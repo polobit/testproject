@@ -95,6 +95,7 @@
 											class="icon-tasks"></i> Add Task</a></li>
 									<li><a href='#' class="contact-add-deal"><i class="icon-money"></i>
 											Add Deal</a></li>
+							{{#canEditContact owner.id}}
 									<li class='divider'></li>
 
 									<li><a href='#bulk-campaigns' class="contact-add-campaign"
@@ -111,7 +112,7 @@
 											Merge Duplicates</a></li>
 											<li class='divider'></li>
 
-								{{#canEditContact owner.id}}
+							
 									<li><a href='#' id='contact-actions-delete'><i
 											class="icon-trash"></i> Delete</a></li>
 								{{/canEditContact}}

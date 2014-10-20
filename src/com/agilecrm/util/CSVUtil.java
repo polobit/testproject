@@ -254,6 +254,9 @@ public class CSVUtil
 
 	System.out.println(csvData.size());
 
+	System.out.println("available scopes for user " + domainUser.email + ", scopes = "
+		+ accessControl.getCurrentUserScopes());
+
 	// Counters to count number of contacts saved contacts
 	int savedContacts = 0;
 	int mergedContacts = 0;
@@ -443,6 +446,15 @@ public class CSVUtil
 		    // Sets current object to check scope
 
 		    tempContact = ContactUtil.mergeContactFields(tempContact);
+		    accessControl.setObject(tempContact);
+		    if (!accessControl.canDelete())
+		    {
+			accessDeniedToUpdate++;
+			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+				"Access denied to update contact"));
+
+			continue;
+		    }
 		    isMerged = true;
 		}
 		else
@@ -535,11 +547,10 @@ public class CSVUtil
 	    {
 		buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
 	    }
-	    if (accessDeniedToUpdate > 0)
-	    {
-		buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
-	    }
-
+	}
+	if (accessDeniedToUpdate > 0)
+	{
+	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
 	}
 	else
 	{

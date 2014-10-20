@@ -45,13 +45,22 @@ public class ContactAccessControl extends UserAccessControl
 	}
     }
 
+    @Override
+    public void setObject(Object object)
+    {
+	if (object != null)
+	    contact = (Contact) object;
+	else
+	    contact = new Contact();
+    }
+
     public boolean canCreate()
     {
 	// If contact is defined it checks for update operation if owner in the
 	// contact and current owner is different
 	if (!isNewContact() && !checkOwner())
 	{
-	    return hasScope(UserAccessScopes.DELETE_CONTACTS) || hasScope(UserAccessScopes.UPDATE_CONTACT);
+	    return hasScope(UserAccessScopes.DELETE_CONTACTS);
 	}
 
 	if (isNewContact())
@@ -66,7 +75,7 @@ public class ContactAccessControl extends UserAccessControl
 	// contact
 	if (!isNewContact() && !checkOwner())
 	{
-	    return hasScope(UserAccessScopes.DELETE_CONTACTS) || hasScope(UserAccessScopes.UPDATE_CONTACT);
+	    return hasScope(UserAccessScopes.DELETE_CONTACTS);
 	}
 
 	return true;
@@ -79,7 +88,7 @@ public class ContactAccessControl extends UserAccessControl
     {
 	// If contact is defined it checks for update operation if owner in the
 	// contact and current owner is different
-	return hasScope(UserAccessScopes.VIEW_CONTACTS) || hasScope(UserAccessScopes.EXPORT_CONTACTS);
+	return hasScope(UserAccessScopes.VIEW_CONTACTS);
     }
 
     /**
@@ -103,7 +112,6 @@ public class ContactAccessControl extends UserAccessControl
 
 	return false;
     }
-    
 
     /**
      * Checks if contact is new

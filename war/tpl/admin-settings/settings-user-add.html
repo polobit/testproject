@@ -63,13 +63,11 @@
     				</div>
 					<div id="collapseOne" class="panel-collapse collapse" >
       					<div class="panel-body" style="margin-top:20px!important;margin-left:20px" >
-							
-						
-		<!--			{{#unless id}}
+					{{#unless id}}
  					<div class="control-group">
 						
 					<div class="controls">
-						<div class="multiple-checkbox" name="scopes">
+						<div class="multiple-checkbox" name="newscopes">
 								<label class="checkbox" >
                             	<input type="checkbox" name="temp"  value="CREATE_CONTACT" checked> 
                             		Create Contacts <br/>
@@ -97,7 +95,7 @@
 						{{#unless is_admin}}
 						<div class="control-group">
 						<div class="controls">
-						<div class="multiple-checkbox"  name="scopes">
+						<div class="multiple-checkbox"  name="newscopes">
 								<label class="checkbox" >
                             	<input type="checkbox" name="temp"  value="CREATE_CONTACT"> 
                             		Create Contacts <br/>
@@ -124,7 +122,7 @@
 					{{else}}
 					<div class="control-group">
 						<div class="controls">
-						<div class="multiple-checkbox"  name="scopes">
+						<div class="multiple-checkbox"  name="newscopes">
 									<label class="checkbox" >
                             	<input type="checkbox" name="temp"  value="CREATE_CONTACT" disabled> 
                             		Create Contacts <br/>
@@ -149,7 +147,7 @@
                     </div>
 					{{/unless}}
 					{{/unless}}
-				-->
+				
 					<div class="control-group" style="margin-top:-20px">
 						<div class="controls">
 						<div class="multiple-checkbox"  name="menu_scopes" style="padding-top:5px">

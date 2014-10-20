@@ -731,11 +731,6 @@ var WidgetsRouter = Backbone.Router
 																$('.contact-sync-tab').addClass('active');
 																// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
 
-																if (!canImportContacts())
-																{
-																				showContactsImportAccessDeniedMessage("#prefs-tabs-content");
-																				return;
-																}
 
 																this.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'admin-settings-import-google-contacts', });
 

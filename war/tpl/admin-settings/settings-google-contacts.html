@@ -11,7 +11,12 @@
     			<a class="btn btn-danger delete"  id="google-import-prefs-delete" >Disable</a>
 				<a href="#sync/contacts" class="btn" id="setting-widget">Settings</a>
     		{{else}}
-    			<div class="btn" id="google-import" style="display:inline-block;">Enable</div>
+				{{#canSyncContacts}}
+    					<div class="btn" id="google-import" style="display:inline-block;">Enable</div>
+					{{else}}
+						<div class="btn" style="display:inline-block;" disabled>Enable</div>
+						<div style="margin-top:5px">No permission to import contacts.</div>
+				{{/canSyncContacts}}
     		{{/if}}
 	</div>
 </div>
@@ -226,7 +231,13 @@
     			<a class="btn btn-danger delete"  id="stripe-import-prefs-delete" >Disable</a>
 				<a href="#sync/stripe-import" class="btn" id="setting-widget">Settings</a>
     		{{else}}
-    			<div class="btn" id="stripe_import" style="display:inline-block;">Enable</div>
+				{{#canSyncContacts}}
+    						<div class="btn" id="stripe_import" style="display:inline-block;">Enable</div>
+					{{else}}
+							<div class="btn" style="display:inline-block;" disabled>Enable</div>
+							<div style="margin-top:5px">No permission to import contacts.</div>
+				{{/canSyncContacts}}
+    		
     		{{/if}}
 	</div>
 </div>
@@ -319,8 +330,13 @@ margin-left: -3px;">.myshopify.com</span>
         	   <a class="btn btn-danger delete"  id="shopify-import-prefs-delete" >Disable</a>
 				<a href="#sync/shopify" class="btn">Settings</a>
 			{{else}}
-
-			   <a href="#sync/shopify"  class="btn"  style="display:inline-block;">Enable</a>
+					{{#canSyncContacts}}
+    						   <a href="#sync/shopify"  class="btn"  style="display:inline-block;">Enable</a>
+						{{else}}
+							   <a href="#"  class="btn"  style="display:inline-block;" disabled>Enable</a>
+								<div style="margin-top:5px">No permission to import contacts.</div>
+					{{/canSyncContacts}}
+			
 			{{/if}}
 
 </div>
@@ -344,8 +360,14 @@ margin-left: -3px;">.myshopify.com</span>
 				<a href="#sync/zoho-import" class="btn" id="setting-widget">Settings</a>
 			</div>
          {{else}}
+				{{#canSyncContacts}}
+    						   <button class="btn" id="zoho-import" style="display:inline-block;">Enable</button>
+						{{else}}
+							   <a href="#"  class="btn"  style="display:inline-block;" disabled>Enable</a>
+								<div style="margin-top:5px">No permission to import contacts.</div>
+					{{/canSyncContacts}}
          <div>
-           <button class="btn" id="zoho-import" style="display:inline-block;">Enable</button>
+           
         </div>
 {{/if}}
 
@@ -354,7 +376,8 @@ margin-left: -3px;">.myshopify.com</span>
 </script>
 
 
-<script id="admin-settings-import-quickbook-settings-template" type="text/html">
+<script id="admin-settings-import-quickbook-settings-template"
+	type="text/html">
 <div class="span4 well">
 <span class="label label-important" style="float:right">Beta</span>
 <center> <img class="thumbnail" src="/widgets/QuickBooks210x70.png" style="width:210px; height:70px;margin-left:40px" /></center>
@@ -424,7 +447,14 @@ margin-left: -3px;">.myshopify.com</span>
 				<a href="#sync/quickbook" class="btn">Settings</a>
 			{{else}}
 
-			   <a href="/OAuthServlet?service=quickbook-import&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks""  class="btn"  style="display:inline-block;">Enable</a>
+			  
+				{{#canSyncContacts}}
+    						 <a href="/OAuthServlet?service=quickbook-import&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks""  class="btn"  style="display:inline-block;">Enable</a>
+						{{else}}
+							   <a href="#"  class="btn"  style="display:inline-block;" disabled>Enable</a>
+								<div style="margin-top:5px">No permission to import contacts.</div>
+					{{/canSyncContacts}}
+
 			{{/if}}
 
 </div>
@@ -447,7 +477,13 @@ margin-left: -3px;">.myshopify.com</span>
 				<a href="#sync/xero" class="btn">Settings</a>
 			{{else}}
 
-			    <a href="#" id ="xeroconnect"class="btn" style="display:inline-block;">Enable</a>
+			   
+			{{#canSyncContacts}}
+    						 <a href="#" id ="xeroconnect"class="btn" style="display:inline-block;">Enable</a>
+						{{else}}
+							   <a href="#"  class="btn"  style="display:inline-block;" disabled>Enable</a>
+								<div style="margin-top:5px">No permission to import contacts.</div>
+					{{/canSyncContacts}}
 			{{/if}}
 
 </div>
@@ -456,7 +492,8 @@ margin-left: -3px;">.myshopify.com</span>
 </script>
 
 
-<script id="admin-settings-import-xero-settings-template" type="text/html">
+<script id="admin-settings-import-xero-settings-template"
+	type="text/html">
 <div class="span4 well">
 <span class="label label-important" style="float:right">Beta</span>
 <center> <img class="thumbnail" src="/widgets/xero210x70.png"  style="width:210px; height:70px;margin-left:40px" /></center>

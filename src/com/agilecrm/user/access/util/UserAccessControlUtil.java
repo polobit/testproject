@@ -1,13 +1,18 @@
 package com.agilecrm.user.access.util;
 
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.UserAccessScopes;
+import com.agilecrm.user.access.exception.AccessDeniedException;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Query;
 
 /**
@@ -21,9 +26,35 @@ public class UserAccessControlUtil
 {
     public enum CRUDOperation
     {
-	CREATE, READ, UPDATE, DELETE, IMPORT, EXPORT;
+	CREATE("You do not have permission to create contacts."),
+
+	READ("You do not have permission to view this contact."),
+
+	UPDATE("You do not have permission to update contacts."),
+
+	DELETE("You do not have permission to update contacts."),
+
+	IMPORT("You do not have permission to import contacts"),
+
+	EXPORT("You do not have permission to export contacts");
 
 	String errorMessage = "Access Denied. Contact account administrator";
+
+	CRUDOperation(String errorMessage)
+	{
+	    this.errorMessage = errorMessage;
+	}
+
+	public String getErrorMessage()
+	{
+	    return errorMessage;
+	}
+
+	public void throwException()
+	{
+	    throw new AccessDeniedException(this.errorMessage);
+	}
+
     }
 
     /*
@@ -56,8 +87,7 @@ public class UserAccessControlUtil
 	    isOperationAllowed = acccessControl.canRead();
 
 	if (throwException && !isOperationAllowed)
-	    throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN).entity(operation.errorMessage)
-		    .build());
+	    operation.throwException();
 
 	return isOperationAllowed;
     }
@@ -94,6 +124,40 @@ public class UserAccessControlUtil
     public static UserAccessControl getAccessControl(String className, Object object)
     {
 	return UserAccessControl.getAccessControl(className, object);
+    }
+
+    // Returns current user scopes
+    public static HashSet<UserAccessScopes> getCurrentUserScopes()
+    {
+	// Gets user info from session manager
+	UserInfo info = SessionManager.get();
+
+	// If info is null then scopes are returned from domain user. It barely
+	// occurs
+	if (info == null)
+	{
+	    return new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
+	}
+
+	// To give all scopes as of now.
+
+	// If scopes in info is not set, scopes are fetched from current domain
+	// user, set in user info, and returned.
+	if (info.getScopes() == null)
+	{
+	    DomainUser user = DomainUserUtil.getCurrentDomainUser();
+	    if (user == null)
+		return new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
+
+	    info.setScopes(DomainUserUtil.getCurrentDomainUser().scopes);
+	}
+
+	return info.getScopes();
+    }
+
+    public static boolean hasScope(UserAccessScopes scope)
+    {
+	return getCurrentUserScopes().contains(scope);
     }
 
 }

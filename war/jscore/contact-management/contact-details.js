@@ -11,6 +11,17 @@ function starify(el) {
     	
     	var contact_model  =  App_Contacts.contactDetailView.model;
     	
+    	// If contact update is not allowed then start rating does not allow user to change it
+    	if(!canEditContact(App_Contacts.contactDetailView.model.get('owner').id))
+    	{
+    			$('#star', el).raty({
+    			 'readOnly': true,
+    			  score: App_Contacts.contactDetailView.model.get('star_value')
+    			 });
+    		 return;
+    	}
+    	
+    	
     	// Set URL - is this required?
     	// contact_model.url = 'core/api/contacts';
     	

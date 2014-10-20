@@ -2737,6 +2737,14 @@ $(function()
 
 		return options.inverse(this);
 	});
+	
+	Handlebars.registerHelper("canSyncContacts", function(options)
+			{
+				if(canImportContacts())
+					return options.fn(this);
+
+				return options.inverse(this);
+			});
 
 	/**
 	 * To check Access controls for showing icons on dashboard
@@ -2812,13 +2820,19 @@ $(function()
 
 	Handlebars.registerHelper('canEditContact', function(owner_id, options)
 	{
-		return options.fn(this);
-
-		if ((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+		if (canEditContact(owner_id))
 			return options.fn(this);
 
 		return options.inverse(this)
 	});
+	
+	Handlebars.registerHelper('canEditCurrentContact', function(owner_id, options){
+		if (canEditCurrentContact())
+			return options.fn(this);
+
+		return options.inverse(this)
+	})
+	
 
 	Handlebars.registerHelper('gateway_exists', function(value, target, options)
 	{
@@ -2899,8 +2913,6 @@ $(function()
 
 	Handlebars.registerHelper('canEditContact', function(owner_id, options)
 	{
-		return options.fn(this);
-
 		if ((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
 			return options.fn(this);
 
