@@ -119,6 +119,7 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	var options = uiFieldDefinition.options;
 	var selectOptionAttributes ="";
 	
+	
 	// Populate Options - Naresh 23/04/2014
 	if(options !== undefined)
 	{
@@ -209,6 +210,9 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     	options = getTwilioIncomingList("twilio_incoming_list");
     	
     }
+    
+    if(options == null)
+    	options = "";
     
     // Populate Options
     $.each(
@@ -560,17 +564,10 @@ function _generateUIFields(selector, ui) {
             continue;
         }
 
-        // DatePicker				
-        if (uiFieldType == "datepicker") {
-
-            continue;
-        }
-
         // Slider				
         if (uiFieldType == "slider") {
             continue;
         }
-        
         // MergeFields Select Option - Naresh
         if(uiFieldType == "merge_fields")
         {
@@ -666,6 +663,17 @@ function _generateUIFields(selector, ui) {
            $(uiField).appendTo(container);
            continue;
         }
+        
+        if(uiFieldType == "datePicker")
+        {
+           addLabel(uiFieldDefinition.label, container);
+          
+           uiField = generateSelectUI(uiFieldDefinition);
+           
+           $(uiField).appendTo(container);
+           continue;
+        }
+        
         
         // Else Input, textarea,		                
         addLabel(uiFieldDefinition.label, container);

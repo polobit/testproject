@@ -123,23 +123,29 @@ function getUpdateFields(type)
 
 function getTwilioIncomingList(type)
 {
-	var numbers={};
+	var numbers;
 	$.ajax({
 		  url: 'core/api/sms-gateway/twilio',
 		  type: "GET",
 		  async:false,
 		  dataType:'json',
 		  success: function (twilioNumbers) {
-			  if(twilioNumbers!=null)
-			  for (var i=0;i<twilioNumbers.length;i++) {
-					numbers[twilioNumbers[i]]=twilioNumbers[i];
-		  } 
+			  numbers=  twilioNumbers;
 		}
 		
 	});
 	
+	if(numbers == null)
+		return null;
+	
+	var numbersList={};
+	var length = numbers.length;
+	if(length>0){
+	for (var i=0;i<length;i++) 
+	numbersList[numbers[i]]=numbers[i];
+	}
 	// Parse stringify json
-	return numbers;	
+	return numbersList;	
 }
 /**
  * Returns custom fields in format required for merge fields. 
@@ -185,6 +191,8 @@ function merge_jsons(target, object1, object2)
 {
 	return $.extend(target, object1, object2);
 }
+
+
 
 /**
  * Function to insert text on cursor position in textarea. It inserts 
@@ -426,4 +434,14 @@ function disable_text_required_property(selector)
 	// Remove 'required' property of 'text' if 'html' is not empty and 'text' is empty
 	if(selector.find('#tinyMCEhtml_email').val() != "" && selector.find('#text_email').val() == "")
 		selector.find('#text_email').removeProp("required");
+}
+
+function getDate(selector){
+	 $('#duration').datepicker({
+		        changeMonth: true,
+		        changeYear: true,
+		        yearRange: "+0:+100]",
+		         constrainInput: false
+	    });
+	
 }

@@ -144,7 +144,7 @@ public class OpportunityUtil
     public static List<Opportunity> getOpportunities(long minTime, long maxTime)
     {
 	return dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime)
-		.list();
+	        .list();
     }
 
     /**
@@ -239,10 +239,10 @@ public class OpportunityUtil
 		double pipeline = opportunity.expected_value * opportunity.probability / 100;
 
 		/*
-		 * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
-		 * //Get mm/yy String mmYY = formatter.format(new
-		 * Date(opportunity.close_date * 1000));
-		 */
+	         * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
+	         * //Get mm/yy String mmYY = formatter.format(new
+	         * Date(opportunity.close_date * 1000));
+	         */
 		Date opportunityDate = new Date(opportunity.close_date * 1000);
 
 		Calendar calendar = Calendar.getInstance();
@@ -305,7 +305,7 @@ public class OpportunityUtil
     public static int getTotalNumberOfMilestones(long minTime, long maxTime, String milestone)
     {
 	return dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime)
-		.filter("milestone", milestone).count();
+	        .filter("milestone", milestone).count();
     }
 
     /**
@@ -354,7 +354,7 @@ public class OpportunityUtil
     {
 	// Gets total count of opportunities within the given period
 	int numOpportunities = dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime)
-		.filter("close_date <= ", maxTime).count();
+	        .filter("close_date <= ", maxTime).count();
 
 	JSONObject conversionObject = new JSONObject();
 
@@ -370,15 +370,15 @@ public class OpportunityUtil
     public static List<Opportunity> getDealsRelatedToCurrentUser()
     {
 	return dao.ofy().query(Opportunity.class)
-		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-		.order("-created_time").limit(10).list();
+	        .filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+	        .order("-created_time").limit(10).list();
     }
 
     public static List<Opportunity> getUpcomingDealsRelatedToCurrentUser(String pageSize)
     {
 	return dao.ofy().query(Opportunity.class)
-		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-		.order("close_date").limit(Integer.parseInt(pageSize)).list();
+	        .filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+	        .order("close_date").limit(Integer.parseInt(pageSize)).list();
     }
 
     /**
@@ -426,7 +426,7 @@ public class OpportunityUtil
 		searchMap.put("milestone", milestone);
 
 	    if (StringUtils.isNotBlank(contactId))
-		searchMap.put("related_contacts", new Key<Contact>(Contact.class, contactId));
+		searchMap.put("related_contacts", new Key<Contact>(Contact.class, Long.parseLong(contactId)));
 
 	    if (!StringUtils.isNotBlank(fieldName))
 		fieldName = "-created_time";
@@ -556,8 +556,8 @@ public class OpportunityUtil
     public static int getTotalNumberOfMilestonesByPipeline(Long pipelineId, long minTime, long maxTime, String milestone)
     {
 	return dao.ofy().query(Opportunity.class).filter("pipeline", new Key<Milestone>(Milestone.class, pipelineId))
-		.filter("close_date >= ", minTime).filter("close_date <= ", maxTime).filter("milestone", milestone)
-		.count();
+	        .filter("close_date >= ", minTime).filter("close_date <= ", maxTime).filter("milestone", milestone)
+	        .count();
     }
 
     /**
@@ -607,7 +607,7 @@ public class OpportunityUtil
     public static List<Opportunity> getOpportunitiesByPipeline(Long pipelineId, long minTime, long maxTime)
     {
 	return dao.ofy().query(Opportunity.class).filter("pipeline", new Key<Milestone>(Milestone.class, pipelineId))
-		.filter("close_date >= ", minTime).filter("close_date <= ", maxTime).list();
+	        .filter("close_date >= ", minTime).filter("close_date <= ", maxTime).list();
     }
 
     /**
@@ -647,10 +647,10 @@ public class OpportunityUtil
 		double pipeline = opportunity.expected_value * opportunity.probability / 100;
 
 		/*
-		 * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
-		 * //Get mm/yy String mmYY = formatter.format(new
-		 * Date(opportunity.close_date * 1000));
-		 */
+	         * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
+	         * //Get mm/yy String mmYY = formatter.format(new
+	         * Date(opportunity.close_date * 1000));
+	         */
 		Date opportunityDate = new Date(opportunity.close_date * 1000);
 
 		Calendar calendar = Calendar.getInstance();

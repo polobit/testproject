@@ -60,7 +60,11 @@ $(function(){
 		
 		$(el).find('#delete-checked').remove();
 		
-		$(table).after('<div class="row-fluid"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked" style="margin-bottom: 15px"> Delete</a>');
+		if(!$(table_element).hasClass('noDelete')){
+			
+			$(table).after('<div class="row-fluid"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked" style="margin-bottom: 15px"> Delete</a>');
+			
+		}
 			
 		if($(table_element).hasClass('no-sorting'))
 		{	

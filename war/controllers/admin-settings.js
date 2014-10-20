@@ -40,7 +40,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	"email-gateways/:id" : "emailGateways",
 	
+
 	"sms-gateways/:id" : "smsGateways"
+
 	
 		},
 
@@ -117,30 +119,29 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 */
 	usersAdd : function()
 	{
-		var self = this;
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
 			$('#content').html("You have no Admin Privileges");
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		var view = new Base_Model_View({ url : 'core/api/users', template : "admin-settings-user-add", isNew : true, window : 'users', reload : false,
+		var view = new Base_Model_View({ url : 'core/api/users', template : "admin-settings-user-add", isNew : true, window : 'users', reload : true,
 			postRenderCallback : function(el)
 			{
 				if (view.model.get("id"))
 					addTagAgile("User invited");
-              
+
 				// Binds action
 				bindAdminChangeAction(el);
 			}, saveCallback : function(response)
 			{
 				$.getJSON("core/api/users/current-owner", function(data)
-						{
-					data["created_user_email"]=response.email;
-							
-							add_created_user_info_as_note_to_owner(data);
+				{
+					data["created_user_email"] = response.email;
 
-						});
+					add_created_user_info_as_note_to_owner(data);
+
+				});
 			} });
 
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
@@ -431,10 +432,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					LHS = $("#LHS", el);
 					RHS = $("#RHS", el);
 
+
 					// Chaining dependencies of input
 					// fields
 					// with jquery.chained.js
 					RHS.chained(LHS);
+
 
 					// Trigger change on email api select
 					setTimeout(function()
@@ -508,16 +511,19 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					LHS = $("#LHS", el);
 					RHS = $("#RHS", el);
 					RHS.chained(LHS);
-					setTimeout(function()
-					{
-						$('#sms-api', el).val(value).attr("selected", "selected").trigger('change')
-					}, 1);
-				});
+					});
 			},
 			saveCallback: function(data)
 			{
 				// On saved, navigate to integrations
 				Backbone.history.navigate("integrations",{trigger:true});
+			},
+			errorCallback: function(data){
+				if($("#twilio-error").is(":visible"))
+					$("#twilio-error").remove();
+				
+				$responceText="<div style='color:#B94A48; font-size:14px' id='twilio-error'><i>"+data.responseText+"</i></div>";
+				$(".form-actions", this.el).append($responceText);
 			}
 			
 		});
@@ -525,6 +531,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
+
 	} 
+
 	
 });

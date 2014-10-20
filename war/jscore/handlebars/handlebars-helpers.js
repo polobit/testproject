@@ -16,6 +16,27 @@ $(function()
 	{
 		return getPropertyValue(items, name);
 	});
+	
+	/**
+	 * Helper function to return the checkbox html element with value of a property matched with the given
+	 * name from the array of properties
+	 * 
+	 * @method getPropertyValue
+	 * @param {Object}
+	 *            items array of objects
+	 * @param {String}
+	 *            name to get matched object value
+	 * @returns heckbox html element with value of the matched object
+	 */
+	Handlebars.registerHelper('getPropertyValueInCheckbox', function(items, name, separator,checked)
+			{
+				return getPropertyValueInCheckbox(items, name, separator,checked);
+			});
+	
+	Handlebars.registerHelper('get_correct_count', function(count)
+			{
+				return count-1;
+			});
 
 	/**
 	 * Helper function to return the value of property based on sub-type of the
@@ -384,6 +405,18 @@ $(function()
 			return "Follow Up";
 		else
 			return ucfirst(value);
+
+	});
+	
+	
+	/**
+	 * Adds Custom Fields to contact merge form, where this helper function is called
+	 */
+	Handlebars.registerHelper('show_custom_fields_for_merge', function(custom_fields, contacts)
+	{
+
+		var el = show_custom_fields_helper_for_merge(custom_fields, contacts);
+		return new Handlebars.SafeString(el);
 
 	});
 
@@ -1387,6 +1420,25 @@ $(function()
 
 						return new Handlebars.SafeString(count_message);
 					});
+	
+	Handlebars
+	.registerHelper(
+			'duplicate_contacts_count',
+			function()
+			{
+				var count_message;
+				if (this[0] && this[0].count && (this[0].count != -1))
+				{
+					var count = this[0].count-1;
+					count_message = "<small> (" + count + " Total) </small>";
+				}
+				else
+					count_message = "<small> (" + this.length + " Total) </small>";
+
+				return new Handlebars.SafeString(count_message);
+			});
+	
+	
 
 	/**
 	 * 
@@ -1780,19 +1832,7 @@ $(function()
 
 	Handlebars.registerHelper('get_social_icon', function(name)
 	{
-		if (!name)
-			return;
-
-		var icon_json = { "TWITTER" : "icon-twitter-sign", "LINKEDIN" : "icon-linkedin-sign", "URL" : "icon-globe", "GOOGLE-PLUS" : "icon-google-plus-sign",
-			"FACEBOOK" : "icon-facebook-sign", "GITHUB" : "icon-github", "FEED" : "icon-rss", "XING" : "icon-xing-sign", "SKYPE" : "icon-skype",
-			"YOUTUBE" : "icon-youtube", "FLICKR" : "icon-flickr" };
-
-		name = name.trim();
-
-		if (icon_json[name])
-			return icon_json[name];
-
-		return "icon-globe";
+		return get_social_icon(name);
 
 	});
 

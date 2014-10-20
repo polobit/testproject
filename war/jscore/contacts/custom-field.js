@@ -318,6 +318,94 @@ function show_custom_fields_helper(custom_fields, properties){
 	return el;
 }
 
+
+/**
+ * It builds UI for showing custom fields in the contacts-merge feature
+ */
+function show_custom_fields_helper_for_merge(custom_fields, contacts) {
+	var el = "";
+	$.each(custom_fields,function(index, field) {
+		var elements = [];
+		for (var i = 0; i < contacts.length; i++) {
+			if(i===0){
+				var checked = false;
+				elements.push('<tr><td style="background-color:#f3f3f3">'
+						+ field.field_label + '</td>');
+			}
+			var contact_field = contacts[i];
+			for (var j = 0; j < contact_field.properties.length; j++) {
+				var property = contact_field.properties[j];
+				if (property.type == "CUSTOM"
+					&& property.name == field.field_label) {
+					var value = property.value;
+					if (value) {
+						checked = true;
+						if (field.field_type.toLowerCase() == "date") {
+							try {
+								value = new Date(
+										property.value * 1000)
+								.format('mm/dd/yyyy');
+							} catch (err) {
+							}
+						}
+						if (i === 0) {
+							var ele = '<td>'
+								+ '<input type="radio" name="'
+								+ field.field_label
+								+ '" class="'
+								+ field.field_type
+								.toLowerCase()
+								+ '" checked="checked" fieldtype="custom" oid="'
+								+ contact_field.id
+								+ '" id="'
+								+ field.id
+								+ '" field="'
+								+ field.field_label
+								+ '" data="'
+								+ value + '">'
+								+ value + '</td>';
+							elements.push(ele);
+							break;
+						} else {
+							var ele = '<td>'
+								+ '<input type="radio" name="'
+								+ field.field_label
+								+ '" class="'
+								+ field.field_type
+								.toLowerCase()
+								+ '" fieldtype="custom" oid="'
+								+ contact_field.id
+								+ '" id="'
+								+ field.id
+								+ '" field="'
+								+ field.field_label
+								+ '" data="'
+								+ value + '">'
+								+ value + '</td>';
+							elements.push(ele);
+							break;
+						}
+					}// end of if loop checking value is null or not
+				}
+				else if (j === contact_field.properties.length - 1) {
+					var ele = '<td></td>';
+					elements.push(ele);
+				}
+			} // end of contact properties for loop
+			if(i===contacts.length-1){
+				if(checked){
+					for(var i=0;i<elements.length;i++){
+						el = el.concat(elements[i]);
+					}
+					el = el.concat('</tr>');
+				}
+				elements.length = 0;
+			}
+		}// end of contacts for loop
+	});
+	return el;
+}
+
 /**
  * De-serializes custom fields (fills the matched custom field values of the entity 
  * (for list and check-box fields) to the generated html string above) and return 

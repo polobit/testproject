@@ -80,6 +80,24 @@ public class AppengineSearch<T>
 	builder.delete(id);
     }
 
+    
+    /**
+     * It is similar to simple search, but it takes an extra parameter 'type'.
+     * Type indicates type of the contact either PERSON or COMPANY
+     * 
+     * @param keyword
+     * @param count
+     * @param cursor
+     * @param type
+     * @return
+     */
+    @SuppressWarnings("rawtypes")
+    public Collection getSearchResults(String keyword, Integer count, String cursor)
+    {
+	
+	return query.processQuery(keyword, count, cursor);
+    }
+    
     /**
      * Initializes search on keword, send count an cursor to limit results
      * according to count

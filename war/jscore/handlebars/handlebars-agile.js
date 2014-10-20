@@ -209,9 +209,17 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("stripe.js");
 	}
+	else if (templateName.indexOf("twilioio") == 0)
+	{
+	template_relative_urls.push("twilioio.js");
+	}
 	else if (templateName.indexOf("twilio") == 0)
 	{
 		template_relative_urls.push("twilio.js");
+	}	
+	else if (templateName.indexOf("sip") == 0)
+	{
+	template_relative_urls.push("sip.js");
 	}
 	else if (templateName.indexOf("twitter") == 0)
 	{
@@ -481,6 +489,89 @@ function getPropertyValueBytype(items, name, type, subtype)
 		}
 	}
 }
+
+function getPropertyValueInCheckbox(items, name, id, checked)
+{
+	if (items == undefined)
+		return;
+	var el = "";
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name === name)
+		{		
+			if(name === "website"){
+			  if(checked === 'checked'){			  
+				  el = el.concat('<input type="checkbox" field="'+name+ '" subtype="'+get_subtype_value(items[i])+ '" data="'+items[i].value+ '" oid="'+id+ '" checked="'+checked+ '">' + items[i].value);
+			  }
+			  else{
+				  el = el.concat('<input type="checkbox" field="'+name+ '" subtype="'+get_subtype_value(items[i])+ '" data="'+items[i].value+ '" oid="'+id+ '">' + items[i].value);
+			  }
+			  el = el.concat(get_website_icon(items[i]));
+			}
+			else if(name === "phone"){
+				 if(checked === 'checked'){			  
+					  el = el.concat('<input type="checkbox" field="'+name+ '" subtype="'+get_subtype_value(items[i])+ '" data="'+items[i].value+ '" oid="'+id+ '" checked="'+checked+ '">' + items[i].value );
+				 }
+				 else{
+					  el = el.concat('<input type="checkbox" field="'+name+ '" subtype="'+get_subtype_value(items[i])+ '" data="'+items[i].value+ '" oid="'+id+ '">' + items[i].value );
+				 }
+			 el = el.concat(get_subtype(items[i]));
+			}
+			else if(name === "email"){
+				if(checked === 'checked')
+					el = el.concat('<input type="checkbox" field="'+name+ '" subtype="'+get_subtype_value(items[i])+ '" data="'+items[i].value+ '" oid="'+ id + '" checked="'+checked+ '">' + items[i].value);
+				else{
+					el = el.concat('<input type="checkbox" field="'+name+ '" subtype="'+get_subtype_value(items[i])+ '" data="'+items[i].value+ '" oid="'+ id + '">' + items[i].value);
+				}
+				el = el.concat(get_subtype(items[i]));
+			}
+		}
+	}
+	return el;
+}
+
+function get_website_icon(item){
+	var icon = get_social_icon(item.subtype);
+	var str = "<i class=\"".concat(icon).concat("\"").concat(" style=\"font-size: 1.3em !important; margin-left:10px \"></i> <br>");
+	return str;
+}
+
+function get_social_icon(name){
+	if (!name)
+	return;
+
+    var icon_json = { "TWITTER" : "icon-twitter-sign", "LINKEDIN" : "icon-linkedin-sign", "URL" : "icon-globe", "GOOGLE-PLUS" : "icon-google-plus-sign",
+	"FACEBOOK" : "icon-facebook-sign", "GITHUB" : "icon-github", "FEED" : "icon-rss", "XING" : "icon-xing-sign", "SKYPE" : "icon-skype",
+	"YOUTUBE" : "icon-youtube", "FLICKR" : "icon-flickr" };
+
+    name = name.trim();
+
+    if (icon_json[name])
+	return icon_json[name];
+
+    return "icon-globe";
+}
+
+function get_subtype(item){
+	
+	if(item.subtype!=undefined && item.subtype!=""){
+		var str = "<span class=\"label\" style=\"margin:3px 0px 3px 10px\">".concat(item.subtype).concat("</span> <br>");
+		return str;
+	}
+	else
+		return "<br>";
+}
+
+function get_subtype_value(item){
+	
+	if(item.subtype!=undefined && item.subtype!=""){
+		var str = item.subtype;
+		return str;
+	}
+	else
+	   return "";
+}
+
 
 /**
  * Returns list of custom properties. used to fill custom data in fields in

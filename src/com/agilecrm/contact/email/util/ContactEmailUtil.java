@@ -9,6 +9,8 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.ContactEmail;
@@ -88,7 +90,10 @@ public class ContactEmailUtil
 
 		// Returns set of To Emails
 		Set<String> toEmailSet = getToEmailSet(to);
-
+		
+		// Get signature without body
+		signature = getParsedSignature(signature);
+		
 		try
 		{
 			// If contact is available, no need of fetching contact from
@@ -116,7 +121,7 @@ public class ContactEmailUtil
 					}
 				}
 			}
-
+ 
 		}
 		catch (Exception e)
 		{
@@ -136,7 +141,7 @@ public class ContactEmailUtil
 		}
 
 		// combine body and signature.
-		body = body + "<div><br/>" + signature + "</div>";
+		body = body.replace("</body>", "<div><br/>" + signature + "</div></body>");
 
 		// Sends email
 		EmailUtil.sendMail(fromEmail, fromName, to, cc, bcc, subject, null, body, null);
@@ -439,4 +444,27 @@ public class ContactEmailUtil
 
 		return null;
 	}
+	
+	/**
+	 * Returns parsed signature without body tags
+	 * 
+	 * @param signature - signature stored in user prefs
+	 * @return
+	 */
+	public static String getParsedSignature(String signature)
+	{
+	    if(StringUtils.isEmpty(signature))
+		return signature;
+	    
+	    if(signature.contains("<body>") && signature.contains("</body>"))
+	    {
+		Document doc = Jsoup.parse(signature);
+		signature = doc.select("body").toString();
+		signature = signature.replace("<body>", "").replace("</body>", "");
+		signature = StringUtils.trim(signature);
+	    }
+	    
+	    return signature;
+	}
+	
 }

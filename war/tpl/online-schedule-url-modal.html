@@ -1,5 +1,4 @@
 <!-- online scheduling Modal views -->
-<script id="scheduleModal-template" type="text/html">
 <div class="modal hide fade" id="scheduleModal">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
@@ -12,7 +11,7 @@
                      <div class="control-group" style="float:left;">
                        <label class="control-label"><b>Your Personalized Link </b></label>
                         <div class="controls schedule_url_online" id="schedule-url-id" style="width:540px;word-wrap:break-word;display:inline-block;">
-                        <a href="https://{{this.domain}}.agilecrm.com/calendar/{{this.schedule_id}}" target="_blank" name="scheduleurl" id="scheduleurl">https://{{this.domain}}.agilecrm.com/calendar/<span id="schedule_id">{{this.schedule_id}}</span></a>
+                        <a href="" target="_blank" name="scheduleurl" id="scheduleurl"><span id="hrefvalue"></span><span id="schedule_id">{{this.schedule_id}}</span></a>
 <div class="" id="edit" style="display:inline;"><a href="" style="margin-top: 3px;" id="edit-schedule-id" class="edit-schedule-id nounderline"><i title="Edit" class="icon-edit" style="margin-left: 30px;"></i></a></div>
                      
  </div>
@@ -25,7 +24,7 @@
                </div>  
 <div id="suggestion" >
                     <label class="control-label"><b>How can I define my daily available timeslots?</b></label>
-                   <p>We don't have this option yet. But you can try this workaround for now - Link your Google calendar with Agile from Preferences -> Sync. In your Google Calendar, create an event that covers all your unavailable time, and make it repeat everyday. </p> 
+                   <p> Link your Google calendar with Agile from Preferences -> Sync. In your Google Calendar, create an event that covers all your unavailable time, and make it repeat everyday. </p> 
                </div> 
  <div id="tip">
                    <p style="margin:6px 0px 0px"><i class="icon-lightbulb" style="font-size:17px;"></i> Put this link in the signature or in your automated emails</p> 
@@ -40,4 +39,3 @@
          <!-- <a href="#" id="send-schedule-url-email"><i class="icon-envelope-alt"></i> Send your schedule URL via Email</a>-->
      </div>
 </div>
-</script>
