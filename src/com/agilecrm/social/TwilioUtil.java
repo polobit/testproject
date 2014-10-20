@@ -35,7 +35,7 @@ public class TwilioUtil
 	 * Twilio authentication token of the account which contains Agile
 	 * application
 	 */
-	public static final String authToken = "5e7085bb019e378fb18822f319a3ec46";
+	public static final String authToken = "5e7085bb019e378fb18822f319a3ec46"; // default
 
 	/**
 	 * Creates a {@link TwilioRestClient} instance and sets the account SID of
@@ -563,4 +563,147 @@ public class TwilioUtil
 		return auth_token;
 	}
 
+	/****************************************
+	 * Following methods for Twilio IO
+	 ****************************************/
+
+	public static Object getIncomingNumberTwilioIO(TwilioRestClient client) throws Exception
+	{
+		TwilioRestResponse response = client.request(
+				"/" + TwilioUtil.APIVERSION + "/Accounts/" + client.getAccountSid() + "/IncomingPhoneNumbers", "GET",
+				null);
+
+		System.out.println(response.getResponseText());
+
+		/*
+		 * If error occurs, throw exception based on its status else return
+		 * outgoing numbers
+		 */
+		if (response.isError())
+			TwilioUtil.throwProperException(response);
+
+		JSONObject result = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse")
+				.getJSONObject("IncomingPhoneNumbers");
+
+		System.out.println("response: " + XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse"));
+		System.out.println("incoming number result: " + result);
+
+		System.out.println(result.getString("total"));
+		// If no numbers, return empty object
+		if (Integer.parseInt(result.getString("total")) == 0)
+			return new JSONArray();
+
+		/*
+		 * Response may be array or single object, check and return the first
+		 * number if it is an array
+		 */
+		if (result.get("IncomingPhoneNumber") instanceof JSONObject)
+			return new JSONArray().put(result.getJSONObject("IncomingPhoneNumber"));
+
+		return result.getJSONArray("IncomingPhoneNumber");
+	}
+
+	public static Object getOutgoingNumberTwilioIO(TwilioRestClient client) throws Exception
+	{
+		TwilioRestResponse response = client
+				.request("/" + TwilioUtil.APIVERSION + "/Accounts/" + client.getAccountSid() + "/OutgoingCallerIds",
+						"GET", null);
+
+		System.out.println("Twilio outgoing No: " + response.getResponseText());
+
+		/*
+		 * If error occurs, throw exception based on its status else return
+		 * outgoing numbers
+		 */
+		if (response.isError())
+			TwilioUtil.throwProperException(response);
+
+		JSONObject outgoingCallerIds = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse")
+				.getJSONObject("OutgoingCallerIds");
+
+		System.out.println("OutgoingCallerID's: " + outgoingCallerIds);
+
+		// If no numbers, return empty object
+		if (Integer.parseInt(outgoingCallerIds.getString("total")) == 0)
+			return new JSONArray();
+
+		/*
+		 * Response may be array or single object, check and return the first
+		 * number if it is an array
+		 */
+		if (outgoingCallerIds.get("OutgoingCallerId") instanceof JSONObject)
+			return new JSONArray().put(outgoingCallerIds.getJSONObject("OutgoingCallerId"));
+
+		return outgoingCallerIds.getJSONArray("OutgoingCallerId");
+	}
+
+	public static String createAppSidTwilioIO(String accountSID, String authToken, String numberSid) throws Exception
+	{
+		System.out.println("In createAppSidTwilioIO");
+
+		// Get Twilio client configured with account SID and authToken
+		TwilioRestClient client = new TwilioRestClient(accountSID, authToken, null);
+		System.out.println(client.getAccountSid());
+
+		// parameters required to create application
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("FriendlyName", "Agile CRM Twilio Saga");
+		// params.put("VoiceUrl",
+		// "http://1-dot-onlyvoiceservlet.appspot.com/voice");
+
+		// params.put("VoiceUrl",
+		// "http://1-dot-bothservlet.appspot.com/backend/twilioiovoice");
+		params.put(
+				"VoiceUrl",
+				"https://" + NamespaceManager.get()
+						+ "-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiovoice");
+		params.put("VoiceMethod", "GET");
+		// params.put("StatusCallback",+
+		// "http://1-dot-bothservlet.appspot.com/backend/twilioiostatuscallback");
+		params.put("StatusCallback", "https://" + NamespaceManager.get()
+				+ "-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiostatuscallback?sessionmngrid="
+				+ SessionManager.get().getDomainId());
+		params.put("StatusCallbackMethod", "GET");
+
+		// Make a POST request to create application
+		TwilioRestResponse response = client.request("/2010-04-01/Accounts/" + client.getAccountSid()
+				+ "/Applications.json", "POST", params);
+
+		System.out.println("Twilio app sid : " + response.getResponseText());
+
+		/*
+		 * If error occurs, throw exception based on its status else return
+		 * application SID
+		 */
+		if (response.isError())
+			throwProperException(response);
+
+		String appSid = new JSONObject(response.getResponseText()).getString("sid");
+
+		System.out.println("appSid" + appSid);
+
+		/* ****** Add application to twilio number ***** */
+		if (!numberSid.equalsIgnoreCase("None"))
+		{
+			// parameters required to create application
+			params = new HashMap<String, String>();
+			params.put("VoiceApplicationSid", appSid);
+
+			System.out.println("params" + params.toString());
+			// Make a POST request to add application to twilio number
+			// /IncomingPhoneNumbers/PNa96612e977cc4a8c8b6cb0c14dd43e88
+			response = client.request("/2010-04-01/Accounts/" + client.getAccountSid() + "/IncomingPhoneNumbers/"
+					+ numberSid, "POST", params);
+
+			System.out.println("Twilio app added to number : " + response.getResponseText());
+
+			/*
+			 * If error occurs, throw exception based on its status else return
+			 * application SID
+			 */
+			if (response.isError())
+				throwProperException(response);
+		}
+		return appSid;
+	}
 }

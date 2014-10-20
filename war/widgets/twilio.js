@@ -1,12 +1,9 @@
-// Twilio call noty when user change tab
-var Twilio_Call_Noty;
+
 
 // Url from where twilio call is made
 var Twilio_Caller_Url;
 
 var connection;
-var To_Number;
-var To_Name = "";
 
 window.onhashchange = hashchanged;
 
@@ -103,33 +100,12 @@ $(function()
 		else if (check_prefs.verificaton_status == "failure")
 			$('#Twilio').html(getTemplate('twilio-initial', {}));
 	});
-
-	/*
-	 * // Tab change event fetch and twilio call noty displayed, if call in //
-	 * progress. $(window).on('hashchange', function(e) { hashchanged(); });
-	 */
-
-	$(".noty_twilio_hangup").die().live('click', function(e)
-	{
-		e.preventDefault();
-		console.log("Twilio call hang up from noty");
-
-		Twilio.Device.disconnectAll();
-	});
-
-	$(".noty_twilio_dialpad").die().live('click', function(e)
-	{
-		e.preventDefault();
-		console.log("Twilio call dailpad from noty");
-
-		$('.noty_message').find('#dialpad_in_twilio').toggle();
-	});
 });
 
 // If twilio call is in progress and tab/page is changed so display call noty.
 function hashchanged()
 {
-	console.log("window.location.href");
+	/*console.log("window.location.href");
 	console.log(window.location.href);
 	console.log(Twilio_Call_Noty);
 	console.log(Twilio.Device.status());
@@ -137,10 +113,10 @@ function hashchanged()
 
 	// if (Twilio_Caller_Url != window.location.href && Twilio.Device.status()
 	// == "busy")
-	if (Twilio.Device.status() == "busy")
+	if (Twilio.Device.status() == "busy" && Twilio_Call_Noty == undefined)
 	{
 		showCallNotyPopup("connected", "Twilio", "<b>On call : </b><br>" + To_Name + "   " + To_Number + "<br>", false);
-	}
+	}*/
 }
 
 /**
@@ -325,11 +301,13 @@ function checkTwilioPrefsAndGenerateToken(twilio_prefs, from_number)
 		 * generates a token in Twilio and shows set up to make calls and shows
 		 * details in Twilio panel
 		 */
-		generateTokenInTwilio(from_number, function(token)
+		/*generateTokenInTwilio(from_number, function(token)
 		{
 			showTwilioDetails(token, from_number);
 			return;
-		});
+		});*/
+		
+		showTwilioDetails(null, from_number);
 	}
 }
 
@@ -395,6 +373,8 @@ function generateTokenInTwilio(from_number, callback)
  */
 function showTwilioDetails(token, from_number)
 {
+	console.log("In showTwilioDetails");
+	
 	// Shows loading until details are fetched
 	$('#Twilio').html(TWILIO_LOGS_LOAD_IMAGE);
 
@@ -413,7 +393,7 @@ function showTwilioDetails(token, from_number)
 	$('#Twilio').html(getTemplate('twilio-profile', numbers));
 
 	// Twilio set up to intialize events to handle calls
-	setUpTwilio(token, from_number);
+	//setUpTwilio(token, from_number);
 
 	/*
 	 * Hide if a link to add note exists (If call is made we show this link,
@@ -504,7 +484,7 @@ function setUpTwilio(token, from_number)
 			// Add dialpad template in twilio content
 			if ($('#Twilio').find('.widget_content').find("#dialpad_in_twilio").length == 0)
 			{
-				var dialpad = $(getTemplate("twilio-dialpad"), {});
+				var dialpad = $(getTemplate("twilioio-dialpad"), {});
 				$('#Twilio').find('.widget_content').append(dialpad);
 			}
 
@@ -533,9 +513,9 @@ function setUpTwilio(token, from_number)
 				Twilio_Caller_Url = window.location.href;
 				To_Number = $('#contact_number').val();
 
-				To_Name = getContactName();
+				To_Name = getTwilioContactName();
 
-				connection = conn;
+				globalconnection = conn;
 				$("#twilio_hangup").show();
 				$("#twilio_dialpad").show();
 				$("#twilio_call").hide();
@@ -563,13 +543,8 @@ function setUpTwilio(token, from_number)
 
 				// Remove twilio caller's url
 				Twilio_Caller_Url = undefined;
-
-				// Close noty
-				if (Twilio_Call_Noty != undefined)
-				{
-					Twilio_Call_Noty.close();
-					Twilio_Call_Noty = undefined;
-				}
+				
+				closeTwilioNoty();
 			}
 
 		});
@@ -593,7 +568,7 @@ function setUpTwilio(token, from_number)
 			// If connection is opened, hide call and show hang up
 			if (conn._status == "open")
 			{
-				connection = conn;
+				globalconnection = conn;
 				$("#twilio_hangup").show();
 				$("#twilio_dialpad").show();
 				$("#twilio_call").hide();
@@ -647,7 +622,7 @@ function setUpTwilio(token, from_number)
 }
 
 // Get name of contact
-function getContactName()
+function getTwilioContactName()
 {
 	var contactName = "";
 	var firstName = agile_crm_get_contact_property('first_name');
@@ -659,20 +634,6 @@ function getContactName()
 		contactName = contactName + lastName;
 	
 	return contactName;
-}
-
-// Send DTMF signal to twilio active connection from dialpad.
-function twilioSendDTMF(digit)
-{
-	console.log("twilioSendDTMF: " + digit);
-
-	// session for call is active and number is available.
-	if (Twilio.Device.status() == "busy" && digit)
-	{
-		// send dtmf on twilio
-		// if (connection)
-		connection.sendDigits(digit);
-	}
 }
 
 /**
@@ -759,7 +720,7 @@ function registerClickEvents(from_number)
 		// parameters to show in record modal
 		var to_display = {};
 		to_display['to'] = to_number;
-		to_display['name'] = getContactName();
+		to_display['name'] = getTwilioContactName();
 
 		// Get and fill template with details
 		var record_modal = $(getTemplate('twilio-record', to_display));

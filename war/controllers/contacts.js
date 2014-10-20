@@ -520,11 +520,18 @@ var ContactsRouter = Backbone.Router.extend({
 			
 			// For sip
 			if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
-				{			
-					$(".contact-make-sip-call").show();
-					$(".make-call").show();				
-					$(".contact-make-call").hide();			
-				}	
+			{
+				$(".contact-make-sip-call").show();
+				$(".contact-make-twilio-call").hide();
+				$(".contact-make-call").hide();
+			}
+			else if(Twilio_Start == true)
+			//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")			
+			{
+				$(".contact-make-sip-call").hide();
+				$(".contact-make-twilio-call").show();
+				$(".contact-make-call").hide();
+			}	
 			} });
 
 		var el = this.contactDetailView.render(true).el;
@@ -536,11 +543,18 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		// For sip
 		if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
-			{			
-				$(".contact-make-sip-call").show();
-				$(".make-call").show();				
-				$(".contact-make-call").hide();			
-			}
+		{
+			$(".contact-make-sip-call").show();
+			$(".contact-make-twilio-call").hide();
+			$(".contact-make-call").hide();
+		}
+		//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")
+		else if(Twilio_Start == true)
+		{
+			$(".contact-make-sip-call").hide();
+			$(".contact-make-twilio-call").show();
+			$(".contact-make-call").hide();
+		}
 	},
 
 	/**
