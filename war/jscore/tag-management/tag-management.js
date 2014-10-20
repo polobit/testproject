@@ -426,8 +426,8 @@ function showModalConfirmation(title, body, yes_callback, no_callback,
 			+ '</div>'
 			+ '<div class="modal-footer">'
 			+ '<div>'
+			+ '<a  href="#" id="deny" class="btn action" data-dismiss="modal" action="deny">No</a>' 
 			+ '<a href="#" id="confirm" class="action btn btn-primary" action="confirm">Yes</a>'
-			+ '<a  href="#" id="deny" class="btn action" data-dismiss="modal" action="deny">No</a>'
 			+ '</div>' + '</div>' + '</div>' + '</div>');
 
 	confirmationModal.modal('show');

@@ -59,3 +59,11 @@ function canEditCurrentContact()
 	
 	return canEditContact(contact.owner.id);
 }
+
+function canRunBulkOperations()
+{
+	if((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) && hasScope('VIEW_CONTACTS'))
+		return true;
+	
+	return false;
+}
