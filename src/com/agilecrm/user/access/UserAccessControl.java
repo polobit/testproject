@@ -140,4 +140,9 @@ public abstract class UserAccessControl
     {
 
     }
+
+    public boolean isNew()
+    {
+	return false;
+    }
 }
