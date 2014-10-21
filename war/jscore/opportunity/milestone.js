@@ -143,6 +143,11 @@ $(function(){
     	
     	e.preventDefault();
     	var form = $(this).closest('form');
+    	if(!new_milestone || new_milestone.length <= 0 || (/^[a-zA-Z0-9-_ ]*$/).test(new_milestone))
+		{
+    		$('#milestone-error-modal').modal('show');
+			return;
+		}
     	form.find('.show_field').css("display","none");
     	form.find(".show_milestone_field").css("display","inline-block");
     	
@@ -152,7 +157,7 @@ $(function(){
 		{
 			return;
 		}
-
+    	
     	// To add a milestone when input is not empty
     	if(new_milestone != "")
     	{
