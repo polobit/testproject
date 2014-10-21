@@ -58,8 +58,15 @@ public class DealCSVExport
 	{
 	    str[indexMap.get(NAME)] = deal.name;
 	    str[indexMap.get(DESCRIPTION)] = deal.description;
-	    if (deal.getPipeline_id() != 0)
-		str[indexMap.get(PIPELINE)] = deal.getPipeline().name;
+	    try
+	    {
+		if (deal.getPipeline_id() != 0)
+		    str[indexMap.get(PIPELINE)] = deal.getPipeline().name;
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
 	    str[indexMap.get(MILESTONE)] = deal.milestone;
 	    str[indexMap.get(PROBABILITY)] = deal.probability + "%";
 	    String currency = UserPrefsUtil.getCurrentUserPrefs().currency;
