@@ -659,7 +659,7 @@ public class QueryDocumentUtil
 		if (stringBuffer.length() > 0)
 			stringBuffer.append(" AND type=PERSON");
 		// filtering user access level
-		if (UserAccessControlUtil.hasScope(UserAccessScopes.DELETE_CONTACTS))
+		if (!UserAccessControlUtil.hasScope(UserAccessScopes.DELETE_CONTACTS))
 		{
 			Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
 			if (domainUserKey != null)
