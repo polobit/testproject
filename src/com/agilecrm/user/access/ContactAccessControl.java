@@ -88,7 +88,10 @@ public class ContactAccessControl extends UserAccessControl
     {
 	// If contact is defined it checks for update operation if owner in the
 	// contact and current owner is different
-	return hasScope(UserAccessScopes.VIEW_CONTACTS);
+	if (!checkOwner() || contact.getContactOwnerKey() == null)
+	    return hasScope(UserAccessScopes.VIEW_CONTACTS);
+
+	return true;
     }
 
     /**
@@ -98,6 +101,9 @@ public class ContactAccessControl extends UserAccessControl
      */
     public boolean checkOwner()
     {
+	if (contact == null || contact.getContactOwnerKey() == null)
+	    return true;
+
 	// Gets current user id and contact owner id and checks for equity
 	Long currentContactOwnerId = contact.getContactOwnerKey().getId();
 	UserInfo info = SessionManager.get();
