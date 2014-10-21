@@ -24,6 +24,7 @@ import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
+import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.googlecode.objectify.Key;
@@ -272,6 +273,10 @@ public abstract class ContactSyncService implements SyncService
 		contact.save();
 
 		syncStatus.put(ImportStatus.MERGED_CONTACTS, syncStatus.get(ImportStatus.MERGED_CONTACTS) + 1);
+	    }
+	    catch (AccessDeniedException e)
+	    {
+		syncStatus.put(ImportStatus.ACCESS_DENIED, syncStatus.get(ImportStatus.ACCESS_DENIED) + 1);
 	    }
 	    catch (Exception e)
 	    {
