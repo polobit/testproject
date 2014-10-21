@@ -564,9 +564,9 @@ public class BulkOperationsAPI
 		    ActivitySave.html2text(emailData.getString("subject")));
 	}
 
-	if (fetcher.getAvailableContacts() > 0)
+	if (count > 0)
 	    BulkActionNotifications.publishNotification("Email successfully sent to " + count + " Contacts");
-	else if (fetcher.getAvailableCompanies() > 0)
+	else if (count > 0)
 	    BulkActionNotifications.publishNotification("Email successfully sent to " + count + " companies");
 	else
 	    BulkActionNotifications.publishNotification("Email successfully sent to 0 contacts/companies");
