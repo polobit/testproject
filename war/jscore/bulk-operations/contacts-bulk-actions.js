@@ -108,7 +108,7 @@ $(function()
 		if(!canRunBulkOperations())
 		{
 			showModalConfirmation("Bulk Assign Campaign", 
-					"You may not be the owner for some of the contacts selected. Proceeding with this operation will add only your contacts to the campaign.<br/><br/>Do you want to proceed?", 
+					"You may not have permission to update some of the contacts selected. Proceeding with this operation will add only your contacts to the campaign.<br/><br/>Do you want to proceed?", 
 					show_bulk_campaign_assign_page
 					, function(){
 						// No callback

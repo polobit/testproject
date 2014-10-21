@@ -263,7 +263,7 @@ public abstract class ContactSyncService implements SyncService
 	if (ContactUtil.isDuplicateContact(contact))
 	{
 	    contact = ContactUtil.mergeContactFields(contact);
-	    if (accessControl.canDelete())
+	    if (!accessControl.canDelete())
 	    {
 		syncStatus.put(ImportStatus.ACCESS_DENIED, syncStatus.get(ImportStatus.ACCESS_DENIED) + 1);
 		return contact;
@@ -286,7 +286,15 @@ public abstract class ContactSyncService implements SyncService
 	else if (contactRestriction.can_create())
 	{
 	    addTagToContact(contact);
-	    contact.save();
+	    try
+	    {
+		contact.save();
+	    }
+	    catch (AccessDeniedException e)
+	    {
+		syncStatus.put(ImportStatus.ACCESS_DENIED, syncStatus.get(ImportStatus.ACCESS_DENIED) + 1);
+		return contact;
+	    }
 	    restriction.contacts_count++;
 	    syncStatus.put(ImportStatus.NEW_CONTACTS, syncStatus.get(ImportStatus.NEW_CONTACTS) + 1);
 	}

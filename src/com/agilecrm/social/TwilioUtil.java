@@ -654,12 +654,12 @@ public class TwilioUtil
 	// params.put("VoiceUrl",
 	// "http://1-dot-bothservlet.appspot.com/backend/twilioiovoice");
 	params.put("VoiceUrl", "https://" + NamespaceManager.get()
-		+ "-dot-2-9-dot-agile-crm-cloud.appspot.com/twilioiovoice");
+		+ ".agilecrm.com/twilioiovoice");
 	params.put("VoiceMethod", "GET");
 	// params.put("StatusCallback",+
 	// "http://1-dot-bothservlet.appspot.com/backend/twilioiostatuscallback");
 	params.put("StatusCallback", "https://" + NamespaceManager.get()
-		+ "-dot-2-9-dot-agile-crm-cloud.appspot.com/twilioiostatuscallback?sessionmngrid="
+		+ ".agilecrm.com/twilioiostatuscallback?sessionmngrid="
 		+ SessionManager.get().getDomainId());
 	params.put("StatusCallbackMethod", "GET");
 

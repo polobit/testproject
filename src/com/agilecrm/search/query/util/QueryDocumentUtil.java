@@ -579,18 +579,18 @@ public class QueryDocumentUtil
 		// filtering on first name and last name
 		if (StringUtils.isNotBlank(firstName) && StringUtils.isNotBlank(lastName))
 		{
-			String fName = firstName.trim().replaceAll("\"", "\\\\\"");
-			String lName = lastName.trim().replaceAll("\"", "\\\\\"");
+			String fName = firstName.trim().replaceAll(" ", "").replaceAll("\"", "\\\\\"");
+			String lName = lastName.trim().replaceAll(" ", "").replaceAll("\"", "\\\\\"");
 			stringBuffer.append("(first_name=\"" + fName + "\" AND " + "last_name=\"" + lName + "\")");
 		}
 		else if (StringUtils.isNotBlank(firstName) && StringUtils.isBlank(lastName))
 		{
-			String fName = firstName.trim().replaceAll("\"", "\\\\\"");
+			String fName = firstName.trim().replaceAll(" ", "").replaceAll("\"", "\\\\\"");
 			stringBuffer.append("(first_name=\"" + fName + "\")");
 		}
 		else if (StringUtils.isBlank(firstName) && StringUtils.isNotBlank(lastName))
 		{
-			String lName = lastName.trim().replaceAll("\"", "\\\\\"");
+			String lName = lastName.trim().replaceAll(" ", "").replaceAll("\"", "\\\\\"");
 			stringBuffer.append("(last_name=\"" + lName + "\")");
 		}
 		List<ContactField> properties = contact.getProperties();
@@ -600,12 +600,12 @@ public class QueryDocumentUtil
 			if (contactField.name.equalsIgnoreCase(Contact.PHONE))
 			{
 				if (StringUtils.isNotBlank(contactField.value))
-					phones.add((contactField.value).trim());
+					phones.add((contactField.value).trim().replaceAll(" ", ""));
 			}
 			if (contactField.name.equalsIgnoreCase(Contact.EMAIL))
 			{
 				if (StringUtils.isNotBlank(contactField.value))
-					emails.add((contactField.value).trim());
+					emails.add((contactField.value).trim().replaceAll(" ", ""));
 			}
 		}
 		if (emails.size() > 0)
@@ -639,7 +639,7 @@ public class QueryDocumentUtil
 			{
 				if (i == 0)
 				{
-					phoneBuffer.append(" OR phone=(");
+					phoneBuffer.append("phone=(");
 				}
 				phoneBuffer.append("\"");
 				phoneBuffer.append(phonesArray[i]);
@@ -659,7 +659,7 @@ public class QueryDocumentUtil
 		if (stringBuffer.length() > 0)
 			stringBuffer.append(" AND type=PERSON");
 		// filtering user access level
-		if (UserAccessControlUtil.hasScope(UserAccessScopes.DELETE_CONTACTS))
+		if (!UserAccessControlUtil.hasScope(UserAccessScopes.DELETE_CONTACTS))
 		{
 			Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
 			if (domainUserKey != null)
