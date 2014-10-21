@@ -142,7 +142,7 @@ public class ContactExportCSVUtil
 	    sb.append(note.subject.trim()).append("\n"+note.description);
 	    data.add(sb.toString());
 	    count++;
-	    if (count == 5)
+	    if (count == 10)
 		break;
 	}
 	// convert all data into string array
@@ -172,6 +172,11 @@ public class ContactExportCSVUtil
 	data.add("Note3");
 	data.add("Note4");
 	data.add("Note5");
+	data.add("Note6");
+	data.add("Note7");
+	data.add("Note8");
+	data.add("Note9");
+	data.add("Note10");
 	String[] headers = new String[data.size()];
 	int i = 0;
 	for (String s : data)
