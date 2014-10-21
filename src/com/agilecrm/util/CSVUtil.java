@@ -548,6 +548,7 @@ public class CSVUtil
 	if (savedContacts > 0)
 	{
 	    buildCSVImportStatus(status, ImportStatus.NEW_CONTACTS, savedContacts);
+	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts);
 	}
 	if (mergedContacts > 0)
 	{
@@ -564,10 +565,7 @@ public class CSVUtil
 	{
 	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
 	}
-	else
-	{
-	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts);
-	}
+	
 
 	// Sends notification on CSV import completion
 	dBbillingRestriction.send_warning_message();
