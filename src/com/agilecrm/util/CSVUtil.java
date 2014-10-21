@@ -56,6 +56,7 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
+import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.files.AppEngineFile;
@@ -483,6 +484,14 @@ public class CSVUtil
 
 		tempContact.save();
 	    }// end of try
+	    catch (AccessDeniedException e)
+	    {
+
+		System.out.println("ACL exception raised while saving contact ");
+		e.printStackTrace();
+		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), e.getMessage()));
+
+	    }
 	    catch (Exception e)
 	    {
 
@@ -546,11 +555,6 @@ public class CSVUtil
 	    buildCSVImportStatus(status, ImportStatus.MERGED_CONTACTS, mergedContacts);
 
 	}
-	else
-	{
-	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts);
-	}
-
 	if (limitExceeded > 0)
 	{
 	    buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
@@ -558,6 +562,10 @@ public class CSVUtil
 	if (accessDeniedToUpdate > 0)
 	{
 	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
+	}
+	else
+	{
+	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts);
 	}
 
 	// Sends notification on CSV import completion
