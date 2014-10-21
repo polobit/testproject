@@ -487,6 +487,7 @@ public class CSVUtil
 	    catch (AccessDeniedException e)
 	    {
 
+		accessDeniedToUpdate++
 		System.out.println("ACL exception raised while saving contact ");
 		e.printStackTrace();
 		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), e.getMessage()));
