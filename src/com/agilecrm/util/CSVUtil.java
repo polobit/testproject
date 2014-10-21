@@ -543,20 +543,22 @@ public class CSVUtil
 	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts + mergedContacts);
 
 	    buildCSVImportStatus(status, ImportStatus.MERGED_CONTACTS, mergedContacts);
-	    if (limitExceeded > 0)
-	    {
-		buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
-	    }
-	}
-	if (accessDeniedToUpdate > 0)
-	{
-	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
+
 	}
 	else
 	{
 	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts);
 	}
 
+	if (limitExceeded > 0)
+	{
+	    buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
+	}
+	if (accessDeniedToUpdate > 0)
+	{
+	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
+	}
+	
 	// Sends notification on CSV import completion
 	dBbillingRestriction.send_warning_message();
 
