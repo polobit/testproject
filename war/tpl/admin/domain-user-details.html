@@ -64,45 +64,71 @@
 
 <div class="row">
 
-
-
 </script>
 
 <script id="plan-info-template" type="text/html">
 <div class="header"><a id="login_id"   href='https://{{description}}.agilecrm.com/login'  target='_self'><strong><u>Login To Domain</u></strong></a></div>
 <div class="well">
 <p>
-	<strong><u>Your Current Plan</u>:</strong>
+	<strong><u>Your Current Plans</u>:</strong>
 </p>
-{{#if this.subscription}}
+{{#if this.subscriptions}}
+{{#each subscriptions.data}}
+
+{{#is_userPlan plan.id}}
+<div id="user_sub">
+<strong><u>User plan</u></strong>
+{{/is_userPlan}}
+
+{{#is_emailPlan plan.id}}
+<div id="email_sub">
+<strong><u>Email plan</u></strong>
+{{/is_emailPlan}}
+
+
+
+	
 <p>
-     Start Date: <time class="time-ago" datetime="{{epochToHumanDate "" subscription.start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" subscription.start}}</time>     
+     Start Date: <time class="time-ago" datetime="{{epochToHumanDate "" start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start}}</time>     
 </p>
-{{#if this.subscription.currentPeriodEnd}}
+{{#if this.currentPeriodEnd}}
 <p>
-    End Date: <time class="time-ago" datetime="{{epochToHumanDate "" subscription.currentPeriodEnd}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" subscription.currentPeriodEnd}}</time>     
+    End Date: <time class="time-ago" datetime="{{epochToHumanDate "" currentPeriodEnd}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" currentPeriodEnd}}</time>     
 </p>
 {{/if}}
 
 <p>
-Current Plan: &nbsp;&nbsp;{{subscription.plan.id}}
+Current Plan: &nbsp;&nbsp;{{plan.id}}
 </p>
 
 <p>
-Interval: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{subscription.plan.interval}}
+Interval: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.interval}}
 </p>
 <p>
-Amount: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{numeric_operation subscription.plan.amount 100 "/"}} {{toUpperCase subscription.plan.currency}}
+Amount: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{numeric_operation plan.amount 100 "/"}} {{toUpperCase plan.currency}}
 </p>
 <p>
-Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{subscription.plan.name}}
+Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 </p>
 <p>
-Users: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{subscription.quantity}}
+Users: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{quantity}}
 </p><br/>
+{{#is_userPlan plan.id}}			
 <p>
-	<a href="/#domainSubscribe/{{description}}"  ><strong><u> Change Plan</strong></u> </a>&nbsp;&nbsp;
+	<a href="/#domainSubscribe"><strong><u> Change Plan</strong></u> </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<a href="/#delete_userplan/{{id}}/{{../../id}}"> <strong><u>Cancel Subscription</u></strong> </a>
 </p>
+{{/is_userPlan}}
+{{#is_emailPlan plan.id}}
+<p>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<a href="/#delete_emailplan/{{id}}/{{../../id}}"> <strong><u>Cancel Subscription</u></strong> </a>
+</p>
+{{/is_emailPlan}}
+<br/><br/>
+</div>
+{{/each}}
   {{else}}
         <div ><strong>No active subscription</strong></div>
 {{/if}}

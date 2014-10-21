@@ -1748,7 +1748,7 @@ $(function()
 			return options.inverse(this)
 		}
 	});
-
+	
 	Handlebars.registerHelper('containString', function(value, target, options)
 	{
 		if (target.search(value) != -1)
@@ -1756,6 +1756,23 @@ $(function()
 
 		return options.inverse(this);
 	});
+	Handlebars.registerHelper('is_emailPlan', function(planId, options)
+			{
+				
+				if (planId.search("email") != -1)
+					return options.fn(this);
+
+				return options.inverse(this);
+
+				
+			});
+	Handlebars.registerHelper('is_userPlan', function(planId, options)
+			{
+				if (planId.search("email") != -1)
+					return options.inverse(this);
+				return options.fn(this);
+				
+			});
 
 	Handlebars.registerHelper('numeric_operation', function(operand1, operand2, operator)
 	{
