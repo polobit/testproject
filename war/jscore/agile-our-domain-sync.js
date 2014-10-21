@@ -219,6 +219,7 @@ function our_domain_sync()
 
 					var name = CURRENT_DOMAIN_USER['name'];
 					// var first_name = name; var last_name = name;
+					name = name.trim();
 
 					var first_name = name.split(" ")[0].trim();
 					var last_name = (first_name.length < name.length) ? name.substring(first_name.length + 1).trim() : '';
