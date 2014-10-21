@@ -210,33 +210,33 @@ function our_domain_sync()
 			// set_profile_noty();
 			Agile_Contact = data;
 
-			var email_from_our_website=readCookie("_agile_our_website_email");
+			var email_from_our_website = readCookie("_agile_our_website_email");
 
 			if (email_from_our_website)
 			{
-				if(email_from_our_website==CURRENT_DOMAIN_USER['email']){
-					
-					
-					var name = CURRENT_DOMAIN_USER['name'];
-				//	var first_name = name; var last_name = name;
-				
-					var first_name = name.split(" ")[0].trim();
-					var last_name  = (first_name.length < name.length) ? name.substring(first_name.length + 1).trim() : '';
-					
-					_agile.update_contact({"first_name" : first_name, "last_name" : last_name }, function(data)
-							{
+				if (email_from_our_website == CURRENT_DOMAIN_USER['email'])
+				{
 
-								Agile_Contact = data;
-								eraseCookie('_agile_our_website_email');
-								
-							});
-					
+					var name = CURRENT_DOMAIN_USER['name'];
+					// var first_name = name; var last_name = name;
+
+					var first_name = name.split(" ")[0].trim();
+					var last_name = (first_name.length < name.length) ? name.substring(first_name.length + 1).trim() : '';
+
+					_agile.update_contact({ "first_name" : first_name, "last_name" : last_name }, function(data)
+					{
+
+						Agile_Contact = data;
+						eraseCookie('_agile_our_website_email');
+
+					});
+
 				}
 			}
 			// Adds signup tag, if it is not added previously.
 			// set_profile_noty();
 			add_custom_fields_to_our_domain();
-		
+
 			if (CURRENT_DOMAIN_USER['is_account_owner'])
 			{
 				add_tag_our_domain("Domain Owner");
@@ -246,12 +246,12 @@ function our_domain_sync()
 		}, function(data)
 		{
 			var name = CURRENT_DOMAIN_USER['name'];
-			
-			//var first_name = name, last_name = name;
+
+			// var first_name = name, last_name = name;
 			name = name.trim();
 			var first_name = name.split(" ")[0].trim();
-			var last_name  = (first_name.length < name.length) ? name.substring(first_name.length + 1).trim() : '';
-			
+			var last_name = (first_name.length < name.length) ? name.substring(first_name.length + 1).trim() : '';
+
 			// Creates a new contact and assigns it to global value
 			_agile.create_contact({ "email" : CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name" : last_name }, function(data)
 			{
@@ -259,6 +259,11 @@ function our_domain_sync()
 				// Shows noty
 				// set_profile_noty();
 				add_custom_fields_to_our_domain();
+				if (CURRENT_DOMAIN_USER['is_account_owner'])
+				{
+					add_tag_our_domain("Domain Owner");
+
+				}
 				initWebrules();
 				add_referrar_info_as_note();
 			});
@@ -431,15 +436,14 @@ function add_property(name, value, type, callback)
  */
 function add_created_user_info_as_note_to_owner(owner, callback)
 {
-		var note = {};
-		note.subject = "User created";
-		note.description = "Domain - " + owner['domain']+"\n User Email -  " + owner['created_user_email'];
-		_agile.add_note(note, function(data)
-		{
-			if (callback && typeof callback == "function")
-				callback(data);
+	var note = {};
+	note.subject = "User created";
+	note.description = " Domain - " + owner['domain'] + "\n User Email -  " + owner['created_user_email'];
+	_agile.add_note(note, function(data)
+	{
+		if (callback && typeof callback == "function")
+			callback(data);
 
-		},owner['email']);
-		
-	
+	}, owner['email']);
+
 }
