@@ -58,12 +58,12 @@ public class ContactAccessControl extends UserAccessControl
     {
 	// If contact is defined it checks for update operation if owner in the
 	// contact and current owner is different
-	if (!isNewContact() && !checkOwner())
+	if (!isNew() && !checkOwner())
 	{
 	    return hasScope(UserAccessScopes.DELETE_CONTACTS);
 	}
 
-	if (isNewContact())
+	if (isNew())
 	    return hasScope(UserAccessScopes.CREATE_CONTACT);
 
 	return true;
@@ -73,7 +73,7 @@ public class ContactAccessControl extends UserAccessControl
     {
 	// Delete condition is checked only if current user is not owner of the
 	// contact
-	if (!isNewContact() && !checkOwner())
+	if (!isNew() && !checkOwner())
 	{
 	    return hasScope(UserAccessScopes.DELETE_CONTACTS);
 	}
@@ -118,7 +118,7 @@ public class ContactAccessControl extends UserAccessControl
      * 
      * @return
      */
-    public boolean isNewContact()
+    public boolean isNew()
     {
 	if (contact == null || contact.id != null)
 	    return false;

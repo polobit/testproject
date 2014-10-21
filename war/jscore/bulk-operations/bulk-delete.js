@@ -41,9 +41,7 @@ $(function(){
 			if(!canRunBulkOperations())
 			{
 				showModalConfirmation("Bulk Delete", 
-						"You may not have permission to update some of the contacts selected. " +
-						"Proceeding with this operation will change the owner for only the contacts " +
-						"you are allowed to update.<br/><br/> Do you want to proceed?", 
+						"You may not have permission to delete some of the contacts selected. Proceeding with this operation will delete only the contacts that you are permitted to delete.<br/><br/> Do you want to proceed?", 
 						function (){
 					
 					// Customize the bulk delete operations
@@ -150,9 +148,7 @@ $(function(){
 				if(!canRunBulkOperations())
 				{
 					showModalConfirmation("Bulk Delete", 
-							"You may not have permission to update some of the contacts selected. " +
-							"Proceeding with this operation will change the owner for only the contacts " +
-							"you are allowed to update.<br/><br/> Do you want to proceed?", 
+							"You may not have permission to delete some of the contacts selected. Proceeding with this operation will delete only the contacts that you are permitted to delete.<br/><br/> Do you want to proceed?",
 							function (){
 								// Customize the bulk delete operations
 								if(!customize_bulk_delete(id_array, data_array))

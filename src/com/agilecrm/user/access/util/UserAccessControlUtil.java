@@ -32,7 +32,7 @@ public class UserAccessControlUtil
 
 	UPDATE("You do not have permission to update contacts."),
 
-	DELETE("You do not have permission to update contacts."),
+	DELETE("You do not have permission to update this contact."),
 
 	IMPORT("You do not have permission to import contacts"),
 
@@ -76,7 +76,12 @@ public class UserAccessControlUtil
 	boolean isOperationAllowed = true;
 
 	if (operation == CRUDOperation.CREATE)
+	{
+	    if (!acccessControl.isNew())
+		operation = CRUDOperation.DELETE;
+
 	    isOperationAllowed = acccessControl.canCreate();
+	}
 	else if (operation == CRUDOperation.DELETE)
 	    isOperationAllowed = acccessControl.canDelete();
 	else if (operation == CRUDOperation.IMPORT)
