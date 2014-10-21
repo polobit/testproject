@@ -67,7 +67,7 @@ public class XeroScribeServlet extends HttpServlet
 			// If return URL is null, redirect to dashboard
 			System.out.println(returnURL);
 			if (returnURL == null)
-				resp.sendRedirect("/");
+				resp.sendRedirect("/#Xero/xero");
 			else
 				resp.sendRedirect(returnURL);
 
