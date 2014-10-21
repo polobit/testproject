@@ -14,8 +14,8 @@
 				{{#canSyncContacts}}
     					<div class="btn" id="google-import" style="display:inline-block;">Enable</div>
 					{{else}}
-						<div class="btn" style="display:inline-block;" disabled>Enable</div>
-						<div style="margin-top:5px">No permission to import contacts.</div>
+						<span class="btn" style="display:inline-block;" disabled>Enable</span>
+						<span style="margin-left:5px"><i>Needs import privilege.</i></span>
 				{{/canSyncContacts}}
     		{{/if}}
 	</div>
@@ -234,8 +234,8 @@
 				{{#canSyncContacts}}
     						<div class="btn" id="stripe_import" style="display:inline-block;">Enable</div>
 					{{else}}
-							<div class="btn" style="display:inline-block;" disabled>Enable</div>
-							<div style="margin-top:5px">No permission to import contacts.</div>
+							<span class="btn" style="display:inline-block;" disabled>Enable</span>
+							<span style="margin-left:5px"><i>Needs import privilege.</i></span>
 				{{/canSyncContacts}}
     		
     		{{/if}}
@@ -334,7 +334,7 @@ margin-left: -3px;">.myshopify.com</span>
     						   <a href="#sync/shopify"  class="btn"  style="display:inline-block;">Enable</a>
 						{{else}}
 							   <a href="#"  class="btn"  style="display:inline-block;" disabled>Enable</a>
-								<div style="margin-top:5px">No permission to import contacts.</div>
+								<span style="margin-left:5px"><i>Needs import privilege.</i></span>
 					{{/canSyncContacts}}
 			
 			{{/if}}
@@ -364,7 +364,7 @@ margin-left: -3px;">.myshopify.com</span>
     						   <button class="btn" id="zoho-import" style="display:inline-block;">Enable</button>
 						{{else}}
 							   <a href="#"  class="btn"  style="display:inline-block;" disabled>Enable</a>
-								<div style="margin-top:5px">No permission to import contacts.</div>
+								<span style="margin-left:5px"><i>Needs import privilege.</i></span>
 					{{/canSyncContacts}}
          <div>
            
@@ -452,7 +452,7 @@ margin-left: -3px;">.myshopify.com</span>
     						 <a href="/OAuthServlet?service=quickbook-import&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks""  class="btn"  style="display:inline-block;">Enable</a>
 						{{else}}
 							   <a href="#"  class="btn"  style="display:inline-block;" disabled>Enable</a>
-								<div style="margin-top:5px">No permission to import contacts.</div>
+								<span style="margin-left:5px"><i>Needs import privilege.</i></span>
 					{{/canSyncContacts}}
 
 			{{/if}}
@@ -482,7 +482,7 @@ margin-left: -3px;">.myshopify.com</span>
     						 <a href="#" id ="xeroconnect"class="btn" style="display:inline-block;">Enable</a>
 						{{else}}
 							   <a href="#"  class="btn"  style="display:inline-block;" disabled>Enable</a>
-								<div style="margin-top:5px">No permission to import contacts.</div>
+								<span style="margin-left:5px"><i>Needs import privilege.</i></span>
 					{{/canSyncContacts}}
 			{{/if}}
 

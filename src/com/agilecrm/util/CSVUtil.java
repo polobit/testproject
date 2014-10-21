@@ -530,7 +530,8 @@ public class CSVUtil
 
 	}// end of for loop
 
-	calculateTotalFailedContacts(status);
+	if (failedContacts.size() > 0)
+	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedContacts.size());
 
 	buildCSVImportStatus(status, ImportStatus.TOTAL, csvData.size());
 
@@ -558,7 +559,7 @@ public class CSVUtil
 	{
 	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
 	}
-	
+
 	// Sends notification on CSV import completion
 	dBbillingRestriction.send_warning_message();
 

@@ -153,12 +153,12 @@ public class SearchAPI
 			else if (StringUtils.isNotBlank(firstName) && StringUtils.isBlank(lastName))
 			{
 				String fName = firstName.trim().replaceAll("\"", "\\\\\"");
-				stringBuffer.append("first_name=\"" + fName + "\")");
+				stringBuffer.append("(first_name=\"" + fName + "\")");
 			}
 			else if (StringUtils.isBlank(firstName) && StringUtils.isNotBlank(lastName))
 			{
 				String lName = lastName.trim().replaceAll("\"", "\\\\\"");
-				stringBuffer.append("last_name=\"" + lName + "\")");
+				stringBuffer.append("(last_name=\"" + lName + "\")");
 			}
 			List<ContactField> properties = contact.getProperties();
 			for (int i = 0; i < properties.size(); i++)
@@ -246,7 +246,6 @@ public class SearchAPI
 						iterator.remove();
 						return collection;
 					}
-
 				}
 				counter++;
 			}

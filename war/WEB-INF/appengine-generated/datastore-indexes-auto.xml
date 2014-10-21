@@ -1,6 +1,6 @@
 <!-- Indices written at Thu, 16 Oct 2014 12:34:35 UTC -->
 
-<datastore-indexes/>
+<datastore-indexes>
 
     <!-- Used 9 times in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">

@@ -565,9 +565,9 @@ public class BulkOperationsAPI
 	}
 
 	if (fetcher.getAvailableContacts() > 0)
-	    BulkActionNotifications.publishNotification("Email successfully sent to " + 0 + " Contacts");
+	    BulkActionNotifications.publishNotification("Email successfully sent to " + count + " Contacts");
 	else if (fetcher.getAvailableCompanies() > 0)
-	    BulkActionNotifications.publishNotification("Email successfully sent to " + 0 + " companies");
+	    BulkActionNotifications.publishNotification("Email successfully sent to " + count + " companies");
 	else
 	    BulkActionNotifications.publishNotification("Email successfully sent to 0 contacts/companies");
 
