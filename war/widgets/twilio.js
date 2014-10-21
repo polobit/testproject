@@ -446,6 +446,33 @@ function getTwilioLogs(to)
 		});
 		// Add the call logs to the timeline.
 		addLogsToTimeLine($.parseJSON(logs));
+		
+		/*
+		 * On click of play button in Twilio logs, call conversaion is played
+		 */
+		$("#record_sound_play").die().live("click", function(e)
+		{
+			e.preventDefault();
+
+			/**
+			 * We make play button on a widget disabled on click of it. This is done
+			 * to avoid continuous click in a short time, like double click on add
+			 * button
+			 */
+			/*
+			 * if ($(this).attr("disabled")) return; // set attribute disabled as
+			 * disabled $(this).attr("disabled", "disabled");
+			 */
+
+			// Sound URL from Twilio to play call
+			var sound_url = "https://api.twilio.com" + $(this).attr("sound_url");
+			console.log("Twilio sound URL: " + sound_url);
+
+			// plays call conversion
+			play_sound(sound_url, "true");
+
+			// $(this).removeAttr("disabled");
+		});
 
 	}).error(function(data)
 	{
