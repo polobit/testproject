@@ -189,7 +189,7 @@ $(function()
 		if(!canRunBulkOperations())
 		{
 			showModalConfirmation("Bulk Add Tag", 
-					"You may not have permission to update some of the contacts selected. Proceeding with this operation will add Tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?" ,
+					"You may not have permission to update some of the contacts selected. Proceeding with this operation will add tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?" ,
  
 					show_add_tag_bulkaction_form
 					, function(){
@@ -297,7 +297,7 @@ $(function()
 		if(!canRunBulkOperations())
 		{
 			showModalConfirmation("Bulk Remove Tag", 
-					"You may not have permission to update some of the contacts selected. Proceeding with this operation will delete Tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?" ,
+					"You may not have permission to update some of the contacts selected. Proceeding with this operation will delete tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?" ,
  
 					show_remove_tag_bulkaction_form
 					, function(){
