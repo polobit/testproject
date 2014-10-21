@@ -797,7 +797,7 @@ public class ContactUtil
 		++i;
 	    }
 
-	    if (i >= 150)
+	    if (i >= 50)
 	    {
 		search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
 		builderObjects.clear();
@@ -805,7 +805,7 @@ public class ContactUtil
 	    }
 	}
 
-	if (builderObjects.size() > 1)
+	if (builderObjects.size() >= 1)
 	    search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
 
 	Contact.dao.putAll(contacts_list);
