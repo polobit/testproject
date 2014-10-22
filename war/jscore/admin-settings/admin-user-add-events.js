@@ -12,5 +12,6 @@ function bindAdminChangeAction(el)
 		if(!this.checked){
 			$(this).removeAttr("checked");
 		}
-	})
+	});
+	
 }
