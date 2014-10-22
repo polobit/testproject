@@ -12,5 +12,27 @@ function bindAdminChangeAction(el)
 		if(!this.checked){
 			$(this).removeAttr("checked");
 		}
+	});
+	
+	var import_field = $('input[value="IMPORT_CONTACTS"]', el);
+	
+	if(!import_field)
+		return;
+	
+	if($('input[value="IMPORT_CONTACTS"]:checked', el))
+		{
+			$('input[value="CREATE_CONTACT"]', el).attr("checked", "checked" ).attr("disabled", "disabled");
+		}
+			
+	import_field.die().live('change', function(e){
+		var is_import_enabled = $(this).is(":checked");
+		if(is_import_enabled == true)
+			{
+				$('input[value="CREATE_CONTACT"]', el).attr("checked", "checked" ).attr("disabled", "disabled");
+			}
+			
+		else
+			$('input[value="CREATE_CONTACT"]', el).removeAttr("disabled");
 	})
+	
 }
