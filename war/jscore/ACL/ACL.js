@@ -62,7 +62,10 @@ function canEditCurrentContact()
 
 function canRunBulkOperations()
 {
-	if((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) && hasScope('VIEW_CONTACTS'))
+	if(hasScope('VIEW_CONTACTS'))
+		return false;
+	
+	if(!(hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')))
 		return true;
 	
 	return false;
