@@ -19,7 +19,7 @@ function bindAdminChangeAction(el)
 	if(!import_field)
 		return;
 	
-	if($('input[value="IMPORT_CONTACTS"]:checked', el))
+	if($('input[value="IMPORT_CONTACTS"]:checked', el).length > 0)
 		{
 			$('input[value="CREATE_CONTACT"]', el).attr("checked", "checked" ).attr("disabled", "disabled");
 		}
