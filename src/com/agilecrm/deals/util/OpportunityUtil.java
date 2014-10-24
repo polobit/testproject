@@ -14,6 +14,10 @@ import org.json.JSONException;
 
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.CustomFieldDef.SCOPE;
+import com.agilecrm.contact.CustomFieldDef.Type;
+import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
@@ -745,6 +749,9 @@ public class OpportunityUtil
 
 	    searchMap.putAll(getDateFilterCondition(filterJson, "close_date"));
 	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
+	    Map<String, Object> customFilters = getCustomFieldFilters(filterJson.getJSONObject("customFields"));
+	    if (customFilters != null)
+		searchMap.putAll(customFilters);
 	    if (count != 0)
 		return dao.fetchAllByOrder(count, cursor, searchMap, true, false, "-created_time");
 
@@ -830,4 +837,36 @@ public class OpportunityUtil
 	}
     }
 
+    private static Map<String, Object> getCustomFieldFilters(org.json.JSONObject json)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	List<CustomFieldDef> customFieldList = CustomFieldDefUtil.getAllCustomFields(SCOPE.DEAL);
+	try
+	{
+	    for (CustomFieldDef customField : customFieldList)
+	    {
+		String fieldLabel = customField.field_label;
+		if ((customField.field_type == Type.TEXT || customField.field_type == Type.TEXTAREA || customField.field_type == Type.LIST)
+			&& checkJsonString(json, fieldLabel))
+		{
+		    searchMap.put(fieldLabel, json.getString(fieldLabel));
+		}
+		else if (customField.field_type == Type.CHECKBOX && checkJsonString(json, fieldLabel))
+		{
+		    String val = json.getBoolean(fieldLabel) ? "on" : "off";
+		    searchMap.put(fieldLabel, val);
+		}
+		else if (customField.field_type == Type.DATE && checkJsonString(json, fieldLabel))
+		{
+		    searchMap.putAll(getDateFilterCondition(json, fieldLabel));
+		}
+	    }
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	return searchMap;
+    }
 }
