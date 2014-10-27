@@ -1,43 +1,127 @@
 <script id="contact-detail-template" type="text/html">
-<div class="row-fluid"><small class="navigation span9" style="min-height:10px!important;font-size:smaller;line-height:6px;"></small></div>
+<!-- previous next actions -->
+<div class="row-fluid" style="display:none;"><small class="navigation span9 contact-switching"></small></div>
+<!-- ending previous next actions -->
+<!--  header span12 row view starting -->
 <div class="row">
-	<div class="span9">
+<div class="span12">
 		<div style="margin-bottom: 20px;">
-			<div style="border: 1px solid beige" class="row-fluid">
-				<div class="page-header"
-					style="padding: 20px; border: 1px solid #f5f5f5; margin: 0px">
-					<div style="display: inline">
-						<div style="float:left;">
+			<div class="row-fluid" style="border-bottom: 1px solid #ddd;padding-bottom: 10px;">
+				<div>
+					<div>
+					<div class="span10">
+<!-- starting profile pic -->
+						<div style="float: left;width: 100px;">
 							<form style='display: inline; padding-right: 10px; height: auto;'
 								id="contact-container">
 								<a href="#" class="tooltip_info" data-placement="top"
 									data-toggle="tooltip"
 									title="<i class='icon-edit icon-white icon'></i> Change Picture"
 									style='text-decoration: none;'> <img
-									class='thumbnail upload_pic imgholder submit' type="submit"
+									class='thumbnail upload_pic imgholder submit contact-profpic' type="submit"
 									src="{{gravatarurl properties 80}}"
-									style='display: inline; height: 80px; width: 80px' />
+									style='display: inline;' />
 								</a> <input type="hidden" id="upload_url" name="gravatarurl">
 								<a style="display: none;" class="save_img submit" type="submit">Save</a>
 							</form>
 						</div>
-						<div
-							style='margin-top: 0%; float:left; vertical-align: middle'>
-							<div
-								style="height: auto; text-overflow: ellipsis; white-space:nowrap;width:20em;padding-top:5px;overflow: hidden;">
-								<b style="font-size:2em;">{{getPropertyValue properties
+						<!--  ending profile pic -->
+						<!--  starting title, company  -->
+						<div style='margin-top: 7px;float: left;vertical-align: middle;margin-left: 4px;' class="span10">
+							<div>
+							<div>	
+							<div class="pull-left contact-profile-name mg-r-md">
+								{{getPropertyValue properties
 										"first_name"}} {{getPropertyValue properties "last_name"}}
-								</b>{{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}}
-								
-								</br>{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}
+								<!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a> -->{{/if_propertyName}}
+								</div>
+								<div class="pull-left mg-r-md">
+								<div id='star' class="contact-star"></div>
+								</div>
+								<!--  starting score -->
+						<div class="pull-left unselectable" id="score" unselectable="on"
+							onselectstart="return false">
+							<div  class="score-view">
+								<img src="../../img/flame.png" style="width:13px;height:13px;"> <span style="vertical-align: text-top; margin-left: -5px">
+									<img border="0" src="/img/help.png"
+									style="height: 6px; vertical-align: middle" rel="popover"
+									data-placement="bottom" data-title="Lead Score"
+									data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation."
+									id="element" data-trigger="hover">
+								</span>
+							
+								<span style="display: inline-block; vertical-align: middle">
+									{{#if lead_score}} <span id="lead-score">{{lead_score}}</span>&nbsp;
+									{{else}} <span id="lead-score">0</span>&nbsp;
+									{{/if}}
+								</span>
+							{{#canEditContact owner.id}}
+								<span class="contact-score-control">
+									<ul
+										style="display: inline-block; list-style-type: none; margin:0px">
+										<li style="height: 9px"><i class="icon-sort-up" id="add"
+											style="height: 10px; cursor: pointer"></i></li>
+										<li><i class="icon-sort-down" id="minus"
+											style="height: 10px; cursor: pointer"></i></li>
+									</ul>
+								</span>
+							{{/canEditContact}}
+							</div>
+						</div>
+						<!--  ending score -->
+								<div class="clearfix"></div>
+								<div class="contact-title">
+							{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}
 								{{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}
 								{{#if contact_company_id}} 
 									<a href="#contact/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
 								{{else}}
 									{{getPropertyValue properties "company"}}
 								{{/if}}
-								<br />
-								<div class="span2" style="padding-top: 5px; margin: 0px">
+								</div>
+								<div>
+				<div class="contact-tags">
+					<ul id="added-tags-ul" class="tagsinput"
+						style="display: inline; vertical-align: top; margin-bottom: 10px">
+							{{#if tagsWithTime.length}} 
+							 {{#canEditContact owner.id}}
+								{{#each tagsWithTime}}
+										<li style="display: inline-block;" class="tag" data="{{this.tag}}"><span><a
+								class="anchor" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
+								class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> 
+								{{/each}}
+								{{else}}
+									{{#each tagsWithTime}}
+										<li style="display: inline-block;" class="tag" data="{{this.tag}}"><span><a
+											class="anchor" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
+									{{/each}}
+							 {{/canEditContact}}
+							{{/if}}
+						 
+						
+					</ul>
+					<div style="display: inline-block; margin-top: 3px;">
+						<form id="addTagsForm" style="display: none; margin-bottom: 0px;">
+							<div class="control-group save-tag" style="margin-bottom: 0px">
+								<input name="" type="text" id="addTags"
+									class="tags-typeahead ignore-comma-keydown"
+									style="margin-bottom: -1px; width: 60%" placeholder="Enter tag" />
+								<span><a href="#" class="btn" id="contact-add-tags"
+									style="margin-left: 10px; margin-right: 5px">Add</a></span>
+							</div>
+						</form>
+						{{#canEditContact owner.id}}
+			<a href="#" id="add-tags" rel="tooltip"
+							data-original-title="addtag" data-placement="top"><i
+							class="icon-plus-sign"></i> <span>Add tags</span></a>
+						{{/canEditContact}}
+
+						
+					</div>
+				</div>
+			</div>
+								
+								<div class="span2" style="padding-top: 5px; margin: 0px;display:none;">
 									{{#property_is_exists "website" properties}}
 									{{#multiple_Property_Element "website" properties}} {{#each
 									this}} {{#if_equals subtype "TWITTER"}} <span
@@ -81,10 +165,15 @@
 								</div>
 							</div>
 						</div>
-						
-						<div class="right" style='position: relative'>
+						</div>
+						</div>
+						<!--  ending title,company -->
+						<div class="span2">
+						<div class="pull-right">
+						<!--  starting rating,edit,owner -->
+						<div  style='position: relative'>
 							<div class="btn-group right" style='position: relative'>
-								<div id='star' style='padding-bottom: 13px; width: auto !important'></div>
+								
 								<a class="btn" style="border-radius: 4px 0px 0px 4px!important;margin-left: 6px;" href='#contact-edit'><i class="icon-edit"></i> Edit</a>
 								<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 								<ul class="dropdown-menu">
@@ -125,49 +214,18 @@
 								</ul>
 							</div>
 						</div>
-						<div class="well right unselectable" id="score" unselectable="on"
-							style="height: 43px; margin-right: 70px; padding-top: 0px; padding-right: 10px; padding-left: 15px"
-							onselectstart="return false">
-							<div style="font-size: 22px; display: inline-block">
-								Score <span style="vertical-align: text-top; margin-left: -5px">
-									<img border="0" src="/img/help.png"
-									style="height: 6px; vertical-align: middle" rel="popover"
-									data-placement="bottom" data-title="Lead Score"
-									data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation."
-									id="element" data-trigger="hover">
-								</span>
-							</div>
-							<div>
-								<div style="display: inline-block; vertical-align: middle">
-									{{#if lead_score}} <span id="lead-score"
-										style="font-size: 28px; padding-left: 12px;">{{lead_score}}</span>&nbsp;
-									{{else}} <span id="lead-score"
-										style="font-size: 28px; padding-left: 12px;">0</span>&nbsp;
-									{{/if}}
-								</div>
-							{{#canEditContact owner.id}}
-								<div style="display: inline-block">
-									<ul
-										style="display: inline-block; list-style-type: none; margin-left: 2px">
-										<li style="height: 9px"><i class="icon-sort-up" id="add"
-											style="height: 10px; cursor: pointer"></i></li>
-										<li><i class="icon-sort-down" id="minus"
-											style="height: 10px; cursor: pointer"></i></li>
-									</ul>
-								</div>
-							{{/canEditContact}}
-							</div>
-						</div>
-
-					</div>
-<div class="clearfix"></div>
-					<!-- Owner block -->
+						<!--  ending rating,edit,owner -->
+						
+						<!-- Owner block -->
 				
-					<div style="float: right; margin-top: -21px;">
+					<div style="margin-top:63px;">
 						<div class="change-owner-succes"></div>
-						<span title="Owner"><strong style="color: gray">Owner:</strong>&nbsp;&nbsp;<span
-							id="contact-owner" data={{owner.id}}
-							style="display: inline-block">{{owner.name}}</span> <span>
+						<span title="Owner"><span class="contact-owner"><span class="contact-owner-text">Owner:&nbsp;&nbsp;</span>
+<img src="https://pbs.twimg.com/profile_images/1917130692/BD587CFD-E929-40F6-A5B3-C90916D01C88_bigger" style="border-radius: 50%;width: 25px;height: 25px;
+">
+<span
+							id="contact-owner contact-owner-name" data={{owner.id}}
+							style="display: inline-block">{{owner.name}}</span> <span class="contact-owner-edit">
 						{{#canEditContact owner.id}}
 								<a href="#"> <i class="icon-edit"
 									style="vertical-align: middle;" rel="popover"
@@ -187,53 +245,28 @@
                             </select>--> </span>
 						{{/canEditContact}}
 					</div>
+					</div>
+					<!--  ending owner block -->
+						
+						
+</div>
+					</div>
+<div class="clearfix"></div>
+					
 					<div class="clearfix"></div>
 				</div>
 
 			</div>
-			<div style="background-color: whitesmoke">
-				<div style="padding: 20px 10px 20px 23px">
-					<ul id="added-tags-ul" class="tagsinput"
-						style="display: inline; vertical-align: top; margin-bottom: 10px">
-							{{#if tagsWithTime.length}} 
-							 {{#canEditContact owner.id}}
-								{{#each tagsWithTime}}
-										<li style="display: inline-block;" class="tag" data="{{this.tag}}"><span><a
-								class="anchor" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
-								class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> 
-								{{/each}}
-								{{else}}
-									{{#each tagsWithTime}}
-										<li style="display: inline-block;" class="tag" data="{{this.tag}}"><span><a
-											class="anchor" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
-									{{/each}}
-							 {{/canEditContact}}
-							{{/if}}
-						 
-						
-					</ul>
-					<div style="display: inline-block; margin-top: 3px;">
-						<form id="addTagsForm" style="display: none; margin-bottom: 0px;">
-							<div class="control-group save-tag" style="margin-bottom: 0px">
-								<input name="" type="text" id="addTags"
-									class="tags-typeahead ignore-comma-keydown"
-									style="margin-bottom: -1px; width: 60%" placeholder="Enter tag" />
-								<span><a href="#" class="btn" id="contact-add-tags"
-									style="margin-left: 10px; margin-right: 5px">Add</a></span>
-							</div>
-						</form>
-						{{#canEditContact owner.id}}
-			<a href="#" id="add-tags" rel="tooltip"
-							data-original-title="addtag" data-placement="top"><i
-							class="icon-plus-sign"></i> <span>Add tags</span></a>
-						{{/canEditContact}}
-
-						
-					</div>
-				</div>
-			</div>
+			
 		</div>
-		<div class="">
+		</div>
+		</div>
+		<!--  ending top header span12 view -->
+		
+		<!--  starting middle view row -->
+		<div class="row">
+		<!--  starting time line view -->
+		<div class="span9">
 			<ul class="nav nav-tabs" id="contactDetailsTab">
 				<li class=""><a data-toggle="tab" href="#timeline">Timeline</a></li>
 				<li class=""><a data-toggle="tab" href="#notes">Notes</a></li>
@@ -246,7 +279,7 @@
 				<li class=""><a data-toggle="tab" href="#mail">Mail</a></li>
 				<li class=""><a data-toggle="tab" href="#documents">Documents</a></li>
 			</ul>
-			<div class="tab-content well" id="contact-tab-content">
+			<div class="tab-content" id="contact-tab-content">
 				<div class="tab-pane" id="time-line">
 					<div class="timeline-loading-img" style="width:35px;max-height:30px;overflow:hidden;">
 						<img class="loading-img" src="img/21-0.gif"></img>
@@ -293,13 +326,14 @@
 				<div class="tab-pane" id="documents"><img src="img/21-0.gif"></img></div>
 			</div>
 		</div>
-	</div>
-	<!-- Contact Details -->
-	<div class="span3">
+	<!--  ending timeline view -->
+
+	<!--  starting right panel view -->
+	<div class="span3 contact-right-widgetsview" style="padding-left:17px;box-sizing:border-box;border-left:1px solid #ddd;">
 
 
 		{{#property_is_exists "phone" properties}}
-			<div class="widget_container" id="{{name}}-container">
+			<div class="widget_container contact-rightpanel" id="{{name}}-container" style="border-bottom:1px solid #ddd;padding-bottom:10px;">
 				{{else}} 
 					{{#property_is_exists "email" properties}}
 						<div class="widget_container" id="{{name}}-container">
@@ -318,8 +352,8 @@
 						<div class="widget_header">
 							<div class="pull-left"
 								style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: 18em">
-								<i class="icon-user "></i> <strong>Contact
-									{{getPropertyValue properties "first_name"}}</strong>
+								<i class="icon-user "></i>Contact
+									<span>{{getPropertyValue properties "first_name"}}</span>
 							</div>
 						</div>
 						<!-- <div id="qrcode"><img src="img/1-0.gif"></div> -->
@@ -331,16 +365,19 @@
 						</div>
 
 						<div class="clearfix"></div>
-						<div style='word-wrap: break-word; padding-top: 10px'>
+						<div style='padding-top: 10px'>
 							{{#property_is_exists "phone" properties}}
-							<div class="pull-left row-fluid" style="padding-bottom: 5px;">
+							<div  style="padding-bottom: 5px;">
 								{{#multiple_Property_Element "phone" properties}}
-								<div style="display: inline-block; text-align: right" class="span4">
+								<!-- <div style="display: inline-block; text-align: right" class="span4">
 									<span><strong style="color: gray">Phone</strong><span>
-								</div>
-								<div style="padding:0px 10px 2px 0px; display: inline-block;line-height: 20px" class="span8">
+								</div> -->
+								<div class="contact-phone">
 									{{#each this}}
-									<div>
+									<div class="pull-left contact-phone-icon">
+									<i class="icon icon-mobile-phone" style="font-size: 19px;padding-left: 0px;padding-top: 0px;position: relative;top:0px;left: 3px;"></i>
+									</div>
+									<div class="pull-left" style="font-size:13px;margin-bottom:6px;">
                                         <a href='#' class="contact-make-sip-call" style="display:none;" 
                                            fname="{{getCurrentContactProperty "first_name"}}" 
                                            lname="{{getCurrentContactProperty "last_name"}}" 
@@ -355,30 +392,42 @@
 										<a href="tel:{{value}}" class="contact-make-call">{{value}}</a> 
                                         {{#if subtype}}<span class="label">{{subtype}}</span> {{/if}}
 									</div>
+									<div class="clearfix"></div>
 									{{/each}}
 								</div>
 								{{/multiple_Property_Element}}
 							</div>
+							<div class="clearfix"></div>
 							{{/property_is_exists}}
  							{{#property_is_exists "email" properties}}
-							<div class="pull-left row-fluid" style="margin-bottom: 3px;">
+							<div  style="margin-top:3px;">
 								{{#multiple_Property_Element "email" properties}}
-								<div style="display: inline-block; text-align: right" class="span4">
+								<!-- <div style="display: inline-block; text-align: right" class="span4">
 									<span><strong style="color: gray">Email</strong></span>
-								</div>
+								</div> -->
+								
 								{{#property_is_exists "phone" ../properties}}
 								<div
-									class="span8 contact-detail-entity-list" style="padding-right:0px!important;">
+									class="contact-detail-entity-list " style="padding-right:0px!important;font-size:13px;">
+									
+									<div class="contact-email">
 									{{else}}
-									<div style="padding:0px 10px 2px 0px; display: inline-block;" class="span8">
+									
+									<div style="padding:0px 10px 2px 0px; display: inline-block;">
 										{{/property_is_exists}} 
 									{{#each this}}
-										<div>
+
+<div class="pull-left contact-email-icon" style="width:10%"><i class="icon icon-envelope" style="font-size:13px;"></i></div>
+										<div class="pull-left" style="width:90%">
 											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label">{{subtype}}</span> {{/if}}
 										</div>
+
+<div class="clearfix"></div>
 									{{/each}}
 									</div>
 									{{/multiple_Property_Element}}
+								</div>
+								<div class="clearfix"></div>
 								</div>
 								{{/property_is_exists}}<div class="custom-data"> {{#getContactCustomPropertiesExclusively
 								properties}}
@@ -403,11 +452,11 @@
 									{{/getContactCustomPropertiesExclusively}}
 									</div>
  									{{#property_is_exists "address" properties}}
-										<div class="pull-left row-fluid " style="padding-bottom: 5px;">
+										<div class="pull-left row-fluid " style="padding-bottom: 5px;font-size:13px;">
 											{{#address_Element properties}}{{/address_Element}}</div>
 
 										<div class="pull-left row-fluid">
-											<div id="map" style="width: auto; height: 200px; display: none; margin: 10px 10px 15px;">
+											<div id="map" style="width: auto; height: 200px; display: none; margin:0px 0px 0px;">
 											</div>
 										</div>
 									{{/property_is_exists}}
@@ -423,5 +472,11 @@
 							<div id="widgets"></div>
 						</div>
 					</div>
-
+					</div>
+					</div>
+					</div>
+					</div>
+					<!--  ending mid  right panel view -->
+					</div>
+					<!--  ending middle view row -->
 					</script>

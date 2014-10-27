@@ -1,0 +1,416 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*frequently usable css elements*/
+
+.no-margin {
+  margin: 0;
+}
+.mg-n {
+  margin-right: -15px;
+  margin-left: -15px;
+}
+.mg-r-n {
+  margin-right: -15px;
+}
+.mg-l-n {
+  margin-left: -15px;
+}
+.no-mg-l {
+  margin-left: 0;
+}
+.no-mg-r {
+  margin-right: 0;
+}
+.no-mg-t {
+  margin-top: 0;
+}
+.no-mg-b {
+  margin-bottom: 0;
+}
+.mg-lg {
+  margin: 25px;
+}
+.mg-r-lg {
+  margin-right: 25px;
+}
+.mg-l-lg {
+  margin-left: 25px;
+}
+.mg-t-lg {
+  margin-top: 25px;
+}
+.mg-b-lg {
+  margin-bottom: 25px;
+}
+.mg {
+  margin: 20px;
+}
+.mg-r {
+  margin-right: 20px;
+}
+.mg-l {
+  margin-left: 20px;
+}
+.mg-t {
+  margin-top: 20px;
+}
+.mg-b {
+  margin-bottom: 20px;
+}
+.mg-md {
+  margin: 15px;
+}
+.mg-r-md {
+  margin-right: 15px;
+}
+.mg-l-md {
+  margin-left: 15px;
+}
+.mg-t-md {
+  margin-top: 15px;
+}
+.mg-b-md {
+  margin-bottom: 15px;
+}
+.mg-sm {
+  margin: 10px;
+}
+.mg-r-sm {
+  margin-right: 10px;
+}
+.mg-l-sm {
+  margin-left: 10px;
+}
+.mg-t-sm {
+  margin-top: 10px;
+}
+.mg-b-sm {
+  margin-bottom: 10px;
+}
+.mg-xs {
+  margin: 5px;
+}
+.mg-r-xs {
+  margin-right: 5px;
+}
+.mg-l-xs {
+  margin-left: 5px;
+}
+.mg-t-xs {
+  margin-top: 5px;
+}
+.mg-b-xs {
+  margin-bottom: 5px;
+}
+/* Padding space */
+.no-padding {
+  padding: 0!important;
+}
+.no-pd-l {
+  padding-left: 0;
+}
+.no-pd-r {
+  padding-right: 0;
+}
+.no-pd-t {
+  padding-top: 0;
+}
+.no-pd-b {
+  padding-bottom: 0;
+}
+.pd-lg {
+  padding: 25px;
+}
+.pd-r-lg {
+  padding-right: 25px;
+}
+.pd-l-lg {
+  padding-left: 25px;
+}
+.pd-t-lg {
+  padding-top: 25px;
+}
+.pd-b-lg {
+  padding-bottom: 25px;
+}
+.pd {
+  padding: 20px;
+}
+.pd-r {
+  padding-right: 20px;
+}
+.pd-l {
+  padding-left: 20px;
+}
+.pd-t {
+  padding-top: 20px;
+}
+.pd-b {
+  padding-bottom: 20px;
+}
+.pd-md {
+  padding: 15px;
+}
+.pd-r-md {
+  padding-right: 15px;
+}
+.pd-l-md {
+  padding-left: 15px;
+}
+.pd-t-md {
+  padding-top: 15px;
+}
+.pd-b-md {
+  padding-bottom: 15px;
+}
+.pd-sm {
+  padding: 10px;
+}
+.pd-r-sm {
+  padding-right: 10px;
+}
+.pd-l-sm {
+  padding-left: 10px;
+}
+.pd-t-sm {
+  padding-top: 10px;
+}
+.pd-b-sm {
+  padding-bottom: 10px;
+}
+.pd-xs {
+  padding: 5px;
+}
+.pd-r-xs {
+  padding-right: 5px;
+}
+.pd-l-xs {
+  padding-left: 5px;
+}
+.pd-t-xs {
+  padding-top: 5px;
+}
+.pd-b-xs {
+  padding-bottom: 5px;
+}
+/* Borders */
+.bordered {
+  border: 1px solid #e8ecf3;
+}
+.bd-b {
+  border-bottom: 1px solid #e8ecf3;
+}
+.bd-t {
+  border-top: 1px solid #e8ecf3;
+}
+.bd-l {
+  border-left: 1px solid #e8ecf3;
+}
+.bd-r {
+  border-right: 1px solid #e8ecf3;
+}
+/* Radius */
+.no-radius {
+  border-radius: 0;
+}
+.no-radius .list-group-item:first-child {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.no-radius .list-group-item:last-child {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+/* text utilities */
+.text-uppercase {
+  text-transform: uppercase;
+}
+.strike {
+  text-decoration: line-through;
+}
+.full-width {
+  width: 100%;
+}
+/*ending frequently usable css elements*/
+
+.contact-switching
+{
+	min-height:10px!important;font-size:smaller;line-height:6px;
+}
+.contact-title,.contact-profile-name
+{
+	text-transform:capitalize;
+	
+}
+.contact-profile-name
+{
+	font-size: 20px;
+	
+
+}
+.unselectable
+{
+	
+}
+.score-view
+{
+	font-size: 17px;
+display: inline-block;
+position: relative;
+top: -8px;
+}
+.contact-star
+{
+	
+width: auto !important;
+cursor: pointer;
+}
+.contact-profpic
+{
+	height: 90px;
+width: 90px;
+border: 1px solid #ddd;
+padding: 2px;
+border-radius: 4px;
+}
+.contact-title
+{
+	font-size:15px;
+}
+.contact-tags
+{
+padding: 14px 10px 0px 0px;white-space:normal;
+}
+.contact-score-control
+{
+	display: inline-block;
+position: relative;
+top: 5px;
+font-size: 14px;
+left: -10px;
+}
+.contact-owner
+{
+	font-size:15px;
+}
+.contact-owner-name
+{
+	font-size:13px;
+}
+.contact-owner-edit
+{
+	display:none;
+}
+.contact-right-widgetsview .widget_container
+{
+	border:none;
+	margin-bottom:0px;
+}
+.contact-right-widgetsview .label,#ClickDesk li .label
+{
+font-size: 10.998px;
+font-weight: normal;
+line-height: 14px;
+color: #bbb;
+vertical-align: baseline;
+white-space: nowrap;
+text-shadow: none;
+background-color: #fff;
+border: 1px solid #ddd;
+text-transform: capitalize;	
+}
+.contact-right-widgetsview
+{
+	position:relative;
+	font-size:15px;
+	border:none;
+	margin-bottom:0px;
+	border-radius:0px
+}
+.contact-right-widgetsview i
+{
+	margin-right:5px;
+}
+.contact-right-widgetsview .widget_header
+{
+	padding:0px;
+	background:#fff;
+	border-bottom:none;
+	
+}
+.contact-right-widgetsview .widget_content
+{
+	border-bottom:none;
+	padding:0px;
+	font-size:13px;
+}
+.contact-right-widgetsview .widget_tab_footer
+{
+	border-top:1px dashed #ddd;
+	background:none;
+}
+.widget_header_icons 
+{
+	position: absolute;
+	right: 0px;
+}
+.widget_header 
+{
+	margin: 12px 0px 0px;
+}
+.widget-sortable  li
+{
+border-bottom: 1px solid #ddd;
+padding-bottom: 13px;	
+}
+.widget-sortable li ul  li
+{
+	border-bottom:none;
+}
+.contact-phone .contact-phone-icon,.score-view .contact-score-control,.contact-email .contact-email-icon,.contact-owner-text
+{
+	visibility:hidden;
+}
+.contact-phone .contact-phone-icon:first-child,.score-view:hover .contact-score-control,.contact-email .contact-email-icon:first-child
+{
+	visibility:visible;
+}
+#ClickDesk .nav-tabs
+{
+background:none;	
+}
+#ClickDesk .nav-tabs
+{
+	border-bottom:none;
+}
+#ClickDesk .nav-tabs .active a,#ClickDesk .nav-tabs a:hover
+{
+	
+	border-bottom-color:#3b94d9;
+	border-bottom-style:solid;
+	border-bottom-width:2px;
+}
+#ClickDesk .nav-tabs a:hover,#ClickDesk .nav-tabs a
+{
+	background:none!important;
+	border-radius:0px!important;
+	border-top-color:transparent;
+	border-right-color:transparent;
+	border-left-color:transparent;
+}
+#ClickDesk .nav-tabs li
+{
+	padding:0px 0px 10px;
+	
+}
+#ClickDesk li a
+{
+	margin-top:0px;
+}
+#ClickDesk ul li
+{
+	padding:10px 0px;
+	border-bottom:1px dashed #ddd;
+	font-size:13px;
+}

@@ -150,7 +150,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = "/";
 
-var HANDLEBARS_PRECOMPILATION = true || <%=production%>;
+var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
 
 
 var CSS_PATH = "/";
@@ -237,6 +237,7 @@ head.ready(["core", "stats"], function(){
 
 
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
+<link rel="stylesheet" type="text/css" href="css/contacts-new-ui.css">
 
 <!-- Google analytics code -->
 <script>

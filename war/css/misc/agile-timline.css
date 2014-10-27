@@ -21,16 +21,16 @@
 	position: relative;
 	width: 288px;
 	padding: 11px;
-	border: 1px #adadad solid;
+	border: 1px #ddd solid;
 	background-color: #fff;
 	min-height: 37px;
 	word-wrap: break-word;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 	border-radius: 2px;
-	-webkit-box-shadow: 0px 0px 3px 0px #5CACEE;
+/*	-webkit-box-shadow: 0px 0px 3px 0px #5CACEE;
 	-moz-box-shadow: 0px 0px 3px 0px #5CACEE;
-	box-shadow: 0px 0px 3px 0px #5CACEE;
+	box-shadow: 0px 0px 3px 0px #5CACEE;*/
 }
 
 #timeline .post.right {
@@ -67,7 +67,8 @@
 }
 
 #timeline .post .text {
-	color: #393939;
+	/*color: #393939;*/
+	color:#bbb!important;
 	font-family: Georgia, sans-serif;
 	font-size: 12px;
 	margin: 10px 0;
@@ -137,7 +138,8 @@
 }
 
 #timeline .year-marker .inner2 {
-	background-color: #4365ae;
+	/*background-color: #4365ae;*/
+	background:#657ca6;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 	border-radius: 2px;
@@ -147,7 +149,7 @@
 	text-align: center;
 	color: #fff;
 	font-size: 14px;
-	font-weight: bold;
+	
 	height: 26px;
 	line-height: 26px;
 }

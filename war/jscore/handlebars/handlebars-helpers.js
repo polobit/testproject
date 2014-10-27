@@ -279,7 +279,10 @@ $(function()
 	 */
 	Handlebars.registerHelper('icons', function(item)
 	{
-		item = item.toLowerCase();
+		 
+		console.log('mamasri code');
+		item = item.toLowerCase().trim();
+		console.log(item);
 		if (item == "email")
 			return "icon-envelope-alt";
 		if (item == "phone")
@@ -300,6 +303,10 @@ $(function()
 			return "icon-share-alt";
 		if (item == "other")
 			return "icon-tasks";
+		if (item == "twitter")
+			return "icon-twitter";
+		if (item == "facebook")
+			return "icon-facebook";
 
 	});
 
@@ -1074,7 +1081,7 @@ $(function()
 
 							if (properties[i].name == "address")
 							{
-								var el = '<div style="display: inline-block; vertical-align: top;text-align:right;margin-top:0px" class="span4"><span><strong style="color:gray">Address</strong></span></div>';
+								var el = '';
 
 								var address = {};
 								try
@@ -1093,10 +1100,10 @@ $(function()
 								if (properties_count != 0)
 
 									el = el
-											.concat('<div style="display:inline;padding-right: 0px!important;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8 contact-detail-entity-list"><div style="padding-top:3px;"><span>');
-								else
-									el = el
-											.concat('<div style="display:inline;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8"><div><span>');
+									.concat('<div style="display:inline;padding-right: 0px!important;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="contact-detail-entity-list"><div style="padding-top:3px;"><div class="pull-left" style="width:8%"><i class="icon icon-map-marker" style="margin:0 0px 0 3px"></i></div><span class="pull-left" style="width:92%">');
+						else
+							el = el
+									.concat('<div style="display:inline;display: inline-block;padding-bottom: 2px; line-height: 20px;"><div><div class="pull-left" style="width:8%"><i class="icon icon-map-marker" style="margin:0 0px 0 3px"></i></div><span class="pull-left" style="width:92%">');
 
 								$.each(address, function(key, val)
 								{

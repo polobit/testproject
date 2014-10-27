@@ -3,9 +3,9 @@
 	{{add_tag "Widgets"}}
 {{/if}}
     {{#if_equals name "Sip"}}
-	  <div class="widget_container" id="{{remove_spaces name}}-container" style="display:none;">
+	  <div class="widget_container" id="{{remove_spaces name}}-container" style="display:none;position:relative;">
     {{else}}
-      <div class="widget_container" id="{{remove_spaces name}}-container"> 
+      <div class="widget_container" id="{{remove_spaces name}}-container" style="position:relative;"> 
     {{/if_equals}}
 		<div class="widget_header widget_edit_icons" onmouseover="showIcons(this); return false;" onmouseout="hideIcons(this); return false;">
 			<div class="widget_header_icons pull-right clear-fix" style="display:none;">
@@ -33,12 +33,14 @@
 					</li>
 				</ul>
 			</div>
-			<div style="width:14%">
-				<img src="{{mini_logo_url}}" class="pull-left" width="24" height="24" alt=""/>
+			<div style="width:9%;float:left;">
+				<!-- <img src="{{mini_logo_url}}" class="pull-left" width="24" height="24" alt=""/> -->
+<i class="{{icons name}}"></i>
 			</div>
-			<div class="widget_header_name overflow-elipsis" style="width:80%">
-				<strong>{{#if_equals name "Linkedin"}}LinkedIn{{else}}{{#if_equals name "HelpScout"}}Help Scout{{else}}{{name}}{{/if_equals}}{{/if_equals}}</strong>
+			<div class="widget_header_name overflow-elipsis" style="width:80%;padding:0px 0 0 5px;">
+		{{#if_equals name "Linkedin"}}LinkedIn{{else}}{{#if_equals name "HelpScout"}}Help Scout{{else}}{{name}}{{/if_equals}}{{/if_equals}}
 			</div>
+<div class="clearfix"></div>
 		</div>
 		<div class="widgets" id="{{remove_spaces name}}">
 			{{#unless is_minimized}}
