@@ -435,13 +435,14 @@ function disable_text_required_property(selector)
 	if(selector.find('#tinyMCEhtml_email').val() != "" && selector.find('#text_email').val() == "")
 		selector.find('#text_email').removeProp("required");
 }
-
+//Bhasuri 10/25/2014
 function getDate(selector){
 	 $('#duration').datepicker({
 		        changeMonth: true,
 		        changeYear: true,
 		        yearRange: "+0:+100]",
-		         constrainInput: false
+		         constrainInput: false,
+		       //  minDate: 0 
 	    });
 	
 }

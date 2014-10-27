@@ -18,7 +18,9 @@
             "id":"duration",
 			"title": "Enter the date",
 			"fieldType": "input",
-            "type": "date"
+            "type": "datePicker",
+            "placeholder" : "{{date}}",
+            "onfocus" : "getDate()"
     },{
                 "label": "Time",
                 "required": "required",

@@ -96,6 +96,7 @@ public class TwilioSMSUtil
 			return null;
 		TwilioRestClient client = new TwilioRestClient(account_SID, auth_token, TWILIO_ENDPOINT);
 		List<String> verifiredTwilioNumbers = new ArrayList<String>();
+		JSONObject result = null;
 		try
 		{
 			TwilioRestResponse response = client.request("/" + TWILIO_VERSION + "/" + TWILIO_ACCOUNTS + "/"
@@ -107,8 +108,14 @@ public class TwilioSMSUtil
 			if (response.isError())
 				return null;
 
-			JSONObject result = XML.toJSONObject(response.getResponseText()).getJSONObject(TWILIO_RESPONSE)
+			result = XML.toJSONObject(response.getResponseText()).getJSONObject(TWILIO_RESPONSE)
 					.getJSONObject(TWILIO_INCOMING_NUMBERS);
+
+			if (result.getInt("total") == 1)
+			{
+				verifiredTwilioNumbers.add(result.getJSONObject("IncomingPhoneNumber").get("PhoneNumber").toString());
+				return verifiredTwilioNumbers;
+			}
 
 			JSONArray incomingNumberArray = result.getJSONArray("IncomingPhoneNumber");
 
@@ -119,7 +126,7 @@ public class TwilioSMSUtil
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception in TwilioSMS");
+			System.out.println("Exception in TwilioSMS. The result is " + result);
 			e.printStackTrace();
 		}
 
@@ -228,14 +235,16 @@ public class TwilioSMSUtil
 				e.printStackTrace();
 			}
 
-			logJSON.put("delivered", deliveredCount);
-			logJSON.put("queued", queuedCount);
-			logJSON.put("undelivered", undeliveredCount);
-			logJSON.put("failed", failedCount);
+			logJSON.put("Delivered", deliveredCount);
+			logJSON.put("Queued", queuedCount);
+			logJSON.put("Undelivered", undeliveredCount);
+			logJSON.put("Failed", failedCount);
 			logJSON.put("ThisMonth", thisMonthCount);
 			logJSON.put("LastMonth", lastMonthCount);
 			logJSON.put("Today", todaysCount);
 			logJSON.put("Yesterday", yesterdaysCount);
+			logJSON.put("Stats-Type", "SMS-Stats");
+
 		}
 		catch (JSONException e)
 		{
