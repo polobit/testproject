@@ -1,4 +1,4 @@
-function bindAdminChangeAction(el)
+function bindAdminChangeAction(el, data)
 {
 	$('input[name="is_admin"]', el).die().live('change', function(e){
 	var is_admin = $(this).is(":checked");
@@ -19,9 +19,10 @@ function bindAdminChangeAction(el)
 	if(!import_field)
 		return;
 	
-	if($('input[value="IMPORT_CONTACTS"]:checked', el))
+	if(data && data.scopes)
 		{
-			$('input[value="CREATE_CONTACT"]', el).attr("checked", "checked" ).attr("disabled", "disabled");
+			if(jQuery.inArray("IMPORT_CONTACTS", data.scopes) >=0)
+				$('input[value="CREATE_CONTACT"]', el).attr("checked", "checked" ).attr("disabled", "disabled");
 		}
 			
 	import_field.die().live('change', function(e){

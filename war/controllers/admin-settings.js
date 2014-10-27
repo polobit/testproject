@@ -132,7 +132,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					addTagAgile("User invited");
 
 				// Binds action
-				bindAdminChangeAction(el);
+				bindAdminChangeAction(el, view.model.toJSON());
 			}, saveCallback : function(response)
 			{
 				$.getJSON("core/api/users/current-owner", function(data)
@@ -207,7 +207,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		}, postRenderCallback : function(el)
 		{
-			bindAdminChangeAction(el);
+			bindAdminChangeAction(el, view.model.toJSON());
 		} });
 
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
