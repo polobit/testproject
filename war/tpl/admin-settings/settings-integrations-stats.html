@@ -12,35 +12,21 @@
             	<h3 style="text-align: center;">Emails Sent</h3>
 				<table class="table table-bordered">
 					<tbody>
-						{{#if this.id}}
 						<tr><th>This Hour</th><td>{{numberWithCommas sent_hourly}}</td></tr>
 						<tr><th>This Week</th><td>{{numberWithCommas sent_weekly}}</td></tr>
 						<tr><th>This Month</th><td>{{numberWithCommas sent_monthly}}</td></tr>
 						<tr><th>Overall</th><td>{{numberWithCommas sent_total}}</td></tr>
-						{{else}}
-						<tr><th>This Hour</th><td>0</td></tr>
-						<tr><th>This Week</th><td>0</td></tr>
-						<tr><th>This Month</th><td>0</td></tr>
-						<tr><th>Overall</th><td>0</td></tr>
-						{{/if}}
 					</tbody>
 				</table>
         	</div>
         	<div class="span6">
-            	<h3 style="text-align: center;">Bounces ( Last 30 Days )</h3>
+            	<h3 style="text-align: center;">Bounces (Last 30 Days)</h3>
 				<table class="table table-bordered">
 					<tbody>
-						{{#if this.id}}
 						<tr><th>Hard Bounce</th><td>{{numberWithCommas last_30_days.hard_bounces}}</td></tr>
 						<tr><th>Soft Bounce</th><td>{{numberWithCommas last_30_days.soft_bounces}}</td></tr>
 						<tr><th>Rejects</th><td>{{numberWithCommas last_30_days.rejects}}</td></tr>
 						<tr><th>Spam Complaints</th><td>{{numberWithCommas last_30_days.complaints}}</td></tr>
-						{{else}}
-						<tr><th>Hard Bounce</th><td>0</td></tr>
-						<tr><th>Soft Bounce</th><td>0</td></tr>
-						<tr><th>Rejects</th><td>0</td></tr>
-						<tr><th>Spam Complaints</th><td>0</td></tr>
-						{{/if}}
 					</tbody>
 				</table>
         	</div>
@@ -57,31 +43,31 @@
             	<h3 style="text-align: center;">SMS Sent</h3>
 				<table class="table table-bordered">
 					<tbody>
-						<tr><th>Today</th><td>{{Today}}</td></tr>
-						<tr><th>Yesterday</th><td> {{Yesterday}}</td></tr>
-						<tr><th>This Month</th><td>{{ThisMonth}} </td></tr>
-						<tr><th>Last Month</th><td>{{LastMonth}} </td></tr>
+						<tr><th>Today</th><td>{{numberWithCommas Today}}</td></tr>
+						<tr><th>Yesterday</th><td> {{numberWithCommas Yesterday}}</td></tr>
+						<tr><th>This Month</th><td>{{numberWithCommas ThisMonth}} </td></tr>
+						<tr><th>Last Month</th><td>{{numberWithCommas LastMonth}} </td></tr>
 					</tbody>
 				</table>
         	</div>
         	<div class="span6">
-            	<h3 style="text-align: center;">SMS Details ( Last 30 Days )</h3>
+            	<h3 style="text-align: center;">Delivery Status (Last 30 Days)</h3>
 				<table class="table table-bordered">
 					<tbody>
-						<tr><th>Queued</th><td>{{Queued}} </td></tr>
-						<tr><th>Delivered</th><td> {{Delivered}}</td></tr>
+						<tr><th>Queued</th><td>{{numberWithCommas Queued}} </td></tr>
+						<tr><th>Delivered</th><td> {{numberWithCommas Delivered}}</td></tr>
 						<tr><th>Undelivered
 						<span style="vertical-align: text-top; margin-left: -3px">
 						<img border="0" src="/img/help.png" style="height: 6px; vertical-align: top" rel="popover" data-placement="right" data-title:"="" 
-						data-content="Twilio has received a delivery receipt indicating that the message was not delivered. This can happen for a number of reasons including carrier content filtering, availability of the destination handset, etc." 
+						data-content="This can happen for a number of reasons including carrier content filtering, availability of the destination handset, etc." 
 						id="element" data-trigger="hover" data-original-title=""></span>
-						</th><td>{{Undelivered}}</td></tr>
+						</th><td>{{numberWithCommas Undelivered}}</td></tr>
 						<tr><th>Failed
 						<span style="vertical-align: text-top; margin-left: -3px">
 						<img border="0" src="/img/help.png" style="height: 6px; vertical-align: top" rel="popover" data-placement="right" data-title:"="" 
-						data-content="The message could not be sent. This can happen for various reasons including queue overflows, account suspensions. Twilio does not charge you for failed messages." 
+						data-content="This can happen for various reasons including incorrect number, improper number format, queue overflows or  account suspensions. Twilio does not charge you for failed messages." 
 						id="element" data-trigger="hover" data-original-title=""></span>
-						</th><td>{{Failed}} </td></tr>
+						</th><td>{{numberWithCommas Failed}} </td></tr>
 					</tbody>
 				</table>
         	</div>

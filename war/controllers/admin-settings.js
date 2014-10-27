@@ -356,24 +356,34 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		
-		 head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function(){
-				$("#content").html(getTemplate("admin-settings"), {});
-				var email_stats;
-				var sms_stats;
-				$.ajax({ url: 'core/api/emails/email-stats', type: "GET", async:false, dataType:'json', success: function (stats) {email_stats = stats}});
-				$.ajax({ url: 'core/api/sms-gateway/twilio/logs', type: "GET", async:false, dataType:'json', success: function (stats) {sms_stats = stats}});
-				
-				var totalLogs=$.extend(email_stats, sms_stats);
-				
-				var emailStatsModelView = new Base_Model_View({ template : 'admin-settings-integrations-stats', data :totalLogs });
-				
-				$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render().el);
-		 });
 		
 		
+		$("#content").html(getTemplate("admin-settings"), {});
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.stats-tab').addClass('active');
-	
+		$('#content').find('#admin-prefs-tabs-content').html(getRandomLoadingImg());
+		
+		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function(){
+				
+		
+		var email_stats = {};
+		var sms_stats = {};
+		$.ajax({ url: 'core/api/emails/email-stats', type: "GET",  dataType:'json', success: function (stats) {
+				email_stats = stats;
+			$.ajax({ url: 'core/api/sms-gateway/twilio/logs', type: "GET",  dataType:'json', success: function (stats) {
+					sms_stats = stats
+					var totalLogs = {};
+					totalLogs = $.extend(email_stats, sms_stats);
+					
+					var emailStatsModelView = new Base_Model_View({ template : 'admin-settings-integrations-stats', data :totalLogs });
+					
+					$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render(true).el);
+				}});
+				
+			}});
+		 });
+		
+		 
 	},
 
 	/**
