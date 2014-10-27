@@ -12,6 +12,7 @@ var _agile_synch_form_v2 = function()
 	var agile_form = document.getElementById('agile-form');
 	var agile_form_data = document.getElementById('agile-form-data').getAttribute('name').split(" ");
 	var agile_contact = {};
+	var agile_form_identification_tag = agile_form_data[3];
 	var agile_redirect_url = agile_form_data[2];
 	var agile_api = agile_form_data[1];
 	var agile_domain = agile_form_data[0];
@@ -43,8 +44,15 @@ var _agile_synch_form_v2 = function()
 	agile_address = JSON.stringify(agile_address);
 	if (agile_address.length > 2)
 		agile_contact.address = agile_address;
+
+	// Add tags, agile_form_identification_tag to contact
 	if (agile_tags)
-		agile_contact.tags = agile_tags;
+		if (agile_form_identification_tag)
+			agile_contact.tags = agile_tags + "," + agile_form_identification_tag;
+		else
+			agile_contact.tags = agile_tags;
+	else if (agile_form_identification_tag)
+		agile_contact.tags = agile_form_identification_tag;
 
 	// If email, api, domain present execute JSAPI
 	var agile_email = agile_contact.email;
