@@ -143,15 +143,16 @@ $(function(){
     	
     	e.preventDefault();
     	var form = $(this).closest('form');
-    	if(!new_milestone || new_milestone.length <= 0 || (/^[a-zA-Z0-9-_ ]*$/).test(new_milestone))
+    	
+    	var new_milestone = form.find(".add_new_milestone").val().trim();
+    	
+    	if(!new_milestone || new_milestone.length <= 0 || !(/^[a-zA-Z0-9-_ ]*$/).test(new_milestone))
 		{
     		$('#milestone-error-modal').modal('show');
 			return;
 		}
     	form.find('.show_field').css("display","none");
     	form.find(".show_milestone_field").css("display","inline-block");
-    	
-    	var new_milestone = form.find(".add_new_milestone").val().trim();
     	
     	if(!new_milestone || new_milestone.length <= 0 || (/^\s*$/).test(new_milestone))
 		{
