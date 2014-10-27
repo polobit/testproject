@@ -19,7 +19,6 @@
 			"title": "Choose a date or add a merge field like {{custom_date_field}}",
 			"fieldType": "input",
             "type": "datePicker",
-            "placeholder" : "{{date}}",
             "onfocus" : "getDate()"
     },{
                 "label": "Time",
