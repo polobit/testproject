@@ -74,7 +74,8 @@ $(function(){
 	
 	$('.add-pipeline').die().live('click',function(e){
 		$('#pipelineForm input').val('');
-		$('#pipelineModal').find('.save-status').text('');
+		$('#pipelineForm input#milestones').val('New,Prospect,Proposal,Won,Lost');
+		$('#pipelineModal').find('.save-status').html('');
 	});
 	
 	
@@ -254,8 +255,8 @@ $(function(){
     		},
 			error: function(data,response){
 				console.log(response,data);
-				$('#pipelineModal').find('.save-status').text(response.responseText);
-				setTimeout(function(){$('#pipelineModal').find('.save-status').text('');}, 5000);
+				$('#pipelineModal').find('.save-status').html('<span style="color:red;">'+response.responseText+'</span>');
+				setTimeout(function(){$('#pipelineModal').find('.save-status').html('');}, 5000);
 				enable_save_button($("#pipeline_validate"));
 			}
     	});
