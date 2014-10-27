@@ -180,10 +180,10 @@ public class FreshbooksContactWrapper extends ContactWrapper
     public ContactField getAddress()
     {
 
-	String address = getAddress(customer);
-	if (address != null)
+	JSONObject address = getAddress(customer);
+	if (address != null && address.length() >0)
 	{
-	   return  new ContactField(Contact.ADDRESS, address, "home");
+	   return  new ContactField(Contact.ADDRESS, address.toString(), "home");
 	}
 
 	return null;
@@ -208,7 +208,8 @@ public class FreshbooksContactWrapper extends ContactWrapper
 	return null;
     }
 
-    private String getAddress(JSONObject customer)
+
+    private JSONObject getAddress(JSONObject customer)
     {
 	try
 	{
@@ -234,7 +235,8 @@ public class FreshbooksContactWrapper extends ContactWrapper
 		address.put("city", city);
 	    }
 
-	    if (!StringUtils.isEmpty("zip") && !zip.equals("undefined"))
+
+	    if (!StringUtils.isEmpty(zip) && !zip.equals("undefined"))
 	    {
 		address.put("zip", zip);
 	    }
@@ -271,7 +273,7 @@ public class FreshbooksContactWrapper extends ContactWrapper
 		    address.put("city", scity);
 		}
 
-		if (!StringUtils.isEmpty("zip") && !szip.equals("undefined"))
+		if (!StringUtils.isEmpty(szip) && !szip.equals("undefined"))
 		{
 		    address.put("zip", szip);
 		}
@@ -285,7 +287,7 @@ public class FreshbooksContactWrapper extends ContactWrapper
 		}
 	    }
 
-	    return address.toString();
+	    return address;
 
 	}
 	catch (NullPointerException | ClassCastException | JSONException e)
