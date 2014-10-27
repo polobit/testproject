@@ -705,6 +705,12 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 	scopes = newscopes;
 
+	// Adds create scope if there is import scope
+	if (scopes.contains(UserAccessScopes.IMPORT_CONTACTS) && !scopes.contains(UserAccessScopes.CREATE_CONTACT))
+	{
+	    scopes.add(UserAccessScopes.CREATE_CONTACT);
+	}
+
 	List<UserAccessScopes> defaultScopes = UserAccessScopes.customValues();
 
 	defaultScopes.removeAll(scopes);
