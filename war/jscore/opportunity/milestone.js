@@ -72,6 +72,19 @@ $(function(){
 
 	});
 	
+	$('.add-pipeline').die().live('click',function(e){
+		$('#pipelineForm input').val('');
+		$('#pipelineModal').find('.save-status').text('');
+	});
+	
+	
+	$('.pipeline-edit').die().live('click',function(e){
+		var id = $(this).attr('id');
+		var json = App_Admin_Settings.pipelineGridView.collection.get(id).toJSON();
+		deserializeForm(json,$('#pipelineForm'));
+		
+	});
+	
 	/**
 	 * If Pipelined View is selected, deals are loaded with pipelined view and 
 	 * creates the pipelined view cookie
@@ -242,6 +255,7 @@ $(function(){
 			error: function(data,response){
 				console.log(response,data);
 				$('#pipelineModal').find('.save-status').text(response.responseText);
+				setTimeout(function(){$('#pipelineModal').find('.save-status').text('');}, 5000);
 				enable_save_button($("#pipeline_validate"));
 			}
     	});

@@ -100,7 +100,7 @@ public class MilestoneAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Milestone savePipeline(Milestone milestone)
     {
-	if (MilestoneUtil.isDuplicate(milestone, false))
+	if (MilestoneUtil.countByName(milestone) > 0)
 	{
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Sorry, Track already exists with this name.").build());
@@ -120,17 +120,27 @@ public class MilestoneAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Milestone updatePipeline(Milestone milestone)
     {
-	if (milestone.name.equals("Default") && MilestoneUtil.isDuplicate(milestone, true))
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Sorry, There should be atleast one Track with name Default.").build());
-	}
+	int count = 0;
 
-	if (MilestoneUtil.isDuplicate(milestone, true))
+	if (milestone.id != null)
+	{
+	    Milestone oldMilestone = MilestoneUtil.getMilestone(milestone.id);
+	    if (oldMilestone.name.equalsIgnoreCase(milestone.name))
+		count = 1;
+
+	    // Check whether the user is changing the name for Default track and
+	    // throw exception.
+	    if (oldMilestone.name.equalsIgnoreCase("Default") && !milestone.name.equals("Default")
+		    && MilestoneUtil.countByName(oldMilestone) <= 1)
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			.entity("Sorry, You can't change name for Default Track.").build());
+	}
+	if (MilestoneUtil.countByName(milestone) > count)
 	{
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Sorry, Track already exists with this name.").build());
 	}
+
 	milestone.save();
 	return milestone;
     }
@@ -147,7 +157,7 @@ public class MilestoneAPI
     {
 	Milestone milestone = MilestoneUtil.getMilestone(id);
 	// Throw non-200 if it exists
-	if (milestone.name.equals("Default") && !MilestoneUtil.isDuplicate(milestone, true))
+	if (milestone.name.equals("Default") && !(MilestoneUtil.countByName(milestone) == 1))
 	{
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Sorry, There should be atleast one Default Track.").build());

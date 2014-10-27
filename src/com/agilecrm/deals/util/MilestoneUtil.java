@@ -116,7 +116,14 @@ public class MilestoneUtil
 	}
     }
 
-    public static boolean isDuplicate(Milestone milestone, boolean isUpdate)
+    /**
+     * Return the count tracks having the name in the given milestone.
+     * 
+     * @param milestone
+     *            milestone object
+     * @return count of tracks.
+     */
+    public static int countByName(Milestone milestone)
     {
 	List<Milestone> milestones = getMilestonesList();
 	int count = 0;
@@ -126,10 +133,6 @@ public class MilestoneUtil
 		if (milestone.name.equals(track.name))
 		    count++;
 	    }
-	if ((isUpdate && count == 1) || count == 0)
-	    return false;
-
-	return true;
+	return count;
     }
-
 }
