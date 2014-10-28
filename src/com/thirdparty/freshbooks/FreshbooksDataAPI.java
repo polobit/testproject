@@ -93,7 +93,7 @@ public class FreshbooksDataAPI
 	    contactPrefs.token = token;
 	    contactPrefs.othersParams = url;
 	}
-	 contactPrefs.type = Type.FRESHBOOKS;
+	contactPrefs.type = Type.FRESHBOOKS;
 	contactPrefs.save();
 	return contactPrefs;
 
