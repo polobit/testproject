@@ -361,10 +361,14 @@ public class ShopifySyncImpl extends OneWaySyncService
 	ArrayList<LinkedHashMap<String, Object>> listOrder = new ArrayList<LinkedHashMap<String, Object>>();
 	String newOrder = getOrderUrl(customerId, "new");
 	String updatedOrder = getOrderUrl(customerId, "updated");
-	listOrder.addAll(Orders(newOrder));
+	List<LinkedHashMap<String, Object>> newOrderList = Orders(newOrder);
+	List<LinkedHashMap<String, Object>> updatedOrderList = Orders(updatedOrder);
+	if(newOrderList!=null)
+		listOrder.addAll(newOrderList);
 	if (lastSyncPoint != null)
 	{
-	    listOrder.addAll(Orders(updatedOrder));
+		if(updatedOrderList!=null)
+			listOrder.addAll(updatedOrderList);
 	}
 	return listOrder;
 
