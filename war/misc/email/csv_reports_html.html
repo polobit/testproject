@@ -55,9 +55,18 @@
 						</tr>
 					</tbody>
 				</table>
-				{{#HashMap.TOTAL_FAILED}} 
-				<div><b>*</b> Attached CSV file contains the failed contacts along with the reason for failure. You may correct the data and upload the file again</div>
+
+
+				{{#HashMap.FAILEDCSV}}
+				{{#HashMap.TOTAL_FAILED}}
+				<div>
+					<b>*</b> Attached CSV file contains the failed contacts along with
+					the reason for failure. You may correct the data and upload the
+					file again
+				</div>
 				{{/HashMap.TOTAL_FAILED}}
+				{{/HashMap.FAILEDCSV}}
+
 				<p style="font-weight: bold;">Have questions or need help?</p>
 				<p>Our customer service and support team is here to help you any
 					way we can. Please email us at care@agilecrm.com</p>
