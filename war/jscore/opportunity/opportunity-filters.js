@@ -8,7 +8,10 @@
 $(function () {
 	$('#show-filter-button').live('click', function(e){
 		e.preventDefault();
-		showFilters();
+		if($('#filter_options').is(':visible'))
+			$('#filter_options').hide();
+		else
+			showFilters();
 	});
 	
 	$('#deals-filter-validate').live('click', function(e){
@@ -29,9 +32,20 @@ $(function () {
 			$('#'+filter+' .between').hide();
 		}
 		else {
+			$('#filter_options .filter_type').val('equal');
+			$(this).val('between');
+			$('#sort_field').val($(this).attr('data'));
+			$('#filter_options .between').hide();
+			$('#filter_options .equals').show();
 			$('#'+filter+' .equals').hide();
 			$('#'+filter+' .between').show();
 		}
+	});
+	
+	$('#clear-deal-filters').live('click',function(e){
+		var json = {};
+		deserializeForm(json, $('#dealsFilterForm'));
+		eraseCookie('deal-filters');
 	});
 	
 });
@@ -65,6 +79,11 @@ function showFilters(){
 			format : 'mm/dd/yyyy',
 		});
 		
+		if(readCookie('deal-filters')){
+			var json = $.parseJSON(readCookie('deal-filters'));
+			deserializeForm(json, $('#dealsFilterForm'));
+		}
+		
 	}, "DEAL");
 	
 }
@@ -97,7 +116,11 @@ function getDealFilters(){
 	var query = ''
 	if(readCookie('deal-filters')){
 		query = readCookie('deal-filters');
-		var json = $.parseJSON(query);
+		if(!readCookie("agile_deal_view")){
+			var json = $.parseJSON(query);
+			json.milestone = '';
+			return JSON.stringify(json);
+		}
 	}
 	
 	return query;

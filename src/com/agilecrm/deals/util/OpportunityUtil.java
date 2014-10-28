@@ -718,10 +718,30 @@ public class OpportunityUtil
 	    if (checkJsonString(filterJson, "owner_id"))
 		searchMap.put("ownerKey",
 			new Key<DomainUser>(DomainUser.class, Long.parseLong(filterJson.getString("owner_id"))));
-	    if (checkJsonString(filterJson, "value_start"))
-		searchMap.put("value >", Long.parseLong(filterJson.getString("value_start")));
-	    if (checkJsonString(filterJson, "value_end"))
-		searchMap.put("value <", Long.parseLong(filterJson.getString("value_end")));
+
+	    if (checkJsonString(filterJson, "value_filter")
+		    && filterJson.getString("value_filter").equalsIgnoreCase("equals"))
+	    {
+		if (checkJsonString(filterJson, "value"))
+		{
+		    double value = Double.parseDouble(filterJson.getString("value"));
+		    searchMap.put("expected_value", value);
+		}
+
+	    }
+	    else
+	    {
+		if (checkJsonString(filterJson, "value_start"))
+		{
+		    double value = Double.parseDouble(filterJson.getString("value_start").replace("%", ""));
+		    searchMap.put("expected_value >", value);
+		}
+		if (checkJsonString(filterJson, "value_end"))
+		{
+		    double value = Double.parseDouble(filterJson.getString("value_end").replace("%", ""));
+		    searchMap.put("expected_value <", value);
+		}
+	    }
 
 	    if (checkJsonString(filterJson, "probability_filter")
 		    && filterJson.getString("probability_filter").equalsIgnoreCase("equals"))
@@ -743,11 +763,10 @@ public class OpportunityUtil
 		if (checkJsonString(filterJson, "probability_end"))
 		{
 		    long probability = Long.parseLong(filterJson.getString("probability_end").replace("%", ""));
-		    searchMap.put("probability >", probability);
+		    searchMap.put("probability <", probability);
 		}
 	    }
 
-	    searchMap.put("created_time >", 0);
 	    searchMap.putAll(getDateFilterCondition(filterJson, "close_date"));
 	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
 	    Map<String, Object> customFilters = getCustomFieldFilters(filterJson.getJSONObject("customFields"));
@@ -756,8 +775,13 @@ public class OpportunityUtil
 
 	    System.out.println("---------------" + searchMap.toString());
 
+	    String sortField = "-created_time";
+
+	    if (checkJsonString(filterJson, "sort_field"))
+		sortField = filterJson.getString("sort_field");
+
 	    if (count != 0)
-		return dao.fetchAllByOrder(count, cursor, searchMap, true, false, "-created_time");
+		return dao.fetchAllByOrder(count, cursor, searchMap, true, false, sortField);
 
 	    return dao.listByProperty(searchMap);
 	}
@@ -795,7 +819,7 @@ public class OpportunityUtil
 		    if (checkJsonString(json, fieldName + "_end"))
 		    {
 			long closeDate = Long.parseLong(json.getString(fieldName + "_end"));
-			searchMap.put(fieldName + " >", closeDate / 1000);
+			searchMap.put(fieldName + " <", closeDate / 1000);
 		    }
 		}
 	    }
@@ -842,19 +866,21 @@ public class OpportunityUtil
 	    for (CustomFieldDef customField : customFieldList)
 	    {
 		String fieldLabel = customField.field_label;
+		String fieldKey = fieldLabel.replace(" ", "_");
+		searchMap.put("custom_data.name", fieldLabel);
 		if ((customField.field_type == Type.TEXT || customField.field_type == Type.TEXTAREA || customField.field_type == Type.LIST)
-			&& checkJsonString(json, fieldLabel))
+			&& checkJsonString(json, fieldKey))
 		{
-		    searchMap.put(fieldLabel, json.getString(fieldLabel));
+		    searchMap.put("custom_data.value", json.getString(fieldKey));
 		}
-		else if (customField.field_type == Type.CHECKBOX && checkJsonString(json, fieldLabel))
+		else if (customField.field_type == Type.CHECKBOX && checkJsonString(json, fieldKey))
 		{
-		    String val = json.getBoolean(fieldLabel) ? "on" : "off";
-		    searchMap.put(fieldLabel, val);
+		    if (json.getBoolean(fieldKey))
+			searchMap.put(fieldLabel, "on");
 		}
-		else if (customField.field_type == Type.DATE && checkJsonString(json, fieldLabel))
+		else if (customField.field_type == Type.DATE && checkJsonString(json, fieldKey))
 		{
-		    searchMap.putAll(getDateFilterCondition(json, fieldLabel));
+		    searchMap.putAll(getDateFilterCondition(json, fieldKey));
 		}
 	    }
 	}
@@ -863,6 +889,8 @@ public class OpportunityUtil
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+
+	System.out.println("-----custom---------" + searchMap.toString());
 	return searchMap;
     }
 }
