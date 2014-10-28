@@ -36,7 +36,7 @@ public class DealCSVExport
     public static final String OWNER = "Owner";
     public static final String RELATED_TO = "Related Conatacts";
 
-    private static final DateFormat date = new SimpleDateFormat("EEE, MMM d yyyy");
+    private static final DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
 
     /**
      * Inserts contact properties into CSV w.r.t header name.
@@ -58,8 +58,15 @@ public class DealCSVExport
 	{
 	    str[indexMap.get(NAME)] = deal.name;
 	    str[indexMap.get(DESCRIPTION)] = deal.description;
-	    if (deal.getPipeline_id() != 0)
-		str[indexMap.get(PIPELINE)] = deal.getPipeline().name;
+	    try
+	    {
+		if (deal.getPipeline_id() != 0)
+		    str[indexMap.get(PIPELINE)] = deal.getPipeline().name;
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
 	    str[indexMap.get(MILESTONE)] = deal.milestone;
 	    str[indexMap.get(PROBABILITY)] = deal.probability + "%";
 	    String currency = UserPrefsUtil.getCurrentUserPrefs().currency;

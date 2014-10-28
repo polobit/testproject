@@ -116,4 +116,23 @@ public class MilestoneUtil
 	}
     }
 
+    /**
+     * Return the count tracks having the name in the given milestone.
+     * 
+     * @param milestone
+     *            milestone object
+     * @return count of tracks.
+     */
+    public static int countByName(Milestone milestone)
+    {
+	List<Milestone> milestones = getMilestonesList();
+	int count = 0;
+	if (milestones.size() > 0)
+	    for (Milestone track : milestones)
+	    {
+		if (milestone.name.equals(track.name))
+		    count++;
+	    }
+	return count;
+    }
 }
