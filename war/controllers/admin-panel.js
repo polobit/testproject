@@ -26,12 +26,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 
 	"getDomainUserDetails/:id" : "getDomainUserDetails",
 		
-	//delete user plan
-	"delete_userplan/:subscription_id/:cus_id" : "deleteUserPlan",
 	
-	//delete email plan
-	"delete_emailplan/:subscription_id/:cus_id" : "deleteEmailPlan"
-			
 	
 	
 
@@ -58,50 +53,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 		} });
 
 	},
-	//delete user plan
-	deleteUserPlan : function(subscription_id, cus_id)
-	{	
-		console.log(cus_id);
-		console.log(subscription_id);
-		if (!confirm("Are you sure you want to cancel this subscription ?" ))
-			return;
-		$.ajax({url : 'core/api/admin_panel/deletesubscription?subscription_id='+subscription_id+'&cus_id='+cus_id,
-				type : 'DELETE',
-				
-				success: function()
-			{
-				
-				$('#user_sub').empty();
-			},error : function(response)
-			{
-
-				console.log(response);
-			}
-			
-		});
-	},
-	//delete user plan
-	deleteEmailPlan : function(subscription_id, cus_id)
-	{	
-		console.log(cus_id);
-		console.log(subscription_id);
-		if (!confirm("Are you sure you want to cancel this subscription ?" ))
-			return;
-		$.ajax({url : 'core/api/admin_panel/deletesubscription?subscription_id='+subscription_id+'&cus_id='+cus_id,
-			type : 'DELETE',
-			
-			success: function()
-		{
-			
-			$('#email_sub').empty();
-		},error : function(response)
-		{
-
-			console.log(response);
-		}
-		
-	});
-	},
+	
 	
 	
 

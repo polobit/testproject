@@ -78,15 +78,6 @@
 {{#is_userPlan plan.id}}
 <div id="user_sub">
 <p><strong><u>User Plan</u></strong></p>
-{{/is_userPlan}}
-
-{{#is_emailPlan plan.id}}
-<div id="email_sub">
-<p><strong><u>Email Plan</u></strong></p>
-<p>
-	Email Limit: &nbsp;&nbsp;&nbsp;&nbsp;{{numeric_operation quantity 1000 "*"}}
-</p>
-{{/is_emailPlan}}
 <p>
      Start Date: <time class="time-ago" datetime="{{epochToHumanDate "" start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start}}</time>     
 </p>
@@ -109,28 +100,64 @@ Amount: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{get_total_amount plan.
 <p>
 Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 </p>
-
-
-
-{{#is_userPlan plan.id}}			
 <p>
 	Users: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{quantity}}
 </p><br/><p>
 	<a href="/#domainSubscribe"><strong><u> Change Plan</strong></u> </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a href="/#delete_userplan/{{id}}/{{../../id}}"> <strong><u>Cancel Subscription</u></strong> </a>
-</p>
+	<a href="#" id="delete_userplan" sub_id={{id}} cus_id={{../../id}}> <strong><u>Cancel Subscription</u></strong> </a>
+</p><br/><br/>
+</div>
 {{/is_userPlan}}
+{{/each}}
+
+
+
+{{#each subscriptions.data}}
 {{#is_emailPlan plan.id}}
 
+<div id="email_sub">
+<p><strong><u>Email Plan</u></strong></p>
+
+
+<p>
+     Start Date: <time class="time-ago" datetime="{{epochToHumanDate "" start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start}}</time>     
+</p>
+
+{{#if this.currentPeriodEnd}}
+<p>
+    End Date: <time class="time-ago" datetime="{{epochToHumanDate "" currentPeriodEnd}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" currentPeriodEnd}}</time>     
+</p>
+<p>
+	Email Limit: &nbsp;&nbsp;&nbsp;&nbsp;{{numeric_operation quantity 1000 "*"}}
+</p>
+{{/if}}
+<p>
+Current Plan: &nbsp;&nbsp;{{plan.id}}
+</p>
+<p>
+Interval: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.interval}}
+</p>
+<p>
+Amount: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{get_total_amount plan.amount quantity}} {{toUpperCase plan.currency}}
+</p>
+<p>
+Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
+</p>
 <p>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a href="/#delete_emailplan/{{id}}/{{../../id}}"> <strong><u>Cancel Subscription</u></strong> </a>
+	<a href="#" id="delete_emailplan" sub_id={{id}} cus_id={{../../id}}"> <strong><u>Cancel Subscription</u></strong> </a>
 </p>
-{{/is_emailPlan}}
 <br/><br/>
 </div>
+{{/is_emailPlan}}
 {{/each}}
+
+
+
+
+
+
   {{else}}
         <div ><strong>No active subscription</strong></div>
 {{/if}}
