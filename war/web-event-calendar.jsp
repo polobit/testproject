@@ -39,12 +39,11 @@ if (scheduleid != null)
  
   //String email = "farah@agilecrm.com";
   System.out.println("my try");
-  
-	  System.out.println(scheduleid);
+  System.out.println(scheduleid);
   	
   DomainUser domainUser = DomainUserUtil.getDomainUserFromScheduleId(scheduleid,d_name);
 		  
-  //DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("sukanya.552@gmail.com");
+  // DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("jagadeesh@invox.com");
 		  
   System.out.println("Domain user " + domainUser);
 	  
@@ -209,27 +208,28 @@ ObjectMapper mapper = new ObjectMapper();
 					var currentDate = newDate.getFullYear() + '-' + currMonth + '-' + newDate.getDate();
 					console.log("in doc ready");
 					console.log(currentDate);
-                                    current_date_mozilla=currentDate;
+                 current_date_mozilla=currentDate;
 					// Set current date as selected date
 					Selected_Date = newDate;
-
+                  var ms=86400000;
 					// Initialize date picker
 					$('#datepick').DatePicker({ flat : true, date : [
 							'2014-07-6', '2016-07-28'
-					], current : '' + currentDate, format : 'Y-m-d', calendars : 1, mode : 'single', view : 'days', onChange : function(formated, dates)
+					], current : '' + currentDate, format : 'Y-m-d', calendars : 1, mode : 'single', view : 'days', onRender: function(date) {
+						return {
+							disabled: (date.valueOf() < Date.now()-ms),
+							className: date.valueOf() < Date.now()-ms ? 'datepickerNotInMonth' : false
+						}
+					},onChange : function(formated, dates)
 					{
 						console.log("In date picker on change");
 						console.log(formated + "  " + dates);
 						selecteddate=dates;
 						// On date change change selected date
 						Selected_Date = formated;
-						
+						//setting the date to current_date_mozilla variable becoz it doesn't shppot new date format
 						current_date_mozilla=Selected_Date;
-						var isFirefox = typeof InstallTrigger !== 'undefined';
-						 if(isFirefox){
-							 $('#datepick').DatePickerSetDate(current_date_mozilla, true);
-							
-						 }
+					
 						// Check user select date
 						if ($('.segment2').hasClass('me-disable'))
 							return;
@@ -282,6 +282,8 @@ ObjectMapper mapper = new ObjectMapper();
 			getSlotDurations();
 		}
 	</script>
+	<script src="//static.getclicky.com/js" type="text/javascript"></script>
+<script type="text/javascript">try{ clicky.init(100783726); }catch(e){}</script>
 </body>
 
 </html>
