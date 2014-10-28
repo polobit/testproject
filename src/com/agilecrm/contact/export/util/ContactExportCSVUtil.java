@@ -14,6 +14,7 @@ import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.export.ContactCSVExport;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
+import com.agilecrm.contact.util.NoteUtil;
 import com.google.appengine.api.files.FileWriteChannel;
 
 public class ContactExportCSVUtil
@@ -35,18 +36,19 @@ public class ContactExportCSVUtil
             String[] headers = ContactExportCSVUtil.getCSVHeadersForContact();
     
             if (isFirstTime)
-        	writer.writeNext(headers);
+        	writer.writeNext(getHeaders(headers));
     
             Map<String, Integer> indexMap = ContactExportCSVUtil.getIndexMapOfCSVHeaders(headers);
     
             for (Contact contact : contactList)
-            {
-        	if (contact == null)
-        	    continue;
-    
-        	String str[] = ContactCSVExport.insertContactProperties(contact, indexMap, headers.length);
-        	writer.writeNext(str);
-            }
+	    {
+		if (contact == null)
+		    continue;
+
+		String str[] = ContactCSVExport.insertContactProperties(contact, indexMap, headers.length);
+		List<Note> notes = NoteUtil.getNotes(contact.id);
+		writer.writeNext(addNotes(str, notes));
+	    }
     
             // Close without finalizing
             writer.close();

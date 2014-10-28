@@ -553,7 +553,7 @@ margin-left: -3px;">.myshopify.com</span>
 	type="text/html">
 <div class="span4 well">
 <span class="label label-important" style="float:right">Beta</span>
-<center> <img class="thumbnail" src="img/plugins/freshbooks-logo.png" style="width: 250px; height:70px;" /></center>
+<center> <img class="thumbnail" src="img/plugins/freshbooks-logo.png" style="width: 216px; height:70px;" /></center>
 {{#unless id}}
     <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;margin-top: 10px;word-break: break-word;margin-left:13px;height:20px !important"  rel="tooltip" >
 		Setup contacts sync with your Freshbooks account.
@@ -561,13 +561,13 @@ margin-left: -3px;">.myshopify.com</span>
 {{/unless}} 
 
     {{#if id}}
-<form id="freshbooks-form" class="form-horizontal">
+<form id="freshbooks-form" class="form-horizontal" style="margin-top:20px;">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div style="margin-top:10px;">Account Linked &nbsp; {{othersParams}}.freshbooks.com <span><a href="#" class="delete">Change</a></span></div> 
+          <div><span>Account Linked </span>  <span style="margin-left: 13px;">{{othersParams}}.freshbooks.com <span><a href="#" class="delete">Change</a></span></span></div>
 	
           
              	<div class="control-group" style="margin-left: -80px;margin-top:20px;">
-					<label class="control-label">Frequency</label> 
+					<label class="control-label" style="margin-left: 26px;">Frequency</label> 
            				<div class="controls">
 							<select class="required" name="duration" id="freq" style="margin-left: 15px;">
 
@@ -584,7 +584,7 @@ margin-left: -3px;">.myshopify.com</span>
 					</div>
 		   		</div>
 
-			<div class="form-actions" style="margin-left: -68px;border-top: 0px;">
+			<div class="form-actions" style="margin-left: -59px;border-top: 0px;">
 
 {{#if inProgress}}
 			<button class="btn btn-primary" id="freshbooks_sync_prefs" style="display:inline-block;" disabled="disabled">Syncing</button>
@@ -599,12 +599,23 @@ margin-left: -3px;">.myshopify.com</span>
     </form>
 {{else}}
 <div style="margin-top: -9px;">
- <form class="widget_content" style="border-bottom:none;" id="freshbooks_login_form" name="freshbooks_login_form" method="post">
+
+<form class="widget_content" style="border-bottom:none;margin-top:20px;" id="freshbooks_login_form" name="freshbooks_login_form" method="post">
 	    	
 			
 				<label>Enter your Freshbooks details: </label>
-				<div class="control-group" style="margin-bottom:0px;"><div class="controls"><input type="url" id="freshbooks_url" class="input-medium" required="required" style="width:90%" placeholder="Enter domain name of freshbooks" value="" id="freshbooks_url"></input></div></div>
-				<div class="control-group" style="margin-bottom:0px;"><div class="controls"><input type="text" id="freshbooks_apiKey" class="input-medium" required="required" style="width:90%" placeholder="API Token" value="" id="freshbooks_apiKey"></input></div></div>
+                   
+				<div class="control-group" style="margin-bottom:0px;"><div class="controls">
+              <input type="url" id="freshbooks_url" class="input-medium" style="width:90%" placeholder="Enter domain name of freshbooks" value="" id="freshbooks_url"></input>
+          <div id="domainerror" class="hide" style="color:red;">Enter Domain Name only</div>
+
+    </div></div>
+				
+               
+           <div class="control-group" style="margin-bottom:0px;"><div class="controls">
+              <input type="text" id="freshbooks_apiKey" class="input-medium" required="required" style="width:90%" placeholder="API Token" value="" id="freshbooks_apiKey"></input>
+            <div id="apierror" class="hide" style="color:red;">Enter Valid API Token only</div>
+    </div></div>
 				
                <a href ="#" id ="freshbooks" class="btn">Connect</a>
 				
@@ -625,7 +636,7 @@ margin-left: -3px;">.myshopify.com</span>
     <img class="thumbnail" src="img/plugins/freshbooks-logo.png" style="width: 250px; height:70px;" />
 	<br />
     <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;"  rel="tooltip" >
-		Sync Clients from Freshbooks as Contacts in Agile CRM along with invoice.
+		Sync Clients from Freshbooks as Contacts along with purchase history.
 	</div>
     
 			{{#if id}}
@@ -650,7 +661,7 @@ margin-left: -3px;">.myshopify.com</span>
 	type="text/html">
 <div class="span4 well">
 <span class="label label-important" style="float:right">Beta</span>
-<center> <img class="thumbnail" src="img/plugins/freshbooks-logo.png" style="width: 250px; height:70px;" /></center>
+<center> <img class="thumbnail" src="img/plugins/freshbooks-logo.png" style="width: 216px;margin-left: 72px; height:70px;" /></center>
 <br/>
 {{#unless id}}
     <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;margin-left:13px;height:20px !important"  rel="tooltip" >
@@ -658,12 +669,17 @@ margin-left: -3px;">.myshopify.com</span>
 	</div>
 
 
-<form class="widget_content" style="border-bottom:none;" id="freshbooks_login_form" name="freshbooks_login_form" method="post">
+<form class="widget_content" style="border-bottom:none;margin-top:20px;" id="freshbooks_login_form" name="freshbooks_login_form" method="post">
 	    	
 			
 				<label>Enter your Freshbooks details: </label>
-				<div class="control-group" style="margin-bottom:0px;"><div class="controls"><input type="url" id="freshbooks_url" class="input-medium" required="required" style="width:90%" placeholder="Enter domain name of freshbooks" value="" id="freshbooks_url"></input></div></div>
-				<div class="control-group" style="margin-bottom:0px;"><div class="controls"><input type="text" id="freshbooks_apiKey" class="input-medium" required="required" style="width:90%" placeholder="API Token" value="" id="freshbooks_apiKey"></input></div></div>
+                     <div id="domainerror" class="hide" style="color:red;">Enter Domain Name only</div>
+				<div class="control-group" style="margin-bottom:0px;"><div class="controls">
+              <input type="url" id="freshbooks_url" class="input-medium" style="width:90%" placeholder="Enter domain name of freshbooks" value="" id="freshbooks_url"></input></div></div>
+				
+               <div id="apierror" class="hide" style="color:red;">Enter Valid API Token only</div>
+           <div class="control-group" style="margin-bottom:0px;"><div class="controls">
+              <input type="text" id="freshbooks_apiKey" class="input-medium" required="required" style="width:90%" placeholder="API Token" value="" id="freshbooks_apiKey"></input></div></div>
 				
                <a href ="#" id ="freshbooks" class="btn">Connect</a>
 				
