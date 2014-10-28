@@ -76,6 +76,7 @@ public class JerseyApplication extends Application
 	s.add(com.thirdparty.salesforce.SalesforceImportAPI.class);
 	s.add(com.thirdparty.zoho.ZohoImportAPI.class);
 	s.add(com.thirdparty.stripe.StripeDataService.class);
+	s.add(com.thirdparty.freshbooks.FreshbooksDataAPI.class);
 	s.add(com.thirdparty.quickbook.QuickBookController.class);
 	s.add(com.thirdparty.xero.XeroController.class);
 	s.add(com.thirdparty.shopify.ShopifyImportAPI.class);
