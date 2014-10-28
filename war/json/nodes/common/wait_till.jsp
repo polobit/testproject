@@ -16,7 +16,7 @@
             "category": "Settings",
 			"name": "duration",
             "id":"duration",
-			"title": "Choose a date or add a merge field like {{custom_date_field}}",
+			"title": "Choose a date or add a merge field like {{YourCustomDateField}}",
 			"fieldType": "input",
             "type": "datePicker",
             "onfocus" : "getDate()"
