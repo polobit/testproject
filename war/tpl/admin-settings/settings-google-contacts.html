@@ -599,17 +599,23 @@ margin-left: -3px;">.myshopify.com</span>
     </form>
 {{else}}
 <div style="margin-top: -9px;">
- <form class="widget_content" style="border-bottom:none;" id="freshbooks_login_form" name="freshbooks_login_form" method="post">
+
+<form class="widget_content" style="border-bottom:none;margin-top:20px;" id="freshbooks_login_form" name="freshbooks_login_form" method="post">
 	    	
 			
 				<label>Enter your Freshbooks details: </label>
-                     <div id="domainerror" class="hide" style="color:red;">Enter Domain Name only</div>
+                   
 				<div class="control-group" style="margin-bottom:0px;"><div class="controls">
-              <input type="url" id="freshbooks_url" class="input-medium" style="width:90%" placeholder="Enter domain name of freshbooks" value="" id="freshbooks_url"></input></div></div>
+              <input type="url" id="freshbooks_url" class="input-medium" style="width:90%" placeholder="Enter domain name of freshbooks" value="" id="freshbooks_url"></input>
+          <div id="domainerror" class="hide" style="color:red;">Enter Domain Name only</div>
+
+    </div></div>
 				
-               <div id="apierror" class="hide" style="color:red;">Enter  Valid API Token only</div>
+               
            <div class="control-group" style="margin-bottom:0px;"><div class="controls">
-              <input type="text" id="freshbooks_apiKey" class="input-medium" required="required" style="width:90%" placeholder="API Token" value="" id="freshbooks_apiKey"></input></div></div>
+              <input type="text" id="freshbooks_apiKey" class="input-medium" required="required" style="width:90%" placeholder="API Token" value="" id="freshbooks_apiKey"></input>
+            <div id="apierror" class="hide" style="color:red;">Enter Valid API Token only</div>
+    </div></div>
 				
                <a href ="#" id ="freshbooks" class="btn">Connect</a>
 				
