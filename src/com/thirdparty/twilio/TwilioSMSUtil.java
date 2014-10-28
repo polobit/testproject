@@ -1,5 +1,6 @@
 package com.thirdparty.twilio;
 
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -154,13 +155,34 @@ public class TwilioSMSUtil
 			return null;
 
 		TwilioRestClient client = new TwilioRestClient(account_SID, auth_token, TWILIO_ENDPOINT);
+		SimpleDateFormat sdfMap = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar gc = Calendar.getInstance();
+
+		// gc.setTime(new Date());
+		// gc.add(Calendar.MONTH, -2);
+		String endLogDate = sdfMap.format(gc.getTime());
+
+		gc.add(Calendar.MONTH, -2);
+
+		// startLogDate
+		// Calendar gc = Calendar.getInstance();
+		// gc.setTime(new Date());
+		// gc.add(Calendar.MONTH, -2);
+		// Date dateBefore = gc.getTime();
+		String startLogDate = sdfMap.format(gc.getTime());
+
+		Map<String, String> dateRange = new HashMap<String, String>();
+
 		try
 		{
+			dateRange.put(URLEncoder.encode("DateSent>", "UTF-8"), startLogDate);
+			dateRange.put(URLEncoder.encode("DateSent<", "UTF-8"), endLogDate);
+
 			TwilioRestResponse messages = client.request("/" + TWILIO_VERSION + "/" + TWILIO_ACCOUNTS + "/"
-					+ account_SID + "/" + "Messages.json?DateSent%3E%3D2014-09-08%26DateSent%3C%3D2014-10-08%26"
+					+ account_SID + "/" + "Messages.json"
 			/*
 			 * + "DateSent>=" + oneMonthBack + "&DateSent<=" + currentDate
-			 */, "GET", null);
+			 */, "GET", dateRange);
 
 			if (messages.isError())
 				return null;
