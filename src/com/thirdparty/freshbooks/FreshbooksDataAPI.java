@@ -1,16 +1,17 @@
 /**
  * 
  */
-package com.thirdparty.stripe;
-
-import java.util.ArrayList;
+package com.thirdparty.freshbooks;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.sync.Type;
 import com.thirdparty.google.ContactPrefs;
@@ -18,14 +19,11 @@ import com.thirdparty.google.ContactsImportUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
- * <code>StripeDataService</code> provide service for managing ContactPref CRUD
- * and import customers service
- * 
  * @author jitendra
- * 
+ *
  */
-@Path("/api/stripe")
-public class StripeDataService
+@Path("/api/freshbooks")
+public class FreshbooksDataAPI
 {
 
     /**
@@ -38,8 +36,8 @@ public class StripeDataService
     @Produces(MediaType.APPLICATION_JSON)
     public ContactPrefs getPrefs()
     {
-	ContactPrefs contactPrefs = ContactPrefsUtil.getPrefsByType(Type.STRIPE);
-	return contactPrefs; //
+
+	//return ContactPrefsUtil.getPrefsByType(Type.FRESHBOOKS);
     }
 
     /**
@@ -55,8 +53,7 @@ public class StripeDataService
 
 	ContactPrefs contactPrefs = ContactPrefsUtil.mergePrefs(ContactPrefsUtil.get(prefs.id), prefs);
 	contactPrefs.save();
-
-	if (contactPrefs != null && !contactPrefs.apiKey.isEmpty())
+	if (contactPrefs != null && !contactPrefs.token.isEmpty())
 	    doImport(contactPrefs);
 
     }
@@ -68,7 +65,7 @@ public class StripeDataService
     @Path("/import-settings")
     public void deletePrefs()
     {
-	ContactPrefsUtil.delete(Type.STRIPE);
+	//ContactPrefsUtil.delete(Type.FRESHBOOKS);
 
     }
 
@@ -79,10 +76,26 @@ public class StripeDataService
      */
     private void doImport(ContactPrefs prefs)
     {
-	ArrayList<String> options = new ArrayList<String>();
-	options.add("customer");
-	prefs.importOptions = options;
 	ContactsImportUtil.initilaizeImportBackend(prefs);
+
+    }
+
+    /**
+     * save freshbooks token
+     */
+    @GET
+    @Path("/save/{token}/{url}")
+    public ContactPrefs saveToken(@PathParam("token") String token, @PathParam("url") String url)
+    {
+	ContactPrefs contactPrefs = new ContactPrefs();
+	if (!StringUtils.isBlank(token) && !StringUtils.isBlank(url))
+	{
+	    contactPrefs.token = token;
+	    contactPrefs.othersParams = url;
+	}
+	//contactPrefs.type = Type.FRESHBOOKS;
+	contactPrefs.save();
+	return contactPrefs;
 
     }
 
