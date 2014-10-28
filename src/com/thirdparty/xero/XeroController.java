@@ -16,10 +16,10 @@ import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
  * 
- <code>XeroController</code> provide controller service handles all REST
- * API calls. it maps method using @path annotation and provide HTTP CRUD service
+ <code>XeroController</code> provide controller service handles all REST API
+ * calls. it maps method using @path annotation and provide HTTP CRUD service
  * for ContactSyncPrefs and also initialize sync service for sync contacts.
- *   
+ * 
  */
 @Path("/xero")
 public class XeroController
@@ -35,11 +35,12 @@ public class XeroController
     @Path("/import-settings")
     public void savePrefs(ContactPrefs prefs)
     {
-	ContactPrefs contactPrefs = ContactPrefsUtil.get(prefs.id);
-	contactPrefs.save();
 
-	if (!contactPrefs.token.isEmpty() && contactPrefs != null)
+	ContactPrefs contactPrefs = ContactPrefsUtil.mergePrefs(ContactPrefsUtil.get(prefs.id), prefs);
+	contactPrefs.save();
+	if (contactPrefs != null && !contactPrefs.token.isEmpty())
 	    doImport(contactPrefs);
+
     }
 
     /**
@@ -57,6 +58,5 @@ public class XeroController
     {
 	ContactsImportUtil.initilaizeImportBackend(contactPrefs);
     }
-
 
 }
