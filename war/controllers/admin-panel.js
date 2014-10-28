@@ -63,6 +63,8 @@ var AdminPanelRouter = Backbone.Router.extend({
 	{	
 		console.log(cus_id);
 		console.log(subscription_id);
+		if (!confirm("Are you sure you want to cancel this subscription ?" ))
+			return;
 		$.ajax({url : 'core/api/admin_panel/deletesubscription?subscription_id='+subscription_id+'&cus_id='+cus_id,
 				type : 'DELETE',
 				
@@ -83,20 +85,22 @@ var AdminPanelRouter = Backbone.Router.extend({
 	{	
 		console.log(cus_id);
 		console.log(subscription_id);
+		if (!confirm("Are you sure you want to cancel this subscription ?" ))
+			return;
 		$.ajax({url : 'core/api/admin_panel/deletesubscription?subscription_id='+subscription_id+'&cus_id='+cus_id,
-				type : 'DELETE',
-				
-				success: function()
-			{
-				
-				$('#email_sub').empty();
-			},error : function(response)
-			{
-
-				console.log(response);
-			}
+			type : 'DELETE',
 			
-		});
+			success: function()
+		{
+			
+			$('#email_sub').empty();
+		},error : function(response)
+		{
+
+			console.log(response);
+		}
+		
+	});
 	},
 	
 	

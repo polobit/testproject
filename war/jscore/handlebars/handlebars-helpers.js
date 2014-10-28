@@ -1794,6 +1794,11 @@ $(function()
 		if (operator == "/")
 			return operand1 / operand2;
 	});
+	Handlebars.registerHelper('get_total_amount', function(operand1, operand2)
+			{
+
+					return (operand1 /100)*operand2;
+			});
 
 	Handlebars.registerHelper('check_length', function(content, length, options)
 	{

@@ -77,17 +77,16 @@
 
 {{#is_userPlan plan.id}}
 <div id="user_sub">
-<strong><u>User plan</u></strong>
+<p><strong><u>User Plan</u></strong></p>
 {{/is_userPlan}}
 
 {{#is_emailPlan plan.id}}
 <div id="email_sub">
-<strong><u>Email plan</u></strong>
+<p><strong><u>Email Plan</u></strong></p>
+<p>
+	Email Limit: &nbsp;&nbsp;&nbsp;&nbsp;{{numeric_operation quantity 1000 "*"}}
+</p>
 {{/is_emailPlan}}
-
-
-
-	
 <p>
      Start Date: <time class="time-ago" datetime="{{epochToHumanDate "" start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start}}</time>     
 </p>
@@ -105,21 +104,24 @@ Current Plan: &nbsp;&nbsp;{{plan.id}}
 Interval: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.interval}}
 </p>
 <p>
-Amount: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{numeric_operation plan.amount 100 "/"}} {{toUpperCase plan.currency}}
+Amount: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{get_total_amount plan.amount quantity}} {{toUpperCase plan.currency}}
 </p>
 <p>
 Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 </p>
-<p>
-Users: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{quantity}}
-</p><br/>
+
+
+
 {{#is_userPlan plan.id}}			
 <p>
+	Users: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{quantity}}
+</p><br/><p>
 	<a href="/#domainSubscribe"><strong><u> Change Plan</strong></u> </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	<a href="/#delete_userplan/{{id}}/{{../../id}}"> <strong><u>Cancel Subscription</u></strong> </a>
 </p>
 {{/is_userPlan}}
 {{#is_emailPlan plan.id}}
+
 <p>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
