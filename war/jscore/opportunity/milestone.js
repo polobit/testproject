@@ -18,6 +18,11 @@ $(function(){
 	$('#opportunity-track-list-model-list a.pipeline').live('click',function(e){
 		e.preventDefault();
 		createCookie("agile_deal_track", $(this).attr('id'));
+		if(readCookie('deal-filters')){
+			var json = $.parseJSON(readCookie('deal-filters'));
+			json.pipeline_id = $(this).attr('id');
+			createCookie('deal-filters',JSON.stringify(json));
+		}
 		App_Deals.deals();
 	});
 	

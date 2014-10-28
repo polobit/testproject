@@ -769,9 +769,12 @@ public class OpportunityUtil
 
 	    searchMap.putAll(getDateFilterCondition(filterJson, "close_date"));
 	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
-	    Map<String, Object> customFilters = getCustomFieldFilters(filterJson.getJSONObject("customFields"));
-	    if (customFilters != null)
-		searchMap.putAll(customFilters);
+
+	    /*
+	     * Map<String, Object> customFilters =
+	     * getCustomFieldFilters(filterJson.getJSONObject("customFields"));
+	     * if (customFilters != null) searchMap.putAll(customFilters);
+	     */
 
 	    System.out.println("---------------" + searchMap.toString());
 
@@ -806,20 +809,19 @@ public class OpportunityUtil
 			&& checkJsonString(json, fieldName))
 		{
 		    long closeDate = Long.parseLong(json.getString(fieldName));
-		    searchMap.put(fieldName + " >", closeDate / 1000);
-		    searchMap.put(fieldName + " <", closeDate / 1000 + 86400);
+		    searchMap.put(fieldName, closeDate);
 		}
 		else
 		{
 		    if (checkJsonString(json, fieldName + "_start"))
 		    {
 			long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
-			searchMap.put(fieldName + " >", closeDate / 1000);
+			searchMap.put(fieldName + " >", closeDate);
 		    }
 		    if (checkJsonString(json, fieldName + "_end"))
 		    {
 			long closeDate = Long.parseLong(json.getString(fieldName + "_end"));
-			searchMap.put(fieldName + " <", closeDate / 1000);
+			searchMap.put(fieldName + " <", closeDate);
 		    }
 		}
 	    }
