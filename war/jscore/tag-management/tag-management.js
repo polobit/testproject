@@ -263,7 +263,7 @@ $("#add-new-tag").die().live('click', function(e) {
 	toggleAddTag(true);
 });
 
-$("#new_tag").die().live('blur keydown', function(event) {
+$("#new_tag").die().live('keydown', function(event) {
 	console.log(event.which)
 
 	if (event.which == 0) {
