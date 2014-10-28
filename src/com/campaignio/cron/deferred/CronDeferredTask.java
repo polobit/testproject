@@ -101,7 +101,10 @@ public class CronDeferredTask implements DeferredTask {
 				return;
 
 			JSONObject data = new JSONObject(dataString);
-			subscriberJSON = new JSONObject(subscriberJSONString);
+
+	                // Get updated subscriber json
+			subscriberJSON = AgileTaskletUtil.getUpdatedSubscriberJSON(new JSONObject(subscriberJSONString));
+
 			JSONObject nodeJSON = new JSONObject(nodeJSONString);
 			// Get updated node JSON
 			JSONObject updatedNodeJSON = TaskletUtil.getNodeJSON(campaignJSON,

@@ -1,7 +1,10 @@
 package com.campaignio.tasklets.agile.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -15,6 +18,7 @@ import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.CustomFieldDef.Type;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -279,8 +283,16 @@ public class AgileTaskletUtil
 	    // Returns Created and Updated date in GMT with given format.
 	    subscriberJSON.put("created_date",
 		    DateUtil.getGMTDateInGivenFormat(contact.created_time * 1000, "MM/dd/yyyy"));
-	    subscriberJSON.put("modified_date",
-		    DateUtil.getGMTDateInGivenFormat(contact.updated_time * 1000, "MM/dd/yyyy"));
+
+	    // If contact is updated
+	    if (contact.updated_time != 0L)
+	    {
+		subscriberJSON.put("modified_date",
+		        DateUtil.getGMTDateInGivenFormat(contact.updated_time * 1000, "MM/dd/yyyy"));
+
+		// Contact updated time
+		subscriberJSON.put("modified_time", contact.updated_time);
+	    }
 
 	    subscriberJSON.put("powered_by", EmailUtil.getPoweredByAgileLink("campaign", "Powered by"));
 
@@ -293,8 +305,10 @@ public class AgileTaskletUtil
 		    .put("isUnsubscribedAll", isUnsubscribedAll(contact));
 
 	    // If isBounce not null
-	    if (isBounce(contact, subscriberJSON) != null)
-		subscriberJSONWithAddedParams.put("isBounce", isBounce(contact, subscriberJSON));
+	    EmailBounceType bounceType = isBounce(contact, subscriberJSON);
+
+	    if (bounceType != null)
+		subscriberJSONWithAddedParams.put("isBounce", bounceType);
 
 	    return subscriberJSONWithAddedParams;
 	}
@@ -383,8 +397,16 @@ public class AgileTaskletUtil
 	    // Returns Created and Updated date in GMT with given format.
 	    subscriberJSON.put("created_date",
 		    DateUtil.getGMTDateInGivenFormat(contact.created_time * 1000, "MM/dd/yyyy"));
-	    subscriberJSON.put("modified_date",
-		    DateUtil.getGMTDateInGivenFormat(contact.updated_time * 1000, "MM/dd/yyyy"));
+
+	    // Insert only if updated
+	    if (contact.updated_time != 0L)
+	    {
+		subscriberJSON.put("modified_date",
+		        DateUtil.getGMTDateInGivenFormat(contact.updated_time * 1000, "MM/dd/yyyy"));
+
+		// Updated time
+		subscriberJSON.put("modified_time", contact.updated_time);
+	    }
 
 	    System.out.println("SubscriberJSON in WorkflowUtil: " + subscriberJSON);
 
@@ -600,5 +622,70 @@ public class AgileTaskletUtil
 	}
 
 	return customFieldLabels;
+    }
+
+    /**
+     * Returns updated subscriber json by comparing modified time in json and
+     * current contact
+     * 
+     * @param subscriberJSON
+     *            - subscriber json
+     * @return JSONObject
+     */
+    public static JSONObject getUpdatedSubscriberJSON(JSONObject subscriberJSON)
+    {
+	try
+	{
+
+	    if (subscriberJSON == null || !subscriberJSON.has("data") || !subscriberJSON.has("id"))
+		return subscriberJSON;
+
+	    JSONObject data = subscriberJSON.getJSONObject("data");
+
+	    // Compares updated time of subscriber json and current contact
+	    if (data.has("modified_time") && data.getLong("modified_time") != 0L)
+		return getUpdatedSubscriberJSON(subscriberJSON, data.getLong("modified_time"));
+
+	    // For older Crons, modified_time doesn't exists in subscriberjson.
+	    // So converting into epoch and comparing
+	    if (data.has("modified_date") && !(data.getString("modified_date").contains("1970")))
+	    {
+		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+		Date date = dateFormat.parse(data.getString("modified_date"));
+
+		long time = date.getTime() / 1000;
+
+		return getUpdatedSubscriberJSON(subscriberJSON, time);
+	    }
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while fetching updated subscriber json..." + e.getMessage());
+	}
+
+	return subscriberJSON;
+    }
+
+    /**
+     * Returns updated subscriber json
+     * 
+     * @param currentsubscriberJSON
+     *            - current subscriber json
+     * @param updatedTime
+     *            - contact latest updated time
+     * @throws JSONException
+     */
+    public static JSONObject getUpdatedSubscriberJSON(JSONObject currentsubscriberJSON, Long updatedTime)
+	    throws JSONException
+    {
+	Long contactId = currentsubscriberJSON.getLong("id");
+
+	// If updated
+	if (ContactUtil.isContactUpdated(contactId, updatedTime))
+	    return AgileTaskletUtil.getUpdatedSubscriberJSON(ContactUtil.getContact(contactId), currentsubscriberJSON);
+
+	return currentsubscriberJSON;
     }
 }
