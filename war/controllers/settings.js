@@ -441,9 +441,9 @@ var SettingsRouter = Backbone.Router.extend({
 				CLICKDESK_Live_Chat.onStatus(function(status) {
 
 					if(status == "online")
-						$("#clickdesk_status").append('Chat with our support representative. <a style="cursor:pointer" onclick="clickdesk_show_livechat_popup();">Start chat</a>.');
+						$("#clickdesk_status").html('Chat with our support representative.<br/> <a style="cursor:pointer" onclick="clickdesk_show_livechat_popup();">Start chat</a>.');
 					else
-						$("#clickdesk_status").append('Chat support representative is not available at the moment. <a href="#contact-us" style="margin-left:10px;float:right;" class="btn" id="show_support">Leave a message</a>');
+						$("#clickdesk_status").html('Chat support representative is not available at the moment.<br/> <a href="#contact-us" id="show_support">Leave a message</a>.');
 					/*var img_src = "https://d1gwclp1pmzk26.cloudfront.net/images/ss/live-" + status + ".png";
 					$("#livilyChatLink").append("<img src='" + img_src + "'/>");*/
 				});
@@ -455,9 +455,9 @@ var SettingsRouter = Backbone.Router.extend({
 				CLICKDESK_Live_Chat.onStatus(function(status) {
 
 					if(status == "online")
-						$("#clickdesk_status").append('Chat with our support representative.<br/> <a style="cursor:pointer" onclick="clickdesk_show_livechat_popup();">Start chat</a>.');
+						$("#clickdesk_status").html('Chat with our support representative.<br/> <a style="cursor:pointer" onclick="clickdesk_show_livechat_popup();">Start chat</a>.');
 					else
-						$("#clickdesk_status").append('Chat support representative is not available at the moment.<br/> <a href="#contact-us" id="show_support">Leave a message</a>.');
+						$("#clickdesk_status").html('Chat support representative is not available at the moment.<br/> <a href="#contact-us" id="show_support">Leave a message</a>.');
 				});
 				
 			}, 5000);
