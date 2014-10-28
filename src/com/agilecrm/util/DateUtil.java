@@ -39,6 +39,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Utility class for date manipulation. This class gives a simple interface for
@@ -52,7 +54,19 @@ public class DateUtil
 
 	// -------------------------------------------------------------- Attributes
 	private Calendar cal;
+	private static final String WaiTillDateRegEx = "(0?[1-9]|1[012])/(0?[1-9]|[12][0-9]|3[01])/((19|20)\\d\\d)";
 
+	private static final String WaitTillDateFormat = "MM/dd/yyyy";
+
+	private static final String CustomFieldDateRegEx = "(0?[1-9]|[12][0-9]|3[01])\\s([a-zA-Z]{3})\\s((19|20)\\d\\d)";
+
+	private static final String CustomFieldDateFormat = "dd MMM yyyy";
+
+	private static final String CustomFieldCSVDateRegEx = "(0?[1-9]|[12][0-9]|3[01])\\s([a-zA-Z]{3})\\s((19|20)\\d\\d)";
+
+	private static final String CustomFieldCSVDateFormat = "dd/MM/yyyy";
+
+	// dd/MM/yyyy
 	// ------------------------------------------------------------ Constructors
 
 	/** Inizialize a new instance with the current date */
@@ -285,21 +299,45 @@ public class DateUtil
 	 */
 	public static Calendar getCalendar(String duration, String timeZoneString, String at)
 	{
+		SimpleDateFormat sdf = null;
 		TimeZone timeZone = TimeZone.getTimeZone(timeZoneString);
 		Calendar calendar = Calendar.getInstance(timeZone);
-
 		String hours = at.substring(0, 2);
 		String mins = at.substring(3);
-		String year = duration.substring(0, 4);
-		String month = duration.substring(5, 7);
-		String date = duration.substring(8);
+		try
+		{
+			// Pattern for MM/dd/yyyy - From calendar of wait till node
+			Pattern calendarPattern = Pattern.compile(WaiTillDateRegEx);
+			Matcher calendarMatcher = calendarPattern.matcher(duration);
 
+			// Pattern for dd MMM yyyy - From custom field in admin settings
+			Pattern customFieldPattern = Pattern.compile(CustomFieldDateRegEx);
+			Matcher customFieldMatcher = customFieldPattern.matcher(duration);
+
+			// Pattern for dd/MM/yyyy - From csv import CSVUtil reference
+			Pattern customFieldCSVPattern = Pattern.compile(CustomFieldCSVDateRegEx);
+			Matcher customFieldCSVMatcher = customFieldCSVPattern.matcher(duration);
+
+			if (calendarMatcher.matches())
+				sdf = new SimpleDateFormat(WaitTillDateFormat);
+			else if (customFieldMatcher.matches())
+				sdf = new SimpleDateFormat(CustomFieldDateFormat);
+			else if (customFieldCSVMatcher.matches())
+				sdf = new SimpleDateFormat(CustomFieldCSVDateFormat);
+			else
+				return null;
+
+			calendar.setTime(sdf.parse(duration));
+		}
+		catch (Exception e)
+		{
+			System.out.println("Inside getCalender in DateUtil");
+			e.printStackTrace();
+		}
 		calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hours));
 		calendar.set(Calendar.MINUTE, Integer.parseInt(mins));
 
-		// month begins from zero
-		calendar.set(Integer.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(date));
 		return calendar;
-	}
 
+	}
 }

@@ -2,7 +2,7 @@
     "name": "Wait Till",
     "thumbnail": "json/nodes/images/common/WaitTill.png",
     "icon": "json/nodes/icons/common/WaitTill.png",
-    "info": "Wait till a specified date and time before proceeding to the next step. Useful if you want to send new year offers or birthday wishes.",
+    "info": "Wait till a specified date and time before proceeding to the next step.",
     "help": "Wait till a specified date and time before proceeding to the next step. Useful if you want to send new year offers or birthday wishes.",
     "author": "John",
     "company": "mantra",
@@ -16,9 +16,10 @@
             "category": "Settings",
 			"name": "duration",
             "id":"duration",
-			"title": "Enter the date",
+			"title": "Choose a date or add a merge field like {{YourCustomDateField}}",
 			"fieldType": "input",
-            "type": "date"
+            "type": "datePicker",
+            "onfocus" : "getDate()"
     },{
                 "label": "Time",
                 "required": "required",
