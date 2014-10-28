@@ -22,7 +22,9 @@ $(function()
 												alert("Please Enter Freshbooks API Token");
 												$('#freshbooks_apiKey').focus();
 												return false;
-								}else if(token.length !=32){
+								}
+								else if (token.length != 32)
+								{
 												alert("Invalid Freshbooks API Token");
 												$('#freshbooks_apiKey').focus();
 												return false;
@@ -50,9 +52,10 @@ $(function()
 												window.location = window.location.origin + "#sync";
 								}
 				});
-				
-	 function isBlank(str) {
-				    return (!str || /^\s*$/.test(str));
+
+				function isBlank(str)
+				{
+								return (!str || /^\s*$/.test(str));
 				}
 
 });
