@@ -42,12 +42,6 @@ $(function()
 												});
 												return false;
 								}
-								else if (token.length != 32)
-								{
-												alert("Invalid Freshbooks API Token");
-												$('#freshbooks_apiKey').focus();
-												return false;
-								}
 								$.ajax({ url : 'core/api/freshbooks/save/' + token + '/' + url + '', async : false, success : function(data)
 								{
 												if (data)
