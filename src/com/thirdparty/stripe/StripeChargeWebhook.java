@@ -20,8 +20,11 @@ import org.json.JSONObject;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.WidgetUtil;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
@@ -97,6 +100,34 @@ public class StripeChargeWebhook extends HttpServlet
 
 		    System.out.println("Assigning campaign to contact ... ");
 		    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
+
+		    String stripeFieldValue = null;
+		    Widget widget = WidgetUtil.getWidget("Stripe");
+		    if (widget != null)
+		    {
+			try
+			{
+			    JSONObject stripePrefs = new JSONObject(widget.prefs);
+			    if (stripePrefs.has("stripe_field_name"))
+				stripeFieldValue = stripePrefs.getString("stripe_field_name");
+			}
+			catch (Exception e)
+			{
+			    e.printStackTrace();
+			}
+		    }
+
+		    if (!StringUtils.equals(getCustomerId(stripeJson, eventType), "null"))
+		    {
+			ContactField field = new ContactField();
+			field.type = FieldType.CUSTOM;
+			field.value = getCustomerId(stripeJson, eventType);
+			if (stripeFieldValue != null && !stripeFieldValue.isEmpty())
+			    field.name = stripeFieldValue;
+			else
+			    field.name = "StripeID";
+			contactProperties.add(field);
+		    }
 
 		    if (contact.properties.isEmpty())
 			contact.properties = contactProperties;
@@ -234,6 +265,23 @@ public class StripeChargeWebhook extends HttpServlet
 		}
 	    }
 	    return null;
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+    }
+
+    public String getCustomerId(JSONObject stripeJson, String stripeEventType)
+    {
+	String customerId = null;
+	try
+	{
+	    if (stripeEventType.contains("charge"))
+		customerId = stripeJson.getString("customer");
+	    else if (stripeEventType.contains("customer"))
+		customerId = stripeJson.getString("id");
+	    return customerId;
 	}
 	catch (Exception e)
 	{

@@ -46,6 +46,6 @@
          </div>
       </div>
       <!-- /container back -->
-      <script data-main="misc/formbuilder/main.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      <script data-main="misc/formbuilder/main-built.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
    </body>
 </html>

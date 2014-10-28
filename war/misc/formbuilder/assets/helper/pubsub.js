@@ -45,11 +45,17 @@ var addAgileApi = function(json, api, callback)
 	agileredirecturl.type = "input";
 	agileredirecturl.value = "#";
 
+	var agileformidtag = {};
+	agileformidtag.label = "Lead Identification Tag";
+	agileformidtag.type = "input";
+	agileformidtag.value = "";
+
 	for ( var b = 0; b < json.length; b++)
 	{
 		json[b].fields["agileapi"] = agileapi;
 		json[b].fields["agiledomain"] = agiledomain;
 		json[b].fields["agileredirecturl"] = agileredirecturl;
+		json[b].fields["agileformidtag"] = agileformidtag;
 	}
 	callback(json);
 }
