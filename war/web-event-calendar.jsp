@@ -43,7 +43,7 @@ if (scheduleid != null)
   	
   DomainUser domainUser = DomainUserUtil.getDomainUserFromScheduleId(scheduleid,d_name);
 		  
-  // DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("jagadeesh@invox.com");
+   // DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("jagadeesh@invox.com");
 		  
   System.out.println("Domain user " + domainUser);
 	  
