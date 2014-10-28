@@ -11,6 +11,7 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
+import com.agilecrm.util.IcalendarUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
