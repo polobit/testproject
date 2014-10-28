@@ -1520,6 +1520,75 @@ $(function(){
 
 });$(function()
 {
+				$("#freshbooks").die().live("click", function(e)
+				{
+								e.preventDefault();
+								var url = $('#freshbooks_url').val();
+								var token = $('#freshbooks_apiKey').val();
+								if (isBlank(url))
+								{
+												alert("Please Enter Freshbooks Domain Name");
+												return false;
+								}
+								else if (new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?").test(url))
+								{
+												alert("Please Enter Domain Name only");
+												$("#freshbooks_url").focus();
+												return false;
+								}
+
+								if (isBlank(token))
+								{
+												alert("Please Enter Freshbooks API Token");
+												$('#freshbooks_apiKey').focus();
+												return false;
+								}else if(token.length !=32){
+												alert("Invalid Freshbooks API Token");
+												$('#freshbooks_apiKey').focus();
+												return false;
+								}
+								else if (token.length != 32)
+								{
+												alert("Invalid Freshbooks API Token");
+												$('#freshbooks_apiKey').focus();
+												return false;
+								}
+								$.ajax({ url : 'core/api/freshbooks/save/' + token + '/' + url + '', async : false, success : function(data)
+								{
+												if (data)
+												{
+																console.log(data);
+
+												}
+
+								} });
+								var location = window.location.hash;
+								if (location == "#sync/freshbooks/setting")
+								{
+												window.location.reload();
+								}
+								else if (location == "#sync/freshbooks")
+								{
+												window.location = window.location.origin + "#sync/freshbooks/setting";
+								}
+								else
+								{
+												window.location = window.location.origin + "#sync";
+								}
+				});
+				
+	 function isBlank(str) {
+				    return (!str || /^\s*$/.test(str));
+				}
+
+				function isBlank(str)
+				{
+								return (!str || /^\s*$/.test(str));
+				}
+
+});
+$(function()
+{
 	$("#import_shopify").die().live('click', function(e)
 			{
 				var shopName = $('#shop').val();
@@ -2318,6 +2387,376 @@ function constructCustomfieldOptions(type, callback)
 
 }
 /**
+ * Deletes the selected row related entities from the database based on the url
+ * attribute of the table and fades out the rows from the table
+ * 
+ * author: Ramesh
+ * 
+ */
+
+var dup_contacts1_array = [];
+
+$(function() {
+	$('#duplicate-contacts-cancel').die().live('click', function(event) {
+		event.preventDefault();
+		dup_contacts1_array.length = 0;
+		var master_record = App_Contacts.contactDetailView.model.toJSON();
+		Backbone.history.navigate("contact/"+master_record.id, {
+			trigger : true
+		});
+	});
+
+	$('#contact-merge-cancel').die().live('click', function(event) {
+		event.preventDefault();
+		dup_contacts1_array.length = 0;
+		var master_record = App_Contacts.contactDetailView.model.toJSON();
+		Backbone.history.navigate("duplicate-contacts/"+master_record.id, {
+			trigger : true
+		});
+//		Backbone.history.navigate("contacts", {
+//			trigger : true
+//		});
+	});
+
+	/**
+	 * Validates the checkbox status of each row in duplicate contacts table and
+	 * sends these contacts to merge contacts page
+	 * 
+	 */
+	$('#duplicate-contacts-checked-grid')
+			.die()
+			.live(
+					'click',
+					function(event) {
+						event.preventDefault();
+						var index_array = [];
+						var data_array = [];
+						var checked = false;
+						var table = $('body').find('.showCheckboxes');
+						$(table).find('.tbody_check').each(
+								function(index, element) {
+									// If element is checked store it's id in an
+									// array
+									if ($(element).is(':checked')) {
+										dup_contacts1_array.push($(element)
+												.closest('tr').find('td.data')
+												.attr('data'));
+										checked = true;
+									}
+								});
+						if (checked) {
+							if (dup_contacts1_array.length > 2) {
+								alert('You can merge maximum of 2 records at a time with master record.');
+								dup_contacts1_array.length = 0;
+								return;
+							}
+							Backbone.history.navigate("merge-contacts", {
+								trigger : true
+							});
+						} else
+							$('body')
+									.find(".select-none")
+									.html(
+											'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to merge. Please select at least one record to continue.</div>')
+									.show().delay(3000).hide(1);
+					});
+
+	/**
+	 * Merges the selected duplicate contacts properties with the Master contact
+	 * object and deletes the duplicate contact objects from the datastore
+	 * 
+	 */
+	$('#merge-contacts-model')
+			.die()
+			.live(
+					'click',
+					function(event) {
+						event.preventDefault();
+						if (dup_contacts1_array.length > 1) {
+							if (!confirm(" Delete "
+									+ dup_contacts1_array.length
+									+ " duplicate contacts and merge data to master record?"))
+								return;
+						} else if (!confirm(" Delete 1 duplicate contact and merge data to master record?"))
+							return;
+						$(this).attr('disabled', 'disabled');
+						$('#contact-merge-cancel').attr('disabled', 'disabled');
+						$('#contact-merge-cancel').after('<img class="contact-merge-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+						var checked = false;
+						var selected_fields = [];
+						var table = $('body').find('#merge-contacts-table');
+						var tbody = $(table).find('tbody');
+						var phones = [];
+						var emails = [];   
+						var websites = [];
+						var tags = [];
+						var custom_fields = [];
+						var remove_fields = [];
+						var master_record = App_Contacts.contactDetailView.model;
+						var master_record_dup = JSON.parse(JSON
+								.stringify(master_record.toJSON()));
+						var master_id = master_record.id;
+						console.log(master_record.toJSON());
+
+						tbody
+								.children()
+								.each(
+										function(index, element) {
+											$(element)
+													.find(
+															"[type=radio]:checked")
+													.each(
+															function(index,
+																	element) {
+																if ($(element)
+																		.attr(
+																				"oid") != master_id) {
+																	var fieldName = $(
+																			element)
+																			.attr(
+																					"field");
+																	var fieldValue = $(
+																			element)
+																			.attr(
+																					"data");
+																	var fieldType = $(
+																			element)
+																			.attr(
+																					"fieldtype");
+																	if (typeof fieldType !== typeof undefined
+																			&& fieldType !== false) {
+																		if (fieldValue) {
+																			custom_field = {};
+																			custom_field['name'] = fieldName;
+																			custom_field['value'] = fieldValue;
+																			custom_field['type'] = 'CUSTOM';
+																			custom_fields
+																					.push(custom_field);
+																		} else {
+																			remove_field = {};
+																			remove_field['name'] = fieldName;
+																			remove_field['type'] = 'CUSTOM';
+																			remove_fields
+																					.push(remove_field);
+																		}
+																	} else {
+																		if (fieldValue) {
+																			selected_field = {};
+																			selected_field['name'] = fieldName;
+																			selected_field['value'] = fieldValue;
+																			selected_fields
+																					.push(selected_field);
+																			if (fieldName
+																					.toLowerCase() == 'company') {
+																				var company_id = $(
+																						element)
+																						.attr(
+																								"company_id");
+																				master_record
+																						.set({
+																							"contact_company_id" : company_id
+																						});
+																			}
+																		} else {
+																			remove_field = {};
+																			remove_field['name'] = fieldName;
+																			remove_field['type'] = 'SYSTEM';
+																			remove_fields
+																					.push(remove_field);
+																		}
+																	}
+																}
+															});
+											$(element)
+													.find(
+															"[type=checkbox]:checked")
+													.each(
+															function(index,
+																	element) {
+																var fieldName = $(
+																		element)
+																		.attr(
+																				"field");
+																var fieldValue = $(
+																		element)
+																		.attr(
+																				"data");
+																var fieldType = $(
+																		element)
+																		.attr(
+																				"fieldtype");
+																if (fieldName === "email") {
+																	var subtype = $(
+																			element)
+																			.attr(
+																					"subtype");
+																	email = {};
+																	email['value'] = fieldValue;
+																	if (subtype)
+																		email['subtype'] = subtype;
+																	emails
+																			.push(email);
+																} else if (fieldName === "website") {
+																	var subtype = $(
+																			element)
+																			.attr(
+																					"subtype");
+																	website = {};
+																	website['value'] = fieldValue;
+																	if (subtype)
+																		website['subtype'] = subtype;
+																	websites
+																			.push(website);
+																} else if (fieldName === "phone") {
+																	var subtype = $(
+																			element)
+																			.attr(
+																					"subtype");
+																	phone = {};
+																	phone['value'] = fieldValue;
+																	if (subtype)
+																		phone['subtype'] = subtype;
+																	phones
+																			.push(phone);
+																} else if (fieldName === "tags") {
+																	tags
+																			.push(fieldValue);
+																}
+															});
+										});
+						var properties = master_record_dup.properties;
+						master_record.set({
+							"tags" : tags
+						});
+						merge_duplicate_contacts(master_record, properties,
+								selected_fields, custom_fields, remove_fields,
+								websites, emails, phones);
+					});
+});
+
+function merge_duplicate_contacts(master_record, properties, selected_fields,
+		custom_fields, remove_fields, websites, emails, phones) {
+	for (var i = properties.length - 1; i >= 0; i--) {
+		if (properties[i].name.toLowerCase() === 'email'
+				|| properties[i].name.toLowerCase() === 'website'
+				|| properties[i].name.toLowerCase() === 'phone') {
+			properties.splice(i, 1);
+		}
+	}
+	for (var i = 0; i < remove_fields.length; i++) {
+		for (var j = 0; j < properties.length; j++) {
+			var property = properties[j];
+			if (property.name.toLowerCase() === remove_fields[i].name
+					.toLowerCase()
+					&& property.type.toLowerCase() === remove_fields[i].type
+							.toLowerCase()) {
+				properties.splice(j, 1);
+				break;
+			}
+		}
+	}
+	for (var j = 0; j < selected_fields.length; j++) {
+		var element = selected_fields[j];
+		for (var k = 0; k < properties.length; k++) {
+			if (properties[k].name.toLowerCase() === element['name']
+					.toLowerCase()) {
+				properties[k].value = element['value'];
+				break;
+			} else if (k == properties.length - 1) {
+				var object = {};
+				object['name'] = element['name'];
+				object['value'] = element['value'];
+				object['type'] = 'SYSTEM';
+				properties.push(object);
+				break;
+			}
+		}
+	}
+	if (custom_fields.length > 0) {
+		for (var i = 0; i < custom_fields.length; i++) {
+			var element = custom_fields[i];
+			for (var j = 0; j < properties.length; j++) {
+				if (properties[j].name.toLowerCase() === element['name']
+						.toLowerCase()
+						&& properties[j].type === 'CUSTOM') {
+					properties[j].value = element['value'];
+					break;
+				} else if (j == properties.length - 1) {
+					if (custom_fields[i].value) {
+						var object = {};
+						object['name'] = custom_fields[i].name;
+						object['value'] = custom_fields[i].value;
+						object['type'] = 'CUSTOM';
+						properties.push(object);
+						break;
+					}
+				}
+			}
+		}
+	}
+	if (emails.length > 0) {
+		for (var i = 0; i < emails.length; i++) {
+			var object = {};
+			object['name'] = 'email';
+			object['value'] = emails[i].value;
+			object['type'] = 'SYSTEM';
+			if (emails[i].subtype)
+				object['subtype'] = emails[i].subtype;
+			properties.push(object);
+		}
+	}
+	if (phones.length > 0) {
+		for (var i = 0; i < phones.length; i++) {
+			var object = {};
+			object['name'] = 'phone';
+			object['value'] = phones[i].value;
+			object['type'] = 'SYSTEM';
+			if (phones[i].subtype)
+				object['subtype'] = phones[i].subtype;
+			properties.push(object);
+		}
+	}
+	if (websites.length > 0) {
+		for (var i = 0; i < websites.length; i++) {
+			var object = {};
+			object['name'] = 'website';
+			object['value'] = websites[i].value;
+			object['type'] = 'SYSTEM';
+			if (websites[i].subtype)
+				object['subtype'] = websites[i].subtype;
+			properties.push(object);
+		}
+	}
+	master_record.set({
+		"properties" : properties
+	});
+	delete_duplicate_contacts('/core/api/bulk/update?action_type=DELETE',
+			dup_contacts1_array, master_record);
+}
+function delete_duplicate_contacts(url, id_array, master_record) {
+	for (var i = 0; i < id_array.length; i++) {
+		$.ajax({
+			url : '/core/api/contacts/' + id_array[i],
+			type : 'DELETE',
+			async : false,
+			success : function() {
+				if (i === id_array.length - 1) {
+					master_record.save({}, {
+						url : '/core/api/contacts/',
+						success : function() {
+							$(".contact-merge-loading").remove();	
+							CONTACTS_HARD_RELOAD = true;
+							var id = master_record.toJSON().id;
+							Backbone.history.navigate("contact/" + id, {
+								trigger : true
+							});
+						}
+					});
+				}
+			}
+		});
+	}
+}/**
  * contactTableView is customized function (customization of appendedItem
 
  * function in Base_Collection_View), when custom view is selected, this
@@ -3009,18 +3448,16 @@ function show_custom_fields_helper(custom_fields, properties){
 				if(field.scope=="DEAL"){
 					if(field.is_required)
 						el = el.concat('<div class="control-group">	<label class="control-label">'
-									+field.field_label
-									+' <span class="field_req">*</span><input type="'
+									+'<span class="field_req">*</span><input type="'
 									+field_type
 									+'" class="'
 									+field.field_type.toLowerCase()
 									+'_input custom_field required" id='
 									+field.id+' name="'
 									+field.field_label
-									+'" style="margin-left: 5px;"></label></div></div>');
+									+'" style="margin: 0px 5px;">'+field.field_label+'</label></div></div>');
 					else
 						el = el.concat('<div class="control-group">	<label class="control-label">'
-									+field.field_label
 									+'<input type="'
 									+field_type
 									+'" class="'
@@ -3028,7 +3465,7 @@ function show_custom_fields_helper(custom_fields, properties){
 									+'_input custom_field" id='
 									+field.id+' name="'
 									+field.field_label
-									+'" style="margin-left: 5px;"></label></div>');
+									+'" style="margin: 0px 5px;">'+field.field_label+'</label></div>');
 					return;
 				}
 				
@@ -3107,6 +3544,94 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'"></div></div>');
 	});
 
+	return el;
+}
+
+
+/**
+ * It builds UI for showing custom fields in the contacts-merge feature
+ */
+function show_custom_fields_helper_for_merge(custom_fields, contacts) {
+	var el = "";
+	$.each(custom_fields,function(index, field) {
+		var elements = [];
+		for (var i = 0; i < contacts.length; i++) {
+			if(i===0){
+				var checked = false;
+				elements.push('<tr><td style="background-color:#f3f3f3">'
+						+ field.field_label + '</td>');
+			}
+			var contact_field = contacts[i];
+			for (var j = 0; j < contact_field.properties.length; j++) {
+				var property = contact_field.properties[j];
+				if (property.type == "CUSTOM"
+					&& property.name == field.field_label) {
+					var value = property.value;
+					if (value) {
+						checked = true;
+						if (field.field_type.toLowerCase() == "date") {
+							try {
+								value = new Date(
+										property.value * 1000)
+								.format('mm/dd/yyyy');
+							} catch (err) {
+							}
+						}
+						if (i === 0) {
+							var ele = '<td>'
+								+ '<input type="radio" name="'
+								+ field.field_label
+								+ '" class="'
+								+ field.field_type
+								.toLowerCase()
+								+ '" checked="checked" fieldtype="custom" oid="'
+								+ contact_field.id
+								+ '" id="'
+								+ field.id
+								+ '" field="'
+								+ field.field_label
+								+ '" data="'
+								+ value + '">'
+								+ value + '</td>';
+							elements.push(ele);
+							break;
+						} else {
+							var ele = '<td>'
+								+ '<input type="radio" name="'
+								+ field.field_label
+								+ '" class="'
+								+ field.field_type
+								.toLowerCase()
+								+ '" fieldtype="custom" oid="'
+								+ contact_field.id
+								+ '" id="'
+								+ field.id
+								+ '" field="'
+								+ field.field_label
+								+ '" data="'
+								+ value + '">'
+								+ value + '</td>';
+							elements.push(ele);
+							break;
+						}
+					}// end of if loop checking value is null or not
+				}
+				else if (j === contact_field.properties.length - 1) {
+					var ele = '<td></td>';
+					elements.push(ele);
+				}
+			} // end of contact properties for loop
+			if(i===contacts.length-1){
+				if(checked){
+					for(var i=0;i<elements.length;i++){
+						el = el.concat(elements[i]);
+					}
+					el = el.concat('</tr>');
+				}
+				elements.length = 0;
+			}
+		}// end of contacts for loop
+	});
 	return el;
 }
 
@@ -4354,6 +4879,20 @@ function dealCustomFieldValue(name, data){
 
 	});
 	
+	$('.add-pipeline').die().live('click',function(e){
+		$('#pipelineForm input').val('');
+		$('#pipelineForm input#milestones').val('New,Prospect,Proposal,Won,Lost');
+		$('#pipelineModal').find('.save-status').html('');
+	});
+	
+	
+	$('.pipeline-edit').die().live('click',function(e){
+		var id = $(this).attr('id');
+		var json = App_Admin_Settings.pipelineGridView.collection.get(id).toJSON();
+		deserializeForm(json,$('#pipelineForm'));
+		
+	});
+	
 	/**
 	 * If Pipelined View is selected, deals are loaded with pipelined view and 
 	 * creates the pipelined view cookie
@@ -4385,6 +4924,10 @@ function dealCustomFieldValue(name, data){
 					if(readCookie("agile_deal_track") && readCookie("agile_deal_track") == id)
 						eraseCookie("agile_deal_track");
 					App_Admin_Settings.milestones();
+				},
+				error: function(jqXHR, status, errorThrown){
+					console.log(status);
+					$('#pipeline-delete-modal').find('.pipeline-delete-message').text(status.responseText);
 				}
 			});
 		});
@@ -4421,16 +4964,22 @@ function dealCustomFieldValue(name, data){
     	
     	e.preventDefault();
     	var form = $(this).closest('form');
-    	form.find('.show_field').css("display","none");
-    	form.find(".show_milestone_field").css("display","inline-block");
     	
     	var new_milestone = form.find(".add_new_milestone").val().trim();
+    	
+    	if(!new_milestone || new_milestone.length <= 0 || !(/^[a-zA-Z0-9-_ ]*$/).test(new_milestone))
+		{
+    		$('#milestone-error-modal').modal('show');
+			return;
+		}
+    	form.find('.show_field').css("display","none");
+    	form.find(".show_milestone_field").css("display","inline-block");
     	
     	if(!new_milestone || new_milestone.length <= 0 || (/^\s*$/).test(new_milestone))
 		{
 			return;
 		}
-
+    	
     	// To add a milestone when input is not empty
     	if(new_milestone != "")
     	{
@@ -4472,7 +5021,10 @@ function dealCustomFieldValue(name, data){
         		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
         		success : function(model, response) {
         			App_Admin_Settings.milestones();
-        		}
+        		},
+				error: function(data,response){
+					console.log(response);
+				}
         	});
     	});
     	
@@ -4507,7 +5059,13 @@ function dealCustomFieldValue(name, data){
     			$('#pipelineModal').modal('hide');
     			App_Admin_Settings.milestones();
     	    	
-    		}
+    		},
+			error: function(data,response){
+				console.log(response,data);
+				$('#pipelineModal').find('.save-status').html('<span style="color:red;">'+response.responseText+'</span>');
+				setTimeout(function(){$('#pipelineModal').find('.save-status').html('');}, 5000);
+				enable_save_button($("#pipeline_validate"));
+			}
     	});
     	
     });
@@ -5213,7 +5771,7 @@ $("#add-new-tag").die().live('click', function(e) {
 	toggleAddTag(true);
 });
 
-$("#new_tag").die().live('blur keydown', function(event) {
+$("#new_tag").die().live('keydown', function(event) {
 	console.log(event.which)
 
 	if (event.which == 0) {
@@ -5376,8 +5934,8 @@ function showModalConfirmation(title, body, yes_callback, no_callback,
 			+ '</div>'
 			+ '<div class="modal-footer">'
 			+ '<div>'
+			+ '<a  href="#" id="deny" class="btn action" data-dismiss="modal" action="deny">No</a>' 
 			+ '<a href="#" id="confirm" class="action btn btn-primary" action="confirm">Yes</a>'
-			+ '<a  href="#" id="deny" class="btn action" data-dismiss="modal" action="deny">No</a>'
 			+ '</div>' + '</div>' + '</div>' + '</div>');
 
 	confirmationModal.modal('show');
@@ -6377,21 +6935,44 @@ $(function(){
 			}
 		});
 	});
-});function bindAdminChangeAction(el)
+});function bindAdminChangeAction(el, data)
 {
 	$('input[name="is_admin"]', el).die().live('change', function(e){
 	var is_admin = $(this).is(":checked");
 	if(is_admin == false)
-		$("input[type=checkbox]", $('div[name="scopes"]', el)).removeAttr("disabled");
+		$("input[type=checkbox]", $('div[name="newscopes"]', el)).removeAttr("disabled");
 	else
-		$("input[type=checkbox]", $('div[name="scopes"]', el)).attr("checked", "checked" ).attr("disabled", "disabled");
+		$("input[type=checkbox]", $('div[name="newscopes"]', el)).attr("checked", "checked" ).attr("disabled", "disabled");
 	})
 	
-	$("input[type=checkbox]", $('div[name="scopes"]', el)).die().live('change', function(e){
+	$("input[type=checkbox]", $('div[name="newscopes"]', el)).die().live('change', function(e){
 		if(!this.checked){
 			$(this).removeAttr("checked");
 		}
+	});
+	
+	var import_field = $('input[value="IMPORT_CONTACTS"]', el);
+	
+	if(!import_field)
+		return;
+	
+	if(data && data.scopes)
+		{
+			if(jQuery.inArray("IMPORT_CONTACTS", data.scopes) >=0)
+				$('input[value="CREATE_CONTACT"]', el).attr("checked", "checked" ).attr("disabled", "disabled");
+		}
+			
+	import_field.die().live('change', function(e){
+		var is_import_enabled = $(this).is(":checked");
+		if(is_import_enabled == true)
+			{
+				$('input[value="CREATE_CONTACT"]', el).attr("checked", "checked" ).attr("disabled", "disabled");
+			}
+			
+		else
+			$('input[value="CREATE_CONTACT"]', el).removeAttr("disabled");
 	})
+	
 }$(function(){
 	
 	$('#email-gateway-delete').die().live('click', function(e){
@@ -7055,22 +7636,61 @@ function our_domain_sync()
 			// set_profile_noty();
 			Agile_Contact = data;
 
+			var email_from_our_website = readCookie("_agile_our_website_email");
+
+			if (email_from_our_website)
+			{
+				if (email_from_our_website == CURRENT_DOMAIN_USER['email'])
+				{
+
+					var name = CURRENT_DOMAIN_USER['name'];
+					// var first_name = name; var last_name = name;
+					name = name.trim();
+
+					var first_name = name.split(" ")[0].trim();
+					var last_name = (first_name.length < name.length) ? name.substring(first_name.length + 1).trim() : '';
+
+					_agile.update_contact({ "first_name" : first_name, "last_name" : last_name }, function(data)
+					{
+
+						Agile_Contact = data;
+						eraseCookie('_agile_our_website_email');
+
+					});
+
+				}
+			}
 			// Adds signup tag, if it is not added previously.
 			// set_profile_noty();
 			add_custom_fields_to_our_domain();
+
+			if (CURRENT_DOMAIN_USER['is_account_owner'])
+			{
+				add_tag_our_domain("Domain Owner");
+
+			}
 			initWebrules();
 		}, function(data)
 		{
 			var name = CURRENT_DOMAIN_USER['name'];
-			var first_name = name, last_name = name;
+
+			// var first_name = name, last_name = name;
+			name = name.trim();
+			var first_name = name.split(" ")[0].trim();
+			var last_name = (first_name.length < name.length) ? name.substring(first_name.length + 1).trim() : '';
+
 			// Creates a new contact and assigns it to global value
 			_agile.create_contact({ "email" : CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name" : last_name }, function(data)
 			{
-				
 				Agile_Contact = data;
 				// Shows noty
 				// set_profile_noty();
 				add_custom_fields_to_our_domain();
+				if (CURRENT_DOMAIN_USER['is_account_owner'])
+				{
+					add_tag_our_domain("Domain Owner");
+
+				}
 				initWebrules();
 				add_referrar_info_as_note();
 			});
@@ -7235,6 +7855,24 @@ function add_property(name, value, type, callback)
 		if (callback && typeof callback == "function")
 			callback(data);
 	});
+}
+
+/**
+ * adds user info as a note to account owner when user created called from
+ * user-add route
+ */
+function add_created_user_info_as_note_to_owner(owner, callback)
+{
+	var note = {};
+	note.subject = "User created";
+	note.description = " Domain - " + owner['domain'] + "\n User Email -  " + owner['created_user_email'];
+	_agile.add_note(note, function(data)
+	{
+		if (callback && typeof callback == "function")
+			callback(data);
+
+	}, owner['email']);
+
 }
 $(function(){ 
 	
@@ -7520,7 +8158,210 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 			}
 		}
 	});
-}$(function()
+}/**
+ * Chrome extension id
+ *//*
+var Chrome_Extension_Id = "eofoblinhpjfhkjlfckmeidagfogclib";
+
+*//**
+ * Chrome extension resource path to detect extension
+ *//*
+var Chrome_Extension_Accesible_Resource = "/js/xhr_override.js";
+
+*//**
+ * Chrome extension webstore url
+ *//*
+var Chrome_Extension_Webstore_Url = "https://chrome.google.com/webstore/detail/" + Chrome_Extension_Id;
+
+*//**
+ * Detect chrome extension on load
+ *//*
+$(function()
+{
+
+	console.log("**chrome extension**");
+
+	// Check chrome browser
+	var chrome = window.chrome || {};
+	console.log("chrome: " + chrome);
+
+	if (!chrome.app || !chrome.webstore)
+	{
+		console.log("***no chrome***")
+		return;
+	}
+
+	// After clicking on logout, erase cookie to show notification after
+	// login about chrome extension again if not install.
+	$('a').click(function(event)
+	{
+		var herfLogout = $(this).attr("href");
+		if (herfLogout == "/login")
+		{
+			// erase field to notification about chrome extension
+			eraseCookie("agile_chrome_extension");
+		}
+	});
+
+	console.log("readCookie: " + readCookie("agile_chrome_extension") + " " + readCookie("prevent_extension_request"));
+
+	// Read cookie to notify once per session
+	if (readCookie("agile_chrome_extension") || readCookie("prevent_extension_request"))
+	{
+		console.log("return now");
+		return;
+	}
+
+	// Detect extension
+	Detect_Chrome_Extension(Toggle_Extension_Request_Ui);
+});
+
+*//**
+ * Detect chrome extension by sending image request
+ *//*
+function Detect_Chrome_Extension(callback)
+{
+	console.log("In Detect_Chrome_Extension");
+
+	if (document.getElementById('agilecrm_extension'))
+	{
+		console.log("crome extension installed.");
+		if (callback)
+			callback(true);
+	}
+	else
+	{
+		console.log("crome extension is not installed.");
+
+		// Create visit type cookie to notify once per session
+		createCookie("agile_chrome_extension", "notified");
+
+		if (callback)
+			callback(false);
+
+		Initialize_Chrome_Webstore_events();
+	}
+}
+
+*//**
+ * Toggle extension installer UI
+ * 
+ * @param hide
+ *//*
+function Toggle_Extension_Request_Ui(hide)
+{
+
+	console.log("in Toggle_Extension_Request_Ui:" + hide);
+
+	if ($("#chrome_extension").length >= 1)
+	{
+		$("#chrome_extension").remove();
+		toggle_navbar_position("slide_up");
+	}
+
+	// true, extension installed
+	if (hide)
+		return;
+
+	$("body").append(getTemplate("chrome-extension", {}));
+	toggle_navbar_position("slide_down");
+}
+
+function toggle_navbar_position(positionToChange)
+{
+	console.log("in toggle_navbar_position: " + positionToChange);
+
+	if (positionToChange == "slide_up")
+		$(".navbar-fixed-top").removeClass("navbar-slide-down");
+	else if (positionToChange == "slide_down")
+		$(".navbar-fixed-top").addClass("navbar-slide-down");
+}
+
+*//**
+ * Initilaize webstore events to install the extension
+ *//*
+function Initialize_Chrome_Webstore_events()
+{
+
+	console.log("in Initialize_Chrome_Webstore_events");
+
+	*//**
+	 * To dismiss chrome extension popup
+	 *//*
+	$('#chrome_extension #dismiss').die().live('click', function(e)
+	{
+		e.stopPropagation();
+
+		// To prevent notify user permanantly
+		createCookie("prevent_extension_request", "true");
+
+		Toggle_Extension_Request_Ui(true);
+	});
+
+	*//**
+	 * To prevent notify user on each session
+	 *//*
+	$("#chrome_extension #prevent_extension_request").die().live('click', function()
+	{
+
+		// To prevent notify user permanantly
+		createCookie("prevent_extension_request", "true");
+
+		Toggle_Extension_Request_Ui(true);
+	});
+
+	*//**
+	 * Install extension
+	 *//*
+	$('#chrome_extension #chrome_install_button').die().live('click', function(e)
+	{
+
+		e.stopPropagation();
+
+		var $this = $(this);
+
+		Toggle_Extension_Loader("inline");
+
+		try
+		{
+			chrome.webstore.install(Chrome_Extension_Webstore_Url, function(success)
+			{
+
+				console.log(success);
+				Toggle_Extension_Request_Ui(true);
+
+			}, function(error)
+			{
+				console.log(error);
+				Toggle_Extension_Loader("none");
+			});
+		}
+		catch (e)
+		{
+			console.log(e);
+			Toggle_Extension_Loader("none");
+		}
+
+		return false;
+	});
+}
+
+*//**
+ * Toggle loader image
+ * 
+ * @param type
+ *//*
+function Toggle_Extension_Loader(type)
+{
+
+	console.log("In Toggle_Extension_Loader: " + type);
+
+	if (!type)
+		return;
+
+	$("#chrome_extension").find("#loading").css('display', type);
+}
+*/$(function()
 {
 
 	/**
@@ -7538,6 +8379,27 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 	{
 		return getPropertyValue(items, name);
 	});
+	
+	/**
+	 * Helper function to return the checkbox html element with value of a property matched with the given
+	 * name from the array of properties
+	 * 
+	 * @method getPropertyValue
+	 * @param {Object}
+	 *            items array of objects
+	 * @param {String}
+	 *            name to get matched object value
+	 * @returns heckbox html element with value of the matched object
+	 */
+	Handlebars.registerHelper('getPropertyValueInCheckbox', function(items, name, separator,checked)
+			{
+				return getPropertyValueInCheckbox(items, name, separator,checked);
+			});
+	
+	Handlebars.registerHelper('get_correct_count', function(count)
+			{
+				return count-1;
+			});
 
 	/**
 	 * Helper function to return the value of property based on sub-type of the
@@ -7906,6 +8768,18 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 			return "Follow Up";
 		else
 			return ucfirst(value);
+
+	});
+	
+	
+	/**
+	 * Adds Custom Fields to contact merge form, where this helper function is called
+	 */
+	Handlebars.registerHelper('show_custom_fields_for_merge', function(custom_fields, contacts)
+	{
+
+		var el = show_custom_fields_helper_for_merge(custom_fields, contacts);
+		return new Handlebars.SafeString(el);
 
 	});
 
@@ -8909,6 +9783,25 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 
 						return new Handlebars.SafeString(count_message);
 					});
+	
+	Handlebars
+	.registerHelper(
+			'duplicate_contacts_count',
+			function()
+			{
+				var count_message;
+				if (this[0] && this[0].count && (this[0].count != -1))
+				{
+					var count = this[0].count-1;
+					count_message = "<small> (" + count + " Total) </small>";
+				}
+				else
+					count_message = "<small> (" + this.length + " Total) </small>";
+
+				return new Handlebars.SafeString(count_message);
+			});
+	
+	
 
 	/**
 	 * 
@@ -9302,19 +10195,7 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 
 	Handlebars.registerHelper('get_social_icon', function(name)
 	{
-		if (!name)
-			return;
-
-		var icon_json = { "TWITTER" : "icon-twitter-sign", "LINKEDIN" : "icon-linkedin-sign", "URL" : "icon-globe", "GOOGLE-PLUS" : "icon-google-plus-sign",
-			"FACEBOOK" : "icon-facebook-sign", "GITHUB" : "icon-github", "FEED" : "icon-rss", "XING" : "icon-xing-sign", "SKYPE" : "icon-skype",
-			"YOUTUBE" : "icon-youtube", "FLICKR" : "icon-flickr" };
-
-		name = name.trim();
-
-		if (icon_json[name])
-			return icon_json[name];
-
-		return "icon-globe";
+		return get_social_icon(name);
 
 	});
 
@@ -10219,6 +11100,14 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 
 		return options.inverse(this);
 	});
+	
+	Handlebars.registerHelper("canSyncContacts", function(options)
+			{
+				if(canImportContacts())
+					return options.fn(this);
+
+				return options.inverse(this);
+			});
 
 	/**
 	 * To check Access controls for showing icons on dashboard
@@ -10294,13 +11183,19 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 
 	Handlebars.registerHelper('canEditContact', function(owner_id, options)
 	{
-		return options.fn(this);
-
-		if ((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+		if (canEditContact(owner_id))
 			return options.fn(this);
 
 		return options.inverse(this)
 	});
+	
+	Handlebars.registerHelper('canEditCurrentContact', function(owner_id, options){
+		if (canEditCurrentContact())
+			return options.fn(this);
+
+		return options.inverse(this)
+	})
+	
 
 	Handlebars.registerHelper('gateway_exists', function(value, target, options)
 	{
@@ -10381,8 +11276,6 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 
 	Handlebars.registerHelper('canEditContact', function(owner_id, options)
 	{
-		return options.fn(this);
-
 		if ((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
 			return options.fn(this);
 
@@ -10665,9 +11558,17 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("stripe.js");
 	}
+	else if (templateName.indexOf("twilioio") == 0)
+	{
+	template_relative_urls.push("twilioio.js");
+	}
 	else if (templateName.indexOf("twilio") == 0)
 	{
 		template_relative_urls.push("twilio.js");
+	}	
+	else if (templateName.indexOf("sip") == 0)
+	{
+	template_relative_urls.push("sip.js");
 	}
 	else if (templateName.indexOf("twitter") == 0)
 	{
@@ -10937,6 +11838,89 @@ function getPropertyValueBytype(items, name, type, subtype)
 		}
 	}
 }
+
+function getPropertyValueInCheckbox(items, name, id, checked)
+{
+	if (items == undefined)
+		return;
+	var el = "";
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name === name)
+		{		
+			if(name === "website"){
+			  if(checked === 'checked'){			  
+				  el = el.concat('<input type="checkbox" field="'+name+ '" subtype="'+get_subtype_value(items[i])+ '" data="'+items[i].value+ '" oid="'+id+ '" checked="'+checked+ '">' + items[i].value);
+			  }
+			  else{
+				  el = el.concat('<input type="checkbox" field="'+name+ '" subtype="'+get_subtype_value(items[i])+ '" data="'+items[i].value+ '" oid="'+id+ '">' + items[i].value);
+			  }
+			  el = el.concat(get_website_icon(items[i]));
+			}
+			else if(name === "phone"){
+				 if(checked === 'checked'){			  
+					  el = el.concat('<input type="checkbox" field="'+name+ '" subtype="'+get_subtype_value(items[i])+ '" data="'+items[i].value+ '" oid="'+id+ '" checked="'+checked+ '">' + items[i].value );
+				 }
+				 else{
+					  el = el.concat('<input type="checkbox" field="'+name+ '" subtype="'+get_subtype_value(items[i])+ '" data="'+items[i].value+ '" oid="'+id+ '">' + items[i].value );
+				 }
+			 el = el.concat(get_subtype(items[i]));
+			}
+			else if(name === "email"){
+				if(checked === 'checked')
+					el = el.concat('<input type="checkbox" field="'+name+ '" subtype="'+get_subtype_value(items[i])+ '" data="'+items[i].value+ '" oid="'+ id + '" checked="'+checked+ '">' + items[i].value);
+				else{
+					el = el.concat('<input type="checkbox" field="'+name+ '" subtype="'+get_subtype_value(items[i])+ '" data="'+items[i].value+ '" oid="'+ id + '">' + items[i].value);
+				}
+				el = el.concat(get_subtype(items[i]));
+			}
+		}
+	}
+	return el;
+}
+
+function get_website_icon(item){
+	var icon = get_social_icon(item.subtype);
+	var str = "<i class=\"".concat(icon).concat("\"").concat(" style=\"font-size: 1.3em !important; margin-left:10px \"></i> <br>");
+	return str;
+}
+
+function get_social_icon(name){
+	if (!name)
+	return;
+
+    var icon_json = { "TWITTER" : "icon-twitter-sign", "LINKEDIN" : "icon-linkedin-sign", "URL" : "icon-globe", "GOOGLE-PLUS" : "icon-google-plus-sign",
+	"FACEBOOK" : "icon-facebook-sign", "GITHUB" : "icon-github", "FEED" : "icon-rss", "XING" : "icon-xing-sign", "SKYPE" : "icon-skype",
+	"YOUTUBE" : "icon-youtube", "FLICKR" : "icon-flickr" };
+
+    name = name.trim();
+
+    if (icon_json[name])
+	return icon_json[name];
+
+    return "icon-globe";
+}
+
+function get_subtype(item){
+	
+	if(item.subtype!=undefined && item.subtype!=""){
+		var str = "<span class=\"label\" style=\"margin:3px 0px 3px 10px\">".concat(item.subtype).concat("</span> <br>");
+		return str;
+	}
+	else
+		return "<br>";
+}
+
+function get_subtype_value(item){
+	
+	if(item.subtype!=undefined && item.subtype!=""){
+		var str = item.subtype;
+		return str;
+	}
+	else
+	   return "";
+}
+
 
 /**
  * Returns list of custom properties. used to fill custom data in fields in
@@ -12032,7 +13016,7 @@ function initializeSocialSuite()
 
 	// After clicking on logout, unregister all streams on server.
 	$('a').click(function(event)
-	{
+	{		
 		var herfLogout = $(this).attr("href");
 		if (herfLogout == "/login")
 			unregisterAll();
@@ -14594,14 +15578,67 @@ function regenerate_api_key(url){
 	return jQuery.inArray(scope, scopes) > -1;
 }
 
-function canImportContacts()
-{
-	return hasScope("IMPORT_CONTACTS");
-}
 
 function showContactsImportAccessDeniedMessage(el)
 {
    $(el).html("<h4>Access denied to sync contacts. Please contact Admin</h4>");	
+}
+
+function hasScope(scope_constant)
+{
+	return (CURRENT_DOMAIN_USER.scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.scopes) != -1);
+}
+
+function canEditContacts()
+{
+	return hasScope("DELETE_CONTACTS");
+}
+
+function canEditContacts()
+{
+	return hasScope("VIEW_CONTACTS");
+}
+
+function canCreateContacts()
+{
+	return hasScope("CREATE_CONTACT");
+}
+
+function canImportContacts()
+{
+	if(!hasScope("CREATE_CONTACT"))
+		return false; 
+	return hasScope("IMPORT_CONTACTS");
+}
+
+function canEditContact(owner_id)
+{
+	if((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+		return true;
+	
+	return false;
+}
+
+function canEditCurrentContact()
+{
+	var contact_model = App_Contacts.contactDetailView.model;
+	
+	if(!contact_model)
+		return;
+	var contact = contact_model.toJSON();
+	
+	return canEditContact(contact.owner.id);
+}
+
+function canRunBulkOperations()
+{
+	if(!hasScope('VIEW_CONTACTS'))
+		return true;
+	
+	if(!(hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')))
+		return false;
+	
+	return true;
 }/**
  * email-pic.js contains functions which fetch the picture
  * if its a valid email and get the picture by the email
@@ -14768,7 +15805,6 @@ function get_slots(s_date, s_slot)
 	var initialURL = '/core/api/webevents/getslots?&user_name=' + User_Name + '&user_id=' + User_Id + '&timezone=' + timezone + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneAbbr + "&epoch_time=" + epochTime + "&start_time=" + start_time + "&end_time=" + end_time;
 	$.getJSON(initialURL, function(data)
 	{
-		console.log(data);
 
 		// No slots available for selected day
 		if (data.length == 0)
@@ -14801,7 +15837,26 @@ function displaySlots()
 
 	// Empty div where all slots listed, to display new slots
 	$('.checkbox-main-grid').html('');
-
+	
+	console.log(Available_Slots.length);
+	
+	var after_now=[];
+	var date=new Date();
+	for(var s=0;s<Available_Slots.length;s++){
+		if(Available_Slots[s][0]*1000>date.getTime()){
+			
+			after_now.push(Available_Slots[s]);
+		}
+		
+	}
+	console.log(after_now.length);
+	Available_Slots="";
+	Available_Slots=after_now;
+	if(Available_Slots.length==0){
+		displayNoSlotsMsg();
+		return;
+	}
+	
 	// Number of row
 	var numRow = Available_Slots.length / 5;
 
@@ -14856,7 +15911,6 @@ function save_web_event(formId, confirmBtn)
 	
 	// Get details
 	var data = $('#' + formId).serializeArray();
-	$('#three').addClass('green-bg').html('<i class="fa fa-check"></i>');
 	console.log(data);
 	
 	// Make json
@@ -14922,6 +15976,7 @@ function save_web_event(formId, confirmBtn)
 	$('#three').addClass('green-bg').html('<i class="fa fa-check"></i>');
 	// Add selected slots to input json
 	web_calendar_event["selectedSlotsString"] = JSON.stringify(web_calendar_event["selectedSlotsString"]);
+
 	console.log(web_calendar_event);
 	console.log(JSON.stringify(web_calendar_event));
 
@@ -14990,8 +16045,8 @@ $("#create_new_appointment").die().live('click', function(e)
 {
 
 	location.reload(true);
-});
-$(function()
+
+});$(function()
 {
 	// Total available slots on selected date with selecetd slot
 	var Available_Slots = null;
@@ -15942,7 +16997,7 @@ var Base_Model_View = Backbone.View
 				
 				var saveCallback = this.options.saveCallback;
 				
-				
+				var errorCallback = this.options.errorCallback;
 				
 				// Represents form element
 				var $form = $('#' + formId);
@@ -16157,6 +17212,11 @@ var Base_Model_View = Backbone.View
 										// Removes disabled attribute of save button
 										enable_save_button($(e.currentTarget));
 										console.log(response);
+										
+										if (errorCallback && typeof (errorCallback) === "function") {
+											errorCallback(response);
+										     return;
+										    }
 										// Hide loading on error
 										//$save_info.hide();
 
@@ -17745,7 +18805,7 @@ var CONTACT_CUSTOM_FIELDS = undefined;
  *            id of HTML element e.g., textarea#email-body
  * 
  */
-function setupTinyMCEEditor(selector, noAgileContactFields, callback)
+function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback)
 {
 	
 	// Id undefined
@@ -17763,6 +18823,12 @@ function setupTinyMCEEditor(selector, noAgileContactFields, callback)
 	// Remove Agile Contact fields button
 	if(noAgileContactFields)
 		toolbar_2 = "bullist numlist | outdent indent blockquote | forecolor backcolor | preview | code";
+	
+	var default_plugins = ["textcolor link image preview code fullpage"];
+	
+	// If no plugins, assign default
+	if(!plugins)
+		plugins = default_plugins;
 	
 	// Init tinymce first time
 	if (typeof (tinymce) === "undefined")
@@ -17786,8 +18852,7 @@ function setupTinyMCEEditor(selector, noAgileContactFields, callback)
 			$(selector).css('display', '');
 			$('#loading-editor').html("");
 			
-			tinymce.init({ mode : "exact", selector : selector, plugins : [
-			    "textcolor link image preview code fullpage"], 
+			tinymce.init({ mode : "exact", selector : selector, plugins : plugins,
 			    menubar : false,
 				toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | link image | formatselect | fontselect | fontsizeselect",
 				toolbar2 : toolbar_2, valid_elements : "*[*]",
@@ -17797,8 +18862,16 @@ function setupTinyMCEEditor(selector, noAgileContactFields, callback)
 				extended_valid_elements : "*[*]", setup : function(editor)
 				{
 					editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : set_up_merge_fields(editor) });
-				} });
+				}
+				});
+			
+			// callback after tinymce initialised
+	    	setTimeout(function(){
+	    		if(callback != undefined && typeof (callback) === "function")
+	    		callback();
+	    		},500);
 		});
+    	
 		return;
 	}
 
@@ -17808,6 +18881,9 @@ function setupTinyMCEEditor(selector, noAgileContactFields, callback)
 
 	// Add custom toolbar
 	tinymce.settings.toolbar2 = toolbar_2;
+	
+	// Add required plugins
+	tinymce.settings.plugins = plugins;
 	
 	// reinitialize tinymce
 	reinitialize_tinymce_editor_instance(selector, callback);
@@ -17828,12 +18904,14 @@ function set_tinymce_content(selector, content)
 	try
 	{
 		if(typeof (tinymce) !== "undefined")
+		{
 			tinymce.get(selector).setContent(content);
+		}
 	}
 	catch (err)
 	{
 		console.log("error occured while setting content...");
-		console.log(err)
+		console.log(err);
 	}
 }
 
@@ -17895,7 +18973,7 @@ function reinitialize_tinymce_editor_instance(selector, callback)
 
 	    	// Show textarea and remove loading img
 	    	$('#loading-editor').html("");
-//	    	$('#'+ selector).css('display', '');
+	    	$('#'+ selector).css('display', '');
 			
 	    	tinymce.EditorManager.execCommand('mceAddEditor', true, selector);
 	    	
@@ -17904,9 +18982,9 @@ function reinitialize_tinymce_editor_instance(selector, callback)
 	    		callback();
 	    		
 	    	// Show hidden tinymce
-	    	$('.mce-tinymce').css('display','');
+	    	$('.mce-tinymce').css('display', '');
 
-	    }, 1);
+	    }, 100);
 	
 	}
 	catch (err)
@@ -18245,11 +19323,11 @@ function showCallNotyPopup(state, type, message, duration)
 			LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
 			{
 				if (state == "incoming") // confirm
-					incomingCallNoty(message);
+					incomingCallNoty(message, type);
 				else if (state == "connected") // success
 					connectedCallNoty(message, type);
 				else if (state == "outgoing") // confirm
-					outgoingCallNoty(message);
+					outgoingCallNoty(message, type);
 				else
 					showCallNoty(type, message, duration); // as per
 				// requirement
@@ -18280,8 +19358,22 @@ function showCallNoty(type, message, duration)
  * 
  * @param message
  */
-function incomingCallNoty(message)
+function incomingCallNoty(message, type)
 {
+	if (type == "Twilio")
+	{
+		// Close noty
+		if (Twilio_Call_Noty != undefined)
+			Twilio_Call_Noty.close();
+
+		// Set properties
+		Twilio_Call_Noty = noty({ text : message, type : "confirm", layout : "bottomRight", buttons : [
+				{ addClass : 'btn btn-primary noty_twilio_answer', text : 'Answer' }, { addClass : 'btn btn-danger noty_twilio_ignore', text : 'Ignore' }
+		] });
+
+		return;
+	}
+
 	// Close event
 	if (CALL != undefined)
 		CALL.close();
@@ -18307,22 +19399,17 @@ function connectedCallNoty(message, type)
 			Twilio_Call_Noty.close();
 
 		// Set properties
-		Twilio_Call_Noty = noty({
-			text : message,
-			type : "success",
-			layout : "bottomRight",
-			buttons : [
-					{ addClass : 'btn btn-primary noty_twilio_dialpad', text : 'Dialpad' },
-					{ addClass : 'btn btn-danger noty_twilio_hangup', text : 'Hangup' }
-			] });
-	
+		Twilio_Call_Noty = noty({ text : message, type : "success", layout : "bottomRight", buttons : [
+				{ addClass : 'btn btn-primary noty_twilio_dialpad', text : 'Dialpad' }, { addClass : 'btn btn-danger noty_twilio_hangup', text : 'Hangup' }
+		] });
+
 		// Add dialpad template in twilio content
-		var dialpad = $(getTemplate("twilio-dialpad"), {});
-		$('.noty_message').append(dialpad);
+		var dialpad = $(getTemplate("twilioio-dialpad"), {});
+		$('.noty_buttons').prepend(dialpad);
 
 		return;
 	}
-	
+
 	// Close event
 	if (CALL != undefined)
 		CALL.close();
@@ -18338,8 +19425,22 @@ function connectedCallNoty(message, type)
  * 
  * @param message
  */
-function outgoingCallNoty(message)
+function outgoingCallNoty(message, type)
 {
+	if (type == "Twilio")
+	{
+		// Close noty
+		if (Twilio_Call_Noty != undefined)
+			Twilio_Call_Noty.close();
+
+		// Set properties
+		Twilio_Call_Noty = noty({ text : message, type : "confirm", layout : "bottomRight", buttons : [
+			{ addClass : 'btn btn-danger noty_twilio_cancel', text : 'Cancel' }
+		] });
+
+		return;
+	}
+
 	// Close event
 	if (CALL != undefined)
 		CALL.close();
@@ -18348,7 +19449,8 @@ function outgoingCallNoty(message)
 	CALL = noty({ text : message, type : "confirm", layout : "bottomRight", buttons : [
 		{ addClass : 'btn btn-danger hangup', text : 'Cancel' }
 	] });
-}/* functions related to audio */
+}
+/* functions related to audio */
 
 /**
  * Add audio tag in home.jsp after SIP registration is done successfully.
@@ -18418,10 +19520,10 @@ $(function()
 		e.preventDefault();
 
 		// If noty do not have dialpad then add
-		if ($('.noty_message').find('.dialpad_btns').html() == null)
+		if ($('.noty_buttons').find('.dialpad_btns').html() == null)
 		{
 			var dialpad = $(getTemplate("dialpad"), {});
-			$(".noty_message").append(dialpad);
+			$(".noty_buttons").prepend(dialpad);
 		}
 		else
 		{
@@ -18644,10 +19746,9 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			$(".contact-make-sip-call").show();
 			
 			// Contact with tel: is hidden
-			$(".contact-make-call").hide();
+			$(".contact-make-call").hide();		
+			$(".contact-make-twilio-call").hide();
 			
-			$(".make-call").show();
-
 			// enable notifications if not already done
 			if (window.webkitNotifications && window.webkitNotifications.checkPermission() != 0)
 			{
@@ -19928,8 +21029,10 @@ $(function()
 				
 				var json = serializeForm("cancelation-request-form");
 				
+				var info = json.account_cancel_reason;
+				
 				// Replace \r\n with <br> tags as email is sent as text/html
-				var reason = json.account_cancel_reason.replace(/\r\n/g,"<br/>");
+				var reason = info.replace(/\r\n/g,"<br/>");
 				
 				// Build url
 				var url =  'core/api/emails/send-email?from=' + encodeURIComponent(CURRENT_DOMAIN_USER.email) + '&to=' + 
@@ -19944,7 +21047,14 @@ $(function()
 					});
 					
 					// Adds "Cancellation Request" tag in "Our" domain
-					addTagAgile("Cancellation Request");
+					add_tag_our_domain("Cancellation Request");
+					
+					// Adds note in "Our" domain
+					var note = {};
+					note.subject = "Cancellation Request";
+					note.description = info;
+					
+					agile_addNote(note,'', CURRENT_DOMAIN_USER.email);
 					
 					// Enables Send Email button.
 				    enable_send_button($('#send-delete-request'));
@@ -20619,7 +21729,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	"email-gateways/:id" : "emailGateways",
 	
+
 	"sms-gateways/:id" : "smsGateways"
+
 	
 		},
 
@@ -20702,14 +21814,23 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		var view = new Base_Model_View({ url : 'core/api/users', template : "admin-settings-user-add", isNew : true, window : 'users', reload : true,
+		var view = new Base_Model_View({ url : 'core/api/users', template : "admin-settings-user-add", isNew : true, window : 'users', reload : false,
 			postRenderCallback : function(el)
 			{
 				if (view.model.get("id"))
 					addTagAgile("User invited");
 
 				// Binds action
-				bindAdminChangeAction(el);
+				bindAdminChangeAction(el, view.model.toJSON());
+			}, saveCallback : function(response)
+			{
+				$.getJSON("core/api/users/current-owner", function(data)
+				{
+					data["created_user_email"] = response.email;
+
+					add_created_user_info_as_note_to_owner(data);
+
+				});
 			} });
 
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
@@ -20775,7 +21896,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		}, postRenderCallback : function(el)
 		{
-			bindAdminChangeAction(el);
+			bindAdminChangeAction(el, view.model.toJSON());
 		} });
 
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
@@ -21000,10 +22121,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					LHS = $("#LHS", el);
 					RHS = $("#RHS", el);
 
+
 					// Chaining dependencies of input
 					// fields
 					// with jquery.chained.js
 					RHS.chained(LHS);
+
 
 					// Trigger change on email api select
 					setTimeout(function()
@@ -21077,16 +22200,19 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					LHS = $("#LHS", el);
 					RHS = $("#RHS", el);
 					RHS.chained(LHS);
-					setTimeout(function()
-					{
-						$('#sms-api', el).val(value).attr("selected", "selected").trigger('change')
-					}, 1);
-				});
+					});
 			},
 			saveCallback: function(data)
 			{
 				// On saved, navigate to integrations
 				Backbone.history.navigate("integrations",{trigger:true});
+			},
+			errorCallback: function(data){
+				if($("#twilio-error").is(":visible"))
+					$("#twilio-error").remove();
+				
+				$responceText="<div style='color:#B94A48; font-size:14px' id='twilio-error'><i>"+data.responseText+"</i></div>";
+				$(".form-actions", this.el).append($responceText);
 			}
 			
 		});
@@ -21094,7 +22220,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
+
 	} 
+
 	
 });
 /**
@@ -21282,7 +22410,6 @@ var CalendarRouter = Backbone.Router.extend({
 			
 		});
 
-		getCurrentUserScheduleURL();
 		
 		this.tasksListView = new Base_Collection_View({ url : '/core/api/tasks', restKey : "task", templateKey : "tasks", individual_tag_name : 'tr',
 			postRenderCallback : function(el)
@@ -21346,25 +22473,7 @@ var CalendarRouter = Backbone.Router.extend({
 		// Hide owner's and status task selection options from dropdown
 		$(".hide-on-pending").hide();
 	} });
-
-function getCurrentUserScheduleURL(){
-	
-	var updatedCurrentUser = Backbone.Model.extend({ url : '/core/api/users/current-user', restKey : "domainUser" });
-
-	var updateduserModel = new updatedCurrentUser();
-
-	updateduserModel.fetch({ success : function(data)
-	{
-		var model = data.toJSON();
-		var scheduleid=model.schedule_id;
-		console.log(scheduleid);
-		//var onlineschedulingURL="https://" + model.domain + ".agilecrm.com/schedule/"+scheduleid;
-		var onlineschedulingURL="https://" + model.domain + ".agilecrm.com/calendar/"+scheduleid;
-		ONLINE_SCHEDULING_URL=onlineschedulingURL;
-	
-	}});
-
-}/**
+/**
  * Creates backbone router for Case create, read and update operations
  */
 var CasesRouter = Backbone.Router.extend({
@@ -21781,6 +22890,10 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		"contact-duplicate" : "duplicateContact",
 		
+		"duplicate-contacts/:id" : "duplicateContacts",
+
+		"merge-contacts" : "mergeContacts",
+		
 		"tags/:tag" : "contacts", 
 		
 		"send-email" : "sendEmail",
@@ -22021,6 +23134,112 @@ var ContactsRouter = Backbone.Router.extend({
 		$("#contactsmenu").addClass("active");
 
 	},
+	
+	/**
+	 * Fetches all the duplicate contacts (persons) for the given
+	 * contact and shows as list
+	 */
+	duplicateContacts : function(contact_id)
+	{
+
+		dup_contacts1_array.length = 0;
+		var max_contacts_count = 20;
+		var individual_tag_name = "tr";
+
+		// Default url for contacts route
+		this.contact_id = contact_id;
+		var url = '/core/api/search/duplicate-contacts/' + contact_id;
+		var collection_is_reverse = false;
+		template_key = "duplicate-contacts";
+
+		if (App_Contacts.contactDetailView === undefined)
+		{
+			Backbone.history.navigate("contact/" + contact_id, { trigger : true });
+			return;
+		}
+
+		/*
+		 * cursor and page_size options are taken to activate
+		 * infiniScroll
+		 */
+		this.duplicateContactsListView = new Base_Collection_View({ url : url, templateKey : template_key, individual_tag_name : 'tr', cursor : true,
+			page_size : 25, sort_collection : collection_is_reverse, slateKey : null, postRenderCallback : function(el)
+			{
+				// this.duplicateContactsListView.collection.forEach(function(model,
+				// index) {
+				// model.set('master_id',contact_id);
+				// });
+			} });
+
+		// Contacts are fetched when the app loads in the initialize
+		this.duplicateContactsListView.collection.fetch();
+
+		$('#content').html(this.duplicateContactsListView.render().el);
+
+		$(".active").removeClass("active");
+		$("#contactsmenu").addClass("active");
+
+	},
+
+	/**
+	 * Merges duplicate contacts(persons) into a single master contact,
+	 * at a time we can merge 3 contacts
+	 */
+	mergeContacts : function()
+	{
+		
+		
+		var id = dup_contacts1_array[0];
+
+		var max_contacts_count = 20;
+		var individual_tag_name = "table";
+
+		var collection_is_reverse = false;
+		template_key = "merge-contacts";
+
+		if (App_Contacts.duplicateContactsListView == undefined || dup_contacts1_array.length<1)
+		{
+			Backbone.history.navigate("contacts", { trigger : true });
+			return;
+		}
+		var contacts = [];
+		for (var i = 0; i < dup_contacts1_array.length; i++)
+		{
+			var contact_id = Number(dup_contacts1_array[i]);
+			var data = App_Contacts.duplicateContactsListView.collection.where({ id : contact_id });
+			var temp = contacts.concat(data);
+			contacts = temp;
+		}
+		var bigObject = {};
+		var master_record = App_Contacts.contactDetailView.model.toJSON();
+		console.log(master_record);
+//		bigObject['custom_fields'] = get_custom_fields();
+		var objects = []
+		var length = 0;
+		objects[0] = master_record;
+		for (i = 0; i < contacts.length; i++)
+		{
+			objects[i + 1] = contacts[i].toJSON();
+			length++;
+		}
+		bigObject["contacts"] = objects;
+		bigObject["length"] = length;
+		
+		// Contact Edit - take him to continue-contact form
+		add_custom_fields_to_form(bigObject, function(contact)
+		{
+			this.mergeContactsView = new Base_Model_View({ template : template_key, data : bigObject, postRenderCallback : function(el)
+			{
+				// g_id_array.length = 0;
+			} });
+
+			$('#content').html(this.mergeContactsView.render(true).el);
+			$( window ).scrollTop( 0 );
+			$(".active").removeClass("active");
+			$("#contactsmenu").addClass("active");
+
+		}, master_record.type);	
+	},
 
 	/**
 	 * Shows a contact in its detail view by taking the contact from
@@ -22064,11 +23283,17 @@ var ContactsRouter = Backbone.Router.extend({
 				model.id = id;
 				model.fetch({ success : function(data)
 				{
-
+					
 					// Call Contact Details again
 					App_Contacts.contactDetails(id, model);
 
-				} });
+				}, 
+				error: function(data, response)
+				{
+					if(response && response.status == '403')
+						$("#content").html(response.responseText);
+				}
+				});
 
 				return;
 			}
@@ -22119,12 +23344,16 @@ var ContactsRouter = Backbone.Router.extend({
 		this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 
+			
 			// Clone contact model, to avoid render and post-render fell
 			// in to
 			// loop while changing attributes of contact
-			var recentViewedTime = new Backbone.Model();
-			recentViewedTime.url = "core/api/contacts/viewed-at/" + contact.get('id');
-			recentViewedTime.save();
+			if(canEditCurrentContact())
+			{
+				var recentViewedTime = new Backbone.Model();
+				recentViewedTime.url = "core/api/contacts/viewed-at/" + contact.get('id');
+				recentViewedTime.save();
+			}
 
 			if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.get(id))
 				App_Contacts.contactsListView.collection.get(id).attributes = contact.attributes;
@@ -22163,11 +23392,18 @@ var ContactsRouter = Backbone.Router.extend({
 			
 			// For sip
 			if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
-				{			
-					$(".contact-make-sip-call").show();
-					$(".make-call").show();				
-					$(".contact-make-call").hide();			
-				}	
+			{
+				$(".contact-make-sip-call").show();
+				$(".contact-make-twilio-call").hide();
+				$(".contact-make-call").hide();
+			}
+			else if(Twilio_Start == true)
+			//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")			
+			{
+				$(".contact-make-sip-call").hide();
+				$(".contact-make-twilio-call").show();
+				$(".contact-make-call").hide();
+			}	
 			} });
 
 		var el = this.contactDetailView.render(true).el;
@@ -22179,11 +23415,18 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		// For sip
 		if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
-			{			
-				$(".contact-make-sip-call").show();
-				$(".make-call").show();				
-				$(".contact-make-call").hide();			
-			}
+		{
+			$(".contact-make-sip-call").show();
+			$(".contact-make-twilio-call").hide();
+			$(".contact-make-call").hide();
+		}
+		//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")
+		else if(Twilio_Start == true)
+		{
+			$(".contact-make-sip-call").hide();
+			$(".contact-make-twilio-call").show();
+			$(".contact-make-call").hide();
+		}
 	},
 
 	/**
@@ -22336,7 +23579,7 @@ var ContactsRouter = Backbone.Router.extend({
 	 * populate_send_email_details is called from the
 	 * postRenderCallback.
 	 */
-	sendEmail : function(id)
+	sendEmail : function(id, subject, body)
 	{
 		
 		var model = {};
@@ -22369,19 +23612,33 @@ var ContactsRouter = Backbone.Router.extend({
 		// Populate from address and templates
 		populate_send_email_details(el);
 		
+		if(subject)
+			$("#emailForm",el).find('input[name="subject"]').val(subject);
+		
 		// Setup HTML Editor
 		if(id)
-			setupTinyMCEEditor('textarea#email-body', false, function(){
+		{		
+			setupTinyMCEEditor('textarea#email-body', false, undefined, function(){
 				
-				// Reset tinymce content
-				set_tinymce_content('email-body', '');
-			});
+					if(!body)
+						body = '';
+				
+					// Add tinymce content
+					set_tinymce_content('email-body', body);
+			
+				});
+		}
 		else
-			setupTinyMCEEditor('textarea#email-body', true, function(){
+		{	
+			setupTinyMCEEditor('textarea#email-body', true, undefined, function(){
+
+					if(!body)
+						body = '';
 				
-				// Reset tinymce content
-				set_tinymce_content('email-body', '');
+					// Add tinymce content
+					set_tinymce_content('email-body', body);
 			});
+		}
 		
 	},
 	
@@ -23073,7 +24330,7 @@ var SettingsRouter = Backbone.Router.extend({
 						postRenderCallback: function(el)
 						{
 							// setup TinyMCE
-							setupTinyMCEEditor('textarea#WYSItextarea', true);
+							setupTinyMCEEditor('textarea#WYSItextarea', true, ["textcolor link image preview code"]);
 						}
 			 		});
 		
@@ -23336,7 +24593,7 @@ var SettingsRouter = Backbone.Router.extend({
 		$('#prefs-tabs-content').html(view.render().el);
 		
 		// set up TinyMCE Editor
-		setupTinyMCEEditor('textarea#email-template-html', false, function(){
+		setupTinyMCEEditor('textarea#email-template-html', false, undefined, function(){
 			
 			// Reset tinymce
 			set_tinymce_content('email-template-html', '');			
@@ -23379,7 +24636,7 @@ var SettingsRouter = Backbone.Router.extend({
 		/** TinyMCE **/
 		
 		// set up TinyMCE Editor
-		setupTinyMCEEditor('textarea#email-template-html', false, function(){
+		setupTinyMCEEditor('textarea#email-template-html', false, undefined, function(){
 			
 			// Insert content into tinymce
 			set_tinymce_content('email-template-html', currentTemplate.toJSON().text);			
@@ -23456,15 +24713,37 @@ var SettingsRouter = Backbone.Router.extend({
 });
 var ShopifyRouter = Backbone.Router.extend({
 	routes: {
-		"shopify/:shopurl" : "shopify"
+		"shopify/:shopurl" : "shopify","shopify":"shopify"
 	},
 	shopify: function(shopurl){
-		var post_url = "core/shopifyapp?shop=" + shopurl; 
-		console.log(post_url);
+		var t_url = "core/shopifyapp?shop=" + shopurl;
+		var response = {}; response["shopurl"] = shopurl;
+		
 		$.ajax({
-			type : "POST",
-			url : post_url
+			type : "GET",
+			url : t_url,
+			success: function(data){
+				if(data){
+					response["installed"] = true;
+					//$("#content").html(getTemplate("shopify", response));
+					$("#content").html(getTemplate("shopifyboxes", response));
+					return;
+				}
+				else{
+					$.ajax({
+						type : "POST",
+						url : t_url,
+						success: function(data){
+							response["installed"] = false;
+							//$("#content").html(getTemplate("shopify", response));
+							$("#content").html(getTemplate("shopifyboxes", response));
+							return;
+						}
+					});
+				}
+			}
 		});
+		
 	}
 });// Social suites stream and tweets.
 var Streams_List_View;
@@ -24562,6 +25841,8 @@ var WidgetsRouter = Backbone.Router
 												"Sip" : "Sip", "Sip/:id" : "Sip",
 
 												"Twilio" : "Twilio", "Twilio/:id" : "Twilio",
+												
+												"TwilioIO" : "TwilioIO", "TwilioIO/:id" : "TwilioIO",
 
 												"FreshBooks" : "FreshBooks", "FreshBooks/:id" : "FreshBooks",
 
@@ -24579,7 +25860,7 @@ var WidgetsRouter = Backbone.Router
 
 												"sync" : "contactSync", "sync/contacts" : "google_apps_contacts", "sync/calendar" : "google_apps_calendar", "sync/stripe-import" : "stripe_sync",
 																"sync/shopify" : "shopify", "sync/salesforce" : "salesforce", "sync/zoho-import" : "zoho_sync", "sync/quickbook" : "quickbook_import",
-																"sync/xero" : "xero_import" },
+																"sync/xero" : "xero_import","sync/freshbooks":"freshbooks_sync","sync/freshbooks/setting":"freshbooks_sync_setting" },
 
 												/**
 												 * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
@@ -24823,6 +26104,20 @@ var WidgetsRouter = Backbone.Router
 																				fill_form(id, "Sip", 'sip-login');
 
 												},
+												
+												/**
+												 * Manages TwilioIO widget
+												 */
+												TwilioIO : function(id)
+												{
+													if (!id)
+														show_set_up_widget("TwilioIO", 'twilioio-login');
+													else
+														{
+														  fill_form(id, "TwilioIO", 'twilioio-login');
+														  fill_twilioio_numbers();
+														}
+												},
 
 												/**
 												 * Manages Twilio widget
@@ -24988,6 +26283,8 @@ var WidgetsRouter = Backbone.Router
 															       show_set_up_widget("Shopify", "shopify-login");
 																 }
 																 else{ 
+																 			
+																 				
 																 				show_set_up_widget("Shopify","shopify-revoke-access")
 																 		
 																 }
@@ -25252,11 +26549,6 @@ var WidgetsRouter = Backbone.Router
 																$('.contact-sync-tab').addClass('active');
 																// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
 
-																if (!canImportContacts())
-																{
-																				showContactsImportAccessDeniedMessage("#prefs-tabs-content");
-																				return;
-																}
 
 																this.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'admin-settings-import-google-contacts', });
 
@@ -25264,15 +26556,10 @@ var WidgetsRouter = Backbone.Router
 																$('#prefs-tabs-content')
 																								.html(
 																																'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Google <small>import Contacts from Google</small></h2><div class="span11 no-mg-l"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div>' + '<div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>' + '<div class="row-fluid prefs-datasync"><h2 class="widget-head">E-commerce <small>import Contacts from E-commerce</small></h2><div class="span11 no-mg-l"><div id ="shopify"></div></div></div>' +
-																																/*
-																																 * '<div class="row-fluid"><div
-																																 * class="page-header"><h2>CRM
-																																 * <small>import Contacts from CRM</small></h2></div><div
-																																 * class="span11"><div id ="quickbook"
-																																 * class="span4"></div><div id ="xero"
-																																 * class="span4"></div></div></div>' +
-																																 */
-																																'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Payment <small>import Contacts from payment gateway</small></h2><div class="span11 no-mg-l"><div id ="stripe"></div></div></div>'
+																												
+																																'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Payment <small>import Contacts from payment gateway</small></h2><div class="span11 no-mg-l"><div id ="stripe"></div></div></div>'+
+																																'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Accounting <small>import Contacts from Accounting</small></h2><div class="span11 no-mg-l"><div id ="freshbook"></div></div></div>'
+
 
 																								);
 
@@ -25430,6 +26717,39 @@ var WidgetsRouter = Backbone.Router
 																				} });
 
 																$("#prefs-tabs-content").html(this.shopify_sync_setting.render().el);
+												},
+		
+												freshbooks_sync : function()
+												{
+
+																$("#content").html(getTemplate("settings"), {});
+
+																$('#PrefsTab .active').removeClass('active');
+																$('.contact-sync-tab').addClass('active');
+
+																this.freshbooks_sync_setting = new Base_Model_View({ url : 'core/api/freshbooks/import-settings', template : 'admin-settings-import-freshbooks-contacts-form',
+																				saveCallback : function(model)
+																				{
+
+																								showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+																				} });
+
+																$("#prefs-tabs-content").html(this.freshbooks_sync_setting.render().el);
+												},
+												
+												freshbooks_sync_setting:function(){
+																$("#content").html(getTemplate("settings"), {});
+
+																$('#PrefsTab .active').removeClass('active');
+																$('.contact-sync-tab').addClass('active');
+																this.freshbooks_import_settings = new Base_Model_View({ url : 'core/api/freshbooks/import-settings', template : 'admin-settings-import-freshbooks-settings',
+																				saveCallback : function(model)
+																				{
+
+																								showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+																				} });
+
+																$("#prefs-tabs-content").html(this.freshbooks_import_settings.render().el);			
 												},
 
 												zoho_sync : function()
@@ -26618,6 +27938,17 @@ function starify(el) {
     	
     	var contact_model  =  App_Contacts.contactDetailView.model;
     	
+    	// If contact update is not allowed then start rating does not allow user to change it
+    	if(!canEditContact(App_Contacts.contactDetailView.model.get('owner').id))
+    	{
+    			$('#star', el).raty({
+    			 'readOnly': true,
+    			  score: App_Contacts.contactDetailView.model.get('star_value')
+    			 });
+    		 return;
+    	}
+    	
+    	
     	// Set URL - is this required?
     	// contact_model.url = 'core/api/contacts';
     	
@@ -27122,6 +28453,7 @@ $(function()
 		var noteModal = $("#noteModal").clone();
 
 		$("#noteForm > fieldset", noteModal).prepend('<input name="id" type="hidden"/>');
+		$("#noteForm > fieldset", noteModal).prepend('<input name="created_time" type="hidden"/>');
 		$("#noteForm", noteModal).parent().parent().find(".modal-header > h3").html('<i class="icon-edit"></i>&nbsp;Edit Note');
 		$("#noteForm", noteModal).attr('id', "noteUpdateForm");
 		noteModal.attr('id', "noteUpdateModal");
@@ -27908,6 +29240,47 @@ $(function(){
 		
 		window.history.back();
 	});	
+	
+	$('#email-reply').die().live('click', function(e){
+		e.preventDefault();
+	
+		var from = $(this).data('from');
+		
+		var $parent_element = $(this).parent().parent();
+		
+		var to_emails = $parent_element.find('.to-emails').data('to');
+		
+		if(to_emails){
+			
+			var to_array = to_emails.split(',');
+		
+			to_emails = "";
+			
+			for(var i=0, len = to_array.length; i < len; i++)
+			{
+
+				to_emails += to_array[i].match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
+				
+				// Append comma without trailing
+				if(i < len-1)
+					to_emails += ', ';
+			
+			}
+		}
+		
+		// Change url only without triggerring function
+		App_Contacts.navigate('send-email');
+		
+		// Trigger route callback
+		App_Contacts.sendEmail(to_emails, "Re: " + $parent_element.find('.email-subject').text(), '<p></p><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex;">'+ $parent_element.find('.email-body').html()+'</blockquote>');
+		
+	});
+	
+	$('#email-reply-div').live('hover', function(e){
+		e.preventDefault();
+
+		$(this).find('#email-reply').toggle();
+	});
 
 	/**
 	 * Delete functionality for activity blocks in contact details
@@ -29129,6 +30502,30 @@ function show_error(modalId, formId, errorClass, htmlText)
 				}
 }
 
+function show_error_in_formactions(modalId, formId, errorClass, htmlText)
+{
+	var modal_elem = $('#' + modalId);
+	var form_elem = $('#' + formId);
+
+	// Show cause of error in saving
+	var save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+			+ htmlText
+			+ '</i></p></small></div>');
+
+	// Hides the error message after 3
+	// seconds
+	
+	if (modal_elem.css('display') !== 'none')
+	{
+					modal_elem.find('.' + errorClass).html(save_info).show().delay(3000).hide(1);
+	}
+	else if (form_elem.css('display') !== 'none')
+	{
+					form_elem.find('.' + errorClass)
+													.html(save_info).show().delay(3000).hide(1);
+	}
+}
+
 /**
  * Serializes both contact (person or company) modal form (with basic
  * information) and its continue editing form (with detailed information) and
@@ -29544,6 +30941,10 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 																dupEmail = "";
 												// get the already existing email from response text.
 												show_error(modal_id, form_id, 'duplicate-email', response.responseText);
+								}
+								else if(response.status == 403)
+								{
+									show_error_in_formactions(modal_id, form_id, 'form-action-error', response.responseText);
 								}
 								else
 												show_error(modal_id, form_id, 'duplicate-email', response.responseText);
@@ -31815,6 +33216,18 @@ $('.activity-task-edit').live('click', function(e)
 	updateactivity__task(currenttask);
 });
 
+$('.email-details').live('click', function(e)
+		{
+			e.preventDefault();
+			var data = $(this).closest('a').attr("data");
+			
+			var obj=getActivityObject(data);
+			console.log(obj);
+			var emailinfo = $(getTemplate("infoModal", JSON.parse(obj)));
+			emailinfo.modal('show');
+		
+		});
+
 function getDealObject(id)
 {
 
@@ -31857,6 +33270,12 @@ function update_event_activity(ele)
 	deserializeForm(value, $("#updateActivityForm"));
 	$("#updateActivityModal").modal('show');
 
+}
+
+function getModal(){
+	 var activity_object = App_Activity_log.activitiesview.collection.models[this];
+	 alert(activity_object);
+	 console.log(activity_object);
 }
 
 function updateactivity__task(ele)
@@ -32312,13 +33731,22 @@ $(function()
 	 * 
 	 */
 	$('#updateActivityModal').on('hidden', function() {
-
+		if($(this).hasClass('in'))
+		{
+			return;
+		}
+		
 		$("#updateActivityForm").find("li").remove();
 		$('#update-event-time-1').closest('.control-group').show();
 		$('#update-event-date-2').closest('.row').show();
 	});
 	$('#activityModal').on('hidden', function() {
 
+		if($(this).hasClass('in'))
+		{
+			return;
+		}
+		
 		$("#activityForm").find("li").remove();
 		$('#event-time-1').closest('.control-group').show();
 		$('#event-date-2').closest('.row').show();
@@ -33380,7 +34808,42 @@ $(function() {
 
 	})
 });
-$(function()
+/**
+ * workflow-alerts deals with the alerts inside a campaign.
+ * Ex- If the node limit is reached
+ */
+function campaignAlert(alertType)
+{
+	if(alertType == null)
+		return;
+	var alertJSON={};
+	var alertTemplate;
+	if(alertType == "nodeLimit")
+		{
+		alertJSON = _billing_restriction.currentLimits;
+		alertTemplate = $(getTemplate('campaign-node-limit-modal',alertJSON));
+		}
+
+	 
+	if(alertType == "EmptyTwilio")
+		{
+		alertJSON["title"]="No Twilio Number";
+		alertJSON["message"]="The Twilio SMS gateway you configured does not have a purchased number. Please purchase a number from Twilio to start sending SMS.";
+		alertTemplate = $(getTemplate('SMSGateway-integration-alert-modal',alertJSON));
+		}
+	
+	if(alertType == "UnauthorisedTwilio")
+		{
+		alertJSON["title"]="SMS Gateway not Configured";
+		alertJSON["message"]="You need to enable SMS Gateway integration to use this option. Please enable it in Admin Settings -> Integrations";
+		alertTemplate = $(getTemplate('SMSGateway-integration-alert-modal',alertJSON));
+		}
+
+	//alertTemplate = $(getTemplate('SMSGateway-integration-alert-modal',alertJSON));	
+	//console.log();
+	alertTemplate.modal('show');
+	
+}$(function()
 {
 
 	$("#select-all-active-contacts")
@@ -38397,12 +39860,37 @@ $(function()
 	{
 		e.preventDefault();
 
+		if(!canRunBulkOperations())
+			{
+				showModalConfirmation("Bulk Change Owner", 
+						"You may not have permission to update some of the contacts selected. " +
+						"Proceeding with this operation will change the owner for only the contacts " +
+						"you are allowed to update.<br/><br/> Do you want to proceed?", 
+						show_bulk_owner_change_page
+						, function(){
+							// No callback
+							return;
+							},
+							function(){
+				
+							});
+			}
+		else
+			{
+				show_bulk_owner_change_page();
+			}
+		
+	});
+	
+	function show_bulk_owner_change_page()
+	{
 		var filter, id_array = [];
 		if (SELECT_ALL == true)
 			filter = getSelectionCriteria();
 		else
 			id_array = get_contacts_bulk_ids();
-
+		
+		// Yes callback 
 		// Bind a custom event to trigger on loading the form
 		$('body').die('fill_owners').live('fill_owners', function(event)
 		{
@@ -38445,7 +39933,9 @@ $(function()
 				enable_save_button(saveButton);
 			}, 'Contacts owner change scheduled')
 		});
-	});
+		
+	}
+	
 
 	/**
 	 * Bulk operations - Adds to campaign Shows all the workflows as drop down
@@ -38454,7 +39944,29 @@ $(function()
 	$("#bulk-campaigns").live('click', function(e)
 	{
 		e.preventDefault();
-
+		
+		if(!canRunBulkOperations())
+		{
+			showModalConfirmation("Bulk Assign Campaign", 
+					"You may not have permission to update some of the contacts selected. Proceeding with this operation will add only your contacts to the campaign.<br/><br/>Do you want to proceed?", 
+					show_bulk_campaign_assign_page
+					, function(){
+						// No callback
+						return;
+						},
+						function(){
+							return;
+						});
+		}
+	else
+		{
+			show_bulk_campaign_assign_page()
+		}
+		
+	});
+	
+	function show_bulk_campaign_assign_page()
+	{
 		var id_array = [];
 		var filter;
 		if (SELECT_ALL == true)
@@ -38504,8 +40016,7 @@ $(function()
 				enable_save_button(saveButton);
 			}, 'Campaign assigning scheduled');
 		});
-
-	});
+	}
 
 	/**
 	 * Bulk operations - Adds tags' Shows the existing tags with help of
@@ -38515,8 +40026,30 @@ $(function()
 	{
 		e.preventDefault();
 
+		if(!canRunBulkOperations())
+		{
+			showModalConfirmation("Bulk Add Tag", 
+					"You may not have permission to update some of the contacts selected. Proceeding with this operation will add tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?" ,
+ 
+					show_add_tag_bulkaction_form
+					, function(){
+						// No callback
+						return;
+						},
+						function(){
+							return;
+						});
+		}
+		else
+		{
+			show_add_tag_bulkaction_form()
+		}
+	});
+	
+	function show_add_tag_bulkaction_form()
+	{
 		var id_array = get_contacts_bulk_ids();
-
+		
 		// var tags = get_tags('tagsBulkForm');
 
 		Backbone.history.navigate("bulk-tags", { trigger : true });
@@ -38590,7 +40123,7 @@ $(function()
 				return;
 			}
 		});
-	});
+	}
 	
 	
 	/**
@@ -38601,6 +40134,30 @@ $(function()
 	{
 		e.preventDefault();
 
+		if(!canRunBulkOperations())
+		{
+			showModalConfirmation("Bulk Remove Tag", 
+					"You may not have permission to update some of the contacts selected. Proceeding with this operation will delete tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?" ,
+ 
+					show_remove_tag_bulkaction_form
+					, function(){
+						// No callback
+						return;
+						},
+						function(){
+							return;
+						});
+		}
+		else
+		{
+			show_remove_tag_bulkaction_form()
+		}
+	
+	});
+	
+	
+	function show_remove_tag_bulkaction_form()
+	{
 		var id_array = get_contacts_bulk_ids();
 
 		// var tags = get_tags('tagsBulkForm');
@@ -38676,7 +40233,7 @@ $(function()
 				return;
 			}
 		});
-	});
+	}
 
 
 
@@ -38689,7 +40246,30 @@ $(function()
 	{
 		e.preventDefault();
 		
-		var count = 0;
+		if(!canRunBulkOperations())
+		{
+			showModalConfirmation("Bulk Email", 
+					"You may not be the owner for some of the contacts selected. Proceeding with this operation will send email to only your contacts.<br/><br/> Do you want to proceed?" ,
+ 
+					show_bulk_email_form
+					, function(){
+						// No callback
+						return;
+						},
+						function(){
+							return;
+						});
+		}
+		else
+		{
+			show_bulk_email_form()
+		}
+		
+	});
+	
+	function show_bulk_email_form()
+	{
+			var count = 0;
 		
 		// Selected Contact ids
 		var id_array = get_contacts_bulk_ids();
@@ -38703,7 +40283,7 @@ $(function()
 			populate_send_email_details();
 			
 			// Setup HTML Editor
-			setupTinyMCEEditor('textarea#email-body', false, function(){
+			setupTinyMCEEditor('textarea#email-body', false, undefined, function(){
 				
 				// Reset tinymce content
 				set_tinymce_content('email-body', '');
@@ -38761,8 +40341,7 @@ $(function()
 			postBulkOperationData(url, json, $form, null, function(){ 
 				enable_send_button($('#bulk-send-email'));}, "Emails have been queued for " + count +" contacts. They will be sent shortly.");
 		});
-		
-	});
+	}
 
 	/**
 	 * Bulk Operations - Exports selected contacts in a CSV file as an attachment 
@@ -38771,7 +40350,7 @@ $(function()
 	$("#bulk-contacts-export").live('click', function(e)
 			{
 				e.preventDefault();
-
+								
 				// Removes if previous modals exist.
 				if ($('#contacts-export-csv-modal').size() != 0)
 				{
@@ -39103,31 +40682,71 @@ $(function(){
 		});
 		if(checked){
 			
-			// customize delete confirmation message
-			if(!customize_delete_message(table))
-				return;
-			
-			// Customize the bulk delete operations
-			if(!customize_bulk_delete(id_array, data_array))
-				return;
-			
-			
-			$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
-			
-			var url = $(table).attr('url');
-			if(SELECT_ALL == true)
+			if(!canRunBulkOperations())
 			{
-				if($(table).attr('id') == "contacts" || $(table).attr('id') == "companies" )
-					url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+				showModalConfirmation("Bulk Delete", 
+						"You may not have permission to delete some of the contacts selected. Proceeding with this operation will delete only the contacts that you are permitted to delete.<br/><br/> Do you want to proceed?", 
+						function (){
+					
+					// Customize the bulk delete operations
+					if(!customize_bulk_delete(id_array, data_array))
+						return;
+					
+					
+					$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+					
+					var url = $(table).attr('url');
+					if(SELECT_ALL == true)
+					{
+						if($(table).attr('id') == "contacts" || $(table).attr('id') == "companies" )
+							url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+					}
+					
+					// For Active Subscribers table
+					if(SUBSCRIBERS_SELECT_ALL == true){	
+						if($(table).attr('id') == "active-campaign")
+							url = url + "&filter=all-active-subscribers";
+					}
+					
+					bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
+						}, 
+						function(){
+							
+							return;
+						},
+						function() {
+							
+						});
 			}
-			
-			// For Active Subscribers table
-			if(SUBSCRIBERS_SELECT_ALL == true){	
-				if($(table).attr('id') == "active-campaign")
-					url = url + "&filter=all-active-subscribers";
+			else
+			{
+				// customize delete confirmation message
+				if(!customize_delete_message(table))
+					return;
+				
+				// Customize the bulk delete operations
+				if(!customize_bulk_delete(id_array, data_array))
+					return;
+				
+				
+				$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+				
+				var url = $(table).attr('url');
+				if(SELECT_ALL == true)
+				{
+					if($(table).attr('id') == "contacts" || $(table).attr('id') == "companies" )
+						url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+				}
+				
+				// For Active Subscribers table
+				if(SUBSCRIBERS_SELECT_ALL == true){	
+					if($(table).attr('id') == "active-campaign")
+						url = url + "&filter=all-active-subscribers";
+				}
+				
+				bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
 			}
-			
-			bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
+						
 		}	
 		else
 		{
@@ -39170,13 +40789,38 @@ $(function(){
 			});
 			if(checked){
 				
-				if(!confirm("Are you sure you want to delete?"))
-		    		return;
-				// Customize the bulk delete operations
-				if(!customize_bulk_delete(id_array, data_array))
-					return;
+				if(!canRunBulkOperations())
+				{
+					showModalConfirmation("Bulk Delete", 
+							"You may not have permission to delete some of the contacts selected. Proceeding with this operation will delete only the contacts that you are permitted to delete.<br/><br/> Do you want to proceed?",
+							function (){
+								// Customize the bulk delete operations
+								if(!customize_bulk_delete(id_array, data_array))
+										return;
 				
-				bulk_delete_operation($(table).attr('url'), id_array, index_array, table, true, data_array);
+								bulk_delete_operation($(table).attr('url'), id_array, index_array, table, true, data_array);
+							}
+							, function(){
+								// No callback
+								return;
+								},
+								function(){
+					
+								});
+				}
+			else
+				{
+					if(!confirm("Are you sure you want to delete?"))
+		    		return;
+					
+					// Customize the bulk delete operations
+						if(!customize_bulk_delete(id_array, data_array))
+							return;
+				
+						bulk_delete_operation($(table).attr('url'), id_array, index_array, table, true, data_array);
+				}
+				
+				
 			}	
 			else
 	            $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
@@ -39555,7 +41199,11 @@ $(function(){
 		
 		$(el).find('#delete-checked').remove();
 		
-		$(table).after('<div class="row-fluid"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked" style="margin-bottom: 15px"> Delete</a>');
+		if(!$(table_element).hasClass('noDelete')){
+			
+			$(table).after('<div class="row-fluid"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked" style="margin-bottom: 15px"> Delete</a>');
+			
+		}
 			
 		if($(table_element).hasClass('no-sorting'))
 		{	
@@ -40905,48 +42553,136 @@ function send_ical_info_email(emailModal)
 					});
 }
 
-$('#show-schedule-url').live('click', function(e)
+$(function()
 {
-	e.preventDefault();
+
+	$('#scheduleModal').on('hidden', function (e) {
+		$("#edit").show();$('#charlength').hide();$('#specialchar').hide();
+		  
+		})
 	
-	if ($("#scheduleModal").size() != 0){
-		$("#scheduleModal").modal('hide');
-		//alert($("#scheduleModal").size());
-	}
-	var scheduleModel = $(getTemplate("scheduleModal", {}));
+	$('#show-schedule-url').live('click', function(e)
+	{
+		e.preventDefault();
+		$('#scheduleModal').modal('show');
+	});
+
 	
+	$('#scheduleModal').on('show', function() {
+       
+		var updatedCurrentUser = Backbone.Model.extend({ url : '/core/api/users/current-user', restKey : "domainUser" });
+
+		var updateduserModel = new updatedCurrentUser();
+
+		updateduserModel.fetch({ success : function(data)
+		{
+			var model = data.toJSON();
+
+			if ($("#scheduleModal").size() > 1)
+			{
+				$('#scheduleModal').modal('hide').remove();
+
+			}
+
+			var onlineschedulingURL = "https://" + model.domain + ".agilecrm.com/calendar/" + model.schedule_id;
+			var hrefvalue="https://"+model.domain+".agilecrm.com/calendar/";
+			$("#scheduleurl").attr("href", onlineschedulingURL);
+			$("#hrefvalue").html(hrefvalue);
+			$("#schedule_id").html(model.schedule_id);
+			
+			$("#scheduleurl").removeClass("nounderline");
+
+		
+		} });
+	});
 	
-	scheduleModel.modal('show');
-	
+	$("#edit-schedule-id").die().live('click', function(e)
+	{
+
+		e.preventDefault();
+		var data = $('#schedule_id').text();
+		$("#edit").hide();
+		$("#scheduleurl").removeAttr("href");
+		$('#schedule_id').html("<input class='input-small' type='text' style='position: relative;top: 6px;left: 5px;margin-top:-9px;' name='url' id='url' value='" + data + "'/><buttion class='btn' style='display:inline-block;margin-left:30px;margin-bottom:5px;' id='save-scheduleurl'>Save</button>");
+
+
+		$("#scheduleurl").addClass("nounderline");
+		$('#scheduleModal').data('modal', null);
+
+	});
+
+	$("#save-scheduleurl").die().live('click', function(e)
+	{
+		e.preventDefault();
+		var data = $("#url").val();
+		if(data.length<4){
+			$('#charlength').fadeIn('slow');
+            setTimeout(function() {
+         	    $('#charlength').fadeOut('slow');
+         	}, 2000);
+	    	return;
+		}
+		
+		 var regex = /^[0-9a-zA-Z\_]+$/
+			    if(!(regex.test(data)))
+			    	{
+			    	 $('#specialchar').fadeIn('slow');
+                       setTimeout(function() {
+                    	    $('#specialchar').fadeOut('slow');
+                    	}, 2000);
+			    	return;
+			    	}
+		   
+		var saveBtn = $(this);
+		disable_save_button($(saveBtn));
+		$.ajax({ url : 'core/api/users/updatescheduleid?scheduleid=' + data, type : 'GET', success : function(user)
+		{
+			var onlineschedulingURL = "https://" + user.domain + ".agilecrm.com/calendar/" + user.schedule_id;
+			$("#scheduleurl").attr("href", onlineschedulingURL);
+			$("#schedule_id").text(user.schedule_id);
+			enable_save_button($(saveBtn));
+			$("#edit").show();	$("#specialchar").hide();$("#charlength").hide();	
+			$("#scheduleurl").removeClass("nounderline");
+			
+
+		}, error : function(user)
+		{
+
+			alert("Error occured while saving please try again");
+			enable_save_button($(saveBtn));
+		} });
+
+	});
+
 });
 
+
+
+
 $('#send-schedule-url-email').live('click', function(e)
-		{
-			e.preventDefault();
+{
+	e.preventDefault();
 
-			$("#scheduleModal").modal('hide');
-		
-			// Removes previous modals if exist.
-			if ($('#scheduleModal').size() != 0)
-				$('#scheduleModal').remove();
+	$("#scheduleModal").modal('hide');
 
-			    var emailModal = $(getTemplate("share-schedule-url-by-email", {}));
+	// Removes previous modals if exist.
+	if ($('#scheduleModal').size() != 0)
+		$('#scheduleModal').remove();
 
-				var description = $(emailModal).find('textarea').val();
+	var emailModal = $(getTemplate("share-schedule-url-by-email", {}));
 
-				description = description.replace(/<br\/>/g, "\r\n");
+	var description = $(emailModal).find('textarea').val();
 
-				$(emailModal).find('textarea').val(description);
+	description = description.replace(/<br\/>/g, "\r\n");
 
-				emailModal.modal('show');
+	$(emailModal).find('textarea').val(description);
 
-				// Send schedule url by email
-			//	send_schedule_url_email(emailModal);
-		
-			
-		});
+	emailModal.modal('show');
 
+	// Send schedule url by email
+	// send_schedule_url_email(emailModal);
 
+});
 
 /**
  * Sends email with ical data to current-user email.
@@ -40972,7 +42708,7 @@ function send_schedule_url_email(emailModal)
 
 						var json = serializeForm("sharescheduleurlmailForm");
 						json.body = json.body.replace(/\r\n/g, "<br/>");
-				
+
 						var url = 'core/api/emails/send-email?from=' + encodeURIComponent(json.from) + '&to=' + encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + encodeURIComponent(json.body);
 
 						// Shows message
@@ -40988,7 +42724,6 @@ function send_schedule_url_email(emailModal)
 
 					});
 }
-
 /**
  * wysihtml.js is used to embed beautiful html editors to email body. Inserts
  * merge fields into email body. wysihtml makes use of wysihtml5 which is a
@@ -42101,114 +43836,115 @@ function verifyNumberFromTwilio(from_number, id, callback)
 
 $(function()
 {
-    $("#widget-prefs-save").die().live('click', function(e)
-    {
-	e.preventDefault();
-
-	if ($(this).attr('disabled') == "disabled")
-	    return;
-
-	$(this).attr('disabled', 'disabled');
-
-	// Read from from
-	var form = $(this).parents('form');
-
-	// Gets widget object
-	var data = $(form).data('widget');
-
-	var form_id = $(form).attr('id');
-
-	if (!isValidForm($(form)))
+	$("#widget-prefs-save").die().live('click', function(e)
 	{
-	    $(this).removeAttr('disabled')
-	    return;
-	}
+		e.preventDefault();
 
-	// Serializes form daa
-	var form_data = serializeForm(form_id);
+		if ($(this).attr('disabled') == "disabled")
+			return;
 
-	try
-	{
+		$(this).attr('disabled', 'disabled');
 
-	    if (data.prefs)
-		data["prefs"] = JSON.parse(data["prefs"]);
-	    else
-		data["prefs"] = {};
+		// Read from from
+		var form = $(this).parents('form');
 
-	    console.log(data["prefs"]);
-	}
-	catch (err)
-	{
-	}
+		// Gets widget object
+		var data = $(form).data('widget');
 
-	// Update prefs
-	$.each(form_data, function(key, value)
-	{
-	    data["prefs"][key] = value;
+		var form_id = $(form).attr('id');
+
+		if (!isValidForm($(form)))
+		{
+			$(this).removeAttr('disabled')
+			return;
+		}
+
+		// Serializes form daa
+		var form_data = serializeForm(form_id);
+
+		try
+		{
+
+			if (data.prefs)
+				data["prefs"] = JSON.parse(data["prefs"]);
+			else
+				data["prefs"] = {};
+
+			console.log(data["prefs"]);
+		}
+		catch (err)
+		{
+		}
+
+		// Update prefs
+		$.each(form_data, function(key, value)
+		{
+			data["prefs"][key] = value;
+		});
+
+		if (data.prefs)
+		{
+			data.prefs = JSON.stringify(data.prefs);
+
+			update_collection_with_prefs(data);
+		}
+
+		var that = this;
+
+		// Save entity
+		saveEntity(data, "core/api/widgets", function(result)
+		{
+			$(form).data('widget', result.toJSON());
+			$(that).removeAttr('disabled');
+			Backbone.history.navigate("add-widget", { trigger : true });
+		})
 	});
-
-	if (data.prefs)
-	{
-	    data.prefs = JSON.stringify(data.prefs);
-
-	    update_collection_with_prefs(data);
-	}
-
-	var that = this;
-
-	// Save entity
-	saveEntity(data, "core/api/widgets", function(result)
-	{
-	    $(form).data('widget', result.toJSON());
-	    $(that).removeAttr('disabled');
-	    Backbone.history.navigate("add-widget", { trigger : true });
-	})
-    });
 
 });
 
 function update_collection_with_prefs(data)
 {
-    console.log(data);
-    if (App_Widgets.Catalog_Widgets_View && App_Widgets.Catalog_Widgets_View.collection)
-    {
-	var models = App_Widgets.Catalog_Widgets_View.collection.where({ name : data["name"] });
-	if (models && models[0])
+	console.log(data);
+	if (App_Widgets.Catalog_Widgets_View && App_Widgets.Catalog_Widgets_View.collection)
 	{
-	    models[0].set({ 'prefs' : data.prefs });
-	    console.log(App_Widgets.Catalog_Widgets_View.collection.where({ name : data["name"] })[0]);
+		var models = App_Widgets.Catalog_Widgets_View.collection.where({ name : data["name"] });
+		if (models && models[0])
+		{
+			models[0].set({ 'prefs' : data.prefs });
+			console.log(App_Widgets.Catalog_Widgets_View.collection.where({ name : data["name"] })[0]);
+		}
+
 	}
 
-    }
-
-    if (Widgets_View && Widgets_View.collection)
-    {
-	var models = Widgets_View.collection.where({ name : data["name"] });
-	if (models && models[0])
+	if (Widgets_View && Widgets_View.collection)
 	{
-	    models[0].set({ 'prefs' : data.prefs });
-	    console.log(Widgets_View.collection.where({ name : data["name"] })[0]);
-	}
+		var models = Widgets_View.collection.where({ name : data["name"] });
+		if (models && models[0])
+		{
+			models[0].set({ 'prefs' : data.prefs });
+			console.log(Widgets_View.collection.where({ name : data["name"] })[0]);
+		}
 
-    }
+	}
 }
 
 function clickdesk_save_widget_prefs()
 {
-    $('#save_clickdesk_prefs').unbind("click");
+	$('#save_clickdesk_prefs').unbind("click");
 
-    // On click of save button, check input and save details
-    $('#save_clickdesk_prefs').die().live('click', function(e)
-    {
-	e.preventDefault();
+	// On click of save button, check input and save details
+	$('#save_clickdesk_prefs').die().live('click', function(e)
+	{
+		e.preventDefault();
 
-	// Checks whether all input fields are given
-	if (!isValidForm($("#clickdesk_login_form")))
-	    return;
+		// Checks whether all input fields are given
+		if (!isValidForm($("#clickdesk_login_form")))
+			return;
 
-	// Saves ClickDesk preferences in ClickDesk widget object
-	saveClickDeskWidgetPrefs();
-    });
+		// Saves ClickDesk preferences in ClickDesk
+		// widget object
+		saveClickDeskWidgetPrefs();
+	});
 }
 
 /**
@@ -42217,37 +43953,39 @@ function clickdesk_save_widget_prefs()
  */
 function saveClickDeskWidgetPrefs()
 {
-    // Retrieve and store the ClickDesk preferences entered by the user as JSON
-    var ClickDesk_prefs = {};
-    ClickDesk_prefs["clickdesk_username"] = $("#clickdesk_username").val();
-    ClickDesk_prefs["clickdesk_api_key"] = $("#clickdesk_api_key").val();
+	// Retrieve and store the ClickDesk preferences entered by the
+	// user as JSON
+	var ClickDesk_prefs = {};
+	ClickDesk_prefs["clickdesk_username"] = $("#clickdesk_username").val();
+	ClickDesk_prefs["clickdesk_api_key"] = $("#clickdesk_api_key").val();
 
-    // Saves the preferences into widget with ClickDesk widget name
-    save_widget_prefs("ClickDesk", JSON.stringify(ClickDesk_prefs), function(data)
-    {
-	console.log('In clickdesk save success');
-	console.log(data);
-    });
+	// Saves the preferences into widget with ClickDesk widget name
+	save_widget_prefs("ClickDesk", JSON.stringify(ClickDesk_prefs), function(data)
+	{
+		console.log('In clickdesk save success');
+		console.log(data);
+	});
 }
 
 function helpscout_save_widget_prefs()
 {
-    $('#save_api_key').unbind("click");
+	$('#save_api_key').unbind("click");
 
-    // Saves the API key
-    $('#save_api_key').die().live('click', function(e)
-    {
-	e.preventDefault();
-
-	// Checks whether all input fields are given
-	if (!isValidForm($("#helpscout_login_form")))
+	// Saves the API key
+	$('#save_api_key').die().live('click', function(e)
 	{
-	    return;
-	}
+		e.preventDefault();
 
-	// Saves HelpScout preferences in HelpScout widget object
-	saveHelpScoutWidgetPrefs();
-    });
+		// Checks whether all input fields are given
+		if (!isValidForm($("#helpscout_login_form")))
+		{
+			return;
+		}
+
+		// Saves HelpScout preferences in HelpScout
+		// widget object
+		saveHelpScoutWidgetPrefs();
+	});
 
 }
 
@@ -42257,36 +43995,37 @@ function helpscout_save_widget_prefs()
  */
 function saveHelpScoutWidgetPrefs()
 {
-    // Retrieve and store the HelpScout API key entered by the user
-    var HelpScout_prefs = {};
-    HelpScout_prefs["helpscout_api_key"] = $("#helpscout_api_key").val();
+	// Retrieve and store the HelpScout API key entered by the user
+	var HelpScout_prefs = {};
+	HelpScout_prefs["helpscout_api_key"] = $("#helpscout_api_key").val();
 
-    // Saves the preferences into widget with Rapleaf widget name
-    save_widget_prefs("HelpScout", JSON.stringify(HelpScout_prefs), function(data)
-    {
-	console.log('In HelpScout save success');
-	console.log(data);
-    });
+	// Saves the preferences into widget with Rapleaf widget name
+	save_widget_prefs("HelpScout", JSON.stringify(HelpScout_prefs), function(data)
+	{
+		console.log('In HelpScout save success');
+		console.log(data);
+	});
 }
 
 function freshbook_save_widget_prefs()
 {
-    $('#freshbooks_save_token').unbind("click");
+	$('#freshbooks_save_token').unbind("click");
 
-    // On click of save button, check input and save details
-    $('#freshbooks_save_token').die().live('click', function(e)
-    {
-	e.preventDefault();
-
-	// Checks whether all input fields are given
-	if (!isValidForm($("#freshbooks_login_form")))
+	// On click of save button, check input and save details
+	$('#freshbooks_save_token').die().live('click', function(e)
 	{
-	    return;
-	}
+		e.preventDefault();
 
-	// Saves FreshBooks preferences in FreshBooks widget object
-	savefreshBooksWidgetPrefs();
-    });
+		// Checks whether all input fields are given
+		if (!isValidForm($("#freshbooks_login_form")))
+		{
+			return;
+		}
+
+		// Saves FreshBooks preferences in FreshBooks
+		// widget object
+		savefreshBooksWidgetPrefs();
+	});
 }
 
 /**
@@ -42295,38 +44034,39 @@ function freshbook_save_widget_prefs()
  */
 function savefreshBooksWidgetPrefs()
 {
-    // Store the data given by the user as JSON
-    var freshbooks_prefs = {};
-    freshbooks_prefs["freshbooks_apiKey"] = $("#freshbooks_apiKey").val();
-    freshbooks_prefs["freshbooks_url"] = $("#freshbooks_url").val();
+	// Store the data given by the user as JSON
+	var freshbooks_prefs = {};
+	freshbooks_prefs["freshbooks_apiKey"] = $("#freshbooks_apiKey").val();
+	freshbooks_prefs["freshbooks_url"] = $("#freshbooks_url").val();
 
-    // Saves the preferences into widget with FreshBooks widget name
-    save_widget_prefs("FreshBooks", JSON.stringify(freshbooks_prefs), function(data)
-    {
-	console.log('In freshbooks save success');
-	console.log(data);
-    });
+	// Saves the preferences into widget with FreshBooks widget name
+	save_widget_prefs("FreshBooks", JSON.stringify(freshbooks_prefs), function(data)
+	{
+		console.log('In freshbooks save success');
+		console.log(data);
+	});
 }
 
 function rapleaf_save_widget_prefs()
 {
 
-    $('#save_api_key').unbind("click");
+	$('#save_api_key').unbind("click");
 
-    // Saves the API key
-    $('#save_api_key').die().live('click', function(e)
-    {
-	e.preventDefault();
-
-	// Checks whether all input fields are given
-	if (!isValidForm($("#rapleaf_login_form")))
+	// Saves the API key
+	$('#save_api_key').die().live('click', function(e)
 	{
-	    return;
-	}
+		e.preventDefault();
 
-	// Saves Rapleaf preferences in Rapleaf widget object
-	saveRaplefWidgetPrefs();
-    });
+		// Checks whether all input fields are given
+		if (!isValidForm($("#rapleaf_login_form")))
+		{
+			return;
+		}
+
+		// Saves Rapleaf preferences in Rapleaf widget
+		// object
+		saveRaplefWidgetPrefs();
+	});
 }
 
 /**
@@ -42335,16 +44075,16 @@ function rapleaf_save_widget_prefs()
  */
 function saveRaplefWidgetPrefs()
 {
-    // Retrieve and store the Rapleaf API key entered by the user
-    var Rapleaf_prefs = {};
-    Rapleaf_prefs["rapleaf_api_key"] = $("#rapleaf_api_key").val();
+	// Retrieve and store the Rapleaf API key entered by the user
+	var Rapleaf_prefs = {};
+	Rapleaf_prefs["rapleaf_api_key"] = $("#rapleaf_api_key").val();
 
-    // Saves the preferences into widget with Rapleaf widget name
-    save_widget_prefs("Rapleaf", JSON.stringify(Rapleaf_prefs), function(data)
-    {
-	console.log('In Rapleaf save success');
-	console.log(data);
-    });
+	// Saves the preferences into widget with Rapleaf widget name
+	save_widget_prefs("Rapleaf", JSON.stringify(Rapleaf_prefs), function(data)
+	{
+		console.log('In Rapleaf save success');
+		console.log(data);
+	});
 }
 
 /**
@@ -42355,22 +44095,23 @@ function saveRaplefWidgetPrefs()
 function zendesk_save_widget_prefs()
 {
 
-    $('#save_prefs').unbind("click");
+	$('#save_prefs').unbind("click");
 
-    // On click of save button, check input and save details
-    $('#save_prefs').die().live('click', function(e)
-    {
-	e.preventDefault();
-
-	// Checks whether all input fields are given
-	if (!isValidForm($("#zendesk_login_form")))
+	// On click of save button, check input and save details
+	$('#save_prefs').die().live('click', function(e)
 	{
-	    return;
-	}
-	// Saves Zendesk preferences in ClickDesk widget object
-	saveZendeskWidgetPrefs();
+		e.preventDefault();
 
-    });
+		// Checks whether all input fields are given
+		if (!isValidForm($("#zendesk_login_form")))
+		{
+			return;
+		}
+		// Saves Zendesk preferences in ClickDesk widget
+		// object
+		saveZendeskWidgetPrefs();
+
+	});
 
 }
 
@@ -42380,18 +44121,19 @@ function zendesk_save_widget_prefs()
  */
 function saveZendeskWidgetPrefs()
 {
-    // Retrieve and store the Zendesk preferences entered by the user as JSON
-    var zendesk_prefs = {};
-    zendesk_prefs["zendesk_username"] = $("#zendesk_username").val();
-    zendesk_prefs["zendesk_password"] = $("#zendesk_password").val();
-    zendesk_prefs["zendesk_url"] = $("#zendesk_url").val();
+	// Retrieve and store the Zendesk preferences entered by the
+	// user as JSON
+	var zendesk_prefs = {};
+	zendesk_prefs["zendesk_username"] = $("#zendesk_username").val();
+	zendesk_prefs["zendesk_password"] = $("#zendesk_password").val();
+	zendesk_prefs["zendesk_url"] = $("#zendesk_url").val();
 
-    // Saves the preferences into widget with zendesk widget name
-    save_widget_prefs("Zendesk", JSON.stringify(zendesk_prefs), function(data)
-    {
-	console.log('In zendesk save success');
-	console.log(data);
-    });
+	// Saves the preferences into widget with zendesk widget name
+	save_widget_prefs("Zendesk", JSON.stringify(zendesk_prefs), function(data)
+	{
+		console.log('In zendesk save success');
+		console.log(data);
+	});
 }
 
 /**
@@ -42402,22 +44144,23 @@ function saveZendeskWidgetPrefs()
 function sip_save_widget_prefs()
 {
 
-    $('#save_prefs').unbind("click");
+	$('#save_prefs').unbind("click");
 
-    // On click of save button, check input and save details
-    $('#save_prefs').die().live('click', function(e)
-    {
-	e.preventDefault();
-
-	// Checks whether all input fields are given
-	if (!isValidForm($("#sip_login_form")))
+	// On click of save button, check input and save details
+	$('#save_prefs').die().live('click', function(e)
 	{
-	    return;
-	}
-	// Saves Sip preferences in ClickDesk widget object
-	saveSipWidgetPrefs();
+		e.preventDefault();
 
-    });
+		// Checks whether all input fields are given
+		if (!isValidForm($("#sip_login_form")))
+		{
+			return;
+		}
+		// Saves Sip preferences in ClickDesk widget
+		// object
+		saveSipWidgetPrefs();
+
+	});
 
 }
 
@@ -42427,429 +44170,529 @@ function sip_save_widget_prefs()
  */
 function saveSipWidgetPrefs()
 {
-    // Retrieve and store the Sip preferences entered by the user as JSON
-    var sip_prefs = {};
-    sip_prefs["sip_username"] = $("#sip_username").val();
-    sip_prefs["sip_privateid"] = $("#sip_privateid").val();
-    sip_prefs["sip_realm"] = $("#sip_realm").val();
-    sip_prefs["sip_password"] = $("#sip_password").val();
+	// Retrieve and store the Sip preferences entered by the user as
+	// JSON
+	var sip_prefs = {};
+	sip_prefs["sip_username"] = $("#sip_username").val();
+	sip_prefs["sip_privateid"] = $("#sip_privateid").val();
+	sip_prefs["sip_realm"] = $("#sip_realm").val();
+	sip_prefs["sip_password"] = $("#sip_password").val();
 
-    sip_prefs["sip_publicid"] = "sip:" + $("#sip_privateid").val() + "@" + $("#sip_realm").val();
+	sip_prefs["sip_publicid"] = "sip:" + $("#sip_privateid").val() + "@" + $("#sip_realm").val();
 
-    if ($('#sip_wsenable').is(':checked'))
-	sip_prefs["sip_wsenable"] = "true";
-    else
-	sip_prefs["sip_wsenable"] = "false";
+	if ($('#sip_wsenable').is(':checked'))
+		sip_prefs["sip_wsenable"] = "true";
+	else
+		sip_prefs["sip_wsenable"] = "false";
 
-    console.log(sip_prefs);
+	console.log(sip_prefs);
 
-    // Saves the preferences into widget with sip widget name
-    save_widget_prefs("Sip", JSON.stringify(sip_prefs), function(data)
-    {
-	console.log('In sip save success');
-	console.log(data);
-    });
+	// Saves the preferences into widget with sip widget name
+	save_widget_prefs("Sip", JSON.stringify(sip_prefs), function(data)
+	{
+		console.log('In sip save success');
+		console.log(data);
+	});
+}
+
+/**
+ * Shows setup if user adds TwilioIO widget for the first time or clicks on
+ * reset icon on TwilioIO panel in the UI
+ * 
+ */
+function twilioio_save_widget_prefs()
+{
+
+	$('#save_prefs').unbind("click");
+
+	// On click of save button, check input and save details
+	$('#save_prefs').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		$("#error-number-not-selected").hide();
+
+		if ($(this).text() == "Saving..." || $(this).text() == "Loading...")
+		{
+			console.log("Do not hit me again " + $(this).text());
+			return;
+		}
+
+		// Checks whether all input fields are given
+		if (!isValidForm($("#twilioio_login_form")))
+		{
+			return;
+		}
+
+		if ($("#twilio_from_numbers option:selected").val() == "" && $("#twilio_numbers option:selected").val() == "")
+		{
+			$("#error-number-not-selected").show();
+			return;
+		}
+
+		// Saves twilioio preferences in ClickDesk widget object
+		saveTwilioIOWidgetPrefs();
+
+	});
+
+}
+
+/**
+ * Calls method in script API (agile_widget.js) to save TwilioIO preferences in
+ * TwilioIO widget object
+ */
+function saveTwilioIOWidgetPrefs()
+{
+	$("#save_prefs").text("Saving...");
+	$("#save_prefs").attr("disabled", true);
+
+	// Retrieve and store the TwilioIO preferences entered by the user as JSON
+	var twilioio_prefs = {};
+	twilioio_prefs["twilio_acc_sid"] = $("#twilio_acc_sid").val();
+	twilioio_prefs["twilio_auth_token"] = $("#twilio_auth_token").val();
+	twilioio_prefs["twilio_from_number"] = $("#twilio_from_numbers option:selected").val();
+	twilioio_prefs["twilio_number"] = $("#twilio_numbers option:selected").val();
+	twilioio_prefs["twilio_number_sid"] = $("#twilio_number_sid").val();
+
+	console.log(twilioio_prefs);
+
+	// Create application and update twilio number setting (add url)
+	// twilioio_prefs["twilio_app_sid"] = createAppSid(twilioio_prefs);
+
+	createAppSid(twilioio_prefs, function(data)
+	{
+		twilioio_prefs["twilio_app_sid"] = data;
+		console.log(twilioio_prefs);
+
+		// Saves the preferences into widget with sip widget name
+		save_widget_prefs("TwilioIO", JSON.stringify(twilioio_prefs), function(data)
+		{
+			console.log('In TwilioIO save success');
+			console.log(data);
+		});
+	});
 }
 
 function save_widget_prefs(pluginName, prefs, callback)
 {
-    console.log("In save_widget_prefs.");
-    /*
-     * Get widget model from collection based on the name attribute of the
-     * widget model
-     */
-    var models = App_Widgets.Catalog_Widgets_View.collection.where({ name : pluginName });
+	console.log("In save_widget_prefs.");
+	/*
+	 * Get widget model from collection based on the name attribute of the
+	 * widget model
+	 */
+	var models = App_Widgets.Catalog_Widgets_View.collection.where({ name : pluginName });
 
-    /*
-     * Saves widget model and on success navigate back to contact detailed view
-     */
-    var widgetModel = new Backbone.Model();
+	/*
+	 * Saves widget model and on success navigate back to contact detailed view
+	 */
+	var widgetModel = new Backbone.Model();
 
-    console.log(widgetModel);
+	console.log(widgetModel);
 
-    // URL to connect with widgets
-    widgetModel.url = '/core/api/widgets';
-    models[0].set('prefs', prefs);
+	// URL to connect with widgets
+	widgetModel.url = '/core/api/widgets';
+	models[0].set('prefs', prefs);
 
-    widgetModel.save(models[0].toJSON(), { success : function(data)
-    {
-	// Checks if Widget_View is defined and adds widget to collection
-	if (Widgets_View && Widgets_View.collection)
-	    Widgets_View.collection.add(new BaseModel(data.toJSON()));
-
-	data.set('is_added', true);
-	models[0].set(data);
-	window.location.href = "#add-widget";
-
-	console.log(data);
-
-	update_collection_with_prefs(data);
-
-	// Stop old stack.
-	if (Sip_Start == true)
+	widgetModel.save(models[0].toJSON(), { success : function(data)
 	{
-	    Sip_Updated = true;
-	    sipUnRegister();
-	}
+		// Checks if Widget_View is defined and adds
+		// widget to collection
+		if (Widgets_View && Widgets_View.collection)
+			Widgets_View.collection.add(new BaseModel(data.toJSON()));
 
-	// Register on Sip.
-	sipStart();
-    } });
+		data.set('is_added', true);
+		models[0].set(data);
+		window.location.href = "#add-widget";
 
+		console.log(data);
+
+		update_collection_with_prefs(data);
+
+		if (pluginName == "Sip")
+		{
+			// Stop old stack.
+			if (Sip_Start == true)
+			{
+				Sip_Updated = true;
+				sipUnRegister();
+			}
+
+			// Register on Sip.
+			sipStart();
+		}
+
+		if (pluginName == "TwilioIO")
+		{
+			Twilio_Setup_Called = false;
+
+			// Get widget, Create token and set twilio device
+			globalTwilioIOSetup();
+		}
+	} });
 }
 
 function show_set_up_widget(widget_name, template_id, url, model)
 {
-    $("#content").html(getTemplate("settings"), {});
+	$("#content").html(getTemplate("settings"), {});
 
-    var el;
-    var models;
-    $('#prefs-tabs-content').html(getRandomLoadingImg());
-    if (model)
-    {
-    console.log(model)	
-	el = $(getTemplate("widget-settings", model));
-    }
-	else
-    {
-	if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
+	var el;
+	var models;
+	$('#prefs-tabs-content').html(getRandomLoadingImg());
+	if (model)
 	{
-		
-		App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
+		console.log(model)
+		el = $(getTemplate("widget-settings", model));
+	}
+	else
+	{
+		if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
+		{
+			App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
 
-		// Fetch the list of widgets
-		App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
+			// Fetch the list of widgets
+			App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
 			{
 
-			$.getJSON('core/api/widgets/' + widget_name, function(data)
-			    {
+				$.getJSON('core/api/widgets/' + widget_name, function(data)
+				{
 					show_set_up_widget(widget_name, template_id, url, data);
-			    });
-		} });
+				});
+			} });
+			return;
+		}
+		models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });
 
-		return;
-		
+		el = $(getTemplate("widget-settings", models[0].toJSON()));
 	}
-	models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });
-
-	el = $(getTemplate("widget-settings", models[0].toJSON()));
-    }
-
-    console.log(el);
-
-    if (widget_name == "Zendesk")
-	zendesk_save_widget_prefs();
-
-    else if (widget_name == "ClickDesk")
-	clickdesk_save_widget_prefs();
-
-    else if (widget_name == "HelpScout")
-	helpscout_save_widget_prefs();
-
-    else if (widget_name == "FreshBooks")
-	freshbook_save_widget_prefs();
-
-    else if (widget_name == "Rapleaf")
-	rapleaf_save_widget_prefs();
-
-    else if (widget_name == "Sip")
-	sip_save_widget_prefs();
-    
-    else if(widget_name =="QuickBooks")
-	quickBooks_save_widget_prefs();
-    
-    else if(widget_name =="Chargify")
-    	chargify_save_widget_prefs();
-    else if(widget_name == "Shopify")
-    	shopify_save_widget_prefs();
-    
-    // Shows available widgets in the content
-    if (url)
-    {
-	$('#widget-settings', el).html(getTemplate(template_id, { "url" : url }));
 	console.log(el);
-    }
-    else
-    {
-	$('#widget-settings', el).html(getTemplate(template_id, {}));
-	console.log(el);
-    }
 
-    $('#prefs-tabs-content').html(el);
+	if (widget_name == "Zendesk")
+		zendesk_save_widget_prefs();
 
-    $('#PrefsTab .active').removeClass('active');
-    $('.add-widget-prefs-tab').addClass('active');
+	else if (widget_name == "ClickDesk")
+		clickdesk_save_widget_prefs();
 
+	else if (widget_name == "HelpScout")
+		helpscout_save_widget_prefs();
+
+	else if (widget_name == "FreshBooks")
+		freshbook_save_widget_prefs();
+
+	else if (widget_name == "Rapleaf")
+		rapleaf_save_widget_prefs();
+
+	else if (widget_name == "Sip")
+		sip_save_widget_prefs();
+
+	else if (widget_name == "TwilioIO")
+		twilioio_save_widget_prefs();
+
+	else if (widget_name == "QuickBooks")
+		quickBooks_save_widget_prefs();
+
+	else if (widget_name == "Chargify")
+		chargify_save_widget_prefs();
+
+	else if (widget_name == "Shopify")
+		shopify_save_widget_prefs();
+
+	// Shows available widgets in the content
+	if (url)
+	{
+		$('#widget-settings', el).html(getTemplate(template_id, { "url" : url }));
+		console.log(el);
+	}
+	else
+	{
+		if (widget_name == "Shopify" && (model || models[0].attributes.id))
+		{
+			if (model)
+			{
+				$('#widget-settings', el).html(getTemplate(template_id, { "data" : jQuery.parseJSON(model.prefs) }));
+			}
+			else if (models[0].attributes.id)
+			{
+				$('#widget-settings', el).html(getTemplate(template_id, { "data" : jQuery.parseJSON(models[0].attributes.prefs) }));
+			}
+		}
+		else
+		{
+			$('#widget-settings', el).html(getTemplate(template_id, {}));
+			console.log(el);
+		}
+	}
+	$('#prefs-tabs-content').html(el);
+	$('#PrefsTab .active').removeClass('active');
+	$('.add-widget-prefs-tab').addClass('active');
 }
 
 function set_up_access(widget_name, template_id, data, url, model)
 {
-    $("#content").html(getTemplate("settings"), {});
+	$("#content").html(getTemplate("settings"), {});
 
-    var el;
-    var json;
-    var models;
+	var el;
+	var json;
+	var models;
 
-    $('#prefs-tabs-content').html(getRandomLoadingImg());
-    $('#PrefsTab .active').removeClass('active');
-    $('.add-widget-prefs-tab').addClass('active');
+	$('#prefs-tabs-content').html(getRandomLoadingImg());
+	$('#PrefsTab .active').removeClass('active');
+	$('.add-widget-prefs-tab').addClass('active');
 
-    if (model)
-    {
-	el = $(getTemplate("widget-settings", model));
-	json = model;
-    }
-    else
-    {
-	
-	if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
+	if (model)
 	{
-		
-		App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
+		el = $(getTemplate("widget-settings", model));
+		json = model;
+	}
+	else
+	{
 
-		// Fetch the list of widgets
-		App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
+		if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
+		{
+
+			App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
+
+			// Fetch the list of widgets
+			App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
 			{
 
-		    $.getJSON('core/api/widgets/' + widget_name, function(data1)
-	    	    {
-	    			set_up_access(widget_name, template_id, data, url, data1)
-	    	    });
-		} });
+				$.getJSON('core/api/widgets/' + widget_name, function(data1)
+				{
+					set_up_access(widget_name, template_id, data, url, data1)
+				});
+			} });
 
-		return;
-		
+			return;
+
+		}
+
+		models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });
+		json = models[0].toJSON();
+		el = $(getTemplate("widget-settings", json));
 	}
 
-	models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });
-	json = models[0].toJSON();
-	el = $(getTemplate("widget-settings", json));
-    }
+	if (json.name == "Twilio")
+		json['outgoing_numbers'] = data;
 
-    if (json.name == "Twilio")
-	json['outgoing_numbers'] = data;
+	else if (json.name == "Linkedin" || json.name == "Twitter")
+		json['profile'] = data;
 
-    else if (json.name == "Linkedin" || json.name == "Twitter" )
-	json['profile'] = data;
+	else
+		json['custom_data'] = data;
 
-    else
-	json['custom_data'] = data;
+	console.log(json);
 
-    console.log(json);
+	// merged_json = $.extend(merged_json, model, data);
 
-    // merged_json = $.extend(merged_json, model, data);
+	$('#widget-settings', el).html(getTemplate(widget_name.toLowerCase() + "-revoke-access", json));
 
-    $('#widget-settings', el).html(getTemplate(widget_name.toLowerCase() + "-revoke-access", json));
+	$('#prefs-tabs-content').html(el);
 
-    $('#prefs-tabs-content').html(el);
+	$('#prefs-tabs-content').find('form').data('widget', json);
+	console.log(json);
+	console.log($('#prefs-tabs-content').find('form').data('widget'));
 
-    $('#prefs-tabs-content').find('form').data('widget', json);
-    console.log(json);
-    console.log($('#prefs-tabs-content').find('form').data('widget'));
+	$('#PrefsTab .active').removeClass('active');
+	$('.add-widget-prefs-tab').addClass('active');
 
-    $('#PrefsTab .active').removeClass('active');
-    $('.add-widget-prefs-tab').addClass('active');
+	$(".revoke-widget").die().live('click', function(e)
+	{
 
-    $(".revoke-widget").die().live('click', function(e)
-    {
-
-	console.log($(this).attr("widget-name"));
-	delete_widget(widget_name);
-	show_set_up_widget(widget_name, template_id, url, model);
-    });
+		console.log($(this).attr("widget-name"));
+		delete_widget(widget_name);
+		show_set_up_widget(widget_name, template_id, url, model);
+	});
 
 }
 
 function fill_form(id, widget_name, template_id)
 {
-    console.log("In fill_form");
-    console.log(id + " " + widget_name + " " + template_id);
+	console.log("In fill_form");
+	console.log(id + " " + widget_name + " " + template_id);
 
-    var model = App_Widgets.Catalog_Widgets_View.collection.get(id);
-    console.log(model.get("prefs"));
+	var model = App_Widgets.Catalog_Widgets_View.collection.get(id);
+	console.log(model.get("prefs"));
 
-    show_set_up_widget(widget_name, template_id);
+	show_set_up_widget(widget_name, template_id);
 
-    if (model && model.get("prefs"))
-    {
-	var prefsJSON = JSON.parse(model.get("prefs"));
-	fill_fields(prefsJSON);
-    }
+	if (model && model.get("prefs"))
+	{
+		var prefsJSON = JSON.parse(model.get("prefs"));
+		fill_fields(prefsJSON);
+	}
 }
 
-
-function show_shopify_prefs(id, widget_name, template_id){
+function show_shopify_prefs(id, widget_name, template_id)
+{
 	console.log("In show pref  setting ");
-	 $('#prefs-tabs-content').html(getTemplate(template_id));
-	
+	$('#prefs-tabs-content').html(getTemplate(template_id));
+
 }
 
 function fill_fields(fieldsJSON)
 {
-    for (i in fieldsJSON)
-    {
-	if (i == "sip_wsenable")
+	for (i in fieldsJSON)
 	{
-	    if (fieldsJSON[i] == 'true')
-		$("#" + i).attr('checked', 'checked');
-	}
-	else
-	    $("#" + i).val(fieldsJSON[i]);
+		if (i == "sip_wsenable")
+		{
+			if (fieldsJSON[i] == 'true')
+				$("#" + i).attr('checked', 'checked');
+		}
+		else
+			$("#" + i).val(fieldsJSON[i]);
 
-    }
+	}
 }
 
 function widgetError(id, template_id, error, disable_check)
 {
-    // build JSON with error message
-    var error_json = {};
-    error_json['message'] = error;
-    error_json['disable_check'] = disable_check;
+	// build JSON with error message
+	var error_json = {};
+	error_json['message'] = error;
+	error_json['disable_check'] = disable_check;
 
-    /*
-     * Get error template and fill it with error message and show it in the div
-     * with given id
-     */
-    $('#' + id).html(getTemplate(template_id, error_json));
+	/*
+	 * Get error template and fill it with error message and show it in the div
+	 * with given id
+	 */
+	$('#' + id).html(getTemplate(template_id, error_json));
 
 }
 
 function setUpError(widget_name, template_id, error_data, error_url, model)
 {
 
-    $("#content").html(getTemplate("settings"), {});
+	$("#content").html(getTemplate("settings"), {});
 
-    var el;
-    var models;
-    var json;
+	var el;
+	var models;
+	var json;
 
-    $('#prefs-tabs-content').html(getRandomLoadingImg());
-    $('#PrefsTab .active').removeClass('active');
-    $('.add-widget-prefs-tab').addClass('active');
+	$('#prefs-tabs-content').html(getRandomLoadingImg());
+	$('#PrefsTab .active').removeClass('active');
+	$('.add-widget-prefs-tab').addClass('active');
 
-    if (model)
-    {
-	el = $(getTemplate("widget-settings", model));
-	json = model;
-    }
-    else
-    {
-
-	if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
+	if (model)
 	{
-		
-		App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
+		el = $(getTemplate("widget-settings", model));
+		json = model;
+	}
+	else
+	{
 
-		// Fetch the list of widgets
-		App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
+		if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
+		{
+
+			App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
+
+			// Fetch the list of widgets
+			App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
 			{
 
-		    $.getJSON('core/api/widgets/' + widget_name, function(data1)
-	    	    {
-	    			setUpError(widget_name, template_id, error_data, error_url, data1)
-	    	    });
-		} });
+				$.getJSON('core/api/widgets/' + widget_name, function(data1)
+				{
+					setUpError(widget_name, template_id, error_data, error_url, data1)
+				});
+			} });
 
-		return;
-		
+			return;
+
+		}
+
+		models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });
+		json = models[0].toJSON();
+		el = $(getTemplate("widget-settings", json));
 	}
 
-	models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });
-	json = models[0].toJSON();
-	el = $(getTemplate("widget-settings", json));
-    }
+	json['error_message'] = error_data;
+	json['error_url'] = error_url;
 
-    json['error_message'] = error_data;
-    json['error_url'] = error_url;
+	// merged_json = $.extend(merged_json, model, data);
 
-    // merged_json = $.extend(merged_json, model, data);
+	$('#widget-settings', el).html(getTemplate(template_id, json));
 
-    $('#widget-settings', el).html(getTemplate(template_id, json));
+	$('#prefs-tabs-content').html(el);
 
-    $('#prefs-tabs-content').html(el);
+	$('#prefs-tabs-content').find('form').data('widget', json);
 
-    $('#prefs-tabs-content').find('form').data('widget', json);
+	$('#PrefsTab .active').removeClass('active');
+	$('.add-widget-prefs-tab').addClass('active');
 
-    $('#PrefsTab .active').removeClass('active');
-    $('.add-widget-prefs-tab').addClass('active');
-
-}
-function shopify_save_widget_prefs(){
-	
 }
 
 function xero_save_widget_prefs()
 {
-    $('#xero_save_token').unbind("click");
-    alert("hello in xero save")
-    // On click of save button, check input and save details
-    $('#xero_save_token').die().live('click', function(e)
-    {
-	e.preventDefault();
-
-	// Retrieve and store the ClickDesk preferences entered by the user as
-	// JSON
-	var Xero_prefs = {};
-
-	// Saves the preferences into widget with ClickDesk widget name
-	save_widget_prefs("Xero", JSON.stringify(Xero_prefs), function(data)
+	$('#xero_save_token').unbind("click");
+	alert("hello in xero save")
+	// On click of save button, check input and save details
+	$('#xero_save_token').die().live('click', function(e)
 	{
-	    console.log('In xero save success');
-	    console.log(data);
+		e.preventDefault();
+
+		// Retrieve and store the ClickDesk preferences
+		// entered by the user as
+		// JSON
+		var Xero_prefs = {};
+
+		// Saves the preferences into widget with
+		// ClickDesk widget name
+		save_widget_prefs("Xero", JSON.stringify(Xero_prefs), function(data)
+		{
+			console.log('In xero save success');
+			console.log(data);
+		});
 	});
-    });
 }
 
-    function quickBooks_save_widget_prefs(template_id,url)
-    {
-	  head.js('https://appcenter.intuit.com/Content/IA/intuit.ipp.anywhere.js', function()
-		    {
-	      $('#widget-settings', el).html(getTemplate(template_id, { "url" : url }));
+function quickBooks_save_widget_prefs(template_id, url)
+{
+	head.js('https://appcenter.intuit.com/Content/IA/intuit.ipp.anywhere.js', function()
+	{
+		$('#widget-settings', el).html(getTemplate(template_id, { "url" : url }));
 		console.log(el);
-	      intuit.ipp.anywhere.setup({    menuProxy: 'http://example.com/myapp/BlueDotMenu',    grantUrl: url});	
-		    });
-	
-    }
-    function chargify_save_widget_prefs()
-    {
-        $('#chargify_save_api_key').unbind("click");
+		intuit.ipp.anywhere.setup({ menuProxy : 'http://example.com/myapp/BlueDotMenu', grantUrl : url });
+	});
 
-        // Saves the API key
-        $('#chargify_save_api_key').die().live('click', function(e)
-        {
-    	e.preventDefault();
+}
+function chargify_save_widget_prefs()
+{
+	$('#chargify_save_api_key').unbind("click");
 
-    	// Checks whether all input fields are given
-    	if (!isValidForm($("#chargify_login_form")))
-    	{
-    	    return;
-    	}
+	// Saves the API key
+	$('#chargify_save_api_key').die().live('click', function(e)
+	{
+		e.preventDefault();
 
-    	// Saves HelpScout preferences in HelpScout widget object
-    	saveChargifyWidgetPrefs();
-        });
+		// Checks whether all input fields are given
+		if (!isValidForm($("#chargify_login_form")))
+		{
+			return;
+		}
 
-    }
+		// Saves HelpScout preferences in HelpScout
+		// widget object
+		saveChargifyWidgetPrefs();
+	});
 
-    /**
-     * Calls method in script API (agile_widget.js) to save HelpScout preferences in
-     * HelpScout widget object
-     */
-    function saveChargifyWidgetPrefs()
-    {
-        // Retrieve and store the HelpScout API key entered by the user
-        var Chargify_prefs = {};
-        Chargify_prefs["chargify_api_key"] = $("#chargify_api_key").val();
-        Chargify_prefs["chargify_subdomain"] = $("#chargify_subdomain").val();
+}
 
-        // Saves the preferences into widget with Rapleaf widget name
-        save_widget_prefs("Chargify", JSON.stringify(Chargify_prefs), function(data)
-        {
-    	console.log('In chargify save success');
-    	console.log(data);
-        });
-    }
+/**
+ * Calls method in script API (agile_widget.js) to save HelpScout preferences in
+ * HelpScout widget object
+ */
+function saveChargifyWidgetPrefs()
+{
+	// Retrieve and store the HelpScout API key entered by the user
+	var Chargify_prefs = {};
+	Chargify_prefs["chargify_api_key"] = $("#chargify_api_key").val();
+	Chargify_prefs["chargify_subdomain"] = $("#chargify_subdomain").val();
 
+	// Saves the preferences into widget with Rapleaf widget name
+	save_widget_prefs("Chargify", JSON.stringify(Chargify_prefs), function(data)
+	{
+		console.log('In chargify save success');
+		console.log(data);
+	});
+}
 /**
  * Loads widgets on a contact, creates a collection view
  */
@@ -43315,6 +45158,743 @@ function hideIcons(el)
 
 	// Changes width of widget name
 	$(el).find('div.widget_header_name').css({ "width" : "80%" });
+}
+// Twilio call noty when user change tab
+var Twilio_Call_Noty;
+
+var To_Number;
+var To_Name = "";
+
+var Twilio_Token;
+var Verfied_Number;
+var globalconnection;
+var Twilio_Setup_Called = false;
+var Twilio_Start = false;
+var Restart_Twilio = false;
+
+$(function()
+{
+	// After 15 sec procedure will start.
+	setTimeout(function()
+	{
+		// after DOM ready.
+		if (document.readyState === "complete")
+		{
+			globalTwilioIOSetup();
+		}
+	}, 15000); // 15 sec
+
+	$(".noty_twilio_hangup").die().live('click', function(e)
+	{
+		e.preventDefault();
+		console.log("Twilio call hang up from noty");
+
+		Twilio.Device.disconnectAll();
+	});
+
+	$(".noty_twilio_dialpad").die().live('click', function(e)
+	{
+		e.preventDefault();
+		console.log("Twilio call dailpad from noty");
+
+		$('.noty_buttons').find('#dialpad_in_twilio').toggle();
+	});
+
+	$(".noty_twilio_answer").die().live('click', function(e)
+	{
+		e.preventDefault();
+		console.log("Twilio call answered from noty");
+
+		globalconnection.accept();
+	});
+
+	$(".noty_twilio_ignore").die().live('click', function(e)
+	{
+		e.preventDefault();
+		console.log("Twilio call ignore from noty");
+
+		globalconnection.ignore();
+	});
+
+	$(".noty_twilio_cancel").die().live('click', function(e)
+	{
+		e.preventDefault();
+		console.log("Twilio call canceld from noty");
+
+		globalconnection.disconnect();
+
+		Twilio.Device.disconnectAll();
+	});
+
+	$("#validate_account").die().live('click', function(e)
+	{
+		e.preventDefault();
+		console.log("In validate event");
+
+		if ($(this).text() == "Validating...")
+		{
+			console.log("Do not hit me again " + $(this).text());
+			return;
+		}
+
+		// Checks whether all input fields are given
+		if (!isValidForm($("#twilioio_login_form")))
+		{
+			return;
+		}
+
+		var acc_sid = $("#twilio_acc_sid").val();
+		var auth_token = $("#twilio_auth_token").val();
+
+		// if (acc_sid.match("^AC"))
+		{
+			// Change validate to validating
+			$("#validate_account").text("Validating...");
+			$("#validate_account").attr("disabled", true);
+
+			// validate entered details and get verified numbers
+			getValidateAndVerfiedCallerId(acc_sid, auth_token, null);
+		}
+		/*
+		 * else alert("Account SID should start with 'AC'");
+		 */
+	});
+
+	$("#twilio_number").die().live('change', function(e)
+	{
+		e.preventDefault();
+		$("#error-number-not-selected").hide();
+
+		var numberSID = $("#twilio_number option:selected").attr("data");
+		console.log("twilio_number change");
+		console.log("twilio_number " + $(this).val() + " clicked " + numberSID);
+
+		$("#twilio_number_sid").val(numberSID);
+	});
+
+	$("#twilio_from_number").die().live('change', function(e)
+	{
+		e.preventDefault();
+		$("#error-number-not-selected").hide();
+	});
+
+	$(".contact-make-twilio-call").die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		if (Twilio.Device.status() == "busy")
+		{
+			alert("Already on call.");
+			return;
+		}
+
+		console.log("phone: " + $(this).attr("phone"));
+
+		twiliocall($(this).attr("phone"), getTwilioIOContactName());
+	});
+
+	$("#twilio_acc_sid", "#twilio_auth_token").die().live('click', function(e)
+	{
+		e.preventDefault();
+		$("#note-number-not-available").hide();
+	});
+});
+
+/*
+ * Get token from widget details and setup twilio device. Caller : 1.
+ * Twilio.Device.offline 2. init() 3. save_widget_prefs(...)
+ */
+
+function globalTwilioIOSetup()
+{
+	console.log("Twilio_Setup_Called: " + Twilio_Setup_Called);
+
+	if (Twilio_Setup_Called)
+		return;
+
+	Twilio_Setup_Called = true;
+
+	// Get Sip widget
+	$.getJSON("/core/api/widgets/TwilioIO", function(twilioio_widget)
+	{
+		console.log("twilioio_widget");
+		console.log(twilioio_widget);
+
+		if (twilioio_widget == null)
+			return;
+
+		if (twilioio_widget.prefs != undefined)
+		{
+			twilioio_widget.prefs = eval("(" + twilioio_widget.prefs + ")");
+
+			if (twilioio_widget.prefs.twilio_from_number)
+				Verfied_Number = twilioio_widget.prefs.twilio_from_number;
+			else
+				Verfied_Number = twilioio_widget.prefs.twilio_number;
+
+			getGlobalToken();
+		}
+	}).error(function(data)
+	{
+		console.log("twilioio error");
+		console.log(data);
+	});
+}
+
+function getGlobalToken()
+{
+	console.log("****** In getGlobalToken ******");
+	Restart_Twilio = false;
+
+	$.get("/core/api/widgets/twilio/getglobaltoken", function(token)
+	{
+		console.log("Twilio token " + token);
+		Twilio_Token = token;
+
+		setUpGlobalTwilio();
+
+		setTimeout(function()
+		{
+			if (Twilio.Device.status() == "busy")
+			{
+				Restart_Twilio = true;
+			}
+			else
+			{
+				// Get widget, Create token and set twilio device
+				globalTwilioIOSetup();
+			}
+		}, 86400000); // 24 hr = 86400000ms
+
+	}).error(function(data)
+	{
+		console.log("Twilio IO error ");
+		console.log(data);
+	});
+}
+
+function getValidateAndVerfiedCallerId(acc_sid, auth_token, callback)
+{
+	$.get("/core/api/widgets/twilio/validateaccount/" + acc_sid + "/" + auth_token, function(result)
+	{
+		console.log("Twilio validate account " + result);
+		console.log(result);
+		result = eval("(" + result + ")");
+		console.log("Twilio validate account " + result);
+
+		if (result)
+		{
+			// Get twilio number
+			getTwilioNumbers(acc_sid, auth_token, function(twilioNumbers)
+			{
+				// Get verified number
+				getVerifiedNumbers(acc_sid, auth_token, function(verifiedNumbers)
+				{
+					addNumbersInUI(twilioNumbers, verifiedNumbers);
+
+					// If defined, execute the callback function
+					if (callback && typeof (callback) === "function")
+						callback(result);
+				});
+			});
+		}
+		else
+			setToValidate(result, true);
+	}).error(function(data)
+	{
+		console.log("Twilio validate account error");
+		setToValidate(data, true);
+	});
+}
+
+function addNumbersInUI(twilioNumbers, verifiedNumbers)
+{
+	console.log("Twilio twilio number " + twilioNumbers + "  " + verifiedNumbers);
+	console.log("Twilio twilio number " + twilioNumbers.length + "  " + verifiedNumbers.length);
+	// console.log("Twilio twilio number " + twilioNumbers[0].PhoneNumber+" "
+	// +verifiedNumbers[0].PhoneNumber );
+
+	// no twilio # as well as no verified #
+	if (twilioNumbers.length == 0 && verifiedNumbers.length == 0)
+	{
+		// Reset form
+		setToValidate("no number", false);
+
+		// Add error msg at bottom of form
+		$("#note-number-not-available").html("You have no twilio numbers and verified numbers.");
+		$("#note-number-not-available").show();
+	}
+	// twilio # is available but no verified #
+	else if (twilioNumbers.length != 0 && verifiedNumbers.length == 0)
+	{
+		// Add note at bottom you do not have verified #
+		$("#note-number-not-available").html("You have no verified numbers. Please verify number in your Twilio account.");
+		$("#note-number-not-available").show();
+
+		// If no numbers
+		if (!twilioNumbers[0].PhoneNumber)
+		{
+			alert("You have no twilio numbers. Please buy or port a number in your Twilio account.");
+			return;
+		}
+
+		console.log("Twilio twilio number " + twilioNumbers[0].PhoneNumber);
+
+		// Add verified number in UI
+		addTwilioNumbersInUI(twilioNumbers);
+
+		// Hide validate button
+		$("#validate_account").hide();
+
+		// Show save button
+		$("#save_prefs").show();
+
+		// Hide twilio from numbers list
+		$("#twilio_from_numbers").hide();
+
+		// Show twilio numbers list
+		$("#twilio_numbers").show();
+
+		$("#twilio_number").addClass("required");
+	}
+	// verified # is available but no twilio #
+	else if (twilioNumbers.length == 0 && verifiedNumbers.length != 0)
+	{
+		// Add note at bottom you do not have twilio #
+		$("#note-number-not-available").html("You have no twilio numbers. Please buy or port a number in your Twilio account.");
+		$("#note-number-not-available").show();
+
+		// If no numbers
+		if (!verifiedNumbers[0].PhoneNumber)
+		{
+			alert("You have no verified numbers. Please verify number in your Twilio account.");
+			return;
+		}
+
+		console.log("Twilio verified number " + verifiedNumbers[0].PhoneNumber);
+
+		// Add verified number in UI
+		addVerifiedCallerIdInUI(verifiedNumbers);
+
+		// Hide validate button
+		$("#validate_account").hide();
+
+		// Show save button
+		$("#save_prefs").show();
+
+		// Show twilio from numbers list
+		$("#twilio_from_numbers").show();
+
+		// Hide twilio numbers list
+		$("#twilio_numbers").hide();
+
+		$("#twilio_from_number").addClass("required");
+	}
+	// both available
+	else if (twilioNumbers.length != 0 && verifiedNumbers.length != 0)
+	{
+		// Add verified number in UI
+		addTwilioNumbersInUI(twilioNumbers);
+
+		// Add verified number in UI
+		addVerifiedCallerIdInUI(verifiedNumbers);
+
+		// Hide validate button
+		$("#validate_account").hide();
+
+		// Show save button
+		$("#save_prefs").show();
+
+		// Show twilio from numbers list
+		$("#twilio_from_numbers").show();
+
+		// Show twilio numbers list
+		$("#twilio_numbers").show();
+	}
+}
+
+function setToValidate(data, showAlert)
+{
+	// Change validate to validating
+	$("#validate_account").text("Validate");
+	$("#validate_account").attr("disabled", false);
+
+	console.log("Twilio error ");
+	console.log(data);
+
+	if (showAlert)
+		alert("Please enter valid details.");
+
+	// Reset form fields after sending email
+	$("#twilioio_login_form").each(function()
+	{
+		this.reset();
+	});
+}
+
+function getTwilioNumbers(acc_sid, auth_token, callback)
+{
+	$.get("/core/api/widgets/twilio/gettwilionumbers/" + acc_sid + "/" + auth_token, function(result)
+	{
+		console.log("Twilio getTwilioNumbers " + result);
+		console.log(result);
+		result = eval("(" + result + ")");
+		console.log("Twilio getTwilioNumbers " + result);
+
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(result);
+	}).error(function(data)
+	{
+		console.log("error in getTwilioNumbers");
+		setToValidate(data, true);
+	});
+}
+
+function getVerifiedNumbers(acc_sid, auth_token, callback)
+{
+	$.get("/core/api/widgets/twilio/getverifiednumbers/" + acc_sid + "/" + auth_token, function(result)
+	{
+		console.log("Twilio getVerifiedNumbers " + result);
+		console.log(result);
+		result = eval("(" + result + ")");
+		console.log("Twilio getVerifiedNumbers " + result);
+
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(result);
+	}).error(function(data)
+	{
+		console.log("error in getVerifiedNumbers");
+		setToValidate(data, true);
+	});
+}
+
+function addTwilioNumbersInUI(result)
+{
+	var phoneNumberHtml = '<option value="" default selected style="display:none;">Select a Twilio number</option>';
+	var optionHtml = "";
+
+	// Collect all twilio number for display
+	$.each(result, function(index, phoneNumber)
+	{
+		optionHtml = '<option data="' + phoneNumber.Sid + '" value="' + phoneNumber.PhoneNumber + '">' + phoneNumber.PhoneNumber + '</option>';
+		phoneNumberHtml = phoneNumberHtml + optionHtml;
+	});
+
+	optionHtml = '<option data="" value="">None</option>';
+	phoneNumberHtml = phoneNumberHtml + optionHtml;
+	
+	// Add verified number in list
+	$("#twilio_number").html(phoneNumberHtml);
+}
+
+function addVerifiedCallerIdInUI(result)
+{
+	var phoneNumberHtml = '<option value="" default selected style="display:none;">Select a verifed number</option>';
+	var optionHtml = "";
+
+	// Collect all verified number for display
+	$.each(result, function(index, phoneNumber)
+	{
+		optionHtml = '<option value="' + phoneNumber.PhoneNumber + '">' + phoneNumber.PhoneNumber + '</option>';
+		phoneNumberHtml = phoneNumberHtml + optionHtml;
+	});
+
+	optionHtml = '<option data="" value="">None</option>';
+	phoneNumberHtml = phoneNumberHtml + optionHtml;
+	
+	// Add verified number in list
+	$("#twilio_from_number").html(phoneNumberHtml);
+}
+
+//
+function createAppSid(twilioio_prefs, callback)
+{
+	console.log("In createAppSid");
+	var numberSid = "None";
+	if (twilioio_prefs.twilio_number_sid != "")
+		numberSid = twilioio_prefs.twilio_number_sid;
+
+	$.get("/core/api/widgets/twilio/createappsid/" + twilioio_prefs.twilio_acc_sid + "/" + twilioio_prefs.twilio_auth_token + "/" + numberSid, function(result)
+	{
+		console.log("Twilio createAppSid " + result);
+
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(result);
+	}).error(function(data)
+	{
+		console.log("Twilio get app sid error ");
+		console.log(data);
+
+		alert("Please try again with valid details.");
+
+		$("#save_prefs").text("Save");
+		$("#save_prefs").attr("disabled", false);
+		$("#save_prefs").hide();
+		$("#validate_account").text("Validate");
+		$("#validate_account").attr("disabled", false);
+		$("#validate_account").show();
+
+		// Show twilio from numbers list
+		$("#twilio_from_numbers").hide();
+
+		// Show twilio numbers list
+		$("#twilio_numbers").hide();
+
+		// Reset form fields after sending email
+		$("#twilioio_login_form").each(function()
+		{
+			this.reset();
+		});
+	});
+}
+
+function fill_twilioio_numbers()
+{
+	// Hide validate button
+	$("#validate_account").hide();
+
+	// Show save button
+	$("#save_prefs").show();
+
+	$("#save_prefs").text("Loading...");
+	$("#save_prefs").attr("disabled", true);
+
+	// Retrieves widget which is fetched using script API
+	// Get TwilioIO widget
+	$.getJSON("/core/api/widgets/TwilioIO", function(twilioio_widget)
+	{
+		if (twilioio_widget == null)
+			return;
+
+		console.log("twilioio_widget");
+		console.log(twilioio_widget);
+
+		if (twilioio_widget.prefs != undefined)
+		{
+			twilioio_widget.prefs = eval("(" + twilioio_widget.prefs + ")");
+
+			getValidateAndVerfiedCallerId(twilioio_widget.prefs.twilio_acc_sid, twilioio_widget.prefs.twilio_auth_token, function(data)
+			{
+				console.log("In callback getValidateAndVerfiedCallerId");
+				$('#twilio_from_number').val(twilioio_widget.prefs.twilio_from_number);
+				$('#twilio_number').val(twilioio_widget.prefs.twilio_number);
+				$('#twilio_number_sid').val(twilioio_widget.prefs.twilio_number_sid);
+				$("#save_prefs").text("Save");
+				$("#save_prefs").attr("disabled", false);
+			});
+		}
+	}).error(function(data)
+	{
+		console.log("twilioio_widget error");
+		console.log(data);
+	});
+}
+
+// Get name of contact
+function getTwilioIOContactName()
+{
+	var contactName = "";
+	var firstName = agile_crm_get_contact_property('first_name');
+	var lastName = agile_crm_get_contact_property('last_name');
+
+	if (firstName)
+		contactName = firstName + " ";
+	if (lastName)
+		contactName = contactName + lastName;
+
+	return contactName;
+}
+
+function setUpGlobalTwilio()
+{
+	// Loads twilio min.js to intiliaze twilio call events
+	head.js("https://static.twilio.com/libs/twiliojs/1.1/twilio.min.js", function()
+	{
+		Twilio.Device.setup(Twilio_Token);
+
+		if (Twilio_Start)
+			return;
+
+		Twilio_Start = true;
+
+		Twilio.Device.ready(function(device)
+		{
+			console.log("ready");
+
+			console.log("in twilio ready Twilio_Setup_Called: " + Twilio_Setup_Called);
+			Twilio_Setup_Called = false;
+
+			// Make call option visible on contact detail page
+			if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
+			{
+				$(".contact-make-sip-call").show();
+				$(".contact-make-twilio-call").hide();
+				$(".contact-make-call").hide();
+			}
+			else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")
+			{
+				$(".contact-make-sip-call").hide();
+				$(".contact-make-twilio-call").show();
+				$(".contact-make-call").hide();
+			}
+		});
+
+		Twilio.Device.error(function(error)
+		{
+			console.log("Twilio error");
+			console.log(error);
+			console.log(error.code);
+
+			if (Twilio.Device.status() == "busy")
+			{
+				alert("A connection is currently active.");
+				return;
+			}
+
+			closeTwilioNoty();
+
+			// Token expired error
+			if (error.code == "31205")
+			{
+				// Get widget, Create token and set twilio device
+				globalTwilioIOSetup();
+			}
+		});
+
+		Twilio.Device.connect(function(conn)
+		{
+			console.log("Twilio call is connected");
+			// Called for all new connections
+			console.log(conn);
+			console.log(conn._status);
+			globalconnection = conn;
+
+			showCallNotyPopup("connected", "Twilio", "<b>On call : </b><br>" + To_Name + "   " + To_Number + "<br>", false);
+		});
+
+		Twilio.Device.disconnect(function(conn)
+		{
+			console.log("Twilio call is disconnected");
+			// Called for all disconnections
+			console.log(conn);
+
+			if (Twilio.Device.status() != "busy")
+			{
+				closeTwilioNoty();
+				if (Restart_Twilio == true)
+				{
+					// Get widget, Create token and set twilio device
+					globalTwilioIOSetup();
+				}
+			}
+		});
+
+		Twilio.Device
+				.incoming(function(conn)
+				{
+					console.log("Incoming connection from " + conn.parameters.From);
+
+					if (Twilio.Device.status() == "busy")
+					{
+						console.log("getting one more call.");
+
+						showCallNotyPopup("missedCall", "error", "<b>Missed call : </b><br>" + conn.parameters.From + "<br>", 5000);
+
+						conn.reject();						
+						if (conn)
+							conn.disconnect();
+						return;
+					}
+
+					globalconnection = conn;
+
+					// accept the incoming connection and start two-way audio
+					// conn.accept();
+					To_Number = globalconnection.parameters.From;
+
+					showCallNotyPopup("incoming", "Twilio",
+							'<i class="icon icon-phone"></i><b>Incoming call :</b><br> ' + To_Name + "   " + To_Number + "<br>", false);
+				});
+
+		// If any network failure, show error
+		Twilio.Device.offline(function()
+		{
+			// Called on network connection lost.
+			console.log("Twilio went offline");
+
+			closeTwilioNoty();
+
+			// Get widget, Create token and set twilio device
+			// globalTwilioIOSetup();
+		});
+
+		// When call is cancelled, hide hang up and show call
+		Twilio.Device.cancel(function(conn)
+		{
+			// who canceled the call
+			console.log(conn.parameters.From);
+
+			closeTwilioNoty();
+		});
+
+		/*
+		 * Called for each available client when this device becomes ready and
+		 * every time another client's availability changes.
+		 */
+		Twilio.Device.presence(function(presenceEvent)
+		{
+			// name of client whose availablity changed
+			console.log(presenceEvent.from);
+
+			// true or false
+			console.log(presenceEvent.available);
+		});
+	});
+}
+function twiliocall(phoneNumber, toName)
+{
+	// get the phone number to connect the call to
+	params = { "from" : Verfied_Number, "PhoneNumber" : phoneNumber };
+	Twilio.Device.connect(params);
+
+	To_Number = phoneNumber;
+	To_Name = toName;
+
+	showCallNotyPopup("outgoing", "Twilio", '<i class="icon icon-phone"></i><b>Calling :</b><br> ' + To_Name + "   " + To_Number + "<br>", false);
+}
+
+// Send DTMF signal to twilio active connection from dialpad.
+function twilioSendDTMF(digit)
+{
+	console.log("twilioSendDTMF: " + digit);
+
+	// session for call is active and number is available.
+	if (Twilio.Device.status() == "busy" && digit)
+	{
+		// send dtmf on twilio
+		// if (connection)
+		globalconnection.sendDigits(digit);
+	}
+}
+
+function closeTwilioNoty()
+{
+	if (Twilio.Device.status() == "busy")
+		return;
+
+	globalconnection = undefined;
+	To_Number = undefined;
+	To_Name = "";
+
+	// Close noty
+	if (Twilio_Call_Noty != undefined)
+	{
+		Twilio_Call_Noty.close();
+		Twilio_Call_Noty = undefined;
+	}
 }
 $(function(){
 	
