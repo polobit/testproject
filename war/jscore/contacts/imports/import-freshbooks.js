@@ -7,24 +7,39 @@ $(function()
 								var token = $('#freshbooks_apiKey').val();
 								if (isBlank(url))
 								{
-												alert("Please Enter Freshbooks Domain Name");
+												// alert("Please Enter Freshbooks Domain Name");
+												$("#domainerror").removeClass('hide');
+												$("#freshbooks_url").focus();
+												$("#freshbooks_url").keypress(function(){
+																$("#domainerror").addClass('hide');
+												});
 												return false;
 								}
 								else if (new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?").test(url))
 								{
 												alert("Please Enter Domain Name only");
+												$("#domainerror").removeClass('hide');
 												$("#freshbooks_url").focus();
+												$("#freshbooks_url").keypress(function(){
+																$("#domainerror").addClass('hide');
+												});
 												return false;
 								}
 
 								if (isBlank(token))
 								{
-												alert("Please Enter Freshbooks API Token");
+												$("#apierror").removeClass('hide');
 												$('#freshbooks_apiKey').focus();
+												$("#freshbooks_apiKey").keypress(function(){
+																$("#apierror").addClass('hide');
+												});
 												return false;
 								}else if(token.length !=32){
-												alert("Invalid Freshbooks API Token");
+												$("#apierror").removeClass('hide');
 												$('#freshbooks_apiKey').focus();
+												$("#freshbooks_apiKey").keypress(function(){
+																$("#apierror").addClass('hide');
+												});
 												return false;
 								}
 								else if (token.length != 32)
