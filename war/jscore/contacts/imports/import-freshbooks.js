@@ -56,6 +56,10 @@ $(function()
 												window.location = window.location.origin + "#sync";
 								}
 				});
+				
+	 function isBlank(str) {
+				    return (!str || /^\s*$/.test(str));
+				}
 
 				function isBlank(str)
 				{
