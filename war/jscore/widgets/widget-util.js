@@ -290,7 +290,13 @@ function saveZendeskWidgetPrefs()
 	var zendesk_prefs = {};
 	zendesk_prefs["zendesk_username"] = $("#zendesk_username").val();
 	zendesk_prefs["zendesk_password"] = $("#zendesk_password").val();
-	zendesk_prefs["zendesk_url"] = $("#zendesk_url").val();
+//	zendesk_prefs["zendesk_url"] = $("#zendesk_url").val();
+	
+    var zenDeskURL = $("#zendesk_url").val();
+    if(zenDeskURL.indexOf("https") == -1) {//if not found
+    	zenDeskURL = zenDeskURL.replace("http", "https");
+    }
+    zendesk_prefs["zendesk_url"] = zenDeskURL;
 
 	// Saves the preferences into widget with zendesk widget name
 	save_widget_prefs("Zendesk", JSON.stringify(zendesk_prefs), function(data)
