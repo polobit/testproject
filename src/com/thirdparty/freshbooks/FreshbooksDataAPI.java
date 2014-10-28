@@ -37,7 +37,7 @@ public class FreshbooksDataAPI
     public ContactPrefs getPrefs()
     {
 
-	//return ContactPrefsUtil.getPrefsByType(Type.FRESHBOOKS);
+	return ContactPrefsUtil.getPrefsByType(Type.FRESHBOOKS);
     }
 
     /**
@@ -65,7 +65,7 @@ public class FreshbooksDataAPI
     @Path("/import-settings")
     public void deletePrefs()
     {
-	//ContactPrefsUtil.delete(Type.FRESHBOOKS);
+	ContactPrefsUtil.delete(Type.FRESHBOOKS);
 
     }
 
@@ -93,7 +93,7 @@ public class FreshbooksDataAPI
 	    contactPrefs.token = token;
 	    contactPrefs.othersParams = url;
 	}
-	//contactPrefs.type = Type.FRESHBOOKS;
+	 contactPrefs.type = Type.FRESHBOOKS;
 	contactPrefs.save();
 	return contactPrefs;
 
