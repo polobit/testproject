@@ -7,6 +7,7 @@ package com.agilecrm.contact.sync;
 import java.io.Serializable;
 
 import com.agilecrm.contact.sync.service.SyncService;
+import com.agilecrm.contact.sync.service.impl.FreshbooksSyncImpl;
 import com.agilecrm.contact.sync.service.impl.GoogleSyncImpl;
 import com.agilecrm.contact.sync.service.impl.SalesforceSync;
 import com.agilecrm.contact.sync.service.impl.ShopifySyncImpl;
@@ -26,13 +27,11 @@ import com.thirdparty.xero.XeroSyncImpl;
  */
 public enum Type implements Serializable
 {
-    GOOGLE(GoogleSyncImpl.class, "Google Import Status"), 
-    STRIPE(StripeSyncImpl.class, "Stripe Import Status"), 
-    ZOHO(ZohoSyncImpl.class, "Zoho Import Status"), 
-    SALESFORCE(SalesforceSync.class, "Salesforce Import Status"),
-    SHOPIFY(ShopifySyncImpl.class, "Shopify Import Status"),
-    QUICKBOOK(QuickBookSyncImpl.class,"QuickBooks Import Status"),
-    XERO(XeroSyncImpl.class,"Xero Import Status");
+    GOOGLE(GoogleSyncImpl.class, "Google Import Status"), STRIPE(StripeSyncImpl.class, "Stripe Import Status"), ZOHO(
+	    ZohoSyncImpl.class, "Zoho Import Status"), SALESFORCE(SalesforceSync.class, "Salesforce Import Status"), SHOPIFY(
+	    ShopifySyncImpl.class, "Shopify Import Status"), QUICKBOOK(QuickBookSyncImpl.class,
+	    "QuickBooks Import Status"), XERO(XeroSyncImpl.class, "Xero Import Status"), FRESHBOOKS(
+	    FreshbooksSyncImpl.class, "Freshbooks Import Status");
 
     Class<? extends SyncService> clazz;
     String notificationEmailSubject = "";
