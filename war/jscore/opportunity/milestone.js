@@ -72,6 +72,20 @@ $(function(){
 
 	});
 	
+	$('.add-pipeline').die().live('click',function(e){
+		$('#pipelineForm input').val('');
+		$('#pipelineForm input#milestones').val('New,Prospect,Proposal,Won,Lost');
+		$('#pipelineModal').find('.save-status').html('');
+	});
+	
+	
+	$('.pipeline-edit').die().live('click',function(e){
+		var id = $(this).attr('id');
+		var json = App_Admin_Settings.pipelineGridView.collection.get(id).toJSON();
+		deserializeForm(json,$('#pipelineForm'));
+		
+	});
+	
 	/**
 	 * If Pipelined View is selected, deals are loaded with pipelined view and 
 	 * creates the pipelined view cookie
@@ -103,6 +117,10 @@ $(function(){
 					if(readCookie("agile_deal_track") && readCookie("agile_deal_track") == id)
 						eraseCookie("agile_deal_track");
 					App_Admin_Settings.milestones();
+				},
+				error: function(jqXHR, status, errorThrown){
+					console.log(status);
+					$('#pipeline-delete-modal').find('.pipeline-delete-message').text(status.responseText);
 				}
 			});
 		});
@@ -139,16 +157,22 @@ $(function(){
     	
     	e.preventDefault();
     	var form = $(this).closest('form');
-    	form.find('.show_field').css("display","none");
-    	form.find(".show_milestone_field").css("display","inline-block");
     	
     	var new_milestone = form.find(".add_new_milestone").val().trim();
+    	
+    	if(!new_milestone || new_milestone.length <= 0 || !(/^[a-zA-Z0-9-_ ]*$/).test(new_milestone))
+		{
+    		$('#milestone-error-modal').modal('show');
+			return;
+		}
+    	form.find('.show_field').css("display","none");
+    	form.find(".show_milestone_field").css("display","inline-block");
     	
     	if(!new_milestone || new_milestone.length <= 0 || (/^\s*$/).test(new_milestone))
 		{
 			return;
 		}
-
+    	
     	// To add a milestone when input is not empty
     	if(new_milestone != "")
     	{
@@ -190,7 +214,10 @@ $(function(){
         		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
         		success : function(model, response) {
         			App_Admin_Settings.milestones();
-        		}
+        		},
+				error: function(data,response){
+					console.log(response);
+				}
         	});
     	});
     	
@@ -225,7 +252,13 @@ $(function(){
     			$('#pipelineModal').modal('hide');
     			App_Admin_Settings.milestones();
     	    	
-    		}
+    		},
+			error: function(data,response){
+				console.log(response,data);
+				$('#pipelineModal').find('.save-status').html('<span style="color:red;">'+response.responseText+'</span>');
+				setTimeout(function(){$('#pipelineModal').find('.save-status').html('');}, 5000);
+				enable_save_button($("#pipeline_validate"));
+			}
     	});
     	
     });

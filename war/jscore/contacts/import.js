@@ -178,6 +178,34 @@ $(function()
 		
 	});
 	
+	$('#freshbooks_sync_prefs').die().live('click',function(e){
+					e.preventDefault();
+					var disable = $(this).attr('disabled');
+					if(disable)
+						return false;
+					$(this).attr("disabled", "disabled");
+					$(this).text("Syncing");
+					
+					var freshbooks_prefs = serializeForm("freshbooks-form");
+					freshbooks_prefs['inProgress'] = true;
+					
+					App_Widgets.freshbooks_import_settings.model.set(freshbooks_prefs, {silent:true});
+					var url = App_Widgets.freshbooks_import_settings.model.url;
+
+					$(this).after(getRandomLoadingImg());
+					App_Widgets.freshbooks_import_settings.model.url = url + "?sync=true"
+					App_Widgets.freshbooks_import_settings.model.save({}, {success : function(data){
+					
+						App_Widgets.freshbooks_import_settings.render(true);
+						App_Widgets.freshbooks_import_settings.model.url = url;	
+							show_success_message_after_save_button("Sync Initiated", App_Widgets.freshbooks_import_settings.el);
+							showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+						}});
+					
+				});
+
+
+	
 });
 
 function show_success_message_after_save_button(message, el)

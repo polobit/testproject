@@ -218,13 +218,22 @@ $(function()
 	 * 
 	 */
 	$('#updateActivityModal').on('hidden', function() {
-
+		if($(this).hasClass('in'))
+		{
+			return;
+		}
+		
 		$("#updateActivityForm").find("li").remove();
 		$('#update-event-time-1').closest('.control-group').show();
 		$('#update-event-date-2').closest('.row').show();
 	});
 	$('#activityModal').on('hidden', function() {
 
+		if($(this).hasClass('in'))
+		{
+			return;
+		}
+		
 		$("#activityForm").find("li").remove();
 		$('#event-time-1').closest('.control-group').show();
 		$('#event-date-2').closest('.row').show();

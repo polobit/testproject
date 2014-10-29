@@ -28,6 +28,30 @@ function show_error(modalId, formId, errorClass, htmlText)
 				}
 }
 
+function show_error_in_formactions(modalId, formId, errorClass, htmlText)
+{
+	var modal_elem = $('#' + modalId);
+	var form_elem = $('#' + formId);
+
+	// Show cause of error in saving
+	var save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+			+ htmlText
+			+ '</i></p></small></div>');
+
+	// Hides the error message after 3
+	// seconds
+	
+	if (modal_elem.css('display') !== 'none')
+	{
+					modal_elem.find('.' + errorClass).html(save_info).show().delay(3000).hide(1);
+	}
+	else if (form_elem.css('display') !== 'none')
+	{
+					form_elem.find('.' + errorClass)
+													.html(save_info).show().delay(3000).hide(1);
+	}
+}
+
 /**
  * Serializes both contact (person or company) modal form (with basic
  * information) and its continue editing form (with detailed information) and
@@ -443,6 +467,10 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 																dupEmail = "";
 												// get the already existing email from response text.
 												show_error(modal_id, form_id, 'duplicate-email', response.responseText);
+								}
+								else if(response.status == 403)
+								{
+									show_error_in_formactions(modal_id, form_id, 'form-action-error', response.responseText);
 								}
 								else
 												show_error(modal_id, form_id, 'duplicate-email', response.responseText);

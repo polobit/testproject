@@ -1,5 +1,7 @@
 package com.agilecrm.activities.util;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,16 +16,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.WebCalendarEvent;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
+import com.agilecrm.util.IcalendarUtil;
 import com.googlecode.objectify.Key;
 
 public class WebCalendarEventUtil
@@ -52,9 +55,6 @@ public class WebCalendarEventUtil
     public static List<List<Long>> getSlots(String username, Long userid, int slotTime, String date, int timezone,
 	    String timezoneName, Long epochTime, Long startTime, Long endTime) throws ParseException
     {
-	System.out.println("In getSlots");
-	System.out.println(username + " " + slotTime + " " + date + " " + timezone + " " + timezoneName + " "
-		+ epochTime + " " + startTime + " " + endTime);
 
 	// Get all permutations possible based on selected slottime(duration) in
 	// 24 Hr.
@@ -75,7 +75,7 @@ public class WebCalendarEventUtil
 
 	// Get all filled slots from Google calendar.
 	List<List<Long>> filledGoogleSlots = GoogleCalendarUtil.getFilledGoogleSlots(userid, slotTime, timezone,
-		timezoneName, startTime, endTime);
+	        timezoneName, startTime, endTime);
 
 	if (filledGoogleSlots != null)
 	{
@@ -108,14 +108,12 @@ public class WebCalendarEventUtil
 	    String timezoneName)
     {
 	System.out.println("In getAllPossibleSlots");
-	System.out.println(slotTime + " " + date + " " + timezone + " " + timezoneName + " " + startTime);
 
 	// List of list of slots
 	List<List<Long>> listOfLists = new ArrayList<List<Long>>();
 
 	// Selected date
 	Date sd = new Date(startTime * 1000);
-	System.out.println(sd);
 
 	Calendar cal = Calendar.getInstance();
 	cal.setTime(sd);
@@ -125,8 +123,6 @@ public class WebCalendarEventUtil
 	// DateUtil startDateUtil = new DateUtil(sd);
 	// startDateUtil.toTZ(timezoneName);
 	// startDateUtil.toMidnight();
-
-	System.out.println(sd);
 
 	// Number of slots possible within 24Hrs with selected slot
 	// time(duration)
@@ -151,7 +147,6 @@ public class WebCalendarEventUtil
 	    d.setTime(time);
 	    cal.setTime(d);
 	    sd = cal.getTime();
-	    System.out.println(sd);
 
 	    // End time of slot
 	    slot = sd.getTime() / 1000;
@@ -162,7 +157,6 @@ public class WebCalendarEventUtil
 	}
 
 	System.out.println("All available slots:");
-	printList(listOfLists);
 	return listOfLists;
     }
 
@@ -187,8 +181,6 @@ public class WebCalendarEventUtil
 	System.out.println("In getFilledAgileSlots");
 
 	List<List<Long>> filledSlots = new ArrayList<List<Long>>();
-
-	System.out.println("check for " + startTime + " " + endTime);
 
 	// Get agile events on selected timings
 	List<Event> agileEvents = EventUtil.getEvents(startTime, endTime);
@@ -308,11 +300,11 @@ public class WebCalendarEventUtil
 		List<Long> fitSlot = fit.next();
 
 		/*
-		 * Start/end time of filled slot is in between available slot so
-		 * remove available slot
-		 */
+	         * Start/end time of filled slot is in between available slot so
+	         * remove available slot
+	         */
 		if ((fitSlot.get(0) > pitSlot.get(0) && fitSlot.get(0) < pitSlot.get(1))
-			|| (fitSlot.get(1) > pitSlot.get(0) && fitSlot.get(1) < pitSlot.get(1)))
+		        || (fitSlot.get(1) > pitSlot.get(0) && fitSlot.get(1) < pitSlot.get(1)))
 		{
 		    // Remove possible slot
 		    pit.remove();
@@ -337,10 +329,10 @@ public class WebCalendarEventUtil
 	int j = 0;
 	for (List<Long> e : listOfSlots)
 	{
-	    System.out.println("Slot: " + j);
+
 	    for (Long t : e)
 	    {
-		System.out.println(t);
+
 	    }
 	    j++;
 	}
@@ -357,11 +349,13 @@ public class WebCalendarEventUtil
      *            Contact entity.
      * @return result
      * @throws JSONException
+     * @throws URISyntaxException
+     * @throws ParseException
+     * @throws IOException
      */
     public static String createEvents(WebCalendarEvent wce, Contact contact) throws JSONException
     {
 	System.out.println("In createEvents");
-	System.out.println(wce.toString());
 
 	// Domain user id
 	Long domainUserId = wce.domainUserId;
@@ -373,6 +367,13 @@ public class WebCalendarEventUtil
 	String selectedDateSlot = wce.date;
 
 	String timezone = wce.timezone;
+
+	Event newEvnt = null;
+
+	DomainUser user = DomainUserUtil.getDomainUser(domainUserId);
+
+	net.fortuna.ical4j.model.Calendar iCal = null;
+	net.fortuna.ical4j.model.Calendar agileUseiCal = null;
 
 	Long epoch_start_date = null;
 	// Add properties value in contact entity
@@ -432,8 +433,6 @@ public class WebCalendarEventUtil
 	    // WCE save
 	    saveMe.save();
 
-	    System.out.println(saveMe);
-
 	    // Check if the email exists with the current email address
 	    boolean isDuplicate = ContactUtil.isExists(contact.getContactFieldValue("EMAIL"));
 
@@ -447,12 +446,10 @@ public class WebCalendarEventUtil
 		// Save as new contact
 		contact.save();
 
-		System.out.println("Contacts properties = ");
 		for (ContactField f : contact.properties)
 		{
 		    System.out.println("\t" + f.name + " - " + f.value);
 		}
-		System.out.println("contact tags : " + contact.tags);
 	    }
 	    else
 	    {
@@ -460,13 +457,13 @@ public class WebCalendarEventUtil
 		contact = ContactUtil.searchContactByEmail(wce.email);
 	    }
 
-	    // If contact is valid
+	    // If contact is validz
 	    if (contact.id != null)
 	    {
 		// Create agile event
 		// String title, Long start, Long end, boolean isEventStarred,
 		// Long contactId, Long agileUserId
-		Event newEvnt = new Event("", null, null, false, null, agileUserId);
+		newEvnt = new Event("", null, null, false, null, agileUserId);
 
 		// Set property values
 		newEvnt.title = wce.name.concat(" with ".concat(wce.userName)); // name
@@ -486,20 +483,35 @@ public class WebCalendarEventUtil
 
 		// save agile event
 		newEvnt.save();
+
+		agileUseiCal = IcalendarUtil.getICalFromEvent(newEvnt, null, user.email, user.name);
+		System.out.println("agileUseiCal-- " + agileUseiCal.toString());
+		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
+		String body_subject = "<p>Your appointment was scheduled with <b>" + wce.userName
+		        + "</b>.</p><p>Duration - " + wce.slot_time + " minutes</p><p>Note message : " + wce.notes
+		        + "</p>";
+		EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", user.email, null, null,
+		        "Appointment Scheduled", null, body_subject, null, null, attachments_to_agile_user);
 	    }
 	}
 
 	// If user want confirmation, send confirmation email.
 	if (wce.confirmation.equalsIgnoreCase("on"))
 	{
-	    DomainUser user = DomainUserUtil.getDomainUser(domainUserId);
+
+	    iCal = IcalendarUtil.getICalFromEvent(newEvnt, user, wce.email, null);
+
+	    System.out.println("icall s string  " + iCal.toString() + " email " + wce.email);
+
 	    String body = "<p>Your appointment was scheduled with " + user.name + " on "
 		    + getNearestDateOnlyFromEpoch(epoch_start_date, timezone) + "</p><p>Duration - " + wce.slot_time
 		    + " minutes</p><p>Note message : " + wce.notes + "</p>";
 
-	    // Saves Contact Email
-	    ContactEmailUtil.saveContactEmailAndSend("noreply@agilecrm.com", "Agile CRM", wce.email, user.email, null,
-		    "Appointment Scheduled", body, "-", contact, false);
+	    String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
+
+	    EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", wce.email, null, null,
+		    "Appointment Scheduled", null, body, null, null, attachments);
+
 	}
 	return "Done";
     }
@@ -516,18 +528,14 @@ public class WebCalendarEventUtil
 	    slot.put("time", 15);
 	    slot.put("title", "say hi");
 	    slots.add(slot.toString());
-	    System.out.println(slot);
 
 	    slot.put("time", 30);
 	    slot.put("title", "let's keep it short");
 	    slots.add(slot.toString());
-	    System.out.println(slot);
 
 	    slot.put("time", 60);
 	    slot.put("title", "let's chat");
 	    slots.add(slot.toString());
-
-	    System.out.println(slot);
 
 	}
 	catch (JSONException e)
@@ -549,13 +557,10 @@ public class WebCalendarEventUtil
 	try
 	{
 	    DateFormat dbFormatter = new SimpleDateFormat("ddd MMM dd yyyy HH:mm:ssZ");
-	    System.out.println(dbFormatter.getTimeZone());
 
 	    // Thu Aug 14 2014 00:00:00 GMT 0530 (India Standard Time)
 
 	    dbFormatter.parse(sDate);
-
-	    System.out.println(dbFormatter.getTimeZone());
 
 	    return dbFormatter.getTimeZone().toString();
 	}
@@ -571,9 +576,8 @@ public class WebCalendarEventUtil
     // Get Nearest Date only (12am)
     public static String getNearestDateOnlyFromEpoch(long timeInMilliSecs, String timeZone)
     {
-	System.out.println(timeZone);
 
-	DateFormat dateFormat = new SimpleDateFormat("EEE, MMMM d yyyy, h:mm a");
+	DateFormat dateFormat = new SimpleDateFormat("EEE, MMMM d yyyy, h:mm a (z)");
 	return getGMTDateInMilliSecFromTimeZoneId(timeZone, timeInMilliSecs * 1000, dateFormat);
     }
 
@@ -581,7 +585,7 @@ public class WebCalendarEventUtil
     public static String getGMTDateInMilliSecFromTimeZoneId(String timeZoneId, long timeInMilliSecs,
 	    DateFormat dateFormat)
     {
-
+	System.out.println(timeZoneId);
 	if (dateFormat == null)
 	{
 	    dateFormat = new SimpleDateFormat();

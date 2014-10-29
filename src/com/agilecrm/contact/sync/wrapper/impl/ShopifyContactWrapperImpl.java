@@ -53,7 +53,7 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     public ContactField getFirstName()
     {
 	String firstName = null;
-	if (contactProperties.containsKey("first_name"))
+	if (contactProperties.containsKey("first_name") && contactProperties.get("first_name")!=null)
 	{
 	    firstName = contactProperties.get("first_name").toString();
 	}
@@ -69,7 +69,7 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     public ContactField getLastName()
     {
 	String lastName = null;
-	if (contactProperties.containsKey("last_name"))
+	if (contactProperties.containsKey("last_name") && contactProperties.get("last_name")!=null)
 	{
 	    lastName = contactProperties.get("last_name").toString();
 	}
@@ -85,7 +85,7 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     public ContactField getEmail()
     {
 	String email = null;
-	if (contactProperties.containsKey("email"))
+	if (contactProperties.containsKey("email") && contactProperties.get("email")!=null)
 	{
 	    email = contactProperties.get("email").toString();
 	}
@@ -211,7 +211,7 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     public List<Note> getNotes()
     {
 	List<Note> notes = new ArrayList<Note>();
-	if (contactProperties.containsKey("note"))
+	if (contactProperties.containsKey("note") && contactProperties.get("note")!=null)
 	{
 	    String note = contactProperties.get("note").toString();
 	    Note n = new Note("Customer's Note", note);

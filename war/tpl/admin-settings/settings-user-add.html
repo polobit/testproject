@@ -55,11 +55,11 @@
 
 					<div id="accordion">
 					  <div class="panel-heading controls">
-     					 <h5 class="panel-title">
-        					<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-          						<span class="icon-plus"> Privileges</span></a>
+     					 <div class="panel-title">
+        					<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" >
+          						<span class="icon-plus"> </span> Privileges</a>
 					        </a>
-      					</h5>
+      					</div>
     				</div>
 					<div id="collapseOne" class="panel-collapse collapse" >
       					<div class="panel-body" style="margin-top:20px!important;margin-left:20px" >
@@ -74,20 +74,20 @@
 									<small> Add contacts</small>
 								</label>
 								<label class="checkbox" >
-                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" checked> 
-                        	    	Update Contacts  <br/>
-									<small>  Edit and delete contacts owned by other users</small>
-                    	       </label>
+            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" checked> 
+        	                    	Import Contacts  <br/>
+									<small> Import from CSV file, sync from Google Apps and other integrations </small>
+    	                       </label>
 								<label class="checkbox" >
                         	    	<input type="checkbox" name="temp"  value="VIEW_CONTACTS" checked> 
-                            		View Contacts  <br/>
+                            		View All Contacts  <br/>
 									<small> View contacts owned by other users</small>
                            		</label>
 								<label class="checkbox" >
-            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" checked> 
-        	                    	Import Contacts  <br/>
-									<small> Import from CSV file, Sync from Google Apps, or other CRMs </small>
-    	                       </label>
+                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" checked> 
+                        	    	Update All Contacts  <br/>
+									<small>  Edit and delete contacts owned by other users</small>
+                    	       </label>
 							</div>
 						</div>
                     </div>
@@ -102,20 +102,20 @@
 									<small> Add contacts</small>
 								</label>
 								<label class="checkbox" >
-                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS"> 
-                        	    	Update Contacts  <br/>
-									<small>  Edit and delete contacts owned by other users</small>
-                    	       </label>
+            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS"> 
+        	                    	Import Contacts  <br/>
+									<small> Import from CSV file, sync from Google Apps and other integrations</small>
+    	                       </label>
 								<label class="checkbox" >
                         	    	<input type="checkbox" name="temp"  value="VIEW_CONTACTS"> 
-                            		View Contacts  <br/>
+                            		View All Contacts  <br/>
 									<small> View contacts owned by other users </small>
                            		</label>
 								<label class="checkbox" >
-            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS"> 
-        	                    	Import Contacts  <br/>
-									<small> Import from CSV file, Sync from Google Apps, or other CRMs </small>
-    	                       </label>
+                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS"> 
+                        	    	Update All Contacts  <br/>
+									<small>  Edit and delete contacts owned by other users</small>
+                    	       </label>
 							</div>
 						</div>
                     </div>
@@ -129,19 +129,20 @@
 									<small> Add contacts</small>
 								</label>
 								<label class="checkbox" >
-                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" disabled> 
-                        	    	Update Contacts  <br/>
-									<small>  Edit and delete contacts owned by other users</small>
-                    	       </label><label class="checkbox" >
-                        	    	<input type="checkbox" name="temp"  value="VIEW_CONTACTS" disabled> 
-                            		View Contacts  <br/>
-									<small> View contacts owned by other  </small>
-                           		</label>
-								<label class="checkbox" >
             	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" disabled> 
         	                    	Import Contacts  <br/>
-									<small> Import from CSV file, Sync from Google Apps, or other CRMs </small>
+									<small> Import from CSV file, sync from Google Apps and other integrations </small>
     	                       </label>
+								<label class="checkbox" >
+                        	    	<input type="checkbox" name="temp"  value="VIEW_CONTACTS" disabled> 
+                            		View All Contacts  <br/>
+									<small> View contacts owned by other users </small>
+                           		</label>
+								<label class="checkbox" >
+                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" disabled> 
+                        	    	Update All Contacts  <br/>
+									<small>  Edit and delete contacts owned by other users</small>
+                    	       </label>
 							</div>
 						</div>
                     </div>

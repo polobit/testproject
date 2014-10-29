@@ -1640,6 +1640,10 @@ cursor: pointer;
 	margin-right:8px;
 }
 
+.typeahead
+{
+	z-index: 2050 !important;
+}
 
 
 

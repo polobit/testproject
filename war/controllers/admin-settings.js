@@ -30,8 +30,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"menu-settings" : "menu_settings",
 
 	/* Mandrill Email Activity */
-	"email-stats" : "emailStats",
+	/*"email-stats" : "emailStats",*/
 
+	/* Integrations Stats*/
+	"integrations-stats" : "integrationsStats",
+	
 	/* Web to Lead */
 	"integrations" : "integrations",
 
@@ -132,7 +135,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					addTagAgile("User invited");
 
 				// Binds action
-				bindAdminChangeAction(el);
+				bindAdminChangeAction(el, view.model.toJSON());
 			}, saveCallback : function(response)
 			{
 				$.getJSON("core/api/users/current-owner", function(data)
@@ -207,7 +210,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		}, postRenderCallback : function(el)
 		{
-			bindAdminChangeAction(el);
+			bindAdminChangeAction(el, view.model.toJSON());
 		} });
 
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
@@ -329,11 +332,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	},
 
 	/**
-	 * Fetches Mandrill subaccount usage info.
+	 * Fetches Stats of integrations - usage info.
 	 */
-	emailStats : function()
+	integrationsStats : function()
 	{
-		if (!CURRENT_DOMAIN_USER.is_admin)
+		/*if (!CURRENT_DOMAIN_USER.is_admin)
 		{
 			$('#content').html("You have no Admin Privileges");
 			return;
@@ -344,7 +347,43 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.stats-tab').addClass('active');
+		 */
+		
 
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html("You have no Admin Privileges");
+			return;
+		}
+		
+		
+		
+		$("#content").html(getTemplate("admin-settings"), {});
+		$('#content').find('#AdminPrefsTab .active').removeClass('active');
+		$('#content').find('.stats-tab').addClass('active');
+		$('#content').find('#admin-prefs-tabs-content').html(getRandomLoadingImg());
+		
+		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function(){
+				
+		
+		var email_stats = {};
+		var sms_stats = {};
+		$.ajax({ url: 'core/api/emails/email-stats', type: "GET",  dataType:'json', success: function (stats) {
+				email_stats = stats;
+			$.ajax({ url: 'core/api/sms-gateway/twilio/logs', type: "GET",  dataType:'json', success: function (stats) {
+					sms_stats = stats
+					var totalLogs = {};
+					totalLogs = $.extend(email_stats, sms_stats);
+					
+					var emailStatsModelView = new Base_Model_View({ template : 'admin-settings-integrations-stats', data :totalLogs });
+					
+					$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render(true).el);
+				}});
+				
+			}});
+		 });
+		
+		 
 	},
 
 	/**
@@ -367,7 +406,6 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		this.integrations.collection.fetch();
 		
 		$('#content').find('#admin-prefs-tabs-content').html(this.integrations.render().el);
-		
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
 	},

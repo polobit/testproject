@@ -2594,7 +2594,7 @@ $(function()
 							reputation = "Excellent";
 						}
 
-						return "<span style='font-size:13px;' class='label label-" + type + "'>" + reputation + "</span> <!--<span class='badge badge-" + type + "'>" + value + "</span>-->";
+						return "<span style='font-size:13px;position: relative;top: -3px' class='label label-" + type + "'>" + reputation + "</span> <!--<span class='badge badge-" + type + "'>" + value + "</span>-->";
 
 					});
 

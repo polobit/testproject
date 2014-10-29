@@ -42,7 +42,7 @@ var WidgetsRouter = Backbone.Router
 
 												"sync" : "contactSync", "sync/contacts" : "google_apps_contacts", "sync/calendar" : "google_apps_calendar", "sync/stripe-import" : "stripe_sync",
 																"sync/shopify" : "shopify", "sync/salesforce" : "salesforce", "sync/zoho-import" : "zoho_sync", "sync/quickbook" : "quickbook_import",
-																"sync/xero" : "xero_import" },
+																"sync/xero" : "xero_import","sync/freshbooks":"freshbooks_sync","sync/freshbooks/setting":"freshbooks_sync_setting"},
 
 												/**
 												 * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
@@ -738,15 +738,10 @@ var WidgetsRouter = Backbone.Router
 																$('#prefs-tabs-content')
 																								.html(
 																																'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Google <small>import Contacts from Google</small></h2><div class="span11 no-mg-l"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div>' + '<div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>' + '<div class="row-fluid prefs-datasync"><h2 class="widget-head">E-commerce <small>import Contacts from E-commerce</small></h2><div class="span11 no-mg-l"><div id ="shopify"></div></div></div>' +
-																																/*
-																																 * '<div class="row-fluid"><div
-																																 * class="page-header"><h2>CRM
-																																 * <small>import Contacts from CRM</small></h2></div><div
-																																 * class="span11"><div id ="quickbook"
-																																 * class="span4"></div><div id ="xero"
-																																 * class="span4"></div></div></div>' +
-																																 */
+																												
 																																'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Payment <small>import Contacts from payment gateway</small></h2><div class="span11 no-mg-l"><div id ="stripe"></div></div></div>'
+																														/*		'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Accounting <small>import Contacts from Accounting</small></h2><div class="span11 no-mg-l"><div id ="freshbook"></div></div></div>'*/
+
 
 																								);
 
@@ -762,7 +757,9 @@ var WidgetsRouter = Backbone.Router
 																this.shopify_sync = new Base_Model_View({ url : 'core/api/shopify/import-settings',
 																				template : 'admin-settings-import-shopify-contact-syncPrefs' });
 																$('#shopify').append(this.shopify_sync.render().el);
-
+																
+														//		this.freshbooks_sync = new Base_Model_View({url:'core/api/freshbooks/import-settings',template:'admin-settings-import-freshbooks-contacts-syncPrefs'});
+																//$('#freshbook').append(this.freshbooks_sync.render().el);
 																/* salesforce import template */
 																// this.salesforce = new
 																// Base_Model_View({url:'core/api/salesforce/get-prefs',template:'admin-settings-salesforce-contact-sync'});
@@ -904,6 +901,39 @@ var WidgetsRouter = Backbone.Router
 																				} });
 
 																$("#prefs-tabs-content").html(this.shopify_sync_setting.render().el);
+												},
+												
+												freshbooks_sync : function()
+												{
+
+																$("#content").html(getTemplate("settings"), {});
+
+																$('#PrefsTab .active').removeClass('active');
+																$('.contact-sync-tab').addClass('active');
+
+																this.freshbooks_sync_setting = new Base_Model_View({ url : 'core/api/freshbooks/import-settings', template : 'admin-settings-import-freshbooks-contacts-form',
+																				saveCallback : function(model)
+																				{
+
+																								showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+																				} });
+
+																$("#prefs-tabs-content").html(this.freshbooks_sync_setting.render().el);
+												},
+												
+												freshbooks_sync_setting:function(){
+																$("#content").html(getTemplate("settings"), {});
+
+																$('#PrefsTab .active').removeClass('active');
+																$('.contact-sync-tab').addClass('active');
+																this.freshbooks_import_settings = new Base_Model_View({ url : 'core/api/freshbooks/import-settings', template : 'admin-settings-import-freshbooks-settings',
+																				saveCallback : function(model)
+																				{
+
+																								showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+																				} });
+
+																$("#prefs-tabs-content").html(this.freshbooks_import_settings.render().el);			
 												},
 
 												zoho_sync : function()

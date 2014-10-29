@@ -107,7 +107,6 @@ function get_slots(s_date, s_slot)
 	var initialURL = '/core/api/webevents/getslots?&user_name=' + User_Name + '&user_id=' + User_Id + '&timezone=' + timezone + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneAbbr + "&epoch_time=" + epochTime + "&start_time=" + start_time + "&end_time=" + end_time;
 	$.getJSON(initialURL, function(data)
 	{
-		console.log(data);
 
 		// No slots available for selected day
 		if (data.length == 0)
@@ -140,7 +139,26 @@ function displaySlots()
 
 	// Empty div where all slots listed, to display new slots
 	$('.checkbox-main-grid').html('');
-
+	
+	console.log(Available_Slots.length);
+	
+	var after_now=[];
+	var date=new Date();
+	for(var s=0;s<Available_Slots.length;s++){
+		if(Available_Slots[s][0]*1000>date.getTime()){
+			
+			after_now.push(Available_Slots[s]);
+		}
+		
+	}
+	console.log(after_now.length);
+	Available_Slots="";
+	Available_Slots=after_now;
+	if(Available_Slots.length==0){
+		displayNoSlotsMsg();
+		return;
+	}
+	
 	// Number of row
 	var numRow = Available_Slots.length / 5;
 
@@ -195,7 +213,6 @@ function save_web_event(formId, confirmBtn)
 	
 	// Get details
 	var data = $('#' + formId).serializeArray();
-
 	console.log(data);
 	
 	// Make json
@@ -261,6 +278,7 @@ function save_web_event(formId, confirmBtn)
 	$('#three').addClass('green-bg').html('<i class="fa fa-check"></i>');
 	// Add selected slots to input json
 	web_calendar_event["selectedSlotsString"] = JSON.stringify(web_calendar_event["selectedSlotsString"]);
+
 	console.log(web_calendar_event);
 	console.log(JSON.stringify(web_calendar_event));
 
@@ -329,4 +347,5 @@ $("#create_new_appointment").die().live('click', function(e)
 {
 
 	location.reload(true);
+
 });

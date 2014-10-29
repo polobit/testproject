@@ -1,5 +1,6 @@
 package com.thirdparty.twilio;
 
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -96,6 +97,7 @@ public class TwilioSMSUtil
 			return null;
 		TwilioRestClient client = new TwilioRestClient(account_SID, auth_token, TWILIO_ENDPOINT);
 		List<String> verifiredTwilioNumbers = new ArrayList<String>();
+		JSONObject result = null;
 		try
 		{
 			TwilioRestResponse response = client.request("/" + TWILIO_VERSION + "/" + TWILIO_ACCOUNTS + "/"
@@ -107,8 +109,14 @@ public class TwilioSMSUtil
 			if (response.isError())
 				return null;
 
-			JSONObject result = XML.toJSONObject(response.getResponseText()).getJSONObject(TWILIO_RESPONSE)
+			result = XML.toJSONObject(response.getResponseText()).getJSONObject(TWILIO_RESPONSE)
 					.getJSONObject(TWILIO_INCOMING_NUMBERS);
+
+			if (result.getInt("total") == 1)
+			{
+				verifiredTwilioNumbers.add(result.getJSONObject("IncomingPhoneNumber").get("PhoneNumber").toString());
+				return verifiredTwilioNumbers;
+			}
 
 			JSONArray incomingNumberArray = result.getJSONArray("IncomingPhoneNumber");
 
@@ -119,7 +127,7 @@ public class TwilioSMSUtil
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception in TwilioSMS");
+			System.out.println("Exception in TwilioSMS. The result is " + result);
 			e.printStackTrace();
 		}
 
@@ -147,13 +155,27 @@ public class TwilioSMSUtil
 			return null;
 
 		TwilioRestClient client = new TwilioRestClient(account_SID, auth_token, TWILIO_ENDPOINT);
+		SimpleDateFormat sdfMap = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar gc = Calendar.getInstance();
+		gc.add(Calendar.DAY_OF_YEAR, 1);
+		String endLogDate = sdfMap.format(gc.getTime());
+
+		gc.add(Calendar.MONTH, -2);
+
+		String startLogDate = sdfMap.format(gc.getTime());
+
+		Map<String, String> dateRange = new HashMap<String, String>();
+
 		try
 		{
+			dateRange.put(URLEncoder.encode("DateSent>", "UTF-8"), startLogDate);
+			dateRange.put(URLEncoder.encode("DateSent<", "UTF-8"), endLogDate);
+
 			TwilioRestResponse messages = client.request("/" + TWILIO_VERSION + "/" + TWILIO_ACCOUNTS + "/"
-					+ account_SID + "/" + "Messages.json?DateSent%3E%3D2014-09-08%26DateSent%3C%3D2014-10-08%26"
+					+ account_SID + "/" + "Messages.json"
 			/*
 			 * + "DateSent>=" + oneMonthBack + "&DateSent<=" + currentDate
-			 */, "GET", null);
+			 */, "GET", dateRange);
 
 			if (messages.isError())
 				return null;
@@ -228,14 +250,16 @@ public class TwilioSMSUtil
 				e.printStackTrace();
 			}
 
-			logJSON.put("delivered", deliveredCount);
-			logJSON.put("queued", queuedCount);
-			logJSON.put("undelivered", undeliveredCount);
-			logJSON.put("failed", failedCount);
+			logJSON.put("Delivered", deliveredCount);
+			logJSON.put("Queued", queuedCount);
+			logJSON.put("Undelivered", undeliveredCount);
+			logJSON.put("Failed", failedCount);
 			logJSON.put("ThisMonth", thisMonthCount);
 			logJSON.put("LastMonth", lastMonthCount);
 			logJSON.put("Today", todaysCount);
 			logJSON.put("Yesterday", yesterdaysCount);
+			logJSON.put("Stats-Type", "SMS-Stats");
+
 		}
 		catch (JSONException e)
 		{

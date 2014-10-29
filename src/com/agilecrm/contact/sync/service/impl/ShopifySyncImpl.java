@@ -97,8 +97,10 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    ArrayList<LinkedHashMap<String, Object>> updatedCustomersList= new ArrayList<LinkedHashMap<String, Object>>();
 		    
 		    newCustomersList=getCustomers(materializeURL(shop, "customers", currentPage, "new"));
+		    System.out.println("newCustomersList size-----"+newCustomersList.size());
 		    if(lastSyncPoint!=null){
 		    	updatedCustomersList=getCustomers(materializeURL(shop, "customers", currentPage, "edited"));
+		    	System.out.println("updatedCustomersList size-----"+updatedCustomersList.size());
 		    }
 
 		    customers.addAll(newCustomersList);
@@ -112,6 +114,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 			{
 
 			    Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i));
+			    System.out.println("Contact-------"+contact);
 
 			    addCustomerRelatedNote(customers.get(i).get("note"), contact);
 			    saveCustomersOrder(customers.get(i), contact);
@@ -361,10 +364,14 @@ public class ShopifySyncImpl extends OneWaySyncService
 	ArrayList<LinkedHashMap<String, Object>> listOrder = new ArrayList<LinkedHashMap<String, Object>>();
 	String newOrder = getOrderUrl(customerId, "new");
 	String updatedOrder = getOrderUrl(customerId, "updated");
-	listOrder.addAll(Orders(newOrder));
+	List<LinkedHashMap<String, Object>> newOrderList = Orders(newOrder);
+	List<LinkedHashMap<String, Object>> updatedOrderList = Orders(updatedOrder);
+	if(newOrderList!=null)
+		listOrder.addAll(newOrderList);
 	if (lastSyncPoint != null)
 	{
-	    listOrder.addAll(Orders(updatedOrder));
+		if(updatedOrderList!=null)
+			listOrder.addAll(updatedOrderList);
 	}
 	return listOrder;
 
@@ -431,6 +438,7 @@ public class ShopifySyncImpl extends OneWaySyncService
      */
     public void saveCustomersOrder(Object customer, Contact contact)
     {
+    	System.out.println("Start------saveCustomersOrder(-,-)");
 	LinkedHashMap<String, Object> customerProperties = (LinkedHashMap<String, Object>) customer;
 	ArrayList<LinkedHashMap<String, Object>> orders = getOrder(customerProperties.get("id").toString());
 
@@ -523,6 +531,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    }
 
 	}
+	System.out.println("End------saveCustomersOrder(-,-)");
 
     }
 
@@ -535,6 +544,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 
     private void addCustomerRelatedNote(Object noteObject, Contact contact)
     {
+    	System.out.println("Start----addCustomerRelatedNote(-,-)");
 	Map<String, Note> noteMap = new HashMap<String, Note>();
 	try
 	{
@@ -578,6 +588,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	{
 	    e.printStackTrace();
 	}
+	System.out.println("End----addCustomerRelatedNote(-,-)");
     }
 
     /**

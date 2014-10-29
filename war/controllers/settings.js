@@ -436,6 +436,34 @@ var SettingsRouter = Backbone.Router.extend({
 	support : function()
 	{
 		$("#content").html(getTemplate("support-form"), {});
+
+		try {
+				CLICKDESK_Live_Chat.onStatus(function(status) {
+
+					if(status == "online")
+						$("#clickdesk_status").html('Chat with our support representative.<br/> <a style="cursor:pointer" onclick="clickdesk_show_livechat_popup();">Start chat</a>.');
+					else
+						$("#clickdesk_status").html('Chat support representative is not available at the moment.<br/> <a href="#contact-us" id="show_support">Leave a message</a>.');
+					/*var img_src = "https://d1gwclp1pmzk26.cloudfront.net/images/ss/live-" + status + ".png";
+					$("#livilyChatLink").append("<img src='" + img_src + "'/>");*/
+				});
+			
+		} catch (e) {
+			
+			setTimeout(function(){
+				
+				CLICKDESK_Live_Chat.onStatus(function(status) {
+
+					if(status == "online")
+						$("#clickdesk_status").html('Chat with our support representative.<br/> <a style="cursor:pointer" onclick="clickdesk_show_livechat_popup();">Start chat</a>.');
+					else
+						$("#clickdesk_status").html('Chat support representative is not available at the moment.<br/> <a href="#contact-us" id="show_support">Leave a message</a>.');
+				});
+				
+			}, 5000);
+			
+			
+		}
 	},
 
 	/**
