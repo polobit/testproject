@@ -157,18 +157,11 @@ public class TwilioSMSUtil
 		TwilioRestClient client = new TwilioRestClient(account_SID, auth_token, TWILIO_ENDPOINT);
 		SimpleDateFormat sdfMap = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar gc = Calendar.getInstance();
-
-		// gc.setTime(new Date());
-		// gc.add(Calendar.MONTH, -2);
+		gc.add(Calendar.DAY_OF_YEAR, 1);
 		String endLogDate = sdfMap.format(gc.getTime());
 
 		gc.add(Calendar.MONTH, -2);
 
-		// startLogDate
-		// Calendar gc = Calendar.getInstance();
-		// gc.setTime(new Date());
-		// gc.add(Calendar.MONTH, -2);
-		// Date dateBefore = gc.getTime();
 		String startLogDate = sdfMap.format(gc.getTime());
 
 		Map<String, String> dateRange = new HashMap<String, String>();
