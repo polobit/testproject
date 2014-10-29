@@ -37,23 +37,29 @@
 				<input type="hidden" id="sort_field" name="sort_field" />
 			<fieldset>
 				<div class="control-group row-filter">
-					<label class="control-label"><b>Owner </b> <a data-toggle="collapse" href="#owners" style="display:inline;">+</a></label>
-					<div class="controls" id="owners">
+					<label class="control-label"><b>Owner </b> 
+						<a data-toggle="collapse" href="#owners" style="display:inline;position:absolute;right:5px;"><i class="icon-plus" /></a>
+					</label>
+					<div class="controls collapse" id="owners">
 						<select id="owners-list" name="owner_id"></select>
 						<img class="loading-img" src="img/21-0.gif"></img>
 					</div>
 				</div>
 				<div class="control-group row-filter">
-					<label class="control-label"><b>Track </b></label>
-					<div class="controls">
+					<label class="control-label"><b>Track </b>
+						<a data-toggle="collapse" href="#track_div" style="display:inline;position:absolute;right:5px;"><i class="icon-plus" /></a>
+					</label>
+					<div class="controls collapse" id="track_div">
 						<span><select id="pipeline" name="pipeline_id">
 								<option value="">Select..</option>
 						</select></span><img class="loading-img" src="img/21-0.gif"></img>
 					</div>
 				</div>
 				<div class="control-group row-filter">
-					<label class="control-label"><b>Milestone </b></label>
-					<div class="controls">
+					<label class="control-label"><b>Milestone </b>
+						<a data-toggle="collapse" href="#milestone_div" style="display:inline;position:absolute;right:5px;"><i class="icon-plus" /></a>
+					</label>
+					<div class="controls collapse" id="milestone_div">
 						<span><select id="milestone" name="milestone">
 								<option value="">Select..</option>
 						</select></span><img class="loading-img" src="img/21-0.gif" style="display:none;"></img>
@@ -61,67 +67,88 @@
 				</div>
 					
 				<div class="control-group row-filter" id="deal-value-filter">
-					<label class="control-label"><b>Value</b><select name="value_filter" class="filter_type" data="expected_value" style="max-width: 90px;margin-left: 20px;">
+					<label class="control-label"><b>Value</b>
+						<a data-toggle="collapse" href="#value_div" style="display:inline;position:absolute;right:5px;"><i class="icon-plus" /></a>
+					</label>
+					<div class="controls collapse" id="value_div">
+							<select id="value_filter" name="value_filter" class="filter_type" data="expected_value" style="max-width: 90px;margin-left: 20px;">
 								<option value="equals">Equals</option>
 								<option value="between">Between</option>
-						</select></label>
-					<div class="controls equals" >
+							</select>
+						<div class="equals">
 							<input type="text" id="value" name="value"
-								placeholder="Value"/>
-					</div>
-					<div class="controls between hide" >
+								placeholder="Value" class="equals"/>
+						</div>
+						<div class="between hide">
 							<input type="text" id="value_start" name="value_start"
-								placeholder="Min Value"/> to
+								class="between hide" placeholder="Min Value"/> 
+							<span>to</span>
 							<input type="text" id="value_end" name="value_end"
 								placeholder="Max Value" class="between hide" />
+						</div>
 					</div>
 				</div>
 				<div class="control-group row-filter" id="deal-probability-filter">
-					<label class="control-label"><b>Probability</b><select name="probability_filter" class="filter_type" data="probability" style="max-width: 90px;margin-left: 20px;">
+					<label class="control-label"><b>Probability</b>
+						<a data-toggle="collapse" href="#probability_div" style="display:inline;position:absolute;right:5px;"><i class="icon-plus" /></a>
+					</label>
+					<div id="probability_div" class="contraols collapse">
+						<select id="probability_filter" name="probability_filter" class="filter_type" data="probability" style="max-width: 90px;margin-left: 20px;">
 								<option value="equals">Equals</option>
 								<option value="between">Between</option>
-						</select></label>
-					<div class="controls equals" >
+						</select>
+					<div class="equals" >
 							<input type="text" id="probability" name="probability"
 								placeholder="Probability %"/>
 					</div>
-					<div class="controls between hide" >
-							<input type="text" id="probability_min" name="probability_start"
+					<div class="between hide" >
+							<input type="text" id="probability_start" name="probability_start"
 								placeholder="Min Probability %"/> to
-							<input type="text" id="probability_max" name="probability_end"
+							<input type="text" id="probability_end" name="probability_end"
 								placeholder="Max Probability %"/>
+					</div>
 					</div>
 				</div>
 				<div class="control-group row-filter" id="deal-created-filter">
-					<label class="control-label"><b>Deal Created</b><select name="created_time_filter" class="filter_type" data="created_time" style="max-width: 90px;margin-left: 20px;">
+					<label class="control-label"><b>Deal Created</b>
+						<a data-toggle="collapse" href="#created_time_div" style="display:inline;position:absolute;right:5px;"><i class="icon-plus" /></a>
+					</label>
+					<div id="created_time_div" class="controls collapse">
+						<select id="created_time_filter" name="created_time_filter" class="filter_type" data="created_time" style="max-width: 90px;margin-left: 20px;">
 								<option value="equals">Equals</option>
 								<option value="between">Between</option>
-						</select></label>
-					<div class="controls equals" >
+						</select>
+					<div class="equals" >
 							<input type="text" id="created_time" name="created_time"
 								placeholder="MM/DD/YYYY" class="date input" />
 					</div>
-					<div class="controls between hide" >
+					<div class="between hide" >
 							<input type="text" id="created_time_start" name="created_time_start"
 								placeholder="MM/DD/YYYY" class="date input" /> to
 							<input type="text" id="created_time_end" name="created_time_end"
 								placeholder="MM/DD/YYYY" class="date input" />
 					</div>
+					</div>
 				</div>
 				<div class="control-group row-filter" id="deal-closed-filter">
-					<label class="control-label"><b>Deal Closed</b><select name="close_date_filter" class="filter_type" data="close_date" style="max-width: 90px;margin-left: 20px;">
+					<label class="control-label"><b>Deal Closed</b>
+						<a data-toggle="collapse" href="#close_date_div" style="display:inline;position:absolute;right:5px;"><i class="icon-plus" /></a>
+					</label>
+					<div id="close_date_div" class="controls collapse">
+						<select id="close_date_filter" name="close_date_filter" class="filter_type" data="close_date" style="max-width: 90px;margin-left: 20px;">
 								<option value="equals">Equals</option>
 								<option value="between">Between</option>
-						</select></label>
-					<div class="controls equals" >
+						</select>
+					<div class="equals" >
 							<input type="text" id="close_date" name="close_date"
 								 placeholder="MM/DD/YYYY" class="date input" />
 					</div>
-					<div class="controls between hide" >
+					<div class="between hide" >
 							<input type="text" id="close_date_start" name="close_date_start"
 								placeholder="MM/DD/YYYY" class="date input" /> to
 							<input type="text" id="close_date_end" name="colse_date_end"
 								placeholder="MM/DD/YYYY" class="date input" />
+					</div>
 					</div>
 				</div>
 			</fieldset>

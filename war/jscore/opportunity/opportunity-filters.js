@@ -6,6 +6,8 @@
  * 
  **/
 $(function () {
+	
+	// Show filter drop down.
 	$('#show-filter-button').live('click', function(e){
 		e.preventDefault();
 		if($('#filter_options').is(':visible'))
@@ -14,17 +16,13 @@ $(function () {
 			showFilters();
 	});
 	
+	// Filter deals.
 	$('#deals-filter-validate').live('click', function(e){
 		e.preventDefault();
 		filterDeals($(this));
 	});
 	
-	$('#dealsFilterForm input[type="checkbox"]').live('click',function(e){
-		var id = $(this).attr('data');
-		alert('add required to '+id);
-		$('#dealsFilterForm #'+id).addClass('required');
-	});
-	
+	// For updating the filter inequality and the fields based on the filter type selected.
 	$('#filter_options .filter_type').live('change',function(e){
 		var filter = $(this).closest('.control-group').attr('id');
 		if($(this).val()=='equals'){
@@ -52,17 +50,22 @@ $(function () {
 		}
 	});
 	
+	// Clear the deal filter form and remove the cookie.
 	$('#clear-deal-filters').live('click',function(e){
 		$('#dealsFilterForm input').val('');
 	 	$('#dealsFilterForm select').val('');
 		$('#dealsFilterForm select.filter_type').val('equals');
 		$('#filter_options .between').hide();
 		$('#filter_options .equals').show();
+		$('#filter_options .controls').collapse('hide');
 		eraseCookie('deal-filters');
 	});
 	
 });
 
+/**
+ * Show filters drop down and fill the options.
+ */
 function showFilters(){
 	var el = $('#filter_options');
 
@@ -76,36 +79,43 @@ function showFilters(){
 		$("#owners-list", $("#dealsFilterForm")).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
 		$("#owners-list", $("#dealsFilterForm")).closest('div').find('.loading-img').hide();
 	});
-	// Contacts type-ahead
-	agile_type_ahead("relates_to", el, contacts_typeahead);
 
+	// Populate pipeline in the select box.
 	populateTracks(el, undefined, undefined, function(data){
 		if(readCookie('deal-filters')){
 			var json = $.parseJSON(readCookie('deal-filters'));
 			$.each(json,function(key,value){
+				
+				// Fill the filters based on previosly selected filters in cookie.
 				if(value){
+					if($('[name="'+key+'"]').closest('.controls').height()== 0 && key.indexOf('_filter')<0){
+						$('[name="'+key+'"]').closest('.controls').collapse('show');
+					}
+					
 					if(key=='pipeline_id'){
-						var el = $('#filter_option');
-						// Fills milestone select element
+						// Fills milestone and select element
 						populateMilestones(el, undefined,json.pipeline_id, undefined, function(data){
 							$("#milestone", el).html(data);
 							$("#milestone", el).closest('div').find('.loading-img').hide();
-							$('#'+key).val(value);
+							$("#milestone",el).val(json.milestone);
 						});
-					} 					
+					}
 					$('#'+key).val(value);
 					if(key=='pipeline_id')
 						$('#pipeline').val(value);
 					else if($('#'+key).hasClass('date'))
 						$('#'+key).val(new Date(value * 1000).format('mm/dd/yyyy'));
+					
+					if(key.indexOf('_filter')>0)
+						$('#'+key).trigger('change');
 				}
-			});
-			// Enable the datepicker
-			$('#filter_options .date').datepicker({
-				format : 'mm/dd/yyyy',
 			});
 			//deserializeForm(json, $('#dealsFilterForm'));
 		}
+		// Enable the datepicker
+		$('#filter_options .date').datepicker({
+			format : 'mm/dd/yyyy',
+		});
 	});
 	
 	/*add_custom_fields_to_form({}, function(data){
@@ -118,6 +128,10 @@ function showFilters(){
 	
 }
 
+/**
+ * Deserialize the filters form and save them in the cookie as JSON string and reload the page.
+ * @param saveBtn
+ */
 function filterDeals(saveBtn){
 	// Returns, if the sav	e button has disabled attribute
 	if (saveBtn.attr('disabled'))
@@ -135,23 +149,26 @@ function filterDeals(saveBtn){
 	//json.customFields=customJson;
 	if(readCookie("agile_deal_track") && json.pipeline_id.length > 1 && readCookie("agile_deal_track") != json.pipeline_id)
 		createCookie("agile_deal_track", json.pipeline_id)
-	console.log('----filter json--- ',json);
 	createCookie('deal-filters',JSON.stringify(json));
 	saveBtn.removeAttr('disabled');
 	// Loads the deals
 	App_Deals.deals();
 }
 
+/**
+ * Get the deal filters in the cookie.
+ * @returns
+ */
 function getDealFilters(){
 	var query = ''
 	if(readCookie('deal-filters')){
 		query = readCookie('deal-filters');
+		// Remove the milestone field in the filters if it is milestone view.
 		if(!readCookie("agile_deal_view")){
 			var json = $.parseJSON(query);
 			json.milestone = '';
 			return JSON.stringify(json);
 		}
 	}
-	
 	return query;
 }

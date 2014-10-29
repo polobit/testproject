@@ -121,6 +121,12 @@ $(function(){
 					$('#pipeline-delete-modal').modal('hide');
 					if(readCookie("agile_deal_track") && readCookie("agile_deal_track") == id)
 						eraseCookie("agile_deal_track");
+					if(readCookie("deal-filters")){
+						var json = $.parseJSON(readCookie("agile_deal_view"));
+						if(json.pipeline_id = id)
+							eraseCookie("deal-filters");
+					}
+					
 					App_Admin_Settings.milestones();
 				},
 				error: function(jqXHR, status, errorThrown){

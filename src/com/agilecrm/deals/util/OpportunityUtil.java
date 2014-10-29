@@ -704,6 +704,17 @@ public class OpportunityUtil
 	return dealsObject;
     }
 
+    /**
+     * Get opportunities based on the filted in the given filter JSON object.
+     * 
+     * @param filterJson
+     *            JSON object containing the fields.
+     * @param count
+     *            number of deals per page.
+     * @param cursor
+     *            cursor for the deals.
+     * @return deals list.
+     */
     public static List<Opportunity> getOpportunitiesByFilter(org.json.JSONObject filterJson, int count, String cursor)
     {
 	Map<String, Object> searchMap = new HashMap<String, Object>();
@@ -734,12 +745,12 @@ public class OpportunityUtil
 		if (checkJsonString(filterJson, "value_start"))
 		{
 		    double value = Double.parseDouble(filterJson.getString("value_start").replace("%", ""));
-		    searchMap.put("expected_value >", value);
+		    searchMap.put("expected_value >=", value);
 		}
 		if (checkJsonString(filterJson, "value_end"))
 		{
 		    double value = Double.parseDouble(filterJson.getString("value_end").replace("%", ""));
-		    searchMap.put("expected_value <", value);
+		    searchMap.put("expected_value <=", value);
 		}
 	    }
 
@@ -758,12 +769,12 @@ public class OpportunityUtil
 		if (checkJsonString(filterJson, "probability_start"))
 		{
 		    long probability = Long.parseLong(filterJson.getString("probability_start").replace("%", ""));
-		    searchMap.put("probability >", probability);
+		    searchMap.put("probability >=", probability);
 		}
 		if (checkJsonString(filterJson, "probability_end"))
 		{
 		    long probability = Long.parseLong(filterJson.getString("probability_end").replace("%", ""));
-		    searchMap.put("probability <", probability);
+		    searchMap.put("probability <=", probability);
 		}
 	    }
 
@@ -796,6 +807,16 @@ public class OpportunityUtil
 	return null;
     }
 
+    /**
+     * Generate the Map object with field name and values of the date(epoch
+     * time).
+     * 
+     * @param json
+     *            Filter object containing date fields.
+     * @param fieldName
+     *            name of the date field.
+     * @return map object with date field query conditions.
+     */
     private static Map<String, Object> getDateFilterCondition(org.json.JSONObject json, String fieldName)
     {
 
@@ -839,6 +860,16 @@ public class OpportunityUtil
 	return searchMap;
     }
 
+    /**
+     * Validate the field in the json. Check whether the given field is in JSON
+     * and it has any value.
+     * 
+     * @param json
+     *            JSON object.
+     * @param key
+     *            field name to validate.
+     * @return true if field is present in the json and it has some value.
+     */
     private static boolean checkJsonString(org.json.JSONObject json, String key)
     {
 
@@ -859,6 +890,14 @@ public class OpportunityUtil
 	}
     }
 
+    /**
+     * Generate Map object with Query conditons for deals custom fields.
+     * 
+     * @param json
+     *            Filter object containing the filters related to custom fields.
+     * @return
+     */
+    @SuppressWarnings("unused")
     private static Map<String, Object> getCustomFieldFilters(org.json.JSONObject json)
     {
 	Map<String, Object> searchMap = new HashMap<String, Object>();
