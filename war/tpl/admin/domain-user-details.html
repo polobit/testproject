@@ -68,11 +68,11 @@
 
 <script id="plan-info-template" type="text/html">
 <div class="header"><a id="login_id"   href='https://{{description}}.agilecrm.com/login'  target='_self'><strong><u>Login To Domain</u></strong></a></div>
+{{#if this.subscriptions}}
 <div class="well">
 <p>
 	<strong><u>Your Current Plans</u>:</strong>
 </p>
-{{#if this.subscriptions}}
 {{#each subscriptions.data}}
 
 {{#is_userPlan plan.id}}
@@ -153,15 +153,11 @@ Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 {{/is_emailPlan}}
 {{/each}}
 
-
-
-
-
-
   {{else}}
         <div ><strong>No active subscription</strong></div>
-{{/if}}
 </div>
+{{/if}}
+
 
 </script>
 
