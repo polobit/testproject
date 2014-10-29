@@ -117,7 +117,7 @@ public class StripeChargeWebhook extends HttpServlet
 			}
 		    }
 
-		    if (!StringUtils.equals(getCustomerId(stripeJson, eventType), "null"))
+		    if (!(StringUtils.equals(getCustomerId(stripeJson, eventType), "null") || StringUtils.isBlank(getCustomerId(stripeJson, eventType))))
 		    {
 			ContactField field = new ContactField();
 			field.type = FieldType.CUSTOM;
@@ -278,9 +278,12 @@ public class StripeChargeWebhook extends HttpServlet
 	try
 	{
 	    if (stripeEventType.contains("charge"))
-		customerId = stripeJson.getString("customer");
+		customerId = stripeJson.getJSONObject("data").getJSONObject("object").getJSONObject("card").getString("customer");
 	    else if (stripeEventType.contains("customer"))
-		customerId = stripeJson.getString("id");
+	    {
+		JSONObject defaultCard = getDefaultCustomerCard(stripeJson);
+		customerId = defaultCard.getString("customer");
+	    }
 	    return customerId;
 	}
 	catch (Exception e)
