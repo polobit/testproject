@@ -205,7 +205,7 @@ public class Event
     public void save()
     {
 	dao.put(this);
-//	EventUtil.sendIcal(this);
+	EventUtil.sendIcal(this);
 	System.out.println("Event object " + this);
     }
 
