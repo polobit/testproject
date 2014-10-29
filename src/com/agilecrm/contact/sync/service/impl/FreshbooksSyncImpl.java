@@ -3,8 +3,6 @@
  */
 package com.agilecrm.contact.sync.service.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -126,10 +124,19 @@ public class FreshbooksSyncImpl extends OneWaySyncService
     @Override
     protected void updateLastSyncedInPrefs()
     {
-	SimpleDateFormat sm = new SimpleDateFormat("YYYY-MM-dd hh:mm:ss");
-	String date = sm.format(new Date());
-	prefs.lastSyncCheckPoint = date;
-	prefs.save();
+
+	try
+	{
+	    FreshbooksDataService service = new FreshbooksDataService(prefs.token, prefs.othersParams);
+
+	    System.out.println("lastupdated time" + service.getLastUpdatedTime());
+	    prefs.lastSyncCheckPoint = service.getLastUpdatedTime();
+	    prefs.save();
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception occurred during last updated time");
+	}
 
     }
 
