@@ -490,7 +490,7 @@ public class WebCalendarEventUtil
 		String body_subject = "<p>Your appointment was scheduled with <b>" + wce.userName
 		        + "</b>.</p><p>Duration - " + wce.slot_time + " minutes</p><p>Note message : " + wce.notes
 		        + "</p>";
-		EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", null, user.email, null, null,
+		EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", user.email, null, null,
 		        "Appointment Scheduled", null, body_subject, null, null, attachments_to_agile_user);
 	    }
 	}
@@ -509,7 +509,7 @@ public class WebCalendarEventUtil
 
 	    String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 
-	    EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", null, wce.email, null, null,
+	    EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", wce.email, null, null,
 		    "Appointment Scheduled", null, body, null, null, attachments);
 
 	}
