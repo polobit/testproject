@@ -126,7 +126,8 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	    }
 	    else
 		// Send mail to domain user
-		sendMail1(SendMail.FAILED_BILLINGS_FINAL_TIME_SUBJECT, SendMail.FAILED_BILLINGS_FINAL_TIME);
+		sendMail1(SendMail.EMAIL_SUBSCRIPTION_CANCELLED_BY_USER_SUBJECT,
+			SendMail.EMAIL_SUBSCRIPTION_CANCELLED_BY_USER);
 
 	}
 
