@@ -928,7 +928,7 @@ public class Contact extends Cursor
     {
 	for (ContactField field : properties)
 	{
-	    if (StringUtils.equals(field.name, EMAIL))
+	    if (StringUtils.equals(field.name, EMAIL) && field.value!=null)
 		field.value = (field.value).toLowerCase();
 
 	}
