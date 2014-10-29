@@ -2,16 +2,12 @@ package com.agilecrm.subscription;
 
 import org.codehaus.jettison.json.JSONObject;
 
-import com.agilecrm.subscription.Subscription.Gateway;
-import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
-import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
-import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 
@@ -30,14 +26,13 @@ public class SubscriptionUtil
 	if (subscription == null)
 	{
 	    subscription = new Subscription();
-	    
+
 	    subscription.fillDefaultPlans();
 	}
-	
 
 	return subscription;
     }
-    
+
     public static boolean isFreePlan()
     {
 	Objectify ofy = ObjectifyService.begin();
@@ -45,10 +40,10 @@ public class SubscriptionUtil
 	if (subscription == null)
 	{
 	    subscription = new Subscription();
-	    
+
 	    subscription.fillDefaultPlans();
 	}
-	
+
 	return subscription.isFreePlan();
     }
 
@@ -69,7 +64,8 @@ public class SubscriptionUtil
 	{
 	    Customer customer = getCustomer(subscription.billing_data);
 	    subscription.billing_data = StripeUtil.getJSONFromCustomer(customer);
-	    subscription.cachedData = BillingRestrictionUtil.getBillingRestriction(subscription.plan.plan_type.toString(), subscription.plan.quantity);
+	    subscription.cachedData = BillingRestrictionUtil.getBillingRestriction(
+		    subscription.plan.plan_type.toString(), subscription.plan.quantity);
 	    subscription.cachedData.refresh(true);
 	}
 	catch (StripeException e)
@@ -105,8 +101,8 @@ public class SubscriptionUtil
     }
 
     /**
-     * Creates a Customer in respective {@link Subscription.Gateway} and store customer
-     * details in {@link Subscription} object
+     * Creates a Customer in respective {@link Subscription.Gateway} and store
+     * customer details in {@link Subscription} object
      * 
      * @return {@link Subscription}
      * 
@@ -116,32 +112,32 @@ public class SubscriptionUtil
      */
     public static Subscription createEmailSubscription(Plan plan) throws Exception
     {
-        Subscription subscription = getSubscription();
-        // Creates customer and adds subscription
-        subscription.billing_data = subscription.getAgileBilling().addSubscriptionAddon(plan);
-        subscription.emailPlan = plan;
-        
-        // Saves new subscription information
-        if (subscription.billing_data != null)
-            subscription.save();
-    
-        return subscription;
+	Subscription subscription = getSubscription();
+	// Creates customer and adds subscription
+	subscription.billing_data = subscription.getAgileBilling().addSubscriptionAddon(plan);
+	subscription.emailPlan = plan;
+
+	// Saves new subscription information
+	if (subscription.billing_data != null)
+	    subscription.save();
+
+	return subscription;
     }
-    
+
     public static String getEmailPlan(Integer quantity)
     {
 	Integer count = quantity * 1000;
-	
+
 	String plan_id = "";
-	if(count <=  100000)
+	if (count <= 100000)
 	    plan_id = "email-4";
-	else if(count <= 1000000)
+	else if (count <= 1000000)
 	    plan_id = "email-3";
-	else if(count > 1000000)
+	else if (count > 1000000)
 	    plan_id = "email-3";
 	return plan_id;
     }
-    
+
     public static void deleteEmailSubscription(String namespace)
     {
 	String oldNamespace = NamespaceManager.get();
@@ -149,25 +145,27 @@ public class SubscriptionUtil
 	{
 	    NamespaceManager.set(namespace);
 	    deleteEmailSubscription();
-	} finally 
+	}
+	finally
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
     }
-    
+
     public static boolean deleteEmailSubscription(String namespace, String subscriptionId)
     {
 	String oldNamespace = NamespaceManager.get();
 	try
 	{
 	    NamespaceManager.set(namespace);
-	   return deleteEmailSubscriptionById(subscriptionId);
-	} finally 
+	    return deleteEmailSubscriptionById(subscriptionId);
+	}
+	finally
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
     }
-    
+
     public static void deleteUserSubscription(String namespace)
     {
 	String oldNamespace = NamespaceManager.get();
@@ -175,7 +173,8 @@ public class SubscriptionUtil
 	{
 	    NamespaceManager.set(namespace);
 	    deleteUserSubscription();
-	} finally 
+	}
+	finally
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
@@ -184,35 +183,35 @@ public class SubscriptionUtil
     public static void deleteEmailSubscription()
     {
 	Subscription subscription = getSubscription();
-	if(subscription.isFreeEmailPack())
+	if (subscription.isFreeEmailPack())
 	    return;
-	
+
 	subscription.emailPlan = null;
 	subscription.save();
     }
-    
+
     public static boolean deleteEmailSubscriptionById(String subscription_id)
     {
 	Subscription subscription = getSubscription();
-	if(subscription.isFreeEmailPack())
+	if (subscription.isFreeEmailPack())
 	    return false;
-	
-	if(subscription.emailPlan==null || !subscription_id.equals(subscription.emailPlan))
+
+	if (subscription.emailPlan == null || !subscription_id.equals(subscription.emailPlan))
 	{
 	    return false;
 	}
-		subscription.emailPlan = null;
+	subscription.emailPlan = null;
 	subscription.save();
 	return true;
     }
-    
+
     public static void deleteUserSubscription()
     {
 	Subscription subscription = getSubscription();
-	if(subscription.isFreePlan())
+	if (subscription.isFreePlan())
 	    return;
-	
-	subscription.emailPlan = null;
+
+	subscription.plan = null;
 	subscription.save();
     }
 }
