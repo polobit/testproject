@@ -196,7 +196,7 @@ public class EventUtil
 		    String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 
 		    if (toemail != null)
-			EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", null, toemail.value, null, null,
+			EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", toemail.value, null, null,
 			        subject, null, null, null, null, attachments);
 		}
 	    }
@@ -207,7 +207,7 @@ public class EventUtil
 		System.out.println("agileUseiCal-- " + agileUseiCal.toString());
 		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
 
-		EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", null, user.email, null, null, subject, null,
+		EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", user.email, null, null, subject, null,
 		        null, null, null, attachments_to_agile_user);
 
 	    }
