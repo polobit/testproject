@@ -3,15 +3,10 @@
  */
 package com.thirdparty.freshbooks;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
-
-import com.google.api.server.spi.types.SimpleDate;
 
 /**
  * @author jitendra
@@ -22,11 +17,13 @@ public class FreshbooksDataService
 
     public static final String FRESHBOOK_API_URL = "https://$<dc>.freshbooks.com/api/2.1/xml-in";
     public static final String FRESHBOOK_URL = "https://$<ns>.freshbooks.com/";
+    public static final String FRESHBOOKS_CLIENT__COUNT_REQUEST = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+	    + "<request method=\"$method\"><folder>active</folder></request>";
     public static final String FRESHBOOKS_CLIENT_REQUEST = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-	    + "<request method=\"$method\"><per_page>$total_record</per_page><page>$page_number</page></request>";
+	    + "<request method=\"$method\"><per_page>$total_record</per_page><page>$page_number</page><folder>active</folder></request>";
     public static final String FRESHBOOKS_CLIENT_REQUEST_BETWEEN_DATE = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-	    + "<request method=\"$method\"><per_page>$total_record</per_page><page>$page_number</page> "
-	    + "<updated_from>$updatedDateTime</updated_from></request>";
+
+    + "<updated_from>$updatedDateTime</updated_from><folder>active</folder></request>";
 
     public static final String FRESHBOOKS_INVOICE_REQUEST = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
 	    + "<request method=\"$method\">$body   $status </request>";
@@ -42,7 +39,6 @@ public class FreshbooksDataService
 	    this.freshBookNameSpace = freshBookNameSpace.trim();
 	}
     }
-
 
     /**
      * Return customers between given date
@@ -110,12 +106,11 @@ public class FreshbooksDataService
 
     public int getTotalCount(String lastSyncDate)
     {
-	int total = 0;
 
+	int total = 0;
 	String url = FRESHBOOK_API_URL.replace("$<dc>", freshBookNameSpace);
 
-	String request = FRESHBOOKS_CLIENT_REQUEST.replace("$method", "client.list").replace("$total_record", "" + 1)
-		.replace("$page_number", "" + 1);
+	String request = FRESHBOOKS_CLIENT__COUNT_REQUEST.replace("$method", "client.list");
 	if (!StringUtils.isBlank(lastSyncDate))
 	{
 	    request = FRESHBOOKS_CLIENT_REQUEST_BETWEEN_DATE.replace("$method", "client.list")
@@ -132,7 +127,11 @@ public class FreshbooksDataService
 	    JSONObject responseJson = XML.toJSONObject(response).getJSONObject("response");
 	    verifyResponse(responseJson);
 	    JSONObject results = responseJson.getJSONObject("clients");
-	    total = Integer.parseInt((String) results.get("total"));
+	    if (results.has("pages"))
+	    {
+		System.out.println(results.get("pages"));
+		total = Integer.parseInt((String) results.get("pages"));
+	    }
 	    return total;
 	}
 	catch (Exception e)
@@ -243,32 +242,32 @@ public class FreshbooksDataService
 	return invoices;
     }
 
-    public static void main(String[] args)
+    public String getLastUpdatedTime()
     {
+	String lastUpdatedTime = null;
+
+	String url = FRESHBOOK_API_URL.replace("$<dc>", freshBookNameSpace);
+
+	String request = FRESHBOOKS_CLIENT_REQUEST.replace("$method", "client.list").replace("$total_record", "" + 1)
+		.replace("$page_number", "" + 1);
+
+	String response;
 	try
 	{
-	    FreshbooksDataService fresh = new FreshbooksDataService("996a563547d53cebb2d89de86d5ef61f", "roisay");
-	    SimpleDateFormat sm = new SimpleDateFormat("YYYY-MM-dd hh:mm:ss");
-	    String date = sm.format(new Date());
-	    System.out.println(date);
-	    JSONArray arr = fresh.getCustomers(1, date);
+	    response = FreshbooksConnectionUtil.accessUrlusingAuthentication(url, apiKey, "x", request,
+		    "application/xml", "POST");
 
-	    JSONObject cust = arr.getJSONObject(0);
-	    String cid = cust.getString("client_id");
-	    System.out.println(fresh.getInvoices(cid));
-
-	    // System.out.println(fresh.getInvoices(clientId));
-	    // System.out.println("------------------------------------------");
-	    // System.out.println(fresh.getClientsJSON("tejaswi@gmail.com"));
-	    // System.out.println("------------------------------------------");
-	    // System.out.println(fresh.addClient("teju", "g",
-	    // "tejjjaswi@gmail.com"));
-	    // System.out.println("------------------------------------------");
-	    // System.out.println(fresh.sendInvoice("teju", "g",
-	    // "tejaswitest@gmail.com", "pro", "1"));
-
-	    // fresh.getInvoices("28");
-	    // fresh.getItems();
+	    JSONObject responseJson = XML.toJSONObject(response).getJSONObject("response");
+	    verifyResponse(responseJson);
+	    JSONObject result = responseJson.getJSONObject("clients");
+	    if (result != null && result.length() > 0)
+	    {
+		JSONObject client = (JSONObject) result.get("client");
+		if (client.has("updated"))
+		{
+		    lastUpdatedTime = (String) client.get("updated");
+		}
+	    }
 
 	}
 	catch (Exception e)

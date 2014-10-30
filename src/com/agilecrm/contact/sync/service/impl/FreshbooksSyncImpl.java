@@ -29,7 +29,6 @@ import com.thirdparty.freshbooks.FreshbooksDataService;
  */
 public class FreshbooksSyncImpl extends OneWaySyncService
 {
-    private Integer PAGE_SIZE = 25;
     private Integer CURRENT_PAGE = 1;
     private Integer TOTAL_PAGE = CURRENT_PAGE;
 
@@ -47,19 +46,14 @@ public class FreshbooksSyncImpl extends OneWaySyncService
 	    FreshbooksDataService service = new FreshbooksDataService(prefs.token, prefs.othersParams);
 	    System.out.println("freshbooks Service created");
 
-	    int total = service.getTotalCount(prefs.lastSyncCheckPoint);
-	    System.out.println("total "+total+" contact found");
+	    TOTAL_PAGE = service.getTotalCount(prefs.lastSyncCheckPoint);
 
-	    if (total > 25)
-	    {
-		TOTAL_PAGE = (int) Math.ceil(total / PAGE_SIZE);
-	    }
 	    while (CURRENT_PAGE <= TOTAL_PAGE)
 	    {
 		JSONArray customers = service.getCustomers(CURRENT_PAGE, prefs.lastSyncCheckPoint);
 		if (customers != null && customers.length() > 0)
 		{
-		    System.out.println("fetched customer :"+customers.length());
+		    System.out.println("fetched customer :" + customers.length());
 		    for (int i = 0; i < customers.length(); i++)
 		    {
 			Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i));
