@@ -22,6 +22,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
@@ -97,36 +99,45 @@ public class StripeChargeWebhook extends HttpServlet
 			String value = agileJson.getString(key);
 			contactProperties.add(new ContactField(key, value, null));
 		    }
-
 		    System.out.println("Assigning campaign to contact ... ");
 		    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
 
-		    String stripeFieldValue = null;
-		    Widget widget = WidgetUtil.getWidget("Stripe");
-		    if (widget != null)
+		    DomainUser user = APIKey.getDomainUserRelatedToAPIKey(apiKey);
+		    if (user != null)
 		    {
-			try
-			{
-			    JSONObject stripePrefs = new JSONObject(widget.prefs);
-			    if (stripePrefs.has("stripe_field_name"))
-				stripeFieldValue = stripePrefs.getString("stripe_field_name");
-			}
-			catch (Exception e)
-			{
-			    e.printStackTrace();
-			}
-		    }
+			UserInfo userInfo = new UserInfo("agilecrm.com", user.email, user.name);
+			SessionManager.set(userInfo);
 
-		    if (!(StringUtils.equals(getCustomerId(stripeJson, eventType), "null") || StringUtils.isBlank(getCustomerId(stripeJson, eventType))))
-		    {
-			ContactField field = new ContactField();
-			field.type = FieldType.CUSTOM;
-			field.value = getCustomerId(stripeJson, eventType);
-			if (stripeFieldValue != null && !stripeFieldValue.isEmpty())
-			    field.name = stripeFieldValue;
-			else
-			    field.name = "StripeID";
-			contactProperties.add(field);
+			String stripeFieldValue = null;
+			Widget widget = WidgetUtil.getWidget("Stripe");
+			if (widget != null)
+			{
+			    try
+			    {
+				JSONObject stripePrefs = new JSONObject(widget.prefs);
+				if (stripePrefs.has("stripe_field_name"))
+				{
+				    stripeFieldValue = stripePrefs.getString("stripe_field_name");
+				    System.out.println("stripe field name is " + stripeFieldValue);
+				}
+			    }
+			    catch (Exception e)
+			    {
+				e.printStackTrace();
+			    }
+			}
+
+			if (!(StringUtils.equals(getCustomerId(stripeJson, eventType), "null") || StringUtils.isBlank(getCustomerId(stripeJson, eventType))))
+			{
+			    ContactField field = new ContactField();
+			    field.type = FieldType.CUSTOM;
+			    field.value = getCustomerId(stripeJson, eventType);
+			    if (stripeFieldValue != null && !stripeFieldValue.isEmpty())
+				field.name = stripeFieldValue;
+			    else
+				field.name = "StripeID";
+			    contactProperties.add(field);
+			}
 		    }
 
 		    if (contact.properties.isEmpty())
