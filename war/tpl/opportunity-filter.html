@@ -32,8 +32,8 @@
 							padding-top: 4px !important;
 						}
 					</style>
-					<div id="deal-filter-container" class="deal-filter-container inner-box">
-						<form id="dealsFilterForm" name="dealsFilterForm" role="form">
+					<div id="deal-filter-container" class="deal-filter-container inner-box" style="max-height:300px;">
+						<form id="dealsFilterForm" name="dealsFilterForm" role="form" style="margin-bottom:0px;">
 			<fieldset>
 				<div class="control-group row-filter">
 					<label class="control-label"><b>Owner </b></label>
@@ -60,15 +60,8 @@
 				</div>
 					
 				<div class="control-group row-filter" id="deal-value-filter">
-					<label class="control-label"><b>Value</b><select name="value_filter_type" class="filter_type" style="max-width: 90px;margin-left: 20px;">
-								<option value="equals">Equals</option>
-								<option value="between">Between</option>
-						</select></label>
-					<div class="controls equals" >
-							<input type="text" id="value" name="value"
-								placeholder="Value" />
-					</div>
-					<div class="controls between hide" >
+					<label class="control-label"><b>Value</b></label>
+					<div class="controls" >
 							<input type="text" id="value_start" name="value_start"
 								placeholder="Value Start"/> to
 							<input type="text" id="value_end" name="value_end"
@@ -109,6 +102,9 @@
 				</div>
 			</fieldset>
 		</form>
+		<form id="dealsCustomFilterForm" name="dealsCustomFilterForm" role="form">
+			<fieldset></fieldset>
+		</form>
 					</div>
 					<!-- End of filters-container -->
 				</div>
@@ -117,4 +113,12 @@
 		</div>
 		<!-- dropdown-menu class div-->
 	</div>
+</script>
+
+<script id="deal-custom-filter-template" type="text/html">
+	<fieldset>
+		{{#each this}}
+			
+		{{/each}}
+	</fieldset>
 </script>

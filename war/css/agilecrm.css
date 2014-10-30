@@ -1722,5 +1722,10 @@ cursor: pointer;
 	display: block;
 	border-bottom: 1px solid #eceff5;
 	padding: 8px 10px 8px 10px;
+	margin-bottom: 0px;
+}
+
+#dealsCustomFilterForm .control-label {
+	font-weight: bold;
 }
 /* End of filter UI */

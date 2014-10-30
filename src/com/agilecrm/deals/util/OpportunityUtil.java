@@ -706,12 +706,44 @@ public class OpportunityUtil
 
 	try
 	{
-	    if (filterJson.has("pipeline_id") && filterJson.getLong("pipeline_id") != 0)
-		searchMap.put("pipeline", new Key<Milestone>(Milestone.class, filterJson.getLong("pipeline_id")));
+	    if (filterJson.has("pipeline_id") && StringUtils.isNotEmpty(filterJson.getString("pipeline_id")))
+		searchMap.put("pipeline",
+			new Key<Milestone>(Milestone.class, Long.parseLong(filterJson.getString("pipeline_id"))));
 	    if (filterJson.has("milestone") && filterJson.getString("milestone") != null)
 		searchMap.put("milestone", filterJson.getString("milestone"));
 	    if (filterJson.has("owner_id") && filterJson.getLong("owner_id") != 0)
 		searchMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, filterJson.getLong("owner_id")));
+	    if (filterJson.has("value_start") && filterJson.getLong("value_start") != 0)
+		searchMap.put("value >", new Key<DomainUser>(DomainUser.class, filterJson.getLong("value_start")));
+	    if (filterJson.has("value_end") && filterJson.getLong("value_end") != 0)
+		searchMap.put("value <", new Key<DomainUser>(DomainUser.class, filterJson.getLong("value_end")));
+
+	    if (filterJson.has("closed_filter_type")
+		    && filterJson.getString("closed_filter_type").equalsIgnoreCase("equals"))
+	    {
+		if (filterJson.has("closed_date") && StringUtils.isNotEmpty(filterJson.getString("closed_date")))
+		{
+		    long closeDate = Long.parseLong(filterJson.getString("closed_date"));
+		    searchMap.put("close_date >", closeDate / 1000);
+		    searchMap.put("close_date <", closeDate / 1000 + 86400);
+		}
+
+	    }
+	    else
+	    {
+		if (filterJson.has("closed_date_start")
+			&& StringUtils.isNotEmpty(filterJson.getString("closed_date_start")))
+		{
+		    long closeDate = Long.parseLong(filterJson.getString("closed_date_start"));
+		    searchMap.put("close_date >", closeDate / 1000);
+		}
+		if (filterJson.has("closed_date_end")
+			&& StringUtils.isNotEmpty(filterJson.getString("closed_date_end")))
+		{
+		    long closeDate = Long.parseLong(filterJson.getString("closed_date_end"));
+		    searchMap.put("close_date >", closeDate / 1000);
+		}
+	    }
 
 	    if (count != 0)
 		return dao.fetchAllByOrder(count, cursor, searchMap, true, false, "-created_time");

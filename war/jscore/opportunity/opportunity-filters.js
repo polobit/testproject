@@ -67,10 +67,19 @@ function showFilters(){
 	});
 	
 	
+	
+	add_custom_fields_to_form({}, function(data){
+		console.log('----------------',data);
+		var el_custom_fields = show_custom_fields_helper(data["custom_fields"], []);
+		//$(el_custom_fields).find('div.control-group').addClass('row-filter');
+		$("#dealsCustomFilterForm fieldset", el).html($(el_custom_fields)).find('div.control-group').addClass('row-filter');;
+		
+		
+	}, "DEAL");
 }
 
 function filterDeals(saveBtn){
-	// Returns, if the save button has disabled attribute
+	// Returns, if the sav	e button has disabled attribute
 	if (saveBtn.attr('disabled'))
 		return;
 	saveBtn.attr('disabled','disabled');
@@ -82,9 +91,11 @@ function filterDeals(saveBtn){
 		return false;
 	}*/
 	var json = serializeForm(formId);
+	var customJson = serializeForm('dealsCustomFilterForm');
+	json.customFields=customJson;
 	if(readCookie("agile_deal_track") && json.pipeline_id.length > 1 && readCookie("agile_deal_track") != json.pipeline_id)
 		createCookie("agile_deal_track", json.pipeline_id)
-	console.log(json);
+	console.log('----filter json--- ',json);
 	createCookie('deal-filters',JSON.stringify(json));
 	saveBtn.removeAttr('disabled');
 	// Loads the deals
