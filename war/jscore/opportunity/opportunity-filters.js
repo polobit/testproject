@@ -65,6 +65,8 @@ function showFilters(){
 	$('#filter_options .date').datepicker({
 		format : 'mm/dd/yyyy',
 	});
+	
+	
 }
 
 function filterDeals(saveBtn){
@@ -80,16 +82,21 @@ function filterDeals(saveBtn){
 		return false;
 	}*/
 	var json = serializeForm(formId);
+	if(readCookie("agile_deal_track") && json.pipeline_id.length > 1 && readCookie("agile_deal_track") != json.pipeline_id)
+		createCookie("agile_deal_track", json.pipeline_id)
 	console.log(json);
 	createCookie('deal-filters',JSON.stringify(json));
 	saveBtn.removeAttr('disabled');
+	// Loads the deals
+	App_Deals.deals();
 }
 
 function getDealFilters(){
 	var query = ''
 	if(readCookie('deal-filters')){
-		
+		query = readCookie('deal-filters');
+		var json = $.parseJSON(query);
 	}
 	
-	
+	return query;
 }

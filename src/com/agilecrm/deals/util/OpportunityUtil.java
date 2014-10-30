@@ -10,6 +10,7 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONException;
 
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
@@ -144,7 +145,7 @@ public class OpportunityUtil
     public static List<Opportunity> getOpportunities(long minTime, long maxTime)
     {
 	return dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime)
-	        .list();
+		.list();
     }
 
     /**
@@ -239,10 +240,10 @@ public class OpportunityUtil
 		double pipeline = opportunity.expected_value * opportunity.probability / 100;
 
 		/*
-	         * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
-	         * //Get mm/yy String mmYY = formatter.format(new
-	         * Date(opportunity.close_date * 1000));
-	         */
+		 * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
+		 * //Get mm/yy String mmYY = formatter.format(new
+		 * Date(opportunity.close_date * 1000));
+		 */
 		Date opportunityDate = new Date(opportunity.close_date * 1000);
 
 		Calendar calendar = Calendar.getInstance();
@@ -305,7 +306,7 @@ public class OpportunityUtil
     public static int getTotalNumberOfMilestones(long minTime, long maxTime, String milestone)
     {
 	return dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime)
-	        .filter("milestone", milestone).count();
+		.filter("milestone", milestone).count();
     }
 
     /**
@@ -354,7 +355,7 @@ public class OpportunityUtil
     {
 	// Gets total count of opportunities within the given period
 	int numOpportunities = dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime)
-	        .filter("close_date <= ", maxTime).count();
+		.filter("close_date <= ", maxTime).count();
 
 	JSONObject conversionObject = new JSONObject();
 
@@ -370,15 +371,15 @@ public class OpportunityUtil
     public static List<Opportunity> getDealsRelatedToCurrentUser()
     {
 	return dao.ofy().query(Opportunity.class)
-	        .filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-	        .order("-created_time").limit(10).list();
+		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+		.order("-created_time").limit(10).list();
     }
 
     public static List<Opportunity> getUpcomingDealsRelatedToCurrentUser(String pageSize)
     {
 	return dao.ofy().query(Opportunity.class)
-	        .filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-	        .order("close_date").limit(Integer.parseInt(pageSize)).list();
+		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+		.order("close_date").limit(Integer.parseInt(pageSize)).list();
     }
 
     /**
@@ -556,8 +557,8 @@ public class OpportunityUtil
     public static int getTotalNumberOfMilestonesByPipeline(Long pipelineId, long minTime, long maxTime, String milestone)
     {
 	return dao.ofy().query(Opportunity.class).filter("pipeline", new Key<Milestone>(Milestone.class, pipelineId))
-	        .filter("close_date >= ", minTime).filter("close_date <= ", maxTime).filter("milestone", milestone)
-	        .count();
+		.filter("close_date >= ", minTime).filter("close_date <= ", maxTime).filter("milestone", milestone)
+		.count();
     }
 
     /**
@@ -607,7 +608,7 @@ public class OpportunityUtil
     public static List<Opportunity> getOpportunitiesByPipeline(Long pipelineId, long minTime, long maxTime)
     {
 	return dao.ofy().query(Opportunity.class).filter("pipeline", new Key<Milestone>(Milestone.class, pipelineId))
-	        .filter("close_date >= ", minTime).filter("close_date <= ", maxTime).list();
+		.filter("close_date >= ", minTime).filter("close_date <= ", maxTime).list();
     }
 
     /**
@@ -647,10 +648,10 @@ public class OpportunityUtil
 		double pipeline = opportunity.expected_value * opportunity.probability / 100;
 
 		/*
-	         * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
-	         * //Get mm/yy String mmYY = formatter.format(new
-	         * Date(opportunity.close_date * 1000));
-	         */
+		 * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
+		 * //Get mm/yy String mmYY = formatter.format(new
+		 * Date(opportunity.close_date * 1000));
+		 */
 		Date opportunityDate = new Date(opportunity.close_date * 1000);
 
 		Calendar calendar = Calendar.getInstance();
@@ -697,5 +698,31 @@ public class OpportunityUtil
 
 	System.out.println(dealsObject);
 	return dealsObject;
+    }
+
+    public static List<Opportunity> getOpportunitiesByFilter(org.json.JSONObject filterJson, int count, String cursor)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+
+	try
+	{
+	    if (filterJson.has("pipeline_id") && filterJson.getLong("pipeline_id") != 0)
+		searchMap.put("pipeline", new Key<Milestone>(Milestone.class, filterJson.getLong("pipeline_id")));
+	    if (filterJson.has("milestone") && filterJson.getString("milestone") != null)
+		searchMap.put("milestone", filterJson.getString("milestone"));
+	    if (filterJson.has("owner_id") && filterJson.getLong("owner_id") != 0)
+		searchMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, filterJson.getLong("owner_id")));
+
+	    if (count != 0)
+		return dao.fetchAllByOrder(count, cursor, searchMap, true, false, "-created_time");
+
+	    return dao.listByProperty(searchMap);
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	return null;
     }
 }
