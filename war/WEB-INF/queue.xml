@@ -1,141 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
 <queue-entries>
-  <queue>
-    <name>campaign-queue</name>
-    <rate>5/s</rate>
-    <max-concurrent-requests>10</max-concurrent-requests>
-    <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-  </queue>
-  <queue>
-    <name>notification-queue</name>
-    <rate>5/s</rate>
-    <max-concurrent-requests>5</max-concurrent-requests>
-    <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-  </queue>
-  <queue>
-    <name>reports-queue</name>
-    <rate>2/s</rate>
-    <max-concurrent-requests>5</max-concurrent-requests>
-    <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-  </queue>
-    <queue>
-    <name>contact-sync-queue</name>
-    <rate>2/s</rate>
-    <max-concurrent-requests>5</max-concurrent-requests>
-    <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-  </queue>
-   <queue>
-    <name>bulk-actions-queue</name>
-    <rate>2/s</rate>
-    <max-concurrent-requests>5</max-concurrent-requests>
-    <retry-parameters>
-		<task-retry-limit>0</task-retry-limit>
-	</retry-parameters>
-  </queue>
-  <queue>
-  	<name>cron-queue</name>
-    <rate>5/s</rate>
-    <max-concurrent-requests>10</max-concurrent-requests>
-    <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-  </queue>
-  
-  <!-- pull queues -->
-  <queue>
-  <name>email-pull-queue</name>
-  <mode>pull</mode>
-  <retry-parameters>
-      <task-retry-limit>1</task-retry-limit>	  
-  </retry-parameters>
-  </queue>
-  
-  <queue>
-  <name>campaign-pull-queue</name>
-  <mode>pull</mode>
-  <retry-parameters>
-  		<task-retry-limit>1</task-retry-limit>
-  </retry-parameters>
-  </queue>
-  
-  <queue>
-  <name>normal-campaign-pull-queue</name>
-  <mode>pull</mode>
-  <retry-parameters>
-  		<task-retry-limit>1</task-retry-limit>
-  </retry-parameters>
-  </queue>
-  
-  <queue>
-  <name>bulk-campaign-pull-queue</name>
-  <mode>pull</mode>
-  <retry-parameters>
-  		<task-retry-limit>1</task-retry-limit>
-  </retry-parameters>
-  </queue>
-  
-  <queue>
-  <name>normal-email-pull-queue</name>
-  <mode>pull</mode>
-  <retry-parameters>
-  		<task-retry-limit>1</task-retry-limit>
-  </retry-parameters>
-  </queue>
-  
-  <queue>
-  <name>bulk-email-pull-queue</name>
-  <mode>pull</mode>
-  <retry-parameters>
-  		<task-retry-limit>1</task-retry-limit>
-  </retry-parameters>
-  </queue>
-  
-   <queue>
-  <name>sb-email-pull-queue</name>
-  <mode>pull</mode>
-  <retry-parameters>
-      <task-retry-limit>1</task-retry-limit>	  
-  </retry-parameters>
-  </queue>
-  
-  <queue>
-  <name>sb-campaign-pull-queue</name>
-  <mode>pull</mode>
-  <retry-parameters>
-  		<task-retry-limit>1</task-retry-limit>
-  </retry-parameters>
-  </queue>
+	<queue>
+		<name>campaign-queue</name>
+		<rate>5/s</rate>
+		<max-concurrent-requests>10</max-concurrent-requests>
+		<retry-parameters>
+			<task-retry-limit>1</task-retry-limit>
+		</retry-parameters>
+	</queue>
+	<queue>
+		<name>notification-queue</name>
+		<rate>5/s</rate>
+		<max-concurrent-requests>5</max-concurrent-requests>
+		<retry-parameters>
+			<task-retry-limit>1</task-retry-limit>
+		</retry-parameters>
+	</queue>
+	<queue>
+		<name>reports-queue</name>
+		<rate>2/s</rate>
+		<max-concurrent-requests>5</max-concurrent-requests>
+		<retry-parameters>
+			<task-retry-limit>1</task-retry-limit>
+		</retry-parameters>
+	</queue>
+	<queue>
+		<name>contact-sync-queue</name>
+		<rate>2/s</rate>
+		<max-concurrent-requests>5</max-concurrent-requests>
+		<retry-parameters>
+			<task-retry-limit>1</task-retry-limit>
+		</retry-parameters>
+	</queue>
+	<queue>
+		<name>bulk-actions-queue</name>
+		<rate>2/s</rate>
+		<max-concurrent-requests>5</max-concurrent-requests>
+		<retry-parameters>
+			<task-retry-limit>0</task-retry-limit>
+		</retry-parameters>
+	</queue>
+	<queue>
+		<name>cron-queue</name>
+		<rate>5/s</rate>
+		<max-concurrent-requests>10</max-concurrent-requests>
+		<retry-parameters>
+			<task-retry-limit>1</task-retry-limit>
+		</retry-parameters>
+	</queue>
 
-  <queue>
-  <name>normal-sms-pull-queue</name>
-  <mode>pull</mode>
-  <retry-parameters>
-  		<task-retry-limit>1</task-retry-limit>
-  </retry-parameters>
-  </queue>
-  
-  <queue>
-  <name>bulk-sms-pull-queue</name>
-  <mode>pull</mode>
-  <retry-parameters>
-  		<task-retry-limit>1</task-retry-limit>
-  </retry-parameters>
-  </queue>
-  
-   <queue>
-    <name>periodic-triggers-queue</name>
-    <rate>2/s</rate>
-    <max-concurrent-requests>5</max-concurrent-requests>
-    <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
-	</retry-parameters>
-  </queue>
+	<!-- pull queues -->
+	<queue>
+		<name>email-pull-queue</name>
+		<mode>pull</mode>
+		<retry-parameters>
+			<task-retry-limit>1</task-retry-limit>
+		</retry-parameters>
+	</queue>
+
+	<queue>
+		<name>campaign-pull-queue</name>
+		<mode>pull</mode>
+		<retry-parameters>
+			<task-retry-limit>1</task-retry-limit>
+		</retry-parameters>
+	</queue>
+
+	<queue>
+		<name>normal-campaign-pull-queue</name>
+		<mode>pull</mode>
+		<retry-parameters>
+			<task-retry-limit>1</task-retry-limit>
+		</retry-parameters>
+	</queue>
+
+	<queue>
+		<name>bulk-campaign-pull-queue</name>
+		<mode>pull</mode>
+		<retry-parameters>
+			<task-retry-limit>1</task-retry-limit>
+		</retry-parameters>
+	</queue>
+
+	<queue>
+		<name>normal-email-pull-queue</name>
+		<mode>pull</mode>
+		<retry-parameters>
+			<task-retry-limit>1</task-retry-limit>
+		</retry-parameters>
+	</queue>
+
+	<queue>
+		<name>bulk-email-pull-queue</name>
+		<mode>pull</mode>
+		<retry-parameters>
+			<task-retry-limit>1</task-retry-limit>
+		</retry-parameters>
+	</queue>
+
+	<queue>
+		<name>sb-email-pull-queue</name>
+		<mode>pull</mode>
+		<retry-parameters>
+			<task-retry-limit>1</task-retry-limit>
+		</retry-parameters>
+	</queue>
+
+	<queue>
+		<name>sb-campaign-pull-queue</name>
+		<mode>pull</mode>
+		<retry-parameters>
+			<task-retry-limit>1</task-retry-limit>
+		</retry-parameters>
+	</queue>
+
+	<queue>
+		<name>normal-sms-pull-queue</name>
+		<mode>pull</mode>
+		<retry-parameters>
+			<task-retry-limit>1</task-retry-limit>
+		</retry-parameters>
+	</queue>
+
+	<queue>
+		<name>bulk-sms-pull-queue</name>
+		<mode>pull</mode>
+		<retry-parameters>
+			<task-retry-limit>1</task-retry-limit>
+		</retry-parameters>
+	</queue>
+
+	<queue>
+		<name>periodic-triggers-queue</name>
+		<rate>2/s</rate>
+		<max-concurrent-requests>5</max-concurrent-requests>
+		<retry-parameters>
+			<task-retry-limit>1</task-retry-limit>
+		</retry-parameters>
+	</queue>
+
 </queue-entries>
