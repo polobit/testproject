@@ -69,7 +69,7 @@
 					</div>
 				</div>
 				<div class="control-group row-filter" id="deal-probability-filter">
-					<label class="control-label"><b>Probability</b><select name="created_filter_type" class="filter_type" style="max-width: 90px;margin-left: 20px;">
+					<label class="control-label"><b>Probability</b><select name="probability_filter" class="filter_type" style="max-width: 90px;margin-left: 20px;">
 								<option value="equals">Equals</option>
 								<option value="between">Between</option>
 						</select></label>
@@ -85,34 +85,34 @@
 					</div>
 				</div>
 				<div class="control-group row-filter" id="deal-created-filter">
-					<label class="control-label"><b>Deal Created</b><select name="created_filter_type" class="filter_type" style="max-width: 90px;margin-left: 20px;">
+					<label class="control-label"><b>Deal Created</b><select name="created_time_filter" class="filter_type" style="max-width: 90px;margin-left: 20px;">
 								<option value="equals">Equals</option>
 								<option value="between">Between</option>
 						</select></label>
 					<div class="controls equals" >
-							<input type="text" id="created_date" name="created_date"
+							<input type="text" id="created_time" name="created_time"
 								placeholder="MM/DD/YYYY" class="date input" />
 					</div>
 					<div class="controls between hide" >
-							<input type="text" id="created_date_start" name="created_date_start"
+							<input type="text" id="created_time_start" name="created_time_start"
 								placeholder="MM/DD/YYYY" class="date input" /> to
-							<input type="text" id="created_date_end" name="created_date_end"
+							<input type="text" id="created_time_end" name="created_time_end"
 								placeholder="MM/DD/YYYY" class="date input" />
 					</div>
 				</div>
 				<div class="control-group row-filter" id="deal-closed-filter">
-					<label class="control-label"><b>Deal Closed</b><select name="closed_filter_type" class="filter_type" style="max-width: 90px;margin-left: 20px;">
+					<label class="control-label"><b>Deal Closed</b><select name="close_date_filter" class="filter_type" style="max-width: 90px;margin-left: 20px;">
 								<option value="equals">Equals</option>
 								<option value="between">Between</option>
 						</select></label>
 					<div class="controls equals" >
-							<input type="text" id="closed_date" name="closed_date"
+							<input type="text" id="close_date" name="close_date"
 								 placeholder="MM/DD/YYYY" class="date input" />
 					</div>
 					<div class="controls between hide" >
-							<input type="text" id="closed_date_start" name="closed_date_start"
+							<input type="text" id="close_date_start" name="close_date_start"
 								placeholder="MM/DD/YYYY" class="date input" /> to
-							<input type="text" id="closed_date_end" name="colsed_date_end"
+							<input type="text" id="close_date_end" name="colse_date_end"
 								placeholder="MM/DD/YYYY" class="date input" />
 					</div>
 				</div>

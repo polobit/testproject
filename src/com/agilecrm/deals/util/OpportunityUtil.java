@@ -719,33 +719,32 @@ public class OpportunityUtil
 	    if (checkJsonString(filterJson, "value_end"))
 		searchMap.put("value <", Long.parseLong(filterJson.getString("value_end")));
 
-	    if (checkJsonString(filterJson, "closed_filter_type")
-		    && filterJson.getString("closed_filter_type").equalsIgnoreCase("equals"))
+	    if (checkJsonString(filterJson, "probability_filter")
+		    && filterJson.getString("probability_filter").equalsIgnoreCase("equals"))
 	    {
-		if (filterJson.has("closed_date") && StringUtils.isNotEmpty(filterJson.getString("closed_date")))
+		if (checkJsonString(filterJson, "probability"))
 		{
-		    long closeDate = Long.parseLong(filterJson.getString("closed_date"));
-		    searchMap.put("close_date >", closeDate / 1000);
-		    searchMap.put("close_date <", closeDate / 1000 + 86400);
+		    long probability = Long.parseLong(filterJson.getString("probability").replace("%", ""));
+		    searchMap.put("probability", probability);
 		}
 
 	    }
 	    else
 	    {
-		if (filterJson.has("closed_date_start")
-			&& StringUtils.isNotEmpty(filterJson.getString("closed_date_start")))
+		if (checkJsonString(filterJson, "probability_start"))
 		{
-		    long closeDate = Long.parseLong(filterJson.getString("closed_date_start"));
-		    searchMap.put("close_date >", closeDate / 1000);
+		    long probability = Long.parseLong(filterJson.getString("probability_start").replace("%", ""));
+		    searchMap.put("probability >", probability);
 		}
-		if (filterJson.has("closed_date_end")
-			&& StringUtils.isNotEmpty(filterJson.getString("closed_date_end")))
+		if (checkJsonString(filterJson, "probability_end"))
 		{
-		    long closeDate = Long.parseLong(filterJson.getString("closed_date_end"));
-		    searchMap.put("close_date >", closeDate / 1000);
+		    long probability = Long.parseLong(filterJson.getString("probability_end").replace("%", ""));
+		    searchMap.put("probability >", probability);
 		}
 	    }
 
+	    searchMap.putAll(getDateFilterCondition(filterJson, "close_date"));
+	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
 	    if (count != 0)
 		return dao.fetchAllByOrder(count, cursor, searchMap, true, false, "-created_time");
 
@@ -757,6 +756,58 @@ public class OpportunityUtil
 	    e.printStackTrace();
 	}
 	return null;
+    }
+
+    private static Map<String, Object> getDateFilterCondition(org.json.JSONObject json, String fieldName)
+    {
+
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+
+	try
+	{
+	    if (checkJsonString(json, fieldName + "_filter"))
+	    {
+		if (json.getString(fieldName + "_filter").equalsIgnoreCase("equals"))
+		{
+		    if (checkJsonString(json, fieldName))
+		    {
+			long closeDate = Long.parseLong(json.getString(fieldName));
+			searchMap.put(fieldName + " >", closeDate / 1000);
+			searchMap.put(fieldName + " <", closeDate / 1000 + 86400);
+		    }
+		    else if (fieldName.equalsIgnoreCase("created_time"))
+		    {
+			long createdTime = System.currentTimeMillis() / 1000;
+			searchMap.put(fieldName + " >", createdTime);
+		    }
+
+		}
+		else
+		{
+		    if (checkJsonString(json, fieldName + "_start"))
+		    {
+			long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
+			searchMap.put(fieldName + " >", closeDate / 1000);
+		    }
+		    if (checkJsonString(json, fieldName + "_end"))
+		    {
+			long closeDate = Long.parseLong(json.getString(fieldName + "_end"));
+			searchMap.put(fieldName + " >", closeDate / 1000);
+		    }
+		}
+	    }
+	}
+	catch (NumberFormatException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	return searchMap;
     }
 
     private static boolean checkJsonString(org.json.JSONObject json, String key)
