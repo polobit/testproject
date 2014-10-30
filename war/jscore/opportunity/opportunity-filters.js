@@ -34,7 +34,7 @@ $(function () {
 			var bwCount = $("#filter_options").find('select option[value="between"]:selected').length;
 			var valid = true;
 			if(bwCount > 1)
-				valid = confirm(msg);
+				valid = false;
 			if(valid){
 				$('#filter_options .filter_type').val('equal');
 				$(this).val('between');
@@ -44,6 +44,7 @@ $(function () {
 				$('#'+filter+' .equals').hide();
 				$('#'+filter+' .between').show();
 			} else {
+				alert('You can only use one "between" condition for filtering.');
 				$(this).val('equals');
 			}
 			
