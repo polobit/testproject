@@ -1,0 +1,120 @@
+<script id="deal-filter-template" type="text/html">
+<div class="widget-box" id="widget-box">
+	<div id="deal-filters" class="btn-group helpdesk-filters">
+		<a id="show-filter-button" class="btn btn-primary dropdown-toggle" title="Filters">
+			<i id="icon-filter" class="icon-filter icon-white"></i>
+		</a>
+		<div class="dropdown-menu pull-right" id="filter_options"
+			style="margin-top: 5px; padding: 0px; background-color: #cad2dd;">
+			<div id="filter_list">
+				<div class="arrow"></div>
+				<div id="popover-content" class="popover-content">
+					<div id="popup_header" class="popup_header" style="padding-bottom: 5px;">
+						<span id="filters-heading" class="heading" style="font-size: 11px;">Filters</span> <span
+							id="clear-ticket-filters" class="btn btn-small pull-left"
+							style="font-size: 9px; font-weight: bold; color: #475b6f; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5); padding: 2px 6px 2px 6px;">Clear</span>
+						<span id="deals-filter-validate" class="btn btn-primary btn-small pull-right save"
+							style="font-size: 9px; font-weight: bold; color: #fff; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3); padding: 2px 6px 2px 6px;">Done</span>
+					</div>
+					<style>
+						.ticket-filter-container select, .ticket-filter-container input{
+							width: 100%;
+							height: 23px;
+							font-size: 10px;
+						}
+						.ticket-filter-container label{
+							font-size: 11px;
+							width: 170px;
+							height: 20px;
+							margin-bottom: 0;
+						}
+						.row-filter{
+							padding-top: 4px !important;
+						}
+					</style>
+					<div id="deal-filter-container" class="deal-filter-container inner-box">
+						<form id="dealsFilterForm" name="dealsFilterForm" role="form">
+			<fieldset>
+				<div class="control-group row-filter">
+					<label class="control-label"><b>Owner </b></label>
+					<div class="controls" id="owners">
+						<select id="owners-list" name="owner_id"></select>
+						<img class="loading-img" src="img/21-0.gif"></img>
+					</div>
+				</div>
+				<div class="control-group row-filter">
+					<label class="control-label"><b>Track </b></label>
+					<div class="controls">
+						<span><select id="pipeline" name="pipeline_id">
+								<option value="">Select..</option>
+						</select></span><img class="loading-img" src="img/21-0.gif"></img>
+					</div>
+				</div>
+				<div class="control-group row-filter">
+					<label class="control-label"><b>Milestone </b></label>
+					<div class="controls">
+						<span><select id="milestone" name="milestone">
+								<option value="">Select..</option>
+						</select></span><img class="loading-img" src="img/21-0.gif" style="display:none;"></img>
+					</div>
+				</div>
+					
+				<div class="control-group row-filter" id="deal-value-filter">
+					<label class="control-label"><b>Value</b><select name="value_filter_type" class="filter_type" style="max-width: 90px;margin-left: 20px;">
+								<option value="equals">Equals</option>
+								<option value="between">Between</option>
+						</select></label>
+					<div class="controls equals" >
+							<input type="text" id="value" name="value"
+								placeholder="Value" />
+					</div>
+					<div class="controls between hide" >
+							<input type="text" id="value_start" name="value_start"
+								placeholder="Value Start"/> to
+							<input type="text" id="value_end" name="value_end"
+								placeholder="Value End" class="between hide" />
+					</div>
+				</div>
+				<div class="control-group row-filter" id="deal-created-filter">
+					<label class="control-label"><b>Deal Created</b><select name="created_filter_type" class="filter_type" style="max-width: 90px;margin-left: 20px;">
+								<option value="equals">Equals</option>
+								<option value="between">Between</option>
+						</select></label>
+					<div class="controls equals" >
+							<input type="text" id="created_date" name="created_date"
+								placeholder="MM/DD/YYYY" class="date input" />
+					</div>
+					<div class="controls between hide" >
+							<input type="text" id="created_date_start" name="created_date_start"
+								placeholder="MM/DD/YYYY" class="date input" /> to
+							<input type="text" id="created_date_end" name="created_date_end"
+								placeholder="MM/DD/YYYY" class="date input" />
+					</div>
+				</div>
+				<div class="control-group row-filter" id="deal-closed-filter">
+					<label class="control-label"><b>Deal Closed</b><select name="closed_filter_type" class="filter_type" style="max-width: 90px;margin-left: 20px;">
+								<option value="equals">Equals</option>
+								<option value="between">Between</option>
+						</select></label>
+					<div class="controls equals" >
+							<input type="text" id="closed_date" name="closed_date"
+								 placeholder="MM/DD/YYYY" class="date input" />
+					</div>
+					<div class="controls between hide" >
+							<input type="text" id="closed_date_start" name="closed_date_start"
+								placeholder="MM/DD/YYYY" class="date input" /> to
+							<input type="text" id="closed_date_end" name="colsed_date_end"
+								placeholder="MM/DD/YYYY" class="date input" />
+					</div>
+				</div>
+			</fieldset>
+		</form>
+					</div>
+					<!-- End of filters-container -->
+				</div>
+				<!-- popover-content -->
+			</div>
+		</div>
+		<!-- dropdown-menu class div-->
+	</div>
+</script>

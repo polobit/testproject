@@ -61,6 +61,7 @@ var DealsRouter = Backbone.Router.extend({
 					// Shows deals chart
 					dealsLineChartByPipeline(pipeline_id);
 					setupDealsTracksList(cel);
+					setupDealFilters(cel);
 				},
 				appendItemCallback : function(el)
 				{ 
