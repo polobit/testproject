@@ -69,6 +69,8 @@ public class FreshbooksSyncImpl extends OneWaySyncService
 				    saveInvoices(ctx, contacts.get(j));
 
 				}
+				Contact ctx = wrapContactToAgileSchemaAndSave(customers.get(i));
+				saveInvoices(ctx, customers.get(i));
 			    }
 			    else
 			    {
