@@ -42,14 +42,6 @@ function showFilters(){
 	el.show();
 	//$("#deals-filter").modal('show');
 	
-	add_custom_fields_to_form({}, function(data){
-		var el_custom_fields = show_custom_fields_helper(data["custom_fields"], []);
-		$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
-		
-	}, "DEAL")
-	
-	
-	
 	// Fills owner select element
 	populateUsers("owners-list", el, undefined, undefined, function(data){
 		
@@ -61,21 +53,20 @@ function showFilters(){
 	agile_type_ahead("relates_to", el, contacts_typeahead);
 
 	populateTracks(el, undefined, undefined, function(data){});
-	// Enable the datepicker
-	$('#filter_options .date').datepicker({
-		format : 'mm/dd/yyyy',
-	});
-	
-	
 	
 	add_custom_fields_to_form({}, function(data){
 		console.log('----------------',data);
-		var el_custom_fields = show_custom_fields_helper(data["custom_fields"], []);
+		var el_custom_fields = getTemplate("deal-custom-filter",data["custom_fields"]);
 		//$(el_custom_fields).find('div.control-group').addClass('row-filter');
-		$("#dealsCustomFilterForm fieldset", el).html($(el_custom_fields)).find('div.control-group').addClass('row-filter');;
+		$("#dealsCustomFilterForm fieldset", el).html($(el_custom_fields)).find('div.control-group').addClass('row-filter');
 		
+		// Enable the datepicker
+		$('#filter_options .date').datepicker({
+			format : 'mm/dd/yyyy',
+		});
 		
 	}, "DEAL");
+	
 }
 
 function filterDeals(saveBtn){

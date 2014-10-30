@@ -747,11 +747,15 @@ public class OpportunityUtil
 		}
 	    }
 
+	    searchMap.put("created_time >", 0);
 	    searchMap.putAll(getDateFilterCondition(filterJson, "close_date"));
 	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
 	    Map<String, Object> customFilters = getCustomFieldFilters(filterJson.getJSONObject("customFields"));
 	    if (customFilters != null)
 		searchMap.putAll(customFilters);
+
+	    System.out.println("---------------" + searchMap.toString());
+
 	    if (count != 0)
 		return dao.fetchAllByOrder(count, cursor, searchMap, true, false, "-created_time");
 
@@ -774,20 +778,12 @@ public class OpportunityUtil
 	{
 	    if (checkJsonString(json, fieldName + "_filter"))
 	    {
-		if (json.getString(fieldName + "_filter").equalsIgnoreCase("equals"))
+		if (json.getString(fieldName + "_filter").equalsIgnoreCase("equals")
+			&& checkJsonString(json, fieldName))
 		{
-		    if (checkJsonString(json, fieldName))
-		    {
-			long closeDate = Long.parseLong(json.getString(fieldName));
-			searchMap.put(fieldName + " >", closeDate / 1000);
-			searchMap.put(fieldName + " <", closeDate / 1000 + 86400);
-		    }
-		    else if (fieldName.equalsIgnoreCase("created_time"))
-		    {
-			long createdTime = System.currentTimeMillis() / 1000;
-			searchMap.put(fieldName + " >", createdTime);
-		    }
-
+		    long closeDate = Long.parseLong(json.getString(fieldName));
+		    searchMap.put(fieldName + " >", closeDate / 1000);
+		    searchMap.put(fieldName + " <", closeDate / 1000 + 86400);
 		}
 		else
 		{

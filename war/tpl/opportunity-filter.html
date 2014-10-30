@@ -36,7 +36,7 @@
 						<form id="dealsFilterForm" name="dealsFilterForm" role="form" style="margin-bottom:0px;">
 			<fieldset>
 				<div class="control-group row-filter">
-					<label class="control-label"><b>Owner </b></label>
+					<label class="control-label"><b>Owner </b> <a data-toggle="collapse" href="#owners" style="display:inline;">+</a></label>
 					<div class="controls" id="owners">
 						<select id="owners-list" name="owner_id"></select>
 						<img class="loading-img" src="img/21-0.gif"></img>
@@ -132,9 +132,56 @@
 </script>
 
 <script id="deal-custom-filter-template" type="text/html">
-	<fieldset>
 		{{#each this}}
-			
+			{{#if_equals field_type "TEXT"}}
+			<div class="control-group row-filter">
+				<label class="control-label"><b>{{field_label}}</b></label>
+					<div class="controls" >
+							<input type="text" id="{{replace_spaces field_label}}" name="{{replace_spaces field_label}}"/>
+					</div>
+			</div>
+			{{/if_equals}}
+			{{#if_equals field_type "TEXTAREA"}}
+			<div class="control-group row-filter">
+				<label class="control-label"><b>{{field_label}}</b></label>
+					<div class="controls" >
+							<textarea id="{{replace_spaces field_label}}" name="{{replace_spaces field_label}}"/>
+					</div>
+			</div>
+			{{/if_equals}}
+			{{#if_equals field_type "CHECKBOX"}}
+			<div class="control-group row-filter">
+				<label class="control-label"><input type="checkbox" id="{{replace_spaces field_label}}" name="{{replace_spaces field_label}}" style="margin-right:5px;"/><b>{{field_label}}</b></label>
+			</div>
+			{{/if_equals}}
+			{{#if_equals field_type "LIST"}}
+			<div class="control-group row-filter">
+				<label class="control-label"><b>{{field_label}}</b></label>
+					<div class="controls" >
+							<select id="{{replace_spaces field_label}}" name="{{replace_spaces field_label}}">
+								<option value="">Select..</option>
+								{{{buildOptions field_data}}}
+							</select>
+					</div>
+			</div>
+			{{/if_equals}}
+			{{#if_equals field_type "DATE"}}
+			<div class="control-group row-filter" id="deal_{{replace_spaces field_label}}_filter">
+				<label class="control-label"><b>{{field_label}}</b><select name="{{replace_spaces field_label}}_filter" class="filter_type" style="max-width: 90px;margin-left: 20px;">
+								<option value="equals">Equals</option>
+								<option value="between">Between</option>
+						</select></label>
+					<div class="controls equals" >
+							<input type="text" id="{{replace_spaces field_label}}" name="{{replace_spaces field_label}}"
+								 placeholder="MM/DD/YYYY" class="date input" />
+					</div>
+					<div class="controls between hide" >
+							<input type="text" id="{{replace_spaces field_label}}_start" name="{{replace_spaces field_label}}_start"
+								placeholder="MM/DD/YYYY" class="date input" /> to
+							<input type="text" id="{{replace_spaces field_label}}_end" name="{{replace_spaces field_label}}_end"
+								placeholder="MM/DD/YYYY" class="date input" />
+					</div>
+			</div>
+			{{/if_equals}}
 		{{/each}}
-	</fieldset>
 </script>
