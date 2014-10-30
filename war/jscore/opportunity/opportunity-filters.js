@@ -61,6 +61,8 @@ $(function () {
 		eraseCookie('deal-filters');
 	});
 	
+	$('#filter_options a.changeIcon').live('click',function(e){$(this).find('i').toggleClass('icon-plus icon-minus')});
+	
 });
 
 /**
@@ -89,7 +91,7 @@ function showFilters(){
 				// Fill the filters based on previosly selected filters in cookie.
 				if(value){
 					if($('[name="'+key+'"]').closest('.controls').height()== 0 && key.indexOf('_filter')<0){
-						$('[name="'+key+'"]').closest('.controls').collapse('show');
+						$('[name="'+key+'"]').closest('.control-group').find('a.changeIcon').trigger('click');
 					}
 					
 					if(key=='pipeline_id'){
