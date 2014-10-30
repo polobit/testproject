@@ -46,6 +46,7 @@ var CalendarRouter = Backbone.Router.extend({
 		this.tasksListView.collection.fetch();
 
 		$('#tasks').html(this.tasksListView.el);
+		$('#event-list-filters').html(getTemplate('event-filter'));
 	},
 
 	/* Show tasks list when All Tasks clicked under calendar page. */
