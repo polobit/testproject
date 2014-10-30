@@ -4,6 +4,9 @@ var QUERY_RESULTS;
 // Saves map of key: name and value: contact id
 var TYPEHEAD_TAGS = {};
 
+//Saves map of key: name and value: contact email
+var TYPEHEAD_EMAILS = {};
+
 /**
  * This script file defines simple search keywords entered in input fields are 
  * sent to back end as query through bootstrap typeahead. Methods render, matcher 
@@ -28,7 +31,7 @@ var TYPEHEAD_TAGS = {};
  * @author Yaswanth
  * 
  */
-function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url) {
+function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch) {
 
     // Turn off browser default auto complete
     $('#' + id, el).attr("autocomplete", "off");
@@ -119,6 +122,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         		$.each(data, function (index, item){
         			tag_name = items_list[index];
         			TYPEHEAD_TAGS[tag_name] = item.id;
+        			TYPEHEAD_EMAILS[tag_name] = getContactEmail(item);
         		});
 
         		/*
@@ -231,21 +235,35 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
             // Return if items are not defined and it is not search in nav bar
             if (!items) return;
 
-            // If tag already exists returns
-            $.each($('.tags', el).children('li'), function (index, tag){
+            if(isEmailSearch)
+            {
+                // If email already exists returns
+               $.each($('.tags', el).children('li'), function (index, tag){
 
-                if ($(tag).attr('data') == TYPEHEAD_TAGS[items]){
-                    tag_not_exist = false;
-                    return;
-                }
-            });
-
-            // add tag
-            if (tag_not_exist)
-            	{
+                    if ($(tag).attr('data') == TYPEHEAD_EMAILS[items]){
+                    	email_not_exist = false;
+                        return;
+                    }
+                });
+                if(email_not_exist && (TYPEHEAD_EMAILS[items] != "No email"))
+                	$('#' + id, el).closest("div.controls").find(".tags").append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_EMAILS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
             	
-            		$('.tags', el).append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
-            	}
+            }
+            else
+            {
+	            // If tag already exists returns
+	            $.each($('.tags', el).children('li'), function (index, tag){
+	
+	                if ($(tag).attr('data') == TYPEHEAD_TAGS[items]){
+	                    tag_not_exist = false;
+	                    return;
+	                }
+	            });
+	
+	            // add tag
+	            if (tag_not_exist)
+	            	$('.tags', el).append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
+            }
         },
         // Needs to be overridden to set timedelay on search
         keyup: function (e) {
@@ -362,6 +380,15 @@ function contacts_typeahead(data)
     
 }
 
+function getContactEmail(contact)
+{
+	var email=getPropertyValue(contact.properties, "email");
+	email = email!=undefined ? email.trim():"";
+	
+	if(email.length)return email;
+	else return "No email";
+
+}
 
 function getContactName(contact)
 {

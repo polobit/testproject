@@ -731,6 +731,14 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		var el = $("#content").html(getTemplate("send-email", model));
 		
+		// Call setupTypeAhead to get contacts
+		agile_type_ahead("to", el, contacts_typeahead, null, null, null, null, true);
+		
+		agile_type_ahead("email_cc", el, contacts_typeahead, null, null, null, null, true);
+		
+		agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, null, null, true);
+		
+		
 		if (id)
 			$("#emailForm", el).find('input[name="to"]').val(id);
 		else

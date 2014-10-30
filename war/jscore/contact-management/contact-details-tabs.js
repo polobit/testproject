@@ -331,6 +331,31 @@ $(function(){
 		 if($(this).attr('disabled'))
 	   	     return;
 		 
+		// serialize form.
+		var json = serializeForm("emailForm");
+		
+		if((json.contact_to_ids).join())
+			json.to += ((json.to != "") ? "," : "") + (json.contact_to_ids).join();
+		
+		if((json.contact_cc_ids).join())
+			json.email_cc += ((json.email_cc != "") ? "," : "") + (json.contact_cc_ids).join();
+		
+		if((json.contact_bcc_ids).join())
+			json.email_bcc += ((json.email_bcc != "") ? "," : "") + (json.contact_bcc_ids).join();
+	
+		if(json.to == "" || json.to == null || json.to == undefined)
+		{
+			// Appends error info to form actions block.
+			$save_info = $('<span style="display:inline-block;color:#df382c;">This field is required.</span>');	
+			$('#emailForm').find("#to").closest(".controls > div").append($save_info);
+			$('#emailForm').find("#to").focus();
+			// Hides the error message after 3 seconds
+			$save_info.show().delay(3000).hide(1);
+			
+			enable_send_button($('#sendEmail'));
+			return;
+		}
+		
 		// Is valid
 		if(!isValidForm($('#emailForm')))
 	      	return;
@@ -340,9 +365,6 @@ $(function(){
 		
 		// Saves tinymce content to textarea
 		save_content_to_textarea('email-body');
-		
-		// serialize form.
-		var json = serializeForm("emailForm");
 		
 		// Navigates to previous page on sending email
 		$.ajax({
