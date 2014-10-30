@@ -394,7 +394,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 		if (!contact && this.contactDetailView && this.contactDetailView.model != null)
 		{
-			contact_collection = this.contactDetailView;
+			//contact_collection = this.contactDetailView;
 
 			if (id == this.contactDetailView.model.toJSON()['id'])
 			{
@@ -444,9 +444,10 @@ var ContactsRouter = Backbone.Router.extend({
 
 			this.contactsListView.collection.url = "core/api/contacts";
 			contact = this.contactsListView.collection.get(id);
-			contact_collection = this.contactsListView.collection;
-
 		}
+		
+		// Assigning contact collection
+		contact_collection = this.contactsListView.collection;
 
 		add_recent_view(contact);
 
