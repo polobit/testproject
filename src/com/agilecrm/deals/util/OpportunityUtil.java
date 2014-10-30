@@ -706,19 +706,20 @@ public class OpportunityUtil
 
 	try
 	{
-	    if (filterJson.has("pipeline_id") && StringUtils.isNotEmpty(filterJson.getString("pipeline_id")))
+	    if (checkJsonString(filterJson, "pipeline_id"))
 		searchMap.put("pipeline",
 			new Key<Milestone>(Milestone.class, Long.parseLong(filterJson.getString("pipeline_id"))));
-	    if (filterJson.has("milestone") && filterJson.getString("milestone") != null)
+	    if (checkJsonString(filterJson, "milestone"))
 		searchMap.put("milestone", filterJson.getString("milestone"));
-	    if (filterJson.has("owner_id") && filterJson.getLong("owner_id") != 0)
-		searchMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, filterJson.getLong("owner_id")));
-	    if (filterJson.has("value_start") && filterJson.getLong("value_start") != 0)
-		searchMap.put("value >", new Key<DomainUser>(DomainUser.class, filterJson.getLong("value_start")));
-	    if (filterJson.has("value_end") && filterJson.getLong("value_end") != 0)
-		searchMap.put("value <", new Key<DomainUser>(DomainUser.class, filterJson.getLong("value_end")));
+	    if (checkJsonString(filterJson, "owner_id"))
+		searchMap.put("ownerKey",
+			new Key<DomainUser>(DomainUser.class, Long.parseLong(filterJson.getString("owner_id"))));
+	    if (checkJsonString(filterJson, "value_start"))
+		searchMap.put("value >", Long.parseLong(filterJson.getString("value_start")));
+	    if (checkJsonString(filterJson, "value_end"))
+		searchMap.put("value <", Long.parseLong(filterJson.getString("value_end")));
 
-	    if (filterJson.has("closed_filter_type")
+	    if (checkJsonString(filterJson, "closed_filter_type")
 		    && filterJson.getString("closed_filter_type").equalsIgnoreCase("equals"))
 	    {
 		if (filterJson.has("closed_date") && StringUtils.isNotEmpty(filterJson.getString("closed_date")))
@@ -757,4 +758,25 @@ public class OpportunityUtil
 	}
 	return null;
     }
+
+    private static boolean checkJsonString(org.json.JSONObject json, String key)
+    {
+
+	try
+	{
+	    if (!json.has(key))
+		return false;
+	    if (json.getString(key) == null || json.getString(key) == "null" || json.getString(key).length() == 0)
+		return false;
+
+	    return true;
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	    return false;
+	}
+    }
+
 }
