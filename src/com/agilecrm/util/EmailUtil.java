@@ -96,8 +96,14 @@ public class EmailUtil
 			tokenSet.add(StringUtils.trim(email));
 		}
 
+<<<<<<< HEAD
 		return tokenSet;
 	}
+=======
+	// Comment script tags.
+	emailBody = emailBody.replaceAll("(<script|<SCRIPT)", "<!--<script").replaceAll("(</script>|</SCRIPT>)",
+		"<script>-->");
+>>>>>>> 7da812a... Email White label
 
 	/**
 	 * Sends an email using to remote object <code>SendGridEmail</code>
@@ -488,5 +494,8 @@ public class EmailUtil
     {
 	return BillingRestrictionUtil.getBillingRestriction(null, null).getCurrentLimits().isEmailWhiteLabelEnabled();
     }
+<<<<<<< HEAD
 >>>>>>> EmailsUIFix-11/20/14
+=======
+>>>>>>> 7da812a... Email White label
 }
