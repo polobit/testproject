@@ -1,4 +1,8 @@
 <!-- Indices written at Wed, 29 Oct 2014 13:17:02 IST -->
 
-<datastore-indexes/>
-
+<datastore-index kind="Opportunity" ancestor="false" source="manual">
+        <property name="milestone" direction="asc"/>
+        <property name="ownerKey" direction="asc"/>
+        <property name="pipeline" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
