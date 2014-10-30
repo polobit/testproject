@@ -60,11 +60,13 @@ public class BillingRestriction
     public Integer pageviews_count;
     public Integer emails_count;
     public Integer users_count;
-    
+
     public Integer companies_count;
-    
-    public Integer one_time_emails_count;
-    
+
+    public Integer one_time_emails_count = 0;
+
+    public Integer max_emails_count;
+
     public Long email_pack_start_time = 0L;
 
     @NotSaved(IfDefault.class)
@@ -98,6 +100,8 @@ public class BillingRestriction
     private BillingRestriction(PlanLimits limits)
     {
 	planDetails = limits;
+
+	planDetails.setEmailWhiteLabelEnabled(max_emails_count != null && max_emails_count > 0);
     }
 
     /**

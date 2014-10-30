@@ -331,6 +331,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    // Email count and according to plan and extra free pack that is
 	    // provided to all users
 	    restriction.one_time_emails_count = (count * 1000);
+	    restriction.max_emails_count = restriction.one_time_emails_count;
 	    restriction.save();
 	}
 	finally
