@@ -56,8 +56,26 @@ public class FreshbooksSyncImpl extends OneWaySyncService
 		    System.out.println("fetched customer :" + customers.length());
 		    for (int i = 0; i < customers.length(); i++)
 		    {
-			Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i));
-			saveInvoices(contact, customers.get(i));
+			JSONObject org = customers.getJSONObject(i);
+			if (org.has("contacts"))
+			{
+			    JSONObject contact = org.getJSONObject("contacts");
+			    if (contact != null && contact.length() > 0)
+			    {
+				JSONArray contacts = contact.getJSONArray("contact");
+				for (int j = 0; j < contacts.length(); j++)
+				{
+				    Contact ctx = wrapContactToAgileSchemaAndSave(contacts.get(j));
+				    saveInvoices(ctx, contacts.get(j));
+
+				}
+			    }
+			    else
+			    {
+				Contact ctx = wrapContactToAgileSchemaAndSave(customers.get(i));
+				saveInvoices(ctx, customers.get(i));
+			    }
+			}
 		    }
 
 		}
