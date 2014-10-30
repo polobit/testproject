@@ -20,7 +20,7 @@ function isArray(a)
 function load_events_from_google(callback)
 {
 	if(readCookie('event-filters') && JSON.parse(readCookie('event-filters')).type == 'agile')
-			return;
+		return;
 	
 	// Name of the cookie to store/fetch calendar prefs. Current user id is set
 	// in cookie name to avoid
@@ -87,8 +87,8 @@ function get_google_calendar_event_source(data, callback)
 function showCalendar() {
 	
 	// Customized fetch options
-	if(readCookie('event-filters') && JSON.parse(readCookie('event-filters')).type != 'agile')
-	_init_gcal_options();
+	if(!readCookie('event-filters') || JSON.parse(readCookie('event-filters')).type != 'agile')
+		_init_gcal_options();
 
 	$('#calendar').fullCalendar({
     	
@@ -113,7 +113,7 @@ function showCalendar() {
         	
         	var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
         	
-        	if(eventFilters.owner_id.length > 0)
+        	if(readCookie('event-filters') && eventFilters.owner_id.length > 0)
         		eventsURL += '&owner_id='+eventFilters.owner_id;
         	console.log('-----------------',eventsURL);
             $.getJSON(eventsURL, function (doc) {

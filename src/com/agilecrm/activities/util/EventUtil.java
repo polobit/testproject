@@ -101,6 +101,28 @@ public class EventUtil
      *            End time of the search range
      * @return List of events matched to the search range
      */
+    public static List<Event> getEvents(Long start, Long end)
+    {
+	try
+	{
+	    return dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end).list();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Fetches all the events, which are in the given search range
+     * 
+     * @param start
+     *            Start time of the search range
+     * @param end
+     *            End time of the search range
+     * @return List of events matched to the search range
+     */
     public static List<Event> getEvents(Long start, Long end, Long ownerId)
     {
 	try
