@@ -165,6 +165,9 @@ public class BillingRestriction
      */
     public PlanLimits getCurrentLimits()
     {
+	if (one_time_emails_count != null && one_time_emails_count > 0)
+	    planDetails.setEmailWhiteLabelEnabled(true);
+	
 	return planDetails;
     }
 
