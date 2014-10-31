@@ -87,7 +87,7 @@ public class StripeChargeWebhook extends HttpServlet
 		    if (contact == null)
 		    {
 			contact = new Contact();
-			if (!StringUtils.isBlank(email))
+			if (!(StringUtils.isBlank(email) || StringUtils.equals(email, "null")))
 			    contactProperties.add(new ContactField(Contact.EMAIL, email, null));
 		    }
 
