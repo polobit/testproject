@@ -447,7 +447,8 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 		
 		// Assigning contact collection
-		contact_collection = this.contactsListView.collection;
+		if(this.contactsListView)
+			contact_collection = this.contactsListView.collection;
 
 		add_recent_view(contact);
 
