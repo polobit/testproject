@@ -11,6 +11,8 @@ var WidgetsRouter = Backbone.Router
 												"Linkedin" : "Linkedin", "Linkedin/:id" : "Linkedin",
 
 												"Twitter" : "Twitter", "Twitter/:id" : "Twitter",
+												
+												"GooglePlus" : "GooglePlus", "GooglePlus/:id" : "GooglePlus",
 
 												"Rapleaf" : "Rapleaf", "Rapleaf/:id" : "Rapleaf",
 
@@ -988,6 +990,88 @@ var WidgetsRouter = Backbone.Router
 
 																$("#prefs-tabs-content").html(this.xero_import_settings.render().el);
 
-												}
+												},
+												
+												//Reddy code
+												/**
+												 * Manages GooglePlus widget
+												 */
+												GooglePlus: function(id) {
+
+												    if (!id) {
+												        show_set_up_widget("GooglePlus", 'googleplus-login',
+												            '/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.href) + "/googleplus");
+												    } else {
+												    	
+												    	var apiUrl = "core/api/widgets/social/profile/";
+												    	
+												    	if (!isNaN(parseInt(id))) {
+												    		apiUrl = apiUrl + id;
+												    	} else {
+												    		var data1 = $.parseJSON(
+												    		        $.ajax({
+												    		            url: "core/api/widgets/GooglePlus", 
+												    		            async: false,
+												    		            dataType: 'json'
+												    		        }).responseText
+												    		    );
+												    		//console.clear();
+												    		//console.log(data1);												    		
+												    		if (data1) {
+									                        	apiUrl = apiUrl + data1.id;
+									                        } else {
+									                            show_set_up_widget("GooglePlus", 'googleplus-login',
+									                            		'/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.href) + "/googleplus");												                            
+									                            return;
+									                        }
+												    	}
+												    	
+												            $
+												                .getJSON(
+												                		apiUrl ,
+												                    function(data) {
+												                        set_up_access(
+												                            "GooglePlus",
+												                            'googleplus-login',
+												                            data,
+												                            '/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#GooglePlus/googleplus"));
+
+												                    }).error(
+												                    function(data) {
+
+												                        console.log(data);
+												                        setUpError("GooglePlus", "widget-settings-error", data.responseText,
+												                            window.location.protocol + "//" + window.location.host + "/#GooglePlus/googleplus1");
+
+												                    });
+
+												    }
+
+												}//End of Gplus
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
 								});
 
