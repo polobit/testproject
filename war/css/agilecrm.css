@@ -1645,5 +1645,15 @@ cursor: pointer;
 	z-index: 2050 !important;
 }
 
+/* choose avatars */
 
+.choose-avatars table tr td a
+{
+margin: 3px 51px 17px 6px;
+display:block;
+}
 
+.choose-avatars table tr td a img
+{
+	padding:11px 11px;
+}

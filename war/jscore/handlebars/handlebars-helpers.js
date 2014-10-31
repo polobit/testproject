@@ -2982,5 +2982,21 @@ $(function()
 
 		return monthArray[month_index - 1];
 	});
+	
+	/**
+	 * Choose Avatar templates
+	 */
+	Handlebars.registerHelper('get_avatars_template', function(options) {
+		var template = getTemplate("choose-avatar-images-modal", {});
+		return template;
+	});
+	
+	// To compare values
+	Handlebars.registerHelper('same_value', function(value, target, options) {
+		if (value != target)
+			return options.inverse(this);
+		else
+			return options.fn(this);
+	});
 
 });
