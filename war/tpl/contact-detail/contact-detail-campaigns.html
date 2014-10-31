@@ -27,8 +27,9 @@
 								class="close remove-active-campaign" contact_name = "{{contactShortName}}" campaign_name="{{campaign_name}}" title="Remove from Campaign">&times</a></span></li> 
 					{{/each}}
                     </ul>
-
+	{{#canEditCurrentContact "1"}}
             <a class="add-to-campaign" style="margin-top:1%;" href="#"><i class="icon-plus-sign"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
+	{{/canEditCurrentContact}}
             <form id="add-to-campaign-form" class="show_campaigns_list" style="display:none;">
             	<div class="control-group">
                 	<div class="controls">
@@ -43,8 +44,9 @@
          </div>
          
          {{else}}
-         
-         <a class="add-to-campaign" style="margin-top:1%;" href="#"><i class="icon-plus-sign"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
+         {{#canEditCurrentContact "1"}}
+        	 <a class="add-to-campaign" style="margin-top:1%;" href="#"><i class="icon-plus-sign"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
+		{{/canEditCurrentContact}}
          	<form id="add-to-campaign-form" class="show_campaigns_list" style="display: none;">
 				<div class="control-group">
                 	<div class="controls">

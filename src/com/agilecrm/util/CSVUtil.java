@@ -56,6 +56,7 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
+import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.files.AppEngineFile;
@@ -254,6 +255,9 @@ public class CSVUtil
 
 	System.out.println(csvData.size());
 
+	System.out.println("available scopes for user " + domainUser.email + ", scopes = "
+		+ accessControl.getCurrentUserScopes());
+
 	// Counters to count number of contacts saved contacts
 	int savedContacts = 0;
 	int mergedContacts = 0;
@@ -443,6 +447,15 @@ public class CSVUtil
 		    // Sets current object to check scope
 
 		    tempContact = ContactUtil.mergeContactFields(tempContact);
+		    accessControl.setObject(tempContact);
+		    if (!accessControl.canDelete())
+		    {
+			accessDeniedToUpdate++;
+			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+				"Access denied to update contact"));
+
+			continue;
+		    }
 		    isMerged = true;
 		}
 		else
@@ -471,6 +484,15 @@ public class CSVUtil
 
 		tempContact.save();
 	    }// end of try
+	    catch (AccessDeniedException e)
+	    {
+
+		accessDeniedToUpdate++;
+		System.out.println("ACL exception raised while saving contact ");
+		e.printStackTrace();
+		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), e.getMessage()));
+
+	    }
 	    catch (Exception e)
 	    {
 
@@ -518,32 +540,30 @@ public class CSVUtil
 
 	}// end of for loop
 
-	calculateTotalFailedContacts(status);
+	if (failedContacts.size() > 0)
+	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedContacts.size());
 
 	buildCSVImportStatus(status, ImportStatus.TOTAL, csvData.size());
 
 	if (savedContacts > 0)
 	{
 	    buildCSVImportStatus(status, ImportStatus.NEW_CONTACTS, savedContacts);
+	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts);
 	}
 	if (mergedContacts > 0)
 	{
-	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts + mergedContacts);
+	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, mergedContacts);
 
 	    buildCSVImportStatus(status, ImportStatus.MERGED_CONTACTS, mergedContacts);
-	    if (limitExceeded > 0)
-	    {
-		buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
-	    }
-	    if (accessDeniedToUpdate > 0)
-	    {
-		buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
-	    }
 
 	}
-	else
+	if (limitExceeded > 0)
 	{
-	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts);
+	    buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
+	}
+	if (accessDeniedToUpdate > 0)
+	{
+	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
 	}
 
 	// Sends notification on CSV import completion
@@ -879,19 +899,13 @@ public class CSVUtil
     public boolean isValidFields(Contact contact, Map<Object, Object> statusMap, List<FailedContactBean> failed,
 	    List<ContactField> properties, String[] csvValues)
     {
-	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.FIRST_NAME)))
+	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.FIRST_NAME))
+		&& StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
 	{
 	    buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
-	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "First name field can't be blank"));
+	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "Name field can't be blank"));
 	    return false;
 	}
-	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
-	{
-	    buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
-	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "Last name field can't be blank"));
-	    return false;
-	}
-
 	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.EMAIL)))
 	{
 	    buildCSVImportStatus(statusMap, ImportStatus.EMAIL_REQUIRED, 1);

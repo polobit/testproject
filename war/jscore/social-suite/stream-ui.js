@@ -52,7 +52,7 @@ function initializeSocialSuite()
 
 	// After clicking on logout, unregister all streams on server.
 	$('a').click(function(event)
-	{
+	{		
 		var herfLogout = $(this).attr("href");
 		if (herfLogout == "/login")
 			unregisterAll();

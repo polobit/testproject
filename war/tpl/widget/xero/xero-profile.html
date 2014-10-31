@@ -3,9 +3,9 @@
 <div class="widget_content">
 	<div  style="display:inline-block;">
 		<div  class="title_txt" style="display:inline-block;">
-			<a href="https://go.xero.com/Contacts/View.aspx?contactID={{Contact.ContactID}}" target="_blank"><h4 style="text-transform: capitalize;"><b>
+			<a href="https://go.xero.com/Contacts/View.aspx?contactID={{Contact.ContactID}}" target="_blank"><h4 style="text-transform: capitalize;">
 			{{Contact.Name}}<br>	
-			</b></h4></a>
+			</h4></a>
 		</div>
 	</div>
 	<div>
@@ -44,7 +44,7 @@
 		{{/if}}
 	</div>
 	<div>
-		<a class="btn" id="xero_add_invoice" style="margin-top:10px;cursor:pointer;" href="https://go.xero.com/AccountsReceivable/Edit.aspx?fromContactID={{Contact.ContactID}}" target="_blank"><i class="icon-plus"></i>Add Invoice</a>
+		<a  id="xero_add_invoice" href="https://go.xero.com/AccountsReceivable/Edit.aspx?fromContactID={{Contact.ContactID}}" target="_blank"><i class="icon-plus"></i>Add Invoice</a>
 	</div>
 </div>
 	{{#if invoice.Invoice}}
@@ -122,7 +122,7 @@
 <script id="xero-profile-addcontact-template" type="text/html">
 <div class="widget_content">
 		<div>{{{message}}}</div>
-		<a class="btn" id="xero_add_contact" style="margin-top:10px;cursor:pointer;"><i class="icon-plus"></i>Add Contact</a>
+		<a  id="xero_add_contact" style="margin-top:10px;"><i class="icon-plus"></i>Add Contact</a>
 	</div>
 </script>
 

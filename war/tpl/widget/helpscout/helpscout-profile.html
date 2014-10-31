@@ -17,8 +17,8 @@
 
 <script id="helpscout-profile-template" type="text/html">
 <div class="widget_content">
-<div class="row-fluid">
-	<div class="pull-left ml_5 span8">
+<div>
+	<div class="pull-left ml_5">
 		{{#if firstName}}
 			<p class="title_txt">{{firstName}} {{lastName}}</p>
 		{{/if}}
@@ -27,8 +27,9 @@
 		{{/if}}
 	</div>
 </div>
+<div class="clearfix"></div>
 <div class="clearfix" style="margin-top:5px;">
-	<a class="btn" id="add_conv"><i class="icon-plus"></i>New Conversation</a>
+	<a  id="add_conv"><i class="icon-plus"></i>New Conversation</a>
 	<p id="helpscout_loading" style="display:none;" >Please wait...</p>
 	<p id="helpscout_error" style="display:none;" >Please Try agian.</p>
 </div>						

@@ -45,16 +45,25 @@ public class ContactAccessControl extends UserAccessControl
 	}
     }
 
+    @Override
+    public void setObject(Object object)
+    {
+	if (object != null)
+	    contact = (Contact) object;
+	else
+	    contact = new Contact();
+    }
+
     public boolean canCreate()
     {
 	// If contact is defined it checks for update operation if owner in the
 	// contact and current owner is different
-	if (!isNewContact() && !checkOwner())
+	if (!isNew() && !checkOwner())
 	{
-	    return hasScope(UserAccessScopes.DELETE_CONTACTS) || hasScope(UserAccessScopes.UPDATE_CONTACT);
+	    return hasScope(UserAccessScopes.DELETE_CONTACTS);
 	}
 
-	if (isNewContact())
+	if (isNew())
 	    return hasScope(UserAccessScopes.CREATE_CONTACT);
 
 	return true;
@@ -64,9 +73,9 @@ public class ContactAccessControl extends UserAccessControl
     {
 	// Delete condition is checked only if current user is not owner of the
 	// contact
-	if (!isNewContact() && !checkOwner())
+	if (!isNew() && !checkOwner())
 	{
-	    return hasScope(UserAccessScopes.DELETE_CONTACTS) || hasScope(UserAccessScopes.UPDATE_CONTACT);
+	    return hasScope(UserAccessScopes.DELETE_CONTACTS);
 	}
 
 	return true;
@@ -79,7 +88,10 @@ public class ContactAccessControl extends UserAccessControl
     {
 	// If contact is defined it checks for update operation if owner in the
 	// contact and current owner is different
-	return hasScope(UserAccessScopes.VIEW_CONTACTS) || hasScope(UserAccessScopes.EXPORT_CONTACTS);
+	if (!checkOwner() || contact.getContactOwnerKey() == null)
+	    return hasScope(UserAccessScopes.VIEW_CONTACTS);
+
+	return true;
     }
 
     /**
@@ -89,6 +101,9 @@ public class ContactAccessControl extends UserAccessControl
      */
     public boolean checkOwner()
     {
+	if (contact == null || contact.getContactOwnerKey() == null)
+	    return true;
+
 	// Gets current user id and contact owner id and checks for equity
 	Long currentContactOwnerId = contact.getContactOwnerKey().getId();
 	UserInfo info = SessionManager.get();
@@ -103,14 +118,13 @@ public class ContactAccessControl extends UserAccessControl
 
 	return false;
     }
-    
 
     /**
      * Checks if contact is new
      * 
      * @return
      */
-    public boolean isNewContact()
+    public boolean isNew()
     {
 	if (contact == null || contact.id != null)
 	    return false;

@@ -20,12 +20,37 @@ $(function()
 	{
 		e.preventDefault();
 
+		if(!canRunBulkOperations())
+			{
+				showModalConfirmation("Bulk Change Owner", 
+						"You may not have permission to update some of the contacts selected. " +
+						"Proceeding with this operation will change the owner for only the contacts " +
+						"you are allowed to update.<br/><br/> Do you want to proceed?", 
+						show_bulk_owner_change_page
+						, function(){
+							// No callback
+							return;
+							},
+							function(){
+				
+							});
+			}
+		else
+			{
+				show_bulk_owner_change_page();
+			}
+		
+	});
+	
+	function show_bulk_owner_change_page()
+	{
 		var filter, id_array = [];
 		if (SELECT_ALL == true)
 			filter = getSelectionCriteria();
 		else
 			id_array = get_contacts_bulk_ids();
-
+		
+		// Yes callback 
 		// Bind a custom event to trigger on loading the form
 		$('body').die('fill_owners').live('fill_owners', function(event)
 		{
@@ -68,7 +93,9 @@ $(function()
 				enable_save_button(saveButton);
 			}, 'Contacts owner change scheduled')
 		});
-	});
+		
+	}
+	
 
 	/**
 	 * Bulk operations - Adds to campaign Shows all the workflows as drop down
@@ -77,7 +104,29 @@ $(function()
 	$("#bulk-campaigns").live('click', function(e)
 	{
 		e.preventDefault();
-
+		
+		if(!canRunBulkOperations())
+		{
+			showModalConfirmation("Bulk Assign Campaign", 
+					"You may not have permission to update some of the contacts selected. Proceeding with this operation will add only your contacts to the campaign.<br/><br/>Do you want to proceed?", 
+					show_bulk_campaign_assign_page
+					, function(){
+						// No callback
+						return;
+						},
+						function(){
+							return;
+						});
+		}
+	else
+		{
+			show_bulk_campaign_assign_page()
+		}
+		
+	});
+	
+	function show_bulk_campaign_assign_page()
+	{
 		var id_array = [];
 		var filter;
 		if (SELECT_ALL == true)
@@ -127,8 +176,7 @@ $(function()
 				enable_save_button(saveButton);
 			}, 'Campaign assigning scheduled');
 		});
-
-	});
+	}
 
 	/**
 	 * Bulk operations - Adds tags' Shows the existing tags with help of
@@ -138,8 +186,30 @@ $(function()
 	{
 		e.preventDefault();
 
+		if(!canRunBulkOperations())
+		{
+			showModalConfirmation("Bulk Add Tag", 
+					"You may not have permission to update some of the contacts selected. Proceeding with this operation will add tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?" ,
+ 
+					show_add_tag_bulkaction_form
+					, function(){
+						// No callback
+						return;
+						},
+						function(){
+							return;
+						});
+		}
+		else
+		{
+			show_add_tag_bulkaction_form()
+		}
+	});
+	
+	function show_add_tag_bulkaction_form()
+	{
 		var id_array = get_contacts_bulk_ids();
-
+		
 		// var tags = get_tags('tagsBulkForm');
 
 		Backbone.history.navigate("bulk-tags", { trigger : true });
@@ -213,7 +283,7 @@ $(function()
 				return;
 			}
 		});
-	});
+	}
 	
 	
 	/**
@@ -224,6 +294,30 @@ $(function()
 	{
 		e.preventDefault();
 
+		if(!canRunBulkOperations())
+		{
+			showModalConfirmation("Bulk Remove Tag", 
+					"You may not have permission to update some of the contacts selected. Proceeding with this operation will delete tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?" ,
+ 
+					show_remove_tag_bulkaction_form
+					, function(){
+						// No callback
+						return;
+						},
+						function(){
+							return;
+						});
+		}
+		else
+		{
+			show_remove_tag_bulkaction_form()
+		}
+	
+	});
+	
+	
+	function show_remove_tag_bulkaction_form()
+	{
 		var id_array = get_contacts_bulk_ids();
 
 		// var tags = get_tags('tagsBulkForm');
@@ -299,7 +393,7 @@ $(function()
 				return;
 			}
 		});
-	});
+	}
 
 
 
@@ -312,7 +406,30 @@ $(function()
 	{
 		e.preventDefault();
 		
-		var count = 0;
+		if(!canRunBulkOperations())
+		{
+			showModalConfirmation("Bulk Email", 
+					"You may not be the owner for some of the contacts selected. Proceeding with this operation will send email to only your contacts.<br/><br/> Do you want to proceed?" ,
+ 
+					show_bulk_email_form
+					, function(){
+						// No callback
+						return;
+						},
+						function(){
+							return;
+						});
+		}
+		else
+		{
+			show_bulk_email_form()
+		}
+		
+	});
+	
+	function show_bulk_email_form()
+	{
+			var count = 0;
 		
 		// Selected Contact ids
 		var id_array = get_contacts_bulk_ids();
@@ -384,8 +501,7 @@ $(function()
 			postBulkOperationData(url, json, $form, null, function(){ 
 				enable_send_button($('#bulk-send-email'));}, "Emails have been queued for " + count +" contacts. They will be sent shortly.");
 		});
-		
-	});
+	}
 
 	/**
 	 * Bulk Operations - Exports selected contacts in a CSV file as an attachment 
@@ -394,7 +510,7 @@ $(function()
 	$("#bulk-contacts-export").live('click', function(e)
 			{
 				e.preventDefault();
-
+								
 				// Removes if previous modals exist.
 				if ($('#contacts-export-csv-modal').size() != 0)
 				{

@@ -19,11 +19,11 @@
 
 <script id="quickbooks-profile-template" type="text/html"> 
 <div class="widget_content">
-	<div  style="display:inline-block;">
-		<div  class="title_txt" style="display:inline-block;">
-			<a href="https://sg.qbo.intuit.com/app/customerdetail?nameId={{Customer.Id}}" target="_blank"><h4 style="text-transform: capitalize;"><b>	
+	<div >
+		<div  class="title_txt" >
+			<a href="https://sg.qbo.intuit.com/app/customerdetail?nameId={{Customer.Id}}" target="_blank"><h4 style="text-transform: capitalize;">	
 				 {{Customer.DisplayName}}
-			</b></h4></a>
+			</h4></a>
 		</div>
 	</div>
 	<div>
@@ -65,7 +65,7 @@
 		{{/if}}
 	</div>
 	<div>
-		<a class="btn" id="quickbooks_add_invoice" style="margin-top:10px;cursor:pointer;" href="https://sg.qbo.intuit.com/app/invoice?nameId={{Customer.Id}}" target="_blank"><i class="icon-plus"></i>Add Invoice</a>
+		<a  id="quickbooks_add_invoice" style="margin-top:7px;cursor:pointer;display:block;" href="https://sg.qbo.intuit.com/app/invoice?nameId={{Customer.Id}}" target="_blank"><i class="icon-plus"></i>Add Invoice</a>
 	</div>
 </div>
 {{#if Invoices}}
@@ -113,7 +113,7 @@
 <script id="quickbooks-profile-addcontact-template" type="text/html">
 <div class="widget_content">
 		<div>No customer found.</div>
-		<a class="btn" id="quickbooks_add_contact" style="margin-top:10px;cursor:pointer;"><i class="icon-plus"></i>Add Contact</a>
+		<a  id="quickbooks_add_contact" style="margin-top:7px;display:block;"><i class="icon-plus"></i>Add Contact</a>
 	</div>
 </script>
 <script id="quickbook-items-template" type="text/html">

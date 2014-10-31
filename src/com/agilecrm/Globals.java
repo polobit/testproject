@@ -4,7 +4,8 @@ public class Globals
 {
 
     public static String[] URLS = { "agilecrm.com", "helptor.com", "-dot-sandbox-dot-agile-crm-cloud.appspot.com",
-	    "-dot-sandbox-dot-agilecrmbeta.appspot.com","-dot-addon-dot-agilecrmbeta.appspot.com", "-dot-mcsandbox-dot-agile-crm-cloud.appspot.com" };
+	    "-dot-sandbox-dot-agilecrmbeta.appspot.com", "-dot-addon-dot-agilecrmbeta.appspot.com",
+	    "-dot-mcsandbox-dot-agile-crm-cloud.appspot.com" };
 
     public static String SUB_VERSION_URL = "-dot-agile-crm-cloud.appspot.com";
 
@@ -79,12 +80,13 @@ public class Globals
     // public static final String STRIPE_CLIENT_ID =
     // "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
     // Stripe live keys
-   // public static final String STRIPE_LIVE_API_KEY = "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
-    //public static final String STRIPE_LIVE_CLIENT_ID = "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
-    
+    // public static final String STRIPE_LIVE_API_KEY =
+    // "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
+    // public static final String STRIPE_LIVE_CLIENT_ID =
+    // "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
+
     public static final String STRIPE_LIVE_API_KEY = "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
     public static final String STRIPE_LIVE_CLIENT_ID = "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
-
 
     // development keys
     public static final String DEV_STRIPE_API_KEY = STRIPE_LIVE_API_KEY;
@@ -111,10 +113,13 @@ public class Globals
     // "qyprdCLvyUgaMn6K9lrd3eyPDn1DuL";
     // public static final String QUICKBOOKS_CONSUMER_SECRET =
     // "o7hOCLRSBidVE9gkGQPBaFy0IIcyvtHuXPpL8kmw";
-/**    public static final String QUICKBOOKS_APP_KEY = "08945c87bae1fb46bab9241ba0e81dc19bbf";
-    public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdCLvyUgaMn6K9lrd3eyPDn1DuL";
-    public static final String QUICKBOOKS_CONSUMER_SECRET = "o7hOCLRSBidVE9gkGQPBaFy0IIcyvtHuXPpL8kmw";
-*/
+    /**
+     * public static final String QUICKBOOKS_APP_KEY =
+     * "08945c87bae1fb46bab9241ba0e81dc19bbf"; public static final String
+     * QUICKBOOKS_CONSUMER_KEY = "qyprdCLvyUgaMn6K9lrd3eyPDn1DuL"; public static
+     * final String QUICKBOOKS_CONSUMER_SECRET =
+     * "o7hOCLRSBidVE9gkGQPBaFy0IIcyvtHuXPpL8kmw";
+     */
     // "8f73de20b0e45b476ab9b8abd3e659c2aa74";
     // public static final String QUICKBOOKS_CONSUMER_KEY =
     // "qyprdGhvaKh6kMZEKXIKffUmQIwMuK";

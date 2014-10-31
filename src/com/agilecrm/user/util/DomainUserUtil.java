@@ -125,6 +125,14 @@ public class DomainUserUtil
     }
 
     /**
+     * Creates domain user key
+     */
+    public static Key<DomainUser> getDomainUserKey(Long id)
+    {
+	return new Key<DomainUser>(DomainUser.class, id);
+    }
+
+    /**
      * Gets list of domain users of given domain
      * 
      * @param domain
@@ -144,6 +152,18 @@ public class DomainUserUtil
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
+    }
+
+    /**
+     * Get Current User key
+     */
+    public static Key<DomainUser> getCurentUserKey()
+    {
+	UserInfo info = SessionManager.get();
+	if (info == null)
+	    return null;
+
+	return getDomainUserKey(info.getDomainId());
     }
 
     /**
@@ -335,7 +355,7 @@ public class DomainUserUtil
 	NamespaceManager.set("");
 
 	DomainUser user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true)
-	        .get();
+		.get();
 
 	NamespaceManager.set(oldNamespace);
 	return user;

@@ -11,7 +11,7 @@ public class ShopifyAppUnInstallServlet extends HttpServlet
     public void service(HttpServletRequest request, HttpServletResponse response)
     {
 	String shopUrl = request.getParameter("shop");
-	ShopifyAppUtil.setShopifyAppPrefs(shopUrl, null);
+	ShopifyAppUtil.deleteShopifyAppPrefs(shopUrl);
 	return;
     }
 }

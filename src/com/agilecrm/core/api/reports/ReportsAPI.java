@@ -30,6 +30,7 @@ import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.search.util.TagSearchUtil;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
 
 /**
  * <code>ReportsAPI</code> lass includes REST calls to interact with
@@ -133,6 +134,8 @@ public class ReportsAPI
 	    rule.LHS = "type";
 
 	    report.rules.add(rule);
+
+	    UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(Contact.class.getSimpleName(), report.rules);
 
 	    // Generates report results
 	    Collection<Contact> contacts = report.generateReports(Integer.parseInt(count), cursor);

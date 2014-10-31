@@ -22,6 +22,9 @@ import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
+import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.googlecode.objectify.Key;
@@ -58,6 +61,8 @@ public abstract class ContactSyncService implements SyncService
 
     /** total_synced_contact. */
     protected int total_synced_contact;
+
+    private UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null);
 
     /**
      * creates ContactSyncService Instance at runtime follows Dynamic
@@ -258,13 +263,22 @@ public abstract class ContactSyncService implements SyncService
 	if (ContactUtil.isDuplicateContact(contact))
 	{
 	    contact = ContactUtil.mergeContactFields(contact);
+	    if (!accessControl.canDelete())
+	    {
+		syncStatus.put(ImportStatus.ACCESS_DENIED, syncStatus.get(ImportStatus.ACCESS_DENIED) + 1);
+		return contact;
+	    }
 	    try
 	    {
 		contact.save();
-		
-	    syncStatus.put(ImportStatus.MERGED_CONTACTS, syncStatus.get(ImportStatus.MERGED_CONTACTS) + 1);
+
+		syncStatus.put(ImportStatus.MERGED_CONTACTS, syncStatus.get(ImportStatus.MERGED_CONTACTS) + 1);
 	    }
-	    catch(Exception e)
+	    catch (AccessDeniedException e)
+	    {
+		syncStatus.put(ImportStatus.ACCESS_DENIED, syncStatus.get(ImportStatus.ACCESS_DENIED) + 1);
+	    }
+	    catch (Exception e)
 	    {
 		System.out.println("exception raised : " + e.getMessage());
 	    }
@@ -272,7 +286,15 @@ public abstract class ContactSyncService implements SyncService
 	else if (contactRestriction.can_create())
 	{
 	    addTagToContact(contact);
-	    contact.save();
+	    try
+	    {
+		contact.save();
+	    }
+	    catch (AccessDeniedException e)
+	    {
+		syncStatus.put(ImportStatus.ACCESS_DENIED, syncStatus.get(ImportStatus.ACCESS_DENIED) + 1);
+		return contact;
+	    }
 	    restriction.contacts_count++;
 	    syncStatus.put(ImportStatus.NEW_CONTACTS, syncStatus.get(ImportStatus.NEW_CONTACTS) + 1);
 	}

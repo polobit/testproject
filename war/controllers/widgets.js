@@ -23,6 +23,8 @@ var WidgetsRouter = Backbone.Router
 												"Sip" : "Sip", "Sip/:id" : "Sip",
 
 												"Twilio" : "Twilio", "Twilio/:id" : "Twilio",
+												
+												"TwilioIO" : "TwilioIO", "TwilioIO/:id" : "TwilioIO",
 
 												"FreshBooks" : "FreshBooks", "FreshBooks/:id" : "FreshBooks",
 
@@ -283,6 +285,20 @@ var WidgetsRouter = Backbone.Router
 																else
 																				fill_form(id, "Sip", 'sip-login');
 
+												},
+												
+												/**
+												 * Manages TwilioIO widget
+												 */
+												TwilioIO : function(id)
+												{
+													if (!id)
+														show_set_up_widget("TwilioIO", 'twilioio-login');
+													else
+														{
+														  fill_form(id, "TwilioIO", 'twilioio-login');
+														  fill_twilioio_numbers();
+														}
 												},
 
 												/**
@@ -715,11 +731,6 @@ var WidgetsRouter = Backbone.Router
 																$('.contact-sync-tab').addClass('active');
 																// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
 
-																if (!canImportContacts())
-																{
-																				showContactsImportAccessDeniedMessage("#prefs-tabs-content");
-																				return;
-																}
 
 																this.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'admin-settings-import-google-contacts', });
 

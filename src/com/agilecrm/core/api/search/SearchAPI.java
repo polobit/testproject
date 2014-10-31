@@ -1,10 +1,7 @@
 package com.agilecrm.core.api.search;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -16,11 +13,11 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.Document;
 import com.agilecrm.search.query.QueryDocument;
+import com.agilecrm.search.query.util.QueryDocumentUtil;
 
 /**
  * <code>SearchAPI</code> class is used to search contacts based on keywords and
@@ -137,87 +134,11 @@ public class SearchAPI
 		try
 		{
 			Contact contact = ContactUtil.getContact(Long.valueOf(id));
-			String firstName = contact.getContactFieldValue(Contact.FIRST_NAME);
-			String lastName = contact.getContactFieldValue(Contact.LAST_NAME);
-			StringBuffer emailBuffer = new StringBuffer();
-			StringBuffer phoneBuffer = new StringBuffer();
-			StringBuffer stringBuffer = new StringBuffer();
-			Set<String> emails = new HashSet<String>();
-			Set<String> phones = new HashSet<String>();
-			if (StringUtils.isNotBlank(firstName) && StringUtils.isNotBlank(lastName))
-			{
-				String fName = firstName.trim().replaceAll("\"", "\\\\\"");
-				String lName = lastName.trim().replaceAll("\"", "\\\\\"");
-				stringBuffer.append("(first_name=\"" + fName + "\" AND " + "last_name=\"" + lName + "\")");
-			}
-			else if (StringUtils.isNotBlank(firstName) && StringUtils.isBlank(lastName))
-			{
-				String fName = firstName.trim().replaceAll("\"", "\\\\\"");
-				stringBuffer.append("first_name=\"" + fName + "\")");
-			}
-			else if (StringUtils.isBlank(firstName) && StringUtils.isNotBlank(lastName))
-			{
-				String lName = lastName.trim().replaceAll("\"", "\\\\\"");
-				stringBuffer.append("last_name=\"" + lName + "\")");
-			}
-			List<ContactField> properties = contact.getProperties();
-			for (int i = 0; i < properties.size(); i++)
-			{
-				ContactField contactField = properties.get(i);
-				if (contactField.name.equalsIgnoreCase(Contact.PHONE))
-				{
-					if (StringUtils.isNotBlank(contactField.value))
-						phones.add((contactField.value).trim());
-				}
-				if (contactField.name.equalsIgnoreCase(Contact.EMAIL))
-				{
-					if (StringUtils.isNotBlank(contactField.value))
-						emails.add((contactField.value).trim());
-				}
-			}
-			if (emails.size() > 0)
-			{
-				Object[] emailsArray = emails.toArray();
-				for (int i = 0; i < emailsArray.length; i++)
-				{
-					if (i == 0)
-					{
-						emailBuffer.append(" OR email=(");
-					}
-					emailBuffer.append("\"");
-					emailBuffer.append(emailsArray[i]);
-					emailBuffer.append("\"");
-					if (!(i == emailsArray.length - 1))
-						emailBuffer.append(" OR ");
-					else
-						emailBuffer.append(")");
-				}
-			}
-			if (phones.size() > 0)
-			{
-				Object[] phonesArray = phones.toArray();
-				for (int i = 0; i < phonesArray.length; i++)
-				{
-					if (i == 0)
-					{
-						phoneBuffer.append(" OR phone=(");
-					}
-					phoneBuffer.append("\"");
-					phoneBuffer.append(phonesArray[i]);
-					phoneBuffer.append("\"");
-					if (!(i == phonesArray.length - 1))
-						phoneBuffer.append(" OR ");
-					else
-						phoneBuffer.append(")");
-				}
-			}
+
+			// getting search query for finding duplicate contacts
+			String query = QueryDocumentUtil.constructDuplicateContactsQuery(contact);
+
 			int pageSize = Integer.parseInt(count) + 1;
-
-			stringBuffer.append(phoneBuffer.toString());
-			stringBuffer.append(emailBuffer.toString());
-			stringBuffer.append(" AND type=PERSON");
-
-			String query = stringBuffer.toString();
 
 			System.out.println(query);
 
@@ -246,7 +167,6 @@ public class SearchAPI
 						iterator.remove();
 						return collection;
 					}
-
 				}
 				counter++;
 			}

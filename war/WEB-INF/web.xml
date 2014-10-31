@@ -1,8 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
 	<servlet>
 		<servlet-name>Home</servlet-name>
@@ -222,11 +218,11 @@
 		<servlet-class>com.agilecrm.session.CalendarServlet</servlet-class>
 		<init-param>
 			<param-name>consumer_key</param-name>
-			<param-value />
+			<param-value/>
 		</init-param>
 		<init-param>
 			<param-name>consumer_secret</param-name>
-			<param-value />
+			<param-value/>
 		</init-param>
 	</servlet>
 
@@ -322,10 +318,29 @@
 		<url-pattern>/backend/voice</url-pattern>
 		<url-pattern>/verification</url-pattern>
 	</servlet-mapping>
+	
 
-
-
-
+    <servlet>
+        <servlet-name>TwilioIOVoiceServlet</servlet-name>
+        <servlet-class>com.thirdparty.twilio.TwilioIOVoiceServlet</servlet-class>
+    </servlet>  
+ 
+    <servlet-mapping>
+        <servlet-name>TwilioIOVoiceServlet</servlet-name>
+        <url-pattern>/twilioiovoice</url-pattern>
+    </servlet-mapping>
+	
+	<servlet>
+        <servlet-name>TwilioIOStatusCallBackServlet</servlet-name>
+        <servlet-class>com.thirdparty.twilio.TwilioIOStatusCallBackServlet</servlet-class>
+    </servlet>   
+ 
+    <servlet-mapping>
+        <servlet-name>TwilioIOStatusCallBackServlet</servlet-name>
+        <url-pattern>/twilioiostatuscallback</url-pattern>
+    </servlet-mapping>
+    
+    
 	<servlet>
 		<servlet-name>ForgotDomain</servlet-name>
 		<jsp-file>/forgot-domain.jsp</jsp-file>
@@ -397,8 +412,7 @@
 		<url-pattern>/upload-google-document.jsp</url-pattern>
 		<url-pattern>/XeroServlet</url-pattern>
 		<url-pattern>/shopify</url-pattern>
-		<url-pattern>/auth/*</url-pattern>
-
+		<url-pattern>/auth/*</url-pattern>		
 	</filter-mapping>
 
 	<filter-mapping>
@@ -691,7 +705,7 @@
 		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
 		<init-param>
 			<param-name>services</param-name>
-			<param-value />
+			<param-value/>
 		</init-param>
 	</servlet>
 	<servlet-mapping>
