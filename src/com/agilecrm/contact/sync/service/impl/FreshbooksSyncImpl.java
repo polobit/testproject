@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
@@ -66,6 +67,8 @@ public class FreshbooksSyncImpl extends OneWaySyncService
 				for (int j = 0; j < contacts.length(); j++)
 				{
 				    Contact ctx = wrapContactToAgileSchemaAndSave(contacts.get(j));
+				    ctx.properties.add(getOrganization(customers.get(i)));
+				    ctx.save();
 				    saveInvoices(ctx, contacts.get(j));
 
 				}
@@ -262,6 +265,28 @@ public class FreshbooksSyncImpl extends OneWaySyncService
 	    }
 	}
 	return items;
+    }
+
+    private ContactField getOrganization(Object obj)
+    {
+	JSONObject customer = (JSONObject) obj;
+	ContactField field = null;
+	try
+	{
+	    if (customer.has("organization"))
+	    {
+		String organization = customer.getString("organization");
+		if (!organization.isEmpty() && !organization.equals("undefined"))
+		{
+		    field = new ContactField(Contact.COMPANY, organization, "office");
+		}
+	    }
+	}
+	catch (NullPointerException | JSONException e)
+	{
+	    e.printStackTrace();
+	}
+	return field;
     }
 
 }
