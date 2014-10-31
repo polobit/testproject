@@ -1,6 +1,6 @@
 <script id="googleplus-login-template" type="text/html">
 <div class='widget_content' style='border-bottom:none;line-height: 160%;' >
-	Google+ is a social utility that connects people with friends and others who work, study and live around them.
+	Keep tabs on your customers' activity on Google+ and engage with them better.
 	<p style='margin: 10px 0px 5px 0px;' >
 		<a class='btn' href="{{url}}" style='text-decoration: none;'>Link Your Google+</a>
 	</p>
@@ -9,7 +9,6 @@
 
 <script id="googleplus-revoke-access-template" type="text/html">
 <div class='widget_content' style='border-bottom:none;line-height: 160%;'>
-Google+ is a social utility that connects people with friends and others who work, study and live around them.
 {{#if custom_data.image.url}}	
 <div class="row-fluid">
 		<div class="span4">
@@ -99,13 +98,13 @@ Google+ is a social utility that connects people with friends and others who wor
 	<div class="pull-left ml_5 span8">
 		<p class="title_txt"><a href="{{url}}" target="_blank" >{{displayName}}</a></p>
 <p>{{placesLived.0.value}}</p>
-<p>{{occupation}}</p> <p>{{organizations.0.name}} - {{organizations.0.title}}</p>
+<p>{{occupation}}</p><!-- <p>{{organizations.0.name}} - {{organizations.0.title}}</p>-->
 	</div>
 	<div class="clearfix"></div>	
 	<p style="word-wrap:break-word;word-break:normal;">{{show_link_in_statement tagline}}</p>					
 </div>
 <div class="clearfix"></div>
-<div style="text-align: center;font-size: 16px;padding: 5px 0 6px 0;border-bottom: 1px solid #d6d6d6;"><small>Recent Posts</small></div>
+<div id="recentPostsText" style="text-align: center;font-size: 16px;padding: 5px 0 6px 0;border-bottom: 1px solid #d6d6d6;"><small>Recent Posts</small></div>
 <div id="gpostscontainer"></div>
 </script>
 
@@ -114,10 +113,19 @@ Google+ is a social utility that connects people with friends and others who wor
 <div class="tab-content" id="gpTabContent">
 	<div id="gpposts" class="tab-pane fade active in">
 		<ul class="widget_tab_content collapse in"  id="gplus_social_stream">	
-{{#each items}}​
+{{#each items}}
 <li class="gpost" post_id="{{id}}">	
 				<div class="pull-left row-fluid">
-					<div class="span2 mr_5"><a href="{{url}}" target="_blank"><img src="{{actor.image.url}}" width="30" height="30" alt="" class="img-rounded pull-left"></a></div>
+<div class="span2 mr_5"><a href="{{url}}" target="_blank">
+{{#if_equals object.attachments.0.objectType "photo"}}
+<img src="{{object.attachments.0.image.url}}" width="30" height="30" alt="" class="img-rounded pull-left">
+{{else}}
+{{#if_equals object.attachments.0.objectType "video"}}
+<img src="{{object.attachments.0.image.url}}" width="30" height="30" alt="" class="img-rounded pull-left">
+{{else}}
+<img src="{{actor.image.url}}" width="30" height="30" alt="" class="img-rounded pull-left">
+{{/if_equals}}{{/if_equals}}
+</a></div>
 					<div class="pull-left span9">
 						<p class="mb_0" style="word-break:normal;word-wrap:break-word;">
 {{#if_equals object.attachments.0.objectType "photo"}}
@@ -136,7 +144,7 @@ Google+ is a social utility that connects people with friends and others who wor
 {{/each}}
 		</ul>
 		{{#if_equals items.length 0}}
-<div style="font-size: 16px;padding: 5px;"><small>No posts.</small></div>
+<!--<div style="font-size: 16px;padding: 5px;"><small>No posts.</small></div>-->
 {{else}}
 		<div class="widget_tab_footer" align="center">
 			<a href="" class="gplus_stream" id="gplusstreammore" rel="tooltip" ntoken="{{nextPageToken}}" title="Click to see more posts">Show More</a>
@@ -149,10 +157,19 @@ Google+ is a social utility that connects people with friends and others who wor
 </script>
 
 <script id="googleplus-posts-template" type="text/html">
-{{#each items}}​
+{{#each items}}
 <li class="gpost" post_id="{{id}}">	
 				<div class="pull-left row-fluid">
-					<div class="span2 mr_5"><a href="{{url}}" target="_blank"><img src="{{actor.image.url}}" width="30" height="30" alt="" class="img-rounded pull-left"></a></div>
+<div class="span2 mr_5"><a href="{{url}}" target="_blank">
+{{#if_equals object.attachments.0.objectType "photo"}}
+<img src="{{object.attachments.0.image.url}}" width="30" height="30" alt="" class="img-rounded pull-left">
+{{else}}
+{{#if_equals object.attachments.0.objectType "video"}}
+<img src="{{object.attachments.0.image.url}}" width="30" height="30" alt="" class="img-rounded pull-left">
+{{else}}
+<img src="{{actor.image.url}}" width="30" height="30" alt="" class="img-rounded pull-left">
+{{/if_equals}}{{/if_equals}}
+</a></div>
 					<div class="pull-left span9">
 						<p class="mb_0" style="word-break:normal;word-wrap:break-word;">
 {{#if_equals object.attachments.0.objectType "photo"}}

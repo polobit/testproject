@@ -93,7 +93,7 @@ public class DefaultWidgets
 				WidgetType.CALL));
 		widgets.add(new Widget(
 				"GooglePlus",
-				"Google+ is a social utility that connects people with friends and others who work, study and live around them",
+				"Keep tabs on your customers' activity on Google+ and engage with them better.",
 				"/widgets/googleplus.js", "/widgets/gplus.png", "/widgets/gplusicon.png", null, WidgetType.SOCIAL));
 
 		System.out.println("Default widgets ");

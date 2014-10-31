@@ -107,18 +107,18 @@ $(function()
 
 		// Unique Google Plus User Id from widget
 		profileID = $(this).attr('id');
-
-		var profileDat = getGooglePlusUserDetails(profileID);
-		if (typeof profileDat.errors == "undefined")
-		{
-			if (typeof PROFILE_DATA["" + profileID] == "undefined")
-			{
-				PROFILE_DATA["" + profileID] = profileDat;
-				var povOverData = $("#" + profileID).attr('data-content');
-				$("#" + profileID).attr('data-content', povOverData + getTemplate("googleplus-pop-profile", profileDat));
-			}
-
-		}
+		// on hover ajax request
+//		var profileDat = getGooglePlusUserDetails(profileID);
+//		if (typeof profileDat.errors == "undefined")
+//		{
+//			if (typeof PROFILE_DATA["" + profileID] == "undefined")
+//			{
+//				PROFILE_DATA["" + profileID] = profileDat;
+//				var povOverData = $("#" + profileID).attr('data-content');
+//				$("#" + profileID).attr('data-content', povOverData + getTemplate("googleplus-pop-profile", profileDat));
+//			}
+//
+//		}
 
 		// Aligns details to left in the pop over
 		$(this).popover({ placement : 'left' });
@@ -270,7 +270,8 @@ function showGooglePlusPosts(id, nextPageToken)
 		GPostsData = getGooglePlusPosts(id);
 	}
 
-	// console.log(GPostsData);
+//	console.clear();
+//	console.log(GPostsData);
 
 	if (typeof nextPageToken != "undefined")
 	{
@@ -280,6 +281,8 @@ function showGooglePlusPosts(id, nextPageToken)
 	else
 	{
 		$('#gpostscontainer').html(getTemplate("googleplus-profile-tabs", GPostsData));
+		if(!GPostsData.items.length)
+			$('#recentPostsText').remove();
 	}
 
 	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
