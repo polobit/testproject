@@ -1,8 +1,62 @@
-<!-- Indices written at Wed, 29 Oct 2014 13:17:02 IST -->
+<!-- Indices written at Fri, 31 Oct 2014 11:29:47 IST -->
 
-<datastore-index kind="Opportunity" ancestor="false" source="manual">
+<datastore-indexes>
+
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
         <property name="milestone" direction="asc"/>
         <property name="ownerKey" direction="asc"/>
         <property name="pipeline" direction="asc"/>
         <property name="created_time" direction="desc"/>
     </datastore-index>
+
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="pipeline" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
+
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="milestone" direction="asc"/>
+        <property name="pipeline" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="pipeline" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="milestone" direction="asc"/>
+        <property name="pipeline" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
+
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="ownerKey" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="ownerKey" direction="asc"/>
+        <property name="pipeline" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="expected_value" direction="asc"/>
+        <property name="milestone" direction="asc"/>
+        <property name="ownerKey" direction="asc"/>
+        <property name="pipeline" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="expected_value" direction="asc"/>
+        <property name="milestone" direction="asc"/>
+        <property name="ownerKey" direction="asc"/>
+        <property name="pipeline" direction="asc"/>
+        <property name="probability" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+
+</datastore-indexes>
