@@ -21,9 +21,23 @@ $(function(){
 			
 			setImageURL(selectedSource);
 			
-			//var modalId = $(this).attr("id");
-			//$("a[href='#" + modalId + "']").find("img").attr('src', selectedSource);
+			var modalId = $(this).attr("id");
+			$("a[href='#" + modalId + "']").find("img").attr('src', selectedSource);
 			//$(".preview-avatar").attr("src", selectedSource);
 	});
 	
 });
+
+// selects default avatars randomly
+function choose_random_avatar()
+{
+	var avatar = ["https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/86.png",
+	              "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/72.png",
+	              "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/17.png",
+	              "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/5.png",
+	              "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/3.png"];
+
+	var random = Math.floor((Math.random() * avatar.length));
+
+	return avatar[random];
+}

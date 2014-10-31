@@ -19,6 +19,16 @@ $(function(){
 	
 });	
 
+function uploadImage(id)
+{
+	var newwindow = window.open("upload.jsp?id=" + id,'name','height=310,width=500');
+	if (window.focus)
+	{
+		newwindow.focus();
+	}
+	return false;
+}
+
 function setImageURLInModal(url)
 {
 	var id = "upload-in-modal";
@@ -31,16 +41,8 @@ function setImageURLInModal(url)
 	// Set the value of selector for input
 	$("#" + modalId).find(".modal-body input[type='hidden']").val(url);
 	
-}
-
-function uploadImage(id)
-{
-	var newwindow = window.open("upload.jsp?id=" + id,'name','height=310,width=500');
-	if (window.focus)
-	{
-		newwindow.focus();
-	}
-	return false;
+	$("#" + modalId).closest('.modal').modal('hide');
+	
 }
 
 function setImageURL(url)
@@ -48,7 +50,7 @@ function setImageURL(url)
 	var id = "upload-container";
 	// Set the media stream
 	$('#' + id).find('.imgholder').html('');
-	$('#' + id).find('.imgholder').html('<img src="' + url + '" height="100" width="100"/>');
+	$('#' + id).find('.imgholder').html('<img class="thumbnail" src="' + url + '" height="75" width="75"/>');
 	
 	// Set the value of selector for input
 	$('#' + id).find('#upload_url').val(url);

@@ -42,7 +42,7 @@
                                   {{#if pic}}
                                     <img class="thumbnail" src="{{pic}}" style="height:75px!important;width:75px!important;" />
                                   {{else}}
-                                    <img class="thumbnail" src="https://contactuswidget.appspot.com/images/pic.png" style="height:75px!important;width:75px!important;" />
+                                    <img class="thumbnail" src='{{pick_random_avatar_url}}' style="height:75px!important;width:75px!important;" />
                                   {{/if}}
 								</div></a>												
                                 <p style="text-align: center;">
@@ -294,15 +294,15 @@
 	<div class="modal-body choose-avatars">
 		<table>
 		 	<tbody>
-                   <input type="hidden" name="custom-avatar" value="{{#getCurrentUserPrefs}}{{#if pic}}{{#same_value pic "https://contactuswidget.appspot.com/images/pic.png"}}//d1gwclp1pmzk26.cloudfront.net/img/gravatar/1.png{{else}}{{pic}}{{/same_value}}{{else}}//d1gwclp1pmzk26.cloudfront.net/img/gravatar/1.png{{/if}}{{/getCurrentUserPrefs}}">
+                   <input type="hidden" name="custom-avatar" value="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}/img/gravatar/custom-avatar.png{{/if}}{{/getCurrentUserPrefs}}">
                    <tr>
-                     <td><a href="#"><img class="thumbnail" src="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/pic.png" height="50" width="50"/></a>
+                     <!--<td><a href="#"><img class="thumbnail" src="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/pic.png" height="50" width="50"/></a>
                          <p class="help-block" style="color:#999;padding-top:5px;opacity:0">For</p>
-                     </td>
+                     </td>-->
                      <td colspan="3" style="text-align: left;padding-top: 0px;position: relative;top: -5px;left: 5px;">
                       	 <div id="upload-in-modal" messg="User image has been uploaded">
 							<a href="#" class="imgholder" style="width: 80px;display:inline-block;margin: 0px 0px 0px;cursor:pointer;">
-	                         	<img class="preview-avatar thumbnail" src="{{#getCurrentUserPrefs}}{{#if pic}}/img/gravatar/custom-avatar.png{{else}}{{#same_value pic "https://contactuswidget.appspot.com/images/pic.png"}}/img/gravatar/custom-avatar.png{{else}}{{pic}}{{/same_value}}/img/gravatar/custom-avatar.png{{/if}}{{/getCurrentUserPrefs}}"  height="50" width="50"/>
+	                         	<img class="preview-avatar thumbnail" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}/img/gravatar/custom-avatar.png{{/if}}{{/getCurrentUserPrefs}}"  height="50" width="50"/>
                           	</a>
                           	<div style="margin-left:5px;vertical-align:bottom;display:inline-block;margin-left: 5px;position: relative;top: -6px;">
                                   <input class="upload_prefs_s3 submit btn" type="submit" id="user_prefs_image" value="Upload"/>

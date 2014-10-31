@@ -2991,12 +2991,9 @@ $(function()
 		return template;
 	});
 	
-	// To compare values
-	Handlebars.registerHelper('same_value', function(value, target, options) {
-		if (value != target)
-			return options.inverse(this);
-		else
-			return options.fn(this);
+	// To pick randomly selected avatar url
+	Handlebars.registerHelper('pick_random_avatar_url', function(options) {
+		return choose_random_avatar();
 	});
 
 });
