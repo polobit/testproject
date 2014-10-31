@@ -44,7 +44,7 @@ $(function () {
 				$('#'+filter+' .equals').hide();
 				$('#'+filter+' .between').show();
 			} else {
-				alert('You can only use one "between" condition for filtering.');
+				alert("Sorry. You can't have multiple 'Between' conditions.");
 				$(this).val('equals');
 			}
 			
@@ -122,6 +122,9 @@ function showFilters(){
 		$('#filter_options .date').datepicker({
 			format : 'mm/dd/yyyy',
 		});
+		if(!readCookie("agile_deal_view"))
+			$('#milestone').closest('.control-group').hide();
+		
 	});
 	
 	/*add_custom_fields_to_form({}, function(data){

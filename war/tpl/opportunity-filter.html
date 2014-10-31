@@ -92,7 +92,7 @@
 					<label class="control-label"><b>Probability</b>
 						<a data-toggle="collapse" href="#probability_div" style="display:inline;position:absolute;right:5px;text-decoration:none;" class="changeIcon"><i class="icon-plus" /></a>
 					</label>
-					<div id="probability_div" class="contraols collapse">
+					<div id="probability_div" class="controls collapse">
 						<select id="probability_filter" name="probability_filter" class="filter_type" data="probability" style="max-width:90px;">
 								<option value="equals">Equals</option>
 								<option value="between">Between</option>
@@ -106,27 +106,6 @@
 								placeholder="Min Probability %"/> to
 							<input type="text" id="probability_end" name="probability_end"
 								placeholder="Max Probability %"/>
-					</div>
-					</div>
-				</div>
-				<div class="control-group row-filter" id="deal-created-filter">
-					<label class="control-label"><b>Deal Created</b>
-						<a data-toggle="collapse" href="#created_time_div" style="display:inline;position:absolute;right:5px;text-decoration:none;" class="changeIcon"><i class="icon-plus" /></a>
-					</label>
-					<div id="created_time_div" class="controls collapse">
-						<select id="created_time_filter" name="created_time_filter" class="filter_type" data="created_time" style="max-width:90px;">
-								<option value="equals">Equals</option>
-								<option value="between">Between</option>
-						</select>
-					<div class="equals" >
-							<input type="text" id="created_time" name="created_time"
-								placeholder="MM/DD/YYYY" class="date input" />
-					</div>
-					<div class="between hide" >
-							<input type="text" id="created_time_start" name="created_time_start"
-								placeholder="MM/DD/YYYY" class="date input" /> to
-							<input type="text" id="created_time_end" name="created_time_end"
-								placeholder="MM/DD/YYYY" class="date input" />
 					</div>
 					</div>
 				</div>
@@ -147,6 +126,27 @@
 							<input type="text" id="close_date_start" name="close_date_start"
 								placeholder="MM/DD/YYYY" class="date input" /> to
 							<input type="text" id="close_date_end" name="colse_date_end"
+								placeholder="MM/DD/YYYY" class="date input" />
+					</div>
+					</div>
+				</div>
+				<div class="control-group row-filter" id="deal-created-filter">
+					<label class="control-label"><b>Deal Created</b>
+						<a data-toggle="collapse" href="#created_time_div" style="display:inline;position:absolute;right:5px;text-decoration:none;" class="changeIcon"><i class="icon-plus" /></a>
+					</label>
+					<div id="created_time_div" class="controls collapse">
+						<select id="created_time_filter" name="created_time_filter" class="filter_type" data="created_time" style="max-width:90px;">
+								<option value="equals">Equals</option>
+								<option value="between">Between</option>
+						</select>
+					<div class="equals" >
+							<input type="text" id="created_time" name="created_time"
+								placeholder="MM/DD/YYYY" class="date input" />
+					</div>
+					<div class="between hide" >
+							<input type="text" id="created_time_start" name="created_time_start"
+								placeholder="MM/DD/YYYY" class="date input" /> to
+							<input type="text" id="created_time_end" name="created_time_end"
 								placeholder="MM/DD/YYYY" class="date input" />
 					</div>
 					</div>
