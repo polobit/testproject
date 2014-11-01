@@ -116,13 +116,14 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    // names
 	    saveContactsInAgile(entries);
 
+	    start_index += entries.size();
+
 	    // If fetched contacts size is less than 200, next request is not
 	    // sent to fetch next set of results
 	    if (entries.size() < MAX_FETCH_LIMIT_FOR_GOOGLE)
 		break;
 
 	    i += entries.size();
-	    start_index += entries.size();
 
 	}
 
