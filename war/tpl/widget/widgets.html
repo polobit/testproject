@@ -3,12 +3,12 @@
 	{{add_tag "Widgets"}}
 {{/if}}
      {{#if_equals name "Sip"}}
-	  <div class="widget_container" id="{{remove_spaces name}}-container" style="display:none;position:relative;">
+	  <div class="widget_container" id="{{remove_spaces name}}-container" style="display:none;">
     {{else}}
       {{#if_equals name "TwilioIO"}}
-	  <div class="widget_container" id="{{remove_spaces name}}-container" style="display:none;position:relative">
+	  <div class="widget_container" id="{{remove_spaces name}}-container" style="display:none;">
     {{else}}
-      <div class="widget_container" id="{{remove_spaces name}}-container" style="position:relative;">       
+      <div class="widget_container" id="{{remove_spaces name}}-container">       
     {{/if_equals}}     
     {{/if_equals}}
 		<div class="widget_header widget_edit_icons" onmouseover="showIcons(this); return false;" onmouseout="hideIcons(this); return false;">
