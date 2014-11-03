@@ -234,7 +234,20 @@ public class FreshbooksDataService
 	    {
 		if (invoiceObject.has("invoice"))
 		{
-		    invoices.put(invoiceObject.get("invoice"));
+		    Object invoice = invoiceObject.get("invoice");
+		    if (invoice instanceof JSONObject)
+		    {
+			invoices.put(invoice);
+		    }
+		    else
+		    {
+			JSONArray list = (JSONArray) invoiceObject.get("invoice");
+			for (int i = 0; i < list.length(); i++)
+			{
+			    invoices.put(list.get(i));
+			}
+		    }
+
 		}
 	    }
 	}
