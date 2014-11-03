@@ -184,7 +184,11 @@ public class FreshbooksSyncImpl extends OneWaySyncService
 					    if (tax > 0.0)
 						sb.append("Tax : " + tax + "(" + invoice.get("currency_code") + ")");
 					}
-					sb.append("\n Total Amount : " + item.get("amount") + "("
+
+				    }
+				    if (items.length() - 1 == j)
+				    {
+					sb.append("\nTotal Amount : " + invoice.get("amount") + "("
 						+ invoice.get("currency_code") + ")");
 				    }
 				    n.description = sb.toString();
@@ -208,9 +212,9 @@ public class FreshbooksSyncImpl extends OneWaySyncService
 				    note.description = sb.toString();
 
 				}
-				if (items.length() == 1)
+				if (items.length() - 1 == j)
 				{
-				    note.description += "\n Total Amount : " + invoice.get("amount") + "("
+				    note.description += "\nTotal Amounts : " + invoice.get("amount") + "("
 					    + invoice.get("currency_code") + ")" + "";
 				}
 
