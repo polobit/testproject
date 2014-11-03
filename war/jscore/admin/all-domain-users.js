@@ -122,7 +122,7 @@ $(".delete_user").die().live('click', function(e){
 				success: function()
 			{
 				
-				$('#user_sub').empty();
+				location.reload(true);
 			},error : function(response)
 			{
 
@@ -143,7 +143,7 @@ $(".delete_user").die().live('click', function(e){
 				success: function()
 			{
 				
-				$('#email_sub').empty();
+					location.reload(true);
 			},error : function(response)
 			{
 
