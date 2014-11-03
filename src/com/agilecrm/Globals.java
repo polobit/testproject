@@ -86,7 +86,7 @@ public class Globals
     // "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
 
     public static final String STRIPE_LIVE_API_KEY = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
-    public static final String STRIPE_LIVE_CLIENT_ID = "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
+    public static final String STRIPE_LIVE_CLIENT_ID = "pk_test_x7mrOw8Rfn2FPGp5JdveGJDN";
 
     // development keys
     public static final String DEV_STRIPE_API_KEY = STRIPE_LIVE_API_KEY;
