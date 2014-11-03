@@ -116,38 +116,31 @@
 {{#each items}}
 <li class="gpost" post_id="{{id}}">	
 				<div class="pull-left row-fluid">
-<div class="span2 mr_5"><a href="{{url}}" target="_blank">
 {{#if_equals object.attachments.0.objectType "photo"}}
-<img src="{{object.attachments.0.image.url}}" width="30" height="30" alt="" class="img-rounded pull-left">
+<div class="span3 mr_5"><a href="{{url}}" target="_blank"><img src="{{object.attachments.0.image.url}}" width="57" height="57" alt="" class="img-rounded pull-left"></a></div>
+<div class="pull-left span8"><p class="mb_0" style="word-break:normal;word-wrap:break-word;">
+{{title}} <a href="{{url}}" target="_blank">view photo</a>
+</p><small>{{verb}}ed</small> <small><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small></div>
 {{else}}
 {{#if_equals object.attachments.0.objectType "video"}}
-<img src="{{object.attachments.0.image.url}}" width="30" height="30" alt="" class="img-rounded pull-left">
+<div class="span3 mr_5"><a href="{{url}}" target="_blank"><img src="{{object.attachments.0.image.url}}" width="57" height="57" alt="" class="img-rounded pull-left"></a></div>
+<div class="pull-left span8"><p class="mb_0" style="word-break:normal;word-wrap:break-word;">
+{{title}} <a href="{{url}}" target="_blank">view video</a>
+</p><small>{{verb}}ed</small> <small><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small></div>
 {{else}}
-<img src="{{actor.image.url}}" width="30" height="30" alt="" class="img-rounded pull-left">
-{{/if_equals}}{{/if_equals}}
-</a></div>
-					<div class="pull-left span9">
-						<p class="mb_0" style="word-break:normal;word-wrap:break-word;">
-{{#if_equals object.attachments.0.objectType "photo"}}
-{{object.attachments.0.displayName}} <a href="{{url}}" target="_blank">view photo</a>
-{{else}}
-{{#if_equals object.attachments.0.objectType "video"}}
-{{object.attachments.0.displayName}} <a href="{{url}}" target="_blank">view video</a>
-{{else}}
+<div class="span12"><p class="mb_0" style="word-break:normal;word-wrap:break-word;">
 {{title}} <a href="{{url}}" target="_blank">view more</a>
+</p><small>{{verb}}ed</small> <small><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small></div>
 {{/if_equals}}{{/if_equals}}
-					</p>
-				<small>{{verb}}ed</small> <small><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small>
-					</div>
 				</div>					
-			</li>
+</li>
 {{/each}}
 		</ul>
 		{{#if_equals items.length 0}}
 <!--<div style="font-size: 16px;padding: 5px;"><small>No posts.</small></div>-->
 {{else}}
 		<div class="widget_tab_footer" align="center">
-			<a href="" class="gplus_stream" id="gplusstreammore" rel="tooltip" ntoken="{{nextPageToken}}" title="Click to see more posts">Show More</a>
+			<a href="#" class="gplus_stream" id="gplusstreammore" rel="tooltip" ntoken="{{nextPageToken}}" title="Click to see more posts">Show More</a>
 			<span id="spinnerspan" style="display:none;"><img src="img/ajax-spinner.gif" id="spinner-gplus"></img><span>
 		</div>
 {{/if_equals}}
@@ -160,30 +153,23 @@
 {{#each items}}
 <li class="gpost" post_id="{{id}}">	
 				<div class="pull-left row-fluid">
-<div class="span2 mr_5"><a href="{{url}}" target="_blank">
 {{#if_equals object.attachments.0.objectType "photo"}}
-<img src="{{object.attachments.0.image.url}}" width="30" height="30" alt="" class="img-rounded pull-left">
+<div class="span3 mr_5"><a href="{{url}}" target="_blank"><img src="{{object.attachments.0.image.url}}" width="57" height="57" alt="" class="img-rounded pull-left"></a></div>
+<div class="pull-left span8"><p class="mb_0" style="word-break:normal;word-wrap:break-word;">
+{{title}} <a href="{{url}}" target="_blank">view photo</a>
+</p><small>{{verb}}ed</small> <small><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small></div>
 {{else}}
 {{#if_equals object.attachments.0.objectType "video"}}
-<img src="{{object.attachments.0.image.url}}" width="30" height="30" alt="" class="img-rounded pull-left">
+<div class="span3 mr_5"><a href="{{url}}" target="_blank"><img src="{{object.attachments.0.image.url}}" width="57" height="57" alt="" class="img-rounded pull-left"></a></div>
+<div class="pull-left span8"><p class="mb_0" style="word-break:normal;word-wrap:break-word;">
+{{title}} <a href="{{url}}" target="_blank">view video</a>
+</p><small>{{verb}}ed</small> <small><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small></div>
 {{else}}
-<img src="{{actor.image.url}}" width="30" height="30" alt="" class="img-rounded pull-left">
-{{/if_equals}}{{/if_equals}}
-</a></div>
-					<div class="pull-left span9">
-						<p class="mb_0" style="word-break:normal;word-wrap:break-word;">
-{{#if_equals object.attachments.0.objectType "photo"}}
-{{object.attachments.0.displayName}} <a href="{{url}}" target="_blank">view photo</a>
-{{else}}
-{{#if_equals object.attachments.0.objectType "video"}}
-{{object.attachments.0.displayName}} <a href="{{url}}" target="_blank">view video</a>
-{{else}}
+<div class="span12"><p class="mb_0" style="word-break:normal;word-wrap:break-word;">
 {{title}} <a href="{{url}}" target="_blank">view more</a>
+</p><small>{{verb}}ed</small> <small><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small></div>
 {{/if_equals}}{{/if_equals}}
-</p>
-				<small>{{verb}}ed</small> <small><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small>
-					</div>
 				</div>					
-			</li>
+</li>
 {{/each}}
 </script>
