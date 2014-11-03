@@ -274,5 +274,6 @@ public class FreshbooksDataService
 	{
 	    e.printStackTrace();
 	}
+	return lastUpdatedTime;
     }
 }

@@ -81,16 +81,24 @@ public class FreshbooksSyncImpl extends OneWaySyncService
 				    }
 				}
 
-				for (int j = 0; j < contacts.length(); j++)
-				{
-				    Contact ctx = wrapContactToAgileSchemaAndSave(contacts.get(j));
-				    ctx.properties.add(getOrganization(customers.get(i)));
-				    ctx.save();
-				    saveInvoices(ctx, contacts.get(j));
-
-				}
+				// save main contacts
 				Contact ctx = wrapContactToAgileSchemaAndSave(customers.get(i));
 				saveInvoices(ctx, customers.get(i));
+				ContactField organization = ctx.getContactFieldByName(Contact.COMPANY);
+
+				// saves sub contacts withing organization
+				for (int j = 0; j < contacts.length(); j++)
+				{
+				    Contact subContact = wrapContactToAgileSchemaAndSave(contacts.get(j));
+				    // check if company already set in contact
+				    subContact.properties.add(organization);
+
+				    subContact.save();
+
+				    saveInvoices(subContact, contacts.get(j));
+
+				}
+
 			    }
 			    else
 			    {
@@ -297,6 +305,7 @@ public class FreshbooksSyncImpl extends OneWaySyncService
 		{
 		    field = new ContactField(Contact.COMPANY, organization, "office");
 		}
+
 	    }
 	}
 	catch (NullPointerException | JSONException e)
