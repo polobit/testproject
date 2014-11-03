@@ -1,0 +1,175 @@
+<script id="googleplus-login-template" type="text/html">
+<div class='widget_content' style='border-bottom:none;line-height: 160%;' >
+	Keep tabs on your customers' activity on Google+ and engage with them better.
+	<p style='margin: 10px 0px 5px 0px;' >
+		<a class='btn' href="{{url}}" style='text-decoration: none;'>Link Your Google+</a>
+	</p>
+</div>
+</script>
+
+<script id="googleplus-revoke-access-template" type="text/html">
+<div class='widget_content' style='border-bottom:none;line-height: 160%;'>
+{{#if custom_data.image.url}}	
+<div class="row-fluid">
+		<div class="span4">
+			<img src="{{custom_data.image.url}}&sz=70" width="70" height="70" alt="" class="thumbnail"/>
+		</div>
+		<div class="span7">
+			<p class="title_txt"><a href="{{custom_data.url}}" target="_blank" >{{custom_data.displayName}}</a></p>
+		</div>
+	</div>
+{{/if}}
+	<div>
+		<p style='margin: 10px 0px 5px 0px;' >
+			<a class='btn revoke-widget ml_5' style='text-decoration: none;' widget-name="GooglePlus">Revoke Access</a>
+			<a href="#add-widget" class='btn ml_5' style='text-decoration: none;' widget-name="GooglePlus">Cancel</a>
+		</p>
+	</div>
+</div>
+</script>
+
+<script id="googleplus-search-result-template" type="text/html">
+{{#each this}}
+<img rel='popover' data-original-title='Google+ Profile' class='GoogleplusDisplayPic thumbnail' id='{{id}}' src ='{{image.url}}' screen_name="{{displayName}}"
+   style='display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;width: 35px;height: 35px' 
+   data-content="
+      <div class='row-fluid' style='padding-bottom:10px;'>
+            <div class='span4' style='padding:0px 10px 0px 10px;'>
+              <img src='{{image.url}}'></img>
+            </div>
+            <div class='span8'>
+               <b style='color:#069;font-size:14px;'>{{displayName}}</b>
+            </div>" 
+></img>
+{{/each}}
+</script>
+
+
+<script id="googleplus-pop-profile-template" type="text/html">
+
+<div>
+<p>{{placesLived.0.value}}</p>
+<p>{{occupation}}</p>
+<p>{{organizations.0.name}} - {{organizations.0.title}}</p>
+</div>
+      </div><div  class='row-fluid' style='padding-bottom:10px;word-wrap: break-word;'>
+		 <p style='font-style: italic;'>{{show_link_in_statement tagline}}</p>
+	  </div>
+
+</script>
+
+
+<script id="googleplus-modified-search-template" type="text/html">
+	<div display:inline;  line-height:12px;word-wrap: break-word;">
+		<form class="widget_content" style="border-bottom:none;" id="gpsearchform" name="gpsearchform" method="get">
+	    	<fieldset>
+				<p><label>Enter search details</label></p>
+				<div class="control-group"><div class="controls"><input type="text" id="searchkeywords" class="input-medium required widget_input_box" style="width:90%" placeholder="Key Words" value="{{keywords}}" name="keywords" maxlength="40" required></input></div></div>
+				<a href="#" id="gpsearchbtn" class="btn" style="text-decoration:none;">Search</a>
+				<span><img src="img/ajax-spinner.gif" id="spinner-search" style="display:none;"></img></span>
+				<a href="#" id="gpsearchclose" class="btn close" style="float:none;margin-left:5px;">Close</a>
+			 </fieldset>
+	    </form>
+	</div>
+</script>
+
+<script id="googleplus-error-panel-template" type="text/html">
+{{#if disable_check}}
+	<div style="line-height:160%;word-wrap: break-word;padding:10px">
+		{{{message}}}
+	</div>
+{{else}}
+	{{#check_length message "140"}}
+		<div class="ellipsis-multiline" title="{{message}}" style="height: 100px !important;-webkit-line-clamp: 5;line-height:160%;word-wrap: break-word;word-break: normal;">
+			{{{message}}}
+		</div>
+	{{else}}
+		<div style="line-height:160%;word-wrap: break-word;padding:10px">
+			{{{message}}}
+		</div>
+	{{/check_length}}	
+{{/if}}
+</script>
+
+
+<script id="googleplus-profile-template" type="text/html">
+<div class="widget_content row-fluid">
+	<div class="span3"><img src="{{image.url}}" width="50" height="50" alt="" class="img-rounded pull-left"/></div>
+	<div class="pull-left ml_5 span8">
+		<p class="title_txt"><a href="{{url}}" target="_blank" >{{displayName}}</a></p>
+<p>{{placesLived.0.value}}</p>
+<p>{{occupation}}</p><!-- <p>{{organizations.0.name}} - {{organizations.0.title}}</p>-->
+	</div>
+	<div class="clearfix"></div>	
+	<p style="word-wrap:break-word;word-break:normal;">{{show_link_in_statement tagline}}</p>					
+</div>
+<div class="clearfix"></div>
+<div id="recentPostsText" style="text-align: center;font-size: 16px;padding: 5px 0 6px 0;border-bottom: 1px solid #d6d6d6;"><small>Recent Posts</small></div>
+<div id="gpostscontainer"></div>
+</script>
+
+<script id="googleplus-profile-tabs-template" type="text/html">
+
+<div class="tab-content" id="gpTabContent">
+	<div id="gpposts" class="tab-pane fade active in">
+		<ul class="widget_tab_content collapse in"  id="gplus_social_stream">	
+{{#each items}}
+<li class="gpost" post_id="{{id}}">	
+				<div class="pull-left row-fluid">
+{{#if_equals object.attachments.0.objectType "photo"}}
+<div class="span3 mr_5"><a href="{{url}}" target="_blank"><img src="{{object.attachments.0.image.url}}" width="57" height="57" alt="" class="img-rounded pull-left"></a></div>
+<div class="pull-left span8"><p class="mb_0" style="word-break:normal;word-wrap:break-word;">
+{{title}} <a href="{{url}}" target="_blank">view photo</a>
+</p><small>{{verb}}ed</small> <small><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small></div>
+{{else}}
+{{#if_equals object.attachments.0.objectType "video"}}
+<div class="span3 mr_5"><a href="{{url}}" target="_blank"><img src="{{object.attachments.0.image.url}}" width="57" height="57" alt="" class="img-rounded pull-left"></a></div>
+<div class="pull-left span8"><p class="mb_0" style="word-break:normal;word-wrap:break-word;">
+{{title}} <a href="{{url}}" target="_blank">view video</a>
+</p><small>{{verb}}ed</small> <small><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small></div>
+{{else}}
+<div class="span12"><p class="mb_0" style="word-break:normal;word-wrap:break-word;">
+{{title}} <a href="{{url}}" target="_blank">view more</a>
+</p><small>{{verb}}ed</small> <small><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small></div>
+{{/if_equals}}{{/if_equals}}
+				</div>					
+</li>
+{{/each}}
+		</ul>
+		{{#if_equals items.length 0}}
+<!--<div style="font-size: 16px;padding: 5px;"><small>No posts.</small></div>-->
+{{else}}
+		<div class="widget_tab_footer" align="center">
+			<a href="#" class="gplus_stream" id="gplusstreammore" rel="tooltip" ntoken="{{nextPageToken}}" title="Click to see more posts">Show More</a>
+			<span id="spinnerspan" style="display:none;"><img src="img/ajax-spinner.gif" id="spinner-gplus"></img><span>
+		</div>
+{{/if_equals}}
+	</div>
+	
+</div>
+</script>
+
+<script id="googleplus-posts-template" type="text/html">
+{{#each items}}
+<li class="gpost" post_id="{{id}}">	
+				<div class="pull-left row-fluid">
+{{#if_equals object.attachments.0.objectType "photo"}}
+<div class="span3 mr_5"><a href="{{url}}" target="_blank"><img src="{{object.attachments.0.image.url}}" width="57" height="57" alt="" class="img-rounded pull-left"></a></div>
+<div class="pull-left span8"><p class="mb_0" style="word-break:normal;word-wrap:break-word;">
+{{title}} <a href="{{url}}" target="_blank">view photo</a>
+</p><small>{{verb}}ed</small> <small><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small></div>
+{{else}}
+{{#if_equals object.attachments.0.objectType "video"}}
+<div class="span3 mr_5"><a href="{{url}}" target="_blank"><img src="{{object.attachments.0.image.url}}" width="57" height="57" alt="" class="img-rounded pull-left"></a></div>
+<div class="pull-left span8"><p class="mb_0" style="word-break:normal;word-wrap:break-word;">
+{{title}} <a href="{{url}}" target="_blank">view video</a>
+</p><small>{{verb}}ed</small> <small><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small></div>
+{{else}}
+<div class="span12"><p class="mb_0" style="word-break:normal;word-wrap:break-word;">
+{{title}} <a href="{{url}}" target="_blank">view more</a>
+</p><small>{{verb}}ed</small> <small><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small></div>
+{{/if_equals}}{{/if_equals}}
+				</div>					
+</li>
+{{/each}}
+</script>

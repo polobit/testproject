@@ -91,6 +91,10 @@ public class DefaultWidgets
 		widgets.add(new Widget("TwilioIO", "Make and receive calls from your contacts using your Twilio account.",
 				"/widgets/twilioio.js", "/img/plugins/twilio.png", "/widgets/twilio-small-logo.png", null,
 				WidgetType.CALL));
+		widgets.add(new Widget(
+				"GooglePlus",
+				"Keep tabs on your customers' activity on Google+ and engage with them better.",
+				"/widgets/googleplus.js", "/widgets/gplus.png", "/widgets/gplusicon.png", null, WidgetType.SOCIAL));
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);

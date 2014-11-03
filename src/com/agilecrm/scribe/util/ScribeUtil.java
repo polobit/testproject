@@ -113,6 +113,12 @@ public class ScribeUtil
 	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GOOGLE_CALENDAR,
 		    com.agilecrm.scribe.api.GoogleApi.class, callback, Globals.GOOGLE_CALENDAR_CLIENT_ID,
 		    Globals.GOOGLE_CALENDAR_SECRET_KEY, ScribeServlet.GOOGLE_CALENDAR_SCOPE);
+	
+	// If service type Google Plus, creates a Service, specific to Google Plus
+	else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_PLUS))
+		service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GOOGLE_PLUS,
+			com.agilecrm.scribe.api.GoogleApi.class, callback, Globals.GOOGLE_CLIENT_ID,
+			Globals.GOOGLE_SECRET_KEY, ScribeServlet.GOOGLE_PLUS_OAUTH2_SCOPE);
 
 	else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_OAUTH_LOGIN))
 	    service = OAuthLoginUtil.getLoginService(req, resp, serviceType);
@@ -250,6 +256,9 @@ public class ScribeUtil
 	// If Service type is Gmail, save preferences in social prefs
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GMAIL))
 	    saveGmailPrefs(code, service, agileUser);
+	
+	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_PLUS))
+		saveGooglePlusPrefs(req, code);
 
 	/*
 	 * if service type is stripe, we post the code and get the access token
@@ -749,5 +758,63 @@ public class ScribeUtil
 	
 	prefs.save();
     }
+    
+    public static void saveGooglePlusPrefs(HttpServletRequest req, String code)
+	{
+		System.out.println("Saving GPlus Prefs");
+
+		// Exchanges access token/refresh token with extracted Authorization
+		// code
+		HashMap<String, Object> result = GoogleServiceUtil.exchangeAuthTokenForAccessToken(code,
+				ScribeServlet.GOOGLE_PLUS_OAUTH2_SCOPE);
+
+		System.out.println(result);
+
+		String refresh_token = String.valueOf(result.get("refresh_token"));
+		String access_token = String.valueOf(result.get("access_token"));
+		String expires_in = String.valueOf(result.get("expires_in"));
+
+		Map<String, String> properties = new HashMap<String, String>();
+		properties.put("code_token", code);
+		properties.put("access_token", access_token);
+		properties.put("refresh_token", refresh_token);
+		properties.put("expires_in", expires_in);
+		properties.put("time", String.valueOf(System.currentTimeMillis()));
+
+		// Gets widget name from the session
+		String serviceType = (String) req.getSession().getAttribute("service_type");
+
+		System.out.println("serviceName " + serviceType);
+		// update widget with tokens
+		saveWidgetPrefsByName(serviceType, properties);
+	}
+
+	public static void updateGooglePlusPrefs(String widgetId, String code, String refreshToken) throws Exception
+	{
+		System.out.println("Update GPlus Prefs");
+
+		String response = GoogleServiceUtil.refreshTokenInGoogle(refreshToken);
+
+		// Creates HashMap from response JSON string
+		HashMap<String, Object> result = new ObjectMapper().readValue(response,
+				new TypeReference<HashMap<String, Object>>()
+				{
+				});
+		System.out.println(result.toString());
+
+		String access_token = String.valueOf(result.get("access_token"));
+		String expires_in = String.valueOf(result.get("expires_in"));
+
+		Map<String, String> properties = new HashMap<String, String>();
+		properties.put("code_token", code);
+		properties.put("access_token", access_token);
+		properties.put("refresh_token", refreshToken);
+		properties.put("expires_in", expires_in);
+		properties.put("time", String.valueOf(System.currentTimeMillis()));
+		saveWidgetPrefs(widgetId, properties);
+
+		// update widget with tokens
+		// saveWidgetPrefsByName(serviceType, properties);
+	}
     
 }
