@@ -93,25 +93,22 @@ public class SendMessage extends TaskletAdapter
 		if (checkvalidTo(to).equals("Invalid"))
 		{
 			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-					"SMS failed as " + to + " is invalid phone number", LogType.SMS_FAILED.toString());
+					"SMS could not be sent -  Invalid phone number", LogType.SMS_FAILED.toString());
 
 			// Execute Next One in Loop
 			TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
 			return;
 		}
 
-		if (checkvalidTo(to).equals("AlphaNumeric"))
-		{
-			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-					"SMS failed as " + to + " is alpha numeric", LogType.SMS_FAILED.toString());
-
-			// Execute Next One in Loop
-			TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
-			return;
-		}
-		//
-
-		// if(SMSGateway.getSMSGateway().equals(SMSGateway.SMS_API.TWILIO))
+		/*
+		 * if (checkvalidTo(to).equals("AlphaNumeric")) {
+		 * LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON),
+		 * AgileTaskletUtil.getId(subscriberJSON), "SMS failed as " + to +
+		 * " is alpha numeric", LogType.SMS_FAILED.toString());
+		 * 
+		 * // Execute Next One in Loop TaskletUtil.executeTasklet(campaignJSON,
+		 * subscriberJSON, data, nodeJSON, null); return; }
+		 */
 
 		TwilioSMSUtil.sendSMS(SMS_API, from, to, message, ACCOUNT_SID, AUTH_TOKEN);
 
@@ -154,6 +151,7 @@ public class SendMessage extends TaskletAdapter
 		{
 
 			System.out.println("Inside getVerifiedTwilioNumbers");
+			System.err.println("Exception was thrown: getVerifiedTwilioNumbers " + e.toString());
 			e.printStackTrace();
 		}
 
@@ -178,8 +176,9 @@ public class SendMessage extends TaskletAdapter
 		{
 			System.out.println("Inside Send Message check valid 'to' number");
 
-			if (phoneUtil.isAlphaNumber(to))
-				return "AlphaNumeric";
+			/*
+			 * if (phoneUtil.isAlphaNumber(to)) return "AlphaNumeric";
+			 */
 			System.err.println("NumberParseException was thrown: " + e.toString());
 		}
 
