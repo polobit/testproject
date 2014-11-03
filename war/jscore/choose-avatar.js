@@ -17,13 +17,16 @@ $(function(){
 	
 			var selectedSource = $(this).find(".modal-body input[type='hidden']").val();
 			
-			$("input[name='custom_image']").val(selectedSource);
-			
-			setImageURL(selectedSource);
-			
-			var modalId = $(this).attr("id");
-			$("a[href='#" + modalId + "']").find("img").attr('src', selectedSource);
-			//$(".preview-avatar").attr("src", selectedSource);
+			if(selectedSource)
+			{
+				$("input[name='custom_image']").val(selectedSource);
+				
+				setImageURL(selectedSource);
+				
+				/*var modalId = $(this).attr("id");
+				$("a[href='#" + modalId + "']").find("img").attr('src', selectedSource);*/
+				//$(".preview-avatar").attr("src", selectedSource);
+			}
 	});
 	
 });
