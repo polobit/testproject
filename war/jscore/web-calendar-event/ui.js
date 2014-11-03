@@ -24,7 +24,7 @@ $(function()
 		 if(isFirefox){
 			 $('#datepick').DatePickerSetDate(current_date_mozilla, true);
 		 }
-		
+		 $('.checkbox-main-grid').html('<img class="loading-img" src="../img/21-0.gif" style="width: 40px;margin-left: 216px;"></img>');
 		if (!selecteddate)
 		{
 			selecteddate = new Date();
