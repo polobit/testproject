@@ -202,13 +202,23 @@
             "name": "time_zone",
             "title": "Select the time zone for your email delivery.",
             "options": {
-                <%@pageimport="java.util.Arrays"%><%@pageimport="java.util.TimeZone"%><%String[
-                    
-                ]allTimeZones=TimeZone.getAvailableIDs();Arrays.sort(allTimeZones);for(inti=0;i<allTimeZones.length;i++){
-                    Stringoption=allTimeZones[
-                        i
-                    ];if(i==allTimeZones.length-1)out.println("\""+option+"\":\""+option+"\"");elseout.println("\""+option+"\":\""+option+"\",");
-                }%>
+                <%@page import="java.util.Arrays"%>
+                        <%@page import="java.util.TimeZone"%>
+                        <%
+						String[] allTimeZones = TimeZone.getAvailableIDs();    
+						Arrays.sort(allTimeZones);  
+						
+					    for (int i = 0; i < allTimeZones.length; i++)
+					    {  
+							String option = allTimeZones[i];
+							
+							if(i == allTimeZones.length -1 )
+							out.println("\"" + option +  "\":\"" + option + "\"");
+							else
+							out.println("\"" + option +  "\":\"" + option + "\",");
+								
+						}  
+						%>
             },
             "fieldType": "select",
             "type": "select"
