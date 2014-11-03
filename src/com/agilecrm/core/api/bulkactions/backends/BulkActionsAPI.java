@@ -138,12 +138,11 @@ public class BulkActionsAPI
 	{
 	    System.out.println("filter id : " + filterId);
 	    BulkActionUtil.postDataToBulkActionBackend(ActionType.valueOf(action_type).getUrl(), contentType,
-		    Method.POST, filterId, request.getParameter("data"));
+		    ActionType.valueOf(action_type).getQueue(), Method.POST, filterId, request.getParameter("data"));
 	    return;
 	}
 
 	BulkActionUtil.postDataToBulkActionBackend(bytes, ActionType.valueOf(action_type).getUrl(), contentType,
-	        Method.POST);
+	        Method.POST, ActionType.valueOf(action_type).getQueue());
     }
-
 }

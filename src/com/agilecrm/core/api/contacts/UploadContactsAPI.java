@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.util.CSVUtil;
@@ -137,34 +138,37 @@ public class UploadContactsAPI
 	    String postURL = BackendServiceFactory.getBackendService().getBackendAddress(
 		    Globals.BULK_ACTION_BACKENDS_URL);
 
-	    // Backends should be initialized using a task queue
-	    Queue queue = QueueFactory.getQueue("bulk-actions-queue");
-
 	    // Task is created setting host as backends url. It takes payload
 	    // and blobkey, current domain user id as path parameters. current
 	    // owner id is required to set owner of uploaded contacts
 	    String s = request.getParameter("type");
 	    if (s.equalsIgnoreCase("deals"))
 	    {
+		// Backends should be initialized using a task queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.DEALS_UPLOAD_QUEUE);
+
 		TaskOptions taskOptions = TaskOptions.Builder
-			.withUrl(
-				"/core/api/bulk-actions/upload-deals/"
-					+ String.valueOf(SessionManager.get().getDomainId() + "/"
-						+ request.getParameter("key"))).payload(bytes)
-			.header("Content-Type", request.getContentType()).header("Host", postURL).method(Method.POST);
+		        .withUrl(
+		                "/core/api/bulk-actions/upload-deals/"
+		                        + String.valueOf(SessionManager.get().getDomainId() + "/"
+		                                + request.getParameter("key"))).payload(bytes)
+		        .header("Content-Type", request.getContentType()).header("Host", postURL).method(Method.POST);
 
 		// Task is added into queue
 		queue.addAsync(taskOptions);
 	    }
 	    else
 	    {
+		// Backends should be initialized using a task queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_UPLOAD_QUEUE);
+
 		TaskOptions taskOptions = TaskOptions.Builder
-			.withUrl(
-				"/core/api/bulk-actions/upload/"
-					+ String.valueOf(SessionManager.get().getDomainId() + "/"
-						+ request.getParameter("key") + "/" + request.getParameter("type")))
-			.payload(bytes).header("Content-Type", request.getContentType()).header("Host", postURL)
-			.method(Method.POST);
+		        .withUrl(
+		                "/core/api/bulk-actions/upload/"
+		                        + String.valueOf(SessionManager.get().getDomainId() + "/"
+		                                + request.getParameter("key") + "/" + request.getParameter("type")))
+		        .payload(bytes).header("Content-Type", request.getContentType()).header("Host", postURL)
+		        .method(Method.POST);
 
 		// Task is added into queue
 		queue.addAsync(taskOptions);

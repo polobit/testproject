@@ -1,5 +1,6 @@
 package com.agilecrm.deals.util;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.CustomFieldDef;
@@ -248,6 +250,7 @@ public class OpportunityUtil
 		 * //Get mm/yy String mmYY = formatter.format(new
 		 * Date(opportunity.close_date * 1000));
 		 */
+
 		Date opportunityDate = new Date(opportunity.close_date * 1000);
 
 		Calendar calendar = Calendar.getInstance();
@@ -466,7 +469,7 @@ public class OpportunityUtil
 	String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
 
 	// Create Task and push it into Task Queue
-	Queue queue = QueueFactory.getDefaultQueue();
+	Queue queue = QueueFactory.getQueue(AgileQueues.DEALS_EXPORT_QUEUE);
 	TaskOptions taskOptions = TaskOptions.Builder.withUrl(uri).header("Host", url).method(Method.POST);
 
 	queue.addAsync(taskOptions);
@@ -705,7 +708,45 @@ public class OpportunityUtil
     }
 
     /**
-     * Get opportunities based on the filted in the given filter JSON object.
+     * Gets all the pending deals related to current user. Fetches the deals
+     * equals or less to current date and deals which are not won or lost
+     * 
+     * @return List<Opportunity> having total pending deals with respect to
+     *         current user.
+     */
+
+    public static List<Opportunity> getPendingDealsRelatedToCurrentUser()
+    {
+	List<String> milestoneList = new ArrayList<String>();
+	milestoneList.add("New");
+	milestoneList.add("Prospect");
+	milestoneList.add("Proposal");
+	return dao.ofy().query(Opportunity.class).filter("close_date <=", (new Date()).getTime() / 1000)
+		.filter("close_date !=", null).filter("milestone in", milestoneList)
+		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+		.order("close_date").list();
+    }
+
+    /**
+     * Gets all the pending deals related to all users. Fetches the deals equals
+     * or less to current date and deals which are not won or lost
+     * 
+     * @return List<Opportunity> having total pending deals with respect to
+     *         current user.
+     */
+
+    public static List<Opportunity> getPendingDealsRelatedToAllUsers()
+    {
+	List<String> milestoneList = new ArrayList<String>();
+	milestoneList.add("New");
+	milestoneList.add("Prospect");
+	milestoneList.add("Proposal");
+	return dao.ofy().query(Opportunity.class).filter("close_date <=", (new Date()).getTime() / 1000)
+		.filter("close_date !=", null).filter("milestone in", milestoneList).order("close_date").list();
+    }
+
+    /**
+     * Get opportunities based on the filter in the given filter JSON object.
      * 
      * @param filterJson
      *            JSON object containing the fields.
@@ -728,6 +769,7 @@ public class OpportunityUtil
 		if (checkJsonString(filterJson, "milestone"))
 		    searchMap.put("milestone", filterJson.getString("milestone"));
 	    }
+
 	    if (checkJsonString(filterJson, "owner_id"))
 		searchMap.put("ownerKey",
 			new Key<DomainUser>(DomainUser.class, Long.parseLong(filterJson.getString("owner_id"))));
