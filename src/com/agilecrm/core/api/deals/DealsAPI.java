@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -493,8 +494,23 @@ public class DealsAPI
 	    SessionManager.set(new UserInfo(null, user.email, user.name));
 	    SessionManager.get().setDomainId(user.id);
 	}
-	List<Opportunity> deals = OpportunityUtil.getOpportunities();
-	String path = DealExportBlobUtil.writeDealCSVToBlobstore(deals, true);
+	String currentCursor = null;
+	String previousCursor = null;
+	int firstTime = 0;
+	String path = null;
+	List<Opportunity> deals = null;
+	int max = 1000;
+	do
+	{
+	    deals = OpportunityUtil.getOpportunities(max, currentCursor);
+	    currentCursor = deals.get(deals.size() - 1).cursor;
+	    firstTime++;
+	    if (firstTime == 1)
+		path = DealExportBlobUtil.writeDealCSVToBlobstore(deals, false);
+	    else
+		DealExportBlobUtil.editExistingBlobFile(path, deals, false);
+	} while (deals.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
+	DealExportBlobUtil.editExistingBlobFile(path, null, true);
 	List<String> fileData = DealExportBlobUtil.retrieveBlobFileData(path);
 	if (count == null)
 	    count = String.valueOf(deals.size());

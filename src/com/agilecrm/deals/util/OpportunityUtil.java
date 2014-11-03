@@ -722,10 +722,12 @@ public class OpportunityUtil
 	try
 	{
 	    if (checkJsonString(filterJson, "pipeline_id"))
+	    {
 		searchMap.put("pipeline",
 			new Key<Milestone>(Milestone.class, Long.parseLong(filterJson.getString("pipeline_id"))));
-	    if (checkJsonString(filterJson, "milestone"))
-		searchMap.put("milestone", filterJson.getString("milestone"));
+		if (checkJsonString(filterJson, "milestone"))
+		    searchMap.put("milestone", filterJson.getString("milestone"));
+	    }
 	    if (checkJsonString(filterJson, "owner_id"))
 		searchMap.put("ownerKey",
 			new Key<DomainUser>(DomainUser.class, Long.parseLong(filterJson.getString("owner_id"))));

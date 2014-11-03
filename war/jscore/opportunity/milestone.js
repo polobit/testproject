@@ -20,7 +20,11 @@ $(function(){
 		createCookie("agile_deal_track", $(this).attr('id'));
 		if(readCookie('deal-filters')){
 			var json = $.parseJSON(readCookie('deal-filters'));
-			json.pipeline_id = $(this).attr('id');
+			var track = $(this).attr('id');
+			if(track == '1')
+				json.pipeline_id = '';
+			else
+				json.pipeline_id = $(this).attr('id');
 			createCookie('deal-filters',JSON.stringify(json));
 		}
 		App_Deals.deals();

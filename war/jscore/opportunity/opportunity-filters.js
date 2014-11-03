@@ -175,6 +175,8 @@ function getDealFilters(){
 		// Remove the milestone field in the filters if it is milestone view.
 		if(!readCookie("agile_deal_view")){
 			var json = $.parseJSON(query);
+			if(json.pipeline_id.length == 0)
+				json.pipeline_id = readCookie('agile_deal_track');
 			json.milestone = '';
 			return JSON.stringify(json);
 		}
