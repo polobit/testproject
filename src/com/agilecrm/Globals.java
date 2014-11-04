@@ -144,7 +144,7 @@ public class Globals
     // Cheat Code
     public static final String MASTER_CODE_INTO_SYSTEM = "agileRocks()";
 
-    public static final String BULK_ACTION_BACKENDS_URL = "b1";
+    public static final String BULK_ACTION_BACKENDS_URL = "b1-sandbox";
 
     public static final String BULK_BACKENDS = "bulk";
     public static final String NORMAL_BACKENDS = "normal";
