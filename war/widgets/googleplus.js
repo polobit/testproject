@@ -282,7 +282,7 @@ function showGooglePlusPosts(id, nextPageToken)
 	{
 		$('#gpostscontainer').html(getTemplate("googleplus-profile-tabs", GPostsData));
 		if(!GPostsData.items.length)
-			$('#recentPostsText').html('<span style="font-size:14px">There are no posts.</span>');
+			$('#recentPostsText').html('<span style="font-size:14px">No Posts.</span>');
 	}
 
 	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
