@@ -190,6 +190,9 @@ public abstract class ContactSyncService implements SyncService
 	{
 	    SendMail.sendMail(user.email, notificationSubject, NOTIFICATION_TEMPLATE, new Object[] { user,
 		    buildNotificationStatus() });
+
+	    SendMail.sendMail("yaswanth@agilecrm.com", notificationSubject + " - " + user.domain,
+		    NOTIFICATION_TEMPLATE, new Object[] { user, buildNotificationStatus() });
 	}
     }
 

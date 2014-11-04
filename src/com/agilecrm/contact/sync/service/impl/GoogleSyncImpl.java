@@ -42,7 +42,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 {
 
     /** The Constant MAX_FETCH_LIMIT_FOR_GOOGLE. */
-    private static final Integer MAX_FETCH_LIMIT_FOR_GOOGLE = 200;
+    private static final Integer MAX_FETCH_LIMIT_FOR_GOOGLE = 50;
 
     /** contact service. */
     private ContactsService contactService;
@@ -64,7 +64,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
     private long first_contact_time = 0l;
     private long last_contact_time = 0l;
 
-    private int max_limit = MAX_SYNC_LIMIT + 3000;
+    private int max_limit = MAX_SYNC_LIMIT - 800;
 
     private String baseon_index = "false";
 
@@ -127,7 +127,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    e.printStackTrace();
 	}
 
-	while (canSync() && (fetchIndex < max_limit || isImportSync()))
+	while (canSync() && (fetchIndex < max_limit || (isImportSync() && fetchIndex < 500)))
 	{
 
 	    /**
@@ -195,9 +195,11 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	}
 	finally
 	{
+	    prefs.inProgress = false;
+	    updateLastSyncedInPrefs();
+
 	    sendNotification(prefs.type.getNotificationEmailSubject());
 
-	    updateLastSyncedInPrefs();
 	}
 
     }
