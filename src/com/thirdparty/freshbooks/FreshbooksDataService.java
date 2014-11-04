@@ -22,8 +22,7 @@ public class FreshbooksDataService
     public static final String FRESHBOOKS_CLIENT_REQUEST = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
 	    + "<request method=\"$method\"><per_page>$total_record</per_page><page>$page_number</page><folder>active</folder></request>";
     public static final String FRESHBOOKS_CLIENT_REQUEST_BETWEEN_DATE = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-
-    + "<updated_from>$updatedDateTime</updated_from><folder>active</folder></request>";
+	    + "<request method=\"$method\"><updated_from>$updatedDateTime</updated_from><folder>active</folder></request>";
 
     public static final String FRESHBOOKS_INVOICE_REQUEST = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
 	    + "<request method=\"$method\">$body   $status </request>";
