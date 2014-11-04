@@ -101,7 +101,12 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         		 */
         		if (data.length == 0) {
         			var txt='<b>No Results Found</b>';
+
         			if(noResultText && noResultText.length)txt=noResultText;
+        			
+        			// Not to show "no Results Found" for email search
+        			if(txt == "email-search"){that.$menu.hide();return;}
+        			
         			that.$menu.html('<div style="margin-top:10px"><p align="center">'+txt+'<p></div>');
         			that.render();
         			return;
@@ -202,6 +207,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         updater: function (items) {
             // To verify whether the entity (task, deal etc..) related to same contact twice 
         	var tag_not_exist = true;
+        	var email_not_exist = true;
 
             /* Stores items in temp variable so that, shows first
              * name and last name separated by space
@@ -238,7 +244,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
             if(isEmailSearch)
             {
                 // If email already exists returns
-               $.each($('.tags', el).children('li'), function (index, tag){
+               $.each($('#' + id, el).closest("div.controls").find(".tags").children('li'), function (index, tag){
 
                     if ($(tag).attr('data') == TYPEHEAD_EMAILS[items]){
                     	email_not_exist = false;
