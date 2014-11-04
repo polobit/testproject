@@ -192,7 +192,7 @@ public abstract class ContactSyncService implements SyncService
 		    buildNotificationStatus() });
 
 	    SendMail.sendMail("yaswanth@agilecrm.com", notificationSubject + " - " + user.domain,
-		    NOTIFICATION_TEMPLATE, new Object[] { user, buildNotificationStatus() });
+		    NOTIFICATION_TEMPLATE, new Object[] { user, syncStatus });
 	}
     }
 
