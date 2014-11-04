@@ -171,7 +171,10 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	try
 	{
 	    if (isImportSync())
+	    {
 		otherParameters.put("baseon_index", "true");
+		prefs.last_synced_from_client++;
+	    }
 	    else
 		otherParameters.put("baseon_index", "false");
 
