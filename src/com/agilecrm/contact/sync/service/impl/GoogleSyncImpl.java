@@ -53,6 +53,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
     /** last_synced_from_client hold date as long ie unix timestamp */
     private Long last_synced_from_client = 0l;
     private int start_index = 1;
+    private int start_index_from_db = 1;
 
     private int fetchIndex = 0;
 
@@ -90,6 +91,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		{
 		    otherParameters = new JSONObject(prefs.othersParams);
 		    start_index = Integer.parseInt(otherParameters.getString("start_index"));
+		    start_index_from_db = start_index;
 		    baseon_index = otherParameters.getString("baseon_index");
 		}
 		catch (JSONException e)
@@ -156,7 +158,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	    setStartAndEnd(entries);
 
-	    // start_index += entries.size();
+	    start_index += entries.size();
 
 	    // If fetched contacts size is less than 200, next request is not
 	    // sent to fetch next set of results
@@ -171,7 +173,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	try
 	{
 	    // Sets index
-	    start_index += total_synced_contact;
+	    start_index_from_db += total_synced_contact;
 
 	    if (isImportSync())
 	    {
@@ -181,7 +183,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    else
 		otherParameters.put("baseon_index", "false");
 
-	    otherParameters.put("start_index", start_index);
+	    otherParameters.put("start_index", start_index_from_db);
 
 	    prefs.othersParams = otherParameters.toString();
 	    prefs.last_synced_from_client++;
