@@ -195,6 +195,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	}
 	finally
 	{
+	    updateLastSyncedInPrefs();
 	    prefs.inProgress = false;
 	    updateLastSyncedInPrefs();
 
