@@ -13,7 +13,8 @@ import org.apache.commons.io.IOUtils;
 import com.agilecrm.contact.sync.SyncPrefsBuilder;
 import com.agilecrm.contact.sync.service.SyncService;
 import com.agilecrm.contact.util.BulkActionUtil;
-import com.agilecrm.session.SessionManager;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
+import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.NamespaceUtil;
@@ -65,6 +66,20 @@ public class ContactUtilServlet extends HttpServlet
 	    {
 		DomainUser user = DomainUserUtil.getDomainUser(contactPrefs.domainUser.getId());
 		BulkActionUtil.setSessionManager(user);
+
+		BillingRestriction restriction = BillingRestriction.getInstance(null, null);
+		restriction.refreshContacts();
+
+		/** contact restriction. */
+		DaoBillingRestriction contactRestriction = DaoBillingRestriction.getInstace(
+			DaoBillingRestriction.ClassEntities.Contact.toString(), restriction);
+
+		if (contactRestriction == null)
+		    return;
+
+		// Returns if contacts limit is reached
+		if (!contactRestriction.can_create())
+		    return;
 	    }
 
 	    SyncService service = new SyncPrefsBuilder().config(contactPrefs).getService(contactPrefs.type.getClazz());
