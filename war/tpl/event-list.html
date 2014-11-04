@@ -1,0 +1,141 @@
+<script id="events-collection-template" type="text/html">
+<header>
+    <h3 style="margin-left:3px;font-size: 23px;display:inline-block!important;">
+        Events <small> ({{this.length}})</small>
+    </h3>
+	
+</header>
+{{#unless this.length}}
+<div class="slate" style="padding:5px 2px;">
+    <div class="slate-content" style="text-align:center;">
+		<h4>You have no Events</h4>
+	</div>
+</div>
+{{/unless}}
+{{#if this.length}}
+<table style="display:block;overflow:hidden!important;margin-bottom:-20px;"><tbody><tr><td>
+<section>
+    <form>
+       
+        <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
+            <div id="today-heading" style="display: none"><b>Today</b></div>
+			
+            <tbody id="today-event" style="display: inline;"></tbody>
+        </table>
+
+        <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
+            <div id="tomorrow-heading" style="display: none"><b>Tomorrow</b></div>
+			
+            <tbody id="tomorrow-event" style="display: inline;"></tbody>
+        </table>
+
+        <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
+            <div id="next-week-heading" style="display: none"><b>Later</b></div>
+            <tbody id="next-week-event" style="display: inline;"></tbody>
+        </table>
+
+    </form>
+</section>
+</td></tr></tbody></table>
+{{/if}}
+</script>
+
+<script id="events-model-template" type="text/html">
+<td style="width: 850px;cursor: pointer;" onclick=show_model({{id}})>
+<div class="row" style="margin-left:3px;height: 23px;">
+<div class="span3">{{title}}</div>
+<div class="pull-right">
+<div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;"> 	
+<span class="label" style="background-color:{{color}}">{{event_priority color}}</span></div>
+</div>
+
+
+</div>
+
+<div class="row" style="margin-left:3px;height: 23px;">
+<div class="span5">{{getTime start}} -  {{getTime end}}</div>
+
+<div class="pull-right" style="overflow-x: auto;">
+{{#if contacts.length}} 
+<div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;"> 	
+	   	{{#each contacts}}<span class="label">{{getContactDisplayValue this}}</span> {{/each}}	
+		
+	</div>
+{{/if}}
+</div>
+
+<div class="row" style="margin-left:3px;height: 23px;">
+<div class="span5">{{getTime start}} -  {{getTime end}}</div>
+<div class="pull-right">
+<div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;"> 	
+<span class="label" style="background-color:{{color}}">{{event_priority color}}</span></div>
+</div>
+</div>
+
+</td>
+</script>
+
+
+<script id="future-collection-template" type="text/html">
+<header>
+    <h3 style="margin-left:3px;font-size: 23px;display:inline-block!important;">
+        Events <small> {{count}}</small>
+    </h3>
+	
+</header>
+{{#unless this.length}}
+<div class="slate" style="padding:5px 2px;">
+    <div class="slate-content" style="text-align:center;">
+		<h4>You have no Events</h4>
+	</div>
+</div>
+{{/unless}}
+{{#if this.length}}
+<table style="display:block;overflow:hidden!important;margin-bottom:-20px;"><tbody><tr><td>
+<section>
+    <form>
+       
+        <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
+            <div id="event-heading" style="display: none"></div>
+            <tbody id="eventAll" style="display: inline;"></tbody>
+        </table>
+
+
+    </form>
+</section>
+</td></tr></tbody></table>
+{{/if}}
+</script>
+
+<script id="future-model-template" type="text/html">
+<td style="width: 850px;cursor: pointer;" onclick=show_model({{id}})>
+<div class="row" style="margin-left:3px;height: 23px;">
+<div class="span3">{{title}}</div>
+
+<div class="pull-right" style="overflow-x: auto;max-width: 600px;">
+{{#if contacts.length}} 
+<div class="ellipsis-multiline" style="line-height:20px !important;"> 	
+	   	{{#each contacts}}<span class="label">{{getContactDisplayValue this}}</span> {{/each}}	
+		
+	</div>
+{{/if}}
+</div>
+
+
+</div>
+
+<div class="row" style="margin-left:3px;height: 23px;">
+<div class="span5">{{getCustomDateWithTime start end}}</div>
+
+<div class="pull-right">
+<div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;"> 	
+<span class="label" style="background-color:{{color}}">{{event_priority color}}</span></div>
+
+</div>
+
+</div>
+
+</td>
+</script>
+
+
