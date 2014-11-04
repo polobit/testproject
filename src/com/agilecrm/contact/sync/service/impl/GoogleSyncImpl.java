@@ -187,6 +187,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	    prefs.othersParams = otherParameters.toString();
 	    prefs.last_synced_from_client++;
+
+	    System.out.println(prefs.othersParams);
 	}
 	catch (JSONException e)
 	{
@@ -377,11 +379,13 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    if (new_created_at.equals(created_at))
 	    {
 		importedContacts = true;
+		baseon_index = "true";
 		matches++;
 	    }
 	    else
 	    {
 		importedContacts = false;
+		baseon_index = "false";
 	    }
 
 	    created_at = new_created_at;
