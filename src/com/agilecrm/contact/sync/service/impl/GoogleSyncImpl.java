@@ -64,9 +64,9 @@ public class GoogleSyncImpl extends TwoWaySyncService
     private long first_contact_time = 0l;
     private long last_contact_time = 0l;
 
-    private int max_limit = MAX_SYNC_LIMIT + 2000;
+    private int max_limit = MAX_SYNC_LIMIT;
 
-    private int max_batch_limit = 5000;
+    private int max_batch_limit = 2000;
 
     private String baseon_index = "false";
 
