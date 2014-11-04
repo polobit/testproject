@@ -156,7 +156,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	    setStartAndEnd(entries);
 
-	    start_index += entries.size();
+	    // start_index += entries.size();
 
 	    // If fetched contacts size is less than 200, next request is not
 	    // sent to fetch next set of results
@@ -170,6 +170,9 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	try
 	{
+	    // Sets index
+	    start_index += total_synced_contact;
+
 	    if (isImportSync())
 	    {
 		otherParameters.put("baseon_index", "true");

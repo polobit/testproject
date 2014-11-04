@@ -183,6 +183,9 @@ public abstract class ContactSyncService implements SyncService
     {
 	DomainUser user = DomainUserUtil.getCurrentDomainUser();
 
+	// Saves limits
+	restriction.save();
+
 	if (user != null)
 	{
 	    SendMail.sendMail(user.email, notificationSubject, NOTIFICATION_TEMPLATE, new Object[] { user,
