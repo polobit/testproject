@@ -10,6 +10,8 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.scribe.utils.Preconditions;
 
 import com.agilecrm.contact.Contact;
@@ -40,7 +42,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 {
 
     /** The Constant MAX_FETCH_LIMIT_FOR_GOOGLE. */
-    private static final Integer MAX_FETCH_LIMIT_FOR_GOOGLE = 100;
+    private static final Integer MAX_FETCH_LIMIT_FOR_GOOGLE = 200;
 
     /** contact service. */
     private ContactsService contactService;
@@ -61,7 +63,11 @@ public class GoogleSyncImpl extends TwoWaySyncService
     private long first_contact_time = 0l;
     private long last_contact_time = 0l;
 
-    private int max_limit = MAX_SYNC_LIMIT;
+    private int max_limit = MAX_SYNC_LIMIT + 3000;
+
+    private String baseon_index = "false";
+
+    private JSONObject otherParameters = new JSONObject();
 
     /**
      * fetch contacts from google.
@@ -82,7 +88,13 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    {
 		try
 		{
-		    start_index = Integer.parseInt(prefs.othersParams);
+		    otherParameters = new JSONObject(prefs.othersParams);
+		    start_index = Integer.parseInt(otherParameters.getString("start_index"));
+		    baseon_index = otherParameters.getString("baseon_index");
+		}
+		catch (JSONException e)
+		{
+
 		}
 		catch (NumberFormatException e)
 		{
@@ -113,7 +125,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    e.printStackTrace();
 	}
 
-	while (fetchIndex < MAX_SYNC_LIMIT || importedContacts)
+	while (canSync() && (fetchIndex < max_limit || isImportSync()))
 	{
 
 	    /**
@@ -153,16 +165,33 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	    fetchIndex += entries.size();
 
+	    System.out.println(otherParameters);
 	}
 
-	if (importedContacts)
+	try
+	{
+	    if (isImportSync())
+		otherParameters.put("baseon_index", "true");
+	    else
+		otherParameters.put("baseon_index", "false");
+
+	    otherParameters.put("start_index", start_index);
+
+	    prefs.othersParams = otherParameters.toString();
 	    prefs.last_synced_from_client++;
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    sendNotification(prefs.type.getNotificationEmailSubject());
 
-	prefs.othersParams = String.valueOf(start_index);
+	    updateLastSyncedInPrefs();
+	}
 
-	sendNotification(prefs.type.getNotificationEmailSubject());
-
-	updateLastSyncedInPrefs();
     }
 
     private void setStartAndEnd(List<ContactEntry> entries)
@@ -191,15 +220,10 @@ public class GoogleSyncImpl extends TwoWaySyncService
      */
     private boolean isImportSync()
     {
-	if ((first_contact_time + last_contact_time) > 0 && first_contact_time == last_contact_time)
-	{
-	    importedContacts = true;
+	if ("true".equals(baseon_index))
 	    return true;
-	}
 
-	if (importedContacts)
-	    prefs.last_synced_from_client++;
-	return false;
+	return importedContacts;
     }
 
     private List<ContactEntry> fetchContactsFromGoogle()
@@ -223,10 +247,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	    List<ContactEntry> entries = resultFeed.getEntries();
 
-	    System.out.println("**********************************************");
 	    System.out.println(resultFeed.getTotalResults());
 	    System.out.println(resultFeed.getStartIndex());
-	    System.out.println("##############################################");
 	    return entries;
 	}
 	catch (IOException e)
@@ -340,7 +362,6 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	importedContacts = false;
 	for (ContactEntry entry : entries)
 	{
-	    System.out.println("___________________________________");
 	    Long new_created_at = entry.getUpdated().getValue();
 	    if (new_created_at.equals(created_at))
 	    {
@@ -361,7 +382,6 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	System.out.println("TIME UPDATED" + created_at + ", " + prefs.last_synced_from_client + ", matches :" + matches
 		+ ", boolean" + importedContacts);
 
-	max_limit = 2000;
 	last_synced_from_client = created_at > last_synced_from_client ? created_at : last_synced_from_client;
     }
 

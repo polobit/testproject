@@ -322,4 +322,9 @@ public abstract class ContactSyncService implements SyncService
 
 	contact.addTags(StringUtils.capitalize(tag));
     }
+
+    protected boolean canSync()
+    {
+	return contactRestriction.can_create();
+    }
 }
