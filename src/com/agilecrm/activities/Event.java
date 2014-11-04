@@ -205,7 +205,10 @@ public class Event
     public void save()
     {
 	dao.put(this);
-	// EventUtil.sendIcal(this);
+	if (!this.title.equals("Gossip at water cooler") && !this.title.equals("Discuss today's Dilbert strip"))
+	{
+	    EventUtil.sendIcal(this);
+	}
 	System.out.println("Event object " + this);
     }
 
