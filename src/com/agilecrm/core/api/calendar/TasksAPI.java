@@ -228,7 +228,15 @@ public class TasksAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Task updateTask(Task task)
     {
-	ActivitySave.createTaskEditActivity(task);
+	try
+	{
+	    ActivitySave.createTaskEditActivity(task);
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 	task.save();
 	return task;
     }

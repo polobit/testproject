@@ -112,7 +112,7 @@ public class ActivityUtil
      *            ever user changed the progress. null if nothing.
      */
     public static Activity createTaskActivity(ActivityType activity_type, Task task, String new_data, String old_data,
-	    String changed_field)
+	    String changed_field, JSONArray jsn)
     {
 	Activity activity = new Activity();
 	activity.label = task.subject;
@@ -132,6 +132,37 @@ public class ActivityUtil
 	    activity.custom2 = old_data;
 	if (StringUtils.isNotEmpty(changed_field))
 	    activity.custom3 = changed_field;
+
+	try
+	{
+	    if (jsn != null && jsn.length() > 0)
+	    {
+		List<String> contactids = ActivitySave.getContactids(jsn);
+		List<String> contactnames = ActivitySave.getContactNames(jsn);
+
+		JSONObject obj = new JSONObject();
+		JSONArray arr = new JSONArray();
+
+		for (int i = 0; i < contactids.size(); i++)
+		{
+
+		    obj.put("contactid", contactids.get(i));
+		    obj.put("contactname", contactnames.get(i));
+
+		    arr.put(obj);
+
+		    obj = new JSONObject();
+		}
+		System.out.println(arr.toString());
+		activity.related_contact_ids = arr.toString();
+
+	    }
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 	activity.save();
 	return activity;
     }
@@ -149,7 +180,7 @@ public class ActivityUtil
      *            event. null if nothing.
      */
     public static Activity createEventActivity(ActivityType activity_type, Event event, String new_data,
-	    String old_data, String changed_field)
+	    String old_data, String changed_field, JSONArray jsn)
     {
 	Activity activity = new Activity();
 	activity.label = event.title;
@@ -163,6 +194,37 @@ public class ActivityUtil
 	    activity.custom2 = old_data;
 	if (StringUtils.isNotEmpty(changed_field))
 	    activity.custom3 = changed_field;
+
+	try
+	{
+	    if (jsn != null && jsn.length() > 0)
+	    {
+		List<String> contactids = ActivitySave.getContactids(jsn);
+		List<String> contactnames = ActivitySave.getContactNames(jsn);
+
+		JSONObject obj = new JSONObject();
+		JSONArray arr = new JSONArray();
+
+		for (int i = 0; i < contactids.size(); i++)
+		{
+
+		    obj.put("contactid", contactids.get(i));
+		    obj.put("contactname", contactnames.get(i));
+
+		    arr.put(obj);
+
+		    obj = new JSONObject();
+		}
+		System.out.println(arr.toString());
+		activity.related_contact_ids = arr.toString();
+
+	    }
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 
 	activity.save();
 	return activity;
@@ -182,7 +244,7 @@ public class ActivityUtil
      *            nothing.
      */
     public static Activity createDealActivity(ActivityType activity_type, Opportunity deal, String new_data,
-	    String old_data, String changed_field)
+	    String old_data, String changed_field, JSONArray jsn)
     {
 	Activity activity = new Activity();
 	activity.label = deal.name;
@@ -202,6 +264,36 @@ public class ActivityUtil
 	    activity.custom2 = old_data;
 	if (StringUtils.isNotEmpty(changed_field))
 	    activity.custom3 = changed_field;
+	try
+	{
+	    if (jsn != null && jsn.length() > 0)
+	    {
+		List<String> contactids = ActivitySave.getContactids(jsn);
+		List<String> contactnames = ActivitySave.getContactNames(jsn);
+
+		JSONObject obj = new JSONObject();
+		JSONArray arr = new JSONArray();
+
+		for (int i = 0; i < contactids.size(); i++)
+		{
+
+		    obj.put("contactid", contactids.get(i));
+		    obj.put("contactname", contactnames.get(i));
+
+		    arr.put(obj);
+
+		    obj = new JSONObject();
+		}
+		System.out.println(arr.toString());
+		activity.related_contact_ids = arr.toString();
+
+	    }
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 
 	activity.save();
 	return activity;
@@ -220,7 +312,7 @@ public class ActivityUtil
      * 
      */
     public static Activity createDocumentActivity(ActivityType activity_type, Document document, String new_data,
-	    String old_data, String changed_field)
+	    String old_data, String changed_field,JSONArray jsn)
     {
 	Activity activity = new Activity();
 	activity.label = document.name;
@@ -234,6 +326,36 @@ public class ActivityUtil
 	    activity.custom2 = old_data;
 	if (StringUtils.isNotEmpty(changed_field))
 	    activity.custom3 = changed_field;
+	try
+	{
+	    if (jsn != null && jsn.length() > 0)
+	    {
+		List<String> contactids = ActivitySave.getContactids(jsn);
+		List<String> contactnames = ActivitySave.getContactNames(jsn);
+
+		JSONObject obj = new JSONObject();
+		JSONArray arr = new JSONArray();
+
+		for (int i = 0; i < contactids.size(); i++)
+		{
+
+		    obj.put("contactid", contactids.get(i));
+		    obj.put("contactname", contactnames.get(i));
+
+		    arr.put(obj);
+
+		    obj = new JSONObject();
+		}
+		System.out.println(arr.toString());
+		activity.related_contact_ids = arr.toString();
+
+	    }
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 
 	activity.save();
 	return activity;
@@ -921,6 +1043,25 @@ public class ActivityUtil
 	    contids.add(con.id.toString());
 	}
 	return contids;
+
+    }
+
+    /**
+     * gets thejsonarray of contact ids by giving list of contact objects
+     * 
+     * @param contacts
+     * @return list of contact ids
+     */
+    public static JSONArray getContactIdsJson(List<Contact> contacts)
+    {
+	System.out.println(contacts.size());
+	JSONArray jsn = new JSONArray();
+	for (Contact con : contacts)
+	{
+	    jsn.put(con.id);
+	}
+	System.out.println(jsn);
+	return jsn;
 
     }
 

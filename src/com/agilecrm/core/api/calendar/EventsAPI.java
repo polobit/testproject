@@ -165,7 +165,15 @@ public class EventsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Event updateEvent(Event event)
     {
-	ActivitySave.createEventEditActivity(event);
+	try
+	{
+	    ActivitySave.createEventEditActivity(event);
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 	event.save();
 	return event;
     }
