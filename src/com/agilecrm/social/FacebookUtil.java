@@ -60,7 +60,7 @@ public class FacebookUtil
     public JSONObject searchContactsByName(String name) throws Exception
 
     {
-
+    name = name.replaceAll("[()?:!.,;@]+", "");//removing special characters
 	ResponseList<User> results = facebook.searchUsers(name);
 
 	// Print response

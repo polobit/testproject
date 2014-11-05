@@ -110,6 +110,49 @@ $(".delete_user").die().live('click', function(e){
 				} });
 			
 		});
+		$("#delete_userplan").die().live('click',function(e) {
+			e.preventDefault();
+			if (!confirm("Are you sure you want to cancel this subscription ?" ))
+				return;
+			var sub_id = $("#delete_userplan").attr("sub_id");
+			var cus_id = $("#delete_userplan").attr("cus_id");
+			$.ajax({url : 'core/api/admin_panel/deletesubscription?subscription_id='+sub_id+'&cus_id='+cus_id,
+				type : 'DELETE',
+				
+				success: function()
+			{
+				
+				location.reload(true);
+			},error : function(response)
+			{
+
+				console.log(response);
+			}
+			
+		});
+		});
+		$("#delete_emailplan").die().live('click',function(e) {
+			e.preventDefault();
+			if (!confirm("Are you sure you want to cancel this subscription ?" ))
+				return;
+			var sub_id = $("#delete_emailplan").attr("sub_id");
+			var cus_id = $("#delete_emailplan").attr("cus_id");
+			$.ajax({url : 'core/api/admin_panel/deletesubscription?subscription_id='+sub_id+'&cus_id='+cus_id,
+				type : 'DELETE',
+				
+				success: function()
+			{
+				
+					location.reload(true);
+			},error : function(response)
+			{
+
+				console.log(response);
+			}
+			
+		});
+			
+		});
 		
 		
 	

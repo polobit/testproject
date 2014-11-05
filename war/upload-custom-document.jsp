@@ -75,10 +75,12 @@ function isValid(){
                   {  
 	        		// Concating file extension to key
 		    	    var fileName = $("input:file").val();
+	        		var extension;
 		    	    
 		    	    if(fileName.lastIndexOf(".") > 0)
-		    	    	fileName = fileName.substring(fileName.lastIndexOf(".")+1);
-		    	    else
+		    	    	extension = fileName.substring(fileName.lastIndexOf(".")+1);
+		    	    
+		    	    if(fileName.lastIndexOf("\\") > 0)
 		    	    	fileName = fileName.substring(fileName.lastIndexOf("\\")+1);
 		    	    
 		    	    var key = $("#key").val();

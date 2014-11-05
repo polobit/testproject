@@ -382,16 +382,36 @@ public class ContactUtil
     {
 
 	boolean flag = false;
-	Collection<Contact> c = createSearchRule(companyName);
-	Iterator<Contact> contactIterator = c.iterator();
-	for (Contact contact : c)
+	/*
+	 * Collection<Contact> c = createSearchRule(companyName);
+	 * Iterator<Contact> contactIterator = c.iterator(); for (Contact
+	 * contact : c) { ContactField field =
+	 * contact.getContactFieldByName(Contact.NAME); if
+	 * (field.value.equalsIgnoreCase(companyName)) { flag = true; break; } }
+	 */
+
+	try
 	{
-	    ContactField field = contact.getContactFieldByName(Contact.NAME);
-	    if (field.value.equalsIgnoreCase(companyName))
+	    int count = dao.ofy().query(Contact.class).filter("properties.name", "name").filter("type", Type.COMPANY)
+		    .filter("properties.value", companyName.trim().toLowerCase()).count();
+	    if (count == 0)
+	    {
+		count = dao.ofy().query(Contact.class).filter("properties.name", "name").filter("type", Type.PERSON)
+			.filter("properties.value", companyName.trim().toLowerCase()).count();
+		if (count > 0)
+		{
+		    flag = true;
+		}
+	    }
+	    else
 	    {
 		flag = true;
-		break;
 	    }
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
 	}
 
 	return flag;
@@ -983,6 +1003,9 @@ public class ContactUtil
 
 	Contact oldContact = null;
 	ContactField field = contact.getContactFieldByName(Contact.NAME);
+	if (field == null)
+	    field = contact.getContactFieldByName(Contact.COMPANY);
+
 	oldContact = ContactUtil.searchCompany(field.value.toLowerCase());
 	if (oldContact != null)
 	    return mergeCompanyFields(contact, oldContact);
@@ -1148,4 +1171,5 @@ public class ContactUtil
 	    i.remove();
 	}
     }
+
 }

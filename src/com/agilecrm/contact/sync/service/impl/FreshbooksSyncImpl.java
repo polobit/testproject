@@ -3,8 +3,6 @@
  */
 package com.agilecrm.contact.sync.service.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
@@ -29,7 +28,6 @@ import com.thirdparty.freshbooks.FreshbooksDataService;
  */
 public class FreshbooksSyncImpl extends OneWaySyncService
 {
-    private Integer PAGE_SIZE = 25;
     private Integer CURRENT_PAGE = 1;
     private Integer TOTAL_PAGE = CURRENT_PAGE;
 
@@ -47,23 +45,65 @@ public class FreshbooksSyncImpl extends OneWaySyncService
 	    FreshbooksDataService service = new FreshbooksDataService(prefs.token, prefs.othersParams);
 	    System.out.println("freshbooks Service created");
 
-	    int total = service.getTotalCount(prefs.lastSyncCheckPoint);
-	    System.out.println("total "+total+" contact found");
+	    TOTAL_PAGE = service.getTotalCount(prefs.lastSyncCheckPoint);
 
-	    if (total > 25)
-	    {
-		TOTAL_PAGE = (int) Math.ceil(total / PAGE_SIZE);
-	    }
 	    while (CURRENT_PAGE <= TOTAL_PAGE)
 	    {
 		JSONArray customers = service.getCustomers(CURRENT_PAGE, prefs.lastSyncCheckPoint);
 		if (customers != null && customers.length() > 0)
 		{
-		    System.out.println("fetched customer :"+customers.length());
+		    System.out.println("fetched customer :" + customers.length());
 		    for (int i = 0; i < customers.length(); i++)
 		    {
-			Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i));
-			saveInvoices(contact, customers.get(i));
+			JSONObject org = customers.getJSONObject(i);
+			if (org.has("contacts"))
+			{
+			    JSONObject contact = org.getJSONObject("contacts");
+			    if (contact != null && contact.length() > 0)
+			    {
+				JSONArray contacts = new JSONArray();
+				if (contact.has("contact"))
+				{
+				    Object object = contact.get("contact");
+				    if (object instanceof JSONObject)
+				    {
+					contacts.put(object);
+				    }
+				    else
+				    {
+					JSONArray obj = contact.getJSONArray("contact");
+					for (int k = 0; k < obj.length(); k++)
+					{
+					    contacts.put(obj.get(k));
+					}
+				    }
+				}
+
+				// save main contacts
+				Contact ctx = wrapContactToAgileSchemaAndSave(customers.get(i));
+				saveInvoices(ctx, customers.get(i));
+				ContactField organization = ctx.getContactFieldByName(Contact.COMPANY);
+
+				// saves sub contacts withing organization
+				for (int j = 0; j < contacts.length(); j++)
+				{
+				    Contact subContact = wrapContactToAgileSchemaAndSave(contacts.get(j));
+				    // check if company already set in contact
+				    subContact.properties.add(organization);
+
+				    subContact.save();
+
+				    saveInvoices(subContact, contacts.get(j));
+
+				}
+
+			    }
+			    else
+			    {
+				Contact ctx = wrapContactToAgileSchemaAndSave(customers.get(i));
+				saveInvoices(ctx, customers.get(i));
+			    }
+			}
 		    }
 
 		}
@@ -84,10 +124,19 @@ public class FreshbooksSyncImpl extends OneWaySyncService
     @Override
     protected void updateLastSyncedInPrefs()
     {
-	SimpleDateFormat sm = new SimpleDateFormat("YYYY-MM-dd hh:mm:ss");
-	String date = sm.format(new Date());
-	prefs.lastSyncCheckPoint = date;
-	prefs.save();
+
+	try
+	{
+	    FreshbooksDataService service = new FreshbooksDataService(prefs.token, prefs.othersParams);
+
+	    System.out.println("lastupdated time" + service.getLastUpdatedTime());
+	    prefs.lastSyncCheckPoint = service.getLastUpdatedTime();
+	    prefs.save();
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception occurred during last updated time");
+	}
 
     }
 
@@ -142,7 +191,11 @@ public class FreshbooksSyncImpl extends OneWaySyncService
 					    if (tax > 0.0)
 						sb.append("Tax : " + tax + "(" + invoice.get("currency_code") + ")");
 					}
-					sb.append("\n Total Amount : " + item.get("amount") + "("
+
+				    }
+				    if (items.length() - 1 == j)
+				    {
+					sb.append("\nTotal Amount : " + invoice.get("amount") + "("
 						+ invoice.get("currency_code") + ")");
 				    }
 				    n.description = sb.toString();
@@ -166,9 +219,9 @@ public class FreshbooksSyncImpl extends OneWaySyncService
 				    note.description = sb.toString();
 
 				}
-				if (items.length() == 1)
+				if (items.length() - 1 == j)
 				{
-				    note.description += "\n Total Amount : " + invoice.get("amount") + "("
+				    note.description += "\nTotal Amounts : " + invoice.get("amount") + "("
 					    + invoice.get("currency_code") + ")" + "";
 				}
 
@@ -248,6 +301,29 @@ public class FreshbooksSyncImpl extends OneWaySyncService
 	    }
 	}
 	return items;
+    }
+
+    private ContactField getOrganization(Object obj)
+    {
+	JSONObject customer = (JSONObject) obj;
+	ContactField field = null;
+	try
+	{
+	    if (customer.has("organization"))
+	    {
+		String organization = customer.getString("organization");
+		if (!organization.isEmpty() && !organization.equals("undefined"))
+		{
+		    field = new ContactField(Contact.COMPANY, organization, "office");
+		}
+
+	    }
+	}
+	catch (NullPointerException | JSONException e)
+	{
+	    e.printStackTrace();
+	}
+	return field;
     }
 
 }

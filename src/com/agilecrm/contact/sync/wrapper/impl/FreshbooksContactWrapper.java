@@ -181,9 +181,9 @@ public class FreshbooksContactWrapper extends ContactWrapper
     {
 
 	JSONObject address = getAddress(customer);
-	if (address != null && address.length() >0)
+	if (address != null && address.length() > 0)
 	{
-	   return  new ContactField(Contact.ADDRESS, address.toString(), "home");
+	    return new ContactField(Contact.ADDRESS, address.toString(), "home");
 	}
 
 	return null;
@@ -207,7 +207,6 @@ public class FreshbooksContactWrapper extends ContactWrapper
 	 */
 	return null;
     }
-
 
     private JSONObject getAddress(JSONObject customer)
     {
@@ -234,7 +233,6 @@ public class FreshbooksContactWrapper extends ContactWrapper
 	    {
 		address.put("city", city);
 	    }
-
 
 	    if (!StringUtils.isEmpty(zip) && !zip.equals("undefined"))
 	    {
@@ -274,6 +272,7 @@ public class FreshbooksContactWrapper extends ContactWrapper
 		}
 
 		if (!StringUtils.isEmpty(szip) && !szip.equals("undefined"))
+
 		{
 		    address.put("zip", szip);
 		}
@@ -296,5 +295,4 @@ public class FreshbooksContactWrapper extends ContactWrapper
 	}
 	return null;
     }
-
 }

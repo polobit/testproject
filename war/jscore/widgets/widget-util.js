@@ -290,7 +290,13 @@ function saveZendeskWidgetPrefs()
 	var zendesk_prefs = {};
 	zendesk_prefs["zendesk_username"] = $("#zendesk_username").val();
 	zendesk_prefs["zendesk_password"] = $("#zendesk_password").val();
-	zendesk_prefs["zendesk_url"] = $("#zendesk_url").val();
+//	zendesk_prefs["zendesk_url"] = $("#zendesk_url").val();
+	
+    var zenDeskURL = $("#zendesk_url").val();
+    if(zenDeskURL.indexOf("https") == -1) {//if not found
+    	zenDeskURL = zenDeskURL.replace("http", "https");
+    }
+    zendesk_prefs["zendesk_url"] = zenDeskURL;
 
 	// Saves the preferences into widget with zendesk widget name
 	save_widget_prefs("Zendesk", JSON.stringify(zendesk_prefs), function(data)
@@ -557,8 +563,6 @@ function show_set_up_widget(widget_name, template_id, url, model)
 	else if (widget_name == "Chargify")
 		chargify_save_widget_prefs();
 
-	else if (widget_name == "Shopify")
-		shopify_save_widget_prefs();
 
 	// Shows available widgets in the content
 	if (url)

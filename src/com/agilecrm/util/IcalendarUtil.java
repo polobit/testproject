@@ -103,7 +103,12 @@ public class IcalendarUtil
 	else
 	{
 	    _organizerName = name;
-	    _organizerEmail = name + "@invoxagilecrm.com";
+
+	    if (name.contains(" "))
+	    {
+		name = name.replaceAll("\\s+", "");
+	    }
+	    _organizerEmail = name + "@yourinvoxagilecrm.com";
 	}
 
 	List<String> existingAttendeeList = new ArrayList<>();

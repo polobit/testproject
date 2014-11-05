@@ -32,6 +32,8 @@ import com.agilecrm.widgets.util.WidgetUtil;
 public class FacebookWidgetsApi
 {
 
+	String errorMessage = "Authentication Error. Please reconfigure your Facebook widget.";
+	
     /**
      * Contacts to Facebook and search facebook profiles based on user name
      * 
@@ -68,7 +70,7 @@ public class FacebookWidgetsApi
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(errorMessage)
 		    .build());
 	}
 
@@ -106,7 +108,7 @@ public class FacebookWidgetsApi
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(errorMessage)
 		    .build());
 	}
 
@@ -144,7 +146,7 @@ public class FacebookWidgetsApi
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(errorMessage)
 		    .build());
 	}
 
