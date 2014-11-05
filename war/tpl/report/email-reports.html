@@ -1,0 +1,180 @@
+<script type="text/html" id="email-report-categories-template">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h2>Reports</h2>
+        </div>
+
+
+<div id="general" class="row-fluid">
+
+<!-- Contact reports -->
+<div class="span4">
+    <div class="well" style="width:220px; height:200px; text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 70px 10px;">
+                <i class="icon-envelope icon-4x"></i>
+            </div>
+            <b>Contact Reports</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
+            Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
+        </div>
+        <!-- Add button -->
+        <div style="/*margin: 40px auto;	width: 50%;*/">
+            <a class="btn btn-primary" href="#email-reports/contacts">Go</a>
+        </div>
+    </div>
+</div>
+
+
+<!-- Activity reports -->
+
+<div class="span4">
+    <div class="well" style="width:220px; height:200px; text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 70px 10px;">
+                <i class="icon-envelope icon-4x"></i>
+            </div>
+            <b>Activity Reports</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
+           Get periodic email reports with a list of activities performed by users like tasks completed, deals closed as per your custom criteria.
+        </div>
+        <!-- Add button -->
+        <div style="/*margin: 40px auto;	width: 50%;*/">
+            <a class="btn btn-primary" href="#email-reports/activities">Go</a>
+        </div>
+    </div>
+</div>
+
+</script>
+
+<script id="activity-report-collection-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Activity Reports</h1>
+            <a href="#activityReportModal" id="add-activity-report" role="button" data-toggle="modal" class="btn right" style="top:-28px;position:relative"><span><i class="icon-plus-sign" /></span>  Add Report</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span9">
+		 <div id="slate">
+         </div>
+        {{#if this.length}}
+        <table class="table table-bordered table-striped showCheckboxes" url="core/api/activity-reports/bulk">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Duration</th>
+					<th>Fields</th>
+                </tr>
+            </thead>
+            <tbody id="activity-report-model-list" class="agile-edit-row">
+            </tbody>
+        </table>
+		{{/if}}
+    </div>
+    <div class="span3">
+        <div class="well" id="addview">
+            <h3>
+                What are Activity Reports?
+            </h3>
+            <br />
+            <p>Customize your reports based on a variety of tags and filters and receive them periodically to constantly be in touch with your sales cycle and pipeline. Use the information to improve lead nurturing and customer retention strategies.
+</p>
+        </div>
+    </div>
+</div>
+<div class="modal hide fade" id="activityReportModal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3><i class="icon-plus-sign"></i>&nbsp;Activity Report</h3>
+    </div>
+    <div class="modal-body" style="max-height:420px !important;">
+		<form id="activityReportsForm" class="form-horizontal">
+				<fieldset style="margin-left: -20px">
+					<div class="control-group">
+						<label class="control-label">Name<span class="field_req">*</span></label>
+						<div class="controls">
+							<input type="text" name="name" class="required" />
+						</div>
+					</div>
+
+			<div class="control-group">
+				<label class="control-label">Activity Type <span class="field_req">*</span></label>
+				<div class="controls" id="contactTypeAhead">
+					<select id="activity-type-list" name="activity_type" class="required" multiple="multiple">
+						<option value="Opportunity">Deals</option>
+						<option value="Task">Task</option>
+						<option value="Event">Event</option>
+						<option value="Email">Email</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label">Users <span class="field_req">*</span></label>
+				<div class="controls" >
+					<select id="users-list" name="user_ids" class="required" multiple="multiple">
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label">Send Report To<span
+					class="field_req">*</span></label>
+				<div class="controls">
+					<input type="text" name="sendTo" class="required" placeholder="Email addresses separated by comma"/>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Duration<span
+					class="field_req">*</span></label>
+				<div class="controls">
+					<select class="required" name="duration">
+					<option value="DAILY">Daily</option>
+						<option value="WEEKLY">Weekly</option>
+						<option value="MONTHLY">Monthly</option>
+					</select>
+				</div>
+			</div>			
+			<input type="hidden" class="hide" name="id" /></input>
+			</fieldset>
+		</form>
+ </div>
+    <div class="modal-footer">
+        <a href="#" class="save btn btn-primary" id="activity_report_validate">Save
+        </a>
+        <span class="save-status"></span>
+    </div>
+
+</div>
+</script>
+
+<script id="activity-report-model-template" type="text/html">
+	<td data="{{id}}" class="data" style="cursor:pointer"><a>{{name}}</a></td>
+	<td>
+    	{{ucfirst duration}}
+	</td>
+	<td><div style="width:17em;text-transform:capitalize;">{{#field_Element activity_type}}{{/field_Element}}</div></td>
+	<td>
+		<a href="#report-results/{{id}}" data={{id}} id="activity-report-instant-results">Show Results</a> 			
+	</td>
+	<td>
+	 	<a  data={{id}} id="activity-reports-email-now" >Send Now</a>
+	</td>
+<br />
+</script>
+
+<script id="activity-reports-add-template" type="text/html">
+
+</script>

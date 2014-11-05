@@ -8,7 +8,7 @@ var ReportsRouter = Backbone.Router.extend({
 	routes : {
 
 	/* Reports */
-	"reports" : "reports", "email-reports" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
+	"reports" : "reports", "email-reports" : "emailReportTypes", "email-reports/:type" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
 		"report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts", "report-funnel/:tags" : "showFunnelReport",
 		"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport" },
 
@@ -23,17 +23,54 @@ var ReportsRouter = Backbone.Router.extend({
 	},
 
 	/**
-	 * Shows list of reports, with an option to add new report
+	 * Shows email-reports categories
 	 */
-	emailReports : function()
+	emailReportTypes : function()
 	{
-		this.reports = new Base_Collection_View({ url : '/core/api/reports', restKey : "reports", templateKey : "report", individual_tag_name : 'tr' });
-
-		this.reports.collection.fetch();
-		$("#content").html(this.reports.render().el);
-
+		$("#content").html(getTemplate('email-report-categories', {}));
 		$(".active").removeClass("active");
 		$("#reportsmenu").addClass("active");
+	},
+	
+	/**
+	 * Shows list of reports, with an option to add new report
+	 */
+	emailReports : function(type)
+	{
+		//alert(type);
+		if(type== 'activities'){
+			this.activityReports = new Base_Collection_View({ url : '/core/api/activity-reports', restKey : "activityReports", templateKey : "activity-report", individual_tag_name : 'tr', postRenderCallback: function(el){
+				// Fills owner select element
+				populateUsers("users-list", el, undefined, undefined, function(data){
+					console.log($(data).find('option').remove().html());
+					$("#users-list",el).html(data);
+					$("#users-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
+					$("#users-list", el).closest('div').find('.loading-img').hide();
+					$('#users-list').find('option[value=""]').remove();
+					head.js(LIB_PATH + 'lib/jquery.multi-select.js', function()
+							{
+								$('#activity-type-list, #users-list',el).multiSelect();
+							});
+				});
+				
+			}
+			});
+
+			this.activityReports.collection.fetch();
+			$("#content").html(this.activityReports.render().el);
+
+			$(".active").removeClass("active");
+			$("#reportsmenu").addClass("active");
+			
+		} else {
+			this.reports = new Base_Collection_View({ url : '/core/api/reports', restKey : "reports", templateKey : "report", individual_tag_name : 'tr' });
+
+			this.reports.collection.fetch();
+			$("#content").html(this.reports.render().el);
+
+			$(".active").removeClass("active");
+			$("#reportsmenu").addClass("active");
+		}
 	},
 
 	/**
