@@ -270,11 +270,11 @@ function showCalendar() {
 
 function showEventFilters(){
 	 $.getJSON('/core/api/users/agileusers', function (users) {
-		 var html = '<option value="">All Events</option>';
+		 var html = '<option value="">All</option>';
 		 if(users){
 			 $.each(users,function(i,user){
 				 if(CURRENT_DOMAIN_USER.id == user.domainUser.id)
-					 html += '<option value='+user.id+'>My Events</option>';
+					 html += '<option value='+user.id+'>Me</option>';
 			 });
 		 }
 		 $('#event-owner').html(html);
