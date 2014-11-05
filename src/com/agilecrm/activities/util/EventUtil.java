@@ -187,17 +187,15 @@ public class EventUtil
 		if (user != null)
 		{
 		    ContactField toemail = con.getContactFieldByName("email");
-		    if (toemail == null)
-		    {
-			toemail = con.getContactFieldByName("first_name");
-		    }
-		    net.fortuna.ical4j.model.Calendar iCal = IcalendarUtil.getICalFromEvent(event, user, toemail.value,
-			    null);
-		    String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 
 		    if (toemail != null)
-			EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", toemail.value, null, null,
-			        subject, null, null, null, null, attachments);
+		    {
+			net.fortuna.ical4j.model.Calendar iCal = IcalendarUtil.getICalFromEvent(event, user,
+			        toemail.value, null);
+			String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
+			EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", toemail.value, null,
+			        null, subject, null, null, null, null, attachments);
+		    }
 		}
 	    }
 	    if (user != null)
@@ -207,8 +205,8 @@ public class EventUtil
 		System.out.println("agileUseiCal-- " + agileUseiCal.toString());
 		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
 
-		EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", user.email, null, null, subject, null,
-		        null, null, null, attachments_to_agile_user);
+		EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", user.email, null, null, subject,
+		        null, null, null, null, attachments_to_agile_user);
 
 	    }
 	}
