@@ -330,7 +330,10 @@ $(function(){
 		
 		 if($(this).attr('disabled'))
 	   	     return;
-		 
+			
+		// Saves tinymce content to textarea
+		save_content_to_textarea('email-body');
+			
 		// serialize form.
 		var json = serializeForm("emailForm");
 		
@@ -362,9 +365,6 @@ $(function(){
 		
 		// Disables send button and change text to Sending...
 		disable_send_button($(this));
-		
-		// Saves tinymce content to textarea
-		save_content_to_textarea('email-body');
 		
 		// Navigates to previous page on sending email
 		$.ajax({

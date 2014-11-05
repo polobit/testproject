@@ -284,7 +284,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
               case 9: // tab
               case 13: // enter
                 if (!this.shown) return
-                this.select()
+                if(isEmailSearch && !CONTACTS.length)this.hide();else this.select();
                 break
 
               case 27: // escape
