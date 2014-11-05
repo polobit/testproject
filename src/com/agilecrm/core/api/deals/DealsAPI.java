@@ -372,7 +372,7 @@ public class DealsAPI
 
 	// Executes notification when deal is deleted
 	DealNotificationPrefsUtil.executeNotificationForDeleteDeal(opportunitiesJSONArray);
-	ActivitySave.createLogForBulkDeletes(EntityType.DEAL, opportunitiesJSONArray.toString(),
+	ActivitySave.createLogForBulkDeletes(EntityType.DEAL, opportunitiesJSONArray,
 	        String.valueOf(opportunitiesJSONArray.length()), "");
 	Opportunity.dao.deleteBulkByIds(opportunitiesJSONArray);
     }

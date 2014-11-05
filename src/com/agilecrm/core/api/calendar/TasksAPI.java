@@ -254,8 +254,8 @@ public class TasksAPI
     public void deleteContacts(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
-	ActivitySave.createLogForBulkDeletes(EntityType.TASK, tasksJSONArray.toString(),
-	        String.valueOf(tasksJSONArray.length()), "");
+	ActivitySave.createLogForBulkDeletes(EntityType.TASK, tasksJSONArray, String.valueOf(tasksJSONArray.length()),
+	        "");
 	Task.dao.deleteBulkByIds(tasksJSONArray);
     }
 

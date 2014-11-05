@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.activities.Event;
+import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.EventUtil;
 
@@ -191,6 +192,8 @@ public class EventsAPI
     public void deleteEvents(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray eventsJSONArray = new JSONArray(model_ids);
+	ActivitySave.createLogForBulkDeletes(EntityType.EVENT, eventsJSONArray, String.valueOf(eventsJSONArray.length()),
+	        "");
 
 	Event.dao.deleteBulkByIds(eventsJSONArray);
     }

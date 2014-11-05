@@ -534,13 +534,31 @@ public class ActivitySave
      * @param new_data
      * @param old_data
      * @param changed_field
+     * @throws JSONException
      */
-    public static void createLogForBulkDeletes(EntityType entitytype, String delete_entity_ids,
-	    String delete_entity_names, String changed_field)
+    public static void createLogForBulkDeletes(EntityType entitytype, JSONArray delete_entity_ids, String no,
+	    String changed_field) throws JSONException
     {
+	List<String> delete_entity_names = new ArrayList<>();
 
-	ActivityUtil.createBulkDeleteActivity(entitytype, delete_entity_ids,
-	        delete_entity_names.replaceAll("[^\\w\\s\\-,]", ""), changed_field);
+	if (entitytype == EntityType.DEAL)
+	{
+	    delete_entity_names = ActivityUtil.getDealNames(delete_entity_ids);
+	}
+	else if (entitytype == EntityType.TASK)
+	{
+	    delete_entity_names = ActivityUtil.getTaskNames(delete_entity_ids);
+	}
+	else if (entitytype == EntityType.EVENT)
+	{
+	    delete_entity_names = ActivityUtil.getEventNames(delete_entity_ids);
+	}
+	else if (entitytype == EntityType.DOCUMENT)
+	{
+	    delete_entity_names = ActivityUtil.getDocumentNames(delete_entity_ids);
+	}
+	ActivityUtil.createBulkDeleteActivity(entitytype, no,
+	        delete_entity_names.toString().replaceAll("[^\\w\\s\\-,]", ""), changed_field);
 
     }
 

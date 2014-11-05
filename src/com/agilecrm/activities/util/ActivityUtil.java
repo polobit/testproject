@@ -1215,6 +1215,34 @@ public class ActivityUtil
     }
 
     /**
+     * gets the list of task names by giving array of event ids
+     * 
+     * @param js
+     * @return
+     * @throws JSONException
+     */
+    public static List<String> getEventNames(JSONArray js) throws JSONException
+    {
+	List<String> list = new ArrayList<>();
+
+	for (int i = 0; i <= js.length() - 1; i++)
+	{
+
+	    if (js.get(i) != null)
+	    {
+		Event event = EventUtil.getEvent(js.getLong(i));
+		if (event != null)
+		{
+		    list.add(event.title);
+
+		}
+	    }
+
+	}
+	return list;
+    }
+
+    /**
      * gets list of document names
      * 
      * @param js

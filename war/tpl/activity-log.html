@@ -254,7 +254,7 @@ Modified Task <a href="" data={{entity_id}} class='activity-task-edit'">{{label}
 	</div>	
 <div class="pull-left">
 <div>
-{{#if_equals "1" custom2}}
+{{#if_equals "1" custom1}}
   Deleted {{custom2}} Task 
 {{else}} 
 	Deleted {{custom2}} Tasks 
@@ -500,7 +500,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 	</div>
 <div class="pull-left">
 <div>	
-    {{#if_equals "1" custom2}}
+    {{#if_equals "1" custom1}}
   Deleted {{custom2}} Deal 
 {{else}} 
 	Deleted {{custom2}} Deals 
@@ -576,7 +576,32 @@ Added {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href
 </div>
 <div class="clearfix"></div>
 {{/if_equals}}
+{{#if_equals "BULK_DELETE" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left">
+<div>	
+    {{#if_equals "1" custom1}}
+  Deleted {{custom2}} Event 
+{{else}} 
+	Deleted {{custom2}} Events 
+{{/if_equals}}
+</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
 
+{{/if_equals}}
 
 {{#if_equals "EVENT_DELETE" activity_type}}
 	
@@ -1021,7 +1046,7 @@ Added Tag {{removeDoubleCoutes custom1}} to <a href="#contact/{{entity_id}}">{{l
 	</div>
 <div class="pull-left activity-tag">
 <div>	
-    {{#if_equals "1" custom2}}
+    {{#if_equals "1" custom1}}
   Deleted {{custom2}} Document 
 {{else}} 
 Deleted {{custom2}} Documents 
