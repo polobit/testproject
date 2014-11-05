@@ -196,8 +196,8 @@ public class EventUtil
 		    String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 
 		    if (toemail != null)
-			EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", toemail.value, null, null,
-			        subject, null, null, null, null, attachments);
+			EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", toemail.value, null,
+			        null, subject, null, null, null, null, attachments);
 		}
 	    }
 	    if (user != null)
@@ -207,8 +207,8 @@ public class EventUtil
 		System.out.println("agileUseiCal-- " + agileUseiCal.toString());
 		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
 
-		EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", user.email, null, null, subject, null,
-		        null, null, null, attachments_to_agile_user);
+		EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", user.email, null, null, subject,
+		        null, null, null, null, attachments_to_agile_user);
 
 	    }
 	}
@@ -243,5 +243,38 @@ public class EventUtil
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+
+    public static List<Event> getEventsStartingInNextFifteenMinutes(Long agileuserid)
+    {
+	Event event = null;
+	Long starttime = System.currentTimeMillis() / 1000;
+
+	int duration = 600;
+	Long endtime = starttime + duration;
+
+	List<Event> events = dao.ofy().query(Event.class)
+	        .filter("owner = ", new Key<AgileUser>(AgileUser.class, agileuserid)).filter("start >=", starttime)
+	        .filter("start <=", endtime).list();
+
+	if (events != null && events.size() > 0)
+	{
+	    for (Event e : events)
+	    {
+		if (e.color.equals("#36C"))
+		{
+		    e.color = "Normal";
+		}
+		else if (e.color.equals("red"))
+		{
+		    e.color = "High";
+		}
+		else if (e.color.equals("green"))
+		{
+		    e.color = "Low";
+		}
+	    }
+	}
+	return events;
     }
 }

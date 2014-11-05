@@ -262,6 +262,15 @@
 		<servlet-name>TaskReminder</servlet-name>
 		<url-pattern> /backend/cron/tasks</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>EventReminder</servlet-name>
+		<servlet-class>com.agilecrm.EventReminderServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EventReminder</servlet-name>
+		<url-pattern> /backend/cron/events</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>AccountLimitChecker</servlet-name>
