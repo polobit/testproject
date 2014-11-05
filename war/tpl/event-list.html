@@ -63,13 +63,6 @@
 	</div>
 {{/if}}
 </div>
-
-<div class="row" style="margin-left:3px;height: 23px;">
-<div class="span5">{{getTime start}} -  {{getTime end}}</div>
-<div class="pull-right">
-<div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;"> 	
-<span class="label" style="background-color:{{color}}">{{event_priority color}}</span></div>
-</div>
 </div>
 
 </td>
@@ -112,6 +105,17 @@
 <div class="row" style="margin-left:3px;height: 23px;">
 <div class="span3">{{title}}</div>
 
+<div class="pull-right">
+<div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;"> 	
+<span class="label" style="background-color:{{color}}">{{event_priority color}}</span></div>
+</div>
+
+
+</div>
+
+<div class="row" style="margin-left:3px;height: 23px;">
+<div class="span5">{{getCustomDateWithTime start end}}</div>
+
 <div class="pull-right" style="overflow-x: auto;max-width: 600px;">
 {{#if contacts.length}} 
 <div class="ellipsis-multiline" style="line-height:20px !important;"> 	
@@ -123,18 +127,6 @@
 
 
 </div>
-
-<div class="row" style="margin-left:3px;height: 23px;">
-<div class="span5">{{getCustomDateWithTime start end}}</div>
-
-<div class="pull-right">
-<div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;"> 	
-<span class="label" style="background-color:{{color}}">{{event_priority color}}</span></div>
-
-</div>
-
-</div>
-
 </td>
 </script>
 
