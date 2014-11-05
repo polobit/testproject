@@ -312,7 +312,7 @@ public class ActivityUtil
      * 
      */
     public static Activity createDocumentActivity(ActivityType activity_type, Document document, String new_data,
-	    String old_data, String changed_field,JSONArray jsn)
+	    String old_data, String changed_field, JSONArray jsn)
     {
 	Activity activity = new Activity();
 	activity.label = document.name;
@@ -648,25 +648,9 @@ public class ActivityUtil
 		}
 	    JSONObject js = new JSONObject(new Gson().toJson(obj));
 	    JSONArray jsn = js.getJSONArray("contact_ids");
+	    List<Contact> contacts = oldobj.getContacts();
 
-	    List<String> oldcontactids = oldobj.getContact_ids();
-
-	    Object[] mapvalue = new Object[3];
-
-	    if (oldcontactids.size() > 0)
-	    {
-		mapvalue = getChangedContactNames(jsn, oldcontactids);
-	    }
-	    else
-	    {
-
-		mapvalue[0] = ActivitySave.getContactNames(jsn);
-		mapvalue[1] = "[]";
-		mapvalue[2] = "contacts_added";
-	    }
-	    dealmap.put("Contacts_related_to", mapvalue);
-	    System.out.println(mapvalue[0] + "  " + mapvalue[1] + "   " + mapvalue[2]);
-	    System.out.println("deals==============================");
+	    getDealRelatedContacts(contacts, jsn, obj);
 
 	}
 	catch (Exception e)
@@ -677,6 +661,118 @@ public class ActivityUtil
 	}
 
 	return dealmap;
+    }
+
+    /**
+     * stores log for related to field change
+     * 
+     * @param contacts
+     * @param jsn
+     * @param opportunity
+     * @throws JSONException
+     */
+    public static void getDealRelatedContacts(List<Contact> contacts, JSONArray jsn, Opportunity opportunity)
+	    throws JSONException
+    {
+
+	List<String> old_cont_ids = getContactIds(contacts);
+
+	Object[] mapvalue = new Object[3];
+	if (jsn == null)
+	{
+	    JSONArray removed_relatedconatcts = ActivitySave.getJsonArrayOfIdFromList(old_cont_ids);
+	    ActivityUtil.createDealActivity(ActivityType.DEAL_RELATED_CONTACTS, opportunity, null, null,
+		    "removed_all_relatedcontacts", removed_relatedconatcts);
+	}
+	else if (contacts.size() > jsn.length())
+	{
+	    JSONArray removed_jsonconatcts = ActivitySave.removedContacts(old_cont_ids, jsn);
+	    ActivityUtil.createDealActivity(ActivityType.DEAL_RELATED_CONTACTS, opportunity, null, null,
+		    "removed_relatedcontacts", removed_jsonconatcts);
+	}
+
+	else if (jsn.length() > old_cont_ids.size())
+	{
+
+	    JSONArray added_jsonconatcts = ActivitySave.addedContacts(old_cont_ids, jsn);
+	    ActivityUtil.createDealActivity(ActivityType.DEAL_RELATED_CONTACTS, opportunity, null, null,
+		    "added_relatedcontacts", added_jsonconatcts);
+
+	}
+    }
+
+    /**
+     * stores log for related_to filed change
+     * 
+     * @param contacts
+     * @param jsn
+     * @param event
+     * @throws JSONException
+     */
+    public static void getEventRelatedContacts(List<Contact> contacts, JSONArray jsn, Event event) throws JSONException
+    {
+
+	List<String> old_cont_ids = getContactIds(contacts);
+
+	Object[] mapvalue = new Object[3];
+	if (jsn == null)
+	{
+	    JSONArray removed_relatedconatcts = ActivitySave.getJsonArrayOfIdFromList(old_cont_ids);
+	    ActivityUtil.createEventActivity(ActivityType.EVENT_RELATED_CONTACTS, event, null, null,
+		    "removed_all_relatedcontacts", removed_relatedconatcts);
+	}
+	else if (contacts.size() > jsn.length())
+	{
+	    JSONArray removed_jsonconatcts = ActivitySave.removedContacts(old_cont_ids, jsn);
+	    ActivityUtil.createEventActivity(ActivityType.EVENT_RELATED_CONTACTS, event, null, null,
+		    "removed_relatedcontacts", removed_jsonconatcts);
+	}
+
+	else if (jsn.length() > old_cont_ids.size())
+	{
+
+	    JSONArray added_jsonconatcts = ActivitySave.addedContacts(old_cont_ids, jsn);
+	    ActivityUtil.createEventActivity(ActivityType.EVENT_RELATED_CONTACTS, event, null, null,
+		    "added_relatedcontacts", added_jsonconatcts);
+
+	}
+    }
+
+    /**
+     * stores log for related_to filed change
+     * 
+     * @param contacts
+     * @param jsn
+     * @param task
+     * @throws JSONException
+     */
+    public static void getTaskRelatedContacts(List<Contact> contacts, JSONArray jsn, Task task) throws JSONException
+    {
+
+	List<String> old_cont_ids = getContactIds(contacts);
+
+	Object[] mapvalue = new Object[3];
+	if (jsn == null)
+	{
+	    JSONArray removed_relatedconatcts = ActivitySave.getJsonArrayOfIdFromList(old_cont_ids);
+	    ActivityUtil.createTaskActivity(ActivityType.TASK_RELATED_CONTACTS, task, null, null,
+		    "removed_all_relatedcontacts", removed_relatedconatcts);
+	}
+	else if (contacts.size() > jsn.length())
+	{
+	    JSONArray removed_jsonconatcts = ActivitySave.removedContacts(old_cont_ids, jsn);
+	    ActivityUtil.createTaskActivity(ActivityType.TASK_RELATED_CONTACTS, task, null, null,
+		    "removed_relatedcontacts", removed_jsonconatcts);
+	}
+
+	else if (jsn.length() > old_cont_ids.size())
+	{
+
+	    JSONArray added_jsonconatcts = ActivitySave.addedContacts(old_cont_ids, jsn);
+	    ActivityUtil.createTaskActivity(ActivityType.TASK_RELATED_CONTACTS, task, null, null,
+		    "added_relatedcontacts", added_jsonconatcts);
+
+	}
     }
 
     /**
@@ -781,32 +877,9 @@ public class ActivityUtil
 	    JSONArray jsn = js.getJSONArray("contacts");
 
 	    List<Contact> contacts = oldobj.getContacts();
-	    List<String> old_cont_ids = new ArrayList<>();
+	    List<String> old_cont_ids = getContactIds(contacts);
 
-	    if (contacts.size() > 0)
-	    {
-		old_cont_ids = getContactIds(contacts);
-	    }
-
-	    Object[] mapvalue = new Object[3];
-
-	    if (old_cont_ids.size() > 0)
-	    {
-		mapvalue = getChangedContactNames(jsn, old_cont_ids);
-	    }
-	    else
-	    {
-
-		mapvalue[0] = ActivitySave.getContactNames(jsn);
-		mapvalue[1] = "[]";
-		mapvalue[2] = "contacts_added";
-	    }
-
-	    eventmap.put("Contacts_related_to", mapvalue);
-
-	    System.out.println(mapvalue[0] + "  " + mapvalue[1] + "   " + mapvalue[2]);
-	    System.out.println("events==============================");
-
+	    getEventRelatedContacts(contacts, jsn, obj);
 	}
 	catch (Exception e)
 	{
@@ -911,31 +984,9 @@ public class ActivityUtil
 	    JSONArray jsn = js.getJSONArray("contacts");
 
 	    List<Contact> contacts = oldobj.getContacts();
-	    List<String> old_cont_ids = new ArrayList<>();
+	    List<String> old_cont_ids = getContactIds(contacts);
 
-	    if (contacts.size() > 0)
-	    {
-		old_cont_ids = getContactIds(contacts);
-	    }
-
-	    Object[] mapvalue = new Object[3];
-	    // mapvalue[0] stores newly added contacs
-	    // mapvalue[1] stores removed contacts
-	    if (old_cont_ids.size() > 0)
-	    {
-		mapvalue = getChangedContactNames(jsn, old_cont_ids);
-	    }
-	    else
-	    {
-
-		mapvalue[0] = ActivitySave.getContactNames(jsn);
-		mapvalue[1] = "[]";
-		mapvalue[2] = "contacts_added";
-	    }
-	    taskmap.put("Contacts_related_to", mapvalue);
-	    System.out.println(mapvalue[0] + "  " + mapvalue[1] + "   " + mapvalue[2]);
-	    System.out.println("tasks==============================");
-
+	    getTaskRelatedContacts(contacts, jsn, obj);
 	}
 	catch (Exception e)
 	{

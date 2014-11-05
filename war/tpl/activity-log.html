@@ -171,8 +171,21 @@
 			{{/if}}
 	</div>
 <div class="pull-left activity-tag">
-<div>	
- Modified Task <a href="" data={{entity_id}} class='activity-task-edit'">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a> {{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
+<div>
+{{#if related_contact_ids}}
+{{#if_equals "removed_all_relatedcontacts" custom3}}
+Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a> {{/toLinkTrigger}}{{/stringToJSON}} from Task <a href="" data={{entity_id}} class='activity-task-edit'">{{label}}</a> 
+{{/if_equals}} 
+{{#if_equals "removed_relatedcontacts" custom3}}
+Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a> {{/toLinkTrigger}}{{/stringToJSON}} from Task <a href="" data={{entity_id}} class='activity-task-edit'">{{label}}</a> 
+{{/if_equals}} 
+{{#if_equals "added_relatedcontacts" custom3}}
+Added {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a> {{/toLinkTrigger}}{{/stringToJSON}} to Task <a href="" data={{entity_id}} class='activity-task-edit'">{{label}}</a> 
+{{/if_equals}}
+{{else}}
+Modified Task <a href="" data={{entity_id}} class='activity-task-edit'">{{label}}</a>  
+
+{{/if}} 
 	</div>
 <div>	
 		<small class="edit-hover pull-left" > 
@@ -360,8 +373,20 @@
 	</div>
 <div class="pull-left activity-tag">	
 <div>
+{{#if related_contact_ids}}
+{{#if_equals "removed_all_relatedcontacts" custom3}}
+Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a> {{/toLinkTrigger}}{{/stringToJSON}} from Deal <a href="" data={{entity_id}} class='activity-deal-edit'">{{label}}</a> 
+{{/if_equals}} 
+{{#if_equals "removed_relatedcontacts" custom3}}
+Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a> {{/toLinkTrigger}}{{/stringToJSON}} from Deal <a href="" data={{entity_id}} class='activity-deal-edit'">{{label}}</a> 
+{{/if_equals}} 
+{{#if_equals "added_relatedcontacts" custom3}}
+Added {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a> {{/toLinkTrigger}}{{/stringToJSON}} to Deal <a href="" data={{entity_id}} class='activity-deal-edit'">{{label}}</a> 
+{{/if_equals}}
+{{else}}
 Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a> {{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
-	</div>
+{{/if}}	
+</div>
 <div>	
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
@@ -528,9 +553,21 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 			{{/if}}
 	</div>
 <div class="pull-left activity-tag">
-<div>	
+<div>
+{{#if related_contact_ids}}
+{{#if_equals "removed_all_relatedcontacts" custom3}}
+Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a> {{/toLinkTrigger}}{{/stringToJSON}} from Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> 
+{{/if_equals}} 
+{{#if_equals "removed_relatedcontacts" custom3}}
+Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a> {{/toLinkTrigger}}{{/stringToJSON}} from Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> 
+{{/if_equals}} 
+{{#if_equals "added_relatedcontacts" custom3}}
+Added {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a> {{/toLinkTrigger}}{{/stringToJSON}} to Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> 
+{{/if_equals}}
+{{else}}	
  Modified Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a> {{/toLinkTrigger}}{{/stringToJSON}}{{/if}}  
-	</div>
+{{/if}}	
+</div>
 <div>	
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
@@ -959,9 +996,9 @@ Added Tag {{removeDoubleCoutes custom1}} to <a href="#contact/{{entity_id}}">{{l
 <div class="pull-left activity-tag">
 <div>	
 {{#if_equals "1" custom2}}
-   Removed Document <a href="{{custom1}}" target="_blank">{{label}}</a> on {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a> {{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
+   Removed {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a> {{/toLinkTrigger}}{{/stringToJSON}}{{/if}} from Document <a href="{{custom1}}" target="_blank">{{label}}</a>
 {{else}} 
-	 Removed Document <a href="{{custom1}}" target="_blank">{{label}}</a> on {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a> {{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
+	 Removed {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a> {{/toLinkTrigger}}{{/stringToJSON}}{{/if}}from Document <a href="{{custom1}}" target="_blank">{{label}}</a> 
 {{/if_equals}}	
 </div>
 <div>

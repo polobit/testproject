@@ -45,7 +45,6 @@ public class ActivitySave
 	Object expectedvalue[] = deals.get("expected_value");
 	Object probablity[] = deals.get("probability");
 	Object milestone[] = deals.get("milestone");
-	Object Contacts_related_to[] = deals.get("Contacts_related_to");
 	JSONObject js = new JSONObject(new Gson().toJson(opportunity));
 	JSONArray jsn = js.getJSONArray("contact_ids");
 
@@ -68,35 +67,6 @@ public class ActivitySave
 		else
 		    ActivityUtil.createDealActivity(ActivityType.DEAL_MILESTONE_CHANGE, opportunity,
 			    milestone[0].toString(), milestone[1].toString(), milestone[2].toString(), jsn);
-	    }
-
-	    if (name == null && expectedvalue == null && probablity == null && close_date == null && milestone == null
-		    && ownername == null)
-	    {
-		if (Contacts_related_to != null)
-		{
-		    if (!Contacts_related_to[0].toString().equalsIgnoreCase("[]")
-			    && !Contacts_related_to[1].toString().equalsIgnoreCase("[]"))
-			ActivityUtil.createDealActivity(ActivityType.DEAL_RELATED_CONTACTS, opportunity,
-			        Contacts_related_to[0].toString(), Contacts_related_to[1].toString(),
-			        Contacts_related_to[2].toString(), jsn);
-		    else if (Contacts_related_to[0].toString().equalsIgnoreCase("[]")
-			    && Contacts_related_to[1].toString().equalsIgnoreCase("[]"))
-		    {
-
-		    }
-		    else if (!Contacts_related_to[0].toString().equalsIgnoreCase("[]"))
-		    {
-			ActivityUtil.createDealActivity(ActivityType.DEAL_RELATED_CONTACTS, opportunity,
-			        Contacts_related_to[0].toString(), "[]", Contacts_related_to[2].toString(), jsn);
-		    }
-		    else if (!Contacts_related_to[1].toString().equalsIgnoreCase("[]"))
-		    {
-			ActivityUtil.createDealActivity(ActivityType.DEAL_RELATED_CONTACTS, opportunity, "[]",
-			        Contacts_related_to[1].toString(), Contacts_related_to[2].toString(), jsn);
-		    }
-
-		}
 	    }
 
 	    if (name != null || expectedvalue != null || probablity != null || close_date != null)
@@ -181,40 +151,12 @@ public class ActivitySave
 	Object end_date[] = events.get("end_date");
 	Object title[] = events.get("title");
 	Object priority[] = events.get("priority");
-	Object Contacts_related_to[] = events.get("Contacts_related_to");
 
 	JSONObject js = new JSONObject(new Gson().toJson(event));
 	JSONArray jsn = js.getJSONArray("contacts");
 
 	if (events.size() > 0)
 	{
-	    if (start_date == null && end_date == null && title == null && priority == null)
-	    {
-		if (Contacts_related_to != null)
-		{
-		    if (!Contacts_related_to[0].toString().equalsIgnoreCase("[]")
-			    && !Contacts_related_to[1].toString().equalsIgnoreCase("[]"))
-			ActivityUtil.createEventActivity(ActivityType.EVENT_RELATED_CONTACTS, event,
-			        Contacts_related_to[0].toString(), Contacts_related_to[1].toString(),
-			        Contacts_related_to[2].toString(), jsn);
-		    else if (Contacts_related_to[0].toString().equalsIgnoreCase("[]")
-			    && Contacts_related_to[1].toString().equalsIgnoreCase("[]"))
-		    {
-
-		    }
-		    else if (!Contacts_related_to[0].toString().equalsIgnoreCase("[]"))
-		    {
-			ActivityUtil.createEventActivity(ActivityType.EVENT_RELATED_CONTACTS, event,
-			        Contacts_related_to[0].toString(), "[]", Contacts_related_to[2].toString(), jsn);
-		    }
-		    else if (!Contacts_related_to[1].toString().equalsIgnoreCase("[]"))
-		    {
-			ActivityUtil.createEventActivity(ActivityType.EVENT_RELATED_CONTACTS, event, "[]",
-			        Contacts_related_to[1].toString(), Contacts_related_to[2].toString(), jsn);
-		    }
-
-		}
-	    }
 
 	    if (start_date != null || end_date != null || title != null || priority != null)
 	    {
@@ -288,34 +230,6 @@ public class ActivitySave
 		        owner_name[1].toString(), owner_name[2].toString(), jsn);
 	    }
 
-	    if (due == null && priority == null && subject == null && task_type == null && progress == null
-		    && owner_name == null)
-	    {
-		if (Contacts_related_to != null)
-		{
-		    if (!Contacts_related_to[0].toString().equalsIgnoreCase("[]")
-			    && !Contacts_related_to[1].toString().equalsIgnoreCase("[]"))
-			ActivityUtil.createTaskActivity(ActivityType.TASK_RELATED_CONTACTS, task,
-			        Contacts_related_to[0].toString(), Contacts_related_to[1].toString(),
-			        Contacts_related_to[2].toString(), jsn);
-		    else if (Contacts_related_to[0].toString().equalsIgnoreCase("[]")
-			    && Contacts_related_to[1].toString().equalsIgnoreCase("[null]"))
-		    {
-
-		    }
-		    else if (!Contacts_related_to[0].toString().equalsIgnoreCase("[]"))
-		    {
-			ActivityUtil.createTaskActivity(ActivityType.TASK_RELATED_CONTACTS, task,
-			        Contacts_related_to[0].toString(), "[]", Contacts_related_to[2].toString(), jsn);
-		    }
-		    else if (!Contacts_related_to[1].toString().equalsIgnoreCase("[]"))
-		    {
-			ActivityUtil.createTaskActivity(ActivityType.TASK_RELATED_CONTACTS, task, "[]",
-			        Contacts_related_to[1].toString(), Contacts_related_to[2].toString(), jsn);
-		    }
-
-		}
-	    }
 	    if (due != null || priority != null || subject != null || task_type != null)
 	    {
 		List changed_data = getChangedData(due, priority, subject, task_type);
@@ -704,6 +618,31 @@ public class ActivitySave
     }
 
     /**
+     * used to fetch the the contacts which are added to related to field.
+     * 
+     * @param oldcont
+     *            contactids which were saved in db
+     * @param ar
+     *            latest contacts which comes along with new document object for
+     *            saving
+     * @return
+     * @throws JSONException
+     */
+    public static JSONArray addedContacts(List<String> oldcont, JSONArray ar) throws JSONException
+    {
+	JSONArray jsn = new JSONArray();
+	for (int i = 0; i <= ar.length() - 1; i++)
+	{
+	    if (!oldcont.contains(ar.get(i)))
+		jsn.put(ar.get(i));
+
+	}
+
+	return jsn;
+
+    }
+
+    /**
      * returns the JSONArray from List
      * 
      * @param ids
@@ -742,7 +681,7 @@ public class ActivitySave
 	    if (js.get(i) != null)
 	    {
 		Contact contact = ContactUtil.getContact(Long.parseLong(js.get(i).toString()));
-		if (contact != null)
+		if (contact != null && contact.type == contact.type.PERSON)
 		{
 		    ContactField firstname = contact.getContactFieldByName("first_name");
 		    ContactField lastname = contact.getContactFieldByName("last_name");
@@ -752,10 +691,18 @@ public class ActivitySave
 		    }
 		    if (lastname != null)
 		    {
-			contact_name += "";
+			contact_name += " ";
 			contact_name += lastname.value;
 		    }
 
+		    list.add(contact_name.trim());
+		    contact_name = "";
+		}
+		else if (contact != null && contact.type == contact.type.COMPANY)
+		{
+		    ContactField name = contact.getContactFieldByName("name");
+
+		    contact_name = name.value;
 		    list.add(contact_name.trim());
 		    contact_name = "";
 		}
