@@ -91,5 +91,28 @@ public class XeroUtil
 		return HTTPUtil.accessHTTPURL(xeroPluginurl + "/organisation",
 				(new JSONObject(widget.prefs).put("callbackUrl", callbackUrl)).toString(), "PUT");
 	}
+	
+	public Widget refreshToken(Widget widget) throws Exception
+	{
+		String returnStr = HTTPUtil.accessHTTPURL(xeroPluginurl + "/refreshtoken",
+				(new JSONObject(widget.prefs).put("callbackUrl", callbackUrl)).toString(), "PUT");
+		
+		System.out.println("New accessToken JSON: " + returnStr);
+		
+		if (returnStr.contains("xero_access_token")) {
+			System.out.println("Before renew: "+widget.prefs);
+			JSONObject jsObj = new JSONObject(returnStr);
+			widget.addProperty("xero_access_token", jsObj.getString("xero_access_token"));
+			widget.addProperty("xero_token_secret", jsObj.getString("xero_token_secret"));
+			widget.addProperty("xero_oauth_handler", jsObj.getString("xero_oauth_handler"));
+			widget.addProperty("oauth_expires_in", jsObj.getString("oauth_expires_in"));
+			widget.addProperty("oauth_created_time", jsObj.getString("oauth_created_time"));
+			widget.save();
+			System.out.println("After renew: "+widget.prefs);
+		}
+		
+		return widget;
+		
+	}
 
 }
