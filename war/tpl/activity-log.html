@@ -375,7 +375,7 @@ Modified Task <a href="" data={{entity_id}} class='activity-task-edit'">{{label}
 <div>
 {{#if related_contact_ids}}
 {{#if_equals "removed_all_relatedcontacts" custom3}}
-Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/stringToJSON}} from Deal <a href="" data={{entity_id}} class='activity-deal-edit'">{{label}}</a> 
+Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} from Deal <a href="" data={{entity_id}} class='activity-deal-edit'">{{label}}</a> 
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
 Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} from Deal <a href="" data={{entity_id}} class='activity-deal-edit'">{{label}}</a> 
