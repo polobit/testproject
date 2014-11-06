@@ -317,6 +317,7 @@ function show_chained_fields(el, data, forceShow)
 				$(this).remove();
 		})
 		
+		
 		if(placeholder)
 		{
 			$("input", self).attr("placeholder", placeholder);
@@ -327,6 +328,7 @@ function show_chained_fields(el, data, forceShow)
 			
 			$("input", self).remove();
 			$($('select[name="'+field_name+'"]', self)[0]).show();
+			$('select:not([name="'+field_name+'"])', self).remove();
 		}
 		
 		
