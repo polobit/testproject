@@ -561,7 +561,7 @@ public class ActivitySave
 		delete_entity_names = ActivityUtil.getDocumentNames(delete_entity_ids);
 	    }
 	    ActivityUtil.createBulkDeleteActivity(entitytype, no,
-		    delete_entity_names.toString().replaceAll("[^\\w\\s\\-,]", ""), changed_field);
+		    delete_entity_names.toString().substring(1, delete_entity_names.size() - 1), changed_field);
 	}
 
     }
