@@ -435,6 +435,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 <div class="pull-left activity-tag">
 <div>	
  Assigned Deal  <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> to {{custom1}} {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
+
 </div>
 <div>		
 		<small class="edit-hover pull-left" > 
@@ -501,9 +502,9 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 <div class="pull-left">
 <div>	
     {{#if_equals "1" custom1}}
-  Deleted Deal {{custom2}}  
+  Deleted {{custom2}} Deal  
 {{else}} 
-	Deleted Deals {{custom2}}  
+	Deleted {{custom2}} Deals 
 {{/if_equals}}
 </div>
 <div>	
