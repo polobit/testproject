@@ -27,7 +27,7 @@
 						</div>
 						<!--  ending profile pic -->
 						<!--  starting title, company  -->
-						<div style='margin-top: 7px;float: left;vertical-align: middle;margin-left: 4px;' class="span10">
+						<div style='margin-top:2px;float: left;vertical-align: middle;margin-left: 4px;' class="span10">
 							<div>
 							<div>	
 							<div class="pull-left contact-profile-name mg-r-md">
@@ -71,18 +71,62 @@
 						<!--  ending score -->
 								<div class="clearfix"></div>
 								<div class="contact-title">
-							<div class="contact-job-title">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}</div>
+							<div class="contact-job-title contact-overflow-ellipsis">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}</div>
 								<div> {{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}</div>
 
-<div class="contact-company-name">								
+<div class="contact-company-name contact-overflow-ellipsis">								
 {{#if contact_company_id}} 
-									<a href="#contact/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
+									<a href="#contact/{{contact_company_id}}" class="contact-overflow-ellipsis">{{getPropertyValue properties "company"}}</a>
 								{{else}}
 									{{getPropertyValue properties "company"}}
 								{{/if}}
 </div>
 <div class="clearfix"></div>
 								</div>
+		<div  style="padding-top: 5px; margin: 0px;">
+									{{#property_is_exists "website" properties}}
+									{{#multiple_Property_Element "website" properties}} {{#each
+									this}} {{#if_equals subtype "TWITTER"}} <span
+										style="margin-right: 5px"><a target="_blank"
+										href="https://twitter.com/{{getTwitterHandleByURL value}}"
+										style="text-decoration: none"> <i
+											class="{{get_social_icon "
+											TWITTER"}}" style="font-size: 1.4em !important"></i>
+									</a>
+									</span> {{else}}  {{#if_equals subtype "SKYPE"}} <span
+										style="margin-right: 5px"><a target="_blank"
+										href="{{getSkypeURL value}}"
+										style="text-decoration: none"> <i
+											class="{{get_social_icon "
+											SKYPE"}}" style="font-size: 1.4em !important"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "FACEBOOK"}} <span
+										style="margin-right: 5px"><a target="_blank"
+										href="https://www.facebook.com/{{getFacebookURL value}}/"
+										style="text-decoration: none"> <i
+											class="{{get_social_icon "
+											FACEBOOK"}}" style="font-size: 1.4em !important"></i>
+									</a>
+									</span>{{else}}
+
+								{{#if_equals subtype "GOOGLE-PLUS"}} <span
+										style="margin-right: 5px"><a target="_blank"
+										href="https://plus.google.com/{{value}}/"
+										style="text-decoration: none"> <i
+											class="{{get_social_icon "
+											GOOGLE-PLUS"}}" style="font-size: 1.4em !important"></i>
+									</a>
+									</span>{{else}}
+									<span style="margin-right: 5px"> <a
+										target="_blank" href="{{getHyperlinkFromURL value}}" style="text-decoration: none">
+											<i class="{{get_social_icon subtype}}"
+											style="font-size: 1.4em !important"></i>
+									</a>
+									</span> {{/if_equals}} {{/if_equals}} {{/if_equals}} {{/if_equals}} {{/each}} {{/multiple_Property_Element}}
+									{{/property_is_exists}}
+								</div>						
+							<div class="clearfix"></div>	
+								
 								<div>
 				<div class="contact-tags">
 					<ul id="added-tags-ul" class="tagsinput"
@@ -125,48 +169,7 @@
 				</div>
 			</div>
 								
-								<div class="span2" style="padding-top: 5px; margin: 0px;display:none;">
-									{{#property_is_exists "website" properties}}
-									{{#multiple_Property_Element "website" properties}} {{#each
-									this}} {{#if_equals subtype "TWITTER"}} <span
-										style="margin-right: 5px"><a target="_blank"
-										href="https://twitter.com/{{getTwitterHandleByURL value}}"
-										style="text-decoration: none"> <i
-											class="{{get_social_icon "
-											TWITTER"}}" style="font-size: 1.4em !important"></i>
-									</a>
-									</span> {{else}}  {{#if_equals subtype "SKYPE"}} <span
-										style="margin-right: 5px"><a target="_blank"
-										href="{{getSkypeURL value}}"
-										style="text-decoration: none"> <i
-											class="{{get_social_icon "
-											SKYPE"}}" style="font-size: 1.4em !important"></i>
-									</a>
-									</span>{{else}} {{#if_equals subtype "FACEBOOK"}} <span
-										style="margin-right: 5px"><a target="_blank"
-										href="https://www.facebook.com/{{getFacebookURL value}}/"
-										style="text-decoration: none"> <i
-											class="{{get_social_icon "
-											FACEBOOK"}}" style="font-size: 1.4em !important"></i>
-									</a>
-									</span>{{else}}
-
-								{{#if_equals subtype "GOOGLE-PLUS"}} <span
-										style="margin-right: 5px"><a target="_blank"
-										href="https://plus.google.com/{{value}}/"
-										style="text-decoration: none"> <i
-											class="{{get_social_icon "
-											GOOGLE-PLUS"}}" style="font-size: 1.4em !important"></i>
-									</a>
-									</span>{{else}}
-									<span style="margin-right: 5px"> <a
-										target="_blank" href="{{getHyperlinkFromURL value}}" style="text-decoration: none">
-											<i class="{{get_social_icon subtype}}"
-											style="font-size: 1.4em !important"></i>
-									</a>
-									</span> {{/if_equals}} {{/if_equals}} {{/if_equals}} {{/if_equals}} {{/each}} {{/multiple_Property_Element}}
-									{{/property_is_exists}}
-								</div>
+								
 							</div>
 						</div>
 						</div>
@@ -180,7 +183,7 @@
 								
 								<a class="btn" style="border-radius: 4px 0px 0px 4px!important;margin-left: 6px;" href='#contact-edit'><i class="icon-edit"></i> Edit</a>
 								<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-								<ul class="dropdown-menu">
+								<ul class="dropdown-menu pull-right">
 
 									<li><a href='#' class="contact-add-note"><i
 											class="icon-file"></i> Add Note</a></li>
@@ -482,7 +485,7 @@
 										<div >
 											{{#address_Element properties}}{{/address_Element}}</div>
 
-										<div class="pull-left row-fluid" style="margin-left:22px;margin-top:12px;">
+										<div class="pull-left row-fluid" style="margin-left:20px;margin-top:12px;">
 											<div id="map" style="width: auto; height: 200px; display: none; margin:0px 0px 0px;">
 											</div>
 										</div>

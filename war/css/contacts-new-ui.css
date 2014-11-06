@@ -320,7 +320,7 @@ cursor: pointer;
 }
 .contact-profpic
 {
-	height: 90px;
+	height: 95px;
 width: 90px;
 border: 1px solid #ddd;
 padding: 2px;
@@ -331,10 +331,21 @@ border-radius: 4px;
 	font-size:15px;
 	padding-bottom:0px;
 }
+.contact-job-title
+{
+	width:auto;
+	max-width:431px;
+}
+.contact-company-name,.contact-company-name a
+{
+	width:auto;
+	max-width:300px;
+}
+
 
 .contact-title .contact-job-title
 {
-	padding-bottom:14px;
+	/*padding-bottom:14px;*/
 	float:left;
 }
 .contact-title :not(.clearfix)
@@ -351,7 +362,7 @@ border-radius: 4px;
 }
 .contact-company-name a
 {
-	padding-bottom:14px;
+	/*padding-bottom:14px;*/
 	display:inline-block;
 }
 .contact-job-title:empty
