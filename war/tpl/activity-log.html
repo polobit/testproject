@@ -1024,7 +1024,7 @@ Added Tag {{removeDoubleCoutes custom1}} to <a href="#contact/{{entity_id}}">{{l
 {{#if_equals "1" custom2}}
    Removed {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} from Document <a href="{{custom1}}" target="_blank">{{label}}</a>
 {{else}} 
-	 Removed {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}from Document <a href="{{custom1}}" target="_blank">{{label}}</a> 
+	 Removed {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} from Document <a href="{{custom1}}" target="_blank">{{label}}</a> 
 {{/if_equals}}	
 </div>
 <div>
