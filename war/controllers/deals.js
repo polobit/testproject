@@ -47,9 +47,9 @@ var DealsRouter = Backbone.Router.extend({
 		{
 			DEALS_LIST_COLLECTION = null;
 			var query = ''
-				if(readCookie('deal-filters')){
+				/*if(readCookie('deal-filters')){
 					query = '&filters='+encodeURIComponent(getDealFilters());
-				}
+				}*/
 			// Fetches deals as list
 			this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity/based?pipeline_id='+pipeline_id+query, templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
 				postRenderCallback : function(el)
