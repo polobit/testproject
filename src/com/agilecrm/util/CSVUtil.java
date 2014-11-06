@@ -82,6 +82,8 @@ public class CSVUtil
     BillingRestriction billingRestriction;
     private ContactBillingRestriction dBbillingRestriction;
 
+    private static final int MAX_ALLOWED_FIELD_VALUE_SIZE = 490;
+
     private UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null);
 
     private CSVUtil()
@@ -292,10 +294,9 @@ public class CSVUtil
 		for (int j = 0; j < csvValues.length; j++)
 		{
 
-		    if (StringUtils.isBlank(csvValues[j]))
+		    String csvValue = csvValues[j];
+		    if (StringUtils.isBlank(csvValue))
 			continue;
-
-		    csvValues[j] = csvValues[j].trim();
 
 		    ContactField field = properties.get(j);
 
@@ -306,6 +307,16 @@ public class CSVUtil
 		    {
 			continue;
 		    }
+
+		    if ("note".equals(field.name))
+		    {
+			notes_positions.add(j);
+			continue;
+		    }
+
+		    // Trims content of field to 490 characters. It should not
+		    // be trimmed for notes
+		    csvValues[j] = checkAndTrimValue(csvValue);
 
 		    if ("tags".equals(field.name))
 		    {
@@ -343,11 +354,6 @@ public class CSVUtil
 			{
 			    e.printStackTrace();
 			}
-			continue;
-		    }
-		    if ("note".equals(field.name))
-		    {
-			notes_positions.add(j);
 			continue;
 		    }
 
@@ -645,10 +651,9 @@ public class CSVUtil
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
 
-		if (StringUtils.isBlank(csvValues[j]))
+		String csvValue = csvValues[j];
+		if (StringUtils.isBlank(csvValue))
 		    continue;
-
-		csvValues[j] = csvValues[j].trim();
 
 		ContactField field = properties.get(j);
 
@@ -659,6 +664,10 @@ public class CSVUtil
 		{
 		    continue;
 		}
+
+		// Trims content of field to 490 characters. It should not
+		// be trimmed for notes
+		csvValues[j] = checkAndTrimValue(csvValue);
 
 		if (Contact.ADDRESS.equals(field.name))
 		{
@@ -1502,4 +1511,14 @@ public class CSVUtil
 	return dummyContact;
     }
 
+    private String checkAndTrimValue(String value)
+    {
+	value = value.trim();
+
+	// If field value is more than 500, it will trim the value
+	if (value.length() > MAX_ALLOWED_FIELD_VALUE_SIZE)
+	    value = value.substring(0, MAX_ALLOWED_FIELD_VALUE_SIZE);
+
+	return value;
+    }
 }
