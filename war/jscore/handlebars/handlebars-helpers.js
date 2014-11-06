@@ -1100,10 +1100,10 @@ $(function()
 								if (properties_count != 0)
 
 									el = el
-									.concat('<div style="display:inline;padding-right: 0px!important;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="contact-detail-entity-list"><div style="padding-top:3px;"><div class="pull-left" style="width:8%"><i class="icon icon-map-marker" style="margin:0 0px 0 3px"></i></div><span class="pull-left" style="width:92%">');
+									.concat('<div class="contact-addressview"><div><div class="pull-left" style="width:10%"><i class="icon icon-map-marker"></i></div><div class="pull-left" style="width:90%">');
 						else
 							el = el
-									.concat('<div style="display:inline;display: inline-block;padding-bottom: 2px; line-height: 20px;"><div><div class="pull-left" style="width:8%"><i class="icon icon-map-marker" style="margin:0 0px 0 3px"></i></div><span class="pull-left" style="width:92%">');
+									.concat('<div class="contact-addressview"><div><div class="pull-left" style="width:10%"><i class="icon icon-map-marker"></i></div><div class="pull-left" style="width:90%">');
 
 								$.each(address, function(key, val)
 								{

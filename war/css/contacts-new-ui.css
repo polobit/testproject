@@ -246,19 +246,71 @@
 .contact-profile-name
 {
 	font-size: 20px;
+white-space: nowrap;
+text-overflow: ellipsis;
+overflow: hidden;
+width: auto;
+max-width: 500px;
+height: auto;
+padding-bottom: 2px;
 	
+
+}
+.contact-overflow-ellipsis
+{
+	text-overflow:ellipsis;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.contact-custom-firstfield
+{
+	
+font-size: 13px;
+color:#000;
+margin-bottom:3px;
+margin-right:8px;
+
+}
+.contact-custom-firstfield time
+{
+	color:#000;
+}
+.custom-data
+{
+	margin-top:5px;
+}
+.contact-addressview
+{
+padding-right: 0px!important;line-height: 21px;
+color: #888;
+font-size: 13px;	
+padding-top:8px;
+padding-bottom:5px;
+}
+.contact-custom-lastfield
+{
+	color:#888;
+text-align: right;
+font-size:14px;
 
 }
 .unselectable
 {
 	
 }
+.contact-rightpanel-ellipsis
+{
+	width:90%;
+	text-overflow:ellipsis;
+	overflow:hidden;
+	white-space:nowrap;
+}
 .score-view
 {
 	font-size: 17px;
 display: inline-block;
 position: relative;
-top: -8px;
+top: -7px;
 }
 .contact-star
 {
@@ -277,27 +329,63 @@ border-radius: 4px;
 .contact-title
 {
 	font-size:15px;
+	padding-bottom:0px;
+}
+
+.contact-title .contact-job-title
+{
+	padding-bottom:14px;
+	float:left;
+}
+.contact-title :not(.clearfix)
+{
+	float:left;
+}
+.contact-custom-icon
+{
+	padding-top:3px;
+}
+.contact-custom-icon i,.contact-addressview i
+{
+	color:#8a6086;
+}
+.contact-company-name a
+{
+	padding-bottom:14px;
+	display:inline-block;
+}
+.contact-job-title:empty
+{
+	padding-bottom:0px;
 }
 .contact-tags
 {
-padding: 14px 10px 0px 0px;white-space:normal;
+padding: 0px 10px 0px 0px;white-space:normal;
 }
 .contact-score-control
 {
 	display: inline-block;
 position: relative;
 top: 5px;
-font-size: 14px;
+font-size: 11px;
 left: -10px;
 }
 .contact-owner
 {
-	font-size:15px;
+	font-size:14px;
+	color:#888;
 }
-.contact-owner-name
+.contact-owner img
+{
+	border-radius:50%;
+	width:25px;
+	height:25px;
+	
+}
+/*.contact-owner-name
 {
 	font-size:13px;
-}
+}*/
 .contact-owner-edit
 {
 	display:none;
@@ -356,14 +444,14 @@ text-transform: capitalize;
 	position:relative;
 	
 }
-#widgets .widget_header.widget_edit_icons::after {
+/*#widgets .widget_header.widget_edit_icons::after {
 position: absolute;
 left: 0px;
 content: '';
 border-bottom: 5px solid rgb(221, 221, 221);
 width: 41px;
 bottom: -3px;
-}
+}*/
 .contact-right-widgetsview .widget_header:hover
 {
 	/*box-shadow:0 0 13px 0px #eee;*/
@@ -414,6 +502,15 @@ padding-bottom: 13px;
 .widget-sortable li ul  li
 {
 	border-bottom:none;
+}
+.contact-phone
+{
+	line-height:20px;
+}
+.contact-email
+{
+	font-size:13px;
+	line-height:20px;
 }
 .contact-phone .contact-phone-icon,.score-view .contact-score-control,.contact-email .contact-email-icon,.contact-owner-text
 {

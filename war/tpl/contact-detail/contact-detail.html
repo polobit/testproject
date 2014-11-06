@@ -33,7 +33,7 @@
 							<div class="pull-left contact-profile-name mg-r-md">
 								{{getPropertyValue properties
 										"first_name"}} {{getPropertyValue properties "last_name"}}
-								<!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a> -->{{/if_propertyName}}
+								 <!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}} -->
 								</div>
 								<div class="pull-left mg-r-md">
 								<div id='star' class="contact-star"></div>
@@ -61,7 +61,7 @@
 										style="display: inline-block; list-style-type: none; margin:0px">
 										<li style="height: 9px"><i class="icon-sort-up" id="add"
 											style="height: 10px; cursor: pointer"></i></li>
-										<li><i class="icon-sort-down" id="minus"
+										<li style="position:relative,top:-2px;"><i class="icon-sort-down" id="minus"
 											style="height: 10px; cursor: pointer"></i></li>
 									</ul>
 								</span>
@@ -71,13 +71,17 @@
 						<!--  ending score -->
 								<div class="clearfix"></div>
 								<div class="contact-title">
-							{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}
-								{{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}
-								{{#if contact_company_id}} 
+							<div class="contact-job-title">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}</div>
+								<div> {{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}</div>
+
+<div class="contact-company-name">								
+{{#if contact_company_id}} 
 									<a href="#contact/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
 								{{else}}
 									{{getPropertyValue properties "company"}}
 								{{/if}}
+</div>
+<div class="clearfix"></div>
 								</div>
 								<div>
 				<div class="contact-tags">
@@ -222,8 +226,20 @@
 					<div style="margin-top:37px;">
 						<div class="change-owner-succes"></div>
 						<span title="Owner"><span class="contact-owner"><span class="contact-owner-text">Owner:&nbsp;&nbsp;</span>
-<img src="https://pbs.twimg.com/profile_images/1917130692/BD587CFD-E929-40F6-A5B3-C90916D01C88_bigger" style="border-radius: 50%;width: 25px;height: 25px;
-">
+<!-- <img src="https://pbs.twimg.com/profile_images/1917130692/BD587CFD-E929-40F6-A5B3-C90916D01C88_bigger" style="border-radius: 50%;width: 25px;height: 25px;
+"> -->
+<span class="contact-owner-pic">
+		{{#if owner}}
+			{{#if ownerPic}}
+				<img class="user-img"  alt="" src="{{ownerPic}}" >
+			{{else}}
+				<img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" >
+			{{/if}}
+		{{else}}
+			<img class="user-img"  alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
+		{{/if}}
+</span>
+
 <span
 							id="contact-owner contact-owner-name" data={{owner.id}}
 							style="display: inline-block">{{owner.name}}</span> <span class="contact-owner-edit">
@@ -378,7 +394,7 @@
 									<div class="pull-left contact-phone-icon">
 									<i class="icon icon-mobile-phone" style="font-size: 19px;padding-left: 0px;padding-top: 0px;position: relative;top:0px;left: 3px;"></i>
 									</div>
-									<div class="pull-left" style="font-size:13px;margin-bottom:6px;">
+									<div class="pull-left contact-rightpanel-ellipsis" style="font-size:13px;margin-bottom:6px;">
                                         <a href='#' class="contact-make-sip-call" style="display:none;" 
                                            fname="{{getCurrentContactProperty "first_name"}}" 
                                            lname="{{getCurrentContactProperty "last_name"}}" 
@@ -409,76 +425,97 @@
 								
 								{{#property_is_exists "phone" ../properties}}
 								<div
-									class="contact-detail-entity-list " style="padding-right:0px!important;font-size:13px;">
+									 style="padding-right:0px!important;font-size:13px;line-height:20px;">
 									
 									<div class="contact-email">
 									{{else}}
 									
-									<div style="padding:0px 10px 2px 0px; display: inline-block;">
+									<div  class="contact-email single-mail">
 										{{/property_is_exists}} 
 									{{#each this}}
 
-<div class="pull-left contact-email-icon" style="width:10%"><i class="icon icon-envelope" style="font-size:13px;"></i></div>
-										<div class="pull-left" style="width:90%">
+<div class="pull-left contact-email-icon" style="margin-right:7px;"><i class="icon icon-envelope" style="font-size:13px;"></i></div>
+										<div class="pull-left contact-rightpanel-ellipsis" style="margin-bottom:4px;">
 											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label">{{subtype}}</span> {{/if}}
 										</div>
 
-<div class="clearfix"></div>
+<div class="clearfix aaa"></div>
 									{{/each}}
 									</div>
+									</div>
+								
 									{{/multiple_Property_Element}}
-								</div>
-								<div class="clearfix"></div>
-								</div>
-								{{/property_is_exists}}<div class="custom-data"> {{#getContactCustomPropertiesExclusively
+								
+
+								{{/property_is_exists}}
+
+<div class="custom-data"> {{#getContactCustomPropertiesExclusively
 								properties}}
-								<div class="pull-left row-fluid">
+								<div>
+					<div class="contact-custom-icon pull-left" style="width: 10%;"><i class="icon icon-random" style="font-size: 13px;"></i></div>			
+								<div class="pull-left" style="width:90%;line-height:21px;">
 									{{#each_with_index this}}
-										<div class="pull-left row-fluid" style="">
-											<div class="span4" style="padding: 4px 0px 5px 2px;text-align:right;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;">
-												<strong style="color: gray" title="{{name}}">{{name}}</strong>
-											</div>
+										
 										{{#if_equals index ../this.length}}
-											<div class="span8"
-												style="padding:4px 10px 5px 2px; display: inline-block;margin-bottom:5px; border-top: 1px solid whitesmoke;">
-											{{#if_equals subtype "DATE"}} <time class="note-created-time" datetime="{{epochToHumanDate "" value}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+											<span class="contact-custom-firstfield">
+											{{#if_equals subtype "DATE"}} <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</span>
 										{{else}}
-											<div class="span8"
-												style="padding:4px 10px 5px 2px; display: inline-block; border-top: 1px solid whitesmoke;">
-											{{#if_equals subtype "DATE"}} <time class="note-created-time" datetime="{{epochToHumanDate "" value}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+											<span class="contact-custom-firstfield">
+											{{#if_equals subtype "DATE"}} <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</span>
 										{{/if_equals}}
-										</div>
+										
+										
+											<span class="contact-custom-lastfield">
+												<span style="color: gray" title="{{name}}">{{name}}</span>
+											</span>
+<div class="clearfix"></div>
+										
+										
 									{{/each_with_index}}
+</div>
 									</div>
 									{{/getContactCustomPropertiesExclusively}}
 									</div>
+									<div class="clearfix"></div>
+
  									{{#property_is_exists "address" properties}}
-										<div class="pull-left row-fluid " style="padding-bottom: 5px;font-size:13px;">
+										<div >
 											{{#address_Element properties}}{{/address_Element}}</div>
 
-										<div class="pull-left row-fluid" style="margin-left:20px">
+										<div class="pull-left row-fluid" style="margin-left:22px;margin-top:12px;">
 											<div id="map" style="width: auto; height: 200px; display: none; margin:0px 0px 0px;">
 											</div>
 										</div>
+
+
+
+                            	
 									{{/property_is_exists}}
 
 							
 
+ </div>
+							<div class="clearfix"></div>
+                            </div>	
 
-
-
+                           
+							
 
 							<div id="widgets"></div>
-								</div>
-								<div class="clearfix"></div>
-							</div>
+
+							
+
+
+								
+							
+
 						</div>
 					</div>
 					</div>
 					</div>
 					</div>
-					</div>
+					
 					<!--  ending mid  right panel view -->
-					</div>
+					
 					<!--  ending middle view row -->
 					</script>
