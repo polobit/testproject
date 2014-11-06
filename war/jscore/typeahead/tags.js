@@ -262,17 +262,19 @@ function get_tags(form_id) {
         };
     }).get();
     
-   /* // Reads input value from input field too.
-    var input_filed = $("#" + form_id + " input");
+    // Reads input value from input field too.
+    var input_filed = $("#" + form_id + " input.tags-typeahead");
     if(input_filed != null)
     {
-    	var tag_input = $(input_filed).val().trim();
+    	var tag_input = $(input_filed).val();
+    	
     	if(tag_input)
     		{
+    			tag_input = tag_input.trim();
     			tags_json[0].value.push(tag_input);
     		//	input_filed.val("");
     		}
-    }*/
+    }
     return tags_json;
 }
 
