@@ -461,6 +461,12 @@ public class ActivitySave
 	    if (contactids.size() > 0)
 	    {
 		JSONArray removedcontacts = getJsonArrayOfIdFromList(contactids);
+		System.out.println("------------------------ " + removedcontacts.length());
+		for (int i = 0; i <= removedcontacts.length() - 1; i++)
+		{
+
+		    System.out.println("---------------" + removedcontacts.get(i));
+		}
 		ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_REMOVE, document, document.url,
 		        String.valueOf(contactids.size()), "Related contact to this Document", removedcontacts);
 	    }
