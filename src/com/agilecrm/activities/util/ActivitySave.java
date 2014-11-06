@@ -543,22 +543,26 @@ public class ActivitySave
 
 	if (entitytype == EntityType.DEAL)
 	{
-	    delete_entity_names = ActivityUtil.getDealNames(delete_entity_ids);
+	    ActivityUtil.createBulkDeleteActivity(entitytype, no, String.valueOf(delete_entity_ids.length()),
+		    changed_field);
 	}
-	else if (entitytype == EntityType.TASK)
+	else
 	{
-	    delete_entity_names = ActivityUtil.getTaskNames(delete_entity_ids);
+	    if (entitytype == EntityType.TASK)
+	    {
+		delete_entity_names = ActivityUtil.getTaskNames(delete_entity_ids);
+	    }
+	    else if (entitytype == EntityType.EVENT)
+	    {
+		delete_entity_names = ActivityUtil.getEventNames(delete_entity_ids);
+	    }
+	    else if (entitytype == EntityType.DOCUMENT)
+	    {
+		delete_entity_names = ActivityUtil.getDocumentNames(delete_entity_ids);
+	    }
+	    ActivityUtil.createBulkDeleteActivity(entitytype, no,
+		    delete_entity_names.toString().replaceAll("[^\\w\\s\\-,]", ""), changed_field);
 	}
-	else if (entitytype == EntityType.EVENT)
-	{
-	    delete_entity_names = ActivityUtil.getEventNames(delete_entity_ids);
-	}
-	else if (entitytype == EntityType.DOCUMENT)
-	{
-	    delete_entity_names = ActivityUtil.getDocumentNames(delete_entity_ids);
-	}
-	ActivityUtil.createBulkDeleteActivity(entitytype, no,
-	        delete_entity_names.toString().replaceAll("[^\\w\\s\\-,]", ""), changed_field);
 
     }
 
