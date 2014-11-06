@@ -45,56 +45,28 @@ public class ActivitySave
 	Object expectedvalue[] = deals.get("expected_value");
 	Object probablity[] = deals.get("probability");
 	Object milestone[] = deals.get("milestone");
-	Object Contacts_related_to[] = deals.get("Contacts_related_to");
+	JSONObject js = new JSONObject(new Gson().toJson(opportunity));
+	JSONArray jsn = js.getJSONArray("contact_ids");
 
 	if (deals.size() > 0)
 	{
 	    if (ownername != null)
 	    {
 		ActivityUtil.createDealActivity(ActivityType.DEAL_OWNER_CHANGE, opportunity, ownername[0].toString(),
-		        ownername[1].toString(), ownername[2].toString());
+		        ownername[1].toString(), ownername[2].toString(), jsn);
 
 	    }
 	    if (milestone != null)
 	    {
 		if (milestone[0].toString().equalsIgnoreCase("Won"))
 		    ActivityUtil.createDealActivity(ActivityType.DEAL_CLOSE, opportunity, milestone[0].toString(),
-			    milestone[1].toString(), milestone[2].toString());
+			    milestone[1].toString(), milestone[2].toString(), jsn);
 		else if (milestone[0].toString().equalsIgnoreCase("Lost"))
 		    ActivityUtil.createDealActivity(ActivityType.DEAL_LOST, opportunity, milestone[0].toString(),
-			    milestone[1].toString(), milestone[2].toString());
+			    milestone[1].toString(), milestone[2].toString(), jsn);
 		else
 		    ActivityUtil.createDealActivity(ActivityType.DEAL_MILESTONE_CHANGE, opportunity,
-			    milestone[0].toString(), milestone[1].toString(), milestone[2].toString());
-	    }
-
-	    if (name == null && expectedvalue == null && probablity == null && close_date == null && milestone == null
-		    && ownername == null)
-	    {
-		if (Contacts_related_to != null)
-		{
-		    if (!Contacts_related_to[0].toString().equalsIgnoreCase("[]")
-			    && !Contacts_related_to[1].toString().equalsIgnoreCase("[]"))
-			ActivityUtil.createDealActivity(ActivityType.DEAL_RELATED_CONTACTS, opportunity,
-			        Contacts_related_to[0].toString(), Contacts_related_to[1].toString(),
-			        Contacts_related_to[2].toString());
-		    else if (Contacts_related_to[0].toString().equalsIgnoreCase("[]")
-			    && Contacts_related_to[1].toString().equalsIgnoreCase("[]"))
-		    {
-
-		    }
-		    else if (!Contacts_related_to[0].toString().equalsIgnoreCase("[]"))
-		    {
-			ActivityUtil.createDealActivity(ActivityType.DEAL_RELATED_CONTACTS, opportunity,
-			        Contacts_related_to[0].toString(), "[]", Contacts_related_to[2].toString());
-		    }
-		    else if (!Contacts_related_to[1].toString().equalsIgnoreCase("[]"))
-		    {
-			ActivityUtil.createDealActivity(ActivityType.DEAL_RELATED_CONTACTS, opportunity, "[]",
-			        Contacts_related_to[1].toString(), Contacts_related_to[2].toString());
-		    }
-
-		}
+			    milestone[0].toString(), milestone[1].toString(), milestone[2].toString(), jsn);
 	    }
 
 	    if (name != null || expectedvalue != null || probablity != null || close_date != null)
@@ -102,7 +74,7 @@ public class ActivitySave
 		List changed_data = getChangedData(name, expectedvalue, probablity, close_date);
 
 		ActivityUtil.createDealActivity(ActivityType.DEAL_EDIT, opportunity, changed_data.get(1).toString(),
-		        changed_data.get(0).toString(), changed_data.get(2).toString());
+		        changed_data.get(0).toString(), changed_data.get(2).toString(), jsn);
 	    }
 	}
 
@@ -166,9 +138,10 @@ public class ActivitySave
      * method used create EVENT_EDIT activity
      * 
      * @param event
+     * @throws JSONException
      */
 
-    public static void createEventEditActivity(Event event)
+    public static void createEventEditActivity(Event event) throws JSONException
     {
 
 	Map<String, Object[]> events = ActivityUtil.eventchangedfields(event);
@@ -178,44 +151,19 @@ public class ActivitySave
 	Object end_date[] = events.get("end_date");
 	Object title[] = events.get("title");
 	Object priority[] = events.get("priority");
-	Object Contacts_related_to[] = events.get("Contacts_related_to");
+
+	JSONObject js = new JSONObject(new Gson().toJson(event));
+	JSONArray jsn = js.getJSONArray("contacts");
 
 	if (events.size() > 0)
 	{
-	    if (start_date == null && end_date == null && title == null && priority == null)
-	    {
-		if (Contacts_related_to != null)
-		{
-		    if (!Contacts_related_to[0].toString().equalsIgnoreCase("[]")
-			    && !Contacts_related_to[1].toString().equalsIgnoreCase("[]"))
-			ActivityUtil.createEventActivity(ActivityType.EVENT_RELATED_CONTACTS, event,
-			        Contacts_related_to[0].toString(), Contacts_related_to[1].toString(),
-			        Contacts_related_to[2].toString());
-		    else if (Contacts_related_to[0].toString().equalsIgnoreCase("[]")
-			    && Contacts_related_to[1].toString().equalsIgnoreCase("[]"))
-		    {
-
-		    }
-		    else if (!Contacts_related_to[0].toString().equalsIgnoreCase("[]"))
-		    {
-			ActivityUtil.createEventActivity(ActivityType.EVENT_RELATED_CONTACTS, event,
-			        Contacts_related_to[0].toString(), "[]", Contacts_related_to[2].toString());
-		    }
-		    else if (!Contacts_related_to[1].toString().equalsIgnoreCase("[]"))
-		    {
-			ActivityUtil.createEventActivity(ActivityType.EVENT_RELATED_CONTACTS, event, "[]",
-			        Contacts_related_to[1].toString(), Contacts_related_to[2].toString());
-		    }
-
-		}
-	    }
 
 	    if (start_date != null || end_date != null || title != null || priority != null)
 	    {
 		List changed_data = getChangedData(start_date, end_date, priority, title);
 
 		ActivityUtil.createEventActivity(ActivityType.EVENT_EDIT, event, changed_data.get(1).toString(),
-		        changed_data.get(0).toString(), changed_data.get(2).toString());
+		        changed_data.get(0).toString(), changed_data.get(2).toString(), jsn);
 	    }
 	}
 
@@ -225,8 +173,9 @@ public class ActivitySave
      * method used to create TASK_EDIT activity
      * 
      * @param task
+     * @throws JSONException
      */
-    public static void createTaskEditActivity(Task task)
+    public static void createTaskEditActivity(Task task) throws JSONException
     {
 	Map<String, Object[]> tasks = ActivityUtil.taskChangedFields(task);
 	System.out.println(tasks.size());
@@ -239,6 +188,9 @@ public class ActivitySave
 	Object task_type[] = tasks.get("task_type");
 	Object owner_name[] = tasks.get("Task_owner");
 	Object Contacts_related_to[] = tasks.get("Contacts_related_to");
+
+	JSONObject js = new JSONObject(new Gson().toJson(task));
+	JSONArray jsn = js.getJSONArray("contacts");
 	System.out.println(due + "  " + priority + "  " + status + "  " + progress + "  " + subject + " " + task_type
 	        + "  " + owner_name + "  " + Contacts_related_to);
 	if (tasks.size() > 0)
@@ -248,7 +200,7 @@ public class ActivitySave
 	    {
 
 		ActivityUtil.createTaskActivity(ActivityType.TASK_PROGRESS_CHANGE, task, progress[0].toString(),
-		        progress[1].toString(), progress[2].toString());
+		        progress[1].toString(), progress[2].toString(), jsn);
 
 	    }
 
@@ -259,59 +211,31 @@ public class ActivitySave
 		{
 
 		    ActivityUtil.createTaskActivity(ActivityType.TASK_PROGRESS_CHANGE, task, progress[0].toString(),
-			    progress[1].toString(), progress[2].toString());
+			    progress[1].toString(), progress[2].toString(), jsn);
 		}
 		else if (status[0].toString().equalsIgnoreCase("COMPLETED"))
 		{
 		    ActivityUtil.createTaskActivity(ActivityType.TASK_COMPLETED, task, status[0].toString(),
-			    status[1].toString(), status[2].toString());
+			    status[1].toString(), status[2].toString(), jsn);
 		}
 		else
 
 		    ActivityUtil.createTaskActivity(ActivityType.TASK_STATUS_CHANGE, task, status[0].toString(),
-			    status[1].toString(), status[2].toString());
+			    status[1].toString(), status[2].toString(), jsn);
 	    }
 
 	    if (owner_name != null)
 	    {
 		ActivityUtil.createTaskActivity(ActivityType.TASK_OWNER_CHANGE, task, owner_name[0].toString(),
-		        owner_name[1].toString(), owner_name[2].toString());
+		        owner_name[1].toString(), owner_name[2].toString(), jsn);
 	    }
 
-	    if (due == null && priority == null && subject == null && task_type == null && progress == null
-		    && owner_name == null)
-	    {
-		if (Contacts_related_to != null)
-		{
-		    if (!Contacts_related_to[0].toString().equalsIgnoreCase("[]")
-			    && !Contacts_related_to[1].toString().equalsIgnoreCase("[]"))
-			ActivityUtil.createTaskActivity(ActivityType.TASK_RELATED_CONTACTS, task,
-			        Contacts_related_to[0].toString(), Contacts_related_to[1].toString(),
-			        Contacts_related_to[2].toString());
-		    else if (Contacts_related_to[0].toString().equalsIgnoreCase("[]")
-			    && Contacts_related_to[1].toString().equalsIgnoreCase("[null]"))
-		    {
-
-		    }
-		    else if (!Contacts_related_to[0].toString().equalsIgnoreCase("[]"))
-		    {
-			ActivityUtil.createTaskActivity(ActivityType.TASK_RELATED_CONTACTS, task,
-			        Contacts_related_to[0].toString(), "[]", Contacts_related_to[2].toString());
-		    }
-		    else if (!Contacts_related_to[1].toString().equalsIgnoreCase("[]"))
-		    {
-			ActivityUtil.createTaskActivity(ActivityType.TASK_RELATED_CONTACTS, task, "[]",
-			        Contacts_related_to[1].toString(), Contacts_related_to[2].toString());
-		    }
-
-		}
-	    }
 	    if (due != null || priority != null || subject != null || task_type != null)
 	    {
 		List changed_data = getChangedData(due, priority, subject, task_type);
 
 		ActivityUtil.createTaskActivity(ActivityType.TASK_EDIT, task, changed_data.get(1).toString(),
-		        changed_data.get(0).toString(), changed_data.get(2).toString());
+		        changed_data.get(0).toString(), changed_data.get(2).toString(), jsn);
 	    }
 
 	}
@@ -326,6 +250,13 @@ public class ActivitySave
     public static void createDealAddActivity(Opportunity opportunity) throws JSONException
     {
 
+	List<Contact> contacts = opportunity.getContacts();
+	JSONArray jsn = null;
+	if (contacts != null && contacts.size() > 0)
+	{
+	    jsn = ActivityUtil.getContactIdsJson(contacts);
+	}
+
 	String owner_name = DomainUserUtil.getDomainUser(Long.parseLong(opportunity.owner_id)).name;
 
 	List<Note> notes = opportunity.getNotes();
@@ -336,44 +267,11 @@ public class ActivitySave
 	    String note_subject = note.subject;
 	    String note_description = note.description;
 	    ActivityUtil.createDealActivity(ActivityType.NOTE_ADD, opportunity, note_subject, note_description,
-		    note.id.toString());
+		    note.id.toString(), jsn);
 	}
 
-	ActivityUtil.createDealActivity(ActivityType.DEAL_ADD, opportunity, owner_name, "", "Deal_owner_name");
+	ActivityUtil.createDealActivity(ActivityType.DEAL_ADD, opportunity, owner_name, "", "Deal_owner_name", jsn);
 
-    }
-
-    public static List<String> getContactNames(JSONArray js) throws JSONException
-    {
-	List<String> list = new ArrayList<>();
-	String contact_name = "";
-	for (int i = 0; i <= js.length() - 1; i++)
-	{
-
-	    if (js.get(i) != null)
-	    {
-		Contact contact = ContactUtil.getContact(Long.parseLong(js.get(i).toString()));
-		if (contact != null)
-		{
-		    ContactField firstname = contact.getContactFieldByName("first_name");
-		    ContactField lastname = contact.getContactFieldByName("last_name");
-		    if (firstname != null)
-		    {
-			contact_name += firstname.value;
-		    }
-		    if (lastname != null)
-		    {
-			contact_name += "";
-			contact_name += lastname.value;
-		    }
-
-		    list.add(contact_name.trim());
-		    contact_name = "";
-		}
-	    }
-
-	}
-	return list;
     }
 
     /**
@@ -385,10 +283,16 @@ public class ActivitySave
 
     public static void createTaskAddActivity(Task task) throws JSONException
     {
+	List<Contact> contacts = task.getContacts();
+	JSONArray jsn = null;
+	if (contacts != null && contacts.size() > 0)
+	{
+	    jsn = ActivityUtil.getContactIdsJson(contacts);
+	}
 
 	String owner_name = DomainUserUtil.getDomainUser(Long.parseLong(task.owner_id)).name;
 
-	ActivityUtil.createTaskActivity(ActivityType.TASK_ADD, task, owner_name, "", "Task_owner_name");
+	ActivityUtil.createTaskActivity(ActivityType.TASK_ADD, task, owner_name, "", "Task_owner_name", jsn);
 
     }
 
@@ -401,7 +305,14 @@ public class ActivitySave
     public static void createEventAddActivity(Event event) throws JSONException
     {
 
-	ActivityUtil.createEventActivity(ActivityType.EVENT_ADD, event, event.title, "", "event title");
+	List<Contact> contacts = event.getContacts();
+	JSONArray jsn = null;
+	if (contacts != null && contacts.size() > 0)
+	{
+	    jsn = ActivityUtil.getContactIdsJson(contacts);
+	}
+
+	ActivityUtil.createEventActivity(ActivityType.EVENT_ADD, event, event.title, "", "event title", jsn);
 
     }
 
@@ -409,11 +320,17 @@ public class ActivitySave
      * creates EVENT_DELETE activity
      * 
      * @param event
+     * @throws JSONException
      */
-    public static void createEventDeleteActivity(Event event)
+    public static void createEventDeleteActivity(Event event) throws JSONException
     {
-
-	ActivityUtil.createEventActivity(ActivityType.EVENT_DELETE, event, "", "", "");
+	List<Contact> contacts = event.getContacts();
+	JSONArray jsn = null;
+	if (contacts != null && contacts.size() > 0)
+	{
+	    jsn = ActivityUtil.getContactIdsJson(contacts);
+	}
+	ActivityUtil.createEventActivity(ActivityType.EVENT_DELETE, event, "", "", "", jsn);
 
     }
 
@@ -425,7 +342,13 @@ public class ActivitySave
     public static void createTaskDeleteActivity(Task task)
     {
 
-	ActivityUtil.createTaskActivity(ActivityType.TASK_DELETE, task, "", "", "");
+	List<Contact> contacts = task.getContacts();
+	JSONArray jsn = null;
+	if (contacts != null && contacts.size() > 0)
+	{
+	    jsn = ActivityUtil.getContactIdsJson(contacts);
+	}
+	ActivityUtil.createTaskActivity(ActivityType.TASK_DELETE, task, "", "", "", jsn);
 
     }
 
@@ -436,8 +359,14 @@ public class ActivitySave
      */
     public static void createDealDeleteActivity(Opportunity opr)
     {
+	List<Contact> contacts = opr.getContacts();
+	JSONArray jsn = null;
+	if (contacts != null && contacts.size() > 0)
+	{
+	    jsn = ActivityUtil.getContactIdsJson(contacts);
+	}
 
-	ActivityUtil.createDealActivity(ActivityType.DEAL_DELETE, opr, "", "", "");
+	ActivityUtil.createDealActivity(ActivityType.DEAL_DELETE, opr, "", "", "", jsn);
 
     }
 
@@ -477,7 +406,7 @@ public class ActivitySave
 	{
 
 	    ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_ADD, document, document.url,
-		    String.valueOf(jsn.length()), "Related contact to this Document");
+		    String.valueOf(jsn.length()), "Related contact to this Document", jsn);
 	}
 
     }
@@ -508,20 +437,21 @@ public class ActivitySave
 		if (contactids.size() > jsn.length())
 		{
 		    int numberofcontacts = contactids.size() - jsn.length();
+		    JSONArray jsonconatcs = removedContacts(contactids, jsn);
 
 		    ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_REMOVE, document, document.url,
-			    String.valueOf(numberofcontacts), "Related contact to this Document");
+			    String.valueOf(numberofcontacts), "Related contact to this Document", jsonconatcs);
 		}
 		else
 		{
 		    ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_ADD, document, document.url,
-			    String.valueOf(jsn.length()), "Related contact to this Document");
+			    String.valueOf(jsn.length()), "Related contact to this Document", jsn);
 		}
 	    }
 	    else
 	    {
 		ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_ADD, document, document.url,
-		        String.valueOf(jsn.length()), "Related contact to this Document");
+		        String.valueOf(jsn.length()), "Related contact to this Document", jsn);
 	    }
 	}
 
@@ -530,8 +460,15 @@ public class ActivitySave
 	    System.out.println("contacts size in else condition " + contactids.size());
 	    if (contactids.size() > 0)
 	    {
+		JSONArray removedcontacts = getJsonArrayOfIdFromList(contactids);
+		System.out.println("------------------------ " + removedcontacts.length());
+		for (int i = 0; i <= removedcontacts.length() - 1; i++)
+		{
+
+		    System.out.println("---------------" + removedcontacts.get(i));
+		}
 		ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_REMOVE, document, document.url,
-		        String.valueOf(contactids.size()), "Related contact to this Document");
+		        String.valueOf(contactids.size()), "Related contact to this Document", removedcontacts);
 	    }
 	}
 
@@ -603,13 +540,40 @@ public class ActivitySave
      * @param new_data
      * @param old_data
      * @param changed_field
+     * @throws JSONException
      */
-    public static void createLogForBulkDeletes(EntityType entitytype, String delete_entity_ids,
-	    String delete_entity_names, String changed_field)
+    public static void createLogForBulkDeletes(EntityType entitytype, JSONArray delete_entity_ids, String no,
+	    String changed_field) throws JSONException
     {
+	List<String> delete_entity_names = new ArrayList<>();
 
-	ActivityUtil.createBulkDeleteActivity(entitytype, delete_entity_ids,
-	        delete_entity_names.replaceAll("[^\\w\\s\\-,]", ""), changed_field);
+	String deleteed_names = "";
+
+	if (entitytype == EntityType.DEAL)
+	{
+	    ActivityUtil.createBulkDeleteActivity(entitytype, no, String.valueOf(delete_entity_ids.length()),
+		    changed_field);
+	}
+	else
+	{
+	    if (entitytype == EntityType.TASK)
+	    {
+		delete_entity_names = ActivityUtil.getTaskNames(delete_entity_ids);
+		deleteed_names = delete_entity_names.toString();
+	    }
+	    else if (entitytype == EntityType.EVENT)
+	    {
+		delete_entity_names = ActivityUtil.getEventNames(delete_entity_ids);
+		deleteed_names = delete_entity_names.toString();
+	    }
+	    else if (entitytype == EntityType.DOCUMENT)
+	    {
+		delete_entity_names = ActivityUtil.getDocumentNames(delete_entity_ids);
+		deleteed_names = delete_entity_names.toString();
+	    }
+	    ActivityUtil.createBulkDeleteActivity(entitytype, no,
+		    deleteed_names.substring(1, deleteed_names.length() - 1), changed_field);
+	}
 
     }
 
@@ -635,9 +599,171 @@ public class ActivitySave
 
     }
 
+    /**
+     * return the string with out html tags
+     * 
+     * @param html
+     * @return
+     */
     public static String html2text(String html)
     {
 	return Jsoup.parse(html).text();
+    }
+
+    /**
+     * used to fetch the the contacts which are removed from related to field.
+     * 
+     * @param oldcont
+     *            contactids which were saved in db
+     * @param ar
+     *            latest contacts which comes along with new document object for
+     *            saving
+     * @return
+     * @throws JSONException
+     */
+    public static JSONArray removedContacts(List<String> oldcont, JSONArray ar) throws JSONException
+    {
+	JSONArray jsn = new JSONArray();
+	for (int i = 0; i <= ar.length() - 1; i++)
+	{
+	    if (oldcont.contains(ar.get(i)))
+	    {
+		oldcont.remove(ar.get(i));
+
+	    }
+
+	}
+
+	List<String> removedcontacts = oldcont;
+
+	if (removedcontacts != null && removedcontacts.size() > 0)
+	{
+
+	    for (int k = 0; k < removedcontacts.size(); k++)
+	    {
+		jsn.put(removedcontacts.get(k));
+
+	    }
+	}
+
+	return jsn;
+
+    }
+
+    /**
+     * used to fetch the the contacts which are added to related to field.
+     * 
+     * @param oldcont
+     *            contactids which were saved in db
+     * @param ar
+     *            latest contacts which comes along with new document object for
+     *            saving
+     * @return
+     * @throws JSONException
+     */
+    public static JSONArray addedContacts(List<String> oldcont, JSONArray ar) throws JSONException
+    {
+	JSONArray jsn = new JSONArray();
+	for (int i = 0; i <= ar.length() - 1; i++)
+	{
+	    if (!oldcont.contains(ar.get(i)))
+		jsn.put(ar.get(i));
+
+	}
+
+	return jsn;
+
+    }
+
+    /**
+     * returns the JSONArray from List
+     * 
+     * @param ids
+     * @return
+     * @throws JSONException
+     */
+    public static JSONArray getJsonArrayOfIdFromList(List<String> ids) throws JSONException
+    {
+	JSONArray jsn1 = new JSONArray();
+	for (int i = 0; i <= ids.size() - 1; i++)
+	{
+	    String s1 = ids.get(i);
+	    jsn1.put(s1);
+
+	}
+
+	return jsn1;
+
+    }
+
+    /**
+     * returns jsonarray of contactnames
+     * 
+     * @param js
+     *            array of contactids
+     * @return
+     * @throws JSONException
+     */
+    public static List<String> getContactNames(JSONArray js) throws JSONException
+    {
+	List<String> list = new ArrayList<>();
+	String contact_name = "";
+	for (int i = 0; i <= js.length() - 1; i++)
+	{
+
+	    if (js.get(i) != null)
+	    {
+		Contact contact = ContactUtil.getContact(Long.parseLong(js.get(i).toString()));
+		if (contact != null && contact.type == contact.type.PERSON)
+		{
+		    ContactField firstname = contact.getContactFieldByName("first_name");
+		    ContactField lastname = contact.getContactFieldByName("last_name");
+		    if (firstname != null)
+		    {
+			contact_name += firstname.value;
+		    }
+		    if (lastname != null)
+		    {
+			contact_name += " ";
+			contact_name += lastname.value;
+		    }
+		    if (firstname == null && lastname == null)
+		    {
+			contact_name = contact.getContactFieldByName("email").value;
+		    }
+
+		    list.add(contact_name.trim());
+		    contact_name = "";
+		}
+		else if (contact != null && contact.type == contact.type.COMPANY)
+		{
+		    ContactField name = contact.getContactFieldByName("name");
+
+		    contact_name = name.value;
+		    list.add(contact_name.trim());
+		    contact_name = "";
+		}
+	    }
+
+	}
+	return list;
+    }
+
+    /**
+     * 
+     * @param js
+     *            json array of contact ids
+     * @return
+     * @throws JSONException
+     */
+    public static List<String> getContactids(JSONArray js) throws JSONException
+    {
+	List<String> list = new ArrayList<>();
+	for (int i = 0; i <= js.length() - 1; i++)
+	{
+	    list.add(js.getString(i));
+	}
+	return list;
     }
 
 }

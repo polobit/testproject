@@ -129,7 +129,7 @@ public class EventUtil
 	{
 	    if (ownerId != null)
 		return dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end)
-			.filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
+		        .filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
 	    return dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end).list();
 	}
 	catch (Exception e)
@@ -170,7 +170,7 @@ public class EventUtil
     public static int getContactEventsCount(Long contactId) throws Exception
     {
 	Query<Event> query = dao.ofy().query(Event.class)
-		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
+	        .filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
 
 	return query.count();
     }
@@ -186,7 +186,7 @@ public class EventUtil
     public static List<Event> getContactSortedEvents(Long contactId) throws Exception
     {
 	Query<Event> query = dao.ofy().query(Event.class)
-		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId)).order("start");
+	        .filter("related_contacts =", new Key<Contact>(Contact.class, contactId)).order("start");
 
 	return query.list();
     }
@@ -212,28 +212,26 @@ public class EventUtil
 		if (user != null)
 		{
 		    ContactField toemail = con.getContactFieldByName("email");
-		    if (toemail == null)
-		    {
-			toemail = con.getContactFieldByName("first_name");
-		    }
-		    net.fortuna.ical4j.model.Calendar iCal = IcalendarUtil.getICalFromEvent(event, user, toemail.value,
-			    null);
-		    String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 
 		    if (toemail != null)
+		    {
+			net.fortuna.ical4j.model.Calendar iCal = IcalendarUtil.getICalFromEvent(event, user,
+			        toemail.value, null);
+			String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 			EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", toemail.value, null,
-				null, subject, null, null, null, null, attachments);
+			        null, subject, null, null, null, null, attachments);
+		    }
 		}
 	    }
 	    if (user != null)
 	    {
 		net.fortuna.ical4j.model.Calendar agileUseiCal = IcalendarUtil.getICalFromEvent(event, null,
-			user.email, user.name);
+		        user.email, user.name);
 		System.out.println("agileUseiCal-- " + agileUseiCal.toString());
 		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
 
 		EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", user.email, null, null, subject,
-			null, null, null, null, attachments_to_agile_user);
+		        null, null, null, null, attachments_to_agile_user);
 
 	    }
 	}
