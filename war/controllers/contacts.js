@@ -739,18 +739,20 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		if (id)
 		{
-			if(getCurrentContactProperty("first_name") || getCurrentContactProperty("last_name"))
+/*			var name;
+			if(model)
 			{
-				var name;
-				name = (getCurrentContactProperty("first_name")?getCurrentContactProperty("first_name"):"");
-				name = (name + " " + (getCurrentContactProperty("last_name")?getCurrentContactProperty("last_name"):"")).trim();
-				
-				if(name.length)
-					$('#to', el).closest("div.controls").find(".tags").append('<li class="tag" style="display: inline-block;" data="' + id + '"><a href="#contact/' + model.id +'">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
-				else
-					$("#emailForm", el).find('input[name="to"]').val(id);
+				var first_name = getPropertyValue(model, "first_name");
+				var last_name = getPropertyValue(model, "last_name");
+				if(first_name || last_name)
+				{
+					name = first_name?first_name:"";
+					name = (name + " " + (last_name?last_name:"")).trim();
+				}
 			}
-			else
+			if(name.length)
+				$('#to', el).closest("div.controls").find(".tags").append('<li class="tag" style="display: inline-block;" data="' + id + '"><a href="#contact/' + model.id +'">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
+			else*/
 				$("#emailForm", el).find('input[name="to"]').val(id);
 		}
 		else
