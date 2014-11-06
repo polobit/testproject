@@ -142,20 +142,21 @@ public class ActivityUtil
 
 		JSONObject obj = new JSONObject();
 		JSONArray arr = new JSONArray();
-
-		for (int i = 0; i < contactids.size(); i++)
+		if (contactids != null && contactnames != null && contactids.size() == contactnames.size())
 		{
+		    for (int i = 0; i < contactids.size(); i++)
+		    {
 
-		    obj.put("contactid", contactids.get(i));
-		    obj.put("contactname", contactnames.get(i));
+			obj.put("contactid", contactids.get(i));
+			obj.put("contactname", contactnames.get(i));
 
-		    arr.put(obj);
+			arr.put(obj);
 
-		    obj = new JSONObject();
+			obj = new JSONObject();
+		    }
+		    System.out.println(arr.toString());
+		    activity.related_contact_ids = arr.toString();
 		}
-		System.out.println(arr.toString());
-		activity.related_contact_ids = arr.toString();
-
 	    }
 	}
 	catch (JSONException e)
@@ -204,19 +205,21 @@ public class ActivityUtil
 
 		JSONObject obj = new JSONObject();
 		JSONArray arr = new JSONArray();
-
-		for (int i = 0; i < contactids.size(); i++)
+		if (contactids != null && contactnames != null && contactids.size() == contactnames.size())
 		{
+		    for (int i = 0; i < contactids.size(); i++)
+		    {
 
-		    obj.put("contactid", contactids.get(i));
-		    obj.put("contactname", contactnames.get(i));
+			obj.put("contactid", contactids.get(i));
+			obj.put("contactname", contactnames.get(i));
 
-		    arr.put(obj);
+			arr.put(obj);
 
-		    obj = new JSONObject();
+			obj = new JSONObject();
+		    }
+		    System.out.println(arr.toString());
+		    activity.related_contact_ids = arr.toString();
 		}
-		System.out.println(arr.toString());
-		activity.related_contact_ids = arr.toString();
 
 	    }
 	}
@@ -273,20 +276,21 @@ public class ActivityUtil
 
 		JSONObject obj = new JSONObject();
 		JSONArray arr = new JSONArray();
-
-		for (int i = 0; i < contactids.size(); i++)
+		if (contactids != null && contactnames != null && contactids.size() == contactnames.size())
 		{
+		    for (int i = 0; i < contactids.size(); i++)
+		    {
 
-		    obj.put("contactid", contactids.get(i));
-		    obj.put("contactname", contactnames.get(i));
+			obj.put("contactid", contactids.get(i));
+			obj.put("contactname", contactnames.get(i));
 
-		    arr.put(obj);
+			arr.put(obj);
 
-		    obj = new JSONObject();
+			obj = new JSONObject();
+		    }
+		    System.out.println(arr.toString());
+		    activity.related_contact_ids = arr.toString();
 		}
-		System.out.println(arr.toString());
-		activity.related_contact_ids = arr.toString();
-
 	    }
 	}
 	catch (JSONException e)
@@ -336,19 +340,20 @@ public class ActivityUtil
 		JSONObject obj = new JSONObject();
 		JSONArray arr = new JSONArray();
 
-		for (int i = 0; i < contactids.size(); i++)
+		if (contactids != null && contactnames != null && contactids.size() == contactnames.size())
 		{
+		    for (int i = 0; i < contactids.size(); i++)
+		    {
 
-		    obj.put("contactid", contactids.get(i));
-		    obj.put("contactname", contactnames.get(i));
+			obj.put("contactid", contactids.get(i));
+			obj.put("contactname", contactnames.get(i));
 
-		    arr.put(obj);
+			arr.put(obj);
 
-		    obj = new JSONObject();
+			obj = new JSONObject();
+		    }
+		    activity.related_contact_ids = arr.toString();
 		}
-		System.out.println(arr.toString());
-		activity.related_contact_ids = arr.toString();
-
 	    }
 	}
 	catch (JSONException e)
