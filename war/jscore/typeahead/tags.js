@@ -262,7 +262,7 @@ function get_tags(form_id) {
         };
     }).get();
     
-    // Reads input value from input field too.
+   /* // Reads input value from input field too.
     var input_filed = $("#" + form_id + " input");
     if(input_filed != null)
     {
@@ -270,9 +270,9 @@ function get_tags(form_id) {
     	if(tag_input)
     		{
     			tags_json[0].value.push(tag_input);
-    			input_filed.val("");
+    		//	input_filed.val("");
     		}
-    }
+    }*/
     return tags_json;
 }
 
