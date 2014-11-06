@@ -547,6 +547,8 @@ public class ActivitySave
     {
 	List<String> delete_entity_names = new ArrayList<>();
 
+	String deleteed_names = "";
+
 	if (entitytype == EntityType.DEAL)
 	{
 	    ActivityUtil.createBulkDeleteActivity(entitytype, no, String.valueOf(delete_entity_ids.length()),
@@ -557,17 +559,20 @@ public class ActivitySave
 	    if (entitytype == EntityType.TASK)
 	    {
 		delete_entity_names = ActivityUtil.getTaskNames(delete_entity_ids);
+		deleteed_names = delete_entity_names.toString();
 	    }
 	    else if (entitytype == EntityType.EVENT)
 	    {
 		delete_entity_names = ActivityUtil.getEventNames(delete_entity_ids);
+		deleteed_names = delete_entity_names.toString();
 	    }
 	    else if (entitytype == EntityType.DOCUMENT)
 	    {
 		delete_entity_names = ActivityUtil.getDocumentNames(delete_entity_ids);
+		deleteed_names = delete_entity_names.toString();
 	    }
 	    ActivityUtil.createBulkDeleteActivity(entitytype, no,
-		    delete_entity_names.toString().substring(1, delete_entity_names.size() - 1), changed_field);
+		    deleteed_names.substring(1, deleteed_names.length() - 1), changed_field);
 	}
 
     }
