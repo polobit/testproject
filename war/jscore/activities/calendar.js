@@ -108,8 +108,10 @@ function showCalendar() {
         eventSources :[{events: function (start, end, callback) {
         	
         	var eventFilters = JSON.parse(readCookie('event-filters'));
-        	if(readCookie('event-filters') && eventFilters.type == 'google')
-    			return;
+        	if(readCookie('event-filters') && eventFilters.type == 'google'){
+        		 $("#loading_calendar_events").hide();
+        		return;
+        	}
         	
         	var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
         	
@@ -270,7 +272,7 @@ function showCalendar() {
 
 function showEventFilters(){
 	 $.getJSON('/core/api/users/agileusers', function (users) {
-		 var html = '<option value="">All</option>';
+		 var html = '<option value="">Any</option>';
 		 if(users){
 			 $.each(users,function(i,user){
 				 if(CURRENT_DOMAIN_USER.id == user.domainUser.id)
