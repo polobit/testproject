@@ -5,11 +5,11 @@ function saveActivityReport(saveBtn){
 
 	// Disables save button to prevent multiple click event issues
 	disable_save_button(saveBtn);
-	if(!isValidForm('#activityReportsForm')){
+	/*if(!isValidForm('#activityReportsForm')){
 		// Removes disabled attribute of save button
 		enable_save_button(saveBtn);
 		return;
-	}
+	}*/
 	
 	var json = serializeForm('activityReportsForm');
 	json.activity_type = $('#activity-type-list').val();
@@ -49,11 +49,6 @@ function updateActivityReport(id){
 }
 
 $(function(){
-	$('#activity_report_validate').live('click',function(e){
-		e.preventDefault();
-		alert('hai');
-		saveActivityReport($(this));
-	});
 	
 	$('#activityReportModal').live('hidden.bs.modal',function(e){
 		$('#users-list, #activity-type-list').multiSelect('deselect_all');
@@ -61,10 +56,10 @@ $(function(){
 	
 	/** 
 	    * Deal list view edit
-	    */
+	    
 	    $('#activity-report-model-list > tr > td:not(":first-child")').live('click', function(e) {
 			e.preventDefault();
 			updateActivityReport($(this).closest('tr').find('.data').attr('data'));
 		});
-	
+	*/
 });

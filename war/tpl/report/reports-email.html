@@ -25,7 +25,7 @@
         </div>
         <!-- Add button -->
         <div style="/*margin: 40px auto;	width: 50%;*/">
-            <a class="btn btn-primary" href="#email-reports/contacts">Go</a>
+            <a class="btn btn-primary" href="#contact-reports">Go</a>
         </div>
     </div>
 </div>
@@ -49,7 +49,7 @@
         </div>
         <!-- Add button -->
         <div style="/*margin: 40px auto;	width: 50%;*/">
-            <a class="btn btn-primary" href="#email-reports/activities">Go</a>
+            <a class="btn btn-primary" href="#activity-reports">Go</a>
         </div>
     </div>
 </div>
@@ -61,7 +61,7 @@
     <div class="span12">
         <div class="page-header">
             <h1>Activity Reports</h1>
-            <a href="#activityReportModal" id="add-activity-report" role="button" data-toggle="modal" class="btn right" style="top:-28px;position:relative"><span><i class="icon-plus-sign" /></span>  Add Report</a>
+            <a href="#activity-report-add" id="addActivityReport" class="btn right" style="top:-28px;position:relative"><span><i class="icon-plus-sign" /></span>  Add Report</a>
         </div>
     </div>
 </div>
@@ -78,7 +78,7 @@
 					<th>Fields</th>
                 </tr>
             </thead>
-            <tbody id="activity-report-model-list" class="agile-edit-row">
+            <tbody id="activity-report-model-list" route="activity-report-edit/">
             </tbody>
         </table>
 		{{/if}}
@@ -176,5 +176,70 @@
 </script>
 
 <script id="activity-reports-add-template" type="text/html">
+<div class="span12">
+	<div class="well">
+		<form id="activityReportsForm" class="form-horizontal">
+				<div name="rules" class="formsection chainedSelect">
+ 					{{#if id}} 
+                        <legend class="formheading"> Edit Activity Report</legend>
+                      {{else}}
+                        <legend class="formheading"><i class="icon-plus-sign"></i> Add Activity Report</legend>
+                    {{/if}}
+				<fieldset style="margin-left: -20px">
+					<div class="control-group">
+						<label class="control-label">Name<span class="field_req">*</span></label>
+						<div class="controls">
+							<input type="text" name="name" class="required" />
+						</div>
+					</div>
 
+			<div class="control-group">
+				<label class="control-label">Activity Type <span class="field_req">*</span></label>
+				<div class="controls" id="contactTypeAhead">
+					<select id="activity-type-list" name="activity_type" class="required" multiple="multiple">
+						<option value="Opportunity">Deals</option>
+						<option value="Task">Task</option>
+						<option value="Event">Event</option>
+						<option value="Email">Email</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label">Users <span class="field_req">*</span></label>
+				<div class="controls" >
+					<select id="users-list" name="user_ids" class="required" multiple="multiple">
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label">Send Report To<span
+					class="field_req">*</span></label>
+				<div class="controls">
+					<input type="text" name="sendTo" class="required" placeholder="Email addresses separated by comma"/>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Duration<span
+					class="field_req">*</span></label>
+				<div class="controls">
+					<select class="required" name="duration">
+					<option value="DAILY">Daily</option>
+						<option value="WEEKLY">Weekly</option>
+						<option value="MONTHLY">Monthly</option>
+					</select>
+				</div>
+			</div>			
+			{{#if id}} <input type="hidden" name="id" class="hide" value="{{id}}" />
+			{{/if}}
+			<div class="form-actions">
+				<a href="#" type="submit" class="save btn btn-primary"
+					id="filtersAdd">Save</a>
+				 <a href="#activity-reports" class="btn ">Close</a>
+			</div>
+			</fieldset>
+		</form>
+	</div>
+</div>
 </script>

@@ -8,7 +8,8 @@ var ReportsRouter = Backbone.Router.extend({
 	routes : {
 
 	/* Reports */
-	"reports" : "reports", "email-reports" : "emailReportTypes", "email-reports/:type" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
+	"reports" : "reports", "email-reports" : "emailReportTypes","activity-reports":"activityReports", "activity-report-add" : "activityReportAdd", "activity-report-edit/:id" : "activityReportEdit",
+	"acivity-report-results/:id" : "activityReportInstantResults", "contact-reports" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
 		"report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts", "report-funnel/:tags" : "showFunnelReport",
 		"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport" },
 
@@ -32,37 +33,106 @@ var ReportsRouter = Backbone.Router.extend({
 		$("#reportsmenu").addClass("active");
 	},
 	
+	activityReports : function()
+	{
+		this.activityReports = new Base_Collection_View({ url : '/core/api/activity-reports', restKey : "activityReports", templateKey : "activity-report", individual_tag_name : 'tr'});
+
+		this.activityReports.collection.fetch();
+		$("#content").html(this.activityReports.render().el);
+
+		$(".active").removeClass("active");
+		$("#reportsmenu").addClass("active");
+	},
+	
+	activityReportAdd : function(){
+		$("#content").html(getRandomLoadingImg());
+		var activity_report_add = new Base_Model_View({ url : 'core/api/activity-reports', template : "activity-reports-add", window : "activity-reports", isNew : true,
+			postRenderCallback : function(el)
+			{
+				// Fills owner select element
+				fillSelect("users-list", '/core/api/users', 'domainUser', function()
+						{
+							head.js(LIB_PATH + 'lib/jquery.multi-select.js', function()
+							{
+								$('#activity-type-list, #users-list',el).multiSelect();
+								$('#ms-activity-type-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "activity_type").attr("id", "activity_type");
+								$('#ms-users-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id", "user_ids");
+								$("#content").html(el)
+							});
+						}, '<option value="{{id}}">{{name}}</option>', true, el);
+				
+
+			} });
+
+		$("#content").html(getRandomLoadingImg());
+		activity_report_add.render();
+
+	},
+	
+	/**
+	 * Edits a report by de-serializing the existing report into its saving
+	 * form, from there it can be edited and saved. Populates users and loads
+	 * agile.jquery.chained.min.js to match the conditions with the values of
+	 * input fields.
+	 */
+	activityReportEdit : function(id)
+	{
+		$("#content").html(getRandomLoadingImg());
+		// Counter to set when script is loaded. Used to avoid flash in page
+		var count = 0;
+
+		// If reports view is not defined, navigates to reports
+		if (!this.activityReports || !this.activityReports.collection || this.activityReports.collection.length == 0 || this.activityReports.collection.get(id) == null)
+		{
+			this.navigate("activity-reports", { trigger : true });
+			return;
+		}
+
+		// Gets a report to edit, from reports collection, based on id
+		var activityReport = this.activityReports.collection.get(id);
+		var report_model = new Base_Model_View({ url : 'core/api/activity-reports', change : false, model : activityReport, template : "activity-reports-add", window : "activity-reports",
+			postRenderCallback : function(el)
+			{
+				fillSelect("users-list", '/core/api/users', 'domainUser', function()
+						{
+							var json = activityReport.toJSON();
+							deserializeForm(json,$('#activityReportsForm',el));
+							
+							head.js(LIB_PATH + 'lib/jquery.multi-select.js', function()
+							{
+
+								$('#activity-type-list, #users-list',el).multiSelect();
+								$('#ms-activity-type-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "activity_type").attr("id", "activity_type");
+								$('#ms-users-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id", "user_ids");
+								$("#content").html(el)
+								$.each(json.user_ids,function(i,user_id){
+									$('#users-list').multiSelect('select',user_id);
+									console.log('select user---',user_id);
+								});
+								$.each(json.activity_type,function(i,activity){
+									$('#activity-type-list').multiSelect('select',activity);
+									console.log('select activity-------',activity);
+								});
+								$('#ms-activity-type-list .ms-selection').children('ul').addClass('multiSelect').attr("name", "activity_type").attr("id", "activity_type");
+								$('#ms-users-list .ms-selection').children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id", "user_ids");
+								
+							});
+						}, '<option value="{{id}}">{{name}}</option>', true, el);
+				
+			} });
+
+		$("#content").html(getRandomLoadingImg());
+		report_model.render();
+
+	},
+
+	
 	/**
 	 * Shows list of reports, with an option to add new report
 	 */
-	emailReports : function(type)
+	emailReports : function()
 	{
-		//alert(type);
-		if(type== 'activities'){
-			this.activityReports = new Base_Collection_View({ url : '/core/api/activity-reports', restKey : "activityReports", templateKey : "activity-report", individual_tag_name : 'tr', postRenderCallback: function(el){
-				// Fills owner select element
-				populateUsers("users-list", el, undefined, undefined, function(data){
-					console.log($(data).find('option').remove().html());
-					$("#users-list",el).html(data);
-					$("#users-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
-					$("#users-list", el).closest('div').find('.loading-img').hide();
-					$('#users-list').find('option[value=""]').remove();
-					head.js(LIB_PATH + 'lib/jquery.multi-select.js', function()
-							{
-								$('#activity-type-list, #users-list',el).multiSelect();
-							});
-				});
-				
-			}
-			});
-
-			this.activityReports.collection.fetch();
-			$("#content").html(this.activityReports.render().el);
-
-			$(".active").removeClass("active");
-			$("#reportsmenu").addClass("active");
-			
-		} else {
+	
 			this.reports = new Base_Collection_View({ url : '/core/api/reports', restKey : "reports", templateKey : "report", individual_tag_name : 'tr' });
 
 			this.reports.collection.fetch();
@@ -70,7 +140,6 @@ var ReportsRouter = Backbone.Router.extend({
 
 			$(".active").removeClass("active");
 			$("#reportsmenu").addClass("active");
-		}
 	},
 
 	/**
