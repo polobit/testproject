@@ -289,6 +289,26 @@ function showEventFilters(){
      });
 }
 
+function loadDefaultFilters(){
+	// Create a cookie with default option, if there is no cookie related to event filter.
+	if(!readCookie('event-filters')){
+		$.getJSON('/core/api/users/agileusers', function (users) {
+			 var html = '';
+			 if(users){
+				 $.each(users,function(i,user){
+					 if(CURRENT_DOMAIN_USER.id == user.domainUser.id)
+						 {
+						 	var json = {};
+						 	json.owner_id = user.id;
+						 	json.type='';
+						 	createCookie('event-filters',JSON.stringify(json));
+						 }
+				 });
+			 }
+		});
+	}
+}
+
 $(function(){
 	$("#sync-google-calendar").die().live('click', function(e){
 		e.preventDefault();
@@ -332,7 +352,7 @@ $(function(){
 		var formId = 'eventsFilterForm';
 		var json = serializeForm(formId);
 		createCookie('event-filters',JSON.stringify(json));
-		$('#calendar').html('<img class="loading_img" style="padding-right:5px;" height="32px" width="32px" src= "img/21-0.gif"></img>')
+		$('#calendar').html('');
 		//App_Calendar.calendar();
 		showCalendar();
 	});
@@ -342,6 +362,8 @@ $(function(){
 		e.preventDefault();
 		$('#filter_options select').val('');
 		eraseCookie('event-filters');
+		loadDefaultFilters();
+		showEventFilters();
 	});
 	
 	/**
@@ -358,22 +380,6 @@ $(function(){
 	    }
 	});
 	
-	// Create a cookie with default option, if there is no cookie related to event filter.
-	if(!readCookie('event-filters')){
-		$.getJSON('/core/api/users/agileusers', function (users) {
-			 var html = '';
-			 if(users){
-				 $.each(users,function(i,user){
-					 if(CURRENT_DOMAIN_USER.id == user.domainUser.id)
-						 {
-						 	var json = {};
-						 	json.owner_id = user.id;
-						 	json.type='';
-						 	createCookie('event-filters',JSON.stringify(json));
-						 }
-				 });
-			 }
-		});
-	}
+	loadDefaultFilters();
 });
 
