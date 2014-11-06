@@ -299,7 +299,7 @@ function loadDefaultFilters(){
 					 if(CURRENT_DOMAIN_USER.id == user.domainUser.id)
 						 {
 						 	var json = {};
-						 	json.owner_id = user.id;
+						 	json.owner_id = user.id.toString();
 						 	json.type='';
 						 	createCookie('event-filters',JSON.stringify(json));
 						 }
