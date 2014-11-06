@@ -114,7 +114,6 @@ function showCalendar() {
         	}
         	
         	var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
-        	
         	if(readCookie('event-filters') && eventFilters.owner_id.length > 0)
         		eventsURL += '&owner_id='+eventFilters.owner_id;
         	console.log('-----------------',eventsURL);
@@ -272,12 +271,13 @@ function showCalendar() {
 
 function showEventFilters(){
 	 $.getJSON('/core/api/users/agileusers', function (users) {
-		 var html = '<option value="">Any</option>';
+		 var html = '';
 		 if(users){
 			 $.each(users,function(i,user){
 				 if(CURRENT_DOMAIN_USER.id == user.domainUser.id)
-					 html += '<option value='+user.id+'>Me</option>';
+					 html = '<option value='+user.id+'>Me</option>';
 			 });
+			 html += '<option value="">Any</option>';
 		 }
 		 $('#event-owner').html(html);
 		 $('#filter_options').show();
@@ -324,10 +324,7 @@ $(function(){
 	// Show filter drop down.
 	$('#event-filter-button').live('click', function(e){
 		e.preventDefault();
-		if($('#filter_options').is(':visible'))
-			$('#filter_options').hide();
-		else
-			showEventFilters();
+		showEventFilters();
 	});
 	
 	$('#event-filter-validate').live('click',function(e){
@@ -335,7 +332,9 @@ $(function(){
 		var formId = 'eventsFilterForm';
 		var json = serializeForm(formId);
 		createCookie('event-filters',JSON.stringify(json));
-		App_Calendar.calendar();
+		$('#calendar').html('<img class="loading_img" style="padding-right:5px;" height="32px" width="32px" src= "img/21-0.gif"></img>')
+		//App_Calendar.calendar();
+		showCalendar();
 	});
 	
 	// Show filter drop down.
@@ -344,5 +343,37 @@ $(function(){
 		$('#filter_options select').val('');
 		eraseCookie('event-filters');
 	});
+	
+	/**
+	 * Hide the filters window when click on out side of the filters pop up.
+	 */
+	$(document).mouseup(function (e)
+	{
+	    var container = $("#filter_options");
+
+	    if (!container.is(e.target) // if the target of the click isn't the container...
+	        && container.has(e.target).length === 0) // ... nor a descendant of the container
+	    {
+	        container.hide();
+	    }
+	});
+	
+	// Create a cookie with default option, if there is no cookie related to event filter.
+	if(!readCookie('event-filters')){
+		$.getJSON('/core/api/users/agileusers', function (users) {
+			 var html = '';
+			 if(users){
+				 $.each(users,function(i,user){
+					 if(CURRENT_DOMAIN_USER.id == user.domainUser.id)
+						 {
+						 	var json = {};
+						 	json.owner_id = user.id;
+						 	json.type='';
+						 	createCookie('event-filters',JSON.stringify(json));
+						 }
+				 });
+			 }
+		});
+	}
 });
 

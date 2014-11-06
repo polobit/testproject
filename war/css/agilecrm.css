@@ -1645,12 +1645,8 @@ cursor: pointer;
 
 /* filters UI */
 #filter_options .arrow { /* top: -9px !important; */
-	/* background: url(https://manage.stripe.com/assets/popover/arrows/bezeled/top-202a3b3e49dae0d89968b785c8e1dd96.png); */
-	/* width: 19px; */
-	/* height: 10px; */
-	/* background-repeat: no-repeat; */
-	/* border: none !important; */
-	background: url(/img/webchat/up-arrow.png);
+	/* background: url(https://manage.stripe.com/assets/popover/arrows/bezeled/top-202a3b3e49dae0d89968b785c8e1dd96.png);*/
+	background: url(/img/up-arrow.png);
 	width: 19px;
 	height: 10px;
 	background-repeat: no-repeat;
