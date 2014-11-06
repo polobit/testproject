@@ -712,6 +712,10 @@ public class ActivitySave
 			contact_name += " ";
 			contact_name += lastname.value;
 		    }
+		    if (firstname == null && lastname == null)
+		    {
+			contact_name = contact.getContactFieldByName("email").value;
+		    }
 
 		    list.add(contact_name.trim());
 		    contact_name = "";
