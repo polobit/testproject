@@ -51,6 +51,7 @@ public class EventsAPI
     {
 	String start = req.getParameter("start");
 	String end = req.getParameter("end");
+	String ownerId = req.getParameter("owner_id");
 
 	System.out.println("Start: " + start + " End: " + end);
 	if (start == null || end == null)
@@ -61,7 +62,9 @@ public class EventsAPI
 
 	try
 	{
-	    return EventUtil.getEvents(Long.parseLong(start), Long.parseLong(end));
+	    if (ownerId != null)
+		return EventUtil.getEvents(Long.parseLong(start), Long.parseLong(end), Long.parseLong(ownerId));
+	    return EventUtil.getEvents(Long.parseLong(start), Long.parseLong(end), null);
 	}
 	catch (Exception e)
 	{

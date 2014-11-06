@@ -2323,6 +2323,12 @@ $(function()
 		return value.replace(/ +/g, '');
 
 	});
+	
+	Handlebars.registerHelper('replace_spaces', function(value)
+			{
+				return value.replace(/ +/g, '_');
+
+			});
 
 	/***************************************************************************
 	 * Returns campaignStatus object from contact campaignStatus array having
@@ -3012,5 +3018,18 @@ $(function()
 			return SHORT_CODE;
 		}
 	});
+
+	Handlebars.registerHelper('buildOptions', function(field_data)
+			{
+				var list_values = field_data.split(";");
+				var list_options = '';
+				// Create options based on list values
+				$.each(list_values,function(index, value){
+					if(value != "")
+						list_options = list_options.concat('<option value="'+value+'">'+value+'</option>');
+				});
+		
+				return list_options;
+			});
 
 });
