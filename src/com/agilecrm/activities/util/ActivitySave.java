@@ -432,7 +432,7 @@ public class ActivitySave
 	if (jsn != null && jsn.length() > 0)
 	{
 	    System.out.println("inside  contacts  ");
-	    if (contactids != null)
+	    if (contactids != null && contactids.size() > 0)
 	    {
 		if (contactids.size() > jsn.length())
 		{
@@ -729,7 +729,30 @@ public class ActivitySave
 		    }
 		    if (firstname == null && lastname == null)
 		    {
-			contact_name = contact.getContactFieldByName("email").value;
+			ContactField email = contact.getContactFieldByName("email");
+			if (email != null)
+			{
+			    contact_name = email.value;
+			}
+			else
+			{
+			    List<ContactField> confield = contact.properties;
+			    for (int k = 0; k <= confield.size() - 1; k++)
+			    {
+				ContactField field = confield.get(k);
+				if (field != null)
+				{
+				    if (field.value != null)
+				    {
+					contact_name = field.value;
+					break;
+				    }
+				}
+
+			    }
+
+			}
+
 		    }
 
 		    list.add(contact_name.trim());
