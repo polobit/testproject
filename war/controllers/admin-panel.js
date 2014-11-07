@@ -24,7 +24,11 @@ var AdminPanelRouter = Backbone.Router.extend({
 
 	// get domain details
 
-	"getDomainUserDetails/:id" : "getDomainUserDetails"
+	"getDomainUserDetails/:id" : "getDomainUserDetails",
+		
+	
+	
+	
 
 	},
 
@@ -49,6 +53,9 @@ var AdminPanelRouter = Backbone.Router.extend({
 		} });
 
 	},
+	
+	
+	
 
 	// function will be called from getDomainDetails Navigation
 	// todisplay get subscription object for particular domain

@@ -183,10 +183,16 @@ public abstract class ContactSyncService implements SyncService
     {
 	DomainUser user = DomainUserUtil.getCurrentDomainUser();
 
+	// Saves limits
+	restriction.save();
+
 	if (user != null)
 	{
 	    SendMail.sendMail(user.email, notificationSubject, NOTIFICATION_TEMPLATE, new Object[] { user,
 		    buildNotificationStatus() });
+
+	    SendMail.sendMail("yaswanth@agilecrm.com", notificationSubject + " - " + user.domain,
+		    NOTIFICATION_TEMPLATE, new Object[] { user, syncStatus });
 	}
     }
 
@@ -321,5 +327,10 @@ public abstract class ContactSyncService implements SyncService
 	    tag = prefs.type.toString().toLowerCase() + " contact";
 
 	contact.addTags(StringUtils.capitalize(tag));
+    }
+
+    protected boolean canSync()
+    {
+	return contactRestriction.can_create();
     }
 }

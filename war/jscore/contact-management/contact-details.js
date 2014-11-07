@@ -365,7 +365,7 @@ function contact_detail_view_navigation(id, contact_collection, el){
     	next_contact_id = contact_collection.at(current_index + 1).id
     }
 
-    if (collection_length > 0 && current_index != 0) {
+    if (collection_length > 0 && current_index != 0 && contact_collection.at(current_index - 1) && contact_collection.at(current_index - 1).has("id")) {
 
     	previous_contact_id = contact_collection.at(current_index - 1).id
     }

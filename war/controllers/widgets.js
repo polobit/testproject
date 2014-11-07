@@ -11,6 +11,8 @@ var WidgetsRouter = Backbone.Router
 												"Linkedin" : "Linkedin", "Linkedin/:id" : "Linkedin",
 
 												"Twitter" : "Twitter", "Twitter/:id" : "Twitter",
+												
+												"GooglePlus" : "GooglePlus", "GooglePlus/:id" : "GooglePlus",
 
 												"Rapleaf" : "Rapleaf", "Rapleaf/:id" : "Rapleaf",
 
@@ -739,8 +741,8 @@ var WidgetsRouter = Backbone.Router
 																								.html(
 																																'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Google <small>import Contacts from Google</small></h2><div class="span11 no-mg-l"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div>' + '<div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>' + '<div class="row-fluid prefs-datasync"><h2 class="widget-head">E-commerce <small>import Contacts from E-commerce</small></h2><div class="span11 no-mg-l"><div id ="shopify"></div></div></div>' +
 																												
-																																'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Payment <small>import Contacts from payment gateway</small></h2><div class="span11 no-mg-l"><div id ="stripe"></div></div></div>'
-																														/*		'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Accounting <small>import Contacts from Accounting</small></h2><div class="span11 no-mg-l"><div id ="freshbook"></div></div></div>'*/
+																																'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Payment <small>import Contacts from payment gateway</small></h2><div class="span11 no-mg-l"><div id ="stripe"></div></div></div>'+
+																																'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Accounting <small>import Contacts from Accounting</small></h2><div class="span11 no-mg-l"><div id ="freshbook"></div></div></div>'
 
 
 																								);
@@ -758,8 +760,8 @@ var WidgetsRouter = Backbone.Router
 																				template : 'admin-settings-import-shopify-contact-syncPrefs' });
 																$('#shopify').append(this.shopify_sync.render().el);
 																
-														//		this.freshbooks_sync = new Base_Model_View({url:'core/api/freshbooks/import-settings',template:'admin-settings-import-freshbooks-contacts-syncPrefs'});
-																//$('#freshbook').append(this.freshbooks_sync.render().el);
+																this.freshbooks_sync = new Base_Model_View({url:'core/api/freshbooks/import-settings',template:'admin-settings-import-freshbooks-contacts-syncPrefs'});
+																$('#freshbook').append(this.freshbooks_sync.render().el);
 																/* salesforce import template */
 																// this.salesforce = new
 																// Base_Model_View({url:'core/api/salesforce/get-prefs',template:'admin-settings-salesforce-contact-sync'});
@@ -988,6 +990,81 @@ var WidgetsRouter = Backbone.Router
 
 																$("#prefs-tabs-content").html(this.xero_import_settings.render().el);
 
-												}
+												},
+												
+												//Reddy code
+												/**
+												 * Manages GooglePlus widget
+												 */
+												GooglePlus: function(id) {
+
+												    if (!id) {
+												        show_set_up_widget("GooglePlus", 'googleplus-login',
+												            '/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.href) + "/googleplus");
+												    } else {
+												    	
+												    	var widgetDetails = $.parseJSON(
+											    		        $.ajax({
+											    		            url: "core/api/widgets/GooglePlus", 
+											    		            async: false,
+											    		            dataType: 'json'
+											    		        }).responseText
+											    		    );
+												    	
+												    	console.clear();
+												    	console.log("In google Plus widget Router");
+											    		console.log(widgetDetails);												    		
+											    		
+											    		if (widgetDetails) {
+								                        	 widgetPrefGP = JSON.parse(widgetDetails.prefs);
+								                        	
+								                        	var userData = $.parseJSON(
+												    		        $.ajax({
+												    		            url: "https://www.googleapis.com/plus/v1/people/me?access_token="+ widgetPrefGP['access_token'], 
+												    		            async: false,
+												    		            dataType: 'json'
+												    		        }).responseText
+												    		    );
+								                        	
+								                        	set_up_access(
+										                            "GooglePlus",
+										                            'googleplus-login',
+										                            userData,
+										                            '/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#GooglePlus/googleplus"));
+								                        	
+								                        	
+								                        } else {
+								                            show_set_up_widget("GooglePlus", 'googleplus-login',
+								                            		'/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.href) + "/googleplus");												                            
+								                            return;
+								                        }
+												    }
+
+												}//End of Gplus
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
 								});
 

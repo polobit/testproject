@@ -47,7 +47,7 @@
 </script>
 
 <script id="facebook-modified-search-template" type="text/html">
-	<div display:inline;  line-height:12px;word-wrap: break-word;">
+	<div display:inline; line-height:12px;word-wrap: break-word;">
 		<form class="widget_content" style="border-bottom:none;" id="facebook-search_form" name="facebook-search_form" method="get">
 	    	<fieldset>
 				<p><label>Enter search details</label></p>
@@ -61,17 +61,22 @@
 </script>
 <script id="facebook-profile-template" type="text/html">
 	<div class="widget_content row-fluid">
+{{#if user.image}}
 		<div class="span3"><img src="{{user.image}}" width="36" height="36" alt="" class="img-rounded pull-left"/></div>
 		<div class="pull-left ml_5 span8">
 			<p class="title_txt"><a href="{{user.link}}" target="_blank" >{{user.name}}</a></p>
 		<a class="btn" id="send_fb_friend_request_w" style="margin-top:10px;cursor:pointer;" href= "#" onClick="window.open('https://www.facebook.com/dialog/friends/?id={{user.id}}&app_id=1472694689634803&redirect_uri=https://my.agilecrm.com/backend/googleservlet?act=facebook','Sample','toolbar=no,width=800,height=500,left=200,top=200, status=no,scrollbars=no,resize=no');return false"><i class="icon-plus"></i>Add Friend</a>
-		<a class="btn" id="fb_post_on_wall" style="margin-top:10px;cursor:pointer;" href= "#" onClick="window.open('https://www.facebook.com/dialog/feed?app_id=1472694689634803&display=popup&from={{me.id}}&to={{user.id}}&caption=An example caption&link=https://developers.facebook.com%2Fdocs%2F%20%20%20&redirect_uri=https://my.agilecrm.com/backend/googleservlet?act=facebook','Sample','toolbar=no,width=1000,height=500,left=200,top=200, status=no,scrollbars=no,resize=no');return false">Post</a>
-</div>	
+		<a class="btn" id="fb_post_on_wall" style="margin-top:10px;cursor:pointer;" href= "#" onClick="window.open('https://www.facebook.com/dialog/send?app_id=1472694689634803&display=popup&to={{user.id}}&link=https://www.agilecrm.com/&redirect_uri=https://my.agilecrm.com/backend/googleservlet?act=facebook','Sample','toolbar=no,width=1000,height=500,left=200,top=200, status=no,scrollbars=no,resize=no');return false">Post</a>
+</div>
+{{else}}
+Authentication Error. Please reconfigure your Facebook widget.
+{{/if}}	
 </div>
 </script>
 
 <script id="facebook-revoke-access-template" type="text/html">
 <div class='widget_content' style='border-bottom:none;line-height: 160%;' >
+{{#if custom_data.picture.data.url}}
 	<div class="row-fluid">
 		<div class="span4">
 			<img src="{{custom_data.picture.data.url}}" width="70" height="70" alt="" class="thumbnail"/>
@@ -81,6 +86,7 @@
 			<p style="margin:0px;">{{custom_data.location.name}}</p>
 		</div>
 	</div>
+{{/if}}
 	<div>
 		<p style='margin: 10px 0px 5px 0px;' >
 			<a class='btn revoke-widget ml_5' style='text-decoration: none;' widget-name="Facebook">Revoke Access</a>

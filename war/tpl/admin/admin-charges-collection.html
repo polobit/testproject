@@ -1,6 +1,6 @@
    <script id="admin-charge-collection-template" type="html/text">
         <div class="page-header">
-            <h2>Payment Details</h2> 
+            <h2>Past Transactions</h2> 
         </div>
     <div >
         <table class="table table-striped" id="sort-table">
@@ -8,7 +8,7 @@
                 <tr>
                     <th>Amount(USD)</th>
                     <th>Created Date</th>
-                    <th>Refund stats</th>
+                    <th>Status</th>
                     <th></th>
                 </tr>
             </thead>
@@ -26,10 +26,19 @@
     	${{numeric_operation amount 100 "/"}}&nbsp;&nbsp;&nbsp;--{{id}}
 	</td>
 	<td><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></td>
-	<td>{{#if refunded}}
-      refunded
+	<td>
+			{{#if paid}}
+				{{#if refunded}}
+      				refunded ({{numeric_operation amount 100 "/"}} {{toUpperCase currency}})
+				{{else}}
+					paid
+				{{/if}}
+			{{else}}
+				failed
 {{/if}}</td>
-	<td>{{#unless refunded}}<button data="{{id}}" class="refund btn-mini btn-primary">Refund</button>{{/unless}}</td>
+	<td>{{#unless refunded}}
+		{{#if paid}}
+		<button data="{{id}}" class="refund btn-mini btn-primary">Refund</button>{{/if}}{{/unless}}</td>
 
 
 

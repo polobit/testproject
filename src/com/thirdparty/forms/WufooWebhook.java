@@ -125,7 +125,7 @@ public class WufooWebhook extends HttpServlet
 			&& (StringUtils.equals("date", json.getString("Type")) || StringUtils.equals("eurodate", json.getString("Type")))
 			&& (!StringUtils.isBlank(req.getParameter(json.getString("ID")))))
 		{
-		    finalJson.put(json.getString("Title"), dateFieldValue(req.getParameter(json.getString("ID"))));
+		    finalJson.put(json.getString("Title") + " " + "agilecustomfield", dateFieldValue(req.getParameter(json.getString("ID"))));
 		    continue;
 		}
 
