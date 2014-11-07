@@ -85,7 +85,7 @@ public class Globals
     // public static final String STRIPE_LIVE_CLIENT_ID =
     // "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
 
-    public static final String STRIPE_LIVE_API_KEY = "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
+    public static final String STRIPE_LIVE_API_KEY = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
     public static final String STRIPE_LIVE_CLIENT_ID = "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
 
     // development keys
@@ -144,7 +144,7 @@ public class Globals
     // Cheat Code
     public static final String MASTER_CODE_INTO_SYSTEM = "agileRocks()";
 
-    public static final String BULK_ACTION_BACKENDS_URL = "b1";
+    public static final String BULK_ACTION_BACKENDS_URL = "b1-sandbox";
 
     public static final String BULK_BACKENDS = "bulk";
     public static final String NORMAL_BACKENDS = "normal";
