@@ -58,15 +58,14 @@
 			<li class="row-fluid sub_header_li">
 				<div class="pull-left">
 				<a class="invoices" data-toggle="collapse"  id="getInvoice-lineitems-{{InvoiceID}}"  value="{{InvoiceID}}"   style="cursor:pointer;"><i class="icon-plus"></i></a>
-				&nbsp;
-				<a  data-toggle="tooltip" data-placement="top" title= "{{xeroTypeToolTip Type}}" style="cursor:pointer;" href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/View.aspx?InvoiceID={{InvoiceID}}" target="_blank">{{InvoiceNumber}} {{xeroType Type}}</a>
+				<a data-toggle="tooltip" data-placement="top" title= "{{xeroTypeToolTip Type}}" style="cursor:pointer;" href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/View.aspx?InvoiceID={{InvoiceID}}" target="_blank">{{InvoiceNumber}} {{xeroType Type}}</a>
 				</div>				
 				<div class="pull-right">{{CurrencyCode}} {{Total}}</div><br>
 				
 				<div id="collapse-{{InvoiceID}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
 				</div>		
 				<div class="span12">
-				<div class="span8"><small>Due: <time class="time-ago" datetime="{{DueDate}}">{{DueDate}}</time></small></div>					
+				<div class="span8"><small>Due <time class="time-ago" datetime="{{DueDate}}">{{DueDate}}</time></small></div>					
 				<div class="span4"><span class="badge">{{capFirstLetter Status}}</span></div><br>
 				</div>			
 			</li>
@@ -77,16 +76,16 @@
 			<li class="row-fluid sub_header_li">
 				<div class="pull-left">
 					<a class="invoices" data-toggle="collapse"  id="getInvoice-lineitems-{{invoice.Invoice.InvoiceID}}"  value="{{invoice.Invoice.InvoiceID}}"   style="cursor:pointer;"><i class="icon-plus"></i></a>
-					&nbsp;
 					<a id="xeroinvoicelink" data-toggle="tooltip" data-placement="top" title= "{{xeroTypeToolTip invoice.Invoice.Type}}" style="cursor:pointer;" href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/View.aspx?InvoiceID={{invoice.Invoice.InvoiceID}}" target="_blank">{{invoice.Invoice.InvoiceNumber}} {{xeroType invoice.Invoice.Type}}</a>
 				</div>
 				<div class="pull-right">{{invoice.Invoice.CurrencyCode}} {{invoice.Invoice.Total}}</div><br>
 				
 				<div id="collapse-{{invoice.Invoice.InvoiceID}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
 				</div>		
-				
-				<div class="pull-left"><small><time class="time-ago pull-left" datetime="{{invoice.Invoice.DueDate}}">{{invoice.Invoice.DueDate}}</time></small></div>					
-				<div class="pull-right"><span class="badge">{{capFirstLetter invoice.Invoice.Status}}</span></div><br>			
+				<div class="span12">
+				<div class="span8"><small>Due <time class="time-ago" datetime="{{invoice.Invoice.DueDate}}">{{invoice.Invoice.DueDate}}</time></small></div>					
+				<div class="span4"><span class="badge">{{capFirstLetter invoice.Invoice.Status}}</span></div><br>
+				</div>			
 			</li>
 	</ul>
 	
@@ -128,15 +127,17 @@
 
 <script id="xero-profile-addinvoice-template" type="text/html">
 <div class="widget_content">
-		<div>No invoices Exist for this contact </div>
+		<div>No invoices exist for this contact </div>
 		<a class="btn" id="xero_add_invoice" style="margin-top:10px;cursor:pointer;" href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/Edit.aspx?fromContactID={{ContactID}}" target="_blank"><i class="icon-plus"></i>Add Invoice</a>
 	</div>
 </script>
 <script id="xero-revoke-access-template" type="text/html">
 <div class='widget_content' style='border-bottom:none;line-height: 160%;' >
 	<div class="row-fluid">
-		<div class="span4">
-			<br><p class="title_txt"><a href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/Dashboard/" target="_blank" >{{fetchXeroUser prefs}}</a></p>
+		<div class="span12">
+{{#if custom_data.prefsObj.xero_company_name}}
+			<p class="title_txt" style="padding-left:10px;"><a href="https://go.xero.com/organisationlogin/default.aspx?shortcode={{custom_data.prefsObj.xero_org_shortcode}}&redirecturl=/Dashboard/" target="_blank" >{{custom_data.prefsObj.xero_company_name}}</a></p>
+{{/if}}
 		</div>
 	</div>
 	<div>
@@ -151,11 +152,11 @@
 <script id="xero-invoice-lineitems-template" type="text/html">	
 {{#isArray LineItems.LineItem}}						
 		{{#each LineItems.LineItem}}	
-			<div class="pull-left" style="padding-left: 20px;">{{ItemCode}}</div>					
+			<div class="pull-left" style="padding-left: 20px;">{{Description}}</div>					
 			<div class="pull-right">{{currencyFormat LineAmount}}</div><br>
 		{{/each}}
 {{else}}
-		<div class="pull-left" style="padding-left: 20px;">{{LineItems.LineItem.ItemCode}}</div>					
+		<div class="pull-left" style="padding-left: 20px;">{{LineItems.LineItem.Description}}</div>					
 		<div class="pull-right">{{currencyFormat LineItems.LineItem.LineAmount}}</div><br>					
 	{{/isArray}}
 

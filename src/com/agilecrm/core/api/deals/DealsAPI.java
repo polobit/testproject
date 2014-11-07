@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -120,8 +121,28 @@ public class DealsAPI
     public List<Opportunity> getOpportunitiesByFilter(@QueryParam("owner_id") String ownerId,
 	    @QueryParam("milestone") String milestone, @QueryParam("related_to") String contactId,
 	    @QueryParam("order_by") String fieldName, @QueryParam("cursor") String cursor,
-	    @QueryParam("page_size") String count, @QueryParam("pipeline_id") Long pipelineId)
+	    @QueryParam("page_size") String count, @QueryParam("pipeline_id") Long pipelineId,
+	    @QueryParam("filters") String filters)
     {
+	if (filters != null)
+	{
+	    System.out.println(filters);
+	    try
+	    {
+		org.json.JSONObject json = new org.json.JSONObject(filters);
+		if (milestone != null)
+		    json.put("milestone", milestone);
+		System.out.println(json.toString());
+		if (count != null)
+		    return OpportunityUtil.getOpportunitiesByFilter(json, Integer.parseInt(count), cursor);
+		return OpportunityUtil.getOpportunitiesByFilter(json, 0, cursor);
+	    }
+	    catch (JSONException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	}
 	if (count != null)
 	{
 	    return OpportunityUtil.getOpportunitiesByFilter(ownerId, milestone, contactId, fieldName,
@@ -372,7 +393,7 @@ public class DealsAPI
 
 	// Executes notification when deal is deleted
 	DealNotificationPrefsUtil.executeNotificationForDeleteDeal(opportunitiesJSONArray);
-	ActivitySave.createLogForBulkDeletes(EntityType.DEAL, opportunitiesJSONArray.toString(),
+	ActivitySave.createLogForBulkDeletes(EntityType.DEAL, opportunitiesJSONArray,
 	        String.valueOf(opportunitiesJSONArray.length()), "");
 	Opportunity.dao.deleteBulkByIds(opportunitiesJSONArray);
     }
@@ -473,8 +494,23 @@ public class DealsAPI
 	    SessionManager.set(new UserInfo(null, user.email, user.name));
 	    SessionManager.get().setDomainId(user.id);
 	}
-	List<Opportunity> deals = OpportunityUtil.getOpportunities();
-	String path = DealExportBlobUtil.writeDealCSVToBlobstore(deals, true);
+	String currentCursor = null;
+	String previousCursor = null;
+	int firstTime = 0;
+	String path = null;
+	List<Opportunity> deals = null;
+	int max = 1000;
+	do
+	{
+	    deals = OpportunityUtil.getOpportunities(max, currentCursor);
+	    currentCursor = deals.get(deals.size() - 1).cursor;
+	    firstTime++;
+	    if (firstTime == 1)
+		path = DealExportBlobUtil.writeDealCSVToBlobstore(deals, false);
+	    else
+		DealExportBlobUtil.editExistingBlobFile(path, deals, false);
+	} while (deals.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
+	DealExportBlobUtil.editExistingBlobFile(path, null, true);
 	List<String> fileData = DealExportBlobUtil.retrieveBlobFileData(path);
 	if (count == null)
 	    count = String.valueOf(deals.size());

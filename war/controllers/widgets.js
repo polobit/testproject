@@ -491,9 +491,12 @@ var WidgetsRouter = Backbone.Router
 																				{
 																								$
 																																.getJSON(
-																																								"core/api/custom-fields",
+																																								"core/api/widgets/Xero",
 																																								function(data)
 																																								{
+																																									if(typeof data.prefs != "undefined") {
+																																										data.prefsObj = JSON.parse(data.prefs);
+																																									}
 																																												set_up_access(
 																																																				"Xero",
 																																																				'xero-login',
@@ -514,7 +517,7 @@ var WidgetsRouter = Backbone.Router
 																																								{
 																																												$
 																																																				.getJSON(
-																																																												"core/api/custom-fields",
+																																																												"core/api/widgets/Xero",
 																																																												function(data)
 																																																												{
 																																																																set_up_access(

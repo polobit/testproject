@@ -228,7 +228,15 @@ public class TasksAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Task updateTask(Task task)
     {
-	ActivitySave.createTaskEditActivity(task);
+	try
+	{
+	    ActivitySave.createTaskEditActivity(task);
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 	task.save();
 	return task;
     }
@@ -246,8 +254,8 @@ public class TasksAPI
     public void deleteContacts(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
-	ActivitySave.createLogForBulkDeletes(EntityType.TASK, tasksJSONArray.toString(),
-	        String.valueOf(tasksJSONArray.length()), "");
+	ActivitySave.createLogForBulkDeletes(EntityType.TASK, tasksJSONArray, String.valueOf(tasksJSONArray.length()),
+	        "");
 	Task.dao.deleteBulkByIds(tasksJSONArray);
     }
 

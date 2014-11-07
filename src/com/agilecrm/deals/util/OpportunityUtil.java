@@ -10,9 +10,14 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONException;
 
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.CustomFieldDef.SCOPE;
+import com.agilecrm.contact.CustomFieldDef.Type;
+import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
@@ -144,7 +149,7 @@ public class OpportunityUtil
     public static List<Opportunity> getOpportunities(long minTime, long maxTime)
     {
 	return dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime)
-	        .list();
+		.list();
     }
 
     /**
@@ -239,10 +244,10 @@ public class OpportunityUtil
 		double pipeline = opportunity.expected_value * opportunity.probability / 100;
 
 		/*
-	         * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
-	         * //Get mm/yy String mmYY = formatter.format(new
-	         * Date(opportunity.close_date * 1000));
-	         */
+		 * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
+		 * //Get mm/yy String mmYY = formatter.format(new
+		 * Date(opportunity.close_date * 1000));
+		 */
 		Date opportunityDate = new Date(opportunity.close_date * 1000);
 
 		Calendar calendar = Calendar.getInstance();
@@ -305,7 +310,7 @@ public class OpportunityUtil
     public static int getTotalNumberOfMilestones(long minTime, long maxTime, String milestone)
     {
 	return dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime)
-	        .filter("milestone", milestone).count();
+		.filter("milestone", milestone).count();
     }
 
     /**
@@ -354,7 +359,7 @@ public class OpportunityUtil
     {
 	// Gets total count of opportunities within the given period
 	int numOpportunities = dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime)
-	        .filter("close_date <= ", maxTime).count();
+		.filter("close_date <= ", maxTime).count();
 
 	JSONObject conversionObject = new JSONObject();
 
@@ -370,15 +375,15 @@ public class OpportunityUtil
     public static List<Opportunity> getDealsRelatedToCurrentUser()
     {
 	return dao.ofy().query(Opportunity.class)
-	        .filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-	        .order("-created_time").limit(10).list();
+		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+		.order("-created_time").limit(10).list();
     }
 
     public static List<Opportunity> getUpcomingDealsRelatedToCurrentUser(String pageSize)
     {
 	return dao.ofy().query(Opportunity.class)
-	        .filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-	        .order("close_date").limit(Integer.parseInt(pageSize)).list();
+		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+		.order("close_date").limit(Integer.parseInt(pageSize)).list();
     }
 
     /**
@@ -556,8 +561,8 @@ public class OpportunityUtil
     public static int getTotalNumberOfMilestonesByPipeline(Long pipelineId, long minTime, long maxTime, String milestone)
     {
 	return dao.ofy().query(Opportunity.class).filter("pipeline", new Key<Milestone>(Milestone.class, pipelineId))
-	        .filter("close_date >= ", minTime).filter("close_date <= ", maxTime).filter("milestone", milestone)
-	        .count();
+		.filter("close_date >= ", minTime).filter("close_date <= ", maxTime).filter("milestone", milestone)
+		.count();
     }
 
     /**
@@ -607,7 +612,7 @@ public class OpportunityUtil
     public static List<Opportunity> getOpportunitiesByPipeline(Long pipelineId, long minTime, long maxTime)
     {
 	return dao.ofy().query(Opportunity.class).filter("pipeline", new Key<Milestone>(Milestone.class, pipelineId))
-	        .filter("close_date >= ", minTime).filter("close_date <= ", maxTime).list();
+		.filter("close_date >= ", minTime).filter("close_date <= ", maxTime).list();
     }
 
     /**
@@ -647,10 +652,10 @@ public class OpportunityUtil
 		double pipeline = opportunity.expected_value * opportunity.probability / 100;
 
 		/*
-	         * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
-	         * //Get mm/yy String mmYY = formatter.format(new
-	         * Date(opportunity.close_date * 1000));
-	         */
+		 * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
+		 * //Get mm/yy String mmYY = formatter.format(new
+		 * Date(opportunity.close_date * 1000));
+		 */
 		Date opportunityDate = new Date(opportunity.close_date * 1000);
 
 		Calendar calendar = Calendar.getInstance();
@@ -697,5 +702,238 @@ public class OpportunityUtil
 
 	System.out.println(dealsObject);
 	return dealsObject;
+    }
+
+    /**
+     * Get opportunities based on the filted in the given filter JSON object.
+     * 
+     * @param filterJson
+     *            JSON object containing the fields.
+     * @param count
+     *            number of deals per page.
+     * @param cursor
+     *            cursor for the deals.
+     * @return deals list.
+     */
+    public static List<Opportunity> getOpportunitiesByFilter(org.json.JSONObject filterJson, int count, String cursor)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+
+	try
+	{
+	    if (checkJsonString(filterJson, "pipeline_id"))
+	    {
+		searchMap.put("pipeline",
+			new Key<Milestone>(Milestone.class, Long.parseLong(filterJson.getString("pipeline_id"))));
+		if (checkJsonString(filterJson, "milestone"))
+		    searchMap.put("milestone", filterJson.getString("milestone"));
+	    }
+	    if (checkJsonString(filterJson, "owner_id"))
+		searchMap.put("ownerKey",
+			new Key<DomainUser>(DomainUser.class, Long.parseLong(filterJson.getString("owner_id"))));
+
+	    if (checkJsonString(filterJson, "value_filter")
+		    && filterJson.getString("value_filter").equalsIgnoreCase("equals"))
+	    {
+		if (checkJsonString(filterJson, "value"))
+		{
+		    double value = Double.parseDouble(filterJson.getString("value"));
+		    searchMap.put("expected_value", value);
+		}
+
+	    }
+	    else
+	    {
+		if (checkJsonString(filterJson, "value_start"))
+		{
+		    double value = Double.parseDouble(filterJson.getString("value_start").replace("%", ""));
+		    searchMap.put("expected_value >=", value);
+		}
+		if (checkJsonString(filterJson, "value_end"))
+		{
+		    double value = Double.parseDouble(filterJson.getString("value_end").replace("%", ""));
+		    searchMap.put("expected_value <=", value);
+		}
+	    }
+
+	    if (checkJsonString(filterJson, "probability_filter")
+		    && filterJson.getString("probability_filter").equalsIgnoreCase("equals"))
+	    {
+		if (checkJsonString(filterJson, "probability"))
+		{
+		    long probability = Long.parseLong(filterJson.getString("probability").replace("%", ""));
+		    searchMap.put("probability", probability);
+		}
+
+	    }
+	    else
+	    {
+		if (checkJsonString(filterJson, "probability_start"))
+		{
+		    long probability = Long.parseLong(filterJson.getString("probability_start").replace("%", ""));
+		    searchMap.put("probability >=", probability);
+		}
+		if (checkJsonString(filterJson, "probability_end"))
+		{
+		    long probability = Long.parseLong(filterJson.getString("probability_end").replace("%", ""));
+		    searchMap.put("probability <=", probability);
+		}
+	    }
+
+	    searchMap.putAll(getDateFilterCondition(filterJson, "close_date"));
+	    searchMap.putAll(getDateFilterCondition(filterJson, "created_time"));
+
+	    /*
+	     * Map<String, Object> customFilters =
+	     * getCustomFieldFilters(filterJson.getJSONObject("customFields"));
+	     * if (customFilters != null) searchMap.putAll(customFilters);
+	     */
+
+	    System.out.println("---------------" + searchMap.toString());
+
+	    String sortField = "-created_time";
+
+	    if (checkJsonString(filterJson, "sort_field"))
+		sortField = filterJson.getString("sort_field");
+
+	    if (count != 0)
+		return dao.fetchAllByOrder(count, cursor, searchMap, true, false, sortField);
+
+	    return dao.listByProperty(searchMap);
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	return null;
+    }
+
+    /**
+     * Generate the Map object with field name and values of the date(epoch
+     * time).
+     * 
+     * @param json
+     *            Filter object containing date fields.
+     * @param fieldName
+     *            name of the date field.
+     * @return map object with date field query conditions.
+     */
+    private static Map<String, Object> getDateFilterCondition(org.json.JSONObject json, String fieldName)
+    {
+
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+
+	try
+	{
+	    if (checkJsonString(json, fieldName + "_filter"))
+	    {
+		if (json.getString(fieldName + "_filter").equalsIgnoreCase("equals")
+			&& checkJsonString(json, fieldName))
+		{
+		    long closeDate = Long.parseLong(json.getString(fieldName));
+		    searchMap.put(fieldName, closeDate);
+		}
+		else
+		{
+		    if (checkJsonString(json, fieldName + "_start"))
+		    {
+			long closeDate = Long.parseLong(json.getString(fieldName + "_start"));
+			searchMap.put(fieldName + " >", closeDate);
+		    }
+		    if (checkJsonString(json, fieldName + "_end"))
+		    {
+			long closeDate = Long.parseLong(json.getString(fieldName + "_end"));
+			searchMap.put(fieldName + " <", closeDate);
+		    }
+		}
+	    }
+	}
+	catch (NumberFormatException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	return searchMap;
+    }
+
+    /**
+     * Validate the field in the json. Check whether the given field is in JSON
+     * and it has any value.
+     * 
+     * @param json
+     *            JSON object.
+     * @param key
+     *            field name to validate.
+     * @return true if field is present in the json and it has some value.
+     */
+    private static boolean checkJsonString(org.json.JSONObject json, String key)
+    {
+
+	try
+	{
+	    if (!json.has(key))
+		return false;
+	    if (json.getString(key) == null || json.getString(key) == "null" || json.getString(key).length() == 0)
+		return false;
+
+	    return true;
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	    return false;
+	}
+    }
+
+    /**
+     * Generate Map object with Query conditons for deals custom fields.
+     * 
+     * @param json
+     *            Filter object containing the filters related to custom fields.
+     * @return
+     */
+    @SuppressWarnings("unused")
+    private static Map<String, Object> getCustomFieldFilters(org.json.JSONObject json)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	List<CustomFieldDef> customFieldList = CustomFieldDefUtil.getAllCustomFields(SCOPE.DEAL);
+	try
+	{
+	    for (CustomFieldDef customField : customFieldList)
+	    {
+		String fieldLabel = customField.field_label;
+		String fieldKey = fieldLabel.replace(" ", "_");
+		searchMap.put("custom_data.name", fieldLabel);
+		if ((customField.field_type == Type.TEXT || customField.field_type == Type.TEXTAREA || customField.field_type == Type.LIST)
+			&& checkJsonString(json, fieldKey))
+		{
+		    searchMap.put("custom_data.value", json.getString(fieldKey));
+		}
+		else if (customField.field_type == Type.CHECKBOX && checkJsonString(json, fieldKey))
+		{
+		    if (json.getBoolean(fieldKey))
+			searchMap.put(fieldLabel, "on");
+		}
+		else if (customField.field_type == Type.DATE && checkJsonString(json, fieldKey))
+		{
+		    searchMap.putAll(getDateFilterCondition(json, fieldKey));
+		}
+	    }
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	System.out.println("-----custom---------" + searchMap.toString());
+	return searchMap;
     }
 }
