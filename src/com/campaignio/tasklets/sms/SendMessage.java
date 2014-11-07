@@ -93,12 +93,30 @@ public class SendMessage extends TaskletAdapter
 		if (checkvalidTo(to).equals("Invalid"))
 		{
 			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+<<<<<<< HEAD
 					"SMS could not be sent -  Invalid phone number", LogType.SMS_FAILED.toString());
+=======
+					"SMS failed as " + to + " is invalid phone number", LogType.SMS_FAILED.toString());
+>>>>>>> GooglePhoneAPI-SMS
 
 			// Execute Next One in Loop
 			TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
 			return;
 		}
+<<<<<<< HEAD
+=======
+
+		if (checkvalidTo(to).equals("AlphaNumeric"))
+		{
+			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+					"SMS failed as " + to + " is alpha numeric", LogType.SMS_FAILED.toString());
+
+			// Execute Next One in Loop
+			TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+			return;
+		}
+		//
+>>>>>>> GooglePhoneAPI-SMS
 
 		/*
 		 * if (checkvalidTo(to).equals("AlphaNumeric")) {
