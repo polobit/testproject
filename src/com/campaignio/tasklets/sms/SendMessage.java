@@ -12,6 +12,9 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 import com.thirdparty.twilio.TwilioSMSUtil;
 
 /**
@@ -78,7 +81,7 @@ public class SendMessage extends TaskletAdapter
 			return;
 		}
 
-		if (!checkvalid(from))
+		if (!checkvalidFrom(from))
 		{
 			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
 					"SMS failed as " + from + " is not verified number by twilio", LogType.SMS_FAILED.toString());
@@ -87,8 +90,43 @@ public class SendMessage extends TaskletAdapter
 			TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
 			return;
 		}
+		if (checkvalidTo(to).equals("Invalid"))
+		{
+			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+<<<<<<< HEAD
+					"SMS could not be sent -  Invalid phone number", LogType.SMS_FAILED.toString());
+=======
+					"SMS failed as " + to + " is invalid phone number", LogType.SMS_FAILED.toString());
+>>>>>>> GooglePhoneAPI-SMS
 
-		// if(SMSGateway.getSMSGateway().equals(SMSGateway.SMS_API.TWILIO))
+			// Execute Next One in Loop
+			TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+			return;
+		}
+<<<<<<< HEAD
+=======
+
+		if (checkvalidTo(to).equals("AlphaNumeric"))
+		{
+			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+					"SMS failed as " + to + " is alpha numeric", LogType.SMS_FAILED.toString());
+
+			// Execute Next One in Loop
+			TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+			return;
+		}
+		//
+>>>>>>> GooglePhoneAPI-SMS
+
+		/*
+		 * if (checkvalidTo(to).equals("AlphaNumeric")) {
+		 * LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON),
+		 * AgileTaskletUtil.getId(subscriberJSON), "SMS failed as " + to +
+		 * " is alpha numeric", LogType.SMS_FAILED.toString());
+		 * 
+		 * // Execute Next One in Loop TaskletUtil.executeTasklet(campaignJSON,
+		 * subscriberJSON, data, nodeJSON, null); return; }
+		 */
 
 		TwilioSMSUtil.sendSMS(SMS_API, from, to, message, ACCOUNT_SID, AUTH_TOKEN);
 
@@ -101,10 +139,8 @@ public class SendMessage extends TaskletAdapter
 
 	}
 
-	private boolean checkvalid(String from)
+	private boolean checkvalidFrom(String from)
 	{
-
-		// Convert number in E164 format which is accepted by twilio
 
 		List<String> verifiedNumbers = getVerifiedTwilioNumbers();
 
@@ -133,6 +169,7 @@ public class SendMessage extends TaskletAdapter
 		{
 
 			System.out.println("Inside getVerifiedTwilioNumbers");
+			System.err.println("Exception was thrown: getVerifiedTwilioNumbers " + e.toString());
 			e.printStackTrace();
 		}
 
@@ -141,6 +178,29 @@ public class SendMessage extends TaskletAdapter
 
 		return TwilioSMSUtil.verifiedTwilioNumbers(ACCOUNT_SID, AUTH_TOKEN);
 
+	}
+
+	private String checkvalidTo(String to)
+	{
+
+		PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+		try
+		{
+			PhoneNumber toPhoneNumber = phoneUtil.parse(to, null);
+			if (phoneUtil.isValidNumber(toPhoneNumber))
+				return "Valid";
+		}
+		catch (NumberParseException e)
+		{
+			System.out.println("Inside Send Message check valid 'to' number");
+
+			/*
+			 * if (phoneUtil.isAlphaNumber(to)) return "AlphaNumeric";
+			 */
+			System.err.println("NumberParseException was thrown: " + e.toString());
+		}
+
+		return "Invalid";
 	}
 
 }

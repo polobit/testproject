@@ -723,18 +723,40 @@ var ContactsRouter = Backbone.Router.extend({
 	{
 		
 		var model = {};
-		
+
 		// Takes back to contacts if contacts detail view is not defined
 		if (this.contactDetailView && !this.contactDetailView.model.get(id))
 		{
 			// Show the email form with the email prefilled from the curtrent contact
 			model = this.contactDetailView.model.toJSON();
 		}
-		
 		var el = $("#content").html(getTemplate("send-email", model));
 		
+		// Call setupTypeAhead to get contacts
+		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true);
+		
+		agile_type_ahead("email_cc", el, contacts_typeahead, null, null, "email-search", null, true);
+		
+		agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, "email-search", null, true);
+		
 		if (id)
-			$("#emailForm", el).find('input[name="to"]').val(id);
+		{
+/*			var name;
+			if(model)
+			{
+				var first_name = getPropertyValue(model, "first_name");
+				var last_name = getPropertyValue(model, "last_name");
+				if(first_name || last_name)
+				{
+					name = first_name?first_name:"";
+					name = (name + " " + (last_name?last_name:"")).trim();
+				}
+			}
+			if(name.length)
+				$('#to', el).closest("div.controls").find(".tags").append('<li class="tag" style="display: inline-block;" data="' + id + '"><a href="#contact/' + model.id +'">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
+			else*/
+				$("#emailForm", el).find('input[name="to"]').val(id);
+		}
 		else
 			$("#emailForm", el).find('input[name="to"]').val('');
 
