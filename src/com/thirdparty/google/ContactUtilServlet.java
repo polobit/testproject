@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 
+import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.contact.sync.SyncPrefsBuilder;
 import com.agilecrm.contact.sync.service.SyncService;
 import com.agilecrm.contact.util.BulkActionUtil;
@@ -22,6 +23,7 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.thirdparty.google.deferred.GoogleContactsDeferredTask;
+import com.thirdparty.sync.ContactSyncDeferredTask;
 
 /**
  * <code>ContactUtilServlet</code> contains method to get and import contacts.
@@ -47,61 +49,46 @@ public class ContactUtilServlet extends HttpServlet
 	ContactPrefs contactPrefs = null;
 	try
 	{
-	    // String type = null, cron = null;
 
-	    InputStream stream = req.getInputStream();
-	    byte[] contactPrefsByteArray = IOUtils.toByteArray(stream);
-
-	    ByteArrayInputStream b = new ByteArrayInputStream(contactPrefsByteArray);
-	    ObjectInputStream o = new ObjectInputStream(b);
-
-	    System.out.println("contactPrefsByteArray " + contactPrefsByteArray);
-	    // retrieves Object which was added in taskQueue
-	    contactPrefs = (ContactPrefs) o.readObject();
-
-	    if (contactPrefs == null)
-		return;
-
-	    if (contactPrefs.domainUser != null)
-	    {
-		DomainUser user = DomainUserUtil.getDomainUser(contactPrefs.domainUser.getId());
-		BulkActionUtil.setSessionManager(user);
-
-		BillingRestriction restriction = BillingRestriction.getInstance(null, null);
-		restriction.refreshContacts();
-
-		/** contact restriction. */
-		DaoBillingRestriction contactRestriction = DaoBillingRestriction.getInstace(
-			DaoBillingRestriction.ClassEntities.Contact.toString(), restriction);
-
-		if (contactRestriction == null)
-		    return;
-
-		// Returns if contacts limit is reached
-		if (!contactRestriction.can_create())
-		    return;
-	    }
-
-	    SyncService service = new SyncPrefsBuilder().config(contactPrefs).getService(contactPrefs.type.getClazz());
-
-	    if (service != null)
-	    {
-		service.initSync();
-
-	    }
-
-	    /*
-	     * if (req != null) { // check this request comes from cron or
-	     * normal execution if its // from cron then it gives
-	     * X-AppEngine-Cron as request parameter String cronAttr =
-	     * req.getHeader("X-AppEngine-Cron"); if (cronAttr != null &&
-	     * !cronAttr.isEmpty()) {
-	     * 
-	     * type = req.getParameter("type"); cron = req.getParameter("cron");
-	     *//**
-	     * If sync type is google the contact sync based on duration is
-	     * initialized
+	    /**
+	     * check this servlet request came from normal request or cron
+	     * request if this is cron request then X-AppEngine-Cron parameter
+	     * must be present in request header
 	     */
+
+	    String cronAttr = req.getHeader("X-AppEngine-Cron");
+
+	    System.out.println(cronAttr);
+
+	    /**
+	     * if cronAttr not present in request then read contact prefs from
+	     * stream
+	     */
+	    if (cronAttr == null)
+	    {
+		System.out.println("normal request......");
+		InputStream stream = req.getInputStream();
+		byte[] contactPrefsByteArray = IOUtils.toByteArray(stream);
+
+		ByteArrayInputStream b = new ByteArrayInputStream(contactPrefsByteArray);
+		ObjectInputStream o = new ObjectInputStream(b);
+
+		System.out.println("contactPrefsByteArray " + contactPrefsByteArray);
+		// retrieves Object which was added in taskQueue
+		contactPrefs = (ContactPrefs) o.readObject();
+
+		if (contactPrefs != null)
+		{
+		    doSync(contactPrefs);
+		}
+	    }
+	    else
+	    {
+		System.out.println("cron request came....");
+		String duration = req.getParameter("duration");
+		initializeCronSync(duration);
+	    }
+
 	    /*
 	     * 
 	     * if ("GOOGLE".equals(type) && !StringUtils.isEmpty(cron)) { String
@@ -121,12 +108,25 @@ public class ContactUtilServlet extends HttpServlet
 	{
 	    e.printStackTrace();
 	}
-	finally
-	{
-	    contactPrefs.inProgress = false;
-	    contactPrefs.save();
-	}
 
+    }
+
+    private void initializeCronSync(String duration)
+    {
+	SyncFrequency frequency = SyncFrequency.valueOf(duration);
+
+	if (frequency == null)
+	    return;
+
+	// Create Task and push it into Task Queue
+	Queue queue = QueueFactory.getQueue("contact-sync-queue");
+
+	for (String namespace : NamespaceUtil.getAllNamespaces())
+	{
+	    ContactSyncDeferredTask task = new ContactSyncDeferredTask(namespace, frequency);
+
+	    queue.add(TaskOptions.Builder.withPayload(task));
+	}
     }
 
     /**
@@ -262,6 +262,47 @@ public class ContactUtilServlet extends HttpServlet
 	 * "Problem occured while importing. Please try again"); } finally { //
 	 * contactPrefs.delete(); }
 	 */
+    }
+
+    public void doSync(ContactPrefs contactPrefs)
+    {
+
+	if (contactPrefs == null)
+	    return;
+	if (contactPrefs.domainUser != null)
+	{
+	    DomainUser user = DomainUserUtil.getDomainUser(contactPrefs.domainUser.getId());
+	    BulkActionUtil.setSessionManager(user);
+
+	    BillingRestriction restriction = BillingRestriction.getInstance(null, null);
+	    restriction.refreshContacts();
+
+	    /** contact restriction. */
+	    DaoBillingRestriction contactRestriction = DaoBillingRestriction.getInstace(
+		    DaoBillingRestriction.ClassEntities.Contact.toString(), restriction);
+
+	    if (contactRestriction == null)
+		return;
+
+	    // Returns if contacts limit is reached
+	    if (!contactRestriction.can_create())
+		return;
+	}
+
+	SyncService service = new SyncPrefsBuilder().config(contactPrefs).getService(contactPrefs.type.getClazz());
+
+	if (service != null)
+	{
+	    try
+	    {
+		service.initSync();
+	    }
+	    finally
+	    {
+		contactPrefs.inProgress = false;
+		contactPrefs.save();
+	    }
+	}
     }
 
 }
