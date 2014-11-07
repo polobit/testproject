@@ -3031,5 +3031,18 @@ $(function()
 		
 				return list_options;
 			});
+	
+	/**
+	 * Choose Avatar templates
+	 */
+	Handlebars.registerHelper('get_avatars_template', function(options) {
+		var template = getTemplate("choose-avatar-images-modal", {});
+		return template;
+	});
+	
+	// To pick randomly selected avatar url
+	Handlebars.registerHelper('pick_random_avatar_url', function(options) {
+		return choose_random_avatar();
+	});
 
 });

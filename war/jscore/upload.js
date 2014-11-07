@@ -11,6 +11,12 @@ $(function(){
 		uploadImage("contact-container");
 	});
 	
+	//Upload personal prefs
+	$(".upload_prefs_s3").live('click', function(e){
+		e.preventDefault();
+		uploadImage("upload-in-modal");
+	});
+	
 });	
 
 function uploadImage(id)
@@ -23,12 +29,28 @@ function uploadImage(id)
 	return false;
 }
 
+function setImageURLInModal(url)
+{
+	var id = "upload-in-modal";
+	// Set the media stream
+	$('#' + id).find('.imgholder').html('');
+	$('#' + id).find('.imgholder').html('<img class="thumbnail" src="' + url + '" height="50" width="50"/>');
+	
+	var  modalId = $('#' + id).closest(".modal").attr("id");
+	
+	// Set the value of selector for input
+	$("#" + modalId).find(".modal-body input[type='hidden']").val(url);
+	
+	$("#" + modalId).closest('.modal').modal('hide');
+	
+}
+
 function setImageURL(url)
 {
 	var id = "upload-container";
 	// Set the media stream
 	$('#' + id).find('.imgholder').html('');
-	$('#' + id).find('.imgholder').html('<img src="' + url + '" height="100" width="100"/>');
+	$('#' + id).find('.imgholder').html('<img class="thumbnail" src="' + url + '" height="75" width="75"/>');
 	
 	// Set the value of selector for input
 	$('#' + id).find('#upload_url').val(url);

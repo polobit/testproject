@@ -17,27 +17,39 @@
 
                 <div class="control-group">
                     <label class="control-label">To <span class="field_req">*</span></label>
-                    <div class="controls">
-					{{#if properties}}
-                        	<input type="text" class="span4 multipleEmails required" name="to" id="to" value="{{getPropertyValue properties "email"}}" />
-						{{else}}
-							<input type="text" class="span4 multipleEmails required" name="to" id="to" value="" /> 
-					{{/if}}
-
-                    </div>
+					<div class="controls" class="contactTypeAhead">
+						<div>
+							<div class="pull-left">
+								<ul name="contact_to_ids" class="contacts tagsinput tags"></ul>
+							</div>
+							<input type="text" id="to" name="to"
+								placeholder="Contact Email" class="typeahead typeahead_contacts multipleEmails"
+								data-provide="typeahead" data-mode="multiple" /><!--  {{#if properties}} value="{{getPropertyValue properties "email"}}" {{/if}} -->
+						</div>
+					</div>
                 </div>
                 
                 <div class="control-group" style="display: none;">
                     <label class="control-label">Cc</label>
-                    <div class="controls">
-                        <input type="text" class="span4 multipleEmails" name="email_cc" id="email_cc" placeholder="Cc"/>
-                    </div>
+                    <div class="controls" class="contactTypeAhead">
+						<div>
+							<div class="pull-left">
+								<ul name="contact_cc_ids" class="contacts tagsinput tags"></ul>
+							</div>
+                        	<input type="text" class="typeahead typeahead_contacts multipleEmails" name="email_cc" id="email_cc" placeholder="Cc" data-provide="typeahead" data-mode="multiple"/>
+                    	</div>
+					</div>
                 </div>
                 
                 <div class="control-group" style="display: none;">
                     <label class="control-label">Bcc</label>
-                    <div class="controls">
-                        <input type="text" class="span4 multipleEmails" name="email_bcc" id="email_bcc" placeholder="Bcc"/>
+                    <div class="controls" class="contactTypeAhead">
+						<div>
+							<div class="pull-left">
+								<ul name="contact_bcc_ids" class="contacts tagsinput tags"></ul>
+							</div>
+                        	<input type="text" class="typeahead typeahead_contacts multipleEmails" name="email_bcc" id="email_bcc" placeholder="Bcc" data-provide="typeahead" data-mode="multiple"/>
+						</div>
                     </div>
                 </div>
 

@@ -28,6 +28,7 @@ $(function()
 		$("#noteForm", noteModal).parent().parent().find(".modal-header > h3").html('<i class="icon-edit"></i>&nbsp;Edit Note');
 		$("#noteForm", noteModal).attr('id', "noteUpdateForm");
 		noteModal.attr('id', "noteUpdateModal");
+		agile_type_ahead("note_related_to", $("#noteUpdateForm", noteModal), contacts_typeahead);
 		$("#note_validate", noteModal).attr("id", "note_update");
 		deserializeForm(note.toJSON(), $("#noteUpdateForm", noteModal));
 
