@@ -422,11 +422,29 @@ public class ActivitySave
 
 	Document olddoc = DocumentUtil.getDocument(document.id);
 
-	List<String> contactids = olddoc.getContact_ids();
+	List<String> old_contactids = olddoc.getContact_ids();
+	List<String> contactids = new ArrayList<>();
+	for (int i = 0; i <= old_contactids.size() - 1; i++)
+	{
+	    Contact con = ContactUtil.getContact(Long.parseLong(old_contactids.get(i)));
+	    if (con != null)
+	    {
+		contactids.add(old_contactids.get(i));
+	    }
+
+	}
 
 	JSONObject js = new JSONObject(new Gson().toJson(document));
 
-	JSONArray jsn = js.getJSONArray("contact_ids");
+	JSONArray jsncontacts = js.getJSONArray("contact_ids");
+	JSONArray jsn = new JSONArray();
+
+	for (int i = 0; i <= jsncontacts.length() - 1; i++)
+	{
+	    Contact con = ContactUtil.getContact(Long.parseLong(jsncontacts.get(i).toString()));
+	    if (con != null)
+		jsn.put(jsncontacts.get(i));
+	}
 
 	System.out.println(jsn + "  new contacts left side and old contacts right side  " + contactids);
 	if (jsn != null && jsn.length() > 0)
@@ -460,7 +478,7 @@ public class ActivitySave
 	    System.out.println("contacts size in else condition " + contactids.size());
 	    if (contactids.size() > 0)
 	    {
-		JSONArray removedcontacts = getJsonArrayOfIdFromList(contactids);
+		JSONArray removedcontacts = getJsonArrayOfIdFromListForDocument(contactids);
 		System.out.println("------------------------ " + removedcontacts.length());
 		for (int i = 0; i <= removedcontacts.length() - 1; i++)
 		{
@@ -651,6 +669,49 @@ public class ActivitySave
     }
 
     /**
+     * used to fetch the the contacts which are removed from related to field.
+     * 
+     * @param oldcont
+     *            contactids which were saved in db
+     * @param ar
+     *            latest contacts which comes along with new document object for
+     *            saving
+     * @return
+     * @throws JSONException
+     */
+    public static JSONArray removedContactsFromDocument(List<String> oldcont, JSONArray ar) throws JSONException
+    {
+	JSONArray jsn = new JSONArray();
+	for (int i = 0; i <= ar.length() - 1; i++)
+	{
+	    if (oldcont.contains(ar.get(i)))
+	    {
+		oldcont.remove(ar.get(i));
+
+	    }
+
+	}
+
+	List<String> removedcontacts = oldcont;
+
+	if (removedcontacts != null && removedcontacts.size() > 0)
+	{
+
+	    for (int k = 0; k < removedcontacts.size(); k++)
+	    {
+		Contact con = ContactUtil.getContact(Long.parseLong(removedcontacts.get(k)));
+		if (con != null)
+		{
+		    jsn.put(removedcontacts.get(k));
+
+		}
+
+	    }
+	}
+	return jsn;
+    }
+
+    /**
      * used to fetch the the contacts which are added to related to field.
      * 
      * @param oldcont
@@ -689,6 +750,29 @@ public class ActivitySave
 	{
 	    String s1 = ids.get(i);
 	    jsn1.put(s1);
+
+	}
+
+	return jsn1;
+
+    }
+
+    /**
+     * returns the JSONArray from List
+     * 
+     * @param ids
+     * @return
+     * @throws JSONException
+     */
+    public static JSONArray getJsonArrayOfIdFromListForDocument(List<String> ids) throws JSONException
+    {
+	JSONArray jsn1 = new JSONArray();
+	for (int i = 0; i <= ids.size() - 1; i++)
+	{
+	    String s1 = ids.get(i);
+	    Contact con = ContactUtil.getContact(Long.parseLong(s1));
+	    if (con != null)
+		jsn1.put(s1);
 
 	}
 

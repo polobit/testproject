@@ -490,8 +490,12 @@ public class WebCalendarEventUtil
 		String body_subject = "<p>Your appointment was scheduled with <b>" + wce.userName
 		        + "</b>.</p><p>Duration - " + wce.slot_time + " minutes</p><p>Note message : " + wce.notes
 		        + "</p>";
+		String body1 = "<p>" + wce.userName + "(" + wce.email + ") scheduled an appointment(" + wce.name
+		        + ") for " + wce.slot_time + " mins</p><p>Note message : " + wce.notes
+		        + "</p><p><a href=https://" + user.domain
+		        + ".agilecrm.com/#calendar>View on Agile Calendar</a></p>";
 		EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
-		        "Appointment Scheduled", null, body_subject, null, null, attachments_to_agile_user);
+		        "Appointment Scheduled", null, body1, null, null, attachments_to_agile_user);
 	    }
 	}
 
