@@ -274,7 +274,7 @@ white-space: nowrap;
 text-overflow: ellipsis;
 overflow: hidden;
 width: auto;
-max-width: 500px;
+max-width:75%;
 height: auto;
 padding-bottom: 2px;
 	
@@ -359,12 +359,20 @@ border-radius: 4px;
 .contact-job-title
 {
 	width:auto;
-	max-width:431px;
+	max-width:70%;
+}
+.contact-company-name
+{
+	max-width:29%;
 }
 .contact-company-name,.contact-company-name a
 {
 	width:auto;
-	max-width:300px;
+	
+}
+.contact-company-name a
+{
+	max-width:100%;
 }
 
 
