@@ -234,9 +234,33 @@
 }
 /*ending frequently usable css elements*/
 
-.contact-switching
+/*.contact-switching
 {
 	min-height:10px!important;font-size:smaller;line-height:6px;
+}
+*/
+.contact-switching a:first-child
+{
+	float:left;
+}
+.contact-switching a:last-child
+{
+	float:right;
+}
+.contact-switching a
+{
+	text-decoration:none!important;
+}
+.contact-switching a i
+{
+	font-size:15px;
+}
+
+.contact-navigation-view
+{
+	float: right;
+width: 48%;
+margin-bottom: 5px;
 }
 .contact-title,.contact-profile-name
 {
@@ -283,7 +307,7 @@ word-wrap:break-word;
 .contact-addressview
 {
 padding-right: 0px!important;line-height: 21px;
-color: #888;
+/*color: #888;*/
 font-size: 13px;	
 padding-top:8px;
 padding-bottom:5px;
@@ -323,7 +347,7 @@ cursor: pointer;
 {
 	height: 95px;
 width: 90px;
-border: 1px solid #ddd;
+/*border: 1px solid #ddd;*/
 padding: 2px;
 border-radius: 4px;
 }
@@ -382,10 +406,22 @@ top: 5px;
 font-size: 11px;
 left: -10px;
 }
+.contact-owner-view
+{
+	
+display: block;
+float: right;
+width: auto;
+max-width: 100%;	
+}
 .contact-owner
 {
 	font-size:14px;
 	color:#888;
+}
+.contact-owner-pic
+{
+	float:left;
 }
 .contact-owner img
 {
@@ -394,10 +430,16 @@ left: -10px;
 	height:25px;
 	
 }
-/*.contact-owner-name
+.contact-owner-name
 {
-	font-size:13px;
-}*/
+max-width: 80%;
+float: left;
+white-space: nowrap;
+text-overflow: ellipsis;
+overflow: hidden;
+width: auto;
+margin-left: 4px;
+}
 .contact-owner-edit
 {
 	display:none;
@@ -603,8 +645,9 @@ margin: 5px 0px;
 position:relative;
 }
 .contact-right-widgetsview .widget_header {
-	padding:5px 1px 5px 14px;
+	padding:5px 0px 5px 14px;
 	margin-left:-17px;
+	-webkit-box-sizing:content-box;
 	
 }
 .twitter-tabs,.clickdeskTab

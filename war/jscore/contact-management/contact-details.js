@@ -371,9 +371,9 @@ function contact_detail_view_navigation(id, contact_collection, el){
     }
 
     if(previous_contact_id != null)
-    	$('.navigation', el).append('<a style="float:left;" href="#contact/' + previous_contact_id + '" class=""><i class="icon-caret-left"></i>&nbsp;Previous</a>');
+    	$('.navigation', el).append('<a style="float:left;" href="#contact/' + previous_contact_id + '" class=""><i class="icon icon-chevron-left"></i></a>');
     if(next_contact_id != null)
-    	$('.navigation', el).append('<a style="float:right;" href="#contact/'+ next_contact_id + '" class="">Next&nbsp;<i class="icon-caret-right"></i></a>');
+    	$('.navigation', el).append('<a style="float:right;" href="#contact/'+ next_contact_id + '" class=""><i class="icon icon-chevron-right"></i></a>');
 	
 }
 

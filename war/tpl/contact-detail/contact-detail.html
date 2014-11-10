@@ -1,6 +1,6 @@
 <script id="contact-detail-template" type="text/html">
 <!-- previous next actions -->
-<div class="row-fluid" style="display:none;"><small class="navigation span9 contact-switching"></small></div>
+
 <!-- ending previous next actions -->
 <!--  header span12 row view starting -->
 <div class="row">
@@ -18,7 +18,7 @@
 									data-toggle="tooltip"
 									title="<i class='icon-edit icon-white icon'></i> Change Picture"
 									style='text-decoration: none;'> <img
-									class='thumbnail upload_pic imgholder submit contact-profpic' type="submit"
+									class='upload_pic imgholder submit contact-profpic' type="submit"
 									src="{{gravatarurl properties 80}}"
 									style='display: inline;' />
 								</a> <input type="hidden" id="upload_url" name="gravatarurl">
@@ -176,10 +176,12 @@
 						</div>
 						<!--  ending title,company -->
 						<div class="span2">
-						<div class="pull-right">
+						<div class="pull-right" style="width:100%">
+<div class="contact-navigation-view"><span class="navigation  contact-switching"></span></div>
+<div class="clearfix"></div>
 						<!--  starting rating,edit,owner -->
-						<div  style='position: relative'>
-							<div class="btn-group right" style='position: relative'>
+						<div>
+							<div class="btn-group right">
 								
 								<a class="btn" style="border-radius: 4px 0px 0px 4px!important;margin-left: 6px;" href='#contact-edit'><i class="icon-edit"></i> Edit</a>
 								<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
@@ -225,10 +227,10 @@
 						<!--  ending rating,edit,owner -->
 						
 						<!-- Owner block -->
-				
-					<div style="margin-top:37px;">
+				<div class="clearfix"></div>
+					<div style="margin-top:10px;">
 						<div class="change-owner-succes"></div>
-						<span title="Owner"><span class="contact-owner"><span class="contact-owner-text">Owner:&nbsp;&nbsp;</span>
+						<span title="Owner" class="contact-owner-view"><span class="contact-owner"><span class="contact-owner-text" style="display:none">Owner:&nbsp;&nbsp;</span>
 <!-- <img src="https://pbs.twimg.com/profile_images/1917130692/BD587CFD-E929-40F6-A5B3-C90916D01C88_bigger" style="border-radius: 50%;width: 25px;height: 25px;
 "> -->
 <span class="contact-owner-pic">
@@ -245,7 +247,7 @@
 
 <span
 							id="contact-owner contact-owner-name" data={{owner.id}}
-							style="display: inline-block">{{owner.name}}</span> <span class="contact-owner-edit">
+							style="display: inline-block" class="contact-owner-name">{{owner.name}}</span> <span class="contact-owner-edit" style="display:none;">
 						{{#canEditContact owner.id}}
 								<a href="#"> <i class="icon-edit"
 									style="vertical-align: middle;" rel="popover"
