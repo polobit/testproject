@@ -1317,8 +1317,8 @@ public class ActivityUtil
 	    if (endTime != null)
 		searchMap.put("time <", endTime);
 
-	    query.filter("user", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).order(
-		    "time");
+	    System.out.println("Search query --------" + searchMap);
+
 	    if (max != null && max > 0)
 		dao.fetchAllByOrder(max, cursor, searchMap, true, false, "time");
 

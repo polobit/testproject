@@ -35,8 +35,8 @@ var ReportsRouter = Backbone.Router.extend({
 	
 	activityReports : function()
 	{
+		$("#content").html(getRandomLoadingImg());
 		this.activityReports = new Base_Collection_View({ url : '/core/api/activity-reports', restKey : "activityReports", templateKey : "activity-report", individual_tag_name : 'tr'});
-
 		this.activityReports.collection.fetch();
 		$("#content").html(this.activityReports.render().el);
 
@@ -46,9 +46,12 @@ var ReportsRouter = Backbone.Router.extend({
 	
 	activityReportAdd : function(){
 		$("#content").html(getRandomLoadingImg());
+		var count = 0;
 		var activity_report_add = new Base_Model_View({ url : 'core/api/activity-reports', template : "activity-reports-add", window : "activity-reports", isNew : true,
 			postRenderCallback : function(el)
 			{
+				if (count != 0)
+					return;
 				// Fills owner select element
 				fillSelect("users-list", '/core/api/users', 'domainUser', function()
 						{
@@ -57,7 +60,9 @@ var ReportsRouter = Backbone.Router.extend({
 								$('#activity-type-list, #users-list',el).multiSelect();
 								$('#ms-activity-type-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "activity_type").attr("id", "activity_type");
 								$('#ms-users-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id", "user_ids");
-								$("#content").html(el)
+								++count;
+								if (count > 0)
+									$("#content").html(el)
 							});
 						}, '<option value="{{id}}">{{name}}</option>', true, el);
 				
@@ -93,6 +98,8 @@ var ReportsRouter = Backbone.Router.extend({
 		var report_model = new Base_Model_View({ url : 'core/api/activity-reports', change : false, model : activityReport, template : "activity-reports-add", window : "activity-reports",
 			postRenderCallback : function(el)
 			{
+				if (count != 0)
+					return;
 				fillSelect("users-list", '/core/api/users', 'domainUser', function()
 						{
 							var json = activityReport.toJSON();
@@ -104,6 +111,7 @@ var ReportsRouter = Backbone.Router.extend({
 								$('#activity-type-list, #users-list',el).multiSelect();
 								$('#ms-activity-type-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "activity_type").attr("id", "activity_type");
 								$('#ms-users-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id", "user_ids");
+								
 								$("#content").html(el)
 								$.each(json.user_ids,function(i,user_id){
 									$('#users-list').multiSelect('select',user_id);

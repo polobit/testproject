@@ -10,6 +10,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import net.sf.json.JSONException;
@@ -121,6 +122,32 @@ public class ActivityReportsAPI
 	    e.printStackTrace();
 	}
 
+    }
+
+    /**
+     * Generates reports results based on report id. It takes page size and
+     * cursor parameters to limit fetching of results.
+     * 
+     * @param id
+     * @param count
+     * @param cursor
+     * @return
+     */
+    @Path("/show-results/{report_id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getReportResults(@PathParam("report_id") String id, @QueryParam("page_size") String count,
+	    @QueryParam("cursor") String cursor)
+    {
+	try
+	{
+
+	    return ActivityReportsUtil.generateActivityReports(Long.parseLong(id)).toString();
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
     }
 
 }
