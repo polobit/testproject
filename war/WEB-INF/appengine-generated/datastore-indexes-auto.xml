@@ -70,5 +70,18 @@
         <property name="ownerKey" direction="asc"/>
         <property name="created_time" direction="desc"/>
     </datastore-index>
+    
+        <!-- Used 1 time in query history -->
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="ownerKey" direction="asc"/>
+        <property name="expected_value" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="ownerKey" direction="asc"/>
+        <property name="pipeline" direction="asc"/>
+        <property name="expected_value" direction="asc"/>
+    </datastore-index>
 
 </datastore-indexes>
