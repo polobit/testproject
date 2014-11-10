@@ -29,6 +29,8 @@ import com.stripe.model.StripeObject;
 public class InvoiceWebhookHandler extends StripeWebhookHandler
 {
 
+    String subscribptionIdFromStripe = null;
+
     @Override
     public void process()
     {
@@ -270,6 +272,8 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 		plan.put("end_date", new Date(Long.parseLong(period.getString("end")) * 1000).toString());
 	    }
 
+	    if (data.has("id"))
+		subscribptionIdFromStripe = data.getString("id");
 	    plan.put("amount", Integer.valueOf(obj.getString("total")) / 100);
 
 	    System.out.println(plan);
@@ -346,6 +350,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 		restriction.max_emails_count = restriction.one_time_emails_count;
 	    }
 	    restriction.save();
+
 	}
 	finally
 	{
@@ -353,5 +358,4 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	}
 
     }
-
 }
