@@ -28,16 +28,13 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  */
 public class EventReminder
 {
-    public static void sendEventReminders(String domain) throws IOException
+    public static void getEventReminder(String domain, Long starttime) throws IOException
     {
 
-	// Get Namespaces / domains
-
-	EventReminderDeferredTask eventReminderDeferredTask = new EventReminderDeferredTask(domain);
+	EventReminderDeferredTask eventReminderDeferredTask = new EventReminderDeferredTask(domain, starttime);
 	Queue queue = QueueFactory.getQueue("event-reminder");
 	TaskOptions options = TaskOptions.Builder.withPayload(eventReminderDeferredTask);
-	options.countdownMillis(100000l);
-	queue.add(TaskOptions.Builder.withPayload(eventReminderDeferredTask));
+	queue.add(options);
 
     }
 }

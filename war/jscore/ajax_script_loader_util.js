@@ -52,6 +52,7 @@ function loadMiscScripts()
 	 * loads and calls downloadAndRegisterForNotifications function
 	 */
 	downloadAndRegisterForNotifications();
+	showEventNotification();
 }
 
 

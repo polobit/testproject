@@ -245,36 +245,44 @@ public class EventUtil
 	}
     }
 
-    public static List<Event> getEventsStartingInNextFifteenMinutes(Long agileuserid)
+    public static Event getLatestEvent(Long starttime)
     {
 	Event event = null;
-	Long starttime = System.currentTimeMillis() / 1000;
+	int duration = 3600;
+	Long currenttime = System.currentTimeMillis() / 1000;
+	if (starttime == null)
+	    starttime = currenttime + 900;
+	else
+	    starttime = starttime + 900;
 
-	int duration = 600;
 	Long endtime = starttime + duration;
 
-	List<Event> events = dao.ofy().query(Event.class)
-	        .filter("owner = ", new Key<AgileUser>(AgileUser.class, agileuserid)).filter("start >=", starttime)
-	        .filter("start <=", endtime).list();
+	System.out.println(starttime + "----------------------------" + endtime);
 
+	List<Event> events = dao.ofy().query(Event.class).filter("start >=", starttime).filter("start <=", endtime)
+	        .order("start").list();
 	if (events != null && events.size() > 0)
 	{
-	    for (Event e : events)
-	    {
-		if (e.color.equals("#36C"))
-		{
-		    e.color = "Normal";
-		}
-		else if (e.color.equals("red"))
-		{
-		    e.color = "High";
-		}
-		else if (e.color.equals("green"))
-		{
-		    e.color = "Low";
-		}
-	    }
+	    event = events.get(0);
+
 	}
-	return events;
+
+	System.out.println("------------------------- " + event);
+	return event;
+    }
+
+    public static Event getSampleEvent()
+    {
+	try
+	{
+
+	    // Gets list of tasks filtered on given conditions
+	    return dao.ofy().query(Event.class).get();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
 }

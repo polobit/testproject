@@ -1,6 +1,7 @@
 package com.agilecrm;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.servlet.http.HttpServlet;
@@ -34,11 +35,15 @@ public class EventReminderServlet extends HttpServlet
 	{
 	    Set<String> domains = NamespaceUtil.getAllNamespaces();
 
+	    Set<String> domainsset = new HashSet<>();
+	    domainsset.add("jagadeesh");
+	    domainsset.add("test800");
+
 	    // Start a task queue for each domain
-	    for (String domain : domains)
+	    for (String domain : domainsset)
 	    {
 
-		EventReminder.sendEventReminders(domain);
+		EventReminder.getEventReminder(domain, null);
 	    }
 	}
 	catch (IOException e)
