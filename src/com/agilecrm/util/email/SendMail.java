@@ -65,13 +65,13 @@ public class SendMail
 
     public static final String PAYMENT_RECEIVED = "subscription/payments/success/payment_received";
     public static final String PAYMENT_RECEIVED_SUBJECT = "Payment Received. Thank you.";
-    
+
     public static final String EMAIL_PAYMENT_RECEIVED = "subscription/add-on/email/payment_received";
     public static final String EMAIL_PAYMENT_RECEIVED_SUBJECT = "Payment Received. Thank you.";
 
     public static final String PLAN_CHANGED = "subscription/plan_changed";
     public static final String PLAN_CHANGED_SUBJECT = "Your Agile CRM plan has changed";
-    
+
     public static final String EMAIL_PLAN_CHANGED = "subscription/add-on/email/plan_changed";
     public static final String EMAIL_PLAN_CHANGED_SUBJECT = "Your Agile CRM plan has changed";
 
@@ -95,6 +95,9 @@ public class SendMail
 
     public static final String DUE_TASK_REMINDER = "due_task_reminder";
     public static final String DUE_TASK_REMINDER_SUBJECT = "Your Due Tasks.";
+
+    public static final String START_EVENT_REMINDER = "start_event_reminder";
+    public static final String START_EVENT_REMINDER_SUBJECT = "Event Starting In Next Ten Minutes.";
 
     public static final String PASSWORD_CHANGE_NOTIFICATION = "password_change_notification";
     public static final String PASSWORD_CHANGE_NOTIFICATION_SUBJECT = "Your Password has been changed.";

@@ -183,6 +183,7 @@ public class Event
 	    this.owner = new Key<AgileUser>(AgileUser.class, agileUserId);
     }
 
+    @XmlElement(name = "eventOwner")
     public DomainUser getOwner() throws Exception
     {
 	if (owner != null)

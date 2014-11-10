@@ -1,11 +1,10 @@
 package com.agilecrm.activities.deferred;
 
-import java.io.IOException;
+import java.util.List;
 
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.SendEventReminder;
 import com.agilecrm.activities.util.EventUtil;
-import com.agilecrm.user.DomainUser;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
@@ -50,60 +49,38 @@ public class EventReminderDeferredTask implements DeferredTask
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set(domain);
 	Event event = null;
-
-	event = EventUtil.getLatestEvent(starttime);
-
-	if (event == null)
+	try
 	{
-	    try
+	    List<Event> eventList = EventUtil.getLatestEvents(starttime);
+	    if (eventList != null && eventList.size() > 0)
 	    {
-		SendEventReminder.sendEventReminders(domain, "jagadeeshs.agile@gmail.com", "jagadeesh",
-		        "noevents in this session and domain name " + domain, "Normal",
-		        (System.currentTimeMillis() / 1000) + 1200, System.currentTimeMillis() / 1000);
-
+		event = eventList.get(0);
 	    }
-	    catch (Exception e)
+
+	    if (event == null)
 	    {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		starttime = (System.currentTimeMillis() / 1000) + 6400;
+		SendEventReminder.sendEventReminders(domain, starttime, false);
 	    }
-	}
-	else
-	{
-
-	    try
+	    else
 	    {
 
-		DomainUser user = event.getOwner();
-		String useremail = user.email;
-		String username = user.name;
-		String eventname = event.title;
-		String priority = event.color;
 		Long starttime = event.start;
-		Long endtime = event.end;
 
-		SendEventReminder.sendEventReminders(domain, useremail, username, eventname, priority, starttime,
-		        endtime);
-	    }
-	    catch (Exception e)
-	    {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-		try
-		{
-		    SendEventReminder.sendEventReminders(domain, "jagadeeshs.agile@gmail.com", "jagadeesh",
-			    "noevents in this session and domain name " + domain, "Normal",
-			    (System.currentTimeMillis() / 1000) + 1200, System.currentTimeMillis() / 1000);
-		}
-		catch (IOException e1)
-		{
-		    // TODO Auto-generated catch block
-		    e1.printStackTrace();
-		}
+		SendEventReminder.sendEventReminders(domain, starttime, true);
 
 	    }
 
 	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
 
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 }

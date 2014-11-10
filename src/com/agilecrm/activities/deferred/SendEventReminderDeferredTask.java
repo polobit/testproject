@@ -1,15 +1,24 @@
 package com.agilecrm.activities.deferred;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import org.json.JSONException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONObject;
 
-import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.EventReminder;
 import com.agilecrm.activities.util.EventUtil;
-import com.agilecrm.util.IcalendarUtil;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.UserPrefsUtil;
+import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.thirdparty.PubNub;
 
@@ -26,6 +35,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
     String priority = null;
     Long starttime = null;
     Long endtime = null;
+    boolean nosampleevent = false;
 
     /**
      * Default constructor, assigns domain name
@@ -33,16 +43,11 @@ public class SendEventReminderDeferredTask implements DeferredTask
      * @param domain
      *            name as string
      */
-    public SendEventReminderDeferredTask(String domain, String useremail, String username, String eventname,
-	    String priority, Long starttime, Long endtime)
+    public SendEventReminderDeferredTask(String domain, Long starttime, boolean nosampleevent)
     {
 	this.domain = domain;
-	this.useremail = useremail;
-	this.username = username;
-	this.eventname = eventname;
-	this.priority = priority;
 	this.starttime = starttime;
-	this.endtime = endtime;
+	this.nosampleevent = nosampleevent;
 
     }
 
@@ -55,58 +60,117 @@ public class SendEventReminderDeferredTask implements DeferredTask
     public void run()
     {
 
+	List<Event> eventList = EventUtil.getLatestWithSameStartTime(starttime);
 	try
 	{
-
-	    String subject = "Event Reminder:" + eventname;
-
-	    JSONObject pubnub_notification = new JSONObject();
-	    pubnub_notification.put("title", eventname);
-	    pubnub_notification.put("start", starttime);
-	    pubnub_notification.put("end", endtime);
-	    pubnub_notification.put("priority", priority);
-	    pubnub_notification.put("username", username);
-	    pubnub_notification.put("useremail", useremail);
-
-	    Event event = EventUtil.getSampleEvent();
-	    if (event != null)
+	    if (eventList != null && eventList.size() > 0 && nosampleevent)
 	    {
-		event.start = starttime;
-		event.end = endtime;
-		event.title = eventname;
-		net.fortuna.ical4j.model.Calendar agileUseiCal = IcalendarUtil.getICalFromEvent(event, null, useremail,
-		        username);
-		System.out.println("agileUseiCal-- " + agileUseiCal.toString());
-		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
-		if (!("jagadeeshs.agile@gmail.com").equals(useremail))
+		for (int i = 0; i <= eventList.size() - 1; i++)
 		{
-		    EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", useremail, null, null,
-			    subject, null, null, null, null, attachments_to_agile_user);
+
+		    DomainUser domainuser = null;
+		    try
+		    {
+			domainuser = eventList.get(i).getOwner();
+		    }
+		    catch (Exception e1)
+		    {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		    }
+
+		    AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainuser.id);
+
+		    if (agileUser == null)
+			continue;
+		    List<Event> listobj = new ArrayList<>();
+		    listobj.add(eventList.get(i));
+
+		    Event event = eventList.get(i);
+
+		    JSONObject pubnub_notification = new JSONObject();
+		    pubnub_notification.put("title", event.title);
+		    pubnub_notification.put("start", event.start);
+		    pubnub_notification.put("end", event.end);
+		    pubnub_notification.put("priority", event.color);
+		    pubnub_notification.put("username", domainuser.name);
+		    pubnub_notification.put("useremail", domainuser.email);
+		    pubnub_notification.put("type", "CALENDER_REMINDER");
+
 		    PubNub.pubNubPush(domain, pubnub_notification);
+
+		    UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+
+		    if (!userPrefs.event_reminder)
+			continue;
+
+		    List<Map<String, Object>> eventListMap = null;
+
+		    try
+		    {
+			eventListMap = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(listobj),
+			        new TypeReference<List<HashMap<String, Object>>>()
+			        {
+			        });
+		    }
+		    catch (Exception e)
+		    {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("events", eventList);
+
+			// Sends mail to the domain user.
+			SendMail.sendMail(domainuser.email, SendMail.START_EVENT_REMINDER_SUBJECT,
+			        SendMail.START_EVENT_REMINDER, map);
+			EventReminder.getEventReminder(domain, starttime);
+		    }
+		    Map<String, Object> currentEvent = eventListMap.get(0);
+		    List<Contact> contactList = eventList.get(i).getContacts();
+		    List<Map<String, Object>> contactListMap = new ArrayList<Map<String, Object>>();
+		    for (Contact contact : contactList)
+		    {
+			Map<String, Object> mapContact = new HashMap<String, Object>();
+
+			for (ContactField contactField : contact.properties)
+			    mapContact.put(contactField.name, contactField);
+
+			mapContact.put("id", String.valueOf(contact.id));
+			// save id of this contact for href
+
+			contactListMap.add(mapContact);
+
+		    }
+		    currentEvent.put("related_contacts", contactListMap);
+		    HashMap<String, Object> map = new HashMap<String, Object>();
+		    map.put("events", eventListMap);
+
+		    // Sends mail to the domain user.
+		    SendMail.sendMail(domainuser.email, SendMail.START_EVENT_REMINDER_SUBJECT,
+			    SendMail.START_EVENT_REMINDER, map);
 		}
-		else
-		{
-		    EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", useremail, null, null,
-			    subject, null, null, null, null, attachments_to_agile_user);
-		}
+	    }
+
+	    else
+	    {
+
+		/*
+	         * System.out.println("executing else condition"); String
+	         * subject = "no event in this session"; String body =
+	         * "Event StartTime " + String.valueOf(starttime);
+	         * 
+	         * ContactEmailUtil.saveContactEmailAndSend("noreply@agilecrm.com"
+	         * , "JAGADEESH", "jagadeeshs.agile@gmail.com", null, null,
+	         * subject, body, "-", null, false);
+	         */
+
 	    }
 
 	    EventReminder.getEventReminder(domain, starttime);
-
 	}
-	catch (JSONException | IOException e)
+
+	catch (Exception e)
 	{
 	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	    try
-	    {
-		EventReminder.getEventReminder(domain, starttime);
-	    }
-	    catch (IOException e1)
-	    {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	    }
+
 	}
 
     }

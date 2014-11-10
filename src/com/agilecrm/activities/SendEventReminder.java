@@ -10,16 +10,15 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 public class SendEventReminder
 {
 
-    public static void sendEventReminders(String domain, String useremail, String username, String eventname,
-	    String priority, Long starttime, Long endtime) throws IOException
+    public static void sendEventReminders(String domain, Long starttime, boolean nosamplevent) throws IOException
     {
 
 	System.out.println(starttime);
 	System.out.println("start time of event----------------- " + ((starttime - 600) * 1000));
 	// Get Namespaces / domains
 
-	SendEventReminderDeferredTask sendEventReminder = new SendEventReminderDeferredTask(domain, useremail,
-	        username, eventname, priority, starttime, endtime);
+	SendEventReminderDeferredTask sendEventReminder = new SendEventReminderDeferredTask(domain, starttime,
+	        nosamplevent);
 	Queue queue = QueueFactory.getQueue("event-reminder");
 	TaskOptions options = TaskOptions.Builder.withPayload(sendEventReminder);
 	options.etaMillis((starttime - 600) * 1000);

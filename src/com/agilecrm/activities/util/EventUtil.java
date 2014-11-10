@@ -1,5 +1,6 @@
 package com.agilecrm.activities.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.agilecrm.account.util.EmailGatewayUtil;
@@ -245,9 +246,8 @@ public class EventUtil
 	}
     }
 
-    public static Event getLatestEvent(Long starttime)
+    public static List<Event> getLatestEvents(Long starttime)
     {
-	Event event = null;
 	int duration = 3600;
 	Long currenttime = System.currentTimeMillis() / 1000;
 	if (starttime == null)
@@ -259,30 +259,48 @@ public class EventUtil
 
 	System.out.println(starttime + "----------------------------" + endtime);
 
+	List<Event> domain_events = new ArrayList<>();
+
 	List<Event> events = dao.ofy().query(Event.class).filter("start >=", starttime).filter("start <=", endtime)
 	        .order("start").list();
 	if (events != null && events.size() > 0)
 	{
-	    event = events.get(0);
+	    System.out.println("executing evnts!-null in event util");
+	    Event event = events.get(0);
+	    domain_events = getLatestWithSameStartTime(event.start);
+	    return domain_events;
 
 	}
 
-	System.out.println("------------------------- " + event);
-	return event;
+	return null;
     }
 
-    public static Event getSampleEvent()
+    public static List<Event> getLatestWithSameStartTime(Long starttime)
     {
-	try
-	{
 
-	    // Gets list of tasks filtered on given conditions
-	    return dao.ofy().query(Event.class).get();
-	}
-	catch (Exception e)
+	List<Event> domain_events = new ArrayList<>();
+
+	domain_events = dao.listByProperty("start", starttime);
+	System.out.println(domain_events.size() + " domainevents size in get latest with same time");
+	if (domain_events != null && domain_events.size() > 0)
 	{
-	    e.printStackTrace();
-	    return null;
+	    for (Event event : domain_events)
+	    {
+		if (event.color.equals("#36C"))
+		{
+		    event.color = "Normal";
+		}
+		else if (event.color.equals("red"))
+		{
+		    event.color = "High";
+		}
+		else if (event.color.equals("green"))
+		{
+		    event.color = "Low";
+		}
+	    }
 	}
+	return domain_events;
+
     }
 }

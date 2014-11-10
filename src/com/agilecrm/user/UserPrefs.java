@@ -102,6 +102,9 @@ public class UserPrefs
     @NotSaved(IfDefault.class)
     public boolean task_reminder = true;
 
+    @NotSaved(IfDefault.class)
+    public boolean event_reminder = true;
+
     /**
      * Enable or disable keyboard shortcuts.
      */
