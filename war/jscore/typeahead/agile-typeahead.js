@@ -291,7 +291,29 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
                 if (!this.shown) return
                 this.hide()
                 break
+                
+              case 188:
+            	  if(isEmailSearch)
+            	  {
+            		  if(checkEmailValidation(($('#' + id, el).val()).slice(0,-1)))
+            		  {
+                 		 var email_check = true;
+                		 var email_value = ($('#' + id, el).val()).slice(0,-1);
+                		 $.each($('#' + id, el).closest("div.controls").find(".tags").children('li'), function (index, tag){
 
+                             if ($(tag).attr('data') == email_value){
+                            	 email_check = false;
+                                 return;
+                             }
+                         });
+                         if(email_check)
+                         	$('#' + id, el).closest("div.controls").find(".tags").append('<li class="tag"  style="display: inline-block;" data="' + email_value + '"><a style="cursor:pointer;">' + email_value + '</a><a class="close" id="remove_tag">&times</a></li>');
+                         this.select();
+            		  }
+            		  else this.hide();
+            	  }
+            	  break
+            	  
               default:
             	 {
             		// Checks if there is previous request and cancels it
@@ -394,6 +416,11 @@ function getContactEmail(contact)
 	if(email.length)return email;
 	else return "No email";
 
+}
+
+function checkEmailValidation(value)
+{
+	return /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/i.test(value);
 }
 
 function getContactName(contact)
