@@ -253,7 +253,7 @@ public class EventUtil
 	if (starttime == null)
 	    starttime = currenttime + 900;
 	else
-	    starttime = starttime + 900;
+	    starttime = starttime + 300;
 
 	Long endtime = starttime + duration;
 

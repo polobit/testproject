@@ -84,6 +84,11 @@ public class SendEventReminderDeferredTask implements DeferredTask
 			    subject, null, null, null, null, attachments_to_agile_user);
 		    PubNub.pubNubPush(domain, pubnub_notification);
 		}
+		else
+		{
+		    EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", useremail, null, null,
+			    subject, null, null, null, null, attachments_to_agile_user);
+		}
 	    }
 
 	    EventReminder.getEventReminder(domain, starttime);
