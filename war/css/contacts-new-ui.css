@@ -269,6 +269,7 @@ font-size: 13px;
 color:#000;
 margin-bottom:3px;
 margin-right:8px;
+word-wrap:break-word;
 
 }
 .contact-custom-firstfield time
@@ -356,10 +357,10 @@ border-radius: 4px;
 {
 	padding-top:3px;
 }
-.contact-custom-icon i,.contact-addressview i
+/*.contact-custom-icon i,.contact-addressview i
 {
 	color:#8a6086;
-}
+}*/
 .contact-company-name a
 {
 	/*padding-bottom:14px;*/
@@ -404,7 +405,8 @@ left: -10px;
 .contact-right-widgetsview .widgets
 {
 	/*border: 1px solid #ddd;*/
-padding: 9px 9px;
+/*padding: 9px 9px;*/
+padding-top:10px;
 border-top-width: 0px;
 }
 
@@ -418,7 +420,7 @@ border-top-width: 0px;
 	border:none;
 	margin-bottom:0px;
 }
-.contact-right-widgetsview .label,#ClickDesk li .label
+.contact-right-widgetsview .label,#ClickDesk li .label,.contact-right-widgetsview .badge
 {
 font-size: 10.998px;
 font-weight: normal;
@@ -442,6 +444,12 @@ text-transform: capitalize;
 .contact-right-widgetsview i
 {
 	margin-right:5px;
+	text-decoration:none;
+	
+}
+.contact-right-widgetsview i:not(#widgets i)
+{
+	color:#000;
 }
 .contact-right-widgetsview .widget_header
 {
@@ -475,27 +483,36 @@ bottom: -3px;
 }
 .contact-right-widgetsview .widget_tab_footer
 {
-	border-top:1px dashed #ddd;
+	/*border-top:1px dashed #ddd;*/
 	background:none;
+	border-bottom:1px solid #eee;
+	border-top:none;
 }
 .contact-right-widgetsview .sub_header
 {
 	padding:10px 0px;
 	background:none;
+	border-bottom:1px solid #eee;
 }
 .contact-right-widgetsview .title_txt
 {
 	color:#000;
 	font-weight:normal;
 	margin:0;
-	font-size:13px;
+	font-size:15px;
 }
 .contact-right-widgetsview .sub_header_li
 {
 	padding:10px 0px;
 	font-size:13px;
-	border-bottom:1px dashed #ddd;
+	border-bottom:1px solid #eee;
 }
+
+#clickdesk_tickets_panel li:last-child,.contact-right-widgetsview li.sub_header_li:last-child
+{
+	border-bottom:none;
+}
+
 .widget_header_icons 
 {
 	position: absolute;
@@ -531,7 +548,10 @@ padding-bottom: 13px;
 {
 	visibility:visible;
 }
-#ClickDesk .nav-tabs
+
+/*widget css*/
+
+/*#ClickDesk .nav-tabs
 {
 background:none;	
 }
@@ -558,17 +578,22 @@ background:none;
 {
 	padding:0px 0px 10px;
 	
+}*/
+/*.widget_content i,.widget_content i:hover {
+	text-decoration:none!important;
+}*/
+
+.widget_content a
+{
+	cursor:pointer;
 }
+
+
 #ClickDesk li a
 {
 	margin-top:0px;
 }
-#ClickDesk ul li
-{
-	padding:10px 0px;
-	border-bottom:1px dashed #ddd;
-	font-size:13px;
-}
+
 .contact-right-widgetsview .ui-sortable-helper
 {
 	border-top: 0px solid #ddd;
@@ -577,7 +602,57 @@ border: 1px solid #ddd;
 margin: 5px 0px;
 position:relative;
 }
-.contact-rightpanel .widget_header {
-	padding:5px 1px 5px;
+.contact-right-widgetsview .widget_header {
+	padding:5px 1px 5px 14px;
+	margin-left:-17px;
 	
 }
+.twitter-tabs,.clickdeskTab
+{
+	background:none!important;
+}
+.twitter-tabs li,.clickdeskTab li
+{
+	padding-bottom:0px;
+}
+.clickdesktab-content li 
+{
+	padding:10px 0px;
+	border-bottom:1px solid #eee!important;
+	font-size:13px;
+}
+.clickdesktab-content li:last-child
+{
+	border-bottom:none!important;
+}
+
+
+
+
+/*zendesk,helpscout css*/
+
+#Zendesk .widget_content,#HelpScout .widget_content
+{
+	margin:0px 0px 10px;
+}
+#HelpScout .overflow-elipsis
+{
+margin-bottom:5px;	
+}
+
+/*rapleaf css*/
+
+#Rapleaf ul li
+{
+	padding-bottom:0px;
+}
+
+
+
+/*facebook css , freshbooks , quickbooks*/
+
+/*#Facebook .widget_content,#FreshBooks .widget_content,#QuickBooks .widget_content,#Xero .widget_content
+{
+	margin-top:10px;
+}
+*/

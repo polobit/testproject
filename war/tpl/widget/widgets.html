@@ -46,8 +46,15 @@
 			</div>
 <div class="clearfix"></div>
 		</div>
+{{#if_equals widget_type "CUSTOM"}}
+		<div class="widgets widget-custom" id="{{remove_spaces name}}">
+	{{else}}
 		<div class="widgets" id="{{remove_spaces name}}">
+{{/if_equals}}
+
+		
 			{{#unless is_minimized}}
+
 			<center><img id="widget_load_img" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>
 			{{/unless}}
 		</div>

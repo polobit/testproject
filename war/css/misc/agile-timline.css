@@ -22,7 +22,7 @@
 	width: 288px;
 	padding: 11px;
 	border: 1px #ddd solid;
-	background-color: #fff;
+	background-color: #f5f5f5;
 	min-height: 37px;
 	word-wrap: break-word;
 	-webkit-border-radius: 2px;
@@ -67,8 +67,8 @@
 }
 
 #timeline .post .text {
-	/*color: #393939;*/
-	color:#bbb!important;
+	color: #393939;
+	/*color:#bbb!important;*/
 	font-family: Georgia, sans-serif;
 	font-size: 12px;
 	margin: 10px 0;
@@ -111,13 +111,19 @@
 }
 
 #timeline .post.left .date {
-	background: transparent url(../../img/tab-left.png) no-repeat right;
+	/* background: transparent url(../../img/tab-left.png) no-repeat right; */
+	background:#f5f5f5;
 	right: -54px;
+	border:1px solid #ddd;
+	border-left:none;
 }
 
 #timeline .post.right .date {
-	background: transparent url(../../img/tab-right.png) no-repeat left;
+	/* background: transparent url(../../img/tab-right.png) no-repeat left; */
+	background:#f5f5f5;
 	left: -54px;
+	border:1px solid #ddd;
+	border-right:none;
 }
 
 #timeline .year-marker {

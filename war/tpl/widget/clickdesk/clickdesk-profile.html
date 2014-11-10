@@ -16,14 +16,14 @@
 </script>
 
 <script id="clickdesk-profile-template" type="text/html">
-<p class="widget_content" style="margin-bottom: 0px;font-size:13px;">Conversations and tickets related to {{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}</p>
-<ul class="nav nav-tabs" id="myTab">
+<p class="widget_content" style="margin:0px 0px 10px 0px;font-size:13px;">Conversations and tickets related to {{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}</p>
+<ul class="nav nav-tabs clickdeskTab" id="myTab">
 	<li class="active" style="width:48%; margin-left: 2%; text-align: center;" align="center"><a data-toggle="tab" href="#chats" id="clickdesk_chats"><h4>Chats</h4><small></small></a></li>
 	<li style="width:48%;text-align: center;" align="center"><a data-toggle="tab" href="#c_tickets" id="clickdesk_tickets"><h4>Tickets</h4><small></small></a></li>
 </ul>
 <div class="tab-content" id="myTabContent">
 	<div id="chats" class="tab-pane fade active in">
-		<ul class="widget_tab_content" id="clickdesk_chats_panel">
+		<ul class="widget_tab_content clickdesktab-content" id="clickdesk_chats_panel">
 						
 		</ul>
 		<div class="clearfix" id="clickdesk-chats-error-panel" style="display:none;">
@@ -83,11 +83,11 @@
 
 <script id="clickdesk-error-template" type="text/html">
 {{#check_length message "140"}}
-	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:10px">
+	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:0px 0px 10px">
 		{{{message}}}
 	</div>
 {{else}}
-	<div style="line-height:160%;word-wrap: break-word;padding:10px">
+	<div style="line-height:160%;word-wrap: break-word;padding:0px 0px 10px">
 		{{{message}}}
 	</div>
 {{/check_length}}

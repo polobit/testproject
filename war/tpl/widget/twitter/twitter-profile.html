@@ -1,5 +1,5 @@
 <script id="twitter-profile-template" type="text/html">
-<div class="widget_content row-fluid">
+<div class="widget_content row-fluid" style="margin:10px 0px;">
 	<div class="span3"><img src="{{picture}}" width="36" height="36" alt="" class="img-rounded pull-left"/></div>
 	<div class="pull-left ml_5 span8">
 		<p class="title_txt"><a href="{{url}}" target="_blank" >{{name}}</a></p>
@@ -14,7 +14,7 @@
 </div>
 <div class="" id="twitter-error-panel" style="display:none;" >
 </div>
-<ul class="nav nav-tabs row-fluid" id="myTab">
+<ul class="nav nav-tabs row-fluid twitter-tabs" id="myTab">
 	<li class="active" style="width:32%; margin-left:2%;text-align: center;" align="center"><a data-toggle="tab" href="#tweets"><h4>{{tweet_count}}</h4><small>Tweets</small></a></li>
 	<li style="width:32%;text-align: center;" align="center"><a data-toggle="tab" href="#followers" id="twitter_followers"><h4>{{num_connections}}</h4><small>Followers</small></a></li>
 	<li style="width:32%;text-align: center;" align="center"><a data-toggle="tab" href="#following" id="twitter_following"><h4>{{friends_count}}</h4><small>Following</small></a></li>
@@ -144,7 +144,7 @@
 
 <script id="twitter-error-panel-template" type="text/html">
 {{#if disable_check}}
-	<div style="line-height:160%;word-wrap: break-word;padding:10px">
+	<div style="line-height:160%;word-wrap: break-word;padding:0px 0px 10px">
 		{{{message}}}
 	</div>
 {{else}}
@@ -153,7 +153,7 @@
 			{{{message}}}
 		</div>
 	{{else}}
-		<div style="line-height:160%;word-wrap: break-word;padding:10px">
+		<div style="line-height:160%;word-wrap: break-word;padding:0px 0px 10px">
 			{{{message}}}
 		</div>
 	{{/check_length}}	

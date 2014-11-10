@@ -429,9 +429,9 @@ function showTwitterMatchingProfiles(data)
 
 	var el;
 	if (Twitter_search_details['keywords'] && Twitter_search_details['keywords'] != "")
-		el = "<div><p class='a-dotted' style='margin-bottom:0px 0px 6px;font-size:13px;'>Search results for " + "<a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a></p>";
+		el = "<div style='padding:10px 0px'><p class='a-dotted' style='margin-bottom:0px 0px 6px;font-size:13px;'>Search results for " + "<a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a></p>";
 	else
-		el = "<div><p class='a-dotted' style='margin-bottom:0px 0px 6px;font-size:13px;'>Search results. " + "<a href='#' class='twitter_modify_search'>Modify search</a></p>";
+		el = "<div style='padding:10px 0px'><p class='a-dotted' style='margin-bottom:0px 0px 6px;font-size:13px;'>Search results. " + "<a href='#' class='twitter_modify_search'>Modify search</a></p>";
 
 	el = el.concat(getTemplate("twitter-search-result", data));
 	el = el + "</div>";
