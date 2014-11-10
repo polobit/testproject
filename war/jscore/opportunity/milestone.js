@@ -126,7 +126,7 @@ $(function(){
 					if(readCookie("agile_deal_track") && readCookie("agile_deal_track") == id)
 						eraseCookie("agile_deal_track");
 					if(readCookie("deal-filters")){
-						var json = $.parseJSON(readCookie("agile_deal_view"));
+						var json = $.parseJSON(readCookie("deal-filters"));
 						if(json.pipeline_id = id)
 							eraseCookie("deal-filters");
 					}
