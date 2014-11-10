@@ -87,14 +87,16 @@ function showFilters(){
 		
 		$("#deals-filter").find("#owners-list").html(data);
 		//Select none by default.
-		$("#owners-list", $("#dealsFilterForm")).find('option[value='+ CURRENT_DOMAIN_USER.id +']').removeAttr("selected");
+		if(readCookie('deal-filters')){
+			var json = $.parseJSON(readCookie('deal-filters'));
+		}
 		$("#owners-list", $("#dealsFilterForm")).closest('div').find('.loading-img').hide();
-	});
 	
 	// Populate pipeline in the select box.
 	populateTracks(el, undefined, undefined, function(data){
 		//Select none by default.
 		$('#pipeline').val('');
+		$('#owners-list').val('');
 		if(readCookie('deal-filters')){
 			var json = $.parseJSON(readCookie('deal-filters'));
 			$.each(json,function(key,value){
@@ -116,6 +118,8 @@ function showFilters(){
 					$('#'+key).val(value);
 					if(key=='pipeline_id')
 						$('#pipeline').val(value);
+					else if(key=='owner_id')
+						$('#owners-list').val(value);
 					else if($('#'+key).hasClass('date'))
 						$('#'+key).val(new Date(value * 1000).format('mm/dd/yyyy'));
 					
@@ -135,7 +139,7 @@ function showFilters(){
 		}
 		
 	});
-	
+	});
 	/*add_custom_fields_to_form({}, function(data){
 		console.log('----------------',data);
 		var el_custom_fields = getTemplate("deal-custom-filter",data["custom_fields"]);
