@@ -154,7 +154,7 @@ $(function()
 
 		Twitter_search_details['plugin_id'] = Twitter_Plugin_Id;
 
-		$('#Twitter').html(getTemplate('twitter-modified-search', Twitter_search_details));
+		$('#Twitter', agile_crm_get_current_view()).html(getTemplate('twitter-modified-search', Twitter_search_details));
 	});
 
 	/*
@@ -195,7 +195,7 @@ $(function()
 		Twitter_follower_ids = [];
 
 		// show loading in follower panel
-		$('#twitter_follower_panel').html(TWITTER_UPDATE_LOAD_IMAGE);
+		$('#twitter_follower_panel', agile_crm_get_current_view()).html(TWITTER_UPDATE_LOAD_IMAGE);
 
 		// Retrieves the Twitter IDs of all the followers
 		getFollowerIdsInTwitter(Twitter_id, function(data)
@@ -208,7 +208,7 @@ $(function()
 			// If no followers, show info
 			if (data.length == 0)
 			{
-				$('#twitter_follower_panel').html(Twitter_current_profile_user_name + " doesn't have any followers yet");
+				$('#twitter_follower_panel', agile_crm_get_current_view()).html(Twitter_current_profile_user_name + " doesn't have any followers yet");
 				return;
 			}
 
@@ -220,7 +220,7 @@ $(function()
 			getListOfProfilesByIDsinTwitter(temp, function(result)
 			{
 				// Show matching profiles in Twitter panel
-				$('#twitter_follower_panel').html(getTemplate("twitter-follower-following", result));
+				$('#twitter_follower_panel', agile_crm_get_current_view()).html(getTemplate("twitter-follower-following", result));
 
 				$(".twitterImage").die().live('mouseover', function()
 				{
@@ -285,7 +285,7 @@ $(function()
 
 		Twitter_following_ids = [];
 
-		$('#twitter_following_panel').html(TWITTER_UPDATE_LOAD_IMAGE);
+		$('#twitter_following_panel', agile_crm_get_current_view()).html(TWITTER_UPDATE_LOAD_IMAGE);
 
 		// Retrieves the Twitter IDs of all the following persons
 		getFollowingIdsInTwitter(Twitter_id, function(data)
@@ -296,7 +296,7 @@ $(function()
 			console.log(data.length);
 			if (data.length == 0)
 			{
-				$('#twitter_following_panel').html(Twitter_current_profile_user_name + " isn't following anyone yet");
+				$('#twitter_following_panel', agile_crm_get_current_view()).html(Twitter_current_profile_user_name + " isn't following anyone yet");
 				return;
 			}
 
@@ -309,7 +309,7 @@ $(function()
 			{
 
 				// Show matching profiles in Twitter panel
-				$('#twitter_following_panel').html(getTemplate("twitter-follower-following", result));
+				$('#twitter_following_panel', agile_crm_get_current_view()).html(getTemplate("twitter-follower-following", result));
 
 				$(".twitterImage").die().live('mouseover', function()
 				{
@@ -373,7 +373,7 @@ $(function()
 function setupTwitterOAuth()
 {
 	// Shows loading until set up is shown
-	$('#Twitter').html(TWITTER_UPDATE_LOAD_IMAGE);
+	$('#Twitter', agile_crm_get_current_view()).html(TWITTER_UPDATE_LOAD_IMAGE);
 
 	// URL to return, after fetching token and secret key from Twitter
 	var callbackURL = window.location.href;
@@ -386,7 +386,7 @@ function setupTwitterOAuth()
 	var url = '/scribe?service=twitter&return_url=' + encodeURIComponent(callbackURL) + '&plugin_id=' + encodeURIComponent(Twitter_Plugin_Id);
 
 	// Shows a link button in the UI which connects to the above URL
-	$('#Twitter')
+	$('#Twitter', agile_crm_get_current_view())
 			.html(
 					"<div class='widget_content' style='border-bottom:none;line-height: 160%;' >" + "Engage with contacts in real time based on what they tweet." + "<p style='margin: 10px 0px 5px 0px;'>" + "<a class='btn' href=\"" + url + "\" style='text-decoration:none;'>" + "Link Your Twitter</a></p></div>");
 }
@@ -419,25 +419,25 @@ function showTwitterMatchingProfiles(data)
 		if (Twitter_search_details['keywords'] && Twitter_search_details['keywords'] != "")
 			twitterMainError(
 					TWITTER_PLUGIN_NAME,
-					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found for <a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a>",
+					"<p class='a-dotted' style='margin-bottom:0px 0px 6px;font-size:13px;'>No matches found for <a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a>",
 					true);
 		else
 			twitterMainError(TWITTER_PLUGIN_NAME,
-					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found. <a href='#' class='twitter_modify_search'>Modify search</a>", true);
+					"<p class='a-dotted' style='margin-bottom:0px 0px 6px;font-size:13px;'>No matches found. <a href='#' class='twitter_modify_search'>Modify search</a>", true);
 		return;
 	}
 
 	var el;
 	if (Twitter_search_details['keywords'] && Twitter_search_details['keywords'] != "")
-		el = "<div style='padding:10px'><p class='a-dotted'>Search results for " + "<a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a></p>";
+		el = "<div><p class='a-dotted' style='margin-bottom:0px 0px 6px;font-size:13px;'>Search results for " + "<a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a></p>";
 	else
-		el = "<div style='padding:10px'><p class='a-dotted'>Search results. " + "<a href='#' class='twitter_modify_search'>Modify search</a></p>";
+		el = "<div><p class='a-dotted' style='margin-bottom:0px 0px 6px;font-size:13px;'>Search results. " + "<a href='#' class='twitter_modify_search'>Modify search</a></p>";
 
 	el = el.concat(getTemplate("twitter-search-result", data));
 	el = el + "</div>";
 
 	// Show matching profiles in Twitter panel
-	$('#Twitter').html(el);
+	$('#Twitter', agile_crm_get_current_view()).html(el);
 
 	/*
 	 * Displays Twitter profile details on mouse hover and saves profile on
@@ -511,7 +511,7 @@ function showTwitterMatchingProfiles(data)
 function getTwitterMatchingProfiles()
 {
 	// Shows loading image, until matches profiles are fetched
-	$('#Twitter').html(TWITTER_UPDATE_LOAD_IMAGE);
+	$('#Twitter', agile_crm_get_current_view()).html(TWITTER_UPDATE_LOAD_IMAGE);
 
 	// Gets contact id, to save social results of a particular id
 	var contact_id = agile_crm_get_contact()['id'];
@@ -723,7 +723,7 @@ function fetchTwitterIdFromUrl(url_json, successCallback, errorCallback)
 function showTwitterProfile(Twitter_id)
 {
 	// Shows loading, until profile is fetched
-	$('#Twitter').html(TWITTER_UPDATE_LOAD_IMAGE);
+	$('#Twitter', agile_crm_get_current_view()).html(TWITTER_UPDATE_LOAD_IMAGE);
 
 	// Stores connected status of agile user with contact Twitter profile
 	var twitter_connected;
@@ -751,7 +751,7 @@ function showTwitterProfile(Twitter_id)
 		Twitter_current_update_id = data.current_update_id;
 
 		// Gets Twitter profile template and populate the fields with details
-		$('#Twitter').html(getTemplate("twitter-profile", data));
+		$('#Twitter', agile_crm_get_current_view()).html(getTemplate("twitter-profile", data));
 
 		// Checks if the agile user is following the contact's Twitter profile
 		if (data.is_connected)
@@ -923,7 +923,7 @@ function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data
 		e.preventDefault();
 
 		// Loading button is displayed until updates are shown
-		$("#twitter_social_stream").html(TWITTER_UPDATE_LOAD_IMAGE);
+		$("#twitter_social_stream", agile_crm_get_current_view()).html(TWITTER_UPDATE_LOAD_IMAGE);
 
 		// shows all recent network updates
 		allNetworkUpdates(Twitter_id, stream_data);
@@ -1017,7 +1017,7 @@ function getFirstFiveNetworkUpdates(Twitter_id)
 	function(data)
 	{
 		// Populates the template with the data and shows refresh button
-		$("#twitter_social_stream").html(getTemplate("twitter-update-stream", data));
+		$("#twitter_social_stream", agile_crm_get_current_view()).html(getTemplate("twitter-update-stream", data));
 		$('#twitter_current_activity').hide();
 		$('#twitter_refresh_stream').show();
 
@@ -1062,7 +1062,7 @@ function allNetworkUpdates(Twitter_id, stream_data)
 		$('#tweet_load').remove();
 
 		// Populates the template with the data
-		$("#twitter_social_stream").html(getTemplate("twitter-update-stream", data));
+		$("#twitter_social_stream", agile_crm_get_current_view()).html(getTemplate("twitter-update-stream", data));
 
 		$(".time-ago", $("#twitter_social_stream")).timeago();
 
@@ -1091,7 +1091,7 @@ function allNetworkUpdates(Twitter_id, stream_data)
 			/*
 			 * Populates the template with the initial update stream on error
 			 */
-			$("#twitter_social_stream").html(getTemplate("twitter-update-stream", stream_data));
+			$("#twitter_social_stream", agile_crm_get_current_view()).html(getTemplate("twitter-update-stream", stream_data));
 
 		$(".time-ago", $("#twitter_social_stream")).timeago();
 
@@ -1566,6 +1566,6 @@ function twitterMainError(id, error, disable_check)
 	 * Get error template and fill it with error message and show it in the div
 	 * with given id
 	 */
-	$('#' + id).html(getTemplate('twitter-error-panel', error_json));
+	$('#' + id, agile_crm_get_current_view()).html(getTemplate('twitter-error-panel', error_json));
 
 }

@@ -624,4 +624,10 @@ function agile_crm_add_event_to_timeline(name, title, body, time)
 	add_entity_to_timeline(new BaseModel(model));
 }
 
-
+function agile_crm_get_current_view()
+{
+	if(App_Contacts.contactDetailView)
+		return App_Contacts.contactDetailView.el;
+	
+	return undefined;
+}
