@@ -1083,7 +1083,7 @@ $(function()
 							{
 								var el = '';
 
-								var address = {};
+							 var address = {};
 								try
 								{
 									address = JSON.parse(properties[i].value);

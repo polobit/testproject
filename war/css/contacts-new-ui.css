@@ -2,7 +2,7 @@
 /* CSS Document */
 
 /*frequently usable css elements*/
-
+/*
 .no-margin {
   margin: 0;
 }
@@ -104,7 +104,11 @@
   margin-bottom: 5px;
 }
 /* Padding space */
-.no-padding {
+
+
+
+
+/*.no-padding {
   padding: 0!important;
 }
 .no-pd-l {
@@ -221,7 +225,9 @@
 .no-radius .list-group-item:last-child {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
-}
+}*/
+
+
 /* text utilities */
 .text-uppercase {
   text-transform: uppercase;
@@ -239,6 +245,11 @@
 	min-height:10px!important;font-size:smaller;line-height:6px;
 }
 */
+.mg-r-md
+{
+	margin-right:15px;
+}
+
 .contact-switching a:first-child
 {
 	float:left;
@@ -253,15 +264,17 @@
 }
 .contact-switching a i
 {
-	font-size:15px;
+	font-size:11px;
 }
 
 .contact-navigation-view
 {
 	float: right;
 width: 48%;
-margin-bottom: 5px;
+/*margin-bottom: 5px;*/
+margin-top:-16px;
 }
+
 .contact-title,.contact-profile-name
 {
 	text-transform:capitalize;
@@ -483,6 +496,7 @@ background-color: #fff;
 border: 1px solid #ddd;
 text-transform: capitalize;	
 }
+
 .contact-right-widgetsview
 {
 	position:relative;
@@ -540,7 +554,7 @@ bottom: -3px;
 }
 .contact-right-widgetsview .sub_header
 {
-	padding:10px 0px;
+	padding:10px 0px 0px;
 	background:none;
 	border-bottom:1px solid #eee;
 }
@@ -549,7 +563,7 @@ bottom: -3px;
 	color:#000;
 	font-weight:normal;
 	margin:0;
-	font-size:15px;
+	font-size:13px;
 }
 .contact-right-widgetsview .sub_header_li
 {
@@ -570,7 +584,7 @@ bottom: -3px;
 }
 .widget_header 
 {
-	margin: 12px 0px 0px;
+	margin:0px 0px 0px 0px;
 }
 .widget-sortable  li
 {
@@ -707,3 +721,40 @@ margin-bottom:5px;
 	margin-top:10px;
 }
 */
+
+#contacts-inner-tabs .tab-content .tab-pane .page-header
+{
+border-bottom:none;	
+}
+#contacts-inner-tabs .tab-content .tab-pane ul
+{
+	margin:0;
+}
+#contacts-inner-tabs .tab-content .tab-pane  .activity-text-block
+{
+	background:#eee;
+}
+#contacts-inner-tabs .tab-content .tab-pane  .activity-text-block pre
+{
+	background:#eee!important;
+}
+#contacts-inner-tabs .tab-content .tab-pane  .activity-text-block .document-title
+{
+	font-size:13px;
+}
+#Shopify ul li
+{
+	border-bottom:1px solid #eee;
+}
+.widgets
+{
+	font-size:13px;
+}
+
+
+
+@-moz-document url-prefix() {
+   .contact-right-widgetsview .label, #ClickDesk li .label, .contact-right-widgetsview .badge {
+       line-height:22px;
+    }
+}
