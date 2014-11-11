@@ -205,6 +205,17 @@ public class ReportsUtil
 			if (contactField == null)
 			    contactField = new ContactField();
 
+			try
+			{
+			    if (field.contains("time"))
+				contactField.value = SearchUtil.getDateWithoutTimeComponent(Long
+					.parseLong(contactField.value) * 1000);
+			}
+			catch (NumberFormatException e)
+			{
+
+			}
+
 			customFieldJSON = new ObjectMapper().writeValueAsString(contactField);
 
 			Map<String, Object> customField = new ObjectMapper().readValue(customFieldJSON,
@@ -212,7 +223,9 @@ public class ReportsUtil
 				{
 				});
 
-			customProperties.add(customField);
+			customField.put("custom", true);
+
+			contactProperties.add(customField);
 		    }
 
 		    catch (IOException e)
