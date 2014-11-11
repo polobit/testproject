@@ -70,18 +70,9 @@ $(function () {
 });
 
 function setupDealFilters(cel){
-	$('#deal-list-filters').html(getTemplate('deal-filter'));
-}
-
-/**
- * Show filters drop down and fill the options.
- */
-function showFilters(){
-	var el = $('#filter_options');
-
-	el.show();
-	//$("#deals-filter").modal('show');
 	
+	$('#deal-list-filters').html(getTemplate('deal-filter'));
+	var el = $('#filter_options');
 	// Fills owner select element
 	populateUsers("owners-list", el, undefined, undefined, function(data){
 		
@@ -104,7 +95,8 @@ function showFilters(){
 				// Fill the filters based on previosly selected filters in cookie.
 				if(value){
 					if($('[name="'+key+'"]').closest('.controls').height()== 0 && key.indexOf('_filter')<0){
-						$('[name="'+key+'"]').closest('.control-group').find('a.changeIcon').trigger('click');
+						$('[name="'+key+'"]').closest('.controls').addClass('in');
+						$('[name="'+key+'"]').closest('.control-group').find('a.changeIcon').find('i').toggleClass('icon-plus icon-minus');
 					}
 					
 					if(key=='pipeline_id'){
@@ -140,6 +132,18 @@ function showFilters(){
 		
 	});
 	});
+}
+
+/**
+ * Show filters drop down and fill the options.
+ */
+function showFilters(){
+	var el = $('#filter_options');
+
+	el.show();
+	//$("#deals-filter").modal('show');
+	
+
 	/*add_custom_fields_to_form({}, function(data){
 		console.log('----------------',data);
 		var el_custom_fields = getTemplate("deal-custom-filter",data["custom_fields"]);
