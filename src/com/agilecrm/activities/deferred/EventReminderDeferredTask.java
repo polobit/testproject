@@ -59,7 +59,7 @@ public class EventReminderDeferredTask implements DeferredTask
 
 	    if (event == null)
 	    {
-		starttime = (System.currentTimeMillis() / 1000) + 6400;
+		starttime = (System.currentTimeMillis() / 1000) + 3600;
 		SendEventReminder.sendEventReminders(domain, starttime, false);
 	    }
 	    else

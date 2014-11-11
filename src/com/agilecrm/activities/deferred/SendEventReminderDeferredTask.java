@@ -158,7 +158,12 @@ public class SendEventReminderDeferredTask implements DeferredTask
 
 	catch (Exception e)
 	{
-	    // TODO Auto-generated catch block
+	    String subject = "Exception occured in last catch block in send event reminder event notification and domain "
+		    + domain;
+	    String body = "exception occured due to " + e.getMessage();
+
+	    ContactEmailUtil.saveContactEmailAndSend("noreply@agilecrm.com", "Agile CRM", "jagadeesh@invox.com", null,
+		    null, subject, body, "-", null, false);
 
 	}
 

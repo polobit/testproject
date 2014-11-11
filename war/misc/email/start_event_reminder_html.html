@@ -8,7 +8,7 @@
 					<tbody>
 						<tr>
 							<td valign="middle" height="32px"
-								style="padding: 0; color: white">Events Starting in next one hour</td>
+								style="padding: 0; color: white">Upcoming Event</td>
 							</td>
 						</tr>
 					</tbody>
@@ -21,7 +21,6 @@
 					<thead>
 						<tr bgcolor="#CCCCCC">
 							<th align="left" style="font-size: 12px"><strong>Title</strong></th>
-							<!-- <th align="left" style="font-size: 12px;"><strong>Type</strong></th> -->
 							<th align="left" style="font-size: 12px"><strong>Priority</strong></th>
 							<th align="left" style="font-size: 12px"><strong>Related To</strong></th>
 		      			</tr>
@@ -36,10 +35,10 @@
 						   		
 						   		<div style="display:inline-table;float:left;margin:2px 10px 10px 0px;width:75px;">
 						   		
-						   		{{#eventOwner.domain}}
-						   			<a href="https://{{eventOwner.domain}}.agilecrm.com/#contact/{{/eventOwner.domain}}
-						   		{{^eventOwner.domain}}
-						   			<a href="http://localhost:8888#contact/{{/eventOwner.domain}}{{id}}" target="_blank" style="text-decoration:none;">
+						   		{{#owner.domain}}
+						   			<a href="https://{{owner.domain}}.agilecrm.com/#contact/{{/owner.domain}}
+						   		{{^owner.domain}}
+						   			<a href="http://localhost:8888#contact/{{/owner.domain}}{{id}}" target="_blank" style="text-decoration:none;">
 						   			{{#image}}
 						   				<img style="width:40px; height:40px; max-width:40px; max-height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px; " src="{{value}}"
 						   			{{/image}}
@@ -53,12 +52,12 @@
 						   						<img style="width:32px; height:32px; padding:8px; border: 1px solid #ddd; border-radius: 5px; " src="https://www.google.com/s2/favicons?domain={{value}}"
 						   					{{/url}}
 						   					{{^url}}
-						   						{{#eventOwner.domain}}
-						   						<img src="https://{{eventOwner.domain}}.agilecrm.com/img/company.png" style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;"
-						   						{{/eventOwner.domain}}
-						   						{{^eventOwner.domain}}
+						   						{{#owner.domain}}
+						   						<img src="https://{{owner.domain}}.agilecrm.com/img/company.png" style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;"
+						   						{{/owner.domain}}
+						   						{{^owner.domain}}
 						   						<img style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;"
-						   						{{/eventOwner.domain}}
+						   						{{/owner.domain}}
 						   					{{/url}}
 						   				{{/first_name}}
 						   			{{/image}}
@@ -85,12 +84,12 @@
 				<div style="text-align: right">
 					<a 
 						{{#events}}
-							{{#eventOwner.domain}}
-								href="https://{{eventOwner.domain}}.agilecrm.com"
-							{{/eventOwner.domain}}
-							{{^eventOwner.domain}}
+							{{#owner.domain}}
+								href="https://{{owner.domain}}.agilecrm.com"
+							{{/owner.domain}}
+							{{^owner.domain}}
 								href="https://www.agilecrm.com"
-							{{/eventOwner.domain}}
+							{{/owner.domain}}
 						{{/events}} 
 						target="_blank"> 
 						<img style="border: 0; margin-top: 10px"
