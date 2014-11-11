@@ -1,6 +1,7 @@
 package com.agilecrm.core.api.reports;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -136,18 +137,25 @@ public class ActivityReportsAPI
     @Path("/show-results/{report_id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getReportResults(@PathParam("report_id") String id, @QueryParam("page_size") String count,
-	    @QueryParam("cursor") String cursor)
+    public Map<String, Object> getReportResults(@PathParam("report_id") String id,
+	    @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
     {
 	try
 	{
 
-	    return ActivityReportsUtil.generateActivityReports(Long.parseLong(id)).toString();
+	    return ActivityReportsUtil.generateActivityReports(Long.parseLong(id), null);
 	}
 	catch (Exception e)
 	{
 	    return null;
 	}
+    }
+
+    @Path("/email/{report_id}")
+    @GET
+    public static void sendActivityReport(@PathParam("report_id") String id, @QueryParam("end_time") Long endTime)
+    {
+	ActivityReportsUtil.sendActivityReport(Long.parseLong(id), endTime);
     }
 
 }

@@ -76,6 +76,7 @@
                     <th>Name</th>
                     <th>Duration</th>
 					<th>Fields</th>
+					<th>Users</th>
                 </tr>
             </thead>
             <tbody id="activity-report-model-list" route="activity-report-edit/">
@@ -165,9 +166,9 @@
 	<td>
     	{{ucfirst duration}}
 	</td>
-	<td><div style="width:17em;text-transform:capitalize;">{{#field_Element activity_type}}{{/field_Element}}</div></td>
+	<td><div style="width:15em;text-transform:capitalize;">{{#field_Element activity_type}}{{/field_Element}}</div></td>
 	<td>
-		<a href="#report-results/{{id}}" data={{id}} id="activity-report-instant-results">Show Results</a> 			
+		{{#each usersList}}{{name}},{{/each}}
 	</td>
 	<td>
 	 	<a  data={{id}} id="activity-reports-email-now" >Send Now</a>

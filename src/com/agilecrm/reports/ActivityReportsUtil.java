@@ -6,12 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Event;
-import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -20,6 +16,7 @@ import com.agilecrm.reports.ActivityReports.ActivityType;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 
@@ -63,19 +60,27 @@ public class ActivityReportsUtil
 	}
     }
 
-    public static JSONObject generateActivityReports(Long id)
+    public static List<Key<ActivityReports>> getAllReportKeysByDuration(String duration)
+    {
+	System.out.println("fetching the reports - " + duration);
+	return dao.listKeysByProperty("duration", duration);
+    }
+
+    public static Map<String, Object> generateActivityReports(Long id, Long endTime)
     {
 	ActivityReports report = getActivityReport(id);
 	List<ActivityType> activities = report.activity_type;
 	List<String> userIds = report.user_ids;
-	JSONObject activityReports = new JSONObject();
+	Map<String, Object> activityReports = new HashMap<String, Object>();
 	try
 	{
 	    Map<String, Long> timeBounds = getTimeBound(report);
+	    if (endTime != null)
+		timeBounds.put("end_time", endTime);
 
 	    activityReports.put("start_time", timeBounds.get("startTime"));
 	    activityReports.put("end_time", timeBounds.get("endTime"));
-
+	    activityReports.put("report_name", report.name);
 	    List<Map<String, Object>> userReport = new ArrayList<Map<String, Object>>();
 	    for (String userId : userIds)
 	    {
@@ -110,7 +115,7 @@ public class ActivityReportsUtil
 	return activityReports;
     }
 
-    public static JSONObject getDealActivityReport(Long user_id, Long startTime, Long endTime)
+    public static Map<String, Object> getDealActivityReport(Long user_id, Long startTime, Long endTime)
     {
 
 	List<Key<Opportunity>> dealWon = new ArrayList<Key<Opportunity>>();
@@ -119,13 +124,21 @@ public class ActivityReportsUtil
 	List<Key<Opportunity>> dealCreated = new ArrayList<Key<Opportunity>>();
 	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user_id, Activity.EntityType.DEAL.toString(),
 		null, null, startTime, endTime, 0, null);
+	List<Activity> wonActivities = new ArrayList<Activity>();
+	List<Activity> lostActivities = new ArrayList<Activity>();
 	System.out.println("Deals ---- " + activities.size());
 	for (Activity act : activities)
 	{
 	    if (act.activity_type == Activity.ActivityType.DEAL_LOST)
+	    {
 		dealLost.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
+		lostActivities.add(act);
+	    }
 	    else if (act.activity_type == Activity.ActivityType.DEAL_CLOSE)
+	    {
 		dealWon.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
+		wonActivities.add(act);
+	    }
 	    else if (act.activity_type == Activity.ActivityType.DEAL_ADD)
 		dealCreated.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
 	    else
@@ -152,19 +165,19 @@ public class ActivityReportsUtil
 	    lostCount++;
 	}
 
-	JSONObject dealsReport = new JSONObject();
+	Map<String, Object> dealsReport = new HashMap<String, Object>();
 	try
 	{
 	    dealsReport.put("won_count", wonCount);
 	    dealsReport.put("lost_count", lostCount);
 	    dealsReport.put("won_value", wonValue);
 	    dealsReport.put("lost_value", lostValue);
-	    dealsReport.put("deals_won", dealsWon);
-	    dealsReport.put("deals_lost", dealsLost);
+	    dealsReport.put("deals_won", wonActivities);
+	    dealsReport.put("deals_lost", lostActivities);
 	    dealsReport.put("deals_created", dealsCreated);
 	    dealsReport.put("deals_updated", dealsUpdated);
 	}
-	catch (JSONException e)
+	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    System.out.println("Exception occured while deal report creation - " + e.getMessage());
@@ -173,18 +186,18 @@ public class ActivityReportsUtil
 	return dealsReport;
     }
 
-    public static JSONObject getEventActivityReport(Long user_id, Long startTime, Long endTime)
+    public static Map<String, Object> getEventActivityReport(Long user_id, Long startTime, Long endTime)
     {
 	List<Event> events = new ArrayList<Event>();
 	events = EventUtil.getEvents(startTime, endTime, AgileUser.getCurrentAgileUserFromDomainUser(user_id).id);
 
-	JSONObject eventsReport = new JSONObject();
+	Map<String, Object> eventsReport = new HashMap<String, Object>();
 	try
 	{
 	    eventsReport.put("events_count", events.size());
 	    eventsReport.put("events", events);
 	}
-	catch (JSONException e)
+	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    System.out.println("Exception occured while event report creation - " + e.getMessage());
@@ -193,35 +206,35 @@ public class ActivityReportsUtil
 	return eventsReport;
     }
 
-    public static JSONObject getTaskActivityReport(Long user_id, Long startTime, Long endTime)
+    public static Map<String, Object> getTaskActivityReport(Long user_id, Long startTime, Long endTime)
     {
-	List<Key<Task>> taskComplete = new ArrayList<Key<Task>>();
-	List<Key<Task>> taskUpdated = new ArrayList<Key<Task>>();
-	List<Key<Task>> taskCreated = new ArrayList<Key<Task>>();
+	List<Activity> taskComplete = new ArrayList<Activity>();
+	List<Activity> taskUpdated = new ArrayList<Activity>();
+	List<Activity> taskCreated = new ArrayList<Activity>();
 	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user_id, Activity.EntityType.TASK.toString(),
 		null, null, startTime, endTime, 0, null);
 	System.out.println("Tasks ---- " + activities.size());
 	for (Activity act : activities)
 	{
 	    if (act.activity_type == Activity.ActivityType.TASK_COMPLETED)
-		taskComplete.add(new Key<Task>(Task.class, act.entity_id));
+		taskComplete.add(act);
 	    else if (act.activity_type == Activity.ActivityType.TASK_ADD)
-		taskCreated.add(new Key<Task>(Task.class, act.entity_id));
-	    else
-		taskUpdated.add(new Key<Task>(Task.class, act.entity_id));
+		taskCreated.add(act);
+	    else if (act.activity_type == Activity.ActivityType.TASK_PROGRESS_CHANGE)
+		taskUpdated.add(act);
 	}
 
-	List<Task> tasksAssigned = Task.dao.fetchAllByKeys(taskCreated);
-	List<Task> tasksUpdated = Task.dao.fetchAllByKeys(taskUpdated);
-	List<Task> tasksCompleted = Task.dao.fetchAllByKeys(taskComplete);
-	JSONObject tasksReport = new JSONObject();
+	Map<String, Object> tasksReport = new HashMap<String, Object>();
 	try
 	{
-	    tasksReport.put("tasks_done", tasksCompleted);
-	    tasksReport.put("tasks_inprogress", tasksUpdated);
-	    tasksReport.put("taks_assigned", tasksAssigned);
+	    tasksReport.put("tasks_done", taskComplete);
+	    tasksReport.put("tasks_inprogress", taskUpdated);
+	    tasksReport.put("taks_assigned", taskCreated);
+	    tasksReport.put("tasks_done_count", taskComplete.size());
+	    tasksReport.put("tasks_inprogress_count", taskUpdated.size());
+	    tasksReport.put("taks_assigned_count", taskCreated.size());
 	}
-	catch (JSONException e)
+	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    System.out.println("Exception occured while event report creation - " + e.getMessage());
@@ -290,5 +303,13 @@ public class ActivityReportsUtil
 	    }
 	}
 	return timeBound;
+    }
+
+    public static void sendActivityReport(Long reportId, Long endTime)
+    {
+	ActivityReports report = getActivityReport(reportId);
+	// Send reports email
+	SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, "activity_reports",
+		ActivityReportsUtil.generateActivityReports(reportId, endTime));
     }
 }

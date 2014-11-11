@@ -54,6 +54,13 @@ $(function(){
 		$('#users-list, #activity-type-list').multiSelect('deselect_all');
 	});
 	
+	$('#activity-reports-email-now').die().live('click',function(e){
+		e.preventDefault();
+		var date = Date.now()/1000;
+		$.ajax({ type : 'GET', url : '/core/api/activity-reports/email/' + $(this).attr('data')+'?end_time='+date, async : false,
+			dataType : 'json' });
+	});
+	
 	/** 
 	    * Deal list view edit
 	    

@@ -236,6 +236,16 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>ActivityReports</servlet-name>
+		<servlet-class>com.agilecrm.reports.ActivityReportServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ActivityReports</servlet-name>
+		<url-pattern>/backend/cron/activity-reports/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>Reports</servlet-name>
 		<servlet-class>com.agilecrm.reports.ReportServlet</servlet-class>
 	</servlet>
