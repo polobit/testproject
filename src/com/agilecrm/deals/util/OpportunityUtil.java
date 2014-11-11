@@ -759,7 +759,7 @@ public class OpportunityUtil
     public static List<Opportunity> getOpportunitiesByFilter(org.json.JSONObject filterJson, int count, String cursor)
     {
 	Map<String, Object> searchMap = new HashMap<String, Object>();
-
+	String sortField = "-created_time";
 	try
 	{
 	    if (checkJsonString(filterJson, "pipeline_id"))
@@ -786,6 +786,8 @@ public class OpportunityUtil
 	    }
 	    else
 	    {
+		sortField = "expected_value";
+
 		if (checkJsonString(filterJson, "value_start"))
 		{
 		    double value = Double.parseDouble(filterJson.getString("value_start").replace("%", ""));
@@ -832,11 +834,6 @@ public class OpportunityUtil
 	     */
 
 	    System.out.println("---------------" + searchMap.toString());
-
-	    String sortField = "-created_time";
-
-	    if (checkJsonString(filterJson, "sort_field"))
-		sortField = filterJson.getString("sort_field");
 
 	    if (count != 0)
 		return dao.fetchAllByOrder(count, cursor, searchMap, true, false, sortField);

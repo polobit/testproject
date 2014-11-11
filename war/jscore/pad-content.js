@@ -55,8 +55,8 @@ var CONTENT_JSON = {
 		"image" : "/img/clipboard.png"
 	},
 	"deals" : {
-		"title" : "You do not have any deals currently.",
-		"description" : "Deals are sales opportunities you track continuously throughout its lifecycle.",
+		"title" : "No deals found.",
+		"description" : "You either do not have any deals currently, or there are none matching the filter conditions. <br/>Deals are sales opportunities you track continuously throughout its lifecycle.",
 		//"learn_more" : "click here to learn more",
 		"button_text" : "Add Deal",
 		"route" : "#",
