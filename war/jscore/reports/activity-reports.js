@@ -56,9 +56,64 @@ $(function(){
 	
 	$('#activity-reports-email-now').die().live('click',function(e){
 		e.preventDefault();
-		var date = Date.now()/1000;
-		$.ajax({ type : 'GET', url : '/core/api/activity-reports/email/' + $(this).attr('data')+'?end_time='+date, async : false,
-			dataType : 'json' });
+		e.stopPropagation();
+		var id = $(this).attr('data');
+		var confirmationModal = $('<div id="report-send-confirmation" class="modal fade in">' +
+				'<div class="modal-header" >'+
+					'<a href="#" data-dismiss="modal" class="close">&times;</a>' +
+						'<h3>Send Report</h3></div>' +
+							'<div class="modal-body">' +
+								'<p>You are about to send report.</p>' +
+								'<p>Do you want to proceed?</p>' +
+							'</div>' +	
+					'<div class="modal-footer">' +
+						'<div><span class="report-message" style="margin-right:5px"></span></div>' +
+						'<div>' +
+						'<a href="#" id="report-send-confirm" class="btn btn-primary">Yes</a>' +
+						'<a  href="#" class="btn close" data-dismiss="modal" >No</a>'+ 
+						'</div>' +
+					'</div>' +
+				'</div>' + 
+			'</div>');
+
+		confirmationModal.modal('show');
+		var date = Date.now()%1000;
+		$("#report-send-confirm", confirmationModal).click(
+				function(event)
+				{
+					event.preventDefault();
+					
+					if ($(this).attr("disabled")) return;
+					
+					$(this).attr("disabled", "disabled");
+					$.get('/core/api/activity-reports/email/' + id +'?end_time='+date, function(data){
+						
+						console.log("sending email");
+							$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Report will be sent shortly</i></p></small></div>');
+				
+							$('.report-message').html($save_info);
+				
+							$save_info.show();
+
+							setTimeout(function ()
+							            {
+								   (confirmationModal).modal('hide');
+							            }, 2000);
+
+					}).fail(function(response){
+						$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'+response.responseText+'</i></p></small></div>');
+						
+						$('.report-message').html($save_info);
+			
+						$save_info.show();
+
+						setTimeout(function ()
+						            {
+							   (confirmationModal).modal('hide');
+						            }, 2000);
+
+					});
+				});
 	});
 	
 	/** 
