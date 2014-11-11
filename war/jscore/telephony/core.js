@@ -5,13 +5,13 @@
  * adding sip widget / updating sip widget / re-login user.
  */
 function sipStart()
-{	
+{
 	// After 15 sec procedure will start.
 	setTimeout(function()
-	{		
+	{
 		// after DOM ready.
 		if (document.readyState === "complete")
-		{	
+		{
 			// If sip already register.
 			if (Sip_Start == true)
 				return;
@@ -29,8 +29,8 @@ function sipStart()
 				{
 					head.js(LIB_PATH + 'lib/telephony/SIPml-api.js', function()
 					{
-						SIPml.setDebugLevel("error");
-						
+						//SIPml.setDebugLevel("error");
+
 						// initialize SIPML5
 						if (SIPml.isInitialized()) // If already done.
 							sipRegister();
@@ -55,7 +55,7 @@ function sipRegister()
 {
 	// Add audio tags in home page.
 	addAudio();
-	
+
 	// Properties for session object.
 	Config_Call = { audio_remote : document.getElementById('audio_remote'), events_listener : { events : '*', listener : sipSessionEventsListener } };
 
@@ -89,7 +89,13 @@ function sipRegister()
 		{
 			// Check websocket_proxy_url
 			if (credentials.sip_wsenable == "true")
-				url = "ws://54.83.12.176:10060";
+			{
+				console.log(window.location.protocol);
+				if (window.location.protocol != "https:")
+					url = "ws://54.83.12.176:10060"; // http
+				else
+					url = "wss://54.83.12.176:10060"; // https
+			}
 
 			// Define sip stack
 			Sip_Stack = new SIPml.Stack({ realm : credentials.sip_realm, impi : credentials.sip_privateid, impu : credentials.sip_publicid,
