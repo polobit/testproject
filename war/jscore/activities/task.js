@@ -214,6 +214,9 @@ function highlight_task() {
 	$("#relatedEvent").css("display", "none");
 	$("#relatedTask").css("display", "block");
 	
+	if($("#activityForm").find("#event_related_to").closest(".controls").find("ul").children())
+		$("#taskForm").find("#task_related_to").closest(".controls").find("ul").html($("#activityForm").find("#event_related_to").closest(".controls").find("ul").children());
+	
 	// Date().format('mm/dd/yyyy'));
 	$('input.date').val(new Date().format('mm/dd/yyyy')).datepicker('update');
 }
