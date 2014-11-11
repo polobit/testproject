@@ -3,6 +3,7 @@ package com.agilecrm.workflows.util;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -45,7 +46,8 @@ public class WorkflowDeleteUtil
 
 	    // Deletes remaining related entities using backend, to avoid
 	    // Deadline exception.
-	    BulkActionUtil.postDataToBulkActionBackend("/core/api/bulk-actions/remove-workflow-related/" + campaignId, "", Method.POST, campaignId);
+	    BulkActionUtil.postDataToBulkActionBackend("/core/api/bulk-actions/remove-workflow-related/" + campaignId,
+		    "", AgileQueues.WORKFLOWS_RELATED_QUEUE, Method.POST, campaignId);
 
 	}
     }

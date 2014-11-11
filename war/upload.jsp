@@ -49,6 +49,10 @@ function returnBack()
 		 {
 			 window.opener.setContactImageURL(url);
 		 }
+		 else if(id == "upload-in-modal")
+		 {
+			 window.opener.setImageURLInModal(url);
+		 }
 		 else
 		 {
 			 window.opener.setImageURL(url);

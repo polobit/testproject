@@ -26,7 +26,7 @@ $(function()
 
 	if (xero_widget.prefs == undefined)
 	{
-		xeroError(Xero_PLUGIN_NAME, 'Authentication Error. The access token has expired. Please reconfigure your Xero widget.');
+		xeroError(Xero_PLUGIN_NAME, 'Authentication Error.Please reconfigure your Xero widget.');
 		return;
 	}
 
@@ -36,7 +36,7 @@ $(function()
 
 	if (typeof SHORT_CODE == "undefined")
 	{
-		xeroError(Xero_PLUGIN_NAME, "Authentication Error. The access token has expired. Please reconfigure your Xero widget.");
+		xeroError(Xero_PLUGIN_NAME, "Authentication Error.Please reconfigure your Xero widget.");
 		return;
 	}
 
@@ -105,7 +105,7 @@ function showXeroClient()
 {
 	if (EmailList.length == 0)
 	{
-		xeroError(Xero_PLUGIN_NAME, "Please provide email for this contact");
+		xeroError(Xero_PLUGIN_NAME, "No email for this contact");
 		return;
 	}
 	var emailArray = [];
@@ -146,7 +146,7 @@ function showXeroClient()
 
 		var resText = data.responseText;
 		console.log(resText);
-		if (resText.indexOf('No contact found with email address') != -1)
+		if (resText.indexOf('No contact found') != -1)
 		{
 			createContact(resText);
 		}

@@ -1,6 +1,5 @@
 package com.agilecrm.core.api.contacts;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,26 +15,23 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.xml.ws.RequestWrapper;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.TagManagement;
 import com.agilecrm.contact.deferred.TagManagementDeferredTask;
 import com.agilecrm.contact.deferred.TagManagementDeferredTask.Action;
-import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.TagUtil;
-import com.google.appengine.api.backends.BackendService;
 import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
-import com.google.appengine.api.taskqueue.TaskOptions.Method;
 
 /**
  * <code>TagsAPI</code> includes REST calls to interact with {@link Tag} class
@@ -74,7 +70,7 @@ public class TagsAPI
 	    return null;
 	}
     }
-    
+
     @POST
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public void saveTag(Tag tag)
@@ -174,41 +170,43 @@ public class TagsAPI
 	System.out.println("reload : " + reload);
 	return TagUtil.getTags(true);
     }
-    
+
     @Path("stats2")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Tag> getTagsStats2(@QueryParam("reload") boolean reload, @QueryParam("page_size") String page_size, @QueryParam("cursor") String cursor)
+    public List<Tag> getTagsStats2(@QueryParam("reload") boolean reload, @QueryParam("page_size") String page_size,
+	    @QueryParam("cursor") String cursor)
     {
 	System.out.println("reload : " + reload);
-	if(StringUtils.isEmpty(page_size))
+	if (StringUtils.isEmpty(page_size))
 	    return TagUtil.getStatus();
 	try
 	{
 	    int tags_fetch_size = Integer.parseInt(page_size);
-	    
+
 	    return TagUtil.getStats(tags_fetch_size, cursor);
 	}
-	catch(NumberFormatException e)
+	catch (NumberFormatException e)
 	{
 	    return TagUtil.getStatus();
 	}
     }
-    
+
     /**
      * Returns tag with stats (Number of contacts associated with contacts)
+     * 
      * @param tag
      * @return
      */
     @Path("getstats/{tag}")
     @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Tag getTagStats(@PathParam("tag") String tag)
     {
 	return TagUtil.getTagWithStats(tag);
-	
+
     }
-    
+
     /**
      * Creates new tags in tags database
      * 
@@ -260,6 +258,7 @@ public class TagsAPI
      * 
      * @param tag
      */
+    @SuppressWarnings("deprecation")
     @Path("bulk/delete")
     @DELETE
     public void bulkDeleteTag(@QueryParam("tag") String tag)
@@ -276,8 +275,8 @@ public class TagsAPI
 	// If count is between 100 to 800, task is carried out by taskqueue.
 	else if (count > 100 && count < 800)
 	{
-	    Queue queue = QueueFactory.getDefaultQueue();
-	    
+	    Queue queue = QueueFactory.getQueue(AgileQueues.BULK_TAGS_QUEUE);
+
 	    // Create Task and push it into Task Queue
 	    TaskOptions taskOptions = TaskOptions.Builder.withPayload(tagAction);
 
@@ -288,7 +287,7 @@ public class TagsAPI
 	else
 	{
 	    // Initialize task here
-	    Queue queue = QueueFactory.getDefaultQueue();
+	    Queue queue = QueueFactory.getQueue(AgileQueues.BULK_TAGS_QUEUE);
 
 	    String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
 
@@ -299,6 +298,7 @@ public class TagsAPI
 	}
     }
 
+    @SuppressWarnings("deprecation")
     @Path("bulk/rename")
     @POST
     public void renameTag(Tag tag, @QueryParam("tag") String newTag, @Context HttpServletRequest request)
@@ -315,8 +315,8 @@ public class TagsAPI
 	// If count is between 100 to 800, task is carried out by taskqueue.
 	else if (count > 100 && count < 800)
 	{
-	    Queue queue = QueueFactory.getDefaultQueue();
-	    
+	    Queue queue = QueueFactory.getQueue(AgileQueues.BULK_TAGS_QUEUE);
+
 	    // Create Task and push it into Task Queue
 	    TaskOptions taskOptions = TaskOptions.Builder.withPayload(tagAction);
 
@@ -327,7 +327,7 @@ public class TagsAPI
 	else
 	{
 	    // Initialize task here
-	    Queue queue = QueueFactory.getDefaultQueue();
+	    Queue queue = QueueFactory.getQueue(AgileQueues.BULK_TAGS_QUEUE);
 
 	    String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
 

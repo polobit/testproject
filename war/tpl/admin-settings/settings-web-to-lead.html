@@ -171,10 +171,12 @@
 		<div class="page-header">
 			<h2>SMS Gateways</h2>
 		</div>
+
+		<!-- Twilio -->
 		<div class="span4" style="margin-left:0px;text-align:center;" id="twilio-sms-api-integration">
 			<div class="well" style="width:220px; height:200px;">
 				<div style="position: relative;">
-					<img alt="sms-integration" src="/img/plugins/twilio-logo.png" style="top: -5px; position: relative; height: 85px;">
+					<img alt="sms-integration" src="/img/plugins/twilio.png" style="top: -5px; position: relative; height: 85px;">
 						<div class="clearfix">
 						</div>
 				</div>
@@ -204,8 +206,46 @@
 				</div>
 			</div>
 		</div>
+		
+		<!-- Plivo 
+		
+		<div class="span4" style="margin-left:0px;text-align:center;" id="plivo-sms-api-integration">
+			<div class="well" style="width:220px; height:200px;">
+				<div style="position: relative;">
+					<img alt="sms-integration" src="/img/plugins/plivo.png" style="top: -5px; position: relative; height: 85px;">
+						<div class="clearfix">
+						</div>
+				</div>
+				<br>
+				<div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;"  rel="tooltip" title="Plivo toolTip">
+				Plivo Description
+				</div><br/>
+				<div style="float:left;"> 
+					{{#if this.length}}	
+						{{#gateway_exists "PLIVO" this}}
+							<a href="#integrations" class="btn btn-danger " id="sms-gateway-delete"  data={{id}} >Disable</a>
+								<a href="#sms-gateways/plivo" class="btn">Settings</a>
+						{{else}}
+							{{#check_plan "FREE"}}
+								<a class="btn" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Enable</a><span style="margin-left:5px"><i>Paid accounts only</i></span>
+							{{else}}
+								<a href="#sms-gateways/plivo" class="btn">Enable</a>
+							{{/check_plan}}	
+						{{/gateway_exists}}
+					{{else}}
+						{{#check_plan "FREE"}}
+							<a class="btn" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Enable</a><span style="margin-left:5px"><i>Paid accounts only</i></span>
+						{{else}}
+							<a href="#sms-gateways/plivo" class="btn">Enable</a> 
+						{{/check_plan}}	
+					{{/if}}
+				</div>
+			</div>
+		</div>
+		-->
+		
 	</div>
-
 </div>
+
 </script>	
 

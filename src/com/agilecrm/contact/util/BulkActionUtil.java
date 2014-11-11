@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
@@ -42,23 +43,26 @@ public class BulkActionUtil
      */
     public static enum ActionType
     {
-	DELETE("/core/api/bulk-actions/delete/contacts"), ASIGN_WORKFLOW("/core/api/bulk-actions/enroll-campaign/%s"), CHANGE_OWNER(
-		"/core/api/bulk-actions/change-owner/%s"), ADD_TAG("/core/api/bulk-actions/contact/tags"), CONTACTS_UPLOAD(
-		"/core/api/bulk-actions/contacts/multi/upload"), REMOVE_ACTIVE_SUBSCRIBERS(
-		"/core/api/bulk-actions/remove-active-subscribers/%s"), SEND_EMAIL(
-		"/core/api/bulk-actions/contacts/send-email"), EXPORT_CONTACTS_CSV(
-		"/core/api/bulk-actions/contacts/export-contacts-csv"), REMOVE_TAG(
-		"/core/api/bulk-actions/contact/remove-tags");
+	DELETE("/core/api/bulk-actions/delete/contacts", AgileQueues.CONTACTS_DELETE_QUEUE), ASIGN_WORKFLOW(
+	        "/core/api/bulk-actions/enroll-campaign/%s", AgileQueues.CAMPAIGN_SUBSCRIBE_QUEUE), CHANGE_OWNER(
+	        "/core/api/bulk-actions/change-owner/%s", AgileQueues.OWNER_CHANGE_QUEUE), ADD_TAG(
+	        "/core/api/bulk-actions/contact/tags", AgileQueues.BULK_TAGS_QUEUE), CONTACTS_UPLOAD(
+	        "/core/api/bulk-actions/contacts/multi/upload", AgileQueues.CONTACTS_UPLOAD_QUEUE), REMOVE_ACTIVE_SUBSCRIBERS(
+	        "/core/api/bulk-actions/remove-active-subscribers/%s", AgileQueues.WORKFLOWS_RELATED_QUEUE), SEND_EMAIL(
+	        "/core/api/bulk-actions/contacts/send-email", AgileQueues.BULK_EMAILS_QUEUE), EXPORT_CONTACTS_CSV(
+	        "/core/api/bulk-actions/contacts/export-contacts-csv", AgileQueues.CONTACTS_EXPORT_QUEUE), REMOVE_TAG(
+	        "/core/api/bulk-actions/contact/remove-tags", AgileQueues.BULK_TAGS_QUEUE);
 
-	String url;
+	String url, queue;
 
 	/*
 	 * Constructor sets domain user Id at the end of the url, it is required
 	 * to set Session in thread local, so domain user can be fetched
 	 */
-	ActionType(String url)
+	ActionType(String url, String queue)
 	{
 	    this.url = url;
+	    this.queue = queue;
 	}
 
 	/*
@@ -67,6 +71,11 @@ public class BulkActionUtil
 	public String getUrl()
 	{
 	    return url + "/" + SessionManager.get().getDomainId();
+	}
+
+	public String getQueue()
+	{
+	    return queue;
 	}
     }
 
@@ -82,15 +91,21 @@ public class BulkActionUtil
      * @param contentType
      * @param type
      */
-    public static void postDataToBulkActionBackend(byte[] data, String uri, String contentType, Method type)
+    @SuppressWarnings("deprecation")
+    public static void postDataToBulkActionBackend(byte[] data, String uri, String contentType, Method type,
+	    String queueName)
     {
+
+	// By default, use 'bulk-actions-queue'
+	if (StringUtils.isBlank(queueName))
+	    queueName = "bulk-actions-queue";
 
 	String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
 
 	// Create Task and push it into Task Queue
-	Queue queue = QueueFactory.getQueue("bulk-actions-queue");
+	Queue queue = QueueFactory.getQueue(queueName);
 	TaskOptions taskOptions = TaskOptions.Builder.withUrl(uri).payload(data).header("Content-Type", contentType)
-		.header("Host", url).method(type);
+	        .header("Host", url).method(type);
 
 	queue.addAsync(taskOptions);
     }
@@ -108,9 +123,16 @@ public class BulkActionUtil
      * @param type
      * @param data
      */
-    public static void postDataToBulkActionBackend(String uri, String contentType, Method type, String... data)
+    @SuppressWarnings("deprecation")
+    public static void postDataToBulkActionBackend(String uri, String contentType, String queueName, Method type,
+	    String... data)
     {
-	Queue queue = QueueFactory.getQueue("bulk-actions-queue");
+
+	// By default, use 'bulk-actions-queue'
+	if (StringUtils.isBlank(queueName))
+	    queueName = "bulk-actions-queue";
+
+	Queue queue = QueueFactory.getQueue(queueName);
 	TaskOptions taskOptions = null;
 
 	String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
@@ -129,7 +151,7 @@ public class BulkActionUtil
 	}
 
 	taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0]).header("Content-Type", contentType)
-		.header("Host", url).method(type);
+	        .header("Host", url).method(type);
 
 	queue.addAsync(taskOptions);
     }
@@ -150,7 +172,7 @@ public class BulkActionUtil
 	String workflowId = ((String[]) parameter.get("workflow_id"))[0];
 	url = String.format(url, workflowId);
 	System.out.println(url);
-	BulkActionUtil.postDataToBulkActionBackend(data, url, contentType, type);
+	BulkActionUtil.postDataToBulkActionBackend(data, url, contentType, type, AgileQueues.CAMPAIGN_SUBSCRIBE_QUEUE);
     }
 
     /**
@@ -169,7 +191,7 @@ public class BulkActionUtil
 	String workflowId = ((String[]) parameter.get("workflow_id"))[0];
 	url = String.format(url, workflowId);
 	System.out.println(url);
-	BulkActionUtil.postDataToBulkActionBackend(url, contentType, type, id);
+	BulkActionUtil.postDataToBulkActionBackend(url, contentType, AgileQueues.CAMPAIGN_SUBSCRIBE_QUEUE, type, id);
     }
 
     /**
@@ -188,7 +210,7 @@ public class BulkActionUtil
 	String ownerId = ((String[]) parameter.get("owner"))[0];
 	url = String.format(url, ownerId);
 
-	BulkActionUtil.postDataToBulkActionBackend(data, url, contentType, type);
+	BulkActionUtil.postDataToBulkActionBackend(data, url, contentType, type, AgileQueues.OWNER_CHANGE_QUEUE);
     }
 
     /**
@@ -208,7 +230,7 @@ public class BulkActionUtil
 
 	System.out.println("url to send : " + url);
 
-	BulkActionUtil.postDataToBulkActionBackend(url, contentType, type, id);
+	BulkActionUtil.postDataToBulkActionBackend(url, contentType, AgileQueues.OWNER_CHANGE_QUEUE, type, id);
     }
 
     /**
@@ -355,7 +377,7 @@ public class BulkActionUtil
 
 	System.out.println("Selected Active Subscribers removal url " + url);
 
-	BulkActionUtil.postDataToBulkActionBackend(data, url, contentType, type);
+	BulkActionUtil.postDataToBulkActionBackend(data, url, contentType, type, AgileQueues.WORKFLOWS_RELATED_QUEUE);
     }
 
     /**
@@ -382,7 +404,7 @@ public class BulkActionUtil
 	System.out.println("All Active Subscribers removal url " + url);
 	System.out.println("filter id is " + id);
 
-	BulkActionUtil.postDataToBulkActionBackend(url, contentType, type, id);
+	BulkActionUtil.postDataToBulkActionBackend(url, contentType, AgileQueues.WORKFLOWS_RELATED_QUEUE, type, id);
     }
 
     /**

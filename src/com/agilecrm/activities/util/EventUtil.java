@@ -115,6 +115,31 @@ public class EventUtil
     }
 
     /**
+     * Fetches all the events, which are in the given search range
+     * 
+     * @param start
+     *            Start time of the search range
+     * @param end
+     *            End time of the search range
+     * @return List of events matched to the search range
+     */
+    public static List<Event> getEvents(Long start, Long end, Long ownerId)
+    {
+	try
+	{
+	    if (ownerId != null)
+		return dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end)
+		        .filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
+	    return dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end).list();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
      * Gets Events with respect to AgileUser.
      * 
      * @param agileUser

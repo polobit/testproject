@@ -38,16 +38,16 @@
     </div>
    
    <script src="//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js"></script>
-   <script src="https://mctest.agilecrm.com/stats/min/agile-min.js"></script>
+   <script src="http://localhost:8888/stats/min/agile-min.js"></script>
 	
 	<script type="text/javascript">
 	
-	var LIB_PATH = "https://googleapps-dot-mcsandbox-dot-agile-crm-cloud.appspot.com/";
-	// var LIB_PATH = "http://localhost:8888/";
+	//var LIB_PATH = "https://googleapps-dot-mcsandbox-dot-agile-crm-cloud.appspot.com/";
+	var LIB_PATH = "http://localhost:8888/";
 	
 	function agile_download_scripts (callback)
 	{
-		 head.js("//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js", "//ajax.aspnetcdn.com/ajax/jquery.validate/1.7/jquery.validate.js", "https://googledrive.com/host/0B_7PZgY8S6g-eDFxY0pxMlR2aWc/gadget.min.js");
+		 head.js("//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js", "//ajax.aspnetcdn.com/ajax/jquery.validate/1.7/jquery.validate.js", LIB_PATH+"misc/gmail/gadget-js-all/min/gadget.js");
 		 head.js("//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.runtime.min.js", 'https://googledrive.com/host/0B_7PZgY8S6g-eDFxY0pxMlR2aWc/tpl.js');	
 		 head.js(LIB_PATH + "jscore/handlebars/handlebars-helpers.js");	
 			

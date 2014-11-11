@@ -2323,6 +2323,12 @@ $(function()
 		return value.replace(/ +/g, '');
 
 	});
+	
+	Handlebars.registerHelper('replace_spaces', function(value)
+			{
+				return value.replace(/ +/g, '_');
+
+			});
 
 	/***************************************************************************
 	 * Returns campaignStatus object from contact campaignStatus array having
@@ -3011,6 +3017,32 @@ $(function()
 		} else {
 			return SHORT_CODE;
 		}
+	});
+
+	Handlebars.registerHelper('buildOptions', function(field_data)
+			{
+				var list_values = field_data.split(";");
+				var list_options = '';
+				// Create options based on list values
+				$.each(list_values,function(index, value){
+					if(value != "")
+						list_options = list_options.concat('<option value="'+value+'">'+value+'</option>');
+				});
+		
+				return list_options;
+			});
+	
+	/**
+	 * Choose Avatar templates
+	 */
+	Handlebars.registerHelper('get_avatars_template', function(options) {
+		var template = getTemplate("choose-avatar-images-modal", {});
+		return template;
+	});
+	
+	// To pick randomly selected avatar url
+	Handlebars.registerHelper('pick_random_avatar_url', function(options) {
+		return choose_random_avatar();
 	});
 
 });

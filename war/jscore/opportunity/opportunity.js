@@ -253,6 +253,9 @@ function setupDealsTracksList(cel){
 	
 }
 
+function setupDealFilters(cel){
+	$('#deal-list-filters').html(getTemplate('deal-filter'));
+}
 /**
  * Copy the cursor in the last model of collection to the new model while adding it to the collection. 
  * @param dealPipelineModel

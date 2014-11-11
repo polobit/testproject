@@ -37,17 +37,18 @@
                 <div style="margin-right:80px;">
                     <div class="right">
                         <div id="upload-container" messg="User image has been uploaded">
-                            <div class="clearfix">
-                                <div class="imgholder">
+                            <div class="clearfix"><a href="#choose-avatar-modal" data-toggle="modal">
+								<div class="imgholder">
                                   {{#if pic}}
                                     <img class="thumbnail" src="{{pic}}" style="height:75px!important;width:75px!important;" />
                                   {{else}}
                                     <img class="thumbnail" src="https://contactuswidget.appspot.com/images/pic.png" style="height:75px!important;width:75px!important;" />
                                   {{/if}}
-								</div>												
-                                <p>
+								</div></a>												
+                                <p style="text-align: center;">
 									<input type="hidden" id="upload_url" name="pic"/>  
-                                    <input style="margin: 10px 0px 0px;" class="upload_s3 btn" type="button" id="user_prefs_image" value="Upload"/>
+                                    <!--<input style="margin: 10px 0px 0px;" class="upload_s3 btn" type="button" id="user_prefs_image" value="Upload"/>-->
+									<a href="#choose-avatar-modal" data-toggle="modal" style="vertical-align:bottom;cursor:pointer;">Change Avatar</a>
                                 </p>
                             </div>
                         </div>
@@ -283,4 +284,37 @@
         </fieldset>
     </form>
 </div>
+
+
+<div id="choose-avatar-modal" class="modal hide fade responsive-ui-modal">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">&times;</button>
+		<h3>Avatars</h3>
+	</div>
+	<div class="modal-body choose-avatars">
+		<table>
+		 	<tbody>
+                   <input type="hidden" name="custom-avatar" value="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{/if}}{{/getCurrentUserPrefs}}">
+                   <tr>
+                     <!--<td><a href="#"><img class="thumbnail" src="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/pic.png" height="50" width="50"/></a>
+                         <p class="help-block" style="color:#999;padding-top:5px;opacity:0">For</p>
+                     </td>-->
+                     <td colspan="3" style="text-align: left;padding-top: 0px;position: relative;top: -5px;left: 5px;">
+                      	 <div id="upload-in-modal" messg="User image has been uploaded">
+							<a href="#" class="imgholder" style="width: 80px;display:inline-block;margin: 0px 0px 0px;cursor:pointer;">
+	                         	<img class="preview-avatar thumbnail" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{/if}}{{/getCurrentUserPrefs}}"  height="50" width="50"/>
+                          	</a>
+                          	<div style="margin-left:5px;vertical-align:bottom;display:inline-block;margin-left: 5px;position: relative;top: -6px;">
+                                  <input class="upload_prefs_s3 submit btn" type="submit" id="user_prefs_image" value="Upload"/>
+                          	</div>
+                         </div>
+                         <p class="help-block" style="color:#999;padding-top:5px;">Recommended image size: 50px*50px.</p>
+                     </td>
+		 		  </tr>
+				  {{{get_avatars_template}}}
+		 	</tbody>
+		</table>		   
+	</div>
+</div>
+
 </script>

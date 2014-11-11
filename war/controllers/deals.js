@@ -41,12 +41,17 @@ var DealsRouter = Backbone.Router.extend({
 			deal_fetching = false;
 			DEALS_LIST_COLLECTION = null;
 			setupDealsTracksList();
+			setupDealFilters();
 		}
 		else
 		{
 			DEALS_LIST_COLLECTION = null;
+			var query = ''
+				/*if(readCookie('deal-filters')){
+					query = '&filters='+encodeURIComponent(getDealFilters());
+				}*/
 			// Fetches deals as list
-			this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity/based?pipeline_id='+pipeline_id, templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
+			this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity/based?pipeline_id='+pipeline_id+query, templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
 				postRenderCallback : function(el)
 				{
 					if(pipeline_id == 1)
@@ -61,6 +66,7 @@ var DealsRouter = Backbone.Router.extend({
 					// Shows deals chart
 					dealsLineChartByPipeline(pipeline_id);
 					setupDealsTracksList(cel);
+					setupDealFilters(cel);
 				},
 				appendItemCallback : function(el)
 				{ 

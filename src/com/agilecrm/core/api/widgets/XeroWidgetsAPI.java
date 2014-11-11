@@ -2,6 +2,7 @@ package com.agilecrm.core.api.widgets;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Calendar;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -57,6 +58,8 @@ public class XeroWidgetsAPI
 		if (widget == null)
 			return null;
 
+		widget = checkAccesToken(widget);
+		
 		XeroUtil utilObj = new XeroUtil();
 		utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
 
@@ -97,6 +100,8 @@ public class XeroWidgetsAPI
 		Widget widget = WidgetUtil.getWidget(widgetId);
 		if (widget == null)
 			return null;
+		
+		widget = checkAccesToken(widget);
 
 		XeroUtil utilObj = new XeroUtil();
 		utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
@@ -128,6 +133,8 @@ public class XeroWidgetsAPI
 		Widget widget = WidgetUtil.getWidget(widgetId);
 		if (widget == null)
 			return null;
+		
+		widget = checkAccesToken(widget);
 
 		XeroUtil utilObj = new XeroUtil();
 		utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
@@ -152,6 +159,8 @@ public class XeroWidgetsAPI
 		Widget widget = WidgetUtil.getWidget(widgetId);
 		if (widget == null)
 			return null;
+		
+		widget = checkAccesToken(widget);
 
 		XeroUtil utilObj = new XeroUtil();
 		utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
@@ -185,7 +194,43 @@ public class XeroWidgetsAPI
 		return requestURL;
 	}
 	
-	
+	public Widget checkAccesToken(Widget widget)
+	{
+		long current_epoch_time = Calendar.getInstance().getTimeInMillis();
+		
+		try
+		{
+			JSONObject jsObj = new JSONObject(widget.prefs);
+			String accessTokenCreatedTime = (String) jsObj.get("oauth_created_time");
+			try
+			{
+				long access_token_created_time = Long.valueOf(accessTokenCreatedTime);
+				// If time diff is greater than 30min renew access token
+				if ((current_epoch_time - access_token_created_time) >= 1800000l)
+				{
+					System.out.println("Renew from agilecrm: Renewing access token....");
+					//renewAccessToken(context);
+
+					XeroUtil utilObj = new XeroUtil();
+					utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
+					return utilObj.refreshToken(widget);
+			}
+			}
+			catch (NumberFormatException e)
+			{
+				throw new Exception("Please reconfigure your Xero integration.");
+			}
+			
+		}
+
+
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		return widget;
+	}
 	
 
 }
