@@ -696,12 +696,12 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>mailhandler</servlet-name>
-		<servlet-class>com.agilecrm.MailHandlerServlet</servlet-class>
+		<servlet-name>MandrillWebhookTriggerInbound</servlet-name>
+		<servlet-class>com.thirdparty.mandrill.webhook.MandrillWebhookTriggerInbound</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>mailhandler</servlet-name>
-		<url-pattern>/_ah/mail/*</url-pattern>
+		<servlet-name>MandrillWebhookTriggerInbound</servlet-name>
+		<url-pattern>/mail/bcc</url-pattern>
 	</servlet-mapping>
 
 	<servlet>

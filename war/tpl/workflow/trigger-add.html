@@ -43,6 +43,8 @@
 										<optgroup label="Email Bounces">
 										<option value="SOFT_BOUNCE">Soft Bounce</option>
 										<option value="HARD_BOUNCE">Hard Bounce</option>
+										<optgroup label="Email Event">
+										<option value="INBOUND_MAIL_EVENT" id="inbound-mail-event">Email Event</option>
 									</select>
                                 </div>
                             </div>
@@ -101,7 +103,27 @@
 									<option value="CHECKOUT_UPDATE">Checkout updated</option>
 							</select>
 							</div>	
-						</div> 
+						</div>
+						<div id="trigger-inbound-mail-event" style="display:none;">
+						<div class="control-group">
+                    		<label class="control-label" style="width:200px!important;">From <span class="field_req">*</span></label>
+                    		<div class="controls" style="margin-left:220px!important">
+                        		<input type="text" placeholder="From" class="required" name="trigger_inbound_mail_event_from">
+                    		</div>
+                		</div>
+						<div class="control-group">
+                    		<label class="control-label" style="width:200px!important;">To <span class="field_req">*</span></label>
+                    		<div class="controls" style="margin-left:220px!important">
+                        		<input type="text" placeholder="To" class="required" name="trigger_inbound_mail_event_to">
+                    		</div>
+                		</div>
+						<div class="control-group">
+                    		<label class="control-label" style="width:200px!important;">Subject <span class="field_req">*</span></label>
+                    		<div class="controls" style="margin-left:220px!important">
+                        		<input type="text" placeholder="Subject" class="required" name="trigger_inbound_mail_event_subject">
+                    		</div>
+                		</div>
+						</div>
                         <div class="control-group">
                             <label class="control-label" style="width:200px!important;">Run this Campaign on the Contact <span class="field_req">*</span></label>
                             <div class="controls" style="margin-left:220px!important;">
