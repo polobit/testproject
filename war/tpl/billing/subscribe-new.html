@@ -374,10 +374,12 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 	{{/if}}
 </script>
 <script id="charge-model-template" type="text/html">
-	<td><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></td>	
+{{#if paid}}
+	<td class="data" data="{{invoice}}"><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></td>	
 	<td >
     	${{numeric_operation amount 100 "/"}} {{#if refunded}} - Refunded {{/if}}
 	</td>
+{{/if}}
 	
 	
 </script>

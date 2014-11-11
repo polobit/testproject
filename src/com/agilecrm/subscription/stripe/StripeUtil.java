@@ -33,6 +33,7 @@ import com.stripe.model.Charge;
 import com.stripe.model.Customer;
 import com.stripe.model.CustomerCardCollection;
 import com.stripe.model.Event;
+import com.stripe.model.Invoice;
 
 /**
  * <code>StripeUtil</code> is utility class used to process data, to support
@@ -329,6 +330,25 @@ public class StripeUtil
 			e.printStackTrace();
 		}
 
+	}
+
+	public static Invoice getInvoice(String invoice_id)
+	{
+		Stripe.apiKey = Globals.STRIPE_API_KEY;
+		try
+		{
+			Invoice invoice = Invoice.retrieve(invoice_id);
+			System.out.println("aaaaaaaaaaaaa");
+			System.out.println(invoice);
+			return invoice;
+		}
+		catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException
+				| APIException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

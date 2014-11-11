@@ -1551,6 +1551,18 @@ $(function()
 		else
 			return options.inverse(this);
 	});
+	Handlebars.registerHelper('if_not_equals', function(value, target, options)
+			{
+
+				
+				if ((typeof target === "undefined") || (typeof value === "undefined"))
+					return options.inverse(this);
+
+				if (value.toString().trim() != target.toString().trim())
+					return options.fn(this);
+				else
+					return options.inverse(this);
+			});
 
 	/**
 	 * Compares the arguments (value and target) and executes the template based
