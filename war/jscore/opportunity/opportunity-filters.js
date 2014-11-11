@@ -63,6 +63,7 @@ $(function () {
 				$(this).find('a.changeIcon').trigger('click');
 		});
 		eraseCookie('deal-filters');
+		$('#show-filter-button').removeClass('btn-primary');
 	});
 	
 	$('#filter_options a.changeIcon').live('click',function(e){$(this).find('i').toggleClass('icon-plus icon-minus')});
@@ -74,6 +75,7 @@ function setupDealFilters(cel){
 	$('#deal-list-filters').html(getTemplate('deal-filter'));
 	var el = $('#filter_options');
 	// Fills owner select element
+	
 	populateUsers("owners-list", el, undefined, undefined, function(data){
 		
 		$("#deals-filter").find("#owners-list").html(data);
@@ -119,6 +121,7 @@ function setupDealFilters(cel){
 						$('#'+key).trigger('change');
 				}
 			});
+			$('#show-filter-button').addClass('btn-primary');
 			//deserializeForm(json, $('#dealsFilterForm'));
 		}
 		// Enable the datepicker
@@ -129,7 +132,7 @@ function setupDealFilters(cel){
 			$('#pipeline').closest('.control-group').hide();
 			$('#milestone').closest('.control-group').hide();
 		}
-		
+		$('#filter_options select').find('option[value=""]').text('Any');
 	});
 	});
 }

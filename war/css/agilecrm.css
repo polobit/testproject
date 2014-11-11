@@ -1724,4 +1724,8 @@ cursor: pointer;
 #dealsCustomFilterForm .control-label {
 	font-weight: bold;
 }
+
+#show-filter-button.btn-primary {
+	min-width : 0px;
+}
 /* End of filter UI */
