@@ -77,7 +77,7 @@ function subscribeToPubNub(domain)
 			if (message.type == "CALENDER_REMINDER")
 			{
 				var html = getTemplate("event-notification", message);
-				showNoty('information', html, "bottomRight", "EVENT_REMINDER");
+				showNoty('information', html, "bottomRight", "CALENDER_REMINDER");
 				return;
 			}
 			
