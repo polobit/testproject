@@ -69,7 +69,7 @@ function setupSipAuth()
 	 * in ClickDesk widget object saveSipPrefs();
 	 */
 
-	});
+	//});
 }
 
 /**
