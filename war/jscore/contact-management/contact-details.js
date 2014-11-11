@@ -12,7 +12,7 @@ function starify(el) {
     	var contact_model  =  App_Contacts.contactDetailView.model;
     	
     	// If contact update is not allowed then start rating does not allow user to change it
-    	if(!canEditContact(App_Contacts.contactDetailView.model.get('owner').id))
+    	if(App_Contacts.contactDetailView.model.get('owner') && !canEditContact(App_Contacts.contactDetailView.model.get('owner').id))
     	{
     			$('#star', el).raty({
     			 'readOnly': true,
