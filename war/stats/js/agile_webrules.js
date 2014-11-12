@@ -50,7 +50,7 @@ function _agile_require_js(scriptURL, callback)
 		{
 			if ((!this.readyState || this.readyState === "loaded" || this.readyState === "complete"))
 			{
-				+callback();
+				callback();
 			}
 		};
 	}
