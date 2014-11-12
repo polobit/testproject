@@ -274,7 +274,7 @@ function showEventFilters(){
 		 var html = '';
 		 if(users){
 			 $.each(users,function(i,user){
-				 if(CURRENT_DOMAIN_USER.id == user.domainUser.id)
+				 if(CURRENT_DOMAIN_USER.id == user.domain_user_id)
 					 html = '<option value='+user.id+'>Me</option>';
 			 });
 			 html += '<option value="">Any</option>';
@@ -296,7 +296,7 @@ function loadDefaultFilters(){
 			 var html = '';
 			 if(users){
 				 $.each(users,function(i,user){
-					 if(CURRENT_DOMAIN_USER.id == user.domainUser.id)
+					 if(CURRENT_DOMAIN_USER.id == user.domain_user_id)
 						 {
 						 	var json = {};
 						 	json.owner_id = user.id.toString();
