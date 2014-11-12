@@ -5,6 +5,7 @@ import java.util.List;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.SendEventReminder;
 import com.agilecrm.activities.util.EventUtil;
+import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
@@ -74,6 +75,12 @@ public class EventReminderDeferredTask implements DeferredTask
 	}
 	catch (Exception e)
 	{
+	    String subject = "Exception occured in event reminder deferred task domain " + domain + " "
+		    + System.currentTimeMillis();
+	    String body = "exception occured due to " + e.getMessage();
+
+	    ContactEmailUtil.saveContactEmailAndSend("noreply@agilecrm.com", "Agile CRM", "jagadeesh@invox.com", null,
+		    null, subject, body, "-", null, false);
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 
