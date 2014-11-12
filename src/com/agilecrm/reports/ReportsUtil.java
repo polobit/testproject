@@ -19,6 +19,9 @@ import org.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.CustomFieldDef.SCOPE;
+import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.reports.deferred.ReportsInstantEmailDeferredTask;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.util.SearchUtil;
@@ -164,6 +167,22 @@ public class ReportsUtil
     public static Collection customizeContactParameters(Collection contactList, LinkedHashSet<String> fields_set)
     {
 
+	List<CustomFieldDef> fields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT,
+		com.agilecrm.contact.CustomFieldDef.Type.DATE.toString());
+
+	// Store date fields for easy verification. It is used to convert epoch
+	// times into date values
+	List<String> dateFields = new ArrayList<String>();
+
+	for (CustomFieldDef def : fields)
+	{
+	    for (String field : fields_set)
+	    {
+		if (def.field_label.equals(field))
+		    dateFields.add(field);
+	    }
+	}
+
 	List<Map<String, List<Map<String, Object>>>> newProperties = new ArrayList<Map<String, List<Map<String, Object>>>>();
 
 	for (Object contactObject : contactList)
@@ -205,15 +224,17 @@ public class ReportsUtil
 			if (contactField == null)
 			    contactField = new ContactField();
 
-			try
+			if (dateFields.contains(field_name))
 			{
-			    if (field.contains("time"))
+			    try
+			    {
 				contactField.value = SearchUtil.getDateWithoutTimeComponent(Long
 					.parseLong(contactField.value) * 1000);
-			}
-			catch (NumberFormatException e)
-			{
-
+			    }
+			    catch (NumberFormatException e)
+			    {
+				e.printStackTrace();
+			    }
 			}
 
 			customFieldJSON = new ObjectMapper().writeValueAsString(contactField);
