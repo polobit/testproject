@@ -116,6 +116,24 @@ $(function(){
 				});
 	});
 	
+	$('#activity-type-list-select-all').die().live('click',function(e){
+		e.preventDefault();
+		$('#activity-type-list').multiSelect('select_all');
+	});
+	$('#activity-type-list-select-none').die().live('click',function(e){
+		e.preventDefault();
+		$('#activity-type-list').multiSelect('deselect_all');
+	});
+	
+	$('#users-list-select-all').die().live('click',function(e){
+		e.preventDefault();
+		$('#users-list').multiSelect('select_all');
+	});
+	$('#users-list-select-none').die().live('click',function(e){
+		e.preventDefault();
+		$('#users-list').multiSelect('deselect_all');
+	});
+	
 	/** 
 	    * Deal list view edit
 	    
