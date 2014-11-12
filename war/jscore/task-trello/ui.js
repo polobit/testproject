@@ -89,6 +89,7 @@ $(function()
 		$(this).closest(".btn-group").find(".selected_name").text(name);
 
 		// Empty collection
+		if(TASKS_LIST_COLLECTION != null)
 		TASKS_LIST_COLLECTION.collection.reset();
 				
 		// Shows loading image untill data gets ready for displaying
