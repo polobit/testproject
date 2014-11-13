@@ -42,3 +42,96 @@
 	    </form>
 	</div>
 </script>
+
+
+
+<script id="settings-sms-gateway-template" type="text/html">
+	<div class="well" style="width: 300px;">
+		<form style="border-bottom: none; margin-top: -10px; margin-bottom: 0px;" id="sms-gateway-integration-form">
+			<fieldset>
+
+				<div style="position: relative; padding-top: 10px;">
+					<center>
+						<img class="thumbnail" alt="sms-integration" id="integrations-image" style="top: -5px; position: relative; height: 85px;" />
+					</center>
+				</div>
+
+				<div class="control-group" style="margin-bottom: 0px;margin-top : 20px;">
+					<div class="controls">
+						<label id="integrations-label"></label>             			
+					</div>
+				</div>
+
+				<div style="margin-bottom: 0px; padding-top: 24px;">
+					<div>
+						{{#if id}} 
+							<input type="hidden" class="input-medium required TWILIO PLIVO" style="width: 90%" name="id" value="{{id}}" />
+						{{/if}} 
+
+
+							<input type="hidden" class="input-medium required TWILIO" style="width: 90%" value="INTEGRATIONS" name="widget_type" /> 
+							<input type="hidden" class="input-medium required TWILIO PLIVO" style="width: 90%" value="SMS-Gateway" name="name" /> 
+						
+						{{#if widget_type}} 
+							<input type="hidden" class="input-medium required TWILIO PLIVO" style="width: 90%" value="This is a {{widget_type}} gateway" name="description" />
+						{{/if}}
+
+						{{#if_equals "TWILIO" sms_api}} 
+							<input type="hidden" class="input-medium required TWILIO" style="width: 90%" name="endpoint" value="https://api.twilio.com" /> 
+						{{/if_equals}} 
+
+						{{#if_equals "INTEGRATIONS" widget_type}}
+							{{#if_equals "SMS-Gateway" name}} 
+{{#if prefs}} 
+{{#stringToJSON this "prefs"}} 
+<input type="hidden" class="input-medium required TWILIO PLIVO" style="width: 90%" name="id" />
+<div class="control-group" style="margin-bottom: 0px; margin-top: -12px;">
+<div class="controls">
+<input type="text" class="input-medium required TWILIO PLIVO" style="width: 90%" placeholder={{#if_equals "TWILIO" sms_api}}"ACCOUNT SID" {{else}}"ACCOUNT ID"{{/if_equals}} name={{#if_equals "TWILIO" sms_api}}"account_sid"{{else}}"account_id"{{/if_equals}} value="{{#if_equals " TWILIO" sms_api}}{{account_sid}}{{else}}{{account_id}}{{/if_equals}}"/>
+</div>
+</div>
+<div class="control-group" style="margin-bottom: 0px;">
+<div class="controls">
+<input type="text" class="input-medium required TWILIO PLIVO" style="width: 90%; margin-top: 10px;" placeholder="Auth Token" name="auth_token" value="{{auth_token}}" id = "auth_token" />
+</div>
+</div>
+{{/stringToJSON}} {{/if}} {{/if_equals}} {{else}} {{#if id}}
+<input type="hidden" class="input-medium required TWILIO PLIVO" style="width: 90%" name="id" />{{/if}}
+<div class="control-group" style="margin-bottom: 0px;">
+<div class="controls">
+<input type="text" class="input-medium required TWILIO PLIVO" style="width: 90%;margin-top: -12px;" placeholder="ACCOUNT SID" id="accoundID" />
+</div>
+</div>
+<div class="control-group" style="margin-bottom: 0px;">
+<div class="controls">
+<input type="text" class="input-medium required TWILIO PLIVO" style="width: 90%; margin-top: 10px" placeholder="Auth Token" name="auth_token" id = "auth_token" />
+</div>
+</div>
+{{/if_equals}}
+</div>
+</div>
+<div id="sms-integration-error">
+<p style="margin: 10px 0px 5px 0px;">
+<a type="submit" href="#" class="save btn btn-primary" style="text-decoration: none; padding: 4px 5px;">Save</a> 
+<a type="reset" class="btn" href="#integrations" style="text-decoration: none;">Cancel</a>
+</p>
+</div>
+</fieldset>
+</form>
+</div>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
