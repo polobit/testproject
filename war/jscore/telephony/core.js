@@ -94,7 +94,7 @@ function sipRegister()
 				if (window.location.protocol != "https:")
 					url = "ws://54.83.12.176:10060"; // http
 				else
-					url = "wss://54.83.12.176:10060"; // https
+					url = "wss://54.83.12.176:10062"; // https
 			}
 
 			// Define sip stack
