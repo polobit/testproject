@@ -45,7 +45,7 @@ public class EmailBillingRestriction extends DaoBillingRestriction
 
 	// Gets maximum allowed contacts in current plan
 	max_allowed = restriction.max_emails_count == null ? 0 : restriction.max_emails_count;
-	emails = restriction.one_time_emails_count;
+	emails = restriction.one_time_emails_count == null ? 0 : restriction.one_time_emails_count;
     }
 
     @Override
