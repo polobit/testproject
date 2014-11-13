@@ -32,7 +32,7 @@ public class EventReminder
     {
 
 	EventReminderDeferredTask eventReminderDeferredTask = new EventReminderDeferredTask(domain, starttime);
-	Queue queue = QueueFactory.getQueue("event-reminder");
+	Queue queue = QueueFactory.getQueue("event-reminder-queue");
 	TaskOptions options = TaskOptions.Builder.withPayload(eventReminderDeferredTask);
 	queue.add(options);
 
