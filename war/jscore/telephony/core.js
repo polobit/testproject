@@ -92,9 +92,11 @@ function sipRegister()
 			{
 				console.log(window.location.protocol);
 				if (window.location.protocol != "https:")
-					url = "ws://54.83.12.176:10060"; // http
+					//url = "ws://54.83.12.176:10060/ws"; // http
+					url = "ws://rtc.agilecrm.com:10060/ws"; 
 				else
-					url = "wss://54.83.12.176:10062"; // https
+					url = "wss://rtc.agilecrm.com:10062/wss"; 
+					//url = "wss://54.83.12.176:10062/wss"; // https
 			}
 
 			// Define sip stack
