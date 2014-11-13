@@ -14,21 +14,15 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
-
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
-import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
-import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -64,11 +58,17 @@ public class SubscriptionApi
     public Subscription getsubscription(@QueryParam("reload") boolean reload) throws StripeException
     {
 
+	Subscription subscription = null;
+
 	// If reload is set customer object is fetched from stripe
 	if (reload)
-	    return SubscriptionUtil.getSubscription(true);
+	    subscription = SubscriptionUtil.getSubscription(true);
 
-	return SubscriptionUtil.getSubscription();
+	subscription = SubscriptionUtil.getSubscription();
+
+	subscription.cachedData = BillingRestrictionUtil.getBillingRestriction(null, null);
+
+	return subscription;
     }
 
     /**
@@ -112,13 +112,13 @@ public class SubscriptionApi
 		    return subscribe;
 		}
 	    }
-		/*
-		 * If credit_card details and plan details are not null then it
-		 * is new subscription
-		 */
-	    
-		else if (subscribe.card_details != null && subscribe.plan != null)
-		    subscribe = subscribe.createNewSubscription();
+	    /*
+	     * If credit_card details and plan details are not null then it is
+	     * new subscription
+	     */
+
+	    else if (subscribe.card_details != null && subscribe.plan != null)
+		subscribe = subscribe.createNewSubscription();
 
 	    // Sets plan in session
 	    BillingRestrictionUtil.setPlanInSession(subscribe.plan);
@@ -257,7 +257,7 @@ public class SubscriptionApi
 		    .build());
 	}
     }
-    
+
     /**
      * Fetches invoices of subscription details
      * 
@@ -273,18 +273,18 @@ public class SubscriptionApi
 	    String customerJSONString = null;
 	    try
 	    {
-		 List<Charge> list =  StripeUtil.getCharges(customerId, Integer.parseInt(page_size));
-		 
+		List<Charge> list = StripeUtil.getCharges(customerId, Integer.parseInt(page_size));
+
 		// Gets customer JSON string from customer object
-		 customerJSONString = new Gson().toJson(list);
-		 return customerJSONString;
+		customerJSONString = new Gson().toJson(list);
+		return customerJSONString;
 	    }
-	    catch(NumberFormatException e)
+	    catch (NumberFormatException e)
 	    {
 		e.printStackTrace();
 		// return StripeUtil.getCharges(customerId);
 	    }
-	   return customerJSONString;
+	    return customerJSONString;
 	}
 	catch (Exception e)
 	{
@@ -292,8 +292,6 @@ public class SubscriptionApi
 		    .build());
 	}
     }
-    
-    
 
     /**
      * Deletes subscription object of the domain and deletes related customer
