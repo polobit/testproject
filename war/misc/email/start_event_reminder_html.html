@@ -8,7 +8,7 @@
 					<tbody>
 						<tr>
 							<td valign="middle" height="32px"
-								style="padding: 0; color: white">{{#events}}Event Reminder : {{title}} @ {{date}}{{/events}}</td>
+								style="padding: 0; color: white">Event Reminder</td>
 							</td>
 						</tr>
 					</tbody>
@@ -20,10 +20,10 @@
 					
 					<tbody>
 						{{#events}}
-						<tr><td><div style="margin-top:36px;margin-bottom:-15px">What :</div></td><td><div style="margin-top:32px;">{{title}}</div></td></tr>
-						<tr><td><div style="margin-top:36px;margin-bottom:36px">When :</div></td><td><div style="margin-right:30px">{{date}}</div></td></tr>
-						<tr></tr>
-						<tr><td style="vertical-align: top;margin-top:-20px"><div>Who :</div></td><td>{{#related_contacts}}
+				<tr><td style="line-height:43px;">What&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td><td>{{title}}</td></tr>
+				<tr><td style="line-height:43px;">When&nbsp;&nbsp;&nbsp;&nbsp;: </td><td>{{date}}</td></tr>
+				{{#related}}
+					<tr><td style="vertical-align:top;line-height:43px;">Who&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</td><td style="vertical-align: top;margin-top:-20px">{{#related_contacts}} 
 						   		<div style="margin-right:30px">{{#owner.domain}}
 						   			<a href="https://{{owner.domain}}.agilecrm.com/#contact/{{/owner.domain}}
 						   		{{^owner.domain}}
@@ -54,7 +54,7 @@
 						   			
 						   			<span style="vertical-align: top;padding-top: 15px;display: inline-block;padding-left: 5px;">{{#first_name}}{{value}}{{/first_name}}{{#last_name}} {{value}}{{/last_name}}{{#name}}{{value}}{{/name}}</span>
 						   		
-						   		</a></div>{{/related_contacts}}</td></tr>
+						   		</a></div>{{/related_contacts}}</td></tr>{{/related}}
 						{{/events}}
 				
 					</tbody>

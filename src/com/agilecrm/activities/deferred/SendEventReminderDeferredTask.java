@@ -146,6 +146,11 @@ public class SendEventReminderDeferredTask implements DeferredTask
 
 		    }
 		    currentEvent.put("related_contacts", contactListMap);
+		    if (currentEvent.get("related_contacts") != null && currentEvent.size() > 0)
+		    {
+			currentEvent.put("related", true);
+		    }
+
 		    HashMap<String, Object> map = new HashMap<String, Object>();
 		    map.put("events", eventListMap);
 
