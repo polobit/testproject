@@ -236,6 +236,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    JSONObject lines = obj.getJSONObject("lines");
 	    JSONObject data = lines.getJSONArray("data").getJSONObject(0);
 
+	    System.out.println(data);
 	    if (data.has("quantity"))
 		plan.put("quantity", data.get("quantity"));
 
