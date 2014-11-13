@@ -15,6 +15,7 @@ function startMakingCollection(criteria, pending)
 	// Hide list view and show column view
 	$('#new-task-list-based-condition').show();
 	$('#task-list-based-condition').hide();
+	$('.tasks-count').html("");
 	
 	// Shows loading image untill data gets ready for displaying
 	$('#new-task-list-based-condition').html(LOADING_HTML);
