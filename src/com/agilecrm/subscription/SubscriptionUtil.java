@@ -196,7 +196,9 @@ public class SubscriptionUtil
 	if (subscription.isFreeEmailPack())
 	    return false;
 
-	if (subscription.emailPlan == null || !subscription_id.equals(subscription.emailPlan))
+	// If subscription is not equal then subscription in changed not
+	// canceled
+	if (!subscription_id.equals(subscription.emailPlan))
 	{
 	    return false;
 	}
