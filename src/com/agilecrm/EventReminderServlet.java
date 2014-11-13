@@ -40,7 +40,7 @@ public class EventReminderServlet extends HttpServlet
 	    domainsset.add("our");
 
 	    // Start a task queue for each domain
-	    for (String domain : domains)
+	    for (String domain : domainsset)
 	    {
 
 		EventReminder.getEventReminder(domain, null);

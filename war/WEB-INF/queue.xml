@@ -40,7 +40,14 @@
 		<task-retry-limit>0</task-retry-limit>
 	</retry-parameters>
   </queue>
- 
+  <queue>
+    <name>event-reminder-queue</name>
+    <rate>5/s</rate>
+    <max-concurrent-requests>5</max-concurrent-requests>
+    <retry-parameters>
+		<task-retry-limit>2</task-retry-limit>
+	</retry-parameters>
+  </queue>
   <queue>
   	<name>cron-queue</name>
     <rate>5/s</rate>
