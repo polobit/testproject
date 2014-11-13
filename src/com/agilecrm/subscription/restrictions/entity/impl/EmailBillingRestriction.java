@@ -26,6 +26,11 @@ public class EmailBillingRestriction extends DaoBillingRestriction
     public boolean check()
     {
 	emails = restriction.one_time_emails_count;
+
+	// To avoid NullPointerException
+	max_allowed = Integer.valueOf(max_allowed) == null ? 0 : max_allowed;
+	emails = emails == null ? 0 : emails;
+
 	// TODO Auto-generated method stub
 	if (max_allowed == 0 && (emails <= 0 && emails >= -5000))
 	    return true;
