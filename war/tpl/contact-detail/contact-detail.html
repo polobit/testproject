@@ -72,7 +72,7 @@
 								<div class="clearfix"></div>
 								<div class="contact-title">
 							<div class="contact-job-title contact-overflow-ellipsis">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}</div>
-								<div> {{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}</div>
+								<div style="padding:0 2px"> {{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}</div>
 
 <div class="contact-company-name contact-overflow-ellipsis">								
 {{#if contact_company_id}} 
@@ -246,14 +246,14 @@
 </span>
 
 <span
-							id="contact-owner contact-owner-name" data={{owner.id}}
-							style="display: inline-block" class="contact-owner-name">{{owner.name}}</span> <span class="contact-owner-edit" style="display:none;">
+							id="contact-owner" data={{owner.id}}
+							style="display: inline-block" class="contact-owner-name change-owner-element">{{owner.name}}</span> <span class="contact-owner-edit" style="display:none;">
 						{{#canEditContact owner.id}}
-								<a href="#"> <i class="icon-edit"
+								<!--<a href="#"> <i class="icon-edit"
 									style="vertical-align: middle;" rel="popover"
 									data-placement="top" data-title="Lead Owner"
 									data-content="Click here to change owner."
-									id="change-owner-element" data-trigger="hover"></i></a>
+									id="change-owner-element" data-trigger="hover"></i></a>-->
 						</span>
 							<div class="btn-group" id="change-owner-ul"
 								style="vertical-align: middle; display: none">
@@ -374,13 +374,13 @@
 						<div class="widget_header">
 							<div class="pull-left"
 								style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: 18em">
-								<i class="icon-user "></i>Contact
-									<span>{{getPropertyValue properties "first_name"}}</span>
+								<i class="icon-user " style="font-size:18px"></i>Contact
+									<span style="text-transform:capitalize;">{{getPropertyValue properties "first_name"}}</span>
 							</div>
 						</div>
 						<!-- <div id="qrcode"><img src="img/1-0.gif"></div> -->
 						<!-- For refreshing the contact in the model list -->
-						<div id="refresh_contact" style="display:none;margin: 0px 25px;">This contact has been updated[
+						<div id="refresh_contact" style="display:none;margin: 0px 23px;font-size:13px;">This contact has been updated[
 							<a id="action_refresh_contact" style="cursor:pointer;">
 								<i class="icon-refresh" rel="popover" data-placement="top" data-title="Refresh Contact" data-content="Click to get updated contact details." data-trigger="hover"></i>
 							</a>]
@@ -440,7 +440,7 @@
 									{{#each this}}
 
 <div class="pull-left contact-email-icon" style="margin-right:7px;"><i class="icon icon-envelope" style="font-size:13px;"></i></div>
-										<div class="pull-left contact-rightpanel-ellipsis" style="margin-bottom:4px;">
+										<div class="pull-left contact-email-multiline" style="margin-bottom:4px;">
 											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label">{{subtype}}</span> {{/if}}
 										</div>
 
@@ -487,8 +487,8 @@
 										<div >
 											{{#address_Element properties}}{{/address_Element}}</div>
 
-										<div class="pull-left row-fluid" style="margin-left:20px;margin-top:12px;">
-											<div id="map" style="width: auto; height: 200px; display: none; margin:0px 0px 0px;">
+										<div class="pull-left row-fluid" style="margin-left:30px;margin-top:12px;width:245px;">
+											<div id="map" style="width:auto; height: 200px; display: none; margin:0px 0px 0px;">
 											</div>
 										</div>
 
@@ -506,7 +506,7 @@
                            
 							
 
-							<div id="widgets"></div>
+							<div id="widgets" style="margin-top:10px;"></div>
 
 							
 
