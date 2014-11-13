@@ -178,8 +178,12 @@ public class ReportsUtil
 	{
 	    for (String field : fields_set)
 	    {
-		if (def.field_label.equals(field))
-		    dateFields.add(field);
+		if (!field.contains("custom"))
+		    continue;
+
+		String field_name = field.split("custom_")[1];
+		if (def.field_label.equals(field_name))
+		    dateFields.add(field_name);
 	    }
 	}
 
@@ -265,10 +269,20 @@ public class ReportsUtil
 		    try
 		    {
 			contactJSON = new JSONObject(mapper.writeValueAsString(contact));
-			fieldValue = contactJSON.get(field).toString();
 
-			if (field.contains("time"))
-			    fieldValue = SearchUtil.getDateWithoutTimeComponent(Long.parseLong(fieldValue) * 1000);
+			if ("lead_owner".equals(field))
+			{
+			    JSONObject owner = contactJSON.getJSONObject("owner");
+			    fieldValue = owner.getString("name");
+			}
+			else
+			{
+			    fieldValue = contactJSON.get(field).toString();
+
+			    if (field.contains("time"))
+				fieldValue = SearchUtil.getDateWithoutTimeComponent(Long.parseLong(fieldValue) * 1000);
+			}
+
 		    }
 		    catch (Exception e)
 		    {
