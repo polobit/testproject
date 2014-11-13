@@ -246,6 +246,12 @@ public class EventUtil
 	}
     }
 
+    /**
+     * fetches the latest events to send event reminders
+     * 
+     * @param starttime
+     * @return
+     */
     public static List<Event> getLatestEvents(Long starttime)
     {
 	int duration = 3600;
@@ -275,6 +281,12 @@ public class EventUtil
 	return null;
     }
 
+    /**
+     * fetches the events which are starting at same time
+     * 
+     * @param starttime
+     * @return
+     */
     public static List<Event> getLatestWithSameStartTime(Long starttime)
     {
 
@@ -286,18 +298,7 @@ public class EventUtil
 	{
 	    for (Event event : domain_events)
 	    {
-		if (event.color.equals("#36C"))
-		{
-		    event.color = "Normal";
-		}
-		else if (event.color.equals("red"))
-		{
-		    event.color = "High";
-		}
-		else if (event.color.equals("green"))
-		{
-		    event.color = "Low";
-		}
+		event.date = event.start;
 	    }
 	}
 	return domain_events;

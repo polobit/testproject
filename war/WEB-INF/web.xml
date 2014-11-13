@@ -271,6 +271,15 @@
 		<servlet-name>EventReminder</servlet-name>
 		<url-pattern> /backend/cron/events</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>FailedDomainEventReminder</servlet-name>
+		<servlet-class>com.agilecrm.FailedDomainEventReminderServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FailedDomainEventReminder</servlet-name>
+		<url-pattern> /backend/faileddomaineventreminder</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>AccountLimitChecker</servlet-name>

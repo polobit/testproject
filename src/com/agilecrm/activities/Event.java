@@ -91,6 +91,12 @@ public class Event
     public Long created_time = 0L;
 
     /**
+     * date field to mustach template of the event
+     */
+    @NotSaved
+    public Long date;
+
+    /**
      * Related Contact
      */
     @NotSaved(IfDefault.class)

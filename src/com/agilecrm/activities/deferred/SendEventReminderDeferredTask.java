@@ -1,5 +1,6 @@
 package com.agilecrm.activities.deferred;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +15,6 @@ import com.agilecrm.activities.EventReminder;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
@@ -22,6 +22,7 @@ import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.thirdparty.PubNub;
+import com.thirdparty.mandrill.Mandrill;
 
 @SuppressWarnings("serial")
 public class SendEventReminderDeferredTask implements DeferredTask
@@ -123,8 +124,9 @@ public class SendEventReminderDeferredTask implements DeferredTask
 			        + domain + " " + System.currentTimeMillis();
 			String body = "exception occured due to " + e.getMessage();
 
-			ContactEmailUtil.saveContactEmailAndSend("noreply@agilecrm.com", "Agile CRM",
-			        "jagadeesh@invox.com", null, null, subject, body, "-", null, false);
+			Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com",
+			        "event-reminder-failure", "jagadeesh@invox.com", null, null, subject, null, body, null,
+			        null);
 			EventReminder.getEventReminder(domain, starttime);
 		    }
 		    Map<String, Object> currentEvent = eventListMap.get(0);
@@ -162,9 +164,17 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    + domain + " " + System.currentTimeMillis();
 	    String body = "exception occured due to " + e.getMessage();
 
-	    ContactEmailUtil.saveContactEmailAndSend("noreply@agilecrm.com", "Agile CRM", "jagadeesh@invox.com", null,
-		    null, subject, body, "-", null, false);
-
+	    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "event-reminder-failure",
+		    "jagadeesh@invox.com", null, null, subject, null, body, null, null);
+	    try
+	    {
+		EventReminder.getEventReminder(domain, starttime);
+	    }
+	    catch (IOException e1)
+	    {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	    }
 	}
 
     }

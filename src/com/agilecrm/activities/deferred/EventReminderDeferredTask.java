@@ -5,16 +5,16 @@ import java.util.List;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.SendEventReminder;
 import com.agilecrm.activities.util.EventUtil;
-import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
+import com.thirdparty.mandrill.Mandrill;
 
 /**
- * <code>TaskReminderDeferredTask</code> implements google appengene's
- * DeferredTask interface and overrides it's run method to send daily reminder
- * (an email) about the pending tasks.
+ * <code>EventReminderDeferredTask</code> implements google appengene's
+ * DeferredTask interface and overrides it's run method to send event reminder
+ * (an email) and pubnub notification before 10mins to event start time.
  * 
- * @author Rammohan
+ * @author Jagadeesh
  * 
  */
 @SuppressWarnings("serial")
@@ -28,10 +28,10 @@ public class EventReminderDeferredTask implements DeferredTask
     Long starttime = null;
 
     /**
-     * Default constructor, assigns domain name
      * 
      * @param domain
-     *            name as string
+     * @param starttime
+     *            fetches the evnets based on start time
      */
     public EventReminderDeferredTask(String domain, Long starttime)
     {
@@ -40,11 +40,9 @@ public class EventReminderDeferredTask implements DeferredTask
     }
 
     /**
-     * Fetches all the domain users within the domain and send email to those
-     * users having due tasks of that day, if that user activates to receive
-     * emails.
-     * 
-     **/
+     * fetches the events based on start time and send start time to
+     * <SendEventReminderDeferredTask> to set ETA
+     */
     public void run()
     {
 	String oldNamespace = NamespaceManager.get();
@@ -79,8 +77,8 @@ public class EventReminderDeferredTask implements DeferredTask
 		    + System.currentTimeMillis();
 	    String body = "exception occured due to " + e.getMessage();
 
-	    ContactEmailUtil.saveContactEmailAndSend("noreply@agilecrm.com", "Agile CRM", "jagadeesh@invox.com", null,
-		    null, subject, body, "-", null, false);
+	    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "event-reminder-failure",
+		    "jagadeesh@invox.com", null, null, subject, null, body, null, null);
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 

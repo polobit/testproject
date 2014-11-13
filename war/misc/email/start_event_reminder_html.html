@@ -8,7 +8,7 @@
 					<tbody>
 						<tr>
 							<td valign="middle" height="32px"
-								style="padding: 0; color: white">Upcoming Event</td>
+								style="padding: 0; color: white">{{#events}}Event Reminder : {{title}} @ {{date}}{{/events}}</td>
 							</td>
 						</tr>
 					</tbody>
@@ -16,59 +16,45 @@
 			</div>
 			<div
 				style="font-size: 14px; background-color: #fff; padding: 10px 7px 7px 7px">
-				<p>*****This is an automated email. Please do not reply*****</p>
-				<table width="100%" cellpadding="5" cellspacing="0" style:"margin-top:-40px;">
-					<thead>
-						<tr bgcolor="#CCCCCC">
-							<th align="left" style="font-size: 12px"><strong>Title</strong></th>
-							<th align="left" style="font-size: 12px"><strong>Priority</strong></th>
-							<th align="left" style="font-size: 12px"><strong>Related To</strong></th>
-		      			</tr>
-					</thead>
+				<table width="100%" cellpadding="5" cellspacing="0" style="margin-top:-40px;">
+					
 					<tbody>
 						{{#events}}
-						<tr>
-						   <td align="left" style="font-size: 12px;width:40%;color:#000;vertical-align:top;text-align:justify;border-bottom:1px solid #e6e6e6;padding:5px 8px 0px 5px;">{{{title}}}</td>
-						   <td align="left" style="font-size: 12px;width:5%;color:#000;vertical-align:top;border-bottom:1px solid #e6e6e6;padding:5px 8px 0px 5px;">{{color}}</td>
-						   <td align="left" style="font-size: 12px;width:50%;color:#000;vertical-align:top;position:relative; text-align: left;border-bottom:1px solid #e6e6e6;padding:5px 8px 0px 5px; ">
-						   		{{#related_contacts}}
-						   		
-						   		<div style="display:inline-table;float:left;margin:2px 10px 10px 0px;width:75px;">
-						   		
-						   		{{#owner.domain}}
+						<tr><td><div style="margin-top:36px;margin-bottom:-15px">What :</div></td><td><div style="margin-top:32px;">{{title}}</div></td></tr>
+						<tr><td><div style="margin-top:36px;margin-bottom:36px">When :</div></td><td><div style="margin-right:30px">{{date}}</div></td></tr>
+						<tr></tr>
+						<tr><td style="vertical-align: top;margin-top:-20px"><div>Who :</div></td><td>{{#related_contacts}}
+						   		<div style="margin-right:30px">{{#owner.domain}}
 						   			<a href="https://{{owner.domain}}.agilecrm.com/#contact/{{/owner.domain}}
 						   		{{^owner.domain}}
 						   			<a href="http://localhost:8888#contact/{{/owner.domain}}{{id}}" target="_blank" style="text-decoration:none;">
 						   			{{#image}}
-						   				<img style="width:40px; height:40px; max-width:40px; max-height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px; " src="{{value}}"
+						   				<img style="width:40px; height:40px; max-width:40px; max-height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px; " src="{{value}}" title="{{#first_name}}{{value}}{{/first_name}}{{#last_name}} {{value}}{{/last_name}}"/>
+						   				
 						   			{{/image}}
-						   			
 						   			{{^image}}
 						   				{{#first_name}}
-						   					<img style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;" src="https://secure.gravatar.com/avatar/afbd1e5924d99dd19fcd0bb016e25a34.jpg?s=80&d=https%3A//dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png"
+						   					<img style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;" src="https://secure.gravatar.com/avatar/afbd1e5924d99dd19fcd0bb016e25a34.jpg?s=80&d=https%3A//dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png" title="{{#first_name}}{{value}}{{/first_name}}{{#last_name}} {{value}}{{/last_name}}"/>
 						   				{{/first_name}}
 						   				{{^first_name}}
 						   					{{#url}}
-						   						<img style="width:32px; height:32px; padding:8px; border: 1px solid #ddd; border-radius: 5px; " src="https://www.google.com/s2/favicons?domain={{value}}"
+						   						<img style="width:32px; height:32px; padding:8px; border: 1px solid #ddd; border-radius: 5px; " src="https://www.google.com/s2/favicons?domain={{value}}" title="{{#name}}{{value}}{{/name}}"/>
 						   					{{/url}}
 						   					{{^url}}
 						   						{{#owner.domain}}
-						   						<img src="https://{{owner.domain}}.agilecrm.com/img/company.png" style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;"
+						   						<img src="https://{{owner.domain}}.agilecrm.com/img/company.png" style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;"  title="{{#first_name}}{{value}}{{/first_name}}{{#last_name}} {{value}}{{/last_name}}{{#name}}{{value}}{{/name}}"/>
 						   						{{/owner.domain}}
 						   						{{^owner.domain}}
-						   						<img style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;"
+						   						<img style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;" title="{{#first_name}}{{value}}{{/first_name}}{{#last_name}} {{value}}{{/last_name}}{{#name}}{{value}}{{/name}}" />
 						   						{{/owner.domain}}
 						   					{{/url}}
 						   				{{/first_name}}
 						   			{{/image}}
 						   			
-						   			title="{{#first_name}}{{value}}{{/first_name}}{{#last_name}} {{value}}{{/last_name}}{{#name}}{{value}}{{/name}}"
-						   			/><span style="display:block;overflow:hidden;color:#000;text-overflow:ellipsis;white-space:nowrap;width:70px;">{{#first_name}}{{value}}{{/first_name}}{{#last_name}} {{value}}{{/last_name}}{{#name}}{{value}}{{/name}}</span>
-						   			</a>
-						   		</div>		
-						   		{{/related_contacts}}
-						   </td>
-						</tr>
+						   			
+						   			<span style="vertical-align: top;padding-top: 15px;display: inline-block;padding-left: 5px;">{{#first_name}}{{value}}{{/first_name}}{{#last_name}} {{value}}{{/last_name}}{{#name}}{{value}}{{/name}}</span>
+						   		
+						   		</a></div>{{/related_contacts}}</td></tr>
 						{{/events}}
 				
 					</tbody>

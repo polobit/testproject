@@ -9,15 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.activities.EventReminder;
-import com.agilecrm.activities.TaskReminder;
 import com.agilecrm.util.NamespaceUtil;
 
 /**
- * <code>TaskReminderServlet</code> is the servlet for handling cron requests of
- * Tasks Reminder. It calls {@link TaskReminder} to send task reminder emails to
- * the respective users.
+ * <code>EventReminderServlet</code> is the servlet for handling cron requests
+ * of Event Reminder. It calls {@link EventReminder} to send event reminder
+ * emails to the respective users.
  * 
- * @author Naresh
+ * @author Jagadeesh
  * 
  */
 @SuppressWarnings("serial")
@@ -38,9 +37,10 @@ public class EventReminderServlet extends HttpServlet
 	    Set<String> domainsset = new HashSet<>();
 	    domainsset.add("jagadeesh");
 	    domainsset.add("test800");
+	    domainsset.add("our");
 
 	    // Start a task queue for each domain
-	    for (String domain : domainsset)
+	    for (String domain : domains)
 	    {
 
 		EventReminder.getEventReminder(domain, null);
