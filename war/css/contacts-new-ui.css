@@ -129,6 +129,10 @@ font-size: 13px;
 /*padding-top:8px;*/
 padding-bottom:5px;
 }
+.contact-addressview .icon-map-marker
+{
+margin-left:3px;	
+}
 .contact-custom-lastfield
 {
 	color:#888;
@@ -264,6 +268,7 @@ white-space: nowrap;
 text-overflow: ellipsis;
 overflow: hidden;
 width: auto;
+cursor:pointer;
 /*margin-left: 4px;*/
 }
 .contact-owner-edit

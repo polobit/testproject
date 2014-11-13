@@ -72,7 +72,7 @@
 								<div class="clearfix"></div>
 								<div class="contact-title">
 							<div class="contact-job-title contact-overflow-ellipsis">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}</div>
-								<div style="padding:0 2px"> {{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}</div>
+								<div style="padding:0 4px 0 0px"> {{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}</div>
 
 <div class="contact-company-name contact-overflow-ellipsis">								
 {{#if contact_company_id}} 
@@ -457,7 +457,7 @@
 <div class="custom-data"> {{#getContactCustomPropertiesExclusively
 								properties}}
 								<div>
-					<div class="contact-custom-icon pull-left" style="width: 10%;"><i class="icon icon-info-sign" style="font-size: 13px;"></i></div>			
+					<div class="contact-custom-icon pull-left" style="width:25px;"><i class="icon icon-info-sign" style="font-size: 13px;margin-left:2px;"></i></div>			
 								<div class="pull-left" style="width:90%;line-height:21px;">
 									{{#each_with_index this}}
 										
@@ -487,7 +487,7 @@
 										<div >
 											{{#address_Element properties}}{{/address_Element}}</div>
 
-										<div class="pull-left row-fluid" style="margin-left:30px;margin-top:12px;width:245px;">
+										<div class="pull-left row-fluid" style="margin-left:27px;margin-top:12px;width:245px;">
 											<div id="map" style="width:auto; height: 200px; display: none; margin:0px 0px 0px;">
 											</div>
 										</div>
