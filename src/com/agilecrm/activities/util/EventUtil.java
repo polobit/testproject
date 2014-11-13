@@ -298,10 +298,24 @@ public class EventUtil
 	{
 	    for (Event event : domain_events)
 	    {
-		event.date = event.start;
+		event.date = getHumanTimeFromEppoch(event.start);
 	    }
 	}
 	return domain_events;
 
+    }
+
+    /**
+     * converts eppoch to server timezone
+     * 
+     * @param epoch
+     * @return
+     */
+    public static String getHumanTimeFromEppoch(Long epoch)
+    {
+	String date = new java.text.SimpleDateFormat("MMMM d yyyy, h:mm a (z)")
+	        .format(new java.util.Date(epoch * 1000));
+
+	return date;
     }
 }

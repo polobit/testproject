@@ -56,8 +56,9 @@
 
 <script id="event-notification-template" type="text/html">
 <div>
+<span type="hidden">Event Notification</span>
 <span style="float:left;">
-	{{eventname}} coming up at <time class="time-ago" datetime="{{epochToHumanDate "" start}}">{{epochToHumanDate "h:MM TT" start}}</time>
+	{{title}} coming up at <time class="time-ago" datetime="{{epochToHumanDate "" start}}">{{epochToHumanDate "h:MM TT" start}}</time>
 </span>
 </div>
 </script>

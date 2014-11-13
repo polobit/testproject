@@ -94,7 +94,7 @@ public class Event
      * date field to mustach template of the event
      */
     @NotSaved
-    public Long date;
+    public String date;
 
     /**
      * Related Contact
