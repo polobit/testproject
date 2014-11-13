@@ -43,7 +43,7 @@ public class EmailUtil
 
 	// Comment script tags.
 	emailBody = emailBody.replaceAll("(<script|<SCRIPT)", "<!--<script").replaceAll("(</script>|</SCRIPT>)",
-		"<script>-->");
+	        "<script>-->");
 
 	// If emailBody is text, replace '\n' with <br> is enough
 	if (!(emailBody.contains("</")))
@@ -162,7 +162,7 @@ public class EmailUtil
 	    queryParams += "s=" + trackerId;
 
 	String trackingImage = "<div class=\"ag-img\"><img src=\"https://" + NamespaceManager.get()
-		+ ".agilecrm.com/open?" + queryParams + "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
+	        + ".agilecrm.com/open?" + queryParams + "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
 
 	return html + trackingImage;
     }
@@ -177,7 +177,7 @@ public class EmailUtil
     public static String getPoweredByAgileURL(String medium)
     {
 	return "https://www.agilecrm.com?utm_source=powered-by&utm_medium=" + medium + "&utm_campaign="
-		+ NamespaceManager.get();
+	        + NamespaceManager.get();
     }
 
     /**
@@ -188,7 +188,7 @@ public class EmailUtil
     public static String getPoweredByAgileLink(String medium, String labelText)
     {
 	return labelText + " <a href=\"" + getPoweredByAgileURL(medium)
-		+ "\" target=\"_blank\" style=\"text-decoration:none;\" rel=\"nofollow\"> Agile</a>";
+	        + "\" target=\"_blank\" style=\"text-decoration:none;\" rel=\"nofollow\"> Agile</a>";
     }
 
     /**

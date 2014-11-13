@@ -8,9 +8,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.util.AccountEmailStatsUtil;
+import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.util.HttpClientUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.taskqueue.TaskHandle;
 import com.thirdparty.SendGrid;
 
@@ -43,7 +47,7 @@ public class SendGridUtil
      * 
      * @param tasks
      */
-    public static void sendSendGridMails(List<TaskHandle> tasks)
+    public static void sendSendGridMails(List<TaskHandle> tasks, EmailSender emailSender)
     {
 	try
 	{
@@ -63,12 +67,25 @@ public class SendGridUtil
 	    for (TaskHandle task : tasks)
 	    {
 		MailDeferredTask mailDeferredTask = (MailDeferredTask) SerializationUtils
-		        .deserialize(task.getPayload());
+			.deserialize(task.getPayload());
+
+		// Creates log for sending email
+		if (!StringUtils.isBlank(mailDeferredTask.campaignId)
+			&& !StringUtils.isBlank(mailDeferredTask.subscriberId))
+		{
+		    LogUtil.addLogToSQL(mailDeferredTask.campaignId, mailDeferredTask.subscriberId, "Subject: "
+			    + mailDeferredTask.subject, LogType.EMAIL_SENT.toString());
+		}
+
+		// Set emails sent count
+		if (emailSender != null)
+		    emailSender.setCount(AccountEmailStatsUtil.getEmailsTotal(mailDeferredTask.to, mailDeferredTask.cc,
+			    mailDeferredTask.bcc));
 
 		// If same To email or CC or BCC exists, send email without
 		// merging
 		if (!StringUtils.isBlank(mailDeferredTask.cc) || !StringUtils.isBlank(mailDeferredTask.bcc)
-		        || isToExists(toArray, mailDeferredTask.to) || mailDeferredTask.to.contains(","))
+			|| isToExists(toArray, mailDeferredTask.to) || mailDeferredTask.to.contains(","))
 		{
 		    sendWithoutMerging(mailDeferredTask);
 		    continue;
@@ -86,7 +103,7 @@ public class SendGridUtil
 		to += mailDeferredTask.to + ",";
 
 		if (toArray.length() > MandrillUtil.MIN_TO_EMAILS
-		        && htmlArray.toString().length() >= MandrillUtil.MAX_CONTENT_SIZE)
+			&& htmlArray.toString().length() >= MandrillUtil.MAX_CONTENT_SIZE)
 		{
 		    tempArray.put(new JSONObject().put("to", to).put("to_list", toArray)
 			    .put("subject_list", subjectArray).put("html_list", htmlArray).put("text_list", textArray));
@@ -104,7 +121,7 @@ public class SendGridUtil
 	    // Append those not exceeded
 	    if (toArray.length() != 0)
 		tempArray.put(new JSONObject().put("to", to).put("to_list", toArray).put("subject_list", subjectArray)
-		        .put("html_list", htmlArray).put("text_list", textArray));
+			.put("html_list", htmlArray).put("text_list", textArray));
 
 	    MailDeferredTask firstSendGridDefferedTask = (MailDeferredTask) SerializationUtils
 		    .deserialize(firstTaskHandle.getPayload());
@@ -113,11 +130,11 @@ public class SendGridUtil
 	    for (int i = 0, len = tempArray.length(); i < len; i++)
 	    {
 		String postData = SendGrid.getSendGridQueryString(firstSendGridDefferedTask.apiUser,
-		        firstSendGridDefferedTask.apiKey, firstSendGridDefferedTask.fromEmail,
-		        firstSendGridDefferedTask.fromName, tempArray.getJSONObject(i).getString("to"), null, null,
-		        SendGridSubVars.SUBJECT.getString(), firstSendGridDefferedTask.replyTo,
-		        SendGridSubVars.HTML.getString(), SendGridSubVars.TEXT.getString(),
-		        getSMTPJSON(tempArray.getJSONObject(i)).toString());
+			firstSendGridDefferedTask.apiKey, firstSendGridDefferedTask.fromEmail,
+			firstSendGridDefferedTask.fromName, tempArray.getJSONObject(i).getString("to"), null, null,
+			SendGridSubVars.SUBJECT.getString(), firstSendGridDefferedTask.replyTo,
+			SendGridSubVars.HTML.getString(), SendGridSubVars.TEXT.getString(),
+			getSMTPJSON(tempArray.getJSONObject(i)).toString());
 
 		HttpClientUtil.accessPostURLUsingHttpClient(SendGrid.SENDGRID_API_POST_URL, postData);
 	    }
@@ -145,10 +162,10 @@ public class SendGridUtil
 	SMTPJSON.put("to", json.getJSONArray("to_list"));
 
 	SMTPJSON.put(
-	        "sub",
-	        new JSONObject().put(SendGridSubVars.SUBJECT.getString(), json.getJSONArray("subject_list"))
-	                .put(SendGridSubVars.HTML.getString(), json.getJSONArray("html_list"))
-	                .put(SendGridSubVars.TEXT.getString(), json.getJSONArray("text_list")));
+		"sub",
+		new JSONObject().put(SendGridSubVars.SUBJECT.getString(), json.getJSONArray("subject_list"))
+			.put(SendGridSubVars.HTML.getString(), json.getJSONArray("html_list"))
+			.put(SendGridSubVars.TEXT.getString(), json.getJSONArray("text_list")));
 	return SMTPJSON;
     }
 
@@ -161,8 +178,8 @@ public class SendGridUtil
     {
 
 	SendGrid.sendMail(sendGridDeferred.apiUser, sendGridDeferred.apiKey, sendGridDeferred.fromEmail,
-	        sendGridDeferred.fromName, sendGridDeferred.to, sendGridDeferred.cc, sendGridDeferred.bcc,
-	        sendGridDeferred.subject, sendGridDeferred.replyTo, sendGridDeferred.html, sendGridDeferred.text, null);
+		sendGridDeferred.fromName, sendGridDeferred.to, sendGridDeferred.cc, sendGridDeferred.bcc,
+		sendGridDeferred.subject, sendGridDeferred.replyTo, sendGridDeferred.html, sendGridDeferred.text, null);
     }
 
     /**

@@ -7,9 +7,15 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.examples.HtmlToPlainText;
 
+import com.agilecrm.account.util.AccountEmailStatsUtil;
+import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.util.HttpClientUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.TaskHandle;
 import com.thirdparty.mandrill.EmailContentLengthLimitExceededException;
@@ -68,17 +74,17 @@ public class MandrillUtil
      * @param tasks
      *            - pull queue leased tasks
      */
-    public static void sendMandrillMails(List<TaskHandle> tasks)
+    public static void sendMandrillMails(List<TaskHandle> tasks, EmailSender emailSender)
     {
 	TaskHandle firstTaskHandle = tasks.get(0);
 
 	MailDeferredTask firstMailDefferedTask = (MailDeferredTask) SerializationUtils.deserialize(firstTaskHandle
-	        .getPayload());
+		.getPayload());
 
 	// Initialize mailJSON with common fields
 	JSONObject mailJSON = getMandrillMailJSON(firstMailDefferedTask.apiKey, firstMailDefferedTask.domain,
-	        firstMailDefferedTask.fromEmail, firstMailDefferedTask.fromName, firstMailDefferedTask.replyTo,
-	        firstMailDefferedTask.metadata);
+		firstMailDefferedTask.fromEmail, firstMailDefferedTask.fromName, firstMailDefferedTask.replyTo,
+		firstMailDefferedTask.metadata);
 
 	JSONArray mergeVarsArray = new JSONArray();
 	JSONArray toArray = new JSONArray();
@@ -91,16 +97,30 @@ public class MandrillUtil
 	{
 	    for (TaskHandle task : tasks)
 	    {
+
 		flag = false;
 
 		MailDeferredTask mailDeferredTask = (MailDeferredTask) SerializationUtils
-		        .deserialize(task.getPayload());
+			.deserialize(task.getPayload());
+
+		// Creates log for sending email
+		if (!StringUtils.isBlank(mailDeferredTask.campaignId)
+			&& !StringUtils.isBlank(mailDeferredTask.subscriberId))
+		{
+		    LogUtil.addLogToSQL(mailDeferredTask.campaignId, mailDeferredTask.subscriberId, "Subject: "
+			    + mailDeferredTask.subject, LogType.EMAIL_SENT.toString());
+		}
+
+		// Set emails sent count
+		if (emailSender != null)
+		    emailSender.setCount(AccountEmailStatsUtil.getEmailsTotal(mailDeferredTask.to, mailDeferredTask.cc,
+			    mailDeferredTask.bcc));
 
 		// If same To email (i.e., multiple send-email nodes linked to
 		// each in campaign). If CC or BCC or multiple To with comma
 		// separated given then send email without merging
 		if (!StringUtils.isBlank(mailDeferredTask.cc) || !StringUtils.isBlank(mailDeferredTask.bcc)
-		        || isToExists(toArray, mailDeferredTask.to) || mailDeferredTask.to.contains(","))
+			|| isToExists(toArray, mailDeferredTask.to) || mailDeferredTask.to.contains(","))
 		{
 		    sendWithoutMerging(mailDeferredTask);
 		    continue;
@@ -108,7 +128,7 @@ public class MandrillUtil
 
 		// MergeVars
 		mergeVarsArray.put(getEachMergeJSON(mailDeferredTask.to, mailDeferredTask.subject,
-		        mailDeferredTask.html, mailDeferredTask.text));
+			mailDeferredTask.html, mailDeferredTask.text));
 
 		// To array
 		toArray.put(new JSONObject().put(Mandrill.MANDRILL_RECIPIENT_EMAIL, mailDeferredTask.to));
@@ -137,12 +157,12 @@ public class MandrillUtil
 	    for (int i = 0, len = tempArray.length(); i < len; i++)
 	    {
 		mailJSON.getJSONObject(Mandrill.MANDRILL_MESSAGE)
-		        .put(Mandrill.MANDRILL_TO, tempArray.getJSONObject(i).getJSONArray("toArray"))
-		        .put(Mandrill.MANDRILL_MERGE_VARS, tempArray.getJSONObject(i).getJSONArray("mergeVarsArray"))
-		        .put(Mandrill.MANDRILL_MERGE, true).put(Mandrill.MANDRILL_PRESERVE_RECIPIENTS, false);
+			.put(Mandrill.MANDRILL_TO, tempArray.getJSONObject(i).getJSONArray("toArray"))
+			.put(Mandrill.MANDRILL_MERGE_VARS, tempArray.getJSONObject(i).getJSONArray("mergeVarsArray"))
+			.put(Mandrill.MANDRILL_MERGE, true).put(Mandrill.MANDRILL_PRESERVE_RECIPIENTS, false);
 
 		HttpClientUtil.accessPostURLUsingHttpClient(Mandrill.MANDRILL_API_POST_URL
-		        + Mandrill.MANDRILL_API_MESSAGE_CALL, mailJSON.toString());
+			+ Mandrill.MANDRILL_API_MESSAGE_CALL, mailJSON.toString());
 	    }
 
 	}
@@ -290,7 +310,7 @@ public class MandrillUtil
 
 	vars.put(getVarJSON(MandrillMergeVars.HTML_CONTENT.toString(), getHTML(html, text)));
 
-	vars.put(getVarJSON(MandrillMergeVars.TEXT_CONTENT.toString(), text));
+	vars.put(getVarJSON(MandrillMergeVars.TEXT_CONTENT.toString(), getText(html, text)));
 
 	return vars;
     }
@@ -338,6 +358,25 @@ public class MandrillUtil
 	    return html;
 
 	return convertTextIntoHtml(text);
+    }
+
+    /**
+     * Returns Text if not empty, otherwise extracts text from html
+     * 
+     * @param html
+     *            - html body
+     * @param text
+     *            - text body
+     * @return String
+     * 
+     */
+    public static String getText(String html, String text)
+    {
+	// return text if not empty
+	if (!StringUtils.isBlank(text))
+	    return text;
+
+	return new HtmlToPlainText().getPlainText(Jsoup.parse(html));
     }
 
     /**

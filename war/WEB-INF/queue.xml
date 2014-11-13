@@ -193,8 +193,8 @@
   </retry-parameters>
   </queue>
   
-   <queue>
-  <name>sb-email-pull-queue</name>
+  <queue>
+  <name>normal-personal-email-pull-queue</name>
   <mode>pull</mode>
   <retry-parameters>
       <task-retry-limit>1</task-retry-limit>	  
@@ -202,7 +202,7 @@
   </queue>
   
   <queue>
-  <name>sb-campaign-pull-queue</name>
+  <name>bulk-personal-email-pull-queue</name>
   <mode>pull</mode>
   <retry-parameters>
   		<task-retry-limit>1</task-retry-limit>

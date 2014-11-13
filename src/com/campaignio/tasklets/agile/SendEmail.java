@@ -9,10 +9,12 @@ import java.util.TimeZone;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
+import com.agilecrm.queues.backend.BackendUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
@@ -244,14 +246,14 @@ public class SendEmail extends TaskletAdapter
 	    if (subscriberJSON.getBoolean("isUnsubscribedAll"))
 	    {
 		System.err.println("Skipping SendEmail node for "
-		        + subscriberJSON.getJSONObject("data").getString(Contact.EMAIL)
-		        + " as it is Unsubscribed from All.");
+			+ subscriberJSON.getJSONObject("data").getString(Contact.EMAIL)
+			+ " as it is Unsubscribed from All.");
 
 		// Add log
 		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-		        "Campaign email was not sent since the contact unsubscribed from the campaign <br><br> Email subject: "
-		                + getStringValue(nodeJSON, subscriberJSON, data, SUBJECT),
-		        LogType.EMAIL_SENDING_SKIPPED.toString());
+			"Campaign email was not sent since the contact unsubscribed from the campaign <br><br> Email subject: "
+				+ getStringValue(nodeJSON, subscriberJSON, data, SUBJECT),
+			LogType.EMAIL_SENDING_SKIPPED.toString());
 
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -267,11 +269,11 @@ public class SendEmail extends TaskletAdapter
 	    {
 		// Add log
 		LogUtil.addLogToSQL(
-		        AgileTaskletUtil.getId(campaignJSON),
-		        AgileTaskletUtil.getId(subscriberJSON),
-		        "Campaign email was not sent due to hard bounce <br><br> Email subject: "
-		                + getStringValue(nodeJSON, subscriberJSON, data, SUBJECT),
-		        LogType.EMAIL_SENDING_SKIPPED.toString());
+			AgileTaskletUtil.getId(campaignJSON),
+			AgileTaskletUtil.getId(subscriberJSON),
+			"Campaign email was not sent due to hard bounce <br><br> Email subject: "
+				+ getStringValue(nodeJSON, subscriberJSON, data, SUBJECT),
+			LogType.EMAIL_SENDING_SKIPPED.toString());
 
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -467,8 +469,8 @@ public class SendEmail extends TaskletAdapter
 
 	// Check if we need to convert links
 	if (trackClicks != null
-	        && (trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES) || trackClicks
-	                .equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH)))
+		&& (trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES) || trackClicks
+			.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH)))
 	{
 	    try
 	    {
@@ -477,7 +479,7 @@ public class SendEmail extends TaskletAdapter
 		data.put(CLICK_TRACKING_ID, System.currentTimeMillis());
 
 		html = EmailLinksConversion.convertLinksUsingJSOUP(html, subscriberId, campaignId,
-		        trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH));
+			trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH));
 
 	    }
 	    catch (Exception e)
@@ -486,9 +488,12 @@ public class SendEmail extends TaskletAdapter
 	    }
 	}
 
+	// Enables white label for paid plans
+	boolean isWhilteLabelEnabled = EmailUtil.isWhiteLabelEnabled();
+
 	// Appends Agile label
 	text = StringUtils.replace(text, EmailUtil.getPoweredByAgileLink("campaign", "Powered by"), "Sent using Agile");
-	text = EmailUtil.appendAgileToText(text, "Sent using");
+	text = EmailUtil.appendAgileToText(text, "Sent using", isWhilteLabelEnabled);
 
 	// Send Message
 	if (html != null && html.length() > 10)
@@ -497,21 +502,23 @@ public class SendEmail extends TaskletAdapter
 
 	    // If no powered by merge field, append Agile label to html
 	    if (!StringUtils.contains(html, EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
-		html = EmailUtil.appendAgileToHTML(html, "campaign", "Powered by");
+		html = EmailUtil.appendAgileToHTML(html, "campaign", "Powered by", isWhilteLabelEnabled);
 
 	    // Send HTML Email
 	    sendEmail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-		    new JSONObject().put(MandrillWebhook.METADATA_CAMPAIGN_ID, campaignId).toString());
+		    new JSONObject().put(MandrillWebhook.METADATA_CAMPAIGN_ID, campaignId).toString(), subscriberId,
+		    campaignId);
 	}
 	else
 	{
 	    // Send Text Email
 	    sendEmail(fromEmail, fromName, to, cc, bcc, subject, replyTo, null, text,
-		    new JSONObject().put(MandrillWebhook.METADATA_CAMPAIGN_ID, campaignId).toString());
+		    new JSONObject().put(MandrillWebhook.METADATA_CAMPAIGN_ID, campaignId).toString(), subscriberId,
+		    campaignId);
 	}
 
 	// Creates log for sending email
-	LogUtil.addLogToSQL(campaignId, subscriberId, "Subject: " + subject, LogType.EMAIL_SENT.toString());
+	LogUtil.addLogToSQL(campaignId, subscriberId, "Subject: " + subject, LogType.EMAIL_QUEUED.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -534,11 +541,11 @@ public class SendEmail extends TaskletAdapter
 	    // Get Data
 	    if (subscriberJSON.has("data"))
 		subscriberJSON.getJSONObject("data").put(
-		        "unsubscribe_link",
-		        "https://" + NamespaceManager.get() + ".agilecrm.com/unsubscribe?sid="
-		                + URLEncoder.encode(AgileTaskletUtil.getId(subscriberJSON), "UTF-8") + "&cid="
-		                + URLEncoder.encode(AgileTaskletUtil.getId(campaignJSON), "UTF-8") + "&e="
-		                + URLEncoder.encode(subscriberJSON.getJSONObject("data").getString("email"), "UTF-8"));
+			"unsubscribe_link",
+			"https://" + NamespaceManager.get() + ".agilecrm.com/unsubscribe?sid="
+				+ URLEncoder.encode(AgileTaskletUtil.getId(subscriberJSON), "UTF-8") + "&cid="
+				+ URLEncoder.encode(AgileTaskletUtil.getId(campaignJSON), "UTF-8") + "&e="
+				+ URLEncoder.encode(subscriberJSON.getJSONObject("data").getString("email"), "UTF-8"));
 	}
 	catch (Exception e)
 	{
@@ -569,7 +576,7 @@ public class SendEmail extends TaskletAdapter
      *            - text body
      */
     private void sendEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
-	    String replyTo, String html, String text, String mandrillMetadata)
+	    String replyTo, String html, String text, String mandrillMetadata, String subscriberId, String campaignId)
     {
 	String domain = NamespaceManager.get();
 
@@ -582,8 +589,10 @@ public class SendEmail extends TaskletAdapter
 	}
 
 	// Send Email using email gateway
-	EmailGatewayUtil.sendBulkEmail(domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-	        mandrillMetadata);
+	EmailGatewayUtil.sendBulkEmail(
+		"bulk".equals(BackendUtil.getCurrentBackendName()) ? AgileQueues.BULK_EMAIL_PULL_QUEUE
+			: AgileQueues.NORMAL_EMAIL_PULL_QUEUE, domain, fromEmail, fromName, to, cc, bcc, subject,
+		replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
 
     }
 }
