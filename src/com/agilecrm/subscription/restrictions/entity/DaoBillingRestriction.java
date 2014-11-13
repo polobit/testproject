@@ -3,6 +3,7 @@ package com.agilecrm.subscription.restrictions.entity;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.ContactBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.DomainUserBillingRestriction;
+import com.agilecrm.subscription.restrictions.entity.impl.EmailBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.ReportGraphBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.WebRuleBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.WorkflowBillingRestriction;
@@ -32,7 +33,9 @@ public abstract class DaoBillingRestriction implements
 
 	Report(ReportGraphBillingRestriction.class),
 
-	DomainUser(DomainUserBillingRestriction.class);
+	DomainUser(DomainUserBillingRestriction.class),
+
+	Email(EmailBillingRestriction.class);
 
 	Class<? extends DaoBillingRestriction> clazz;
 
