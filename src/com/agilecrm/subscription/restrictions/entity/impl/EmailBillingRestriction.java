@@ -25,6 +25,7 @@ public class EmailBillingRestriction extends DaoBillingRestriction
     @Override
     public boolean check()
     {
+	emails = restriction.one_time_emails_count;
 	// TODO Auto-generated method stub
 	if (max_allowed == 0 && (emails <= 0 && emails >= -5000))
 	    return true;
@@ -43,7 +44,7 @@ public class EmailBillingRestriction extends DaoBillingRestriction
 	    restriction = BillingRestrictionUtil.getBillingRestriction(sendReminder);
 
 	// Gets maximum allowed contacts in current plan
-	max_allowed = restriction.max_emails_count;
+	max_allowed = restriction.max_emails_count == null ? 0 : restriction.max_emails_count;
 	emails = restriction.one_time_emails_count;
     }
 
