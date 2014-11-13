@@ -8,7 +8,7 @@
 					<tbody>
 						<tr>
 							<td valign="middle" height="32px"
-								style="padding: 0; color: white">Event Reminder</td>
+								style="padding: 0; color: white">Event Reminder :{{#events}}{{title}} @ {{date}}{{/events}}</td>
 							</td>
 						</tr>
 					</tbody>
@@ -16,16 +16,17 @@
 			</div>
 			<div
 				style="font-size: 14px; background-color: #fff; padding: 10px 7px 7px 7px">
-				<table width="100%" cellpadding="5" cellspacing="0" style="margin-top:-40px;">
+				<table width="100%" cellpadding="0" cellspacing="-6" style="margin-top:-40px;">
 					
 					<tbody>
 						{{#events}}
-				<tr><td style="line-height:43px;">What&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td><td>{{title}}</td></tr>
-				<tr><td style="line-height:43px;">When&nbsp;&nbsp;&nbsp;&nbsp;: </td><td>{{date}}</td></tr>
+				<tr><td style="line-height:43px;">What&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td><td>{{title}}</td></tr>
+				<tr><td style="line-height:43px;">When&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td><td>{{date}}</td></tr>
+				<tr><td style="line-height:43px;">Calendar : </td><td><a  href="https://{{owner.domain}}.agilecrm.com/#calendar">View Agile Calendar</a></td></tr>
 				{{#related}}
-					<tr><td style="vertical-align:top;line-height:43px;">Who&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</td><td style="vertical-align: top;margin-top:-20px">{{#related_contacts}} 
+					<tr><td style="vertical-align:top;line-height:43px;">Who&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</td><td style="vertical-align: top;margin-top:-20px">{{#related_contacts}} 
 						   		<div style="margin-right:30px">{{#owner.domain}}
-						   			<a href="https://{{owner.domain}}.agilecrm.com/#contact/{{/owner.domain}}
+						   			<a style="text-decoration: none;" href="https://{{owner.domain}}.agilecrm.com/#contact/{{/owner.domain}}
 						   		{{^owner.domain}}
 						   			<a href="http://localhost:8888#contact/{{/owner.domain}}{{id}}" target="_blank" style="text-decoration:none;">
 						   			{{#image}}

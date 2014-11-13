@@ -2,9 +2,7 @@ package com.agilecrm.util.email;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -130,19 +128,6 @@ public class MustacheUtil
 		    {
 			Map.Entry<String, JsonNode> next = i.next();
 			Object o = toObject(next.getValue());
-			if (next.getKey().indexOf("time") > -1 || next.getKey().indexOf("date") > -1)
-			{
-			    try
-			    {
-				if (next.getValue().isNumber())
-				    o = convertDate(null, next.getValue().asLong());
-			    }
-			    catch (Exception e)
-			    {
-				System.out.println("Exception in generating map for mustache - " + e.getMessage());
-			    }
-
-			}
 			put(next.getKey(), o);
 		    }
 		}
@@ -160,19 +145,6 @@ public class MustacheUtil
 	{
 	    return node.asText();
 	}
-    }
-
-    public static String convertDate(String format, Long epoch)
-    {
-	if (format == null)
-	    format = "EEE, MMMM d yyyy, h:mm a (z)";
-	if (epoch > 0)
-	{
-	    Date d = new Date(epoch * 1000);
-	    SimpleDateFormat df = new SimpleDateFormat(format);
-	    return df.format(d);
-	}
-	return "";
     }
 
     /** Example */
