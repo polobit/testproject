@@ -507,7 +507,7 @@ position:relative;
 	border-bottom:none!important;
 }
 
-#twitter_social_stream li
+#twitter_social_stream li,#gplus_social_stream li
 {
 	border-bottom:1px solid #eee;
 }
