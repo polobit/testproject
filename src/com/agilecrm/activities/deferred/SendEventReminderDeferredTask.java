@@ -20,6 +20,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.SendMail;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.thirdparty.PubNub;
 import com.thirdparty.mandrill.Mandrill;
@@ -62,6 +63,10 @@ public class SendEventReminderDeferredTask implements DeferredTask
     public void run()
     {
 
+	System.out.println("in sendEVentReminderDeferredTask Namespace " + NamespaceManager.get());
+
+	System.out.println("in sendEVentReminderDeferredTask Domain " + domain);
+
 	List<Event> eventList = EventUtil.getLatestWithSameStartTime(starttime);
 	try
 	{
@@ -78,6 +83,14 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    catch (Exception e1)
 		    {
 			// TODO Auto-generated catch block
+			String subject = "Exception occured afetr domainuser  catchBlock  domain " + domain + " "
+			        + System.currentTimeMillis();
+			String body = "exception occured due to " + e1.getMessage();
+
+			Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com",
+			        "event-reminder-failure", "jagadeesh@invox.com", null, null, subject, null, body, null,
+			        null);
+
 			e1.printStackTrace();
 		    }
 
@@ -98,6 +111,8 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    pubnub_notification.put("username", domainuser.name);
 		    pubnub_notification.put("useremail", domainuser.email);
 		    pubnub_notification.put("type", "CALENDER_REMINDER");
+		    System.out.println("domain name before pubnubnotification " + domain);
+		    System.out.println("namespacemanagernamebeforesendingpubnub " + NamespaceManager.get());
 
 		    PubNub.pubNubPush(domain, pubnub_notification);
 
@@ -117,17 +132,16 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    }
 		    catch (Exception e)
 		    {
-			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("events", eventList);
 
-			String subject = "Exception occured afetr event List map at 122 in event notification and domain "
-			        + domain + " " + System.currentTimeMillis();
+			String subject = "Exception occured after EventListMap catchBlock  domain " + domain + " "
+			        + System.currentTimeMillis();
 			String body = "exception occured due to " + e.getMessage();
 
 			Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com",
 			        "event-reminder-failure", "jagadeesh@invox.com", null, null, subject, null, body, null,
 			        null);
 			EventReminder.getEventReminder(domain, starttime);
+			return;
 		    }
 		    Map<String, Object> currentEvent = eventListMap.get(0);
 		    List<Contact> contactList = eventList.get(i).getContacts();
@@ -146,7 +160,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
 
 		    }
 		    currentEvent.put("related_contacts", contactListMap);
-		    if (currentEvent.get("related_contacts") != null && currentEvent.size() > 0)
+		    if (contactList != null && contactList.size() > 0)
 		    {
 			currentEvent.put("related", true);
 		    }
@@ -174,6 +188,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
 	    try
 	    {
 		EventReminder.getEventReminder(domain, starttime);
+		return;
 	    }
 	    catch (IOException e1)
 	    {

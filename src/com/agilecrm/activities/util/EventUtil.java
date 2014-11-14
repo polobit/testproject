@@ -13,6 +13,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.IcalendarUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -254,12 +255,14 @@ public class EventUtil
      */
     public static List<Event> getLatestEvents(Long starttime)
     {
+	System.out.println("in getLatest Events Domain name " + NamespaceManager.get());
+
 	int duration = 3600;
 	Long currenttime = System.currentTimeMillis() / 1000;
 	if (starttime == null)
 	    starttime = currenttime + 900;
 	else
-	    starttime = starttime + 300;
+	    starttime = starttime + 120;
 
 	Long endtime = starttime + duration;
 
@@ -271,7 +274,6 @@ public class EventUtil
 	        .order("start").list();
 	if (events != null && events.size() > 0)
 	{
-	    System.out.println("executing evnts!-null in event util");
 	    Event event = events.get(0);
 	    domain_events = getLatestWithSameStartTime(event.start);
 	    return domain_events;
@@ -290,10 +292,13 @@ public class EventUtil
     public static List<Event> getLatestWithSameStartTime(Long starttime)
     {
 
+	System.out.println("in getLatest EventsWithSameStartTime " + NamespaceManager.get());
+
 	List<Event> domain_events = new ArrayList<>();
 
 	domain_events = dao.listByProperty("start", starttime);
-	System.out.println(domain_events.size() + " domainevents size in get latest with same time");
+	System.out.println(domain_events.size() + " domainevents size in getlatesteventswithSameStarttime");
+	System.out.println(starttime + " StartTime in getLatestWithStartTime");
 	if (domain_events != null && domain_events.size() > 0)
 	{
 	    for (Event event : domain_events)

@@ -38,10 +38,13 @@ public class EventReminderServlet extends HttpServlet
 	    domainsset.add("jagadeesh");
 	    domainsset.add("test800");
 	    domainsset.add("our");
+	    domainsset.add("trimspace");
 
 	    // Start a task queue for each domain
 	    for (String domain : domainsset)
 	    {
+
+		System.out.println("Domain Name in EventReminder Servlet " + domain);
 
 		EventReminder.getEventReminder(domain, null);
 	    }

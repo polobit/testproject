@@ -19,7 +19,7 @@ public class SendEventReminder
 
 	SendEventReminderDeferredTask sendEventReminder = new SendEventReminderDeferredTask(domain, starttime,
 	        nosamplevent);
-	Queue queue = QueueFactory.getQueue("event-reminder-queue");
+	Queue queue = QueueFactory.getQueue("event-notifier");
 	TaskOptions options = TaskOptions.Builder.withPayload(sendEventReminder);
 	options.etaMillis((starttime - 600) * 1000);
 	queue.add(options);

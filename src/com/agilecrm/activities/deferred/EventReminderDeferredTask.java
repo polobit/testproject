@@ -73,7 +73,7 @@ public class EventReminderDeferredTask implements DeferredTask
 	}
 	catch (Exception e)
 	{
-	    String subject = "Exception occured in event reminder deferred task domain " + domain + " "
+	    String subject = "Exception occured in EventReminderDeferredTask and domainname" + domain + " "
 		    + System.currentTimeMillis();
 	    String body = "exception occured due to " + e.getMessage();
 

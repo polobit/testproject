@@ -8,7 +8,7 @@
 					<tbody>
 						<tr>
 							<td valign="middle" height="32px"
-								style="padding: 0; color: white">Event Reminder :{{#events}}{{title}} @ {{date}}{{/events}}</td>
+								style="padding: 0; color: white">Event Reminder: {{#events}}{{title}} @ {{date}}{{/events}}</td>
 							</td>
 						</tr>
 					</tbody>
@@ -16,11 +16,11 @@
 			</div>
 			<div
 				style="font-size: 14px; background-color: #fff; padding: 10px 7px 7px 7px">
-				<table width="100%" cellpadding="0" cellspacing="-6" style="margin-top:-40px;">
+				<table width="100%" cellpadding="0" cellspacing="0" style="margin-top:-40px;">
 					
 					<tbody>
 						{{#events}}
-				<tr><td style="line-height:43px;">What&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td><td>{{title}}</td></tr>
+				<tr><td style="line-height:43px;width:11%">What&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td><td>{{title}}</td></tr>
 				<tr><td style="line-height:43px;">When&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td><td>{{date}}</td></tr>
 				<tr><td style="line-height:43px;">Calendar : </td><td><a  href="https://{{owner.domain}}.agilecrm.com/#calendar">View Agile Calendar</a></td></tr>
 				{{#related}}
