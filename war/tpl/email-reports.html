@@ -102,9 +102,9 @@
 	<td>
     	{{ucfirst frequency}}
 	</td>
-	<td><div style="width:15em;text-transform:capitalize;">{{#if activity}}{{#field_Element activity}}{{/field_Element}}{{/if}}</div></td>
+	<td><div style="width:15em;text-transform:capitalize;">{{#if activity}}{{arrayToCamelcase activity}}{{/if}}</div></td>
 	<td>
-		{{#each usersList}}{{name}},{{/each}}
+		{{namesFromObject usersList 'name'}}
 	</td>
 	<td>
 	 	<a  data={{id}} id="activity-reports-email-now" >Send Now</a>
