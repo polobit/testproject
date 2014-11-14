@@ -125,7 +125,7 @@ function getTwilioIncomingList(type)
 {
 	var numbers;
 	$.ajax({
-		  url: 'core/api/sms-gateway/twilio',
+		  url: 'core/api/sms-gateway/numbers',
 		  type: "GET",
 		  async:false,
 		  dataType:'json',

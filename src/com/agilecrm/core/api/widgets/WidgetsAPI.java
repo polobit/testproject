@@ -313,6 +313,8 @@ public class WidgetsAPI
 	{
 
 		Widget widget = WidgetUtil.getWidget(id);
-		widget.delete();
+		if (widget != null)
+			widget.delete();
+		System.err.println("The widget is null and id is " + id);
 	}
 }

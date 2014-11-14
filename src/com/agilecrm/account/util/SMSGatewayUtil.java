@@ -1,17 +1,24 @@
 package com.agilecrm.account.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.queues.backend.BackendUtil;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.sms.util.deferred.SMSDeferredTask;
+import com.agilecrm.social.PlivoUtil;
 import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.widgets.Widget;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
+import com.thirdparty.plivo.PlivoSMSUtil;
+import com.thirdparty.twilio.TwilioSMSUtil;
 
 /**
  * <code>SMSGatewayUtil</code> is utility class for SMS integrations
@@ -21,6 +28,26 @@ import com.googlecode.objectify.ObjectifyService;
  */
 public class SMSGatewayUtil
 {
+	/**
+	 * Base url to make URL request
+	 */
+	public static final String TWILIO_ENDPOINT = "https://api.twilio.com";
+
+	/**
+	 * Twilio Account Version
+	 */
+	public static final String TWILIO_VERSION = "2010-04-01";
+
+	/**
+	 * Plivo Account Version
+	 */
+	public static final String PLIVO_VERSION = "v1";
+
+	/**
+	 * Metadata
+	 */
+	public static final String TWILIO_METADATA = "metadata1";
+
 	/**
 	 * Checks in cache first if that widget exists else makes a call to
 	 * datastore.
@@ -69,19 +96,19 @@ public class SMSGatewayUtil
 	/**
 	 * 
 	 * @param smsGatewaytype
-	 *            - the current SMS gateway type(Twilio)
+	 *            - the current SMS gateway type
 	 * @param domain
 	 *            - The current namespacemanager domain
 	 * @param version
-	 *            - Version of Twilio
+	 *            - Version of Gateway
 	 * @param from
 	 *            - From number
 	 * @param to
 	 *            - To number
 	 * @param message
 	 *            - Body of the message to be sent
-	 * @param account_sid
-	 *            - Account SID
+	 * @param account_id
+	 *            - Account ID
 	 * @param auth_token
 	 *            - Authentication token
 	 * @param endpoint
@@ -92,7 +119,7 @@ public class SMSGatewayUtil
 	private static void addToQueue(String smsGatewaytype, String domain, String version, String from, String to,
 			String message, String account_sid, String auth_token, String endpoint, String metadata)
 	{
-	    SMSDeferredTask smsDeferredTask = new SMSDeferredTask(smsGatewaytype, domain, version, from, to, message,
+		SMSDeferredTask smsDeferredTask = new SMSDeferredTask(smsGatewaytype, domain, version, from, to, message,
 				account_sid, auth_token, endpoint, metadata);
 
 		// Add to pull queue with from number as Tag
@@ -104,10 +131,129 @@ public class SMSGatewayUtil
 
 	public static boolean checkCredentials(Widget smsGatewayWidget) throws JSONException, Exception
 	{
-		// smsGatewayWidget.getSMSAPI().equals(SMSGateway.SMS_API.TWILIO)
-		return TwilioUtil.checkCredentials(TwilioUtil.getAccountSID(smsGatewayWidget),
-				TwilioUtil.getAuthToken(smsGatewayWidget));
+		JSONObject prefsJSON = new JSONObject(smsGatewayWidget.prefs);
+		String smsAPI = (String) prefsJSON.get("sms_api");
+
+		if (smsAPI.equals("TWILIO"))
+			return TwilioUtil.checkCredentials(TwilioUtil.getAccountSID(smsGatewayWidget),
+					TwilioUtil.getAuthToken(smsGatewayWidget));
+
+		else if (smsAPI.equals("PLIVO"))
+			return PlivoUtil.checkCredentials(PlivoUtil.getAccountID(smsGatewayWidget),
+					TwilioUtil.getAuthToken(smsGatewayWidget));
+		else
+			return false;
 
 	}
 
+	/**
+	 * 
+	 * @param smsGatewayWidget
+	 * @return
+	 */
+	public static List<String> incomingNumbers(Widget smsGatewayWidget)
+	{
+		JSONObject prefsJSON;
+		try
+		{
+			prefsJSON = new JSONObject(smsGatewayWidget.prefs);
+			String smsAPI = (String) prefsJSON.get("sms_api");
+
+			if (smsAPI.equals("TWILIO"))
+				return TwilioSMSUtil.incomingNumbers(smsGatewayWidget);
+			if (smsAPI.equals("PLIVO"))
+				return PlivoSMSUtil.incomingNumbers(smsGatewayWidget);
+			else
+				return new ArrayList<String>();
+		}
+
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return new ArrayList<String>();
+		}
+
+	}
+
+	public static List<String> currentGatewayNumbers()
+	{
+		Widget smsGatewayWidget = getSMSGatewayWidget();
+
+		if (smsGatewayWidget == null)
+			return null;
+
+		return incomingNumbers(smsGatewayWidget);
+	}
+
+	public static void sendSMS(String SMSGatewayType, String from, String to, String message, String account_id,
+			String auth_token)
+	{
+
+		String domain = NamespaceManager.get();
+
+		if (SMSGatewayType.equals("TWILIO"))
+			sendSMS(SMSGatewayType, domain, TWILIO_VERSION, from, to, message, account_id, auth_token, TWILIO_ENDPOINT,
+					TWILIO_METADATA);
+
+		if (SMSGatewayType.equals("PLIVO"))
+			sendSMS(SMSGatewayType, domain, PLIVO_VERSION, from, to, message, account_id, auth_token, "", "");
+
+	}
+
+	public static String getLink(Widget smsGatewayWidget)
+	{
+
+		JSONObject prefsJSON;
+		try
+		{
+			prefsJSON = new JSONObject(smsGatewayWidget.prefs);
+			String smsAPI = (String) prefsJSON.get("sms_api");
+			if (smsAPI.equals("TWILIO"))
+				return "https://www.twilio.com/user/account/phone-numbers/incoming";
+			if (smsAPI.equals("PLIVO"))
+				return "https://manage.plivo.com/number/search/";
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+
+	}
+
+	public static String getSMSType(Widget smsGatewayWidget)
+	{
+		JSONObject prefsJSON;
+		try
+		{
+			prefsJSON = new JSONObject(smsGatewayWidget.prefs);
+			return (String) prefsJSON.get("sms_api");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return "";
+
+	}
+
+	public static JSONObject getSMSLogs()
+	{
+
+		Widget widget = SMSGatewayUtil.getSMSGatewayWidget();
+		if (widget == null)
+			return null;
+
+		String smsType = getSMSType(widget);
+
+		if ("TWILIO".equals(smsType))
+			return TwilioSMSUtil.currentSMSLogs(widget);
+		if ("PLIVO".equals(smsType))
+			return PlivoSMSUtil.currentSMSLogs(widget);
+
+		return null;
+
+	}
 }

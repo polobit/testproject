@@ -94,7 +94,7 @@ public class TwilioSMSUtil
 	{
 
 		if (account_SID == null || auth_token == null)
-			return null;
+			return new ArrayList<String>();
 		TwilioRestClient client = new TwilioRestClient(account_SID, auth_token, TWILIO_ENDPOINT);
 		List<String> verifiredTwilioNumbers = new ArrayList<String>();
 		JSONObject result = null;
@@ -107,7 +107,7 @@ public class TwilioSMSUtil
 			 * If error occurs, return null
 			 */
 			if (response.isError())
-				return null;
+				return new ArrayList<String>();
 
 			result = XML.toJSONObject(response.getResponseText()).getJSONObject(TWILIO_RESPONSE)
 					.getJSONObject(TWILIO_INCOMING_NUMBERS);
@@ -136,7 +136,7 @@ public class TwilioSMSUtil
 	}
 
 	/**
-	 * Returns a log of a Twilio number
+	 * Returns logs of a Twilio number
 	 */
 	public static JSONObject getTwilioLogs(String account_SID, String auth_token)
 	{
@@ -172,10 +172,7 @@ public class TwilioSMSUtil
 			dateRange.put(URLEncoder.encode("DateSent<", "UTF-8"), endLogDate);
 
 			TwilioRestResponse messages = client.request("/" + TWILIO_VERSION + "/" + TWILIO_ACCOUNTS + "/"
-					+ account_SID + "/" + "Messages.json"
-			/*
-			 * + "DateSent>=" + oneMonthBack + "&DateSent<=" + currentDate
-			 */, "GET", dateRange);
+					+ account_SID + "/" + "Messages.json", "GET", dateRange);
 
 			if (messages.isError())
 				return null;
@@ -193,9 +190,19 @@ public class TwilioSMSUtil
 			Date currentdate = null;
 			Date thisMonthDate = null;
 			Date yesterdayDate = null;
+			Date lastOneMonth = null;
 
 			currentdate = sdfConverted.parse(sdfConverted.format(Calendar.getInstance().getTime()));
+			Calendar currentDate = Calendar.getInstance();
+			currentDate.add(Calendar.MONTH, -1);
+			lastOneMonth = sdfConverted.parse(sdfConverted.format(currentDate.getTime()));
 
+			/*
+			 * ======= Calendar currentDate = Calendar.getInstance();
+			 * currentDate.add(Calendar.MONTH, -1); lastOneMonth =
+			 * sdfConverted.parse(sdfConverted.format(currentDate.getTime()));
+			 * >>>>>>> 012109f... Plivo SMS
+			 */
 			Calendar calDate = Calendar.getInstance();
 
 			calDate.add(Calendar.DATE, -1);
@@ -219,16 +226,16 @@ public class TwilioSMSUtil
 					messageDate = sdfActual.parse(date);
 					messageDate = sdfConverted.parse(sdfConverted.format(messageDate));
 
-					if (status.toString().equals("delivered"))
+					if (status.toString().equals("delivered") && messageDate.compareTo(lastOneMonth) >= 0)
 						deliveredCount++;
 
-					if (status.toString().equals("queued"))
+					if (status.toString().equals("queued") && messageDate.compareTo(lastOneMonth) >= 0)
 						queuedCount++;
 
-					if (status.toString().equals("undelivered"))
+					if (status.toString().equals("undelivered") && messageDate.compareTo(lastOneMonth) >= 0)
 						undeliveredCount++;
 
-					if (status.toString().equals("failed"))
+					if (status.toString().equals("failed") && messageDate.compareTo(lastOneMonth) >= 0)
 						failedCount++;
 
 					if (messageDate.compareTo(thisMonthDate) >= 0)
@@ -258,7 +265,7 @@ public class TwilioSMSUtil
 			logJSON.put("LastMonth", lastMonthCount);
 			logJSON.put("Today", todaysCount);
 			logJSON.put("Yesterday", yesterdaysCount);
-			logJSON.put("Stats-Type", "SMS-Stats");
+			logJSON.put("Stats-Type", "TWILIO");
 
 		}
 		catch (JSONException e)
@@ -366,10 +373,10 @@ public class TwilioSMSUtil
 		return TwilioSMSUtil.getTwilioLogs(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 	}
 
-	public static boolean isIncomingNumbersEmpty(Widget widget)
+	public static List<String> incomingNumbers(Widget widget)
 	{
 		if (widget == null)
-			return true;
+			return new ArrayList<String>();
 
 		try
 		{
@@ -387,11 +394,36 @@ public class TwilioSMSUtil
 		}
 
 		if (TWILIO_ACCOUNT_SID == null || TWILIO_AUTH_TOKEN == null)
-			return false;
+			return new ArrayList<String>();
 
-		if (verifiedTwilioNumbers(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN).isEmpty())
-			return true;
-		return false;
+		return verifiedTwilioNumbers(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 
+	}
+
+	public static JSONObject currentSMSLogs(Widget widget)
+	{
+
+		if (widget == null)
+			return null;
+
+		try
+		{
+			String prefs = widget.prefs;
+			JSONObject prefsJSON = new JSONObject(prefs);
+			TWILIO_ACCOUNT_SID = prefsJSON.getString("account_sid");
+			TWILIO_AUTH_TOKEN = prefsJSON.getString("auth_token");
+
+		}
+		catch (Exception e)
+		{
+
+			System.out.println("Inside getVerifiedTwilioNumbers");
+			e.printStackTrace();
+		}
+
+		if (TWILIO_ACCOUNT_SID == null || TWILIO_AUTH_TOKEN == null)
+			return null;
+
+		return TwilioSMSUtil.getTwilioLogs(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 	}
 }

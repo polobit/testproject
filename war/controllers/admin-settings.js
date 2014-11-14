@@ -507,12 +507,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			}
 			
 		});
-		
-		
-		
 
 		$('#content').find('#admin-prefs-tabs-content').html(this.email_gateway.render().el);
-
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
 	} ,
@@ -594,14 +590,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				$responceText = "<div style='color:#B94A48; font-size:14px' id='sms-gateway-error'><i>" + data.responseText + "</i></div>";
 				$("#sms-integration-error", this.el).append($responceText);
 			}
-
 		});
 
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
-
 	} 
 
-	
 });

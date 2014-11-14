@@ -105,11 +105,11 @@ function addAddonTabTemplate(data, url, callback, container)
              if(json.name == "Send Message"){
             	 var list = getTwilioIncomingList();
             	 if(list == null){
-            		window.parent.campaignAlert("UnauthorisedTwilio");
+            		window.parent.campaignAlert("Unauthorised");
             		return; 
             	 }
        	    	 if($.isEmptyObject(list)){
-       	    		window.parent.campaignAlert("EmptyTwilio");
+       	    		window.parent.campaignAlert("Empty");
 	    		 return;
             	 }
              } 
