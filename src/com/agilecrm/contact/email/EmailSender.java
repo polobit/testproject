@@ -92,10 +92,6 @@ public class EmailSender
 
 	emailBillingRestriction.setBillingRestriction(billingRestriction);
 
-	// Sets max and checks again. It will help adding tag
-	emailBillingRestriction.setMax();
-	emailBillingRestriction.check();
-
     }
 
     public void updateOneTimeEmailStats()

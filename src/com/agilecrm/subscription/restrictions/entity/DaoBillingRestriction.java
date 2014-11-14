@@ -17,7 +17,7 @@ import com.agilecrm.subscription.restrictions.entity.impl.WorkflowBillingRestric
  * 
  */
 public abstract class DaoBillingRestriction implements
-	com.agilecrm.subscription.restrictions.entity.EntityDaoRestrictionInterface
+        com.agilecrm.subscription.restrictions.entity.EntityDaoRestrictionInterface
 {
     /**
      * Class information used to create instance according to name of the class
@@ -178,4 +178,8 @@ public abstract class DaoBillingRestriction implements
 	return null;
     }
 
+    public void setBillingRestriction(BillingRestriction restriction)
+    {
+	this.restriction = restriction;
+    }
 }
