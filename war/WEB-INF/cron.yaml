@@ -76,12 +76,20 @@ cron:
   url: /backend/billing/restrictions
   schedule: every day 23:30
 
-- description: Bulk Email Cron
+- description: Bulk Campaign Email Cron
   url: /backend/cron/cron-pull?q=bulk-email-pull-queue
   schedule: every 1 mins
 
-- description: Bulk Normal Cron
+- description: Normal Campaign Email Cron
   url: /backend/cron/cron-pull?q=normal-email-pull-queue
+  schedule: every 1 mins
+
+- description: Bulk Personal Emails Cron. 
+  url: /backend/cron/cron-pull?q=bulk-personal-email-pull-queue
+  schedule: every 1 mins
+
+- description: Normal Personal Email Cron.
+  url: /backend/cron/cron-pull?q=normal-personal-email-pull-queue
   schedule: every 1 mins
 
 - description: Bulk Normal Campaign Cron
