@@ -1,10 +1,13 @@
 package com.agilecrm.reports;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.json.JSONArray;
 
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Event;
@@ -15,7 +18,9 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.reports.ActivityReports.ActivityType;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.UserPrefsUtil;
+import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
@@ -69,40 +74,44 @@ public class ActivityReportsUtil
     public static Map<String, Object> generateActivityReports(Long id, Long endTime)
     {
 	ActivityReports report = getActivityReport(id);
-	List<ActivityType> activities = report.activity_type;
-	List<String> userIds = report.user_ids;
+	List<ActivityType> activities = report.activity;
+	List<DomainUser> users = report.getUsersList();
 	Map<String, Object> activityReports = new HashMap<String, Object>();
 	try
 	{
 	    Map<String, Long> timeBounds = getTimeBound(report);
 	    if (endTime != null)
-		timeBounds.put("end_time", endTime);
+		timeBounds.put("endTime", endTime);
 
 	    activityReports.put("start_time", timeBounds.get("startTime"));
 	    activityReports.put("end_time", timeBounds.get("endTime"));
+	    if (report.frequency == ActivityReports.Frequency.DAILY)
+	    {
+		String format = "EEE, MMM d, yyyy HH:mm z";
+		activityReports.put("start_time", MustacheUtil.convertDate(format, timeBounds.get("startTime")));
+		activityReports.put("end_time", MustacheUtil.convertDate(format, timeBounds.get("endTime")));
+	    }
 	    activityReports.put("report_name", report.name);
+
 	    List<Map<String, Object>> userReport = new ArrayList<Map<String, Object>>();
-	    for (String userId : userIds)
+	    for (DomainUser user : users)
 	    {
 		Map<String, Object> activityReport = new HashMap<String, Object>();
-		activityReport.put("user_id", userId);
-		activityReport.put("user_name", DomainUserUtil.getDomainUser(Long.parseLong(userId)).name);
-
+		activityReport.put("user_id", user.id);
+		activityReport.put("user_name", user.name);
+		activityReports.put("domain", user.domain);
 		if (activities.contains(ActivityReports.ActivityType.DEAL))
-		    activityReport.put(
-			    "deals",
-			    getDealActivityReport(Long.parseLong(userId), timeBounds.get("startTime"),
-				    timeBounds.get("endTime")));
-		if (activities.contains(ActivityReports.ActivityType.DEAL))
-		    activityReport.put(
-			    "events",
-			    getEventActivityReport(Long.parseLong(userId), timeBounds.get("startTime"),
-				    timeBounds.get("endTime")));
-		if (activities.contains(ActivityReports.ActivityType.DEAL))
-		    activityReport.put(
-			    "tasks",
-			    getTaskActivityReport(Long.parseLong(userId), timeBounds.get("startTime"),
-				    timeBounds.get("endTime")));
+		    activityReport.put("deals",
+			    getDealActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+		if (activities.contains(ActivityReports.ActivityType.EVENT))
+		    activityReport.put("events",
+			    getEventActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+		if (activities.contains(ActivityReports.ActivityType.TASK))
+		    activityReport.put("tasks",
+			    getTaskActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+		if (activities.contains(ActivityReports.ActivityType.EMAIL))
+		    activityReport.put("emails",
+			    getEmailActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
 		userReport.add(activityReport);
 	    }
 	    activityReports.put("reports", userReport);
@@ -115,34 +124,55 @@ public class ActivityReportsUtil
 	return activityReports;
     }
 
-    public static Map<String, Object> getDealActivityReport(Long user_id, Long startTime, Long endTime)
+    public static Map<String, Object> getDealActivityReport(DomainUser user, Long startTime, Long endTime)
     {
 
 	List<Key<Opportunity>> dealWon = new ArrayList<Key<Opportunity>>();
 	List<Key<Opportunity>> dealLost = new ArrayList<Key<Opportunity>>();
 	List<Key<Opportunity>> dealUpdated = new ArrayList<Key<Opportunity>>();
 	List<Key<Opportunity>> dealCreated = new ArrayList<Key<Opportunity>>();
-	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user_id, Activity.EntityType.DEAL.toString(),
+	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, Activity.EntityType.DEAL.toString(),
 		null, null, startTime, endTime, 0, null);
 	List<Activity> wonActivities = new ArrayList<Activity>();
 	List<Activity> lostActivities = new ArrayList<Activity>();
+	List<Activity> newDealActivities = new ArrayList<Activity>();
+	UserPrefs pref = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id));
 	System.out.println("Deals ---- " + activities.size());
 	for (Activity act : activities)
 	{
 	    if (act.activity_type == Activity.ActivityType.DEAL_LOST)
 	    {
 		dealLost.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
+		act.related_contact_ids = getActivityRelateCOntacts(act, user.domain);
 		lostActivities.add(act);
 	    }
 	    else if (act.activity_type == Activity.ActivityType.DEAL_CLOSE)
 	    {
 		dealWon.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
+		act.related_contact_ids = getActivityRelateCOntacts(act, user.domain);
 		wonActivities.add(act);
 	    }
-	    else if (act.activity_type == Activity.ActivityType.DEAL_ADD)
-		dealCreated.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
 	    else
 		dealUpdated.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
+	}
+
+	List<String> activityTypeList = new ArrayList<String>();
+	activityTypeList.add(Activity.ActivityType.DEAL_ADD.toString());
+	activityTypeList.add(Activity.ActivityType.DEAL_OWNER_CHANGE.toString());
+
+	activities = dao.ofy().query(Activity.class).filter("entity_type = ", Activity.EntityType.DEAL.toString())
+		.filter("activity_type in ", activityTypeList).filter("time >= ", startTime)
+		.filter("time <= ", endTime).list();
+	System.out.println("-------act assigned---" + activities.size());
+	for (Activity act : activities)
+	{
+	    System.out.println(act.custom1.equals(user.name) + "-----ass name---" + act.custom1);
+	    if (act.custom1.equals(user.name))
+	    {
+		act.related_contact_ids = getActivityRelateCOntacts(act, user.domain);
+		dealCreated.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
+		newDealActivities.add(act);
+	    }
 	}
 
 	List<Opportunity> dealsWon = Opportunity.dao.fetchAllByKeys(dealWon);
@@ -152,8 +182,11 @@ public class ActivityReportsUtil
 
 	int wonCount = 0;
 	int lostCount = 0;
+	int newCount = 0;
 	double wonValue = 0;
 	double lostValue = 0;
+	double newValue = 0;
+	DecimalFormat formatter = new DecimalFormat("#,###");
 	for (Opportunity deal : dealsWon)
 	{
 	    wonValue += deal.expected_value;
@@ -165,17 +198,41 @@ public class ActivityReportsUtil
 	    lostCount++;
 	}
 
+	for (Opportunity deal : dealsCreated)
+	{
+	    newValue += deal.expected_value;
+	    newCount++;
+	}
+
+	String currency = pref.currency != null ? pref.currency.substring(pref.currency.indexOf("-") + 1) : "$";
+	System.out.println("--------currency--------" + currency);
 	Map<String, Object> dealsReport = new HashMap<String, Object>();
 	try
 	{
-	    dealsReport.put("won_count", wonCount);
-	    dealsReport.put("lost_count", lostCount);
-	    dealsReport.put("won_value", wonValue);
-	    dealsReport.put("lost_value", lostValue);
-	    dealsReport.put("deals_won", wonActivities);
-	    dealsReport.put("deals_lost", lostActivities);
-	    dealsReport.put("deals_created", dealsCreated);
+	    if (wonCount > 0)
+	    {
+		dealsReport.put("won_count", wonCount);
+		dealsReport.put("won_value", formatter.format(wonValue));
+		dealsReport.put("deals_won", wonActivities);
+	    }
+	    if (lostCount > 0)
+	    {
+		dealsReport.put("lost_count", lostCount);
+		dealsReport.put("lost_value", formatter.format(lostValue));
+		dealsReport.put("deals_lost", lostActivities);
+	    }
+
+	    if (newCount > 0)
+	    {
+		dealsReport.put("new_count", newCount);
+		dealsReport.put("new_value", formatter.format(newValue));
+		dealsReport.put("deals_created", newDealActivities);
+	    }
 	    dealsReport.put("deals_updated", dealsUpdated);
+	    dealsReport.put("currency", currency);
+	    int total = wonCount + lostCount + newCount;
+	    if (total > 0)
+		dealsReport.put("deals_total", total);
 	}
 	catch (Exception e)
 	{
@@ -186,16 +243,18 @@ public class ActivityReportsUtil
 	return dealsReport;
     }
 
-    public static Map<String, Object> getEventActivityReport(Long user_id, Long startTime, Long endTime)
+    public static Map<String, Object> getEventActivityReport(DomainUser user, Long startTime, Long endTime)
     {
 	List<Event> events = new ArrayList<Event>();
-	events = EventUtil.getEvents(startTime, endTime, AgileUser.getCurrentAgileUserFromDomainUser(user_id).id);
-
+	events = EventUtil.getEvents(startTime, endTime, AgileUser.getCurrentAgileUserFromDomainUser(user.id).id);
 	Map<String, Object> eventsReport = new HashMap<String, Object>();
 	try
 	{
-	    eventsReport.put("events_count", events.size());
-	    eventsReport.put("events", events);
+	    if (events.size() > 0)
+	    {
+		eventsReport.put("events_count", events.size());
+		eventsReport.put("events", events);
+	    }
 	}
 	catch (Exception e)
 	{
@@ -206,33 +265,68 @@ public class ActivityReportsUtil
 	return eventsReport;
     }
 
-    public static Map<String, Object> getTaskActivityReport(Long user_id, Long startTime, Long endTime)
+    public static Map<String, Object> getTaskActivityReport(DomainUser user, Long startTime, Long endTime)
     {
 	List<Activity> taskComplete = new ArrayList<Activity>();
 	List<Activity> taskUpdated = new ArrayList<Activity>();
 	List<Activity> taskCreated = new ArrayList<Activity>();
-	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user_id, Activity.EntityType.TASK.toString(),
+	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, Activity.EntityType.TASK.toString(),
 		null, null, startTime, endTime, 0, null);
 	System.out.println("Tasks ---- " + activities.size());
 	for (Activity act : activities)
 	{
 	    if (act.activity_type == Activity.ActivityType.TASK_COMPLETED)
+	    {
+		act.related_contact_ids = getActivityRelateCOntacts(act, user.domain);
 		taskComplete.add(act);
-	    else if (act.activity_type == Activity.ActivityType.TASK_ADD)
-		taskCreated.add(act);
+	    }
 	    else if (act.activity_type == Activity.ActivityType.TASK_PROGRESS_CHANGE)
+	    {
+		act.related_contact_ids = getActivityRelateCOntacts(act, user.domain);
 		taskUpdated.add(act);
+	    }
+	}
+
+	activities = ActivityUtil.getActivitiesByFilter(null, Activity.EntityType.TASK.toString(),
+		Activity.ActivityType.TASK_ADD + " OR " + Activity.ActivityType.TASK_OWNER_CHANGE, null, startTime,
+		endTime, 0, null);
+
+	for (Activity act : activities)
+	{
+	    if (act.custom1.equals(user.name))
+	    {
+		act.related_contact_ids = getActivityRelateCOntacts(act, user.domain);
+		taskCreated.add(act);
+	    }
 	}
 
 	Map<String, Object> tasksReport = new HashMap<String, Object>();
 	try
 	{
-	    tasksReport.put("tasks_done", taskComplete);
-	    tasksReport.put("tasks_inprogress", taskUpdated);
-	    tasksReport.put("taks_assigned", taskCreated);
-	    tasksReport.put("tasks_done_count", taskComplete.size());
-	    tasksReport.put("tasks_inprogress_count", taskUpdated.size());
-	    tasksReport.put("taks_assigned_count", taskCreated.size());
+	    if (taskComplete.size() > 0)
+	    {
+		tasksReport.put("tasks_done_count", taskComplete.size());
+		tasksReport.put("tasks_done", taskComplete);
+
+	    }
+
+	    if (taskUpdated.size() > 0)
+	    {
+		tasksReport.put("tasks_inprogress_count", taskUpdated.size());
+		tasksReport.put("tasks_inprogress", taskUpdated);
+
+	    }
+
+	    if (taskCreated.size() > 0)
+	    {
+		tasksReport.put("taks_assigned_count", taskCreated.size());
+		tasksReport.put("taks_assigned", taskCreated);
+	    }
+
+	    int total = taskCreated.size() + taskUpdated.size() + taskComplete.size();
+	    if (total > 0)
+		tasksReport.put("tasks_total", total);
+
 	}
 	catch (Exception e)
 	{
@@ -243,6 +337,62 @@ public class ActivityReportsUtil
 	return tasksReport;
     }
 
+    public static Map<String, Object> getEmailActivityReport(DomainUser user, Long startTime, Long endTime)
+    {
+	List<String> activityTypeList = new ArrayList<String>();
+	activityTypeList.add(Activity.ActivityType.EMAIL_SENT.toString());
+	activityTypeList.add(Activity.ActivityType.BULK_ACTION.toString());
+
+	List<Activity> activities = dao.ofy().query(Activity.class).filter("activity_type in ", activityTypeList)
+		.filter("time >= ", startTime).filter("time <= ", endTime).list();
+
+	int emailsCount = 0;
+	List<Activity> emailActivity = new ArrayList<Activity>();
+
+	for (Activity activity : activities)
+	{
+	    if (activity.activity_type == Activity.ActivityType.EMAIL_SENT)
+	    {
+		emailsCount++;
+		emailActivity.add(activity);
+	    }
+	    else if (activity.activity_type == Activity.ActivityType.BULK_ACTION
+		    && activity.custom1.equals("SEND_EMAIL"))
+	    {
+		try
+		{
+		    emailsCount += Integer.parseInt(activity.custom3);
+		}
+		catch (Exception e)
+		{
+		    emailsCount++;
+		}
+
+		activity.label = activity.custom3 + " " + activity.label;
+		activity.custom3 = activity.custom2;
+		emailActivity.add(activity);
+	    }
+	}
+
+	Map<String, Object> emailReport = new HashMap<String, Object>();
+	try
+	{
+	    if (emailsCount > 0)
+	    {
+		emailReport.put("emails_count", emailsCount);
+		emailReport.put("emails_sent", emailActivity);
+	    }
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println("Exception occured while event report creation - " + e.getMessage());
+	}
+
+	return emailReport;
+    }
+
     private static Map<String, Long> getTimeBound(ActivityReports report)
     {
 	Calendar cal = Calendar.getInstance();
@@ -251,14 +401,14 @@ public class ActivityReportsUtil
 	cal.set(Calendar.SECOND, 0);
 	cal.set(Calendar.MILLISECOND, 0);
 	Map<String, Long> timeBound = new HashMap<String, Long>();
-	if (report.duration.equals(ActivityReports.Duration.DAILY))
+	if (report.frequency.equals(ActivityReports.Frequency.DAILY))
 	{
 	    cal.add(Calendar.DATE, -1);
 	    timeBound.put("startTime", cal.getTimeInMillis() / 1000);
 	    cal.add(Calendar.DATE, 1);
 	    timeBound.put("endTime", cal.getTimeInMillis() / 1000);
 	}
-	else if (report.duration.equals(ActivityReports.Duration.WEEKLY))
+	else if (report.frequency.equals(ActivityReports.Frequency.WEEKLY))
 	{
 	    int daysBackToFri = cal.get(Calendar.DAY_OF_WEEK);
 	    if (daysBackToFri == Calendar.FRIDAY)
@@ -271,7 +421,7 @@ public class ActivityReportsUtil
 	    cal.add(Calendar.DATE, -7);
 	    timeBound.put("startTime", cal.getTimeInMillis() / 1000);
 	}
-	else if (report.duration.equals(ActivityReports.Duration.MONTHLY))
+	else if (report.frequency.equals(ActivityReports.Frequency.MONTHLY))
 	{
 	    int todayDate = cal.get(Calendar.DATE);
 	    // cal.add(Calendar.MONTH, 1);
@@ -311,5 +461,35 @@ public class ActivityReportsUtil
 	// Send reports email
 	SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, "activity_reports",
 		ActivityReportsUtil.generateActivityReports(reportId, endTime));
+    }
+
+    private static String getActivityRelateCOntacts(Activity activity, String domain)
+    {
+	try
+	{
+	    if (activity.related_contact_ids != null && activity.related_contact_ids.length() != 0)
+	    {
+		String result = "related to ";
+
+		JSONArray contacts = new JSONArray(activity.related_contact_ids);
+		for (int i = 0; i < contacts.length(); i++)
+		{
+		    result += "<a href=\"https://" + domain + ".agilecrm.com/#contact"
+			    + contacts.getJSONObject(i).getString("contactid") + "\" target=\"_blank\">"
+			    + contacts.getJSONObject(i).getString("contactname") + "</a>";
+		    if (i + 1 != contacts.length())
+			result += ", ";
+
+		}
+		return result;
+	    }
+	}
+	catch (org.json.JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	return "";
     }
 }

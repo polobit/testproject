@@ -17,11 +17,23 @@ cron:
   
 - description: Monthly reports
   url: /backend/cron/reports?duration=MONTHLY
-  schedule: 1st friday of month 23:55
+  schedule: 1st friday of month 23:45
   
 - description: Weekly reports
   url: /backend/cron/reports?duration=WEEKLY
-  schedule: every friday 23:50 
+  schedule: every friday 23:40 
+  
+  - description: daily activity reports
+  url: /backend/cron/activity-reports?duration=DAILY
+  schedule: every day 23:20
+  
+- description: Monthly activity reports
+  url: /backend/cron/activity-reports?duration=MONTHLY
+  schedule: 1st friday of month 23:55
+  
+- description: Weekly activity reports
+  url: /backend/cron/activity-reports?duration=WEEKLY
+  schedule: every friday 23:50
 
 - description: daily triggers
   url: /backend/cron/triggers?period=DAILY
@@ -34,7 +46,6 @@ cron:
 - description: Weekly triggers
   url: /backend/cron/triggers?period=WEEKLY
   schedule: every monday 01:00
-
   
 - description: Due Tasks Reminder
   url: /backend/cron/tasks

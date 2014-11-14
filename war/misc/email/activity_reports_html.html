@@ -18,102 +18,158 @@
 			</div>
 			<div
 				style="font-size: 14px; background-color: #fff; padding: 10px 7px 7px 7px">
-				<p>*****This is an automated email. Please do not reply*****</p>
-Activities from {{start_time}} to {{end_time}}.
+				Activities from {{start_time}} to {{end_time}}.
 				{{#reports}}
 				<h4>Activities of {{user_name}}</h4>
-				<b>Deals</b>
-				<table width="100%" cellpadding="5" cellspacing="0"style:"margin-top:-40px">
+				{{#deals}}
+				{{#deals.deals_total}}
+				<p style="font-size:1.2em;font-weight:bold;">Deals</p>
+				<table width="100%" cellpadding="5" cellspacing="0" style="margin-top:-40px;border-style:solid;border-radius:5px;border-color:darkgray;border-width:1px;">
 					<tbody>
+						{{#deals.won_count}}
 						<tr>
-							<td>
-								WON {{deals.won_count}}<p>Total value {{deals.won_value}}</p>
+							<td style="background-color:lightgray;width:30%;border-bottom-style:solid;border-bottom-width:1px !important;border-bottom-color:grey;vertical-align:top;">
+								<p style="margin:0px">WON</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{deals.won_count}}</span><p>Total value {{deals.currency}} {{deals.won_value}}</p>
 							</td>
-							<td>
+							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
 								<ul>
 									{{#deals.deals_won}}
-										<li>{{label}} won on {{epochToTaskDate time}}</li>
+										<li>{{label}} {{{related_contact_ids}}} won on {{time}}</li>
 									{{/deals.deals_won}}
 								</ul>
 							</td>
 						</tr>
+						{{/deals.won_count}}
+						{{#deals.lost_count}}
 						<tr>
-							<td>
-								LOST {{deals.lost_count}}<p>Total value {{deals.lost_value}}</p>
+							<td style="background-color:lightgray;width:30%;border-bottom-style:solid;border-bottom-width:1px !important;border-bottom-color:grey;vertical-align:top;">
+								<p style="margin:0px">LOST</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{deals.lost_count}}</span><p>Total value {{deals.currency}} {{deals.lost_value}}</p>
 							</td>
-							<td>
+							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
 								<ul>
 									{{#deals.deals_lost}}
-										<li>{{label}} lost on {{epochToTaskDate time}}</li>
+										<li>{{label}} {{{related_contact_ids}}} lost on {{time}}</li>
 									{{/deals.deals_lost}}
 								</ul>
 							</td>
 						</tr>
+						{{/deals.lost_count}}
+						{{#deals.new_count}}
+						<tr>
+							<td style="background-color:lightgray;width:30%;border-bottom-style:solid;border-bottom-width:1px !important;border-bottom-color:grey;vertical-align:top;">
+								<p style="margin:0px">New</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{deals.new_count}}</span><p>Total value {{deals.currency}} {{deals.new_value}}</p>
+							</td>
+							<td style="color:#777;">
+								<ul>
+									{{#deals.deals_created}}
+										<li>{{label}} {{{related_contact_ids}}} assigned on {{time}}</li>
+									{{/deals.deals_created}}
+								</ul>
+							</td>
+						</tr>
+						{{/deals.new_count}}
 					</tbody>
 				</table>
-				<b>Tasks</b>
-				<table width="100%" cellpadding="5" cellspacing="0"style:"margin-top:-40px">
+				{{/deals.deals_total}}
+				{{/deals}}
+				{{#tasks}}
+				{{#tasks.tasks_total}}
+				<p style="font-size:1.2em;font-weight:bold;">Tasks</p>
+				<table width="100%" cellpadding="5" cellspacing="0" style="margin-top:-40px;border-style:solid;border-radius:5px;border-color:darkgray;border-width:1px;">
 					<tbody>
+						{{#tasks.tasks_done_count}}
 						<tr>
-							<td>
-								Done {{tasks.tasks_done_count}} tasks.
+							<td style="background-color:lightgray;width:30%;border-bottom-style:solid;border-bottom-width:1px !important;border-bottom-color:grey;vertical-align:top;">
+								<p style="margin:0px">Done</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{tasks.tasks_done_count}}</span>
 							</td>
-							<td>
+							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
 								<ul>
 									{{#tasks.tasks_done}}
-										<li>{{label}} completed on {{epochToTaskDate time}}</li>
+										<li>{{label}} {{{related_contact_ids}}} completed on {{time}}</li>
 									{{/tasks.tasks_done}}
 								</ul>
 							</td>
 						</tr>
+						{{/tasks.tasks_done_count}}
+						{{#tasks.tasks_inprogress_count}}
 						<tr>
-							<td>
-								In Progress {{tasks.tasks_inprogress_count}} tasks.
+							<td style="background-color:lightgray;width:30%;border-bottom-style:solid;border-bottom-width:1px !important;border-bottom-color:grey;vertical-align:top;">
+								<p style="margin:0px">In Progress</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{tasks.tasks_inprogress_count}}</span>
 							</td>
-							<td>
+							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
 								<ul>
 									{{#tasks.tasks_inprogress}}
-										<li>{{label}} changed progress last on {{epochToTaskDate time}}</li>
+										<li>{{label}} {{{related_contact_ids}}} ({{custom1}}%)</li>
 									{{/tasks.tasks_inprogress}}
 								</ul>
 							</td>
 						</tr>
+						{{/tasks.tasks_inprogress_count}}
+						{{#tasks.taks_assigned_count}}
 						<tr>
-							<td>
-								Assigned {{tasks.taks_assigned_count}} total.
+							<td style="background-color:lightgray;width:30%;border-bottom-style:solid;border-bottom-width:1px !important;border-bottom-color:grey;vertical-align:top;">
+								<p style="margin:0px">Assigned</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{tasks.taks_assigned_count}}</span>
 							</td>
-							<td>
+							<td style="color:#777;">
 								<ul>
 									{{#tasks.taks_assigned}}
-										<li>{{label}} created on {{epochToTaskDate time}}</li>
+										<li>{{label}} {{{related_contact_ids}}} created on {{time}}</li>
 									{{/tasks.taks_assigned}}
 								</ul>
 							</td>
 						</tr>
+						{{/tasks.taks_assigned_count}}
 					</tbody>
 				</table>
-				<b>Events</b>
-				<table width="100%" cellpadding="5" cellspacing="0"style:"margin-top:-40px">
+				{{/tasks.tasks_total}}
+				{{/tasks}}
+				{{#events}}
+				{{#events.events_count}}
+				<p style="font-size:1.2em;font-weight:bold;">Events</p>
+				<table width="100%" cellpadding="5" cellspacing="0" style="margin-top:-40px;border-style:solid;border-radius:5px;border-color:darkgray;border-width:1px;">
 					<tbody>
 						<tr>
-							<td>
-								Having {{events.events_count}}
+							<td style="background-color:lightgray;width:30%;border-bottom-style:solid;border-bottom-width:1px !important;border-bottom-color:grey;vertical-align:top;">
+								<span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{events.events_count}}</span>
 							</td>
-							<td>
+							<td style="color:#777;">
 								<ul>
 									{{#events.events}}
-										<li>Had {{title}} on</li>
+										<li>{{title}} on {{start}}</li>
 									{{/events.events}}
 								</ul>
 							</td>
 						</tr>
 					</tbody>
 				</table>
+				{{/events.events_count}}
+				{{/events}}
+				{{#emails}}
+				{{#emails.emails_count}}
+				<p style="font-size:1.2em;font-weight:bold;">Emails</p>
+				<table width="100%" cellpadding="5" cellspacing="0" style="margin-top:-40px;border-style:solid;border-radius:5px;border-color:darkgray;border-width:1px;">
+					<tbody>
+						<tr>
+							<td style="background-color:lightgray;width:30%;border-bottom-style: solid;border-bottom-width: 1px !important;border-bottom-color: grey;">
+								<p style="margin:0px">Emails Sent</p><span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{emails.emails_count}}</span>
+							</td>
+							<td style="color:#777;">
+								<ul>
+									{{#emails.emails_sent}}
+										<li>Email sent to {{label}} on {{time}}</li>
+									{{/emails.emails_sent}}
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				{{/emails.emails_count}}
+				{{/emails}}
 				{{/reports}}
 				<br />
 				<p>You are receiving this email as you have created a report 
 					<span>"{{report_name}}"</span> at Agile CRM.
-				 	You can manage <a href="https://{{HashMap.domain}}.agilecrm.com/#reports" target="_blank">reports</a> here.</p>
+				 	You can manage <a href="https://{{domain}}.agilecrm.com/#activity-reports" target="_blank">reports</a> here.</p>
 				<br/>
 				<p style="font-weight: bold;">Have questions or need help?</p>
 				<p>Our customer service and support team is here to help you any

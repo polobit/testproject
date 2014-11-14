@@ -58,15 +58,13 @@ var ReportsRouter = Backbone.Router.extend({
 							head.js(LIB_PATH + 'lib/jquery.multi-select.js', function()
 							{
 								$('#activity-type-list, #users-list',el).multiSelect();
-								$('#ms-activity-type-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "activity_type").attr("id", "activity_type");
+								$('#ms-activity-type-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "activity").attr("id", "activity_type");
 								$('#ms-users-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id", "user_ids");
 								++count;
 								if (count > 0)
 									$("#content").html(el)
 							});
 						}, '<option value="{{id}}">{{name}}</option>', true, el);
-				
-
 			} });
 
 		$("#content").html(getRandomLoadingImg());
@@ -109,7 +107,7 @@ var ReportsRouter = Backbone.Router.extend({
 							{
 
 								$('#activity-type-list, #users-list',el).multiSelect();
-								$('#ms-activity-type-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "activity_type").attr("id", "activity_type");
+								$('#ms-activity-type-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "activity").attr("id", "activity_type");
 								$('#ms-users-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id", "user_ids");
 								
 								$("#content").html(el)
@@ -117,11 +115,11 @@ var ReportsRouter = Backbone.Router.extend({
 									$('#users-list').multiSelect('select',user_id);
 									console.log('select user---',user_id);
 								});
-								$.each(json.activity_type,function(i,activity){
+								$.each(json.activity,function(i,activity){
 									$('#activity-type-list').multiSelect('select',activity);
 									console.log('select activity-------',activity);
 								});
-								$('#ms-activity-type-list .ms-selection').children('ul').addClass('multiSelect').attr("name", "activity_type").attr("id", "activity_type");
+								$('#ms-activity-type-list .ms-selection').children('ul').addClass('multiSelect').attr("name", "activity").attr("id", "activity_type");
 								$('#ms-users-list .ms-selection').children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id", "user_ids");
 								
 							});

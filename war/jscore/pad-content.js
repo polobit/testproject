@@ -71,6 +71,14 @@ var CONTENT_JSON = {
 		"route" : "#report-add",
 		"image" : "/img/clipboard.png"
 	},
+	"activity-reports" : {
+		"title" : "You do not have any reports currently.",
+		"description" : "Reports are based on a variety of tags and filters and receive them periodically to constantly be in touch with your sales cycle and pipeline.",
+		//"learn_more" : "click here to learn more",
+		"button_text" : "Add Report",
+		"route" : "#activity-report-add",
+		"image" : "/img/clipboard.png"
+	},
 	"contact-filters" : {
 		"title" : "You do not have any filters currently.",
 		"description" : "Filters are used to sort contacts with a specific criteria to find patterns.",

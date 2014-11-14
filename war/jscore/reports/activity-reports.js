@@ -12,7 +12,7 @@ function saveActivityReport(saveBtn){
 	}*/
 	
 	var json = serializeForm('activityReportsForm');
-	json.activity_type = $('#activity-type-list').val();
+	json.activity = $('#activity-type-list').val();
 	json.user_ids = $('#users-list').val();
 	console.log(json);
 	
@@ -42,7 +42,7 @@ function updateActivityReport(id){
 	$.each(json.user_ids,function(i,user_id){
 		$('#users-list').multiSelect('select',user_id);
 	});
-	$.each(json.activity_type,function(i,activity){
+	$.each(json.activity,function(i,activity){
 		$('#activity-type-list').multiSelect('select',activity);
 	});
 	
@@ -77,7 +77,7 @@ $(function(){
 			'</div>');
 
 		confirmationModal.modal('show');
-		var date = Date.now()%1000;
+		var date = Math.floor(Date.now()/1000);
 		$("#report-send-confirm", confirmationModal).click(
 				function(event)
 				{

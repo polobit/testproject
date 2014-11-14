@@ -44,17 +44,17 @@ public class ActivityReports implements Serializable
 
     @Indexed
     @NotSaved(IfDefault.class)
-    public List<ActivityType> activity_type = null;
+    public List<ActivityType> activity = null;
 
     // Category of report generation - daily, weekly, monthly.
-    public static enum Duration
+    public static enum Frequency
     {
 	DAILY, WEEKLY, MONTHLY
     };
 
     @Indexed
     @NotSaved(IfDefault.class)
-    public Duration duration;
+    public Frequency frequency;
 
     @NotSaved(IfDefault.class)
     public String sendTo = null;
@@ -73,10 +73,10 @@ public class ActivityReports implements Serializable
 
     }
 
-    public ActivityReports(Duration duration, String name)
+    public ActivityReports(Frequency duration, String name)
     {
 	this.name = name;
-	this.duration = duration;
+	this.frequency = duration;
     }
 
     @XmlElement(name = "usersList")
