@@ -6,16 +6,12 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
-import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
-import com.agilecrm.subscription.restrictions.db.BillingRestriction;
-import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandler;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.email.SendMail;
-import com.google.appengine.api.NamespaceManager;
 import com.stripe.model.Customer;
 
 public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
@@ -116,19 +112,22 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	    System.out.println("is deleted : " + isDeleted);
 	    if (!isDeleted)
 	    {
-		com.stripe.model.Subscription stripeSubscription = StripeUtil.getEmailSubscription(customer, getDomain());
+		com.stripe.model.Subscription stripeSubscription = StripeUtil.getEmailSubscription(customer,
+			getDomain());
 		System.out.println(stripeSubscription);
 		if (stripeSubscription != null)
 		{
 		    planDetails.put("current_plan", stripeSubscription.getPlan().getName());
 		    planDetails.put("current_quantity", stripeSubscription.getQuantity());
 		}
-		
-		SendMail.sendMail(getUser().email, SendMail.EMAIL_PLAN_CHANGED_SUBJECT, SendMail.EMAIL_PLAN_CHANGED, planDetails);
+
+		SendMail.sendMail(getUser().email, SendMail.EMAIL_PLAN_CHANGED_SUBJECT, SendMail.EMAIL_PLAN_CHANGED,
+			planDetails);
 	    }
 	    else
 		// Send mail to domain user
-		sendMail1(SendMail.FAILED_BILLINGS_FINAL_TIME_SUBJECT, SendMail.FAILED_BILLINGS_FINAL_TIME);
+		sendMail1(SendMail.EMAIL_SUBSCRIPTION_CANCELLED_BY_USER_SUBJECT,
+			SendMail.EMAIL_SUBSCRIPTION_CANCELLED_BY_USER);
 
 	}
 
@@ -136,7 +135,7 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	{
 	    SubscriptionUtil.deleteUserSubscription(getDomain());
 	    // Send mail to domain user
-	    sendMail1(SendMail.FAILED_BILLINGS_FINAL_TIME_SUBJECT, SendMail.FAILED_BILLINGS_FINAL_TIME);
+	    sendMail1(SendMail.ACCOUNT_CANCELLED_BY_USER_SUBJECT, SendMail.ACCOUNT_CANCELLED_BY_USER);
 	}
     }
 

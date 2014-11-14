@@ -57,6 +57,9 @@ public class SendMail
     public static final String ACCOUNT_CANCELLED_BY_USER = "account_cancelled_by_user";
     public static final String ACCOUNT_CANCELLED_BY_USER_SUBJECT = "Agile CRM Account Cancelled";
 
+    public static final String EMAIL_SUBSCRIPTION_CANCELLED_BY_USER = "subscription/add-on/email/email_cancelled_by_user_html.html";
+    public static final String EMAIL_SUBSCRIPTION_CANCELLED_BY_USER_SUBJECT = "Agile CRM Email Package Cancelled";
+
     public static final String AGENT_ADDED = "agent_added";
     public static final String AGENT_ADDED_SUBJECT = "You have been added to Agile CRM";
 
@@ -65,13 +68,13 @@ public class SendMail
 
     public static final String PAYMENT_RECEIVED = "subscription/payments/success/payment_received";
     public static final String PAYMENT_RECEIVED_SUBJECT = "Payment Received. Thank you.";
-    
+
     public static final String EMAIL_PAYMENT_RECEIVED = "subscription/add-on/email/payment_received";
     public static final String EMAIL_PAYMENT_RECEIVED_SUBJECT = "Payment Received. Thank you.";
 
     public static final String PLAN_CHANGED = "subscription/plan_changed";
     public static final String PLAN_CHANGED_SUBJECT = "Your Agile CRM plan has changed";
-    
+
     public static final String EMAIL_PLAN_CHANGED = "subscription/add-on/email/plan_changed";
     public static final String EMAIL_PLAN_CHANGED_SUBJECT = "Your Agile CRM plan has changed";
 
