@@ -38,7 +38,7 @@ public class StripeChargeWebhook extends HttpServlet
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
 	String apiKey = request.getParameter("api-key");
-	System.out.println("servlet updated, api key is " + apiKey);
+	System.out.println("api key is " + apiKey);
 
 	Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
 	if (owner == null)

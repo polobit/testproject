@@ -94,7 +94,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 			    Contact contact = buildContact(recepientName, recepientEmail);
 			    if (contact != null)
 			    {
-				if (InboundMailTrigger() != null && triggerCondition(message, InboundMailTrigger(), recepientEmail))
+				if (InboundMailTrigger() != null && triggerConditionResult(message, InboundMailTrigger(), recepientEmail))
 				{
 				    System.out.println("assigning campaign to contact");
 				    WorkflowSubscribeUtil.subscribe(contact, InboundMailTrigger().id);
@@ -187,7 +187,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	}
     }
 
-    public Boolean triggerCondition(JSONObject message, Trigger trigger, String recepientEmail)
+    public Boolean triggerConditionResult(JSONObject message, Trigger trigger, String recepientEmail)
     {
 	try
 	{
@@ -198,9 +198,9 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	    System.out.println("mail from is " + mailFrom);
 	    System.out.println("mail to is " + recepientEmail);
 
-	    if (StringUtils.equals(mailSubject, trigger.trigger_inbound_mail_event_subject)
-		    && StringUtils.equals(mailFrom, trigger.trigger_inbound_mail_event_from)
-		    && StringUtils.equals(recepientEmail, trigger.trigger_inbound_mail_event_to))
+	    if (triggerCondition(mailSubject, trigger.trigger_inbound_mail_event_subject)
+		    && triggerCondition(mailFrom, trigger.trigger_inbound_mail_event_from)
+		    && triggerCondition(recepientEmail, trigger.trigger_inbound_mail_event_to))
 		return true;
 	    else
 		return false;
@@ -209,6 +209,15 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	{
 	    return false;
 	}
+    }
+
+    public Boolean triggerCondition(String messageData, String triggerCondition)
+    {
+	if (StringUtils.isBlank(triggerCondition))
+	    return true;
+	else if (StringUtils.equals(messageData, triggerCondition))
+	    return true;
+	return false;
     }
 
     public String getAgileEmail(JSONObject message)
