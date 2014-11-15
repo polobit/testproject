@@ -1,5 +1,7 @@
 package com.agilecrm.contact.email;
 
+import java.util.List;
+
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
@@ -22,6 +24,8 @@ public class EmailSender
     public AccountEmailStats accountEmailStats = null;
 
     public PlanLimits limits = null;
+
+    private int totalEmailsSent = 0;
 
     boolean isWhiteLabled = false;
 
@@ -59,9 +63,42 @@ public class EmailSender
     public boolean canSend()
     {
 	return emailBillingRestriction.check();
+
     }
 
     public void updateStats()
+    {
+	System.out.println("initial count : " + billingRestriction.one_time_emails_count);
+
+	billingRestriction = BillingRestrictionUtil.getBillingRestriction(true);
+
+	System.out.println("Updated Stats time is..." + System.currentTimeMillis());
+
+	billingRestriction.one_time_emails_count = billingRestriction.one_time_emails_count == null ? 0
+	        : billingRestriction.one_time_emails_count;
+
+	billingRestriction.one_time_emails_count -= totalEmailsSent;
+
+	System.out.println("Updated count : " + billingRestriction.one_time_emails_count + ", emails sent"
+	        + totalEmailsSent);
+
+	totalEmailsSent = 0;
+
+	if (billingRestriction != null)
+	    billingRestriction.save();
+
+	if (accountEmailStats != null)
+	    accountEmailStats.save();
+
+	emailBillingRestriction.setBillingRestriction(billingRestriction);
+
+	// Sets max and checks again. It will help adding tag
+	emailBillingRestriction.setMax();
+	emailBillingRestriction.check();
+
+    }
+
+    public void updateOneTimeEmailStats()
     {
 	if (billingRestriction != null)
 	    billingRestriction.save();
@@ -82,8 +119,10 @@ public class EmailSender
 		    : billingRestriction.one_time_emails_count;
 
 	    billingRestriction.one_time_emails_count -= count;
+
 	}
 
+	totalEmailsSent += count;
     }
 
     public void incrementEmailsCount()
@@ -111,7 +150,8 @@ public class EmailSender
     }
 
     public void sendEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
-	    String replyTo, String html, String text, String mandrillMetadata, String... attachments) throws Exception
+	    String replyTo, String html, String text, String mandrillMetadata, List<Long> documentIds,
+	    String... attachments) throws Exception
     {
 
 	String domain = NamespaceManager.get();
@@ -120,14 +160,14 @@ public class EmailSender
 	    if (canSend())
 	    {
 		EmailGatewayUtil.sendEmail(emailGateway, domain, fromEmail, fromName, to, cc, bcc, subject, replyTo,
-		        html, text, mandrillMetadata, attachments);
+		        html, text, mandrillMetadata, documentIds, attachments);
 
 		// Sets Billing restriction limit and account email stats
 		if (!EmailUtil.isToAgileEmail(to))
 		{
-		    setCount(AccountEmailStatsUtil.getEmailsTotal(to, cc, bcc));
+		    setCount(1);
 
-		    updateStats();
+		    updateOneTimeEmailStats();
 		}
 
 		return;
@@ -140,7 +180,8 @@ public class EmailSender
 	}
 
 	// If plan exceeded, throw exception
-	throw new Exception("Emails limit exceeded. Please increase your email limits.");
+	throw new Exception(
+	        "Your email quota has expired. Please <a href=\"#subscribe\">upgrade</a> your email subscription.");
 
     }
 

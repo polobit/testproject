@@ -325,6 +325,7 @@ public class EmailGatewayUtil
 	    {
 		Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
 		        mandrillMetadata, documentIds, attachments);
+
 		return;
 	    }
 
