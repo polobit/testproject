@@ -84,8 +84,14 @@ $(function()
 		
 		// Show selected name
 		var name = $(this).html(), id = $(this).attr("href");
-
-		$(this).closest("ul").data("selected_item", id);
+		
+		var selectedDropDown = $(this).closest("ul").attr("id");
+				
+		if(selectedDropDown == "new-type-tasks")
+		    $(this).closest("ul.main-menu").data("selected_item", id);
+		else 
+			$(this).closest("ul").data("selected_item", id);
+		
 		$(this).closest(".btn-group").find(".selected_name").text(name);
 
 		// Empty collection

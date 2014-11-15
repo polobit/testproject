@@ -9,6 +9,9 @@
 
 $(function() {
 	
+	// To set events and css of dropdown's sub menu
+	$('.dropdown-submenu > a').submenupicker();
+	
 	// Loads progress slider in add task / update modal.
 	loadProgressSlider($("#taskForm"));
 	loadProgressSlider($("#updateTaskForm"));
