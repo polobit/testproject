@@ -82,8 +82,8 @@ function sipStackEventsListener(e /* SIPml.Stack.Event */)
  */
 function sipSessionEventsListener(e /* SIPml.Session.Event */)
 {	
-	//console.log(e.type);
-	//console.log(e.description);
+	console.log(e.type);
+	console.log(e.description);
 
 	tsk_utils_log_info('==agile session event = ' + e.type);
 
@@ -187,6 +187,8 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 				showCallNotyPopup("hackersForbidden", "error", "SIP: Hackers Forbidden.", false);
 			else if (e.description == "User not found")
 				showCallNotyPopup("userNotFound", "error", "SIP: User not found.", false);
+			else if(e.description == "Call terminating...")
+			     console.log("SIP : Terminated because " + e.description);
 			else
 				showCallNotyPopup("disconnected", 'error', "SIP : Terminated because " + e.description, 5000);
 
