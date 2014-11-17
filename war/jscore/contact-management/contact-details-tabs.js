@@ -445,6 +445,8 @@ $(function(){
 		
 		// Removes leading and trailing commas
 		reply_email = reply_email.replace(/(, $)/g, "");
+		cc_emails = cc_emails.replace(/(, $)/g, "");
+		bcc_emails = bcc_emails.replace(/(, $)/g, "");
 		
 		// Trigger route callback
 		App_Contacts.sendEmail(reply_email, "Re: " + $parent_element.find('.email-subject').text(), '<p></p><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex;">'+ $parent_element.find('.email-body').html()+'</blockquote>', cc_emails, bcc_emails);
