@@ -423,26 +423,25 @@ $(function(){
 		
 		if(configured_email && to_emails){
 			
-			to_emails = get_emails_to_reply(to_emails, from, configured_email);
+			// Merge both from and to removing configured email
+			to_emails = get_emails_to_reply(from + ', '+ to_emails, configured_email);
 		}
 		
 		if(configured_email && cc_emails){
 			
-			cc_emails = get_emails_to_reply(cc_emails, from, configured_email);
+			cc_emails = get_emails_to_reply(cc_emails, configured_email);
 		}
 
 		if(configured_email && bcc_emails){
 	
-			bcc_emails = get_emails_to_reply(bcc_emails, from, configured_email);
+			bcc_emails = get_emails_to_reply(bcc_emails, configured_email);
 		}
 		
 		// Change url only without triggerring function
 		App_Contacts.navigate('send-email');
 		
-		var reply_email = from;
-		
-		if(email_sync_configured)
-			reply_email = from + ', ' + to_emails;
+		// Reply all emails
+		reply_email = to_emails;
 		
 		// Removes leading and trailing commas
 		reply_email = reply_email.replace(/(, $)/g, "");
@@ -667,7 +666,7 @@ function load_contact_tab(el, contactJSON)
 		
 }
 
-function get_emails_to_reply(emails, from, configured_email)
+function get_emails_to_reply(emails, configured_email)
 {
 	var emails_array = emails.split(',');
 	
@@ -678,7 +677,7 @@ function get_emails_to_reply(emails, from, configured_email)
 
 		var email = emails_array[i].match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
 		
-		if(configured_email && (email == configured_email || email == from))
+		if(configured_email && (email == configured_email))
 			continue;
 		
 		emails += email;
