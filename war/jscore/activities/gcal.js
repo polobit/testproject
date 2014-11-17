@@ -87,7 +87,7 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
 			
 			if(fc_event)
 			// Add event
-			$('#calendar').fullCalendar( 'renderEvent', fc_event  )
+			$('#calendar_event').fullCalendar( 'renderEvent', fc_event  )
 		}
 	});
 }

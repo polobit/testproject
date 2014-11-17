@@ -34,13 +34,22 @@
 		</div>-->
     </div>
     <div class="span9">
-        <div id="calendar">
-           
+        <div id="calendar_event">
+           <ul class="nav nav-tabs" id="event_tab">
+            <li class="active"><a href="#agile" data-toggle="tab" >Agile Event</a></li>
+            <li><a href="#google" data-toggle="tab">Google Event</a></li>
+            </ul>
         </div>
+           <div class="tab-content">
+           <div class="tab-pane active" id="agile"></div>
+          <div class="tab-pane" id="google"></div>
+          </div>
         <br />
         <a class="right" href="#icalModal" data-toggle="modal" id="subscribe-ical" style="display:none;"><i class="icon-calendar"></i> Subscribe to iCalendar Feed</a>
     </div>
 </div>
+
+
 </script>
 
 <script id="event-filter-template" type="text/html">

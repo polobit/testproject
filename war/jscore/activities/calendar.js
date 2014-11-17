@@ -3,12 +3,12 @@
  * Describes the given object is an array or not
  * 
  * @param {Object}
- *            a to verify array or not
+ *         a to verify array or not
  * @returns {Boolean} true if given param is array else false
  */
 function isArray(a)
 {
-    return Object.prototype.toString.apply(a) === '[object Array]';
+				return Object.prototype.toString.apply(a) === '[object Array]';
 }
 
 /**
@@ -19,47 +19,49 @@ function isArray(a)
  */
 function load_events_from_google(callback)
 {
-	if(readCookie('event-filters') && JSON.parse(readCookie('event-filters')).type == 'agile')
-		return;
-	
-	// Name of the cookie to store/fetch calendar prefs. Current user id is set
-	// in cookie name to avoid
-	// showing tasks in different users calendar if logged in same browser
-	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
-	
-	// Reads existing cookie
-	var _agile_calendar_prefs_cookie = readCookie(google_calendar_cookie_name);
-	
-	// If cookie is not null, then it check it token is still valid; checks
-	// based on expiry time.
-	if(_agile_calendar_prefs_cookie && _agile_calendar_prefs_cookie != "null")
-	{
-		var prefs = JSON.parse(_agile_calendar_prefs_cookie);
+				if (readCookie('event-filters') && JSON.parse(readCookie('event-filters')).type == 'agile')
+								return;
 
-		// Checks if token expired. It considers expire before 2 minutes window
-		// of actual expiry time.
-		if(prefs.expires_at - (2 * 60 * 1000)  >= new Date().getTime())
-		{
-			// Returns token to the callback accoring to specification of gcal
-			get_google_calendar_event_source(prefs, callback);
-			return;
-		}
-		
-		// Erases cookie if token is expired and sends request to backend to
-		// acquire new token
-		erase_google_calendar_prefs_cookie()
-		
-	}
-	
-	// Fetch new token from backen, saves in cookie, and token is returned to gcal  
-	$.getJSON('/core/api/calendar-prefs/refresh-token', function (prefs) {
-		if(!prefs)
-			return;
-		
-		// Creates cookie
-		createCookie(google_calendar_cookie_name, JSON.stringify(prefs));
-		get_google_calendar_event_source(prefs, callback);
- 	});
+				// Name of the cookie to store/fetch calendar prefs. Current user id is set
+				// in cookie name to avoid
+				// showing tasks in different users calendar if logged in same browser
+				var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
+
+				// Reads existing cookie
+				var _agile_calendar_prefs_cookie = readCookie(google_calendar_cookie_name);
+
+				// If cookie is not null, then it check it token is still valid; checks
+				// based on expiry time.
+				if (_agile_calendar_prefs_cookie && _agile_calendar_prefs_cookie != "null")
+				{
+								var prefs = JSON.parse(_agile_calendar_prefs_cookie);
+
+								// Checks if token expired. It considers expire before 2 minutes window
+								// of actual expiry time.
+								if (prefs.expires_at - (2 * 60 * 1000) >= new Date().getTime())
+								{
+												// Returns token to the callback accoring to specification of gcal
+												get_google_calendar_event_source(prefs, callback);
+												return;
+								}
+
+								// Erases cookie if token is expired and sends request to backend to
+								// acquire new token
+								erase_google_calendar_prefs_cookie()
+
+				}
+
+				// Fetch new token from backen, saves in cookie, and token is returned to
+				// gcal
+				$.getJSON('/core/api/calendar-prefs/refresh-token', function(prefs)
+				{
+								if (!prefs)
+												return;
+
+								// Creates cookie
+								createCookie(google_calendar_cookie_name, JSON.stringify(prefs));
+								get_google_calendar_event_source(prefs, callback);
+				});
 }
 
 /**
@@ -67,319 +69,403 @@ function load_events_from_google(callback)
  */
 function erase_google_calendar_prefs_cookie()
 {
-	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
-	eraseCookie(google_calendar_cookie_name);
+				var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
+				eraseCookie(google_calendar_cookie_name);
 }
 
 // Returns token in to gcal callback in specified format
 function get_google_calendar_event_source(data, callback)
 {
-	
-	if (callback && typeof (callback) === "function")
-		callback({token:data.access_token, dataType:'agile-gcal', className:"agile-gcal"});
+
+				if (callback && typeof (callback) === "function")
+								callback({ token : data.access_token, dataType : 'agile-gcal', className : "agile-gcal" });
 }
-
-
 
 /**
  * Shows the calendar
  */
-function showCalendar() {
-	
-	// Customized fetch options
-	if(!readCookie('event-filters') || JSON.parse(readCookie('event-filters')).type != 'agile')
-		_init_gcal_options();
+function showCalendar()
+{
 
-	$('#calendar').fullCalendar({
-    	
-       /**
-		 * Renders the events displaying currently on fullCalendar
-		 * 
-		 * @method events
-		 * @param {Object}
-		 *            start fullCalendar current section start day date object
-		 * @param {Object}
-		 *            end fullCalendar current section end day date object
-		 * @param {function}
-		 *            callback displays the events on fullCalendar
-		 * 
-		 */
-    	
-        eventSources :[{events: function (start, end, callback) {
-        	
-        	var eventFilters = JSON.parse(readCookie('event-filters'));
-        	if(readCookie('event-filters') && eventFilters.type == 'google'){
-        		 $("#loading_calendar_events").hide();
-        		return;
-        	}
-        	
-        	var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
-        	if(readCookie('event-filters') && eventFilters.owner_id.length > 0)
-        		eventsURL += '&owner_id='+eventFilters.owner_id;
-        	console.log('-----------------',eventsURL);
-            $.getJSON(eventsURL, function (doc) {
-                
-            	if(doc)
-            	{
-            		  
-            	    callback(doc);
-            		
-            	}
-            });
-        }},
-        {
-        	dataType : 'agile-gcal'
-        }],
-        header: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'month,agendaWeek,agendaDay'
-        },
-        loading: function (bool) {
-            if (bool) {
-            	
-            	  $("#loading_calendar_events").remove();
-            	  $('.fc-header-left').append('<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle">loading...</span>').show();
-                $('.fc-header-left').show();
-                
-            } else {
-              // $('#loading').hide();
-            	 $("#loading_calendar_events").hide();
-                start_tour('calendar');
-            }
-        },
-        selectable: true,
-		selectHelper: true,
-		editable: true,
-		theme: false,
-	   /**
-		 * Shows event pop-up modal with pre-filled date and time values, when
-		 * we select a day or multiple days of the fullCalendar
-		 * 
-		 * @method select
-		 * @param {Object}
-		 *            start start-date of the event
-		 * @param {Object}
-		 *            end end-date of the event
-		 * @param {Boolean}
-		 *            allDay
-		 */	
-        select: function(start, end, allDay) {
-        	// Show a new event
-            $('#activityModal').modal('show');
-            highlight_event();
-            
-            // Set Date for Event
-            var dateFormat = 'mm/dd/yyyy';
-            $('#task-date-1').val(start.format(dateFormat));
-            $("#event-date-1").val(start.format(dateFormat));
-            $("#event-date-2").val(end.format(dateFormat));
+				// Customized fetch options
+				if (!readCookie('event-filters') || JSON.parse(readCookie('event-filters')).type != 'agile')
+								_init_gcal_options();
 
-            
-            // Set Time for Event
-            if ((start.getHours() == 00) && (end.getHours() == 00) && (end.getMinutes() == 00)) {
-                $('#event-time-1').val('');
-                $('#event-time-2').val('');
-            } else {
-                $('#event-time-1').val((start.getHours() < 10 ? "0" : "") + start.getHours() + ":" + (start.getMinutes() < 10 ? "0" : "") + start.getMinutes());
-                $('#event-time-2').val((end.getHours() < 10 ? "0" : "") + end.getHours() + ":" + (end.getMinutes() < 10 ? "0" : "") + end.getMinutes());
-            }
-            
-		},
-	   /**
-		 * Updates the event by changing start and end date, when it is dragged
-		 * to another location on fullCalendar.
-		 * 
-		 * @method eventDrop
-		 * @param {Object}
-		 *            event1 event with new start and end date
-		 * @param {Number}
-		 *            dayDelta holds the number of days the event was moved
-		 *            forward
-		 * @param {Number}
-		 *            minuteDelta holds the number of minutes the event was
-		 *            moved forward
-		 * @param {Boolean}
-		 *            allDay weather the event has been dropped on a day in
-		 *            month view or not
-		 * @param {Function}
-		 *            revertFunc sets the event back to it's original position
-		 */	
-		eventDrop: function(event1, dayDelta, minuteDelta, allDay, revertFunc) {      
-	    
-			
-			// Confirm from the user about the change
-			if (!confirm("Are you sure about this change?")) {
-	            revertFunc();
-	            return;
-	        }
-			
-			var event = $.extend(true, {}, event1);
-			
-			
-			// Update event if the user changes it in the calendar
-			event.start = new Date(event.start).getTime()/1000;
-	        event.end = new Date(event.end).getTime()/1000;
-	        if(event.end == null || event.end == 0)	        	
-	        	event.end = event.start;
-	        var eventModel = new Backbone.Model();
-	        eventModel.url = 'core/api/events';
-	        
-	        eventModel.save(event);	        
-   	    },
-   	   /**
-		 * Updates or deletes an event by clicking on it
-		 * 
-		 * @method eventClick
-		 * @param {Object}
-		 *            event to update or delete
-		 */ 
-   	    eventClick: function (event) {
-   	    	if(isNaN(event.id))
-   	    		return;
-   	    	// Deserialize
-   	    	deserializeForm(event, $("#updateActivityForm"));
-   	    	
-   	    	// Set time for update Event
-            $('#update-event-time-1').val((event.start.getHours() < 10 ? "0" : "") + event.start.getHours() + ":" + (event.start.getMinutes() < 10 ? "0" : "") +event.start.getMinutes());
-            $('#update-event-time-2').val((event.end.getHours() < 10 ? "0" : "") + event.end.getHours() + ":" + (event.end.getMinutes() < 10 ? "0" : "") + event.end.getMinutes());
-           
-         // Set date for update Event
-            var dateFormat = 'mm/dd/yyyy';
-            $("#update-event-date-1").val((event.start).format(dateFormat));
-            $("#update-event-date-2").val((event.end).format(dateFormat));
-            
-   	    	// hide end date & time for all day events
-            if(event.allDay)
-            {
-            	$("#update-event-date-2").closest('.row').hide();
-            	$('#update-event-time-1').closest('.control-group').hide();
-            }
-            else 
-            {
-            	$('#update-event-time-1').closest('.control-group').show();
-            	$("#update-event-date-2").closest('.row').show();
-            }
-   	    	
-         // Show edit modal for the event
-            $("#updateActivityModal").modal('show');
-   	    	return false;
-   	    }
-   	    
-    });
+				$('#calendar_event')
+												.fullCalendar(
+																				{
+
+																								/**
+																								 * Renders the events displaying currently on
+																								 * fullCalendar
+																								 * 
+																								 * @method events
+																								 * @param {Object}
+																								 *         start fullCalendar current section start day
+																								 *         date object
+																								 * @param {Object}
+																								 *         end fullCalendar current section end day date
+																								 *         object
+																								 * @param {function}
+																								 *         callback displays the events on fullCalendar
+																								 * 
+																								 */
+
+																								eventSources : [
+																																{ events : function(start, end, callback)
+																																{
+
+																																				var eventFilters = JSON.parse(readCookie('event-filters'));
+																																				if (readCookie('event-filters') && eventFilters.type == 'google')
+																																				{
+																																								$("#loading_calendar_events").hide();
+																																								return;
+																																				}
+
+																																				var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
+																																				if (readCookie('event-filters') && eventFilters.owner_id.length > 0)
+																																								eventsURL += '&owner_id=' + eventFilters.owner_id;
+																																				console.log('-----------------', eventsURL);
+																																				$.getJSON(eventsURL, function(doc)
+																																				{
+
+																																								if (doc)
+																																								{
+
+																																												callback(doc);
+
+																																								}
+																																				});
+																																} }, { dataType : 'agile-gcal' }
+																								],
+																								header : { left : 'prev,next today', center : 'title', right : 'month,agendaWeek,agendaDay' },
+																								loading : function(bool)
+																								{
+																												if (bool)
+																												{
+
+																																$("#loading_calendar_events").remove();
+																																$('.fc-header-left').append(
+																																								'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle">loading...</span>').show();
+																																$('.fc-header-left').show();
+
+																												}
+																												else
+																												{
+																																// $('#loading').hide();
+																																$("#loading_calendar_events").hide();
+																																start_tour('calendar');
+																												}
+																								},
+																								selectable : true,
+																								selectHelper : true,
+																								editable : true,
+																								theme : false,
+																								/**
+																								 * Shows event pop-up modal with pre-filled date and
+																								 * time values, when we select a day or multiple days of
+																								 * the fullCalendar
+																								 * 
+																								 * @method select
+																								 * @param {Object}
+																								 *         start start-date of the event
+																								 * @param {Object}
+																								 *         end end-date of the event
+																								 * @param {Boolean}
+																								 *         allDay
+																								 */
+																								select : function(start, end, allDay)
+																								{
+																												// Show a new event
+																												$('#activityModal').modal('show');
+																												highlight_event();
+
+																												// Set Date for Event
+																												var dateFormat = 'mm/dd/yyyy';
+																												$('#task-date-1').val(start.format(dateFormat));
+																												$("#event-date-1").val(start.format(dateFormat));
+																												$("#event-date-2").val(end.format(dateFormat));
+
+																												// Set Time for Event
+																												if ((start.getHours() == 00) && (end.getHours() == 00) && (end.getMinutes() == 00))
+																												{
+																																$('#event-time-1').val('');
+																																$('#event-time-2').val('');
+																												}
+																												else
+																												{
+																																$('#event-time-1')
+																																								.val(
+																																																(start.getHours() < 10 ? "0" : "") + start.getHours() + ":" + (start.getMinutes() < 10 ? "0" : "") + start
+																																																								.getMinutes());
+																																$('#event-time-2').val(
+																																								(end.getHours() < 10 ? "0" : "") + end.getHours() + ":" + (end.getMinutes() < 10 ? "0" : "") + end.getMinutes());
+																												}
+
+																								},
+																								/**
+																								 * Updates the event by changing start and end date,
+																								 * when it is dragged to another location on
+																								 * fullCalendar.
+																								 * 
+																								 * @method eventDrop
+																								 * @param {Object}
+																								 *         event1 event with new start and end date
+																								 * @param {Number}
+																								 *         dayDelta holds the number of days the event
+																								 *         was moved forward
+																								 * @param {Number}
+																								 *         minuteDelta holds the number of minutes the
+																								 *         event was moved forward
+																								 * @param {Boolean}
+																								 *         allDay weather the event has been dropped on
+																								 *         a day in month view or not
+																								 * @param {Function}
+																								 *         revertFunc sets the event back to it's
+																								 *         original position
+																								 */
+																								eventDrop : function(event1, dayDelta, minuteDelta, allDay, revertFunc)
+																								{
+
+																												// Confirm from the user about the change
+																												if (!confirm("Are you sure about this change?"))
+																												{
+																																revertFunc();
+																																return;
+																												}
+
+																												var event = $.extend(true, {}, event1);
+
+																												// Update event if the user changes it in the
+																												// calendar
+																												event.start = new Date(event.start).getTime() / 1000;
+																												event.end = new Date(event.end).getTime() / 1000;
+																												if (event.end == null || event.end == 0)
+																																event.end = event.start;
+																												var eventModel = new Backbone.Model();
+																												eventModel.url = 'core/api/events';
+
+																												eventModel.save(event);
+																								},
+																								/**
+																								 * Updates or deletes an event by clicking on it
+																								 * 
+																								 * @method eventClick
+																								 * @param {Object}
+																								 *         event to update or delete
+																								 */
+																								eventClick : function(event)
+																								{
+																												if (isNaN(event.id))
+																																return;
+																												// Deserialize
+																												deserializeForm(event, $("#updateActivityForm"));
+
+																												// Set time for update Event
+																												$('#update-event-time-1')
+																																				.val(
+																																												(event.start.getHours() < 10 ? "0" : "") + event.start.getHours() + ":" + (event.start.getMinutes() < 10 ? "0" : "") + event.start
+																																																				.getMinutes());
+																												$('#update-event-time-2').val(
+																																				(event.end.getHours() < 10 ? "0" : "") + event.end.getHours() + ":" + (event.end.getMinutes() < 10 ? "0" : "") + event.end
+																																												.getMinutes());
+
+																												// Set date for update Event
+																												var dateFormat = 'mm/dd/yyyy';
+																												$("#update-event-date-1").val((event.start).format(dateFormat));
+																												$("#update-event-date-2").val((event.end).format(dateFormat));
+
+																												// hide end date & time for all day events
+																												if (event.allDay)
+																												{
+																																$("#update-event-date-2").closest('.row').hide();
+																																$('#update-event-time-1').closest('.control-group').hide();
+																												}
+																												else
+																												{
+																																$('#update-event-time-1').closest('.control-group').show();
+																																$("#update-event-date-2").closest('.row').show();
+																												}
+
+																												// Show edit modal for the event
+																												$("#updateActivityModal").modal('show');
+																												return false;
+																								}
+
+																				});
 }
 
-function showEventFilters(){
-	 $.getJSON('/core/api/users/agileusers', function (users) {
-		 var html = '';
-		 if(users){
-			 $.each(users,function(i,user){
-				 if(CURRENT_DOMAIN_USER.id == user.domain_user_id)
-					 html = '<option value='+user.id+'>Me</option>';
-			 });
-			 html += '<option value="">Any</option>';
-		 }
-		 $('#event-owner').html(html);
-		 $('#filter_options').show();
-		 if(readCookie('event-filters')){
-			 var eventFilters = JSON.parse(readCookie('event-filters'));
-			 $('#event-owner').val(eventFilters.owner_id);
-			 $('#event_type').val(eventFilters.type);
-		 }
-     });
+function showEventFilters()
+{
+				$.getJSON('/core/api/users/agileusers', function(users)
+				{
+								var html = '';
+								if (users)
+								{
+												$.each(users, function(i, user)
+												{
+																if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
+																				html = '<option value=' + user.id + '>Me</option>';
+												});
+												html += '<option value="">Any</option>';
+								}
+								$('#event-owner').html(html);
+								$('#filter_options').show();
+								if (readCookie('event-filters'))
+								{
+												var eventFilters = JSON.parse(readCookie('event-filters'));
+												$('#event-owner').val(eventFilters.owner_id);
+												$('#event_type').val(eventFilters.type);
+								}
+				});
 }
 
-function loadDefaultFilters(){
-	// Create a cookie with default option, if there is no cookie related to event filter.
-	if(!readCookie('event-filters')){
-		$.getJSON('/core/api/users/agileusers', function (users) {
-			 var html = '';
-			 if(users){
-				 $.each(users,function(i,user){
-					 if(CURRENT_DOMAIN_USER.id == user.domain_user_id)
-						 {
-						 	var json = {};
-						 	json.owner_id = user.id.toString();
-						 	json.type='';
-						 	createCookie('event-filters',JSON.stringify(json));
-						 }
-				 });
-			 }
-		});
-	}
+function loadDefaultFilters()
+{
+				// Create a cookie with default option, if there is no cookie related to
+				// event filter.
+				if (!readCookie('event-filters'))
+				{
+								$.getJSON('/core/api/users/agileusers', function(users)
+								{
+												var html = '';
+												if (users)
+												{
+																$.each(users, function(i, user)
+																{
+																				if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
+																				{
+																								var json = {};
+																								json.owner_id = user.id.toString();
+																								json.type = '';
+																								createCookie('event-filters', JSON.stringify(json));
+																				}
+																});
+												}
+								});
+				}
 }
 
-$(function(){
-	$("#sync-google-calendar").die().live('click', function(e){
-		e.preventDefault();
-		
-		// URL to return, after fetching token and secret key from LinkedIn
-		var callbackURL = window.location.href;
-		
-		// For every request of import, it will ask to grant access
-		window.location = "/scribe?service=google_calendar&return_url=" + encodeURIComponent(callbackURL);
-	});
-	
-	$("#sync-google-calendar-delete").die().live('click', function(e){
-		e.preventDefault();
-		
-		var disabled = $(this).attr("disabled");
-		if(disabled)
-			return;
-		
-		$(this).attr("disabled", "disabled");
-		
-		$(this).after(getRandomLoadingImg());
-		App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs"
-		console.log(App_Widgets.calendar_sync_google.model.destroy({success : function(){
-			
-			App_Widgets.calendar_sync_google.model.clear();
-			App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs/get"
-				App_Widgets.calendar_sync_google.render(true);
-			erase_google_calendar_prefs_cookie();
-			
-		}}));
-	});
-	
-	// Show filter drop down.
-	$('#event-filter-button').live('click', function(e){
-		e.preventDefault();
-		showEventFilters();
-	});
-	
-	$('#event-filter-validate').live('click',function(e){
-		$('#filter_options').hide();
-		var formId = 'eventsFilterForm';
-		var json = serializeForm(formId);
-		createCookie('event-filters',JSON.stringify(json));
-		$('#calendar').html('');
-		//App_Calendar.calendar();
-		showCalendar();
-	});
-	
-	// Show filter drop down.
-	$('#clear-event-filters').live('click', function(e){
-		e.preventDefault();
-		$('#filter_options select').val('');
-		eraseCookie('event-filters');
-		loadDefaultFilters();
-		showEventFilters();
-	});
-	
-	/**
-	 * Hide the filters window when click on out side of the filters pop up.
-	 */
-	$(document).mouseup(function (e)
-	{
-	    var container = $("#filter_options");
+$(function()
+{
+				$("#sync-google-calendar").die().live('click', function(e)
+				{
+								e.preventDefault();
 
-	    if (!container.is(e.target) // if the target of the click isn't the container...
-	        && container.has(e.target).length === 0) // ... nor a descendant of the container
-	    {
-	        container.hide();
-	    }
-	});
-	
-	loadDefaultFilters();
+								// URL to return, after fetching token and secret key from LinkedIn
+								var callbackURL = window.location.href;
+
+								// For every request of import, it will ask to grant access
+								window.location = "/scribe?service=google_calendar&return_url=" + encodeURIComponent(callbackURL);
+				});
+
+				$("#sync-google-calendar-delete").die().live('click', function(e)
+				{
+								e.preventDefault();
+
+								var disabled = $(this).attr("disabled");
+								if (disabled)
+												return;
+
+								$(this).attr("disabled", "disabled");
+
+								$(this).after(getRandomLoadingImg());
+								App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs"
+								console.log(App_Widgets.calendar_sync_google.model.destroy({ success : function()
+								{
+
+												App_Widgets.calendar_sync_google.model.clear();
+												App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs/get"
+												App_Widgets.calendar_sync_google.render(true);
+												erase_google_calendar_prefs_cookie();
+
+								} }));
+				});
+
+				// Show filter drop down.
+				$('#event-filter-button').live('click', function(e)
+				{
+								e.preventDefault();
+								showEventFilters();
+				});
+
+				$('#event-filter-validate').live('click', function(e)
+				{
+								$('#filter_options').hide();
+								var formId = 'eventsFilterForm';
+								var json = serializeForm(formId);
+								createCookie('event-filters', JSON.stringify(json));
+
+								// if list view
+								if (!readCookie("agile_calendar_view"))
+								{
+												$('#calendar_event').html('');
+												// App_Calendar.calendar();
+												showCalendar();
+								}
+								else
+								{
+												if (readCookie('event-filters') && JSON.parse(readCookie('event-filters')).type == 'agile')
+												{
+																$($('#event_tab').children()[1]).addClass("hide");
+																$($('#event_tab').children()[0]).removeClass("hide");
+																$($('#event_tab').children()[0]).addClass("active");
+																loadAgileEvents();
+												}
+												else if (readCookie('event-filters') && JSON.parse(readCookie('event-filters')).type == 'google')
+												{
+																$($('#event_tab').children()[0]).addClass("hide");
+																$($('#event_tab').children()[1]).removeClass("hide");
+																$($('#event_tab').children()[1]).addClass("active");
+																loadGoogleEvents();
+												}
+												else
+												{
+																if ($($('#event_tab').children()[0]).hasClass("hide"))
+																{
+
+																				$($('#event_tab').children()[0]).removeClass("hide");
+																				if(!$($('#event_tab').children()[0]).hasClass("active")){
+																								$($('#event_tab').children()[0]).addClass("active");
+																				}
+																			
+																}
+																if ($($('#event_tab').children()[1]).hasClass("hide"))
+																{
+																				$($('#event_tab').children()[1]).removeClass("hide");
+																}
+																$($('#event_tab').children()[1]).removeClass("active");
+
+												}
+								}
+				});
+
+				// Show filter drop down.
+				$('#clear-event-filters').live('click', function(e)
+				{
+								e.preventDefault();
+								$('#filter_options select').val('');
+								eraseCookie('event-filters');
+								loadDefaultFilters();
+								showEventFilters();
+				});
+
+				/**
+				 * Hide the filters window when click on out side of the filters pop up.
+				 */
+				$(document).mouseup(function(e)
+				{
+								var container = $("#filter_options");
+
+								if (!container.is(e.target) // if the target of the click isn't the
+																// container...
+																&& container.has(e.target).length === 0) // ... nor a
+								// descendant of the
+								// container
+								{
+												container.hide();
+								}
+				});
+
+				loadDefaultFilters();
 });
-
