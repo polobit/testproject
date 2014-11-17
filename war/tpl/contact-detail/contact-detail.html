@@ -230,42 +230,30 @@
 				<div class="clearfix"></div>
 					<div style="margin-top:10px;">
 						<div class="change-owner-succes"></div>
-						<span title="Owner" class="contact-owner-view"><span class="contact-owner"><span class="contact-owner-text" style="display:none">Owner:&nbsp;&nbsp;</span>
-<!-- <img src="https://pbs.twimg.com/profile_images/1917130692/BD587CFD-E929-40F6-A5B3-C90916D01C88_bigger" style="border-radius: 50%;width: 25px;height: 25px;
-"> -->
-<span class="contact-owner-pic">
-		{{#if owner}}
-			{{#if ownerPic}}
-				<img class="user-img"  alt="" src="{{ownerPic}}" >
-			{{else}}
-				<img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" >
-			{{/if}}
-		{{else}}
-			<img class="user-img"  alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
-		{{/if}}
-</span>
+      <span title="Owner" class="contact-owner-view">
+       <span class="contact-owner" id="change-owner-element">
+        <span class="contact-owner-text" style="display:none">Owner:&nbsp;&nbsp;</span>
+ 
+        <span class="contact-owner-pic">
+        {{#if owner}}
+          <img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" >
+        {{else}}
+          <img class="user-img"  alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
+        {{/if}}
+        </span>
 
-<span
-							id="contact-owner" data={{owner.id}}
-							style="display: inline-block" class="contact-owner-name change-owner-element">{{owner.name}}</span> <span class="contact-owner-edit" style="display:none;">
-						{{#canEditContact owner.id}}
-								<!--<a href="#"> <i class="icon-edit"
-									style="vertical-align: middle;" rel="popover"
-									data-placement="top" data-title="Lead Owner"
-									data-content="Click here to change owner."
-									id="change-owner-element" data-trigger="hover"></i></a>-->
-						</span>
-							<div class="btn-group" id="change-owner-ul"
-								style="vertical-align: middle; display: none">
-								<a class="btn dropdown-toggle" data-toggle="dropdown">
-									Change owner <span class="caret"></span>
-								</a>
-								<ul id='contact-detail-owner' class="dropdown-menu pull-right">
-								</ul>
-							</div> <!--<select id='contact-detail-owner' class="input-block-level">
-                                <option class="contact-detail-owner" value="">Select..</option>
-                            </select>--> </span>
-						{{/canEditContact}}
+        <span id="contact-owner" data={{owner.id}} style="display: inline-block" class="contact-owner-name">{{owner.name}}</span>
+        <span class="contact-owner-edit" style="display:none;"></span>
+        {{#canEditContact owner.id}}
+        <div class="btn-group" id="change-owner-ul" style="vertical-align: middle; display: none">
+         <a class="btn dropdown-toggle" data-toggle="dropdown">
+          Change owner <span class="caret"></span>
+         </a>
+         <ul id='contact-detail-owner' class="dropdown-menu pull-right"></ul>
+        </div> 
+       </span>
+       {{/canEditContact}}
+      </span>
 					</div>
 					</div>
 					<!--  ending owner block -->

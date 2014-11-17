@@ -97,7 +97,6 @@ function fill_owners(el, data, callback){
  * To show owner on change
  */
 function show_owner(){
-	$('.change-owner-element').css('display', 'inline-block');
 	$('#contact-owner').css('display', 'inline-block');
 }
 
@@ -470,7 +469,7 @@ $(function(){
     	e.preventDefault();
         $(this).popover('show');
     });
-	   
+/*	   
     $('.change-owner-element').live('mouseenter',function(e){
     	e.preventDefault();
     	$('#change-owner-ul').css('display', 'none');
@@ -478,23 +477,16 @@ $(function(){
         	template:'<div class="popover"><div class="arrow"></div><div class="popover-inner"><div class="popover-content"><p></p></div></div></div>'
         });
         $(this).popover('show');
-    });
+    });*/
     
-    $('.change-owner-element').live('click',function(e){
+    $('#change-owner-element > #contact-owner').live('click',function(e){
     	e.preventDefault();
     	
     	fill_owners(undefined, undefined, function(){
-    		$('.change-owner-element').popover('hide');
-        	
-        	// Hiding the owner name
-        	$('.change-owner-element').css('display', 'none');
+
         	$('#contact-owner').css('display', 'none');
-        	
-        	if($('#change-owner-ul').css('display') == 'inline-block')
-        		$('#change-owner-ul').css('display', 'none');
-        	
-        	else
-        		$('#change-owner-ul').css('display', 'inline-block');
+
+        	$('#change-owner-ul').css('display', 'inline-block');
     	});
     	
     	

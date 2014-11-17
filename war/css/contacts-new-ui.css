@@ -271,6 +271,10 @@ width: auto;
 cursor:pointer;
 /*margin-left: 4px;*/
 }
+#contact-detail-owner li
+{
+	cursor:pointer;
+}
 .contact-owner-edit
 {
 	display:none;
@@ -588,6 +592,11 @@ border-bottom:none;
 {
 	background:none!important;
 }
+.last-li-nopadding li:last-child
+{
+padding-bottom:0px!important;
+}
+
 .font-15
 {
 	font-size:15px;
