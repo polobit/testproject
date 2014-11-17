@@ -10,122 +10,146 @@
 
 $(function()
 {
-	/**
-	 * Shows activity modal, and highlights the event form features (Shows event
-	 * form and hides task form, changes color and font-weight)
-	 * 
-	 */
-	$('#show-activity').live('click', function(e)
-	{
-		e.preventDefault();
-		highlight_event();
 
-		$("#activityModal").modal('show');
-	});
+				/**
+				 * Shows activity modal, and highlights the event form features (Shows event
+				 * form and hides task form, changes color and font-weight)
+				 * 
+				 */
+				$('#show-activity').live('click', function(e)
+				{
+								e.preventDefault();
+								highlight_event();
 
-	/**
-	 * Shows the event form fields in activity modal
-	 */
-	$(".add-event").live('click', function(e)
-	{
-		e.preventDefault();
+								$("#activityModal").modal('show');
+				});
 
-		$('#activityModal').modal('show');
-		highlight_event();
-		
-		/*
-		 * $('#task-date-1').val(new Date().format('mm/dd/yyyy'));
-		 * $("#event-date-1").val(new Date().format('mm/dd/yyyy'));
-		 * $("#event-date-2").val(new Date().format('mm/dd/yyyy'));
-		 */
+				/**
+				 * Shows the event form fields in activity modal
+				 */
+				$(".add-event").live('click', function(e)
+				{
+								e.preventDefault();
 
-		
-		return;
-	});
+								$('#activityModal').modal('show');
+								highlight_event();
 
-	/**
-	 * When clicked on update button of event-update-modal, the event will get
-	 * updated by calling save_event function
-	 * 
-	 */
-	$('#update_event_validate').die().live('click', function(e)
-	{
-		e.preventDefault();
-		save_event('updateActivityForm', 'updateActivityModal', true, this);
-	});
+								/*
+								 * $('#task-date-1').val(new Date().format('mm/dd/yyyy'));
+								 * $("#event-date-1").val(new Date().format('mm/dd/yyyy'));
+								 * $("#event-date-2").val(new Date().format('mm/dd/yyyy'));
+								 */
 
-	/**
-	 * Deletes an event from calendar by calling ajax DELETE request with an
-	 * appropriate url
-	 */
-	$('#event_delete').die().live('click', function(e)
-	{
-		e.preventDefault();
-		
-		if($(this).attr('disabled')=='disabled')return;
+								return;
+				});
 
-		/**
-		 * Confirmation alert to delete an event
-		 */
-		if (!confirm("Are you sure you want to delete?"))
-			return;
+				/**
+				 * When clicked on update button of event-update-modal, the event will get
+				 * updated by calling save_event function
+				 * 
+				 */
+				$('#update_event_validate').die().live('click', function(e)
+				{
+								e.preventDefault();
+								var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
+								if (readCookie("agile_calendar_view"))
+								{
+												var eventModel = App_Calendar.eventCollectionView.collection.get(eventId);
+												var formData = serializeForm('updateActivityForm');
+												eventModel.set(formData,{merge: true});
 
-		var event_id = $('#updateActivityForm input[name=id]').val()
-		var save_button=$(this);
-		
-		disable_save_button(save_button);
-		/**
-		 * Shows loading symbol until model get saved
-		 */
-		//$('#updateActivityModal').find('span.save-status').html(getRandomLoadingImg());
-		$.ajax({ url : 'core/api/events/' + event_id, type : 'DELETE', success : function()
-		{
-
-			//$('#updateActivityModal').find('span.save-status img').remove();
-			enable_save_button(save_button);
-			$("#updateActivityModal").modal('hide');
-
-			$('#calendar').fullCalendar('removeEvents', event_id);
-		} });
-	});
-
-	/**
-	 * Activates the date picker to the corresponding fields in activity modal
-	 * and activity-update modal
-	 */
-	var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev) {
-		// If event start date is changed and end date is less than start date, change the value of the end date to start date.
-		var eventDate2 = new Date($('#event-date-2').val());
-		  if (ev.date.valueOf() > eventDate2.valueOf()) {
-			    $('#event-date-2').val($('#event-date-1').val());
-			  }
-			 
-			});
-
-	$('#event-date-2').datepicker({ format : 'mm/dd/yyyy' });
-	$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev) {
-		// If event start date is changed and end date is less than start date, change the value of the end date to start date.
-		var eventDate2 = new Date($('#update-event-date-2').val());
-		  if (ev.date.valueOf() > eventDate2.valueOf()) {
-			    $('#update-event-date-2').val($('#update-event-date-1').val());
-			  }
-			 
-			});
-	$('#update-event-date-2').datepicker({ format : 'mm/dd/yyyy' });
-
-	/**
-	 * Activates time picker for start time to the fields with class
-	 * start-timepicker
-	 */
-	$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' })
-						.on('hide.timepicker',function(e){
-								
-							if($('#activityModal #allDay').is(':checked'))
-							{
-								$('#event-time-1').closest('.control-group').hide();
-								$('#event-date-2').closest('.row').hide();
-							}	
+								}
+												save_event('updateActivityForm', 'updateActivityModal', true, this);
 							
+				});
+
+				/**
+				 * Deletes an event from calendar by calling ajax DELETE request with an
+				 * appropriate url
+				 */
+				$('#event_delete').die().live('click', function(e)
+				{
+								e.preventDefault();
+
+								if ($(this).attr('disabled') == 'disabled')
+												return;
+
+								/**
+								 * Confirmation alert to delete an event
+								 */
+								if (!confirm("Are you sure you want to delete?"))
+												return;
+
+								var event_id = $('#updateActivityForm input[name=id]').val();
+								var save_button = $(this);
+
+								disable_save_button(save_button);
+								/**
+								 * Shows loading symbol until model get saved
+								 */
+								// $('#updateActivityModal').find('span.save-status').html(getRandomLoadingImg());
+								$.ajax({ url : 'core/api/events/' + event_id, type : 'DELETE', success : function()
+								{
+
+												// $('#updateActivityModal').find('span.save-status img').remove();
+												enable_save_button(save_button);
+												$("#updateActivityModal").modal('hide');
+												var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
+												$('#calendar').fullCalendar('removeEvents', eventId);
+								} });
+								if (readCookie("agile_calendar_view"))
+								{
+											
+												var eventModel = App_Calendar.eventCollectionView.collection.get(event_id);
+												eventModel.set(eventModel,{remove: true});
+												document.location.reload();
+
+								}
+				});
+
+				/**
+				 * Activates the date picker to the corresponding fields in activity modal
+				 * and activity-update modal
+				 */
+				var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev)
+				{
+								// If event start date is changed and end date is less than start date,
+								// change the value of the end date to start date.
+								var eventDate2 = new Date($('#event-date-2').val());
+								if (ev.date.valueOf() > eventDate2.valueOf())
+								{
+												$('#event-date-2').val($('#event-date-1').val());
+								}
+
+				});
+
+				$('#event-date-2').datepicker({ format : 'mm/dd/yyyy' });
+				$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev)
+				{
+								// If event start date is changed and end date is less than start date,
+								// change the value of the end date to start date.
+								var eventDate2 = new Date($('#update-event-date-2').val());
+								if (ev.date.valueOf() > eventDate2.valueOf())
+								{
+												$('#update-event-date-2').val($('#update-event-date-1').val());
+								}
+
+				});
+				$('#update-event-date-2').datepicker({ format : 'mm/dd/yyyy' });
+
+				/**
+				 * Activates time picker for start time to the fields with class
+				 * start-timepicker
+				 */
+				$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' }).on('hide.timepicker', function(e)
+				{
+
+								if ($('#activityModal #allDay').is(':checked'))
+								{
+												$('#event-time-1').closest('.control-group').hide();
+												$('#event-date-2').closest('.row').hide();
+								}
+
 								e.stopImmediatePropagation();
 								return false;
 							});
