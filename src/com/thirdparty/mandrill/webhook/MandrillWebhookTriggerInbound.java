@@ -94,10 +94,15 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 			    Contact contact = buildContact(recepientName, recepientEmail);
 			    if (contact != null)
 			    {
-				if (InboundMailTrigger() != null && triggerConditionResult(message, InboundMailTrigger(), recepientEmail))
+				List<Trigger> triggers = TriggerUtil.getAllTriggers();
+				for (Trigger trigger : triggers)
 				{
-				    System.out.println("assigning campaign to contact");
-				    WorkflowSubscribeUtil.subscribe(contact, InboundMailTrigger().id);
+				    if (StringUtils.equals(trigger.type.toString(), INBOUND_MAIL_EVENT)
+					    && triggerConditionResult(message, trigger, recepientEmail))
+				    {
+					System.out.println("assigning campaign to contact");
+					WorkflowSubscribeUtil.subscribe(contact, trigger.id);
+				    }
 				}
 				System.out.println("saving contact");
 				contact.setContactOwner(owner);
@@ -266,16 +271,5 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	{
 	    return null;
 	}
-    }
-
-    public Trigger InboundMailTrigger()
-    {
-	List<Trigger> triggers = TriggerUtil.getAllTriggers();
-	for (Trigger trigger : triggers)
-	{
-	    if (StringUtils.equals(trigger.type.toString(), INBOUND_MAIL_EVENT))
-		return trigger;
-	}
-	return null;
     }
 }
