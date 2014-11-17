@@ -97,8 +97,9 @@ margin-bottom:0px;
 
 
  <!-- JQUery Core and UI CDN -->
-<script type='text/javascript' src='/lib/jquery.min.js'></script>
+<script type='text/javascript' src='/lib/jquery-new/jquery-2.1.1.min.js'></script>
 <script type="text/javascript" src="/lib/bootstrap.min.js"></script>
+<script type='text/javascript' src='/lib/jquery-new/jquery.steps.min.js'></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
 <script type="text/javascript">
 jQuery.validator.setDefaults({
@@ -172,7 +173,9 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 			
 				
 				<div class="clearfix"></div>
+				
 				<form name='agile' id="agile" method='post' class="regpage-fieldview" onsubmit="return isValid();"> 
+				    <fieldset>
 				<!--  <h3 class="log-subhead"><small>Or Fill out the form below</small></h3>	 -->
 				<div id="openid_btns">
 					<input type='hidden' name='type' value='agile'></input>
@@ -209,6 +212,22 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 			
 				 
 				</div>
+				 </fieldset>
+				  <fieldset>
+				  	 <legend>Profile Information</legend>
+ 
+        <label for="name-2">First name *</label>
+        <input id="name-2" name="name" type="text" class="required">
+        <label for="surname-2">Last name *</label>
+        <input id="surname-2" name="surname" type="text" class="required">
+        <label for="email-2">Email *</label>
+        <input id="email-2" name="email" type="text" class="required email">
+        <label for="address-2">Address</label>
+        <input id="address-2" name="address" type="text">
+        <label for="age-2">Age (The warning step will show up if age is less than 18) *</label>
+        <input id="age-2" name="age" type="text" class="required number">
+        <p>(*) Mandatory</p>
+				  </fieldset>
 				</form>
 					
 				 <%-- commented code for choose domain company <form name='choose_domain' id="choose_domain" method='post' onsubmit="return validateAndSubmit();"  class="pad-top-15">
@@ -249,7 +268,15 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 		
 		
 		<script type="text/javascript">
-		$(document).ready(function() {			
+		$(document).ready(function() {	
+			
+			var form = $("#agile").show();
+			 
+			form.steps({
+			    headerTag: "h3",
+			    bodyTag: "fieldset",
+			    transitionEffect: "slideLeft"
+			});
 			
 			jQuery.validator.addMethod("domainLength", function(value, element) {
 				var subdomain = value;

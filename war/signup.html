@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>jQeury.steps Demos</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.v3.min.css" />
+<link type="text/css" rel="stylesheet" href="/css/openid-min.css" />
+<link type="text/css" rel="stylesheet" href="/css/signin.css" />
+<link type="text/css" rel="stylesheet" href="/css/register.css" />
+<link type="text/css" rel="stylesheet"
+	href="/css/signup/jquery.steps.css" />
+<style>
+@media ( min-width : 900px) {
+	body {
+		padding-top: 20px;
+		overflow-x: hidden;
+		overflow-y: scroll;
+	}
+	.navbar-search {
+		padding-left: 10%
+	}
+}
+
+label {
+	display: block !important;
+}
+
+.error {
+	color: #ff604f;
+	font-weight: normal;
+}
+
+.close {
+	color: #000 !important;
+	text-decoration: none !important;
+}
+
+.login-page .openid_large_btn:hover {
+	margin: 4px 0px 0px 4px;
+	border: 2px solid #999;
+	box-shadow: none;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+}
+
+/* To move validation slides */
+#agile label {
+	margin-bottom: 0px;
+}
+
+::-moz-placeholder {
+	color: #999;
+	opacity: 0.5;
+}
+
+::-webkit-input-placeholder {
+	color: #999;
+	opacity: 0.5;
+}
+</style>
+<script type='text/javascript' src='/lib/jquery-new/jquery-2.1.1.min.js'></script>
+<script type="text/javascript" src="/lib/bootstrap.min.js"></script>
+<script type='text/javascript' src='/lib/jquery-new/jquery.steps.min.js'></script>
+<script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
+<script type="text/javascript">
+	jQuery.validator.setDefaults({
+		debug : true,
+		success : "valid"
+	});
+	$(function() {
+		$("#wizard").steps({
+			headerTag : "h2",
+			bodyTag : "fieldset",
+			transitionEffect : "slideLeft",
+			forceMoveForward : true,
+			clearFixCssClass : "ttt"
+		});
+	});
+</script>
+</head>
+<body class="logpages reg-page-bg">
+	<!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+	<div class="content">
+		<div class="row login-page">
+			<div class='regpage-container'>
+				<div class="regpage-content clearfix">
+					<div align="center">
+
+						<h1 class="regpage-logHead">
+							<img src="img/signin/cloud-logo.png"> Register your free
+							Agile account
+						</h1>
+						<div class="reg-info">No credit card required</div>
+
+						<form name='agile' id="agile" method='post'
+							class="regpage-fieldview" onsubmit="return isValid();">
+							<div id="wizard">
+								<h2>First Step</h2>
+								<fieldset>
+									<!--  <h3 class="log-subhead"><small>Or Fill out the form below</small></h3>	 -->
+									<div id="openid_btns">
+										<input type='hidden' name='type' value='agile'></input>
+										<div class="form-group login-userid">
+											<span class="regpage-uname"></span> <input
+												class="input-xlarge field required form-control" name='name'
+												type="text" maxlength="50" minlength="3"
+												placeholder="Full Name" autocapitalize="off" autofocus>
+										</div>
+										<div class="form-group login-email">
+											<span class="regpage-mail"></span> <input
+												class="input-xlarge field required email form-control"
+												id="login_email" name='email' type="text" maxlength="50"
+												minlength="6" placeholder="Email Address (User ID)"
+												autocapitalize="off">
+										</div>
+										<div class="form-group ">
+											<span class="regpage-password"></span> <input
+												class="input-xlarge field required form-control"
+												maxlength="20" minlength="4" name='password' type="password"
+												placeholder="Password" autocapitalize="off">
+										</div>
+										<div class="form-group">
+											<div class="input-prepend input-append input-group">
+												<input id='subdomain' type="text" placeholder="Company"
+													name="subdomain"
+													class="required  domainLength commonDomain domainCharacters domain_input_field input-medium form-control"
+													autocapitalize="off"> <span
+													class="add-on field_domain_add_on input-group-addon regpage-domain"
+													id="app_address">.agilecrm.com</span>
+												<!--  <span style="color:#999"></span>
+							   	   -->
+											</div>
+										</div>
+									</div>
+								</fieldset>
+
+								<h2>Second Step</h2>
+								<fieldset>
+ 									 <input id="age-2" name="age" type="text" class="required number">
+ 									  <input id="address-2" name="address" type="text">
+								</fieldset>
+
+								<h2>Third Step</h2>
+								<fieldset>
+									<p>Morbi ornare tellus at elit ultrices id dignissim lorem
+										elementum. Sed eget nisl at justo condimentum dapibus. Fusce
+										eros justo, pellentesque non euismod ac, rutrum sed quam. Ut
+										non mi tortor. Vestibulum eleifend varius ullamcorper. Aliquam
+										erat volutpat. Donec diam massa, porta vel dictum sit amet,
+										iaculis ac massa. Sed elementum dui commodo lectus
+										sollicitudin in auctor mauris venenatis.</p>
+								</fieldset>
+							
+								
+							</div>
+						</form>
+	
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
