@@ -25,6 +25,11 @@ public class EmailBillingRestriction extends DaoBillingRestriction
     @Override
     public boolean check()
     {
+
+	// If reminder is set then tags are created and added in our domain
+	if (restriction.sendReminder)
+	    send_warning_message();
+
 	emails = restriction.one_time_emails_count;
 
 	// To avoid NullPointerException
@@ -48,7 +53,9 @@ public class EmailBillingRestriction extends DaoBillingRestriction
 	if (restriction == null)
 	    restriction = BillingRestrictionUtil.getBillingRestriction(sendReminder);
 
-	// Gets maximum allowed contacts in current plan
+	restriction.sendReminder = true;
+
+	// Gets maximum allowed emails in current plan
 	max_allowed = restriction.max_emails_count == null ? 0 : restriction.max_emails_count;
 	emails = restriction.one_time_emails_count == null ? 0 : restriction.one_time_emails_count;
     }
@@ -57,7 +64,7 @@ public class EmailBillingRestriction extends DaoBillingRestriction
     public String getTag()
     {
 	String tag = BillingRestrictionReminderUtil.getTag(restriction.one_time_emails_count, max_allowed, "Email",
-		hardUpdateTags);
+	        hardUpdateTags);
 
 	if (tag != null)
 	{
