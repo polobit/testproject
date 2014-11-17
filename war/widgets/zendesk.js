@@ -3,68 +3,6 @@
  * on the third party JavaScript API provided. It interacts with the application
  * based on the function provided on agile_widgets.js (Third party API).
  */
-$(function()
-{
-	// Zendesk widget name declared as global variable
-	ZENDESK_PLUGIN_NAME = "Zendesk";
-
-	// Zendesk update loading image declared as global
-	ZENDESK_UPDATE_LOAD_IMAGE = '<center><img id="tickets_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
-
-	// Retrieves widget which is fetched using script API
-	var zendesk_widget = agile_crm_get_widget(ZENDESK_PLUGIN_NAME);
-
-	console.log('In Zendesk');
-	console.log(zendesk_widget);
-
-	// ID of the Zendesk widget as global variable
-	Zendesk_Plugin_Id = zendesk_widget.id;
-
-	// Stores email of the contact as global variable
-	Email = agile_crm_get_contact_property('email');
-	console.log('Email: ' + Email);
-
-
-	/*
-	 * Gets Zendesk widget preferences, required to check whether to show setup
-	 * button or to fetch details. If undefined - considering first time usage
-	 * of widget, setupZendeskAuth is shown and returned
-	 */
-	if (zendesk_widget.prefs == undefined)
-	{
-		setupZendeskAuth();
-		return;
-	}
-
-	/*
-	 * If Zendesk widget preferences are defined, shows tickets from Zendesk
-	 * associated with current contact's email
-	 */
-	showZendeskProfile();
-
-	// On click of add ticket, add ticket method is called
-	$('#add_ticket').die().live('click', function(e)
-	{
-		e.preventDefault();
-		addTicketToZendesk();
-	});
-
-	/*
-	 * On mouse enter of ticket, show tab link which has a link to show detailed
-	 * description of ticket and comment on it
-	 */
-	$('.zendesk_ticket_hover').live('mouseenter', function(e)
-	{
-		$(this).find('.zendesk_tab_link').show();
-	});
-
-	// On mouse leave of chat, hides tab link
-	$('.zendesk_ticket_hover').live('mouseleave', function(e)
-	{
-		$('.zendesk_tab_link').hide();
-	});
-
-});
 
 /**
  * Shows setup if user adds Zendesk widget for the first time or clicks on reset
@@ -551,3 +489,67 @@ function zendeskStreamError(id, message)
 	$('#' + id).show();
 	$('#' + id).fadeOut(10000);
 }
+
+$(function()
+		{
+			// Zendesk widget name declared as global variable
+			ZENDESK_PLUGIN_NAME = "Zendesk";
+
+			// Zendesk update loading image declared as global
+			ZENDESK_UPDATE_LOAD_IMAGE = '<center><img id="tickets_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+
+			// Retrieves widget which is fetched using script API
+			var zendesk_widget = agile_crm_get_widget(ZENDESK_PLUGIN_NAME);
+
+			console.log('In Zendesk');
+			console.log(zendesk_widget);
+
+			// ID of the Zendesk widget as global variable
+			Zendesk_Plugin_Id = zendesk_widget.id;
+
+			// Stores email of the contact as global variable
+			Email = agile_crm_get_contact_property('email');
+			console.log('Email: ' + Email);
+
+
+			/*
+			 * Gets Zendesk widget preferences, required to check whether to show setup
+			 * button or to fetch details. If undefined - considering first time usage
+			 * of widget, setupZendeskAuth is shown and returned
+			 */
+			if (zendesk_widget.prefs == undefined)
+			{
+				setupZendeskAuth();
+				return;
+			}
+
+			/*
+			 * If Zendesk widget preferences are defined, shows tickets from Zendesk
+			 * associated with current contact's email
+			 */
+			showZendeskProfile();
+
+			// On click of add ticket, add ticket method is called
+			$('#add_ticket').die().live('click', function(e)
+			{
+				e.preventDefault();
+				addTicketToZendesk();
+			});
+
+			/*
+			 * On mouse enter of ticket, show tab link which has a link to show detailed
+			 * description of ticket and comment on it
+			 */
+			$('.zendesk_ticket_hover').live('mouseenter', function(e)
+			{
+				$(this).find('.zendesk_tab_link').show();
+			});
+
+			// On mouse leave of chat, hides tab link
+			$('.zendesk_ticket_hover').live('mouseleave', function(e)
+			{
+				$('.zendesk_tab_link').hide();
+			});
+
+		});
+

@@ -1,42 +1,3 @@
-$(function()
-{
-    console.log("in quickbooks widget.js")
-
-    // QuickBooks widget name as a global variable
-    QUICKBOOKS_PLUGIN_NAME = "QuickBooks";
-
-    // QuickBooks profile loading image declared as global
-    QUICKBOOKS_PROFILE_LOAD_IMAGE = '<center><img id="quickbooks_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
-
-    // Retrieves widget which is fetched using script API
-    var quickbooks_widget = agile_crm_get_widget(QUICKBOOKS_PLUGIN_NAME);
-
-    // ID of the QuickBooks widget as global variable
-    QUICKBOOKS_PLUGIN_ID = quickbooks_widget.id;
-    console.log("plugin Id" + QUICKBOOKS_PLUGIN_ID);
-
-    Email = agile_crm_get_contact_property('email');
-    
- // Email list as global variable
-	EmailList = agile_crm_get_contact_properties_list("email");
-    var first_name = agile_crm_get_contact_property("first_name");
-    var last_name = agile_crm_get_contact_property("last_name");
-    
-    //set last name empty if it is undifned
-    if(last_name==undefined||last_name==null)
-    	last_name=' ';
-    
-    console.log("Email is" + Email)
-
-    showQuickbooksContacts();
-
-    $('#quickbooks_add_contact').die().live('click', function(e)
-    {
-	e.preventDefault();
-	addContactToQuickbooks(first_name, last_name, Email);
-    });
-});
-
 function showQuickbooksContacts()
 {
     if (!Email)
@@ -154,3 +115,43 @@ function addContactToQuickbooks(first_name, last_name)
 		quickBooksError(data.responseText)
 	});
 }
+
+
+$(function()
+		{
+		    console.log("in quickbooks widget.js")
+
+		    // QuickBooks widget name as a global variable
+		    QUICKBOOKS_PLUGIN_NAME = "QuickBooks";
+
+		    // QuickBooks profile loading image declared as global
+		    QUICKBOOKS_PROFILE_LOAD_IMAGE = '<center><img id="quickbooks_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+
+		    // Retrieves widget which is fetched using script API
+		    var quickbooks_widget = agile_crm_get_widget(QUICKBOOKS_PLUGIN_NAME);
+
+		    // ID of the QuickBooks widget as global variable
+		    QUICKBOOKS_PLUGIN_ID = quickbooks_widget.id;
+		    console.log("plugin Id" + QUICKBOOKS_PLUGIN_ID);
+
+		    Email = agile_crm_get_contact_property('email');
+		    
+		 // Email list as global variable
+			EmailList = agile_crm_get_contact_properties_list("email");
+		    var first_name = agile_crm_get_contact_property("first_name");
+		    var last_name = agile_crm_get_contact_property("last_name");
+		    
+		    //set last name empty if it is undifned
+		    if(last_name==undefined||last_name==null)
+		    	last_name=' ';
+		    
+		    console.log("Email is" + Email)
+
+		    showQuickbooksContacts();
+
+		    $('#quickbooks_add_contact').die().live('click', function(e)
+		    {
+			e.preventDefault();
+			addContactToQuickbooks(first_name, last_name, Email);
+		    });
+		});

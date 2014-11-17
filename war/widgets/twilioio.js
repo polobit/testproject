@@ -1,37 +1,3 @@
-$(function()
-{
-	// Twilio widget name as a global variable
-	TwilioIO_PLUGIN_NAME = "TwilioIO";
-
-	// Retrieves widget which is fetched using script API
-	var twilioio_widget = agile_crm_get_widget(TwilioIO_PLUGIN_NAME);
-
-	console.log('In twilioio_widget');
-	console.log(twilioio_widget);
-
-	// Retrieves list of phone numbers in agile contact
-	TwilioIONumbers = agile_crm_get_contact_properties_list("phone");
-	console.log("TwilioIONumbers");
-	console.log(TwilioIONumbers);
-
-	showListOfNumbers();
-
-	$("#twilioio_call").die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		if (Twilio.Device.status() == "busy")
-		{
-			alert("Already on call.");
-			return;
-		}
-
-		twiliocall($('#twilioio_contact_number').val(), getTwilioIOContactName1());
-	});
-
-	
-});
-
 // Get name of contact
 function getTwilioIOContactName1()
 {
@@ -92,3 +58,37 @@ function twilioError(id, message)
 	 */
 	$('#' + id).html(getTemplate('twilio-error', error_json));
 }
+
+$(function()
+		{
+			// Twilio widget name as a global variable
+			TwilioIO_PLUGIN_NAME = "TwilioIO";
+
+			// Retrieves widget which is fetched using script API
+			var twilioio_widget = agile_crm_get_widget(TwilioIO_PLUGIN_NAME);
+
+			console.log('In twilioio_widget');
+			console.log(twilioio_widget);
+
+			// Retrieves list of phone numbers in agile contact
+			TwilioIONumbers = agile_crm_get_contact_properties_list("phone");
+			console.log("TwilioIONumbers");
+			console.log(TwilioIONumbers);
+
+			showListOfNumbers();
+
+			$("#twilioio_call").die().live('click', function(e)
+			{
+				e.preventDefault();
+
+				if (Twilio.Device.status() == "busy")
+				{
+					alert("Already on call.");
+					return;
+				}
+
+				twiliocall($('#twilioio_contact_number').val(), getTwilioIOContactName1());
+			});
+
+			
+		});

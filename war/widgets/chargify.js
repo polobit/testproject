@@ -4,43 +4,7 @@
  * application based on the function provided on agile_widgets.js (Third party
  * API).
  */
-$(function()
-{
-	console.log("in Chargify.js")
-	// Chargify widget name as a global variable
-	CHARGIFY_PLUGIN_NAME = "Chargify";
 
-	// Chargify profile loading image declared as global
-	CHARGIFY_PROFILE_LOAD_IMAGE = '<center><img id="chargify_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
-
-	// Retrieves widget which is fetched using script API
-	var chargify_widget = agile_crm_get_widget(CHARGIFY_PLUGIN_NAME);
-
-	// ID of the Chargify widget as global variable
-	CHARGIFY_PLUGIN_ID = chargify_widget.id;
-	console.log("plugin Id" + CHARGIFY_PLUGIN_ID);
-
-	// Email as global variable
-	Email = agile_crm_get_contact_property('email');
-
-	// Email list as global variable
-	EmailList = agile_crm_get_contact_properties_list("email");
-
-	var first_name = agile_crm_get_contact_property("first_name");
-	var last_name = agile_crm_get_contact_property("last_name");
-
-	if (last_name == undefined || last_name == null)
-		last_name == ' ';
-	showChargifyClient();
-
-	$('#chargify_add_contact').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		addContactToChargify(first_name, last_name, Email);
-	});
-
-});
 
 /*
  * Show Chargify profile
@@ -142,3 +106,42 @@ function addContactToChargify(first_name, last_name)
 	});
 
 }
+
+
+$(function()
+		{
+			console.log("in Chargify.js")
+			// Chargify widget name as a global variable
+			CHARGIFY_PLUGIN_NAME = "Chargify";
+
+			// Chargify profile loading image declared as global
+			CHARGIFY_PROFILE_LOAD_IMAGE = '<center><img id="chargify_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+
+			// Retrieves widget which is fetched using script API
+			var chargify_widget = agile_crm_get_widget(CHARGIFY_PLUGIN_NAME);
+
+			// ID of the Chargify widget as global variable
+			CHARGIFY_PLUGIN_ID = chargify_widget.id;
+			console.log("plugin Id" + CHARGIFY_PLUGIN_ID);
+
+			// Email as global variable
+			Email = agile_crm_get_contact_property('email');
+
+			// Email list as global variable
+			EmailList = agile_crm_get_contact_properties_list("email");
+
+			var first_name = agile_crm_get_contact_property("first_name");
+			var last_name = agile_crm_get_contact_property("last_name");
+
+			if (last_name == undefined || last_name == null)
+				last_name == ' ';
+			showChargifyClient();
+
+			$('#chargify_add_contact').die().live('click', function(e)
+			{
+				e.preventDefault();
+
+				addContactToChargify(first_name, last_name, Email);
+			});
+
+		});

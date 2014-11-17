@@ -4,62 +4,7 @@
  * application based on the function provided on agile_widgets.js (Third party
  * API)
  */
-$(function()
-{
-	// FreshBooks widget name as a global variable
-	FRESHBOOKS_PLUGIN_NAME = "FreshBooks";
 
-	// FreshBooks update loading image declared as global
-	FRESHBOOKS_LOGS_LOAD_IMAGE = '<center><img id="freshbooks_invoice_load" src="img/ajax-loader-cursor.gif" style="margin-top: 14px;margin-bottom: 10px;"></img></center>';
-
-	// Retrieves widget which is fetched using script API
-	var freshbooks_widget = agile_crm_get_widget(FRESHBOOKS_PLUGIN_NAME);
-
-	console.log('In FreshBooks');
-	console.log(freshbooks_widget);
-
-	// ID of the FreshBooks widget as global variable
-	FreshBooks_Plugin_id = freshbooks_widget.id;
-
-	// Stores email of the contact as global variable
-	Email = agile_crm_get_contact_property('email');
-	console.log('Email: ' + Email);
-
-	/*
-	 * Gets FreshBooks widget preferences, required to check whether to show
-	 * setup button or to fetch details. If undefined - considering first time
-	 * usage of widget, setUpFreshbooksAuth is shown and returned
-	 */
-	if (freshbooks_widget.prefs == undefined)
-	{
-		setUpFreshbooksAuth();
-		return;
-	}
-
-	/*
-	 * If FreshBooks widget preferences are defined, shows invoices from
-	 * FreshBooks associated with current contact's email
-	 */
-	showFreshBooksClient();
-
-	/*
-	 * Retrieve first name and last name of contact, to add contact as client in
-	 * FreshBooks
-	 */
-	var first_name = agile_crm_get_contact_property("first_name");
-	var last_name = agile_crm_get_contact_property("last_name");
-
-	/*
-	 * On click of add client button in FreshBooks, calls method to add a client
-	 * in FreshBooks with contact's first name, last name and email
-	 */
-	$('#freshbooks_add_client').die().live('click', function(e)
-	{
-		e.preventDefault();
-		addClientToFreshBooks(first_name, last_name, Email);
-	});
-
-});
 
 /**
  * Shows setup if user adds FreshBooks widget for the first time or clicks on
@@ -265,3 +210,60 @@ function freshBooksError(id, message)
 	 */
 	$('#' + id).html(getTemplate('freshbooks-error', error_json));
 }
+
+$(function()
+		{
+			// FreshBooks widget name as a global variable
+			FRESHBOOKS_PLUGIN_NAME = "FreshBooks";
+
+			// FreshBooks update loading image declared as global
+			FRESHBOOKS_LOGS_LOAD_IMAGE = '<center><img id="freshbooks_invoice_load" src="img/ajax-loader-cursor.gif" style="margin-top: 14px;margin-bottom: 10px;"></img></center>';
+
+			// Retrieves widget which is fetched using script API
+			var freshbooks_widget = agile_crm_get_widget(FRESHBOOKS_PLUGIN_NAME);
+
+			console.log('In FreshBooks');
+			console.log(freshbooks_widget);
+
+			// ID of the FreshBooks widget as global variable
+			FreshBooks_Plugin_id = freshbooks_widget.id;
+
+			// Stores email of the contact as global variable
+			Email = agile_crm_get_contact_property('email');
+			console.log('Email: ' + Email);
+
+			/*
+			 * Gets FreshBooks widget preferences, required to check whether to show
+			 * setup button or to fetch details. If undefined - considering first time
+			 * usage of widget, setUpFreshbooksAuth is shown and returned
+			 */
+			if (freshbooks_widget.prefs == undefined)
+			{
+				setUpFreshbooksAuth();
+				return;
+			}
+
+			/*
+			 * If FreshBooks widget preferences are defined, shows invoices from
+			 * FreshBooks associated with current contact's email
+			 */
+			showFreshBooksClient();
+
+			/*
+			 * Retrieve first name and last name of contact, to add contact as client in
+			 * FreshBooks
+			 */
+			var first_name = agile_crm_get_contact_property("first_name");
+			var last_name = agile_crm_get_contact_property("last_name");
+
+			/*
+			 * On click of add client button in FreshBooks, calls method to add a client
+			 * in FreshBooks with contact's first name, last name and email
+			 */
+			$('#freshbooks_add_client').die().live('click', function(e)
+			{
+				e.preventDefault();
+				addClientToFreshBooks(first_name, last_name, Email);
+			});
+
+		});
