@@ -677,7 +677,12 @@ function get_emails_to_reply(emails, configured_email)
 
 		var email = emails_array[i].match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
 		
-		if(configured_email && (email == configured_email))
+		// Skip configured email
+		if(configured_email && email == configured_email)
+			continue;
+		
+		// Skip current user email
+		if(email == CURRENT_DOMAIN_USER.email)
 			continue;
 		
 		emails += email;
