@@ -123,7 +123,7 @@ function showStripeProfile(stripe_custom_field_name)
 			  });
 	
 	
-		 $('#Stripe').html("<div><form class='widget_content' style='border-bottom:none;' id='stripe_contact_id_form' name='stripe_contact_id_form' method='post'>" +
+		 $('#Stripe').html("<div><form class='widget_content' style='border-bottom:none;margin-bottom:5px;' id='stripe_contact_id_form' name='stripe_contact_id_form' method='post'>" +
 		    "<fieldset><p>Please provide the Stripe customer id for this contact</p>" +
 		    "<div class='control-group' style='margin-bottom:0px'><div class='controls'>" +
 		    "<input type='text' class='required' name='stripe_contact_id' style='width:90%' id='stripe_contact_id' placeholder='Stripe customer id' onkeydown='if (event.keyCode == 13) { event.preventDefault(); }'></input>" +
