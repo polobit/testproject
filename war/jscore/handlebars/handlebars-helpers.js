@@ -434,14 +434,13 @@ $(function()
 	Handlebars.registerHelper('add_dots_end', function(value)
 	{
 
-		if(value){
 		if (value.length > 50)
 		{
 			var subst = value.substr(0, 50);
 			subst = subst + "....";
 			return subst;
 		}
-		}
+
 		return value;
 
 	});
@@ -1429,10 +1428,7 @@ $(function()
 						return new Handlebars.SafeString(count_message);
 					});
 	
-	Handlebars
-	.registerHelper(
-			'duplicate_contacts_count',
-			function()
+				Handlebars.registerHelper('duplicate_contacts_count', function()
 			{
 				var count_message;
 				if (this[0] && this[0].count && (this[0].count != -1))
@@ -1571,7 +1567,7 @@ $(function()
 				else
 					return options.inverse(this);
 			});
-
+				
 	/**
 	 * Compares the arguments (value and target) and executes the template based
 	 * on the result (used in contacts typeahead)
@@ -2613,10 +2609,7 @@ $(function()
 	 * Returns reputation name based on value
 	 * 
 	 */
-	Handlebars
-			.registerHelper(
-					'get_subaccount_reputation',
-					function(value)
+				Handlebars.registerHelper('get_subaccount_reputation', function(value)
 					{
 						var type = "";
 						var reputation = "Unknown";
