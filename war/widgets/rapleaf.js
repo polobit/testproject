@@ -5,7 +5,6 @@
  * fetches information based on the email
  */
 
-
 /**
  * Shows setup if user adds Rapleaf widget for the first time or clicks on reset
  * icon on Rapleaf panel in the UI, to set up connection to Rapleaf account.
@@ -119,8 +118,6 @@ function rapleafError(id, message)
 	 */
 	$('#' + id).html(getTemplate('rapleaf-error', error_json));
 }
-<<<<<<< HEAD
-=======
 
 $(function()
 		{
@@ -162,4 +159,4 @@ $(function()
 			showRapleafDetails();
 
 		});
->>>>>>> 57983bb... Widgets loading issue fix. Moved all init functions to bottom in all widget script
+
