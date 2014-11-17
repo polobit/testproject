@@ -236,7 +236,7 @@ head.ready(["core", "stats"], function(){
  <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-timline.css"></link>
  <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-widgets.css"></link>
  <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/chrome-extension-check.css"></link>
- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/lib/bootstrap-submenu.min.css"></link>
+ <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/bootstrap-submenu.min.css"></link>
 <!-- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/date-picker.css"></link> -->
 
 

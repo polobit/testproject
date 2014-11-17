@@ -92,4 +92,7 @@ var CalendarRouter = Backbone.Router.extend({
 
 		// Hide owner's and status task selection options from dropdown
 		$(".hide-on-pending").hide();
+		
+		// To set events and css of dropdown's sub menu
+		$('.dropdown-submenu > a').submenupicker();
 	} });
