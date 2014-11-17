@@ -211,6 +211,14 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     	
     }
     
+    
+    
+    if(uiFieldDefinition.fieldType == "campaign_list")
+    {
+    	options = getCampaignList("campaign_list");
+    	
+    }
+    
     if(options == null)
     	options = "";
     
@@ -238,6 +246,10 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     if(selectEventHandler)
     	return "<select onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "' id='" + uiFieldDefinition.id + "'"+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes + "</select>";
     
+  
+    if(uiFieldDefinition.fieldType == "campaign_list")
+    	return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'"+getStyleAttribute(uiFieldDefinition.style)+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes +  "</select>";
+     
 	  // retun select field with name and title attributes(Yasin(14-09-10)) 
     return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'"+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes + "</select>";
            
@@ -342,7 +354,7 @@ function generateDefaultUI(uiFieldDefinition) {
 		 return ("<" + tagName + " " + attributes + " />");
 	}else
 
-    return "<" + tagName + " " + attributes + getStyleAttribute(uiFieldDefinition.style);
+    return "<" + tagName + " " + attributes + getStyleAttribute(uiFieldDefinition.style)+"/>";
 
 }
 //Bhasuri 
@@ -357,7 +369,7 @@ function getStyleAttribute(styleAttributes)
 				style+=key+":"+value+";";
 			} );
 	
-		return style+"'/>";
+		return style+"'";
 	}
 
 function loadTinyMCE(name)
@@ -654,6 +666,17 @@ function _generateUIFields(selector, ui) {
         }
         
         if(uiFieldType == "twilio_incoming_list")
+        {
+           addLabel(uiFieldDefinition.label, container);
+          
+           
+           uiField = generateSelectUI(uiFieldDefinition);
+           
+           $(uiField).appendTo(container);
+           continue;
+        }
+        
+        if(uiFieldType == "campaign_list")
         {
            addLabel(uiFieldDefinition.label, container);
           
