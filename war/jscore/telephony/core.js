@@ -29,7 +29,7 @@ function sipStart()
 				{
 					head.js(LIB_PATH + 'lib/telephony/SIPml-api.js', function()
 					{
-						//SIPml.setDebugLevel("error");
+						SIPml.setDebugLevel("error");
 
 						// initialize SIPML5
 						if (SIPml.isInitialized()) // If already done.
