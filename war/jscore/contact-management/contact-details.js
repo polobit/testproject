@@ -487,6 +487,10 @@ $(function(){
         	$('#contact-owner').css('display', 'none');
 
         	$('#change-owner-ul').css('display', 'inline-block');
+        	
+        	 if($('#change-owner-element > #change-owner-ul').css('display') == 'inline-block')
+                 $("#change-owner-element").find(".loading").remove();
+        	
     	});
     	
     	

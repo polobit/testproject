@@ -269,6 +269,7 @@ text-overflow: ellipsis;
 overflow: hidden;
 width: auto;
 cursor:pointer;
+margin-top:3px;
 /*margin-left: 4px;*/
 }
 #contact-detail-owner li
