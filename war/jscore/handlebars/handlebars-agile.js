@@ -245,7 +245,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("chargify.js");
 	}
-
+	if (templateName.indexOf("shopify") == 0)
+	{
+		template_relative_urls.push("shopify.js");
+	}
 	if (templateName.indexOf("socialsuite") == 0)
 	{
 		template_relative_urls.push("socialsuite.js");

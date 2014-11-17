@@ -507,12 +507,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			}
 			
 		});
-		
-		
-		
 
 		$('#content').find('#admin-prefs-tabs-content').html(this.email_gateway.render().el);
-
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
 	} ,
@@ -528,50 +524,77 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		    this.navigate("integrations", {trigger: true});
 			return;
 		}
-	
 		
-		 view = new Base_Model_View({ model : App_Admin_Settings.integrations.collection.where({name:"SMS-Gateway"})[0], url : 'core/api/sms-gateway',
-			template : 'settings-sms-gateway',prePersist: function(model){
-				view=model.attributes.account_sid;
-				var prefJSON={
-						account_sid:model.attributes.account_sid,
-						auth_token:model.attributes.auth_token,
-						endpoint:model.attributes.endpoint,
-						sms_api:"TWILIO"
-							};
-				
-				model.set({prefs : JSON.stringify(prefJSON)}, {silent:true});
-				}, postRenderCallback : function(el)
-					{
-				// Loads jquery.chained.min.js
-				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
-				{
-					var LHS, RHS;
-					LHS = $("#LHS", el);
-					RHS = $("#RHS", el);
-					RHS.chained(LHS);
-					});
-			},
-			saveCallback: function(data)
+		var value,accountID;
+		if (id == 'plivo'){
+			value = 'PLIVO';
+			accountID = "account_id";
+		}
+		if (id == 'twilio'){
+			value = 'TWILIO';
+			accountID = "account_sid";
+		}
+		
+		var smsGateway;
+		$.each(this.integrations.collection.models,function(key,value){
+			var prefJSON = JSON.parse(value.attributes.prefs);
+			if(prefJSON["sms_api"])
+				smsGateway = prefJSON["sms_api"];
+			});
+		
+		//allow one sms gateway configured at a time
+		if(smsGateway != undefined)//check if sms gateway exist
+		{
+			if(smsGateway.toUpperCase() != value)//checks if the current sms gateway is the same as the clicked one
+			{
+			modalAlert("sms-integration-alert-modal","You have a SMS Gateway already configured. Please disable that to configure a new one.","SMS Gateway Configured");
+			this.navigate("integrations", { trigger : true });
+			return;	
+			}
+		}
+		
+		view = new Base_Model_View({
+			model : App_Admin_Settings.integrations.collection.where({ name : "SMS-Gateway" })[0],
+			url : 'core/api/sms-gateway',
+			template : 'settings-sms-gateway',
+			prePersist : function(model)
+			{
+				if (id == 'plivo')
+				var prefJSON = { account_id : model.attributes.account_id, auth_token : model.attributes.auth_token, endpoint : model.attributes.endpoint, sms_api : value }; 
+				if (id == 'twilio')
+				var prefJSON = { account_sid : model.attributes.account_sid, auth_token : model.attributes.auth_token, endpoint : model.attributes.endpoint, sms_api : value}; 
+				model.set({ prefs : JSON.stringify(prefJSON) }, { silent : true });
+			}, postRenderCallback : function(el)
+			{
+				if(id=="plivo"){
+					$("#integrations-image",el).attr("src","/img/plugins/plivo.png");
+					$("#accoundID",el).attr("name","account_id");
+					$("#accoundID",el).attr("placeholder","Auth ID");
+					$("#integrations-label",el).text("You need a Paid Plivo account to be able to send SMS");
+				}
+				if(id=="twilio"){
+					$("#integrations-image",el).attr("src","/img/plugins/twilio.png");
+					$("#accoundID",el).attr("name","account_sid");
+					$("#accoundID",el).attr("placeholder","Account SID");
+					$("#integrations-label",el).text("Please provide your account details");
+				}
+			}, saveCallback : function(data)
 			{
 				// On saved, navigate to integrations
-				Backbone.history.navigate("integrations",{trigger:true});
-			},
-			errorCallback: function(data){
-				if($("#twilio-error").is(":visible"))
-					$("#twilio-error").remove();
-				
-				$responceText="<div style='color:#B94A48; font-size:14px' id='twilio-error'><i>"+data.responseText+"</i></div>";
-				$(".form-actions", this.el).append($responceText);
+				Backbone.history.navigate("integrations", { trigger : true });
+			}, errorCallback : function(data)
+			{
+				if ($("#sms-gateway-error").is(":visible"))
+					$("#sms-gateway-error").remove();
+
+				$responceText = "<div style='color:#B94A48; font-size:14px' id='sms-gateway-error'><i>" + data.responseText + "</i></div>";
+				$("#sms-integration-error", this.el).append($responceText);
 			}
-			
 		});
 
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
-
 	} 
 
-	
 });

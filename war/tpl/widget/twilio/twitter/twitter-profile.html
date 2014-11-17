@@ -51,7 +51,7 @@
 		</div>
 	</div>
 	<div id="followers" class="tab-pane fade">
-		<ul class="widget_tab_content" id="twitter_follower_panel" style="padding:10px">
+		<ul class="widget_tab_content" id="twitter_follower_panel" style="padding:10px 0px;">
 						
 		</ul>
 		<div id="follower-error-panel" style="display:none;" >
@@ -62,7 +62,7 @@
 		</div>
 	</div>
 	<div id="following" class="tab-pane fade">
-		<ul class="widget_tab_content" id="twitter_following_panel" style="padding:10px">
+		<ul class="widget_tab_content" id="twitter_following_panel" style="padding:10px 0px">
 			
 		</ul>
 		<div id="following-error-panel" style="display:none;" >
@@ -144,7 +144,7 @@
 
 <script id="twitter-error-panel-template" type="text/html">
 {{#if disable_check}}
-	<div style="line-height:160%;word-wrap: break-word;padding:10px">
+	<div style="line-height:160%;word-wrap: break-word;padding:0px">
 		{{{message}}}
 	</div>
 {{else}}
@@ -153,7 +153,7 @@
 			{{{message}}}
 		</div>
 	{{else}}
-		<div style="line-height:160%;word-wrap: break-word;padding:10px">
+		<div style="line-height:160%;word-wrap: break-word;padding:0px">
 			{{{message}}}
 		</div>
 	{{/check_length}}	

@@ -88,6 +88,9 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     	init_tags_typeahead();
     }
     
+    if(nodeJSONDefinition["name"] == "Send Message" )
+        $("#nodeui").find("[name=to]").val("{{phone}}");
+    
     // Clear Global Operations Queues (for dynamic edit)
     clearGridOperations();
 

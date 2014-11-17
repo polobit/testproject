@@ -43,7 +43,7 @@ public class StripeChargeWebhook extends HttpServlet
 	Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
 	if (owner == null)
 	{
-	    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid API Key");
+	    // response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid API Key");
 	    return;
 	}
 
@@ -68,7 +68,7 @@ public class StripeChargeWebhook extends HttpServlet
 	    JSONObject stripeEventJson = getStripeEventJson(stripeJson, eventType);
 	    if (stripeEventJson == null)
 	    {
-		response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+		// response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 		return;
 	    }
 
@@ -153,7 +153,6 @@ public class StripeChargeWebhook extends HttpServlet
 	}
 	catch (JSONException e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
     }

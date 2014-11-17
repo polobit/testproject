@@ -279,7 +279,10 @@ $(function()
 	 */
 	Handlebars.registerHelper('icons', function(item)
 	{
-		item = item.toLowerCase();
+		 
+		console.log('mamasri code');
+		item = item.toLowerCase().trim();
+		console.log(item);
 		if (item == "email")
 			return "icon-envelope-alt";
 		if (item == "phone")
@@ -300,6 +303,10 @@ $(function()
 			return "icon-share-alt";
 		if (item == "other")
 			return "icon-tasks";
+		if (item == "twitter")
+			return "icon-twitter";
+		if (item == "facebook")
+			return "icon-facebook";
 
 	});
 
@@ -1074,9 +1081,9 @@ $(function()
 
 							if (properties[i].name == "address")
 							{
-								var el = '<div style="display: inline-block; vertical-align: top;text-align:right;margin-top:0px" class="span4"><span><strong style="color:gray">Address</strong></span></div>';
+								var el = '';
 
-								var address = {};
+							 var address = {};
 								try
 								{
 									address = JSON.parse(properties[i].value);
@@ -1093,10 +1100,10 @@ $(function()
 								if (properties_count != 0)
 
 									el = el
-											.concat('<div style="display:inline;padding-right: 0px!important;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8 contact-detail-entity-list"><div style="padding-top:3px;"><span>');
-								else
-									el = el
-											.concat('<div style="display:inline;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8"><div><span>');
+									.concat('<div class="contact-addressview"><div><div class="pull-left" style="width:25px"><i class="icon icon-map-marker"></i></div><div class="pull-left" style="width:90%">');
+						else
+							el = el
+									.concat('<div class="contact-addressview"><div><div class="pull-left" style="width:25px"><i class="icon icon-map-marker"></i></div><div class="pull-left" style="width:90%">');
 
 								$.each(address, function(key, val)
 								{
@@ -1109,7 +1116,7 @@ $(function()
 								});
 
 								if (properties[i].subtype)
-									el = el.concat(" <span class='label'>" + properties[i].subtype + "</span>");
+									el = el.concat('<span class="label">' + properties[i].subtype + '</span>');
 								el = el.concat('</span></div></div>');
 								return new Handlebars.SafeString(el);
 							}

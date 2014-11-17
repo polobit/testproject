@@ -4,46 +4,6 @@
  * based on the function provided on agile_widgets.js (Third party API). Rapleaf
  * fetches information based on the email
  */
-$(function()
-{
-	// Rapleaf widget name declared as global variable
-	RAPLEAF_PLUGIN_NAME = "Rapleaf";
-
-	// Rapleaf loading image declared as global
-	RAPLEAF_LOADING_IMAGE = '<div id="rap_info_load"><center><img  src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center></div>';
-
-	// Retrieves widget which is fetched using script API
-	var rapleaf_widget = agile_crm_get_widget(RAPLEAF_PLUGIN_NAME);
-
-	console.log('In Rapleaf');
-	console.log(rapleaf_widget);
-
-	// ID of the Rapleaf widget as global variable
-	Rapleaf_Plugin_Id = rapleaf_widget.id;
-
-	// Stores email of the contact as global variable
-	Email = agile_crm_get_contact_property('email');
-	console.log('Email: ' + Email);
-
-
-	/*
-	 * Gets Rapleaf widget preferences, required to check whether to show setup
-	 * button or to fetch details. If undefined - considering first time usage
-	 * of widget, setupRapleafAuth is shown and returned
-	 */
-	if (rapleaf_widget.prefs == undefined)
-	{
-		setupRapleafAuth();
-		return;
-	}
-
-	/*
-	 * If Rapleaf widget preferences are defined, shows details from Rapleaf
-	 * associated with current contact's email
-	 */
-	showRapleafDetails();
-
-});
 
 /**
  * Shows setup if user adds Rapleaf widget for the first time or clicks on reset
@@ -158,3 +118,45 @@ function rapleafError(id, message)
 	 */
 	$('#' + id).html(getTemplate('rapleaf-error', error_json));
 }
+
+$(function()
+		{
+			// Rapleaf widget name declared as global variable
+			RAPLEAF_PLUGIN_NAME = "Rapleaf";
+
+			// Rapleaf loading image declared as global
+			RAPLEAF_LOADING_IMAGE = '<div id="rap_info_load"><center><img  src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center></div>';
+
+			// Retrieves widget which is fetched using script API
+			var rapleaf_widget = agile_crm_get_widget(RAPLEAF_PLUGIN_NAME);
+
+			console.log('In Rapleaf');
+			console.log(rapleaf_widget);
+
+			// ID of the Rapleaf widget as global variable
+			Rapleaf_Plugin_Id = rapleaf_widget.id;
+
+			// Stores email of the contact as global variable
+			Email = agile_crm_get_contact_property('email');
+			console.log('Email: ' + Email);
+
+
+			/*
+			 * Gets Rapleaf widget preferences, required to check whether to show setup
+			 * button or to fetch details. If undefined - considering first time usage
+			 * of widget, setupRapleafAuth is shown and returned
+			 */
+			if (rapleaf_widget.prefs == undefined)
+			{
+				setupRapleafAuth();
+				return;
+			}
+
+			/*
+			 * If Rapleaf widget preferences are defined, shows details from Rapleaf
+			 * associated with current contact's email
+			 */
+			showRapleafDetails();
+
+		});
+
