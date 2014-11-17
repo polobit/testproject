@@ -329,10 +329,19 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 		count = 1;
 	    BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(null, null);
 
-	    // Email count and according to plan and extra free pack that is
-	    // provided to all users
-	    restriction.one_time_emails_count = (count * 1000);
-	    restriction.max_emails_count = restriction.one_time_emails_count;
+	    System.out.println("events : " + getEvent().getData());
+	    System.out.println("previous attributes : " + getEvent().getData().getPreviousAttributes());
+	    if (getEvent().getData().getPreviousAttributes() == null
+		    || getEvent().getData().getPreviousAttributes().isEmpty())
+	    {
+		restriction.one_time_emails_count = (count * 1000);
+		restriction.max_emails_count = restriction.one_time_emails_count;
+	    }
+	    else
+	    {
+		restriction.one_time_emails_count += (count * 1000);
+		restriction.max_emails_count = restriction.one_time_emails_count;
+	    }
 	    restriction.save();
 	}
 	finally
