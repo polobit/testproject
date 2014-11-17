@@ -334,12 +334,15 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    if (getEvent().getData().getPreviousAttributes() == null
 		    || getEvent().getData().getPreviousAttributes().isEmpty())
 	    {
-		restriction.one_time_emails_count = (count * 1000);
+		if (restriction.one_time_emails_count < 0)
+		    restriction.one_time_emails_count = 0;
+
+		restriction.one_time_emails_count += (count * 1000);
 		restriction.max_emails_count = restriction.one_time_emails_count;
 	    }
 	    else
 	    {
-		restriction.one_time_emails_count += (count * 1000);
+		restriction.one_time_emails_count = (count * 1000);
 		restriction.max_emails_count = restriction.one_time_emails_count;
 	    }
 	    restriction.save();
