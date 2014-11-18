@@ -1,12 +1,10 @@
-
 /**
  * Creates a backbone router to perform admin activities (account preferences,
  * users management, custom fields, milestones and etc..).
  * 
  */
-var view={};
+var view = {};
 var AdminSettingsRouter = Backbone.Router.extend({
-
 	routes : {
 	/* Admin-Settings */
 	"admin" : "adminSettings",
@@ -21,8 +19,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"custom-fields" : "customFields",
 
 	/* Api & Analytics */
-	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode", 
-	
+	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode",
+
 	/* Milestones */
 	"milestones" : "milestones",
 
@@ -30,25 +28,21 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"menu-settings" : "menu_settings",
 
 	/* Mandrill Email Activity */
-	/*"email-stats" : "emailStats",*/
+	/* "email-stats" : "emailStats", */
 
-	/* Integrations Stats*/
+	/* Integrations Stats */
 	"integrations-stats" : "integrationsStats",
-	
+
 	/* Web to Lead */
 	"integrations" : "integrations",
 
 	"tag-management" : "tagManagement",
-	
 
 	"email-gateways/:id" : "emailGateways",
-	
 
 	"sms-gateways/:id" : "smsGateways"
 
-	
-		},
-
+	},
 
 	/**
 	 * Show menu-settings modules selection ( calendar, cases, deals, campaign ) &
@@ -309,7 +303,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			// $('#content').html(view.el);
 		});
 	},
-	
+
 	/**
 	 * Creates a Model to show and edit milestones, reloads the page on save
 	 * success
@@ -322,10 +316,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		this.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones", individual_tag_name : 'div', sortKey: "name", postRenderCallback : function(el)
-		{
-			setup_milestones(el);
-		} });
+		this.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones",
+			individual_tag_name : 'div', sortKey : "name", postRenderCallback : function(el)
+			{
+				setup_milestones(el);
+			} });
 		this.pipelineGridView.collection.fetch();
 		$('#content').find('#admin-prefs-tabs-content').html(this.pipelineGridView.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
@@ -337,54 +332,52 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 */
 	integrationsStats : function()
 	{
-		/*if (!CURRENT_DOMAIN_USER.is_admin)
-		{
-			$('#content').html("You have no Admin Privileges");
-			return;
-		}
-		$("#content").html(getTemplate("admin-settings"), {});
-		var emailStatsModelView = new Base_Model_View({ url : 'core/api/emails/email-stats', template : 'admin-settings-email-stats', });
-
-		$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render().el);
-		$('#content').find('#AdminPrefsTab .active').removeClass('active');
-		$('#content').find('.stats-tab').addClass('active');
+		/*
+		 * if (!CURRENT_DOMAIN_USER.is_admin) { $('#content').html("You have no
+		 * Admin Privileges"); return; }
+		 * $("#content").html(getTemplate("admin-settings"), {}); var
+		 * emailStatsModelView = new Base_Model_View({ url :
+		 * 'core/api/emails/email-stats', template :
+		 * 'admin-settings-email-stats', });
+		 * 
+		 * $('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render().el);
+		 * $('#content').find('#AdminPrefsTab .active').removeClass('active');
+		 * $('#content').find('.stats-tab').addClass('active');
 		 */
-		
 
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
 			$('#content').html("You have no Admin Privileges");
 			return;
 		}
-		
-		
-		
+
 		$("#content").html(getTemplate("admin-settings"), {});
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.stats-tab').addClass('active');
 		$('#content').find('#admin-prefs-tabs-content').html(getRandomLoadingImg());
-		
-		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function(){
-				
-		
-		var email_stats = {};
-		var sms_stats = {};
-		$.ajax({ url: 'core/api/emails/email-stats', type: "GET",  dataType:'json', success: function (stats) {
+
+		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
+		{
+
+			var email_stats = {};
+			var sms_stats = {};
+			$.ajax({ url : 'core/api/emails/email-stats', type : "GET", dataType : 'json', success : function(stats)
+			{
 				email_stats = stats;
-			$.ajax({ url: 'core/api/sms-gateway/twilio/logs', type: "GET",  dataType:'json', success: function (stats) {
-					sms_stats = stats
+				$.ajax({ url : 'core/api/sms-gateway/SMSlogs', type : "GET", dataType : 'json', success : function(stats)
+				{
+					sms_stats = stats;
 					var totalLogs = {};
 					totalLogs = $.extend(email_stats, sms_stats);
-					
-					var emailStatsModelView = new Base_Model_View({ template : 'admin-settings-integrations-stats', data :totalLogs });
-					
+
+					var emailStatsModelView = new Base_Model_View({ template : 'admin-settings-integrations-stats', data : totalLogs });
+
 					$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render(true).el);
-				}});
-				
-			}});
-		 });
-		
-		 
+				} });
+
+			} });
+		});
+
 	},
 
 	/**
@@ -398,14 +391,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		
-		this.integrations = new Base_Collection_View({
-			url : 'core/api/widgets/integrations',
-			templateKey: 'admin-settings-web-to-lead'
-		});
-		
+
+		this.integrations = new Base_Collection_View({ url : 'core/api/widgets/integrations', templateKey : 'admin-settings-web-to-lead' });
+
 		this.integrations.collection.fetch();
-		
+
 		$('#content').find('#admin-prefs-tabs-content').html(this.integrations.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
@@ -418,24 +408,25 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html("You have no Admin Privileges");
 			return;
 		}
-		
+
 		$("#content").html(getTemplate("admin-settings"), {});
-		
-		this.tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li', sort_collection: true, sortKey : 'tag', postRenderCallback: function(el){
-		}});
+
+		this.tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li',
+			sort_collection : true, sortKey : 'tag', postRenderCallback : function(el)
+			{
+			} });
 		this.tagsview1.appendItem = append_tag_management;
-		
-//		var tagsView = new Base_Model_View({ url : 'core/api/tags', template : 'admin-settings-tags-model', });
+
+		// var tagsView = new Base_Model_View({ url : 'core/api/tags', template
+		// : 'admin-settings-tags-model', });
 		console.log(this.tagsview1);
 		this.tagsview1.collection.fetch();
-		
+
 		$('#content').find('#admin-prefs-tabs-content').html(this.tagsview1.render().el);
-		
+
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.tag-management-tab').addClass('active');
 	},
-	
-
 
 	emailGateways : function(id)
 	{
@@ -443,94 +434,88 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$("#content").html(getTemplate("admin-settings"), {});
 
 		// On Reload, navigate to integrations
-		if(!this.integrations || this.integrations.collection==undefined)
+		if (!this.integrations || this.integrations.collection == undefined)
 		{
-		    this.navigate("integrations", {trigger: true});
+			this.navigate("integrations", { trigger : true });
 			return;
 		}
-		
+
 		var value = 'SEND_GRID';
 
 		if (id == 'mandrill')
 			value = 'MANDRILL';
-		
 
-		
-		 this.email_gateway = new Base_Model_View({url : 'core/api/email-gateway',
+		this.email_gateway = new Base_Model_View({ url : 'core/api/email-gateway',
 
-			template : 'settings-email-gateway', postRenderCallback : function(el)
+		template : 'settings-email-gateway', postRenderCallback : function(el)
+		{
+			// Loads jquery.chained.min.js
+			head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 			{
-				// Loads jquery.chained.min.js
-				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+				var LHS, RHS;
+
+				// Assigning elements with ids LHS
+				// and RHS
+				// in trigger-add.html
+				LHS = $("#LHS", el);
+				RHS = $("#RHS", el);
+
+				// Chaining dependencies of input
+				// fields
+				// with jquery.chained.js
+				RHS.chained(LHS);
+
+				// Trigger change on email api select
+				setTimeout(function()
 				{
-					var LHS, RHS;
+					$('#email-api', el).val(value).attr("selected", "selected").trigger('change')
+				}, 1);
+			});
+		}, saveCallback : function()
+		{
+			// On saved, navigate to integrations
+			Backbone.history.navigate("integrations", { trigger : true });
 
-					// Assigning elements with ids LHS
-					// and RHS
-					// in trigger-add.html
-					LHS = $("#LHS", el);
-					RHS = $("#RHS", el);
+			data = App_Admin_Settings.email_gateway.model.toJSON();
 
+			// Add webhook
+			if (data.email_api == "MANDRILL")
+			{
+				// Add mandrill webhook
+				$.getJSON("core/api/email-gateway/add-webhook?api_key=" + data.api_key + "&type=" + data.email_api, function(data)
+				{
 
-					// Chaining dependencies of input
-					// fields
-					// with jquery.chained.js
-					RHS.chained(LHS);
+					console.log(data);
 
-
-					// Trigger change on email api select
-					setTimeout(function()
-					{
-						$('#email-api', el).val(value).attr("selected", "selected").trigger('change')
-					}, 1);
 				});
-			},
-			saveCallback: function()
-			{
-				// On saved, navigate to integrations
-				Backbone.history.navigate("integrations",{trigger:true});
-				
-
-				data = App_Admin_Settings.email_gateway.model.toJSON();
-
-
-				// Add webhook
-				if(data.email_api == "MANDRILL")
-				{
-					// Add mandrill webhook
-					$.getJSON("core/api/email-gateway/add-webhook?api_key="+ data.api_key+"&type="+data.email_api, function(data){
-						
-						console.log(data);
-						
-					});
-				}
 			}
-			
+		}
+
 		});
 
 		$('#content').find('#admin-prefs-tabs-content').html(this.email_gateway.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
-	} ,
-	
+	},
+
 	smsGateways : function(id)
 	{
 		console.log("inside sms gateways");
 		$("#content").html(getTemplate("admin-settings"), {});
 
 		// On Reload, navigate to integrations
-		if(!this.integrations || this.integrations.collection==undefined)
+		if (!this.integrations || this.integrations.collection == undefined)
 		{
-		    this.navigate("integrations", {trigger: true});
+			this.navigate("integrations", { trigger : true });
 			return;
 		}
 		
 		var value,accountID;
-		if (id == 'plivo'){
+		if (id == "plivo"){
 			value = 'PLIVO';
 			accountID = "account_id";
 		}
-		if (id == 'twilio'){
+		if (id == "twilio"){
 			value = 'TWILIO';
 			accountID = "account_sid";
 		}
@@ -559,9 +544,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			template : 'settings-sms-gateway',
 			prePersist : function(model)
 			{
-				if (id == 'plivo')
+				if (id == "plivo")
 				var prefJSON = { account_id : model.attributes.account_id, auth_token : model.attributes.auth_token, endpoint : model.attributes.endpoint, sms_api : value }; 
-				if (id == 'twilio')
+				if (id == "twilio")
 				var prefJSON = { account_sid : model.attributes.account_sid, auth_token : model.attributes.auth_token, endpoint : model.attributes.endpoint, sms_api : value}; 
 				model.set({ prefs : JSON.stringify(prefJSON) }, { silent : true });
 			}, postRenderCallback : function(el)
@@ -592,6 +577,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			}
 		});
 
+		
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');

@@ -9,33 +9,51 @@ function agile_webRules(callback)
 	// Callback
 	agile_json(agile_url, callback);
 }
+
 /**
  * Download all web rules and execute them
  */
 function _agile_execute_web_rules()
 {
 	// Download web rules and call _agile_webrules
-	_agile_require_js("https://agilegrabbers.appspot.com/demo/agile-webrules-min.js", function(){_agile_webrules();});
+	_agile_require_js("https://agilegrabbers.appspot.com/demo/agile-webrules-min.js", function()
+	{
+		_agile_webrules();
+	});
 }
 
 /**
  * Loads js file during the run time and executes callback
  */
-function _agile_require_js(file, callback) {
-	   var script = document.getElementsByTagName('script')[0],
-	   newjs = document.createElement('script');
+function _agile_require_js(scriptURL, callback)
+{
+	var script = document.createElement('script');
+	script.type = 'text/javascript';
+	script.async = true;
+	script.src = scriptURL;
 
-	  // IE
-	  newjs.onreadystatechange = function () {
-	     if (newjs.readyState === 'loaded' || newjs.readyState === 'complete') {
-	        newjs.onreadystatechange = null;
-	        callback();
-	     }
-	  };
-	  // others
-	  newjs.onload = function () {
-	     callback();
-	  }; 
-	  newjs.src = file;
-	  script.parentNode.insertBefore(newjs, script);
+	// If IE browser
+	if ((navigator.appVersion).indexOf('MSIE') > 0)
+	{
+		script.onreadystatechange = function()
+		{
+			if ((!this.readyState || this.readyState === "loaded" || this.readyState === "complete"))
+			{
+				callback();
+			}
+		};
 	}
+	// Browsers other than IE
+	else
+	{
+		script.onload = function()
+		{
+			if ((!this.readyState || this.readyState === "loaded" || this.readyState === "complete"))
+			{
+				callback();
+			}
+		};
+	}
+	var head_tag = document.getElementsByTagName('head')[0];
+	head_tag.appendChild(script);
+}
