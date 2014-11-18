@@ -285,7 +285,7 @@ function appendGoogleEventCategorization(base_model)
 				console.log(base_model.get('title'));
 				var eventStartDate = base_model.get('start');
 				var d = new Date(eventStartDate);
-				var createdtime = get_activity_created_time(d.getTime()/1000);
+				var createdtime = get_activity_created_time(d.getTime() / 1000);
 
 				// Today
 				// Today
@@ -318,7 +318,7 @@ function appendGoogleEventCategorization(base_model)
 								$('#next-week-event', this.el).append(itemView.render().el);
 								$('#next-week-event', this.el).parent('table').css("display", "block");
 								$('#next-week-event', this.el).show();
-								if ($('#tomorrow-event').children().length > 0)
+								if ($('#tomorrow-event', this.el).children().length > 0)
 								{
 												$('#next-week-heading', this.el).show();
 
@@ -345,7 +345,8 @@ function show_model(id)
 												$('#updateActivityModal')
 																				.find("ul[name='contacts']")
 																				.append(
-																												'<li class="tag" data="' + contactList[i].id + '" style="display: inline-block; "><a href="#contact/' + contactList[i].id + '">' + getCompanyName(contactList[i].properties) + '</a><a class="close" id="remove_tag">×</a></li>');
+
+																												'<li class="tag" data="' + contactList[i].id + '" style="display: inline-block; "><a href="#contact/' + contactList[i].id + '">' + getCompanyName(contactList[i].properties) + '</a><a class="close" id="remove_tag">�</a></li>');
 
 								}
 								else
@@ -353,7 +354,7 @@ function show_model(id)
 												$('#updateActivityModal')
 																				.find("ul[name='contacts']")
 																				.append(
-																												'<li class="tag" data="' + contactList[i].id + '" style="display: inline-block; "><a href="#contact/' + contactList[i].id + '">' + getName(contactList[i].properties) + '</a><a class="close" id="remove_tag">×</a></li>');
+																												'<li class="tag" data="' + contactList[i].id + '" style="display: inline-block; "><a href="#contact/' + contactList[i].id + '">' + getName(contactList[i].properties) + '</a><a class="close" id="remove_tag">�</a></li>');
 								}
 				}
 
@@ -487,8 +488,6 @@ function loadAgileEvents()
 function loadGoogleEvents()
 {
 
-				
-
 				$.getJSON('core/api/calendar-prefs/get', function(response)
 				{
 								console.log(response);
@@ -562,4 +561,3 @@ function loadGoogleEvents()
 
 				});
 }
-
