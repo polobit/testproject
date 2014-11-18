@@ -387,6 +387,7 @@ $.validator.setDefaults({
 						 var domain = $("#subdomain").val();
 						 var email = $("#login_email").val();
 						
+						 
 						 // Pauses the carousel
 						 $('#cor').carousel('pause');
 						 
@@ -394,13 +395,16 @@ $.validator.setDefaults({
 						 
 						 if(step == 0)
 						{
+							var url =  "/backend/register-check?domain="+domain+"&email=" + email;
 							 $('.carousel').find('.active').hide();
-							 $('#cor').carousel("next");
-							 $('#cor').carousel('pause');
+							 isDuplicateAccount(url, form, function(data){
+								 $('#cor').carousel("next");
+								 $('#cor').carousel('pause');
+							 })
 							 return;
 						}
 						
-					 	checkAndCreateUser("/backend/register-check?domain="+domain+"&email=" + email, form);
+						 submitForm(form);
 						}
 					 }
 			});
@@ -438,6 +442,65 @@ $.validator.setDefaults({
 		    return  $("#agile").valid();
 		    }
 		
+		function isDuplicateAccount(url, form, successCallback, errorCallback)
+		{
+			 $("#register_account").attr("disabled", "disabled");
+			 
+			 $.ajax({
+				  type: "POST",
+				  url: url,
+				  dataType : "json",
+				  success: function(data){
+					
+					console.log(data);
+					  
+					  if(data && data.error)
+						{
+						
+						
+						// If error block is removed, it is added again into DOM 
+						  var error_block = $("#domain-error");
+						
+						  if(error_block.length)
+							  $("#domain-error").html("<a class='close' data-dismiss='alert' href='#'>&times</a> " + data.error).show();
+						  else
+
+							  $("#agile").prepend('<div id="domain-error" class="alert alert-error login-error" ><a class="close" data-dismiss="alert" href="#">&times</a>'+ data.error+'</div');
+
+					
+						  
+						  $("#register_account").removeAttr("disabled");
+						  
+						  if(errorCallback && typeof errorCallback === 'function')
+							  errorCallback(data);
+						  return;
+						  
+						}
+					  
+					  // Hides error message if any 
+					  $("#domain-error").hide();
+					  
+					  if(successCallback && typeof successCallback === 'function')
+						  successCallback(data);
+					 
+				  },
+				  error: function(xhr, status, error)
+				  {
+					  console.log(xhr);
+					  console.log(error);
+				  }
+		}
+			 
+		function submitForm(form)
+		{
+			// Read domain
+			 var domain = $("#subdomain").val();
+			
+			  // Form data is posted to its subdomain 
+			 $(form).attr('action', "https://" + domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com/register");
+			 //  $(form).attr('action', "http://localhost:8888/register");
+			  form.submit();
+		}
 		function checkAndCreateUser(url, form)
 		{
 			 $("#register_account").attr("disabled", "disabled");
@@ -474,6 +537,7 @@ $.validator.setDefaults({
 						
 							  
 							  $("#register_account").removeAttr("disabled");
+
 							  return;
 							  
 							}
@@ -481,13 +545,7 @@ $.validator.setDefaults({
 						  // Hides error message if any 
 						  $("#domain-error").hide();
 						  
-						// Read domain
-						 var domain = $("#subdomain").val();
-						
-						  // Form data is posted to its subdomain 
-						 $(form).attr('action', "https://" + domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com/register");
-						 //  $(form).attr('action', "http://localhost:8888/register");
-						  form.submit();	 
+					 
 					  },
 					  error: function(xhr, status, error)
 					  {
