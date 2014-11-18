@@ -54,6 +54,7 @@
 	margin-right:15px;
 }
 
+
 .contact-switching a:first-child
 {
 	float:left;
@@ -473,6 +474,10 @@ background:none;
 	cursor:pointer;
 }
 
+.widgets ul li a
+{
+	outline:none;
+}
 
 #ClickDesk li a
 {
@@ -605,6 +610,11 @@ padding-bottom:0px!important;
 #notes pre
 {
 	padding:0px
+}
+
+#twilio-logs-panel
+{
+	border-bottom:none!important;
 }
 
 @-moz-document url-prefix() {
