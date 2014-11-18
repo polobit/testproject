@@ -82,6 +82,9 @@ $(function()
 	{
 		e.preventDefault();
 		
+		// Hide list view and show column view with loading img
+		hideListViewAndShowLoading();
+		
 		// Show selected name
 		var name = $(this).html(), id = $(this).attr("href");
 		
@@ -97,11 +100,8 @@ $(function()
 		// Empty collection
 		if(TASKS_LIST_COLLECTION != null)
 		TASKS_LIST_COLLECTION.collection.reset();
-				
-		// Shows loading image untill data gets ready for displaying
-		$('#new-task-list-based-condition').html(LOADING_HTML);	
 		
-		// Add selected details of dropdown in cookie
+		//Add selected details of dropdown in cookie
 		addDetailsInCookie(this);
 		
 		setTimeout(function() { // Do something after 2 seconds

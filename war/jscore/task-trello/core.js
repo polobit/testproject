@@ -12,14 +12,9 @@ function startMakingCollection(criteria, pending)
 		  return;
 		}	
 	
-	// Hide list view and show column view
-	$('#new-task-list-based-condition').show();
-	$('#task-list-based-condition').hide();
-	$('.tasks-count').html("");
+	// Hide list view and show column view with loading img
+	hideListViewAndShowLoading();
 	
-	// Shows loading image untill data gets ready for displaying
-	$('#new-task-list-based-condition').html(LOADING_HTML);
-
 	// Get user details and add into GROUPING_MAP's owner array.
 	if (criteria == "OWNER" && GROUPING_MAP[criteria].type.length == 0)
 		getUserDetails(function(data)
