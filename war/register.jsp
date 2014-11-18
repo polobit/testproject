@@ -89,12 +89,21 @@ label {
 	color: #999;
 	opacity: 0.5;
 }
+
+.carousel-inner > .item {
+    position: relative;
+   // display: none;
+    -webkit-transition: 0.3s ease-in-out left;
+    -moz-transition: 0.3s ease-in-out left;
+    -o-transition: 0.3s ease-in-out left;
+    transition: 0.3s ease-in-out left;
+}
 </style>
 
 
 <!-- JQUery Core and UI CDN -->
 <script type='text/javascript' src='/lib/jquery-new/jquery-2.1.1.min.js'></script>
-<script type="text/javascript" src="/lib/bootstrap.min.js"></script>
+<script type="text/javascript" src="/lib/bootstrap.v3.min.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
 <script type="text/javascript">
 jQuery.validator.setDefaults({
@@ -143,15 +152,15 @@ $.validator.setDefaults({
 
 	<div class="row login-page">
 		<div class='regpage-container'>
-			<div id="cor" class="regpage-content clearfix carousel">
-				<div align="center">
+			<div id="cor" class="regpage-content clearfix carousel slide">
+			<!-- 	<div align="center">
 					<h1 class="regpage-logHead">
 						<img src="img/signin/cloud-logo.png"> Register your free
 						Agile account
 					</h1>
 					<div class="reg-info">No credit card required</div>
 				</div>
-
+ -->
 
 				<form id='oauth' name='oauth' method='post' class="pad-top-10">
 
@@ -178,6 +187,13 @@ $.validator.setDefaults({
 					class="regpage-fieldview" onsubmit="return isValid();">
 					<div class="carousel-inner">
 						<div class="item active">
+						<div align="center">
+					<h1 class="regpage-logHead">
+						<img src="img/signin/cloud-logo.png"> Register your free
+						Agile account
+					</h1>
+					<div class="reg-info">No credit card required</div>
+				</div>
 							<fieldset>
 								<!--  <h3 class="log-subhead"><small>Or Fill out the form below</small></h3>	 -->
 								<div id="openid_btns">
@@ -232,7 +248,34 @@ $.validator.setDefaults({
 							</fieldset>
 						</div>
 						<div class="item">
+						<div align="center">
+					<h1 class="regpage-logHead">
+						<img src="img/signin/cloud-logo.png"> Dummy
+					</h1>
+					<div class="reg-info">No credit card required</div>
+				</div>
 							<fieldset class="step2">
+								<div class="form-group login-email">
+									<span class="regpage-mail"></span> <input
+										class="input-xlarge field required email form-control"
+										id="login_email" name='email1' type="text" maxlength="50"
+										minlength="6" placeholder="Email Address (User ID)"
+										autocapitalize="off">
+								</div>
+								<div class="form-group login-email">
+									<span class="regpage-mail"></span> <input
+										class="input-xlarge field required email form-control"
+										id="login_email" name='email1' type="text" maxlength="50"
+										minlength="6" placeholder="Email Address (User ID)"
+										autocapitalize="off">
+								</div>
+								<div class="form-group login-email">
+									<span class="regpage-mail"></span> <input
+										class="input-xlarge field required email form-control"
+										id="login_email" name='email1' type="text" maxlength="50"
+										minlength="6" placeholder="Email Address (User ID)"
+										autocapitalize="off">
+								</div>
 								<div class="form-group login-email">
 									<span class="regpage-mail"></span> <input
 										class="input-xlarge field required email form-control"
@@ -331,8 +374,10 @@ $.validator.setDefaults({
 		
 			console.log($('#cor'))
 			$('#cor').carousel({
-				  interval: 1000000000
-				})
+				  interval: 100
+				});
+			
+			$('#cor').carousel('pause');
 				
 			// Submits the Agile form to to RegisterServlet
 			$("#agile").validate({
@@ -344,6 +389,7 @@ $.validator.setDefaults({
 						 var domain = $("#subdomain").val();
 						 var email = $("#login_email").val();
 						 $('#cor').carousel("next");
+						 $('#cor').carousel('pause');
 					// checkAndCreateUser("/backend/register-check?domain="+domain+"&email=" + email, form);
 						}
 					 }
