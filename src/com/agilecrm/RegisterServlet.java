@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -192,14 +193,15 @@ public class RegisterServlet extends HttpServlet
 
 	// Creates contact in our domain
 	createUserInOurDomain(request);
-	
+
 	// Redirect to home page
 	response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com/");
     }
 
     private void createUserInOurDomain(HttpServletRequest request)
     {
-	Contact contact = new Contact();
+	String userDomain = NamespaceManager.get();
+	Contact contact = null;
 
 	// Main fields
 	ContactField emailField = new ContactField();
@@ -227,30 +229,34 @@ public class RegisterServlet extends HttpServlet
 
 	companySizeField.name = Contact.COMPANY;
 	companySizeField.value = companySize;
-	
+
 	ContactField phoneNumberField = new ContactField();
-	String phoneNumber =  request.getParameter("phone_numbers");
+	String phoneNumber = request.getParameter("phone_number");
 	phoneNumberField.name = Contact.PHONE;
 	phoneNumberField.value = phoneNumber;
-	
-	contact.properties.add(emailField);
-	contact.properties.add(nameField);
-	contact.properties.add(companyField);
-	contact.properties.add(companySizeField);
-	contact.properties.add(phoneNumberField);
-	
-	String userDomain = NamespaceManager.get();
+
 	try
 	{
 	    NamespaceManager.set(Globals.COMPANY_DOMAIN);
+	    contact = ContactUtil.searchContactByEmail(emailField.value);
+	    if (contact == null)
+		contact = new Contact();
+
+	    contact.properties.add(emailField);
+	    contact.properties.add(nameField);
+	    contact.properties.add(companyField);
+	    contact.properties.add(companySizeField);
+	    contact.properties.add(phoneNumberField);
+
+	    System.out.println("contact to be saved : " + contact);
 	    contact.save();
+	    System.out.println("contact after saving : " + contact);
 	}
 	finally
 	{
 	    NamespaceManager.set(userDomain);
 	}
-	
-	
+
     }
 
     /**

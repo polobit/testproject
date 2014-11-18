@@ -194,7 +194,7 @@ $.validator.setDefaults({
 								</h1>
 								<div class="reg-info">No credit card required</div>
 							</div>
-							<fieldset>
+							<fieldset id="agile-fieldset">
 								<!--  <h3 class="log-subhead"><small>Or Fill out the form below</small></h3>	 -->
 								<div id="openid_btns" class="regpage-fieldview">
 									<input type='hidden' name='type' value='agile'></input>
@@ -266,25 +266,17 @@ $.validator.setDefaults({
 									<div class="form-group login-company-size">
 										<span class="regpage-company-size"></span> <input
 											class="input-xlarge field required form-control number"
-											id="login_company_size" name='company-size' type="text" min=2
+											id="login_company_size" name='company_size' type="text" min=2
 											placeholder="Company Size" autocapitalize="off">
 									</div>
 
 									<div class="form-group login-company-size">
 										<span class="regpage-company-size"></span> <input
 											class="input-xlarge field required form-control number"
-											id="login_phone_number" name='phone-number' type="text" min=2
+											id="login_phone_number" name='phone_number' type="text" min=2
 											placeholder="Phone Number " autocapitalize="off">
 									</div>
 
-									<div class="form-group login-company-size">
-										<span class="regpage-company-size"></span> <input
-											class="input-xlarge field required form-control number"
-											id="login_phone_number" name='phone-number' type="text" min=2
-											placeholder="Phone Number " autocapitalize="off">
-									</div>
-									
-									
 									<div align="center" class="regpage-signup">
 										<input type='submit' id="register_account" value="Confirm"
 											class='btn btn-large btn-primary  regpage-btn'>
@@ -396,8 +388,8 @@ $.validator.setDefaults({
 						 if(step == 0)
 						{
 							var url =  "/backend/register-check?domain="+domain+"&email=" + email;
-							 $('.carousel').find('.active').hide();
 							 isDuplicateAccount(url, form, function(data){
+								 $('.carousel').find('.active').hide();
 								 $('#cor').carousel("next");
 								 $('#cor').carousel('pause');
 							 })
@@ -464,8 +456,7 @@ $.validator.setDefaults({
 						  if(error_block.length)
 							  $("#domain-error").html("<a class='close' data-dismiss='alert' href='#'>&times</a> " + data.error).show();
 						  else
-
-							  $("#agile").prepend('<div id="domain-error" class="alert alert-error login-error" ><a class="close" data-dismiss="alert" href="#">&times</a>'+ data.error+'</div');
+							  $("#agile-fieldset").prepend('<div id="domain-error" class="alert alert-error login-error" ><a class="close" data-dismiss="alert" href="#">&times</a>'+ data.error+'</div');
 
 					
 						  
@@ -489,8 +480,9 @@ $.validator.setDefaults({
 					  console.log(xhr);
 					  console.log(error);
 				  }
+			 });
 		}
-			 
+		
 		function submitForm(form)
 		{
 			// Read domain
@@ -501,6 +493,8 @@ $.validator.setDefaults({
 			 //  $(form).attr('action', "http://localhost:8888/register");
 			  form.submit();
 		}
+			 
+		
 		function checkAndCreateUser(url, form)
 		{
 			 $("#register_account").attr("disabled", "disabled");
