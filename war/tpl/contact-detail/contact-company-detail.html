@@ -83,26 +83,14 @@
 					<!-- Owner block -->
 					<br />
 					<div style="float: right; margin-top: -15px;">
-						<div class="change-owner-succes"></div>
-						<span title="Owner"><strong style="color: gray">Owner:</strong>&nbsp;&nbsp;<span
-							id="contact-owner" data={{owner.id}}
-							style="display: inline-block">{{owner.name}}</span>  <span>
-								<a href="#"> <i class="icon-edit"
-									style="vertical-align: middle;" rel="popover"
-									data-placement="top" data-title="Lead Owner"
-									data-content="Click here to change owner."
-									id="change-owner-element" data-trigger="hover"></i></a>
-						</span>
-							<div class="btn-group" id="change-owner-ul"
-								style="vertical-align: middle; display: none">
-								<a class="btn dropdown-toggle" data-toggle="dropdown">
-									Change owner <span class="caret"></span>
-								</a>
-								<ul id='contact-detail-owner' class="dropdown-menu pull-right">
-								</ul>
-							</div> <!--<select id='contact-detail-owner' class="input-block-level">
-                                <option class="contact-detail-owner" value="">Select..</option>
-                            </select>--> </span>
+<div class="change-owner-succes"></div>
+      <span title="Owner" id="change-owner-element"><strong style="color: gray">Owner:</strong>&nbsp;&nbsp;
+       <span id="contact-owner" data={{owner.id}} style="display: inline-block">{{owner.name}}</span>
+       <div class="btn-group" id="change-owner-ul" style="vertical-align: middle; display: none">
+        <a class="btn dropdown-toggle" data-toggle="dropdown"> Change owner <span class="caret"></span></a>
+        <ul id='contact-detail-owner' class="dropdown-menu pull-right"></ul>
+       </div> 
+      </span>
 					</div>
 				</div>
 

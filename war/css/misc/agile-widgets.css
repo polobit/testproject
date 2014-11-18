@@ -23,6 +23,7 @@
 	margin-top: 9px;
 }
 
+
 .widget_header {
 	padding: 10px;
 	background: rgba(240, 240, 240, 3);
@@ -72,6 +73,7 @@
 	width: 100%;
 	word-wrap: break-word;
 	word-break: normal;
+	font-size:13px;
 }
 
 .ml_10 {

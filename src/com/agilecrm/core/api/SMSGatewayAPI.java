@@ -70,12 +70,12 @@ public class SMSGatewayAPI
 		{
 
 			if (!SMSGatewayUtil.checkCredentials(smsGatewayWidget))
-				throw new Exception("Incorrect Authentication SID or Auth token");
+				throw new Exception("Incorrect Authentication ID or Auth token");
 
-			if (TwilioSMSUtil.isIncomingNumbersEmpty(smsGatewayWidget))
+			if (SMSGatewayUtil.incomingNumbers(smsGatewayWidget).isEmpty())
 				throw new Exception(
-						"You do not have a number purchased from Twilio for this account. You can purchase one <a href='https://www.twilio.com/user/account/phone-numbers/incoming' target='_blank'>"
-								+ "here" + "</a>");
+						"You do not have a number purchased for this account. You can purchase one <a href='"
+								+ SMSGatewayUtil.getLink(smsGatewayWidget) + "' target='_blank'>" + "here" + "</a>");
 
 			smsGatewayWidget.save();
 		}
@@ -113,5 +113,28 @@ public class SMSGatewayAPI
 		if (name.equals("twilio"))
 			return TwilioSMSUtil.currentTwilioLogs();
 		return null;
+	}
+
+	/**
+	 * Returns current SMSGateway numbers list
+	 * 
+	 * @return
+	 */
+	@Path("/numbers")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<String> getGatewayNumbers()
+	{
+
+		return SMSGatewayUtil.currentGatewayNumbers();
+	}
+
+	@Path("/SMSlogs")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public JSONObject getSMSLogs()
+	{
+
+		return SMSGatewayUtil.getSMSLogs();
 	}
 }

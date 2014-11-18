@@ -49,11 +49,11 @@ margin-left: -3px;">.myshopify.com</span>
 
 <script id="shopify-error-template" type="text/html">
 {{#check_length message "140"}}
-	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:10px">
+	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:0px">
 		{{{message}}}
 	</div>
 {{else}}
-	<div style="line-height:160%;word-wrap: break-word;padding:10px">
+	<div style="line-height:160%;word-wrap: break-word;padding:0px">
 		{{{message}}}
 	</div>
 {{/check_length}}
@@ -68,14 +68,14 @@ margin-left: -3px;">.myshopify.com</span>
 
 <div>Total spent &nbsp;&nbsp;{{this.0.currency}}&nbsp; {{this.0.total_spent}}</div>
 </div>
-<div class="sub_header">
+<div class="sub_header" style="font-weight:bold;">
 	<h4>Order Details</h4>
 </div>
 
 
 {{#each_index_slice this 1}}
 
-<ul style="margin:0px;">
+<ul style="margin:0px;" style="border-bottom:1px solid #eee">
 <li class="row-fluid sub_header_li">
 
 <div class="pull-left">

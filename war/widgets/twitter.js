@@ -3,367 +3,6 @@
  * based on the third party JavaScript API provided.It interacts with the
  * application based on the function provided on agile_widgets.js(Third party API)
  */
-$(function()
-{
-	// Twitter widget name as a global variable
-	TWITTER_PLUGIN_NAME = "Twitter";
-
-	// Twitter update loading image declared as global
-	TWITTER_UPDATE_LOAD_IMAGE = '<div id="tweet_load"><center><img  src=\"img/ajax-loader-cursor.gif\" ' + 'style="margin-top: 10px;margin-bottom: 14px;"></img></center></div>';
-
-	// Current contact user name in Twitter profile
-	Twitter_current_profile_user_name = "";
-	Twitter_current_update_id = "";
-	Twitter_current_profile_screen_name = "";
-	console.log(Twitter_follower_ids);
-	console.log(Twitter_following_ids);
-	var Twitter_follower_ids = undefined;
-	var Twitter_following_ids = undefined;
-	search_string = undefined;
-	search_data = undefined;
-	Twitter_search_details = {};
-	web_url = "";
-
-	// Global twitter id
-	Twitter_id = "";
-
-	// Retrieves widget which is fetched using script API
-	var twitter_widget = agile_crm_get_widget(TWITTER_PLUGIN_NAME);
-
-	console.log('In Twitter');
-	console.log(Twitter_follower_ids);
-	console.log(Twitter_following_ids);
-
-	console.log(twitter_widget);
-
-	// ID of the Twitter widget as global variable
-	Twitter_Plugin_Id = twitter_widget.id;
-
-	/*
-	 * Gets Twitter widget preferences, required to check whether to show setup
-	 * button or to fetch details. If undefined - considering first time usage
-	 * of widget, setupTwitterOAuth is shown and returned
-	 */
-	if (twitter_widget.prefs == undefined)
-	{
-		setupTwitterOAuth();
-		return;
-	}
-
-	// Get website URL for Twitter from contact to get profile based on it
-	web_url = agile_crm_get_contact_property_by_subtype('website', 'TWITTER');
-	console.log(web_url);
-
-	// If Twitter URL exists for contact,
-	if (web_url)
-	{
-		// Get Twitter id from URL and show profile
-		getTwitterIdByUrl(web_url, function(data)
-		{
-			Twitter_id = data;
-			showTwitterProfile(Twitter_id);
-		});
-	}
-	else
-	{
-		// Shows all the matches in Twitter for the contact
-		getTwitterMatchingProfiles();
-	}
-
-	// Deletes Twitter profile on click of delete button in template
-	$('#Twitter_plugin_delete').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url, function(data)
-		{
-			console.log("In twitter delete callback");
-			getTwitterMatchingProfiles();
-		});
-
-	});
-
-	// Sends a message to Twitter when clicked on send message button
-	$('#twitter_message').die().live('click', function(e)
-	{
-		e.preventDefault();
-		sendTwitterMessage(Twitter_id);
-	});
-
-	// Sends an follow request to Twitter when clicked on follow button
-	$('#twitter_follow').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		// Checks whether it is disabled, if disabled no request is sent
-		if ($(this).attr("disabled"))
-			return;
-
-		// Once if follow clicked, request sent and button is disabled
-		sendFollowRequest(Twitter_id);
-	});
-
-	// Sends an UnFollow request to Twitter when clicked on UnFollow button
-	$('#twitter_unfollow').die().live('click', function(e)
-	{
-		e.preventDefault();
-		sendUnfollowRequest(Twitter_id);
-	});
-
-	// On mouse enter unfollow
-	$('#twitter_unfollow').live('mouseenter', function()
-	{
-		$('#twitter_unfollow').text("Unfollow");
-		$('#twitter_unfollow').addClass("btn-danger");
-		$('#twitter_unfollow').removeClass("btn-primary");
-	});
-
-	// On mouse leave following
-	$('#twitter_unfollow').live('mouseleave', function()
-	{
-		$('#twitter_unfollow').text("Following");
-		$('#twitter_unfollow').addClass("btn-primary");
-		$('#twitter_unfollow').removeClass("btn-danger");
-	});
-
-	// ReTweets a tweet in Twitter on click of ReTweet link
-	$('.twitter_retweet').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		// Get the id of the tweet on which retweet is clicked
-		var tweet_id = $(this).attr("id");
-		console.log(tweet_id);
-
-		// While retweet, the comment message is made optional
-		retweetTheTweet(tweet_id, "optional", this);
-	});
-
-	// Sends a tweet to the contact Twitter profile
-	$('#twitter_tweet').die().live('click', function(e)
-	{
-		e.preventDefault();
-		tweetInTwitter(Twitter_id);
-
-	});
-
-	// on click of name link to modify search, search template is shown
-	$('.twitter_modify_search').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		Twitter_search_details['plugin_id'] = Twitter_Plugin_Id;
-
-		$('#Twitter', agile_crm_get_current_view()).html(getTemplate('twitter-modified-search', Twitter_search_details));
-	});
-
-	/*
-	 * On click of search button in modify template, matching profiles are
-	 * fetched
-	 */
-	$('#twitter_search_btn').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		getModifiedTwitterMatchingProfiles();
-	});
-
-	/*
-	 * On click of close, show past results with past searched data
-	 */
-	$('#twitter_search_close').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		if (search_data)
-			showTwitterMatchingProfiles(search_data);
-		else
-			getTwitterMatchingProfiles();
-	});
-
-	// On click of followers in twitter panel
-	$('#twitter_followers').die().live('click', function(e1)
-	{
-		e1.preventDefault();
-
-		if (Twitter_follower_ids && Twitter_follower_ids.length != 0)
-			return;
-
-		console.log("In twit folowers");
-		console.log(Twitter_follower_ids);
-
-		Twitter_follower_ids = [];
-
-		// show loading in follower panel
-		$('#twitter_follower_panel', agile_crm_get_current_view()).html(TWITTER_UPDATE_LOAD_IMAGE);
-
-		// Retrieves the Twitter IDs of all the followers
-		getFollowerIdsInTwitter(Twitter_id, function(data)
-		{
-			// Store array of IDs in a global variable
-			Twitter_follower_ids = data;
-
-			console.log(data);
-
-			// If no followers, show info
-			if (data.length == 0)
-			{
-				$('#twitter_follower_panel', agile_crm_get_current_view()).html(Twitter_current_profile_user_name + " doesn't have any followers yet");
-				return;
-			}
-
-			// Get 20 from array and remove 20 from array
-			var temp = Twitter_follower_ids.splice(0, 20);
-			console.log(temp);
-
-			// Get the Twitter profile for 20 Twitter IDs
-			getListOfProfilesByIDsinTwitter(temp, function(result)
-			{
-				// Show matching profiles in Twitter panel
-				$('#twitter_follower_panel', agile_crm_get_current_view()).html(getTemplate("twitter-follower-following", result));
-
-				$(".twitterImage").die().live('mouseover', function()
-				{
-					// Unique Twitter Id from widget
-					var id = $(this).attr('id');
-
-					// Aligns details to left in the pop over
-					$('#' + id).popover({ placement : 'left' });
-
-					/*
-					 * Called show to overcome pop over bug (not showing pop
-					 * over on mouse hover for first time)
-					 */
-					$('#' + id).popover('show');
-				});
-			}, function(error)
-			{
-				Twitter_follower_ids = undefined;
-				$('#tweet_load').remove();
-				tweetError("follower-error-panel", error.responseText);
-			});
-		});
-	});
-
-	$('#more_followers').die().live('click', function(e2)
-	{
-		e2.preventDefault();
-
-		if (!Twitter_follower_ids)
-			return;
-
-		$('#spinner-followers').show();
-
-		console.log(Twitter_follower_ids);
-
-		// Get 20 from array and remove 20 from array
-		var temp = Twitter_follower_ids.splice(0, 20);
-		console.log(temp);
-
-		// Get the Twitter profile for 20 Twitter IDs
-		getListOfProfilesByIDsinTwitter(temp, function(result)
-		{
-
-			$('#spinner-followers').hide();
-
-			// Show matching profiles in Twitter panel
-			$('#twitter_follower_panel').append(getTemplate('twitter-follower-following', result));
-		}, function(error)
-		{
-			$('#spinner-followers').hide();
-			tweetError("follower-error-panel", error.responseText);
-		});
-	});
-
-	// On click of following in twitter panel
-	$('#twitter_following').die().live('click', function(e1)
-	{
-		e1.preventDefault();
-
-		if (Twitter_following_ids && Twitter_following_ids.length != 0)
-			return;
-
-		Twitter_following_ids = [];
-
-		$('#twitter_following_panel', agile_crm_get_current_view()).html(TWITTER_UPDATE_LOAD_IMAGE);
-
-		// Retrieves the Twitter IDs of all the following persons
-		getFollowingIdsInTwitter(Twitter_id, function(data)
-		{
-			// Store array of IDs in a global variable
-			Twitter_following_ids = data;
-
-			console.log(data.length);
-			if (data.length == 0)
-			{
-				$('#twitter_following_panel', agile_crm_get_current_view()).html(Twitter_current_profile_user_name + " isn't following anyone yet");
-				return;
-			}
-
-			// Get 20 from array and remove 20 from array
-			var temp = Twitter_following_ids.splice(0, 20);
-			console.log(temp);
-
-			// Get the Twitter profile for 20 Twitter IDs
-			getListOfProfilesByIDsinTwitter(temp, function(result)
-			{
-
-				// Show matching profiles in Twitter panel
-				$('#twitter_following_panel', agile_crm_get_current_view()).html(getTemplate("twitter-follower-following", result));
-
-				$(".twitterImage").die().live('mouseover', function()
-				{
-					// Unique Twitter Id from widget
-					var id = $(this).attr('id');
-
-					// Aligns details to left in the pop over
-					$('#' + id).popover({ placement : 'left' });
-
-					/*
-					 * Called show to overcome pop over bug (not showing pop
-					 * over on mouse hover for first time)
-					 */
-					$('#' + id).popover('show');
-				});
-			}, function(error)
-			{
-				Twitter_following_ids = undefined;
-				$('#tweet_load').remove();
-				tweetError("following-error-panel", error.responseText);
-			});
-		});
-	});
-
-	$('#more_following').die().live('click', function(e2)
-	{
-		e2.preventDefault();
-
-		if (!Twitter_following_ids)
-			return;
-
-		$('#spinner-following').show();
-
-		// Get 20 from array and remove 20 from array
-		var temp = Twitter_following_ids.splice(0, 20);
-		console.log(temp);
-
-		// Get the Twitter profile for 20 Twitter IDs
-		getListOfProfilesByIDsinTwitter(temp, function(result)
-		{
-
-			// $('#tweet_load').remove();
-			$('#spinner-following').hide();
-
-			// Show matching profiles in Twitter panel
-			$('#twitter_following_panel').append(getTemplate('twitter-follower-following', result));
-		}, function(error)
-		{
-			$('#spinner-following').hide();
-			tweetError("following-error-panel", error.responseText);
-		});
-
-	});
-});
 
 /**
  * Shows setup if user adds Twitter widget for the first time. Uses
@@ -419,19 +58,19 @@ function showTwitterMatchingProfiles(data)
 		if (Twitter_search_details['keywords'] && Twitter_search_details['keywords'] != "")
 			twitterMainError(
 					TWITTER_PLUGIN_NAME,
-					"<p class='a-dotted' style='margin-bottom:0px 0px 6px;font-size:13px;'>No matches found for <a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a>",
+					"<p class='a-dotted' style='margin-bottom:0px;font-size:13px;'>No matches found for <a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a>",
 					true);
 		else
 			twitterMainError(TWITTER_PLUGIN_NAME,
-					"<p class='a-dotted' style='margin-bottom:0px 0px 6px;font-size:13px;'>No matches found. <a href='#' class='twitter_modify_search'>Modify search</a>", true);
+					"<p class='a-dotted' style='margin-bottom:0px;font-size:13px;'>No matches found. <a href='#' class='twitter_modify_search'>Modify search</a>", true);
 		return;
 	}
 
 	var el;
 	if (Twitter_search_details['keywords'] && Twitter_search_details['keywords'] != "")
-		el = "<div><p class='a-dotted' style='margin-bottom:0px 0px 6px;font-size:13px;'>Search results for " + "<a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a></p>";
+		el = "<div style='padding:0px 0px'><p class='a-dotted' style='margin-bottom:0px 0px 6px;font-size:13px;'>Search results for " + "<a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a></p>";
 	else
-		el = "<div><p class='a-dotted' style='margin-bottom:0px 0px 6px;font-size:13px;'>Search results. " + "<a href='#' class='twitter_modify_search'>Modify search</a></p>";
+		el = "<div style='padding:0px 0px'><p class='a-dotted' style='margin-bottom:0px 0px 6px;font-size:13px;'>Search results. " + "<a href='#' class='twitter_modify_search'>Modify search</a></p>";
 
 	el = el.concat(getTemplate("twitter-search-result", data));
 	el = el + "</div>";
@@ -1569,3 +1208,366 @@ function twitterMainError(id, error, disable_check)
 	$('#' + id, agile_crm_get_current_view()).html(getTemplate('twitter-error-panel', error_json));
 
 }
+
+$(function()
+		{
+			// Twitter widget name as a global variable
+			TWITTER_PLUGIN_NAME = "Twitter";
+
+			// Twitter update loading image declared as global
+			TWITTER_UPDATE_LOAD_IMAGE = '<div id="tweet_load"><center><img  src=\"img/ajax-loader-cursor.gif\" ' + 'style="margin-top: 10px;margin-bottom: 14px;"></img></center></div>';
+
+			// Current contact user name in Twitter profile
+			Twitter_current_profile_user_name = "";
+			Twitter_current_update_id = "";
+			Twitter_current_profile_screen_name = "";
+			console.log(Twitter_follower_ids);
+			console.log(Twitter_following_ids);
+			var Twitter_follower_ids = undefined;
+			var Twitter_following_ids = undefined;
+			search_string = undefined;
+			search_data = undefined;
+			Twitter_search_details = {};
+			web_url = "";
+
+			// Global twitter id
+			Twitter_id = "";
+
+			// Retrieves widget which is fetched using script API
+			var twitter_widget = agile_crm_get_widget(TWITTER_PLUGIN_NAME);
+
+			console.log('In Twitter');
+			console.log(Twitter_follower_ids);
+			console.log(Twitter_following_ids);
+
+			console.log(twitter_widget);
+
+			// ID of the Twitter widget as global variable
+			Twitter_Plugin_Id = twitter_widget.id;
+
+			/*
+			 * Gets Twitter widget preferences, required to check whether to show setup
+			 * button or to fetch details. If undefined - considering first time usage
+			 * of widget, setupTwitterOAuth is shown and returned
+			 */
+			if (twitter_widget.prefs == undefined)
+			{
+				setupTwitterOAuth();
+				return;
+			}
+
+			// Get website URL for Twitter from contact to get profile based on it
+			web_url = agile_crm_get_contact_property_by_subtype('website', 'TWITTER');
+			console.log(web_url);
+
+			// If Twitter URL exists for contact,
+			if (web_url)
+			{
+				// Get Twitter id from URL and show profile
+				getTwitterIdByUrl(web_url, function(data)
+				{
+					Twitter_id = data;
+					showTwitterProfile(Twitter_id);
+				});
+			}
+			else
+			{
+				// Shows all the matches in Twitter for the contact
+				getTwitterMatchingProfiles();
+			}
+
+			// Deletes Twitter profile on click of delete button in template
+			$('#Twitter_plugin_delete').die().live('click', function(e)
+			{
+				e.preventDefault();
+
+				agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url, function(data)
+				{
+					console.log("In twitter delete callback");
+					getTwitterMatchingProfiles();
+				});
+
+			});
+
+			// Sends a message to Twitter when clicked on send message button
+			$('#twitter_message').die().live('click', function(e)
+			{
+				e.preventDefault();
+				sendTwitterMessage(Twitter_id);
+			});
+
+			// Sends an follow request to Twitter when clicked on follow button
+			$('#twitter_follow').die().live('click', function(e)
+			{
+				e.preventDefault();
+
+				// Checks whether it is disabled, if disabled no request is sent
+				if ($(this).attr("disabled"))
+					return;
+
+				// Once if follow clicked, request sent and button is disabled
+				sendFollowRequest(Twitter_id);
+			});
+
+			// Sends an UnFollow request to Twitter when clicked on UnFollow button
+			$('#twitter_unfollow').die().live('click', function(e)
+			{
+				e.preventDefault();
+				sendUnfollowRequest(Twitter_id);
+			});
+
+			// On mouse enter unfollow
+			$('#twitter_unfollow').live('mouseenter', function()
+			{
+				$('#twitter_unfollow').text("Unfollow");
+				$('#twitter_unfollow').addClass("btn-danger");
+				$('#twitter_unfollow').removeClass("btn-primary");
+			});
+
+			// On mouse leave following
+			$('#twitter_unfollow').live('mouseleave', function()
+			{
+				$('#twitter_unfollow').text("Following");
+				$('#twitter_unfollow').addClass("btn-primary");
+				$('#twitter_unfollow').removeClass("btn-danger");
+			});
+
+			// ReTweets a tweet in Twitter on click of ReTweet link
+			$('.twitter_retweet').die().live('click', function(e)
+			{
+				e.preventDefault();
+
+				// Get the id of the tweet on which retweet is clicked
+				var tweet_id = $(this).attr("id");
+				console.log(tweet_id);
+
+				// While retweet, the comment message is made optional
+				retweetTheTweet(tweet_id, "optional", this);
+			});
+
+			// Sends a tweet to the contact Twitter profile
+			$('#twitter_tweet').die().live('click', function(e)
+			{
+				e.preventDefault();
+				tweetInTwitter(Twitter_id);
+
+			});
+
+			// on click of name link to modify search, search template is shown
+			$('.twitter_modify_search').die().live('click', function(e)
+			{
+				e.preventDefault();
+
+				Twitter_search_details['plugin_id'] = Twitter_Plugin_Id;
+
+				$('#Twitter', agile_crm_get_current_view()).html(getTemplate('twitter-modified-search', Twitter_search_details));
+			});
+
+			/*
+			 * On click of search button in modify template, matching profiles are
+			 * fetched
+			 */
+			$('#twitter_search_btn').die().live('click', function(e)
+			{
+				e.preventDefault();
+
+				getModifiedTwitterMatchingProfiles();
+			});
+
+			/*
+			 * On click of close, show past results with past searched data
+			 */
+			$('#twitter_search_close').die().live('click', function(e)
+			{
+				e.preventDefault();
+
+				if (search_data)
+					showTwitterMatchingProfiles(search_data);
+				else
+					getTwitterMatchingProfiles();
+			});
+
+			// On click of followers in twitter panel
+			$('#twitter_followers').die().live('click', function(e1)
+			{
+				e1.preventDefault();
+
+				if (Twitter_follower_ids && Twitter_follower_ids.length != 0)
+					return;
+
+				console.log("In twit folowers");
+				console.log(Twitter_follower_ids);
+
+				Twitter_follower_ids = [];
+
+				// show loading in follower panel
+				$('#twitter_follower_panel', agile_crm_get_current_view()).html(TWITTER_UPDATE_LOAD_IMAGE);
+
+				// Retrieves the Twitter IDs of all the followers
+				getFollowerIdsInTwitter(Twitter_id, function(data)
+				{
+					// Store array of IDs in a global variable
+					Twitter_follower_ids = data;
+
+					console.log(data);
+
+					// If no followers, show info
+					if (data.length == 0)
+					{
+						$('#twitter_follower_panel', agile_crm_get_current_view()).html(Twitter_current_profile_user_name + " doesn't have any followers yet");
+						return;
+					}
+
+					// Get 20 from array and remove 20 from array
+					var temp = Twitter_follower_ids.splice(0, 20);
+					console.log(temp);
+
+					// Get the Twitter profile for 20 Twitter IDs
+					getListOfProfilesByIDsinTwitter(temp, function(result)
+					{
+						// Show matching profiles in Twitter panel
+						$('#twitter_follower_panel', agile_crm_get_current_view()).html(getTemplate("twitter-follower-following", result));
+
+						$(".twitterImage").die().live('mouseover', function()
+						{
+							// Unique Twitter Id from widget
+							var id = $(this).attr('id');
+
+							// Aligns details to left in the pop over
+							$('#' + id).popover({ placement : 'left' });
+
+							/*
+							 * Called show to overcome pop over bug (not showing pop
+							 * over on mouse hover for first time)
+							 */
+							$('#' + id).popover('show');
+						});
+					}, function(error)
+					{
+						Twitter_follower_ids = undefined;
+						$('#tweet_load').remove();
+						tweetError("follower-error-panel", error.responseText);
+					});
+				});
+			});
+
+			$('#more_followers').die().live('click', function(e2)
+			{
+				e2.preventDefault();
+
+				if (!Twitter_follower_ids)
+					return;
+
+				$('#spinner-followers').show();
+
+				console.log(Twitter_follower_ids);
+
+				// Get 20 from array and remove 20 from array
+				var temp = Twitter_follower_ids.splice(0, 20);
+				console.log(temp);
+
+				// Get the Twitter profile for 20 Twitter IDs
+				getListOfProfilesByIDsinTwitter(temp, function(result)
+				{
+
+					$('#spinner-followers').hide();
+
+					// Show matching profiles in Twitter panel
+					$('#twitter_follower_panel').append(getTemplate('twitter-follower-following', result));
+				}, function(error)
+				{
+					$('#spinner-followers').hide();
+					tweetError("follower-error-panel", error.responseText);
+				});
+			});
+
+			// On click of following in twitter panel
+			$('#twitter_following').die().live('click', function(e1)
+			{
+				e1.preventDefault();
+
+				if (Twitter_following_ids && Twitter_following_ids.length != 0)
+					return;
+
+				Twitter_following_ids = [];
+
+				$('#twitter_following_panel', agile_crm_get_current_view()).html(TWITTER_UPDATE_LOAD_IMAGE);
+
+				// Retrieves the Twitter IDs of all the following persons
+				getFollowingIdsInTwitter(Twitter_id, function(data)
+				{
+					// Store array of IDs in a global variable
+					Twitter_following_ids = data;
+
+					console.log(data.length);
+					if (data.length == 0)
+					{
+						$('#twitter_following_panel', agile_crm_get_current_view()).html(Twitter_current_profile_user_name + " isn't following anyone yet");
+						return;
+					}
+
+					// Get 20 from array and remove 20 from array
+					var temp = Twitter_following_ids.splice(0, 20);
+					console.log(temp);
+
+					// Get the Twitter profile for 20 Twitter IDs
+					getListOfProfilesByIDsinTwitter(temp, function(result)
+					{
+
+						// Show matching profiles in Twitter panel
+						$('#twitter_following_panel', agile_crm_get_current_view()).html(getTemplate("twitter-follower-following", result));
+
+						$(".twitterImage").die().live('mouseover', function()
+						{
+							// Unique Twitter Id from widget
+							var id = $(this).attr('id');
+
+							// Aligns details to left in the pop over
+							$('#' + id).popover({ placement : 'left' });
+
+							/*
+							 * Called show to overcome pop over bug (not showing pop
+							 * over on mouse hover for first time)
+							 */
+							$('#' + id).popover('show');
+						});
+					}, function(error)
+					{
+						Twitter_following_ids = undefined;
+						$('#tweet_load').remove();
+						tweetError("following-error-panel", error.responseText);
+					});
+				});
+			});
+
+			$('#more_following').die().live('click', function(e2)
+			{
+				e2.preventDefault();
+
+				if (!Twitter_following_ids)
+					return;
+
+				$('#spinner-following').show();
+
+				// Get 20 from array and remove 20 from array
+				var temp = Twitter_following_ids.splice(0, 20);
+				console.log(temp);
+
+				// Get the Twitter profile for 20 Twitter IDs
+				getListOfProfilesByIDsinTwitter(temp, function(result)
+				{
+
+					// $('#tweet_load').remove();
+					$('#spinner-following').hide();
+
+					// Show matching profiles in Twitter panel
+					$('#twitter_following_panel').append(getTemplate('twitter-follower-following', result));
+				}, function(error)
+				{
+					$('#spinner-following').hide();
+					tweetError("following-error-panel", error.responseText);
+				});
+
+			});
+		});
+

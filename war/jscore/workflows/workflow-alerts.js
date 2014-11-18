@@ -15,14 +15,14 @@ function campaignAlert(alertType)
 		}
 
 	 
-	if(alertType == "EmptyTwilio")
+	if(alertType == "Empty")
 		{
 		alertJSON["title"]="No Twilio Number";
 		alertJSON["message"]="The Twilio SMS gateway you configured does not have a purchased number. Please purchase a number from Twilio to start sending SMS.";
 		alertTemplate = $(getTemplate('SMSGateway-integration-alert-modal',alertJSON));
 		}
 	
-	if(alertType == "UnauthorisedTwilio")
+	if(alertType == "Unauthorised")
 		{
 		alertJSON["title"]="SMS Gateway not Configured";
 		alertJSON["message"]="You need to enable SMS Gateway integration to use this option. Please enable it in Admin Settings -> Integrations";

@@ -719,7 +719,7 @@ var ContactsRouter = Backbone.Router.extend({
 	 * populate_send_email_details is called from the
 	 * postRenderCallback.
 	 */
-	sendEmail : function(id, subject, body)
+	sendEmail : function(id, subject, body, cc, bcc)
 	{
 		
 		var model = {};
@@ -776,6 +776,18 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		if(subject)
 			$("#emailForm",el).find('input[name="subject"]').val(subject);
+		
+		if(cc)
+		{
+			$("#emailForm",el).find('#email_cc').closest('.control-group').show();
+			$("#emailForm",el).find('input[name="email_cc"]').val(cc);
+		}
+		
+		if(bcc)
+		{
+			$("#emailForm",el).find('#email_bcc').closest('.control-group').show();
+			$("#emailForm",el).find('input[name="email_bcc"]').val(bcc);
+		}
 		
 		// Setup HTML Editor
 		if(id)

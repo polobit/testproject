@@ -1,6 +1,7 @@
 package com.agilecrm.sms.util.deferred;
 
 import com.google.appengine.api.taskqueue.DeferredTask;
+import com.thirdparty.plivo.PlivoSMSUtil;
 import com.thirdparty.twilio.TwilioSMSUtil;
 import com.thirdparty.twilio.sdk.TwilioRestException;
 
@@ -67,14 +68,23 @@ public class SMSDeferredTask implements DeferredTask
 	{
 		System.out.println("SMSDeferredTask run...");
 
-		// if (smsGatewayType.equals(SMS_API.TWILIO.toString()))
 		try
 		{
-			TwilioSMSUtil.sendSMS(account_sid, auth_token, smsEndpoint, version, fromNumber, toNumber, body, metadata);
+			if (smsGatewayType.equals("PLIVO"))
+				PlivoSMSUtil.sendSMS(account_sid, auth_token, smsEndpoint, version, fromNumber, toNumber, body,
+						metadata);
+			if (smsGatewayType.equals("TWILIO"))
+				TwilioSMSUtil.sendSMS(account_sid, auth_token, smsEndpoint, version, fromNumber, toNumber, body,
+						metadata);
 		}
 		catch (TwilioRestException e)
 		{
 			System.out.println("TwilioRestException in SMSDefferedTask");
+			e.printStackTrace();
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exceptiom in SMSDefferedTask");
 			e.printStackTrace();
 		}
 	}

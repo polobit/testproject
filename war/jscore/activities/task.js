@@ -304,6 +304,18 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 			}
 			else if (Current_Route == 'tasks')
 			{
+				var criteria = getCriteria();
+				
+				if(criteria == "LIST")
+					{					
+					  if (isUpdate)
+						App_Calendar.allTasksListView.collection.remove(json);
+					  
+	  				  App_Calendar.allTasksListView.collection.add(data);	  				
+					  App_Calendar.allTasksListView.render(true);					
+					  return;
+					}
+				
 				updateTask(isUpdate, data, json);
 			}
 			// Updates data to temeline

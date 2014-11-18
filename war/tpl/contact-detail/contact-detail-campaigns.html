@@ -8,7 +8,7 @@
          
 		 {{#if this.done}}
          <div>
-           <h3 style="display: inline-block; margin-right: 5px">Completed Campaigns: </h3> <ul class="tagsinput">
+           <div style="display: inline-block; margin-right: 5px" class="font-15">Completed Campaigns: </div> <ul class="tagsinput">
                    {{#each this.done}}
 						<li class="tag" style="display:inline-block; background-color: gray; border-color: gray;" data="{{campaign_id}}"><span><a
 								class="anchor" href="#workflow/{{campaign_id}}">{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Done Campaign{{/if}}</a></span></li> 
@@ -20,7 +20,7 @@
 
          {{#if this.active}}
          <div>
-           <h3 id="contact-active-campaigns" style="display: inline-block; margin-right: 5px; ">Active Campaigns: </h3> <ul class="tagsinput active-campaigns">
+           <div class="font-15" id="contact-active-campaigns" style="display: inline-block; margin-right: 5px;">Active Campaigns: </div> <ul class="tagsinput active-campaigns">
                    {{#each this.active}}
 						<li class="tag" style="display:inline-block; background-color: gray; border-color: gray;" data="{{campaign_id}}"><span><a
 								class="anchor" href="#workflow/{{campaign_id}}">{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Active Campaign{{/if}}</a><a
@@ -86,7 +86,7 @@
         {{#if this.length}}
           <div style="margin-top:10px">
 		     
-              <h3>Campaign Log</h3>
+              <div class="font-15">Campaign Log</div>
           </div>
 		  <ul id="campaigns-model-list" class="ativity-block-ul"></ul>
 		{{/if}}

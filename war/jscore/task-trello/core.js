@@ -1,6 +1,22 @@
 // Before selecting proper type array from map, need to fill map with user's detail.
 function startMakingCollection(criteria, pending)
 {
+	console.log("in startMakingCollection");
+	console.log(criteria+" "+ pending);
+	
+	// Check for list view 
+	if(criteria == "LIST")
+		{	
+		  // Display list view
+		  displayListView();
+		  return;
+		}	
+	
+	// Hide list view and show column view
+	$('#new-task-list-based-condition').show();
+	$('#task-list-based-condition').hide();
+	$('.tasks-count').html("");
+	
 	// Shows loading image untill data gets ready for displaying
 	$('#new-task-list-based-condition').html(LOADING_HTML);
 

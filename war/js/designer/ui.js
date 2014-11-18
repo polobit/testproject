@@ -205,6 +205,12 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     }
     
     
+    if(uiFieldDefinition.fieldType == "incoming_list")
+    {
+    	options = getTwilioIncomingList("incoming_list");
+    	
+    }
+    
     if(uiFieldDefinition.fieldType == "twilio_incoming_list")
     {
     	options = getTwilioIncomingList("twilio_incoming_list");
@@ -653,7 +659,29 @@ function _generateUIFields(selector, ui) {
                 
         }
         
+        if(uiFieldType == "incoming_list")
+        {
+           addLabel(uiFieldDefinition.label, container);
+          
+           
+           uiField = generateSelectUI(uiFieldDefinition);
+           
+           $(uiField).appendTo(container);
+           continue;
+        }
+        
         if(uiFieldType == "twilio_incoming_list")
+        {
+           addLabel(uiFieldDefinition.label, container);
+          
+           
+           uiField = generateSelectUI(uiFieldDefinition);
+           
+           $(uiField).appendTo(container);
+           continue;
+        }
+        
+        if(uiFieldType == "incoming_list")
         {
            addLabel(uiFieldDefinition.label, container);
           

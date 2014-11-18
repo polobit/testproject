@@ -1,99 +1,3 @@
-/**
- * ===facebook.js==== It is a pluginIn to be integrated with CRM, developed
- * based on the third party JavaScript API provided. It interacts with the
- * application based on the function provided on agile_widgets.js (Third party
- * API).
- */
-$(function()
-{
-	console.log("in facebook.js")
-	// Facebook widget name as a global variable
-	FACEBOOK_PLUGIN_NAME = "Facebook";
-
-	// Facebook profile loading image declared as global
-	FACEBOOK_PROFILE_LOAD_IMAGE = '<center><img id="facebook_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
-
-	// Retrieves Facebook which is fetched using script API
-	var facebook_widget = agile_crm_get_widget(FACEBOOK_PLUGIN_NAME);
-
-	// ID of the Facebook widget as global variable
-	FACEBOOK_PLUGIN_ID = facebook_widget.id;
-	console.log("plugin Id" + FACEBOOK_PLUGIN_ID);
-
-	// Email as global variable
-	// Email = agile_crm_get_contact_property('email');
-	var first_name = agile_crm_get_contact_property("first_name");
-	var last_name = agile_crm_get_contact_property("last_name");
-
-	// setting lastname to empty string if it is undefined
-	if (last_name == undefined || last_name == null)
-		last_name = '';
-
-	console.log("firstName:" + first_name + "lastname:" + last_name);
-
-	// search string as global varibale
-	SEARCH_STRING = first_name + ' ' + last_name;
-	console.log("    SEARCH_STRING" + SEARCH_STRING)
-
-	web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
-	console.log(web_url);
-
-	if (web_url)
-	{
-		// Get Twitter id from URL and show profile
-		console.log("profile attched" + web_url)
-		tempurl = web_url.replace('@', '');
-		console.log(tempurl);
-		showFacebookProfile(tempurl);
-	}
-	else
-	{
-		// Shows all the matches in Twitter for the contact
-		console.log("no profile attached")
-		showFacebookMatchingProfile(SEARCH_STRING);
-	}
-
-	$('#facebook_search_btn').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		getModifiedFacebookMatchingProfiles();
-	});
-
-	$('.facebook_modify_search').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		// Twitter_search_details['plugin_id'] = Twitter_Plugin_Id;
-
-		$('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-modified-search', { "searchString" : SEARCH_STRING }));
-	});
-	$('#facebook_search_close').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		/*
-		 * if (search_data) showTwitterMatchingProfiles(search_data); else
-		 * getTwitterMatchingProfiles();
-		 */
-	});
-	
-	// Deletes Twitter profile on click of delete button in template
-	$('#Facebook_plugin_delete').die().live('click', function(e)
-	{
-		e.preventDefault();
-		web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
-		console.log('deleting facebook acct.',web_url);
-		agile_crm_delete_contact_property_by_subtype('website', 'FACEBOOK', web_url, function(data)
-		{
-			console.log("In facebook delete callback");
-			showFacebookMatchingProfile();
-		});
-
-	});
-
-});
-
 function showFacebookMatchingProfile(first_name)
 {
 	var contact_image = agile_crm_get_contact_property("image");
@@ -286,3 +190,99 @@ function showFacebookProfile(facebookid)
 
 	});
 }
+
+	/**
+	 * ===facebook.js==== It is a pluginIn to be integrated with CRM, developed
+	 * based on the third party JavaScript API provided. It interacts with the
+	 * application based on the function provided on agile_widgets.js (Third
+	 * party API).
+	 */
+	$(function()
+	{
+		console.log("in facebook.js")
+		// Facebook widget name as a global variable
+		FACEBOOK_PLUGIN_NAME = "Facebook";
+
+		// Facebook profile loading image declared as global
+		FACEBOOK_PROFILE_LOAD_IMAGE = '<center><img id="facebook_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+
+		// Retrieves Facebook which is fetched using script API
+		var facebook_widget = agile_crm_get_widget(FACEBOOK_PLUGIN_NAME);
+
+		// ID of the Facebook widget as global variable
+		FACEBOOK_PLUGIN_ID = facebook_widget.id;
+		console.log("plugin Id" + FACEBOOK_PLUGIN_ID);
+
+		// Email as global variable
+		// Email = agile_crm_get_contact_property('email');
+		var first_name = agile_crm_get_contact_property("first_name");
+		var last_name = agile_crm_get_contact_property("last_name");
+
+		// setting lastname to empty string if it is undefined
+		if (last_name == undefined || last_name == null)
+			last_name = '';
+
+		console.log("firstName:" + first_name + "lastname:" + last_name);
+
+		// search string as global varibale
+		SEARCH_STRING = first_name + ' ' + last_name;
+		console.log("    SEARCH_STRING" + SEARCH_STRING)
+
+		web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
+		console.log(web_url);
+
+		if (web_url)
+		{
+			// Get Twitter id from URL and show profile
+			console.log("profile attched" + web_url)
+			tempurl = web_url.replace('@', '');
+			console.log(tempurl);
+			showFacebookProfile(tempurl);
+		}
+		else
+		{
+			// Shows all the matches in Twitter for the contact
+			console.log("no profile attached")
+			showFacebookMatchingProfile(SEARCH_STRING);
+		}
+
+		$('#facebook_search_btn').die().live('click', function(e)
+		{
+			e.preventDefault();
+
+			getModifiedFacebookMatchingProfiles();
+		});
+
+		$('.facebook_modify_search').die().live('click', function(e)
+		{
+			e.preventDefault();
+
+			// Twitter_search_details['plugin_id'] = Twitter_Plugin_Id;
+
+			$('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-modified-search', { "searchString" : SEARCH_STRING }));
+		});
+		$('#facebook_search_close').die().live('click', function(e)
+		{
+			e.preventDefault();
+
+			/*
+			 * if (search_data) showTwitterMatchingProfiles(search_data); else
+			 * getTwitterMatchingProfiles();
+			 */
+		});
+		
+		// Deletes Twitter profile on click of delete button in template
+		$('#Facebook_plugin_delete').die().live('click', function(e)
+		{
+			e.preventDefault();
+			web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
+			console.log('deleting facebook acct.',web_url);
+			agile_crm_delete_contact_property_by_subtype('website', 'FACEBOOK', web_url, function(data)
+			{
+				console.log("In facebook delete callback");
+				showFacebookMatchingProfile();
+			});
+
+		});
+
+	});

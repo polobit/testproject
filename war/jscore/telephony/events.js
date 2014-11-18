@@ -164,7 +164,8 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 		}
 		else if (e.session == Sip_Session_Call)
 		{
-			// call terminated.
+			// Call terminated.
+			Sip_Session_Call = null;
 			stopRingTone();
 
 			// Show state of call.
@@ -186,10 +187,12 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 				showCallNotyPopup("hackersForbidden", "error", "SIP: Hackers Forbidden.", false);
 			else if (e.description == "User not found")
 				showCallNotyPopup("userNotFound", "error", "SIP: User not found.", false);
-			
+			else if(e.description == "Call terminating...")
+			    console.log("SIP : Terminated because " + e.description);
+			else
+				showCallNotyPopup("disconnected", 'error', "SIP : Terminated because " + e.description, 5000);
 
-			// Call terminated.
-			Sip_Session_Call = null;
+			// call terminated.			
 			User_Name = null;
 			User_Number = null;
 			User_Img = null;
