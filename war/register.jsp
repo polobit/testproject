@@ -438,50 +438,41 @@ $.validator.setDefaults({
 		{
 			 $("#register_account").attr("disabled", "disabled");
 			 
-			 $.ajax({
-				  type: "POST",
-				  url: url,
-				  dataType : "json",
-				  success: function(data){
+			 $.post(url, {}, function(data){
+				 console.log(data);
+				  console.log(data.error)
+				  
+				  
+				 if(data && data.error && data.error.length > 0)
+					{
 					
-					console.log(data);
-					  
-					 if(data && data.error && data.error.length > 0)
-						{
-						
-						 console.log(error);
-						
-						// If error block is removed, it is added again into DOM 
-						  var error_block = $("#domain-error");
-						
-						  if(error_block.length)
-							  $("#domain-error").html("<a class='close' data-dismiss='alert' href='#'>&times</a> " + data.error).show();
-						  else
-							  $("#agile-fieldset").prepend('<div id="domain-error" class="alert alert-error login-error" ><a class="close" data-dismiss="alert" href="#">&times</a>'+ data.error+'</div');
+					 console.log(data.error);
+					
+					// If error block is removed, it is added again into DOM 
+					  var error_block = $("#domain-error");
+					
+					  if(error_block.length)
+						  $("#domain-error").html("<a class='close' data-dismiss='alert' href='#'>&times</a> " + data.error).show();
+					  else
+						  $("#agile-fieldset").prepend('<div id="domain-error" class="alert alert-error login-error" ><a class="close" data-dismiss="alert" href="#">&times</a>'+ data.error+'</div');
 
-					
-						  
-						  $("#register_account").removeAttr("disabled");
-						  
-						  if(errorCallback && typeof errorCallback === 'function')
-							  errorCallback(data);
-						  return;
-						  
-						}
+				
 					  
-					  // Hides error message if any 
-					  $("#domain-error").hide();
+					  $("#register_account").removeAttr("disabled");
 					  
-					  if(successCallback && typeof successCallback === 'function')
-						  successCallback(data);
-					 
-				  },
-				  error: function(xhr, status, error)
-				  {
-					  console.log(xhr);
-					  console.log(error);
-				  }
-			 });
+					  if(errorCallback && typeof errorCallback === 'function')
+						  errorCallback(data);
+					  return;
+					  
+					}
+				  
+				  // Hides error message if any 
+				  $("#domain-error").hide();
+				  
+				  if(successCallback && typeof successCallback === 'function')
+					  successCallback(data);
+				 
+			 } , "json");
 		}
 		
 		function submitForm(form)
