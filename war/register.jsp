@@ -515,9 +515,10 @@ $.validator.setDefaults({
 						
 						console.log(data);
 						  
-						  if(data && data.error)
+						  if(data && data.error && data.error.length > 0)
 							{
 							
+							  console.log("error");
 							
 							// If error block is removed, it is added again into DOM 
 							  var error_block = $("#domain-error");
