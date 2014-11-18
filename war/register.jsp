@@ -555,7 +555,7 @@ $.validator.setDefaults({
 				  if(successCallback && typeof successCallback === 'function')
 					  successCallback(data);
 				 
-			 } , "json");
+			 }, "json");
 		}
 		
 		function submitForm(form)
