@@ -1,8 +1,11 @@
 package com.agilecrm.util;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+
+import com.google.appengine.api.utils.SystemProperty;
 
 /**
  * <code>VersioningUitl</code> class checks request version and builds login
@@ -66,6 +69,16 @@ public class VersioningUtil
     public static String getAppVersion(ServletRequest request)
     {
 	return getAppVersion(request.getServerName());
+    }
+
+    public static String getURL(String domain, HttpServletRequest request)
+    {
+	String version = getAppVersion(request);
+
+	if (StringUtils.isEmpty(version))
+	    return "https://" + domain + ".agilecrm.com/";
+	
+	return "https://" + domain + "-dot-" + version + "-dot-agilecrmbeta.appspot.com/";
     }
 
     /**

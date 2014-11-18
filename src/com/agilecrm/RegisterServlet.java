@@ -213,8 +213,10 @@ public class RegisterServlet extends HttpServlet
 	}
 	
 
+	String redirectionURL = VersioningUtil.getURL(domainUser.domain, request);
+	
 	// Redirect to home page
-	response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com/");
+	response.sendRedirect(redirectionURL);
     }
 
     private void createUserInOurDomain(HttpServletRequest request)
