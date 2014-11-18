@@ -7,7 +7,7 @@
     "author": "Bhasuri",
     "company": "Agile",
     "language": "en",
-    "branches": "No,Yes",
+    "branches": "Yes",
     "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.Unsubscribe",
     "category": "Utilities",
     "ui": [
