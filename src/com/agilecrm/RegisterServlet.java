@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -188,8 +190,67 @@ public class RegisterServlet extends HttpServlet
 
 	DomainUser domainUser = createUser(request, response, userInfo, password);
 
+	// Creates contact in our domain
+	createUserInOurDomain(request);
+	
 	// Redirect to home page
 	response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com/");
+    }
+
+    private void createUserInOurDomain(HttpServletRequest request)
+    {
+	Contact contact = new Contact();
+
+	// Main fields
+	ContactField emailField = new ContactField();
+	String emailValue = request.getParameter("email");
+
+	emailField.name = Contact.EMAIL;
+	emailField.value = emailValue;
+
+	// Main fields
+	ContactField nameField = new ContactField();
+	String name = request.getParameter("name");
+
+	nameField.name = Contact.FIRST_NAME;
+	nameField.value = name;
+
+	ContactField companyField = new ContactField();
+	String companyName = request.getParameter("company");
+
+	companyField.name = Contact.COMPANY;
+	companyField.value = companyName;
+
+	ContactField companySizeField = new ContactField();
+
+	String companySize = request.getParameter("company_size");
+
+	companySizeField.name = Contact.COMPANY;
+	companySizeField.value = companySize;
+	
+	ContactField phoneNumberField = new ContactField();
+	String phoneNumber =  request.getParameter("phone_numbers");
+	phoneNumberField.name = Contact.PHONE;
+	phoneNumberField.value = phoneNumber;
+	
+	contact.properties.add(emailField);
+	contact.properties.add(nameField);
+	contact.properties.add(companyField);
+	contact.properties.add(companySizeField);
+	contact.properties.add(phoneNumberField);
+	
+	String userDomain = NamespaceManager.get();
+	try
+	{
+	    NamespaceManager.set(Globals.COMPANY_DOMAIN);
+	    contact.save();
+	}
+	finally
+	{
+	    NamespaceManager.set(userDomain);
+	}
+	
+	
     }
 
     /**
@@ -237,7 +298,7 @@ public class RegisterServlet extends HttpServlet
 	System.out.println("reference domain in register servlet " + reference_domain);
 	// Create Domain User, Agile User
 	domainUser = new DomainUser(domain, userInfo.getEmail(), userInfo.getName(), password, true, true,
-	        reference_domain);
+		reference_domain);
 
 	// Set IP Address
 	domainUser.setInfo(DomainUser.IP_ADDRESS, "");
