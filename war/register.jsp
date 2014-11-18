@@ -250,40 +250,25 @@ $.validator.setDefaults({
 						<div class="item">
 						<div align="center">
 					<h1 class="regpage-logHead">
-						<img src="img/signin/cloud-logo.png"> Dummy
+						<img src="img/signin/cloud-logo.png">One last step
 					</h1>
 					<div class="reg-info">No credit card required</div>
 				</div>
 							<fieldset class="step2">
-								<div class="form-group login-email">
-									<span class="regpage-mail"></span> <input
-										class="input-xlarge field required email form-control"
-										id="login_email" name='email1' type="text" maxlength="50"
-										minlength="6" placeholder="Email Address (User ID)"
+								<div class="form-group login-company">
+									<span class="regpage-company"></span> <input
+										class="input-xlarge field required form-control"
+										id="login_company" name='company' type="text" maxlength="50"
+										placeholder="Company Name"
 										autocapitalize="off">
 								</div>
-								<div class="form-group login-email">
-									<span class="regpage-mail"></span> <input
-										class="input-xlarge field required email form-control"
-										id="login_email" name='email1' type="text" maxlength="50"
-										minlength="6" placeholder="Email Address (User ID)"
+							
+								<div class="form-group login-company-size">
+									<span class="regpage-company-size"></span> <input
+										class="input-xlarge field required form-control number"
+										id="login_company-size" name='company-size' type="text" min=2 placeholder="Company Size"
 										autocapitalize="off">
 								</div>
-								<div class="form-group login-email">
-									<span class="regpage-mail"></span> <input
-										class="input-xlarge field required email form-control"
-										id="login_email" name='email1' type="text" maxlength="50"
-										minlength="6" placeholder="Email Address (User ID)"
-										autocapitalize="off">
-								</div>
-								<div class="form-group login-email">
-									<span class="regpage-mail"></span> <input
-										class="input-xlarge field required email form-control"
-										id="login_email" name='email1' type="text" maxlength="50"
-										minlength="6" placeholder="Email Address (User ID)"
-										autocapitalize="off">
-								</div>
-								
 								
 								<div align="center" class="regpage-signup">
 										<input type='submit' id="register_account" value="Confirm"
@@ -374,7 +359,7 @@ $.validator.setDefaults({
 		
 			console.log($('#cor'))
 			$('#cor').carousel({
-				  interval: 100
+				  interval: 100000000
 				});
 			
 			$('#cor').carousel('pause');
@@ -382,15 +367,26 @@ $.validator.setDefaults({
 			// Submits the Agile form to to RegisterServlet
 			$("#agile").validate({
 				 submitHandler: function(form) {
-					 $("input", $(".step2")).addClass("ignore");            
-		            
 					 if(isValid())
 						{
+						 alert("valid");
 						 var domain = $("#subdomain").val();
 						 var email = $("#login_email").val();
-						 $('#cor').carousel("next");
+						
+						 // Pauses the carousel
 						 $('#cor').carousel('pause');
-					// checkAndCreateUser("/backend/register-check?domain="+domain+"&email=" + email, form);
+						 
+						 var step = $('.carousel').find('.active').index();
+						 
+						 if(step == 0)
+						{
+							 
+							 $('#cor').carousel("next");
+							 $('#cor').carousel('pause');
+							 return;
+						}
+						
+					 	checkAndCreateUser("/backend/register-check?domain="+domain+"&email=" + email, form);
 						}
 					 }
 			});
@@ -415,6 +411,7 @@ $.validator.setDefaults({
 		  return regularExpression.test(subdomain);
 		}
 		
+		
 		//validates the form fields
 		function isValid(){
 			
@@ -430,13 +427,14 @@ $.validator.setDefaults({
 		function checkAndCreateUser(url, form)
 		{
 			 $("#register_account").attr("disabled", "disabled");
+			 console.log(url);
 				$.ajax({
 					  type: "POST",
 					  url: url,
 					  dataType : "json",
 					  success: function(data){
 						
-						
+						console.log(data);
 						  
 						  if(data && data.error)
 							{
@@ -465,12 +463,13 @@ $.validator.setDefaults({
 						 var domain = $("#subdomain").val();
 						
 						  // Form data is posted to its subdomain 
-						 $(form).attr('action', "https://" + domain + ".agilecrm.com/register");
-						  // $(form).attr('action', "http://localhost:8888/register");
+						 $(form).attr('action', "https://" + domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com/register");
+						 //  $(form).attr('action', "http://localhost:8888/register");
 						  form.submit();	 
 					  },
 					  error: function(xhr, status, error)
 					  {
+						  console.log(xhr);
 						  console.log(error);
 					  }
 					});
