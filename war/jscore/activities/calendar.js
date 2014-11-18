@@ -435,6 +435,16 @@ $(function()
 																				$($('#event_tab').children()[1]).removeClass("hide");
 																}
 																$($('#event_tab').children()[1]).removeClass("active");
+																loadGoogleEvents();
+																loadAgileEvents();
+																
+																if(!$('#agile').hasClass("active")){
+												    				$('#agile').addClass("active");	
+												    }
+															
+												    if($('#google').hasClass("active")){
+												    				$('#google').removeClass("active");	
+												    }
 
 												}
 								}

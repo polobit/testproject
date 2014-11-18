@@ -41,7 +41,7 @@ var CalendarRouter = Backbone.Router.extend({
 																$($('#event_tab').children()[1]).addClass("active");
 																// display google events
 																// retrieve google Calendar prefs and pass to function
-											         loadGoogleEvents();
+																loadGoogleEvents();
 												}
 												else
 												{
@@ -54,6 +54,19 @@ var CalendarRouter = Backbone.Router.extend({
 																if ($($('#event_tab').children()[1]).hasClass("hide"))
 																{
 																				$($('#event_tab').children()[1]).removeClass("hide");
+																}
+
+																loadGoogleEvents();
+																loadAgileEvents();
+
+																if (!$('#agile').hasClass("active"))
+																{
+																				$('#agile').addClass("active");
+																}
+
+																if ($('#google').hasClass("active"))
+																{
+																				$('#google').removeClass("active");
 																}
 
 												}
@@ -261,7 +274,56 @@ function appendGoogleEvent(base_model)
 				$('#google_event', this.el).append(itemView.render().el);
 				$('#google_event', this.el).parent('table').css("display", "block");
 				$('#google_event', this.el).show();
-				$('#event-heading', this.el).show();
+
+}
+
+function appendGoogleEventCategorization(base_model)
+{
+				var itemView = new Base_List_View({ model : base_model, "view" : "inline", template : this.options.templateKey + "-model", tagName : 'tr', });
+
+				// add to the right box - overdue, today, tomorrow etc.
+				console.log(base_model.get('title'));
+				var eventStartDate = base_model.get('start');
+				var d = new Date(eventStartDate);
+				var createdtime = get_activity_created_time(d.getTime()/1000);
+
+				// Today
+				// Today
+				if (createdtime == 0)
+				{
+
+								var heading = $('#today-heading', this.el);
+
+								$('#today-event', this.el).append(itemView.render().el);
+								$('#today-event', this.el).parent('table').css("display", "block");
+								$('#today-event', this.el).show();
+								$('#today-heading', this.el).show();
+				}
+				// if create time is 1 then that events belongs to tomarrow
+				else if (createdtime == 1)
+				{
+
+								var heading = $('#tomorrow-heading', this.el);
+
+								$('#tomorrow-event', this.el).append(itemView.render().el);
+								$('#tomorrow-event', this.el).parent('table').css("display", "block");
+								$('#tomorrow-event', this.el).show();
+								$('#tomorrow-heading', this.el).show();
+				}
+				else if (createdtime > 1)
+				{
+
+								var heading = $('#next-week-heading', this.el);
+
+								$('#next-week-event', this.el).append(itemView.render().el);
+								$('#next-week-event', this.el).parent('table').css("display", "block");
+								$('#next-week-event', this.el).show();
+								if ($('#tomorrow-event').children().length > 0)
+								{
+												$('#next-week-heading', this.el).show();
+
+								}
+				}
 
 }
 
@@ -392,6 +454,15 @@ function getCompanyName(properties)
 function loadAgileEvents()
 {
 
+				if (!$('#agile').hasClass("active"))
+				{
+								$('#agile').addClass("active");
+				}
+				if ($('#google').hasClass("active"))
+				{
+								$('#google').removeClass("active");
+				}
+
 				var view = readCookie("agile_calendar_view");
 				if (view == "calendar_list_view")
 				{
@@ -413,44 +484,82 @@ function loadAgileEvents()
 				}
 }
 
-function loadGoogleEvents(){
-				$.getJSON('core/api/calendar-prefs/get', function(response)
-												{
-																console.log(response);
+function loadGoogleEvents()
+{
 
-																head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
+				
+
+				$.getJSON('core/api/calendar-prefs/get', function(response)
+				{
+								console.log(response);
+
+								head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
+								{
+												setupGC(function()
+												{
+
+																gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
+
+																// Retrieve the events from primary
+																var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary' });
+
+																request.execute(function(resp)
 																{
-																				setupGC(function()
+																				var events = new Array();
+																				console.log(resp);
+																				for (var i = 0; i < resp.items.length; i++)
+																				{
+																								var fc_event = google2fcEvent(resp.items[i]);
+																								console.log(fc_event);
+																								events.push(fc_event);
+
+																				}
+																				var view = readCookie("agile_calendar_view");
+																				if (view == "calendar_list_view")
+																				{
+																								var eventCollectionView = new Base_Collection_View({ data : events, templateKey : "googleEventCategorization",
+																												individual_tag_name : 'tr' });
+																								eventCollectionView.appendItem = appendGoogleEventCategorization;
+																								$('#google').html(eventCollectionView.render(true).el);
+																				}
+																				else
+																				{
+																								var eventCollectionView = new Base_Collection_View({ data : events, templateKey : "google-event", individual_tag_name : 'tr' });
+																								eventCollectionView.appendItem = appendGoogleEvent;
+																								$('#google').html(eventCollectionView.render(true).el);
+																				}
+
+																				if ((readCookie('event-filters') && JSON.parse(readCookie('event-filters')).type != 'agile') && (readCookie('event-filters') && JSON
+																												.parse(readCookie('event-filters')).type != 'google'))
 																				{
 
-																								gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
-
-																								// Retrieve the events from primary
-																								var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary' });
-
-																								request.execute(function(resp)
+																								if ($('#google').hasClass("active"))
 																								{
-																												var events = new Array();
-																												console.log(resp);
-																												for (var i = 0; i < resp.items.length; i++)
-																												{
-																																var fc_event = google2fcEvent(resp.items[i]);
-																																console.log(fc_event);
-																																events.push(fc_event);
+																												$('#google').removeClass("active");
+																								}
+																								if (!$('#agile').hasClass("active"))
+																								{
+																												$('#agile').addClass("active");
+																								}
+																				}
+																				else
+																				{
+																								if (!$('#google').hasClass("active"))
+																								{
+																												$('#google').addClass("active");
+																								}
+																								if ($('#agile').hasClass("active"))
+																								{
+																												$('#agile').removeClass("active");
+																								}
+																				}
 
-																												}
-																												var eventCollectionView = new Base_Collection_View({ data : events, url : 'https://www.googleapis.com',
-																																templateKey : "google-event", individual_tag_name : 'tr' });
-																												eventCollectionView.appendItem = appendGoogleEvent;
-																												eventCollectionView.collection.fetch();
-
-																												$('#google').html(eventCollectionView.render().el);
-
-																								});
-
-																				});
-																				return;
 																});
 
 												});
+												return;
+								});
+
+				});
 }
+

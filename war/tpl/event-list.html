@@ -99,36 +99,52 @@
         
     </div>
 {{/if}}
+</div>
+
+</div>
+
+</td>
+</script>
+
+
+
+<script id="google-event-collection-template" type="text/html">
+
+{{#unless this.length}}
+<div class="slate" style="padding:5px 2px;">
+    <div class="slate-content" style="text-align:center;">
+        <h4>You have no Events</h4>
+    </div>
+</div>
+{{/unless}}
+{{#if this.length}}
+        <table class="table hide" style="overflow:hidden!important;">
+            <tbody id="google_event" style="display: table;width:100%"></tbody>
+        </table>
+{{/if}}
 </script>
 
 <script id="future-model-template" type="text/html">
 <td style="width: 850px;cursor: pointer;" onclick=show_model({{id}})>
 <div class="row" style="margin-left:3px;height: 23px;">
-<div class="span3">{{title}}</div>
 
-<div class="pull-right">
-<div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;"> 	
-<span class="label" style="background-color:{{color}}">{{event_priority color}}</span></div>
-</div>
+<div class="span3">{{getGoogleEventCustomTime start end}}</div>
 
-
-</div>
-
-<div class="row" style="margin-left:3px;height: 23px;">
-<div class="span5">{{getCustomDateWithTime start end}}</div>
-
-<div class="pull-right" style="overflow-x: auto;max-width: 600px;">
+<div class="span9 pull-right" style="overflow-x: auto;text-align:right;">
 {{#if contacts.length}} 
-<div class="ellipsis-multiline" style="line-height:20px !important;"> 	
-	   	{{#each contacts}}<span class="label">{{getContactDisplayValue this}}</span> {{/each}}	
-		
-	</div>
+<div class="ellipsis-multiline" style="line-height:20px !important; height: auto !important;">  
+        {{#each contacts}}<span class="label">{{getContactDisplayValue this}}</span> {{/each}}  
+        
+    </div>
 {{/if}}
 </div>
 
-
 </div>
+
 </td>
 </script>
+
+
+
 
 
