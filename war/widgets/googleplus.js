@@ -29,9 +29,9 @@ function showMatchedPeople(search)
 
 		var el;
 		if (searchDetails['keywords'] && searchDetails['keywords'] != "")
-			el = "<div style='padding:10px'><p class='a-dotted'>Search results for " + "<a href='#' class='peoplesearch'>" + searchDetails['keywords'] + "</a></p>";
+			el = "<div><p class='a-dotted'>Search results for " + "<a href='#' class='peoplesearch'>" + searchDetails['keywords'] + "</a></p>";
 		else
-			el = "<div style='padding:10px'><p class='a-dotted'>Search results. " + "<a href='#' class='peoplesearch'>Modify search</a></p>";
+			el = "<div><p class='a-dotted'>Search results. " + "<a href='#' class='peoplesearch'>Modify search</a></p>";
 
 		el = el.concat(getTemplate("googleplus-search-result", data));
 		el = el + "</div>";
@@ -102,7 +102,7 @@ function showGooglePlusPosts(id, nextPageToken)
 	{
 		$('#gpostscontainer').html(getTemplate("googleplus-profile-tabs", GPostsData));
 		if(!GPostsData.items.length)
-			$('#recentPostsText').html('<div style="text-align: center;font-size: 14px;padding: 5px 0 6px 0;border-bottom: 1px solid #d6d6d6;">No Posts.</div>');
+			$('#recentPostsText').html('<div style="text-align: center;font-size: 13px;padding: 5px 0 6px 0;">No Posts.</div>');
 	}
 
 	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
