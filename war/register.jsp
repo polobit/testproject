@@ -266,7 +266,14 @@ $.validator.setDefaults({
 								<div class="form-group login-company-size">
 									<span class="regpage-company-size"></span> <input
 										class="input-xlarge field required form-control number"
-										id="login_company-size" name='company-size' type="text" min=2 placeholder="Company Size"
+										id="login_company_size" name='company-size' type="text" min=2 placeholder="Company Size"
+										autocapitalize="off">
+								</div>
+								
+								<div class="form-group login-company-size">
+									<span class="regpage-company-size"></span> <input
+										class="input-xlarge field required form-control number"
+										id="login_phone_number" name='phone-number' type="text" min=2 placeholder="Phone Number "
 										autocapitalize="off">
 								</div>
 								
@@ -427,6 +434,14 @@ $.validator.setDefaults({
 		function checkAndCreateUser(url, form)
 		{
 			 $("#register_account").attr("disabled", "disabled");
+			 
+			  // Form data is posted to its subdomain 
+			// $(form).attr('action', "https://" + domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com/register");
+			 $(form).attr('action', "http://localhost:8888/register");
+			  form.submit();
+			  return;
+			  
+			  
 			 console.log(url);
 				$.ajax({
 					  type: "POST",
