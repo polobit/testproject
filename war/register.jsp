@@ -90,13 +90,13 @@ label {
 	opacity: 0.5;
 }
 
-.carousel-inner > .item {
-    position: relative;
-   // display: none;
-    -webkit-transition: 0.3s ease-in-out left;
-    -moz-transition: 0.3s ease-in-out left;
-    -o-transition: 0.3s ease-in-out left;
-    transition: 0.3s ease-in-out left;
+.carousel-inner>.item {
+	position: relative; //
+	display: none;
+	-webkit-transition: 0.3s ease-in-out left;
+	-moz-transition: 0.3s ease-in-out left;
+	-o-transition: 0.3s ease-in-out left;
+	transition: 0.3s ease-in-out left;
 }
 </style>
 
@@ -153,7 +153,7 @@ $.validator.setDefaults({
 	<div class="row login-page">
 		<div class='regpage-container'>
 			<div id="cor" class="regpage-content clearfix carousel slide">
-			<!-- 	<div align="center">
+				<!-- 	<div align="center">
 					<h1 class="regpage-logHead">
 						<img src="img/signin/cloud-logo.png"> Register your free
 						Agile account
@@ -184,19 +184,19 @@ $.validator.setDefaults({
 				<div class="clearfix"></div>
 
 				<form name='agile' id="agile" method='post'
-					class="regpage-fieldview" onsubmit="return isValid();">
+					onsubmit="return isValid();" style="min-height:572px">
 					<div class="carousel-inner">
 						<div class="item active">
-						<div align="center">
-					<h1 class="regpage-logHead">
-						<img src="img/signin/cloud-logo.png"> Register your free
-						Agile account
-					</h1>
-					<div class="reg-info">No credit card required</div>
-				</div>
+							<div align="center">
+								<h1 class="regpage-logHead">
+									<img src="img/signin/cloud-logo.png"> Register your free
+									Agile account
+								</h1>
+								<div class="reg-info">No credit card required</div>
+							</div>
 							<fieldset>
 								<!--  <h3 class="log-subhead"><small>Or Fill out the form below</small></h3>	 -->
-								<div id="openid_btns">
+								<div id="openid_btns" class="regpage-fieldview">
 									<input type='hidden' name='type' value='agile'></input>
 									<div class="form-group login-userid">
 										<span class="regpage-uname"></span> <input
@@ -248,43 +248,51 @@ $.validator.setDefaults({
 							</fieldset>
 						</div>
 						<div class="item">
-						<div align="center">
-					<h1 class="regpage-logHead">
-						<img src="img/signin/cloud-logo.png">One last step
-					</h1>
-					<div class="reg-info">No credit card required</div>
-				</div>
+							<div align="center">
+								<h1 class="regpage-logHead">
+									<img src="img/signin/cloud-logo.png">One last step
+								</h1>
+								<div class="reg-info">No credit card required</div>
+							</div>
 							<fieldset class="step2">
-								<div class="form-group login-company">
-									<span class="regpage-company"></span> <input
-										class="input-xlarge field required form-control"
-										id="login_company" name='company' type="text" maxlength="50"
-										placeholder="Company Name"
-										autocapitalize="off">
-								</div>
-							
-								<div class="form-group login-company-size">
-									<span class="regpage-company-size"></span> <input
-										class="input-xlarge field required form-control number"
-										id="login_company_size" name='company-size' type="text" min=2 placeholder="Company Size"
-										autocapitalize="off">
-								</div>
-								
-								<div class="form-group login-company-size">
-									<span class="regpage-company-size"></span> <input
-										class="input-xlarge field required form-control number"
-										id="login_phone_number" name='phone-number' type="text" min=2 placeholder="Phone Number "
-										autocapitalize="off">
-								</div>
-								
-								<div align="center" class="regpage-signup">
+								<div class='regpage-fieldview'>
+									<div class="form-group login-company">
+										<span class="regpage-company"></span> <input
+											class="input-xlarge field required form-control"
+											id="login_company" name='company' type="text" maxlength="50"
+											placeholder="Company Name" autocapitalize="off">
+									</div>
+
+									<div class="form-group login-company-size">
+										<span class="regpage-company-size"></span> <input
+											class="input-xlarge field required form-control number"
+											id="login_company_size" name='company-size' type="text" min=2
+											placeholder="Company Size" autocapitalize="off">
+									</div>
+
+									<div class="form-group login-company-size">
+										<span class="regpage-company-size"></span> <input
+											class="input-xlarge field required form-control number"
+											id="login_phone_number" name='phone-number' type="text" min=2
+											placeholder="Phone Number " autocapitalize="off">
+									</div>
+
+									<div class="form-group login-company-size">
+										<span class="regpage-company-size"></span> <input
+											class="input-xlarge field required form-control number"
+											id="login_phone_number" name='phone-number' type="text" min=2
+											placeholder="Phone Number " autocapitalize="off">
+									</div>
+									
+									
+									<div align="center" class="regpage-signup">
 										<input type='submit' id="register_account" value="Confirm"
 											class='btn btn-large btn-primary  regpage-btn'>
 									</div>
 
 									<div class="form-group regpage-options log-terms"
 										style="margin-bottom: 0px;"></div>
-
+								</div>
 							</fieldset>
 						</div>
 					</div>
@@ -376,7 +384,6 @@ $.validator.setDefaults({
 				 submitHandler: function(form) {
 					 if(isValid())
 						{
-						 alert("valid");
 						 var domain = $("#subdomain").val();
 						 var email = $("#login_email").val();
 						
@@ -387,7 +394,7 @@ $.validator.setDefaults({
 						 
 						 if(step == 0)
 						{
-							 
+							 $('.carousel').find('.active').hide();
 							 $('#cor').carousel("next");
 							 $('#cor').carousel('pause');
 							 return;
