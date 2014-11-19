@@ -3085,8 +3085,7 @@ $(function()
 					var agile_api = $.ajax({ type : 'GET', url : '/core/api/api-key', async : false,
 						dataType : 'json' }).responseText;
 					agile_api = JSON.parse(agile_api);
-					//var inbound_email = window.location.hostname.split('.')[0] + "-" + agile_api.api_key + "@agle.cc";
-					var inbound_email = "localhost" + "-" + agile_api.api_key + "@agle.cc";
+					var inbound_email = window.location.hostname.split('.')[0] + "-" + agile_api.api_key + "@agle.cc";
 					return new Handlebars.SafeString(inbound_email);
 				});
 
