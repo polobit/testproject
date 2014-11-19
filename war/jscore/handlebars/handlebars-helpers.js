@@ -427,13 +427,14 @@ $(function()
 	Handlebars.registerHelper('add_dots_end', function(value)
 	{
 
+		if(value){
 		if (value.length > 50)
 		{
 			var subst = value.substr(0, 50);
 			subst = subst + "....";
 			return subst;
 		}
-
+		}
 		return value;
 
 	});
