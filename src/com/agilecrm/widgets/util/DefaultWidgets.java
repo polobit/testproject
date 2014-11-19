@@ -91,10 +91,11 @@ public class DefaultWidgets
 		widgets.add(new Widget("TwilioIO", "Make and receive calls from your contacts using your Twilio account.",
 				"/widgets/twilioio.js", "/img/plugins/twilio.png", "/widgets/twilio-small-logo.png", null,
 				WidgetType.CALL));
-		widgets.add(new Widget(
-				"GooglePlus",
+		widgets.add(new Widget("GooglePlus",
 				"Keep tabs on your customers' activity on Google+ and engage with them better.",
 				"/widgets/googleplus.js", "/widgets/gplus.png", "/widgets/gplusicon.png", null, WidgetType.SOCIAL));
+		widgets.add(new Widget("CallScript", "CallScript with rules.", "/widgets/callscript.js", null, null, null,
+				WidgetType.SUPPORT));
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);
@@ -114,7 +115,7 @@ public class DefaultWidgets
 		if (Arrays.asList(new String[] { "Linkedin", "Twitter", "Rapleaf" }).contains(widgetName))
 			return WidgetType.SOCIAL;
 
-		if (Arrays.asList(new String[] { "ClickDesk", "Zendesk" }).contains(widgetName))
+		if (Arrays.asList(new String[] { "ClickDesk", "Zendesk", "CallScript" }).contains(widgetName))
 			return WidgetType.SUPPORT;
 
 		if (Arrays.asList(new String[] { "Twilio", "Sip", "TwilioIO" }).contains(widgetName))

@@ -41,6 +41,8 @@ var WidgetsRouter = Backbone.Router
 												"Facebook" : "Facebook", "Facebook/:id" : "Facebook", "Shopify" : "Shopify", "Shopify/:id" : "Shopify",
 
 												"Chargify" : "Chargify", "Chargify/:id" : "Chargify",
+												
+												"CallScript" : "CallScript", "CallScript/:id" : "CallScript",
 
 												"sync" : "contactSync", "sync/contacts" : "google_apps_contacts", "sync/calendar" : "google_apps_calendar", "sync/stripe-import" : "stripe_sync",
 																"sync/shopify" : "shopify", "sync/salesforce" : "salesforce", "sync/zoho-import" : "zoho_sync", "sync/quickbook" : "quickbook_import",
@@ -1043,31 +1045,18 @@ var WidgetsRouter = Backbone.Router
 								                        }
 												    }
 
-												}//End of Gplus
+												},//End of Gplus
 												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
+												/**
+												 * Manages CallScript widget
+												 */
+												CallScript : function(id)
+												{
+																if (!id)
+																				show_set_up_widget("CallScript", 'callscript-login');
+																else
+																				fill_form(id, "CallScript", 'callscript-login');
+
+												}
 								});
 

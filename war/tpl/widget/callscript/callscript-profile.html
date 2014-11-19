@@ -1,0 +1,83 @@
+<script id="callscript-login-template" type="text/html">
+<div display:inline;  line-height:12px;word-wrap: break-word;">
+    <p style='line-height:140%;'>                   
+                   Rules are used to show status of contacts with a specific criteria to find patterns.
+    </p>
+	<form class="widget_content" style="border-bottom:none;" id="callscript_login_form" name="callscript_login_form" method="post">
+    	<fieldset>	
+              <div id="csr_fields" style="display:none"><input type="text" id="csr_name" name="csr_name" value=""/></div>
+              <a href="#callscriptruleModal" data-toggle="modal" id="add_rules" class="btn btn-primary" style="text-decoration:none;"><i class="icon-plus-sign"></i>Add Rule</a>
+			  <a href="#" id="save_prefs" class="btn btn-primary" style="text-decoration:none;display:none;">Save</a>
+			  <a href="#add-widget" class="btn ml_5" style="text-decoration:none;">Cancel</a>              
+		 </fieldset>
+    </form>
+</div>
+</script>
+
+
+
+<script id="callscript-profile-template" type="text/html">
+<div class="widget_content">
+		<div class="row-fluid">
+			{{#if_equals to.length "1"}}<div><input type="hidden" id="twilioio_contact_number" value="{{to.0.value}}"/>Call {{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}} on {{to.0.value}}</div>
+			{{else}}
+			<div class="span2" valign="middle" style="padding:4px"><h4>To&nbsp;:</h4></div>
+			<div class="span10">
+				<select name="number" id="twilioio_contact_number" class="required span10" style="width:100%" >
+					{{#each to}}
+						<option value="{{value}}">{{value}} 
+							{{#if subtype}}({{subtype}}){{/if}}
+						</option>
+					{{/each}}
+				</select>
+			</div>
+			{{/if_equals}}
+		</div>
+		<div class="row-fluid">
+			<a href="#call" class="btn pull-right" id="twilioio_call" style="display:none;"><i class="icon-phone"></i>Call</a>			
+			<a href="#note" class="right contact-add-note" id="twilioio_note" style="margin: 5px;">Add Note</a>
+		</div>
+ 	</div>	
+</script>
+
+
+
+<script id="callscript-collection-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Filters</h1>
+            <a href="#contact-filter-add" class="btn right" id="addFilter" style='top:-28px;position:relative'><span><i class='icon-plus-sign'/></span>  Add Filter</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span9"> 
+		<div id="slate">
+         </div>
+        {{#if this.length}}
+        <table class="table table-bordered showCheckboxes" url="core/api/filters/bulk">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody id='contact-filter-model-list' route='contact-filter-edit/'>
+            </tbody>
+        </table>
+		{{/if}}
+    </div>
+    <div class='span3'>
+        <div class="well" id='addview'>
+             <h3>
+              What are Filters?
+             </h3><br/>
+            <p>Filters are used to sort contacts with a specific criteria to find patterns. You can save your preferred filters and also have daily, weekly or monthly reports sent to you based on the filter</p>
+        </div>
+    </div>
+</div>
+</script>
+
+<script id="callscript-model-template" type="text/html">
+	<td data='{{id}}' class='data' style="cursor:pointer"> {{name}} </td>
+</script>
