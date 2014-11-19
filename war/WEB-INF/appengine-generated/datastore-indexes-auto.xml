@@ -148,5 +148,9 @@
 	        <property name="type" direction="asc"/>
 	        <property name="star_value" direction="desc"/>
 	</datastore-index>
+	<datastore-index kind="ContactView" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="name" direction="asc"/>
+	</datastore-index>
 
 </datastore-indexes>
