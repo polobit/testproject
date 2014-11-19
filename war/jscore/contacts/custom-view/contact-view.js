@@ -92,12 +92,15 @@ function setupViews(cel, button_name) {
 		templateKey : "contact-view",
 		individual_tag_name : 'li',
 		id : 'view-list',
+		sort_collection : false,
 		postRenderCallback : function(el) {
 
 			// If button_name is defined, then view is selected then the name of
 			// the view is show in the custom view button.
 			if (button_name)
 				$(el).find('.custom_view').append(button_name);
+			//updates the selected sort item to bold
+			updateSelectedSortKey(el);
 		}
 	});
 
@@ -113,6 +116,19 @@ function setupViews(cel, button_name) {
 			}
 		}
 	})
+}
+
+function updateSelectedSortKey(el) {
+	var sort_key = readCookie("sort_by_name");
+	if(sort_key && sort_key != null) {
+		var idSuffix = '-asc';
+		if(sort_key.indexOf('-') == 0) {
+			sort_key = sort_key.substring(1);
+			idSuffix = '-desc'
+		}
+		var elementId = 'sort-by-'+sort_key+idSuffix;
+		$(el).find('#'+elementId).addClass('bold-text');
+	}
 }
 
 /**

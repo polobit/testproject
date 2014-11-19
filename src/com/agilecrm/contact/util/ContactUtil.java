@@ -130,6 +130,17 @@ public class ContactUtil
     {
 	return dao.fetchAll();
     }
+    
+    /**
+     * Fetches all the contacts at once irrespective of their type
+     * (person/company)
+     * 
+     * @return List of contacts
+     */
+    public static List<Contact> getAllContactsByOrder(String orderBy)
+    {
+    	return dao.fetchAllByOrder(orderBy);
+    }
 
     // returns all contacts count
     public static int getCount()
@@ -171,6 +182,22 @@ public class ContactUtil
 	searchMap.put("type", Type.COMPANY);
 	return dao.fetchAll(max, cursor, searchMap);
     }
+    
+    /**
+     * Fetches all the contacts of type company only (step by step)
+     * 
+     * @param max
+     *            number of contacts (of type company) to be fetched at once
+     * @param cursor
+     *            Activates infiniScroll at client side
+     * @return list of contacts (company)
+     */
+    public static List<Contact> getAllCompaniesByOrder(int max, String cursor, String sortKey)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("type", Type.COMPANY);
+	return dao.fetchAllByOrder(max, cursor, searchMap, false, false, sortKey);
+    }
 
     /**
      * Fetches all the contacts of type person only (step by step)
@@ -184,6 +211,25 @@ public class ContactUtil
     public static List<Contact> getAllContacts(int max, String cursor)
     {
 	return getAllContacts(max, cursor, false);
+    }
+    
+    /**
+     * Fetches all the contacts of type person only (step by step)
+     * 
+     * @param max
+     *            number of contacts (of type person) to be fetched at once
+     * @param cursor
+     *            Activates infiniScroll at client side
+     * @return list of contacts (person)
+     */
+    public static List<Contact> getAllContactsByOrder(int max, String cursor, String sortKey)
+    {
+    	Map<String, Object> searchMap = new HashMap<String, Object>();
+    	searchMap.put("type", Type.PERSON);
+    	if (max != 0)
+    	    return dao.fetchAllByOrder(max, cursor, searchMap, false, false, sortKey);
+
+    	return dao.listByPropertyAndOrder(searchMap, sortKey);
     }
 
     public static List<Contact> getAllContacts(int max, String cursor, boolean forceReload)

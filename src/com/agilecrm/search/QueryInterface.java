@@ -79,7 +79,7 @@ public interface QueryInterface
      * @param cursor
      * @return
      */
-    Collection<?> advancedSearch(List<SearchRule> rules, Integer count, String cursor);
+    Collection<?> advancedSearch(List<SearchRule> rules, Integer count, String cursor, String orderBy);
 
     /**
      * Returns the number of results for the advanced search based on the list

@@ -118,13 +118,13 @@ public class ContactFilterAPI
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Contact> getQueryResults(@PathParam("filter_id") String id, @QueryParam("page_size") String count,
-	    @QueryParam("cursor") String cursor)
+	    @QueryParam("cursor") String cursor, @QueryParam("global_sort_key") String sortKey)
     {
 	System.out.println("cursor : " + cursor);
 	if (!StringUtils.isEmpty(count))
-	    return ContactFilterUtil.getContacts(id, Integer.parseInt(count), cursor);
+	    return ContactFilterUtil.getContacts(id, Integer.parseInt(count), cursor, sortKey);
 
-	return ContactFilterUtil.getContacts(id, null, null);
+	return ContactFilterUtil.getContacts(id, null, null, sortKey);
     }
 
     /**

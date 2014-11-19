@@ -78,6 +78,25 @@ $(function()
 		// /removed old code from below,
 		// now filters will work only on contact, not company
 	});
+	
+	// Fetch sort result without changing route on click
+	$('.sort').live('click', function(e)
+	{
+
+		e.preventDefault();
+		eraseCookie('sort_by_name');
+
+		// Gets name of the attribut to sort, which is set as data
+		// attribute in the link
+		sort_by = $(this).attr('data');
+		
+		// Saves Sort By in cookie
+		createCookie('sort_by_name', sort_by);
+
+		CONTACTS_HARD_RELOAD=true;
+		App_Contacts.contacts();
+		return;
+	});
 
 	/*
 	 * If default filter is selected, removes filter cookies an load contacts
@@ -171,12 +190,16 @@ function setupContactFilterList(cel, tag_id)
 						
 
 	var filter_id = null;
+	head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
+	{
 	contactFiltersListView = new Base_Collection_View(
 			{
 				url : '/core/api/filters',
+				sort_collection : false,
 				restKey : "ContactFilter",
 				templateKey : "contact-filter-list",
 				individual_tag_name : 'li',
+				sort_collection : false,
 				postRenderCallback : function(el)
 				{
 					var filter_name;
@@ -234,6 +257,7 @@ function setupContactFilterList(cel, tag_id)
 
 	// Shows in contacts list
 	$('#filter-list', cel).html(contactFiltersListView.render().el);
+					});
 }
 
 /**

@@ -15,6 +15,17 @@
             	<a href="#contacts" class="DefaultView">Default</a>
 				<a href="#contacts" class="GridView">Grid View</a>
         	</li>
+			<li class="divider"></li>
+			<li class="dropdown-submenu"><a data-toggle="dropdown" >Sort By</a>
+				<ul class="dropdown-menu" id="contact-sort-views">
+					<li><a class="sort" id="sort-by-created_time-desc" data="-created_time" href="#">Newest</a></li>
+					<li><a class="sort" id="sort-by-created_time-asc" data="created_time" href="#">Oldest</a></li>
+					<li><a class="sort" id="sort-by-lead_score-desc" data="-lead_score" href="#">Score Desc</a></li>
+					<li><a class="sort" id="sort-by-lead_score-asc" data="lead_score" href="#">Score Asc</a></li>
+					<li><a class="sort" id="sort-by-star_value-desc" data="-star_value" href="#">Star Value Desc</a></li>
+					<li><a class="sort" id="sort-by-star_value-asc" data="star_value" href="#">Star Value Asc</a></li>
+				</ul>
+			</li>
         	<li class="divider"></li>
         	<li>
             	<a href="#contact-views">Add/Edit View</a>

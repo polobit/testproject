@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.annotation.Cached;
+import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.googlecode.objectify.condition.IfDefault;
@@ -31,6 +32,7 @@ public class CustomView
     public Long id;
 
     /** Name of the contact custom view */
+    @Indexed
     @NotSaved(IfDefault.class)
     public String name = null;
 
@@ -64,7 +66,7 @@ public class CustomView
     {
 
 	// Fetches all the Views
-	return dao.fetchAll();
+	return dao.fetchAllByOrder("name");
     }
 
     // Get contact view by id

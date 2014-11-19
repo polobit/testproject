@@ -101,6 +101,12 @@ var ContactsRouter = Backbone.Router.extend({
 		var max_contacts_count = 20;
 		var template_key = "contacts";
 		var individual_tag_name = "tr";
+		var sort_key = readCookie("sort_by_name");
+		if(!sort_key || sort_key == null) {
+			sort_key = '-created_time';
+			// Saves Sort By in cookie
+			createCookie('sort_by_name', sort_key);
+		}
 		
 		// Checks if user is using custom view. It check for grid view
 		if (grid_view || readCookie("agile_contact_view"))
@@ -233,8 +239,8 @@ var ContactsRouter = Backbone.Router.extend({
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.contactsListView = new Base_Collection_View({ url : url, templateKey : template_key, individual_tag_name : individual_tag_name,
-			cursor : true, page_size : 25, sort_collection : collection_is_reverse, slateKey : slateKey,  postRenderCallback : function(el)
+		this.contactsListView = new Base_Collection_View({ url : url, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
+			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey,  postRenderCallback : function(el)
 			{
 
 				// Contacts are fetched when the app loads in
@@ -270,7 +276,6 @@ var ContactsRouter = Backbone.Router.extend({
 
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
-
 	},
 	
 	/**
@@ -904,8 +909,14 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		var slateKey = getContactPadcontentKey(url);
+		var sort_key = readCookie("sort_by_name");
+		if(!sort_key || sort_key == null) {
+			sort_key = '-created_time';
+			// Saves Sort By in cookie
+			createCookie('sort_by_name', sort_key);
+		}
 		
-		this.contact_custom_view = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data,
+		this.contact_custom_view = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
 			templateKey : "contacts-custom-view", individual_tag_name : 'tr', slateKey : slateKey, cursor : true, page_size : 25, sort_collection : false,
 			postRenderCallback : function(el)
 			{

@@ -20,7 +20,7 @@ var ContactViewsRouter = Backbone.Router.extend({
 	contactViews : function()
 	{
 		this.contactViewListView = new Base_Collection_View({ url : '/core/api/contact-view', restKey : "contactView",
-			templateKey : "contact-custom-view", individual_tag_name : 'tr' });
+			templateKey : "contact-custom-view", individual_tag_name : 'tr', sort_collection : false });
 		this.contactViewListView.collection.fetch();
 		$('#content').html(this.contactViewListView.render().el);
 	},

@@ -116,7 +116,7 @@ public class ContactFilter implements Serializable
      */
     public static List<ContactFilter> getAllContactFilters()
     {
-	return dao.fetchAll();
+	return dao.fetchAllByOrder("name");
     }
 
     /**
@@ -135,10 +135,10 @@ public class ContactFilter implements Serializable
      * @return {@link Collection}
      */
     @SuppressWarnings("rawtypes")
-    public Collection queryContacts(Integer count, String cursor)
+    public Collection queryContacts(Integer count, String cursor, String orderBy)
     {
 
-	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules, count, cursor);
+	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules, count, cursor, orderBy);
     }
 
     /**

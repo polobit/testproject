@@ -423,6 +423,19 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	return fetchAll(q);
     }
+    
+    public List<T> listByPropertyAndOrder(Map<String, Object> map, String orderBy)
+    {
+	Query<T> q = ofy().query(clazz);
+	for (String propName : map.keySet())
+	{
+	    q.filter(propName, map.get(propName));
+	}
+	if (!StringUtils.isEmpty(orderBy))
+		q.order(orderBy);
+
+	return fetchAll(q);
+    }
 
     /**
      * Fetches all the entities of type T
@@ -433,6 +446,19 @@ public class ObjectifyGenericDao<T> extends DAOBase
     {
 	Query<T> q = ofy().query(clazz);
 
+	return fetchAll(q);
+    }
+    
+    /**
+     * Fetches all the entities of type T
+     * 
+     * @return list of all T objects
+     */
+    public List<T> fetchAllByOrder(String orderBy)
+    {
+	Query<T> q = ofy().query(clazz);
+	if (!StringUtils.isEmpty(orderBy))
+	    q.order(orderBy);
 	return fetchAll(q);
     }
 

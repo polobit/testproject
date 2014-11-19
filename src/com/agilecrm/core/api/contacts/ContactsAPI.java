@@ -83,15 +83,15 @@ public class ContactsAPI
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Contact> getContacts(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
-	    @QueryParam("reload") boolean force_reload)
+	    @QueryParam("reload") boolean force_reload, @QueryParam("global_sort_key") String sortKey)
     {
 	if (count != null)
 	{
 	    System.out.println("Fetching page by page");
-	    return ContactUtil.getAllContacts(Integer.parseInt(count), cursor);
+	    return ContactUtil.getAllContactsByOrder(Integer.parseInt(count), cursor, sortKey);
 	}
 
-	return ContactUtil.getAllContacts();
+	return ContactUtil.getAllContactsByOrder(sortKey);
     }
 
     /* Fetch all contacts related to a company */
@@ -144,16 +144,17 @@ public class ContactsAPI
     @Path("/companies")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Contact> getCompanies(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
+    public List<Contact> getCompanies(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
+    		@QueryParam("global_sort_key") String sortKey)
     {
 	if (count != null)
 	{
 
 	    System.out.println("Fetching companies page by page");
-	    return ContactUtil.getAllCompanies(Integer.parseInt(count), cursor);
+	    return ContactUtil.getAllCompaniesByOrder(Integer.parseInt(count), cursor, sortKey);
 	}
 
-	return ContactUtil.getAllContacts();
+	return ContactUtil.getAllContactsByOrder(sortKey);
     }
 
     @Path("/")
