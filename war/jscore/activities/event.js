@@ -54,13 +54,17 @@ $(function()
 								var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
 								if (readCookie("agile_calendar_view"))
 								{
-												var eventModel = App_Calendar.eventCollectionView.collection.get(eventId);
-												var formData = serializeForm('updateActivityForm');
-												eventModel.set(formData, { merge : true });
 
+												save_event('updateActivityForm', 'updateActivityModal', true, this, function(data){
+																console.log(data);
+																var eventModel = eventCollectionView.collection.get(eventId);
+																eventModel.set(data.toJSON(), {merge: true});
+												});
+
+								}else{
+												save_event('updateActivityForm', 'updateActivityModal', true, this);
 								}
-								save_event('updateActivityForm', 'updateActivityModal', true, this);
-
+							
 				});
 
 				/**
@@ -367,7 +371,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
  *         updating the existing one
  * 
  */
-function save_event(formId, modalName, isUpdate, saveBtn)
+function save_event(formId, modalName, isUpdate, saveBtn, callback)
 {
 
 				// Returns, if the save button has disabled attribute
@@ -444,7 +448,7 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 
 								// $('#calendar').fullCalendar( 'refetchEvents' );
 								var event = data.toJSON();
-								if (Current_Route == 'calendar')
+								if (Current_Route == 'calendar' && !readCookie("agile_calendar_view"))
 								{
 
 												// When updating an event remove the old event from fullCalendar
@@ -496,6 +500,9 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 								}
 								else
 												App_Calendar.navigate("calendar", { trigger : true });
+								
+								if(callback && typeof callback === 'function')
+												callback(data);
 				} });
 }
 

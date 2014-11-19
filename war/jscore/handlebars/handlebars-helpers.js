@@ -5979,13 +5979,17 @@ $(function()
 												var year = d.getFullYear();
 												var date = d.getDate();
 												var month = d.getMonth();
-												if (hours > 12)
-																hours = hours - 12;
 												var min = d.getMinutes();
 												if (min == 0)
 																min = "00"
 												var ampm = hours >= 12 ? "PM" : "AM";
+<<<<<<< HEAD
 												return months[month + 1] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
+=======
+												if (hours > 12)
+																hours = hours - 12;
+												return months[month] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
+>>>>>>> 0eb0d73... Fixed Auto Save event calendar list view
 
 								}
 								// date form milliseconds
@@ -5995,12 +5999,12 @@ $(function()
 								var year = d.getFullYear();
 								var date = d.getDate();
 								var month = d.getMonth();
-								if (hours > 12)
-												hours = hours - 12;
 								var min = d.getMinutes();
 								if (min == 0)
 												min = "00"
 								var ampm = hours >= 12 ? "PM" : "AM";
+								if (hours > 12)
+												hours = hours - 12;
 								return months[month] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
 
 				}
@@ -6013,24 +6017,25 @@ $(function()
 								{
 												var d = new Date(parseInt(date));
 												var hours = d.getHours();
-												if (hours > 12)
-																hours = hours - 12;
+										
 												var min = d.getMinutes();
 												if (min == 0)
 																min = "00"
 												var ampm = hours >= 12 ? "PM" : "AM";
+												if (hours > 12)
+																hours = hours - 12;
 												return hours + ":" + min + " " + ampm;
 								}
 								// date form milliseconds
 
 								var d = new Date(parseInt(date) * 1000);
 								var hours = d.getHours();
-								if (hours > 12)
-												hours = hours - 12;
 								var min = d.getMinutes();
 								if (min == 0)
 												min = "00"
 								var ampm = hours >= 12 ? "PM" : "AM";
+								if (hours > 12)
+												hours = hours - 12;
 								return hours + ":" + min + " " + ampm;
 				}
 

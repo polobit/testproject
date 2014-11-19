@@ -467,19 +467,21 @@ function loadAgileEvents()
 				var view = readCookie("agile_calendar_view");
 				if (view == "calendar_list_view")
 				{
-								this.eventCollectionView = new Base_Collection_View({ url : 'core/api/events/list', templateKey : "events", individual_tag_name : 'tr',
-												sort_collection : false, cursor : true, page_size : 25, });
-								this.eventCollectionView.appendItem = appendItem1;
-								this.eventCollectionView.collection.fetch();
+
+								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/list', templateKey : "events", individual_tag_name : 'tr',
+												sort_collection : false, cursor : true, page_size : 25});
+								eventCollectionView.appendItem = appendItem1;
+								eventCollectionView.collection.fetch();
 
 								$('#agile').html(this.eventCollectionView.render().el);
 				}
 				else if (view == "calendar_list_view_future")
 				{
-								this.eventCollectionView = new Base_Collection_View({ url : 'core/api/events/future/list', templateKey : "future", individual_tag_name : 'tr',
-												sort_collection : false, cursor : true, page_size : 25, });
-								this.eventCollectionView.appendItem = appendItem2;
-								this.eventCollectionView.collection.fetch();
+
+								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/future/list', templateKey : "future", individual_tag_name : 'tr',
+												sort_collection : false, cursor : true, page_size : 25 });
+								eventCollectionView.appendItem = appendItem2;
+								eventCollectionView.collection.fetch();
 
 								$('#agile').html(this.eventCollectionView.render().el);
 				}
@@ -500,7 +502,7 @@ function loadGoogleEvents()
 																gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
 
 																// Retrieve the events from primary
-																var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary' });
+																var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary', maxResults: 1000,singleEvents: true });
 
 																request.execute(function(resp)
 																{
@@ -516,16 +518,18 @@ function loadGoogleEvents()
 																				var view = readCookie("agile_calendar_view");
 																				if (view == "calendar_list_view")
 																				{
-																								var eventCollectionView = new Base_Collection_View({ data : events, templateKey : "googleEventCategorization",
+<
+																								 this.googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "googleEventCategorization",
 																												individual_tag_name : 'tr' });
-																								eventCollectionView.appendItem = appendGoogleEventCategorization;
-																								$('#google').html(eventCollectionView.render(true).el);
+																								 this.googleEventCollectionView.appendItem = appendGoogleEventCategorization;
+																								$('#google').html(this.googleEventCollectionView.render(true).el);
 																				}
 																				else
 																				{
-																								var eventCollectionView = new Base_Collection_View({ data : events, templateKey : "google-event", individual_tag_name : 'tr' });
-																								eventCollectionView.appendItem = appendGoogleEvent;
-																								$('#google').html(eventCollectionView.render(true).el);
+
+																								this.googleEventCollectionView  = new Base_Collection_View({ data : events, templateKey : "google-event", individual_tag_name : 'tr' });
+																								this.googleEventCollectionView.appendItem = appendGoogleEvent;
+																								$('#google').html(this.googleEventCollectionView.render(true).el);
 																				}
 
 																				if ((readCookie('event-filters') && JSON.parse(readCookie('event-filters')).type != 'agile') && (readCookie('event-filters') && JSON

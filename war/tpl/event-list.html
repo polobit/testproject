@@ -81,6 +81,12 @@
             <tbody id="eventAll" style="display: inline;"></tbody>
         </table>
 
+<script id="future-model-template" type="text/html">
+
+<td style="cursor: pointer;" onclick=show_model({{id}})>
+<div class="row" style="margin-left:3px;height: 23px;">
+<div class="span8" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden">{{title}}</div>
+
 <div class="span1 pull-right" style="text-align:right">
 <div class="ellipsis-multiline" style="line-height:20px !important;height: auto !important; word-break:keep-all;">  
 <span class="label" style="background-color:{{color}}">{{event_priority color}}</span></div>
@@ -92,7 +98,7 @@
 <div class="row" style="margin-left:3px;height: 22px;overflow:hidden;">
 <div class="span3">{{getCustomDateWithTime start end}}</div>
 
-<div class="span6 pull-right" style="overflow-x: auto;text-align:right;">
+<div class="span5 pull-right" style="overflow-x: auto;text-align:right;">
 {{#if contacts.length}} 
 <div class="ellipsis-multiline" style="line-height:20px !important; height: auto !important;">  
         {{#each contacts}}<span class="label">{{getContactDisplayValue this}}</span> {{/each}}  
@@ -104,7 +110,9 @@
 </div>
 
 </td>
+
 </script>
+
 
 
 
