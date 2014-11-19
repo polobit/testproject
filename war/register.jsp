@@ -39,6 +39,9 @@
 <link type="text/css" rel="stylesheet" href="/css/openid-min.css" />
 <link type="text/css" rel="stylesheet" href="/css/signin.css" />
 <link type="text/css" rel="stylesheet" href="/css/register.css" />
+<link type="text/css" rel="stylesheet" href="/css/signup/bootstrap-select.min.css" />
+
+
 
 
 <style>
@@ -103,7 +106,8 @@ label {
 
 <!-- JQUery Core and UI CDN -->
 <script type='text/javascript' src='/lib/jquery-new/jquery-2.1.1.min.js'></script>
-<script type="text/javascript" src="/lib/bootstrap.v3.min.js"></script>
+<script type="text/javascript" src="/lib/bootstrap.v3.min.js"></script>\
+<script type="text/javascript" src="/lib/bootstrap-select/bootstrap-select.min.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
 <script type="text/javascript">
 jQuery.validator.setDefaults({
@@ -262,12 +266,13 @@ $.validator.setDefaults({
 											id="login_company" name='company' type="text" maxlength="50"
 											placeholder="Company Name" autocapitalize="off">
 									</div>
-
+ 
 									<div class="form-group login-company-size">
-										<span class="regpage-company-size"></span> <input
-											class="input-xlarge field required form-control number"
-											id="login_company_size" name='company_size' type="text" min=2
-											placeholder="Company Size" autocapitalize="off">
+									<select class="selectpicker show-tick form-control"  data-width="100%">
+    <option>Mustard</option>
+    <option>Ketchup</option>
+    <option>Relish</option>
+  </select>
 									</div>
 
 									<div class="form-group login-company-size">
@@ -370,6 +375,11 @@ $.validator.setDefaults({
 				});
 			
 			$('#cor').carousel('pause');
+			
+			$('.selectpicker').selectpicker({
+			      style: 'none',
+			      size: 100
+			  });
 				
 			// Submits the Agile form to to RegisterServlet
 			$("#agile").validate({
