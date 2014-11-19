@@ -8,7 +8,7 @@
 					<tbody>
 						<tr>
 							<td valign="middle" height="32px"
-								style="padding: 0; color: white">{{report_name}}</td>
+								style="padding: 0; color: white">{{report_name}} ({{start_time}} - {{end_time}})</td>
 							<td valign="right" height="32px"
 								style="padding: 0; color: white; text-align: right">
 								Activity Report</td>
@@ -18,9 +18,8 @@
 			</div>
 			<div
 				style="font-size: 14px; background-color: #fff; padding: 10px 7px 7px 7px">
-				Activities from {{start_time}} to {{end_time}}.
 				{{#reports}}
-				<h4>Activities of {{user_name}}</h4>
+				<h2>{{#pic}}<img src="{{pic}}" style="vertical-align:middle;height:50px;width:50px;border-radius:5px;margin-left:5px;padding:2px;border-style:groove;"/>{{/pic}} Activities of {{user_name}}</h2>
 				{{#deals}}
 				{{#deals.deals_total}}
 				<p style="font-size:1.2em;font-weight:bold;">Deals</p>
@@ -29,12 +28,12 @@
 						{{#deals.won_count}}
 						<tr>
 							<td style="background-color:lightgray;width:30%;border-bottom-style:solid;border-bottom-width:1px !important;border-bottom-color:grey;vertical-align:top;">
-								<p style="margin:0px">WON</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{deals.won_count}}</span><p>Total value {{deals.currency}} {{deals.won_value}}</p>
+								<p style="margin:0px;font-weight:bold;">Won</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{deals.won_count}}</span><p>Total value {{deals.currency}} {{deals.won_value}}</p>
 							</td>
 							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
 								<ul>
 									{{#deals.deals_won}}
-										<li>{{label}} {{{related_contact_ids}}} won on {{time}}</li>
+										<li>'{{label}}' {{{related_contact_ids}}} won on {{time_string}}</li>
 									{{/deals.deals_won}}
 								</ul>
 							</td>
@@ -43,12 +42,12 @@
 						{{#deals.lost_count}}
 						<tr>
 							<td style="background-color:lightgray;width:30%;border-bottom-style:solid;border-bottom-width:1px !important;border-bottom-color:grey;vertical-align:top;">
-								<p style="margin:0px">LOST</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{deals.lost_count}}</span><p>Total value {{deals.currency}} {{deals.lost_value}}</p>
+								<p style="margin:0px;font-weight:bold;">Lost</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{deals.lost_count}}</span><p>Total value {{deals.currency}} {{deals.lost_value}}</p>
 							</td>
 							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
 								<ul>
 									{{#deals.deals_lost}}
-										<li>{{label}} {{{related_contact_ids}}} lost on {{time}}</li>
+										<li>'{{label}}' {{{related_contact_ids}}} lost on {{time_string}}</li>
 									{{/deals.deals_lost}}
 								</ul>
 							</td>
@@ -57,17 +56,31 @@
 						{{#deals.new_count}}
 						<tr>
 							<td style="background-color:lightgray;width:30%;border-bottom-style:solid;border-bottom-width:1px !important;border-bottom-color:grey;vertical-align:top;">
-								<p style="margin:0px">New</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{deals.new_count}}</span><p>Total value {{deals.currency}} {{deals.new_value}}</p>
+								<p style="margin:0px;font-weight:bold;">New</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{deals.new_count}}</span><p>Total value {{deals.currency}} {{deals.new_value}}</p>
 							</td>
-							<td style="color:#777;">
+							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
 								<ul>
 									{{#deals.deals_created}}
-										<li>{{label}} {{{related_contact_ids}}} assigned on {{time}}</li>
+										<li>'{{label}}' {{{related_contact_ids}}} assigned on {{time_string}}</li>
 									{{/deals.deals_created}}
 								</ul>
 							</td>
 						</tr>
 						{{/deals.new_count}}
+						{{#deals.mile_count}}
+						<tr>
+							<td style="background-color:lightgray;width:30%;vertical-align:top;">
+								<p style="margin:0px;font-weight:bold;">Milestone Change</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{deals.mile_count}}</span><p>Total value {{deals.currency}} {{deals.mile_value}}</p>
+							</td>
+							<td style="color:#777;">
+								<ul>
+									{{#deals.mile_change}}
+										<li>'{{label}}' {{{related_contact_ids}}} changed to {{custom1}} on {{time_string}}</li>
+									{{/deals.mile_change}}
+								</ul>
+							</td>
+						</tr>
+						{{/deals.mile_count}}
 					</tbody>
 				</table>
 				{{/deals.deals_total}}
@@ -80,12 +93,12 @@
 						{{#tasks.tasks_done_count}}
 						<tr>
 							<td style="background-color:lightgray;width:30%;border-bottom-style:solid;border-bottom-width:1px !important;border-bottom-color:grey;vertical-align:top;">
-								<p style="margin:0px">Done</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{tasks.tasks_done_count}}</span>
+								<p style="margin:0px;font-weight:bold;">Done</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{tasks.tasks_done_count}}</span>
 							</td>
 							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
 								<ul>
 									{{#tasks.tasks_done}}
-										<li>{{label}} {{{related_contact_ids}}} completed on {{time}}</li>
+										<li>'{{label}}' {{{related_contact_ids}}} completed on {{time_string}}</li>
 									{{/tasks.tasks_done}}
 								</ul>
 							</td>
@@ -94,12 +107,12 @@
 						{{#tasks.tasks_inprogress_count}}
 						<tr>
 							<td style="background-color:lightgray;width:30%;border-bottom-style:solid;border-bottom-width:1px !important;border-bottom-color:grey;vertical-align:top;">
-								<p style="margin:0px">In Progress</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{tasks.tasks_inprogress_count}}</span>
+								<p style="margin:0px;font-weight:bold;">In Progress</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{tasks.tasks_inprogress_count}}</span>
 							</td>
 							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
 								<ul>
 									{{#tasks.tasks_inprogress}}
-										<li>{{label}} {{{related_contact_ids}}} ({{custom1}}%)</li>
+										<li>'{{label}}' {{{related_contact_ids}}} ({{custom1}}%)</li>
 									{{/tasks.tasks_inprogress}}
 								</ul>
 							</td>
@@ -107,13 +120,13 @@
 						{{/tasks.tasks_inprogress_count}}
 						{{#tasks.taks_assigned_count}}
 						<tr>
-							<td style="background-color:lightgray;width:30%;border-bottom-style:solid;border-bottom-width:1px !important;border-bottom-color:grey;vertical-align:top;">
-								<p style="margin:0px">Assigned</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{tasks.taks_assigned_count}}</span>
+							<td style="background-color:lightgray;width:30%;vertical-align:top;">
+								<p style="margin:0px;font-weight:bold;">Assigned</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{tasks.taks_assigned_count}}</span>
 							</td>
 							<td style="color:#777;">
 								<ul>
 									{{#tasks.taks_assigned}}
-										<li>{{label}} {{{related_contact_ids}}} created on {{time}}</li>
+										<li>'{{label}}' {{{related_contact_ids}}} created on {{time_string}}</li>
 									{{/tasks.taks_assigned}}
 								</ul>
 							</td>
@@ -124,25 +137,41 @@
 				{{/tasks.tasks_total}}
 				{{/tasks}}
 				{{#events}}
-				{{#events.events_count}}
+				{{#events.events_total}}
 				<p style="font-size:1.2em;font-weight:bold;">Events</p>
 				<table width="100%" cellpadding="5" cellspacing="0" style="margin-top:-40px;border-style:solid;border-radius:5px;border-color:darkgray;border-width:1px;">
 					<tbody>
+						{{#events.events_count}}
 						<tr>
 							<td style="background-color:lightgray;width:30%;border-bottom-style:solid;border-bottom-width:1px !important;border-bottom-color:grey;vertical-align:top;">
-								<span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{events.events_count}}</span>
+								<p style="margin:0px;font-weight:bold;">Completed</p><span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{events.events_count}}</span>
 							</td>
-							<td style="color:#777;">
+							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
 								<ul>
 									{{#events.events}}
-										<li>{{title}} on {{start}}</li>
+										<li>'{{title}}' on {{color}}</li>
 									{{/events.events}}
 								</ul>
 							</td>
 						</tr>
+						{{/events.events_count}}
+						{{#events.event_moved_count}}
+						<tr>
+							<td style="background-color:lightgray;width:30%;vertical-align:top;">
+								<p style="margin:0px;font-weight:bold;">Rescheduled</p><span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{events.events_count}}</span>
+							</td>
+							<td style="color:#777;">
+								<ul>
+									{{#events.events_moved}}
+										<li>{{custom4}} on {{time_string}}</li>
+									{{/events.events_moved}}
+								</ul>
+							</td>
+						</tr>
+						{{/events.event_moved_count}}
 					</tbody>
 				</table>
-				{{/events.events_count}}
+				{{/events.events_total}}
 				{{/events}}
 				{{#emails}}
 				{{#emails.emails_count}}
@@ -150,13 +179,13 @@
 				<table width="100%" cellpadding="5" cellspacing="0" style="margin-top:-40px;border-style:solid;border-radius:5px;border-color:darkgray;border-width:1px;">
 					<tbody>
 						<tr>
-							<td style="background-color:lightgray;width:30%;border-bottom-style: solid;border-bottom-width: 1px !important;border-bottom-color: grey;">
-								<p style="margin:0px">Emails Sent</p><span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{emails.emails_count}}</span>
+							<td style="background-color:lightgray;width:30%;vertical-align:top;">
+								<p style="margin:0px;font-weight:bold;">Emails Sent</p><span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{emails.emails_count}}</span>
 							</td>
 							<td style="color:#777;">
 								<ul>
 									{{#emails.emails_sent}}
-										<li>Email sent to {{label}} on {{time}}</li>
+										<li>Email '{{custom3}}' sent to {{{label}}} on {{time_string}}</li>
 									{{/emails.emails_sent}}
 								</ul>
 							</td>
@@ -165,15 +194,33 @@
 				</table>
 				{{/emails.emails_count}}
 				{{/emails}}
+				{{#docs}}
+				{{#docs.doc_count}}
+				<p style="font-size:1.2em;font-weight:bold;">Documents</p>
+				<table width="100%" cellpadding="5" cellspacing="0" style="margin-top:-40px;border-style:solid;border-radius:5px;border-color:darkgray;border-width:1px;">
+					<tbody>
+						<tr>
+							<td style="background-color:lightgray;width:30%;vertical-align:top;">
+								<p style="margin:0px;font-weight:bold;"></p><span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{docs.doc_count}}</span>
+							</td>
+							<td style="color:#777;">
+								<ul>
+									{{#docs.doc_activities}}
+										<li><a href="{{custom1}}" >'{{label}}'</a> uploaded on {{time_string}}</li>
+									{{/docs.doc_activities}}
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				{{/docs.doc_count}}
+				{{/docs}}
 				{{/reports}}
 				<br />
 				<p>You are receiving this email as you have created a report 
 					<span>"{{report_name}}"</span> at Agile CRM.
 				 	You can manage <a href="https://{{domain}}.agilecrm.com/#activity-reports" target="_blank">reports</a> here.</p>
 				<br/>
-				<p style="font-weight: bold;">Have questions or need help?</p>
-				<p>Our customer service and support team is here to help you any
-					way we can. Please email us at care@agilecrm.com</p>
 				<p>Thanks for being a valued customer.</p>
 				<br /> Best Wishes, <br /> AgileCRM Support. <br />
 				http://www.agilecrm.com

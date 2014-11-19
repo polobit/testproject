@@ -39,7 +39,7 @@ public class ActivityReports implements Serializable
 
     public static enum ActivityType
     {
-	DEAL, TASK, EVENT, EMAIL
+	DEAL, DOCUMENTS, TASK, EVENT, EMAIL, NOTES
     }
 
     @Indexed

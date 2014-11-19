@@ -149,8 +149,11 @@ public class MustacheUtil
 			    try
 			    {
 				if (next.getValue().isNumber())
-				    o = convertDate(null, next.getValue().asLong());
-				System.out.println("--------------" + o);
+				{
+				    Object d = convertDate("dd MMM, HH:mm", next.getValue().asLong());
+				    System.out.println("--------------" + d);
+				    put(next.getKey() + "_string", d);
+				}
 			    }
 			    catch (Exception e)
 			    {

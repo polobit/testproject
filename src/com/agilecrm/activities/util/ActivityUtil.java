@@ -348,7 +348,7 @@ public class ActivityUtil
 			obj.put("contactid", contactids.get(i));
 			obj.put("contactname", contactnames.get(i));
 			System.out.println("ContactIds  " + contactids.get(i) + "contact names   "
-			        + contactnames.get(i));
+				+ contactnames.get(i));
 			arr.put(obj);
 
 			obj = new JSONObject();
@@ -812,7 +812,7 @@ public class ActivityUtil
      */
     public static String getTimeFromEppoch(Long epoch)
     {
-	String date = new java.text.SimpleDateFormat("EEE, d MMM yyyy ").format(new java.util.Date(epoch * 1000));
+	String date = new java.text.SimpleDateFormat("EEE, d MMM yyyy HH:mm").format(new java.util.Date(epoch * 1000));
 
 	return date;
     }

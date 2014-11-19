@@ -25,6 +25,8 @@ import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
+
 public class ActivityReportsUtil
 {
     public static ObjectifyGenericDao<ActivityReports> dao = new ObjectifyGenericDao<ActivityReports>(
@@ -83,14 +85,10 @@ public class ActivityReportsUtil
 	    if (endTime != null)
 		timeBounds.put("endTime", endTime);
 
-	    activityReports.put("start_time", timeBounds.get("startTime"));
-	    activityReports.put("end_time", timeBounds.get("endTime"));
-	    if (report.frequency == ActivityReports.Frequency.DAILY)
-	    {
-		String format = "EEE, MMM d, yyyy HH:mm z";
-		activityReports.put("start_time", MustacheUtil.convertDate(format, timeBounds.get("startTime")));
-		activityReports.put("end_time", MustacheUtil.convertDate(format, timeBounds.get("endTime")));
-	    }
+	    String format = "EEE, MMM d, yyyy HH:mm z";
+
+	    activityReports.put("start_time", MustacheUtil.convertDate(format, timeBounds.get("startTime")));
+	    activityReports.put("end_time", MustacheUtil.convertDate(format, timeBounds.get("endTime")));
 	    activityReports.put("report_name", report.name);
 
 	    List<Map<String, Object>> userReport = new ArrayList<Map<String, Object>>();
@@ -100,6 +98,8 @@ public class ActivityReportsUtil
 		activityReport.put("user_id", user.id);
 		activityReport.put("user_name", user.name);
 		activityReports.put("domain", user.domain);
+		activityReport.put("pic",
+			UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id)).pic);
 		if (activities.contains(ActivityReports.ActivityType.DEAL))
 		    activityReport.put("deals",
 			    getDealActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
@@ -112,6 +112,12 @@ public class ActivityReportsUtil
 		if (activities.contains(ActivityReports.ActivityType.EMAIL))
 		    activityReport.put("emails",
 			    getEmailActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+		if (activities.contains(ActivityReports.ActivityType.NOTES))
+		    activityReport.put("notes",
+			    getNotesActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+		if (activities.contains(ActivityReports.ActivityType.DOCUMENTS))
+		    activityReport.put("docs",
+			    getDocumentsActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
 		userReport.add(activityReport);
 	    }
 	    activityReports.put("reports", userReport);
@@ -131,11 +137,13 @@ public class ActivityReportsUtil
 	List<Key<Opportunity>> dealLost = new ArrayList<Key<Opportunity>>();
 	List<Key<Opportunity>> dealUpdated = new ArrayList<Key<Opportunity>>();
 	List<Key<Opportunity>> dealCreated = new ArrayList<Key<Opportunity>>();
+	List<Key<Opportunity>> mileChange = new ArrayList<Key<Opportunity>>();
 	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, Activity.EntityType.DEAL.toString(),
 		null, null, startTime, endTime, 0, null);
 	List<Activity> wonActivities = new ArrayList<Activity>();
 	List<Activity> lostActivities = new ArrayList<Activity>();
 	List<Activity> newDealActivities = new ArrayList<Activity>();
+	List<Activity> mileChangeActivities = new ArrayList<Activity>();
 	UserPrefs pref = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id));
 	System.out.println("Deals ---- " + activities.size());
 	for (Activity act : activities)
@@ -143,14 +151,20 @@ public class ActivityReportsUtil
 	    if (act.activity_type == Activity.ActivityType.DEAL_LOST)
 	    {
 		dealLost.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
-		act.related_contact_ids = getActivityRelateCOntacts(act, user.domain);
+		act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
 		lostActivities.add(act);
 	    }
 	    else if (act.activity_type == Activity.ActivityType.DEAL_CLOSE)
 	    {
 		dealWon.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
-		act.related_contact_ids = getActivityRelateCOntacts(act, user.domain);
+		act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
 		wonActivities.add(act);
+	    }
+	    else if (act.activity_type == Activity.ActivityType.DEAL_MILESTONE_CHANGE)
+	    {
+		mileChange.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
+		act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
+		mileChangeActivities.add(act);
 	    }
 	    else
 		dealUpdated.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
@@ -169,7 +183,7 @@ public class ActivityReportsUtil
 	    System.out.println(act.custom1.equals(user.name) + "-----ass name---" + act.custom1);
 	    if (act.custom1.equals(user.name))
 	    {
-		act.related_contact_ids = getActivityRelateCOntacts(act, user.domain);
+		act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
 		dealCreated.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
 		newDealActivities.add(act);
 	    }
@@ -179,13 +193,16 @@ public class ActivityReportsUtil
 	List<Opportunity> dealsLost = Opportunity.dao.fetchAllByKeys(dealLost);
 	List<Opportunity> dealsCreated = Opportunity.dao.fetchAllByKeys(dealCreated);
 	List<Opportunity> dealsUpdated = Opportunity.dao.fetchAllByKeys(dealUpdated);
+	List<Opportunity> dealsMileChange = Opportunity.dao.fetchAllByKeys(mileChange);
 
 	int wonCount = 0;
 	int lostCount = 0;
 	int newCount = 0;
+	int mileCount = 0;
 	double wonValue = 0;
 	double lostValue = 0;
 	double newValue = 0;
+	double mileValue = 0;
 	DecimalFormat formatter = new DecimalFormat("#,###");
 	for (Opportunity deal : dealsWon)
 	{
@@ -202,6 +219,12 @@ public class ActivityReportsUtil
 	{
 	    newValue += deal.expected_value;
 	    newCount++;
+	}
+
+	for (Opportunity deal : dealsMileChange)
+	{
+	    mileValue += deal.expected_value;
+	    mileCount++;
 	}
 
 	String currency = pref.currency != null ? pref.currency.substring(pref.currency.indexOf("-") + 1) : "$";
@@ -228,7 +251,15 @@ public class ActivityReportsUtil
 		dealsReport.put("new_value", formatter.format(newValue));
 		dealsReport.put("deals_created", newDealActivities);
 	    }
-	    dealsReport.put("deals_updated", dealsUpdated);
+
+	    if (mileCount > 0)
+	    {
+		dealsReport.put("mile_count", mileCount);
+		dealsReport.put("mile_value", formatter.format(mileValue));
+		dealsReport.put("mile_change", mileChangeActivities);
+	    }
+
+	    // dealsReport.put("deals_updated", dealsUpdated);
 	    dealsReport.put("currency", currency);
 	    int total = wonCount + lostCount + newCount;
 	    if (total > 0)
@@ -247,6 +278,40 @@ public class ActivityReportsUtil
     {
 	List<Event> events = new ArrayList<Event>();
 	events = EventUtil.getEvents(startTime, endTime, AgileUser.getCurrentAgileUserFromDomainUser(user.id).id);
+
+	List<Activity> eventActivity = ActivityUtil.getActivitiesByFilter(user.id,
+		Activity.EntityType.EVENT.toString(), null, null, startTime, endTime, 0, null);
+	List<Activity> eventAddActivity = new ArrayList<Activity>();
+	List<Activity> eventMovedActivity = new ArrayList<Activity>();
+	for (Activity activity : eventActivity)
+	{
+	    if (activity.activity_type == Activity.ActivityType.EVENT_ADD)
+	    {
+		eventAddActivity.add(activity);
+	    }
+	    else if (activity.activity_type == Activity.ActivityType.EVENT_EDIT
+		    && activity.custom3.indexOf("start_date") > 0)
+	    {
+		List<String> fields = Arrays.asList(activity.custom3.substring(1, activity.custom3.length() - 1).split(
+			","));
+		List<String> newFieldValues = Arrays.asList(activity.custom2
+			.substring(1, activity.custom2.length() - 1).split(","));
+		List<String> oldFieldValues = Arrays.asList(activity.custom1
+			.substring(1, activity.custom1.length() - 1).split(","));
+		int index = fields.indexOf("start_date");
+		activity.custom4 = "'" + activity.label + "'  rescheduled from " + oldFieldValues.get(index)
+			+ oldFieldValues.get(index + 1) + " to " + newFieldValues.get(index)
+			+ newFieldValues.get(index + 1);
+		eventMovedActivity.add(activity);
+
+	    }
+	}
+
+	for (Event event : events)
+	{
+	    event.color = MustacheUtil.convertDate("MMM dd HH:mm", event.start);
+	}
+
 	Map<String, Object> eventsReport = new HashMap<String, Object>();
 	try
 	{
@@ -255,6 +320,16 @@ public class ActivityReportsUtil
 		eventsReport.put("events_count", events.size());
 		eventsReport.put("events", events);
 	    }
+
+	    if (eventMovedActivity.size() > 0)
+	    {
+		eventsReport.put("event_moved_count", eventMovedActivity.size());
+		eventsReport.put("events_moved", eventMovedActivity);
+	    }
+
+	    int total = events.size() + eventMovedActivity.size();
+	    if (total > 0)
+		eventsReport.put("events_total", total);
 	}
 	catch (Exception e)
 	{
@@ -277,12 +352,12 @@ public class ActivityReportsUtil
 	{
 	    if (act.activity_type == Activity.ActivityType.TASK_COMPLETED)
 	    {
-		act.related_contact_ids = getActivityRelateCOntacts(act, user.domain);
+		act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
 		taskComplete.add(act);
 	    }
 	    else if (act.activity_type == Activity.ActivityType.TASK_PROGRESS_CHANGE)
 	    {
-		act.related_contact_ids = getActivityRelateCOntacts(act, user.domain);
+		act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
 		taskUpdated.add(act);
 	    }
 	}
@@ -295,7 +370,7 @@ public class ActivityReportsUtil
 	{
 	    if (act.custom1.equals(user.name))
 	    {
-		act.related_contact_ids = getActivityRelateCOntacts(act, user.domain);
+		act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
 		taskCreated.add(act);
 	    }
 	}
@@ -354,6 +429,8 @@ public class ActivityReportsUtil
 	    if (activity.activity_type == Activity.ActivityType.EMAIL_SENT)
 	    {
 		emailsCount++;
+		activity.label = "<a href=\"https://" + user.domain + ".agilecrm.com/#contact/" + activity.entity_id
+			+ "\">" + activity.label + "</a>";
 		emailActivity.add(activity);
 	    }
 	    else if (activity.activity_type == Activity.ActivityType.BULK_ACTION
@@ -391,6 +468,59 @@ public class ActivityReportsUtil
 	}
 
 	return emailReport;
+    }
+
+    public static Map<String, Object> getNotesActivityReport(DomainUser user, Long startTime, Long endTime)
+    {
+
+	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, Activity.EntityType.CONTACT.toString(),
+		Activity.ActivityType.NOTE_ADD.toString(), null, startTime, endTime, 0, null);
+
+	Map<String, Object> notesReport = new HashMap<String, Object>();
+	try
+	{
+	    if (activities.size() > 0)
+	    {
+		notesReport.put("notes_contacts_count", activities.size());
+		notesReport.put("notes_contacts", activities);
+	    }
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println("Exception occured while event report creation - " + e.getMessage());
+	}
+	return notesReport;
+    }
+
+    public static Map<String, Object> getDocumentsActivityReport(DomainUser user, Long startTime, Long endTime)
+    {
+	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id,
+		Activity.EntityType.DOCUMENT.toString(), Activity.ActivityType.DOCUMENT_ADD.toString(), null,
+		startTime, endTime, 0, null);
+	for (Activity act : activities)
+	{
+	    act.custom4 = getActivityRelateContacts(act, user.domain, " related to ");
+	}
+
+	Map<String, Object> docReport = new HashMap<String, Object>();
+	try
+	{
+	    if (activities.size() > 0)
+	    {
+		docReport.put("doc_count", activities.size());
+		docReport.put("doc_activities", activities);
+	    }
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println("Exception occured while event report creation - " + e.getMessage());
+	}
+
+	return docReport;
     }
 
     private static Map<String, Long> getTimeBound(ActivityReports report)
@@ -463,13 +593,13 @@ public class ActivityReportsUtil
 		ActivityReportsUtil.generateActivityReports(reportId, endTime));
     }
 
-    private static String getActivityRelateCOntacts(Activity activity, String domain)
+    private static String getActivityRelateContacts(Activity activity, String domain, String prefix)
     {
 	try
 	{
 	    if (activity.related_contact_ids != null && activity.related_contact_ids.length() != 0)
 	    {
-		String result = "related to ";
+		String result = prefix;
 
 		JSONArray contacts = new JSONArray(activity.related_contact_ids);
 		for (int i = 0; i < contacts.length(); i++)
