@@ -37,9 +37,6 @@ $(function()
 		// Hide trigger inbound mail event div for other trigger conditions.
 		if($(this).val() !== 'INBOUND_MAIL_EVENT'){
 			$('form#addTriggerForm').find('div#trigger-inbound-mail-event').css('display', 'none');
-			$('form#addTriggerForm').find('div#trigger-inbound-mail-event').find('input[name=trigger_inbound_mail_event_subject]').val("");
-			$('form#addTriggerForm').find('div#trigger-inbound-mail-event').find('input[name=trigger_inbound_mail_event_to]').val("");
-			$('form#addTriggerForm').find('div#trigger-inbound-mail-event').find('input[name=trigger_inbound_mail_event_from]').val("");
 		}
 
 		// Initialize tags typeahead
@@ -189,15 +186,9 @@ function populate_shopify_events_in_trigger(trigger_form, shopify_event_select_i
 	}
 }
 
-function populate_inbound_mail_events_in_trigger(trigger_form, inbound_mail_event_div_class, trigger_inbound_mail_event)
+function populate_inbound_mail_events_in_trigger(trigger_form, inbound_mail_event_div_class)
 {
 	trigger_form.find('div#' + inbound_mail_event_div_class).css('display','');
-	if(trigger_inbound_mail_event)
-	{
-		trigger_form.find('div#trigger-inbound-mail-event').find('input[name=trigger_inbound_mail_event_from]').val(trigger_inbound_mail_event["mail_from"]);
-		trigger_form.find('div#trigger-inbound-mail-event').find('input[name=trigger_inbound_mail_event_to]').val(trigger_inbound_mail_event["mail_to"]);
-		trigger_form.find('div#trigger-inbound-mail-event').find('input[name=trigger_inbound_mail_event_subject]').val(trigger_inbound_mail_event["mail_subject"]);
-	}
 }
 
 /**

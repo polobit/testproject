@@ -112,24 +112,6 @@ public class Trigger
     public String trigger_shopify_event = null;
 
     /**
-     * Trigger condition from_email
-     */
-    @NotSaved(IfDefault.class)
-    public String trigger_inbound_mail_event_from = null;
-
-    /**
-     * Trigger condition mail_subject
-     */
-    @NotSaved(IfDefault.class)
-    public String trigger_inbound_mail_event_subject = null;
-
-    /**
-     * Trigger condition to
-     */
-    @NotSaved(IfDefault.class)
-    public String trigger_inbound_mail_event_to = null;
-
-    /**
      * ContactFilter id of a contact. Contact Filter details can be retrieved
      * using contact filter id.
      */

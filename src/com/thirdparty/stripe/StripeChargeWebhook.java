@@ -43,7 +43,8 @@ public class StripeChargeWebhook extends HttpServlet
 	Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
 	if (owner == null)
 	{
-	    // response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid API Key");
+	    // response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+	    // "Invalid API Key");
 	    return;
 	}
 
@@ -99,8 +100,6 @@ public class StripeChargeWebhook extends HttpServlet
 			String value = agileJson.getString(key);
 			contactProperties.add(new ContactField(key, value, null));
 		    }
-		    System.out.println("Assigning campaign to contact ... ");
-		    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
 
 		    DomainUser user = APIKey.getDomainUserRelatedToAPIKey(apiKey);
 		    if (user != null)
@@ -148,8 +147,12 @@ public class StripeChargeWebhook extends HttpServlet
 
 		    contact.setContactOwner(owner);
 		    contact.save();
+
+		    System.out.println("Assigning campaign to contact ... ");
+		    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
 		}
 	    }
+	    return;
 	}
 	catch (JSONException e)
 	{

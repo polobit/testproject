@@ -542,11 +542,7 @@ var WorkflowsRouter = Backbone.Router
 
 						if(type == 'INBOUND_MAIL_EVENT')
 						{
-							var trigger_inbound_mail_event = {};
-							trigger_inbound_mail_event.mail_to = currentTrigger.toJSON()['trigger_inbound_mail_event_to'];
-							trigger_inbound_mail_event.mail_from = currentTrigger.toJSON()['trigger_inbound_mail_event_from'];
-							trigger_inbound_mail_event.mail_subject = currentTrigger.toJSON()['trigger_inbound_mail_event_subject'];
-							populate_inbound_mail_events_in_trigger($('form#addTriggerForm', el), 'trigger-inbound-mail-event', trigger_inbound_mail_event);
+							populate_inbound_mail_events_in_trigger($('form#addTriggerForm', el), 'trigger-inbound-mail-event');
 						}
 
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";

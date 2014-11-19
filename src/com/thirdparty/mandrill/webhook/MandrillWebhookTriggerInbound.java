@@ -83,31 +83,28 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		    }
 
 		    NamespaceManager.set(agileDomain);
-		    for (int j = 0; j < message.getJSONArray("to").length(); j++)
-		    {
-			JSONArray toRecepient = message.getJSONArray("to").getJSONArray(j);
-			String recepientEmail = toRecepient.getString(0);
-			String recepientName = toRecepient.getString(1);
 
-			if (isNotAgileEmail(recepientEmail))
+		    String fromEmail = message.getString("from_email");
+		    String fromName = message.getString("from_name");
+
+		    Contact contact = buildContact(fromName, fromEmail);
+		    if (contact == null)
+		    {
+			// response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		    }
+
+		    System.out.println("saving contact");
+		    contact.setContactOwner(owner);
+		    contact.save();
+
+		    List<Trigger> triggers = TriggerUtil.getAllTriggers();
+		    for (Trigger trigger : triggers)
+		    {
+			if (StringUtils.equals(trigger.type.toString(), INBOUND_MAIL_EVENT))
 			{
-			    Contact contact = buildContact(recepientName, recepientEmail);
-			    if (contact != null)
-			    {
-				List<Trigger> triggers = TriggerUtil.getAllTriggers();
-				for (Trigger trigger : triggers)
-				{
-				    if (StringUtils.equals(trigger.type.toString(), INBOUND_MAIL_EVENT)
-					    && triggerConditionResult(message, trigger, recepientEmail))
-				    {
-					System.out.println("assigning campaign to contact");
-					WorkflowSubscribeUtil.subscribe(contact, trigger.id);
-				    }
-				}
-				System.out.println("saving contact");
-				contact.setContactOwner(owner);
-				contact.save();
-			    }
+			    System.out.println("assigning campaign to contact");
+			    WorkflowSubscribeUtil.subscribe(contact, trigger.id);
 			}
 		    }
 		}
@@ -125,34 +122,22 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	return;
     }
 
-    public List<ContactField> updateContactPropList(List<ContactField> oldProperties, List<ContactField> newProperties)
+    public JSONObject getSenderNames(String fromName, String fromEmail) throws JSONException
     {
-	List<ContactField> outDatedProperties = new ArrayList<ContactField>();
-	for (ContactField oldProperty : oldProperties)
-	    for (ContactField newProperty : newProperties)
-		if (StringUtils.equals(oldProperty.name, newProperty.name) && StringUtils.equals(oldProperty.subtype, newProperty.subtype))
-		    outDatedProperties.add(oldProperty);
-	oldProperties.removeAll(outDatedProperties);
-	newProperties.addAll(oldProperties);
-	return newProperties;
-    }
-
-    public JSONObject getRecepientNames(String recepientName, String recepientEmail) throws JSONException
-    {
-	JSONObject recepient = new JSONObject();
-	if (!(StringUtils.isBlank(recepientName) || StringUtils.equals(recepientName, "null")))
+	JSONObject from = new JSONObject();
+	if (!(StringUtils.isBlank(fromName) || StringUtils.equals(fromName, "null")))
 	{
-	    if (StringUtils.contains(recepientName, "+"))
+	    if (StringUtils.contains(fromName, " "))
 	    {
-		recepient.put(Contact.FIRST_NAME, recepientName.split("\\+")[0]);
-		recepient.put(Contact.LAST_NAME, recepientName.split("\\+")[1]);
+		from.put(Contact.FIRST_NAME, fromName.split(" ")[0]);
+		from.put(Contact.LAST_NAME, fromName.split(" ")[1]);
 	    }
 	    else
-		recepient.put(Contact.FIRST_NAME, recepientName);
+		from.put(Contact.FIRST_NAME, fromName);
 	}
 	else
-	    recepient.put(Contact.FIRST_NAME, recepientEmail.split("@")[0]);
-	return recepient;
+	    from.put(Contact.FIRST_NAME, fromEmail.split("@")[0]);
+	return from;
     }
 
     public Boolean isNotAgileEmail(String recepientEmail)
@@ -165,64 +150,36 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	    return false;
     }
 
-    public Contact buildContact(String recepientName, String recepientEmail)
+    public Contact buildContact(String fromName, String fromEmail)
     {
-	List<ContactField> properties = new ArrayList<ContactField>();
-	properties.add(new ContactField(Contact.EMAIL, recepientEmail, null));
-
-	try
-	{
-	    JSONObject recepient;
-	    recepient = getRecepientNames(recepientName, recepientEmail);
-	    if (recepient.has(Contact.FIRST_NAME))
-		properties.add(new ContactField(Contact.FIRST_NAME, recepient.getString("first_name"), null));
-	    if (recepient.has(Contact.LAST_NAME))
-		properties.add(new ContactField(Contact.LAST_NAME, recepient.getString("last_name"), null));
-
-	    Contact contact = ContactUtil.searchContactByEmail(recepientEmail);
-	    if (contact == null)
-		contact = new Contact();
-	    contact.properties = updateContactPropList(contact.properties, properties);
-	    return contact;
-
-	}
-	catch (JSONException e)
-	{
+	if (StringUtils.isBlank(fromEmail) || StringUtils.equals(fromEmail, "null"))
 	    return null;
-	}
-    }
 
-    public Boolean triggerConditionResult(JSONObject message, Trigger trigger, String recepientEmail)
-    {
-	try
+	Contact contact = ContactUtil.searchContactByEmail(fromEmail);
+	if (contact == null)
 	{
-	    String mailSubject = message.getString("subject");
-	    System.out.println("mail subject is " + mailSubject);
+	    contact = new Contact();
+	    List<ContactField> properties = new ArrayList<ContactField>();
+	    properties.add(new ContactField(Contact.EMAIL, fromEmail, null));
+	    try
+	    {
+		JSONObject from = getSenderNames(fromName, fromEmail);
+		if (from.has(Contact.FIRST_NAME))
+		    properties.add(new ContactField(Contact.FIRST_NAME, from.getString(Contact.FIRST_NAME), null));
+		if (from.has(Contact.LAST_NAME))
+		    properties.add(new ContactField(Contact.LAST_NAME, from.getString(Contact.LAST_NAME), null));
 
-	    String mailFrom = message.getString("from_email");
-	    System.out.println("mail from is " + mailFrom);
-	    System.out.println("mail to is " + recepientEmail);
-
-	    if (triggerCondition(mailSubject, trigger.trigger_inbound_mail_event_subject)
-		    && triggerCondition(mailFrom, trigger.trigger_inbound_mail_event_from)
-		    && triggerCondition(recepientEmail, trigger.trigger_inbound_mail_event_to))
-		return true;
-	    else
-		return false;
+		contact.properties = properties;
+		return contact;
+	    }
+	    catch (JSONException e)
+	    {
+		return null;
+	    }
 	}
-	catch (JSONException e)
-	{
-	    return false;
-	}
-    }
+	else
+	    return null;
 
-    public Boolean triggerCondition(String messageData, String triggerCondition)
-    {
-	if (StringUtils.isBlank(triggerCondition))
-	    return true;
-	else if (StringUtils.equals(messageData, triggerCondition))
-	    return true;
-	return false;
     }
 
     public String getAgileEmail(JSONObject message)
@@ -234,8 +191,6 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		allRecepients.put(message.getJSONArray("to"));
 	    if (message.has("cc"))
 		allRecepients.put(message.getJSONArray("cc"));
-	    if (message.has("bcc"))
-		allRecepients.put(message.getJSONArray("bcc"));
 
 	    for (int i = 0; i < allRecepients.length(); i++)
 	    {
@@ -249,6 +204,9 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 			return recepient.getString(0);
 		}
 	    }
+	    if (!StringUtils.isBlank(message.getString("email")) && !isNotAgileEmail(message.getString("email")))
+		return message.getString("email");
+
 	    return null;
 	}
 	catch (JSONException e)
