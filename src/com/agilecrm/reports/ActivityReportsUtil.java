@@ -32,15 +32,22 @@ public class ActivityReportsUtil
     public static ObjectifyGenericDao<ActivityReports> dao = new ObjectifyGenericDao<ActivityReports>(
 	    ActivityReports.class);
 
+    /**
+     * Get the activity reports of a user.
+     * 
+     * @param userId
+     *            id of the user.
+     * @return List of Keys of activity reports.
+     */
     public static List<Key<ActivityReports>> getAllActivityReports(Long userId)
     {
 	return dao.listKeysByProperty("user", new Key<DomainUser>(DomainUser.class, userId));
     }
 
     /**
-     * Fetches all the available reports
+     * Fetches all the available activity reports
      * 
-     * @return {@link List} of {@link Reports}
+     * @return List of activity reports.
      */
     public static List<ActivityReports> fetchAllReports()
     {
@@ -51,7 +58,8 @@ public class ActivityReportsUtil
      * Get report based on given Id
      * 
      * @param id
-     * @return {@link Reports}
+     *            id of the activity report.
+     * @return Activity report.
      */
     public static ActivityReports getActivityReport(Long id)
     {
@@ -67,31 +75,55 @@ public class ActivityReportsUtil
 	}
     }
 
-    public static List<Key<ActivityReports>> getAllReportKeysByDuration(String duration)
+    /**
+     * Get the list of all the Activity reports of the particular frequency.
+     * 
+     * @param frequency
+     *            frequency of the activity reports.
+     * @return List of keys of activity reports.
+     */
+    public static List<Key<ActivityReports>> getAllReportKeysByDuration(String frequency)
     {
-	System.out.println("fetching the reports - " + duration);
-	return dao.listKeysByProperty("duration", duration);
+	System.out.println("fetching the reports - " + frequency);
+	return dao.listKeysByProperty("duration", frequency);
     }
 
+    /**
+     * Generate the data required to show in the activity report.
+     * 
+     * @param id
+     *            id of the activity report.
+     * @param endTime
+     *            lower bound for the time to get the activities.
+     * @return Data to show in the Activity report.
+     */
     public static Map<String, Object> generateActivityReports(Long id, Long endTime)
     {
 	ActivityReports report = getActivityReport(id);
 	List<ActivityType> activities = report.activity;
 	List<DomainUser> users = report.getUsersList();
 	Map<String, Object> activityReports = new HashMap<String, Object>();
+
 	try
 	{
+	    // Calculate the time bounds for the activities depending on the
+	    // frequency.
 	    Map<String, Long> timeBounds = getTimeBound(report);
+
+	    // If user mentioned any the upper time bound (end time).
 	    if (endTime != null)
 		timeBounds.put("endTime", endTime);
 
+	    // Format for dates in the report.
 	    String format = "EEE, MMM d, yyyy HH:mm z";
 
+	    // Fill the map object with the required data.
 	    activityReports.put("start_time", MustacheUtil.convertDate(format, timeBounds.get("startTime")));
 	    activityReports.put("end_time", MustacheUtil.convertDate(format, timeBounds.get("endTime")));
 	    activityReports.put("report_name", report.name);
 
 	    List<Map<String, Object>> userReport = new ArrayList<Map<String, Object>>();
+	    // For every user selected in the activity report.
 	    for (DomainUser user : users)
 	    {
 		Map<String, Object> activityReport = new HashMap<String, Object>();
@@ -100,6 +132,9 @@ public class ActivityReportsUtil
 		activityReports.put("domain", user.domain);
 		activityReport.put("pic",
 			UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id)).pic);
+
+		// Check for the entities/activities selected by the user for
+		// activity report.
 		if (activities.contains(ActivityReports.ActivityType.DEAL))
 		    activityReport.put("deals",
 			    getDealActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
@@ -130,22 +165,42 @@ public class ActivityReportsUtil
 	return activityReports;
     }
 
+    /**
+     * Get the report of the deals.
+     * 
+     * @param user
+     *            by whom the activities are performed.
+     * @param startTime
+     *            the lower bound of the time(start time) for getting activities
+     *            (Activities after this time).
+     * @param endTime
+     *            the upper bound of the time(end time) for getting activities
+     *            (Activities before this time).
+     * @return the report on the deals.
+     */
     public static Map<String, Object> getDealActivityReport(DomainUser user, Long startTime, Long endTime)
     {
 
+	// Local variable declaretion.
 	List<Key<Opportunity>> dealWon = new ArrayList<Key<Opportunity>>();
 	List<Key<Opportunity>> dealLost = new ArrayList<Key<Opportunity>>();
 	List<Key<Opportunity>> dealUpdated = new ArrayList<Key<Opportunity>>();
 	List<Key<Opportunity>> dealCreated = new ArrayList<Key<Opportunity>>();
 	List<Key<Opportunity>> mileChange = new ArrayList<Key<Opportunity>>();
-	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, Activity.EntityType.DEAL.toString(),
-		null, null, startTime, endTime, 0, null);
+
 	List<Activity> wonActivities = new ArrayList<Activity>();
 	List<Activity> lostActivities = new ArrayList<Activity>();
 	List<Activity> newDealActivities = new ArrayList<Activity>();
 	List<Activity> mileChangeActivities = new ArrayList<Activity>();
+
+	// Get all the activities of the user on deals. Instead of getting by
+	// activity type. This will reduce the DB calls.
+	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, Activity.EntityType.DEAL.toString(),
+		null, null, startTime, endTime, 0, null);
+
 	UserPrefs pref = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id));
-	System.out.println("Deals ---- " + activities.size());
+
+	// Separate the activities based on the activity type.
 	for (Activity act : activities)
 	{
 	    if (act.activity_type == Activity.ActivityType.DEAL_LOST)
@@ -170,6 +225,8 @@ public class ActivityReportsUtil
 		dealUpdated.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
 	}
 
+	// Get the deals assigned to this user (Can be assigned by the other
+	// users also.)
 	List<String> activityTypeList = new ArrayList<String>();
 	activityTypeList.add(Activity.ActivityType.DEAL_ADD.toString());
 	activityTypeList.add(Activity.ActivityType.DEAL_OWNER_CHANGE.toString());
@@ -177,7 +234,7 @@ public class ActivityReportsUtil
 	activities = dao.ofy().query(Activity.class).filter("entity_type = ", Activity.EntityType.DEAL.toString())
 		.filter("activity_type in ", activityTypeList).filter("time >= ", startTime)
 		.filter("time <= ", endTime).list();
-	System.out.println("-------act assigned---" + activities.size());
+
 	for (Activity act : activities)
 	{
 	    System.out.println(act.custom1.equals(user.name) + "-----ass name---" + act.custom1);
@@ -189,6 +246,7 @@ public class ActivityReportsUtil
 	    }
 	}
 
+	// Local variable declaretion.
 	List<Opportunity> dealsWon = Opportunity.dao.fetchAllByKeys(dealWon);
 	List<Opportunity> dealsLost = Opportunity.dao.fetchAllByKeys(dealLost);
 	List<Opportunity> dealsCreated = Opportunity.dao.fetchAllByKeys(dealCreated);
@@ -203,6 +261,9 @@ public class ActivityReportsUtil
 	double lostValue = 0;
 	double newValue = 0;
 	double mileValue = 0;
+
+	// Calculate the total values of all the deals based on the activity
+	// type.
 	DecimalFormat formatter = new DecimalFormat("#,###");
 	for (Opportunity deal : dealsWon)
 	{
@@ -228,7 +289,8 @@ public class ActivityReportsUtil
 	}
 
 	String currency = pref.currency != null ? pref.currency.substring(pref.currency.indexOf("-") + 1) : "$";
-	System.out.println("--------currency--------" + currency);
+
+	// Fill the map object with required data to show in the report.
 	Map<String, Object> dealsReport = new HashMap<String, Object>();
 	try
 	{
@@ -274,15 +336,33 @@ public class ActivityReportsUtil
 	return dealsReport;
     }
 
+    /**
+     * Get the activity report on events of a user.
+     * 
+     * @param user
+     *            User to which the events are for.
+     * @param startTime
+     *            the lower bound of the time(start time) for getting activities
+     *            (Activities after this time).
+     * @param endTime
+     *            the upper bound of the time(end time) for getting activities
+     *            (Activities before this time).
+     * @return report on the events.
+     */
     public static Map<String, Object> getEventActivityReport(DomainUser user, Long startTime, Long endTime)
     {
-	List<Event> events = new ArrayList<Event>();
-	events = EventUtil.getEvents(startTime, endTime, AgileUser.getCurrentAgileUserFromDomainUser(user.id).id);
+	// Events that are completed by the given user.
+	List<Event> events = EventUtil.getEvents(startTime, endTime,
+		AgileUser.getCurrentAgileUserFromDomainUser(user.id).id);
 
-	List<Activity> eventActivity = ActivityUtil.getActivitiesByFilter(user.id,
-		Activity.EntityType.EVENT.toString(), null, null, startTime, endTime, 0, null);
 	List<Activity> eventAddActivity = new ArrayList<Activity>();
 	List<Activity> eventMovedActivity = new ArrayList<Activity>();
+
+	// Get all the activities on the user performed on the events.
+	List<Activity> eventActivity = ActivityUtil.getActivitiesByFilter(user.id,
+		Activity.EntityType.EVENT.toString(), null, null, startTime, endTime, 0, null);
+
+	// Get activities of the events whose start time is changed.
 	for (Activity activity : eventActivity)
 	{
 	    if (activity.activity_type == Activity.ActivityType.EVENT_ADD)
@@ -312,6 +392,7 @@ public class ActivityReportsUtil
 	    event.color = MustacheUtil.convertDate("MMM dd HH:mm", event.start);
 	}
 
+	// Fill the map with the required data to show in the activity report.
 	Map<String, Object> eventsReport = new HashMap<String, Object>();
 	try
 	{
@@ -340,14 +421,30 @@ public class ActivityReportsUtil
 	return eventsReport;
     }
 
+    /**
+     * Get the activity reports on tasks of a user.
+     * 
+     * @param user
+     *            user to which the tasks are belong to.
+     * @param startTime
+     *            the lower bound of the time(start time) for getting activities
+     *            (Activities after this time).
+     * @param endTime
+     *            the upper bound of the time(end time) for getting activities
+     *            (Activities before this time).
+     * @return
+     */
     public static Map<String, Object> getTaskActivityReport(DomainUser user, Long startTime, Long endTime)
     {
 	List<Activity> taskComplete = new ArrayList<Activity>();
 	List<Activity> taskUpdated = new ArrayList<Activity>();
 	List<Activity> taskCreated = new ArrayList<Activity>();
+
+	// Get all the activities of the user on tasks. Instead of getting by
+	// activity type. This will reduce the DB calls.
 	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, Activity.EntityType.TASK.toString(),
 		null, null, startTime, endTime, 0, null);
-	System.out.println("Tasks ---- " + activities.size());
+	// Separate activities based on the activity types.
 	for (Activity act : activities)
 	{
 	    if (act.activity_type == Activity.ActivityType.TASK_COMPLETED)
@@ -361,7 +458,7 @@ public class ActivityReportsUtil
 		taskUpdated.add(act);
 	    }
 	}
-
+	// For tasks assigned to the user.
 	activities = ActivityUtil.getActivitiesByFilter(null, Activity.EntityType.TASK.toString(),
 		Activity.ActivityType.TASK_ADD + " OR " + Activity.ActivityType.TASK_OWNER_CHANGE, null, startTime,
 		endTime, 0, null);
@@ -412,8 +509,23 @@ public class ActivityReportsUtil
 	return tasksReport;
     }
 
+    /**
+     * Get the report on the emails sent by the user.
+     * 
+     * @param user
+     *            user who sent the emails.
+     * @param startTime
+     *            the lower bound of the time(start time) for getting activities
+     *            (Activities after this time).
+     * @param endTime
+     *            the upper bound of the time(end time) for getting activities
+     *            (Activities before this time).
+     * @return
+     */
     public static Map<String, Object> getEmailActivityReport(DomainUser user, Long startTime, Long endTime)
     {
+
+	// Get activities for email sent.
 	List<String> activityTypeList = new ArrayList<String>();
 	activityTypeList.add(Activity.ActivityType.EMAIL_SENT.toString());
 	activityTypeList.add(Activity.ActivityType.BULK_ACTION.toString());
@@ -429,6 +541,8 @@ public class ActivityReportsUtil
 	    if (activity.activity_type == Activity.ActivityType.EMAIL_SENT)
 	    {
 		emailsCount++;
+		// Prepare the summary to show in the email, as it is not
+		// possible to format in the template.
 		activity.label = "<a href=\"https://" + user.domain + ".agilecrm.com/#contact/" + activity.entity_id
 			+ "\">" + activity.label + "</a>";
 		emailActivity.add(activity);
@@ -470,6 +584,19 @@ public class ActivityReportsUtil
 	return emailReport;
     }
 
+    /**
+     * Get the activity reports on the notes added to contact by the user.
+     * 
+     * @param user
+     *            who added notes to the contacts.
+     * @param startTime
+     *            the lower bound of the time(start time) for getting activities
+     *            (Activities after this time).
+     * @param endTime
+     *            the upper bound of the time(end time) for getting activities
+     *            (Activities before this time).
+     * @return report on the notes added by the user.
+     */
     public static Map<String, Object> getNotesActivityReport(DomainUser user, Long startTime, Long endTime)
     {
 
@@ -494,6 +621,19 @@ public class ActivityReportsUtil
 	return notesReport;
     }
 
+    /**
+     * Get the activity report on the documents uploaded by the user.
+     * 
+     * @param user
+     *            who uploaded the documents.
+     * @param startTime
+     *            the lower bound of the time(start time) for getting activities
+     *            (Activities after this time).
+     * @param endTime
+     *            the upper bound of the time(end time) for getting activities
+     *            (Activities before this time).
+     * @return report on the documents uploaded.
+     */
     public static Map<String, Object> getDocumentsActivityReport(DomainUser user, Long startTime, Long endTime)
     {
 	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id,
@@ -523,6 +663,14 @@ public class ActivityReportsUtil
 	return docReport;
     }
 
+    /**
+     * Get the time bound os the activities based on the activity report
+     * frequency.
+     * 
+     * @param report
+     *            activity report object.
+     * @return start time and the end time for getting the activities.
+     */
     private static Map<String, Long> getTimeBound(ActivityReports report)
     {
 	Calendar cal = Calendar.getInstance();
@@ -531,8 +679,11 @@ public class ActivityReportsUtil
 	cal.set(Calendar.SECOND, 0);
 	cal.set(Calendar.MILLISECOND, 0);
 	Map<String, Long> timeBound = new HashMap<String, Long>();
+
+	// Based on the frequency.
 	if (report.frequency.equals(ActivityReports.Frequency.DAILY))
 	{
+	    // 12:00 AM to 12:00 AM.
 	    cal.add(Calendar.DATE, -1);
 	    timeBound.put("startTime", cal.getTimeInMillis() / 1000);
 	    cal.add(Calendar.DATE, 1);
@@ -540,6 +691,7 @@ public class ActivityReportsUtil
 	}
 	else if (report.frequency.equals(ActivityReports.Frequency.WEEKLY))
 	{
+	    // Friday to Friday.
 	    int daysBackToFri = cal.get(Calendar.DAY_OF_WEEK);
 	    if (daysBackToFri == Calendar.FRIDAY)
 		timeBound.put("endTime", cal.getTimeInMillis() / 1000);
@@ -553,6 +705,8 @@ public class ActivityReportsUtil
 	}
 	else if (report.frequency.equals(ActivityReports.Frequency.MONTHLY))
 	{
+	    // First Friday of the previous month to the first Friday of this
+	    // month.
 	    int todayDate = cal.get(Calendar.DATE);
 	    // cal.add(Calendar.MONTH, 1);
 	    int todayDay = cal.get(Calendar.DAY_OF_WEEK);
@@ -585,6 +739,15 @@ public class ActivityReportsUtil
 	return timeBound;
     }
 
+    /**
+     * To send the activity report as a mail to the email addresses given the
+     * activity report.
+     * 
+     * @param reportId
+     *            id of the activity report to be sent.
+     * @param endTime
+     *            end time of the activities to be sent in the report.
+     */
     public static void sendActivityReport(Long reportId, Long endTime)
     {
 	ActivityReports report = getActivityReport(reportId);
@@ -593,6 +756,17 @@ public class ActivityReportsUtil
 		ActivityReportsUtil.generateActivityReports(reportId, endTime));
     }
 
+    /**
+     * Prepare the related contacts as HTML text with the links to their page.
+     * 
+     * @param activity
+     *            activity having the information about the replated contacts.
+     * @param domain
+     *            domain of the user.
+     * @param prefix
+     *            prefix to be added before the contacts like 'related to' etc.
+     * @return HTML string format of the related contacts with the link.
+     */
     private static String getActivityRelateContacts(Activity activity, String domain, String prefix)
     {
 	try

@@ -151,6 +151,16 @@ public class ActivityReportsAPI
 	}
     }
 
+    /**
+     * Send activity reports as a mail to the user specified email addresses in
+     * the activity report object.
+     * 
+     * @param id
+     *            id of the activity report.
+     * @param endTime
+     *            end time of the activities to be taken in to
+     *            consideration.(optional)
+     */
     @Path("/email/{report_id}")
     @GET
     public static void sendActivityReport(@PathParam("report_id") String id, @QueryParam("end_time") Long endTime)
