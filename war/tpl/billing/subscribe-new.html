@@ -281,7 +281,7 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 					<label class="control-label">Emails</label>
 					<div class="controls" style="margin-top: 5px;">
 						{{numeric_operation ../emailPlan.quantity 1000 "*"}} <small>per month</small> <br/>
-						<span>getPendingEmails() <small>Remaining</small></span>
+						<span>{{getRemaininaEmails}}  <small>Remaining</small></span>
 				</div>
 				<div class="control-group" style="margin-top: -5%">
 					<label class="control-label" style="margin-top: -2%">Cost</label>
