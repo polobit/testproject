@@ -322,7 +322,7 @@ function adjustHeightOfTaskListAndScroll()
  * Hide task in list view and display column view with loading img. 
  */
 function hideListViewAndShowLoading()
-{
+{	
 	// Hide list view and show column view
 	$('#new-task-list-based-condition').show();
 	$('#task-list-based-condition').hide();

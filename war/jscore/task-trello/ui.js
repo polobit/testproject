@@ -80,19 +80,19 @@ $(function()
 	// Click events to agents dropdown of Owner's list and Criteria's list
 	$("ul#new-owner-tasks li a, ul#new-type-tasks li a").die().live("click", function(e)
 	{
-		e.preventDefault();
+		e.preventDefault();			
 		
 		// Hide list view and show column view with loading img
-		hideListViewAndShowLoading();
+		hideListViewAndShowLoading();		
 		
 		// Show selected name
 		var name = $(this).html(), id = $(this).attr("href");
 		
 		var selectedDropDown = $(this).closest("ul").attr("id");
 				
-		if(selectedDropDown == "new-type-tasks")
+		if(selectedDropDown == "new-type-tasks") // criteria type
 		    $(this).closest("ul.main-menu").data("selected_item", id);
-		else 
+		else  // owner type
 			$(this).closest("ul").data("selected_item", id);
 		
 		$(this).closest(".btn-group").find(".selected_name").text(name);
@@ -126,4 +126,20 @@ $(function()
 		// Change status UI and input field
 		changeStatus($(this).attr("value"), $(this).closest("form"));
 	});
+	
+	/*// On hover of submenu show submenu.
+	$(".dropdown-submenu").die().live("hover", function()
+	{			
+	  $(".dropdown-submenu .dropdown-menu").toggle();	  
+	});	
+	
+	$(".check-submenu-open").die().live("click", function()
+	 {			
+		console.log("***");
+		if($(".dropdown-submenu .dropdown-menu").css("display") == "block")
+			{
+			console.log("===========");
+			$(".dropdown-submenu .dropdown-menu").toggle();
+			}		  	  
+	 });*/
 });

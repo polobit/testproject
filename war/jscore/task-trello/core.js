@@ -14,7 +14,7 @@ function startMakingCollection(criteria, pending)
 	
 	// Hide list view and show column view with loading img
 	hideListViewAndShowLoading();
-	
+			
 	// Get user details and add into GROUPING_MAP's owner array.
 	if (criteria == "OWNER" && GROUPING_MAP[criteria].type.length == 0)
 		getUserDetails(function(data)
