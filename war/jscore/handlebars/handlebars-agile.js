@@ -256,7 +256,10 @@ function getTemplateUrls(templateName)
 		if (HANDLEBARS_PRECOMPILATION)
 			template_relative_urls.push("socialsuite.html");
 	}
-	
+	if (templateName.indexOf("portlet") == 0)
+	{
+		template_relative_urls.push("portlets.js");
+	}
 	return template_relative_urls;
 }
 

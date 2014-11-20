@@ -156,12 +156,12 @@ $("#add-portlet").live("click", function(e){
 
 	// 
 	this.Catalog_Portlets_View.collection.fetch();
-
-	// Add social network types template
-	$("#streamDetails").html(this.Catalog_Portlets_View.el);
-
+	
 	// Show form modal
 	$('#portletStreamModal').modal('show');
+
+	// Add social network types template
+	$("#streamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);
 });
 $('#portlets-contacts-model-list > tr, #portlets-companies-model-list > tr').live('click', function(e){
 	var id = $(this).find(".data").attr("data");
