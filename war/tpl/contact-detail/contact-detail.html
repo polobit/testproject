@@ -5,7 +5,7 @@
 <!--  header span12 row view starting -->
 <div class="row">
 <div class="span12">
-		<div style="margin-bottom: 20px;">
+		<div style="margin-bottom:20px;margin-top:25px;">
 			<div class="row-fluid" style="border-bottom: 1px solid #ddd;padding-bottom: 10px;">
 				<div>
 					<div>
@@ -83,7 +83,7 @@
 </div>
 <div class="clearfix"></div>
 								</div>
-		<div  style="padding-top: 5px; margin: 0px;">
+		<div  style="padding-top: 5px; margin: 0px;" class="contact-website">
 									{{#property_is_exists "website" properties}}
 									{{#multiple_Property_Element "website" properties}} {{#each
 									this}} {{#if_equals subtype "TWITTER"}} <span
@@ -176,7 +176,7 @@
 						</div>
 						<!--  ending title,company -->
 						<div class="span2">
-						<div class="pull-right" style="width:100%">
+						<div class="pull-right" style="width:100%;position:relative;">
 <div class="contact-navigation-view"><span class="navigation  contact-switching"></span></div>
 <div class="clearfix"></div>
 						<!--  starting rating,edit,owner -->
@@ -228,7 +228,7 @@
 						
 						<!-- Owner block -->
 				<div class="clearfix"></div>
-					<div style="margin-top:10px;">
+					<div  class="contact-owner-position">
 						<div class="change-owner-succes"></div>
      <span title="Owner" class="contact-owner-view">
       	<span class="contact-owner" id="change-owner-element">
@@ -242,7 +242,7 @@
         
         	{{#canEditContact owner.id}}
         	<div class="btn-group" id="change-owner-ul" style="vertical-align: middle; display: none">
-        		 <a class="btn dropdown-toggle" data-toggle="dropdown">Change owner <span class="caret"></span></a>
+        		 <a class="btn dropdown-toggle" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
         		 <ul id='contact-detail-owner' class="dropdown-menu pull-right"></ul>
         	</div> 
 			{{/canEditContact}}
@@ -337,7 +337,7 @@
 
 
 		{{#property_is_exists "phone" properties}}
-			<div class="widget_container contact-rightpanel" id="{{name}}-container" style="padding-bottom:10px;">
+			<div class="widget_container contact-rightpanel" id="{{name}}-container" style="/* padding-bottom:10px; */">
 				{{else}} 
 					{{#property_is_exists "email" properties}}
 						<div class="widget_container contact-rightpanel" id="{{name}}-container">
@@ -371,7 +371,7 @@
 						<div class="clearfix"></div>
 						<div style='padding-top: 10px'>
 							{{#property_is_exists "phone" properties}}
-							<div  style="padding-bottom: 5px;">
+							<div  style="/* padding-bottom: 5px; */">
 								{{#multiple_Property_Element "phone" properties}}
 								<!-- <div style="display: inline-block; text-align: right" class="span4">
 									<span><strong style="color: gray">Phone</strong><span>
@@ -381,7 +381,7 @@
 									<div class="pull-left contact-phone-icon">
 									<i class="icon icon-phone" style="font-size: 16px;padding-left: 0px;padding-top: 0px;position: relative;top:0px;left:0px;margin-right:7px;"></i>
 									</div>
-									<div class="pull-left contact-rightpanel-ellipsis" style="font-size:13px;margin-bottom:6px;">
+									<div class="pull-left contact-rightpanel-ellipsis" style="font-size:13px;margin-bottom:4px;">
                                         <a href='#' class="contact-make-sip-call" style="display:none;" 
                                            fname="{{getCurrentContactProperty "first_name"}}" 
                                            lname="{{getCurrentContactProperty "last_name"}}" 
@@ -422,7 +422,7 @@
 									{{#each this}}
 
 <div class="pull-left contact-email-icon" style="margin-right:7px;"><i class="icon icon-envelope" style="font-size:13px;"></i></div>
-										<div class="pull-left contact-email-multiline" style="margin-bottom:4px;">
+										<div class="pull-left contact-email-multiline">
 											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label">{{subtype}}</span> {{/if}}
 										</div>
 
@@ -442,19 +442,23 @@
 					<div class="contact-custom-icon pull-left" style="width:25px;"><i class="icon icon-info-sign" style="font-size: 13px;margin-left:2px;"></i></div>			
 								<div class="pull-left" style="width:90%;line-height:21px;">
 									{{#each_with_index this}}
+
+
+                                            <span class="contact-custom-name">
+												<span style="color: gray" title="{{name}}">{{name}}</span>
+											</span>
+
 										
 										{{#if_equals index ../this.length}}
-											<span class="contact-custom-firstfield">
+											<span class="contact-custom-value">
 											{{#if_equals subtype "DATE"}} <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</span>
 										{{else}}
-											<span class="contact-custom-firstfield">
+											<span class="contact-custom-value">
 											{{#if_equals subtype "DATE"}} <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</span>
 										{{/if_equals}}
 										
 										
-											<span class="contact-custom-lastfield">
-												<span style="color: gray" title="{{name}}">{{name}}</span>
-											</span>
+											
 <div class="clearfix"></div>
 										
 										
@@ -469,7 +473,7 @@
 										<div >
 											{{#address_Element properties}}{{/address_Element}}</div>
 
-										<div class="pull-left row-fluid" style="margin-left:27px;margin-top:12px;width:245px;">
+										<div class="pull-left row-fluid" style="margin-left:27px;margin-top:12px;width:245px;margin-bottom:7px;">
 											<div id="map" style="width:auto; height: 200px; display: none; margin:0px 0px 0px;">
 											</div>
 										</div>
@@ -488,7 +492,7 @@
                            
 							
 
-							<div id="widgets" style="margin-top:10px;"></div>
+							<div id="widgets" style="margin-top:15px;"></div>
 
 							
 
