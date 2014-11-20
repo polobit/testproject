@@ -3063,5 +3063,10 @@ $(function()
 	Handlebars.registerHelper('pick_random_avatar_url', function(options) {
 		return choose_random_avatar();
 	});
+	
+	Handlebars.registerHelper('getRemaininaEmails', function()
+	{
+		return getPendingEmails();
+	});
 
 });
