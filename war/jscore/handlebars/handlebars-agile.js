@@ -256,6 +256,7 @@ function getTemplateUrls(templateName)
 		if (HANDLEBARS_PRECOMPILATION)
 			template_relative_urls.push("socialsuite.html");
 	}
+	
 	return template_relative_urls;
 }
 
