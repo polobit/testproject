@@ -104,6 +104,7 @@ function setupViews(cel, button_name) {
 					$(el).find('.custom_view').append(button_name);
 				//updates the selected sort item to bold
 				updateSelectedSortKey(el);
+				addClickEventsForSorting(el);
 			}
 		});
 		// Fetches the list of custom fields, and shows is the the contact page
@@ -133,6 +134,28 @@ function updateSelectedSortKey(el) {
 		$(el).find('#'+elementId).addClass('bold-text');
 	}
 }
+
+	function addClickEventsForSorting(el) {
+		// Fetch sort result without changing route on click
+		$(el).find('.sort').on("click", function(e)
+		{
+
+			e.preventDefault();
+			eraseCookie('sort_by_name');
+
+			// Gets name of the attribut to sort, which is set as data
+			// attribute in the link
+			sort_by = $(this).attr('data');
+			
+			// Saves Sort By in cookie
+			createCookie('sort_by_name', sort_by);
+
+			CONTACTS_HARD_RELOAD=true;
+			App_Contacts.contacts();
+			return;
+		});
+
+	}
 
 /**
  * Init function to define actions on events on the custom view list

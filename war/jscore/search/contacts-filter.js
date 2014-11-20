@@ -78,26 +78,6 @@ $(function()
 		// /removed old code from below,
 		// now filters will work only on contact, not company
 	});
-	
-	// Fetch sort result without changing route on click
-	$('.sort').live('click', function(e)
-	{
-
-		e.preventDefault();
-		eraseCookie('sort_by_name');
-
-		// Gets name of the attribut to sort, which is set as data
-		// attribute in the link
-		sort_by = $(this).attr('data');
-		
-		// Saves Sort By in cookie
-		createCookie('sort_by_name', sort_by);
-
-		CONTACTS_HARD_RELOAD=true;
-		App_Contacts.contacts();
-		return;
-	});
-
 	/*
 	 * If default filter is selected, removes filter cookies an load contacts
 	 * with out any query condition
