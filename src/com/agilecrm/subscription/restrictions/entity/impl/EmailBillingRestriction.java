@@ -26,20 +26,18 @@ public class EmailBillingRestriction extends DaoBillingRestriction
     public boolean check()
     {
 
-	// If reminder is set then tags are created and added in our domain
-	if (restriction.sendReminder)
-	    send_warning_message();
-
 	emails = restriction.one_time_emails_count;
 
 	// To avoid NullPointerException
 	max_allowed = Integer.valueOf(max_allowed) == null ? 0 : max_allowed;
 	emails = emails == null ? 0 : emails;
 
-	
-	System.out.println("Max allowed in EmailBillingRestriction check "+ max_allowed);
-	System.out.println("Emails remaind "+ emails);
-	
+	System.out.println("Max allowed in EmailBillingRestriction check " + max_allowed);
+	System.out.println("Emails remaind " + emails);
+
+	// If reminder is set then tags are created and added in our domain
+	send_warning_message();
+
 	// TODO Auto-generated method stub
 	if (max_allowed == 0 && (emails <= 0 && emails >= -5000))
 	    return true;
@@ -67,13 +65,20 @@ public class EmailBillingRestriction extends DaoBillingRestriction
     @Override
     public String getTag()
     {
-	String tag = BillingRestrictionReminderUtil.getTag(restriction.one_time_emails_count, max_allowed, "Email",
-	        hardUpdateTags);
+	int emailsSent = 0;
+	if(emails < 0)
+	    emailsSent = max_allowed;
+	else
+	    emailsSent = max_allowed - emails;
+	
+	emailsSent = emailsSent < 0 ? 0 : emailsSent;
+	System.out.println("emails sent : " + emailsSent);
+	String tag = BillingRestrictionReminderUtil.getTag(emailsSent, max_allowed, "Email",
+		hardUpdateTags);
 
 	if (tag != null)
 	{
-	    int percentage = BillingRestrictionReminderUtil.calculatePercentage(max_allowed,
-		    restriction.one_time_emails_count);
+	    int percentage = BillingRestrictionReminderUtil.calculatePercentage(max_allowed, emailsSent);
 
 	    // If tags are not there then new tag is saved in tags in our domain
 	    // class
