@@ -779,6 +779,8 @@ function getPendingEmails()
 		var remaining =  5000 + count;
 		if(remaining < 0)
 			return 0;
+		
+		return remaining;
 	}
 	
 	return count;
