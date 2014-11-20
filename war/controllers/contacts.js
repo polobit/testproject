@@ -731,6 +731,8 @@ var ContactsRouter = Backbone.Router.extend({
 			model = this.contactDetailView.model.toJSON();
 		}
 		var el = $("#content").html(getTemplate("send-email", model));
+		if(!id)
+			$("#emailForm", el).find('.add-attachment-select').hide();
 		
 		// Call setupTypeAhead to get contacts
 		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true);
