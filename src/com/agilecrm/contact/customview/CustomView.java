@@ -1,5 +1,6 @@
 package com.agilecrm.contact.customview;
 
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -24,7 +25,7 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 @Unindexed
 @Cached
-public class CustomView
+public class CustomView implements Comparable<CustomView>
 {
 
     // Key
@@ -65,8 +66,13 @@ public class CustomView
     public static List<CustomView> getContactViewList()
     {
 
-	// Fetches all the Views
-	return dao.fetchAllByOrder("name");
+    	// Fetches all the Views
+    	List<CustomView> customViews = dao.fetchAll();
+    	if(customViews == null || customViews.isEmpty()) {
+			return customViews;
+		}
+    	Collections.sort(customViews);
+    	return customViews;
     }
 
     // Get contact view by id
@@ -108,5 +114,17 @@ public class CustomView
     {
 	return "id: " + id + " fields_set: " + fields_set + " view_name" + name;
     }
+
+	@Override
+	public int compareTo(CustomView customView) {
+		if(this.name == null && customView.name != null) {
+			return -1;
+		} else if(this.name != null && customView.name == null) {
+			return 1;
+		} else if(this.name == null && customView.name == null) {
+			return 0;
+		}
+		return this.name.compareToIgnoreCase(customView.name);
+	}
 
 }

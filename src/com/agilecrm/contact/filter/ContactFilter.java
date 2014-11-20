@@ -3,6 +3,7 @@ package com.agilecrm.contact.filter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Embedded;
@@ -10,6 +11,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.customview.CustomView;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -43,7 +45,7 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @XmlRootElement
 @Cached
-public class ContactFilter implements Serializable
+public class ContactFilter implements Serializable, Comparable<ContactFilter>
 {
     // Key
     @Id
@@ -116,7 +118,13 @@ public class ContactFilter implements Serializable
      */
     public static List<ContactFilter> getAllContactFilters()
     {
-	return dao.fetchAllByOrder("name");
+		// Fetches all the Views
+		List<ContactFilter> cotactFilters = dao.fetchAll();
+		if(cotactFilters == null || cotactFilters.isEmpty()) {
+			return cotactFilters;
+		}
+		Collections.sort(cotactFilters);
+		return cotactFilters;
     }
 
     /**
@@ -153,4 +161,16 @@ public class ContactFilter implements Serializable
     {
 	return new AppengineSearch<Contact>(Contact.class).getAdvancedSearchResultsCount(rules);
     }
+
+	@Override
+	public int compareTo(ContactFilter contactFilter) {
+		if(this.name == null && contactFilter.name != null) {
+			return -1;
+		} else if(this.name != null && contactFilter.name == null) {
+			return 1;
+		} else if(this.name == null && contactFilter.name == null) {
+			return 0;
+		}
+		return this.name.compareToIgnoreCase(contactFilter.name);
+	}
 }
