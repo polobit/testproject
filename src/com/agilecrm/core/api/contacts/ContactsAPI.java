@@ -49,7 +49,6 @@ import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.util.HTTPUtil;
-import com.agilecrm.util.JSAPIUtil;
 
 /**
  * <code>ContactsAPI</code> includes REST calls to interact with {@link Contact}
@@ -798,17 +797,17 @@ public class ContactsAPI
     @Path("/add-score")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces("application/x-javascript")
-    public String addScore(@FormParam("email") String email, @FormParam("score") Integer score)
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Contact addScore(@FormParam("email") String email, @FormParam("score") Integer score)
     {
 	try
 	{
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
-		return JSAPIUtil.generateContactMissingError();
+		return null;
 
 	    contact.addScore(score);
-	    return new ObjectMapper().writeValueAsString(contact);
+	    return contact;
 	}
 	catch (Exception e)
 	{
