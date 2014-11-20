@@ -516,12 +516,12 @@ public class QueryDocumentUtil
 		}
 		else if (condition.equals(SearchRule.RuleCondition.NEXT))
 		{
-			long currentTime = new Date().getTime();
+			long currentTime = new Date().getTime()/1000;
 
 			long limitTime = currentTime + (Integer.parseInt(rhs) - 1) * 24 * 3600;
 
-			query = buildNestedCondition("AND", query, lhs + " >=" + currentTime);
-			query = buildNestedCondition("AND", query, lhs + " <=" + limitTime);
+			query = buildNestedCondition("AND", query, lhs + "_epoch >=" + currentTime);
+			query = buildNestedCondition("AND", query, lhs + "_epoch <=" + limitTime);
 		}
 
 		return query;
