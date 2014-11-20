@@ -12,14 +12,15 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.Event;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.EventUtil;
 
@@ -195,9 +196,40 @@ public class EventsAPI
     public void deleteEvents(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray eventsJSONArray = new JSONArray(model_ids);
-	ActivitySave.createLogForBulkDeletes(EntityType.EVENT, eventsJSONArray, String.valueOf(eventsJSONArray.length()),
-	        "");
+	ActivitySave.createLogForBulkDeletes(EntityType.EVENT, eventsJSONArray,
+		String.valueOf(eventsJSONArray.length()), "");
 
 	Event.dao.deleteBulkByIds(eventsJSONArray);
     }
+
+    @Path("/future/list")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Event> getAllEvent(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
+	    @QueryParam("reload") boolean force_reload)
+    {
+	if (count != null)
+	{
+	    System.out.println("Fetching page by page");
+	    return EventUtil.getEventList((Integer.parseInt(count)), cursor);
+	}
+
+	return EventUtil.getEvents();
+    }
+
+    @Path("/list")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Event> getFutureEvent(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
+	    @QueryParam("reload") boolean force_reload)
+    {
+	if (count != null)
+	{
+	    System.out.println("Fetching page by page");
+	    return EventUtil.getAllEvents((Integer.parseInt(count)), cursor);
+	}
+
+	return EventUtil.getEvents();
+    }
+
 }

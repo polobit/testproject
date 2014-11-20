@@ -85,6 +85,11 @@ var CalendarRouter = Backbone.Router.extend({
 																showCalendar();
 
 												});
+											
+																$('#grp_filter').css('display','none');
+																$('#event_tab').css('display','none');
+																
+												
 
 								}
 
@@ -164,7 +169,7 @@ var CalendarRouter = Backbone.Router.extend({
 $(function()
 {
 
-				$(".c_list_view").die().live('click', function(e)
+				$(".c_list").die().live('click', function(e)
 				{
 								e.preventDefault();
 								// Creates the cookie
@@ -174,7 +179,7 @@ $(function()
 								App_Calendar.calendar();
 				});
 
-				$(".c_view").die().live('click', function(e)
+				$(".c_cal").die().live('click', function(e)
 				{
 								e.preventDefault();
 								// Erases the cookie
@@ -193,6 +198,10 @@ $(function()
 								// Loads the calendar
 								App_Calendar.calendar();
 				});
+				
+				if(readCookie("agile_calendar_view")){
+         $('#grp_filter').removeClass('hide');
+				}
 
 				// intialize event tab
 				$('#event_tab').tab();
@@ -470,7 +479,7 @@ function loadAgileEvents()
 
 								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/list', templateKey : "events", individual_tag_name : 'tr',
 												sort_collection : false, cursor : true, page_size : 25});
-								eventCollectionView.appendItem = appendItem1;
+								eventCollectionView.appendItem = appendItem2;
 								eventCollectionView.collection.fetch();
 
 								$('#agile').html(this.eventCollectionView.render().el);
@@ -480,7 +489,7 @@ function loadAgileEvents()
 
 								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/future/list', templateKey : "future", individual_tag_name : 'tr',
 												sort_collection : false, cursor : true, page_size : 25 });
-								eventCollectionView.appendItem = appendItem2;
+								eventCollectionView.appendItem = appendItem1;
 								eventCollectionView.collection.fetch();
 
 								$('#agile').html(this.eventCollectionView.render().el);
@@ -518,17 +527,17 @@ function loadGoogleEvents()
 																				var view = readCookie("agile_calendar_view");
 																				if (view == "calendar_list_view")
 																				{
-<
-																								 this.googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "googleEventCategorization",
+
+																								 this.googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "google-event",
 																												individual_tag_name : 'tr' });
-																								 this.googleEventCollectionView.appendItem = appendGoogleEventCategorization;
+																								 this.googleEventCollectionView.appendItem = appendGoogleEvent;
 																								$('#google').html(this.googleEventCollectionView.render(true).el);
 																				}
 																				else
 																				{
 
-																								this.googleEventCollectionView  = new Base_Collection_View({ data : events, templateKey : "google-event", individual_tag_name : 'tr' });
-																								this.googleEventCollectionView.appendItem = appendGoogleEvent;
+																								this.googleEventCollectionView  = new Base_Collection_View({ data : events, templateKey : "googleEventCategorization", individual_tag_name : 'tr' });
+																								this.googleEventCollectionView.appendItem = appendGoogleEventCategorization;
 																								$('#google').html(this.googleEventCollectionView.render(true).el);
 																				}
 

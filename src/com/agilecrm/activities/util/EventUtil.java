@@ -1,5 +1,6 @@
 package com.agilecrm.activities.util;
 
+import java.util.Date;
 import java.util.List;
 
 import com.agilecrm.account.util.EmailGatewayUtil;
@@ -284,5 +285,33 @@ public class EventUtil
 		.format(new java.util.Date(epoch * 1000));
 
 	return date;
+    }
+
+    /**
+     * get All events base on cursor value
+     * 
+     * @param max
+     * @param cursor
+     * @return List of Events
+     */
+    public static List<Event> getAllEvents(int max, String cursor)
+    {
+	Query<Event> query = dao.ofy().query(Event.class).order("start");
+	return dao.fetchAllWithCursor(max, cursor, query, false, false);
+    }
+
+    /**
+     * get All events base on cursor value and start date
+     * 
+     * @param max
+     * @param cursor
+     * @return List of Events
+     */
+    public static List<Event> getEventList(int max, String cursor)
+    {
+	Date d = new Date();
+	Long startDate = d.getTime();
+	Query<Event> query = dao.ofy().query(Event.class).filter("start >=", startDate / 1000);
+	return dao.fetchAllWithCursor(max, cursor, query, false, false);
     }
 }
