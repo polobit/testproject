@@ -270,7 +270,7 @@ width:100%;
 }
 .contact-owner-name
 {
-max-width: 83%;
+max-width:80%;
 float: left;
 white-space: nowrap;
 text-overflow: ellipsis;
