@@ -33,6 +33,8 @@ public class EventReminderServlet extends HttpServlet
 	{
 	    Set<String> domains = NamespaceUtil.getAllNamespaces();
 
+	    System.out.println("number of domains in event reminder servlet " + domains.size());
+
 	    // Start a task queue for each domain
 	    for (String domain : domains)
 	    {
