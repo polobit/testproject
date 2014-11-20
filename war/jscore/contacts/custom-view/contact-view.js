@@ -95,7 +95,7 @@ function setupViews(cel, button_name) {
 			id : 'view-list',
 			sort_collection : false,
 			postRenderCallback : function(el) {
-				$('.dropdown-menu').find(".dropdown-submenu").on("click",function(e){
+				$(el).find('.dropdown-menu').find(".dropdown-submenu").on("click",function(e){
 				    e.stopImmediatePropagation();
 				});
 				// If button_name is defined, then view is selected then the name of
