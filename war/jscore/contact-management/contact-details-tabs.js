@@ -330,21 +330,15 @@ $(function(){
 	$('#sendEmail').die().live('click',function(e){
 		e.preventDefault();
 		
-		var network_type = $('#attachment-select').find(":selected").attr('network_type');
-		if(network_type){
-			if(network_type != 'Select'){
-				if(network_type.toUpperCase() === 'GOOGLE'){
-					$('#attachment-select').closest("span").find(".attachment-status").html("<span style='color:red;margin-left:10px;'>Select other type</span>");
-					return;
-				}
-				else{
-					$('#attachment-select').closest("span").find('.attachment-status').find("span").fadeOut(0);
-				}
-		    }
-		}
-					
-		 if($(this).attr('disabled'))
+		if($(this).attr('disabled'))
 	   	     return;
+		 
+		var network_type = $('#attachment-select').find(":selected").attr('network_type');
+		//checking email attachment type , email doesn't allow google drive documents as attachments
+		if(network_type){
+			if(network_type.toUpperCase() === 'GOOGLE')
+				return;
+		}	
 			
 		// Saves tinymce content to textarea
 		save_content_to_textarea('email-body');

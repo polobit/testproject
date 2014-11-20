@@ -78,28 +78,22 @@
                 </div>   
                 
                <div class="control-group">
-               	<label class="control-label">&nbsp; </label>
-                    <div class="controls">
-               	        <a href="#" class="add-attachment-select"><i class='icon-plus-sign'/></i> Add Attachment</a>
-						<span class="attachment-document-select" style="display:none;">
+                   <label class="checkbox" style="float:right;">
+                       <input type="checkbox" name="track_clicks" checked="checked">
+                       Enable Tracking
+                   </label> 
+               	   <label class="control-label">&nbsp; </label>
+                   <div class="controls">
+               	       <a href="#" class="add-attachment-select"><i class='icon-plus-sign'/></i> Add Attachment</a>
+					   <span class="attachment-document-select" style="display:none;">
 							<select id="attachment-select" style="margin-bottom: -1px;" name="document_id">
-								<option value="">Select</option>
 							</select>
 							&nbsp;
                             <a href="#" class="add-attachment-cancel"><i class="icon-remove-circle"></i></a>
                             <span class="attachment-status"></span>
 						</span>
-						</div>			
-				</div>               
-                
-               <div class="control-group">
-                    <div class="controls">
-                        <label class="checkbox" style="float:right;">
-                            <input type="checkbox" name="track_clicks" checked="checked">
-                            Enable Tracking
-                        </label> 
-                    </div>
-                </div> 
+				   </div>			
+				</div>            
 
                 <input name="signature" type="hidden" value="{{#getCurrentUserPrefs}}{{signature}}{{/getCurrentUserPrefs}}"/>
 
