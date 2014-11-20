@@ -112,7 +112,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    pubnub_notification.put("useremail", domainuser.email);
 		    pubnub_notification.put("type", "CALENDER_REMINDER");
 		    System.out.println("domain name before pubnubnotification " + domain);
-		    System.out.println("namespacemanagernamebeforesendingpubnub " + NamespaceManager.get());
+		    System.out.println("namespace manager name before sending pubnub " + NamespaceManager.get());
 
 		    PubNub.pubNubPush(domain, pubnub_notification);
 
@@ -169,8 +169,8 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    map.put("events", eventListMap);
 
 		    // Sends mail to the domain user.
-		    SendMail.sendMail(domainuser.email, "Event Reminder :" + event.title + "@" + event.date,
-			    SendMail.START_EVENT_REMINDER, map);
+		    SendMail.sendMail("sreenadh@faxdesk.com", "Event Reminder :" + event.title + "@" + event.date
+			    + " domain name " + domain, SendMail.START_EVENT_REMINDER, map);
 		}
 	    }
 
