@@ -149,7 +149,7 @@ public class StripeChargeWebhook extends HttpServlet
 		    contact.save();
 
 		    System.out.println("Assigning campaign to contact ... ");
-		    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
+		    WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id, new JSONObject().put("stripe", stripeJson));
 		}
 	    }
 	    return;

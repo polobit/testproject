@@ -24,6 +24,7 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.EmailUtil;
+import com.agilecrm.util.JSONUtil;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus.UnsubscribeType;
 import com.campaignio.reports.DateUtil;
@@ -440,6 +441,47 @@ public class AgileTaskletUtil
 	{
 	    if (contact != null)
 		subscriberJSONArray.put(getSubscriberJSON(contact));
+	}
+
+	return subscriberJSONArray;
+    }
+
+    /**
+     * Converts list of contacts into JSONArray.
+     * 
+     * @param contacts
+     *            List of Contact objects subscribed to campaign.
+     * @return JSONArray of list of contacts.
+     */
+    public static JSONArray getSubscriberJSONArray(List<Contact> contacts, JSONObject triggerJSON)
+    {
+	JSONArray subscriberJSONArray = new JSONArray();
+
+	for (Contact contact : contacts)
+	{
+	    if (contact != null)
+	    {
+		JSONObject subscriberJSON = getSubscriberJSON(contact);
+
+		try
+		{
+		    if (subscriberJSON.has("data") && triggerJSON != null)
+		    {
+			JSONObject data = JSONUtil.mergeJSONs(new JSONObject[] { subscriberJSON.getJSONObject("data"),
+			        triggerJSON });
+
+			subscriberJSON.put("data", data);
+		    }
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		    System.err.println("Exception occured while merging jsons in getSubscriberJSONArray..."
+			    + e.getMessage());
+		}
+
+		subscriberJSONArray.put(subscriberJSON);
+	    }
 	}
 
 	return subscriberJSONArray;
