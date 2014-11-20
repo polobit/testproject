@@ -761,7 +761,8 @@ function getPendingEmails()
 {
 	var count = _billing_restriction.one_time_emails_count;
 	
-	var max =  _billing_restriction.max_emails_count;
+	var max = getMaxEmailsLimit();
+	
 	// if max is greater than zero, we consider user is subscrbed to email plan
 	if(max > 0)
 	{
@@ -784,4 +785,18 @@ function getPendingEmails()
 	}
 	
 	return count;
+}
+
+function getMaxEmailsLimit()
+{
+	return  _billing_restriction.max_emails_count;
+}
+function canSendEmails(emails_to_send)
+{
+	var pending = getPendingEmails();
+	alert(pending);
+	if(pending >= emails_to_send)
+		return true;
+	
+	return false;
 }
