@@ -283,6 +283,11 @@ public class BillingRestriction
 	
 	if(max_emails_count == null)
 	    max_emails_count = 0;
-		
+	
+	if(one_time_emails_count > 0 && (max_emails_count == null || max_emails_count == 0))
+	{
+	    max_emails_count = one_time_emails_count;
+	    this.save();
+	}
     }
 }
