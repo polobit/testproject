@@ -284,9 +284,19 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 				</div>
 				<div class="control-group" style="margin-top: -5%">
 					<label class="control-label" style="margin-top: -2%">Cost</label>
-					<div class="controls">${{total}} <br/><small>(Charged @ ${{numeric_operation plan.amount "100" "/"}} per thousand)</small></div>
+					<div class="controls">${{total}} <small>(Charged @ ${{numeric_operation plan.amount "100" "/"}} per thousand)</small></div>
 				</div>	
-				</br>
+				<div class="control-group" style="margin-top: -5%">
+					<label class="control-label" style="margin-top: -2%">Emails<br/>Remaining</label>
+					<div class="controls">
+						{{#if ../cachedData.one_time_emails_count}}
+								{{../../cachedData.one_time_emails_count}}
+							{{else}}
+								0
+						{{/if}}
+						<small>(for this billing cycle)</small>
+					</div>
+				</div>
 				<div class="control-group" style="margin-top: -5%">
 					<label class="control-label" style="margin-top: -2%">Next Invoice</label>
 					<div class="controls">
