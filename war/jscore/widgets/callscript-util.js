@@ -1,5 +1,6 @@
 $(function()
 {	
+	// Add ule from modal to widget form, show save btn , hide add rule btn
 	$("#add_callscriptrule").die().live('click', function(e)
 	{
 		e.preventDefault();
@@ -32,3 +33,36 @@ $(function()
 		$("#save_prefs").show();
 	});
 });
+
+// Get widget and fill widget form
+function fill_rules()
+{	
+	console.log("In fill_rules");
+	
+	// Disable add rule btn
+	$("#add_rules").text("Loading...");
+	$("#add_rules").attr("disabled", true);	
+	
+	// Get widget from collection and Convert prefs in json 
+	var callscriptWidget = getCallScriptJSON();
+	
+	// Add rules to widget form
+	
+	// Enable add rule btn
+	$("#add_rules").text('<i class="icon-plus-sign"></i>Add Rule');
+	$("#add_rules").attr("disabled", false);
+}
+
+// Get widget from collection and Convert prefs in json 
+function getCallScriptJSON()
+{
+	console.log("In getCallScriptJSON");
+
+	// Get call scrip widget
+	var callscriptWidget = App_Widgets.Catalog_Widgets_View.collection.where({ name : "CallScript" });
+	console.log(callscriptWidget);
+	
+	// Convert  prefs in json
+	
+	// Merge widget together	
+}

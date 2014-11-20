@@ -1056,6 +1056,7 @@ var WidgetsRouter = Backbone.Router
 																				show_set_up_widget("CallScript", 'callscript-login');
 																else
 																				fill_form(id, "CallScript", 'callscript-login');
+																                fill_rules();
 
 												}
 								});
