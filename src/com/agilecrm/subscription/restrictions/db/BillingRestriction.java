@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
@@ -272,5 +273,16 @@ public class BillingRestriction
 	    return true;
 
 	return false;
+    }
+    
+    @PostLoad
+    private void postLoad()
+    {
+	if(one_time_emails_count == null)
+	    one_time_emails_count = 0;
+	
+	if(max_emails_count == null)
+	    max_emails_count = 0;
+		
     }
 }

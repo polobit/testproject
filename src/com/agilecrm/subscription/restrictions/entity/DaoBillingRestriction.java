@@ -118,6 +118,7 @@ public abstract class DaoBillingRestriction implements
 	    return dao;
 
 	dao.restriction = restriction;
+	dao.setMax();
 	dao.sendReminder = dao.restriction.sendReminder;
 	return dao;
     }
