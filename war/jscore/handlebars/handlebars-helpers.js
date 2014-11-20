@@ -16,10 +16,10 @@ $(function()
 	{
 		return getPropertyValue(items, name);
 	});
-	
+
 	/**
-	 * Helper function to return the checkbox html element with value of a property matched with the given
-	 * name from the array of properties
+	 * Helper function to return the checkbox html element with value of a
+	 * property matched with the given name from the array of properties
 	 * 
 	 * @method getPropertyValue
 	 * @param {Object}
@@ -28,15 +28,15 @@ $(function()
 	 *            name to get matched object value
 	 * @returns heckbox html element with value of the matched object
 	 */
-	Handlebars.registerHelper('getPropertyValueInCheckbox', function(items, name, separator,checked)
-			{
-				return getPropertyValueInCheckbox(items, name, separator,checked);
-			});
-	
+	Handlebars.registerHelper('getPropertyValueInCheckbox', function(items, name, separator, checked)
+	{
+		return getPropertyValueInCheckbox(items, name, separator, checked);
+	});
+
 	Handlebars.registerHelper('get_correct_count', function(count)
-			{
-				return count-1;
-			});
+	{
+		return count - 1;
+	});
 
 	/**
 	 * Helper function to return the value of property based on sub-type of the
@@ -407,10 +407,10 @@ $(function()
 			return ucfirst(value);
 
 	});
-	
-	
+
 	/**
-	 * Adds Custom Fields to contact merge form, where this helper function is called
+	 * Adds Custom Fields to contact merge form, where this helper function is
+	 * called
 	 */
 	Handlebars.registerHelper('show_custom_fields_for_merge', function(custom_fields, contacts)
 	{
@@ -426,15 +426,16 @@ $(function()
 	 */
 	Handlebars.registerHelper('add_dots_end', function(value)
 	{
-
-		if(value){
-		if (value.length > 50)
+		if (value)
 		{
-			var subst = value.substr(0, 50);
-			subst = subst + "....";
-			return subst;
+			if (value.length > 50)
+			{
+				var subst = value.substr(0, 50);
+				subst = subst + "....";
+				return subst;
+			}
 		}
-		}
+
 		return value;
 
 	});
@@ -545,6 +546,7 @@ $(function()
 					'deals_by_milestones',
 					function(data)
 					{
+
 						var html = "";
 						var count = Object.keys(data).length;
 						$
@@ -576,6 +578,7 @@ $(function()
 					'milestone_ul',
 					function(data)
 					{
+
 						var html = "<ul class='milestone-value-list tagsinput' style='padding:1px;list-style:none;'>";
 						if (data)
 						{
@@ -748,6 +751,7 @@ $(function()
 	 */
 	Handlebars.registerHelper('currencySymbol', function()
 	{
+
 		var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
 		var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
 		return symbol;
@@ -1064,6 +1068,7 @@ $(function()
 	 * Converts address as comma seprated values and returns as handlebars safe
 	 * string.
 	 */
+
 	Handlebars
 			.registerHelper(
 					'address_Element',
@@ -1075,7 +1080,7 @@ $(function()
 
 							if (properties[i].name == "address")
 							{
-								var el = '<div style="display: inline-block; vertical-align: top;text-align:right;margin-top:0px" class="span4"><span><strong style="color:gray">Address</strong></span></div>';
+								var el = '';
 
 								var address = {};
 								try
@@ -1094,10 +1099,10 @@ $(function()
 								if (properties_count != 0)
 
 									el = el
-											.concat('<div style="display:inline;padding-right: 0px!important;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8 contact-detail-entity-list"><div style="padding-top:3px;"><span>');
+											.concat('<div class="contact-addressview"><div><div class="pull-left" style="width:25px"><i class="icon icon-map-marker"></i></div><div class="pull-left" style="width:90%">');
 								else
 									el = el
-											.concat('<div style="display:inline;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8"><div><span>');
+											.concat('<div class="contact-addressview"><div><div class="pull-left" style="width:25px"><i class="icon icon-map-marker"></i></div><div class="pull-left" style="width:90%">');
 
 								$.each(address, function(key, val)
 								{
@@ -1110,7 +1115,7 @@ $(function()
 								});
 
 								if (properties[i].subtype)
-									el = el.concat(" <span class='label'>" + properties[i].subtype + "</span>");
+									el = el.concat('<span class="label">' + properties[i].subtype + '</span>');
 								el = el.concat('</span></div></div>');
 								return new Handlebars.SafeString(el);
 							}
@@ -1421,25 +1426,20 @@ $(function()
 
 						return new Handlebars.SafeString(count_message);
 					});
-	
-	Handlebars
-	.registerHelper(
-			'duplicate_contacts_count',
-			function()
-			{
-				var count_message;
-				if (this[0] && this[0].count && (this[0].count != -1))
-				{
-					var count = this[0].count-1;
-					count_message = "<small> (" + count + " Total) </small>";
-				}
-				else
-					count_message = "<small> (" + this.length + " Total) </small>";
 
-				return new Handlebars.SafeString(count_message);
-			});
-	
-	
+	Handlebars.registerHelper('duplicate_contacts_count', function()
+	{
+		var count_message;
+		if (this[0] && this[0].count && (this[0].count != -1))
+		{
+			var count = this[0].count - 1;
+			count_message = "<small> (" + count + " Total) </small>";
+		}
+		else
+			count_message = "<small> (" + this.length + " Total) </small>";
+
+		return new Handlebars.SafeString(count_message);
+	});
 
 	/**
 	 * 
@@ -1548,6 +1548,17 @@ $(function()
 			return options.inverse(this);
 
 		if (value.toString().trim() == target.toString().trim())
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	});
+	Handlebars.registerHelper('if_not_equals', function(value, target, options)
+	{
+
+		if ((typeof target === "undefined") || (typeof value === "undefined"))
+			return options.inverse(this);
+
+		if (value.toString().trim() != target.toString().trim())
 			return options.fn(this);
 		else
 			return options.inverse(this);
@@ -1749,7 +1760,7 @@ $(function()
 			return options.inverse(this)
 		}
 	});
-	
+
 	Handlebars.registerHelper('containString', function(value, target, options)
 	{
 		if (target.search(value) != -1)
@@ -1758,22 +1769,21 @@ $(function()
 		return options.inverse(this);
 	});
 	Handlebars.registerHelper('is_emailPlan', function(planId, options)
-			{
-				
-				if (planId.search("email") != -1)
-					return options.fn(this);
+	{
 
-				return options.inverse(this);
+		if (planId.search("email") != -1)
+			return options.fn(this);
 
-				
-			});
+		return options.inverse(this);
+
+	});
 	Handlebars.registerHelper('is_userPlan', function(planId, options)
-			{
-				if (planId.search("email") != -1)
-					return options.inverse(this);
-				return options.fn(this);
-				
-			});
+	{
+		if (planId.search("email") != -1)
+			return options.inverse(this);
+		return options.fn(this);
+
+	});
 
 	Handlebars.registerHelper('numeric_operation', function(operand1, operand2, operator)
 	{
@@ -1796,10 +1806,10 @@ $(function()
 			return operand1 / operand2;
 	});
 	Handlebars.registerHelper('get_total_amount', function(operand1, operand2)
-			{
+	{
 
-					return (operand1 /100)*operand2;
-			});
+		return (operand1 / 100) * operand2;
+	});
 
 	Handlebars.registerHelper('check_length', function(content, length, options)
 	{
@@ -1808,6 +1818,11 @@ $(function()
 			return options.fn(this);
 
 		return options.inverse(this);
+	});
+	Handlebars.registerHelper('get_unrefunded_amount', function(operand1, operand2)
+	{
+		return (operand1 - operand2) / 100;
+
 	});
 
 	Handlebars.registerHelper('check_json_length', function(content, length, options)
@@ -2294,10 +2309,12 @@ $(function()
 
 				// Inserts LHS of colon as key. E.g., To
 				var key = arrcolon[0];
-				key = key.trim(); // if key starts with space, it can't
+				key = key.trim(); // if key starts with space, it
+				// can't
 				// accessible
 
-				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com
+				// Inserts RHS of colon as value. E.g.,
+				// naresh@agilecrm.com
 				var value = arrcolon.slice(1).join(":"); // join the
 				// remaining string
 				// based on colon,
@@ -2324,12 +2341,12 @@ $(function()
 		return value.replace(/ +/g, '');
 
 	});
-	
-	Handlebars.registerHelper('replace_spaces', function(value)
-			{
-				return value.replace(/ +/g, '_');
 
-			});
+	Handlebars.registerHelper('replace_spaces', function(value)
+	{
+		return value.replace(/ +/g, '_');
+
+	});
 
 	/***************************************************************************
 	 * Returns campaignStatus object from contact campaignStatus array having
@@ -2594,38 +2611,37 @@ $(function()
 	 * Returns reputation name based on value
 	 * 
 	 */
-	Handlebars
-			.registerHelper(
-					'get_subaccount_reputation',
-					function(value)
-					{
-						var type = "";
-						var reputation = "Unknown";
+	Handlebars.registerHelper('get_subaccount_reputation', function(value)
+	{
+		var type = "";
+		var reputation = "Unknown";
 
-						if (value > 1 && value < 40)
-						{
-							type = "important";
-							reputation = "Poor";
-						}
-						else if (value >= 40 && value < 75)
-						{
-							type = "";
-							reputation = "Ok";
-						}
-						else if (value >= 75 && value < 90)
-						{
-							type = "success";
-							reputation = "Good";
-						}
-						else if (value >= 90)
-						{
-							type = "success";
-							reputation = "Excellent";
-						}
+		if (value > 1 && value < 40)
+		{
+			type = "important";
+			reputation = "Poor";
+		}
+		else if (value >= 40 && value < 75)
+		{
+			type = "";
+			reputation = "Ok";
+		}
+		else if (value >= 75 && value < 90)
+		{
+			type = "success";
+			reputation = "Good";
+		}
+		else if (value >= 90)
+		{
+			type = "success";
+			reputation = "Excellent";
+		}
 
-						return "<span style='font-size:13px;position: relative;top: -3px' class='label label-" + type + "'>" + reputation + "</span> <!--<span class='badge badge-" + type + "'>" + value + "</span>-->";
+		return "<span style='font-size:13px;position: relative;top: -3px' class='label label-" + type
 
-					});
+		+ "'>" + reputation + "</span> <!--<span class='badge badge-" + type + "'>" + value + "</span>-->";
+
+	});
 
 	/**
 	 * Returns id from hash. It returns id from hash iff id exists at last.
@@ -2766,14 +2782,14 @@ $(function()
 
 		return options.inverse(this);
 	});
-	
-	Handlebars.registerHelper("canSyncContacts", function(options)
-			{
-				if(canImportContacts())
-					return options.fn(this);
 
-				return options.inverse(this);
-			});
+	Handlebars.registerHelper("canSyncContacts", function(options)
+	{
+		if (canImportContacts())
+			return options.fn(this);
+
+		return options.inverse(this);
+	});
 
 	/**
 	 * To check Access controls for showing icons on dashboard
@@ -2854,14 +2870,14 @@ $(function()
 
 		return options.inverse(this)
 	});
-	
-	Handlebars.registerHelper('canEditCurrentContact', function(owner_id, options){
+
+	Handlebars.registerHelper('canEditCurrentContact', function(owner_id, options)
+	{
 		if (canEditCurrentContact())
 			return options.fn(this);
 
 		return options.inverse(this)
 	})
-	
 
 	Handlebars.registerHelper('gateway_exists', function(value, target, options)
 	{
@@ -3011,39 +3027,377 @@ $(function()
 
 		return monthArray[month_index - 1];
 	});
-	
-	Handlebars.registerHelper('xeroOrganisationShortCode', function(block) {
-		if(typeof SHORT_CODE == "undefined" || SHORT_CODE == "") {
+
+	Handlebars.registerHelper('xeroOrganisationShortCode', function(block)
+	{
+		if (typeof SHORT_CODE == "undefined" || SHORT_CODE == "")
+		{
 			return false;
-		} else {
+		}
+		else
+		{
+			return SHORT_CODE;
+		}
+	});
+	Handlebars.registerHelper('if_id', function(ctype, options)
+	{
+		if (this.type == ctype)
+		{
+			return options.fn(this);
+		}
+	});
+
+	/**
+	 * extract time from epochTime
+	 */
+	Handlebars.registerHelper("getTime", function(date)
+	{
+
+		if (!date)
+			return;
+
+		if ((date / 100000000000) > 1)
+		{
+			var d = new Date(parseInt(date));
+			var hours = d.getHours();
+			if (hours > 12)
+				hours = hours - 12;
+			var min = d.getMinutes();
+			if (min == 0)
+				min = "00"
+			var ampm = hours >= 12 ? "PM" : "AM";
+			return hours + ":" + min + " " + ampm;
+		}
+		// date form milliseconds
+
+		var d = new Date(parseInt(date) * 1000);
+		var hours = d.getHours();
+		if (hours > 12)
+			hours = hours - 12;
+		var min = d.getMinutes();
+		if (min == 0)
+			min = "00"
+		var ampm = hours >= 12 ? "PM" : "AM";
+		return hours + ":" + min + " " + ampm;
+
+	});
+
+	/**
+	 * get custom date with time
+	 */
+
+	Handlebars.registerHelper("getCustomDateWithTime", function(start, end)
+	{
+		var day1 = getDay(start);
+		var day2 = getDay(end);
+
+		var d1 = getCustomFormatedDate(start);
+		var d2 = getCustomFormatedDate(end);
+		var time = extractTimeFromDate(end);
+
+		if (day1 != day2)
+			return d1 + " - " + d2;
+		else
+			return d1 + " - " + time;
+
+	});
+
+	function getCustomFormatedDate(date)
+	{
+
+		var months = [
+				'Jan', 'Feb', 'March', 'April', 'May', 'Jun', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'
+		];
+
+		if (!date)
+			return;
+
+		if ((date / 100000000000) > 1)
+		{
+			var d = new Date(parseInt(date));
+			var hours = d.getHours();
+			var year = d.getFullYear();
+			var date = d.getDate();
+			var month = d.getMonth();
+			var min = d.getMinutes();
+			if (min == 0)
+				min = "00"
+			var ampm = hours >= 12 ? "PM" : "AM";
+			if (hours > 12)
+				hours = hours - 12;
+			return months[month] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
+
+		}
+		// date form milliseconds
+
+		var d = new Date(parseInt(date) * 1000);
+		var hours = d.getHours();
+		var year = d.getFullYear();
+		var date = d.getDate();
+		var month = d.getMonth();
+		var min = d.getMinutes();
+		if (min == 0)
+			min = "00"
+		var ampm = hours >= 12 ? "PM" : "AM";
+		if (hours > 12)
+			hours = hours - 12;
+		return months[month] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
+
+	}
+	function extractTimeFromDate(date)
+	{
+		if (!date)
+			return;
+
+		if ((date / 100000000000) > 1)
+		{
+			var d = new Date(parseInt(date));
+			var hours = d.getHours();
+
+			var min = d.getMinutes();
+			if (min == 0)
+				min = "00"
+			var ampm = hours >= 12 ? "PM" : "AM";
+			if (hours > 12)
+				hours = hours - 12;
+			return hours + ":" + min + " " + ampm;
+		}
+		// date form milliseconds
+
+		var d = new Date(parseInt(date) * 1000);
+		var hours = d.getHours();
+		var min = d.getMinutes();
+		if (min == 0)
+			min = "00"
+		var ampm = hours >= 12 ? "PM" : "AM";
+		if (hours > 12)
+			hours = hours - 12;
+		return hours + ":" + min + " " + ampm;
+	}
+
+	function getDay(date)
+	{
+		if ((date / 100000000000) > 1)
+		{
+			var sDate = new Date(parseInt(date));
+			return sDate.getDate();
+		}
+		else
+		{
+			var sDate = new Date(parseInt(date) * 1000);
+			return sDate.getDate();
+		}
+	}
+
+	Handlebars.registerHelper('buildOptions', function(field_data)
+	{
+		var list_values = field_data.split(";");
+		var list_options = '';
+		// Create options based on list values
+		$.each(list_values, function(index, value)
+		{
+			if (value != "")
+				list_options = list_options.concat('<option value="' + value + '">' + value + '</option>');
+		});
+
+		return list_options;
+	});
+
+	/**
+	 * return contact property value base on type if contact type is COMPANY
+	 * then return company name other wise retun contact first_name + last_name
+	 * as name
+	 */
+
+	Handlebars.registerHelper('getContactDisplayValue', function(contact)
+	{
+		var displayName;
+
+		var type = contact.type;
+		var properties = contact.properties;
+		if (properties)
+		{
+			if (type == "COMPANY")
+			{
+
+				for (var i = 0; i < properties.length; i++)
+				{
+					if (properties[i].name == 'name')
+					{
+						displayName = properties[i].value;
+						break;
+					}
+				}
+			}
+			else
+			{
+				for (var i = 0; i < properties.length; i++)
+				{
+					if (properties[i].name == 'first_name')
+						displayName = properties[i].value;
+					if (properties[i].name == 'last_name')
+						displayName = displayName + " " + properties[i].value;
+				}
+			}
+		}
+		return displayName;
+	});
+
+	Handlebars.registerHelper('xeroOrganisationShortCode', function(block)
+	{
+		if (typeof SHORT_CODE == "undefined" || SHORT_CODE == "")
+		{
+			return false;
+		}
+		else
+		{
 			return SHORT_CODE;
 		}
 	});
 
 	Handlebars.registerHelper('buildOptions', function(field_data)
-			{
-				var list_values = field_data.split(";");
-				var list_options = '';
-				// Create options based on list values
-				$.each(list_values,function(index, value){
-					if(value != "")
-						list_options = list_options.concat('<option value="'+value+'">'+value+'</option>');
-				});
-		
-				return list_options;
-			});
-	
+	{
+		var list_values = field_data.split(";");
+		var list_options = '';
+		// Create options based on list values
+		$.each(list_values, function(index, value)
+		{
+			if (value != "")
+				list_options = list_options.concat('<option value="' + value + '">' + value + '</option>');
+		});
+
+		return list_options;
+	});
+
 	/**
 	 * Choose Avatar templates
 	 */
-	Handlebars.registerHelper('get_avatars_template', function(options) {
+	Handlebars.registerHelper('get_avatars_template', function(options)
+	{
 		var template = getTemplate("choose-avatar-images-modal", {});
 		return template;
 	});
-	
+
 	// To pick randomly selected avatar url
-	Handlebars.registerHelper('pick_random_avatar_url', function(options) {
+	Handlebars.registerHelper('pick_random_avatar_url', function(options)
+	{
 		return choose_random_avatar();
 	});
 
+	// return google event custom date and time
+
+	Handlebars.registerHelper('getGoogleEventCustomTime', function(start, end)
+	{
+		var startDate = new Date(start);
+		var endDate = new Date(end);
+		console.log("google event start " + startDate);
+		console.log("google event end " + endDate);
+		return getGoogleCustomFormatteDate(startDate.getTime(), endDate.getTime());
+
+	});
+
+	function getGoogleCustomFormatteDate(start, end)
+	{
+
+		var day1 = getDay(start);
+		var day2 = getDay(end);
+
+		var d1 = getCustomFormatedDate(start);
+		var d2 = getCustomFormatedDate(end);
+		var time = extractTimeFromDate(end);
+		var createdTime = getEventCreatedTime(start);
+		if (createdTime == 0 || createdTime == 1)
+		{
+			return extractTimeFromDate(start) + " - " + extractTimeFromDate(end);
+		}
+		else
+		{
+
+			if (day1 != day2)
+				return d1 + " - " + d2;
+			else
+				return d1 + " - " + time;
+		}
+	}
+
+	Handlebars.registerHelper("displayCustomDateTime", function(start, end)
+	{
+		var eventCreateTime = get_activity_created_time(start);
+
+		var day1 = getDay(start);
+		var day2 = getDay(end);
+
+		var d1 = getCustomFormatedDate(start);
+		var d2 = getCustomFormatedDate(end);
+		var time = extractTimeFromDate(end);
+		if (eventCreateTime == 0 || eventCreatedTime == 1)
+		{
+			return time;
+		}
+		else
+		{
+			if (day1 != day2)
+				return d1 + " - " + d2;
+			else
+				return d1 + " - " + time;
+		}
+	});
+
+	// helper function return html icon base on type added on 17/11/2014
+	Handlebars.registerHelper('showIcon', function(value)
+	{
+		var scope = (value && typeof value === 'string') ? (value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()) : '';
+		if (scope == "Contact")
+		{
+			return new Handlebars.SafeString("<i class='icon-user'></i>");
+		}
+		else if (scope == "Company")
+		{
+			return new Handlebars.SafeString("<i class='icon-picture'></i>");
+		}
+		else if (scope == "Deal")
+		{
+			return new Handlebars.SafeString("<i class='icon-money'></i>");
+		}
+		else if (scope == "Case")
+		{
+			return new Handlebars.SafeString("<i class='icon-folder-close'></i>");
+		}
+	});
+
+	Handlebars.registerHelper('secondsToFriendlyTime', function(time)
+	{
+		var hours = Math.floor(time / 3600);
+		if (hours > 0)
+			time = time - hours * 60 * 60;
+		var minutes = Math.floor(time / 60);
+		var seconds = time - minutes * 60;
+		var friendlyTime = "";
+		if (hours == 1)
+			friendlyTime = hours + " hr ";
+		if (hours > 1)
+			friendlyTime = hours + " hrs ";
+		if (minutes > 0)
+			friendlyTime += minutes + " min ";
+		if (seconds > 0)
+			friendlyTime += seconds + " sec";
+		if (friendlyTime != "")
+			return "(" + friendlyTime + ")";
+		return friendlyTime;
+	});
+
 });
+
+// helper function return created time for event
+function getEventCreatedTime(due)
+{
+	// Get Todays Date
+	var eventStartDate = new Date(due);
+	due = eventStartDate.getTime() / 1000;
+	var date = new Date();
+	date.setHours(0, 0, 0, 0);
+
+	date = date.getTime() / 1000;
+	// console.log("Today " + date + " Due " + due);
+	return Math.floor((due - date) / (24 * 3600));
+}
