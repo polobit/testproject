@@ -118,5 +118,9 @@
         <property name="pipeline" direction="asc"/>
         <property name="expected_value" direction="asc"/>
     </datastore-index>
+    
+    <datastore-index kind="Portlet" ancestor="true" source="manual">
+        <property name="row_position" direction="asc"/>
+    </datastore-index>
 
 </datastore-indexes>
