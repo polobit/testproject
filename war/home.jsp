@@ -184,7 +184,7 @@ var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.j
 
 <!-- JQUery Core and UI CDN -->	
 <!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
-head.load(JQUERY_LIB_PATH, LIB_PATH + 'lib/bootstrap.2.3.min.js', LIB_PATH + 'lib/jquery.validate.min.js', LIB_PATH + 'lib/bootstrap-datepicker-min.js',LIB_PATH + 'lib/date-formatter.js', LIB_PATH + 'lib/bootstrap-timepicker-min.js', LIB_PATH + 'lib/bootstrap-submenu.min.js');
+head.load(JQUERY_LIB_PATH, LIB_PATH + 'lib/bootstrap.2.3.min.js', LIB_PATH + 'lib/jquery.validate.min.js', LIB_PATH + 'lib/bootstrap-datepicker-min.js',LIB_PATH + 'lib/date-formatter.js', LIB_PATH + 'lib/bootstrap-timepicker-min.js');
 
 <!-- Backbone -->
 head.js(LIB_PATH + 'lib/underscore-min.js', LIB_PATH + 'lib/backbone-min.js', LIB_PATH + 'lib/infiniscroll.js');
@@ -235,8 +235,7 @@ head.ready(["core", "stats"], function(){
 <link rel="stylesheet" type="text/css" href="css/misc/agile-social-suite.css"></link>
  <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-timline.css"></link>
  <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-widgets.css"></link>
- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/chrome-extension-check.css"></link>
- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/bootstrap-submenu.min.css"></link>
+ <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/chrome-extension-check.css"></link> 
 <!-- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/date-picker.css"></link> -->
 
 
