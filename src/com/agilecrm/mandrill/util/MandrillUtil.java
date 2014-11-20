@@ -206,6 +206,11 @@ public class MandrillUtil
 
 	try
 	{
+	    
+	    // If replyTo is blank, make fromEmail as replyTo
+	    if (StringUtils.isBlank(replyTo))
+		replyTo = fromEmail;
+	    
 	    if (!StringUtils.isBlank(subaccount))
 		messageJSON.put(MandrillSubAccounts.MANDRILL_SUBACCOUNT, subaccount);
 
