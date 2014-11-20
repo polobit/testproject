@@ -85,37 +85,40 @@ function contactTableView(base_model) {
 function setupViews(cel, button_name) {
 
 	// Creates a view for custom views
-	
-	var customView = new Base_Collection_View({
-		url : 'core/api/contact-view',
-		restKey : "contactView",
-		templateKey : "contact-view",
-		individual_tag_name : 'li',
-		id : 'view-list',
-		sort_collection : false,
-		postRenderCallback : function(el) {
-
-			// If button_name is defined, then view is selected then the name of
-			// the view is show in the custom view button.
-			if (button_name)
-				$(el).find('.custom_view').append(button_name);
-			//updates the selected sort item to bold
-			updateSelectedSortKey(el);
-		}
-	});
-
-	// Fetches the list of custom fields, and shows is the the contact page
-	customView.collection.fetch({
-		success : function() {
-			$("#view-list", cel).html(customView.el);
-			
-			if(readCookie('company_filter'))
-			{
-				$('#contact-view-model-list>li').css('display','none');
-				$('#contact-view-model-list>li:first').css('display','list-item');
+	head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
+	{
+		var customView = new Base_Collection_View({
+			url : 'core/api/contact-view',
+			restKey : "contactView",
+			templateKey : "contact-view",
+			individual_tag_name : 'li',
+			id : 'view-list',
+			sort_collection : false,
+			postRenderCallback : function(el) {
+				$('.dropdown-menu').find(".dropdown-submenu").on("click",function(e){
+				    e.stopImmediatePropagation();
+				});
+				// If button_name is defined, then view is selected then the name of
+				// the view is show in the custom view button.
+				if (button_name)
+					$(el).find('.custom_view').append(button_name);
+				//updates the selected sort item to bold
+				updateSelectedSortKey(el);
 			}
-		}
-	})
+		});
+		// Fetches the list of custom fields, and shows is the the contact page
+		customView.collection.fetch({
+			success : function() {
+				$("#view-list", cel).html(customView.el);
+				
+				if(readCookie('company_filter'))
+				{
+					$('#contact-view-model-list>li').css('display','none');
+					$('#contact-view-model-list>li:first').css('display','list-item');
+				}
+			}
+		})
+	});
 }
 
 function updateSelectedSortKey(el) {

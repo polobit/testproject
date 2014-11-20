@@ -190,8 +190,6 @@ function setupContactFilterList(cel, tag_id)
 						
 
 	var filter_id = null;
-	head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
-	{
 		contactFiltersListView = new Base_Collection_View(
 			{
 				url : '/core/api/filters',
@@ -202,9 +200,6 @@ function setupContactFilterList(cel, tag_id)
 				sort_collection : false,
 				postRenderCallback : function(el)
 				{
-					$('.dropdown-menu').find(".dropdown-submenu").on("click",function(e){
-					    e.stopImmediatePropagation();
-					});
 					var filter_name;
 					// Set saved filter name on dropdown button
 					if (filter_name = readCookie('contact_filter'))
@@ -260,7 +255,6 @@ function setupContactFilterList(cel, tag_id)
 		
 			// Shows in contacts list
 			$('#filter-list', cel).html(contactFiltersListView.render().el);
-		});
 }
 
 /**
