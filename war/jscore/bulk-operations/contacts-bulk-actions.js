@@ -433,7 +433,10 @@ $(function()
 			
 			if(!canSendEmails(count))
 			{
+				var pendingEmails = getPendingEmails();
 				showModalConfirmation("Emails limit", 
+					"You have only "+ pendingEmails + "emails remaining as per your quota. Please upgrated your email subscription." +
+					"Continuing with this operation may not send the email to some contacts. <br/><br/>" +
 					"Do you want to proceed?", 
 					show_bulk_email_form
 					, function(){
