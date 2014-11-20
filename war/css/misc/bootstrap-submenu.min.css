@@ -15,7 +15,7 @@
 	}
 	.dropdown-submenu>a:after {
 		margin-top: 6px;
-		border-left: 4px dashed;
+		border-right: 4px dashed;
 		border-top: 4px solid transparent;
 		border-bottom: 4px solid transparent
 	}

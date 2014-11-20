@@ -125,21 +125,5 @@ $(function()
 	{
 		// Change status UI and input field
 		changeStatus($(this).attr("value"), $(this).closest("form"));
-	});
-	
-	/*// On hover of submenu show submenu.
-	$(".dropdown-submenu").die().live("hover", function()
-	{			
-	  $(".dropdown-submenu .dropdown-menu").toggle();	  
 	});	
-	
-	$(".check-submenu-open").die().live("click", function()
-	 {			
-		console.log("***");
-		if($(".dropdown-submenu .dropdown-menu").css("display") == "block")
-			{
-			console.log("===========");
-			$(".dropdown-submenu .dropdown-menu").toggle();
-			}		  	  
-	 });*/
 });
