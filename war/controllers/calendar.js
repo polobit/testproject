@@ -3,6 +3,8 @@
  * 
  * @module Activities
  */
+
+var eventCollectionView;
 var CalendarRouter = Backbone.Router.extend({
 
 				routes : {
@@ -22,54 +24,8 @@ var CalendarRouter = Backbone.Router.extend({
 								if (view)
 								{
 
-												if (readCookie('event-filters') && JSON.parse(readCookie('event-filters')).type == 'agile')
-												{
-																// changing tab
-
-																$($('#event_tab').children()[1]).addClass("hide");
-																$($('#event_tab').children()[0]).removeClass("hide");
-																$($('#event_tab').children()[0]).addClass("active");
-
-																loadAgileEvents();
-
-												}
-												else if (readCookie('event-filters') && JSON.parse(readCookie('event-filters')).type == 'google')
-												{
-																// activate google tab
-																$($('#event_tab').children()[0]).addClass("hide");
-																$($('#event_tab').children()[1]).removeClass("hide");
-																$($('#event_tab').children()[1]).addClass("active");
-																// display google events
-																// retrieve google Calendar prefs and pass to function
-																loadGoogleEvents();
-												}
-												else
-												{
-																if ($($('#event_tab').children()[0]).hasClass("hide"))
-																{
-
-																				$($('#event_tab').children()[0]).removeClass("hide");
-																				$($('#event_tab').children()[0]).addClass("active");
-																}
-																if ($($('#event_tab').children()[1]).hasClass("hide"))
-																{
-																				$($('#event_tab').children()[1]).removeClass("hide");
-																}
-
-																loadGoogleEvents();
-																loadAgileEvents();
-
-																if (!$('#agile').hasClass("active"))
-																{
-																				$('#agile').addClass("active");
-																}
-
-																if ($('#google').hasClass("active"))
-																{
-																				$('#google').removeClass("active");
-																}
-
-												}
+												loadAgileEvents();
+												loadGoogleEvents();
 								}
 								else
 								{
@@ -85,11 +41,9 @@ var CalendarRouter = Backbone.Router.extend({
 																showCalendar();
 
 												});
-											
-																$('#grp_filter').css('display','none');
-																$('#event_tab').css('display','none');
-																
-												
+
+												$('#grp_filter').css('display', 'none');
+												$('#event_tab').css('display', 'none');
 
 								}
 
@@ -158,8 +112,6 @@ var CalendarRouter = Backbone.Router.extend({
 								// Hide owner's and status task selection options from dropdown
 								$(".hide-on-pending").hide();
 
-								// To set events and css of dropdown's sub menu
-								$('.dropdown-submenu > a').submenupicker();
 				},
 
 // list view of event
@@ -173,7 +125,11 @@ $(function()
 				{
 								e.preventDefault();
 								// Creates the cookie
-								createCookie("agile_calendar_view", "calendar_list_view");
+
+								if (readCookie('event-filters') && JSON.parse(readCookie('event-filters')).time == 'future')
+												createCookie("agile_calendar_view", "calendar_list_view_future");
+								else
+												createCookie("agile_calendar_view", "calendar_list_view");
 
 								// Loads the calendar
 								App_Calendar.calendar();
@@ -198,10 +154,52 @@ $(function()
 								// Loads the calendar
 								App_Calendar.calendar();
 				});
-				
-				if(readCookie("agile_calendar_view")){
-         $('#grp_filter').removeClass('hide');
+
+				if (readCookie("agile_calendar_view"))
+				{
+								$('#grp_filter').removeClass('hide');
 				}
+
+				// intialize event tab
+				$('#event_tab').tab();
+
+});
+
+$(function()
+{
+
+				$(".c_list").die().live('click', function(e)
+				{
+								e.preventDefault();
+								// Creates the cookie
+								if (readCookie('event-filters') && JSON.parse(readCookie('event-filters')).time == 'future')
+												createCookie("agile_calendar_view", "calendar_list_view_future");
+								else
+												createCookie("agile_calendar_view", "calendar_list_view");
+
+								// Loads the calendar
+								App_Calendar.calendar();
+				});
+
+				$(".c_cal").die().live('click', function(e)
+				{
+								e.preventDefault();
+								// Erases the cookie
+								eraseCookie("agile_calendar_view");
+
+								// Loads the calendar
+								App_Calendar.calendar();
+				});
+
+				$(".c_list_view_future").die().live('click', function(e)
+				{
+								e.preventDefault();
+								// Creates the cookie
+								createCookie("agile_calendar_view", "calendar_list_view_future");
+
+								// Loads the calendar
+								App_Calendar.calendar();
+				});
 
 				// intialize event tab
 				$('#event_tab').tab();
@@ -464,21 +462,13 @@ function getCompanyName(properties)
 function loadAgileEvents()
 {
 
-				if (!$('#agile').hasClass("active"))
-				{
-								$('#agile').addClass("active");
-				}
-				if ($('#google').hasClass("active"))
-				{
-								$('#google').removeClass("active");
-				}
-
+	
 				var view = readCookie("agile_calendar_view");
 				if (view == "calendar_list_view")
 				{
 
 								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/list', templateKey : "events", individual_tag_name : 'tr',
-												sort_collection : false, cursor : true, page_size : 25});
+												sort_collection : false, cursor : true, page_size : 25 });
 								eventCollectionView.appendItem = appendItem2;
 								eventCollectionView.collection.fetch();
 
@@ -511,7 +501,7 @@ function loadGoogleEvents()
 																gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
 
 																// Retrieve the events from primary
-																var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary', maxResults: 1000,singleEvents: true });
+																var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary', maxResults : 1000, singleEvents : true });
 
 																request.execute(function(resp)
 																{
@@ -528,43 +518,20 @@ function loadGoogleEvents()
 																				if (view == "calendar_list_view")
 																				{
 
-																								 this.googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "google-event",
-																												individual_tag_name : 'tr' });
-																								 this.googleEventCollectionView.appendItem = appendGoogleEvent;
+																								this.googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "google-event", individual_tag_name : 'tr' });
+																								this.googleEventCollectionView.appendItem = appendGoogleEvent;
 																								$('#google').html(this.googleEventCollectionView.render(true).el);
 																				}
 																				else
 																				{
 
-																								this.googleEventCollectionView  = new Base_Collection_View({ data : events, templateKey : "googleEventCategorization", individual_tag_name : 'tr' });
+																								this.googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "googleEventCategorization",
+																												individual_tag_name : 'tr' });
 																								this.googleEventCollectionView.appendItem = appendGoogleEventCategorization;
 																								$('#google').html(this.googleEventCollectionView.render(true).el);
 																				}
 
-																				if ((readCookie('event-filters') && JSON.parse(readCookie('event-filters')).type != 'agile') && (readCookie('event-filters') && JSON
-																												.parse(readCookie('event-filters')).type != 'google'))
-																				{
-
-																								if ($('#google').hasClass("active"))
-																								{
-																												$('#google').removeClass("active");
-																								}
-																								if (!$('#agile').hasClass("active"))
-																								{
-																												$('#agile').addClass("active");
-																								}
-																				}
-																				else
-																				{
-																								if (!$('#google').hasClass("active"))
-																								{
-																												$('#google').addClass("active");
-																								}
-																								if ($('#agile').hasClass("active"))
-																								{
-																												$('#agile').removeClass("active");
-																								}
-																				}
+																		
 
 																});
 

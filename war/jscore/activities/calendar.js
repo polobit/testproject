@@ -311,6 +311,13 @@ function showEventFilters()
 								}
 								$('#event-owner').html(html);
 								$('#filter_options').show();
+
+
+								if (readCookie("agile_calendar_view"))
+												$('#filter_options .calendar-view').hide();
+								else
+												$('#filter_options .list-view').hide();
+
 								if (readCookie('event-filters'))
 								{
 												var eventFilters = JSON.parse(readCookie('event-filters'));
@@ -318,6 +325,7 @@ function showEventFilters()
 												$('#event_type').val(eventFilters.type);
 								}
 				});
+
 }
 
 function loadDefaultFilters()
@@ -396,6 +404,14 @@ $(function()
 								var json = serializeForm(formId);
 								createCookie('event-filters', JSON.stringify(json));
 
+								if (readCookie("agile_calendar_view"))
+								{
+												if (json.time === 'future')
+																createCookie("agile_calendar_view", "calendar_list_view_future");
+												else
+																createCookie("agile_calendar_view", "calendar_list_view");
+								}
+
 								// if list view
 								if (!readCookie("agile_calendar_view"))
 								{
@@ -405,48 +421,10 @@ $(function()
 								}
 								else
 								{
-												if (readCookie('event-filters') && JSON.parse(readCookie('event-filters')).type == 'agile')
-												{
-																$($('#event_tab').children()[1]).addClass("hide");
-																$($('#event_tab').children()[0]).removeClass("hide");
-																$($('#event_tab').children()[0]).addClass("active");
-																loadAgileEvents();
-												}
-												else if (readCookie('event-filters') && JSON.parse(readCookie('event-filters')).type == 'google')
-												{
-																$($('#event_tab').children()[0]).addClass("hide");
-																$($('#event_tab').children()[1]).removeClass("hide");
-																$($('#event_tab').children()[1]).addClass("active");
-																loadGoogleEvents();
-												}
-												else
-												{
-																if ($($('#event_tab').children()[0]).hasClass("hide"))
-																{
 
-																				$($('#event_tab').children()[0]).removeClass("hide");
-																				if(!$($('#event_tab').children()[0]).hasClass("active")){
-																								$($('#event_tab').children()[0]).addClass("active");
-																				}
-																			
-																}
-																if ($($('#event_tab').children()[1]).hasClass("hide"))
-																{
-																				$($('#event_tab').children()[1]).removeClass("hide");
-																}
-																$($('#event_tab').children()[1]).removeClass("active");
-																loadGoogleEvents();
-																loadAgileEvents();
-																
-																if(!$('#agile').hasClass("active")){
-												    				$('#agile').addClass("active");	
-												    }
-															
-												    if($('#google').hasClass("active")){
-												    				$('#google').removeClass("active");	
-												    }
+												loadAgileEvents();
+												loadGoogleEvents();
 
-												}
 								}
 				});
 
