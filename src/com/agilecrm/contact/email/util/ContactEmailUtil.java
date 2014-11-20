@@ -79,7 +79,7 @@ public class ContactEmailUtil
 	 *            - body
 	 */
 	public static void saveContactEmailAndSend(String fromEmail, String fromName, String to, String cc, String bcc,
-			String subject, String body, String signature, Contact contact, boolean trackClicks)
+			String subject, String body, String signature, Contact contact, boolean trackClicks, List<Long> documentIds)
 	{
 
 		// Personal Email open tracking id
@@ -90,10 +90,10 @@ public class ContactEmailUtil
 
 		// Returns set of To Emails
 		Set<String> toEmailSet = getToEmailSet(to);
-		
+
 		// Get signature without body
 		signature = getParsedSignature(signature);
-		
+
 		try
 		{
 			// If contact is available, no need of fetching contact from
@@ -102,7 +102,7 @@ public class ContactEmailUtil
 			{
 				contactId = contact.id.toString();
 				saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, signature, Long.parseLong(contactId),
-						toEmailSet.size(), openTrackerId);
+						toEmailSet.size(), openTrackerId, documentIds);
 			}
 			else
 			{
@@ -117,11 +117,11 @@ public class ContactEmailUtil
 					{
 						contactId = contact.id.toString();
 						saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, signature, contact.id,
-								toEmailSet.size(), openTrackerId);
+								toEmailSet.size(), openTrackerId, documentIds);
 					}
 				}
 			}
- 
+
 		}
 		catch (Exception e)
 		{
@@ -144,7 +144,7 @@ public class ContactEmailUtil
 		body = body.replace("</body>", "<div><br/>" + signature + "</div></body>");
 
 		// Sends email
-		EmailUtil.sendMail(fromEmail, fromName, to, cc, bcc, subject, null, body, null);
+		EmailUtil.sendMail(fromEmail, fromName, to, cc, bcc, subject, null, body, null, documentIds);
 	}
 
 	/**
@@ -197,7 +197,8 @@ public class ContactEmailUtil
 	 *            - to identify number of To emails separated by comma
 	 */
 	public static void saveContactEmail(String fromEmail, String fromName, String to, String cc, String bcc,
-			String subject, String body, String signature, Long contactId, int toEmailSize, long trackerId)
+			String subject, String body, String signature, Long contactId, int toEmailSize, long trackerId,
+			List<Long> documentIds)
 	{
 
 		// combine body and signature.
@@ -212,6 +213,8 @@ public class ContactEmailUtil
 		contactEmail.bcc = bcc;
 
 		contactEmail.trackerId = trackerId;
+
+		contactEmail.attachment_ids = documentIds;
 
 		contactEmail.save();
 	}
@@ -444,27 +447,28 @@ public class ContactEmailUtil
 
 		return null;
 	}
-	
+
 	/**
 	 * Returns parsed signature without body tags
 	 * 
-	 * @param signature - signature stored in user prefs
+	 * @param signature
+	 *            - signature stored in user prefs
 	 * @return
 	 */
 	public static String getParsedSignature(String signature)
 	{
-	    if(StringUtils.isEmpty(signature))
+		if (StringUtils.isEmpty(signature))
+			return signature;
+
+		if (signature.contains("<body>") && signature.contains("</body>"))
+		{
+			Document doc = Jsoup.parse(signature);
+			signature = doc.select("body").toString();
+			signature = signature.replace("<body>", "").replace("</body>", "");
+			signature = StringUtils.trim(signature);
+		}
+
 		return signature;
-	    
-	    if(signature.contains("<body>") && signature.contains("</body>"))
-	    {
-		Document doc = Jsoup.parse(signature);
-		signature = doc.select("body").toString();
-		signature = signature.replace("<body>", "").replace("</body>", "");
-		signature = StringUtils.trim(signature);
-	    }
-	    
-	    return signature;
 	}
-	
+
 }

@@ -68,6 +68,8 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback)
 				toolbar2 : toolbar_2, valid_elements : "*[*]",
 				toolbar_items_size: 'small',
 				browser_spellcheck : true,
+				relative_urls : false,
+				convert_urls : false,
 		        gecko_spellcheck: true,
 				extended_valid_elements : "*[*]", setup : function(editor)
 				{
