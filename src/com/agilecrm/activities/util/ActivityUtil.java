@@ -1275,5 +1275,33 @@ public class ActivityUtil
 	}
 	return list;
     }
+    /**
+     * Gets list of activities based on entity id and 
+     * min time and max time.
+     * 
+     * @param entityId
+     *            - Given entity id.
+     * @param minTime
+     *            - Given min time.
+     * @param maxTime
+     *            - Given max time.
+     * @return list of activities based on entity id and 
+     * min time and max time.
+     */
+    public static List<Activity> getActivitiesByEntityId(Long entityId, long minTime, long maxTime){
+    	return dao.ofy().query(Activity.class).filter("entity_id", entityId).filter("time >= ", minTime).filter("time <= ", maxTime).order("-time").list();
+    }
+    /**
+     * Gets list of activities based on activity type.
+     * 
+     * @param activityType
+     *            - Given activity type.
+     * 
+     * @return list of activities based on activity type.
+     */
+    public static List<Activity> getActivitiesByActivityType(String activityType,Long ownerId,long minTime,long maxTime){
+    	return dao.ofy().query(Activity.class).filter("activity_type", activityType).filter("user",new Key<DomainUser>(DomainUser.class, ownerId))
+    			.filter("time >= ", minTime).filter("time <= ", maxTime).list();
+    }
 
 }

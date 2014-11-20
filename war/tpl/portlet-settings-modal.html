@@ -1,0 +1,228 @@
+<div id="portletSettingsModal" class="modal hide fade">
+	<div class="modal-header">
+		<h3>Portlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsContactsFilterBasedSettingsForm" name="portletsContactsFilterBasedSettingsForm" method="post" style="display:none">
+			<div class="control-group">
+				<label class="control-label">Filter</label>
+				<div class="controls">
+					<select id="filter" name="filter" class="required">
+						<option value="contacts">Contacts</option>
+						<option value="companies">Companies</option>
+						<option value="recent">Recent</option>
+						<option value="myContacts">My Contacts</option>
+						<option value="leads">Leads</option>
+					</select>
+				</div>
+			</div>
+		</form>
+		
+		<form id="portletsContactsEmailsOpenedSettingsForm" name="portletsContactsEmailsOpenedSettingsForm" method="post" style="display:none">
+			<div class="control-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required">
+						<option value="2-days">2 Days</option>
+						<option value="1-week">1 Week</option>
+						<option value="1-month">1 Month</option>
+					</select>
+				</div>
+			</div>
+		</form>
+		
+		<form id="portletsContactsEmailsSentSettingsForm" name="portletsContactsEmailsSentSettingsForm" method="post" style="display:none">
+			<div class="control-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required">
+						<option value="1-day">1 Day</option>
+						<option value="2-days">2 Days</option>
+						<option value="1-week">1 Week</option>
+						<option value="1-month">1 Month</option>
+					</select>
+				</div>
+			</div>
+		</form>
+		
+		<form id="portletsContactsGrowthGraphSettingsForm" name="portletsContactsGrowthGraphSettingsForm" method="post" style="display:none">
+			<div class="control-group">
+				<label class="control-label">Tags <span class="field_req">*</span></label>
+				<div class="controls">
+					<div class="pull-left" id="portlet-tags">
+						<ul id="portlet-ul-tags" name="tags" class= "tagsinput tags"></ul>
+					</div>
+					<input name="tags" type="text" id="addPortletBulkTags" class="tags-typeahead multi-tags" placeholder="Enter tags separated by comma" onkeyup="hidePortletErrors(this);" />      
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Frequency</label>
+				<div class="controls">
+					<select name="frequency" id="frequency" class="required" style="width:100px">
+						<option value="daily">Daily</option>
+						<option value="weekly">Weekly</option>
+						<option value="monthly">Monthly</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Duration</label>
+				<div style="padding:4px 8px;box-shadow: 0 0px 2px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1);" class="pull-left" id="portlet-reportrange">
+					<i class="icon-calendar icon-large"></i>
+					<span id="range"></span>
+					<input type="hidden" id="start-date" name="start-date" />
+					<input type="hidden" id="end-date" name="end-date" />
+				</div>
+			</div>
+		</form>
+		
+		<form id="portletsPendingDealsSettingsForm" name="portletsPendingDealsSettingsForm" method="post" style="display:none">
+			<input type="text" class="hidden" />
+			<div class="control-group">
+				<label class="control-label">Deals</label>
+				<div class="controls">
+					<select id="deals" name="deals" class="required">
+						<option value="all-deals">All Deals</option>
+						<option value="my-deals">My Deals</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Due Date</label>
+				<div class="controls">
+                    <span><input id="due-date" type="text" name="due-date" class="required date" placeholder="MM/DD/YY" /></span>
+				</div>
+			</div>
+		</form>
+		
+		<form id="portletsDealsByMilestoneSettingsForm" name="portletsDealsByMilestoneSettingsForm" method="post" style="display:none">
+			<input type="text" class="hidden" />
+			<div class="control-group">
+				<label class="control-label">Track</label>
+				<div class="controls">
+					<select id="track" name="track" class="required">
+						
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Deals</label>
+				<div class="controls">
+					<select id="deals" name="deals" class="required">
+						<option value="all-deals">All Deals</option>
+						<option value="my-deals">My Deals</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Due Date</label>
+				<div class="controls">
+                    <span><input id="due-date" type="text" name="due-date" class="required date" placeholder="MM/DD/YY" /></span>
+                </div>
+			</div>
+		</form>
+		
+		<form id="portletsDealsClosuresPerPersonSettingsForm" name="portletsDealsClosuresPerPersonSettingsForm" method="post" style="display:none">
+			<input type="text" class="hidden" />
+			<div class="control-group">
+				<label class="control-label">Group by</label>
+				<div class="controls">
+					<select id="group-by" name="group-by" class="required">
+						<option value="number-of-deals">No. of Deals</option>
+						<option value="deal-value">Deal Value</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Due Date</label>
+				<div class="controls">
+                    <span><input id="due-date" type="text" name="due-date" class="required date" placeholder="MM/DD/YY" /></span>
+                </div>
+			</div>
+		</form>
+		
+		<form id="portletsDealsWonSettingsForm" name="portletsDealsWonSettingsForm" method="post" style="display:none">
+			<div class="control-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required">
+						<option value="1-week" >1 Week</option>
+						<option value="1-month">1 Month</option>
+						<option value="3-months">3 Months</option>
+						<option value="6-months">6 Months</option>
+						<option value="12-months">12 Months</option>
+					</select>
+				</div>
+			</div>
+		</form>
+		
+		<form id="portletsDealsFunnelSettingsForm" name="portletsDealsFunnelSettingsForm" method="post" style="display:none">
+			<input type="text" class="hidden" />
+			<div class="control-group">
+				<label class="control-label">Track</label>
+				<div class="controls">
+					<select id="track" name="track" class="required">
+						
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Deals</label>
+				<div class="controls">
+					<select id="deals" name="deals" class="required">
+						<option value="all-deals">All Deals</option>
+						<option value="my-deals">My Deals</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Due Date</label>
+				<div class="controls">
+                    <span><input id="due-date" type="text" name="due-date" class="required date" placeholder="MM/DD/YY" /></span>
+                </div>
+			</div>
+		</form>
+		
+		<form id="portletsDealsAssignedSettingsForm" name="portletsDealsAssignedSettingsForm" method="post" style="display:none">
+			<div class="control-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required">
+						<option value="1-day" >1 Day</option>
+						<option value="1-week">1 Week</option>
+						<option value="1-month">1 Month</option>
+					</select>
+				</div>
+			</div>
+		</form>
+		
+		<form id="portletsCallsPerPersonSettingsForm" name="portletsCallsPerPersonSettingsForm" method="post" style="display:none">
+			<div class="control-group">
+				<label class="control-label">Group by</label>
+				<div class="controls">
+					<select id="group-by" name="group-by" class="required">
+						<option value="number-of-calls" >No. of calls</option>
+						<option value="call-duration">Call Duration</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required">
+						<option value="1-day" >1 Day</option>
+						<option value="1-week">1 Week</option>
+						<option value="1-month">1 Month</option>
+					</select>
+				</div>
+			</div>
+		</form>
+		
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-primary" href="#portlets">Save</a>
+		<a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>
+	</div>
+</div>

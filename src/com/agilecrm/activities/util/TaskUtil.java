@@ -562,6 +562,31 @@ public class TaskUtil
 	    return null;
 	}
     }
+    /**
+     * Gets the list of tasks which have been pending for Today
+     * 
+     * @return List of tasks that have been pending for Today
+     */
+    public static List<Task> getTodayPendingTasks(){
+    	try{
+    		// Gets Today's date
+    		DateUtil startDateUtil = new DateUtil();
+    		Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
+    		//Date startDate = new Date();
+    		//Long startTime = startDate.getTime() / 1000;
+    		
+    		// Gets Date after numDays days
+    		DateUtil endDateUtil = new DateUtil();
+    		Long endTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
+    		
+    		// Gets list of tasks filtered on given conditions
+    		return dao.ofy().query(Task.class).filter("due >=", startTime).filter("due <=", endTime)
+    				.filter("is_complete", false).list();
+	    }catch(Exception e){
+	    	e.printStackTrace();
+	    	return null;
+	    }
+	}
 
     /***************************************************************************/
 }

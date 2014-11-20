@@ -20,7 +20,9 @@ import org.json.JSONException;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
+import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
@@ -1171,5 +1173,26 @@ public class ContactUtil
 	    i.remove();
 	}
     }
+    /**
+	 * Gets contacts who opened personal emails in specific {@Link Long} duration
+	 * 
+	 * @param {@Link Long} - minTime,{@Link Long} - maxTime
+	 * @return {@Link List<Contact>}
+	 */
+	public static List<Contact> getEmailsOpened(Long minTime,Long maxTime){
+		List<Contact> contactsList=null;
+		List<Long> contactIdsList=new ArrayList<Long>();
+		try {
+			List<ContactEmail> openedEmailsList=ContactEmailUtil.getEmailsOpened(minTime,maxTime);
+			for(ContactEmail  contactEmail : openedEmailsList){
+				contactIdsList.add(contactEmail.contact_id);
+			}
+			if(contactIdsList.size()!=0)
+				contactsList = dao.ofy().query(Contact.class).filter("id in", contactIdsList).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return contactsList;
+	}
 
 }

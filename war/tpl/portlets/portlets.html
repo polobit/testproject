@@ -1,0 +1,736 @@
+<script id="portlets-contacts-model-template" type="text/html">
+	<td class="data" data="{{id}}">
+	<div class="row-fluid">
+        <div style="display:inline;padding-right:1px;height:auto;">
+        	{{#if_contact_type "PERSON"}}
+        		<img class="portlet-roundimg img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  width="40px" height="40px" style="display:inline; width:30px; height:30px; " />
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<img class="portlet-roundimg" {{getCompanyImage "30" "display:inline;"}} />
+        	{{/if_contact_type}}
+    	</div>
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:70%;margin-left:7px;">
+        	{{#if_contact_type "PERSON"}}
+        		<span class="font-14">	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </span>
+        		<br />
+        		{{getPropertyValue properties "email"}}
+        	{{/if_contact_type}}
+  
+            {{#if_contact_type "COMPANY"}}
+        		{{getPropertyValue properties "name"}}</br>
+        		{{getPropertyValue properties "url"}}
+        	{{/if_contact_type}}
+	    </div>
+	</div>
+	</td>
+	<td><div style="display:inline-block;vertical-align:top;">{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}</div>
+	</td>
+	<td> 
+<!-- <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:15em;overflow:hidden;"> --> 
+	 <div class="fieldoverflow-ellipsis" style="text-align:right" > 	
+		{{#each tags}}
+	    	<span class="label">{{this}}</span>	
+		{{/each}}
+	</div>
+	
+	</td>
+	<!-- <td><div>{{lead_score}}</div></td> -->
+</script>
+
+<script id="portlets-contacts-collection-template" type="text/html">
+<!-- <div class="row"> -->
+		{{#if this.length}}
+		<!-- <div class="data">
+			<div class="data-container"></div> -->
+			<table id="contacts" class="table  agile-ellipsis-dynamic">
+				<col width="45%">
+				<col width="20%">
+				<col width="24%">
+				<!-- <col width="12%"> -->
+				<!-- <div class="filter-criteria"></div> -->
+				<!-- <thead>
+					<tr>
+						<th>Name</th>
+						<th>Work</th>
+						<th>Tags</th> -->
+						<!-- <th>Lead Score</th> -->
+					<!-- </tr>
+				</thead> -->
+				<tbody id="portlets-contacts-model-list" class="portlets-contacts-model-list"
+					route="contact/" style="overflow: scroll;overflow:hidden;">
+				</tbody>
+			</table>
+		<!-- </div>
+	</div> -->
+    {{else}}
+       No Contacts Found
+	{{/if}}
+<!-- </div> -->
+</script>
+<script id="portlets-companies-model-template" type="text/html">
+	<td class="data" data="{{id}}">
+        <div style="display:inline;padding-right:5px;height:auto;">
+        		<img class="portlet-roundimg img-inital" {{getCompanyImage "30" "display:inline;"}} />
+    	</div>
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">
+        		{{getPropertyValue properties "name"}}</br>
+        		{{getPropertyValue properties "url"}}
+    	</div>
+	</td>
+	<td>
+		<div>{{setupRating star_value}}</div>
+	</td>
+	<td>
+		<div>{{owner.name}}</div>
+	</td>
+</script>
+
+<script id="portlets-companies-collection-template" type="text/html">
+<!-- <div class="row"> -->
+		{{#if this.length}}
+		<!-- <div class="data">
+			<div class="data-container"></div> -->
+			<table id="contacts" class="table agile-ellipsis-dynamic">
+				<col width="30%">
+				<col width="26%">
+				<col width="30%">
+				<!-- <div class="filter-criteria"></div> -->
+				<!-- <thead>
+					<tr>
+						<th>Name</th>
+						<th>Star Value</th>
+						<th>Owner</th>
+					</tr>
+				</thead> -->
+				<tbody id="portlets-companies-model-list" class="portlets-companies-model-list"
+					route="contact/" style="overflow: scroll;">
+				</tbody>
+			</table>
+		<!-- </div>
+	</div> -->
+    {{else}}
+      No comapnies found.
+	{{/if}}
+<!-- </div> -->
+</script>
+<script id="portlets-opportunities-collection-template" type="text/html">
+<div id="dealsWonValue" class="dealsWonValue" style="display:none;font-weight:bold;"></div>
+{{#if this.length}}
+<table class="table  no-sorting agile-ellipsis-dynamic">
+<colgroup>
+	<col width="14%">
+	<col width="20%">
+	<col width="10%">
+	<!-- <col width="15%"> -->
+	<!-- <col width="15%"> -->
+</colgroup>          
+          			<!-- <thead>
+                        <tr>
+                            <th>Opportunity</th>
+                            <th>Related To</th>
+                            <th>Value</th> -->
+                            <!-- <th>Milestone</th> -->
+                            <!-- <th>Close Date</th> -->
+                        <!-- </tr>
+                    </thead> -->
+              <tbody id="portlets-opportunities-model-list" class="portlets-opportunities-model-list" style="cursor:pointer;">
+          </tbody>
+	</table>
+{{else}}
+      No deals found.
+{{/if}}
+</script>
+
+<script id="portlets-opportunities-model-template" type="text/html">
+<td data="{{id}}" class="data">
+    <div style="height:auto;">
+		{{name}}
+    </div>
+</td>
+<td>
+	<div style="height:auto;display:inline-block;">
+		{{#each contacts}}
+        	{{#if_contact_type "PERSON"}}
+        		<a href="#contact/{{id}}" class="activate-link"><img class="portlet-roundimg img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 30}}" width="40px" height="40px" style="display:inline; width:30px; height:30px;  "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        	{{/if_contact_type}}
+			{{#if_contact_type "COMPANY"}}
+        		<a href="#contact/{{id}}" class="activate-link"><img class="portlet-roundimg" {{getCompanyImage "30" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        	{{/if_contact_type}}
+       {{/each}}
+	</div>{{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
+</td>
+<td><div style="height:auto;">{{currencySymbol}} {{numberWithCommas expected_value}}</div></td>
+<!-- <td><div style="height:auto;">{{milestone}}<br />({{probability}}%) </div></td> -->
+<!-- <td><div style="height:auto;"><time class="deal-close-time" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></div></td> -->
+</script>
+<script id="portlets-tasks-collection-template" type="text/html">
+<!-- <div class="line" style="text-align:centre;"><h3>Tasks</h3></div> -->
+{{#if this.length}}
+<table class="table no-sorting agile-ellipsis-dynamic">
+<colgroup>
+	<col width="10%">
+    <col width="90%">
+</colgroup>         
+              <tbody id="portlets-tasks-model-list" style="cursor:pointer;">
+          </tbody>
+	</table>
+{{else}}
+      No tasks found.
+{{/if}}
+</script>
+<script id="portlets-tasks-model-template" type="text/html">
+<td> <input type="checkbox" data='{{id}}' class='portlets-tasks-select' id="tasklist">
+<!-- <label for="tasklist" style="overflow:visible;"></label> --> </td>
+	<td style="width:100%!important;">
+		<div>
+  			<p style="width:60%;float:left;">{{#is_link subject}}<span class="activate-link" style="white-space: normal!important;">{{else}}<span style="white-space: normal!important;">{{/is_link}}{{safe_string subject}}</span></p>
+  			<p style="text-align: right; max-width:39%;"> 
+				<span class="label">{{task_property type}}</span>
+				{{#if_equals priority_type "NORMAL"}}{{else}}
+					<span style="margin-left:5px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
+				{{/if_equals}}
+			</p>
+		</div>
+        <div>
+  			{{#if this.contacts}}
+				<p class="activate-link" style="white-space: nowrap;">{{#related_to_one contacts}}{{/related_to_one}}</p>
+			{{/if}}
+		</div>
+	</td>
+</script>
+<script id="portlets-events-collection-template" type="text/html">
+<!-- <div class="line" style="text-align:centre;"><h3>Events</h3></div> -->
+{{#if this.length}}
+<table class="table no-sorting agile-ellipsis-dynamic">
+<!-- <colgroup>
+	<col width="14%">
+    <col width="14%">
+    <col width="30%">
+</colgroup> -->         
+          			<!-- <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Priority</th>
+                            <th>End Date</th>
+                        </tr>
+                    </thead> -->
+              <tbody id="portlets-events-model-list" style="cursor:pointer;">
+          </tbody>
+	</table>
+{{else}}
+      No events found.
+{{/if}}
+</script>
+<script id="portlets-events-model-template" type="text/html">
+<td data="{{id}}" class="data">
+    <div class="portlet-time-view">
+     <div style="width:35%;padding:5px 10px 5px;">
+      <time class="event-start-time" datetime="{{epochToHumanDate "HH:MM" start}}" style="color:#000;font-size: 18px;">{{epochToHumanDate "HH:" start}}</time>
+     <time class="event-start-time" datetime="{{epochToHumanDate "HH:MM" start}}" style="color:#000;vertical-align:top;">{{epochToHumanDate "MM" start}}</time> 
+     <span class="times-space"></span>   
+    <time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" end}}" style="color:#000;font-size: 18px;">{{epochToHumanDate "HH:" end}}</time>
+    <time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" end}}" style="color:#000;vertical-align:top;">{{epochToHumanDate "MM" end}}</time>
+	 </div>
+      {{#if this.contacts}}
+         <p class="activate-link" style="margin-top: -8%; text-align: right; max-width: 65%; margin-left: 36%;white-space: nowrap;">
+				{{#related_to_one contacts}}{{/related_to_one}}
+         </p>
+	  {{/if}}
+     </div>
+     <div>
+     <p style="width:70%">
+       <span>{{title}}</span>
+	 </p>
+     <p style="margin-top: -8%; text-align: right; max-width: 30%; margin-left: 71%;">
+      <span class="label label-{{#if_equals color "red"}}{{task_label_color "HIGH"}}{{/if_equals}}{{#if_equals color "#36C"}}{{task_label_color "NORMAL"}}{{/if_equals}}{{#if_equals color "green"}}{{task_label_color "LOW"}}{{/if_equals}}">{{#if_equals color "red"}}High{{/if_equals}}{{#if_equals color "#36C"}}Normal{{/if_equals}}{{#if_equals color "green"}}Low{{/if_equals}}</span>
+     </p>
+    </div>
+    <!-- <div style="height:auto;">
+		<b>{{title}}</b>
+    </div>
+</td>
+<td><div><span class="label label-{{#if_equals color "red"}}{{task_label_color "HIGH"}}{{/if_equals}}{{#if_equals color "#36C"}}{{task_label_color "NORMAL"}}{{/if_equals}}{{#if_equals color "green"}}{{task_label_color "LOW"}}{{/if_equals}}">{{#if_equals color "red"}}High{{/if_equals}}{{#if_equals color "#36C"}}Normal{{/if_equals}}{{#if_equals color "green"}}Low{{/if_equals}}</span></div></td>
+<td><div><time class="event-end-time" datetime="{{epochToHumanDate "" end}}" style="border-bottom: dotted 1px #999;">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" end}}</time></div></td> -->
+</script>
+<script id="portlets-contacts-filterbased-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
+				<ul class="portlet_header_control">
+					{{#if is_minimized}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-maximize icon-plus"></i></a></li>
+					{{else}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
+					{{/if}}
+                    <li><a href="#" id="{{id}}-settings" class="portlet-settings icon-wrench" data-toggle="modal"></a></li>
+                    <li><i id="{{id}}-close" class="icon-remove {{remove_spaces name}}-close" style="cursor:pointer;" onclick="deletePortlet(this);"></i></li>
+				</ul>
+			</div>
+			<div class="portlet_header_name">
+                <i class="icon-user icon-1x"></i>
+                <span class="portlet-icon-divider"></span>
+				<span>
+                   {{#if_equals settings.filter "contacts"}}
+                       Contacts -All Conatcts
+                   {{/if_equals}}
+                   {{#if_equals settings.filter "companies"}}
+                       Contacts -All Companies
+                   {{/if_equals}}
+                   {{#if_equals settings.filter "recent"}}
+                       Contacts -Recent Contacts
+                   {{/if_equals}}
+                   {{#if_equals settings.filter "myContacts"}}
+                       Contacts -My Contacts
+                   {{/if_equals}}
+                   {{#if_equals settings.filter "leads"}}
+                       Contacts -Leads
+                   {{/if_equals}}
+                </span>
+			</div>
+		</div>
+        <div class="portlet_body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+
+<script id="portlets-contacts-emails-opened-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
+				<ul class="portlet_header_control">
+					{{#if is_minimized}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-maximize icon-plus"></i></a></li>
+					{{else}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
+					{{/if}}
+                    <li><a href="#" id="{{id}}-settings" class="portlet-settings icon-wrench" data-toggle="modal"></a></li>
+                    <li><i id="{{id}}-close" class="icon-remove {{remove_spaces name}}-close" style="cursor:pointer;" onclick="deletePortlet(this);"></i></li>
+				</ul>
+			</div>
+			<div class="portlet_header_name">
+                <i class="icon-user icon-1x"></i>
+                <span class="portlet-icon-divider"></span>
+				<span>
+					{{#if_equals settings.duration "2-days"}}
+						Emails opened in last 2 days
+					{{/if_equals}}
+					{{#if_equals settings.duration "1-week"}}
+						Emails opened in last 1 week
+					{{/if_equals}}
+					{{#if_equals settings.duration "1-month"}}
+						Emails opened in last 1 month
+					{{/if_equals}}
+                </span>
+			</div>
+		</div>
+        <div class="portlet_body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>
+</script>
+<script id="portlets-contacts-emails-sent-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
+				<ul class="portlet_header_control">
+					{{#if is_minimized}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-maximize icon-plus"></i></a></li>
+					{{else}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
+					{{/if}}
+                    <li><a href="#" id="{{id}}-settings" class="portlet-settings icon-wrench" data-toggle="modal"></a></li>
+                    <li><i id="{{id}}-close" class="icon-remove {{remove_spaces name}}-close" style="cursor:pointer;" onclick="deletePortlet(this);"></i></li>
+				</ul>
+			</div>
+			<div class="portlet_header_name">
+                <i class="icon-user icon-1x"></i>
+                <span class="portlet-icon-divider"></span>
+				<span>
+					{{#if_equals settings.duration "1-day"}}
+						Emails sent per person in last 1 day
+					{{/if_equals}}
+					{{#if_equals settings.duration "2-days"}}
+						Emails sent per person in last 2 days
+					{{/if_equals}}
+					{{#if_equals settings.duration "1-week"}}
+						Emails sent per person in last 1 week
+					{{/if_equals}}
+					{{#if_equals settings.duration "1-month"}}
+						Emails sent per person in last 1 month
+					{{/if_equals}}
+                </span>
+			</div>
+		</div>
+        <div class="portlet_body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>
+</script>
+<script id="portlets-contacts-growth-graph-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
+				<ul class="portlet_header_control">
+					{{#if is_minimized}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-maximize icon-plus"></i></a></li>
+					{{else}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
+					{{/if}}
+                    <li><a href="#" id="{{id}}-settings" class="portlet-settings icon-wrench" data-toggle="modal"></a></li>
+                    <li><i id="{{id}}-close" class="icon-remove {{remove_spaces name}}-close" style="cursor:pointer;" onclick="deletePortlet(this);"></i></li>
+				</ul>
+			</div>
+			<div class="portlet_header_name">
+                <i class="icon-user icon-1x"></i>
+                <span class="portlet-icon-divider"></span>
+				<span>
+                   Contacts Growth Graph
+                </span>
+			</div>
+		</div>
+        <div class="portlet_body">
+			<div id="plan-limit-error-{{id}}" class="pull-left" style="width:100%;display:none"></div>
+        </div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>
+</script>
+<script id="portlets-deals-pending-deals-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
+				<ul class="portlet_header_control">
+					{{#if is_minimized}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-maximize icon-plus"></i></a></li>
+					{{else}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
+					{{/if}}
+                    <li><a href="#" id="{{id}}-settings" class="portlet-settings icon-wrench" data-toggle="modal"></a></li>
+                    <li><i id="{{id}}-close" class="icon-remove {{remove_spaces name}}-close" style="cursor:pointer;" onclick="deletePortlet(this);"></i></li>
+				</ul>
+			</div>
+			<div class="portlet_header_name">
+                <i class="icon-money icon-1x"></i>
+                <span class="portlet-icon-divider"></span>
+				<span>
+					{{#if_equals settings.deals "all-deals"}}
+						All Pending Deals
+					{{/if_equals}}
+					{{#if_equals settings.deals "my-deals"}}
+						My Pending Deals
+					{{/if_equals}}
+                </span>
+			</div>
+		</div>
+        <div class="portlet_body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>
+</script>
+<script id="portlets-deals-deals-by-milestone-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
+				<ul class="portlet_header_control">
+					{{#if is_minimized}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-maximize icon-plus"></i></a></li>
+					{{else}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
+					{{/if}}
+                    <li><a href="#" id="{{id}}-settings" class="portlet-settings icon-wrench" data-toggle="modal"></a></li>
+                    <li><i id="{{id}}-close" class="icon-remove {{remove_spaces name}}-close" style="cursor:pointer;" onclick="deletePortlet(this);"></i></li>
+				</ul>
+			</div>
+			<div class="portlet_header_name">
+                <i class="icon-money icon-1x"></i>
+                <span class="portlet-icon-divider"></span>
+				<span>
+					{{#if_equals settings.deals "all-deals"}}
+						All Deals By Milestone
+					{{/if_equals}}
+					{{#if_equals settings.deals "my-deals"}}
+						My Deals By Milestone
+					{{/if_equals}}
+                </span>
+			</div>
+		</div>
+        <div class="portlet_body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>
+</script>
+<script id="portlets-deals-closures-per-person-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
+				<ul class="portlet_header_control">
+					{{#if is_minimized}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-maximize icon-plus"></i></a></li>
+					{{else}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
+					{{/if}}
+                    <li><a href="#" id="{{id}}-settings" class="portlet-settings icon-wrench" data-toggle="modal"></a></li>
+                    <li><i id="{{id}}-close" class="icon-remove {{remove_spaces name}}-close" style="cursor:pointer;" onclick="deletePortlet(this);"></i></li>
+				</ul>
+			</div>
+			<div class="portlet_header_name">
+                <i class="icon-money icon-1x"></i>
+                <span class="portlet-icon-divider"></span>
+				<span>
+                   Closures Per Person
+                </span>
+			</div>
+		</div>
+        <div class="portlet_body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>
+</script>
+<script id="portlets-deals-deals-won-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
+				<ul class="portlet_header_control">
+					{{#if is_minimized}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-maximize icon-plus"></i></a></li>
+					{{else}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
+					{{/if}}
+                    <li><a href="#" id="{{id}}-settings" class="portlet-settings icon-wrench" data-toggle="modal"></a></li>
+                    <li><i id="{{id}}-close" class="icon-remove {{remove_spaces name}}-close" style="cursor:pointer;" onclick="deletePortlet(this);"></i></li>
+				</ul>
+			</div>
+			<div class="portlet_header_name">
+                <i class="icon-money icon-1x"></i>
+                <span class="portlet-icon-divider"></span>
+				<span>
+					{{#if_equals settings.duration "1-week"}}
+						Deals won in last 1 week
+					{{/if_equals}}
+					{{#if_equals settings.duration "1-month"}}
+						Deals won in last 1 month
+					{{/if_equals}}
+					{{#if_equals settings.duration "3-months"}}
+						Deals won in last 3 months
+					{{/if_equals}}
+					{{#if_equals settings.duration "6-months"}}
+						Deals won in last 6 months
+					{{/if_equals}}
+					{{#if_equals settings.duration "12-months"}}
+						Deals won in last 12 months
+					{{/if_equals}}
+                </span>
+			</div>
+		</div>
+        <div class="portlet_body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+<script id="portlets-deals-deals-funnel-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
+				<ul class="portlet_header_control">
+					{{#if is_minimized}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-maximize icon-plus"></i></a></li>
+					{{else}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
+					{{/if}}
+                    <li><a href="#" id="{{id}}-settings" class="portlet-settings icon-wrench" data-toggle="modal"></a></li>
+                    <li><i id="{{id}}-close" class="icon-remove {{remove_spaces name}}-close" style="cursor:pointer;" onclick="deletePortlet(this);"></i></li>
+				</ul>
+			</div>
+			<div class="portlet_header_name">
+                <i class="icon-money icon-1x"></i>
+                <span class="portlet-icon-divider"></span>
+				<span>
+                   Deals Funnel
+                </span>
+			</div>
+		</div>
+        <div class="portlet_body"></div>
+
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+<script id="portlets-deals-deals-assigned-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
+				<ul class="portlet_header_control">
+					{{#if is_minimized}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-maximize icon-plus"></i></a></li>
+					{{else}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
+					{{/if}}
+                    <li><a href="#" id="{{id}}-settings" class="portlet-settings icon-wrench" data-toggle="modal"></a></li>
+                    <li><i id="{{id}}-close" class="icon-remove {{remove_spaces name}}-close" style="cursor:pointer;" onclick="deletePortlet(this);"></i></li>
+				</ul>
+			</div>
+			<div class="portlet_header_name">
+                <i class="icon-money icon-1x"></i>
+                <span class="portlet-icon-divider"></span>
+				<span>
+					{{#if_equals settings.duration "1-day"}}
+						Deals Assigned in last 1 day
+					{{/if_equals}}
+					{{#if_equals settings.duration "1-week"}}
+						Deals Assigned in last 1 week
+					{{/if_equals}}
+					{{#if_equals settings.duration "1-month"}}
+						Deals Assigned in last 1 month
+					{{/if_equals}}
+                </span>
+			</div>
+		</div>
+        <div class="portlet_body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+<script id="portlets-contacts-calls-per-person-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
+				<ul class="portlet_header_control">
+					{{#if is_minimized}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-maximize icon-plus"></i></a></li>
+					{{else}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
+					{{/if}}
+                    <li><a href="#" id="{{id}}-settings" class="portlet-settings icon-wrench" data-toggle="modal"></a></li>
+                    <li><i id="{{id}}-close" class="icon-remove {{remove_spaces name}}-close" style="cursor:pointer;" onclick="deletePortlet(this);"></i></li>
+				</ul>
+			</div>
+			<div class="portlet_header_name">
+                <i class="icon-money icon-1x"></i>
+                <span class="portlet-icon-divider"></span>
+				<span>
+					{{#if_equals settings.duration "1-day"}}
+						Calls Per Person in last 1 day
+					{{/if_equals}}
+					{{#if_equals settings.duration "1-week"}}
+						Calls Per Person in last 1 week
+					{{/if_equals}}
+					{{#if_equals settings.duration "1-month"}}
+						Calls Per Person in last 1 month
+					{{/if_equals}}
+                </span>
+			</div>
+		</div>
+        <div class="portlet_body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+<script id="portlets-tasksandevents-agenda-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
+				<ul class="portlet_header_control">
+					{{#if is_minimized}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-maximize icon-plus"></i></a></li>
+					{{else}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
+					{{/if}}
+                    <li><i id="{{id}}-close" class="icon-remove {{remove_spaces name}}-close" style="cursor:pointer;" onclick="deletePortlet(this);"></i></li>
+				</ul>
+			</div>
+			<div class="portlet_header_name">
+                <i class="icon-calendar icon-1x"></i>
+                <span class="portlet-icon-divider"></span>
+				<span>
+                   Agenda
+                </span>
+			</div>
+		</div>
+        <div class="portlet_body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>
+</script>
+<script id="portlets-tasksandevents-today-tasks-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
+				<ul class="portlet_header_control">
+					{{#if is_minimized}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-maximize icon-plus"></i></a></li>
+					{{else}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
+					{{/if}}
+                    <li><i id="{{id}}-close" class="icon-remove {{remove_spaces name}}-close" style="cursor:pointer;" onclick="deletePortlet(this);"></i></li>
+				</ul>
+			</div>
+			<div class="portlet_header_name">
+                <i class="icon-calendar icon-1x"></i>
+                <span class="portlet-icon-divider"></span>
+				<span>
+                   Today Tasks
+                </span>
+			</div>
+		</div>
+        <div class="portlet_body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+
+<script id="portlets-collection-template" type="text/html">
+<div class="slate" id="no-portlets" style="display:none">
+    <div class="slate-content">
+       <div class="box-left">
+            <img alt="Clipboard" src="/img/clipboard.png" />
+       </div>
+       <div class="box-right">
+            <h3>You do not have any portlets currently.</h3>
+            <div class="text">
+               	Portlets help you to view different modules data by grouping and manage your portlets by adding them.  
+            </div>
+          		Get started by adding a portlet.<br>
+                <a id="add-portlet" class="add-portlet add-stream-tab btn">
+ 		          <i class="icon icon-plus-sign"></i> Add Portlet
+		        </a> 
+	   </div>
+    </div>
+</div>
+<div class="row-fluid" id="portlet-res">
+{{#unless this.length}}
+  <div class="slate" id="zero-portlets">
+    <div class="slate-content">
+       <div class="box-left">
+            <img alt="Clipboard" src="/img/clipboard.png" />
+       </div>
+       <div class="box-right">
+            <h3>You do not have any portlets currently.</h3>
+            <div class="text">
+               	Portlets help you to view different modules data by grouping and manage your portlets by adding them.  
+            </div>
+          		Get started by adding a portlet.<br>
+                <a id="add-portlet" class="add-portlet add-stream-tab btn">
+ 		          <i class="icon icon-plus-sign"></i> Add Portlet
+		        </a> 
+	   </div>
+    </div>
+  </div>
+{{/unless}}
+     <div id="col-0" class="portlet-column span4" style="width:30.624%;"></div>
+     <div id="col-1" class="portlet-column span4" style="width:30.624%;"></div>
+     <div id="col-2" class="portlet-column span4" style="width:30.624%;"></div>
+</div>
+</script>
+
+<script id="portlets-template" type="text/html">
+<div class="line">
+	<div class="row">
+    	<div class="span12">
+        	<div class="page-header">
+            	<h1>Portlets</h1>
+				<a id="add-portlet" class="add-portlet add-stream-tab btn right" style="cursor:pointer;top:-30px;position: relative;">
+					<i class="icon icon-plus-sign"></i> Add Portlet
+				</a>      
+        	</div>
+    	</div>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<div class="line">
+				<div id="portlets">&nbsp;</div>
+			</div>
+		</div>
+	</div>
+</div>
+</script>
