@@ -794,7 +794,6 @@ function getMaxEmailsLimit()
 function canSendEmails(emails_to_send)
 {
 	var pending = getPendingEmails();
-	alert(pending);
 	if(pending >= emails_to_send)
 		return true;
 	

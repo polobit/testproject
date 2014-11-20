@@ -422,6 +422,30 @@ $(function()
 		}
 		else
 		{
+			// Selected Contact ids
+			var id_array = get_contacts_bulk_ids();
+			
+			// when SELECT_ALL is true i.e., all contacts are selected.
+			if(id_array.length === 0)
+			   count = getAvailableContacts();
+			else
+				count = id_array.length;
+			
+			if(!canSendEmails(count))
+			{
+				showModalConfirmation("Emails limit", 
+					"Do you want to proceed?", 
+					show_bulk_email_form
+					, function(){
+						// No callback
+						return;
+						},
+						function(){
+			
+						});
+				return;
+			}
+			
 			show_bulk_email_form()
 		}
 		
