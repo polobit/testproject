@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -79,7 +78,6 @@ public class ActivityReports implements Serializable
 	this.frequency = duration;
     }
 
-    @XmlElement(name = "usersList")
     public List<DomainUser> getUsersList()
     {
 	Objectify ofy = ObjectifyService.begin();
