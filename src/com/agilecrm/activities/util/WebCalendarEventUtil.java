@@ -104,17 +104,17 @@ public class WebCalendarEventUtil
 
 	if (possibleSlots != null && business_hours != null && business_hours.size() > 0)
 	{
+	    Calendar cl = Calendar.getInstance();
 	    for (int i = 0; i <= possibleSlots.size() - 1; i++)
 	    {
-		Calendar cl = Calendar.getInstance();
+
 		List<Long> slots = possibleSlots.get(i);
 		Long main = slots.get(0);
+		cl.setTimeInMillis(main);
 		Long s1 = business_hours.get(0);
-		cl.setTimeInMillis(s1 * 1000);
-		Calendar cl2 = Calendar.getInstance();
 		Long s2 = business_hours.get(1);
-		cl2.setTimeInMillis(s2 * 1000);
-		if (main < (cl.getTimeInMillis() / 1000) || (cl2.getTimeInMillis() / 1000) > s2)
+
+		if (cl.getTimeInMillis() / 1000 < s1 || (cl.getTimeInMillis() / 1000) > s2)
 		{
 		    possibleSlots.remove(slots);
 		}
