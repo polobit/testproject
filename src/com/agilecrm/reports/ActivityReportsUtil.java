@@ -109,7 +109,7 @@ public class ActivityReportsUtil
 	    // Calculate the time bounds for the activities depending on the
 	    // frequency.
 	    Map<String, Long> timeBounds = getTimeBound(report);
-
+	    System.out.println("time intervals - " + timeBounds.toString());
 	    // If user mentioned any the upper time bound (end time).
 	    if (endTime != null)
 		timeBounds.put("endTime", endTime);
@@ -237,7 +237,6 @@ public class ActivityReportsUtil
 
 	for (Activity act : activities)
 	{
-	    System.out.println(act.custom1.equals(user.name) + "-----ass name---" + act.custom1);
 	    if (act.custom1.equals(user.name))
 	    {
 		act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
@@ -708,12 +707,10 @@ public class ActivityReportsUtil
 	    // First Friday of the previous month to the first Friday of this
 	    // month.
 	    int todayDate = cal.get(Calendar.DATE);
-	    // cal.add(Calendar.MONTH, 1);
+	    cal.set(Calendar.DATE, 1);
 	    int todayDay = cal.get(Calendar.DAY_OF_WEEK);
-	    int offset = todayDay < 6 ? Calendar.FRIDAY - todayDay : (todayDay == 6 ? 0 : todayDay + Calendar.FRIDAY);
-	    System.out.print("Offset --------- " + offset);
+	    int offset = todayDay < 6 ? Calendar.FRIDAY - todayDay : (todayDay == 6 ? 0 : Calendar.FRIDAY);
 	    cal.add(Calendar.DATE, offset);
-	    System.out.print("First Friday --------- " + cal.toString());
 	    if (todayDate <= cal.get(Calendar.DATE))
 	    {
 		timeBound.put("endTime", cal.getTimeInMillis() / 1000);
