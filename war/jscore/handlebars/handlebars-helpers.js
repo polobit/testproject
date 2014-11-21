@@ -1,414 +1,6 @@
 $(function()
 {
 
-<<<<<<< HEAD
-	/**
-				 * Helper function to return the value of a property matched with the given
-				 * name from the array of properties
-				 * 
-				 * @method getPropertyValue
-				 * @param {Object}
-				 *         items array of objects
-				 * @param {String}
-				 *         name to get matched object value
-				 * @returns value of the matched object
-				 */
-	Handlebars.registerHelper('getPropertyValue', function(items, name)
-	{
-		return getPropertyValue(items, name);
-	});
-	
-	/**
-				 * Helper function to return the checkbox html element with value of a
-				 * property matched with the given name from the array of properties
-				 * 
-				 * @method getPropertyValue
-				 * @param {Object}
-				 *         items array of objects
-				 * @param {String}
-				 *         name to get matched object value
-				 * @returns heckbox html element with value of the matched object
-				 */
-	Handlebars.registerHelper('getPropertyValueInCheckbox', function(items, name, separator,checked)
-			{
-				return getPropertyValueInCheckbox(items, name, separator,checked);
-			});
-	
-	Handlebars.registerHelper('get_correct_count', function(count)
-			{
-				return count-1;
-			});
-
-	/**
-				 * Helper function to return the value of property based on sub-type of the
-				 * property
-				 */
-	Handlebars.registerHelper('getPropertyValueBySubtype', function(items, name, subtype)
-	{
-		return getPropertyValueBySubtype(items, name, subtype);
-	});
-
-	/**
-				 * Helper function to return the value of property based on type of the
-				 * property
-				 */
-	Handlebars.registerHelper('getPropertyValueBytype', function(items, name, type, subtype)
-	{
-		return getPropertyValueBytype(items, name, type, subtype);
-	});
-
-	/**
-				 * Returns twitter handle based on the twitter url of the profile. Accepts
-				 * string URL and splits at last "/" and returns handle.
-				 */
-	Handlebars.registerHelper('getTwitterHandleByURL', function(value)
-	{
-
-		if (value.indexOf("https://twitter.com/") != -1)
-			return value;
-
-		value = value.substring(value.lastIndexOf("/") + 1);
-		console.log(value);
-
-		return value;
-	});
-
-	/**
-				 * 
-				 */
-	Handlebars.registerHelper('getContactCustomProperties', function(items, options)
-	{
-		var fields = getContactCustomProperties(items);
-		if (fields.length == 0)
-			return options.inverse(fields);
-
-		return options.fn(fields);
-
-	});
-
-	/**
-				 * Returns custom fields without few fields like LINKEDIN or TWITTER or
-				 * title fields
-				 */
-	Handlebars.registerHelper('getContactCustomPropertiesExclusively', function(items, options)
-	{
-
-		var exclude_by_subtype = [
-				"LINKEDIN", "TWITTER"
-		];
-		var exclude_by_name = [
-			"title"
-		];
-
-		var fields = getContactCustomProperties(items);
-
-		var exclusive_fields = [];
-		for (var i = 0; i < fields.length; i++)
-		{
-			if (jQuery.inArray(fields[i].name, exclude_by_name) != -1 || (fields[i].subtype && jQuery.inArray(fields[i].subtype, exclude_by_subtype) != -1))
-			{
-				continue;
-			}
-
-			exclusive_fields.push(jQuery.extend(true, {}, fields[i]));
-		}
-		if (exclusive_fields.length == 0)
-			return options.inverse(exclusive_fields);
-
-		$.getJSON("core/api/custom-fields/type/DATE", function(data)
-		{
-
-			if (data.length == 0)
-				return;
-
-			for (var j = 0; j < data.length; j++)
-			{
-				for (var i = 0; i < exclusive_fields.length; i++)
-				{
-					if (exclusive_fields[i].name == data[j].field_label)
-						try
-						{
-							var value = exclusive_fields[i].value * 1000;
-
-							if (!isNaN(value))
-							{
-								exclusive_fields[i].value = value;
-								exclusive_fields[i]["subtype"] = data[j].field_type;
-							}
-
-						}
-						catch (err)
-						{
-							exclusive_fields[i].value = exclusive_fields[i].value;
-						}
-				}
-			}
-			updateCustomData(options.fn(exclusive_fields));
-		});
-
-		return options.fn(exclusive_fields)
-
-	});
-
-	Handlebars.registerHelper('urlEncode', function(url, key, data)
-	{
-
-		var startChar = "&";
-		if (url.indexOf("?") != -1)
-			startChar = "&";
-
-		var encodedUrl = url + startChar + key + "=" + escape(JSON.stringify(data));
-		// console.log(encodedUrl.length + " " + encodedUrl);
-		return encodedUrl;
-	});
-
-	Handlebars.registerHelper('encodeString', function(url)
-	{
-		return encodeURIComponent(url);
-	});
-
-	/**
-				 * Helper function to return image for an entity (contact). Checks for
-				 * existing image, if not found checks for an image using the email of the
-				 * entity, if again failed to found returns a default image link.
-				 * 
-				 * @method gravatarurl
-				 * @param {Object}
-				 *         items array of objects
-				 * @param {Number}
-				 *         width to specify the width of the image
-				 * @returns image link
-				 * 
-				 */
-	Handlebars.registerHelper('gravatarurl', function(items, width)
-	{
-
-		if (items == undefined)
-			return;
-
-		// Checks if properties already has an image, to return it
-		var agent_image = getPropertyValue(items, "image");
-		if (agent_image)
-			return agent_image;
-
-		// Default image
-		var img = DEFAULT_GRAVATAR_url;
-
-		var email = getPropertyValue(items, "email");
-		if (email)
-		{
-			return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + "&d=" + escape(img);
-		}
-
-		return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
-
-	});
-
-	Handlebars.registerHelper('defaultGravatarurl', function(width)
-	{
-		// Default image
-		var img = DEFAULT_GRAVATAR_url;
-
-		return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
-	});
-
-	Handlebars.registerHelper('emailGravatarurl', function(width, email)
-	{
-		// Default image
-		var img = DEFAULT_GRAVATAR_url;
-
-		if (email)
-		{
-			return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + "&d=" + escape(img);
-		}
-
-		return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
-	});
-
-	/**
-				 * CSS text avatars
-				 */
-	Handlebars.registerHelper('nameAvatar', function(items, width)
-	{
-
-		if (items == undefined)
-			return;
-
-		// Checks if properties already has an image, to return it
-		var agent_image = getPropertyValue(items, "image");
-		if (agent_image)
-			return agent_image;
-
-		var email = getPropertyValue(items, "email");
-		if (email)
-		{
-			return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + '&d=404';
-		}
-
-		return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '&d=404';
-
-	});
-
-	/**
-				 * To add data-name attribute to image tags
-				 */
-	Handlebars.registerHelper('dataNameAvatar', function(items)
-	{
-
-		if (items == undefined)
-			return;
-
-		var name = "";
-
-		if (getPropertyValue(items, "first_name"))
-			name = name + "" + getPropertyValue(items, "first_name").substr(0, 1);
-
-		if (getPropertyValue(items, "last_name"))
-			name = name + "" + getPropertyValue(items, "last_name").substr(0, 1);
-
-		return name;
-
-	});
-
-	/**
-				 * Helper function to return icons based on given name
-				 * 
-				 * @method icons
-				 * @param {String}
-				 *         item name to get icon
-				 * @returns icon name
-				 */
-	Handlebars.registerHelper('icons', function(item)
-	{
-		 
-		console.log('mamasri code');
-		item = item.toLowerCase().trim();
-		console.log(item);
-		if (item == "email")
-			return "icon-envelope-alt";
-		if (item == "phone")
-			return "icon-headphones";
-		if (item == "url")
-			return "icon-home";
-		if (item == "call")
-			return "icon-phone-sign";
-		if (item == "follow_up")
-			return "icon-signout";
-		if (item == "meeting")
-			return "icon-group";
-		if (item == "milestone")
-			return "icon-cog";
-		if (item == "send")
-			return "icon-reply";
-		if (item == "tweet")
-			return "icon-share-alt";
-		if (item == "other")
-			return "icon-tasks";
-		if (item == "twitter")
-			return "icon-twitter";
-		if (item == "facebook")
-			return "icon-facebook";
-
-	});
-
-	Handlebars.registerHelper('eachkeys', function(context, options)
-	{
-		var fn = options.fn, inverse = options.inverse;
-		var ret = "";
-
-		var empty = true;
-		for (key in context)
-		{
-			empty = false;
-			break;
-		}
-
-		if (!empty)
-		{
-			for (key in context)
-			{
-				ret = ret + fn({ 'key' : key, 'value' : context[key] });
-			}
-		}
-		else
-		{
-			ret = inverse(this);
-		}
-		return ret;
-	});
-
-	/**
-				 * Turns the first letter of the given string to upper-case and the
-				 * remaining to lower-case (EMaiL to Email).
-				 * 
-				 * @method ucfirst
-				 * @param {String}
-				 *         value to convert as ucfirst
-				 * @returns converted string
-				 */
-	Handlebars.registerHelper('ucfirst', function(value)
-	{
-		return (value && typeof value === 'string') ? (value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()) : '';
-	});
-
-	/**
-				 * Returns Contact short name
-				 */
-	Handlebars.registerHelper('contactShortName', function()
-	{
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
-		{
-
-			var contact_properties = App_Contacts.contactDetailView.model.get('properties');
-
-			if (App_Contacts.contactDetailView.model.get('type') == 'PERSON')
-			{
-				for (var i = 0; i < contact_properties.length; i++)
-				{
-
-					if (contact_properties[i].name == "last_name")
-						return contact_properties[i].value;
-					else if (contact_properties[i].name == "first_name")
-						return contact_properties[i].value;
-				}
-				return "Contact";
-			}
-			else
-			{
-				for (var i = 0; i < contact_properties.length; i++)
-				{
-					if (contact_properties[i].name == "name")
-						return contact_properties[i].value;
-				}
-				return "Company";
-			}
-		}
-	});
-
-	/**
-				 * Returns workflow name surrounded by quotations if exists, otherwise this
-				 */
-	Handlebars.registerHelper('workflowName', function()
-	{
-		if (App_Workflows.workflow_model)
-		{
-			var workflowName = App_Workflows.workflow_model.get("name");
-			return "\'" + workflowName + "\'";
-		}
-
-		return "this";
-	});
-
-	/**
-				 * 
-				 * @method task_property
-				 * @param {String}
-				 *         change property value in view
-				 * @returns converted string
-				 */
-	Handlebars.registerHelper('task_property', function(value)
-	{
-=======
 				/**
 				 * Helper function to return the value of a property matched with the given
 				 * name from the array of properties
@@ -708,6 +300,10 @@ $(function()
 												return "icon-share-alt";
 								if (item == "other")
 												return "icon-tasks";
+		if (item == "twitter")
+			return "icon-twitter";
+		if (item == "facebook")
+			return "icon-facebook";
 
 				});
 
@@ -799,22 +395,6 @@ $(function()
 								return "this";
 				});
 
-				/**
-				 * 
-				 * @method task_property
-				 * @param {String}
-				 *         change property value in view
-				 * @returns converted string
-				 */
-				Handlebars.registerHelper('task_property', function(value)
-				{
-
-								if (value == "FOLLOW_UP")
-												return "Follow Up";
-								else
-												return ucfirst(value);
-
-				});
 
 				/**
 				 * Adds Custom Fields to contact merge form, where this helper function is
@@ -835,11 +415,14 @@ $(function()
 				Handlebars.registerHelper('add_dots_end', function(value)
 				{
 
-								if (value.length > 50)
+								if (value)
 								{
-												var subst = value.substr(0, 50);
-												subst = subst + "....";
-												return subst;
+												if (value.length > 50)
+												{
+																var subst = value.substr(0, 50);
+																subst = subst + "....";
+																return subst;
+												}
 								}
 
 								return value;
@@ -2783,7 +2366,7 @@ $(function()
 								}
 
 				});
->>>>>>> 30f9921... Added new Function in handlebar for displayCustom date event list view
+
 
 				/**
 				 * Returns other active campaigns in campaign-active subscribers.
@@ -2791,6 +2374,7 @@ $(function()
 				Handlebars.registerHelper('if_other_active_campaigns', function(object, data, options)
 				{
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	});
 	
@@ -3466,65 +3050,540 @@ $(function()
 
 							 var address = {};
 								try
+=======
+								if (object === undefined || object[data] === undefined)
+												return;
+
+								var other_campaigns = {};
+								var other_active_campaigns = [];
+								var other_completed_campaigns = [];
+								var campaignStatusArray = object[data];
+
+								var current_campaign_id = getIdFromHash();
+
+								for (var i = 0, len = campaignStatusArray.length; i < len; i++)
 								{
-									address = JSON.parse(properties[i].value);
+												// neglect same campaign
+												if (current_campaign_id === campaignStatusArray[i].campaign_id)
+																continue;
+
+												// push all other active campaigns
+												if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
+																other_active_campaigns.push(campaignStatusArray[i])
+
+																// push all done campaigns
+												if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
+																other_completed_campaigns.push(campaignStatusArray[i]);
 								}
-								catch (err)
+
+								other_campaigns["active"] = other_active_campaigns;
+								other_campaigns["done"] = other_completed_campaigns;
+
+								return options.fn(other_campaigns);
+
+				});
+
+				/**
+				 * Returns Contact Model from contactDetailView collection.
+				 * 
+				 */
+				Handlebars.registerHelper('contact_model', function(options)
+				{
+
+								if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
 								{
-									address['address'] = properties[i].value;
+
+												// To show Active Campaigns list immediately after campaign
+												// assigned.
+												if (CONTACT_ASSIGNED_TO_CAMPAIGN)
+												{
+																CONTACT_ASSIGNED_TO_CAMPAIGN = false;
+
+																// fetches updated contact json
+																var contact_json = $.ajax({ type : 'GET', url : '/core/api/contacts/' + App_Contacts.contactDetailView.model.get('id'), async : false,
+																				dataType : 'json' }).responseText;
+
+																// Updates Contact Detail model
+																App_Contacts.contactDetailView.model.set(JSON.parse(contact_json));
+
+																return options.fn(JSON.parse(contact_json));
+												}
+
+												// if simply Campaigns tab clicked, use current collection
+												return options.fn(App_Contacts.contactDetailView.model.toJSON());
+								}
+				});
+
+				/**
+				 * Returns json object of active and done subscribers from contact object's
+				 * campaignStatus.
+				 */
+				Handlebars.registerHelper('contact_campaigns', function(object, data, options)
+				{
+
+								// if campaignStatus is not defined, return
+								if (object === undefined || object[data] === undefined)
+												return;
+
+								// Temporary json to insert active and completed campaigns
+								var campaigns = {};
+
+								var active_campaigns = [];
+								var completed_campaigns = [];
+
+								// campaignStatus object of contact
+								var campaignStatusArray = object[data];
+
+								for (var i = 0, len = campaignStatusArray.length; i < len; i++)
+								{
+												// push all active campaigns
+												if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
+																active_campaigns.push(campaignStatusArray[i])
+
+																// push all done campaigns
+												if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
+																completed_campaigns.push(campaignStatusArray[i]);
 								}
 
-								// Gets properties (keys) count of given json
-								// object
-								var count = countJsonProperties(address);
+								campaigns["active"] = active_campaigns;
+								campaigns["done"] = completed_campaigns;
 
-								if (properties_count != 0)
+								// apply obtained campaigns context within
+								// contact_campaigns block
+								return options.fn(campaigns);
+				});
 
+				/**
+				 * Verifies given urls length and returns options hash based on restricted
+				 * count value.
+				 * 
+				 */
+				Handlebars.registerHelper("if_more_urls", function(url_json, url_json_length, options)
+				{
+								var RESTRICT_URLS_COUNT = 3;
+								var temp_urls_array = [];
+								var context_json = {};
+
+								// If length is less than restricted, compile
+								// else block with given url_json
+								if (url_json_length < RESTRICT_URLS_COUNT)
+												return options.inverse(url_json);
+
+								// Insert urls until restricted count reached
+								for (var i = 0; i < url_json.length; i++)
+								{
+												if (i === RESTRICT_URLS_COUNT)
+																break;
+
+												temp_urls_array.push(url_json[i]);
+								}
+
+								context_json.urls = temp_urls_array;
+
+								// More remained
+								context_json.more = url_json_length - RESTRICT_URLS_COUNT;
+
+								return options.fn(context_json);
+
+				});
+
+				/**
+				 * Returns first occurence string from string having underscores E.g,
+				 * mac_os_x to mac
+				 */
+				Handlebars.registerHelper('normalize_os', function(data)
+				{
+								if (data === undefined || data.indexOf('_') === -1)
+												return data;
+
+								// if '_' exists splits
+								return data.split('_')[0];
+				});
+
+				Handlebars.registerHelper('safe_tweet', function(data)
+				{
+								data = data.trim();
+								return new Handlebars.SafeString(data);
+				});
+				/**
+				 * Get stream icon for social suite streams.
+				 */
+				Handlebars.registerHelper('get_stream_icon', function(name)
+				{
+								if (!name)
+												return;
+
+								var icon_json = { "Home" : "icon-home", "Retweets" : "icon-retweet", "DM_Inbox" : "icon-download-alt", "DM_Outbox" : "icon-upload-alt",
+												"Favorites" : "icon-star", "Sent" : "icon-share-alt", "Search" : "icon-search", "Scheduled" : "icon-time", "All_Updates" : "icon-home",
+												"My_Updates" : "icon-share-alt" };
+
+								name = name.trim();
+
+								if (icon_json[name])
+												return icon_json[name];
+
+								return "icon-globe";
+
+				});
+
+		
+
+				/**
+				 * put user address location togather separated by comma.
+				 */
+				Handlebars.registerHelper('user_location', function()
+				{
+
+								var City = this.city == "?" ? "" : (this.city + ", ");
+								var Region = this.region == "?" ? "" : (this.region + ", ");
+								var Country = this.country;
+								if (this.city == "?" && this.region == "?")
+												Country = this.country == "?" ? this.city_lat_long : (this.city_lat_long + " ( " + this.country + " )");
+
+								return (City + Region + Country).trim();
+				});
+
+				/**
+				 * Trims trailing spaces
+				 */
+				Handlebars.registerHelper('trim_space', function(value)
+				{
+
+								if (value === undefined)
+												return value;
+
+								return value.trim();
+				});
+
+				/**
+				 * Returns reputation name based on value
+				 * 
+				 */
+				Handlebars.registerHelper('get_subaccount_reputation', function(value)
+				{
+								var type = "";
+								var reputation = "Unknown";
+
+								if (value > 1 && value < 40)
+								{
+												type = "important";
+												reputation = "Poor";
+								}
+								else if (value >= 40 && value < 75)
+								{
+												type = "";
+												reputation = "Ok";
+								}
+								else if (value >= 75 && value < 90)
+								{
+												type = "success";
+												reputation = "Good";
+								}
+								else if (value >= 90)
+								{
+												type = "success";
+												reputation = "Excellent";
+								}
+
+								return "<span style='font-size:13px;position: relative;top: -3px' class='label label-" + type
+
+								+ "'>" + reputation + "</span> <!--<span class='badge badge-" + type + "'>" + value + "</span>-->";
+
+				});
+
+				/**
+				 * Returns id from hash. It returns id from hash iff id exists at last.
+				 * 
+				 */
+				Handlebars.registerHelper('get_id_from_hash', function()
+				{
+
+								return getIdFromHash();
+
+				});
+
+				Handlebars.registerHelper('get_subscribers_type_from_hash', function()
+				{
+
+								// Returns "workflows" from "#workflows"
+								var hash = window.location.hash.substr(1);
+
+								if (hash.indexOf("all") != -1)
+												return "All";
+
+								if (hash.indexOf("active") != -1)
+												return "Active";
+
+								if (hash.indexOf("completed") != -1)
+												return "Completed";
+
+								if (hash.indexOf("removed") != -1)
+												return "Removed";
+
+								if (hash.indexOf("unsubscribed") != -1)
+												return "Unsubscribed";
+
+								if (hash.indexOf("hardbounced") != -1)
+												return "Hard Bounced";
+
+								if (hash.indexOf("softbounced") != -1)
+												return "Soft Bounced";
+
+								if (hash.indexOf("spam-reported") != -1)
+												return "Spam Reported";
+				});
+
+				Handlebars.registerHelper("check_plan", function(plan, options)
+				{
+								console.log(plan);
+
+								if (!_billing_restriction)
+												return options.fn(this);
+
+								if (_billing_restriction.currentLimits.planName == plan)
+												return options.fn(this);
+
+								return options.inverse(this);
+
+				});
+
+				/**
+				 * Safari browser doesn't supporting few CSS properties like margin-top,
+				 * margin-bottom etc. So this helper is used to add compatible CSS
+				 * properties to Safari
+				 */
+				Handlebars.registerHelper("isSafariBrowser", function(options)
+				{
+
+								if (navigator.userAgent.indexOf('Safari') !== -1 && navigator.userAgent.indexOf('Chrome') === -1)
+												return options.fn(this);
+
+								return options.inverse(this);
+				});
+
+				/**
+				 * give custome status base on xerotype
+				 */
+
+				Handlebars.registerHelper('xeroType', function(type)
+				{
+								return (type == "ACCPAY") ? "Payable" : "Receivable";
+				});
+
+				/**
+				 * give custom type to xero type
+				 */
+				Handlebars.registerHelper('xeroTypeToolTip', function(type)
+				{
+								return (type == "ACCPAY") ? "Payable" : "Receivable";
+				});
+
+				/**
+				 * gives first latter capital for given input
+				 */
+				Handlebars.registerHelper('capFirstLetter', function(data)
+				{
+								if (data === "DEFAULT")
+>>>>>>> 351af59... Resolve Conflict with handlebars
+								{
+												// console.log("return empty");
+												return "";
+								}
+								else
+								{
+												var temp = data.toLowerCase();
+												return temp.charAt(0).toUpperCase() + temp.slice(1);
+								}
+				});
+
+				Handlebars.registerHelper('qbStatus', function(Balance)
+				{
+								console.log(this);
+								console.log(this.TotalAmt);
+								if (Balance == 0)
+								{
+												return "Paid"
+								}
+								else
+								{
+												return "Due"
+								}
+				});
+				Handlebars.registerHelper('currencyFormat', function(data)
+				{
+
+								return Number(data).toLocaleString('en');
+								// data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+				});
+
+				Handlebars.registerHelper('QbDateFormat', function(data)
+				{
+
+								var i = [];
+								i = data.split("-");
+								return i[0] + "-" + i[2] + "-" + i[1];
+				});
+
+				Handlebars.registerHelper("hasScope", function(scope_constant, options)
+				{
+								if (CURRENT_DOMAIN_USER.scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.scopes) != -1)
+												return options.fn(this);
+
+								return options.inverse(this);
+				});
+
+				Handlebars.registerHelper("canSyncContacts", function(options)
+				{
+								if (canImportContacts())
+												return options.fn(this);
+
+								return options.inverse(this);
+				});
+
+<<<<<<< HEAD
 									el = el
 									.concat('<div class="contact-addressview"><div><div class="pull-left" style="width:25px"><i class="icon icon-map-marker"></i></div><div class="pull-left" style="width:90%">');
 						else
 							el = el
 									.concat('<div class="contact-addressview"><div><div class="pull-left" style="width:25px"><i class="icon icon-map-marker"></i></div><div class="pull-left" style="width:90%">');
+=======
+				/**
+				 * To check Access controls for showing icons on dashboard
+				 */
+				Handlebars.registerHelper('hasMenuScope', function(item, options)
+				{
+								if ((CURRENT_DOMAIN_USER.menu_scopes).indexOf(item) != -1)
+												return options.fn(this);
+								else
+												return options.inverse(this);
+				});
 
-								$.each(address, function(key, val)
+				Handlebars.registerHelper('fetchXeroUser', function(data)
+				{
+								return JSON.parse(data).xeroemail;
+				});
+
+				Handlebars.registerHelper('getfbreturndomain', function(data)
+				{
+								var arr = window.location.href.split('/')
+								return arr[2];
+				});
+
+				Handlebars
+												.registerHelper(
+																				'tagManagementCollectionSetup',
+																				function(tags)
+																				{
+
+																								console.log(tags);
+																								var json = {};
+
+																								var keys = [];
+																								// Store tags in a json, starting letter as key
+																								for (var i = 0; i < tags.length; i++)
+																								{
+																												var tag = tags[i].tag;
+																												var key = tag.charAt(0).toUpperCase();
+																												// console.log(tag);
+																												if (jQuery.inArray(key, keys) == -1)
+																																keys.push(key);
+																								}
+
+																								console.log(keys);
+																								var html_temp = "";
+
+																								for (var i = 0; i < keys.length; i++)
+																												html_temp += "<div class=\"clearfix\"></div><div style='margin-right:10px;'><div class='tag-key tag-management-key'>" + keys[i] + "</div><div class=\"clearfix\"></div><div class='left' tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div>";
+
+																								console.log(html_temp);
+																								return new Handlebars.SafeString(html_temp);
+																				});
+
+				Handlebars.registerHelper('containsScope', function(item, list, options)
+				{
+								if (list.length == 0 || !item)
+												return options.inverse(this);
+
+								if (jQuery.inArray(item, list) == -1)
+												return options.inverse(this);
+
+								return options.fn(this);
+
+				});
+
+				Handlebars.registerHelper('isOwnerOfContact', function(owner_id, options)
+				{
+
+								if (CURRENT_DOMAIN_USER.id == owner_id)
+												return options.fn(this);
+								return options.inverse(this);
+				});
+
+				Handlebars.registerHelper('canEditContact', function(owner_id, options)
+				{
+								if (canEditContact(owner_id))
+												return options.fn(this);
+
+								return options.inverse(this)
+				});
+
+				Handlebars.registerHelper('canEditCurrentContact', function(owner_id, options)
+				{
+								if (canEditCurrentContact())
+												return options.fn(this);
+
+								return options.inverse(this)
+				})
+
+				Handlebars.registerHelper('gateway_exists', function(value, target, options)
+				{
+>>>>>>> 351af59... Resolve Conflict with handlebars
+
+								for (var i = 0; i < target.length; i++)
 								{
-									if (--count == 0)
-									{
-										el = el.concat(val + ".");
-										return;
-									}
-									el = el.concat(val + ", ");
-								});
 
-								if (properties[i].subtype)
-									el = el.concat('<span class="label">' + properties[i].subtype + '</span>');
-								el = el.concat('</span></div></div>');
-								return new Handlebars.SafeString(el);
-							}
-							else if (properties[i].name == "phone" || properties[i].name == "email")
-							{
-								++properties_count;
-							}
-						}
-					});
+												var prefs = JSON.parse(target[i].prefs);
 
-	Handlebars.registerHelper('address_Template', function(properties)
-	{
+												if (target[i].name == "EmailGateway")
+												{
 
-		for (var i = 0, l = properties.length; i < l; i++)
-		{
+																if (prefs.email_api == value)
+																				return options.fn(target[i]);
+												}
 
-			if (properties[i].name == "address")
-			{
-				var el = '';
+												if (target[i].name == "SMS-Gateway")
+												{
+																if (prefs.sms_api == value)
+																				return options.fn(target[i]);
+												}
+								}
+								return options.inverse(this);
+				});
 
-				var address = {};
-				try
+				Handlebars.registerHelper("each_index_slice", function(array, index, options)
 				{
-					address = JSON.parse(properties[i].value);
-				}
-				catch (err)
+								var buffer = "";
+								for (var i = index; i < array.length; i++)
+								{
+												var item = array[i];
+
+												// stick an index property onto the item, starting with 1, may make
+												// configurable later
+												// item.index = i + 1;
+
+												console.log(item);
+												// show the inside of the block
+												buffer += options.fn(item);
+								}
+
+								// return the finished buffer
+								return buffer;
+
+				});
+
+				Handlebars.registerHelper('gateway_exists', function(value, target, options)
 				{
+<<<<<<< HEAD
 					address['address'] = properties[i].value;
 				}
 =======
@@ -3561,14 +3620,38 @@ $(function()
 
 <<<<<<< HEAD
 				$.each(address, function(key, val)
-				{
-					if (--count == 0)
-					{
-						el = el.concat(val + ".");
-						return;
-					}
-					el = el.concat(val + ", ");
+=======
+
+								for (var i = 0; i < target.length; i++)
+								{
+
+												var prefs = JSON.parse(target[i].prefs);
+
+												if (target[i].name == "EmailGateway")
+												{
+
+																if (prefs.email_api == value)
+																				return options.fn(target[i]);
+												}
+
+												if (target[i].name == "SMS-Gateway")
+												{
+																if (prefs.sms_api == value)
+																				return options.fn(target[i]);
+												}
+								}
+								return options.inverse(this);
 				});
+
+				Handlebars.registerHelper('isOwnerOfContact', function(owner_id, options)
+>>>>>>> 351af59... Resolve Conflict with handlebars
+				{
+
+								if (CURRENT_DOMAIN_USER.id == owner_id)
+												return options.fn(this);
+								return options.inverse(this);
+				});
+<<<<<<< HEAD
 				/*
 				 * if (properties[i].subtype) el = el.concat(" <span class='label'>" +
 				 * properties[i].subtype + "</span>");
@@ -4547,23 +4630,212 @@ $(function()
 																								console.log(html_temp);
 																								return new Handlebars.SafeString(html_temp);
 																				});
+=======
 
-	// Gets date in given range
-	Handlebars.registerHelper('date-range', function(from_date_string, no_of_days, options)
-	{
-		var from_date = Date.parse(from_date_string);
-		var to_date = Date.today().add({ days : parseInt(no_of_days) });
-		return to_date.toString('MMMM d, yyyy') + " - " + from_date.toString('MMMM d, yyyy');
+				Handlebars.registerHelper('canEditContact', function(owner_id, options)
+				{
+								if ((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+												return options.fn(this);
 
+								return options.inverse(this)
+				});
+
+				Handlebars.registerHelper('getAccountPlanName', function(plan_name)
+				{
+								if (!plan_name)
+												return "Free";
+
+								var plan_fragments = plan_name.split("_");
+
+								return ucfirst(plan_fragments[0]);
+
+				});
+
+				Handlebars.registerHelper('getAccountPlanInteval', function(plan_name)
+				{
+								if (!plan_name)
+												return "Monthly";
+
+								var plan_fragments = plan_name.split("_");
+
+								return ucfirst(plan_fragments[1]);
+
+				});
+
+				Handlebars.registerHelper('getSubscriptionBasedOnPlan', function(customer, plan, options)
+				{
+								var subscription = getSubscriptionWithAmount(customer, plan);
+
+								if (subscription != null)
+												return options.fn(subscription);
+
+								return options.inverse(this);
+				});
+
+				// handling with iso date
+				Handlebars.registerHelper("iso_date_to_normalizeDate", function(dateString)
+				{
+
+								/*
+								 * var myDate = new Date(dateString); var timestamp = myDate.getTime();
+								 * var d = new Date(parseInt(timestamp) / 1000).format("dd-MM-yyyy");
+								 * return d;
+								 */
+								if (dateString.length <= 0)
+												return;
+								var arr = dateString.split("T");
+								console.log("normalize date " + arr[0]);
+								// var d = new Date(arr[0]).format("dd-MM-yyyy");
+								return arr[0];
+
+				});
+
+				/**
+				 * Index starts from 1
+				 */
+				Handlebars.registerHelper("getMonthFromIndex", function(month_index)
+				{
+								var monthArray = [
+																"January", "february", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+								];
+								if (month_index > 12)
+												return monthArray[11];
+
+								return monthArray[month_index - 1];
+				});
+
+				Handlebars.registerHelper('xeroOrganisationShortCode', function(block)
+				{
+								if (typeof SHORT_CODE == "undefined" || SHORT_CODE == "")
+								{
+												return false;
+								}
+								else
+								{
+												return SHORT_CODE;
+								}
+				});
+				Handlebars.registerHelper('if_id', function(ctype, options)
+				{
+								if (this.type == ctype)
+								{
+												return options.fn(this);
+								}
+				});
+
+				/**
+				 * extract time from epochTime
+				 */
+				Handlebars.registerHelper("getTime", function(date)
+				{
+
+								if (!date)
+												return;
+
+								if ((date / 100000000000) > 1)
+								{
+												var d = new Date(parseInt(date));
+												var hours = d.getHours();
+												if (hours > 12)
+																hours = hours - 12;
+												var min = d.getMinutes();
+												if (min == 0)
+																min = "00"
+												var ampm = hours >= 12 ? "PM" : "AM";
+												return hours + ":" + min + " " + ampm;
+								}
+								// date form milliseconds
+
+								var d = new Date(parseInt(date) * 1000);
+								var hours = d.getHours();
+								if (hours > 12)
+												hours = hours - 12;
+								var min = d.getMinutes();
+								if (min == 0)
+												min = "00"
+								var ampm = hours >= 12 ? "PM" : "AM";
+								return hours + ":" + min + " " + ampm;
+
+				});
+
+				/**
+				 * get custom date with time
+				 */
+
+				Handlebars.registerHelper("getCustomDateWithTime", function(start, end)
+				{
+								var day1 = getDay(start);
+								var day2 = getDay(end);
+
+								var d1 = getCustomFormatedDate(start);
+								var d2 = getCustomFormatedDate(end);
+								var time = extractTimeFromDate(end);
+
+								if (day1 != day2)
+												return d1 + " - " + d2;
+								else
+												return d1 + " - " + time;
+
+				});
+
+				function getCustomFormatedDate(date)
+				{
+
+								var months = [
+																'Jan', 'Feb', 'March', 'April', 'May', 'Jun', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'
+								];
+>>>>>>> 351af59... Resolve Conflict with handlebars
+
+								if (!date)
+												return;
+
+<<<<<<< HEAD
 								if (jQuery.inArray(item, list) == -1)
 												return options.inverse(this);
 
 <<<<<<< HEAD
 	Handlebars.registerHelper("extractEmail", function(content, options)
 	{
+=======
+								if ((date / 100000000000) > 1)
+								{
+												var d = new Date(parseInt(date));
+												var hours = d.getHours();
+												var year = d.getFullYear();
+												var date = d.getDate();
+												var month = d.getMonth();
+												var min = d.getMinutes();
+												if (min == 0)
+																min = "00"
+												var ampm = hours >= 12 ? "PM" : "AM";
+												if (hours > 12)
+																hours = hours - 12;
+												return months[month] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
 
-		console.log(content);
+								}
+								// date form milliseconds
 
+								var d = new Date(parseInt(date) * 1000);
+								var hours = d.getHours();
+								var year = d.getFullYear();
+								var date = d.getDate();
+								var month = d.getMonth();
+								var min = d.getMinutes();
+								if (min == 0)
+												min = "00"
+								var ampm = hours >= 12 ? "PM" : "AM";
+								if (hours > 12)
+												hours = hours - 12;
+								return months[month] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
+>>>>>>> 351af59... Resolve Conflict with handlebars
+
+				}
+				function extractTimeFromDate(date)
+				{
+								if (!date)
+												return;
+
+<<<<<<< HEAD
 		return options.fn(content.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0]);
 	});
 
@@ -5269,10 +5541,73 @@ $(function()
 
 												if (target[i].name == "EmailGateway")
 												{
+=======
+								if ((date / 100000000000) > 1)
+								{
+												var d = new Date(parseInt(date));
+												var hours = d.getHours();
 
-		for (var i = 0, len = campaignStatusArray.length; i < len; i++)
-		{
+												var min = d.getMinutes();
+												if (min == 0)
+																min = "00"
+												var ampm = hours >= 12 ? "PM" : "AM";
+												if (hours > 12)
+																hours = hours - 12;
+												return hours + ":" + min + " " + ampm;
+								}
+								// date form milliseconds
 
+								var d = new Date(parseInt(date) * 1000);
+								var hours = d.getHours();
+								var min = d.getMinutes();
+								if (min == 0)
+												min = "00"
+								var ampm = hours >= 12 ? "PM" : "AM";
+								if (hours > 12)
+												hours = hours - 12;
+								return hours + ":" + min + " " + ampm;
+				}
+
+				function getDay(date)
+				{
+								if ((date / 100000000000) > 1)
+								{
+												var sDate = new Date(parseInt(date));
+												return sDate.getDate();
+								}
+								else
+								{
+												var sDate = new Date(parseInt(date) * 1000);
+												return sDate.getDate();
+								}
+				}
+
+				Handlebars.registerHelper('buildOptions', function(field_data)
+				{
+								var list_values = field_data.split(";");
+								var list_options = '';
+								// Create options based on list values
+								$.each(list_values, function(index, value)
+								{
+												if (value != "")
+																list_options = list_options.concat('<option value="' + value + '">' + value + '</option>');
+								});
+
+								return list_options;
+				});
+
+				/**
+				 * return contact property value base on type if contact type is COMPANY
+				 * then return company name other wise retun contact first_name + last_name
+				 * as name
+				 */
+>>>>>>> 351af59... Resolve Conflict with handlebars
+
+				Handlebars.registerHelper('getContactDisplayValue', function(contact)
+				{
+								var displayName;
+
+<<<<<<< HEAD
 			// compares campaign-id of each element of array with
 			// current campaign-id
 			if (campaignStatusArray[i].campaign_id === current_campaign_id)
@@ -5506,13 +5841,51 @@ $(function()
 				 */
 	Handlebars.registerHelper('trim_space', function(value)
 	{
+=======
+								var type = contact.type;
+								var properties = contact.properties;
+								if (properties)
+								{
+												if (type == "COMPANY")
+												{
 
-		if (value === undefined)
-			return value;
+																for (var i = 0; i < properties.length; i++)
+																{
+																				if (properties[i].name == 'name')
+																				{
+																								displayName = properties[i].value;
+																								break;
+																				}
+																}
+												}
+												else
+												{
+																for (var i = 0; i < properties.length; i++)
+																{
+																				if (properties[i].name == 'first_name')
+																								displayName = properties[i].value;
+																				if (properties[i].name == 'last_name')
+																								displayName = displayName + " " + properties[i].value;
+																}
+												}
+								}
+								return displayName;
+				});
+>>>>>>> 351af59... Resolve Conflict with handlebars
 
-		return value.trim();
-	});
+				Handlebars.registerHelper('xeroOrganisationShortCode', function(block)
+				{
+								if (typeof SHORT_CODE == "undefined" || SHORT_CODE == "")
+								{
+												return false;
+								}
+								else
+								{
+												return SHORT_CODE;
+								}
+				});
 
+<<<<<<< HEAD
 	/**
 				 * Returns reputation name based on value
 				 * 
@@ -5793,23 +6166,38 @@ $(function()
 		{
 
 			var prefs = JSON.parse(target[i].prefs);
+=======
+				Handlebars.registerHelper('buildOptions', function(field_data)
+				{
+								var list_values = field_data.split(";");
+								var list_options = '';
+								// Create options based on list values
+								$.each(list_values, function(index, value)
+								{
+												if (value != "")
+																list_options = list_options.concat('<option value="' + value + '">' + value + '</option>');
+								});
+>>>>>>> 351af59... Resolve Conflict with handlebars
 
-			if (target[i].name == "EmailGateway")
-			{
+								return list_options;
+				});
 
-				if (prefs.email_api == value)
-					return options.fn(target[i]);
-			}
+				/**
+				 * Choose Avatar templates
+				 */
+				Handlebars.registerHelper('get_avatars_template', function(options)
+				{
+								var template = getTemplate("choose-avatar-images-modal", {});
+								return template;
+				});
 
-			if (target[i].name == "SMS-Gateway")
-			{
-				if (prefs.sms_api == value)
-					return options.fn(target[i]);
-			}
-		}
-		return options.inverse(this);
-	});
+				// To pick randomly selected avatar url
+				Handlebars.registerHelper('pick_random_avatar_url', function(options)
+				{
+								return choose_random_avatar();
+				});
 
+<<<<<<< HEAD
 	Handlebars.registerHelper("each_index_slice", function(array, index, options)
 	{
 		var buffer = "";
@@ -5944,15 +6332,42 @@ $(function()
 <<<<<<< HEAD
 	Handlebars.registerHelper('gateway_exists', function(value, target, options)
 	{
+=======
+				Handlebars.registerHelper('getRemaininaEmails', function()
+				{
+								return getPendingEmails();
+				});
 
-		for (var i = 0; i < target.length; i++)
-		{
+				// return google event custom date and time
 
-			var prefs = JSON.parse(target[i].prefs);
+				Handlebars.registerHelper('getGoogleEventCustomTime', function(start, end)
+				{
+								var startDate = new Date(start);
+								var endDate = new Date(end);
 
-			if (target[i].name == "EmailGateway")
-			{
+								return getGoogleCustomFormatteDate(startDate.getTime(), endDate.getTime());
 
+				});
+>>>>>>> 351af59... Resolve Conflict with handlebars
+
+				function getGoogleCustomFormatteDate(start, end)
+				{
+
+								var day1 = getDay(start);
+								var day2 = getDay(end);
+
+								var d1 = getCustomFormatedDate(start);
+								var d2 = getCustomFormatedDate(end);
+								var time = extractTimeFromDate(end);
+								var createdTime = getEventCreatedTime(start);
+								if (createdTime == 0 || createdTime == 1)
+								{
+												return extractTimeFromDate(start) + " - " + extractTimeFromDate(end);
+								}
+								else
+								{
+
+<<<<<<< HEAD
 				if (prefs.email_api == value)
 					return options.fn(target[i]);
 			}
@@ -6289,7 +6704,160 @@ $(function()
 												return d1 + " - " + d2;
 								else
 												return d1 + " - " + time;
+=======
+												if (day1 != day2)
+												{
+																if (d2)
+																				return d1 + " - " + d2;
+																else
+																				return d1;
+												}
+												else
+																return d1 + " - " + time;
+								}
+				}
+
+				Handlebars.registerHelper("displayCustomDateTime", function(start, end)
+				{
+								var eventCreateTime = get_activity_created_time(start);
+
+								var day1 = getDay(start);
+								var day2 = getDay(end);
+
+								var d1 = getCustomFormatedDate(start);
+								var d2 = getCustomFormatedDate(end);
+								var time = extractTimeFromDate(end);
+								if (eventCreateTime == 0 || eventCreatedTime == 1)
+								{
+												return time;
+								}
+								else
+								{
+												if (day1 != day2)
+																return d1 + " - " + d2;
+												else
+																return d1 + " - " + time;
+								}
+				});
+
+				// helper function return html icon base on type added on 17/11/2014
+				Handlebars.registerHelper('showIcon', function(value)
+				{
+								var scope = (value && typeof value === 'string') ? (value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()) : '';
+								if (scope == "Contact")
+								{
+												return new Handlebars.SafeString("<i class='icon-user'></i>");
+								}
+								else if (scope == "Company")
+								{
+												return new Handlebars.SafeString("<i class='icon-picture'></i>");
+								}
+								else if (scope == "Deal")
+								{
+												return new Handlebars.SafeString("<i class='icon-money'></i>");
+								}
+								else if (scope == "Case")
+								{
+												return new Handlebars.SafeString("<i class='icon-folder-close'></i>");
+								}
+				});
+
+				Handlebars.registerHelper('secondsToFriendlyTime', function(time)
+				{
+								var hours = Math.floor(time / 3600);
+								if (hours > 0)
+												time = time - hours * 60 * 60;
+								var minutes = Math.floor(time / 60);
+								var seconds = time - minutes * 60;
+								var friendlyTime = "";
+								if (hours == 1)
+												friendlyTime = hours + " hr ";
+								if (hours > 1)
+												friendlyTime = hours + " hrs ";
+								if (minutes > 0)
+												friendlyTime += minutes + " min ";
+								if (seconds > 0)
+												friendlyTime += seconds + " sec";
+								if (friendlyTime != "")
+												return "(" + friendlyTime + ")";
+								return friendlyTime;
+				});
+
+				// helper function to return agile bcc special email for inbound mail event
+				// trigger
+				Handlebars.registerHelper('inboundMail', function()
+				{
+								var agile_api = $.ajax({ type : 'GET', url : '/core/api/api-key', async : false, dataType : 'json' }).responseText;
+								agile_api = JSON.parse(agile_api);
+								var inbound_email = window.location.hostname.split('.')[0] + "-" + agile_api.api_key + "@agle.cc";
+								return new Handlebars.SafeString(inbound_email);
+				});
+
+				Handlebars.registerHelper('secondsToFriendlyTime', function(time)
+				{
+								var hours = Math.floor(time / 3600);
+								if (hours > 0)
+												time = time - hours * 60 * 60;
+								var minutes = Math.floor(time / 60);
+								var seconds = time - minutes * 60;
+								var friendlyTime = "";
+								if (hours == 1)
+												friendlyTime = hours + " hr ";
+								if (hours > 1)
+												friendlyTime = hours + " hrs ";
+								if (minutes > 0)
+												friendlyTime += minutes + " min ";
+								if (seconds > 0)
+												friendlyTime += seconds + " sec";
+								if (friendlyTime != "")
+												return "(" + friendlyTime + ")";
+								return friendlyTime;
+				});
+
+				// To pick randomly selected avatar url
+				Handlebars.registerHelper('arrayToCamelcase', function(values)
+				{
+								var result = '';
+								for (var i = 0; i < values.length; i++)
+								{
+												result += ucfirst(values[i]);
+												if (i + 1 < values.length)
+																result += ', ';
+								}
+								return result;
+				});
+
+				// To pick randomly selected avatar url
+				Handlebars.registerHelper('namesFromObject', function(jsonArray, fieldName)
+				{
+								var result = '';
+								console.log(jsonArray.length);
+								for (var i = 0; i < jsonArray.length; i++)
+								{
+												result += jsonArray[i][fieldName];
+												if (i + 1 < jsonArray.length)
+																result += ', ';
+								}
+								return result;
+>>>>>>> 351af59... Resolve Conflict with handlebars
 				});
 
 >>>>>>> 30f9921... Added new Function in handlebar for displayCustom date event list view
 });
+<<<<<<< HEAD
+=======
+
+// helper function return created time for event
+function getEventCreatedTime(due)
+{
+				// Get Todays Date
+				var eventStartDate = new Date(due);
+				due = eventStartDate.getTime() / 1000;
+				var date = new Date();
+				date.setHours(0, 0, 0, 0);
+
+				date = date.getTime() / 1000;
+				// console.log("Today " + date + " Due " + due);
+				return Math.floor((due - date) / (24 * 3600));
+}
+>>>>>>> 351af59... Resolve Conflict with handlebars

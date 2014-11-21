@@ -111,9 +111,16 @@ function google2fcEvent(google) {
     if (fc.allDay) {
       // subtract 1 from end date: Google all-day end dates are exclusive
       // FullCalendar's are inclusive
-      var end = $.fullCalendar.parseDate(fc.end);
+    				var end;
+    				if(fc.end.length >10){
+         end = $.fullCalendar.parseDate(fc.end);
+         fc.end = $.fullCalendar.formatDate(end, 'yyyy-MM-dd');
+    				}else{
+    								end = new Date(fc.end);
+    				}
       end.setDate(end.getDate() - 1);
-      fc.end = $.fullCalendar.formatDate(end, 'yyyy-MM-dd');
+      fc.end = end.format('yyyy-MM-dd');
+    				
     }
     return fc;
 }
