@@ -11,7 +11,7 @@
                 <ul class="dropdown-menu main-menu" id="new-type-tasks">
                    <li class="dropdown-submenu do-onclick-nothing">
                        <a data-toggle="dropdown">Group By</a>
-                       <ul class="dropdown-menu" id="new-type-tasks" style="min-width: 85px;left: -87px;">
+                       <ul class="dropdown-menu" id="new-type-tasks" style="min-width: 85px;left: -86px;">
                           <li><a href="CATEGORY" class="new-type-task">Category</a></li>
                           <li><a href="OWNER" class="hide-on-pending hide-on-my-task new-type-task">Owner</a></li>
                           <li><a href="DUE" class="new-type-task">Due</a></li>
@@ -50,7 +50,7 @@
 <script id="new-tasks-lists-model-template" type="text/html">
      <div class="list-header" attr="{{heading}}" ownerID={{owner_id}}> 
          <span style="overflow: hidden;white-space: nowrap;text-overflow:ellipsis;min-width: 10%;max-width: 90%;display: inline-block;">{{get_normal_name heading}}</span>
-         <span id="task-count-{{heading}}-{{owner_id}}" class="txt-small txt-mute"></span>
+         <span id="task-count-{{heading}}-{{owner_id}}" class="txt-small txt-mute" style="position: absolute;padding-left: 3px;top: 7px;"></span>
          <div class="pull-right"><img id="task-list-loading-img-{{heading}}-{{owner_id}}" src="img/ajax-loader-cursor.gif"></img></div>                 
      </div>     
 
