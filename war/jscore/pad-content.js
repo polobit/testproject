@@ -72,8 +72,8 @@ var CONTENT_JSON = {
 		"image" : "/img/clipboard.png"
 	},
 	"activity-reports" : {
-		"title" : "You do not have any reports currently.",
-		"description" : "Reports are based on a variety of tags and filters and receive them periodically to constantly be in touch with your sales cycle and pipeline.",
+		"title" : "You do not have any activity reports currently.",
+		"description" : "Get a periodic  email digest of various activities by users in Agile.",
 		//"learn_more" : "click here to learn more",
 		"button_text" : "Add Report",
 		"route" : "#activity-report-add",
