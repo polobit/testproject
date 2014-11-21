@@ -76,6 +76,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		    }
 
 		    Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
+		    System.out.println("owner is " + owner);
 		    if (owner == null)
 		    {
 			// response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -83,10 +84,16 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		    }
 
 		    NamespaceManager.set(agileDomain);
+		    
+		    
+		    System.out.println("CURRENT namespace is " + NamespaceManager.get());
 
 		    String fromEmail = message.getString("from_email");
 		    String fromName = message.getString("from_name");
 
+		    System.out.println("from email is " + fromEmail);
+		    System.out.println("from name is " + fromName);
+		    
 		    Contact contact = buildContact(fromName, fromEmail);
 		    if (contact == null)
 		    {
@@ -101,6 +108,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		    List<Trigger> triggers = TriggerUtil.getAllTriggers();
 		    for (Trigger trigger : triggers)
 		    {
+			System.out.println("trigger id is " + trigger.id);
 			if (StringUtils.equals(trigger.type.toString(), INBOUND_MAIL_EVENT))
 			{
 			    System.out.println("assigning campaign to contact");
