@@ -38,10 +38,44 @@
     				</div> 
 <div id="meeting_type_error" style="color: red;display:none;margin-left: 159px;margin-top: -9px;">Speacial characters are not allowed except comma</div>
 
-<div class="control-group" style="margin-top:30px">
+
+ 
+    			</fieldset>
+    		</form>
+
+
+<form  id="meeting_durations" name="meeting_durations"  class="form-horizontal">
+    			<fieldset>
+
+{{#stringToJSON this "meeting_durations"}}
+<div class="control-group">
+    					<label class="control-label" for="cname">Meeting Duration</label> 
+                   		  
+							<div class="controls">
+                            <label class="">
+                            15 Mins &nbsp;<input type="text" style="width:220px" id="15mins" name="15mins"   value="{{15mins}}"/> 
+                            </label>
+                            <label class="">
+                            30 Mins &nbsp;<input type="text" style="width:220px"  id="30mins" name="30mins" value="{{30mins}}"/> 
+                            </label>
+                           <label class="">
+                            60 Mins &nbsp;<input type="text" style="width:220px"  id="60mins" name="60mins" value="{{60mins}}"/> 
+                            </label>
+                        </div>
+    				</div> 
+{{/stringToJSON}}
+
+
+    			</fieldset>
+    		</form>
+
+    
+    		<form  class="form-horizontal">
+    			<fieldset>
+<div class="control-group">
                 <label class="control-label">Time Zone</label> 
                      		<div class="controls">
-                		<select id="timezone" name="timezone">
+                		<select id="timezone" name="timezone" class="input-xlarge">
                 		<option value="-12">(GMT-12:00) International Date Line West</option>
                 		<option value="MIT">(GMT-11:00) Midway Island, Samoa</option>
                 		<option value="HAST">(GMT-10:00) Hawaii</option>
@@ -130,37 +164,9 @@
                 	</select>				
                 </div>
                 </div>
- 
-    			</fieldset>
-    		</form>
-
-
-<form  id="meeting_durations" name="meeting_durations"  class="form-horizontal">
-    			<fieldset>
-
-{{#stringToJSON this "meeting_durations"}}
-<div class="control-group">
-    					<label class="control-label" for="cname">Meeting Duration</label> 
-                   		  
-							<div class="controls">
-                            <label class="">
-                            15 Mins &nbsp;<input type="text" {{15mins}} id="15mins" name="15mins"   value="{{15mins}}"/> 
-                            </label>
-                            <label class="">
-                            30 Mins &nbsp;<input type="text" id="30mins" name="30mins" value="{{30mins}}"/> 
-                            </label>
-                           <label class="">
-                            60 Mins &nbsp;<input type="text" id="60mins" name="60mins" value="{{60mins}}"/> 
-                            </label>
-                        </div>
-    				</div> 
-{{/stringToJSON}}
-
 
     			</fieldset>
     		</form>
-
-    
 
     		<form  class="form-horizontal">
     			<fieldset>
@@ -173,7 +179,6 @@
 <div class="control-group">
     				<div class="form-actions">
                			<button type="submit" class="btnSerialize btn btn-primary" id="btnSerialize">Save</button>
-               			<a type="reset" href='#user-prefs' class="btn">Cancel</a>
              			</div>
 </div>
 

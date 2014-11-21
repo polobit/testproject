@@ -28,6 +28,7 @@ $("#btnSerialize").die().live('click', function(e){
 		
 		json['businesshours_prefs']=business_hours;
 		json['meeting_durations']=JSON.stringify(meeting_durations);
+		json['timezone']=$("#timezone").val();
 		console.log(business_hours);
 
 		$.ajax({
