@@ -342,6 +342,14 @@ function displayListView()
 	$('#task-list-based-condition').show();
 	
 	var url = getParamsNew();
+	
+	// When user hit list view first time and my pending is selected as default one, we have to set pending true.
+	var owner = $('#new-owner-tasks').data("selected_item");
+	if(owner == undefined)
+		url = url  + "&pending=" + true;
+	
+	console.log("url for list view: "+url);	
+	
 	updateData(url);
 }
 
