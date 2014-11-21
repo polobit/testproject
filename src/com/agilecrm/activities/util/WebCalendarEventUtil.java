@@ -167,15 +167,17 @@ public class WebCalendarEventUtil
 	// according domain user timezone gets the weekday
 	// i.e in java sun,mon,tue,wed,thu,fri,sat 1,2,3,4,5,6,7 respectivly
 	TimeZone tz = TimeZone.getTimeZone(domain_user.timezone);
-	Calendar calendar = Calendar.getInstance(tz);
+	Calendar calendar = Calendar.getInstance();
 	calendar.setTimeInMillis(eppoch * 1000);
-
+	calendar.setTimeZone(tz);
 	int week_day = getWeekDayAccordingToJS(calendar.get(Calendar.DAY_OF_WEEK));
 
 	int date = calendar.get(Calendar.DATE);
 
 	int year = calendar.get(Calendar.YEAR);
 	int month = calendar.get(Calendar.MONTH);
+
+	System.out.println("week day " + week_day + " date " + date + " year " + year + " month " + month);
 
 	// business hours preferences will get as json array
 	JSONArray business_hours_array = new JSONArray(domain_user.business_hours);
@@ -218,25 +220,6 @@ public class WebCalendarEventUtil
 	    business_hours.add(endtime);
 	}
 	return business_hours;
-    }
-
-    /**
-     * 
-     * @param timezone
-     *            accepts domainuser timezone and gives weekday according to
-     *            timezone
-     * @param eppoch
-     *            sets the time to the calendar
-     * @return
-     */
-    public static int getWeekDay(TimeZone timezone, Long eppoch)
-    {
-	Calendar calendar = Calendar.getInstance(timezone);
-	calendar.setTimeInMillis(eppoch * 1000);
-
-	System.out.println(" weekday according to user timezone");
-	return 0;
-
     }
 
     public static int getWeekDayAccordingToJS(int wkday)
