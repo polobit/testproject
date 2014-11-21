@@ -48,7 +48,7 @@ var WorkflowsRouter = Backbone.Router
 			{
 
 				this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
-					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
+					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 2, postRenderCallback : function(el)
 					{
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 						{
@@ -245,8 +245,8 @@ var WorkflowsRouter = Backbone.Router
 				}
 
 				/* Set the designer JSON. This will be deserialized */
-				this.workflow_model = this.workflow_list_view.collection.get(id);
-				var workflowName = this.workflow_model.get("name");
+//				this.workflow_model = this.workflow_list_view.collection.get(id);
+//				var workflowName = this.workflow_model.get("name");
 
 				if (log_type == undefined || log_type == "ALL")
 					log_type = "";
@@ -269,7 +269,7 @@ var WorkflowsRouter = Backbone.Router
 				logsListView.collection.fetch({ success : function(collection)
 				{
 					if (collection.length === 0)
-						fill_logs_slate('logs-slate', log_type.split('=')[1], workflowName);
+						fill_logs_slate('logs-slate', log_type.split('=')[1]);
 				} });
 
 				$('#campaign-analysis-tabs-content').html(logsListView.el);
@@ -325,9 +325,9 @@ var WorkflowsRouter = Backbone.Router
 					return;
 				}
 
-				/* Set the designer JSON. This will be deserialized */
-				this.workflow_model = this.workflow_list_view.collection.get(id);
-				var workflowName = this.workflow_model.get("name");
+//				/* Set the designer JSON. This will be deserialized */
+//				this.workflow_model = this.workflow_list_view.collection.get(id);
+//				var workflowName = this.workflow_model.get("name");
 
 				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 				{

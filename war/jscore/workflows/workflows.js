@@ -354,7 +354,7 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
  * @param type - 
  *          to match with LOGS_PAD_CONTENT json key
  **/
-function fill_logs_slate(id, type, workflow_name)
+function fill_logs_slate(id, type)
 {
 	if(type == undefined)
 		type="ALL";
