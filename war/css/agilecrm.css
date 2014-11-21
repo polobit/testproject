@@ -1756,3 +1756,10 @@ display:block;
 #activityReportsForm ul.ms-list{
 	height:150px;
 }
+
+.inbound-help-text, .inbound-help-text:hover
+{
+	text-decoration: none;
+	border-bottom: 1px dashed #b2b0b1;
+	color: #b2b0b1
+}

@@ -39,7 +39,7 @@
                                         <option value="RUNS_MONTHLY">Monthly</option>
 										<optgroup label="Payments">
 										<option value="STRIPE_CHARGE_EVENT" id="stripe-charge-event">Stripe Event</option>
-                                        <!--<option value="SHOPIFY_EVENT" id="shopify-event">Shopify Event</option>-->
+                                        <option value="SHOPIFY_EVENT" id="shopify-event">Shopify Event</option>
 										<optgroup label="Email Bounces">
 										<option value="SOFT_BOUNCE">Soft Bounce</option>
 										<option value="HARD_BOUNCE">Hard Bounce</option>
@@ -107,8 +107,7 @@
 						<div id="trigger-inbound-mail-event" style="display:none;">
 						<div class="control-group">
                     		<div class="controls" style="margin-left:220px!important; width:40%;">
-								<i class="icon-info-sign"></i>
-								<small>For Agile CRM to recognize your emails, please setup forwarding at your email server side.</small>
+								<small><i class="icon-info-sign"></i> For Agile CRM to recognize your emails, please setup <a class="inbound-help-text"  rel="popover" data-placement="top" data-title="" data-content={{inboundMail}} id="element" data-trigger="hover" data-original-title="">forwarding email</a> at your email server side.</small>
 							</div>
                 		</div>
 						</div>
