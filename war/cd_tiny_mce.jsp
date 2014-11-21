@@ -233,6 +233,8 @@ function init_tinymce()
         valid_elements: "*[*]",
         browser_spellcheck : true,
         gecko_spellcheck: true,
+        relative_urls : false,
+		convert_urls : false,
         extended_valid_elements : "*[*]",
         setup: function(editor) {
             
