@@ -88,7 +88,6 @@ public class ActivityReports implements Serializable
 	return users_list;
     }
 
-    @XmlElement(name = "user_ids")
     public List<String> getUser_ids()
     {
 	user_ids = new ArrayList<String>();
