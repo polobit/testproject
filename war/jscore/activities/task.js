@@ -7,7 +7,7 @@
  * author: Rammohan
  */
 
-$(function() {
+$(function() {	
 	
 	// Loads progress slider in add task / update modal.
 	loadProgressSlider($("#taskForm"));

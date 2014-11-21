@@ -82,6 +82,9 @@ var CalendarRouter = Backbone.Router.extend({
 			
 			// Read stored selections from cookie and Creates nested collection
 			readDetailsFromCookie();
+			
+			// Bind dropdown events 
+			bindDropdownEvents();
 
 		}, "<li><a href='{{id}}' class='hide-on-owner'>My Tasks</a></li>", true);
 
@@ -91,5 +94,5 @@ var CalendarRouter = Backbone.Router.extend({
 		$("#calendarmenu").addClass("active");
 
 		// Hide owner's and status task selection options from dropdown
-		$(".hide-on-pending").hide();
+		$(".hide-on-pending").hide();		
 	} });
