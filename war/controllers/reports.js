@@ -158,7 +158,7 @@ var ReportsRouter = Backbone.Router.extend({
 		var count = 0;
 		$("#content").html(getRandomLoadingImg());
 		CUSTOM_FIELDS = undefined;
-		var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "email-reports", isNew : true,
+		var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "contact-reports", isNew : true,
 			postRenderCallback : function(el)
 			{
 				// Counter to set when script is loaded. Used to avoid flash in
@@ -220,7 +220,7 @@ var ReportsRouter = Backbone.Router.extend({
 
 		// Gets a report to edit, from reports collection, based on id
 		var report = this.reports.collection.get(id);
-		var report_model = new Base_Model_View({ url : 'core/api/reports', change : false, model : report, template : "reports-add", window : "email-reports",
+		var report_model = new Base_Model_View({ url : 'core/api/reports', change : false, model : report, template : "reports-add", window : "contact-reports",
 			postRenderCallback : function(el)
 			{
 				if (count != 0)
