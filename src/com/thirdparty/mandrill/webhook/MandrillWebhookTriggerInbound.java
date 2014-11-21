@@ -75,6 +75,8 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 			// response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			continue;
 		    }
+		    
+		    NamespaceManager.set(agileDomain);
 
 		    Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
 		    System.out.println("owner is " + owner);
@@ -83,10 +85,6 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 			// response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			continue;
 		    }
-
-		    NamespaceManager.set(agileDomain);
-		    
-		    
 		    System.out.println("CURRENT namespace is " + NamespaceManager.get());
 
 		    String fromEmail = message.getString("from_email");
