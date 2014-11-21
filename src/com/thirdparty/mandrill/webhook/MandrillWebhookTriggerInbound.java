@@ -36,6 +36,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
+	System.out.println("---------------updated--------------------");
 	String oldNamespace = NamespaceManager.get();
 	try
 	{
