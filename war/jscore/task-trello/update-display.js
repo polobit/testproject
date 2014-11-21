@@ -344,3 +344,52 @@ function displayListView()
 	var url = getParamsNew();
 	updateData(url);
 }
+
+//
+function bindDropdownEvents()
+{
+	// Click events to agents dropdown of Owner's list and Criteria's list
+	$("ul#new-owner-tasks li a, .new-type-task").on("click", function(e)
+	{        
+		e.preventDefault();			
+				
+		// Hide list view and show column view with loading img
+		hideListViewAndShowLoading();		
+		
+		// Hide dropdown
+		if($(".type-task-button").hasClass("open"))
+			$(".type-task-button").removeClass("open");
+		
+		// Show selected name
+		var name = $(this).html(), id = $(this).attr("href");
+		
+		var selectedDropDown = $(this).closest("ul").attr("id");
+				
+		if(selectedDropDown == "new-type-tasks") // criteria type
+		    $(this).closest("ul.main-menu").data("selected_item", id);
+		else  // owner type
+			$(this).closest("ul").data("selected_item", id);
+		
+		$(this).closest(".btn-group").find(".selected_name").text(name);
+
+		// Empty collection
+		if(TASKS_LIST_COLLECTION != null)
+		TASKS_LIST_COLLECTION.collection.reset();
+		
+		//Add selected details of dropdown in cookie
+		addDetailsInCookie(this);
+		
+		setTimeout(function() { // Do something after 2 seconds
+			// Get details from dropdown and call function to create collection
+			getDetailsForCollection();
+		}, 2000);
+	});
+
+	// Change page heading as per owner selection
+	$("ul#new-owner-tasks li a").on("click", function()
+	{		
+		// Change heading of page
+		changeHeadingOfPage($('#new-owner-tasks').closest(".btn-group").find(".selected_name").html());
+	});
+	
+}

@@ -9,17 +9,17 @@
                 <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu main-menu" id="new-type-tasks">
-                   <li class="dropdown-submenu">
+                   <li class="dropdown-submenu do-onclick-nothing">
                        <a data-toggle="dropdown">Group By</a>
                        <ul class="dropdown-menu" id="new-type-tasks" style="min-width: 85px;left: -87px;">
-                          <li><a href="CATEGORY">Category</a></li>
-                          <li><a href="OWNER" class="hide-on-pending hide-on-my-task">Owner</a></li>
-                          <li><a href="DUE">Due</a></li>
-                          <li><a href="PRIORITY">Priority</a></li>
-                          <li><a href="STATUS" class="hide-on-pending hide-on-all-pending">Status</a></li>
+                          <li><a href="CATEGORY" class="new-type-task">Category</a></li>
+                          <li><a href="OWNER" class="hide-on-pending hide-on-my-task new-type-task">Owner</a></li>
+                          <li><a href="DUE" class="new-type-task">Due</a></li>
+                          <li><a href="PRIORITY" class="new-type-task">Priority</a></li>
+                          <li><a href="STATUS" class="hide-on-pending hide-on-all-pending new-type-task">Status</a></li>
                        </ul>
                    </li>
-                   <li><a href="LIST" class="list-view">List View</a></li>                     
+                   <li><a href="LIST" class="list-view new-type-task">List View</a></li>                     
                 </ul>
             </div>
             <div class="btn-group pull-right owner-task-button" style="cursor:pointer;margin-right:15px;top: -28px;">
@@ -49,7 +49,7 @@
 
 <script id="new-tasks-lists-model-template" type="text/html">
      <div class="list-header" attr="{{heading}}" ownerID={{owner_id}}> 
-         <span>{{get_normal_name heading}}</span>
+         <span style="overflow: hidden;white-space: nowrap;text-overflow:ellipsis;min-width: 10%;max-width: 90%;display: inline-block;">{{get_normal_name heading}}</span>
          <span id="task-count-{{heading}}-{{owner_id}}" class="txt-small txt-mute"></span>
          <div class="pull-right"><img id="task-list-loading-img-{{heading}}-{{owner_id}}" src="img/ajax-loader-cursor.gif"></img></div>                 
      </div>     

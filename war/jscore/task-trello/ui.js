@@ -78,7 +78,7 @@ $(function()
 	});
 	
 	// Click events to agents dropdown of Owner's list and Criteria's list
-	$("ul#new-owner-tasks li a, ul#new-type-tasks li a").die().live("click", function(e)
+	/*$("ul#new-owner-tasks li a, ul#new-type-tasks li a").die().live("click", function(e)
 	{
 		e.preventDefault();			
 		
@@ -115,7 +115,7 @@ $(function()
 	{		
 		// Change heading of page
 		changeHeadingOfPage($('#new-owner-tasks').closest(".btn-group").find(".selected_name").html());
-	});
+	});*/
 
 	/*
 	 * In new/update task modal, on selection of status, show progress slider
