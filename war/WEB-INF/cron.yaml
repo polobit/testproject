@@ -23,7 +23,7 @@ cron:
   url: /backend/cron/reports?duration=WEEKLY
   schedule: every friday 23:40 
   
-  - description: daily activity reports
+- description: daily activity reports
   url: /backend/cron/activity-reports?duration=DAILY
   schedule: every day 23:20
   
