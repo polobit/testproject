@@ -1,8 +1,8 @@
 /**
- * contact-details-tabs.js fetches the contact (which is in contact detail view) 
- * related details (notes, tasks, deals, campaigns and mails etc..) and presents 
- * in tab content as specified, when the corresponding tab is clicked. 
- * Timeline tab is activated by default to show all the details as vertical time-line.
+ * contact-details-tabs.js fetches the contact (which is in contact detail view)
+ * related details (notes, tasks, deals, campaigns and mails etc..) and presents
+ * in tab content as specified, when the corresponding tab is clicked. Timeline
+ * tab is activated by default to show all the details as vertical time-line.
  * 
  * @module Contact management
  * @author Rammohan
@@ -40,9 +40,9 @@ $(function(){
 	var id;
 	
 	/**
-	 * Activates the Timeline tab-content to show the time-line with all details,
-	 * which are already added to time-line, when the contact is getting to its
-	 * detail view.  
+	 * Activates the Timeline tab-content to show the time-line with all
+	 * details, which are already added to time-line, when the contact is
+	 * getting to its detail view.
 	 */
 	$('#contactDetailsTab a[href="#timeline"]').live('click', function (e){
 		e.preventDefault();
@@ -75,7 +75,7 @@ $(function(){
 		$(this).parent().parent().find('#complete-webstats').removeAttr('style');
 	});
 	
-	//to remove contact from active campaign.
+	// to remove contact from active campaign.
 	$('.remove-active-campaign').die().live('click',function(e){
 		e.preventDefault();
 		
@@ -102,7 +102,8 @@ $(function(){
 	    	var contact_json = App_Contacts.contactDetailView.model.toJSON();
 	    	var campaign_status = contact_json.campaignStatus;
 	    	
-	    	// On success callback, remove from both UI and backbone contact model.
+	    	// On success callback, remove from both UI and backbone contact
+			// model.
 	    	if(campaign_status !== undefined)
 	    		{
 	    			for(var i = 0,len = campaign_status.length;i<len;i++)
@@ -116,26 +117,23 @@ $(function(){
 	    			}
 	    		}
 	    	
-	    	// Remove li 
+	    	// Remove li
 	    	$removeActiveCampaign.closest('li').remove();
 	    	
 	    	}
 	    });
 		
 	});
-/*	
-	$('.ativity-block-ul > li')
-	.live('mouseenter',function(){
-		console.log("hover");
-	})
-	.live('mouseleave',function(){
-		console.log("hout");
-	}); */
+/*
+ * $('.ativity-block-ul > li') .live('mouseenter',function(){
+ * console.log("hover"); }) .live('mouseleave',function(){ console.log("hout");
+ * });
+ */
 	
 	
 	/**
-	 * Fetches all the notes related to the contact and shows the notes collection 
-	 * as a table in its tab-content, when "Notes" tab is clicked.
+	 * Fetches all the notes related to the contact and shows the notes
+	 * collection as a table in its tab-content, when "Notes" tab is clicked.
 	 */ 
 	$('#contactDetailsTab a[href="#notes"]').live('click', function (e){
 		e.preventDefault();
@@ -144,8 +142,8 @@ $(function(){
 	});
 	
 	/**
-	 * Fetches all the events related to the contact and shows the events collection 
-	 * as a table in its tab-content, when "Events" tab is clicked.
+	 * Fetches all the events related to the contact and shows the events
+	 * collection as a table in its tab-content, when "Events" tab is clicked.
 	 */
 	$('#contactDetailsTab a[href="#events"]').live('click', function (e){
 		e.preventDefault();
@@ -154,8 +152,9 @@ $(function(){
 	});
 	
 	/**
-	 * Fetches all the documents related to the contact and shows the documents collection 
-	 * as a table in its tab-content, when "Documents" tab is clicked.
+	 * Fetches all the documents related to the contact and shows the documents
+	 * collection as a table in its tab-content, when "Documents" tab is
+	 * clicked.
 	 */
 	$('#contactDetailsTab a[href="#documents"]').live('click', function (e){
 		e.preventDefault();
@@ -164,8 +163,8 @@ $(function(){
 	});
 	
 	/**
-	 * Fetches all the notes related to the contact and shows the tasks collection 
-	 * as a table in its tab-content, when "Tasks" tab is clicked.
+	 * Fetches all the notes related to the contact and shows the tasks
+	 * collection as a table in its tab-content, when "Tasks" tab is clicked.
 	 */
 	$('#contactDetailsTab a[href="#tasks"]').live('click', function (e){
 		e.preventDefault();
@@ -174,8 +173,8 @@ $(function(){
 	});
 	
 	/**
-	 * Fetches all the deals related to the contact and shows the deals collection 
-	 * as a table in its tab-content, when "Deals" tab is clicked.
+	 * Fetches all the deals related to the contact and shows the deals
+	 * collection as a table in its tab-content, when "Deals" tab is clicked.
 	 */
 	$('#contactDetailsTab a[href="#deals"]').live('click', function (e){
 		e.preventDefault();
@@ -194,19 +193,19 @@ $(function(){
 	});
 	
 	/**
-	 * Gets every conversation of the contact (if it has email) with the associated 
-	 * email (gmail or imap) in Email-preferences of this CRM, when "Mail" tab is 
-	 * clicked.  
+	 * Gets every conversation of the contact (if it has email) with the
+	 * associated email (gmail or imap) in Email-preferences of this CRM, when
+	 * "Mail" tab is clicked.
 	 */
-	$('#contactDetailsTab a[href="#mail"]').live('click', function (e){
+	$('#contactDetailsTab a[href="#mail"]').live('click', function (e){	
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("mail");
 		contact_details_tab.load_mail();
 	});
 	
 	/**
-	 * Gets the activities of a contact from browsing history, using its
-	 * email. To do so the email should be run in analytics script provided by 
+	 * Gets the activities of a contact from browsing history, using its email.
+	 * To do so the email should be run in analytics script provided by
 	 * agileCRM.
 	 */ 
 	$('#contactDetailsTab a[href="#stats"]').live('click', function (e){
@@ -217,9 +216,9 @@ $(function(){
 	});
 	
 	/**
-	 * Fetches all the logs of the campaigns that the contact is subscribed to and
-	 * shows them in a table. Also shows a campaigns drop down list to subscribe
-	 * the contact to the selected campaign.  
+	 * Fetches all the logs of the campaigns that the contact is subscribed to
+	 * and shows them in a table. Also shows a campaigns drop down list to
+	 * subscribe the contact to the selected campaign.
 	 */
 	$('#contactDetailsTab a[href="#campaigns"]').live('click', function (e){
 		e.preventDefault();
@@ -235,7 +234,7 @@ $(function(){
 	    
 	 
 	/**
-	 * Populates subject and description using email templates, on select option 
+	 * Populates subject and description using email templates, on select option
 	 * change of "Fill From Templates" field.
 	 */
 	$('.emailSelect').die().live('change',function(e){
@@ -270,17 +269,19 @@ $(function(){
 				var subject = model.subject;
 				var text = model.text;
 				
-				// Apply handlebars template on send-email route 
+				// Apply handlebars template on send-email route
 				if(Current_Route !== 'bulk-email' && Current_Route !== 'send-email')
 				{
 				
 				// Get Current Contact
-/*				var contact = App_Contacts.contactDetailView.model;
-				var json = contact.toJSON();*/
+/*
+ * var contact = App_Contacts.contactDetailView.model; var json =
+ * contact.toJSON();
+ */
 				
 				/*
-				 * Get Contact properties json to fill the templates
-				 * using handlebars
+				 * Get Contact properties json to fill the templates using
+				 * handlebars
 				 */  
 				var json = get_contact_json_for_merge_fields();
 				var template;
@@ -323,13 +324,21 @@ $(function(){
 	});
 	
 	/**
-	 * Sends email to the target email. Before sending, validates and serializes email form. 
+	 * Sends email to the target email. Before sending, validates and serializes
+	 * email form.
 	 */ 
 	$('#sendEmail').die().live('click',function(e){
 		e.preventDefault();
 		
-		 if($(this).attr('disabled'))
+		if($(this).attr('disabled'))
 	   	     return;
+		 
+		var network_type = $('#attachment-select').find(":selected").attr('network_type');
+		//checking email attachment type , email doesn't allow google drive documents as attachments
+		if(network_type){
+			if(network_type.toUpperCase() === 'GOOGLE')
+				return;
+		}	
 			
 		// Saves tinymce content to textarea
 		save_content_to_textarea('email-body');
@@ -379,10 +388,10 @@ $(function(){
 			            window.history.back();
 			            
 		                 },
-		        error: function()
+		        error: function(request, status, error)
 		               {
 		        	      enable_send_button($('#sendEmail'));
-		        	      
+		        	      window.alert(request.responseText);
 		        	      console.log("Error occured while sending email");
 		               }
 		});
@@ -390,8 +399,8 @@ $(function(){
 	});
 	
 	/**
-	 * Close button click event of send email form. Navigates to contact
-	 * detail view.
+	 * Close button click event of send email form. Navigates to contact detail
+	 * view.
 	 */
 	$('#send-email-close').die().live('click',function(e){
 		e.preventDefault();
@@ -491,12 +500,13 @@ $(function(){
 		// Create array with entity id.
 		id_array.push(entity_id);
 		
-		// Set entity id array in to json object with key ids, 
+		// Set entity id array in to json object with key ids,
 		// where ids are read using form param
 		id_json.ids = JSON.stringify(id_array);
 		var that = this;
 
-		// Add loading. Adds loading only if there is no loaded image added already i.e., 
+		// Add loading. Adds loading only if there is no loaded image added
+		// already i.e.,
 		// to avoid multiple loading images on hitting delete multiple times
 		if($(this).find('.loading').length == 0)
 			$(this).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
@@ -542,8 +552,8 @@ $(function(){
  * Returns contact properties in a json
  * 
  * @method get_property_JSON
- * @param {Object} contactJSON
- * 			contact as json object
+ * @param {Object}
+ *            contactJSON contact as json object
  */  
 function get_property_JSON(contactJSON)
 {	
@@ -558,20 +568,21 @@ function get_property_JSON(contactJSON)
 }
 
 /**
- * Populates send email details (from address, to address, signature and
- * email templates) 
+ * Populates send email details (from address, to address, signature and email
+ * templates)
  * 
  * @method populate_send_email_details
- * @param {Object} el
- * 			html object of send email form
+ * @param {Object}
+ *            el html object of send email form
  */
 function populate_send_email_details(el){
 
 	$("#emailForm",el).find('input[name="from_name"]').val(CURRENT_DOMAIN_USER.name);
 	$("#emailForm", el).find( 'input[name="from_email"]' ).val(CURRENT_DOMAIN_USER.email);
 	
-	// Fill hidden signature field using userprefs 
-	//$("#emailForm").find( 'input[name="signature"]' ).val(CURRENT_USER_PREFS.signature);
+	// Fill hidden signature field using userprefs
+	// $("#emailForm").find( 'input[name="signature"]'
+	// ).val(CURRENT_USER_PREFS.signature);
 
 	// Prefill the templates
 	var optionsTemplate = "<option value='{{id}}'> {{#if name}}{{name}}{{else}}{{subject}}{{/if}}</option>";
@@ -579,12 +590,13 @@ function populate_send_email_details(el){
 }
 
 /**
- * Activates "Timeline" tab and its tab-content in contact details and
- * also deactivates the other activated tabs.
+ * Activates "Timeline" tab and its tab-content in contact details and also
+ * deactivates the other activated tabs.
  * 
  * @method activate_timeline_tab
  * 
- * Changed to activate first tab in the list ( on contact-details page , works even on company-details page
+ * Changed to activate first tab in the list ( on contact-details page , works
+ * even on company-details page
  * @modified Chandan
  */
 function activate_timeline_tab(){
@@ -594,7 +606,8 @@ function activate_timeline_tab(){
 	$('div.tab-content').find('div.active').removeClass('active');
 	$('div.tab-content > div:first-child').addClass('active');
 	
-	//	$('#time-line').addClass('active');  //old original code for flicking timeline
+	// $('#time-line').addClass('active'); //old original code for flicking
+	// timeline
 	
 	if(App_Contacts.contactDetailView.model.get('type')=='COMPANY')
 	{
@@ -605,9 +618,10 @@ function activate_timeline_tab(){
 /**
  * Disables Send button of SendEmail and change text from Send to Sending...
  * 
- * @param elem - element to be disabled.
+ * @param elem -
+ *            element to be disabled.
  * 
- **/
+ */
 function disable_send_button(elem)
 {
 	elem.css('min-width',elem.width()+'px')
@@ -619,9 +633,10 @@ function disable_send_button(elem)
 /**
  * Enables disabled Send button and keep old text
  * 
- * @param elem - element to be enabled.
+ * @param elem -
+ *            element to be enabled.
  * 
- **/
+ */
 function enable_send_button(elem)
 {
 	elem.text(elem.attr('data-send-text')).removeAttr('disabled data-send-text');
@@ -629,7 +644,7 @@ function enable_send_button(elem)
 
 /**
  * Returns webstats count w.r.t domain
- **/
+ */
 function get_web_stats_count_for_domain()
 {
 	// Returns web-stats count
@@ -665,7 +680,8 @@ function load_contact_tab(el, contactJSON)
 	{
 		
 		
-		// Should add active class, tab is not enough as content might not be shown in view.
+		// Should add active class, tab is not enough as content might not be
+		// shown in view.
 		$(".tab-content", el).find("#" + position).addClass("active");
 		contact_details_tab["load_" + position]();
 	}

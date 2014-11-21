@@ -78,7 +78,6 @@ $(function()
 		// /removed old code from below,
 		// now filters will work only on contact, not company
 	});
-
 	/*
 	 * If default filter is selected, removes filter cookies an load contacts
 	 * with out any query condition
@@ -171,12 +170,14 @@ function setupContactFilterList(cel, tag_id)
 						
 
 	var filter_id = null;
-	contactFiltersListView = new Base_Collection_View(
+		contactFiltersListView = new Base_Collection_View(
 			{
 				url : '/core/api/filters',
+				sort_collection : false,
 				restKey : "ContactFilter",
 				templateKey : "contact-filter-list",
 				individual_tag_name : 'li',
+				sort_collection : false,
 				postRenderCallback : function(el)
 				{
 					var filter_name;
@@ -227,13 +228,13 @@ function setupContactFilterList(cel, tag_id)
 						
 				} });
 
-	// Fetchs filters
-	contactFiltersListView.collection.fetch();
-
-	var filter_dropdown_element = contactFiltersListView.render().el;
-
-	// Shows in contacts list
-	$('#filter-list', cel).html(contactFiltersListView.render().el);
+			// Fetchs filters
+			contactFiltersListView.collection.fetch();
+		
+			var filter_dropdown_element = contactFiltersListView.render().el;
+		
+			// Shows in contacts list
+			$('#filter-list', cel).html(contactFiltersListView.render().el);
 }
 
 /**

@@ -174,7 +174,8 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 	
 	// While attaching document is from existing documenst list, no need of form verification.
 	if(form_id)
-	{
+	{	
+		
 		if (!isValidForm('#' + form_id)) {
 
 			// Removes disabled attribute of save button

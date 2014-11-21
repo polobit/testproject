@@ -49,7 +49,6 @@ import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.util.HTTPUtil;
-import com.agilecrm.util.JSAPIUtil;
 
 /**
  * <code>ContactsAPI</code> includes REST calls to interact with {@link Contact}
@@ -83,15 +82,15 @@ public class ContactsAPI
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Contact> getContacts(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
-	    @QueryParam("reload") boolean force_reload)
+	    @QueryParam("reload") boolean force_reload, @QueryParam("global_sort_key") String sortKey)
     {
 	if (count != null)
 	{
 	    System.out.println("Fetching page by page");
-	    return ContactUtil.getAllContacts(Integer.parseInt(count), cursor);
+	    return ContactUtil.getAllContactsByOrder(Integer.parseInt(count), cursor, sortKey);
 	}
 
-	return ContactUtil.getAllContacts();
+	return ContactUtil.getAllContactsByOrder(sortKey);
     }
 
     /* Fetch all contacts related to a company */
@@ -144,16 +143,17 @@ public class ContactsAPI
     @Path("/companies")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Contact> getCompanies(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
+    public List<Contact> getCompanies(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
+    		@QueryParam("global_sort_key") String sortKey)
     {
 	if (count != null)
 	{
 
 	    System.out.println("Fetching companies page by page");
-	    return ContactUtil.getAllCompanies(Integer.parseInt(count), cursor);
+	    return ContactUtil.getAllCompaniesByOrder(Integer.parseInt(count), cursor, sortKey);
 	}
 
-	return ContactUtil.getAllContacts();
+	return ContactUtil.getAllContactsByOrder(sortKey);
     }
 
     @Path("/")
@@ -798,17 +798,17 @@ public class ContactsAPI
     @Path("/add-score")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces("application/x-javascript")
-    public String addScore(@FormParam("email") String email, @FormParam("score") Integer score)
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Contact addScore(@FormParam("email") String email, @FormParam("score") Integer score)
     {
 	try
 	{
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
-		return JSAPIUtil.generateContactMissingError();
+		return null;
 
 	    contact.addScore(score);
-	    return new ObjectMapper().writeValueAsString(contact);
+	    return contact;
 	}
 	catch (Exception e)
 	{

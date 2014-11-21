@@ -85,35 +85,77 @@ function contactTableView(base_model) {
 function setupViews(cel, button_name) {
 
 	// Creates a view for custom views
-	
-	var customView = new Base_Collection_View({
-		url : 'core/api/contact-view',
-		restKey : "contactView",
-		templateKey : "contact-view",
-		individual_tag_name : 'li',
-		id : 'view-list',
-		postRenderCallback : function(el) {
-
-			// If button_name is defined, then view is selected then the name of
-			// the view is show in the custom view button.
-			if (button_name)
-				$(el).find('.custom_view').append(button_name);
-		}
-	});
-
-	// Fetches the list of custom fields, and shows is the the contact page
-	customView.collection.fetch({
-		success : function() {
-			$("#view-list", cel).html(customView.el);
-			
-			if(readCookie('company_filter'))
-			{
-				$('#contact-view-model-list>li').css('display','none');
-				$('#contact-view-model-list>li:first').css('display','list-item');
+	head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
+	{
+		var customView = new Base_Collection_View({
+			url : 'core/api/contact-view',
+			restKey : "contactView",
+			templateKey : "contact-view",
+			individual_tag_name : 'li',
+			id : 'view-list',
+			sort_collection : false,
+			postRenderCallback : function(el) {
+				$(el).find('.dropdown-menu').find(".dropdown-submenu").on("click",function(e){
+				    e.stopImmediatePropagation();
+				});
+				// If button_name is defined, then view is selected then the name of
+				// the view is show in the custom view button.
+				if (button_name)
+					$(el).find('.custom_view').append(button_name);
+				//updates the selected sort item to bold
+				updateSelectedSortKey(el);
+				addClickEventsForSorting(el);
 			}
-		}
-	})
+		});
+		// Fetches the list of custom fields, and shows is the the contact page
+		customView.collection.fetch({
+			success : function() {
+				$("#view-list", cel).html(customView.el);
+				
+				if(readCookie('company_filter'))
+				{
+					$('#contact-view-model-list>li').css('display','none');
+					$('#contact-view-model-list>li:first').css('display','list-item');
+				}
+			}
+		})
+	});
 }
+
+function updateSelectedSortKey(el) {
+	var sort_key = readCookie("sort_by_name");
+	if(sort_key && sort_key != null) {
+		var idSuffix = '-asc';
+		if(sort_key.indexOf('-') == 0) {
+			sort_key = sort_key.substring(1);
+			idSuffix = '-desc'
+		}
+		var elementId = 'sort-by-'+sort_key+idSuffix;
+		$(el).find('#'+elementId).addClass('bold-text');
+	}
+}
+
+	function addClickEventsForSorting(el) {
+		// Fetch sort result without changing route on click
+		$(el).find('.sort').on("click", function(e)
+		{
+
+			e.preventDefault();
+			eraseCookie('sort_by_name');
+
+			// Gets name of the attribut to sort, which is set as data
+			// attribute in the link
+			sort_by = $(this).attr('data');
+			
+			// Saves Sort By in cookie
+			createCookie('sort_by_name', sort_by);
+
+			CONTACTS_HARD_RELOAD=true;
+			App_Contacts.contacts();
+			return;
+		});
+
+	}
 
 /**
  * Init function to define actions on events on the custom view list

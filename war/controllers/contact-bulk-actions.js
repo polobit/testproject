@@ -94,6 +94,7 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 		else
 		{
 			$("#content").html(getTemplate("send-email", {}));
+			$("#emailForm").find('.add-attachment-select').hide();
 			$('body').trigger('fill_emails');
 		}
 	}

@@ -1,5 +1,6 @@
 package com.agilecrm.contact.customview;
 
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.annotation.Cached;
+import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.googlecode.objectify.condition.IfDefault;
@@ -23,7 +25,7 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 @Unindexed
 @Cached
-public class CustomView
+public class CustomView implements Comparable<CustomView>
 {
 
     // Key
@@ -31,6 +33,7 @@ public class CustomView
     public Long id;
 
     /** Name of the contact custom view */
+    @Indexed
     @NotSaved(IfDefault.class)
     public String name = null;
 
@@ -63,8 +66,13 @@ public class CustomView
     public static List<CustomView> getContactViewList()
     {
 
-	// Fetches all the Views
-	return dao.fetchAll();
+    	// Fetches all the Views
+    	List<CustomView> customViews = dao.fetchAll();
+    	if(customViews == null || customViews.isEmpty()) {
+			return customViews;
+		}
+    	Collections.sort(customViews);
+    	return customViews;
     }
 
     // Get contact view by id
@@ -106,5 +114,17 @@ public class CustomView
     {
 	return "id: " + id + " fields_set: " + fields_set + " view_name" + name;
     }
+
+	@Override
+	public int compareTo(CustomView customView) {
+		if(this.name == null && customView.name != null) {
+			return -1;
+		} else if(this.name != null && customView.name == null) {
+			return 1;
+		} else if(this.name == null && customView.name == null) {
+			return 0;
+		}
+		return this.name.compareToIgnoreCase(customView.name);
+	}
 
 }

@@ -351,7 +351,7 @@ public class BulkActionUtil
 	if (criteria.equals("#contacts"))
 	    return ContactUtil.getAllContacts(ENTITIES_FETCH_LIMIT, cursor);
 
-	return new ArrayList<Contact>(ContactFilterUtil.getContacts(criteria, ENTITIES_FETCH_LIMIT, cursor));
+	return new ArrayList<Contact>(ContactFilterUtil.getContacts(criteria, ENTITIES_FETCH_LIMIT, cursor, null));
     }
 
     /**

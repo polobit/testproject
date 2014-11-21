@@ -118,5 +118,39 @@
         <property name="pipeline" direction="asc"/>
         <property name="expected_value" direction="asc"/>
     </datastore-index>
+    
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+	</datastore-index>
+	
+	<datastore-index kind="Contact" ancestor="false" source="auto">
+	        <property name="type" direction="asc"/>
+	        <property name="created_time" direction="asc"/>
+	</datastore-index>
+	
+	<datastore-index kind="Contact" ancestor="false" source="auto">
+	        <property name="type" direction="asc"/>
+	        <property name="lead_score" direction="asc"/>
+	</datastore-index>
+	
+	<datastore-index kind="Contact" ancestor="false" source="auto">
+	        <property name="type" direction="asc"/>
+	        <property name="lead_score" direction="desc"/>
+	</datastore-index>
+	
+	<datastore-index kind="Contact" ancestor="false" source="auto">
+	        <property name="type" direction="asc"/>
+	        <property name="star_value" direction="asc"/>
+	</datastore-index>
+	
+	<datastore-index kind="Contact" ancestor="false" source="auto">
+	        <property name="type" direction="asc"/>
+	        <property name="star_value" direction="desc"/>
+	</datastore-index>
+	<datastore-index kind="ContactView" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="name" direction="asc"/>
+	</datastore-index>
 
 </datastore-indexes>
