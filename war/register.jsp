@@ -256,7 +256,7 @@ $.validator.setDefaults({
 								<h1 class="regpage-logHead">
 									<img src="img/signin/cloud-logo.png">One last step
 								</h1>
-								<div class="reg-info">No credit card required</div>
+								<div class="reg-info"></div>
 							</div>
 							<fieldset class="step2">
 								<div class='regpage-fieldview'>
@@ -268,18 +268,46 @@ $.validator.setDefaults({
 									</div>
  
 									<div class="form-group login-company-size">
-									<select class="selectpicker show-tick form-control"  data-width="100%">
-    <option>Mustard</option>
-    <option>Ketchup</option>
-    <option>Relish</option>
-  </select>
+									<select class="form-control required"  name="company_size" data-width="100%">
+											<option value="">Company size</option>
+											<option value="5000+">5000+</option>
+											<option value="1000-4999">1000-4999</option>
+											<option value="500-999">500-999</option>
+											<option value="250-499">250-499</option>
+											<option value="50-249">50-249</option>
+											<option value="25-49">25-49</option>
+											<option value="10-24">10-24</option>
+											<option value="1-9">1-9</option>    
+								  </select>
 									</div>
-
+									
 									<div class="form-group login-company-size">
 										<span class="regpage-company-size"></span> <input
 											class="input-xlarge field required form-control number"
 											id="login_phone_number" name='phone_number' type="text" min=2
 											placeholder="Phone Number " autocapitalize="off">
+									</div>
+									
+									<div class="form-group login-plan_type">
+									<select class="form-control required"  name="plan_type" data-width="100%">
+											<option value="">Choose Plan</option>
+											<option value="Starter">Starter</option>
+											<option value="Regular">Regular</option>
+											<option value="pro">professional</option>
+								  </select>
+									</div>
+									
+										<div class="form-group login-plan_type">
+									<select class="form-control required"  name="role" data-width="100%">
+											<option value="">Role</option>
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+								  </select>
+									</div>
+									
+									<div class="form-group login-company-size">
+										<span class="regpage-plan_type"></span> 
 									</div>
 
 									<div align="center" class="regpage-signup">
@@ -287,7 +315,7 @@ $.validator.setDefaults({
 											class='btn btn-large btn-primary  regpage-btn'>
 									</div>
 
-									<div class="form-group regpage-options log-terms"
+									<div class="form-group "
 										style="margin-bottom: 0px;"></div>
 								</div>
 							</fieldset>
@@ -376,10 +404,10 @@ $.validator.setDefaults({
 			
 			$('#cor').carousel('pause');
 			
-			$('.selectpicker').selectpicker({
+			/* $('.selectpicker').selectpicker({
 			      style: 'none',
 			      size: 100
-			  });
+			  }); */
 				
 			// Submits the Agile form to to RegisterServlet
 			$("#agile").validate({
