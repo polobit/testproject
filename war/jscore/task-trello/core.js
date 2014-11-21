@@ -98,15 +98,7 @@ function initTaskListCollection()
 			$('.loading', el).remove();
 
 			// Adjust Height Of Task List And Scroll as per window size
-			adjustHeightOfTaskListAndScroll();
-			
-			$('.dropdown-menu').find(".do-onclick-nothing").on("click",function(e)
-					{
-							    e.stopImmediatePropagation();
-					});
-							
-			// Bind dropdown events 
-			bindDropdownEvents();
+			adjustHeightOfTaskListAndScroll();			
 		} });
 
 	// Over write append function

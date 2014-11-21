@@ -82,6 +82,9 @@ var CalendarRouter = Backbone.Router.extend({
 			
 			// Read stored selections from cookie and Creates nested collection
 			readDetailsFromCookie();
+			
+			// Bind dropdown events 
+			bindDropdownEvents();
 
 		}, "<li><a href='{{id}}' class='hide-on-owner'>My Tasks</a></li>", true);
 

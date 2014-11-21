@@ -348,8 +348,13 @@ function displayListView()
 //
 function bindDropdownEvents()
 {
+	$('.dropdown-menu').find(".do-onclick-nothing").on("click",function(e)
+	 {
+	    e.stopImmediatePropagation();
+	 });
+	
 	// Click events to agents dropdown of Owner's list and Criteria's list
-	$("ul#new-owner-tasks li a, .new-type-task").on("click", function(e)
+	$("ul#new-owner-tasks li a,ul#new-type-tasks .new-type-task").on("click", function(e)
 	{        
 		e.preventDefault();			
 				
