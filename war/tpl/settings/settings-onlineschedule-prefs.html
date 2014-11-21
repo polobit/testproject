@@ -1,0 +1,195 @@
+<!-- online scheduling Modal views -->
+
+
+<script id="settings-business-prefs-template" type="text/html">
+ <div class="row">
+    	<div class="span9">
+    	<div class="well">
+
+<form id="scheduleid" name="scheduleid" method="post" action="" class="form-horizontal">
+    			<fieldset>
+ <div class="control-group" style="margin-bottom:0px;">
+                       <label class="control-label"><b>Scheduling URL </b></label>
+                        <div class="controls schedule_url_online" id="schedule-url-id" style="width:540px;word-wrap:break-word;display:inline-block;position:relative;margin-left:23px;padding-top:5px">
+                        <a href="" target="_blank" name="scheduleurl" id="scheduleurl"><span id="hrefvalue"></span><span id="schedule_id">{{this.schedule_id}}</span></a>
+<div class="" id="edit" style="display:inline;"><a href="" style="margin-top: 3px;" id="edit-schedule-id" class="edit-schedule-id nounderline"><i title="Edit" class="icon-edit" style="margin-left: 30px;"></i></a></div>
+                     
+ </div>
+<div id="specialchar" style="color: red;display:none;margin-left: 167px;margin-top: 5px;">Special characters are not allowed except underscore.</div>
+<div id="charlength" style="color: red;display:none;margin-left: 167px;margin-top: -2px;">Please enter at least 4 letters.</div>
+<div class="clearfix"></div> 
+<div class="tip"><p style="margin-left:161px;color:#999999;"><i class="icon-lightbulb" style="font-size:17px;"></i> Put this link in the signature or in your automated emails</p></div>
+ 
+    			</fieldset>
+    		</form>
+
+    
+
+    		<form id="scheduleform" name="scheduleform" method="post" action="" class="form-horizontal">
+    			<fieldset>
+<input type="text" name="id" class="hide" value="{{id}}" >
+
+                   	
+<div class="control-group">
+    					<label class="control-label" for="cname">Meeting Type </label> 
+                   		<div class="controls">
+    						<input class="input-xlarge" type="text" id="meeting_types" name="meeting_types" {{#if meeting_types}}  value="{{meeting_types}}" {{else}} placeholder="Enter comma separated meeting types" {{/if}} autocapitalize="off"/>
+    					</div>
+    				</div> 
+<div id="meeting_type_error" style="color: red;display:none;margin-left: 159px;margin-top: -9px;">Speacial characters are not allowed except comma</div>
+
+<div class="control-group" style="margin-top:30px">
+                <label class="control-label">Time Zone</label> 
+                     		<div class="controls">
+                		<select id="timezone" name="timezone">
+                		<option value="-12">(GMT-12:00) International Date Line West</option>
+                		<option value="MIT">(GMT-11:00) Midway Island, Samoa</option>
+                		<option value="HAST">(GMT-10:00) Hawaii</option>
+                		<option value="AKST">(GMT-09:00) Alaska</option>
+                		<option value="PST">(GMT-08:00) Pacific Time (US &amp; Canada)</option>
+                		<option value="America/Denver">(GMT-07:00) Mountain Time (US &amp; Canada)</option>
+                		<option value="America/Chihuahua">(GMT-07:00) Chihuahua, La Paz, Mazatlan</option>
+                		<option value="America/Phoenix">(GMT-07:00) Arizona</option>
+                		<option value="Canada/East-Saskatchewan">(GMT-06:00) Saskatchewan</option>
+                		<option value="America/Tegucigalpa">(GMT-06:00) Central America</option>
+                		<option value="America/Chicago">(GMT-06:00) Central Time (US &amp; Canada)</option>
+                		<option value="America/Mexico_City">(GMT-06:00) Guadalajara, Mexico City, Monterrey</option>
+                		<option value="America/New_York">(GMT-05:00) Eastern Time (US &amp; Canada)</option>
+                		<option value="America/Bogota">(GMT-05:00) Bogota, Lima, Quito, Rio Branco</option>
+                		<option value="America/Indiana/Indianapolis">(GMT-05:00) Indiana (East)</option>
+                		<option value="America/Caracas">(GMT-04:30) Caracas</option>
+                		<option value="Canada/Atlantic">(GMT-04:00) Atlantic Time (Canada)</option>
+                		<option value="America/Manaus">(GMT-04:00) Manaus</option>
+                		<option value="America/Santiago">(GMT-04:00) Santiago</option>
+                		<option value="America/La_Paz">(GMT-04:00) La Paz</option>
+                		<option value="Canada/Newfoundland">(GMT-03:30) Newfoundland</option>
+                		<option value="America/Argentina/Buenos_Aires">(GMT-03:00) Buenos Aires</option>
+                		<option value="America/Sao_Paulo">(GMT-03:00) Brasilia</option>
+                		<option value="America/Godthab">(GMT-03:00) Greenland</option>
+                		<option value="America/Montevideo">(GMT-03:00) Montevideo</option>
+                		<option value="America/Argentina/Buenos_Aires">(GMT-03:00) Georgetown</option>
+                		<option value="Atlantic/South_Georgia">(GMT-02:00) Mid-Atlantic</option>
+                		<option value="Atlantic/Azores">(GMT-01:00) Azores</option>
+                		<option value="Atlantic/Cape_Verde">(GMT-01:00) Cape Verde Is.</option>
+                		<option value="Europe/London">(GMT) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London</option>
+                		<option value="Atlantic/Reykjavik">(GMT) Monrovia, Reykjavik</option>
+                		<option value="Africa/Casablanca">(GMT) Casablanca</option>
+                		<option value="Europe/Belgrade">(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague</option>
+                		<option value="Europe/Sarajevo">(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb</option>
+                		<option value="Europe/Brussels">(GMT+01:00) Brussels, Copenhagen, Madrid, Paris</option>
+                		<option value="Africa/Algiers">(GMT+01:00) West Central Africa</option>
+                		<option value="Europe/Amsterdam">(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna</option>
+                		<option value="Europe/Minsk">(GMT+02:00) Minsk</option>
+                		<option value="Africa/Cairo">(GMT+02:00) Cairo</option>
+                		<option value="Europe/Helsinki">(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius</option>
+                		<option value="Europe/Athens">(GMT+02:00) Athens, Bucharest, Istanbul</option>
+                		<option value="Asia/Jerusalem">(GMT+02:00) Jerusalem</option>
+                		<option value="Asia/Amman">(GMT+02:00) Amman</option>
+                		<option value="Asia/Beirut">(GMT+02:00) Beirut</option>
+                		<option value="Africa/Windhoek">(GMT+02:00) Windhoek</option>
+                		<option value="Africa/Harare">(GMT+02:00) Harare, Pretoria</option>
+                		<option value="Asia/Kuwait">(GMT+03:00) Kuwait, Riyadh</option>
+                		<option value="Asia/Baghdad">(GMT+03:00) Baghdad</option>
+                		<option value="Africa/Nairobi">(GMT+03:00) Nairobi</option>
+                		<option value="Asia/Tbilisi">(GMT+03:00) Tbilisi</option>
+                		<option value="Europe/Moscow">(GMT+03:00) Moscow, St. Petersburg, Volgograd</option>
+                		<option value="Asia/Tehran">(GMT+03:30) Tehran</option>
+                		<option value="Asia/Muscat">(GMT+04:00) Abu Dhabi, Muscat</option>
+                		<option value="Asia/Baku">(GMT+04:00) Baku</option>
+                		<option value="Asia/Yerevan">(GMT+04:00) Yerevan</option>
+                		<option value="Asia/Yekaterinburg">(GMT+05:00) Ekaterinburg</option>
+                		<option value="Asia/Karachi">(GMT+05:00) Islamabad, Karachi</option>
+                		<option value="Asia/Tashkent">(GMT+05:00) Tashkent</option>
+                		<option value="Asia/Kolkata" selected="selected">(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi</option>
+                		<option value="Asia/Colombo">(GMT+05:30) Sri Jayawardenepura</option>
+                		<option value="Asia/Katmandu">(GMT+05:45) Kathmandu</option>
+                		<option value="Asia/Dhaka">(GMT+06:00) Astana, Dhaka</option>
+                		<option value="Asia/Novosibirsk">(GMT+06:00) Almaty, Novosibirsk</option>
+                		<option value="Asia/Rangoon">(GMT+06:30) Yangon (Rangoon)</option>
+                		<option value="Asia/Krasnoyarsk">(GMT+07:00) Krasnoyarsk</option>
+                		<option value="Asia/Bangkok">(GMT+07:00) Bangkok, Hanoi, Jakarta</option>
+                		<option value="Asia/Shanghai">(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi</option>
+                		<option value="Asia/Ulaanbaatar">(GMT+08:00) Irkutsk, Ulaan Bataar</option>
+                		<option value="Asia/Kuala_Lumpur">(GMT+08:00) Kuala Lumpur, Singapore</option>
+                		<option value="Asia/Taipei">(GMT+08:00) Taipei</option>
+                		<option value="Australia/Perth">(GMT+08:00) Perth</option>
+                		<option value="Asia/Seoul">(GMT+09:00) Seoul</option>
+                		<option value="Asia/Tokyo">(GMT+09:00) Osaka, Sapporo, Tokyo</option>
+                		<option value="Asia/Yakutsk">(GMT+09:00) Yakutsk</option>
+                		<option value="Australia/Darwin">(GMT+09:30) Darwin</option>
+                		<option value="Australia/Adelaide">(GMT+09:30) Adelaide</option>
+                		<option value="Australia/Sydney">(GMT+10:00) Canberra, Melbourne, Sydney</option>
+                		<option value="Australia/Brisbane">(GMT+10:00) Brisbane</option>
+                		<option value="Australia/Hobart">(GMT+10:00) Hobart</option>
+                		<option value="Asia/Vladivostok">(GMT+10:00) Vladivostok</option>
+                		<option value="Pacific/Guam">(GMT+10:00) Guam, Port Moresby</option>
+                		<option value="Asia/Magadan">(GMT+11:00) Magadan, Solomon Is., New Caledonia</option>
+                		<option value="Pacific/Fiji">(GMT+12:00) Fiji, Kamchatka, Marshall Is.</option>
+                		<option value="Pacific/Auckland">(GMT+12:00) Auckland, Wellington</option>
+                		<option value="Pacific/Tongatapu">(GMT+13:00) Nuku'alofa</option>
+                	</select>				
+                </div>
+                </div>
+ 
+    			</fieldset>
+    		</form>
+
+
+<form  id="meeting_durations" name="meeting_durations"  class="form-horizontal">
+    			<fieldset>
+
+{{#stringToJSON this "meeting_durations"}}
+<div class="control-group">
+    					<label class="control-label" for="cname">Meeting Duration</label> 
+                   		  
+							<div class="controls">
+                            <label class="">
+                            15 Mins &nbsp;<input type="text" {{15mins}} id="15mins" name="15mins"   value="{{15mins}}"/> 
+                            </label>
+                            <label class="">
+                            30 Mins &nbsp;<input type="text" id="30mins" name="30mins" value="{{30mins}}"/> 
+                            </label>
+                           <label class="">
+                            60 Mins &nbsp;<input type="text" id="60mins" name="60mins" value="{{60mins}}"/> 
+                            </label>
+                        </div>
+    				</div> 
+{{/stringToJSON}}
+
+
+    			</fieldset>
+    		</form>
+
+    
+
+    		<form  class="form-horizontal">
+    			<fieldset>
+<div class="control-group">
+<label class="control-label" for="cname" style="margin-bottom: -20px;">Business Hours</label>
+                   		<div class="controls">
+    						<div id="define-business-hours"></div>
+    					</div>
+    				</div> 
+<div class="control-group">
+    				<div class="form-actions">
+               			<button type="submit" class="btnSerialize btn btn-primary" id="btnSerialize">Save</button>
+               			<a type="reset" href='#user-prefs' class="btn">Cancel</a>
+             			</div>
+</div>
+
+    			</fieldset>
+    		</form>
+
+
+    	</div>
+    </div>
+<div class="span3">
+		<div class="well">
+			<h3>What is Online Appointment Scheduling?</h3>
+			<br />
+			<p>Scheduling meetings over email or phone is tedious. Agile allows your customers to schedule a meeting with you directly in just a few clicks.</p>
+			<br/>
+		</div>
+	</div>
+    </div>
+</script>

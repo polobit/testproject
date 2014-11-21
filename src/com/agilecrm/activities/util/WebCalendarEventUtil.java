@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,16 +53,30 @@ public class WebCalendarEventUtil
      * @return List of available slots on selected date
      * @throws ParseException
      */
-    public static List<List<Long>> getSlots(String username, Long userid, int slotTime, String date, int timezone,
-	    String timezoneName, Long epochTime, Long startTime, Long endTime) throws ParseException
+    public static List<List<Long>> getSlots(Long userid, int slotTime, String date, int timezone, String timezoneName,
+	    Long epochTime, Long startTime, Long endTime, Long agileuserid) throws ParseException
     {
+	List<Long> business_hours = new ArrayList<>();
+	List<List<Long>> listOfLists = new ArrayList<List<Long>>();
+	try
+	{
+	    business_hours = getEpochForBusinessTimings(epochTime, userid, timezoneName);
+
+	    if (business_hours == null || business_hours.size() == 0)
+		return listOfLists;
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 
 	// Get all permutations possible based on selected slottime(duration) in
 	// 24 Hr.
 	List<List<Long>> possibleSlots = getAllPossibleSlots(slotTime, date, startTime, timezone, timezoneName);
 
 	// Get all filled slots from Agile calendar.
-	List<List<Long>> filledAgileSlots = getFilledAgileSlots(username, slotTime, startTime, endTime);
+	List<List<Long>> filledAgileSlots = getFilledAgileSlots(agileuserid, slotTime, startTime, endTime);
 
 	// Remove all filled slots from available/possible slots.
 	possibleSlots.removeAll(filledAgileSlots);
@@ -85,13 +100,201 @@ public class WebCalendarEventUtil
 	    // Remove all filled odd timing slots from available/possible slots.
 	    possibleSlots = removeAllOddSlots(possibleSlots, filledGoogleSlots);
 	}
+	System.out.println(possibleSlots.size());
 
+	if (possibleSlots != null && business_hours != null && business_hours.size() > 0)
+	{
+	    for (int i = 0; i <= possibleSlots.size() - 1; i++)
+	    {
+		List<Long> slots = possibleSlots.get(i);
+		Long main = slots.get(0);
+		Long s1 = business_hours.get(0);
+		Long s2 = business_hours.get(1);
+		if (main < s1 || main > s2)
+		{
+		    possibleSlots.remove(slots);
+		}
+		else
+		{
+		    listOfLists.add(slots);
+		}
+
+	    }
+	}
+	if (listOfLists != null && listOfLists.size() > 0)
+	{
+	    System.out.println("business hours " + business_hours.get(0) + "------------" + business_hours.get(1));
+	    System.out.println("final list of lists ======================");
+	    for (int i = 0; i <= listOfLists.size() - 1; i++)
+	    {
+		List<Long> sl = listOfLists.get(i);
+		{
+		    System.out.println(sl.get(0) + " -----------   " + sl.get(1));
+		}
+	    }
+	}
+
+	System.out.println(possibleSlots.size());
 	// print list of slot
 	// System.out.println("possibleSlots:");
 	// printList(possibleSlots);
 
 	// Return available slots
-	return possibleSlots;
+	return listOfLists;
+    }
+
+    /**
+     * 
+     * @param eppoch
+     *            epoch time we get from client browser it is equal to 12 AM in
+     *            the mid night
+     * @param userid
+     *            domain user id to get business hours preferences
+     * @param client_timezone
+     *            we get from online schedule page to show the timings according
+     *            to client timezone
+     * @return [from time, to time]
+     * @throws JSONException
+     */
+    public static List<Long> getEpochForBusinessTimings(Long eppoch, Long userid, String client_timezone)
+	    throws JSONException
+    {
+	// used to store business hours
+	List<Long> business_hours = new ArrayList<>();
+
+	DomainUser domain_user = DomainUserUtil.getDomainUser(userid);
+
+	// according domain user timezone gets the weekday
+	// i.e in java sun,mon,tue,wed,thu,fri,sat 1,2,3,4,5,6,7 respectivly
+	TimeZone tz = TimeZone.getTimeZone(domain_user.timezone);
+	Calendar calendar = Calendar.getInstance(tz);
+	calendar.setTimeInMillis(eppoch * 1000);
+
+	int week_day = getWeekDayAccordingToJS(calendar.get(Calendar.DAY_OF_WEEK));
+
+	int date = calendar.get(Calendar.DATE);
+
+	int year = calendar.get(Calendar.YEAR);
+	int month = calendar.get(Calendar.MONTH);
+
+	// business hours preferences will get as json array
+	JSONArray business_hours_array = new JSONArray(domain_user.business_hours);
+
+	// in backend business hours will be stored as
+	// [{"isActive":true,"timeTill":"03:00","timeFrom":"14:00"},{"isActive":false,"timeTill":null,"timeFrom":null},...]
+	// 0 position is monday and 1 position is tuesday according to business
+	// hours plugin
+	JSONObject business = new JSONObject(business_hours_array.get(week_day).toString());
+	String fromTime = null;
+	String tillTime = null;
+
+	// if(isActive) true i.e working day if not return empty list
+	if (business.getString("isActive") == "true")
+	{
+	    fromTime = business.getString("timeFrom");
+	    // we have to pass hour to calendar only 00 format.
+	    // calendar give time in sec according to date and hour
+	    fromTime = fromTime.split(":")[0];
+	    tillTime = business.getString("timeTill");
+	    tillTime = tillTime.split(":")[0];
+
+	}
+	if (StringUtils.isNotEmpty(fromTime) && StringUtils.isNotEmpty(tillTime))
+	{
+	    Long endtime = null;
+
+	    //
+	    Long starttime = getEppochTime(date, month, year, Integer.parseInt(fromTime), tz);
+	    if (Integer.parseInt(fromTime) < Integer.parseInt(tillTime))
+	    {
+		endtime = getEppochTime(date, month, year, Integer.parseInt(tillTime), tz);
+	    }
+	    else
+	    {
+		endtime = getEppochTime(date + 1, month, year, Integer.parseInt(tillTime), tz);
+	    }
+
+	    business_hours.add(starttime);
+	    business_hours.add(endtime);
+	}
+	return business_hours;
+    }
+
+    /**
+     * 
+     * @param timezone
+     *            accepts domainuser timezone and gives weekday according to
+     *            timezone
+     * @param eppoch
+     *            sets the time to the calendar
+     * @return
+     */
+    public static int getWeekDay(TimeZone timezone, Long eppoch)
+    {
+	Calendar calendar = Calendar.getInstance(timezone);
+	calendar.setTimeInMillis(eppoch * 1000);
+
+	System.out.println(" weekday according to user timezone");
+	return 0;
+
+    }
+
+    public static int getWeekDayAccordingToJS(int wkday)
+    {
+
+	if (wkday == 1)
+	{
+	    return 6;
+	}
+	else if (wkday == 2)
+	{
+	    return 0;
+	}
+	else if (wkday == 3)
+	{
+	    return 1;
+	}
+	else if (wkday == 4)
+	{
+	    return 2;
+	}
+	else if (wkday == 5)
+	{
+	    return 3;
+	}
+	else if (wkday == 6)
+	{
+	    return 4;
+	}
+	else if (wkday == 7)
+	{
+	    return 5;
+	}
+	return wkday;
+    }
+
+    /**
+     * 
+     * @param date
+     *            date of the day number
+     * @param month
+     *            month of the year number
+     * @param year
+     *            year
+     * @param time
+     *            hour of the day
+     * @param timezone
+     *            sets the calendar to this particular timezone
+     * @return
+     */
+    public static Long getEppochTime(int date, int month, int year, int time, TimeZone timezone)
+    {
+	Calendar calendar = Calendar.getInstance();
+	calendar.set(year, month, date, time, 0);
+	calendar.setTimeZone(timezone);
+	Long epoch = (calendar.getTimeInMillis() / 1000);
+	return epoch;
+
     }
 
     /**
@@ -176,14 +379,14 @@ public class WebCalendarEventUtil
      * @param startTime
      * @return List of filled slots from Agile calendar on selected date
      */
-    private static List<List<Long>> getFilledAgileSlots(String username, int slotTime, Long startTime, Long endTime)
+    private static List<List<Long>> getFilledAgileSlots(Long userid, int slotTime, Long startTime, Long endTime)
     {
 	System.out.println("In getFilledAgileSlots");
 
 	List<List<Long>> filledSlots = new ArrayList<List<Long>>();
 
 	// Get agile events on selected timings
-	List<Event> agileEvents = EventUtil.getEvents(startTime, endTime);
+	List<Event> agileEvents = EventUtil.getEvents(startTime, endTime, userid);
 
 	// Add filled slot in nested list
 	for (Event e : agileEvents)
@@ -383,9 +586,6 @@ public class WebCalendarEventUtil
 	if (!wce.email.isEmpty())
 	    contact.properties.add(new ContactField(Contact.EMAIL, wce.email, null));
 
-	if (!wce.email.isEmpty())
-	    contact.properties.add(new ContactField(Contact.PHONE, wce.phoneNumber, null));
-
 	contact.type = Type.PERSON;
 
 	// If slots are not selected
@@ -490,10 +690,22 @@ public class WebCalendarEventUtil
 		String body_subject = "<p>Your appointment was scheduled with <b>" + wce.userName
 		        + "</b>.</p><p>Duration - " + wce.slot_time + " minutes</p><p>Note message : " + wce.notes
 		        + "</p>";
-		String body1 = "<p>" + wce.userName + "(" + wce.email + ") scheduled an appointment(" + wce.name
-		        + ") for " + wce.slot_time + " mins</p><p>Note message : " + wce.notes
-		        + "</p><p><a href=https://" + user.domain
-		        + ".agilecrm.com/#calendar>View on Agile Calendar</a></p>";
+		String body1 = "<p>" + wce.userName + " (" + wce.email + ") scheduled an appointment ("
+		        + wce.phoneNumber + ") for " + wce.slot_time + " mins</p><p><a href=https://" + user.domain
+		        + ".agilecrm.com/#calendar>View Agile Calendar</a></p><p>Note: " + wce.notes + "</p>";
+		if (StringUtils.isNotEmpty(wce.phoneNumber))
+		{
+		    body1 = "<p>" + wce.userName + " (" + wce.email + ") scheduled an appointment (" + wce.phoneNumber
+			    + ") for " + wce.slot_time + " mins</p><p><a href=https://" + user.domain
+			    + ".agilecrm.com/#calendar>View Agile Calendar</a></p><p>Note: " + wce.notes + "</p>";
+		}
+		else
+		{
+		    body1 = "<p>" + wce.userName + " (" + wce.email + ") scheduled an appointment " + " for "
+			    + wce.slot_time + " mins</p><p><a href=https://" + user.domain
+			    + ".agilecrm.com/#calendar>View Agile Calendar</a></p><p>Note: " + wce.notes + "</p>";
+		}
+
 		EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
 		        "Appointment Scheduled", null, body1, null, null, attachments_to_agile_user);
 	    }
@@ -511,35 +723,54 @@ public class WebCalendarEventUtil
 		    + getNearestDateOnlyFromEpoch(epoch_start_date, timezone) + "</p><p>Duration - " + wce.slot_time
 		    + " minutes</p><p>Note message : " + wce.notes + "</p>";
 
+	    String body1 = "<p>Your appointment is scheduled for " + wce.slot_time + " mins with " + user.name + " on "
+		    + getNearestDateOnlyFromEpoch(epoch_start_date, timezone) + "</p>";
+
+	    if (StringUtils.isNotEmpty(wce.phoneNumber))
+	    {
+		body1 += "<p>Appointment Type: " + wce.phoneNumber + "</p>";
+	    }
+	    body1 += "<p> Notes: " + wce.notes + "</p>";
+
 	    String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 
 	    EmailGatewayUtil.sendEmail(null, user.email, user.name, wce.email, null, null, "Appointment Scheduled",
-		    null, body, null, null, attachments);
+		    null, body1, null, null, attachments);
 
 	}
 	return "Done";
     }
 
-    public static List<String> getSlotDetails()
+    public static List<String> getSlotDetails(Long id)
     {
 	JSONObject slot = new JSONObject();
 	/* JSONArray slots = new JSONArray(); */
 
 	List<String> slots = new ArrayList<String>();
 
+	DomainUser dm = DomainUserUtil.getDomainUser(id);
+
 	try
 	{
-	    slot.put("time", 15);
-	    slot.put("title", "say hi");
-	    slots.add(slot.toString());
-
-	    slot.put("time", 30);
-	    slot.put("title", "let's keep it short");
-	    slots.add(slot.toString());
-
-	    slot.put("time", 60);
-	    slot.put("title", "let's chat");
-	    slots.add(slot.toString());
+	    JSONObject js = new JSONObject(dm.meeting_durations);
+	    if (StringUtils.isNotEmpty(js.getString("15mins")))
+	    {
+		slot.put("time", 15);
+		slot.put("title", js.get("15mins"));
+		slots.add(slot.toString());
+	    }
+	    if (StringUtils.isNotEmpty(js.getString("30mins")))
+	    {
+		slot.put("time", 30);
+		slot.put("title", js.get("30mins"));
+		slots.add(slot.toString());
+	    }
+	    if (StringUtils.isNotEmpty(js.getString("60mins")))
+	    {
+		slot.put("time", 60);
+		slot.put("title", js.get("60mins"));
+		slots.add(slot.toString());
+	    }
 
 	}
 	catch (JSONException e)

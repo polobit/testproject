@@ -14,19 +14,43 @@ function change_availability_date(selected_date)
 // Get slot details time n description
 function getSlotDurations()
 {
+
 	// Send request to get slot details time n description
-	var initialURL = '/core/api/webevents/getslotdetails';
+	var initialURL = '/core/api/webevents/getslotdetails?userid=' + User_Id;
 	$
 			.getJSON(
 					initialURL,
 					function(data)
 					{
-						for ( var slotDetail in data)
+						if (data.length == 3)
 						{
-							var json = JSON.parse(data[slotDetail]);
-							$('.segment1')
-									.append(
-											'<div class="col-sm-4"><p class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + json.title + '</p></div>');
+							for ( var slotDetail in data)
+							{
+								var json = JSON.parse(data[slotDetail]);
+								$('.segment1')
+										.append(
+												'<div class="col-sm-4"><p class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + json.title + '</p></div>');
+							}
+						}
+						if (data.length == 2)
+						{
+							for ( var slotDetail in data)
+							{
+								var json = JSON.parse(data[slotDetail]);
+								$('.segment1')
+										.append(
+												'<div class="col-sm-4" style="margin-left: 99px;"><p class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + json.title + '</p></div>');
+							}
+						}
+						if (data.length == 1)
+						{
+							for ( var slotDetail in data)
+							{
+								var json = JSON.parse(data[slotDetail]);
+								$('.segment1')
+										.append(
+												'<div class="col-sm-12" align="center"><p class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + json.title + '</p></div>');
+							}
 						}
 					});
 }
@@ -74,6 +98,7 @@ function resetAll()
 // calendar.
 function get_slots(s_date, s_slot)
 {
+
 	console.log("in get_slots");
 	console.log(s_date + " " + s_slot);
 
@@ -94,6 +119,7 @@ function get_slots(s_date, s_slot)
 	// selected date in current epoch time
 	var epochTime = getEpochTimeFromDate(s_date); // milliseconds
 	console.log(epochTime);
+	console.log("---------------------------------");
 
 	var d = new Date(s_date)
 	console.log(d);
@@ -104,7 +130,7 @@ function get_slots(s_date, s_slot)
 	console.log(start_time + "  " + end_time);
 
 	// Send request to get available slot
-	var initialURL = '/core/api/webevents/getslots?&user_name=' + User_Name + '&user_id=' + User_Id + '&timezone=' + timezone + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneAbbr + "&epoch_time=" + epochTime + "&start_time=" + start_time + "&end_time=" + end_time;
+	var initialURL = '/core/api/webevents/getslots?&user_id=' + User_Id + '&timezone=' + timezone + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneName + "&epoch_time=" + epochTime + "&start_time=" + start_time + "&end_time=" + end_time +"&agile_user_id=" + Agile_User_Id ;
 	$.getJSON(initialURL, function(data)
 	{
 
@@ -139,26 +165,29 @@ function displaySlots()
 
 	// Empty div where all slots listed, to display new slots
 	$('.checkbox-main-grid').html('');
-	
+
 	console.log(Available_Slots.length);
-	
-	var after_now=[];
-	var date=new Date();
-	for(var s=0;s<Available_Slots.length;s++){
-		if(Available_Slots[s][0]*1000>date.getTime()){
-			
+
+	var after_now = [];
+	var date = new Date();
+	for (var s = 0; s < Available_Slots.length; s++)
+	{
+		if (Available_Slots[s][0] * 1000 > date.getTime())
+		{
+
 			after_now.push(Available_Slots[s]);
 		}
-		
+
 	}
 	console.log(after_now.length);
-	Available_Slots="";
-	Available_Slots=after_now;
-	if(Available_Slots.length==0){
+	Available_Slots = "";
+	Available_Slots = after_now;
+	if (Available_Slots.length == 0)
+	{
 		displayNoSlotsMsg();
 		return;
 	}
-	
+
 	// Number of row
 	var numRow = Available_Slots.length / 5;
 
@@ -210,11 +239,11 @@ function save_web_event(formId, confirmBtn)
 		$('#' + formId).find("input").focus();
 		return false;
 	}
-	
+
 	// Get details
 	var data = $('#' + formId).serializeArray();
 	console.log(data);
-	
+
 	// Make json
 	var web_calendar_event = {};
 	$.each(data, function()

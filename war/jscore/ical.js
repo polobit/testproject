@@ -194,7 +194,7 @@ $(function()
 		var data = $('#schedule_id').text();
 		$("#edit").hide();
 		$("#scheduleurl").removeAttr("href");
-		$('#schedule_id').html("<input class='input-small' type='text' style='position: relative;top: 6px;left: 5px;margin-top:-9px;' name='url' id='url' value='" + data + "'/><buttion class='btn' style='display:inline-block;margin-left:30px;margin-bottom:5px;' id='save-scheduleurl'>Save</button>");
+		$('#schedule_id').html("<input class='input-small' type='text' style='position: relative;top: 6px;left: 5px;margin-top:-9px;' name='url' id='url' value='" + data + "'/><buttion class='btn' style='display:inline-block;margin-left:30px;margin-bottom:5px;position: absolute;top:1px' id='save-scheduleurl'>Save</button>");
 
 
 		$("#scheduleurl").addClass("nounderline");

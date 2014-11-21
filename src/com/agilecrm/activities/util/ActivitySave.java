@@ -46,7 +46,7 @@ public class ActivitySave
 	Object probablity[] = deals.get("probability");
 	Object milestone[] = deals.get("milestone");
 	JSONObject js = new JSONObject(new Gson().toJson(opportunity));
-	JSONArray jsn = js.getJSONArray("contact_ids");
+	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contact_ids"));
 
 	if (deals.size() > 0)
 	{
@@ -153,7 +153,7 @@ public class ActivitySave
 	Object priority[] = events.get("priority");
 
 	JSONObject js = new JSONObject(new Gson().toJson(event));
-	JSONArray jsn = js.getJSONArray("contacts");
+	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contacts"));
 
 	if (events.size() > 0)
 	{
@@ -187,12 +187,11 @@ public class ActivitySave
 	Object subject[] = tasks.get("subject");
 	Object task_type[] = tasks.get("task_type");
 	Object owner_name[] = tasks.get("Task_owner");
-	Object Contacts_related_to[] = tasks.get("Contacts_related_to");
 
 	JSONObject js = new JSONObject(new Gson().toJson(task));
-	JSONArray jsn = js.getJSONArray("contacts");
+	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contacts"));
 	System.out.println(due + "  " + priority + "  " + status + "  " + progress + "  " + subject + " " + task_type
-	        + "  " + owner_name + "  " + Contacts_related_to);
+	        + "  " + owner_name);
 	if (tasks.size() > 0)
 	{
 
@@ -328,7 +327,7 @@ public class ActivitySave
 	JSONArray jsn = null;
 	if (contacts != null && contacts.size() > 0)
 	{
-	    jsn = ActivityUtil.getContactIdsJson(contacts);
+	    jsn = getExistingContactsJsonArray(ActivityUtil.getContactIdsJson(contacts));
 	}
 	ActivityUtil.createEventActivity(ActivityType.EVENT_DELETE, event, "", "", "", jsn);
 
@@ -338,15 +337,16 @@ public class ActivitySave
      * creates TASK_DELETE activity
      * 
      * @param task
+     * @throws JSONException
      */
-    public static void createTaskDeleteActivity(Task task)
+    public static void createTaskDeleteActivity(Task task) throws JSONException
     {
 
 	List<Contact> contacts = task.getContacts();
 	JSONArray jsn = null;
 	if (contacts != null && contacts.size() > 0)
 	{
-	    jsn = ActivityUtil.getContactIdsJson(contacts);
+	    jsn = getExistingContactsJsonArray(ActivityUtil.getContactIdsJson(contacts));
 	}
 	ActivityUtil.createTaskActivity(ActivityType.TASK_DELETE, task, "", "", "", jsn);
 
@@ -356,14 +356,15 @@ public class ActivitySave
      * creates DEAL_DELETE activity
      * 
      * @param opr
+     * @throws JSONException
      */
-    public static void createDealDeleteActivity(Opportunity opr)
+    public static void createDealDeleteActivity(Opportunity opr) throws JSONException
     {
 	List<Contact> contacts = opr.getContacts();
 	JSONArray jsn = null;
 	if (contacts != null && contacts.size() > 0)
 	{
-	    jsn = ActivityUtil.getContactIdsJson(contacts);
+	    jsn = getExistingContactsJsonArray(ActivityUtil.getContactIdsJson(contacts));
 	}
 
 	ActivityUtil.createDealActivity(ActivityType.DEAL_DELETE, opr, "", "", "", jsn);
@@ -505,7 +506,7 @@ public class ActivitySave
 	JSONObject js = new JSONObject(new Gson().toJson(note));
 	System.out.println(js);
 
-	JSONArray jsn = js.getJSONArray("contact_ids");
+	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contact_ids"));
 
 	if (jsn != null && jsn.length() > 0)
 	{
@@ -873,4 +874,27 @@ public class ActivitySave
 	return list;
     }
 
+    /**
+     * @throws JSONException
+     * 
+     */
+    public static JSONArray getExistingContactsJsonArray(JSONArray jsn) throws JSONException
+    {
+
+	JSONArray jsnarray = new JSONArray();
+	if (jsn == null && jsn.length() > 0)
+	{
+	    return null;
+	}
+	for (int i = 0; i <= jsn.length() - 1; i++)
+	{
+	    Contact contact = ContactUtil.getContact(jsn.getLong(i));
+	    if (contact != null)
+	    {
+		jsnarray.put(jsn.getLong(i));
+	    }
+	}
+	return jsnarray;
+
+    }
 }
