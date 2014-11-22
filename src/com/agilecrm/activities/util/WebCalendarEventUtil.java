@@ -60,7 +60,7 @@ public class WebCalendarEventUtil
 	List<List<Long>> listOfLists = new ArrayList<List<Long>>();
 	try
 	{
-	    business_hours = getEpochForBusinessTimings(date_insecs, userid, timezoneName);
+	    business_hours = getEpochForBusinessTimings(epochTime, userid, timezoneName);
 
 	    if (business_hours == null || business_hours.size() == 0)
 		return listOfLists;
