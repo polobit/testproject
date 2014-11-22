@@ -54,13 +54,13 @@ public class WebCalendarEventUtil
      * @throws ParseException
      */
     public static List<List<Long>> getSlots(Long userid, int slotTime, String date, int timezone, String timezoneName,
-	    Long epochTime, Long startTime, Long endTime, Long agileuserid) throws ParseException
+	    Long epochTime, Long startTime, Long endTime, Long agileuserid, Long date_insecs) throws ParseException
     {
 	List<Long> business_hours = new ArrayList<>();
 	List<List<Long>> listOfLists = new ArrayList<List<Long>>();
 	try
 	{
-	    business_hours = getEpochForBusinessTimings(epochTime, userid, timezoneName);
+	    business_hours = getEpochForBusinessTimings(date_insecs, userid, timezoneName);
 
 	    if (business_hours == null || business_hours.size() == 0)
 		return listOfLists;

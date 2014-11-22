@@ -117,10 +117,13 @@ function get_slots(s_date, s_slot)
 	console.log(timezoneAbbr);
 
 	// selected date in current epoch time
-	var epochTime = (new Date().getTime())/1000;// milliseconds
+	var epochTime = getEpochTimeFromDate(s_date); // milliseconds
 	console.log(epochTime);
 	console.log("---------------------------------");
-
+	
+	
+	var now_sec = epochTime+s_date.getSeconds() + (60 * (s_date.getMinutes() + (60 * s_date.getHours())));
+	
 	var d = new Date(s_date)
 	console.log(d);
 
@@ -130,7 +133,7 @@ function get_slots(s_date, s_slot)
 	console.log(start_time + "  " + end_time);
 
 	// Send request to get available slot
-	var initialURL = '/core/api/webevents/getslots?&user_id=' + User_Id + '&timezone=' + timezone + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneName + "&epoch_time=" + epochTime + "&start_time=" + start_time + "&end_time=" + end_time +"&agile_user_id=" + Agile_User_Id ;
+	var initialURL = '/core/api/webevents/getslots?&user_id=' + User_Id + '&timezone=' + timezone + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneName + "&epoch_time=" + epochTime + "&start_time=" + start_time + "&end_time=" + end_time +"&agile_user_id=" + Agile_User_Id+"&date_in_secs=" + now_sec ;
 	$.getJSON(initialURL, function(data)
 	{
 
