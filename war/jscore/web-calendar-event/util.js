@@ -117,7 +117,7 @@ function get_slots(s_date, s_slot)
 	console.log(timezoneAbbr);
 
 	// selected date in current epoch time
-	var epochTime = getEpochTimeFromDate(s_date); // milliseconds
+	var epochTime = (new Date().getTime())/1000;// milliseconds
 	console.log(epochTime);
 	console.log("---------------------------------");
 
