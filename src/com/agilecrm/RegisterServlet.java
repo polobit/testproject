@@ -201,7 +201,6 @@ public class RegisterServlet extends HttpServlet
     private void createUserInOurDomain(HttpServletRequest request)
     {
 	String userDomain = NamespaceManager.get();
-	Contact contact = null;
 
 	// Main fields
 	ContactField emailField = new ContactField();
@@ -234,20 +233,44 @@ public class RegisterServlet extends HttpServlet
 	String phoneNumber = request.getParameter("phone_number");
 	phoneNumberField.name = Contact.PHONE;
 	phoneNumberField.value = phoneNumber;
+	
+	ContactField planField = new ContactField();
+	String planValue = request.getParameter("plan_type");
+	planField.name = "plan_type";
+	planField.value = planValue;
+	
+	ContactField userField = new ContactField();
+	String userCount = request.getParameter("users_count");
+	planField.name = "users";
+	planField.value = userCount;
+	
+	ContactField companyTypeField = new ContactField();
+	String companyType = request.getParameter("company_type");
+	planField.name = "company type";
+	planField.value = companyType;
 
 	try
 	{
 	    NamespaceManager.set(Globals.COMPANY_DOMAIN);
-	    contact = ContactUtil.searchContactByEmail(emailField.value);
-	    if (contact == null)
-		contact = new Contact();
+	    
+	    Contact contact = new Contact();
 
 	    contact.properties.add(emailField);
 	    contact.properties.add(nameField);
 	    contact.properties.add(companyField);
 	    contact.properties.add(companySizeField);
 	    contact.properties.add(phoneNumberField);
+	    contact.properties.add(userField);
+	    contact.properties.add(companyTypeField);
+	    
 
+	    Contact oldContact = ContactUtil.searchContactByEmail(emailField.value);
+	    
+	    if(oldContact != null)
+	    {
+		contact = ContactUtil.mergeContactFeilds(contact, oldContact);
+	    }
+	    
 	    System.out.println("contact to be saved : " + contact);
 	    contact.save();
 	    System.out.println("contact after saving : " + contact);
