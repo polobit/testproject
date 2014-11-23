@@ -123,7 +123,6 @@ function get_slots(s_date, s_slot)
 	var d = new Date(s_date);
 	var secs = epochTime+d.getSeconds() + (60 * d.getMinutes()) + (60 * 60 * d.getHours());
 	console.log(secs);
-	console.log("---------------------------------");
 
 	var start_time = getEpochTimeFromDate(d);
 	d.setDate(d.getDate() + 1)
