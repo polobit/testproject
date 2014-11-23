@@ -111,7 +111,11 @@ public class WebCalendarEventUtil
 		Long main = slots.get(0);
 		Long s1 = business_hours.get(0);
 		Long s2 = business_hours.get(1);
-		if (main > s1 || main < s2)
+		if (main < s1 || main > s2)
+		{
+		    possibleSlots.remove(i);
+		}
+		else
 		{
 		    listOfLists.add(slots);
 		}
@@ -273,6 +277,7 @@ public class WebCalendarEventUtil
 	calendar.set(year, month, date, time, 0);
 	calendar.setTimeZone(timezone);
 	Date d = calendar.getTime();
+	System.out.println("date in get eppoch time  -----------------------" + d);
 	Long epoch = d.getTime() / 1000;
 
 	return epoch;
