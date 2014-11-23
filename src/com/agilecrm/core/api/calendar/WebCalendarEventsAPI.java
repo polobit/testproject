@@ -58,10 +58,11 @@ public class WebCalendarEventsAPI
 	    @QueryParam("timezone") int timezone, @QueryParam("timezone_name") String timezoneName,
 	    @QueryParam("epoch_time") Long epochTime, @QueryParam("start_time") Long startTime,
 	    @QueryParam("end_time") Long endTime, @QueryParam("user_id") Long userid,
-	    @QueryParam("agile_user_id") Long agileuserid) throws ParseException
+	    @QueryParam("agile_user_id") Long agileuserid, @QueryParam("current_secs") Long currentsecs)
+	    throws ParseException
     {
 	return WebCalendarEventUtil.getSlots(userid, slot_time, date, timezone, timezoneName, epochTime, startTime,
-	        endTime, agileuserid);
+	        endTime, agileuserid, currentsecs);
     }
 
     @Path("/save")

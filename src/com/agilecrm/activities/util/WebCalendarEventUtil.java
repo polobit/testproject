@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
@@ -54,13 +55,13 @@ public class WebCalendarEventUtil
      * @throws ParseException
      */
     public static List<List<Long>> getSlots(Long userid, int slotTime, String date, int timezone, String timezoneName,
-	    Long epochTime, Long startTime, Long endTime, Long agileuserid) throws ParseException
+	    Long epochTime, Long startTime, Long endTime, Long agileuserid, Long currentsecs) throws ParseException
     {
 	List<Long> business_hours = new ArrayList<>();
 	List<List<Long>> listOfLists = new ArrayList<List<Long>>();
 	try
 	{
-	    business_hours = getEpochForBusinessTimings(epochTime, userid, timezoneName);
+	    business_hours = getEpochForBusinessTimings(currentsecs, userid, timezoneName);
 
 	    if (business_hours == null || business_hours.size() == 0)
 		return listOfLists;
@@ -110,11 +111,7 @@ public class WebCalendarEventUtil
 		Long main = slots.get(0);
 		Long s1 = business_hours.get(0);
 		Long s2 = business_hours.get(1);
-		if (main < s1 || main > s2)
-		{
-		    possibleSlots.remove(slots);
-		}
-		else
+		if (main > s1 || main < s2)
 		{
 		    listOfLists.add(slots);
 		}
@@ -134,7 +131,7 @@ public class WebCalendarEventUtil
 	    }
 	}
 
-	System.out.println(possibleSlots.size());
+	System.out.println(listOfLists.size());
 	// print list of slot
 	// System.out.println("possibleSlots:");
 	// printList(possibleSlots);
@@ -272,10 +269,12 @@ public class WebCalendarEventUtil
      */
     public static Long getEppochTime(int date, int month, int year, int time, TimeZone timezone)
     {
-	Calendar calendar = Calendar.getInstance();
+	Calendar calendar = new GregorianCalendar();
 	calendar.set(year, month, date, time, 0);
 	calendar.setTimeZone(timezone);
-	Long epoch = (calendar.getTimeInMillis() / 1000);
+	Date d = calendar.getTime();
+	Long epoch = d.getTime() / 1000;
+
 	return epoch;
 
     }
