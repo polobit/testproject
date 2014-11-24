@@ -308,8 +308,9 @@ public class ContactFilterResultFetcher
 		System.out.println("scopes : " + access.getCurrentUserScopes());
 		System.out.println("info" + SessionManager.get());
 		if (access != null
-			&& !(access.hasScope(UserAccessScopes.VIEW_CONTACTS) && access
-				.hasScope(UserAccessScopes.UPDATE_CONTACT)))
+			&& !(access.hasScope(UserAccessScopes.VIEW_CONTACTS) && (access
+				.hasScope(UserAccessScopes.DELETE_CONTACTS) || access
+				.hasScope(UserAccessScopes.UPDATE_CONTACT))))
 		{
 
 		    Iterator<Contact> iterator = contacts.iterator();
@@ -509,7 +510,7 @@ public class ContactFilterResultFetcher
 
     private void modifyDAOCondition()
     {
-	if (!hasScope(UserAccessScopes.UPDATE_CONTACT))
+	if (!hasScope(UserAccessScopes.UPDATE_CONTACT) && !hasScope(UserAccessScopes.DELETE_CONTACTS))
 	{
 	    if (domainUserId == null)
 		return;
@@ -524,7 +525,8 @@ public class ContactFilterResultFetcher
 	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
 		UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules);
 
-	if (hasScope(UserAccessScopes.VIEW_CONTACTS) && !hasScope(UserAccessScopes.UPDATE_CONTACT))
+	if (hasScope(UserAccessScopes.VIEW_CONTACTS)
+		&& !(hasScope(UserAccessScopes.UPDATE_CONTACT) || hasScope(UserAccessScopes.DELETE_CONTACTS)))
 	{
 	    if (domainUserId == null)
 		return;
