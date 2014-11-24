@@ -2,6 +2,8 @@ package com.agilecrm;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -44,6 +46,12 @@ import com.google.appengine.api.utils.SystemProperty;
 @SuppressWarnings("serial")
 public class RegisterServlet extends HttpServlet
 {
+    public static final String COMPANY_TYPE = "Company Type";
+    public static final String PLAN_CHOSEN = "Plan";
+    public static final String USERS_COUNT = "Users";
+    public static final String ROLE = "Role";
+    public static final String DOMAIN = "Domain";
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
 	doGet(request, response);
@@ -200,77 +208,93 @@ public class RegisterServlet extends HttpServlet
 
     private void createUserInOurDomain(HttpServletRequest request)
     {
+	// Form 1
 	String userDomain = NamespaceManager.get();
-
-	// Main fields
-	ContactField emailField = new ContactField();
 	String emailValue = request.getParameter("email");
-
-	emailField.name = Contact.EMAIL;
-	emailField.value = emailValue;
-
-	// Main fields
-	ContactField nameField = new ContactField();
 	String name = request.getParameter("name");
-
-	nameField.name = Contact.FIRST_NAME;
-	nameField.value = name;
-
-	ContactField companyField = new ContactField();
-	String companyName = request.getParameter("company");
-
-	companyField.name = Contact.COMPANY;
-	companyField.value = companyName;
-
-	ContactField companySizeField = new ContactField();
-
-	String companySize = request.getParameter("company_size");
-
-	companySizeField.name = Contact.COMPANY;
-	companySizeField.value = companySize;
-
-	ContactField phoneNumberField = new ContactField();
-	String phoneNumber = request.getParameter("phone_number");
-	phoneNumberField.name = Contact.PHONE;
-	phoneNumberField.value = phoneNumber;
-	
-	ContactField planField = new ContactField();
 	String planValue = request.getParameter("plan_type");
-	planField.name = "plan_type";
-	planField.value = planValue;
-	
-	ContactField userField = new ContactField();
 	String userCount = request.getParameter("users_count");
-	planField.name = "users";
-	planField.value = userCount;
-	
-	ContactField companyTypeField = new ContactField();
+
+	// Form 2
+	String companyName = request.getParameter("company");
+	String companySize = request.getParameter("company_size");
 	String companyType = request.getParameter("company_type");
-	planField.name = "company type";
-	planField.value = companyType;
+	String role = request.getParameter("role");
+	String phoneNumber = request.getParameter("phone_number");
+
+	List<ContactField> properties = new ArrayList<ContactField>();
 
 	try
 	{
+
+	    // Name
+	    if (StringUtils.isEmpty(name))
+	    {
+		if (name.contains(" "))
+		{
+		    String[] names = name.split(" ");
+		    properties.add(createField(Contact.FIRST_NAME, names[0]));
+
+		    if (names.length > 1)
+		    {
+			properties.add(createField(Contact.LAST_NAME, names[1]));
+		    }
+		}
+	    }
+
+	    // Email
+	    if (!StringUtils.isEmpty(emailValue))
+	    {
+		properties.add(createField(Contact.EMAIL, emailValue));
+	    }
+
+	    // Plan
+	    if (!StringUtils.isEmpty(planValue))
+	    {
+		properties.add(createField(PLAN_CHOSEN, planValue));
+	    }
+
+	    // Users count
+	    if (!StringUtils.isEmpty(userCount))
+	    {
+		properties.add(createField(USERS_COUNT, userCount));
+	    }
+
+	    // Company
+	    if (!StringUtils.isEmpty(companyName))
+	    {
+		properties.add(createField(Contact.COMPANY, companyName));
+	    }
+
+	    // Company type
+	    if (!StringUtils.isEmpty(companyType))
+	    {
+		properties.add(createField(COMPANY_TYPE, companyType));
+	    }
+
+	    if (!StringUtils.isEmpty(phoneNumber))
+	    {
+		properties.add(createField(Contact.PHONE, phoneNumber));
+	    }
+	    if (!StringUtils.isEmpty(role))
+	    {
+		properties.add(createField(ROLE, role));
+	    }
+
+	    properties.add(createField(DOMAIN, userDomain));
+
 	    NamespaceManager.set(Globals.COMPANY_DOMAIN);
-	    
+
 	    Contact contact = new Contact();
+	    contact.properties = properties;
 
-	    contact.properties.add(emailField);
-	    contact.properties.add(nameField);
-	    contact.properties.add(companyField);
-	    contact.properties.add(companySizeField);
-	    contact.properties.add(phoneNumberField);
-	    contact.properties.add(userField);
-	    contact.properties.add(companyTypeField);
-	    
+	    Contact oldContact = ContactUtil.searchContactByEmail(contact.getContactFieldValue(Contact.EMAIL));
 
-	    Contact oldContact = ContactUtil.searchContactByEmail(emailField.value);
-	    
-	    if(oldContact != null)
+	    if (oldContact != null)
 	    {
 		contact = ContactUtil.mergeContactFeilds(contact, oldContact);
 	    }
-	    
+
 	    System.out.println("contact to be saved : " + contact);
 	    contact.save();
 	    System.out.println("contact after saving : " + contact);
@@ -280,6 +304,15 @@ public class RegisterServlet extends HttpServlet
 	    NamespaceManager.set(userDomain);
 	}
 
+    }
+
+    private ContactField createField(String name, String value)
+    {
+	ContactField property = new ContactField();
+
+	property.name = name;
+	property.value = value;
+	return property;
     }
 
     /**

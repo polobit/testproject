@@ -243,6 +243,7 @@ $.validator.setDefaults({
 											<option value="8">8</option>
 											<option value="9">9</option>
 											<option value="10">10</option>
+											<option value="10+">> 10</option>
 								 	 </select>
 								 	 </div>
 									</div>
@@ -294,16 +295,12 @@ $.validator.setDefaults({
 									</div>
 																		<div class="form-group login-company">
 								<!--	<div style="display:inline-block;width:49%"> -->
-									<select class="form-control required"  name="company_size" data-width="100%">
+									<select class="form-control required"  name="company_type" data-width="100%">
 											<option value="">Company type</option>
-											<option value="5000+">5000+</option>
-											<option value="1000-4999">1000-4999</option>
-											<option value="500-999">500-999</option>
-											<option value="250-499">250-499</option>
-											<option value="50-249">50-249</option>
-											<option value="25-49">25-49</option>
-											<option value="10-24">10-24</option>
-											<option value="1-9">1-9</option>    
+											<option value="B2B">B2B</option>
+											<option value="SaaS">SaaS</option>
+											<option value="eCommerce">eCommerce</option>
+											<option value="Agency">Agency</option>
 								  </select>
 								  </div>
 									<div class="form-group login-company-size">
