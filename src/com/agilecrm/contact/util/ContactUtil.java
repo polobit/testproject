@@ -78,14 +78,14 @@ public class ContactUtil
      *            name of the tag
      * @return list of contacts
      */
-    public static List<Contact> getContactsForTag(String tag, Integer count, String cursor)
+    public static List<Contact> getContactsForTag(String tag, Integer count, String cursor, String orderBy)
     {
 	Map<String, Object> searchMap = new HashMap<String, Object>();
 	searchMap.put("tagsWithTime.tag", tag);
 	if (count != null)
-	    return dao.fetchAll(count, cursor, searchMap, true, false);
+	    return dao.fetchAllByOrder(count, cursor, searchMap, true, false, orderBy);
 
-	return dao.listByProperty(searchMap);
+	return dao.listByPropertyAndOrder(searchMap, orderBy);
     }
 
     /**

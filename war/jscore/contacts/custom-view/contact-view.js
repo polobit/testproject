@@ -151,7 +151,16 @@ function updateSelectedSortKey(el) {
 			createCookie('sort_by_name', sort_by);
 
 			CONTACTS_HARD_RELOAD=true;
-			App_Contacts.contacts();
+			// If filter is not set then show view on the default contacts
+			// list
+			if(!App_Contacts.tag_id)
+			{
+				App_Contacts.contacts();
+				return;
+			}
+			
+			// If tag filter is applied send tags fetch url and tag_id, which is tobe shown on contacts table.
+			App_Contacts.contacts(App_Contacts.tag_id);
 			return;
 		});
 
