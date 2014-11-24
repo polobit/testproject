@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -58,9 +59,9 @@ public class ActivityReports implements Serializable
     public String sendTo = null;
 
     @NotSaved
-    public List<String> user_ids = new ArrayList<String>();;
+    public List<String> user_ids = new ArrayList<String>();
 
-    public List<Key<DomainUser>> usersList = new ArrayList<Key<DomainUser>>();
+    private List<Key<DomainUser>> usersList = new ArrayList<Key<DomainUser>>();
 
     public static ObjectifyGenericDao<ActivityReports> dao = new ObjectifyGenericDao<ActivityReports>(
 	    ActivityReports.class);
@@ -78,7 +79,8 @@ public class ActivityReports implements Serializable
 	this.frequency = duration;
     }
 
-    public List<DomainUser> getUsersList()
+    @XmlElement(name = "users")
+    public List<DomainUser> getUsers()
     {
 	System.out.println("----get users list --- " + this.usersList.size());
 	List<DomainUser> users_list = new ArrayList<DomainUser>();
