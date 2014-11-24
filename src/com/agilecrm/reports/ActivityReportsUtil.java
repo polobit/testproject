@@ -100,12 +100,13 @@ public class ActivityReportsUtil
     public static Map<String, Object> generateActivityReports(Long id, Long endTime)
     {
 	ActivityReports report = getActivityReport(id);
+	System.out.println(report.toString());
 	List<ActivityType> activities = report.activity;
-	List<DomainUser> users = report.getUsersList();
 	Map<String, Object> activityReports = new HashMap<String, Object>();
 
 	try
 	{
+	    List<DomainUser> users = report.getUsersList();
 	    // Calculate the time bounds for the activities depending on the
 	    // frequency.
 	    Map<String, Long> timeBounds = getTimeBound(report);

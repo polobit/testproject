@@ -80,6 +80,7 @@ public class ActivityReports implements Serializable
 
     public List<DomainUser> getUsersList()
     {
+	System.out.println("----get users list --- " + this.usersList.size());
 	List<DomainUser> users_list = new ArrayList<DomainUser>();
 	if (this.usersList != null)
 	{
