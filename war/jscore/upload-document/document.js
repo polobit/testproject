@@ -79,7 +79,7 @@ $(function(){
 	/**
 	 * To validate the document add or edit forms
 	 */
-    $('#document_validate, #document_update_validate').on('click',function(e){
+    $('#document_validate, #document_update_validate').live('click',function(e){
  		e.preventDefault();
 
  		var modal_id = $(this).closest('.upload-document-modal').attr("id");
