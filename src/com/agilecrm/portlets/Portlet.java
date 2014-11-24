@@ -61,6 +61,12 @@ public class Portlet {
     @NotSaved(IfDefault.class)
     public int row_position = 0;
     
+    @NotSaved(IfDefault.class)
+    public int size_x = 0;
+    
+    @NotSaved(IfDefault.class)
+    public int size_y = 0;
+    
     /**
      * Stores {@link Boolean} info whether the portlet is minimized
      */

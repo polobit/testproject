@@ -58,7 +58,7 @@ function set_p_portlets(base_model){
 	var row_position = base_model.get('row_position');
 	var portlet_settings=base_model.get('settings');
 	
-	if(column_position==1){
+	/*if(column_position==1){
 		if($('#col-0').children().length==0){
 			$('#col-0',this.el).html(getRandomLoadingImg());
 			$('#col-0',this.el).html($(itemView.render().el).attr('id','ui-id-'+column_position+'-'+row_position).addClass('portlet_container').css("z-index","0").css("opacity","1"));
@@ -79,7 +79,12 @@ function set_p_portlets(base_model){
 		}else{
 			$('#col-2',this.el).children(':last').after($(itemView.render().el).attr('id','ui-id-'+column_position+'-'+row_position).addClass('portlet_container').css("z-index","0").css("opacity","1"));
 		}
-	}
+	}*/
+	if($('.gridster > div:visible > div',this.el).length==0)
+		$('.gridster > div',this.el).html($(itemView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
+	else
+		$('.gridster > div > div:last',this.el).after($(itemView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
+	
 	if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Filter Based"){
 		if(base_model.get('settings').filter=="companies")
 			itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+base_model.get('settings').filter, templateKey : "portlets-companies", individual_tag_name : 'tr' });
@@ -426,6 +431,32 @@ function set_p_portlets(base_model){
 	});
 	enablePortletTimeAndDates(base_model);
 }
+
+
+function set_p_portlets1(base_model){
+	var itemView;
+	if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Filter Based"){
+		itemView = new Base_Model_View({ model : base_model, template : "portlets-contacts-filterbased-model", tagName : 'li', id : base_model.get("id")+"-li" });
+	}
+	if($('.gridster > ul > li',this.el).length==0)
+		$('.gridster > ul',this.el).html($(itemView.render().el).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
+	else
+		$('.gridster > ul > li:last',this.el).after($(itemView.render().el).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
+	if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Filter Based"){
+		if(base_model.get('settings').filter=="companies")
+			itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+base_model.get('settings').filter, templateKey : "portlets-companies", individual_tag_name : 'tr' });
+		else
+			itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+base_model.get('settings').filter, templateKey : "portlets-contacts", individual_tag_name : 'tr' });
+	}
+	if(itemCollection!=undefined)
+		itemCollection.collection.fetch();
+	$('#'+base_model.get("id")+'-li > .portlet_body').append($(itemCollection.render().el));
+	//$('.gs-w',this.el).append($(itemCollection.render().el));
+}
+
+
+
+
 /**
  * Generic function to fetch data for graphs and act accordingly on plan limit error
  * @param url

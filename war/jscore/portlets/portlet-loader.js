@@ -18,14 +18,13 @@ function loadPortlets(el){
 		// postrender. It is set to false after portlet setup is initialized
 		is_portlet_view_new = true;
 		Portlets_View = new Base_Collection_View({ url : '/core/api/portlets', sortKey : "row_position", restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
-			postRenderCallback : function(portlets_el)
-			{
-				head.load("css/misc/agile-portlet.css", function()
-				{
+			postRenderCallback : function(portlets_el){
+				head.load("css/misc/agile-portlet.css","http://gridster.net/dist/jquery.gridster.min.css", function(){
 					// If scripts aren't loaded earlier, setup is initialized
-					if (is_portlet_view_new)
-					{
+					if (is_portlet_view_new){
 						set_up_portlets(el, portlets_el);
+						if(Portlets_View.collection.length==0)
+							$('.gridster > div:visible > div',el).removeClass('gs-w');
 					}
 					is_portlet_view_new = false;
 				})
@@ -77,6 +76,8 @@ function loadPortlets(el){
 		// show portlets
 		var newEl = Portlets_View.render().el;
 		set_up_portlets(el, newEl);
+		if(Portlets_View.collection.length==0)
+			$('.gridster > div:visible > div',el).removeClass('gs-w');
 		$('#portlets', el).html(newEl);
 		/*setTimeout(function(){
 			$('#portlets-opportunities-model-list').removeClass('agile-edit-row');
@@ -85,6 +86,7 @@ function loadPortlets(el){
 		},1000);*/
 	}
 }
+var gridster;
 /**
  * 
  * 
@@ -92,7 +94,64 @@ function loadPortlets(el){
  * @param portlets_el
  */
 function set_up_portlets(el, portlets_el){
-	enablePortletSorting(portlets_el);
+	$(function(){
+	    gridster = $('.gridster > div:visible',el).gridster({
+	    	widget_selector: "div",
+	        widget_margins: [10, 10],
+	        widget_base_dimensions: [400, 280],
+	        min_cols: 3,
+	        draggable: {
+	        	stop: function(event,ui){
+					var models = [];
+
+					/*
+					 * Iterate through each all the portlets and set each portlet
+					 * position and store it in array
+					 */
+					$('#portlet-res > div > .gs-w').each(function(){
+						var model_id = $(this).find('.portlets').attr('id');
+						
+						var model = Portlets_View.collection.get(model_id);
+						
+						model.set({ 'column_position' : parseInt($(this).attr("data-col")) }, { silent : true });
+						
+						model.set({ 'row_position' : parseInt($(this).attr("data-row")) }, { silent : true });
+
+						models.push({ id : model.get("id"), column_position : parseInt($(this).attr("data-col")), row_position : parseInt($(this).attr("data-row")) });
+					});
+					// Saves new positions in server
+					$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
+						contentType : "application/json; charset=utf-8", dataType : 'json' });
+				}
+	        },
+	        resize: {
+	        	enabled: true,
+	        	stop: function(event,ui){
+					var models = [];
+
+					/*
+					 * Iterate through each all the portlets and set each portlet
+					 * position and store it in array
+					 */
+					$('#portlet-res > div > .gs-w').each(function(){
+						var model_id = $(this).find('.portlets').attr('id');
+						
+						var model = Portlets_View.collection.get(model_id);
+						
+						model.set({ 'size_x' : parseInt($(this).attr("data-sizex")) }, { silent : true });
+						
+						model.set({ 'size_y' : parseInt($(this).attr("data-sizey")) }, { silent : true });
+
+						models.push({ id : model.get("id"), size_x : parseInt($(this).attr("data-sizex")), size_y : parseInt($(this).attr("data-sizey")) });
+					});
+					// Saves new width and height in server
+					$.ajax({ type : 'POST', url : '/core/api/portlets/widthAndHeight', data : JSON.stringify(models),
+						contentType : "application/json; charset=utf-8", dataType : 'json' });
+				}
+	        }
+	    }).data('gridster');
+	  });
+	//enablePortletSorting(portlets_el);
 }
 /**
  * Shrink the portlet header name width
@@ -133,7 +192,7 @@ function hidePortletIcons(el)
 function enablePortletSorting(el){
 	// Loads jquery-ui to get sortable functionality on portlets
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function(){
-		$('.portlet-column').sortable({
+		/*$('.portlet-column').sortable({
 			connectWith: '.portlet-column',
 			iframeFix: false,
 			items:'div.portlet_container',
@@ -144,8 +203,7 @@ function enablePortletSorting(el){
 			placeholder: 'portlet-ui-sortable-placeholder portlet-round-all',
 			forcePlaceholderSize:true,
 			tolerance:'pointer'
-		});
-
+		});*/
 		/*
 		 * This event is called after sorting stops to save new positions of
 		 * portlets

@@ -98,6 +98,29 @@ public class PortletsAPI {
 		}
 	}
 	/**
+	 * Saves position of portlet, used to show portlets in ascending order 
+	 * according to position
+	 * 
+	 * @param portlets
+	 *             {@link List} of {@link Portlet}
+	 */
+	@Path("widthAndHeight")
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public void savePortletWidthAndHeight(List<Portlet> portlets){
+		if (portlets == null)
+			return;
+
+		// UI sends only ID and Position
+		for (Portlet portlet : portlets){
+			Portlet portlt = PortletUtil.getPortlet(portlet.id);
+			portlt.size_x = portlet.size_x;
+			portlt.size_y = portlet.size_y;
+			portlt.save();
+		}
+	}
+	/**
 	 * Updates a portlet
 	 * 
 	 * @param portlet

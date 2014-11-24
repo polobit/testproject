@@ -9,7 +9,8 @@ var PortletsRouter = Backbone.Router
 												},
 												
 												portlets : function(){
-													head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function(){
+													head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js',
+															'http://gridster.net/dist/jquery.gridster.js',function(){
 														var el = $(getTemplate('portlets', {}));
 														$("#content").html(el);
 														loadPortlets(el);
@@ -49,7 +50,15 @@ function addNewPortlet(portlet_type,p_name){
 		obj.name="Calls Per Person";
 	obj.portlet_type=portlet_type;
 	obj.column_position=1;
-	obj.row_position=$('#col-0').children().length+1;
+	var max_row_position=0;
+	if(gridster!=undefined)
+		gridster.$widgets.each(function(){
+			if(parseInt($(this).attr("data-row"))>max_row_position)
+				max_row_position=parseInt($(this).attr("data-row"));
+		});
+	obj.row_position=max_row_position+1;
+	obj.size_x=1;
+	obj.size_y=1;
 	if(portlet_type=="CONTACTS" && p_name=="FilterBased")
 		json['filter']="contacts";
 	else if(portlet_type=="CONTACTS" && p_name=="EmailsOpened")
@@ -94,6 +103,8 @@ function addNewPortlet(portlet_type,p_name){
         	if($('#no-portlets').is(':visible'))
     			$('#no-portlets').hide();
         	Portlets_View.collection.add(model);
+        	//var el = $(getTemplate('portlets', {}));
+        	//set_up_portlets(el,el);
         	
         	//move the scroll bar to bottom for showing the newly added portlet
         	window.scrollTo(0,document.body.scrollHeight);
