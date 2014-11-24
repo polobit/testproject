@@ -10,9 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -81,9 +80,8 @@ public class ActivityReports implements Serializable
 
     public List<DomainUser> getUsersList()
     {
-	Objectify ofy = ObjectifyService.begin();
-	List<DomainUser> users_list = new ArrayList<DomainUser>();
-	users_list.addAll(ofy.get(this.usersList).values());
+	List<DomainUser> users_list = DomainUserUtil.dao.fetchAllByKeys(this.usersList);
+	System.out.println("----users list --- " + users_list.size());
 	return users_list;
     }
 
