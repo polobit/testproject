@@ -221,6 +221,31 @@ $.validator.setDefaults({
 											maxlength="20" minlength="4" name='password' type="password"
 											placeholder="Password" autocapitalize="off">
 									</div>
+									<div class="form-group login-plan_type">
+									<div style="display:inline-block;width:49%">
+									<select class="form-control required"  name="plan_type" data-width="100%">
+											<option value="">Choose Plan</option>
+											<option value="Starter">Starter</option>
+											<option value="Regular">Regular</option>
+											<option value="pro">professional</option>
+								 	 </select>
+								 	 </div>
+								 	 <div style="display:inline-block;width:50%">
+								 	 <select class="form-control required"  name="users" data-width="100%">
+											<option value="">Choose Users</option>
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+											<option value="4">4</option>
+											<option value="5">5</option>
+											<option value="6">6</option>
+											<option value="7">7</option>
+											<option value="8">8</option>
+											<option value="9">9</option>
+											<option value="10">10</option>
+								 	 </select>
+								 	 </div>
+									</div>
 									<div class="form-group">
 										<div class="input-prepend input-append input-group">
 											<input id='subdomain' type="text" placeholder="Company"
@@ -261,15 +286,16 @@ $.validator.setDefaults({
 							<fieldset class="step2">
 								<div class='regpage-fieldview'>
 									<div class="form-group login-company">
+							<!-- 	<div style="display:inline-block;width:50%">  -->	
 										<span class="regpage-company"></span> <input
 											class="input-xlarge field required form-control"
 											id="login_company" name='company' type="text" maxlength="50"
 											placeholder="Company Name" autocapitalize="off">
 									</div>
- 
-									<div class="form-group login-company-size">
+																		<div class="form-group login-company">
+								<!--	<div style="display:inline-block;width:49%"> -->
 									<select class="form-control required"  name="company_size" data-width="100%">
-											<option value="">Company size</option>
+											<option value="">Company type</option>
 											<option value="5000+">5000+</option>
 											<option value="1000-4999">1000-4999</option>
 											<option value="500-999">500-999</option>
@@ -279,31 +305,27 @@ $.validator.setDefaults({
 											<option value="10-24">10-24</option>
 											<option value="1-9">1-9</option>    
 								  </select>
-									</div>
-									
+								  </div>
 									<div class="form-group login-company-size">
+									 <!--  <div style="display:inline-block;width:50%"> -->
+									<select class="form-control required"  name="role">
+											<option value="">Role</option>
+											<option value="VP, Sales">VP, Sales</option>
+											<option value="VP, Marketing">VP, Marketing</option>
+											<option value="Developer">Developer</option>
+											<option value="Reseller">Reseller</option>
+											<option value="Agency">Agency</option>
+											<option value="Small Business Owner">Small Business Owner</option>
+											<option value="Other">Other</option>
+								  </select>
+								  </div>
+								  <div class="form-group login-company-size">
+								<!--  <div style="display:inline-block;width:49%">-->
 										<span class="regpage-company-size"></span> <input
 											class="input-xlarge field required form-control number"
 											id="login_phone_number" name='phone_number' type="text" min=2
 											placeholder="Phone Number " autocapitalize="off">
-									</div>
-									
-									<div class="form-group login-plan_type">
-									<select class="form-control required"  name="plan_type" data-width="100%">
-											<option value="">Choose Plan</option>
-											<option value="Starter">Starter</option>
-											<option value="Regular">Regular</option>
-											<option value="pro">professional</option>
-								  </select>
-									</div>
-									
-										<div class="form-group login-plan_type">
-									<select class="form-control required"  name="role" data-width="100%">
-											<option value="">Role</option>
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-								  </select>
+											</div>
 									</div>
 									
 									<div class="form-group login-company-size">
