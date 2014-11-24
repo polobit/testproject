@@ -23,6 +23,10 @@ import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.taskqueue.TransientFailureException;
 import com.thirdparty.PubNub;
 import com.thirdparty.mandrill.Mandrill;
 
@@ -81,6 +85,17 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    {
 			domainuser = eventList.get(i).getOwner();
 		    }
+
+		    catch (TransientFailureException tfe)
+		    {
+			EventReminderDeferredTask eventReminderDeferredTask = new EventReminderDeferredTask(domain,
+			        starttime);
+			Queue queue = QueueFactory.getQueue("event-notifier");
+			TaskOptions options = TaskOptions.Builder.withPayload(eventReminderDeferredTask);
+			options.countdownMillis(40000);
+			queue.add(options);
+		    }
+
 		    catch (Exception e1)
 		    {
 			// TODO Auto-generated catch block
@@ -147,6 +162,17 @@ public class SendEventReminderDeferredTask implements DeferredTask
 			        {
 			        });
 		    }
+
+		    catch (TransientFailureException tfe)
+		    {
+			EventReminderDeferredTask eventReminderDeferredTask = new EventReminderDeferredTask(domain,
+			        starttime);
+			Queue queue = QueueFactory.getQueue("event-notifier");
+			TaskOptions options = TaskOptions.Builder.withPayload(eventReminderDeferredTask);
+			options.countdownMillis(20000);
+			queue.add(options);
+		    }
+
 		    catch (Exception e)
 		    {
 
@@ -208,6 +234,15 @@ public class SendEventReminderDeferredTask implements DeferredTask
 	    }
 
 	    EventReminder.getEventReminder(domain, starttime);
+	}
+
+	catch (TransientFailureException tfe)
+	{
+	    EventReminderDeferredTask eventReminderDeferredTask = new EventReminderDeferredTask(domain, starttime);
+	    Queue queue = QueueFactory.getQueue("event-notifier");
+	    TaskOptions options = TaskOptions.Builder.withPayload(eventReminderDeferredTask);
+	    options.countdownMillis(20000);
+	    queue.add(options);
 	}
 
 	catch (Exception e)

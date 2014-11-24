@@ -9,6 +9,10 @@ import com.agilecrm.activities.SendEventReminder;
 import com.agilecrm.activities.util.EventUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.taskqueue.TransientFailureException;
 import com.thirdparty.mandrill.Mandrill;
 
 /**
@@ -73,6 +77,16 @@ public class EventReminderDeferredTask implements DeferredTask
 	    }
 
 	}
+
+	catch (TransientFailureException tfe)
+	{
+	    EventReminderDeferredTask eventReminderDeferredTask = new EventReminderDeferredTask(domain, starttime);
+	    Queue queue = QueueFactory.getQueue("event-notifier");
+	    TaskOptions options = TaskOptions.Builder.withPayload(eventReminderDeferredTask);
+	    options.countdownMillis(20000);
+	    queue.add(options);
+	}
+
 	catch (Exception e)
 	{
 	    String subject = "Exception occured at eventreminderdeferredtask   " + domain + " "
