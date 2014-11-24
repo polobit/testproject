@@ -19,6 +19,7 @@ import com.agilecrm.reports.ActivityReports.ActivityType;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
@@ -125,8 +126,9 @@ public class ActivityReportsUtil
 
 	    List<Map<String, Object>> userReport = new ArrayList<Map<String, Object>>();
 	    // For every user selected in the activity report.
-	    for (DomainUser user : users)
+	    for (String userId : report.user_ids)
 	    {
+		DomainUser user = DomainUserUtil.getDomainUser(Long.parseLong(userId));
 		Map<String, Object> activityReport = new HashMap<String, Object>();
 		activityReport.put("user_id", user.id);
 		activityReport.put("user_name", user.name);
@@ -182,7 +184,7 @@ public class ActivityReportsUtil
     public static Map<String, Object> getDealActivityReport(DomainUser user, Long startTime, Long endTime)
     {
 
-	// Local variable declaretion.
+	// Local variable declaration.
 	List<Key<Opportunity>> dealWon = new ArrayList<Key<Opportunity>>();
 	List<Key<Opportunity>> dealLost = new ArrayList<Key<Opportunity>>();
 	List<Key<Opportunity>> dealUpdated = new ArrayList<Key<Opportunity>>();
