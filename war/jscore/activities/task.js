@@ -25,7 +25,7 @@ $(function() {
 	 * relatedTo field typeahead, changing color and font-weight) when we click
 	 * on task link in activities modal.
 	 */
-	$("#task").click(function(e) {
+	$("#task").live('click',function(e) {
 		e.preventDefault();
 		var el = $("#taskForm");
 		highlight_task();
@@ -103,7 +103,7 @@ $(function() {
 	 * When clicked on update button of task-update-modal, the task will get
 	 * updated by calling save_task function
 	 */
-	$('#update_task_validate').click(function(e) {
+	$('#update_task_validate').live('click',function(e) {
 		e.preventDefault();
 		save_task('updateTaskForm', 'updateTaskModal', true, this);
 	});
