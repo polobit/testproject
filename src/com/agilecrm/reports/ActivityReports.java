@@ -80,7 +80,19 @@ public class ActivityReports implements Serializable
 
     public List<DomainUser> getUsersList()
     {
-	List<DomainUser> users_list = DomainUserUtil.dao.fetchAllByKeys(this.usersList);
+	List<DomainUser> users_list = new ArrayList<DomainUser>();
+	if (this.usersList != null)
+	{
+	    try
+	    {
+		users_list = DomainUserUtil.dao.fetchAllByKeys(this.usersList);
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("Exception in getting users - " + e.getMessage());
+	    }
+	}
+
 	System.out.println("----users list --- " + users_list.size());
 	return users_list;
     }
@@ -124,4 +136,21 @@ public class ActivityReports implements Serializable
     {
 	dao.put(this);
     }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString()
+    {
+	StringBuilder builder = new StringBuilder();
+	builder.append("ActivityReports [id=").append(id).append(", name=").append(name).append(", activity=")
+		.append(activity).append(", frequency=").append(frequency).append(", sendTo=").append(sendTo)
+		.append(", user_ids=").append(user_ids).append(", usersList=").append(usersList)
+		.append(", created_time=").append(created_time).append("]");
+	return builder.toString();
+    }
+
 }
