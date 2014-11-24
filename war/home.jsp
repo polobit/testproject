@@ -163,7 +163,7 @@ var LOCAL_SERVER = <%=debug%>;
 
 var IS_FLUID = <%=is_fluid%>;
 
-var CLICKDESK_CODE_LOADED = false;
+var CLICKDESK_CODE_LOADED = true;
 
 // Get current user prefs json
 var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
