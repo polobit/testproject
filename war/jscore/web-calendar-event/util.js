@@ -344,7 +344,7 @@ function save_web_event(formId, confirmBtn)
 					}
 					else
 					{
-						alert("Your appointment not scheduled. please try again");
+						alert("Something went wrong as your appointment was not scheduled. Please try again in few hours. Error: "+res);
 						resetAll();
 						location.reload(true);
 					}

@@ -3,7 +3,7 @@
 
 <script id="settings-business-prefs-template" type="text/html">
  <div class="row">
-    	<div class="span9">
+    	<div class="span9" id="schedule-preferences">
     	<div class="well">
 
 <form id="scheduleid" name="scheduleid" method="post" action="" class="form-horizontal">
@@ -33,7 +33,7 @@
 <div class="control-group">
     					<label class="control-label" for="cname">Meeting Type </label> 
                    		<div class="controls">
-    						<input class="input-xlarge" type="text" id="meeting_types" name="meeting_types" {{#if meeting_types}}  value="{{meeting_types}}" {{else}} placeholder="Enter comma separated meeting types" {{/if}} autocapitalize="off"/>
+    						<input class="input-xlarge" type="text" id="meeting_types" name="meeting_types"  value="{{meeting_types}}"  placeholder="Enter comma separated meeting types"  autocapitalize="off"/>
     					</div>
     				</div> 
 <div id="meeting_type_error" style="color: red;display:none;margin-left: 159px;margin-top: -9px;">Speacial characters are not allowed except comma</div>

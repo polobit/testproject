@@ -53,24 +53,15 @@ public class WebCalendarEventUtil
      * @param startTime
      * @return List of available slots on selected date
      * @throws ParseException
+     * @throws JSONException
      */
     public static List<List<Long>> getSlots(Long userid, int slotTime, String date, int timezone, String timezoneName,
-	    Long epochTime, Long startTime, Long endTime, Long agileuserid, Long currentsecs) throws ParseException
+	    Long epochTime, Long startTime, Long endTime, Long agileuserid, Long currentsecs) throws ParseException,
+	    JSONException
     {
-	List<Long> business_hours = new ArrayList<>();
-	List<List<Long>> listOfLists = new ArrayList<List<Long>>();
-	try
-	{
-	    business_hours = getEpochForBusinessTimings(currentsecs, userid, timezoneName);
 
-	    if (business_hours == null || business_hours.size() == 0)
-		return listOfLists;
-	}
-	catch (JSONException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
+	DomainUser domain_user = DomainUserUtil.getDomainUser(userid);
+	List<List<Long>> listOfLists = new ArrayList<List<Long>>();
 
 	// Get all permutations possible based on selected slottime(duration) in
 	// 24 Hr.
@@ -103,19 +94,13 @@ public class WebCalendarEventUtil
 	}
 	System.out.println(possibleSlots.size());
 
-	if (possibleSlots != null && business_hours != null && business_hours.size() > 0)
+	if (possibleSlots != null && possibleSlots.size() > 0)
 	{
 	    for (int i = 0; i <= possibleSlots.size() - 1; i++)
 	    {
 		List<Long> slots = possibleSlots.get(i);
 		Long main = slots.get(0);
-		Long s1 = business_hours.get(0);
-		Long s2 = business_hours.get(1);
-		if (main < s1 || main > s2)
-		{
-		    possibleSlots.remove(i);
-		}
-		else
+		if (checkBussinessHour(main, domain_user.timezone, new JSONArray(domain_user.business_hours)))
 		{
 		    listOfLists.add(slots);
 		}
@@ -124,7 +109,7 @@ public class WebCalendarEventUtil
 	}
 	if (listOfLists != null && listOfLists.size() > 0)
 	{
-	    System.out.println("business hours " + business_hours.get(0) + "------------" + business_hours.get(1));
+
 	    System.out.println("final list of lists ======================");
 	    for (int i = 0; i <= listOfLists.size() - 1; i++)
 	    {
@@ -147,27 +132,23 @@ public class WebCalendarEventUtil
     /**
      * 
      * @param eppoch
-     *            epoch time we get from client browser it is equal to 12 AM in
-     *            the mid night
-     * @param userid
-     *            domain user id to get business hours preferences
-     * @param client_timezone
-     *            we get from online schedule page to show the timings according
-     *            to client timezone
-     * @return [from time, to time]
+     *            checks this epoch time is in business hours of user or not
+     * @param usertimezone
+     *            domain user timezone
+     * @param business_hours_array
+     * @return if epoch is in between business hour then it return true else
+     *         false
      * @throws JSONException
      */
-    public static List<Long> getEpochForBusinessTimings(Long eppoch, Long userid, String client_timezone)
+    public static boolean checkBussinessHour(Long eppoch, String usertimezone, JSONArray business_hours_array)
 	    throws JSONException
     {
 	// used to store business hours
 	List<Long> business_hours = new ArrayList<>();
 
-	DomainUser domain_user = DomainUserUtil.getDomainUser(userid);
-
 	// according domain user timezone gets the weekday
 	// i.e in java sun,mon,tue,wed,thu,fri,sat 1,2,3,4,5,6,7 respectivly
-	TimeZone tz = TimeZone.getTimeZone(domain_user.timezone);
+	TimeZone tz = TimeZone.getTimeZone(usertimezone);
 	Calendar calendar = Calendar.getInstance();
 	calendar.setTimeInMillis(eppoch * 1000);
 	calendar.setTimeZone(tz);
@@ -179,9 +160,6 @@ public class WebCalendarEventUtil
 	int month = calendar.get(Calendar.MONTH);
 
 	System.out.println("week day " + week_day + " date " + date + " year " + year + " month " + month);
-
-	// business hours preferences will get as json array
-	JSONArray business_hours_array = new JSONArray(domain_user.business_hours);
 
 	// in backend business hours will be stored as
 	// [{"isActive":true,"timeTill":"03:00","timeFrom":"14:00"},{"isActive":false,"timeTill":null,"timeFrom":null},...]
@@ -208,20 +186,27 @@ public class WebCalendarEventUtil
 
 	    //
 	    Long starttime = getEppochTime(date, month, year, Integer.parseInt(fromTime), tz);
-	    if (Integer.parseInt(fromTime) < Integer.parseInt(tillTime))
-	    {
-		endtime = getEppochTime(date, month, year, Integer.parseInt(tillTime), tz);
-	    }
-	    else
-	    {
-		endtime = getEppochTime(date + 1, month, year, Integer.parseInt(tillTime), tz);
-	    }
 
-	    business_hours.add(starttime);
-	    business_hours.add(endtime);
+	    endtime = getEppochTime(date, month, year, Integer.parseInt(tillTime), tz);
+
+	    if (eppoch > starttime && eppoch < endtime)
+	    {
+		return true;
+	    }
 	}
-	return business_hours;
+	return false;
     }
+
+    /**
+     * 
+     * @param wkday
+     *            int weekday. according jquery business hours plugin monday to
+     *            sun represented as 0 to 6 according to java sunday to sat
+     *            represented as 1 to 7 as we are storing business hours in
+     *            jsonarray we have to get appropriate week num to get business
+     *            hours
+     * @return weekday according jquery business hours plugin
+     */
 
     public static int getWeekDayAccordingToJS(int wkday)
     {

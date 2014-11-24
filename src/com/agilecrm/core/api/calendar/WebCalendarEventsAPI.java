@@ -9,7 +9,9 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.json.JSONException;
 
@@ -61,20 +63,42 @@ public class WebCalendarEventsAPI
 	    @QueryParam("agile_user_id") Long agileuserid, @QueryParam("current_secs") Long currentsecs)
 	    throws ParseException
     {
-	return WebCalendarEventUtil.getSlots(userid, slot_time, date, timezone, timezoneName, epochTime, startTime,
-	        endTime, agileuserid, currentsecs);
+	try
+	{
+	    return WebCalendarEventUtil.getSlots(userid, slot_time, date, timezone, timezoneName, epochTime, startTime,
+		    endTime, agileuserid, currentsecs);
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	return null;
     }
 
     @Path("/save")
     @PUT
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public String saveWebEvent(WebCalendarEvent wce) throws JSONException
+    public String saveWebEvent(WebCalendarEvent wce)
     {
 	System.out.println(wce);
 
 	Contact contact = new Contact();
-	String result = WebCalendarEventUtil.createEvents(wce, contact);
-	return result;
+	String result;
+	try
+	{
+	    result = WebCalendarEventUtil.createEvents(wce, contact);
+	    return result;
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	    System.out.println(e.getMessage());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+
     }
 }

@@ -182,7 +182,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     public String business_hours = getDefaultBusinessHours();
 
     @NotSaved(IfDefault.class)
-    public String timezone = "Asia/Kolkata";
+    public String timezone = "UTC";
 
     @NotSaved(IfDefault.class)
     public String meeting_durations = "{\"15mins\":\"Say Hai\",\"30mins\":\"Lets keep it Short\",\"60mins\":\"Lets Chat\"}";

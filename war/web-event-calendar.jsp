@@ -46,7 +46,7 @@ if (scheduleid != null)
   	
   DomainUser domainUser = DomainUserUtil.getDomainUserFromScheduleId(scheduleid,d_name);
 		  
-  //  DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("jagadeesh@invox.com");
+  // DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("jagadeesh@invox.com");
 		  
   System.out.println("Domain user " + domainUser);
 	  
@@ -68,6 +68,9 @@ if (scheduleid != null)
 	      meeting_durations=domainUser.meeting_durations;
 	      meeting_types=domainUser.meeting_types;
 	      System.out.println(" meetiing types "+meeting_types);
+	      if(meeting_types!=null){
+		  meeting_types=meeting_types.trim();
+	      }
 	      	
 	      if(StringUtils.isEmpty(userPrefs.pic))
 	          profile_pic  ="/img/gravatar.png";
@@ -160,7 +163,7 @@ ObjectMapper mapper = new ObjectMapper();
 							disabled="disabled" /> 
 							<%if(StringUtils.isNotEmpty(meeting_types)){ %>
 							<select class="form-control meetingtypes" style="border: 1px solid #74B9EF;" title='Meeting Types' name="phoneNumber" id="phoneNumber">
-							<option value="">Meeting Type</option>
+							 <option selected disabled>Meeting Type</option>
 	<%String []str=meeting_types.split(",");
 	for(int i=0;i<=str.length-1;i++){%>
 	    
@@ -181,7 +184,7 @@ ObjectMapper mapper = new ObjectMapper();
 
 					<div class="col-sm-8">
 						<textarea class="inputtext me-disable" rows="7" cols="90"
-							id="notes" name="notes" placeholder="Notes" disabled="disabled"></textarea>
+							id="notes" name="notes" placeholder="Notes,Phone or SkypeId" disabled="disabled"></textarea>
 					</div>
 					<div class="clearfix"></div>
 				</div>
