@@ -21,7 +21,6 @@ $("#btnSerialize").die().live('click', function(e){
 	var json = serializeForm("scheduleform");
 	var meeting_durations = serializeForm("meeting_durations");
 	console.log(json);
-	$("#schedule-preferences").html(getRandomLoadingImg());
 	
 	 var business_hours=JSON.stringify(businessHoursManager.serialize());
 		
@@ -29,8 +28,8 @@ $("#btnSerialize").die().live('click', function(e){
 		json['meeting_durations']=JSON.stringify(meeting_durations);
 		json['timezone']=$("#timezone").val();
 		console.log(business_hours);
-
 		
+		$("#schedule-preferences").html(getRandomLoadingImg());
 		$.ajax({
 			url : '/core/api/scheduleprefs',
 			type : 'PUT',
