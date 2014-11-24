@@ -1,5 +1,7 @@
 package com.agilecrm.activities.deferred;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 
 import com.agilecrm.activities.Event;
@@ -58,7 +60,7 @@ public class EventReminderDeferredTask implements DeferredTask
 
 	    if (event == null)
 	    {
-		starttime = (System.currentTimeMillis() / 1000) + 3600;
+		starttime = (System.currentTimeMillis() / 1000) + 900;
 		SendEventReminder.sendEventReminders(domain, starttime, false);
 	    }
 	    else
@@ -73,14 +75,23 @@ public class EventReminderDeferredTask implements DeferredTask
 	}
 	catch (Exception e)
 	{
-	    String subject = "Exception occured in EventReminderDeferredTask and domainname" + domain + " "
+	    String subject = "Exception occured at eventreminderdeferredtask   " + domain + " "
 		    + System.currentTimeMillis();
-	    String body = "exception occured due to " + e.getMessage();
+	    String body = "   e.getmessage " + e.getMessage();
+	    try
+	    {
+		StringWriter errors = new StringWriter();
+		e.printStackTrace(new PrintWriter(errors));
+		String errorString = errors.toString();
 
-	    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "event-reminder-failure",
-		    "jagadeesh@invox.com", null, null, subject, null, body, null, null);
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+		Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "event-reminder-failure",
+		        "jagadeesh@invox.com", null, null, subject, null, errorString + body, null, null);
+	    }
+	    catch (Exception ex)
+	    {
+		ex.printStackTrace();
+		System.err.println("Exception occured while event notification status mail " + e.getMessage());
+	    }
 
 	}
 	finally
