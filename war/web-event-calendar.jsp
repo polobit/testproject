@@ -68,9 +68,6 @@ if (scheduleid != null)
 	      meeting_durations=domainUser.meeting_durations;
 	      meeting_types=domainUser.meeting_types;
 	      System.out.println(" meetiing types "+meeting_types);
-	      if(meeting_types!=null){
-		  meeting_types=meeting_types.trim();
-	      }
 	      	
 	      if(StringUtils.isEmpty(userPrefs.pic))
 	          profile_pic  ="/img/gravatar.png";
@@ -166,8 +163,7 @@ ObjectMapper mapper = new ObjectMapper();
 							 <option selected disabled>Meeting Type</option>
 	<%String []str=meeting_types.split(",");
 	for(int i=0;i<=str.length-1;i++){%>
-	    
-		<option value=<%=str[i]%>><%=str[i]%></option>
+		<option value=<%=mapper.writeValueAsString(str[i])%>><%=str[i]%></option>
 	
 	<%}
 	%>
@@ -184,7 +180,7 @@ ObjectMapper mapper = new ObjectMapper();
 
 					<div class="col-sm-8">
 						<textarea class="inputtext me-disable" rows="7" cols="90"
-							id="notes" name="notes" placeholder="Notes,Phone or SkypeId" disabled="disabled"></textarea>
+							id="notes" name="notes" placeholder="Notes,Phone or Skype" disabled="disabled"></textarea>
 					</div>
 					<div class="clearfix"></div>
 				</div>
