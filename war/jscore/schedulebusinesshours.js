@@ -5,6 +5,9 @@ $(function()
 $("#btnSerialize").die().live('click', function(e){
 	e.preventDefault();
 	
+	var saveBtn = $(this);
+	disable_save_button($(saveBtn));
+	
 	var meeting_types=$('#meeting_types').val();
 	
 	
@@ -29,7 +32,7 @@ $("#btnSerialize").die().live('click', function(e){
 		json['timezone']=$("#timezone").val();
 		console.log(business_hours);
 		
-		$("#schedule-preferences").html(getRandomLoadingImg());
+	//	$("#schedule-preferences").html(getRandomLoadingImg());
 		$.ajax({
 			url : '/core/api/scheduleprefs',
 			type : 'PUT',
@@ -40,10 +43,10 @@ $("#btnSerialize").die().live('click', function(e){
 			{
 			window.location.reload(true);
 			},
-			error : function(response)
+			error : function(error)
 			{
-				alert("error");
-				
+				$('#error_message').html("Due to "+error.statusText+" scheduling preferences not updated. Please try again in few hours");
+				enable_save_button($(saveBtn));
 			} });
 	
 });

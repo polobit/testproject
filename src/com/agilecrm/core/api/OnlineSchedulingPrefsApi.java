@@ -3,7 +3,9 @@ package com.agilecrm.core.api;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
 
@@ -38,7 +40,13 @@ public class OnlineSchedulingPrefsApi
 		domainuser.business_hours = array.toString();
 		domainuser.timezone = user.timezone;
 		domainuser.save();
+		return domainuser;
 
+	    }
+	    else
+	    {
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Invalid User")
+		        .build());
 	    }
 
 	}
@@ -46,8 +54,10 @@ public class OnlineSchedulingPrefsApi
 	{
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
-	return user;
+
     }
 
 }
