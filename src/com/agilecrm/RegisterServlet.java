@@ -228,7 +228,7 @@ public class RegisterServlet extends HttpServlet
 	{
 
 	    // Name
-	    if (StringUtils.isEmpty(name))
+	    if (!StringUtils.isEmpty(name))
 	    {
 		if (name.contains(" "))
 		{
@@ -239,6 +239,10 @@ public class RegisterServlet extends HttpServlet
 		    {
 			properties.add(createField(Contact.LAST_NAME, names[1]));
 		    }
+		}
+		else
+		{
+		    properties.add(createField(Contact.FIRST_NAME, name));
 		}
 	    }
 
