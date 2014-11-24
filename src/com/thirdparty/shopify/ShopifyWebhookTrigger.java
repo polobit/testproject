@@ -91,9 +91,6 @@ public class ShopifyWebhookTrigger extends HttpServlet
 			contactProperties.add(new ContactField(key, value, null));
 		    }
 
-		    System.out.println("Assigning campaign to contact ...");
-		    WorkflowSubscribeUtil.subscribe(contact, trigger.id);
-
 		    if (contact.properties.isEmpty())
 			contact.properties = contactProperties;
 		    else
@@ -104,7 +101,10 @@ public class ShopifyWebhookTrigger extends HttpServlet
 		    contact.addTags(tags);
 		    contact.save();
 
-		    if (!StringUtils.isBlank(shopifyJson.getString("note")))
+		    System.out.println("Assigning campaign to contact ...");
+		    WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.id, new JSONObject().put("shopify", shopifyJson));
+
+		    if (!(StringUtils.isBlank(shopifyJson.getString("note"))||StringUtils.equals("null", shopifyJson.getString("note"))))
 		    {
 			System.out.println("Saving note ...");
 			Note note = new Note("Shopify Note", shopifyJson.getString("note"));
