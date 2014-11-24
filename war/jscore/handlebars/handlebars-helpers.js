@@ -127,7 +127,7 @@ $(function()
 					if (exclusive_fields[i].name == data[j].field_label)
 						try
 						{
-							var value = exclusive_fields[i].value * 1000;
+							var value = exclusive_fields[i].value;
 
 							if (!isNaN(value))
 							{
