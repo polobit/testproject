@@ -10,20 +10,19 @@
 <table style="display:block;overflow:hidden!important;margin-bottom:-20px;"><tbody><tr><td>
 <section>
     <form>
-       
-        <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
+        <table class="table hide table-striped " style="overflow:hidden!important">
             <div id="today-heading" style="display: none"><b>Today</b></div>
 			
             <tbody id="today-event" style="display: inline;"></tbody>
         </table>
 
-        <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
+        <table class="table hide table-striped" style="overflow:hidden!important;">
             <div id="tomorrow-heading" style="display: none"><b>Tomorrow</b></div>
 			
             <tbody id="tomorrow-event" style="display: inline;"></tbody>
         </table>
 
-        <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
+        <table class="table hide table-striped" style="overflow:hidden!important;">
             <div id="next-week-heading" style="display: none"><b>Later</b></div>
             <tbody id="next-week-event" style="display: inline;"></tbody>
         </table>
@@ -56,7 +55,7 @@
 <div class="span8" style="text-align:right;">
 {{#if contacts.length}} 
 <div class="line-clamp">  
-        {{#each contacts}}<span class="label">{{getContactDisplayValue this}}</span> {{/each}}  
+        {{#each contacts}}<a href ="#contact/{{this.id}}">{{getContactDisplayValue this}}</a> {{/each}}  
         
     </div>
 {{/if}}
@@ -77,13 +76,8 @@
 </div>
 {{/unless}}
 {{#if this.length}}
-<table style="display:block;overflow:hidden!important;margin-bottom:-20px;"><tbody><tr><td>
-<section>
-    <form>
-       
-        <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
-            <div id="event-heading" style="display: none"></div>
-            <tbody id="eventAll" style="display: inline;"></tbody>
+        <table class="table hide table-striped" style="overflow:hidden!important;">
+            <tbody id="eventAll" style="display: table;width:100%"></tbody>
         </table>
 
 <script id="events-model-template" type="text/html">
@@ -108,7 +102,7 @@
 <div class="span8" style="text-align:right;">
 {{#if contacts.length}} 
 <div class="line-clamp">  
-        {{#each contacts}}<span class="label">{{getContactDisplayValue this}}</span> {{/each}}  
+        {{#each contacts}}<a href="#contact/{{this.id}}">{{getContactDisplayValue this}}</a> {{/each}}  
         
     </div>
 {{/if}}
@@ -132,7 +126,7 @@
 </div>
 {{/unless}}
 {{#if this.length}}
-        <table class="table hide" style="overflow:hidden!important;">
+        <table class="table hide table-striped" style="overflow:hidden!important;">
             <tbody id="google_event" style="display: table;width:100%"></tbody>
         </table>
 {{/if}}

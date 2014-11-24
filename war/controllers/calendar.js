@@ -103,6 +103,8 @@ var CalendarRouter = Backbone.Router.extend({
 
 												// Read stored selections from cookie and Creates nested collection
 												readDetailsFromCookie();
+												// Bind dropdown events
+												bindDropdownEvents();
 
 								}, "<li><a href='{{id}}' class='hide-on-owner'>My Tasks</a></li>", true);
 
@@ -368,7 +370,7 @@ function show_model(id)
 																				.find("ul[name='contacts']")
 																				.append(
 
-																												'<li class="tag" data="' + contactList[i].id + '" style="display: inline-block; "><a href="#contact/' + contactList[i].id + '">' + getCompanyName(contactList[i].properties) + '</a><a class="close" id="remove_tag">�</a></li>');
+																												'<li class="tag" data="' + contactList[i].id + '" style="display: inline-block; "><a href="#contact/' + contactList[i].id + '">' + getCompanyName(contactList[i].properties) + '</a><a class="close" id="remove_tag">x</a></li>');
 
 								}
 								else
@@ -376,7 +378,7 @@ function show_model(id)
 												$('#updateActivityModal')
 																				.find("ul[name='contacts']")
 																				.append(
-																												'<li class="tag" data="' + contactList[i].id + '" style="display: inline-block; "><a href="#contact/' + contactList[i].id + '">' + getName(contactList[i].properties) + '</a><a class="close" id="remove_tag">�</a></li>');
+																												'<li class="tag" data="' + contactList[i].id + '" style="display: inline-block; "><a href="#contact/' + contactList[i].id + '">' + getName(contactList[i].properties) + '</a><a class="close" id="remove_tag">x</a></li>');
 								}
 				}
 
@@ -453,13 +455,26 @@ function getDate(date)
 function getName(properties)
 {
 				var name;
+				var firstName;
+				var lastName;
 				for (var i = 0; i < properties.length; i++)
 				{
 								if (properties[i].name == 'first_name')
-												name = properties[i].value;
+												firstName = properties[i].value;
 								if (properties[i].name == 'last_name')
-												name = name + " " + properties[i].value;
+												lastName = properties[i].value;
+
 				}
+				if (!firstName)
+				{
+								firstName = '';
+				}
+				if (!lastName)
+				{
+								lastName == '';
+				}
+				name = firstName + " " + lastName;
+
 				return name;
 }
 
@@ -485,14 +500,17 @@ function loadAgileEvents()
 												sort_collection : false, cursor : true, page_size : 25 });
 								eventCollectionView.appendItem = appendItem2;
 								eventCollectionView.collection.fetch();
-
+								eventCollectionView.collection.comparator = function(model) {
+								    return model.get('start');
+								}
+								eventCollectionView.collection.sort();
 								$('#agile').html(this.eventCollectionView.render().el);
 				}
 				else if (view == "calendar_list_view_future")
 				{
 
 								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/future/list', templateKey : "future", individual_tag_name : 'tr',
-												sort_collection : false, cursor : true, page_size : 25 });
+												sort_collection : true, cursor : true, page_size : 25 });
 								eventCollectionView.appendItem = appendItem1;
 								eventCollectionView.collection.fetch();
 
@@ -532,8 +550,13 @@ function loadGoogleEvents()
 
 																								}
 																								googleNextPageToken = resp.nextPageToken;
-																								googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "google-event", individual_tag_name : 'tr' });
+																								googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "google-event", individual_tag_name : 'tr',
+																												sort_collection : true });
 																								googleEventCollectionView.appendItem = appendGoogleEvent;
+																								googleEventCollectionView.collection.comparator = function(model) {
+																								    return model.get('start');
+																								}
+																								googleEventCollectionView.collection.sort();
 																								$('#google').html(googleEventCollectionView.render(true).el);
 
 																				});
@@ -541,8 +564,6 @@ function loadGoogleEvents()
 																}
 																else
 																{
-																				var startDate = new Date();
-																				startDate = startDate.toISOString();
 																				var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true });
 																				request.execute(function(resp)
 																				{
@@ -556,7 +577,7 @@ function loadGoogleEvents()
 
 																								}
 																								googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "googleEventCategorization",
-																												individual_tag_name : 'tr' });
+																												individual_tag_name : 'tr', sort_collection : true });
 																								googleEventCollectionView.appendItem = appendGoogleEventCategorization;
 																								$('#google').html(googleEventCollectionView.render(true).el);
 
@@ -601,12 +622,10 @@ function loadMoreEventsFromGoogle()
 																if (view == "calendar_list_view")
 																{
 																				googleEventCollectionView.collection.add(events);
-																				// $('#google').html(googleEventCollectionView.render(true).el);
 																}
 																else
 																{
 																				googleEventCollectionView.collection.add(events);
-																				// $('#google').html(googleEventCollectionView.render(true).el);
 																}
 
 												})

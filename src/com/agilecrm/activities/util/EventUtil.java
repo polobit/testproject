@@ -1,5 +1,6 @@
 package com.agilecrm.activities.util;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.IcalendarUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -91,7 +93,6 @@ public class EventUtil
     {
 	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
 	return dao.listByProperty("related_contacts = ", contactKey);
-
     }
 
     /**
@@ -243,51 +244,6 @@ public class EventUtil
     }
 
     /**
-     * Gets the list of events which have been pending for Today
-     * 
-     * @return List of events that have been pending for Today
-     */
-    public static List<Event> getTodayPendingEvents()
-    {
-	try
-	{
-	    // Gets Today's date
-	    DateUtil startDateUtil = new DateUtil();
-	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
-	    // Date startDate = new Date();
-	    // Long startTime = startDate.getTime() / 1000;
-
-	    // Gets Date after numDays days
-	    DateUtil endDateUtil = new DateUtil();
-	    Long endTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000) - 1;
-
-	    // Gets list of tasks filtered on given conditions
-	    return dao.ofy().query(Event.class).filter("search_range >=", startTime).filter("search_range <=", endTime)
-		    .order("search_range").list();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-
-    }
-
-    /**
-     * converts eppoch to server timezone
-     * 
-     * @param epoch
-     * @return
-     */
-    public static String getHumanTimeFromEppoch(Long epoch)
-    {
-	String date = new java.text.SimpleDateFormat("MMMM d yyyy, h:mm a (z)")
-		.format(new java.util.Date(epoch * 1000));
-
-	return date;
-    }
-
-    /**
      * get All events base on cursor value
      * 
      * @param max
@@ -314,4 +270,114 @@ public class EventUtil
 	Query<Event> query = dao.ofy().query(Event.class).filter("start >=", startDate / 1000);
 	return dao.fetchAllWithCursor(max, cursor, query, false, false);
     }
+
+    /**
+     * >>>>>>> 75cc75c... Fixed Event list view minor Customization ui and
+     * sorting Gets the list of events which have been pending for Today
+     * 
+     * @return List of events that have been pending for Today
+     */
+    public static List<Event> getTodayPendingEvents()
+    {
+	try
+
+	{
+	    // Gets Today's date
+	    DateUtil startDateUtil = new DateUtil();
+	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
+	    // Date startDate = new Date();
+	    // Long startTime = startDate.getTime() / 1000;
+
+	    // Gets Date after numDays days
+	    DateUtil endDateUtil = new DateUtil();
+	    Long endTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000) - 1;
+
+	    // Gets list of tasks filtered on given conditions
+	    return dao.ofy().query(Event.class).filter("search_range >=", startTime).filter("search_range <=", endTime)
+		    .order("search_range").list();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * fetches the latest events to send event reminders
+     * 
+     * @param starttime
+     * @return
+     */
+    public static List<Event> getLatestEvents(Long starttime)
+    {
+	System.out.println("in getLatest Events Domain name " + NamespaceManager.get());
+
+	int duration = 3600;
+	Long currenttime = System.currentTimeMillis() / 1000;
+	if (starttime == null)
+	    starttime = currenttime + 900;
+	else
+	    starttime = starttime + 120;
+
+	Long endtime = starttime + duration;
+
+	System.out.println(starttime + "----------------------------" + endtime);
+
+	List<Event> domain_events = new ArrayList<>();
+
+	List<Event> events = dao.ofy().query(Event.class).filter("start >=", starttime).filter("start <=", endtime)
+		.order("start").list();
+	if (events != null && events.size() > 0)
+	{
+	    Event event = events.get(0);
+	    domain_events = getLatestWithSameStartTime(event.start);
+	    return domain_events;
+
+	}
+
+	return null;
+    }
+
+    /**
+     * fetches the events which are starting at same time
+     * 
+     * @param starttime
+     * @return
+     */
+    public static List<Event> getLatestWithSameStartTime(Long starttime)
+    {
+
+	System.out.println("in getLatest EventsWithSameStartTime " + NamespaceManager.get());
+
+	List<Event> domain_events = new ArrayList<>();
+
+	domain_events = dao.listByProperty("start", starttime);
+	System.out.println(domain_events.size() + " domainevents size in getlatesteventswithSameStarttime");
+	System.out.println(starttime + " StartTime in getLatestWithStartTime");
+	if (domain_events != null && domain_events.size() > 0)
+	{
+	    for (Event event : domain_events)
+	    {
+		event.date = getHumanTimeFromEppoch(event.start);
+	    }
+	}
+	return domain_events;
+
+    }
+
+    /**
+     * converts eppoch to server timezone
+     * 
+     * @param epoch
+     * @return
+     */
+    public static String getHumanTimeFromEppoch(Long epoch)
+    {
+	String date = new java.text.SimpleDateFormat("MMMM d yyyy, h:mm a (z)")
+		.format(new java.util.Date(epoch * 1000));
+
+	return date;
+    }
+
 }

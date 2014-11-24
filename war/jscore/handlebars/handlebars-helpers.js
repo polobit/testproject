@@ -6510,6 +6510,7 @@ $(function()
 								{
 												for (var i = 0; i < properties.length; i++)
 												{
+<<<<<<< HEAD
 																if (properties[i].name == 'first_name')
 																				displayName = properties[i].value;
 																if (properties[i].name == 'last_name')
@@ -6518,6 +6519,35 @@ $(function()
 								}
 
 								return displayName;
+=======
+																var firstName;
+																var lastName;
+																for (var i = 0; i < properties.length; i++)
+																{
+																				if (properties[i].name == 'first_name')
+																				{
+																								firstName = properties[i].value;
+
+																				}
+
+																				if (properties[i].name == 'last_name')
+																				{
+																								lastName = properties[i].value;
+
+																				}
+
+																}
+																if(!firstName){
+																				firstName = '';
+																}
+																if(!lastName){
+																				lastName == '';
+																}
+																displayName = firstName +" "+lastName;
+												}
+								}
+												return displayName;
+>>>>>>> 75cc75c... Fixed Event list view minor Customization ui and sorting
 				});
 >>>>>>> 30f9921... Added new Function in handlebar for displayCustom date event list view
 
