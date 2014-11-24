@@ -187,7 +187,14 @@ public class WebCalendarEventUtil
 	    //
 	    Long starttime = getEppochTime(date, month, year, Integer.parseInt(fromTime), tz);
 
-	    endtime = getEppochTime(date, month, year, Integer.parseInt(tillTime), tz);
+	    if (Integer.parseInt(fromTime) < Integer.parseInt(tillTime))
+	    {
+		endtime = getEppochTime(date, month, year, Integer.parseInt(tillTime), tz);
+	    }
+	    else
+	    {
+		endtime = getEppochTime(date + 1, month, year, Integer.parseInt(tillTime), tz);
+	    }
 
 	    if (eppoch > starttime && eppoch < endtime)
 	    {
