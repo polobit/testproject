@@ -58,6 +58,7 @@ public class ActivityReports implements Serializable
     @NotSaved(IfDefault.class)
     public String sendTo = null;
 
+    @NotSaved
     public List<String> user_ids = new ArrayList<String>();;
 
     public List<Key<DomainUser>> usersList = new ArrayList<Key<DomainUser>>();
