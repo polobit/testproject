@@ -13,6 +13,8 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -88,6 +90,8 @@ public class ActivityReports implements Serializable
 	{
 	    try
 	    {
+		Objectify ofy = ObjectifyService.begin();
+		System.out.println(ofy.get(this.usersList).values());
 		users_list = DomainUserUtil.dao.fetchAllByKeys(this.usersList);
 	    }
 	    catch (Exception e)
