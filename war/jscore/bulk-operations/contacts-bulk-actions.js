@@ -434,18 +434,37 @@ $(function()
 			if(!canSendEmails(count))
 			{
 				var pendingEmails = getPendingEmails();
+				
+				var yes = "Yes";
+				var no = "No"
+					
+				var message = "";
+				var upgrade_link =  'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>'
+				if(pendingEmails <= 0)
+					{
+						yes = "";
+						no = "Ok"
+						message = "You have used up all emails in your quota. " + upgrade_link;
+					}
+				else
+					message = "You have only "+ pendingEmails + " emails remaining as per your quota. " + upgrade_link +
+					" Continuing with this operation may not send the email to some contacts. <br/><br/>" +
+					"Do you want to proceed?";
+				
 				showModalConfirmation("Emails limit", 
-					"You have only "+ pendingEmails + "emails remaining as per your quota. Please upgrated your email subscription." +
-					"Continuing with this operation may not send the email to some contacts. <br/><br/>" +
-					"Do you want to proceed?", 
+						message, 
 					show_bulk_email_form
-					, function(){
+					, function(element){
+							
 						// No callback
+						if(!element)
 						return;
+						
+						if($(element).attr('subscribe'))
+							Backbone.history.navigate( "subscribe", { trigger : true });
 						},
-						function(){
-			
-						});
+						function(element){
+						}, yes, no);
 				return;
 			}
 			
