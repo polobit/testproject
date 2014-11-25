@@ -13,7 +13,7 @@ var widget_template_loaded_map = {};
 function loadWidgets(el, contact)
 {
 	// Before loading the widgets, clear the queue of requests.
-//	queueClear("widget_queue");
+	// queueClear("widget_queue");
 	// Create Data JSON
 	var data = { contact : contact };
 
@@ -230,33 +230,47 @@ function set_up_widgets(el, widgets_el)
 
 function setup_custom_widget(model, widgets_el)
 {
-	// $('form', this).focus_first();
-	if (model.get('script'))
-		$('#' + model.get('selector'), widgets_el).html(model.get('script'));
-	else
-		getScript(model, function(data)
-		{
-			console.log(data);
-			$('#' + model.get('selector'), widgets_el).html(data);
-		});
+	try
+	{
+		// $('form', this).focus_first();
+		if (model.get('script'))
+			$('#' + model.get('selector'), widgets_el).html(model.get('script'));
+		else
+			getScript(model, function(data)
+			{
+				console.log(data);
+				$('#' + model.get('selector'), widgets_el).html(data);
+			});
+	}
+	catch (err)
+	{
+		console.log(err);
+	}
 }
 
 function getScript(model, callback)
 {
-	// Gets contact id, to save social results of a particular id
-	var contact_id = agile_crm_get_contact()['id'];
-
-	$.post("core/api/widgets/script/" + contact_id + "/" + model.get("name"), function(data)
+	try
 	{
+		// Gets contact id, to save social results of a particular id
+		var contact_id = agile_crm_get_contact()['id'];
 
-		// If defined, execute the callback function
-		if (callback && typeof (callback) === "function")
-			callback(data);
-	}).error(function(data)
+		$.post("core/api/widgets/script/" + contact_id + "/" + model.get("name"), function(data)
+		{
+
+			// If defined, execute the callback function
+			if (callback && typeof (callback) === "function")
+				callback(data);
+		}).error(function(data)
+		{
+			console.log(data);
+			console.log(data.responseText);
+		});
+	}
+	catch (err)
 	{
-		console.log(data);
-		console.log(data.responseText);
-	});
+		console.log(err);
+	}
 }
 
 /**
@@ -330,33 +344,45 @@ function enableWidgetSoring(el)
  */
 function queueGetRequest(queueName, url, dataType, successCallback, errorCallback)
 {
+	console.log(queueName + ", " + url);
 	// Loads ajaxq to initialize queue
 	head.js('/js/lib/ajaxm/ajaxq.js', function()
 	{
-		/*
-		 * Initialize a queue, with GET request
-		 */
-		$.ajaxq(queueName, { url : url, cache : false, dataType : dataType,
-
-		// function to be executed on success, if successCallback is defined
-		success : function(data)
-		{console.log("Sucesses",url);
-			if (successCallback && typeof (successCallback) === "function")
-				successCallback(data);
-		},
-
-		// function to be executed on success, if errorCallback is defined
-		error : function(data)
-		{console.log("error",url);
-			if (errorCallback && typeof (errorCallback) === "function")
-				errorCallback(data);
-		},
-
-		// function to be executed on completion of queue
-		complete : function(data)
+		try
 		{
-			console.log('completed get');
-		}, });
+			/*
+			 * Initialize a queue, with GET request
+			 */
+			$.ajaxq(queueName, { url : url, cache : false, dataType : dataType,
+
+			// function to be executed on success, if successCallback is
+			// defined
+			success : function(data)
+			{
+				console.log("Sucesses", url);
+				if (successCallback && typeof (successCallback) === "function")
+					successCallback(data);
+			},
+
+			// function to be executed on success, if errorCallback is
+			// defined
+			error : function(data)
+			{
+				console.log("error", url);
+				if (errorCallback && typeof (errorCallback) === "function")
+					errorCallback(data);
+			},
+
+			// function to be executed on completion of queue
+			complete : function(data)
+			{
+				console.log('completed get');
+			}, });
+		}
+		catch (err)
+		{
+			console.log(err);
+		}
 	});
 }
 
@@ -385,45 +411,59 @@ function queuePostRequest(queueName, url, data, successcallback, errorCallback)
 	// Loads ajaxq to initialize queue
 	head.js('/js/lib/ajaxm/ajaxq.js', function()
 	{
-		/*
-		 * Initialize a queue, with POST request
-		 */
-		$.ajaxq(queueName, { type : 'POST', url : url, cache : false, data : data,
-
-		// function to be executed on success, if successCallback is defined
-		success : function(data)
+		try
 		{
-			if (successcallback && typeof (successcallback) === "function")
-				successcallback(data);
-		},
+			/*
+			 * Initialize a queue, with POST request
+			 */
+			$.ajaxq(queueName, { type : 'POST', url : url, cache : false, data : data,
 
-		// function to be executed on success, if errorCallback is defined
-		error : function(data)
-		{
-			if (errorCallback && typeof (errorCallback) === "function")
-				errorCallback(data);
-		},
+			// function to be executed on success, if successCallback is
+			// defined
+			success : function(data)
+			{
+				if (successcallback && typeof (successcallback) === "function")
+					successcallback(data);
+			},
 
-		// function to be executed on completion of queue
-		complete : function(data)
+			// function to be executed on success, if errorCallback is
+			// defined
+			error : function(data)
+			{
+				if (errorCallback && typeof (errorCallback) === "function")
+					errorCallback(data);
+			},
+
+			// function to be executed on completion of queue
+			complete : function(data)
+			{
+				console.log('completed post');
+			} });
+		}
+		catch (err)
 		{
-			console.log('completed post');
-		} });
+			console.log(err);
+		}
 	});
 }
 
 /**
  * Aborts all the requests in the queue.
- * @param queueName the name of the queue.
+ * 
+ * @param queueName
+ *            the name of the queue.
  */
-function queueClear(queueName){
+function queueClear(queueName)
+{
 	console.log('clear queue.');
-	if(document.ajaxq){
+	if (document.ajaxq)
+	{
 		document.ajaxq.q[queueName] = [];
 	}
-	/*head.js('/js/lib/ajaxm/ajaxq.js', function(){
-		$.ajaxq.clear(queueName);
-	});*/
+	/*
+	 * head.js('/js/lib/ajaxm/ajaxq.js', function(){ $.ajaxq.clear(queueName);
+	 * });
+	 */
 }
 
 /**

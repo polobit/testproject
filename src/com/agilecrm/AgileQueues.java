@@ -16,6 +16,17 @@ public class AgileQueues
     // Cron Push Queue
     public static final String CRON_QUEUE = "cron-queue";
 
+    public static final String CONTACTS_DELETE_QUEUE = "contacts-delete-queue";
+    public static final String OWNER_CHANGE_QUEUE = "owner-change-queue";
+    public static final String CAMPAIGN_SUBSCRIBE_QUEUE = "campaign-subscribe-queue";
+    public static final String BULK_TAGS_QUEUE = "bulk-tags-queue";
+    public static final String CONTACTS_UPLOAD_QUEUE = "contacts-upload-queue";
+    public static final String DEALS_UPLOAD_QUEUE = "deals-upload-queue";
+    public static final String BULK_EMAILS_QUEUE = "bulk-emails-queue";
+    public static final String CONTACTS_EXPORT_QUEUE = "contacts-export-queue";
+    public static final String DEALS_EXPORT_QUEUE = "deals-export-queue";
+    public static final String WORKFLOWS_RELATED_QUEUE = "workflows-related-queue";
+
     // Campaign and Email pull queues
     public static final String CAMPAIGN_PULL_QUEUE = "sb-campaign-pull-queue";
     public static final String EMAIL_PULL_QUEUE = "sb-email-pull-queue";

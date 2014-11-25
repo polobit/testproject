@@ -3,109 +3,13 @@
  * the third party JavaScript API provided. It interacts with the application
  * based on the function provided on agile_widgets.js (Third party API).
  */
-$(function()
-{
-	console.log("in xero widget.js")
-	// Xero widget name as a global variable
-	Xero_PLUGIN_NAME = "Xero";
 
-	// Xero profile loading image declared as global
-	XERO_PROFILE_LOAD_IMAGE = '<center><img id="xero_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
-
-	// Retrieves widget which is fetched using script API
-	var xero_widget = agile_crm_get_widget(Xero_PLUGIN_NAME);
-
-	// ID of the Xero widget as global variable
-	Xero_PLUGIN_ID = xero_widget.id;
-	console.log("plugin Id" + Xero_PLUGIN_ID);
-	/*
-	 * Gets Xero widget preferences, required to check whether to show setup
-	 * button or to fetch details. If undefined - considering first time usage
-	 * of widget, setupXeroOAuth is shown and returned
-	 */
-
-	if (xero_widget.prefs == undefined)
-	{
-		xeroError(Xero_PLUGIN_NAME, 'Authentication Error. The access token has expired. Please reconfigure your Xero widget.');
-		return;
-	}
-
-	var xeroWidgetPref = JSON.parse(xero_widget.prefs);
-	
-	SHORT_CODE = xeroWidgetPref.xero_org_shortcode;	
-
-	if (typeof SHORT_CODE == "undefined")
-	{
-		xeroError(Xero_PLUGIN_NAME, "Authentication Error. The access token has expired. Please reconfigure your Xero widget.");
-		return;
-	}
-
-	// Email as global variable
-	Email = agile_crm_get_contact_property('email');
-
-	// Email list as global variable
-	EmailList = agile_crm_get_contact_properties_list("email");
-
-	var first_name = agile_crm_get_contact_property("first_name");
-	var last_name = agile_crm_get_contact_property("last_name");
-
-	if (last_name == undefined || last_name == null)
-		last_name = ' ';
-
-	showXeroClient();
-
-	$('#xero_add_contact').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		addContactToXero(first_name, last_name, Email);
-	});
-
-	// attach event to invoices + icon to get lineitems
-	$('.invoices').die().live('click', function(e)
-	{
-		e.preventDefault();
-		var invoiceId = $(this).attr('value');
-
-		// checking for data existence in div
-		if ($('#collapse-' + invoiceId).text().trim() === "")
-		{
-			console.log("no data present");
-			$('#collapse-' + invoiceId).html(XERO_PROFILE_LOAD_IMAGE);
-			$.get("/core/api/widgets/xero/lineItems/" + Xero_PLUGIN_ID + "/" + invoiceId, function(data)
-			{
-				if (data.Status = 'OK')
-				{
-					console.log((JSON.parse(data)).Invoices.Invoice);
-					$('#collapse-' + invoiceId).html(getTemplate('xero-invoice-lineitems', (JSON.parse(data)).Invoices.Invoice));
-				}
-				else
-				{
-					console.log("error")
-					xeroError(Xero_PLUGIN_NAME, data)
-				}
-				$('#XERO_PROFILE_LOAD_IMAGE').remove();
-			});
-
-		}
-
-		if ($('#collapse-' + invoiceId).hasClass("collapse"))
-		{
-			$('#collapse-' + invoiceId).removeClass("collapse");
-		}
-		else
-		{
-			$('#collapse-' + invoiceId).addClass("collapse");
-		}
-
-	});
-});
 
 function showXeroClient()
 {
 	if (EmailList.length == 0)
 	{
-		xeroError(Xero_PLUGIN_NAME, "Please provide email for this contact");
+		xeroError(Xero_PLUGIN_NAME, "No email for this contact");
 		return;
 	}
 	var emailArray = [];
@@ -146,7 +50,7 @@ function showXeroClient()
 
 		var resText = data.responseText;
 		console.log(resText);
-		if (resText.indexOf('No contact found with email address') != -1)
+		if (resText.indexOf('No contact found') != -1)
 		{
 			createContact(resText);
 		}
@@ -237,3 +141,101 @@ function addContactToXero(first_name, last_name)
 	});
 
 }
+
+$(function()
+		{
+			console.log("in xero widget.js")
+			// Xero widget name as a global variable
+			Xero_PLUGIN_NAME = "Xero";
+
+			// Xero profile loading image declared as global
+			XERO_PROFILE_LOAD_IMAGE = '<center><img id="xero_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+
+			// Retrieves widget which is fetched using script API
+			var xero_widget = agile_crm_get_widget(Xero_PLUGIN_NAME);
+
+			// ID of the Xero widget as global variable
+			Xero_PLUGIN_ID = xero_widget.id;
+			console.log("plugin Id" + Xero_PLUGIN_ID);
+			/*
+			 * Gets Xero widget preferences, required to check whether to show setup
+			 * button or to fetch details. If undefined - considering first time usage
+			 * of widget, setupXeroOAuth is shown and returned
+			 */
+
+			if (xero_widget.prefs == undefined)
+			{
+				xeroError(Xero_PLUGIN_NAME, 'Authentication Error.Please reconfigure your Xero widget.');
+				return;
+			}
+
+			var xeroWidgetPref = JSON.parse(xero_widget.prefs);
+			
+			SHORT_CODE = xeroWidgetPref.xero_org_shortcode;	
+
+			if (typeof SHORT_CODE == "undefined")
+			{
+				xeroError(Xero_PLUGIN_NAME, "Authentication Error.Please reconfigure your Xero widget.");
+				return;
+			}
+
+			// Email as global variable
+			Email = agile_crm_get_contact_property('email');
+
+			// Email list as global variable
+			EmailList = agile_crm_get_contact_properties_list("email");
+
+			var first_name = agile_crm_get_contact_property("first_name");
+			var last_name = agile_crm_get_contact_property("last_name");
+
+			if (last_name == undefined || last_name == null)
+				last_name = ' ';
+
+			showXeroClient();
+
+			$('#xero_add_contact').die().live('click', function(e)
+			{
+				e.preventDefault();
+
+				addContactToXero(first_name, last_name, Email);
+			});
+
+			// attach event to invoices + icon to get lineitems
+			$('.invoices').die().live('click', function(e)
+			{
+				e.preventDefault();
+				var invoiceId = $(this).attr('value');
+
+				// checking for data existence in div
+				if ($('#collapse-' + invoiceId).text().trim() === "")
+				{
+					console.log("no data present");
+					$('#collapse-' + invoiceId).html(XERO_PROFILE_LOAD_IMAGE);
+					$.get("/core/api/widgets/xero/lineItems/" + Xero_PLUGIN_ID + "/" + invoiceId, function(data)
+					{
+						if (data.Status = 'OK')
+						{
+							console.log((JSON.parse(data)).Invoices.Invoice);
+							$('#collapse-' + invoiceId).html(getTemplate('xero-invoice-lineitems', (JSON.parse(data)).Invoices.Invoice));
+						}
+						else
+						{
+							console.log("error")
+							xeroError(Xero_PLUGIN_NAME, data)
+						}
+						$('#XERO_PROFILE_LOAD_IMAGE').remove();
+					});
+
+				}
+
+				if ($('#collapse-' + invoiceId).hasClass("collapse"))
+				{
+					$('#collapse-' + invoiceId).removeClass("collapse");
+				}
+				else
+				{
+					$('#collapse-' + invoiceId).addClass("collapse");
+				}
+
+			});
+		});

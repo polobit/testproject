@@ -19,6 +19,9 @@ import org.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.CustomFieldDef.SCOPE;
+import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.reports.deferred.ReportsInstantEmailDeferredTask;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.util.SearchUtil;
@@ -164,6 +167,26 @@ public class ReportsUtil
     public static Collection customizeContactParameters(Collection contactList, LinkedHashSet<String> fields_set)
     {
 
+	List<CustomFieldDef> fields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT,
+		com.agilecrm.contact.CustomFieldDef.Type.DATE.toString());
+
+	// Store date fields for easy verification. It is used to convert epoch
+	// times into date values
+	List<String> dateFields = new ArrayList<String>();
+
+	for (CustomFieldDef def : fields)
+	{
+	    for (String field : fields_set)
+	    {
+		if (!field.contains("custom"))
+		    continue;
+
+		String field_name = field.split("custom_")[1];
+		if (def.field_label.equals(field_name))
+		    dateFields.add(field_name);
+	    }
+	}
+
 	List<Map<String, List<Map<String, Object>>>> newProperties = new ArrayList<Map<String, List<Map<String, Object>>>>();
 
 	for (Object contactObject : contactList)
@@ -205,6 +228,19 @@ public class ReportsUtil
 			if (contactField == null)
 			    contactField = new ContactField();
 
+			if (dateFields.contains(field_name))
+			{
+			    try
+			    {
+				contactField.value = SearchUtil.getDateWithoutTimeComponent(Long
+					.parseLong(contactField.value) * 1000);
+			    }
+			    catch (NumberFormatException e)
+			    {
+				e.printStackTrace();
+			    }
+			}
+
 			customFieldJSON = new ObjectMapper().writeValueAsString(contactField);
 
 			Map<String, Object> customField = new ObjectMapper().readValue(customFieldJSON,
@@ -212,7 +248,9 @@ public class ReportsUtil
 				{
 				});
 
-			customProperties.add(customField);
+			customField.put("custom", true);
+
+			contactProperties.add(customField);
 		    }
 
 		    catch (IOException e)
@@ -231,10 +269,20 @@ public class ReportsUtil
 		    try
 		    {
 			contactJSON = new JSONObject(mapper.writeValueAsString(contact));
-			fieldValue = contactJSON.get(field).toString();
 
-			if (field.contains("time"))
-			    fieldValue = SearchUtil.getDateWithoutTimeComponent(Long.parseLong(fieldValue) * 1000);
+			if ("lead_owner".equals(field))
+			{
+			    JSONObject owner = contactJSON.getJSONObject("owner");
+			    fieldValue = owner.getString("name");
+			}
+			else
+			{
+			    fieldValue = contactJSON.get(field).toString();
+
+			    if (field.contains("time"))
+				fieldValue = SearchUtil.getDateWithoutTimeComponent(Long.parseLong(fieldValue) * 1000);
+			}
+
 		    }
 		    catch (Exception e)
 		    {

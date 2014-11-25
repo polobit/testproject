@@ -21,7 +21,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
@@ -139,7 +138,7 @@ public class BulkOperationsAPI
 	    if (contact_ids != null)
 		ContactUtil.processContacts(contacts);
 
-	    ContactUtil.changeOwnerToContactsBulk(fetcher.nextSet(), new_owner);
+	    ContactUtil.changeOwnerToContactsBulk(contacts, new_owner);
 	}
 
 	String message = "Owner changed for ";
@@ -278,7 +277,7 @@ public class BulkOperationsAPI
 		ContactUtil.processContacts(contacts);
 
 	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
-	    ContactUtil.addTagsToContactsBulk(fetcher.nextSet(), tagsArray);
+	    ContactUtil.addTagsToContactsBulk(contacts, tagsArray);
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
@@ -330,7 +329,7 @@ public class BulkOperationsAPI
 		ContactUtil.processContacts(contacts);
 
 	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
-	    ContactUtil.removeTagsToContactsBulk(fetcher.nextSet(), tagsArray);
+	    ContactUtil.removeTagsToContactsBulk(contacts, tagsArray);
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.REMOVE_TAGS, Arrays.asList(tagsArray)
@@ -537,13 +536,15 @@ public class BulkOperationsAPI
 
 	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200, contact_ids, currentUserId);
 
-	count = fetcher.getAvailableContacts() > 0 ? fetcher.getAvailableContacts() : fetcher.getAvailableCompanies();
+	int noEmailsCount = 0;
+
 	while (fetcher.hasNextSet())
 	{
-	    int noEmailsCount = ContactBulkEmailUtil.sendBulkContactEmails(emailData, fetcher.nextSet());
-
-	    count -= noEmailsCount;
+	    noEmailsCount += ContactBulkEmailUtil.sendBulkContactEmails(emailData, fetcher.nextSet());
 	}
+
+	count = fetcher.getAvailableContacts() > 0 ? fetcher.getAvailableContacts() : fetcher.getAvailableCompanies();
+	count = count - noEmailsCount;
 
 	System.out.println("contacts : " + fetcher.getAvailableContacts());
 	System.out.println("companies : " + fetcher.getAvailableCompanies());
@@ -571,8 +572,6 @@ public class BulkOperationsAPI
 	else
 	    BulkActionNotifications.publishNotification("Email successfully sent to 0 contacts/companies");
 
-	// Record email sent stats
-	AccountEmailStatsUtil.recordAccountEmailStats(NamespaceManager.get(), count);
     }
 
     /**

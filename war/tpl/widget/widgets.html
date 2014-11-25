@@ -41,15 +41,24 @@
 					</li>
 				</ul>
 			</div>
-			<div style="width:14%">
-				<img src="{{mini_logo_url}}" class="pull-left" width="24" height="24" alt=""/>
+			<div style="width:9%;float:left;">
+				 <img src="{{mini_logo_url}}" class="pull-left" width="24" height="24" alt=""/> 
+<!-- <i class="{{icons name}}"></i> -->
 			</div>
-			<div class="widget_header_name overflow-elipsis" style="width:80%">
-				<strong>{{#if_equals name "Linkedin"}}LinkedIn{{else}}{{#if_equals name "GooglePlus"}}Google+{{else}}{{#if_equals name "HelpScout"}}Help Scout{{else}}{{name}}{{/if_equals}}{{/if_equals}}{{/if_equals}}</strong>
+			<div class="widget_header_name overflow-elipsis" style="width:80%;padding:0px 0 0 5px;">
+		{{#if_equals name "Linkedin"}}LinkedIn{{else}}{{#if_equals name "GooglePlus"}}Google+{{else}}{{#if_equals name "HelpScout"}}Help Scout{{else}}{{name}}{{/if_equals}}{{/if_equals}}{{/if_equals}}
 			</div>
+<div class="clearfix"></div>
 		</div>
+{{#if_equals widget_type "CUSTOM"}}
+		<div class="widgets widget-custom" id="{{remove_spaces name}}">
+	{{else}}
 		<div class="widgets" id="{{remove_spaces name}}">
+{{/if_equals}}
+
+		
 			{{#unless is_minimized}}
+
 			<center><img id="widget_load_img" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>
 			{{/unless}}
 		</div>

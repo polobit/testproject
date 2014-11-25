@@ -29,8 +29,8 @@
             "id": "type-select",
             "title": "Select the given URL type.",
             "options": {
-                "Exact Match": "exact_match",
-                "Contains": "contains"
+                "Contains": "contains",
+                "Exact Match": "exact_match"
             },
             "fieldType": "select",
             "type": "select",

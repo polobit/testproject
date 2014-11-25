@@ -279,7 +279,10 @@ $(function()
 	 */
 	Handlebars.registerHelper('icons', function(item)
 	{
-		item = item.toLowerCase();
+		 
+		console.log('mamasri code');
+		item = item.toLowerCase().trim();
+		console.log(item);
 		if (item == "email")
 			return "icon-envelope-alt";
 		if (item == "phone")
@@ -300,6 +303,10 @@ $(function()
 			return "icon-share-alt";
 		if (item == "other")
 			return "icon-tasks";
+		if (item == "twitter")
+			return "icon-twitter";
+		if (item == "facebook")
+			return "icon-facebook";
 
 	});
 
@@ -1074,9 +1081,9 @@ $(function()
 
 							if (properties[i].name == "address")
 							{
-								var el = '<div style="display: inline-block; vertical-align: top;text-align:right;margin-top:0px" class="span4"><span><strong style="color:gray">Address</strong></span></div>';
+								var el = '';
 
-								var address = {};
+							 var address = {};
 								try
 								{
 									address = JSON.parse(properties[i].value);
@@ -1093,10 +1100,10 @@ $(function()
 								if (properties_count != 0)
 
 									el = el
-											.concat('<div style="display:inline;padding-right: 0px!important;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8 contact-detail-entity-list"><div style="padding-top:3px;"><span>');
-								else
-									el = el
-											.concat('<div style="display:inline;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8"><div><span>');
+									.concat('<div class="contact-addressview"><div><div class="pull-left" style="width:25px"><i class="icon icon-map-marker"></i></div><div class="pull-left" style="width:90%">');
+						else
+							el = el
+									.concat('<div class="contact-addressview"><div><div class="pull-left" style="width:25px"><i class="icon icon-map-marker"></i></div><div class="pull-left" style="width:90%">');
 
 								$.each(address, function(key, val)
 								{
@@ -1109,7 +1116,7 @@ $(function()
 								});
 
 								if (properties[i].subtype)
-									el = el.concat(" <span class='label'>" + properties[i].subtype + "</span>");
+									el = el.concat('<span class="label">' + properties[i].subtype + '</span>');
 								el = el.concat('</span></div></div>');
 								return new Handlebars.SafeString(el);
 							}
@@ -1551,6 +1558,18 @@ $(function()
 		else
 			return options.inverse(this);
 	});
+	Handlebars.registerHelper('if_not_equals', function(value, target, options)
+			{
+
+				
+				if ((typeof target === "undefined") || (typeof value === "undefined"))
+					return options.inverse(this);
+
+				if (value.toString().trim() != target.toString().trim())
+					return options.fn(this);
+				else
+					return options.inverse(this);
+			});
 
 	/**
 	 * Compares the arguments (value and target) and executes the template based
@@ -2323,6 +2342,12 @@ $(function()
 		return value.replace(/ +/g, '');
 
 	});
+	
+	Handlebars.registerHelper('replace_spaces', function(value)
+			{
+				return value.replace(/ +/g, '_');
+
+			});
 
 	/***************************************************************************
 	 * Returns campaignStatus object from contact campaignStatus array having
@@ -3011,6 +3036,32 @@ $(function()
 		} else {
 			return SHORT_CODE;
 		}
+	});
+
+	Handlebars.registerHelper('buildOptions', function(field_data)
+			{
+				var list_values = field_data.split(";");
+				var list_options = '';
+				// Create options based on list values
+				$.each(list_values,function(index, value){
+					if(value != "")
+						list_options = list_options.concat('<option value="'+value+'">'+value+'</option>');
+				});
+		
+				return list_options;
+			});
+	
+	/**
+	 * Choose Avatar templates
+	 */
+	Handlebars.registerHelper('get_avatars_template', function(options) {
+		var template = getTemplate("choose-avatar-images-modal", {});
+		return template;
+	});
+	
+	// To pick randomly selected avatar url
+	Handlebars.registerHelper('pick_random_avatar_url', function(options) {
+		return choose_random_avatar();
 	});
 
 });

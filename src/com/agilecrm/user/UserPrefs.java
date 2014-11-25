@@ -1,5 +1,7 @@
 package com.agilecrm.user;
 
+import java.util.Random;
+
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -102,6 +104,9 @@ public class UserPrefs
     @NotSaved(IfDefault.class)
     public boolean task_reminder = true;
 
+    /**
+     * event-reminder mail
+     */
     @NotSaved(IfDefault.class)
     public boolean event_reminder = true;
 
@@ -175,6 +180,31 @@ public class UserPrefs
     }
 
     /**
+     * Returns random gravatar url.
+     * 
+     * @return selected gravatar url
+     */
+    public String chooseRandomAvatar()
+    {
+	String[] avatar = { "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/86.png",
+	        "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/72.png",
+	        "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/17.png",
+	        "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/5.png",
+	        "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/3.png",
+	        "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/64.png",
+	        "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/62.png",
+	        "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/36.png",
+	        "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/79.png",
+	        "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/73.png",
+	        "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/75.png" };
+
+	// Generate Random Number
+	Random random = new Random(System.currentTimeMillis());
+	int r = random.nextInt(avatar.length);
+	return avatar[r];
+    }
+
+    /**
      * Saves UserPrefs. Wraps DomainUser Name with UserPrefs name.
      */
     public void save()
@@ -182,6 +212,9 @@ public class UserPrefs
 	// Wrapping UserPrefs name to DomainUser name
 	DomainUser currentDomainUser = DomainUserUtil.getCurrentDomainUser();
 
+	// Assigning Random avatar
+	if (pic == null)
+	    pic = chooseRandomAvatar();
 	try
 	{
 	    if ((currentDomainUser != null)

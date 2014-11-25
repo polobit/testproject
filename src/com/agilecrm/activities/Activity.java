@@ -1,10 +1,14 @@
 package com.agilecrm.activities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
@@ -41,6 +45,29 @@ public class Activity extends Cursor
      */
     @NotSaved(IfDefault.class)
     private String user_name = null;
+
+    /**
+     * List of contact ids related to a task
+     */
+    @NotSaved(IfDefault.class)
+    public List<String> contacts = null;
+
+    /**
+     * List of contact keys related to a task
+     */
+    public List<Key<Contact>> contacts_related = new ArrayList<Key<Contact>>();
+
+    /**
+     * While saving an event it contains list of contact keys, but while
+     * retrieving includes complete contact object.
+     * 
+     * @return List of contact objects
+     */
+    @XmlElement
+    public List<Contact> getContacts()
+    {
+	return Contact.dao.fetchAllByKeys(this.contacts_related);
+    }
 
     /**
      * Type of the entity used in the activity.
@@ -103,6 +130,9 @@ public class Activity extends Cursor
 
     @NotSaved(IfDefault.class)
     public String custom4 = null;
+
+    @NotSaved(IfDefault.class)
+    public String related_contact_ids;
 
     // Dao
     private static ObjectifyGenericDao<Activity> dao = new ObjectifyGenericDao<Activity>(Activity.class);

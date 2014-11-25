@@ -68,10 +68,9 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 
 	    try
 	    {
-	     updateContactInOurDomain(getContactFromOurDomain(), user.email,
-	     subscription, null);
+		updateContactInOurDomain(getContactFromOurDomain(), user.email, subscription, null);
 	    }
-	    catch(Exception e)
+	    catch (Exception e)
 	    {
 		e.printStackTrace();
 	    }
@@ -186,7 +185,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
     public Subscription setSubscriptionFlag(Subscription.BillingStatus status)
     {
 	String domain = getDomain();
-	
+
 	String oldNamespace = NamespaceManager.get();
 	try
 	{
@@ -250,20 +249,18 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    else
 	    {
 		System.out.println("plan details not found ");
-		if(obj.has("metadata"))
+		if (obj.has("metadata"))
 		{
 		    JSONObject metadata = obj.getJSONObject("metadata");
-		    
+
 		    System.out.println("meta data : " + metadata);
-		    if(metadata != null)
+		    if (metadata != null)
 		    {
 			plan.put("quantity", metadata.get("quantity"));
 			plan.put("plan", metadata.get("plan"));
 		    }
 		}
 	    }
-	    
-	   
 
 	    if (data.has("period"))
 	    {
@@ -275,7 +272,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    plan.put("amount", Integer.valueOf(obj.getString("total")) / 100);
 
 	    System.out.println(plan);
-	    
+
 	    return plan;
 	}
 	catch (JSONException e1)
@@ -333,7 +330,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 
 	    // Email count and according to plan and extra free pack that is
 	    // provided to all users
-	    restriction.emails_count = (count * 1000);
+	    restriction.one_time_emails_count = (count * 1000);
 	    restriction.save();
 	}
 	finally

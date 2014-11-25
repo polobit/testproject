@@ -300,6 +300,9 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
                       trigger: true
                   });
     	    	}
+    	    	
+    	    	// Updates workflow model
+    	    	App_Workflows.workflow_model = workflow;
     	    },
             
             error: function(jqXHR, status, errorThrown){ 

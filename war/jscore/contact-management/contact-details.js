@@ -12,7 +12,7 @@ function starify(el) {
     	var contact_model  =  App_Contacts.contactDetailView.model;
     	
     	// If contact update is not allowed then start rating does not allow user to change it
-    	if(!canEditContact(App_Contacts.contactDetailView.model.get('owner').id))
+    	if(App_Contacts.contactDetailView.model.get('owner') && !canEditContact(App_Contacts.contactDetailView.model.get('owner').id))
     	{
     			$('#star', el).raty({
     			 'readOnly': true,
@@ -97,7 +97,6 @@ function fill_owners(el, data, callback){
  * To show owner on change
  */
 function show_owner(){
-	$('#change-owner-element').css('display', 'inline-block');
 	$('#contact-owner').css('display', 'inline-block');
 }
 
@@ -371,9 +370,9 @@ function contact_detail_view_navigation(id, contact_collection, el){
     }
 
     if(previous_contact_id != null)
-    	$('.navigation', el).append('<a style="float:left;" href="#contact/' + previous_contact_id + '" class=""><i class="icon-caret-left"></i>&nbsp;Previous</a>');
+    	$('.navigation', el).append('<a style="float:left;" href="#contact/' + previous_contact_id + '" class=""><i class="icon icon-chevron-left"></i></a>');
     if(next_contact_id != null)
-    	$('.navigation', el).append('<a style="float:right;" href="#contact/'+ next_contact_id + '" class="">Next&nbsp;<i class="icon-caret-right"></i></a>');
+    	$('.navigation', el).append('<a style="float:right;" href="#contact/'+ next_contact_id + '" class=""><i class="icon icon-chevron-right"></i></a>');
 	
 }
 
@@ -470,31 +469,28 @@ $(function(){
     	e.preventDefault();
         $(this).popover('show');
     });
-	   
-    $('#change-owner-element').live('mouseenter',function(e){
+/*	   
+    $('.change-owner-element').live('mouseenter',function(e){
     	e.preventDefault();
     	$('#change-owner-ul').css('display', 'none');
         $(this).popover({
         	template:'<div class="popover"><div class="arrow"></div><div class="popover-inner"><div class="popover-content"><p></p></div></div></div>'
         });
         $(this).popover('show');
-    });
+    });*/
     
-    $('#change-owner-element').live('click',function(e){
+    $('#change-owner-element > #contact-owner').live('click',function(e){
     	e.preventDefault();
     	
     	fill_owners(undefined, undefined, function(){
-    		$('#change-owner-element').popover('hide');
-        	
-        	// Hiding the owner name
-        	$('#change-owner-element').css('display', 'none');
+
         	$('#contact-owner').css('display', 'none');
+
+        	$('#change-owner-ul').css('display', 'inline-block');
         	
-        	if($('#change-owner-ul').css('display') == 'inline-block')
-        		$('#change-owner-ul').css('display', 'none');
+        	 if($('#change-owner-element > #change-owner-ul').css('display') == 'inline-block')
+                 $("#change-owner-element").find(".loading").remove();
         	
-        	else
-        		$('#change-owner-ul').css('display', 'inline-block');
     	});
     	
     	

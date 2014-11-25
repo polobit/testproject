@@ -14,7 +14,7 @@
 </div>
 <div class="" id="twitter-error-panel" style="display:none;" >
 </div>
-<ul class="nav nav-tabs row-fluid" id="myTab">
+<ul class="nav nav-tabs twitter-tabs row-fluid" id="myTab">
 	<li class="active" style="width:32%; margin-left:2%;text-align: center;" align="center"><a data-toggle="tab" href="#tweets"><h4>{{tweet_count}}</h4><small>Tweets</small></a></li>
 	<li style="width:32%;text-align: center;" align="center"><a data-toggle="tab" href="#followers" id="twitter_followers"><h4>{{num_connections}}</h4><small>Followers</small></a></li>
 	<li style="width:32%;text-align: center;" align="center"><a data-toggle="tab" href="#following" id="twitter_following"><h4>{{friends_count}}</h4><small>Following</small></a></li>
@@ -51,7 +51,7 @@
 		</div>
 	</div>
 	<div id="followers" class="tab-pane fade">
-		<ul class="widget_tab_content" id="twitter_follower_panel" style="padding:10px">
+		<ul class="widget_tab_content" id="twitter_follower_panel" style="padding:10px 0px;">
 						
 		</ul>
 		<div id="follower-error-panel" style="display:none;" >
@@ -62,7 +62,7 @@
 		</div>
 	</div>
 	<div id="following" class="tab-pane fade">
-		<ul class="widget_tab_content" id="twitter_following_panel" style="padding:10px">
+		<ul class="widget_tab_content" id="twitter_following_panel" style="padding:10px 0px">
 			
 		</ul>
 		<div id="following-error-panel" style="display:none;" >
@@ -144,7 +144,7 @@
 
 <script id="twitter-error-panel-template" type="text/html">
 {{#if disable_check}}
-	<div style="line-height:160%;word-wrap: break-word;padding:10px">
+	<div style="line-height:160%;word-wrap: break-word;padding:0px">
 		{{{message}}}
 	</div>
 {{else}}
@@ -153,7 +153,7 @@
 			{{{message}}}
 		</div>
 	{{else}}
-		<div style="line-height:160%;word-wrap: break-word;padding:10px">
+		<div style="line-height:160%;word-wrap: break-word;padding:0px">
 			{{{message}}}
 		</div>
 	{{/check_length}}	

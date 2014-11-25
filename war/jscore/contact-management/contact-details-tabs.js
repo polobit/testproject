@@ -330,19 +330,41 @@ $(function(){
 		
 		 if($(this).attr('disabled'))
 	   	     return;
-		 
+			
+		// Saves tinymce content to textarea
+		save_content_to_textarea('email-body');
+			
+		// serialize form.
+		var json = serializeForm("emailForm");
+		
+		if((json.contact_to_ids).join())
+			json.to += ((json.to != "") ? "," : "") + (json.contact_to_ids).join();
+		
+		if((json.contact_cc_ids).join())
+			json.email_cc += ((json.email_cc != "") ? "," : "") + (json.contact_cc_ids).join();
+		
+		if((json.contact_bcc_ids).join())
+			json.email_bcc += ((json.email_bcc != "") ? "," : "") + (json.contact_bcc_ids).join();
+	
+		if(json.to == "" || json.to == null || json.to == undefined)
+		{
+			// Appends error info to form actions block.
+			$save_info = $('<span style="display:inline-block;color:#df382c;">This field is required.</span>');	
+			$('#emailForm').find("#to").closest(".controls > div").append($save_info);
+			$('#emailForm').find("#to").focus();
+			// Hides the error message after 3 seconds
+			$save_info.show().delay(3000).hide(1);
+			
+			enable_send_button($('#sendEmail'));
+			return;
+		}
+		
 		// Is valid
 		if(!isValidForm($('#emailForm')))
 	      	return;
 		
 		// Disables send button and change text to Sending...
 		disable_send_button($(this));
-		
-		// Saves tinymce content to textarea
-		save_content_to_textarea('email-body');
-		
-		// serialize form.
-		var json = serializeForm("emailForm");
 		
 		// Navigates to previous page on sending email
 		$.ajax({
@@ -385,30 +407,53 @@ $(function(){
 		var $parent_element = $(this).parent().parent();
 		
 		var to_emails = $parent_element.find('.to-emails').data('to');
+		var cc_emails = $parent_element.find('.cc-emails').data('cc');
+		var bcc_emails = $parent_element.find('.bcc-emails').data('bcc');
 		
-		if(to_emails){
-			
-			var to_array = to_emails.split(',');
+		var email_sync_configured = contact_details_tab.email_sync_configured;
+		var configured_email;
 		
-			to_emails = "";
+		if(email_sync_configured)
+		{
+			if(email_sync_configured["type"])
+				configured_email = email_sync_configured["email"];
+			else
+				configured_email= email_sync_configured["user_name"];
+		}
+		
+		if(configured_email && to_emails){
 			
-			for(var i=0, len = to_array.length; i < len; i++)
-			{
+			// Merge both from and to removing configured email
+			to_emails = get_emails_to_reply(from + ', '+ to_emails, configured_email);
+		}
+		
+		if(configured_email && cc_emails){
+			
+			cc_emails = get_emails_to_reply(cc_emails, configured_email);
+		}
 
-				to_emails += to_array[i].match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
-				
-				// Append comma without trailing
-				if(i < len-1)
-					to_emails += ', ';
-			
-			}
+		if(configured_email && bcc_emails){
+	
+			bcc_emails = get_emails_to_reply(bcc_emails, configured_email);
 		}
 		
 		// Change url only without triggerring function
 		App_Contacts.navigate('send-email');
 		
+		// Reply all emails
+		reply_email = to_emails;
+		
+		// Removes leading and trailing commas
+		reply_email = reply_email.replace(/(, $)/g, "");
+		
+		if(cc_emails)
+			cc_emails = cc_emails.replace(/(, $)/g, "");
+		
+		if(bcc_emails)
+			bcc_emails = bcc_emails.replace(/(, $)/g, "");
+		
 		// Trigger route callback
-		App_Contacts.sendEmail(to_emails, "Re: " + $parent_element.find('.email-subject').text(), '<p></p><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex;">'+ $parent_element.find('.email-body').html()+'</blockquote>');
+		App_Contacts.sendEmail(reply_email, "Re: " + $parent_element.find('.email-subject').text(), '<p></p><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex;">'+ $parent_element.find('.email-body').html()+'</blockquote>', cc_emails, bcc_emails);
 		
 	});
 	
@@ -625,5 +670,35 @@ function load_contact_tab(el, contactJSON)
 		contact_details_tab["load_" + position]();
 	}
 		
+}
+
+function get_emails_to_reply(emails, configured_email)
+{
+	var emails_array = emails.split(',');
+	
+	emails = "";
+	
+	for(var i=0, len = emails_array.length; i < len; i++)
+	{
+
+		var email = emails_array[i].match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
+		
+		// Skip configured email
+		if(configured_email && email == configured_email)
+			continue;
+		
+		// Skip current user email
+		if(email == CURRENT_DOMAIN_USER.email)
+			continue;
+		
+		emails += email;
+		
+		// Append comma without trailing
+		if(i < len-1)
+			emails += ', ';
+	
+	}
+	
+	return emails;
 }
 

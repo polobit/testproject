@@ -3,35 +3,7 @@
  * based on the third party API provided. It interacts with the application
  * based on the function provided on agile_widgets.js (Third party API).
  */
-$(function()
-{
-	HELPSCOUT_PLUGIN_NAME = "HelpScout";
 
-	// HelpScout update loading image declared as global
-	HELPSCOUT_UPDATE_LOAD_IMAGE = '<center><img id="conv_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
-
-	// Retrieves widget which is fetched using script API
-	var helpscout_widget = agile_crm_get_widget(HELPSCOUT_PLUGIN_NAME);
-
-	console.log('In HelpScout');
-	console.log(helpscout_widget);
-
-	// ID of the HelpScout widget as global variable
-	HelpScout_Plugin_Id = helpscout_widget.id;
-
-	// Stores email of the contact as global variable
-	Email = agile_crm_get_contact_property('email');
-	console.log('Email: ' + Email);
-	customerId = 0;
-	showHelpScoutMails();
-
-	// On click of add ticket, add ticket method is called
-	$('#add_conv').die().live('click', function(e)
-	{
-		e.preventDefault();
-		addTicketToHelpScout();
-	});
-});
 
 /**
  * Show data retrieved from HelpScout in the HelpScout widget
@@ -304,3 +276,33 @@ function helpscoutStreamError(id, message)
 	$('#' + id).show();
 	$('#' + id).fadeOut(10000);
 }
+
+$(function()
+		{
+			HELPSCOUT_PLUGIN_NAME = "HelpScout";
+
+			// HelpScout update loading image declared as global
+			HELPSCOUT_UPDATE_LOAD_IMAGE = '<center><img id="conv_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+
+			// Retrieves widget which is fetched using script API
+			var helpscout_widget = agile_crm_get_widget(HELPSCOUT_PLUGIN_NAME);
+
+			console.log('In HelpScout');
+			console.log(helpscout_widget);
+
+			// ID of the HelpScout widget as global variable
+			HelpScout_Plugin_Id = helpscout_widget.id;
+
+			// Stores email of the contact as global variable
+			Email = agile_crm_get_contact_property('email');
+			console.log('Email: ' + Email);
+			customerId = 0;
+			showHelpScoutMails();
+
+			// On click of add ticket, add ticket method is called
+			$('#add_conv').die().live('click', function(e)
+			{
+				e.preventDefault();
+				addTicketToHelpScout();
+			});
+		});

@@ -72,7 +72,7 @@
 					</li>
                     {{#if cc}}
                     <li>
-                    <div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
+                    <div class="caption cc-emails" data-cc="{{cc}}" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
                     	<strong>Cc:</strong> {{cc}}
             		</div>
           			</li>
@@ -80,7 +80,7 @@
 
                     {{#if bcc}}
                     <li>
-            		<div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
+            		<div class="caption bcc-emails" data-bcc="{{bcc}}" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
               			<strong>Bcc:</strong> {{bcc}}
             		</div>
           			</li>

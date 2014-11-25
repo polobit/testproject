@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.agilecrm.account.util.SMSGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.util.ContactUtil;
@@ -312,7 +313,9 @@ public class WidgetsAPI
 	public void deleteGatewayWidget(@PathParam("id") Long id)
 	{
 
-		Widget widget = WidgetUtil.getWidget(id);
-		widget.delete();
+		Widget widget = SMSGatewayUtil.getSMSGatewayWidget();
+		if (widget != null)
+			widget.delete();
+		System.err.println("The widget is null and id is " + id);
 	}
 }

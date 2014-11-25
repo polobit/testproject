@@ -149,6 +149,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 			if(jsonModel.length==1){
 				$('#pipeline',el).closest('div.control-group').hide();
 				$('#milestone',el).closest('div.control-group').css("margin-left","0px");
+				$('#dealsFilterForm #pipeline',el).closest('div.control-group').show();
 			}
 			
 			if (callback && typeof (callback) === "function") {

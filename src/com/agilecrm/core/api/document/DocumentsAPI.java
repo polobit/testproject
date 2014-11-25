@@ -19,7 +19,6 @@ import org.json.JSONException;
 
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
-import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
 
@@ -159,8 +158,8 @@ public class DocumentsAPI
     public void deleteDocuments(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray documentsJSONArray = new JSONArray(model_ids);
-	ActivityUtil.createBulkDeleteActivity(EntityType.DOCUMENT, "", String.valueOf(documentsJSONArray.length()),
-	        "documents deleted");
+	ActivitySave.createLogForBulkDeletes(EntityType.DOCUMENT, documentsJSONArray,
+	        String.valueOf(documentsJSONArray.length()), "documents deleted");
 
 	Document.dao.deleteBulkByIds(documentsJSONArray);
     }

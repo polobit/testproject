@@ -171,16 +171,18 @@
 		<div class="page-header">
 			<h2>SMS Gateways</h2>
 		</div>
+
+		<!-- Twilio -->
 		<div class="span4" style="margin-left:0px;text-align:center;" id="twilio-sms-api-integration">
 			<div class="well" style="width:220px; height:200px;">
 				<div style="position: relative;">
-					<img alt="sms-integration" src="/img/plugins/twilio-logo.png" style="top: -5px; position: relative; height: 85px;">
+					<img alt="sms-integration" src="/img/plugins/twilio.png" style="top: -5px; position: relative; height: 85px;">
 						<div class="clearfix">
 						</div>
 				</div>
 				<br>
-				<div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;"  rel="tooltip" title="Stay connected to your users with Twilio phone numbers in 40 countries all over the globe">
-				Stay connected to your users with Twilio phone numbers in 40 countries all over the globe
+				<div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;" >
+				Twilio provies APIs for text messages and VoIP. User your Twilio account to send SMS from Campaigns.
 				</div><br/>
 				<div style="float:left;"> 
 					{{#if this.length}}	
@@ -204,8 +206,61 @@
 				</div>
 			</div>
 		</div>
-	</div>
 
+		<!-- Plivo -->		
+		<div class="span4" style="margin-left:0px;text-align:center;" id="plivo-sms-api-integration">
+			<div class="well" style="width:220px; height:200px;">
+				<div style="position: relative;">
+					<img alt="sms-integration" src="/img/plugins/plivo.png" style="top: -5px; position: relative; height: 85px;">
+						<div class="clearfix">
+						</div>
+				</div>
+				<br>
+				<div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;"  rel="tooltip" ">
+				Plivo provies Voice and SMS API for businesses of all sizes.  Use your Plivo account to send SMS from Campaigns.
+				</div><br/>
+				<div style="float:left;"> 
+					{{#if this.length}}	
+						{{#gateway_exists "PLIVO" this}}
+							<a href="#integrations" class="btn btn-danger " id="sms-gateway-delete"  data={{id}} >Disable</a>
+								<a href="#sms-gateways/plivo" class="btn">Settings</a>
+						{{else}}
+							{{#check_plan "FREE"}}
+								<a class="btn" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Enable</a><span style="margin-left:5px"><i>Paid accounts only</i></span>
+							{{else}}
+								<a href="#sms-gateways/plivo" class="btn">Enable</a>
+							{{/check_plan}}	
+						{{/gateway_exists}}
+					{{else}}
+						{{#check_plan "FREE"}}
+							<a class="btn" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Enable</a><span style="margin-left:5px"><i>Paid accounts only</i></span>
+						{{else}}
+							<a href="#sms-gateways/plivo" class="btn">Enable</a> 
+						{{/check_plan}}	
+					{{/if}}
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+
 </script>	
 
+
+<script id = "sms-integration-alert-modal-template" type="text/html">
+	<div class="modal hide fade" id="SMSGateway-integration-alert">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">x</button>
+			<h3><i class="icon-file-text"></i> {{title}} </h3>
+		</div>
+		<div class="modal-body">
+				<div id="sms-integrations-message">
+					<p>  {{message}}</p>
+				</div>
+		</div>
+		<div class="modal-footer">
+			<span class="sms-integrations-footer" style="margin-right:5px"></span>
+				<a href="#" class="btn btn-primary" data-dismiss="modal">OK</a>
+		</div>
+	</div>
+</script>

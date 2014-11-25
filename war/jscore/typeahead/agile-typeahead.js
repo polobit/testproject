@@ -4,6 +4,9 @@ var QUERY_RESULTS;
 // Saves map of key: name and value: contact id
 var TYPEHEAD_TAGS = {};
 
+//Saves map of key: name and value: contact email
+var TYPEHEAD_EMAILS = {};
+
 /**
  * This script file defines simple search keywords entered in input fields are 
  * sent to back end as query through bootstrap typeahead. Methods render, matcher 
@@ -28,7 +31,7 @@ var TYPEHEAD_TAGS = {};
  * @author Yaswanth
  * 
  */
-function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url) {
+function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch) {
 
     // Turn off browser default auto complete
     $('#' + id, el).attr("autocomplete", "off");
@@ -98,7 +101,12 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         		 */
         		if (data.length == 0) {
         			var txt='<b>No Results Found</b>';
+
         			if(noResultText && noResultText.length)txt=noResultText;
+        			
+        			// Not to show "no Results Found" for email search
+        			if(txt == "email-search"){that.$menu.hide();return;}
+        			
         			that.$menu.html('<div style="margin-top:10px"><p align="center">'+txt+'<p></div>');
         			that.render();
         			return;
@@ -119,6 +127,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         		$.each(data, function (index, item){
         			tag_name = items_list[index];
         			TYPEHEAD_TAGS[tag_name] = item.id;
+        			TYPEHEAD_EMAILS[tag_name] = getContactEmail(item);
         		});
 
         		/*
@@ -198,6 +207,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         updater: function (items) {
             // To verify whether the entity (task, deal etc..) related to same contact twice 
         	var tag_not_exist = true;
+        	var email_not_exist = true;
 
             /* Stores items in temp variable so that, shows first
              * name and last name separated by space
@@ -231,21 +241,35 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
             // Return if items are not defined and it is not search in nav bar
             if (!items) return;
 
-            // If tag already exists returns
-            $.each($('.tags', el).children('li'), function (index, tag){
+            if(isEmailSearch)
+            {
+                // If email already exists returns
+               $.each($('#' + id, el).closest("div.controls").find(".tags").children('li'), function (index, tag){
 
-                if ($(tag).attr('data') == TYPEHEAD_TAGS[items]){
-                    tag_not_exist = false;
-                    return;
-                }
-            });
-
-            // add tag
-            if (tag_not_exist)
-            	{
+                    if ($(tag).attr('data') == TYPEHEAD_EMAILS[items]){
+                    	email_not_exist = false;
+                        return;
+                    }
+                });
+                if(email_not_exist && (TYPEHEAD_EMAILS[items] != "No email"))
+                	$('#' + id, el).closest("div.controls").find(".tags").append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_EMAILS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
             	
-            		$('.tags', el).append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
-            	}
+            }
+            else
+            {
+	            // If tag already exists returns
+	            $.each($('.tags', el).children('li'), function (index, tag){
+	
+	                if ($(tag).attr('data') == TYPEHEAD_TAGS[items]){
+	                    tag_not_exist = false;
+	                    return;
+	                }
+	            });
+	
+	            // add tag
+	            if (tag_not_exist)
+	            	$('.tags', el).append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
+            }
         },
         // Needs to be overridden to set timedelay on search
         keyup: function (e) {
@@ -260,14 +284,36 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
               case 9: // tab
               case 13: // enter
                 if (!this.shown) return
-                this.select()
+                if(isEmailSearch && !CONTACTS.length)this.hide();else this.select();
                 break
 
               case 27: // escape
                 if (!this.shown) return
                 this.hide()
                 break
+                
+              case 188:
+            	  if(isEmailSearch)
+            	  {
+            		  if(checkEmailValidation(($('#' + id, el).val()).slice(0,-1)))
+            		  {
+                 		 var email_check = true;
+                		 var email_value = ($('#' + id, el).val()).slice(0,-1);
+                		 $.each($('#' + id, el).closest("div.controls").find(".tags").children('li'), function (index, tag){
 
+                             if ($(tag).attr('data') == email_value){
+                            	 email_check = false;
+                                 return;
+                             }
+                         });
+                         if(email_check)
+                         	$('#' + id, el).closest("div.controls").find(".tags").append('<li class="tag"  style="display: inline-block;" data="' + email_value + '"><a style="cursor:pointer;">' + email_value + '</a><a class="close" id="remove_tag">&times</a></li>');
+                         this.select();
+            		  }
+            		  else this.hide();
+            	  }
+            	  break
+            	  
               default:
             	 {
             		// Checks if there is previous request and cancels it
@@ -362,6 +408,20 @@ function contacts_typeahead(data)
     
 }
 
+function getContactEmail(contact)
+{
+	var email=getPropertyValue(contact.properties, "email");
+	email = email!=undefined ? email.trim():"";
+	
+	if(email.length)return email;
+	else return "No email";
+
+}
+
+function checkEmailValidation(value)
+{
+	return /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/i.test(value);
+}
 
 function getContactName(contact)
 {

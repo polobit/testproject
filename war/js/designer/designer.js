@@ -493,7 +493,9 @@ function testMailButton(button){
 			  $(button).css('color','');
     	return;
     }
-
+/*
+ * 
+ * <span id="confirmation-text" style="margin: 5px 2px 0px; display: inline-block; text-align: center; float: left; width: 75%; color: red; font-style: italic; opacity: 0.316546890625;">Email has been sent to bhasuri@invox.com</span>*/
     if($('#tinyMCEhtml_email').val() != "" && $('#text_email').val() == "")
 		$('#text_email').removeProp("required");
     
@@ -505,7 +507,7 @@ function testMailButton(button){
     				  $(button).css('color','');
     	    	return;
     	    }
-    
+    	var margin;
         var jsonValues = serializeNodeForm();
         $(button).css('color','gray');
         $.ajax({
@@ -513,11 +515,17 @@ function testMailButton(button){
     		  type: "POST",
     		  data:jsonValues,
     		  async:false,
-    		  success: function (email) {
+    		  success: function (email) {//top": "-44px
     			 
     			 $('#errorsdiv').text("sfasd"+email);
-    			 $(button).before("<span id='confirmation-text'style='margin: 5px 2px 0px;display: inline-block;text-align: center;float: left;width: 75%; color: red;font-style: italic;'>Email has been sent to "+email+"</span>");
-   			   $("#confirmation-text").fadeOut(8000,function(){
+    			 if(button == "#button_email")
+    				 margin = "margin:-6px 24px;";
+    				 else
+    				 margin = "margin:-44px 29px 0px;";
+    		    					 
+    			 $(button).before("<span class='clearfix' id='confirmation-text'style='top: -49px;"+margin+"display: inline-block;text-align: center;float: left;width: 75%; color: red;font-style: italic;'>Email has been sent to "+email+"</span>");
+   			 
+    			  $("#confirmation-text").fadeOut(8000,function(){
    				
    				  $("#confirmation-text").remove();
    				  $(button).removeAttr('disabled', 'disabled');

@@ -205,6 +205,12 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     }
     
     
+    if(uiFieldDefinition.fieldType == "incoming_list")
+    {
+    	options = getTwilioIncomingList("incoming_list");
+    	
+    }
+    
     if(uiFieldDefinition.fieldType == "twilio_incoming_list")
     {
     	options = getTwilioIncomingList("twilio_incoming_list");
@@ -408,7 +414,7 @@ function generateHTMLEditor(uiFieldDefinition, container) {
 
 	var htmlDiv = "<label>HTML: <a href='#' onclick='load_email_templates()'>(Select a Template / Load from Editor)</a></label><br/><br/>";	
 	htmlDiv += "<textarea  id='tinyMCE" + textAreaName + "' name='" + textAreaName + "' rows='13' cols='75'>" + value + "</textarea>";		
-	htmlDiv += "<div style='clear:both;'></div><br/><p><i>You can leave empty if you do not wish to send html emails. Plain text emails would be sent. Only HTML emails would be tracked.</i></p>";	
+	htmlDiv += "<div style='clear:both;'></div><br/><p style='margin: 0;position: relative;top: 20px;'><i>You can leave empty if you do not wish to send html emails. Plain text emails would be sent. Only HTML emails would be tracked.</i></p>";	
 
 	$(htmlDiv).appendTo(container);	
 }
@@ -653,7 +659,29 @@ function _generateUIFields(selector, ui) {
                 
         }
         
+        if(uiFieldType == "incoming_list")
+        {
+           addLabel(uiFieldDefinition.label, container);
+          
+           
+           uiField = generateSelectUI(uiFieldDefinition);
+           
+           $(uiField).appendTo(container);
+           continue;
+        }
+        
         if(uiFieldType == "twilio_incoming_list")
+        {
+           addLabel(uiFieldDefinition.label, container);
+          
+           
+           uiField = generateSelectUI(uiFieldDefinition);
+           
+           $(uiField).appendTo(container);
+           continue;
+        }
+        
+        if(uiFieldType == "incoming_list")
         {
            addLabel(uiFieldDefinition.label, container);
           

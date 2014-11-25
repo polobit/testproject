@@ -563,8 +563,6 @@ function show_set_up_widget(widget_name, template_id, url, model)
 	else if (widget_name == "Chargify")
 		chargify_save_widget_prefs();
 
-	else if (widget_name == "Shopify")
-		shopify_save_widget_prefs();
 
 	// Shows available widgets in the content
 	if (url)

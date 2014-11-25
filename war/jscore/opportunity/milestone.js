@@ -18,6 +18,15 @@ $(function(){
 	$('#opportunity-track-list-model-list a.pipeline').live('click',function(e){
 		e.preventDefault();
 		createCookie("agile_deal_track", $(this).attr('id'));
+		if(readCookie('deal-filters')){
+			var json = $.parseJSON(readCookie('deal-filters'));
+			var track = $(this).attr('id');
+			if(track == '1')
+				json.pipeline_id = '';
+			else
+				json.pipeline_id = $(this).attr('id');
+			createCookie('deal-filters',JSON.stringify(json));
+		}
 		App_Deals.deals();
 	});
 	
@@ -116,6 +125,12 @@ $(function(){
 					$('#pipeline-delete-modal').modal('hide');
 					if(readCookie("agile_deal_track") && readCookie("agile_deal_track") == id)
 						eraseCookie("agile_deal_track");
+					if(readCookie("deal-filters")){
+						var json = $.parseJSON(readCookie("deal-filters"));
+						if(json.pipeline_id = id)
+							eraseCookie("deal-filters");
+					}
+					
 					App_Admin_Settings.milestones();
 				},
 				error: function(jqXHR, status, errorThrown){
@@ -157,9 +172,8 @@ $(function(){
     	
     	e.preventDefault();
     	var form = $(this).closest('form');
-    	
     	var new_milestone = form.find(".add_new_milestone").val().trim();
-    	
+
     	if(!new_milestone || new_milestone.length <= 0 || !(/^[a-zA-Z0-9-_ ]*$/).test(new_milestone))
 		{
     		$('#milestone-error-modal').modal('show');

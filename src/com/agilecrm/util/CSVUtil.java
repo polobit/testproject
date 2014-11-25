@@ -82,6 +82,8 @@ public class CSVUtil
     BillingRestriction billingRestriction;
     private ContactBillingRestriction dBbillingRestriction;
 
+    private static final int MAX_ALLOWED_FIELD_VALUE_SIZE = 490;
+
     private UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null);
 
     private CSVUtil()
@@ -101,7 +103,7 @@ public class CSVUtil
     {
 	TOTAL, SAVED_CONTACTS, MERGED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED, NEW_CONTACTS, LIMIT_REACHED,
 
-	ACCESS_DENIED, TYPE, PROBABILITY, TRACK;
+	ACCESS_DENIED, TYPE, PROBABILITY, TRACK, FAILEDCSV;
 
     }
 
@@ -292,10 +294,9 @@ public class CSVUtil
 		for (int j = 0; j < csvValues.length; j++)
 		{
 
-		    if (StringUtils.isBlank(csvValues[j]))
+		    String csvValue = csvValues[j];
+		    if (StringUtils.isBlank(csvValue))
 			continue;
-
-		    csvValues[j] = csvValues[j].trim();
 
 		    ContactField field = properties.get(j);
 
@@ -306,6 +307,16 @@ public class CSVUtil
 		    {
 			continue;
 		    }
+
+		    if ("note".equals(field.name))
+		    {
+			notes_positions.add(j);
+			continue;
+		    }
+
+		    // Trims content of field to 490 characters. It should not
+		    // be trimmed for notes
+		    csvValues[j] = checkAndTrimValue(csvValue);
 
 		    if ("tags".equals(field.name))
 		    {
@@ -343,11 +354,6 @@ public class CSVUtil
 			{
 			    e.printStackTrace();
 			}
-			continue;
-		    }
-		    if ("note".equals(field.name))
-		    {
-			notes_positions.add(j);
 			continue;
 		    }
 
@@ -426,6 +432,10 @@ public class CSVUtil
 			    }
 			}
 
+		    }
+		    if (field.name.equalsIgnoreCase(Contact.COMPANY))
+		    {
+			tempContact.properties.add(new ContactField("name", csvValues[j].trim().toLowerCase(), null));
 		    }
 
 		    tempContact.properties.add(field);
@@ -565,6 +575,7 @@ public class CSVUtil
 	{
 	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
 	}
+	buildCSVImportStatus(status, ImportStatus.FAILEDCSV, 1);
 
 	// Sends notification on CSV import completion
 	dBbillingRestriction.send_warning_message();
@@ -645,10 +656,9 @@ public class CSVUtil
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
 
-		if (StringUtils.isBlank(csvValues[j]))
+		String csvValue = csvValues[j];
+		if (StringUtils.isBlank(csvValue))
 		    continue;
-
-		csvValues[j] = csvValues[j].trim();
 
 		ContactField field = properties.get(j);
 
@@ -659,6 +669,10 @@ public class CSVUtil
 		{
 		    continue;
 		}
+
+		// Trims content of field to 490 characters. It should not
+		// be trimmed for notes
+		csvValues[j] = checkAndTrimValue(csvValue);
 
 		if (Contact.ADDRESS.equals(field.name))
 		{
@@ -698,6 +712,8 @@ public class CSVUtil
 		if (field.name.equalsIgnoreCase(Contact.NAME))
 		{
 		    companyName = field.value = csvValues[j];
+		    // added company in new field in lower case
+		    tempContact.properties.add(new ContactField("company", companyName.trim().toLowerCase(), null));
 		}
 		else
 		{
@@ -819,25 +835,46 @@ public class CSVUtil
 
 	}
 
-	calculateTotalFailedContacts(status);
-
 	buildCSVImportStatus(status, ImportStatus.TOTAL, companies.size());
+	if (savedCompany > 0)
+	{
+	    buildCSVImportStatus(status, ImportStatus.NEW_CONTACTS, savedCompany);
+	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedCompany);
+	}
 
 	if (mergedCompany > 0)
 	{
-	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedCompany + mergedCompany);
-	    buildCSVImportStatus(status, ImportStatus.NEW_CONTACTS, savedCompany);
+	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, mergedCompany);
+
 	    buildCSVImportStatus(status, ImportStatus.MERGED_CONTACTS, mergedCompany);
-	    buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
-	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
-	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedCompany);
+
+	}
+	if (nameMissing > 0)
+	{
 	    buildCSVImportStatus(status, ImportStatus.NAME_MANDATORY, nameMissing);
 
 	}
-	else
+
+	if (limitExceeded > 0)
 	{
-	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedCompany);
+	    buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
 	}
+	if (accessDeniedToUpdate > 0)
+	{
+	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
+	}
+	if (failedCompany > 0 || nameMissing > 0 || accessDeniedToUpdate > 0 || limitExceeded > 0)
+	{
+	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedCompany + nameMissing + accessDeniedToUpdate
+		    + limitExceeded);
+	}
+
+	// avoid message of attached failed csv file add new property in map so
+	// we can check if there is some company get failed we dont need that
+	// message like find failed attached csv file for company
+	// TODO: jitendra implement unsucessfull csv for company import
+
+	// calculateTotalFailedContacts(status);
 
 	// Sends notification on CSV import completion
 	dBbillingRestriction.send_warning_message();
@@ -1376,12 +1413,12 @@ public class CSVUtil
 	try
 	{
 	    CSVWriter writer = new CSVWriter(Channels.newWriter(channel, "UTF8"));
-
-	    writer.writeNext(getHeading(headings));
+	    String[] heads = getHeading(headings);
+	    writer.writeNext(heads);
 	    for (FailedContactBean bean : failedContacts)
 	    {
 
-		writer.writeNext(toArray(toList(bean.getContact().properties), bean.getCauses()));
+		writer.writeNext(toArray(toList(bean.getContact().properties), bean.getCauses(), heads.length));
 
 	    }
 
@@ -1415,10 +1452,16 @@ public class CSVUtil
 
     }
 
-    private String[] toArray(List<String> properties, String errorMsg)
+    private String[] toArray(List<String> properties, String errorMsg, int index)
     {
-
-	properties.add(errorMsg);
+	try
+	{
+	    properties.add(index - 1, errorMsg);
+	}
+	catch (ArrayIndexOutOfBoundsException e)
+	{
+	    e.printStackTrace();
+	}
 	String[] values = new String[properties.size()];
 
 	int i = 0;
@@ -1502,4 +1545,14 @@ public class CSVUtil
 	return dummyContact;
     }
 
+    private String checkAndTrimValue(String value)
+    {
+	value = value.trim();
+
+	// If field value is more than 500, it will trim the value
+	if (value.length() > MAX_ALLOWED_FIELD_VALUE_SIZE)
+	    value = value.substring(0, MAX_ALLOWED_FIELD_VALUE_SIZE);
+
+	return value;
+    }
 }

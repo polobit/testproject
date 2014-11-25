@@ -317,3 +317,16 @@ function adjustHeightOfTaskListAndScroll()
 	$("#new-task-list-based-condition").height(bodyheight - 155);
 	$(".list-tasks").css('max-height', bodyheight - 245);
 }
+
+/**
+ * Display task in list view with selected filter. 
+ */
+function displayListView()
+{
+	console.log("in displayListView");
+	$('#new-task-list-based-condition').hide();
+	$('#task-list-based-condition').show();
+	
+	var url = getParamsNew();
+	updateData(url);
+}

@@ -19,6 +19,9 @@ function isArray(a)
  */
 function load_events_from_google(callback)
 {
+	if(readCookie('event-filters') && JSON.parse(readCookie('event-filters')).type == 'agile')
+		return;
+	
 	// Name of the cookie to store/fetch calendar prefs. Current user id is set
 	// in cookie name to avoid
 	// showing tasks in different users calendar if logged in same browser
@@ -84,9 +87,10 @@ function get_google_calendar_event_source(data, callback)
 function showCalendar() {
 	
 	// Customized fetch options
-	_init_gcal_options();
-	
-  $('#calendar').fullCalendar({
+	if(!readCookie('event-filters') || JSON.parse(readCookie('event-filters')).type != 'agile')
+		_init_gcal_options();
+
+	$('#calendar').fullCalendar({
     	
        /**
 		 * Renders the events displaying currently on fullCalendar
@@ -102,8 +106,18 @@ function showCalendar() {
 		 */
     	
         eventSources :[{events: function (start, end, callback) {
-        
-            $.getJSON('/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000, function (doc) {
+        	
+        	var eventFilters = JSON.parse(readCookie('event-filters'));
+        	if(readCookie('event-filters') && eventFilters.type == 'google'){
+        		 $("#loading_calendar_events").hide();
+        		return;
+        	}
+        	
+        	var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
+        	if(readCookie('event-filters') && eventFilters.owner_id.length > 0)
+        		eventsURL += '&owner_id='+eventFilters.owner_id;
+        	console.log('-----------------',eventsURL);
+            $.getJSON(eventsURL, function (doc) {
                 
             	if(doc)
             	{
@@ -255,6 +269,46 @@ function showCalendar() {
     });
 }
 
+function showEventFilters(){
+	 $.getJSON('/core/api/users/agileusers', function (users) {
+		 var html = '';
+		 if(users){
+			 $.each(users,function(i,user){
+				 if(CURRENT_DOMAIN_USER.id == user.domain_user_id)
+					 html = '<option value='+user.id+'>Me</option>';
+			 });
+			 html += '<option value="">Any</option>';
+		 }
+		 $('#event-owner').html(html);
+		 $('#filter_options').show();
+		 if(readCookie('event-filters')){
+			 var eventFilters = JSON.parse(readCookie('event-filters'));
+			 $('#event-owner').val(eventFilters.owner_id);
+			 $('#event_type').val(eventFilters.type);
+		 }
+     });
+}
+
+function loadDefaultFilters(){
+	// Create a cookie with default option, if there is no cookie related to event filter.
+	if(!readCookie('event-filters')){
+		$.getJSON('/core/api/users/agileusers', function (users) {
+			 var html = '';
+			 if(users){
+				 $.each(users,function(i,user){
+					 if(CURRENT_DOMAIN_USER.id == user.domain_user_id)
+						 {
+						 	var json = {};
+						 	json.owner_id = user.id.toString();
+						 	json.type='';
+						 	createCookie('event-filters',JSON.stringify(json));
+						 }
+				 });
+			 }
+		});
+	}
+}
+
 $(function(){
 	$("#sync-google-calendar").die().live('click', function(e){
 		e.preventDefault();
@@ -286,5 +340,46 @@ $(function(){
 			
 		}}));
 	});
+	
+	// Show filter drop down.
+	$('#event-filter-button').live('click', function(e){
+		e.preventDefault();
+		showEventFilters();
+	});
+	
+	$('#event-filter-validate').live('click',function(e){
+		$('#filter_options').hide();
+		var formId = 'eventsFilterForm';
+		var json = serializeForm(formId);
+		createCookie('event-filters',JSON.stringify(json));
+		$('#calendar').html('');
+		//App_Calendar.calendar();
+		showCalendar();
+	});
+	
+	// Show filter drop down.
+	$('#clear-event-filters').live('click', function(e){
+		e.preventDefault();
+		$('#filter_options select').val('');
+		eraseCookie('event-filters');
+		loadDefaultFilters();
+		showEventFilters();
+	});
+	
+	/**
+	 * Hide the filters window when click on out side of the filters pop up.
+	 */
+	$(document).mouseup(function (e)
+	{
+	    var container = $("#filter_options");
+
+	    if (!container.is(e.target) // if the target of the click isn't the container...
+	        && container.has(e.target).length === 0) // ... nor a descendant of the container
+	    {
+	        container.hide();
+	    }
+	});
+	
+	loadDefaultFilters();
 });
 
