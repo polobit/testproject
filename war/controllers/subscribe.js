@@ -470,6 +470,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		 * page
 		 */
 		$.getJSON("core/api/subscription?reload=true", function(data){
+			_billing_restriction = data.cachedData;
 			$("#content").html(getTemplate("subscribe", data))
 		
 			var subscription_model = new BaseModel(data);
@@ -755,3 +756,51 @@ var SubscribeRouter = Backbone.Router.extend({
 	},
 
 });
+
+function getPendingEmails()
+{
+	var count = _billing_restriction.one_time_emails_count;
+	
+	var max = getMaxEmailsLimit();
+	
+	// if max is greater than zero, we consider user is subscrbed to email plan
+	if(max > 0)
+	{
+		// In case of count is less than zero we return 0;
+		if(count < 0)
+			return 0;
+		
+		return count;
+	}
+	
+	// If max is zero then it is free plan
+	if(max == 0)
+	{
+		// Count comes as a negavie value here
+		var remaining =  5000 + count;
+		if(remaining < 0)
+			return 0;
+		
+		return remaining;
+	}
+	
+	return count;
+}
+
+function getMaxEmailsLimit()
+{
+	var max = _billing_restriction.max_emails_count;
+	
+	if(max == undefined)
+		max = 0;
+	
+	return max;
+}
+function canSendEmails(emails_to_send)
+{
+	var pending = getPendingEmails();
+	if(pending >= emails_to_send)
+		return true;
+	
+	return false;
+}
