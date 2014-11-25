@@ -692,7 +692,7 @@ $(function()
 				{
 								if (priority == 'red')
 												return 'High';
-								if (priority == '#36C')
+								if (priority == '#36C'|| priority == 'blue')
 												return 'Normal';
 								if (priority == 'green')
 												return 'Low';
