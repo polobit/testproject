@@ -543,7 +543,7 @@ public class BulkOperationsAPI
 
 	while (fetcher.hasNextSet())
 	{
-	    if (emailSender.emailBillingRestriction.check())
+	    if (emailSender.canSend())
 		noEmailsCount += ContactBulkEmailUtil.sendBulkContactEmails(emailData, fetcher.nextSet(), emailSender);
 	    else
 	    {
