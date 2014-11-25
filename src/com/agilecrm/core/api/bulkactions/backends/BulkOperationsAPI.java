@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
 import com.agilecrm.contact.export.util.ContactExportBlobUtil;
 import com.agilecrm.contact.export.util.ContactExportEmailUtil;
@@ -538,9 +539,19 @@ public class BulkOperationsAPI
 
 	int noEmailsCount = 0;
 
+	// Gets emailSender
+	EmailSender emailSender = EmailSender.getEmailSender();
+
 	while (fetcher.hasNextSet())
 	{
-	    noEmailsCount += ContactBulkEmailUtil.sendBulkContactEmails(emailData, fetcher.nextSet());
+	    if (emailSender.canSend())
+		noEmailsCount += ContactBulkEmailUtil.sendBulkContactEmails(emailData, fetcher.nextSet(), emailSender);
+	    else
+	    {
+		BulkActionNotifications
+			.publishNotification("Emails limit exceeded. Please increase your email limits.");
+		break;
+	    }
 	}
 
 	count = fetcher.getAvailableContacts() > 0 ? fetcher.getAvailableContacts() : fetcher.getAvailableCompanies();
