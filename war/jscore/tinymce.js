@@ -483,3 +483,20 @@ function get_formatted_date(epoch_time, format)
 	return date + " " + month_names[month] 
 			+ " " + year;
 }
+
+function register_focus_on_tinymce(selector)
+{
+	var document = $("iframe#"+selector+"_ifr").contents()[0];
+	
+	if(!document)
+		return;
+	
+	$(document).die().live('click', function(e){
+		
+		e.preventDefault();
+		
+		$(this).find('body').focus();
+		
+	});
+}
+

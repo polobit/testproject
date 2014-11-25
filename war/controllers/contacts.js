@@ -804,6 +804,9 @@ var ContactsRouter = Backbone.Router.extend({
 				
 					// Add tinymce content
 					set_tinymce_content('email-body', body);
+					
+					// Register focus
+					register_focus_on_tinymce('email-body');
 			
 				});
 		}
@@ -816,6 +819,9 @@ var ContactsRouter = Backbone.Router.extend({
 				
 					// Add tinymce content
 					set_tinymce_content('email-body', body);
+					
+					// Register focus
+					register_focus_on_tinymce('email-body')
 			});
 		}
 		
