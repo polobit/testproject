@@ -36,7 +36,8 @@ public class SetOwner extends TaskletAdapter
      * @param nodeJSON
      *            - current node json i.e, Set Owner json
      **/
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+	    throws Exception
     {
 	// Get OwnerId
 	String ownerId = getStringValue(nodeJSON, subscriberJSON, data, OWNER_ID);
@@ -44,11 +45,17 @@ public class SetOwner extends TaskletAdapter
 	try
 	{
 	    // Sets contact owner
-	    String ownerName = setOwner(subscriberJSON, ownerId);
+	    Contact updatedContact = setOwner(subscriberJSON, ownerId);
+
+	    // Update subscriberJSON
+	    subscriberJSON = AgileTaskletUtil.getUpdatedSubscriberJSON(updatedContact, subscriberJSON);
+
+	    // to show in log
+	    String newContactOwnerName = updatedContact.getOwner().name;
 
 	    // Creates log for SetOwner
-	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Owner set to <b>" + ownerName + "</b>",
-		    LogType.SET_OWNER.toString());
+	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+		    "Owner set to <b>" + newContactOwnerName + "</b>", LogType.SET_OWNER.toString());
 	}
 	catch (Exception e)
 	{
@@ -68,7 +75,7 @@ public class SetOwner extends TaskletAdapter
      * @param ownerId
      *            - given owner id
      */
-    public static String setOwner(JSONObject subscriberJSON, String ownerId)
+    public static Contact setOwner(JSONObject subscriberJSON, String ownerId)
     {
 	// Get ownerKey from domain user id.
 	Key<DomainUser> newOwnerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
@@ -78,11 +85,6 @@ public class SetOwner extends TaskletAdapter
 	contact.setContactOwner(newOwnerKey);
 	contact.save();
 
-	// Update subscriberJSON
-	subscriberJSON = AgileTaskletUtil.getUpdatedSubscriberJSON(contact, subscriberJSON);
-
-	// to show in log
-	String newContactOwnerName = contact.getOwner().name;
-	return newContactOwnerName;
+	return contact;
     }
 }
