@@ -339,7 +339,8 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    Map<String, ArrayList<LinkedHashMap<String, Object>>> results = new ObjectMapper().readValue(
 		    response.getStream(), Map.class);
 	    customers = results.get("customers");
-
+	    if(customers==null)
+	    	System.out.println("customers is null");
 	}
 	catch (OAuthException e)
 	{
