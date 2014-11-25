@@ -89,75 +89,55 @@ $(function()
 		} });
 	});
 
-	/**
-	 * Activates the date picker to the corresponding fields in activity modal
-	 * and activity-update modal
-	 */
-	var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev) {
-		// If event start date is changed and end date is less than start date, change the value of the end date to start date.
-		var eventDate2 = new Date($('#event-date-2').val());
-		  if (ev.date.valueOf() > eventDate2.valueOf()) {
-			    $('#event-date-2').val($('#event-date-1').val());
-			  }
-			 
-			});
-
-	$('#event-date-2').datepicker({ format : 'mm/dd/yyyy' });
-	$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev) {
-		// If event start date is changed and end date is less than start date, change the value of the end date to start date.
-		var eventDate2 = new Date($('#update-event-date-2').val());
-		  if (ev.date.valueOf() > eventDate2.valueOf()) {
-			    $('#update-event-date-2').val($('#update-event-date-1').val());
-			  }
-			 
-			});
-	$('#update-event-date-2').datepicker({ format : 'mm/dd/yyyy' });
-
-	/**
-	 * Activates time picker for start time to the fields with class
-	 * start-timepicker
-	 */
-	$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' })
-						.on('hide.timepicker',function(e){
-								
-							if($('#activityModal #allDay').is(':checked'))
-							{
-								$('#event-time-1').closest('.control-group').hide();
-								$('#event-date-2').closest('.row').hide();
-							}	
-							
-								e.stopImmediatePropagation();
-								return false;
-							});
-
-	/**
-	 * Activates time picker for end time to the fields with class
-	 * end-timepicker
-	 */
-	$('.end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false, template : 'modal' });
-
-	/**
-	 * Activates time picker for start time to the fields with class
-	 * update-start-timepicker
-	 */
-	$('.update-start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' });
-
-	/**
-	 * Activates time picker for end time to the fields with class
-	 * update-end-timepicker
-	 */
-	$('.update-end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false, template : 'modal' });
-
+	
 	/**
 	 * Sets the start time with current time and end time half an hour more than
 	 * start time, when they have no values by the time the modal is shown.
 	 */
 	$('#activityModal').on('shown', function()
 	{
-        // Show related to contacts list
+		/**
+		 * Activates the date picker to the corresponding fields in activity modal
+		 * and activity-update modal
+		 */
+		var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev) {
+			// If event start date is changed and end date is less than start date, change the value of the end date to start date.
+			var eventDate2 = new Date($('#event-date-2').val());
+			  if (ev.date.valueOf() > eventDate2.valueOf()) {
+				    $('#event-date-2').val($('#event-date-1').val());
+				  }
+				 
+				});
+
+		$('#event-date-2').datepicker({ format : 'mm/dd/yyyy' });
+		
+		/**
+		 * Activates time picker for start time to the fields with class
+		 * start-timepicker
+		 */
+		$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' })
+							.on('hide.timepicker',function(e){
+									
+								if($('#activityModal #allDay').is(':checked'))
+								{
+									$('#event-time-1').closest('.control-group').hide();
+									$('#event-date-2').closest('.row').hide();
+								}	
+								
+									e.stopImmediatePropagation();
+									return false;
+								});
+
+		/**
+		 * Activates time picker for end time to the fields with class
+		 * end-timepicker
+		 */
+		$('.end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false, template : 'modal' });
+		
+		 // Show related to contacts list
 		var el = $("#activityForm");
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
-		
+
 		/**
 		 * Fills current time only when there is no time in the fields
 		 */
@@ -177,6 +157,28 @@ $(function()
 	 */
 	$('#updateActivityModal').on('show', function()
 	{
+		$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev) {
+			// If event start date is changed and end date is less than start date, change the value of the end date to start date.
+			var eventDate2 = new Date($('#update-event-date-2').val());
+			  if (ev.date.valueOf() > eventDate2.valueOf()) {
+				    $('#update-event-date-2').val($('#update-event-date-1').val());
+				  }
+				 
+				});
+		$('#update-event-date-2').datepicker({ format : 'mm/dd/yyyy' });
+		
+		/**
+		 * Activates time picker for start time to the fields with class
+		 * update-start-timepicker
+		 */
+		$('.update-start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' });
+
+		/**
+		 * Activates time picker for end time to the fields with class
+		 * update-end-timepicker
+		 */
+		$('.update-end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false, template : 'modal' });
+
         // Show related to contacts list
 		var el = $("#updateActivityForm");
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
