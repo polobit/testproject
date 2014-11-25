@@ -25,20 +25,20 @@ function scramble_input_names(el)
 
 $(function()
 {
-	CUSTOM_FIELDS = undefined;
+	CONTACT_CUSTOM_FIELDS = undefined;
+	COMPANY_CUSTOM_FIELDS = undefined;
 	
 	// Filter Contacts- Clone Multiple
 	$(".filter-contacts-multiple-add").die().live('click', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
-		var htmlContent = $(getTemplate("filter-contacts", {})).find('tr').clone();
+		var htmlContent = $(getTemplate("filter-contacts", {})).find('.chained-table.contact').find('tr').clone();
 		
 		scramble_input_names($(htmlContent));
 
 		// boolean parameter to avoid contacts/not-contacts fields in form
 		chainFilters(htmlContent, function(){
-			
 		}, false);
 
 //		$(this).hide();
@@ -47,6 +47,24 @@ $(function()
 		$(this).siblings("table").find("tbody").append(htmlContent);
 	});
 	
+	// Filter Contacts- Clone Multiple
+	$(".filter-companies-multiple-add").die().live('click', function(e)
+	{
+		e.preventDefault();
+		// To solve chaining issue when cloned
+		var htmlContent = $(getTemplate("filter-contacts", {})).find('.chained-table.company').find('tr').clone();
+		
+		scramble_input_names($(htmlContent));
+
+		// boolean parameter to avoid contacts/not-contacts fields in form
+		chainFilters(htmlContent, function(){
+		}, false);
+
+//		$(this).hide();
+		// var htmlContent = $(this).closest("tr").clone();
+		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+		$(this).siblings("table").find("tbody").append(htmlContent);
+	});
 	
 	
 
@@ -148,6 +166,17 @@ $(function()
 		}
 		
 	})
+	
+	$("#contact_type").die().live('change', function(e)
+	{
+		if($(this).val() == 'COMPANY') {
+			$('#companies-filter-wrapper').show();
+			$('#contacts-filter-wrapper').hide();
+		} else {
+			$('#companies-filter-wrapper').hide();
+			$('#contacts-filter-wrapper').show();
+		}
+	});
 	
 	
 });
@@ -256,28 +285,61 @@ function revertToDefaultContacts()
 	App_Contacts.contacts();
 }
 
+function chainFiltersForContactAndCompany(el, data, callback) {
+	if(data && data.contact_type) {
+		if(data.contact_type == 'PERSON') {
+			chainFilters($(el).find('.chained-table.contact'), data, undefined, false, false);
+			chainFilters($(el).find('.chained-table.company'), undefined, undefined, false, true);
+		} else if(data.contact_type == 'COMPANY') {
+			chainFilters($(el).find('.chained-table.company'), data, undefined, false, true);
+			chainFilters($(el).find('.chained-table.contact'), undefined, undefined, false, false);
+		}
+	} else {
+		chainFilters($(el).find('.chained-table.contact'), undefined, undefined, false, false);
+		chainFilters($(el).find('.chained-table.company'), undefined, undefined, false, true);
+	}
+	if (callback && typeof (callback) === "function")
+		{
+			callback();
+		}
+}
+
 /**
  * Chains fields using jquery.chained library. It deserialzed data into form
  * 
  * @param el
  */
-function chainFilters(el, data, callback, is_webrules)
+function chainFilters(el, data, callback, is_webrules, is_company)
 {
-	if(!CUSTOM_FIELDS)
-	{
-		$("#content").html(getRandomLoadingImg());
-		fillCustomFieldsInFilters(el, function(){
+	if(is_company) {
+		fillCompanyCustomFieldsInFilters(el, function(){
 			show_chained_fields(el, data, true);
 			if (callback && typeof (callback) === "function")
 			{
 				// execute the callback, passing parameters as necessary
 				callback();
 			}
-		}, is_webrules)
+		});
 		return;
+	} else {
+		if(!CONTACT_CUSTOM_FIELDS)
+		{
+			$("#content").html(getRandomLoadingImg());
+			fillContactCustomFieldsInFilters(el, function(){
+				show_chained_fields(el, data, true);
+				if (callback && typeof (callback) === "function")
+				{
+					// execute the callback, passing parameters as necessary
+					callback();
+				}
+			}, is_webrules)
+			return;
+		}
+		
+		fillCustomFields(CONTACT_CUSTOM_FIELDS, el, undefined, false)
 	}
 	
-	fillCustomFields(CUSTOM_FIELDS, el)
+	
 	show_chained_fields(el, data);
 	if (callback && typeof (callback) === "function")
 	{
@@ -304,7 +366,6 @@ function show_chained_fields(el, data, forceShow)
 	NESTED_RHS = $("#nested_rhs", el);
 	NESTED_LHS = $("#nested_lhs", el);
 	
-	// Chaining dependencies of input fields with jquery.chained.js
 	RHS.chained(condition, function(chained_el, self){
 		var selected_field = $(chained_el).find('option:selected');
 		var placeholder = $(selected_field).attr("placeholder");
@@ -341,10 +402,10 @@ function show_chained_fields(el, data, forceShow)
 	NESTED_LHS.chained(NESTED_CONDITION);
 	NESTED_RHS.chained(NESTED_CONDITION);
 
-
-
-	if(data && data.rules)
-		deserializeChainedSelect($(el).find('form'), data.rules, el_self.find('form'));
+	if(data && data.rules) {
+		deserializeChainedSelect(el, data.rules, el_self);
+	}
+		
 	
 	// If LHS selected is tags then typeahead is enabled on rhs field
 	if ($(':selected', LHS).val() && ($(':selected', LHS).val()).indexOf('tags') != -1)
@@ -413,14 +474,28 @@ function addTagsArrayasTypeaheadSource(tagsJSON, element)
 }
 
 
-function fillCustomFieldsInFilters(el, callback, is_webrules)
+function fillContactCustomFieldsInFilters(el, callback, is_webrules)
 {
 
 	$.getJSON("core/api/custom-fields/searchable/scope?scope=CONTACT", function(fields){
 		console.log(fields);
-		CUSTOM_FIELDS = fields;
+		CONTACT_CUSTOM_FIELDS = fields;
 		fillCustomFields(fields, el, callback, is_webrules)
 	})
+}
+
+function fillCompanyCustomFieldsInFilters(el, callback)
+{
+	if(!COMPANY_CUSTOM_FIELDS)
+	{
+		$.getJSON("core/api/custom-fields/searchable/scope?scope=COMPANY", function(fields){
+			console.log(fields);
+			COMPANY_CUSTOM_FIELDS = fields;
+			fillCustomFields(fields, el, callback, false);
+		});
+	} else {
+		fillCustomFields(COMPANY_CUSTOM_FIELDS, el, callback, false)
+	}
 }
 
 function fillCustomFields(fields, el, callback, is_webrules)

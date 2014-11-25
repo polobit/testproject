@@ -64,7 +64,7 @@ public class ContactFilterUtil
 	    SearchRule rule = new SearchRule();
 	    rule.LHS = "type";
 	    rule.CONDITION = RuleCondition.EQUALS;
-	    rule.RHS = "PERSON";
+	    rule.RHS = filter.contact_type.toString();
 	    filter.rules.add(rule);
 	    
 	    // Sets ACL condition
