@@ -152,7 +152,7 @@ $(function()
 		  
 		})
 	
-	$('#show-schedule-url').live('click', function(e)
+	$('#show-schedule-url').die().live('click', function(e)
 	{
 		e.preventDefault();
 		$('#scheduleModal').modal('show');
