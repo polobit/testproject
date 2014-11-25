@@ -34,32 +34,38 @@ function contactTableView(base_model) {
 	// Converts base_model (contact) in to JSON
 	var contact = base_model.toJSON();
 	var el = itemView.el;
-	// Clears the template, because all the fields are appended, has to be reset
-	// for each contact
-	// $('#contacts-custom-view-model-template').empty();
-	
-	// Iterates through, each field name and appends the field according to
-	// order of the fields
-	$.each(fields, function(index, field_name) {
-		if(field_name.indexOf("CUSTOM_") != -1)
-		{
-			field_name = field_name.split("CUSTOM_")[1]; 			
-			var property = getProperty(contact.properties, field_name);
-			if(!property)
+	$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
 			{
-				$(el).append(getTemplate('contacts-custom-view-custom', {}));
-				return;
-			}
-			
-			$(el).append(getTemplate('contacts-custom-view-custom', property));
-			return;
-		}
-		
-/*		$('#contacts-custom-view-model-template').append(
-				getTemplate('contacts-custom-view-' + field_name, contact));*/
-		$(el).append(getTemplate('contacts-custom-view-' + field_name, contact));
-	});
-
+				// Clears the template, because all the fields are appended, has to be reset
+				// for each contact
+				// $('#contacts-custom-view-model-template').empty();
+				
+				// Iterates through, each field name and appends the field according to
+				// order of the fields
+				$.each(fields, function(index, field_name) {
+					if(field_name.indexOf("CUSTOM_") != -1)
+					{
+						field_name = field_name.split("CUSTOM_")[1]; 			
+						var property = getProperty(contact.properties, field_name);
+						if(!property)
+						{
+							$(el).append(getTemplate('contacts-custom-view-custom', {}));
+							return;
+						}
+						if(isDateCustomField(customDatefields,property)){
+							console.log('got true');
+							$(el).append(getTemplate('contacts-custom-view-custom-date', property));
+						}
+						else
+							$(el).append(getTemplate('contacts-custom-view-custom', property));
+						return;
+					}
+					
+			/*		$('#contacts-custom-view-model-template').append(
+							getTemplate('contacts-custom-view-' + field_name, contact));*/
+					$(el).append(getTemplate('contacts-custom-view-' + field_name, contact));
+				});
+			});
 	// Appends model to model-list template in collection template
 	$(('#contacts-custom-view-model-list'), this.el).append(el);
 
@@ -67,6 +73,16 @@ function contactTableView(base_model) {
 	$(('#contacts-custom-view-model-list'), this.el).find('tr:last').data(
 			base_model);
 
+}
+
+// Check whether the given fields list has the property name.
+function isDateCustomField(customDatefields,property){
+	var count = 0;
+	$.each(customDatefields,function(index,field){
+		if(field.field_label==property.name)
+			count++;
+	});
+	return count>0;
 }
 
 /**
