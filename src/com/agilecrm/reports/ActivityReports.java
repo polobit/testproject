@@ -82,7 +82,14 @@ public class ActivityReports implements Serializable
     @XmlElement
     public List<DomainUser> getUsersList()
     {
-	return DomainUserUtil.getDomainUsersFromKeys(this.usersList);
+	List<DomainUser> users = new ArrayList<DomainUser>();
+	for (Key<DomainUser> userKey : usersList)
+	{
+	    users.add(DomainUserUtil.getDomainUser(userKey.getId()));
+	    System.out.println("User id - " + userKey.getId());
+	}
+	System.out.println("__users list size - " + users.size());
+	return users;
     }
 
     public List<String> getUser_ids()
