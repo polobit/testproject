@@ -486,11 +486,6 @@ public class DomainUserUtil
 	    System.out.println("-------users size - " + userList.size());
 	    return userList;
 	}
-	catch (Exception e)
-	{
-	    System.out.println("Exception in geting Userslist.");
-	    return null;
-	}
 	finally
 	{
 
