@@ -97,16 +97,18 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    ArrayList<LinkedHashMap<String, Object>> updatedCustomersList= new ArrayList<LinkedHashMap<String, Object>>();
 		    
 		    newCustomersList=getCustomers(materializeURL(shop, "customers", currentPage, "new"));
-		    System.out.println("newCustomersList size-----"+newCustomersList.size());
+		    if(newCustomersList!=null)
+		    	System.out.println("newCustomersList size-----"+newCustomersList.size());
 		    if(lastSyncPoint!=null){
 		    	updatedCustomersList=getCustomers(materializeURL(shop, "customers", currentPage, "edited"));
-		    	System.out.println("updatedCustomersList size-----"+updatedCustomersList.size());
+		    	if(updatedCustomersList!=null)
+		    		System.out.println("updatedCustomersList size-----"+updatedCustomersList.size());
 		    }
 
 		    customers.addAll(newCustomersList);
 		    customers.addAll(updatedCustomersList);
 		    
-		    if(newCustomersList.size()==0 && updatedCustomersList.size()==0)
+		    if(newCustomersList!=null && newCustomersList.size()==0 && updatedCustomersList!=null && updatedCustomersList.size()==0)
 		    	break;
 		    if (!isLimitExceeded())
 		    {
