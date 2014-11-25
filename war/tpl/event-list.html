@@ -47,7 +47,7 @@
 <div class="row" style="margin-left:3px;">
 <div class="span4" onclick=show_model({{id}})>{{getCustomDateWithTime start end}}</div>
 
-<div class="span8" style="text-align:right;">
+<div class="span8" style="text-align:right;cursor: default;">
 {{#if contacts.length}} 
 <div class="line-clamp">  
         {{#each contacts}}<a href ="#contact/{{this.id}}">{{getContactDisplayValue this}}</a> {{/each}}  
@@ -95,7 +95,7 @@
 <div class="row" style="margin-left:3px;">
 <div class="span4" onclick=show_model({{id}})>{{getCustomDateWithTime start end}}</div>
 
-<div class="span8" style="text-align:right;">
+<div class="span8" style="text-align:right;cursor: default;">
 {{#if contacts.length}} 
 <div class="line-clamp">  
         {{#each contacts}}<a href="#contact/{{this.id}}">{{getContactDisplayValue this}}</a> {{/each}}  
