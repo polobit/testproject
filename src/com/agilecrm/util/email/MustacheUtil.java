@@ -145,13 +145,11 @@ public class MustacheUtil
 			Object o = toObject(next.getValue());
 			if (next.getKey().indexOf("time") > -1 || next.getKey().indexOf("date") > -1)
 			{
-			    System.out.println(next.getValue().isNumber() + "--------------" + next.getKey());
 			    try
 			    {
 				if (next.getValue().isNumber())
 				{
 				    Object d = convertDate("dd MMM, HH:mm", next.getValue().asLong());
-				    System.out.println("--------------" + d);
 				    put(next.getKey() + "_string", d);
 				}
 			    }

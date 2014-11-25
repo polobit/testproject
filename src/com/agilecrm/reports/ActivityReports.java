@@ -86,9 +86,7 @@ public class ActivityReports implements Serializable
 	for (Key<DomainUser> userKey : usersList)
 	{
 	    users.add(DomainUserUtil.getDomainUser(userKey.getId()));
-	    System.out.println("User id - " + userKey.getId());
 	}
-	System.out.println("__users list size - " + users.size());
 	return users;
     }
 

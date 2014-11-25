@@ -194,6 +194,27 @@
 				</table>
 				{{/emails.emails_count}}
 				{{/emails}}
+				{{#notes}}
+				{{#notes.notes_contacts_count}}
+				<p style="font-size:1.2em;font-weight:bold;">Contact Notes</p>
+				<table width="100%" cellpadding="5" cellspacing="0" style="margin-top:-40px;border-style:solid;border-radius:5px;border-color:darkgray;border-width:1px;">
+					<tbody>
+						<tr>
+							<td style="background-color:lightgray;width:30%;vertical-align:top;">
+								<p style="margin:0px;font-weight:bold;">Notes</p><span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{emails.emails_count}}</span>
+							</td>
+							<td style="color:#777;">
+								<ul>
+									{{#notes.notes_contacts}}
+										<li>Note '{{custom1}}' added to {{{custom4}}} on {{time_string}}</li>
+									{{/notes.notes_contacts}}
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				{{/notes.notes_contacts_count}}
+				{{/notes}}
 				{{#docs}}
 				{{#docs.doc_count}}
 				<p style="font-size:1.2em;font-weight:bold;">Documents</p>

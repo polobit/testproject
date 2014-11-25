@@ -539,8 +539,10 @@ public class ActivityReportsUtil
 	activityTypeList.add(Activity.ActivityType.EMAIL_SENT.toString());
 	activityTypeList.add(Activity.ActivityType.BULK_ACTION.toString());
 
-	List<Activity> activities = dao.ofy().query(Activity.class).filter("activity_type in ", activityTypeList)
-		.filter("time >= ", startTime).filter("time <= ", endTime).list();
+	List<Activity> activities = dao.ofy().query(Activity.class)
+		.filter("user", new Key<DomainUser>(DomainUser.class, user.id))
+		.filter("activity_type in ", activityTypeList).filter("time >= ", startTime)
+		.filter("time <= ", endTime).list();
 
 	int emailsCount = 0;
 	List<Activity> emailActivity = new ArrayList<Activity>();
@@ -611,6 +613,11 @@ public class ActivityReportsUtil
 
 	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, Activity.EntityType.CONTACT.toString(),
 		Activity.ActivityType.NOTE_ADD.toString(), null, startTime, endTime, 0, null);
+
+	for (Activity activity : activities)
+	{
+	    activity.custom4 = getActivityRelateContacts(activity, user.domain, "");
+	}
 
 	Map<String, Object> notesReport = new HashMap<String, Object>();
 	try
