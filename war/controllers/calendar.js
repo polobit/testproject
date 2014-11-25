@@ -497,20 +497,17 @@ function loadAgileEvents()
 				{
 
 								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/list', templateKey : "events", individual_tag_name : 'tr',
-												sort_collection : false, cursor : true, page_size : 25 });
+												sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25 });
 								eventCollectionView.appendItem = appendItem2;
 								eventCollectionView.collection.fetch();
-								eventCollectionView.collection.comparator = function(model) {
-								    return model.get('start');
-								}
-								eventCollectionView.collection.sort();
+
 								$('#agile').html(this.eventCollectionView.render().el);
 				}
 				else if (view == "calendar_list_view_future")
 				{
 
 								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/future/list', templateKey : "future", individual_tag_name : 'tr',
-												sort_collection : true, cursor : true, page_size : 25 });
+												sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25 });
 								eventCollectionView.appendItem = appendItem1;
 								eventCollectionView.collection.fetch();
 
@@ -551,12 +548,8 @@ function loadGoogleEvents()
 																								}
 																								googleNextPageToken = resp.nextPageToken;
 																								googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "google-event", individual_tag_name : 'tr',
-																												sort_collection : true });
+																												sort_collection : true, sortKey : 'start', descending : false });
 																								googleEventCollectionView.appendItem = appendGoogleEvent;
-																								googleEventCollectionView.collection.comparator = function(model) {
-																								    return model.get('start');
-																								}
-																								googleEventCollectionView.collection.sort();
 																								$('#google').html(googleEventCollectionView.render(true).el);
 
 																				});
@@ -577,7 +570,7 @@ function loadGoogleEvents()
 
 																								}
 																								googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "googleEventCategorization",
-																												individual_tag_name : 'tr', sort_collection : true });
+																												individual_tag_name : 'tr', sort_collection : true, sortKey : 'start', descending : false });
 																								googleEventCollectionView.appendItem = appendGoogleEventCategorization;
 																								$('#google').html(googleEventCollectionView.render(true).el);
 
@@ -622,10 +615,12 @@ function loadMoreEventsFromGoogle()
 																if (view == "calendar_list_view")
 																{
 																				googleEventCollectionView.collection.add(events);
+																				googleEventCollectionView.collection.sort();
 																}
 																else
 																{
 																				googleEventCollectionView.collection.add(events);
+																				googleEventCollectionView.collection.sort();
 																}
 
 												})
@@ -658,17 +653,13 @@ function loadMoreEventsFromGoogle()
 																				var view = readCookie("agile_calendar_view");
 																				if (view == "calendar_list_view")
 																				{
-
-																								googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "google-event", individual_tag_name : 'tr' });
-																								googleEventCollectionView.appendItem = appendGoogleEvent;
-																								$('#google').html(googleEventCollectionView.render(true).el);
+																								googleEventCollectionView.collection.add(events);
+																								googleEventCollectionView.collection.sort();
 																				}
 																				else
 																				{
-																								googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "googleEventCategorization",
-																												individual_tag_name : 'tr' });
-																								googleEventCollectionView.appendItem = appendGoogleEventCategorization;
-																								$('#google').html(googleEventCollectionView.render(true).el);
+																								googleEventCollectionView.collection.add(events);
+																								googleEventCollectionView.collection.sort();
 																				}
 
 																});

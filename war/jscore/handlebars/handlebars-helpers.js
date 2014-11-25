@@ -6634,8 +6634,22 @@ $(function()
 								var d1 = getCustomFormatedDate(start);
 								var d2 = getCustomFormatedDate(end);
 								var time = extractTimeFromDate(end);
+<<<<<<< HEAD
 								if (day1 != day2)
 												return d1 + " - " + d2;
+=======
+								var createdTime = getEventCreatedTime(start);
+								if (createdTime == 0 || createdTime == 1)
+								{
+												var t1 = extractTimeFromDate(start);
+												var t2 =  extractTimeFromDate(end);
+												if(t1 && t2)
+																return t1+" - "+t2;
+												if(t2)
+																return t1+" - " +t2;
+												else return t1;
+								}
+>>>>>>> 37f7de5... Fixed Google and Agile Event Sorting 
 								else
 												return d1 + " - " + time;
 				}
