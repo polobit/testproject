@@ -245,15 +245,22 @@ float: right;
 width: auto;
 max-width: 100%;	
 }
+
 .contact-owner
 {
 	font-size:14px;
 	color:#888;
+
+}
+.contact-owner-text
+{
+	float:left;
 }
 .contact-owner-pic
 {
 	float:left;
 	margin-right:4px;
+	display:none;
 }
 .contact-owner img
 {
@@ -271,14 +278,14 @@ width:100%;
 }
 .contact-owner-name
 {
-max-width:80%;
+max-width:70%;
 float: left;
 white-space: nowrap;
 text-overflow: ellipsis;
 overflow: hidden;
 width: auto;
 cursor:pointer;
-margin-top:3px;
+/*margin-top:3px;*/
 /*margin-left: 4px;*/
 }
 #contact-detail-owner li
@@ -434,7 +441,7 @@ padding-bottom: 13px;
 	word-wrap:break-word;
 	width:90%;
 }
-.contact-phone .contact-phone-icon,.score-view .contact-score-control,.contact-email .contact-email-icon,.contact-owner-text
+.contact-phone .contact-phone-icon,.score-view .contact-score-control,.contact-email .contact-email-icon
 {
 	visibility:hidden;
 }
