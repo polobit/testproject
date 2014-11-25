@@ -239,7 +239,13 @@ $(function()
 		}, error : function(user)
 		{
 
-			alert("Error occured while saving please try again");
+
+			$('#schedule_error_message').html('Something went wrong as your appointment was not scheduled. Please try again in few hours. Error: '+user.statusText);
+			 $('#schedule_error_message').fadeIn('slow');
+             setTimeout(function() {
+          	    $('#schedule_error_message').fadeOut('slow');
+          	}, 2000);
+	    	return;
 			enable_save_button($(saveBtn));
 		} });
 

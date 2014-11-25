@@ -8,19 +8,6 @@ $("#btnSerialize").die().live('click', function(e){
 	var saveBtn = $(this);
 	disable_save_button($(saveBtn));
 	
-	var meeting_types=$('#meeting_types').val();
-	
-	
-	 var regex = /^[a-zA-Z0-9, ]*$/
-		    if(!(regex.test(meeting_types)))
-		    	{
-		    	 $('#meeting_type_error').fadeIn('slow');
-               setTimeout(function() {
-            	    $('#meeting_type_error').fadeOut('slow');
-            	}, 2000);
-		    	return;
-		    	}
-	
 	var json = serializeForm("scheduleform");
 	var meeting_durations = serializeForm("meeting_durations");
 	console.log(json);
