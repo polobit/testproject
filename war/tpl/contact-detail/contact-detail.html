@@ -232,13 +232,13 @@
 						<div class="change-owner-succes"></div>
      <span title="Owner" class="contact-owner-view">
       	<span class="contact-owner" id="change-owner-element">
-        	<span class="contact-owner-text" style="display:none">Owner:&nbsp;&nbsp;</span>
+        	<span class="contact-owner-text">Owner:&nbsp;&nbsp;</span>
 			{{#if owner}}
-        	<span class="contact-owner-pic" style="visibility:visible;"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
+        	<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
 			{{else}}
-			<span class="contact-owner-pic" style="visibility:hidden;"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add" style="font-size:13px;"><a style="cursor:pointer;">Assign Owner</a></span>
+			<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add" style="font-size:13px;"><a style="cursor:pointer;">Assign Owner</a></span>
  			{{/if}}
-        	<span id="contact-owner" data={{owner.id}} style="display:inline-block;" class="contact-owner-name">{{owner.name}}</span>
+        	<span id="contact-owner" data={{owner.id}} class="contact-owner-name">{{owner.name}}</span>
         
         	{{#canEditContact owner.id}}
         	<div class="btn-group" id="change-owner-ul" style="vertical-align: middle; display: none">

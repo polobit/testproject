@@ -280,7 +280,6 @@ $(function()
 	Handlebars.registerHelper('icons', function(item)
 	{
 		 
-		console.log('mamasri code');
 		item = item.toLowerCase().trim();
 		console.log(item);
 		if (item == "email")
