@@ -439,9 +439,11 @@ $(function()
 				var no = "No"
 					
 				var message = "";
-				var upgrade_link =  'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>'
+				var upgrade_link =  'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>';
+				var title = "Not enough emails left"
 				if(pendingEmails <= 0)
 					{
+						title = "Emails limit";
 						yes = "";
 						no = "Ok"
 						message = "You have used up all emails in your quota. " + upgrade_link;
@@ -451,7 +453,7 @@ $(function()
 					" Continuing with this operation may not send the email to some contacts. <br/><br/>" +
 					"Do you want to proceed?";
 				
-				showModalConfirmation("Emails limit", 
+				showModalConfirmation(title, 
 						message, 
 					show_bulk_email_form
 					, function(element){
