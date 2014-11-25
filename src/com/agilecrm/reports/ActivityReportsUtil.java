@@ -19,7 +19,6 @@ import com.agilecrm.reports.ActivityReports.ActivityType;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
-import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
@@ -126,9 +125,8 @@ public class ActivityReportsUtil
 
 	    List<Map<String, Object>> userReport = new ArrayList<Map<String, Object>>();
 	    // For every user selected in the activity report.
-	    for (String userId : report.user_ids)
+	    for (DomainUser user : users)
 	    {
-		DomainUser user = DomainUserUtil.getDomainUser(Long.parseLong(userId));
 		Map<String, Object> activityReport = new HashMap<String, Object>();
 		activityReport.put("user_id", user.id);
 		activityReport.put("user_name", user.name);
@@ -191,10 +189,10 @@ public class ActivityReportsUtil
 	List<Key<Opportunity>> dealCreated = new ArrayList<Key<Opportunity>>();
 	List<Key<Opportunity>> mileChange = new ArrayList<Key<Opportunity>>();
 
-	List<Activity> wonActivities = new ArrayList<Activity>();
-	List<Activity> lostActivities = new ArrayList<Activity>();
-	List<Activity> newDealActivities = new ArrayList<Activity>();
-	List<Activity> mileChangeActivities = new ArrayList<Activity>();
+	Map<Long, Activity> wonActivities = new HashMap<Long, Activity>();
+	Map<Long, Activity> lostActivities = new HashMap<Long, Activity>();
+	Map<Long, Activity> newDealActivities = new HashMap<Long, Activity>();
+	Map<Long, Activity> mileChangeActivities = new HashMap<Long, Activity>();
 
 	// Get all the activities of the user on deals. Instead of getting by
 	// activity type. This will reduce the DB calls.
@@ -210,19 +208,19 @@ public class ActivityReportsUtil
 	    {
 		dealLost.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
 		act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
-		lostActivities.add(act);
+		lostActivities.put(act.entity_id, act);
 	    }
 	    else if (act.activity_type == Activity.ActivityType.DEAL_CLOSE)
 	    {
 		dealWon.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
 		act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
-		wonActivities.add(act);
+		wonActivities.put(act.entity_id, act);
 	    }
 	    else if (act.activity_type == Activity.ActivityType.DEAL_MILESTONE_CHANGE)
 	    {
 		mileChange.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
 		act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
-		mileChangeActivities.add(act);
+		mileChangeActivities.put(act.entity_id, act);
 	    }
 	    else
 		dealUpdated.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
@@ -244,11 +242,11 @@ public class ActivityReportsUtil
 	    {
 		act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
 		dealCreated.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
-		newDealActivities.add(act);
+		newDealActivities.put(act.entity_id, act);
 	    }
 	}
 
-	// Local variable declaretion.
+	// Local variable declaration.
 	List<Opportunity> dealsWon = Opportunity.dao.fetchAllByKeys(dealWon);
 	List<Opportunity> dealsLost = Opportunity.dao.fetchAllByKeys(dealLost);
 	List<Opportunity> dealsCreated = Opportunity.dao.fetchAllByKeys(dealCreated);
@@ -263,64 +261,73 @@ public class ActivityReportsUtil
 	double lostValue = 0;
 	double newValue = 0;
 	double mileValue = 0;
-
-	// Calculate the total values of all the deals based on the activity
-	// type.
-	DecimalFormat formatter = new DecimalFormat("#,###");
-	for (Opportunity deal : dealsWon)
-	{
-	    wonValue += deal.expected_value;
-	    wonCount++;
-	}
-	for (Opportunity deal : dealsLost)
-	{
-	    lostValue += deal.expected_value;
-	    lostCount++;
-	}
-
-	for (Opportunity deal : dealsCreated)
-	{
-	    newValue += deal.expected_value;
-	    newCount++;
-	}
-
-	for (Opportunity deal : dealsMileChange)
-	{
-	    mileValue += deal.expected_value;
-	    mileCount++;
-	}
-
 	String currency = pref.currency != null ? pref.currency.substring(pref.currency.indexOf("-") + 1) : "$";
 
 	// Fill the map object with required data to show in the report.
 	Map<String, Object> dealsReport = new HashMap<String, Object>();
 	try
 	{
+	    // Calculate the total values of all the deals based on the activity
+	    // type.
+	    DecimalFormat formatter = new DecimalFormat("#,###");
+	    for (Opportunity deal : dealsWon)
+	    {
+		wonValue += deal.expected_value;
+
+		wonActivities.get(deal.id).custom4 = "(" + currency + formatter.format(deal.expected_value) + ", "
+			+ deal.probability + "%, " + deal.getPipeline().name + ")";
+
+		wonCount++;
+	    }
+	    for (Opportunity deal : dealsLost)
+	    {
+		lostValue += deal.expected_value;
+		lostActivities.get(deal.id).custom4 = "(" + currency + formatter.format(deal.expected_value) + ", "
+			+ deal.probability + "%, " + deal.getPipeline().name + ")";
+		lostCount++;
+	    }
+
+	    for (Opportunity deal : dealsCreated)
+	    {
+		newValue += deal.expected_value;
+		newDealActivities.get(deal.id).custom4 = "(" + currency + formatter.format(deal.expected_value) + ", "
+			+ deal.probability + "%, " + deal.getPipeline().name + ")";
+		newCount++;
+	    }
+
+	    for (Opportunity deal : dealsMileChange)
+	    {
+		mileValue += deal.expected_value;
+		mileChangeActivities.get(deal.id).custom4 = "(" + currency + formatter.format(deal.expected_value)
+			+ ", " + deal.probability + "%, " + deal.getPipeline().name + ")";
+		mileCount++;
+	    }
+
 	    if (wonCount > 0)
 	    {
 		dealsReport.put("won_count", wonCount);
 		dealsReport.put("won_value", formatter.format(wonValue));
-		dealsReport.put("deals_won", wonActivities);
+		dealsReport.put("deals_won", wonActivities.values());
 	    }
 	    if (lostCount > 0)
 	    {
 		dealsReport.put("lost_count", lostCount);
 		dealsReport.put("lost_value", formatter.format(lostValue));
-		dealsReport.put("deals_lost", lostActivities);
+		dealsReport.put("deals_lost", lostActivities.values());
 	    }
 
 	    if (newCount > 0)
 	    {
 		dealsReport.put("new_count", newCount);
 		dealsReport.put("new_value", formatter.format(newValue));
-		dealsReport.put("deals_created", newDealActivities);
+		dealsReport.put("deals_created", newDealActivities.values());
 	    }
 
 	    if (mileCount > 0)
 	    {
 		dealsReport.put("mile_count", mileCount);
 		dealsReport.put("mile_value", formatter.format(mileValue));
-		dealsReport.put("mile_change", mileChangeActivities);
+		dealsReport.put("mile_change", mileChangeActivities.values());
 	    }
 
 	    // dealsReport.put("deals_updated", dealsUpdated);

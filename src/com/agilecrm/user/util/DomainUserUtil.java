@@ -482,8 +482,9 @@ public class DomainUserUtil
 
 	try
 	{
-
-	    return dao.fetchAllByKeys(userKeys);
+	    List<DomainUser> userList = dao.fetchAllByKeys(userKeys);
+	    System.out.println("-------users size - " + userList.size());
+	    return userList;
 	}
 	catch (Exception e)
 	{

@@ -33,7 +33,7 @@
 							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
 								<ul>
 									{{#deals.deals_won}}
-										<li>'{{label}}' {{{related_contact_ids}}} won on {{time_string}}</li>
+										<li>'{{label}}' {{custom4}} {{{related_contact_ids}}} won on {{time_string}}</li>
 									{{/deals.deals_won}}
 								</ul>
 							</td>
@@ -47,7 +47,7 @@
 							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
 								<ul>
 									{{#deals.deals_lost}}
-										<li>'{{label}}' {{{related_contact_ids}}} lost on {{time_string}}</li>
+										<li>'{{label}}' {{custom4}} {{{related_contact_ids}}} lost on {{time_string}}</li>
 									{{/deals.deals_lost}}
 								</ul>
 							</td>
@@ -61,7 +61,7 @@
 							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
 								<ul>
 									{{#deals.deals_created}}
-										<li>'{{label}}' {{{related_contact_ids}}} assigned on {{time_string}}</li>
+										<li>'{{label}}' {{custom4}} {{{related_contact_ids}}} assigned on {{time_string}}</li>
 									{{/deals.deals_created}}
 								</ul>
 							</td>
@@ -75,7 +75,7 @@
 							<td style="color:#777;">
 								<ul>
 									{{#deals.mile_change}}
-										<li>'{{label}}' {{{related_contact_ids}}} changed to {{custom1}} on {{time_string}}</li>
+										<li>'{{label}}' {{custom4}} {{{related_contact_ids}}} changed to {{custom1}} on {{time_string}}</li>
 									{{/deals.mile_change}}
 								</ul>
 							</td>
