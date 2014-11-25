@@ -282,7 +282,7 @@ public class RegisterServlet extends HttpServlet
 	    }
 	    if (!StringUtils.isEmpty(role))
 	    {
-		properties.add(createField(ROLE, role));
+		properties.add(createField(Contact.TITLE, role));
 	    }
 
 	    properties.add(createField(DOMAIN, userDomain));
@@ -316,6 +316,7 @@ public class RegisterServlet extends HttpServlet
 
 	property.name = name;
 	property.value = value;
+	property.type = property.getType();
 	return property;
     }
 
