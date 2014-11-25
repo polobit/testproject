@@ -2,37 +2,33 @@
 {{#unless this.length}}
 <div class="slate" style="padding:5px 2px;">
     <div class="slate-content" style="text-align:center;">
-		<h4>You have no Events</h4>
-	</div>
+        <h4>You have no Events</h4>
+    </div>
 </div>
 {{/unless}}
 {{#if this.length}}
-<table style="display:block;overflow:hidden!important;margin-bottom:-20px;"><tbody><tr><td>
-<section>
-    <form>
+<div class="future_event_group">
+       
         <table class="table hide table-striped " style="overflow:hidden!important">
             <div id="today-heading" style="display: none"><b>Today</b></div>
-			
-            <tbody id="today-event" style="display: inline;"></tbody>
+            
+            <tbody id="today-event" style="display: inline;display: table;width: 100%;"></tbody>
         </table>
 
         <table class="table hide table-striped" style="overflow:hidden!important;">
             <div id="tomorrow-heading" style="display: none"><b>Tomorrow</b></div>
-			
-            <tbody id="tomorrow-event" style="display: inline;"></tbody>
+            
+            <tbody id="tomorrow-event" style="display: inline;display: table;width: 100%;"></tbody>
         </table>
 
         <table class="table hide table-striped" style="overflow:hidden!important;">
             <div id="next-week-heading" style="display: none"><b>Later</b></div>
-            <tbody id="next-week-event" style="display: inline;"></tbody>
+            <tbody id="next-week-event" style="display: inline;display: table;width: 100%;"></tbody>
         </table>
 
-    </form>
-</section>
-</td></tr></tbody></table>
+</div>
 {{/if}}
 </script>
-
 
 <script id="future-model-template" type="text/html">
 <td style="cursor: pointer;">
@@ -45,7 +41,6 @@
 <span class="label" style="background-color:{{color}}">{{event_priority color}}</span></div>
 </div>
 </div>
-
 
 <div class="clearfix"></div>
 
@@ -71,14 +66,16 @@
 {{#unless this.length}}
 <div class="slate" style="padding:5px 2px;">
     <div class="slate-content" style="text-align:center;">
-		<h4>You have no Events</h4>
-	</div>
+        <h4>You have no Events</h4>
+    </div>
 </div>
 {{/unless}}
 {{#if this.length}}
         <table class="table hide table-striped" style="overflow:hidden!important;">
             <tbody id="eventAll" style="display: table;width:100%"></tbody>
         </table>
+{{/if}}
+</script>
 
 <script id="events-model-template" type="text/html">
 
@@ -94,7 +91,6 @@
 </div>
 
 <div class="clearfix"></div>
-
 
 <div class="row" style="margin-left:3px;">
 <div class="span4" onclick=show_model({{id}})>{{getCustomDateWithTime start end}}</div>
@@ -132,10 +128,20 @@
 {{/if}}
 </script>
 
-<script id="future-model-template" type="text/html">
-<td style="width: 850px;cursor: pointer;" onclick=show_model({{id}})>
+<script id="google-event-model-template" type="text/html">
+<td>
 <div class="row" style="margin-left:3px;height: 23px;">
+<div class="span8" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden">{{title}}</div>
 
+<div class="span4 pull-right" style="text-align:right">
+<div class="ellipsis-multiline" style="line-height:20px !important;height: auto !important; word-break:keep-all;">  
+<span class="label">Google Event</span></div>
+</div>
+
+
+</div>
+<div class="clearfix"></div>
+<div class="row" style="margin-left:3px;height: 23px;">
 <div class="span3">{{getGoogleEventCustomTime start end}}</div>
 
 <div class="span9 pull-right" style="overflow-x: auto;text-align:right;">
@@ -153,6 +159,68 @@
 </script>
 
 
+<script id="googleEventCategorization-collection-template" type="text/html">
+    
+</header>
+{{#unless this.length}}
+<div class="slate" style="padding:5px 2px;">
+    <div class="slate-content" style="text-align:center;">
+        <h4>You have no Events</h4>
+    </div>
+</div>
+{{/unless}}
+{{#if this.length}}
+<div class="future_event_group">
+       
+        <table class="table hide " style="overflow:hidden!important">
+            <div id="today-heading" style="display: none"><b>Today</b></div>
+            
+            <tbody id="today-event" style="display: inline;display: table;width: 100%;"></tbody>
+        </table>
+
+        <table class="table hide " style="overflow:hidden!important;">
+            <div id="tomorrow-heading" style="display: none"><b>Tomorrow</b></div>
+            
+            <tbody id="tomorrow-event" style="display: inline;display: table;width: 100%;"></tbody>
+        </table>
+
+        <table class="table hide " style="overflow:hidden!important;">
+            <div id="next-week-heading" style="display: none"><b>Later</b></div>
+            <tbody id="next-week-event" style="display: inline;display: table;width: 100%;"></tbody>
+        </table>
+
+</div>
+{{/if}}
+</script>
+
+<script id="googleEventCategorization-model-template" type="text/html">
+<td>
+<div class="row" style="margin-left:3px;height: 23px;">
+<div class="span8" style="overflow: hidden;">{{title}}</div>
+<div class="span4 pull-right" style="text-align:right;">
+<div class="ellipsis-multiline" style="line-height:20px !important;height: auto !important; word-break:keep-all;">  
+<span class="label">Google Event</span></div>
+</div>
+
+</div>
+
+<div class="clearfix"></div>
+
+<div class="row" style="margin-left:3px;height: 23px;">
+<div class="span3">{{getGoogleEventCustomTime start end}}</div>
+
+<div class="span9 pull-right" style="overflow-x: auto;text-align:right;">
+{{#if contacts.length}} 
+<div class="ellipsis-multiline" style="line-height:20px !important;height: auto !important; word-break:keep-all;white-space: nowrap;">  
+        {{#each contacts}}<span class="label">{{getContactDisplayValue this}}</span> {{/each}}  
+        
+    </div>
+{{/if}}
+</div>
 
 
+</div>
+
+</td>
+</script>
 
