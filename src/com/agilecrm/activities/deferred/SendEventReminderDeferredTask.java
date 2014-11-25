@@ -121,6 +121,11 @@ public class SendEventReminderDeferredTask implements DeferredTask
 			}
 			catch (Exception ex)
 			{
+			    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com",
+				    "event-reminder-failure", "jagadeesh@invox.com", null, null,
+				    "exception occured while sending mail " + domain, null,
+				    "exception occured in send event reminder deferred task", null, null);
+
 			    ex.printStackTrace();
 			    System.err.println("Exception occured while sending campaign status mail "
 				    + e1.getMessage());
@@ -204,6 +209,10 @@ public class SendEventReminderDeferredTask implements DeferredTask
 			}
 			catch (Exception ex)
 			{
+			    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com",
+				    "event-reminder-failure", "jagadeesh@invox.com", null, null,
+				    "exception occured while sending mail " + domain, null,
+				    "exception occured in send event reminder deferred task", null, null);
 			    ex.printStackTrace();
 			    System.err.println("Exception occured while sending event notification mail "
 				    + e.getMessage());
@@ -240,7 +249,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    map.put("events", eventListMap);
 
 		    // Sends mail to the domain user.
-		    SendMail.sendMail("sreenadh@faxdesk.com", "Event Reminder :" + event.title + "@" + event.date
+		    SendMail.sendMail("maildummy800@gmail.com", "Event Reminder :" + event.title + "@" + event.date
 			    + " domain name " + domain, SendMail.START_EVENT_REMINDER, map);
 		}
 	    }
@@ -277,6 +286,9 @@ public class SendEventReminderDeferredTask implements DeferredTask
 	    }
 	    catch (Exception ex)
 	    {
+		Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "event-reminder-failure",
+		        "jagadeesh@invox.com", null, null, "exception occured while sending mail " + domain, null,
+		        "exception occured in send event reminder deferred task", null, null);
 		ex.printStackTrace();
 		System.err.println("Exception occured while sending event notification mail " + e.getMessage());
 	    }

@@ -64,7 +64,7 @@ public class EventReminderDeferredTask implements DeferredTask
 
 	    if (event == null)
 	    {
-		starttime = (System.currentTimeMillis() / 1000) + 900;
+		starttime = (System.currentTimeMillis() / 1000) + 3600;
 		SendEventReminder.sendEventReminders(domain, starttime, false);
 	    }
 	    else
@@ -106,6 +106,9 @@ public class EventReminderDeferredTask implements DeferredTask
 	    }
 	    catch (Exception ex)
 	    {
+		Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "event-reminder-failure",
+		        "jagadeesh@invox.com", null, null, "exception occured while sending mail " + domain, null,
+		        "exception occured in event reminder deferred task", null, null);
 		ex.printStackTrace();
 		System.err.println("Exception occured while event notification status mail " + e.getMessage());
 	    }
