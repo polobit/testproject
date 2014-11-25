@@ -13,8 +13,6 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -81,27 +79,10 @@ public class ActivityReports implements Serializable
 	this.frequency = duration;
     }
 
-    @XmlElement(name = "users")
-    public List<DomainUser> getUsers()
+    @XmlElement
+    public List<DomainUser> getUsersList()
     {
-	System.out.println("----get users list --- " + this.usersList.size());
-	List<DomainUser> users_list = new ArrayList<DomainUser>();
-	if (this.usersList != null)
-	{
-	    try
-	    {
-		Objectify ofy = ObjectifyService.begin();
-		System.out.println(ofy.get(this.usersList).values());
-		users_list = DomainUserUtil.dao.fetchAllByKeys(this.usersList);
-	    }
-	    catch (Exception e)
-	    {
-		System.out.println("Exception in getting users - " + e.getMessage());
-	    }
-	}
-
-	System.out.println("----users list --- " + users_list.size());
-	return users_list;
+	return DomainUserUtil.getDomainUsersFromKeys(this.usersList);
     }
 
     public List<String> getUser_ids()
