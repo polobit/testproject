@@ -196,6 +196,8 @@ public class WebCalendarEventUtil
 		endtime = getEppochTime(date + 1, month, year, Integer.parseInt(tillTime), tz);
 	    }
 
+	    System.out.println("business hour starttime " + starttime + " business hour endtime " + endtime);
+
 	    if (eppoch > starttime && eppoch < endtime)
 	    {
 		return true;
