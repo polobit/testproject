@@ -789,7 +789,12 @@ function getPendingEmails()
 
 function getMaxEmailsLimit()
 {
-	return  _billing_restriction.max_emails_count;
+	var max = _billing_restriction.max_emails_count;
+	
+	if(max == undefined)
+		max = 0;
+	
+	return max;
 }
 function canSendEmails(emails_to_send)
 {

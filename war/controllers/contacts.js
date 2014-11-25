@@ -721,9 +721,32 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	sendEmail : function(id, subject, body, cc, bcc)
 	{
-		
 		var model = {};
-
+		
+		if(!canSendEmails(1))
+		{
+			var pendingEmails = getPendingEmails();
+			window.history.back();
+			var title = "Emails limit";
+			var yes = "";
+			var no = "Ok"
+			var upgrade_link =  'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>';
+			var message = "You have used up all emails in your quota. " + upgrade_link;
+			
+			showModalConfirmation(title, 
+					message, 
+					""
+				, function(element){
+						
+					// No callback
+						Backbone.history.navigate( "subscribe", { trigger : true });
+						return;
+					},
+					function(element){
+						
+					}, yes, no);
+			return;
+		}
 		// Takes back to contacts if contacts detail view is not defined
 		if (this.contactDetailView && !this.contactDetailView.model.get(id))
 		{
