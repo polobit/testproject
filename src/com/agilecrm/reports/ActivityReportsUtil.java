@@ -107,7 +107,7 @@ public class ActivityReportsUtil
 
 	try
 	{
-	    List<DomainUser> users = report.getUsers();
+	    List<DomainUser> users = report.getUsersList();
 	    // Calculate the time bounds for the activities depending on the
 	    // frequency.
 	    Map<String, Long> timeBounds = getTimeBound(report);
