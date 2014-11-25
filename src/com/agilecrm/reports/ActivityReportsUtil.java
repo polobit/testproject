@@ -97,6 +97,7 @@ public class ActivityReportsUtil
      *            lower bound for the time to get the activities.
      * @return Data to show in the Activity report.
      */
+    @SuppressWarnings("unchecked")
     public static Map<String, Object> generateActivityReports(Long id, Long endTime)
     {
 	ActivityReports report = getActivityReport(id);
@@ -133,27 +134,47 @@ public class ActivityReportsUtil
 		activityReports.put("domain", user.domain);
 		activityReport.put("pic",
 			UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id)).pic);
-
+		int count = 0;
 		// Check for the entities/activities selected by the user for
 		// activity report.
 		if (activities.contains(ActivityReports.ActivityType.DEAL))
+		{
 		    activityReport.put("deals",
 			    getDealActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+		    count += getTotalCount((Map<String, Object>) activityReport.get("deals"), "deals_total");
+		}
 		if (activities.contains(ActivityReports.ActivityType.EVENT))
+		{
 		    activityReport.put("events",
 			    getEventActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+		    count += getTotalCount((Map<String, Object>) activityReport.get("events"), "events_total");
+		}
 		if (activities.contains(ActivityReports.ActivityType.TASK))
+		{
 		    activityReport.put("tasks",
 			    getTaskActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+		    count += getTotalCount((Map<String, Object>) activityReport.get("tasks"), "tasks_total");
+		}
 		if (activities.contains(ActivityReports.ActivityType.EMAIL))
+		{
 		    activityReport.put("emails",
 			    getEmailActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+		    count += getTotalCount((Map<String, Object>) activityReport.get("emails"), "emails_count");
+		}
 		if (activities.contains(ActivityReports.ActivityType.NOTES))
+		{
 		    activityReport.put("notes",
 			    getNotesActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+		    count += getTotalCount((Map<String, Object>) activityReport.get("notes"), "notes_contacts_count");
+		}
 		if (activities.contains(ActivityReports.ActivityType.DOCUMENTS))
+		{
 		    activityReport.put("docs",
 			    getDocumentsActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+		    count += getTotalCount((Map<String, Object>) activityReport.get("docs"), "doc_count");
+		}
+		if (count > 0)
+		    activityReport.put("total", count);
 		userReport.add(activityReport);
 	    }
 	    activityReports.put("reports", userReport);
@@ -809,5 +830,23 @@ public class ActivityReportsUtil
 	}
 
 	return "";
+    }
+
+    /**
+     * Check for the count in the report and return the count.
+     * 
+     * @param report
+     *            activity report
+     * @param field
+     *            name of the count field
+     * @return number of entries in the report.
+     */
+    private static Integer getTotalCount(Map<String, Object> report, String field)
+    {
+	if (report.containsKey(field))
+	{
+	    return (Integer) report.get(field);
+	}
+	return 0;
     }
 }
