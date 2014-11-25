@@ -236,17 +236,17 @@ $(function()
 			$("#scheduleurl").removeClass("nounderline");
 			
 
-		}, error : function(user)
+		}, error : function(error)
 		{
 
-
-			$('#schedule_error_message').html('Something went wrong as your appointment was not scheduled. Please try again in few hours. Error: '+user.statusText);
+            console.log(error);
+			$('#schedule_error_message').html('Something went wrong as your schedule url was not updated. Please try again in few hours. Error: '+error.statusText);
 			 $('#schedule_error_message').fadeIn('slow');
              setTimeout(function() {
           	    $('#schedule_error_message').fadeOut('slow');
           	}, 2000);
-	    	return;
 			enable_save_button($(saveBtn));
+			return;
 		} });
 
 	});
