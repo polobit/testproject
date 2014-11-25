@@ -88,6 +88,12 @@ public class SendEventReminderDeferredTask implements DeferredTask
 
 		    catch (TransientFailureException tfe)
 		    {
+			Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com",
+			        "event-reminder-failure", "jagadeesh@invox.com", null, null, "exception occured "
+			                + domain, null,
+			        "exception occured transient failure exception send event reminder deferred task",
+			        null, null);
+
 			EventReminderDeferredTask eventReminderDeferredTask = new EventReminderDeferredTask(domain,
 			        starttime);
 			Queue queue = QueueFactory.getQueue("event-notifier");
@@ -165,6 +171,12 @@ public class SendEventReminderDeferredTask implements DeferredTask
 
 		    catch (TransientFailureException tfe)
 		    {
+			Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com",
+			        "event-reminder-failure", "jagadeesh@invox.com", null, null, "exception occured "
+			                + domain, null,
+			        "exception occured transient failure exception send event reminder deferred task",
+			        null, null);
+
 			EventReminderDeferredTask eventReminderDeferredTask = new EventReminderDeferredTask(domain,
 			        starttime);
 			Queue queue = QueueFactory.getQueue("event-notifier");
@@ -238,6 +250,10 @@ public class SendEventReminderDeferredTask implements DeferredTask
 
 	catch (TransientFailureException tfe)
 	{
+	    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "event-reminder-failure",
+		    "jagadeesh@invox.com", null, null, "exception occured " + domain, null,
+		    "exception occured transient failure exception send event reminder deferred task", null, null);
+
 	    EventReminderDeferredTask eventReminderDeferredTask = new EventReminderDeferredTask(domain, starttime);
 	    Queue queue = QueueFactory.getQueue("event-notifier");
 	    TaskOptions options = TaskOptions.Builder.withPayload(eventReminderDeferredTask);

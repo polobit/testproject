@@ -80,17 +80,20 @@ public class EventReminderDeferredTask implements DeferredTask
 
 	catch (TransientFailureException tfe)
 	{
+	    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "event-reminder-failure",
+		    "jagadeesh@invox.com", null, null, "exception occured " + domain, null,
+		    "exception occured in event reminder deferred task", null, null);
 	    EventReminderDeferredTask eventReminderDeferredTask = new EventReminderDeferredTask(domain, starttime);
 	    Queue queue = QueueFactory.getQueue("event-notifier");
 	    TaskOptions options = TaskOptions.Builder.withPayload(eventReminderDeferredTask);
-	    options.countdownMillis(20000);
+	    options.countdownMillis(40000);
 	    queue.add(options);
 	}
 
 	catch (Exception e)
 	{
 	    String subject = "Exception occured at eventreminderdeferredtask   " + domain + " "
-		    + System.currentTimeMillis();
+		    + System.currentTimeMillis() / 1000;
 	    String body = "   e.getmessage " + e.getMessage();
 	    try
 	    {
