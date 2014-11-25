@@ -36,7 +36,7 @@ public class EmailSender
 	emailSender.billingRestriction = BillingRestrictionUtil.getBillingRestriction(true);
 
 	emailSender.emailBillingRestriction = (EmailBillingRestriction) DaoBillingRestriction.getInstace(
-		DaoBillingRestriction.ClassEntities.Email.toString(), emailSender.billingRestriction);
+	        DaoBillingRestriction.ClassEntities.Email.toString(), emailSender.billingRestriction);
 
 	emailSender.emailGateway = EmailGatewayUtil.getEmailGateway();
 
@@ -76,7 +76,14 @@ public class EmailSender
 	    accountEmailStats.count += count;
 
 	if (billingRestriction != null)
+	{
+	    // To avoid NullPointerException
+	    billingRestriction.one_time_emails_count = billingRestriction.one_time_emails_count == null ? 0
+		    : billingRestriction.one_time_emails_count;
+
 	    billingRestriction.one_time_emails_count -= count;
+	}
+
     }
 
     public void incrementEmailsCount()
@@ -113,7 +120,7 @@ public class EmailSender
 	    if (canSend())
 	    {
 		EmailGatewayUtil.sendEmail(emailGateway, domain, fromEmail, fromName, to, cc, bcc, subject, replyTo,
-			html, text, mandrillMetadata, attachments);
+		        html, text, mandrillMetadata, attachments);
 
 		// Sets Billing restriction limit and account email stats
 		if (!EmailUtil.isToAgileEmail(to))
@@ -142,7 +149,7 @@ public class EmailSender
 	    String html, String text, String mandrillMetadata, String subscriberId, String campaignId)
     {
 	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
-		fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+	        fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
 
 	// Add to pull queue with from email as Tag
 	PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);
