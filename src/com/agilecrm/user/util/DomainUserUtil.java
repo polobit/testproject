@@ -476,7 +476,7 @@ public class DomainUserUtil
     public static List<DomainUser> getDomainUsersFromKeys(List<Key<DomainUser>> userKeys)
     {
 	String oldnamespace = NamespaceManager.get();
-	System.out.println("-----------geting Userslist.");
+	System.out.println("-----------geting Userslist." + userKeys.size());
 
 	NamespaceManager.set("");
 
