@@ -80,11 +80,14 @@ $(function()
 
 		e.preventDefault();
 		eraseCookie('company_filter');
+		
 
 		var filter_id = $(this).attr('id');
+		var filter_type = $(this).attr('filter_type');
 
 		// Saves Filter in cookie
 		createCookie('contact_filter', filter_id)
+		createCookie('contact_filter_type', filter_type)
 
 		// Gets name of the filter, which is set as data
 		// attribute in filter
@@ -118,6 +121,7 @@ $(function()
 
 		e.preventDefault();
 		eraseCookie('contact_filter');
+		eraseCookie('contact_filter_type');
 
 		createCookie('company_filter', "Companies");
 		CONTACTS_HARD_RELOAD = true;
@@ -274,6 +278,7 @@ function revertToDefaultContacts()
 {
 	// Erase filter cookie. Erases both contact and company filter
 	eraseCookie('contact_filter');
+	eraseCookie('contact_filter_type');
 	eraseCookie('company_filter');
 
 	if (App_Contacts.contactsListView)

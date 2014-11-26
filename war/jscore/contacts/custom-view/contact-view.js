@@ -112,7 +112,7 @@ function setupViews(cel, button_name) {
 			success : function() {
 				$("#view-list", cel).html(customView.el);
 				
-				if(readCookie('company_filter'))
+				if(readCookie('company_filter') || readCookie('contact_filter_type') == 'COMPANY')
 				{
 					$('#contact-view-model-list>li').css('display','none');
 					$('#contact-view-model-list>li:first').css('display','list-item');
