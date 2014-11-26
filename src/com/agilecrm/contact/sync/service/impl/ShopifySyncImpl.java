@@ -345,11 +345,11 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    Map<String, ArrayList<LinkedHashMap<String, Object>>> results = new ObjectMapper().readValue(
 		    response.getStream(), Map.class);
 	    customers = results.get("customers");
-	    int total_customers = getTotalCustomers(shop);
+	    int total_customers = getCustomerCount(accessURl);
 	    
 	    //Some times no customers getting due to invalid response so 
 	    //if customers null again calling the getCustomers method
-	    if(customers==null && (currentPage*MAX_FETCH_RESULT)<total_customers){
+	    if((customers==null && (currentPage*MAX_FETCH_RESULT)<total_customers) || (customers!=null && customers.size()==0 && (currentPage*MAX_FETCH_RESULT)<total_customers)){
 	    	System.out.println("customers is null");
 	    	getCustomers(accessURl,currentPage);
 	    }
