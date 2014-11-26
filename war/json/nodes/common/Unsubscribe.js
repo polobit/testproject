@@ -13,7 +13,7 @@
     "ui": [
         {
             "label": "Select a campaign to unsubscribe",
-            "title":"Unsubscribe from  [ All Campaigns / Select Campaigns ]",
+            "title":"Unsubscribe from All Campaigns / Selected Campaigns",
             "required": "required",
             "category": "Settings",
             "name": "unsubscribe",
