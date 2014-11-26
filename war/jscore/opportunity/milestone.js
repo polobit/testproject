@@ -376,6 +376,13 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone) {
 	var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : oldMilestone });
 	if(!dealPipelineModel)
 		return;
+	try{
+		$('#'+newMilestone+'_count').text(parseInt($('#'+newMilestone+'_count').text())+1);
+		$('#'+oldMilestone+'_count').text(parseInt($('#'+oldMilestone+'_count').text())-1);
+	} catch(err){
+		console.log(err);
+	}
+	
 	dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
 
 	// Add the deal in to new milestone collection.
