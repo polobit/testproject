@@ -1,13 +1,14 @@
 package com.agilecrm.subscription.restrictions.entity.impl;
 
+import com.agilecrm.reports.Reports;
+import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.util.BillingRestrictionReminderUtil;
 import com.agilecrm.workflows.Workflow;
 
-public class WorkflowBillingRestriction extends DaoBillingRestriction
+public class ReportBillingRestriction extends DaoBillingRestriction
 {
-    boolean hardUpdateTags = true;
 
     /**
      * Checks if new workflow does not exceed limits in current plan
@@ -15,58 +16,59 @@ public class WorkflowBillingRestriction extends DaoBillingRestriction
     @Override
     public boolean can_create()
     {
-	restriction.campaigns_count = Workflow.dao.count();
+	restriction.reports_count = ReportsUtil.count();
 
 	if (restriction.sendReminder)
 	    send_warning_message();
 
-	if (restriction.campaigns_count < max_allowed)
+	if (restriction.reports_count < max_allowed)
 	    return true;
 
 	return false;
     }
 
-    /**
-     * Always returns as there are no limits on updation
-     */
     @Override
     public boolean can_update()
     {
-	// TODO Auto-generated method stub
 	return true;
     }
 
     @Override
-    public void send_warning_message()
+    public boolean check()
     {
-	getTag();
-	if (restriction.tagsToAddInOurDomain.isEmpty())
-	    return;
 
-	restriction.sendReminder();
+	Reports report = (Reports) entity;
+	if (report.id == null)
+	    return can_create();
+
+	return can_update();
     }
 
-    /**
-     * Creates restriction object and gets Max allowed workflows count
-     */
     @Override
     public void setMax()
     {
 	if (restriction == null)
 	    restriction = BillingRestrictionUtil.getInstance(sendReminder);
 
-	max_allowed = restriction.planDetails.getWorkflowLimit();
+	max_allowed = restriction.planDetails.getReportsLimit();
     }
 
     @Override
     public String getTag()
     {
 	System.out.println(max_allowed);
-	System.out.println(restriction.campaigns_count);
-	String tag = BillingRestrictionReminderUtil.getTag(restriction.campaigns_count, max_allowed, "Workflow",
+	System.out.println();
+	Integer percentage = BillingRestrictionReminderUtil.calculatePercentage(max_allowed, restriction.reports_count);
+	
+	if(percentage < 75)
+	    return null;
+	
+	String tag = BillingRestrictionReminderUtil.getTag(restriction.reports_count, max_allowed, "Report",
 		hardUpdateTags);
+	
+	if(!canAddTag(percentage, tag))
+	    return null;
 
-	System.out.println(restriction.campaigns_count + ", " + max_allowed);
 	System.out.println("system tag");
 	System.out.println(tag);
 	if (tag != null)
@@ -74,14 +76,5 @@ public class WorkflowBillingRestriction extends DaoBillingRestriction
 
 	return tag;
     }
-
-    @Override
-    public boolean check()
-    {
-	Workflow workflow = (Workflow) entity;
-	if (workflow.id == null)
-	    return can_create();
-
-	return can_update();
-    }
+    
 }
