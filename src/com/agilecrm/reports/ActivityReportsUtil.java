@@ -488,10 +488,16 @@ public class ActivityReportsUtil
 		taskUpdated.add(act);
 	    }
 	}
-	// For tasks assigned to the user.
-	activities = ActivityUtil.getActivitiesByFilter(null, Activity.EntityType.TASK.toString(),
-		Activity.ActivityType.TASK_ADD + " OR " + Activity.ActivityType.TASK_OWNER_CHANGE, null, startTime,
-		endTime, 0, null);
+
+	// Get the deals assigned to this user (Can be assigned by the other
+	// users also.)
+	List<String> activityTypeList = new ArrayList<String>();
+	activityTypeList.add(Activity.ActivityType.TASK_ADD.toString());
+	activityTypeList.add(Activity.ActivityType.TASK_OWNER_CHANGE.toString());
+
+	activities = dao.ofy().query(Activity.class).filter("entity_type = ", Activity.EntityType.TASK.toString())
+		.filter("activity_type in ", activityTypeList).filter("time >= ", startTime)
+		.filter("time <= ", endTime).list();
 
 	for (Activity act : activities)
 	{
@@ -521,8 +527,8 @@ public class ActivityReportsUtil
 
 	    if (taskCreated.size() > 0)
 	    {
-		tasksReport.put("taks_assigned_count", taskCreated.size());
-		tasksReport.put("taks_assigned", taskCreated);
+		tasksReport.put("tasks_assigned_count", taskCreated.size());
+		tasksReport.put("tasks_assigned", taskCreated);
 	    }
 
 	    int total = taskCreated.size() + taskUpdated.size() + taskComplete.size();

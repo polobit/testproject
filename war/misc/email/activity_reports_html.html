@@ -120,20 +120,20 @@
 							</td>
 						</tr>
 						{{/tasks.tasks_inprogress_count}}
-						{{#tasks.taks_assigned_count}}
+						{{#tasks.tasks_assigned_count}}
 						<tr>
 							<td style="background-color:lightgray;width:30%;vertical-align:top;">
-								<p style="margin:0px;font-weight:bold;">Assigned</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{tasks.taks_assigned_count}}</span>
+								<p style="margin:0px;font-weight:bold;">Assigned</p> <span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{tasks.tasks_assigned_count}}</span>
 							</td>
 							<td style="color:#777;">
 								<ul>
-									{{#tasks.taks_assigned}}
+									{{#tasks.tasks_assigned}}
 										<li>'{{label}}' {{{related_contact_ids}}} created on {{time_string}}</li>
-									{{/tasks.taks_assigned}}
+									{{/tasks.tasks_assigned}}
 								</ul>
 							</td>
 						</tr>
-						{{/tasks.taks_assigned_count}}
+						{{/tasks.tasks_assigned_count}}
 					</tbody>
 				</table>
 				{{/tasks.tasks_total}}
