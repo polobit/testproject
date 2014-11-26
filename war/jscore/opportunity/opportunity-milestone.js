@@ -166,6 +166,13 @@ function dealsFetch(index,milestones)
 		$('#'+base_model.get("heading").replace(/ +/g, '')+'-list-container').html(dealCollection.render(true).el)
 		console.log($('#'+base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').length);
 		$('#'+base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').hide();
+		try {
+			$('#'+base_model.get("heading").replace(/ +/g, '')+'_count').text(data.at(0).toJSON().count);
+		}
+		catch(err) {
+		    console.log(err);
+		}
+		
 		$('a.deal-notes').tooltip();
 		// Counter to fetch next sub collection
 		pipeline_count++;
