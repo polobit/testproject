@@ -163,7 +163,7 @@ public class EmailUtil
 
 	String trackingImage = "<div class=\"ag-img\"><img src="
 	        + VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "open?" + queryParams
-	        + "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
+	        + " nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
 
 	return html + trackingImage;
     }
