@@ -2,6 +2,9 @@
  * sound.js plays sounds within the browser. It uses HTML5 Audio to play sounds.
  * @param sound - sound name.
  **/
+// Global variable to use in twilio.js
+audio = null;
+
 function play_sound(sound, is_web_url)
 {
 	var sound_url;
@@ -16,7 +19,7 @@ function play_sound(sound, is_web_url)
 	try
 	{
 		// If browser supports html5 audio
-		var audio = new Audio(sound_url);
+		audio = new Audio(sound_url);
 		audio.play();
 	}
 	catch (err)

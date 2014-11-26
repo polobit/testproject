@@ -52,7 +52,7 @@ template = "pink";
 String width = currentUserPrefs.width;
 boolean is_fluid = !width.isEmpty();
 
-BillingRestriction restriction = BillingRestrictionUtil.getInstance();
+BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(null, null);
 %>
 
 
@@ -125,18 +125,26 @@ document.getElementById('templates').innerHTML=tpl.responseText; //insert in dum
 
 <!-- Templates
 Use = [<]%@ include file="tpl/min/tpl.js" %[>] -->
+		
+	
 
 <!-- Determine Console.logging - we log in local boxes -->
 <%
 boolean debug = true;
 boolean production = false;
+boolean HANDLEBARS_PRECOMPILATION = false;
 if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 {
     debug = false;
+    HANDLEBARS_PRECOMPILATION = true;
+    debug = true;
     production = true;
+   
 }
 
 %>
+
+ <%@ include file="tpl/min/precompiled/tpl.html" %>
 
 </div>
 <!-- Including Footer page -->
@@ -152,7 +160,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = "/";
 
-var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
+var HANDLEBARS_PRECOMPILATION = true || <%=production%>;
 
 
 var CSS_PATH = "/";
@@ -216,9 +224,7 @@ head.js({"core" : 'jscore/min/js-all-min.js'});
 head.js({"stats" : 'stats/min/agile-min.js'});
 head.ready(["core", "stats"], function(){
 	
-	if(HANDLEBARS_PRECOMPILATION)
-		downloadTemplate("tpl.html");
-		else
+	if(!HANDLEBARS_PRECOMPILATION)
 		downloadTemplate("tpl.js");
 
 		// Load User voice then

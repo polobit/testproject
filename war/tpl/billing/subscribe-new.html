@@ -280,13 +280,14 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 				<div class="control-group">
 					<label class="control-label">Emails</label>
 					<div class="controls" style="margin-top: 5px;">
-						{{numeric_operation ../emailPlan.quantity 1000 "*"}} <small>per month</small></div>
+						{{numeric_operation ../emailPlan.quantity 1000 "*"}} <small>per month</small> <br/>
+						<span>{{getRemaininaEmails}}  <small>Remaining</small></span>
 				</div>
+</div>
 				<div class="control-group" style="margin-top: -5%">
 					<label class="control-label" style="margin-top: -2%">Cost</label>
-					<div class="controls">${{total}} <br/><small>(Charged @ ${{numeric_operation plan.amount "100" "/"}} per thousand)</small></div>
+					<div class="controls">${{total}} <small>(Charged @ ${{numeric_operation plan.amount "100" "/"}} per thousand)</small></div>
 				</div>	
-				</br>
 				<div class="control-group" style="margin-top: -5%">
 					<label class="control-label" style="margin-top: -2%">Next Invoice</label>
 					<div class="controls">
@@ -296,9 +297,12 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 				</div>
 </div>
 				{{else}}
-				<div style="margin-top: 10%; text-align: center; font-size: 15px">
+				<div style="margin-top: 10%; text-align: center;">
 					5000 Emails <br />
-				<div style="margin-top:10px"><small> Powered by Agile CRM </small></div>
+				<div><small>(One time free emails powered by Agile CRM)</small></div>
+
+				<div style="margin-top:25px;margin-bottom:30px; text-align: center;">
+					{{getRemaininaEmails}} Emails remaining
 				</div>
 </div>
 			{{/getSubscriptionBasedOnPlan}}

@@ -280,7 +280,6 @@ $(function()
 	Handlebars.registerHelper('icons', function(item)
 	{
 		 
-		console.log('mamasri code');
 		item = item.toLowerCase().trim();
 		console.log(item);
 		if (item == "email")
@@ -3063,6 +3062,11 @@ $(function()
 	// To pick randomly selected avatar url
 	Handlebars.registerHelper('pick_random_avatar_url', function(options) {
 		return choose_random_avatar();
+	});
+	
+	Handlebars.registerHelper('getRemaininaEmails', function()
+	{
+		return getPendingEmails();
 	});
 
 });

@@ -209,7 +209,7 @@ public class SendGrid
 	queryString += "&" + addToEmailsToParams(EmailUtil.getStringTokenSet(to, ","), SENDGRID_API_PARAM_MULTIPLE_TO);
 
 	// Appends CC
-	if (!StringUtils.isEmpty(bcc))
+	if (!StringUtils.isEmpty(cc))
 	    queryString += "&"
 		    + addToEmailsToParams(EmailUtil.getStringTokenSet(cc, ","), SENDGRID_API_PARAM_MULTIPLE_CC);
 
