@@ -520,7 +520,7 @@ function loadAgileEvents()
 				{
 
 								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/list', templateKey : "events", individual_tag_name : 'tr',
-												sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 10 });
+												sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25 });
 								eventCollectionView.appendItem = appendItem2;
 								eventCollectionView.collection.fetch();
 
@@ -557,7 +557,7 @@ function loadGoogleEvents()
 																var view = readCookie("agile_calendar_view");
 																if (view == "calendar_list_view")
 																{
-																				var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary', maxResults : 10, singleEvents : true, orderBy : 'startTime' });
+																				var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, orderBy : 'startTime' });
 																				request.execute(function(resp)
 																				{
 																								var events = new Array();
@@ -619,7 +619,7 @@ function loadMoreEventsFromGoogle()
 												gapi.auth.setToken({ access_token : accessToken, state : "https://www.googleapis.com/auth/calendar" });
 
 												// Retrieve the events from primary
-												var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary', maxResults : 10, singleEvents : true, pageToken : googleNextPageToken,
+												var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary', maxResults : 20, singleEvents : true, pageToken : googleNextPageToken,
 																orderBy : 'startTime' });
 
 												request.execute(function(resp)
