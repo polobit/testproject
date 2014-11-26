@@ -140,7 +140,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    }
 	    catch (Exception e)
 	    {
-	    	System.out.println("After exception raised in initSync(), updating last sync prefs "+e.getMessage());
+	    	System.out.println("After exception raised in initSync(), updating last sync prefs----- "+e.getMessage());
 		updateLastSyncedInPrefs();
 		e.printStackTrace();
 	    }
@@ -203,7 +203,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	{
 	    
 	    // retries when any problem happence
-		System.out.println("After exception raised in updateLastSyncedInPrefs(), updating last sync prefs "+e.getMessage());
+		System.out.println("After exception raised in updateLastSyncedInPrefs(), updating last sync prefs------- "+e.getMessage());
 	    updateLastSyncedInPrefs();
 	    e.printStackTrace();
 	}
