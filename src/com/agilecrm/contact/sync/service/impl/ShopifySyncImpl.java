@@ -104,9 +104,10 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    	if(updatedCustomersList!=null)
 		    		System.out.println("updatedCustomersList size-----"+updatedCustomersList.size());
 		    }
-
-		    customers.addAll(newCustomersList);
-		    customers.addAll(updatedCustomersList);
+		    if(newCustomersList!=null)
+		    	customers.addAll(newCustomersList);
+		    if(updatedCustomersList!=null)
+		    	customers.addAll(updatedCustomersList);
 		    
 		    if(newCustomersList!=null && newCustomersList.size()==0 && updatedCustomersList!=null && updatedCustomersList.size()==0)
 		    	break;
