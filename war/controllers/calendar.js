@@ -263,7 +263,7 @@ function appendItem1(base_model)
 								$('#next-week-event', this.el).append(itemView.render().el);
 								$('#next-week-event', this.el).parent('table').css("display", "block");
 								$('#next-week-event', this.el).show();
-								if ($('#tomorrow-event').children().length > 0)
+								if ($('#tomorrow-event').children().length > 0 || 	$('#today-event').children().length > 0)
 								{
 												$('#next-week-heading', this.el).show();
 
@@ -298,6 +298,17 @@ function appendGoogleEvent(base_model)
 				$('#google_event', this.el).append(itemView.render().el);
 				$('#google_event', this.el).parent('table').css("display", "block");
 				$('#google_event', this.el).show();
+				if ($('#event-owner').val() == "")
+				{
+								if ($('.e_owner').hasClass('hide'))
+												$('.e_owner').removeClass('hide');
+
+				}
+				else
+				{
+
+								$('.e_owner').addClass('hide');
+				}
 
 }
 
@@ -342,11 +353,23 @@ function appendGoogleEventCategorization(base_model)
 								$('#next-week-event', this.el).append(itemView.render().el);
 								$('#next-week-event', this.el).parent('table').css("display", "block");
 								$('#next-week-event', this.el).show();
-								if ($('#tomorrow-event', this.el).children().length > 0)
+								if ($('#tomorrow-event', this.el).children().length > 0 || ('#today-event').children().length > 0)
 								{
 												$('#next-week-heading', this.el).show();
 
 								}
+				}
+				
+				if ($('#event-owner').val() == "")
+				{
+								if ($('.e_owner').hasClass('hide'))
+												$('.e_owner').removeClass('hide');
+
+				}
+				else
+				{
+
+								$('.e_owner').addClass('hide');
 				}
 
 }
@@ -497,7 +520,7 @@ function loadAgileEvents()
 				{
 
 								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/list', templateKey : "events", individual_tag_name : 'tr',
-												sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25 });
+												sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 10 });
 								eventCollectionView.appendItem = appendItem2;
 								eventCollectionView.collection.fetch();
 
