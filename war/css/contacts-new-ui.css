@@ -343,14 +343,11 @@ text-transform: capitalize;
 	
 	
 }
-.contact-right-widgetsview i:not(.icon-user)
+.contact-phone i,.contact-email-icon i,.contact-custom-icon  i,.contact-addressview i
 {
 	color:#888;
 }
-.contact-right-widgetsview i:not(#widgets i)
-{
-	color:#000;
-}
+
 .contact-make-call,.contact-email-multiline a
 {
 	color:#000;
