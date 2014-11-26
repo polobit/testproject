@@ -41,6 +41,13 @@ public class PlanLimits
     protected String reporting;
     protected boolean whiteLabelEnabled;
     protected boolean emailWhiteLabelEnabled;
+    
+    /**
+     * New plan restrictions
+     */
+    protected Integer reportsLimit;
+    protected Integer widgetsLimit;
+    protected Integer TriggersLimit;
 
     protected Integer campaignNodesLimit;
     /**
@@ -229,5 +236,20 @@ public class PlanLimits
     public void setEmailWhiteLabelEnabled(boolean emailWhiteLabelEnabled)
     {
 	this.emailWhiteLabelEnabled = emailWhiteLabelEnabled;
+    }
+
+    public Integer getReportsLimit()
+    {
+        return reportsLimit;
+    }
+
+    public Integer getWidgetsLimit()
+    {
+        return widgetsLimit;
+    }
+
+    public Integer getTriggersLimit()
+    {
+        return TriggersLimit;
     }
 }

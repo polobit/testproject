@@ -63,6 +63,19 @@ public class BillingRestriction
     public Integer users_count;
 
     public Integer companies_count;
+    
+    /**
+     * New limits
+     */
+    @NotSaved(IfDefault.class)
+    public Integer reports_count = 0;
+    
+    @NotSaved(IfDefault.class)
+    public Integer triggers_count = 0;
+    
+    @NotSaved(IfDefault.class)
+    public Integer widgets_count = 0;
+    
 
     public Integer one_time_emails_count = 0;
 
