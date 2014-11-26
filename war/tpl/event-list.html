@@ -31,8 +31,17 @@
 </script>
 
 <script id="future-model-template" type="text/html">
-<td style="cursor: pointer;">
-<div class="row" style="margin-left:3px;" onclick=show_model({{id}})>
+<td class="e_owner" style="cursor: pointer;" onclick=show_model({{id}})>
+    <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:4em;overflow:hidden;">
+       {{#if pic}}
+        <img class="thumbnail" src="{{pic}}" width="40px" height="40px" title="{{owner.name}}" />
+	   {{else}}
+		<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{owner.name}}" />
+       {{/if}}
+    </div>
+</td>
+<td>
+<div class="row" style="margin-left:3px;cursor: pointer;" onclick=show_model({{id}})>
 <div class="span8">
 <div class="line-clamp">{{title}}</div></div>
 
@@ -45,7 +54,7 @@
 <div class="clearfix"></div>
 
 <div class="row" style="margin-left:3px;">
-<div class="span4" onclick=show_model({{id}})>{{getCustomDateWithTime start end}}</div>
+<div class="span4" onclick=show_model({{id}}) style="cursor: pointer;">{{getCustomDateWithTime start end}}</div>
 
 <div class="span8" style="text-align:right;cursor: default;">
 {{#if contacts.length}} 

@@ -10,7 +10,10 @@
 
 $(function()
 {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 81b3629... Fixed event in place update
 				/**
 				 * Shows activity modal, and highlights the event form features (Shows event
 				 * form and hides task form, changes color and font-weight)
@@ -55,16 +58,17 @@ $(function()
 								if (readCookie("agile_calendar_view"))
 								{
 
-												save_event('updateActivityForm', 'updateActivityModal', true, this, function(data){
-																console.log(data);
-																var eventModel = eventCollectionView.collection.get(eventId);
-																eventModel.set(data.toJSON(), {merge: true});
-												});
+												var eventModel = eventCollectionView.collection.get(eventId);
+												var formData = serializeForm('updateActivityForm');
 
-								}else{
-												save_event('updateActivityForm', 'updateActivityModal', true, this);
 								}
-							
+								save_event('updateActivityForm', 'updateActivityModal', true, this, function(data)
+								{
+												console.log(data);
+												var eventModel = eventCollectionView.collection.get(eventId);
+												eventModel.set(data.toJSON(), { merge : true });
+								});
+
 				});
 
 				/**
@@ -84,7 +88,7 @@ $(function()
 								if (!confirm("Are you sure you want to delete?"))
 												return;
 
-								var event_id = $('#updateActivityForm input[name=id]').val();
+								var event_id = $('#updateActivityForm input[name=id]').val()
 								var save_button = $(this);
 
 								disable_save_button(save_button);
@@ -98,9 +102,9 @@ $(function()
 												// $('#updateActivityModal').find('span.save-status img').remove();
 												enable_save_button(save_button);
 												$("#updateActivityModal").modal('hide');
-												var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
 												$('#calendar_event').fullCalendar('removeEvents', eventId);
 								} });
+								var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
 								if (readCookie("agile_calendar_view"))
 								{
 
@@ -109,6 +113,7 @@ $(function()
 												document.location.reload();
 
 								}
+
 				});
 
 				/**
@@ -388,6 +393,7 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 								// Removes disabled attribute of save button
 								enable_save_button($(saveBtn));
 								return false;
+<<<<<<< HEAD
 				}
 
 				var json = serializeForm(formId);
@@ -408,6 +414,28 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 								return;
 				}
 
+=======
+				}
+
+				var json = serializeForm(formId);
+
+				if (json.allDay)
+				{
+								json.end = json.start;
+								json.start_time = "00:00";
+								json.end_time = "23:45";
+				}// for all day, assume ending in last of that day.
+
+				// For validation
+				if (!is_valid_range(json.start * 1000, json.end * 1000, (json.start_time).split(":"), (json.end_time).split(":"), modalName))
+				{
+
+								// Removes disabled attribute of save button
+								enable_save_button($(saveBtn));
+								return;
+				}
+
+>>>>>>> 81b3629... Fixed event in place update
 				// Show loading symbol until model get saved
 				// $('#' + modalName).find('span.save-status').html(getRandomLoadingImg());
 
@@ -453,9 +481,15 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 
 												// When updating an event remove the old event from fullCalendar
 												if (isUpdate)
+<<<<<<< HEAD
 																$('#calendar').fullCalendar('removeEvents', json.id);
 
 												$('#calendar').fullCalendar('renderEvent', data.toJSON());
+=======
+																$('#calendar_event').fullCalendar('removeEvents', json.id);
+
+												$('#calendar_event').fullCalendar('renderEvent', data.toJSON());
+>>>>>>> 81b3629... Fixed event in place update
 								}
 								// Updates data to temeline
 								else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
@@ -495,13 +529,21 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 
 																				return false;
 																}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 81b3629... Fixed event in place update
 												});
 								}
 								else
 												App_Calendar.navigate("calendar", { trigger : true });
+<<<<<<< HEAD
 								
 								if(callback && typeof callback === 'function')
+=======
+
+								if (callback && typeof callback === 'function')
+>>>>>>> 81b3629... Fixed event in place update
 												callback(data);
 				} });
 }
