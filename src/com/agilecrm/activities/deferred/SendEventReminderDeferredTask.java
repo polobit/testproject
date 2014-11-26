@@ -249,7 +249,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    map.put("events", eventListMap);
 
 		    // Sends mail to the domain user.
-		    SendMail.sendMail("maildummy800@gmail.com", "Event Reminder :" + event.title + "@" + event.date
+		    SendMail.sendMail("maildummy800@gmail.com", "Event Reminder: " + event.title + "@" + event.date
 			    + " domain name " + domain, SendMail.START_EVENT_REMINDER, map);
 		}
 	    }
