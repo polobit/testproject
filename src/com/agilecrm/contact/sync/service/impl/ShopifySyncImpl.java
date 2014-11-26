@@ -113,6 +113,8 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    	break;
 		    if (!isLimitExceeded())
 		    {
+		    	if(customers!=null)
+		    		System.out.println("customers size----------"+customers.size());
 			for (int i = 0; i < customers.size(); i++)
 			{
 
@@ -138,7 +140,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    }
 	    catch (Exception e)
 	    {
-	    	System.out.println("After exception raised in initSync(), updating last sync prefs");
+	    	System.out.println("After exception raised in initSync(), updating last sync prefs "+e.getMessage());
 		updateLastSyncedInPrefs();
 		e.printStackTrace();
 	    }
@@ -201,7 +203,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	{
 	    
 	    // retries when any problem happence
-		System.out.println("After exception raised in updateLastSyncedInPrefs(), updating last sync prefs");
+		System.out.println("After exception raised in updateLastSyncedInPrefs(), updating last sync prefs "+e.getMessage());
 	    updateLastSyncedInPrefs();
 	    e.printStackTrace();
 	}
