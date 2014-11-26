@@ -8,7 +8,6 @@ import com.agilecrm.subscription.restrictions.entity.impl.ReportGraphBillingRest
 import com.agilecrm.subscription.restrictions.entity.impl.TriggerBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.WebRuleBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.WorkflowBillingRestriction;
-import com.agilecrm.workflows.triggers.Trigger;
 
 /**
  * <code>DoaBillingRestriction</code> class is abstract class based on

@@ -29,6 +29,6 @@ public class StarterPlanLimits extends PlanLimits
 		 */
 		widgetsLimit = 1;
 		reportsLimit = 2;
-		TriggersLimit = 0;
+		TriggersLimit = 1;
 	}
 }
