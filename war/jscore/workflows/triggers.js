@@ -39,7 +39,7 @@ $(function()
 			$('form#addTriggerForm').find('div#trigger-inbound-mail-event').css('display', 'none');
 		}
 		
-		if($(this).val() != 'EMAIL_OPENED' || $(this).val() != 'LINK_CLICKED'){
+		if($(this).val() != 'EMAIL_OPENED' || $(this).val() != 'EMAIL_LINK_CLICKED'){
 			$('form#addTriggerForm').find('select#email-tracking-type').closest('div.control-group').css('display', 'none');
 			
 			$('form#addTriggerForm').find('#custom-link-clicked').closest('div.control-group').css('display', 'none');
@@ -89,10 +89,10 @@ $(function()
 			populate_inbound_mail_events_in_trigger($('form#addTriggerForm'), 'trigger-inbound-mail-event');
 		}
 		
-		if($(this).val() == 'EMAIL_OPENED' || $(this).val() == 'LINK_CLICKED'){
+		if($(this).val() == 'EMAIL_OPENED' || $(this).val() == 'EMAIL_LINK_CLICKED'){
 			$('form#addTriggerForm').find('#email-tracking-type').closest('div.control-group').css('display', '');
 			
-			if($(this).val() == 'LINK_CLICKED')
+			if($(this).val() == 'EMAIL_LINK_CLICKED')
 				$('form#addTriggerForm').find('#custom-link-clicked').closest('div.control-group').css('display', '');
 		}
 			

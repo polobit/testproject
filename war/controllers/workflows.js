@@ -545,7 +545,7 @@ var WorkflowsRouter = Backbone.Router
 							populate_inbound_mail_events_in_trigger($('form#addTriggerForm', el), 'trigger-inbound-mail-event');
 						}
 						
-						if(type == 'EMAIL_OPENED' || type == 'LINK_CLICKED')
+						if(type == 'EMAIL_OPENED' || type == 'EMAIL_LINK_CLICKED')
 						{
 							// Show custom tags textbox
 							$('#email-tracking-type', el).closest('div.control-group').css('display', '');
@@ -587,7 +587,7 @@ var WorkflowsRouter = Backbone.Router
 								}, optionsTemplate, false, el);
 							}
 							
-							if(type == 'LINK_CLICKED')
+							if(type == 'EMAIL_LINK_CLICKED')
 							{
 								// Show custom tags textbox
 								$('#custom-link-clicked', el).closest('div.control-group').css('display', '');

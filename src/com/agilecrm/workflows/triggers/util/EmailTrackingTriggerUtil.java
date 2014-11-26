@@ -70,7 +70,7 @@ public class EmailTrackingTriggerUtil
 
     public static void executeLinkClickedTrigger(String subscriberId, String campaignId, String linkClicked)
     {
-	List<Trigger> triggers = TriggerUtil.getTriggersByCondition(Trigger.Type.LINK_CLICKED);
+	List<Trigger> triggers = TriggerUtil.getTriggersByCondition(Trigger.Type.EMAIL_LINK_CLICKED);
 
 	Long contactId = null;
 	Long workflowId = null;
@@ -90,7 +90,7 @@ public class EmailTrackingTriggerUtil
 	if (trigger == null)
 	    return;
 
-	if (!trigger.type.equals(Type.LINK_CLICKED))
+	if (!trigger.type.equals(Type.EMAIL_LINK_CLICKED))
 	    return;
 
 	Contact contact = null;
