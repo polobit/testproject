@@ -126,10 +126,10 @@ ObjectMapper mapper = new ObjectMapper();
 							class="timezone1">Timezone </span>
 						</span>
 					</div>
-					<div class="col-sm-4 col-xs-12">
+					<div class="col-md-4 col-sm-12 col-xs-12">
 						<div id="datepick" style="height:215px;"></div>
 					</div>
-					<div class="col-sm-6 col-xs-12">
+					<div class="col-md-8 col-sm-12 col-xs-12">
 						<p class="availability">Availability on</p>
 						<ul class="checkbox-main-grid">
 
