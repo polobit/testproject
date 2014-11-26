@@ -11,13 +11,13 @@
 <%
     // Get Catalog
     String[] EMAIL_CATALOG = {"json/nodes/email/send_email.jsp","json/nodes/email/ab.js", "json/nodes/email/clicked.js","json/nodes/email/opened.js"};
-    String[] UTILITIES_CATALOG = {"json/nodes/common/close_case.js","json/nodes/common/change_deal_milestone.js","json/nodes/crm/has_deal.js","json/nodes/common/wait.js","json/nodes/common/wait_till.jsp","json/nodes/common/check_tags.js","json/nodes/crm/set_owner.jsp","json/nodes/crm/transfer.jsp","json/nodes/common/set_property.js"};
+    String[] UTILITIES_CATALOG = {"json/nodes/common/close_case.js","json/nodes/common/change_deal_milestone.js","json/nodes/crm/has_deal.js","json/nodes/common/wait.js","json/nodes/common/wait_till.jsp","json/nodes/common/check_tags.js","json/nodes/crm/set_owner.jsp","json/nodes/crm/transfer.jsp","json/nodes/common/set_property.js" ,"json/nodes/common/Unsubscribe.js"};};
     String[] MOBILE_CATALOG = { "json/nodes/sms/sendmessage.js"};
 		   /* ,"json/nodes/sms/getmessage.js", "json/nodes/sms/menusms.js" };  */
     String[] DEVELOPERS_CATALOG = { "json/nodes/developers/jsonio.js", "json/nodes/developers/condition.js"};
     String[] CRM_CATALOG = {"json/nodes/crm/adddeal.jsp","json/nodes/crm/addnote.js","json/nodes/crm/addtask.jsp","json/nodes/common/add_case.js","json/nodes/crm/tags.js", "json/nodes/common/score.js", "json/nodes/crm/notify.js"};
     String[] SOCIAL_CATALOG = {"json/nodes/social/tweet.js"};
-    String [] WEB_CATALOG = {"json/nodes/common/url.js","json/nodes/common/unsubscribe.js"};
+    String [] WEB_CATALOG = {"json/nodes/common/url.js"};
 
     // Download Each Catalog
     JSONArray jsonArray = new JSONArray();

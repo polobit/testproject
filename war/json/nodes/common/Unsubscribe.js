@@ -2,8 +2,8 @@
     "name": "Unsubscribe",
     "thumbnail": "json/nodes/images/common/unsubscribe.png",
     "icon": "json/nodes/icons/common/unsubscribe.png",
-    "info": "Unsubscribe info",
-    "help": "Unsubscribe help",
+    "info": "Select the campaign(s) to unsubscribe from.",
+    "help": "Unsubscribe the contact from selected campaigns.",
     "author": "Bhasuri",
     "company": "Agile",
     "language": "en",
@@ -13,6 +13,7 @@
     "ui": [
         {
             "label": "Select a campaign to unsubscribe",
+            "title":"Unsubscribe from  [ All Campaigns / Select Campaigns ]",
             "required": "required",
             "category": "Settings",
             "name": "unsubscribe",
@@ -23,12 +24,12 @@
             "style":
             	{
             	"margin-top": "10px",
-            "height": "24px"
+            "height": "100px"
 
             	}
         },
         {
-            "label": "help text for unsubscribe",
+            "label": "Unsubscribe the contact from selected campaigns.",
             "category": "Help",
             "componet": "label",
             "type": "label"

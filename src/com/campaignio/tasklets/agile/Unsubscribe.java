@@ -1,7 +1,11 @@
 package com.campaignio.tasklets.agile;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.util.ContactUtil;
@@ -25,85 +29,112 @@ import com.campaignio.tasklets.util.TaskletUtil;
 public class Unsubscribe extends TaskletAdapter
 {
 	/**
-	 * Given URL
+	 * Selected property - Yes
 	 */
-	public static String URL_VALUE = "url_value";
+	public static String BRANCH_YES = "All";
 
 	/**
-	 * Given URL type
+	 * Selected property - No
 	 */
-	public static String TYPE = "type";
+	public static String BRANCH_NO = "No";
 
-	/**
-	 * Exact URL type
+	/*
+	 * Unsubscibe select field
 	 */
-	public static String EXACT_MATCH = "exact_match";
-
-	/**
-	 * Like URL type
-	 */
-	public static String CONTAINS = "contains";
-
-	/**
-	 * Branch Yes
-	 */
-	public static String BRANCH_YES = "yes";
-
-	/**
-	 * Branch No
-	 */
-	public static String BRANCH_NO = "no";
-
-	/**
-	 * Number of days or hours to be considered
-	 */
-	public static final String DURATION = "duration";
-
-	/**
-	 * Days or Hours
-	 */
-	public static final String DURATION_TYPE = "duration_type";
+	public static String SELECT_ID = "unsubscribe";
 
 	public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
 			throws Exception
 	{
 
 		// Get URL value and type
-		String unsubscribeFrom = getStringValue(nodeJSON, subscriberJSON, data, "unsubscribe");
+		String unsubscribeFrom = getStringValue(nodeJSON, subscriberJSON, data, SELECT_ID);
 
-		if (unsubscribeFrom.equals("All"))
-		{
-			// List<Workflow> workflows= W
-			ContactUtil.workflowListOfAContact((long) subscriberJSON.get("id"));
+		String subscriberID = AgileTaskletUtil.getId(subscriberJSON);
 
-			Iterator<String> workflowIt = ContactUtil.workflowListOfAContact((long) subscriberJSON.get("id"))
-					.iterator();
+		String campaignID = AgileTaskletUtil.getId(campaignJSON);
 
-			while (workflowIt.hasNext())
-			{
-				String w = workflowIt.next();
+		// Get list of all workflows
+		if (BRANCH_YES.equals(unsubscribeFrom))
+			if (unsubscribeAll(subscriberJSON, subscriberID, campaignID))
+				return;
 
-				CronUtil.removeTask(w, String.valueOf(subscriberJSON.get("id")));
-				CampaignStatusUtil.setStatusOfCampaign(AgileTaskletUtil.getId(subscriberJSON), w, "", Status.REMOVED);
+		List<String> campaignIDs = getListOfCampaignIDs(nodeJSON, subscriberJSON, subscriberID, campaignJSON);
 
-			}
-			CampaignStatusUtil.setStatusOfCampaign(AgileTaskletUtil.getId(subscriberJSON),
-					AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getCampaignNameFromJSON(campaignJSON),
-					Status.DONE);
+		int campaignIDsSize = campaignIDs.size();
 
-			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-					"We are unsubscribed from all ", LogType.SMS_SENT.toString());
+		for (int i = 0; i < campaignIDsSize; i++)
+			setStatus(campaignIDs.get(i), subscriberID);
+
+		LogUtil.addLogToSQL(campaignID, subscriberID, "We are unsubscribed from few campaigns ",
+				LogType.UNSUBSCRIBED_CAMPAIGN.toString());
+
+		if (campaignIDs.contains(campaignID))
 			return;
-		}
-		CronUtil.removeTask(String.valueOf(campaignJSON.get("id")), String.valueOf(subscriberJSON.get("id")));
-		CampaignStatusUtil.setStatusOfCampaign(AgileTaskletUtil.getId(subscriberJSON),
-				String.valueOf(campaignJSON.get("id")), "", Status.REMOVED);
-
-		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-				"We are unsubscribed from this ", LogType.SMS_SENT.toString());
 
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
 
+	}
+
+	private boolean unsubscribeAll(JSONObject subscriberJSON, String subscriberID, String campaignID)
+	{
+
+		Iterator<String> workflowsIDs;
+		workflowsIDs = ContactUtil.workflowListOfAContact(Long.parseLong(subscriberID)).iterator();
+
+		// remove each workflow from cron and set their status to removed
+		while (workflowsIDs.hasNext())
+			setStatus(workflowsIDs.next(), subscriberID);
+
+		LogUtil.addLogToSQL(campaignID, subscriberID, "Unsubscribed from all campaigns",
+				LogType.UNSUBSCRIBED_CAMPAIGN.toString());
+		return true;
+	}
+
+	private List<String> getListOfCampaignIDs(JSONObject nodeJSON, JSONObject subscriberJSON, String subscriberID,
+			JSONObject campaignJSON)
+	{
+		List<String> campaignIDs = new ArrayList<String>();
+		JSONArray jsonArray;
+		try
+		{
+			jsonArray = nodeJSON.getJSONArray(JSON_VALUES);
+			int jsonArrayLength = jsonArray.length();
+
+			// Iterate through name/value pairs. First one is the select option
+			// ID and multi select ID
+
+			for (int i = 1; i < jsonArrayLength; i++)
+			{
+				// Get the each JSON data
+
+				JSONObject json = jsonArray.getJSONObject(i);
+
+				// For Serialized data from ui - you will get name, value
+				// pairs
+				if (json.has("name"))
+					campaignIDs.add((String) json.get("value"));
+
+			}
+		}
+		catch (JSONException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new ArrayList<String>();
+		}
+
+		return campaignIDs;
+	}
+
+	private void setStatus(String workflowID, String subscriberID)
+	{
+
+		// remove workflow from cron
+		CronUtil.removeTask(workflowID, subscriberID);
+
+		// set status as removed
+		CampaignStatusUtil.setStatusOfCampaign(subscriberID, workflowID, "", Status.REMOVED);
 	}
 }
