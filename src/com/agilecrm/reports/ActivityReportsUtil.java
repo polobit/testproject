@@ -295,32 +295,43 @@ public class ActivityReportsUtil
 	    {
 		wonValue += deal.expected_value;
 
-		wonActivities.get(deal.id).custom4 = "(" + currency + formatter.format(deal.expected_value) + ", "
-			+ deal.probability + "%, " + deal.getPipeline().name + ")";
-
+		String summary = "(" + currency + formatter.format(deal.expected_value) + ", " + deal.probability + "%";
+		if (!deal.getPipeline().name.equals("Default"))
+		    summary += ", " + deal.getPipeline().name;
+		summary += ")";
+		wonActivities.get(deal.id).custom4 = summary;
 		wonCount++;
 	    }
 	    for (Opportunity deal : dealsLost)
 	    {
 		lostValue += deal.expected_value;
-		lostActivities.get(deal.id).custom4 = "(" + currency + formatter.format(deal.expected_value) + ", "
-			+ deal.probability + "%, " + deal.getPipeline().name + ")";
+		String summary = "(" + currency + formatter.format(deal.expected_value) + ", " + deal.probability + "%";
+		if (!deal.getPipeline().name.equals("Default"))
+		    summary += ", " + deal.getPipeline().name;
+		summary += ")";
+		lostActivities.get(deal.id).custom4 = summary;
 		lostCount++;
 	    }
 
 	    for (Opportunity deal : dealsCreated)
 	    {
 		newValue += deal.expected_value;
-		newDealActivities.get(deal.id).custom4 = "(" + currency + formatter.format(deal.expected_value) + ", "
-			+ deal.probability + "%, " + deal.getPipeline().name + ")";
+		String summary = "(" + currency + formatter.format(deal.expected_value) + ", " + deal.probability + "%";
+		if (!deal.getPipeline().name.equals("Default"))
+		    summary += ", " + deal.getPipeline().name;
+		summary += ")";
+		newDealActivities.get(deal.id).custom4 = summary;
 		newCount++;
 	    }
 
 	    for (Opportunity deal : dealsMileChange)
 	    {
 		mileValue += deal.expected_value;
-		mileChangeActivities.get(deal.id).custom4 = "(" + currency + formatter.format(deal.expected_value)
-			+ ", " + deal.probability + "%, " + deal.getPipeline().name + ")";
+		String summary = "(" + currency + formatter.format(deal.expected_value) + ", " + deal.probability + "%";
+		if (!deal.getPipeline().name.equals("Default"))
+		    summary += ", " + deal.getPipeline().name;
+		summary += ")";
+		mileChangeActivities.get(deal.id).custom4 = summary;
 		mileCount++;
 	    }
 
@@ -438,7 +449,13 @@ public class ActivityReportsUtil
 		eventsReport.put("events_moved", eventMovedActivity);
 	    }
 
-	    int total = events.size() + eventMovedActivity.size();
+	    if (eventAddActivity.size() > 0)
+	    {
+		eventsReport.put("events_added_count", eventAddActivity.size());
+		eventsReport.put("events_added", eventAddActivity);
+	    }
+
+	    int total = events.size() + eventMovedActivity.size() + eventAddActivity.size();
 	    if (total > 0)
 		eventsReport.put("events_total", total);
 	}

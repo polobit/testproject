@@ -157,10 +157,24 @@
 							</td>
 						</tr>
 						{{/events.events_count}}
+						{{#events.events_added_count}}
+						<tr>
+							<td style="background-color:lightgray;width:30%;border-bottom-style:solid;border-bottom-width:1px !important;border-bottom-color:grey;vertical-align:top;">
+								<p style="margin:0px;font-weight:bold;">New</p><span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{events.events_added_count}}</span>
+							</td>
+							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
+								<ul>
+									{{#events.events_added}}
+										<li>Event '{{custom1}}' added on {{time_string}}</li>
+									{{/events.events_added}}
+								</ul>
+							</td>
+						</tr>
+						{{/events.events_added_count}}
 						{{#events.event_moved_count}}
 						<tr>
 							<td style="background-color:lightgray;width:30%;vertical-align:top;">
-								<p style="margin:0px;font-weight:bold;">Rescheduled</p><span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{events.events_count}}</span>
+								<p style="margin:0px;font-weight:bold;">Rescheduled</p><span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{events.event_moved_count}}</span>
 							</td>
 							<td style="color:#777;">
 								<ul>
