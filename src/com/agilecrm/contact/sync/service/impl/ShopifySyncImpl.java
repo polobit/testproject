@@ -125,16 +125,19 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    }
 		    else
 		    {
+		    	System.out.println("Limit exceeded so updating last sync prefs");
 			updateLastSyncedInPrefs();
 			break;
 		    }
 		    currentPage += 1;
 		}
 		sendNotification(prefs.type.getNotificationEmailSubject());
+		System.out.println("After mail notification, updating last sync prefs");
 		updateLastSyncedInPrefs();
 	    }
 	    catch (Exception e)
 	    {
+	    	System.out.println("After exception raised in initSync(), updating last sync prefs");
 		updateLastSyncedInPrefs();
 		e.printStackTrace();
 	    }
@@ -197,7 +200,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	{
 	    
 	    // retries when any problem happence
-	    
+		System.out.println("After exception raised in updateLastSyncedInPrefs(), updating last sync prefs");
 	    updateLastSyncedInPrefs();
 	    e.printStackTrace();
 	}
