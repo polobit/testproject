@@ -341,8 +341,17 @@ text-transform: capitalize;
 	margin-right:5px;
 	text-decoration:none;
 	
+	
+}
+.contact-right-widgetsview i:not(.icon-user)
+{
+	color:#888;
 }
 .contact-right-widgetsview i:not(#widgets i)
+{
+	color:#000;
+}
+.contact-make-call,.contact-email-multiline a
 {
 	color:#000;
 }
