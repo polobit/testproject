@@ -96,11 +96,11 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    ArrayList<LinkedHashMap<String, Object>> newCustomersList= new ArrayList<LinkedHashMap<String, Object>>();
 		    ArrayList<LinkedHashMap<String, Object>> updatedCustomersList= new ArrayList<LinkedHashMap<String, Object>>();
 		    
-		    newCustomersList=getCustomers(materializeURL(shop, "customers", currentPage, "new"));
+		    newCustomersList=getCustomers(materializeURL(shop, "customers", currentPage, "new"),currentPage);
 		    if(newCustomersList!=null)
 		    	System.out.println("newCustomersList size-----"+newCustomersList.size());
 		    if(lastSyncPoint!=null){
-		    	updatedCustomersList=getCustomers(materializeURL(shop, "customers", currentPage, "edited"));
+		    	updatedCustomersList=getCustomers(materializeURL(shop, "customers", currentPage, "edited"),currentPage);
 		    	if(updatedCustomersList!=null)
 		    		System.out.println("updatedCustomersList size-----"+updatedCustomersList.size());
 		    }
@@ -333,7 +333,7 @@ public class ShopifySyncImpl extends OneWaySyncService
      *            the access url
      * @return ArrayList of Customers
      */
-    public ArrayList<LinkedHashMap<String, Object>> getCustomers(String accessURl)
+    public ArrayList<LinkedHashMap<String, Object>> getCustomers(String accessURl,int currentPage)
     {
 
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, accessURl);
@@ -345,13 +345,19 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    Map<String, ArrayList<LinkedHashMap<String, Object>>> results = new ObjectMapper().readValue(
 		    response.getStream(), Map.class);
 	    customers = results.get("customers");
-	    if(customers==null)
+	    int total_customers = getTotalCustomers(shop);
+	    
+	    //Some times no customers getting due to invalid response so 
+	    //if customers null again calling the getCustomers method
+	    if(customers==null && (currentPage*MAX_FETCH_RESULT)<total_customers){
 	    	System.out.println("customers is null");
+	    	getCustomers(accessURl,currentPage);
+	    }
 	}
 	catch (OAuthException e)
 	{
 	    if (e.getCause().equals(new SocketTimeoutException()))
-		getCustomers(accessURl);
+		getCustomers(accessURl,currentPage);
 	}
 	catch (Exception e)
 	{
@@ -447,101 +453,105 @@ public class ShopifySyncImpl extends OneWaySyncService
      */
     public void saveCustomersOrder(Object customer, Contact contact)
     {
-    	System.out.println("Start------saveCustomersOrder(-,-)");
-	LinkedHashMap<String, Object> customerProperties = (LinkedHashMap<String, Object>) customer;
-	ArrayList<LinkedHashMap<String, Object>> orders = getOrder(customerProperties.get("id").toString());
+    	try {
+        	System.out.println("Start------saveCustomersOrder(-,-)");
+        	LinkedHashMap<String, Object> customerProperties = (LinkedHashMap<String, Object>) customer;
+        	ArrayList<LinkedHashMap<String, Object>> orders = getOrder(customerProperties.get("id").toString());
 
-	if (orders != null && orders.size() > 0)
-	{
+        	if (orders != null && orders.size() > 0)
+        	{
 
-	    // removeOlderNotes(contact);
-	    Map<String, Note> notes = new HashMap<String, Note>();
+        	    // removeOlderNotes(contact);
+        	    Map<String, Note> notes = new HashMap<String, Note>();
 
-	    Iterator<LinkedHashMap<String, Object>> it = orders.listIterator();
-	    while (it.hasNext())
-	    {
-		Note note = new Note();
-		LinkedHashMap<String, Object> order = it.next();
+        	    Iterator<LinkedHashMap<String, Object>> it = orders.listIterator();
+        	    while (it.hasNext())
+        	    {
+        		Note note = new Note();
+        		LinkedHashMap<String, Object> order = it.next();
 
-		ArrayList<LinkedHashMap<String, Object>> listItems = (ArrayList<LinkedHashMap<String, Object>>) order
-			.get("line_items");
-		Iterator<LinkedHashMap<String, Object>> iterator = listItems.listIterator();
-		while (iterator.hasNext())
-		{
-		    LinkedHashMap<String, Object> itemDetails = iterator.next();
-		    ArrayList<LinkedHashMap<String, String>> taxDetails = (ArrayList<LinkedHashMap<String, String>>) itemDetails
-			    .get("tax_lines");
-		    note.subject = "Order-" + order.get("order_number");
+        		ArrayList<LinkedHashMap<String, Object>> listItems = (ArrayList<LinkedHashMap<String, Object>>) order
+        			.get("line_items");
+        		Iterator<LinkedHashMap<String, Object>> iterator = listItems.listIterator();
+        		while (iterator.hasNext())
+        		{
+        		    LinkedHashMap<String, Object> itemDetails = iterator.next();
+        		    ArrayList<LinkedHashMap<String, String>> taxDetails = (ArrayList<LinkedHashMap<String, String>>) itemDetails
+        			    .get("tax_lines");
+        		    note.subject = "Order-" + order.get("order_number");
 
-		    if (notes.containsKey(note.subject))
-		    {
+        		    if (notes.containsKey(note.subject))
+        		    {
 
-			Note n = notes.get(note.subject);
-			StringBuilder sb = new StringBuilder(n.description);
-			sb.append("\n").append(itemDetails.get("name") + " : ").append(itemDetails.get("price") + "(")
-				.append(order.get("currency") + ")");
-			if (taxDetails.size() > 0)
-			{
-			    sb.append("Tax : " + taxDetails.get(0).get("price") + "(" + order.get("currency") + ")");
-			}
-			sb.append("\n Total Price : " + order.get("total_price") + "(" + order.get("currency") + ")");
-			n.description = sb.toString();
+        			Note n = notes.get(note.subject);
+        			StringBuilder sb = new StringBuilder(n.description);
+        			sb.append("\n").append(itemDetails.get("name") + " : ").append(itemDetails.get("price") + "(")
+        				.append(order.get("currency") + ")");
+        			if (taxDetails.size() > 0)
+        			{
+        			    sb.append("Tax : " + taxDetails.get(0).get("price") + "(" + order.get("currency") + ")");
+        			}
+        			sb.append("\n Total Price : " + order.get("total_price") + "(" + order.get("currency") + ")");
+        			n.description = sb.toString();
 
-		    }
-		    else
-		    {
-			StringBuilder sb = new StringBuilder();
-			sb.append(itemDetails.get("name") + " : ").append(itemDetails.get("price") + "(")
-				.append(order.get("currency") + ")");
-			if (taxDetails.size() > 0)
-			{
-			    sb.append("Tax : " + taxDetails.get(0).get("price") + "(" + order.get("currency") + ")");
-			}
-			note.description = sb.toString();
+        		    }
+        		    else
+        		    {
+        			StringBuilder sb = new StringBuilder();
+        			sb.append(itemDetails.get("name") + " : ").append(itemDetails.get("price") + "(")
+        				.append(order.get("currency") + ")");
+        			if (taxDetails.size() > 0)
+        			{
+        			    sb.append("Tax : " + taxDetails.get(0).get("price") + "(" + order.get("currency") + ")");
+        			}
+        			note.description = sb.toString();
 
-		    }
-		    if (listItems.size() == 1)
-		    {
-			note.description += "\n Total Price : " + order.get("total_price") + "("
-				+ order.get("currency") + ")" + "";
-		    }
+        		    }
+        		    if (listItems.size() == 1)
+        		    {
+        			note.description += "\n Total Price : " + order.get("total_price") + "("
+        				+ order.get("currency") + ")" + "";
+        		    }
 
-		    note.addRelatedContacts(contact.id.toString());
+        		    note.addRelatedContacts(contact.id.toString());
 
-		    notes.put(note.subject, note);
+        		    notes.put(note.subject, note);
 
-		    contact.tags.add(itemDetails.get("title").toString());
-		    contact.save();
+        		    contact.tags.add(itemDetails.get("title").toString());
+        		    contact.save();
 
+        		}
+        		// saving note
+        		try
+        		{
+        		    List<Note> listNote = NoteUtil.getNotes(contact.id);
+        		    for (Note n : listNote)
+        		    {
+        			notes.put(n.subject, n);
+        		    }
+
+        		    for (Entry<String, Note> map : notes.entrySet())
+        		    {
+        			Note orderNote = map.getValue();
+        			orderNote.save();
+        		    }
+        		}
+        		catch (Exception e)
+        		{
+        		    e.printStackTrace();
+        		}
+
+        		printRefunds(contact, order.get("id").toString(), customerProperties.get("id").toString());
+        		printOrderRelatedEvents(order.get("id").toString(), contact);
+
+        	    }
+
+        	}
+        	System.out.println("End------saveCustomersOrder(-,-)");
+
+            } catch (Exception e1) {
+			e1.printStackTrace();
 		}
-		// saving note
-		try
-		{
-		    List<Note> listNote = NoteUtil.getNotes(contact.id);
-		    for (Note n : listNote)
-		    {
-			notes.put(n.subject, n);
-		    }
-
-		    for (Entry<String, Note> map : notes.entrySet())
-		    {
-			Note orderNote = map.getValue();
-			orderNote.save();
-		    }
-		}
-		catch (Exception e)
-		{
-		    e.printStackTrace();
-		}
-
-		printRefunds(contact, order.get("id").toString(), customerProperties.get("id").toString());
-		printOrderRelatedEvents(order.get("id").toString(), contact);
-
-	    }
-
-	}
-	System.out.println("End------saveCustomersOrder(-,-)");
-
     }
 
     /**
