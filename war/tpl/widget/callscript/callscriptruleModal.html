@@ -6,13 +6,142 @@
     </div>
     <div class="modal-body" style="max-height:420px !important;">
         <form id="callscriptruleForm" name="callscriptruleForm" method="post">
-            <fieldset>   
+            <fieldset>           
+            <input type="hidden" id="rule_index" name="rule_index" value="" />
+            
             <div class="control-group">
-						<label class="control-label">Name<span class="field_req">*</span></label>
-						<div class="controls">
-							<input type="text" name="name" class="required" />
-						</div>
-					</div>         
+				<label class="control-label">Name<span class="field_req">*</span></label>
+				<div class="controls">
+					<input type="text" name="name" class="required" />
+				</div>
+			</div> 
+					   
+			<div class="control-group">
+				<label class="control-label">Display Text<span class="field_req">*</span></label>
+				<div class="controls">
+					<input type="text" name="displaytext" class="required" />
+				</div>
+			</div>      
+            
+<select id="mark" name="mark">
+  <option value="">--</option>
+  <option value="bmw">BMW</option>
+  <option value="audi">Audi</option>
+</select>
+<select id="series" name="series">
+  <option value="">--</option>
+  <option value="series-3" class="bmw">3 series</option>
+  <option value="series-5" class="bmw">5 series</option>
+  <option value="series-6" class="bmw">6 series</option>
+  <option value="a3" class="audi">A3</option>
+  <option value="a4" class="audi">A4</option>
+  <option value="a5" class="audi">A5</option>
+</select>
+            
+                                              <div id="div-lhs">
+												<select name="LHS" class="lhs" id="LHS" style="width: 125px;">
+													<optgroup label="Tag">
+														<option value="tags" selected="selected">Tag</option>
+														<option value="tags_time">Tag And Created Date</option>
+													</optgroup>
+													<optgroup label="Date">
+														<option value="created_time">Created</option>
+														<option value="updated_time">Updated</option>
+													</optgroup>
+ 													<optgroup label="Properties">
+														<option value="first_name">First Name</option>
+														<option value="email">Email Address</option>
+														<option value="company">Company</option>
+														<option value="title">Job Title</option>
+														<option value="phone">Phone Number</option>
+														<option value="lead_score">Score</option>
+														<option value="owner_id">Owner</option>
+													</optgroup>
+												
+													 <optgroup label="Custom Fields" id="custom-fields" class="hide">
+													</optgroup>
+												</select>
+											</div>
+												
+											<div id="div-condition">
+												<select id="CONDITION" name="CONDITION" class="condition" style="width: 100%;">
+													<option value="EQUALS"
+														class="first_name phone company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
+													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
+													<option value="NOTEQUALS"
+														class="first_name company owner org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+													
+													<option value="EQUALS" class="tags tags_time">is</option>
+													<option value="NOTEQUALS" class="tags">isn't</option>
+
+													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
+													<option value="IS_LESS_THAN" class="lead_score">less than</option>
+													<option value="ON" class="updated_time created_time">on</option>
+													<option value="AFTER" class="created_time updated_time">is
+														after</option>
+													<option value="BEFORE" class="created_time updated_time">is
+														before</option>
+													<option value="BETWEEN" class="created_time updated_time">is
+														between</option>
+													<option value="LAST" class="created_time updated_time">in
+														last</option>
+													<option value="EQUALS" class="tag org_tag">is</option>
+													<option value="ANYOF" class="tag">is any of</option>
+												</select>
+											</div>
+											
+											<div id="RHS" class="rhs" name="RHS">
+												<input type="text" name="temp" style="width:92%"
+													class="LAST required" placeholder="Number of days"/>
+												<input type="text" name="temp" style="width:92%"
+													class="EQUALS NOTEQUALS ANYOF required"/>
+												 
+												<input type="text" name="temp" 
+													class="MATCHES NOT_CONTAINS  required"/>
+												<input type="text" name="temp" style="width:92%"
+													class="IS_GREATER_THAN IS_LESS_THAN number required"/> 
+													
+                                                <input type="text" name="tag" 
+													class="tags tags_time required"
+													style="margin: 0px;width:92%" /> 
+                                                <input type="text" name="temp" class="email required" style="width:92%"/>
+												<input id="updated_date" type="text" name="updated_date" style="width:92%; text-overflow:none; "
+													class="ON AFTER BEFORE BETWEEN input required date"
+													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
+											</div>	
+												   
+											<div class="rhs-new" "id="RHS-NEW" name="RHS_NEW">
+												<input id="date_between" type="text" name="temp" data-date-format="mm/dd/yyyy"
+													class="BETWEEN input date required" style="width: 92%" placeholder="MM/DD/YY" />
+											</div>
+											
+											<div id="div-nested-condition">
+												<select class="nested_condition" id="NESTED_CONDITION" name="NESTED_CONDITION" style="width: 100%;">
+													<option value="EQUALS" class="tags_time">on</option>
+													<option value="AFTER" class="tags_time">is after</option>
+													<option value="BEFORE" class="tags_time">is before</option>
+													<option value="BETWEEN" class="tags_time">is
+														between</option>
+													<option value="LAST" class="tags_time">in last</option>
+											</div>
+											
+											<div id="NESTED_LHS" name="NESTED_LHS" class="nested_lhs">
+												<input type="text" name="temp" class="LAST required"
+													style="width: 92%;" placeholder="Number of days" /> 
+												<input
+													id="date_between" type="text" style="width: 92%"
+													name="temp"
+													class="BETWEEN EQUALS AFTER BEFORE input date required"
+													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
+											</div>
+												
+											<div id="NESTED_RHS" name="NESTED_RHS" class="nested_rhs">
+												<input id="date_between" type="text" name="temp"
+													style="width: 92%;" class="BETWEEN input date required"
+													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy" />
+											</div>       
+            
             </fieldset>
         </form>
     </div>

@@ -5,7 +5,12 @@
     </p>
 	<form class="widget_content" style="border-bottom:none;" id="callscript_login_form" name="callscript_login_form" method="post">
     	<fieldset>	
-              <div id="csr_fields" style="display:none"><input type="text" id="csr_name" name="csr_name" value=""/></div>
+              <input type="hidden" id="edit_rule_index" name="edit_rule_index" value="" />
+              <div id="csr_table" style="display:none"></div>
+              <div id="csr_fields" style="display:none">
+                    <input type="text" id="csr_name" name="csr_name" value=""/>
+                    <input type="text" id="csr_display_text" name="csr_display_text" value=""/>
+              </div>
               <a href="#callscriptruleModal" data-toggle="modal" id="add_rules" class="btn btn-primary" style="text-decoration:none;"><i class="icon-plus-sign"></i>Add Rule</a>
 			  <a href="#" id="save_prefs" class="btn btn-primary" style="text-decoration:none;display:none;">Save</a>
 			  <a href="#add-widget" class="btn ml_5" style="text-decoration:none;">Cancel</a>              
@@ -14,6 +19,37 @@
 </div>
 </script>
 
+<script id="callscript-table-template" type="text/html">
+{{#if this.length}}
+<table class="table table-striped agile-ellipsis-dynamic">
+               <colgroup>
+                <col width="20%">
+				<col width="20%">
+				<col width="10%">				
+			   </colgroup>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Display Text</th>
+                </tr>
+            </thead>
+            <tbody>
+             {{#each this}}
+               <tr data='{{@index}}' class='row-callscriptrule' style="cursor:pointer">
+                   <td class='data'><div style="overflow: hidden;white-space: nowrap;text-overflow:ellipsis;display: inline-block;">{{name}}</div></td>
+                   <td class='data'><div style="overflow: hidden;white-space: nowrap;text-overflow:ellipsis;display: inline-block;">{{displaytext}}</div></td>
+                   <td class='data'>
+                       <div class="callscriptrule-actions pull-right" style="visibility: hidden;">
+                          <i class="icon icon-edit edit-callscriptrule" data="{{@index}}" title="Edit Call Script Rule"></i>     
+                          <i class="icon icon-trash delete-callscriptrule" data="{{@index}}" title="Delete Call Script Rule"></i>
+                       </div>
+                   </td>
+               </tr> 
+             {{/each}}
+            </tbody>
+        </table>
+{{/if}}
+</script>
 
 
 <script id="callscript-profile-template" type="text/html">
@@ -42,42 +78,3 @@
 
 
 
-<script id="callscript-collection-template" type="text/html">
-<div class="row">
-    <div class="span12">
-        <div class="page-header">
-            <h1>Filters</h1>
-            <a href="#contact-filter-add" class="btn right" id="addFilter" style='top:-28px;position:relative'><span><i class='icon-plus-sign'/></span>  Add Filter</a>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="span9"> 
-		<div id="slate">
-         </div>
-        {{#if this.length}}
-        <table class="table table-bordered showCheckboxes" url="core/api/filters/bulk">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                </tr>
-            </thead>
-            <tbody id='contact-filter-model-list' route='contact-filter-edit/'>
-            </tbody>
-        </table>
-		{{/if}}
-    </div>
-    <div class='span3'>
-        <div class="well" id='addview'>
-             <h3>
-              What are Filters?
-             </h3><br/>
-            <p>Filters are used to sort contacts with a specific criteria to find patterns. You can save your preferred filters and also have daily, weekly or monthly reports sent to you based on the filter</p>
-        </div>
-    </div>
-</div>
-</script>
-
-<script id="callscript-model-template" type="text/html">
-	<td data='{{id}}' class='data' style="cursor:pointer"> {{name}} </td>
-</script>

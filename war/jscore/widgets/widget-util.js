@@ -483,16 +483,18 @@ function callscript_save_widget_prefs()
  */
 function saveCallScriptWidgetPrefs()
 {
+	$("#save_prefs").text("Saving...");
+	$("#save_prefs").attr("disabled", true);
+	
 	// Retrieve and store the Sip preferences entered by the user as
 	// JSON
-	var callscript_prefs = {};
-	var callscript_rule = {};
+	var callscript_prefs = {};	
 	
-	// Make rule
-	callscript_rule["csr_name"] = $("#csr_name").val();
-	
+	// Make rule	
+	var callscript_rule = makeRule();
+		
 	// Add rule to pref
-	callscript_prefs["rule"] = callscript_rule;
+	callscript_prefs["rules"] = callscript_rule;
 	
 	console.log(callscript_rule);
 	console.log(callscript_prefs);
