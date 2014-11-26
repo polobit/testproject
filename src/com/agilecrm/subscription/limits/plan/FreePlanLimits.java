@@ -28,13 +28,6 @@ public class FreePlanLimits extends PlanLimits
 		reporting = "EMAIL_REPORTING";
 		whiteLabelEnabled = false;
 		campaignNodesLimit = 5;
-		
-		/**
-		 * New plan limits
-		 */
-		widgetsLimit = 1;
-		reportsLimit = 1;
-		TriggersLimit = 1;
 
 	}
 }

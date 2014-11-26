@@ -63,23 +63,8 @@ public class BillingRestriction
     
     public Integer companies_count;
     
-    /**
-     * New limits
-     */
-    @NotSaved(IfDefault.class)
-    public Integer reports_count = 0;
+    public Integer one_time_emails_count;
     
-    @NotSaved(IfDefault.class)
-    public Integer triggers_count = 0;
-    
-    @NotSaved(IfDefault.class)
-    public Integer widgets_count = 0;
-    
-
-    public Integer one_time_emails_count = 0;
-
-    public Integer max_emails_count;
-
     public Long email_pack_start_time = 0L;
 
     @NotSaved(IfDefault.class)

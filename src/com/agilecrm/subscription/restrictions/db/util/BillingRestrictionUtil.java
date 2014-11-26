@@ -32,7 +32,7 @@ public class BillingRestrictionUtil
     public static enum ErrorMessages
     {
 	Contact("Contacts limit reached"), WebRule("Web Rules limit reached"), Workflow("Campaigns limit reached"), REPORT(
-		"This query is not allowed in Free plan"), NOT_DOWNGRADABLE("Plan cannot be dowgraded"),  Trigger("Triggers limit reached"), Reports("Email Reports limit reached");
+		"This query is not allowed in Free plan"), NOT_DOWNGRADABLE("Plan cannot be dowgraded");
 	private String message;
 
 	ErrorMessages(String message)

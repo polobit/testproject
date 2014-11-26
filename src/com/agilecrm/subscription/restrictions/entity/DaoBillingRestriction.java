@@ -3,12 +3,9 @@ package com.agilecrm.subscription.restrictions.entity;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.ContactBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.DomainUserBillingRestriction;
-import com.agilecrm.subscription.restrictions.entity.impl.ReportBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.ReportGraphBillingRestriction;
-import com.agilecrm.subscription.restrictions.entity.impl.TriggerBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.WebRuleBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.WorkflowBillingRestriction;
-import com.agilecrm.workflows.triggers.Trigger;
 
 /**
  * <code>DoaBillingRestriction</code> class is abstract class based on
@@ -35,11 +32,7 @@ public abstract class DaoBillingRestriction implements
 
 	Report(ReportGraphBillingRestriction.class),
 
-	DomainUser(DomainUserBillingRestriction.class),
-
-	Reports(ReportBillingRestriction.class),
-	
-	Trigger(TriggerBillingRestriction.class);
+	DomainUser(DomainUserBillingRestriction.class);
 
 	Class<? extends DaoBillingRestriction> clazz;
 
@@ -160,19 +153,4 @@ public abstract class DaoBillingRestriction implements
 	return null;
     }
 
-    public void setBillingRestriction(BillingRestriction restriction)
-    {
-	this.restriction = restriction;
-    }
-    
-    public boolean canAddTag(Integer percentage, String tag)
-    {
-	if(percentage < 75)
-	    return false;
-	
-	if (!restriction.tags_in_our_domain.isEmpty() && restriction.tags_in_our_domain.contains(tag))
-	    return false;
-	
-	return true;
-    }
 }

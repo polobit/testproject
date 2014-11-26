@@ -414,10 +414,4 @@ public class ReportsUtil
 
 	BillingRestrictionUtil.throwLimitExceededException(ErrorMessages.REPORT);
     }
-    
-    public static Integer count()
-    {
-	return Reports.dao.count();
-    }
-    
 }
