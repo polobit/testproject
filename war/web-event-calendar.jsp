@@ -46,7 +46,7 @@ if (scheduleid != null)
   	
   DomainUser domainUser = DomainUserUtil.getDomainUserFromScheduleId(scheduleid,d_name);
 		  
-  // DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("jagadeesh@invox.com");
+ //  DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("jagadeesh@invox.com");
 		  
   System.out.println("Domain user " + domainUser);
 	  
@@ -159,7 +159,7 @@ ObjectMapper mapper = new ObjectMapper();
 							name="email" placeholder="Email" class="required me-disable"
 							disabled="disabled" /> 
 							<%if(StringUtils.isNotEmpty(meeting_types)){ %>
-							<select class="form-control meetingtypes" style="border: 1px solid #74B9EF;" title='Meeting Types' name="phoneNumber" id="phoneNumber">
+							<select class="form-control meetingtypes" style="border: 1px solid #74B9EF;height:37px" title='Meeting Type' name="phoneNumber" id="phoneNumber">
 							 <option selected disabled>Meeting Type</option>
 	<%String []str=meeting_types.split(",");
 	for(int i=0;i<=str.length-1;i++){%>
@@ -174,13 +174,13 @@ ObjectMapper mapper = new ObjectMapper();
 					
 						<div class="clearfix"></div>
 						<input type="checkbox" id="confirmation" name="confirmation"
-							class="me-disable" disabled="disabled" /> <label
-							for="confirmation">Send me a confirmation email</label>
+							class="me-disable" disabled="disabled" style="margin-top: 10px;" /> <label
+							style="margin-top: 7px;" for="confirmation">Send me a confirmation email</label>
 					</div>
 
 					<div class="col-sm-8">
 						<textarea class="inputtext me-disable" rows="7" cols="90"
-							id="notes" name="notes" placeholder="Notes,Phone or Skype" disabled="disabled"></textarea>
+							id="notes" name="notes" placeholder="Notes (Phone number/Skype details)" disabled="disabled"></textarea>
 					</div>
 					<div class="clearfix"></div>
 				</div>

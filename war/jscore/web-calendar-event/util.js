@@ -153,9 +153,15 @@ function displayNoSlotsMsg()
 {
 	// Empty div where all slots listed, to display new slots
 	$('.checkbox-main-grid').html('');
+	
+	
+	var date = new Date(selecteddate);
+	console.log(date);
+
+	$('.availability').html("No slots available for " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
 
 	// Add msg
-	$('.checkbox-main-grid').append('<label for="no-slots" style="margin-left:112px;">Slots are not available for selected day.</label>');
+	//$('.checkbox-main-grid').append('<label for="no-slots" style="margin-left:112px;">Slots are not available for selected day.</label>');
 }
 
 // Add slots in grid checkbox in checkbox list
