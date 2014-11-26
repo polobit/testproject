@@ -65,7 +65,7 @@ public class Trigger
      */
     public enum Type
     {
-	TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, DEAL_IS_ADDED, DEAL_IS_DELETED, DEAL_MILESTONE_IS_CHANGED, ADD_SCORE, STRIPE_CHARGE_EVENT, SHOPIFY_EVENT, RUNS_DAILY, RUNS_WEEKLY, RUNS_MONTHLY, SOFT_BOUNCE, HARD_BOUNCE, INBOUND_MAIL_EVENT
+	TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, DEAL_IS_ADDED, DEAL_IS_DELETED, DEAL_MILESTONE_IS_CHANGED, ADD_SCORE, STRIPE_CHARGE_EVENT, SHOPIFY_EVENT, RUNS_DAILY, RUNS_WEEKLY, RUNS_MONTHLY, SOFT_BOUNCE, HARD_BOUNCE, INBOUND_MAIL_EVENT, EMAIL_OPENED, LINK_CLICKED
     };
 
     /**
@@ -73,6 +73,19 @@ public class Trigger
      */
     public Type type;
 
+    public enum EmailTrackingType
+    {
+	ALL, CAMPAIGNS, PERSONAL
+    };
+    
+    public EmailTrackingType email_tracking_type;
+    
+    @NotSaved(IfDefault.class)
+    public Long email_tracking_campaign_id=null;
+    
+    @NotSaved(IfDefault.class)
+    public String custom_link_clicked = null;
+    
     /**
      * Campaign id of a campaign with respect to trigger. Campaign name can be
      * retrieved using campaign id.

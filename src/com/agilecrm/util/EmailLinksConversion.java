@@ -162,7 +162,7 @@ public class EmailLinksConversion
 	// String domainURL = VersioningUtil.getLoginURL(NamespaceManager.get(),
 	// "sandbox");
 
-	String domainURL = VersioningUtil.getDefaultLoginUrl(NamespaceManager.get());
+	String domainURL = VersioningUtil.getHostURLByApp(NamespaceManager.get());
 
 	// Remove all /
 	while (domainURL.endsWith("/"))

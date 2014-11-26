@@ -14,6 +14,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.triggers.util.EmailTrackingTriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.servlets.util.TrackClickUtil;
 import com.campaignio.urlshortener.URLShortener;
@@ -159,6 +160,9 @@ public class RedirectServlet extends HttpServlet
 
 	    // Interrupt cron tasks of clicked.
 	    TrackClickUtil.interruptCronTasksOfClicked(trackerId, campaignId, subscriberId);
+
+	    // Link clicked trigger
+	    EmailTrackingTriggerUtil.executeLinkClickedTrigger(subscriberId, campaignId, originalURL);
 	}
 	catch (Exception e)
 	{

@@ -45,6 +45,8 @@
 										<option value="HARD_BOUNCE">Hard Bounce</option>
 										<optgroup label="Email Event">
 										<option value="INBOUND_MAIL_EVENT" id="inbound-mail-event">New Email</option>
+										<option value="EMAIL_OPENED">Email Opened</option>
+										<option value="LINK_CLICKED">Link Clicked</option>
 									</select>
                                 </div>
                             </div>
@@ -60,7 +62,7 @@
 							
                         <div class="control-group" style="display:none;">
                             <div id="RHS" name="RHS">
-                                <label class="control-label TAG_IS_ADDED TAG_IS_DELETED ADD_SCORE " style="width:200px!important;"></label>
+                                <label class="control-label TAG_IS_ADDED TAG_IS_DELETED ADD_SCORE EMAIL_OPENED" style="width:200px!important;"></label>
                                 <div class="controls" style="margin-left:220px!important;width:230px!important;">
                                     <input type="text" value="{{custom_tags}}" id="trigger-custom-tags" name="custom_tags" class="required trigger-tags TAG_IS_ADDED TAG_IS_DELETED" style="margin-bottom: -1px;" placeholder="Enter tag" />
                                     <input type="text" placeholder="Enter Score" {{#if custom_score}} value="{{this.custom_score}}" {{/if}} id="trigger-custom-score" name="custom_score" class="ADD_SCORE required custom-value digits" />
@@ -90,6 +92,32 @@
 							</div>
 							</div>
 						</div>
+                        <!--Email Clicked and Opened-->
+						<div class="control-group" style="display:none;">
+							<div class="controls" style="margin-left:220px!important">
+									<select id="email-tracking-type" name="email_tracking_type">
+										<option value="ALL">All</option>
+										<option value="CAMPAIGNS">Campaigns</option>
+										<option value="PERSONAL">Personal</option>
+									</select>
+							</div>
+						</div>
+						<div class="control-group" style="display:none;">
+                            <label class="control-label" style="width:200px!important;"></label>
+                            <div class="controls" style="margin-left:220px!important;">
+                                <select id="email-tracking-campaign-id" name="email_tracking_campaign_id" class="required">
+                                    <option value="">Select...</option>
+                                </select>
+                            </div>
+                        </div>
+						 <div class="control-group" style="display:none;">
+                            <div>
+                                <label class="control-label" style="width:200px!important;"></label>
+                                <div class="controls" style="margin-left:220px!important;width:230px!important;">
+                                    <input type="text" id="custom-link-clicked" value="{{custom_link_clicked}}" name="custom_link_clicked" class="required LINK_CLICKED" style="margin-bottom: -1px;" placeholder="URL contains" />
+                                </div>
+                            </div>
+                        </div>
 						<div class="control-group" style="display:none;">
 							<div class="controls" style="margin-left:220px!important">
 							<select id="trigger-shopify-event" name="trigger_shopify_event" class="required">

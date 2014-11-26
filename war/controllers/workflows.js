@@ -544,6 +544,56 @@ var WorkflowsRouter = Backbone.Router
 						{
 							populate_inbound_mail_events_in_trigger($('form#addTriggerForm', el), 'trigger-inbound-mail-event');
 						}
+						
+						if(type == 'EMAIL_OPENED' || type == 'LINK_CLICKED')
+						{
+							// Show custom tags textbox
+							$('#email-tracking-type', el).closest('div.control-group').css('display', '');
+							
+							$('#email-tracking-type', el).find('option[value=' + currentTrigger.toJSON()["email_tracking_type"] + ']').attr('selected', 'selected').trigger('change');
+							
+							if(currentTrigger.toJSON()["email_tracking_type"] == "CAMPAIGNS")
+							{
+								$('#email-tracking-campaign-id',el).closest('div.control-group').css('display', '');
+								
+								var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+
+								/**
+								 * Fills campaign select drop down with existing
+								 * Campaigns and shows previous option as selected.
+								 * 
+								 * @param campaign-select -
+								 *            Id of select element of Campaign
+								 * @param /core/api/workflows -
+								 *            Url to get workflows
+								 * @param 'workflow' -
+								 *            parse key
+								 * @param callback-function -
+								 *            Shows previous option selected
+								 * @param optionsTemplate-
+								 *            to fill options with workflows
+								 */
+								fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', function fillCampaign()
+								{
+									var value = currentTrigger.toJSON();
+									if (value)
+									{
+										$('#email-tracking-campaign-id', el).find('option[value=' + value.email_tracking_campaign_id + ']').attr('selected', 'selected');
+									}
+									
+									// Remove loading image
+									$('.loading', el).remove();
+									
+								}, optionsTemplate, false, el);
+							}
+							
+							if(type == 'LINK_CLICKED')
+							{
+								// Show custom tags textbox
+								$('#custom-link-clicked', el).closest('div.control-group').css('display', '');
+							}
+							
+						}
 
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 

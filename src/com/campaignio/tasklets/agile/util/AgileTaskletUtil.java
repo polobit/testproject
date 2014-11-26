@@ -602,7 +602,6 @@ public class AgileTaskletUtil
      */
     public static JSONObject getUpdatedSubscriberJSON(Contact updatedContact, JSONObject oldSubscriberJSON)
     {
-
 	// Update subscriberJSON
 	JSONObject updatedSubscriberJSON = AgileTaskletUtil.getSubscriberJSON(updatedContact);
 

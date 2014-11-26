@@ -38,6 +38,13 @@ $(function()
 		if($(this).val() !== 'INBOUND_MAIL_EVENT'){
 			$('form#addTriggerForm').find('div#trigger-inbound-mail-event').css('display', 'none');
 		}
+		
+		if($(this).val() != 'EMAIL_OPENED' || $(this).val() != 'LINK_CLICKED'){
+			$('form#addTriggerForm').find('select#email-tracking-type').closest('div.control-group').css('display', 'none');
+			
+			$('form#addTriggerForm').find('#custom-link-clicked').closest('div.control-group').css('display', 'none');
+		}
+			
 
 		// Initialize tags typeahead
 		if ($(this).val() == 'TAG_IS_ADDED' || $(this).val() == 'TAG_IS_DELETED')
@@ -81,6 +88,14 @@ $(function()
 		{
 			populate_inbound_mail_events_in_trigger($('form#addTriggerForm'), 'trigger-inbound-mail-event');
 		}
+		
+		if($(this).val() == 'EMAIL_OPENED' || $(this).val() == 'LINK_CLICKED'){
+			$('form#addTriggerForm').find('#email-tracking-type').closest('div.control-group').css('display', '');
+			
+			if($(this).val() == 'LINK_CLICKED')
+				$('form#addTriggerForm').find('#custom-link-clicked').closest('div.control-group').css('display', '');
+		}
+			
 	});
 	
 	// When cancel clicked, take to Back page
@@ -90,6 +105,39 @@ $(function()
 
 		if (history !== undefined)
 			history.back(-1);
+	});
+	
+	$('#email-tracking-type').die().live('change', function(e){
+		
+		e.preventDefault();
+		
+		if($(this).val() == 'ALL' || $(this).val() == 'PERSONAL')
+		{
+			// Show milestones select element
+			$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', 'none');
+			return;
+		}
+		
+		// Show milestones select element
+		$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', '');
+
+		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+		
+		/**
+		 * Fills campaign select with existing Campaigns.
+		 * 
+		 * @param campaign-select -
+		 *            Id of select element of Campaign
+		 * @param /core/api/workflows -
+		 *            Url to get workflows
+		 * @param 'workflow' -
+		 *            parse key
+		 * @param no-callback -
+		 *            No callback
+		 * @param optionsTemplate-
+		 *            to fill options with workflows
+		 */
+		fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', 'no-callback', optionsTemplate, false);
 	});
 });
 

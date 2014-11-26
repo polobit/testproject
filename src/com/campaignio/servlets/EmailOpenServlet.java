@@ -23,6 +23,7 @@ import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.triggers.util.EmailTrackingTriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -98,7 +99,12 @@ public class EmailOpenServlet extends HttpServlet
 		chromeExtensionShowNotification(emailId, fromEmailId, subject, trackerId);
 	    }
 	    else
+	    {
 		addLogAndShowNotification(trackerId, campaignId);
+
+		// Trigger Email Open for only within App emails
+		EmailTrackingTriggerUtil.executeEmailOpenTrigger(trackerId, campaignId);
+	    }
 
 	}
 	finally
@@ -229,7 +235,6 @@ public class EmailOpenServlet extends HttpServlet
 	    }
 
 	}
-
     }
 
     /**
