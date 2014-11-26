@@ -27,9 +27,9 @@ public class AgileQueues
     public static final String DEALS_EXPORT_QUEUE = "deals-export-queue";
     public static final String WORKFLOWS_RELATED_QUEUE = "workflows-related-queue";
 
-    // Campaign and Email pull queues
-    public static final String CAMPAIGN_PULL_QUEUE = "sb-campaign-pull-queue";
-    public static final String EMAIL_PULL_QUEUE = "sb-email-pull-queue";
+    // Personal bulk Email pull queues
+    public static final String NORMAL_PERSONAL_EMAIL_PULL_QUEUE = "normal-personal-email-pull-queue";
+    public static final String BULK_PERSONAL_EMAIL_PULL_QUEUE = "bulk-personal-email-pull-queue";
 
     // Campaign pull queues
     public static final String BULK_CAMPAIGN_PULL_QUEUE = "bulk-campaign-pull-queue";

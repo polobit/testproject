@@ -52,7 +52,7 @@ template = "pink";
 String width = currentUserPrefs.width;
 boolean is_fluid = !width.isEmpty();
 
-BillingRestriction restriction = BillingRestrictionUtil.getInstance();
+BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(null, null);
 %>
 
 
