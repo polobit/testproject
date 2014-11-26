@@ -132,11 +132,8 @@ function getCampaignList(type)
 	$.each(data, function(index, obj)
 	{
 
-		$.each(obj, function(key, value)
-		{
-			if (key == 'name')
-				listOfWorkflows[value] = value;
-		});
+			//if (key == 'name')
+				listOfWorkflows[obj["name"]] = obj["id"];
 
 	});
 

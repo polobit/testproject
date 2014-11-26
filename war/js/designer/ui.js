@@ -248,7 +248,7 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     
   
     if(uiFieldDefinition.fieldType == "campaign_list")
-    	return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'"+getStyleAttribute(uiFieldDefinition.style)+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes +  "</select>";
+    return "<select multiple name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'"+getStyleAttribute(uiFieldDefinition.style)+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes +  "</select>";
      
 	  // retun select field with name and title attributes(Yasin(14-09-10)) 
     return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'"+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes + "</select>";
@@ -361,7 +361,7 @@ function generateDefaultUI(uiFieldDefinition) {
 function getStyleAttribute(styleAttributes)
 {
 	if(styleAttributes == undefined)
-		return " style='width:75%'/>";
+		return " style='width:75%'";
 	
 	var style=" style='";
 	$.each(
