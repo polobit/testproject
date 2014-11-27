@@ -118,5 +118,26 @@
         <property name="pipeline" direction="asc"/>
         <property name="expected_value" direction="asc"/>
     </datastore-index>
+    
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="milestone" direction="asc"/>
+        <property name="ownerKey" direction="asc"/>
+        <property name="pipeline" direction="asc"/>
+        <property name="close_date" direction="desc"/>
+    </datastore-index>
+	
+	    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="milestone" direction="asc"/>
+        <property name="pipeline" direction="asc"/>
+        <property name="close_date" direction="desc"/>
+    </datastore-index>
+	
+	 <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="expected_value" direction="asc"/>
+        <property name="milestone" direction="asc"/>
+        <property name="ownerKey" direction="asc"/>
+        <property name="pipeline" direction="asc"/>
+        <property name="close_date" direction="desc"/>
+    </datastore-index>
 
 </datastore-indexes>

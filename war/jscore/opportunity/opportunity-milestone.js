@@ -36,7 +36,7 @@ function createDealsNestedCollection(pipeline_id,milestones)
 	initDealListCollection(milestones);
 	
 	// Url to call DB
-	var initialURL = '/core/api/opportunity/based?pipeline_id='+pipeline_id;
+	var initialURL = '/core/api/opportunity/based?pipeline_id='+pipeline_id+'&order_by=-close_date';
 	
 	if(readCookie('deal-filters')){
 		initialURL += '&filters='+encodeURIComponent(getDealFilters());
