@@ -36,7 +36,7 @@
 						<div class="controls">
 							<div id="contact_type_filter" name="contact_type_filter">
 								<select name="contact_type" id="contact_type" >
-									<option value="PERSON">Person</option>
+									<option value="PERSON">Contact</option>
 									<option value="COMPANY">Company</option>
 								</select>
 							</div>
@@ -207,7 +207,6 @@
 														<option value="updated_time">Updated</option>
 													</optgroup>
  													<optgroup label="Properties">
-														<option value="lead_score">Score</option>
 														<option value="owner_id">Owner</option>
 														<option value="name">Name</option>
 													</optgroup>
@@ -242,6 +241,8 @@
 														between</option>
 													<option value="LAST" class="created_time updated_time">in
 														last</option>
+													<option value="NEXT" class="created_time updated_time">in next
+														</option>
 													<option value="EQUALS" class="tag org_tag">is</option>
 													<option value="ANYOF" class="tag">is any of</option>
 												</select>
@@ -250,9 +251,9 @@
 										<td class="rhs-block span2 controls" style="vertical-align:top; " >
 											<div id="RHS" class="rhs" name="RHS">
 												<input type="text" name="temp" style="width:92%"
-													class="LAST required" placeholder="Number of days"/>
+													class="LAST NEXT required" placeholder="Number of days"/>
 												<input type="text" name="temp" style="width:92%"
-													class="EQUALS NOTEQUALS ANYOF required"/>
+													class="EQUALS NOTEQUALS CONTAINS ANYOF required"/>
 												 
 												<input type="text" name="temp" 
 													class="MATCHES NOT_CONTAINS  required"/>
