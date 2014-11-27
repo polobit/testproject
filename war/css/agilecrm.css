@@ -856,6 +856,14 @@ position: absolute;
 right: -12px;
 z-index: 9;
 }
+.miltstone-title{
+	width: auto;
+	text-overflow: ellipsis;
+	max-width: 150px;
+	white-space: nowrap;
+	overflow:hidden;
+	display: inline-block;
+}
 .dealtitle-angular > span:after {
 border-bottom: 12px solid transparent;
 border-left: 12px solid #eee;
@@ -863,7 +871,7 @@ border-top: 12px solid transparent;
 content: "";
 position: absolute;
 right: -11px;
-top: 35%;
+top: 34%;
 z-index: 99;
 }
 .dealtitle-angular
