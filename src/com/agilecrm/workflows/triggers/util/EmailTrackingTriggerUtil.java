@@ -22,6 +22,8 @@ public class EmailTrackingTriggerUtil
     {
 	List<Trigger> triggers = TriggerUtil.getTriggersByCondition(Trigger.Type.EMAIL_OPENED);
 
+	System.out.println("EmailOpened triggers size..." + triggers.size());
+
 	Long contactId = null;
 	Long workflowId = null;
 
@@ -56,8 +58,11 @@ public class EmailTrackingTriggerUtil
 	    return;
 	}
 
+	System.out.println("Triggering type is " + trigger.type);
+
 	if (!trigger.email_tracking_type.equals(EmailTrackingType.CAMPAIGNS))
 	{
+
 	    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
 	    return;
 	}
