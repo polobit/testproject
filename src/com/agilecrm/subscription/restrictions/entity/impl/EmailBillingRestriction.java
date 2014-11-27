@@ -66,19 +66,25 @@ public class EmailBillingRestriction extends DaoBillingRestriction
     public String getTag()
     {
 	int emailsSent = 0;
-	if(emails < 0)
-	    emailsSent = max_allowed;
+	int local_max_allowed = max_allowed;
+	if(emails < 0 && local_max_allowed > 0)
+	    emailsSent = local_max_allowed;
 	else
-	    emailsSent = max_allowed - emails;
+	    emailsSent = local_max_allowed - emails;
+	
 	
 	emailsSent = emailsSent < 0 ? 0 : emailsSent;
+	
+	if(local_max_allowed == 0)
+	    local_max_allowed = 5000;
+	
 	System.out.println("emails sent : " + emailsSent);
-	String tag = BillingRestrictionReminderUtil.getTag(emailsSent, max_allowed, "Email",
+	String tag = BillingRestrictionReminderUtil.getTag(emailsSent, local_max_allowed, "Email",
 		hardUpdateTags);
 
 	if (tag != null)
 	{
-	    int percentage = BillingRestrictionReminderUtil.calculatePercentage(max_allowed, emailsSent);
+	    int percentage = BillingRestrictionReminderUtil.calculatePercentage(local_max_allowed, emailsSent);
 
 	    // If tags are not there then new tag is saved in tags in our domain
 	    // class
