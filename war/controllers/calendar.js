@@ -207,7 +207,6 @@ $(function()
 
 				// intialize event tab
 				$('#event_tab').tab();
-			
 
 				$(window).scroll(function()
 				{
@@ -283,7 +282,7 @@ function appendItem1(base_model)
 
 								$('.e_owner').addClass('hide');
 				}
-
+				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",",""));
 }
 
 // append all events
@@ -300,6 +299,20 @@ function appendItem2(base_model)
 				$('#eventAll', this.el).show();
 				$('#event-heading', this.el).show();
 
+				// check for all selected
+				if ($('#event-owner').val() == "")
+				{
+								if ($('.e_owner').hasClass('hide'))
+												$('.e_owner').removeClass('hide');
+
+				}
+				else
+				{
+
+								$('.e_owner').addClass('hide');
+				}
+				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",",""));
+
 }
 
 // append all google events
@@ -312,6 +325,7 @@ function appendGoogleEvent(base_model)
 				$('#google_event', this.el).append(itemView.render().el);
 				$('#google_event', this.el).parent('table').css("display", "block");
 				$('#google_event', this.el).show();
+				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",",""));
 
 }
 
@@ -362,81 +376,87 @@ function appendGoogleEventCategorization(base_model)
 
 								}
 				}
+				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",",""));
 
 }
-
 
 function show_model(id)
 {
 
-				$('#updateActivityModal').modal('show');
-
-				var event = App_Calendar.eventCollectionView.collection.get(id).toJSON();
-				console.log("clicked event " + event);
-
-				var contactList = event.contacts;
-				for (var i = 0; i < contactList.length; i++)
-
+				if ($(window.event.target).is('a'))
 				{
-								if (contactList[i].type == "COMPANY")
+								window.event.stopPropagation();
+				}
+				else
+				{
+								$('#updateActivityModal').modal('show');
+
+								var event = eventCollectionView.collection.get(id).toJSON();
+								console.log("clicked event " + event);
+
+								var contactList = event.contacts;
+								for (var i = 0; i < contactList.length; i++)
+
 								{
+												if (contactList[i].type == "COMPANY")
+												{
 
-												$('#updateActivityModal')
-																				.find("ul[name='contacts']")
-																				.append(
+																$('#updateActivityModal')
+																								.find("ul[name='contacts']")
+																								.append(
+																																'<li class="tag" data="' + contactList[i].id + '" style="display: inline-block; "><a href="#contact/' + contactList[i].id + '">' + getCompanyName(contactList[i].properties) + '</a><a class="close" id="remove_tag">x</a></li>');
 
-																												'<li class="tag" data="' + contactList[i].id + '" style="display: inline-block; "><a href="#contact/' + contactList[i].id + '">' + getCompanyName(contactList[i].properties) + '</a><a class="close" id="remove_tag">x</a></li>');
+												}
+												else
+												{
+																$('#updateActivityModal')
+																								.find("ul[name='contacts']")
+																								.append(
+																																'<li class="tag" data="' + contactList[i].id + '" style="display: inline-block; "><a href="#contact/' + contactList[i].id + '">' + getName(contactList[i].properties) + '</a><a class="close" id="remove_tag">x</a></li>');
+												}
+								}
 
+								var priority = event.color;
+
+								$('#updateActivityModal').find("select").children().each(function()
+								{
+												if (this.value == priority)
+																$(this).attr('selected', 'selected');
+								});
+
+								if (event.allDay)
+								{
+												$('#updateActivityModal').find("input[name='allDay']").attr('checked', 'checked');
 								}
 								else
 								{
-												$('#updateActivityModal')
-																				.find("ul[name='contacts']")
-																				.append(
-																												'<li class="tag" data="' + contactList[i].id + '" style="display: inline-block; "><a href="#contact/' + contactList[i].id + '">' + getName(contactList[i].properties) + '</a><a class="close" id="remove_tag">x</a></li>');
+												$('#updateActivityModal').find("input[name='allDay']").removeAttr("checked");
 								}
+								$('#updateActivityModal').find("input[name='title']").val(event.title);
+								highlight_event();
+
+								start = getDate(event.start);
+								end = getDate(event.end);
+								// Set Date for Event
+
+								$("#update-event-date-1").val(getFormattedDate(event.start));
+								$("#update-event-date-2").val(getFormattedDate(event.end));
+
+								// Set Time for Event
+								if ((start.getHours() == 00) && (end.getHours() == 00) && (end.getMinutes() == 00))
+								{
+												$('#update-event-time-1').val('');
+												$('#update-event-time-2').val('');
+								}
+								else
+								{
+												$('#update-event-time-1').val(
+																				(start.getHours() < 10 ? "0" : "") + start.getHours() + ":" + (start.getMinutes() < 10 ? "0" : "") + start.getMinutes());
+												$('#update-event-time-2').val((end.getHours() < 10 ? "0" : "") + end.getHours() + ":" + (end.getMinutes() < 10 ? "0" : "") + end.getMinutes());
+								}
+
+								$('#updateActivityModal').find("input[type='hidden']").val(id);
 				}
-
-				var priority = event.color;
-
-				$('#updateActivityModal').find("select").children().each(function()
-				{
-								if (this.value == priority)
-												$(this).attr('selected', 'selected');
-				});
-
-				if (event.allDay)
-				{
-								$('#updateActivityModal').find("input[name='allDay']").attr('checked', 'checked');
-				}
-				else
-				{
-								$('#updateActivityModal').find("input[name='allDay']").removeAttr("checked");
-				}
-				$('#updateActivityModal').find("input[name='title']").val(event.title);
-				highlight_event();
-
-				start = getDate(event.start);
-				end = getDate(event.end);
-				// Set Date for Event
-
-				$("#update-event-date-1").val(getFormattedDate(event.start));
-				$("#update-event-date-2").val(getFormattedDate(event.end));
-
-				// Set Time for Event
-				if ((start.getHours() == 00) && (end.getHours() == 00) && (end.getMinutes() == 00))
-				{
-								$('#update-event-time-1').val('');
-								$('#update-event-time-2').val('');
-				}
-				else
-				{
-								$('#update-event-time-1').val((start.getHours() < 10 ? "0" : "") + start.getHours() + ":" + (start.getMinutes() < 10 ? "0" : "") + start.getMinutes());
-								$('#update-event-time-2').val((end.getHours() < 10 ? "0" : "") + end.getHours() + ":" + (end.getMinutes() < 10 ? "0" : "") + end.getMinutes());
-				}
-
-				$('#updateActivityModal').find("input[type='hidden']").val(id);
-
 }
 
 function getFormattedDate(date)
@@ -567,17 +587,6 @@ function loadGoogleEvents()
 																								googleEventCollectionView.appendItem = appendGoogleEvent;
 																								$('#google').html(googleEventCollectionView.render(true).el);
 
-																								if ($('#event-owner').val() == "")
-																								{
-																												if ($('.e_owner').hasClass('hide'))
-																																$('.e_owner').removeClass('hide');
-
-																								}
-																								else
-																								{
-
-																												$('.e_owner').addClass('hide');
-																								}
 
 																				});
 
@@ -603,18 +612,6 @@ function loadGoogleEvents()
 																												individual_tag_name : 'tr', sort_collection : true, sortKey : 'start', descending : false });
 																								googleEventCollectionView.appendItem = appendGoogleEventCategorization;
 																								$('#google').html(googleEventCollectionView.render(true).el);
-
-																								if ($('#event-owner').val() == "")
-																								{
-																												if ($('.e_owner').hasClass('hide'))
-																																$('.e_owner').removeClass('hide');
-
-																								}
-																								else
-																								{
-
-																												$('.e_owner').addClass('hide');
-																								}
 
 																				});
 
@@ -663,18 +660,6 @@ function loadMoreEventsFromGoogle()
 																{
 																				googleEventCollectionView.collection.add(events);
 																				googleEventCollectionView.collection.sort();
-																}
-																
-																if ($('#event-owner').val() == "")
-																{
-																				if ($('.e_owner').hasClass('hide'))
-																								$('.e_owner').removeClass('hide');
-
-																}
-																else
-																{
-
-																				$('.e_owner').addClass('hide');
 																}
 
 												})
