@@ -24,8 +24,7 @@
             "style":
             	{
             	"margin-top": "10px",
-            "height": "100px"
-
+            	"height": "100px"
             	}
         },
         {
