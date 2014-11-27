@@ -207,6 +207,7 @@ $(function()
 
 				// intialize event tab
 				$('#event_tab').tab();
+			
 
 				$(window).scroll(function()
 				{
@@ -263,11 +264,24 @@ function appendItem1(base_model)
 								$('#next-week-event', this.el).append(itemView.render().el);
 								$('#next-week-event', this.el).parent('table').css("display", "block");
 								$('#next-week-event', this.el).show();
-								if ($('#tomorrow-event').children().length > 0 || 	$('#today-event').children().length > 0)
+								if ($('#tomorrow-event').children().length > 0 || $('#today-event').children().length > 0)
 								{
 												$('#next-week-heading', this.el).show();
 
 								}
+				}
+
+
+				if ($('#event-owner').val() == "")
+				{
+								if ($('.e_owner').hasClass('hide'))
+												$('.e_owner').removeClass('hide');
+
+				}
+				else
+				{
+
+								$('.e_owner').addClass('hide');
 				}
 
 }
@@ -298,17 +312,6 @@ function appendGoogleEvent(base_model)
 				$('#google_event', this.el).append(itemView.render().el);
 				$('#google_event', this.el).parent('table').css("display", "block");
 				$('#google_event', this.el).show();
-				if ($('#event-owner').val() == "")
-				{
-								if ($('.e_owner').hasClass('hide'))
-												$('.e_owner').removeClass('hide');
-
-				}
-				else
-				{
-
-								$('.e_owner').addClass('hide');
-				}
 
 }
 
@@ -359,20 +362,9 @@ function appendGoogleEventCategorization(base_model)
 
 								}
 				}
-				
-				if ($('#event-owner').val() == "")
-				{
-								if ($('.e_owner').hasClass('hide'))
-												$('.e_owner').removeClass('hide');
-
-				}
-				else
-				{
-
-								$('.e_owner').addClass('hide');
-				}
 
 }
+
 
 function show_model(id)
 {
@@ -575,12 +567,27 @@ function loadGoogleEvents()
 																								googleEventCollectionView.appendItem = appendGoogleEvent;
 																								$('#google').html(googleEventCollectionView.render(true).el);
 
+																								if ($('#event-owner').val() == "")
+																								{
+																												if ($('.e_owner').hasClass('hide'))
+																																$('.e_owner').removeClass('hide');
+
+																								}
+																								else
+																								{
+
+																												$('.e_owner').addClass('hide');
+																								}
+
 																				});
 
 																}
 																else
 																{
-																				var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true });
+
+																				var startDate = new Date();
+																				var gDate = startDate.toISOString();
+																				var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, timeMin : gDate });
 																				request.execute(function(resp)
 																				{
 																								var events = new Array();
@@ -596,6 +603,18 @@ function loadGoogleEvents()
 																												individual_tag_name : 'tr', sort_collection : true, sortKey : 'start', descending : false });
 																								googleEventCollectionView.appendItem = appendGoogleEventCategorization;
 																								$('#google').html(googleEventCollectionView.render(true).el);
+
+																								if ($('#event-owner').val() == "")
+																								{
+																												if ($('.e_owner').hasClass('hide'))
+																																$('.e_owner').removeClass('hide');
+
+																								}
+																								else
+																								{
+
+																												$('.e_owner').addClass('hide');
+																								}
 
 																				});
 
@@ -644,6 +663,18 @@ function loadMoreEventsFromGoogle()
 																{
 																				googleEventCollectionView.collection.add(events);
 																				googleEventCollectionView.collection.sort();
+																}
+																
+																if ($('#event-owner').val() == "")
+																{
+																				if ($('.e_owner').hasClass('hide'))
+																								$('.e_owner').removeClass('hide');
+
+																}
+																else
+																{
+
+																				$('.e_owner').addClass('hide');
 																}
 
 												})

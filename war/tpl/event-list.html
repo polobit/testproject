@@ -31,17 +31,17 @@
 </script>
 
 <script id="future-model-template" type="text/html">
-<td class="e_owner" style="cursor: pointer;" onclick=show_model({{id}})>
-    <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:4em;overflow:hidden;">
-       {{#if pic}}
-        <img class="thumbnail" src="{{pic}}" width="40px" height="40px" title="{{owner.name}}" />
-	   {{else}}
-		<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{owner.name}}" />
-       {{/if}}
-    </div>
+<td class="e_owner" style="width:50px;cursor: pointer;" onclick=show_model({{id}})>
+    <div>
+	{{#if ownerPic}}
+        	<img class="thumbnail" src="{{ownerPic}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
+	{{else}}
+			<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
+	{{/if}}
+  </div>
 </td>
 <td>
-<div class="row" style="margin-left:3px;cursor: pointer;" onclick=show_model({{id}})>
+<div class="row" style="cursor: pointer;margin-left:1px;" onclick=show_model({{id}})>
 <div class="span8">
 <div class="line-clamp">{{title}}</div></div>
 
@@ -53,13 +53,13 @@
 
 <div class="clearfix"></div>
 
-<div class="row" style="margin-left:3px;">
+<div class="row" style="margin-left:1px;">
 <div class="span4" onclick=show_model({{id}}) style="cursor: pointer;">{{getCustomDateWithTime start end}}</div>
 
-<div class="span8" style="text-align:right;cursor: default;">
+<div class="span8 contact_text" style="text-align:right;cursor: default;">
 {{#if contacts.length}} 
 <div class="line-clamp">  
-        {{#each contacts}}<a href ="#contact/{{this.id}}">{{getContactDisplayValue this}}</a> {{/each}}  
+        {{#each contacts}}<a href ="#contact/{{this.id}}">{{getContactDisplayValue this}},</a> {{/each}}  
         
     </div>
 {{/if}}
@@ -88,8 +88,17 @@
 
 <script id="events-model-template" type="text/html">
 
-<td style="cursor: pointer;">
-<div class="row" style="margin-left:3px;" onclick=show_model({{id}})>
+<td class="e_owner" style="width:50px;cursor: pointer;" onclick=show_model({{id}})>
+ <div>
+	{{#if ownerPic}}
+        	<img class="thumbnail" src="{{ownerPic}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
+	{{else}}
+			<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
+	{{/if}}
+  </div>
+</td>
+<td>
+<div class="row" style="margin-left:3px;cursor: pointer;" onclick=show_model({{id}})>
 <div class="span8">
 <div class="line-clamp">{{title}}</div></div>
 
@@ -102,12 +111,12 @@
 <div class="clearfix"></div>
 
 <div class="row" style="margin-left:3px;">
-<div class="span4" onclick=show_model({{id}})>{{getCustomDateWithTime start end}}</div>
 
-<div class="span8" style="text-align:right;cursor: default;">
+<div class="span5" onclick=show_model({{id}}) style="cursor: pointer;">{{getCustomDateWithTime start end}}</div>
+<div class="span7" style="text-align:right;cursor: default;">
 {{#if contacts.length}} 
 <div class="line-clamp">  
-        {{#each contacts}}<a href="#contact/{{this.id}}">{{getContactDisplayValue this}}</a> {{/each}}  
+        {{#each contacts}}<a href="#contact/{{this.id}}">{{getContactDisplayValue this}},</a> {{/each}}  
         
     </div>
 {{/if}}
@@ -138,17 +147,17 @@
 </script>
 
 <script id="google-event-model-template" type="text/html">
-<td class="e_owner" style="cursor: pointer;">
-    <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:4em;overflow:hidden;">
-       {{#if pic}}
-        <img class="thumbnail" src="{{pic}}" width="40px" height="40px" title="{{owner.name}}" />
-	   {{else}}
-		<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{owner.name}}" />
-       {{/if}}
-    </div>
+<td class="e_owner" style="width:50px;">
+    <div>
+	{{#if ownerPic}}
+        	<img class="thumbnail" src="{{ownerPic}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
+	{{else}}
+			<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
+	{{/if}}
+  </div>
 </td>
 <td>
-<div class="row" style="margin-left:3px;height: 23px;">
+<div class="row" style="height: 23px;margin-left:1px">
 <div class="span8" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden">{{title}}</div>
 
 <div class="span4 pull-right" style="text-align:right">
@@ -159,10 +168,10 @@
 
 </div>
 <div class="clearfix"></div>
-<div class="row" style="margin-left:3px;height: 23px;">
-<div class="span3">{{getGoogleEventCustomTime start end}}</div>
+<div class="row" style="height: 23px;margin-left:1px">
+<div class="span4">{{getGoogleEventCustomTime start end}}</div>
 
-<div class="span9 pull-right" style="overflow-x: auto;text-align:right;">
+<div class="span8 pull-right" style="overflow-x: auto;text-align:right;">
 {{#if contacts.length}} 
 <div class="ellipsis-multiline" style="line-height:20px !important; height: auto !important;">  
         {{#each contacts}}<span class="label">{{getContactDisplayValue this}}</span> {{/each}}  
@@ -212,17 +221,17 @@
 </script>
 
 <script id="googleEventCategorization-model-template" type="text/html">
-<td class="e_owner" style="cursor: pointer;">
-    <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:4em;overflow:hidden;">
-       {{#if pic}}
-        <img class="thumbnail" src="{{pic}}" width="40px" height="40px" title="{{owner.name}}" />
-	   {{else}}
-		<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{owner.name}}" />
-       {{/if}}
-    </div>
+<td class="e_owner" style="width: 50px;">
+   <div>
+	{{#if ownerPic}}
+        	<img class="thumbnail" src="{{ownerPic}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
+	{{else}}
+			<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
+	{{/if}}
+  </div>
 </td>
 <td>
-<div class="row" style="margin-left:3px;height: 23px;">
+<div class="row" style="height: 23px;margin-left:1px;">
 <div class="span8" style="overflow: hidden;">{{title}}</div>
 <div class="span4 pull-right" style="text-align:right;">
 <div class="ellipsis-multiline" style="line-height:20px !important;height: auto !important; word-break:keep-all;">  
@@ -233,10 +242,10 @@
 
 <div class="clearfix"></div>
 
-<div class="row" style="margin-left:3px;height: 23px;">
-<div class="span3">{{getGoogleEventCustomTime start end}}</div>
+<div class="row" style="height: 23px;margin-left:1px;">
+<div class="span4">{{getGoogleEventCustomTime start end}}</div>
 
-<div class="span9 pull-right" style="overflow-x: auto;text-align:right;">
+<div class="span8 pull-right" style="overflow-x: auto;text-align:right;">
 {{#if contacts.length}} 
 <div class="ellipsis-multiline" style="line-height:20px !important;height: auto !important; word-break:keep-all;white-space: nowrap;">  
         {{#each contacts}}<span class="label">{{getContactDisplayValue this}}</span> {{/each}}  
