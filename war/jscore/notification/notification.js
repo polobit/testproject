@@ -393,7 +393,7 @@ function showSwitchChanges(el)
 function showNoty(type, message, position, notification_type, onCloseCallback)
 {
 	// Don't show notifications when disabled by user. Neglect campaign ones
-	if (notification_type != "CAMPAIGN_NOTIFY" ||notification_type != "CALENDAR_REMINDER" && !notification_prefs.control_notifications)
+	if (notification_type != "CAMPAIGN_NOTIFY" ||notification_type != "CALENDER_REMINDER" && !notification_prefs.control_notifications)
 		return;
 
 	// Check for html5 notification permission.
@@ -418,7 +418,7 @@ function showNoty(type, message, position, notification_type, onCloseCallback)
 			return;
 		}
 		
-		if (notification_type != "CALENDAR_REMINDER")
+		if (notification_type != "CALENDER_REMINDER")
 		show_desktop_notification(getImageUrl(message,notification_type), getNotificationType(notification_type), getTextMessage(message), getId(message), getId(message).split(
 				'/')[1] + '-' + notification_type);
 		return;
