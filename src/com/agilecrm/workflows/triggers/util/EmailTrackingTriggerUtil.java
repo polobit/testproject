@@ -20,16 +20,10 @@ public class EmailTrackingTriggerUtil
 
     public static void executeEmailOpenTrigger(String subscriberId, String campaignId)
     {
-	System.out.println("subscriberId " + subscriberId + " campaignId " + campaignId);
-
 	List<Trigger> triggers = TriggerUtil.getTriggersByCondition(Trigger.Type.EMAIL_OPENED);
-
-	System.out.println("Obtained triggers is..." + triggers);
 
 	if (triggers == null || triggers.size() == 0)
 	    return;
-
-	System.out.println("EmailOpened triggers size..." + triggers.size());
 
 	Long contactId = null;
 	Long workflowId = null;
@@ -37,35 +31,17 @@ public class EmailTrackingTriggerUtil
 	if (!StringUtils.isBlank(subscriberId))
 	    contactId = Long.parseLong(subscriberId);
 
-	System.out.println(contactId);
-
 	if (!StringUtils.isBlank(campaignId))
 	    workflowId = Long.parseLong(campaignId);
 
-	System.out.println(workflowId);
-
 	for (Trigger trigger : triggers)
-	{
-	    System.out.println("Executing trigger...." + trigger);
 	    executeEmailOpenTrigger(trigger, contactId, workflowId);
-	}
     }
 
     public static void executeEmailOpenTrigger(Trigger trigger, Long contactId, Long workflowId)
     {
-	System.out.println("Trigger " + trigger + " Contact Id " + contactId + " workflowId " + workflowId);
-
 	if (trigger == null)
 	    return;
-
-	System.out.println(!(trigger.type.equals(Type.EMAIL_OPENED)));
-
-	// Trigger type should be EMAIL_OPENED
-	if (!(trigger.type.equals(Type.EMAIL_OPENED)))
-	{
-	    System.out.println("Returning as trigger type is different...");
-	    return;
-	}
 
 	Contact contact = null;
 
@@ -79,18 +55,15 @@ public class EmailTrackingTriggerUtil
 	    return;
 	}
 
-	System.out.println("Triggering type is " + trigger.type);
-
 	if (!trigger.email_tracking_type.equals(EmailTrackingType.CAMPAIGNS))
 	{
-	    System.out.println("Email tracking type is " + trigger.email_tracking_type);
 	    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
 	    return;
 	}
 
 	// Trigger only if email opened belongs to Given Campaign
-	if (trigger.email_tracking_campaign_id != trigger.campaign_id
-	        && trigger.email_tracking_campaign_id == workflowId)
+	if (!trigger.email_tracking_campaign_id.equals(trigger.campaign_id)
+	        && trigger.email_tracking_campaign_id.equals(workflowId))
 	    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
     }
 
@@ -116,7 +89,7 @@ public class EmailTrackingTriggerUtil
 	if (trigger == null)
 	    return;
 
-	if (!trigger.type.equals(Type.EMAIL_LINK_CLICKED))
+	if (!(trigger.type.equals(Type.EMAIL_LINK_CLICKED)))
 	    return;
 
 	Contact contact = null;
@@ -142,8 +115,8 @@ public class EmailTrackingTriggerUtil
 	    return;
 	}
 
-	if (trigger.email_tracking_campaign_id != trigger.campaign_id
-	        && trigger.email_tracking_campaign_id == campaignId)
+	if (!trigger.email_tracking_campaign_id.equals(trigger.campaign_id)
+	        && trigger.email_tracking_campaign_id.equals(campaignId))
 	    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
 
     }
