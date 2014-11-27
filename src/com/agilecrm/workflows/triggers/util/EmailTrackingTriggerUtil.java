@@ -22,6 +22,11 @@ public class EmailTrackingTriggerUtil
     {
 	List<Trigger> triggers = TriggerUtil.getTriggersByCondition(Trigger.Type.EMAIL_OPENED);
 
+	System.out.println("Obtained triggers is..." + triggers);
+
+	if (triggers == null)
+	    return;
+
 	System.out.println("EmailOpened triggers size..." + triggers.size());
 
 	Long contactId = null;

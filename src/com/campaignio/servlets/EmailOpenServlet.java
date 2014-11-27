@@ -102,10 +102,17 @@ public class EmailOpenServlet extends HttpServlet
 	    {
 		addLogAndShowNotification(trackerId, campaignId);
 
+		System.out.println("Triggering from email open....");
+
 		// Trigger Email Open for only within App emails
 		EmailTrackingTriggerUtil.executeEmailOpenTrigger(trackerId, campaignId);
 	    }
 
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while triggering email open..." + e.getMessage());
 	}
 	finally
 	{
