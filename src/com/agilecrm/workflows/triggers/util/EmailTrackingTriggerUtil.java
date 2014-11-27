@@ -61,7 +61,7 @@ public class EmailTrackingTriggerUtil
 	System.out.println(trigger.type.equals(Type.EMAIL_OPENED));
 
 	// Trigger type should be EMAIL_OPENED
-	if (!trigger.type.equals(Type.EMAIL_OPENED))
+	if (!(trigger.type.equals(Type.EMAIL_OPENED)))
 	    return;
 
 	Contact contact = null;
