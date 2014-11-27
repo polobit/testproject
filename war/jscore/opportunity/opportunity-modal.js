@@ -427,6 +427,11 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 						if(!checkPipeline(deal.pipeline_id)){
 							console.log('removing the deal');
 							$("#" + oldMilestone).find("#" + id).parent().remove();
+							try{
+								$('#'+oldMilestone+'_count').text(parseInt($('#'+oldMilestone+'_count').text())-1);
+							} catch(err){
+								console.log(err);
+							}
 						}else if(newMilestone != oldMilestone){
 							
 							dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
@@ -435,6 +440,13 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 							
 							dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal));
 							$("#" + oldMilestone).find("#" + id).parent().remove();
+							
+							try{
+								$('#'+newMilestone+'_count').text(parseInt($('#'+newMilestone+'_count').text())+1);
+								$('#'+oldMilestone+'_count').text(parseInt($('#'+oldMilestone+'_count').text())-1);
+							} catch(err){
+								console.log(err);
+							}
 						}else {
 							dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
 							if(!dealPipelineModel)
@@ -451,6 +463,11 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 							return;
 						
 						dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal));
+						try{
+							$('#'+newMilestone+'_count').text(parseInt($('#'+newMilestone+'_count').text())+1);
+						} catch(err){
+							console.log(err);
+						}
 					}
 					includeTimeAgo($("#" + newMilestone));
 					$('a.deal-notes').tooltip();
