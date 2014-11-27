@@ -85,7 +85,7 @@ public class ActivityReportsUtil
     public static List<Key<ActivityReports>> getAllReportKeysByDuration(String frequency)
     {
 	System.out.println("fetching the reports - " + frequency);
-	return dao.listKeysByProperty("duration", frequency);
+	return dao.listKeysByProperty("frequency", frequency);
     }
 
     /**

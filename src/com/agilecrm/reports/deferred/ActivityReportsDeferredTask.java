@@ -51,7 +51,7 @@ public class ActivityReportsDeferredTask implements DeferredTask
 	}
 
 	String oldNamespace = NamespaceManager.get();
-
+	System.out.println("Domain name is - " + domain);
 	NamespaceManager.set(domain);
 	try
 	{
