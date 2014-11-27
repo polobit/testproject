@@ -50,12 +50,25 @@ public class SetOwner extends TaskletAdapter
 	    // Update subscriberJSON
 	    subscriberJSON = AgileTaskletUtil.getUpdatedSubscriberJSON(updatedContact, subscriberJSON);
 
-	    // to show in log
-	    String newContactOwnerName = updatedContact.getOwner().name;
+	    DomainUser newContactOwner = updatedContact.getOwner();
+
+	    // Owner is not updating sometimes, so updating subscriberJSON
+	    if (newContactOwner != null && subscriberJSON.has("data")
+		    && subscriberJSON.getJSONObject("data").has("owner"))
+	    {
+		JSONObject owner = subscriberJSON.getJSONObject("data").getJSONObject("owner");
+
+		if (!(owner.getString("id").equals(newContactOwner.id.toString())))
+		{
+		    owner.put("id", newContactOwner.id);
+		    owner.put("name", newContactOwner.name);
+		    owner.put("email", newContactOwner.email);
+		}
+	    }
 
 	    // Creates log for SetOwner
 	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-		    "Owner set to <b>" + newContactOwnerName + "</b>", LogType.SET_OWNER.toString());
+		    "Owner set to <b>" + newContactOwner.name + "</b>", LogType.SET_OWNER.toString());
 	}
 	catch (Exception e)
 	{
