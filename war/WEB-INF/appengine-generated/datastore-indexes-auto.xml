@@ -1,27 +1,27 @@
-<!-- Indices written at Thu, 30 Oct 2014 12:57:30 IST -->
+<!-- Indices written at Thu, 27 Nov 2014 23:06:11 IST -->
 
 <datastore-indexes>
 
-    <!-- Used 3 times in query history -->
+    <!-- Used 2 times in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">
         <property name="viewed.viewer_id" direction="asc"/>
         <property name="viewed.viewed_time" direction="desc"/>
     </datastore-index>
 
-    <!-- Used 6 times in query history -->
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="ownerKey" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
     <datastore-index kind="Task" ancestor="false" source="auto">
         <property name="is_complete" direction="asc"/>
         <property name="owner" direction="asc"/>
         <property name="due" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 3 times in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="ownerKey" direction="asc"/>
-        <property name="close_date" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 1 time in query history -->
+    <!-- Used 2 times in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">
         <property name="__key__" direction="asc"/>
         <property name="updated_time" direction="asc"/>
@@ -32,192 +32,10 @@
         <property name="widget_type" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 1 time in query history -->
+    <!-- Used 2 times in query history -->
     <datastore-index kind="Note" ancestor="false" source="auto">
         <property name="related_contacts" direction="asc"/>
         <property name="created_time" direction="desc"/>
     </datastore-index>
-
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="pipeline" direction="asc"/>
-        <property name="close_date" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 166 times in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="milestone" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="close_date" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 45 times in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="milestone" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="expected_value" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 8 times in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="pipeline" direction="asc"/>
-        <property name="expected_value" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 6 times in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="expected_value" direction="asc"/>
-        <property name="created_time" direction="desc"/>
-    </datastore-index>
-
-    <!-- Used 2 times in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="expected_value" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="created_time" direction="desc"/>
-    </datastore-index>
-
-    <!-- Used 2 times in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="expected_value" direction="asc"/>
-        <property name="milestone" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="created_time" direction="desc"/>
-    </datastore-index>
-
-    <!-- Used 2 times in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="expected_value" direction="asc"/>
-        <property name="milestone" direction="asc"/>
-        <property name="ownerKey" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="created_time" direction="desc"/>
-    </datastore-index>
-
-    <!-- Used 24 times in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="expected_value" direction="asc"/>
-        <property name="ownerKey" direction="asc"/>
-        <property name="created_time" direction="desc"/>
-    </datastore-index>
-
-    <!-- Used 2 times in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="ownerKey" direction="asc"/>
-        <property name="created_time" direction="desc"/>
-    </datastore-index>
-    
-        <!-- Used 1 time in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="ownerKey" direction="asc"/>
-        <property name="expected_value" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="ownerKey" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="expected_value" direction="asc"/>
-    </datastore-index>
-    
-    <datastore-index kind="Contact" ancestor="false" source="auto">
-        <property name="type" direction="asc"/>
-        <property name="created_time" direction="desc"/>
-	</datastore-index>
-	
-	<datastore-index kind="Contact" ancestor="false" source="auto">
-	        <property name="type" direction="asc"/>
-	        <property name="created_time" direction="asc"/>
-	</datastore-index>
-	
-	<datastore-index kind="Contact" ancestor="false" source="auto">
-	        <property name="type" direction="asc"/>
-	        <property name="lead_score" direction="asc"/>
-	</datastore-index>
-	
-	<datastore-index kind="Contact" ancestor="false" source="auto">
-	        <property name="type" direction="asc"/>
-	        <property name="lead_score" direction="desc"/>
-	</datastore-index>
-	
-	<datastore-index kind="Contact" ancestor="false" source="auto">
-	        <property name="type" direction="asc"/>
-	        <property name="star_value" direction="asc"/>
-	</datastore-index>
-	
-	<datastore-index kind="Contact" ancestor="false" source="auto">
-	        <property name="type" direction="asc"/>
-	        <property name="star_value" direction="desc"/>
-	</datastore-index>
-	<datastore-index kind="ContactView" ancestor="false" source="auto">
-        <property name="type" direction="asc"/>
-        <property name="name" direction="asc"/>
-	</datastore-index>
-	
-	<datastore-index kind="Contact" ancestor="false">
-    	<property name="tagsWithTime.tag" direction="asc" />
-    	<property name="created_time" direction="asc" />
-  	</datastore-index>
-  
-  <datastore-index kind="Contact" ancestor="false">
-  	<property name="tagsWithTime.tag" direction="asc" />
-  	<property name="created_time" direction="desc" />
-  </datastore-index>
-  
-  <datastore-index kind="Contact" ancestor="false">
-    <property name="tagsWithTime.tag" direction="asc" />
-    <property name="lead_score" direction="asc" />
-  </datastore-index>
-  
-  <datastore-index kind="Contact" ancestor="false">
-    <property name="tagsWithTime.tag" direction="asc" />
-    <property name="lead_score" direction="desc" />
-  </datastore-index>
-  
-  <datastore-index kind="Contact" ancestor="false">
-    <property name="tagsWithTime.tag" direction="asc" />
-    <property name="star_value" direction="asc" />
-  </datastore-index>
-  
-  <datastore-index kind="Contact" ancestor="false">
-    <property name="tagsWithTime.tag" direction="asc" />
-    <property name="star_value" direction="desc" />
-  </datastore-index>
-	
-	<!-- Used 4 times in query history -->
-    <datastore-index kind="Contact" ancestor="false" source="auto">
-        <property name="owner_key" direction="asc"/>
-        <property name="created_time" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 2 times in query history -->
-    <datastore-index kind="Contact" ancestor="false" source="auto">
-        <property name="owner_key" direction="asc"/>
-        <property name="created_time" direction="desc"/>
-    </datastore-index>
-
-    <!-- Used 2 times in query history -->
-    <datastore-index kind="Contact" ancestor="false" source="auto">
-        <property name="owner_key" direction="asc"/>
-        <property name="lead_score" direction="desc"/>
-    </datastore-index>
-
-    <!-- Used 2 times in query history -->
-    <datastore-index kind="Contact" ancestor="false" source="auto">
-        <property name="owner_key" direction="asc"/>
-        <property name="lead_score" direction="asc"/>
-    </datastore-index>
-    
-    <!-- Used 2 times in query history -->
-    <datastore-index kind="Contact" ancestor="false" source="auto">
-        <property name="owner_key" direction="asc"/>
-        <property name="star_value" direction="desc"/>
-    </datastore-index>
-
-    <!-- Used 2 times in query history -->
-    <datastore-index kind="Contact" ancestor="false" source="auto">
-        <property name="owner_key" direction="asc"/>
-        <property name="star_value" direction="asc"/>
-    </datastore-index>
-	
 
 </datastore-indexes>
