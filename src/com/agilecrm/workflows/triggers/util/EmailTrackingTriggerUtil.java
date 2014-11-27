@@ -20,6 +20,8 @@ public class EmailTrackingTriggerUtil
 
     public static void executeEmailOpenTrigger(String subscriberId, String campaignId)
     {
+	System.out.println("subscriberId " + subscriberId + " campaignId " + campaignId);
+
 	List<Trigger> triggers = TriggerUtil.getTriggersByCondition(Trigger.Type.EMAIL_OPENED);
 
 	System.out.println("Obtained triggers is..." + triggers);
@@ -35,11 +37,18 @@ public class EmailTrackingTriggerUtil
 	if (!StringUtils.isBlank(subscriberId))
 	    contactId = Long.parseLong(subscriberId);
 
+	System.out.println(contactId);
+
 	if (!StringUtils.isBlank(campaignId))
 	    workflowId = Long.parseLong(campaignId);
 
+	System.out.println(workflowId);
+
 	for (Trigger trigger : triggers)
+	{
+	    System.out.println("Executing trigger...." + trigger);
 	    executeEmailOpenTrigger(trigger, contactId, workflowId);
+	}
     }
 
     public static void executeEmailOpenTrigger(Trigger trigger, Long contactId, Long workflowId)
