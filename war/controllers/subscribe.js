@@ -293,6 +293,7 @@ var SubscribeRouter = Backbone.Router.extend({
 					})
 					
 					$("#email-quantity", el).die().live('keydown', function(e){
+						isValidForm($("#email-plan-form", el));
 						if(e.which == 13)
 							{
 								e.preventDefault();
