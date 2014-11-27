@@ -304,6 +304,8 @@ public class SubscriptionApi
 	{
 	    // Get current domain subscription entity
 	    Subscription subscription = SubscriptionUtil.getSubscription();
+	    
+	    subscription.cancelSubscription();
 
 	    // Check if subscription is not null delete
 	    // subscription(subscription call delete customer form gateway)
