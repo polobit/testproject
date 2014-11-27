@@ -137,7 +137,6 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 {
     debug = false;
     HANDLEBARS_PRECOMPILATION = true;
-    debug = true;
     production = true;
    
 }
