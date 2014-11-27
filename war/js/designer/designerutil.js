@@ -126,7 +126,7 @@ function getCampaignList(type)
 
 	// Parse stringify json
 	var data = JSON.parse(workflows);
-
+	//changed to all
 	var listOfWorkflows = {"All":"All"};
 
 	$.each(data, function(index, obj)
