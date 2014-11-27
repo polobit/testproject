@@ -34,15 +34,15 @@ public class ShopifyWebhookTrigger extends HttpServlet
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException
     {
 	String apiKey = req.getParameter("api-key");
-	System.out.println("API Key is " + apiKey);
+	System.out.println("API KEY is " + apiKey);
 
 	Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
+	System.out.println("Owner is " + owner);
 	if (owner == null)
 	{
 	    res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "API Key invalid");
 	    return;
 	}
-	System.out.println("Owner is " + owner);
 
 	String shopifyEvent = req.getHeader("X-Shopify-Topic");
 	System.out.println("Shopify event is " + shopifyEvent);
@@ -60,14 +60,15 @@ public class ShopifyWebhookTrigger extends HttpServlet
 	try
 	{
 	    JSONObject shopifyJson = new JSONObject(shopifyData);
-	    System.out.println("Shopify json is " + shopifyJson);
+	    System.out.println("Shopify JSON is " + shopifyJson);
 
 	    List<Trigger> triggers = TriggerUtil.getAllTriggers();
 	    for (Trigger trigger : triggers)
 	    {
 		if (StringUtils.equals(shopifyEvent.replace('/', '_').toUpperCase(), trigger.trigger_shopify_event))
 		{
-		    String customerEmail = shopifyJson.getString("email");
+		    System.out.println("Trigger type shopify event match ...");
+		    String customerEmail = getCustomerEmail(shopifyEvent, shopifyJson);
 		    System.out.println("Customer email is " + customerEmail);
 
 		    String[] tags = getCustomerTags(shopifyEvent, shopifyJson);
@@ -75,21 +76,36 @@ public class ShopifyWebhookTrigger extends HttpServlet
 		    Contact contact = ContactUtil.searchContactByEmail(customerEmail);
 		    if (contact == null)
 			contact = new Contact();
+
 		    List<ContactField> contactProperties = new ArrayList<ContactField>();
 
 		    JSONObject customerJson = getCustomerDetails(shopifyEvent, shopifyJson);
+		    System.out.println("Customer JSON is " + customerJson);
 		    if (customerJson == null)
 		    {
 			res.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		    }
-		    Iterator<?> keys = customerJson.keys();
+
+		    JSONObject agileCustomerJson = getAgileContactProperties(customerJson);
+		    System.out.println("Agile customer data is " + agileCustomerJson);
+		    if (StringUtils.isBlank(agileCustomerJson.toString()))
+		    {
+			res.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		    }
+
+		    Iterator<?> keys = agileCustomerJson.keys();
 		    while (keys.hasNext())
 		    {
 			String key = (String) keys.next();
 			String value = customerJson.getString(key);
 			contactProperties.add(new ContactField(key, value, null));
 		    }
+
+		    ContactField addressContactField = getCustomerAddress(shopifyEvent, shopifyJson);
+		    if (addressContactField != null)
+			contactProperties.add(addressContactField);
 
 		    if (contact.properties.isEmpty())
 			contact.properties = contactProperties;
@@ -101,24 +117,211 @@ public class ShopifyWebhookTrigger extends HttpServlet
 		    contact.addTags(tags);
 		    contact.save();
 
-		    System.out.println("Assigning campaign to contact ...");
-		    WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.id, new JSONObject().put("shopify", shopifyJson));
-
-		    if (!(StringUtils.isBlank(shopifyJson.getString("note"))||StringUtils.equals("null", shopifyJson.getString("note"))))
+		    Note note = getCustomerNote(shopifyEvent, shopifyJson);
+		    if (note != null)
 		    {
 			System.out.println("Saving note ...");
-			Note note = new Note("Shopify Note", shopifyJson.getString("note"));
 			note.addRelatedContacts(contact.id.toString());
 			note.setOwner(new Key<AgileUser>(AgileUser.class, owner.getId()));
 			note.save();
 		    }
+
+		    System.out.println("Assigning campaign to contact....");
+		    WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.id, new JSONObject().put("shopify", shopifyJson));
 		}
 	    }
+	    return;
 	}
 	catch (JSONException e)
 	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+	    return;
+	}
+    }
+
+    public String getCustomerEmail(String shopifyEvent, JSONObject shopifyJson)
+    {
+	try
+	{
+	    String customerEmail = null;
+	    if (shopifyEvent.contains("customers"))
+		customerEmail = shopifyJson.getString("email");
+	    else if (shopifyEvent.contains("checkouts") || shopifyEvent.contains("orders"))
+		customerEmail = shopifyJson.getJSONObject("customer").getString("email");
+
+	    return customerEmail;
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+    }
+
+    public String[] getCustomerTags(String shopifyEvent, JSONObject shopifyJson)
+    {
+	try
+	{
+	    List<String> trimmedTags = new ArrayList<String>();
+	    String shopifyTags = null;
+
+	    if (shopifyEvent.contains("customers"))
+		shopifyTags = shopifyJson.getString("tags");
+	    else if (shopifyEvent.contains("checkouts") || shopifyEvent.contains("orders"))
+		shopifyTags = shopifyJson.getJSONObject("customer").getString("tags");
+
+	    if (StringUtils.isBlank(shopifyTags))
+		return null;
+
+	    String[] tags = shopifyTags.split(",");
+	    for (String tag : tags)
+		trimmedTags.add(tag.trim());
+
+	    return trimmedTags.toArray(new String[trimmedTags.size()]);
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+    }
+
+    public Note getCustomerNote(String shopifyEvent, JSONObject shopifyJson)
+    {
+	try
+	{
+	    String noteDescription = null;
+	    if (shopifyEvent.contains("customers"))
+		noteDescription = shopifyJson.getString("note");
+	    else if (shopifyEvent.contains("checkouts") || shopifyEvent.contains("orders"))
+		noteDescription = shopifyJson.getJSONObject("customer").getString("note");
+
+	    if (StringUtils.isBlank(noteDescription) || StringUtils.equals(noteDescription, "null"))
+		return null;
+
+	    Note note = new Note("Shopify Note", noteDescription);
+	    return note;
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+
+    }
+
+    public JSONObject getAgileContactProperties(JSONObject customerJson)
+    {
+	try
+	{
+	    JSONObject agileJson = new JSONObject();
+
+	    Iterator<?> keys = customerJson.keys();
+	    while (keys.hasNext())
+	    {
+		String key = (String) keys.next();
+		String value = customerJson.getString(key);
+
+		if (!StringUtils.isBlank(value))
+		{
+		    switch (key)
+		    {
+		    case "email":
+			agileJson.put(Contact.EMAIL, value);
+			break;
+		    case "first_name":
+			agileJson.put(Contact.FIRST_NAME, value);
+			break;
+		    case "last_name":
+			agileJson.put(Contact.LAST_NAME, value);
+			break;
+		    default:
+			break;
+		    }
+		}
+	    }
+	    return agileJson;
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+    }
+
+    public JSONObject getCustomerDetails(String shopifyEvent, JSONObject shopifyJson)
+    {
+	try
+	{
+	    JSONObject customerJson = null;
+	    if (shopifyEvent.contains("customers"))
+		customerJson = shopifyJson;
+	    else if (shopifyEvent.contains("checkouts") || shopifyEvent.contains("orders"))
+		customerJson = shopifyJson.getJSONObject("customer");
+	    return customerJson;
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+    }
+
+    public ContactField getCustomerAddress(String shopifyEvent, JSONObject shopifyJson)
+    {
+	try
+	{
+	    JSONObject addressJson;
+	    String address = null;
+
+	    if (shopifyEvent.contains("customers"))
+		addressJson = shopifyJson.getJSONObject("default_address");
+	    else if (shopifyEvent.contains("orders"))
+		addressJson = shopifyJson.getJSONObject("customer").getJSONObject("default_address");
+	    else if (shopifyEvent.contains("checkouts"))
+		addressJson = shopifyJson.getJSONObject("billing_address");
+	    else
+		addressJson = null;
+
+	    if (addressJson == null)
+		return null;
+	    
+	    Iterator<?> keys = addressJson.keys();
+	    while (keys.hasNext())
+	    {
+		String key = (String) keys.next();
+		String value = addressJson.getString(key);
+
+		if (!StringUtils.isBlank(value))
+		{
+		    switch (key)
+		    {
+		    case "address1":
+		    case "address2":
+			address = (StringUtils.isBlank(address)) ? value : address + ", " + value;
+			break;
+		    case "city":
+			addressJson.put("city", value);
+			break;
+		    case "country_code":
+			addressJson.put("country", value);
+			break;
+		    case "zip":
+			addressJson.put("zip", value);
+			break;
+		    default:
+			break;
+		    }
+		}
+	    }
+	    if (!StringUtils.isBlank(address))
+		addressJson.put("address", address);
+
+	    if (!StringUtils.isBlank(addressJson.toString()))
+	    {
+		ContactField addressContactField = new ContactField(Contact.ADDRESS, addressJson.toString(), null);
+		return addressContactField;
+	    }
+	    else
+		return null;
+	}
+	catch (Exception e)
+	{
+	    return null;
 	}
     }
 
@@ -133,83 +336,5 @@ public class ShopifyWebhookTrigger extends HttpServlet
 	oldProperties.removeAll(outDatedProperties);
 	newProperties.addAll(oldProperties);
 	return newProperties;
-    }
-
-    public JSONObject getAgileContactProperties(JSONObject shopifyJson) throws JSONException
-    {
-	JSONObject agileJson = new JSONObject();
-	JSONObject addressJSON = new JSONObject();
-	String address = new String();
-
-	Iterator<?> keys = shopifyJson.keys();
-	while (keys.hasNext())
-	{
-	    String key = (String) keys.next();
-	    String value = shopifyJson.getString(key);
-
-	    if (!StringUtils.isBlank(value))
-	    {
-		switch (key)
-		{
-		case "address1":
-		case "address2":
-		    address = (StringUtils.isBlank(address)) ? value : address + ", " + value;
-		    break;
-		case "country_code":
-		    addressJSON.put("country", value);
-		    break;
-		case "zip":
-		case "city":
-		    addressJSON.put(key, value);
-		    break;
-		case "province_code":
-		case "name":
-		case "province":
-		case "longitude":
-		case "latitude":
-		case "country":
-		case "id":
-		case "default":
-		    break;
-		default:
-		    agileJson.put(key, value);
-		    break;
-		}
-	    }
-	}
-	if (!StringUtils.isBlank(address))
-	    addressJSON.put("address", address);
-	if (!StringUtils.isBlank(addressJSON.toString()))
-	    agileJson.put(Contact.ADDRESS, addressJSON);
-
-	return agileJson;
-    }
-
-    public JSONObject getCustomerDetails(String shopifyEvent, JSONObject shopifyJson) throws JSONException
-    {
-	JSONObject customerJson;
-	if (shopifyEvent.contains("customer"))
-	    customerJson = shopifyJson.getJSONObject("default_address");
-	else
-	    customerJson = shopifyJson.getJSONObject("shipping_address");
-	return customerJson;
-    }
-
-    public String[] getCustomerTags(String shopifyEvent, JSONObject shopifyJson) throws JSONException
-    {
-	List<String> trimmedTags = new ArrayList<String>();
-	String shopifyTags;
-
-	if (shopifyEvent.contains("customer"))
-	    shopifyTags = shopifyJson.getString("tags");
-	else
-	    shopifyTags = shopifyJson.getJSONObject("customer").getString("tags");
-
-	String[] tags = shopifyTags.split(",");
-
-	for (String tag : tags)
-	    trimmedTags.add(tag.trim());
-
-	return trimmedTags.toArray(new String[trimmedTags.size()]);
     }
 }
