@@ -163,8 +163,16 @@ public abstract class DaoBillingRestriction implements
     @Override
     public void send_warning_message()
     {
-	getTag();
-
+	try
+	{
+	    getTag();
+	}
+	catch(Exception e)
+	{
+	    System.err.print(e.getMessage());
+	    e.printStackTrace();
+	    return;
+	}
 	if (restriction.tagsToAddInOurDomain.isEmpty())
 	    return;
 
