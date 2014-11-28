@@ -67,7 +67,7 @@ public class BusinessHours extends TaskletAdapter
 			{
 
 				JSONObject json = arrayDuration.getJSONObject(i);
-				Vector dayOfWeek = new Vector();
+				Vector<Integer> dayOfWeek = new Vector<Integer>();
 
 				/*
 				 * "Mon-Fri": "Mon-Fri", "Mon-Sat": "Mon-Sat", "Mon-Sun":
@@ -138,6 +138,11 @@ public class BusinessHours extends TaskletAdapter
 				if (uiDay.equalsIgnoreCase("Sun"))
 					dayOfWeek.add(Calendar.SUNDAY);
 
+				Calendar currentcalendar = Calendar.getInstance();
+				int day = currentcalendar.get(Calendar.DAY_OF_WEEK);
+
+				if (!dayOfWeek.contains(day))
+					return false;
 				// Get the current time in Hong Kong
 				/*
 				 * { "name": "timezone", "value":
