@@ -7,7 +7,6 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.workflows.triggers.Trigger;
-import com.agilecrm.workflows.triggers.Trigger.EmailTrackingType;
 import com.agilecrm.workflows.triggers.Trigger.Type;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 
@@ -55,7 +54,7 @@ public class EmailTrackingTriggerUtil
 	    return;
 	}
 
-	if (!trigger.email_tracking_type.equals(EmailTrackingType.CAMPAIGNS))
+	if (!trigger.email_tracking_type.equals("CAMPAIGNS"))
 	{
 	    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
 	    return;
@@ -109,7 +108,7 @@ public class EmailTrackingTriggerUtil
 	    return;
 	}
 
-	if (!trigger.email_tracking_type.equals(EmailTrackingType.CAMPAIGNS))
+	if (!trigger.email_tracking_type.equals("CAMPAIGNS"))
 	{
 	    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
 	    return;

@@ -73,12 +73,8 @@ public class Trigger
      */
     public Type type;
 
-    public enum EmailTrackingType
-    {
-	ANY, CAMPAIGNS, PERSONAL
-    };
-
-    public EmailTrackingType email_tracking_type;
+    @NotSaved(IfDefault.class)
+    public String email_tracking_type = "ANY";
 
     @NotSaved(IfDefault.class)
     public Long email_tracking_campaign_id = null;

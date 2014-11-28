@@ -42,6 +42,8 @@ $(function()
 		if($(this).val() != 'EMAIL_OPENED' || $(this).val() != 'EMAIL_LINK_CLICKED'){
 			$('form#addTriggerForm').find('select#email-tracking-type').closest('div.control-group').css('display', 'none');
 			
+			$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', 'none');
+			
 			$('form#addTriggerForm').find('#custom-link-clicked').closest('div.control-group').css('display', 'none');
 		}
 			
@@ -111,14 +113,14 @@ $(function()
 		
 		e.preventDefault();
 		
-		if($(this).val() == 'ALL' || $(this).val() == 'PERSONAL')
+		if($(this).val() == 'ANY' || $(this).val() == 'PERSONAL')
 		{
 			// Show milestones select element
 			$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', 'none');
 			return;
 		}
 		
-		// Show milestones select element
+		// Show campaign select element
 		$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', '');
 
 		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
