@@ -308,12 +308,16 @@ public class SubscriptionApi
 	    if(subscription == null)
 		return;
 
+	    subscription.cancelSubscription();
+	    
+	    subscription.refreshCustomer();
+	    
 	    subscription.plan = null;
 	    subscription.emailPlan = null;
 	    
 	    subscription.save();
 	    
-	    subscription.cancelSubscription();
+	  
 	}
 	catch (Exception e)
 	{
