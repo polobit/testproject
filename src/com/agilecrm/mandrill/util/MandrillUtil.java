@@ -386,7 +386,7 @@ public class MandrillUtil
     public static String getText(String html, String text)
     {
 	// return text if not empty
-	if (!StringUtils.isBlank(text))
+	if (!StringUtils.isBlank(text) || StringUtils.isBlank(html))
 	    return text;
 
 	return new HtmlToPlainText().getPlainText(Jsoup.parse(html));
