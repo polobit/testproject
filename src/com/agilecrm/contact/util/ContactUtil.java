@@ -36,6 +36,7 @@ import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.search.Index;
 import com.googlecode.objectify.Key;
@@ -1220,32 +1221,33 @@ public class ContactUtil
 	}
 
 	public static List<String> workflowListOfAContact(Long id)
-	{
-		Contact contact = ContactUtil.getContact(id);
-		if (contact == null)
-			return new ArrayList<>();
-
-		List<String> workflowList = new ArrayList<String>();
-
-		List<CampaignStatus> contactCampaignStatus = contact.campaignStatus;
-		Iterator<CampaignStatus> it = contactCampaignStatus.iterator();
-		while (it.hasNext())
+	{// string
+		List<String> workflows = null;
+		try
 		{
+			List<CampaignStatus> dflk = dao.get(id).campaignStatus;
+			Iterator<CampaignStatus> jkjhk = dflk.iterator();
+			workflows = new ArrayList<String>();
+			while (jkjhk.hasNext())
+			{
+				workflows.add(jkjhk.next().campaign_id);
 
-			CampaignStatus campaignStatus = it.next();
-			try
-			{
-				if (campaignStatus.status.contains("ACTIVE"))
-					workflowList.add(campaignStatus.campaign_id);
 			}
-			catch (EnumConstantNotPresentException e)
-			{
-				System.err.println("Inside workflowListOfAContact");
-				e.printStackTrace();
-				return new ArrayList<>();
-			}
+
 		}
-		return workflowList;
+		catch (EntityNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return workflows;
+
+		/*
+		 * List<String> cmapingIDList = new ArrayList<String>();
+		 * 
+		 * Iterator<String> it = q.iterator(); while (it.hasNext()) { it.
+		 * cmapingIDList.add(it.toString()); } return q;
+		 */
 	}
 
 }
