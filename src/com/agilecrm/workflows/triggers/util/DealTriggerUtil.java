@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -174,7 +173,7 @@ public class DealTriggerUtil
     {
 	try
 	{
-	    JSONObject opportunityJSON = getJSONObject(opportunity);
+	    JSONObject opportunityJSON = TriggerUtil.getJSONObject(opportunity);
 
 	    // If null
 	    if (opportunityJSON == null)
@@ -196,6 +195,7 @@ public class DealTriggerUtil
 	    if (owner != null)
 	    {
 		JSONObject updatedOwner = new JSONObject();
+		updatedOwner.put("id", owner.getString("id"));
 		updatedOwner.put("name", owner.getString("name"));
 		updatedOwner.put("email", owner.getString("email"));
 
@@ -233,35 +233,6 @@ public class DealTriggerUtil
 	    customJSON.put(customField.name, customField.value);
 
 	return customJSON;
-    }
-
-    public static JSONObject getJSONObject(Object object)
-    {
-	try
-	{
-	    ObjectMapper mapper = new ObjectMapper();
-	    String objectStr = null;
-
-	    try
-	    {
-		if (object instanceof Opportunity)
-		    objectStr = mapper.writeValueAsString(object);
-
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-		System.err.println("Exception occured while serializing object..." + e.getMessage());
-	    }
-
-	    return new JSONObject(objectStr);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured while converting to json..." + e.getMessage());
-	    return null;
-	}
     }
 
 }

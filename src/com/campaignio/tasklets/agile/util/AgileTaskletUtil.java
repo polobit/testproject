@@ -24,7 +24,6 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.EmailUtil;
-import com.agilecrm.util.JSONUtil;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus.UnsubscribeType;
 import com.campaignio.reports.DateUtil;
@@ -168,6 +167,14 @@ public class AgileTaskletUtil
 	}
     }
 
+    public static JSONObject getSubscriberJSON(Contact contact)
+    {
+	// Custom date labels to convert epoch to Date format
+	List<String> dateCustomFieldLabels = getDateCustomLabelsFromCache();
+
+	return getSubscriberJSON(contact, dateCustomFieldLabels);
+    }
+
     /**
      * Converts contact object into json object.
      * 
@@ -175,8 +182,7 @@ public class AgileTaskletUtil
      *            Contact object that subscribes to workflow.
      * @return JsonObject of contact.
      */
-    @SuppressWarnings("unchecked")
-    public static JSONObject getSubscriberJSON(Contact contact)
+    public static JSONObject getSubscriberJSON(Contact contact, List<String> dateCustomFieldLabels)
     {
 	if (contact == null)
 	    return null;
@@ -190,8 +196,6 @@ public class AgileTaskletUtil
 
 	try
 	{
-	    // Custom date labels to convert epoch to Date format
-	    List<String> dateCustomFieldLabels = getDateCustomLabelsFromCache();
 
 	    JSONObject subscriberJSON = new JSONObject();
 
@@ -437,10 +441,13 @@ public class AgileTaskletUtil
     {
 	JSONArray subscriberJSONArray = new JSONArray();
 
+	// Custom date labels to convert epoch to Date format
+	List<String> dateCustomFieldLabels = getDateCustomLabelsFromCache();
+
 	for (Contact contact : contacts)
 	{
 	    if (contact != null)
-		subscriberJSONArray.put(getSubscriberJSON(contact));
+		subscriberJSONArray.put(getSubscriberJSON(contact, dateCustomFieldLabels));
 	}
 
 	return subscriberJSONArray;
@@ -457,21 +464,18 @@ public class AgileTaskletUtil
     {
 	JSONArray subscriberJSONArray = new JSONArray();
 
+	// Custom date labels to convert epoch to Date format
+	List<String> dateCustomFieldLabels = getDateCustomLabelsFromCache();
+
 	for (Contact contact : contacts)
 	{
 	    if (contact != null)
 	    {
-		JSONObject subscriberJSON = getSubscriberJSON(contact);
+		JSONObject subscriberJSON = getSubscriberJSON(contact, dateCustomFieldLabels);
 
 		try
 		{
-		    if (subscriberJSON.has("data") && triggerJSON != null)
-		    {
-			JSONObject data = JSONUtil.mergeJSONs(new JSONObject[] { subscriberJSON.getJSONObject("data"),
-			        triggerJSON });
-
-			subscriberJSON.put("data", data);
-		    }
+		    subscriberJSON.put("_agile_custom_trigger_json", triggerJSON);
 		}
 		catch (Exception e)
 		{
@@ -598,6 +602,7 @@ public class AgileTaskletUtil
      */
     public static JSONObject getUpdatedSubscriberJSON(Contact updatedContact, JSONObject oldSubscriberJSON)
     {
+
 	// Update subscriberJSON
 	JSONObject updatedSubscriberJSON = AgileTaskletUtil.getSubscriberJSON(updatedContact);
 
