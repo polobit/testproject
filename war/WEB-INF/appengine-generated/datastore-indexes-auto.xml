@@ -1,14 +1,9 @@
-<!-- Indices written at Thu, 30 Oct 2014 12:57:30 IST -->
+<!-- Indices written at Mon, 17 Nov 2014 11:10:45 IST -->
+
 
 <datastore-indexes>
 
-    <!-- Used 3 times in query history -->
-    <datastore-index kind="Contact" ancestor="false" source="auto">
-        <property name="viewed.viewer_id" direction="asc"/>
-        <property name="viewed.viewed_time" direction="desc"/>
-    </datastore-index>
-
-    <!-- Used 6 times in query history -->
+    <!-- Used 1 time in query history -->
     <datastore-index kind="Task" ancestor="false" source="auto">
         <property name="is_complete" direction="asc"/>
         <property name="owner" direction="asc"/>
@@ -148,11 +143,45 @@
 	        <property name="type" direction="asc"/>
 	        <property name="star_value" direction="desc"/>
 	</datastore-index>
+	
 	<datastore-index kind="ContactView" ancestor="false" source="auto">
         <property name="type" direction="asc"/>
         <property name="name" direction="asc"/>
 	</datastore-index>
-	
+    
+    <datastore-index kind="Portlet" ancestor="true" source="manual">
+        <property name="row_position" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Activity" ancestor="false" source="auto">
+        <property name="entity_type" direction="asc"/>
+        <property name="user" direction="asc"/>
+        <property name="time" direction="asc"/>
+    </datastore-index>
+
+    <datastore-index kind="Activity" ancestor="false" source="auto">
+        <property name="activity_type" direction="asc"/>
+        <property name="entity_type" direction="asc"/>
+        <property name="time" direction="asc"/>
+    </datastore-index>
+
+    <datastore-index kind="Event" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="search_range" direction="asc"/>
+    </datastore-index>
+
+    <datastore-index kind="Activity" ancestor="false" source="auto">
+        <property name="activity_type" direction="asc"/>
+        <property name="time" direction="asc"/>
+    </datastore-index>
+
+    <datastore-index kind="Activity" ancestor="false" source="auto">
+        <property name="activity_type" direction="asc"/>
+        <property name="entity_type" direction="asc"/>
+        <property name="user" direction="asc"/>
+        <property name="time" direction="asc"/>
+    </datastore-index>
+    
 	<datastore-index kind="Contact" ancestor="false">
     	<property name="tagsWithTime.tag" direction="asc" />
     	<property name="created_time" direction="asc" />
@@ -218,12 +247,32 @@
         <property name="owner_key" direction="asc"/>
         <property name="star_value" direction="asc"/>
     </datastore-index>
+	
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="milestone" direction="asc"/>
+        <property name="ownerKey" direction="asc"/>
+        <property name="pipeline" direction="asc"/>
+        <property name="close_date" direction="desc"/>
+    </datastore-index>
+	
+	    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="milestone" direction="asc"/>
+        <property name="pipeline" direction="asc"/>
+        <property name="close_date" direction="desc"/>
+    </datastore-index>
+	
+	 <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="expected_value" direction="asc"/>
+        <property name="milestone" direction="asc"/>
+        <property name="ownerKey" direction="asc"/>
+        <property name="pipeline" direction="asc"/>
+        <property name="close_date" direction="desc"/>
+    </datastore-index>
     
     <!-- Used 0 times in query history -->
     <datastore-index kind="CustomFieldDef" ancestor="false" source="auto">
         <property name="scope" direction="asc"/>
         <property name="position" direction="asc"/>
     </datastore-index>
-	
 
 </datastore-indexes>
