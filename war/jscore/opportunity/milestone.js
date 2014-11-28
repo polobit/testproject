@@ -377,8 +377,8 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone) {
 	if(!dealPipelineModel)
 		return;
 	try{
-		$('#'+newMilestone+'_count').text(parseInt($('#'+newMilestone+'_count').text())+1);
-		$('#'+oldMilestone+'_count').text(parseInt($('#'+oldMilestone+'_count').text())-1);
+		$('#'+newMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text())+1);
+		$('#'+oldMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+oldMilestone.replace(/ +/g, '')+'_count').text())-1);
 	} catch(err){
 		console.log(err);
 	}
