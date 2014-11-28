@@ -339,8 +339,22 @@ public class StripeImpl implements AgileBilling
     {
 	Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
 
-	// Cancels subscription in stripe
-	customer.cancelSubscription();
+	// Returns if customer is null
+	if(customer == null)
+	    return;
+	
+	// Fetches all subscriptions
+	CustomerSubscriptionCollection subscriptions = customer.getSubscriptions();
+	
+	// If There are not subscriptions it returns
+	if(subscriptions.getTotalCount() == 0)
+	    return;
+	
+	// Fetches all subscriptions and cancels from stripe
+	for(com.stripe.model.Subscription s : subscriptions.getData())
+	{
+	    s.cancel(null);
+	}
     }
 
     public static JSONObject getCoupon(String couponId) throws Exception
