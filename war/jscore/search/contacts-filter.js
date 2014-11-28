@@ -294,19 +294,15 @@ function chainFiltersForContactAndCompany(el, data, callback) {
 	if(data && data.contact_type) {
 		if(data.contact_type == 'PERSON') {
 			chainFilters($(el).find('.chained-table.contact'), data, undefined, false, false);
-			chainFilters($(el).find('.chained-table.company'), undefined, undefined, false, true);
+			chainFilters($(el).find('.chained-table.company'), undefined, callback, false, true);
 		} else if(data.contact_type == 'COMPANY') {
 			chainFilters($(el).find('.chained-table.company'), data, undefined, false, true);
-			chainFilters($(el).find('.chained-table.contact'), undefined, undefined, false, false);
+			chainFilters($(el).find('.chained-table.contact'), undefined, callback, false, false);
 		}
 	} else {
 		chainFilters($(el).find('.chained-table.contact'), undefined, undefined, false, false);
-		chainFilters($(el).find('.chained-table.company'), undefined, undefined, false, true);
+		chainFilters($(el).find('.chained-table.company'), undefined, callback, false, true);
 	}
-	if (callback && typeof (callback) === "function")
-		{
-			callback();
-		}
 }
 
 /**
