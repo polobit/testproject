@@ -306,11 +306,6 @@ public class SubscriptionApi
 	    Subscription subscription = SubscriptionUtil.getSubscription();
 	    
 	    subscription.cancelSubscription();
-
-	    // Check if subscription is not null delete
-	    // subscription(subscription call delete customer form gateway)
-	    if (subscription != null)
-		subscription.delete();
 	}
 	catch (Exception e)
 	{
