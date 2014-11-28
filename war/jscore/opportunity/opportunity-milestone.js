@@ -167,7 +167,8 @@ function dealsFetch(index,milestones)
 		console.log($('#'+base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').length);
 		$('#'+base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').hide();
 		try {
-			$('#'+base_model.get("heading").replace(/ +/g, '')+'_count').text(data.at(0).toJSON().count);
+			var count = data.at(0)?data.at(0).toJSON().count:0;
+			$('#'+base_model.get("heading").replace(/ +/g, '')+'_count').text(data.at(0)?data.at(0).toJSON().count:0);
 		}
 		catch(err) {
 		    console.log(err);
