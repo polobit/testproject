@@ -142,7 +142,7 @@ public class BusinessHours extends TaskletAdapter
 				int day = currentcalendar.get(Calendar.DAY_OF_WEEK);
 
 				if (!dayOfWeek.contains(day))
-					return false;
+					continue;
 				// Get the current time in Hong Kong
 				/*
 				 * { "name": "timezone", "value":
