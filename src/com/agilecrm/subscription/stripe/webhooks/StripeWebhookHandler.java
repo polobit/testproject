@@ -65,6 +65,16 @@ public abstract class StripeWebhookHandler
 	    return null;
 
 	user = DomainUserUtil.getDomainOwner(domain);
+
+	if (user == null)
+	{
+	    Customer customer = getCustomerFromStripe();
+	    if (customer != null)
+		user = DomainUserUtil.getDomainUserByEmailFromParticularDomain(customer.getEmail(), getDomain());
+	    if (user == null)
+		user = DomainUserUtil.getDomainOwner("local");
+	}
+
 	return user;
     }
 
