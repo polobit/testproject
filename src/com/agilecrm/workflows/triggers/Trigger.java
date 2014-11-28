@@ -75,17 +75,17 @@ public class Trigger
 
     public enum EmailTrackingType
     {
-	ALL, CAMPAIGNS, PERSONAL
+	ANY, CAMPAIGNS, PERSONAL
     };
-    
+
     public EmailTrackingType email_tracking_type;
-    
+
     @NotSaved(IfDefault.class)
-    public Long email_tracking_campaign_id=null;
-    
+    public Long email_tracking_campaign_id = null;
+
     @NotSaved(IfDefault.class)
     public String custom_link_clicked = null;
-    
+
     /**
      * Campaign id of a campaign with respect to trigger. Campaign name can be
      * retrieved using campaign id.
