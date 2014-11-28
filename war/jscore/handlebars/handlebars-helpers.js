@@ -2808,6 +2808,17 @@ $(function()
 	{
 		return JSON.parse(data).xeroemail;
 	});
+	
+	Handlebars.registerHelper('isContactType', function(contact_type, contact_type_2 , options)
+	{
+		if(!contact_type && contact_type_2 == 'PERSON') {
+			return options.fn(this);
+		}
+		else if (contact_type == contact_type_2)
+			return options.fn(this);
+		
+		return options.inverse(this);
+	});
 
 	Handlebars.registerHelper('getfbreturndomain', function(data)
 	{
