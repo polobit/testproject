@@ -490,8 +490,13 @@ public class WebCalendarEventUtil
 		String body_subject = "<p>Your appointment was scheduled with <b>" + wce.userName
 		        + "</b>.</p><p>Duration - " + wce.slot_time + " minutes</p><p>Note message : " + wce.notes
 		        + "</p>";
+
+		String body1 = "<p>" + wce.userName + " (" + wce.email + ") scheduled an appointment " + " for "
+		        + wce.slot_time + " mins</p><p><a href=https://" + user.domain
+		        + ".agilecrm.com/#calendar>View Agile Calendar</a></p>Phone: " + wce.phoneNumber
+		        + "</p><p>Note: " + wce.notes + "</p>";
 		EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
-		        "Appointment Scheduled", null, body_subject, null, null, attachments_to_agile_user);
+		        "Appointment Scheduled", null, body1, null, null, attachments_to_agile_user);
 	    }
 	}
 
@@ -503,14 +508,18 @@ public class WebCalendarEventUtil
 
 	    System.out.println("icall s string  " + iCal.toString() + " email " + wce.email);
 
-	    String body = "<p>Your appointment was scheduled with " + user.name + " on "
+	    String body1 = "<p>Your appointment is scheduled for " + wce.slot_time + " mins with " + user.name + " on "
+		    + getNearestDateOnlyFromEpoch(epoch_start_date, timezone) + "</p><p>Phone: " + wce.phoneNumber
+		    + "</p><p>Notes: " + wce.notes + "</p>";
+
+	    String body = "<p>Your appointment is scheduled for " + user.name + " on "
 		    + getNearestDateOnlyFromEpoch(epoch_start_date, timezone) + "</p><p>Duration - " + wce.slot_time
 		    + " minutes</p><p>Note message : " + wce.notes + "</p>";
 
 	    String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 
 	    EmailGatewayUtil.sendEmail(null, user.email, user.name, wce.email, null, null, "Appointment Scheduled",
-		    null, body, null, null, attachments);
+		    null, body1, null, null, attachments);
 
 	}
 	return "Done";
