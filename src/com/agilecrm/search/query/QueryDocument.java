@@ -1,6 +1,8 @@
 package com.agilecrm.search.query;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -74,7 +76,20 @@ public class QueryDocument<T> implements QueryInterface
     {
 	// Normalizes the string. Removes spaces from the string as space are
 	// excluded while saving in documents
-	keyword = SearchUtil.normalizeString(keyword).replace(":", "\\:");
+    	keyword = SearchUtil.normalizeString(keyword);
+    	if(!keyword.isEmpty() && keyword.charAt(0) == '-')
+    		keyword = keyword.replace("-", "");
+    	try
+    	{
+    		keyword = URLEncoder.encode(keyword, "UTF-8");
+    	}
+    	catch (UnsupportedEncodingException e)
+    	{
+    		// TODO Auto-generated catch block
+    		e.printStackTrace();
+    	}
+    	if(keyword == null || keyword.equals(""))
+    		return new ArrayList<>();
 	/*
 	 * Builds the query, search on field search_tokens(since contact
 	 * properties are split in to fragments, and saved in document with
@@ -98,7 +113,20 @@ public class QueryDocument<T> implements QueryInterface
     @Override
     public Collection<T> simpleSearchWithType(String keyword, Integer count, String cursor, String type)
     {
-	keyword = SearchUtil.normalizeString(keyword);
+    	keyword = SearchUtil.normalizeString(keyword);
+    	if(!keyword.isEmpty() && keyword.charAt(0) == '-')
+    		keyword = keyword.replace("-", "");
+    	try
+    	{
+    		keyword = URLEncoder.encode(keyword, "UTF-8");
+    	}
+    	catch (UnsupportedEncodingException e)
+    	{
+    		// TODO Auto-generated catch block
+    		e.printStackTrace();
+    	}
+    	if(keyword == null || keyword.equals(""))
+    		return new ArrayList<>();
 	return processQuery("search_tokens:" + keyword + " AND type:" + type, count, cursor);
     }
 
