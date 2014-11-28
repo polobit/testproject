@@ -25,7 +25,7 @@ public class RegularPlanLimits extends PlanLimits
 		 * New plan limits
 		 */
 		widgetsLimit = 1;
-		reportsLimit = 5;
+		reportsLimit = 10;
 		TriggersLimit = 5;
 	}
 }
