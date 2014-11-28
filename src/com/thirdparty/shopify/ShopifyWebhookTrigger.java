@@ -131,7 +131,7 @@ public class ShopifyWebhookTrigger extends HttpServlet
 		    }
 
 		    System.out.println("Assigning campaign to contact....");
-		    WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.id, new JSONObject().put("shopify", shopifyJson));
+		    WorkflowSubscribeUtil.subscribe(contact, trigger.id);
 		}
 	    }
 	    return;
