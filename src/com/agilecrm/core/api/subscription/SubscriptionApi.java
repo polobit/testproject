@@ -23,6 +23,7 @@ import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -63,9 +64,10 @@ public class SubscriptionApi
 	// If reload is set customer object is fetched from stripe
 	if (reload)
 	    subscription = SubscriptionUtil.getSubscription(true);
-
-	subscription.cachedData = BillingRestrictionUtil.getBillingRestriction(subscription.plan.plan_type.toString(), subscription.plan.quantity);
-
+	else
+	    subscription = SubscriptionUtil.getSubscription();
+	
+	    subscription.cachedData = BillingRestrictionUtil.getBillingRestriction(subscription.plan.plan_type.toString(), subscription.plan.quantity);
 	return subscription;
     }
 
