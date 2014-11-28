@@ -3063,5 +3063,40 @@ $(function()
 	Handlebars.registerHelper('pick_random_avatar_url', function(options) {
 		return choose_random_avatar();
 	});
+	
+	// To choose font awesome icon for custom fields
+	Handlebars.registerHelper('choose_custom_field_font_icon', function(field_type) {
+		var icon_class='';
+		if(field_type=="TEXT")
+			icon_class = "icon-text-height";
+		else if(field_type=="TEXTAREA")
+			icon_class = "icon-file-alt";
+		else if(field_type=="DATE")
+			icon_class = "icon-calendar";
+		else if(field_type=="CHECKBOX")
+			icon_class = "icon-check";
+		else if(field_type=="LIST")
+			icon_class = "icon-list-ul";
+		else if(field_type=="NUMBER")
+			icon_class = "icon-text-height";
+		return icon_class;
+	});
+	// To choose font awesome icon for custom fields
+	Handlebars.registerHelper('choose_custom_field_type', function(field_type) {
+		var field_type_name='';
+		if(field_type=="TEXT")
+			field_type_name = "Text Field";
+		else if(field_type=="TEXTAREA")
+			field_type_name = "Text Area";
+		else if(field_type=="DATE")
+			field_type_name = "Date";
+		else if(field_type=="CHECKBOX")
+			field_type_name = "Checkbox";
+		else if(field_type=="LIST")
+			field_type_name = "List";
+		else if(field_type=="NUMBER")
+			field_type_name = "Number";
+		return field_type_name;
+	});
 
 });

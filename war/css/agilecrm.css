@@ -1742,3 +1742,9 @@ display:block;
 {
 	padding:11px 11px;
 }
+.custom-fields-table tbody tr:hover td:nth-child(n+2) div {
+	display: block!important;
+}
+.custom-fields-table tbody tr:hover td:last-child div {
+	display: block!important;
+}

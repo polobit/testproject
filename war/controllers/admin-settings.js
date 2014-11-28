@@ -232,8 +232,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		this.customFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields', restKey : "customFieldDefs",
+		this.customFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields/allScopes', restKey : "customFieldDefs",
 			templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
+		
+		this.customFieldsListView.appendItem = groupingCustomFields;
 
 		this.customFieldsListView.collection.fetch();
 

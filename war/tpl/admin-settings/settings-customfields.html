@@ -1,8 +1,8 @@
 <script id="admin-settings-customfields-collection-template" type="text/html">
-<div class="" style="margin-bottom: 15px;">
+<!-- <div class="" style="margin-bottom: 15px;">
             <h3><strong>Custom Fields</strong></h3>
             <ul class="nav right">
-                <li class="btn-group right" style="top:-27px;position:relative;">
+                <li class="btn-group right" style="top:0px;position:relative;">
                     <a href="#custom-fields-add" class="dropdown-toggle btn right" data-toggle="dropdown">
                     <i class="icon-plus-sign" /> Add Custom Field  <span class="caret"></span></a>
                     <ul class="dropdown-menu pull-right">
@@ -21,9 +21,11 @@
                     </ul>
                 </li>
             </ul>
-</div>
+</div> -->
 <div class="row">
     <div class="span9">
+		<div class="well">
+		<div><h3>Custom Fields</h3></div>
         {{#unless this.length}}
 		<div style="height: 245px;">
         <div class="slate">
@@ -60,10 +62,8 @@
 		</div>
         {{/unless}}
         {{#if this.length}}
-        <div class="data-block">
-            <div class="data-container">
-                <table class="table table-bordered table-striped showCheckboxes agile-ellipsis-dynamic" url="core/api/custom-fields/bulk" style="cursor:pointer;">
-				<colgroup><col width="30px"><col width="20%"><col width="20%"><col width="20%"><col width="35%"></colgroup>
+        	<!-- <table class="table agile-ellipsis-dynamic" url="core/api/custom-fields/bulk" style="background: none repeat scroll 0% 0% inactiveborder;">
+				<colgroup><col width="20%"><col width="20%"><col width="20%"><col width="35%"></colgroup>
                     <thead>
                         <tr>
                             <th>Field Label</th>
@@ -72,12 +72,14 @@
 							<th>Scope</th>
                         </tr>
                     </thead>
-                    <tbody id="admin-settings-customfields-model-list">
+                    <tbody id="admin-settings-customfields-contact-model-list">
                     </tbody>
-                </table>
-            </div>
-        </div>
+                </table> -->
+        {{#each this}}
+			<div id="{{scope}}-custom-fileds" />
+		{{/each}}
         {{/if}}
+	</div>
     </div>
     <div class="span3">
         <div class="data-block">
@@ -109,4 +111,217 @@
     <td>{{ucfirst field_type}}</td>
 	<td>{{ucfirst scope}}</td>
     <br/>
+</script>
+
+
+<script id="admin-settings-customfields-contact-collection-template" type="text/html">
+<legend style="font-size: 16px; margin-bottom: -1px;">
+	Contact
+</legend>
+<div class="">
+    {{#if this.length}}
+        <table class="table agile-ellipsis-dynamic custom-fields-table" url="core/api/custom-fields/bulk" style="background: none repeat scroll 0% 0% #f2f5ff;margin-bottom:1px;">
+				<colgroup><col width="40%"><col width="6%"><col width="2%"></colgroup>
+                    <tbody id="admin-settings-customfields-contact-model-list" class="custom-fields-contact-tbody">
+                    </tbody>
+                </table>
+        {{/if}}
+		<div style="margin-bottom: 20px;margin-left: 9px;">
+			<a href="#contactCustomFModal" class="fieldmodal" data-toggle="modal" type="CONTACT"><i class="icon-plus-sign" /> Add </a>
+		</div>
+</div>
+<div id="custom-field-modal"></div>
+</script>
+
+<script id="admin-settings-customfields-contact-model-template" type="text/html">
+	<td>
+		<div style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%">
+			{{field_label}}
+			{{#if_equals is_required true}}
+				<span class="field_req">*</span>
+			{{/if_equals}}
+		</div>
+		<div style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%;"><small>{{field_description}}</small></div> 
+	</td>
+    <td style="padding-right:0;">
+		<div style="text-align:right;height:20px;">
+			{{#if_equals searchable true}}
+				<i title="Searchable" class="icon-search" style="color:#999999;"></i>
+			{{/if_equals}}
+			<span class="label">{{choose_custom_field_type field_type}}</span>
+		</div>
+		<div style="display:none;text-align:right;margin-bottom:-8px;">
+			<a id="edit-custom-field" style="cursor: pointer; text-decoration: none;" data-toggle="modal" role="button" href="#">
+				<i title="Edit Contact Custom Field" class="task-action icon icon-edit"></i>
+			</a>
+			&nbsp;&nbsp;
+			<a id="delete-custom-field" style="cursor: pointer; text-decoration: none;" data-toggle="modal" role="button" href="#">
+				<i title="Delete Contact Custom Field" class="task-action icon icon-trash"></i>
+			</a>
+		</div>
+	</td>
+	<td style="padding-right:0;">
+		<div style="display:none;margin-top:9px;float:right;">
+			<i title="Drag" class="icon-move"></i>
+		</div>
+	</td>
+	<br/>
+</script>
+<script id="admin-settings-customfields-company-collection-template" type="text/html">
+<legend style="font-size: 16px; margin-bottom: -1px;">
+	Company
+</legend>
+<div class="">
+    {{#if this.length}}
+        <table class="table agile-ellipsis-dynamic custom-fields-table" url="core/api/custom-fields/bulk" style="background: none repeat scroll 0% 0% #f2f5ff;margin-bottom:1px;">
+			<colgroup><col width="40%"><col width="6%"><col width="2%"></colgroup>
+                    <tbody id="admin-settings-customfields-company-model-list" class="custom-fields-company-tbody">
+                    </tbody>
+                </table>
+        {{/if}}
+		<div style="margin-bottom: 20px;margin-left: 9px;">
+			<a href="#contactCustomFModal" class="fieldmodal" data-toggle="modal" type="COMPANY"><i class="icon-plus-sign" /> Add </a>
+		</div>
+</div>
+<div id="custom-field-modal"></div>
+</script>
+
+<script id="admin-settings-customfields-company-model-template" type="text/html">
+    <td>
+		<div style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%">
+			{{field_label}}
+			{{#if_equals is_required true}}
+				<span class="field_req">*</span>
+			{{/if_equals}}
+		</div>
+		<div style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%;"><small>{{field_description}}</small></div> 
+	</td>
+    <td style="padding-right:0;">
+		<div style="text-align:right;height:20px;">
+			{{#if_equals searchable true}}
+				<i title="Searchable" class="icon-search" style="color:#999999;"></i>
+			{{/if_equals}}
+			<span class="label">{{choose_custom_field_type field_type}}</span>
+		</div>
+		<div style="display:none;text-align:right;margin-bottom:-8px;">
+			<a id="edit-custom-field" style="cursor: pointer; text-decoration: none;" data-toggle="modal" role="button" href="#">
+				<i title="Edit Company Custom Field" class="task-action icon icon-edit"></i>
+			</a>
+			&nbsp;&nbsp;
+			<a id="delete-custom-field" style="cursor: pointer; text-decoration: none;" data-toggle="modal" role="button" href="#">
+				<i title="Delete Company Custom Field" class="task-action icon icon-trash"></i>
+			</a>
+		</div>
+	</td>
+	<td style="padding-right:0;">
+		<div style="display:none;margin-top:9px;float:right;">
+			<i title="Drag" class="icon-move"></i>
+		</div>
+	</td>
+	<br/>
+</script>
+<script id="admin-settings-customfields-deal-collection-template" type="text/html">
+<legend style="font-size: 16px; margin-bottom: -1px;">
+	Deal
+</legend>
+<div class="">
+    {{#if this.length}}
+        <table class="table agile-ellipsis-dynamic custom-fields-table" url="core/api/custom-fields/bulk" style="background: none repeat scroll 0% 0% #f2f5ff;margin-bottom:1px;">
+			<colgroup><col width="40%"><col width="6%"><col width="2%"></colgroup>
+                    <tbody id="admin-settings-customfields-deal-model-list" class="custom-fields-deal-tbody">
+                    </tbody>
+                </table>
+        {{/if}}
+		<div style="margin-bottom: 20px;margin-left: 9px;">
+			<a href="#contactCustomFModal" class="fieldmodal" data-toggle="modal" type="DEAL"><i class="icon-plus-sign" /> Add </a>
+		</div>
+</div>
+<div id="custom-field-modal"></div>
+</script>
+
+<script id="admin-settings-customfields-deal-model-template" type="text/html">
+    <td>
+		<div style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%">
+			{{field_label}}
+			{{#if_equals is_required true}}
+				<span class="field_req">*</span>
+			{{/if_equals}}
+		</div>
+		<div style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%;"><small>{{field_description}}</small></div> 
+	</td>
+    <td style="padding-right:0;">
+		<div style="text-align:right;height:20px;">
+			{{#if_equals searchable true}}
+				<i title="Searchable" class="icon-search" style="color:#999999;"></i>
+			{{/if_equals}}
+			<span class="label">{{choose_custom_field_type field_type}}</span>
+		</div>
+		<div style="display:none;text-align:right;margin-bottom:-8px;">
+			<a id="edit-custom-field" style="cursor: pointer; text-decoration: none;" data-toggle="modal" role="button" href="#">
+				<i title="Edit Deal Custom Field" class="task-action icon icon-edit"></i>
+			</a>
+			&nbsp;&nbsp;
+			<a id="delete-custom-field" style="cursor: pointer; text-decoration: none;" data-toggle="modal" role="button" href="#">
+				<i title="Delete Deal Custom Field" class="task-action icon icon-trash"></i>
+			</a>
+		</div>
+	</td>
+	<td style="padding-right:0;">
+		<div style="display:none;margin-top:9px;float:right;">
+			<i title="Drag" class="icon-move"></i>
+		</div>
+	</td>
+	<br/>
+</script>
+<script id="admin-settings-customfields-case-collection-template" type="text/html">
+<legend style="font-size: 16px; margin-bottom: -1px;">
+	Case
+</legend>
+<div class="">
+    {{#if this.length}}
+        <table class="table agile-ellipsis-dynamic custom-fields-table" url="core/api/custom-fields/bulk" style="background: none repeat scroll 0% 0% #f2f5ff;margin-bottom:1px;">
+			<colgroup><col width="40%"><col width="6%"><col width="2%"></colgroup>
+                    <tbody id="admin-settings-customfields-case-model-list" class="custom-fields-case-tbody">
+                    </tbody>
+                </table>
+        {{/if}}
+		<div style="margin-bottom: 20px;margin-left: 9px;">
+			<a href="#contactCustomFModal" class="fieldmodal" data-toggle="modal" type="CASE"><i class="icon-plus-sign" /> Add </a>
+		</div>
+</div>
+<div id="custom-field-modal"></div>
+</script>
+<script id="admin-settings-customfields-case-model-template" type="text/html">
+	<td>
+		<div style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%">
+			{{field_label}}
+			{{#if_equals is_required true}}
+				<span class="field_req">*</span>
+			{{/if_equals}}
+		</div>
+		<div style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%;"><small>{{field_description}}</small></div> 
+	</td>
+    <td style="padding-right:0;">
+		<div style="text-align:right;height:20px;">
+			{{#if_equals searchable true}}
+				<i title="Searchable" class="icon-search" style="color:#999999;"></i>
+			{{/if_equals}}
+			<span class="label">{{choose_custom_field_type field_type}}</span>
+		</div>
+		<div style="display:none;text-align:right;margin-bottom:-8px;">
+			<a id="edit-custom-field" style="cursor: pointer; text-decoration: none;" data-toggle="modal" role="button" href="#">
+				<i title="Edit Case Custom Field" class="task-action icon icon-edit"></i>
+			</a>
+			&nbsp;&nbsp;
+			<a id="delete-custom-field" style="cursor: pointer; text-decoration: none;" data-toggle="modal" role="button" href="#">
+				<i title="Delete Case Custom Field" class="task-action icon icon-trash"></i>
+			</a>
+		</div>
+	</td>
+	<td style="padding-right:0;">
+		<div style="display:none;margin-top:9px;float:right;">
+			<i title="Drag" class="icon-move"></i>
+		</div>
+	</td>
+	<br/>
 </script>

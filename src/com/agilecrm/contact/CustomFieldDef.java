@@ -6,6 +6,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
+import com.googlecode.objectify.annotation.NotSaved;
+import com.googlecode.objectify.condition.IfDefault;
 
 /**
  * <code>CustomFieldDef<code> stores the fields of type text, date, list, textarea and check-box.
@@ -79,6 +81,13 @@ public class CustomFieldDef
     };
 
     public SCOPE scope = SCOPE.CONTACT;
+    
+    /**
+     * Since custom fields are sortable at the client position of the custom field is stored
+     * in position variable
+     */
+    @NotSaved(IfDefault.class)
+    public int position = 0;
 
     // Dao
     public static ObjectifyGenericDao<CustomFieldDef> dao = new ObjectifyGenericDao<CustomFieldDef>(
