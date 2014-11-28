@@ -2,7 +2,7 @@
     "name": "Unsubscribe",
     "thumbnail": "json/nodes/images/common/unsubscribe.png",
     "icon": "json/nodes/icons/common/unsubscribe.png",
-    "info": "Select the campaign(s) to unsubscribe from.",
+    "info": "You can unsubscribe the contact from either a specific campaign or all the campaigns the contact is currently in.",
     "help": "Unsubscribe the contact from selected campaigns.",
     "author": "Bhasuri",
     "company": "Agile",
