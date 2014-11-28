@@ -114,7 +114,9 @@ public class ShopifyWebhookTrigger extends HttpServlet
 
 		    System.out.println("Contact properties are " + contact.properties);
 		    contact.setContactOwner(owner);
-		    contact.addTags(tags);
+		    if (tags != null)
+			contact.addTags(tags);
+		    System.out.println("Saving contact ...");
 		    contact.save();
 
 		    Note note = getCustomerNote(shopifyEvent, shopifyJson);
@@ -124,6 +126,7 @@ public class ShopifyWebhookTrigger extends HttpServlet
 			note.addRelatedContacts(contact.id.toString());
 			note.setOwner(new Key<AgileUser>(AgileUser.class, owner.getId()));
 			note.save();
+			System.out.println("Saving note ...");
 		    }
 
 		    System.out.println("Assigning campaign to contact....");
@@ -266,6 +269,7 @@ public class ShopifyWebhookTrigger extends HttpServlet
 	try
 	{
 	    JSONObject addressJson;
+	    JSONObject agileAddressJson = new JSONObject();
 	    String address = null;
 
 	    if (shopifyEvent.contains("customers"))
@@ -286,7 +290,7 @@ public class ShopifyWebhookTrigger extends HttpServlet
 		String key = (String) keys.next();
 		String value = addressJson.getString(key);
 
-		if (!StringUtils.isBlank(value))
+		if (!StringUtils.isBlank(value) && !StringUtils.equals(value, "null"))
 		{
 		    switch (key)
 		    {
@@ -295,13 +299,13 @@ public class ShopifyWebhookTrigger extends HttpServlet
 			address = (StringUtils.isBlank(address)) ? value : address + ", " + value;
 			break;
 		    case "city":
-			addressJson.put("city", value);
+			agileAddressJson.put("city", value);
 			break;
 		    case "country_code":
-			addressJson.put("country", value);
+			agileAddressJson.put("country", value);
 			break;
 		    case "zip":
-			addressJson.put("zip", value);
+			agileAddressJson.put("zip", value);
 			break;
 		    default:
 			break;
@@ -309,11 +313,11 @@ public class ShopifyWebhookTrigger extends HttpServlet
 		}
 	    }
 	    if (!StringUtils.isBlank(address))
-		addressJson.put("address", address);
+		agileAddressJson.put("address", address);
 
-	    if (!StringUtils.isBlank(addressJson.toString()))
+	    if (!StringUtils.isBlank(agileAddressJson.toString()))
 	    {
-		ContactField addressContactField = new ContactField(Contact.ADDRESS, addressJson.toString(), null);
+		ContactField addressContactField = new ContactField(Contact.ADDRESS, agileAddressJson.toString(), null);
 		return addressContactField;
 	    }
 	    else
