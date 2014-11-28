@@ -101,7 +101,7 @@ function serializeForm(form_id) {
 	 */
 	// Stores build rules based on chained select
 	
-	var chained_selects = $('#' + form_id + ' .chained-table');
+	var chained_selects = $('#' + form_id + ' .chained-table:visible');
 	$.each(chained_selects, function(index, element){
 		var json_array = [];
 	arr = arr.concat($(element).find('.chained').map(function() {
