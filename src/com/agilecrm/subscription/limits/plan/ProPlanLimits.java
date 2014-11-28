@@ -29,7 +29,7 @@ public class ProPlanLimits extends PlanLimits
 		 * New plan limits
 		 */
 		widgetsLimit = 1;
-		reportsLimit = 7;
+		reportsLimit = 25;
 		TriggersLimit = 15;
 	}
 

@@ -20,6 +20,7 @@ import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
+import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
@@ -487,6 +488,12 @@ public class Subscription
 	{
 	    e.printStackTrace();
 	}
+    }
+    
+    public void refreshCustomer() throws Exception
+    {
+	 Customer customer = SubscriptionUtil.getCustomer(billing_data);
+	 billing_data = StripeUtil.getJSONFromCustomer(customer);
     }
 
     /**

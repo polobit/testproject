@@ -64,7 +64,7 @@ public class TriggerBillingRestriction extends DaoBillingRestriction
 	if(percentage < 75)
 	    return null;
 	
-	String tag = BillingRestrictionReminderUtil.getTag(restriction.reports_count, max_allowed, "Trigger",
+	String tag = BillingRestrictionReminderUtil.getTag(restriction.triggers_count, max_allowed, "Trigger",
 		hardUpdateTags);
 	
 	if(!canAddTag(percentage, tag))

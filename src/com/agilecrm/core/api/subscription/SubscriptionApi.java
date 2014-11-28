@@ -23,6 +23,7 @@ import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -63,11 +64,10 @@ public class SubscriptionApi
 	// If reload is set customer object is fetched from stripe
 	if (reload)
 	    subscription = SubscriptionUtil.getSubscription(true);
-
-	subscription = SubscriptionUtil.getSubscription();
-
-	subscription.cachedData = BillingRestrictionUtil.getBillingRestriction(subscription.plan.plan_type.toString(), subscription.plan.quantity);
-
+	else
+	    subscription = SubscriptionUtil.getSubscription();
+	
+	    subscription.cachedData = BillingRestrictionUtil.getBillingRestriction(subscription.plan.plan_type.toString(), subscription.plan.quantity);
 	return subscription;
     }
 
@@ -304,11 +304,20 @@ public class SubscriptionApi
 	{
 	    // Get current domain subscription entity
 	    Subscription subscription = SubscriptionUtil.getSubscription();
+	    
+	    if(subscription == null)
+		return;
 
-	    // Check if subscription is not null delete
-	    // subscription(subscription call delete customer form gateway)
-	    if (subscription != null)
-		subscription.delete();
+	    subscription.cancelSubscription();
+	    
+	    subscription.refreshCustomer();
+	    
+	    subscription.plan = null;
+	    subscription.emailPlan = null;
+	    
+	    subscription.save();
+	    
+	  
 	}
 	catch (Exception e)
 	{
