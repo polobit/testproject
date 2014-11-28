@@ -96,11 +96,11 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    ArrayList<LinkedHashMap<String, Object>> newCustomersList= new ArrayList<LinkedHashMap<String, Object>>();
 		    ArrayList<LinkedHashMap<String, Object>> updatedCustomersList= new ArrayList<LinkedHashMap<String, Object>>();
 		    
-		    newCustomersList=getCustomers(materializeURL(shop, "customers", currentPage, "new"),currentPage);
+		    newCustomersList=getCustomers(materializeURL(shop, "customers", currentPage, "new"),currentPage,materializeURL(shop, "count", 0, "new"));
 		    if(newCustomersList!=null)
 		    	System.out.println("newCustomersList size-----"+newCustomersList.size());
 		    if(lastSyncPoint!=null){
-		    	updatedCustomersList=getCustomers(materializeURL(shop, "customers", currentPage, "edited"),currentPage);
+		    	updatedCustomersList=getCustomers(materializeURL(shop, "customers", currentPage, "edited"),currentPage,materializeURL(shop, "count", 0, "edited"));
 		    	if(updatedCustomersList!=null)
 		    		System.out.println("updatedCustomersList size-----"+updatedCustomersList.size());
 		    }
@@ -315,7 +315,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	catch (OAuthException e)
 	{
 
-	    if (e.getCause().equals(new SocketTimeoutException()))
+	    if (e.getCause().equals(new SocketTimeoutException()) || e.getCause().toString().contains((new SocketTimeoutException()).toString()))
 		getCustomerCount(url);
 	}
 	catch (Exception e)
@@ -333,7 +333,7 @@ public class ShopifySyncImpl extends OneWaySyncService
      *            the access url
      * @return ArrayList of Customers
      */
-    public ArrayList<LinkedHashMap<String, Object>> getCustomers(String accessURl,int currentPage)
+    public ArrayList<LinkedHashMap<String, Object>> getCustomers(String accessURl,int currentPage,String countURL)
     {
 
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, accessURl);
@@ -345,19 +345,19 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    Map<String, ArrayList<LinkedHashMap<String, Object>>> results = new ObjectMapper().readValue(
 		    response.getStream(), Map.class);
 	    customers = results.get("customers");
-	    int total_customers = getCustomerCount(accessURl);
+	    int total_customers = getCustomerCount(countURL);
 	    
 	    //Some times no customers getting due to invalid response so 
 	    //if customers null again calling the getCustomers method
 	    if((customers==null && (currentPage*MAX_FETCH_RESULT)<total_customers) || (customers!=null && customers.size()==0 && (currentPage*MAX_FETCH_RESULT)<total_customers)){
 	    	System.out.println("customers is null");
-	    	getCustomers(accessURl,currentPage);
+	    	getCustomers(accessURl,currentPage,countURL);
 	    }
 	}
 	catch (OAuthException e)
 	{
-	    if (e.getCause().equals(new SocketTimeoutException()))
-		getCustomers(accessURl,currentPage);
+	    if (e.getCause().equals(new SocketTimeoutException()) || e.getCause().toString().contains((new SocketTimeoutException()).toString()))
+		getCustomers(accessURl,currentPage,countURL);
 	}
 	catch (Exception e)
 	{
@@ -407,10 +407,10 @@ public class ShopifySyncImpl extends OneWaySyncService
 	}
 	catch (OAuthException e)
 	{
-	    if (e.getCause().equals(new SocketTimeoutException()))
-		;
-	    // retry
-	    Orders(url);
+		// retry
+	    if (e.getCause().equals(new SocketTimeoutException()) || e.getCause().toString().contains((new SocketTimeoutException()).toString()))
+	    	Orders(url);
+	    
 	}
 	catch (Exception e)
 	{
