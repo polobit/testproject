@@ -34,7 +34,7 @@ public class FreePlanLimits extends PlanLimits
 		 */
 		widgetsLimit = 1;
 		reportsLimit = 1;
-		TriggersLimit = 1;
+		TriggersLimit = 0;
 
 	}
 }
