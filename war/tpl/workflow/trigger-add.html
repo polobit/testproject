@@ -47,6 +47,8 @@
 										<option value="INBOUND_MAIL_EVENT" id="inbound-mail-event">New Email</option>
 										<option value="EMAIL_OPENED">Email Opened</option>
 										<option value="EMAIL_LINK_CLICKED">Email Link Clicked</option>
+										<optgroup label="Calendar">
+										<option value="EVENT_IS_ADDED">Event is added</option>
 									</select>
                                 </div>
                             </div>
@@ -72,6 +74,22 @@
                         <div class="control-group" style="display:none;">
 							<div class="controls" style="margin-left:220px!important;">
                             <select id="trigger-deal-milestone" name="trigger_deal_milestone" class="required">
+                                    <option value="">Select...</option>
+                                </select>
+							</div>
+                        </div>
+						<!-- Calendar Event -->
+						 <div class="control-group" style="display:none;">
+							<div class="controls" style="margin-left:220px!important;">
+                            <select id="event-type" name="event_type" class="required">
+                                    <option value="ANY">Any</option>
+									<option value="WEB_APPOINTMENT">Web Appoinment</option>
+                                </select>
+							</div>
+                        </div>
+						 <div class="control-group" style="display:none;">
+							<div class="controls" style="margin-left:220px!important;">
+                            <select id="event-owner-id" name="event_owner_id" class="required">
                                     <option value="">Select...</option>
                                 </select>
 							</div>

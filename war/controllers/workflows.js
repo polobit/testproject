@@ -594,6 +594,15 @@ var WorkflowsRouter = Backbone.Router
 							}
 							
 						}
+						
+						if(type == 'EVENT_IS_ADDED')
+						{
+							$('form#addTriggerForm', el).find('select#event-type').closest('div.control-group').css('display', '');
+							
+							$('#email-type', el).find('option[value=' + currentTrigger.toJSON()["email_type"] + ']').attr('selected', 'selected').trigger('change');
+							
+							populate_owners_in_trigger($('form#addTriggerForm', el), 'event-owner-id', currentTrigger.toJSON()["event_owner_id"]);
+						}
 
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 

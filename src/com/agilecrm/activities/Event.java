@@ -16,6 +16,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
+import com.agilecrm.workflows.triggers.util.EventTriggerUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -233,6 +234,28 @@ public class Event
      */
     public void save()
     {
+	if (this.contacts != null)
+	{
+	    // Create list of Contact keys
+	    for (String contact_id : this.contacts)
+	    {
+		this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id)));
+	    }
+
+	    this.contacts = null;
+	}
+
+	// Create owner key
+	if (owner == null)
+	{
+	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	    if (agileUser != null)
+		this.owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
+	}
+
+	if (id == null)
+	    EventTriggerUtil.executeTriggerForNewEvent(this);
+
 	dao.put(this);
 
 	System.out.println("Event object " + this);
@@ -249,28 +272,9 @@ public class Event
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
 
-	if (this.contacts != null)
-	{
-	    // Create list of Contact keys
-	    for (String contact_id : this.contacts)
-	    {
-		this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id)));
-	    }
-
-	    this.contacts = null;
-	}
-
 	search_range = new ArrayList<Long>();
 	search_range.add(start);
 	search_range.add(end);
-
-	// Create owner key
-	if (owner == null)
-	{
-	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
-	    if (agileUser != null)
-		this.owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
-	}
     }
 
     public String toString()

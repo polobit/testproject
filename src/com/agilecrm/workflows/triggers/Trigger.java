@@ -65,7 +65,7 @@ public class Trigger
      */
     public enum Type
     {
-	TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, DEAL_IS_ADDED, DEAL_IS_DELETED, DEAL_MILESTONE_IS_CHANGED, ADD_SCORE, STRIPE_CHARGE_EVENT, SHOPIFY_EVENT, RUNS_DAILY, RUNS_WEEKLY, RUNS_MONTHLY, SOFT_BOUNCE, HARD_BOUNCE, INBOUND_MAIL_EVENT, EMAIL_OPENED, EMAIL_LINK_CLICKED
+	TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, DEAL_IS_ADDED, DEAL_IS_DELETED, DEAL_MILESTONE_IS_CHANGED, ADD_SCORE, STRIPE_CHARGE_EVENT, SHOPIFY_EVENT, RUNS_DAILY, RUNS_WEEKLY, RUNS_MONTHLY, SOFT_BOUNCE, HARD_BOUNCE, INBOUND_MAIL_EVENT, EMAIL_OPENED, EMAIL_LINK_CLICKED, EVENT_IS_ADDED
     };
 
     /**
@@ -126,6 +126,12 @@ public class Trigger
      */
     @NotSaved(IfDefault.class)
     public Long contact_filter_id = null;
+
+    @NotSaved(IfDefault.class)
+    public String event_owner_id = "ANY";
+
+    @NotSaved(IfDefault.class)
+    public String event_type = "ANY";
 
     /**
      * Initialize DataAccessObject.

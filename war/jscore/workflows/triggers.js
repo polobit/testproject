@@ -46,6 +46,13 @@ $(function()
 			
 			$('form#addTriggerForm').find('#custom-link-clicked').closest('div.control-group').css('display', 'none');
 		}
+		
+		if($(this).val() != 'EVENT_IS_ADDED')
+		{
+			$('form#addTriggerForm').find('select#event-owner-id').closest('div.control-group').css('display', 'none');
+			
+			$('form#addTriggerForm').find('select#event-type').closest('div.control-group').css('display', 'none');
+		}
 			
 
 		// Initialize tags typeahead
@@ -96,6 +103,13 @@ $(function()
 			
 			if($(this).val() == 'EMAIL_LINK_CLICKED')
 				$('form#addTriggerForm').find('#custom-link-clicked').closest('div.control-group').css('display', '');
+		}
+		
+		if($(this).val() == 'EVENT_IS_ADDED')
+		{
+			$('form#addTriggerForm').find('select#event-type').closest('div.control-group').css('display', '');
+			
+			populate_owners_in_trigger($('form#addTriggerForm'), 'event-owner-id');
 		}
 			
 	});
@@ -239,6 +253,26 @@ function populate_shopify_events_in_trigger(trigger_form, shopify_event_select_i
 function populate_inbound_mail_events_in_trigger(trigger_form, inbound_mail_event_div_class)
 {
 	trigger_form.find('div#' + inbound_mail_event_div_class).css('display','');
+}
+
+function populate_owners_in_trigger(trigger_form, owner_select_id, trigger_owner_id)
+{
+	// Show milestones select element
+	trigger_form.find('select#' + owner_select_id).closest('div.control-group').css('display', '');
+
+	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+	
+	fillSelect(owner_select_id, '/core/api/users', 'users', function()
+			{
+		
+			$("#" + owner_select_id +' option:first').after('<option value="ANY">Any</option>');
+			
+			if (trigger_owner_id)
+			{
+				$('#'+owner_select_id, trigger_form).find('option[value=' + trigger_owner_id + ']').attr('selected', 'selected');
+			}
+		
+	}, optionsTemplate, false, undefined, "Select event owner");
 }
 
 /**
