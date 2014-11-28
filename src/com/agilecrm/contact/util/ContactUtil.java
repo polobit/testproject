@@ -1175,6 +1175,7 @@ public class ContactUtil
 
 	public static List<String> workflowListOfAContact(Long id)
 	{
+		System.out.println("inside contact util");
 		Contact contact = ContactUtil.getContact(id);
 		if (contact == null)
 			return new ArrayList<>();
