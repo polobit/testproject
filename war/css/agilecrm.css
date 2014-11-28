@@ -1744,3 +1744,7 @@ display:block;
 {
 	padding:11px 11px;
 }
+
+#activityReportsForm ul.ms-list{
+	height:150px;
+}
