@@ -71,8 +71,6 @@ public class ShopifyWebhookTrigger extends HttpServlet
 		    String customerEmail = getCustomerEmail(shopifyEvent, shopifyJson);
 		    System.out.println("Customer email is " + customerEmail);
 
-		    String[] tags = getCustomerTags(shopifyEvent, shopifyJson);
-
 		    Contact contact = ContactUtil.searchContactByEmail(customerEmail);
 		    if (contact == null)
 			contact = new Contact();
@@ -111,11 +109,14 @@ public class ShopifyWebhookTrigger extends HttpServlet
 			contact.properties = contactProperties;
 		    else
 			contact.properties = updateContactPropList(contact.properties, contactProperties);
-
 		    System.out.println("Contact properties are " + contact.properties);
+
 		    contact.setContactOwner(owner);
+
+		    String[] tags = getCustomerTags(shopifyEvent, shopifyJson);
 		    if (tags != null)
 			contact.addTags(tags);
+
 		    System.out.println("Saving contact ...");
 		    contact.save();
 
@@ -300,6 +301,9 @@ public class ShopifyWebhookTrigger extends HttpServlet
 			break;
 		    case "city":
 			agileAddressJson.put("city", value);
+			break;
+		    case "province":
+			agileAddressJson.put("state", value);
 			break;
 		    case "country_code":
 			agileAddressJson.put("country", value);
