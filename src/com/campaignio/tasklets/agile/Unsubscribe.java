@@ -63,15 +63,10 @@ public class Unsubscribe extends TaskletAdapter
 
 		int campaignIDsSize = campaignIDs.size();
 
-		List<String> campaignNames = new ArrayList<String>();
-
 		for (int i = 0; i < campaignIDsSize; i++)
-			campaignNames.add(setStatus(campaignIDs.get(i), subscriberID));
+			setStatus(campaignIDs.get(i), subscriberID);
 
-		String message = getMessage(campaignNames);
-		System.out.println(message + "fdsfadsf");
-
-		LogUtil.addLogToSQL(campaignID, subscriberID, "Contact unsubscribed from " + message,
+		LogUtil.addLogToSQL(campaignID, subscriberID, "We are unsubscribed from few campaigns ",
 				LogType.UNSUBSCRIBED_CAMPAIGN.toString());
 
 		if (campaignIDs.contains(campaignID))
@@ -88,36 +83,13 @@ public class Unsubscribe extends TaskletAdapter
 		Iterator<String> workflowsIDs;
 		workflowsIDs = ContactUtil.workflowListOfAContact(Long.parseLong(subscriberID)).iterator();
 
-		List<String> campaignNames = new ArrayList<String>();
-
 		// remove each workflow from cron and set their status to removed
 		while (workflowsIDs.hasNext())
-			campaignNames.add(setStatus(workflowsIDs.next(), subscriberID));
+			setStatus(workflowsIDs.next(), subscriberID);
 
-		String message = getMessage(campaignNames);
-
-		System.out.println("mesages is");
-		LogUtil.addLogToSQL(campaignID, subscriberID, "Contact unsubscribed from " + message,
+		LogUtil.addLogToSQL(campaignID, subscriberID, "Unsubscribed from all campaigns",
 				LogType.UNSUBSCRIBED_CAMPAIGN.toString());
 		return true;
-	}
-
-	private String getMessage(List<String> campaignNames)
-	{
-		int listSize = campaignNames.size();
-
-		String message = null;
-
-		if (listSize == 1)
-			return message = campaignNames.get(0) + ".";
-		else
-		{
-			for (int i = 0; i < listSize - 1; i++)
-				message += campaignNames.get(i) + ", ";
-
-			message = " and " + campaignNames.get(listSize) + ".";
-		}
-		return message;
 	}
 
 	private List<String> getListOfCampaignIDs(JSONObject nodeJSON, JSONObject subscriberJSON, String subscriberID,
@@ -156,13 +128,13 @@ public class Unsubscribe extends TaskletAdapter
 		return campaignIDs;
 	}
 
-	private String setStatus(String workflowID, String subscriberID)
+	private void setStatus(String workflowID, String subscriberID)
 	{
 
 		// remove workflow from cron
 		CronUtil.removeTask(workflowID, subscriberID);
 
 		// set status as removed
-		return CampaignStatusUtil.setSatatusOfCampaignWithNames(subscriberID, workflowID, "", Status.REMOVED);
+		CampaignStatusUtil.setStatusOfCampaign(subscriberID, workflowID, "", Status.REMOVED);
 	}
 }
