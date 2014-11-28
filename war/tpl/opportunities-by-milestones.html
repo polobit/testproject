@@ -52,7 +52,7 @@
 </script>
 <script id="opportunities-by-paging-model-template" type="text/html">
 	<div class='dealtitle-angular'>
-		<p class='milestone-heading'> {{heading}}<span class="pull-right" style="position: absolute;right: 11px;top: -1px;"><img class="loading_img" src="/img/ajax-loader-cursor.gif" width="12px"></span></p>
+		<p class='milestone-heading'> <span class="miltstone-title">{{heading}}</span><span id="{{remove_spaces heading}}_count" class="txt-mute" style="margin-left:5px;vertical-align:top;"></span><span class="pull-right" style="position: absolute;right: 11px;top: -1px;"><img class="loading_img" src="/img/ajax-loader-cursor.gif" width="12px"></span></p>
 		<span></span>
 	</div>
 	<div id="{{remove_spaces heading}}-list-container" class='milestones' milestone='{{heading}}'>

@@ -450,12 +450,13 @@ public class ContactsAPI
      *            email of contact form parameter
      * @param tagsString
      *            array of tags as string
+     * @return
      * @throws JSONException
      */
     @Path("/email/tags/add")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void addTagsToContactsBasedOnEmail(@FormParam("email") String email, @FormParam("tags") String tagsString,
+    public Tag[] addTagsToContactsBasedOnEmail(@FormParam("email") String email, @FormParam("tags") String tagsString,
 	    @Context HttpServletResponse response) throws JSONException
     {
 
@@ -467,7 +468,7 @@ public class ContactsAPI
 
 	    object.put("error", "No tags to add");
 	    HTTPUtil.writeResonse(response, object.toString());
-	    return;
+	    return null;
 	}
 
 	Contact contact = ContactUtil.searchContactByEmail(email);
@@ -475,7 +476,7 @@ public class ContactsAPI
 	{
 	    object.put("error", "No contact found with email address \'" + email + "\'");
 	    HTTPUtil.writeResonse(response, object.toString());
-	    return;
+	    return null;
 	}
 
 	JSONArray tagsJSONArray = new JSONArray(tagsString);
@@ -490,11 +491,13 @@ public class ContactsAPI
 	    e.printStackTrace();
 	}
 	if (tagsArray == null)
-	    return;
+	    return null;
 
 	System.out.println("Tags to add : " + tagsArray);
 	contact.addTags(tagsArray);
 	System.out.println("Tags after added : " + contact.tagsWithTime);
+
+	return tagsArray;
 
     }
 
