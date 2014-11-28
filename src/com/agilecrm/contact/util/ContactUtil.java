@@ -1221,16 +1221,26 @@ public class ContactUtil
 	}
 
 	public static List<String> workflowListOfAContact(Long id)
-	{// string
-		List<String> workflows = null;
+	{
+		List<String> activeWorkflows = null;
 		try
 		{
-			List<CampaignStatus> dflk = dao.get(id).campaignStatus;
-			Iterator<CampaignStatus> jkjhk = dflk.iterator();
-			workflows = new ArrayList<String>();
-			while (jkjhk.hasNext())
+			List<CampaignStatus> campaignStatusList = dao.get(id).campaignStatus;
+			Iterator<CampaignStatus> statusIterator = campaignStatusList.iterator();
+			activeWorkflows = new ArrayList<String>();
+			while (statusIterator.hasNext())
 			{
-				workflows.add(jkjhk.next().campaign_id);
+				CampaignStatus campaignStatus = statusIterator.next();
+				try
+				{
+					if (campaignStatus.status.contains("ACTIVE"))
+						activeWorkflows.add(campaignStatus.campaign_id);
+				}
+				catch (EnumConstantNotPresentException e)
+				{
+					System.err.println("Inside workflowListOfAContact");
+					e.printStackTrace();
+				}
 
 			}
 
@@ -1240,7 +1250,8 @@ public class ContactUtil
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return workflows;
+		System.out.println("the active workflows are " + activeWorkflows.toString());
+		return activeWorkflows;
 
 		/*
 		 * List<String> cmapingIDList = new ArrayList<String>();
