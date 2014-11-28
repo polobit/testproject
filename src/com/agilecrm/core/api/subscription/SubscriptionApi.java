@@ -305,6 +305,14 @@ public class SubscriptionApi
 	    // Get current domain subscription entity
 	    Subscription subscription = SubscriptionUtil.getSubscription();
 	    
+	    if(subscription == null)
+		return;
+
+	    subscription.plan = null;
+	    subscription.emailPlan = null;
+	    
+	    subscription.save();
+	    
 	    subscription.cancelSubscription();
 	}
 	catch (Exception e)
