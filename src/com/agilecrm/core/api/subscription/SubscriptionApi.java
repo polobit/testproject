@@ -64,8 +64,6 @@ public class SubscriptionApi
 	if (reload)
 	    subscription = SubscriptionUtil.getSubscription(true);
 
-	subscription = SubscriptionUtil.getSubscription();
-
 	subscription.cachedData = BillingRestrictionUtil.getBillingRestriction(subscription.plan.plan_type.toString(), subscription.plan.quantity);
 
 	return subscription;
