@@ -286,6 +286,7 @@ $.validator.setDefaults({
 							</div>
 							<fieldset class="step2">
 								<div class='regpage-fieldview'>
+									<h4>About your Company</h4>
 									<div class="form-group login-company">
 							<!-- 	<div style="display:inline-block;width:50%">  -->	
 										<span class="regpage-company"></span> <input
@@ -293,7 +294,7 @@ $.validator.setDefaults({
 											id="login_company" name='company' type="text" maxlength="50"
 											placeholder="Company Name" autocapitalize="off">
 									</div>
-																		<div class="form-group login-company">
+									<div class="form-group login-company">
 								<!--	<div style="display:inline-block;width:49%"> -->
 									<select class="form-control required"  name="company_type" data-width="100%">
 											<option value="">Company type</option>
@@ -303,6 +304,7 @@ $.validator.setDefaults({
 											<option value="Agency">Agency</option>
 								  </select>
 								  </div>
+								  <h4>About yourself</h4>
 									<div class="form-group login-company-size">
 									 <!--  <div style="display:inline-block;width:50%"> -->
 									<select class="form-control required"  name="role">
@@ -323,7 +325,6 @@ $.validator.setDefaults({
 											id="login_phone_number" name='phone_number' type="text" min=2
 											placeholder="Phone Number " autocapitalize="off">
 											</div>
-									</div>
 									
 									<div class="form-group login-company-size">
 										<span class="regpage-plan_type"></span> 
@@ -336,7 +337,7 @@ $.validator.setDefaults({
 
 									<div class="form-group "
 										style="margin-bottom: 0px;"></div>
-								</div>
+										</div>
 							</fieldset>
 						</div>
 					</div>
