@@ -380,7 +380,7 @@ function convertToHumanDate(format, date)
 
 $("#create_new_appointment").die().live('click', function(e)
 {
-
+ //reloads the page
 	location.reload(true);
 
 });

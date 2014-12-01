@@ -186,6 +186,7 @@ public class WebCalendarEventUtil
 
 	    //
 	    Long starttime = getEppochTime(date, month, year, Integer.parseInt(fromTime), tz);
+	    starttime = starttime - 60;
 
 	    if (Integer.parseInt(fromTime) < Integer.parseInt(tillTime))
 	    {
@@ -668,12 +669,8 @@ public class WebCalendarEventUtil
 		agileUseiCal = IcalendarUtil.getICalFromEvent(newEvnt, null, user.email, user.name);
 		System.out.println("agileUseiCal-- " + agileUseiCal.toString());
 		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
-		String body_subject = "<p>Your appointment was scheduled with <b>" + wce.userName
-		        + "</b>.</p><p>Duration - " + wce.slot_time + " minutes</p><p>Note message : " + wce.notes
-		        + "</p>";
-		String body1 = "<p>" + wce.userName + " (" + wce.email + ") scheduled an appointment ("
-		        + wce.phoneNumber + ") for " + wce.slot_time + " mins</p><p><a href=https://" + user.domain
-		        + ".agilecrm.com/#calendar>View Agile Calendar</a></p><p>Note: " + wce.notes + "</p>";
+		String body1 = null;
+
 		if (StringUtils.isNotEmpty(wce.phoneNumber))
 		{
 		    body1 = "<p>" + wce.userName + " (" + wce.email + ") scheduled an appointment (" + wce.phoneNumber
