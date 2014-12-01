@@ -487,16 +487,14 @@ public class WebCalendarEventUtil
 		agileUseiCal = IcalendarUtil.getICalFromEvent(newEvnt, null, user.email, user.name);
 		System.out.println("agileUseiCal-- " + agileUseiCal.toString());
 		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
-		String body_subject = "<p>Your appointment was scheduled with <b>" + wce.userName
-		        + "</b>.</p><p>Duration - " + wce.slot_time + " minutes</p><p>Note message : " + wce.notes
-		        + "</p>";
 
-		String body1 = "<p>" + wce.userName + " (" + wce.email + ") scheduled an appointment " + " for "
-		        + wce.slot_time + " mins</p><p><a href=https://" + user.domain
-		        + ".agilecrm.com/#calendar>View Agile Calendar</a></p>Phone: " + wce.phoneNumber
-		        + "</p><p>Note: " + wce.notes + "</p>";
+		String usermail = "<span>" + wce.userName + " has scheduled an appointment </span><br/><span>Type: '"
+		        + wce.name + "' (" + wce.slot_time + "mins)</span><br/><span>Phone: " + wce.phoneNumber
+		        + "</span><br/><span>Note: " + wce.notes + "</span><br/><span><a href=https://" + user.domain
+		        + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></span>";
+
 		EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
-		        "Appointment Scheduled", null, body1, null, null, attachments_to_agile_user);
+		        "Appointment Scheduled", null, usermail, null, null, attachments_to_agile_user);
 	    }
 	}
 
@@ -506,20 +504,18 @@ public class WebCalendarEventUtil
 
 	    iCal = IcalendarUtil.getICalFromEvent(newEvnt, user, wce.email, null);
 
+	    String link = "https://www.agilecrm.com/?utm_source=powered-by&medium=email&utm_campaign=" + user.domain;
 	    System.out.println("icall s string  " + iCal.toString() + " email " + wce.email);
 
-	    String body1 = "<p>Your appointment is scheduled for " + wce.slot_time + " mins with " + user.name + " on "
-		    + getNearestDateOnlyFromEpoch(epoch_start_date, timezone) + "</p><p>Phone: " + wce.phoneNumber
-		    + "</p><p>Notes: " + wce.notes + "</p>";
-
-	    String body = "<p>Your appointment is scheduled for " + user.name + " on "
-		    + getNearestDateOnlyFromEpoch(epoch_start_date, timezone) + "</p><p>Duration - " + wce.slot_time
-		    + " minutes</p><p>Note message : " + wce.notes + "</p>";
+	    String client_mail = "<span>You have a new appointment with '" + user.name + "'</span><br/><span>Type: '"
+		    + wce.name + "' (" + wce.slot_time + "mins)</span><br/><span>Phone: " + wce.phoneNumber
+		    + "</span><br/><span>Note: " + wce.notes
+		    + "</span><br/><span>This event has been scheduled using <a href=" + link + ">Agile CRM</a></span>";
 
 	    String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 
 	    EmailGatewayUtil.sendEmail(null, user.email, user.name, wce.email, null, null, "Appointment Scheduled",
-		    null, body1, null, null, attachments);
+		    null, client_mail, null, null, attachments);
 
 	}
 	return "Done";

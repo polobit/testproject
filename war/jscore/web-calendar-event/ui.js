@@ -9,6 +9,15 @@ $(function()
 		e.preventDefault();
 
 		Selected_Time = $(this).attr('data');
+		if(Selected_Time==15){
+			appointmenttype="say hi";
+		}
+		else if(Selected_Time==30){
+			appointmenttype="let's keep it short";
+		}
+        else if(Selected_Time==60){
+        	appointmenttype="let's chat";
+		}
 
 		$(".activemin").removeClass("activemin");
 		$(this).find('.minutes').addClass("activemin");
