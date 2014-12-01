@@ -111,8 +111,8 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 			{
 			    System.out.println("assigning campaign to contact");
 
-			    WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.id,
-				    new JSONObject().put("mandrill_inbound", message));
+			    WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id,
+				    new JSONObject().put("message", message));
 			}
 		    }
 		}
