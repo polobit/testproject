@@ -78,6 +78,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 
 	    if (total_records < MAX_FETCH_RESULT)
 		pages = 1;*/
+		boolean limitExceeded=false;
 
 	    try
 	    {
@@ -111,7 +112,8 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    
 		    if(newCustomersList!=null && newCustomersList.size()==0 && updatedCustomersList!=null && updatedCustomersList.size()==0)
 		    	break;
-		    if (!isLimitExceeded())
+		    limitExceeded = isLimitExceeded();
+		    if (!limitExceeded)
 		    {
 		    	if(customers!=null)
 		    		System.out.println("customers size----------"+customers.size());
@@ -134,7 +136,10 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    }
 		    currentPage += 1;
 		}
-		sendNotification(prefs.type.getNotificationEmailSubject());
+		//If limit exceeded mail notification is called by isLimitExceeded()
+		//otherwise we call mail notification from here
+		if (!limitExceeded)
+			sendNotification(prefs.type.getNotificationEmailSubject());
 		System.out.println("After mail notification, updating last sync prefs");
 		updateLastSyncedInPrefs();
 	    }
