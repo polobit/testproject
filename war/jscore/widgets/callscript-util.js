@@ -1,50 +1,30 @@
 $(function()
 {
-	// Need to call openTwitter function in ui.js for Oauth.
-	head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
-	{
-	});	
-	
-	// Add ule from modal to widget form, show save btn , hide add rule btn
-	$("#add_callscriptrule").die().live('click', function(e)
+	// Filter Contacts- Clone Multiple
+	$(".callscript-multiple-add").die().live('click', function(e)
 	{
 		e.preventDefault();
-		console.log("In add_callscriptrule event");
+		// To solve chaining issue when cloned
+		var htmlContent = $(getTemplate("callscript-rule", {})).find('tr').clone();
 
-		// Checks whether all input fields are given
-		if (!isValidForm($("#callscriptruleForm")))
+		scramble_input_names($(htmlContent));
+
+		// boolean parameter to avoid contacts/not-contacts fields in form
+		chainFilters(htmlContent, function()
 		{
-			return;
-		}
 
-		// Get data from form elements
-		var formData = jQuery(callscriptruleForm).serializeArray();
-		var json = {};
+		}, false);
 
-		// Convert into JSON
-		jQuery.each(formData, function()
-		{
-			json[this.name] = this.value || '';
-		});
+		// $(this).hide();
+		// var htmlContent = $(this).closest("tr").clone();
+		$(htmlContent).find("i.callscript-multiple-remove").css("display", "inline-block");
+		$(this).siblings("table").find("tbody").append(htmlContent);
+	});
 
-		console.log("json: ");
-		console.log(json);
-
-		// Hide csr modal
-		$('#callscriptruleModal').modal('hide');
-
-		// If editing rule so hide old rule from table
-		if (json.rule_index != "")
-			$('.row-callscriptrule[data=' + json.rule_index + ']').hide();
-
-		$("#csr_fields").show();
-		$("#csr_name").val(json.name);
-		$("#csr_display_text").val(json.displaytext);
-		$("#edit_rule_index").val(json.rule_index);
-
-		// Show save btn
-		$("#add_rules").hide();
-		$("#save_prefs").show();
+	// Filter Contacts- Remove Multiple
+	$("i.callscript-multiple-remove").die().live('click', function(e)
+	{
+		$(this).closest("tr").remove();
 	});
 
 	// Add rule from modal to widget form, show save btn , hide add rule btn
@@ -54,41 +34,16 @@ $(function()
 		console.log("In edit-callscriptrule event");
 		console.log($(this));
 
-		/*
-		 * One time user can edit only one rule. Already edited one rule and
-		 * without saving that trying to edit another rule, so make visible
-		 * previous rule.
-		 */
-		$('.row-callscriptrule').show();
-
-		// Hide deleted rules
-		$('.deleted-callscriptrule').hide();
-
-		var ruleIndex = $(this).attr("data");
-
-		// If rule index is there for edit
-		if (ruleIndex)
-		{
-			// Get widget from collection and Convert prefs in json
-			var callscriptPrefsJson = getCallScriptJSON();
-
-			// if widget is already added
-			if (callscriptPrefsJson != null)
-			{
-				console.log(callscriptPrefsJson.rules[ruleIndex]);
-
-				// Fill form
-				deserializeForm(callscriptPrefsJson.rules[ruleIndex], $("#callscriptruleForm"));
-
-				$("#rule_index").val(ruleIndex);
-
-				// Show modal
-				$("#callscriptruleModal").modal('show');
-			}
-		}
+		var editRuleIndex = $(this).attr("data");
+		
+		// Redirect to show call script rules page
+		window.location.href = "#CallScript/editrules/" + editRuleIndex;
+		
+		// Shows loading image until data gets ready for displaying
+		$('#prefs-tabs-content').html(LOADING_HTML);
 	});
 
-	// Delete rule
+	// Delete event for call script rule
 	$('.delete-callscriptrule').die().live('click', function(e)
 	{
 		e.preventDefault();
@@ -100,73 +55,45 @@ $(function()
 		if (!confirm("Are you sure to delete a rule"))
 			return;
 
-		// Add delete class
-		$(this).closest("tr").addClass("deleted-callscriptrule");
+		// Remove element
+		$(this).closest("tr").remove();
 
-		// Hide element
-		$(this).closest("tr").hide();
-
-		// Show save btn
-		$("#add_rules").hide();
-		$("#save_prefs").show();
+		// Delete rule from widget
+		deleteCallScriptRule($(this).attr("data"))
 	});
 
 	// Display rule actions
 	$('.row-callscriptrule').live('mouseenter', function()
 	{
-		$(this).find(".callscriptrule-actions").css("visibility","visible");
+		$(this).find(".callscriptrule-actions").css("visibility", "visible");
 	});
 
 	// Hide rule actions
 	$('.row-callscriptrule').live('mouseleave', function()
 	{
-		$(this).find(".callscriptrule-actions").css("visibility","hidden");
-	});
-
-	// On modal hide reset the form
-	$('#callscriptruleModal').live('hidden.bs.modal', 'show.bs.modal', function(e)
-	{
-		console.log("in callscriptruleModal hidden.bs.modal");
-		// Reset all fields
-		$('#callscriptruleForm').each(function()
-		{
-			this.reset();
-		});	
-	});
-	
-	// On modal hide reset the form
-	$('#callscriptruleModal').live('shown.bs.modal', function(e)
-	{
-		console.log("in callscriptruleModal shown.bs.modal");		
-		$("#series").chained("#mark");
-		$("#CONDITION").chained("#LHS");	
-		/*$("#RHS_NEW").chained("#CONDITION");	
-		$("#NESTED_CONDITION").chained("#LHS");
-		$("#NESTED_LHS").chained("#NESTED_CONDITION");
-		$("#NESTED_RHS").chained("#NESTED_CONDITION");	*/			
+		$(this).find(".callscriptrule-actions").css("visibility", "hidden");
 	});
 });
 
-// Get widget and fill widget form
-function fill_rules()
+// Get widget and make adjustment of buttons in widget form
+function adjust_form()
 {
-	console.log("In fill_rules");
+	console.log("In adjust_form");
 
 	// Disable add rule btn
-	$("#add_rules").text("Loading...");
-	$("#add_rules").attr("disabled", true);
+	$("#add_csrule").text("Loading...");
+	$("#add_csrule").attr("disabled", true);
 
-	// Get widget from collection and Convert prefs in json
-	var callscriptPrefsJson = getCallScriptJSON();
-
-	// if widget is already added so
-	// Add rules to widget form
-	if (callscriptPrefsJson != null)
-		addRulesInForm(callscriptPrefsJson);
+	// if widget is already added so display showrules and hide add rule btn
+	if (isCallScriptAdded())
+	{
+		$("#add_csrule").hide();
+		$("#show_csrules").show();
+	}
 
 	// Enable add rule btn
-	$("#add_rules").text('Add Rule');
-	$("#add_rules").attr("disabled", false);
+	$("#add_csrule").text('Add Rule');
+	$("#add_csrule").attr("disabled", false);
 }
 
 // Get widget from collection and Convert prefs in json
@@ -191,28 +118,21 @@ function getCallScriptJSON()
 	return callscriptPrefsJson;
 }
 
-// Add rules in setting form
-function addRulesInForm(callscriptPrefsJson)
-{
-	console.log("In addRulesInForm");
-
-	$("#csr_table").show();
-	$("#csr_table").html(getTemplate("callscript-table", callscriptPrefsJson.rules));
-}
-
 // Add rules in rules array to add same array in widget's prefs
 function makeRule()
 {
 	console.log("in makeRule");
 
-	// If editing rule so get rule index
-	var editRuleIndex = $("#edit_rule_index").val();
-	console.log("editRuleIndex: " + editRuleIndex);
-
 	// Get rule from form
-	var rule = { "name" : $("#csr_name").val(), "displaytext" : $("#csr_display_text").val() };
-	console.log("rule");
-	console.log(rule);
+	var json = serializeForm("callscriptruleForm");
+	console.log(json);
+
+	// Get index of edited rule
+	var editRuleIndex = json.ruleindex;
+
+	// Remove rule index from json
+	delete json.ruleindex;
+	console.log(json);
 
 	// Get widget from collection and Convert prefs in json
 	var callscriptPrefsJson = getCallScriptJSON();
@@ -225,48 +145,289 @@ function makeRule()
 	{
 		// Edit rule
 		if (editRuleIndex != "")
+			callscriptPrefsJson.csrules[editRuleIndex] = json;
+		else
+		// Add Rule
 		{
-			callscriptPrefsJson.rules[editRuleIndex] = rule;
-			$("#rule_index").val("");
-		}
-		else if (rule.name != "")
-			// Add Rule
-			callscriptPrefsJson.rules.push(rule);
+			// Add position to rule
+			json["position"] = callscriptPrefsJson.csrules.length;
 
-		// Check for rule deletion
-		var v = $(".deleted-callscriptrule");
-
-		if (v.length > 0)
-		{			
-			// How many elements removed from rules array
-			var removeCounter = 0;
-
-			// Get deleted index
-			for ( var i = 0; i < v.length; i++)
-			{
-				// Get index from deleted rule
-				var dltRuleIndex = $(v[i]).attr("data");
-				console.log("dltRuleIndex: " + dltRuleIndex);
-
-				/*
-				 * Minus removed counter from index of rule to be deleted,
-				 * because after each delete indexes are changed.
-				 */
-				dltRuleIndex -= removeCounter;
-				console.log("dltRuleIndex: " + dltRuleIndex);
-
-				// Get rule from prefs
-				console.log(callscriptPrefsJson.rules[dltRuleIndex]);
-
-				// Delete rule from widget
-				callscriptPrefsJson.rules.splice(dltRuleIndex, 1);
-				removeCounter++;
-			}
+			// Add rule in rules
+			callscriptPrefsJson.csrules.push(json);
 		}
 
-		console.log(callscriptPrefsJson.rules);
-		return callscriptPrefsJson.rules;
+		console.log(callscriptPrefsJson.csrules);
+
+		return callscriptPrefsJson.csrules;
 	}
-	else
-		return [rule];
+
+	// Add position 0 to first rule
+	json["position"] = 0;
+
+	// First rule in widget
+	return [json];
+}
+
+// Delete selected call script rule from widget
+function deleteCallScriptRule(dltRuleIndex)
+{
+	console.log("deleteCallScriptRule :" + dltRuleIndex);
+
+	// Get widget from collection and Convert prefs in json
+	var callscriptPrefsJson = getCallScriptJSON();
+
+	/*
+	 * if widget is already added so get rules from widget and delete rules in
+	 * array
+	 */
+	if (callscriptPrefsJson != null)
+	{
+		// Get rule from prefs
+		console.log(callscriptPrefsJson.csrules[dltRuleIndex]);
+
+		// Delete rule from widget
+		callscriptPrefsJson.csrules.splice(dltRuleIndex, 1);
+
+		console.log(callscriptPrefsJson.csrules);
+
+		// Saves the preferences into widget with sip widget name
+		save_widget_prefs("CallScript", JSON.stringify(callscriptPrefsJson), function(data)
+		{
+			console.log('In call script save success after delete');
+			console.log(data);
+		});
+	}
+}
+
+// Get widget from collection and convert prefs to json before display in table.
+function showCallScriptRule()
+{
+	console.log("in showCallScriptRule");
+
+	// Shows loading image untill data gets ready for displaying
+	$('#prefs-tabs-content').html(LOADING_HTML);
+
+	// Get widget from collection and Convert prefs in json
+	var callscriptPrefsJson = getCallScriptJSON();
+
+	// if widget is already added so
+	// Add rules to show rules page
+	if (callscriptPrefsJson != null)
+	{
+		console.log("widget added");
+		$("#prefs-tabs-content").html(getTemplate("callscript-table", callscriptPrefsJson.csrules));
+		
+		// Apply drag drop (sortable)
+		setup_sortable_callscriptrules();
+	}
+}
+
+// show add rule page with chaining
+function addCallScriptRule()
+{
+	console.log("in addCallScriptRule");
+
+	var contacts_filter = new Base_Model_View({ template : "callscript-rule", isNew : "true", postRenderCallback : function(el)
+	{
+		head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+		{
+			chainFilters(el, undefined, function()
+			{
+				$('#prefs-tabs-content').html(el);
+
+				// if this is first rule then set add-widget url on cancel btn
+				if (!isCallScriptAdded())
+				{
+					$(".redirect-to-addwidget").show();
+					$(".redirect-to-showrules").hide();
+				}
+			});
+		})
+	} });
+
+	// Shows loading image until data gets ready for displaying
+	$("#prefs-tabs-content").html(LOADING_HTML);
+	contacts_filter.render();
+}
+
+// Get call script rule from widget and display in edit rule page
+function editCallScriptRule(id)
+{
+	console.log("in editCallScriptRule: " + id);
+
+	// Shows loading image until data gets ready for displaying
+	$('#prefs-tabs-content').html(LOADING_HTML);
+
+	// Get widget from collection and Convert prefs in json
+	var callscriptPrefsJson = getCallScriptJSON();
+
+	// if widget is already added
+	if (callscriptPrefsJson != null)
+	{
+		var csrule = callscriptPrefsJson.csrules[id];
+
+		console.log(csrule);
+
+		csrule["ruleindex"] = id;
+
+		console.log(csrule);
+
+		$("#prefs-tabs-content").html(LOADING_HTML);
+		head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+		{
+			$("#prefs-tabs-content").html(getTemplate("callscript-rule"));
+			$("#prefs-tabs-content").find('#filter-settings').find("#loading-img-for-table").html(LOADING_HTML).show();
+			$("#prefs-tabs-content").find('#filter-settings').find(".chained-table").hide();
+			
+			chainFilters($("#prefs-tabs-content"), csrule, function()
+			{
+				$("#prefs-tabs-content").find('#filter-settings').find("#loading-img-for-table").hide();
+				$("#prefs-tabs-content").find('#filter-settings').find(".chained-table").show();
+			});
+			scramble_input_names($("#prefs-tabs-content").find('#filter-settings'));
+
+			// Change heading
+			$(".addLable").html(" Edit Call Script Rule");
+
+			// Fill input tags
+			$("#name").val(csrule.name);
+			$("#displaytext").val(csrule.displaytext);
+			$("#position").val(csrule.position);
+			$("#ruleindex").val(csrule.ruleindex);			
+		});
+	}
+}
+
+// Check call script widget is added or not
+function isCallScriptAdded()
+{
+	console.log("In isCallScriptAdded");
+
+	// Get call script widget
+	var callscriptWidget = App_Widgets.Catalog_Widgets_View.collection.where({ name : "CallScript" });
+	console.log(callscriptWidget);
+
+	// call script widget not added
+	if (callscriptWidget[0].get("is_added") == false)
+		return false;
+
+	// call script widget added
+	return true;
+}
+
+
+/**
+ * Sets call script rules as sortable list.
+ */
+function setup_sortable_callscriptrules()
+{	
+	// Loads jquery-ui to get sortable functionality on widgets
+	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function()
+	{
+		$(".csr-sortable").sortable(
+				{		
+					axis: "y" ,
+					forcePlaceholderSize: true,
+					placeholder:'<tr><td></td></tr>',
+					handle: ".icon-move",
+					containment: ".csr-sortable",
+					cursor: "move",
+					forceHelperSize: true,
+					scroll: false,
+					items: "> tr",
+					helper: function(e, tr)
+					{
+					    var $originals = tr.children();
+					    var $helper = tr.clone();
+					    $helper.children().each(function(index)
+					    {
+					      // Set helper cell sizes to match the original sizes
+					      $(this).width($originals.eq(index).width());
+					    });
+					    return $helper;
+					}						
+				}).disableSelection();
+		
+		
+		$('.csr-sortable').on("sortstart", function(event, ui) {
+			$(".csr-sortable").append("<tr class='pseduo-row' style='border:none!important;'><td></td><td></td><td></td></tr>");
+		});
+		
+		/*
+		 * This event is called after sorting stops to save new positions of
+		 * rules
+		 */
+		$('.csr-sortable').on("sortstop", function(event, ui) {
+
+			$('.csr-sortable').find(".pseduo-row").remove();
+			
+			// Get new array of rule
+			getRulesNewPosition(function(newRules){
+				// Saves new positions in widget
+				saveAfterDrop(newRules);
+			});			
+		});		
+	});
+}
+
+// Get new positioned array of rule
+function getRulesNewPosition(callback)
+{
+	console.log("In getRulesNewPosition");
+	
+	var newRules = [];
+	
+	// Get widget from collection and Convert prefs in json
+	var callscriptPrefsJson = getCallScriptJSON();
+
+	/*
+	 * Iterate through each all the rules and set each rule
+	 * position and store it in array
+	 */
+	$('.csr-sortable > tr').each(function(index, element)
+	{
+		if(!$(element).hasClass("pseduo-row")){
+
+			var old_rule_index = $(element).attr('data');
+			
+			console.log("old_rule_index:"+old_rule_index);
+
+			// Get Model, model is set as data to widget element
+			var rule = callscriptPrefsJson.csrules[old_rule_index];
+
+			console.log("rule:"+rule);					
+			rule["position"] = index;
+			console.log("rule:"+rule);
+			
+			newRules.push(rule);
+			console.log("newRules:"+newRules);
+			
+			$(element).attr('data',index);
+		}
+	});
+	
+	if (callback && typeof (callback) === "function")
+		callback(newRules);	
+}
+
+// Save rules after dropped 
+function saveAfterDrop(newRules)
+{
+ console.log("In saveAfterDrop");	
+ 
+//Get widget from collection and Convert prefs in json
+var callscriptPrefsJson = getCallScriptJSON();
+ 
+//Add rule to pref
+ callscriptPrefsJson["csrules"] = newRules;
+ 
+ console.log("callscriptPrefsJson:"+callscriptPrefsJson);
+ 
+ //Saves the preferences into widget with sip widget name
+ save_widget_prefs("CallScript", JSON.stringify(callscriptPrefsJson), function(data)
+	{
+		console.log('In call script save success after drag-drop');
+		console.log(data);
+	});
+ 
 }

@@ -4,15 +4,9 @@
                    Rules are used to show status of contacts with a specific criteria to find patterns.
     </p>
 	<form class="widget_content" style="border-bottom:none;" id="callscript_login_form" name="callscript_login_form" method="post">
-    	<fieldset>	
-              <input type="hidden" id="edit_rule_index" name="edit_rule_index" value="" />
-              <div id="csr_table" style="display:none"></div>
-              <div id="csr_fields" style="display:none">
-                    <input type="text" id="csr_name" name="csr_name" value=""/>
-                    <input type="text" id="csr_display_text" name="csr_display_text" value=""/>
-              </div>
-              <a href="#callscriptruleModal" data-toggle="modal" id="add_rules" class="btn btn-primary" style="text-decoration:none;"><i class="icon-plus-sign"></i>Add Rule</a>
-			  <a href="#" id="save_prefs" class="btn btn-primary" style="text-decoration:none;display:none;">Save</a>
+    	<fieldset>
+              <a href="#CallScript/addrules" id="add_csrule" class="btn btn-primary" style="text-decoration:none;"><i class="icon-plus-sign"></i>Add Rule</a>
+              <a href="#CallScript/rules" id="show_csrules" class="btn btn-primary" style="text-decoration:none;display:none;">Show Rule</a>			  
 			  <a href="#add-widget" class="btn ml_5" style="text-decoration:none;">Cancel</a>              
 		 </fieldset>
     </form>
@@ -20,8 +14,20 @@
 </script>
 
 <script id="callscript-table-template" type="text/html">
-{{#if this.length}}
-<table class="table table-striped agile-ellipsis-dynamic">
+<div class="span11">
+<div class="well">
+<div class="row">
+    <div class="span10">      
+        <div class="page-header">
+            <h1>Call Script Rules</h1>
+            <a href="#CallScript/addrules" class="btn right" id="add_rule" style='top:-28px;position:relative'><span><i class='icon-plus-sign'/></span>  Add Rule</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span8">		
+        {{#if this.length}}
+         <table class="table table-striped agile-ellipsis-dynamic">
                <colgroup>
                 <col width="20%">
 				<col width="20%">
@@ -33,24 +39,239 @@
                     <th>Display Text</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="csr-sortable">
              {{#each this}}
-               <tr data='{{@index}}' class='row-callscriptrule' style="cursor:pointer">
+               <tr data='{{@index}}' class='row-callscriptrule ui-state-default'>
                    <td class='data'><div style="overflow: hidden;white-space: nowrap;text-overflow:ellipsis;display: inline-block;">{{name}}</div></td>
                    <td class='data'><div style="overflow: hidden;white-space: nowrap;text-overflow:ellipsis;display: inline-block;">{{displaytext}}</div></td>
                    <td class='data'>
                        <div class="callscriptrule-actions pull-right" style="visibility: hidden;">
-                          <i class="icon icon-edit edit-callscriptrule" data="{{@index}}" title="Edit Call Script Rule"></i>     
-                          <i class="icon icon-trash delete-callscriptrule" data="{{@index}}" title="Delete Call Script Rule"></i>
+                          <i class="icon icon-move" data="{{@index}}" title="Drag-Drop Call Script Rule"></i> 
+                          <i class="icon icon-edit edit-callscriptrule" data="{{@index}}" title="Edit Call Script Rule"  style="cursor:pointer"></i>     
+                          <i class="icon icon-trash delete-callscriptrule" data="{{@index}}" title="Delete Call Script Rule"  style="cursor:pointer"></i>
                        </div>
                    </td>
                </tr> 
              {{/each}}
             </tbody>
         </table>
-{{/if}}
+    {{else}}
+     <div id="slate">
+			<div class="slate">
+    			<div class="slate-content">
+        				<div class="box-left"><img alt="Clipboard" src="/img/clipboard.png"></div>
+				        <div class="box-right">
+                            <h3>You do not have any call script rules currently.</h3>
+                            <div class="text">Call Script Rules are used to show relevent text about contact.</div>
+                            <a href="#CallScript/addrules" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i>  Add Rule</a>
+				        </div>
+                </div>
+           </div>
+        </div>
+    {{/if}}
+    </div>
+    <div class='span2'>
+        <div class="well" id='addview'>
+             <h3>
+              What are Call Script Rules?
+             </h3><br/>
+            <p>Rules are used to show status of contacts with a specific criteria to find patterns.</p>
+        </div>
+    </div>
+</div>
+</div>
+</div>
 </script>
 
+<script id="callscript-rule-template" type="text/html">
+<div class="span10">
+	<div class="well">
+		<form id="callscriptruleForm" class="form-horizontal">
+			<div name="rules" class="formsection chainedSelect">             
+					 {{#if ruleindex}} 
+                        <legend class="formheading"> Edit Call Script Rule<span
+						style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="/img/help.png"
+							style="height: 6px; vertical-align: text-top" rel="popover"
+							data-placement="bottom"
+							data-content="callscriptrule callscriptrule callscriptrule callscriptrule callscriptrule callscriptrule"
+							id="element" data-trigger="hover">
+					</span></legend>
+                        {{else}}
+                        <legend class="formheading"><span class="addLable"><i class="icon-plus-sign"></i> Add Call Script Rule</span><span
+						style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="/img/help.png"
+							style="height: 6px; vertical-align: text-top" rel="popover"
+							data-placement="bottom"
+							data-content="callscriptrule callscriptrule callscriptrule callscriptrule callscriptrule callscriptrule"
+							id="element" data-trigger="hover">
+					</span>
+				</legend>
+                        {{/if}}
+				</legend>			
+                <fieldset>
+                    <input type="hidden" id="ruleindex" name="ruleindex" value="" />
+                    <input type="hidden" id="position" name="position" value="" />
+
+					<div class="control-group">
+						<label class="control-label">Name<span class="field_req">*</span></label>
+						<div class="controls">
+							<input type="text" id="name" name="name" class="required" />
+						</div>
+					</div>
+
+                    <div class="control-group">
+						<label class="control-label">Display Text<span class="field_req">*</span></label>
+						<div class="controls">
+                            <textarea id="displaytext" name="displaytext" rows="3" class="input required" placeholder="Display Text"></textarea>							
+						</div>
+					</div>
+                       
+					<div class="control-group" id="filter-settings">
+						<label class="control-label">Condition</label>
+						<div class="controls">
+                            <div id="loading-img-for-table" style="display:none;"></div>
+							<table style="background-color: transparent;margin-bottom:5px" class="chained-table">
+								<tbody>
+									<tr valign="top" class="chained controls" name="rules" style="padding-left:100px; ">
+										<td>
+											<div name="ruleType">
+												<input type="text" class="hide" name="temp" class="required"
+													value="Contact"/>
+											</div>
+										</td>
+										<td class="lhs-block span2">
+											<div id="LHS" name="LHS">
+												<select name="temp" class="lhs" id="LHS" style="width: 125px;">
+													<optgroup label="Tag">
+														<option value="tags" selected="selected">Tag</option>
+														<option value="tags_time">Tag And Created Date</option>
+													</optgroup>
+													<optgroup label="Date">
+														<option value="created_time">Created</option>														
+													</optgroup>
+ 													<optgroup label="Properties">					
+														<option value="company">Company</option>
+														<option value="title">Job Title</option>														
+														<option value="lead_score">Score</option>
+														<option value="owner_id">Owner</option>
+													</optgroup>
+												
+													 <optgroup label="Custom Fields" id="custom-fields" class="hide">
+													</optgroup>
+												</select>
+											</div>
+										</td>
+										<td class="codition-block span2">
+											<div id="condition" name="CONDITION">
+												<select name="temp" style="width: 100%;">
+													<option value="EQUALS"
+														class="company title org_tag jobtitle city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
+													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
+													<option value="NOTEQUALS"
+														class="company owner org_tag title city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+													
+													<option value="EQUALS" class="tags tags_time">is</option>
+													<option value="NOTEQUALS" class="tags">isn't</option>
+
+													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
+													<option value="IS_LESS_THAN" class="lead_score">less than</option>
+													<option value="ON" class="created_time">on</option>
+													<option value="AFTER" class="created_time">is
+														after</option>
+													<option value="BEFORE" class="created_time">is
+														before</option>
+													<option value="BETWEEN" class="created_time">is
+														between</option>
+													<option value="LAST" class="created_time">in
+														last</option>
+													<option value="EQUALS" class="tag org_tag">is</option>
+													<option value="ANYOF" class="tag">is any of</option>
+												</select>
+											</div>
+										</td>
+										<td class="rhs-block span2 controls" style="vertical-align:top; " >
+											<div id="RHS" class="rhs" name="RHS">
+												<input type="text" name="temp" style="width:92%"
+													class="LAST required" placeholder="Number of days"/>
+												<input type="text" name="temp" style="width:92%"
+													class="EQUALS NOTEQUALS ANYOF required"/>
+												 
+												<input type="text" name="temp" 
+													class="MATCHES NOT_CONTAINS  required"/>
+												<input type="text" name="temp" style="width:92%"
+													class="IS_GREATER_THAN IS_LESS_THAN number required"/> 
+													
+                                                <input type="text" name="tag" 
+													class="tags tags_time required"
+													style="margin: 0px;width:92%" />                                                 
+												<input id="updated_date" type="text" name="updated_date" style="width:92%; text-overflow:none; "
+													class="ON AFTER BEFORE BETWEEN input required date"
+													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
+											</div>
+										</td>
+										<td class="rhs-new-block controls span2" style="vertical-align:top; " >
+											<div id="RHS-NEW" name="RHS_NEW">
+												<input id="date_between" type="text" name="temp" data-date-format="mm/dd/yyyy"
+													class="BETWEEN input date required" style="width: 92%" placeholder="MM/DD/YY" />
+											</div>
+										</td>
+										<td class="nested-condition-block span2" style="vertical-align:top; " >
+											<div id="nested_condition" name="nested_condition">
+												<select name="temp"  style="width: 100%;">
+													<option value="EQUALS" class="tags_time">on</option>
+													<option value="AFTER" class="tags_time">is after</option>
+													<option value="BEFORE" class="tags_time">is before</option>
+													<option value="BETWEEN" class="tags_time">is
+														between</option>
+													<option value="LAST" class="tags_time">in last</option>
+											</div>
+										</td>
+										<td class="controls span2" style="vertical-align:top; " >
+											<div id="nested_lhs" name="nested_lhs">
+												<input type="text" name="temp" class="LAST required"
+													style="width: 92%;" placeholder="Number of days" /> 
+												<input
+													id="date_between" type="text" style="width: 92%"
+													name="temp"
+													class="BETWEEN EQUALS AFTER BEFORE input date required"
+													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
+											</div>
+										</td>
+										<td class="controls span2" style="vertical-align:top; " >
+											<div id="nested_rhs" name="nested_rhs">
+												<input id="date_between" type="text" name="temp"
+													style="width: 92%;" class="BETWEEN input date required"
+													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy" />
+											</div>
+										</td>
+									<td>
+									<div style="margin-left:10px">
+										<i
+											class="callscript-multiple-remove icon-remove-circle"
+											style="display: none;  cursor:pointer;"></i></div></td>
+									</tr>
+								
+								</tbody>
+							</table>
+								<a href="#" class="callscript-multiple-add" style="text-decoration:none;margin-top:5px"><i class="icon-plus"></i> Add</a>
+						</div>
+					</div>
+			</div>
+
+			{{#if id}} <input type="text" name="id" class="hide" value={{id}}>
+			{{/if}}
+			<div class="form-actions">
+				<a href="#" class="btn btn-primary" id="save_prefs">Save</a> 
+                <a href="#CallScript/rules" class="btn redirect-to-showrules">Close</a>
+                <a href="#add-widget" style="display:none;" class="btn redirect-to-addwidget">Close</a>
+			</div>
+			</fieldset>
+		</form>
+	</div>
+</div>
+</script>
 
 <script id="callscript-profile-template" type="text/html">
 <div class="widget_content">

@@ -69,7 +69,7 @@ var ContactFiltersRouter = Backbone.Router.extend({
 		var ContactFilter = new Base_Model_View({ url : 'core/api/filters', model : contact_filter, template : "filter-contacts",
 			window : 'contact-filters', postRenderCallback : function(el)
 			{
-
+                console.log(contact_filter.toJSON());
 				$("#content").html(LOADING_HTML);
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 				{

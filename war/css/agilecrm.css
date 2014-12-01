@@ -1742,3 +1742,16 @@ display:block;
 {
 	padding:11px 11px;
 }
+
+
+/** call script rules sorting **/
+.csr-sortable > tr.pseduo-row td {
+	border-top: 0px #fff!important;
+	background-color: #fff!important;
+}
+.csr-sortable > tr.pseduo-row td input[type="checkbox"] {
+	display: none;
+}
+.csr-sortable tr:hover td:last-child div {
+	display: block!important;
+}

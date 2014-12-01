@@ -42,7 +42,8 @@ var WidgetsRouter = Backbone.Router
 
 												"Chargify" : "Chargify", "Chargify/:id" : "Chargify",
 												
-												"CallScript" : "CallScript", "CallScript/:id" : "CallScript",
+												"CallScript/rules" : "CallScriptShow", "CallScript/addrules" : "CallScriptAdd","CallScript/editrules/:id" : "CallScriptEdit",
+												"CallScript" : "CallScript", "CallScript/:id" : "CallScript",												
 
 												"sync" : "contactSync", "sync/contacts" : "google_apps_contacts", "sync/calendar" : "google_apps_calendar", "sync/stripe-import" : "stripe_sync",
 																"sync/shopify" : "shopify", "sync/salesforce" : "salesforce", "sync/zoho-import" : "zoho_sync", "sync/quickbook" : "quickbook_import",
@@ -1056,8 +1057,32 @@ var WidgetsRouter = Backbone.Router
 																				show_set_up_widget("CallScript", 'callscript-login');
 																else
 																				fill_form(id, "CallScript", 'callscript-login');
-																                fill_rules();
+																                adjust_form();
 
+												},
+												
+												/**
+												 * Show CallScript rules
+												 */
+												CallScriptShow : function()
+												{
+													showCallScriptRule();
+												},
+												
+												/**
+												 * Add CallScript rules
+												 */
+												CallScriptAdd : function()
+												{
+													addCallScriptRule();
+												},
+												
+												/**
+												 * Edit CallScript rules
+												 */
+												CallScriptEdit : function(id)
+												{
+													editCallScriptRule(id);
 												}
 								});
 

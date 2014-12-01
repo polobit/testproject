@@ -68,6 +68,7 @@ $(function()
 
 function update_collection_with_prefs(data)
 {
+	console.log("In update_collection_with_prefs");
 	console.log(data);
 	if (App_Widgets.Catalog_Widgets_View && App_Widgets.Catalog_Widgets_View.collection)
 	{
@@ -464,17 +465,14 @@ function callscript_save_widget_prefs()
 		}
 
 		// Checks whether all input fields are given
-		if (!isValidForm($("#callscript_login_form")))
+		if (!isValidForm($("#callscriptruleForm")))
 		{
 			return;
-		}
-		
+		}		
 
 		// Saves call script preferences in callscript widget object
 		saveCallScriptWidgetPrefs();
-
 	});
-
 }
 
 /**
@@ -494,7 +492,7 @@ function saveCallScriptWidgetPrefs()
 	var callscript_rule = makeRule();
 		
 	// Add rule to pref
-	callscript_prefs["rules"] = callscript_rule;
+	callscript_prefs["csrules"] = callscript_rule;
 	
 	console.log(callscript_rule);
 	console.log(callscript_prefs);
@@ -503,8 +501,11 @@ function saveCallScriptWidgetPrefs()
 	save_widget_prefs("CallScript", JSON.stringify(callscript_prefs), function(data)
 	{
 		console.log('In call script save success');
-		console.log(data);
-	});
+		console.log(data);		
+		
+		// Redirect to show call script rules page
+		window.location.href = "#CallScript/rules";
+	});	
 }
 
 function save_widget_prefs(pluginName, prefs, callback)
@@ -536,8 +537,12 @@ function save_widget_prefs(pluginName, prefs, callback)
 
 		data.set('is_added', true);
 		models[0].set(data);
+		
+		// If plugin name is CallScript do not redirect
+		if (pluginName != "CallScript")
 		window.location.href = "#add-widget";
 
+		console.log("data******");
 		console.log(data);
 
 		update_collection_with_prefs(data);
@@ -562,6 +567,9 @@ function save_widget_prefs(pluginName, prefs, callback)
 			// Get widget, Create token and set twilio device
 			globalTwilioIOSetup();
 		}
+		
+		if (callback && typeof (callback) === "function")
+			callback(data);
 	} });
 }
 
