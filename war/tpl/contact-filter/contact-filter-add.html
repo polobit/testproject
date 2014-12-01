@@ -205,8 +205,10 @@
 														<option value="updated_time">Updated</option>
 													</optgroup>
  													<optgroup label="Properties">
+														<option value="email">Email Address</option>
 														<option value="owner_id">Owner</option>
 														<option value="name">Name</option>
+														<option value="url">Url</option>
 													</optgroup>
 												
 													 <optgroup label="Custom Fields" id="custom-fields" class="hide">
@@ -218,11 +220,11 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" style="width: 100%;">
 													<option value="EQUALS"
-														class="name phone company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="name phone company title org_tag jobtitle email url phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="name company owner org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+														class="name company owner org_tag title email url phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 													<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="NOTEQUALS" class="tags">isn't</option>
 
