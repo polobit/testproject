@@ -488,10 +488,11 @@ public class WebCalendarEventUtil
 		System.out.println("agileUseiCal-- " + agileUseiCal.toString());
 		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
 
-		String usermail = "<span>" + wce.userName + " has scheduled an appointment </span><br/><span>Type: '"
-		        + wce.name + "' (" + wce.slot_time + "mins)</span><br/><span>Phone: " + wce.phoneNumber
-		        + "</span><br/><span>Note: " + wce.notes + "</span><br/><span><a href=https://" + user.domain
-		        + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></span>";
+		String usermail = "<p>" + wce.userName + " (" + wce.email
+		        + ") has scheduled an appointment </p><span>Type: '" + wce.name + "' (" + wce.slot_time
+		        + "mins)</span><br/><span>Phone: " + wce.phoneNumber + "</span><br/><span>Note: " + wce.notes
+		        + "</span><br/><p><a href=https://" + user.domain
+		        + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
 
 		EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
 		        "Appointment Scheduled", null, usermail, null, null, attachments_to_agile_user);
@@ -507,10 +508,10 @@ public class WebCalendarEventUtil
 	    String link = "https://www.agilecrm.com/?utm_source=powered-by&medium=email&utm_campaign=" + user.domain;
 	    System.out.println("icall s string  " + iCal.toString() + " email " + wce.email);
 
-	    String client_mail = "<span>You have a new appointment with '" + user.name + "'</span><br/><span>Type: '"
-		    + wce.name + "' (" + wce.slot_time + "mins)</span><br/><span>Phone: " + wce.phoneNumber
-		    + "</span><br/><span>Note: " + wce.notes
-		    + "</span><br/><span>This event has been scheduled using <a href=" + link + ">Agile CRM</a></span>";
+	    String client_mail = "<p>You have a new appointment with <b>" + user.name + "</b> (" + user.email
+		    + ")</p><span>Type: '" + wce.name + "' (" + wce.slot_time + "mins)</span><br/><span>Phone: "
+		    + wce.phoneNumber + "</span><br/><span>Note: " + wce.notes
+		    + "</span><br/><p>This event has been scheduled using <a href=" + link + ">Agile CRM</a></p>";
 
 	    String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 
