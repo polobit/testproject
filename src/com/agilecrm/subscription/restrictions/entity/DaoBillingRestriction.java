@@ -37,11 +37,11 @@ public abstract class DaoBillingRestriction implements
 
 	DomainUser(DomainUserBillingRestriction.class),
 
-	Email(EmailBillingRestriction.class);
+	Email(EmailBillingRestriction.class),
 	
-	//Reports(ReportBillingRestriction.class),
+	Reports(ReportBillingRestriction.class),
 	
-	//Trigger(TriggerBillingRestriction.class);
+	Trigger(TriggerBillingRestriction.class);
 
 	Class<? extends DaoBillingRestriction> clazz;
 
