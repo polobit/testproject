@@ -74,7 +74,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 			// response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			continue;
 		    }
-		    
+
 		    NamespaceManager.set(agileDomain);
 
 		    Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
@@ -91,7 +91,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 
 		    System.out.println("from email is " + fromEmail);
 		    System.out.println("from name is " + fromName);
-		    
+
 		    Contact contact = buildContact(fromName, fromEmail);
 		    if (contact == null)
 		    {
@@ -110,7 +110,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 			if (StringUtils.equals(trigger.type.toString(), INBOUND_MAIL_EVENT))
 			{
 			    System.out.println("assigning campaign to contact");
-			    WorkflowSubscribeUtil.subscribe(contact, trigger.id);
+			    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
 			}
 		    }
 		}
