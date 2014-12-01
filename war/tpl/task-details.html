@@ -1,0 +1,51 @@
+<script id="task-detail-template" type="text/html">
+
+		<div class="row">
+		<!--  starting time line view -->
+		<div class="span9" id="contacts-inner-tabs">
+			<ul class="nav nav-tabs" id="taskDetailsTab">
+				<li class=""><a data-toggle="tab" href="#timeline">Timeline</a></li>
+				<li class=""><a data-toggle="tab" href="#notes">Notes</a></li>
+				<li class=""><a data-toggle="tab" href="#contacts">Contacts</a></li>
+			</ul>
+
+			<div class="tab-content" id="task-tab-content">
+				<div class="tab-pane" id="time-line">
+					<div class="timeline-loading-img" style="width:35px;max-height:30px;overflow:hidden;">
+						<img class="loading-img" src="img/21-0.gif"></img>
+					</div>
+
+					<div class="slate" id="timeline-slate"
+						style="margin-top: 30px; display: none">
+						<div class="slate-content">
+							<div class="box-left">
+								<img alt="Clipboard" src="/img/clipboard.png" />
+							</div>
+							<div class="box-right">
+								<h3>{{getPropertyValue properties "first_name"}} has no
+									entities (Notes, Tasks, Deals and etc..) related, to show in
+									the Timeline.</h3>
+								<div class="text">You can add entities related to it by
+									selecting suitable option from the above "actions" drop down
+									button.</div>
+								<a href="#">Click here to learn more</a> <br />
+							</div>
+						</div>
+					</div>
+
+					<div style="margin: auto; width: 700px">
+						<div id="timeline">
+							<div id="line-container">
+								<div id="line"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane" id="notes"><img src="img/21-0.gif"></img></div>
+				<div class="tab-pane" id="contacts"><img src="img/21-0.gif"></img></div>
+				
+			</div>
+		</div>
+	<!--  ending timeline view -->
+
+						</script>

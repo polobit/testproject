@@ -670,6 +670,9 @@ var notification_prefs;
 function downloadAndRegisterForNotifications()
 {
 
+	// As of now I know that this function is calling only once after loggin. so Updating due task count in this function;
+	var due_task_count=getDueTasksCount();
+	$('#due_tasks_count').html(due_task_count);
 	// Download Notification Prefs
 	var notification_model = Backbone.Model.extend({ url : 'core/api/notifications' });
 
@@ -4602,6 +4605,168 @@ function eraseCookie(name)
 {
 	createCookie(name, "", -1);
 }
+
+$(function(){
+	
+	$(".voice-mail-add").die().live('click', function(e){
+		e.preventDefault();
+		$("#uploadVoiceMailModal").modal('show');
+	});
+	
+	$('#uploadVoiceMailModal').on('show', function() {
+		// Removes alert message of error related date and time.
+		$('#' + this.id).find('.alert').css('display', 'none');		
+		// Removes error class of input fields
+		$('#' + this.id).find('.error').removeClass('error');
+	});
+	
+	$(".addFileLink").live('click', function(e) {
+		e.preventDefault();
+		$(this).closest('form').find('#error').html("");
+		var form_id = $(this).closest('form').attr("id");
+		var id = $(this).find("a").attr("id");
+		if(id && id == "S3")
+			var newwindow = window.open("upload-voice-mail.jsp?id="+ form_id +"&t=" + CURRENT_USER_PREFS.template +"&d=" + CURRENT_DOMAIN_USER.domain, 'name','height=310,width=500');
+		if (window.focus){
+			newwindow.focus();
+		}
+		return false;
+	});
+	
+    $('#voicemail_validate').live('click',function(e){
+ 		e.preventDefault();
+ 		var modal_id = $(this).closest('.voice-mail-modal').attr("id");
+    	var form_id = $(this).closest('.voice-mail-modal').find('form').attr("id");
+    	
+    	if(!isValidForm('#' + form_id))
+    		return false;
+    			
+    	// serialize form.
+    	var json = serializeForm(form_id);
+    	if(form_id == "uploadVoiceMaiForm")
+    		saveVoiceMail(form_id, modal_id, this, json);
+	});
+    
+    $("#uploadVoiceMaiForm").submit(function(e){
+    	e.preventDefault();
+    });
+    
+    
+    //audio javascript controls
+    
+   $(".audioPlay").live('click', function(e){
+	   e.preventDefault();
+//	   alert("audioPlay");
+	   audio = $(this).find("audio");
+	   $(this).addClass("audioPause");
+	   $(this).removeClass("audioPlay");
+	   $(this).find("i").removeClass("icon-play");
+//	   $(this).find("i").addClass("icon-pause");
+	   $(this).find("i").addClass("icon-stop");
+	   audio.trigger('play');
+	   var that = this;
+	   audio.bind('ended', function(){
+		   $(that).addClass("audioPlay");
+		   $(that).removeClass("audioPause");
+		   $(that).find("i").removeClass("icon-stop");
+		   $(that).find("i").addClass("icon-play");
+		});
+   });
+   
+   $(".audioPause").live('click', function(e){
+	   e.preventDefault();
+//	   alert("audioPause");
+	   audio = $(this).find("audio");
+	   $(this).addClass("audioPlay");
+	   $(this).removeClass("audioPause");
+//	   $(this).find("i").removeClass("icon-pause");
+	   $(this).find("i").removeClass("icon-stop");
+	   $(this).find("i").addClass("icon-play");
+	   audio.trigger('pause');
+	   audio.prop("currentTime",0);
+   });
+	
+});//end of function
+
+
+function saveVoiceMailFileURL(url, network, id)
+{
+	id = id.split("?id=")[1];
+	var form_id = id.split("&")[0];
+	
+	// Saving extension of document
+	var extension = url.split("?");
+	if(url.match("audiofiles/"))
+	{
+		extension = extension[0];
+		extension = extension.substring(extension.lastIndexOf("/")+1);
+	}
+	else 
+		extension = "";
+	
+	$('#' + form_id).find("#extension").val(extension);
+	$('#' + form_id).find("#network_type").val(network);
+	var newUrl = url.substring(0, url.indexOf("?"));//removing query string
+   	$('#' + form_id).find('#upload_url').val(newUrl);
+   	$(".addFileLink").empty();
+   	if(extension != "")
+   		$(".addFileLink").html(extension);
+}
+
+function saveVoiceMail(form_id, modal_id, saveBtn, json)
+{
+	// Returns, if the save button has disabled attribute
+	if ($(saveBtn).attr('disabled'))
+		return;
+
+	disable_save_button($(saveBtn));
+	
+	if(form_id)
+	{
+		if (!isValidForm('#' + form_id)) {
+			enable_save_button($(saveBtn));
+			return false;
+		}
+		
+		var url = $('#' + form_id).find('#upload_url').val();
+		if(url == "")
+		{
+			$('#' + form_id).find('#error').html('<div class="alert alert-error">Sorry! Voice file not uploaded properly.</div>');
+			enable_save_button($(saveBtn));
+			return;
+		}
+	}
+	
+	var newVoiceMail = new Backbone.Model();
+	newVoiceMail.url = 'core/api/voicemails';
+	newVoiceMail.save(json, {
+		success : function(data) {
+		App_VoiceMailRouter.VoiceMailCollectionView.collection.add(data);
+		App_VoiceMailRouter.VoiceMailCollectionView.render(true);
+		enable_save_button($(saveBtn));
+		
+		if(form_id)
+		{
+			$('#' + form_id).find("#network_type").val("");
+			$('#' + form_id).find("#upload_url").val("");
+			$('#' + form_id).find("#extension").val("");
+			$('#' + form_id).find(".addFileLink").empty();
+			$('#' + form_id).find('#error').empty();
+			$('#' + form_id).find(".addFileLink").html('<a href="#" id="S3"><i class="icon-plus-sign"></i> <span>Add File</span></a>');
+			$('#' + form_id).each(function() {
+				this.reset();
+			});
+			
+			$('#' + modal_id).modal('hide');
+		}
+		
+	}
+	});
+	
+}
+
+
+
 $(function(){
 	
 	/**
@@ -4631,6 +4796,12 @@ $(function(){
        	else
        		saveDeal(form_id, modal_id, this, json, true);
 	});
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * To avoid showing previous errors of the modal.
@@ -4704,7 +4875,12 @@ $(function(){
     */
     $('#opportunities-model-list > tr > td:not(":first-child")').live('click', function(e) {
 		e.preventDefault();
-		updateDeal($(this).closest('tr').data());
+		$('.popover').remove();
+		var currentdeal=$(this).closest('tr').data();
+		Backbone.history.navigate("deal/"+currentdeal.id , {
+            trigger: true
+        });
+	//	updateDeal($(this).closest('tr').data());
 	});
     
     /**
@@ -4712,7 +4888,10 @@ $(function(){
      */
 	$('#dashboard-opportunities-model-list > tr').live('click', function(e) {
 		e.preventDefault();
-		updateDeal($(this).data());
+		var currentdeal=$(this).closest('tr').data();
+		Backbone.history.navigate("deal/"+currentdeal.id , {
+            trigger: true
+        });
 	});
 	
 	$('.milestones > li').live('mouseenter', function () {
@@ -4798,6 +4977,141 @@ $(function(){
 			$("#milestone", el).closest('div').find('.loading-img').hide();
 		});
 	});
+	
+	$("#opportunity_archive").die().live('click',function(e){
+		e.preventDefault();
+		$('#archived',$('#opportunityUpdateForm')).attr('checked','checked');
+		$("#opportunityUpdateModal #opportunity_validate").trigger('click');
+	});
+	$("#opportunity_unarchive").die().live('click',function(e){
+		e.preventDefault();
+		$('#archived',$('#opportunityUpdateForm')).removeAttr('checked');
+		$('#opportunityUpdateModal #opportunity_validate').trigger('click');
+	});
+	
+	
+	
+	/**
+	 * Milestone view deal delete
+	 */
+	$('.deal-archive').live('click', function(e) {
+		e.preventDefault();
+        if(!confirm("Archive Deal?"))
+			return;
+
+        var id = $(this).closest('.data').attr('id');
+        var milestone = ($(this).closest('ul').attr("milestone")).trim();
+        var currentDeal;
+        
+        // Get the current deal model from the collection.
+        var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
+    	if(!dealPipelineModel)
+    		return;
+    	currentDeal = dealPipelineModel[0].get('dealCollection').get(id).toJSON();
+    	currentDeal.archived = true;
+        var that = $(this);
+        
+        var notes = [];
+    	$.each(currentDeal.notes, function(index, note)
+    	{
+    		notes.push(note.id);
+    	});
+    	currentDeal.notes = notes;
+        if(currentDeal.note_description)
+    		delete currentDeal.note_description;
+
+        if(!currentDeal.close_date || currentDeal.close_date==0)
+        	currentDeal.close_date = null;
+        
+        currentDeal.owner_id = currentDeal.owner.id;
+        
+        var arch_deal = new Backbone.Model();
+		arch_deal.url = '/core/api/opportunity';
+		arch_deal.save(currentDeal, {
+			// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
+			success : function(model, response) {
+				// Remove the deal from the collection and remove the UI element.
+				if(removeArchive(response)){
+					dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
+					$('#'+id).parent().remove();
+				}
+				else{
+					that.remove();
+					$('#'+id+' .deal-options').find('.deal-edit').remove();
+					$('#'+id+' .deal-options').prepend('<a title="Restore" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>');
+				}
+				console.log('archived deal----',model);
+				// Shows Milestones Pie
+				pieMilestones();
+	
+				// Shows deals chart
+				dealsLineChart();
+				update_deal_collection(model.toJSON(), id, milestone, milestone);
+				
+			}
+		});
+	});
+	
+	/**
+	 * Milestone view deal delete
+	 */
+	$('.deal-restore').live('click', function(e) {
+		e.preventDefault();
+        if(!confirm("Restore Deal?"))
+			return;
+
+        var id = $(this).closest('.data').attr('id');
+        var milestone = ($(this).closest('ul').attr("milestone")).trim();
+        var currentDeal;
+        
+        // Get the current deal model from the collection.
+        var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
+    	if(!dealPipelineModel)
+    		return;
+    	currentDeal = dealPipelineModel[0].get('dealCollection').get(id).toJSON();
+    	currentDeal.archived = false;
+        var that = $(this);
+        
+        var notes = [];
+    	$.each(currentDeal.notes, function(index, note)
+    	{
+    		notes.push(note.id);
+    	});
+    	currentDeal.notes = notes;
+        if(currentDeal.note_description)
+    		delete currentDeal.note_description;
+
+        if(!currentDeal.close_date || currentDeal.close_date==0)
+        	currentDeal.close_date = null;
+        currentDeal.owner_id = currentDeal.owner.id;
+        var arch_deal = new Backbone.Model();
+		arch_deal.url = '/core/api/opportunity';
+		arch_deal.save(currentDeal, {
+			// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
+			success : function(model, response) {
+				// Remove the deal from the collection and remove the UI element.
+				if(removeArchive(response)){
+					dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
+					$('#'+id).parent().remove();
+				}
+				else{
+					that.remove();
+					var htmllinks ='<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>';
+					htmllinks += '<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>';
+					$('#'+id+' .deal-options').prepend(htmllinks);
+				}
+				console.log('archived deal----',model);
+				// Shows Milestones Pie
+				pieMilestones();
+	
+				// Shows deals chart
+				dealsLineChart();
+				update_deal_collection(model.toJSON(), id, milestone, milestone);
+				
+			}
+		});
+	});
+	
 });
 
 /**
@@ -4809,7 +5123,7 @@ function updateDeal(ele, editFromMilestoneView)
 	// Checking Whether the edit is from milestone view,
 	// if it is we are passing JSON object so no need to convert
 	var value = (editFromMilestoneView ? ele : ele.toJSON());
-	
+
 	add_recent_view(new BaseModel(value));
 	
 	var dealForm = $("#opportunityUpdateForm");
@@ -4820,7 +5134,15 @@ function updateDeal(ele, editFromMilestoneView)
 	
 	$("#opportunityUpdateModal").modal('show');
 	
-	
+	// Hide archive button, if the is already archived.
+	if(value.archived){
+		$('#opportunity_archive').hide();
+		$('#opportunity_unarchive').show();
+	}
+	else{
+		$('#opportunity_unarchive').hide();
+		$('#opportunity_archive').show();
+	}
 	
 	// Call setupTypeAhead to get contacts
 	agile_type_ahead("relates_to", dealForm, contacts_typeahead);
@@ -4924,6 +5246,21 @@ function checkPipeline(pipeId){
 	return false;
 }
 
+function removeArchive(deal){
+	var result = false;
+	if(readCookie('deal-filters')){
+		var arch = $.parseJSON(readCookie('deal-filters')).archived;
+		if(arch == 'false' && deal.archived==true)
+			return true;
+		else if(arch=='true' && deal.archived==false)
+			return true;
+		else
+			return false;
+		
+	}else 
+	return result;
+}
+
 /**
  * Updates or Saves a deal
  */ 
@@ -4943,7 +5280,8 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 
 	// Shows loading symbol until model get saved
     // $('#' + modalId).find('span.save-status').html(getRandomLoadingImg());
-
+if(json.close_date==0)
+	json.close_date=null;
 	var newDeal = new Backbone.Model();
 	newDeal.url = 'core/api/opportunity';
 	newDeal.save(json, {
@@ -4974,7 +5312,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 				
 				
 				/*
-				 * Verifies whether the added task is related to the contact in
+				 * Verifies whether the added deal is related to the contact in
 				 * contact detail view or not
 				 */
 				$.each(deal.contacts, function(index, contact) {
@@ -4986,7 +5324,12 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 
 						if (dealsView && dealsView.collection)
 						{
-							if(dealsView.collection.get(deal.id))
+							if(deal.archived == true)
+							{
+								dealsView.collection.remove(deal.id);
+								dealsView.collection.sort();
+							}
+							else if(dealsView.collection.get(deal.id))
 							{
 								dealsView.collection.get(deal.id).set(new BaseModel(deal));
 							}
@@ -5061,10 +5404,31 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 							$("#" + newMilestone.replace(/ +/g, '')).find("#" + id).parent().html(getTemplate('deals-by-paging-model', deal));
 						}
 						
+						if(removeArchive(deal)){
+							
+							console.log('removing the deal when archived');
+							$("#" + oldMilestone.replace(/ +/g, '')).find("#" + id).parent().remove();
+							try{
+								$('#'+oldMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+oldMilestone.replace(/ +/g, '')+'_count').text())-1);
+							} catch(err){
+								console.log(err);
+							}
+						}
+						
 					} else if(checkPipeline(deal.pipeline_id)){
 						var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
 						if(!dealPipelineModel)
 							return;
+						var filterJSON = $.parseJSON(readCookie('deal-filters'));
+						console.log(deal.owner.id.toString() != filterJSON.owner_id, deal.owner.id.toString(), filterJSON.owner_id);
+						if(filterJSON.owner_id.length > 0 && deal.owner.id.toString() != filterJSON.owner_id)
+							return;
+						console.log(filterJSON.archived != 'all' && deal.archived != filterJSON.archived, deal.archived);
+						if(filterJSON.archived){
+							console.log(filterJSON.archived);
+							if(filterJSON.archived != 'all' && deal.archived.toString() != filterJSON.archived)
+								return;
+						}
 						
 						dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal));
 						try{
@@ -5080,15 +5444,44 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 					if (isUpdate)
 						 App_Deals.opportunityCollectionView.collection.remove(json);
 					
+						data.attributes.cursor = App_Deals.opportunityCollectionView.collection.last().toJSON().cursor;
 						App_Deals.opportunityCollectionView.collection.add(data);
 						App_Deals.opportunityCollectionView.render(true);
 				}
 
 			}
+			else if (Current_Route == 'portlets') 
+			{
+				if(App_Portlets.currentPosition && App_Portlets.pendingDeals && App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)]){
+					if (isUpdate)
+						App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+					// Updates task list view
+					if(json.milestone!="Won" && json.milestone!="Lost")
+						App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+					App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].render(true);
+				}
+				if(App_Portlets.currentPosition && App_Portlets.dealsWon && App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)]){
+					if (isUpdate)
+						App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+					// Updates task list view
+					App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+					App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)].render(true);
+				}
+
+			}
 			else {
-				App_Deals.navigate("deals", {
-					trigger : true
-				});
+				App_Deal_Details.dealDetailView.model = data;
+				App_Deal_Details.dealDetailView.render(true)
+				Backbone.history.navigate("deal/"+data.toJSON().id , {
+		            trigger: true
+		        });
+					
+					
+					
 			}
 		}
 	});
@@ -5154,6 +5547,19 @@ $(function () {
     	e.preventDefault();
     	window.history.back();
     });
+	
+	//Check the archived filter for the first time and set it to false as default.
+	if(readCookie('deal-filters')){
+		var json = $.parseJSON(readCookie('deal-filters'));
+		if(!json.archived){
+			json.archived="false";
+			createCookie('deal-filters',JSON.stringify(json));
+		}
+	} else {
+		var json = {"owner_id":"","pipeline_id":"","milestone":"","value_filter":"equals","value":"","value_start":"","value_end":"","archived":"false","":false,"contact_ids":[]};
+		json.archived="false";
+		createCookie('deal-filters',JSON.stringify(json));
+	}
 	
 });
 
@@ -5395,7 +5801,6 @@ function appendCustomfields(el){
 			 $(el).find('#opportunities-model-list tr').each(function(index,element){
 				 var row = '';
 				 $.each(customfields, function(i,customfield){
-						console.log(customfield);
 						 row += '<td class="deal_custom_replace"><div style="width:6em;text-overflow:ellipsis;">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
 					});
 				 $(this).append(row);
@@ -5412,7 +5817,6 @@ function appendCustomfields(el){
  * @returns {String} value of the custom field.
  */
 function dealCustomFieldValue(name, data){
-	console.log(data);
 	var value = '';
 	$.each(data,function(index, field){
 		if(field.name == name){
@@ -5768,6 +6172,10 @@ function update_milestone(data, id, newMilestone, oldMilestone){
 	DealJSON.notes = notes;
 	if(DealJSON.note_description)
 		delete DealJSON.note_description;
+	
+	 if(!DealJSON.close_date || DealJSON.close_date==0)
+		 DealJSON.close_date = null;
+	 DealJSON.owner_id = DealJSON.owner.id;
    // Saving that deal object
 	var up_deal = new Backbone.Model();
 	up_deal.url = '/core/api/opportunity';
@@ -5876,7 +6284,10 @@ function startGettingDeals(criteria, pending)
 		$('#new-opportunity-list-paging').html(html);
 		return;
 	}
-		
+	if(readCookie('agile_deal_track')){
+		if(readCookie('agile_deal_track') != pipeline_id)
+			createCookie('agile_deal_track',pipeline_id);
+	}
 	var milestones = trackListView.collection.get(pipeline_id).toJSON().milestones.split(',');
 	console.log(milestones);
 	createDealsNestedCollection(pipeline_id,milestones);
@@ -6151,6 +6562,7 @@ $(function () {
 		$('#dealsFilterForm select.filter_type').val('equals');
 		$('#filter_options .between').hide();
 		$('#filter_options .equals').show();
+		$('#dealsFilterForm #archived').val('false');
 		$('#filter_options').find('.control-group').each(function(index){
 			if($(this).find('.controls').height()>0)
 				$(this).find('a.changeIcon').trigger('click');
@@ -6169,20 +6581,20 @@ function setupDealFilters(cel){
 	var el = $('#filter_options');
 	// Fills owner select element
 	
-	populateUsers("owners-list", el, undefined, undefined, function(data){
+	populateUsers("owners-list-filters", el, undefined, undefined, function(data){
 		
-		$("#deals-filter").find("#owners-list").html(data);
+		$("#deals-filter").find("#owners-list-filters").html(data);
 		//Select none by default.
 		if(readCookie('deal-filters')){
 			var json = $.parseJSON(readCookie('deal-filters'));
 		}
-		$("#owners-list", $("#dealsFilterForm")).closest('div').find('.loading-img').hide();
+		$("#owners-list-filters", $("#dealsFilterForm")).closest('div').find('.loading-img').hide();
 	
 	// Populate pipeline in the select box.
 	populateTracks(el, undefined, undefined, function(data){
 		//Select none by default.
 		$('#pipeline').val('');
-		$('#owners-list').val('');
+		$('#owners-list-filters').val('');
 		if(readCookie('deal-filters')){
 			var json = $.parseJSON(readCookie('deal-filters'));
 			$.each(json,function(key,value){
@@ -6206,7 +6618,7 @@ function setupDealFilters(cel){
 					if(key=='pipeline_id')
 						$('#pipeline').val(value);
 					else if(key=='owner_id')
-						$('#owners-list').val(value);
+						$('#owners-list-filters').val(value);
 					else if($('#'+key).hasClass('date'))
 						$('#'+key).val(new Date(value * 1000).format('mm/dd/yyyy'));
 					
@@ -6248,6 +6660,9 @@ function updateFilterColor(){
 		if(json.pipeline_id.length > 0)
 			filters_count++;
 	}
+	
+	if(json.archived != 'false')
+		filters_count++;
 	
 	if(filters_count > 0)
 	$('#show-filter-button').addClass('btn-primary');
@@ -6957,6 +7372,407 @@ function play_sound(sound, is_web_url)
 	});
 	
 })(jQuery);/**
+ * contact-details-tabs.js fetches the contact (which is in contact detail view) 
+ * related details (notes, tasks, deals, campaigns and mails etc..) and presents 
+ * in tab content as specified, when the corresponding tab is clicked. 
+ * Timeline tab is activated by default to show all the details as vertical time-line.
+ * 
+ * @module Contact management
+ * @author Rammohan
+ */
+
+var deal_tab_position_cookie_name = "deal_tab_position";
+
+
+$(function(){ 
+
+	var id;
+	
+
+	
+	/**
+	 * Fetches all the notes related to the deal and shows the notes collection 
+	 * as a table in its tab-content, when "Notes" tab is clicked.
+	 */ 
+	$('#deal-details-tab a[href="#dealnotes"]').live('click', function (e){
+		e.preventDefault();
+		save_deal_tab_position_in_cookie("dealnotes");
+		deal_details_tab.load_deal_notes();
+	});
+	
+	
+	
+	/**
+	 * Fetches all the contacts related to the deal and shows the contacts collection 
+	 * as a table in its tab-content, when "contacts" tab is clicked.
+	 */
+	$('#deal-details-tab a[href="#dealrelated"]').live('click', function (e){
+		e.preventDefault();
+		save_deal_tab_position_in_cookie("dealrelated");
+		deal_details_tab.loadDealRelatedContactsView();
+	});
+	
+	/**
+	 * Fetches all the notes related to the contact and shows the tasks collection 
+	 * as a table in its tab-content, when "Tasks" tab is clicked.
+	 */
+	$('#deal-details-tab a[href="#dealactivities"]').live('click', function (e){
+		e.preventDefault();
+		save_deal_tab_position_in_cookie("dealactivities");
+		deal_details_tab.load_deal_activities();
+	});
+	
+
+	$('.activity-delete').die().live('click', function(e){
+		e.preventDefault();
+		
+		var model = $(this).parents('li').data();
+		
+		if(model && model.collection)
+		{
+			model.collection.remove(model);
+		}
+
+		// Gets the id of the entity
+		var entity_id = $(this).attr('id');
+
+		// Gets the url to which delete request is to be sent
+		var entity_url = $(this).attr('url');
+
+		if(!entity_url)
+			return;
+		
+		var id_array = [];
+		var id_json = {};
+		
+		// Create array with entity id.
+		id_array.push(entity_id);
+		
+		// Set entity id array in to json object with key ids, 
+		// where ids are read using form param
+		id_json.ids = JSON.stringify(id_array);
+		var that = this;
+
+		// Add loading. Adds loading only if there is no loaded image added already i.e., 
+		// to avoid multiple loading images on hitting delete multiple times
+		if($(this).find('.loading').length == 0)
+			$(this).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
+		
+		$.ajax({
+			url: entity_url,
+			type: 'POST',
+			data: id_json,
+			success: function() {
+				// Removes activity from list
+				$(that).parents(".activity").fadeOut(400, function(){ $(this).remove(); });
+				removeItemFromTimeline($("#" + entity_id, $("#timeline")));
+			}
+		});
+	});
+	
+	
+	
+});
+
+
+
+
+function save_deal_tab_position_in_cookie(tab_href)
+{
+	
+	var position = readCookie(deal_tab_position_cookie_name);
+	
+	if(position == tab_href)
+		return;
+	
+	createCookie(deal_tab_position_cookie_name, tab_href);
+}
+
+function load_deal_tab(el, dealJSON)
+{
+//	timeline_collection_view = null;
+	var position = readCookie(deal_tab_position_cookie_name);
+	if(position){
+		if(position=="dealactivities"){
+			$('#deal-details-tab a[href="#dealactivities"]', el).tab('show');
+
+			deal_details_tab.load_deal_activities();
+		}
+		else if(position=="dealrelated"){
+			$('#deal-details-tab a[href="#dealrelated"]', el).tab('show');
+
+			deal_details_tab.loadDealRelatedContactsView();
+		}
+		else if(position=="dealnotes"){
+			$('#deal-details-tab a[href="#dealnotes"]', el).tab('show');
+
+			deal_details_tab.load_deal_notes();
+		}
+	}
+	else{
+	
+	$('#deal-details-tab a[href="#dealactivities"]', el).tab('show');
+
+	deal_details_tab.load_deal_activities();
+	}
+	
+		
+}
+
+
+
+var dealrelatedView;
+var dealNotesView;
+var dealActivitiesView;
+
+
+var deal_details_tab = {
+		
+		
+		
+		loadDealRelatedContactsView : function()
+		{
+			 var id = App_Deal_Details.dealDetailView.model.id;
+			 if(id){
+			dealrelatedView = new Base_Collection_View({
+	            url: '/core/api/opportunity/' + id + "/related_to",
+	            templateKey: "deal-related",
+	            individual_tag_name: 'tr',
+	            sortKey:"created_time",
+	            cursor : true,
+	            descending: true,
+	            postRenderCallback: function(el) {
+	            	
+	            }
+	        });
+			dealrelatedView.collection.fetch();
+	        $('#dealrelated').html(dealrelatedView.el);
+			 }
+		},
+		load_deal_notes : function()
+		{
+		    var id = App_Deal_Details.dealDetailView.model.id;
+		    if(id){
+		    dealNotesView = new Base_Collection_View({
+	            url: '/core/api/opportunity/' + id + "/notes",
+	            restKey: "note",
+	            templateKey: "deal-notes",
+	            individual_tag_name: 'li',
+	            sortKey:"created_time",
+	            descending: true,
+	            postRenderCallback: function(el) {
+	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+	            		 $(".note-created-time", el).timeago();
+	              	})
+	            }
+	        });
+		    dealNotesView.collection.fetch();
+	        $('#dealnotes').html(dealNotesView.el);
+		    }
+		},
+		
+		load_deal_activities : function()
+		{
+		    var id = App_Deal_Details.dealDetailView.model.id;
+		    if(id){
+		    dealActivitiesView = new Base_Collection_View({
+	            url: '/core/api/opportunity/' + id + "/activities",
+	            templateKey: "deal-detail-activities",
+	            individual_tag_name: 'li',
+	            scroll_symbol:'scroll',
+	            sortKey:"time",
+	            descending: true,
+	            cursor : true,
+	            page_size : 20,
+	            postRenderCallback: function(el) {
+	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+	            		 $(".note-created-time", el).timeago();
+	              	})
+	            }
+	        });
+		    dealActivitiesView.collection.fetch();
+	        $('#dealactivities').html(dealActivitiesView.el);
+		    }
+		    }
+		
+};
+$(".deal-edit-note").die().live('click', function(e)
+	{
+	
+		e.preventDefault();
+	
+		var note = dealNotesView.collection.get($(this).attr('data'));
+		console.log(note);
+		deserializeForm(note.toJSON(), $("#dealnoteUpdateForm",  $('#dealnoteupdatemodal')));
+		fill_relation_deal($('#dealnoteUpdateForm'));
+		$('#dealnoteupdatemodal').modal('show');
+	});
+
+
+    $("#dealnote_update").live('click', function(e)
+		{
+			e.preventDefault();
+
+			// Returns, if the save button has disabled attribute
+			if ($(this).attr('disabled'))
+				return;
+
+			// Disables save button to prevent multiple click event issues
+			disable_save_button($(this));//$(this).attr('disabled', 'disabled');
+
+			if (!isValidForm('#dealnoteUpdateForm'))
+			{
+
+				// Removes disabled attribute of save button
+				enable_save_button($(this));
+				return;
+			}
+
+			// Shows loading symbol until model get saved
+			//$('#noteUpdateModal').find('span.save-status').html(getRandomLoadingImg());
+
+			var json = serializeForm("dealnoteUpdateForm");
+			
+			
+
+
+			saveDealUpdateNote($("#dealnoteUpdateForm"), $("#dealnoteupdatemodal"), this, json);
+		});
+		/**
+		 * Saves note model using "Bcakbone.Model" object, and adds saved data to
+		 * time-line if necessary.
+		 */
+		$('#dealnote_validate').live('click', function(e)
+		{
+			
+			e.preventDefault();
+
+			// Returns, if the save button has disabled attribute
+			if ($(this).attr('disabled'))
+				return;
+			
+			if (!isValidForm('#dealnoteForm'))
+			{
+				return;
+			}
+
+			disable_save_button($(this));
+			
+			// Shows loading symbol until model get saved
+			//$('#noteModal').find('span.save-status').html(getRandomLoadingImg());
+
+			var json = serializeForm("dealnoteForm");
+
+			console.log(json);
+		
+			    saveDealNote($("#dealnoteForm"), $("#deal-note-modal"), this, json);
+		});
+
+		/**
+		 * Shows note modal and activates contacts typeahead to its related to field
+		 */
+		$('#dealshow-note').live('click', function(e)
+		{
+			if(App_Deal_Details.dealDetailView.model.get('archived') == true)
+				return;	
+			e.preventDefault();
+			$("#deal-note-modal").modal('show');
+
+			
+			var el = $("#dealnoteForm");
+			
+			
+		});
+		
+		
+		/**
+		 * "Hide" event of note modal to remove contacts appended to related to
+		 * field and validation errors
+		 */
+		$('#deal-note-modal').on('hidden', function()
+		{
+			// Removes appended contacts from related-to field
+			$("#dealnoteForm").find("li").remove();
+
+			// Remove value of input field
+			$("#from_task", "#dealnoteForm").val("");
+			$("#task_form", "#dealnoteForm").val("");
+			
+			// Removes validation error messages
+			remove_validation_errors('dealnoteModal');
+		});
+		
+		
+	
+		
+		
+		function saveDealNote(form, modal, element, note)
+		{
+
+			console.log(note);
+			var noteModel = new Backbone.Model();
+			noteModel.url = 'core/api/opportunity/deals/notes';
+			noteModel.save(note, { success : function(data)
+			{
+
+				// Removes disabled attribute of save button
+				enable_save_button($(element));//$(element).removeAttr('disabled');
+
+				form.each(function()
+				{
+					this.reset();
+				});
+
+				// Removes loading symbol and hides the modal
+				//modal.find('span.save-status img').remove();
+				modal.modal('hide');
+
+
+				App_Deal_Details.dealDetailView.model = data;
+				App_Deal_Details.dealDetailView.render(true)
+				Backbone.history.navigate("deal/"+data.toJSON().id , {
+		            trigger: true
+		        });
+				
+			
+				
+			} });
+		}
+		
+		function saveDealUpdateNote(form, modal, element, note)
+		{
+
+			console.log(note);
+			var noteModel = new Backbone.Model();
+			noteModel.url = 'core/api/opportunity/deals/notes';
+			noteModel.save(note, { success : function(data)
+			{
+
+				// Removes disabled attribute of save button
+				enable_save_button($(element));//$(element).removeAttr('disabled');
+
+				form.each(function()
+				{
+					this.reset();
+				});
+
+				// Removes loading symbol and hides the modal
+				//modal.find('span.save-status img').remove();
+				modal.modal('hide');
+
+
+				App_Deal_Details.dealDetailView.model = data;
+				App_Deal_Details.dealDetailView.render(true)
+				Backbone.history.navigate("deal/"+data.toJSON().id , {
+		            trigger: true
+		        });
+				
+			
+				
+			} });
+		}
+
+/**
  * Loads highcharts.js and highcharts-exporting.js plugins used to show graphs,
  * after loading graphs callback function sent is called i.e., actions to be
  * performed after loading plugin scripts
@@ -8050,10 +8866,15 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 
 			$("#" + selectId, el).empty().append('<option class="default-select" value="">' + defaultSelectOption + '</option>');
 		}
-
+		var data = collection.toJSON();
+		data.sort(function(a, b){
+		    if (a.name < b.name) return -1;
+		    if (b.name < a.name) return 1;
+		    return 0;
+		});
 		// Iterates though each model in the collection and
 		// populates the template using handlebars
-		$.each(collection.toJSON(), function(index, model)
+		$.each(data, function(index, model)
 		{
 			// Convert template into HTML
 			var modelTemplate = Handlebars.compile(template);
@@ -11970,6 +12791,29 @@ function Toggle_Extension_Loader(type)
 								return name;
 
 				});
+				
+				
+				
+				/**
+				 * Get activity type  without underscore and caps, for deal _details page.
+				 */
+				Handlebars.registerHelper('get_normal_activity_type', function(name)
+				{
+								if (!name)
+												return;
+
+								var name_json = { "DEAL_ADD" : "Deal Created", "DEAL_EDIT" : "Deal Edited", "DEAL_CLOSE" : "Deal Closed", "DEAL_LOST" : "Deal Lost", "DEAL_RELATED_CONTACTS" : " Deal Contacts Changed", "DEAL_OWNER_CHANGE" : "Deal Owner Changed", "DEAL_MILESTONE_CHANGE" : "Deal Milestone Changed",
+												"NOTE_ADD" : "Note Added" };
+
+								name = name.trim();
+
+								if (name_json[name])
+												return name_json[name];
+
+								return name;
+
+				});
+
 
 				/**
 				 * put user address location togather separated by comma.
@@ -12467,8 +13311,23 @@ function Toggle_Extension_Loader(type)
 								return template;
 				});
 				
+				// checks if email type is agile or not
+				Handlebars.registerHelper('if_email_type_is_agile', function(value,options)
+				{
+					var type = email_server_type;
+					if (type)
+						if(value === type)
+							return options.fn(this);
+						else
+							return options.inverse(this);
+					else
+					{
+						 return options.fn(this);
+					}
+				});
+				
 				// Reads the gloabal varaible and returns it value
-				Handlebars.registerHelper('read_global_var', function(custom_fields, contacts)
+				Handlebars.registerHelper('read_global_var', function()
 				{
 					var type = email_server_type;
 					if (type)
@@ -12823,15 +13682,15 @@ function Toggle_Extension_Loader(type)
 					var seconds = time - minutes * 60;
 					var friendlyTime = "";
 					if(hours == 1)
-						friendlyTime = hours+ " hr ";
+						friendlyTime = hours+ "h ";
 					if(hours > 1)
-						friendlyTime = hours+ " hrs ";
+						friendlyTime = hours+ "h ";
 					if(minutes > 0)
-						friendlyTime += minutes + " min ";
+						friendlyTime += minutes + "m ";
 					if(seconds > 0)
-						friendlyTime += seconds + " sec";
+						friendlyTime += seconds + "s ";
 					if(friendlyTime != "")
-						return "("+friendlyTime+")";
+						return ' - '+friendlyTime;
 					return friendlyTime;
 				});
 	// To pick randomly selected avatar url
@@ -12876,6 +13735,53 @@ function Toggle_Extension_Loader(type)
 			field_type_name = "Formula";
 		return field_type_name;
 	});
+	
+	//@author Purushotham
+	//function to compare integer values
+	Handlebars.registerHelper('ifCond', function(v1, type, v2, options) {	
+		switch(type){
+			case "greaterthan":
+				if(parseInt(v1) > parseInt(v2))
+					return options.fn(this);
+				break;
+			case "lessthan":
+				if(parseInt(v1) < parseInt(v2))
+					return options.fn(this);
+				break;
+			case "equals":
+				if(parseInt(v1) === parseInt(v2))
+					return options.fn(this);
+				break;
+		}
+		return options.inverse(this);
+	});
+	
+	Handlebars.registerHelper('callActivityFriendlyStatus',function(status,direction){
+		
+		switch(status) {
+	    case "completed":
+	    case "answered":
+	    	return "Call duration";
+	    	break;
+	    case "busy":
+	    case "no-answer":
+	    	if(direction == 'outgoing')
+	    		return "Contact busy";
+	    	else
+	    		return "Not answered";
+	    	break;
+	    case "failed":
+	    	return "Failed";
+	    	break;
+	    case "in-progress":
+	    case "voicemail":
+	    	return "Left voicemail";
+	    	break; 	
+	    default:
+	        return "";
+		}
+		
+	});
 
 	Handlebars.registerHelper('shopifyWebhook', function()
 	{
@@ -12883,6 +13789,99 @@ function Toggle_Extension_Loader(type)
 		agile_api = JSON.parse(agile_api);
 		var shopify_webhook = window.location.origin + "/shopifytrigger?api-key=" + agile_api.api_key;
 		return new Handlebars.SafeString(shopify_webhook);
+	});
+	/**
+	 * getting convenient name of portlet
+	 */
+	Handlebars.registerHelper('get_portlet_name', function(p_name) {
+		var portlet_name = '';
+		if(p_name=='Filter Based')
+			portlet_name = 'Contact List';
+		else if(p_name=='Emails Opened')
+			portlet_name = 'Email Opens';
+		else if(p_name=='Emails Sent')
+			portlet_name = 'Emails';
+		else if(p_name=='Growth Graph')
+			portlet_name = 'Tag Graph';
+		else if(p_name=='Calls Per Person')
+			portlet_name = 'Calls';
+		else if(p_name=='Pending Deals')
+			portlet_name = 'Pending Deals';
+		else if(p_name=='Deals By Milestone')
+			portlet_name = 'Deals by Milestone';
+		else if(p_name=='Closures Per Person')
+			portlet_name = 'Closures per Person';
+		else if(p_name=='Deals Won')
+			portlet_name = 'Deals Won';
+		else if(p_name=='Deals Funnel')
+			portlet_name = 'Deals Funnel';
+		else if(p_name=='Deals Assigned')
+			portlet_name = 'Deals Assigned';
+		else if(p_name=='Agenda')
+			portlet_name = "Today's Events";
+		else if(p_name=='Today Tasks')
+			portlet_name = "Today's Tasks";
+		else if(p_name=='Agile CRM Blog')
+			portlet_name = "Agile CRM Blog";
+		return portlet_name;
+	});
+	/**
+	 * getting portlet icons
+	 */
+	Handlebars.registerHelper('get_portlet_icon', function(p_name) {
+		var icon_name = '';
+		if(p_name=='Filter Based')
+			icon_name = 'icon-user';
+		else if(p_name=='Emails Opened')
+			icon_name = 'icon-envelope';
+		else if(p_name=='Emails Sent')
+			icon_name = 'icon-envelope';
+		else if(p_name=='Growth Graph')
+			icon_name = 'icon-bar-chart';
+		else if(p_name=='Calls Per Person')
+			icon_name = 'icon-phone';
+		else if(p_name=='Pending Deals')
+			icon_name = 'icon-time';
+		else if(p_name=='Deals By Milestone')
+			icon_name = 'icon-flag-checkered';
+		else if(p_name=='Closures Per Person')
+			icon_name = 'icon-thumbs-up';
+		else if(p_name=='Deals Won')
+			icon_name = 'icon-briefcase';
+		else if(p_name=='Deals Funnel')
+			icon_name = 'icon-filter';
+		else if(p_name=='Deals Assigned')
+			icon_name = 'icon-user';
+		else if(p_name=='Agenda')
+			icon_name = "icon-calendar";
+		else if(p_name=='Today Tasks')
+			icon_name = "icon-tasks";
+		else if(p_name=='Agile CRM Blog')
+			icon_name = "icon-rss-sign";
+		return icon_name;
+	});
+	/**
+	 * getting flitered contact portlet header name
+	 */
+	Handlebars.registerHelper('get_flitered_contact_portlet_header', function(filter_name) {
+		var header_name = '';
+		if(filter_name=='contacts')
+			header_name = "All Contacts";
+		else if(filter_name=='companies')
+			header_name = "All Companies";
+		else if(filter_name=='recent')
+			header_name = "Recent Contacts";
+		else if(filter_name=='myContacts')
+			header_name = "My Contacts";
+		else if(filter_name=='leads')
+			header_name = "Leads";
+		else{
+			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/'+filter_name, async : false, dataType : 'json',
+				success: function(data){
+					header_name = ""+data.name;
+				} });
+		} 	
+		return header_name;
 	});
 	
 	Handlebars.registerHelper('if_equals_or', function()
@@ -12908,6 +13907,112 @@ function Toggle_Extension_Loader(type)
 		return buildFacebookProfileURL(url);
 	});
 	
+	
+	/**
+	 * returns tracks count of opportunity
+	 */
+	Handlebars.registerHelper('getTracksCount', function(options)
+			{
+			if (parseInt(DEAL_TRACKS_COUNT) > 1)
+				return options.fn(this);
+             else
+				return options.inverse(this);
+			});
+	/**
+	 * getting flitered contact portlet header name
+	 */
+	Handlebars.registerHelper('get_deals_funnel_portlet_header', function(track_id) {
+		var header_name = '';
+		if(track_id==0)
+			header_name = "Default";
+		else{
+			var milestone = $.ajax({ type : 'GET', url : '/core/api/milestone/'+track_id, async : false, dataType : 'json',
+				success: function(data){
+					header_name = data.name;
+				} });
+		} 	
+		return header_name;
+	});
+	
+	/**
+	 * getting time in AM and PM format for event portlet
+	 */
+	Handlebars.registerHelper('get_AM_PM_format', function(date_val) {
+		var date = new Date(date_val * 1000);
+		var hours = date.getHours();
+		var minutes = date.getMinutes();
+		var ampm = hours >= 12 ? 'PM' : 'AM';
+		hours = hours % 12;
+		hours = hours ? hours : 12; // the hour '0' should be '12'
+		minutes = minutes < 10 ? '0'+minutes : minutes;
+		var strTime = hours + ':' + minutes + ' ' + ampm;
+		return strTime;
+	});
+	
+	/**
+	 * getting duration between two dates for event portlet
+	 */
+	Handlebars.registerHelper('get_duration', function(startDate,endDate) {
+		var duration='';
+		var days=0;
+		var hrs=0;
+		var mins=0;
+		var diffInSeconds = endDate - startDate;
+		days = Math.floor(diffInSeconds/(24*60*60));
+		hrs = Math.floor((diffInSeconds % (24*60*60))/(60*60));
+		mins = Math.floor(((diffInSeconds % (24*60*60)) % (60*60))/60);
+		if(days!=0 && days==1)
+			duration += ''+days+' Day ';
+		else if(days!=0 && days>1)
+			duration += ''+days+' Days ';
+		if(hrs!=0 && hrs==1)
+			duration += ''+hrs+' Hour ';
+		else if(hrs!=0 && hrs>1)
+			duration += ''+hrs+' Hours ';
+		if(mins!=0 && mins==1)
+			duration += ''+mins+' Minute';
+		else if(mins!=0 && mins>1)
+			duration += ''+mins+' Minutes';
+		return duration;
+	});
+	
+	
+	/**
+	 * Returns plain customise text for activity remove underscore and other
+	 * special charecter from string
+	 */
+	Handlebars.registerHelper('displayActivityFieldText', function(value)
+	{
+		var fields = value.replace(/[^a-zA-Z ^,]/g, " ").split(",");
+		var text = "";
+		if (fields.length > 1)
+		{
+			for (var i = 0; i < fields.length - 1; i++)
+			{
+				text += " " + fields[i].trim();
+				if (i != fields.length - 2)
+				{
+					text += ",";
+				}
+			}
+			text += " and " + fields[fields.length - 1].trim();
+		}
+		else
+		{
+			text = fields[fields.length - 1].trim();
+		}
+		// update title
+		text = text.replace('subject', 'Title');
+		// update priority
+		text = text.replace('priority type', 'Priority');
+		// update category
+		text = text.replace('task type', 'Category');
+		// update due date
+		text = text.replace('due date', 'Due date');
+		return text;
+
+	});
+	
 });
 
 // helper function return created time for event
@@ -12922,7 +14027,8 @@ function getEventCreatedTime(due)
 	date = date.getTime() / 1000;
 	// console.log("Today " + date + " Due " + due);
 	return Math.floor((due - date) / (24 * 3600));
-}// We store one template compiled - if repetitive templates are called, we save time on compilations
+}
+// We store one template compiled - if repetitive templates are called, we save time on compilations
 var Handlebars_Compiled_Templates = {};
 
 /**
@@ -13077,6 +14183,10 @@ function getTemplateUrls(templateName)
 	if (templateName.indexOf("document") == 0)
 	{
 		template_relative_urls.push("document.js");
+	}	
+	if (templateName.indexOf("voice-mail") == 0)
+	{
+		template_relative_urls.push("voice-mail.js");
 	}
 	if (templateName.indexOf("gmap") == 0)
 	{
@@ -13183,6 +14293,15 @@ function getTemplateUrls(templateName)
 
 		if (HANDLEBARS_PRECOMPILATION)
 			template_relative_urls.push("socialsuite.html");
+	}
+
+	if (templateName.indexOf("portlet") == 0)
+	{
+		template_relative_urls.push("portlets.js");
+	}
+	if (templateName.indexOf("deal-detail") == 0)
+	{
+		template_relative_urls.push("deal-detail.js");
 	}
 	return template_relative_urls;
 }
@@ -13692,6 +14811,1774 @@ function getIdFromHash()
 function updateCustomData(el)
 {
 	$(".custom-data", App_Contacts.contactDetailView.el).html(el)
+}
+var Portlets_View;
+var portlet_template_loaded_map = {};
+
+/**
+ * Loads all the portlets for the current agile user
+ * 
+ * @param el
+ */
+function loadPortlets(el){
+	App_Portlets.todayEventsCollection = new Array();
+	App_Portlets.tasksCollection = new Array();
+	App_Portlets.pendingDeals = new Array();
+	App_Portlets.dealsWon = new Array();
+	/*
+	 * If Portlets_View is not defined , creates collection view, collection is
+	 * sorted based on position i.e., set when sorted using jquery ui sortable
+	 */
+	if (!Portlets_View){
+		// This flag is used to ensure portlet script are loaded only once in
+		// postrender. It is set to false after portlet setup is initialized
+		is_portlet_view_new = true;
+		Portlets_View = new Base_Collection_View({ url : '/core/api/portlets', sortKey : "row_position", restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
+			postRenderCallback : function(portlets_el){
+				head.load("css/misc/agile-portlet.css","css/jquery.gridster.css", function(){
+					// If scripts aren't loaded earlier, setup is initialized
+					set_up_portlets(el, portlets_el);
+					if(Portlets_View.collection.length==0)
+						$('.gridster > div:visible > div',el).removeClass('gs-w');
+				});
+			} });
+		this.Portlets_View.appendItem = set_p_portlets;
+
+		/*
+		 * Fetch portlets from collection and set_up_portlets (load their scripts)
+		 */
+		Portlets_View.collection.fetch();
+
+		// show portlets
+		var newEl = Portlets_View.render().el;
+		$('#portlets', el).html(newEl);
+		/*setTimeout(function(){
+			$('#portlets-opportunities-model-list').removeClass('agile-edit-row');
+			$('#portlets-tasks-model-list').removeClass('agile-edit-row');
+			$('#portlets-events-model-list').removeClass('agile-edit-row');
+		},1000);*/
+	}else{
+		/*
+		 * Have a flag, which is used to check whether portlets are already
+		 * loaded. This avoid unnecessary loading.
+		 */
+		/*var flag = false;
+		is_portlet_view_new = true;
+		Portlets_View = new Base_Collection_View({ url : '/core/api/portlets', sortKey : "row_position", restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
+			postRenderCallback : function(portlets_el)
+			{
+				head.load("css/misc/agile-portlet.css", function()
+				{
+					// If scripts aren't loaded earlier, setup is initialized
+					if (is_portlet_view_new)
+					{
+						set_up_portlets(el, portlets_el);
+					}
+					is_portlet_view_new = false;
+				})
+
+			} });*/
+		this.Portlets_View.appendItem = set_p_portlets;
+
+		/*
+		 * Fetch portlets from collection and set_up_portlets (load their scripts)
+		 */
+		Portlets_View.collection.fetch();
+
+		// show portlets
+		var newEl = Portlets_View.render().el;
+		//set_up_portlets(el, newEl);
+		/*if(Portlets_View.collection.length==0)
+			$('.gridster > div:visible > div',el).removeClass('gs-w');*/
+		$('#portlets', el).html(newEl);
+		/*setTimeout(function(){
+			$('#portlets-opportunities-model-list').removeClass('agile-edit-row');
+			$('#portlets-tasks-model-list').removeClass('agile-edit-row');
+			$('#portlets-events-model-list').removeClass('agile-edit-row');
+		},1000);*/
+	}
+}
+var gridster;
+/**
+ * 
+ * 
+ * @param el
+ * @param portlets_el
+ */
+function set_up_portlets(el, portlets_el){
+	$(function(){
+		gridster = $('.gridster > div:visible',portlets_el).gridster({
+	    	widget_selector: "div",
+	        widget_margins: [10, 5],
+	        widget_base_dimensions: [400, 200],
+	        min_cols: 3,
+	        autogenerate_stylesheet: true,
+	        draggable: {
+	        	ignore_dragging: [".portlet_body"],
+	        	stop: function(event,ui){
+	        		
+	        		//$('#'+this.$player.attr('id')).attr('id','ui-id-'+this.$player.attr('data-col')+'-'+this.$player.attr('data-row'));
+	        		
+					var models = [];
+
+					/*
+					 * Iterate through each all the portlets and set each portlet
+					 * position and store it in array
+					 */
+					$('#portlet-res > div > .gs-w').each(function(){
+						
+						$(this).attr('id','ui-id-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
+						
+						$(this).find('div.portlet_body').attr('id','p-body-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
+						
+						var model_id = $(this).find('.portlets').attr('id');
+						
+						var model = Portlets_View.collection.get(model_id);
+						
+						model.set({ 'column_position' : parseInt($(this).attr("data-col")) }, { silent : true });
+						
+						model.set({ 'row_position' : parseInt($(this).attr("data-row")) }, { silent : true });
+
+						models.push({ id : model.get("id"), column_position : parseInt($(this).attr("data-col")), row_position : parseInt($(this).attr("data-row")) });
+					});
+					// Saves new positions in server
+					$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
+						contentType : "application/json; charset=utf-8", dataType : 'json' });
+				}
+	        },
+	        resize: {
+	        	enabled: true,
+	        	max_size: [3,3],
+	        	stop: function(event,ui){
+	        		
+	        		//for resizing portlet body
+	                if($('#'+this.$resized_widget.attr('id')).height()<=200){
+	        			$('#'+this.$resized_widget.attr('id')+' > .portlet_body').css("height","160px");
+	        			$('#'+this.$resized_widget.attr('id')+' > .portlet_body').css("max-height","160px");
+	        		}else{
+	        			$('#'+this.$resized_widget.attr('id')+' > .portlet_body').css("height",this.$resize_preview_holder.height()-40+"px");
+	        			$('#'+this.$resized_widget.attr('id')+' > .portlet_body').css("max-height",this.$resize_preview_holder.height()-40+"px");
+	        		}
+	        		$(window).trigger('resize');
+	        		
+	        		$('#'+this.$resized_widget.attr('id')+' > div.portlet_body').css('overflow-x','hidden').css('overflow-y','auto');
+	        		
+					var models = [];
+
+					/*
+					 * Iterate through each all the portlets and set each portlet
+					 * position and store it in array
+					 */
+					$('#portlet-res > div > .gs-w').each(function(){
+						
+						$(this).attr('id','ui-id-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
+						
+						$(this).find('div.portlet_body').attr('id','p-body-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
+						
+						var model_id = $(this).find('.portlets').attr('id');
+						
+						var model = Portlets_View.collection.get(model_id);
+						
+						model.set({ 'size_x' : parseInt($(this).attr("data-sizex")) }, { silent : true });
+						
+						model.set({ 'size_y' : parseInt($(this).attr("data-sizey")) }, { silent : true });
+						
+						model.set({ 'column_position' : parseInt($(this).attr("data-col")) }, { silent : true });
+						
+						model.set({ 'row_position' : parseInt($(this).attr("data-row")) }, { silent : true });
+
+						models.push({ id : model.get("id"), size_x : parseInt($(this).attr("data-sizex")), size_y : parseInt($(this).attr("data-sizey")), 
+							column_position : parseInt($(this).attr("data-col")), row_position : parseInt($(this).attr("data-row")) });
+					});
+					// Saves new width and height in server
+					$.ajax({ type : 'POST', url : '/core/api/portlets/widthAndHeight', data : JSON.stringify(models),
+						contentType : "application/json; charset=utf-8", dataType : 'json' });
+				}
+	        }
+	    }).data('gridster');
+	    $(window).resize(function(){
+	    	if(gridster!=undefined)
+	    		$('.gridster-portlets').css("height","auto");
+	    	if($(window).width()<768 && gridster!=undefined){
+	    		gridster.disable();
+	    		gridster.disable_resize();
+	    	}else if(gridster!=undefined){
+	    		gridster.enable();
+	    		gridster.enable_resize();
+	    		gridster.set_dom_grid_height();
+	    	}
+	    });
+	    if($(window).width()<768 && gridster!=undefined){
+    		gridster.disable();
+    		gridster.disable_resize();
+    	}else if(gridster!=undefined){
+    		gridster.enable();
+    		gridster.enable_resize();
+    	}
+	    $(window).trigger('resize');
+	  });
+	//enablePortletSorting(portlets_el);
+}
+/**
+ * Shrink the portlet header name width
+ * 
+ * <p>
+ * Shows the icons and decrease the width of portlet header to avoid the portlet
+ * name overflow on mouse hover
+ * 
+ * @param el
+ *            Element on which mouse entered (portlet header)
+ */
+function showPortletIcons(el){
+	// Shows portlet icons on hover
+	$(el).find('div.portlet_header_icons').show();
+
+	// Changes width of portlet name
+	$(el).find('div.portlet_header_name').css({ "width" : "40%" });
+}
+/**
+ * Expand the portlet header name width.
+ * 
+ * <p>
+ * Hide the icons and use the remaining width in portlet header name DIV on mouse
+ * leave
+ * </p>
+ * 
+ * @param el
+ *            Element on which mouse left (portlet header)
+ */
+function hidePortletIcons(el)
+{
+	// Hide portlet icons on hover
+	$(el).find('div.portlet_header_icons').hide();
+
+	// Changes width of portlet name
+	$(el).find('div.portlet_header_name').css({ "width" : "80%" });
+}
+function enablePortletSorting(el){
+	// Loads jquery-ui to get sortable functionality on portlets
+	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function(){
+		/*$('.portlet-column').sortable({
+			connectWith: '.portlet-column',
+			iframeFix: false,
+			items:'div.portlet_container',
+			opacity:0.8,
+			helper:'original',
+			revert:true,
+			forceHelperSize:true,
+			placeholder: 'portlet-ui-sortable-placeholder portlet-round-all',
+			forcePlaceholderSize:true,
+			tolerance:'pointer'
+		});*/
+		/*
+		 * This event is called after sorting stops to save new positions of
+		 * portlets
+		 */
+		$('.row-fluid', el).on(
+				"sortstop",
+				function(event, ui){
+					var models = [];
+
+					/*
+					 * Iterate through each all the portlets and set each portlet
+					 * position and store it in array
+					 */
+					$('#portlet-res').children().each(function(column){
+						$(this).children().each(function(row){
+							var model_id = $(this).find('.portlets').attr('id');
+							
+							var model = Portlets_View.collection.get(model_id);
+
+							model.set({ 'column_position' : column+1 }, { silent : true });
+							
+							model.set({ 'row_position' : row+1 }, { silent : true });
+
+							models.push({ id : model.get("id"), column_position : column+1, row_position : row+1 });
+						});
+					});
+
+					// Saves new positions in server
+					$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
+						contentType : "application/json; charset=utf-8", dataType : 'json' });
+				});
+	});
+}
+function showPortletSettings(el){
+	var elData;
+	var base_model = Portlets_View.collection.get(el.split("-settings")[0]);
+	
+	//Hide previous error messages
+	$('.help-inline').hide();
+	
+	$('#portletSettingsModal').modal('show');
+	$('#portletSettingsModal > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
+	$("#portlet-type",$('#portletSettingsModal')).val(base_model.get('portlet_type'));
+	$("#portlet-name",$('#portletSettingsModal')).val(base_model.get('name'));
+	
+	if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Filter Based"){
+		showPortletSettingsForm("portletsContactsFilterBasedSettingsForm");
+		elData = $('#portletsContactsFilterBasedSettingsForm');
+		portletContactFiltersListView = new Base_Collection_View({ url : '/core/api/filters', sort_collection : false, restKey : "ContactFilter", templateKey : "portlets-contact-filter-list",
+					individual_tag_name : 'option', sort_collection : false, postRenderCallback : function(el){
+						$("#filter", elData).find('option[value='+ base_model.get("settings").filter +']').attr("selected", "selected");
+					} });
+
+		// Fetchs filters
+		portletContactFiltersListView.collection.fetch();
+		$("#filterControls", elData).html(portletContactFiltersListView.render().el);
+	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Emails Opened"){
+		showPortletSettingsForm("portletsContactsEmailsOpenedSettingsForm");
+		elData = $('#portletsContactsEmailsOpenedSettingsForm');
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Emails Sent"){
+		showPortletSettingsForm("portletsContactsEmailsSentSettingsForm");
+		elData = $('#portletsContactsEmailsSentSettingsForm');
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Growth Graph"){
+		$('#portlet-ul-tags > li').remove();
+		$('#cancel-modal').attr('disabled',false);
+		
+		showPortletSettingsForm("portletsContactsGrowthGraphSettingsForm");
+		elData = $('#portletsContactsGrowthGraphSettingsForm');
+		
+		//Saved tags are appended
+		var tags=base_model.get('settings').tags.split(",");
+		var li='';
+		$.each(tags,function(index,tagName){
+			if(tagName!="")
+				li += "<li data='"+tagName+"' style='display: inline-block;' class='tag'>"+tagName+"<a id='remove_tag' class='close'>&times</a></li>";
+		});
+		$('#portlet-ul-tags').append(li);
+		
+		//enable tags properties
+		setup_tags_typeahead();
+		
+		$("#frequency", elData).find('option[value='+ base_model.get("settings").frequency +']').attr("selected", "selected");
+		var range=""+(new Date(parseInt(base_model.get("settings")["start-date"])).format('mmmm d, yyyy'))+" - "+(new Date(parseInt(base_model.get("settings")["end-date"])).format('mmmm d, yyyy'));
+		$('#portlet-reportrange span').html(range);
+		$('#start-date').val(base_model.get("settings")["start-date"]);
+		$('#end-date').val(base_model.get("settings")["end-date"]);
+		
+	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Pending Deals"){
+		showPortletSettingsForm("portletsPendingDealsSettingsForm");
+		elData = $('#portletsPendingDealsSettingsForm');
+		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
+		$("#due-date", elData).val(new Date(base_model.get("settings")["due-date"]*1000).format('mm/dd/yyyy'));
+	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals By Milestone"){
+		showPortletSettingsForm("portletsDealsByMilestoneSettingsForm");
+		elData = $('#portletsDealsByMilestoneSettingsForm');
+		var url='/core/api/portlets/portletDealsByMilestone?deals='+base_model.get('settings').deals+'&track='+base_model.get('settings').track+'&due-date='+base_model.get('settings')["due-date"];
+		fetchPortletsGraphData(url,function(data){
+			var options = '';
+			$.each(data["milestoneMap"],function(milestoneId,milestoneName){
+				if(base_model.get('settings').track==0 && milestoneName=="Default")
+					options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
+				else if(base_model.get('settings').track==milestoneId)
+					options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
+				else
+					options+="<option value="+milestoneId+">"+milestoneName+"</option>";
+			});
+			$('#track', elData).html(options);
+			$('.loading-img').hide();
+		});
+		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
+		$("#due-date", elData).val(new Date(base_model.get("settings")["due-date"]*1000).format('mm/dd/yyyy'));
+	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Closures Per Person"){
+		showPortletSettingsForm("portletsDealsClosuresPerPersonSettingsForm");
+		elData = $('#portletsDealsClosuresPerPersonSettingsForm');
+		$("#group-by", elData).find('option[value='+ base_model.get("settings")["group-by"] +']').attr("selected", "selected");
+		$("#due-date", elData).val(new Date(base_model.get("settings")["due-date"]*1000).format('mm/dd/yyyy'));
+	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Won"){
+		showPortletSettingsForm("portletsDealsWonSettingsForm");
+		elData = $('#portletsDealsWonSettingsForm');
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Funnel"){
+		showPortletSettingsForm("portletsDealsFunnelSettingsForm");
+		elData = $('#portletsDealsFunnelSettingsForm');
+		var url='/core/api/portlets/portletDealsFunnel?deals='+base_model.get('settings').deals+'&track='+base_model.get('settings').track+'&due-date='+base_model.get('settings')["due-date"];
+		fetchPortletsGraphData(url,function(data){
+			var options = '';
+			$.each(data["milestoneMap"],function(milestoneId,milestoneName){
+				if(base_model.get('settings').track==0 && milestoneName=="Default")
+					options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
+				else if(base_model.get('settings').track==milestoneId)
+					options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
+				else
+					options+="<option value="+milestoneId+">"+milestoneName+"</option>";
+			});
+			$('#track', elData).html(options);
+			$('.loading-img').hide();
+		});
+		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
+		$("#due-date", elData).val(new Date(base_model.get("settings")["due-date"]*1000).format('mm/dd/yyyy'));
+	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Assigned"){
+		showPortletSettingsForm("portletsDealsAssignedSettingsForm");
+		elData = $('#portletsDealsAssignedSettingsForm');
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Calls Per Person"){
+		showPortletSettingsForm("portletsCallsPerPersonSettingsForm");
+		elData = $('#portletsCallsPerPersonSettingsForm');
+		$("#group-by", elData).find('option[value='+ base_model.get("settings")["group-by"] +']').attr("selected", "selected");
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+	}
+	
+	if(base_model.get('name')=="Pending Deals" || base_model.get('name')=="Deals By Milestone" || base_model.get('name')=="Closures Per Person" || base_model.get('name')=="Deals Funnel"){
+		$('#due-date', elData).datepicker({
+			format : 'mm/dd/yyyy'
+		});
+	}	
+}
+function hidePortletSettings(el){
+	$('#'+el.id.split("-cancel-modal")[0]+'-portlet-settings').modal('hide');
+	//$('#'+el.id.split("-cancel-modal")[0]+'-backdrop').modal('hide');
+}
+function hidePortletSettingsAfterSave(form_id){
+	$('#portletSettingsModal').modal('hide');
+	$('#'+form_id).hide();
+	$('.modal-backdrop').hide();
+}
+$('.portlet-minimize').die().live('click', function(e){
+	e.preventDefault();
+	var id = $(this).attr('id').split("-collapse")[0];
+
+	$("#" + $(this).attr('id')).collapse('hide');
+	$(this).removeClass();
+
+	$(this).addClass('collapsed');
+	$(this).addClass('portlet-maximize');
+	$(this).addClass('icon-plus');
+
+	// Get portlet from collection by portlet id
+	var portlet = Portlets_View.collection.get(id);
+	var portletJSON = portlet.toJSON();
+
+	// set "is_minimized" field of portlet as true
+	portlet.set({ 'is_minimized' : true }, { silent : true });
+	portletJSON['is_minimized'] = true;
+
+	// Get model and save portlet
+	var model = new BaseModel();
+	model.url = "core/api/portlets";
+	model.save(portletJSON, { silent : true });
+	
+	$('#'+id).parent().find('.portlet_body').hide();
+});
+$('.portlet-maximize').die().live('click', function(e){
+	e.preventDefault();
+	var id = $(this).attr('id').split("-collapse")[0];
+
+	$("#" + $(this).attr('id')).collapse('hide');
+	$(this).removeClass();
+
+	$(this).addClass('collapsed');
+	$(this).addClass('portlet-minimize');
+	$(this).addClass('icon-minus');
+
+	// Get portlet from collection by portlet id
+	var portlet = Portlets_View.collection.get(id);
+	var portletJSON = portlet.toJSON();
+
+	// set "is_minimized" field of portlet as true
+	portlet.set({ 'is_minimized' : false }, { silent : true });
+	portletJSON['is_minimized'] = false;
+
+	// Get model and save portlet
+	var model = new BaseModel();
+	model.url = "core/api/portlets";
+	model.save(portletJSON, { silent : true });
+	
+	$('#'+id).parent().find('.portlet_body').show();
+});
+$('.portlet-settings-save-modal').live('click', function(e){
+	var scrollPosition=$(window).scrollTop();
+	var form_id=$(this).parent().prev().find('form:visible').attr('id');
+	if (!isValidForm('#' + form_id))
+		return false;
+	
+	var el=this.id;
+	var flag=true;
+	var json={};
+	var obj={};
+	var portletType=$('#portlet-type').val();
+	var portletName=$('#portlet-name').val();
+	json = serializeForm(form_id);
+	if(portletType=="CONTACTS" && portletName=="Growth Graph"){
+		var tags='';
+		if($('#addPortletBulkTags').val()!=""){
+			var tag=$('#addPortletBulkTags').val();
+			if($('#portlet-ul-tags > li').length==0)
+				$('#portlet-ul-tags').append("<li data='"+tag+"' style='display: inline-block;' class='tag'>'"+tag+"'<a tag='"+tag+"' id='remove_tag' class='close'>&time</a></li>");
+			else
+				$('#portlet-ul-tags > li:last').after("<li data='"+tag+"' style='display: inline-block;' class='tag'>'"+tag+"'<a tag='"+tag+"' id='remove_tag' class='close'>&time</a></li>");
+		}
+		$('#portlet-ul-tags > li').each(function(){
+			if($(this).is(':last'))
+				tags += $(this).attr('data');
+			else
+				tags += $(this).attr('data')+',';
+		});
+		json['tags']=tags;
+	}
+	
+	var idVal = $('#'+$(this).attr('id').split("-save-modal")[0]).parent().find('.portlet_body').attr('id');
+	var portlet = Portlets_View.collection.get(el.split("-save-modal")[0]);
+	portlet.set({ "prefs" : JSON.stringify(json) }, { silent : true });
+	portlet.url="core/api/portlets";
+	var model = new BaseModel();
+	model.url = 'core/api/portlets';
+	if(flag){
+		model.save(portlet.toJSON(), {
+	        success: function (data) {
+	        	hidePortletSettingsAfterSave(form_id);
+	        	$(window).scrollTop(scrollPosition);
+	        	var model = data.toJSON();
+	        	Portlets_View.collection.get(model).set(new BaseModel(model));
+	        	var pos = ''+data.get("column_position")+''+data.get("row_position");
+	        	//$('#'+this.parentNode.parentNode.parentNode.id).replaceWith($(getTemplate('portlets-model', model)));
+	        	var portletCollectionView;
+	        	if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Filter Based"){
+	        		if(data.get('settings').filter=="companies")
+	        			portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter+'&sortKey=-created_time', templateKey : 'portlets-companies', sort_collection : false, individual_tag_name : 'tr', sortKey : "-created_time" });
+	        		else
+	        			portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter+'&sortKey=-created_time', templateKey : 'portlets-contacts', sort_collection : false, individual_tag_name : 'tr', sortKey : "-created_time" });
+	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Emails Opened"){
+	        		portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+data.get('settings').duration, templateKey : 'portlets-contacts', individual_tag_name : 'tr' });
+	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Pending Deals"){
+	        		App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+data.get('settings').deals+'&due-date='+data.get('settings')["due-date"], templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
+	        			postRenderCallback : function(p_el){
+	        				displayTimeAgo(p_el);
+	        			} });
+	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Deals Won"){
+	        		App_Portlets.dealsWon[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletDealsWon?duration='+data.get('settings').duration, templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
+	        			postRenderCallback : function(p_el){
+	        				displayTimeAgo(p_el);
+	        			} });
+	        	}
+	        	if(portletCollectionView!=undefined)
+	        		portletCollectionView.collection.fetch();
+	        	if(data.get('name')!="Deals By Milestone" && data.get('name')!="Closures Per Person" && data.get('name')!="Deals Funnel" && data.get('name')!="Emails Sent" 
+	        		&& data.get('name')!="Growth Graph" && data.get('name')!="Deals Assigned" && data.get('name')!="Calls Per Person" 
+	        			&& data.get('name')!="Pending Deals" && data.get('name')!="Deals Won"){
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(portletCollectionView.render().el));
+	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Pending Deals"){
+	        		App_Portlets.pendingDeals[parseInt(pos)].collection.fetch();
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.pendingDeals[parseInt(pos)].render().el));
+	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Deals Won"){
+	        		App_Portlets.dealsWon[parseInt(pos)].collection.fetch();
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.dealsWon[parseInt(pos)].render().el));
+	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Deals By Milestone"){
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
+	        		var selector=idVal;
+	    			var url='/core/api/portlets/portletDealsByMilestone?deals='+data.get('settings').deals+'&track='+data.get('settings').track+'&due-date='+data.get('settings')["due-date"];
+	    			var milestonesList=[];
+	    			var milestoneValuesList=[];
+	    			var milestoneNumbersList=[];
+	    			var milestoneMap=[];
+	    			
+	    			fetchPortletsGraphData(url,function(data1){
+	    				milestonesList=data1["milestonesList"];
+	    				milestoneValuesList=data1["milestoneValuesList"];
+	    				milestoneNumbersList=data1["milestoneNumbersList"];
+	    				milestoneMap=data1["milestoneMap"];
+	    				
+	    				dealsByMilestoneBarGraph(selector,milestonesList,milestoneValuesList,milestoneNumbersList);
+	    				
+	    				//Added track options
+	    				var options='';
+	    				$.each(milestoneMap,function(milestoneId,milestoneName){
+	    					if(data.get('settings').track==0 && milestoneName=="Default")
+	    						options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
+	    					else if(data.get('settings').track==milestoneId)
+	    						options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
+	    					else
+	    						options+="<option value="+milestoneId+">"+milestoneName+"</option>";
+	    				});
+	    				$('#'+data.get("id")+'-track-options').append(options);
+	    			});
+	    			
+	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Closures Per Person"){
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
+	        		
+	        		var selector=idVal;
+	        		var url='/core/api/portlets/portletClosuresPerPerson?due-date='+data.get('settings')["due-date"];
+	    			
+	    			var milestoneNumbersList=[];
+	    			var milestoneValuesList=[];
+	    			var domainUsersList=[];
+	    			
+	    			fetchPortletsGraphData(url,function(data1){
+	    				milestoneNumbersList=data1["milestoneNumbersList"];
+	    				milestoneValuesList=data1["milestoneValuesList"];
+	    				domainUsersList=data1["domainUsersList"];
+	    				
+	    				var catges=[];
+	    				
+	    				$.each(domainUsersList,function(index,domainUser){
+	    					catges.push(domainUser);
+	    				});
+	    				
+	    				var data2=[];
+	    				var text='';
+	    				var name='';
+	    				
+	    				if(data.get('settings')["group-by"]=="number-of-deals"){
+	    					$.each(milestoneNumbersList,function(index,mNumber){
+	    						data2.push(mNumber);
+	    					});
+	    					text="No. of Deals Won";
+	    					name="Deals Won";
+	    				}else{
+	    					$.each(milestoneValuesList,function(index,mValue){
+	    						data2.push(mValue);
+	    					});
+	    					text="Deals Won Value";
+	    					name="Won Deal Value";
+	    				}
+	    				
+	    				closuresPerPersonBarGraph(selector,catges,data2,text,name);
+	    			});
+	    			
+	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Deals Funnel"){
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
+	        		
+	        		var selector=idVal;
+	    			var url='/core/api/portlets/portletDealsFunnel?deals='+data.get('settings').deals+'&track='+data.get('settings').track+'&due-date='+data.get('settings')["due-date"];
+	    			
+	    			var milestonesList=[];
+	    			var milestoneValuesList=[];
+	    			var milestoneMap=[];
+	    			
+	    			fetchPortletsGraphData(url,function(data1){
+	    				milestonesList=data1["milestonesList"];
+	    				milestoneValuesList=data1["milestoneValuesList"];
+	    				milestoneMap=data1["milestoneMap"];
+	    				
+	    				var funnel_data=[];
+	    				var temp=0;
+	    				
+	    				$.each(milestonesList,function(index,milestone){
+	    					var each_data=[];
+	    					
+	    					if(milestone!='Won')
+	    						each_data.push(milestone,milestoneValuesList[index]);
+	    					else
+	    						temp=index;
+	    					if(each_data!="")
+	    						funnel_data.push(each_data);
+	    				});
+	    				
+	    				var temp_data=[];
+	    				temp_data.push(milestonesList[temp],milestoneValuesList[temp]);
+	    				funnel_data.push(temp_data);
+	    				
+	    				dealsFunnelGraph(selector,funnel_data);
+	    				
+	    				var options='';
+	    				$.each(milestoneMap,function(milestoneId,milestoneName){
+	    					if(data.get('settings').track==0 && milestoneName=="Default")
+	    						options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
+	    					else if(data.get('settings').track==milestoneId)
+	    						options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
+	    					else
+	    						options+="<option value="+milestoneId+">"+milestoneName+"</option>";
+	    				});
+	    				$('#'+data.get("id")+'-track-options').append(options);
+	    			});
+	    			
+	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Emails Sent"){
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
+	        		
+	        		var selector=idVal;
+	    			var url='/core/api/portlets/portletEmailsSent?duration='+data.get('settings').duration;
+	    			
+	    			var domainUsersList=[];
+	    			var mailsCountList=[];
+	    			
+	    			fetchPortletsGraphData(url,function(data){
+	    				domainUsersList=data["domainUsersList"];
+	    				mailsCountList=data["mailsCountList"];
+	    				
+	    				var catges=[];
+	    				$.each(domainUsersList,function(index,domainUser){
+	    					catges.push(domainUser);
+	    				});
+	    				
+	    				emailsSentBarGraph(selector,catges,mailsCountList);
+	    			});
+	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Growth Graph"){
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
+	        		
+	        		var selector=idVal;
+	    			var url='/core/api/portlets/portletGrowthGraph?tags='+data.get('settings').tags+'&frequency='+data.get('settings').frequency+'&start-date='+data.get('settings')["start-date"]+'&end-date='+data.get('settings')["end-date"];
+	    			
+	    			fetchPortletsGraphData(url,function(data1){
+	    				if(data1.status==406){
+	    					// Show cause of error in saving
+	    					$save_info = $('<div class="portlet-error-message" style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+	    							+ data1.responseText
+	    							+ '</i></p></small></div>');
+	    					
+	    					$("#plan-limit-error-"+data.get('id')).html($save_info).show();
+	    					
+	    					return;
+	    				}
+	    				var series;
+	    				// Iterates through data and adds keys into
+	    				// categories
+	    				$.each(data1, function(k, v){
+	    					// Initializes series with names with the first
+	    					// data point
+	    					if (series == undefined){
+	    						var index = 0;
+	    						series = [];
+	    						$.each(v, function(k1, v1){
+	    							var series_data = {};
+	    							series_data.name = k1;
+	    							series_data.data = [];
+	    							series[index++] = series_data;
+	    						});
+	    					}
+	    					// Fill Data Values with series data
+	    					$.each(v, function(k1, v1){
+	    						// Find series with the name k1 and to that,
+	    						// push v1
+	    						var series_data = find_series_with_name(series, k1);
+	    						series_data.data.push([
+	    								k * 1000, v1
+	    						]);
+	    					});
+
+	    				});
+	    				
+	    				portletGrowthGraph(selector,series,data);
+	    			});
+	    			//Saved tags are appended
+	    			var p_settings=data.get('settings');
+	    			var p_tags=p_settings.tags;
+	    			var tags=p_tags.split(",");
+	    			var li='';
+	    			$.each(tags,function(index,tagName){
+	    				if(tagName!="")
+	    					li += "<li data='"+tagName+"' style='display: inline-block;' class='tag'>"+tagName+"<a id='remove_tag' class='close'>&times</a></li>";
+	    			});
+	    			$('#'+data.get("id")+'-portlet-ul-tags').append(li);
+	    			
+	    			//enable tags properties
+	    			setup_tags_typeahead();
+	    			
+	    		}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Deals Assigned"){
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
+	        		
+	        		var selector=idVal;
+	    			var url='/core/api/portlets/portletDealsAssigned?duration='+data.get('settings').duration;
+	    			
+	    			var domainUsersList=[];
+	    			var dealsAssignedCountList=[];
+	    			
+	    			fetchPortletsGraphData(url,function(data){
+	    				domainUsersList=data["domainUsersList"];
+	    				dealsAssignedCountList=data["assignedOpportunitiesCountList"];
+	    				
+	    				dealsAssignedBarGraph(selector,domainUsersList,dealsAssignedCountList);
+	    			});
+	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Calls Per Person"){
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
+	        		
+	        		var selector=idVal;
+	        		var url='/core/api/portlets/portletCallsPerPerson?duration='+data.get('settings').duration;
+	        		
+	        		var incomingCompletedCallsCountList=[];
+	    			var incomingFailedCallsCountList=[];
+	    			var incomingCompletedCallsDurationList=[];
+	    			var outgoingCompletedCallsCountList=[];
+	    			var outgoingFailedCallsCountList=[];
+	    			var outgoingCompletedCallsDurationList=[];
+	    			var completedCallsCountList=[];
+	    			var failedCallsCountList=[];
+	    			var completedCallsDurationList=[];
+	    			var domainUsersList=[];
+	    			
+	    			fetchPortletsGraphData(url,function(data2){
+	    				incomingCompletedCallsCountList=data2["incomingCompletedCallsCountList"];
+	    				incomingFailedCallsCountList=data2["incomingFailedCallsCountList"];
+	    				incomingCompletedCallsDurationList=data2["incomingCompletedCallsDurationList"];
+	    				outgoingCompletedCallsCountList=data2["outgoingCompletedCallsCountList"];
+	    				outgoingFailedCallsCountList=data2["outgoingFailedCallsCountList"];
+	    				outgoingCompletedCallsDurationList=data2["outgoingCompletedCallsDurationList"];
+	    				completedCallsCountList=data2["completedCallsCountList"];
+	    				failedCallsCountList=data2["failedCallsCountList"];
+	    				completedCallsDurationList=data2["completedCallsDurationList"];
+	    				domainUsersList=data2["domainUsersList"];
+	    				
+	    				var series=[];
+	    				var text='';
+	    				var colors;
+	    				
+	    				if(data.get('settings')["group-by"]=="number-of-calls"){
+	    					var tempData={};
+	    					tempData.name="Completed Calls";
+	    					tempData.data=completedCallsCountList;
+	    					series[0]=tempData;
+	    					tempData={};
+	    					tempData.name="Failed Calls";
+	    					tempData.data=failedCallsCountList;
+	    					series[1]=tempData;
+	    					text="No. of Calls";
+	    					colors=['green','red'];
+	    				}else{
+	    					var tempData={};
+	    					tempData.name="Calls Duration";
+	    					tempData.data=completedCallsDurationList;
+	    					series[0]=tempData;
+	    					text="Call Duration";
+	    					colors=['green'];
+	    				}
+	    				
+	    				callsPerPersonBarGraph(selector,domainUsersList,series,text,colors);
+	    			});
+	        	}
+	        	/*if(data.get('portlet_type')=="DEALS" && data.get('name')=="Deals Won" && portletCollectionView.collection.models.length!=0){
+	        		setTimeout(function(){
+	        			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').find('.dealsWonValue').show();
+		    			var totalVal=0;
+		        		$.each(portletCollectionView.collection.models,function(index,model){
+							totalVal += parseInt(model.get("expected_value"));
+						});
+		        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').find('.dealsWonValue').append("Total won value:"+totalVal);
+	        		},2000);
+	        	}*/
+	        	
+	        	setPortletContentHeight(data);
+    			$('#'+data.get('id')).parent().find('div:last').after('<span class="gs-resize-handle gs-resize-handle-both"></span>');
+	        	
+	        	if(data.get('is_minimized'))
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').hide();
+	        	
+	        	enablePortletTimeAndDates(data);
+	        	/*head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function(){
+					var el = $(getTemplate('portlets', {}));
+					$("#content").html(el);
+					loadPortlets(el);
+				});*/
+	        },
+	        error: function (obj, response) {
+	        	//alert("response--"+response.status);
+	        }
+		});
+	}
+});
+function showPortletSettingsForm(formId){
+	$('#portletSettingsModal > .modal-body > form').each(function(){
+		if($(this).attr('id')==formId)
+			$(this).show();
+		else
+			$(this).hide();
+	});
+}
+function initBlogPortletSync(el)
+{
+	head
+			.js(
+					LIB_PATH + 'lib/jquery.feeds.min.js',
+					function()
+					{
+
+						$('#portlet_blog_sync_container',el)
+								.feeds(
+										{
+											feeds : { blog : "https://www.agilecrm.com/blog/feed/" },
+											max : 3,
+											entryTemplate : function(entry)
+											{
+												return '<strong>' + '<a href="' + entry.link + '" title = "' + entry.title + '" target="_blank" >' + entry.title + '</a></strong><div style="color:#999;font-size:11px;line-height: 13px;margin-bottom:5px">' 
+												+ new Date(entry.publishedDate).format('mmm d, yyyy') + '</div><p style="padding-top:5px;margin-bottom:15px">' 
+												+ entry.contentSnippet.replace('<a', '<a target="_blank"') + '</p>';
+											},
+											onComplete : function(e){
+												$('#portlet_blog_sync_container',el).append('<span class="pull-right"><a href="https://www.agilecrm.com/blog" target="_blank">Agile CRM Blog</a></span>');
+											} });
+					});
+
+}
+$('.portlet_header').live("mouseover",function(e){
+	if(gridster!=undefined)
+		gridster.enable();
+});
+$('.portlet_body').live("mouseover",function(e){
+	if(gridster!=undefined)
+		gridster.disable();
+});
+var itemCollection;
+var itemCollection1;
+var tasksCollection;
+function organize_portlets(base_model){
+	var itemView = new Base_List_View({ model : base_model, template : this.options.templateKey + "-model", tagName : 'div', });
+
+	// Get portlet type from model (portlet object)
+	var portlet_type = base_model.get('portlet_type');
+	var is_added = base_model.get('is_added');
+
+	/*
+	 * Appends the model (portlet) to its specific div, based on the portlet_type
+	 * as div id (div defined in portlet-add.html)
+	 */
+	if (portlet_type == "CONTACTS")
+		$('#contacts', this.el).append($(itemView.render().el));
+	else if (portlet_type == "DEALS")
+		$('#deals', this.el).append($(itemView.render().el));
+	else if (portlet_type == "TASKSANDEVENTS")
+		$('#taksAndEvents', this.el).append($(itemView.render().el));
+	else if (portlet_type == "USERACTIVITY")
+		$('#userActivity', this.el).append($(itemView.render().el));
+	else if (portlet_type == "RSS")
+		$('#rssFeed', this.el).append($(itemView.render().el));
+}
+function set_p_portlets(base_model){
+	var itemView;
+	if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Filter Based"){
+		itemView = new Base_Model_View({ model : base_model, template : "portlets-contacts-filterbased-model", tagName : 'div' });
+	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Emails Opened"){
+		itemView = new Base_Model_View({ model : base_model, template : "portlets-contacts-emails-opened-model", tagName : 'div' });
+	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Emails Sent"){
+		itemView = new Base_Model_View({ model : base_model, template : "portlets-contacts-emails-sent-model", tagName : 'div' });
+	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Growth Graph"){
+		itemView = new Base_Model_View({ model : base_model, template : "portlets-contacts-growth-graph-model", tagName : 'div' });
+	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Pending Deals"){
+		itemView = new Base_Model_View({ model : base_model, template : "portlets-deals-pending-deals-model", tagName : 'div' });
+	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals By Milestone"){
+		itemView = new Base_Model_View({ model : base_model, template : "portlets-deals-deals-by-milestone-model", tagName : 'div' });
+	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Closures Per Person"){
+		itemView = new Base_Model_View({ model : base_model, template : "portlets-deals-closures-per-person-model", tagName : 'div' });
+	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Won"){
+		itemView = new Base_Model_View({ model : base_model, template : "portlets-deals-deals-won-model", tagName : 'div' });
+	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Funnel"){
+		itemView = new Base_Model_View({ model : base_model, template : "portlets-deals-deals-funnel-model", tagName : 'div' });
+	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Assigned"){
+		itemView = new Base_Model_View({ model : base_model, template : "portlets-deals-deals-assigned-model", tagName : 'div' });
+	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Agenda"){
+		itemView = new Base_Model_View({ model : base_model, template : "portlets-tasksandevents-agenda-model", tagName : 'div' });
+	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Today Tasks"){
+		itemView = new Base_Model_View({ model : base_model, template : "portlets-tasksandevents-today-tasks-model", tagName : 'div' });
+	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Calls Per Person"){
+		itemView = new Base_Model_View({ model : base_model, template : "portlets-contacts-calls-per-person-model", tagName : 'div' });
+	}else if(base_model.get('portlet_type')=="RSS" && base_model.get('name')=="Agile CRM Blog"){
+		itemView = new Base_Model_View({ model : base_model, template : "portlets-useractivity-blog-model", tagName : 'div' });
+	}
+	//var itemView = new Base_Model_View({ model : base_model, template : "portlets-model", tagName : 'div', });
+
+	// Get portlet type from model (portlet object)
+	var column_position = base_model.get('column_position');
+	var row_position = base_model.get('row_position');
+	var portlet_settings=base_model.get('settings');
+	var pos = ''+column_position+''+row_position;
+	/*if(column_position==1){
+		if($('#col-0').children().length==0){
+			$('#col-0',this.el).html(getRandomLoadingImg());
+			$('#col-0',this.el).html($(itemView.render().el).attr('id','ui-id-'+column_position+'-'+row_position).addClass('portlet_container').css("z-index","0").css("opacity","1"));
+		}else{
+			$('#col-0',this.el).children(':last').after($(itemView.render().el).attr('id','ui-id-'+column_position+'-'+row_position).addClass('portlet_container').css("z-index","0").css("opacity","1"));
+		}
+	}else if(column_position==2){
+		if($('#col-1').children().length==0){
+			$('#col-1',this.el).html(getRandomLoadingImg());
+			$('#col-1',this.el).html($(itemView.render().el).attr('id','ui-id-'+column_position+'-'+row_position).addClass('portlet_container').css("z-index","0").css("opacity","1"));
+		}else{
+			$('#col-1',this.el).children(':last').after($(itemView.render().el).attr('id','ui-id-'+column_position+'-'+row_position).addClass('portlet_container').css("z-index","0").css("opacity","1"));
+		}
+	}else if(column_position==3){
+		if($('#col-2').children().length==0){
+			$('#col-2',this.el).html(getRandomLoadingImg());
+			$('#col-2',this.el).html($(itemView.render().el).attr('id','ui-id-'+column_position+'-'+row_position).addClass('portlet_container').css("z-index","0").css("opacity","1"));
+		}else{
+			$('#col-2',this.el).children(':last').after($(itemView.render().el).attr('id','ui-id-'+column_position+'-'+row_position).addClass('portlet_container').css("z-index","0").css("opacity","1"));
+		}
+	}*/
+	if($('.gridster > div:visible > div',this.el).length==0)
+		$('.gridster > div:visible',this.el).html($(itemView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
+	else
+		$('.gridster > div:visible > div:last',this.el).after($(itemView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
+	
+	if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Filter Based"){
+		if(base_model.get('settings').filter=="companies")
+			itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+base_model.get('settings').filter+'&sortKey=-created_time', templateKey : "portlets-companies", sort_collection : false, individual_tag_name : 'tr', sortKey : "-created_time" });
+		else
+			itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+base_model.get('settings').filter+'&sortKey=-created_time', templateKey : "portlets-contacts", sort_collection : false, individual_tag_name : 'tr', sortKey : "-created_time"  });
+	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Emails Opened"){
+		itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+base_model.get('settings').duration, templateKey : 'portlets-contacts', individual_tag_name : 'tr' });
+	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Pending Deals"){
+		App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+base_model.get('settings').deals+'&due-date='+base_model.get('settings')["due-date"], templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
+			postRenderCallback : function(p_el){
+				displayTimeAgo(p_el);
+			} });
+		App_Portlets.pendingDeals[parseInt(pos)].collection.fetch();
+	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Won"){
+		App_Portlets.dealsWon[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletDealsWon?duration='+base_model.get('settings').duration, templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
+			postRenderCallback : function(p_el){
+				displayTimeAgo(p_el);
+			} });
+		App_Portlets.dealsWon[parseInt(pos)].collection.fetch();
+	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Agenda"){
+		App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda', templateKey : 'portlets-events', individual_tag_name : 'tr' });
+		App_Portlets.todayEventsCollection[parseInt(pos)].collection.fetch();
+	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Today Tasks"){
+		App_Portlets.tasksCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletTodayTasks', templateKey : 'portlets-tasks', individual_tag_name : 'tr' });
+		App_Portlets.tasksCollection[parseInt(pos)].collection.fetch();
+	}
+	if(itemCollection!=undefined)
+		itemCollection.collection.fetch();
+	$('.portlet_body',this.el).each(function(){
+		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')!="Deals By Milestone" 
+			&& base_model.get('name')!="Closures Per Person" && base_model.get('name')!="Deals Funnel" && base_model.get('name')!="Emails Sent"
+				&& base_model.get('name')!="Growth Graph" && base_model.get('name')!="Today Tasks" && base_model.get('name')!="Deals Assigned"
+					&& base_model.get('name')!="Calls Per Person" && base_model.get('name')!="Agile CRM Blog" && base_model.get('name')!="Agenda" 
+						&& base_model.get('name')!="Pending Deals" && base_model.get('name')!="Deals Won"){
+			$(this).html(getRandomLoadingImg());
+			$(this).html($(itemCollection.render().el));
+			setPortletContentHeight(base_model);
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Pending Deals"){
+			$(this).html(getRandomLoadingImg());
+			$(this).html($(App_Portlets.pendingDeals[parseInt(pos)].render().el));
+			setPortletContentHeight(base_model);
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Deals Won"){
+			$(this).html(getRandomLoadingImg());
+			$(this).html($(App_Portlets.dealsWon[parseInt(pos)].render().el));
+			setPortletContentHeight(base_model);
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Agenda"){
+			$(this).html(getRandomLoadingImg());
+			$(this).html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
+			setPortletContentHeight(base_model);
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Today Tasks"){
+			$(this).html(getRandomLoadingImg());
+			$(this).html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
+			setPortletContentHeight(base_model);
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Deals By Milestone"){
+			$(this).attr('id','p-body-'+column_position+'-'+row_position);
+
+			var selector=$(this).attr('id');
+			var url='/core/api/portlets/portletDealsByMilestone?deals='+base_model.get('settings').deals+'&track='+base_model.get('settings').track+'&due-date='+base_model.get('settings')["due-date"];
+			var milestonesList=[];
+			var milestoneValuesList=[];
+			var milestoneNumbersList=[];
+			
+			var milestoneMap=[];
+			$('#'+selector).html(getRandomLoadingImg());
+			fetchPortletsGraphData(url,function(data){
+				milestonesList=data["milestonesList"];
+				milestoneValuesList=data["milestoneValuesList"];
+				milestoneNumbersList=data["milestoneNumbersList"];
+				milestoneMap=data["milestoneMap"];
+				dealsByMilestoneBarGraph(selector,milestonesList,milestoneValuesList,milestoneNumbersList);
+				
+				//Added track options
+				var options='';
+				$.each(milestoneMap,function(milestoneId,milestoneName){
+					if(base_model.get('settings').track==0 && milestoneName=="Default")
+						options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
+					else if(base_model.get('settings').track==milestoneId)
+						options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
+					else
+						options+="<option value="+milestoneId+">"+milestoneName+"</option>";
+				});
+				$('#'+base_model.get("id")+'-track-options').append(options);
+			});
+			
+			
+			if(base_model.get('is_minimized'))
+				$(this).hide();
+			
+			setPortletContentHeight(base_model);
+			
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Closures Per Person"){
+			$(this).attr('id','p-body-'+column_position+'-'+row_position);
+			
+			var selector=$(this).attr('id');
+			var url='/core/api/portlets/portletClosuresPerPerson?due-date='+base_model.get('settings')["due-date"];
+			
+			var milestoneNumbersList=[];
+			var milestoneValuesList=[];
+			var domainUsersList=[];
+			$('#'+selector).html(getRandomLoadingImg());
+			fetchPortletsGraphData(url,function(data){
+				milestoneNumbersList=data["milestoneNumbersList"];
+				milestoneValuesList=data["milestoneValuesList"];
+				domainUsersList=data["domainUsersList"];
+				
+				var catges=[];
+				
+				$.each(domainUsersList,function(index,domainUser){
+					catges.push(domainUser);
+				});
+				
+				var data2=[];
+				var text='';
+				var name='';
+				
+				if(base_model.get('settings')["group-by"]=="number-of-deals"){
+					$.each(milestoneNumbersList,function(index,mNumber){
+						data2.push(mNumber);
+					});
+					text="No. of Deals Won";
+					name="Deals Won";
+				}else{
+					$.each(milestoneValuesList,function(index,mValue){
+						data2.push(mValue);
+					});
+					text="Deals Won Value";
+					name="Won Deal Value";
+				}
+				
+				closuresPerPersonBarGraph(selector,catges,data2,text,name);
+			});
+			
+			if(base_model.get('is_minimized'))
+				$(this).hide();
+			
+			setPortletContentHeight(base_model);
+			
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Deals Funnel"){
+			$(this).attr('id','p-body-'+column_position+'-'+row_position);
+			
+			var selector=$(this).attr('id');
+			var url='/core/api/portlets/portletDealsFunnel?deals='+base_model.get('settings').deals+'&track='+base_model.get('settings').track+'&due-date='+base_model.get('settings')["due-date"];
+			
+			var milestonesList=[];
+			var milestoneValuesList=[];
+			var milestoneMap=[];
+			$('#'+selector).html(getRandomLoadingImg());
+			fetchPortletsGraphData(url,function(data){
+				milestonesList=data["milestonesList"];
+				milestoneValuesList=data["milestoneValuesList"];
+				milestoneMap=data["milestoneMap"];
+				
+				var funnel_data=[];
+				var temp=0;
+				
+				$.each(milestonesList,function(index,milestone){
+					var each_data=[];
+					
+					if(milestone!='Won')
+						each_data.push(milestone,milestoneValuesList[index]);
+					else
+						temp=index;
+					if(each_data!="")
+						funnel_data.push(each_data);
+				});
+				
+				var temp_data=[];
+				temp_data.push(milestonesList[temp],milestoneValuesList[temp]);
+				funnel_data.push(temp_data);
+				
+				dealsFunnelGraph(selector,funnel_data);
+				
+				//Added track options
+				var options='';
+				$.each(milestoneMap,function(milestoneId,milestoneName){
+					if(base_model.get('settings').track==0 && milestoneName=="Default")
+						options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
+					else if(base_model.get('settings').track==milestoneId)
+						options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
+					else
+						options+="<option value="+milestoneId+">"+milestoneName+"</option>";
+				});
+				$('#'+base_model.get("id")+'-track-options').append(options);
+			});
+			
+			if(base_model.get('is_minimized'))
+				$(this).hide();
+			
+			setPortletContentHeight(base_model);
+			
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Emails Sent"){
+			$(this).attr('id','p-body-'+column_position+'-'+row_position);
+			
+			var selector=$(this).attr('id');
+			var url='/core/api/portlets/portletEmailsSent?duration='+base_model.get('settings').duration;
+			
+			var domainUsersList=[];
+			var mailsCountList=[];
+			$('#'+selector).html(getRandomLoadingImg());
+			fetchPortletsGraphData(url,function(data){
+				domainUsersList=data["domainUsersList"];
+				mailsCountList=data["mailsCountList"];
+				
+				var catges=[];
+				$.each(domainUsersList,function(index,domainUser){
+					catges.push(domainUser);
+				});
+				
+				emailsSentBarGraph(selector,catges,mailsCountList);
+			});
+			
+			if(base_model.get('is_minimized'))
+				$(this).hide();
+			
+			setPortletContentHeight(base_model);
+			
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Growth Graph"){
+			$(this).attr('id','p-body-'+column_position+'-'+row_position);
+			
+			var selector=$(this).attr('id');
+			var url='/core/api/portlets/portletGrowthGraph?tags='+base_model.get('settings').tags+'&frequency='+base_model.get('settings').frequency+'&start-date='+base_model.get('settings')["start-date"]+'&end-date='+base_model.get('settings')["end-date"];
+			$('#'+selector).html(getRandomLoadingImg());
+			fetchPortletsGraphData(url,function(data){
+				if(data.status==406){
+					// Show cause of error in saving
+					$save_info = $('<div class="portlet-error-message" style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+							+ data.responseText
+							+ '</i></p></small></div>');
+					
+					$('#'+selector).html($save_info).show();
+					
+					return;
+				}
+				
+				var series;
+				// Iterates through data and adds keys into
+				// categories
+				$.each(data, function(k, v){
+					// Initializes series with names with the first
+					// data point
+					if (series == undefined){
+						var index = 0;
+						series = [];
+						$.each(v, function(k1, v1){
+							var series_data = {};
+							series_data.name = k1;
+							series_data.data = [];
+							series[index++] = series_data;
+						});
+					}
+					// Fill Data Values with series data
+					$.each(v, function(k1, v1){
+						// Find series with the name k1 and to that,
+						// push v1
+						var series_data = find_series_with_name(series, k1);
+						series_data.data.push([
+								k * 1000, v1
+						]);
+					});
+
+				});
+				
+				portletGrowthGraph(selector,series,base_model);
+			});
+			
+			if(base_model.get('is_minimized'))
+				$(this).hide();
+			
+			setPortletContentHeight(base_model);
+			
+			//Saved tags are appended
+			var p_settings=base_model.get('settings');
+			var p_tags=p_settings.tags;
+			var tags=p_tags.split(",");
+			var li='';
+			$.each(tags,function(index,tagName){
+				if(tagName!="")
+					li += "<li data='"+tagName+"' style='display: inline-block;' class='tag'>"+tagName+"<a id='remove_tag' class='close'>&times</a></li>";
+			});
+			$('#'+base_model.get("id")+'-portlet-ul-tags').append(li);
+			
+			//enable tags properties
+			setup_tags_typeahead();
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Deals Assigned"){
+			$(this).attr('id','p-body-'+column_position+'-'+row_position);
+			
+			var selector=$(this).attr('id');
+			var url='/core/api/portlets/portletDealsAssigned?duration='+base_model.get('settings').duration;
+			
+			var domainUsersList=[];
+			var dealsAssignedCountList=[];
+			$('#'+selector).html(getRandomLoadingImg());
+			fetchPortletsGraphData(url,function(data){
+				domainUsersList=data["domainUsersList"];
+				dealsAssignedCountList=data["assignedOpportunitiesCountList"];
+				
+				dealsAssignedBarGraph(selector,domainUsersList,dealsAssignedCountList);
+			});
+			
+			if(base_model.get('is_minimized'))
+				$(this).hide();
+			
+			setPortletContentHeight(base_model);
+			
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Calls Per Person"){
+			$(this).attr('id','p-body-'+column_position+'-'+row_position);
+			
+			var selector=$(this).attr('id');
+			var url='/core/api/portlets/portletCallsPerPerson?duration='+base_model.get('settings').duration;
+			
+			var incomingCompletedCallsCountList=[];
+			var incomingFailedCallsCountList=[];
+			var incomingCompletedCallsDurationList=[];
+			var outgoingCompletedCallsCountList=[];
+			var outgoingFailedCallsCountList=[];
+			var outgoingCompletedCallsDurationList=[];
+			var completedCallsCountList=[];
+			var failedCallsCountList=[];
+			var completedCallsDurationList=[];
+			var domainUsersList=[];
+			$('#'+selector).html(getRandomLoadingImg());
+			fetchPortletsGraphData(url,function(data){
+				incomingCompletedCallsCountList=data["incomingCompletedCallsCountList"];
+				incomingFailedCallsCountList=data["incomingFailedCallsCountList"];
+				incomingCompletedCallsDurationList=data["incomingCompletedCallsDurationList"];
+				outgoingCompletedCallsCountList=data["outgoingCompletedCallsCountList"];
+				outgoingFailedCallsCountList=data["outgoingFailedCallsCountList"];
+				outgoingCompletedCallsDurationList=data["outgoingCompletedCallsDurationList"];
+				completedCallsCountList=data["completedCallsCountList"];
+				failedCallsCountList=data["failedCallsCountList"];
+				completedCallsDurationList=data["completedCallsDurationList"];
+				domainUsersList=data["domainUsersList"];
+				
+				var series=[];
+				var text='';
+				var colors;
+				
+				if(base_model.get('settings')["group-by"]=="number-of-calls"){
+					var tempData={};
+					tempData.name="Completed Calls";
+					tempData.data=completedCallsCountList;
+					series[0]=tempData;
+					tempData={};
+					tempData.name="Failed Calls";
+					tempData.data=failedCallsCountList;
+					series[1]=tempData;
+					text="No. of Calls";
+					colors=['green','red'];
+				}else{
+					var tempData={};
+					tempData.name="Calls Duration";
+					tempData.data=completedCallsDurationList;
+					series[0]=tempData;
+					text="Call Duration";
+					colors=['green'];
+				}
+				
+				callsPerPersonBarGraph(selector,domainUsersList,series,text,colors);
+			});
+			
+			if(base_model.get('is_minimized'))
+				$(this).hide();
+			
+			setPortletContentHeight(base_model);
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Agile CRM Blog"){
+			$(this).find('div').html(getRandomLoadingImg());
+			initBlogPortletSync($(this));
+			if(base_model.get('is_minimized'))
+				$(this).hide();
+			
+			setPortletContentHeight(base_model);
+		}
+	});
+	enablePortletTimeAndDates(base_model);
+}
+
+/**
+ * Generic function to fetch data for graphs and act accordingly on plan limit error
+ * @param url
+ * @param successCallback
+ */
+function fetchPortletsGraphData(url, successCallback){
+	// Hides error message
+	$("#plan-limit-error").hide();
+	
+	// Fetches data
+	$.getJSON(url, function(data){	
+		// Sends data to callback
+		if(successCallback && typeof (successCallback) === "function")
+			successCallback(data);
+	}).error(function(response){
+		// If error is not billing exception then it is returned
+		if(response.status != 406)
+			return;
+				
+		// If it is billing exception, then empty set is sent so page will not be showing loading on error message
+		if(successCallback && typeof (successCallback) === "function")
+			successCallback(response);
+	}); 
+}
+function dealsByMilestoneBarGraph(selector,milestonesList,milestoneValuesList,milestoneNumbersList){
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
+		$('#'+selector).highcharts({
+	        chart: {
+	            type: 'bar',
+	            marginRight: 20
+	        },
+	        title: {
+	            text: ''
+	        },
+	        xAxis: {
+	            categories: milestonesList
+	        },
+	        yAxis: {
+	            min: 0,
+	            title: {
+	                text: 'Deal Value'
+	            }
+	        },
+	        legend: {
+	        	enabled: false
+	        },
+	        tooltip: {
+	        	formatter: function(){
+	        		return '<span style="font-size:10px">'+this.points[0].key+'</span>' + 
+	        		        '<table>' + 
+	        		        '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+'s: </td>' + 
+	        		        '<td style="padding:0"><b>'+milestoneNumbersList[this.points[0].point.x]+'</b></td></tr>' + 
+	        		        '<tr><td style="color:'+this.points[0].series.color+';padding:0">Deal Value: </td>' + 
+	        		        '<td style="padding:0"><b>'+milestoneValuesList[this.points[0].point.x]+' $</b></td></tr>' +
+	        		        '</table>';
+	        	},
+	            shared: true,
+	            useHTML: true
+	        },
+	        plotOptions: {
+	            column: {
+	                pointPadding: 0.2,
+	                borderWidth: 0
+	            }
+	        },
+	        series: [{
+	            name: 'Deal',
+	            data: milestoneValuesList
+	        }],
+	        exporting: {
+		        enabled: false
+		    }
+	    });
+	});
+}
+function closuresPerPersonBarGraph(selector,catges,data,text,name){
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
+		$('#'+selector).highcharts({
+	        chart: {
+	            type: 'bar',
+	            marginRight: 20
+	        },
+	        title: {
+	            text: ''
+	        },
+	        xAxis: {
+	            categories: catges
+	        },
+	        yAxis: {
+	            min: 0,
+	            title: {
+	                text: text
+	            }
+	        },
+	        legend: {
+	        	enabled: false
+	        },
+	        tooltip: {
+	        	formatter: function(){
+	        		return '<span style="font-size:10px">'+this.points[0].key+'</span>' + 
+        			'<table>' + 
+    		        '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+': </td>' + 
+    		        '<td style="padding:0"><b>'+data[this.points[0].point.x]+'</b></td></tr>' + 
+    		        '</table>';
+	        	},
+	            shared: true,
+	            useHTML: true
+	        },
+	        plotOptions: {
+	            column: {
+	                pointPadding: 0.2,
+	                borderWidth: 0
+	            }
+	        },
+	        series: [{
+	            name: name,
+	            data: data
+	        }],
+	        exporting: {
+		        enabled: false
+		    }
+	    });
+	});
+}
+function dealsFunnelGraph(selector,funnel_data){
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', LIB_PATH + 'lib/flot/funnel.js', function(){
+		$('#'+selector).highcharts({
+	        chart: {
+	            type: 'funnel',
+	            marginRight: 20,
+	            className: 'deals-funnel-portlet'
+	        },
+	        title: {
+	            text: ''
+	        },
+	        plotOptions: {
+	        	series: {
+	                dataLabels: {
+	                    enabled: true,
+	                    format: '<b>{point.name}</b> ({point.y:,.0f})',
+	                    color: 'black',
+	                    softConnector: true
+	                },
+	                neckWidth: '20%',
+	                neckHeight: '20%',
+	                
+	                //-- Other available options
+	                height: '100%',
+	                width: '50%'
+	            }
+	        },
+	        series: [{
+	            name: 'Value',
+	            data: funnel_data
+	        }],
+	        exporting: {
+		        enabled: false
+		    }
+	    });
+	});
+}
+function emailsSentBarGraph(selector,catges,mailsCountList){
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
+		$('#'+selector).highcharts({
+	        chart: {
+	            type: 'bar',
+	            marginRight: 20
+	        },
+	        title: {
+	            text: ''
+	        },
+	        xAxis: {
+	            categories: catges
+	        },
+	        yAxis: {
+	            min: 0,
+	            title: {
+	                text: 'No. of emails sent'
+	            }
+	        },
+	        legend: {
+	        	enabled: false
+	        },
+	        tooltip: {
+	        	formatter: function(){
+	        		return '<span style="font-size:10px">'+this.points[0].key+'</span>' + 
+	        		        '<table>' + 
+	        		        '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+': </td>' + 
+	        		        '<td style="padding:0"><b>'+mailsCountList[this.points[0].point.x]+'</b></td></tr>' + 
+	        		        '</table>';
+	        	},
+	            shared: true,
+	            useHTML: true
+	        },
+	        plotOptions: {
+	            column: {
+	                pointPadding: 0.2,
+	                borderWidth: 0
+	            }
+	        },
+	        series: [{
+	            name: 'Sent Emails',
+	            data: mailsCountList
+	        }],
+	        exporting: {
+		        enabled: false
+		    }
+	    });
+	});
+}
+function portletGrowthGraph(selector,series,base_model){
+	var flag=true;
+	
+	/*if(base_model.get("settings").tags==""){
+		$('#portletSettingsModal').modal('show');
+		$('#portletSettingsModal > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
+		$("#portlet-type",$('#portletSettingsModal')).val(base_model.get('portlet_type'));
+		$("#portlet-name",$('#portletSettingsModal')).val(base_model.get('name'));
+		showPortletSettingsForm("portletsContactsGrowthGraphSettingsForm");
+		
+		$("#growth-graph-frequency", $('#portletsContactsGrowthGraphSettingsForm')).find('option[value='+ base_model.get("settings").frequency +']').attr("selected", "selected");
+		var range=""+(new Date(base_model.get("settings")["start-date"]).format('mmmm d, yyyy'))+" - "+(new Date(base_model.get("settings")["end-date"]).format('mmmm d, yyyy'));
+		$('#portlet-reportrange span').html(range);
+		$('#start-date').val(base_model.get("settings")["start-date"]);
+		$('#end-date').val(base_model.get("settings")["end-date"]);
+		
+		enablePortletTimeAndDates(base_model);
+		$('#portletSettingsModal').removeData("modal").modal({backdrop: 'static', keyboard: false});
+		$('#cancel-modal').attr('disabled',true);
+		flag=false;
+	}*/
+	if(base_model.get("settings").tags==""){
+		$('#'+selector).html("<div class='portlet-error-message'>Please <a href='#' id='"+base_model.get("id")+"-settings' class='portlet-settings' dada-toggle='modal'>configure</a> the portlet and add the Tags.</div>");
+		flag=false;
+	}
+	if(flag){
+		head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
+			$('#'+selector).highcharts({
+		        chart: {
+		            type: 'line',
+		            marginRight: 20
+		        },
+		        title: {
+		            text: ''
+		        },
+		        xAxis: {
+		        	type: 'datetime',
+			        dateTimeLabelFormats: {
+			            //don't display the dummy year  month: '%e.%b',
+			        	day: '%e.%b'
+			        },
+			        minTickInterval: 24 * 3600 * 1000
+		        },
+		        yAxis: {
+		            min: 0,
+		            title: {
+		                text: ''
+		            }
+		        },
+		        ongraphtooltip: {
+		        	formatter: function(){
+			            return'<b>'+this.series.name+'</b><br/>'+Highcharts.dateFormat('%e.%b',
+			            this.x)+': '+this.y.toFixed(2);
+			        },
+		            shared: true,
+		            useHTML: true
+		        },
+		        plotOptions: {
+		            column: {
+		                pointPadding: 0.2,
+		                borderWidth: 0
+		            }
+		        },
+		        series: series,
+		        exporting: {
+			        enabled: false
+			    }
+		    });
+		});
+	}
+}
+function dealsAssignedBarGraph(selector,catges,dealsCountList){
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
+		$('#'+selector).highcharts({
+	        chart: {
+	            type: 'bar',
+	            marginRight: 20
+	        },
+	        title: {
+	            text: ''
+	        },
+	        xAxis: {
+	            categories: catges
+	        },
+	        yAxis: {
+	            min: 0,
+	            title: {
+	                text: 'No. of deals assigned'
+	            }
+	        },
+	        legend: {
+	        	enabled: false
+	        },
+	        tooltip: {
+	        	formatter: function(){
+	        		return '<span style="font-size:10px">'+this.points[0].key+'</span>' + 
+	        		        '<table>' + 
+	        		        '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+': </td>' + 
+	        		        '<td style="padding:0"><b>'+dealsCountList[this.points[0].point.x]+'</b></td></tr>' + 
+	        		        '</table>';
+	        	},
+	            shared: true,
+	            useHTML: true
+	        },
+	        plotOptions: {
+	            column: {
+	                pointPadding: 0.2,
+	                borderWidth: 0
+	            }
+	        },
+	        series: [{
+	            name: 'Assigned Deals',
+	            data: dealsCountList
+	        }],
+	        exporting: {
+		        enabled: false
+		    }
+	    });
+	});
+}
+function callsPerPersonBarGraph(selector,domainUsersList,series,text,colors){
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
+		$('#'+selector).highcharts({
+	        chart: {
+	            type: 'bar',
+	            marginRight: 20
+	        },
+	        title: {
+	            text: ''
+	        },
+	        xAxis: {
+	            categories: domainUsersList
+	        },
+	        yAxis: {
+	            min: 0,
+	            title: {
+	                text: text
+	            }
+	        },
+	        tooltip: {
+	            shared: true,
+	            useHTML: true
+	        },
+	        plotOptions: {
+	            column: {
+	                pointPadding: 0.2,
+	                borderWidth: 0
+	            }
+	        },
+	        series: series,
+	        exporting: {
+		        enabled: false
+		    },
+		    colors: colors
+	    });
+	});
+}
+function enablePortletTimeAndDates(base_model){
+	if(base_model.get('name')=="Growth Graph"){
+		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function(){
+			// Bootstrap date range picker.
+			$('#portlet-reportrange').daterangepicker({ ranges : { 'Today' : [
+					'today', 'today'
+			], 'Yesterday' : [
+					'yesterday', 'yesterday'
+			], 'Last 7 Days' : [
+					Date.today().add({ days : -6 }), 'today'
+			], 'Last 30 Days' : [
+					Date.today().add({ days : -29 }), 'today'
+			], 'This Month' : [
+					Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()
+			], 'Last Month' : [
+					Date.today().moveToFirstDayOfMonth().add({ months : -1 }), Date.today().moveToFirstDayOfMonth().add({ days : -1 })
+			] } }, function(start, end){
+				$('#portlet-reportrange span').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
+				$('#start-date').val(start.getTime());
+				$('#end-date').val(end.getTime());
+			});
+		});
+	}
+}
+function setPortletContentHeight(base_model){
+	if(base_model.get("size_y")==1){
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)-40+"px");
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)-40+"px");
+	}else if(base_model.get("size_y")==2){
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+10-40+"px");
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+10-40+"px");
+	}else if(base_model.get("size_y")==3){
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+20-40+"px");
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+20-40+"px");
+	}
 }/**
  * Calls updateNotification method to update or add new tweet notification with
  * count of new unread tweets in stream.
@@ -17830,7 +20717,7 @@ function save_web_event(formId, confirmBtn)
 					{
 						$('#mainwrap').addClass("appointment-wrap");
 
-						var temp = '<div style="margin: 25px;font-size:15px;">'
+						var temp = '<div style="margin: 26px;font-size:15px;">'
 
 						+ '<div id="info" ><h3 style="border-bottom: 1px solid #ddd;padding-bottom:8px;margin-bottom:15px;"><b>Appointment Scheduled</b></h3>' + '<p >Your appointment ('+appointmenttype+') has been scheduled with <b>'+User_Name+'</b> for '+web_calendar_event.slot_time+' mins on '+start+'. </div>' + '<div class="row">' + '<div class="col-md-12">' + '<div class="row">' + '<div class="col-md-12">' + '<div class="left">' + '<a class="btn btn-primary" id="create_new_appointment" style="margin-top:20px;">Schedule Another Appointment</a>' + '</div>' + '</div>' + '</div>' + '</div>' + '<div align="right" style="position: absolute;right: 280px;bottom: -80px;">' + '<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 71px;">Powered by</span> <a href="https://www.agilecrm.com?utm_source=powered-by&amp;medium=event_scheduler&amp;utm_campaign=' + domainname + '" rel="nofollow" target="_blank"><img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 135px;"></a>' + '</div>'
 
@@ -21285,7 +24172,24 @@ function connectedCallNoty(message, type)
 		Twilio_Call_Noty = noty({ text : message, type : "success", layout : "bottomRight", buttons : [
 				{ addClass : 'btn btn-primary noty_twilio_dialpad', text : 'Dialpad' }, { addClass : 'btn btn-danger noty_twilio_hangup', text : 'Hangup' }
 		] });
-
+		
+		if(TWILIO_DIRECTION == "outbound-dial") {
+		var responseJson = $.parseJSON(
+		        $.ajax({
+		        	url: "core/api/voicemails",
+		            async: false,
+		            dataType: 'json'
+		        }).responseText
+		    );
+		
+//		console.log("json resp : ");
+//		console.log(responseJson);
+//		console.log(JSON.stringify(responseJson));
+		
+		var voicemailHTML = $(getTemplate("twilioio-voicemail",responseJson), {});
+		$('.noty_buttons').prepend(voicemailHTML);
+		}
+		
 		// Add dialpad template in twilio content
 		var dialpad = $(getTemplate("twilioio-dialpad"), {});
 		$('.noty_buttons').prepend(dialpad);
@@ -21332,6 +24236,11 @@ function outgoingCallNoty(message, type)
 	CALL = noty({ text : message, type : "confirm", layout : "bottomRight", buttons : [
 		{ addClass : 'btn btn-danger hangup', text : 'Cancel' }
 	] });
+}
+
+function voiceMailDropAction() { 
+//	alert("clicked");
+	$( "div.noty_bar" ).parent().css( "overflow", "visible" );
 }
 /* functions related to audio */
 
@@ -24240,7 +27149,7 @@ var AgileConfigRouter = Backbone.Router.extend({
  */
 
 // All Routers are global
-var App_Contacts, App_Contact_Search, App_Contact_Bulk_Actions, App_Contact_Filters, App_Contact_Views, App_Workflows, App_Deals, App_Admin_Settings, App_Calendar, App_Settings, App_Reports, App_Cases, App_Subscription, App_Visitors, App_WebReports, App_Documents, App_Widgets, App_ShopifyApp;
+var App_Contacts, App_Contact_Search, App_Contact_Bulk_Actions, App_Contact_Filters, App_Contact_Views, App_Workflows, App_Deals, App_Admin_Settings, App_Calendar, App_Settings, App_Reports, App_Cases, App_Subscription, App_Visitors, App_WebReports, App_Documents, App_Widgets, App_ShopifyApp, App_VoiceMailRouter,App_Portlets,App_Deal_Details;;
 var Collection_View = {};
 $(function()
 {
@@ -24266,6 +27175,14 @@ $(function()
 	App_ReferelRouter = new ReferelRouter();
 	App_Activity_log = new ActivitylogRouter();
 	App_ShopifyApp = new ShopifyRouter();
+	App_Deal_Details= new DealDetailsRouter();
+	App_VoiceMailRouter = new VoiceMailRouter();
+<<<<<<< HEAD
+	App_Portlets = new PortletsRouter;
+=======
+	App_task = new TaskDetailsRouter();
+
+>>>>>>> a59355d... fixed quick books sync and added new file for task timeline
 
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
@@ -26519,6 +29436,433 @@ var ContactsRouter = Backbone.Router.extend({
 	
 	});
 /**
+ * calendar.js is a script file having a route to show calendar
+ * 
+ * @module Activities
+ */
+var DEAL_TRACKS_COUNT;
+var DealDetailsRouter = Backbone.Router.extend({
+
+routes : {
+/* Shows page */
+"deal/:id" : "dealdetails", "dealEdit/:id" : "dealEdit" },
+
+dealdetails : function(id)
+{
+	
+	this.dealDetailView = new Base_Model_View({ url : '/core/api/opportunity/' + id, template : "deal-detail", postRenderCallback : function(el)
+	{
+		/**
+		 * gets the tracks count when user comes to deals page and stores in global variable
+		 */
+		if(!DEAL_TRACKS_COUNT)
+		DEAL_TRACKS_COUNT=getTracksCount();
+		load_deal_tab(el, "");
+		var deal_collection;
+		if(App_Deals.opportunityCollectionView && App_Deals.opportunityCollectionView.collection)
+			deal_collection = App_Deals.opportunityCollectionView.collection;
+
+		if (deal_collection != null && readCookie("agile_deal_view"))
+			deal_detail_view_navigation(id, deal_collection, el);
+		
+			
+		
+	} });
+
+	var ele = this.dealDetailView.render(true).el;
+	$("#content").html(getRandomLoadingImg());
+	$('#content').html(ele);
+
+},
+
+dealEdit : function(id, deal)
+{
+
+	// If user refreshes the contacts detail view page directly - we
+	// should load from the model
+	if (!deal)
+	{
+
+		console.log("Downloading deal");
+
+		// Download
+		var deal_details_model = Backbone.Model.extend({ url : function()
+		{
+			return '/core/api/opportunity/' + this.id;
+		} });
+
+		var model = new deal_details_model();
+		model.id = id;
+		model.fetch({ success : function(data)
+		{
+
+			// Call deal Details again
+			App_Deal_Details.dealEdit(id, data);
+
+		}, error : function(data, response)
+		{
+			if (response && response.status == '403')
+				$("#content").html(response.responseText);
+		} });
+
+		return;
+	}
+
+	add_custom_fields_to_form(deal, function(deal)
+	{
+
+		deserialize_deal(deal, 'deal-detail-edit');
+
+	}, "DEAL");
+
+}
+
+});
+
+/**
+ * Validates deal edit form and saves
+ */
+$("#opportunity_validate_form").live('click', function(e)
+{
+	e.preventDefault();
+
+	// To know updated or added deal form names
+	var modal_id = $(this).closest('.container').attr("id");
+	var form_id = $(this).closest('.container').find('form').attr("id");
+
+	var json = serializeForm(form_id);
+	json["custom_data"] = serialize_custom_fields(form_id);
+
+	console.log(json);
+	if (form_id == "opportunityForm1")
+		saveDeal(form_id, modal_id, this, json, false);
+	else
+		saveDeal(form_id, modal_id, this, json, false);
+});
+
+$('#deal-owner').live('click', function(e)
+{
+	e.preventDefault();
+	fill_deal_owners(undefined, undefined, function()
+	{
+
+		$('#deal-owner').css('display', 'none');
+
+		$('#change-deal-owner-ul').css('display', 'inline-block');
+
+		if ($('#change-deal-owner-ul').css('display') == 'inline-block')
+			$("#change-owner-element").find(".loading").remove();
+
+	});
+
+});
+
+
+$('#opportunity-actions-delete').live('click', function(e)
+{
+	  if(!confirm("Are you sure you want to delete?"))
+			return;
+      
+      var id = $(this).closest('.deal_detail_delete').attr('data');
+	
+	$.ajax({ url : 'core/api/opportunity/' + id, type : 'DELETE', success : function(data)
+	{
+		Backbone.history.navigate("#deals", {
+            trigger: true
+        });
+	}, error : function(response)
+	{
+		alert("some exception occured please try again");
+	} });
+});
+
+/**
+ * Shows all the domain users names as ul drop down list to change the owner of
+ * a contact
+ */
+function fill_deal_owners(el, data, callback)
+{
+	var optionsTemplate = "<li><a class='deal-owner-list' data='{{id}}'>{{name}}</a></li>";
+	fillSelect('deal-detail-owner', '/core/api/users', 'domainUsers', callback, optionsTemplate, true);
+}
+
+/**
+ * To show owner on change
+ */
+function show_deal_owner()
+{
+	$('#deal-owner').css('display', 'inline-block');
+}
+
+
+
+
+/**
+ * To navigate from one deal detail view to other
+ */
+function deal_detail_view_navigation(id, deal_collection, el){
+	console.log("collection >>>>>>>>>>>>>>>>");
+	console.log(deal_collection);
+	
+	var collection_length = deal_collection.length;
+    var current_index = deal_collection.indexOf(deal_collection.get(id));
+    var previous_deal_id;
+    var next_deal_id;
+
+    if (collection_length > 1 && current_index < collection_length && deal_collection.at(current_index + 1) && deal_collection.at(current_index + 1).has("id")) {
+     
+    	next_deal_id = deal_collection.at(current_index + 1).id
+    }
+
+    if (collection_length > 0 && current_index != 0 && deal_collection.at(current_index - 1) && deal_collection.at(current_index - 1).has("id")) {
+
+    	previous_deal_id = deal_collection.at(current_index - 1).id
+    }
+
+    if(previous_deal_id != null)
+    	$('.navigation', el).append('<a style="float:left;" href="#deal/' + previous_deal_id + '" class=""><i class="icon icon-chevron-left"></i></a>');
+    if(next_deal_id != null)
+    	$('.navigation', el).append('<a style="float:right;" href="#deal/'+ next_deal_id + '" class=""><i class="icon icon-chevron-right"></i></a>');
+	
+}
+
+/**
+ * Changes, owner of the contact, when an option of change owner drop down is
+ * selected.
+ */
+$('.deal-owner-list').live('click', function()
+{
+
+	$('#change-deal-owner-ul').css('display', 'none');
+
+	// Reads the owner id from the selected option
+	var new_owner_id = $(this).attr('data');
+	var new_owner_name = $(this).text();
+	var current_owner_id = $('#deal-owner').attr('data');
+	// Returns, if same owner is selected again
+	if (new_owner_id == current_owner_id)
+	{
+		// Showing updated owner
+		show_deal_owner();
+		return;
+	}
+
+	var dealModel = new BaseModel();
+	dealModel.url = '/core/api/opportunity/change-owner/' + new_owner_id + "/" + App_Deal_Details.dealDetailView.model.get('id');
+	dealModel.save(App_Deal_Details.dealDetailView.model.toJSON(), { success : function(model)
+	{
+
+		$('#deal-owner').text(new_owner_name);
+		$('#deal-owner').attr('data', new_owner_id);
+
+		// Showing updated owner
+		show_deal_owner();
+		App_Deal_Details.dealDetailView.model = model;
+		App_Deal_Details.dealDetailView.render(true)
+		Backbone.history.navigate("deal/"+model.toJSON().id , {
+            trigger: true
+        });
+
+	} });
+
+});
+
+$('.deal-add-contact').live('click', function(e)
+{
+	e.preventDefault();
+	console.log(App_Deal_Details.dealDetailView.model.toJSON());
+	var currentdeal = App_Deal_Details.dealDetailView.model;
+	updateDeal(currentdeal);
+	
+	setTimeout(function() {
+		$('#opportunityUpdateForm').find("input[name='relates_to']").focus();
+	}, 800);
+
+});
+
+$('.deal-detail-edit-deal').live('click', function(e)
+		{
+			e.preventDefault();
+			console.log(App_Deal_Details.dealDetailView.model.toJSON());
+			var currentdeal = App_Deal_Details.dealDetailView.model;
+			updateDeal(currentdeal);
+			
+
+		});
+
+$('.deal-note').live('click', function(e)
+{
+	e.preventDefault();
+	
+
+	var el = $("#dealnoteForm");
+
+	// Displays contact name, to indicate the note is related to the contact
+	fill_relation_deal(el);
+	$('#deal-note-modal').modal('show');
+});
+
+/**
+ * Displays note modal, to add a note related to the contact in contact detail
+ * view. Also prepends the contact name to related to field of activity modal.
+ */
+
+function fill_relation_deal(el)
+{
+
+	var json = App_Deal_Details.dealDetailView.model.toJSON();
+	var deal_name = json.name;
+	$('.tags', el).html(
+			'<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="' + json.id + '">' + deal_name + '</li>');
+
+}
+
+function deserialize_deal(value, template)
+{
+	value = value.toJSON();
+
+	// Loads the form based on template value
+	var dealForm = $("#content").html(getTemplate(template, value));
+
+	deserializeForm(value, dealForm);
+
+	// Call setupTypeAhead to get contacts
+	agile_type_ahead("relates_to", dealForm, contacts_typeahead);
+
+	// Fills owner select element
+	populateUsers("owners-list", dealForm, value, 'owner', function(data)
+	{
+		dealForm.find("#owners-list").html(data);
+		if (value.owner)
+		{
+			$("#owners-list", dealForm).find('option[value=' + value['owner'].id + ']').attr("selected", "selected");
+			$("#owners-list", dealForm).closest('div').find('.loading-img').hide();
+		}
+	});
+
+	// Fills the pipelines list in the select menu.
+	populateTracks(dealForm, undefined, value, function(pipelinesList)
+	{
+
+		// Fills milestone select element
+		populateMilestones(dealForm, undefined, value.pipeline_id, value, function(data)
+		{
+			dealForm.find("#milestone").html(data);
+			if (value.milestone)
+			{
+				$("#milestone", dealForm).find('option[value=\"' + value.milestone + '\"]').attr("selected", "selected");
+			}
+			$("#milestone", dealForm).closest('div').find('.loading-img').hide();
+		});
+	});
+
+	// Enable the datepicker
+	$('#close_date', dealForm).datepicker({ format : 'mm/dd/yyyy', });
+
+	add_custom_fields_to_form(value, function(data)
+	{
+		var el = show_custom_fields_helper(data["custom_fields"], []);
+		$("#custom-field-deals", dealForm).html(fill_custom_fields_values_generic($(el), value["custom_data"]));
+		$('.date_input', dealForm).datepicker({ format : 'mm/dd/yyyy', });
+
+	}, "DEAL")
+
+}
+
+$('#dealdetail-archive').live('click', function(e) {
+	e.preventDefault();
+    if(!confirm("Archive Deal?"))
+		return;
+
+ 
+    var currentDeal=App_Deal_Details.dealDetailView.model.toJSON();;
+    
+    // Get the current deal model from the collection.
+	currentDeal.archived = true;
+    var that = $(this);
+    
+    var notes = [];
+	$.each(currentDeal.notes, function(index, note)
+	{
+		notes.push(note.id);
+	});
+	currentDeal.notes = notes;
+    if(currentDeal.note_description)
+		delete currentDeal.note_description;
+
+    if(!currentDeal.close_date || currentDeal.close_date==0)
+    	currentDeal.close_date = null;
+    
+    currentDeal.owner_id = currentDeal.owner.id;
+    
+    var arch_deal = new Backbone.Model();
+	arch_deal.url = '/core/api/opportunity';
+	arch_deal.save(currentDeal, {
+		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
+		success : function(data, response) {
+			App_Deal_Details.dealDetailView.model = data;
+			App_Deal_Details.dealDetailView.render(true)
+			Backbone.history.navigate("deal/"+data.toJSON().id , {
+	            trigger: true
+	        });
+			
+			
+		}
+	});
+});
+
+$('.deal-restore-detail-view').live('click', function(e) {
+	e.preventDefault();
+    if(!confirm("Restore Deal?"))
+		return;
+
+   
+	var currentDeal = App_Deal_Details.dealDetailView.model.toJSON();
+	currentDeal.archived = false;
+    
+    var notes = [];
+	$.each(currentDeal.notes, function(index, note)
+	{
+		notes.push(note.id);
+	});
+	currentDeal.notes = notes;
+    if(currentDeal.note_description)
+		delete currentDeal.note_description;
+
+    if(!currentDeal.close_date || currentDeal.close_date==0)
+    	currentDeal.close_date = null;
+    currentDeal.owner_id = currentDeal.owner.id;
+    var arch_deal = new Backbone.Model();
+	arch_deal.url = '/core/api/opportunity';
+	arch_deal.save(currentDeal, {
+		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
+		success : function(data, response) {
+			// Remove the deal from the collection and remove the UI element.
+			App_Deal_Details.dealDetailView.model = data;
+			App_Deal_Details.dealDetailView.render(true)
+			Backbone.history.navigate("deal/"+data.toJSON().id , {
+	            trigger: true
+	        });
+			
+		}
+	});
+});
+
+
+
+/**
+ * 
+ * @returns due tasks count upto today
+ */
+function getTracksCount(){
+	var msg = $.ajax({ type : "GET", url :'core/api/milestone/tracks/count', async : false, dataType : 'json' }).responseText;
+
+	if(!isNaN(msg)){
+		return msg;
+	}
+return 0;
+}
+/**
  * Creates backbone router for Deals/Opportunities create, read and update
  * operations
  */
@@ -26655,7 +29999,280 @@ var DocumentsRouter = Backbone.Router.extend({
 		$(".active").removeClass("active");
 		$("#documentsmenu").addClass("active");
 	} });
-var ReferelRouter = Backbone.Router.extend({
+/**
+ * Creates backbone router to access preferences of the user portlets
+ */
+var PortletsRouter = Backbone.Router
+								.extend({
+
+												routes : {
+												"portlets" 						: "portlets"
+												},
+												
+												portlets : function(){
+													head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js',
+															LIB_PATH + 'lib/jquery.gridster.js',function(){
+														var el = $(getTemplate('portlets', {}));
+														$("#content").html(el);
+														if (IS_FLUID){
+															$('#content').find('div.row').removeClass('row').addClass('row-fluid');
+														}
+														loadPortlets(el);
+													});
+												}
+								});
+//For adding new portlets
+function addNewPortlet(portlet_type,p_name){
+	var obj={};
+	var json={};
+	var curDate=new Date();
+	if(p_name=="FilterBased")
+		obj.name="Filter Based";
+	else if(p_name=="EmailsOpened")
+		obj.name="Emails Opened";
+	else if(p_name=="EmailsSent")
+		obj.name="Emails Sent";
+	else if(p_name=="PendingDeals")
+		obj.name="Pending Deals";
+	else if(p_name=="Agenda")
+		obj.name="Agenda";
+	else if(p_name=="TodayTasks")
+		obj.name="Today Tasks";
+	else if(p_name=="DealsByMilestone")
+		obj.name="Deals By Milestone";
+	else if(p_name=="ClosuresPerPerson")
+		obj.name="Closures Per Person";
+	else if(p_name=="DealsWon")
+		obj.name="Deals Won";
+	else if(p_name=="DealsFunnel")
+		obj.name="Deals Funnel";
+	else if(p_name=="GrowthGraph")
+		obj.name="Growth Graph";
+	else if(p_name=="DealsAssigned")
+		obj.name="Deals Assigned";
+	else if(p_name=="CallsPerPerson")
+		obj.name="Calls Per Person";
+	else if(p_name=="AgileCRMBlog")
+		obj.name="Agile CRM Blog";
+	obj.portlet_type=portlet_type;
+	var max_row_position=0;
+	if(gridster!=undefined)
+		/*gridster.$widgets.each(function(){
+			if(parseInt($(this).attr("data-row"))>max_row_position)
+				max_row_position = parseInt($(this).attr("data-row")) * parseInt($(this).attr("data-sizey"));
+		});*/
+		var next_position = gridster.next_position(1,1);
+	obj.column_position=next_position.col;
+	obj.row_position=next_position.row;
+	obj.size_x=next_position.size_x;
+	obj.size_y=next_position.size_y;
+	if(portlet_type=="CONTACTS" && p_name=="FilterBased")
+		json['filter']="myContacts";
+	else if(portlet_type=="CONTACTS" && p_name=="EmailsOpened")
+		json['duration']="2-days";
+	else if(portlet_type=="USERACTIVITY" && p_name=="EmailsSent")
+		json['duration']="1-day";
+	else if(portlet_type=="CONTACTS" && p_name=="GrowthGraph"){
+		json['tags']="";
+		json['frequency']='daily';
+		json['start-date']=new Date(curDate.getFullYear(),curDate.getMonth(),curDate.getDate()-6,0,0,0).getTime();
+		json['end-date']=new Date(curDate.getFullYear(),curDate.getMonth(),curDate.getDate(),0,0,0).getTime();
+	}
+	else if(portlet_type=="DEALS" && p_name=="PendingDeals"){
+		json['deals']="my-deals";
+		json['due-date']=Math.round((new Date()).getTime()/1000);
+	}
+	else if(portlet_type=="DEALS" && (p_name=="DealsByMilestone" || p_name=="DealsFunnel")){
+		json['deals']="my-deals";
+		json['track']=0;
+		json['due-date']=Math.round((new Date()).getTime()/1000);
+	}else if(portlet_type=="DEALS" && p_name=="ClosuresPerPerson"){
+		json['group-by']="number-of-deals";
+		json['due-date']=Math.round((new Date()).getTime()/1000);
+	}else if(portlet_type=="DEALS" && p_name=="DealsWon")
+		json['duration']="1-week";
+	else if(portlet_type=="DEALS" && p_name=="DealsAssigned")
+		json['duration']="1-day";
+	else if(portlet_type=="USERACTIVITY" && p_name=="CallsPerPerson"){
+		json['group-by']="number-of-calls";
+		json['duration']="1-day";
+	}
+	else if(portlet_type=="RSS" && p_name=="AgileCRMBlog")
+		obj.size_y=2;
+	var portlet = new BaseModel();
+	portlet.url = 'core/api/portlets/addPortlet';
+	portlet.set({ "prefs" : JSON.stringify(json) }, { silent : true });
+	var model;
+	var scrollPosition;
+	portlet.save(obj, {
+        success: function (data) {
+        	hidePortletsPopup();
+        	model=data.toJSON();
+        	//var el = $(getTemplate('portlets-model', model));
+        	if($('#zero-portlets').is(':visible'))
+        		$('#zero-portlets').hide();
+        	if($('#no-portlets').is(':visible'))
+    			$('#no-portlets').hide();
+        	Portlets_View.collection.add(model);
+        	
+        	scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
+        	//move the scroll bar for showing the newly added portlet
+        	window.scrollTo(0,scrollPosition);
+        },
+        error: function (model, response) {
+        	hidePortletsPopup();
+        	var model=data.toJSON();
+        	//var el = $(getTemplate('portlets-model', model));
+        	if($('#zero-portlets').is(':visible'))
+        		$('#zero-portlets').hide();
+        	if($('#no-portlets').is(':visible'))
+    			$('#no-portlets').hide();
+        	Portlets_View.collection.add(model);
+        	var scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
+        	//move the scroll bar for showing the newly added portlet
+        	window.scrollTo(0,scrollPosition);
+        }});
+	setTimeout(function(){
+		gridster.add_widget($('#ui-id-'+model.column_position+'-'+model.row_position),model.size_x,model.size_y,model.column_position,model.row_position);
+		gridster.set_dom_grid_height();
+		window.scrollTo(0,scrollPosition);
+	},1000);
+}
+function hidePortletsPopup(){
+	$('#portletStreamModal').modal('hide');
+	$('.modal-backdrop').hide();
+}
+function deletePortlet(el){
+	var p_id = el.id.split("-close")[0];
+	$('#portletDeleteModal').modal('show');
+	$('#portletDeleteModal > .modal-footer > .save-modal').attr('id',p_id);
+	$('#portletDeleteModal > .modal-body').html("Are you sure you want to delete Portlet - "+$('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()+" ?");
+}
+$('.portlet-delete-modal').live("click", function(e){
+	var portlet = Portlets_View.collection.get($(this).attr('id'));
+	/*
+	 * Sends Delete request with portlet name as path parameter, and on
+	 * success fetches the portlets to reflect the changes is_added, to show
+	 * add portlet in the view instead of delete option
+	 */
+	$.ajax({ type : 'DELETE', url : '/core/api/portlets/' + portlet.get("id"), contentType : "application/json; charset=utf-8",
+
+	success : function(data){
+		Portlets_View.collection.remove(portlet);
+		//$('#'+el.parentNode.parentNode.parentNode.parentNode.parentNode.id).remove();
+		gridster.remove_widget($('#'+portlet.get("id")).parent(),false);
+		setTimeout(function(){
+			gridster.$changed.attr('id','ui-id-'+gridster.$changed.attr('data-col')+'-'+gridster.$changed.attr('data-row'));
+		},500);
+		$('#'+portlet.get("id")).parent().remove();
+		
+		
+		if($('.gridster-portlets > div').length==0)
+			$('#no-portlets').show();
+		$('#portletDeleteModal').modal('hide');
+	}, dataType : 'json' });
+});
+$("#add-portlet").live("click", function(e){
+	this.Catalog_Portlets_View = new Base_Collection_View({ url : '/core/api/portlets/default', restKey : "portlet", templateKey : "portlets-add",
+		sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el){
+			
+		} });
+
+	this.Catalog_Portlets_View.appendItem = organize_portlets;
+
+	// 
+	this.Catalog_Portlets_View.collection.fetch();
+	
+	// Show form modal
+	$('#portletStreamModal').modal('show');
+
+	// Add social network types template
+	$("#streamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);
+});
+$('#portlets-contacts-model-list > tr, #portlets-companies-model-list > tr').live('click', function(e){
+	var id = $(this).find(".data").attr("data");
+	App_Contacts.navigate("contact/" + id, { trigger : true });
+});
+$('#portlets-opportunities-model-list > tr').live('click', function(e) {
+	e.preventDefault();
+	App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
+	updateDeal($(this).data());
+});
+$('#portlets-events-model-list > tr').live('click', function(e){
+	App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
+	var id = $(this).find(".data").attr("data");
+	var model = $(this).data().collection.get(id);
+   	if(isNaN(id))
+   		return;
+   	// Deserialize
+   	deserializeForm(model.toJSON(), $("#updateActivityForm"));
+   	
+   	// Set time for update Event
+    $('#update-event-time-1').val((new Date(model.get('start')*1000).getHours() < 10 ? "0" : "") + new Date(model.get('start')*1000).getHours() + ":" + (new Date(model.get('start')*1000).getMinutes() < 10 ? "0" : "") +new Date(model.get('start')*1000).getMinutes());
+    $('#update-event-time-2').val((new Date(model.get('end')*1000).getHours() < 10 ? "0" : "") + new Date(model.get('end')*1000).getHours() + ":" + (new Date(model.get('end')*1000).getMinutes() < 10 ? "0" : "") + new Date(model.get('end')*1000).getMinutes());
+   
+ // Set date for update Event
+    var dateFormat = 'mm/dd/yyyy';
+    $("#update-event-date-1").val((new Date(model.get('start')*1000)).format(dateFormat));
+    $("#update-event-date-2").val((new Date(model.get('end')*1000)).format(dateFormat));
+    
+   	// hide end date & time for all day events
+    if(event.allDay)
+    {
+    	$("#update-event-date-2").closest('.row').hide();
+    	$('#update-event-time-1').closest('.control-group').hide();
+    }
+    else 
+    {
+    	$('#update-event-time-1').closest('.control-group').show();
+    	$("#update-event-date-2").closest('.row').show();
+    }
+   	
+ // Show edit modal for the event
+    $("#updateActivityModal").modal('show');
+   	return false;
+});
+$('#portlets-tasks-model-list > tr').live('click', function(e) {
+	App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
+	var value = $(this).data().toJSON();
+	deserializeForm(value, $("#updateTaskForm"));
+	$("#updateTaskModal").modal('show');
+	// Fills owner select element
+	populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner',
+			function(data) {
+				$("#updateTaskForm").find("#owners-list").html(data);
+				if (value.taskOwner) {
+					$("#owners-list", $("#updateTaskForm")).find(
+							'option[value=' + value['taskOwner'].id + ']')
+							.attr("selected", "selected");
+				}
+				$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+			});
+	
+	// Add notes in task modal
+	showNoteOnForm("updateTaskForm", value.notes);
+});
+/**
+ * Makes the pending task as completed by calling complete_task function
+ */
+$('.portlets-tasks-select').live('click', function(e) {
+			e.stopPropagation();
+			if ($(this).is(':checked')) {
+				// Complete
+				var taskId = $(this).attr('data');
+				//var itemListView = new Base_Collection_View({ data : Portlets_View.collection.get($(this).parents('.portlet_container').find('.portlets').attr('id')).get('tasksList'), templateKey : 'portlets-tasks', individual_tag_name : 'tr' });
+				// complete_task(taskId, $(this));
+				complete_task(taskId,tasksCollection.collection,$(this).closest('tr'));
+			}
+});
+function hidePortletErrors(ele){
+	if($('#'+ele.id).next().is(':visible'))
+		$('#'+ele.id).next().hide();
+}
+$('.portlet-settings').live('click',function(e){
+	e.preventDefault();
+	showPortletSettings(this.id);
+});var ReferelRouter = Backbone.Router.extend({
 
 	routes : {
 
@@ -26702,7 +30319,10 @@ var ReportsRouter = Backbone.Router.extend({
 	 */
 	reports : function()
 	{
-		$("#content").html(getTemplate('report-categories', {}));
+		var campaignsCollectionView = new Base_Collection_View({ url : '/core/api/workflows', templateKey : "report-categories",
+			individual_tag_name : 'tr',sort_collection : false});
+		campaignsCollectionView.collection.fetch();
+		$("#content").html(campaignsCollectionView.el);
 		$(".active").removeClass("active");
 		$("#reportsmenu").addClass("active");
 	},
@@ -27153,10 +30773,13 @@ var SettingsRouter = Backbone.Router.extend({
 			"imap" : "imap",
 			
 			/* Office prefs */
-			"office" : "office",			
+			"office" : "office",	
 
 			/* Social preferences */
 			"social-prefs" : "socialPrefs",
+			
+			/* Gmail share preferences */
+			"gmail/:id" : "gmailShare",
 
 			/* Email templates */
 			"email-templates" : "emailTemplates", "email-template-add" : "emailTemplateAdd", "email-template/:id" : "emailTemplateEdit",
@@ -27404,6 +31027,37 @@ var SettingsRouter = Backbone.Router.extend({
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-tab').addClass('active');
 		
+		
+		/**
+		 * Share imap settings with othe users
+		 */
+		$(".imap-share-settings-select").die().live('click', function(e)
+		{
+			e.preventDefault();
+			var el = $(this).closest("div");
+			$(this).css("display", "none");
+			el.find(".imap-share-settings-txt").css("display","none");
+			el.find(".imap-share-select").css("display", "inline");
+			var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
+			fillSelect('#imap-share-user-select', 'core/api/imap/shared-to-users', 'users', function fillNew()
+			{
+				$("#imap-share-user-select .default-select").remove();
+			}, optionsTemplate, false, el);
+		});
+
+		/**
+		 * To cancel the imap share settings event
+		 */
+		$(".imap-share-settings-cancel").die().live('click', function(e)
+		{
+			e.preventDefault();
+			var el = $(this).closest("div");
+			var name = $(this).attr('name');
+			el.find(".imap-share-select").css("display", "none");
+			el.find(".imap-share-settings-select").css("display", "inline");
+			el.find(".imap-share-settings-txt").css("display","inline");
+		});
+		
 	},
 	
 	/**
@@ -27435,7 +31089,105 @@ var SettingsRouter = Backbone.Router.extend({
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-tab').addClass('active');
 		
+		/**
+		 * Share office settings with other users
+		 */
+		$(".office-share-settings-select").die().live('click', function(e)
+		{
+			e.preventDefault();
+			var el = $(this).closest("div");
+			$(this).css("display", "none");
+			el.find(".office-share-settings-txt").css("display","none");
+			el.find(".office-share-select").css("display", "inline");
+			var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
+			fillSelect('#office-share-user-select', 'core/api/office/shared-to-users', 'users', function fillNew()
+			{
+				$("#office-share-user-select .default-select").remove();
+			}, optionsTemplate, false, el);
+		});
+
+		/**
+		 * To cancel the imap share settings event
+		 */
+		$(".office-share-settings-cancel").die().live('click', function(e)
+		{
+			e.preventDefault();
+			var el = $(this).closest("div");
+			var name = $(this).attr('name');
+			el.find(".office-share-select").css("display", "none");
+			el.find(".office-share-settings-select").css("display", "inline");
+			el.find(".office-share-settings-txt").css("display","inline");
+		});
+		
 	},
+	
+	/**
+	 * Gmail sharing settings
+	 */
+	gmailShare : function(id)
+	{
+		$("#content").html(getTemplate("settings"), {});
+
+		// Gets GMAIL Prefs
+		var gmailShareView = new Base_Model_View({ url : '/core/api/social-prefs/GMAIL', template : "settings-gmail-prefs-share", postRenderCallback : function(el)
+		{
+
+		}, saveCallback : function()
+		{
+			App_Settings.navigate("email", { trigger : true });
+			return;
+		} });
+
+		// Appends Gmail
+		$('#prefs-tabs-content').html(gmailShareView.render().el);
+		$('#PrefsTab .active').removeClass('active');
+		$('.email-tab').addClass('active');
+
+		/**
+		 * Share gmail settings
+		 */
+		$(".gmail-share-settings-select").die().live('click', function(e)
+		{
+			e.preventDefault();
+			var el = $(this).closest("div");
+			$(this).css("display", "none");
+			el.find(".gmail-share-select").css("display", "inline");
+			el.find(".gmail-share-settings-txt").css("display","none");
+			var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
+			fillSelect('#gmail-share-user-select', 'core/api/social-prefs/GMAIL/shared-to-users', 'users', function fillNew()
+			{
+				$("#gmail-share-user-select .default-select").remove();
+			}, optionsTemplate, false, el);
+		});
+
+		/**
+		 * To cancel the imap share settings event
+		 */
+		$(".gmail-share-settings-cancel").die().live('click', function(e)
+		{
+			e.preventDefault();
+			var el = $(this).closest("div");
+			var name = $(this).attr('name');
+			el.find(".gmail-share-select").css("display", "none");
+			el.find(".gmail-share-settings-select").css("display", "inline");
+			el.find(".gmail-share-settings-txt").css("display","inline");
+		});
+		
+		$("#share-gmail-prefs-btn").die().live('click', function(e)
+		{		
+			e.preventDefault();
+			var vals = [];
+			var model = gmailShareView.model;
+			$( '#gmail-share-user-select :selected' ).each( function( i, selected ) {
+				vals[i] = $( selected ).val();
+			});
+			model.set({ "shared_with_users_ids" : vals });
+			model.save({},{ url : '/core/api/social-prefs/GMAIL', success : function(){
+				Backbone.history.navigate("email" , { trigger : true });
+			}});
+		});
+	},
+
 
 	/**
 	 * Shows list of email templates, with an option to add new template
@@ -28690,6 +32442,203 @@ function canSendEmails(emails_to_send)
 	
 	return false;
 }
+var TaskDetailsRouter = Backbone.Router.extend({ routes : {
+'task/id':'taskDetails'
+},
+
+
+taskDetails:function(){
+				document.write("hello");
+				
+/*				
+				contactDetails : function(id, contact)
+				{
+
+					var contact_collection;
+
+					if (!contact && this.contactDetailView && this.contactDetailView.model != null)
+					{
+						//contact_collection = this.contactDetailView;
+
+						if (id == this.contactDetailView.model.toJSON()['id'])
+						{
+							App_Contacts.contactDetails(id, this.contactDetailView.model);
+							return;
+						}
+					}
+
+					// If user refreshes the contacts detail view page directly - we
+					// should load from the model
+					if (!contact)
+						if (!this.contactsListView || this.contactsListView.collection.length == 0 || this.contactsListView.collection.get(id) == null)
+						{
+
+							console.log("Downloading contact");
+
+							// Download
+							var contact_details_model = Backbone.Model.extend({ url : function()
+							{
+								return '/core/api/contacts/' + this.id;
+							} });
+
+							var model = new contact_details_model();
+							model.id = id;
+							model.fetch({ success : function(data)
+							{
+								
+								// Call Contact Details again
+								App_Contacts.contactDetails(id, model);
+
+							}, 
+							error: function(data, response)
+							{
+								if(response && response.status == '403')
+									$("#content").html(response.responseText);
+							}
+							});
+
+							return;
+						}
+
+					// If not downloaded fresh during refresh - read from collection
+					if (!contact)
+					{
+						// Set url to core/api/contacts (If filters are loaded
+						// contacts url is changed so set it back)
+
+						this.contactsListView.collection.url = "core/api/contacts";
+						contact = this.contactsListView.collection.get(id);
+						//contact_collection = this.contactsListView.collection;
+					}
+					
+					// Assigning contact collection
+					if(this.contactsListView && this.contactsListView.collection)
+						contact_collection = this.contactsListView.collection;
+
+					add_recent_view(contact);
+
+					// If contact is of type company , go to company details page
+					if (contact.get('type') == 'COMPANY')
+					{
+						this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "company-detail",
+							postRenderCallback : function(el)
+							{
+								fill_company_related_contacts(id, 'company-contacts');
+								// Clone contact model, to avoid render and
+								// post-render fell in to
+								// loop while changing attributes of contact
+								var recentViewedTime = new Backbone.Model();
+								recentViewedTime.url = "core/api/contacts/viewed-at/" + contact.get('id');
+								recentViewedTime.save();
+
+								if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.get(id))
+									App_Contacts.contactsListView.collection.get(id).attributes = contact.attributes;
+
+								starify(el);
+								show_map(el);
+								//fill_owners(el, contact.toJSON());
+								// loadWidgets(el, contact.toJSON());
+							} });
+
+						var el = this.contactDetailView.render(true).el;
+						$('#content').html(el);
+						fill_company_related_contacts(id, 'company-contacts');
+						return;
+					}
+
+					this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
+					{
+
+						
+						// Clone contact model, to avoid render and post-render fell
+						// in to
+						// loop while changing attributes of contact
+						if(canEditCurrentContact())
+						{
+							var recentViewedTime = new Backbone.Model();
+							recentViewedTime.url = "core/api/contacts/viewed-at/" + contact.get('id');
+							recentViewedTime.save();
+						}
+
+						if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.get(id))
+							App_Contacts.contactsListView.collection.get(id).attributes = contact.attributes;
+
+
+						load_contact_tab(el, contact.toJSON());
+
+						loadWidgets(el, contact.toJSON());
+						
+						
+						 * // To get QR code and download Vcard
+						 * $.get('/core/api/VCard/' + contact.toJSON().id,
+						 * function(data){ console.log("Vcard string");
+						 * console.log(data); var url =
+						 * 'https://chart.googleapis.com/chart?cht=qr&chs=180x180&chld=0&choe=UTF-8&chl=' +
+						 * encodeURIComponent(data); $("#qrcode", el).html('<img
+						 * src="' + url + '" id="qr_code" alt="QR Code"/>');
+						 * //$("#qrcode", el).html('<img
+						 * style="display:inline-block!important;" src="' + url + '"
+						 * id="qr_code" alt="QR Code" data="' + data + '"
+						 * onload="qr_load();"/>'); $("#qrcode", el).prepend('<span
+						 * style="padding: 8% 0%;margin-right: 2px;float:right;"
+						 * id="downloadify"></span>'); });
+						 
+
+						starify(el);
+
+						show_map(el);
+
+						// To navigate between contacts details
+						if (contact_collection != null)
+							contact_detail_view_navigation(id, contact_collection, el);
+
+						//fill_owners(el, contact.toJSON());
+						start_tour("contact-details", el);
+						
+						// For sip
+						if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
+						{
+							$(".contact-make-sip-call").show();
+							$(".contact-make-twilio-call").hide();
+							$(".contact-make-call").hide();
+						}
+						else if(Twilio_Start == true)
+						//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")			
+						{
+							$(".contact-make-sip-call").hide();
+							$(".contact-make-twilio-call").show();
+							$(".contact-make-call").hide();
+						}	
+						} });
+
+					var el = this.contactDetailView.render(true).el;
+
+					$('#content').html(el);
+					
+					// Check updates in the contact.
+					checkContactUpdated();
+					
+					// For sip
+					if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
+					{
+						$(".contact-make-sip-call").show();
+						$(".contact-make-twilio-call").hide();
+						$(".contact-make-call").hide();
+					}
+					//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")
+					else if(Twilio_Start == true)
+					{
+						$(".contact-make-sip-call").hide();
+						$(".contact-make-twilio-call").show();
+						$(".contact-make-call").hide();
+					}
+				},*/
+}
+
+
+
+
+});
 var VisitorsRouter = Backbone.Router.extend({
 
 routes : { "visitors" : "loadGmap" },
@@ -28728,6 +32677,35 @@ loadGmap : function()
 
 }
 
+});
+var VoiceMailRouter = Backbone.Router.extend({
+
+	routes : {
+	"voicemail" : "voicemail"
+	},
+
+	voicemail : function(){
+		$("#content").html(getTemplate("settings"), {});
+		$('#PrefsTab .active').removeClass('active');
+		$('.add-widget-prefs-tab').addClass('active');
+		
+		this.VoiceMailCollectionView = new Base_Collection_View({ url : 'core/api/voicemails', templateKey : "voice-mail", cursor : true, page_size : 20,
+			individual_tag_name : 'tr', postRenderCallback : function(el)
+			{
+				includeTimeAgo(el);
+			},
+			appendItemCallback : function(el)
+			{ 
+				// To show time ago for models appended by infinite scroll
+				includeTimeAgo(el);
+			} });
+		
+		this.VoiceMailCollectionView.collection.fetch();
+		console.log(this.VoiceMailCollectionView);
+		$('#prefs-tabs-content').html(this.VoiceMailCollectionView.render().el);
+//		alert("In voice mail");
+		
+	}
 });
 /**
  * Creates backbone router to access preferences of the user (email templates,
@@ -29579,7 +33557,7 @@ var WidgetsRouter = Backbone.Router
 																																'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Google <small>import Contacts from Google</small></h2><div class="span11 no-mg-l"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div>' + '<div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>' + '<div class="row-fluid prefs-datasync"><h2 class="widget-head">E-commerce <small>import Contacts from E-commerce</small></h2><div class="span11 no-mg-l"><div id ="shopify"></div></div></div>' +
 																												
 																																'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Payment <small>import Contacts from payment gateway</small></h2><div class="span11 no-mg-l"><div id ="stripe"></div></div></div>'+
-																																'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Accounting <small>import Contacts from Accounting</small></h2><div class="span11 no-mg-l"><div id ="freshbook"></div></div></div>'
+																																'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Accounting <small>import Contacts from Accounting</small></h2><div class="span11 no-mg-l"><div class="span4" id ="freshbook"></div><div class="span4" id ="quickbook"></div></div>'
 
 
 																								);
@@ -30157,11 +34135,11 @@ var WorkflowsRouter = Backbone.Router
 				// Render tabs
 				$('#campaign-analysis-tabs').html(getTemplate("campaign-analysis-tabs", { "id" : id }));
 
-				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
+//				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+//				{
+//					this.navigate("workflows", { trigger : true });
+//					return;
+//				}
 
 				/* Set the designer JSON. This will be deserialized */
 //				this.workflow_model = this.workflow_list_view.collection.get(id);
@@ -30238,11 +34216,11 @@ var WorkflowsRouter = Backbone.Router
 				// Render tabs with id
 				$('#campaign-analysis-tabs').html(getTemplate("campaign-analysis-tabs", { "id" : id }));
 
-				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
+//				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+//				{
+//					this.navigate("workflows", { trigger : true });
+//					return;
+//				}
 
 //				/* Set the designer JSON. This will be deserialized */
 //				this.workflow_model = this.workflow_list_view.collection.get(id);
@@ -30727,11 +34705,11 @@ var WorkflowsRouter = Backbone.Router
 				// Render tabs
 				$('#campaign-analysis-tabs').html(getTemplate("campaign-analysis-tabs", { "id" : id }));
 
-				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
+//				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+//				{
+//					this.navigate("workflows", { trigger : true });
+//					return;
+//				}
 
 				var all_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/all-subscribers/' + id,
 						'workflow-other-subscribers');
@@ -32257,9 +36235,7 @@ $(function()
 		e.preventDefault();
 		email_server_type = "agilecrm"
 		save_contact_tab_position_in_cookie("mail");
-		var mail_server_url = 'core/api/emails/agile-emails?e=';
-		contact_details_tab.load_mail_accounts();
-		contact_details_tab.load_mail(mail_server_url);
+		contact_details_tab.load_mail();
 	});
 
 	/**
@@ -32299,6 +36275,8 @@ $(function()
 		$('#email-type-select').html($(this).html());
 		var url = $(this).attr('data-url');
 		email_server_type = $(this).attr('email-server-type');
+		if(url)
+			url = url.concat(email_server_type);
 		contact_details_tab.load_mail(url);
 	});
 
@@ -32515,20 +36493,17 @@ $(function()
 				var cc_emails = $parent_element.find('.cc-emails').data('cc');
 				var bcc_emails = $parent_element.find('.bcc-emails').data('bcc');
 
-				var email_sync_configured = contact_details_tab.email_sync_configured;
+				var email_sync_configured = contact_details_tab.configured_sync_email;
+
 				var configured_email;
 
 				if (email_sync_configured)
 				{
-					if (email_sync_configured["type"])
-						configured_email = email_sync_configured["email"];
-					else
-						configured_email = email_sync_configured["user_name"];
+					configured_email = email_sync_configured;
 				}
 
 				if (configured_email && to_emails)
 				{
-
 					// Merge both from and to removing configured email
 					to_emails = get_emails_to_reply(from + ', ' + to_emails, configured_email);
 				}
@@ -34740,9 +38715,15 @@ var contact_details_tab = {
 		},
 		load_mail_accounts : function()
 		{
+			var contact_details_tab_scope = this;
 			var mailAccountsView = new Base_Model_View({ url : 'core/api/emails/synced-accounts', template : "email-account-types",
 				postRenderCallback : function(el)
 				{
+//					var model = mailAccountsView.model.toJSON();
+//					if(model.hasEmailAccountsConfigured)
+//						contact_details_tab_scope.email_sync_configured = true;
+//					else
+//						contact_details_tab_scope.email_sync_configured = false;
 				} });
 
 			$('#mail-account-types', App_Contacts.contactDetailView.el).html(mailAccountsView.render().el);
@@ -34751,21 +38732,27 @@ var contact_details_tab = {
 		{
 			var contact = App_Contacts.contactDetailView.model;
 			var json = contact.toJSON();
-			this.email_sync_configured = {};
+			this.configured_sync_email = "";
 			var cursor = true;
-
+		
 			// Get email of the contact in contact detail
 			var email = getAllPropertyValuesByName(json.properties, "email", ",");
-
+		
 			// By default showing Agile emails
 			if (!mail_server_url)
 			{
 				this.load_mail_accounts();
-				mail_server_url = 'core/api/emails/agile-emails?e=';
+				mail_server_url = 'core/api/emails/agile-emails?e='+encodeURIComponent(email);
 				email_server_type = "agilecrm";
 				cursor = false;
 			}
-
+			else
+			{
+				mail_server_url = mail_server_url + '&search_email='+encodeURIComponent(email);
+			}
+		
+			var contact_details_tab_scope = this;
+			
 			// Shows an error alert, when there is no email to the contact
 			if (!email)
 			{
@@ -34774,13 +38761,11 @@ var contact_details_tab = {
 								'<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the mails.</div>');
 				return;
 			}
-
-			var contact_details_tab_scope = this;
-
+		
 			$('#email-type-select-dropdown').attr('disabled', 'disabled');
-
+		
 			// Fetches mails collection
-			var mailsView = new Base_Collection_View({ url : mail_server_url + encodeURIComponent(email), cursor : cursor, page_size : 10,
+			var mailsView = new Base_Collection_View({ url : mail_server_url , cursor : cursor, page_size : 10,
 				templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 				postRenderCallback : function(el)
 				{
@@ -34789,7 +38774,7 @@ var contact_details_tab = {
 					{
 						$(".email-sent-time", el).each(function(index, element)
 						{
-
+		
 							// console.log("before :" + $(element).html())
 							// console.log("converted manually" +
 							// jQuery.timeago($(element).html()));
@@ -34797,7 +38782,10 @@ var contact_details_tab = {
 							// console.log($(element).html())
 						});
 					});
-
+					
+					if(email_server_type!="agilecrm")
+						contact_details_tab_scope.configured_sync_email = email_server_type;
+					
 					var gmail;
 					queueGetRequest('email_prefs_queue', '/core/api/social-prefs/GMAIL', 'json', function(data)
 					{
@@ -34813,21 +38801,12 @@ var contact_details_tab = {
 
 					queueGetRequest('email_prefs_queue', '/core/api/office', 'json', function(office_exchange)
 					{
-
-						// contact_details_tab_scope.email_sync_configured is used
-						// in
-						if (gmail)
-							contact_details_tab_scope.email_sync_configured = gmail;
-						else if (imap)
-							contact_details_tab_scope.email_sync_configured = imap;
-						else if (office_exchange)
-							contact_details_tab_scope.email_sync_configured = office_exchange;
-
 						if (!imap && !office_exchange && !gmail)
-							$('#email-prefs-verification', el).css('display', 'block');
+							$('#email-prefs-verification', el).css('display', 'block');					
 					});
-				} });
-
+				}
+			});
+		
 			mailsView.collection.fetch();
 			$('#mails', App_Contacts.contactDetailView.el).html(mailsView.render().el);
 		},
@@ -35574,7 +39553,10 @@ $(function(){
 		var id = $(this).attr('data');
 		var value = tasksView.collection.get(id).toJSON();
 		deserializeForm(value, $("#updateTaskForm"));
+		
     	$("#updateTaskModal").modal('show');
+    	
+    	$('.update-task-timepicker').val(fillTimePicker(value.due));
 		// Fills owner select element
 		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data){
 			$("#updateTaskForm").find("#owners-list").html(data);
@@ -35595,6 +39577,9 @@ $(function(){
 		var value = eventsView.collection.get(id).toJSON();
 		deserializeForm(value, $("#updateActivityForm"));
     	$("#updateActivityModal").modal('show');
+    	$('.update-start-timepicker').val(fillTimePicker(value.start));
+
+		$('.update-end-timepicker').val(fillTimePicker(value.end));
 	});
 	
 	$(".complete-task").die().live('click', function(e){
@@ -36033,13 +40018,21 @@ $(function() {
 	});
 
 	/**
-	 * Hide event of update task modal. Removes the relatedTo field elements if
-	 * any, when the modal is hidden in order to not to show them again when the
-	 * modal is shown next
-	 * 
+	 * initialises task time picker
 	 */
+	
+	$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false, template : 'modal' });
+	$('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false, template : 'modal' });
+	
+	
+	
 	$('#updateTaskModal').on('hidden', function() {
 
+		if ($(this).hasClass('in'))
+		{
+			return;
+		}
+		
 		$("#updateTaskForm").find("li").remove();
 		
 		resetForm($("#updateTaskForm"));
@@ -36081,6 +40074,9 @@ $(function() {
 		var value = $(ele).data().toJSON();
 		deserializeForm(value, $("#updateTaskForm"));
 		$("#updateTaskModal").modal('show');
+		
+		$('.update-task-timepicker').val(fillTimePicker(value.due));
+
 		// Fills owner select element
 		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner',
 				function(data) {
@@ -36145,6 +40141,12 @@ function highlight_task() {
 	$('input.date').val(new Date().format('mm/dd/yyyy')).datepicker('update');
 }
 
+
+
+
+
+
+
 /**
  * Creates or updates a task and adds the saved object to the suitable
  * collection by verifying the current window location.
@@ -36184,6 +40186,9 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 	if (!isUpdate)
 		json.due = new Date(json.due).getTime();
 	
+	var startarray = (json.task_ending_time).split(":");
+	json.due = new Date((json.due) * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
+	
 	var newTask = new Backbone.Model();
 	newTask.url = 'core/api/tasks';
 	newTask.save(json, {
@@ -36200,6 +40205,9 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 			$('#' + modalId).modal('hide');
 
 			var task = data.toJSON();
+			
+			
+			
 			if (Current_Route == 'calendar') {
 				if (isUpdate)
 					App_Calendar.tasksListView.collection.remove(json);
@@ -36278,6 +40286,15 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 						return false;
 					}
 				});
+			} else if (App_Portlets.currentPosition && App_Portlets.tasksCollection && App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)] && Current_Route == 'portlets') {
+				if (isUpdate)
+					App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+				// Updates task list view
+				App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+				App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)].render(true);
+
 			} else {
 				App_Calendar.navigate("calendar", {
 					trigger : true
@@ -36473,6 +40490,8 @@ function complete_task(taskId, collection, ui, callback) {
 		success : function(model, response) {
 			collection.remove(model);
 
+			var due_task_count=getDueTasksCount();
+			$('#due_tasks_count').html(due_task_count);
 			if (ui)
 				ui.fadeOut(2000);
 
@@ -36496,6 +40515,18 @@ function complete_task(taskId, collection, ui, callback) {
 	 */
 
 }
+
+
+
+function getDueTasksCount(){
+	var msg = $.ajax({ type : "GET", url :'core/api/tasks/overdue/uptotoday', async : false, dataType : 'json' }).responseText;
+
+	if(!isNaN(msg)){
+		return msg;
+	}
+return 0;
+}
+
 function includeTimeAgo(element){
 	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 			{
@@ -36723,6 +40754,9 @@ function update_event_activity(ele)
 	var value = JSON.parse(ele);
 	deserializeForm(value, $("#updateActivityForm"));
 	$("#updateActivityModal").modal('show');
+	$('.update-start-timepicker').val(fillTimePicker(value.start));
+
+	$('.update-end-timepicker').val(fillTimePicker(value.end));
 
 }
 
@@ -36913,9 +40947,14 @@ $(function() {
 	/**
 	 * Removes appended contacts from related-to field of task form and
 	 * validation error messages if any.
+	 * when timepicker editing it will be return
 	 */
 	$('#activityModal').on('hidden', function(e) {
 
+		if ($(this).hasClass('in'))
+		{
+			return;
+		}
 		// Remove appended contacts from related-to
 		$("#taskForm").find("li").remove();
 
@@ -36983,269 +41022,274 @@ $(function() {
 $(function()
 {
 
-				/**
-				 * Shows activity modal, and highlights the event form features (Shows event
-				 * form and hides task form, changes color and font-weight)
-				 * 
-				 */
-				$('#show-activity').live('click', function(e)
-				{
-								e.preventDefault();
-								highlight_event();
+	/**
+	 * Shows activity modal, and highlights the event form features (Shows event
+	 * form and hides task form, changes color and font-weight)
+	 * 
+	 */
+	$('#show-activity').live('click', function(e)
+	{
+		e.preventDefault();
+		highlight_event();
 
-								$("#activityModal").modal('show');
-				});
+		$("#activityModal").modal('show');
+	});
 
-				/**
-				 * Shows the event form fields in activity modal
-				 */
-				$(".add-event").live('click', function(e)
-				{
-								e.preventDefault();
+	/**
+	 * Shows the event form fields in activity modal
+	 */
+	$(".add-event").live('click', function(e)
+	{
+		e.preventDefault();
 
-								$('#activityModal').modal('show');
-								highlight_event();
+		$('#activityModal').modal('show');
+		highlight_event();
 
-								/*
-								 * $('#task-date-1').val(new Date().format('mm/dd/yyyy'));
-								 * $("#event-date-1").val(new Date().format('mm/dd/yyyy'));
-								 * $("#event-date-2").val(new Date().format('mm/dd/yyyy'));
-								 */
+		/*
+		 * $('#task-date-1').val(new Date().format('mm/dd/yyyy'));
+		 * $("#event-date-1").val(new Date().format('mm/dd/yyyy'));
+		 * $("#event-date-2").val(new Date().format('mm/dd/yyyy'));
+		 */
 
-								return;
-				});
+		return;
+	});
 
-				/**
-				 * When clicked on update button of event-update-modal, the event will get
-				 * updated by calling save_event function
-				 * 
-				 */
-				$('#update_event_validate').die().live('click', function(e)
-				{
-								e.preventDefault();
-								var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
-								save_event('updateActivityForm', 'updateActivityModal', true, this, function(data)
-								{
-												console.log(data);
-												var eventModel = eventCollectionView.collection.get(eventId);
-												eventModel.set(data.toJSON(), { merge : true });
-												eventCollectionView.render(true);
-								});
+	/**
+	 * When clicked on update button of event-update-modal, the event will get
+	 * updated by calling save_event function
+	 * 
+	 */
+	$('#update_event_validate').die().live('click', function(e)
+	{
+		e.preventDefault();
+		var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
+		save_event('updateActivityForm', 'updateActivityModal', true, this, function(data)
+		{
+			console.log(data);
+			var eventModel = eventCollectionView.collection.get(eventId);
+			eventModel.set(data.toJSON(), { merge : true });
+			eventCollectionView.render(true);
+		});
 
-				});
+	});
 
-				/**
-				 * Deletes an event from calendar by calling ajax DELETE request with an
-				 * appropriate url
-				 */
-				$('#event_delete').die().live('click', function(e)
-				{
-								e.preventDefault();
+	/**
+	 * Deletes an event from calendar by calling ajax DELETE request with an
+	 * appropriate url
+	 */
+	$('#event_delete').die().live('click', function(e)
+	{
+		e.preventDefault();
 
-								if ($(this).attr('disabled') == 'disabled')
-												return;
+		if ($(this).attr('disabled') == 'disabled')
+			return;
 
-								/**
-								 * Confirmation alert to delete an event
-								 */
-								if (!confirm("Are you sure you want to delete?"))
-												return;
+		/**
+		 * Confirmation alert to delete an event
+		 */
+		if (!confirm("Are you sure you want to delete?"))
+			return;
 
-								var event_id = $('#updateActivityForm input[name=id]').val();
-								var save_button = $(this);
+		var event_id = $('#updateActivityForm input[name=id]').val();
+		var save_button = $(this);
 
-								disable_save_button(save_button);
-								/**
-								 * Shows loading symbol until model get saved
-								 */
-								// $('#updateActivityModal').find('span.save-status').html(getRandomLoadingImg());
-								$.ajax({ url : 'core/api/events/' + event_id, type : 'DELETE', success : function()
-								{
+		disable_save_button(save_button);
+		/**
+		 * Shows loading symbol until model get saved
+		 */
+		// $('#updateActivityModal').find('span.save-status').html(getRandomLoadingImg());
+		$.ajax({ url : 'core/api/events/' + event_id, type : 'DELETE', success : function()
+		{
 
-												// $('#updateActivityModal').find('span.save-status img').remove();
-												enable_save_button(save_button);
-												$("#updateActivityModal").modal('hide');
+			// $('#updateActivityModal').find('span.save-status img').remove();
+			enable_save_button(save_button);
+			$("#updateActivityModal").modal('hide');
 
-												var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
-												$('#calendar_event').fullCalendar('removeEvents', eventId);
-								} });
-								if (readCookie("agile_calendar_view"))
-								{
-												var eventModel = eventCollectionView.collection.get(event_id);
-												eventModel.set(eventModel, { remove : true });
-												document.location.reload();
+			var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
+			$('#calendar_event').fullCalendar('removeEvents', eventId);
+		} });
+		if (readCookie("agile_calendar_view"))
+		{
+			var eventModel = eventCollectionView.collection.get(event_id);
+			eventModel.set(eventModel, { remove : true });
+			document.location.reload();
 
-								}
+		}
 
-				});
+	});
 
-				/**
-				 * Activates the date picker to the corresponding fields in activity modal
-				 * and activity-update modal
-				 */
-				var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev)
-				{
-								// If event start date is changed and end date is less than start date,
-								// change the value of the end date to start date.
-								var eventDate2 = new Date($('#event-date-2').val());
-								if (ev.date.valueOf() > eventDate2.valueOf())
-								{
-												$('#event-date-2').val($('#event-date-1').val());
-								}
+	/**
+	 * Activates the date picker to the corresponding fields in activity modal
+	 * and activity-update modal
+	 */
+	var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev)
+	{
+		// If event start date is changed and end date is less than start date,
+		// change the value of the end date to start date.
+		var eventDate2 = new Date($('#event-date-2').val());
+		if (ev.date.valueOf() > eventDate2.valueOf())
+		{
+			$('#event-date-2').val($('#event-date-1').val());
+		}
 
-				});
+	});
 
-				$('#event-date-2').datepicker({ format : 'mm/dd/yyyy' });
-				$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev)
-				{
-								// If event start date is changed and end date is less than start date,
-								// change the value of the end date to start date.
-								var eventDate2 = new Date($('#update-event-date-2').val());
-								if (ev.date.valueOf() > eventDate2.valueOf())
-								{
-												$('#update-event-date-2').val($('#update-event-date-1').val());
-								}
+	$('#event-date-2').datepicker({ format : 'mm/dd/yyyy' });
+	$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev)
+	{
+		// If event start date is changed and end date is less than start date,
+		// change the value of the end date to start date.
+		var eventDate2 = new Date($('#update-event-date-2').val());
+		if (ev.date.valueOf() > eventDate2.valueOf())
+		{
+			$('#update-event-date-2').val($('#update-event-date-1').val());
+		}
 
-				});
-				$('#update-event-date-2').datepicker({ format : 'mm/dd/yyyy' });
+	});
+	$('#update-event-date-2').datepicker({ format : 'mm/dd/yyyy' });
 
-				/**
-				 * Activates time picker for start time to the fields with class
-				 * start-timepicker
-				 */
-				$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' }).on('hide.timepicker', function(e)
-				{
+	/**
+	 * Activates time picker for start time to the fields with class
+	 * start-timepicker
+	 */
+	$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' }).on('hide.timepicker', function(e)
+	{
 
-								if ($('#activityModal #allDay').is(':checked'))
-								{
-												$('#event-time-1').closest('.control-group').hide();
-												$('#event-date-2').closest('.row').hide();
-								}
+		if ($('#activityModal #allDay').is(':checked'))
+		{
+			$('#event-time-1').closest('.control-group').hide();
+			$('#event-date-2').closest('.row').hide();
+		}
 
-								e.stopImmediatePropagation();
-								return false;
-				});
+		e.stopImmediatePropagation();
+		return false;
+	});
 
-				/**
-				 * Activates time picker for end time to the fields with class
-				 * end-timepicker
-				 */
-				$('.end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false, template : 'modal' });
+	/**
+	 * Activates time picker for end time to the fields with class
+	 * end-timepicker
+	 */
+	$('.end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false, template : 'modal' });
 
-				/**
-				 * Activates time picker for start time to the fields with class
-				 * update-start-timepicker
-				 */
-				$('.update-start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' });
+	/**
+	 * Activates time picker for start time to the fields with class
+	 * update-start-timepicker
+	 */
+	$('.update-start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' });
 
-				/**
-				 * Activates time picker for end time to the fields with class
-				 * update-end-timepicker
-				 */
-				$('.update-end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false, template : 'modal' });
+	/**
+	 * Activates time picker for end time to the fields with class
+	 * update-end-timepicker
+	 */
+	$('.update-end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false, template : 'modal' });
 
-				/**
-				 * Sets the start time with current time and end time half an hour more than
-				 * start time, when they have no values by the time the modal is shown.
-				 */
-				$('#activityModal').on('shown', function()
-				{
-								// Show related to contacts list
-								var el = $("#activityForm");
-								agile_type_ahead("event_related_to", el, contacts_typeahead);
+	/**
+	 * Sets the start time with current time and end time half an hour more than
+	 * start time, when they have no values by the time the modal is shown.
+	 */
+	$('#activityModal').on('shown', function()
+	{
+		// Show related to contacts list
+		var el = $("#activityForm");
+		agile_type_ahead("event_related_to", el, contacts_typeahead);
 
-								/**
-								 * Fills current time only when there is no time in the fields
-								 */
-								if ($('.start-timepicker').val() == '')
-												$('.start-timepicker').val(get_hh_mm());
+		/**
+		 * Fills current time only when there is no time in the fields
+		 */
+		if ($('.start-timepicker').val() == '')
+			$('.start-timepicker').val(get_hh_mm());
 
-								if ($('.end-timepicker').val() == '')
-												$('.end-timepicker').val(get_hh_mm(true));
+		if ($('.end-timepicker').val() == '')
+			$('.end-timepicker').val(get_hh_mm(true));
+		//sets the time in time picker if it is empty
+		if ($('.new-task-timepicker').val() == '')
+			$('.new-task-timepicker').val("12:00");
+		// Update will highlight the date of in date picker
+		$("input.date").datepicker('update');
 
-								// Update will highlight the date of in date picker
-								$("input.date").datepicker('update');
+	});
 
-				});
+	/**
+	 * To avoid showing previous errors of the modal.
+	 */
+	$('#updateActivityModal').on('show', function()
+	{
+		// Show related to contacts list
+		var el = $("#updateActivityForm");
+		agile_type_ahead("event_related_to", el, contacts_typeahead);
 
-				/**
-				 * To avoid showing previous errors of the modal.
-				 */
-				$('#updateActivityModal').on('show', function()
-				{
-								// Show related to contacts list
-								var el = $("#updateActivityForm");
-								agile_type_ahead("event_related_to", el, contacts_typeahead);
+		if ($('#updateActivityModal #allDay').is(':checked'))
+		{
+			$('#update-event-time-1').closest('.control-group').hide();
+			$('#update-event-date-2').closest('.row').hide();
+		}
 
-								if ($('#updateActivityModal #allDay').is(':checked'))
-								{
-												$('#update-event-time-1').closest('.control-group').hide();
-												$('#update-event-date-2').closest('.row').hide();
-								}
+		// Removes alert message of error related date and time.
+		$('#' + this.id).find('.alert').css('display', 'none');
 
-								// Removes alert message of error related date and time.
-								$('#' + this.id).find('.alert').css('display', 'none');
+		// Removes error class of input fields
+		$('#' + this.id).find('.error').removeClass('error');
 
-								// Removes error class of input fields
-								$('#' + this.id).find('.error').removeClass('error');
+		$("input.date").datepicker('update');
 
-								$("input.date").datepicker('update');
+	});
 
-				});
+	/**
+	 * To avoid showing previous errors of the modal.
+	 */
+	$('#activityModal').on('show', function(e)
+	{
 
-				/**
-				 * To avoid showing previous errors of the modal.
-				 */
-				$('#activityModal').on('show', function(e)
-				{
+		// Removes alert message of error related date and time.
+		$('#' + this.id).find('.alert').css('display', 'none');
 
-								// Removes alert message of error related date and time.
-								$('#' + this.id).find('.alert').css('display', 'none');
+		// Removes error class of input fields
+		$('#' + this.id).find('.error').removeClass('error');
 
-								// Removes error class of input fields
-								$('#' + this.id).find('.error').removeClass('error');
+	});
 
-				});
+	/**
+	 * Hide event of update task modal. Removes the relatedTo field elements if
+	 * any, when the modal is hidden in order to not to show them again when the
+	 * modal is shown next
+	 * 
+	 */
+	$('#updateActivityModal').on('hidden', function()
+	{
+		if ($(this).hasClass('in'))
+		{
+			return;
+		}
 
-				/**
-				 * Hide event of update task modal. Removes the relatedTo field elements if
-				 * any, when the modal is hidden in order to not to show them again when the
-				 * modal is shown next
-				 * 
-				 */
-				$('#updateActivityModal').on('hidden', function()
-				{
-								if ($(this).hasClass('in'))
-								{
-												return;
-								}
+		$("#updateActivityForm").find("li").remove();
+		$('#update-event-time-1').closest('.control-group').show();
+		$('#update-event-date-2').closest('.row').show();
+	});
+	$('#activityModal').on('hidden', function()
+	{
 
-								$("#updateActivityForm").find("li").remove();
-								$('#update-event-time-1').closest('.control-group').show();
-								$('#update-event-date-2').closest('.row').show();
-				});
-				$('#activityModal').on('hidden', function()
-				{
+		if ($(this).hasClass('in'))
+		{
+			return;
+		}
 
-								if ($(this).hasClass('in'))
-								{
-												return;
-								}
-
-								$("#activityForm").find("li").remove();
-								$('#event-time-1').closest('.control-group').show();
-								$('#event-date-2').closest('.row').show();
-				});
-
-				/**
-				 * Highlights the event features (Shows event form and hides task form,
-				 * changing color and font-weight)
-				 */
-				$("#event").live('click', function(e)
-				{
-								e.preventDefault();
-								highlight_event();
-				});
+		$("#activityForm").find("li").remove();
+		$('#event-time-1').closest('.control-group').show();
+		$('#event-date-2').closest('.row').show();
+		
+	});
+	
+	
+	
+	/**
+	 * Highlights the event features (Shows event form and hides task form,
+	 * changing color and font-weight)
+	 */
+	$("#event").live('click', function(e)
+	{
+		e.preventDefault();
+		highlight_event();
+	});
 
 });
 
@@ -37255,18 +41299,18 @@ $(function()
  */
 function highlight_event()
 {
-				$("#hiddentask").val("event");
-				$("#event").css({ "color" : "black" });
-				$("#task").css({ "color" : "red" });
-				$("#relatedTask").css("display", "none");
-				$("#relatedEvent").css("display", "block");
+	$("#hiddentask").val("event");
+	$("#event").css({ "color" : "black" });
+	$("#task").css({ "color" : "red" });
+	$("#relatedTask").css("display", "none");
+	$("#relatedEvent").css("display", "block");
 
-				if ($("#taskForm").find("#task_related_to").closest(".controls").find("ul").children())
-								$("#activityForm").find("#event_related_to").closest(".controls").find("ul").html(
-																$("#taskForm").find("#task_related_to").closest(".controls").find("ul").children());
+	if ($("#taskForm").find("#task_related_to").closest(".controls").find("ul").children())
+		$("#activityForm").find("#event_related_to").closest(".controls").find("ul").html(
+				$("#taskForm").find("#task_related_to").closest(".controls").find("ul").children());
 
-				// Date().format('mm/dd/yyyy'));
-				$('input.date').val(new Date().format('mm/dd/yyyy'));
+	// Date().format('mm/dd/yyyy'));
+	$('input.date').val(new Date().format('mm/dd/yyyy'));
 }
 
 /**
@@ -37276,51 +41320,51 @@ function highlight_event()
  * 
  * @method is_valid_range
  * @param {Number}
- *         startDate start date of an event
+ *            startDate start date of an event
  * @param {Number}
- *         endDate end date of an event
+ *            endDate end date of an event
  * @param {Number}
- *         startTime start time of an event
+ *            startTime start time of an event
  * @param {Number}
- *         endTime end time of an event
+ *            endTime end time of an event
  * @param {String}
- *         modalId the unique id for the modal to identify it
+ *            modalId the unique id for the modal to identify it
  */
 function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 {
-				if (endDate - startDate >= 86400000)
-				{
-								return true;
-				}
-				else if (startDate > endDate)
-				{
-								$('#' + modalName)
-																.find(".invalid-range")
-																.html(
-																								'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date. Please change.</div>');
+	if (endDate - startDate >= 86400000)
+	{
+		return true;
+	}
+	else if (startDate > endDate)
+	{
+		$('#' + modalName)
+				.find(".invalid-range")
+				.html(
+						'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date. Please change.</div>');
 
-								return false;
-				}
-				else if (startTime[0] > endTime[0])
-				{
-								$('#' + modalName)
-																.find(".invalid-range")
-																.html(
-																								'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater than end time. Please change.</div>');
+		return false;
+	}
+	else if (startTime[0] > endTime[0])
+	{
+		$('#' + modalName)
+				.find(".invalid-range")
+				.html(
+						'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater than end time. Please change.</div>');
 
-								return false;
-				}
-				else if (startTime[0] == endTime[0] && startTime[1] >= endTime[1])
-				{
-								$('#' + modalName)
-																.find(".invalid-range")
-																.html(
-																								'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater or equal to end time. Please change.</div>');
+		return false;
+	}
+	else if (startTime[0] == endTime[0] && startTime[1] >= endTime[1])
+	{
+		$('#' + modalName)
+				.find(".invalid-range")
+				.html(
+						'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater or equal to end time. Please change.</div>');
 
-								return false;
-				}
-				else
-								return true;
+		return false;
+	}
+	else
+		return true;
 }
 
 // Save event
@@ -37331,149 +41375,159 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
  * 
  * @method save_event
  * @param {String}
- *         formId the unique id for the form to identify it
+ *            formId the unique id for the form to identify it
  * @param {String}
- *         modalId the unique id for the modal to identify it
+ *            modalId the unique id for the modal to identify it
  * @param {Boolean}
- *         isUpdate the boolean value to identify weather saving the new one or
- *         updating the existing one
+ *            isUpdate the boolean value to identify weather saving the new one
+ *            or updating the existing one
  * 
  */
 function save_event(formId, modalName, isUpdate, saveBtn, callback)
 {
 
-				// Returns, if the save button has disabled attribute
-				if ($(saveBtn).attr('disabled'))
-								return;
+	// Returns, if the save button has disabled attribute
+	if ($(saveBtn).attr('disabled'))
+		return;
 
-				// Disables save button to prevent multiple click event issues
-				disable_save_button($(saveBtn));
+	// Disables save button to prevent multiple click event issues
+	disable_save_button($(saveBtn));
 
-				// Save functionality for event
-				if (!isValidForm('#' + formId))
+	// Save functionality for event
+	if (!isValidForm('#' + formId))
+	{
+
+		// Removes disabled attribute of save button
+		enable_save_button($(saveBtn));
+		return false;
+
+	}
+
+	var json = serializeForm(formId);
+
+	if (json.allDay)
+	{
+		json.end = json.start;
+		json.start_time = "00:00";
+		json.end_time = "23:45";
+	}// for all day, assume ending in last of that day.
+
+	// For validation
+	if (!is_valid_range(json.start * 1000, json.end * 1000, (json.start_time).split(":"), (json.end_time).split(":"), modalName))
+	{
+
+		// Removes disabled attribute of save button
+		enable_save_button($(saveBtn));
+		return;
+	}
+
+	// Show loading symbol until model get saved
+	// $('#' + modalName).find('span.save-status').html(getRandomLoadingImg());
+
+	// Appending start time to start date
+	var startarray = (json.start_time).split(":");
+	json.start = new Date(json.start * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
+
+	// Appending end time to end date
+	var endarray = (json.end_time).split(":");
+	json.end = new Date(json.end * 1000).setHours(endarray[0], endarray[1]) / 1000.0;
+
+	$('#' + modalName).modal('hide');
+
+	$('#' + formId).each(function()
+	{
+		this.reset();
+	});
+
+	// Deleting start_time and end_time from json
+	delete json.start_time;
+	delete json.end_time;
+
+	var eventModel = new Backbone.Model();
+	eventModel.url = 'core/api/events';
+	eventModel.save(json, { success : function(data)
+	{
+
+		// Removes disabled attribute of save button
+		enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
+
+		$('#' + formId).each(function()
+		{
+			this.reset();
+		});
+
+		// $('#' + modalName).find('span.save-status img').remove();
+		$('#' + modalName).modal('hide');
+
+		// $('#calendar').fullCalendar( 'refetchEvents' );
+		var event = data.toJSON();
+		if (Current_Route == 'calendar' && !readCookie("agile_calendar_view"))
+		{
+
+			// When updating an event remove the old event from fullCalendar
+			if (isUpdate)
+
+				$('#calendar_event').fullCalendar('removeEvents', json.id);
+
+			$('#calendar_event').fullCalendar('renderEvent', data.toJSON());
+		}
+		// Updates data to temeline
+		else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+		{
+
+			/*
+			 * Verifies whether the added task is related to the contact in
+			 * contact detail view or not
+			 */
+			$.each(event.contacts, function(index, contact)
+			{
+				if (contact.id == App_Contacts.contactDetailView.model.get('id'))
 				{
 
-								// Removes disabled attribute of save button
-								enable_save_button($(saveBtn));
-								return false;
+					// Add model to collection. Disabled sort while adding and
+					// called
+					// sort explicitly, as sort is not working when it is called
+					// by add
+					// function
+					if (eventsView && eventsView.collection)
+					{
+						if (eventsView.collection.get(data.id))
+						{
+							eventsView.collection.get(data.id).set(new BaseModel(data));
+						}
+						else
+						{
+							eventsView.collection.add(new BaseModel(data), { sort : false });
+							eventsView.collection.sort();
+						}
+					}
 
+					// Activates "Timeline" tab and its tab content in
+					// contact detail view
+					// activate_timeline_tab();
+					// add_entity_to_timeline(data);
+
+					return false;
 				}
 
-				var json = serializeForm(formId);
+			});
+		}else if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && Current_Route == 'portlets') 
+		{
+			if (isUpdate)
+				App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);
 
-				if (json.allDay)
-				{
-								json.end = json.start;
-								json.start_time = "00:00";
-								json.end_time = "23:45";
-				}// for all day, assume ending in last of that day.
+			// Updates events list view
+			App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.add(data);
 
-				// For validation
-				if (!is_valid_range(json.start * 1000, json.end * 1000, (json.start_time).split(":"), (json.end_time).split(":"), modalName))
-				{
+			App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
 
-								// Removes disabled attribute of save button
-								enable_save_button($(saveBtn));
-								return;
-				}
+		}
+		else
+			App_Calendar.navigate("calendar", { trigger : true });
 
-				// Show loading symbol until model get saved
-				// $('#' + modalName).find('span.save-status').html(getRandomLoadingImg());
-
-				// Appending start time to start date
-				var startarray = (json.start_time).split(":");
-				json.start = new Date(json.start * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
-
-				// Appending end time to end date
-				var endarray = (json.end_time).split(":");
-				json.end = new Date(json.end * 1000).setHours(endarray[0], endarray[1]) / 1000.0;
-
-				$('#' + modalName).modal('hide');
-
-				$('#' + formId).each(function()
-				{
-								this.reset();
-				});
-
-				// Deleting start_time and end_time from json
-				delete json.start_time;
-				delete json.end_time;
-
-				var eventModel = new Backbone.Model();
-				eventModel.url = 'core/api/events';
-				eventModel.save(json, { success : function(data)
-				{
-
-								// Removes disabled attribute of save button
-								enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
-
-								$('#' + formId).each(function()
-								{
-												this.reset();
-								});
-
-								// $('#' + modalName).find('span.save-status img').remove();
-								$('#' + modalName).modal('hide');
-
-								// $('#calendar').fullCalendar( 'refetchEvents' );
-								var event = data.toJSON();
-								if (Current_Route == 'calendar' && !readCookie("agile_calendar_view"))
-								{
-
-												// When updating an event remove the old event from fullCalendar
-												if (isUpdate)
-
-																$('#calendar_event').fullCalendar('removeEvents', json.id);
-
-												$('#calendar_event').fullCalendar('renderEvent', data.toJSON());
-								}
-								// Updates data to temeline
-								else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
-								{
-
-												/*
-												 * Verifies whether the added task is related to the contact in
-												 * contact detail view or not
-												 */
-												$.each(event.contacts, function(index, contact)
-												{
-																if (contact.id == App_Contacts.contactDetailView.model.get('id'))
-																{
-
-																				// Add model to collection. Disabled sort while adding and
-																				// called
-																				// sort explicitly, as sort is not working when it is called
-																				// by add
-																				// function
-																				if (eventsView && eventsView.collection)
-																				{
-																								if (eventsView.collection.get(data.id))
-																								{
-																												eventsView.collection.get(data.id).set(new BaseModel(data));
-																								}
-																								else
-																								{
-																												eventsView.collection.add(new BaseModel(data), { sort : false });
-																												eventsView.collection.sort();
-																								}
-																				}
-
-																				// Activates "Timeline" tab and its tab content in
-																				// contact detail view
-																				// activate_timeline_tab();
-																				// add_entity_to_timeline(data);
-
-																				return false;
-																}
-
-												});
-								}
-								else
-												App_Calendar.navigate("calendar", { trigger : true });
-
-								if (callback && typeof callback === 'function')
-												callback(data);
-				} });
+		if (callback && typeof callback === 'function')
+			callback(data);
+	} });
 }
 
 /**
@@ -37481,45 +41535,64 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
  * 
  * @method get_hh_mm
  * @param {Boolean}
- *         end_time to make end time 30 minutes more than start time
+ *            end_time to make end time 30 minutes more than start time
  * 
  */
-function get_hh_mm(end_time)
+function get_hh_mm(end_time, editFromContactPage)
 {
 
-				var hours = new Date().getHours();
-				var minutes = new Date().getMinutes();
+	var hours = new Date().getHours();
+	var minutes = new Date().getMinutes();
 
-				if (minutes % 15 != 0)
-								minutes = minutes - (minutes % 15);
+	if (minutes % 15 != 0)
+		minutes = minutes - (minutes % 15);
 
-				// Make end time 30 minutes more than start time
-				if (end_time)
-				{
-								if (minutes == "30")
-								{
-												hours = hours + 1;
-												minutes = 0;
-								}
-								else if (minutes == "45")
-								{
-												hours = hours + 1;
-												minutes = 15;
-								}
-								else
-												minutes = minutes + 30;
-				}
+	// Make end time 30 minutes more than start time
+	if (end_time)
+	{
+		if (minutes == "30")
+		{
+			hours = hours + 1;
+			minutes = 0;
+		}
+		else if (minutes == "45")
+		{
+			hours = hours + 1;
+			minutes = 15;
+		}
+		else
+			minutes = minutes + 30;
+	}
 
-				if (hours < 10)
-				{
-								hours = "0" + hours;
-				}
-				if (minutes < 10)
-				{
-								minutes = "0" + minutes;
-				}
+	if (hours < 10)
+	{
+		hours = "0" + hours;
+	}
+	if (minutes < 10)
+	{
+		minutes = "0" + minutes;
+	}
 
-				return hours + ':' + minutes;
+	return hours + ':' + minutes;
+}
+
+function fillTimePicker(end_time)
+{
+	if (end_time)
+	{
+		var hours = new Date(end_time * 1000).getHours();
+		var minutes = new Date(end_time * 1000).getMinutes();
+		if (hours < 10)
+		{
+			hours = "0" + hours;
+		}
+		if (minutes < 10)
+		{
+			minutes = "0" + minutes;
+		}
+
+		return hours + ':' + minutes;
+	}
 }
 /**
  * 
@@ -37542,8 +41615,14 @@ function isArray(a)
  */
 function load_events_from_google(callback)
 {
-				if (readCookie('event-filters') && JSON.parse(readCookie('event-filters')).type == 'agile')
-								return;
+				if(readCookie('event-filters')){
+					if(JSON.parse(readCookie('event-filters')).type == 'agile')
+						return;
+					
+					//Check whether to show the google calendar events or not.
+					 if(JSON.parse(readCookie('event-filters')).owner_id.length >0 && CURRENT_AGILE_USER.id != JSON.parse(readCookie('event-filters')).owner_id)
+						 return;
+				}
 
 				// Name of the cookie to store/fetch calendar prefs. Current user id is set
 				// in cookie name to avoid
@@ -37610,9 +41689,16 @@ function get_google_calendar_event_source(data, callback)
 function showCalendar()
 {
 
-				// Customized fetch options
-				if (!readCookie('event-filters') || JSON.parse(readCookie('event-filters')).type != 'agile')
-								_init_gcal_options();
+				//Check whether to show the google calendar events or not.
+				if(!readCookie('event-filters') || JSON.parse(readCookie('event-filters')).type != 'agile'){
+					 $.getJSON('/core/api/users/agileusers', function (users) {
+						 $.each(users,function(i,user){
+							 if(CURRENT_DOMAIN_USER.id == user.domain_user_id && JSON.parse(readCookie('event-filters')).owner_id == user.id){
+								 _init_gcal_options();
+							 }
+						 });
+					 });
+				}
 
 				$('#calendar_event')
 												.fullCalendar(
@@ -37822,17 +41908,17 @@ function showEventFilters()
 {
 				$.getJSON('/core/api/users/agileusers', function(users)
 				{
-								var html = '';
-								if (users)
-								{
-												$.each(users, function(i, user)
-												{
-																if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-																				html = '<option value=' + user.id + '>Me</option>';
-												});
-												html += '<option value="">Any</option>';
-								}
-								$('#event-owner').html(html);
+								 var html = '', html1='';
+								 if(users){
+									 $.each(users,function(i,user){
+										 if(CURRENT_DOMAIN_USER.id == user.domain_user_id)
+											 html1 = '<option value='+user.id+'>Me</option>';
+										 else
+											 html += '<option value='+user.id+'>'+user.domainUser.name+'</option>';
+									 });
+									 html += '<option value="">Any</option>';
+								 }
+								 $('#event-owner').html(html1+html);
 								$('#filter_options').show();
 
 
@@ -37960,6 +42046,22 @@ $(function()
 								loadDefaultFilters();
 								showEventFilters();
 				});
+				
+				$('#event_type').live('change',function(){
+					console.log("----------",this.options[this.selectedIndex].text);
+					var dd = document.getElementById('event-owner');
+					var opt = $(this).val();
+					if(opt == 'google' && dd.options[dd.selectedIndex].text != 'Any'){
+						dd.selectedIndex = 0;
+					}
+				});
+				
+				$('#event-owner').live('change',function(){
+					console.log("----------",this.options[this.selectedIndex].text);
+					var opt = this.options[this.selectedIndex].text;
+					if(opt != 'Me' && opt != 'Any')
+						$('#event_type').val('agile');
+				});
 
 				/**
 				 * Hide the filters window when click on out side of the filters pop up.
@@ -37979,6 +42081,15 @@ $(function()
 				});
 
 				loadDefaultFilters();
+				
+				//Save current agile user in global.
+				 $.getJSON('/core/api/users/agileusers', function (users) {
+					 $.each(users,function(i,user){
+						 if(CURRENT_DOMAIN_USER.id == user.domain_user_id ){
+							 CURRENT_AGILE_USER = user;
+						 }
+					 });
+				 });
 });
 /*!
  * FullCalendar v1.6.4 Google Calendar Plugin
@@ -38260,6 +42371,9 @@ $(function(){
 		}	
 		else
             $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to complete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+	
+		var due_task_count=getDueTasksCount();
+		$('#due_tasks_count').html(due_task_count);
 		
 	});
 	
@@ -41388,7 +45502,7 @@ function updateDraggedTask(oldTask, criteria, oldTaskListOwnerId, oldTaskListId,
 		// Criteria is due
 		if (oldTask.taskOwner)
 			oldTask.owner_id = oldTask.taskOwner.id;
-		oldTask["due"] = getNewDueDate(newTaskListId);
+		oldTask["due"] = getNewDueDateBasedOnTime(newTaskListId,oldTask['due']);
 	}
 	else if (fieldToChange == "taskOwner.name")
 	{
@@ -41466,6 +45580,8 @@ function saveAfterDrop(oldTask, criteria, newTaskListId, newTaskListOwnerId, tas
 
 		// Change count of new task list.
 		changeTaskCount(modelNewTaskList[0].toJSON(), true);
+		var due_task_count=getDueTasksCount();
+		$('#due_tasks_count').html(due_task_count);
 	} });
 }
 // Shows and Fill Task Edit Modal
@@ -41494,6 +45610,7 @@ function editTask(taskId, taskListId, taskListOwnerId)
 
 	// Fill form
 	deserializeForm(taskJson, $("#updateTaskForm"));
+	$('.update-task-timepicker').val(fillTimePicker(taskJson.due));
 
 	// Show modal
 	$("#updateTaskModal").modal('show');
@@ -41680,6 +45797,8 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 	newTask.url = 'core/api/tasks';
 	newTask.save(taskJson, { success : function(data)
 	{
+		var due_task_count=getDueTasksCount();
+		$('#due_tasks_count').html(due_task_count);
 		updateTask(true, data, taskJson);
 
 		// Maintain changes in UI
@@ -41903,6 +46022,9 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 
 		// change task count in header of task list
 		changeTaskCount(modelTaskList[0].toJSON(), false);
+		
+		var due_task_count=getDueTasksCount();
+		$('#due_tasks_count').html(due_task_count);
 	} });
 }
 
@@ -42579,6 +46701,39 @@ function getNewDueDate(newTaskListId)
 	return (getGMTTimeFromDate(d) / 1000);
 }
 
+
+
+//As per new task list get new due date for task, after task drop
+function getNewDueDateBasedOnTime(newTaskListId,duedate)
+{
+	var d = new Date();
+	var d1 = new Date(duedate*1000);
+	var secs = d1.getSeconds() + (60 * d1.getMinutes()) + (60 * 60 * d1.getHours());
+	console.log(secs);
+
+	// OVERDUE (yesterday)
+	if (newTaskListId == "OVERDUE")
+		d.setDate(d.getDate() - 1);
+
+	// Today
+	if (newTaskListId == "TODAY")
+		console.log(getGMTTimeFromDate(d) / 1000);
+
+	// Tomorrow
+	if (newTaskListId == "TOMORROW")
+		d.setDate(d.getDate() + 1);
+
+	// Later Day after tomorrow
+	if (newTaskListId == "LATER")
+		d.setDate(d.getDate() + 2);
+
+	console.log((getGMTTimeFromDate(d) / 1000));
+
+	return (getGMTTimeFromDate(d) / 1000)+secs;
+}
+
+
+
 // On basis of status return progress value, when criteria is status and task is
 // dragged in task lists.
 function getProgressValue(status)
@@ -43217,7 +47372,10 @@ $(function(){
 					});
 				});
 	});
-	
+	$("#campaign_id").die().live('click', function(e){
+		e.stopPropagation();
+		$(window).scrollTop(0);
+	});
 	$("#report-instant-results").die().live('click', function(e){
 		e.stopPropagation();
 		var id = $(this).attr('data');
@@ -43575,7 +47733,10 @@ function navigateToDetailsPage(data, name)
 	if(model.entity_type == "deal")
 	{
 		console.log(model);
-		updateDeal(new BaseModel(model));
+		var currentdeal=model;
+		Backbone.history.navigate("deal/"+currentdeal.id , {
+            trigger: true
+        });
 		return;
 	}
 	if(model.entity_type == "document")
@@ -44131,6 +48292,10 @@ function fillCustomFields(fields, el, callback, is_webrules)
 		{
 			lhs_element.append('<option value="'+field.field_label+'_time" field_type="'+field.field_type+'">'+field.field_label+'</option>');
 			condition.find("option.created_time").addClass(field.field_label+'_time');
+		} else if(field.field_type == "NUMBER")
+		{
+			lhs_element.append('<option value="'+field.field_label+'_number" field_type="'+field.field_type+'">'+field.field_label+'</option>');
+			condition.find("option.lead_score").addClass(field.field_label+'_number');
 		}
 		else
 		{
@@ -45291,7 +49456,14 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 		url: url,
 		type: 'POST',
 		data: json,
+		contentType : "application/x-www-form-urlencoded",
 		success: function() {
+			
+			if(url=='core/api/tasks/bulk'){
+				var due_task_count=getDueTasksCount();
+				$('#due_tasks_count').html(due_task_count);
+			}
+			
 			$(".bulk-delete-loading").remove();	
 			
 			if($(table).attr('id') == "contacts")
@@ -45330,7 +49502,8 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 					var $removeItem = $( '#' + data.id );
 					$('#timeline').isotope('remove', $removeItem);
 				});
-			}			
+			}	
+			
 		}
 	});
 }
@@ -45828,7 +50001,9 @@ function modelAction(elem)
 	}	
 	else if(type=='deal')
 	{
-		updateDeal(entity);
+		App_Deal_Details.navigate("deal/"+id,{trigger:true});
+		$('#contactsmenu').parent().find('.active').removeClass('active');
+		$('#contactsmenu').addClass('active');
 	}
 	else if(type == 'case')
 	{
@@ -48028,7 +52203,7 @@ $(function()
 		 * success fetches the widgets to reflect the changes is_added, to show
 		 * add widget in the view instead of delete option
 		 */
-		$.ajax({ type : 'DELETE', url : '/core/api/widgets/remove/' + widget_name, contentType : "application/json; charset=utf-8",
+		$.ajax({ type : 'DELETE', url : '/core/api/widgets/remove?widget_name=' + widget_name, contentType : "application/json; charset=utf-8",
 
 		success : function(data)
 		{
@@ -48052,7 +52227,7 @@ function delete_widget(widget_name)
 	 * success fetches the widgets to reflect the changes is_added, to show
 	 * add widget in the view instead of delete option
 	 */
-	$.ajax({ type : 'DELETE', url : '/core/api/widgets/' + widget_name, contentType : "application/json; charset=utf-8",
+	$.ajax({ type : 'DELETE', url : '/core/api/widgets?widget_name=' + widget_name, contentType : "application/json; charset=utf-8",
 
 	success : function(data)
 	{
@@ -50322,6 +54497,8 @@ var Restart_Twilio = false;
 TWILIO_CONTACT_ID = 0;
 TWILIO_CALLTYPE = "";
 TWILIO_DIRECTION = "";
+TWILIO_CALLED_NO = "";
+TWILIO_IS_VOICEMAIL = false;
 
 $(function()
 {
@@ -50351,12 +54528,24 @@ $(function()
 		$('.noty_buttons').find('#dialpad_in_twilio').toggle();
 	});
 	
-	$("#noty_twilio_voicemail").die().live('click', function(e)
-	{
+	//START voice mails
+	
+	$("#noty_twilio_voicemail").die().live('click', function(e){
 		e.preventDefault();
-		console.log("Twilio call voicemail from noty");
-		$('.noty_buttons').find('#voicemail_in_twilio').toggle();
+		var voiceMailCount = parseInt($(this).attr('data-length'));
+		if(voiceMailCount === 1) {
+			sendVoiceAndEndCall($(this).attr('data-src'));
+		} else {
+			$("#splitButtonVoicemail").trigger("click");
+		}
 	});
+	
+	$(".voiceMailItem").die().live('click',function(e){
+		e.preventDefault();
+		sendVoiceAndEndCall($(this).attr('data-src'));
+	});
+		
+	//END voice mails related
 
 	$(".noty_twilio_answer").die().live('click', function(e)
 	{
@@ -50441,6 +54630,7 @@ $(function()
 		e.preventDefault();
 		TWILIO_CALLTYPE = "Outgoing";
 		TWILIO_DIRECTION = "outbound-dial";
+		TWILIO_IS_VOICEMAIL = false;
 		
 //		alert("connecting twilio call");
 		
@@ -50959,13 +55149,7 @@ function setUpGlobalTwilio()
 			// notes related code			
 			console.log("calSid new  " + conn.parameters.CallSid);
 			
-			var widgetDetails = $.parseJSON(
-			        $.ajax({
-			            url: "/core/api/widgets/TwilioIO", 
-			            async: false,
-			            dataType: 'json'
-			        }).responseText
-			    );
+			var widgetDetails = twilioGetWidgetDetails();
 //			console.log("widget Details");
 //			console.log(widgetDetails);
 			var widgetPrefs = $.parseJSON(widgetDetails.prefs);
@@ -50980,13 +55164,7 @@ function setUpGlobalTwilio()
 			if(!widgetDetails)
 				return;
 			
-			var callDetails  = $.parseJSON(
-			        $.ajax({
-			            url: ApiCallUrl, 
-			            async: false,
-			            dataType: 'json'
-			        }).responseText
-			    );
+			var callDetails  = twilioApiRequest(ApiCallUrl);
 			
 			console.log("Call Details : isParent " + isParent);
 			console.log(callDetails);
@@ -51015,6 +55193,7 @@ function setUpGlobalTwilio()
 				{
 					TWILIO_CALLTYPE = "Incoming";
 					TWILIO_DIRECTION = "inbound";
+					TWILIO_IS_VOICEMAIL = false;
 					TWILIO_CONTACT_ID = 0;
 					console.log("Incoming connection from " + conn.parameters.From);
 
@@ -51062,8 +55241,40 @@ function setUpGlobalTwilio()
 		{
 			// who canceled the call
 			console.log(conn.parameters.From);
-
 			closeTwilioNoty();
+			
+			console.log("Incoming call calSid new  " + conn.parameters.CallSid);
+			
+			var messageObj = conn.message;			
+			var widgetDetails = twilioGetWidgetDetails();
+			var widgetPrefs = $.parseJSON(widgetDetails.prefs);
+			var acc_sid = widgetPrefs.twilio_acc_sid;
+			var auth_token = widgetPrefs.twilio_auth_token;	
+			var isParent = "true";
+			if(TWILIO_CALLTYPE == "Incoming") {
+				isParent = "false";
+			}
+			var ApiCallUrl = "/core/api/widgets/twilio/getlastcall/" + acc_sid + "/" + auth_token + "/" + conn.parameters.CallSid + "/" + isParent;
+			console.log(ApiCallUrl);
+			if(!widgetDetails)
+				return;
+			
+			var callDetails  = twilioApiRequest(ApiCallUrl);
+			console.log(callDetails);
+			
+			if(!callDetails)
+				return;
+			
+			var callRespJson = $.parseJSON(callDetails.responseText);
+			
+			if(typeof callRespJson != "undefined") {
+				if(typeof callRespJson.status != "undefined") {
+					console.log(callRespJson.status);
+					showNoteAfterCall(callRespJson,messageObj);
+				}
+			} else {
+				return;
+			}
 		});
 
 		/*
@@ -51087,7 +55298,8 @@ function twiliocall(phoneNumber, toName)
 	Twilio.Device.connect(params);
 
 	To_Number = phoneNumber;
-	To_Name = toName;
+	To_Name = toName;	
+	TWILIO_CALLED_NO = To_Number;
 
 	showCallNotyPopup("outgoing", "Twilio", '<i class="icon icon-phone"></i><b>Calling :</b><br> ' + To_Name + "   " + To_Number + "<br>", false);
 }
@@ -51125,6 +55337,7 @@ function closeTwilioNoty()
 
 function showNoteAfterCall(callRespJson,messageObj)
 {
+	if(TWILIO_IS_VOICEMAIL == false){
 	var	el = $("#noteForm");
 //	TWILIO_CONTACT_ID = 0;
 	if(TWILIO_CONTACT_ID) {
@@ -51150,8 +55363,11 @@ function showNoteAfterCall(callRespJson,messageObj)
 		if(callStatus != 404 && typeof callRespJson.duration != "undefined") {
 			
 			var phoneNumber = "";
-			if(TWILIO_DIRECTION == "outbound-dial")
-				phoneNumber = callRespJson.to;
+			if(TWILIO_DIRECTION == "outbound-dial") {
+//				phoneNumber = callRespJson.to;
+				phoneNumber = TWILIO_CALLED_NO;
+				TWILIO_CALLED_NO = "";
+			}
 			else
 				phoneNumber = callRespJson.from;
 			
@@ -51180,8 +55396,8 @@ function showNoteAfterCall(callRespJson,messageObj)
 		    	friendlyStatus = TWILIO_CALLTYPE + " call made to "+ phoneNumber +" has failed";
 		    	break;
 		    case "no-answer":
-		    	noteSub = TWILIO_CALLTYPE + " call - No Answer";
-		    	friendlyStatus = "No Answer";
+		    	noteSub = TWILIO_CALLTYPE + " call - No answer";
+		    	friendlyStatus = "No answer";
 		    	break;
 		    default:
 		        return;
@@ -51198,7 +55414,7 @@ function showNoteAfterCall(callRespJson,messageObj)
 				//add note automatically
 				$.post( "/core/api/widgets/twilio/autosavenote", {
 					subject: noteSub,
-					message: "Call is "+friendlyStatus,
+					message: "",
 					contactid: TWILIO_CONTACT_ID
 					});
 			}
@@ -51218,6 +55434,7 @@ function showNoteAfterCall(callRespJson,messageObj)
 			});
 		return showNewContactModal(phoneNumber);
 	}
+	}
 	
 }
 
@@ -51236,13 +55453,13 @@ function twilioSecondsToFriendly(time) {
 	var seconds = time - minutes * 60;
 	var friendlyTime = "";
 	if(hours == 1)
-		friendlyTime = hours+ " hr ";
+		friendlyTime = hours+ "h ";
 	if(hours > 1)
-		friendlyTime = hours+ " hrs ";
+		friendlyTime = hours+ "h ";
 	if(minutes > 0)
-		friendlyTime += minutes + " min ";
+		friendlyTime += minutes + "m ";
 	if(seconds > 0)
-		friendlyTime += seconds + " sec";
+		friendlyTime += seconds + "s ";
 	if(friendlyTime != "")
 	return friendlyTime;
 }
@@ -51265,6 +55482,120 @@ function searchForContact(from) {
 		fromName = getContactName(responseJson);
 	}
 	return fromName;
+}
+
+function sendVoiceAndEndCall(fileSelected) {
+	console.log("Sending voice mail...");
+	if(TWILIO_IS_VOICEMAIL == false) {
+		
+		var conn = globalconnection;
+		var widgetDetails = twilioGetWidgetDetails();
+		var widgetPrefs = $.parseJSON(widgetDetails.prefs);
+		var acc_sid = widgetPrefs.twilio_acc_sid;
+		var auth_token = widgetPrefs.twilio_auth_token;	
+		var isParent = "true";
+		var ApiCallUrl = "/core/api/widgets/twilio/getlastcall/" + acc_sid + "/" + auth_token + "/" + conn.parameters.CallSid + "/" + isParent;
+		if(!widgetDetails)
+			return;
+		
+		var callDetails  = twilioApiRequest(ApiCallUrl);
+		
+		if(!callDetails)
+			return;
+		
+		var callDetailsJson = $.parseJSON(callDetails.responseText);
+		if(isParent == "true")
+			var callRespJson = callDetailsJson.calls[0];
+		else
+			var callRespJson = callDetailsJson;
+		
+		if(typeof callRespJson != "undefined") {
+			if(typeof callRespJson.status != "undefined" && callRespJson.status == 'in-progress') {
+//				alert("Voicemail will be sent to user.Current call will be closed.");
+				var messageObj = globalconnection.message;
+				if(twilioVoiceMailRedirect(fileSelected)) {
+					closeTwilioNoty();
+					if(TWILIO_CONTACT_ID) {		
+					//add note automatically
+					$.post( "/core/api/widgets/twilio/autosavenote", {
+						subject: TWILIO_CALLTYPE + " call - Left voicemail",
+						message: "",
+						contactid: TWILIO_CONTACT_ID
+						});
+					
+					if(TWILIO_CALLED_NO != "") {
+						$.post( "/core/api/widgets/twilio/savecallactivity",{
+							direction: TWILIO_DIRECTION, 
+							phone: TWILIO_CALLED_NO, 
+							status : "voicemail",
+							duration : 0 
+							});
+					}
+					TWILIO_IS_VOICEMAIL = true;					
+					}
+				}
+			}
+		} else {
+			return;
+		}
+	}
+}
+
+function twilioVoiceMailRedirect(fileSelected) {
+	var widgetDetails = twilioGetWidgetDetails();	
+	if(!widgetDetails)
+		return false;
+	
+	var widgetPrefs = $.parseJSON(widgetDetails.prefs);
+	var acc_sid = widgetPrefs.twilio_acc_sid;
+	var auth_token = widgetPrefs.twilio_auth_token;	
+	
+	var isParent = "true";
+	if(TWILIO_CALLTYPE == "Incoming") {
+		isParent = "false";
+	}
+	var ApiCallUrl = "/core/api/widgets/twilio/getlastcall/" + acc_sid + "/" + auth_token + "/" + globalconnection.parameters.CallSid + "/" + isParent;
+	console.log(ApiCallUrl);
+	if(!widgetDetails)
+		return;
+	
+	var callDetails  = twilioApiRequest(ApiCallUrl);	
+	console.log("Call Details : isParent " + isParent);
+	console.log(callDetails);	
+	if(!callDetails)
+		return;
+	
+	var callDetailsJson = $.parseJSON(callDetails.responseText);
+	if(isParent == "true")
+		var callRespJson = callDetailsJson.calls[0];
+	else
+		var callRespJson = callDetailsJson;
+
+	ApiCallUrl = "/core/api/widgets/twilio/setvoicemail/" + acc_sid + "/" + auth_token + "/" +callRespJson.sid + "/" + fileSelected
+	console.log("In ajax send voice mail : " + ApiCallUrl);	
+	var resp  = twilioApiRequest(ApiCallUrl);
+	return true;
+}
+
+
+function twilioGetWidgetDetails(){
+	return $.parseJSON(
+	        $.ajax({
+	            url: "/core/api/widgets/TwilioIO", 
+	            async: false,
+	            dataType: 'json'
+	        }).responseText
+	    );
+}
+//this will return an object
+function twilioApiRequest(ApiCallUrl){
+	return $.parseJSON(
+	        $.ajax({
+	            url: ApiCallUrl, 
+	            async: false,
+	            dataType: 'json'
+	        }).responseText
+	    );
 }
 $(function(){
 	

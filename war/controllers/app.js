@@ -33,6 +33,8 @@ $(function()
 	App_Deal_Details= new DealDetailsRouter();
 	App_VoiceMailRouter = new VoiceMailRouter();
 	App_Portlets = new PortletsRouter;
+	App_task = new TaskDetailsRouter();
+
 
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
