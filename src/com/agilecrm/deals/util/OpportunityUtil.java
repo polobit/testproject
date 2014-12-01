@@ -759,7 +759,7 @@ public class OpportunityUtil
     public static List<Opportunity> getOpportunitiesByFilter(org.json.JSONObject filterJson, int count, String cursor)
     {
 	Map<String, Object> searchMap = new HashMap<String, Object>();
-	String sortField = "-close_date";
+	String sortField = "close_date";
 	try
 	{
 	    if (checkJsonString(filterJson, "pipeline_id"))
