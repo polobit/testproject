@@ -89,8 +89,8 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    catch (TransientFailureException tfe)
 		    {
 			Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com",
-			        "event-reminder-failure", "jagadeesh@invox.com", null, null, "exception occured "
-			                + domain, null,
+			        "event-reminder-failure", "jagadeesh@invox.com", null, null,
+			        "transient exception occured in send event reminder" + domain, null,
 			        "exception occured transient failure exception send event reminder deferred task",
 			        null, null);
 
@@ -100,6 +100,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
 			TaskOptions options = TaskOptions.Builder.withPayload(eventReminderDeferredTask);
 			options.countdownMillis(40000);
 			queue.add(options);
+			return;
 		    }
 
 		    catch (Exception e1)
@@ -188,6 +189,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
 			TaskOptions options = TaskOptions.Builder.withPayload(eventReminderDeferredTask);
 			options.countdownMillis(20000);
 			queue.add(options);
+			return;
 		    }
 
 		    catch (Exception e)
@@ -268,6 +270,8 @@ public class SendEventReminderDeferredTask implements DeferredTask
 	    TaskOptions options = TaskOptions.Builder.withPayload(eventReminderDeferredTask);
 	    options.countdownMillis(20000);
 	    queue.add(options);
+
+	    return;
 	}
 
 	catch (Exception e)
