@@ -617,7 +617,7 @@ public class ActivityReportsUtil
 		}
 
 		activity.label = activity.custom3 + " " + activity.label;
-		activity.custom3 = activity.custom2;
+		activity.custom3 = activity.custom4;
 		emailActivity.add(activity);
 	    }
 	}
