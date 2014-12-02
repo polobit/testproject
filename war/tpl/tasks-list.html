@@ -19,7 +19,7 @@
                     <th>Related To</th>
                 </tr>
             </thead>
-            <tbody id="tasks-list-model-list" style="cursor:pointer;">
+            <tbody id="tasks-list-model-list" style="cursor:pointer;" route="task/">
             </tbody>
         </table>
 		<a href="#" class="btn btn-primary"  style="margin-bottom: 15px;margin-left: 25px;display:none;" id="bulk-complete">Complete</a>
@@ -29,7 +29,7 @@
 </script>
 
 <script id="tasks-list-model-template" type="text/html">
-<td><a href ="#task/{{this.id}}">  
+<td class="data" data="{{id}}">  
   <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;max-width:5em;overflow:hidden;">
 	{{#if ownerPic}}
         	<img class="thumbnail" src="{{ownerPic}}" width="40px" height="40px" title="{{taskOwner.name}}"/>
@@ -64,8 +64,6 @@
 		</div>
        {{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
     </td>
-</a>
-
 </script>
 <script id="tasks-list-header-template" type="text/html">
 <div class="row">

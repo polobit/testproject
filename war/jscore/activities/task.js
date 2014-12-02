@@ -89,10 +89,11 @@ $(function() {
 	/**
 	 * Task list edit
 	 */
-	$('#tasks-list-model-list > tr > td:not(":first-child")').live('click', function(e) {
+	//TODO:jitendra reenable it
+/*	$('#tasks-list-model-list > tr > td:not(":first-child")').live('click', function(e) {
 		e.preventDefault();
 		update_task($(this).closest('tr'));
-	});
+	});*/
 	
 	/**
 	 * Dash board edit

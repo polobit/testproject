@@ -36,6 +36,7 @@ $(function()
 	App_task = new TaskDetailsRouter();
 
 
+
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
 
