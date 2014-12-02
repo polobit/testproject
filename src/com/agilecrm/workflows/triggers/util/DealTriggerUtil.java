@@ -15,6 +15,7 @@ import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.Trigger.Type;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
+import com.campaignio.reports.DateUtil;
 
 /**
  * <code>DealTriggerUtil</code> executes trigger for deals with conditions deal
@@ -183,7 +184,6 @@ public class DealTriggerUtil
 	    opportunityJSON.remove("cursor");
 	    opportunityJSON.remove("count");
 	    opportunityJSON.remove("contact_ids");
-	    opportunityJSON.remove("pipeline_id");
 	    opportunityJSON.remove("owner_id");
 	    opportunityJSON.remove("notes");
 
@@ -203,6 +203,14 @@ public class DealTriggerUtil
 	    }
 
 	    opportunityJSON.put("custom_data", getDealCustomJSON(opportunity));
+
+	    opportunityJSON.put("created_time",
+		    DateUtil.getGMTDateInGivenFormat(opportunity.created_time * 1000, "MM/dd/yyyy"));
+
+	    opportunityJSON.put("close_date",
+		    DateUtil.getGMTDateInGivenFormat(opportunity.close_date * 1000, "MM/dd/yyyy"));
+
+	    opportunityJSON.put("expected_value", getLongFromDouble(opportunity.expected_value));
 
 	    // If deal milestone is changed, add old one
 	    if (!StringUtils.isBlank(oldMilestone))
@@ -235,4 +243,20 @@ public class DealTriggerUtil
 	return customJSON;
     }
 
+    private static Long getLongFromDouble(Double value)
+    {
+	if (value == null)
+	    return null;
+
+	try
+	{
+	    return value.longValue();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while converting string to double..." + e.getMessage());
+	    return null;
+	}
+    }
 }
