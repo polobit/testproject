@@ -73,12 +73,15 @@ public class Unsubscribe extends TaskletAdapter
 
 		String message = getMessage(campaignNames);
 
+		System.out.println("Campaign in all method and the message is: " + message + " and the campaign names are :"
+				+ campaignNames);
 		LogUtil.addLogToSQL(campaignID, subscriberID, "Contact unsubscribed from " + message,
 				LogType.UNSUBSCRIBED_CAMPAIGN.toString());
 
 		if (campaignIDs.contains(campaignID))
 		{
 			CampaignStatusUtil.setStatusOfCampaignWithName(subscriberID, campaignID, "", Status.DONE);
+
 			return;
 		}
 
@@ -104,6 +107,8 @@ public class Unsubscribe extends TaskletAdapter
 
 		String message = getMessage(campaignName);
 
+		System.out.println("Campaign in all method and the message is: " + message + " and the campaign names are :"
+				+ campaignName);
 		LogUtil.addLogToSQL(campaignID, subscriberID, "Contact unsubscribed from " + message,
 				LogType.UNSUBSCRIBED_CAMPAIGN.toString());
 		return true;
