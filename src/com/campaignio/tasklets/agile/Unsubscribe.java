@@ -19,24 +19,19 @@ import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
- * <code>URLVisited</code> represents URLVisited node in the workflow. It access
- * given url. If output obtained is JSONObject, the node under branch Yes is
- * processed, otherwise branch No is processed.
+ * <code>Unsubscribe</code> represents Unsubscribe node in the workflow. It
+ * either unsubscribes from few selected campaigns or all of them
  * 
- * @author Naresh
+ * 
+ * @author Bhasuri
  * 
  */
 public class Unsubscribe extends TaskletAdapter
 {
 	/**
-	 * Selected property - Yes
+	 * Selected property - All
 	 */
-	public static String BRANCH_YES = "All";
-
-	/**
-	 * Selected property - No
-	 */
-	public static String BRANCH_NO = "No";
+	public static String SELECT_ALL = "All";
 
 	/*
 	 * Unsubscibe select field
@@ -47,7 +42,7 @@ public class Unsubscribe extends TaskletAdapter
 			throws Exception
 	{
 
-		// Get URL value and type
+		// Get unsubscribe List
 		String unsubscribeFrom = getStringValue(nodeJSON, subscriberJSON, data, SELECT_ID);
 
 		String subscriberID = AgileTaskletUtil.getId(subscriberJSON);
@@ -55,7 +50,7 @@ public class Unsubscribe extends TaskletAdapter
 		String campaignID = AgileTaskletUtil.getId(campaignJSON);
 
 		// Get list of all workflows
-		if (BRANCH_YES.equals(unsubscribeFrom))
+		if (SELECT_ALL.equals(unsubscribeFrom))
 			if (unsubscribeAll(subscriberJSON, subscriberID, campaignID))
 			{
 				CampaignStatusUtil.setStatusOfCampaignWithName(subscriberID, campaignID, "", Status.DONE);
@@ -76,7 +71,7 @@ public class Unsubscribe extends TaskletAdapter
 		System.out.println("Campaign in all method and the message is: " + message + " and the campaign names are :"
 				+ campaignNames);
 		LogUtil.addLogToSQL(campaignID, subscriberID, "Contact unsubscribed from " + message,
-				LogType.UNSUBSCRIBED_CAMPAIGN.toString());
+				LogType.UNSUBSCRIBE.toString());
 
 		if (campaignIDs.contains(campaignID))
 		{
@@ -110,7 +105,7 @@ public class Unsubscribe extends TaskletAdapter
 		System.out.println("Campaign in all method and the message is: " + message + " and the campaign names are :"
 				+ campaignName);
 		LogUtil.addLogToSQL(campaignID, subscriberID, "Contact unsubscribed from " + message,
-				LogType.UNSUBSCRIBED_CAMPAIGN.toString());
+				LogType.UNSUBSCRIBE.toString());
 		return true;
 	}
 
@@ -124,7 +119,7 @@ public class Unsubscribe extends TaskletAdapter
 		{
 			for (int i = 0; i < listSize - 1; i++)
 			{
-				message += " " + campaignName.get(i);
+				message += " '" + campaignName.get(i) + "'";
 				if ((i + 1) != (listSize - 1))
 					message += ", ";
 			}
