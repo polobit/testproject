@@ -227,7 +227,7 @@ $.validator.setDefaults({
 											<option value="">Choose Plan</option>
 											<option value="Starter">Starter</option>
 											<option value="Regular">Regular</option>
-											<option value="pro">professional</option>
+											<option value="pro">Pro</option>
 								 	 </select>
 								 	 </div>
 								 	 <div style="display:inline-block;width:50%">
