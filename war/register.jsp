@@ -231,7 +231,7 @@ $.validator.setDefaults({
 								 	 </select>
 								 	 </div>
 								 	 <div style="display:inline-block;width:50%">
-								 	 <select class="form-control required"  name="users" data-width="100%">
+								 	 <select class="form-control required"  name="users_count" data-width="100%">
 											<option value="">Choose Users</option>
 											<option value="1">1</option>
 											<option value="2">2</option>
