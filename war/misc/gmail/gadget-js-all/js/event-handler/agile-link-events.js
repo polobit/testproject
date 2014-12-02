@@ -91,11 +91,20 @@ $(function()
 		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 				.find("div.show-form");
+		var newContact = Contacts_Json[$(this).closest(".show-form").attr("data-content")];
 		//  ------ Build contact add template. ------ 
 		agile_build_form_template($(this), "gadget-add-contact", ".show-add-contact-form", function() {
 
 			$(".show-add-contact-form", el).toggle();
 			agile_gadget_adjust_height();
+			
+			console.log('add this email - ',newContact);
+			if(newContact.name.trim().length > 0){
+				console.log(newContact.name.split(' '));
+				$('#fname',el).val(newContact.name.split(' ')[0]);
+				$('#lname',el).val(newContact.name.substring(newContact.name.indexOf(' '),newContact.name.length));
+			} else if(newContact.email.length>0)
+				$('#fname',el).val(newContact.email.substring(0,newContact.email.indexOf('@')));
 		});
 	});
 	

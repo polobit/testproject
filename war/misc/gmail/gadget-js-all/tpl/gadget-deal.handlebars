@@ -19,15 +19,23 @@
 					</div>
 					
 					<div class="control-group" style="margin:0px; padding-top:6px;">		
+						<label class="control-label" for="pipeline_id"><b>Track</b> <span class="field_req">*</span></label>
+						<div class="controls">
+							<select name="pipeline_id" id="pipeline" class="required" style="width:210px;">
+								<option value="">Select</option>
+								{{#if pipelines.length}}
+									{{#each pipelines}}
+										<option value="{{id}}">{{name}}</option>
+									{{/each}}
+								{{/if}}
+                            </select>	
+		  				</div>
+					</div>
+					
+					<div class="control-group" style="margin:0px; padding-top:6px;">		
 						<label class="control-label" for="milestone"><b>Milestone</b> <span class="field_req">*</span></label>
 						<div class="controls">
 							<select name="milestone" id="milestone" class="required" style="width:210px;">
-								<option value="">Select</option>
-								{{#if milestones.length}}
-									{{#each milestones}}
-										<option value="{{.}}">{{.}}</option>
-									{{/each}}
-								{{/if}}
                             </select>	
 		  				</div>
 					</div>

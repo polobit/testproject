@@ -69,17 +69,17 @@ $(function()
 		var el = $(this).closest("div.gadget-contact-details-tab").find("div.show-form");
 		var That = $(this);
 		$('.gadget-deals-tab-list', el).hide();
-
+		
 		// ------ Get campaign work-flow data. ------
-		_agile.get_milestones({ success : function(Response)
+		_agile.get_pipelines({ success : function(Response)
 		{
-			Milestone_Array = Response.milestones.split(",");
+			/*Milestone_Array = Response.milestones.split(",");
 			for ( var Loop in Milestone_Array)
-				Milestone_Array.splice(Loop, 1, Milestone_Array[Loop].trim());
+				Milestone_Array.splice(Loop, 1, Milestone_Array[Loop].trim());*/
 
 			// ------ Take contact data from global object variable. ------
 			var Json = Contacts_Json[el.closest(".show-form").data("content")];
-			Json.milestones = Milestone_Array;
+			Json.pipelines = Response;
 
 			// ------ Compile template and generate UI. ------
 			var Handlebars_Template = getTemplate("gadget-deal", Json, 'no');
@@ -100,12 +100,44 @@ $(function()
 			});
 			// ------ Adjust gadget height. ------
 			agile_gadget_adjust_height();
+			
+			console.log(Response);
+			if(Response.length==1){
+				console.log('auto select track');
+				$('#pipeline').val(Response[0].id);
+				$('#pipeline').trigger('change');
+				$('#pipeline').closest('.control-group').hide();
+			}
 
 		}, error : function(Response)
 		{
 
 		} });
 
+	});
+	
+	$('#pipeline').die().live('change',function(e){
+		var pipeline_id = $(this).val();
+		console.log('-----',pipeline_id);
+		if(pipeline_id.length >0)
+		_agile.get_milestones_by_pipeline(pipeline_id,{ success : function(Response)
+			{
+				Milestone_Array = Response.milestones.split(",");
+				for ( var Loop in Milestone_Array)
+					Milestone_Array.splice(Loop, 1, Milestone_Array[Loop].trim());
+				
+				var html = '';
+				for(var mile in Milestone_Array)
+					html+='<option value="'+Milestone_Array[mile]+'">'+Milestone_Array[mile]+'</option>';
+				$('#milestone').html(html);
+
+			}, error : function(Response)
+			{
+				console.log('Error in getting milestones',Response);
+				$('#milestone').html("");
+			} });
+		else
+			$('#milestone').html("");
 	});
 
 	// ------------------------------------------------- Click event for Action

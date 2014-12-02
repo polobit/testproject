@@ -11,19 +11,27 @@ function agile_get_emails()
 				{ name_from : "Devika Jakkannagari" },
 				{ email_to : "abhi@gashok.mygbiz.com;rahul@gashok.mygbiz.com;dheeraj@gashok.mygbiz.com;chandan@gashok.mygbiz.com;abhiranjan@gashok.mygbiz.com" },
 				{ name_to : "Abhi;;D j p;;" }, { email_cc : "devikatest1@gmail.com;devikatest@gmail.com;teju@gmail.com" }, { name_cc : "Dev T1;;Teju" },
-				{ email : "devikatest@gmail.com" }, { email : "test1@gmail.com" }, { email : "test2@gmail.com" }, { email : "pbx.kumar@gmail.com" }
+				{ email : "devikatest@gmail.com" }, { email : "test1@gmail.com" }, { email : "test1@gmail.com" }, { email : "pbx.kumar@gmail.com" }
 		];
 
 		// emails = [{email:"devikatest@gmail.com"}];
+		console.log(JSON.stringify(emails));
 
-		return parse_emails(emails);
+		return validateEmails(parse_emails(emails));
 	}
 
 	// Google Matches in 2D format
 	emails = google.contentmatch.getContentMatches();
 	console.log(emails);
 	console.log(JSON.stringify(emails));
-	return parse_emails(emails);
+	return validateEmails(parse_emails(emails));
+}
+
+function validateEmails(emails){
+	for(var email in emails){
+		console.log('--------',emails[email]);
+	}
+	return emails;
 }
 
 // Convert 2d to 1d
@@ -55,7 +63,7 @@ function collate_emails(emails, key)
 			emails1D.push(email);
 		});
 	}
-
+console.log('--------',emails1D);
 	return emails1D;
 }
 
