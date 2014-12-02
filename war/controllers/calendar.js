@@ -280,7 +280,7 @@ function appendItem1(base_model)
 												$('.e_owner').removeClass('hide');
 				}
 
-				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",",""));
+				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",","").trim());
 }
 
 // append all events
@@ -310,7 +310,7 @@ function appendItem2(base_model)
 												$('.e_owner').removeClass('hide');
 				}
 
-				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",",""));
+				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",","").trim());
 
 }
 
@@ -324,7 +324,7 @@ function appendGoogleEvent(base_model)
 				$('#google_event', this.el).append(itemView.render().el);
 				$('#google_event', this.el).parent('table').css("display", "block");
 				$('#google_event', this.el).show();
-				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",",""));
+				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",","").trim());
 
 }
 
@@ -342,9 +342,6 @@ function appendGoogleEventCategorization(base_model)
 				// Today
 				if (createdtime == 0)
 				{
-
-								var heading = $('#today-heading', this.el);
-
 								$('#today-event', this.el).append(itemView.render().el);
 								$('#today-event', this.el).parent('table').css("display", "block");
 								$('#today-event', this.el).show();
@@ -354,8 +351,6 @@ function appendGoogleEventCategorization(base_model)
 				else if (createdtime == 1)
 				{
 
-								var heading = $('#tomorrow-heading', this.el);
-
 								$('#tomorrow-event', this.el).append(itemView.render().el);
 								$('#tomorrow-event', this.el).parent('table').css("display", "block");
 								$('#tomorrow-event', this.el).show();
@@ -364,18 +359,16 @@ function appendGoogleEventCategorization(base_model)
 				else if (createdtime > 1)
 				{
 
-								var heading = $('#next-week-heading', this.el);
-
 								$('#next-week-event', this.el).append(itemView.render().el);
 								$('#next-week-event', this.el).parent('table').css("display", "block");
 								$('#next-week-event', this.el).show();
-								if ($('#tomorrow-event', this.el).children().length > 0 || ('#today-event').children().length > 0)
+								if ($('#tomorrow-event', this.el).children().length > 0 || $('#today-event', this.el).children().length > 0)
 								{
 												$('#next-week-heading', this.el).show();
 
 								}
 				}
-				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",",""));
+				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",","").trim());
 
 }
 
@@ -499,17 +492,9 @@ function getName(properties)
 												lastName = properties[i].value;
 
 				}
-				if (!firstName)
-				{
-								firstName = '';
-				}
-				if (!lastName)
-				{
-								lastName == '';
-				}
-				name = firstName + " " + lastName;
+						name = firstName + " " + lastName;
 
-				return name;
+				return name.replace("undefined","").trim();
 }
 
 function getCompanyName(properties)
@@ -525,12 +510,14 @@ function getCompanyName(properties)
 }
 function loadAgileEvents()
 {
+				var jsonObject = $.parseJSON(readCookie('event-filters'));
+				var ownerId = jsonObject.owner_id;
 
 				var view = readCookie("agile_calendar_view");
 				if (view == "calendar_list_view")
 				{
 
-								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/list', templateKey : "events", individual_tag_name : 'tr',
+								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/list?ownerId='+ownerId+'', templateKey : "events", individual_tag_name : 'tr',
 												sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25 });
 								eventCollectionView.appendItem = appendItem2;
 								eventCollectionView.collection.fetch();
@@ -540,8 +527,8 @@ function loadAgileEvents()
 				else if (view == "calendar_list_view_future")
 				{
 
-								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/future/list', templateKey : "future", individual_tag_name : 'tr',
-												sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25 });
+								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/future/list?ownerId='+ownerId+'', templateKey : "future", individual_tag_name : 'tr',
+												sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25});
 								eventCollectionView.appendItem = appendItem1;
 								eventCollectionView.collection.fetch();
 

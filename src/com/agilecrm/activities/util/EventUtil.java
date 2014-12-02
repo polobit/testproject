@@ -272,9 +272,22 @@ public class EventUtil
     }
 
     /**
-     * >>>>>>> 75cc75c... Fixed Event list view minor Customization ui and
-     * sorting Gets the list of events which have been pending for Today
+     * get All events base on cursor value and start date
      * 
+     * @param max
+     * @param cursor
+     * @return List of Events
+     */
+    public static List<Event> getEventList(int max, String cursor, Long ownerId)
+    {
+	Date d = new Date();
+	Long startDate = d.getTime();
+	Query<Event> query = dao.ofy().query(Event.class).filter("start >=", startDate / 1000)
+		.filter("owner", new Key<AgileUser>(AgileUser.class, ownerId));
+	return dao.fetchAllWithCursor(max, cursor, query, false, false);
+    }
+
+    /**
      * @return List of events that have been pending for Today
      */
     public static List<Event> getTodayPendingEvents()
@@ -364,6 +377,16 @@ public class EventUtil
 	}
 	return domain_events;
 
+    }
+
+    /**
+     * return list of events based on event owner id
+     */
+
+    public static List<Event> getEvents(int count, String cursor, Long ownerId)
+    {
+	return dao.ofy().query(Event.class).order("start")
+		.filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
     }
 
     /**

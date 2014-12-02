@@ -16,6 +16,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -206,12 +207,19 @@ public class EventsAPI
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Event> getAllEvent(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
-	    @QueryParam("reload") boolean force_reload)
+	    @QueryParam("reload") boolean force_reload, @QueryParam("ownerId") String ownerId)
     {
 	if (count != null)
 	{
 	    System.out.println("Fetching page by page");
-	    return EventUtil.getEventList((Integer.parseInt(count)), cursor);
+	    if (!StringUtils.isEmpty(ownerId))
+	    {
+		EventUtil.getEventList(Integer.parseInt(count), cursor, Long.parseLong(ownerId));
+	    }
+	    else
+	    {
+		return EventUtil.getEventList((Integer.parseInt(count)), cursor);
+	    }
 	}
 
 	return EventUtil.getEvents();
@@ -221,12 +229,20 @@ public class EventsAPI
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Event> getFutureEvent(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
-	    @QueryParam("reload") boolean force_reload)
+	    @QueryParam("reload") boolean force_reload, @QueryParam("ownerId") String ownerId)
     {
 	if (count != null)
 	{
 	    System.out.println("Fetching page by page");
-	    return EventUtil.getAllEvents((Integer.parseInt(count)), cursor);
+
+	    if (!StringUtils.isEmpty(ownerId))
+	    {
+		EventUtil.getEvents(Integer.parseInt(count), cursor, Long.parseLong(ownerId));
+	    }
+	    else
+	    {
+		return EventUtil.getAllEvents((Integer.parseInt(count)), cursor);
+	    }
 	}
 
 	return EventUtil.getEvents();
