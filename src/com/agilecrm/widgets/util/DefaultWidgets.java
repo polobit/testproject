@@ -94,8 +94,9 @@ public class DefaultWidgets
 		widgets.add(new Widget("GooglePlus",
 				"Keep tabs on your customers' activity on Google+ and engage with them better.",
 				"/widgets/googleplus.js", "/widgets/gplus.png", "/widgets/gplusicon.png", null, WidgetType.SOCIAL));
-		widgets.add(new Widget("CallScript", "CallScript with rules.", "/widgets/callscript.js", null, null, null,
-				WidgetType.SUPPORT));
+		widgets.add(new Widget("CallScript",
+				"Shows you the script for the call base on predefined rules you have set.", "/widgets/callscript.js",
+				null, null, null, WidgetType.SUPPORT));
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);

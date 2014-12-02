@@ -42,11 +42,15 @@
 				</ul>
 			</div>
 			<div style="width:9%;float:left;">
-				 <img src="{{mini_logo_url}}" class="pull-left" width="24" height="24" alt=""/> 
-<!-- <i class="{{icons name}}"></i> -->
+                {{#if_equals name "CallScript"}}
+                   <i class="icon-comment" style="font-size:1.12em;"></i>
+                {{else}}
+                   <img src="{{mini_logo_url}}" class="pull-left" width="24" height="24" alt=""/>
+                {{/if_equals}} 
+                <!-- <i class="{{icons name}}"></i> -->
 			</div>
 			<div class="widget_header_name overflow-elipsis" style="width:80%;padding:0px 0 0 5px;">
-		{{#if_equals name "Linkedin"}}LinkedIn{{else}}{{#if_equals name "GooglePlus"}}Google+{{else}}{{#if_equals name "HelpScout"}}Help Scout{{else}}{{name}}{{/if_equals}}{{/if_equals}}{{/if_equals}}
+		{{#if_equals name "Linkedin"}}LinkedIn{{else}}{{#if_equals name "GooglePlus"}}Google+{{else}}{{#if_equals name "HelpScout"}}Help Scout{{else}}{{#if_equals name "CallScript"}}Call Script{{else}}{{name}}{{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}}
 			</div>
 <div class="clearfix"></div>
 		</div>

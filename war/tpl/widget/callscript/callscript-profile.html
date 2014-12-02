@@ -1,10 +1,13 @@
 <script id="callscript-login-template" type="text/html">
-<div display:inline;  line-height:12px;word-wrap: break-word;">
-    <p style='line-height:140%;'>                   
-                   Rules are used to show status of contacts with a specific criteria to find patterns.
-    </p>
+<div display:inline;  line-height:12px;word-wrap: break-word;">    
 	<form class="widget_content" style="border-bottom:none;" id="callscript_login_form" name="callscript_login_form" method="post">
     	<fieldset>
+              <p class="no-rule-added" style='line-height:140%;display:none;'>                   
+                   You have no script rules configured.
+              </p>
+              <p class="rule-added" style='line-height:140%;display:none;'>
+                   <span class="rule-count"> </span>  script rules configured. <a href="#CallScript/addrules">+Add Rule</a>
+              </p> 
               <a href="#CallScript/addrules" id="add_csrule" class="btn btn-primary" style="text-decoration:none;"><i class="icon-plus-sign"></i>Add Rule</a>
               <a href="#CallScript/rules" id="show_csrules" class="btn btn-primary" style="text-decoration:none;display:none;">Show Rule</a>			  
 			  <a href="#add-widget" class="btn ml_5" style="text-decoration:none;">Cancel</a>              
@@ -14,18 +17,16 @@
 </script>
 
 <script id="callscript-table-template" type="text/html">
-<div class="span11">
+<div class="span10" style="margin-left: 0px;">
 <div class="well">
 <div class="row">
-    <div class="span10">      
-        <div class="page-header">
-            <h1>Call Script Rules</h1>
-            <a href="#CallScript/addrules" class="btn right" id="add_rule" style='top:-28px;position:relative'><span><i class='icon-plus-sign'/></span>  Add Rule</a>
-        </div>
+    <div class="span9">      
+        <legend>Call Script Rules</legend>
+        <a href="#CallScript/addrules" class="btn right" id="add_rule" style='margin-top:-62px;'><span><i class='icon-plus-sign'/></span>  Add Rule</a>
     </div>
 </div>
 <div class="row">
-    <div class="span8">		
+    <div class="span9">		
         {{#if this.length}}
          <table class="table table-striped agile-ellipsis-dynamic">
                <colgroup>
@@ -62,51 +63,28 @@
         				<div class="box-left"><img alt="Clipboard" src="/img/clipboard.png"></div>
 				        <div class="box-right">
                             <h3>You do not have any call script rules currently.</h3>
-                            <div class="text">Call Script Rules are used to show relevent text about contact.</div>
+                            <div class="text">Call Script Rules are used to show you the script for the call base on predefined rules you have set.</div>
                             <a href="#CallScript/addrules" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i>  Add Rule</a>
 				        </div>
                 </div>
            </div>
         </div>
     {{/if}}
-    </div>
-    <div class='span2'>
-        <div class="well" id='addview'>
-             <h3>
-              What are Call Script Rules?
-             </h3><br/>
-            <p>Rules are used to show status of contacts with a specific criteria to find patterns.</p>
-        </div>
-    </div>
+    </div>    
 </div>
 </div>
 </div>
 </script>
 
 <script id="callscript-rule-template" type="text/html">
-<div class="span10">
+<div class="span10" style="margin-left: 0px;">
 	<div class="well">
 		<form id="callscriptruleForm" class="form-horizontal">
 			<div name="rules" class="formsection chainedSelect">             
 					 {{#if ruleindex}} 
-                        <legend class="formheading"> Edit Call Script Rule<span
-						style="vertical-align: text-top; margin-left: -3px"> <img
-							border="0" src="/img/help.png"
-							style="height: 6px; vertical-align: text-top" rel="popover"
-							data-placement="bottom"
-							data-content="callscriptrule callscriptrule callscriptrule callscriptrule callscriptrule callscriptrule"
-							id="element" data-trigger="hover">
-					</span></legend>
+                        <legend class="formheading"> Edit Call Script Rule</legend>
                         {{else}}
-                        <legend class="formheading"><span class="addLable"><i class="icon-plus-sign"></i> Add Call Script Rule</span><span
-						style="vertical-align: text-top; margin-left: -3px"> <img
-							border="0" src="/img/help.png"
-							style="height: 6px; vertical-align: text-top" rel="popover"
-							data-placement="bottom"
-							data-content="callscriptrule callscriptrule callscriptrule callscriptrule callscriptrule callscriptrule"
-							id="element" data-trigger="hover">
-					</span>
-				</legend>
+                        <legend class="formheading"><span class="addLable"><i class="icon-plus-sign"></i> Add Call Script Rule</span></legend>
                         {{/if}}
 				</legend>			
                 <fieldset>
@@ -150,9 +128,12 @@
 													<optgroup label="Date">
 														<option value="created_time">Created</option>														
 													</optgroup>
- 													<optgroup label="Properties">					
+ 													<optgroup label="Properties">
+														<option value="first_name">First Name</option>
+														<option value="email">Email Address</option>
 														<option value="company">Company</option>
-														<option value="title">Job Title</option>														
+														<option value="title">Job Title</option>
+														<option value="phone">Phone Number</option>
 														<option value="lead_score">Score</option>
 														<option value="owner_id">Owner</option>
 													</optgroup>
@@ -166,25 +147,25 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" style="width: 100%;">
 													<option value="EQUALS"
-														class="company title org_tag jobtitle city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="first_name phone company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="company owner org_tag title city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+														class="first_name company owner org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 													
 													<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="NOTEQUALS" class="tags">isn't</option>
 
 													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
 													<option value="IS_LESS_THAN" class="lead_score">less than</option>
-													<option value="ON" class="created_time">on</option>
-													<option value="AFTER" class="created_time">is
+													<option value="ON" class="updated_time created_time">on</option>
+													<option value="AFTER" class="created_time updated_time">is
 														after</option>
-													<option value="BEFORE" class="created_time">is
+													<option value="BEFORE" class="created_time updated_time">is
 														before</option>
-													<option value="BETWEEN" class="created_time">is
+													<option value="BETWEEN" class="created_time updated_time">is
 														between</option>
-													<option value="LAST" class="created_time">in
+													<option value="LAST" class="created_time updated_time">in
 														last</option>
 													<option value="EQUALS" class="tag org_tag">is</option>
 													<option value="ANYOF" class="tag">is any of</option>
@@ -205,7 +186,8 @@
 													
                                                 <input type="text" name="tag" 
 													class="tags tags_time required"
-													style="margin: 0px;width:92%" />                                                 
+													style="margin: 0px;width:92%" /> 
+                                                <input type="text" name="temp" class="email required" style="width:92%"/>
 												<input id="updated_date" type="text" name="updated_date" style="width:92%; text-overflow:none; "
 													class="ON AFTER BEFORE BETWEEN input required date"
 													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>

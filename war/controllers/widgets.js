@@ -1065,7 +1065,7 @@ var WidgetsRouter = Backbone.Router
 												 * Show CallScript rules
 												 */
 												CallScriptShow : function()
-												{
+												{	
 													showCallScriptRule();
 												},
 												

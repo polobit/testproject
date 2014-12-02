@@ -34,6 +34,9 @@ $(function()
 		console.log("In edit-callscriptrule event");
 		console.log($(this));
 
+		// Shows loading image until data gets ready for displaying
+		$('#prefs-tabs-content').html(LOADING_HTML);
+		
 		var editRuleIndex = $(this).attr("data");
 		
 		// Redirect to show call script rules page
@@ -87,13 +90,40 @@ function adjust_form()
 	// if widget is already added so display showrules and hide add rule btn
 	if (isCallScriptAdded())
 	{
-		$("#add_csrule").hide();
-		$("#show_csrules").show();
+		var ruleCount = getCallScriptRuleCount();
+		if(ruleCount >0)
+		  {
+			$(".rule-count").html(ruleCount);
+			$("#add_csrule").hide();
+			$(".rule-added").show();
+			$("#show_csrules").show();
+		  }		
+		else
+			$(".no-rule-added").show();
 	}
+	else
+		$(".no-rule-added").show();
 
 	// Enable add rule btn
 	$("#add_csrule").text('Add Rule');
 	$("#add_csrule").attr("disabled", false);
+}
+
+//Check call script widget is added or not
+function isCallScriptAdded()
+{
+	console.log("In isCallScriptAdded");
+
+	// Get call script widget
+	var callscriptWidget = App_Widgets.Catalog_Widgets_View.collection.where({ name : "CallScript" });
+	console.log(callscriptWidget);
+
+	// call script widget not added
+	if (callscriptWidget[0].get("is_added") == false)
+		return false;
+
+	// call script widget added
+	return true;
 }
 
 // Get widget from collection and Convert prefs in json
@@ -116,6 +146,12 @@ function getCallScriptJSON()
 	console.log(callscriptPrefsJson);
 
 	return callscriptPrefsJson;
+}
+
+function getCallScriptRuleCount()
+{
+	var prefs = getCallScriptJSON();
+	return prefs.csrules.length;	
 }
 
 // Add rules in rules array to add same array in widget's prefs
@@ -298,22 +334,6 @@ function editCallScriptRule(id)
 	}
 }
 
-// Check call script widget is added or not
-function isCallScriptAdded()
-{
-	console.log("In isCallScriptAdded");
-
-	// Get call script widget
-	var callscriptWidget = App_Widgets.Catalog_Widgets_View.collection.where({ name : "CallScript" });
-	console.log(callscriptWidget);
-
-	// call script widget not added
-	if (callscriptWidget[0].get("is_added") == false)
-		return false;
-
-	// call script widget added
-	return true;
-}
 
 
 /**
@@ -321,6 +341,7 @@ function isCallScriptAdded()
  */
 function setup_sortable_callscriptrules()
 {	
+	$(".csr-sortable").append("<tr class='pseduo-row' style='border:none!important;'><td></td><td></td><td></td></tr>");
 	// Loads jquery-ui to get sortable functionality on widgets
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function()
 	{
@@ -345,24 +366,18 @@ function setup_sortable_callscriptrules()
 					      $(this).width($originals.eq(index).width());
 					    });
 					    return $helper;
-					}						
+					}
 				}).disableSelection();
-		
-		
-		$('.csr-sortable').on("sortstart", function(event, ui) {
-			$(".csr-sortable").append("<tr class='pseduo-row' style='border:none!important;'><td></td><td></td><td></td></tr>");
-		});
-		
+				
 		/*
 		 * This event is called after sorting stops to save new positions of
 		 * rules
 		 */
 		$('.csr-sortable').on("sortstop", function(event, ui) {
-
-			$('.csr-sortable').find(".pseduo-row").remove();
-			
+					
 			// Get new array of rule
 			getRulesNewPosition(function(newRules){
+				
 				// Saves new positions in widget
 				saveAfterDrop(newRules);
 			});			
