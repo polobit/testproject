@@ -270,18 +270,16 @@ function appendItem1(base_model)
 								}
 				}
 
-
-				if ($('#event-owner').val() == "")
-				{
+				var jsonObject = $.parseJSON(readCookie('event-filters'));
+				var owner = jsonObject.owner_id;
+				// if no owner then its all 
+				if(owner != ""){
+								$('.e_owner').addClass('hide');
+				}else{
 								if ($('.e_owner').hasClass('hide'))
 												$('.e_owner').removeClass('hide');
-
 				}
-				else
-				{
 
-								$('.e_owner').addClass('hide');
-				}
 				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",",""));
 }
 
@@ -300,17 +298,18 @@ function appendItem2(base_model)
 				$('#event-heading', this.el).show();
 
 				// check for all selected
-				if ($('#event-owner').val() == "")
-				{
+				// on landing of page
+				
+				var jsonObject = $.parseJSON(readCookie('event-filters'));
+				var owner = jsonObject.owner_id;
+				// if no owner then its all 
+				if(owner != ""){
+								$('.e_owner').addClass('hide');
+				}else{
 								if ($('.e_owner').hasClass('hide'))
 												$('.e_owner').removeClass('hide');
-
 				}
-				else
-				{
 
-								$('.e_owner').addClass('hide');
-				}
 				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",",""));
 
 }

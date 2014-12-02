@@ -52,18 +52,12 @@ $(function()
 				{
 								e.preventDefault();
 								var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
-								if (readCookie("agile_calendar_view"))
-								{
-
-												var eventModel = eventCollectionView.collection.get(eventId);
-												var formData = serializeForm('updateActivityForm');
-
-								}
 								save_event('updateActivityForm', 'updateActivityModal', true, this, function(data)
 								{
 												console.log(data);
 												var eventModel = eventCollectionView.collection.get(eventId);
 												eventModel.set(data.toJSON(), { merge : true });
+												eventCollectionView.render(true);
 								});
 
 				});
