@@ -493,6 +493,14 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 	    sendPasswordChangedNotification(domainUser.encrypted_password);
 	}
+	else if(id != null && !is_account_owner)
+	{
+	    DomainUser user = DomainUserUtil.getDomainUser(id);
+	    
+	    // Checks if super user is disabled, and throws exception if super
+	    // is disabled
+	    checkSuperUserDisabled(user);
+	}
 
 	// Check if namespace is null or empty. Then, do not allow to be created
 

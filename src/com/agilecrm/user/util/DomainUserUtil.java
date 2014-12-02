@@ -1,6 +1,7 @@
 package com.agilecrm.user.util;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,8 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.QueryResultIterable;
 import com.googlecode.objectify.Key;
 
 /**
@@ -375,11 +378,60 @@ public class DomainUserUtil
     {
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
-
-	DomainUser user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true)
+	DomainUser user = null;
+	try
+	{
+	    user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true)
 		.get();
+	    if(user == null)
+		user = getDomainOwnerHack(domain);
+	}
+	finally
+	{
+		NamespaceManager.set(oldNamespace);
+	}
 
-	NamespaceManager.set(oldNamespace);
+	return user;
+    }
+    
+    /**
+     * Fetches domain user based on id if is_account_owner flag is not found
+     * @param domain
+     * @return
+     */
+    private static final DomainUser getDomainOwnerHack(String domain)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+	DomainUser user = null;
+	try
+	{
+	     com.googlecode.objectify.Query<DomainUser> query = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_admin", true).limit(1).order("id");
+	     QueryResultIterable<DomainUser> users = query.fetch();
+	     Iterator<DomainUser> iterator = users.iterator();
+	     
+	     // We only need one user
+	     if (iterator.hasNext() )
+	     {
+		 user = iterator.next();
+		 if(!user.is_account_owner)
+		 {
+		     user.is_account_owner = true;
+		     user.save();
+		 }
+	     }
+		 
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+
 	return user;
     }
 
