@@ -292,7 +292,16 @@ var SubscribeRouter = Backbone.Router.extend({
 						that.setup_email_plan(subscription);
 					})
 					
-					$("#email-quantity", el).die().live('keydown', function(e){
+							// Phone number validation
+					jQuery.validator.addMethod("email_plan_minimum", function(value, element) {
+	
+								if (this.optional(element))
+									return true;
+
+								return parseInt(value) > 5;
+							}, " Should purchase a minimum of 5000 emails.");
+					
+					$("#email-quantity", el).die().live('keyup', function(e){
 						isValidForm($("#email-plan-form", el));
 						if(e.which == 13)
 							{
