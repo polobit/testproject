@@ -298,7 +298,7 @@ var SubscribeRouter = Backbone.Router.extend({
 								if (this.optional(element))
 									return true;
 
-								return parseInt(value) > 5;
+								return parseInt(value) >= 5;
 							}, " Should purchase a minimum of 5000 emails.");
 					
 					$("#email-quantity", el).die().live('keyup', function(e){
