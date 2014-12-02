@@ -123,9 +123,12 @@ public class Unsubscribe extends TaskletAdapter
 		else
 		{
 			for (int i = 0; i < listSize - 1; i++)
+			{
 				message += " " + campaignName.get(i);
-
-			message += " and " + campaignName.get(listSize) + ".";
+				if ((i + 1) != (listSize - 1))
+					message += ", ";
+			}
+			message += " and " + campaignName.get(listSize - 1) + ".";
 
 		}
 		return message;
