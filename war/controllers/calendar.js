@@ -279,7 +279,7 @@ function appendItem1(base_model)
 								if ($('.e_owner').hasClass('hide'))
 												$('.e_owner').removeClass('hide');
 				}
-
+			
 				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",","").trim());
 }
 
@@ -309,7 +309,7 @@ function appendItem2(base_model)
 								if ($('.e_owner').hasClass('hide'))
 												$('.e_owner').removeClass('hide');
 				}
-
+				
 				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",","").trim());
 
 }
@@ -542,6 +542,7 @@ function loadGoogleEvents()
 				$.getJSON('core/api/calendar-prefs/get', function(response)
 				{
 								console.log(response);
+								if(response){
 								createCookie('google_event_token', response.access_token);
 
 								head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
@@ -606,6 +607,9 @@ function loadGoogleEvents()
 												});
 												return;
 								});
+								}else{
+												$($('#event_tab').children()[1]).addClass('hide');
+								}
 
 				});
 }

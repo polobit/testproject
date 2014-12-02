@@ -32,7 +32,7 @@
 
 <script id="future-model-template" type="text/html">
 
-<td class="e_owner" style="width:90px;cursor: pointer;" onclick=show_model({{id}})>
+<td class="e_owner" style="width:60px;cursor: pointer;" onclick=show_model({{id}})>
     <div>
 	{{#if ownerPic}}
         	<img class="thumbnail" src="{{ownerPic}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
@@ -65,7 +65,7 @@
         		{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}} 
         		
-        	{{/if_contact_type}} {{#if_contact_type "COMPANY"}}{{getPropertyValue properties "name"}}{{/if_contact_type}},</a> {{/each}}  
+        	{{/if_contact_type}}{{#if_contact_type "COMPANY"}}{{getPropertyValue properties "name"}}{{/if_contact_type}},</a> {{/each}}  
         
     </div>
 {{/if}}
@@ -94,7 +94,7 @@
 
 <script id="events-model-template" type="text/html">
 
-<td class="e_owner" style="width:90px;cursor: pointer;" onclick=show_model({{id}})>
+<td class="e_owner" style="width:60px;cursor: pointer;" onclick=show_model({{id}})>
  <div>
 	{{#if ownerPic}}
         	<img class="thumbnail" src="{{ownerPic}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
@@ -126,7 +126,7 @@
         		{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}} 
         		
-        	{{/if_contact_type}} {{#if_contact_type "COMPANY"}}{{getPropertyValue properties "name"}}{{/if_contact_type}},</a> {{/each}}  
+        	{{/if_contact_type}}{{#if_contact_type "COMPANY"}}{{getPropertyValue properties "name"}}{{/if_contact_type}},</a> {{/each}}  
         
     </div>
 {{/if}}
