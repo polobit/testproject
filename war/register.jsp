@@ -282,7 +282,7 @@ $.validator.setDefaults({
 								<h1 class="regpage-logHead">
 									<img src="img/signin/cloud-logo.png">One last step
 								</h1>
-								<div class="reg-info"></div>
+								<div class="reg-info"> Tell us a little more</div>
 							</div>
 							<fieldset class="step2">
 								<div class='regpage-fieldview'>
