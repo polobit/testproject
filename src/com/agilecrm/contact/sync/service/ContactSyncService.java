@@ -266,6 +266,9 @@ public abstract class ContactSyncService implements SyncService
      */
     private Contact saveContact(Contact contact)
     {
+	int i = 0;
+	if( i + 1 == 1)
+	    return null;
 	if (ContactUtil.isDuplicateContact(contact))
 	{
 	    contact = ContactUtil.mergeContactFields(contact);

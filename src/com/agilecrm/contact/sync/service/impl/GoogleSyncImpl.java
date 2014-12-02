@@ -105,7 +105,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		    e.printStackTrace();
 		}
 	    }
-	    String accessToken = prefs.token;
+	    String accessToken = "ya29.0AApFDf_kTENBhdmA5lpqzBpwBWhvlJtv1dC_h2Kem0fnp8Us1DBoWql";
 
 	    Preconditions.checkEmptyString(accessToken, "Access token is empty");
 
@@ -259,11 +259,19 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	try
 	{
 	    resultFeed = contactService.getFeed(myQuery, ContactFeed.class);
-
+	    
 	    List<ContactEntry> entries = resultFeed.getEntries();
 
+	 //   System.out.println(resultFeed.getFeedBatchLink());
+	  //  System.out.println(resultFeed.getEtag());
+	   // System.out.println(resultFeed.getExtensionLocalName());
+	   // System.out.println(resultFeed.getItemsPerPage());
+	   // System.out.println(resultFeed.getCategories());
+	  //  System.out.println(resultFeed.getId());
 	    System.out.println(resultFeed.getTotalResults());
 	    System.out.println(resultFeed.getStartIndex());
+	    System.out.println(myQuery.getUrl());
+	    System.out.println("---------------------------------------------------------------");
 	    return entries;
 	}
 	catch (IOException e)
@@ -312,7 +320,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	query.setMaxResults(MAX_FETCH_LIMIT_FOR_GOOGLE);
 
-	query.setStringCustomParameter("access_token", prefs.token);
+	query.setStringCustomParameter("access_token", "ya29.0AApFDf_kTENBhdmA5lpqzBpwBWhvlJtv1dC_h2Kem0fnp8Us1DBoWql");
 
 	// query.setStrict(true);
 
@@ -323,7 +331,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	 */
 	if (prefs.sync_from_group != null)
 	{
-	    prefs.sync_from_group = URLDecoder.decode(prefs.sync_from_group);
+	    prefs.sync_from_group = URLDecoder.decode("http://www.google.com/m8/feeds/groups/lionel.negrotto@gmail.com/base/6");
 
 	    // Setting group query
 	    query.setStringCustomParameter("group", prefs.sync_from_group);
@@ -337,8 +345,9 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	 * time can be saved in last synced time
 	 */
 
-	System.out.println(query.getFullTextQuery());
-	System.out.println(query.getMaxResults());
+	//System.out.println(query.getFullTextQuery());
+	//System.out.println(query.getMaxResults());
+	//System.out.println(query.getUrl());
 
 	query.setStringCustomParameter("orderby", "lastmodified");
 	query.setStringCustomParameter("sortOrder", "ascending");
@@ -391,9 +400,9 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    }
 
 	    created_at = new_created_at;
-	    System.out.println(entry.getId() + " , " + entry.getName());
-	    System.out.println(created_at);
-	    contact = wrapContactToAgileSchemaAndSave(entry);
+	 //   System.out.println(entry.getId() + " , " + entry.getName());
+	   // System.out.println(created_at);
+	    //contact = wrapContactToAgileSchemaAndSave(entry);
 	}
 
 	System.out.println("TIME UPDATED" + created_at + ", " + prefs.last_synced_from_client + ", matches :" + matches
@@ -489,14 +498,14 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    // from google
 	    if (createContact == null)
 	    {
-		System.out.println("contact null : " + createContact);
+		//System.out.println("contact null : " + createContact);
 
 		// Last synced time is still set to avoid current contact being
 		// fetched again ang again
 		prefs.last_synced_to_client = contact.created_time > prefs.last_synced_to_client ? contact.created_time
 			: prefs.last_synced_to_client;
 
-		System.out.println(contacts_list_size - 1 + ", " + i);
+		//System.out.println(contacts_list_size - 1 + ", " + i);
 		skip = true;
 	    }
 
