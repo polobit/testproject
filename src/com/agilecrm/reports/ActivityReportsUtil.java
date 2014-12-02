@@ -13,6 +13,8 @@ import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.activities.util.EventUtil;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.reports.ActivityReports.ActivityType;
@@ -659,10 +661,19 @@ public class ActivityReportsUtil
 
 	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, Activity.EntityType.CONTACT.toString(),
 		Activity.ActivityType.NOTE_ADD.toString(), null, startTime, endTime, 0, null);
-
+	List<Activity> noteActivities = new ArrayList<Activity>();
 	for (Activity activity : activities)
 	{
-	    activity.custom4 = getActivityRelateContacts(activity, user.domain, "");
+	    Contact contact = ContactUtil.getContact(activity.entity_id);
+	    String name = contact.getContactFieldValue(Contact.FIRST_NAME) != null ? contact
+		    .getContactFieldValue(Contact.FIRST_NAME) : "";
+	    name = contact.getContactFieldValue(Contact.LAST_NAME) != null ? contact
+		    .getContactFieldValue(Contact.LAST_NAME) : "";
+	    String result = "<a href=\"https://" + user.domain + ".agilecrm.com/#contact" + contact.id
+		    + "\" target=\"_blank\">" + name + "</a>";
+
+	    activity.custom4 = result;
+	    noteActivities.add(activity);
 	}
 
 	Map<String, Object> notesReport = new HashMap<String, Object>();
