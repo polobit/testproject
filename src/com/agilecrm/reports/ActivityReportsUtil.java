@@ -175,6 +175,8 @@ public class ActivityReportsUtil
 		}
 		if (count > 0)
 		    activityReport.put("total", count);
+		else
+		    activityReport.put("message", "No activity form " + user.name);
 		userReport.add(activityReport);
 	    }
 	    activityReports.put("reports", userReport);
