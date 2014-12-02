@@ -266,8 +266,8 @@ public class EventUtil
     public static List<Event> getEventList(int max, String cursor)
     {
 	Date d = new Date();
-	Long startDate = d.getTime();
-	Query<Event> query = dao.ofy().query(Event.class).filter("start >=", startDate / 1000);
+	Long startDate = (d.getTime()) / 1000;
+	Query<Event> query = dao.ofy().query(Event.class).filter("start >=", startDate);
 	return dao.fetchAllWithCursor(max, cursor, query, false, false);
     }
 

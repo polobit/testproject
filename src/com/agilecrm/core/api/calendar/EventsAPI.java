@@ -214,7 +214,7 @@ public class EventsAPI
 	    System.out.println("Fetching page by page");
 	    if (!StringUtils.isEmpty(ownerId))
 	    {
-		EventUtil.getEventList(Integer.parseInt(count), cursor, Long.parseLong(ownerId));
+		return EventUtil.getEventList(Integer.parseInt(count), cursor, Long.parseLong(ownerId));
 	    }
 	    else
 	    {
@@ -237,7 +237,7 @@ public class EventsAPI
 
 	    if (!StringUtils.isEmpty(ownerId))
 	    {
-		EventUtil.getEvents(Integer.parseInt(count), cursor, Long.parseLong(ownerId));
+		return EventUtil.getEvents(Integer.parseInt(count), cursor, Long.parseLong(ownerId));
 	    }
 	    else
 	    {
