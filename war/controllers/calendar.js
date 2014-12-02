@@ -25,9 +25,14 @@ var CalendarRouter = Backbone.Router.extend({
 								var view = readCookie("agile_calendar_view");
 								if (view)
 								{
+<<<<<<< HEAD
 
 												loadAgileEvents();
+=======
+												// retrieve google Calendar prefs and pass to function
+>>>>>>> b19f449... Fixed Event list minor ui changes related to event header
 												loadGoogleEvents();
+												loadAgileEvents();
 								}
 								else
 								{
@@ -272,15 +277,18 @@ function appendItem1(base_model)
 
 				var jsonObject = $.parseJSON(readCookie('event-filters'));
 				var owner = jsonObject.owner_id;
-				// if no owner then its all 
-				if(owner != ""){
+				// if no owner then its all
+				if (owner != "")
+				{
 								$('.e_owner').addClass('hide');
-				}else{
+				}
+				else
+				{
 								if ($('.e_owner').hasClass('hide'))
 												$('.e_owner').removeClass('hide');
 				}
-			
-				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",","").trim());
+
+				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",", "").trim());
 }
 
 // append all events
@@ -299,18 +307,21 @@ function appendItem2(base_model)
 
 				// check for all selected
 				// on landing of page
-				
+
 				var jsonObject = $.parseJSON(readCookie('event-filters'));
 				var owner = jsonObject.owner_id;
-				// if no owner then its all 
-				if(owner != ""){
+				// if no owner then its all
+				if (owner != "")
+				{
 								$('.e_owner').addClass('hide');
-				}else{
+				}
+				else
+				{
 								if ($('.e_owner').hasClass('hide'))
 												$('.e_owner').removeClass('hide');
 				}
-				
-				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",","").trim());
+
+				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",", "").trim());
 
 }
 
@@ -324,7 +335,7 @@ function appendGoogleEvent(base_model)
 				$('#google_event', this.el).append(itemView.render().el);
 				$('#google_event', this.el).parent('table').css("display", "block");
 				$('#google_event', this.el).show();
-				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",","").trim());
+				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",", "").trim());
 
 }
 
@@ -368,7 +379,7 @@ function appendGoogleEventCategorization(base_model)
 
 								}
 				}
-				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",","").trim());
+				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",", "").trim());
 
 }
 
@@ -492,9 +503,9 @@ function getName(properties)
 												lastName = properties[i].value;
 
 				}
-						name = firstName + " " + lastName;
+				name = firstName + " " + lastName;
 
-				return name.replace("undefined","").trim();
+				return name.replace("undefined", "").trim();
 }
 
 function getCompanyName(properties)
@@ -510,29 +521,44 @@ function getCompanyName(properties)
 }
 function loadAgileEvents()
 {
+				var calEnable = false;
+
+				$.ajax({ url : 'core/api/calendar-prefs/get', async : false, success : function(response)
+				{
+								if (response)
+												calEnable = true;
+
+				} });
 				var jsonObject = $.parseJSON(readCookie('event-filters'));
 				var ownerId = jsonObject.owner_id;
 
 				var view = readCookie("agile_calendar_view");
 				if (view == "calendar_list_view")
 				{
-
-								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/list?ownerId='+ownerId+'', templateKey : "events", individual_tag_name : 'tr',
-												sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25 });
+								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/list?ownerId=' + ownerId + '', templateKey : "events",
+												individual_tag_name : 'tr', sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25 });
 								eventCollectionView.appendItem = appendItem2;
 								eventCollectionView.collection.fetch();
+								if(calEnable){
+												$('#agile').html(this.eventCollectionView.render().el);
+												$('#agile_event_list').addClass('hide');
+								}
+								else
+												$('#agile_event').html(this.eventCollectionView.render().el);
 
-								$('#agile').html(this.eventCollectionView.render().el);
 				}
 				else if (view == "calendar_list_view_future")
 				{
-
-								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/future/list?ownerId='+ownerId+'', templateKey : "future", individual_tag_name : 'tr',
-												sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25});
+								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/future/list?ownerId=' + ownerId + '', templateKey : "future",
+												individual_tag_name : 'tr', sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25 });
 								eventCollectionView.appendItem = appendItem1;
 								eventCollectionView.collection.fetch();
-
-								$('#agile').html(this.eventCollectionView.render().el);
+								if(calEnable){
+												$('#agile').html(this.eventCollectionView.render().el);
+												$('#agile_event_list').addClass('hide');
+								}
+								else
+												$('#agile_event').html(this.eventCollectionView.render().el);
 				}
 }
 
@@ -542,73 +568,76 @@ function loadGoogleEvents()
 				$.getJSON('core/api/calendar-prefs/get', function(response)
 				{
 								console.log(response);
-								if(response){
-								createCookie('google_event_token', response.access_token);
-
-								head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
+								if (response)
 								{
-												setupGC(function()
+												createCookie('google_event_token', response.access_token);
+
+												head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
 												{
-
-																gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
-
-																// Retrieve the events from primary
-																var view = readCookie("agile_calendar_view");
-																if (view == "calendar_list_view")
-																{
-																				var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, orderBy : 'startTime' });
-																				request.execute(function(resp)
-																				{
-																								var events = new Array();
-																								console.log(resp);
-																								for (var i = 0; i < resp.items.length; i++)
-																								{
-																												var fc_event = google2fcEvent(resp.items[i]);
-																												console.log(fc_event);
-																												events.push(fc_event);
-
-																								}
-																								googleNextPageToken = resp.nextPageToken;
-																								googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "google-event", individual_tag_name : 'tr',
-																												sort_collection : true, sortKey : 'start', descending : false });
-																								googleEventCollectionView.appendItem = appendGoogleEvent;
-																								$('#google').html(googleEventCollectionView.render(true).el);
-
-
-																				});
-
-																}
-																else
+																setupGC(function()
 																{
 
-																				var startDate = new Date();
-																				var gDate = startDate.toISOString();
-																				var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, timeMin : gDate });
-																				request.execute(function(resp)
+																				gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
+
+																				// Retrieve the events from primary
+																				var view = readCookie("agile_calendar_view");
+																				if (view == "calendar_list_view")
 																				{
-																								var events = new Array();
-																								console.log(resp);
-																								for (var i = 0; i < resp.items.length; i++)
+																								var request = gapi.client.calendar.events
+																																.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, orderBy : 'startTime' });
+																								request.execute(function(resp)
 																								{
-																												var fc_event = google2fcEvent(resp.items[i]);
-																												console.log(fc_event);
-																												events.push(fc_event);
+																												var events = new Array();
+																												console.log(resp);
+																												for (var i = 0; i < resp.items.length; i++)
+																												{
+																																var fc_event = google2fcEvent(resp.items[i]);
+																																console.log(fc_event);
+																																events.push(fc_event);
 
-																								}
-																								googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "googleEventCategorization",
-																												individual_tag_name : 'tr', sort_collection : true, sortKey : 'start', descending : false });
-																								googleEventCollectionView.appendItem = appendGoogleEventCategorization;
-																								$('#google').html(googleEventCollectionView.render(true).el);
+																												}
+																												googleNextPageToken = resp.nextPageToken;
+																												googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "google-event", individual_tag_name : 'tr',
+																																sort_collection : true, sortKey : 'start', descending : false });
+																												googleEventCollectionView.appendItem = appendGoogleEvent;
+																												$('#google').html(googleEventCollectionView.render(true).el);
 
-																				});
+																								});
 
-																}
+																				}
+																				else
+																				{
+																								var startDate = new Date();
+																								var gDate = startDate.toISOString();
+																								var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, timeMin : gDate });
+																								request.execute(function(resp)
+																								{
+																												var events = new Array();
+																												console.log(resp);
+																												for (var i = 0; i < resp.items.length; i++)
+																												{
+																																var fc_event = google2fcEvent(resp.items[i]);
+																																console.log(fc_event);
+																																events.push(fc_event);
 
+																												}
+																												googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "googleEventCategorization",
+																																individual_tag_name : 'tr', sort_collection : true, sortKey : 'start', descending : false });
+																												googleEventCollectionView.appendItem = appendGoogleEventCategorization;
+																												$('#google').html(googleEventCollectionView.render(true).el);
+
+																								});
+
+																				}
+
+																});
+																return;
 												});
-												return;
-								});
-								}else{
-												$($('#event_tab').children()[1]).addClass('hide');
+								}
+								else
+								{
+												$('#event_tab').addClass('hide');
+												$('#agile_event').removeClass('hide');
 								}
 
 				});
