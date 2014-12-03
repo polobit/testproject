@@ -210,6 +210,7 @@ function our_domain_sync()
 			// set_profile_noty();
 			Agile_Contact = data;
 
+			
 			// Adds signup tag, if it is not added previously.
 			// set_profile_noty();
 			add_custom_fields_to_our_domain();
@@ -220,7 +221,6 @@ function our_domain_sync()
 
 			}
 			initWebrules();
-			add_referrar_info_as_note();
 		}, function(data)
 		{
 			var name = CURRENT_DOMAIN_USER['name'];

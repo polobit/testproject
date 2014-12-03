@@ -436,7 +436,7 @@ var SettingsRouter = Backbone.Router.extend({
 	support : function()
 	{
 		$("#content").html(getTemplate("support-form"), {});
-
+	/*	var CLICKDESK_Live_Chat  = "offline";
 		try {
 				CLICKDESK_Live_Chat.onStatus(function(status) {
 
@@ -461,7 +461,8 @@ var SettingsRouter = Backbone.Router.extend({
 			}, 5000);
 			
 			
-		}
+		}*/
+		$("#clickdesk_status").html('No chat support representative is available at the moment. Please<br/> <a href="#contact-us" id="show_support">leave a message</a>.');
 	},
 
 	/**

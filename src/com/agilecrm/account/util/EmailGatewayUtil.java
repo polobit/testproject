@@ -40,338 +40,339 @@ import com.thirdparty.mandrill.Mandrill;
 public class EmailGatewayUtil
 {
 
-    public static EmailGateway saveEmailGateway(EmailGateway emailGateway)
-    {
-
-	try
+	public static EmailGateway saveEmailGateway(EmailGateway emailGateway)
 	{
-	    // Check given api keys
-	    EmailGatewayUtil.checkEmailAPISettings(emailGateway);
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
-		    .entity(e.getMessage()).build());
-	}
 
-	try
-	{
-	    Widget widget = WidgetUtil.getWidgetByNameAndType("EmailGateway", IntegrationType.EMAIL);
+		try
+		{
+			// Check given api keys
+			EmailGatewayUtil.checkEmailAPISettings(emailGateway);
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
+					.entity(e.getMessage()).build());
+		}
 
-	    if (widget == null)
-	    {
-		widget = new Widget("EmailGateway",
-		        "Email gateway supports third party email apis integration into Agile.", "", "", "", "",
-		        WidgetType.INTEGRATIONS, IntegrationType.EMAIL);
-	    }
+		try
+		{
+			Widget widget = WidgetUtil.getWidgetByNameAndType("EmailGateway", IntegrationType.EMAIL);
 
-	    ObjectMapper map = new ObjectMapper();
-	    widget.prefs = map.writeValueAsString(emailGateway);
-	    widget.save();
+			if (widget == null)
+			{
+				widget = new Widget("EmailGateway",
+						"Email gateway supports third party email apis integration into Agile.", "", "", "", "",
+						WidgetType.INTEGRATIONS, IntegrationType.EMAIL);
+			}
 
-	    if (emailGateway != null)
-		CacheUtil.setCache(NamespaceManager.get() + "_email_gateway", emailGateway);
+			ObjectMapper map = new ObjectMapper();
+			widget.prefs = map.writeValueAsString(emailGateway);
+			widget.save();
 
-	    return emailGateway;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
+			if (emailGateway != null)
+				CacheUtil.setCache(NamespaceManager.get() + "_email_gateway", emailGateway);
 
-    /**
-     * Returns email gateway from datastore
-     * 
-     * @return EmailGateway
-     */
-    public static EmailGateway getEmailGateway()
-    {
-
-	// Get from Cache
-	EmailGateway gateway = (EmailGateway) CacheUtil.getCache(NamespaceManager.get() + "_email_gateway");
-
-	if (gateway != null)
-	{
-	    System.out.println("Returning gateway from Cache...");
-	    return gateway;
+			return emailGateway;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-	Widget widget = WidgetUtil.getWidgetByNameAndType("EmailGateway", IntegrationType.EMAIL);
-
-	// If no widget return null
-	if (widget == null)
-	    return null;
-
-	EmailGateway emailGateway = null;
-
-	try
+	/**
+	 * Returns email gateway from datastore
+	 * 
+	 * @return EmailGateway
+	 */
+	public static EmailGateway getEmailGateway()
 	{
-	    // Fetch from widget prefs and wrap to EmailGateway
-	    ObjectMapper mapper = new ObjectMapper();
-	    emailGateway = mapper.readValue(widget.prefs, EmailGateway.class);
-	}
-	catch (Exception e)
-	{
-	    System.out.println("Exception occured while getting email gateway from object mapper..." + e.getMessage());
-	    e.printStackTrace();
-	}
 
-	return emailGateway;
-    }
+		// Get from Cache
+		EmailGateway gateway = (EmailGateway) CacheUtil.getCache(NamespaceManager.get() + "_email_gateway");
 
-    /**
-     * Deletes Email Gateway widget from datastore and memcache
-     */
-    public static void deleteEmailGateway()
-    {
-	try
-	{
-	    // Delete from cache
-	    CacheUtil.deleteCache(NamespaceManager.get() + "_email_gateway");
-	}
-	catch (Exception e)
-	{
-	    System.err.println("Exception occured while deleting gateway from cache..." + e.getMessage());
-	}
+		if (gateway != null)
+		{
+			System.out.println("Returning gateway from Cache...");
+			return gateway;
+		}
 
-	Widget widget = WidgetUtil.getWidgetByNameAndType("EmailGateway", IntegrationType.EMAIL);
-	widget.delete();
-    }
+		Widget widget = WidgetUtil.getWidgetByNameAndType("EmailGateway", IntegrationType.EMAIL);
 
-    /**
-     * Verifies whether given email gateway api keys are valid or not
-     * 
-     * @param emailGateway
-     *            - EmailGateway object
-     * @throws Exception
-     */
-    public static void checkEmailAPISettings(EmailGateway emailGateway) throws Exception
-    {
-	// If null return
-	if (emailGateway == null)
-	    return;
+		// If no widget return null
+		if (widget == null)
+			return null;
 
-	String response = null;
-	JSONObject responseJSON = null;
+		EmailGateway emailGateway = null;
 
-	// Test email to validate email gateway credentials
-	if (emailGateway.email_api.equals(EMAIL_API.SEND_GRID))
-	    response = SendGrid.sendMail(emailGateway.api_user, emailGateway.api_key, "api_test@agilecrm.com",
-		    "API Test", "naresh@agilecrm.com", null, null,
-		    "SendGrid test email from " + NamespaceManager.get(), null, "Test Email.", "Test Email", null);
-	else
-	    response = Mandrill.sendMail(emailGateway.api_key, false, "api_test@agilecrm.com", "API Test",
-		    "naresh@agilecrm.com", null, null, "Mandrill test email from " + NamespaceManager.get(), null,
-		    "Test Email.", "Test Email", null);
+		try
+		{
+			// Fetch from widget prefs and wrap to EmailGateway
+			ObjectMapper mapper = new ObjectMapper();
+			emailGateway = mapper.readValue(widget.prefs, EmailGateway.class);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception occured while getting email gateway from object mapper..." + e.getMessage());
+			e.printStackTrace();
+		}
 
-	try
-	{
-	    // Handle JSON parse exception
-	    responseJSON = new JSONObject(response);
-	}
-	catch (JSONException e)
-	{
-	    System.err.println("JSON Exception occurred while parsing response " + e.getMessage());
-	    e.printStackTrace();
+		return emailGateway;
 	}
 
-	// SendGrid Error
-	if (responseJSON != null && responseJSON.has("errors"))
-	    throw new Exception("Error saving - " + responseJSON.getString("errors"));
-
-	// Mandrill Error
-	if (responseJSON != null && responseJSON.has("status") && responseJSON.getString("status").equals("error"))
-	    throw new Exception("Error saving - " + responseJSON.getString("message"));
-
-    }
-
-    /**
-     * Adds to Pull Queue
-     * 
-     * @param domain
-     *            - Agile Domain
-     * @param fromEmail
-     *            - from email
-     * @param fromName
-     *            - from name
-     * @param to
-     *            - to email
-     * @param cc
-     *            - cc email
-     * @param bcc
-     *            - bcc email
-     * @param subject
-     *            - email subject
-     * @param replyTo
-     *            - reply to email
-     * @param html
-     *            - html body
-     * @param text
-     *            - text body
-     * @param mandrillMetadata
-     *            - Mandrill Metadata. e.g., campaign-id is sent as metadata
-     *            which is used in webhook use in webhook
-     */
-    public static void sendBulkEmail(String domain, String fromEmail, String fromName, String to, String cc,
-	    String bcc, String subject, String replyTo, String html, String text, String mandrillMetadata)
-    {
-	try
+	/**
+	 * Deletes Email Gateway widget from datastore and memcache
+	 */
+	public static void deleteEmailGateway()
 	{
-	    // Fetch EmailGateway
-	    EmailGateway emailGateway = getEmailGateway();
+		try
+		{
+			// Delete from cache
+			CacheUtil.deleteCache(NamespaceManager.get() + "_email_gateway");
+		}
+		catch (Exception e)
+		{
+			System.err.println("Exception occured while deleting gateway from cache..." + e.getMessage());
+		}
 
-	    // If no gateway setup, sends email through Agile Mandrill
-	    if (emailGateway == null)
-	    {
-		// Add to Pull Queue
-		addToQueue(null, null, null, domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-		        mandrillMetadata);
+		Widget widget = WidgetUtil.getWidgetByNameAndType("EmailGateway", IntegrationType.EMAIL);
+		widget.delete();
+	}
 
-		return;
-	    }
+	/**
+	 * Verifies whether given email gateway api keys are valid or not
+	 * 
+	 * @param emailGateway
+	 *            - EmailGateway object
+	 * @throws Exception
+	 */
+	public static void checkEmailAPISettings(EmailGateway emailGateway) throws Exception
+	{
+		// If null return
+		if (emailGateway == null)
+			return;
 
-	    System.out.println("Sending email using emailgateway " + emailGateway.email_api.toString() + " of domain "
-		    + domain);
+		String response = null;
+		JSONObject responseJSON = null;
 
-	    // Add To Queue
-	    addToQueue(emailGateway.email_api.toString(), emailGateway.api_user, emailGateway.api_key, domain,
-		    fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata);
+		// Test email to validate email gateway credentials
+		if (emailGateway.email_api.equals(EMAIL_API.SEND_GRID))
+			response = SendGrid.sendMail(emailGateway.api_user, emailGateway.api_key, "api_test@agilecrm.com",
+					"API Test", "naresh@agilecrm.com", null, null,
+					"SendGrid test email from " + NamespaceManager.get(), null, "Test Email.", "Test Email", null);
+		else
+			response = Mandrill.sendMail(emailGateway.api_key, false, "api_test@agilecrm.com", "API Test",
+					"naresh@agilecrm.com", null, null, "Mandrill test email from " + NamespaceManager.get(), null,
+					"Test Email.", "Test Email", null, null);
+
+		try
+		{
+			// Handle JSON parse exception
+			responseJSON = new JSONObject(response);
+		}
+		catch (JSONException e)
+		{
+			System.err.println("JSON Exception occurred while parsing response " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		// SendGrid Error
+		if (responseJSON != null && responseJSON.has("errors"))
+			throw new Exception("Error saving - " + responseJSON.getString("errors"));
+
+		// Mandrill Error
+		if (responseJSON != null && responseJSON.has("status") && responseJSON.getString("status").equals("error"))
+			throw new Exception("Error saving - " + responseJSON.getString("message"));
 
 	}
-	catch (Exception e)
+
+	/**
+	 * Adds to Pull Queue
+	 * 
+	 * @param domain
+	 *            - Agile Domain
+	 * @param fromEmail
+	 *            - from email
+	 * @param fromName
+	 *            - from name
+	 * @param to
+	 *            - to email
+	 * @param cc
+	 *            - cc email
+	 * @param bcc
+	 *            - bcc email
+	 * @param subject
+	 *            - email subject
+	 * @param replyTo
+	 *            - reply to email
+	 * @param html
+	 *            - html body
+	 * @param text
+	 *            - text body
+	 * @param mandrillMetadata
+	 *            - Mandrill Metadata. e.g., campaign-id is sent as metadata
+	 *            which is used in webhook use in webhook
+	 */
+	public static void sendBulkEmail(String domain, String fromEmail, String fromName, String to, String cc,
+			String bcc, String subject, String replyTo, String html, String text, String mandrillMetadata)
 	{
-	    System.err.println("Exception occured while adding to queue..." + e.getMessage());
-	    e.printStackTrace();
-	}
-    }
+		try
+		{
+			// Fetch EmailGateway
+			EmailGateway emailGateway = getEmailGateway();
 
-    /**
-     * Send personal email or individual email directly without adding to queue
-     * 
-     * @param domain
-     *            - agile domain
-     * @param fromEmail
-     *            - from email
-     * @param fromName
-     *            - from name
-     * @param to
-     *            - to email
-     * @param cc
-     *            - cc email
-     * @param bcc
-     *            - bcc email
-     * @param subject
-     *            - email subject
-     * @param replyTo
-     *            - reply to email
-     * @param html
-     *            - html body
-     * @param text
-     *            - text bodt
-     * @param mandrillMetadata
-     *            - - Mandrill Metadata. e.g., campaign-id is sent as metadata
-     *            which is used in webhook
-     * @param attachments
-     *            - attachment files like contacts export csv file
-     */
-    public static void sendEmail(String domain, String fromEmail, String fromName, String to, String cc, String bcc,
-	    String subject, String replyTo, String html, String text, String mandrillMetadata, String... attachments)
-    {
-	try
+			// If no gateway setup, sends email through Agile Mandrill
+			if (emailGateway == null)
+			{
+				// Add to Pull Queue
+				addToQueue(null, null, null, domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
+						mandrillMetadata);
+
+				return;
+			}
+
+			System.out.println("Sending email using emailgateway " + emailGateway.email_api.toString() + " of domain "
+					+ domain);
+
+			// Add To Queue
+			addToQueue(emailGateway.email_api.toString(), emailGateway.api_user, emailGateway.api_key, domain,
+					fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata);
+
+		}
+		catch (Exception e)
+		{
+			System.err.println("Exception occured while adding to queue..." + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Send personal email or individual email directly without adding to queue
+	 * 
+	 * @param domain
+	 *            - agile domain
+	 * @param fromEmail
+	 *            - from email
+	 * @param fromName
+	 *            - from name
+	 * @param to
+	 *            - to email
+	 * @param cc
+	 *            - cc email
+	 * @param bcc
+	 *            - bcc email
+	 * @param subject
+	 *            - email subject
+	 * @param replyTo
+	 *            - reply to email
+	 * @param html
+	 *            - html body
+	 * @param text
+	 *            - text bodt
+	 * @param mandrillMetadata
+	 *            - - Mandrill Metadata. e.g., campaign-id is sent as metadata
+	 *            which is used in webhook
+	 * @param attachments
+	 *            - attachment files like contacts export csv file
+	 */
+	public static void sendEmail(String domain, String fromEmail, String fromName, String to, String cc, String bcc,
+			String subject, String replyTo, String html, String text, String mandrillMetadata, List<Long> documentIds,
+			String... attachments)
 	{
-	    // Fetch EmailGateway
-	    EmailGateway emailGateway = getEmailGateway();
+		try
+		{
+			// Fetch EmailGateway
+			EmailGateway emailGateway = getEmailGateway();
 
-	    // If no gateway setup, sends email through Agile Mandrill
-	    if (emailGateway == null)
-	    {
-		Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-		        mandrillMetadata, attachments);
-		return;
-	    }
+			// If no gateway setup, sends email through Agile Mandrill
+			if (emailGateway == null)
+			{
+				Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
+						mandrillMetadata, documentIds, attachments);
+				return;
+			}
 
-	    // If SendGrid
-	    if (EMAIL_API.SEND_GRID.equals(emailGateway.email_api))
-		SendGrid.sendMail(emailGateway.api_user, emailGateway.api_key, fromEmail, fromName, to, cc, bcc,
-		        subject, replyTo, html, text, null, attachments);
+			// If SendGrid
+			if (EMAIL_API.SEND_GRID.equals(emailGateway.email_api))
+				SendGrid.sendMail(emailGateway.api_user, emailGateway.api_key, fromEmail, fromName, to, cc, bcc,
+						subject, replyTo, html, text, null, attachments);
 
-	    // If Mandrill
-	    if (EMAIL_API.MANDRILL.equals(emailGateway.email_api))
-		Mandrill.sendMail(emailGateway.api_key, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html,
-		        text, mandrillMetadata, attachments);
+			// If Mandrill
+			if (EMAIL_API.MANDRILL.equals(emailGateway.email_api))
+				Mandrill.sendMail(emailGateway.api_key, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html,
+						text, mandrillMetadata, documentIds, attachments);
 
+		}
+		catch (Exception e)
+		{
+			System.err.println("Exception occured while sending emails through thirdparty email apis..."
+					+ e.getMessage());
+
+			e.printStackTrace();
+
+			System.out.println("Sending email again from exception in EmailGatewayUtil... " + e.getMessage());
+
+			Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
+					mandrillMetadata, documentIds, attachments);
+
+		}
 	}
-	catch (Exception e)
+
+	/**
+	 * Adds email details to deferred task before adding to pull queue
+	 * 
+	 * @param emailGatewayType
+	 * @param apiUser
+	 * @param apiKey
+	 * @param domain
+	 * @param fromEmail
+	 * @param fromName
+	 * @param to
+	 * @param cc
+	 * @param bcc
+	 * @param subject
+	 * @param replyTo
+	 * @param html
+	 * @param text
+	 * @param mandrillMetadata
+	 */
+	public static void addToQueue(String emailGatewayType, String apiUser, String apiKey, String domain,
+			String fromEmail, String fromName, String to, String cc, String bcc, String subject, String replyTo,
+			String html, String text, String mandrillMetadata)
 	{
-	    System.err.println("Exception occured while sending emails through thirdparty email apis..."
-		    + e.getMessage());
+		MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
+				fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata);
 
-	    e.printStackTrace();
-
-	    System.out.println("Sending email again from exception in EmailGatewayUtil... " + e.getMessage());
-
-	    Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-		    mandrillMetadata, attachments);
-
+		// Add to pull queue with from email as Tag
+		PullQueueUtil.addToPullQueue(
+				"bulk".equals(BackendUtil.getCurrentBackendName()) ? AgileQueues.BULK_EMAIL_PULL_QUEUE
+						: AgileQueues.NORMAL_EMAIL_PULL_QUEUE, mailDeferredTask, fromEmail);
 	}
-    }
 
-    /**
-     * Adds email details to deferred task before adding to pull queue
-     * 
-     * @param emailGatewayType
-     * @param apiUser
-     * @param apiKey
-     * @param domain
-     * @param fromEmail
-     * @param fromName
-     * @param to
-     * @param cc
-     * @param bcc
-     * @param subject
-     * @param replyTo
-     * @param html
-     * @param text
-     * @param mandrillMetadata
-     */
-    public static void addToQueue(String emailGatewayType, String apiUser, String apiKey, String domain,
-	    String fromEmail, String fromName, String to, String cc, String bcc, String subject, String replyTo,
-	    String html, String text, String mandrillMetadata)
-    {
-	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
-	        fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata);
+	/**
+	 * Sends bulk emails obtained from leased tasks
+	 * 
+	 * @param tasks
+	 *            - tasks leased from pull queue
+	 */
+	public static void sendMails(List<TaskHandle> tasks)
+	{
+		TaskHandle firstTaskHandle = tasks.get(0);
 
-	// Add to pull queue with from email as Tag
-	PullQueueUtil.addToPullQueue(
-	        "bulk".equals(BackendUtil.getCurrentBackendName()) ? AgileQueues.BULK_EMAIL_PULL_QUEUE
-	                : AgileQueues.NORMAL_EMAIL_PULL_QUEUE, mailDeferredTask, fromEmail);
-    }
+		MailDeferredTask mailDeferredTask = (MailDeferredTask) SerializationUtils.deserialize(firstTaskHandle
+				.getPayload());
 
-    /**
-     * Sends bulk emails obtained from leased tasks
-     * 
-     * @param tasks
-     *            - tasks leased from pull queue
-     */
-    public static void sendMails(List<TaskHandle> tasks)
-    {
-	TaskHandle firstTaskHandle = tasks.get(0);
+		// If null or Mandrill
+		if (mailDeferredTask.emailGatewayType == null
+				|| StringUtils.equals(mailDeferredTask.emailGatewayType, EMAIL_API.MANDRILL.toString()))
+			MandrillUtil.sendMandrillMails(tasks);
 
-	MailDeferredTask mailDeferredTask = (MailDeferredTask) SerializationUtils.deserialize(firstTaskHandle
-	        .getPayload());
+		// If SendGrid
+		if (StringUtils.equals(mailDeferredTask.emailGatewayType, EMAIL_API.SEND_GRID.toString()))
+			SendGridUtil.sendSendGridMails(tasks);
 
-	// If null or Mandrill
-	if (mailDeferredTask.emailGatewayType == null
-	        || StringUtils.equals(mailDeferredTask.emailGatewayType, EMAIL_API.MANDRILL.toString()))
-	    MandrillUtil.sendMandrillMails(tasks);
-
-	// If SendGrid
-	if (StringUtils.equals(mailDeferredTask.emailGatewayType, EMAIL_API.SEND_GRID.toString()))
-	    SendGridUtil.sendSendGridMails(tasks);
-
-	// Records email sent count
-	AccountEmailStatsUtil.recordAccountEmailStats(mailDeferredTask.domain, tasks.size());
-    }
+		// Records email sent count
+		AccountEmailStatsUtil.recordAccountEmailStats(mailDeferredTask.domain, tasks.size());
+	}
 }

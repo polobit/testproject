@@ -1657,7 +1657,9 @@ cursor: pointer;
 	top: -9px;
 	right: 0px;
 }
-
+.bold-text {
+	font-weight:bold !important;
+}
 #filter_options .popover-content {
 	background: #cad2dd !important;
 	padding: 0px !important;

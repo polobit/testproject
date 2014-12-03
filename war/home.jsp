@@ -163,7 +163,7 @@ var LOCAL_SERVER = <%=debug%>;
 
 var IS_FLUID = <%=is_fluid%>;
 
-var CLICKDESK_CODE_LOADED = false;
+var CLICKDESK_CODE_LOADED = true;
 
 // Get current user prefs json
 var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
@@ -236,6 +236,7 @@ head.ready(["core", "stats"], function(){
  <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-timline.css"></link>
  <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-widgets.css"></link>
  <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/chrome-extension-check.css"></link>
+ <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap_submenu.css"></link>
 <!-- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/date-picker.css"></link> -->
 
 

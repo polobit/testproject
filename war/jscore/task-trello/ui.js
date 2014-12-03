@@ -78,24 +78,30 @@ $(function()
 	});
 	
 	// Click events to agents dropdown of Owner's list and Criteria's list
-	$("ul#new-owner-tasks li a, ul#new-type-tasks li a").die().live("click", function(e)
+	/*$("ul#new-owner-tasks li a, ul#new-type-tasks li a").die().live("click", function(e)
 	{
-		e.preventDefault();
+		e.preventDefault();			
+		
+		// Hide list view and show column view with loading img
+		hideListViewAndShowLoading();		
 		
 		// Show selected name
 		var name = $(this).html(), id = $(this).attr("href");
-
-		$(this).closest("ul").data("selected_item", id);
+		
+		var selectedDropDown = $(this).closest("ul").attr("id");
+				
+		if(selectedDropDown == "new-type-tasks") // criteria type
+		    $(this).closest("ul.main-menu").data("selected_item", id);
+		else  // owner type
+			$(this).closest("ul").data("selected_item", id);
+		
 		$(this).closest(".btn-group").find(".selected_name").text(name);
 
 		// Empty collection
 		if(TASKS_LIST_COLLECTION != null)
 		TASKS_LIST_COLLECTION.collection.reset();
-				
-		// Shows loading image untill data gets ready for displaying
-		$('#new-task-list-based-condition').html(LOADING_HTML);	
 		
-		// Add selected details of dropdown in cookie
+		//Add selected details of dropdown in cookie
 		addDetailsInCookie(this);
 		
 		setTimeout(function() { // Do something after 2 seconds
@@ -109,7 +115,7 @@ $(function()
 	{		
 		// Change heading of page
 		changeHeadingOfPage($('#new-owner-tasks').closest(".btn-group").find(".selected_name").html());
-	});
+	});*/
 
 	/*
 	 * In new/update task modal, on selection of status, show progress slider
@@ -119,5 +125,5 @@ $(function()
 	{
 		// Change status UI and input field
 		changeStatus($(this).attr("value"), $(this).closest("form"));
-	});
+	});	
 });

@@ -21,6 +21,10 @@ import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.Query;
 import com.google.appengine.api.search.QueryOptions;
 import com.google.appengine.api.search.ScoredDocument;
+import com.google.appengine.api.search.SortExpression;
+import com.google.appengine.api.search.SortExpression.SortDirection;
+import com.google.appengine.api.search.SortOptions;
+import com.google.appengine.api.search.checkers.SearchApiLimits;
 import com.googlecode.objectify.Key;
 
 /**
@@ -132,7 +136,7 @@ public class QueryDocument<T> implements QueryInterface
      */
     @Override
     @SuppressWarnings("rawtypes")
-    public Collection<T> advancedSearch(List<SearchRule> rules, Integer count, String cursor)
+    public Collection<T> advancedSearch(List<SearchRule> rules, Integer count, String cursor, String orderBy)
     {
 
 	// Construct query based on rules
@@ -144,7 +148,7 @@ public class QueryDocument<T> implements QueryInterface
 	    return new ArrayList<T>();
 
 	// return query results
-	return processQuery(query, count, cursor);
+	return processQuery(query, count, cursor, orderBy);
     }
 
     /**
@@ -195,6 +199,54 @@ public class QueryDocument<T> implements QueryInterface
 	// Builds options based on the query string, page size (limit) and sets
 	// cursor.
 	QueryOptions options = buildOptions(query, page, cursor);
+
+	// Calls process the query with the options built. It returns results in
+	// a map with available entities count and document ids limited to count
+	// sent
+	Map<String, Object> results = processQueryWithOptions(options, query);
+
+	// Fetches entities from datastore based on the document ids returned.
+	// The type of the it entities are fetched dynamically, based on the
+	// class template
+	return getDatastoreEntities(results, page, cursor);
+    }
+    
+    /**
+     * Builds query options and process queries based on the options builds with
+     * cursor and limit.
+     * 
+     * @param query
+     * @param page
+     * @param cursor
+     * @return
+     */
+    public Collection<T> processQuery(String query, Integer page, String cursor, String orderBy)
+    {
+	// If page size is not specified, returns results with out any limit
+	// (Returns are entities )
+	if (page == null && orderBy== null)
+	    return processQuery(query);
+
+	// Builds options based on the query string, page size (limit) and sets
+	// cursor.
+	QueryOptions options = buildOptions(query, page, cursor);
+	
+	if(StringUtils.isNotBlank(orderBy)) {
+		SortOptions sortOptions = null;
+		SortExpression.Builder sortExpressionBuilder = SortExpression.newBuilder();
+		if(orderBy.startsWith("-")) {
+			sortExpressionBuilder = sortExpressionBuilder.setExpression(orderBy.substring(1)).setDirection(SortDirection.DESCENDING);
+		} else {
+			sortExpressionBuilder = sortExpressionBuilder.setExpression(orderBy).setDirection(SortDirection.ASCENDING);
+		}
+		if(orderBy.contains("time")) {
+			sortExpressionBuilder.setDefaultValueDate(SearchApiLimits.MAXIMUM_DATE_VALUE);
+		} else {
+			sortExpressionBuilder.setDefaultValueNumeric(0.0);
+		}
+		sortOptions = SortOptions.newBuilder().addSortExpression(sortExpressionBuilder.build()).build();
+		options = QueryOptions.newBuilder(options).setSortOptions(sortOptions).build();
+	}
 
 	// Calls process the query with the options built. It returns results in
 	// a map with available entities count and document ids limited to count
@@ -269,13 +321,60 @@ public class QueryDocument<T> implements QueryInterface
      */
     private List<ScoredDocument> getDocuments(String query)
     {
+		return getDocuments(query, null);
+    }
+
+    /**
+     * processes query and return collection of contacts. It returns all the the
+     * entities (entities from datastore related to document ids returned in
+     * search)
+     * 
+     * @param query
+     *            {@link String}
+     * @param type
+     *            {@link Reports.ReportType}
+     * @return
+     */
+    private Collection<T> processQuery(String query)
+    {
+	// If index is null return without querying
+	if (index == null)
+	    return null;
+
+	// Get Documents for this query
+	List<ScoredDocument> contact_documents = getDocuments(query);
+
+	// Return datastore entities based on documents.
+	return getDatastoreEntities(contact_documents, Long.valueOf(contact_documents.size()));
+    }
+    
+    
+    /**
+     * processes query and return the actual QueryDocuments of contacts.
+     * @param query
+     * @param orderBy
+     * @return
+     */
+    private List<ScoredDocument> getDocuments(String query, String orderBy)
+    {
+    	SortOptions sortOptions = null;
+    	if(StringUtils.isNotBlank(orderBy)) {
+    		SortExpression sortExpression = null;
+    		if(orderBy.startsWith("-")) {
+    			sortExpression = SortExpression.newBuilder().setExpression(orderBy.substring(1)).setDirection(SortDirection.DESCENDING).build();
+    		} else {
+    			sortExpression = SortExpression.newBuilder().setExpression(orderBy.substring(1)).setDirection(SortDirection.ASCENDING).build();
+    		}
+    		sortOptions = SortOptions.newBuilder().addSortExpression(sortExpression).build();
+    	}
+	
 	/*
 	 * Sets query options only to get id of document (enough to get get
 	 * respective contacts). Default query returns without page limit it max
 	 * 1000 entities. To all matching results, documents should be fetch in
 	 * sets of 1000 documents at time
 	 */
-	QueryOptions options = QueryOptions.newBuilder().setLimit(1000)
+	QueryOptions options = QueryOptions.newBuilder().setLimit(1000).setSortOptions(sortOptions )
 		.setCursor(Cursor.newBuilder().setPerResult(true).build()).setFieldsToReturn("type")
 		.setNumberFoundAccuracy(10000).build();
 
@@ -322,30 +421,6 @@ public class QueryDocument<T> implements QueryInterface
 	System.out.println("total count  : " + contact_documents.size());
 
 	return contact_documents;
-    }
-
-    /**
-     * processes query and return collection of contacts. It returns all the the
-     * entities (entities from datastore related to document ids returned in
-     * search)
-     * 
-     * @param query
-     *            {@link String}
-     * @param type
-     *            {@link Reports.ReportType}
-     * @return
-     */
-    private Collection<T> processQuery(String query)
-    {
-	// If index is null return without querying
-	if (index == null)
-	    return null;
-
-	// Get Documents for this query
-	List<ScoredDocument> contact_documents = getDocuments(query);
-
-	// Return datastore entities based on documents.
-	return getDatastoreEntities(contact_documents, Long.valueOf(contact_documents.size()));
     }
 
     /**

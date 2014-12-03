@@ -338,7 +338,7 @@ public class BulkActionUtil
 
 	    try
 	    {
-		return ContactUtil.getContactsForTag(URLDecoder.decode(tag, "UTF-8"), ENTITIES_FETCH_LIMIT, cursor);
+		return ContactUtil.getContactsForTag(URLDecoder.decode(tag, "UTF-8"), ENTITIES_FETCH_LIMIT, cursor, null);
 	    }
 	    catch (UnsupportedEncodingException e)
 	    {
@@ -351,7 +351,7 @@ public class BulkActionUtil
 	if (criteria.equals("#contacts"))
 	    return ContactUtil.getAllContacts(ENTITIES_FETCH_LIMIT, cursor);
 
-	return new ArrayList<Contact>(ContactFilterUtil.getContacts(criteria, ENTITIES_FETCH_LIMIT, cursor));
+	return new ArrayList<Contact>(ContactFilterUtil.getContacts(criteria, ENTITIES_FETCH_LIMIT, cursor, null));
     }
 
     /**

@@ -244,7 +244,7 @@ $(function()
 	 * Highlights the event features (Shows event form and hides task form,
 	 * changing color and font-weight)
 	 */
-	$("#event").click(function(e)
+	$("#event").live('click', function(e)
 	{
 		e.preventDefault();
 		highlight_event();
