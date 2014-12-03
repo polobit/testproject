@@ -256,6 +256,10 @@ function getTemplateUrls(templateName)
 		if (HANDLEBARS_PRECOMPILATION)
 			template_relative_urls.push("socialsuite.html");
 	}
+	if (templateName.indexOf("deal-detail") == 0)
+	{
+		template_relative_urls.push("deal-detail.js");
+	}
 	return template_relative_urls;
 }
 

@@ -551,19 +551,19 @@ margin-bottom:5px;
 }
 */
 
-#contacts-inner-tabs .tab-content .tab-pane .page-header
+#contacts-inner-tabs .tab-content .tab-pane .page-header,#deal-tab-content  .page-header  
 {
 border-bottom:none;	
 }
-#contacts-inner-tabs .tab-content .tab-pane ul
+#contacts-inner-tabs .tab-content .tab-pane ul,#deal-tab-content ul
 {
 	margin:0;
 }
-#contacts-inner-tabs .tab-content .tab-pane  .activity-text-block
+#contacts-inner-tabs .tab-content .tab-pane  .activity-text-block,#deal-tab-content .activity-text-block
 {
 	background:#f5f5f5;
 }
-#contacts-inner-tabs .tab-content .tab-pane  .activity-text-block pre
+#contacts-inner-tabs .tab-content .tab-pane  .activity-text-block pre,#deal-tab-content .activity-text-block pre
 {
 	background:#f5f5f5!important;
 }

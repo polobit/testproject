@@ -1,0 +1,139 @@
+
+<!-- previous next actions -->
+
+<!-- ending previous next actions -->
+<!--  header span12 row view starting -->
+<script id="deal-detail-template" type="text/html">
+<div class="row">
+	<div class="span12">
+		<div style="margin-bottom: 20px;">
+			<div class="row-fluid"
+				style="border-bottom: 1px solid #ddd; padding-bottom: 40px;">
+				<div>
+					<div>
+						<div class="span10">
+<div class="pull-left" style="margin-top:16px;margin-right:30px;"><i class="icon-money icon-3x" style="font-size:50px;"   title="{{name}}"/></div>
+						<div class="contact-profile-name mg-r-md">{{#if name}}{{name}}{{/if}} &nbsp;&nbsp;<span style="font-size:18px;" class="label label-default">{{milestone}}</span> &nbsp;&nbsp;  <span style="font-size:18px;"> ({{probability}}%)</span></div>
+                        <div class="">{{#if expected_value}}${{expected_value}} {{/if}}
+
+<div style="margin-top:10px;margin-left:85px"><span >{{pipeline.name}}</span></div>
+
+</div>
+
+
+
+</div>
+                        
+ 						<div class="span2">
+							<div class="btn-group right">
+								
+								<a href="#" class="deal-add-contact btn" id="deal_details" style="border-radius: 4px 0px 0px 4px!important;margin-left: 6px;" ><i class="icon-edit"></i> Edit</a>
+								<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+								<ul class="dropdown-menu pull-right">
+
+									<li><a href='#'  id="dealshow-note" class="deal-note"><i
+											class="icon-file"></i> Add Note</a></li>
+							
+									<li><a href='#' id='deal-actions-delete'><i
+											class="icon-trash"></i> Delete</a></li>
+								</ul>
+							</div>
+							
+							<div  class="contact-owner-position deal-owner-block">
+						<div class="change-owner-succes"></div>
+     <span title="Owner" class="contact-owner-view">
+      	<span class="contact-owner" id="change-owner-element">
+        	<span class="contact-owner-text">Owner:&nbsp;&nbsp;</span>
+			{{#if owner}}
+        	<span class="contact-owner-pic" style="margin-top:10px;"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
+			{{else}}
+			<span class="contact-owner-pic" style="margin-top:19px;"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
+ 			{{/if}}
+        	<span id="deal-owner" data={{owner.id}} class="deal-owner-name contact-owner-name">{{owner.name}}</span>
+        
+        	<div class="btn-group" id="change-deal-owner-ul" style="vertical-align: middle; display: none">
+        		 <a class="btn dropdown-toggle" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
+        		 <ul id='deal-detail-owner' class="dropdown-menu pull-right"></ul>
+        	</div> 
+       </span>
+    </span>
+					</div>
+
+
+                        </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+<div class="clearfix"></div>
+	</div>
+
+	
+
+
+
+<!--  ending top header span12 view -->
+
+<!--  starting middle view row -->
+<div class="row">
+	<!--  starting time line view -->
+	  <div class="span9">
+        <div id="deal-details">
+           <ul class="nav nav-tabs" id="deal-details-tab">
+           <li class="active"><a data-toggle="tab" href="#dealtimeline">Timeline</a></li>
+            <li ><a href="#dealrelated" data-toggle="tab">Contacts</a></li>
+            <li ><a href="#dealnotes" data-toggle="tab" >Notes</a></li>
+            
+            </ul>
+        </div>
+           <div class="tab-content" id="deal-tab-content">
+
+<div class="tab-pane active" id="deal-time-line">
+					<div class="timeline-loading-img" style="width:35px;max-height:30px;overflow:hidden;">
+						<img class="loading-img" src="img/21-0.gif"></img>
+						<!-- <img class="loading-img-log" src="img/21-0.gif"></img>
+						<img class="loading-img-email" src="img/21-0.gif"></img>
+						<img class="loading-img" src="img/21-0.gif"></img>
+						<img class="loading-img-stats" src="img/21-0.gif"></img> -->
+					</div>
+
+
+					<div style="margin: auto; width: 700px">
+						<div id="dealtimeline">
+							<div id="line-container">
+								<div id="line"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+           <div class="tab-pane " id="dealrelated"></div>
+           <div class="tab-pane " id="dealnotes"></div>
+          
+          </div>
+	</div>
+
+<div class="span3 " style="padding-left:17px;box-sizing:border-box;border-left:1px solid #ddd;"> <h3>Custom Fields</h3>
+                          {{#if custom_data}}
+<div class="pull-left" style="width:90%;line-height:21px;">
+{{#stringToJSON this "custom_data"}}{{#each this}}<div class="pull-left" style="width:90%;line-height:21px;"><i class="icon icon-info" style="font-size: 13px;margin-left:4px;"></i>
+<span class="contact-custom-name"><span style="color: gray" title="{{this.name}}">{{this.name}}</span></span>
+<span class="contact-custom-value">{{this.value}} </span>
+										
+</div><br/>{{/each}}{{/stringToJSON}}{{/if}}
+
+
+
+<div class="clearfix"></div>
+
+</div>
+
+
+
+<!--  ending mid  right panel view -->
+
+<!--  ending middle view row -->
+</script>
+</html>

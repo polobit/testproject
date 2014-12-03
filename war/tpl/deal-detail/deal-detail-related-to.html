@@ -1,0 +1,71 @@
+<script id="deal-related-model-template" type="text/html">
+	<td></td>
+	<td class="data" data="{{id}}" style="white-space:nowrap;">
+    	<div style="display:inline;padding-right:10px;height:auto;">
+        		<img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
+    	</div>
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
+        		<b>	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </b>
+        		<br />
+        		{{getPropertyValue properties "email"}}
+    	</div>
+	</td>
+	<td><div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;width:8em;overflow:hidden;">{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}</div>
+	</td>
+	<td> 
+<div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;">
+	{{#each tags}}
+    	<span class="label">{{this}}</span>
+    {{/each}}
+</div>
+	</td>
+	<td style="width:6em;"><div>{{lead_score}}</div></td>
+</script>
+
+<script id="deal-related-collection-template" type="text/html">
+
+{{#if this.length}}
+	<div style='height:30px'>
+		<a href="#" class="deal-add-contact btn right" style="position:relative;margin-bottom:10px;">
+			<span><i class="icon-plus-sign"></i></span> Add Contact
+		</a>
+	</div>
+	<br/>
+		
+			<table id="contacts" class="table table-striped agile-ellipsis-dynamic onlySorting" style="overflow: scroll; border-radius: 5px; -webkit-border-radius: 5px; margin-bottom:0px; border: 1px solid #dddddd; border-collapse: separate;">
+				<colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup>
+				<thead>
+					<tr><th></th>
+						<th>Name</th>
+						<th>Work</th>
+						<th>Tags</th>
+						<th>Lead Score</th>
+					</tr>
+				</thead>
+				<tbody id="deal-related-model-list" class="deal-related-model-list agile-edit-row"
+					route="contact/" style="overflow: scroll;">
+				</tbody>
+			</table>
+
+		{{else}}
+			<div class="slate">
+            	<div class="slate-content">
+                	<div class="box-left">
+                    	<img alt="Clipboard" src="/img/clipboard.png">
+                	</div>
+                	<div class="box-right">
+                    	<h3>{{contactShortName}} is not associated with any person/contact. </h3>
+                    	<div class="text">
+							All Contacts which are related to this deal are shown here.
+							<br/>
+							<a href="#" class="deal-add-contact btn left" style="margin-top:10px; margin-bottom:10px;">
+								<i class="icon-plus-sign"></i> Add Contact
+							</a>
+                    	</div>
+                	</div>
+            	</div>
+        	</div>
+		{{/if}}
+</script>

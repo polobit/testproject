@@ -1,3 +1,7 @@
+
+var CURRENT_DEAL;
+
+
 $(function(){
 	
 	/**
@@ -27,6 +31,12 @@ $(function(){
        	else
        		saveDeal(form_id, modal_id, this, json, true);
 	});
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * To avoid showing previous errors of the modal.
@@ -100,7 +110,13 @@ $(function(){
     */
     $('#opportunities-model-list > tr > td:not(":first-child")').live('click', function(e) {
 		e.preventDefault();
-		updateDeal($(this).closest('tr').data());
+		$('.popover').remove();
+		var currentdeal=$(this).closest('tr').data();
+		CURRENT_DEAL=currentdeal.toJSON();
+		Backbone.history.navigate("deal/"+currentdeal.id , {
+            trigger: true
+        });
+	//	updateDeal($(this).closest('tr').data());
 	});
     
     /**

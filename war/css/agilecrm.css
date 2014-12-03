@@ -1742,3 +1742,17 @@ display:block;
 {
 	padding:11px 11px;
 }
+.deal-owner-pic{
+	float:left;
+	margin-right: 0px;
+}
+.deal-owner-name{
+	max-width: 80%;
+float: left;
+white-space: nowrap;
+text-overflow: ellipsis;
+overflow: hidden;
+width: auto;
+cursor:pointer;
+margin-top:3px;
+}

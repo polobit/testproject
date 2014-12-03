@@ -4,7 +4,7 @@
  */
 
 // All Routers are global
-var App_Contacts, App_Contact_Search, App_Contact_Bulk_Actions, App_Contact_Filters, App_Contact_Views, App_Workflows, App_Deals, App_Admin_Settings, App_Calendar, App_Settings, App_Reports, App_Cases, App_Subscription, App_Visitors, App_WebReports, App_Documents, App_Widgets, App_ShopifyApp;
+var App_Contacts, App_Contact_Search, App_Contact_Bulk_Actions, App_Contact_Filters, App_Contact_Views, App_Workflows, App_Deals, App_Admin_Settings, App_Calendar, App_Settings, App_Reports, App_Cases, App_Subscription, App_Visitors, App_WebReports, App_Documents, App_Widgets, App_ShopifyApp,App_Deal_Details;
 var Collection_View = {};
 $(function()
 {
@@ -30,6 +30,7 @@ $(function()
 	App_ReferelRouter = new ReferelRouter();
 	App_Activity_log = new ActivitylogRouter();
 	App_ShopifyApp = new ShopifyRouter();
+	App_Deal_Details= new DealDetailsRouter();
 
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)

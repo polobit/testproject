@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
@@ -69,6 +70,13 @@ public class Note
     private List<String> contact_ids = new ArrayList<String>();
 
     /**
+     * List of deals ids, a note related to
+     * 
+     */
+    @NotSaved
+    private List<String> deal_ids = new ArrayList<String>();
+
+    /**
      * Owner key of AgileUser id.
      */
     @NotSaved(IfDefault.class)
@@ -91,6 +99,12 @@ public class Note
      */
     @NotSaved(IfDefault.class)
     private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
+
+    /**
+     * List of deal keys, a note related to
+     */
+    @NotSaved(IfDefault.class)
+    private List<Key<Opportunity>> related_deals = new ArrayList<Key<Opportunity>>();
 
     /**
      * Separates note from bulk of other models at client side (For timeline
@@ -151,6 +165,12 @@ public class Note
 	contact_ids.add(contactId);
     }
 
+    @JsonIgnore
+    public void addRelatedDeals(String dealid)
+    {
+	deal_ids.add(dealid);
+    }
+
     /**
      * Creates contact keys by iterating note related contact ids and assigns
      * created time, if it is 0L.
@@ -164,6 +184,12 @@ public class Note
 	for (Object contact_id : this.contact_ids)
 	{
 	    this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id.toString())));
+	}
+
+	// Create list of deal keys
+	for (Object deal_id : this.deal_ids)
+	{
+	    this.related_deals.add(new Key<Opportunity>(Opportunity.class, Long.parseLong(deal_id.toString())));
 	}
 
 	/**
@@ -228,6 +254,44 @@ public class Note
 	    contact_ids.add(String.valueOf(contactKey.getId()));
 
 	return contact_ids;
+    }
+
+    /**
+     * Gets deals related with Notes.
+     * 
+     * @return list of deal objects as xml element related with a deal.
+     */
+    @XmlElement
+    public List<Opportunity> getDeals()
+    {
+	Objectify ofy = ObjectifyService.begin();
+	List<Opportunity> deals_list = new ArrayList<Opportunity>();
+	deals_list.addAll(ofy.get(this.related_deals).values());
+	return deals_list;
+    }
+
+    public void addDealIds(String id)
+    {
+	if (deal_ids == null)
+	    deal_ids = new ArrayList<String>();
+
+	deal_ids.add(id);
+    }
+
+    /**
+     * Returns deal ids related to note.
+     * 
+     * @return
+     */
+    @XmlElement(name = "deal_ids")
+    public List<String> getDeal_ids()
+    {
+	deal_ids = new ArrayList<String>();
+
+	for (Key<Opportunity> dealKey : related_deals)
+	    deal_ids.add(String.valueOf(dealKey.getId()));
+
+	return deal_ids;
     }
 
     /**

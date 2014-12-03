@@ -5,6 +5,7 @@ import java.util.List;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.user.AgileUser;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
@@ -40,6 +41,21 @@ public class NoteUtil
 	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
 
 	return dao.ofy().query(Note.class).filter("related_contacts = ", contactKey).order("-created_time").list();
+    }
+
+    /**
+     * Gets all the notes related to a deal
+     * 
+     * @param dealid
+     *            dealid deal id to get its notes
+     * @return list of notes related to a deal
+     * @throws Exception
+     */
+    public static List<Note> getDealNotes(Long dealid) throws Exception
+    {
+	Key<Opportunity> dealKey = new Key<Opportunity>(Opportunity.class, dealid);
+
+	return dao.ofy().query(Note.class).filter("related_deals = ", dealKey).order("-created_time").list();
     }
 
     /**

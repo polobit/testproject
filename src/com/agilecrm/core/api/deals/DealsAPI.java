@@ -21,9 +21,12 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
@@ -571,6 +574,80 @@ public class DealsAPI
 	    queue.add(taskOptions);
 	}
 
+    }
+
+    /**
+     * Notes of a deal, which is in deal detail view
+     * 
+     * @param id
+     *            deal id to get its related entities (notes)
+     * @return list of notes related to a deal
+     * @throws Exception
+     */
+    @Path("/{deal-id}/notes")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Note> getNotes(@PathParam("deal-id") Long id) throws Exception
+    {
+	return NoteUtil.getDealNotes(id);
+    }
+
+    /**
+     * Notes of a deal, which is in deal detail view
+     * 
+     * @param id
+     *            deal id to get its related entities (notes)
+     * @return list of notes related to a deal
+     */
+    @Path("/{deal-id}/related_to")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> getRelatedContacts(@PathParam("deal-id") Long id)
+    {
+	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
+	return opportunity.getContacts();
+    }
+
+    @Path("/change-owner/{new_owner}/{dealid}")
+    @PUT
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Opportunity changeOwnerToDeal(@PathParam("new_owner") String new_owner, @PathParam("dealid") Long dealid)
+	    throws JSONException
+    {
+
+	Opportunity opportunity = OpportunityUtil.getOpportunity(dealid);
+	opportunity.owner_id = new_owner;
+	opportunity.save();
+	return opportunity;
+    }
+
+    @Path("/removeRelatedTo/{contactid}/{dealid}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Opportunity removeContactFromDeal(@PathParam("contactid") String contactid, @PathParam("dealid") Long dealid)
+	    throws JSONException
+    {
+	Opportunity opportunity = OpportunityUtil.getOpportunity(dealid);
+	System.out.println(opportunity.getContact_ids().size());
+	if (opportunity.getContact_ids().contains(contactid))
+	{
+	    int index = opportunity.getContact_ids().indexOf(contactid);
+	    opportunity.getContact_ids().remove(index);
+	}
+	System.out.println(opportunity.getContact_ids().size());
+	opportunity.save();
+	return opportunity;
+    }
+
+    @Path("/activities/{dealid}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Activity> getActivitiesOfDeal(@PathParam("dealid") Long dealid, @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count) throws JSONException
+    {
+
+	return ActivityUtil.getActivitiesByFilter(null, "DEAL", null, dealid, Integer.parseInt(count), cursor);
     }
 
 }
