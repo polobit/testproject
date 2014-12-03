@@ -25,12 +25,7 @@ var CalendarRouter = Backbone.Router.extend({
 								var view = readCookie("agile_calendar_view");
 								if (view)
 								{
-<<<<<<< HEAD
 
-												loadAgileEvents();
-=======
-												// retrieve google Calendar prefs and pass to function
->>>>>>> b19f449... Fixed Event list minor ui changes related to event header
 												loadGoogleEvents();
 												loadAgileEvents();
 								}
