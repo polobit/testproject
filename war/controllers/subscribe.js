@@ -747,9 +747,9 @@ var SubscribeRouter = Backbone.Router.extend({
 			customerId = subscription.get("billingData").id;
 		}
 		
-		var invoice_collection = new Base_Collection_View({ url : "core/api/subscription/charges/"+customerId+"?page_size=3" , templateKey : "charge",
+		var invoice_collection = new Base_Collection_View({ url : "core/api/subscription/charges/"+customerId+"?page_size=20" , templateKey : "charge",
 
-		individual_tag_name : 'tr',sortKey : 'createdtime', descending : true });
+		individual_tag_name : 'tr',sortKey : 'created', descending : true });
 		invoice_collection.collection.fetch();
 
 		$("#invoice-details-holder").html(invoice_collection.render().el);

@@ -34,6 +34,7 @@ import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
+import com.agilecrm.reports.ActivityReports;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.shopify.ShopifyApp;
 import com.agilecrm.subscription.Subscription;
@@ -144,6 +145,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	// Reports
 	ObjectifyService.register(Reports.class);
+	ObjectifyService.register(ActivityReports.class);
 
 	ObjectifyService.register(Case.class);
 	ObjectifyService.register(MenuSetting.class);
@@ -539,7 +541,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	return fetchAllWithCursor(max, cursor, query, forceLoad, cache);
     }
 
-    public List<T> fetchAllByOrder(int max, String cursor, Map<String, Object> map, boolean forceLoad, boolean cache, String orderBy)
+    public List<T> fetchAllByOrder(int max, String cursor, Map<String, Object> map, boolean forceLoad, boolean cache,
+	    String orderBy)
     {
 	Query<T> query = ofy().query(clazz);
 	if (map != null)
@@ -586,7 +589,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		{
 
 		    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
-		    Object object = forceLoad ? null : CacheUtil.getCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count");
+		    Object object = forceLoad ? null : CacheUtil.getCache(this.clazz.getSimpleName() + "_"
+			    + NamespaceManager.get() + "_count");
 
 		    if (object != null)
 			agileCursor.count = (Integer) object;
@@ -596,7 +600,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 			agileCursor.count = query.count();
 			long endTime = System.currentTimeMillis();
 			if ((endTime - startTime) > 3 * 1000 && cache)
-			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count", agileCursor.count, 2 * 60 * 60 * 1000);
+			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
+				    agileCursor.count, 2 * 60 * 60 * 1000);
 		    }
 
 		}
@@ -760,8 +765,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	for (Field field : clazz.getDeclaredFields())
 	{
 	    // Ignore transient, embedded, array, and collection properties
-	    if (field.isAnnotationPresent(Transient.class) || (field.isAnnotationPresent(Embedded.class)) || (field.getType().isArray())
-		    || (Collection.class.isAssignableFrom(field.getType())) || ((field.getModifiers() & BAD_MODIFIERS) != 0))
+	    if (field.isAnnotationPresent(Transient.class) || (field.isAnnotationPresent(Embedded.class))
+		    || (field.getType().isArray()) || (Collection.class.isAssignableFrom(field.getType()))
+		    || ((field.getModifiers() & BAD_MODIFIERS) != 0))
 		continue;
 
 	    field.setAccessible(true);

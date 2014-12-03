@@ -487,4 +487,32 @@ public class DomainUserUtil
 	}
     }
 
+    /**
+     * Gets domain user based on list of keys
+     * 
+     * @param userKeys
+     *            is list of keys.
+     * 
+     * @return {@link DomainUser} object
+     */
+    public static List<DomainUser> getDomainUsersFromKeys(List<Key<DomainUser>> userKeys)
+    {
+	String oldnamespace = NamespaceManager.get();
+	System.out.println("-----------geting Userslist." + userKeys.size());
+
+	NamespaceManager.set("");
+
+	try
+	{
+	    List<DomainUser> userList = dao.fetchAllByKeys(userKeys);
+	    System.out.println("-------users size - " + userList.size());
+	    return userList;
+	}
+	finally
+	{
+
+	    NamespaceManager.set(oldnamespace);
+	}
+    }
+
 }
