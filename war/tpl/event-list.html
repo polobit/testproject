@@ -60,7 +60,7 @@
 
 <div class="span8 contact_text" style="text-align:right;">
 {{#if contacts.length}} 
-<div class="line-clamp contact_text">  
+<div class="ctx contact_text">  
         {{#each contacts}}<a  href ="#contact/{{this.id}}">{{#if_contact_type "PERSON"}}
         		{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}} 
@@ -121,12 +121,14 @@
 
 <div class="span7" style="text-align:right;">
 {{#if contacts.length}} 
-<div class="line-clamp contact_text">  
+<div class="ctx contact_text">  
         {{#each contacts}}<a class="contact_text" href="#contact/{{this.id}}">{{#if_contact_type "PERSON"}}
         		{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}} 
         		
-        	{{/if_contact_type}}{{#if_contact_type "COMPANY"}}{{getPropertyValue properties "name"}}{{/if_contact_type}},</a> {{/each}}  
+        	{{/if_contact_type}}{{#if_contact_type "COMPANY"}}{{getPropertyValue properties "name"}}{{/if_contact_type}}
+        
+<span>,</span></a> {{/each}}  
         
     </div>
 {{/if}}
