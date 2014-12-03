@@ -63,8 +63,13 @@ public class Unsubscribe extends TaskletAdapter
 
 		List<String> campaignNames = new ArrayList<String>();
 
+		List<String> activeCampaigns = ContactUtil.workflowListOfAContact(Long.parseLong(subscriberID));
+
 		for (int i = 0; i < campaignIDsSize; i++)
-			campaignNames.add(setStatus(campaignIDs.get(i), subscriberID));
+		{
+			if (activeCampaigns.get(i).contains(campaignIDs.get(i)))
+				campaignNames.add(setStatus(campaignIDs.get(i), subscriberID));
+		}
 
 		String message = getMessage(campaignNames);
 
@@ -123,7 +128,7 @@ public class Unsubscribe extends TaskletAdapter
 				if ((i + 1) != (listSize - 1))
 					message += ", ";
 			}
-			message += " and " + campaignName.get(listSize - 1) + ".";
+			message += " and '" + campaignName.get(listSize - 1) + "'";
 
 		}
 		return message;
