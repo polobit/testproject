@@ -101,6 +101,12 @@ var ContactsRouter = Backbone.Router.extend({
 		var max_contacts_count = 20;
 		var template_key = "contacts";
 		var individual_tag_name = "tr";
+		var sort_key = readCookie("sort_by_name");
+		if(!sort_key || sort_key == null) {
+			sort_key = '-created_time';
+			// Saves Sort By in cookie
+			createCookie('sort_by_name', sort_key);
+		}
 		
 		// Checks if user is using custom view. It check for grid view
 		if (grid_view || readCookie("agile_contact_view"))
@@ -118,6 +124,7 @@ var ContactsRouter = Backbone.Router.extend({
 		if (readCookie('company_filter'))
 		{
 			eraseCookie('contact_filter');
+			eraseCookie('contact_filter_type');
 		}
 		// Tags, Search & default browse comes to the same function
 		if (tag_id)
@@ -130,6 +137,7 @@ var ContactsRouter = Backbone.Router.extend({
 			// erase filter cookie
 			eraseCookie('contact_filter');
 			eraseCookie('company_filter');
+			eraseCookie('contact_filter_type');
 
 			if (this.contactsListView && this.contactsListView.collection)
 			{
@@ -183,11 +191,15 @@ var ContactsRouter = Backbone.Router.extend({
 			collection_is_reverse = false;
 			url = "core/api/filters/query/" + filter_id;
 		}
+		
+		if(readCookie('contact_filter_type') == 'COMPANY') {
+			template_key = "companies";
+		}
 
 		// If view is set to custom view, load the custom view
 		// If Company filter active-don't load any Custom View Show
 		// default
-		if (!readCookie('company_filter') && readCookie("contact_view"))
+		if (!readCookie('company_filter') && readCookie('contact_filter_type') != 'COMPANY' && readCookie("contact_view"))
 		{
 			// If there is a filter saved in cookie then show filter
 			// results in custom view saved
@@ -233,8 +245,8 @@ var ContactsRouter = Backbone.Router.extend({
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.contactsListView = new Base_Collection_View({ url : url, templateKey : template_key, individual_tag_name : individual_tag_name,
-			cursor : true, page_size : 25, sort_collection : collection_is_reverse, slateKey : slateKey,  postRenderCallback : function(el)
+		this.contactsListView = new Base_Collection_View({ url : url, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
+			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey,  postRenderCallback : function(el)
 			{
 
 				// Contacts are fetched when the app loads in
@@ -270,7 +282,6 @@ var ContactsRouter = Backbone.Router.extend({
 
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
-
 	},
 	
 	/**
@@ -721,9 +732,32 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	sendEmail : function(id, subject, body, cc, bcc)
 	{
-		
 		var model = {};
-
+		
+		if(!canSendEmails(1))
+		{
+			var pendingEmails = getPendingEmails();
+			window.history.back();
+			var title = "Emails limit";
+			var yes = "";
+			var no = "Ok"
+			var upgrade_link =  'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>';
+			var message = "You have used up all emails in your quota. " + upgrade_link;
+			
+			showModalConfirmation(title, 
+					message, 
+					""
+				, function(element){
+						
+					// No callback
+						Backbone.history.navigate( "subscribe", { trigger : true });
+						return;
+					},
+					function(element){
+						
+					}, yes, no);
+			return;
+		}
 		// Takes back to contacts if contacts detail view is not defined
 		if (this.contactDetailView && !this.contactDetailView.model.get(id))
 		{
@@ -799,6 +833,9 @@ var ContactsRouter = Backbone.Router.extend({
 				
 					// Add tinymce content
 					set_tinymce_content('email-body', body);
+					
+					// Register focus
+					register_focus_on_tinymce('email-body');
 			
 				});
 		}
@@ -811,6 +848,9 @@ var ContactsRouter = Backbone.Router.extend({
 				
 					// Add tinymce content
 					set_tinymce_content('email-body', body);
+					
+					// Register focus
+					register_focus_on_tinymce('email-body')
 			});
 		}
 		
@@ -904,8 +944,14 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		var slateKey = getContactPadcontentKey(url);
+		var sort_key = readCookie("sort_by_name");
+		if(!sort_key || sort_key == null) {
+			sort_key = '-created_time';
+			// Saves Sort By in cookie
+			createCookie('sort_by_name', sort_key);
+		}
 		
-		this.contact_custom_view = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data,
+		this.contact_custom_view = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
 			templateKey : "contacts-custom-view", individual_tag_name : 'tr', slateKey : slateKey, cursor : true, page_size : 25, sort_collection : false,
 			postRenderCallback : function(el)
 			{

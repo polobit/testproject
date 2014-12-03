@@ -232,6 +232,28 @@ public class DomainUserUtil
 	    NamespaceManager.set(namespace);
 	}
     }
+    
+    public static DomainUser getDomainUserByEmailFromParticularDomain(String email, String domain)
+    {
+	String namespace = NamespaceManager.get();
+
+	if (StringUtils.isEmpty(domain))
+	    return null;
+
+	NamespaceManager.set("");
+
+	try
+	{
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    searchMap.put("email", email);
+	    searchMap.put("domain", domain);
+	    return dao.getByProperty(searchMap);
+	}
+	finally
+	{
+	    NamespaceManager.set(namespace);
+	}
+    }
 
     /**
      * Gets domain user based on gadget_id
@@ -461,6 +483,34 @@ public class DomainUserUtil
 	}
 	finally
 	{
+	    NamespaceManager.set(oldnamespace);
+	}
+    }
+
+    /**
+     * Gets domain user based on list of keys
+     * 
+     * @param userKeys
+     *            is list of keys.
+     * 
+     * @return {@link DomainUser} object
+     */
+    public static List<DomainUser> getDomainUsersFromKeys(List<Key<DomainUser>> userKeys)
+    {
+	String oldnamespace = NamespaceManager.get();
+	System.out.println("-----------geting Userslist." + userKeys.size());
+
+	NamespaceManager.set("");
+
+	try
+	{
+	    List<DomainUser> userList = dao.fetchAllByKeys(userKeys);
+	    System.out.println("-------users size - " + userList.size());
+	    return userList;
+	}
+	finally
+	{
+
 	    NamespaceManager.set(oldnamespace);
 	}
     }

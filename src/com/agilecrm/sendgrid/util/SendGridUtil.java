@@ -8,9 +8,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
+import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HttpClientUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.taskqueue.TaskHandle;
 import com.thirdparty.SendGrid;
 
@@ -43,7 +47,7 @@ public class SendGridUtil
      * 
      * @param tasks
      */
-    public static void sendSendGridMails(List<TaskHandle> tasks)
+    public static void sendSendGridMails(List<TaskHandle> tasks, EmailSender emailSender)
     {
 	try
 	{
@@ -64,6 +68,31 @@ public class SendGridUtil
 	    {
 		MailDeferredTask mailDeferredTask = (MailDeferredTask) SerializationUtils
 		        .deserialize(task.getPayload());
+
+		// Creates log for sending email
+		if (!StringUtils.isBlank(mailDeferredTask.campaignId)
+		        && !StringUtils.isBlank(mailDeferredTask.subscriberId))
+		{
+		    LogUtil.addLogToSQL(mailDeferredTask.campaignId, mailDeferredTask.subscriberId, "Subject: "
+			    + mailDeferredTask.subject, LogType.EMAIL_SENT.toString());
+
+		    if (!StringUtils.isBlank(mailDeferredTask.text))
+		    {
+			// Appends Agile label
+			mailDeferredTask.text = StringUtils.replace(mailDeferredTask.text,
+			        EmailUtil.getPoweredByAgileLink("campaign", "Powered by"), "Sent using Agile");
+			mailDeferredTask.text = EmailUtil.appendAgileToText(mailDeferredTask.text, "Sent using",
+			        emailSender.isEmailWhiteLabelEnabled());
+		    }
+
+		    // If no powered by merge field, append Agile label to
+		    // html
+		    if (!StringUtils.isBlank(mailDeferredTask.html)
+			    && !StringUtils.contains(mailDeferredTask.html,
+			            EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
+			mailDeferredTask.html = EmailUtil.appendAgileToHTML(mailDeferredTask.html, "campaign",
+			        "Powered by", emailSender.isEmailWhiteLabelEnabled());
+		}
 
 		// If same To email or CC or BCC exists, send email without
 		// merging

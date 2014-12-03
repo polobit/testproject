@@ -68,6 +68,8 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback)
 				toolbar2 : toolbar_2, valid_elements : "*[*]",
 				toolbar_items_size: 'small',
 				browser_spellcheck : true,
+				relative_urls : false,
+				convert_urls : false,
 		        gecko_spellcheck: true,
 				extended_valid_elements : "*[*]", setup : function(editor)
 				{
@@ -481,3 +483,20 @@ function get_formatted_date(epoch_time, format)
 	return date + " " + month_names[month] 
 			+ " " + year;
 }
+
+function register_focus_on_tinymce(selector)
+{
+	var document = $("iframe#"+selector+"_ifr").contents()[0];
+	
+	if(!document)
+		return;
+	
+	$(document).die().live('click', function(e){
+		
+		e.preventDefault();
+		
+		$(this).find('body').focus();
+		
+	});
+}
+

@@ -8,6 +8,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 
 /**
@@ -99,6 +101,20 @@ public class AgileUser
     public static AgileUser getCurrentAgileUser(Long agile_userid)
     {
 	return dao.getByProperty("id", agile_userid);
+    }
+
+    public static AgileUser getUser(Key<AgileUser> userKey)
+    {
+	try
+	{
+	    return dao.get(userKey);
+	}
+	catch (EntityNotFoundException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	    return null;
+	}
     }
 
     /**

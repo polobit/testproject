@@ -67,7 +67,13 @@ var SettingsRouter = Backbone.Router.extend({
 						postRenderCallback: function(el)
 						{
 							// setup TinyMCE
-							setupTinyMCEEditor('textarea#WYSItextarea', true, ["textcolor link image preview code"]);
+							setupTinyMCEEditor('textarea#WYSItextarea', true, [
+								"textcolor link image preview code"
+							], function(){
+								
+								// Register focus
+								register_focus_on_tinymce('WYSItextarea');
+							});
 						}
 			 		});
 		
@@ -333,7 +339,10 @@ var SettingsRouter = Backbone.Router.extend({
 		setupTinyMCEEditor('textarea#email-template-html', false, undefined, function(){
 			
 			// Reset tinymce
-			set_tinymce_content('email-template-html', '');			
+			set_tinymce_content('email-template-html', '');		
+			
+			// Register focus
+			register_focus_on_tinymce('email-template-html');
 		});
 		
 		$('#PrefsTab .active').removeClass('active');
@@ -377,6 +386,9 @@ var SettingsRouter = Backbone.Router.extend({
 			
 			// Insert content into tinymce
 			set_tinymce_content('email-template-html', currentTemplate.toJSON().text);			
+			
+			// Register focus
+			register_focus_on_tinymce('email-template-html');
 		});
 		
 		/**End of TinyMCE**/
@@ -436,7 +448,7 @@ var SettingsRouter = Backbone.Router.extend({
 	support : function()
 	{
 		$("#content").html(getTemplate("support-form"), {});
-
+	/*	var CLICKDESK_Live_Chat  = "offline";
 		try {
 				CLICKDESK_Live_Chat.onStatus(function(status) {
 
@@ -461,7 +473,8 @@ var SettingsRouter = Backbone.Router.extend({
 			}, 5000);
 			
 			
-		}
+		}*/
+		$("#clickdesk_status").html('No chat support representative is available at the moment. Please<br/> <a href="#contact-us" id="show_support">leave a message</a>.');
 	},
 
 	/**

@@ -12,14 +12,9 @@ function startMakingCollection(criteria, pending)
 		  return;
 		}	
 	
-	// Hide list view and show column view
-	$('#new-task-list-based-condition').show();
-	$('#task-list-based-condition').hide();
-	$('.tasks-count').html("");
-	
-	// Shows loading image untill data gets ready for displaying
-	$('#new-task-list-based-condition').html(LOADING_HTML);
-
+	// Hide list view and show column view with loading img
+	hideListViewAndShowLoading();
+			
 	// Get user details and add into GROUPING_MAP's owner array.
 	if (criteria == "OWNER" && GROUPING_MAP[criteria].type.length == 0)
 		getUserDetails(function(data)
@@ -103,7 +98,7 @@ function initTaskListCollection()
 			$('.loading', el).remove();
 
 			// Adjust Height Of Task List And Scroll as per window size
-			adjustHeightOfTaskListAndScroll();
+			adjustHeightOfTaskListAndScroll();			
 		} });
 
 	// Over write append function

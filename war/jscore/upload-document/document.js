@@ -79,7 +79,7 @@ $(function(){
 	/**
 	 * To validate the document add or edit forms
 	 */
-    $('#document_validate, #document_update_validate').on('click',function(e){
+    $('#document_validate, #document_update_validate').live('click',function(e){
  		e.preventDefault();
 
  		var modal_id = $(this).closest('.upload-document-modal').attr("id");
@@ -174,7 +174,8 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 	
 	// While attaching document is from existing documenst list, no need of form verification.
 	if(form_id)
-	{
+	{	
+		
 		if (!isValidForm('#' + form_id)) {
 
 			// Removes disabled attribute of save button

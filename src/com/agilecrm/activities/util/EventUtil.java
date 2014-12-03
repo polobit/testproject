@@ -1,6 +1,7 @@
 package com.agilecrm.activities.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.agilecrm.account.util.EmailGatewayUtil;
@@ -186,6 +187,7 @@ public class EventUtil
      * @throws Exception
      */
     public static List<Event> getContactSortedEvents(Long contactId) throws Exception
+
     {
 	Query<Event> query = dao.ofy().query(Event.class)
 	        .filter("related_contacts =", new Key<Contact>(Contact.class, contactId)).order("start");
@@ -199,6 +201,7 @@ public class EventUtil
      *            method used to send ical event for to contacts added in
      *            related_to filed in event
      */
+    @Deprecated
     public static void sendIcal(Event event)
     {
 	List<Contact> contacts = event.getContacts();
@@ -222,7 +225,7 @@ public class EventUtil
 			        toemail.value, null);
 			String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 			EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", toemail.value, null,
-			        null, subject, null, null, null, null, attachments);
+			        null, subject, null, null, null, null, null, attachments);
 		    }
 		}
 	    }
@@ -234,7 +237,7 @@ public class EventUtil
 		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
 
 		EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", user.email, null, null, subject,
-		        null, null, null, null, attachments_to_agile_user);
+		        null, null, null, null, null, attachments_to_agile_user);
 
 	    }
 	}
@@ -242,13 +245,56 @@ public class EventUtil
     }
 
     /**
-     * Gets the list of events which have been pending for Today
+     * get All events base on cursor value
      * 
+     * @param max
+     * @param cursor
+     * @return List of Events
+     */
+    public static List<Event> getAllEvents(int max, String cursor)
+    {
+	Query<Event> query = dao.ofy().query(Event.class).order("start");
+	return dao.fetchAllWithCursor(max, cursor, query, false, false);
+    }
+
+    /**
+     * get All events base on cursor value and start date
+     * 
+     * @param max
+     * @param cursor
+     * @return List of Events
+     */
+    public static List<Event> getEventList(int max, String cursor)
+    {
+	Date d = new Date();
+	Long startDate = (d.getTime()) / 1000;
+	Query<Event> query = dao.ofy().query(Event.class).filter("start >=", startDate);
+	return dao.fetchAllWithCursor(max, cursor, query, false, false);
+    }
+
+    /**
+     * get All events base on cursor value and start date
+     * 
+     * @param max
+     * @param cursor
+     * @return List of Events
+     */
+    public static List<Event> getEventList(int max, String cursor, Long ownerId)
+    {
+	Date d = new Date();
+	Long startDate = d.getTime();
+	Query<Event> query = dao.ofy().query(Event.class).filter("start >=", startDate / 1000)
+	        .filter("owner", new Key<AgileUser>(AgileUser.class, ownerId));
+	return dao.fetchAllWithCursor(max, cursor, query, false, false);
+    }
+
+    /**
      * @return List of events that have been pending for Today
      */
     public static List<Event> getTodayPendingEvents()
     {
 	try
+
 	{
 	    // Gets Today's date
 	    DateUtil startDateUtil = new DateUtil();
@@ -332,6 +378,16 @@ public class EventUtil
 	}
 	return domain_events;
 
+    }
+
+    /**
+     * return list of events based on event owner id
+     */
+
+    public static List<Event> getEvents(int count, String cursor, Long ownerId)
+    {
+	return dao.ofy().query(Event.class).order("start")
+	        .filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
     }
 
     /**

@@ -1,5 +1,8 @@
 package com.agilecrm.core.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -8,8 +11,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -18,12 +23,15 @@ import org.json.JSONObject;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.util.ActivitySave;
+import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
+import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.thirdparty.mandrill.EmailContentLengthLimitExceededException;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 
 /**
@@ -51,16 +59,9 @@ public class EmailsAPI
     @POST
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public void createEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to,
-	    @QueryParam("subject") String subject, @QueryParam("body") String body)
+	    @QueryParam("subject") String subject, @QueryParam("body") String body) throws Exception
     {
-	try
-	{
-	    EmailUtil.sendMail(fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
+	EmailUtil.sendMail(fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null, null);
     }
 
     /**
@@ -81,22 +82,41 @@ public class EmailsAPI
     public void sendEmail(@Context HttpServletRequest request, @FormParam("from_name") String fromName,
 	    @FormParam("from_email") String fromEmail, @FormParam("to") String to, @FormParam("email_cc") String cc,
 	    @FormParam("email_bcc") String bcc, @FormParam("subject") String subject, @FormParam("body") String body,
-	    @FormParam("signature") String signature, @FormParam("track_clicks") boolean trackClicks)
+	    @FormParam("signature") String signature, @FormParam("track_clicks") boolean trackClicks,
+	    @FormParam("document_id") String document_id) throws Exception
     {
-	// Removes traling commas if any
-	to = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', to);
+	try
+	{
+	    // Removes traling commas if any
+	    to = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', to);
 
-	if (!StringUtils.isBlank(cc))
-	    cc = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', cc);
+	    if (!StringUtils.isBlank(cc))
+		cc = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', cc);
 
-	if (!StringUtils.isBlank(bcc))
-	    bcc = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', bcc);
+	    if (!StringUtils.isBlank(bcc))
+		bcc = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', bcc);
 
-	// Saves Contact Email.
-	ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, signature, null,
-	        trackClicks);
-	ActivitySave.createEmailSentActivityToContact(to, subject, body);
+	    List<Long> documentIds = new ArrayList<Long>();
+	    if (StringUtils.isNotBlank(document_id))
+	    {
+		Long documentId = Long.parseLong(document_id);
+		documentIds.add(documentId);
+	    }
+	    if (MandrillUtil.isEmailContentSizeValid(body, document_id))
+	    {
+		// Saves Contact Email.
+		ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, signature,
+		        null, trackClicks, documentIds);
 
+		ActivitySave.createEmailSentActivityToContact(to, subject, body);
+	    }
+
+	}
+	catch (EmailContentLengthLimitExceededException e)
+	{
+	    throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
+		    .entity(e.getMessage()).build());
+	}
     }
 
     /**
@@ -220,12 +240,28 @@ public class EmailsAPI
 	try
 	{
 
-	    EmailUtil.sendMail(fromEmail, fromName, fromEmail, null, null, subject, replyToEmail, htmlEmail, textEmail);
+	    EmailSender emailSender = EmailSender.getEmailSender();
+
+	    // Appends Agile label
+	    textEmail = StringUtils.replace(textEmail, EmailUtil.getPoweredByAgileLink("campaign", "Powered by"),
+		    "Sent using Agile");
+	    textEmail = EmailUtil.appendAgileToText(textEmail, "Sent using", emailSender.isEmailWhiteLabelEnabled());
+
+	    // If no powered by merge field, append Agile label to html
+	    if (!StringUtils.contains(htmlEmail, EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
+		htmlEmail = EmailUtil.appendAgileToHTML(htmlEmail, "campaign", "Powered by",
+		        emailSender.isEmailWhiteLabelEnabled());
+
+	    emailSender.sendEmail(fromEmail, fromName, fromEmail, null, null, subject, replyToEmail, htmlEmail,
+		    textEmail, null, null);
+
 	}
 	catch (Exception e)
 	{
+	    System.err.println("Exception occured while sending test email..." + e.getMessage());
 	    e.printStackTrace();
 	}
+
 	return fromEmail;
     }
 }

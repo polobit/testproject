@@ -210,30 +210,6 @@ function our_domain_sync()
 			// set_profile_noty();
 			Agile_Contact = data;
 
-			var email_from_our_website = readCookie("_agile_our_website_email");
-
-			if (email_from_our_website)
-			{
-				if (email_from_our_website == CURRENT_DOMAIN_USER['email'])
-				{
-
-					var name = CURRENT_DOMAIN_USER['name'];
-					// var first_name = name; var last_name = name;
-					name = name.trim();
-
-					var first_name = name.split(" ")[0].trim();
-					var last_name = (first_name.length < name.length) ? name.substring(first_name.length + 1).trim() : '';
-
-					_agile.update_contact({ "first_name" : first_name, "last_name" : last_name }, function(data)
-					{
-
-						Agile_Contact = data;
-						eraseCookie('_agile_our_website_email');
-
-					});
-
-				}
-			}
 			// Adds signup tag, if it is not added previously.
 			// set_profile_noty();
 			add_custom_fields_to_our_domain();
@@ -244,6 +220,7 @@ function our_domain_sync()
 
 			}
 			initWebrules();
+			add_referrar_info_as_note();
 		}, function(data)
 		{
 			var name = CURRENT_DOMAIN_USER['name'];

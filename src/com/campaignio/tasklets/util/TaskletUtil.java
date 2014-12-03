@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
+import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.Tasklet;
@@ -73,6 +74,8 @@ public class TaskletUtil
      */
     public static final String HOPS_COUNT = "hop_count";
 
+    public static final String _AGILE_CUSTOM_TRIGGER_JSON = "_agile_custom_trigger_json";
+
     /**
      * Executes Tasklet.
      * 
@@ -113,7 +116,14 @@ public class TaskletUtil
 	if (currentNodeJSON == null)
 	{
 	    nextNode = START_NODE_ID;
+
 	    data = new JSONObject();
+
+	    // Add to data json
+	    JSONObject customTriggerJSON = TriggerUtil.getTriggerCustomJSON(subscriberJSON);
+
+	    if (customTriggerJSON != null)
+		data = customTriggerJSON;
 
 	    // initialize count
 	    data.put(HOPS_COUNT, 0);

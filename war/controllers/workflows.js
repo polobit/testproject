@@ -245,8 +245,8 @@ var WorkflowsRouter = Backbone.Router
 				}
 
 				/* Set the designer JSON. This will be deserialized */
-				this.workflow_model = this.workflow_list_view.collection.get(id);
-				var workflowName = this.workflow_model.get("name");
+//				this.workflow_model = this.workflow_list_view.collection.get(id);
+//				var workflowName = this.workflow_model.get("name");
 
 				if (log_type == undefined || log_type == "ALL")
 					log_type = "";
@@ -269,7 +269,7 @@ var WorkflowsRouter = Backbone.Router
 				logsListView.collection.fetch({ success : function(collection)
 				{
 					if (collection.length === 0)
-						fill_logs_slate('logs-slate', log_type.split('=')[1], workflowName);
+						fill_logs_slate('logs-slate', log_type.split('=')[1]);
 				} });
 
 				$('#campaign-analysis-tabs-content').html(logsListView.el);
@@ -325,9 +325,9 @@ var WorkflowsRouter = Backbone.Router
 					return;
 				}
 
-				/* Set the designer JSON. This will be deserialized */
-				this.workflow_model = this.workflow_list_view.collection.get(id);
-				var workflowName = this.workflow_model.get("name");
+//				/* Set the designer JSON. This will be deserialized */
+//				this.workflow_model = this.workflow_list_view.collection.get(id);
+//				var workflowName = this.workflow_model.get("name");
 
 				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 				{
@@ -538,6 +538,11 @@ var WorkflowsRouter = Backbone.Router
 						{
 							var shopify_event_type = currentTrigger.toJSON()['trigger_shopify_event'];
 							populate_shopify_events_in_trigger($('form#addTriggerForm', el), 'trigger-shopify-event', shopify_event_type);
+						}
+
+						if(type == 'INBOUND_MAIL_EVENT')
+						{
+							populate_inbound_mail_events_in_trigger($('form#addTriggerForm', el), 'trigger-inbound-mail-event');
 						}
 
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";

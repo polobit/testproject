@@ -92,14 +92,14 @@ public class TagsAPI
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Contact> getContacts(@PathParam("tag") String tag, @QueryParam("cursor") String cursor,
-	    @QueryParam("page_size") String count)
+	    @QueryParam("page_size") String count, @QueryParam("global_sort_key") String sortKey)
     {
 	try
 	{
 	    if (count != null)
-		return ContactUtil.getContactsForTag(tag, Integer.parseInt(count), cursor);
+		return ContactUtil.getContactsForTag(tag, Integer.parseInt(count), cursor, sortKey);
 
-	    return ContactUtil.getContactsForTag(tag, null, null);
+	    return ContactUtil.getContactsForTag(tag, null, null, sortKey);
 
 	}
 	catch (Exception e)

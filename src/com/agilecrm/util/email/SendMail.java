@@ -57,7 +57,7 @@ public class SendMail
     public static final String ACCOUNT_CANCELLED_BY_USER = "account_cancelled_by_user";
     public static final String ACCOUNT_CANCELLED_BY_USER_SUBJECT = "Agile CRM Account Cancelled";
 
-    public static final String EMAIL_SUBSCRIPTION_CANCELLED_BY_USER = "subscription/add-on/email/email_cancelled_by_user_html.html";
+    public static final String EMAIL_SUBSCRIPTION_CANCELLED_BY_USER = "subscription/add-on/email/email_cancelled_by_user";
     public static final String EMAIL_SUBSCRIPTION_CANCELLED_BY_USER_SUBJECT = "Agile CRM Email Package Cancelled";
 
     public static final String AGENT_ADDED = "agent_added";
@@ -239,7 +239,8 @@ public class SendMail
 	    System.out.println("Namespace in SendMail is " + NamespaceManager.get());
 
 	    // Send Email
-	    Mandrill.sendMail(false, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, args);
+	    Mandrill.sendMail(false, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, null,
+		    args);
 	}
 	catch (Exception e)
 	{

@@ -14,7 +14,7 @@ var ContactFiltersRouter = Backbone.Router.extend({
 		
 		"contact-filter-edit/:id" : "contactFilterEdit",
 		
-		"contact-filter/:id" : "showFilterContacts",
+		"contact-filter/:id" : "showFilterContacts"
 		
 	},
 	
@@ -24,7 +24,7 @@ var ContactFiltersRouter = Backbone.Router.extend({
 	contactfilters : function()
 	{
 		this.contactFiltersList = new Base_Collection_View({ url : '/core/api/filters', restKey : "ContactFilter", templateKey : "contact-filter",
-			individual_tag_name : 'tr' });
+			individual_tag_name : 'tr', sort_collection : false});
 
 		this.contactFiltersList.collection.fetch();
 		$("#content").html(this.contactFiltersList.render().el);
@@ -42,9 +42,10 @@ var ContactFiltersRouter = Backbone.Router.extend({
 
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 				{
-					chainFilters(el, undefined, function()
+					chainFiltersForContactAndCompany(el, undefined, function()
 					{
 						$('#content').html(el);
+						$("#contact_type").trigger('change');
 					});
 
 				})
@@ -69,14 +70,16 @@ var ContactFiltersRouter = Backbone.Router.extend({
 		var ContactFilter = new Base_Model_View({ url : 'core/api/filters', model : contact_filter, template : "filter-contacts",
 			window : 'contact-filters', postRenderCallback : function(el)
 			{
-
+				$(el).live('agile_model_loaded', function(e) {
+					$("#contact_type").trigger('change');
+				})
 				$("#content").html(LOADING_HTML);
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 				{
-					chainFilters(el, contact_filter.toJSON(), function()
-					{
-						$("#content").html(el);
-					});
+					chainFiltersForContactAndCompany(el, contact_filter.toJSON(), function()
+						{
+							$('#content').html(el);
+						});
 					scramble_input_names($(el).find('#filter-settings'));
 				})
 			}, saveCallback : function(data)
@@ -98,7 +101,7 @@ var ContactFiltersRouter = Backbone.Router.extend({
 	{
 		if (App_Contacts)
 			App_Contacts.contacts(undefined, filter_id);
-	},
+	}
 	
 	
 });

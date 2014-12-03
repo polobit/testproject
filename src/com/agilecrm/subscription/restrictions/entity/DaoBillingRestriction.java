@@ -3,7 +3,10 @@ package com.agilecrm.subscription.restrictions.entity;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.ContactBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.DomainUserBillingRestriction;
+import com.agilecrm.subscription.restrictions.entity.impl.EmailBillingRestriction;
+import com.agilecrm.subscription.restrictions.entity.impl.ReportBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.ReportGraphBillingRestriction;
+import com.agilecrm.subscription.restrictions.entity.impl.TriggerBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.WebRuleBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.WorkflowBillingRestriction;
 
@@ -16,7 +19,7 @@ import com.agilecrm.subscription.restrictions.entity.impl.WorkflowBillingRestric
  * 
  */
 public abstract class DaoBillingRestriction implements
-	com.agilecrm.subscription.restrictions.entity.EntityDaoRestrictionInterface
+        com.agilecrm.subscription.restrictions.entity.EntityDaoRestrictionInterface
 {
     /**
      * Class information used to create instance according to name of the class
@@ -32,7 +35,13 @@ public abstract class DaoBillingRestriction implements
 
 	Report(ReportGraphBillingRestriction.class),
 
-	DomainUser(DomainUserBillingRestriction.class);
+	DomainUser(DomainUserBillingRestriction.class),
+
+	Email(EmailBillingRestriction.class),
+	
+	Reports(ReportBillingRestriction.class),
+	
+	Trigger(TriggerBillingRestriction.class);
 
 	Class<? extends DaoBillingRestriction> clazz;
 
@@ -73,13 +82,8 @@ public abstract class DaoBillingRestriction implements
     {
 	try
 	{
-	    ClassEntities entity = ClassEntities.valueOf(className);
-	    if (entity == null)
-		return null;
+	    DaoBillingRestriction dao = getPlanInstance(className);
 
-	    Class<? extends DaoBillingRestriction> clazz = entity.getClazz();
-	    DaoBillingRestriction dao;
-	    dao = clazz.newInstance();
 	    // Sets max limits
 	    dao.setMax();
 	    return dao;
@@ -90,6 +94,32 @@ public abstract class DaoBillingRestriction implements
 	    // TODO Auto-generated catch block
 	    return null;
 	}
+    }
+
+    private static DaoBillingRestriction getPlanInstance(String className)
+    {
+	ClassEntities entity = ClassEntities.valueOf(className);
+	if (entity == null)
+	    return null;
+
+	Class<? extends DaoBillingRestriction> clazz = entity.getClazz();
+	DaoBillingRestriction dao = null;
+	try
+	{
+	    dao = clazz.newInstance();
+	}
+	catch (InstantiationException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	catch (IllegalAccessException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	return dao;
     }
 
     public static DaoBillingRestriction getInstace(String className, Object entity)
@@ -113,11 +143,12 @@ public abstract class DaoBillingRestriction implements
      */
     public static DaoBillingRestriction getInstace(String className, BillingRestriction restriction)
     {
-	DaoBillingRestriction dao = getInstace(className);
+	DaoBillingRestriction dao = getPlanInstance(className);
 	if (dao == null)
 	    return dao;
 
 	dao.restriction = restriction;
+	dao.setMax();
 	dao.sendReminder = dao.restriction.sendReminder;
 	return dao;
     }
@@ -131,8 +162,16 @@ public abstract class DaoBillingRestriction implements
     @Override
     public void send_warning_message()
     {
-	getTag();
-
+	try
+	{
+	    getTag();
+	}
+	catch(Exception e)
+	{
+	    System.err.print(e.getMessage());
+	    e.printStackTrace();
+	    return;
+	}
 	if (restriction.tagsToAddInOurDomain.isEmpty())
 	    return;
 
@@ -153,4 +192,19 @@ public abstract class DaoBillingRestriction implements
 	return null;
     }
 
+    public void setBillingRestriction(BillingRestriction restriction)
+    {
+	this.restriction = restriction;
+    }
+    
+    public boolean canAddTag(Integer percentage, String tag)
+    {
+	if(percentage < 75)
+	    return false;
+	
+	if (!restriction.tags_in_our_domain.isEmpty() && restriction.tags_in_our_domain.contains(tag))
+	    return false;
+	
+	return true;
+    }
 }

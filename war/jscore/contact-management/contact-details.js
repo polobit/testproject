@@ -97,6 +97,7 @@ function fill_owners(el, data, callback){
  * To show owner on change
  */
 function show_owner(){
+	$('.contact-owner-pic').css('visibility', 'visible');
 	$('#contact-owner').css('display', 'inline-block');
 }
 
@@ -490,9 +491,22 @@ $(function(){
         	
         	 if($('#change-owner-element > #change-owner-ul').css('display') == 'inline-block')
                  $("#change-owner-element").find(".loading").remove();
-        	
     	});
-    	
-    	
     });
+    
+    $('#change-owner-element > .contact-owner-add').live('click',function(e){
+    	e.preventDefault();
+    	
+    	fill_owners(undefined, undefined, function(){
+
+        	$('.contact-owner-add').css('display', 'none');
+
+        	$('#change-owner-ul').css('display', 'inline-block');
+        	$('#change-owner-ul').addClass("open");
+        	
+        	 if($('#change-owner-element > #change-owner-ul').css('display') == 'inline-block')
+        		 $("#change-owner-element").find(".loading").remove();
+    	});
+    });
+    
 });
