@@ -21,5 +21,4 @@ $(function()
 		}
 		// App_Subscription.invoiceDetails(data);
 	});
-	
 });

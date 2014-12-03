@@ -370,7 +370,7 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
                     <th>Amount</th>
                 </tr>
             </thead>
-            <tbody id="charge-model-list" class="model-list-cursor">
+            <tbody id="charge-model-list">
             </tbody>
         </table>
 	{{else}}
@@ -381,7 +381,7 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 {{#if paid}}
 	<td class="data" data="{{invoice}}"><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></td>	
 	<td >
-    	${{numeric_operation amount 100 "/"}} {{#if refunded}} - Refunded {{/if}}
+    	${{numeric_operation amount 100 "/"}} {{#if refunded}}  (Refunded) {{/if}}{{#unless refunded}}{{#if_not_equals amountRefunded 0}} (Refunded ${{numeric_operation amountRefunded 100 "/"}}){{/if_not_equals}}{{/unless}}
 	</td>
 {{/if}}
 	
