@@ -189,7 +189,7 @@ $.validator.setDefaults({
 
 				<form name='agile' id="agile" method='post'
 					onsubmit="return isValid();" style="min-height:572px">
-					<div class="carousel-inner">
+					<div class="carousel-inner" >
 						<div class="item active">
 							<div align="center">
 								<h1 class="regpage-logHead">
@@ -220,32 +220,6 @@ $.validator.setDefaults({
 											class="input-xlarge field required form-control"
 											maxlength="20" minlength="4" name='password' type="password"
 											placeholder="Password" autocapitalize="off">
-									</div>
-									<div class="form-group login-plan_type">
-									<div style="display:inline-block;width:49%">
-									<select class="form-control required"  name="plan_type" data-width="100%">
-											<option value="">Choose Plan</option>
-											<option value="Starter">Starter</option>
-											<option value="Regular">Regular</option>
-											<option value="pro">Pro</option>
-								 	 </select>
-								 	 </div>
-								 	 <div style="display:inline-block;width:50%">
-								 	 <select class="form-control required"  name="users_count" data-width="100%">
-											<option value="">Choose Users</option>
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-											<option value="6">6</option>
-											<option value="7">7</option>
-											<option value="8">8</option>
-											<option value="9">9</option>
-											<option value="10">10</option>
-											<option value="10+">> 10</option>
-								 	 </select>
-								 	 </div>
 									</div>
 									<div class="form-group">
 										<div class="input-prepend input-append input-group">
@@ -286,44 +260,60 @@ $.validator.setDefaults({
 							</div>
 							<fieldset class="step2">
 								<div class='regpage-fieldview'>
-									<h4>About your Company</h4>
-									<div class="form-group login-company">
-							<!-- 	<div style="display:inline-block;width:50%">  -->	
+								<!--  	<h4>About your Company</h4>-->
+								<!--  	<div class="form-group login-company">
+							<!-- 	<div style="display:inline-block;width:50%">  	
 										<span class="regpage-company"></span> <input
 											class="input-xlarge field required form-control"
 											id="login_company" name='company' type="text" maxlength="50"
 											placeholder="Company Name" autocapitalize="off">
-									</div>
+									</div> -->
 									<div class="form-group login-company">
 								<!--	<div style="display:inline-block;width:49%"> -->
 									<select class="form-control required"  name="company_type" data-width="100%">
-											<option value="">Company type</option>
+											<option value="" selected disabled>Company type</option>
 											<option value="B2B">B2B</option>
 											<option value="SaaS">SaaS</option>
 											<option value="eCommerce">eCommerce</option>
-											<option value="Agency">Agency</option>
+											<option value="Marketing Agency">Marketing Agency</option>
 								  </select>
 								  </div>
-								  <h4>About yourself</h4>
+								  <div class="form-group login-plan_type">
+									<div style="display:inline-block;float:left;margin-right:5px">
+									<select class="form-control required"  name="plan_type" data-width="100%">
+											<option value="" selected disabled>Choose Plan</option>
+											<option value="Starter">Starter</option>
+											<option value="Regular">Regular</option>
+											<option value="pro">Pro</option>
+								 	 </select>
+								 	 </div>
+								 	 <div style="display:inline-block;width:180px"> <input
+											class="input-xlarge field required form-control number" name="users_count"
+											type="text" min="1"
+											placeholder="Users" autocapitalize="off" autofocus>
+								 	 </div>
+									</div>
+								 <!--   <h4>About yourself</h4> -->
 									<div class="form-group login-company-size">
 									 <!--  <div style="display:inline-block;width:50%"> -->
 									<select class="form-control required"  name="role">
-											<option value="">Role</option>
+											<option value="" selected disabled>Role</option>
+											<option value="CEO">CEO</option>
 											<option value="VP, Sales">VP, Sales</option>
 											<option value="VP, Marketing">VP, Marketing</option>
 											<option value="Developer">Developer</option>
 											<option value="Reseller">Reseller</option>
-											<option value="Agency">Agency</option>
 											<option value="Small Business Owner">Small Business Owner</option>
+											<option value="Recruiter">Recruiter</option>
 											<option value="Other">Other</option>
 								  </select>
 								  </div>
 								  <div class="form-group login-company-size">
 								<!--  <div style="display:inline-block;width:49%">-->
 										<span class="regpage-company-size"></span> <input
-											class="input-xlarge field required form-control number"
+											class="input-xlarge field required form-control"
 											id="login_phone_number" name='phone_number' type="text" min=2
-											placeholder="Phone Number " autocapitalize="off">
+											placeholder="Phone Number" autocapitalize="off">
 											</div>
 									
 									<div class="form-group login-company-size">
@@ -334,10 +324,8 @@ $.validator.setDefaults({
 										<input type='submit' id="register_account" value="Confirm"
 											class='btn btn-large btn-primary  regpage-btn'>
 									</div>
-
-									<div class="form-group "
+										<div class="form-group regpage-options log-terms"
 										style="margin-bottom: 0px;"></div>
-										</div>
 							</fieldset>
 						</div>
 					</div>
@@ -434,6 +422,7 @@ $.validator.setDefaults({
 				 submitHandler: function(form) {
 					 if(isValid())
 						{
+						 $(".regpage-container").css("height", "527px");
 						 var domain = $("#subdomain").val();
 						 var email = $("#login_email").val();
 						
@@ -447,7 +436,7 @@ $.validator.setDefaults({
 						{
 							var url =  "/backend/register-check?domain="+domain+"&email=" + email;
 							 isDuplicateAccount(url, form, function(data){
-								 $('.carousel').find('.active').hide();
+								// $('.carousel').find('.active').hide();
 								 $('#cor').carousel("next");
 								 $('#cor').carousel('pause');
 							 })
@@ -456,6 +445,10 @@ $.validator.setDefaults({
 						
 						 submitForm(form);
 						}
+					 else
+						 {
+							
+						 }
 					 }
 			});
 			
@@ -486,7 +479,8 @@ $.validator.setDefaults({
 			// Return if action is already in process 
 			if($("#register_account").attr("disabled"))
 				return;
-			
+			 $(".regpage-container").css("height", "auto");
+			 
 		    $("#agile").validate();
 		  //  $("#choose_domain").validate();
 		    return  $("#agile").valid();

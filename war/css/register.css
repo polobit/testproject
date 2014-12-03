@@ -12,9 +12,6 @@ html,body
 	background:url("../../img/signin/reg-bg.jpg") no-repeat scroll center center ;
 	background-attachment:fixed;
 	background-size:100% 100%;
-	
-
-	
 }
 .logpages
 {
@@ -194,4 +191,9 @@ vertical-align: bottom;
 {
 	color:#777;
 	
+}
+
+#agile select
+{
+	height : 50px
 }
