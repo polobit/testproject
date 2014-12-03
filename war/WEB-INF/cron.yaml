@@ -29,7 +29,7 @@ cron:
   
 - description: Monthly activity reports
   url: /backend/cron/activity-reports?duration=MONTHLY
-  schedule: 1st friday of month 23:55
+  schedule: 1 of month 00:00
   
 - description: Weekly activity reports
   url: /backend/cron/activity-reports?duration=WEEKLY

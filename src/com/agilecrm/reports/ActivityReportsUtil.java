@@ -112,11 +112,12 @@ public class ActivityReportsUtil
 	    List<DomainUser> users = report.getUsersList();
 	    // Calculate the time bounds for the activities depending on the
 	    // frequency.
-	    Map<String, Long> timeBounds = getTimeBound(report);
+	    Map<String, Long> timeBounds = getTimeInterval(report);
 	    System.out.println("time intervals - " + timeBounds.toString());
 	    // If user mentioned any the upper time bound (end time).
-	    if (endTime != null)
-		timeBounds.put("endTime", endTime);
+	    /*
+	     * if (endTime != null) timeBounds.put("endTime", endTime);
+	     */
 
 	    // Format for dates in the report.
 	    String format = "EEE, MMM d, yyyy HH:mm z";
@@ -734,6 +735,34 @@ public class ActivityReportsUtil
 	}
 
 	return docReport;
+    }
+
+    private static Map<String, Long> getTimeInterval(ActivityReports report)
+    {
+	Calendar cal = Calendar.getInstance();
+	Map<String, Long> timeBound = new HashMap<String, Long>();
+	timeBound.put("endTime", cal.getTimeInMillis() / 1000);
+
+	if (report.frequency.equals(ActivityReports.Frequency.DAILY))
+	{
+	    cal.add(Calendar.DATE, -1);
+	    timeBound.put("startTime", cal.getTimeInMillis() / 1000);
+	}
+	else if (report.frequency.equals(ActivityReports.Frequency.WEEKLY))
+	{
+	    cal.add(Calendar.DATE, -7);
+	    timeBound.put("startTime", cal.getTimeInMillis() / 1000);
+	}
+	else
+	{
+	    Calendar prev = Calendar.getInstance();
+	    prev.add(Calendar.MONTH, -1);
+	    int offset = prev.getActualMaximum(Calendar.DATE);
+	    cal.add(Calendar.DATE, offset * -1);
+	    timeBound.put("startTime", cal.getTimeInMillis() / 1000);
+	}
+
+	return timeBound;
     }
 
     /**
