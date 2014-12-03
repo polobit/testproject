@@ -24,7 +24,12 @@ $(function() {
 		} else {
 
 			// Save functionality for event
-			save_event('activityForm', 'activityModal', false, this);
+			save_event('activityForm', 'activityModal', false, this,function(data){
+						//	eventCollectionView.collection.comparator ='start';
+									eventCollectionView.collection.add(data.toJSON());
+									eventCollectionView.collection.sort();
+							
+			});
 		}
 	}); // End of Task and Event Validation function
 

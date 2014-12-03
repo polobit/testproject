@@ -13,6 +13,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
@@ -38,6 +39,7 @@ public abstract class StripeWebhookHandler
     protected Customer customer = null;
     protected Map<String, Object> plan;
     private Boolean isEmailPlan = null;
+    protected Subscription subscription = null;
 
     Contact contact;
     DomainUser user;
@@ -63,6 +65,16 @@ public abstract class StripeWebhookHandler
 	    return null;
 
 	user = DomainUserUtil.getDomainOwner(domain);
+
+	if (user == null)
+	{
+	    Customer customer = getCustomerFromStripe();
+	    if (customer != null)
+		user = DomainUserUtil.getDomainUserByEmailFromParticularDomain(customer.getEmail(), getDomain());
+	    if (user == null)
+		user = DomainUserUtil.getDomainOwner("local");
+	}
+
 	return user;
     }
 
@@ -196,13 +208,13 @@ public abstract class StripeWebhookHandler
 	// Send mail to domain user
 	SendMail.sendMail(user.email, emailSubject, template, getcustomDataForMail());
     }
-    
+
     protected void sendMail1(String emailSubject, String template)
     {
 	// Send mail to domain user
 	SendMail.sendMail(user.email, emailSubject, template, getMailDetails());
     }
-    
+
     protected abstract Map<String, Object> getMailDetails();
 
     public void init(String event_response_string, Event event)
@@ -372,20 +384,36 @@ public abstract class StripeWebhookHandler
 	    NamespaceManager.set(oldNamespace);
 	}
     }
-    
+
     protected boolean isEmailAddonPlan()
     {
-	if(isEmailPlan != null)
+	if (isEmailPlan != null)
 	{
 	    return isEmailPlan;
 	}
-	
+
 	String plan_id = String.valueOf(getPlanDetails().get("plan_id"));
 	System.out.println("plan :" + plan_id);
 	if (StringUtils.containsIgnoreCase(plan_id, "email"))
 	    return true;
 
 	return false;
+    }
+
+    protected Subscription getSubscription()
+    {
+	if (subscription != null)
+	    return subscription;
+
+	String currentNamespace = getDomain();
+	String namespaceInAppengine = NamespaceManager.get();
+
+	if (!currentNamespace.equals(namespaceInAppengine))
+	    NamespaceManager.set(currentNamespace);
+
+	subscription = SubscriptionUtil.getSubscription();
+
+	return subscription;
     }
 
 }

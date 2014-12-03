@@ -20,5 +20,12 @@ public class RegularPlanLimits extends PlanLimits
 		reporting = "ALL";
 		whiteLabelEnabled = true;
 		campaignNodesLimit = 25;
+		
+		/**
+		 * New plan limits
+		 */
+		widgetsLimit = 1;
+		reportsLimit = 10;
+		TriggersLimit = 5;
 	}
 }

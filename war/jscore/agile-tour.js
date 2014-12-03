@@ -43,7 +43,7 @@ function create_tour_steps(el)
 	 * Calendar
 	 */
 	Agile_Tour["calendar"] = [
-			{ "element" : "#calendar", "title" : "Calendar Events", "content" : "Events are time based such as meetings.<br/> They show up in calendar.<br/>",
+			{ "element" : "#calendar_event", "title" : "Calendar Events", "content" : "Events are time based such as meetings.<br/> They show up in calendar.<br/>",
 				"placement" : "left",
 				// "el": el,
 				"backdrop" : true, },

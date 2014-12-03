@@ -34,6 +34,11 @@ $(function()
 			$('form#addTriggerForm').find('select#trigger-shopify-event').val("");
 		}
 		
+		// Hide trigger inbound mail event div for other trigger conditions.
+		if($(this).val() !== 'INBOUND_MAIL_EVENT'){
+			$('form#addTriggerForm').find('div#trigger-inbound-mail-event').css('display', 'none');
+		}
+
 		// Initialize tags typeahead
 		if ($(this).val() == 'TAG_IS_ADDED' || $(this).val() == 'TAG_IS_DELETED')
 		{
@@ -70,6 +75,11 @@ $(function()
 		if($(this).val() == 'SHOPIFY_EVENT')
 		{
 			populate_shopify_events_in_trigger($('form#addTriggerForm'), 'trigger-shopify-event');
+		}
+
+		if($(this).val() == 'INBOUND_MAIL_EVENT')
+		{
+			populate_inbound_mail_events_in_trigger($('form#addTriggerForm'), 'trigger-inbound-mail-event');
 		}
 	});
 	
@@ -174,6 +184,11 @@ function populate_shopify_events_in_trigger(trigger_form, shopify_event_select_i
 	{
 		trigger_form.find('select#' + shopify_event_select_id).val(shopify_event_value).attr('selected', 'selected').trigger('change');
 	}
+}
+
+function populate_inbound_mail_events_in_trigger(trigger_form, inbound_mail_event_div_class)
+{
+	trigger_form.find('div#' + inbound_mail_event_div_class).css('display','');
 }
 
 /**

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.json.JSONObject;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.Trigger.Type;
@@ -21,6 +23,10 @@ import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
  * 
  * @author Naresh
  * 
+ */
+/**
+ * @author naresh
+ *
  */
 public class TagsTriggerUtil
 {
@@ -116,13 +122,44 @@ public class TagsTriggerUtil
 	{
 	    for (Trigger trigger : triggerMap.values())
 	    {
-		WorkflowSubscribeUtil.subscribeDeferred(contactList, trigger.campaign_id);
+		WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id,
+		        new JSONObject().put("tag", getTriggeredTagJSON(changedTags)));
 	    }
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	}
+    }
+
+    /**
+     * 
+     * @param changedTags
+     * @return
+     */
+    private static JSONObject getTriggeredTagJSON(Set<String> changedTags)
+    {
+
+	JSONObject json = new JSONObject();
+
+	if (changedTags.size() == 0)
+	    return json;
+
+	try
+	{
+	    String tags = "";
+
+	    for (String tag : changedTags)
+		tags += (tags == "" ? "" : ',') + tag;
+
+	    json.put("name", tags);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return json;
+
     }
 
     /**
@@ -137,4 +174,5 @@ public class TagsTriggerUtil
     {
 	executeTriggerForTags(contact, changedTags, Trigger.Type.TAG_IS_ADDED);
     }
+
 }

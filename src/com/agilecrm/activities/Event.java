@@ -12,6 +12,10 @@ import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -87,6 +91,12 @@ public class Event
      * Created time of the event
      */
     public Long created_time = 0L;
+
+    /**
+     * date field to mustach template of the event
+     */
+    @NotSaved
+    public String date;
 
     /**
      * Related Contact
@@ -181,6 +191,25 @@ public class Event
 	    this.owner = new Key<AgileUser>(AgileUser.class, agileUserId);
     }
 
+    @XmlElement(name = "eventOwner")
+    public DomainUser getOwner() throws Exception
+    {
+	if (owner != null)
+	{
+	    try
+	    {
+		AgileUser agileuser = AgileUser.getCurrentAgileUser(owner.getId());
+		// Gets Domain User Object
+		return DomainUserUtil.getDomainUser(agileuser.domain_user_id);
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+	return null;
+    }
+
     public void addContacts(String id)
     {
 	if (contacts == null)
@@ -248,4 +277,41 @@ public class Event
     {
 	return ("Start " + start + "  End: " + end + " Range: " + search_range);
     }
+
+    /**
+     * Gets picture of owner who created event. Owner picture is retrieved from
+     * user prefs of domain user who created event and is used to display owner
+     * picture in deals list.
+     * 
+     * @return picture of owner.
+     * @throws Exception
+     *             when agileuser doesn't exist with respect to owner key.
+     */
+    @XmlElement(name = "ownerPic")
+    public String getOwnerPic() throws Exception
+    {
+	AgileUser agileuser = null;
+	UserPrefs userprefs = null;
+
+	try
+	{
+	    // Get owner pic through agileuser prefs
+	    if (owner != null)
+		agileuser = AgileUser.getUser(owner);
+
+	    if (agileuser != null)
+		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
+
+	    if (userprefs != null)
+		return userprefs.pic;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+
+	}
+
+	return "";
+    }
+
 }

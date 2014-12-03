@@ -43,6 +43,8 @@
 										<optgroup label="Email Bounces">
 										<option value="SOFT_BOUNCE">Soft Bounce</option>
 										<option value="HARD_BOUNCE">Hard Bounce</option>
+										<optgroup label="Email Event">
+										<option value="INBOUND_MAIL_EVENT" id="inbound-mail-event">New Email</option>
 									</select>
                                 </div>
                             </div>
@@ -92,16 +94,27 @@
 							<div class="controls" style="margin-left:220px!important">
 							<select id="trigger-shopify-event" name="trigger_shopify_event" class="required">
 									<option value="">Select Shopify Event</option>
-									<option value="CUSTOMER_CREATE">Customer created</option>
-									<option value="CUSTOMER_UPDATE">Customer updated</option>
-									<option value="ORDER_CREATE">Order created</option>
-									<option value="ORDER_UPDATE">Order updated</option>
-									<option value="ORDER_PAYMENT">Order payment</option>
-									<option value="CHECKOUT_CREATE">Checkout created</option>
-									<option value="CHECKOUT_UPDATE">Checkout updated</option>
+									<option value="CUSTOMERS_CREATE">Customer created</option>
+									<option value="CUSTOMERS_UPDATE">Customer updated</option>
+									<option value="ORDERS_CREATE">Order created</option>
+									<option value="ORDERS_UPDATE">Order updated</option>
+									<option value="ORDERS_PAYMENT">Order payment</option>
+									<option value="ORDERS_DELETE">Order deleted</option>
+									<option value="ORDERS_FULFILLED">Order fulfilled</option>
+									<option value="ORDERS_CANCELLED">Order cancelled</option>
+									<option value="CHECKOUTS_CREATE">Checkout created</option>
+									<option value="CHECKOUTS_UPDATE">Checkout updated</option>
+									<option value="CHECKOUTS_DELETE">Checkout deleted</option>
 							</select>
 							</div>	
-						</div> 
+						</div>
+						<div id="trigger-inbound-mail-event" style="display:none;">
+						<div class="control-group">
+							<div class="controls" style="margin-left:220px!important; margin-top:-12px;">
+								<small><i class="icon-info-sign"></i> For Agile CRM to recognize your emails, please setup <a class="inbound-help-text">{{inboundMail}}</a> as forwarding email at your email server. The email's From address will be added as a contact and campaign will be run on it (only for the very first time).</small>								
+							</div>
+                		</div>
+						</div>
                         <div class="control-group">
                             <label class="control-label" style="width:200px!important;">Run this Campaign on the Contact <span class="field_req">*</span></label>
                             <div class="controls" style="margin-left:220px!important;">

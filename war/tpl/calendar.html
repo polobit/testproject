@@ -13,7 +13,17 @@
                     <li><a data-toggle="modal" class="add-task">Add Task</a></li>
                 </ul>
             </div>
-			<div id="event-list-filters" class="btn-group right" style="display: inline; top: -30px;margin-right:20px;">
+        	<div class="btn-group right" id=""	style="display: inline; top: -30px;margin-right: 20px;margin-left: 20px;">
+					<div class="btn"><i class="icon-list" style="margin-right:3px"></i></div>
+					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu pull-right">
+					  <li><a href="#" class="c_list">List</a></li>
+						<li><a href="#" class="c_cal">Calendar</a></li>
+					</ul>
+			</div>
+			<div id="event-list-filters" class="btn-group right" style="display: inline; top: -30px;margin-left:20px;">
 				 <img class="loading_img" style="padding-right:5px;" height="32px" width="32px" src= "img/21-0.gif"></img>
 			</div>
         </div>
@@ -34,13 +44,26 @@
 		</div>-->
     </div>
     <div class="span9">
-        <div id="calendar">
-           
+        <div id="calendar_event">
+           <ul class="nav nav-tabs" id="event_tab">
+            <li class="active"><a href="#agile" data-toggle="tab" >Agile Events</a></li>
+            <li><a href="#google" data-toggle="tab">Google Events</a></li>
+            </ul>
         </div>
+           <div class="tab-content">
+           <div class="tab-pane active" id="agile"></div>
+          <div class="tab-pane" id="google"></div>
+          </div>
+          <div id="agile_event_list"><h2> Event List</h2>
+         <div  id="agile_event" style="margin-top: 6px;"></div>
+          </div>
+
         <br />
         <a class="right" href="#icalModal" data-toggle="modal" id="subscribe-ical" style="display:none;"><i class="icon-calendar"></i> Subscribe to iCalendar Feed</a>
     </div>
 </div>
+
+
 </script>
 
 <script id="event-filter-template" type="text/html">
@@ -89,7 +112,7 @@
 						</select>
 					</div>
 				</div>
-				<div class="control-group row-filter">
+				<div class="control-group row-filter calendar-view">
 					<label class="control-label"><b>Type </b>
 					</label>
 					<div class="controls" id="type_div">
@@ -97,6 +120,16 @@
 								<option value="">All</option>
 								<option value="google">Google</option>
 								<option value="agile">Agile</option>
+						</select></span>
+					</div>
+				</div>
+				<div class="control-group row-filter list-view">
+					<label class="control-label"><b>Time </b>
+					</label>
+					<div class="controls" id="time_div">
+						<span><select id="event_time" name="time">
+								<option value="">All Events</option>
+								<option value="future">Future Events</option>
 						</select></span>
 					</div>
 				</div>

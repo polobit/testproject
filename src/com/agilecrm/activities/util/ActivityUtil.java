@@ -348,7 +348,7 @@ public class ActivityUtil
 			obj.put("contactid", contactids.get(i));
 			obj.put("contactname", contactnames.get(i));
 			System.out.println("ContactIds  " + contactids.get(i) + "contact names   "
-			        + contactnames.get(i));
+				+ contactnames.get(i));
 			arr.put(obj);
 
 			obj = new JSONObject();
@@ -812,7 +812,7 @@ public class ActivityUtil
      */
     public static String getTimeFromEppoch(Long epoch)
     {
-	String date = new java.text.SimpleDateFormat("EEE, d MMM yyyy ").format(new java.util.Date(epoch * 1000));
+	String date = new java.text.SimpleDateFormat("EEE, d MMM yyyy HH:mm").format(new java.util.Date(epoch * 1000));
 
 	return date;
     }
@@ -1274,6 +1274,61 @@ public class ActivityUtil
 
 	}
 	return list;
+    }
+
+    /**
+     * Fetch list of activities based on the given filters sorted on the time of
+     * activity.
+     * 
+     * @param user_id
+     *            the id of the user who performed the activity.
+     * @param entity_type
+     *            the type of the entity.
+     * @param activity_type
+     *            activity type.
+     * @param entity_id
+     *            the id of the entity on which the activity is performed.
+     * @param max
+     *            maximum number of the activities to retrieve.
+     * @param cursor
+     *            starting cursor for paging.
+     * @return the list of activities based on the given filter.
+     */
+    public static List<Activity> getActivitiesByFilter(Long user_id, String entity_type, String activity_type,
+	    Long entity_id, Long startTime, Long endTime, Integer max, String cursor)
+    {
+	try
+	{
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    Query<Activity> query = dao.ofy().query(Activity.class);
+	    if (!StringUtils.isEmpty(entity_type))
+		searchMap.put("entity_type", entity_type);
+	    if (!StringUtils.isEmpty(activity_type))
+		searchMap.put("activity_type", activity_type);
+	    if (user_id != null)
+		searchMap.put("user", new Key<DomainUser>(DomainUser.class, user_id));
+
+	    if (entity_id != null)
+		searchMap.put("entity_id", entity_id);
+
+	    if (startTime != null)
+		searchMap.put("time >", startTime);
+
+	    if (endTime != null)
+		searchMap.put("time <", endTime);
+
+	    System.out.println("Search query --------" + searchMap);
+
+	    if (max != null && max > 0)
+		dao.fetchAllByOrder(max, cursor, searchMap, true, false, "time");
+
+	    return dao.listByProperty(searchMap);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
 
 }

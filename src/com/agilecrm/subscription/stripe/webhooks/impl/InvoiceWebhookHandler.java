@@ -29,6 +29,8 @@ import com.stripe.model.StripeObject;
 public class InvoiceWebhookHandler extends StripeWebhookHandler
 {
 
+    String subscribptionIdFromStripe = null;
+
     @Override
     public void process()
     {
@@ -236,6 +238,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    JSONObject lines = obj.getJSONObject("lines");
 	    JSONObject data = lines.getJSONArray("data").getJSONObject(0);
 
+	    System.out.println(data);
 	    if (data.has("quantity"))
 		plan.put("quantity", data.get("quantity"));
 
@@ -269,6 +272,8 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 		plan.put("end_date", new Date(Long.parseLong(period.getString("end")) * 1000).toString());
 	    }
 
+	    if (data.has("id"))
+		subscribptionIdFromStripe = data.getString("id");
 	    plan.put("amount", Integer.valueOf(obj.getString("total")) / 100);
 
 	    System.out.println(plan);
@@ -328,10 +333,24 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 		count = 1;
 	    BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(null, null);
 
-	    // Email count and according to plan and extra free pack that is
-	    // provided to all users
-	    restriction.one_time_emails_count = (count * 1000);
+	    System.out.println("events : " + getEvent().getData());
+	    System.out.println("previous attributes : " + getEvent().getData().getPreviousAttributes());
+	    if (getEvent().getData().getPreviousAttributes() == null
+		    || getEvent().getData().getPreviousAttributes().isEmpty())
+	    {
+		if (restriction.one_time_emails_count < 0)
+		    restriction.one_time_emails_count = 0;
+
+		restriction.one_time_emails_count += (count * 1000);
+		restriction.max_emails_count = restriction.one_time_emails_count;
+	    }
+	    else
+	    {
+		restriction.one_time_emails_count = (count * 1000);
+		restriction.max_emails_count = restriction.one_time_emails_count;
+	    }
 	    restriction.save();
+
 	}
 	finally
 	{
@@ -339,5 +358,4 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	}
 
     }
-
 }

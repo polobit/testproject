@@ -43,7 +43,7 @@ if (scheduleid != null)
   	
   DomainUser domainUser = DomainUserUtil.getDomainUserFromScheduleId(scheduleid,d_name);
 		  
-   // DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("jagadeesh@invox.com");
+    //DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("jagadeesh@invox.com");
 		  
   System.out.println("Domain user " + domainUser);
 	  
@@ -126,10 +126,10 @@ ObjectMapper mapper = new ObjectMapper();
 							class="timezone1">Timezone </span>
 						</span>
 					</div>
-					<div class="col-sm-4">
+					<div class="col-md-4 col-sm-12 col-xs-12">
 						<div id="datepick" style="height:215px;"></div>
 					</div>
-					<div class="col-sm-6" style="width: 65%;">
+					<div class="col-md-8 col-sm-12 col-xs-12">
 						<p class="availability">Availability on</p>
 						<ul class="checkbox-main-grid">
 
