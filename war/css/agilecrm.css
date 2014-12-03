@@ -962,13 +962,22 @@ margin:0px;
 	border:none;
 	border-bottom: 1px solid #DDD;
 	border-radius: 2px;
-	padding: 10px;
+	padding: 10px 10px 5px;
 	background-color: #fff;	
 }
 #deals-by-paging-model-list li:hover
 {
 	background:lightyellow;
 	
+}
+#deals-by-paging-model-list li.ui-sortable-placeholder
+{
+	background:#f5f5f5;
+	visibility:visible!important;
+}
+#deals-by-paging-model-list .data.agile-overflow-ellipsis .agile-overflow-ellipsis 
+{
+margin-top:7px;	
 }
 #opportunities-by-milestones-model-list .milestone-column>ul>li:hover
 {
