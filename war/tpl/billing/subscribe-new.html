@@ -3,7 +3,7 @@
 	<div class="span12">
 		<div class="page-header">
 			<h1>Plan and Upgrade
-				<a href="#" {{#check_plan "FREE"}} id="cancel-account" {{else}} id="cancel-account-request" {{/check_plan}} class="pull-right btn btn-danger" align="center" style="margin-top:10px;">Cancel My Account</a>
+				<a href="#" {{#check_plan "FREE"}} id="cancel-account" {{else}} id="cancel-account-request" {{/check_plan}} class="pull-right" align="center" style="font-size:17px;margin-top:10px;">Cancel My Account</a>
 			</h1>
 		</div>
 	</div>
@@ -137,9 +137,9 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 		<div style="border-bottom:1px solid #f5f5f5;margin-bottom:20px">
 			<h3>Your Credit Card Details
 				{{#if billingData}}
-					<a href="#update-card" id="change-card" class="pull-right btn" align="center" style="margin-top:-5px;margin-right:10px">Change Card</a>
+					<a href="#update-card" id="change-card" class="pull-right" align="center" style="margin-top:-5px;margin-right:10px">Change Card</a>
 				{{else}}
-					<a href="#update-card" id="change-card" class="pull-right btn" align="center" style="margin-top:-5px;margin-right:10px;display:none">Change Card</a>
+					<a href="#update-card" id="change-card" class="pull-right" align="center" style="margin-top:-5px;margin-right:10px;display:none">Change Card</a>
 				{{/if}}
 			</h3>
 		</div>
@@ -299,7 +299,12 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 				{{else}}
 				<div style="margin-top: 10%; text-align: center;">
 					5000 Emails <br />
-				<div><small>(One time free emails powered by Agile CRM)</small></div>
+				<div><small>(One time free emails powered by Agile CRM)
+				
+<span>
+									<img border="0" src="/img/help.png" style="height: 8px; margin-top:-7px;" rel="popover" data-placement="bottom" data-title="Lead Score" data-content="5000 one time free emails that will contain 'Powered by Agile CRM' at the bottom of the email. To remove this, you may purchase an email package." id="element" data-trigger="hover" data-original-title="">
+								</span>
+			</small></div>
 
 				<div style="margin-top:25px;margin-bottom:30px; text-align: center;">
 					{{getRemaininaEmails}} Emails remaining
@@ -339,7 +344,7 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 						<div class="control-group">
                        		 <label class="control-label" style="margin-top:5px">Send Rate</label>
                         		<div class="controls" style="margin-top: 5px;margin-left:150px">
-									<span style="margin-top:5px;float:right"> X 1000 </span><input type="text" class="input input-small required number" id="email-quantity" style="width:105px" name="quantity" min="5" placeholder="Number of emails"></input>
+									<span style="margin-top:5px;float:right"> X 1000 </span><input type="text" class="input input-small number email_plan_minimum required" id="email-quantity" style="width:105px" name="quantity" placeholder="Number of emails"></input>
                         		</div>
                     		</div>
 							<div class="control-group">
