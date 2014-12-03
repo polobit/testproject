@@ -16,7 +16,7 @@
  </div>
 <div id="specialchar" style="color: red;display:none;margin-left: 167px;margin-top: 5px;">Special characters are not allowed except underscore.</div>
 <div id="charlength" style="color: red;display:none;margin-left: 167px;margin-top: -2px;">Please enter at least 4 letters.</div>
-<div id="schedule_error_message" style="color: red;display:none;margin-left: 167px;margin-top: 5px;">jjnjn</div>
+<div id="schedule_error_message" style="color: red;display:none;margin-left: 167px;margin-top: 5px;"></div>
 <div class="clearfix"></div> 
 <div class="tip"><p style="margin-left:161px;color:#999999;"><i class="icon-lightbulb" style="font-size:17px;"></i> Put this link in the signature or in your automated emails</p></div>
  
@@ -64,7 +64,8 @@
                         </div>
     				</div> 
 {{/stringToJSON}}
-
+<div id="meeting_duration_message" style="color: red;display:none;margin-left: 167px;margin-top: 5px;"> Please enable at least one option by mentioning a short text for it.
+</div>
 
     			</fieldset>
     		</form>
@@ -75,7 +76,7 @@
 <div class="control-group">
                 <label class="control-label">Time Zone</label> 
                      		<div class="controls">
-                		<select name="timezone" id="timezone" class="input-xlarge">
+                		<select name="timezone" id="timezone" class="input-xlarge" style="width:280px">
 							<option value="Pacific/Midway">(GMT-11:00)
 								Pacific/Midway</option>
 							<option value="Pacific/Niue">(GMT-11:00) Pacific/Niue</option>

@@ -524,9 +524,10 @@ var SettingsRouter = Backbone.Router
 					                    },
 					                });
 					            
-					         
+					     
+							 $(".mini-time").keydown(false);
+							 
 						});
-						
 						
                         
 					} });
