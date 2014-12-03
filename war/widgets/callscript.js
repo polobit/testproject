@@ -63,7 +63,7 @@ function _agile_execute_callscriptrules(_agile_web_rules)
 	}
 	
 	// show default text as no rule defined 
-	$('#CallScript').html("No rules found for this contact.");	
+	$('#CallScript').html("No matching call script found.");	
 }
 
 // Run a single web rule
