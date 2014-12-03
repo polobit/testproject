@@ -855,6 +855,15 @@ content: "";
 position: absolute;
 right: -12px;
 z-index: 9;
+top:35%;
+}
+.miltstone-title{
+	width: auto;
+	text-overflow: ellipsis;
+	max-width: 150px;
+	white-space: nowrap;
+	overflow:hidden;
+	display: inline-block;
 }
 .miltstone-title{
 	width: auto;
@@ -1811,5 +1820,4 @@ text-overflow:ellipsis;
 .ctx span
 {
 	margin-left:-4px;
-}
 }

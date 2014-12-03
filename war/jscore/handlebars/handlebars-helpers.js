@@ -3382,4 +3382,29 @@ $(function()
 				 * ======== Thank you =================
 				 */
 
+
+	
+				// To pick randomly selected avatar url
+				Handlebars.registerHelper('arrayToCamelcase', function(values) {
+					var result = '';
+					for(var i = 0;i<values.length;i++){
+						result += ucfirst(values[i]);
+						if(i+1<values.length)
+							result += ', ';
+					}
+					return result;
+				});
+				
+				// To pick randomly selected avatar url
+				Handlebars.registerHelper('namesFromObject', function(jsonArray,fieldName) {
+					var result = '';
+					console.log(jsonArray.length);
+					for(var i = 0;i<jsonArray.length;i++){
+						result += jsonArray[i][fieldName];
+						if(i+1<jsonArray.length)
+							result += ', ';
+					}
+					return result;
+				});
+
 });
