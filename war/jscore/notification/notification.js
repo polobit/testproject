@@ -423,11 +423,10 @@ function showNoty(type, message, position, notification_type, onCloseCallback)
 		}
 		
 		if(notification_type!="CALENDER_REMINDER"){
-			show_desktop_notification(getImageUrl(message,notification_type), getNotificationType(notification_type), getTextMessage(message), getId(message), getId(message).split(
-					'/')[1] + '-' + notification_type);
-			return;
-			}
-		
+		show_desktop_notification(getImageUrl(message,notification_type), getNotificationType(notification_type), getTextMessage(message), getId(message), getId(message).split(
+				'/')[1] + '-' + notification_type);
+		return;
+		}
 	}
 
 	// Download the lib
@@ -561,7 +560,6 @@ function getImageUrl(message, notification_type)
 		
 		return $('span:eq(0)', message).attr('id');
 		}
-	}
 
 	return '/img/deal.png';
 }
