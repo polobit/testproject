@@ -96,7 +96,7 @@ public class DefaultWidgets
 				"/widgets/googleplus.js", "/widgets/gplus.png", "/widgets/gplusicon.png", null, WidgetType.SOCIAL));
 		widgets.add(new Widget("CallScript",
 				"Shows you the script for the call base on predefined rules you have set.", "/widgets/callscript.js",
-				null, null, null, WidgetType.SUPPORT));
+				null, null, null, WidgetType.CALL));
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);
@@ -116,10 +116,10 @@ public class DefaultWidgets
 		if (Arrays.asList(new String[] { "Linkedin", "Twitter", "Rapleaf" }).contains(widgetName))
 			return WidgetType.SOCIAL;
 
-		if (Arrays.asList(new String[] { "ClickDesk", "Zendesk", "CallScript" }).contains(widgetName))
+		if (Arrays.asList(new String[] { "ClickDesk", "Zendesk" }).contains(widgetName))
 			return WidgetType.SUPPORT;
 
-		if (Arrays.asList(new String[] { "Twilio", "Sip", "TwilioIO" }).contains(widgetName))
+		if (Arrays.asList(new String[] { "Twilio", "Sip", "TwilioIO", "CallScript" }).contains(widgetName))
 			return WidgetType.CALL;
 
 		if (Arrays.asList(new String[] { "FreshBooks", "Stripe" }).contains(widgetName))
