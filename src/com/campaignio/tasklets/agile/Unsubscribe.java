@@ -119,7 +119,7 @@ public class Unsubscribe extends TaskletAdapter
 		String message = "";
 		int listSize = campaignName.size();
 		if (listSize == 1)
-			return campaignName.get(0) + ".";
+			return "'" + campaignName.get(0) + "'.";
 		else
 		{
 			for (int i = 0; i < listSize - 1; i++)
@@ -128,7 +128,7 @@ public class Unsubscribe extends TaskletAdapter
 				if ((i + 1) != (listSize - 1))
 					message += ", ";
 			}
-			message += " and '" + campaignName.get(listSize - 1) + "'";
+			message += " and '" + campaignName.get(listSize - 1) + "'.";
 
 		}
 		return message;
