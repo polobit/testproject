@@ -669,7 +669,7 @@ public class ActivityReportsUtil
 		    .getContactFieldValue(Contact.FIRST_NAME) : "";
 	    name = contact.getContactFieldValue(Contact.LAST_NAME) != null ? contact
 		    .getContactFieldValue(Contact.LAST_NAME) : "";
-	    String result = "<a href=\"https://" + user.domain + ".agilecrm.com/#contact" + contact.id
+	    String result = "to <a href=\"https://" + user.domain + ".agilecrm.com/#contact" + contact.id
 		    + "\" target=\"_blank\">" + name + "</a>";
 
 	    activity.custom4 = result;
