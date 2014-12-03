@@ -67,7 +67,7 @@ public class Unsubscribe extends TaskletAdapter
 
 		for (int i = 0; i < campaignIDsSize; i++)
 		{
-			if (activeCampaigns.get(i).contains(campaignIDs.get(i)))
+			if (activeCampaigns.contains(campaignIDs.get(i)))
 				campaignNames.add(setStatus(campaignIDs.get(i), subscriberID));
 		}
 
