@@ -154,7 +154,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    pubnub_notification.put("priority", event.color);
 		    pubnub_notification.put("username", domainuser.name);
 		    pubnub_notification.put("useremail", domainuser.email);
-		    pubnub_notification.put("type", "CALENDER_REMINDER");
+		    pubnub_notification.put("type", "EVENT_REMINDER");
 		    System.out.println("domain name before pubnubnotification " + domain);
 		    System.out.println("namespace manager name before sending pubnub " + NamespaceManager.get());
 
