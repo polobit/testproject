@@ -39,6 +39,7 @@ var CalendarRouter = Backbone.Router.extend({
 
 												$(".active").removeClass("active");
 												$("#calendarmenu").addClass("active");
+												$('#agile_event_list').addClass('hide');
 
 												// Typahead also uses jqueryui - if you are changing the version
 												// here,
@@ -149,7 +150,7 @@ $(function()
 								e.preventDefault();
 								// Erases the cookie
 								eraseCookie("agile_calendar_view");
-
+							
 								// Loads the calendar
 								App_Calendar.calendar();
 				});
@@ -171,6 +172,12 @@ $(function()
 
 				// intialize event tab
 				$('#event_tab').tab();
+				if(!readCookie("agile_calendar_view"))
+								$('#agile_event_list').addClass('hide');
+				else{
+								if($('#agile_event_list').hasClass('hide'))
+												$('#agile_event_list').removeClass('hide')
+				}
 
 });
 
