@@ -515,8 +515,8 @@ function fillCustomFields(fields, el, callback, is_webrules)
 		field.field
 		if(field.field_type == "DATE")
 		{
-			lhs_element.append('<option value="'+field.field_label+'_time" custom_divider field_type="'+field.field_type+'">'+field.field_label+'</option>');
-			condition.find("option.created_time").addClass(field.field_label+'_time' + _AGILE_CUSTOM_DIVIDER_);
+			lhs_element.append('<option value="'+field.field_label+'_time" field_type="'+field.field_type+'">'+field.field_label+'</option>');
+			condition.find("option.created_time").addClass(field.field_label+'_time');
 		}
 		else
 		{
