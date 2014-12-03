@@ -12,7 +12,9 @@ import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
@@ -187,6 +189,25 @@ public class Event
 
 	if (agileUserId != null && agileUserId != 0L)
 	    this.owner = new Key<AgileUser>(AgileUser.class, agileUserId);
+    }
+
+    @XmlElement(name = "eventOwner")
+    public DomainUser getOwner() throws Exception
+    {
+	if (owner != null)
+	{
+	    try
+	    {
+		AgileUser agileuser = AgileUser.getCurrentAgileUser(owner.getId());
+		// Gets Domain User Object
+		return DomainUserUtil.getDomainUser(agileuser.domain_user_id);
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+	return null;
     }
 
     public void addContacts(String id)

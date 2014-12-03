@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.activities.EventReminder;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -187,6 +188,8 @@ public class RegisterServlet extends HttpServlet
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, name);
 
 	DomainUser domainUser = createUser(request, response, userInfo, password);
+
+	EventReminder.getEventReminder(domainUser.domain, null);
 
 	// Redirect to home page
 	response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com/");

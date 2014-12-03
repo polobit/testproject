@@ -132,7 +132,7 @@ public class EventUtil
 	{
 	    if (ownerId != null)
 		return dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end)
-			.filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
+		        .filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
 	    return dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end).list();
 	}
 	catch (Exception e)
@@ -173,7 +173,7 @@ public class EventUtil
     public static int getContactEventsCount(Long contactId) throws Exception
     {
 	Query<Event> query = dao.ofy().query(Event.class)
-		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
+	        .filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
 
 	return query.count();
     }
@@ -190,7 +190,7 @@ public class EventUtil
 
     {
 	Query<Event> query = dao.ofy().query(Event.class)
-		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId)).order("start");
+	        .filter("related_contacts =", new Key<Contact>(Contact.class, contactId)).order("start");
 
 	return query.list();
     }
@@ -219,24 +219,25 @@ public class EventUtil
 		    ContactField toemail = con.getContactFieldByName("email");
 
 		    if (toemail != null)
+
 		    {
 			net.fortuna.ical4j.model.Calendar iCal = IcalendarUtil.getICalFromEvent(event, user,
-				toemail.value, null);
+			        toemail.value, null);
 			String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 			EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", toemail.value, null,
-				null, subject, null, null, null, null, null, attachments);
+			        null, subject, null, null, null, null, null, attachments);
 		    }
 		}
 	    }
 	    if (user != null)
 	    {
 		net.fortuna.ical4j.model.Calendar agileUseiCal = IcalendarUtil.getICalFromEvent(event, null,
-			user.email, user.name);
+		        user.email, user.name);
 		System.out.println("agileUseiCal-- " + agileUseiCal.toString());
 		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
 
 		EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", user.email, null, null, subject,
-			null, null, null, null, null, attachments_to_agile_user);
+		        null, null, null, null, null, attachments_to_agile_user);
 
 	    }
 	}
@@ -283,7 +284,7 @@ public class EventUtil
 	Date d = new Date();
 	Long startDate = d.getTime();
 	Query<Event> query = dao.ofy().query(Event.class).filter("start >=", startDate / 1000)
-		.filter("owner", new Key<AgileUser>(AgileUser.class, ownerId));
+	        .filter("owner", new Key<AgileUser>(AgileUser.class, ownerId));
 	return dao.fetchAllWithCursor(max, cursor, query, false, false);
     }
 
@@ -340,7 +341,7 @@ public class EventUtil
 	List<Event> domain_events = new ArrayList<>();
 
 	List<Event> events = dao.ofy().query(Event.class).filter("start >=", starttime).filter("start <=", endtime)
-		.order("start").list();
+	        .order("start").list();
 	if (events != null && events.size() > 0)
 	{
 	    Event event = events.get(0);
@@ -386,7 +387,7 @@ public class EventUtil
     public static List<Event> getEvents(int count, String cursor, Long ownerId)
     {
 	return dao.ofy().query(Event.class).order("start")
-		.filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
+	        .filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
     }
 
     /**
@@ -398,9 +399,8 @@ public class EventUtil
     public static String getHumanTimeFromEppoch(Long epoch)
     {
 	String date = new java.text.SimpleDateFormat("MMMM d yyyy, h:mm a (z)")
-		.format(new java.util.Date(epoch * 1000));
+	        .format(new java.util.Date(epoch * 1000));
 
 	return date;
     }
-
 }
