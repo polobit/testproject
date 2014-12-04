@@ -6,9 +6,16 @@
 
 var TaskDetailsRouter = Backbone.Router.extend({ routes : { 'task/:id' : 'taskDetailView' },
 
-taskDetailView : function()
+taskDetailView : function(id)
 {
-				$("#content").html(getTemplate("task-detail"), {});
+				
+				if(id){
+								if(App_Calendar.allTasksListView){
+								var task = 	App_Calendar.allTasksListView.collection.get(id);
+								$("#content").html(getTemplate("task-detail", task.toJSON()));
+								}
+				}
+								
 
 }
 

@@ -167,12 +167,15 @@ $(function()
 
 				// intialize event tab
 				$('#event_tab').tab();
+
 				if(!readCookie("agile_calendar_view"))
 								$('#agile_event_list').addClass('hide');
 				else{
 								if($('#agile_event_list').hasClass('hide'))
 												$('#agile_event_list').removeClass('hide')
 				}
+
+				$('#taskDetailsTab').tab();
 
 });
 
