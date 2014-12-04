@@ -68,6 +68,7 @@ if (scheduleid != null)
 	      meeting_durations=domainUser.meeting_durations;
 	      meeting_types=domainUser.meeting_types;
 	      System.out.println(" meetiing types "+meeting_types);
+	      
 	      	
 	      if(StringUtils.isEmpty(userPrefs.pic))
 	          profile_pic  ="/img/gravatar.png";
@@ -173,9 +174,9 @@ ObjectMapper mapper = new ObjectMapper();
 							
 					
 						<div class="clearfix"></div>
-						<input type="checkbox" id="confirmation" name="confirmation"
+						<input type="checkbox" id="confirmation" name="confirmation"  checked
 							class="me-disable" disabled="disabled" style="margin-top: 10px;" /> <label
-							style="margin-top: 7px;" for="confirmation">Send me a confirmation email</label>
+							style="margin-top: 7px;" for="confirmation" >Send me a confirmation email</label>
 					</div>
 
 					<div class="col-sm-8">
@@ -203,6 +204,7 @@ ObjectMapper mapper = new ObjectMapper();
  var selecteddate="";
  var current_date_mozilla="";
  var domainname=<%=mapper.writeValueAsString(domain_name)%>;
+ var meeting_duration=<%=mapper.writeValueAsString(meeting_durations)%>;
  </script>
 
 	<script type="text/javascript">

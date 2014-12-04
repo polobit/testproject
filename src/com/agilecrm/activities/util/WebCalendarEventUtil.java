@@ -669,23 +669,27 @@ public class WebCalendarEventUtil
 		agileUseiCal = IcalendarUtil.getICalFromEvent(newEvnt, null, user.email, user.name);
 		System.out.println("agileUseiCal-- " + agileUseiCal.toString());
 		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
-		String body1 = null;
+		String usermail = null;
 
 		if (StringUtils.isNotEmpty(wce.phoneNumber))
 		{
-		    body1 = "<p>" + wce.userName + " (" + wce.email + ") scheduled an appointment (" + wce.phoneNumber
-			    + ") for " + wce.slot_time + " mins</p><p><a href=https://" + user.domain
-			    + ".agilecrm.com/#calendar>View Agile Calendar</a></p><p>Note: " + wce.notes + "</p>";
+
+		    usermail = "<p>" + wce.userName + " (" + wce.email
+			    + ") has scheduled an appointment </p><span>Type: '" + wce.name + "' (" + wce.slot_time
+			    + "mins)</span><br/><span>Meeting Type: " + wce.phoneNumber + "</span><br/><span>Note: "
+			    + wce.notes + "</span><br/><p><a href=https://" + user.domain
+			    + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
 		}
 		else
 		{
-		    body1 = "<p>" + wce.userName + " (" + wce.email + ") scheduled an appointment " + " for "
-			    + wce.slot_time + " mins</p><p><a href=https://" + user.domain
-			    + ".agilecrm.com/#calendar>View Agile Calendar</a></p><p>Note: " + wce.notes + "</p>";
+		    usermail = "<p>" + wce.userName + " (" + wce.email
+			    + ") has scheduled an appointment </p><span>Type: '" + wce.name + "' (" + wce.slot_time
+			    + "mins)</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href=https://"
+			    + user.domain + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
 		}
 
 		EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
-		        "Appointment Scheduled", null, body1, null, null, attachments_to_agile_user);
+		        "Appointment Scheduled", null, usermail, null, null, attachments_to_agile_user);
 	    }
 	}
 
@@ -696,24 +700,27 @@ public class WebCalendarEventUtil
 	    iCal = IcalendarUtil.getICalFromEvent(newEvnt, user, wce.email, null);
 
 	    System.out.println("icall s string  " + iCal.toString() + " email " + wce.email);
-
-	    String body = "<p>Your appointment was scheduled with " + user.name + " on "
-		    + getNearestDateOnlyFromEpoch(epoch_start_date, timezone) + "</p><p>Duration - " + wce.slot_time
-		    + " minutes</p><p>Note message : " + wce.notes + "</p>";
-
-	    String body1 = "<p>Your appointment is scheduled for " + wce.slot_time + " mins with " + user.name + " on "
-		    + getNearestDateOnlyFromEpoch(epoch_start_date, timezone) + "</p>";
-
+	    String link = "https://www.agilecrm.com/?utm_source=powered-by&medium=email&utm_campaign=" + user.domain;
+	    String client_mail = null;
 	    if (StringUtils.isNotEmpty(wce.phoneNumber))
 	    {
-		body1 += "<p>Appointment Type: " + wce.phoneNumber + "</p>";
+		client_mail = "<p>You have a new appointment with <b>" + user.name + "</b> (" + user.email
+		        + ")</p><span>Type: '" + wce.name + "' (" + wce.slot_time + "mins)</span><br/><span>Phone: "
+		        + wce.phoneNumber + "</span><br/><span>Note: " + wce.notes
+		        + "</span><br/><p>This event has been scheduled using <a href=" + link + ">Agile CRM</a></p>";
 	    }
-	    body1 += "<p> Notes: " + wce.notes + "</p>";
+	    else
+	    {
+		client_mail = "<p>You have a new appointment with <b>" + user.name + "</b> (" + user.email
+		        + ")</p><span>Type: '" + wce.name + "' (" + wce.slot_time + "mins)</span><br/><span>Note: "
+		        + wce.notes + "</span><br/><p>This event has been scheduled using <a href=" + link
+		        + ">Agile CRM</a></p>";
+	    }
 
 	    String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 
 	    EmailGatewayUtil.sendEmail(null, user.email, user.name, wce.email, null, null, "Appointment Scheduled",
-		    null, body1, null, null, attachments);
+		    null, client_mail, null, null, attachments);
 
 	}
 	return "Done";

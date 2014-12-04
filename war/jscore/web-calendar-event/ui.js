@@ -9,6 +9,18 @@ $(function()
 		e.preventDefault();
 
 		Selected_Time = $(this).attr('data');
+		
+		var json_meeting_duration=JSON.parse(meeting_duration);
+		console.log(json_meeting_duration);
+		if(Selected_Time==15){
+			appointmenttype=json_meeting_duration['15mins'];
+		}
+		else if(Selected_Time==30){
+			appointmenttype=json_meeting_duration['30mins'];;
+		}
+        else if(Selected_Time==60){
+        	appointmenttype=json_meeting_duration['60mins'];;
+		}
 
 		$(".activemin").removeClass("activemin");
 		$(this).find('.minutes').addClass("activemin");

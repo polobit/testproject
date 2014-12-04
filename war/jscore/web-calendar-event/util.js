@@ -29,7 +29,7 @@ function getSlotDurations()
 								var json = JSON.parse(data[slotDetail]);
 								$('.segment1')
 										.append(
-												'<div class="col-sm-4"><p class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + json.title + '</p></div>');
+												'<div class="col-sm-4"><p title="' + json.title + '" class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
 							}
 						}
 						if (data.length == 2)
@@ -39,7 +39,7 @@ function getSlotDurations()
 								var json = JSON.parse(data[slotDetail]);
 								$('.segment1')
 										.append(
-												'<div class="col-sm-4" style="margin-left: 99px;"><p class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + json.title + '</p></div>');
+												'<div class="col-sm-4" style="margin-left: 99px;"><p title="' + json.title + '" class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
 							}
 						}
 						if (data.length == 1)
@@ -49,7 +49,7 @@ function getSlotDurations()
 								var json = JSON.parse(data[slotDetail]);
 								$('.segment1')
 										.append(
-												'<div class="col-sm-12" align="center"><p class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + json.title + '</p></div>');
+												'<div class="col-sm-12" align="center"><p title="' + json.title + '" class="choose" data="' +addDotsAtEnd(json.time) + '"><span class="minutes">' + json.time + ' mins</span><br />' + json.title + '</p></div>');
 							}
 						}
 					});
@@ -230,6 +230,8 @@ function isValid(formId)
 	return $(formId).valid();
 }
 
+
+
 /*
  * // Validates phone number function validatePhone(txtPhone) { var a =
  * document.getElementById(txtPhone).value; var filter = /^[0-9-+]+$/; if
@@ -341,7 +343,7 @@ function save_web_event(formId, confirmBtn)
 
 						var temp = '<div style="margin: 25px;font-size:15px;">'
 
-						+ '<div id="info" ><h3 style="border-bottom: 1px solid #ddd;padding-bottom:8px;margin-bottom:15px;"><b>Appointment Scheduled</b></h3>' + '<p >Your appointment was scheduled with <b>' + User_Name + '</b> on ' + start + '</div>' + '<div class="row">' + '<div class="col-md-12">' + '<p>Duration: ' + web_calendar_event.slot_time + ' Minutes </p>' + '</div>' + '</div>' + '<div class="row">' + '<div class="col-md-12">' + '<div class="left">' + '<a class="btn btn-primary" id="create_new_appointment" style="margin-top:20px;">Schedule Another Appointment</a>' + '</div>' + '</div>' + '</div>' + '</div>' + '<div align="right" style="position: absolute;right: 280px;bottom: -80px;">' + '<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 71px;">Powered by</span> <a href="https://www.agilecrm.com?utm_source=powered-by&amp;medium=event_scheduler&amp;utm_campaign=' + domainname + '" rel="nofollow" target="_blank"><img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 135px;"></a>' + '</div>'
+							+ '<div id="info" ><h3 style="border-bottom: 1px solid #ddd;padding-bottom:8px;margin-bottom:15px;"><b>Appointment Scheduled</b></h3>' + '<p >Your appointment (&#39;'+appointmenttype+'&#39;) has been scheduled with <b>'+User_Name+'</b> for '+web_calendar_event.slot_time+' mins on '+start+'. </div>' + '<div class="row">' + '<div class="col-md-12">' + '<div class="row">' + '<div class="col-md-12">' + '<div class="left">' + '<a class="btn btn-primary" id="create_new_appointment" style="margin-top:20px;">Schedule Another Appointment</a>' + '</div>' + '</div>' + '</div>' + '</div>' + '<div align="right" style="position: absolute;right: 280px;bottom: -80px;">' + '<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 71px;">Powered by</span> <a href="https://www.agilecrm.com?utm_source=powered-by&amp;medium=event_scheduler&amp;utm_campaign=' + domainname + '" rel="nofollow" target="_blank"><img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 135px;"></a>' + '</div>'
 
 						resetAll();
 
@@ -384,3 +386,20 @@ $("#create_new_appointment").die().live('click', function(e)
 	location.reload(true);
 
 });
+
+/**
+ * if value morethan 50 adds .. at the end
+ */
+function addDotsAtEnd(title){
+if (title)
+{
+	if (title.length > 50)
+	{
+		var subst = title.substr(0, 50);
+		subst = subst + "....";
+		return subst;
+	}
+}
+
+return title;
+}
