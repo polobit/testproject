@@ -123,6 +123,8 @@ $(function()
 	 */
 	$(".status").change(function()
 	{
+		console.log("status change event");
+		
 		// Change status UI and input field
 		changeStatus($(this).attr("value"), $(this).closest("form"));
 	});	

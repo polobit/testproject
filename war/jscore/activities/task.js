@@ -44,7 +44,8 @@ $(function() {
 	 */
 	$(".add-task").live('click', function(e) {
 		e.preventDefault();
-
+		
+		var forAddTask = this;
 		var el = $("#taskForm");
 		
 		agile_type_ahead("task_related_to", el, contacts_typeahead);
@@ -56,9 +57,11 @@ $(function() {
 				function(data) {
 					$("#taskForm").find("#owners-list").html(data);
 					$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
-					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
-		});
-
+					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();	
+					
+					// Add selected task list details in add task modal
+					addTasklListDetails(forAddTask);
+		});				
 	});
 
 	/**
@@ -256,8 +259,7 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 		
 	if (!isUpdate)
 		json.due = new Date(json.due).getTime();
-
-	console.log(json);
+	
 	var newTask = new Backbone.Model();
 	newTask.url = 'core/api/tasks';
 	newTask.save(json, {

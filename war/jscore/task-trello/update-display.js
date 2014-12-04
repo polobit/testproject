@@ -67,7 +67,7 @@ function changeStatus(status, parentForm)
  * progress in task edit modal.
  */
 function changeProgress(value, status, parentForm)
-{
+{	
 	// Add progress % to input field
 	$("#progress", parentForm).val(value);
 
@@ -80,7 +80,7 @@ function changeProgress(value, status, parentForm)
  * update modal.
  */
 function showProgressSlider(value, status, parentForm)
-{
+{	
 	if (value == 100 || status == COMPLETED)
 	{
 		$(".status", parentForm).val(COMPLETED);
@@ -90,7 +90,7 @@ function showProgressSlider(value, status, parentForm)
 	else
 		$("#is_complete", parentForm).val(false);
 
-	if (status == "IN_PROGRESS")
+	if (status == IN_PROGRESS)
 		$(parentForm).find(".progress-slider").css("display", "block");
 	else
 		$(parentForm).find(".progress-slider").css("display", "none");
@@ -403,6 +403,40 @@ function bindDropdownEvents()
 	{		
 		// Change heading of page
 		changeHeadingOfPage($('#new-owner-tasks').closest(".btn-group").find(".selected_name").html());
-	});
+	});	
+}
+
+//Add details about task list where add task btn is clicked
+function addTasklListDetails(addTaskElement)
+{
+	console.log("In addTasklListDetails");
+	console.log(addTaskElement);	
 	
+	if(!$(addTaskElement).hasClass("list-bottom"))
+		return;	
+	
+	switch (getCriteria()) {
+	case "STATUS":
+	{ 
+		$("#status", $("#taskForm")).val($(addTaskElement).attr("heading"));
+		changeStatus($(addTaskElement).attr("heading"), $("#taskForm"));
+	}
+		break;	
+	case "CATEGORY":
+	{$("#type", $("#taskForm")).val($(addTaskElement).attr("heading"));}
+		break;
+	case "OWNER":
+	{$("#owners-list", $("#taskForm")).val($(addTaskElement).attr("ownerID"));}
+		break;
+	case "DUE":
+	{		
+		var epochTime = getNewDueDate($(addTaskElement).attr("heading"));
+		var startDate = new Date(epochTime *1000).format('mm/dd/yyyy');
+		$("#taskForm").find("input.date").val(new Date(startDate).format('mm/dd/yyyy')).datepicker('update');		
+	}
+		break;		
+	case "PRIORITY":
+	{$("#priority_type", $("#taskForm")).val($(addTaskElement).attr("heading"));}
+		break;	
+	}	
 }
