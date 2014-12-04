@@ -562,7 +562,7 @@ function getImageUrl(message, notification_type)
 {
 	if(notification_type != "EVENT_REMINDER"){
 		
-		return '/img/deal.png';
+		return '/img/eventreminder.png';
 	}
 	
 	if ($(message).find('#notification-contact-id').text() != "")
