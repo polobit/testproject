@@ -215,6 +215,11 @@
         <property name="owner" direction="asc"/>
         <property name="search_range" direction="asc"/>
     </datastore-index>
+    
+    <datastore-index kind="Event" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="start" direction="asc"/>
+    </datastore-index>
 
     <datastore-index kind="Activity" ancestor="false" source="auto">
         <property name="activity_type" direction="asc"/>
