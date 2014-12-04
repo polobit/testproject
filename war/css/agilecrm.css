@@ -880,7 +880,7 @@ border-top: 12px solid transparent;
 content: "";
 position: absolute;
 right: -11px;
-top: 34%;
+top: 35%;
 z-index: 99;
 /*angular border css filed */
 }
