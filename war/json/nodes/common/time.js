@@ -1,8 +1,8 @@
 {
-    "name": "Time Based",
-    "thumbnail": "json/nodes/images/Time.png",
-    "icon": "json/nodes/images/Time.png",
-    "info": "Conveniently route your calls based on time. ",
+    "name": "Check Buisness Hours",
+    "thumbnail": "json/nodes/images/common/Time.png",
+    "icon": "json/nodes/icons/common/Time.png",
+    "info": "Check if the current time is within the set business hours.",
     "help": "Time Based routing lets you conveniently route the calls based on time and day of the week.\n\nUse this to play your business hour and non-business hour greetings, manage call forwarding, or play off-hours voice mail.",
     "author": "John",
     "company": "Mantra",
@@ -164,7 +164,7 @@
             ] 
         },
         {
-            "label": "Time Based routing lets you conveniently route the calls based on time and day of the week. <br><br>Use this to play your business hour and non-business hour greetings,manage call forwarding, or play off-hours voice mail.",
+        "label": "Use this node to send emails to customers during business hours or route your new leads to appropriate sales representatives. Time Based routing lets you conveniently route the calls based on time and day of the week.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 
