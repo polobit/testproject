@@ -3406,5 +3406,27 @@ $(function()
 					}
 					return result;
 				});
+				
+				
+				//@author Purushotham
+				Handlebars.registerHelper('secondsToFriendlyTime', function(time) {
+					var hours = Math.floor(time / 3600);
+					if(hours > 0)
+					time = time - hours*60*60;
+					var minutes = Math.floor(time / 60);
+					var seconds = time - minutes * 60;
+					var friendlyTime = "";
+					if(hours == 1)
+						friendlyTime = hours+ " hr ";
+					if(hours > 1)
+						friendlyTime = hours+ " hrs ";
+					if(minutes > 0)
+						friendlyTime += minutes + " min ";
+					if(seconds > 0)
+						friendlyTime += seconds + " sec";
+					if(friendlyTime != "")
+						return "("+friendlyTime+")";
+					return friendlyTime;
+				});
 
 });

@@ -1064,8 +1064,33 @@ Deleted Documents {{custom2}}
 {{/if_equals}}
 {{/if_equals}}
 
-	
+{{#if_equals "CALL" activity_type}}
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>
+{{#if_equals "incoming" custom2}}	
+Incoming call (<span style="text-transform: capitalize;">{{custom1}}</span>) {{#if user.name}}to {{user.name}}{{/if}} {{#if entity_id}}by <a href="#contact/{{entity_id}}">{{label}}</a>{{else}}by {{label}}{{/if}}.<span style="text-transform: capitalize;">{{custom3}}</span> {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}
+{{/if_equals}}
 
+{{#if_equals "outgoing" custom2}}	
+Outgoing call (<span style="text-transform: capitalize;">{{custom1}}</span>) {{#if user.name}}by {{user.name}}{{/if}} {{#if entity_id}}to <a href="#contact/{{entity_id}}">{{label}}</a>{{else}}to {{label}}{{/if}}.<span style="text-transform: capitalize;">{{custom3}}</span> {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}
+{{/if_equals}}
+
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
 
 
 </script>
@@ -1087,7 +1112,7 @@ Deleted Documents {{custom2}}
 					 <li><a href="EVENT">Events</a></li>
 					 <li><a href="CONTACT">Contacts</a></li>
  					<li><a href="DOCUMENT">Documents</a></li>
-                    
+					<li><a href="CALL">Calls</a></li>                    
                 </ul>
             </div>            
 		<div class="btn-group pull-right activity-log-button" style="cursor:pointer;margin-right:15px;top: -28px;">
