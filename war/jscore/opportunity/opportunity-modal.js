@@ -1,6 +1,4 @@
 
-var CURRENT_DEAL;
-
 
 $(function(){
 	
@@ -112,7 +110,6 @@ $(function(){
 		e.preventDefault();
 		$('.popover').remove();
 		var currentdeal=$(this).closest('tr').data();
-		CURRENT_DEAL=currentdeal.toJSON();
 		Backbone.history.navigate("deal/"+currentdeal.id , {
             trigger: true
         });

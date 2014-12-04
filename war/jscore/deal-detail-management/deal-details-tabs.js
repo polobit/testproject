@@ -8,7 +8,7 @@
  * @author Rammohan
  */
 
-var contact_tab_position_cookie_name = "contact_tab_position_" + CURRENT_DOMAIN_USER.id;
+var deal_tab_position_cookie_name = "deal_tab_position_" + CURRENT_DOMAIN_USER.id;
 
 
 $(function(){ 
@@ -18,7 +18,7 @@ $(function(){
 
 	
 	/**
-	 * Fetches all the notes related to the contact and shows the notes collection 
+	 * Fetches all the notes related to the deal and shows the notes collection 
 	 * as a table in its tab-content, when "Notes" tab is clicked.
 	 */ 
 	$('#deal-details-tab a[href="#dealnotes"]').live('click', function (e){
@@ -30,8 +30,8 @@ $(function(){
 	
 	
 	/**
-	 * Fetches all the documents related to the contact and shows the documents collection 
-	 * as a table in its tab-content, when "Documents" tab is clicked.
+	 * Fetches all the contacts related to the deal and shows the contacts collection 
+	 * as a table in its tab-content, when "contacts" tab is clicked.
 	 */
 	$('#deal-details-tab a[href="#dealrelated"]').live('click', function (e){
 		e.preventDefault();
@@ -101,37 +101,18 @@ $(function(){
 	
 });
 
-/**
- * Returns contact properties in a json
- * 
- * @method get_property_JSON
- * @param {Object} contactJSON
- * 			contact as json object
- */  
-function get_property_JSON(contactJSON)
-{	
-	var properties = contactJSON.properties;
-    var json = {};
-	$.each(properties, function(i, val)
-			{
-				json[this.name] = this.value;
-			});
-	console.log(json);
-	return json;
-}
-
 
 
 
 function save_deal_tab_position_in_cookie(tab_href)
 {
 	
-	var position = readCookie(contact_tab_position_cookie_name);
+	var position = readCookie(deal_tab_position_cookie_name);
 	
 	if(position == tab_href)
 		return;
 	
-	createCookie(contact_tab_position_cookie_name, tab_href);
+	createCookie(deal_tab_position_cookie_name, tab_href);
 }
 
 function load_deal_tab(el, dealJSON)
@@ -139,9 +120,9 @@ function load_deal_tab(el, dealJSON)
 //	timeline_collection_view = null;
 //	var position = readCookie(contact_tab_position_cookie_name);
 	
-	$('#deal-details-tab a[href="#dealnotes"]', el).tab('show');
+	$('#deal-details-tab a[href="#dealrelated"]', el).tab('show');
 
-	deal_details_tab.load_deal_notes();
+	deal_details_tab.loadDealRelatedContactsView();
 	
 	/*if(!position || position == "timeline")
 	{

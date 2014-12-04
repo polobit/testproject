@@ -9,44 +9,20 @@ routes : {
 /* Shows page */
 "deal/:id" : "dealdetails", "dealEdit/:id" : "dealEdit" },
 
-dealdetails : function(id, deal)
+dealdetails : function(id)
 {
 
-	// If user refreshes the contacts detail view page directly - we
-	// should load from the model
-	if (!deal)
+	this.dealDetailView = new Base_Model_View({ url : '/core/api/opportunity/' + id, template : "deal-detail", postRenderCallback : function(el)
 	{
+		$("#dealrelated").html(getRandomLoadingImg());
+		load_deal_tab(el, "");
+		var deal_collection;
+		if(App_Deals.opportunityCollectionView && App_Deals.opportunityCollectionView.collection)
+			deal_collection = App_Deals.opportunityCollectionView.collection;
 
-		console.log("Downloading deal");
-
-		// Download
-		var deal_details_model = Backbone.Model.extend({ url : function()
-		{
-			return '/core/api/opportunity/' + this.id;
-		} });
-
-		var model = new deal_details_model();
-		model.id = id;
-		model.fetch({ success : function(data)
-		{
-
-			// Call deal Details again
-			App_Deal_Details.dealdetails(id, model);
-
-		}, error : function(data, response)
-		{
-			if (response && response.status == '403')
-				$("#content").html(response.responseText);
-		} });
-
-		return;
-	}
-
-	this.dealDetailView = new Base_Model_View({ model : deal, isNew : true, template : "deal-detail", postRenderCallback : function(el)
-	{
-
-		deal_details_tab.load_deal_notes();
-
+		if (deal_collection != null)
+			deal_detail_view_navigation(id, deal_collection, el);
+		
 	} });
 
 	var el = this.dealDetailView.render(true).el;
@@ -95,7 +71,6 @@ dealEdit : function(id, deal)
 
 	}, "DEAL");
 
-
 }
 
 });
@@ -138,11 +113,23 @@ $('#deal-owner').live('click', function(e)
 
 });
 
-$('#deal_detail_edit').live('click', function(e)
-{
-	e.preventDefault();
-	updateDeal(CURRENT_DEAL, true);
 
+$('#opportunity-actions-delete').live('click', function(e)
+{
+	  if(!confirm("Are you sure you want to delete?"))
+			return;
+      
+      var id = $(this).closest('.deal_detail_delete').attr('data');
+	
+	$.ajax({ url : 'core/api/opportunity/' + id, type : 'DELETE', success : function(data)
+	{
+		Backbone.history.navigate("#deals", {
+            trigger: true
+        });
+	}, error : function(response)
+	{
+		alert("some exception occured please try again");
+	} });
 });
 
 /**
@@ -161,6 +148,38 @@ function fill_deal_owners(el, data, callback)
 function show_deal_owner()
 {
 	$('#deal-owner').css('display', 'inline-block');
+}
+
+
+
+
+/**
+ * To navigate from one deal detail view to other
+ */
+function deal_detail_view_navigation(id, deal_collection, el){
+	console.log("collection >>>>>>>>>>>>>>>>");
+	console.log(deal_collection);
+	
+	var collection_length = deal_collection.length;
+    var current_index = deal_collection.indexOf(deal_collection.get(id));
+    var previous_deal_id;
+    var next_deal_id;
+
+    if (collection_length > 1 && current_index < collection_length && deal_collection.at(current_index + 1) && deal_collection.at(current_index + 1).has("id")) {
+     
+    	next_deal_id = deal_collection.at(current_index + 1).id
+    }
+
+    if (collection_length > 0 && current_index != 0 && deal_collection.at(current_index - 1) && deal_collection.at(current_index - 1).has("id")) {
+
+    	previous_deal_id = deal_collection.at(current_index - 1).id
+    }
+
+    if(previous_deal_id != null)
+    	$('.navigation', el).append('<a style="float:left;" href="#deal/' + previous_deal_id + '" class=""><i class="icon icon-chevron-left"></i></a>');
+    if(next_deal_id != null)
+    	$('.navigation', el).append('<a style="float:right;" href="#deal/'+ next_deal_id + '" class=""><i class="icon icon-chevron-right"></i></a>');
+	
 }
 
 /**
@@ -203,25 +222,9 @@ $('.deal-owner-list').live('click', function()
 $('.deal-add-contact').live('click', function(e)
 {
 	e.preventDefault();
- console.log(App_Deal_Details.dealDetailView.model.toJSON());
+	console.log(App_Deal_Details.dealDetailView.model.toJSON());
 	var currentdeal = App_Deal_Details.dealDetailView.model;
 	updateDeal(currentdeal);
-
-});
-
-$('#deal_related_delete').live('click', function(e)
-{
-	e.preventDefault();
-	var dealid = "5968973749288960";
-	var contactid = $(this).attr("contactid");
-	
-	$.ajax({ url : 'core/api/opportunity/removeRelatedTo/' + contactid + '/' + dealid, type : 'GET', success : function(data)
-	{
-
-	}, error : function(response)
-	{
-		alert("some exception occured please try again");
-	} });
 
 });
 
@@ -253,57 +256,52 @@ function fill_relation_deal(el)
 
 function deserialize_deal(value, template)
 {
-   value=value.toJSON();
-   
- 
+	value = value.toJSON();
+
 	// Loads the form based on template value
-	var dealForm = $("#content").html(getTemplate(template,value));
-	
+	var dealForm = $("#content").html(getTemplate(template, value));
+
 	deserializeForm(value, dealForm);
-	
+
 	// Call setupTypeAhead to get contacts
 	agile_type_ahead("relates_to", dealForm, contacts_typeahead);
-	
+
 	// Fills owner select element
-	populateUsers("owners-list", dealForm, value, 'owner', function(data) {
-				dealForm.find("#owners-list").html(data);
-				if (value.owner) {
-					$("#owners-list", dealForm).find('option[value=' + value['owner'].id + ']')
-							.attr("selected", "selected");
-					$("#owners-list", dealForm).closest('div').find('.loading-img').hide();
-				}
+	populateUsers("owners-list", dealForm, value, 'owner', function(data)
+	{
+		dealForm.find("#owners-list").html(data);
+		if (value.owner)
+		{
+			$("#owners-list", dealForm).find('option[value=' + value['owner'].id + ']').attr("selected", "selected");
+			$("#owners-list", dealForm).closest('div').find('.loading-img').hide();
+		}
 	});
-	
+
 	// Fills the pipelines list in the select menu.
-	populateTracks(dealForm, undefined, value, function(pipelinesList){
+	populateTracks(dealForm, undefined, value, function(pipelinesList)
+	{
 
 		// Fills milestone select element
-		populateMilestones(dealForm, undefined, value.pipeline_id, value, function(data){
+		populateMilestones(dealForm, undefined, value.pipeline_id, value, function(data)
+		{
 			dealForm.find("#milestone").html(data);
-			if (value.milestone) {
-				$("#milestone", dealForm).find('option[value=\"'+value.milestone+'\"]')
-						.attr("selected", "selected");
+			if (value.milestone)
+			{
+				$("#milestone", dealForm).find('option[value=\"' + value.milestone + '\"]').attr("selected", "selected");
 			}
 			$("#milestone", dealForm).closest('div').find('.loading-img').hide();
 		});
 	});
-	
+
 	// Enable the datepicker
-	$('#close_date', dealForm).datepicker({
-		format : 'mm/dd/yyyy',
-	});
-	
-	
-	add_custom_fields_to_form(value, function(data){
+	$('#close_date', dealForm).datepicker({ format : 'mm/dd/yyyy', });
+
+	add_custom_fields_to_form(value, function(data)
+	{
 		var el = show_custom_fields_helper(data["custom_fields"], []);
 		$("#custom-field-deals", dealForm).html(fill_custom_fields_values_generic($(el), value["custom_data"]));
-		$('.date_input', dealForm).datepicker({
-			format : 'mm/dd/yyyy',
-		});
-		
-	}, "DEAL")
-	
-	
+		$('.date_input', dealForm).datepicker({ format : 'mm/dd/yyyy', });
 
+	}, "DEAL")
 
 }

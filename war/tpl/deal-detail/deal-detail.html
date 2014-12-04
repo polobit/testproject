@@ -6,17 +6,28 @@
 <script id="deal-detail-template" type="text/html">
 <div class="row">
 	<div class="span12">
-		<div style="margin-bottom: 20px;">
+		<div style="margin-bottom: 20px; margin-top:25px;"">
 			<div class="row-fluid"
 				style="border-bottom: 1px solid #ddd; padding-bottom: 40px;">
 				<div>
 					<div>
 						<div class="span10">
-<div class="pull-left" style="margin-top:16px;margin-right:30px;"><i class="icon-money icon-3x" style="font-size:50px;"   title="{{name}}"/></div>
-						<div class="contact-profile-name mg-r-md">{{#if name}}{{name}}{{/if}} &nbsp;&nbsp;<span style="font-size:18px;" class="label label-default">{{milestone}}</span> &nbsp;&nbsp;  <span style="font-size:18px;"> ({{probability}}%)</span></div>
-                        <div class="">{{#if expected_value}}${{expected_value}} {{/if}}
-
-<div style="margin-top:10px;margin-left:85px"><span >{{pipeline.name}}</span></div>
+<div class="pull-left"> </div>
+						<div class="contact-profile-name mg-r-md">{{#if name}}{{name}}{{/if}} </div><br/>
+<div class="contact-custom-value" style="font-size:15px;">
+{{#if_equals milestone "Won"}} <span class="label label-success">{{milestone}}</span>
+{{else}}
+{{#if_equals milestone "Lost"}} <span class="label label-important">{{milestone}}</span>
+{{else}}
+<span class="label label-default">{{milestone}}</span>
+{{/if_equals}}
+{{/if_equals}} 
+<span class="label label-default" style="margin-left:3px;">{{pipeline.name}}</span> 
+ <span style="margin-left:275px;font-size:20px;">${{expected_value}}</span> </div>                   
+<div style="width:43%;height:10px;" class="progress progress-info">
+                       <div class="bar" style="width: {{probability}}%;"></div>
+                       </div>
+<div class="contact-custom-value" style="margin-top: -10px;color: gray;"><span>{{probability}}%</span><span style="margin-left:269px;">Pipeline Value: <span>${{calculatePipeline expected_value probability}}</span> </div> 
 
 </div>
 
@@ -25,6 +36,9 @@
 </div>
                         
  						<div class="span2">
+<div style="width:100%;position:relative;">
+<div class="contact-navigation-view"><span class="navigation  contact-switching"></span></div></div>
+<div class="clearfix"></div>
 							<div class="btn-group right">
 								
 								<a href="#" class="deal-add-contact btn" id="deal_details" style="border-radius: 4px 0px 0px 4px!important;margin-left: 6px;" ><i class="icon-edit"></i> Edit</a>
@@ -34,11 +48,11 @@
 									<li><a href='#'  id="dealshow-note" class="deal-note"><i
 											class="icon-file"></i> Add Note</a></li>
 							
-									<li><a href='#' id='deal-actions-delete'><i
+									<li><a href='#'  data="{{id}}" class="deal_detail_delete" id='opportunity-actions-delete'><i
 											class="icon-trash"></i> Delete</a></li>
 								</ul>
 							</div>
-							
+						<div style="position:relative;">	
 							<div  class="contact-owner-position deal-owner-block">
 						<div class="change-owner-succes"></div>
      <span title="Owner" class="contact-owner-view">
@@ -59,7 +73,7 @@
     </span>
 					</div>
 
-
+</div><!-- position relative -->
                         </div>
 						</div>
 					</div>
@@ -81,7 +95,6 @@
 	  <div class="span9">
         <div id="deal-details">
            <ul class="nav nav-tabs" id="deal-details-tab">
-           <li class="active"><a data-toggle="tab" href="#dealtimeline">Timeline</a></li>
             <li ><a href="#dealrelated" data-toggle="tab">Contacts</a></li>
             <li ><a href="#dealnotes" data-toggle="tab" >Notes</a></li>
             
@@ -89,46 +102,56 @@
         </div>
            <div class="tab-content" id="deal-tab-content">
 
-<div class="tab-pane active" id="deal-time-line">
-					<div class="timeline-loading-img" style="width:35px;max-height:30px;overflow:hidden;">
-						<img class="loading-img" src="img/21-0.gif"></img>
-						<!-- <img class="loading-img-log" src="img/21-0.gif"></img>
-						<img class="loading-img-email" src="img/21-0.gif"></img>
-						<img class="loading-img" src="img/21-0.gif"></img>
-						<img class="loading-img-stats" src="img/21-0.gif"></img> -->
-					</div>
-
-
-					<div style="margin: auto; width: 700px">
-						<div id="dealtimeline">
-							<div id="line-container">
-								<div id="line"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-
            <div class="tab-pane " id="dealrelated"></div>
            <div class="tab-pane " id="dealnotes"></div>
           
           </div>
 	</div>
+<div class="span3 contact-right-widgetsview" style="padding-left:17px;box-sizing:border-box;border-left:1px solid #ddd;">
+			
 
-<div class="span3 " style="padding-left:17px;box-sizing:border-box;border-left:1px solid #ddd;"> <h3>Custom Fields</h3>
-                          {{#if custom_data}}
-<div class="pull-left" style="width:90%;line-height:21px;">
-{{#stringToJSON this "custom_data"}}{{#each this}}<div class="pull-left" style="width:90%;line-height:21px;"><i class="icon icon-info" style="font-size: 13px;margin-left:4px;"></i>
-<span class="contact-custom-name"><span style="color: gray" title="{{this.name}}">{{this.name}}</span></span>
-<span class="contact-custom-value">{{this.value}} </span>
+						<div style='padding-top: 10px'>
+						
+							
+							<div  style="margin-top:3px;">
+								
+								<div style="padding-right:0px!important;font-size:13px;line-height:20px;">
+								<div class="pull-left" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: 18em;margin-top:-15px;font-size: 16px;">
+								<i class="icon icon-info" style="font-size: 13px;margin-left:4px;"></i>Custom Data
+									
+							</div>	
+
+<div class="custom-data"> 
+								
+					<div class="contact-custom-icon pull-left" style="width:25px;"></div>			
+								<div class="pull-left" style="width:90%;line-height:21px;">
+									
+									{{#if custom_data}}
+									{{#each custom_data}}
+
+
+                                            <span class="contact-custom-name">
+												<span style="color: gray" title="{{name}}">{{name}}</span>
+											</span>
+
 										
-</div><br/>{{/each}}{{/stringToJSON}}{{/if}}
+											<span class="contact-custom-value">
+											<span class="note-created-time" title="{{value}}">{{value}}</span>
+                                             </span><br/> 
+										{{/each}}
+                                    {{/if}}
+											
+                               <div class="clearfix"></div>
+                            </div>	
 
-
-
-<div class="clearfix"></div>
-
-</div>
+						
+					</div>
+					</div>
+					</div>
+					</div>
+					</div>
+					</div>
+					
 
 
 
