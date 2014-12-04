@@ -225,7 +225,7 @@
 							<td style="color:#777;">
 								<ul>
 									{{#notes.notes_contacts}}
-										<li>Note '{{custom1}}' added {{{custom4}}} on {{time_string}}</li>
+										<li>Note '{{custom1}}' added {{#label}}to <a href="https://{{domain}}.agilecrm.com/#contact/{{entity_id}}">{{label}}</a>{{/label}} on {{time_string}}</li>
 									{{/notes.notes_contacts}}
 								</ul>
 							</td>
