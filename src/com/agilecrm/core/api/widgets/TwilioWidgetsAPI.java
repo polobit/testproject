@@ -3,7 +3,10 @@ package com.agilecrm.core.api.widgets;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -13,6 +16,8 @@ import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
 
+import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.contact.Note;
 import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
@@ -481,6 +486,79 @@ public class TwilioWidgetsAPI
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
+	}
+	/**
+	 * 
+	 * @author Purushotham
+	 * @created 28-Nov-2014
+	 *
+	 */
+	@Path("getlastcall/{acc-sid}/{auth-token}/{call-sid}/{parent}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getTwilioLastCallLog(@PathParam("acc-sid") String accountSID,
+			@PathParam("auth-token") String authToken, @PathParam("call-sid") String callSID, 
+			@PathParam("parent") String isParent)
+	{
+
+		try
+		{
+			if(isParent.equals("true"))
+			return TwilioUtil.getLastCallLogStatus(accountSID, authToken, callSID).toString();
+			else
+			return TwilioUtil.getLastChildCallLogStatus(accountSID, authToken, callSID).toString();
+		}
+		catch (SocketTimeoutException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and Please try again.").build());
+		}
+		catch (IOException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occurred. Refresh and Please try again.").build());
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+	}
+	/**
+	 * 
+	 * @author Purushotham
+	 * @created 28-Nov-2014
+	 *
+	 */
+	@Path("savecallactivity")
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String saveCallActivity(@FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration) {		
+		if(direction.equalsIgnoreCase("outbound-dial"))
+			ActivityUtil.createLogForCalls("twilio", phone, "outgoing", status, duration);
+		if(direction.equalsIgnoreCase("inbound"))
+			ActivityUtil.createLogForCalls("twilio", phone, "incoming", status, duration);		
+		return "";
+	}
+	
+	/**
+	 * 
+	 * @author Purushotham
+	 * @created 28-Nov-2014
+	 *
+	 */
+	@Path("autosavenote")
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String autoSaveNote(@FormParam("subject") String subject,@FormParam("message") String message,@FormParam("contactid") String contactid) {		
+		Long contactId = Long.parseLong(contactid);
+		Note note = new Note(subject, message);
+		note.addRelatedContacts(contactId.toString());
+		note.save();
+		return "";
 	}
 
 }

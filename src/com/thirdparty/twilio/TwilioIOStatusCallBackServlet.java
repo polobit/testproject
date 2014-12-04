@@ -32,62 +32,62 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 {
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
-
-	System.out.println("In TwilioStatusCallBack Servlet for final test");
-
-	System.out.println("Parent Call SID");
-
-	// number to which call is made
-	String CallDuration = request.getParameter("CallDuration");
-	System.out.println("Twilio CallDuration  : " + CallDuration);
-
-	String CallStatus = request.getParameter("CallStatus");
-	System.out.println("Twilio CallStatus  : " + CallStatus);
-
-	String CallSid = request.getParameter("CallSid");
-	System.out.println("Twilio CallSid  : " + CallSid);
-
-	String sessionmngrid = request.getParameter("sessionmngrid");
-	System.out.println("Twilio sessionmngrid  : " + sessionmngrid);
-
-	Long sessionmngridlong = Long.valueOf(sessionmngrid);
-
-	DomainUser domainUser = DomainUserUtil.getDomainUser(sessionmngridlong);
-
-	if (domainUser == null)
-	    return;
-
-	System.out.println("domainUser : " + domainUser.email);
-
-	UserInfo userInfo = new UserInfo(domainUser);
-
-	SessionManager.set(userInfo);
-
-	/*
-	 * response.setContentType("text/html"); PrintWriter out =
-	 * response.getWriter();
-	 * 
-	 * printRequestAttributes(request, out);
-	 * 
-	 * printRequestParameters(request, out);
-	 */
-	try
-	{
-	    System.out.println("Child Call SID");
-	    getCallDetails(CallSid, sessionmngrid);
-	}
-	catch (Exception e)
-	{
-	    System.out.println("error in TwilioIOStatusCallBackServlet");
-
-	    StringWriter sw = new StringWriter();
-	    PrintWriter pw = new PrintWriter(sw);
-	    e.printStackTrace(pw);
-	    System.out.println(sw.toString());
-
-	    System.out.println(e.getMessage());
-	    System.out.println(e.getStackTrace().toString());
-	}
+// adding notes from client side
+//	System.out.println("In TwilioStatusCallBack Servlet for final test");
+//
+//	System.out.println("Parent Call SID");
+//
+//	// number to which call is made
+//	String CallDuration = request.getParameter("CallDuration");
+//	System.out.println("Twilio CallDuration  : " + CallDuration);
+//
+//	String CallStatus = request.getParameter("CallStatus");
+//	System.out.println("Twilio CallStatus  : " + CallStatus);
+//
+//	String CallSid = request.getParameter("CallSid");
+//	System.out.println("Twilio CallSid  : " + CallSid);
+//
+//	String sessionmngrid = request.getParameter("sessionmngrid");
+//	System.out.println("Twilio sessionmngrid  : " + sessionmngrid);
+//
+//	Long sessionmngridlong = Long.valueOf(sessionmngrid);
+//
+//	DomainUser domainUser = DomainUserUtil.getDomainUser(sessionmngridlong);
+//
+//	if (domainUser == null)
+//	    return;
+//
+//	System.out.println("domainUser : " + domainUser.email);
+//
+//	UserInfo userInfo = new UserInfo(domainUser);
+//
+//	SessionManager.set(userInfo);
+//
+//	/*
+//	 * response.setContentType("text/html"); PrintWriter out =
+//	 * response.getWriter();
+//	 * 
+//	 * printRequestAttributes(request, out);
+//	 * 
+//	 * printRequestParameters(request, out);
+//	 */
+//	try
+//	{
+//	    System.out.println("Child Call SID");
+//	    getCallDetails(CallSid, sessionmngrid);
+//	}
+//	catch (Exception e)
+//	{
+//	    System.out.println("error in TwilioIOStatusCallBackServlet");
+//
+//	    StringWriter sw = new StringWriter();
+//	    PrintWriter pw = new PrintWriter(sw);
+//	    e.printStackTrace(pw);
+//	    System.out.println(sw.toString());
+//
+//	    System.out.println(e.getMessage());
+//	    System.out.println(e.getStackTrace().toString());
+//	}
     }
 
     private void getCallDetails(String callSid, String sessionmngrid) throws Exception

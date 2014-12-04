@@ -700,4 +700,35 @@ public class TwilioUtil
 		}
 		return appSid;
 	}
+	
+	/**
+	 * 
+	 * @author Purushotham
+	 * @created 28-Nov-2014
+	 *
+	 */
+	public static JSONObject getLastCallLogStatus(String account_sid, String auth_token, String call_sid) throws JSONException, Exception
+    {
+	TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
+	Map<String, String> params = new HashMap<String, String>();
+	params.put("ParentCallSid", call_sid);
+	TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls.json", "GET", params);
+	JSONObject responseJSON = new JSONObject(response);	
+	return responseJSON;
+    }
+    
+    /**
+     * 
+     * @author Purushotham
+     * @created 28-Nov-2014
+     *
+     */
+    public static JSONObject getLastChildCallLogStatus(String account_sid, String auth_token, String call_sid) throws JSONException, Exception
+    {
+	TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
+	TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"+call_sid+".json", "GET", null);
+	JSONObject responseJSON = new JSONObject(response);
+	return responseJSON;
+    }
+	
 }
