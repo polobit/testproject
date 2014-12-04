@@ -671,7 +671,7 @@ public class WebCalendarEventUtil
 		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
 		String usermail = null;
 
-		if (StringUtils.isNotEmpty(wce.phoneNumber))
+		if (StringUtils.isNotEmpty(wce.phoneNumber) && !"Meeting Type".equalsIgnoreCase(wce.phoneNumber))
 		{
 
 		    usermail = "<p>" + wce.userName + " (" + wce.email
@@ -702,7 +702,7 @@ public class WebCalendarEventUtil
 	    System.out.println("icall s string  " + iCal.toString() + " email " + wce.email);
 	    String link = "https://www.agilecrm.com/?utm_source=powered-by&medium=email&utm_campaign=" + user.domain;
 	    String client_mail = null;
-	    if (StringUtils.isNotEmpty(wce.phoneNumber))
+	    if (StringUtils.isNotEmpty(wce.phoneNumber) && !"Meeting Type".equalsIgnoreCase(wce.phoneNumber))
 	    {
 		client_mail = "<p>You have a new appointment with <b>" + user.name + "</b> (" + user.email
 		        + ")</p><span>Type: '" + wce.name + "' (" + wce.slot_time + "mins)</span><br/><span>Phone: "
