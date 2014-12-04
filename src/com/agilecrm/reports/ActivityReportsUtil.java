@@ -670,6 +670,7 @@ public class ActivityReportsUtil
 	    Contact contact = ContactUtil.getContact(activity.entity_id);
 	    String name = contact.getContactFieldValue(Contact.FIRST_NAME) != null ? contact
 		    .getContactFieldValue(Contact.FIRST_NAME) + " " : "";
+	    System.out.println("Name of contact for note - " + name);
 	    name += contact.getContactFieldValue(Contact.LAST_NAME) != null ? contact
 		    .getContactFieldValue(Contact.LAST_NAME) : "";
 	    String result = null;
