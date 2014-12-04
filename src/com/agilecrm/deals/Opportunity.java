@@ -178,10 +178,15 @@ public class Opportunity extends Cursor
     private Key<Milestone> pipeline = null;
 
     /**
-     * note's description related to a task
+     * pipeline Id of the deal.
      */
     @NotSaved
     public Long pipeline_id = 0L;
+
+    /**
+     * To state whenther the deals is archived or not.
+     */
+    public boolean archived = false;
 
     /**
      * ObjectifyDao of Opportunity.

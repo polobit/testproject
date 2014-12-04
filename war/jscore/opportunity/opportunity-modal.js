@@ -320,6 +320,20 @@ function checkPipeline(pipeId){
 	return false;
 }
 
+function removeArchive(deal){
+	var result = false;
+	if(readCookie('deal-filters')){
+		var arch = $.parseJSON(readCookie('deal-filters')).archived;
+		
+		if(arch == 'false' && deal.archived)
+			result = true;
+		else if(arch=='true' && !deal.archived)
+			return true;
+		
+	}
+	return result;
+}
+
 /**
  * Updates or Saves a deal
  */ 
@@ -455,6 +469,17 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 							dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal), {silent:true});
 							console.log('Updating html - ',deal);
 							$("#" + newMilestone.replace(/ +/g, '')).find("#" + id).parent().html(getTemplate('deals-by-paging-model', deal));
+						}
+						
+						if(removeArchive(deal)){
+							
+							console.log('removing the deal when archived');
+							$("#" + oldMilestone.replace(/ +/g, '')).find("#" + id).parent().remove();
+							try{
+								$('#'+oldMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+oldMilestone.replace(/ +/g, '')+'_count').text())-1);
+							} catch(err){
+								console.log(err);
+							}
 						}
 						
 					} else if(checkPipeline(deal.pipeline_id)){

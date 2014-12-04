@@ -774,6 +774,11 @@ public class OpportunityUtil
 		searchMap.put("ownerKey",
 			new Key<DomainUser>(DomainUser.class, Long.parseLong(filterJson.getString("owner_id"))));
 
+	    if (checkJsonString(filterJson, "archived"))
+	    {
+		searchMap.put("archived", Boolean.parseBoolean(filterJson.getString("archived")));
+	    }
+
 	    if (checkJsonString(filterJson, "value_filter")
 		    && filterJson.getString("value_filter").equalsIgnoreCase("equals"))
 	    {
