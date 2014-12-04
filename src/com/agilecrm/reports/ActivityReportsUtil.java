@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.activities.Activity;
@@ -332,7 +333,8 @@ public class ActivityReportsUtil
 	    for (Opportunity deal : dealsMileChange)
 	    {
 		mileValue += deal.expected_value;
-		String summary = "(" + currency + formatter.format(deal.expected_value) + ", " + deal.probability + "%";
+		String summary = "(" + currency + " " + formatter.format(deal.expected_value) + ", " + deal.probability
+			+ "%";
 		if (!deal.getPipeline().name.equals("Default"))
 		    summary += ", " + deal.getPipeline().name;
 		summary += ")";
@@ -667,11 +669,14 @@ public class ActivityReportsUtil
 	{
 	    Contact contact = ContactUtil.getContact(activity.entity_id);
 	    String name = contact.getContactFieldValue(Contact.FIRST_NAME) != null ? contact
-		    .getContactFieldValue(Contact.FIRST_NAME) : "";
-	    name = contact.getContactFieldValue(Contact.LAST_NAME) != null ? contact
+		    .getContactFieldValue(Contact.FIRST_NAME) + " " : "";
+	    name += contact.getContactFieldValue(Contact.LAST_NAME) != null ? contact
 		    .getContactFieldValue(Contact.LAST_NAME) : "";
-	    String result = "to <a href=\"https://" + user.domain + ".agilecrm.com/#contact" + contact.id
-		    + "\" target=\"_blank\">" + name + "</a>";
+	    String result = null;
+
+	    if (!StringUtils.isEmpty(name))
+		result = "to <a href=\"https://" + user.domain + ".agilecrm.com/#contact" + contact.id
+			+ "\" target=\"_blank\">" + name + "</a>";
 
 	    activity.custom4 = result;
 	    noteActivities.add(activity);
@@ -682,8 +687,8 @@ public class ActivityReportsUtil
 	{
 	    if (activities.size() > 0)
 	    {
-		notesReport.put("notes_contacts_count", activities.size());
-		notesReport.put("notes_contacts", activities);
+		notesReport.put("notes_contacts_count", noteActivities.size());
+		notesReport.put("notes_contacts", noteActivities);
 	    }
 
 	}
