@@ -560,7 +560,7 @@ function getId(message)
  */
 function getImageUrl(message, notification_type)
 {
-	if(notification_type != "EVENT_REMINDER"){
+	if(notification_type == "EVENT_REMINDER"){
 		
 		return '/img/eventreminder.png';
 	}
