@@ -41,6 +41,13 @@ $(function()
 
 		$('.noty_buttons').find('#dialpad_in_twilio').toggle();
 	});
+	
+	$("#noty_twilio_voicemail").die().live('click', function(e)
+	{
+		e.preventDefault();
+		console.log("Twilio call voicemail from noty");
+		$('.noty_buttons').find('#voicemail_in_twilio').toggle();
+	});
 
 	$(".noty_twilio_answer").die().live('click', function(e)
 	{
@@ -876,7 +883,7 @@ function showNoteAfterCall(callRespJson,messageObj)
 			if(callStatus == "completed") {
 			 	$('.tags',el).html('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ json.id +'">'+contact_name+'</li>');
 			 	$("#noteForm #subject").val(noteSub);
-		 		$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(callRespJson.duration) + "\n");
+		 		$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(callRespJson.duration));
 		 		$("#noteForm").find("#description").focus();
 				$('#noteModal').modal('show');
 				agile_type_ahead("note_related_to", el, contacts_typeahead);

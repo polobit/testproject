@@ -558,8 +558,10 @@ public class ActivityUtil
     public static List<Activity> getActivitites(String entitytype, Long userid, int max, String cursor)
     {
 	Map<String, Object> searchMap = new HashMap<String, Object>();
-	if (!entitytype.equalsIgnoreCase("ALL"))
+	if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL"))
 	    searchMap.put("entity_type", entitytype);
+	if(entitytype.equalsIgnoreCase("CALL"))
+		searchMap.put("activity_type", entitytype);
 	if (userid != null)
 	    searchMap.put("user", new Key<DomainUser>(DomainUser.class, userid));
 
