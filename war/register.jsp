@@ -436,6 +436,7 @@ $.validator.setDefaults({
 						{
 							var url =  "/backend/register-check?domain="+domain+"&email=" + email;
 							 isDuplicateAccount(url, form, function(data){
+								 $("#register_account").removeAttr("disabled");
 								// $('.carousel').find('.active').hide();
 								 $('#cor').carousel("next");
 								 $('#cor').carousel('pause');
