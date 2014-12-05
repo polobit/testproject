@@ -249,6 +249,60 @@
             ]
         },
         {
+            "label": "New Templates",
+            "category": "templates",
+            "themes": [
+                {
+                    "label": "Elena",
+                    "title": "elena",
+                    "theme_preview": {
+                        "theme_small": "/misc/email-templates/new_templates/elena/elena-email-template/preview/front-page.png",
+                        "theme_big": "/misc/email-templates/new_templates/elena/elena-email-template/preview/front-page-full.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "Elena-General",
+                            "href": "/misc/email-templates/new_templates/elena/elena-email-template/preview/front-page-full.png",
+                            "link": "/misc/email-templates/new_templates/elena/elena-email-template/index.html"
+                        }
+                    ]
+                },
+                {
+
+                    "label": "Beacon",
+                    "title": "beacon",
+                    "theme_preview": {
+                        "theme_small": "/misc/email-templates/new_templates/beacon/beacon-email-template/preview/front-page.png",
+                        "theme_big": "/misc/email-templates/new_templates/beacon/beacon-email-template/preview/front-page-full.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "Beacon-General",
+                            "href": "/misc/email-templates/new_templates/beacon/beacon-email-template/preview/front-page-full.png",
+                            "link": "/misc/email-templates/new_templates/beacon/beacon-email-template/index.html"
+                        }
+                    ]
+                
+                },
+                {
+                    "label": "Mailora",
+                    "title": "mailora",
+                    "theme_preview": {
+                        "theme_small": "/misc/email-templates/new_templates/mailora/mailora-email-template/preview/front-page.png",
+                        "theme_big": "/misc/email-templates/new_templates/mailora/mailora-email-template/preview/front-page-full.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "mailora-General",
+                            "href": "/misc/email-templates/new_templates/mailora/mailora-email-template/preview/front-page-full.png",
+                            "link": "/misc/email-templates/new_templates/mailora/mailora-email-template/index.html"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+
             "label": "Other",
             "category": "other",
             "themes": [
