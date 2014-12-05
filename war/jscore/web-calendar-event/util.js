@@ -49,7 +49,7 @@ function getSlotDurations()
 								var json = JSON.parse(data[slotDetail]);
 								$('.segment1')
 										.append(
-												'<div class="col-sm-12" align="center"><p title="' + json.title + '" class="choose" data="' +addDotsAtEnd(json.time) + '"><span class="minutes">' + json.time + ' mins</span><br />' + json.title + '</p></div>');
+												'<div class="col-sm-12" align="center"><p title="' + json.title + '" class="choose" data="' +json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
 							}
 						}
 					});
