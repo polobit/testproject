@@ -519,7 +519,7 @@ var SettingsRouter = Backbone.Router
 					                    postInit:function(){
 					                        $('.operationTimeFrom, .operationTimeTill').timepicker({
 					                            'timeFormat': 'H:i',
-					                            'step': 60
+					                            'step': 30
 					                            });
 					                    },
 					                });

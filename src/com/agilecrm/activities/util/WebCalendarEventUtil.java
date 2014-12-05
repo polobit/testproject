@@ -166,18 +166,28 @@ public class WebCalendarEventUtil
 	// 0 position is monday and 1 position is tuesday according to business
 	// hours plugin
 	JSONObject business = new JSONObject(business_hours_array.get(week_day).toString());
-	String fromTime = null;
-	String tillTime = null;
+	String fromHour = null;
+	String tillHour = null;
 
+	String fromTime = null;
+	String fromTime_mins = null;
+	String tillTime = null;
+	String tillTime_mins = null;
+	String[] stTime = null;
+	String[] edTime = null;
 	// if(isActive) true i.e working day if not return empty list
 	if (business.getString("isActive") == "true")
 	{
-	    fromTime = business.getString("timeFrom");
+	    fromHour = business.getString("timeFrom");
 	    // we have to pass hour to calendar only 00 format.
 	    // calendar give time in sec according to date and hour
-	    fromTime = fromTime.split(":")[0];
-	    tillTime = business.getString("timeTill");
-	    tillTime = tillTime.split(":")[0];
+	    stTime = fromHour.split(":");
+	    fromTime = stTime[0];
+	    fromTime_mins = stTime[1];
+	    tillHour = business.getString("timeTill");
+	    edTime = tillHour.split(":");
+	    tillTime = edTime[0];
+	    tillTime_mins = edTime[1];
 
 	}
 	if (StringUtils.isNotEmpty(fromTime) && StringUtils.isNotEmpty(tillTime))
@@ -185,16 +195,19 @@ public class WebCalendarEventUtil
 	    Long endtime = null;
 
 	    //
-	    Long starttime = getEppochTime(date, month, year, Integer.parseInt(fromTime), tz);
+	    Long starttime = getEppochTime(date, month, year, Integer.parseInt(fromTime),
+		    Integer.parseInt(fromTime_mins), tz);
 	    starttime = starttime - 60;
 
 	    if (Integer.parseInt(fromTime) < Integer.parseInt(tillTime))
 	    {
-		endtime = getEppochTime(date, month, year, Integer.parseInt(tillTime), tz);
+		endtime = getEppochTime(date, month, year, Integer.parseInt(tillTime), Integer.parseInt(tillTime_mins),
+		        tz);
 	    }
 	    else
 	    {
-		endtime = getEppochTime(date + 1, month, year, Integer.parseInt(tillTime), tz);
+		endtime = getEppochTime(date + 1, month, year, Integer.parseInt(tillTime),
+		        Integer.parseInt(tillTime_mins), tz);
 	    }
 
 	    System.out.println("business hour starttime " + starttime + " business hour endtime " + endtime);
@@ -266,10 +279,10 @@ public class WebCalendarEventUtil
      *            sets the calendar to this particular timezone
      * @return
      */
-    public static Long getEppochTime(int date, int month, int year, int time, TimeZone timezone)
+    public static Long getEppochTime(int date, int month, int year, int time, int minutes, TimeZone timezone)
     {
 	Calendar calendar = new GregorianCalendar();
-	calendar.set(year, month, date, time, 0);
+	calendar.set(year, month, date, time, minutes);
 	calendar.setTimeZone(timezone);
 	Date d = calendar.getTime();
 	System.out.println("date in get eppoch time  -----------------------" + d);
