@@ -105,6 +105,12 @@ $(function()
 				$('#lname',el).val(newContact.name.substring(newContact.name.indexOf(' '),newContact.name.length));
 			} else if(newContact.email.length>0)
 				$('#fname',el).val(newContact.email.substring(0,newContact.email.indexOf('@')));
+			
+			if(newContact.email.length>0){
+				var reg = new RegExp('@([a-z]+)\.');
+				if(reg.test(newContact.email))
+				$('#company',el).val(reg.exec(newContact.email)[1]);
+			}
 		});
 	});
 	
@@ -292,6 +298,7 @@ function agile_add_mail_to_list(Val, Email, el){
 		else{
 			$("#agile_content").find('.contact-search-status:last').hide();
 			$("#agile_content").find(".contact-list-width:last").css("max-width", "95%");
+			$("#agile_content").find('.gadget-add-contact').trigger('click');
 		}
  	
 }
