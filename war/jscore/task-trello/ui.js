@@ -128,4 +128,13 @@ $(function()
 		// Change status UI and input field
 		changeStatus($(this).attr("value"), $(this).closest("form"));
 	});	
+	
+	$(".group-view").die().live('click', function(event)
+	{
+		event.preventDefault();
+		console.log("group-view event");
+				
+		// Change UI and input field
+		applyDetailsFromGroupView();
+	});	
 });

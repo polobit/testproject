@@ -341,6 +341,15 @@ function displayListView()
 	$('#new-task-list-based-condition').hide();
 	$('#task-list-based-condition').show();
 	
+	// Display group view
+	$(".group-view").show();
+	
+	// Hide group by
+	$(".do-onclick-nothing").hide();
+	
+	// Hide list view
+	$(".list-view").hide();
+	
 	var url = getParamsNew();
 	
 	// When user hit list view first time and my pending is selected as default one, we have to set pending true.
@@ -389,8 +398,11 @@ function bindDropdownEvents()
 		if(TASKS_LIST_COLLECTION != null)
 		TASKS_LIST_COLLECTION.collection.reset();
 		
-		//Add selected details of dropdown in cookie
+		// Add selected details of dropdown in cookie
 		addDetailsInCookie(this);
+		
+		// Group view settings
+		addDetailsInGroupView(this);
 		
 		setTimeout(function() { // Do something after 2 seconds
 			// Get details from dropdown and call function to create collection
@@ -404,6 +416,106 @@ function bindDropdownEvents()
 		// Change heading of page
 		changeHeadingOfPage($('#new-owner-tasks').closest(".btn-group").find(".selected_name").html());
 	});	
+}
+// Group view settings
+function addDetailsInGroupView(elmnt)
+{
+	console.log("in addDetailsInGroupView");	
+	
+    var criteria = getCriteria();
+	console.log("criteria: " + criteria);
+	
+	// Check for list view 
+	if(criteria == "LIST")
+	  return;
+	  	
+	var name = $(elmnt).html();
+	var id = $(elmnt).attr("href");
+	
+	console.log(name+"  "+id);
+
+	var taskField = null;
+	var taskFieldValue = null;
+
+	if ($(elmnt).closest("ul").attr('id') == "new-type-tasks")
+		taskField = "taskCriteria";
+	else if ($(elmnt).closest("ul").attr('id') == "new-owner-tasks")
+		taskField = "taskOwner";
+
+	taskFieldValue = name + "_" + id;
+
+	// Changes value of attribute in group view btn
+	$(".group-view").attr(taskField, taskFieldValue);
+}
+
+// Change UI and input field 
+function applyDetailsFromGroupView()
+{
+	console.log("In applyDetailsFromGroupView");
+
+	var task_criteria = $(".group-view").attr("taskCriteria");
+	var task_owner = $(".group-view").attr("taskOwner");
+
+	console.log(task_criteria + " " + task_owner);
+
+	withoutEventChangeDropDowns(task_criteria, task_owner, true);
+
+	// Hide group view
+	$(".group-view").hide();
+	
+	// Display group by
+	$(".do-onclick-nothing").show();
+	
+	// Display list view
+	$(".list-view").show();
+	
+	var ownerType = $('#new-owner-tasks').data("selected_item");
+	
+	// Add owner type in cookie
+	addDetailsInCookie($("ul#new-owner-tasks").find('a[href='+ownerType+']'));
+	
+	// Add task type in cookie
+	addDetailsInCookie($("ul#new-type-tasks").find('a[href='+getCriteria()+']'));
+}
+
+//
+function withoutEventChangeDropDowns(task_criteria, task_owner, apply_groupview)
+{
+	console.log("In withoutEventChangeDropDowns");
+	console.log(task_criteria + " " + task_owner);	
+	
+	if (task_criteria)
+	{
+		var res = task_criteria.split("_");
+
+		console.log(res);
+
+		$('#new-type-tasks').data("selected_item", res[1]);
+		$('#new-type-tasks').closest(".btn-group").find(".selected_name").text(res[0]);
+	}
+
+	if (task_owner)
+	{
+		var res = task_owner.split("_")
+
+		console.log(res);
+
+		$('#new-owner-tasks').data("selected_item", res[1]);
+		$('#new-owner-tasks').closest(".btn-group").find(".selected_name").text(res[0]);
+	}
+
+	if(!task_criteria && !task_owner && apply_groupview)
+	  {
+		// Type of task
+		$('#new-type-tasks').data("selected_item", "DUE");
+		$('#new-type-tasks').closest(".btn-group").find(".selected_name").text("Due");		
+	  }
+	
+	// Change heading of page
+	changeHeadingOfPage($('#new-owner-tasks').closest(".btn-group").find(".selected_name").html());
+
+	// Get details from dropdown and call function to create collection
+	getDetailsForCollection();
 }
 
 //Add details about task list where add task btn is clicked
