@@ -569,7 +569,7 @@ public class WebCalendarEventUtil
 	Event newEvnt = null;
 
 	DomainUser user = DomainUserUtil.getDomainUser(domainUserId);
-
+	JSONObject meeting_duration = new JSONObject(user.meeting_durations);
 	net.fortuna.ical4j.model.Calendar iCal = null;
 	net.fortuna.ical4j.model.Calendar agileUseiCal = null;
 
@@ -613,11 +613,14 @@ public class WebCalendarEventUtil
 
 	    // Assign proper name on basis of slot time duration
 	    if (wce.slot_time.compareTo((long) 15) == 0)
-		saveMe.name = "say hi";
+		saveMe.name = meeting_duration.getString("15mins");
+	    ;
 	    if (wce.slot_time.compareTo((long) 30) == 0)
-		saveMe.name = "let's keep it short";
+		saveMe.name = meeting_duration.getString("30mins");
+	    ;
 	    if (wce.slot_time.compareTo((long) 60) == 0)
-		saveMe.name = "let's chat";
+		saveMe.name = meeting_duration.getString("60mins");
+	    ;
 
 	    // Assign slot time
 	    saveMe.slot_time = wce.slot_time;
