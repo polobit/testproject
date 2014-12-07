@@ -263,7 +263,12 @@
                         {
                             "title": "Elena-General",
                             "href": "/misc/email-templates/new_templates/elena/elena-email-template/preview/front-page-full.png",
-                            "link": "/misc/email-templates/new_templates/elena/elena-email-template/index.html"
+                            "link": "/misc/email-templates/new_templates/elena/elena-email-template/layout1.html"
+                        },
+                        {
+                            "title": "Elena-General",
+                            "href": "/misc/email-templates/new_templates/elena/elena-email-template/preview/front-page-full.png",
+                            "link": "/misc/email-templates/new_templates/elena/elena-email-template/layout2.html"
                         }
                     ]
                 },
