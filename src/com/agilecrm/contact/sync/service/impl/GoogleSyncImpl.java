@@ -455,7 +455,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    }
 	    else
 	    {
-		index = 1 + 1;
+		index = 1;
 	    }
 
 	    Long new_created_at = entry.getUpdated().getValue();
