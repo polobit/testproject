@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.jsp.ah.entityDetailsBody_jsp;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
@@ -13,6 +14,7 @@ import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gdata.data.TextContent;
 import com.google.gdata.data.contacts.ContactEntry;
+import com.google.gdata.data.contacts.GroupMembershipInfo;
 import com.google.gdata.data.contacts.Occupation;
 import com.google.gdata.data.contacts.Website;
 import com.google.gdata.data.extensions.Email;
@@ -244,7 +246,13 @@ public class GoogleContactWrapperImpl extends ContactWrapper
     public List<String> getTags()
     {
 	// TODO Auto-generated method stub
-	return null;
+	List<GroupMembershipInfo> groups = entry.getGroupMembershipInfos();
+	List<String> tags = new ArrayList<String>();
+	for(GroupMembershipInfo info : groups)
+	{
+	    tags.add(info.getExtensionLocalName());
+	}
+	return tags;
     }
 
     /*

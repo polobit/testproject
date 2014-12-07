@@ -361,7 +361,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	 */
 	if (prefs.sync_from_group != null)
 	{
-	    prefs.sync_from_group = URLDecoder.decode("http://www.google.com/m8/feeds/groups/lionel.negrotto@gmail.com/base/6");
+	    prefs.sync_from_group = URLDecoder.decode(prefs.sync_from_group);
 
 	    // Setting group query
 	    query.setStringCustomParameter("group", prefs.sync_from_group);
