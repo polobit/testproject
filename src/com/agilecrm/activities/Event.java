@@ -14,6 +14,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
+import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -53,6 +54,21 @@ public class Event
      */
     @NotSaved(IfDefault.class)
     public Long start = 0L;
+
+    /**
+     * Type of the contact (person or company)
+     * 
+     */
+    public static enum EventType
+    {
+	WEB_APPOINTMENT, AGILE
+    };
+
+    /**
+     * type of event
+     */
+    @Indexed
+    public EventType type = EventType.AGILE;
 
     /**
      * End time of event

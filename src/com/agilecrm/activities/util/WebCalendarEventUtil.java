@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.Event;
+import com.agilecrm.activities.Event.EventType;
 import com.agilecrm.activities.WebCalendarEvent;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
@@ -668,6 +669,7 @@ public class WebCalendarEventUtil
 		newEvnt.start = slot.get(0); // start time
 		newEvnt.end = slot.get(1); // end time
 		newEvnt.color = "#36C";
+		newEvnt.type = EventType.WEB_APPOINTMENT;
 
 		epoch_start_date = newEvnt.start;
 		String cid = contact.id.toString(); // related contact
