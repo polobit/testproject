@@ -3096,6 +3096,8 @@ $(function()
 			field_type_name = "List";
 		else if(field_type=="NUMBER")
 			field_type_name = "Number";
+		else if(field_type=="FORMULA")
+			field_type_name = "Formula";
 		return field_type_name;
 	});
 

@@ -612,3 +612,14 @@ padding-bottom:0px!important;
        line-height:22px;
     }
 }
+.custom-number-control{
+	visibility: hidden;
+	display: inline-block;
+    font-size: 14px;
+    left: -15px;
+    position: relative;
+    top: 5px;
+}
+.custom-number-controls:hover > span{
+	visibility: visible;
+}
