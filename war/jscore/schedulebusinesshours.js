@@ -5,7 +5,16 @@ $(function()
 $("#btnSerialize").die().live('click', function(e){
 	e.preventDefault();
 	
-	if(!$("#15mins").val()&&!$("#30mins").val()&&!$("#60mins").val()){
+	
+	if(!$.trim($("#15mins").val())&&!$.trim($("#30mins").val())&&!$.trim($("#60mins").val())){
+		$('#meeting_duration_message').fadeIn('slow');
+        setTimeout(function() {
+     	    $('#meeting_duration_message').fadeOut('slow');
+     	}, 2000);
+    	return;
+	}
+	
+	if($("#15mins").val().charCodeAt(0)== ' ' && $("#30mins").val().charCodeAt(0)== ' ' && $("#60mins").val().charCodeAt(0)== ' '){
 		$('#meeting_duration_message').fadeIn('slow');
         setTimeout(function() {
      	    $('#meeting_duration_message').fadeOut('slow');
