@@ -8,7 +8,7 @@
 	<div class="span12">
 		<div style="margin-bottom: 20px; margin-top:25px;"">
 			<div class="row-fluid"
-				style="border-bottom: 1px solid #ddd; padding-bottom: 40px;">
+				style="border-bottom: 1px solid #ddd; padding-bottom: 30px;">
 				<div>
 					<div>
 						<div class="span10">
@@ -23,11 +23,11 @@
 {{/if_equals}}
 {{/if_equals}} 
 <span class="label label-default" style="margin-left:3px;">{{pipeline.name}}</span> 
- <span style="margin-left:275px;font-size:20px;">${{expected_value}}</span> </div>                   
+ <span style="margin-left:275px;">${{expected_value}}</span> </div>                   
 <div style="width:43%;height:10px;" class="progress progress-info">
                        <div class="bar" style="width: {{probability}}%;"></div>
                        </div>
-<div class="contact-custom-value" style="margin-top: -10px;color: gray;"><span>{{probability}}%</span><span style="margin-left:269px;">Pipeline Value: <span>${{calculatePipeline expected_value probability}}</span> </div> 
+<div class="contact-custom-value" style="margin-top: -10px;color: gray;"><span>{{probability}}%</span><span style="margin-left:269px;">Pipeline Value <span>${{calculatePipeline expected_value probability}}</span> </div> 
 
 </div>
 
