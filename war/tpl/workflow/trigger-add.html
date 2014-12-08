@@ -82,8 +82,9 @@
 						 <div class="control-group" style="display:none;">
 							<div class="controls" style="margin-left:220px!important;">
                             <select id="event-type" name="event_type" class="required">
-                                    <option value="ANY">Any</option>
-									<option value="WEB_APPOINTMENT">Web Appoinment</option>
+									<option value="">Select Event type</option>
+                                    <option value="ANY">Any Event</option>
+									<option value="WEB_APPOINTMENT">Online Appointment</option>
                                 </select>
 							</div>
                         </div>
@@ -114,9 +115,9 @@
 						<div class="control-group" style="display:none;">
 							<div class="controls" style="margin-left:220px!important">
 									<select id="email-tracking-type" name="email_tracking_type" class="required">
-										<option value="ANY">Any</option>
-										<option value="CAMPAIGNS">Campaigns</option>
-										<option value="PERSONAL">Personal</option>
+										<option value="ANY">Personal or Campaign emails</option>
+										<option value="PERSONAL">Personal emails only</option>
+										<option value="CAMPAIGNS">Campaign emails only</option>
 									</select>
 							</div>
 						</div>
@@ -132,7 +133,7 @@
                             <div>
                                 <label class="control-label" style="width:200px!important;"></label>
                                 <div class="controls" style="margin-left:220px!important;width:230px!important;">
-                                    <input type="text" id="custom-link-clicked" value="{{custom_link_clicked}}" name="custom_link_clicked" class="required EMAIL_LINK_CLICKED" style="margin-bottom: -1px;" placeholder="URL contains" />
+                                    <input type="text" id="custom-link-clicked" value="{{custom_link_clicked}}" name="custom_link_clicked" class="required EMAIL_LINK_CLICKED" style="margin-bottom: -1px;" placeholder="Link URL contains" />
                                 </div>
                             </div>
                         </div>

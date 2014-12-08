@@ -265,14 +265,14 @@ function populate_owners_in_trigger(trigger_form, owner_select_id, trigger_owner
 	fillSelect(owner_select_id, '/core/api/users', 'users', function()
 			{
 		
-			$("#" + owner_select_id +' option:first').after('<option value="ANY">Any</option>');
+			$("#" + owner_select_id +' option:first').after('<option value="ANY">Any Owner</option>');
 			
 			if (trigger_owner_id)
 			{
 				$('#'+owner_select_id, trigger_form).find('option[value=' + trigger_owner_id + ']').attr('selected', 'selected');
 			}
 		
-	}, optionsTemplate, false, undefined, "Select event owner");
+	}, optionsTemplate, false, undefined);
 }
 
 /**
