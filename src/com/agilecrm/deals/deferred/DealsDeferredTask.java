@@ -1,5 +1,7 @@
 package com.agilecrm.deals.deferred;
 
+import java.util.List;
+
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.MilestoneUtil;
@@ -25,7 +27,7 @@ public class DealsDeferredTask implements DeferredTask
      * Serial version id.
      */
     private static final long serialVersionUID = 8225965474422062021L;
-    
+
     private String domain;
 
     public DealsDeferredTask(String domain)
@@ -42,20 +44,26 @@ public class DealsDeferredTask implements DeferredTask
 	{
 	    NamespaceManager.set(domain);
 	    System.out.println("Domain name is " + domain);
-	    Milestone milestone = MilestoneUtil.getMilestones();
-	    milestone.name = "Default";
-	    milestone.save();
-	    Long pipelineId = milestone.id;
-	    System.out.println("Default pipeline " + pipelineId);
+	    List<Milestone> milestones = MilestoneUtil.getMilestonesList();
+	    int defCount = 0;
+	    for (Milestone milestone : milestones)
+	    {
+		if (milestone.equals("Default") && defCount == 0)
+		{
+		    milestone.isDefault = true;
+		    defCount++;
+		}
+		milestone.save();
+	    }
+
 	    // Util function fetches reports based on duration, generates
 	    // reports and sends report
 	    for (Opportunity deal : OpportunityUtil.getOpportunities())
 	    {
 		try
 		{
-		    deal.pipeline_id = pipelineId;
 		    deal.save();
-		    System.out.println(deal.pipeline_id);
+		    System.out.println(deal.archived);
 		}
 		catch (Exception e)
 		{
