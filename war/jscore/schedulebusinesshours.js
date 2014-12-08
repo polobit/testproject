@@ -10,7 +10,7 @@ $("#btnSerialize").die().live('click', function(e){
 		$('#meeting_duration_message').fadeIn('slow');
         setTimeout(function() {
      	    $('#meeting_duration_message').fadeOut('slow');
-     	}, 2000);
+     	}, 5000);
     	return;
 	}
 	
@@ -18,7 +18,7 @@ $("#btnSerialize").die().live('click', function(e){
 		$('#meeting_duration_message').fadeIn('slow');
         setTimeout(function() {
      	    $('#meeting_duration_message').fadeOut('slow');
-     	}, 2000);
+     	}, 5000);
     	return;
 	}
 	
