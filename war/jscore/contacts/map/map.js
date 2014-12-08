@@ -87,6 +87,9 @@ function display_google_map() {
 				+ address.state + ', ' + address.country + ', ' + address.zip + '"'
 	}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
+			
+			console.log(results);
+			displayTimeZone(results);
 
 			// Displays map portion
 			$("#map").css('display', 'block');
