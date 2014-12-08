@@ -125,37 +125,45 @@ function reportsContactTableView(base_model)
 	var contact = base_model.toJSON(); // Converts base_model (contact) in to JSON
 	var final_html_content="";
 	var element_tag=this.options.individual_tag_name;
-	
-	// Iterates through, each field name and appends the field according to
-	// order of the fields
-	$.each(fields, function(index, field_name) {
-		
-		if(field_name.indexOf("custom_") != -1)
-		{
-			field_name = field_name.split("custom_")[1]; 	
-			var property = getProperty(contact.properties, field_name);
-			if(!property)
-				property = {};
+	var templateKey = this.options.templateKey;
+	$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
+			{
+				// Iterates through, each field name and appends the field according to
+				// order of the fields
+				$.each(fields, function(index, field_name) {
+					
+					if(field_name.indexOf("custom_") != -1)
+					{
+						field_name = field_name.split("custom_")[1]; 	
+						var property = getProperty(contact.properties, field_name);
+						if(!property)
+							property = {};
 
-			final_html_content += getTemplate('contacts-custom-view-custom', property);
-			return;
-		}
-		
-		
-		
-		if(field_name.indexOf("properties_") != -1)
-			field_name = field_name.split("properties_")[1];
-		
-		final_html_content+=getTemplate('contacts-custom-view-' + field_name, contact);
-	});
+						if(isDateCustomField(customDatefields,property))
+							final_html_content += getTemplate('contacts-custom-view-custom-date', property);
+						else
+							final_html_content += getTemplate('contacts-custom-view-custom', property);
+						
+						return;
+					}
+					
+					
+					
+					if(field_name.indexOf("properties_") != -1)
+						field_name = field_name.split("properties_")[1];
+					
+					final_html_content+=getTemplate('contacts-custom-view-' + field_name, contact);
+				});
+				
+				// Appends model to model-list template in collection template
+				$(("#" + templateKey + '-model-list'), this.el).append(
+						'<'+element_tag+'>'+final_html_content+'</'+element_tag+'>');	
+				
+				// Sets data to tr
+				$(('#' + templateKey + '-model-list'), this.el).find('tr:last').data(
+						base_model);
+			});
 
-	// Appends model to model-list template in collection template
-	$(("#" + this.options.templateKey + '-model-list'), this.el).append(
-			'<'+element_tag+'>'+final_html_content+'</'+element_tag+'>');	
-	
-	// Sets data to tr
-	$(('#' + this.options.templateKey + '-model-list'), this.el).find('tr:last').data(
-			base_model);
 }
 
 function deserialize_multiselect(data, el)

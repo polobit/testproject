@@ -85,7 +85,6 @@ public class PullScheduler
 	// Campaigns need more lease period (in secs)
 	if (StringUtils.equals(queueName, AgileQueues.BULK_CAMPAIGN_PULL_QUEUE)
 	        || StringUtils.equals(queueName, AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE)
-	        || StringUtils.equals(queueName, AgileQueues.CAMPAIGN_PULL_QUEUE)
 	        || StringUtils.equals(queueName, AgileQueues.NORMAL_SMS_PULL_QUEUE)
 	        || StringUtils.equals(queueName, AgileQueues.BULK_SMS_PULL_QUEUE))
 	    return 3600;

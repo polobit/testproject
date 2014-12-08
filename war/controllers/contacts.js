@@ -124,6 +124,7 @@ var ContactsRouter = Backbone.Router.extend({
 		if (readCookie('company_filter'))
 		{
 			eraseCookie('contact_filter');
+			eraseCookie('contact_filter_type');
 		}
 		// Tags, Search & default browse comes to the same function
 		if (tag_id)
@@ -136,6 +137,7 @@ var ContactsRouter = Backbone.Router.extend({
 			// erase filter cookie
 			eraseCookie('contact_filter');
 			eraseCookie('company_filter');
+			eraseCookie('contact_filter_type');
 
 			if (this.contactsListView && this.contactsListView.collection)
 			{
@@ -189,11 +191,15 @@ var ContactsRouter = Backbone.Router.extend({
 			collection_is_reverse = false;
 			url = "core/api/filters/query/" + filter_id;
 		}
+		
+		if(readCookie('contact_filter_type') == 'COMPANY') {
+			template_key = "companies";
+		}
 
 		// If view is set to custom view, load the custom view
 		// If Company filter active-don't load any Custom View Show
 		// default
-		if (!readCookie('company_filter') && readCookie("contact_view"))
+		if (!readCookie('company_filter') && readCookie('contact_filter_type') != 'COMPANY' && readCookie("contact_view"))
 		{
 			// If there is a filter saved in cookie then show filter
 			// results in custom view saved
@@ -726,9 +732,32 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	sendEmail : function(id, subject, body, cc, bcc)
 	{
-		
 		var model = {};
-
+		
+		if(!canSendEmails(1))
+		{
+			var pendingEmails = getPendingEmails();
+			window.history.back();
+			var title = "Emails limit";
+			var yes = "";
+			var no = "Ok"
+			var upgrade_link =  'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>';
+			var message = "You have used up all emails in your quota. " + upgrade_link;
+			
+			showModalConfirmation(title, 
+					message, 
+					""
+				, function(element){
+						
+					// No callback
+						Backbone.history.navigate( "subscribe", { trigger : true });
+						return;
+					},
+					function(element){
+						
+					}, yes, no);
+			return;
+		}
 		// Takes back to contacts if contacts detail view is not defined
 		if (this.contactDetailView && !this.contactDetailView.model.get(id))
 		{
@@ -804,6 +833,9 @@ var ContactsRouter = Backbone.Router.extend({
 				
 					// Add tinymce content
 					set_tinymce_content('email-body', body);
+					
+					// Register focus
+					register_focus_on_tinymce('email-body');
 			
 				});
 		}
@@ -816,6 +848,9 @@ var ContactsRouter = Backbone.Router.extend({
 				
 					// Add tinymce content
 					set_tinymce_content('email-body', body);
+					
+					// Register focus
+					register_focus_on_tinymce('email-body')
 			});
 		}
 		

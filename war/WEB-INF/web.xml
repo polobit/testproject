@@ -1,8 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
 	<servlet>
 		<servlet-name>Home</servlet-name>
@@ -222,11 +218,11 @@
 		<servlet-class>com.agilecrm.session.CalendarServlet</servlet-class>
 		<init-param>
 			<param-name>consumer_key</param-name>
-			<param-value />
+			<param-value/>
 		</init-param>
 		<init-param>
 			<param-name>consumer_secret</param-name>
-			<param-value />
+			<param-value/>
 		</init-param>
 	</servlet>
 
@@ -235,6 +231,16 @@
 		<url-pattern>/meeting</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>ActivityReports</servlet-name>
+		<servlet-class>com.agilecrm.reports.ActivityReportServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ActivityReports</servlet-name>
+		<url-pattern>/backend/cron/activity-reports/*</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>Reports</servlet-name>
 		<servlet-class>com.agilecrm.reports.ReportServlet</servlet-class>
@@ -261,6 +267,24 @@
 	<servlet-mapping>
 		<servlet-name>TaskReminder</servlet-name>
 		<url-pattern> /backend/cron/tasks</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>EventReminder</servlet-name>
+		<servlet-class>com.agilecrm.EventReminderServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EventReminder</servlet-name>
+		<url-pattern> /backend/cron/events</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>FailedDomainEventReminder</servlet-name>
+		<servlet-class>com.agilecrm.FailedDomainEventReminderServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FailedDomainEventReminder</servlet-name>
+		<url-pattern> /backend/faileddomaineventreminder</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -696,12 +720,12 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>mailhandler</servlet-name>
-		<servlet-class>com.agilecrm.MailHandlerServlet</servlet-class>
+		<servlet-name>MandrillWebhookTriggerInbound</servlet-name>
+		<servlet-class>com.thirdparty.mandrill.webhook.MandrillWebhookTriggerInbound</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>mailhandler</servlet-name>
-		<url-pattern>/_ah/mail/*</url-pattern>
+		<servlet-name>MandrillWebhookTriggerInbound</servlet-name>
+		<url-pattern>/mail/bcc</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -709,7 +733,7 @@
 		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
 		<init-param>
 			<param-name>services</param-name>
-			<param-value />
+			<param-value/>
 		</init-param>
 	</servlet>
 	<servlet-mapping>

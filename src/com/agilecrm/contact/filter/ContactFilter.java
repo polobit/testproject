@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.customview.CustomView;
+import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -64,6 +64,12 @@ public class ContactFilter implements Serializable, Comparable<ContactFilter>
      */
     @NotSaved(IfDefault.class)
     public String name = null;
+    
+    /**
+     * Type fo conatct filter.
+     */
+    @NotSaved(IfDefault.class)
+    public Type contact_type = Type.PERSON;
 
     /**
      * Represents list of {@link SearchRule}, query is built on these list of

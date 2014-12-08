@@ -368,6 +368,15 @@ function getTwilioLogs(to)
 			 * if ($(this).attr("disabled")) return; // set attribute disabled as
 			 * disabled $(this).attr("disabled", "disabled");
 			 */
+			
+			//condition to check whether the sound is already playing
+			if(audio != null)
+			{
+				audio.pause();
+				$(".icon-stop").addClass("icon-play");
+				$(".icon-stop").removeClass("icon-stop");
+								
+			}
 
 			// Sound URL from Twilio to play call
 			var sound_url = "https://api.twilio.com" + $(this).attr("sound_url");
@@ -375,8 +384,21 @@ function getTwilioLogs(to)
 
 			// plays call conversion
 			play_sound(sound_url, "true");
+			$(this).addClass("icon-stop");
+			$(this).removeClass("icon-play");
 
 			// $(this).removeAttr("disabled");
+		});
+		
+		// To stop the audio call when playing
+		$(".icon-stop").die().live('click', function(e)
+		{			
+			e.preventDefault();
+			audio.pause();
+			audio=null;
+			$(this).addClass("icon-play");
+			$(this).removeClass("icon-stop");
+								
 		});
 
 	}).error(function(data)

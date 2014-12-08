@@ -7,9 +7,15 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.examples.HtmlToPlainText;
 
+import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
+import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HttpClientUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.TaskHandle;
 import com.thirdparty.mandrill.EmailContentLengthLimitExceededException;
@@ -68,7 +74,7 @@ public class MandrillUtil
      * @param tasks
      *            - pull queue leased tasks
      */
-    public static void sendMandrillMails(List<TaskHandle> tasks)
+    public static void sendMandrillMails(List<TaskHandle> tasks, EmailSender emailSender)
     {
 	TaskHandle firstTaskHandle = tasks.get(0);
 
@@ -91,10 +97,37 @@ public class MandrillUtil
 	{
 	    for (TaskHandle task : tasks)
 	    {
+
 		flag = false;
 
 		MailDeferredTask mailDeferredTask = (MailDeferredTask) SerializationUtils
 		        .deserialize(task.getPayload());
+
+		// Creates log for sending email
+		if (!StringUtils.isBlank(mailDeferredTask.campaignId)
+		        && !StringUtils.isBlank(mailDeferredTask.subscriberId))
+		{
+		    LogUtil.addLogToSQL(mailDeferredTask.campaignId, mailDeferredTask.subscriberId, "Subject: "
+			    + mailDeferredTask.subject, LogType.EMAIL_SENT.toString());
+
+		    if (!StringUtils.isBlank(mailDeferredTask.text))
+		    {
+			// Appends Agile label
+			mailDeferredTask.text = StringUtils.replace(mailDeferredTask.text,
+			        EmailUtil.getPoweredByAgileLink("campaign", "Powered by"), "Sent using Agile");
+			mailDeferredTask.text = EmailUtil.appendAgileToText(mailDeferredTask.text, "Sent using",
+			        emailSender.isEmailWhiteLabelEnabled());
+		    }
+
+		    // If no powered by merge field, append Agile label to
+		    // html
+		    if (!StringUtils.isBlank(mailDeferredTask.html)
+			    && !StringUtils.contains(mailDeferredTask.html,
+			            EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
+			mailDeferredTask.html = EmailUtil.appendAgileToHTML(mailDeferredTask.html, "campaign",
+			        "Powered by", emailSender.isEmailWhiteLabelEnabled());
+
+		}
 
 		// If same To email (i.e., multiple send-email nodes linked to
 		// each in campaign). If CC or BCC or multiple To with comma
@@ -206,11 +239,11 @@ public class MandrillUtil
 
 	try
 	{
-	    
+
 	    // If replyTo is blank, make fromEmail as replyTo
 	    if (StringUtils.isBlank(replyTo))
 		replyTo = fromEmail;
-	    
+
 	    if (!StringUtils.isBlank(subaccount))
 		messageJSON.put(MandrillSubAccounts.MANDRILL_SUBACCOUNT, subaccount);
 
@@ -290,7 +323,7 @@ public class MandrillUtil
 
 	vars.put(getVarJSON(MandrillMergeVars.HTML_CONTENT.toString(), getHTML(html, text)));
 
-	vars.put(getVarJSON(MandrillMergeVars.TEXT_CONTENT.toString(), text));
+	vars.put(getVarJSON(MandrillMergeVars.TEXT_CONTENT.toString(), getText(html, text)));
 
 	return vars;
     }
@@ -338,6 +371,25 @@ public class MandrillUtil
 	    return html;
 
 	return convertTextIntoHtml(text);
+    }
+
+    /**
+     * Returns Text if not empty, otherwise extracts text from html
+     * 
+     * @param html
+     *            - html body
+     * @param text
+     *            - text body
+     * @return String
+     * 
+     */
+    public static String getText(String html, String text)
+    {
+	// return text if not empty
+	if (!StringUtils.isBlank(text) || StringUtils.isBlank(html))
+	    return text;
+
+	return new HtmlToPlainText().getPlainText(Jsoup.parse(html));
     }
 
     /**

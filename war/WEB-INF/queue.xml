@@ -57,6 +57,14 @@
 	</retry-parameters>
   </queue>
   <queue>
+    <name>event-notifier</name>
+    <rate>5/s</rate>
+    <max-concurrent-requests>5</max-concurrent-requests>
+    <retry-parameters>
+		<task-retry-limit>1</task-retry-limit>
+	</retry-parameters>
+  </queue>
+  <queue>
   	<name>cron-queue</name>
     <rate>5/s</rate>
     <max-concurrent-requests>10</max-concurrent-requests>
@@ -146,22 +154,6 @@
   </queue>
   <!-- pull queues -->
   <queue>
-  <name>email-pull-queue</name>
-  <mode>pull</mode>
-  <retry-parameters>
-      <task-retry-limit>1</task-retry-limit>	  
-  </retry-parameters>
-  </queue>
-  
-  <queue>
-  <name>campaign-pull-queue</name>
-  <mode>pull</mode>
-  <retry-parameters>
-  		<task-retry-limit>1</task-retry-limit>
-  </retry-parameters>
-  </queue>
-  
-  <queue>
   <name>normal-campaign-pull-queue</name>
   <mode>pull</mode>
   <retry-parameters>
@@ -193,8 +185,8 @@
   </retry-parameters>
   </queue>
   
-   <queue>
-  <name>sb-email-pull-queue</name>
+  <queue>
+  <name>normal-personal-email-pull-queue</name>
   <mode>pull</mode>
   <retry-parameters>
       <task-retry-limit>1</task-retry-limit>	  
@@ -202,7 +194,7 @@
   </queue>
   
   <queue>
-  <name>sb-campaign-pull-queue</name>
+  <name>bulk-personal-email-pull-queue</name>
   <mode>pull</mode>
   <retry-parameters>
   		<task-retry-limit>1</task-retry-limit>
