@@ -274,7 +274,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 
 	    if (data.has("id"))
 		subscribptionIdFromStripe = data.getString("id");
-	    plan.put("amount", Integer.valueOf(obj.getString("total")) / 100);
+	    plan.put("amount", Float.valueOf(obj.getString("total")) / 100);
 
 	    System.out.println(plan);
 
