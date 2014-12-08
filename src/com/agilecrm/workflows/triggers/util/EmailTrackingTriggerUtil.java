@@ -22,7 +22,10 @@ public class EmailTrackingTriggerUtil
 	List<Trigger> triggers = TriggerUtil.getTriggersByCondition(Trigger.Type.EMAIL_OPENED);
 
 	if (triggers == null || triggers.size() == 0)
+	{
+	    System.out.println("There are no email open triggers...");
 	    return;
+	}
 
 	Long contactId = null;
 	Long workflowId = null;
@@ -54,6 +57,7 @@ public class EmailTrackingTriggerUtil
 	    return;
 	}
 
+	// If not Campaigns, trigger immediately
 	if (!trigger.email_tracking_type.equals("CAMPAIGNS"))
 	{
 	    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
@@ -102,6 +106,7 @@ public class EmailTrackingTriggerUtil
 	    return;
 	}
 
+	// Verify Link URLs contains
 	if (!StringUtils.contains(linkClicked, trigger.custom_link_clicked))
 	{
 	    System.err.println("Link clicked didn't contains trigger url...");

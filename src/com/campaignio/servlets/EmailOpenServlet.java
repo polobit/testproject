@@ -100,12 +100,8 @@ public class EmailOpenServlet extends HttpServlet
 	    }
 	    else
 	    {
-		addLogAndShowNotification(trackerId, campaignId);
-
-		System.out.println("Triggering from email open....");
-
-		// Trigger Email Open for only within App emails
-		EmailTrackingTriggerUtil.executeEmailOpenTrigger(trackerId, campaignId);
+		// Shows notification, adds log & Trigger campaign
+		executePostEmailOpenActions(trackerId, campaignId);
 	    }
 
 	}
@@ -207,7 +203,7 @@ public class EmailOpenServlet extends HttpServlet
      * @param campaignId
      *            - Campaign Id.
      */
-    private void addLogAndShowNotification(String trackerId, String campaignId)
+    private void executePostEmailOpenActions(String trackerId, String campaignId)
     {
 
 	// Personal Emails
@@ -224,6 +220,9 @@ public class EmailOpenServlet extends HttpServlet
 
 		// Shows notification for simple emails.
 		showEmailOpenedNotification(ContactUtil.getContact(contactEmail.contact_id), null, contactEmail.subject);
+
+		// Trigger Email Open for personal emails
+		EmailTrackingTriggerUtil.executeEmailOpenTrigger(contactEmail.contact_id.toString(), null);
 	    }
 	}
 
@@ -239,6 +238,10 @@ public class EmailOpenServlet extends HttpServlet
 
 		// Shows notification for campaign-emails
 		showEmailOpenedNotification(ContactUtil.getContact(Long.parseLong(trackerId)), workflow.name, null);
+
+		// Trigger Email Open for campaign emails
+		EmailTrackingTriggerUtil.executeEmailOpenTrigger(trackerId, campaignId);
+
 	    }
 
 	}
