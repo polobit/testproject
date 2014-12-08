@@ -23,6 +23,7 @@ import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.EmailTrackingTriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log.LogType;
@@ -222,7 +223,8 @@ public class EmailOpenServlet extends HttpServlet
 		showEmailOpenedNotification(ContactUtil.getContact(contactEmail.contact_id), null, contactEmail.subject);
 
 		// Trigger Email Open for personal emails
-		EmailTrackingTriggerUtil.executeEmailOpenTrigger(contactEmail.contact_id.toString(), null);
+		EmailTrackingTriggerUtil.executeTrigger(contactEmail.contact_id.toString(), null, null,
+		        Trigger.Type.EMAIL_OPENED);
 	    }
 	}
 
@@ -240,7 +242,7 @@ public class EmailOpenServlet extends HttpServlet
 		showEmailOpenedNotification(ContactUtil.getContact(Long.parseLong(trackerId)), workflow.name, null);
 
 		// Trigger Email Open for campaign emails
-		EmailTrackingTriggerUtil.executeEmailOpenTrigger(trackerId, campaignId);
+		EmailTrackingTriggerUtil.executeTrigger(trackerId, campaignId, null, Trigger.Type.EMAIL_OPENED);
 
 	    }
 

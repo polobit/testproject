@@ -17,29 +17,6 @@ import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 public class EmailTrackingTriggerUtil
 {
 
-    public static void executeEmailOpenTrigger(String subscriberId, String campaignId)
-    {
-	List<Trigger> triggers = TriggerUtil.getTriggersByCondition(Trigger.Type.EMAIL_OPENED);
-
-	if (triggers == null || triggers.size() == 0)
-	{
-	    System.out.println("There are no email open triggers...");
-	    return;
-	}
-
-	Long contactId = null;
-	Long workflowId = null;
-
-	if (!StringUtils.isBlank(subscriberId))
-	    contactId = Long.parseLong(subscriberId);
-
-	if (!StringUtils.isBlank(campaignId))
-	    workflowId = Long.parseLong(campaignId);
-
-	for (Trigger trigger : triggers)
-	    executeEmailOpenTrigger(trigger, contactId, workflowId);
-    }
-
     public static void executeEmailOpenTrigger(Trigger trigger, Long contactId, Long workflowId)
     {
 	if (trigger == null)
@@ -57,22 +34,12 @@ public class EmailTrackingTriggerUtil
 	    return;
 	}
 
-	// If not Campaigns, trigger immediately
-	if (!trigger.email_tracking_type.equals("CAMPAIGNS"))
-	{
-	    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
-	    return;
-	}
-
-	// Trigger only if email opened belongs to Given Campaign
-	if (!trigger.email_tracking_campaign_id.equals(trigger.campaign_id)
-	        && trigger.email_tracking_campaign_id.equals(workflowId))
-	    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
+	executeCampaign(trigger, workflowId, contact);
     }
 
-    public static void executeLinkClickedTrigger(String subscriberId, String campaignId, String linkClicked)
+    public static void executeTrigger(String subscriberId, String campaignId, String linkClicked, Type type)
     {
-	List<Trigger> triggers = TriggerUtil.getTriggersByCondition(Trigger.Type.EMAIL_LINK_CLICKED);
+	List<Trigger> triggers = TriggerUtil.getTriggersByCondition(type);
 
 	Long contactId = null;
 	Long workflowId = null;
@@ -84,7 +51,13 @@ public class EmailTrackingTriggerUtil
 	    workflowId = Long.parseLong(campaignId);
 
 	for (Trigger trigger : triggers)
-	    executeLinkClickedTrigger(trigger, contactId, workflowId, linkClicked);
+	{
+	    if (type.equals(Type.EMAIL_OPENED))
+		executeEmailOpenTrigger(trigger, contactId, workflowId);
+
+	    else
+		executeLinkClickedTrigger(trigger, contactId, workflowId, linkClicked);
+	}
     }
 
     public static void executeLinkClickedTrigger(Trigger trigger, Long subscriberId, Long campaignId, String linkClicked)
@@ -107,21 +80,42 @@ public class EmailTrackingTriggerUtil
 	}
 
 	// Verify Link URLs contains
-	if (!StringUtils.contains(linkClicked, trigger.custom_link_clicked))
+	if (StringUtils.isBlank(linkClicked) || StringUtils.isBlank(trigger.custom_link_clicked)
+	        || !StringUtils.contains(linkClicked, trigger.custom_link_clicked))
 	{
 	    System.err.println("Link clicked didn't contains trigger url...");
 	    return;
 	}
 
-	if (!trigger.email_tracking_type.equals("CAMPAIGNS"))
+	// Execute campaign
+	executeCampaign(trigger, campaignId, contact);
+
+    }
+
+    /**
+     * @param trigger
+     * @param workflowId
+     * @param contact
+     */
+    private static void executeCampaign(Trigger trigger, Long workflowId, Contact contact)
+    {
+	// If ANY trigger campaign
+	if (trigger.email_tracking_type.equals("ANY"))
 	{
 	    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
 	    return;
 	}
 
-	if (!trigger.email_tracking_campaign_id.equals(trigger.campaign_id)
-	        && trigger.email_tracking_campaign_id.equals(campaignId))
+	// For personal emails, workflowId is null
+	if (trigger.email_tracking_type.equals("PERSONAL") && workflowId == null)
+	{
 	    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
+	    return;
+	}
 
+	// Trigger only if email opened belongs to Given Campaign
+	if (trigger.email_tracking_type.equals("CAMPAIGNS") && trigger.email_tracking_campaign_id.equals(workflowId)
+	        && !trigger.email_tracking_campaign_id.equals(trigger.campaign_id))
+	    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
     }
 }
