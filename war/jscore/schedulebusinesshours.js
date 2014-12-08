@@ -18,13 +18,13 @@ $("#btnSerialize").die().live('click', function(e){
 	disable_save_button($(saveBtn));
 	
 	var json = serializeForm("scheduleform");
-	var meeting_durations = serializeForm("meeting_durations");
-	console.log(json);
+	var meeting_durations = formToJSON();
+	console.log(meeting_durations);
 	
 	 var business_hours=JSON.stringify(businessHoursManager.serialize());
 		
 		json['businesshours_prefs']=business_hours;
-		json['meeting_durations']=JSON.stringify(meeting_durations);
+		json['meeting_durations']=meeting_durations;
 		json['timezone']=$("#timezone").val();
 		console.log(business_hours);
 		
@@ -49,6 +49,19 @@ $("#btnSerialize").die().live('click', function(e){
 
 
 });
+
+/**
+ * meeting duration form will be serialized manually becoz to trim spaces
+ * @returns  serialized meeting duration form.
+ */
+
+function formToJSON() {
+    return JSON.stringify({
+        "15mins": $('#15mins').val().trim(),
+        "30mins": $('#30mins').val().trim(),
+        "60mins": $('#60mins').val().trim()
+        });
+}
 
 
 
