@@ -57,6 +57,15 @@ public class EventTriggerUtil
 
 	    String eventOwnerId = eventOwner == null ? null : eventOwner.id.toString();
 
+	    System.out.println("Event type is " + event.type + " trigger event type " + trigger.event_type);
+
+	    if (trigger.event_type.equals("WEB_APPOINTMENT"))
+	    {
+		// Return if not WebAppointment
+		if (!event.type.toString().equals(trigger.event_type))
+		    return;
+	    }
+
 	    if (trigger.event_owner_id.equals("ANY") || trigger.event_owner_id.equals(eventOwnerId))
 	    {
 		WorkflowSubscribeUtil.subscribeDeferred(contactsList, trigger.campaign_id,
