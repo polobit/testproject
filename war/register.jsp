@@ -287,7 +287,7 @@ $.validator.setDefaults({
 											<option value="pro">Pro</option>
 								 	 </select>
 								 	 </div>
-								 	 <div style="display:inline-block;width:180px"> <input
+								 	 <div style="display:inline-block;width:180px;margin-bottom:0px!important" class="form-group"> <input
 											class="input-xlarge field required form-control number" name="users_count"
 											type="text" min="1"
 											placeholder="Users" autocapitalize="off" autofocus>
@@ -312,7 +312,7 @@ $.validator.setDefaults({
 								<!--  <div style="display:inline-block;width:49%">-->
 										<span class="regpage-company-size"></span> <input
 											class="input-xlarge field required form-control"
-											id="login_phone_number" name='phone_number' type="text" min=2
+											id="login_phone_number" name='phone_number' type="text"
 											placeholder="Phone Number" autocapitalize="off">
 											</div>
 									
@@ -422,7 +422,7 @@ $.validator.setDefaults({
 				 submitHandler: function(form) {
 					 if(isValid())
 						{
-						 $(".regpage-container").css("height", "527px");
+						 $(".regpage-container").addClass('regpage-container-fixed-height');
 						 var domain = $("#subdomain").val();
 						 var email = $("#login_email").val();
 						
@@ -480,7 +480,7 @@ $.validator.setDefaults({
 			// Return if action is already in process 
 			if($("#register_account").attr("disabled"))
 				return;
-			 $(".regpage-container").css("height", "auto");
+			 $(".regpage-container").removeClass('regpage-container-fixed-height');
 			 
 		    $("#agile").validate();
 		  //  $("#choose_domain").validate();
@@ -495,10 +495,11 @@ $.validator.setDefaults({
 				 console.log(data);
 				  console.log(data.error)
 				  
-				  
+				  $(".regpage-container").addClass('regpage-container-fixed-height');
 				 if(data && data.error && data.error.length > 0)
 					{
 					
+					 $(".regpage-container").removeClass('regpage-container-fixed-height');
 					 console.log(data.error);
 					
 					// If error block is removed, it is added again into DOM 

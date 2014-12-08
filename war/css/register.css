@@ -197,3 +197,8 @@ vertical-align: bottom;
 {
 	height : 50px
 }
+
+.regpage-container-fixed-height
+{
+	height : 572px;
+}
