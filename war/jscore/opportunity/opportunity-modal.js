@@ -194,6 +194,54 @@ $(function(){
 			$("#milestone", el).closest('div').find('.loading-img').hide();
 		});
 	});
+	
+	$("#opportunity_archive").die().live('click',function(e){
+		e.preventDefault();
+		$('#archived',$('#opportunityUpdateForm')).attr('checked','checked');
+		$("#opportunity_validate").trigger('click');
+	});
+	
+	/**
+	 * Milestone view deal delete
+	 */
+	$('.deal-archive').live('click', function(e) {
+		e.preventDefault();
+        if(!confirm("Are you sure you want to archive?"))
+			return;
+
+        var id = $(this).closest('.data').attr('id');
+        var milestone = ($(this).closest('ul').attr("milestone")).trim();
+        var currentDeal;
+        
+        // Get the current deal model from the collection.
+        var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
+    	if(!dealPipelineModel)
+    		return;
+    	currentDeal = dealPipelineModel[0].get('dealCollection').get(id).toJSON();
+    	currentDeal.archived = true;
+        var that = this;
+		$.ajax({
+			url: 'core/api/opportunity',
+			contentType:'application/json',
+			type: 'PUT',
+			data: JSON.stringify(currentDeal),
+			success: function(deal) {
+				// Remove the deal from the collection and remove the UI element.
+				if(removeArchive(deal))
+				dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
+				
+				// Removes deal from list
+				$(that).closest('li').css("display","none");
+				
+				// Shows Milestones Pie
+				pieMilestones();
+	
+				// Shows deals chart
+				dealsLineChart();
+			}
+		});
+	});
+	
 });
 
 /**
@@ -216,7 +264,9 @@ function updateDeal(ele, editFromMilestoneView)
 	
 	$("#opportunityUpdateModal").modal('show');
 	
-	
+	// Hide archive button, if the is already archived.
+	if(value.archived)
+		$('#opportunity_archive').hide();
 	
 	// Call setupTypeAhead to get contacts
 	agile_type_ahead("relates_to", dealForm, contacts_typeahead);

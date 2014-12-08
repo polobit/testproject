@@ -93,6 +93,9 @@
 	</div>
 <div class="pull-right">
 <span class="right deal-options" style="visibility:hidden;">
+			{{#if_equals archived false}}
+			<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>
+			{{/if_equals}}
 			<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>
             <a title="Delete" class="deal-delete" style="cursor:pointer;text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a>
         </span>

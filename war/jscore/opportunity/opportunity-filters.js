@@ -58,6 +58,7 @@ $(function () {
 		$('#dealsFilterForm select.filter_type').val('equals');
 		$('#filter_options .between').hide();
 		$('#filter_options .equals').show();
+		$('#dealsFilterForm #archived').val('false');
 		$('#filter_options').find('.control-group').each(function(index){
 			if($(this).find('.controls').height()>0)
 				$(this).find('a.changeIcon').trigger('click');
