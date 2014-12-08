@@ -77,8 +77,6 @@ public class QueryDocument<T> implements QueryInterface
 	// Normalizes the string. Removes spaces from the string as space are
 	// excluded while saving in documents
     	keyword = SearchUtil.normalizeString(keyword);
-    	if(!keyword.isEmpty() && keyword.charAt(0) == '-')
-    		keyword = keyword.replace("-", "");
     	try
     	{
     		keyword = URLEncoder.encode(keyword, "UTF-8");
@@ -114,8 +112,6 @@ public class QueryDocument<T> implements QueryInterface
     public Collection<T> simpleSearchWithType(String keyword, Integer count, String cursor, String type)
     {
     	keyword = SearchUtil.normalizeString(keyword);
-    	if(!keyword.isEmpty() && keyword.charAt(0) == '-')
-    		keyword = keyword.replace("-", "");
     	try
     	{
     		keyword = URLEncoder.encode(keyword, "UTF-8");
