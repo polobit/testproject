@@ -301,7 +301,6 @@ function appendCustomfields(el){
 			 $(el).find('#opportunities-model-list tr').each(function(index,element){
 				 var row = '';
 				 $.each(customfields, function(i,customfield){
-						console.log(customfield);
 						 row += '<td class="deal_custom_replace"><div style="width:6em;text-overflow:ellipsis;">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
 					});
 				 $(this).append(row);
@@ -318,7 +317,6 @@ function appendCustomfields(el){
  * @returns {String} value of the custom field.
  */
 function dealCustomFieldValue(name, data){
-	console.log(data);
 	var value = '';
 	$.each(data,function(index, field){
 		if(field.name == name){

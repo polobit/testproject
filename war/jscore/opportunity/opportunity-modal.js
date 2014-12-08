@@ -551,6 +551,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 					if (isUpdate)
 						 App_Deals.opportunityCollectionView.collection.remove(json);
 					
+						data.attributes.cursor = App_Deals.opportunityCollectionView.collection.last().toJSON().cursor;
 						App_Deals.opportunityCollectionView.collection.add(data);
 						App_Deals.opportunityCollectionView.render(true);
 				}
