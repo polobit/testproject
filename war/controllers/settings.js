@@ -33,6 +33,9 @@ var SettingsRouter = Backbone.Router.extend({
 			/* Notifications */
 			"notification-prefs" : "notificationPrefs",
 			
+			/* scheduling */
+			"scheduler-prefs" : "scheduler",
+			
 			/* support page */
 			"help" : "support",
 			
