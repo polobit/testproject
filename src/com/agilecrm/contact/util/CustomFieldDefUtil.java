@@ -167,10 +167,10 @@ public class CustomFieldDefUtil
     	List<CustomFieldDef> scopesList=new ArrayList<CustomFieldDef>();
     	List<SCOPE> scList=new ArrayList<SCOPE>();
     	try {
-    		scList.add(SCOPE.CASE);
-    		scList.add(SCOPE.DEAL);
-    		scList.add(SCOPE.COMPANY);
     		scList.add(SCOPE.CONTACT);
+    		scList.add(SCOPE.COMPANY);
+    		scList.add(SCOPE.DEAL);
+    		scList.add(SCOPE.CASE);
     		for(SCOPE sc : scList){
     			CustomFieldDef cfd = new CustomFieldDef();
 				cfd.scope=sc;
