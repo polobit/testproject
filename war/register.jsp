@@ -92,14 +92,7 @@ label {
 	opacity: 0.5;
 }
 
-.carousel-inner>.item {
-	position: relative; //
-	display: none;
-	-webkit-transition: 0.3s ease-in-out left;
-	-moz-transition: 0.3s ease-in-out left;
-	-o-transition: 0.3s ease-in-out left;
-	transition: 0.3s ease-in-out left;
-}
+
 </style>
 
 
@@ -189,7 +182,7 @@ $.validator.setDefaults({
 
 				<form name='agile' id="agile" method='post'
 					onsubmit="return isValid();" style="min-height:572px">
-					<div id="cor">
+					<div id="cor" class="carousel slide" data-ride="carousel">
 					<div class="carousel-inner" >
 						<div class="item active">
 							<div align="center">
