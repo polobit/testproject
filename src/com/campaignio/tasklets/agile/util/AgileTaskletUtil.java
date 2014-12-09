@@ -278,14 +278,11 @@ public class AgileTaskletUtil
 				owner.put("id", domainUser.id);
 				owner.put("name", domainUser.name);
 				owner.put("email", domainUser.email);
+				owner.put("calendar_url", MergeFieldsUtil.addCalendarMergeField(domainUser, subscriberJSON));
 			}
 
 			// Inserts contact owner-name and owner-email.
 			subscriberJSON.put("owner", owner);
-
-			// add calender url
-			if (domainUser != null)
-				subscriberJSON.put("calender_url", MergeFieldsUtil.addCalendarMergeField(domainUser, subscriberJSON));
 
 			// Score
 			subscriberJSON.put("score", contact.lead_score);
