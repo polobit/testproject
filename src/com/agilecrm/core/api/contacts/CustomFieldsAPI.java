@@ -73,8 +73,11 @@ public class CustomFieldsAPI
 	{
 	    if (scope == null)
 		CustomFieldDefUtil.getAllCustomFields();
-
-	    return CustomFieldDefUtil.getAllCustomFields(SCOPE.valueOf(scope));
+	    
+	    //Sorting order is added for custom fields so getting them in 
+	    //order this line is commented and below added new line
+	    //return CustomFieldDefUtil.getAllCustomFields(SCOPE.valueOf(scope));
+	    return CustomFieldDefUtil.getCustomFieldsByScopeAndPosition(SCOPE.valueOf(scope));
 	}
 	catch (Exception e)
 	{
@@ -290,4 +293,66 @@ public class CustomFieldsAPI
 	JSONArray CustomFieldsJSONArray = new JSONArray(model_ids);
 	CustomFieldDef.dao.deleteBulkByIds(CustomFieldsJSONArray);
     }
+    /**
+     * Gets all scopes of custom fields
+     * 
+     * @return List of custom fields
+     */
+    @Path("/allScopes")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<CustomFieldDef> getAllScopesOfCustomFields(){
+    	try{
+    		return CustomFieldDefUtil.getAllScopesOfCustomFields();
+    	} catch (Exception e){
+    		e.printStackTrace();
+    		return null;
+    	}
+    }
+    /**
+     * Gets all custom fields by scope type and order by position
+     * 
+     * @return List of custom fields
+     */
+    @Path("/scope/position")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<CustomFieldDef> getCustomFieldsByScopeAndPosition(@QueryParam("scope") String scope){
+    	try{
+    		if(scope!=null)
+    			return CustomFieldDefUtil.getCustomFieldsByScopeAndPosition(SCOPE.valueOf(scope));
+    		else
+    			return null;
+    	}
+    	catch (Exception e){
+    		e.printStackTrace();
+    		return null;
+    	}
+    }
+    /**
+	 * Saves position of custom fields, used to show custom fields in ascending order 
+	 * according to position
+	 * 
+	 * @param customfields
+	 *             {@link List} of {@link CustomFieldDef}
+	 */
+	@Path("positions")
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public void savePortletPositions(List<CustomFieldDef> customfields){
+		try {
+			if (customfields == null)
+				return;
+
+			// UI sends only ID and Position
+			for (CustomFieldDef cfd : customfields){
+				CustomFieldDef customFieldDef = CustomFieldDefUtil.getCustomField(cfd.id);
+				customFieldDef.position = cfd.position;
+				customFieldDef.save();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
