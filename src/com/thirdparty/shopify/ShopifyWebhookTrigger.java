@@ -126,6 +126,7 @@ public class ShopifyWebhookTrigger extends HttpServlet
 			System.out.println("Saving note ...");
 			note.addRelatedContacts(contact.id.toString());
 			note.setOwner(new Key<AgileUser>(AgileUser.class, owner.getId()));
+			note.created_time = System.currentTimeMillis() / 1000;
 			note.save();
 			System.out.println("Saving note ...");
 		    }
