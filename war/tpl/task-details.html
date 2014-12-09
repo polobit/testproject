@@ -37,8 +37,22 @@
 
 
 </div>
-<div class="span2 offset1">{{displayPlainText status}}</div> 
- <div class="span3">Due: {{epochToHumanDate "dd mmm yyyy" due}}</div> 
+<div class="span5">
+<span class="span2">{{displayPlainText status}}</span> 
+ <span class="span3">Due: {{epochToHumanDate "dd mmm yyyy" due}}</span>
+{{#if_equals "IN_PROGRESS" status}} 
+<br/>
+<div style="margin-top:12px;">
+<div  style="width:39%;height:8px;margin-bottom: 1px !important;margin-top: 2px !important;" class="progress progress-info">
+          <div class="bar" style="width: {{progress}}%;"></div>
+     </div>
+<span style="margin-left: 75px;">{{progress}}%</span>
+</div>
+{{/if_equals}} 
+</div>
+
+
+
 <div class="pull-right">
 <div class="change-owner-succes"></div>
   <span title="Owner">
@@ -62,16 +76,7 @@
     </span>
 </div>
 </div> 
-{{#if_equals "IN_PROGRESS" status}} 
-<div class="row-fluid">
-<div class="span4 offset3">
-<div  style="width:81%;height:8px;" class="progress progress-info">
-          <div class="bar" style="width: {{progress}}%;"></div>
-     </div>
-<center style="margin-top: -15px;"><span>{{progress}}%</span></center>
-</div>
-</div>
-{{/if_equals}}
+
 
  <!-----------------ending of task status------------------------>
 
