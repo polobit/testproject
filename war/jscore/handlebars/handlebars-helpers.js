@@ -1650,6 +1650,16 @@ $(function()
 								return ucfirst(value).replaceAll("_", " ");
 
 				});
+				
+				/**
+				 * Returns plain text removes underscore from text
+				 */
+				Handlebars.registerHelper('displayPlainText', function(value)
+				{
+
+								return ucfirst(value).replace("_", " ");
+
+				});
 
 				Handlebars.registerHelper('getCurrentContactProperty', function(value)
 				{

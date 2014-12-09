@@ -391,9 +391,12 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 				App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)].render(true);
 
 			} else {
-				App_Calendar.navigate("calendar", {
-					trigger : true
-				});
+							App_Calendar.allTasksListView.collection.remove(data.toJSON());
+ 				  App_Calendar.allTasksListView.collection.add(data.toJSON());	  				
+			    App_Calendar.allTasksListView.render(true);	
+							$("#content").html(getTemplate("task-detail", data.toJSON()));
+			    task_details_tab.loadActivitiesView();
+	
 			}
 		}
 	});

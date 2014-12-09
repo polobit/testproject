@@ -1,78 +1,299 @@
 <script id="task-detail-template" type="text/html">
-<div class="row">
-<div class="span12">
-		<div style="margin-bottom:20px;margin-top:25px;">
-			<div class="row-fluid" style="border-bottom: 1px solid #ddd;padding-bottom: 25px;">
-                 <div class="span10"> 
-                    <h2>{{subject}}</h2>
-                    <div>{{type}}  &nbsp; <span>{{status}}</span></div>
-                  </div>
+<div class="row-fluid" style="border-bottom: 1px solid #ddd; padding-bottom: 40px; margin-bottom: 20px; margin-top:25px;">
+       <div class="span12">
+			<div class="row-fluid">
+                 <span class="pull-left taskDetail-text"> 
+                    <h2 style="text-transform: capitalize;">{{subject}}</h2>
+                  </span>
+
                   
-                   <div class="span2">
-						<div class="pull-right" style="width:100%;position:relative;">
-         <div><span class="navigation  contact-switching"><a style="float:right;" href="#task/{{id}}" class=""><i class="icon icon-chevron-right"></i></a></span></div>
-         <div class="clearfix"></div>
-						<!--  starting rating,edit,owner -->
-						<div>
-							<div class="btn-group right">
-								<a class="btn" href="#contact-edit"><i class="icon-edit"></i> Edit</a>
-							</div>
-						</div>
-						<!--  ending rating,edit,owner -->
-						
-						<!-- Owner block -->
-				<div class="clearfix"></div>
-					<div  class="contact-owner-position">
-						<div class="change-owner-succes"></div>
-     <span title="Owner" class="contact-owner-view">
+                    {{#if_not_equals priority_type "NORMAL" }}
+                   <span class="label label-{{task_label_color priority_type}}" style="margin-top: 11px;display: inline-block;margin-left: 20px">{{ucfirst priority_type}}</span>
+                         {{/if_not_equals}}
+					 <span class="label" style="margin-top: 11px;display: inline-block;margin-left: 10px">{{task_property type}}</span>
+                 	<!--  starting rating,edit,owner -->
+					<div class="pull-right" data="{{id}}" id="task_edit">
+					   <a class="btn" href="javascript:void(0)" ><i class="icon-edit"></i> Edit</a>
+					 </div>
+                 </div>
+            <!---------- end of row ------------>
+
+
+  <!--------- task status ---------------->
+
+<div class="row-fluid">
+<div class="span2">
+<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:104px;overflow:hidden;display:inline-block;">
+        	{{#each contacts}}
+        		{{#if_contact_type "PERSON"}}
+        			<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        		{{/if_contact_type}}
+				{{#if_contact_type "COMPANY"}}
+        			<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        		{{/if_contact_type}}
+        	{{/each}}
+		</div>
+       {{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
+
+
+</div>
+<div class="span2 offset1">{{displayPlainText status}}</div> 
+ <div class="span3">Due: {{epochToHumanDate "dd mmm yyyy" due}}</div> 
+<div class="pull-right">
+<div class="change-owner-succes"></div>
+  <span title="Owner">
       	<span class="contact-owner" id="change-owner-element">
         	<span class="contact-owner-text">Owner:&nbsp;&nbsp;</span>
-			{{#if owner}}
+			{{#if taskOwner}}
         	<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
 			{{else}}
-			<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add" style="font-size:13px;"><a style="cursor:pointer;">Assign Owner</a></span>
+			<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
+            <span class="task-owner-add" style="font-size:13px;"><a style="cursor:pointer;">Assign Owner</a></span>
  			{{/if}}
-        	<span id="contact-owner" data={{owner.id}} class="contact-owner-name">{{owner.name}}</span>
+        	<span id="task-owner" data={{taskOwner.id}} class="task-owner-name contact-owner-name">{{taskOwner.name}}</span>
         
-        	{{#canEditContact owner.id}}
-        	<div class="btn-group" id="change-owner-ul" style="vertical-align: middle; display: none">
+        	{{#canEditContact taskOwner.id}}
+        	<div class="btn-group" id="change-task-owner-ul" style="vertical-align: middle; display: none">
         		 <a class="btn dropdown-toggle" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
-        		 <ul id='contact-detail-owner' class="dropdown-menu pull-right"></ul>
+        		 <ul id='task-detail-owner' class="dropdown-menu pull-right"></ul>
         	</div> 
 			{{/canEditContact}}
        </span>
     </span>
-					</div>
-					</div>
-					<!--  ending owner block -->
-						
-						
+</div>
+</div> 
+{{#if_equals "IN_PROGRESS" status}} 
+<div class="row-fluid">
+<div class="span4 offset3">
+<div  style="width:81%;height:8px;" class="progress progress-info">
+          <div class="bar" style="width: {{progress}}%;"></div>
+     </div>
+<center style="margin-top: -15px;"><span>{{progress}}%</span></center>
+</div>
+</div>
+{{/if_equals}}
+
+ <!-----------------ending of task status------------------------>
+
+
+
+
+           </div>
 </div>
 
-
-                      
-	           </div>
-</div>
-
-
-		<div class="row">
+		<div class="row-fluid">
 		<!--  starting time line view -->
        <!-- ending of tabs --->
 		<div class="span9">
 			<ul class="nav nav-tabs" id="taskDetailsTab">
-				<li class="active"><a data-toggle="tab" href="#time">Timeline</a></li>
-				<li class=""><a data-toggle="tab" href="#notes">Notes</a></li>
-				<li class=""><a data-toggle="tab" href="#contacts">Related To</a></li>
+                <li  class="active"><a data-toggle="tab" href="#activity">Activity</a></li>
+				<li><a data-toggle="tab" href="#contacts">Related</a></li>
+				<li><a data-toggle="tab" href="#notes">Notes</a></li>
 			</ul>
            
-			<div class="tab-content">
-				<div class="tab-pane active" id="time"><p>time line</p></div>
-				<div class="tab-pane" id="notes"></div>
-				<div class="tab-pane" id="contacts"><img src="img/21-0.gif"></img></div>
+			<div class="tab-content" id="task_tab_detail">
+                <div class="tab-pane active" id="activity"><img src="img/21-0.gif"></img></div>
+				<div class="tab-pane " id="contacts"><img src="img/21-0.gif"></img></div>
+				<div class="tab-pane" id="notes"><img src="img/21-0.gif"></img></div>
 			</div>
        </div>
     <!-- ending of tabs --->
 		</div>
 	<!--  ending timeline view -->
 
-						</script>
+	</script>
+
+<script id="task-related-collection-template" type="text/html">
+{{#if this.length}}
+	<div style='height:30px'>
+		<a href="#" class="task-add-contact btn right" style="position:relative;margin-bottom:10px;">
+			<span><i class="icon-plus-sign"></i></span> Add Contact
+		</a>
+	</div>
+	<br/>
+			<table  class="table table-striped agile-ellipsis-dynamic onlySorting" style="overflow: scroll; border-radius: 5px; -webkit-border-radius: 5px; margin-bottom:0px; border: 1px solid #dddddd; border-collapse: separate;">
+				<colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup>
+				<thead>
+					<tr><th></th>
+						<th>Name</th>
+						<th>Work</th>
+						<th>Tags</th>
+						<th>Lead Score</th>
+					</tr>
+				</thead>
+				<tbody id="task-related-model-list" class="task-related-model-list agile-edit-row"
+					route="contact/" style="overflow: scroll;">
+				</tbody>
+			</table>
+
+		{{else}}
+			<div class="slate">
+            	<div class="slate-content">
+                	<div class="box-left">
+                    	<img alt="Clipboard" src="/img/clipboard.png">
+                	</div>
+                	<div class="box-right">
+                    	<h3>Task is not associated with any person/contact. </h3>
+                    	<div class="text">
+							All Contacts which are related to this task are shown here.
+							<br/>
+							<a href="#" class="task-add-contact btn left" style="margin-top:10px; margin-bottom:10px;">
+								<i class="icon-plus-sign"></i> Add Contact
+							</a>
+                    	</div>
+                	</div>
+            	</div>
+        	</div>
+		{{/if}}
+</script>
+
+<script id="task-related-model-template" type="text/html">
+	<td></td>
+	<td class="data" data="{{id}}" style="white-space:nowrap;">
+    	<div style="display:inline;padding-right:10px;height:auto;">
+        		<img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
+    	</div>
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
+        		<b>	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </b>
+        		<br />
+        		{{getPropertyValue properties "email"}}
+    	</div>
+	</td>
+	<td><div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;width:8em;overflow:hidden;">{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}</div>
+	</td>
+	<td> 
+<div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;">
+	{{#each tags}}
+    	<span class="label">{{this}}</span>
+    {{/each}}
+</div>
+	</td>
+	<td style="width:6em;"><div>{{lead_score}}</div></td>
+</script>
+
+
+
+
+<script id="task-related-activity-collection-template" type="text/html">
+{{#if this.length}}
+			<table  class="table table-striped agile-ellipsis-dynamic onlySorting" style="overflow: scroll; border-radius: 5px; -webkit-border-radius: 5px; margin-bottom:0px; border: 1px solid #dddddd; border-collapse: separate;">
+				<colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup>
+				<thead>
+					<tr><th></th>
+                      <th>Activity Type</th>
+						<th>Field Modified</th>
+						<th>Modified By</th>
+                        <th>Time</th>
+					</tr>
+				</thead>
+				<tbody id="task-related-activity-model-list"		
+				</tbody>
+			</table>
+
+		{{else}}
+			<div class="slate">
+            	<div class="slate-content">
+                	<div class="box-left">
+                    	<img alt="Clipboard" src="/img/clipboard.png">
+                	</div>
+                	<div class="box-right">
+                    	<h3>No Activity. </h3>
+                    	<div class="text">
+							No Activity found.
+                    	</div>
+                	</div>
+            	</div>
+        	</div>
+		{{/if}}
+</script>
+
+<script id="task-related-activity-model-template" type="text/html">
+<td></td>
+<td>{{activity_type}}</td>
+<td>{{removeSquareBrackets custom3}}</td>
+<td>
+<div style="display:inline;padding-right:10px;height:auto;">
+        		<img class="thumbnail img-inital"  src="{{userPic}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
+   </div>
+</td>
+<td><time  datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "dd mmm yyyy" time}}</time></td>
+</script>
+
+
+<!-- New (Note) Modal views -->
+<div class="modal hide fade tasknoteupdatemodal" id="tasknoteupdatemodal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3><i class="icon-plus-sign"></i>&nbsp;Edit Note</h3>
+    </div>
+    <div class="modal-body">
+        <form id="tasknoteUpdateForm" name="tasknoteUpdateForm" method="post">
+            <fieldset>
+              
+                 <input name="id" id="id" type="hidden" value="{{id}}" />
+                 <input name="created_time" id="created_time" type="hidden" value="{{created_time}}" />
+                	            
+                <div class="control-group">
+                    <label class="control-label"><b>Subject</b> <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <input type="text" placeholder="About" name="subject" id="subject" class="required" />
+                    </div>
+                </div>
+                <div class="row-fluid">
+	                <div class="control-group">
+	                    <label class="control-label"><b>Description</b></label>
+	                    <div class="controls">
+	                        <textarea rows="3" class="span8" placeholder="Detailed Note" name="description" id="description" style="max-width:400px;"></textarea> 
+	                    </div>
+	                </div>
+                </div>
+           
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary" id="task_note_update">Save
+        </a>
+        <span class="save-status"></span>
+    </div>
+</div>
+<!-- End of Modal views -->
+
+
+<!-- New (Note) Modal views -->
+<div class="modal hide fade task-note-modal" id="new-task-modal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3><i class="icon-plus-sign"></i>&nbsp;Add Note</h3>
+    </div>
+    <div class="modal-body">
+        <form id="tasknoteForm" name="tasknoteForm" method="post">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label"><b>Subject</b> <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <input type="text" placeholder="About" name="subject" id="subject" class="required" />
+                    </div>
+                </div>
+                <div class="row-fluid">
+	                <div class="control-group">
+	                    <label class="control-label"><b>Description</b></label>
+	                    <div class="controls">
+	                        <textarea rows="3" class="span8" placeholder="Detailed Note" name="description" id="description" style="max-width:400px;"></textarea> 
+	                    </div>
+	                </div>
+                </div>
+           
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary" id="tasknote_validate">Save
+        </a>
+        <span class="save-status"></span>
+    </div>
+</div>
+<!-- End of Modal views -->
+

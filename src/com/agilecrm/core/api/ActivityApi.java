@@ -41,6 +41,23 @@ public class ActivityApi
 	return ActivityUtil.getActivitites(entitytype, userid, Integer.parseInt(count), cursor);
     }
 
+    /**
+     * 
+     * @param cursor
+     * @param max
+     * @return
+     */
+
+    @Path("/getActivityByType")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Activity> getActivities(@QueryParam("entity_type") String entitytype,
+	    @QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
+    {
+
+	return ActivityUtil.getActivitites(entitytype, Integer.parseInt(count), cursor);
+    }
+
     // fetches current user activities
 
     @Path("/getActivitiesofcurrentdomainuser")

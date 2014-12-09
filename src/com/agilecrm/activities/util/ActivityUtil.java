@@ -349,7 +349,7 @@ public class ActivityUtil
 			obj.put("contactid", contactids.get(i));
 			obj.put("contactname", contactnames.get(i));
 			System.out.println("ContactIds  " + contactids.get(i) + "contact names   "
-			        + contactnames.get(i));
+				+ contactnames.get(i));
 			arr.put(obj);
 
 			obj = new JSONObject();
@@ -565,6 +565,17 @@ public class ActivityUtil
 	    searchMap.put("activity_type", entitytype);
 	if (userid != null)
 	    searchMap.put("user", new Key<DomainUser>(DomainUser.class, userid));
+
+	if (max != 0)
+	    return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
+
+	return dao.listByProperty(searchMap);
+    }
+
+    public static List<Activity> getActivitites(String entitytype, int max, String cursor)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("entity_type", entitytype);
 
 	if (max != 0)
 	    return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
@@ -1279,6 +1290,59 @@ public class ActivityUtil
 	return list;
     }
 
+    public static void createLogForCalls(String serviceType, String toOrFromNumber, String callType, String callStatus,
+	    String callDuration)
+    {
+
+	// Search contact
+	if (toOrFromNumber != null)
+	{
+	    Contact contact = ContactUtil.searchContactByPhoneNumber(toOrFromNumber);
+	    System.out.println("contact: " + contact);
+	    if (contact != null)
+	    {
+		String calledToName = "";
+		List<ContactField> properties = contact.properties;
+		for (ContactField f : properties)
+		{
+		    System.out.println("\t" + f.name + " - " + f.value);
+		    if (f.name.equals(contact.FIRST_NAME))
+		    {
+			calledToName += f.value;
+		    }
+		    if (f.name.equals(contact.LAST_NAME))
+		    {
+			calledToName += " " + f.value;
+		    }
+		}
+
+		Activity activity = new Activity();
+		activity.activity_type = ActivityType.CALL;
+		activity.custom1 = serviceType;
+		activity.custom2 = callType;
+		activity.custom3 = callStatus;
+		activity.custom4 = callDuration;
+		activity.label = calledToName;
+		activity.entity_type = EntityType.CONTACT;
+		activity.entity_id = contact.id;
+		activity.save();
+	    }
+	    else
+	    {
+		Activity activity = new Activity();
+		activity.activity_type = ActivityType.CALL;
+		activity.custom1 = serviceType;
+		activity.custom2 = callType;
+		activity.custom3 = callStatus;
+		activity.custom4 = callDuration;
+		activity.label = toOrFromNumber;
+		activity.entity_type = null;
+		activity.entity_id = null;
+		activity.save();
+	    }
+	}
+    }
+
     /**
      * Gets list of activities based on entity id and min time and max time.
      * 
@@ -1293,7 +1357,8 @@ public class ActivityUtil
     public static List<Activity> getActivitiesByEntityId(Long entityId, long minTime, long maxTime)
     {
 	return dao.ofy().query(Activity.class).filter("entity_id", entityId).filter("time >= ", minTime)
-	        .filter("time <= ", maxTime).order("-time").list();
+
+	.filter("time <= ", maxTime).order("-time").list();
     }
 
     /**
@@ -1308,8 +1373,8 @@ public class ActivityUtil
 	    long maxTime)
     {
 	return dao.ofy().query(Activity.class).filter("activity_type", activityType)
-	        .filter("user", new Key<DomainUser>(DomainUser.class, ownerId)).filter("time >= ", minTime)
-	        .filter("time <= ", maxTime).list();
+		.filter("user", new Key<DomainUser>(DomainUser.class, ownerId)).filter("time >= ", minTime)
+		.filter("time <= ", maxTime).list();
     }
 
     /**
@@ -1372,6 +1437,7 @@ public class ActivityUtil
 		}
 	    }
 	}
+
     }
 
     /**
