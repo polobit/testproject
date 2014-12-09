@@ -283,7 +283,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	Query query = buildBasicQueryWithoutAccessKey();
 
-	query.setStringCustomParameter("access_token", "ya29.1QCZrAWpx0_YOQV7hp-sGoVtODDiFiBO_r3tpQLgZvNrVLtP7vaGbhfv");
+	query.setStringCustomParameter("access_token", prefs.apiKey);
 
 	return query;
     }
@@ -318,7 +318,6 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    nextLink = query.getUrl().toString();
 	    etagFromDB = etag;
 	}
-
 	return nextLink;
     }
     
@@ -329,22 +328,29 @@ public class GoogleSyncImpl extends TwoWaySyncService
      * @param entries
      *            the entries
      */
+    private String currentEtagInSync = null;
     private void saveContactsInAgile(List<ContactEntry> entries)
     {
 	Long created_at = 0l;
 
+	if(currentEtagInSync == null)
+	    currentEtagInSync = etagFromDB;
+	
 	for (ContactEntry entry : entries)
 	{
 	    etag = entry.getEtag();
-	    if (etagFromDB == null)
-		etagFromDB = etag;
-	    if (etagFromDB.equals(etag))
+	    
+	    if(currentEtagInSync == null)
+		 currentEtagInSync = etagFromDB = etag;
+	    
+	    if(!StringUtils.equals(etag, currentEtagInSync))
 	    {
-		index++;
+		index += 1;
+		currentEtagInSync = etag;
 	    }
 	    else
 	    {
-		index = 1;
+		index++;
 	    }
 
 	    Long new_created_at = entry.getUpdated().getValue();
