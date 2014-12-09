@@ -479,7 +479,7 @@ $.validator.setDefaults({
 		
 		function setSelectCssInSafari()
 		{
-			if(navigator.userAgent.indexOf("Chrome")==-1 && navigator.userAgent.indexOf("safari")!=-1)
+			if(navigator.userAgent.indexOf("Chrome")==-1 && navigator.userAgent.indexOf("Safari")!=-1)
 				{
 					$("select").addClass('safari-select');
 				}
