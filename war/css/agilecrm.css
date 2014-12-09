@@ -1818,6 +1818,7 @@ text-overflow:ellipsis;
 #activityReportsForm ul.ms-list{
 	height:150px;
 }
+
 .custom-fields-table tbody tr:hover td:nth-child(n+2) div {
 	display: block!important;
 }
@@ -1846,3 +1847,4 @@ text-overflow:ellipsis;
 {
 	margin-left:-4px;
 }
+

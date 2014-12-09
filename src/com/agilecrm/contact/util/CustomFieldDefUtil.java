@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.agilecrm.activities.Event;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.CustomFieldDef.Type;
@@ -161,6 +162,48 @@ public class CustomFieldDefUtil
 	}
 
 	return customFieldLabels;
+    }
+    public static  List<CustomFieldDef> getAllScopesOfCustomFields(){
+    	List<CustomFieldDef> scopesList=new ArrayList<CustomFieldDef>();
+    	List<SCOPE> scList=new ArrayList<SCOPE>();
+    	try {
+    		scList.add(SCOPE.CONTACT);
+    		scList.add(SCOPE.COMPANY);
+    		scList.add(SCOPE.DEAL);
+    		scList.add(SCOPE.CASE);
+    		for(SCOPE sc : scList){
+    			CustomFieldDef cfd = new CustomFieldDef();
+				cfd.scope=sc;
+				scopesList.add(cfd);
+    		}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return scopesList;
+    }
+    public static List<CustomFieldDef> getCustomFieldsByScopeAndPosition(SCOPE scope){
+    	List<CustomFieldDef> customFieldsList = new ArrayList<CustomFieldDef>();
+    	List<CustomFieldDef> customFieldsListWithoutPosition = new ArrayList<CustomFieldDef>();
+    	List<CustomFieldDef> customFieldsListWithPosition = new ArrayList<CustomFieldDef>();
+    	try {
+    		if(scope==SCOPE.PERSON)
+    			scope=SCOPE.CONTACT;
+    		//For new custom fields position column is existed in DB so get them with position order
+    		customFieldsListWithPosition = dao.ofy().query(CustomFieldDef.class).filter("scope", scope).order("position").list();
+    		
+    		//For old custom fields position column is not existed in DB so get them without position order
+    		customFieldsListWithoutPosition = dao.ofy().query(CustomFieldDef.class).filter("scope", scope).list();
+    		for(CustomFieldDef cfd : customFieldsListWithoutPosition){
+    			if(cfd.position==0)
+    				customFieldsList.add(cfd);
+    		}
+    		for(CustomFieldDef cfd : customFieldsListWithPosition){
+    			customFieldsList.add(cfd);
+    		}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return customFieldsList;
     }
 
 }
