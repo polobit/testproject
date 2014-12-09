@@ -21,6 +21,7 @@ public class MergeFieldsUtil
 			schedule_id = domainUser.name;
 		calendar_url += "/calendar/" + schedule_id;
 
+		System.out.println("calendar url is " + calendar_url + " and the domain is " + domainUser.domain);
 		return calendar_url;
 
 	}
