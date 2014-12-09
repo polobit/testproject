@@ -80,9 +80,13 @@ public class EmailTrackingTriggerUtil
 
 	System.out.println("Link Clicked " + linkClicked + " trigger custom url " + trigger.custom_link_clicked);
 
+	// Trim trailing spaces
+	linkClicked = StringUtils.trim(linkClicked);
+	String triggerCustomLink = StringUtils.trim(trigger.custom_link_clicked);
+
 	// Verify Link URLs contains
 	if (StringUtils.isBlank(linkClicked) || StringUtils.isBlank(trigger.custom_link_clicked)
-	        || !StringUtils.contains(linkClicked, trigger.custom_link_clicked))
+	        || !StringUtils.contains(linkClicked, triggerCustomLink))
 	{
 	    System.err.println("Link clicked didn't contains trigger url...");
 	    return;
