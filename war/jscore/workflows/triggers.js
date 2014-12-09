@@ -272,7 +272,7 @@ function populate_owners_in_trigger(trigger_form, owner_select_id, trigger_owner
 				$('#'+owner_select_id, trigger_form).find('option[value=' + trigger_owner_id + ']').attr('selected', 'selected');
 			}
 		
-	}, optionsTemplate, false, undefined);
+	}, optionsTemplate, false, undefined, "Select Event Owner");
 }
 
 /**
