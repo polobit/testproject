@@ -270,6 +270,7 @@ $.validator.setDefaults({
 											<option value="SaaS">SaaS</option>
 											<option value="eCommerce">eCommerce</option>
 											<option value="Marketing Agency">Marketing Agency</option>
+											<option value="Other">Other</option>
 								  </select>
 								  </div>
 								  <div class="form-group login-plan_type">
