@@ -4,9 +4,21 @@ import org.json.JSONObject;
 
 import com.agilecrm.user.DomainUser;
 
+/**
+ * <code>MergeFieldsUitl</code> class is the utility class for merge fields
+ * 
+ * @author Bhasuri
+ * 
+ */
 public class MergeFieldsUtil
 {
-
+	/**
+	 * Adds calendar url to the subscriber json
+	 * 
+	 * @param domainUser
+	 * @param subscriberJSON
+	 * @return calendar URL
+	 */
 	public static String addCalendarMergeField(DomainUser domainUser, JSONObject subscriberJSON)
 	{
 		// local http://localhost:8888
@@ -21,7 +33,6 @@ public class MergeFieldsUtil
 			schedule_id = domainUser.name;
 		calendar_url += "/calendar/" + schedule_id;
 
-		System.out.println("calendar url is " + calendar_url + " and the domain is " + domainUser.domain);
 		return calendar_url;
 
 	}

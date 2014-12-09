@@ -283,7 +283,7 @@ public class AgileTaskletUtil
 
 			// Inserts contact owner-name and owner-email.
 			subscriberJSON.put("owner", owner);
-			System.out.println("subscriber jsion os " + subscriberJSON.toString());
+
 			// Score
 			subscriberJSON.put("score", contact.lead_score);
 
