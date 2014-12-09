@@ -200,6 +200,11 @@ $(function(){
 		$('#archived',$('#opportunityUpdateForm')).attr('checked','checked');
 		$("#opportunity_validate").trigger('click');
 	});
+	$("#opportunity_unarchive").die().live('click',function(e){
+		e.preventDefault();
+		$('#archived',$('#opportunityUpdateForm')).removeAttr('checked');
+		$("#opportunity_validate").trigger('click');
+	});
 	
 	/**
 	 * Milestone view deal delete
@@ -265,8 +270,14 @@ function updateDeal(ele, editFromMilestoneView)
 	$("#opportunityUpdateModal").modal('show');
 	
 	// Hide archive button, if the is already archived.
-	if(value.archived)
+	if(value.archived){
 		$('#opportunity_archive').hide();
+		$('#opportunity_unarchive').show();
+	}
+	else{
+		$('#opportunity_unarchive').hide();
+		$('#opportunity_archive').show();
+	}
 	
 	// Call setupTypeAhead to get contacts
 	agile_type_ahead("relates_to", dealForm, contacts_typeahead);
