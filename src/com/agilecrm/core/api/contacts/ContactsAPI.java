@@ -1,10 +1,15 @@
 package com.agilecrm.core.api.contacts;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -27,7 +32,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.XML;
 
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
@@ -939,20 +943,34 @@ public class ContactsAPI
 	public String getContactsCurrentTime(@PathParam("latitude") String latitude,
 			@PathParam("longitude") String longitude) throws JSONException
 	{
+		long epoch = System.currentTimeMillis() / 1000;
+
 		// URL for get request
-		String urlForTZ = "http://www.earthtools.org/timezone/" + longitude + "/" + latitude;
+		String urlForTZ = "https://maps.googleapis.com/maps/api/timezone/json?location=" + longitude + "," + latitude
+				+ "&timestamp=" + epoch;
 
 		// Send get request and get result
-		String currentTime = HTTPUtil.accessURL(urlForTZ);
-		System.out.println("currentTime: " + currentTime);
+		String contactTimeZone = HTTPUtil.accessURL(urlForTZ);
 
-		if (currentTime.isEmpty())
+		JSONObject contactTimeZoneJson = new JSONObject(contactTimeZone);
+		if (contactTimeZoneJson.toString().isEmpty() || !contactTimeZoneJson.get("status").equals("OK"))
 			return null;
 
-		// String to json object
-		JSONObject currentTimeJSON = XML.toJSONObject(currentTime);
-		System.out.println("currentTimeJSON:" + currentTimeJSON);
+		// Get time zone
+		TimeZone tz = TimeZone.getTimeZone(contactTimeZoneJson.getString("timeZoneId"));
 
-		return currentTimeJSON.toString();
+		// Set calendar
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTimeZone(tz);
+
+		// Set date formatter
+		DateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
+		formatter.setTimeZone(TimeZone.getTimeZone(contactTimeZoneJson.getString("timeZoneId")));
+
+		// Get current date and time
+		String currentDate = formatter.format(calendar.getTime());
+
+		// Return result
+		return currentDate.toString();
 	}
 }
