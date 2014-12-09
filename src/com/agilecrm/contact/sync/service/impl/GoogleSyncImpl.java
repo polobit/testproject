@@ -28,6 +28,7 @@ import com.google.gdata.data.Link;
 import com.google.gdata.data.batch.BatchOperationType;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.ContactFeed;
+import com.google.gdata.data.contacts.GroupMembershipInfo;
 import com.google.gdata.model.batch.BatchUtils;
 import com.google.gdata.util.ServiceException;
 import com.thirdparty.google.GoogleServiceUtil;
@@ -247,7 +248,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	// Build query with URL
 
-	query.setMaxResults(max);
+	query.setMaxResults(getFetchSize());
 
 	// query.setStrict(true);
 
@@ -283,7 +284,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	Query query = buildBasicQueryWithoutAccessKey();
 
-	query.setStringCustomParameter("access_token", prefs.apiKey);
+	query.setStringCustomParameter("access_token", prefs.token);
 
 	return query;
     }
@@ -357,10 +358,12 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	    // System.out.println(entry.getEtag() + " : " + entry.getEdited());
 	    created_at = new_created_at;
+	    List<GroupMembershipInfo> groupInfos = entry.getGroupMembershipInfos();
+	   // groupInfos.get(0).
 	    // System.out.println(entry.getId() + " , " + entry.getName());
 	    // System.out.println(created_at);
 	    // contact = wrapContactToAgileSchemaAndSave(entry);
-	 //   wrapContactToAgileSchemaAndSave(entry);
+	    wrapContactToAgileSchemaAndSave(entry);
 	}
 	
 	

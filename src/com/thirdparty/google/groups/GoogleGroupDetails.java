@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.gdata.data.contacts.ContactGroupEntry;
+import com.google.gdata.data.contacts.SystemGroup;
 
 @SuppressWarnings("serial")
 @XmlRootElement
@@ -16,6 +17,7 @@ public class GoogleGroupDetails implements Serializable
     public String groupName = null;
     public String groupTitle = null;
     public String selfLink = null;
+    public boolean isSystemGroup ;
 
     public GoogleGroupDetails()
     {
@@ -34,6 +36,8 @@ public class GoogleGroupDetails implements Serializable
 	    groupName = groupEntry.getSystemGroup().getId();
 	    groupId = groupName;
 	}
-
+	SystemGroup sysGourp = groupEntry.getSystemGroup();
+	
+	isSystemGroup = sysGourp != null;
     }
 }

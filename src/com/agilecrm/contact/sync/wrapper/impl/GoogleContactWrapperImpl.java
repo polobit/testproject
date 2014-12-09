@@ -3,8 +3,9 @@ package com.agilecrm.contact.sync.wrapper.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Embedded;
+
 import org.apache.commons.lang.StringUtils;
-import org.apache.jsp.ah.entityDetailsBody_jsp;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
@@ -22,7 +23,9 @@ import com.google.gdata.data.extensions.Im;
 import com.google.gdata.data.extensions.Name;
 import com.google.gdata.data.extensions.PhoneNumber;
 import com.google.gdata.data.extensions.StructuredPostalAddress;
+import com.googlecode.objectify.annotation.NotSaved;
 import com.thirdparty.google.contacts.ContactSyncUtil;
+import com.thirdparty.google.groups.GoogleGroupDetails;
 
 /**
  * <code> GoogleContactWrapperImpl</code> implemented ContactWrapper wraps the
@@ -33,7 +36,11 @@ public class GoogleContactWrapperImpl extends ContactWrapper
     // Gdata specific contact object.
     /** The entry. */
     ContactEntry entry;
-
+    
+    @NotSaved
+    @Embedded
+    public List<GoogleGroupDetails> groups = new ArrayList<GoogleGroupDetails>();
+    
     /*
      * (non-Javadoc)
      * 
@@ -245,12 +252,25 @@ public class GoogleContactWrapperImpl extends ContactWrapper
     @Override
     public List<String> getTags()
     {
+	groups = prefs.groups;
+	
 	// TODO Auto-generated method stub
-	List<GroupMembershipInfo> groups = entry.getGroupMembershipInfos();
+	List<GroupMembershipInfo> googleGroups = entry.getGroupMembershipInfos();
 	List<String> tags = new ArrayList<String>();
-	for(GroupMembershipInfo info : groups)
+	for(GroupMembershipInfo info : googleGroups)
 	{
-	    tags.add(info.getExtensionLocalName());
+	    String id = info.getHref();
+	    for(GoogleGroupDetails details : groups)
+	    {
+		if(StringUtils.equals(id, details.atomId))
+		{
+		    if("Contacts".equals(details.groupName) && details.isSystemGroup)
+			continue;
+		    
+		    tags.add(details.groupName);
+		}
+		    
+	    }
 	}
 	return tags;
     }
