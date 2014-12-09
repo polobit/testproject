@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import org.scribe.utils.Preconditions;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.service.TwoWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
 import com.agilecrm.contact.sync.wrapper.impl.GoogleContactWrapperImpl;
@@ -29,6 +30,7 @@ import com.google.gdata.data.batch.BatchOperationType;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.ContactFeed;
 import com.google.gdata.data.contacts.GroupMembershipInfo;
+import com.google.gdata.data.extensions.Email;
 import com.google.gdata.model.batch.BatchUtils;
 import com.google.gdata.util.ServiceException;
 import com.thirdparty.google.GoogleServiceUtil;
@@ -358,11 +360,21 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	    // System.out.println(entry.getEtag() + " : " + entry.getEdited());
 	    created_at = new_created_at;
-	    List<GroupMembershipInfo> groupInfos = entry.getGroupMembershipInfos();
 	   // groupInfos.get(0).
 	    // System.out.println(entry.getId() + " , " + entry.getName());
 	    // System.out.println(created_at);
 	    // contact = wrapContactToAgileSchemaAndSave(entry);
+	    
+	    List<Email> emails = entry.getEmailAddresses();
+	    
+	    // Added condition to mandate emails. It is added here as other sync allows contacts without email
+	    if(emails == null || emails.size() == 0)
+	    {
+		syncStatus.put(ImportStatus.EMAIL_REQUIRED, syncStatus.get(ImportStatus.EMAIL_REQUIRED) + 1);
+		syncStatus.put(ImportStatus.TOTAL_FAILED, syncStatus.get(ImportStatus.TOTAL_FAILED) + 1);
+		continue;
+	    }
+		
 	    wrapContactToAgileSchemaAndSave(entry);
 	}
 	
