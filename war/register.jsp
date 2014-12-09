@@ -275,7 +275,7 @@ $.validator.setDefaults({
 								  </div>
 								  <div class="form-group login-plan_type">
 									<div style="display:inline-block;float:left;margin-right:5px">
-									<select class="form-control required"  name="plan_type" data-width="100%">
+									<select class="form-control required"  name="plan_type" data-width="100%" style="width:162px">
 											<option value="" selected disabled>Choose Plan</option>
 											<option value="Starter">Starter</option>
 											<option value="Regular">Regular</option>
@@ -370,10 +370,13 @@ $.validator.setDefaults({
 	<script type="text/javascript">
 		$(document).ready(function() {	
 			
-			var telInput = 
+				
+			// Initializes phone library
 			$("#login_phone_number").intlTelInput({
 				utilsScript: "lib/phonenumber-lib/utils.js" 
 			});
+			
+			 setSelectCssInSafari();
 
 			
 			jQuery.validator.addMethod("domainLength", function(value, element) {
@@ -473,6 +476,14 @@ $.validator.setDefaults({
 			});
 			
 		});
+		
+		function setSelectCssInSafari()
+		{
+			if(navigator.userAgent.indexOf("Chrome")==-1 && navigator.userAgent.indexOf("safari")!=-1)
+				{
+					$("select").addClass('safari-select');
+				}
+		}
 		
 		function isNotValid(subdomain) {
 			subdomain = subdomain.toString();
