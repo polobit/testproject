@@ -17,16 +17,23 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.util.ActivitySave;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
+import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.email.wrappers.ContactEmailWrapper;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.EmailPrefs;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
@@ -106,7 +113,7 @@ public class EmailsAPI
 	    {
 		// Saves Contact Email.
 		ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, signature,
-		        null, trackClicks, documentIds);
+			null, trackClicks, documentIds);
 
 		ActivitySave.createEmailSentActivityToContact(to, subject, body);
 	    }
@@ -152,7 +159,7 @@ public class EmailsAPI
 	    if (url == null)
 	    {
 		JSONArray contactEmails = ContactEmailUtil.mergeContactEmails(StringUtils.split(searchEmail, ",")[0],
-		        null);
+			null);
 
 		// return in the same format {emails:[]}
 		return new JSONObject().put("emails", contactEmails).toString();
@@ -250,7 +257,7 @@ public class EmailsAPI
 	    // If no powered by merge field, append Agile label to html
 	    if (!StringUtils.contains(htmlEmail, EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
 		htmlEmail = EmailUtil.appendAgileToHTML(htmlEmail, "campaign", "Powered by",
-		        emailSender.isEmailWhiteLabelEnabled());
+			emailSender.isEmailWhiteLabelEnabled());
 
 	    emailSender.sendEmail(fromEmail, fromName, fromEmail, null, null, subject, replyToEmail, htmlEmail,
 		    textEmail, null, null);
@@ -264,4 +271,83 @@ public class EmailsAPI
 
 	return fromEmail;
     }
+    
+    /**
+     * Gets the list of synced email account names of this Agile user
+     * 
+     * @return
+     */
+    @Path("synced-accounts")
+    @GET
+    // @Produces({ MediaType.APPLICATION_JSON + " ;charset=utf-8" })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public EmailPrefs getEmailAccounts()
+    {
+	EmailPrefs emailPrefs = null;
+	try
+	{
+	    emailPrefs = ContactEmailUtil.getEmailPrefs();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return emailPrefs;
+    }
+
+    /**
+     * Returns emails sent through Agile. Emails json string are returned in the
+     * format {emails:[]}.
+     * 
+     * @param searchEmail
+     *            - to get emails related to search email
+     * @param count
+     *            - required number of emails.
+     * @param offset
+     *            - offset.
+     * @return String
+     */
+    @Path("agile-emails")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<ContactEmailWrapper> getAgileEmails(@QueryParam("e") String searchEmail)
+    {
+	List<ContactEmailWrapper> emailsList = null;
+	try
+	{
+	    // Removes unwanted spaces in between commas
+	    String normalisedEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', searchEmail);
+
+	    searchEmail = StringUtils.split(normalisedEmail, ",")[0];
+
+	    Contact contact = ContactUtil.searchContactByEmail(searchEmail);
+
+	    // Fetches contact emails
+	    List<ContactEmail> contactEmails = ContactEmailUtil.getContactEmails(contact.id);
+
+	    JSONArray agileEmails = new JSONArray();
+
+	    // Merge Contact Emails with obtained imap emails
+	    for (ContactEmail contactEmail : contactEmails)
+	    {
+		ObjectMapper mapper = new ObjectMapper();
+		String emailString = mapper.writeValueAsString(contactEmail);
+		agileEmails.put(new JSONObject(emailString));
+	    }
+
+	    emailsList = new ObjectMapper().readValue(agileEmails.toString(),
+		    new TypeReference<List<ContactEmailWrapper>>()
+		    {
+		    });
+	    return emailsList;
+
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got an exception in EmailsAPI: " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
 }

@@ -3070,6 +3070,18 @@ $(function()
 								var template = getTemplate("choose-avatar-images-modal", {});
 								return template;
 				});
+				
+				// Reads the gloabal varaible and returns it value
+				Handlebars.registerHelper('read_global_var', function(custom_fields, contacts)
+				{
+					var type = email_server_type;
+					if (type)
+						return type;
+					else
+					{
+						return "agilecrm";
+					}
+				});
 
 				// To pick randomly selected avatar url
 				Handlebars.registerHelper('pick_random_avatar_url', function(options)

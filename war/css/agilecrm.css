@@ -1670,6 +1670,16 @@ cursor: pointer;
 	margin-right:8px;
 }
 
+#email-social-model-list li .scroll-loading
+{
+	display:none;
+}
+
+#mail-account-types img
+{
+	display:none;
+}
+
 .typeahead
 {
 	z-index: 2050 !important;

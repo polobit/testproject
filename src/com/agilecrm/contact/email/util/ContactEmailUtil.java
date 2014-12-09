@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -16,7 +17,10 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.email.wrappers.EmailWrapper;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.EmailPrefs;
 import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.OfficeEmailPrefs;
 import com.agilecrm.user.SocialPrefs;
@@ -103,7 +107,7 @@ public class ContactEmailUtil
 	    {
 		contactId = contact.id.toString();
 		saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, signature, contact.id, openTrackerId,
-		        documentIds);
+			documentIds);
 	    }
 	    else
 	    {
@@ -118,7 +122,7 @@ public class ContactEmailUtil
 		    {
 			contactId = contact.id.toString();
 			saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, signature, contact.id,
-			        openTrackerId, documentIds);
+				openTrackerId, documentIds);
 		    }
 		}
 	    }
@@ -470,6 +474,97 @@ public class ContactEmailUtil
 	}
 
 	return signature;
+    }
+    
+    /**
+     * Fetches emails from server, server can be either IMAP,Microsoft Exchange
+     * Fetches emails based on pageSize and cursor
+     * 
+     * @param url
+     *            server url
+     * @param pageSize
+     *            number of items to fetch from server
+     * @param cursor
+     *            the offset
+     * @return
+     */
+    public static List<EmailWrapper> getEmailsfromServer(String url, String pageSize, String cursor)
+    {
+	List<EmailWrapper> emailsList = null;
+	try
+	{
+	    // Returns imap emails, usually in form of {emails:[]}, if not build
+	    // result like that.
+	    String jsonResult = HTTPUtil.accessURL(url);
+
+	    // Convert emails to json.
+	    JSONObject emails = ContactEmailUtil.convertEmailsToJSON(jsonResult);
+
+	    // Fetches JSONArray from {emails:[]}
+	    JSONArray emailsArray = emails.getJSONArray("emails");
+
+	    // Add owner email to each email and parse each email body.
+	    emailsArray = ContactEmailUtil.addOwnerAndParseEmailBody(emailsArray);
+
+	    if (emailsArray.length() < Integer.parseInt(pageSize))
+		return new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>()
+		{
+		});
+
+	    emailsList = new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>()
+	    {
+	    });
+
+	    EmailWrapper lastEmail = emailsList.get(emailsList.size() - 1);
+	    lastEmail.cursor = (Integer.parseInt(cursor) + Integer.parseInt(pageSize)) + "";
+	}
+
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println(e.getMessage());
+	    return null;
+	}
+	return emailsList;
+    }
+
+
+    /**
+     * Gets the list of synced email account names of this Agile user
+     * 
+     * @return
+     */
+    public static EmailPrefs getEmailPrefs()
+    {
+	EmailPrefs emailPrefs = new EmailPrefs();
+	try
+	{
+	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	    DomainUser domainUser = agileUser.getDomainUser();
+	    if (domainUser != null)
+	    {
+		if (StringUtils.isNotBlank(domainUser.email))
+		    emailPrefs.setAgileUserName(domainUser.email);
+	    }
+	    // Get Gmail Social Prefs
+	    Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
+	    SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(agileUser, socialPrefsTypeEnum);
+	    if (gmailPrefs != null)
+		emailPrefs.setGmailUserName(gmailPrefs.email);
+	    // Get Imap prefs
+	    IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(agileUser);
+	    if (imapPrefs != null)
+		emailPrefs.setImapUserName(imapPrefs.user_name);
+	    // Get Office365 prefs
+	    OfficeEmailPrefs officePrefs = OfficeEmailPrefsUtil.getOfficePrefs(agileUser);
+	    if (officePrefs != null)
+		emailPrefs.setExchangeUserName(officePrefs.user_name);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return emailPrefs;
     }
 
 }
