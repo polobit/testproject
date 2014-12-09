@@ -27,6 +27,7 @@ import com.agilecrm.util.EmailUtil;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus.UnsubscribeType;
 import com.campaignio.reports.DateUtil;
+import com.campaignio.tasklets.util.MergeFieldsUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
@@ -277,6 +278,7 @@ public class AgileTaskletUtil
 		owner.put("id", domainUser.id);
 		owner.put("name", domainUser.name);
 		owner.put("email", domainUser.email);
+		owner.put("calendar_url", MergeFieldsUtil.addCalendarMergeField(domainUser, subscriberJSON));
 	    }
 
 	    // Inserts contact owner-name and owner-email.
@@ -602,6 +604,7 @@ public class AgileTaskletUtil
      */
     public static JSONObject getUpdatedSubscriberJSON(Contact updatedContact, JSONObject oldSubscriberJSON)
     {
+
 	// Update subscriberJSON
 	JSONObject updatedSubscriberJSON = AgileTaskletUtil.getSubscriberJSON(updatedContact);
 
