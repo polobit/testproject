@@ -38,10 +38,9 @@
 
 <link type="text/css" rel="stylesheet" href="/css/openid-min.css" />
 <link type="text/css" rel="stylesheet" href="/css/signin.css" />
+<link type="text/css" rel="stylesheet" href="/css/phonenumber-lib/intlTelInput.css" />
 <link type="text/css" rel="stylesheet" href="/css/register.css" />
 <link type="text/css" rel="stylesheet" href="/css/signup/bootstrap-select.min.css" />
-
-
 
 
 <style>
@@ -106,9 +105,10 @@ label {
 
 <!-- JQUery Core and UI CDN -->
 <script type='text/javascript' src='/lib/jquery-new/jquery-2.1.1.min.js'></script>
-<script type="text/javascript" src="/lib/bootstrap.v3.min.js"></script>\
-<script type="text/javascript" src="/lib/bootstrap-select/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="/lib/bootstrap.v3.min.js"></script>
+<script type="text/javascript" src="/lib/phonenumber-lib/intlTelInput.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
+
 <script type="text/javascript">
 jQuery.validator.setDefaults({
 	debug: true,
@@ -156,7 +156,7 @@ $.validator.setDefaults({
 
 	<div class="row login-page">
 		<div class='regpage-container'>
-			<div id="cor" class="regpage-content clearfix carousel slide">
+			<div class="regpage-content clearfix carousel slide">
 				<!-- 	<div align="center">
 					<h1 class="regpage-logHead">
 						<img src="img/signin/cloud-logo.png"> Register your free
@@ -189,6 +189,7 @@ $.validator.setDefaults({
 
 				<form name='agile' id="agile" method='post'
 					onsubmit="return isValid();" style="min-height:572px">
+					<div id="cor">
 					<div class="carousel-inner" >
 						<div class="item active">
 							<div align="center">
@@ -310,10 +311,13 @@ $.validator.setDefaults({
 								  </div>
 								  <div class="form-group login-company-size">
 								<!--  <div style="display:inline-block;width:49%">-->
-										<span class="regpage-company-size"></span> <input
-											class="input-xlarge field required form-control"
+										<span class="regpage-phone-number" ></span>
+											<div id="phone-block"> <input
+											class="input-xlarge field form-control tel-number"
 											id="login_phone_number" name='phone_number' type="text"
 											placeholder="Phone Number" autocapitalize="off">
+											<span class="error"></span>
+											</div>
 											</div>
 									
 									<div class="form-group login-company-size">
@@ -326,8 +330,10 @@ $.validator.setDefaults({
 									</div>
 										<div class="form-group regpage-options log-terms"
 										style="margin-bottom: 0px;"></div>
+										</div>
 							</fieldset>
 						</div>
+					</div>
 					</div>
 				</form>
 				<%-- commented code for choose domain company <form name='choose_domain' id="choose_domain" method='post' onsubmit="return validateAndSubmit();"  class="pad-top-15">
@@ -368,7 +374,13 @@ $.validator.setDefaults({
 
 
 	<script type="text/javascript">
-		$(document).ready(function() {			
+		$(document).ready(function() {	
+			
+			var telInput = 
+			$("#login_phone_number").intlTelInput({
+				utilsScript: "lib/phonenumber-lib/utils.js" 
+			});
+
 			
 			jQuery.validator.addMethod("domainLength", function(value, element) {
 				var subdomain = value;
@@ -389,6 +401,19 @@ $.validator.setDefaults({
 			//	console.log(params);
 				
 			}, "Common domain cannot be created.");
+			
+
+			jQuery.validator.addMethod("tel-number", function(value, element) {
+				
+				console.log($(".intl-tel-input > .help-block"));
+				return $(element).intlTelInput("isValidNumber");;
+			//	console.log(params);
+				
+			}, "Enter valid number.");
+			
+			
+			
+			$("#login_phone_number")
 			
 <%-- 			$(".to").click(function(e) {
 				e.preventDefault();
