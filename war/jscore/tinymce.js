@@ -312,7 +312,8 @@ function get_merge_fields()
 	"State":"{{location.state}}",
 	"Country":"{{location.country}}",
 	"Owner Name":"{{owner.name}}",
-	"Owner Email":"{{owner.email}}"
+	"Owner Email":"{{owner.email}}", 
+	"Calendar URL" : "{{owner.calendar_url}}"
 	}
 
 	// Get Custom Fields in template format

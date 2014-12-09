@@ -39,7 +39,7 @@ function getMergeFields(type)
 	var options = { "Select Merge Field" : "", "First Name" : "{{first_name}}", "Last Name" : "{{last_name}}", "Score" : "{{score}}",
 		"Created Date" : "{{created_date}}", "Modified Date" : "{{modified_date}}", "Email" : "{{email}}", "Company" : "{{company}}", "Title" : "{{title}}",
 		"Website" : "{{website}}", "Phone" : "{{phone}}", "City" : "{{location.city}}", "State" : "{{location.state}}", "Country" : "{{location.country}}",
-		"Twitter Id" : "{{twitter_id}}", "LinkedIn Id" : "{{linkedin_id}}", "Owner Name" : "{{owner.name}}", "Owner Email" : "{{owner.email}}" };
+		"Twitter Id" : "{{twitter_id}}", "LinkedIn Id" : "{{linkedin_id}}", "Owner Name" : "{{owner.name}}", "Owner Email" : "{{owner.email}}" , "Calendar URL" : "{{owner.calendar_url}}"};
 
 	// Get Custom Fields in template format
 	var custom_fields = get_custom_fields();
