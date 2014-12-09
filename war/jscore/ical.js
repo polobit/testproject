@@ -152,7 +152,7 @@ $(function()
 		  
 		})
 	
-	$('#show-schedule-url').live('click', function(e)
+	$('#show-schedule-url').die().live('click', function(e)
 	{
 		e.preventDefault();
 		$('#scheduleModal').modal('show');
@@ -194,7 +194,7 @@ $(function()
 		var data = $('#schedule_id').text();
 		$("#edit").hide();
 		$("#scheduleurl").removeAttr("href");
-		$('#schedule_id').html("<input class='input-small' type='text' style='position: relative;top: 6px;left: 5px;margin-top:-9px;' name='url' id='url' value='" + data + "'/><buttion class='btn' style='display:inline-block;margin-left:30px;margin-bottom:5px;' id='save-scheduleurl'>Save</button>");
+		$('#schedule_id').html("<input class='input-small' type='text' style='position: relative;top: 6px;left: 5px;margin-top:-9px;' name='url' id='url' value='" + data + "'/><buttion class='btn' style='display:inline-block;margin-left:30px;margin-bottom:5px;position: absolute;top:1px' id='save-scheduleurl'>Save</button>");
 
 
 		$("#scheduleurl").addClass("nounderline");
@@ -236,11 +236,17 @@ $(function()
 			$("#scheduleurl").removeClass("nounderline");
 			
 
-		}, error : function(user)
+		}, error : function(error)
 		{
 
-			alert("Error occured while saving please try again");
+            console.log(error);
+			$('#schedule_error_message').html('Something went wrong as your schedule url was not updated. Please try again in few hours. Error: '+error.statusText);
+			 $('#schedule_error_message').fadeIn('slow');
+             setTimeout(function() {
+          	    $('#schedule_error_message').fadeOut('slow');
+          	}, 2000);
 			enable_save_button($(saveBtn));
+			return;
 		} });
 
 	});
