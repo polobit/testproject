@@ -76,18 +76,7 @@ public class QueryDocument<T> implements QueryInterface
     {
 	// Normalizes the string. Removes spaces from the string as space are
 	// excluded while saving in documents
-    	keyword = SearchUtil.normalizeString(keyword);
-    	try
-    	{
-    		keyword = URLEncoder.encode(keyword, "UTF-8");
-    	}
-    	catch (UnsupportedEncodingException e)
-    	{
-    		// TODO Auto-generated catch block
-    		e.printStackTrace();
-    	}
-    	if(keyword == null || keyword.equals(""))
-    		return new ArrayList<>();
+	keyword = SearchUtil.normalizeString(keyword).replace(":", "\\:");
 	/*
 	 * Builds the query, search on field search_tokens(since contact
 	 * properties are split in to fragments, and saved in document with
@@ -111,18 +100,7 @@ public class QueryDocument<T> implements QueryInterface
     @Override
     public Collection<T> simpleSearchWithType(String keyword, Integer count, String cursor, String type)
     {
-    	keyword = SearchUtil.normalizeString(keyword);
-    	try
-    	{
-    		keyword = URLEncoder.encode(keyword, "UTF-8");
-    	}
-    	catch (UnsupportedEncodingException e)
-    	{
-    		// TODO Auto-generated catch block
-    		e.printStackTrace();
-    	}
-    	if(keyword == null || keyword.equals(""))
-    		return new ArrayList<>();
+	keyword = SearchUtil.normalizeString(keyword);
 	return processQuery("search_tokens:" + keyword + " AND type:" + type, count, cursor);
     }
 
