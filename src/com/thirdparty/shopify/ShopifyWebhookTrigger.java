@@ -132,7 +132,8 @@ public class ShopifyWebhookTrigger extends HttpServlet
 		    }
 
 		    System.out.println("Assigning campaign to contact....");
-		    WorkflowSubscribeUtil.subscribe(contact, trigger.id);
+		    WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id,
+			    new JSONObject().put("shopify", shopifyJson));
 		}
 	    }
 	    return;
@@ -285,7 +286,7 @@ public class ShopifyWebhookTrigger extends HttpServlet
 
 	    if (addressJson == null)
 		return null;
-	    
+
 	    Iterator<?> keys = addressJson.keys();
 	    while (keys.hasNext())
 	    {
@@ -340,7 +341,8 @@ public class ShopifyWebhookTrigger extends HttpServlet
 
 	for (ContactField oldProperty : oldProperties)
 	    for (ContactField newProperty : newProperties)
-		if (StringUtils.equals(oldProperty.name, newProperty.name) && StringUtils.equals(oldProperty.subtype, newProperty.subtype))
+		if (StringUtils.equals(oldProperty.name, newProperty.name)
+		        && StringUtils.equals(oldProperty.subtype, newProperty.subtype))
 		    outDatedProperties.add(oldProperty);
 	oldProperties.removeAll(outDatedProperties);
 	newProperties.addAll(oldProperties);
