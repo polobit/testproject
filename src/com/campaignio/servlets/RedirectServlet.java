@@ -145,6 +145,10 @@ public class RedirectServlet extends HttpServlet
 	    if (StringUtils.isBlank(campaignId) && contact != null)
 	    {
 		TrackClickUtil.showEmailClickedNotification(contact, null, originalURL);
+
+		// Link clicked trigger
+		EmailTrackingTriggerUtil.executeTrigger(subscriberId, null, originalURL, Type.EMAIL_LINK_CLICKED);
+
 		return;
 	    }
 

@@ -54,7 +54,6 @@ public class EmailTrackingTriggerUtil
 	{
 	    if (type.equals(Type.EMAIL_OPENED))
 		executeEmailOpenTrigger(trigger, contactId, workflowId);
-
 	    else
 		executeLinkClickedTrigger(trigger, contactId, workflowId, linkClicked);
 	}
@@ -78,6 +77,8 @@ public class EmailTrackingTriggerUtil
 	    System.err.print("Contact doesn't exist that clicked link...");
 	    return;
 	}
+
+	System.out.println("Link Clicked " + linkClicked + " trigger custom url " + trigger.custom_link_clicked);
 
 	// Verify Link URLs contains
 	if (StringUtils.isBlank(linkClicked) || StringUtils.isBlank(trigger.custom_link_clicked)
