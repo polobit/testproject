@@ -187,6 +187,9 @@ public class RegisterServlet extends HttpServlet
 	// Get Name
 	String name = request.getParameter("name");
 
+	if(name != null)
+	    name = name.trim();
+	
 	// Get reference code
 
 	if (email == null || password == null)
@@ -199,8 +202,16 @@ public class RegisterServlet extends HttpServlet
 
 	DomainUser domainUser = createUser(request, response, userInfo, password);
 
-	// Creates contact in our domain
-	createUserInOurDomain(request);
+	try
+	{
+	    // Creates contact in our domain
+	    createUserInOurDomain(request);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	
 
 	// Redirect to home page
 	response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com/");
@@ -232,6 +243,7 @@ public class RegisterServlet extends HttpServlet
 	    {
 		if (name.contains(" "))
 		{
+		    name = name.trim();
 		    String[] names = name.split(" ");
 		    properties.add(createField(Contact.FIRST_NAME, names[0]));
 
@@ -267,7 +279,7 @@ public class RegisterServlet extends HttpServlet
 	    // Company
 	    if (!StringUtils.isEmpty(companyName))
 	    {
-		properties.add(createField(Contact.COMPANY, companyName));
+		properties.add(createField(Contact.COMPANY, companyName.trim()));
 	    }
 
 	    // Company type
