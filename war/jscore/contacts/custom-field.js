@@ -30,7 +30,7 @@ $(function() {
 			$("#custom-field-list-values").show();
 			$("input",  $("#custom-field-list-values")).attr("name", "field_data");
 			$("#custom-field-formula-data").hide();
-			$("input",  $("#custom-field-formula-data")).removeAttr("name");
+			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
 		}
 		else if(value == "TEXTAREA")
 		{
@@ -39,7 +39,7 @@ $(function() {
 			$("#custom-field-list-values").hide();
 			$("input",  $("#custom-field-list-values")).removeAttr("name");
 			$("#custom-field-formula-data").hide();
-			$("input",  $("#custom-field-formula-data")).removeAttr("name");
+			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
 		}
 		else if(value == "FORMULA")
 		{
@@ -48,7 +48,7 @@ $(function() {
 			$("#custom-field-list-values").hide();
 			$("input",  $("#custom-field-list-values")).removeAttr("name");
 			$("#custom-field-formula-data").show();
-			$("input",  $("#custom-field-formula-data")).attr("name", "field_data");
+			$("textarea",  $("#custom-field-formula-data")).attr("name", "field_data");
 		}
 		else
 		{
