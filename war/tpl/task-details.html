@@ -21,8 +21,8 @@
 
   <!--------- task status ---------------->
 
-<div class="row-fluid">
-<div class="span2">
+<div class="row">
+<div class="span2" id="task-contact-img">
 <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:104px;overflow:hidden;display:inline-block;">
         	{{#each contacts}}
         		{{#if_contact_type "PERSON"}}
@@ -156,14 +156,26 @@
 	<td></td>
 	<td class="data" data="{{id}}" style="white-space:nowrap;">
     	<div style="display:inline;padding-right:10px;height:auto;">
-        		<img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
-    	</div>
-    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
+          {{#if_contact_type "PERSON"}}
+        	<img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+        		
+             <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
         		<b>	{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}} </b>
         		<br />
         		{{getPropertyValue properties "email"}}
     	</div>
+          {{/if_contact_type}}
+				{{#if_contact_type "COMPANY"}}
+        	 <img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/>
+           <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
+        		<b>{{getPropertyValue properties "name"}}
+        	
+    	</div>
+           
+        		{{/if_contact_type}}
+    	</div>
+    	
 	</td>
 	<td><div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;width:8em;overflow:hidden;">{{getPropertyValue properties "title"}}<br />
     	{{getPropertyValue properties "company"}}</div>

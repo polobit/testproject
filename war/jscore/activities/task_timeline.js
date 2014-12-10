@@ -53,5 +53,10 @@ var task_details_tab = {
 												individual_tag_name : 'tr', descending : true,cursor : true, page_size : 25 });
 								taskActivitiesView.collection.fetch();
 								$('#task_tab_detail').find('#activity').html(taskActivitiesView.el);
+								if($('#task-contact-img .activate-link').length == 0){
+												$('#task-contact-img').css("display","none");
+								}else{
+												$('#task-contact-img').css("margin-left","30px");
+								}
 
 				} };

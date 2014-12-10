@@ -18,6 +18,7 @@ taskDetailView : function(id)
 												taskDetailView = task;
 												$("#content").html(getTemplate("task-detail", task.toJSON()));
 												task_details_tab.loadActivitiesView();
+									
 								}
 				}
 
