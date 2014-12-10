@@ -120,9 +120,9 @@ function load_deal_tab(el, dealJSON)
 //	timeline_collection_view = null;
 //	var position = readCookie(contact_tab_position_cookie_name);
 	
-	$('#deal-details-tab a[href="#dealnotes"]', el).tab('show');
+	$('#deal-details-tab a[href="#dealactivities"]', el).tab('show');
 
-	deal_details_tab.load_deal_notes();
+	deal_details_tab.load_deal_activities();
 	
 	/*if(!position || position == "timeline")
 	{

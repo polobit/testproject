@@ -48,11 +48,12 @@ var deal_details_tab = {
 		load_deal_activities : function()
 		{
 		    var id = App_Deal_Details.dealDetailView.model.id;
+		    if(id){
 		    dealActivitiesView = new Base_Collection_View({
 	            url: '/core/api/opportunity/' + id + "/activities",
 	            templateKey: "deal-detail-activities",
 	            individual_tag_name: 'li',
-	            sortKey:"created_time",
+	            sortKey:"time",
 	            descending: true,
 	            cursor : true,
 	            page_size : 20,
@@ -64,6 +65,7 @@ var deal_details_tab = {
 	        });
 		    dealActivitiesView.collection.fetch();
 	        $('#dealactivities').html(dealActivitiesView.el);
-		}
+		    }
+		    }
 		
 };
