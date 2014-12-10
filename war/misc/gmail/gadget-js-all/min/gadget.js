@@ -266,7 +266,7 @@ function agile_user_associated() {
 	Contacts_Json = {};
 	$.each(emails, function(index, value)
 	{
-		//if(value.email != agile_get_prefs(PREFS_EMAIL))
+		if(value.email != agile_get_prefs(PREFS_EMAIL))
 			Contacts_Json[value.email] = value;
 	});
 	
@@ -1166,14 +1166,14 @@ $(function()
 				$('#fname',el).val(newContact.name.split(' ')[0]);
 				$('#lname',el).val(newContact.name.substring(newContact.name.indexOf(' '),newContact.name.length));
 			} else if(newContact.email.length>0)
-				$('#fname',el).val(newContact.email.substring(0,newContact.email.indexOf('@')));
+				$('#fname',el).val(ucfirst(newContact.email.substring(0,newContact.email.indexOf('@'))));
 			
 			if(newContact.email.length>0){
 				var reg = new RegExp('@([a-z]+)\.');
 				if(reg.test(newContact.email)){
 					var comp = reg.exec(newContact.email)[1];
 					if(PUBLIC_EMAIL_DOMAINS.indexOf(comp)<0)
-						$('#company',el).val(comp);
+						$('#company',el).val(ucfirst(comp));
 				}
 			}
 		});
