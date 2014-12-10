@@ -43,15 +43,14 @@
 		{{/if}}
 		<span class="owner-name">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
 	</span>
-	<h4><a style="text-decoration: none"><b>Deal Created</b></a></h4>
+	<h4><a style="text-decoration: none"><b>Created</b></a></h4>
 	<br/>
 	<div style="background:none;border:none;">
 		<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{show_link_in_statement description}}</pre>
 	</div>	
 	 	<div class="clear">
-		<div style="margin-bottom: 9px;">	
-		Deal {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
- (${{entityObject.expected_value}}, {{entityObject.probability}}%) added to track {{entityObject.pipeline.name}}
+		<div style="margin-bottom: 9px;margin-top: -16px;">	
+		Deal Created
 		</div>
 		<small class="edit-hover"  style="margin-right:10px"> 
 			<time class="note-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
@@ -81,10 +80,9 @@
 		<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{show_link_in_statement description}}</pre>
 	</div>	
 	 	<div class="clear">
-		<div style="margin-bottom: 9px;">	
-		Won Deal {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
- (${{entityObject.expected_value}}, {{entityObject.probability}}%) added to track {{entityObject.pipeline.name}}
-		</div>
+		<div style="margin-bottom: 9px;margin-top: -16px;">	
+Won Deal		
+</div>
 		<small class="edit-hover"  style="margin-right:10px"> 
 			<time class="note-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
 		</small>
@@ -115,9 +113,8 @@
 		<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{show_link_in_statement description}}</pre>
 	</div>	
 	 	<div class="clear">
-		<div style="margin-bottom: 9px;">	
-		Modified Deal {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
- (${{entityObject.expected_value}}, {{entityObject.probability}}%)
+		<div style="margin-bottom: 9px;margin-top: -16px;">
+        Changed	{{custom3}}
 		</div>
 		<small class="edit-hover"  style="margin-right:10px"> 
 			<time class="note-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
@@ -149,16 +146,16 @@
 		<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{show_link_in_statement description}}</pre>
 	</div>	
 	 	<div class="clear">
-		<div style="margin-bottom: 9px;">	
+		<div style="margin-bottom: 9px;margin-top: -16px;">	
 	{{#if related_contact_ids}}
 {{#if_equals "removed_all_relatedcontacts" custom3}}
-Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} from Deal  (${{entityObject.expected_value}} {{entityObject.probability}}%) 
+Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} 
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
-Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} from Deal  (${{entityObject.expected_value}} {{entityObject.probability}}%)  
+Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}   
 {{/if_equals}} 
 {{#if_equals "added_relatedcontacts" custom3}}
-Added {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} to Deal  (${{entityObject.expected_value}} {{entityObject.probability}}%)  
+Added {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}   
 {{/if_equals}}
 {{else}}
 Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
@@ -193,8 +190,9 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 		<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{show_link_in_statement description}}</pre>
 	</div>	
 	 	<div class="clear">
-		<div style="margin-bottom: 9px;">	
-		Added Note to Deal (${{entityObject.expected_value}} {{entityObject.probability}}%)  
+		<div style="margin-bottom: 9px;margin-top: -16px;">	
+		Subject : {{custom1}}<br/>
+        Message : {{custom2}}  
 		</div>
 		<small class="edit-hover"  style="margin-right:10px"> 
 			<time class="note-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
@@ -221,14 +219,14 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 		{{/if}}
 		<span class="owner-name">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
 	</span>
-	<h4><a style="text-decoration: none"><b>Owner Changed</b></a></h4>
+	<h4><a style="text-decoration: none"><b>Reassigned</b></a></h4>
 	<br/>
 	<div style="background:none;border:none;">
 		<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{show_link_in_statement description}}</pre>
 	</div>	
 	 	<div class="clear">
-		<div style="margin-bottom: 9px;">	
-		Deal Owner Changed from {{custom2}} to {{custom1}}
+		<div style="margin-bottom: 9px; margin-top: -16px;">	
+		Owner Changed from {{custom2}} to {{custom1}}
 		</div>
 	<small class="edit-hover"  style="margin-right:10px"> 
 			<time class="note-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
@@ -259,8 +257,8 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 		<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{show_link_in_statement description}}</pre>
 	</div>	
 	 	<div class="clear">
-		<div style="margin-bottom: 9px;">	
-		Changed Deal milestone form {{custom2}} to {{custom1}}
+		<div style="margin-bottom: 9px;margin-top: -16px;">	
+		Milestone changed form {{custom2}} to {{custom1}}
 		</div>
 		<small class="edit-hover"  style="margin-right:10px"> 
 			<time class="note-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
@@ -292,10 +290,9 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 		<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{show_link_in_statement description}}</pre>
 	</div>	
 	 	<div class="clear">
-		<div style="margin-bottom: 9px;">	
-			Lost Deal {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
- (${{entityObject.expected_value}}, {{entityObject.probability}}%)
-		</div>
+		<div style="margin-bottom: 9px;margin-top: -16px;">	
+Lost Deal	
+	</div>
 		<small class="edit-hover"  style="margin-right:10px"> 
 			<time class="note-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
 		</small>
@@ -304,9 +301,6 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 </div>
 
 {{/if_equals}}
-
-
-
 
 		</div>
 		
