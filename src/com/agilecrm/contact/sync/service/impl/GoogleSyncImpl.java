@@ -348,7 +348,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    
 	    if(!StringUtils.equals(etag, currentEtagInSync))
 	    {
-		index += 1;
+		index = 2;
 		currentEtagInSync = etag;
 	    }
 	    else
