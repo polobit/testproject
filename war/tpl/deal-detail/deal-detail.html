@@ -11,24 +11,32 @@
 				style="border-bottom: 1px solid #ddd; padding-bottom: 30px;">
 				<div>
 					<div>
-						<div class="span10">
-<div class="pull-left"> </div>
-						<div class="contact-profile-name mg-r-md">{{#if name}}{{name}}{{/if}} </div><br/>
-<div class="contact-custom-value" style="font-size:15px;">
-{{#if_equals milestone "Won"}} <span class="label label-success">{{milestone}}</span>
+						<div class="span10 ">
+
+						<div class="contact-profile-name mg-r-md" style="margin-bottom:-10px;">{{#if name}}{{name}}{{/if}}
+						
+						
+						{{#if_equals milestone "Won"}} <span class="label label-success"><b>{{milestone}}</b></span>
 {{else}}
-{{#if_equals milestone "Lost"}} <span class="label label-important">{{milestone}}</span>
+{{#if_equals milestone "Lost"}} <span class="label label-important"><b>{{milestone}}</b></span>
 {{else}}
-<span class="label label-default">{{milestone}}</span>
+<span class="label label-default"><b>{{milestone}}</b></span>
 {{/if_equals}}
 {{/if_equals}} 
-<span class="label label-default" style="margin-left:3px;">{{pipeline.name}}</span> 
- <span style="margin-left:275px;">${{expected_value}}</span> </div>                   
-<div style="width:43%;height:10px;" class="progress progress-info">
-                       <div class="bar" style="width: {{probability}}%;"></div>
-                       </div>
-<div class="contact-custom-value" style="margin-top: -10px;color: gray;"><span>{{probability}}%</span><span style="margin-left:269px;">Pipeline Value <span>${{calculatePipeline expected_value probability}}</span> </div> 
-
+{{#if_greater this.pipeline.length "1"}}<span class="label label-default" >{{pipeline.name}}</span>{{/if_greater}}
+						
+						 </div><br/>
+		{{#each contacts}}
+        	{{#if_contact_type "PERSON"}}
+        		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        	{{/if_contact_type}}
+			{{#if_contact_type "COMPANY"}}
+        		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        	{{/if_contact_type}}
+        {{/each}}
+	
+        <span class="contact-profile-name mg-r-md" style="vertical-align:bottom;">${{expected_value}}</span> <span style="vertical-align:bottom;">({{probability}}%)</span>
+						 
 </div>
 
 
@@ -53,7 +61,7 @@
 								</ul>
 							</div>
 						<div style="position:relative;">	
-							<div  class="contact-owner-position deal-owner-block">
+							<div  class="deal-owner-position deal-owner-block">
 						<div class="change-owner-succes"></div>
      <span title="Owner" class="contact-owner-view">
       	<span class="contact-owner" id="change-owner-element">
@@ -95,15 +103,18 @@
 	  <div class="span9">
         <div id="deal-details">
            <ul class="nav nav-tabs" id="deal-details-tab">
-            <li ><a href="#dealrelated" data-toggle="tab">Contacts</a></li>
-            <li ><a href="#dealnotes" data-toggle="tab" >Notes</a></li>
+             <li><a href="#dealactivities" data-toggle="tab" >Activity</a></li>
+             <li><a href="#dealnotes" data-toggle="tab" >Notes</a></li>
+            <li><a href="#dealrelated" data-toggle="tab">Related</a></li>
+           
             
             </ul>
         </div>
            <div class="tab-content" id="deal-tab-content">
-
-           <div class="tab-pane " id="dealrelated"></div>
+           <div class="tab-pane " id="dealactivities"></div>
            <div class="tab-pane " id="dealnotes"></div>
+           <div class="tab-pane " id="dealrelated"></div>
+          
           
           </div>
 	</div>

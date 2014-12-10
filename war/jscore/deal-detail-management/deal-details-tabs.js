@@ -43,10 +43,10 @@ $(function(){
 	 * Fetches all the notes related to the contact and shows the tasks collection 
 	 * as a table in its tab-content, when "Tasks" tab is clicked.
 	 */
-	$('#deal-details-tab a[href="#dealtimeline"]').live('click', function (e){
+	$('#deal-details-tab a[href="#dealactivities"]').live('click', function (e){
 		e.preventDefault();
 		//save_contact_tab_position_in_cookie("documents");
-		deal_details_tab.load_deal_timeline();
+		deal_details_tab.load_deal_activities();
 	});
 	
 
@@ -120,9 +120,9 @@ function load_deal_tab(el, dealJSON)
 //	timeline_collection_view = null;
 //	var position = readCookie(contact_tab_position_cookie_name);
 	
-	$('#deal-details-tab a[href="#dealrelated"]', el).tab('show');
+	$('#deal-details-tab a[href="#dealnotes"]', el).tab('show');
 
-	deal_details_tab.loadDealRelatedContactsView();
+	deal_details_tab.load_deal_notes();
 	
 	/*if(!position || position == "timeline")
 	{

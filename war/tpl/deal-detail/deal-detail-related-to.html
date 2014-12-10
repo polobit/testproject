@@ -11,17 +11,12 @@
         		{{getPropertyValue properties "email"}}
     	</div>
 	</td>
-	<td><div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;width:8em;overflow:hidden;">{{getPropertyValue properties "title"}}<br />
-    	{{getPropertyValue properties "company"}}</div>
-	</td>
-	<td> 
-<div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;">
-	{{#each tags}}
-    	<span class="label">{{this}}</span>
-    {{/each}}
-</div>
-	</td>
-	<td style="width:6em;"><div>{{lead_score}}</div></td>
+	
+<td style="width:6em;"><div>{{#if_equals type "PERSON"}}Contact {{else}} Company{{/if_equals}}</div></td>
+<td style="width:6em;"><div>{{lead_score}}</div></td>
+
+	<td style="width:6em;"><div>{{getPropertyValue properties "phone"}}</div></td>
+	
 </script>
 
 <script id="deal-related-collection-template" type="text/html">
@@ -39,9 +34,9 @@
 				<thead>
 					<tr><th></th>
 						<th>Name</th>
-						<th>Work</th>
-						<th>Tags</th>
-						<th>Lead Score</th>
+						<th>Type</th>
+						<th>Score</th>
+						<th>Phone</th>
 					</tr>
 				</thead>
 				<tbody id="deal-related-model-list" class="deal-related-model-list agile-edit-row"
@@ -56,7 +51,7 @@
                     	<img alt="Clipboard" src="/img/clipboard.png">
                 	</div>
                 	<div class="box-right">
-                    	<h3>This Deal is not associated with any person/contact. </h3>
+                    	<h3>Deal is not associated with any person/contact. </h3>
                     	<div class="text">
 							All Contacts which are related to this deal are shown here.
 							<br/>

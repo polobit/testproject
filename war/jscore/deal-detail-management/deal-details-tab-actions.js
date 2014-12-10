@@ -1,6 +1,6 @@
 var dealrelatedView;
 var dealNotesView;
-var load_deal_timeline;
+var dealActivitiesView;
 
 
 var deal_details_tab = {
@@ -43,6 +43,27 @@ var deal_details_tab = {
 	        });
 		    dealNotesView.collection.fetch();
 	        $('#dealnotes').html(dealNotesView.el);
+		},
+		
+		load_deal_activities : function()
+		{
+		    var id = App_Deal_Details.dealDetailView.model.id;
+		    dealActivitiesView = new Base_Collection_View({
+	            url: '/core/api/opportunity/' + id + "/activities",
+	            templateKey: "deal-detail-activities",
+	            individual_tag_name: 'li',
+	            sortKey:"created_time",
+	            descending: true,
+	            cursor : true,
+	            page_size : 20,
+	            postRenderCallback: function(el) {
+	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+	            		 $(".note-created-time", el).timeago();
+	              	})
+	            }
+	        });
+		    dealActivitiesView.collection.fetch();
+	        $('#dealactivities').html(dealActivitiesView.el);
 		}
 		
 };

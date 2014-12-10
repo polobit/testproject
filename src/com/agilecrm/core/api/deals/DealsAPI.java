@@ -640,7 +640,7 @@ public class DealsAPI
 	return opportunity;
     }
 
-    @Path("/activities/{dealid}")
+    @Path("/{dealid}/activities")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Activity> getActivitiesOfDeal(@PathParam("dealid") Long dealid, @QueryParam("cursor") String cursor,
