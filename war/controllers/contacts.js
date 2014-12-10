@@ -197,11 +197,11 @@ var ContactsRouter = Backbone.Router.extend({
 		// If view is set to custom view, load the custom view
 		// If Company filter active-don't load any Custom View Show
 		// default
-		if (!readCookie('company_filter') && readCookie('contact_filter_type') != 'COMPANY' && readCookie("contact_view"))
+		if ((!readCookie('company_filter') || readCookie('contact_filter_type') != 'COMPANY') && readCookie("contact_view"))
 		{
 			if(readData('dynamic_contact_filter')) {
 				// Then call customview function with filter url
-				this.customView(readCookie("contact_view"), undefined, 'core/api/filters/filter/dynamic-filter?data='+encodeURIComponent(readData('dynamic_contact_filter')), is_lhs_filter);
+				this.customView(readCookie("contact_view"), undefined, 'core/api/filters/filter/dynamic-filter?data='+encodeURIComponent(readData('dynamic_contact_filter')), undefined,  is_lhs_filter);
 				return;
 			}
 			// If there is a filter saved in cookie then show filter
@@ -265,7 +265,7 @@ var ContactsRouter = Backbone.Router.extend({
 		 * infiniScroll
 		 */
 		this.contactsListView = new Base_Collection_View({ url : url, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
-			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey,  postRenderCallback : function(el, models)
+			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey,  postRenderCallback : function(el, collection)
 			{
 
 				// Contacts are fetched when the app loads in
@@ -276,8 +276,8 @@ var ContactsRouter = Backbone.Router.extend({
 				// To set heading in template
 				if(is_lhs_filter) {
 					var count = 0;
-					if(models.length > 0) {
-						count = models[0].attributes.count || models.length;
+					if(collection.models.length > 0) {
+						count = collection.models[0].attributes.count || collection.models.length;
 					}
 					$('#contacts-count').html("<small>(" + count + " Total)</small>");
 					setupViews();
@@ -298,6 +298,7 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#content').html(this.contactsListView.render().el);
 		} else {
 			$('#content').find('.span9').html(this.contactsListView.render().el);
+			$('#bulk-actions').css('display', 'none');
 			CONTACTS_HARD_RELOAD = true;
 		}
 		$(".active").removeClass("active");
@@ -986,7 +987,7 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		this.contact_custom_view = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
 			templateKey : template_key, individual_tag_name : 'tr', slateKey : slateKey, cursor : true, page_size : 25, sort_collection : false,
-			postRenderCallback : function(el, models)
+			postRenderCallback : function(el, collection)
 			{
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
 
@@ -1005,8 +1006,8 @@ var ContactsRouter = Backbone.Router.extend({
 				setupContactFilterList(el, App_Contacts.tag_id);
 				if(is_lhs_filter) {
 					var count = 0;
-					if(models.length > 0) {
-						count = models[0].attributes.count || models.length;
+					if(collection.models.length > 0) {
+						count = collection.models[0].attributes.count || collection.models.length;
 					}
 					$('#contacts-count').html("<small>(" + count + " Total)</small>");
 				} else {					
@@ -1015,17 +1016,18 @@ var ContactsRouter = Backbone.Router.extend({
 			} });
 		
 		this.contact_custom_view.collection.fetch();
+		// Defines appendItem for custom view
+		this.contact_custom_view.appendItem = contactTableView;
 		if(!is_lhs_filter) {
 			$('#content').html(this.contact_custom_view.el);
 		} else {
-			$('#content').find('.span9').html(this.contact_custom_view.render().el);
+			$('#content').find('.span9').html(this.contact_custom_view.el);
+			$('#bulk-actions').css('display', 'none');
 			CONTACTS_HARD_RELOAD = true;
 		}
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
 
-		// Defines appendItem for custom view
-		this.contact_custom_view.appendItem = contactTableView;
 
 		
 
