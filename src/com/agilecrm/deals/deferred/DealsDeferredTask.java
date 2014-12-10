@@ -48,14 +48,14 @@ public class DealsDeferredTask implements DeferredTask
 	    int defCount = 0;
 	    for (Milestone milestone : milestones)
 	    {
-		if (milestone.equals("Default") && defCount == 0)
+		if (milestone.equals("Default"))
 		{
 		    milestone.isDefault = true;
 		    defCount++;
 		}
 		milestone.save();
 	    }
-
+	    System.out.println("Total default tracks - " + defCount);
 	    // Util function fetches reports based on duration, generates
 	    // reports and sends report
 	    for (Opportunity deal : OpportunityUtil.getOpportunities())
