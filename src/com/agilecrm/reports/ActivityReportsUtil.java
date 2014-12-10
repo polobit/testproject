@@ -743,6 +743,21 @@ public class ActivityReportsUtil
 	return docReport;
     }
 
+    public static Map<String, Object> getCallActivityReport(DomainUser user, Long startTime, Long endTime)
+    {
+	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, null,
+		Activity.ActivityType.CALL.toString(), null, startTime, endTime, 0, null);
+
+	Map<String, Object> callReport = new HashMap<String, Object>();
+	if (activities.size() > 0)
+	{
+	    callReport.put("call_count", activities.size());
+	    callReport.put("call_log", activities);
+	}
+
+	return callReport;
+    }
+
     private static Map<String, Long> getTimeInterval(ActivityReports report)
     {
 	Calendar cal = Calendar.getInstance();
