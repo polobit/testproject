@@ -1,11 +1,13 @@
 package com.agilecrm.core.api.contacts;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -21,7 +23,10 @@ import org.json.JSONException;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
+import com.google.gson.Gson;
 
 /**
  * <code>ContactFilterAPI</code> class includes REST calls to access
@@ -144,5 +149,35 @@ public class ContactFilterAPI
 
 	// Deletes all contact filters with ids specified in the list
 	ContactFilter.dao.deleteBulkByIds(contactFiltersJSONArray);
+    }
+    
+    @GET
+    @Path("/filter/dynamic-filter")
+    @Consumes({ MediaType.WILDCARD})
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<Contact> filterContacts(@QueryParam("data") String data, @QueryParam("page_size") String count,
+    	    @QueryParam("cursor") String cursor, @QueryParam("global_sort_key") String sortKey)
+    {
+    	Gson gson = new Gson();
+    	ContactFilter contact_filter = gson.fromJson(data, ContactFilter.class);
+    	SearchRule rule = new SearchRule();
+	    rule.LHS = "type";
+	    rule.CONDITION = RuleCondition.EQUALS;
+	    rule.RHS = contact_filter.contact_type.toString();
+	    contact_filter.rules.add(rule);
+    	/*if(isDatastoreQuery(contact_filter.rules)) {
+    		return ContactUtil.getContactsForTagRules(contact_filter.rules, Integer.parseInt(count), cursor, sortKey);
+    	}*/
+    	return new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt(count), cursor, sortKey));
+    }
+    
+    private Boolean isDatastoreQuery(List<SearchRule> rules) {
+    	boolean retVal = true;
+    	for(SearchRule rule:rules) {
+    		if(!rule.LHS.equals("tags")){
+    			return false;
+    		}
+    	}
+    	return retVal;
     }
 }

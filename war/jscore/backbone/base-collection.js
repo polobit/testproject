@@ -508,7 +508,7 @@ var Base_Collection_View = Backbone.View
 				if (callback && typeof (callback) === "function")
 				{
 					// execute the callback, passing parameters as necessary
-					callback($(this.el));
+					callback($(this.el), this.collection.models);
 				}
 
 				// Add checkboxes to specified tables by triggering view event

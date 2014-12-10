@@ -3429,4 +3429,22 @@ $(function()
 					return friendlyTime;
 				});
 
+	Handlebars.registerHelper('if_equals_or', function()
+				{
+						var options = arguments[arguments.length-1];
+						try {
+							for(var i = 0; i < arguments.length-1; i=i+2) {
+								value = arguments[i];
+								target = arguments[i+1];
+								if ((typeof target === "undefined") || (typeof value === "undefined"))
+									return options.inverse(this);
+								if (value.toString().trim() == target.toString().trim())
+									return options.fn(this);
+							}
+							return options.inverse(this);
+						} catch(err) {
+							console.log("error while if_equals_or of handlebars helper : "+ err.message);
+							return options.inverse(this);
+						}
+				});
 });

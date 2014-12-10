@@ -185,3 +185,52 @@ $(function(){
 		$('form', this).focus_first();
 	});
 });
+
+function serializeLhsFilters(element)
+{
+	var json_array = [];
+	var filters = {};
+	$.each($(element).find('.lhs-contact-filter-row'), function(index, data) {
+		var json_object = {};
+		var element = $(data)[0];
+		var RHS_VALUE, RHS_NEW_VALUE;
+		var CONDITION = $(element).find('[name="CONDITION"]').val();
+		
+		var RHS_ELEMENT = $(element).find('.'+CONDITION).find('#RHS').children();
+		var RHS_NEW_ELEMENT = $(element).find('.'+CONDITION).find('#RHS_NEW').children();
+		
+		if ($(RHS_ELEMENT).hasClass("date")) {
+			var date = new Date($(RHS_ELEMENT).val());
+			RHS_VALUE = getGMTTimeFromDate(date);
+		} else {
+			RHS_VALUE = $(RHS_ELEMENT).val();
+		}
+		if ($(RHS_NEW_ELEMENT).hasClass("date")) {
+			var date = new Date($(RHS_NEW_ELEMENT).val());
+			RHS_NEW_VALUE = getGMTTimeFromDate(date);
+		} else {
+			RHS_NEW_VALUE = $(RHS_NEW_ELEMENT).val();
+		}
+
+		
+		// Set if value of input/select is valid
+		if (RHS_VALUE && RHS_VALUE != null && RHS_VALUE != "") {
+			//if rhs_new exists and is empty dont consider this condition.
+			if(RHS_NEW_ELEMENT && RHS_NEW_ELEMENT.length > 0 ) {
+				if(!RHS_NEW_VALUE || RHS_NEW_VALUE == null || RHS_NEW_VALUE == "") {
+					//in jquery each return is equivalent to continue.
+					return;
+				}
+			}
+			json_object["LHS"] = $(element).find('[name="LHS"]').val();
+			json_object["CONDITION"] = CONDITION;
+			json_object["RHS"] = RHS_VALUE;
+			json_object["RHS_NEW"] = RHS_NEW_VALUE;
+			json_array.push(json_object);
+		}
+		// Pushes each rule built from chained select in to an JSON array
+	});
+	filters["rules"] = json_array;
+	filters["contact_type"] = $(element).find('#contact_type').val();
+	return filters;
+}

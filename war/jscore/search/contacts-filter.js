@@ -80,7 +80,7 @@ $(function()
 
 		e.preventDefault();
 		eraseCookie('company_filter');
-		
+		eraseData('dynamic_contact_filter');
 
 		var filter_id = $(this).attr('id');
 		var filter_type = $(this).attr('filter_type');
@@ -280,6 +280,7 @@ function revertToDefaultContacts()
 	eraseCookie('contact_filter');
 	eraseCookie('contact_filter_type');
 	eraseCookie('company_filter');
+	eraseData('dynamic_filter');
 
 	if (App_Contacts.contactsListView)
 		App_Contacts.contactsListView = undefined;

@@ -1836,3 +1836,35 @@ text-overflow:ellipsis;
 {
 	margin-left:-4px;
 }
+
+.w-95p {
+	width:95px;
+}
+
+.w-105p {
+	width:105px;
+}
+
+.w-220p {
+	width:220px;
+}
+
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.clear {
+	clear:both;
+	display:block;
+}
+
+select.f-left {
+	float:left;
+	margin-right:2px;
+}
+div.lhs-row-filter {
+	border-bottom: 1px solid #f5f5f5;
+	padding-bottom: 10px;
+}
