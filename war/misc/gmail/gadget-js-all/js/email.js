@@ -15,15 +15,15 @@ function agile_get_emails()
 		];
 
 		// emails = [{email:"devikatest@gmail.com"}];
-		console.log(JSON.stringify(emails));
+		//console.log(JSON.stringify(emails));
 
 		return validateEmails(parse_emails(emails));
 	}
 
 	// Google Matches in 2D format
 	emails = google.contentmatch.getContentMatches();
-	console.log(emails);
-	console.log(JSON.stringify(emails));
+	//console.log(emails);
+	//console.log(JSON.stringify(emails));
 	return validateEmails(parse_emails(emails));
 }
 

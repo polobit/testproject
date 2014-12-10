@@ -17,9 +17,8 @@ function agile_user_associated() {
 	Contacts_Json = {};
 	$.each(emails, function(index, value)
 	{
-		//if(value.email != agile_get_prefs(PREFS_EMAIL))
-		if(value.email != 'test1@gmail.com')
-		Contacts_Json[value.email] = value;
+		if(value.email != agile_get_prefs(PREFS_EMAIL))
+			Contacts_Json[value.email] = value;
 	});
 	
 	head.js(LIB_PATH + 'lib/bootstrap.min.js', LIB_PATH + 'jscore/md5.js', function() {
