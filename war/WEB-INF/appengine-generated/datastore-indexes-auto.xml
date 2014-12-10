@@ -17,6 +17,7 @@
 
     <!-- Used 3 times in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
+    	<property name="archived" direction="asc"/>
         <property name="ownerKey" direction="asc"/>
         <property name="close_date" direction="asc"/>
     </datastore-index>
@@ -39,12 +40,14 @@
     </datastore-index>
 
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
+    	<property name="archived" direction="asc"/>
         <property name="pipeline" direction="asc"/>
         <property name="close_date" direction="asc"/>
     </datastore-index>
 
     <!-- Used 166 times in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
+    	<property name="archived" direction="asc"/>
         <property name="milestone" direction="asc"/>
         <property name="pipeline" direction="asc"/>
         <property name="close_date" direction="asc"/>
@@ -52,6 +55,7 @@
 
     <!-- Used 45 times in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
+    	<property name="archived" direction="asc"/>
         <property name="milestone" direction="asc"/>
         <property name="pipeline" direction="asc"/>
         <property name="expected_value" direction="asc"/>
@@ -59,18 +63,21 @@
 
     <!-- Used 8 times in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
+    	<property name="archived" direction="asc"/>
         <property name="pipeline" direction="asc"/>
         <property name="expected_value" direction="asc"/>
     </datastore-index>
 
     <!-- Used 6 times in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
+    	<property name="archived" direction="asc"/>
         <property name="expected_value" direction="asc"/>
         <property name="created_time" direction="desc"/>
     </datastore-index>
 
     <!-- Used 2 times in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
+    	<property name="archived" direction="asc"/>
         <property name="expected_value" direction="asc"/>
         <property name="pipeline" direction="asc"/>
         <property name="created_time" direction="desc"/>
@@ -78,6 +85,7 @@
 
     <!-- Used 2 times in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
+    	<property name="archived" direction="asc"/>
         <property name="expected_value" direction="asc"/>
         <property name="milestone" direction="asc"/>
         <property name="pipeline" direction="asc"/>
@@ -86,6 +94,7 @@
 
     <!-- Used 2 times in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
+    	<property name="archived" direction="asc"/>
         <property name="expected_value" direction="asc"/>
         <property name="milestone" direction="asc"/>
         <property name="ownerKey" direction="asc"/>
@@ -95,6 +104,7 @@
 
     <!-- Used 24 times in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
+    	<property name="archived" direction="asc"/>
         <property name="expected_value" direction="asc"/>
         <property name="ownerKey" direction="asc"/>
         <property name="created_time" direction="desc"/>
@@ -102,18 +112,21 @@
 
     <!-- Used 2 times in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
+    	<property name="archived" direction="asc"/>
         <property name="ownerKey" direction="asc"/>
         <property name="created_time" direction="desc"/>
     </datastore-index>
     
         <!-- Used 1 time in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
+    	<property name="archived" direction="asc"/>
         <property name="ownerKey" direction="asc"/>
         <property name="expected_value" direction="asc"/>
     </datastore-index>
 
     <!-- Used 1 time in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
+    	<property name="archived" direction="asc"/>
         <property name="ownerKey" direction="asc"/>
         <property name="pipeline" direction="asc"/>
         <property name="expected_value" direction="asc"/>
@@ -220,19 +233,22 @@
     </datastore-index>
 	
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
+    	<property name="archived" direction="asc"/>
         <property name="milestone" direction="asc"/>
         <property name="ownerKey" direction="asc"/>
         <property name="pipeline" direction="asc"/>
         <property name="close_date" direction="asc"/>
     </datastore-index>
 	
-	    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+	    <property name="archived" direction="asc"/>
         <property name="milestone" direction="asc"/>
         <property name="pipeline" direction="asc"/>
         <property name="close_date" direction="asc"/>
     </datastore-index>
 	
 	 <datastore-index kind="Opportunity" ancestor="false" source="auto">
+	 	<property name="archived" direction="asc"/>
         <property name="expected_value" direction="asc"/>
         <property name="milestone" direction="asc"/>
         <property name="ownerKey" direction="asc"/>
