@@ -552,6 +552,9 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	 * contacts. It works like a corrector to google contacts
 	 */
 	contactService = GoogleServiceUtil.getService(prefs.token);
+	
+	// Sets request timeout time
+	contactService.setReadTimeout(60000);
 
 	// Other parameters are additional parameters that are saved in prefs
 	if (prefs.othersParams != null)
