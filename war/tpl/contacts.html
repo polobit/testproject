@@ -93,7 +93,7 @@
 <div class="row">
 	<div class="span12">
 		<div class="page-header">
-			<h1><span id="contact-heading">Contacts</span><span id="contacts-count"> {{contacts_count}} </span></h1>
+			<h1><span id="contact-heading">Contacts </span><span id="contacts-count">{{contacts_count}}</span></h1>
 			<div class="btn-group right" id="view-list"
 				style="top: -29px;"></div>
 			<div class="btn-group right" id="filter-list"
@@ -218,7 +218,7 @@
 <div class="row">
 	<div class="span12">
 		<div class="page-header">
-			<h1><span id="contact-heading">Companies</span> <small> {{count}}</small></h1>
+			<h1><span id="contact-heading">Companies </span><span id="contacts-count"><small>{{count}}</small></span></h1>
 			<div class="btn-group right" id="view-list"
 				style="top: -29px;"></div>
 			<div class="btn-group right" id="filter-list"
@@ -424,7 +424,7 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 		<span><span>Filter Contacts</span>
 		</span>
 	</h3>
-	<span class="pull-right">
+	<span class="pull-right" style="margin-top: 8px;">
 		<a id="clear-lhs-contact-filters" href="#">
 			 clear all</i>
 		</a>
@@ -496,16 +496,16 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 		</select>
 		<div class="IS_GREATER_THAN IS_LESS_THAN">
 			<span id="RHS">
-				<input type="number" placeholder="Value" prev-val="" class="w-95p required">
+				<input type="number" min="0" placeholder="Value" prev-val="" class="w-95p required">
 			</span>
 		</div>
 		<div class="BETWEEN hide">
 			<div class="clear" />
 			<span id="RHS">
-				<input type="number" class="required w-95p" prev-val="" placeholder="Min Value"> 
+				<input type="number" min="0" class="required w-95p" prev-val="" placeholder="Min Value"> 
 			</span>
 			<span id="RHS_NEW">
-				<input type="number" placeholder="Max Value" prev-val="" class="required w-95p">
+				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required w-95p">
 			</span>
 		</div>
 		</div>
@@ -526,16 +526,16 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 		</select>
 		<div class="IS_GREATER_THAN IS_LESS_THAN">
 			<span id="RHS">
-				<input type="number" placeholder="Value" prev-val="" class="w-95p required">
+				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="w-95p required">
 			</span>
 		</div>
 		<div class="BETWEEN hide">
 			<div class="clear" />
 			<span id="RHS">
-				<input type="number" class="required w-95p" prev-val="" placeholder="Min Value"> 
+				<input type="number" min="0" max="5" class="required w-95p" prev-val="" placeholder="Min Value"> 
 			</span>
 			<span id="RHS_NEW">
-				<input type="number" placeholder="Max Value" prev-val="" class="required w-95p">
+				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required w-95p">
 			</span>
 		</div>
 		</div>
@@ -617,7 +617,7 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 		<span><span>Filter Companies</span>
 		</span>
 	</h3>
-	<span class="pull-right">
+	<span class="pull-right" style="margin-top: 8px;">
 		<a id="clear-lhs-company-filters" href="#">
 			 clear all</i>
 		</a>
@@ -663,16 +663,16 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 		</select>
 		<div class="IS_GREATER_THAN IS_LESS_THAN">
 			<span id="RHS">
-				<input type="number" placeholder="Value" prev-val="" class="w-95p required">
+				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="w-95p required">
 			</span>
 		</div>
 		<div class="BETWEEN hide">
 			<div class="clear" />
 			<span id="RHS">
-				<input type="number" class="required w-95p" prev-val="" placeholder="Min Value"> 
+				<input type="number" min="0" max="5" class="required w-95p" prev-val="" placeholder="Min Value"> 
 			</span>
 			<span id="RHS_NEW">
-				<input type="number" placeholder="Max Value" prev-val="" class="required w-95p">
+				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required w-95p">
 			</span>
 		</div>
 		</div>

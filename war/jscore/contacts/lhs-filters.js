@@ -61,6 +61,7 @@ function loadCustomFiledsFilters(fields, cel, is_company) {
 		$(this).parent().find('div').find('input').val("").attr('prev-val', "");;
 		$(this).parent().find('div').find('select').val("").attr('prev-val', "");;
 		$(this).parent().find('div.'+selected).removeClass('hide');
+		$(this).parent().find('div.'+selected).find('#RHS input').focus();
 	});
 	scramble_filter_input_names(cel);
 	if(is_company && readData('dynamic_company_filter')) {
@@ -70,11 +71,6 @@ function loadCustomFiledsFilters(fields, cel, is_company) {
 		deserializeLhsFilters($('#lhs-contact-filter-form'), readData('dynamic_contact_filter'));
 	}
 }
-
-$('#lhs-filter-contacts').die().live("click", function(e) {
-	e.preventDefault();
-	submitLhsFilter
-});
 
 function submitLhsFilter() {
 	var formData = serializeLhsFilters($('#lhs-contact-filter-form'))
@@ -129,22 +125,25 @@ $('#lhs-filters-header').die().live("click", function(e) {
 	e.preventDefault();
 	$(this).find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 	$(this).next().toggleClass('hide');
+	$(this).next().find('.lhs-contact-filter-row:visible').find('#RHS:visible').find(':not(input.date)').focus();
 });
 
-$('#RHS input').die().live("blur", function(e) {
-	var prevVal = $(this).attr('prev-val');
-	var currVal = $(this).val();
-	if(prevVal == currVal) {
-		return;
-	} else {
-		$(this).attr('prev-val', currVal);
-	}
-	if($(this).parent().next().attr("id") == "RHS_NEW") {
-		if($(this).parent().next().find('input').val() != "" && currVal != "") {
+$('#RHS input').die().live("blur keyup", function(e) {
+	if (e.type == 'focusout' || e.keyCode == '13')  {
+		var prevVal = $(this).attr('prev-val');
+		var currVal = $(this).val();
+		if(prevVal == currVal) {
+			return;
+		} else {
+			$(this).attr('prev-val', currVal);
+		}
+		if($(this).parent().next().attr("id") == "RHS_NEW") {
+			if($(this).parent().next().find('input').val() != "" && currVal != "") {
+				submitLhsFilter();
+			}
+		} else {
 			submitLhsFilter();
 		}
-	} else {
-		submitLhsFilter();
 	}
 });
 
@@ -154,21 +153,23 @@ $('#RHS select').die().live("change", function(e) {
 	}
 });
 
-$('#RHS_NEW input').die().live("blur", function(e) {
-	var prevVal = $(this).attr('prev-val');
-	var currVal = $(this).val();
-	if(prevVal == currVal) {
-		return;
-	} else {
-		$(this).attr('prev-val', currVal);
-	}
-	if($(this).parent().prev().attr("id") == "RHS") {
-		if(currVal != "" && $(this).parent().prev().find('input').val() != "") {
-			submitLhsFilter();
+$('#RHS_NEW input').die().live("blur keyup", function(e) {
+	if (e.type == 'focusout' || e.keyCode == '13')  {
+		var prevVal = $(this).attr('prev-val');
+		var currVal = $(this).val();
+		if(prevVal == currVal) {
+			return;
+		} else {
+			$(this).attr('prev-val', currVal);
 		}
-	} else {
-		if(currVal != "") {
-			submitLhsFilter();
+		if($(this).parent().prev().attr("id") == "RHS") {
+			if(currVal != "" && $(this).parent().prev().find('input').val() != "") {
+				submitLhsFilter();
+			}
+		} else {
+			if(currVal != "") {
+				submitLhsFilter();
+			}
 		}
 	}
 });

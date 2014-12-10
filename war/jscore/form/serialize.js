@@ -190,6 +190,7 @@ function serializeLhsFilters(element)
 {
 	var json_array = [];
 	var filters = {};
+	$(element).find('a#lhs-filters-header').removeClass('bold-text');
 	$.each($(element).find('.lhs-contact-filter-row'), function(index, data) {
 		var json_object = {};
 		var element = $(data)[0];
@@ -227,6 +228,7 @@ function serializeLhsFilters(element)
 			json_object["RHS"] = RHS_VALUE;
 			json_object["RHS_NEW"] = RHS_NEW_VALUE;
 			json_array.push(json_object);
+			$($(element).parents().find('.lhs-row-filter')[index]).find('a#lhs-filters-header').addClass('bold-text');
 		}
 		// Pushes each rule built from chained select in to an JSON array
 	});
