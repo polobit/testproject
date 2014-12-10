@@ -169,7 +169,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
      * meeting types
      */
     @NotSaved(IfDefault.class)
-    public String meeting_types = "Personal, Phone, Skype, Google Hangouts";
+    public String meeting_types = "In Person, Phone, Skype, Google Hangouts";
 
     @NotSaved
     public String businesshours_prefs;
