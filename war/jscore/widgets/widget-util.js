@@ -423,6 +423,11 @@ function saveTwilioIOWidgetPrefs()
 	twilioio_prefs["twilio_from_number"] = $("#twilio_from_numbers option:selected").val();
 	twilioio_prefs["twilio_number"] = $("#twilio_numbers option:selected").val();
 	twilioio_prefs["twilio_number_sid"] = $("#twilio_number_sid").val();
+	
+	if ($('#twilio_record').is(':checked'))
+		twilioio_prefs["twilio_record"] = "true";
+	else
+		twilioio_prefs["twilio_record"] = "false";
 
 	console.log(twilioio_prefs);
 
@@ -700,7 +705,7 @@ function fill_fields(fieldsJSON)
 {
 	for (i in fieldsJSON)
 	{
-		if (i == "sip_wsenable")
+		if (i == "sip_wsenable" || i == "twilio_record")
 		{
 			if (fieldsJSON[i] == 'true')
 				$("#" + i).attr('checked', 'checked');

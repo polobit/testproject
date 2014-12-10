@@ -635,7 +635,8 @@ public class TwilioUtil
 		return outgoingCallerIds.getJSONArray("OutgoingCallerId");
 	}
 
-	public static String createAppSidTwilioIO(String accountSID, String authToken, String numberSid) throws Exception
+	public static String createAppSidTwilioIO(String accountSID, String authToken, String numberSid, String record)
+			throws Exception
 	{
 		System.out.println("In createAppSidTwilioIO");
 
@@ -646,18 +647,19 @@ public class TwilioUtil
 		// parameters required to create application
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("FriendlyName", "Agile CRM Twilio Saga");
-		// params.put("VoiceUrl",
-		// "http://1-dot-onlyvoiceservlet.appspot.com/voice");
 
 		// params.put("VoiceUrl",
-		// "http://1-dot-bothservlet.appspot.com/backend/twilioiovoice");
-		params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice");
+		// "http://1-dot-twiliovoicerecord.appspot.com/voice?record=" + record);
+		// params.put("VoiceUrl", "https://" + NamespaceManager.get() +
+		// ".agilecrm.com/twilioiovoice");
+		params.put("VoiceUrl", "https://" + NamespaceManager.get()
+				+ "-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiovoice?record=" + record);
 		params.put("VoiceMethod", "GET");
-		// params.put("StatusCallback",+
-		// "http://1-dot-bothservlet.appspot.com/backend/twilioiostatuscallback");
-		params.put("StatusCallback", "https://" + NamespaceManager.get()
-				+ ".agilecrm.com/twilioiostatuscallback?sessionmngrid=" + SessionManager.get().getDomainId());
-		params.put("StatusCallbackMethod", "GET");
+
+		// params.put("StatusCallback", "https://" + NamespaceManager.get()
+		// + ".agilecrm.com/twilioiostatuscallback?sessionmngrid=" +
+		// SessionManager.get().getDomainId());
+		// params.put("StatusCallbackMethod", "GET");
 
 		// Make a POST request to create application
 		TwilioRestResponse response = client.request("/2010-04-01/Accounts/" + client.getAccountSid()
@@ -700,35 +702,39 @@ public class TwilioUtil
 		}
 		return appSid;
 	}
-	
+
 	/**
 	 * 
 	 * @author Purushotham
 	 * @created 28-Nov-2014
-	 *
+	 * 
 	 */
-	public static JSONObject getLastCallLogStatus(String account_sid, String auth_token, String call_sid) throws JSONException, Exception
-    {
-	TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
-	Map<String, String> params = new HashMap<String, String>();
-	params.put("ParentCallSid", call_sid);
-	TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls.json", "GET", params);
-	JSONObject responseJSON = new JSONObject(response);	
-	return responseJSON;
-    }
-    
-    /**
-     * 
-     * @author Purushotham
-     * @created 28-Nov-2014
-     *
-     */
-    public static JSONObject getLastChildCallLogStatus(String account_sid, String auth_token, String call_sid) throws JSONException, Exception
-    {
-	TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
-	TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"+call_sid+".json", "GET", null);
-	JSONObject responseJSON = new JSONObject(response);
-	return responseJSON;
-    }
-	
+	public static JSONObject getLastCallLogStatus(String account_sid, String auth_token, String call_sid)
+			throws JSONException, Exception
+	{
+		TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("ParentCallSid", call_sid);
+		TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls.json",
+				"GET", params);
+		JSONObject responseJSON = new JSONObject(response);
+		return responseJSON;
+	}
+
+	/**
+	 * 
+	 * @author Purushotham
+	 * @created 28-Nov-2014
+	 * 
+	 */
+	public static JSONObject getLastChildCallLogStatus(String account_sid, String auth_token, String call_sid)
+			throws JSONException, Exception
+	{
+		TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
+		TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"
+				+ call_sid + ".json", "GET", null);
+		JSONObject responseJSON = new JSONObject(response);
+		return responseJSON;
+	}
+
 }
