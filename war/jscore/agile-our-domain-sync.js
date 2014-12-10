@@ -634,11 +634,11 @@ function add_password_change_info_as_note_to_owner(cus_email, callback)
 	}, cus_email);
 
 }
-function add_plan_change_info_as_note_to_owner(cus_email, callback)
+function add_plan_change_info_as_note_to_owner(cus_email, plan_type, plan_id, quantity, callback)
 {
 	var note = {};
 	note.subject = "Plan Changed ";
-	note.description = " Plan changed by "+CURRENT_DOMAIN_USER.email;
+	note.description = " Plan changed to "+plan_type+" ("+plan_id+"*"+quantity+") by "+CURRENT_DOMAIN_USER.email;
 	_agile.add_note(note, function(data)
 		{
 		if (callback && typeof callback == "function")

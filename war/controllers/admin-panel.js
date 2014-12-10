@@ -294,7 +294,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 			}, saveCallback : function(data)
 			{
 				window.navigate("domainSubscribe/" + plan.domain_name, { trigger : true });
-				add_plan_change_info_as_note_to_owner(email);
+				add_plan_change_info_as_note_to_owner(email,plan.plan_type,plan.plan_id,plan.quantity);
 				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
 			}
 
