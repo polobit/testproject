@@ -171,15 +171,6 @@ public class Activity extends Cursor
 	return null;
     }
 
-    @XmlElement
-    public Object getEntityObject() throws Exception
-    {
-	if (entity_type == null || entity_id == null)
-	    return null;
-	Object obj = DaoActivity.getInstace(entity_type.toString(), entity_id);
-	return obj;
-    }
-
     @XmlElement(name = "userPic")
     public String getUserPic() throws Exception
     {
