@@ -220,6 +220,15 @@ public class Activity extends Cursor
 	dao.put(this);
     }
 
+    @XmlElement
+    public Object getEntityObject() throws Exception
+    {
+	if (entity_type == null || entity_id == null)
+	    return null;
+	Object obj = DaoActivity.getInstace(entity_type.toString(), entity_id);
+	return obj;
+    }
+
     @PrePersist
     private void prePersist()
     {
