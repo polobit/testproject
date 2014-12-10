@@ -134,11 +134,21 @@
                                 <input type="text" name="due" placeholder="mm/dd/yyyy" id="task-date-1" class="required date" />
                             </div>
                         </div>
-                        <div class="span2 control-group">
+                        
+                        <div class="span2 control-group ">
+                            <label class="control-label"><b>Due Time </b><span class="field_req">*</span></label>
+                            <div class="controls">
+                                <input type="text" name="start_time" class="task-start-timepicker required" id="task-time-1" style="width:65px" placeholder="time" />		
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+						<div class="span3 control-group">
                             <label for="priority_type" class="control-label"><b>Priority </b></label>
                             <div class="controls">
                                 <span class="input ">
-                                    <select name="priority_type" id="priority_type" size="1" class="input-medium">
+                                    <select name="priority_type" id="priority_type" size="1" >
                                         <option value="HIGH">High</option>
                                         <option value="NORMAL" selected="selected">Normal</option>
                                         <option value="LOW">Low</option>
@@ -146,16 +156,7 @@
                                 </span>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-						<div class="span3 control-group">
-							<label class="control-label"><b> Owner </b><span
-								class="field_req">*</span></label>
-							<div class="controls" id="owners">
-								<select id="owners-list" class="required" name="owner_id"></select>
-								<img class="loading-img" src="img/21-0.gif"></img>
-							</div>
-						</div>
+						 
 						<div class="span2">
 							<label for="status" class="control-label"><b>Status </b></label>
                             <div class="controls" style="margin-bottom: 6px;">
@@ -172,6 +173,18 @@
 							</div>											
 						</div>
 					</div>
+					
+					<div class="row">
+					 <div class="span3 control-group">
+							<label class="control-label"><b> Owner </b><span
+								class="field_req">*</span></label>
+							<div class="controls" id="owners">
+								<select id="owners-list" class="required" name="owner_id"></select>
+								<img class="loading-img" src="img/21-0.gif"></img>
+							</div>
+						</div>
+					</div>
+					
 					<div class="row">
 					  <div class="span5 control-group">
 						<label class="control-label"><b>Related To</b></label>

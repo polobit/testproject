@@ -1836,3 +1836,8 @@ text-overflow:ellipsis;
 {
 	margin-left:-4px;
 }
+
+.activity_time{
+	margin-top: -34px;
+margin-bottom: 35px;
+}

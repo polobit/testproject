@@ -136,6 +136,7 @@ $(function() {
 		
 		// Fill details in form
 		setForm(el);
+		
 	});
 
 	/**
@@ -144,6 +145,11 @@ $(function() {
 	$('#task-date-1').datepicker({
 		format : 'mm/dd/yyyy'
 	});
+	
+	
+	$('.task-start-timepicker').timepicker({ defaultTime : get_task_hh_mm(), showMeridian : false, template : 'modal' });
+	
+	$('.updatetask-start-timepicker').timepicker({ defaultTime : get_task_hh_mm(true), showMeridian : false, template : 'modal' });
 
 	/**
 	 * Shows a pop-up modal with pre-filled values to update a task
@@ -156,6 +162,7 @@ $(function() {
 	function update_task(ele) {
 		var value = $(ele).data().toJSON();
 		deserializeForm(value, $("#updateTaskForm"));
+		$('.updatetask-start-timepicker').val(get_task_hh_mm(value.due));
 		$("#updateTaskModal").modal('show');
 		// Fills owner select element
 		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner',
@@ -183,6 +190,7 @@ $(function() {
 					var taskId = $(this).attr('data');
 					// complete_task(taskId, $(this));
 					complete_task(taskId,
+							
 							App_Calendar.tasksListView.collection, $(this)
 									.closest('tr'))
 				}
@@ -259,6 +267,11 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 		
 	if (!isUpdate)
 		json.due = new Date(json.due).getTime();
+	
+	// Appending start time to start date
+	var startarray = (json.start_time).split(":");
+	json.due = new Date(json.due * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
+
 
 	console.log(json);
 	var newTask = new Backbone.Model();
@@ -572,4 +585,25 @@ function complete_task(taskId, collection, ui, callback) {
 	 * ui.fadeOut(2000); }} );
 	 */
 
+}
+
+function get_task_hh_mm(end_time)
+{
+	if(!end_time){
+		return '12:00';
+	}
+	var hours = new Date(end_time*1000).getHours();
+	var minutes = new Date(end_time*1000).getMinutes();
+	
+
+	if (hours < 10)
+	{
+		hours = "0" + hours;
+	}
+	if (minutes < 10)
+	{
+		minutes = "0" + minutes;
+	}
+
+	return hours + ':' + minutes;
 }
