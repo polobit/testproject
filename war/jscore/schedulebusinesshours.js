@@ -24,7 +24,7 @@ $("#btnSerialize").die().live('click', function(e){
 	
 	
 	var saveBtn = $(this);
-	disable_save_button($(saveBtn));
+	enable_save_button($(saveBtn));
 	
 	var json = serializeForm("scheduleform");
 	var meeting_durations = formToJSON();
@@ -46,7 +46,7 @@ $("#btnSerialize").die().live('click', function(e){
 			data : JSON.stringify(json),
 			success : function()
 			{
-			window.location.reload(true);
+			//window.location.reload(true);
 			},
 			error : function(error)
 			{
