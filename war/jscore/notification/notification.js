@@ -77,9 +77,12 @@ function subscribeToPubNub(domain)
 			
 			if (message.type == "EVENT_REMINDER")
 			{
+				if(CURRENT_DOMAIN_USER['email']==message.useremail){
 				var html = getTemplate("event-notification", message);
-				showNoty('information', html, "bottomRight", "EVENT_REMINDER");
+				showNoty('information', html, "bottomRight", "EVENT_REMINDER",undefined,3000000);
 				return;
+				}
+			
 			}
 			
 			
@@ -391,8 +394,11 @@ function showSwitchChanges(el)
  * @param notification_type -
  *            notification type - TAG_CREATED, TAG_DELETED etc.
  */
-function showNoty(type, message, position, notification_type, onCloseCallback)
+function showNoty(type, message, position, notification_type, onCloseCallback,timeout)
 {
+	if(!timeout){
+		timeout=30000;
+	}
 	// Don't show notifications when disabled by user. Neglect campaign ones
 	if(notification_type != "EVENT_REMINDER" ){
 	
@@ -433,7 +439,7 @@ function showNoty(type, message, position, notification_type, onCloseCallback)
 			LIB_PATH + 'lib/noty/themes/default.js', function()
 			{
 
-			var n = noty({ text : message, layout : position, type : type, timeout : 30000, 
+			var n = noty({ text : message, layout : position, type : type, timeout : timeout, 
 			
 				closeCallback : 
 					(onCloseCallback && typeof onCloseCallback == 'function') ? onCloseCallback : undefined,
