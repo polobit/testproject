@@ -485,6 +485,7 @@ function showNoty(type, message, position, notification_type, onCloseCallback,ti
 					if (n.options.type == "information")
 					{
 						var link = $(this).find("a").attr("href");
+						if(link)
 						Backbone.history.navigate(link, { trigger : true });
 					}
 
