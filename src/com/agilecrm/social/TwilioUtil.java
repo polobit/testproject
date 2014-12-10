@@ -650,10 +650,7 @@ public class TwilioUtil
 
 		// params.put("VoiceUrl",
 		// "http://1-dot-twiliovoicerecord.appspot.com/voice?record=" + record);
-		// params.put("VoiceUrl", "https://" + NamespaceManager.get() +
-		// ".agilecrm.com/twilioiovoice");
-		params.put("VoiceUrl", "https://" + NamespaceManager.get()
-				+ "-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiovoice?record=" + record);
+		params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice?record=" + record);
 		params.put("VoiceMethod", "GET");
 
 		// params.put("StatusCallback", "https://" + NamespaceManager.get()
