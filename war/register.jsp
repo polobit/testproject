@@ -264,11 +264,7 @@ $.validator.setDefaults({
 									</div> -->
 									 <div class="form-group login-plan_type">
 									<div style="display:inline-block;float:left;margin-right:5px">
-<<<<<<< HEAD
 									<select class="form-control required"  name="plan_type" data-width="100%" style="min-width:175px">
-=======
-									<select class="form-control required"  name="plan_type" data-width="100%" style="width:162px">
->>>>>>> e7499ac... Register select field fix for safari
 											<option value="" selected disabled>Choose Plan</option>
 											<option value="Starter">Starter</option>
 											<option value="Regular">Regular</option>
@@ -566,6 +562,8 @@ $.validator.setDefaults({
 		{
 			// Read domain
 			 var domain = $("#subdomain").val();
+			
+			 $("#register_account").attr("disabled", "disabled");
 			
 			  // Form data is posted to its subdomain 
 			 //$(form).attr('action', "https://" + domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com/register");
