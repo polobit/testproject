@@ -55,7 +55,6 @@ public class GoogleSyncImpl extends TwoWaySyncService
     /** contact service. */
     private ContactsService contactService;
 
-
     /** last_synced_from_client hold date as long ie unix timestamp */
     private Long last_synced_from_client = 0l;
     private int start_index = 1;
@@ -68,17 +67,15 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
     private int max_limit = MAX_SYNC_LIMIT;
 
-
     private JSONObject otherParameters = new JSONObject();
-    
-    
+
     /**
      * Parameters to check if etag changes
      */
     private String etag = null;
     private int index = 1;
     private String etagFromDB = null;
-    
+
     private String nextLink = null;
 
     /**
@@ -140,22 +137,22 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    return null;
 
 	setNextSet(resultFeed);
-	
+
 	return resultFeed;
     }
-    
+
     private void setNextSet(ContactFeed resultFeed)
     {
 	// Sets total contacts in account
 	int totalContacts = resultFeed.getTotalResults();
-	
+
 	// Gets resultField start index
 	int fetchedContactsSize = resultFeed.getStartIndex();
 
 	// Gets next which can be used to fetch next set of results
 	Link nextLinkObject = resultFeed.getNextLink();
-	
-	// Calculates number of contacts remaining after current fetch 
+
+	// Calculates number of contacts remaining after current fetch
 	int remainingContacts = totalContacts - fetchedContactsSize;
 
 	// Sets previous start index
@@ -166,20 +163,20 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	else if (remainingContacts < max)
 	{
 	    nextLink = null;
-	    
+
 	    // Creates new index based on fetched indexes
 	    start_index += resultFeed.getEntries().size();
-	    
+
 	    // Builds query without access key
 	    Query nextQuery = buildBasicQueryWithoutAccessKey();
 	    DateTime dateTime = new DateTime(last_synced_from_client);
 	    nextQuery.setUpdatedMin(dateTime);
-	    
+
 	    // Sets start index
 	    nextQuery.setStartIndex(start_index);
 	    if (remainingContacts == 0 || remainingContacts < 0)
 	    {
-		//start_index++;
+		// start_index++;
 		nextQuery.setMaxResults(max);
 	    }
 	    else
@@ -323,7 +320,6 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	}
 	return nextLink;
     }
-    
 
     /**
      * Save contacts in agile crm.
@@ -332,21 +328,22 @@ public class GoogleSyncImpl extends TwoWaySyncService
      *            the entries
      */
     private String currentEtagInSync = null;
+
     private void saveContactsInAgile(List<ContactEntry> entries)
     {
 	Long created_at = 0l;
 
-	if(currentEtagInSync == null)
+	if (currentEtagInSync == null)
 	    currentEtagInSync = etagFromDB;
-	
+
 	for (ContactEntry entry : entries)
 	{
 	    etag = entry.getEtag();
-	    
-	    if(currentEtagInSync == null)
-		 currentEtagInSync = etagFromDB = etag;
-	    
-	    if(!StringUtils.equals(etag, currentEtagInSync))
+
+	    if (currentEtagInSync == null)
+		currentEtagInSync = etagFromDB = etag;
+
+	    if (!StringUtils.equals(etag, currentEtagInSync))
 	    {
 		index = 2;
 		currentEtagInSync = etag;
@@ -360,26 +357,25 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	    // System.out.println(entry.getEtag() + " : " + entry.getEdited());
 	    created_at = new_created_at;
-	   // groupInfos.get(0).
+	    // groupInfos.get(0).
 	    // System.out.println(entry.getId() + " , " + entry.getName());
 	    // System.out.println(created_at);
 	    // contact = wrapContactToAgileSchemaAndSave(entry);
-	    
+
 	    List<Email> emails = entry.getEmailAddresses();
-	    
-	    // Added condition to mandate emails. It is added here as other sync allows contacts without email
-	    if(emails == null || emails.size() == 0)
+
+	    // Added condition to mandate emails. It is added here as other sync
+	    // allows contacts without email
+	    if (emails == null || emails.size() == 0)
 	    {
 		syncStatus.put(ImportStatus.EMAIL_REQUIRED, syncStatus.get(ImportStatus.EMAIL_REQUIRED) + 1);
 		syncStatus.put(ImportStatus.TOTAL_FAILED, syncStatus.get(ImportStatus.TOTAL_FAILED) + 1);
 		continue;
 	    }
-		
+
 	    wrapContactToAgileSchemaAndSave(entry);
 	}
-	
-	
-	
+
 	System.out.println(NamespaceManager.get() + " , " + etag + " , " + index + " , "
 		+ entries.get(entries.size() - 1).getUpdated());
 
@@ -536,7 +532,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	System.out.println("total update requests : " + updateRequestCount + " , " + limit);
 
     }
-    
+
     /**
      * Refreshes access token, initializes contacts service object to connect to
      * google. It also fetches extra parameters that are saved in contact prefs
@@ -552,7 +548,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	 * contacts. It works like a corrector to google contacts
 	 */
 	contactService = GoogleServiceUtil.getService(prefs.token);
-	
+
 	// Sets request timeout time
 	contactService.setReadTimeout(60000);
 
@@ -561,13 +557,47 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	{
 	    try
 	    {
+		prefs.sync_from_group = URLDecoder.decode(prefs.sync_from_group, "utf-8");
 		otherParameters = new JSONObject(prefs.othersParams);
-
 		// Start index where last sync stopped.
-		start_index = Integer.parseInt(otherParameters.getString("start_index"));
-		nextLink = otherParameters.getString("nextLink");
-		etagFromDB = otherParameters.getString("etagFromDB");
+
+		if (otherParameters.has(prefs.sync_from_group))
+		{
+		    JSONObject object = otherParameters.getJSONObject(prefs.sync_from_group);
+		    start_index = Integer.parseInt(object.getString("start_index"));
+		    nextLink = object.getString("nextLink");
+		    etagFromDB = object.getString("etagFromDB");
+		    
+		    if(object.has("last_synced"))
+		    {
+			prefs.last_synced_from_client = object.getLong("last_synced");
+		    }
+		    
+		}
+		else
+		{
+		    start_index = Integer.parseInt(otherParameters.getString("start_index"));
+		    nextLink = otherParameters.getString("nextLink");
+		    etagFromDB = otherParameters.getString("etagFromDB");
+		    
+			
+		    JSONObject json = new JSONObject();
+		    
+		    json.put("start_index", start_index);
+		    json.put(prefs.sync_from_group, json);
+		    json.put("etagFromDB", etagFromDB);
+		    json.put("nextLink", nextLink);
+		    
+		    json.put("last_synced", prefs.last_synced_from_client);
+		    
+		    // Removes old parameters
+		    otherParameters.remove("start_index");
+		    otherParameters.remove("nextLink");
+		    otherParameters.remove("etagFromDB");
+		}
+
 		etag = etagFromDB;
+		
 		// totalContacts =
 		// otherParameters.getString(("totalContacts");
 	    }
@@ -629,29 +659,31 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    System.out.println(otherParameters);
 	}
     }
-    
+
     private void updateOtherParameters()
     {
 	try
-	    {
-		otherParameters.put("baseon_index", "true");
-		otherParameters.put("start_index", start_index);
-		otherParameters.put("nextLink", getFinalNextLink());
-		otherParameters.put("etagFromDB", etag);
-		prefs.othersParams = otherParameters.toString();
-	    }
-	    catch (JSONException e)
-	    {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
+	{
+	    JSONObject obj = new JSONObject();
+	    obj.put("start_index", start_index);
+	    obj.put("nextLink", getFinalNextLink());
+	    obj.put("etagFromDB", etag);
+	    otherParameters.put(prefs.sync_from_group, obj);
+	    
+	    prefs.othersParams = otherParameters.toString();
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 
     }
 
     private void finalizeSync()
     {
 	updateOtherParameters();
-	
+
 	prefs.inProgress = false;
 	updateLastSyncedInPrefs();
 	sendNotification(prefs.type.getNotificationEmailSubject());
