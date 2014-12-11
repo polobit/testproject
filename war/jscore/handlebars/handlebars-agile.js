@@ -616,9 +616,11 @@ function getContactCustomProperties(items)
 	var datajson={};
 	var formulaFields=[];
 	var finalFields=[];
-	$.each(App_Contacts.contactDetailView.model.get("properties"),function(index,customField){
-		datajson[''+customField.name]=customField.value;
-	});
+	if(App_Contacts.contactDetailView!=undefined && App_Contacts.contactDetailView!=null){
+		$.each(App_Contacts.contactDetailView.model.get("properties"),function(index,customField){
+			datajson[''+customField.name]=customField.value;
+		});
+	}
 	var j=0;
 	if(App_Contacts.customFieldsList!=undefined && App_Contacts.customFieldsList!=null){
 		for(var i=0;i<App_Contacts.customFieldsList.collection.models.length;i++){
