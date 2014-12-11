@@ -71,6 +71,7 @@ public class RegisterVerificationServlet extends HttpServlet
 	    error.put("error", message);
 
 	    writer.print(error);
+	    writer.close();
 	}
 	catch (IOException e)
 	{

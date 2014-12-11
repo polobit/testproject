@@ -2,6 +2,8 @@ package com.agilecrm;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -12,6 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.activities.EventReminder;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -42,6 +47,12 @@ import com.google.appengine.api.utils.SystemProperty;
 @SuppressWarnings("serial")
 public class RegisterServlet extends HttpServlet
 {
+    public static final String COMPANY_TYPE = "Company Type";
+    public static final String PLAN_CHOSEN = "Plan";
+    public static final String USERS_COUNT = "Users";
+    public static final String ROLE = "Role";
+    public static final String DOMAIN = "Domain";
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
 	doGet(request, response);
@@ -177,6 +188,9 @@ public class RegisterServlet extends HttpServlet
 	// Get Name
 	String name = request.getParameter("name");
 
+	if(name != null)
+	    name = name.trim();
+	
 	// Get reference code
 
 	if (email == null || password == null)
@@ -190,9 +204,134 @@ public class RegisterServlet extends HttpServlet
 	DomainUser domainUser = createUser(request, response, userInfo, password);
 
 	EventReminder.getEventReminder(domainUser.domain, null);
+	try
+	{
+	    // Creates contact in our domain
+	    createUserInOurDomain(request);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	
 
 	// Redirect to home page
 	response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com/");
+    }
+
+    private void createUserInOurDomain(HttpServletRequest request)
+    {
+	// Form 1
+	String userDomain = NamespaceManager.get();
+	String emailValue = request.getParameter("email");
+	String name = request.getParameter("name");
+	String planValue = request.getParameter("plan_type");
+	String userCount = request.getParameter("users_count");
+
+	// Form 2
+	String companyName = request.getParameter("company");
+	String companySize = request.getParameter("company_size");
+	String companyType = request.getParameter("company_type");
+	String role = request.getParameter("role");
+	String phoneNumber = request.getParameter("phone_number");
+
+	List<ContactField> properties = new ArrayList<ContactField>();
+
+	try
+	{
+
+	    // Name
+	    if (!StringUtils.isEmpty(name))
+	    {
+		if (name.contains(" "))
+		{
+		    name = name.trim();
+		    String[] names = name.split(" ");
+		    properties.add(createField(Contact.FIRST_NAME, names[0]));
+
+		    if (names.length > 1)
+		    {
+			properties.add(createField(Contact.LAST_NAME, names[1]));
+		    }
+		}
+		else
+		{
+		    properties.add(createField(Contact.FIRST_NAME, name));
+		}
+	    }
+
+	    // Email
+	    if (!StringUtils.isEmpty(emailValue))
+	    {
+		properties.add(createField(Contact.EMAIL, emailValue));
+	    }
+
+	    // Plan
+	    if (!StringUtils.isEmpty(planValue))
+	    {
+		properties.add(createField(PLAN_CHOSEN, planValue));
+	    }
+
+	    // Users count
+	    if (!StringUtils.isEmpty(userCount))
+	    {
+		properties.add(createField(USERS_COUNT, userCount));
+	    }
+
+	    // Company
+	    if (!StringUtils.isEmpty(companyName))
+	    {
+		properties.add(createField(Contact.COMPANY, companyName.trim()));
+	    }
+
+	    // Company type
+	    if (!StringUtils.isEmpty(companyType))
+	    {
+		properties.add(createField(COMPANY_TYPE, companyType));
+	    }
+
+	    if (!StringUtils.isEmpty(phoneNumber))
+	    {
+		properties.add(createField(Contact.PHONE, phoneNumber));
+	    }
+	    if (!StringUtils.isEmpty(role))
+	    {
+		properties.add(createField(Contact.TITLE, role));
+	    }
+
+	    properties.add(createField(DOMAIN, userDomain));
+
+	    NamespaceManager.set(Globals.COMPANY_DOMAIN);
+
+	    Contact contact = new Contact();
+	    contact.properties = properties;
+
+	    Contact oldContact = ContactUtil.searchContactByEmail(contact.getContactFieldValue(Contact.EMAIL));
+
+	    if (oldContact != null)
+	    {
+		contact = ContactUtil.mergeContactFeilds(contact, oldContact);
+	    }
+
+	    System.out.println("contact to be saved : " + contact);
+	    contact.save();
+	    System.out.println("contact after saving : " + contact);
+	}
+	finally
+	{
+	    NamespaceManager.set(userDomain);
+	}
+
+    }
+
+    private ContactField createField(String name, String value)
+    {
+	ContactField property = new ContactField();
+
+	property.name = name;
+	property.value = value;
+	property.type = property.getType();
+	return property;
     }
 
     /**
@@ -240,7 +379,7 @@ public class RegisterServlet extends HttpServlet
 	System.out.println("reference domain in register servlet " + reference_domain);
 	// Create Domain User, Agile User
 	domainUser = new DomainUser(domain, userInfo.getEmail(), userInfo.getName(), password, true, true,
-	        reference_domain);
+		reference_domain);
 
 	// Set IP Address
 	domainUser.setInfo(DomainUser.IP_ADDRESS, "");
