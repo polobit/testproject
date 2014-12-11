@@ -243,6 +243,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							// related to same contact twice
 							var tag_not_exist = true;
 							var email_not_exist = true;
+							
 							var deal_not_exist=true;
 
 							/*
