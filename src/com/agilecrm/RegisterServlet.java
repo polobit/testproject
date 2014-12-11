@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.account.APIKey;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
@@ -22,8 +23,10 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.ReferenceUtil;
 import com.agilecrm.util.RegisterUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>RegisterServlet</code> class registers the user account in agile crm.
@@ -243,9 +246,9 @@ public class RegisterServlet extends HttpServlet
 	    // Name
 	    if (!StringUtils.isEmpty(name))
 	    {
+		 name = name.trim();
 		if (name.contains(" "))
 		{
-		    name = name.trim();
 		    String[] names = name.split(" ");
 		    properties.add(createField(Contact.FIRST_NAME, names[0]));
 
@@ -313,9 +316,25 @@ public class RegisterServlet extends HttpServlet
 		contact = ContactUtil.mergeContactFeilds(contact, oldContact);
 	    }
 
+	    Key<DomainUser> key = null;
+	    String version = VersioningUtil.getAppVersion(request);
+	    if(!StringUtils.isEmpty(version))
+	    {
+		key = APIKey.getDomainUserKeyRelatedToAPIKey("td2h2iv4njd4mbalruce18q7n4");
+	    }
+	    else
+	    {
+		key = APIKey.getDomainUserKeyRelatedToAPIKey("ckjpag3g8k9lcakm9mu3ar4gc8");
+	    }
+
+	    contact.setContactOwner(key);
 	    System.out.println("contact to be saved : " + contact);
 	    contact.save();
 	    System.out.println("contact after saving : " + contact);
+	}
+	catch(Exception e)
+	{
+	    e.printStackTrace();
 	}
 	finally
 	{
