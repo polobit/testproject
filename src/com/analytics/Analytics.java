@@ -117,17 +117,27 @@ public class Analytics
 	JSONObject userAgentJSON = new JSONObject();
 	try
 	{
+	    UserAgent userAgent = UserAgent.parseUserAgentString(user_agent);
+
+	    String browserName = StringUtils.lowerCase(userAgent.getBrowser().getGroup().toString());
+	    String os = StringUtils.lowerCase(userAgent.getOperatingSystem().getGroup().toString());
+	    String deviceType = StringUtils.lowerCase(userAgent.getOperatingSystem().getDeviceType().toString());
+
 	    // Browser Name
-	    userAgentJSON.put("browser_name", StringUtils.lowerCase(UserAgent.parseUserAgentString(user_agent).getBrowser().getGroup().toString()));
+	    if (!StringUtils.isBlank(browserName) && !browserName.equals("unknown"))
+		userAgentJSON.put("browser_name", browserName);
 
 	    // Browser version
-	    userAgentJSON.put("browser_version", UserAgent.parseUserAgentString(user_agent).getBrowser().getVersion(user_agent).getMajorVersion());
+	    userAgentJSON.put("browser_version",
+		    UserAgent.parseUserAgentString(user_agent).getBrowser().getVersion(user_agent).getMajorVersion());
 
 	    // OS
-	    userAgentJSON.put("os", StringUtils.lowerCase(UserAgent.parseUserAgentString(user_agent).getOperatingSystem().getGroup().toString()));
+	    if (!StringUtils.isBlank(os) && !os.equals("unknown"))
+		userAgentJSON.put("os", os);
 
 	    // Device Type
-	    userAgentJSON.put("device_type", StringUtils.lowerCase(UserAgent.parseUserAgentString(user_agent).getOperatingSystem().getDeviceType().toString()));
+	    if (!StringUtils.isBlank(deviceType) && !deviceType.equals("unknown"))
+		userAgentJSON.put("device_type", deviceType);
 	}
 	catch (Exception e)
 	{

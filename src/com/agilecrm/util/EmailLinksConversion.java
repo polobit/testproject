@@ -84,12 +84,8 @@ public class EmailLinksConversion
 	    // Get all anchor element href attributes
 	    Elements links = doc.select("a[href]");
 
-	    // Domain URL
-	    // String domainURL =
-	    // VersioningUtil.getLoginURL(NamespaceManager.get(),
-	    // "sandbox");
-
-	    String domainURL = VersioningUtil.getDefaultLoginUrl(NamespaceManager.get());
+	    // Triggered main url
+	    String domainURL = VersioningUtil.getHostURLByApp(NamespaceManager.get());
 
 	    // Remove all /
 	    while (domainURL.endsWith("/"))
@@ -162,7 +158,7 @@ public class EmailLinksConversion
 	// String domainURL = VersioningUtil.getLoginURL(NamespaceManager.get(),
 	// "sandbox");
 
-	String domainURL = VersioningUtil.getDefaultLoginUrl(NamespaceManager.get());
+	String domainURL = VersioningUtil.getHostURLByApp(NamespaceManager.get());
 
 	// Remove all /
 	while (domainURL.endsWith("/"))

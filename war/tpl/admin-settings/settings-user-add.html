@@ -245,6 +245,15 @@
     			</div>
 					</div>
 					</div>
+
+                    {{#if id}}
+                	
+    					<input type="text" name="meeting_types" class="hide"  value="{{meeting_types}}">
+                        <input type="text" name="meeting_durations" class="hide"  value="{{meeting_durations}}">
+                        <input type="text" name="business_hours" class="hide"  value="{{business_hours}}">
+                        <input type="text" name="timezone" class="hide"  value="{{timezone}}">
+				
+    				{{/if}}
     				<div class="form-actions">
                			<button type="submit" class="save btn btn-primary">Save Changes</button>
                			<a type="reset" href='#users' class="btn">Cancel</a>

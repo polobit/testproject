@@ -1,6 +1,38 @@
+<script id="email-account-types-template" type="text/html">
+	<div class="btn-group right" style='position:relative'>
+	<button class="btn filter-dropdown" id="email-type-select"><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>{{agileUserName}}</button>
+	<button class="btn dropdown-toggle" id="email-type-select-dropdown" data-toggle="dropdown">
+	<span class="caret"></span>
+	</button>
+	<ul id = "mail-account-type-select" class="pull-right dropdown-menu">
+	{{#if agileUserName}}
+	<li>
+	<a href="" class="agile-emails" data-url="" email-server-type={{agileUserName}}><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>{{agileUserName}}</a>
+	</li>
+	{{/if}}
+	{{#if gmailUserName}}
+	<li>
+	<a href="" class="agile-emails" data-url="core/api/social-prefs/google-emails?e=" email-server-type={{gmailUserName}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{gmailUserName}}</a>
+	</li>
+	{{/if}}
+	{{#if imapUserName}}
+	<li>
+	<a href="" class="agile-emails" data-url="core/api/imap/imap-emails?e=" email-server-type={{imapUserName}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{imapUserName}}</a>
+	</li>
+	{{/if}}
+	{{#if exchangeUserName}}
+	<li>
+	<a href="" class="agile-emails" data-url="core/api/office/office365-emails?e=" email-server-type={{exchangeUserName}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{exchangeUserName}}</a>
+	</li>
+	{{/if}}
+	</ul>
+	</div>
+	</div>
+	<div class="clearfix"></div>
+</script>
 <script id="email-social-collection-template" type="text/html">
 {{#unless this.length}}
-    <div class="slate">
+    <div class="slate" style="margin-top:10px">
             <div class="slate-content">
                 <div class="box-left">
                     <img alt="Clipboard" src="/img/clipboard.png" />
@@ -8,7 +40,7 @@
                 <div class="box-right">
                     <h3>You have no emails for {{contactShortName}}.</h3>
                     <div class="text">
-                        Emails communicated with {{contactShortName}} through agilecrm or given imap email are shown here.
+                        You have no emails for {{contactShortName}} in {{read_global_var}} account.
                     </div>
                     <a href="#send-email/{{getCurrentContactProperty "email"}}" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i> Send Email</a>
                 </div>
@@ -26,6 +58,8 @@
             </div>
         </ul>
 	<ul id="email-social-model-list" class="ativity-block-ul"></ul>
+	<table style="margin-top:18px">
+	</table>
 {{/if}}
 </script>
 
