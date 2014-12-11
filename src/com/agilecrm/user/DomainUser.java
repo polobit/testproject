@@ -185,7 +185,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     public String timezone = "UTC";
 
     @NotSaved(IfDefault.class)
-    public String meeting_durations = "{\"15mins\":\"say hi\",\"30mins\":\"let's keep it Short\",\"60mins\":\"let's Chat\"}";
+    public String meeting_durations = "{\"15mins\":\"say hi\",\"30mins\":\"let's keep it short\",\"60mins\":\"let's chat\"}";
 
     /**
      * Info Keys of the user
