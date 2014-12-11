@@ -623,6 +623,8 @@ function getContactCustomProperties(items)
 	}
 	var j=0;
 	if(App_Contacts.customFieldsList!=undefined && App_Contacts.customFieldsList!=null){
+		if(type=='')
+			type='CONTACT';
 		for(var i=0;i<App_Contacts.customFieldsList.collection.models.length;i++){
 			var json={};
 			if(App_Contacts.customFieldsList.collection.models[i].get("scope")==type && App_Contacts.customFieldsList.collection.models[i].get("field_type")=="FORMULA"){
@@ -649,13 +651,19 @@ function getContactCustomProperties(items)
 			}
 		}
 	}
-	for(var i=0;i<=fields.length;i++){
-		for(var k=0;k<formulaFields.length;k++){
-			if(i+1==formulaFields[k].position)
-				finalFields.push(formulaFields[k]);
+	if(fields.length>0){
+		for(var i=0;i<=fields.length;i++){
+			for(var k=0;k<formulaFields.length;k++){
+				if(i+1==formulaFields[k].position)
+					finalFields.push(formulaFields[k]);
+			}
+			if(i!=fields.length)
+				finalFields.push(fields[i]);
 		}
-		if(i!=fields.length)
-			finalFields.push(fields[i]);
+	}else{
+		for(var k=0;k<formulaFields.length;k++){
+			finalFields.push(formulaFields[k]);	
+		}
 	}
 	return finalFields;
 }
