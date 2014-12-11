@@ -565,7 +565,7 @@ $.validator.setDefaults({
 			// Read domain
 			 var domain = $("#subdomain").val();
 			
-			 $("#register_account").attr("disabled", "disabled");
+			 $("#confirm_registration").attr("disabled", "disabled");
 			
 			  // Form data is posted to its subdomain 
 			 //$(form).attr('action', "https://" + domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com/register");
