@@ -283,7 +283,7 @@ $.validator.setDefaults({
 											<option value="" selected disabled>Company type</option>
 											<option value="B2B">B2B</option>
 											<option value="SaaS">SaaS</option>
-											<option value="eCommerce">eCommerce</option>
+											<option value="Ecommerce">Ecommerce</option>
 											<option value="Marketing Agency">Marketing Agency</option>
 											<option value="Other">Other</option>
 								  </select>

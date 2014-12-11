@@ -203,6 +203,7 @@ vertical-align: bottom;
 {
 	line-height:45px;
 	text-indent:6px;
+	border-radius:9px;
 }
 
 .regpage-container-fixed-height
