@@ -2574,6 +2574,29 @@ $(function()
 								return name;
 
 				});
+				
+				
+				
+				/**
+				 * Get activity type  without underscore and caps, for deal _details page.
+				 */
+				Handlebars.registerHelper('get_normal_activity_type', function(name)
+				{
+								if (!name)
+												return;
+
+								var name_json = { "DEAL_ADD" : "Deal Created", "DEAL_EDIT" : "Deal Edited", "DEAL_CLOSE" : "Deal Closed", "DEAL_LOST" : "Deal Lost", "DEAL_RELATED_CONTACTS" : "Deal Related Contacts", "DEAL_OWNER_CHANGE" : "Deal Owner Change", "DEAL_MILESTONE_CHANGE" : "Deal Milestone Change",
+												"NOTE_ADD" : "Note Add" };
+
+								name = name.trim();
+
+								if (name_json[name])
+												return name_json[name];
+
+								return name;
+
+				});
+
 
 				/**
 				 * put user address location togather separated by comma.

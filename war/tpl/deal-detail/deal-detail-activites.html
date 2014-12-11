@@ -1,0 +1,114 @@
+<script id="deal-detail-activities-collection-template" type="text/html">
+{{#unless this.length}}
+        <div class="slate">
+            <div class="slate-content">
+                <div class="box-left">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right">
+                    <h3>You have any activity.</h3>
+                </div>
+            </div>
+        </div>
+ {{/unless}}
+
+{{#if this.length}}
+<div class="page-header" style="margin-top: 0px !important;border-bottom: 0px;"></div>
+	<ul id="deal-detail-activities-model-list" class="ativity-block-ul" style="margin:0px;"></ul>
+{{/if}}
+</script>
+
+<script id="deal-detail-activities-model-template" type="text/html">
+<div style="display:block;" class="activity">
+
+<div class="well">
+	<span class="activity-block-owner">
+       
+        {{#if domainOwner}}
+			{{#if ownerPic}}
+				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{ownerPic}}" >
+			{{else}}
+				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{defaultGravatarurl 40}}" >
+			{{/if}}
+		{{else}}
+			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
+		{{/if}}
+	</span>
+	<h4><b>{{get_normal_activity_type activity_type}}</b></h4>
+{{#if_equals "DEAL_ADD" activity_type}}
+	<div style="background:none;border:none;margin-top: 8px;">
+         Deal Created
+	</div>	
+     {{/if_equals}}
+
+{{#if_equals "DEAL_EDIT" activity_type}}
+	<div style="background:none;border:none;margin-top: 8px;">
+         {{displayActivityFieldText custom3}} field is edited
+	</div>	
+     {{/if_equals}}
+
+{{#if_equals "DEAL_CLOSE" activity_type}}
+	<div style="background:none;border:none;margin-top: 8px;">
+         Deal Won
+	</div>	
+     {{/if_equals}}
+{{#if_equals "DEAL_LOST" activity_type}}
+	<div style="background:none;border:none;margin-top: 8px;">
+         Deal Lost
+	</div>	
+     {{/if_equals}}
+
+{{#if_equals "DEAL_MILESTONE_CHANGE" activity_type}}
+	<div style="background:none;border:none;margin-top: 8px;">
+         Milestone changed from {{custom2}} to {{custom1}}
+	</div>	
+     {{/if_equals}}
+
+{{#if_equals "DEAL_OWNER_CHANGE" activity_type}}
+	<div style="background:none;border:none;margin-top: 8px;">
+         Owner Changed From {{custom2}} to {{custom1}}
+	</div>	
+     {{/if_equals}}
+
+{{#if_equals "DEAL_RELATED_CONTACTS" activity_type}}
+	<div style="background:none;border:none;margin-top: 8px;">
+         {{#if related_contact_ids}}
+{{#if_equals "removed_all_relatedcontacts" custom3}}
+Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} from Deal 
+{{/if_equals}} 
+{{#if_equals "removed_relatedcontacts" custom3}}
+Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} from Deal  
+{{/if_equals}} 
+{{#if_equals "added_relatedcontacts" custom3}}
+Added {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} to Deal  
+{{/if_equals}}
+{{else}}
+Modified Deal   
+
+{{/if}} 
+	</div>	
+     {{/if_equals}}
+
+{{#if_equals "NOTE_ADD" activity_type}}
+	<div style="background:none;border:none;margin-top: 8px;">
+         Note Added <br/>
+      {{custom2}}
+	</div>	
+     {{/if_equals}}
+
+	<div style="background:none;border:none;">
+		<pre style="border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;"></pre>
+	</div>	
+
+	<div class="clear">
+		<div style="margin-bottom: 16px;" class="pull-right">	
+		 <a href="javascript:void(0)">{{user.name}}</a>
+		</div>
+
+		<small class="edit-hover" style="margin-right:10px"> 
+			<time  datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "dd mmm yyyy" time}}</time>
+		</small>
+	</div>
+
+</div>
+</script>
