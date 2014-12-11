@@ -367,7 +367,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		continue;
 	    }
 
-	  //  wrapContactToAgileSchemaAndSave(entry);
+	   wrapContactToAgileSchemaAndSave(entry);
 	}
 
 	System.out.println(NamespaceManager.get() + " , " + etag + " , " + index + " , "
@@ -584,7 +584,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		    json.put("nextLink", nextLink);
 		    
 		    json.put("last_synced", prefs.last_synced_from_client);
-		    
+		    json.put(prefs.sync_from_group, json);
 		    // Removes old parameters
 		    otherParameters.remove("start_index");
 		    otherParameters.remove("nextLink");
