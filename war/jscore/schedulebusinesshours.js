@@ -46,7 +46,7 @@ $("#btnSerialize").die().live('click', function(e){
 			data : JSON.stringify(json),
 			success : function()
 			{
-			window.location.reload(true);
+			//window.location.reload(true);
 			},
 			error : function(error)
 			{

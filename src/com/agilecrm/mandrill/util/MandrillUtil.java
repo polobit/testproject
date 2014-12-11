@@ -82,7 +82,7 @@ public class MandrillUtil
 	        .getPayload());
 
 	// Initialize mailJSON with common fields
-	JSONObject mailJSON = getMandrillMailJSON(firstMailDefferedTask.apiKey, firstMailDefferedTask.domain,
+	JSONObject mailJSON = getMandrillMailJSON(emailSender.getMandrillAPIKey(), firstMailDefferedTask.domain,
 	        firstMailDefferedTask.fromEmail, firstMailDefferedTask.fromName, firstMailDefferedTask.replyTo,
 	        firstMailDefferedTask.metadata);
 
@@ -135,7 +135,7 @@ public class MandrillUtil
 		if (!StringUtils.isBlank(mailDeferredTask.cc) || !StringUtils.isBlank(mailDeferredTask.bcc)
 		        || isToExists(toArray, mailDeferredTask.to) || mailDeferredTask.to.contains(","))
 		{
-		    sendWithoutMerging(mailDeferredTask);
+		    sendWithoutMerging(mailDeferredTask, emailSender.getMandrillAPIKey());
 		    continue;
 		}
 
@@ -443,7 +443,7 @@ public class MandrillUtil
      * @param mailDeferredTask
      *            - MandrillDeferredTask
      */
-    public static void sendWithoutMerging(MailDeferredTask mailDeferredTask)
+    public static void sendWithoutMerging(MailDeferredTask mailDeferredTask, String apiKey)
     {
 	String oldNamespace = NamespaceManager.get();
 	try
@@ -452,10 +452,9 @@ public class MandrillUtil
 	    NamespaceManager.set(mailDeferredTask.domain);
 
 	    // Send email
-	    Mandrill.sendMail(mailDeferredTask.apiKey, true, mailDeferredTask.fromEmail, mailDeferredTask.fromName,
-		    mailDeferredTask.to, mailDeferredTask.cc, mailDeferredTask.bcc, mailDeferredTask.subject,
-		    mailDeferredTask.replyTo, mailDeferredTask.html, mailDeferredTask.text, mailDeferredTask.metadata,
-		    null);
+	    Mandrill.sendMail(apiKey, true, mailDeferredTask.fromEmail, mailDeferredTask.fromName, mailDeferredTask.to,
+		    mailDeferredTask.cc, mailDeferredTask.bcc, mailDeferredTask.subject, mailDeferredTask.replyTo,
+		    mailDeferredTask.html, mailDeferredTask.text, mailDeferredTask.metadata, null);
 	}
 	catch (Exception e)
 	{
