@@ -275,7 +275,7 @@ $.validator.setDefaults({
 								  </div>
 								  <div class="form-group login-plan_type">
 									<div style="display:inline-block;float:left;margin-right:5px">
-									<select class="form-control required"  name="plan_type" data-width="100%" style="min-width:162px">
+									<select class="form-control required"  name="plan_type" data-width="100%" style="min-width:175px">
 											<option value="" selected disabled>Choose Plan</option>
 											<option value="Starter">Starter</option>
 											<option value="Regular">Regular</option>
@@ -402,8 +402,8 @@ $.validator.setDefaults({
 
 			jQuery.validator.addMethod("tel-number", function(value, element) {
 				
-				console.log($(".intl-tel-input > .help-block"));
-				return $(element).intlTelInput("isValidNumber");;
+				//return $(element).intlTelInput("isValidNumber");;
+				return true;
 			//	console.log(params);
 				
 			}, "Enter valid number.");
