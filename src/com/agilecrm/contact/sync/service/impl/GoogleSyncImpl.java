@@ -3,17 +3,14 @@
  */
 package com.agilecrm.contact.sync.service.impl;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.scribe.utils.Preconditions;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.ImportStatus;
@@ -22,17 +19,14 @@ import com.agilecrm.contact.sync.wrapper.WrapperService;
 import com.agilecrm.contact.sync.wrapper.impl.GoogleContactWrapperImpl;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gdata.client.Query;
-import com.google.gdata.client.authn.oauth.OAuthException;
 import com.google.gdata.client.contacts.ContactsService;
 import com.google.gdata.data.DateTime;
 import com.google.gdata.data.Link;
 import com.google.gdata.data.batch.BatchOperationType;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.ContactFeed;
-import com.google.gdata.data.contacts.GroupMembershipInfo;
 import com.google.gdata.data.extensions.Email;
 import com.google.gdata.model.batch.BatchUtils;
-import com.google.gdata.util.ServiceException;
 import com.thirdparty.google.GoogleServiceUtil;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.groups.GoogleGroupDetails;
@@ -373,7 +367,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		continue;
 	    }
 
-	    wrapContactToAgileSchemaAndSave(entry);
+	  //  wrapContactToAgileSchemaAndSave(entry);
 	}
 
 	System.out.println(NamespaceManager.get() + " , " + etag + " , " + index + " , "
@@ -557,6 +551,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	{
 	    try
 	    {
+		String start_index_from_json = otherParameters.getString("start_index");
 		prefs.sync_from_group = URLDecoder.decode(prefs.sync_from_group, "utf-8");
 		otherParameters = new JSONObject(prefs.othersParams);
 		// Start index where last sync stopped.
@@ -574,9 +569,9 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		    }
 		    
 		}
-		else
+		else if(!StringUtils.isEmpty(start_index_from_json))
 		{
-		    start_index = Integer.parseInt(otherParameters.getString("start_index"));
+		   
 		    nextLink = otherParameters.getString("nextLink");
 		    etagFromDB = otherParameters.getString("etagFromDB");
 		    
