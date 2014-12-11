@@ -219,8 +219,9 @@ function our_domain_sync()
 				add_tag_our_domain("Domain Owner");
 
 			}
-			initWebrules();
 			add_referrar_info_as_note();
+			initWebrules();
+			
 		}, function(data)
 		{
 			var name = CURRENT_DOMAIN_USER['name'];

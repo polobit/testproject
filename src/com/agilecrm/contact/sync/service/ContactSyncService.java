@@ -125,19 +125,25 @@ public abstract class ContactSyncService implements SyncService
      */
     public Contact wrapContactToAgileSchemaAndSave(Object object)
     {
-	Contact contact = wrapContactToAgileSchema(object);
+    	try {
+    		Contact contact = wrapContactToAgileSchema(object);
 
-	if (contact == null)
-	    return contact;
+    		if (contact == null)
+    		    return contact;
 
-	++total_synced_contact;
+    		++total_synced_contact;
 
-	contact = saveContact(contact);
+    		contact = saveContact(contact);
 
-	// Works as save callback to perform actions like creating notes/tasks
-	// and relating to newly created contact
-	contactWrapper.saveCallback();
-	return contact;
+    		// Works as save callback to perform actions like creating notes/tasks
+    		// and relating to newly created contact
+    		contactWrapper.saveCallback();
+    		return contact;
+    	    
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
     }
 
     /**
@@ -162,6 +168,8 @@ public abstract class ContactSyncService implements SyncService
 	    catch (IllegalAccessException e)
 	    {
 		e.printStackTrace();
+	    }catch(Exception e){
+	    	e.printStackTrace();
 	    }
 
 	return contactWrapper.getWrapper(object).buildContact();

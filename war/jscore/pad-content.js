@@ -71,6 +71,14 @@ var CONTENT_JSON = {
 		"route" : "#report-add",
 		"image" : "/img/clipboard.png"
 	},
+	"activity-reports" : {
+		"title" : "You do not have any activity reports currently.",
+		"description" : "Get a periodic  email digest of various activities by users in Agile.",
+		//"learn_more" : "click here to learn more",
+		"button_text" : "Add Report",
+		"route" : "#activity-report-add",
+		"image" : "/img/clipboard.png"
+	},
 	"contact-filters" : {
 		"title" : "You do not have any filters currently.",
 		"description" : "Filters are used to sort contacts with a specific criteria to find patterns.",

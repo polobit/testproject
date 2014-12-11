@@ -505,12 +505,14 @@ function fillCustomFields(fields, el, callback, is_webrules)
 	var rhs_element = $("#RHS", el);
 	var condition = $("#condition > select", el);
 
+	var _AGILE_CUSTOM_DIVIDER_ = ' _AGILE_CUSTOM_DIVIDER_';
 	for(var i = 0; i < fields.length ; i++)
 	{
 		if(i == 0)
 			lhs_element.show();
 		var field = fields[i];
 
+		field.field
 		if(field.field_type == "DATE")
 		{
 			lhs_element.append('<option value="'+field.field_label+'_time" field_type="'+field.field_type+'">'+field.field_label+'</option>');
@@ -520,13 +522,13 @@ function fillCustomFields(fields, el, callback, is_webrules)
 		{
 			lhs_element.append('<option value="'+field.field_label+'" field_type="'+field.field_type+'" >'+field.field_label+'</option>');
 		}
-		condition.append('<option value="EQUALS" class="'+field.field_label+' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is</option>');
-		condition.append('<option value="NOTEQUALS" class="'+field.field_label+' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">isn\'t</option>');
+		condition.append('<option value="EQUALS" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is</option>');
+		condition.append('<option value="NOTEQUALS" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">isn\'t</option>');
 		
 		// Contacts and not contains should only be in webrules form
 		if(is_webrules)
 		{
-			condition.append('<option value="MATCHES" class="'+field.field_label+' custom_field" field_name="'+field.field_label+'">contains</option>');
+			condition.append('<option value="MATCHES" class="'+field.field_label +' custom_field" field_name="'+field.field_label+'">contains</option>');
 			condition.append('<option value="NOT_CONTAINS" class="'+field.field_label+' custom_field" field_name="'+field.field_label+'">doesn\'t contain</option>');
 		}
 		

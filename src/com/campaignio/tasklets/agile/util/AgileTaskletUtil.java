@@ -27,6 +27,7 @@ import com.agilecrm.util.EmailUtil;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus.UnsubscribeType;
 import com.campaignio.reports.DateUtil;
+import com.campaignio.tasklets.util.MergeFieldsUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
@@ -167,6 +168,14 @@ public class AgileTaskletUtil
 	}
     }
 
+    public static JSONObject getSubscriberJSON(Contact contact)
+    {
+	// Custom date labels to convert epoch to Date format
+	List<String> dateCustomFieldLabels = getDateCustomLabelsFromCache();
+
+	return getSubscriberJSON(contact, dateCustomFieldLabels);
+    }
+
     /**
      * Converts contact object into json object.
      * 
@@ -174,8 +183,7 @@ public class AgileTaskletUtil
      *            Contact object that subscribes to workflow.
      * @return JsonObject of contact.
      */
-    @SuppressWarnings("unchecked")
-    public static JSONObject getSubscriberJSON(Contact contact)
+    public static JSONObject getSubscriberJSON(Contact contact, List<String> dateCustomFieldLabels)
     {
 	if (contact == null)
 	    return null;
@@ -189,8 +197,6 @@ public class AgileTaskletUtil
 
 	try
 	{
-	    // Custom date labels to convert epoch to Date format
-	    List<String> dateCustomFieldLabels = getDateCustomLabelsFromCache();
 
 	    JSONObject subscriberJSON = new JSONObject();
 
@@ -272,6 +278,7 @@ public class AgileTaskletUtil
 		owner.put("id", domainUser.id);
 		owner.put("name", domainUser.name);
 		owner.put("email", domainUser.email);
+		owner.put("calendar_url", MergeFieldsUtil.addCalendarMergeField(domainUser, subscriberJSON));
 	    }
 
 	    // Inserts contact owner-name and owner-email.
@@ -436,10 +443,51 @@ public class AgileTaskletUtil
     {
 	JSONArray subscriberJSONArray = new JSONArray();
 
+	// Custom date labels to convert epoch to Date format
+	List<String> dateCustomFieldLabels = getDateCustomLabelsFromCache();
+
 	for (Contact contact : contacts)
 	{
 	    if (contact != null)
-		subscriberJSONArray.put(getSubscriberJSON(contact));
+		subscriberJSONArray.put(getSubscriberJSON(contact, dateCustomFieldLabels));
+	}
+
+	return subscriberJSONArray;
+    }
+
+    /**
+     * Converts list of contacts into JSONArray.
+     * 
+     * @param contacts
+     *            List of Contact objects subscribed to campaign.
+     * @return JSONArray of list of contacts.
+     */
+    public static JSONArray getSubscriberJSONArray(List<Contact> contacts, JSONObject triggerJSON)
+    {
+	JSONArray subscriberJSONArray = new JSONArray();
+
+	// Custom date labels to convert epoch to Date format
+	List<String> dateCustomFieldLabels = getDateCustomLabelsFromCache();
+
+	for (Contact contact : contacts)
+	{
+	    if (contact != null)
+	    {
+		JSONObject subscriberJSON = getSubscriberJSON(contact, dateCustomFieldLabels);
+
+		try
+		{
+		    subscriberJSON.put("_agile_custom_trigger_json", triggerJSON);
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		    System.err.println("Exception occured while merging jsons in getSubscriberJSONArray..."
+			    + e.getMessage());
+		}
+
+		subscriberJSONArray.put(subscriberJSON);
+	    }
 	}
 
 	return subscriberJSONArray;
@@ -556,6 +604,7 @@ public class AgileTaskletUtil
      */
     public static JSONObject getUpdatedSubscriberJSON(Contact updatedContact, JSONObject oldSubscriberJSON)
     {
+
 	// Update subscriberJSON
 	JSONObject updatedSubscriberJSON = AgileTaskletUtil.getSubscriberJSON(updatedContact);
 

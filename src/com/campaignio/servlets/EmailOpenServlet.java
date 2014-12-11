@@ -23,6 +23,8 @@ import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.triggers.Trigger;
+import com.agilecrm.workflows.triggers.util.EmailTrackingTriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -98,8 +100,16 @@ public class EmailOpenServlet extends HttpServlet
 		chromeExtensionShowNotification(emailId, fromEmailId, subject, trackerId);
 	    }
 	    else
-		addLogAndShowNotification(trackerId, campaignId);
+	    {
+		// Shows notification, adds log & Trigger campaign
+		executePostEmailOpenActions(trackerId, campaignId);
+	    }
 
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while triggering email open..." + e.getMessage());
 	}
 	finally
 	{
@@ -194,7 +204,7 @@ public class EmailOpenServlet extends HttpServlet
      * @param campaignId
      *            - Campaign Id.
      */
-    private void addLogAndShowNotification(String trackerId, String campaignId)
+    private void executePostEmailOpenActions(String trackerId, String campaignId)
     {
 
 	// Personal Emails
@@ -211,6 +221,10 @@ public class EmailOpenServlet extends HttpServlet
 
 		// Shows notification for simple emails.
 		showEmailOpenedNotification(ContactUtil.getContact(contactEmail.contact_id), null, contactEmail.subject);
+
+		// Trigger Email Open for personal emails
+		EmailTrackingTriggerUtil.executeTrigger(contactEmail.contact_id.toString(), null, null,
+		        Trigger.Type.EMAIL_OPENED);
 	    }
 	}
 
@@ -226,10 +240,13 @@ public class EmailOpenServlet extends HttpServlet
 
 		// Shows notification for campaign-emails
 		showEmailOpenedNotification(ContactUtil.getContact(Long.parseLong(trackerId)), workflow.name, null);
+
+		// Trigger Email Open for campaign emails
+		EmailTrackingTriggerUtil.executeTrigger(trackerId, campaignId, null, Trigger.Type.EMAIL_OPENED);
+
 	    }
 
 	}
-
     }
 
     /**

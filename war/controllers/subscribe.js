@@ -292,7 +292,17 @@ var SubscribeRouter = Backbone.Router.extend({
 						that.setup_email_plan(subscription);
 					})
 					
-					$("#email-quantity", el).die().live('keydown', function(e){
+							// Phone number validation
+					jQuery.validator.addMethod("email_plan_minimum", function(value, element) {
+	
+								if (this.optional(element))
+									return true;
+
+								return parseInt(value) >= 5;
+							}, " Should purchase a minimum of 5000 emails.");
+					
+					$("#email-quantity", el).die().live('keyup', function(e){
+						isValidForm($("#email-plan-form", el));
 						if(e.which == 13)
 							{
 								e.preventDefault();
@@ -747,9 +757,9 @@ var SubscribeRouter = Backbone.Router.extend({
 			customerId = subscription.get("billingData").id;
 		}
 		
-		var invoice_collection = new Base_Collection_View({ url : "core/api/subscription/charges/"+customerId+"?page_size=3" , templateKey : "charge",
+		var invoice_collection = new Base_Collection_View({ url : "core/api/subscription/charges/"+customerId+"?page_size=20" , templateKey : "charge",
 
-		individual_tag_name : 'tr',sortKey : 'createdtime', descending : true });
+		individual_tag_name : 'tr',sortKey : 'created', descending : true });
 		invoice_collection.collection.fetch();
 
 		$("#invoice-details-holder").html(invoice_collection.render().el);
