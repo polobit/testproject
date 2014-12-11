@@ -14,19 +14,43 @@ function change_availability_date(selected_date)
 // Get slot details time n description
 function getSlotDurations()
 {
+
 	// Send request to get slot details time n description
-	var initialURL = '/core/api/webevents/getslotdetails';
+	var initialURL = '/core/api/webevents/getslotdetails?userid=' + User_Id;
 	$
 			.getJSON(
 					initialURL,
 					function(data)
 					{
-						for ( var slotDetail in data)
+						if (data.length == 3)
 						{
-							var json = JSON.parse(data[slotDetail]);
-							$('.segment1')
-									.append(
-											'<div class="col-sm-4"><p class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + json.title + '</p></div>');
+							for ( var slotDetail in data)
+							{
+								var json = JSON.parse(data[slotDetail]);
+								$('.segment1')
+										.append(
+												'<div class="col-sm-4"><p title="' + json.title + '" class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+							}
+						}
+						if (data.length == 2)
+						{
+							for ( var slotDetail in data)
+							{
+								var json = JSON.parse(data[slotDetail]);
+								$('.segment1')
+										.append(
+												'<div class="col-sm-4" style="margin-left: 99px;"><p title="' + json.title + '" class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+							}
+						}
+						if (data.length == 1)
+						{
+							for ( var slotDetail in data)
+							{
+								var json = JSON.parse(data[slotDetail]);
+								$('.segment1')
+										.append(
+												'<div class="col-sm-12" align="center"><p title="' + json.title + '" class="choose" data="' +json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+							}
 						}
 					});
 }
@@ -74,6 +98,7 @@ function resetAll()
 // calendar.
 function get_slots(s_date, s_slot)
 {
+
 	console.log("in get_slots");
 	console.log(s_date + " " + s_slot);
 
@@ -95,8 +120,9 @@ function get_slots(s_date, s_slot)
 	var epochTime = getEpochTimeFromDate(s_date); // milliseconds
 	console.log(epochTime);
 
-	var d = new Date(s_date)
-	console.log(d);
+	var d = new Date(s_date);
+	var secs = epochTime+d.getSeconds() + (60 * d.getMinutes()) + (60 * 60 * d.getHours());
+	console.log(secs);
 
 	var start_time = getEpochTimeFromDate(d);
 	d.setDate(d.getDate() + 1)
@@ -104,7 +130,7 @@ function get_slots(s_date, s_slot)
 	console.log(start_time + "  " + end_time);
 
 	// Send request to get available slot
-	var initialURL = '/core/api/webevents/getslots?&user_name=' + User_Name + '&user_id=' + User_Id + '&timezone=' + timezone + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneAbbr + "&epoch_time=" + epochTime + "&start_time=" + start_time + "&end_time=" + end_time;
+	var initialURL = '/core/api/webevents/getslots?&user_id=' + User_Id + '&timezone=' + timezone + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneName + "&epoch_time=" + epochTime + "&start_time=" + start_time + "&end_time=" + end_time +"&agile_user_id=" + Agile_User_Id+"&current_secs=" + secs ;
 	$.getJSON(initialURL, function(data)
 	{
 
@@ -127,9 +153,15 @@ function displayNoSlotsMsg()
 {
 	// Empty div where all slots listed, to display new slots
 	$('.checkbox-main-grid').html('');
+	
+	
+	var date = new Date(selecteddate);
+	console.log(date);
+
+	$('.availability').html("No slots available for " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
 
 	// Add msg
-	$('.checkbox-main-grid').append('<label for="no-slots" style="margin-left:112px;">Slots are not available for selected day.</label>');
+	//$('.checkbox-main-grid').append('<label for="no-slots" style="margin-left:112px;">Slots are not available for selected day.</label>');
 }
 
 // Add slots in grid checkbox in checkbox list
@@ -139,26 +171,29 @@ function displaySlots()
 
 	// Empty div where all slots listed, to display new slots
 	$('.checkbox-main-grid').html('');
-	
+
 	console.log(Available_Slots.length);
-	
-	var after_now=[];
-	var date=new Date();
-	for(var s=0;s<Available_Slots.length;s++){
-		if(Available_Slots[s][0]*1000>date.getTime()){
-			
+
+	var after_now = [];
+	var date = new Date();
+	for (var s = 0; s < Available_Slots.length; s++)
+	{
+		if (Available_Slots[s][0] * 1000 > date.getTime())
+		{
+
 			after_now.push(Available_Slots[s]);
 		}
-		
+
 	}
 	console.log(after_now.length);
-	Available_Slots="";
-	Available_Slots=after_now;
-	if(Available_Slots.length==0){
+	Available_Slots = "";
+	Available_Slots = after_now;
+	if (Available_Slots.length == 0)
+	{
 		displayNoSlotsMsg();
 		return;
 	}
-	
+
 	// Number of row
 	var numRow = Available_Slots.length / 5;
 
@@ -195,6 +230,8 @@ function isValid(formId)
 	return $(formId).valid();
 }
 
+
+
 /*
  * // Validates phone number function validatePhone(txtPhone) { var a =
  * document.getElementById(txtPhone).value; var filter = /^[0-9-+]+$/; if
@@ -210,11 +247,11 @@ function save_web_event(formId, confirmBtn)
 		$('#' + formId).find("input").focus();
 		return false;
 	}
-	
+
 	// Get details
 	var data = $('#' + formId).serializeArray();
 	console.log(data);
-	
+
 	// Make json
 	var web_calendar_event = {};
 	$.each(data, function()
@@ -344,7 +381,24 @@ function convertToHumanDate(format, date)
 
 $("#create_new_appointment").die().live('click', function(e)
 {
-
+ //reloads the page
 	location.reload(true);
 
 });
+
+/**
+ * if value morethan 50 adds .. at the end
+ */
+function addDotsAtEnd(title){
+if (title)
+{
+	if (title.length > 50)
+	{
+		var subst = title.substr(0, 50);
+		subst = subst + "....";
+		return subst;
+	}
+}
+
+return title;
+}

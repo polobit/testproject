@@ -47,7 +47,7 @@ public class ActivitySave
 	Object probablity[] = deals.get("probability");
 	Object milestone[] = deals.get("milestone");
 	JSONObject js = new JSONObject(new Gson().toJson(opportunity));
-	JSONArray jsn = js.getJSONArray("contact_ids");
+	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contact_ids"));
 
 	if (deals.size() > 0)
 	{
@@ -154,7 +154,7 @@ public class ActivitySave
 	Object priority[] = events.get("priority");
 
 	JSONObject js = new JSONObject(new Gson().toJson(event));
-	JSONArray jsn = js.getJSONArray("contacts");
+	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contacts"));
 
 	if (events.size() > 0)
 	{
@@ -188,12 +188,11 @@ public class ActivitySave
 	Object subject[] = tasks.get("subject");
 	Object task_type[] = tasks.get("task_type");
 	Object owner_name[] = tasks.get("Task_owner");
-	Object Contacts_related_to[] = tasks.get("Contacts_related_to");
 
 	JSONObject js = new JSONObject(new Gson().toJson(task));
-	JSONArray jsn = js.getJSONArray("contacts");
+	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contacts"));
 	System.out.println(due + "  " + priority + "  " + status + "  " + progress + "  " + subject + " " + task_type
-	        + "  " + owner_name + "  " + Contacts_related_to);
+	        + "  " + owner_name);
 	if (tasks.size() > 0)
 	{
 
@@ -329,7 +328,7 @@ public class ActivitySave
 	JSONArray jsn = null;
 	if (contacts != null && contacts.size() > 0)
 	{
-	    jsn = ActivityUtil.getContactIdsJson(contacts);
+	    jsn = getExistingContactsJsonArray(ActivityUtil.getContactIdsJson(contacts));
 	}
 	ActivityUtil.createEventActivity(ActivityType.EVENT_DELETE, event, "", "", "", jsn);
 
@@ -339,15 +338,16 @@ public class ActivitySave
      * creates TASK_DELETE activity
      * 
      * @param task
+     * @throws JSONException
      */
-    public static void createTaskDeleteActivity(Task task)
+    public static void createTaskDeleteActivity(Task task) throws JSONException
     {
 
 	List<Contact> contacts = task.getContacts();
 	JSONArray jsn = null;
 	if (contacts != null && contacts.size() > 0)
 	{
-	    jsn = ActivityUtil.getContactIdsJson(contacts);
+	    jsn = getExistingContactsJsonArray(ActivityUtil.getContactIdsJson(contacts));
 	}
 	ActivityUtil.createTaskActivity(ActivityType.TASK_DELETE, task, "", "", "", jsn);
 
@@ -357,14 +357,15 @@ public class ActivitySave
      * creates DEAL_DELETE activity
      * 
      * @param opr
+     * @throws JSONException
      */
-    public static void createDealDeleteActivity(Opportunity opr)
+    public static void createDealDeleteActivity(Opportunity opr) throws JSONException
     {
 	List<Contact> contacts = opr.getContacts();
 	JSONArray jsn = null;
 	if (contacts != null && contacts.size() > 0)
 	{
-	    jsn = ActivityUtil.getContactIdsJson(contacts);
+	    jsn = getExistingContactsJsonArray(ActivityUtil.getContactIdsJson(contacts));
 	}
 
 	ActivityUtil.createDealActivity(ActivityType.DEAL_DELETE, opr, "", "", "", jsn);
@@ -423,11 +424,29 @@ public class ActivitySave
 
 	Document olddoc = DocumentUtil.getDocument(document.id);
 
-	List<String> contactids = olddoc.getContact_ids();
+	List<String> old_contactids = olddoc.getContact_ids();
+	List<String> contactids = new ArrayList<>();
+	for (int i = 0; i <= old_contactids.size() - 1; i++)
+	{
+	    Contact con = ContactUtil.getContact(Long.parseLong(old_contactids.get(i)));
+	    if (con != null)
+	    {
+		contactids.add(old_contactids.get(i));
+	    }
+
+	}
 
 	JSONObject js = new JSONObject(new Gson().toJson(document));
 
-	JSONArray jsn = js.getJSONArray("contact_ids");
+	JSONArray jsncontacts = js.getJSONArray("contact_ids");
+	JSONArray jsn = new JSONArray();
+
+	for (int i = 0; i <= jsncontacts.length() - 1; i++)
+	{
+	    Contact con = ContactUtil.getContact(Long.parseLong(jsncontacts.get(i).toString()));
+	    if (con != null)
+		jsn.put(jsncontacts.get(i));
+	}
 
 	System.out.println(jsn + "  new contacts left side and old contacts right side  " + contactids);
 	if (jsn != null && jsn.length() > 0)
@@ -461,7 +480,7 @@ public class ActivitySave
 	    System.out.println("contacts size in else condition " + contactids.size());
 	    if (contactids.size() > 0)
 	    {
-		JSONArray removedcontacts = getJsonArrayOfIdFromList(contactids);
+		JSONArray removedcontacts = getJsonArrayOfIdFromListForDocument(contactids);
 		System.out.println("------------------------ " + removedcontacts.length());
 		for (int i = 0; i <= removedcontacts.length() - 1; i++)
 		{
@@ -488,7 +507,7 @@ public class ActivitySave
 	JSONObject js = new JSONObject(new Gson().toJson(note));
 	System.out.println(js);
 
-	JSONArray jsn = js.getJSONArray("contact_ids");
+	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contact_ids"));
 
 	if (jsn != null && jsn.length() > 0)
 	{
@@ -670,6 +689,49 @@ public class ActivitySave
     }
 
     /**
+     * used to fetch the the contacts which are removed from related to field.
+     * 
+     * @param oldcont
+     *            contactids which were saved in db
+     * @param ar
+     *            latest contacts which comes along with new document object for
+     *            saving
+     * @return
+     * @throws JSONException
+     */
+    public static JSONArray removedContactsFromDocument(List<String> oldcont, JSONArray ar) throws JSONException
+    {
+	JSONArray jsn = new JSONArray();
+	for (int i = 0; i <= ar.length() - 1; i++)
+	{
+	    if (oldcont.contains(ar.get(i)))
+	    {
+		oldcont.remove(ar.get(i));
+
+	    }
+
+	}
+
+	List<String> removedcontacts = oldcont;
+
+	if (removedcontacts != null && removedcontacts.size() > 0)
+	{
+
+	    for (int k = 0; k < removedcontacts.size(); k++)
+	    {
+		Contact con = ContactUtil.getContact(Long.parseLong(removedcontacts.get(k)));
+		if (con != null)
+		{
+		    jsn.put(removedcontacts.get(k));
+
+		}
+
+	    }
+	}
+	return jsn;
+    }
+
+    /**
      * used to fetch the the contacts which are added to related to field.
      * 
      * @param oldcont
@@ -708,6 +770,29 @@ public class ActivitySave
 	{
 	    String s1 = ids.get(i);
 	    jsn1.put(s1);
+
+	}
+
+	return jsn1;
+
+    }
+
+    /**
+     * returns the JSONArray from List
+     * 
+     * @param ids
+     * @return
+     * @throws JSONException
+     */
+    public static JSONArray getJsonArrayOfIdFromListForDocument(List<String> ids) throws JSONException
+    {
+	JSONArray jsn1 = new JSONArray();
+	for (int i = 0; i <= ids.size() - 1; i++)
+	{
+	    String s1 = ids.get(i);
+	    Contact con = ContactUtil.getContact(Long.parseLong(s1));
+	    if (con != null)
+		jsn1.put(s1);
 
 	}
 
@@ -808,4 +893,27 @@ public class ActivitySave
 	return list;
     }
 
+    /**
+     * @throws JSONException
+     * 
+     */
+    public static JSONArray getExistingContactsJsonArray(JSONArray jsn) throws JSONException
+    {
+
+	JSONArray jsnarray = new JSONArray();
+	if (jsn == null && jsn.length() > 0)
+	{
+	    return null;
+	}
+	for (int i = 0; i <= jsn.length() - 1; i++)
+	{
+	    Contact contact = ContactUtil.getContact(jsn.getLong(i));
+	    if (contact != null)
+	    {
+		jsnarray.put(jsn.getLong(i));
+	    }
+	}
+	return jsnarray;
+
+    }
 }
