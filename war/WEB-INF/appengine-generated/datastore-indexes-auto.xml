@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!-- Indices written at Mon, 17 Nov 2014 11:10:45 IST -->
 
 
@@ -319,3 +320,9 @@
     </datastore-index>
 
 </datastore-indexes>
+=======
+<!-- Indices written at Tue, 2 Dec 2014 15:08:39 IST -->
+
+<datastore-indexes/>
+
+>>>>>>> google-contacts-sync-fix
