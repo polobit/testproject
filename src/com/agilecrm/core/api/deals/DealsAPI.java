@@ -589,7 +589,16 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Note> getNotes(@PathParam("deal-id") Long id) throws Exception
     {
-	return NoteUtil.getDealNotes(id);
+	List<Note> notes = NoteUtil.getDealNotes(id);
+	List<Note> dealNotes = OpportunityUtil.getOpportunity(id).getNotes();
+	if (notes != null && notes.size() > 0)
+	{
+	    for (Note no : notes)
+	    {
+		dealNotes.add(no);
+	    }
+	}
+	return dealNotes;
     }
 
     /**
@@ -618,24 +627,6 @@ public class DealsAPI
 
 	Opportunity opportunity = OpportunityUtil.getOpportunity(dealid);
 	opportunity.owner_id = new_owner;
-	opportunity.save();
-	return opportunity;
-    }
-
-    @Path("/removeRelatedTo/{contactid}/{dealid}")
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Opportunity removeContactFromDeal(@PathParam("contactid") String contactid, @PathParam("dealid") Long dealid)
-	    throws JSONException
-    {
-	Opportunity opportunity = OpportunityUtil.getOpportunity(dealid);
-	System.out.println(opportunity.getContact_ids().size());
-	if (opportunity.getContact_ids().contains(contactid))
-	{
-	    int index = opportunity.getContact_ids().indexOf(contactid);
-	    opportunity.getContact_ids().remove(index);
-	}
-	System.out.println(opportunity.getContact_ids().size());
 	opportunity.save();
 	return opportunity;
     }
