@@ -946,7 +946,7 @@ public class ContactsAPI
 		long epoch = System.currentTimeMillis() / 1000;
 
 		// URL for get request
-		String urlForTZ = "https://maps.googleapis.com/maps/api/timezone/json?location=" + longitude + "," + latitude
+		String urlForTZ = "https://maps.googleapis.com/maps/api/timezone/json?location=" + latitude + "," + longitude
 				+ "&timestamp=" + epoch;
 
 		// Send get request and get result

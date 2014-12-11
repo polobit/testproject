@@ -1,16 +1,29 @@
 function displayTimeZone(results)
 {
 	console.log("In displayTimeZone");
-	var latitude = results[0].geometry.location.B;
-	var longitude = results[0].geometry.location.k;
+		
+	var latitude;
+	var longitude;
+	var i = 0;
+	$.each(results[0].geometry.location, function(idx, obj) {
+		console.log(obj);
+		if(i==0)
+		  latitude = obj;
+		else if(i==1) 
+		  longitude = obj;
+		i++;
+	});
 
+	if(!latitude || !longitude)
+		return;
+	
 	$.ajax({ 
 		url : "/core/api/contacts/gettz/" + latitude + "/" + longitude, 
 		type : 'GET', 
 		dataType : 'text', 
 		success : function(data)
 	   {
-		if (data == null)
+		if (data == null || data == "")
 			return;
 
 		$(".contacts-time").html(data);
