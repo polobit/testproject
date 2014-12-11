@@ -202,9 +202,16 @@ public abstract class ContactSyncService implements SyncService
 
 	// Saves limits
 	restriction.save();
+	
+	
 
 	if (user != null)
 	{
+	    
+	    int emailRequired = syncStatus.get(ImportStatus.EMAIL_REQUIRED);
+	    if(emailRequired == 0)
+		    syncStatus.remove(ImportStatus.EMAIL_REQUIRED);
+		
 	    SendMail.sendMail(user.email, notificationSubject, NOTIFICATION_TEMPLATE, new Object[] { user,
 		    buildNotificationStatus() });
 
