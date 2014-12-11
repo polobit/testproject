@@ -277,7 +277,7 @@ $.validator.setDefaults({
 											placeholder="Users" autocapitalize="off" autofocus>
 								 	 </div>
 									</div>
-									<div class="clear-fix"></div>
+									<div class="clearfix"></div>
 									<div class="form-group login-company">
 								<!--	<div style="display:inline-block;width:49%"> -->
 									<select class="form-control required"  name="company_type" data-width="100%">
@@ -307,7 +307,7 @@ $.validator.setDefaults({
 								<!--  <div style="display:inline-block;width:49%">-->
 										<span class="regpage-phone-number" ></span>
 											<div id="phone-block"> <input
-											class="input-xlarge field form-control tel-number"
+											class="input-xlarge field form-control required tel-number"
 											id="login_phone_number" name='phone_number' type="text"
 											placeholder="Phone Number" autocapitalize="off">
 											<span class="error"></span>
