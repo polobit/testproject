@@ -702,8 +702,8 @@ Modified  Event <a href="" data={{entity_id}} class="activity-deal-edit">{{label
 	</div>
 <div class="pull-left activity-tag">
 <div>
-Added note to contact <a href="#contact/{{entity_id}}">{{label}}</a>	
- <a href="" class="activity-edit-note" data={{custom3}} data-toggle="modal" >Note</a> {{#if custom2}}({{add_dots_end custom2}}){{/if}} added   
+Added note to contact <a href="#contact/{{entity_id}}">{{label}}</a><br/>	
+ <i class="icon-pencil"></i> <a href="" class="activity-edit-note" data={{custom3}} data-toggle="modal" >Note</a> {{#if custom2}}({{add_dots_end custom2}}){{/if}} added   
 	</div>
 <div>	
 		<small class="edit-hover pull-right activity_time" > 
@@ -725,8 +725,8 @@ Added note to contact <a href="#contact/{{entity_id}}">{{label}}</a>
 	</div>
 <div class="pull-left activity-tag">
 <div>
-Sent email to <a href="#contact/{{entity_id}}">{{label}}</a>	
- Emial subject- <a href="" class="email-details" data="{{id}}">Email</a> {{#if custom3}}({{add_dots_end custom3}}){{/if}}
+Sent email to <a href="#contact/{{entity_id}}">{{label}}</a><br/>	
+ <i class="icon-envelope-alt"></i> Emial subject- <a href="" class="email-details" data="{{id}}">Email</a> {{#if custom3}}({{add_dots_end custom3}}){{/if}}
 </div>
 <div>
 		<small class="edit-hover pull-right activity_time" > 
@@ -752,7 +752,7 @@ Sent email to <a href="#contact/{{entity_id}}">{{label}}</a>
 <div class="pull-left activity-tag" >
 <div>	
 Added  tag to {{custom3}} contacts<br/>
-{{removeDoubleCoutes custom2}} added
+<i class="icon-envelope-alt"></i> {{removeDoubleCoutes custom2}} added
 
 	</div>
 <div>	
@@ -776,7 +776,7 @@ Added  tag to {{custom3}} contacts<br/>
 <div class="pull-left activity-tag">
 <div>	
  Removed  tag from {{custom3}} contacts<br/>
-{{removeDoubleCoutes custom2}} removed
+<i class="icon-envelope-alt"></i> {{removeDoubleCoutes custom2}} removed
 
 	</div>
 <div>	
@@ -801,10 +801,10 @@ Added  tag to {{custom3}} contacts<br/>
 <div>
 	{{#if_equals "1" custom3}}
 		Added {{custom3}} Contact to Campaign<br/>
-   [campaign] {{custom2}} 
+   <i class="icon-sitemap icon-white"></i> {{custom2}} 
 {{else}}
 Added {{custom3}} Contacts to Campaign <br/>
-[campaign] {{custom2}} 
+<i class="icon-sitemap icon-white"></i> {{custom2}} 
 {{/if_equals}}
 </div>
 <div>
@@ -831,10 +831,10 @@ Added {{custom3}} Contacts to Campaign <br/>
 <div >
 {{#if_equals "1" custom3}}	
 Sent a email to {{custom3}} contact<br/>
-Email subject- <a href="" class="email-details" data={{id}}>Email</a>{{#if custom4}}{{custom4}}{{/if}} 
+<i class="icon-sitemap icon-white"></i> Email subject- <a href="" class="email-details" data={{id}}>Email</a>{{#if custom4}}{{custom4}}{{/if}} 
 {{else}}
 Sent a bulk email to {{custom3}} contacts<br/>
-Email subject- <a href="" class="email-details" data={{id}}>Email</a>{{#if custom4}}{{custom4}}{{/if}} 
+<i class="icon-sitemap icon-white"></i> Email subject- <a href="" class="email-details" data={{id}}>Email</a>{{#if custom4}}{{custom4}}{{/if}} 
 {{/if_equals}}
 
 	</div>
@@ -857,10 +857,10 @@ Email subject- <a href="" class="email-details" data={{id}}>Email</a>{{#if custo
 <div>	
 {{#if_equals "1" custom3}}
 Sent a email to {{custom3}} company<br/>
-Email subject- <a href="" class="email-details" data={{id}}>Email</a>{{#if custom4}}{{custom4}}{{/if}} 
+<i class="icon-sitemap icon-white"></i> Email subject- <a href="" class="email-details" data={{id}}>Email</a>{{#if custom4}}{{custom4}}{{/if}} 
 {{else}}
 Sent a bulk email to {{custom3}} companies<br/>
-Email subject- <a href="" class="email-details" data={{id}}>Email</a>{{#if custom4}}{{custom4}}{{/if}} 
+<i class="icon-sitemap icon-white"></i> Email subject- <a href="" class="email-details" data={{id}}>Email</a>{{#if custom4}}{{custom4}}{{/if}} 
 {{/if_equals}}
 
 	</div>
@@ -889,10 +889,10 @@ Email subject- <a href="" class="email-details" data={{id}}>Email</a>{{#if custo
 <div>	
 {{#if_equals "1" custom3}}
 Changed owner for {{custom3}} contact <br/>
-[contactiocn] Contact assigned to {{custom2}}
+<i class="icon-user icon-white"></i> Contact assigned to {{custom2}}
 {{else}}
 	Changed owner for {{custom3}} contacts <br/>
-[contactiocn] Contact assigned to {{custom2}}
+<i class="icon-user icon-white"></i> Contact assigned to {{custom2}}
 {{/if_equals}}
 </div>
 <div>
@@ -914,10 +914,10 @@ Changed owner for {{custom3}} contact <br/>
 <div>	
 {{#if_equals "1" custom3}}
 Changed owner for {{custom3}} company <br/>
-[contactiocn] Company assigned to {{custom2}}
+<i class="icon-user icon-white"></i> Company assigned to {{custom2}}
 {{else}}
 	Changed owner for {{custom3}} companies <br/>
-[contactiocn] Company assigned to {{custom2}}
+<i class="icon-user icon-white"></i> Company assigned to {{custom2}}
 {{/if_equals}}
 </div>
 <div>
@@ -998,7 +998,7 @@ Changed owner for {{custom3}} company <br/>
 <div class="pull-left activity-tag">
 <div>	
 	Added <a href="#contact/{{entity_id}}">{{label}}</a> to Campaign <br/>
-  <campaig icon> {{custom2}}
+  <i class="icon-sitemap icon-white"></i> {{custom2}}
 	</div>
 <div>	
 		<small class="edit-hover pull-right activity_time" > 
@@ -1023,7 +1023,7 @@ Changed owner for {{custom3}} company <br/>
 <div class="pull-left activity-tag" >
 <div>	
 Added Tag to <a href="#contact/{{entity_id}}">{{label}}</a><br/>
-<tag icon> {{removeDoubleCoutes custom1}} added
+<i class="icon-sitemap icon-white"></i> {{removeDoubleCoutes custom1}} added
 	</div>
 <div>
 		
