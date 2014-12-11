@@ -551,7 +551,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	{
 	    try
 	    {
-		String start_index_from_json = otherParameters.getString("start_index");
+		
 		prefs.sync_from_group = URLDecoder.decode(prefs.sync_from_group, "utf-8");
 		otherParameters = new JSONObject(prefs.othersParams);
 		// Start index where last sync stopped.
@@ -569,7 +569,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		    }
 		    
 		}
-		else if(!StringUtils.isEmpty(start_index_from_json))
+		else if(otherParameters.has("start_index"))
 		{
 		   
 		    nextLink = otherParameters.getString("nextLink");
@@ -582,8 +582,9 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		    json.put(prefs.sync_from_group, json);
 		    json.put("etagFromDB", etagFromDB);
 		    json.put("nextLink", nextLink);
-		    
+		    prefs.last_synced_from_client = 0l;
 		    json.put("last_synced", prefs.last_synced_from_client);
+		   
 		    json.put(prefs.sync_from_group, json);
 		    // Removes old parameters
 		    otherParameters.remove("start_index");
@@ -663,6 +664,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    obj.put("start_index", start_index);
 	    obj.put("nextLink", getFinalNextLink());
 	    obj.put("etagFromDB", etag);
+	    obj.put("last_synced", prefs.last_synced_from_client);
 	    otherParameters.put(prefs.sync_from_group, obj);
 	    
 	    prefs.othersParams = otherParameters.toString();
@@ -677,10 +679,9 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
     private void finalizeSync()
     {
-	updateOtherParameters();
-
 	prefs.inProgress = false;
 	updateLastSyncedInPrefs();
+	updateOtherParameters();
 	sendNotification(prefs.type.getNotificationEmailSubject());
     }
 
