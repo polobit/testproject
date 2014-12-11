@@ -262,18 +262,7 @@ $.validator.setDefaults({
 											id="login_company" name='company' type="text" maxlength="50"
 											placeholder="Company Name" autocapitalize="off">
 									</div> -->
-									<div class="form-group login-company">
-								<!--	<div style="display:inline-block;width:49%"> -->
-									<select class="form-control required"  name="company_type" data-width="100%">
-											<option value="" selected disabled>Company type</option>
-											<option value="B2B">B2B</option>
-											<option value="SaaS">SaaS</option>
-											<option value="eCommerce">eCommerce</option>
-											<option value="Marketing Agency">Marketing Agency</option>
-											<option value="Other">Other</option>
-								  </select>
-								  </div>
-								  <div class="form-group login-plan_type">
+									 <div class="form-group login-plan_type">
 									<div style="display:inline-block;float:left;margin-right:5px">
 									<select class="form-control required"  name="plan_type" data-width="100%" style="min-width:175px">
 											<option value="" selected disabled>Choose Plan</option>
@@ -288,6 +277,17 @@ $.validator.setDefaults({
 											placeholder="Users" autocapitalize="off" autofocus>
 								 	 </div>
 									</div>
+									<div class="form-group login-company">
+								<!--	<div style="display:inline-block;width:49%"> -->
+									<select class="form-control required"  name="company_type" data-width="100%">
+											<option value="" selected disabled>Company type</option>
+											<option value="B2B">B2B</option>
+											<option value="SaaS">SaaS</option>
+											<option value="eCommerce">eCommerce</option>
+											<option value="Marketing Agency">Marketing Agency</option>
+											<option value="Other">Other</option>
+								  </select>
+								  </div>
 								 <!--   <h4>About yourself</h4> -->
 									<div class="form-group login-company-size">
 									 <!--  <div style="display:inline-block;width:50%"> -->
@@ -296,10 +296,9 @@ $.validator.setDefaults({
 											<option value="CEO">CEO</option>
 											<option value="VP, Sales">VP, Sales</option>
 											<option value="VP, Marketing">VP, Marketing</option>
-											<option value="Developer">Developer</option>
 											<option value="Reseller">Reseller</option>
-											<option value="Small Business Owner">Small Business Owner</option>
 											<option value="Recruiter">Recruiter</option>
+											<option value="Developer">Developer</option>
 											<option value="Other">Other</option>
 								  </select>
 								  </div>
