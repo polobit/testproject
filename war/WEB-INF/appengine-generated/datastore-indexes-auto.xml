@@ -317,5 +317,9 @@
         <property name="scope" direction="asc"/>
         <property name="position" direction="asc"/>
     </datastore-index>
+    <datastore-index kind="Note" ancestor="false" source="manual">
+        <property name="related_deals" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
 
 </datastore-indexes>
