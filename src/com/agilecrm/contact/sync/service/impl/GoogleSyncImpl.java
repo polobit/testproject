@@ -563,6 +563,9 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		    nextLink = object.getString("nextLink");
 		    etagFromDB = object.getString("etagFromDB");
 		    
+		    if(otherParameters.has("start_index"))
+			    otherParameters.remove("start_index");
+		    
 		    if(object.has("last_synced"))
 		    {
 			prefs.last_synced_from_client = object.getLong("last_synced");
@@ -591,6 +594,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		    otherParameters.remove("nextLink");
 		    otherParameters.remove("etagFromDB");
 		}
+		
 
 		etag = etagFromDB;
 		
