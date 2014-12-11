@@ -1,38 +1,30 @@
 <script id="deal-detail-activities-collection-template" type="text/html">
-
 {{#unless this.length}}
-
         <div class="slate">
             <div class="slate-content">
                 <div class="box-left">
                     <img alt="Clipboard" src="/img/clipboard.png" />
                 </div>
-                
                 <div class="box-right">
-                    <h3>No activity found</h3>
-                    
+                    <h3>You have any activity.</h3>
                 </div>
             </div>
         </div>
-        {{/unless}}
+ {{/unless}}
+
 {{#if this.length}}
-
-	<ul style="margin:0px" id="deal-detail-activities-model-list" ></ul>
-
+<div class="page-header" style="margin-top: 0px !important;border-bottom: 0px;"></div>
+	<ul id="deal-detail-activities-model-list" class="ativity-block-ul" style="margin:0px;"></ul>
 {{/if}}
 </script>
-
 
 <script id="deal-detail-activities-model-template" type="text/html">
 <div style="display:block;" class="activity">
 
-
-
-{{#if_equals "DEAL_ADD" activity_type}}{{#if_equals "Deal_owner_name" custom3}}
-
-<div class="activity-text-block">
+<div class="well">
 	<span class="activity-block-owner">
-		{{#if domainOwner}}
+       
+        {{#if domainOwner}}
 			{{#if ownerPic}}
 				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{ownerPic}}" >
 			{{else}}
@@ -41,270 +33,21 @@
 		{{else}}
 			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
 		{{/if}}
-		<span class="owner-name">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
 	</span>
-	<h4><a style="text-decoration: none"><b>Created</b></a></h4>
-	<br/>
+	<h4><b>{{activity_type}}</b></h4>
 	<div style="background:none;border:none;">
-		<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{show_link_in_statement description}}</pre>
+		<pre style="border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{removeSquareBrackets custom3}}</pre>
 	</div>	
-	 	<div class="clear">
-		<div style="margin-bottom: 9px;margin-top: -16px;">	
-		Deal Created
+
+	<div class="clear">
+		<div style="margin-bottom: 16px;" class="pull-right">	
+		 <a href="javascript:void(0)">{{user.name}}</a>
 		</div>
-		<small class="edit-hover"  style="margin-right:10px"> 
-			<time class="note-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+
+		<small class="edit-hover" style="margin-right:10px"> 
+			<time  datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "dd mmm yyyy" time}}</time>
 		</small>
-	
 	</div>
+
 </div>
-	
-{{/if_equals}}{{/if_equals}}
-{{#if_equals "DEAL_CLOSE" activity_type}}
-<div class="activity-text-block">
-	<span class="activity-block-owner">
-		{{#if domainOwner}}
-			{{#if ownerPic}}
-				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{ownerPic}}" >
-			{{else}}
-				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{defaultGravatarurl 40}}" >
-			{{/if}}
-		{{else}}
-			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
-		{{/if}}
-		<span class="owner-name">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
-	</span>
-	<h4><a style="text-decoration: none"><b>Deal Won</b></a></h4>
-	<br/>
-	<div style="background:none;border:none;">
-		<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{show_link_in_statement description}}</pre>
-	</div>	
-	 	<div class="clear">
-		<div style="margin-bottom: 9px;margin-top: -16px;">	
-Won Deal		
-</div>
-		<small class="edit-hover"  style="margin-right:10px"> 
-			<time class="note-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-		
-	</div>
-</div>	
-
-{{/if_equals}}
-
-{{#if_equals "DEAL_EDIT" activity_type}}
-	
-<div class="activity-text-block">
-	<span class="activity-block-owner">
-		{{#if domainOwner}}
-			{{#if ownerPic}}
-				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{ownerPic}}" >
-			{{else}}
-				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{defaultGravatarurl 40}}" >
-			{{/if}}
-		{{else}}
-			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
-		{{/if}}
-		<span class="owner-name">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
-	</span>
-	<h4><a style="text-decoration: none"><b>Modified Deal</b></a></h4>
-	<br/>
-	<div style="background:none;border:none;">
-		<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{show_link_in_statement description}}</pre>
-	</div>	
-	 	<div class="clear">
-		<div style="margin-bottom: 9px;margin-top: -16px;">
-        Changed	{{custom3}}
-		</div>
-		<small class="edit-hover"  style="margin-right:10px"> 
-			<time class="note-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-		
-	</div>
-</div>
-{{/if_equals}}
-
-
-{{#if_equals "DEAL_RELATED_CONTACTS" activity_type}}
-	
-<div class="activity-text-block">
-	<span class="activity-block-owner">
-		{{#if domainOwner}}
-			{{#if ownerPic}}
-				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{ownerPic}}" >
-			{{else}}
-				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{defaultGravatarurl 40}}" >
-			{{/if}}
-		{{else}}
-			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
-		{{/if}}
-		<span class="owner-name">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
-	</span>
-	<h4><a style="text-decoration: none"><b>Related Contacts Modified</b></a></h4>
-	<br/>
-	<div style="background:none;border:none;">
-		<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{show_link_in_statement description}}</pre>
-	</div>	
-	 	<div class="clear">
-		<div style="margin-bottom: 9px;margin-top: -16px;">	
-	{{#if related_contact_ids}}
-{{#if_equals "removed_all_relatedcontacts" custom3}}
-Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} 
-{{/if_equals}} 
-{{#if_equals "removed_relatedcontacts" custom3}}
-Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}   
-{{/if_equals}} 
-{{#if_equals "added_relatedcontacts" custom3}}
-Added {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}   
-{{/if_equals}}
-{{else}}
-Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
-{{/if}}	
-		</div>
-		<small class="edit-hover"  style="margin-right:10px"> 
-			<time class="note-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-		
-	</div>
-</div>
-{{/if_equals}}
-
-{{#if_equals "NOTE_ADD" activity_type}}
-	
-<div class="activity-text-block">
-	<span class="activity-block-owner">
-		{{#if domainOwner}}
-			{{#if ownerPic}}
-				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{ownerPic}}" >
-			{{else}}
-				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{defaultGravatarurl 40}}" >
-			{{/if}}
-		{{else}}
-			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
-		{{/if}}
-		<span class="owner-name">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
-	</span>
-	<h4><a style="text-decoration: none"><b>Note Added</b></a></h4>
-	<br/>
-	<div style="background:none;border:none;">
-		<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{show_link_in_statement description}}</pre>
-	</div>	
-	 	<div class="clear">
-		<div style="margin-bottom: 9px;margin-top: -16px;">	
-		Subject : {{custom1}}<br/>
-        Message : {{custom2}}  
-		</div>
-		<small class="edit-hover"  style="margin-right:10px"> 
-			<time class="note-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-		
-	</div>
-</div>
-{{/if_equals}}
-
-
-
-{{#if_equals "DEAL_OWNER_CHANGE" activity_type}}
-	
-<div class="activity-text-block">
-	<span class="activity-block-owner">
-		{{#if domainOwner}}
-			{{#if ownerPic}}
-				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{ownerPic}}" >
-			{{else}}
-				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{defaultGravatarurl 40}}" >
-			{{/if}}
-		{{else}}
-			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
-		{{/if}}
-		<span class="owner-name">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
-	</span>
-	<h4><a style="text-decoration: none"><b>Reassigned</b></a></h4>
-	<br/>
-	<div style="background:none;border:none;">
-		<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{show_link_in_statement description}}</pre>
-	</div>	
-	 	<div class="clear">
-		<div style="margin-bottom: 9px; margin-top: -16px;">	
-		Owner Changed from {{custom2}} to {{custom1}}
-		</div>
-	<small class="edit-hover"  style="margin-right:10px"> 
-			<time class="note-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-		
-	</div>
-</div>
-{{/if_equals}}
-
-{{#if_equals "DEAL_MILESTONE_CHANGE" activity_type}}
-	
-<div class="activity-text-block">
-	<span class="activity-block-owner">
-		{{#if domainOwner}}
-			{{#if ownerPic}}
-				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{ownerPic}}" >
-			{{else}}
-				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{defaultGravatarurl 40}}" >
-			{{/if}}
-		{{else}}
-			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
-		{{/if}}
-		<span class="owner-name">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
-	</span>
-	<h4><a style="text-decoration: none"><b>Milestone Change</b></a></h4>
-	<br/>
-	<div style="background:none;border:none;">
-		<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{show_link_in_statement description}}</pre>
-	</div>	
-	 	<div class="clear">
-		<div style="margin-bottom: 9px;margin-top: -16px;">	
-		Milestone changed form {{custom2}} to {{custom1}}
-		</div>
-		<small class="edit-hover"  style="margin-right:10px"> 
-			<time class="note-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-		
-	</div>
-</div>
-{{/if_equals}}
-
-{{#if_equals "DEAL_LOST" activity_type}}
-	
-	
-<div class="activity-text-block">
-	<span class="activity-block-owner">
-		{{#if domainOwner}}
-			{{#if ownerPic}}
-				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{ownerPic}}" >
-			{{else}}
-				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{defaultGravatarurl 40}}" >
-			{{/if}}
-		{{else}}
-			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
-		{{/if}}
-		<span class="owner-name">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
-	</span>
-	<h4><a style="text-decoration: none"><b>Lost Deal</b></a></h4>
-	<br/>
-	<div style="background:none;border:none;">
-		<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{show_link_in_statement description}}</pre>
-	</div>	
-	 	<div class="clear">
-		<div style="margin-bottom: 9px;margin-top: -16px;">	
-Lost Deal	
-	</div>
-		<small class="edit-hover"  style="margin-right:10px"> 
-			<time class="note-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-		
-	</div>
-</div>
-
-{{/if_equals}}
-
-		</div>
-		
-		
-	
-
 </script>
