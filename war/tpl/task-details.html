@@ -21,37 +21,11 @@
 
   <!--------- task status ---------------->
 
-<div class="row">
-<div class="span2" id="task-contact-img">
-<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:104px;overflow:hidden;display:inline-block;">
-        	{{#each contacts}}
-        		{{#if_contact_type "PERSON"}}
-        			<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
-        		{{/if_contact_type}}
-				{{#if_contact_type "COMPANY"}}
-        			<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
-        		{{/if_contact_type}}
-        	{{/each}}
-		</div>
-       {{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
-
-
-</div>
-<div class="span5">
+<div class="row-fluid">
+<div class="span8">
 <span class="span2">{{displayPlainText status}}</span> 
  <span class="span3">Due: {{epochToHumanDate "dd mmm yyyy" due}}</span>
-{{#if_equals "IN_PROGRESS" status}} 
-<br/>
-<div style="margin-top:12px;">
-<div  style="width:39%;height:8px;margin-bottom: 1px !important;margin-top: 2px !important;" class="progress progress-info">
-          <div class="bar" style="width: {{progress}}%;"></div>
-     </div>
-<span style="margin-left: 75px;">{{progress}}%</span>
 </div>
-{{/if_equals}} 
-</div>
-
-
 
 <div class="pull-right">
 <div class="change-owner-succes"></div>
@@ -74,6 +48,30 @@
 			{{/canEditContact}}
        </span>
     </span>
+</div>
+</div>
+
+<div class="row-fluid">
+{{#if_equals "IN_PROGRESS" status}} 
+<div  style="width:20%;height:8px;margin-bottom: 1px !important;margin-top: 2px !important;" class="progress progress-info">
+          <div class="bar" style="width: {{progress}}%;"></div>
+     </div>
+<span style="margin-left: 75px;">{{progress}}%</span>
+{{/if_equals}} 
+</div>
+
+<div class="row-fluid">
+<div class="span2" id="task-contact-img">
+<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:104px;overflow:hidden;display:inline-block;">
+        	{{#each contacts}}
+        		{{#if_contact_type "PERSON"}}
+        			<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        		{{/if_contact_type}}
+				{{#if_contact_type "COMPANY"}}
+        			<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        		{{/if_contact_type}}
+        	{{/each}}
+		</div>
 </div>
 </div> 
 
@@ -220,7 +218,7 @@
        
          <img class="thumbnail img-inital"  src="{{userPic}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
 	</span>
-	<h4><b>{{displayPlainText activity_type}}</b></h4>
+	<h4><b>{{get_normal_activity_type activity_type}}</b></h4>
 
 
    {{#if_equals "TASK_EDIT" activity_type}}
