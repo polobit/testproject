@@ -277,6 +277,7 @@ $.validator.setDefaults({
 											placeholder="Users" autocapitalize="off" autofocus>
 								 	 </div>
 									</div>
+									<div class="clear-fix"></div>
 									<div class="form-group login-company">
 								<!--	<div style="display:inline-block;width:49%"> -->
 									<select class="form-control required"  name="company_type" data-width="100%">
@@ -560,6 +561,7 @@ $.validator.setDefaults({
 		
 		function submitForm(form)
 		{
+			
 			// Read domain
 			 var domain = $("#subdomain").val();
 			
