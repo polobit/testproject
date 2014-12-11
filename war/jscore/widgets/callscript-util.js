@@ -379,7 +379,7 @@ function setup_sortable_callscriptrules()
 			getRulesNewPosition(function(newRules){
 				
 				// Saves new positions in widget
-				saveAfterDrop(newRules);
+				saveCSRAfterDrop(newRules);
 			});			
 		});		
 	});
@@ -426,9 +426,9 @@ function getRulesNewPosition(callback)
 }
 
 // Save rules after dropped 
-function saveAfterDrop(newRules)
+function saveCSRAfterDrop(newRules)
 {
- console.log("In saveAfterDrop");	
+ console.log("In saveCSRAfterDrop");	
  
 //Get widget from collection and Convert prefs in json
 var callscriptPrefsJson = getCallScriptJSON();
