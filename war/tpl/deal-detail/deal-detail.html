@@ -16,16 +16,17 @@
 						<div class="contact-profile-name mg-r-md" style="margin-bottom:-10px;">{{#if name}}{{name}}{{/if}}
 						
 						
-						{{#if_equals milestone "Won"}} <span class="label label-success"><b>{{milestone}}</b></span>
+						{{#if_equals milestone "Won"}} <span style="position: relative;top: -2px;" class="label label-success"><b>{{milestone}}</b></span>
 {{else}}
-{{#if_equals milestone "Lost"}} <span class="label label-important"><b>{{milestone}}</b></span>
+{{#if_equals milestone "Lost"}} <span style="position: relative;top: -2px;" class="label label-important"><b>{{milestone}}</b></span>
 {{else}}
-<span class="label label-default"><b>{{milestone}}</b></span>
+<span style="position: relative;top: -2px;" class="label label-default"><b>{{milestone}}</b></span>
 {{/if_equals}}
 {{/if_equals}} 
-{{#if_greater this.pipeline.length "1"}}<span class="label label-default" >{{pipeline.name}}</span>{{/if_greater}}
+{{#if_equals this.pipeline.name "Default"}}{{else}}<span style="position: relative;top: -2px;" class="label label-default" >{{pipeline.name}}</span>{{/if_equals}}
 						
 						 </div><br/>
+<div> <span class="contact-profile-name mg-r-md" >{{currencySymbol}} {{numberWithCommas expected_value}}</span> <span>({{probability}}%)</span></div><br/>
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}
         		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
@@ -34,8 +35,7 @@
         		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
         	{{/if_contact_type}}
         {{/each}}
-	
-        <span class="contact-profile-name mg-r-md" style="vertical-align:bottom;">${{expected_value}}</span> <span style="vertical-align:bottom;">({{probability}}%)</span>
+       
 						 
 </div>
 
@@ -43,7 +43,7 @@
 
 </div>
                         
- 						<div class="span2">
+<div class="span2">
 <div style="width:100%;position:relative;">
 <div class="contact-navigation-view"><span class="navigation  contact-switching"></span></div></div>
 <div class="clearfix"></div>
@@ -118,7 +118,7 @@
           
           </div>
 	</div>
-<div class="span3 contact-right-widgetsview" style="padding-left:17px;box-sizing:border-box;border-left:1px solid #ddd;">
+<div class="span3 contact-right-widgetsview" style="padding-left:17px;box-sizing:border-box;border-left:1px solid #ddd;min-height: 200px;">
 			
 
 						<div style='padding-top: 10px'>

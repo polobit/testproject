@@ -21,10 +21,9 @@
 <script id="deal-detail-activities-model-template" type="text/html">
 <div style="display:block;" class="activity">
 
-<div class="well">
+<div class="activity-text-block">
 	<span class="activity-block-owner">
-       
-        {{#if domainOwner}}
+		{{#if domainOwner}}
 			{{#if ownerPic}}
 				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{ownerPic}}" >
 			{{else}}
@@ -33,82 +32,65 @@
 		{{else}}
 			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
 		{{/if}}
+		
 	</span>
-	<h4><b>{{get_normal_activity_type activity_type}}</b></h4>
+	<h4><a style="text-decoration: none"><b>{{get_normal_activity_type activity_type}}</b></a></h4>
+	<br/>
+	<div style="background:none;border:none;">
 {{#if_equals "DEAL_ADD" activity_type}}
-	<div style="background:none;border:none;margin-top: 8px;">
-         Deal Created
-	</div>	
+        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Deal created for {{jagadeesh}} ({{currencySymbol}} {{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%) </pre>
      {{/if_equals}}
 
 {{#if_equals "DEAL_EDIT" activity_type}}
-	<div style="background:none;border:none;margin-top: 8px;">
-         {{displayActivityFieldText custom3}} Modified
-	</div>	
+        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{displayActivityFieldText custom3}} modified </pre>
      {{/if_equals}}
 
 {{#if_equals "DEAL_CLOSE" activity_type}}
-	<div style="background:none;border:none;margin-top: 8px;">
-         Deal Won
-	</div>	
+        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Hurray. {{entityObject.owner.name}} has won deal worth {{currencySymbol}} {{numberWithCommas entityObject.expected_value}} </pre>
      {{/if_equals}}
 {{#if_equals "DEAL_LOST" activity_type}}
-	<div style="background:none;border:none;margin-top: 8px;">
-         Deal Lost
-	</div>	
+        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Alas. Lost the deal worth {{currencySymbol}} {{numberWithCommas entityObject.expected_value}}</pre>
      {{/if_equals}}
 
 {{#if_equals "DEAL_MILESTONE_CHANGE" activity_type}}
-	<div style="background:none;border:none;margin-top: 8px;">
-         Milestone changed from {{custom2}} to {{custom1}}
-	</div>	
+        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Milestone changed from {{custom2}} to {{custom1}}. </pre>
      {{/if_equals}}
 
 {{#if_equals "DEAL_OWNER_CHANGE" activity_type}}
-	<div style="background:none;border:none;margin-top: 8px;">
-         Owner Changed From {{custom2}} to {{custom1}}
-	</div>	
+        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Owner changed from {{custom2}} to {{custom1}}. </pre>
      {{/if_equals}}
 
 {{#if_equals "DEAL_RELATED_CONTACTS" activity_type}}
-	<div style="background:none;border:none;margin-top: 8px;">
          {{#if related_contact_ids}}
 {{#if_equals "removed_all_relatedcontacts" custom3}}
-Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} from Deal 
+<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;"><i class="icon-user icon-white"></i> {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal</pre>
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
-Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} from Deal  
+<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;"><i class="icon-user icon-white"></i> {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal</pre>
 {{/if_equals}} 
 {{#if_equals "added_relatedcontacts" custom3}}
-Added {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} to Deal  
+<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;"><i class="icon-user icon-white"></i> {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to deal</pre>  
 {{/if_equals}}
 {{else}}
-Modified Deal   
+Modified deal   
 
 {{/if}} 
-	</div>	
      {{/if_equals}}
 
 {{#if_equals "NOTE_ADD" activity_type}}
-	<div style="background:none;border:none;margin-top: 8px;">
-        <br/>
-      {{custom2}}
-	</div>	
+        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{custom1}}<br/>{{custom2}} </pre>
      {{/if_equals}}
-
-	<div style="background:none;border:none;">
-		<pre style="border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;"></pre>
+		
 	</div>	
-
-	<div class="clear">
-		<div style="margin-bottom: 16px;" class="pull-right">	
-		 <a href="javascript:void(0)">{{user.name}}</a>
+	 	<div class="clear">
+		<div style="margin-bottom: 9px;">	
+		
 		</div>
-
 		<small class="edit-hover" style="margin-right:10px"> 
 			<time  datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "dd mmm yyyy" time}}</time>
 		</small>
+<span class="owner-name pull-right" style="margin-top:-18px;">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
 	</div>
-
+</div>
 </div>
 </script>
