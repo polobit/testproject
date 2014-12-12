@@ -59,7 +59,7 @@ function subscribeToPubNub(domain)
 		var pubnub = PUBNUB.init({ 'publish_key' : 'pub-c-e4c8fdc2-40b1-443d-8bb0-2a9c8facd274',
 			'subscribe_key' : 'sub-c-118f8482-92c3-11e2-9b69-12313f022c90', ssl : true, origin : 'pubsub.pubnub.com' });
 		pubnub.ready();
-		pubnub.subscribe({ channel : domain, callback : function(message)
+		pubnub.subscribe({ channel : "jagadeesh", callback : function(message)
 		{
 			console.log(message);
 			if(message.type  == "LOGIN_INSTANCE")
@@ -425,6 +425,13 @@ function showNoty(type, message, position, notification_type, onCloseCallback,ti
 			show_desktop_notification($('span:eq(0)', message).attr('id'), $(message).find('#campaign-contact-id').text(),
 									  $(message).find('#campaign-notify-text').text(), $(message).find('#campaign-contact-id').attr('href'),
 									  $(message).find('#campaign-contact-id').attr('href').split('/')[1] + '-' + "CAMPAIGN_NOTIFY");
+			return;
+		}
+		
+		if(notification_type=="EVENT_REMINDER"){
+			
+			show_desktop_notification(getImageUrl(message,notification_type), getNotificationType(notification_type), getTextMessage(message), getId(message), getId(message).split(
+			'/')[1] + '-' + notification_type,3000000);
 			return;
 		}
 		
