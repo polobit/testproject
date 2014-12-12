@@ -107,9 +107,6 @@ function connectedCallNoty(message, type)
 				{ addClass : 'btn btn-primary noty_twilio_dialpad', text : 'Dialpad' }, { addClass : 'btn btn-danger noty_twilio_hangup', text : 'Hangup' }
 		] });
 		
-		var voicemailLink = '<span class="pull-left"><a href="#" id="noty_twilio_voicemail">Voicemail</a></span>';
-		$('.noty_buttons').prepend(voicemailLink);
-		
 		// Add dialpad template in twilio content
 		var dialpad = $(getTemplate("twilioio-dialpad"), {});
 		$('.noty_buttons').prepend(dialpad);
@@ -171,4 +168,9 @@ function outgoingCallNoty(message, type)
 	CALL = noty({ text : message, type : "confirm", layout : "bottomRight", buttons : [
 		{ addClass : 'btn btn-danger hangup', text : 'Cancel' }
 	] });
+}
+
+function voiceMailDropAction() { 
+//	alert("clicked");
+	$( "div.noty_bar" ).parent().css( "overflow", "visible" );
 }

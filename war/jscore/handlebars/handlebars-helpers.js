@@ -3495,6 +3495,26 @@ $(function()
 			field_type_name = "Formula";
 		return field_type_name;
 	});
+	
+	//@author Purushotham
+	//function to compare integer values
+	Handlebars.registerHelper('ifCond', function(v1, type, v2, options) {	
+		switch(type){
+			case "greaterthan":
+				if(parseInt(v1) > parseInt(v2))
+					return options.fn(this);
+				break;
+			case "lessthan":
+				if(parseInt(v1) < parseInt(v2))
+					return options.fn(this);
+				break;
+			case "equals":
+				if(parseInt(v1) === parseInt(v2))
+					return options.fn(this);
+				break;
+		}
+		return options.inverse(this);
+	});
 
 	Handlebars.registerHelper('shopifyWebhook', function()
 	{

@@ -566,5 +566,42 @@ public class TwilioWidgetsAPI
 		note.save();
 		return "";
 	}
+	
+	/**
+	 * 
+	 * @author Purushotham
+	 * @created 10-Dec-2014
+	 *
+	 */
+	
+	@Path("setvoicemail/{acc-sid}/{auth-token}/{call-sid}/{file-selected}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String setVoiceMailRedirect(@PathParam("acc-sid") String accountSID,
+			@PathParam("auth-token") String authToken, @PathParam("call-sid") String callSID, @PathParam("file-selected") String fileSelected)
+	{
+
+		try
+		{
+			TwilioUtil.sendVoiceMailRedirect(accountSID, authToken, callSID, fileSelected);
+			return "{}";//empty JSON Object
+		}
+		catch (SocketTimeoutException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and Please try again.").build());
+		}
+		catch (IOException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occurred. Refresh and Please try again.").build());
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+	}
 
 }

@@ -12,6 +12,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
 import com.thirdparty.twilio.sdk.TwilioRestResponse;
 import com.twilio.sdk.client.TwilioCapability;
@@ -732,14 +733,19 @@ public class TwilioUtil
 	JSONObject responseJSON = new JSONObject(response);
 	return responseJSON;
     }
-    
+    /**
+     * 
+     * @author Purushotham
+     * @created 04-Dec-2014
+     *
+     */
     public static String sendAudioFileToTwilio(String fileUrl)
 	{
         // Create a TwiML response and add our friendly message.
         TwiMLResponse twiml = new TwiMLResponse();
-        
+        String filePath = "https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/" + NamespaceManager.get() + "/" + fileUrl;        
         // Play an MP3 for incoming callers.
-        Play play = new Play(fileUrl);
+        Play play = new Play(filePath);
         try {
             twiml.append(play);
         } catch (TwiMLException e) {
@@ -747,5 +753,33 @@ public class TwilioUtil
         }
         return twiml.toXML();
 	}
+    
+    /**
+     * 
+     * @author Purushotham
+     * @created 10-Dec-2014
+     *
+     */
+    public static void sendVoiceMailRedirect(String account_sid, String auth_token, String call_sid, String fileSelected) throws JSONException, Exception
+    {
+	TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
+    Map<String, String> params = new HashMap<String, String>();
+    
+    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development) {
+    	//For LOCAL
+    	params.put("Url", "http://demo.twilio.com/docs/voice.xml");
+    } else {
+    	//For BETA
+    	params.put("Url", "https://" + NamespaceManager.get() + "-dot-sandbox-dot-agilecrmbeta.appspot.com/twiml?type=1&fid="+fileSelected);    	
+    	
+    	//For LIVE
+    	//params.put("Url", "https://" + NamespaceManager.get() + ".agilecrm.com/twiml?type=1&fid="+fileSelected);
+    }
+    
+    params.put("Method", "POST");
+//    params.put("Status", "completed");
+    client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"+call_sid+".json", "POST", params);
+	return;
+    }
 	
 }

@@ -114,17 +114,17 @@
 </script>
 
 <script id="twilioio-voicemail-template" type="text/html">
-<div id="voicemail_in_twilio" class="muted" style="display:none;float:left;">
 {{#if this}}
-   Select WAV file &nbsp;&nbsp;<select id="tw_voicemails_select" name="tw_voicemails_select" class="input-medium">
-		{{#each this}}
-			<option value="{{url}}">{{name}}</option>
-		{{/each}}
-    </select>
-{{/if}}
-{{#unless this}}
-	No WAV files found.
-{{/unless}}
+<div class="btn-group dropup pull-left">
+<button class="btn" id="noty_twilio_voicemail" data-length="{{length}}" data-src="{{this.0.extension}}">Leave Voicemail</button>
+{{#ifCond length "greaterthan" 1}}
+<button class="btn dropdown-toggle" data-toggle="dropdown" onclick="voiceMailDropAction()" id="splitButtonVoicemail" ><span class="caret"></span></button>
+<ul class="dropdown-menu">
+{{#each this}}
+<li><a href="#" data-src="{{extension}}" class="voiceMailItem">{{name}}</a></li>
+{{/each}}
+</ul>
+{{/ifCond}}
 </div>
-<div style="clear:both;"></div>
+{{/if}}
 </script>

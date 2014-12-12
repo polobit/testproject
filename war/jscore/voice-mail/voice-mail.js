@@ -92,7 +92,8 @@ function saveVoiceMailFileURL(url, network, id)
 	
 	$('#' + form_id).find("#extension").val(extension);
 	$('#' + form_id).find("#network_type").val(network);
-   	$('#' + form_id).find('#upload_url').val(url);
+	var newUrl = url.substring(0, url.indexOf("?"));//removing query string
+   	$('#' + form_id).find('#upload_url').val(newUrl);
    	$(".addFileLink").empty();
    	if(extension != "")
    		$(".addFileLink").html(extension);
