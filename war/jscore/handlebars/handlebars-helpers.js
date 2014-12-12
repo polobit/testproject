@@ -3515,6 +3515,33 @@ $(function()
 		}
 		return options.inverse(this);
 	});
+	
+	Handlebars.registerHelper('callActivityFriendlyStatus',function(status){
+		
+		switch(status) {
+	    case "canceled":
+	    	return "Call missed";
+	        break;
+	    case "completed":
+	    	return "Completed";
+	    	break;
+	    case "busy":
+	    	return "Busy";
+	    	break;
+	    case "failed":
+	    	return "Failed"
+	    	break;
+	    case "no-answer":
+	    	return "No answer";
+	    	break;
+	    case "in-progress":
+	    	return "Leaved voicemail";
+	    	break;
+	    default:
+	        return "";
+		}
+		
+	});
 
 	Handlebars.registerHelper('shopifyWebhook', function()
 	{
