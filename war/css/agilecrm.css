@@ -1418,6 +1418,12 @@ height: 30px;
 {
 	word-wrap:break-word;
 	width:95%;
+	position:relative;
+}
+.activity_time{
+position: absolute;
+right: 0;
+top: 0;
 }
 .footer-left a,#refresh-tags,#documents-model-list a,#admin-prefs-tabs-content .tab-content a,#show-schedule-url,#subscribe-ical,span[title='Owner'] i,#contact-documents-model-list i
 {
@@ -1848,7 +1854,4 @@ text-overflow:ellipsis;
 	margin-left:-4px;
 }
 
-.activity_time{
-	margin-top: -34px;
-margin-bottom: 35px;
-}
+
