@@ -102,7 +102,7 @@ public class Task extends Cursor
      * start date of the task
      * 
      */
-    public Long start_time = 0L;
+    public Long task_start_time = 0L;
 
     /**
      * Created time of task
@@ -367,7 +367,7 @@ public class Task extends Cursor
 	if (progress == 0)
 	{
 	    if (this.progress > 0)
-		start_time = System.currentTimeMillis() / 1000;
+		task_start_time = System.currentTimeMillis() / 1000;
 	}
 	/************* New added code ******************/
 
