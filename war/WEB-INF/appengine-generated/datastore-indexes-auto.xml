@@ -255,5 +255,10 @@
         <property name="pipeline" direction="asc"/>
         <property name="close_date" direction="asc"/>
     </datastore-index>
+    
+    <datastore-index kind="Opportunity" ancestor="false" source="manual">
+        <property name="archived" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
 
 </datastore-indexes>
