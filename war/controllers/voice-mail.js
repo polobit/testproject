@@ -7,7 +7,7 @@ var VoiceMailRouter = Backbone.Router.extend({
 	voicemail : function(){
 		$("#content").html(getTemplate("settings"), {});
 		$('#PrefsTab .active').removeClass('active');
-		$('.voice-mail-tab').addClass('active');
+		$('.add-widget-prefs-tab').addClass('active');
 		
 		this.VoiceMailCollectionView = new Base_Collection_View({ url : 'core/api/voicemails', templateKey : "voice-mail", cursor : true, page_size : 20,
 			individual_tag_name : 'tr', postRenderCallback : function(el)
