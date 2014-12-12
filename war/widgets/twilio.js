@@ -835,11 +835,13 @@ $(function()
 			var twilio_prefs = JSON.parse(twilio_widget.prefs);
 			console.log(twilio_prefs);
 
+			twilioError(Twilio_PLUGIN_NAME, "This widget is deprecated.");
+			
 			/*
 			 * Check if Twilio account has registered numbers and shows set up to verify
 			 * if no numbers available, else generates token required to make calls
 			 */
-			checkTwilioNumbersAndGenerateToken(twilio_prefs);
+			//checkTwilioNumbersAndGenerateToken(twilio_prefs);
 
 			/*
 			 * If Twilio account doesn't have numbers, we need to verify numbers in
