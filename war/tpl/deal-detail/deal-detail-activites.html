@@ -38,7 +38,7 @@
 	<br/>
 	<div style="background:none;border:none;">
 {{#if_equals "DEAL_ADD" activity_type}}
-        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Deal created for {{jagadeesh}} ({{currencySymbol}} {{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%) </pre>
+        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Deal created for {{custom1}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%) </pre>
      {{/if_equals}}
 
 {{#if_equals "DEAL_EDIT" activity_type}}
