@@ -153,7 +153,7 @@ Created a Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}
 	</div>
 <div class="pull-left activity-tag">
 <div>	
- Task owner changed to {{custom1}}
+ Task owner changed to {{custom1}}<br/>
 <i class="icon-tasks"></i> <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
 	</div>
 <div>	
@@ -529,7 +529,7 @@ Changed Deal milestone from {{custom2}} to {{custom1}}<br/>
   Deleted {{custom2}} Deal<br/>
   <i class="icon-money icon-white"></i> {{custom1}}
 {{else}} 
-	Deleted {{custom2}} Deals 
+	Deleted {{custom2}} Deals <br/>
  <i class="icon-money icon-white"></i> {{custom1}}
 {{/if_equals}}
 
@@ -618,7 +618,7 @@ Modified  Event <a href="" data={{entity_id}} class="activity-deal-edit">{{label
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left">
+<div class="pull-left activity-tag">
 <div>	
     {{#if_equals "1" custom1}}
   Deleted {{custom1}} Event <br/>
