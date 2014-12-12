@@ -16,11 +16,11 @@
 						<div class="contact-profile-name mg-r-md" style="margin-bottom:-10px;">{{#if name}}{{name}}{{/if}}
 						
 						
-						{{#if_equals milestone "Won"}} <span style="position: relative;top: -2px;" class="label label-success"><b>{{milestone}}</b></span>
+						{{#if_equals milestone "Won"}} <span style="position: relative;top: -2px;" class="label label-success">{{milestone}}</span>
 {{else}}
-{{#if_equals milestone "Lost"}} <span style="position: relative;top: -2px;" class="label label-important"><b>{{milestone}}</b></span>
+{{#if_equals milestone "Lost"}} <span style="position: relative;top: -2px;" class="label label-important">{{milestone}}</span>
 {{else}}
-<span style="position: relative;top: -2px;" class="label label-default"><b>{{milestone}}</b></span>
+<span style="position: relative;top: -2px;" class="label label-default">{{milestone}}</span>
 {{/if_equals}}
 {{/if_equals}} 
 {{#if_equals this.pipeline.name "Default"}}{{else}}<span style="position: relative;top: -2px;" class="label label-default" >{{pipeline.name}}</span>{{/if_equals}}
