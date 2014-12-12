@@ -32,15 +32,15 @@ function setupLhsFilters(cel, is_company) {
 	} else {
 		$('#lhs_filters_conatiner', cel).html(getTemplate("contacts-lhs-filters"));
 		fillSelect('owner_select','/core/api/users', 'domainUser', function() {
-			if(!CONTACT_CUSTOM_FIELDS)
+			if(!SEARCHABLE_CONTACT_CUSTOM_FIELDS)
 			{
 				$.getJSON("core/api/custom-fields/searchable/scope?scope=CONTACT", function(fields){
-				CONTACT_CUSTOM_FIELDS = fields;
+				SEARCHABLE_CONTACT_CUSTOM_FIELDS = fields;
 				loadCustomFiledsFilters(fields, cel, is_company);
 				return;
 			})
 			} else {		
-				loadCustomFiledsFilters(CONTACT_CUSTOM_FIELDS, cel, is_company);
+				loadCustomFiledsFilters(SEARCHABLE_CONTACT_CUSTOM_FIELDS, cel, is_company);
 			}
 		}, optionsTemplate, false, $('#lhs_filters_conatiner', cel)); 
 

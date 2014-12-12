@@ -25,7 +25,7 @@ function scramble_input_names(el)
 
 $(function()
 {
-	CONTACT_CUSTOM_FIELDS = undefined;
+	SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
 	COMPANY_CUSTOM_FIELDS = undefined;
 	
 	// Filter Contacts- Clone Multiple
@@ -324,7 +324,7 @@ function chainFilters(el, data, callback, is_webrules, is_company)
 		});
 		return;
 	} else {
-		if(!CONTACT_CUSTOM_FIELDS)
+		if(!SEARCHABLE_CONTACT_CUSTOM_FIELDS)
 		{
 			$("#content").html(getRandomLoadingImg());
 			fillContactCustomFieldsInFilters(el, function(){
@@ -338,7 +338,7 @@ function chainFilters(el, data, callback, is_webrules, is_company)
 			return;
 		}
 		
-		fillCustomFields(CONTACT_CUSTOM_FIELDS, el, undefined, false)
+		fillCustomFields(SEARCHABLE_CONTACT_CUSTOM_FIELDS, el, undefined, false)
 	}
 	
 	
@@ -481,7 +481,7 @@ function fillContactCustomFieldsInFilters(el, callback, is_webrules)
 
 	$.getJSON("core/api/custom-fields/searchable/scope?scope=CONTACT", function(fields){
 		console.log(fields);
-		CONTACT_CUSTOM_FIELDS = fields;
+		SEARCHABLE_CONTACT_CUSTOM_FIELDS = fields;
 		fillCustomFields(fields, el, callback, is_webrules)
 	})
 }
