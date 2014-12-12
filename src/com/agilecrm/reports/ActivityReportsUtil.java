@@ -1,8 +1,10 @@
 package com.agilecrm.reports;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -177,6 +179,13 @@ public class ActivityReportsUtil
 			    getDocumentsActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
 		    count += getTotalCount((Map<String, Object>) activityReport.get("docs"), "doc_count");
 		}
+
+		if (activities.contains(ActivityReports.ActivityType.CALL))
+		{
+		    activityReport.put("calls",
+			    getCallActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+		    count += getTotalCount((Map<String, Object>) activityReport.get("calls"), "call_count");
+		}
 		if (count > 0)
 		    activityReport.put("total", count);
 		else
@@ -227,32 +236,37 @@ public class ActivityReportsUtil
 		null, null, startTime, endTime, 0, null);
 
 	UserPrefs pref = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id));
-
-	// Separate the activities based on the activity type.
-	for (Activity act : activities)
+	try
 	{
-	    if (act.activity_type == Activity.ActivityType.DEAL_LOST)
+	    // Separate the activities based on the activity type.
+	    for (Activity act : activities)
 	    {
-		dealLost.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
-		act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
-		lostActivities.put(act.entity_id, act);
+		if (act.activity_type == Activity.ActivityType.DEAL_LOST)
+		{
+		    dealLost.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
+		    act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
+		    lostActivities.put(act.entity_id, act);
+		}
+		else if (act.activity_type == Activity.ActivityType.DEAL_CLOSE)
+		{
+		    dealWon.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
+		    act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
+		    wonActivities.put(act.entity_id, act);
+		}
+		else if (act.activity_type == Activity.ActivityType.DEAL_MILESTONE_CHANGE)
+		{
+		    mileChange.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
+		    act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
+		    mileChangeActivities.put(act.entity_id, act);
+		}
+		else
+		    dealUpdated.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
 	    }
-	    else if (act.activity_type == Activity.ActivityType.DEAL_CLOSE)
-	    {
-		dealWon.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
-		act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
-		wonActivities.put(act.entity_id, act);
-	    }
-	    else if (act.activity_type == Activity.ActivityType.DEAL_MILESTONE_CHANGE)
-	    {
-		mileChange.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
-		act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
-		mileChangeActivities.put(act.entity_id, act);
-	    }
-	    else
-		dealUpdated.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
 	}
-
+	catch (Exception e)
+	{
+	    System.out.println("Exception is processing deal activities. - " + e.getMessage());
+	}
 	// Get the deals assigned to this user (Can be assigned by the other
 	// users also.)
 	List<String> activityTypeList = new ArrayList<String>();
@@ -403,19 +417,22 @@ public class ActivityReportsUtil
 	List<Event> events = EventUtil.getEvents(startTime, endTime,
 		AgileUser.getCurrentAgileUserFromDomainUser(user.id).id);
 
-	List<Activity> eventAddActivity = new ArrayList<Activity>();
+	Map<Long, Activity> eventAddActivity = new HashMap<Long, Activity>();
 	List<Activity> eventMovedActivity = new ArrayList<Activity>();
 
 	// Get all the activities on the user performed on the events.
 	List<Activity> eventActivity = ActivityUtil.getActivitiesByFilter(user.id,
 		Activity.EntityType.EVENT.toString(), null, null, startTime, endTime, 0, null);
 
+	List<Key<Event>> addEvent = new ArrayList<Key<Event>>();
+
 	// Get activities of the events whose start time is changed.
 	for (Activity activity : eventActivity)
 	{
 	    if (activity.activity_type == Activity.ActivityType.EVENT_ADD)
 	    {
-		eventAddActivity.add(activity);
+		eventAddActivity.put(activity.entity_id, activity);
+		addEvent.add(new Key<Event>(Event.class, activity.entity_id));
 	    }
 	    else if (activity.activity_type == Activity.ActivityType.EVENT_EDIT
 		    && activity.custom3.indexOf("start_date") > 0)
@@ -435,11 +452,22 @@ public class ActivityReportsUtil
 	    }
 	}
 
-	for (Event event : events)
+	List<Event> addedEvents = Event.dao.fetchAllByKeys(addEvent);
+	try
 	{
-	    event.color = MustacheUtil.convertDate("MMM dd HH:mm", event.start);
+	    for (Event event : addedEvents)
+	    {
+		eventAddActivity.get(event.id).custom4 = convertDate(null, event.start);
+	    }
+	    for (Event event : events)
+	    {
+		event.color = MustacheUtil.convertDate("MMM dd HH:mm", event.start);
+	    }
 	}
-
+	catch (Exception e)
+	{
+	    System.out.println("Exception in processing events. - " + e.getMessage());
+	}
 	// Fill the map with the required data to show in the activity report.
 	Map<String, Object> eventsReport = new HashMap<String, Object>();
 	try
@@ -459,7 +487,7 @@ public class ActivityReportsUtil
 	    if (eventAddActivity.size() > 0)
 	    {
 		eventsReport.put("events_added_count", eventAddActivity.size());
-		eventsReport.put("events_added", eventAddActivity);
+		eventsReport.put("events_added", eventAddActivity.values());
 	    }
 
 	    int total = events.size() + eventMovedActivity.size() + eventAddActivity.size();
@@ -748,6 +776,11 @@ public class ActivityReportsUtil
 	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, null,
 		Activity.ActivityType.CALL.toString(), null, startTime, endTime, 0, null);
 
+	List<Activity> doneCallActivities = new ArrayList<Activity>();
+	List<Activity> noAnsCallActivities = new ArrayList<Activity>();
+	List<Activity> failedCallActivities = new ArrayList<Activity>();
+	List<Activity> missedCallActivities = new ArrayList<Activity>();
+
 	Map<String, Object> callReport = new HashMap<String, Object>();
 	if (activities.size() > 0)
 	{
@@ -934,5 +967,18 @@ public class ActivityReportsUtil
 	    return (Integer) report.get(field);
 	}
 	return 0;
+    }
+
+    private static String convertDate(String format, Long epoch)
+    {
+	if (format == null)
+	    format = "dd MMM ''yy";
+	if (epoch > 0)
+	{
+	    Date d = new Date(epoch * 1000);
+	    SimpleDateFormat df = new SimpleDateFormat(format);
+	    return df.format(d);
+	}
+	return "";
     }
 }
