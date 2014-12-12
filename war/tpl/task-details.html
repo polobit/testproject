@@ -3,14 +3,12 @@
        <div class="span12">
 			<div class="row-fluid">
                  <span class="pull-left taskDetail-text"> 
-                    <h2 style="text-transform: capitalize;">{{subject}}</h2>
+                    <h2 style="text-transform: capitalize;">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></h2>
                   </span>
-
-                  
+					<span class="label" style="margin-top: 11px;display: inline-block;margin-left: 10px">{{task_property type}}</span>                  
                     {{#if_not_equals priority_type "NORMAL" }}
                    <span class="label label-{{task_label_color priority_type}}" style="margin-top: 11px;display: inline-block;margin-left: 20px">{{ucfirst priority_type}}</span>
                          {{/if_not_equals}}
-					 <span class="label" style="margin-top: 11px;display: inline-block;margin-left: 10px">{{task_property type}}</span>
                  	<!--  starting rating,edit,owner -->
 					<div class="pull-right" data="{{id}}" id="task_edit">
 					   <a class="btn" href="javascript:void(0)" ><i class="icon-edit"></i> Edit</a>
@@ -22,8 +20,12 @@
   <!--------- task status ---------------->
 
 <div class="row-fluid">
-<div class="span8">
-<span class="span2">{{displayPlainText status}}</span> 
+<div class="span8" style="margin-bottom: -30px;">
+{{#if_equals "IN_PROGRESS" status}}
+<span class="span2" style="text-transform: capitalize;">{{displayTaskStatus status}} ({{progress}}%)</span> 
+{{else}}
+<span class="span2" style="text-transform: capitalize;">{{displayTaskStatus status}}</span>
+{{/if_equals}}
  <span class="span3">Due: {{epochToHumanDate "dd mmm yyyy" due}}</span>
 </div>
 
@@ -53,15 +55,14 @@
 
 <div class="row-fluid">
 {{#if_equals "IN_PROGRESS" status}} 
-<div  style="width:20%;height:8px;margin-bottom: 1px !important;margin-top: 2px !important;" class="progress progress-info">
+<div  style="width:20%;height:5px;margin-bottom: 1px !important;margin-top: 2px !important;" class="progress progress-info">
           <div class="bar" style="width: {{progress}}%;"></div>
      </div>
-<span style="margin-left: 75px;">{{progress}}%</span>
 {{/if_equals}} 
 </div>
 
 <div class="row-fluid">
-<div class="span2" id="task-contact-img">
+<div class="span2" id="task-contact-img" style="margin-top: 7px;">
 <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:104px;overflow:hidden;display:inline-block;">
         	{{#each contacts}}
         		{{#if_contact_type "PERSON"}}
@@ -213,7 +214,7 @@
 <script id="task-related-activity-model-template" type="text/html">
 <div style="display:block;" class="activity">
 
-<div class="well">
+<div class="slate">
 	<span class="activity-block-owner">
        
          <img class="thumbnail img-inital"  src="{{userPic}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
@@ -223,25 +224,25 @@
 
    {{#if_equals "TASK_EDIT" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;text-transform: capitalize;">
-         {{displayActivityFieldText custom3}} field is edited
+         Task Updated
 	</div>	
      {{/if_equals}}
 
  {{#if_equals "TASK_ADD" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;text-transform: capitalize;">
-         {{displayActivityFieldText custom3}} field is added
+         Task Created
 	</div>	
      {{/if_equals}}
 
  {{#if_equals "TASK_PROGRESS_CHANGE" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;text-transform: capitalize;">
-         {{displayActivityFieldText custom3}} field is changed
+         Task Status Changed
 	</div>	
      {{/if_equals}}
 
  {{#if_equals "TASK_OWNER_CHANGE" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;text-transform: capitalize;">
-        Owner changed
+      Task  Owner changed
 	</div>	
      {{/if_equals}}
 
@@ -254,7 +255,7 @@
 
  {{#if_equals "TASK_COMPLETED" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;text-transform: capitalize;">
-        Status updated
+        Task Status Change to Completed
 	</div>	
      {{/if_equals}}
 
@@ -267,7 +268,7 @@
 
  {{#if_equals "TASK_RELATED_CONTACTS" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;text-transform: capitalize;">
-        Updated Related Contacts
+        New related Contact attached to task
 	</div>	
      {{/if_equals}}
 

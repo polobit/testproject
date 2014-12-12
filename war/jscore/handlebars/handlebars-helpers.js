@@ -1340,6 +1340,19 @@ $(function()
 				});
 				
 				/**
+				 * Returns plain text removes underscore from text
+				 */
+				Handlebars.registerHelper('displayTaskStatus', function(value)
+				{
+           var val = value.split("_").join("").trim().toLowerCase();
+           if(val == "yettostart")
+           				return  "Not Started";
+           else 
+								return ucfirst(value.split("_").join(" ").trim());
+
+				});
+				
+				/**
 				 * Returns plain customise text for activity remove underscore and other special charecter from string 
 				 */
 				Handlebars.registerHelper('displayActivityFieldText', function(value)
