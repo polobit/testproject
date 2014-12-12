@@ -243,6 +243,7 @@ function agile_create_contact_ui(el, That, Email, Val){
 			$('.contact-search-status', el).show().delay(4000).hide(1,function(){
 				agile_gadget_adjust_width(el, $(".contact-search-status", el), false);
 			});
+			$('.gadget-add-contact', el).trigger('click');
 		}	
 		//  ------ Contact found, show contact summary. ------  
 		else {
