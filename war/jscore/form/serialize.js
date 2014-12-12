@@ -210,7 +210,7 @@ function serializeLhsFilters(element)
 			var date = new Date($(RHS_NEW_ELEMENT).val());
 			RHS_NEW_VALUE = getGMTTimeFromDate(date);
 		}
-		if(RHS_NEW_VALUE) {
+		if(RHS_NEW_VALUE && typeof RHS_NEW_VALUE == "string") {
 			RHS_NEW_VALUE = RHS_NEW_VALUE.trim();
 		}
 		
