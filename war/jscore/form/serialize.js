@@ -193,26 +193,26 @@ function serializeLhsFilters(element)
 	$(element).find('a#lhs-filters-header').removeClass('bold-text');
 	$.each($(element).find('.lhs-contact-filter-row'), function(index, data) {
 		var json_object = {};
-		var element = $(data)[0];
+		var currentElement = $(data)[0];
 		var RHS_VALUE, RHS_NEW_VALUE;
-		var CONDITION = $(element).find('[name="CONDITION"]').val();
+		var CONDITION = $(currentElement).find('[name="CONDITION"]').val();
 		
-		var RHS_ELEMENT = $(element).find('.'+CONDITION).find('#RHS').children();
-		var RHS_NEW_ELEMENT = $(element).find('.'+CONDITION).find('#RHS_NEW').children();
+		var RHS_ELEMENT = $(currentElement).find('.'+CONDITION).find('#RHS').children();
+		var RHS_NEW_ELEMENT = $(currentElement).find('.'+CONDITION).find('#RHS_NEW').children();
 		
-		if ($(RHS_ELEMENT).hasClass("date")) {
+		RHS_VALUE = $(RHS_ELEMENT).val().trim();
+		if ($(RHS_ELEMENT).hasClass("date") && RHS_VALUE && RHS_VALUE != "") {
 			var date = new Date($(RHS_ELEMENT).val());
 			RHS_VALUE = getGMTTimeFromDate(date);
-		} else {
-			RHS_VALUE = $(RHS_ELEMENT).val();
 		}
-		if ($(RHS_NEW_ELEMENT).hasClass("date")) {
+		RHS_NEW_VALUE = $(RHS_NEW_ELEMENT).val();
+		if ($(RHS_NEW_ELEMENT).hasClass("date") && RHS_NEW_VALUE && RHS_NEW_VALUE !="") {
 			var date = new Date($(RHS_NEW_ELEMENT).val());
 			RHS_NEW_VALUE = getGMTTimeFromDate(date);
-		} else {
-			RHS_NEW_VALUE = $(RHS_NEW_ELEMENT).val();
 		}
-
+		if(RHS_NEW_VALUE) {
+			RHS_NEW_VALUE = RHS_NEW_VALUE.trim();
+		}
 		
 		// Set if value of input/select is valid
 		if (RHS_VALUE && RHS_VALUE != null && RHS_VALUE != "") {
@@ -223,12 +223,12 @@ function serializeLhsFilters(element)
 					return;
 				}
 			}
-			json_object["LHS"] = $(element).find('[name="LHS"]').val();
+			json_object["LHS"] = $(currentElement).find('[name="LHS"]').val();
 			json_object["CONDITION"] = CONDITION;
 			json_object["RHS"] = RHS_VALUE;
 			json_object["RHS_NEW"] = RHS_NEW_VALUE;
 			json_array.push(json_object);
-			$($(element).parents().find('.lhs-row-filter')[index]).find('a#lhs-filters-header').addClass('bold-text');
+			$($(element).find('.lhs-row-filter')[index]).find('a#lhs-filters-header').addClass('bold-text');
 		}
 		// Pushes each rule built from chained select in to an JSON array
 	});

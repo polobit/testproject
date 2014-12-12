@@ -52,7 +52,7 @@ function loadCustomFiledsFilters(fields, cel, is_company) {
 	$('#custom-filter-fields', cel).html(getTemplate("contacts-lhs-filters-custom", fields));
 	//$('#custom-filter-fields', cel).find("input.date").datepicker({ format : 'mm/dd/yyyy'});
 	addTagsDefaultTypeahead($($('#tags-lhs-filter-table',cel).find("tr")[1]).find('#RHS'));
-	$("input.date", cel).datepicker({ format : 'mm/dd/yyyy'});
+	$("input.date", cel).datepicker({ format : 'mm/dd/yyyy', autoclose: true});
 	//$('#custom-filter-fields', cel).find("input.date").datepicker({ format : 'mm/dd/yyyy'});
 	$('select[name="CONDITION"]', cel).die().live('change', function(e)
 	{
@@ -61,7 +61,7 @@ function loadCustomFiledsFilters(fields, cel, is_company) {
 		$(this).parent().find('div').find('input').val("").attr('prev-val', "");;
 		$(this).parent().find('div').find('select').val("").attr('prev-val', "");;
 		$(this).parent().find('div.'+selected).removeClass('hide');
-		$(this).parent().find('div.'+selected).find('#RHS input').focus();
+		$(this).parent().find('div.'+selected).find('#RHS :not(input.date)').focus();
 	});
 	scramble_filter_input_names(cel);
 	if(is_company && readData('dynamic_company_filter')) {
@@ -131,7 +131,7 @@ $('#lhs-filters-header').die().live("click", function(e) {
 $('#RHS input').die().live("blur keyup", function(e) {
 	if (e.type == 'focusout' || e.keyCode == '13')  {
 		var prevVal = $(this).attr('prev-val');
-		var currVal = $(this).val();
+		var currVal = $(this).val().trim();
 		if(prevVal == currVal) {
 			return;
 		} else {
@@ -148,15 +148,13 @@ $('#RHS input').die().live("blur keyup", function(e) {
 });
 
 $('#RHS select').die().live("change", function(e) {
-	if($(this).val() != "") {
-		submitLhsFilter();
-	}
+	submitLhsFilter();
 });
 
 $('#RHS_NEW input').die().live("blur keyup", function(e) {
 	if (e.type == 'focusout' || e.keyCode == '13')  {
 		var prevVal = $(this).attr('prev-val');
-		var currVal = $(this).val();
+		var currVal = $(this).val().trim();
 		if(prevVal == currVal) {
 			return;
 		} else {
