@@ -1,4 +1,5 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
+<%@page contentType="text/html; charset=UTF-8" %>
 <%
     //Check if it is being access directly and not through servlet
 			if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
@@ -334,13 +335,13 @@ $.validator.setDefaults({
 						
 						<% if(!StringUtils.isEmpty(error)){%>
 					 <div class="alert alert-error login-error">
-						<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
+						<a class="close" data-dismiss="alert" href="#">Ã—</a><%=error%> 
 					</div>
 					<%}%>
 					
 					 <% if(!StringUtils.isEmpty(success)){%>
 					<div class="alert alert-success login-success">
-						<a class="close" data-dismiss="alert" href="#">×</a><%=success%> 
+						<a class="close" data-dismiss="alert" href="#">Ã—</a><%=success%> 
 					</div>
 					 <%}%>
 					 <!-- <h3><small>Select your domain at Agile CRM</small></h3> -->
@@ -372,7 +373,8 @@ $.validator.setDefaults({
 				
 			// Initializes phone library
 			$("#login_phone_number").intlTelInput({
-				utilsScript: "lib/phonenumber-lib/utils.js" 
+				utilsScript: "lib/phonenumber-lib/utils.js",
+				responsiveDropdown : true
 			});
 			
 			 setSelectCssInSafari();
