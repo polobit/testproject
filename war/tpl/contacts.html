@@ -371,21 +371,22 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 	{{/if_equals_or}}
 
 	{{#if_equals "DATE" field_type}}
-	<select id="between_filter" name="CONDITION" class="w-105p f-left" >
-		<option value="IS_GREATER_THAN">greater than</option>
-		<option value="IS_LESS_THAN">less than</option>
-		<option value="BETWEEN">between</option>
+	<select id="between_filter" name="CONDITION" class="w-105p f-left">
+		<option value="ON">on</option>
+		<option value="AFTER">is after</option>
+		<option value="BEFORE">is before</option>
+		<option value="BETWEEN">is between</option>
 		<option value="LAST">in last</option>
 		<option value="NEXT">in next</option>
 	</select>
-	<div class="IS_GREATER_THAN IS_LESS_THAN">
+	<div class="AFTER BEFORE ON">
 		<span id="RHS">
 			<input type="text" placeholder="MM/DD/YYYY" prev-val="" class="date required w-95p" >
 		</span>
 	</div>
 	<div class="LAST NEXT hide">
 		<span id="RHS">
-			<input type="number" placeholder="Value" prev-val="" class="w-95p required">
+			<input type="number" placeholder="Number of days" prev-val="" class="w-95p required">
 		</span>
 	</div>
 	<div class="BETWEEN hide">
@@ -575,19 +576,21 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 		<div class="lhs-contact-filter-row">
 		<input type="hidden" name="LHS" value="created_time" />
 		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
-			<option value="IS_GREATER_THAN">greater than</option>
-			<option value="IS_LESS_THAN">less than</option>
-			<option value="BETWEEN">between</option>
+			<option value="ON">on</option>
+			<option value="AFTER">is after</option>
+			<option value="BEFORE">is before</option>
+			<option value="BETWEEN">is between</option>
 			<option value="LAST">in last</option>
+			<option value="NEXT">in next</option>
 		</select>
-		<div class="IS_GREATER_THAN IS_LESS_THAN">
+		<div class="AFTER BEFORE ON">
 			<span id="RHS">
 				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="w-95p required date">
 			</span>
 		</div>
-		<div class="LAST hide">
+		<div class="LAST NEXT hide">
 			<span id="RHS">
-				<input type="number" placeholder="Value" prev-val="" class="w-95p required">
+				<input type="number" placeholder="Number of days" prev-val="" class="w-95p required">
 			</span>
 		</div>
 		<div class="BETWEEN hide">
@@ -712,19 +715,21 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 		<div class="lhs-contact-filter-row">
 		<input type="hidden" name="LHS" value="created_time" />
 		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
-			<option value="IS_GREATER_THAN">greater than</option>
-			<option value="IS_LESS_THAN">less than</option>
-			<option value="BETWEEN">between</option>
+			<option value="ON">on</option>
+			<option value="AFTER">is after</option>
+			<option value="BEFORE">is before</option>
+			<option value="BETWEEN">is between</option>
 			<option value="LAST">in last</option>
+			<option value="NEXT">in next</option>
 		</select>
-		<div class="IS_GREATER_THAN IS_LESS_THAN">
+		<div class="AFTER BEFORE ON">
 			<span id="RHS">
 				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="w-95p required date">
 			</span>
 		</div>
-		<div class="LAST hide">
+		<div class="LAST NEXT hide">
 			<span id="RHS">
-				<input type="number" placeholder="Value" prev-val="" class="w-95p required">
+				<input type="number" placeholder="Number of days" prev-val="" class="w-95p required">
 			</span>
 		</div>
 		<div class="BETWEEN hide">
