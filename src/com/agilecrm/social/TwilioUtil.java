@@ -11,6 +11,7 @@ import org.json.XML;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.WidgetUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
 import com.thirdparty.twilio.sdk.TwilioRestResponse;
@@ -231,11 +232,8 @@ public class TwilioUtil
 	 * @return {@link JSONArray} of calls with their recordings
 	 * @throws Exception
 	 */
-	public static JSONArray getCallLogsWithRecordings(Widget widget, String to) throws Exception
+	public static JSONArray getCallLogsWithRecordings(TwilioRestClient client, String to) throws Exception
 	{
-		// Get Twilio client configured with account SID and authToken
-		TwilioRestClient client = getTwilioClient(widget);
-
 		JSONArray logs = new JSONArray();
 		try
 		{
@@ -571,8 +569,6 @@ public class TwilioUtil
 				"/" + TwilioUtil.APIVERSION + "/Accounts/" + client.getAccountSid() + "/IncomingPhoneNumbers", "GET",
 				null);
 
-		System.out.println(response.getResponseText());
-
 		/*
 		 * If error occurs, throw exception based on its status else return
 		 * outgoing numbers
@@ -583,10 +579,6 @@ public class TwilioUtil
 		JSONObject result = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse")
 				.getJSONObject("IncomingPhoneNumbers");
 
-		System.out.println("response: " + XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse"));
-		System.out.println("incoming number result: " + result);
-
-		System.out.println(result.getString("total"));
 		// If no numbers, return empty object
 		if (Integer.parseInt(result.getString("total")) == 0)
 			return new JSONArray();
@@ -607,8 +599,6 @@ public class TwilioUtil
 				.request("/" + TwilioUtil.APIVERSION + "/Accounts/" + client.getAccountSid() + "/OutgoingCallerIds",
 						"GET", null);
 
-		System.out.println("Twilio outgoing No: " + response.getResponseText());
-
 		/*
 		 * If error occurs, throw exception based on its status else return
 		 * outgoing numbers
@@ -618,8 +608,6 @@ public class TwilioUtil
 
 		JSONObject outgoingCallerIds = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse")
 				.getJSONObject("OutgoingCallerIds");
-
-		System.out.println("OutgoingCallerID's: " + outgoingCallerIds);
 
 		// If no numbers, return empty object
 		if (Integer.parseInt(outgoingCallerIds.getString("total")) == 0)
@@ -638,18 +626,13 @@ public class TwilioUtil
 	public static String createAppSidTwilioIO(String accountSID, String authToken, String numberSid, String record)
 			throws Exception
 	{
-		System.out.println("In createAppSidTwilioIO");
-
 		// Get Twilio client configured with account SID and authToken
 		TwilioRestClient client = new TwilioRestClient(accountSID, authToken, null);
-		System.out.println(client.getAccountSid());
 
 		// parameters required to create application
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("FriendlyName", "Agile CRM Twilio Saga");
 
-		// params.put("VoiceUrl",
-		// "http://1-dot-twiliovoicerecord.appspot.com/voice?record=" + record);
 		params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice?record=" + record);
 		params.put("VoiceMethod", "GET");
 
@@ -662,8 +645,6 @@ public class TwilioUtil
 		TwilioRestResponse response = client.request("/2010-04-01/Accounts/" + client.getAccountSid()
 				+ "/Applications.json", "POST", params);
 
-		System.out.println("Twilio app sid : " + response.getResponseText());
-
 		/*
 		 * If error occurs, throw exception based on its status else return
 		 * application SID
@@ -673,8 +654,6 @@ public class TwilioUtil
 
 		String appSid = new JSONObject(response.getResponseText()).getString("sid");
 
-		System.out.println("appSid" + appSid);
-
 		/* ****** Add application to twilio number ***** */
 		if (!numberSid.equalsIgnoreCase("None"))
 		{
@@ -682,13 +661,10 @@ public class TwilioUtil
 			params = new HashMap<String, String>();
 			params.put("VoiceApplicationSid", appSid);
 
-			System.out.println("params" + params.toString());
 			// Make a POST request to add application to twilio number
 			// /IncomingPhoneNumbers/PNa96612e977cc4a8c8b6cb0c14dd43e88
 			response = client.request("/2010-04-01/Accounts/" + client.getAccountSid() + "/IncomingPhoneNumbers/"
 					+ numberSid, "POST", params);
-
-			System.out.println("Twilio app added to number : " + response.getResponseText());
 
 			/*
 			 * If error occurs, throw exception based on its status else return
@@ -734,4 +710,56 @@ public class TwilioUtil
 		return responseJSON;
 	}
 
+	public static JSONArray getCallLogsWithRecordingsFromBothWidget(Widget widget, String to) throws Exception
+	{
+		JSONArray logsFromOldTwilio = new JSONArray();
+		JSONArray logs = new JSONArray();
+
+		try
+		{
+			// Get New twilio call logs and recording
+			{
+				// Fetch account SID from widget preferences
+				String accountSid = widget.getProperty("twilio_acc_sid");
+
+				// Fetch auth token from widget preferences
+				String accAuthToken = widget.getProperty("twilio_auth_token");
+
+				/*
+				 * Build Twilio REST client with the account SID of the logged
+				 * in person and agile authentication token
+				 */
+				TwilioRestClient newClient = new TwilioRestClient(accountSid, accAuthToken, null);
+
+				logs = getCallLogsWithRecordings(newClient, to);
+			}
+
+			// Get Old twilio call logs and recording
+			{
+				// Check old twilio widget is added or not
+				Widget oldTwilioWidget = WidgetUtil.getWidget("Twilio");
+
+				if (oldTwilioWidget != null)
+				{
+					// Get Twilio client configured with account SID and
+					// authToken
+					TwilioRestClient client = getTwilioClient(oldTwilioWidget);
+
+					logsFromOldTwilio = getCallLogsWithRecordings(client, to);
+
+					for (int i = 0; i < logsFromOldTwilio.length(); i++)
+					{
+						logs.put(logsFromOldTwilio.getJSONObject(i));
+					}
+				}
+			}
+
+			System.out.println("TwilioIO call logs : " + logs);
+			return logs;
+		}
+		catch (JSONException e)
+		{
+			return logs;
+		}
+	}
 }

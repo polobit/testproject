@@ -1,11 +1,13 @@
 <script id="twilioio-profile-template" type="text/html">
-<div class="widget_content">
+{{#if_equals to.length "1"}}<div></div>
+{{else}}
+	<div class="widget_content">
 		<div class="row-fluid">
-			{{#if_equals to.length "1"}}<div><input type="hidden" id="twilioio_contact_number" value="{{to.0.value}}"/>Call {{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}} on {{to.0.value}}</div>
+			{{#if_equals to.length "1"}}<div><!-- <input type="hidden" id="contact_number" value="{{to.0.value}}"/>Call {{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}} on {{to.0.value}} --></div>
 			{{else}}
 			<div class="span2" valign="middle" style="padding:4px"><h4>To&nbsp;:</h4></div>
 			<div class="span10">
-				<select name="number" id="twilioio_contact_number" class="required span10" style="width:100%" >
+				<select name="number" id="contact_number" class="required span10" style="width:100%" >
 					{{#each to}}
 						<option value="{{value}}">{{value}} 
 							{{#if subtype}}({{subtype}}){{/if}}
@@ -15,11 +17,13 @@
 			</div>
 			{{/if_equals}}
 		</div>
-		<div class="row-fluid">
-			<a href="#call" class="btn pull-right" id="twilioio_call" style="display:none;"><i class="icon-phone"></i>Call</a>			
-			<a href="#note" class="right contact-add-note" id="twilioio_note" style="margin: 5px;">Add Note</a>
-		</div>
  	</div>	
+{{/if_equals}}
+	<ul id="twilio-logs-panel" class="sub_header_ul">
+		<li>
+			<center><img id="logs_load" src="img/ajax-loader-cursor.gif" style="margin-top: 14px;"></img></center>
+		</li>
+	</ul>
 </script>
 
 <script id="twilioio-login-template" type="text/html">

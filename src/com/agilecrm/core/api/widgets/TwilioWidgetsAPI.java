@@ -237,7 +237,7 @@ public class TwilioWidgetsAPI
 		{
 
 			// Calls TwilioUtil method to retrieve call logs for the "to" number
-			return TwilioUtil.getCallLogsWithRecordings(widget, to).toString();
+			return TwilioUtil.getCallLogsWithRecordingsFromBothWidget(widget, to).toString();
 		}
 		catch (SocketTimeoutException e)
 		{
