@@ -96,17 +96,6 @@ public class Task extends Cursor
     /**
      * Created time of task
      */
-    public Long completed_time = 0L;
-
-    /**
-     * start date of the task
-     * 
-     */
-    public Long task_start_time = 0L;
-
-    /**
-     * Created time of task
-     */
     public Long created_time = 0L;
 
     /**
@@ -357,18 +346,6 @@ public class Task extends Cursor
 
 	System.out.println("Owner : " + this.owner);
 
-	/************* New added code @author jagadeesh ******************/
-
-	if (this.is_complete == true || this.progress == 100 || this.status == status.COMPLETED)
-	{
-	    completed_time = System.currentTimeMillis() / 1000;
-	}
-
-	if (progress == 0)
-	{
-	    if (this.progress > 0)
-		task_start_time = System.currentTimeMillis() / 1000;
-	}
 	/************* New added code ******************/
 
 	// If new note is added to task
