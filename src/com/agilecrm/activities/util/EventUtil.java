@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.Event;
+import com.agilecrm.activities.Event.EventType;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -406,37 +407,45 @@ public class EventUtil
 		return date;
 	}
 
-	public static List<Event> getFutureEvents()
-	{
-		Long currentEpocTime = System.currentTimeMillis() / 1000;
-		List<Event> events = dao.ofy().query(Event.class).filter("end >", currentEpocTime).list();
-		System.out.println("");
-		return events;
-	}
-
-	public static List<Event> getEvent(Key<AgileUser> owner, String status, String eventType)
+	/**
+	 * Gets list of all the keys which are in a given start and end date with
+	 * the type of event date
+	 * 
+	 * @param owner
+	 *            Event owner
+	 * @param status
+	 *            Upcoming event or completed. Eg: start >, start <, end > or
+	 *            end <. >= won't work
+	 * @param eventType
+	 *            Web appointment or agile
+	 * @return List of AgileUser owner keys
+	 * @author Kona
+	 */
+	public static List<Key<Event>> getEventsKey(Key<AgileUser> owner, String status, EventType eventType)
 	{
 		Map<String, Object> searchMap = new HashMap<String, Object>();
-		searchMap.put("owner", owner.toString());
 
-		if ("Any".equals(eventType))
-			eventType = null;
+		if (owner != null)
+			searchMap.put("owner", owner);
 
-		searchMap.put("type", eventType);
-		Long currentEpocTime = System.currentTimeMillis() / 1000;
-		List<Event> events = dao.ofy().query(Event.class).filter("end >", currentEpocTime).list();
+		if (status != null)
+		{
+			Long currentEpocTime = System.currentTimeMillis() / 1000;
+			searchMap.put(status, currentEpocTime);
+		}
+
+		if (eventType != null)
+			searchMap.put("type", eventType);
+
 		try
 		{
-			List<Key<Event>> a = dao.listKeysByProperty(searchMap);
+			List<Key<Event>> agileuserOwnerkey = dao.listKeysByProperty(searchMap);
+			return agileuserOwnerkey;
 		}
 		catch (Exception e)
 		{
-		}/*
-		 * } if("Any".equals(status)) status=null;
-		 * if(("Upcoming").equals(status)) {} if(("Completed").equals(status))
-		 * {}
-		 */
-
-		return new ArrayList<Event>();
+			System.err.println("Exception in getEventsKey in EventUtil Class" + e.getMessage());
+			return new ArrayList<Key<Event>>();
+		}
 	}
 }
