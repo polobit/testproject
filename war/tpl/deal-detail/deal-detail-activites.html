@@ -35,7 +35,6 @@
 		
 	</span>
 	<h4><a style="text-decoration: none"><b>{{get_normal_activity_type activity_type}}</b></a></h4>
-	<br/>
 	<div style="background:none;border:none;">
 {{#if_equals "DEAL_ADD" activity_type}}
         <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Deal created for {{custom1}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%) </pre>
@@ -82,14 +81,15 @@ Modified deal
      {{/if_equals}}
 		
 	</div>	
+<div class="clearfix"></div>
 	 	<div class="clear">
-		<div style="margin-bottom: 9px;">	
 		
-		</div>
 		<small class="edit-hover" style="margin-right:10px"> 
 			<time  datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "dd mmm yyyy" time}}</time>
 		</small>
-<span class="owner-name pull-right" style="margin-top:-18px;">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
+<span class="actions pull-right">
+{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}
+        </span>
 	</div>
 </div>
 </div>

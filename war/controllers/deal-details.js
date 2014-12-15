@@ -11,10 +11,10 @@ routes : {
 
 dealdetails : function(id)
 {
-	$("#content").html(getRandomLoadingImg());
+	
 	this.dealDetailView = new Base_Model_View({ url : '/core/api/opportunity/' + id, template : "deal-detail", postRenderCallback : function(el)
 	{
-		$("#dealrelated").html(getRandomLoadingImg());
+		
 		load_deal_tab(el, "");
 		var deal_collection;
 		if(App_Deals.opportunityCollectionView && App_Deals.opportunityCollectionView.collection)
@@ -26,7 +26,7 @@ dealdetails : function(id)
 	} });
 
 	var el = this.dealDetailView.render(true).el;
-
+	$("#content").html(getRandomLoadingImg());
 	$('#content').html(el);
 
 },

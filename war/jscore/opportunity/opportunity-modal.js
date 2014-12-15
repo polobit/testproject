@@ -121,7 +121,10 @@ $(function(){
      */
 	$('#dashboard-opportunities-model-list > tr').live('click', function(e) {
 		e.preventDefault();
-		updateDeal($(this).data());
+		var currentdeal=$(this).closest('tr').data();
+		Backbone.history.navigate("deal/"+currentdeal.id , {
+            trigger: true
+        });
 	});
 	
 	$('.milestones > li').live('mouseenter', function () {
