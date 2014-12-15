@@ -106,7 +106,7 @@ Created a Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}
 	</div>
 <div class="pull-left activity-tag">
 <div>	
- Deleted Task {label}} <br/>
+ Deleted Task {{label}} <br/>
 <i class="icon-tasks"></i> Task { {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
 </div>
 <div>	
@@ -302,7 +302,7 @@ Modified Task <br/>
 <div class="pull-left activity-tag">
 <div>
  Created a Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a><br/>
- <i class="icon-money icon-white"></i> Deal {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} ({{currencySymbol}}({{numberWithCommas entityObject.expected_value}},{{entityObject.probability}}) added to track {{entityObject.pipeline.name}} 
+ <i class="icon-money icon-white"></i> Deal {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} ({{currencySymbol}}({{numberWithCommas entityObject.expected_value}},{{entityObject.probability}}%) added to track {{entityObject.pipeline.name}} 
 		</div>	
 <div>
 		<small class="edit-hover pull-right activity_time"> 
@@ -673,7 +673,7 @@ Modified  Event <a href="" data={{entity_id}} class="activity-deal-edit">{{label
 <div class="pull-left activity-tag">
 <div>
  Modified Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> <br/>
-<i class="icon-calendar icon-white"></i> Changed {{custom3}}
+<i class="icon-calendar icon-white"></i> Changed {{displayActivityFieldText custom3}}
 
 </div>
 <div>	
