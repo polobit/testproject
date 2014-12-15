@@ -14,7 +14,7 @@ var deal_details_tab = {
 			dealrelatedView = new Base_Collection_View({
 	            url: '/core/api/opportunity/' + id + "/related_to",
 	            templateKey: "deal-related",
-	            individual_tag_name: 'li',
+	            individual_tag_name: 'tr',
 	            sortKey:"created_time",
 	            cursor : true,
 	            descending: true,
