@@ -224,25 +224,35 @@ $(function(){
     		return;
     	currentDeal = dealPipelineModel[0].get('dealCollection').get(id).toJSON();
     	currentDeal.archived = true;
-        var that = this;
-		$.ajax({
-			url: 'core/api/opportunity',
-			contentType:'application/json',
-			type: 'PUT',
-			data: JSON.stringify(currentDeal),
-			success: function(deal) {
+        var that = $(this);
+        
+        var notes = [];
+    	$.each(currentDeal.notes, function(index, note)
+    	{
+    		notes.push(note.id);
+    	});
+    	currentDeal.notes = notes;
+        if(currentDeal.note_description)
+    		delete currentDeal.note_description;
+
+        var arch_deal = new Backbone.Model();
+		arch_deal.url = '/core/api/opportunity';
+		arch_deal.save(currentDeal, {
+			// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
+			success : function(model, response) {
 				// Remove the deal from the collection and remove the UI element.
-				if(removeArchive(deal))
+				if(removeArchive(response))
 				dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
-				
-				// Removes deal from list
-				$(that).closest('li').css("display","none");
-				
+				else
+					that.remove();
+				console.log('archived deal----',model);
 				// Shows Milestones Pie
 				pieMilestones();
 	
 				// Shows deals chart
 				dealsLineChart();
+				update_deal_collection(model.toJSON(), id, milestone, milestone);
+				
 			}
 		});
 	});
