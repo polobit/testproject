@@ -975,4 +975,20 @@ public class OpportunityUtil
 	System.out.println("-----custom---------" + searchMap.toString());
 	return searchMap;
     }
+
+    /**
+     * fetch opportunity related to contact using contact id
+     * 
+     * @param contactId
+     * @return
+     */
+
+    public static List<Opportunity> getAllOpportunity(Long contactId)
+    {
+
+	Map<String, Object> conditionsMap = new HashMap<String, Object>();
+
+	conditionsMap.put("related_contacts", new Key<Contact>(Contact.class, contactId));
+	return dao.listByProperty(conditionsMap);
+    }
 }

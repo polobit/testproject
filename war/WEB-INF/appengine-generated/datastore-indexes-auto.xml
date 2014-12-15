@@ -1,4 +1,4 @@
-<!-- Indices written at Thu, 11 Dec 2014 18:34:47 IST -->
+<!-- Indices written at Mon, 15 Dec 2014 19:27:20 IST -->
 
 <datastore-indexes>
 
@@ -19,6 +19,35 @@
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
         <property name="ownerKey" direction="asc"/>
         <property name="close_date" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 3 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="__key__" direction="asc"/>
+        <property name="updated_time" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Widget" ancestor="true" source="auto">
+        <property name="widget_type" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="CustomFieldDef" ancestor="false" source="auto">
+        <property name="scope" direction="asc"/>
+        <property name="position" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Note" ancestor="false" source="auto">
+        <property name="related_contacts" direction="asc"/>
+        <property name="created_time" direction="desc"/>
     </datastore-index>
 
 </datastore-indexes>
