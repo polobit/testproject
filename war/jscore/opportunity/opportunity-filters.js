@@ -157,6 +157,9 @@ function updateFilterColor(){
 			filters_count++;
 	}
 	
+	if(json.archived != 'false')
+		filters_count++;
+	
 	if(filters_count > 0)
 	$('#show-filter-button').addClass('btn-primary');
 }
