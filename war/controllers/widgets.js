@@ -42,8 +42,8 @@ var WidgetsRouter = Backbone.Router
 
 												"Chargify" : "Chargify", "Chargify/:id" : "Chargify",
 												
-												"CallScript/rules" : "CallScriptShow", "CallScript/addrules" : "CallScriptAdd","CallScript/editrules/:id" : "CallScriptEdit",
-												"CallScript" : "CallScript", "CallScript/:id" : "CallScript",												
+												"callscript/rules" : "CallScriptShow", "callscript/add-rules" : "CallScriptAdd","callscript/editrules/:id" : "CallScriptEdit",
+												"callscript" : "CallScript", "callscript/:id" : "CallScript",												
 
 												"sync" : "contactSync", "sync/contacts" : "google_apps_contacts", "sync/calendar" : "google_apps_calendar", "sync/stripe-import" : "stripe_sync",
 																"sync/shopify" : "shopify", "sync/salesforce" : "salesforce", "sync/zoho-import" : "zoho_sync", "sync/quickbook" : "quickbook_import",

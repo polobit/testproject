@@ -33,7 +33,11 @@
 			{{#if is_added}}
 				{{add_tag "Widgets"}}
     			<a class="btn btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>
-				<a href="#{{name}}/{{id}}" class="btn" id="setting-widget" set-widget-name="{{name}}">Settings</a>
+                {{#if_equals name "CallScript"}}  
+                   <a href="#callscript/{{id}}" class="btn" id="setting-widget" set-widget-name="{{name}}">Settings</a>
+                {{else}}
+				   <a href="#{{name}}/{{id}}" class="btn" id="setting-widget" set-widget-name="{{name}}">Settings</a>
+                {{/if_equals}}
     		{{else}}
 				{{#check_plan "FREE"}}
 					{{#if_equals widget_type "SOCIAL"}}

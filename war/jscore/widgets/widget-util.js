@@ -504,7 +504,7 @@ function saveCallScriptWidgetPrefs()
 		console.log(data);		
 		
 		// Redirect to show call script rules page
-		window.location.href = "#CallScript/rules";
+		window.location.href = "#callscript/rules";
 	});	
 }
 

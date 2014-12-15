@@ -40,7 +40,7 @@ $(function()
 		var editRuleIndex = $(this).attr("data");
 		
 		// Redirect to show call script rules page
-		window.location.href = "#CallScript/editrules/" + editRuleIndex;
+		window.location.href = "#callscript/editrules/" + editRuleIndex;
 		
 		// Shows loading image until data gets ready for displaying
 		$('#prefs-tabs-content').html(LOADING_HTML);
@@ -233,12 +233,16 @@ function deleteCallScriptRule(dltRuleIndex)
 			console.log(data);
 		});
 	}
+	
+	makeWidgetTabActive();
 }
 
 // Get widget from collection and convert prefs to json before display in table.
 function showCallScriptRule()
 {
 	console.log("in showCallScriptRule");
+	
+	makeWidgetTabActive();
 
 	// Shows loading image untill data gets ready for displaying
 	$('#prefs-tabs-content').html(LOADING_HTML);
@@ -262,6 +266,8 @@ function showCallScriptRule()
 function addCallScriptRule()
 {
 	console.log("in addCallScriptRule");
+	
+	makeWidgetTabActive();
 
 	var contacts_filter = new Base_Model_View({ template : "callscript-rule", isNew : "true", postRenderCallback : function(el)
 	{
@@ -290,6 +296,8 @@ function addCallScriptRule()
 function editCallScriptRule(id)
 {
 	console.log("in editCallScriptRule: " + id);
+	
+	makeWidgetTabActive();
 
 	// Shows loading image until data gets ready for displaying
 	$('#prefs-tabs-content').html(LOADING_HTML);
@@ -319,6 +327,9 @@ function editCallScriptRule(id)
 			{
 				$("#prefs-tabs-content").find('#filter-settings').find("#loading-img-for-table").hide();
 				$("#prefs-tabs-content").find('#filter-settings').find(".chained-table").show();
+				
+				$(".callscript-multiple-remove").show();
+				$(".callscript-multiple-remove")[0].style.display = "none";
 			});
 			scramble_input_names($("#prefs-tabs-content").find('#filter-settings'));
 
@@ -445,4 +456,11 @@ var callscriptPrefsJson = getCallScriptJSON();
 		console.log(data);
 	});
  
+}
+
+// Make widget tab active
+function makeWidgetTabActive()
+{
+	$('#PrefsTab .active').removeClass('active');
+	$('.add-widget-prefs-tab').addClass('active');	
 }

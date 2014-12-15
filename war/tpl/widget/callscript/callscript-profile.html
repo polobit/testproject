@@ -6,10 +6,10 @@
                    You have no script rules configured.
               </p>
               <p class="rule-added" style='line-height:140%;display:none;'>
-                   <span class="rule-count"> </span>  script rules configured. <a href="#CallScript/addrules">+Add Rule</a>
+                   <span class="rule-count"> </span>  script rules configured.
               </p> 
-              <a href="#CallScript/addrules" id="add_csrule" class="btn btn-primary" style="text-decoration:none;"><i class="icon-plus-sign"></i>Add Rule</a>
-              <a href="#CallScript/rules" id="show_csrules" class="btn btn-primary" style="text-decoration:none;display:none;">Show Rule</a>			  
+              <a href="#callscript/add-rules" id="add_csrule" class="btn btn-primary" style="text-decoration:none;"><i class="icon-plus-sign"></i>Add Rule</a>
+              <a href="#callscript/rules" id="show_csrules" class="btn btn-primary" style="text-decoration:none;display:none;">Show Rule</a>			  
 			  <a href="#add-widget" class="btn ml_5" style="text-decoration:none;">Cancel</a>              
 		 </fieldset>
     </form>
@@ -17,12 +17,10 @@
 </script>
 
 <script id="callscript-table-template" type="text/html">
-<div class="span10" style="margin-left: 0px;">
-<div class="well">
 <div class="row">
-    <div class="span9">      
+    <div class="span12">      
         <legend>Call Script Rules</legend>
-        <a href="#CallScript/addrules" class="btn right" id="add_rule" style='margin-top:-62px;'><span><i class='icon-plus-sign'/></span>  Add Rule</a>
+        <a href="#callscript/add-rules" class="btn right" id="add_rule" style='margin-top:-62px;'><span><i class='icon-plus-sign'/></span>  Add Rule</a>
     </div>
 </div>
 <div class="row">
@@ -64,15 +62,26 @@
 				        <div class="box-right">
                             <h3>You do not have any call script rules currently.</h3>
                             <div class="text">Call Script Rules are used to show you the script for the call base on predefined rules you have set.</div>
-                            <a href="#CallScript/addrules" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i>  Add Rule</a>
+                            <a href="#callscript/add-rules" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i>  Add Rule</a>
 				        </div>
                 </div>
            </div>
         </div>
     {{/if}}
-    </div>    
-</div>
-</div>
+    </div> 
+
+ <div class="span3">
+        <div class="well">
+            <h3>
+                What are Call Script Rules?
+            </h3>
+            <br />
+            <p>
+                  See a script before you call your contacts. This widget allows you to configure multiple scripts based on predefined rules.
+            </p>
+        </div>
+ </div>   
+
 </div>
 </script>
 
@@ -99,9 +108,9 @@
 					</div>
 
                     <div class="control-group">
-						<label class="control-label">Display Text<span class="field_req">*</span></label>
+						<label class="control-label">Call Script<span class="field_req">*</span></label>
 						<div class="controls">
-                            <textarea id="displaytext" name="displaytext" rows="3" class="input required" placeholder="Display Text"></textarea>							
+                            <textarea id="displaytext" name="displaytext" rows="5" class="input required" placeholder="Display Text"></textarea>							
 						</div>
 					</div>
                        
@@ -246,7 +255,7 @@
 			{{/if}}
 			<div class="form-actions">
 				<a href="#" class="btn btn-primary" id="save_prefs">Save</a> 
-                <a href="#CallScript/rules" class="btn redirect-to-showrules">Close</a>
+                <a href="#callscript/rules" class="btn redirect-to-showrules">Close</a>
                 <a href="#add-widget" style="display:none;" class="btn redirect-to-addwidget">Close</a>
 			</div>
 			</fieldset>
