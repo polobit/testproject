@@ -138,7 +138,7 @@ public class QueryDocumentUtil
 					query = buildNestedCondition("AND", query, newQuery);
 				}
 
-				else if (condition.equals(SearchRule.RuleCondition.NOTEQUALS))
+				else if (condition.equals(SearchRule.RuleCondition.NOTEQUALS) || condition.equals(SearchRule.RuleCondition.NOT_CONTAINS))
 				{
 					// For not queries
 					query = buildNestedCondition("NOT", query, newQuery);
