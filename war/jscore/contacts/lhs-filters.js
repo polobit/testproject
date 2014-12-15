@@ -94,16 +94,18 @@ function submitLhsFilter() {
 $('a.filter-tags-multiple-add-lhs').die().live("click", function(e) {
 	e.preventDefault();
 	var htmlContent = $($('#tags-lhs-filter-table').find("tr")[0]).clone();
-	htmlContent.find('div').removeClass('hide').addClass("lhs-contact-filter-row");
+	htmlContent.find('div.hide').removeClass('hide').addClass("lhs-contact-filter-row");
 	addTagsDefaultTypeahead(htmlContent);
 	scramble_filter_input_names(htmlContent);
 	$(htmlContent).find("i.filter-tags-multiple-remove-lhs").css("display", "inline-block");
 	$(this).siblings("table").find("tbody").append(htmlContent);
+	$(this).siblings("table").find("tr:last").find('#RHS:visible').find(':not(input.date)').focus();
 });
 
 // Filter Contacts- Remove Multiple
 	$("i.filter-tags-multiple-remove-lhs").die().live('click', function(e)
 	{
+		$(this).prev().val("").trigger('blur');
 		$(this).closest("tr").remove();
 	});
 

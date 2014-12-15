@@ -522,6 +522,8 @@ function deserializeChainedSelect1(form, el, element)
 		var currentElemnt = $(element).find('#'+fieldName+'_div');
 		if(LHS == 'tags') {
 			$('#tags_div').parent().find('a').addClass('bold-text');
+			$('#tags_div').removeClass('hide');
+			$('#tags_div').prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 			if(tagsConditionsCount == 0) {
 				currentElemnt = $($('#tags-lhs-filter-table').find("tr")[1]);
 			} else {
@@ -535,6 +537,8 @@ function deserializeChainedSelect1(form, el, element)
 			tagsConditionsCount++;
 		}
 		$(currentElemnt).parent().find("a").addClass('bold-text');
+		$(currentElemnt).removeClass('hide');
+		$(currentElemnt).prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 		$(currentElemnt).find('[name="CONDITION"]').val(CONDITION);
 		$(currentElemnt).find('[name="CONDITION"]').trigger('change');
 		var RHS_ELEMENT = $(currentElemnt).find('.'+CONDITION).find('#RHS').children();
