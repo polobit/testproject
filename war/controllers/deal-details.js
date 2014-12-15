@@ -11,7 +11,7 @@ routes : {
 
 dealdetails : function(id)
 {
-
+	$("#content").html(getRandomLoadingImg());
 	this.dealDetailView = new Base_Model_View({ url : '/core/api/opportunity/' + id, template : "deal-detail", postRenderCallback : function(el)
 	{
 		$("#dealrelated").html(getRandomLoadingImg());
