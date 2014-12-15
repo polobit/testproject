@@ -454,7 +454,8 @@ public class QueryDocumentUtil
 			// support old data
 			epochQuery = lhs + "_epoch" + ">=" + dayStartEpochTime;
 
-			query = buildNestedCondition("AND", epochQuery, lhs + "_epoch" + "<=" + dayEndEpochTime);
+			query = buildNestedCondition("AND", query, epochQuery);
+			query = buildNestedCondition("AND", query, lhs + "_epoch" + "<=" + dayEndEpochTime);
 
 		}
 

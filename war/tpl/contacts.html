@@ -357,8 +357,8 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 
 <div class="controls hide" id="{{replace_spaces field_label}}_div">
 	<div class="lhs-contact-filter-row">
-	<input type="hidden" name="LHS" value="{{field_label}}" />
 	{{#if_equals_or "CHECKBOX" field_type "TEXT" field_type "TEXTAREA" field_type}}
+	<input type="hidden" name="LHS" value="{{field_label}}" />
 	<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="f-left w-105p">
 		<option value="EQUALS" >is</option>
 		<option value="NOTEQUALS" >isn't</option>
@@ -371,6 +371,7 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 	{{/if_equals_or}}
 
 	{{#if_equals "DATE" field_type}}
+	<input type="hidden" name="LHS" value="{{field_label}}_time" />
 	<select id="between_filter" name="CONDITION" class="w-105p f-left">
 		<option value="ON">on</option>
 		<option value="AFTER">is after</option>
