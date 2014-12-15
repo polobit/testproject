@@ -85,6 +85,19 @@ public class ContactField
 	value = field.value;
 	type = field.type;
     }
+    
+    public FieldType getType()
+    {
+	String fieldName = this.name;
+	FieldType type = FieldType.CUSTOM;
+	if (fieldName.equals(Contact.FIRST_NAME) || fieldName.equals(Contact.LAST_NAME) || fieldName.equals(Contact.EMAIL)
+	        || fieldName.equals(Contact.TITLE) || fieldName.equals(Contact.WEBSITE) || fieldName.equals(Contact.COMPANY)
+	        || fieldName.equals(Contact.ADDRESS) || fieldName.equals(Contact.URL) || fieldName.equals(Contact.PHONE)
+	        || fieldName.equals(Contact.NAME))
+	    type = FieldType.SYSTEM;
+	
+	return type;
+    }
 
     @Override
     public String toString()

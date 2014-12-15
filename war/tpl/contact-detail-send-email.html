@@ -12,9 +12,34 @@
                 </legend>
                 <input type="hidden" class="span4" name="from_name"/>
                 <input type="hidden" class="span4" id="from" name="from_email"/>
-				<a class="right" {{#isSafariBrowser}} style="margin-top: 5px;" {{else}} style="margin-top: -23px;" {{/isSafariBrowser}} href="#email-template-add">Create New Template</a>
+				<a class="right" {{#isSafariBrowser}} style="margin-top: 5px;" {{else}} style="margin-top: -23px;" {{/isSafariBrowser}} href="#email-template-add">Create New Template</a><div class="clearfix"></div>
                 <div id="bulk-count" style="margin-left: 17%; padding-bottom: 5px; display: none;"><p></p></div>
-
+				<div class="control-group" style="display: none;">
+                    <label class="control-label">From <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <input type="text" class="span4 email required" id="from_email" name="from_email" style="width: 210px;" />
+                    </div>
+                </div>
+				<div class="control-group">
+                    <div class="controls">
+                    	<div style="line-height:0px;">
+						<a href="#" id="from_email_link">From</a>
+ 						</div>
+                     </div>
+				</div>
+				<div class="control-group" style="display: none;">
+                    <label class="control-label">From Name <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <input type="text" class="span4 required" id="from_name" name="from_name" style="width: 210px;" />
+                    </div>
+                </div>
+				<div class="control-group" style="display: none;">
+                    <div class="controls">
+                    	<div style="line-height:0px;">
+						<a href="#" id="from_name_link">From Name</a>
+ 						</div>
+                     </div>
+				</div>
                 <div class="control-group">
                     <label class="control-label">To <span class="field_req">*</span></label>
 					<div class="controls" class="contactTypeAhead">
