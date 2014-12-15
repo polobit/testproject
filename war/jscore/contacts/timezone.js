@@ -26,7 +26,7 @@ function displayTimeZone(results)
 		if (data == null || data == "")
 			return;
 
-		$(".contacts-time").html(data);
+		$(".contacts-time").html("Local time: "+data);
 		$("#contacts-local-time").show();
 
 	   }, error : function(jqXHR, textStatus, errorThrown)

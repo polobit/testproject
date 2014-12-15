@@ -964,7 +964,7 @@ public class ContactsAPI
 		calendar.setTimeZone(tz);
 
 		// Set date formatter
-		DateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
+		DateFormat formatter = new SimpleDateFormat("HH:mm a (E, dd-MMM)");
 		formatter.setTimeZone(TimeZone.getTimeZone(contactTimeZoneJson.getString("timeZoneId")));
 
 		// Get current date and time
