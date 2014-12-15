@@ -17,6 +17,7 @@ import com.agilecrm.activities.EventReminder;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -55,7 +56,8 @@ public class RegisterServlet extends HttpServlet
     public static final String USERS_COUNT = "Users";
     public static final String ROLE = "Role";
     public static final String DOMAIN = "Domain";
-
+    private static final String SIGN_UP_TAG = "Signup";
+    private static final String DOMAIN_OWNER_TAG = "Domain Owner";
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
 	doGet(request, response);
@@ -210,7 +212,7 @@ public class RegisterServlet extends HttpServlet
 	try
 	{
 	    // Creates contact in our domain
-	    createUserInOurDomain(request);
+	    createUserInOurDomain(request, domainUser);
 	}
 	catch (Exception e)
 	{
@@ -223,7 +225,7 @@ public class RegisterServlet extends HttpServlet
 	response.sendRedirect(redirectionURL);
     }
 
-    private void createUserInOurDomain(HttpServletRequest request)
+    private void createUserInOurDomain(HttpServletRequest request, DomainUser user)
     {
 	// Form 1
 	String userDomain = NamespaceManager.get();
@@ -327,6 +329,17 @@ public class RegisterServlet extends HttpServlet
 	    {
 		key = APIKey.getDomainUserKeyRelatedToAPIKey("ckjpag3g8k9lcakm9mu3ar4gc8");
 	    }
+	    
+	    Tag signupTag = new Tag(SIGN_UP_TAG);
+	    contact.addTag(signupTag);
+	    
+	    // Dummy check. If user goes through register servlet he is domain owner.
+	    if(user.is_account_owner)
+	    {
+		Tag domainOwnerTag = new Tag(DOMAIN_OWNER_TAG);
+		contact.addTag(domainOwnerTag);
+	    }
+		
 
 	    contact.setContactOwner(key);
 	    System.out.println("contact to be saved : " + contact);
