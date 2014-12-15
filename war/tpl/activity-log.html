@@ -107,7 +107,7 @@ Created a Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}
 <div class="pull-left activity-tag">
 <div>	
  Deleted Task {{label}} <br/>
-<i class="icon-tasks"></i> Task { {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
+<i class="icon-tasks"></i> Task {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
 </div>
 <div>	
 		<small class="edit-hover pull-right activity_time" > 
@@ -650,7 +650,7 @@ Modified  Event <a href="" data={{entity_id}} class="activity-deal-edit">{{label
 <div class="pull-left activity-tag">
 <div>	
  Deleted Event {{label}} <br/>
- <i class="icon-calendar icon-white"></i> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
+ <i class="icon-calendar icon-white"></i>Event {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} was deleted.
 </div>
 		<div>
 		<small class="edit-hover pull-right activity_time" > 
