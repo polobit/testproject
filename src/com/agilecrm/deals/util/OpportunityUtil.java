@@ -776,7 +776,8 @@ public class OpportunityUtil
 
 	    if (checkJsonString(filterJson, "archived"))
 	    {
-		searchMap.put("archived", Boolean.parseBoolean(filterJson.getString("archived")));
+		if (!filterJson.getString("archived").equals("all"))
+		    searchMap.put("archived", Boolean.parseBoolean(filterJson.getString("archived")));
 	    }
 
 	    if (checkJsonString(filterJson, "value_filter")
@@ -838,14 +839,10 @@ public class OpportunityUtil
 	     * if (customFilters != null) searchMap.putAll(customFilters);
 	     */
 
-	    System.out.println("---------------" + searchMap.toString());
-	    List<Opportunity> result = null;
 	    if (count != 0)
-		result = dao.fetchAllByOrder(count, cursor, searchMap, true, false, sortField);
+		return dao.fetchAllByOrder(count, cursor, searchMap, true, false, sortField);
 
-	    result = dao.listByProperty(searchMap);
-	    System.out.println(filterJson.getString("milestone") + "-----------" + result.size());
-	    return result;
+	    return dao.listByProperty(searchMap);
 	}
 	catch (JSONException e)
 	{

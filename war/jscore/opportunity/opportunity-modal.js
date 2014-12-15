@@ -234,6 +234,9 @@ $(function(){
     	currentDeal.notes = notes;
         if(currentDeal.note_description)
     		delete currentDeal.note_description;
+        
+        if(currentDeal.close_date==0)
+        	currentDeal.close_date=null;
 
         var arch_deal = new Backbone.Model();
 		arch_deal.url = '/core/api/opportunity';
@@ -424,7 +427,8 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 
 	// Shows loading symbol until model get saved
     // $('#' + modalId).find('span.save-status').html(getRandomLoadingImg());
-
+if(json.close_date==0)
+	json.close_date=null;
 	var newDeal = new Backbone.Model();
 	newDeal.url = 'core/api/opportunity';
 	newDeal.save(json, {
