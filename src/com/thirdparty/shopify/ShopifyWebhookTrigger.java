@@ -224,7 +224,7 @@ public class ShopifyWebhookTrigger extends HttpServlet
 		String key = (String) keys.next();
 		String value = customerJson.getString(key);
 
-		if (!StringUtils.isBlank(value))
+		if (!StringUtils.isBlank(value) && !StringUtils.equals(value, "null"))
 		{
 		    switch (key)
 		    {
