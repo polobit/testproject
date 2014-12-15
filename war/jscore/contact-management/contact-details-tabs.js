@@ -354,7 +354,11 @@ $(function()
 
 						if ($(this).attr('disabled'))
 							return;
-
+						var $form = $('#emailForm');
+						 
+						// Is valid
+						if(!isValidForm($form))
+						      	return;
 						var network_type = $('#attachment-select').find(":selected").attr('network_type');
 						// checking email attachment type , email doesn't allow
 						// google drive documents as attachments
@@ -590,6 +594,20 @@ $(function()
 			$(this).closest('.control-group').hide();
 
 		$('#email_bcc').closest('.control-group').show();
+	});
+
+	$('#from_email_link').die().live('click', function(e){
+		e.preventDefault();
+		$(this).closest('.control-group').hide();
+		$('#from_email').closest('.control-group').show();
+		$('#from_name_link').closest('.control-group').show();
+		return;
+	});
+	$('#from_name_link').die().live('click', function(e){
+		e.preventDefault();
+		$(this).closest('.control-group').hide();
+		$('#from_name').closest('.control-group').show();
+		return;
 	});
 
 });
