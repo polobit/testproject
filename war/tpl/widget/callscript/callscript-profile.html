@@ -44,10 +44,10 @@
                    <td class='data'><div style="overflow: hidden;white-space: nowrap;text-overflow:ellipsis;display: inline-block;">{{name}}</div></td>
                    <td class='data'><div style="overflow: hidden;white-space: nowrap;text-overflow:ellipsis;display: inline-block;">{{displaytext}}</div></td>
                    <td class='data'>
-                       <div class="callscriptrule-actions pull-right" style="visibility: hidden;">
-                          <i class="icon icon-move" data="{{@index}}" title="Drag-Drop Call Script Rule"></i> 
+                       <div class="callscriptrule-actions pull-right" style="visibility: hidden;">                           
                           <i class="icon icon-edit edit-callscriptrule" data="{{@index}}" title="Edit Call Script Rule"  style="cursor:pointer"></i>     
                           <i class="icon icon-trash delete-callscriptrule" data="{{@index}}" title="Delete Call Script Rule"  style="cursor:pointer"></i>
+                          <i class="icon icon-move" data="{{@index}}" title="Drag-Drop Call Script Rule"></i>
                        </div>
                    </td>
                </tr> 
@@ -77,7 +77,10 @@
             </h3>
             <br />
             <p>
-                  See a script before you call your contacts. This widget allows you to configure multiple scripts based on predefined rules.
+                  The Call Script widget shows you a script when calling customers. 
+                  You can have multiple call scripts for various types of customers. 
+                  The script is shown when the Rule defined for it matches the contact currently opened. 
+                  The rules are evaluated from top to bottom.
             </p>
         </div>
  </div>   

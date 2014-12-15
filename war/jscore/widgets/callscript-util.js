@@ -1,3 +1,5 @@
+var CSRCOLLECTION;
+
 $(function()
 {
 	// Filter Contacts- Clone Multiple
@@ -131,7 +133,14 @@ function getCallScriptJSON()
 {
 	console.log("In getCallScriptJSON");
 
-	// Get call scrip widget
+	// If Widgets collection is not defined, navigates to add widget
+	if (!App_Widgets || !App_Widgets.Catalog_Widgets_View || !App_Widgets.Catalog_Widgets_View.collection)
+	{	
+		window.location.href = "#add-widget";
+		return;
+	}	
+	
+	// Get call script widget
 	var callscriptWidget = App_Widgets.Catalog_Widgets_View.collection.where({ name : "CallScript" });
 	console.log(callscriptWidget);
 
@@ -152,6 +161,14 @@ function getCallScriptRuleCount()
 {
 	var prefs = getCallScriptJSON();
 	return prefs.csrules.length;	
+}
+
+function createCSRCollection()
+{
+	var csr = getCallScriptJSON();
+	CSRCOLLECTION = new Base_Collection_View({data: csr.csrules});
+	console.log("CSRCOLLECTION: ");
+	console.log(CSRCOLLECTION);	
 }
 
 // Add rules in rules array to add same array in widget's prefs
