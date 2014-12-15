@@ -234,9 +234,9 @@ $(function(){
     	currentDeal.notes = notes;
         if(currentDeal.note_description)
     		delete currentDeal.note_description;
-        
-        if(currentDeal.close_date==0)
-        	currentDeal.close_date=null;
+
+        if(!currentDeal.close_date || currentDeal.close_date==0)
+        	currentDeal.close_date = null;
 
         var arch_deal = new Backbone.Model();
 		arch_deal.url = '/core/api/opportunity';
