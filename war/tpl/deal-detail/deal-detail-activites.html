@@ -62,13 +62,13 @@
 {{#if_equals "DEAL_RELATED_CONTACTS" activity_type}}
          {{#if related_contact_ids}}
 {{#if_equals "removed_all_relatedcontacts" custom3}}
-<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;"><i class="icon-user icon-white"></i> {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal</pre>
+<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal</pre>
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
-<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;"><i class="icon-user icon-white"></i> {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal</pre>
+<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal</pre>
 {{/if_equals}} 
 {{#if_equals "added_relatedcontacts" custom3}}
-<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;"><i class="icon-user icon-white"></i> {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to deal</pre>  
+<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to deal</pre>  
 {{/if_equals}}
 {{else}}
 Modified deal   
