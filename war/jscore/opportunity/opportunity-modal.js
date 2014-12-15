@@ -206,12 +206,14 @@ $(function(){
 		$("#opportunity_validate").trigger('click');
 	});
 	
+	
+	
 	/**
 	 * Milestone view deal delete
 	 */
 	$('.deal-archive').live('click', function(e) {
 		e.preventDefault();
-        if(!confirm("Are you sure you want to archive?"))
+        if(!confirm("Archive Deal?"))
 			return;
 
         var id = $(this).closest('.data').attr('id');
@@ -244,10 +246,72 @@ $(function(){
 			// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
 			success : function(model, response) {
 				// Remove the deal from the collection and remove the UI element.
-				if(removeArchive(response))
-				dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
-				else
+				if(removeArchive(response)){
+					dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
+					$('#'+id).parent().remove();
+				}
+				else{
 					that.remove();
+					that.closest('.deal-options').prepend('<a title="Archive" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>');
+				}
+				console.log('archived deal----',model);
+				// Shows Milestones Pie
+				pieMilestones();
+	
+				// Shows deals chart
+				dealsLineChart();
+				update_deal_collection(model.toJSON(), id, milestone, milestone);
+				
+			}
+		});
+	});
+	
+	/**
+	 * Milestone view deal delete
+	 */
+	$('.deal-restore').live('click', function(e) {
+		e.preventDefault();
+        if(!confirm("Restore Deal?"))
+			return;
+
+        var id = $(this).closest('.data').attr('id');
+        var milestone = ($(this).closest('ul').attr("milestone")).trim();
+        var currentDeal;
+        
+        // Get the current deal model from the collection.
+        var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
+    	if(!dealPipelineModel)
+    		return;
+    	currentDeal = dealPipelineModel[0].get('dealCollection').get(id).toJSON();
+    	currentDeal.archived = false;
+        var that = $(this);
+        
+        var notes = [];
+    	$.each(currentDeal.notes, function(index, note)
+    	{
+    		notes.push(note.id);
+    	});
+    	currentDeal.notes = notes;
+        if(currentDeal.note_description)
+    		delete currentDeal.note_description;
+
+        if(!currentDeal.close_date || currentDeal.close_date==0)
+        	currentDeal.close_date = null;
+
+        var arch_deal = new Backbone.Model();
+		arch_deal.url = '/core/api/opportunity';
+		arch_deal.save(currentDeal, {
+			// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
+			success : function(model, response) {
+				// Remove the deal from the collection and remove the UI element.
+				if(removeArchive(response)){
+					dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
+					$('#'+id).parent().remove();
+				}
+				else{
+					that.remove();
+					that.closest('.deal-options').prepend('<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>');
+				}
 				console.log('archived deal----',model);
 				// Shows Milestones Pie
 				pieMilestones();
@@ -398,13 +462,14 @@ function removeArchive(deal){
 	var result = false;
 	if(readCookie('deal-filters')){
 		var arch = $.parseJSON(readCookie('deal-filters')).archived;
-		
-		if(arch == 'false' && deal.archived)
-			result = true;
-		else if(arch=='true' && !deal.archived)
+		if(arch == 'false' && deal.archived==true)
 			return true;
+		else if(arch=='true' && deal.archived==false)
+			return true;
+		else
+			return false;
 		
-	}
+	}else 
 	return result;
 }
 
