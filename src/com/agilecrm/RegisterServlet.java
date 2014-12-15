@@ -51,7 +51,7 @@ import com.googlecode.objectify.Key;
 @SuppressWarnings("serial")
 public class RegisterServlet extends HttpServlet
 {
-    public static final String COMPANY_TYPE = "Company Type";
+    public static final String COMPANY_TYPE = "Business Type";
     public static final String PLAN_CHOSEN = "Plan";
     public static final String USERS_COUNT = "Users";
     public static final String ROLE = "Role";
