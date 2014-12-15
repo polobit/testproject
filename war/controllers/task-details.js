@@ -18,7 +18,7 @@ taskDetailView : function(id)
 												taskDetailView = task;
 												$("#content").html(getTemplate("task-detail", task.toJSON()));
 												task_details_tab.loadActivitiesView();
-									
+
 								}
 				}
 
@@ -283,6 +283,7 @@ $(function()
 								var id = $(this).attr('data');
 								var task = App_Calendar.allTasksListView.collection.get(id);
 								update_task(task.toJSON());
+						
 				});
 
 				$('.task-add-contact').die().live('click', function(e)
