@@ -78,7 +78,7 @@ public class VersioningUtil
 	if (StringUtils.isEmpty(version))
 	    return "https://" + domain + ".agilecrm.com/";
 	
-	return "https://" + domain + "-dot-" + SystemProperty.version + "-dot-" + SystemProperty.applicationId +".appspot.com/";
+	return "https://" + domain + "-dot-" + version + "-dot-agile-crm-cloud.appspot.com/";
     }
 
     /**
