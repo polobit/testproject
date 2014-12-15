@@ -354,7 +354,11 @@ $(function()
 
 						if ($(this).attr('disabled'))
 							return;
-
+						var $form = $('#emailForm');
+						 
+						// Is valid
+						if(!isValidForm($form))
+						      	return;
 						var network_type = $('#attachment-select').find(":selected").attr('network_type');
 						// checking email attachment type , email doesn't allow
 						// google drive documents as attachments
