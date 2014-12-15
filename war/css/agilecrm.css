@@ -1849,11 +1849,11 @@ text-overflow:ellipsis;
 }
 
 .w-95p {
-	width:95px;
+	width:95px !important;
 }
 
 .w-105p {
-	width:105px;
+	width:105px !important;
 }
 
 .w-220p {
