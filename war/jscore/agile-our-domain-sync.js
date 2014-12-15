@@ -563,3 +563,23 @@ function add_plan_change_info_as_note_to_owner(cus_email, plan_type, plan_id,
 	}, cus_email);
 
 }
+
+$(function(){
+	try
+	{
+		if(_agile)
+		{
+			setup_our_domain_sync();
+			return;
+		}
+		head.js("stats/min/agile-min.js", function(){
+			setup_our_domain_sync();
+		})
+		
+	}
+	catch(err)
+	{
+		console.log();
+	}
+	
+})
