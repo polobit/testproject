@@ -592,6 +592,20 @@ $(function()
 		$('#email_bcc').closest('.control-group').show();
 	});
 
+	$('#from_email_link').die().live('click', function(e){
+		e.preventDefault();
+		$(this).closest('.control-group').hide();
+		$('#from_email').closest('.control-group').show();
+		$('#from_name_link').closest('.control-group').show();
+		return;
+	});
+	$('#from_name_link').die().live('click', function(e){
+		e.preventDefault();
+		$(this).closest('.control-group').hide();
+		$('#from_name').closest('.control-group').show();
+		return;
+	});
+
 });
 
 /**
