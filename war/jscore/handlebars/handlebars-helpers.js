@@ -1361,7 +1361,10 @@ $(function()
 								 var text="";
 								 if(fields.length >1){
 								 for(var i=0;i<fields.length-1;i++){
-								 				text +=" "+fields[i].trim()+",";
+								 				text +=" "+fields[i].trim();
+								 				if(i != fields.length-2){
+								 								text +=",";
+								 				}
 								 }
 								 text +=" and "+fields[fields.length-1].trim() +" are";
 								 }else{
