@@ -839,11 +839,13 @@ public class OpportunityUtil
 	     */
 
 	    System.out.println("---------------" + searchMap.toString());
-
+	    List<Opportunity> result = null;
 	    if (count != 0)
-		return dao.fetchAllByOrder(count, cursor, searchMap, true, false, sortField);
+		result = dao.fetchAllByOrder(count, cursor, searchMap, true, false, sortField);
 
-	    return dao.listByProperty(searchMap);
+	    result = dao.listByProperty(searchMap);
+	    System.out.println(filterJson.getString("milestone") + "-----------" + result.size());
+	    return result;
 	}
 	catch (JSONException e)
 	{
