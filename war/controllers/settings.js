@@ -22,10 +22,13 @@ var SettingsRouter = Backbone.Router.extend({
 			"imap" : "imap",
 			
 			/* Office prefs */
-			"office" : "office",			
+			"office" : "office",	
 
 			/* Social preferences */
 			"social-prefs" : "socialPrefs",
+			
+			/* Gmail share preferences */
+			"gmail/:id" : "gmailShare",
 
 			/* Email templates */
 			"email-templates" : "emailTemplates", "email-template-add" : "emailTemplateAdd", "email-template/:id" : "emailTemplateEdit",
@@ -273,6 +276,37 @@ var SettingsRouter = Backbone.Router.extend({
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-tab').addClass('active');
 		
+		
+		/**
+		 * Share imap settings with othe users
+		 */
+		$(".imap-share-settings-select").die().live('click', function(e)
+		{
+			e.preventDefault();
+			var el = $(this).closest("div");
+			$(this).css("display", "none");
+			el.find(".imap-share-settings-txt").css("display","none");
+			el.find(".imap-share-select").css("display", "inline");
+			var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
+			fillSelect('#imap-share-user-select', 'core/api/imap/shared-to-users', 'users', function fillNew()
+			{
+				$("#imap-share-user-select .default-select").remove();
+			}, optionsTemplate, false, el);
+		});
+
+		/**
+		 * To cancel the imap share settings event
+		 */
+		$(".imap-share-settings-cancel").die().live('click', function(e)
+		{
+			e.preventDefault();
+			var el = $(this).closest("div");
+			var name = $(this).attr('name');
+			el.find(".imap-share-select").css("display", "none");
+			el.find(".imap-share-settings-select").css("display", "inline");
+			el.find(".imap-share-settings-txt").css("display","inline");
+		});
+		
 	},
 	
 	/**
@@ -304,7 +338,105 @@ var SettingsRouter = Backbone.Router.extend({
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-tab').addClass('active');
 		
+		/**
+		 * Share office settings with other users
+		 */
+		$(".office-share-settings-select").die().live('click', function(e)
+		{
+			e.preventDefault();
+			var el = $(this).closest("div");
+			$(this).css("display", "none");
+			el.find(".office-share-settings-txt").css("display","none");
+			el.find(".office-share-select").css("display", "inline");
+			var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
+			fillSelect('#office-share-user-select', 'core/api/office/shared-to-users', 'users', function fillNew()
+			{
+				$("#office-share-user-select .default-select").remove();
+			}, optionsTemplate, false, el);
+		});
+
+		/**
+		 * To cancel the imap share settings event
+		 */
+		$(".office-share-settings-cancel").die().live('click', function(e)
+		{
+			e.preventDefault();
+			var el = $(this).closest("div");
+			var name = $(this).attr('name');
+			el.find(".office-share-select").css("display", "none");
+			el.find(".office-share-settings-select").css("display", "inline");
+			el.find(".office-share-settings-txt").css("display","inline");
+		});
+		
 	},
+	
+	/**
+	 * Gmail sharing settings
+	 */
+	gmailShare : function(id)
+	{
+		$("#content").html(getTemplate("settings"), {});
+
+		// Gets GMAIL Prefs
+		var gmailShareView = new Base_Model_View({ url : '/core/api/social-prefs/GMAIL', template : "settings-gmail-prefs-share", postRenderCallback : function(el)
+		{
+
+		}, saveCallback : function()
+		{
+			App_Settings.navigate("email", { trigger : true });
+			return;
+		} });
+
+		// Appends Gmail
+		$('#prefs-tabs-content').html(gmailShareView.render().el);
+		$('#PrefsTab .active').removeClass('active');
+		$('.email-tab').addClass('active');
+
+		/**
+		 * Share gmail settings
+		 */
+		$(".gmail-share-settings-select").die().live('click', function(e)
+		{
+			e.preventDefault();
+			var el = $(this).closest("div");
+			$(this).css("display", "none");
+			el.find(".gmail-share-select").css("display", "inline");
+			el.find(".gmail-share-settings-txt").css("display","none");
+			var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
+			fillSelect('#gmail-share-user-select', 'core/api/social-prefs/GMAIL/shared-to-users', 'users', function fillNew()
+			{
+				$("#gmail-share-user-select .default-select").remove();
+			}, optionsTemplate, false, el);
+		});
+
+		/**
+		 * To cancel the imap share settings event
+		 */
+		$(".gmail-share-settings-cancel").die().live('click', function(e)
+		{
+			e.preventDefault();
+			var el = $(this).closest("div");
+			var name = $(this).attr('name');
+			el.find(".gmail-share-select").css("display", "none");
+			el.find(".gmail-share-settings-select").css("display", "inline");
+			el.find(".gmail-share-settings-txt").css("display","inline");
+		});
+		
+		$("#share-gmail-prefs-btn").die().live('click', function(e)
+		{		
+			e.preventDefault();
+			var vals = [];
+			var model = gmailShareView.model;
+			$( '#gmail-share-user-select :selected' ).each( function( i, selected ) {
+				vals[i] = $( selected ).val();
+			});
+			model.set({ "shared_with_users_ids" : vals });
+			model.save({},{ url : '/core/api/social-prefs/GMAIL', success : function(){
+				Backbone.history.navigate("email" , { trigger : true });
+			}});
+		});
+	},
+
 
 	/**
 	 * Shows list of email templates, with an option to add new template

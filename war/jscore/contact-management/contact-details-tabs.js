@@ -248,6 +248,7 @@ $(function()
 		$('#email-type-select').html($(this).html());
 		var url = $(this).attr('data-url');
 		email_server_type = $(this).attr('email-server-type');
+		url = url.concat(email_server_type);
 		contact_details_tab.load_mail(url);
 	});
 

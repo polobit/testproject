@@ -155,9 +155,13 @@ var contact_details_tab = {
 			if (!mail_server_url)
 			{
 				this.load_mail_accounts();
-				mail_server_url = 'core/api/emails/agile-emails?e=';
+				mail_server_url = 'core/api/emails/agile-emails?e='+encodeURIComponent(email);
 				email_server_type = "agilecrm";
 				cursor = false;
+			}
+			else
+			{
+				mail_server_url = mail_server_url + '&search_email='+encodeURIComponent(email);
 			}
 
 			// Shows an error alert, when there is no email to the contact
@@ -174,7 +178,7 @@ var contact_details_tab = {
 			$('#email-type-select-dropdown').attr('disabled', 'disabled');
 
 			// Fetches mails collection
-			var mailsView = new Base_Collection_View({ url : mail_server_url + encodeURIComponent(email), cursor : cursor, page_size : 10,
+			var mailsView = new Base_Collection_View({ url : mail_server_url , cursor : cursor, page_size : 10,
 				templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 				postRenderCallback : function(el)
 				{
