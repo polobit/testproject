@@ -409,6 +409,11 @@ public class ActivitySave
 	    ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_ADD, document, document.url,
 		    String.valueOf(jsn.length()), "Related contact to this Document", jsn);
 	}
+	else
+	{
+	    ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_ADD, document, document.url, null,
+		    "no related contacts", jsn);
+	}
 
     }
 
@@ -567,14 +572,13 @@ public class ActivitySave
 	List<String> delete_entity_names = new ArrayList<>();
 
 	String deleteed_names = "";
-
-	if (entitytype == EntityType.DEAL)
+	if (delete_entity_ids.length() > 100)
 	{
-	    ActivityUtil.createBulkDeleteActivity(entitytype, no, String.valueOf(delete_entity_ids.length()),
-		    changed_field);
+	    ActivityUtil.createBulkDeleteActivity(entitytype, no, "", changed_field);
 	}
 	else
 	{
+
 	    if (entitytype == EntityType.TASK)
 	    {
 		delete_entity_names = ActivityUtil.getTaskNames(delete_entity_ids);
@@ -590,10 +594,14 @@ public class ActivitySave
 		delete_entity_names = ActivityUtil.getDocumentNames(delete_entity_ids);
 		deleteed_names = delete_entity_names.toString();
 	    }
+	    else if (entitytype == EntityType.DEAL)
+	    {
+		delete_entity_names = ActivityUtil.getDealNames(delete_entity_ids);
+		deleteed_names = delete_entity_names.toString();
+	    }
 	    ActivityUtil.createBulkDeleteActivity(entitytype, no,
 		    deleteed_names.substring(1, deleteed_names.length() - 1), changed_field);
 	}
-
     }
 
     /**
