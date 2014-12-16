@@ -48,7 +48,11 @@ public class ContactExportEmailUtil
 
 	// Mandrill attachment should contain mime-type, file-name and
 	// file-content.
-	String[] strArr = { "text/csv", "LocalContacts.csv", data };
+	Date currentDate = new Date();
+	SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh:mm");
+	StringBuilder exportedFileName = new StringBuilder("Contacts_").append(df.format(currentDate)).append(".csv");
+
+	String[] strArr = { "text/csv", exportedFileName.toString(), data };
 
 	System.out.println("Namespace in exportContactCSVAsEmail " + NamespaceManager.get());
 	System.out.println("Domain is  " + domain);
@@ -56,10 +60,8 @@ public class ContactExportEmailUtil
 
 	HashMap<String, String> map = new HashMap<String, String>();
 	map.put("count", total);
-	Date currentDate = new Date();
-	SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh:mm");
-	StringBuilder emailSubject = new StringBuilder("Contacts_").append(df.format(currentDate)).append(".csv");
-	SendMail.sendMail(toEmail, emailSubject.toString(), SendMail.EXPORT_CONTACTS_CSV, map,
+
+	SendMail.sendMail(toEmail, SendMail.EXPORT_CONTACTS_CSV_SUBJECT, SendMail.EXPORT_CONTACTS_CSV, map,
 		SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
     }
 
