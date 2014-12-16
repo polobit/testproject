@@ -59,7 +59,6 @@ define([
       $("body").append(new TempSnippetView({model: snippetModel}).render());
       this.collection.remove(snippetModel);
       var index = $(".target").index();
-      console.log("index " + (index+1));
       saveform.splice((index+1), 1);
       PubSub.trigger("newTempPostRender", mouseEvent);
     }
