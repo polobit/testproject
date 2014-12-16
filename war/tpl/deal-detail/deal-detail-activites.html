@@ -34,7 +34,7 @@
 		{{/if}}
 		
 	</span>
-	<h4><a style="text-decoration: none"><b>{{get_normal_activity_type activity_type}}</b></a></h4>
+	<h4><a style="text-decoration: none"><b>{{get_normal_activity_type activity_type}}</b></a></h4><br/>
 	<div style="background:none;border:none;">
 {{#if_equals "DEAL_ADD" activity_type}}
         <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Deal created for {{custom1}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%) </pre>
