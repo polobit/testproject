@@ -56,10 +56,10 @@ define([
     }
 
     , handleSnippetDrag: function(mouseEvent, snippetModel) {
+      var index = this.collection.indexOf(snippetModel);
       $("body").append(new TempSnippetView({model: snippetModel}).render());
       this.collection.remove(snippetModel);
-      var index = $(".target").index();
-      saveform.splice((index+1), 1);
+      saveform.splice(index, 1);
       PubSub.trigger("newTempPostRender", mouseEvent);
     }
 
