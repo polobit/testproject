@@ -373,7 +373,7 @@ $(function()
 
 						// serialize form.
 						var json = serializeForm("emailForm");
-						if(json.from_email != CURRENT_DOMAIN_USER.email)
+						if(json.from_email != CURRENT_DOMAIN_USER.email && json.from_name == CURRENT_DOMAIN_USER.name)
 						{
 							json.from_name = "";
 						}
