@@ -148,7 +148,7 @@ public class HomeServlet extends HttpServlet
      * Saves logged in time in domain user before request is forwarded to
      * dashboard (home.jsp)
      */
-    private void setLoggedInTime()
+    private void setLoggedInTime(HttpServletRequest req)
     {
 	try
 	{
@@ -159,6 +159,11 @@ public class HomeServlet extends HttpServlet
 	    setLastLoggedInTime(domainUser);
 
 	    domainUser.setInfo(DomainUser.LOGGED_IN_TIME, new Long(System.currentTimeMillis() / 1000));
+
+	    if (domainUser.timezone == null)
+	    {
+		domainUser.timezone = (String) req.getSession().getAttribute("account_timezone");
+	    }
 
 	    domainUser.save();
 	}
@@ -193,7 +198,7 @@ public class HomeServlet extends HttpServlet
 	if (!isNewUser())
 	{
 	    // Saves logged in time in domain user.
-	    setLoggedInTime();
+	    setLoggedInTime(req);
 	    setAccountTimezone(req);
 	    req.getRequestDispatcher("home.jsp").forward(req, resp);
 	    return;
