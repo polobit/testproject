@@ -320,7 +320,7 @@ $.validator.setDefaults({
 									</div>
 
 									<div align="center" class="regpage-signup">
-										<input type='submit' id="register_account" value="Confirm"
+										<input type='submit' id="confirm_registration" value="Confirm"
 											class='btn btn-large btn-primary  regpage-btn'>
 									</div>
 										<div class="form-group regpage-options log-terms"
@@ -569,6 +569,7 @@ $.validator.setDefaults({
 			
 			 $("#confirm_registration").attr("disabled", "disabled");
 			
+			 $("#confirm_registration").attr("disabled", "disabled");
 			  // Form data is posted to its subdomain 
 			 //$(form).attr('action', "https://" + domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com/register");
 			 //  $(form).attr('action', "http://localhost:8888/register");
