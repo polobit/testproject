@@ -44,10 +44,10 @@ $(function()
 		// Shows loading image until data gets ready for displaying
 		$('#prefs-tabs-content').html(LOADING_HTML);
 		
-		var editRuleIndex = $(this).attr("data");
+		var editRuleCount = $(this).attr("data");
 		
 		// Redirect to show call script rules page
-		window.location.href = "#callscript/editrules/" + editRuleIndex;
+		window.location.href = "#callscript/editrules/" + editRuleCount;
 		
 		// Shows loading image until data gets ready for displaying
 		$('#prefs-tabs-content').html(LOADING_HTML);
@@ -186,12 +186,8 @@ function makeRule()
 	console.log(json);
 
 	// Get index of edited rule
-	var editRuleIndex = json.ruleindex;
-
-	// Remove rule index from json
-	delete json.ruleindex;
-	console.log(json);
-
+	var editRuleCount = json.rulecount;
+	
 	// Get widget from collection and Convert prefs in json
 	var callscriptPrefsJson = getCallScriptJSON();
 
@@ -202,28 +198,48 @@ function makeRule()
 	if (callscriptPrefsJson != null)
 	{
 		// Edit rule
-		if (editRuleIndex != "")
-			callscriptPrefsJson.csrules[editRuleIndex] = json;
+		if (editRuleCount != "")
+		  {
+			// Get rule index from rulecount			
+			callscriptPrefsJson.csrules[getRuleIndex(callscriptPrefsJson,editRuleCount)] = json;
+		  }			
 		else
 		// Add Rule
 		{
 			// Add position to rule
 			json["position"] = callscriptPrefsJson.csrules.length;
 
+			// Increment csr count
+			callscriptPrefsJson["csrcount"]= callscriptPrefsJson.csrcount + 1;
+
+			// Add csr count to rule
+			json["rulecount"] = callscriptPrefsJson.csrcount;
+			
 			// Add rule in rules
-			callscriptPrefsJson.csrules.push(json);
+			callscriptPrefsJson.csrules.push(json);			
 		}
 
-		console.log(callscriptPrefsJson.csrules);
+		console.log(callscriptPrefsJson);
 
-		return callscriptPrefsJson.csrules;
+		return callscriptPrefsJson;
 	}
 
 	// Add position 0 to first rule
 	json["position"] = 0;
+	
+	// Add csr count to rule
+	json["rulecount"] = 1;
 
+	// Make it define
+	callscriptPrefsJson = {}; 
+	
 	// First rule in widget
-	return [json];
+	callscriptPrefsJson["csrules"]= [json];
+	
+	// First csr count
+	callscriptPrefsJson["csrcount"]= 1;
+	
+	return callscriptPrefsJson;
 }
 
 // Delete selected call script rule from widget
@@ -322,9 +338,9 @@ function addCallScriptRule()
 }
 
 // Get call script rule from widget and display in edit rule page
-function editCallScriptRule(id)
+function editCallScriptRule(ruleCount)
 {
-	console.log("in editCallScriptRule: " + id);
+	console.log("in editCallScriptRule: " + ruleCount);
 	
 	makeWidgetTabActive();
 
@@ -337,11 +353,8 @@ function editCallScriptRule(id)
 	// if widget is already added
 	if (callscriptPrefsJson != null)
 	{
-		var csrule = callscriptPrefsJson.csrules[id];
-
-		console.log(csrule);
-
-		csrule["ruleindex"] = id;
+		// get rule from id as in rulecount of rule
+		var csrule = getRule(callscriptPrefsJson,ruleCount);
 
 		console.log(csrule);
 
@@ -369,13 +382,38 @@ function editCallScriptRule(id)
 			$("#name").val(csrule.name);
 			$("#displaytext").val(csrule.displaytext);
 			$("#position").val(csrule.position);
-			$("#ruleindex").val(csrule.ruleindex);			
+			$("#rulecount").val(csrule.rulecount);			
 		});
 	}
 }
 
+//Get rule from csrules array by rulecount
+function getRule(callscriptPrefsJson,ruleCount)
+{
+	var rules = callscriptPrefsJson.csrules;
+	
+	for(var i=0;i<rules.length;i++)
+		{		
+		 if( rules[i].rulecount == ruleCount)
+			 {
+			   return rules[i];
+			 }
+		}
+}
 
-
+// Get rule index from csrules array by rulecount 
+function getRuleIndex(callscriptPrefsJson,ruleCount)
+{
+  var rules = callscriptPrefsJson.csrules;
+	
+  for(var i=0;i<rules.length;i++)
+		{
+		 if( rules[i].rulecount == ruleCount)
+			 {
+			   return i;
+			 }
+		}
+}
 /**
  * Sets call script rules as sortable list.
  */

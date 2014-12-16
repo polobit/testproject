@@ -486,15 +486,8 @@ function saveCallScriptWidgetPrefs()
 	
 	// Retrieve and store the Sip preferences entered by the user as
 	// JSON
-	var callscript_prefs = {};	
+	var callscript_prefs = makeRule();	
 	
-	// Make rule	
-	var callscript_rule = makeRule();
-		
-	// Add rule to pref
-	callscript_prefs["csrules"] = callscript_rule;
-	
-	console.log(callscript_rule);
 	console.log(callscript_prefs);
 
 	// Saves the preferences into widget with sip widget name

@@ -45,7 +45,7 @@
                    <td class='data'><div style="overflow: hidden;white-space: nowrap;text-overflow:ellipsis;display: inline-block;">{{displaytext}}</div></td>
                    <td class='data'>
                        <div class="callscriptrule-actions pull-right" style="visibility: hidden;">                           
-                          <i class="icon icon-edit edit-callscriptrule" data="{{@index}}" title="Edit Call Script Rule"  style="cursor:pointer"></i>     
+                          <i class="icon icon-edit edit-callscriptrule" data="{{rulecount}}" title="Edit Call Script Rule"  style="cursor:pointer"></i>     
                           <i class="icon icon-trash delete-callscriptrule" data="{{@index}}" title="Delete Call Script Rule"  style="cursor:pointer"></i>
                           <i class="icon icon-move" data="{{@index}}" title="Drag-Drop Call Script Rule"></i>
                        </div>
@@ -99,9 +99,9 @@
                         <legend class="formheading"><span class="addLable"><i class="icon-plus-sign"></i> Add Call Script Rule</span></legend>
                         {{/if}}
 				</legend>			
-                <fieldset>
-                    <input type="hidden" id="ruleindex" name="ruleindex" value="" />
+                <fieldset>                    
                     <input type="hidden" id="position" name="position" value="" />
+                    <input type="hidden" id="rulecount" name="rulecount" value="" />
 
 					<div class="control-group">
 						<label class="control-label">Name<span class="field_req">*</span></label>
