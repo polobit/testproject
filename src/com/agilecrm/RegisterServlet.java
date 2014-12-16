@@ -363,7 +363,7 @@ public class RegisterServlet extends HttpServlet
 
 	property.name = name;
 	property.value = value;
-	property.type = property.getType();
+	property.type = property.getFieldType();
 	return property;
     }
 

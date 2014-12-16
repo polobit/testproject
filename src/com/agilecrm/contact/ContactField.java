@@ -90,7 +90,7 @@ public class ContactField
     }
     
     @JsonIgnore
-    public FieldType getType()
+    public FieldType getFieldType()
     {
 	String fieldName = this.name;
 	FieldType type = FieldType.CUSTOM;
