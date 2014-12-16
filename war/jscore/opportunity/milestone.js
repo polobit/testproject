@@ -349,7 +349,7 @@ function update_milestone(data, id, newMilestone, oldMilestone){
 	
 	 if(!DealJSON.close_date || DealJSON.close_date==0)
 		 DealJSON.close_date = null;
-	 
+	 DealJSON.owner_id = DealJSON.owner.id;
    // Saving that deal object
 	var up_deal = new Backbone.Model();
 	up_deal.url = '/core/api/opportunity';

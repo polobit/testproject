@@ -628,6 +628,11 @@ if(json.close_date==0)
 						var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
 						if(!dealPipelineModel)
 							return;
+						var filterJSON = $.parseJSON(readCookie('deal-filters'));
+						if(deal.owner.id != filterJSON.owner_id.toString())
+							return;
+						if(filterJSON.archived != 'all' && deal.archived != filterJSON.archived)
+							return;
 						
 						dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal));
 						try{

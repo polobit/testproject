@@ -77,20 +77,20 @@ function setupDealFilters(cel){
 	var el = $('#filter_options');
 	// Fills owner select element
 	
-	populateUsers("owners-list", el, undefined, undefined, function(data){
+	populateUsers("owners-list-filters", el, undefined, undefined, function(data){
 		
-		$("#deals-filter").find("#owners-list").html(data);
+		$("#deals-filter").find("#owners-list-filters").html(data);
 		//Select none by default.
 		if(readCookie('deal-filters')){
 			var json = $.parseJSON(readCookie('deal-filters'));
 		}
-		$("#owners-list", $("#dealsFilterForm")).closest('div').find('.loading-img').hide();
+		$("#owners-list-filters", $("#dealsFilterForm")).closest('div').find('.loading-img').hide();
 	
 	// Populate pipeline in the select box.
 	populateTracks(el, undefined, undefined, function(data){
 		//Select none by default.
 		$('#pipeline').val('');
-		$('#owners-list').val('');
+		$('#owners-list-filters').val('');
 		if(readCookie('deal-filters')){
 			var json = $.parseJSON(readCookie('deal-filters'));
 			$.each(json,function(key,value){
@@ -114,7 +114,7 @@ function setupDealFilters(cel){
 					if(key=='pipeline_id')
 						$('#pipeline').val(value);
 					else if(key=='owner_id')
-						$('#owners-list').val(value);
+						$('#owners-list-filters').val(value);
 					else if($('#'+key).hasClass('date'))
 						$('#'+key).val(new Date(value * 1000).format('mm/dd/yyyy'));
 					
