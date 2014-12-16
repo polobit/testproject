@@ -297,7 +297,7 @@ $(function(){
 
         if(!currentDeal.close_date || currentDeal.close_date==0)
         	currentDeal.close_date = null;
-
+        currentDeal.owner_id = currentDeal.owner.id;
         var arch_deal = new Backbone.Model();
 		arch_deal.url = '/core/api/opportunity';
 		arch_deal.save(currentDeal, {
