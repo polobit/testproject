@@ -1,3 +1,4 @@
+<%@page import="java.util.TimeZone"%>
 <%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.account.AccountPrefs"%>
@@ -180,6 +181,7 @@ if(isIE || isIENew)
 					
 					<div id="openid_btns" style="padding: 5px 0 15px;">
 						<input type='hidden' name='type' value='agile'></input>
+						<input type='hidden' name='account_timezone' value='<%=TimeZone.getDefault().getID()%>'></input>
 						<input class="input-xlarge required email field" name='email' type="text" maxlength="50" minlength="6" placeholder="User ID (Your Email Address)" autocapitalize="off" autofocus
 						<%if(request.getAttribute("agile_email")  != null) {%> value="<%=request.getAttribute("agile_email") %>" <%}%>>
 						

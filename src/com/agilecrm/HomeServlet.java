@@ -12,6 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.AccountPrefs;
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -192,6 +194,7 @@ public class HomeServlet extends HttpServlet
 	{
 	    // Saves logged in time in domain user.
 	    setLoggedInTime();
+	    setAccountTimezone(req);
 	    req.getRequestDispatcher("home.jsp").forward(req, resp);
 	    return;
 	}
@@ -200,5 +203,16 @@ public class HomeServlet extends HttpServlet
 	// inital page tour. It also calls to initialize defaults, if user is
 	// first user in the domain.
 	setUpAgileUser(req, resp);
+    }
+
+    private void setAccountTimezone(HttpServletRequest req)
+    {
+	// TODO Auto-generated method stub
+	AccountPrefs accPrefs = AccountPrefsUtil.getAccountPrefs();
+	if (accPrefs.timezone.equals("UTC"))
+	{
+	    accPrefs.timezone = (String) req.getSession().getAttribute("account_timezone");
+	    accPrefs.save();
+	}
     }
 }
