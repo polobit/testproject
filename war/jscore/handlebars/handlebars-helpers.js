@@ -2585,8 +2585,8 @@ $(function()
 								if (!name)
 												return;
 
-								var name_json = { "DEAL_ADD" : "Deal Created", "DEAL_EDIT" : "Deal Edited", "DEAL_CLOSE" : "Deal Closed", "DEAL_LOST" : "Deal Lost", "DEAL_RELATED_CONTACTS" : "Deal Related Contacts", "DEAL_OWNER_CHANGE" : "Deal Owner Change", "DEAL_MILESTONE_CHANGE" : "Deal Milestone Change",
-												"NOTE_ADD" : "Note Add" };
+								var name_json = { "DEAL_ADD" : "Deal Created", "DEAL_EDIT" : "Deal Edited", "DEAL_CLOSE" : "Deal Closed", "DEAL_LOST" : "Deal Lost", "DEAL_RELATED_CONTACTS" : " Deal Contacts Changed", "DEAL_OWNER_CHANGE" : "Deal Owner Changed", "DEAL_MILESTONE_CHANGE" : "Deal Milestone Changed",
+												"NOTE_ADD" : "Note Added" };
 
 								name = name.trim();
 

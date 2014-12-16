@@ -16,14 +16,14 @@
 						<div class="contact-profile-name mg-r-md" style="margin-bottom:-10px;">{{#if name}}{{name}}{{/if}}
 						
 						
-						{{#if_equals milestone "Won"}} <span style="position: relative;top: -2px;" class="label label-success">{{milestone}}</span>
+						{{#if_equals milestone "Won"}} <span style="position: relative;top: -2px;" class="new-task-type label label-success">{{milestone}}</span>
 {{else}}
-{{#if_equals milestone "Lost"}} <span style="position: relative;top: -2px;" class="label label-important">{{milestone}}</span>
+{{#if_equals milestone "Lost"}} <span style="position: relative;top: -2px;" class="new-task-type label label-important">{{milestone}}</span>
 {{else}}
-<span style="position: relative;top: -2px;" class="label label-default">{{milestone}}</span>
+<span style="position: relative;top: -2px;" class="new-task-type label label-default">{{milestone}}</span>
 {{/if_equals}}
 {{/if_equals}} 
-{{#if_equals this.pipeline.name "Default"}}{{else}}<span style="position: relative;top: -2px;" class="label label-default" >{{pipeline.name}}</span>{{/if_equals}}
+{{#if_equals this.pipeline.name "Default"}}{{else}}<span style="position: relative;top: -2px;" class="new-task-type label label-default" >{{pipeline.name}}</span>{{/if_equals}}
 						
 						 </div><br/>
 <div style="margin-bottom:4px;"> <span class="contact-profile-name mg-r-md" >{{currencySymbol}}{{numberWithCommas expected_value}}</span> <span style="margin-left:-6px;">({{probability}}%)</span></div>
