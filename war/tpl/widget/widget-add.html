@@ -50,7 +50,11 @@
 							{{/if_equals}}
 					{{/if_equals}}
 					{{else}}
-    				<a class="btn btn-primary add-widget" href="#{{name}}" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
+                       {{#if_equals name "CallScript"}}
+                          <a class="btn btn-primary add-widget" href="#callscript" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
+                       {{else}}
+                          <a class="btn btn-primary add-widget" href="#{{name}}" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
+                       {{/if_equals}}    				
 				{{/check_plan}}
     		{{/if}}
 		{{/if_equals}}

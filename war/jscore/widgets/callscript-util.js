@@ -2,6 +2,11 @@ var CSRCOLLECTION;
 
 $(function()
 {
+	$("#callscriptruleForm").live('click', function(e)
+	 {
+		 makeWidgetTabActive();
+	 });
+	
 	// Filter Contacts- Clone Multiple
 	$(".callscript-multiple-add").die().live('click', function(e)
 	{
