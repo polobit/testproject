@@ -1,5 +1,7 @@
 package com.agilecrm.contact.export.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.json.JSONObject;
@@ -54,9 +56,11 @@ public class ContactExportEmailUtil
 
 	HashMap<String, String> map = new HashMap<String, String>();
 	map.put("count", total);
-
-	SendMail.sendMail(toEmail, SendMail.EXPORT_CONTACTS_CSV_SUBJECT, SendMail.EXPORT_CONTACTS_CSV, map, SendMail.AGILE_FROM_EMAIL,
-		SendMail.AGILE_FROM_NAME, strArr);
+	Date currentDate = new Date();
+	SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh:mm");
+	StringBuilder emailSubject = new StringBuilder("Contacts_").append(df.format(currentDate)).append(".csv");
+	SendMail.sendMail(toEmail, emailSubject.toString(), SendMail.EXPORT_CONTACTS_CSV, map,
+		SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
     }
 
 }
