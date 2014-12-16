@@ -99,6 +99,15 @@ function isValidForm(form) {
 		return compiled ? true : false;
 	}," Please enter a valid formula.");
 	
+	//Number validation
+	jQuery.validator.addMethod("number_input", function(value, element){
+		
+		if(value=="")
+			return false;
+		
+		return /^[0-9]+$/.test(value);
+	}," Please enter a valid number.");
+	
 	$(form).validate({
 		rules : {
 			atleastThreeMonths : true,
