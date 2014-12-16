@@ -1,0 +1,68 @@
+<script id="forms-collection-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Forms</h1>
+			<a href="formbuilder" class="btn right" style="top:-28px;position:relative"><span><i class="icon-plus-sign" /></span> Create new form</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+ <div class="span9">
+	{{#unless this.length}}
+	<div style="height: 245px;">
+	<div class="slate">
+		<div class="slate-content">
+			<div class="box-left">
+				<img alt="Clipboard" src="/img/clipboard.png" />
+			</div>
+			<div class="box-right">
+				<h3>You do not have any forms saved.</h3>
+			</div>
+		</div>
+	</div>
+	</div>
+	{{/unless}}
+	{{#if this.length}}
+	<div class="data-block">
+		<div class="data-container">
+			<table class="table table-bordered table-striped showCheckboxes agile-ellipsis-dynamic" url="core/api/forms/bulk" style="cursor:pointer;">
+				<colgroup><col width="50px"><col width="100%"></colgroup>
+				<thead>
+					<tr>
+						<th>Form Title</th>
+					</tr>
+				</thead>
+				<tbody id="forms-model-list">
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{{/if}}
+ </div>
+
+<div class="span3">
+        <div class="well">
+            <h3>
+                Help
+            </h3><br>
+			<div>To start using Web Rules, please setup our <a href="#analytics-code/analytics">tracking code</a>.</div>
+            <br>
+            <h3>
+                What are Forms?
+            </h3>
+            <br>
+            <p>
+Web rules allow you to perform certain actions when people visit your website - like showing a popup or increase score. <br><br>
+For example, when visitors are about to leave your website, show them a sign-up popup. When contacts in Agile visit a specific product page, send them an email asking if they need a demo.</p>
+<p></p>
+<div style="padding-top:10px"><center><a href="https://github.com/agilecrm/agile-popups" target="_blank">Get Started</a></center></div>
+        </div>
+    </div>
+</div>
+</script>
+
+<script id="forms-model-template" type="text/html">
+	<td><a href="formbuilder?form={{id}}"><div style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">{{formName}}</div></a></td>
+	</br>
+</script>

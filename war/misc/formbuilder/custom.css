@@ -64,7 +64,7 @@ textarea {
 }
 
 #render {
-	min-height: 500px;
+	min-height: 475px;
 	font-family: monospace;
 }
 
@@ -286,4 +286,9 @@ legend {
 
 fieldset {
 	border: none;
+}
+
+#form-save {
+	float: right;
+	margin-top: -40px;
 }

@@ -34,6 +34,7 @@ import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
+import com.agilecrm.forms.Form;
 import com.agilecrm.portlets.Portlet;
 import com.agilecrm.reports.ActivityReports;
 import com.agilecrm.reports.Reports;
@@ -182,6 +183,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	// For all Activities
 	ObjectifyService.register(Portlet.class);
+
+	ObjectifyService.register(Form.class);
 
     }
 

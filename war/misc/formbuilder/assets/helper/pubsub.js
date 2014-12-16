@@ -96,3 +96,5 @@ var addAgileFields = function(json, fields, callback)
 	}
 	callback(json);
 }
+
+var saveform = [];
