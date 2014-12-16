@@ -289,9 +289,16 @@ function addCallScriptRule()
 {
 	console.log("in addCallScriptRule");
 	
+	// If Widgets collection is not defined, navigates to add widget
+	if (!App_Widgets || !App_Widgets.Catalog_Widgets_View || !App_Widgets.Catalog_Widgets_View.collection)
+	{	
+		window.location.href = "#add-widget";
+		return;
+	}
+	
 	makeWidgetTabActive();
 
-	var contacts_filter = new Base_Model_View({ template : "callscript-rule", isNew : "true", postRenderCallback : function(el)
+	var add_csr = new Base_Model_View({ template : "callscript-rule", isNew : "true", postRenderCallback : function(el)
 	{
 		head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 		{
@@ -311,7 +318,7 @@ function addCallScriptRule()
 
 	// Shows loading image until data gets ready for displaying
 	$("#prefs-tabs-content").html(LOADING_HTML);
-	contacts_filter.render();
+	add_csr.render();
 }
 
 // Get call script rule from widget and display in edit rule page
@@ -442,15 +449,18 @@ function getRulesNewPosition(callback)
 
 			// Get Model, model is set as data to widget element
 			var rule = callscriptPrefsJson.csrules[old_rule_index];
-
-			console.log("rule:"+rule);					
-			rule["position"] = index;
 			console.log("rule:"+rule);
 			
-			newRules.push(rule);
-			console.log("newRules:"+newRules);
+			if(old_rule_index != index)
+			  {									
+				rule["position"] = index;
+				console.log("rule:"+rule);
+				
+				$(element).attr('data',index);					
+			  }
 			
-			$(element).attr('data',index);
+			newRules.push(rule);
+			console.log("newRules:"+newRules);			
 		}
 	});
 	
