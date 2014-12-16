@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -131,6 +132,7 @@ public class ActivityReportsUtil
 	    activityReports.put("report_name", report.name);
 
 	    List<Map<String, Object>> userReport = new ArrayList<Map<String, Object>>();
+	    long allUserCount = 0;
 	    // For every user selected in the activity report.
 	    for (DomainUser user : users)
 	    {
@@ -138,8 +140,15 @@ public class ActivityReportsUtil
 		activityReport.put("user_id", user.id);
 		activityReport.put("user_name", user.name);
 		activityReports.put("domain", user.domain);
-		activityReport.put("pic",
-			UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id)).pic);
+		try
+		{
+		    activityReport.put("pic",
+			    UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id)).pic);
+		}
+		catch (NullPointerException ne)
+		{
+		    System.out.println("User not logged in upto now.");
+		}
 		int count = 0;
 		// Check for the entities/activities selected by the user for
 		// activity report.
@@ -184,15 +193,17 @@ public class ActivityReportsUtil
 		{
 		    activityReport.put("calls",
 			    getCallActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
-		    count += getTotalCount((Map<String, Object>) activityReport.get("calls"), "call_count");
+		    count += getTotalCount((Map<String, Object>) activityReport.get("calls"), "total_calls");
 		}
 		if (count > 0)
 		    activityReport.put("total", count);
 		else
 		    activityReport.put("message", "No activity form " + user.name);
+		allUserCount += count;
 		userReport.add(activityReport);
 	    }
 	    activityReports.put("reports", userReport);
+	    activityReports.put("all_reports_count", allUserCount);
 	}
 	catch (Exception je)
 	{
@@ -235,7 +246,15 @@ public class ActivityReportsUtil
 	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, Activity.EntityType.DEAL.toString(),
 		null, null, startTime, endTime, 0, null);
 
-	UserPrefs pref = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id));
+	UserPrefs pref = null;
+	try
+	{
+	    pref = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id));
+	}
+	catch (NullPointerException ne)
+	{
+
+	}
 	try
 	{
 	    // Separate the activities based on the activity type.
@@ -302,7 +321,9 @@ public class ActivityReportsUtil
 	double lostValue = 0;
 	double newValue = 0;
 	double mileValue = 0;
-	String currency = pref.currency != null ? pref.currency.substring(pref.currency.indexOf("-") + 1) : "$";
+	String currency = "$";
+	if (pref != null)
+	    currency = pref.currency != null ? pref.currency.substring(pref.currency.indexOf("-") + 1) : "$";
 
 	// Fill the map object with required data to show in the report.
 	Map<String, Object> dealsReport = new HashMap<String, Object>();
@@ -414,8 +435,11 @@ public class ActivityReportsUtil
     public static Map<String, Object> getEventActivityReport(DomainUser user, Long startTime, Long endTime)
     {
 	// Events that are completed by the given user.
-	List<Event> events = EventUtil.getEvents(startTime, endTime,
-		AgileUser.getCurrentAgileUserFromDomainUser(user.id).id);
+	List<Event> events = new ArrayList<Event>();
+
+	AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(user.id);
+	if (agileUser != null)
+	    events = EventUtil.getEvents(startTime, endTime, agileUser.id);
 
 	Map<Long, Activity> eventAddActivity = new HashMap<Long, Activity>();
 	List<Activity> eventMovedActivity = new ArrayList<Activity>();
@@ -771,6 +795,19 @@ public class ActivityReportsUtil
 	return docReport;
     }
 
+    /**
+     * Generate the report on calls made and received by the selected user.
+     * 
+     * @param user
+     *            who made calls
+     * @param startTime
+     *            the lower bound of the time(start time) for getting activities
+     *            (Activities after this time).
+     * @param endTime
+     *            the upper bound of the time(end time) for getting activities
+     *            (Activities before this time).
+     * @return report on calls made and received.
+     */
     public static Map<String, Object> getCallActivityReport(DomainUser user, Long startTime, Long endTime)
     {
 	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, null,
@@ -779,13 +816,75 @@ public class ActivityReportsUtil
 	List<Activity> doneCallActivities = new ArrayList<Activity>();
 	List<Activity> noAnsCallActivities = new ArrayList<Activity>();
 	List<Activity> failedCallActivities = new ArrayList<Activity>();
-	List<Activity> missedCallActivities = new ArrayList<Activity>();
+	// List<Activity> missedCallActivities = new ArrayList<Activity>();
+	int inCount = 0;
+	int outCount = 0;
+	long doneDuration = 0;
+
+	for (Activity activity : activities)
+	{
+	    long custom4 = Long.parseLong(activity.custom4);
+	    if (!StringUtils.isEmpty(activity.custom4))
+	    {
+		activity.custom4 = convertSecToHours(Long.parseLong(activity.custom4), true);
+	    }
+	    if (activity.custom3.equalsIgnoreCase("completed"))
+	    {
+		doneCallActivities.add(activity);
+		doneDuration += custom4;
+		if (activity.custom2.equalsIgnoreCase("incoming"))
+		    inCount++;
+		else
+		    outCount++;
+	    }
+	    else if (activity.custom3.equalsIgnoreCase("no-answer"))
+	    {
+		noAnsCallActivities.add(activity);
+	    }
+	    else if (activity.custom3.equalsIgnoreCase("failed"))
+	    {
+		failedCallActivities.add(activity);
+	    }
+	}
 
 	Map<String, Object> callReport = new HashMap<String, Object>();
-	if (activities.size() > 0)
+	int totalCalls = 0;
+	try
 	{
-	    callReport.put("call_count", activities.size());
-	    callReport.put("call_log", activities);
+	    if (activities.size() > 0)
+	    {
+		if (doneCallActivities.size() > 0)
+		{
+		    callReport.put("done_calls", doneCallActivities);
+		    totalCalls += doneCallActivities.size();
+		    callReport.put("done_count", doneCallActivities.size());
+		    callReport.put("in_count", inCount);
+		    callReport.put("out_count", outCount);
+		    callReport.put("done_duration", convertSecToHours(doneDuration, false));
+
+		}
+		if (failedCallActivities.size() > 0)
+		{
+		    callReport.put("failed_calls", failedCallActivities);
+		    totalCalls += failedCallActivities.size();
+		    callReport.put("failed_count", failedCallActivities.size());
+		}
+		if (noAnsCallActivities.size() > 0)
+		{
+		    callReport.put("no_ans_calls", noAnsCallActivities);
+		    totalCalls += noAnsCallActivities.size();
+		    callReport.put("no_ans_count", noAnsCallActivities.size());
+		}
+
+		if (totalCalls > 0)
+		{
+		    callReport.put("total_calls", totalCalls);
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception in preparing the calls report - " + e.getMessage());
 	}
 
 	return callReport;
@@ -905,9 +1004,13 @@ public class ActivityReportsUtil
     public static void sendActivityReport(Long reportId, Long endTime)
     {
 	ActivityReports report = getActivityReport(reportId);
-	// Send reports email
-	SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, "activity_reports",
-		ActivityReportsUtil.generateActivityReports(reportId, endTime));
+	Map<String, Object> reports = ActivityReportsUtil.generateActivityReports(reportId, endTime);
+	Long recordsCount = (Long) reports.get("all_reports_count");
+	System.out.println("Total records count = " + recordsCount);
+	// Send reports email only if it has records.
+	if (recordsCount != null && recordsCount > 0)
+	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, "activity_reports",
+		    ActivityReportsUtil.generateActivityReports(reportId, endTime));
     }
 
     /**
@@ -972,7 +1075,7 @@ public class ActivityReportsUtil
     private static String convertDate(String format, Long epoch)
     {
 	if (format == null)
-	    format = "dd MMM ''yy";
+	    format = "dd MMM ''yy HH:mm";
 	if (epoch > 0)
 	{
 	    Date d = new Date(epoch * 1000);
@@ -980,5 +1083,20 @@ public class ActivityReportsUtil
 	    return df.format(d);
 	}
 	return "";
+    }
+
+    private static String convertSecToHours(Long seconds, boolean needSecs)
+    {
+	String result = "";
+	long hours = TimeUnit.SECONDS.toHours(seconds);
+	long minute = TimeUnit.SECONDS.toMinutes(seconds) - (TimeUnit.SECONDS.toHours(seconds) * 60);
+	long second = TimeUnit.SECONDS.toSeconds(seconds) - (TimeUnit.SECONDS.toMinutes(seconds) * 60);
+	if (hours > 0)
+	    result += hours + "h ";
+	if (minute > 0)
+	    result += minute + "m ";
+	if (needSecs && second > 0)
+	    result += second + "s";
+	return result;
     }
 }
