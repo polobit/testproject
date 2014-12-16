@@ -17,6 +17,8 @@
  * 
  */
 
+var _CONTACT_CUSTOM_FIELDS = undefined;
+
 function insertSelectedMergeField(ele, target_id)
 {
 	// current value
@@ -42,7 +44,16 @@ function getMergeFields(type)
 		"Twitter Id" : "{{twitter_id}}", "LinkedIn Id" : "{{linkedin_id}}", "Owner Name" : "{{owner.name}}", "Owner Email" : "{{owner.email}}" , "Calendar URL" : "{{owner.calendar_url}}"};
 
 	// Get Custom Fields in template format
-	var custom_fields = get_custom_fields();
+	var custom_fields;
+	
+	// Cache Contact Custom fields
+	if(_CONTACT_CUSTOM_FIELDS)
+		custom_fields = _CONTACT_CUSTOM_FIELDS
+	else
+	{
+		_CONTACT_CUSTOM_FIELDS = get_custom_fields();
+		custom_fields = _CONTACT_CUSTOM_FIELDS;
+	}
 
 	console.log("Custom Fields are");
 

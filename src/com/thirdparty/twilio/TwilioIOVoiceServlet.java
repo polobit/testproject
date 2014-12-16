@@ -29,22 +29,20 @@ public class TwilioIOVoiceServlet extends HttpServlet
 
 		System.out.println("namespaceManager.get(): " + NamespaceManager.get());
 
-		/*
-		 * String agileuserid = request.getParameter("agileuserid");
-		 * System.out.println("Twilio agileuserid : " + agileuserid);
-		 */
 		/* Caller Id from which call is initiated */
 		String callerId = request.getParameter("from");
 
-		/*
-		 * String clientName = "c"; clientName = clientName.concat(agileuserid);
-		 */
-		// System.out.println("clientName: " + clientName);
+		/* Call Recording enable/disable */
+		String record = request.getParameter("record");
 
 		TwiMLResponse twiml = new TwiMLResponse();
 		Dial dial = new Dial();
 		try
 		{
+			if (record != null)
+				if (record.equals("true"))
+					dial.set("record", record);
+
 			if (phoneNumber != null)
 			{
 				System.out.println("Outgoing call");
