@@ -239,7 +239,9 @@ $(function(){
 
         if(!currentDeal.close_date || currentDeal.close_date==0)
         	currentDeal.close_date = null;
-
+        
+        currentDeal.owner_id = currentDeal.owner.id;
+        
         var arch_deal = new Backbone.Model();
 		arch_deal.url = '/core/api/opportunity';
 		arch_deal.save(currentDeal, {
@@ -252,7 +254,7 @@ $(function(){
 				}
 				else{
 					that.remove();
-					that.closest('.deal-options').prepend('<a title="Archive" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>');
+					$('#'+id+' .deal-options').prepend('<a title="Archive" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>');
 				}
 				console.log('archived deal----',model);
 				// Shows Milestones Pie
@@ -310,7 +312,7 @@ $(function(){
 				}
 				else{
 					that.remove();
-					that.closest('.deal-options').prepend('<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>');
+					$('#'+id+' .deal-options').prepend('<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>');
 				}
 				console.log('archived deal----',model);
 				// Shows Milestones Pie
