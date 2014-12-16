@@ -8,7 +8,7 @@
  * @author Rammohan
  */
 
-var deal_tab_position_cookie_name = "deal_tab_position_" + CURRENT_DOMAIN_USER.id;
+var deal_tab_position_cookie_name = "deal_tab_position";
 
 
 $(function(){ 
@@ -23,7 +23,7 @@ $(function(){
 	 */ 
 	$('#deal-details-tab a[href="#dealnotes"]').live('click', function (e){
 		e.preventDefault();
-		//save_contact_tab_position_in_cookie("notes");
+		save_deal_tab_position_in_cookie("dealnotes");
 		deal_details_tab.load_deal_notes();
 	});
 	
@@ -35,7 +35,7 @@ $(function(){
 	 */
 	$('#deal-details-tab a[href="#dealrelated"]').live('click', function (e){
 		e.preventDefault();
-		//save_contact_tab_position_in_cookie("documents");
+		save_deal_tab_position_in_cookie("dealrelated");
 		deal_details_tab.loadDealRelatedContactsView();
 	});
 	
@@ -45,7 +45,7 @@ $(function(){
 	 */
 	$('#deal-details-tab a[href="#dealactivities"]').live('click', function (e){
 		e.preventDefault();
-		//save_contact_tab_position_in_cookie("documents");
+		save_deal_tab_position_in_cookie("dealactivities");
 		deal_details_tab.load_deal_activities();
 	});
 	
@@ -118,37 +118,33 @@ function save_deal_tab_position_in_cookie(tab_href)
 function load_deal_tab(el, dealJSON)
 {
 //	timeline_collection_view = null;
-//	var position = readCookie(contact_tab_position_cookie_name);
+	var position = readCookie(deal_tab_position_cookie_name);
+	if(position){
+		if(position=="dealactivities"){
+			$('#deal-details-tab a[href="#dealactivities"]', el).tab('show');
+
+			deal_details_tab.load_deal_activities();
+		}
+		else if(position=="dealrelated"){
+			$('#deal-details-tab a[href="#dealrelated"]', el).tab('show');
+
+			deal_details_tab.loadDealRelatedContactsView();
+		}
+		else if(position=="dealnotes"){
+			$('#deal-details-tab a[href="#dealnotes"]', el).tab('show');
+
+			deal_details_tab.load_deal_notes();
+		}
+	}
+	else{
 	
 	$('#deal-details-tab a[href="#dealactivities"]', el).tab('show');
 
 	deal_details_tab.load_deal_activities();
-	
-	/*if(!position || position == "timeline")
-	{
-		activate_timeline_tab()
-		contact_details_tab.load_timeline();
-		return;
 	}
 	
-	if(contact_details_tab["load_" + position])
-	{
-		
-		
-		// Should add active class, tab is not enough as content might not be shown in view.
-		$(".tab-content", el).find("#" + position).addClass("active");
-		contact_details_tab["load_" + position]();
-	}*/
 		
 }
 
-
-function load_deal_timeline_details(el, contactId, callback1, noAnimation){
-	
-		noAnimationBruteForce = true;
-		timeline_entity_loader.init(App_Deal_Details.dealDetailView.model.toJSON());
-
-
-}
 
 

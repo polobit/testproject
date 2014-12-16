@@ -497,6 +497,9 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 				}
 
 			}
+			else if(Current_Route=="deal/"+App_Deal_Details.dealDetailView.model.id){
+				window.location.reload(true);
+			}
 			else {
 				App_Deals.navigate("deals", {
 					trigger : true

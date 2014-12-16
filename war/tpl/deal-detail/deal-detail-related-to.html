@@ -2,12 +2,15 @@
 	<td></td>
 	<td class="data" data="{{id}}" style="white-space:nowrap;">
     	<div style="display:inline;padding-right:10px;height:auto;">
-        		<img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
-    	</div>
+{{#if_equals type "PERSON"}}        		
+<img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
+{{else}}
+<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} width="40px" height="40px" style="display:inline; width:40px; height:40px; "  title="{{getPropertyValue properties "name"}}"/>
+{{/if_equals}}    	
+</div>
     	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
         		<b>	{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}} </b>
-        		<br/>
         		<b>{{getPropertyValue properties "name"}}</b>
     	</div>
 	</td>
