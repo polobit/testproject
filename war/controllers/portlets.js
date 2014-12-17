@@ -10,7 +10,7 @@ var PortletsRouter = Backbone.Router
 												
 												portlets : function(){
 													head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js',
-															'http://gridster.net/dist/jquery.gridster.js',function(){
+															LIB_PATH + 'lib/jquery.gridster.js',function(){
 														var el = $(getTemplate('portlets', {}));
 														$("#content").html(el);
 														loadPortlets(el);
@@ -54,7 +54,7 @@ function addNewPortlet(portlet_type,p_name){
 	if(gridster!=undefined)
 		gridster.$widgets.each(function(){
 			if(parseInt($(this).attr("data-row"))>max_row_position)
-				max_row_position=parseInt($(this).attr("data-row"));
+				max_row_position = parseInt($(this).attr("data-row")) * parseInt($(this).attr("data-sizey"));
 		});
 	obj.row_position=max_row_position+1;
 	obj.size_x=1;
@@ -93,18 +93,19 @@ function addNewPortlet(portlet_type,p_name){
 	var portlet = new BaseModel();
 	portlet.url = 'core/api/portlets/addPortlet';
 	portlet.set({ "prefs" : JSON.stringify(json) }, { silent : true });
+	var model;
 	portlet.save(obj, {
         success: function (data) {
         	hidePortletsPopup();
-        	var model=data.toJSON();
+        	model=data.toJSON();
         	//var el = $(getTemplate('portlets-model', model));
         	if($('#zero-portlets').is(':visible'))
         		$('#zero-portlets').hide();
         	if($('#no-portlets').is(':visible'))
     			$('#no-portlets').hide();
         	Portlets_View.collection.add(model);
-        	//var el = $(getTemplate('portlets', {}));
-        	//set_up_portlets(el,el);
+        	
+        	//set_up_portlets(Portlets_View.el, Portlets_View.el);
         	
         	//move the scroll bar to bottom for showing the newly added portlet
         	window.scrollTo(0,document.body.scrollHeight);
@@ -122,6 +123,10 @@ function addNewPortlet(portlet_type,p_name){
         	//move the scroll bar to bottom for showing the newly added portlet
         	window.scrollTo(0,document.body.scrollHeight)
         }});
+	setTimeout(function(){
+		gridster.add_widget($('#ui-id-'+model.column_position+'-'+model.row_position),1,1,model.column_position,model.row_position);
+		gridster.set_dom_grid_height();
+	},1000);
 }
 function hidePortletsPopup(){
 	$('#portletStreamModal').modal('hide');
@@ -146,8 +151,10 @@ function deletePortlet(el){
 		success : function(data){
 			Portlets_View.collection.remove(portlet);
 			//$('#'+el.parentNode.parentNode.parentNode.parentNode.parentNode.id).remove();
+			gridster.remove_widget($('#'+el.id.split("-close")[0]).parent(),true);
 			$('#'+el.id.split("-close")[0]).parent().remove();
-			if($('#col-0').children(':visible').length==0 && $('#col-1').children(':visible').length==0 && $('#col-2').children(':visible').length==0)
+			
+			if($('.gridster-portlets > div').length==0)
 				$('#no-portlets').show();
 			/*head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function(){
 				var el = $(getTemplate('portlets', {}));

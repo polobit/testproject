@@ -81,9 +81,9 @@ function set_p_portlets(base_model){
 		}
 	}*/
 	if($('.gridster > div:visible > div',this.el).length==0)
-		$('.gridster > div',this.el).html($(itemView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
+		$('.gridster > div:visible',this.el).html($(itemView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
 	else
-		$('.gridster > div > div:last',this.el).after($(itemView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
+		$('.gridster > div:visible > div:last',this.el).after($(itemView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
 	
 	if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Filter Based"){
 		if(base_model.get('settings').filter=="companies")
@@ -111,6 +111,18 @@ function set_p_portlets(base_model){
 					&& base_model.get('name')!="Calls Per Person"){
 			$(this).html(getRandomLoadingImg());
 			$(this).html($(itemCollection.render().el));
+			
+			if(base_model.get("size_y")==1){
+				$(this).css("height",(base_model.get("size_y")*200)-40+"px");
+				$(this).css("max-height",(base_model.get("size_y")*200)-40+"px");
+			}else if(base_model.get("size_y")==2){
+				$(this).css("height",(base_model.get("size_y")*200)+10-40+"px");
+				$(this).css("max-height",(base_model.get("size_y")*200)+10-40+"px");
+			}else if(base_model.get("size_y")==3){
+				$(this).css("height",(base_model.get("size_y")*200)+20-40+"px");
+				$(this).css("max-height",(base_model.get("size_y")*200)+20-40+"px");
+			}
+			
 			
 			/*if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Won"){
 				var tempEl=$(this);

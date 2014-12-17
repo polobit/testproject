@@ -8,7 +8,6 @@ var portlet_template_loaded_map = {};
  * @param el
  */
 function loadPortlets(el){
-	var is_portlet_view_new = false;
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
@@ -19,14 +18,11 @@ function loadPortlets(el){
 		is_portlet_view_new = true;
 		Portlets_View = new Base_Collection_View({ url : '/core/api/portlets', sortKey : "row_position", restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
 			postRenderCallback : function(portlets_el){
-				head.load("css/misc/agile-portlet.css","http://gridster.net/dist/jquery.gridster.min.css", function(){
+				head.load("css/misc/agile-portlet.css","css/jquery.gridster.min.css", function(){
 					// If scripts aren't loaded earlier, setup is initialized
-					if (is_portlet_view_new){
-						set_up_portlets(el, portlets_el);
-						if(Portlets_View.collection.length==0)
-							$('.gridster > div:visible > div',el).removeClass('gs-w');
-					}
-					is_portlet_view_new = false;
+					set_up_portlets(el, portlets_el);
+					if(Portlets_View.collection.length==0)
+						$('.gridster > div:visible > div',el).removeClass('gs-w');
 				})
 
 			} });
@@ -75,9 +71,9 @@ function loadPortlets(el){
 
 		// show portlets
 		var newEl = Portlets_View.render().el;
-		set_up_portlets(el, newEl);
-		if(Portlets_View.collection.length==0)
-			$('.gridster > div:visible > div',el).removeClass('gs-w');
+		//set_up_portlets(el, newEl);
+		/*if(Portlets_View.collection.length==0)
+			$('.gridster > div:visible > div',el).removeClass('gs-w');*/
 		$('#portlets', el).html(newEl);
 		/*setTimeout(function(){
 			$('#portlets-opportunities-model-list').removeClass('agile-edit-row');
@@ -95,13 +91,17 @@ var gridster;
  */
 function set_up_portlets(el, portlets_el){
 	$(function(){
-	    gridster = $('.gridster > div:visible',el).gridster({
+		gridster = $('.gridster > div:visible',portlets_el).gridster({
 	    	widget_selector: "div",
 	        widget_margins: [10, 10],
-	        widget_base_dimensions: [400, 280],
+	        widget_base_dimensions: [400, 200],
 	        min_cols: 3,
+	        autogenerate_stylesheet: false,
 	        draggable: {
 	        	stop: function(event,ui){
+	        		
+	        		$('#'+this.$player.attr('id')).attr('id','ui-id-'+this.$player.attr('data-col')+'-'+this.$player.attr('data-row'));
+	        		
 					var models = [];
 
 					/*
@@ -127,6 +127,15 @@ function set_up_portlets(el, portlets_el){
 	        resize: {
 	        	enabled: true,
 	        	stop: function(event,ui){
+	        		
+	        		/*if($('#'+this.$resized_widget.attr('id')).height()<=200){
+	        			$('#'+this.$resized_widget.attr('id')).css("height","160px");
+	        			$('#'+this.$resized_widget.attr('id')).css("max-height","160px");
+	        		}else{
+	        			$('#'+this.$resized_widget.attr('id')).css("height",$('#'+this.$resized_widget.attr('id')).height()-40+"px");
+	        			$('#'+this.$resized_widget.attr('id')).css("max-height",$('#'+this.$resized_widget.attr('id')).height()-40+"px");
+	        		}*/
+	        		
 					var models = [];
 
 					/*
@@ -150,6 +159,25 @@ function set_up_portlets(el, portlets_el){
 				}
 	        }
 	    }).data('gridster');
+	    $(window).resize(function(){
+	    	if(gridster!=undefined)
+	    		$('.gridster-portlets').css("height","auto");
+	    	if($(window).width()<768 && gridster!=undefined){
+	    		gridster.disable();
+	    		gridster.disable_resize();
+	    	}else if(gridster!=undefined){
+	    		gridster.enable();
+	    		gridster.enable_resize();
+	    		gridster.set_dom_grid_height();
+	    	}
+	    });
+	    if($(window).width()<768 && gridster!=undefined){
+    		gridster.disable();
+    		gridster.disable_resize();
+    	}else if(gridster!=undefined){
+    		gridster.enable();
+    		gridster.enable_resize();
+    	}
 	  });
 	//enablePortletSorting(portlets_el);
 }
@@ -460,9 +488,19 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        	var portletCollectionView;
 	        	if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Filter Based"){
 	        		if(data.get('settings').filter=="companies")
-	        			portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter, templateKey : 'portlets-companies', individual_tag_name : 'tr' });
+	        			portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter, templateKey : 'portlets-companies', individual_tag_name : 'tr',
+	        				postRenderCallback : function(){
+	        					//gridster.remove_widget($('#'+data.get('id')).parent(),true);
+	        					gridster.add_widget($('#ui-id-'+data.get('column_position')+'-'+data.get('row_position')),1,1,data.get('column_position'),data.get('row_position'));
+	        					gridster.set_dom_grid_height();
+	        				}});
 	        		else
-	        			portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter, templateKey : 'portlets-contacts', individual_tag_name : 'tr' });
+	        			portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter, templateKey : 'portlets-contacts', individual_tag_name : 'tr',
+	        				postRenderCallback : function(){
+	        					//gridster.remove_widget($('#'+data.get('id')).parent(),true);
+	        					gridster.add_widget($('#ui-id-'+data.get('column_position')+'-'+data.get('row_position')),1,1,data.get('column_position'),data.get('row_position'));
+	        					gridster.set_dom_grid_height();
+	        				}});
 	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Emails Opened"){
 	        		portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+data.get('settings').duration, templateKey : 'portlets-contacts', individual_tag_name : 'tr' });
 	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Pending Deals"){
