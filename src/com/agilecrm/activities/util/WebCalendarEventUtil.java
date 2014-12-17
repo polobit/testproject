@@ -18,6 +18,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.AccountPrefs;
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Event.EventType;
@@ -147,6 +149,15 @@ public class WebCalendarEventUtil
 	// used to store business hours
 	List<Long> business_hours = new ArrayList<>();
 
+	if (StringUtils.isEmpty(usertimezone))
+	{
+	    AccountPrefs acprefs = AccountPrefsUtil.getAccountPrefs();
+	    usertimezone = acprefs.timezone;
+	    if (StringUtils.isEmpty(usertimezone))
+	    {
+		usertimezone = "UTC";
+	    }
+	}
 	// according domain user timezone gets the weekday
 	// i.e in java sun,mon,tue,wed,thu,fri,sat 1,2,3,4,5,6,7 respectivly
 	TimeZone tz = TimeZone.getTimeZone(usertimezone);
@@ -634,30 +645,38 @@ public class WebCalendarEventUtil
 
 	    // Check if the email exists with the current email address
 	    boolean isDuplicate = ContactUtil.isExists(contact.getContactFieldValue("EMAIL"));
-
-	    // if it is not exists
-	    if (!isDuplicate)
+	    try
 	    {
-		// Set lead owner(current domain user)
-		Key<DomainUser> owner_key = new Key<DomainUser>(DomainUser.class, domainUserId);
-		contact.setContactOwner(owner_key);
-
-		// Save as new contact
-		contact.save();
-
-		for (ContactField f : contact.properties)
+		// if it is not exists
+		if (!isDuplicate)
 		{
-		    System.out.println("\t" + f.name + " - " + f.value);
+		    // Set lead owner(current domain user)
+		    Key<DomainUser> owner_key = new Key<DomainUser>(DomainUser.class, domainUserId);
+		    contact.setContactOwner(owner_key);
+
+		    // Save as new contact
+		    contact.save();
+
+		    for (ContactField f : contact.properties)
+		    {
+			System.out.println("\t" + f.name + " - " + f.value);
+		    }
+		}
+		else
+		{
+		    // Get already present contact
+		    contact = ContactUtil.searchContactByEmail(wce.email);
 		}
 	    }
-	    else
+	    catch (Exception e)
 	    {
-		// Get already present contact
-		contact = ContactUtil.searchContactByEmail(wce.email);
+		System.out.println("exception in catch block  " + e.getMessage());
+		e.printStackTrace();
+
 	    }
 
 	    // If contact is validz
-	    if (contact.id != null)
+	    if (contact != null && contact.id != null)
 	    {
 		// Create agile event
 		// String title, Long start, Long end, boolean isEventStarred,
@@ -673,6 +692,59 @@ public class WebCalendarEventUtil
 
 		epoch_start_date = newEvnt.start;
 		String cid = contact.id.toString(); // related contact
+
+		// Add contact in event
+		if (cid != null)
+		{
+		    newEvnt.contacts = new ArrayList<String>();
+		    boolean add = newEvnt.contacts.add(cid);
+		}
+
+		// save agile event
+		newEvnt.save();
+
+		agileUseiCal = IcalendarUtil.getICalFromEvent(newEvnt, null, user.email, user.name);
+		System.out.println("agileUseiCal-- " + agileUseiCal.toString());
+		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
+		String usermail = null;
+
+		if (StringUtils.isNotEmpty(wce.phoneNumber) && !"Meeting Type".equalsIgnoreCase(wce.phoneNumber))
+		{
+
+		    usermail = "<p>" + wce.userName + " (" + wce.email
+			    + ") has scheduled an appointment </p><span>Type: '" + wce.name + "' (" + wce.slot_time
+			    + "mins)</span><br/><span>Meeting Type: " + wce.phoneNumber + "</span><br/><span>Note: "
+			    + wce.notes + "</span><br/><p><a href=https://" + user.domain
+			    + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
+		}
+		else
+		{
+		    usermail = "<p>" + wce.userName + " (" + wce.email
+			    + ") has scheduled an appointment </p><span>Type: '" + wce.name + "' (" + wce.slot_time
+			    + "mins)</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href=https://"
+			    + user.domain + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
+		}
+
+		EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
+		        "Appointment Scheduled", null, usermail, null, null, null, attachments_to_agile_user);
+	    }
+
+	    else
+	    {
+		// Create agile event
+		// String title, Long start, Long end, boolean isEventStarred,
+		// Long contactId, Long agileUserId
+		newEvnt = new Event("", null, null, false, null, agileUserId);
+
+		// Set property values
+		newEvnt.title = wce.name.concat(" with ".concat(wce.userName)); // name
+		newEvnt.start = slot.get(0); // start time
+		newEvnt.end = slot.get(1); // end time
+		newEvnt.color = "#36C";
+		newEvnt.type = EventType.WEB_APPOINTMENT;
+
+		epoch_start_date = newEvnt.start;
+		String cid = null; // related contact
 
 		// Add contact in event
 		if (cid != null)
