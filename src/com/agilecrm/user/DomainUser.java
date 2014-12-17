@@ -169,7 +169,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
      * meeting types
      */
     @NotSaved(IfDefault.class)
-    public String meeting_types = "Personal, Phone, Skype, Google Hangouts";
+    public String meeting_types = "In Person, Phone, Skype, Google Hangouts";
 
     @NotSaved
     public String businesshours_prefs;
@@ -185,7 +185,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     public String timezone = "UTC";
 
     @NotSaved(IfDefault.class)
-    public String meeting_durations = "{\"15mins\":\"Say Hai\",\"30mins\":\"Lets keep it Short\",\"60mins\":\"Lets Chat\"}";
+    public String meeting_durations = "{\"15mins\":\"say hi\",\"30mins\":\"let's keep it short\",\"60mins\":\"let's chat\"}";
 
     /**
      * Info Keys of the user

@@ -633,6 +633,9 @@ public class TwilioUtil
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("FriendlyName", "Agile CRM Twilio Saga");
 
+		// params.put("VoiceUrl",
+		// "http://1-dot-twiliovoicerecord.appspot.com/voice?record=" + record);
+
 		params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice?record=" + record);
 		params.put("VoiceMethod", "GET");
 
@@ -700,6 +703,7 @@ public class TwilioUtil
 	 * @created 28-Nov-2014
 	 * 
 	 */
+
 	public static JSONObject getLastChildCallLogStatus(String account_sid, String auth_token, String call_sid)
 			throws JSONException, Exception
 	{
@@ -762,4 +766,5 @@ public class TwilioUtil
 			return logs;
 		}
 	}
+
 }

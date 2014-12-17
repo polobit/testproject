@@ -6,6 +6,7 @@ import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
+import com.campaignio.tasklets.util.TaskCore;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -28,10 +29,18 @@ public class Start extends TaskletAdapter
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
 	    throws Exception
     {
-	// Set campaign-status as campaignId-ACTIVE.
-	CampaignStatusUtil.setStatusOfCampaign(AgileTaskletUtil.getId(subscriberJSON),
-	        AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getCampaignNameFromJSON(campaignJSON),
-	        Status.ACTIVE);
+
+	// If not set already
+	if (!subscriberJSON.has(TaskCore._ACTIVE_STATUS_SET))
+	{
+	    // Set campaign-status as campaignId-ACTIVE.
+	    CampaignStatusUtil.setStatusOfCampaign(AgileTaskletUtil.getId(subscriberJSON),
+		    AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getCampaignNameFromJSON(campaignJSON),
+		    Status.ACTIVE);
+	}
+
+	// Remove once set to get active correctly in Transfer Node
+	subscriberJSON.remove(TaskCore._ACTIVE_STATUS_SET);
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, "start");

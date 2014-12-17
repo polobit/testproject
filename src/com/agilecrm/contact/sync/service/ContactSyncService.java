@@ -83,6 +83,23 @@ public abstract class ContactSyncService implements SyncService
 	SessionManager.set(info);
 	return this;
     }
+    
+    protected int getAgileMaxLimit()
+    {
+	return contactRestriction.getPendingCount();
+    }
+    
+    protected int getFetchSize()
+    {
+	int pending = getAgileMaxLimit();
+	if(pending > 400)
+	    return 200;
+	
+	if(pending == 1)
+	    return 0;
+	
+	return pending/2;
+    }
 
     /**
      * Checks if is limit exceeded as per user plan
@@ -159,7 +176,7 @@ public abstract class ContactSyncService implements SyncService
 	if (contactWrapper == null)
 	    try
 	    {
-		contactWrapper = getWrapperService().newInstance().getWrapper(object);
+		contactWrapper = getWrapperService().newInstance().getWrapper(object, prefs);
 	    }
 	    catch (InstantiationException e)
 	    {
@@ -193,9 +210,16 @@ public abstract class ContactSyncService implements SyncService
 
 	// Saves limits
 	restriction.save();
+	
+	
 
 	if (user != null)
 	{
+	    
+	    int emailRequired = syncStatus.get(ImportStatus.EMAIL_REQUIRED);
+	    if(emailRequired == 0)
+		    syncStatus.remove(ImportStatus.EMAIL_REQUIRED);
+		
 	    SendMail.sendMail(user.email, notificationSubject, NOTIFICATION_TEMPLATE, new Object[] { user,
 		    buildNotificationStatus() });
 
@@ -274,9 +298,12 @@ public abstract class ContactSyncService implements SyncService
      */
     private Contact saveContact(Contact contact)
     {
+	addTagToContact(contact);
 	if (ContactUtil.isDuplicateContact(contact))
 	{
+	   
 	    contact = ContactUtil.mergeContactFields(contact);
+	    
 	    if (!accessControl.canDelete())
 	    {
 		syncStatus.put(ImportStatus.ACCESS_DENIED, syncStatus.get(ImportStatus.ACCESS_DENIED) + 1);
@@ -299,10 +326,9 @@ public abstract class ContactSyncService implements SyncService
 	}
 	else if (contactRestriction.can_create())
 	{
-	    addTagToContact(contact);
 	    try
 	    {
-		contact.save();
+		 contact.save();
 	    }
 	    catch (AccessDeniedException e)
 	    {
@@ -334,7 +360,7 @@ public abstract class ContactSyncService implements SyncService
 	else
 	    tag = prefs.type.toString().toLowerCase() + " contact";
 
-	contact.addTags(StringUtils.capitalize(tag));
+	contact.tags.add(StringUtils.capitalize(tag));
     }
 
     protected boolean canSync()

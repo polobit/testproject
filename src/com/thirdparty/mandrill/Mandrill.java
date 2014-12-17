@@ -33,7 +33,7 @@ public class Mandrill
 	/**
 	 * Mandrill core REST API URL
 	 */
-	public static final String MANDRILL_API_POST_URL = "https://mandrillapp.com/api/1.0/";
+	public static final String MANDRILL_API_POST_URL = "http://mandrillapp.com/api/1.0/";
 
 	/**
 	 * Mandrill Message Call URL to send mail
