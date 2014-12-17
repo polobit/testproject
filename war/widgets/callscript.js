@@ -410,7 +410,6 @@ var _agile_rules = {
 					return true;
 				}
 			}
-			compareString(_agile_contact , condition);
 		}
 	},
 
