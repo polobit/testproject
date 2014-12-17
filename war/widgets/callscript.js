@@ -220,12 +220,12 @@ function _agile_check_condition(condition)
 	}
 		break;
 	default:
-	{
+	{		
 		switch (condition.CONDITION) {
 		case "EQUALS":
-			return _agile_rules["contact_properties_in"](condition);
+			return _agile_rules["contact_properties_in"](condition);			
 		case "NOTEQUALS":
-			return _agile_rules["contact_properties_out"](condition);
+			return _agile_rules["contact_properties_out"](condition);			
 		case "MATCHES":
 			return _agile_rules["contact_properties_match"](condition);
 		case "NOT_CONTAINS":
@@ -397,13 +397,12 @@ var _agile_rules = {
 
 	// To check if contact properties match or not
 	contact_properties_in : function(condition)
-	{
+	{		
 		if (_agile_contact && condition.RHS)
 		{
 			var k = _agile_contact.properties.length;
 			for ( var s = 0; s < k; s++)
 			{
-
 				// Check if contact properties from callscriptrules match with
 				// contact properties
 				if (condition.LHS == _agile_contact.properties[s].name && condition.RHS == _agile_contact.properties[s].value)
@@ -411,6 +410,7 @@ var _agile_rules = {
 					return true;
 				}
 			}
+			compareString(_agile_contact , condition);
 		}
 	},
 
