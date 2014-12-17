@@ -120,7 +120,7 @@
 <button class="btn" id="noty_twilio_voicemail" data-length="{{length}}" data-src="{{this.0.extension}}">Leave Voicemail</button>
 {{#ifCond length "greaterthan" 1}}
 <button class="btn dropdown-toggle" data-toggle="dropdown" onclick="voiceMailDropAction()" id="splitButtonVoicemail" ><span class="caret"></span></button>
-<ul class="dropdown-menu">
+<ul class="dropdown-menu" style="text-align:left;">
 {{#each this}}
 <li><a href="#" data-src="{{extension}}" class="voiceMailItem">{{name}}</a></li>
 {{/each}}

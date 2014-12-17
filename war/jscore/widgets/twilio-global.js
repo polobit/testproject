@@ -1003,7 +1003,7 @@ function sendVoiceAndEndCall(fileSelected) {
 		var contact_name = getContactName(json);
 		var	el = $("#noteForm");
 	 	$('.tags',el).html('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ json.id +'">'+contact_name+'</li>');
-	 	$("#noteForm #subject").val(TWILIO_CALLTYPE + " call - Leaved Voicemail");
+	 	$("#noteForm #subject").val(TWILIO_CALLTYPE + " call - Left voicemail");
  		$("#noteForm #description").val("");
  		$("#noteForm").find("#description").focus();
 		$('#noteModal').modal('show');

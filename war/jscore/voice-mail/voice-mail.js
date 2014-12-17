@@ -107,21 +107,21 @@ function saveVoiceMail(form_id, modal_id, saveBtn, json)
 
 	disable_save_button($(saveBtn));
 	
-//	if(form_id)
-//	{
-//		if (!isValidForm('#' + form_id)) {
-//			enable_save_button($(saveBtn));
-//			return false;
-//		}
-//		
-//		var url = $('#' + form_id).find('#upload_url').val();
-//		if(url == "")
-//		{
-//			$('#' + form_id).find('#error').html('<div class="alert alert-error">Sorry! Wave file not uploaded properly.</div>');
-//			enable_save_button($(saveBtn));
-//			return;
-//		}
-//	}
+	if(form_id)
+	{
+		if (!isValidForm('#' + form_id)) {
+			enable_save_button($(saveBtn));
+			return false;
+		}
+		
+		var url = $('#' + form_id).find('#upload_url').val();
+		if(url == "")
+		{
+			$('#' + form_id).find('#error').html('<div class="alert alert-error">Sorry! Wave file not uploaded properly.</div>');
+			enable_save_button($(saveBtn));
+			return;
+		}
+	}
 	
 	var newVoiceMail = new Backbone.Model();
 	newVoiceMail.url = 'core/api/voicemails';
