@@ -241,6 +241,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("facebook.js");
 	}
+	else if (templateName.indexOf("callscript") == 0)
+	{
+	template_relative_urls.push("callscript.js");
+	}
 	if (templateName.indexOf("chargify") == 0)
 	{
 		template_relative_urls.push("chargify.js");
