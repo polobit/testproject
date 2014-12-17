@@ -105,7 +105,7 @@ function isValidForm(form) {
 		if(value=="")
 			return false;
 		
-		return /^[0-9]+$/.test(value);
+		return /^[0-9\-]+$/.test(value);
 	}," Please enter a valid number.");
 	
 	$(form).validate({
