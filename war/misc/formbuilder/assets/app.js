@@ -1,4 +1,3 @@
-
 define(
 		[
 				"jquery", "underscore", "backbone", "collections/snippets", "collections/my-form-snippets", "views/tab", "views/my-form",

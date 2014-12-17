@@ -68,6 +68,11 @@ textarea {
 	font-family: monospace;
 }
 
+#form-save {
+	float: right;
+	margin-top: -40px;
+}
+
 /* Popovers now are appended to their parent rather
 than to the body/main document as they once were.
 We need to over-ride some inherited stuff.. */
@@ -189,7 +194,7 @@ form .popover form {
 	padding: 10px 16px !important;
 }
 
-.agile-field input[type="text"] {
+.agile-field input[type="text"] input[type="email"] {
 	padding: 6px 12px;
 }
 
@@ -206,23 +211,23 @@ form .popover form {
 	position: relative;
 }
 
-.agile-input-group input[type="text"] {
+.agile-input-group input[type="text"] input[type="email"] {
 	display: table-cell;
 }
 
-.agile-input-group input[type="text"]:first-child,.agile-input-group .agile-group-addon:first-child
+.agile-input-group input[type="text"]:first-child input[type="email"]:first-child, .agile-input-group .agile-group-addon:first-child
 	{
 	border-bottom-right-radius: 0;
 	border-top-right-radius: 0;
 }
 
-.agile-input-group input[type="text"]:last-child,.agile-input-group .agile-group-addon:last-child
+.agile-input-group input[type="text"]:last-child input[type="email"]:last-child, .agile-input-group .agile-group-addon:last-child
 	{
 	border-bottom-left-radius: 0;
 	border-top-left-radius: 0;
 }
 
-.agile-group-addon:first-child,.agile-input-group input[type="text"]:first-child
+.agile-group-addon:first-child, .agile-input-group input[type="text"]:first-child input[type="email"]:first-child
 	{
 	border-right: 0 none;
 }
@@ -246,7 +251,7 @@ form .popover form {
 	border-bottom-left-radius: 4px;
 }
 
-input[type="text"],textarea,input[type="password"] {
+input[type="text"], input[type="email"], textarea, input[type="password"] {
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
@@ -259,7 +264,7 @@ input[type="text"],textarea,input[type="password"] {
 	margin: 0;
 }
 
-input[type="text"]:focus,textarea:focus,input[type="password"]:focus {
+input[type="text"]:focus, input[type="email"]:focus, textarea:focus, input[type="password"]:focus {
 	border: 1px solid #66afe9;
 }
 
@@ -286,9 +291,4 @@ legend {
 
 fieldset {
 	border: none;
-}
-
-#form-save {
-	float: right;
-	margin-top: -40px;
 }
