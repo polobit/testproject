@@ -25,9 +25,9 @@ dealdetails : function(id)
 		
 	} });
 
-	var el = this.dealDetailView.render(true).el;
+	var ele = this.dealDetailView.render(true).el;
 	$("#content").html(getRandomLoadingImg());
-	$('#content').html(el);
+	$('#content').html(ele);
 
 },
 

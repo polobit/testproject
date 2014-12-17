@@ -497,13 +497,16 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 				}
 
 			}
-			else if(Current_Route=="deal/"+App_Deal_Details.dealDetailView.model.id){
-				window.location.reload(true);
-			}
+			
 			else {
-				App_Deals.navigate("deals", {
-					trigger : true
-				});
+				App_Deal_Details.dealDetailView.model = data;
+				App_Deal_Details.dealDetailView.render(true)
+				Backbone.history.navigate("deal/"+data.toJSON().id , {
+		            trigger: true
+		        });
+					
+					
+					
 			}
 		}
 	});
