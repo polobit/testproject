@@ -205,19 +205,26 @@ public class HomeServlet extends HttpServlet
 	}
 
 	// If user is new user it will create new AgileUser and set cookie for
-	// inital page tour. It also calls to initialize defaults, if user is
+	// initial page tour. It also calls to initialize defaults, if user is
 	// first user in the domain.
 	setUpAgileUser(req, resp);
     }
 
     private void setAccountTimezone(HttpServletRequest req)
     {
-	// TODO Auto-generated method stub
-	AccountPrefs accPrefs = AccountPrefsUtil.getAccountPrefs();
-	if (accPrefs.timezone.equals("UTC"))
+	try
 	{
-	    accPrefs.timezone = (String) req.getSession().getAttribute("account_timezone");
-	    accPrefs.save();
+	    // Set timezone in account prefs.
+	    AccountPrefs accPrefs = AccountPrefsUtil.getAccountPrefs();
+	    if ("UTC".equals(accPrefs.timezone))
+	    {
+		accPrefs.timezone = (String) req.getSession().getAttribute("account_timezone");
+		accPrefs.save();
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception in setting timezone in account prefs.");
 	}
     }
 }
