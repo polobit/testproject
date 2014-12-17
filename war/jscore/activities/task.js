@@ -13,12 +13,7 @@ $(function() {
 	loadProgressSlider($("#taskForm"));
 	loadProgressSlider($("#updateTaskForm"));
 
-	/**
-	 * To stop propagation to edit page
-	 */ 
-	$(".activate-link").die().live('click', function(e){
-		e.stopPropagation();
-	});
+
 	
 	/**
 	 * Activates all features of a task form (highlighting the task form,
@@ -69,7 +64,7 @@ $(function() {
 	 * next-week) while displaying them in client side.Each category has it's
 	 * own table, so to edit tasks call update_task function for each category.
 	 */
-	$('#overdue > tr').live('click', function(e) {
+/*	$('#overdue > tr').live('click', function(e) {
 		e.preventDefault();
 		update_task(this);
 	});
@@ -84,7 +79,7 @@ $(function() {
 	$('#next-week > tr').live('click', function(e) {
 		e.preventDefault();
 		update_task(this);
-	});
+	});*/
 	
 	/**
 	 * Task list edit

@@ -61,7 +61,7 @@
 {{/if_equals}} 
 </div>
 
-<div class="row-fluid"  style="border-bottom: 1px solid #ddd;margin-bottom: 15px; padding-bottom: 30px;">
+<div class="row-fluid"  style="border-bottom: 1px solid #ddd;margin-bottom: 15px; padding-bottom: 30px;height: 40px;">
 <div class="span2" id="task-contact-img" style="margin-top: 7px;">
 <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:104px;overflow:hidden;display:inline-block;">
         	{{#each contacts}}
@@ -85,8 +85,8 @@
 		<div class="span9">
 			<ul class="nav nav-tabs" id="taskDetailsTab">
                 <li  class="active"><a data-toggle="tab" href="#activity">Activity</a></li>
-				<li><a data-toggle="tab" href="#contacts">Related</a></li>
 				<li><a data-toggle="tab" href="#notes">Notes</a></li>
+				<li><a data-toggle="tab" href="#contacts">Related</a></li>
 			</ul>
            
 			<div class="tab-content" id="task_tab_detail">
@@ -207,7 +207,7 @@
 
 <script id="task-related-activity-model-template" type="text/html">
 <div style="display:block;" class="activity">
-<div class="slate">
+<div class="activity-text-block" style="background: #f5f5f5;">
 	<span class="activity-block-owner">
        
          <img class="thumbnail img-inital"  src="{{userPic}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
@@ -216,7 +216,7 @@
 
 
    {{#if_equals "TASK_EDIT" activity_type}}
-	<div style="background:none;border:none;margin-top: 8px;text-transform: capitalize;">
+	<div style="background:none;border:none;margin-top: 8px;">
          {{displayActivityFieldText custom3}} updated
 	</div>	
      {{/if_equals}}
@@ -248,7 +248,7 @@
 
  {{#if_equals "TASK_COMPLETED" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;text-transform: capitalize;">
-        Task Status Change to Completed
+        Task Status Changed to Completed
 	</div>	
      {{/if_equals}}
 

@@ -19,6 +19,20 @@ taskDetailView : function(id)
 												$("#content").html(getTemplate("task-detail", task.toJSON()));
 												task_details_tab.loadActivitiesView();
 
+								}else if(App_Calendar.tasksListView){
+												var task = App_Calendar.tasksListView.collection.get(id);
+												taskDetailView = task;
+												$("#content").html(getTemplate("task-detail", task.toJSON()));
+												task_details_tab.loadActivitiesView();
+								}else{
+												var taskModel = Backbone.Model.extend({});
+												$.ajax({url:"core/api/tasks/getTaskObject/"+id,success:function(response){
+																taskDetailView = new taskModel(response);
+																$("#content").html(getTemplate("task-detail", 	taskDetailView.toJSON()));
+																task_details_tab.loadActivitiesView();
+												}});
+							
+												
 								}
 				}
 
