@@ -1,5 +1,5 @@
 {
-    "name": "Check Buisness Hours",
+    "name": "Check Business Hours",
     "thumbnail": "json/nodes/images/common/Time.png",
     "icon": "json/nodes/icons/common/Time.png",
     "info": "Check if the current time is within the set business hours.",
