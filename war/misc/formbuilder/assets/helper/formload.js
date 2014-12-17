@@ -11,7 +11,7 @@ define([
 			success: function(data){
 				saveform = JSON.parse(data.formJson);
 				var formLabel = saveform[0].fields.name.value;
-				$('#form-label').text("Editing form "+ formLabel + " ...");
+				$('#form-label').text('Editing form "'+ formLabel + '"');
 				new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(saveform) });
 			}
 		});

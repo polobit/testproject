@@ -20,6 +20,7 @@ var _agile_synch_form_v2 = function()
 
 	var agile_address = {};
 	var agile_tags;
+	var agile_notes = [];
 
 	// Build contact JSON
 	for ( var i = 0; i < agile_form.length; i++)
@@ -36,6 +37,13 @@ var _agile_synch_form_v2 = function()
 					agile_tags = agile_tags + ',' + value;
 				else
 					agile_tags = value;
+			}
+			else if (name == "note")
+			{
+				var agile_note = {};
+				agile_note.subject = agile_form[i].parentNode.parentNode.getElementsByTagName("label")[0].innerHTML;
+				agile_note.description = value;
+				agile_notes.push(agile_note);
 			}
 			else
 				agile_contact[name] = value;
@@ -73,9 +81,34 @@ var _agile_synch_form_v2 = function()
 	// Create contact
 	_agile.create_contact(agile_contact, { success : function(data)
 	{
-		agile_formCallback([
-				"", agile_error_msg
-		], agile_button, agile_redirect_url);
+		var note_counter = 0;
+		if (agile_notes.length > 0)
+		{
+			for ( var h = 0; h < agile_notes.length; h++)
+			{
+				_agile.add_note(agile_notes[h], { success : function(data)
+				{
+					note_counter++;
+					if (note_counter == agile_notes.length)
+					{
+						agile_formCallback([
+								"", agile_error_msg
+						], agile_button, agile_redirect_url);
+					}
+				}, error : function(data)
+				{
+					agile_formCallback([
+							"There was an error in sending data", agile_error_msg
+					], agile_button, agile_redirect_url, data);
+				} });
+			}
+		}
+		else
+		{
+			agile_formCallback([
+					"", agile_error_msg
+			], agile_button, agile_redirect_url);
+		}
 	}, error : function(data)
 	{
 		if (data.error.indexOf('Duplicate') != -1)
@@ -83,9 +116,36 @@ var _agile_synch_form_v2 = function()
 			// Update contact if duplicate
 			_agile.update_contact(agile_contact, { success : function(data)
 			{
-				agile_formCallback([
-						"", agile_error_msg
-				], agile_button, agile_redirect_url);
+				var note_counter = 0;
+				if (agile_notes.length > 0)
+				{
+					for ( var h = 0; h < agile_notes.length; h++)
+					{
+						_agile.add_note(agile_notes[h], { success : function(data)
+						{
+							note_counter++;
+							if (note_counter == agile_notes.length)
+							{
+								agile_formCallback([
+										"", agile_error_msg
+								], agile_button, agile_redirect_url);
+
+							}
+						}, error : function(data)
+						{
+							agile_formCallback([
+									"There was an error in sending data", agile_error_msg
+							], agile_button, agile_redirect_url, data);
+						} });
+					}
+				}
+				else
+				{
+					agile_formCallback([
+							"", agile_error_msg
+					], agile_button, agile_redirect_url);
+				}
+
 			}, error : function(data)
 			{
 				agile_formCallback([

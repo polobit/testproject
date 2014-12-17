@@ -1,3 +1,5 @@
 <!-- Form Name -->
-<script type="text/javascript" src="https://<%= agiledomain %>.agilecrm.com/stats/min/agile-min.js"></script>
+<script type="text/javascript">
+if(typeof _agile == "undefined"){var agile_min = document.createElement("script");agile_min.type = "text/javascript";agile_min.src = "https://<%=agiledomain%>.agilecrm.com/stats/min/agile-min.js";document.getElementsByTagName("head")[0].appendChild(agile_min);}
+</script>
 <legend id="agile-form-data" name="<%= agiledomain %> <%= agileapi %> <%= agileredirecturl %> <%= agileformidtag %>"><%= name %></legend>

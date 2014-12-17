@@ -79,3 +79,34 @@ function agile_formCallback(error, button, url, data)
 		window.location.replace(url);
 	}, 1500);
 }
+
+function _agile_load_form_fields()
+{
+	var email = agile_read_cookie("agile-email");
+	if (!email)
+		return;
+
+	_agile.get_contact(email, { success : function(data)
+	{
+		if (data)
+		{
+			var rj = {};
+			var cp = data.properties;
+			for ( var r = 0; r < cp.length; r++)
+			{
+				rj[cp[r].name] = cp[r].value;
+			}
+			var form = document.getElementById("agile-form");
+			for ( var s = 0; s < form.length; s++)
+			{
+				if (rj[form[s].name])
+				{
+					form[s].value = rj[form[s].name];
+				}
+			}
+		}
+	}, error : function(data)
+	{
+		return;
+	} });
+}
