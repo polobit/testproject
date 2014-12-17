@@ -1086,10 +1086,10 @@ Added Tag to <a href="#contact/{{entity_id}}">{{label}}</a><br/>
 <div>	
 {{#if_equals "1" custom2}}
    Removed contact from Document <a href="{{custom1}}" target="_blank">{{label}}</a><br/>
-  <i class="icon-user"></i>Removed {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}. Document type - {{network entityObject.network_type}} 
+  <i class="icon-file"></i>Removed {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}. Document type - {{network entityObject.network_type}} 
 {{else}} 
 	 Removed contacts from Document <a href="{{custom1}}" target="_blank">{{label}}</a><br/>
-<i class="icon-user"></i>Removed {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}. Document type - {{network entityObject.network_type}}
+<i class="icon-file"></i>Removed {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}. Document type - {{network entityObject.network_type}}
 {{/if_equals}}	
 </div>
 <div>
