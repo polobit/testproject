@@ -181,7 +181,7 @@ if(isIE || isIENew)
 					
 					<div id="openid_btns" style="padding: 5px 0 15px;">
 						<input type='hidden' name='type' value='agile'></input>
-						<input type='hidden' name='account_timezone' value='<%=TimeZone.getDefault().getID()%>'></input>
+						<input type='hidden' name='account_timezone' value=''></input>
 						<input class="input-xlarge required email field" name='email' type="text" maxlength="50" minlength="6" placeholder="User ID (Your Email Address)" autocapitalize="off" autofocus
 						<%if(request.getAttribute("agile_email")  != null) {%> value="<%=request.getAttribute("agile_email") %>" <%}%>>
 						
@@ -205,10 +205,11 @@ if(isIE || isIENew)
 			Forgot <a href="/forgot-password">Password? </a><a href="/forgot-domain">Domain?</a>
 		</div>
 	</div>
-
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
+			$('#account_timezone').val(jstz.determine().name);
 			console.log("starting of login");
 			$('.openid_large_btn').click(function(e)
 			{
