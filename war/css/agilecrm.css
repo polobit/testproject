@@ -1848,3 +1848,20 @@ text-overflow:ellipsis;
 	margin-left:-4px;
 }
 
+.custom-fields-table tbody tr td:nth-child(n+2) {
+	border-left: none;
+}
+.custom-fields-table {
+	border-top: medium none;
+}
+.custom-fields-table tbody tr:first-child td:first-child {
+	border-top: 1px solid #ddd;
+	border-radius: 4px 0 0;
+}
+.custom-fields-table tbody tr:first-child td:nth-child(2){
+	border-top: 1px solid #ddd;
+}
+.custom-fields-table tbody tr:first-child td:nth-child(3){
+	border-top: 1px solid #ddd;
+	border-radius: 0 4px 0 0;
+}
