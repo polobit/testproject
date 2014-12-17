@@ -3535,7 +3535,7 @@ $(function()
 	    	return "No answer";
 	    	break;
 	    case "in-progress":
-	    	return "Leaved voicemail";
+	    	return "Left voicemail";
 	    	break;
 	    default:
 	        return "";

@@ -757,6 +757,7 @@ function setUpGlobalTwilio()
 			
 			console.log("Incoming call calSid new  " + conn.parameters.CallSid);
 			
+			var messageObj = conn.message;			
 			var widgetDetails = twilioGetWidgetDetails();
 			var widgetPrefs = $.parseJSON(widgetDetails.prefs);
 			var acc_sid = widgetPrefs.twilio_acc_sid;
@@ -987,27 +988,18 @@ function searchForContact(from) {
 
 function sendVoiceAndEndCall(fileSelected) {
 	console.log("Sending voice mail...");
-	alert("Voicemail will be sent to user.Current call will be closed.");
+//	alert("Voicemail will be sent to user.Current call will be closed.");
+	var messageObj = globalconnection.message;
 	if(twilioVoiceMailRedirect(fileSelected)) {
 		closeTwilioNoty();
-		var json = $.parseJSON(
-		        $.ajax({
-		            url: "core/api/contacts/"+TWILIO_CONTACT_ID, 
-		            async: false,
-		            dataType: 'json'
-		        }).responseText
-		    );
-		if(json == null) {
-			return showNewContactModal(messageObj);
-		}		 
-		var contact_name = getContactName(json);
-		var	el = $("#noteForm");
-	 	$('.tags',el).html('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ json.id +'">'+contact_name+'</li>');
-	 	$("#noteForm #subject").val(TWILIO_CALLTYPE + " call - Left voicemail");
- 		$("#noteForm #description").val("");
- 		$("#noteForm").find("#description").focus();
-		$('#noteModal').modal('show');
-		agile_type_ahead("note_related_to", el, contacts_typeahead);
+		if(TWILIO_CONTACT_ID) {		
+		//add note automatically
+		$.post( "/core/api/widgets/twilio/autosavenote", {
+			subject: TWILIO_CALLTYPE + " call - Left voicemail",
+			message: "",
+			contactid: TWILIO_CONTACT_ID
+			});
+		}
 	}
 }
 
