@@ -1,5 +1,5 @@
 <script id="task-detail-template" type="text/html">
-<div class="row-fluid" style="border-bottom: 1px solid #ddd; padding-bottom: 40px; margin-bottom: 20px; margin-top:25px;">
+<div class="row">
        <div class="span12">
 			<div class="row-fluid">
                  <span class="pull-left taskDetail-text"> 
@@ -7,7 +7,7 @@
                   </span>
 					<span class="label" style="margin-top: 11px;display: inline-block;margin-left: 10px">{{task_property type}}</span>                  
                     {{#if_not_equals priority_type "NORMAL" }}
-                   <span class="label label-{{task_label_color priority_type}}" style="margin-top: 11px;display: inline-block;margin-left: 20px">{{ucfirst priority_type}}</span>
+                   <span class="label label-{{task_label_color priority_type}}" style="margin-top: 11px;display: inline-block;margin-left: 4px">{{ucfirst priority_type}}</span>
                          {{/if_not_equals}}
                  	<!--  starting rating,edit,owner -->
 					<div class="pull-right" data="{{id}}" id="task_edit">
@@ -61,7 +61,7 @@
 {{/if_equals}} 
 </div>
 
-<div class="row-fluid">
+<div class="row-fluid"  style="border-bottom: 1px solid #ddd;margin-bottom: 15px; padding-bottom: 30px;">
 <div class="span2" id="task-contact-img" style="margin-top: 7px;">
 <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:104px;overflow:hidden;display:inline-block;">
         	{{#each contacts}}
@@ -76,16 +76,10 @@
 </div>
 </div> 
 
-
- <!-----------------ending of task status------------------------>
-
-
-
-
-           </div>
+  </div>
 </div>
 
-		<div class="row-fluid">
+		<div class="row">
 		<!--  starting time line view -->
        <!-- ending of tabs --->
 		<div class="span9">
@@ -199,21 +193,20 @@
                     <img alt="Clipboard" src="/img/clipboard.png" />
                 </div>
                 <div class="box-right">
-                    <h3>You have any activity.</h3>
+                    <h3>No Activity Found.</h3>
                 </div>
             </div>
         </div>
  {{/unless}}
 
 {{#if this.length}}
-<div class="page-header" style="margin-top: 0px !important;border-bottom: 0px;"></div>
+<div class="page-header" style="margin-top: 0px !important;padding-bottom: 0px;border-bottom: 0px;"></div>
 	<ul id="task-related-activity-model-list" class="ativity-block-ul" style="margin:0px;"></ul>
 {{/if}}
 </script>
 
 <script id="task-related-activity-model-template" type="text/html">
 <div style="display:block;" class="activity">
-
 <div class="slate">
 	<span class="activity-block-owner">
        
@@ -267,8 +260,8 @@
 
 
  {{#if_equals "TASK_RELATED_CONTACTS" activity_type}}
-	<div style="background:none;border:none;margin-top: 8px;text-transform: capitalize;">
-        New related Contact attached to task
+	<div style="background:none;border:none;margin-top: 8px;">
+    {{#if related_contact_ids}}New Related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} attached to the task
 	</div>	
      {{/if_equals}}
 

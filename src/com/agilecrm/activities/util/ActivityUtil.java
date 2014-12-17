@@ -572,10 +572,10 @@ public class ActivityUtil
 	return dao.listByProperty(searchMap);
     }
 
-    public static List<Activity> getActivitites(String entitytype, int max, String cursor)
+    public static List<Activity> getActivitites(Long entityId, int max, String cursor)
     {
 	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("entity_type", entitytype);
+	searchMap.put("entity_id", entityId);
 
 	if (max != 0)
 	    return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");

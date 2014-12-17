@@ -4397,8 +4397,9 @@ $(function()
 								if (!name)
 												return;
 
-								var name_json = { "DEAL_ADD" : "Deal Created", "DEAL_EDIT" : "Deal Edited", "DEAL_CLOSE" : "Deal Closed", "DEAL_LOST" : "Deal Lost", "DEAL_RELATED_CONTACTS" : "Deal Related Contacts", "DEAL_OWNER_CHANGE" : "Deal Owner Change", "DEAL_MILESTONE_CHANGE" : "Deal Milestone Change",
-												"NOTE_ADD" : "Note Add","TASK_ADD":"Task Added", "TASK_EDIT":"Task Edited", "TASK_PROGRESS_CHANGE":"Task Progress Changed", "TASK_OWNER_CHANGE":"Task Owner Changed", "TASK_STATUS_CHANGE":"Task Status Changed","TASK_COMPLETED":"Task Completed","TASK_DELETE":"Task Deleted",
+
+								var name_json = { "DEAL_ADD" : "Deal Created", "DEAL_EDIT" : "Deal Edited", "DEAL_CLOSE" : "Deal Closed", "DEAL_LOST" : "Deal Lost", "DEAL_RELATED_CONTACTS" : " Deal Contacts Changed", "DEAL_OWNER_CHANGE" : "Deal Owner Changed", "DEAL_MILESTONE_CHANGE" : "Deal Milestone Changed",
+												"NOTE_ADD" : "Note Added","TASK_ADD":"Task Created", "TASK_EDIT":"Task Updated", "TASK_PROGRESS_CHANGE":"Task Progress Changed", "TASK_OWNER_CHANGE":"Task Owner Changed", "TASK_STATUS_CHANGE":"Task Status Changed","TASK_COMPLETED":"Task Completed","TASK_DELETE":"Task Deleted",
 												"TASK_RELATED_CONTACTS":"Task Related Contacts Updated"
  };
 

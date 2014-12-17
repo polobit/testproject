@@ -49,7 +49,7 @@ var task_details_tab = {
 				{
 								var taskJSON = taskDetailView.toJSON();
 								var domainUserId = taskJSON.domain
-								taskActivitiesView = new Base_Collection_View({ url : '/core/api/activitylog/getActivityByType?entity_type=TASK', templateKey : "task-related-activity",
+								taskActivitiesView = new Base_Collection_View({ url : '/core/api/activitylog/getActivityByEntityId?entity_id='+taskJSON.id+'', templateKey : "task-related-activity",
 												individual_tag_name : 'li',sortKey : "time", descending : false,cursor : true, page_size : 25 });
 								taskActivitiesView.collection.fetch();
 								$('#task_tab_detail').find('#activity').html(taskActivitiesView.el);
