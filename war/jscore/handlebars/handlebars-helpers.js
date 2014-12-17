@@ -3529,7 +3529,7 @@ $(function()
 	    	return "Busy";
 	    	break;
 	    case "failed":
-	    	return "Failed"
+	    	return "Failed";
 	    	break;
 	    case "no-answer":
 	    	return "No answer";
