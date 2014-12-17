@@ -440,8 +440,8 @@
             ]
         },
         {
-            "label": "New Templates",
-            "category": "templates",
+            "label": "Responsive",
+            "category": "responsive",
             "themes": [
                 {
                     "label": "Elena",
