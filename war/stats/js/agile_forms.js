@@ -13,7 +13,9 @@ var _agile_synch_form_v2 = function()
 	var agile_form_data = document.getElementById('agile-form-data').getAttribute('name').split(" ");
 	var agile_contact = {};
 	var agile_redirect_url = agile_form_data[2];
-	var agile_form_data_string = agile_form_data[0] + " " + agile_form_data[1] + " " + agile_redirect_url + " ";
+	var agile_api = agile_form_data[1];
+	var agile_domain = agile_form_data[0];
+	var agile_form_data_string = agile_domain + " " + agile_api + " " + agile_redirect_url + " ";
 	var agile_form_identification_tag = document.getElementById('agile-form-data').getAttribute('name').replace(agile_form_data_string, "");
 
 	var agile_address = {};
@@ -64,6 +66,13 @@ var _agile_synch_form_v2 = function()
 
 	// If email, api, domain present execute JSAPI
 	var agile_email = agile_contact.email;
+
+	// Set account, tracking
+	if (!(agile_id.get() && agile_id.getNamespace()))
+	{
+		_agile.set_account(agile_api, agile_domain);
+		_agile.track_page_view();
+	}
 
 	// Set email
 	if (agile_email)
