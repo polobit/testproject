@@ -824,10 +824,28 @@ public class ActivityReportsUtil
 	for (Activity activity : activities)
 	{
 	    long custom4 = Long.parseLong(activity.custom4);
-	    if (!StringUtils.isEmpty(activity.custom4))
+	    String message = "";
+	    String link = null;
+
+	    if (activity.entity_id != null)
+		link = "<a href=\"https://" + user.domain + ".agilecrm.com/#contact/" + activity.entity_id
+			+ "\" target=\"_blank\">" + activity.label + "</a>";
+	    else
+		link = activity.label;
+
+	    if (activity.custom2.equalsIgnoreCase("incoming"))
+		message += "From " + link + " (Outgoing";
+	    else
+		message += "To " + link + " (Incoming";
+
+	    if (!StringUtils.isEmpty(activity.custom4) && custom4 > 0)
 	    {
-		activity.custom4 = convertSecToHours(Long.parseLong(activity.custom4), true);
+		message += " - " + convertSecToHours(Long.parseLong(activity.custom4), true);
 	    }
+
+	    message += ")";
+
+	    activity.custom4 = message;
 	    if (activity.custom3.equalsIgnoreCase("completed"))
 	    {
 		doneCallActivities.add(activity);
