@@ -44,8 +44,12 @@
 						<a class="btn btn-primary add-widget" href="#{{name}}" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
 						{{else}}
 							{{#if_equals widget_type "CALL"}}
-								<a class="btn btn-primary add-widget" href="#{{name}}" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
-								{{else}}
+                               {{#if_equals name "CallScript"}}
+								   <a class="btn btn-primary add-widget" href="#callscript" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
+                               {{else}}
+                                   <a class="btn btn-primary add-widget" href="#{{name}}" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
+							   {{/if_equals}}
+							{{else}}
 								<a class="btn btn-primary" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Add</a><span style="margin-left:5px"><i>Paid accounts only</i></span>
 							{{/if_equals}}
 					{{/if_equals}}

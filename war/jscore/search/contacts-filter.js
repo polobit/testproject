@@ -325,7 +325,7 @@ function chainFilters(el, data, callback, is_webrules, is_company)
 	} else {
 		if(!CONTACT_CUSTOM_FIELDS)
 		{
-			$("#content").html(getRandomLoadingImg());
+			//$("#content").html(getRandomLoadingImg());
 			fillContactCustomFieldsInFilters(el, function(){
 				show_chained_fields(el, data, true);
 				if (callback && typeof (callback) === "function")
