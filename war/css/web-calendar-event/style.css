@@ -198,10 +198,23 @@ font-size: 15px;
 
 div.datepicker table td {
 	text-align: right;
-	padding: 8px !important;
+	/*padding: 8px !important;*/
 	margin: 0;
 }
-
+.datepickerDays td a,.datepickerMonths td a,.datepickerYears td a
+{
+	width: 40px;
+padding: 8px 0px;
+display: block;
+box-sizing: content-box;
+-webkit-box-sizing:content-box;
+-ms-box-sizing:content-box;
+-o-box-sizing:content-box;
+}
+.datepickerYears td a
+{
+	width:58px;
+}
 .datepickerGoNext a,.datepickerGoPrev a {
 	color: #0198E1 !important;
 }
@@ -380,7 +393,12 @@ div.datepicker table td {
 	.segment p.choose {
 		margin-bottom: 25px;
 	}
+	
 }
+
+.segment p.choose {
+		margin-bottom: 25px;
+	}
 
 @media screen and (max-width: 435px) {
 	.segment2 {
