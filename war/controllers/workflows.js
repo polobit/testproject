@@ -603,6 +603,12 @@ var WorkflowsRouter = Backbone.Router
 							
 							populate_owners_in_trigger($('form#addTriggerForm', el), 'event-owner-id', currentTrigger.toJSON()["event_owner_id"]);
 						}
+						
+						//Inbound of Outbound call
+						if(type == 'INBOUND_CALL' || type == 'OUTBOUND_CALL')
+						{
+							populate_call_trigger_options($('form#addTriggerForm', el));	
+						}
 
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 

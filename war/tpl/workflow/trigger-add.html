@@ -49,6 +49,9 @@
 										<option value="EMAIL_LINK_CLICKED">Email Link Clicked</option>
 										<optgroup label="Calendar">
 										<option value="EVENT_IS_ADDED">Event is added</option>
+										<optgroup label="Call">
+										<option value="INBOUND_CALL">Inbound Call</option>
+										<option value="OUTBOUND_CALL">Outbound Call</option>
 									</select>
                                 </div>
                             </div>
@@ -71,7 +74,25 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="control-group" style="display:none;">
+						
+						<!--Call Inbound and Outbound -->
+						<div class="control-group" style="display: none;">
+							<div id="CALL">
+								<label class="control-label INBOUND_CALL OUTBOUND_CALL" style="width:200px!important;"></label>
+								<div class="controls" style="margin-left:220px!important;width:230px!important;">	
+									<select name="call_disposition">
+										<option value="" class="INBOUND_CALL OUTBOUND_CALL">Select call status</option>
+										<option value="ALL" class="INBOUND_CALL OUTBOUND_CALL">All</option>			
+										<option value="completed" class="INBOUND_CALL OUTBOUND_CALL">Answered</option>
+										<option value="busy" class="INBOUND_CALL OUTBOUND_CALL">Busy</option>
+										<option value="failed" class="OUTBOUND_CALL">Incorrect Number</option>
+										<option value="in-progress" class="OUTBOUND_CALL">Voicemail</option>
+									</select>
+								</div>
+							</div>
+						</div>
+                        
+						<div class="control-group" style="display:none;">
 							<div class="controls" style="margin-left:220px!important;">
                             <select id="trigger-deal-milestone" name="trigger_deal_milestone" class="required">
                                     <option value="">Select...</option>
@@ -170,7 +191,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-actions">          
+                        <div class="form-actions" style="padding-left: 220px;">          
                             <a href="#triggers" id="trigger-save" class="save btn btn-primary">Save</a>
                             <a href="#" id="trigger-cancel" class="btn">Cancel</a> 
                         </div>

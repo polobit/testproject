@@ -14,13 +14,17 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
+import com.agilecrm.workflows.triggers.util.CallTriggerUtil;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
 import com.twilio.sdk.client.TwilioCapability;
 import com.twilio.sdk.client.TwilioCapability.DomainException;
@@ -536,10 +540,28 @@ public class TwilioWidgetsAPI
 	@Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public String saveCallActivity(@FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration) {		
-		if(direction.equalsIgnoreCase("outbound-dial"))
-			ActivityUtil.createLogForCalls("twilio", phone, "outgoing", status, duration);
-		if(direction.equalsIgnoreCase("inbound"))
-			ActivityUtil.createLogForCalls("twilio", phone, "incoming", status, duration);		
+	    
+	    	if (StringUtils.isBlank(phone))
+		    return "";
+
+		Contact contact = ContactUtil.searchContactByPhoneNumber(phone);
+
+		if (direction.equalsIgnoreCase("outbound-dial"))
+		{
+		    ActivityUtil.createLogForCalls("twilio", phone, "outgoing", status, duration, contact);
+
+		    // Trigger for outbound
+		    CallTriggerUtil.executeTriggerForCall(contact, "twilio", "outgoing", status, duration);
+		}
+
+		if (direction.equalsIgnoreCase("inbound"))
+		{
+		    ActivityUtil.createLogForCalls("twilio", phone, "incoming", status, duration, contact);
+
+		    // Trigger for inbound
+		    CallTriggerUtil.executeTriggerForCall(contact, "twilio", "incoming", status, duration);
+		}
+	
 		return "";
 	}
 	

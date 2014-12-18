@@ -53,6 +53,11 @@ $(function()
 			
 			$('form#addTriggerForm').find('select#event-type').closest('div.control-group').css('display', 'none');
 		}
+		
+		// Hide trigger milestones div for other trigger conditions.
+		if ($(this).val() !== 'INBOUND_CALL' || $(this).val() !== 'OUTBOUND_CALL'){
+			$('form#addTriggerForm').find('div#CALL').closest('div.control-group').css('display', 'none');
+		}
 			
 
 		// Initialize tags typeahead
@@ -110,6 +115,11 @@ $(function()
 			$('form#addTriggerForm').find('select#event-type').closest('div.control-group').css('display', '');
 			
 			populate_owners_in_trigger($('form#addTriggerForm'), 'event-owner-id');
+		}
+		
+		if($(this).val() == 'INBOUND_CALL' || $(this).val()=='OUTBOUND_CALL')
+		{
+			populate_call_trigger_options($('form#addTriggerForm'));	
 		}
 			
 	});
@@ -273,6 +283,13 @@ function populate_owners_in_trigger(trigger_form, owner_select_id, trigger_owner
 			}
 		
 	}, optionsTemplate, false, undefined, "Select Event Owner");
+}
+
+function populate_call_trigger_options(trigger_form)
+{
+	trigger_form.find('div#CALL').closest('div.control-group').css('display', '');
+	
+	$('#CALL').chained('#LHS');	
 }
 
 /**
