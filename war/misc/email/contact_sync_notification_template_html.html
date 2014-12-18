@@ -29,6 +29,9 @@
 									&nbsp;- Merged Contacts: {{HashMap.MERGED_CONTACTS}}
 									{{/HashMap.MERGED_CONTACTS}}<br />
 								 <b>Failed Contacts </b>
+								 {{#HashMap.EMAIL_REQUIRED}}
+									&nbsp;- Email missing: {{HashMap.EMAIL_REQUIRED}}<br />
+									{{/HashMap.EMAIL_REQUIRED}}
 								 {{#HashMap.LIMIT_REACHED}}
 									&nbsp;- Limit exceeded: {{HashMap.LIMIT_REACHED}}<br />
 									{{/HashMap.LIMIT_REACHED}}

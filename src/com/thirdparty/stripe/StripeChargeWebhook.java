@@ -38,12 +38,13 @@ public class StripeChargeWebhook extends HttpServlet
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
 	String apiKey = request.getParameter("api-key");
-	System.out.println("servlet updated, api key is " + apiKey);
+	System.out.println("api key is " + apiKey);
 
 	Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
 	if (owner == null)
 	{
-	    // response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid API Key");
+	    // response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+	    // "Invalid API Key");
 	    return;
 	}
 
@@ -99,8 +100,6 @@ public class StripeChargeWebhook extends HttpServlet
 			String value = agileJson.getString(key);
 			contactProperties.add(new ContactField(key, value, null));
 		    }
-		    System.out.println("Assigning campaign to contact ... ");
-		    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
 
 		    DomainUser user = APIKey.getDomainUserRelatedToAPIKey(apiKey);
 		    if (user != null)
@@ -128,7 +127,8 @@ public class StripeChargeWebhook extends HttpServlet
 			    }
 			}
 
-			if (!(StringUtils.equals(getCustomerId(stripeJson, eventType), "null") || StringUtils.isBlank(getCustomerId(stripeJson, eventType))))
+			if (!(StringUtils.equals(getCustomerId(stripeJson, eventType), "null") || StringUtils
+			        .isBlank(getCustomerId(stripeJson, eventType))))
 			{
 			    ContactField field = new ContactField();
 			    field.type = FieldType.CUSTOM;
@@ -148,8 +148,13 @@ public class StripeChargeWebhook extends HttpServlet
 
 		    contact.setContactOwner(owner);
 		    contact.save();
+
+		    System.out.println("Assigning campaign to contact ... ");
+		    WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id,
+			    new JSONObject().put("stripe", getStripeJSONForTrigger(stripeJson)));
 		}
 	    }
+	    return;
 	}
 	catch (JSONException e)
 	{
@@ -206,13 +211,15 @@ public class StripeChargeWebhook extends HttpServlet
 	return agileJson;
     }
 
-    public List<ContactField> updateAgileContactProperties(List<ContactField> oldProperties, List<ContactField> newProperties)
+    public List<ContactField> updateAgileContactProperties(List<ContactField> oldProperties,
+	    List<ContactField> newProperties)
     {
 	List<ContactField> outDatedProperties = new ArrayList<ContactField>();
 
 	for (ContactField oldProperty : oldProperties)
 	    for (ContactField newProperty : newProperties)
-		if (StringUtils.equals(oldProperty.name, newProperty.name) && StringUtils.equals(oldProperty.subtype, newProperty.subtype))
+		if (StringUtils.equals(oldProperty.name, newProperty.name)
+		        && StringUtils.equals(oldProperty.subtype, newProperty.subtype))
 		    outDatedProperties.add(oldProperty);
 
 	oldProperties.removeAll(outDatedProperties);
@@ -265,7 +272,8 @@ public class StripeChargeWebhook extends HttpServlet
 	    String defaultCardId = stripeJson.getJSONObject("data").getJSONObject("object").getString("default_card");
 	    if (!StringUtils.equals(defaultCardId, "null"))
 	    {
-		JSONArray customerCards = stripeJson.getJSONObject("data").getJSONObject("object").getJSONObject("cards").getJSONArray("data");
+		JSONArray customerCards = stripeJson.getJSONObject("data").getJSONObject("object")
+		        .getJSONObject("cards").getJSONArray("data");
 		for (int i = 0; i < customerCards.length(); i++)
 		{
 		    JSONObject customerCard = customerCards.getJSONObject(i);
@@ -289,7 +297,8 @@ public class StripeChargeWebhook extends HttpServlet
 	try
 	{
 	    if (stripeEventType.contains("charge"))
-		customerId = stripeJson.getJSONObject("data").getJSONObject("object").getJSONObject("card").getString("customer");
+		customerId = stripeJson.getJSONObject("data").getJSONObject("object").getJSONObject("card")
+		        .getString("customer");
 	    else if (stripeEventType.contains("customer"))
 	    {
 		JSONObject defaultCard = getDefaultCustomerCard(stripeJson);
@@ -301,5 +310,35 @@ public class StripeChargeWebhook extends HttpServlet
 	{
 	    return null;
 	}
+    }
+
+    public JSONObject getStripeJSONForTrigger(JSONObject stripeJSON)
+    {
+	JSONObject stripeTriggerJSON = null;
+
+	try
+	{
+	    if (stripeJSON == null)
+		return null;
+
+	    if (stripeJSON.has("data"))
+	    {
+		JSONObject data = stripeJSON.getJSONObject("data");
+
+		if (data.has("object"))
+		    stripeTriggerJSON = data.getJSONObject("object");
+	    }
+
+	    if (stripeTriggerJSON != null)
+		stripeTriggerJSON.put("type", stripeJSON.getString("type"));
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while getting stripe trigger json..." + e.getMessage());
+	}
+
+	return stripeTriggerJSON;
     }
 }

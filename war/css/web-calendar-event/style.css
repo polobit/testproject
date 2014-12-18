@@ -30,6 +30,7 @@ body {
 	/*font-family: ProximaNova-Regular;*/
 }
 
+
 .minutes.activemin {
 	color: #4A90E2;
 }
@@ -340,7 +341,7 @@ div.datepicker table td {
 
 @media screen and (max-width: 991px) {
 	.checkbox-grid li {
-		width: 50% !important;
+		/*width: 50% !important;*/
 	}
 	.segment2 {
 		min-height: 370px;
@@ -348,14 +349,22 @@ div.datepicker table td {
 }
 
 @media screen and (max-width: 767px) {
+	ul,ul li
+{
+	margin:0;
+	padding:0;
+}
 	.datepicker {
 		margin: 0 auto;
+		width:100%!Important;
 	}
 	.segment2 {
 		min-height: 525px;
 	}
 	.checkbox-grid li {
-		width: 33% !important;
+		/*width: 33% !important;*/
+		margin-left:0px;
+		margin-right:10px;
 	}
 	.inputtext {
 		width: 100%;
@@ -377,9 +386,9 @@ div.datepicker table td {
 	.segment2 {
 		min-height: 640px;
 	}
-	.checkbox-grid li {
+	/*.checkbox-grid li {
 		width: 50% !important;
-	}
+	}*/
 }
 
 .me-disable {
@@ -401,6 +410,10 @@ padding-bottom: 4px;
 font-size: 17px;
 
 color: #8E8F8F;
+}
+#datepick
+{
+	height:300px!Important;
 }
 #datepick table td table
 {

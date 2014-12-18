@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.contact.util.ContactUtil;
@@ -27,7 +29,7 @@ import com.googlecode.objectify.Query;
 public class ContactFilterUtil
 {
 
-    public static List<Contact> getContacts(String id, Integer count, String cursor)
+    public static List<Contact> getContacts(String id, Integer count, String cursor, String orderBy)
     {
 	try
 	{
@@ -45,7 +47,7 @@ public class ContactFilterUtil
 
 		ContactFilter.DefaultFilter filter = ContactFilter.DefaultFilter.valueOf(id);
 		if (filter != null)
-		    return ContactFilterUtil.getContacts(filter, count, cursor);
+		    return ContactFilterUtil.getContacts(filter, count, cursor, orderBy);
 
 		// If requested id contains "system" in it, but it doesn't match
 		// with RECENT/LEAD/CONTACTS then return null
@@ -62,7 +64,7 @@ public class ContactFilterUtil
 	    SearchRule rule = new SearchRule();
 	    rule.LHS = "type";
 	    rule.CONDITION = RuleCondition.EQUALS;
-	    rule.RHS = "PERSON";
+	    rule.RHS = filter.contact_type.toString();
 	    filter.rules.add(rule);
 	    
 	    // Sets ACL condition
@@ -77,7 +79,7 @@ public class ContactFilterUtil
 	     */
 
 	    // Queries based on list of search rules in the filter object
-	    return new ArrayList<Contact>(filter.queryContacts(count, cursor));
+	    return new ArrayList<Contact>(filter.queryContacts(count, cursor, orderBy));
 	}
 	catch (Exception e)
 	{
@@ -93,7 +95,7 @@ public class ContactFilterUtil
      *            {@link ContactFilter.DefaultFilter}
      * @return {@link List} of {@link Contact}s
      */
-    public static List<Contact> getContacts(ContactFilter.DefaultFilter type, Integer max, String cursor)
+    public static List<Contact> getContacts(ContactFilter.DefaultFilter type, Integer max, String cursor, String orderBy)
     {
 	Objectify ofy = ObjectifyService.begin();
 	Query<Contact> contact_query = ofy.query(Contact.class);
@@ -103,12 +105,15 @@ public class ContactFilterUtil
 	if (type == ContactFilter.DefaultFilter.RECENT)
 	{
 	   Map<String, Object> searchMap =  getDefaultContactSearchMap(type);
-	   return Contact.dao.fetchAllByOrder(max, cursor, searchMap, true, true, "-created_time");
+	   if(StringUtils.isBlank(orderBy)) {
+		   orderBy = "-created_time";
+	   }
+	   return Contact.dao.fetchAllByOrder(max, cursor, searchMap, true, true, orderBy);
 	}
 	
 	Map<String, Object> searchMap  = getDefaultContactSearchMap(type);
 
-	return Contact.dao.fetchAll(max, cursor, searchMap);
+	return Contact.dao.fetchAllByOrder(max, cursor, searchMap, false, true, orderBy);
     }
 
     public static Map<String, Object> getDefaultContactSearchMap(ContactFilter.DefaultFilter type)

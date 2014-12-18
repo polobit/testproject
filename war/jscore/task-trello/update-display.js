@@ -67,7 +67,7 @@ function changeStatus(status, parentForm)
  * progress in task edit modal.
  */
 function changeProgress(value, status, parentForm)
-{
+{	
 	// Add progress % to input field
 	$("#progress", parentForm).val(value);
 
@@ -80,7 +80,7 @@ function changeProgress(value, status, parentForm)
  * update modal.
  */
 function showProgressSlider(value, status, parentForm)
-{
+{	
 	if (value == 100 || status == COMPLETED)
 	{
 		$(".status", parentForm).val(COMPLETED);
@@ -90,7 +90,7 @@ function showProgressSlider(value, status, parentForm)
 	else
 		$("#is_complete", parentForm).val(false);
 
-	if (status == "IN_PROGRESS")
+	if (status == IN_PROGRESS)
 		$(parentForm).find(".progress-slider").css("display", "block");
 	else
 		$(parentForm).find(".progress-slider").css("display", "none");
@@ -319,6 +319,20 @@ function adjustHeightOfTaskListAndScroll()
 }
 
 /**
+ * Hide task in list view and display column view with loading img. 
+ */
+function hideListViewAndShowLoading()
+{	
+	// Hide list view and show column view
+	$('#new-task-list-based-condition').show();
+	$('#task-list-based-condition').hide();
+	$('.tasks-count').html("");
+	
+	// Shows loading image untill data gets ready for displaying
+	$('#new-task-list-based-condition').html(LOADING_HTML);	
+}
+
+/**
  * Display task in list view with selected filter. 
  */
 function displayListView()
@@ -327,6 +341,214 @@ function displayListView()
 	$('#new-task-list-based-condition').hide();
 	$('#task-list-based-condition').show();
 	
+	// Display group view
+	$(".group-view").show();
+	
+	// Hide group by
+	$(".do-onclick-nothing").hide();
+	
+	// Hide list view
+	$(".list-view").hide();
+	
 	var url = getParamsNew();
+	
+	// When user hit list view first time and my pending is selected as default one, we have to set pending true.
+	var owner = $('#new-owner-tasks').data("selected_item");
+	if(owner == undefined)
+		url = url  + "&pending=" + true;
+	
+	console.log("url for list view: "+url);	
+	
 	updateData(url);
+}
+
+//
+function bindDropdownEvents()
+{
+	$('.dropdown-menu').find(".do-onclick-nothing").on("click",function(e)
+	 {
+	    e.stopImmediatePropagation();
+	 });
+	
+	// Click events to agents dropdown of Owner's list and Criteria's list
+	$("ul#new-owner-tasks li a,ul#new-type-tasks .new-type-task").on("click", function(e)
+	{        
+		e.preventDefault();			
+				
+		// Hide list view and show column view with loading img
+		hideListViewAndShowLoading();		
+		
+		// Hide dropdown
+		if($(".type-task-button").hasClass("open"))
+			$(".type-task-button").removeClass("open");
+		
+		// Show selected name
+		var name = $(this).html(), id = $(this).attr("href");
+		
+		var selectedDropDown = $(this).closest("ul").attr("id");
+				
+		if(selectedDropDown == "new-type-tasks") // criteria type
+		    $(this).closest("ul.main-menu").data("selected_item", id);
+		else  // owner type
+			$(this).closest("ul").data("selected_item", id);
+		
+		$(this).closest(".btn-group").find(".selected_name").text(name);
+
+		// Empty collection
+		if(TASKS_LIST_COLLECTION != null)
+		TASKS_LIST_COLLECTION.collection.reset();
+		
+		// Add selected details of dropdown in cookie
+		addDetailsInCookie(this);
+		
+		// Group view settings
+		addDetailsInGroupView(this);
+		
+		setTimeout(function() { // Do something after 2 seconds
+			// Get details from dropdown and call function to create collection
+			getDetailsForCollection();
+		}, 2000);
+	});
+
+	// Change page heading as per owner selection
+	$("ul#new-owner-tasks li a").on("click", function()
+	{		
+		// Change heading of page
+		changeHeadingOfPage($('#new-owner-tasks').closest(".btn-group").find(".selected_name").html());
+	});	
+}
+// Group view settings
+function addDetailsInGroupView(elmnt)
+{
+	console.log("in addDetailsInGroupView");	
+	
+    var criteria = getCriteria();
+	console.log("criteria: " + criteria);
+	
+	// Check for list view 
+	if(criteria == "LIST")
+	  return;
+	  	
+	var name = $(elmnt).html();
+	var id = $(elmnt).attr("href");
+	
+	console.log(name+"  "+id);
+
+	var taskField = null;
+	var taskFieldValue = null;
+
+	if ($(elmnt).closest("ul").attr('id') == "new-type-tasks")
+		taskField = "taskCriteria";
+	else if ($(elmnt).closest("ul").attr('id') == "new-owner-tasks")
+		taskField = "taskOwner";
+
+	taskFieldValue = name + "_" + id;
+
+	// Changes value of attribute in group view btn
+	$(".group-view").attr(taskField, taskFieldValue);
+}
+
+// Change UI and input field 
+function applyDetailsFromGroupView()
+{
+	console.log("In applyDetailsFromGroupView");
+
+	var task_criteria = $(".group-view").attr("taskCriteria");
+	var task_owner = $(".group-view").attr("taskOwner");
+
+	console.log(task_criteria + " " + task_owner);
+
+	withoutEventChangeDropDowns(task_criteria, task_owner, true);
+
+	// Hide group view
+	$(".group-view").hide();
+	
+	// Display group by
+	$(".do-onclick-nothing").show();
+	
+	// Display list view
+	$(".list-view").show();
+	
+	var ownerType = $('#new-owner-tasks').data("selected_item");
+	
+	// Add owner type in cookie
+	addDetailsInCookie($("ul#new-owner-tasks").find('a[href='+ownerType+']'));
+	
+	// Add task type in cookie
+	addDetailsInCookie($("ul#new-type-tasks").find('a[href='+getCriteria()+']'));
+}
+
+//
+function withoutEventChangeDropDowns(task_criteria, task_owner, apply_groupview)
+{
+	console.log("In withoutEventChangeDropDowns");
+	console.log(task_criteria + " " + task_owner);	
+	
+	if (task_criteria)
+	{
+		var res = task_criteria.split("_");
+
+		console.log(res);
+
+		$('#new-type-tasks').data("selected_item", res[1]);
+		$('#new-type-tasks').closest(".btn-group").find(".selected_name").text(res[0]);
+	}
+
+	if (task_owner)
+	{
+		var res = task_owner.split("_")
+
+		console.log(res);
+
+		$('#new-owner-tasks').data("selected_item", res[1]);
+		$('#new-owner-tasks').closest(".btn-group").find(".selected_name").text(res[0]);
+	}
+
+	if(!task_criteria && !task_owner && apply_groupview)
+	  {
+		// Type of task
+		$('#new-type-tasks').data("selected_item", "DUE");
+		$('#new-type-tasks').closest(".btn-group").find(".selected_name").text("Due");		
+	  }
+	
+	// Change heading of page
+	changeHeadingOfPage($('#new-owner-tasks').closest(".btn-group").find(".selected_name").html());
+
+	// Get details from dropdown and call function to create collection
+	getDetailsForCollection();
+}
+
+//Add details about task list where add task btn is clicked
+function addTasklListDetails(addTaskElement)
+{
+	console.log("In addTasklListDetails");
+	console.log(addTaskElement);	
+	
+	if(!$(addTaskElement).hasClass("list-bottom"))
+		return;	
+	
+	switch (getCriteria()) {
+	case "STATUS":
+	{ 
+		$("#status", $("#taskForm")).val($(addTaskElement).attr("heading"));
+		changeStatus($(addTaskElement).attr("heading"), $("#taskForm"));
+	}
+		break;	
+	case "CATEGORY":
+	{$("#type", $("#taskForm")).val($(addTaskElement).attr("heading"));}
+		break;
+	case "OWNER":
+	{$("#owners-list", $("#taskForm")).val($(addTaskElement).attr("ownerID"));}
+		break;
+	case "DUE":
+	{		
+		var epochTime = getNewDueDate($(addTaskElement).attr("heading"));
+		var startDate = new Date(epochTime *1000).format('mm/dd/yyyy');
+		$("#taskForm").find("input.date").val(new Date(startDate).format('mm/dd/yyyy')).datepicker('update');		
+	}
+		break;		
+	case "PRIORITY":
+	{$("#priority_type", $("#taskForm")).val($(addTaskElement).attr("heading"));}
+		break;	
+	}	
 }

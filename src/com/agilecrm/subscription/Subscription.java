@@ -15,17 +15,16 @@ import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.limits.PlanLimits;
-import com.agilecrm.subscription.limits.plan.FreePlanLimits;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
+import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
-import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.ClickDeskEncryption;
 import com.google.appengine.api.NamespaceManager;
@@ -33,7 +32,6 @@ import com.google.gson.Gson;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
-import com.stripe.model.Charge;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
 
@@ -312,7 +310,7 @@ public class Subscription
 		BillingRestrictionUtil.throwLimitExceededException(ErrorMessages.NOT_DOWNGRADABLE);
 		return null;
 	    }
-		
+
 	}
 	else if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)
 		&& !BillingRestrictionUtil.getInstanceTemporary(plan).isDowngradable())
@@ -490,6 +488,12 @@ public class Subscription
 	{
 	    e.printStackTrace();
 	}
+    }
+    
+    public void refreshCustomer() throws Exception
+    {
+	 Customer customer = SubscriptionUtil.getCustomer(billing_data);
+	 billing_data = StripeUtil.getJSONFromCustomer(customer);
     }
 
     /**

@@ -62,12 +62,19 @@ public class StripeWebhookServlet2 extends HttpServlet
 	    return;
 
 	StripeWebhookHandler handler = StripeWebhookHandlerUtil.getHandler(stripe_event_message);
-	if(handler == null)
+	if (handler == null)
 	    return;
-	
-	handler.process();
+
+	try
+	{
+	    handler.process();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
-    
+
     private String readData(HttpServletRequest req)
     {
 	ServletInputStream in;
@@ -98,7 +105,6 @@ public class StripeWebhookServlet2 extends HttpServlet
     }
 }
 
-
 class StripeWebhookHandlerUtil
 {
 
@@ -108,7 +114,7 @@ class StripeWebhookHandlerUtil
 	try
 	{
 	    event = StripeUtil.getEventFromJSON(eventResponse);
-	    
+
 	}
 	catch (AuthenticationException e)
 	{
@@ -137,7 +143,7 @@ class StripeWebhookHandlerUtil
 	}
 
 	if (event == null)
-	    
+
 	    return null;
 
 	String event_name;
@@ -146,15 +152,14 @@ class StripeWebhookHandlerUtil
 
 	StripeWebhookHandler handler = null;
 
-	
 	if (event_name.contains("subscription"))
 	    handler = new SubscriptionWebhookHandlerImpl();
-	else if(event_name.contains("invoice"))
+	else if (event_name.contains("invoice"))
 	    handler = new InvoiceWebhookHandler();
-	    
+
 	System.out.println(event_name + ", " + handler);
-	
-	if(handler == null)
+
+	if (handler == null)
 	    return null;
 
 	handler.init(eventResponse, event);

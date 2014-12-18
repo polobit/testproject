@@ -83,6 +83,23 @@ public abstract class ContactSyncService implements SyncService
 	SessionManager.set(info);
 	return this;
     }
+    
+    protected int getAgileMaxLimit()
+    {
+	return contactRestriction.getPendingCount();
+    }
+    
+    protected int getFetchSize()
+    {
+	int pending = getAgileMaxLimit();
+	if(pending > 400)
+	    return 200;
+	
+	if(pending == 1)
+	    return 0;
+	
+	return pending/2;
+    }
 
     /**
      * Checks if is limit exceeded as per user plan
@@ -125,19 +142,25 @@ public abstract class ContactSyncService implements SyncService
      */
     public Contact wrapContactToAgileSchemaAndSave(Object object)
     {
-	Contact contact = wrapContactToAgileSchema(object);
+    	try {
+    		Contact contact = wrapContactToAgileSchema(object);
 
-	if (contact == null)
-	    return contact;
+    		if (contact == null)
+    		    return contact;
 
-	++total_synced_contact;
+    		++total_synced_contact;
 
-	contact = saveContact(contact);
+    		contact = saveContact(contact);
 
-	// Works as save callback to perform actions like creating notes/tasks
-	// and relating to newly created contact
-	contactWrapper.saveCallback();
-	return contact;
+    		// Works as save callback to perform actions like creating notes/tasks
+    		// and relating to newly created contact
+    		contactWrapper.saveCallback();
+    		return contact;
+    	    
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
     }
 
     /**
@@ -153,7 +176,7 @@ public abstract class ContactSyncService implements SyncService
 	if (contactWrapper == null)
 	    try
 	    {
-		contactWrapper = getWrapperService().newInstance().getWrapper(object);
+		contactWrapper = getWrapperService().newInstance().getWrapper(object, prefs);
 	    }
 	    catch (InstantiationException e)
 	    {
@@ -162,6 +185,8 @@ public abstract class ContactSyncService implements SyncService
 	    catch (IllegalAccessException e)
 	    {
 		e.printStackTrace();
+	    }catch(Exception e){
+	    	e.printStackTrace();
 	    }
 
 	return contactWrapper.getWrapper(object).buildContact();
@@ -185,9 +210,16 @@ public abstract class ContactSyncService implements SyncService
 
 	// Saves limits
 	restriction.save();
+	
+	
 
 	if (user != null)
 	{
+	    
+	    int emailRequired = syncStatus.get(ImportStatus.EMAIL_REQUIRED);
+	    if(emailRequired == 0)
+		    syncStatus.remove(ImportStatus.EMAIL_REQUIRED);
+		
 	    SendMail.sendMail(user.email, notificationSubject, NOTIFICATION_TEMPLATE, new Object[] { user,
 		    buildNotificationStatus() });
 
@@ -266,9 +298,12 @@ public abstract class ContactSyncService implements SyncService
      */
     private Contact saveContact(Contact contact)
     {
+	addTagToContact(contact);
 	if (ContactUtil.isDuplicateContact(contact))
 	{
+	   
 	    contact = ContactUtil.mergeContactFields(contact);
+	    
 	    if (!accessControl.canDelete())
 	    {
 		syncStatus.put(ImportStatus.ACCESS_DENIED, syncStatus.get(ImportStatus.ACCESS_DENIED) + 1);
@@ -291,10 +326,9 @@ public abstract class ContactSyncService implements SyncService
 	}
 	else if (contactRestriction.can_create())
 	{
-	    addTagToContact(contact);
 	    try
 	    {
-		contact.save();
+		 contact.save();
 	    }
 	    catch (AccessDeniedException e)
 	    {
@@ -326,7 +360,7 @@ public abstract class ContactSyncService implements SyncService
 	else
 	    tag = prefs.type.toString().toLowerCase() + " contact";
 
-	contact.addTags(StringUtils.capitalize(tag));
+	contact.tags.add(StringUtils.capitalize(tag));
     }
 
     protected boolean canSync()

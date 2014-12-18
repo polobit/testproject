@@ -62,8 +62,7 @@ public class SubscriptionUtil
 	// Returns Customer object as JSONObject
 	try
 	{
-	    Customer customer = getCustomer(subscription.billing_data);
-	    subscription.billing_data = StripeUtil.getJSONFromCustomer(customer);
+	    subscription.refreshCustomer();
 	    subscription.cachedData = BillingRestrictionUtil.getBillingRestriction(
 		    subscription.plan.plan_type.toString(), subscription.plan.quantity);
 	    subscription.cachedData.refresh(true);

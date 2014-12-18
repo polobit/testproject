@@ -115,6 +115,8 @@ $(function(){
             	
             	enable_save_button($clicked_button);
             	
+            	show_campaign_save();
+            	
             	// Adds tag in our domain
             	add_tag_our_domain(CAMPAIGN_TAG);
             	
@@ -286,6 +288,10 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
 
     	    	// Removes disabled attribute of save button
     	    	enable_save_button($clicked_button);
+    	    	
+    	    	// Shows Campaign save message
+    	    	show_campaign_save();
+    	    	
     	    	// $('#workflowform').find('#save-workflow').removeAttr('disabled');
     	    	
     	    	// Hide edit message
@@ -333,7 +339,7 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
 
 					// Appends error info to form actions
 					// block.
-					$("#workflow-limit-reached-msg").html(
+					$("#workflow-msg").html(
 							$save_info).show();
             	  }
                 }
@@ -348,7 +354,7 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
  * @param type - 
  *          to match with LOGS_PAD_CONTENT json key
  **/
-function fill_logs_slate(id, type, workflow_name)
+function fill_logs_slate(id, type)
 {
 	if(type == undefined)
 		type="ALL";
@@ -389,4 +395,12 @@ function fill_logs_slate(id, type, workflow_name)
 		}
 
 	$("#" + id).html(getTemplate("empty-collection-model", LOGS_PAD_CONTENT[type]));
+}
+
+function show_campaign_save()
+{
+	// Campaign save message
+	var $save_info = '<span style="color: green; margin-left: 85px;">Campaign saved.</span>';
+
+	$("#workflow-msg").html($save_info).show().fadeOut(3000);
 }

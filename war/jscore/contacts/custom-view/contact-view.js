@@ -34,32 +34,38 @@ function contactTableView(base_model) {
 	// Converts base_model (contact) in to JSON
 	var contact = base_model.toJSON();
 	var el = itemView.el;
-	// Clears the template, because all the fields are appended, has to be reset
-	// for each contact
-	// $('#contacts-custom-view-model-template').empty();
-	
-	// Iterates through, each field name and appends the field according to
-	// order of the fields
-	$.each(fields, function(index, field_name) {
-		if(field_name.indexOf("CUSTOM_") != -1)
-		{
-			field_name = field_name.split("CUSTOM_")[1]; 			
-			var property = getProperty(contact.properties, field_name);
-			if(!property)
+	$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
 			{
-				$(el).append(getTemplate('contacts-custom-view-custom', {}));
-				return;
-			}
-			
-			$(el).append(getTemplate('contacts-custom-view-custom', property));
-			return;
-		}
-		
-/*		$('#contacts-custom-view-model-template').append(
-				getTemplate('contacts-custom-view-' + field_name, contact));*/
-		$(el).append(getTemplate('contacts-custom-view-' + field_name, contact));
-	});
-
+				// Clears the template, because all the fields are appended, has to be reset
+				// for each contact
+				// $('#contacts-custom-view-model-template').empty();
+				
+				// Iterates through, each field name and appends the field according to
+				// order of the fields
+				$.each(fields, function(index, field_name) {
+					if(field_name.indexOf("CUSTOM_") != -1)
+					{
+						field_name = field_name.split("CUSTOM_")[1]; 			
+						var property = getProperty(contact.properties, field_name);
+						if(!property)
+						{
+							$(el).append(getTemplate('contacts-custom-view-custom', {}));
+							return;
+						}
+						if(isDateCustomField(customDatefields,property)){
+							console.log('got true');
+							$(el).append(getTemplate('contacts-custom-view-custom-date', property));
+						}
+						else
+							$(el).append(getTemplate('contacts-custom-view-custom', property));
+						return;
+					}
+					
+			/*		$('#contacts-custom-view-model-template').append(
+							getTemplate('contacts-custom-view-' + field_name, contact));*/
+					$(el).append(getTemplate('contacts-custom-view-' + field_name, contact));
+				});
+			});
 	// Appends model to model-list template in collection template
 	$(('#contacts-custom-view-model-list'), this.el).append(el);
 
@@ -67,6 +73,16 @@ function contactTableView(base_model) {
 	$(('#contacts-custom-view-model-list'), this.el).find('tr:last').data(
 			base_model);
 
+}
+
+// Check whether the given fields list has the property name.
+function isDateCustomField(customDatefields,property){
+	var count = 0;
+	$.each(customDatefields,function(index,field){
+		if(field.field_label==property.name)
+			count++;
+	});
+	return count>0;
 }
 
 /**
@@ -85,35 +101,86 @@ function contactTableView(base_model) {
 function setupViews(cel, button_name) {
 
 	// Creates a view for custom views
-	
-	var customView = new Base_Collection_View({
-		url : 'core/api/contact-view',
-		restKey : "contactView",
-		templateKey : "contact-view",
-		individual_tag_name : 'li',
-		id : 'view-list',
-		postRenderCallback : function(el) {
-
-			// If button_name is defined, then view is selected then the name of
-			// the view is show in the custom view button.
-			if (button_name)
-				$(el).find('.custom_view').append(button_name);
-		}
-	});
-
-	// Fetches the list of custom fields, and shows is the the contact page
-	customView.collection.fetch({
-		success : function() {
-			$("#view-list", cel).html(customView.el);
-			
-			if(readCookie('company_filter'))
-			{
-				$('#contact-view-model-list>li').css('display','none');
-				$('#contact-view-model-list>li:first').css('display','list-item');
+	head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
+	{
+		var customView = new Base_Collection_View({
+			url : 'core/api/contact-view',
+			restKey : "contactView",
+			templateKey : "contact-view",
+			individual_tag_name : 'li',
+			id : 'view-list',
+			sort_collection : false,
+			postRenderCallback : function(el) {
+				$(el).find('.dropdown-menu').find(".dropdown-submenu").on("click",function(e){
+				    e.stopImmediatePropagation();
+				});
+				// If button_name is defined, then view is selected then the name of
+				// the view is show in the custom view button.
+				if (button_name)
+					$(el).find('.custom_view').append(button_name);
+				//updates the selected sort item to bold
+				updateSelectedSortKey(el);
+				addClickEventsForSorting(el);
 			}
-		}
-	})
+		});
+		// Fetches the list of custom fields, and shows is the the contact page
+		customView.collection.fetch({
+			success : function() {
+				$("#view-list", cel).html(customView.el);
+				
+				if(readCookie('company_filter') || readCookie('contact_filter_type') == 'COMPANY')
+				{
+					$('#contact-view-model-list>li').css('display','none');
+					$('#contact-view-model-list>li:first').css('display','list-item');
+				}
+			}
+		})
+	});
 }
+
+function updateSelectedSortKey(el) {
+	var sort_key = readCookie("sort_by_name");
+	if(sort_key && sort_key != null) {
+		var idSuffix = '-asc';
+		if(sort_key.indexOf('-') == 0) {
+			sort_key = sort_key.substring(1);
+			idSuffix = '-desc'
+		}
+		var elementId = 'sort-by-'+sort_key+idSuffix;
+		$(el).find('#'+elementId).addClass('bold-text');
+	}
+}
+
+	function addClickEventsForSorting(el) {
+		// Fetch sort result without changing route on click
+		$(el).find('.sort').on("click", function(e)
+		{
+
+			e.preventDefault();
+			eraseCookie('sort_by_name');
+
+			// Gets name of the attribut to sort, which is set as data
+			// attribute in the link
+			sort_by = $(this).attr('data');
+			
+			// Saves Sort By in cookie
+			createCookie('sort_by_name', sort_by);
+
+			CONTACTS_HARD_RELOAD=true;
+			// If filter is not set then show view on the default contacts
+			// list
+			if(!App_Contacts.tag_id)
+			{
+				App_Contacts.contacts();
+				return;
+			}
+			
+			// If tag filter is applied send tags fetch url and tag_id, which is tobe shown on contacts table.
+			App_Contacts.contacts(App_Contacts.tag_id);
+			return;
+		});
+
+	}
 
 /**
  * Init function to define actions on events on the custom view list

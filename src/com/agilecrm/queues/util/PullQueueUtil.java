@@ -91,7 +91,7 @@ public class PullQueueUtil
 	// Create Task and push it into Task Queue
 	Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_QUEUE);
 	TaskOptions taskOptions = TaskOptions.Builder.withUrl(backendUrl).param("queue_name", queueName)
-		.header("Host", getCampaignBackendURL(queueName)).method(Method.POST);
+	        .header("Host", getCampaignBackendURL(queueName)).method(Method.POST);
 	queue.addAsync(taskOptions);
     }
 
@@ -125,14 +125,16 @@ public class PullQueueUtil
 
 	// Runs BULK_PULL_QUEUE tasks in bulk backend
 	if (StringUtils.equals(queueName, AgileQueues.BULK_CAMPAIGN_PULL_QUEUE)
-		|| StringUtils.equals(queueName, AgileQueues.BULK_EMAIL_PULL_QUEUE)
-		||StringUtils.equals(queueName, AgileQueues.BULK_SMS_PULL_QUEUE))
+	        || StringUtils.equals(queueName, AgileQueues.BULK_EMAIL_PULL_QUEUE)
+	        || StringUtils.equals(queueName, AgileQueues.BULK_SMS_PULL_QUEUE)
+	        || StringUtils.equals(queueName, AgileQueues.BULK_PERSONAL_EMAIL_PULL_QUEUE))
 	    return backendService.getBackendAddress(Globals.BULK_BACKENDS);
 
 	// Runs NORMAL_PULL_QUEUE tasks in normal backend
 	if (StringUtils.equals(queueName, AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE)
-		|| StringUtils.equals(queueName, AgileQueues.NORMAL_EMAIL_PULL_QUEUE)
-		|| StringUtils.equals(queueName, AgileQueues.NORMAL_SMS_PULL_QUEUE))
+	        || StringUtils.equals(queueName, AgileQueues.NORMAL_EMAIL_PULL_QUEUE)
+	        || StringUtils.equals(queueName, AgileQueues.NORMAL_SMS_PULL_QUEUE)
+	        || StringUtils.equals(queueName, AgileQueues.NORMAL_PERSONAL_EMAIL_PULL_QUEUE))
 	    return backendService.getBackendAddress(Globals.NORMAL_BACKENDS);
 
 	return backendService.getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);

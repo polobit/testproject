@@ -268,6 +268,7 @@ var Base_Collection_View = Backbone.View
 					 * If page size is not defined then sets page size to 20.
 					 */
 					this.page_size = this.options.page_size;
+					this.global_sort_key = this.options.global_sort_key;
 					if (!this.page_size)
 						this.page_size = 20;
 
@@ -290,7 +291,7 @@ var Base_Collection_View = Backbone.View
 						 * view
 						 */
 						$(".scroll-loading", that.el).remove();
-					}, untilAttr : 'cursor', param : 'cursor', strict : true, pageSize : this.page_size,
+					}, untilAttr : 'cursor', param : 'cursor', strict : true, pageSize : this.page_size,global_sort_key: this.global_sort_key,
 
 					/*
 					 * Shows loading on fetch, at the bottom of the table
@@ -317,6 +318,7 @@ var Base_Collection_View = Backbone.View
 					// Store in a variable for us to access in the custom fetch
 					// as this is different
 					var page_size = this.page_size;
+					var global_sort_key = this.global_sort_key;
 
 					// Set the URL
 					this.collection.fetch = function(options)
@@ -324,6 +326,8 @@ var Base_Collection_View = Backbone.View
 						options || (options = {})
 						options.data || (options.data = {});
 						options.data['page_size'] = page_size;
+						if(global_sort_key && global_sort_key != null)
+							options.data['global_sort_key'] = global_sort_key;
 						return Backbone.Collection.prototype.fetch.call(this, options);
 					};
 

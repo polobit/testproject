@@ -16,7 +16,7 @@
 			<a href='#contact-filters'>Add/Edit Filter</a>
 		</li>
 		<li class="divider"></li>
-		<li><a class="filter" id="system-RECENT" data="Recent" href="#contact-filter/system-RECENT">Recent </a></li>
+		<!--<li><a class="filter" id="system-RECENT" data="Recent" href="#contact-filter/system-RECENT">Recent </a></li>-->
 		<li><a class="filter" id="system-CONTACTS"  data="My Contacts" href="#contact-filter/system-CONTACTS">My Contacts</a></li>
 		<li><a class="filter" id="system-LEADS"  data="Leads" href="#contact-filter/system-LEADS">Leads</a></li>
 	</ul>
@@ -24,7 +24,7 @@
 </script>
 
 <script id="contact-filter-list-model-template" type="text/html">
-<a id='{{id}}' class="filter" data={{name}} href="#contact-filter/{{id}}">{{name}}</a>
+<a id='{{id}}' class="filter" data={{name}} filter_type="{{contact_type}}" href="#contact-filter/{{id}}">{{name}}</a>
 </script>
 
 

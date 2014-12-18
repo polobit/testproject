@@ -41,9 +41,10 @@
 	<h4><a style="text-decoration: none"><b>{{subject}}</b></a></h4>
 	<br/>
 	<div style="background:none;border:none;">
-		<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{show_link_in_statement description}}</pre>
+		<pre style="background-color:#fff;margin-bottom:0px;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{show_link_in_statement description}}</pre>
 	</div>	
-	 	<div class="clear">
+<div class="clearfix"></div>
+	 	<div class="clear" style="margin-top:9px">
 		<div style="margin-bottom: 9px;">	
 		{{#each contacts}}
            	{{#if id}}
@@ -60,7 +61,7 @@
 		</small>
 		<span class="actions pull-right">
 			<a title="Edit"  data="{{id}}" data-toggle="modal" class="edit-note" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
-            <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>
+            <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>
         </span>
 	</div>
 </div>

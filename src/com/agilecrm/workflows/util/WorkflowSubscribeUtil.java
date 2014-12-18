@@ -1,12 +1,15 @@
 package com.agilecrm.workflows.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
+import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.queues.backend.BackendUtil;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskCore;
@@ -38,13 +41,41 @@ public class WorkflowSubscribeUtil
 	// Convert Contacts into JSON Array
 	JSONArray subscriberJSONArray = AgileTaskletUtil.getSubscriberJSONArray(contacts);
 
+	subscribeCampaign(workflowId, subscriberJSONArray);
+
+    }
+
+    public static void subscribeDeferred(List<Contact> contacts, Long workflowId, JSONObject triggerJSON)
+    {
+	// Convert Contacts into JSON Array
+	JSONArray subscriberJSONArray = AgileTaskletUtil.getSubscriberJSONArray(contacts, triggerJSON);
+
+	subscribeCampaign(workflowId, subscriberJSONArray);
+
+    }
+
+    public static void subscribeDeferred(Contact contact, Long workflowId, JSONObject triggerJSON)
+    {
+	List<Contact> contacts = new ArrayList<Contact>();
+	contacts.add(contact);
+
+	subscribeDeferred(contacts, workflowId, triggerJSON);
+
+    }
+
+    /**
+     * @param workflowId
+     * @param subscriberJSONArray
+     */
+    private static void subscribeCampaign(Long workflowId, JSONArray subscriberJSONArray)
+    {
 	// Get Campaign JSON
 	JSONObject campaignJSON = WorkflowUtil.getWorkflowJSON(workflowId);
+
 	if (campaignJSON == null)
 	    return;
 
 	TaskCore.executeCampaign(campaignJSON, subscriberJSONArray);
-
     }
 
     /**
@@ -89,7 +120,9 @@ public class WorkflowSubscribeUtil
 		    workflowId.toString(), subscriberJSON.toString(), namespace);
 
 	    PullQueueUtil
-		    .addToPullQueue(AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, taskletWorkflowDeferredTask, namespace);
+		    .addToPullQueue(
+		            Globals.BULK_BACKENDS.equals(BackendUtil.getCurrentBackendName()) ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE
+		                    : AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, taskletWorkflowDeferredTask, namespace);
 	}
 	catch (Exception e)
 	{

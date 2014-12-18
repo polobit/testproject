@@ -78,7 +78,7 @@ public class WebCalendarEvent
     public String confirmation = "off";
 
     @NotSaved
-    public String timezone = "";
+    public String timezone = null;
 
     // Dao
     public static ObjectifyGenericDao<WebCalendarEvent> dao = new ObjectifyGenericDao<WebCalendarEvent>(

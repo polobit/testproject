@@ -245,8 +245,8 @@ var WorkflowsRouter = Backbone.Router
 				}
 
 				/* Set the designer JSON. This will be deserialized */
-				this.workflow_model = this.workflow_list_view.collection.get(id);
-				var workflowName = this.workflow_model.get("name");
+//				this.workflow_model = this.workflow_list_view.collection.get(id);
+//				var workflowName = this.workflow_model.get("name");
 
 				if (log_type == undefined || log_type == "ALL")
 					log_type = "";
@@ -269,7 +269,7 @@ var WorkflowsRouter = Backbone.Router
 				logsListView.collection.fetch({ success : function(collection)
 				{
 					if (collection.length === 0)
-						fill_logs_slate('logs-slate', log_type.split('=')[1], workflowName);
+						fill_logs_slate('logs-slate', log_type.split('=')[1]);
 				} });
 
 				$('#campaign-analysis-tabs-content').html(logsListView.el);
@@ -325,9 +325,9 @@ var WorkflowsRouter = Backbone.Router
 					return;
 				}
 
-				/* Set the designer JSON. This will be deserialized */
-				this.workflow_model = this.workflow_list_view.collection.get(id);
-				var workflowName = this.workflow_model.get("name");
+//				/* Set the designer JSON. This will be deserialized */
+//				this.workflow_model = this.workflow_list_view.collection.get(id);
+//				var workflowName = this.workflow_model.get("name");
 
 				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 				{
@@ -538,6 +538,70 @@ var WorkflowsRouter = Backbone.Router
 						{
 							var shopify_event_type = currentTrigger.toJSON()['trigger_shopify_event'];
 							populate_shopify_events_in_trigger($('form#addTriggerForm', el), 'trigger-shopify-event', shopify_event_type);
+						}
+
+						if(type == 'INBOUND_MAIL_EVENT')
+						{
+							populate_inbound_mail_events_in_trigger($('form#addTriggerForm', el), 'trigger-inbound-mail-event');
+						}
+						
+						if(type == 'EMAIL_OPENED' || type == 'EMAIL_LINK_CLICKED')
+						{
+							// Show custom tags textbox
+							$('#email-tracking-type', el).closest('div.control-group').css('display', '');
+							
+							$('#email-tracking-type', el).find('option[value=' + currentTrigger.toJSON()["email_tracking_type"] + ']').attr('selected', 'selected').trigger('change');
+							
+							if(currentTrigger.toJSON()["email_tracking_type"] == "CAMPAIGNS")
+							{
+								$('#email-tracking-campaign-id',el).closest('div.control-group').css('display', '');
+								
+								var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+
+								/**
+								 * Fills campaign select drop down with existing
+								 * Campaigns and shows previous option as selected.
+								 * 
+								 * @param campaign-select -
+								 *            Id of select element of Campaign
+								 * @param /core/api/workflows -
+								 *            Url to get workflows
+								 * @param 'workflow' -
+								 *            parse key
+								 * @param callback-function -
+								 *            Shows previous option selected
+								 * @param optionsTemplate-
+								 *            to fill options with workflows
+								 */
+								fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', function fillCampaign()
+								{
+									var value = currentTrigger.toJSON();
+									if (value)
+									{
+										$('#email-tracking-campaign-id', el).find('option[value=' + value.email_tracking_campaign_id + ']').attr('selected', 'selected');
+									}
+									
+									// Remove loading image
+									$('.loading', el).remove();
+									
+								}, optionsTemplate, false, el);
+							}
+							
+							if(type == 'EMAIL_LINK_CLICKED')
+							{
+								// Show custom tags textbox
+								$('#custom-link-clicked', el).closest('div.control-group').css('display', '');
+							}
+							
+						}
+						
+						if(type == 'EVENT_IS_ADDED')
+						{
+							$('form#addTriggerForm', el).find('select#event-type').closest('div.control-group').css('display', '');
+							
+							$('#email-type', el).find('option[value=' + currentTrigger.toJSON()["email_type"] + ']').attr('selected', 'selected').trigger('change');
+							
+							populate_owners_in_trigger($('form#addTriggerForm', el), 'event-owner-id', currentTrigger.toJSON()["event_owner_id"]);
 						}
 
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";

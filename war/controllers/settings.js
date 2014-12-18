@@ -33,6 +33,9 @@ var SettingsRouter = Backbone.Router.extend({
 			/* Notifications */
 			"notification-prefs" : "notificationPrefs",
 			
+			/* scheduling */
+			"scheduler-prefs" : "scheduler",
+			
 			/* support page */
 			"help" : "support",
 			
@@ -67,7 +70,13 @@ var SettingsRouter = Backbone.Router.extend({
 						postRenderCallback: function(el)
 						{
 							// setup TinyMCE
-							setupTinyMCEEditor('textarea#WYSItextarea', true, ["textcolor link image preview code"]);
+							setupTinyMCEEditor('textarea#WYSItextarea', true, [
+								"textcolor link image preview code"
+							], function(){
+								
+								// Register focus
+								register_focus_on_tinymce('WYSItextarea');
+							});
 						}
 			 		});
 		
@@ -333,7 +342,10 @@ var SettingsRouter = Backbone.Router.extend({
 		setupTinyMCEEditor('textarea#email-template-html', false, undefined, function(){
 			
 			// Reset tinymce
-			set_tinymce_content('email-template-html', '');			
+			set_tinymce_content('email-template-html', '');		
+			
+			// Register focus
+			register_focus_on_tinymce('email-template-html');
 		});
 		
 		$('#PrefsTab .active').removeClass('active');
@@ -377,6 +389,9 @@ var SettingsRouter = Backbone.Router.extend({
 			
 			// Insert content into tinymce
 			set_tinymce_content('email-template-html', currentTemplate.toJSON().text);			
+			
+			// Register focus
+			register_focus_on_tinymce('email-template-html');
 		});
 		
 		/**End of TinyMCE**/
@@ -436,7 +451,7 @@ var SettingsRouter = Backbone.Router.extend({
 	support : function()
 	{
 		$("#content").html(getTemplate("support-form"), {});
-
+	/*	var CLICKDESK_Live_Chat  = "offline";
 		try {
 				CLICKDESK_Live_Chat.onStatus(function(status) {
 
@@ -461,7 +476,53 @@ var SettingsRouter = Backbone.Router.extend({
 			}, 5000);
 			
 			
-		}
+		}*/
+		$("#clickdesk_status").html('No chat support representative is available at the moment. Please<br/> <a href="#contact-us" id="show_support">leave a message</a>.');
+	},
+	
+	scheduler : function()
+	{
+		$("#content").html(getTemplate("settings"), {});
+		var view = new Base_Model_View({
+			url : 'core/api/users/current-user',
+			template : 'settings-business-prefs',
+			postRenderCallback : function(el)
+			{
+				var onlineschedulingURL = "https://" + view.model.get('domain') + ".agilecrm.com/calendar/" + view.model.get('schedule_id');
+				var hrefvalue="https://"+view.model.get('domain')+".agilecrm.com/calendar/";
+				$("#scheduleurl").attr("href", onlineschedulingURL);
+				$("#hrefvalue").html(hrefvalue);
+				$("#schedule_id").html(view.model.get('schedule_id'));
+				
+				$("#scheduleurl").removeClass("nounderline");
+				
+				head.js(CSS_PATH + 'css/businesshours/businesshours.css',CSS_PATH + 'css/businesshours/jquerytimepicker.css', LIB_PATH + 'lib/businesshours/businesshours.js',LIB_PATH + 'lib/businesshours/jquerytimepicker.js', function()
+						{
+					var json=JSON.parse(view.model.get('business_hours'));
+					console.log();
+					 businessHoursManager = 
+						 $("#define-business-hours").businessHours({
+			                    operationTime:json,/* array of JSON objects */
+			                    
+			                    postInit:function(){
+			                        $('.operationTimeFrom, .operationTimeTill').timepicker({
+			                            'timeFormat': 'H:i',
+			                            'step': 30
+			                            });
+			                    },
+			                });
+			            
+			     
+					 $(".mini-time").keydown(false);
+					 
+				});
+				
+                
+			} });
+		$('#prefs-tabs-content').html(view.render().el);
+		$('#PrefsTab .active').removeClass('active');
+		$('.scheduler-prefs-tab').addClass('active');
+
 	},
 
 	/**
