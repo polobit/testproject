@@ -84,8 +84,6 @@
 		<img id="loading" width="66px" height="49px" style="padding-right:5px" src= "https://d13yacurqjgara.cloudfront.net/users/4613/screenshots/911982/jar-loading.gif"></img>		
 	</div>
 	
-	<span style='font-size:10px;float:right' id="delete-button">delete</span>
-    
     <link media="screen" rel="stylesheet" type="text/css" href="https://my.agilecrm.com/css/bootstrap-pink.min.css" /> 
 	<link rel="stylesheet" type="text/css" href="https://my.agilecrm.com/css/lib/datepicker-min.css" /> 
 	<!-- Fire to work -->
