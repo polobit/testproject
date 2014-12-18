@@ -21,6 +21,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.workflows.triggers.Trigger;
@@ -105,6 +106,12 @@ public class ShopifyWebhookTrigger extends HttpServlet
 		    if (addressContactField != null)
 			contactProperties.add(addressContactField);
 
+		    List<ContactField> contactDetailsFromAddress = getContactDetailsFromAddress(shopifyEvent,
+			    shopifyJson);
+
+		    if (contactDetailsFromAddress != null)
+			contactProperties.addAll(contactDetailsFromAddress);
+
 		    if (contact.properties.isEmpty())
 			contact.properties = contactProperties;
 		    else
@@ -120,18 +127,20 @@ public class ShopifyWebhookTrigger extends HttpServlet
 		    System.out.println("Saving contact ...");
 		    contact.save();
 
-		    Note note = getCustomerNote(shopifyEvent, shopifyJson);
+		    Note note = getCustomerNote(shopifyEvent, shopifyJson, contact);
 		    if (note != null)
 		    {
 			System.out.println("Saving note ...");
 			note.addRelatedContacts(contact.id.toString());
 			note.setOwner(new Key<AgileUser>(AgileUser.class, owner.getId()));
+			note.created_time = System.currentTimeMillis() / 1000;
 			note.save();
 			System.out.println("Saving note ...");
 		    }
 
 		    System.out.println("Assigning campaign to contact....");
-		    WorkflowSubscribeUtil.subscribe(contact, trigger.id);
+		    WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id,
+			    new JSONObject().put("shopify", shopifyJson));
 		}
 	    }
 	    return;
@@ -187,7 +196,7 @@ public class ShopifyWebhookTrigger extends HttpServlet
 	}
     }
 
-    public Note getCustomerNote(String shopifyEvent, JSONObject shopifyJson)
+    public Note getCustomerNote(String shopifyEvent, JSONObject shopifyJson, Contact contact)
     {
 	try
 	{
@@ -200,6 +209,12 @@ public class ShopifyWebhookTrigger extends HttpServlet
 	    if (StringUtils.isBlank(noteDescription) || StringUtils.equals(noteDescription, "null"))
 		return null;
 
+	    List<Note> notes = NoteUtil.getNotes(contact.id);
+	    for (Note note : notes)
+	    {
+		if (StringUtils.equals(note.subject, "Shopify Note"))
+		    return null;
+	    }
 	    Note note = new Note("Shopify Note", noteDescription);
 	    return note;
 	}
@@ -222,7 +237,7 @@ public class ShopifyWebhookTrigger extends HttpServlet
 		String key = (String) keys.next();
 		String value = customerJson.getString(key);
 
-		if (!StringUtils.isBlank(value))
+		if (!StringUtils.isBlank(value) && !StringUtils.equals(value, "null"))
 		{
 		    switch (key)
 		    {
@@ -284,7 +299,7 @@ public class ShopifyWebhookTrigger extends HttpServlet
 
 	    if (addressJson == null)
 		return null;
-	    
+
 	    Iterator<?> keys = addressJson.keys();
 	    while (keys.hasNext())
 	    {
@@ -339,10 +354,53 @@ public class ShopifyWebhookTrigger extends HttpServlet
 
 	for (ContactField oldProperty : oldProperties)
 	    for (ContactField newProperty : newProperties)
-		if (StringUtils.equals(oldProperty.name, newProperty.name) && StringUtils.equals(oldProperty.subtype, newProperty.subtype))
+		if (StringUtils.equals(oldProperty.name, newProperty.name)
+		        && StringUtils.equals(oldProperty.subtype, newProperty.subtype))
 		    outDatedProperties.add(oldProperty);
 	oldProperties.removeAll(outDatedProperties);
 	newProperties.addAll(oldProperties);
 	return newProperties;
+    }
+
+    public List<ContactField> getContactDetailsFromAddress(String shopifyEvent, JSONObject shopifyJson)
+    {
+	try
+	{
+	    List<ContactField> contactDetailsFromAddress = new ArrayList<ContactField>();
+
+	    JSONObject requiredJson = null;
+	    if (shopifyEvent.contains("customers"))
+		requiredJson = shopifyJson.getJSONObject("default_address");
+	    else if (shopifyEvent.contains("orders"))
+		requiredJson = shopifyJson.getJSONObject("customer").getJSONObject("default_address");
+	    else if (shopifyEvent.contains("checkouts"))
+		requiredJson = shopifyJson.getJSONObject("billing_address");
+
+	    if (requiredJson == null)
+		return null;
+
+	    Iterator<?> keys = requiredJson.keys();
+	    while (keys.hasNext())
+	    {
+		String key = (String) keys.next();
+		String value = (String) requiredJson.getString(key);
+
+		if (!StringUtils.isBlank(value) && !StringUtils.equals(value, "null"))
+		{
+		    if (StringUtils.equals(key, Contact.PHONE))
+			contactDetailsFromAddress.add(new ContactField(Contact.PHONE, value, null));
+		    else if (StringUtils.equals(key, Contact.COMPANY))
+			contactDetailsFromAddress.add(new ContactField(Contact.COMPANY, value, null));
+		}
+	    }
+	    if (contactDetailsFromAddress.isEmpty())
+		return null;
+
+	    return contactDetailsFromAddress;
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
     }
 }

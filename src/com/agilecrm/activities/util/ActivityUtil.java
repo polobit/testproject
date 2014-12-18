@@ -558,8 +558,10 @@ public class ActivityUtil
     public static List<Activity> getActivitites(String entitytype, Long userid, int max, String cursor)
     {
 	Map<String, Object> searchMap = new HashMap<String, Object>();
-	if (!entitytype.equalsIgnoreCase("ALL"))
+	if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL"))
 	    searchMap.put("entity_type", entitytype);
+	if(entitytype.equalsIgnoreCase("CALL"))
+		searchMap.put("activity_type", entitytype);
 	if (userid != null)
 	    searchMap.put("user", new Key<DomainUser>(DomainUser.class, userid));
 
@@ -1275,6 +1277,60 @@ public class ActivityUtil
 	}
 	return list;
     }
+    
+    /**
+     * 
+     * @author Purushotham
+     * @created 28-Nov-2014
+     *
+     */
+    public static void createLogForCalls(String serviceType,String toOrFromNumber, String callType, String callStatus, String callDuration)
+    {
+	
+	// Search contact
+	if (toOrFromNumber != null)
+	{
+	    Contact contact = ContactUtil.searchContactByPhoneNumber(toOrFromNumber);
+	    System.out.println("contact: " + contact);
+	    if (contact != null)
+	    {    	
+	    	String calledToName = "";
+	       	List<ContactField> properties = contact.properties;
+	    	for (ContactField f : properties){
+	    		System.out.println("\t" + f.name + " - " + f.value);
+	    		if(f.name.equals(contact.FIRST_NAME)) {
+	    			calledToName += f.value;
+	    		}
+	    		if(f.name.equals(contact.LAST_NAME)) {
+	    			calledToName += " " + f.value;
+	    		}
+	    	}
+	    	
+	    	Activity activity = new Activity();
+			activity.activity_type = ActivityType.CALL;
+			activity.custom1 = serviceType;
+			activity.custom2 = callType;
+			activity.custom3 = callStatus;
+			activity.custom4 = callDuration;
+			activity.label = calledToName;
+			activity.entity_type = EntityType.CONTACT;
+			activity.entity_id = contact.id;
+			activity.save();
+	    } else {
+	    	Activity activity = new Activity();
+			activity.activity_type = ActivityType.CALL;
+			activity.custom1 = serviceType;
+			activity.custom2 = callType;
+			activity.custom3 = callStatus;
+			activity.custom4 = callDuration;
+			activity.label = toOrFromNumber;
+			activity.entity_type = null;
+			activity.entity_id = null;
+			activity.save();
+	    }
+	}
+    }
+    
 
     /**
      * Fetch list of activities based on the given filters sorted on the time of

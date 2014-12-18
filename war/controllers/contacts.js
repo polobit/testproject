@@ -67,10 +67,10 @@ var ContactsRouter = Backbone.Router.extend({
 
 		head.js(LIB_PATH + 'lib/jquery.timeago.js', LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
 		{
-			var el = $(getTemplate('dashboard1', { time_sec : (time_date).toString().toLowerCase(), time_format : "" }));
+			var el = $(getTemplate('dashboard1', { time_sec : (time_date).toString().toLowerCase(), time_format : time_date.getTime()/1000 }));
 			$("#content").html(el);
 			
-			$("span#last-login-time").timeago();
+			$("#last-login-time").timeago();
 			
 			setup_dashboard(el);
 			// loadDynamicTimeline("my-timeline", el);
@@ -402,6 +402,14 @@ var ContactsRouter = Backbone.Router.extend({
 	{
 
 		var contact_collection;
+		
+		//For getting custom fields
+		if(App_Contacts.customFieldsList == null || App_Contacts.customFieldsList == undefined){
+			App_Contacts.customFieldsList = new Base_Collection_View({ url : '/core/api/custom-fields', restKey : "customFieldDefs",
+				templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
+			App_Contacts.customFieldsList.collection.fetch();
+		}
+		
 
 		if (!contact && this.contactDetailView && this.contactDetailView.model != null)
 		{

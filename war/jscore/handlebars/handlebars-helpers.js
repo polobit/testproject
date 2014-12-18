@@ -3070,6 +3070,18 @@ $(function()
 								var template = getTemplate("choose-avatar-images-modal", {});
 								return template;
 				});
+				
+				// Reads the gloabal varaible and returns it value
+				Handlebars.registerHelper('read_global_var', function(custom_fields, contacts)
+				{
+					var type = email_server_type;
+					if (type)
+						return type;
+					else
+					{
+						return "agilecrm";
+					}
+				});
 
 				// To pick randomly selected avatar url
 				Handlebars.registerHelper('pick_random_avatar_url', function(options)
@@ -3382,8 +3394,6 @@ $(function()
 				 * ======== Thank you =================
 				 */
 
-
-	
 				// To pick randomly selected avatar url
 				Handlebars.registerHelper('arrayToCamelcase', function(values) {
 					var result = '';
@@ -3406,5 +3416,90 @@ $(function()
 					}
 					return result;
 				});
+				
+				
+				//@author Purushotham
+				Handlebars.registerHelper('secondsToFriendlyTime', function(time) {
+					var hours = Math.floor(time / 3600);
+					if(hours > 0)
+					time = time - hours*60*60;
+					var minutes = Math.floor(time / 60);
+					var seconds = time - minutes * 60;
+					var friendlyTime = "";
+					if(hours == 1)
+						friendlyTime = hours+ " hr ";
+					if(hours > 1)
+						friendlyTime = hours+ " hrs ";
+					if(minutes > 0)
+						friendlyTime += minutes + " min ";
+					if(seconds > 0)
+						friendlyTime += seconds + " sec";
+					if(friendlyTime != "")
+						return "("+friendlyTime+")";
+					return friendlyTime;
+				});
+	// To pick randomly selected avatar url
+	Handlebars.registerHelper('pick_random_avatar_url', function(options) {
+		return choose_random_avatar();
+	});
+	
+	// To choose font awesome icon for custom fields
+	Handlebars.registerHelper('choose_custom_field_font_icon', function(field_type) {
+		var icon_class='';
+		if(field_type=="TEXT")
+			icon_class = "icon-text-height";
+		else if(field_type=="TEXTAREA")
+			icon_class = "icon-file-alt";
+		else if(field_type=="DATE")
+			icon_class = "icon-calendar";
+		else if(field_type=="CHECKBOX")
+			icon_class = "icon-check";
+		else if(field_type=="LIST")
+			icon_class = "icon-list-ul";
+		else if(field_type=="NUMBER")
+			icon_class = "icon-text-height";
+		return icon_class;
+	});
 
+	// To choose font awesome icon for custom fields
+	Handlebars.registerHelper('choose_custom_field_type', function(field_type) {
+		var field_type_name='';
+		if(field_type=="TEXT")
+			field_type_name = "Text Field";
+		else if(field_type=="TEXTAREA")
+			field_type_name = "Text Area";
+		else if(field_type=="DATE")
+			field_type_name = "Date";
+		else if(field_type=="CHECKBOX")
+			field_type_name = "Checkbox";
+		else if(field_type=="LIST")
+			field_type_name = "List";
+		else if(field_type=="NUMBER")
+			field_type_name = "Number";
+		else if(field_type=="FORMULA")
+			field_type_name = "Formula";
+		return field_type_name;
+	});
+
+	Handlebars.registerHelper('shopifyWebhook', function()
+	{
+		var agile_api = $.ajax({ type : 'GET', url : '/core/api/api-key', async : false, dataType : 'json' }).responseText;
+		agile_api = JSON.parse(agile_api);
+		var shopify_webhook = window.location.origin + "/shopifytrigger?api-key=" + agile_api.api_key;
+		return new Handlebars.SafeString(shopify_webhook);
+	});
 });
+
+// helper function return created time for event
+function getEventCreatedTime(due)
+{
+	// Get Todays Date
+	var eventStartDate = new Date(due);
+	due = eventStartDate.getTime() / 1000;
+	var date = new Date();
+	date.setHours(0, 0, 0, 0);
+
+	date = date.getTime() / 1000;
+	// console.log("Today " + date + " Due " + due);
+	return Math.floor((due - date) / (24 * 3600));
+}

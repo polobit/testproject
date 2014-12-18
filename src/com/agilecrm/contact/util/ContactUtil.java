@@ -1222,6 +1222,7 @@ public class ContactUtil
 
 	public static List<String> workflowListOfAContact(Long id)
 	{
+
 		List<String> activeWorkflows = null;
 		try
 		{
@@ -1253,12 +1254,6 @@ public class ContactUtil
 		System.out.println("the active workflows are " + activeWorkflows.toString());
 		return activeWorkflows;
 
-		/*
-		 * List<String> cmapingIDList = new ArrayList<String>();
-		 * 
-		 * Iterator<String> it = q.iterator(); while (it.hasNext()) { it.
-		 * cmapingIDList.add(it.toString()); } return q;
-		 */
 	}
 
 }

@@ -88,6 +88,11 @@ function getParameters()
 		params += ("&entity_type=" + entitytype);
 		return params;
 	}
+	else if (entitytype == 'CALL')
+	{
+		params += ("&entity_type=" + entitytype);
+		return params;
+	}
 	else
 	{
 		params += ("&entity_type=ALL");
