@@ -46,7 +46,7 @@ if (scheduleid != null)
   	
   DomainUser domainUser = DomainUserUtil.getDomainUserFromScheduleId(scheduleid,d_name);
 
-	  //DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("jagadeesh@invox.com");
+	//  DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("jagadeesh@invox.com");
 		  
   System.out.println("Domain user " + domainUser);
 	  
@@ -193,7 +193,7 @@ ObjectMapper mapper = new ObjectMapper();
 				</div>
 		</form>
 		 <% }else  		   
-		     out.print("Sorry, user is not enrolled with Agile CRM.");  
+		     out.print("Sorry. This is an invalid scheduling URL");  
 		 %> 
 	</div>
 
@@ -235,7 +235,7 @@ ObjectMapper mapper = new ObjectMapper();
 					// Initialize date picker
 					$('#datepick').DatePicker({ flat : true, date : [
 							'2014-07-6', '2016-07-28'
-					], current : '' + currentDate, format : 'Y-m-d', calendars : 1, mode : 'single', view : 'days', onRender: function(date) {
+					], current : '' + currentDate, format : 'Y-m-d', calendars : 1,starts: 0, mode : 'single', view : 'days', onRender: function(date) {
 						return {
 							disabled: (date.valueOf() < Date.now()-ms),
 							className: date.valueOf() < Date.now()-ms ? 'datepickerNotInMonth' : false

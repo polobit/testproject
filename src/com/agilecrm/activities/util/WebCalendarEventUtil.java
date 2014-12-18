@@ -152,7 +152,7 @@ public class WebCalendarEventUtil
 	if (StringUtils.isEmpty(usertimezone))
 	{
 	    AccountPrefs acprefs = AccountPrefsUtil.getAccountPrefs();
-	    usertimezone = acprefs.timezone;
+	    // usertimezone = acprefs.timezone;
 	    if (StringUtils.isEmpty(usertimezone))
 	    {
 		usertimezone = "UTC";
@@ -187,6 +187,17 @@ public class WebCalendarEventUtil
 	String tillTime_mins = null;
 	String[] stTime = null;
 	String[] edTime = null;
+
+	Long night_starttime = 0L;
+	Long night_endtime = 0L;
+
+	String night_fromtime = null;
+	String night_fromTimeMins = null;
+	String night_till_hour = null;
+	String[] night_hours = null;
+	String night_endTime = null;
+	String night_endTimeMins = null;
+
 	// if(isActive) true i.e working day if not return empty list
 	if (business.getString("isActive") == "true")
 	{
@@ -215,16 +226,44 @@ public class WebCalendarEventUtil
 	    {
 		endtime = getEppochTime(date, month, year, Integer.parseInt(tillTime), Integer.parseInt(tillTime_mins),
 		        tz);
+
 	    }
 	    else
 	    {
+
 		endtime = getEppochTime(date + 1, month, year, Integer.parseInt(tillTime),
 		        Integer.parseInt(tillTime_mins), tz);
+
+		int night_wkday = getNightWeekDayAccordingToJS(week_day);
+		JSONObject night_business = new JSONObject(business_hours_array.get(night_wkday).toString());
+
+		if (night_business.getString("isActive") == "true")
+		{
+
+		    // we have to pass hour to calendar only 00 format.
+		    // calendar give time in sec according to date and hour
+
+		    night_fromtime = "00";
+		    night_fromTimeMins = "00";
+		    night_till_hour = business.getString("timeTill");
+		    night_hours = tillHour.split(":");
+		    night_endTime = night_hours[0];
+		    night_endTimeMins = night_hours[1];
+
+		    night_starttime = getEppochTime(date, month, year, Integer.parseInt(night_fromtime),
+			    Integer.parseInt(night_fromTimeMins), tz);
+
+		    night_endtime = getEppochTime(date, month, year, Integer.parseInt(night_endTime),
+			    Integer.parseInt(night_endTimeMins), tz);
+
+		    System.out.println(night_starttime + "  Night hourse start time and end time " + night_endTime);
+
+		}
 	    }
 
 	    System.out.println("business hour starttime " + starttime + " business hour endtime " + endtime);
 
-	    if (eppoch > starttime && eppoch < endtime)
+	    if ((eppoch > starttime && eppoch < endtime) || (eppoch > night_starttime && eppoch < night_endtime))
 	    {
 		return true;
 	    }
@@ -271,6 +310,40 @@ public class WebCalendarEventUtil
 	    return 4;
 	}
 	else if (wkday == 7)
+	{
+	    return 5;
+	}
+	return wkday;
+    }
+
+    public static int getNightWeekDayAccordingToJS(int wkday)
+    {
+
+	if (wkday == 0)
+	{
+	    return 6;
+	}
+	else if (wkday == 1)
+	{
+	    return 0;
+	}
+	else if (wkday == 2)
+	{
+	    return 1;
+	}
+	else if (wkday == 3)
+	{
+	    return 2;
+	}
+	else if (wkday == 4)
+	{
+	    return 3;
+	}
+	else if (wkday == 5)
+	{
+	    return 4;
+	}
+	else if (wkday == 6)
 	{
 	    return 5;
 	}
@@ -665,7 +738,7 @@ public class WebCalendarEventUtil
 		else
 		{
 		    // Get already present contact
-		    contact = ContactUtil.searchContactByEmail(wce.email);
+		    contact = ContactUtil.searchContactByEmail((wce.email));
 		}
 	    }
 	    catch (Exception e)
