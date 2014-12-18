@@ -834,9 +834,9 @@ public class ActivityReportsUtil
 		link = activity.label;
 
 	    if (activity.custom2.equalsIgnoreCase("incoming"))
-		message += "From " + link + " (Outgoing";
+		message += "From " + link + " (Incoming";
 	    else
-		message += "To " + link + " (Incoming";
+		message += "To " + link + " (Outgoing";
 
 	    if (!StringUtils.isEmpty(activity.custom4) && custom4 > 0)
 	    {
