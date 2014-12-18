@@ -160,7 +160,7 @@ public class HomeServlet extends HttpServlet
 
 	    domainUser.setInfo(DomainUser.LOGGED_IN_TIME, new Long(System.currentTimeMillis() / 1000));
 
-	    if (domainUser.timezone == null || "UTC".equals(domainUser.timezone))
+	    if (StringUtils.isEmpty(domainUser.timezone) || "UTC".equals(domainUser.timezone))
 	    {
 		domainUser.timezone = (String) req.getSession().getAttribute("account_timezone");
 	    }
