@@ -1,7 +1,5 @@
 $(function()
 		{
-	        console.log('In CallScript');
-	
 			// CallScript widget name as a global variable
 			CallScript_PLUGIN_NAME = "CallScript";
 
@@ -15,12 +13,8 @@ $(function()
 			// Following wont give current updated widget 
 			  var callscript_widget = agile_crm_get_widget(CallScript_PLUGIN_NAME);
 
-			console.log("callscript_widget");
-			console.log(callscript_widget);
-
 			// ID of the CallScript widget as global variable
 			CallScript_Plugin_Id = callscript_widget.id;
-			console.log("Plugin prefs in CallScript: " + callscript_widget.prefs);
 
 			/*
 			 * Gets CallScript widget preferences, required to check whether to show setup
@@ -36,11 +30,8 @@ $(function()
 			
 			// Parse string preferences as JSON
 			var callscript_prefs = JSON.parse(callscript_widget.prefs);
-			console.log(callscript_prefs);	
-			
+		
 			_agile_contact = agile_crm_get_contact();
-			console.log("_agile_contact: ");
-			console.log(_agile_contact);
 			
 			// Apply call script rules
 			_agile_execute_callscriptrules(callscript_prefs.csrules);
@@ -49,9 +40,6 @@ $(function()
 //Run callscriptrules against a contact
 function _agile_execute_callscriptrules(_agile_web_rules)
 {
-	console.log('In _agile_execute_callscriptrules');
-	console.log(_agile_web_rules);
-	
 	// Get All callscriptrules and execute each
 	for ( var j = 0; j < _agile_web_rules.length; j++)
 	{
@@ -69,9 +57,6 @@ function _agile_execute_callscriptrules(_agile_web_rules)
 // Run a single web rule
 function _agile_execute_callscriptrule(callscriptrule)
 {
-	console.log('In _agile_execute_callscriptrule');
-	console.log(callscriptrule);
-	
 	// Get all conditions and return if any of it doesn't match
 	var l = callscriptrule.rules.length;
 	for ( var i = 0; i < l; i++)
@@ -81,7 +66,6 @@ function _agile_execute_callscriptrule(callscriptrule)
 		if (!_agile_check_condition(condition))
 		 {
 			console.log("not matched: ")
-			console.log(condition);
 			return false;
 		 }
 	}
@@ -98,8 +82,6 @@ function _agile_execute_callscriptrule(callscriptrule)
 // Replace data of contact with merge fields
 function replaceMergeFields(displayText)
 {
-	console.log("In replaceMergeFields");
-	
 	var result = displayText;
 	
 	// Get merge fields	
@@ -112,11 +94,12 @@ function replaceMergeFields(displayText)
 	  matches.push(match[1]);
 	}
 	
+    // Counter for how many merge fields replcae with data
 	var j = 0;
+	
+	// Replace merge fields with data
 	for(var i =0;i<matches.length;i++)
-	{
-	  console.log(matches[i]);
-	  
+	{	  
 	  // Get contact property data
 	  var k = _agile_contact.properties.length;
 		for ( var s = 0; s < k; s++)
@@ -132,25 +115,22 @@ function replaceMergeFields(displayText)
  	}// for end i
 		
 	// if no such field found, then replace with null
-	if(j != matches.length)
+	while(j != matches.length)
 	 {		
 		var match;
 		while ((match = pattern.exec(result)) != null)
 		{
 			// Replace remaining merge fields which are not with contact property data
 			result = result.replace(match[0], "");
+			j++;
 		}
   	 }
-	
-	console.log("result: "+result);
 	return result;
 }
 
 //Core Function which checks if the condition matches with the contact (global)
 function _agile_check_condition(condition)
 {
-	console.log('In _agile_check_condition');
-	
 	switch (condition.LHS) {
 	case "tags":
 	{

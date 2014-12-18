@@ -38,8 +38,6 @@ $(function()
 	$('.edit-callscriptrule').die().live('click', function(e)
 	{
 		e.preventDefault();
-		console.log("In edit-callscriptrule event");
-		console.log($(this));
 
 		// Shows loading image until data gets ready for displaying
 		$('#prefs-tabs-content').html(LOADING_HTML);
@@ -57,10 +55,7 @@ $(function()
 	$('.delete-callscriptrule').die().live('click', function(e)
 	{
 		e.preventDefault();
-
-		console.log("In delete-callscriptrule event");
-		console.log($(this));
-
+		
 		// If not confirmed to delete, return
 		if (!confirm("Are you sure to delete a rule"))
 			return;
@@ -88,8 +83,6 @@ $(function()
 // Get widget and make adjustment of buttons in widget form
 function adjust_form()
 {
-	console.log("In adjust_form");
-
 	// Disable add rule btn
 	$("#add_csrule").text("Loading...");
 	$("#add_csrule").attr("disabled", true);
@@ -119,8 +112,6 @@ function adjust_form()
 //Check call script widget is added or not
 function isCallScriptAdded()
 {
-	console.log("In isCallScriptAdded");
-
 	// Get call script widget
 	var callscriptWidget = App_Widgets.Catalog_Widgets_View.collection.where({ name : "CallScript" });
 	console.log(callscriptWidget);
@@ -136,8 +127,6 @@ function isCallScriptAdded()
 // Get widget from collection and Convert prefs in json
 function getCallScriptJSON()
 {
-	console.log("In getCallScriptJSON");
-
 	// If Widgets collection is not defined, navigates to add widget
 	if (!App_Widgets || !App_Widgets.Catalog_Widgets_View || !App_Widgets.Catalog_Widgets_View.collection)
 	{	
@@ -147,17 +136,12 @@ function getCallScriptJSON()
 	
 	// Get call script widget
 	var callscriptWidget = App_Widgets.Catalog_Widgets_View.collection.where({ name : "CallScript" });
-	console.log(callscriptWidget);
 
 	if (callscriptWidget[0].get("is_added") == false)
 		return null;
 
-	console.log(callscriptWidget[0].get("prefs"));
-
 	// Convert prefs in json
 	var callscriptPrefsJson = JSON.parse(callscriptWidget[0].get("prefs"));
-	console.log("callscriptPrefsJson");
-	console.log(callscriptPrefsJson);
 
 	return callscriptPrefsJson;
 }
@@ -172,18 +156,13 @@ function createCSRCollection()
 {
 	var csr = getCallScriptJSON();
 	CSRCOLLECTION = new Base_Collection_View({data: csr.csrules});
-	console.log("CSRCOLLECTION: ");
-	console.log(CSRCOLLECTION);	
 }
 
 // Add rules in rules array to add same array in widget's prefs
 function makeRule()
 {
-	console.log("in makeRule");
-
 	// Get rule from form
 	var json = serializeForm("callscriptruleForm");
-	console.log(json);
 
 	// Get index of edited rule
 	var editRuleCount = json.rulecount;
@@ -219,8 +198,6 @@ function makeRule()
 			callscriptPrefsJson.csrules.push(json);			
 		}
 
-		console.log(callscriptPrefsJson);
-
 		return callscriptPrefsJson;
 	}
 
@@ -245,8 +222,6 @@ function makeRule()
 // Delete selected call script rule from widget
 function deleteCallScriptRule(dltRuleIndex)
 {
-	console.log("deleteCallScriptRule :" + dltRuleIndex);
-
 	// Get widget from collection and Convert prefs in json
 	var callscriptPrefsJson = getCallScriptJSON();
 
@@ -262,8 +237,6 @@ function deleteCallScriptRule(dltRuleIndex)
 		// Delete rule from widget
 		callscriptPrefsJson.csrules.splice(dltRuleIndex, 1);
 
-		console.log(callscriptPrefsJson.csrules);
-
 		// Saves the preferences into widget with sip widget name
 		save_widget_prefs("CallScript", JSON.stringify(callscriptPrefsJson), function(data)
 		{
@@ -278,8 +251,6 @@ function deleteCallScriptRule(dltRuleIndex)
 // Get widget from collection and convert prefs to json before display in table.
 function showCallScriptRule()
 {
-	console.log("in showCallScriptRule");
-	
 	makeWidgetTabActive();
 
 	// Shows loading image untill data gets ready for displaying
@@ -292,7 +263,6 @@ function showCallScriptRule()
 	// Add rules to show rules page
 	if (callscriptPrefsJson != null)
 	{
-		console.log("widget added");
 		$("#prefs-tabs-content").html(getTemplate("callscript-table", callscriptPrefsJson.csrules));
 		
 		// Apply drag drop (sortable)
@@ -303,8 +273,6 @@ function showCallScriptRule()
 // show add rule page with chaining
 function addCallScriptRule()
 {
-	console.log("in addCallScriptRule");
-	
 	// If Widgets collection is not defined, navigates to add widget
 	if (!App_Widgets || !App_Widgets.Catalog_Widgets_View || !App_Widgets.Catalog_Widgets_View.collection)
 	{	
@@ -340,8 +308,6 @@ function addCallScriptRule()
 // Get call script rule from widget and display in edit rule page
 function editCallScriptRule(ruleCount)
 {
-	console.log("in editCallScriptRule: " + ruleCount);
-	
 	makeWidgetTabActive();
 
 	// Shows loading image until data gets ready for displaying
@@ -355,8 +321,6 @@ function editCallScriptRule(ruleCount)
 	{
 		// get rule from id as in rulecount of rule
 		var csrule = getRule(callscriptPrefsJson,ruleCount);
-
-		console.log(csrule);
 
 		$("#prefs-tabs-content").html(LOADING_HTML);
 		head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
@@ -420,6 +384,7 @@ function getRuleIndex(callscriptPrefsJson,ruleCount)
 function setup_sortable_callscriptrules()
 {	
 	$(".csr-sortable").append("<tr class='pseduo-row' style='border:none!important;'><td></td><td></td><td></td></tr>");
+
 	// Loads jquery-ui to get sortable functionality on widgets
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function()
 	{
@@ -466,8 +431,6 @@ function setup_sortable_callscriptrules()
 // Get new positioned array of rule
 function getRulesNewPosition(callback)
 {
-	console.log("In getRulesNewPosition");
-	
 	var newRules = [];
 	
 	// Get widget from collection and Convert prefs in json
@@ -483,22 +446,16 @@ function getRulesNewPosition(callback)
 
 			var old_rule_index = $(element).attr('data');
 			
-			console.log("old_rule_index:"+old_rule_index);
-
 			// Get Model, model is set as data to widget element
 			var rule = callscriptPrefsJson.csrules[old_rule_index];
-			console.log("rule:"+rule);
 			
 			if(old_rule_index != index)
 			  {									
-				rule["position"] = index;
-				console.log("rule:"+rule);
-				
+				rule["position"] = index;				
 				$(element).attr('data',index);					
 			  }
 			
-			newRules.push(rule);
-			console.log("newRules:"+newRules);			
+			newRules.push(rule);			
 		}
 	});
 	
@@ -509,23 +466,18 @@ function getRulesNewPosition(callback)
 // Save rules after dropped 
 function saveCSRAfterDrop(newRules)
 {
- console.log("In saveCSRAfterDrop");	
- 
 //Get widget from collection and Convert prefs in json
 var callscriptPrefsJson = getCallScriptJSON();
  
 //Add rule to pref
  callscriptPrefsJson["csrules"] = newRules;
  
- console.log("callscriptPrefsJson:"+callscriptPrefsJson);
- 
  //Saves the preferences into widget with sip widget name
  save_widget_prefs("CallScript", JSON.stringify(callscriptPrefsJson), function(data)
 	{
 		console.log('In call script save success after drag-drop');
 		console.log(data);
-	});
- 
+	}); 
 }
 
 // Make widget tab active
