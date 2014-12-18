@@ -178,9 +178,12 @@ public class WebCalendarEventUtil
 	// 0 position is monday and 1 position is tuesday according to business
 	// hours plugin
 	JSONObject business = new JSONObject(business_hours_array.get(week_day).toString());
+
+	// fromHour and tillHour will be stored in string form like "9:00"
 	String fromHour = null;
 	String tillHour = null;
 
+	// from time is "9" formTime_mins is "00"
 	String fromTime = null;
 	String fromTime_mins = null;
 	String tillTime = null;
@@ -191,10 +194,12 @@ public class WebCalendarEventUtil
 	Long night_starttime = 0L;
 	Long night_endtime = 0L;
 
-	String night_fromtime = null;
-	String night_fromTimeMins = null;
+	String[] night_start_hours = null;
+	String night_from_hour = null; // stores like "9:00"
+	String night_fromtime = null; // stores like "9"
+	String night_fromTimeMins = null; // stores like "00"
 	String night_till_hour = null;
-	String[] night_hours = null;
+	String[] night_hours = null; // array after spliting 9:00 into 9 and 00;
 	String night_endTime = null;
 	String night_endTimeMins = null;
 
@@ -227,6 +232,35 @@ public class WebCalendarEventUtil
 		endtime = getEppochTime(date, month, year, Integer.parseInt(tillTime), Integer.parseInt(tillTime_mins),
 		        tz);
 
+		int night_before_wkday = getNightWeekDayAccordingToJS(week_day);
+		JSONObject night_business_hours = new JSONObject(business_hours_array.get(night_before_wkday)
+		        .toString());
+
+		if (night_business_hours.getString("isActive") == "true")
+		{
+
+		    // we have to pass hour to calendar only 00 format.
+		    // calendar give time in sec according to date and hour
+
+		    night_from_hour = night_business_hours.getString("timeFrom");
+		    night_start_hours = tillHour.split(":");
+		    night_fromtime = night_start_hours[0];
+		    night_fromTimeMins = night_start_hours[1];
+		    night_till_hour = night_business_hours.getString("timeTill");
+		    night_hours = night_till_hour.split(":");
+		    night_endTime = night_hours[0];
+		    night_endTimeMins = night_hours[1];
+		    if (Integer.parseInt(night_fromtime) > Integer.parseInt(night_endTime))
+		    {
+			night_starttime = getEppochTime(date, month, year, Integer.parseInt("00"),
+			        Integer.parseInt("00"), tz);
+
+			night_endtime = getEppochTime(date, month, year, Integer.parseInt(night_endTime),
+			        Integer.parseInt(night_endTimeMins), tz);
+		    }
+		    System.out.println(night_starttime + "  Night hours if fromtime > endtime start time and end time "
+			    + night_endTime);
+		}
 	    }
 	    else
 	    {
@@ -245,7 +279,7 @@ public class WebCalendarEventUtil
 
 		    night_fromtime = "00";
 		    night_fromTimeMins = "00";
-		    night_till_hour = business.getString("timeTill");
+		    night_till_hour = night_business.getString("timeTill");
 		    night_hours = tillHour.split(":");
 		    night_endTime = night_hours[0];
 		    night_endTimeMins = night_hours[1];
