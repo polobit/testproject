@@ -3745,12 +3745,12 @@
         Gridster.generated_stylesheets.push(serialized_opts);
 
         /* generate CSS styles for cols */
-        for (i = opts.cols; i >= 0; i--) {
+        /*for (i = opts.cols; i >= 0; i--) {
             styles += (opts.namespace + ' [data-col="'+ (i + 1) + '"] { left:' +
                 ((i * opts.widget_base_dimensions[0]) +
                 (i * opts.widget_margins[0]) +
                 ((i + 1) * opts.widget_margins[0])) + 'px; }\n');
-        }
+        }*/
 
         /* generate CSS styles for rows */
         for (i = opts.rows; i >= 0; i--) {
@@ -3766,11 +3766,11 @@
                 (y - 1) * (opts.widget_margins[1] * 2)) + 'px; }\n');
         }
 
-        for (var x = 1; x <= max_size_x; x++) {
+        /*for (var x = 1; x <= max_size_x; x++) {
             styles += (opts.namespace + ' [data-sizex="' + x + '"] { width:' +
                 (x * opts.widget_base_dimensions[0] +
                 (x - 1) * (opts.widget_margins[0] * 2)) + 'px; }\n');
-        }
+        }*/
 
         this.remove_style_tags();
 

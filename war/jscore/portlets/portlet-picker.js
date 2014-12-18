@@ -14,13 +14,13 @@ function organize_portlets(base_model){
 	 * as div id (div defined in portlet-add.html)
 	 */
 	if (portlet_type == "CONTACTS")
-		$('#contacts', this.el).append($(itemView.render().el).addClass('span6'));
-
-	if (portlet_type == "DEALS")
-		$('#deals', this.el).append($(itemView.render().el).addClass('span6'));
-	
-	if (portlet_type == "TASKSANDEVENTS")
-		$('#taksAndEvents', this.el).append($(itemView.render().el).addClass('span6'));
+		$('#contacts', this.el).append($(itemView.render().el));
+	else if (portlet_type == "DEALS")
+		$('#deals', this.el).append($(itemView.render().el));
+	else if (portlet_type == "TASKSANDEVENTS")
+		$('#taksAndEvents', this.el).append($(itemView.render().el));
+	else if (portlet_type == "USERACTIVITY")
+		$('#userActivity', this.el).append($(itemView.render().el));
 }
 function set_p_portlets(base_model){
 	var itemView;
@@ -28,7 +28,7 @@ function set_p_portlets(base_model){
 		itemView = new Base_Model_View({ model : base_model, template : "portlets-contacts-filterbased-model", tagName : 'div' });
 	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Emails Opened"){
 		itemView = new Base_Model_View({ model : base_model, template : "portlets-contacts-emails-opened-model", tagName : 'div' });
-	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Emails Sent"){
+	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Emails Sent"){
 		itemView = new Base_Model_View({ model : base_model, template : "portlets-contacts-emails-sent-model", tagName : 'div' });
 	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Growth Graph"){
 		itemView = new Base_Model_View({ model : base_model, template : "portlets-contacts-growth-graph-model", tagName : 'div' });
@@ -48,7 +48,7 @@ function set_p_portlets(base_model){
 		itemView = new Base_Model_View({ model : base_model, template : "portlets-tasksandevents-agenda-model", tagName : 'div' });
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Today Tasks"){
 		itemView = new Base_Model_View({ model : base_model, template : "portlets-tasksandevents-today-tasks-model", tagName : 'div' });
-	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Calls Per Person"){
+	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Calls Per Person"){
 		itemView = new Base_Model_View({ model : base_model, template : "portlets-contacts-calls-per-person-model", tagName : 'div' });
 	}
 	//var itemView = new Base_Model_View({ model : base_model, template : "portlets-model", tagName : 'div', });
@@ -112,17 +112,7 @@ function set_p_portlets(base_model){
 			$(this).html(getRandomLoadingImg());
 			$(this).html($(itemCollection.render().el));
 			
-			if(base_model.get("size_y")==1){
-				$(this).css("height",(base_model.get("size_y")*200)-40+"px");
-				$(this).css("max-height",(base_model.get("size_y")*200)-40+"px");
-			}else if(base_model.get("size_y")==2){
-				$(this).css("height",(base_model.get("size_y")*200)+10-40+"px");
-				$(this).css("max-height",(base_model.get("size_y")*200)+10-40+"px");
-			}else if(base_model.get("size_y")==3){
-				$(this).css("height",(base_model.get("size_y")*200)+20-40+"px");
-				$(this).css("max-height",(base_model.get("size_y")*200)+20-40+"px");
-			}
-			
+			setPortletContentHeight(base_model);
 			
 			/*if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Won"){
 				var tempEl=$(this);
@@ -143,6 +133,9 @@ function set_p_portlets(base_model){
 			$(this).html($(tasksCollection.render().el));
 			if(base_model.get('is_minimized'))
 				$(this).hide();
+			
+			setPortletContentHeight(base_model);
+			
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Deals By Milestone"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 
@@ -177,6 +170,9 @@ function set_p_portlets(base_model){
 			
 			if(base_model.get('is_minimized'))
 				$(this).hide();
+			
+			setPortletContentHeight(base_model);
+			
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Closures Per Person"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 			
@@ -221,6 +217,9 @@ function set_p_portlets(base_model){
 			
 			if(base_model.get('is_minimized'))
 				$(this).hide();
+			
+			setPortletContentHeight(base_model);
+			
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Deals Funnel"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 			
@@ -271,6 +270,9 @@ function set_p_portlets(base_model){
 			
 			if(base_model.get('is_minimized'))
 				$(this).hide();
+			
+			setPortletContentHeight(base_model);
+			
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Emails Sent"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 			
@@ -294,6 +296,9 @@ function set_p_portlets(base_model){
 			
 			if(base_model.get('is_minimized'))
 				$(this).hide();
+			
+			setPortletContentHeight(base_model);
+			
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Growth Graph"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 			
@@ -346,6 +351,8 @@ function set_p_portlets(base_model){
 			if(base_model.get('is_minimized'))
 				$(this).hide();
 			
+			setPortletContentHeight(base_model);
+			
 			//Saved tags are appended
 			var p_settings=base_model.get('settings');
 			var p_tags=p_settings.tags;
@@ -377,6 +384,9 @@ function set_p_portlets(base_model){
 			
 			if(base_model.get('is_minimized'))
 				$(this).hide();
+			
+			setPortletContentHeight(base_model);
+			
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Calls Per Person"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 			
@@ -435,6 +445,8 @@ function set_p_portlets(base_model){
 			
 			if(base_model.get('is_minimized'))
 				$(this).hide();
+			
+			setPortletContentHeight(base_model);
 		}
 	});
 	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
@@ -443,31 +455,6 @@ function set_p_portlets(base_model){
 	});
 	enablePortletTimeAndDates(base_model);
 }
-
-
-function set_p_portlets1(base_model){
-	var itemView;
-	if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Filter Based"){
-		itemView = new Base_Model_View({ model : base_model, template : "portlets-contacts-filterbased-model", tagName : 'li', id : base_model.get("id")+"-li" });
-	}
-	if($('.gridster > ul > li',this.el).length==0)
-		$('.gridster > ul',this.el).html($(itemView.render().el).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
-	else
-		$('.gridster > ul > li:last',this.el).after($(itemView.render().el).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
-	if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Filter Based"){
-		if(base_model.get('settings').filter=="companies")
-			itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+base_model.get('settings').filter, templateKey : "portlets-companies", individual_tag_name : 'tr' });
-		else
-			itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+base_model.get('settings').filter, templateKey : "portlets-contacts", individual_tag_name : 'tr' });
-	}
-	if(itemCollection!=undefined)
-		itemCollection.collection.fetch();
-	$('#'+base_model.get("id")+'-li > .portlet_body').append($(itemCollection.render().el));
-	//$('.gs-w',this.el).append($(itemCollection.render().el));
-}
-
-
-
 
 /**
  * Generic function to fetch data for graphs and act accordingly on plan limit error
@@ -500,7 +487,7 @@ function dealsByMilestoneBarGraph(selector,milestonesList,milestoneValuesList,mi
 		$('#'+selector).highcharts({
 	        chart: {
 	            type: 'bar',
-	            width: 325
+	            marginRight: 20
 	        },
 	        title: {
 	            text: ''
@@ -549,7 +536,7 @@ function closuresPerPersonBarGraph(selector,catges,data,text,name){
 		$('#'+selector).highcharts({
 	        chart: {
 	            type: 'bar',
-	            width: 325
+	            marginRight: 20
 	        },
 	        title: {
 	            text: ''
@@ -596,8 +583,8 @@ function dealsFunnelGraph(selector,funnel_data){
 		$('#'+selector).highcharts({
 	        chart: {
 	            type: 'funnel',
-	            width: 325,
-	            marginLeft: -90
+	            marginRight: 20,
+	            className: 'deals-funnel-portlet'
 	        },
 	        title: {
 	            text: ''
@@ -634,7 +621,7 @@ function emailsSentBarGraph(selector,catges,mailsCountList){
 		$('#'+selector).highcharts({
 	        chart: {
 	            type: 'bar',
-	            width: 325
+	            marginRight: 20
 	        },
 	        title: {
 	            text: ''
@@ -706,7 +693,7 @@ function portletGrowthGraph(selector,series,base_model){
 			$('#'+selector).highcharts({
 		        chart: {
 		            type: 'line',
-		            width: 325
+		            marginRight: 20
 		        },
 		        title: {
 		            text: ''
@@ -753,7 +740,7 @@ function dealsAssignedBarGraph(selector,catges,dealsCountList){
 		$('#'+selector).highcharts({
 	        chart: {
 	            type: 'bar',
-	            width: 325
+	            marginRight: 20
 	        },
 	        title: {
 	            text: ''
@@ -800,7 +787,7 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,text,colors){
 		$('#'+selector).highcharts({
 	        chart: {
 	            type: 'bar',
-	            width: 325
+	            marginRight: 20
 	        },
 	        title: {
 	            text: ''
@@ -854,5 +841,17 @@ function enablePortletTimeAndDates(base_model){
 				$('#end-date').val(end.getTime());
 			});
 		});
+	}
+}
+function setPortletContentHeight(base_model){
+	if(base_model.get("size_y")==1){
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)-40+"px");
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)-40+"px");
+	}else if(base_model.get("size_y")==2){
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+10-40+"px");
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+10-40+"px");
+	}else if(base_model.get("size_y")==3){
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+20-40+"px");
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+20-40+"px");
 	}
 }

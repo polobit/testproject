@@ -49,21 +49,22 @@ function addNewPortlet(portlet_type,p_name){
 	else if(p_name=="CallsPerPerson")
 		obj.name="Calls Per Person";
 	obj.portlet_type=portlet_type;
-	obj.column_position=1;
 	var max_row_position=0;
 	if(gridster!=undefined)
-		gridster.$widgets.each(function(){
+		/*gridster.$widgets.each(function(){
 			if(parseInt($(this).attr("data-row"))>max_row_position)
 				max_row_position = parseInt($(this).attr("data-row")) * parseInt($(this).attr("data-sizey"));
-		});
-	obj.row_position=max_row_position+1;
-	obj.size_x=1;
-	obj.size_y=1;
+		});*/
+		var next_position = gridster.next_position(1,1);
+	obj.column_position=next_position.col;
+	obj.row_position=next_position.row;
+	obj.size_x=next_position.size_x;
+	obj.size_y=next_position.size_y;
 	if(portlet_type=="CONTACTS" && p_name=="FilterBased")
 		json['filter']="contacts";
 	else if(portlet_type=="CONTACTS" && p_name=="EmailsOpened")
 		json['duration']="2-days";
-	else if(portlet_type=="CONTACTS" && p_name=="EmailsSent")
+	else if(portlet_type=="USERACTIVITY" && p_name=="EmailsSent")
 		json['duration']="1-day";
 	else if(portlet_type=="CONTACTS" && p_name=="GrowthGraph"){
 		json['tags']="";
@@ -86,7 +87,7 @@ function addNewPortlet(portlet_type,p_name){
 		json['duration']="1-week";
 	else if(portlet_type=="DEALS" && p_name=="DealsAssigned")
 		json['duration']="1-day";
-	else if(portlet_type=="CONTACTS" && p_name=="CallsPerPerson"){
+	else if(portlet_type=="USERACTIVITY" && p_name=="CallsPerPerson"){
 		json['group-by']="number-of-calls";
 		json['duration']="1-day";
 	}
@@ -119,9 +120,9 @@ function addNewPortlet(portlet_type,p_name){
         	if($('#no-portlets').is(':visible'))
     			$('#no-portlets').hide();
         	Portlets_View.collection.add(model);
-        	
+        	var scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
         	//move the scroll bar to bottom for showing the newly added portlet
-        	window.scrollTo(0,document.body.scrollHeight)
+        	window.scrollTo(0,scrollPosition);
         }});
 	setTimeout(function(){
 		gridster.add_widget($('#ui-id-'+model.column_position+'-'+model.row_position),1,1,model.column_position,model.row_position);
@@ -151,8 +152,12 @@ function deletePortlet(el){
 		success : function(data){
 			Portlets_View.collection.remove(portlet);
 			//$('#'+el.parentNode.parentNode.parentNode.parentNode.parentNode.id).remove();
-			gridster.remove_widget($('#'+el.id.split("-close")[0]).parent(),true);
+			gridster.remove_widget($('#'+el.id.split("-close")[0]).parent(),false);
+			setTimeout(function(){
+				gridster.$changed.attr('id','ui-id-'+gridster.$changed.attr('data-col')+'-'+gridster.$changed.attr('data-row'));
+			},500);
 			$('#'+el.id.split("-close")[0]).parent().remove();
+			
 			
 			if($('.gridster-portlets > div').length==0)
 				$('#no-portlets').show();

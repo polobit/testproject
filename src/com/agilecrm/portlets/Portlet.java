@@ -36,7 +36,7 @@ public class Portlet {
     public String name = null;
     
     public static enum PortletType{
-    	CONTACTS, DEALS, TASKSANDEVENTS
+    	CONTACTS, DEALS, TASKSANDEVENTS, USERACTIVITY
     };
 
     /**

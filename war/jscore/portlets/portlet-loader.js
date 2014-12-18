@@ -18,7 +18,7 @@ function loadPortlets(el){
 		is_portlet_view_new = true;
 		Portlets_View = new Base_Collection_View({ url : '/core/api/portlets', sortKey : "row_position", restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
 			postRenderCallback : function(portlets_el){
-				head.load("css/misc/agile-portlet.css","css/jquery.gridster.min.css", function(){
+				head.load("css/misc/agile-portlet.css","css/jquery.gridster.css", function(){
 					// If scripts aren't loaded earlier, setup is initialized
 					set_up_portlets(el, portlets_el);
 					if(Portlets_View.collection.length==0)
@@ -93,14 +93,14 @@ function set_up_portlets(el, portlets_el){
 	$(function(){
 		gridster = $('.gridster > div:visible',portlets_el).gridster({
 	    	widget_selector: "div",
-	        widget_margins: [10, 10],
+	        widget_margins: [10, 5],
 	        widget_base_dimensions: [400, 200],
 	        min_cols: 3,
-	        autogenerate_stylesheet: false,
+	        autogenerate_stylesheet: true,
 	        draggable: {
 	        	stop: function(event,ui){
 	        		
-	        		$('#'+this.$player.attr('id')).attr('id','ui-id-'+this.$player.attr('data-col')+'-'+this.$player.attr('data-row'));
+	        		//$('#'+this.$player.attr('id')).attr('id','ui-id-'+this.$player.attr('data-col')+'-'+this.$player.attr('data-row'));
 	        		
 					var models = [];
 
@@ -109,6 +109,11 @@ function set_up_portlets(el, portlets_el){
 					 * position and store it in array
 					 */
 					$('#portlet-res > div > .gs-w').each(function(){
+						
+						$(this).attr('id','ui-id-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
+						
+						$(this).find('div.portlet_body').attr('id','p-body-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
+						
 						var model_id = $(this).find('.portlets').attr('id');
 						
 						var model = Portlets_View.collection.get(model_id);
@@ -126,6 +131,7 @@ function set_up_portlets(el, portlets_el){
 	        },
 	        resize: {
 	        	enabled: true,
+	        	max_size: [3,3],
 	        	stop: function(event,ui){
 	        		
 	        		/*if($('#'+this.$resized_widget.attr('id')).height()<=200){
@@ -135,6 +141,9 @@ function set_up_portlets(el, portlets_el){
 	        			$('#'+this.$resized_widget.attr('id')).css("height",$('#'+this.$resized_widget.attr('id')).height()-40+"px");
 	        			$('#'+this.$resized_widget.attr('id')).css("max-height",$('#'+this.$resized_widget.attr('id')).height()-40+"px");
 	        		}*/
+	        		$(window).trigger('resize');
+	        		
+	        		$('#'+this.$resized_widget.attr('id')+' > div.portlet_body').css('overflow-x','hidden').css('overflow-y','auto');
 	        		
 					var models = [];
 
@@ -143,6 +152,11 @@ function set_up_portlets(el, portlets_el){
 					 * position and store it in array
 					 */
 					$('#portlet-res > div > .gs-w').each(function(){
+						
+						$(this).attr('id','ui-id-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
+						
+						$(this).find('div.portlet_body').attr('id','p-body-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
+						
 						var model_id = $(this).find('.portlets').attr('id');
 						
 						var model = Portlets_View.collection.get(model_id);
@@ -285,7 +299,7 @@ function showPortletSettings(el){
 		showPortletSettingsForm("portletsContactsEmailsOpenedSettingsForm");
 		elData = $('#portletsContactsEmailsOpenedSettingsForm');
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
-	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Emails Sent"){
+	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Emails Sent"){
 		showPortletSettingsForm("portletsContactsEmailsSentSettingsForm");
 		elData = $('#portletsContactsEmailsSentSettingsForm');
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
@@ -368,7 +382,7 @@ function showPortletSettings(el){
 		showPortletSettingsForm("portletsDealsAssignedSettingsForm");
 		elData = $('#portletsDealsAssignedSettingsForm');
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
-	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Calls Per Person"){
+	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Calls Per Person"){
 		showPortletSettingsForm("portletsCallsPerPersonSettingsForm");
 		elData = $('#portletsCallsPerPersonSettingsForm');
 		$("#group-by", elData).find('option[value='+ base_model.get("settings")["group-by"] +']').attr("selected", "selected");
@@ -488,19 +502,9 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        	var portletCollectionView;
 	        	if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Filter Based"){
 	        		if(data.get('settings').filter=="companies")
-	        			portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter, templateKey : 'portlets-companies', individual_tag_name : 'tr',
-	        				postRenderCallback : function(){
-	        					//gridster.remove_widget($('#'+data.get('id')).parent(),true);
-	        					gridster.add_widget($('#ui-id-'+data.get('column_position')+'-'+data.get('row_position')),1,1,data.get('column_position'),data.get('row_position'));
-	        					gridster.set_dom_grid_height();
-	        				}});
+	        			portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter, templateKey : 'portlets-companies', individual_tag_name : 'tr' });
 	        		else
-	        			portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter, templateKey : 'portlets-contacts', individual_tag_name : 'tr',
-	        				postRenderCallback : function(){
-	        					//gridster.remove_widget($('#'+data.get('id')).parent(),true);
-	        					gridster.add_widget($('#ui-id-'+data.get('column_position')+'-'+data.get('row_position')),1,1,data.get('column_position'),data.get('row_position'));
-	        					gridster.set_dom_grid_height();
-	        				}});
+	        			portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter, templateKey : 'portlets-contacts', individual_tag_name : 'tr' });
 	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Emails Opened"){
 	        		portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+data.get('settings').duration, templateKey : 'portlets-contacts', individual_tag_name : 'tr' });
 	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Pending Deals"){
@@ -513,6 +517,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        	if(data.get('name')!="Deals By Milestone" && data.get('name')!="Closures Per Person" && data.get('name')!="Deals Funnel" && data.get('name')!="Emails Sent" && data.get('name')!="Growth Graph" && data.get('name')!="Deals Assigned" && data.get('name')!="Calls Per Person"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(portletCollectionView.render().el));
+	        		
 	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Deals By Milestone"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
 	        		var selector=idVal;
@@ -542,6 +547,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    				});
 	    				$('#'+data.get("id")+'-track-options').append(options);
 	    			});
+	    			
 	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Closures Per Person"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
 	        		
@@ -583,6 +589,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    				
 	    				closuresPerPersonBarGraph(selector,catges,data2,text,name);
 	    			});
+	    			
 	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Deals Funnel"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
 	        		
@@ -629,8 +636,8 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    				});
 	    				$('#'+data.get("id")+'-track-options').append(options);
 	    			});
-	        		
-	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Emails Sent"){
+	    			
+	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Emails Sent"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
 	        		
 	        		var selector=idVal;
@@ -650,7 +657,6 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    				
 	    				emailsSentBarGraph(selector,catges,mailsCountList);
 	    			});
-	        		
 	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Growth Graph"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
 	        		
@@ -698,7 +704,6 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    				
 	    				portletGrowthGraph(selector,series,data);
 	    			});
-	    			
 	    			//Saved tags are appended
 	    			var p_settings=data.get('settings');
 	    			var p_tags=p_settings.tags;
@@ -728,8 +733,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    				
 	    				dealsAssignedBarGraph(selector,domainUsersList,dealsAssignedCountList);
 	    			});
-	        		
-	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Calls Per Person"){
+	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Calls Per Person"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
 	        		
 	        		var selector=idVal;
@@ -795,6 +799,10 @@ $('.portlet-settings-save-modal').live('click', function(e){
 		        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').find('.dealsWonValue').append("Total won value:"+totalVal);
 	        		},2000);
 	        	}*/
+	        	
+	        	setPortletContentHeight(data);
+    			$('#'+data.get('id')).parent().find('div:last').after('<span class="gs-resize-handle gs-resize-handle-both"></span>');
+	        	
 	        	if(data.get('is_minimized'))
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').hide();
 	        	

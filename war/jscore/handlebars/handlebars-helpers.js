@@ -3488,6 +3488,72 @@ $(function()
 		var shopify_webhook = window.location.origin + "/shopifytrigger?api-key=" + agile_api.api_key;
 		return new Handlebars.SafeString(shopify_webhook);
 	});
+	/**
+	 * getting convenient name of portlet
+	 */
+	Handlebars.registerHelper('get_portlet_name', function(p_name) {
+		var portlet_name = '';
+		if(p_name=='Filter Based')
+			portlet_name = 'Contact Filter';
+		else if(p_name=='Emails Opened')
+			portlet_name = 'Email Opens';
+		else if(p_name=='Emails Sent')
+			portlet_name = 'Emails';
+		else if(p_name=='Growth Graph')
+			portlet_name = 'Tag Graph';
+		else if(p_name=='Calls Per Person')
+			portlet_name = 'Calls';
+		else if(p_name=='Pending Deals')
+			portlet_name = 'Pending Deals';
+		else if(p_name=='Deals By Milestone')
+			portlet_name = 'Deals by Milestone';
+		else if(p_name=='Closures Per Person')
+			portlet_name = 'Closures per Person';
+		else if(p_name=='Deals Won')
+			portlet_name = 'Deals Won';
+		else if(p_name=='Deals Funnel')
+			portlet_name = 'Deals Funnel';
+		else if(p_name=='Deals Assigned')
+			portlet_name = 'Deals Assigned';
+		else if(p_name=='Agenda')
+			portlet_name = "Today's Events";
+		else if(p_name=='Today Tasks')
+			portlet_name = "Today's Tasks";
+		return portlet_name;
+	});
+	/**
+	 * getting portlet icons
+	 */
+	Handlebars.registerHelper('get_portlet_icon', function(p_name) {
+		var icon_name = '';
+		if(p_name=='Filter Based')
+			icon_name = 'icon-filter';
+		else if(p_name=='Emails Opened')
+			icon_name = 'icon-envelope';
+		else if(p_name=='Emails Sent')
+			icon_name = 'icon-envelope';
+		else if(p_name=='Growth Graph')
+			icon_name = 'icon-bar-chart';
+		else if(p_name=='Calls Per Person')
+			icon_name = 'icon-phone';
+		else if(p_name=='Pending Deals')
+			icon_name = 'icon-time';
+		else if(p_name=='Deals By Milestone')
+			icon_name = 'icon-flag-checkered';
+		else if(p_name=='Closures Per Person')
+			icon_name = 'icon-thumbs-up';
+		else if(p_name=='Deals Won')
+			icon_name = 'icon-briefcase';
+		else if(p_name=='Deals Funnel')
+			icon_name = 'icon-filter';
+		else if(p_name=='Deals Assigned')
+			icon_name = 'icon-user';
+		else if(p_name=='Agenda')
+			icon_name = "icon-calendar";
+		else if(p_name=='Today Tasks')
+			icon_name = "icon-tasks";
+		return icon_name;
+	});
 });
 
 // helper function return created time for event
