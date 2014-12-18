@@ -523,9 +523,9 @@ function deserializeChainedSelect1(form, el, element)
 		if(LHS == 'tags') {
 			$('#tags_div').parent().find('a').addClass('bold-text');
 			$('#tags_div').removeClass('hide');
-			$('#tags_div').prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 			if(tagsConditionsCount == 0) {
 				currentElemnt = $($('#tags-lhs-filter-table').find("tr")[1]);
+				$('#tags_div').prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 			} else {
 				var htmlContent = $($('#tags-lhs-filter-table').find("tr")[0]).clone();
 				htmlContent.find('div').removeClass('hide').addClass('lhs-contact-filter-row');
@@ -535,10 +535,11 @@ function deserializeChainedSelect1(form, el, element)
 				currentElemnt = $('#tags-lhs-filter-table').find("tbody").find('tr:last');
 			}
 			tagsConditionsCount++;
+		} else {
+			$(currentElemnt).prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 		}
 		$(currentElemnt).parent().find("a").addClass('bold-text');
 		$(currentElemnt).removeClass('hide');
-		$(currentElemnt).prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 		$(currentElemnt).find('[name="CONDITION"]').val(CONDITION);
 		$(currentElemnt).find('[name="CONDITION"]').trigger('change');
 		var RHS_ELEMENT = $(currentElemnt).find('.'+CONDITION).find('#RHS').children();
