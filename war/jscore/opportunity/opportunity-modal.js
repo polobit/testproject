@@ -629,7 +629,7 @@ if(json.close_date==0)
 						if(!dealPipelineModel)
 							return;
 						var filterJSON = $.parseJSON(readCookie('deal-filters'));
-						if(deal.owner.id != filterJSON.owner_id.toString())
+						if(deal.owner.id.toString() != filterJSON.owner_id)
 							return;
 						if(filterJSON.archived != 'all' && deal.archived != filterJSON.archived)
 							return;

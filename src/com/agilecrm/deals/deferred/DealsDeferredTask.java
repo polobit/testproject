@@ -48,7 +48,7 @@ public class DealsDeferredTask implements DeferredTask
 	    int defCount = 0;
 	    for (Milestone milestone : milestones)
 	    {
-		if (milestone.equals("Default"))
+		if (milestone.name.equals("Default"))
 		{
 		    milestone.isDefault = true;
 		    defCount++;
