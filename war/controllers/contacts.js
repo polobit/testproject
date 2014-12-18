@@ -67,10 +67,10 @@ var ContactsRouter = Backbone.Router.extend({
 
 		head.js(LIB_PATH + 'lib/jquery.timeago.js', LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
 		{
-			var el = $(getTemplate('dashboard1', { time_sec : (time_date).toString().toLowerCase(), time_format : "" }));
+			var el = $(getTemplate('dashboard1', { time_sec : (time_date).toString().toLowerCase(), time_format : time_date.getTime()/1000 }));
 			$("#content").html(el);
 			
-			$("span#last-login-time").timeago();
+			$("#last-login-time").timeago();
 			
 			setup_dashboard(el);
 			// loadDynamicTimeline("my-timeline", el);

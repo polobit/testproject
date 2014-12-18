@@ -87,8 +87,14 @@ function getOptions()
 	// to 1375727400000
 	var start_time = Date.parse($.trim(range[0])).valueOf();
 
+	var end_value = $.trim(range[1]);
+	
+	// To make end value as end time of day
+	if(end_value)
+		end_value = end_value + " 23:59:59";
+	
 	// Returns milliseconds from end date.
-	var end_time = Date.parse($.trim(range[1])).valueOf();
+	var end_time = Date.parse(end_value).valueOf();
 
 	// Adds start_time, end_time and timezone offset to params.
 	options += ("start_time=" + start_time + "&end_time=" + end_time);

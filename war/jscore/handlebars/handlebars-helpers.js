@@ -3460,6 +3460,7 @@ $(function()
 			icon_class = "icon-text-height";
 		return icon_class;
 	});
+
 	// To choose font awesome icon for custom fields
 	Handlebars.registerHelper('choose_custom_field_type', function(field_type) {
 		var field_type_name='';
@@ -3480,22 +3481,44 @@ $(function()
 		return field_type_name;
 	});
 
+	Handlebars.registerHelper('shopifyWebhook', function()
+	{
+		var agile_api = $.ajax({ type : 'GET', url : '/core/api/api-key', async : false, dataType : 'json' }).responseText;
+		agile_api = JSON.parse(agile_api);
+		var shopify_webhook = window.location.origin + "/shopifytrigger?api-key=" + agile_api.api_key;
+		return new Handlebars.SafeString(shopify_webhook);
+	});
+	
 	Handlebars.registerHelper('if_equals_or', function()
-				{
-						var options = arguments[arguments.length-1];
-						try {
-							for(var i = 0; i < arguments.length-1; i=i+2) {
-								value = arguments[i];
-								target = arguments[i+1];
-								if ((typeof target === "undefined") || (typeof value === "undefined"))
-									return options.inverse(this);
-								if (value.toString().trim() == target.toString().trim())
-									return options.fn(this);
-							}
-							return options.inverse(this);
-						} catch(err) {
-							console.log("error while if_equals_or of handlebars helper : "+ err.message);
-							return options.inverse(this);
-						}
-				});
+	{
+		var options = arguments[arguments.length-1];
+		try {
+			for(var i = 0; i < arguments.length-1; i=i+2) {
+				value = arguments[i];
+				target = arguments[i+1];
+				if ((typeof target === "undefined") || (typeof value === "undefined"))
+					return options.inverse(this);
+				if (value.toString().trim() == target.toString().trim())
+					return options.fn(this);
+			}
+			return options.inverse(this);
+		} catch(err) {
+			console.log("error while if_equals_or of handlebars helper : "+ err.message);
+			return options.inverse(this);
+		}
+	});
 });
+
+// helper function return created time for event
+function getEventCreatedTime(due)
+{
+	// Get Todays Date
+	var eventStartDate = new Date(due);
+	due = eventStartDate.getTime() / 1000;
+	var date = new Date();
+	date.setHours(0, 0, 0, 0);
+
+	date = date.getTime() / 1000;
+	// console.log("Today " + date + " Due " + due);
+	return Math.floor((due - date) / (24 * 3600));
+}

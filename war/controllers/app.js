@@ -41,7 +41,7 @@ $(function()
 	 * events, and dispatching routes
 	 */
 	Backbone.history.start();
-	setup_our_domain_sync();
+//	setup_our_domain_sync();
 });
 
 // Global variable to store current route
