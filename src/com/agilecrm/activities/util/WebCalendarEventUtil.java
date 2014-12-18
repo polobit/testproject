@@ -18,6 +18,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.AccountPrefs;
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Event.EventType;
@@ -147,6 +149,15 @@ public class WebCalendarEventUtil
 	// used to store business hours
 	List<Long> business_hours = new ArrayList<>();
 
+	if (StringUtils.isEmpty(usertimezone))
+	{
+	    AccountPrefs acprefs = AccountPrefsUtil.getAccountPrefs();
+	    usertimezone = acprefs.timezone;
+	    if (StringUtils.isEmpty(usertimezone))
+	    {
+		usertimezone = "UTC";
+	    }
+	}
 	// according domain user timezone gets the weekday
 	// i.e in java sun,mon,tue,wed,thu,fri,sat 1,2,3,4,5,6,7 respectivly
 	TimeZone tz = TimeZone.getTimeZone(usertimezone);
