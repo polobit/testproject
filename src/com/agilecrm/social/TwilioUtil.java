@@ -11,7 +11,6 @@ import org.json.XML;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
-import com.agilecrm.widgets.util.WidgetUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
 import com.thirdparty.twilio.sdk.TwilioRestResponse;
@@ -716,47 +715,24 @@ public class TwilioUtil
 
 	public static JSONArray getCallLogsWithRecordingsFromBothWidget(Widget widget, String to) throws Exception
 	{
-		JSONArray logsFromOldTwilio = new JSONArray();
 		JSONArray logs = new JSONArray();
 
 		try
 		{
 			// Get New twilio call logs and recording
-			{
-				// Fetch account SID from widget preferences
-				String accountSid = widget.getProperty("twilio_acc_sid");
+			// Fetch account SID from widget preferences
+			String accountSid = widget.getProperty("twilio_acc_sid");
 
-				// Fetch auth token from widget preferences
-				String accAuthToken = widget.getProperty("twilio_auth_token");
+			// Fetch auth token from widget preferences
+			String accAuthToken = widget.getProperty("twilio_auth_token");
 
-				/*
-				 * Build Twilio REST client with the account SID of the logged
-				 * in person and agile authentication token
-				 */
-				TwilioRestClient newClient = new TwilioRestClient(accountSid, accAuthToken, null);
+			/*
+			 * Build Twilio REST client with the account SID of the logged in
+			 * person and agile authentication token
+			 */
+			TwilioRestClient newClient = new TwilioRestClient(accountSid, accAuthToken, null);
 
-				logs = getCallLogsWithRecordings(newClient, to);
-			}
-
-			// Get Old twilio call logs and recording
-			{
-				// Check old twilio widget is added or not
-				Widget oldTwilioWidget = WidgetUtil.getWidget("Twilio");
-
-				if (oldTwilioWidget != null)
-				{
-					// Get Twilio client configured with account SID and
-					// authToken
-					TwilioRestClient client = getTwilioClient(oldTwilioWidget);
-
-					logsFromOldTwilio = getCallLogsWithRecordings(client, to);
-
-					for (int i = 0; i < logsFromOldTwilio.length(); i++)
-					{
-						logs.put(logsFromOldTwilio.getJSONObject(i));
-					}
-				}
-			}
+			logs = getCallLogsWithRecordings(newClient, to);
 
 			System.out.println("TwilioIO call logs : " + logs);
 			return logs;

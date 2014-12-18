@@ -766,6 +766,7 @@ function twilioError(id, message)
 	 * with given id
 	 */
 	$('#' + id).html(getTemplate('twilio-error', error_json));
+	$('#' + id).append('<a class="btn" id="delete-widget" widget-name="Twilio" style="margin-top: 5px;">Delete Widget</a>');
 }
 
 /**
@@ -835,7 +836,8 @@ $(function()
 			var twilio_prefs = JSON.parse(twilio_widget.prefs);
 			console.log(twilio_prefs);
 
-			twilioError(Twilio_PLUGIN_NAME, "This widget is deprecated.");
+			// Because of new widget it is deprecated and all functions are commented.
+			twilioError(Twilio_PLUGIN_NAME, "This widget is now deprecated and a new improved Twilio widget is available.");
 			
 			/*
 			 * Check if Twilio account has registered numbers and shows set up to verify
