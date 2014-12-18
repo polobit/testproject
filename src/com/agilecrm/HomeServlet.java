@@ -216,7 +216,8 @@ public class HomeServlet extends HttpServlet
 	{
 	    // Set timezone in account prefs.
 	    AccountPrefs accPrefs = AccountPrefsUtil.getAccountPrefs();
-	    if (accPrefs.timezone == null || "UTC".equals(accPrefs.timezone))
+	    if (StringUtils.isEmpty(accPrefs.timezone) || "UTC".equals(accPrefs.timezone)
+		    || "GMT".equals(accPrefs.timezone))
 	    {
 		accPrefs.timezone = (String) req.getSession().getAttribute("account_timezone");
 		accPrefs.save();
