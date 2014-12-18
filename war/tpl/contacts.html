@@ -401,6 +401,7 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 	</div>
 	{{/if_equals}}
 	{{#if_equals "LIST" field_type}}
+	<input type="hidden" name="LHS" value="{{field_label}}" />
 	<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="f-left w-105p">
 		<option value="EQUALS" >is</option>
 		<option value="NOTEQUALS" >isn't</option>
