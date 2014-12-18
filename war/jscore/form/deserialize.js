@@ -528,7 +528,7 @@ function deserializeChainedSelect1(form, el, element)
 				$('#tags_div').prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 			} else {
 				var htmlContent = $($('#tags-lhs-filter-table').find("tr")[0]).clone();
-				htmlContent.find('div').removeClass('hide').addClass('lhs-contact-filter-row');
+				htmlContent.find('div.hide').removeClass('hide').addClass('lhs-contact-filter-row');
 				addTagsDefaultTypeahead(htmlContent);
 				$(htmlContent).find("i.filter-tags-multiple-remove-lhs").css("display", "inline-block");
 				$('#tags-lhs-filter-table').find("tbody").append(htmlContent);
