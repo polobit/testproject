@@ -85,7 +85,7 @@ Task <a href="#task/{{entity_id}}">{{label}}</a> created<br/>
 <div>	
  Task <a href="#task/{{entity_id}}" >{{label}}</a> completed<br/>
 
- <i class="icon-tasks"></i> {{#if this.entityObject}}Task assigned to {{entityObject.taskOwner.name}} was completed.{{/if}} {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
+ <i class="icon-tasks"></i> {{#if this.entityObject}}Task due {{epochToHumanDate "ddd mmm dd yyyy" entityObject.due}} was completed.{{/if}} {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
 	</div>
 <div>
 	
@@ -1056,14 +1056,14 @@ Added Tag to <a href="#contact/{{entity_id}}">{{label}}</a><br/>
 
 {{#if_equals "1" custom2}}
    Added contact to Document <a href="{{custom1}}" target="_blank">{{label}}</a><br/>
-   <i class="icon-file icon-white"></i>Added {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}. Document type - {{network entityObject.network_type}}
+   <i class="icon-file icon-white"></i>Added {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}.
 {{else}} 
 {{#if_equals "no related contacts" custom3}}
    Added Document <a href="{{custom1}}" target="_blank">{{label}}</a><br/>
    <i class="icon-file icon-white"></i> Document type - {{network entityObject.network_type}}
 {{else}}
 	 Added contacts to Document <a href="{{custom1}}" target="_blank">{{label}}</a> <br/>
-<i class="icon-file icon-white"></i>{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} Document type - {{network entityObject.network_type}}
+<i class="icon-file icon-white"></i>{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
 {{/if_equals}} 
 {{/if_equals}}	
 </div>
@@ -1089,10 +1089,10 @@ Added Tag to <a href="#contact/{{entity_id}}">{{label}}</a><br/>
 <div>	
 {{#if_equals "1" custom2}}
    Removed contact from Document <a href="{{custom1}}" target="_blank">{{label}}</a><br/>
-  <i class="icon-file"></i>Removed {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}. Document type - {{network entityObject.network_type}} 
+  <i class="icon-file"></i>Removed {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}. 
 {{else}} 
 	 Removed contacts from Document <a href="{{custom1}}" target="_blank">{{label}}</a><br/>
-<i class="icon-file"></i>Removed {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}. Document type - {{network entityObject.network_type}}
+<i class="icon-file"></i>Removed {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}.
 {{/if_equals}}	
 </div>
 <div>
@@ -1146,13 +1146,13 @@ Deleted  {{custom1}} Documents<br/>
 <div class="pull-left activity-tag">
 <div>
 {{#if_equals "incoming" custom2}}
-Incoming call ({{custom1}}) from {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
-<i class="icon-phone"></i>{{callActivityFriendlyStatus custom3}} {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}
+Call from {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+<i class="icon-phone"></i>{{callActivityFriendlyStatus custom3}} - {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}({{custom1}})
 {{/if_equals}}
 
 {{#if_equals "outgoing" custom2}}	
-Outgoing call ({{custom1}}) to {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
-<i class="icon-phone"></i>{{callActivityFriendlyStatus custom3}} {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}
+Called {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+<i class="icon-phone"></i>{{callActivityFriendlyStatus custom3}} - {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}({{custom1}})
 {{/if_equals}}
 
 
