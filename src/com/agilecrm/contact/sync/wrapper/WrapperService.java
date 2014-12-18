@@ -5,6 +5,7 @@ import java.util.List;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
+import com.thirdparty.google.ContactPrefs;
 
 /**
  * The Interface WrapperService provide several methods for wrap contact field
@@ -27,6 +28,8 @@ public interface WrapperService
      * @return the wrapper
      */
     public ContactWrapper getWrapper(Object object);
+    
+    public ContactWrapper getWrapper(Object object, ContactPrefs prefs);
 
     /**
      * Gets the first name.

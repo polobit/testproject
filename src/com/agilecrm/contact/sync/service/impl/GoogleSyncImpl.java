@@ -3,30 +3,30 @@
  */
 package com.agilecrm.contact.sync.service.impl;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.scribe.utils.Preconditions;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.service.TwoWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
 import com.agilecrm.contact.sync.wrapper.impl.GoogleContactWrapperImpl;
+import com.google.appengine.api.NamespaceManager;
 import com.google.gdata.client.Query;
-import com.google.gdata.client.authn.oauth.OAuthException;
 import com.google.gdata.client.contacts.ContactsService;
 import com.google.gdata.data.DateTime;
+import com.google.gdata.data.Link;
 import com.google.gdata.data.batch.BatchOperationType;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.ContactFeed;
+import com.google.gdata.data.extensions.Email;
 import com.google.gdata.model.batch.BatchUtils;
-import com.google.gdata.util.ServiceException;
 import com.thirdparty.google.GoogleServiceUtil;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.groups.GoogleGroupDetails;
@@ -44,240 +44,170 @@ public class GoogleSyncImpl extends TwoWaySyncService
     /** The Constant MAX_FETCH_LIMIT_FOR_GOOGLE. */
     private static final Integer MAX_FETCH_LIMIT_FOR_GOOGLE = 200;
 
+    public int max = MAX_FETCH_LIMIT_FOR_GOOGLE;
+
     /** contact service. */
     private ContactsService contactService;
-
-    /** previous_synced_time unix timestamp date object */
-    private Long previous_synced_time = 0l;
 
     /** last_synced_from_client hold date as long ie unix timestamp */
     private Long last_synced_from_client = 0l;
     private int start_index = 1;
-    private int start_index_from_db = 1;
 
     private int fetchIndex = 0;
 
-    private boolean importedContacts = false;
     /**
      * Note contact times
      */
-    private long first_contact_time = 0l;
-    private long last_contact_time = 0l;
 
     private int max_limit = MAX_SYNC_LIMIT;
 
-    private int max_batch_limit = 2000;
-
-    private String baseon_index = "false";
-
     private JSONObject otherParameters = new JSONObject();
+
+    /**
+     * Parameters to check if etag changes
+     */
+    private String etag = null;
+    private int index = 1;
+    private String etagFromDB = null;
+
+    private String nextLink = null;
 
     /**
      * fetch contacts from google.
      */
     public void syncContactFromClient()
     {
-
 	/**
 	 * Refresh token before starting sync
 	 */
 	try
 	{
-	    GoogleServiceUtil.refreshGoogleContactPrefsandSave(prefs);
-
-	    previous_synced_time = last_synced_from_client;
-
-	    if (prefs.othersParams != null)
-	    {
-		try
-		{
-		    otherParameters = new JSONObject(prefs.othersParams);
-		    start_index = Integer.parseInt(otherParameters.getString("start_index"));
-		    start_index_from_db = start_index;
-		    baseon_index = otherParameters.getString("baseon_index");
-		}
-		catch (JSONException e)
-		{
-
-		}
-		catch (NumberFormatException e)
-		{
-		    e.printStackTrace();
-		}
-	    }
-	    String accessToken = prefs.token;
-
-	    Preconditions.checkEmptyString(accessToken, "Access token is empty");
-
-	    /**
-	     * Builds service with token
-	     */
-	    try
-	    {
-		contactService = GoogleServiceUtil.getService(accessToken);
-	    }
-	    catch (OAuthException e1)
-	    {
-		e1.printStackTrace();
-		return;
-	    }
-
-	    last_synced_from_client = prefs.last_synced_from_client;
+	    initParameters();
+	    fetchAndSaveContacts();
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	}
-
-	while (canSync() && (fetchIndex < max_limit || (isImportSync() && fetchIndex < max_batch_limit)))
-	{
-
-	    /**
-	     * Retrieves contacts from google.
-	     */
-	    List<ContactEntry> entries = fetchContactsFromGoogle();
-
-	    /**
-	     * If entires are null then method should either return or break
-	     * loop. If it is first set of results then saving contact prefs is
-	     * not necessary as not atleast single set of 200 contacts are
-	     * fetched
-	     */
-	    if (entries == null || entries.size() == 0)
-	    {
-		// If fetching returned null in first attempt to fetch 200
-		// contacts then returns with out updating contact prefs last
-		// updated time
-		if (fetchIndex == 0)
-		    return;
-		else
-		    break;
-	    }
-
-	    // Saves contacts in agile matching accordingly based on entity
-	    // names
-	    saveContactsInAgile(entries);
-
-	    setStartAndEnd(entries);
-
-	    start_index += entries.size();
-
-	    // If fetched contacts size is less than 200, next request is not
-	    // sent to fetch next set of results
-	    if (entries.size() < MAX_FETCH_LIMIT_FOR_GOOGLE)
-		break;
-
-	    fetchIndex += entries.size();
-
-	    System.out.println(otherParameters);
-	}
-
-	try
-	{
-	    // Sets index
-	    start_index_from_db += total_synced_contact;
-
-	    if (isImportSync())
-	    {
-		otherParameters.put("baseon_index", "true");
-		prefs.last_synced_from_client++;
-	    }
-	    else
-		otherParameters.put("baseon_index", "false");
-
-	    otherParameters.put("start_index", start_index_from_db);
-
-	    prefs.othersParams = otherParameters.toString();
-	    prefs.last_synced_from_client++;
-
-	    System.out.println(prefs.othersParams);
-	}
-	catch (JSONException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
 	finally
 	{
-	    updateLastSyncedInPrefs();
-	    prefs.inProgress = false;
-	    updateLastSyncedInPrefs();
+	    finalizeSync();
+	}
+    }
 
-	    sendNotification(prefs.type.getNotificationEmailSubject());
+    private ContactFeed getFeed()
+    {
+	ContactFeed resultFeed = null;
 
+	if (nextLink != null)
+	{
+	    try
+	    {
+		resultFeed = contactService.getFeed(new URL(nextLink + "&access_token=" + prefs.token),
+			ContactFeed.class);
+	    }
+	    catch (Exception e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	}
+	else
+	{
+	    Query myQuery = buildQuery();
+	    myQuery.setStartIndex(start_index);
+	    try
+	    {
+		resultFeed = contactService.getFeed(myQuery, ContactFeed.class);
+	    }
+	    catch (Exception e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
 	}
 
+	if (resultFeed == null)
+	    return null;
+
+	setNextSet(resultFeed);
+
+	return resultFeed;
     }
 
-    private void setStartAndEnd(List<ContactEntry> entries)
+    private void setNextSet(ContactFeed resultFeed)
     {
-	if (entries.size() == 1)
-	    return;
+	// Sets total contacts in account
+	int totalContacts = resultFeed.getTotalResults();
 
-	setStartContactTime(entries.get(0));
-	setLastContactTime(entries.get(entries.size() - 1));
-    }
+	// Gets resultField start index
+	int fetchedContactsSize = resultFeed.getStartIndex();
 
-    private void setStartContactTime(ContactEntry entry)
-    {
-	first_contact_time = entry.getUpdated().getValue();
-    }
+	// Gets next which can be used to fetch next set of results
+	Link nextLinkObject = resultFeed.getNextLink();
 
-    private void setLastContactTime(ContactEntry entry)
-    {
-	last_contact_time = entry.getUpdated().getValue();
-    }
+	// Calculates number of contacts remaining after current fetch
+	int remainingContacts = totalContacts - fetchedContactsSize;
 
-    /**
-     * Returns true if all contacts in current iteration has same created time
-     * 
-     * @return
-     */
-    private boolean isImportSync()
-    {
-	if ("true".equals(baseon_index))
-	    return true;
+	// Sets previous start index
+	start_index = resultFeed.getStartIndex();
 
-	return importedContacts;
+	if (nextLinkObject != null)
+	    nextLink = nextLinkObject.getHref().toString();
+	else if (remainingContacts < max)
+	{
+	    nextLink = null;
+
+	    // Creates new index based on fetched indexes
+	    start_index += resultFeed.getEntries().size();
+
+	    // Builds query without access key
+	    Query nextQuery = buildBasicQueryWithoutAccessKey();
+	    DateTime dateTime = new DateTime(last_synced_from_client);
+	    nextQuery.setUpdatedMin(dateTime);
+
+	    // Sets start index
+	    nextQuery.setStartIndex(start_index);
+	    if (remainingContacts == 0 || remainingContacts < 0)
+	    {
+		// start_index++;
+		nextQuery.setMaxResults(max);
+	    }
+	    else
+		nextQuery.setMaxResults(remainingContacts);
+
+	    nextLink = nextQuery.getUrl().toString();
+	}
+
+	System.out.println("Next link " + nextLink);
+	System.out.println("Total results : " + resultFeed.getTotalResults());
+	System.out.println("Start index" + resultFeed.getStartIndex());
+	System.out.println("fetched size" + resultFeed.getEntries().size());
+	if (resultFeed.getPreviousLink() != null)
+	    System.out.println("Previous Link " + resultFeed.getPreviousLink().getHref().toString());
+
+	if (resultFeed.getFeedBatchLink() != null)
+	    System.out.println("get batch Link " + resultFeed.getFeedBatchLink().getHref().toString());
+
+	System.out.println("############################################################\n\n\n");
     }
 
     private List<ContactEntry> fetchContactsFromGoogle()
     {
-
-	Query myQuery = null;
-
-	if (importedContacts)
-	    myQuery = buildQueryWithIndex();
-	else
-	    myQuery = buildQuery();
 
 	ContactFeed resultFeed = null;
 
 	/**
 	 * Retrieves result feed
 	 */
-	try
-	{
-	    resultFeed = contactService.getFeed(myQuery, ContactFeed.class);
+	System.out.println("existing next link " + nextLink);
 
-	    List<ContactEntry> entries = resultFeed.getEntries();
+	resultFeed = getFeed();
 
-	    System.out.println(resultFeed.getTotalResults());
-	    System.out.println(resultFeed.getStartIndex());
-	    return entries;
-	}
-	catch (IOException e)
-	{
-	    e.printStackTrace();
-	}
-	catch (ServiceException e)
-	{
-	    e.printStackTrace();
-	}
+	List<ContactEntry> entries = resultFeed.getEntries();
 
-	Preconditions.checkNotNull(resultFeed, "Result contact feed is null");
+	return entries;
 
-	return new ArrayList<ContactEntry>();
     }
 
     private Query buildQueryWithIndex()
@@ -289,10 +219,11 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	return query;
     }
 
-    private Query buildBasicQuery()
+    private Query buildBasicQueryWithoutAccessKey()
     {
 	// myQuery.setUpdatedMin(dateTime);
 	URL feedUrl = null;
+
 	try
 	{
 	    feedUrl = new URL(GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL + "contacts/default/full");
@@ -310,9 +241,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	// Build query with URL
 
-	query.setMaxResults(MAX_FETCH_LIMIT_FOR_GOOGLE);
-
-	query.setStringCustomParameter("access_token", prefs.token);
+	query.setMaxResults(getFetchSize());
 
 	// query.setStrict(true);
 
@@ -337,11 +266,18 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	 * time can be saved in last synced time
 	 */
 
-	System.out.println(query.getFullTextQuery());
-	System.out.println(query.getMaxResults());
-
 	query.setStringCustomParameter("orderby", "lastmodified");
 	query.setStringCustomParameter("sortOrder", "ascending");
+
+	return query;
+    }
+
+    private Query buildBasicQuery()
+    {
+
+	Query query = buildBasicQueryWithoutAccessKey();
+
+	query.setStringCustomParameter("access_token", prefs.token);
 
 	return query;
     }
@@ -363,43 +299,81 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
     }
 
+    private String getFinalNextLink()
+    {
+	if (!StringUtils.equals(etag, etagFromDB))
+	{
+	    Query query = buildBasicQueryWithoutAccessKey();
+	    DateTime dateTime = new DateTime(last_synced_from_client);
+	    query.setUpdatedMin(dateTime);
+	    if (index > 1)
+		query.setStartIndex(index);
+	    start_index = 0;
+	    nextLink = query.getUrl().toString();
+	    etagFromDB = etag;
+	}
+	return nextLink;
+    }
+
     /**
      * Save contacts in agile crm.
      * 
      * @param entries
      *            the entries
      */
+    private String currentEtagInSync = null;
+
     private void saveContactsInAgile(List<ContactEntry> entries)
     {
-	Contact contact;
 	Long created_at = 0l;
-	int matches = 0;
-	importedContacts = false;
+
+	if (currentEtagInSync == null)
+	    currentEtagInSync = etagFromDB;
+
 	for (ContactEntry entry : entries)
 	{
-	    Long new_created_at = entry.getUpdated().getValue();
-	    if (new_created_at.equals(created_at))
+	    etag = entry.getEtag();
+
+	    if (currentEtagInSync == null)
+		currentEtagInSync = etagFromDB = etag;
+
+	    if (!StringUtils.equals(etag, currentEtagInSync))
 	    {
-		importedContacts = true;
-		baseon_index = "true";
-		matches++;
+		index = 2;
+		currentEtagInSync = etag;
 	    }
 	    else
 	    {
-		importedContacts = false;
-		baseon_index = "false";
+		index++;
 	    }
 
+	    Long new_created_at = entry.getUpdated().getValue();
+
+	    // System.out.println(entry.getEtag() + " : " + entry.getEdited());
 	    created_at = new_created_at;
-	    System.out.println(entry.getId() + " , " + entry.getName());
-	    System.out.println(created_at);
-	    contact = wrapContactToAgileSchemaAndSave(entry);
+	    // groupInfos.get(0).
+	    // System.out.println(entry.getId() + " , " + entry.getName());
+	    // System.out.println(created_at);
+	    // contact = wrapContactToAgileSchemaAndSave(entry);
+
+	    List<Email> emails = entry.getEmailAddresses();
+
+	    // Added condition to mandate emails. It is added here as other sync
+	    // allows contacts without email
+	    if (emails == null || emails.size() == 0)
+	    {
+		syncStatus.put(ImportStatus.EMAIL_REQUIRED, syncStatus.get(ImportStatus.EMAIL_REQUIRED) + 1);
+		syncStatus.put(ImportStatus.TOTAL_FAILED, syncStatus.get(ImportStatus.TOTAL_FAILED) + 1);
+		continue;
+	    }
+
+	   wrapContactToAgileSchemaAndSave(entry);
 	}
 
-	System.out.println("TIME UPDATED" + created_at + ", " + prefs.last_synced_from_client + ", matches :" + matches
-		+ ", boolean" + importedContacts);
+	System.out.println(NamespaceManager.get() + " , " + etag + " , " + index + " , "
+		+ entries.get(entries.size() - 1).getUpdated());
 
-	last_synced_from_client = created_at > last_synced_from_client ? created_at : last_synced_from_client;
+	last_synced_from_client = created_at;
     }
 
     /*
@@ -489,14 +463,14 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    // from google
 	    if (createContact == null)
 	    {
-		System.out.println("contact null : " + createContact);
+		// System.out.println("contact null : " + createContact);
 
 		// Last synced time is still set to avoid current contact being
 		// fetched again ang again
 		prefs.last_synced_to_client = contact.created_time > prefs.last_synced_to_client ? contact.created_time
 			: prefs.last_synced_to_client;
 
-		System.out.println(contacts_list_size - 1 + ", " + i);
+		// System.out.println(contacts_list_size - 1 + ", " + i);
 		skip = true;
 	    }
 
@@ -551,6 +525,168 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	System.out.println("total update requests : " + updateRequestCount + " , " + limit);
 
+    }
+
+    /**
+     * Refreshes access token, initializes contacts service object to connect to
+     * google. It also fetches extra parameters that are saved in contact prefs
+     * 
+     * @throws Exception
+     */
+    private void initParameters() throws Exception
+    {
+	GoogleServiceUtil.refreshGoogleContactPrefsandSave(prefs);
+
+	/**
+	 * Sets service object which is used to perform operations on google
+	 * contacts. It works like a corrector to google contacts
+	 */
+	contactService = GoogleServiceUtil.getService(prefs.token);
+
+	// Sets request timeout time
+	contactService.setReadTimeout(60000);
+
+	// Other parameters are additional parameters that are saved in prefs
+	if (prefs.othersParams != null)
+	{
+	    try
+	    {
+		
+		prefs.sync_from_group = URLDecoder.decode(prefs.sync_from_group, "utf-8");
+		otherParameters = new JSONObject(prefs.othersParams);
+		// Start index where last sync stopped.
+
+		if (otherParameters.has(prefs.sync_from_group))
+		{
+		    JSONObject object = otherParameters.getJSONObject(prefs.sync_from_group);
+		    start_index = Integer.parseInt(object.getString("start_index"));
+		    nextLink = object.getString("nextLink");
+		    etagFromDB = object.getString("etagFromDB");
+		    
+		    if(otherParameters.has("start_index"))
+			    otherParameters.remove("start_index");
+		    
+		    if(object.has("last_synced"))
+		    {
+			prefs.last_synced_from_client = object.getLong("last_synced");
+		    }
+		    
+		}
+		else if(otherParameters.has("start_index"))
+		{
+		   
+		    nextLink = otherParameters.getString("nextLink");
+		    etagFromDB = otherParameters.getString("etagFromDB");
+		    
+			
+		    JSONObject json = new JSONObject();
+		    
+		    json.put("start_index", start_index);
+		    json.put(prefs.sync_from_group, json);
+		    json.put("etagFromDB", etagFromDB);
+		    json.put("nextLink", nextLink);
+		    prefs.last_synced_from_client = 0l;
+		    json.put("last_synced", prefs.last_synced_from_client);
+		   
+		    json.put(prefs.sync_from_group, json);
+		    // Removes old parameters
+		    otherParameters.remove("start_index");
+		    otherParameters.remove("nextLink");
+		    otherParameters.remove("etagFromDB");
+		}
+		
+
+		etag = etagFromDB;
+		
+		// totalContacts =
+		// otherParameters.getString(("totalContacts");
+	    }
+	    catch (JSONException e)
+	    {
+
+	    }
+	    catch (NumberFormatException e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+
+	last_synced_from_client = prefs.last_synced_from_client;
+    }
+
+    /**
+     * Calls fetch functionality and save function if sync is allowed (ACLs and
+     * billing restriction).
+     */
+    private void fetchAndSaveContacts()
+    {
+	while (canSync() && (fetchIndex < max_limit))
+	{
+
+	    /**
+	     * Retrieves contacts from google.
+	     */
+	    List<ContactEntry> entries = fetchContactsFromGoogle();
+
+	    /**
+	     * If entries are null then method should either return or break
+	     * loop. If it is first set of results then saving contact prefs is
+	     * not necessary as not atleast single set of 200 contacts are
+	     * fetched
+	     */
+	    if (entries == null || entries.size() == 0)
+	    {
+		// If fetching returned null in first attempt to fetch 200
+		// contacts then returns with out updating contact prefs last
+		// updated time
+		if (fetchIndex == 0)
+		    return;
+		else
+		    break;
+	    }
+
+	    // Saves contacts in agile matching accordingly based on entity
+	    // names
+	    saveContactsInAgile(entries);
+
+	    // If fetched contacts size is less than 200, next request is not
+	    // sent to fetch next set of results
+	    if (entries.size() < max)
+		break;
+
+	    fetchIndex += entries.size();
+
+	    System.out.println(otherParameters);
+	}
+    }
+
+    private void updateOtherParameters()
+    {
+	try
+	{
+	    JSONObject obj = new JSONObject();
+	    obj.put("start_index", start_index);
+	    obj.put("nextLink", getFinalNextLink());
+	    obj.put("etagFromDB", etag);
+	    obj.put("last_synced", prefs.last_synced_from_client);
+	    otherParameters.put(prefs.sync_from_group, obj);
+	    
+	    prefs.othersParams = otherParameters.toString();
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+    }
+
+    private void finalizeSync()
+    {
+	prefs.inProgress = false;
+	updateLastSyncedInPrefs();
+	updateOtherParameters();
+	sendNotification(prefs.type.getNotificationEmailSubject());
     }
 
 }

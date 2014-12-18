@@ -3,16 +3,20 @@ package com.agilecrm.contact.sync.wrapper.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Embedded;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gdata.data.TextContent;
 import com.google.gdata.data.contacts.ContactEntry;
+import com.google.gdata.data.contacts.GroupMembershipInfo;
 import com.google.gdata.data.contacts.Occupation;
 import com.google.gdata.data.contacts.Website;
 import com.google.gdata.data.extensions.Email;
@@ -20,7 +24,9 @@ import com.google.gdata.data.extensions.Im;
 import com.google.gdata.data.extensions.Name;
 import com.google.gdata.data.extensions.PhoneNumber;
 import com.google.gdata.data.extensions.StructuredPostalAddress;
+import com.googlecode.objectify.annotation.NotSaved;
 import com.thirdparty.google.contacts.ContactSyncUtil;
+import com.thirdparty.google.groups.GoogleGroupDetails;
 
 /**
  * <code> GoogleContactWrapperImpl</code> implemented ContactWrapper wraps the
@@ -31,7 +37,11 @@ public class GoogleContactWrapperImpl extends ContactWrapper
     // Gdata specific contact object.
     /** The entry. */
     ContactEntry entry;
-
+    
+    @NotSaved
+    @Embedded
+    public List<GoogleGroupDetails> groups = new ArrayList<GoogleGroupDetails>();
+    
     /*
      * (non-Javadoc)
      * 
@@ -243,8 +253,27 @@ public class GoogleContactWrapperImpl extends ContactWrapper
     @Override
     public List<String> getTags()
     {
+	groups = prefs.groups;
+	
 	// TODO Auto-generated method stub
-	return null;
+	List<GroupMembershipInfo> googleGroups = entry.getGroupMembershipInfos();
+	List<String> tags = new ArrayList<String>();
+	for(GroupMembershipInfo info : googleGroups)
+	{
+	    String id = info.getHref();
+	    for(GoogleGroupDetails details : groups)
+	    {
+		if(StringUtils.equals(id, details.atomId))
+		{
+		    if("Contacts".equals(details.groupName) && details.isSystemGroup)
+			continue;
+		    
+		    tags.add(details.groupName);
+		}
+		    
+	    }
+	}
+	return tags;
     }
 
     /*
