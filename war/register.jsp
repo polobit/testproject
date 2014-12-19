@@ -267,6 +267,7 @@ $.validator.setDefaults({
 									<div style="display:inline-block;float:left;margin-right:5px">
 									<select class="form-control required"  name="plan_type" data-width="100%" style="min-width:175px">
 											<option value="" selected disabled>Choose Plan</option>
+											<option value="Starter">Free</option>
 											<option value="Starter">Starter</option>
 											<option value="Regular">Regular</option>
 											<option value="pro">Pro</option>
@@ -287,6 +288,10 @@ $.validator.setDefaults({
 											<option value="SaaS">SaaS</option>
 											<option value="Ecommerce">Ecommerce</option>
 											<option value="Marketing Agency">Marketing Agency</option>
+											<option value="Contact Centers">Contact Centers</option>
+											<option value="Realty">Realty</option>
+											<option value="Media">Media</option>
+											<option value="Technology Consulting">Technology Consulting</option>
 											<option value="Other">Other</option>
 								  </select>
 								  </div>
@@ -296,8 +301,13 @@ $.validator.setDefaults({
 									<select class="form-control required"  name="role">
 											<option value="" selected disabled>Role</option>
 											<option value="CEO">CEO</option>
+											<option value="VP">VP</option>
 											<option value="VP, Sales">VP, Sales</option>
 											<option value="VP, Marketing">VP, Marketing</option>
+											<option value="Customer Success Manager">Customer Success Manager</option>
+											<option value="Sales Manager">Sales Manager</option>
+											<option value="Marketing Manager">Marketing Manager</option>
+											<option value="Consultant">Consultant</option>
 											<option value="Reseller">Reseller</option>
 											<option value="Recruiter">Recruiter</option>
 											<option value="Developer">Developer</option>
