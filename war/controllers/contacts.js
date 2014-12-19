@@ -197,7 +197,7 @@ var ContactsRouter = Backbone.Router.extend({
 		// If view is set to custom view, load the custom view
 		// If Company filter active-don't load any Custom View Show
 		// default
-		if ((!readCookie('company_filter') || readCookie('contact_filter_type') != 'COMPANY') && readCookie("contact_view"))
+		if ((!readCookie('company_filter') || (readCookie('contact_filter_type') && readCookie('contact_filter_type') != 'COMPANY')) && readCookie("contact_view"))
 		{
 			if(readData('dynamic_contact_filter')) {
 				// Then call customview function with filter url
