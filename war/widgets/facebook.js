@@ -246,7 +246,7 @@ function getUserNameOrUserID(url) {
 			console.log(fbUserId);
 			if(isNaN(fbUserId)) {//if not ID
 				console.log("In getID facebook");
-				var getURL = "http://graph.facebook.com/"+fbUserId;
+				var getURL = "https://graph.facebook.com/"+fbUserId;
 				console.log(getURL);
 				var fbProfileDetails = $.parseJSON(
 	    		        $.ajax({
