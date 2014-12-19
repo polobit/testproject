@@ -59,7 +59,7 @@ function subscribeToPubNub(domain)
 		var pubnub = PUBNUB.init({ 'publish_key' : 'pub-c-e4c8fdc2-40b1-443d-8bb0-2a9c8facd274',
 			'subscribe_key' : 'sub-c-118f8482-92c3-11e2-9b69-12313f022c90', ssl : true, origin : 'pubsub.pubnub.com' });
 		pubnub.ready();
-		pubnub.subscribe({ channel : "jagadeesh", callback : function(message)
+		pubnub.subscribe({ channel : domain, callback : function(message)
 		{
 			console.log(message);
 			if(message.type  == "LOGIN_INSTANCE")
