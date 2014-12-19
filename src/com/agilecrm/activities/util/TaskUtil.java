@@ -581,7 +581,7 @@ public class TaskUtil
     		
     		// Gets list of tasks filtered on given conditions
     		return dao.ofy().query(Task.class).filter("due >=", startTime).filter("due <=", endTime)
-    				.filter("is_complete", false).list();
+    				.filter("is_complete", false).limit(50).list();
 	    }catch(Exception e){
 	    	e.printStackTrace();
 	    	return null;

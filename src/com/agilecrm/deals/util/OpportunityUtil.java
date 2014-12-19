@@ -988,7 +988,7 @@ public class OpportunityUtil
     	milestoneList.add("New");
     	milestoneList.add("Prospect");
     	milestoneList.add("Proposal");
-    	return dao.ofy().query(Opportunity.class).filter("close_date <=", dueDate).filter("close_date !=", null).filter("milestone in",milestoneList)
+    	return dao.ofy().query(Opportunity.class).filter("close_date <=", dueDate).filter("close_date !=", null).filter("milestone in",milestoneList).limit(50)
     			.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
     			.order("close_date").list();
     }
@@ -1004,7 +1004,7 @@ public class OpportunityUtil
     	milestoneList.add("New");
     	milestoneList.add("Prospect");
     	milestoneList.add("Proposal");
-    	return dao.ofy().query(Opportunity.class).filter("close_date <=", dueDate).filter("close_date !=", null).filter("milestone in",milestoneList)
+    	return dao.ofy().query(Opportunity.class).filter("close_date <=", dueDate).filter("close_date !=", null).filter("milestone in",milestoneList).limit(50)
     			.order("close_date").list();
     }
     /**
@@ -1050,7 +1050,7 @@ public class OpportunityUtil
      *         times.
      */
     public static List<Opportunity> getOpportunitiesWon(long minTime, long maxTime){
-    	return dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime).filter("milestone","Won")
+    	return dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime).filter("milestone","Won").limit(50)
 	        .list();
     }
     /**

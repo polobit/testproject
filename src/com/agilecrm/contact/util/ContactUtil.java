@@ -1272,7 +1272,7 @@ public class ContactUtil
 				contactIdsList.add(contactEmail.contact_id);
 			}
 			if(contactIdsList.size()!=0)
-				contactsList = dao.ofy().query(Contact.class).filter("id in", contactIdsList).list();
+				contactsList = dao.ofy().query(Contact.class).filter("id in", contactIdsList).limit(50).list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

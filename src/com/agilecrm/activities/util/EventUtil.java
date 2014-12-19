@@ -307,7 +307,7 @@ public class EventUtil
 	    Long endTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000) - 1;
 
 	    // Gets list of tasks filtered on given conditions
-	    return dao.ofy().query(Event.class).filter("search_range >=", startTime).filter("search_range <=", endTime)
+	    return dao.ofy().query(Event.class).filter("search_range >=", startTime).filter("search_range <=", endTime).limit(50)
 		    .order("search_range").list();
 	}
 	catch (Exception e)

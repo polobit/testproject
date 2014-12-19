@@ -206,15 +206,15 @@ public class PortletUtil {
 		if(portlet.portlet_type==PortletType.CONTACTS && portlet.name.equalsIgnoreCase("Filter Based")){
 			if(json!=null && json.get("filter")!=null){
 				if(json.get("filter").toString().equalsIgnoreCase("contacts"))
-					portlet.contactsList=ContactUtil.getAllContacts(100,null);
+					portlet.contactsList=ContactUtil.getAllContacts(50,null);
 				else if(json.get("filter").toString().equalsIgnoreCase("companies"))
-					portlet.contactsList=ContactUtil.getAllCompanies(100, null);
+					portlet.contactsList=ContactUtil.getAllCompanies(50, null);
 				else if(json.get("filter").toString().equalsIgnoreCase("recent"))
-					portlet.contactsList=ContactFilterUtil.getContacts("system-RECENT", 100, null,null);
+					portlet.contactsList=ContactFilterUtil.getContacts("system-RECENT", 50, null,null);
 				else if(json.get("filter").toString().equalsIgnoreCase("myContacts"))
-					portlet.contactsList=ContactFilterUtil.getContacts("system-CONTACTS", 100, null,null);
+					portlet.contactsList=ContactFilterUtil.getContacts("system-CONTACTS", 50, null,null);
 				else if(json.get("filter").toString().equalsIgnoreCase("leads"))
-					portlet.contactsList=ContactFilterUtil.getContacts("system-LEADS", 100, null,null);
+					portlet.contactsList=ContactFilterUtil.getContacts("system-LEADS", 50, null,null);
 			}
 		}else if(portlet.portlet_type==PortletType.CONTACTS && portlet.name.equalsIgnoreCase("Emails Opened")){
 			long minTime=0L;
@@ -405,15 +405,15 @@ public class PortletUtil {
 		List<Contact> contactsList=null;
 		if(json!=null && json.get("filter")!=null){
 			if(json.get("filter").toString().equalsIgnoreCase("contacts"))
-				contactsList=ContactUtil.getAllContacts(100,null);
+				contactsList=ContactUtil.getAllContacts(50,null);
 			else if(json.get("filter").toString().equalsIgnoreCase("companies"))
-				contactsList=ContactUtil.getAllCompanies(100, null);
+				contactsList=ContactUtil.getAllCompanies(50, null);
 			else if(json.get("filter").toString().equalsIgnoreCase("recent"))
-				contactsList=ContactFilterUtil.getContacts("system-RECENT", 100, null,null);
+				contactsList=ContactFilterUtil.getContacts("system-RECENT", 50, null,null);
 			else if(json.get("filter").toString().equalsIgnoreCase("myContacts"))
-				contactsList=ContactFilterUtil.getContacts("system-CONTACTS", 100, null,null);
+				contactsList=ContactFilterUtil.getContacts("system-CONTACTS", 50, null,null);
 			else if(json.get("filter").toString().equalsIgnoreCase("leads"))
-				contactsList=ContactFilterUtil.getContacts("system-LEADS", 100, null,null);
+				contactsList=ContactFilterUtil.getContacts("system-LEADS", 50, null,null);
 		}
 		return contactsList;
 	}

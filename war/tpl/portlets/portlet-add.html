@@ -1,9 +1,10 @@
 <script id="portlets-add-model-template" type="text/html">
 <div style="margin-top:15px">
-	<div class="row-fluid">
-		<div class="span7">
+	<div>
+		<div class="pull-left" style="margin-right:10px;margin-bottom:15px;">
 			<div id="portlets_main" class="network-type" style="cursor: pointer; color: #8a6086; font-size: 16px;" onclick="javascript:addNewPortlet('{{portlet_type}}','{{remove_spaces name}}');">
-				{{name}}
+			<i class="portlets-modal-icon icon {{get_portlet_icon name}}"></i>				
+				{{get_portlet_name name}}
 			</div>
 		</div>    
 	</div>	
@@ -11,26 +12,27 @@
 </script>
 <script id="portlets-add-collection-template" type="text/html">
 <div class="row-fluid">
-	<div class="span1"></div>
-	<div class="span10">
-		<h4 class="portlet-head" style="margin-top:10px;">Contacts Portlets</h4>
-		<div id="contacts" class="row-fluid"></div><br/>
+	<div class="span10 offset1">
+		<h4 class="portlet-head" style="margin-top:10px;">Contacts</h4>
+		<div id="contacts"></div><br/>
 	</div>
 </div>
 <div class="row-fluid">
-	<div class="span1"></div>
-	<div class="span10">
-		<h4 class="portlet-head">Deals Portlets</h4>
+	<div class="span10 offset1">
+		<h4 class="portlet-head">Deals</h4>
 		<div id="deals" class="row-fluid"></div><br/>
     </div>
 </div>
 <div class="row-fluid">
-	<div class="span1"></div>
-		<div class="span10">
-			<h4 class="portlet-head">Tasks & Events Portlets</h4>
-			<div id="taksAndEvents" class="row-fluid"></div><br/>
+	<div class="span10 offset1">
+		<h4 class="portlet-head">Calendar</h4>
+		<div id="taksAndEvents" class="row-fluid"></div><br/>
+	</div>
+</div>
+<div class="row-fluid">
+	<div class="span10 offset1">
+		<h4 class="portlet-head">User Activity</h4>
+		<div id="userActivity" class="row-fluid"></div><br/>
 	</div>
 </div>
 </script>
-	
-	
