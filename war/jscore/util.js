@@ -99,10 +99,15 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 
 			$("#" + selectId, el).empty().append('<option class="default-select" value="">' + defaultSelectOption + '</option>');
 		}
-
+		var data = collection.toJSON();
+		data.sort(function(a, b){
+		    if (a.field_label < b.field_label) return -1;
+		    if (b.field_label < a.field_label) return 1;
+		    return 0;
+		});
 		// Iterates though each model in the collection and
 		// populates the template using handlebars
-		$.each(collection.toJSON(), function(index, model)
+		$.each(data, function(index, model)
 		{
 			// Convert template into HTML
 			var modelTemplate = Handlebars.compile(template);
