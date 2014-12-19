@@ -120,6 +120,8 @@ public class WidgetsAPI
 		System.out.println("In custom widgets api create");
 		if (customWidget == null)
 			return null;
+		
+		customWidget.name = customWidget.name.replaceAll("[^a-zA-Z]+","");
 
 		if (WidgetUtil.checkIfWidgetNameExists(customWidget.name))
 			return null;
