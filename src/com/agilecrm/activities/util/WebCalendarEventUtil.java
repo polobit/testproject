@@ -152,7 +152,7 @@ public class WebCalendarEventUtil
 	if (StringUtils.isEmpty(usertimezone))
 	{
 	    AccountPrefs acprefs = AccountPrefsUtil.getAccountPrefs();
-	    // usertimezone = acprefs.timezone;
+	    usertimezone = acprefs.timezone;
 	    if (StringUtils.isEmpty(usertimezone))
 	    {
 		usertimezone = "UTC";
@@ -277,19 +277,23 @@ public class WebCalendarEventUtil
 		    // we have to pass hour to calendar only 00 format.
 		    // calendar give time in sec according to date and hour
 
-		    night_fromtime = "00";
-		    night_fromTimeMins = "00";
+		    night_from_hour = night_business.getString("timeFrom");
+		    night_start_hours = night_from_hour.split(":");
+		    night_fromtime = night_start_hours[0];
+		    night_fromTimeMins = night_start_hours[1];
 		    night_till_hour = night_business.getString("timeTill");
 		    night_hours = tillHour.split(":");
 		    night_endTime = night_hours[0];
 		    night_endTimeMins = night_hours[1];
 
-		    night_starttime = getEppochTime(date, month, year, Integer.parseInt(night_fromtime),
-			    Integer.parseInt(night_fromTimeMins), tz);
+		    if (Integer.parseInt(night_fromtime) > Integer.parseInt(night_endTime))
+		    {
+			night_starttime = getEppochTime(date, month, year, Integer.parseInt("00"),
+			        Integer.parseInt("00"), tz);
 
-		    night_endtime = getEppochTime(date, month, year, Integer.parseInt(night_endTime),
-			    Integer.parseInt(night_endTimeMins), tz);
-
+			night_endtime = getEppochTime(date, month, year, Integer.parseInt(night_endTime),
+			        Integer.parseInt(night_endTimeMins), tz);
+		    }
 		    System.out.println(night_starttime + "  Night hourse start time and end time " + night_endTime);
 
 		}
