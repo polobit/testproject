@@ -13,6 +13,7 @@ var Restart_Twilio = false;
 TWILIO_CONTACT_ID = 0;
 TWILIO_CALLTYPE = "";
 TWILIO_DIRECTION = "";
+TWILIO_CALLED_NO = "";
 
 $(function()
 {
@@ -810,7 +811,8 @@ function twiliocall(phoneNumber, toName)
 	Twilio.Device.connect(params);
 
 	To_Number = phoneNumber;
-	To_Name = toName;
+	To_Name = toName;	
+	TWILIO_CALLED_NO = To_Number;
 
 	showCallNotyPopup("outgoing", "Twilio", '<i class="icon icon-phone"></i><b>Calling :</b><br> ' + To_Name + "   " + To_Number + "<br>", false);
 }
@@ -873,8 +875,11 @@ function showNoteAfterCall(callRespJson,messageObj)
 		if(callStatus != 404 && typeof callRespJson.duration != "undefined") {
 			
 			var phoneNumber = "";
-			if(TWILIO_DIRECTION == "outbound-dial")
-				phoneNumber = callRespJson.to;
+			if(TWILIO_DIRECTION == "outbound-dial") {
+//				phoneNumber = callRespJson.to;
+				phoneNumber = TWILIO_CALLED_NO;
+				TWILIO_CALLED_NO = "";
+			}
 			else
 				phoneNumber = callRespJson.from;
 			

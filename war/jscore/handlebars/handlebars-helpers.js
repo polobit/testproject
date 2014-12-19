@@ -3520,7 +3520,7 @@ $(function()
 		
 		switch(status) {
 	    case "canceled":
-	    	return "Call missed";
+	    	return "Missed";
 	        break;
 	    case "completed":
 	    	return "Completed";
@@ -3534,9 +3534,15 @@ $(function()
 	    case "no-answer":
 	    	return "No answer";
 	    	break;
+	    case "queued":
+	    	return "Waiting";
+	    	break;
+	    case "ringing":
+	    	return "Ringing";
+	    	break;
 	    case "in-progress":
 	    	return "Left voicemail";
-	    	break;
+	    	break; 	
 	    default:
 	        return "";
 		}
