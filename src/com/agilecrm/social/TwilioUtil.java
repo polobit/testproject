@@ -635,11 +635,25 @@ public class TwilioUtil
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("FriendlyName", "Agile CRM Twilio Saga");
 
-		// params.put("VoiceUrl",
-		// "http://1-dot-twiliovoicerecord.appspot.com/voice?record=" + record);
+		// For Local Host
+		/*
+		 * params.put("VoiceUrl",
+		 * "http://1-dot-twiliovoicerecord.appspot.com/voice?record=" + record+
+		 * "&agileuserid=" + agileUserID);
+		 */
 
-		params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice?record=" + record
-				+ "&agileuserid=" + agileUserID);
+		// For Main
+		/*
+		 * params.put("VoiceUrl", "https://" + NamespaceManager.get() +
+		 * ".agilecrm.com/twilioiovoice?record=" + record + "&agileuserid=" +
+		 * agileUserID);
+		 */
+
+		// For Beta
+		params.put("VoiceUrl", "https://" + NamespaceManager.get()
+				+ "-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiovoice?record=" + record + "&agileuserid="
+				+ agileUserID);
+
 		params.put("VoiceMethod", "GET");
 
 		// params.put("StatusCallback", "https://" + NamespaceManager.get()
