@@ -324,8 +324,9 @@ function chainFilters(el, data, callback, is_webrules, is_company)
 		return;
 	} else {
 		if(!CONTACT_CUSTOM_FIELDS)
-		{
-			$("#content").html(getRandomLoadingImg());
+		{			
+			if(window.location.hash.indexOf("contact-filter") != -1)
+			   $("#content").html(getRandomLoadingImg());
 			fillContactCustomFieldsInFilters(el, function(){
 				show_chained_fields(el, data, true);
 				if (callback && typeof (callback) === "function")
