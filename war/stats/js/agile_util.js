@@ -67,11 +67,8 @@ function agile_cookieTags(tags, action)
  * @param button
  * @param url
  */
-function agile_formCallback(error, button, url, data, contact_id)
+function agile_formCallback(error, button, url, contact_id)
 {
-	if (data)
-		console.log("AgileCRM form error " + data.error);
-
 	if(!error[0]){
 		if(contact_id){
 			var form_name = document.getElementById("agile-form-data").innerHTML;
