@@ -67,10 +67,19 @@ function agile_cookieTags(tags, action)
  * @param button
  * @param url
  */
-function agile_formCallback(error, button, url, data)
+function agile_formCallback(error, button, url, data, contact_id)
 {
 	if (data)
 		console.log("AgileCRM form error " + data.error);
+
+	if(!error[0]){
+		if(contact_id){
+			var form_name = document.getElementById("agile-form-data").innerHTML;
+			var trigger_url = agile_id.getURL() + "/formsubmit?id=" + agile_id.get() + "&contactid=" + encodeURIComponent(contact_id) + "&formname=" + encodeURIComponent(form_name);
+			agile_json(trigger_url);
+		}
+	}
+
 	error[1].innerHTML = error[0];
 	button.removeAttribute("disabled");
 	setTimeout(function()

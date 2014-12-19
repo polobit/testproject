@@ -25,4 +25,15 @@ public class FormUtil
 	else
 	    return form;
     }
+
+    public static Form getFormByName(String formName)
+    {
+	Query<Form> query = dao.ofy().query(Form.class);
+	query.filter("formName", formName);
+	Form form = query.get();
+	if (form == null)
+	    return null;
+	else
+	    return form;
+    }
 }

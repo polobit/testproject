@@ -32,6 +32,8 @@ import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.forms.Form;
+import com.agilecrm.forms.util.FormUtil;
 import com.agilecrm.gadget.GadgetTemplate;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.util.JSAPIUtil;
@@ -42,6 +44,8 @@ import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
+import com.agilecrm.workflows.triggers.Trigger;
+import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
@@ -1276,5 +1280,40 @@ public class JSAPI
 	{
 	    return null;
 	}
+    }
+
+    @Path("formsubmit")
+    @GET
+    public void formSubmitTrigger(@QueryParam("formname") String formName, @QueryParam("contactid") String contactId)
+    {
+	try
+	{
+	    System.out.println("hitting form submit trigger.....");
+	    Form form = FormUtil.getFormByName(formName);
+
+	    if (contactId == null || form == null)
+		return;
+
+	    List<Trigger> triggers = TriggerUtil.getAllTriggers();
+	    for (Trigger trigger : triggers)
+	    {
+		if (StringUtils.equals(trigger.type.toString(), "FORM_SUBMIT"))
+		{
+		    System.out.println("trigger condition, event match ...");
+		    if (StringUtils.equals(trigger.trigger_form_event, form.id.toString()))
+		    {
+			System.out.println("Assigning campaign to contact ...");
+			WorkflowSubscribeUtil.subscribeDeferred(ContactUtil.getContact(Long.parseLong(contactId)),
+			        trigger.campaign_id, null);
+		    }
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Error is " + e.getMessage());
+	    return;
+	}
+
     }
 }

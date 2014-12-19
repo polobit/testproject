@@ -1,11 +1,16 @@
 package com.agilecrm.workflows.triggers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.jdo.annotations.Embedded;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.googlecode.objectify.annotation.Cached;
@@ -65,7 +70,7 @@ public class Trigger
      */
     public enum Type
     {
-	TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, DEAL_IS_ADDED, DEAL_IS_DELETED, DEAL_MILESTONE_IS_CHANGED, ADD_SCORE, STRIPE_CHARGE_EVENT, SHOPIFY_EVENT, RUNS_DAILY, RUNS_WEEKLY, RUNS_MONTHLY, SOFT_BOUNCE, HARD_BOUNCE, INBOUND_MAIL_EVENT, EMAIL_OPENED, EMAIL_LINK_CLICKED, EVENT_IS_ADDED, UNSUBSCRIBED
+	TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, DEAL_IS_ADDED, DEAL_IS_DELETED, DEAL_MILESTONE_IS_CHANGED, ADD_SCORE, STRIPE_CHARGE_EVENT, SHOPIFY_EVENT, RUNS_DAILY, RUNS_WEEKLY, RUNS_MONTHLY, SOFT_BOUNCE, HARD_BOUNCE, INBOUND_MAIL_EVENT, EMAIL_OPENED, EMAIL_LINK_CLICKED, EVENT_IS_ADDED, CONTACT_FIELD_CHANGED, INBOUND_CALL, OUTBOUND_CALL, FORM_SUBMIT
     };
 
     /**
@@ -132,6 +137,15 @@ public class Trigger
 
     @NotSaved(IfDefault.class)
     public String event_type = "ANY";
+
+    @NotSaved(IfDefault.class)
+    public String trigger_form_event = null;
+
+    @NotSaved(IfDefault.class)
+    @Embedded
+    public List<SearchRule> rules = new ArrayList<SearchRule>();
+
+    public String call_disposition = null;
 
     /**
      * Initialize DataAccessObject.
