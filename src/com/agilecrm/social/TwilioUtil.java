@@ -625,6 +625,9 @@ public class TwilioUtil
 	public static String createAppSidTwilioIO(String accountSID, String authToken, String numberSid, String record)
 			throws Exception
 	{
+		// Get current logged in agile user
+		Long agileUserID = AgileUser.getCurrentAgileUser().id;
+
 		// Get Twilio client configured with account SID and authToken
 		TwilioRestClient client = new TwilioRestClient(accountSID, authToken, null);
 
@@ -635,7 +638,8 @@ public class TwilioUtil
 		// params.put("VoiceUrl",
 		// "http://1-dot-twiliovoicerecord.appspot.com/voice?record=" + record);
 
-		params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice?record=" + record);
+		params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice?record=" + record
+				+ "&agileuserid=" + agileUserID);
 		params.put("VoiceMethod", "GET");
 
 		// params.put("StatusCallback", "https://" + NamespaceManager.get()

@@ -35,6 +35,9 @@ public class TwilioIOVoiceServlet extends HttpServlet
 		/* Call Recording enable/disable */
 		String record = request.getParameter("record");
 
+		/* Call Recording enable/disable */
+		String agileuserid = request.getParameter("agileuserid");
+
 		TwiMLResponse twiml = new TwiMLResponse();
 		Dial dial = new Dial();
 		try
@@ -53,7 +56,7 @@ public class TwilioIOVoiceServlet extends HttpServlet
 			{
 				System.out.println("Incoming call");
 				// dial.append(new Client("jenny"));
-				dial.append(new Client("agileclient"));
+				dial.append(new Client("agileclient" + agileuserid));
 				System.out.println("After dial append");
 			}
 			twiml.append(dial);

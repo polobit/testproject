@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Note;
 import com.agilecrm.social.TwilioUtil;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
@@ -308,17 +309,16 @@ public class TwilioWidgetsAPI
 	{
 		Widget twilioio = WidgetUtil.getWidget("TwilioIO");
 
-		/*
-		 * String clientName = "c"; clientName =
-		 * clientName.concat((AgileUser.getCurrentAgileUser().id).toString());
-		 */
+		// Get current logged in agile user
+		Long agileUserID = AgileUser.getCurrentAgileUser().id;
+
 		// Find an application Sid from twilio.com/user/account/apps
 		String applicationSid = twilioio.getProperty("twilio_app_sid");
 		TwilioCapability capability = new TwilioCapability(twilioio.getProperty("twilio_acc_sid"),
 				twilioio.getProperty("twilio_auth_token"));
 		capability.allowClientOutgoing(applicationSid);
 		// capability.allowClientIncoming("jenny");
-		capability.allowClientIncoming("agileclient");
+		capability.allowClientIncoming("agileclient" + agileUserID);
 
 		String token = null;
 
