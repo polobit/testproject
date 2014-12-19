@@ -31,6 +31,9 @@ function getSlotDurations()
 										.append(
 												'<div class="col-sm-4"><p title="' + json.title + '" class="choose timeslot-view" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
 							}
+							$('.segment1')
+						       .append(
+						         '<div class="clearfix"></div>');
 						}
 						if (data.length == 2)
 						{
