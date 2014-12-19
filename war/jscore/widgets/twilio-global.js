@@ -762,6 +762,10 @@ function setUpGlobalTwilio()
 			var widgetPrefs = $.parseJSON(widgetDetails.prefs);
 			var acc_sid = widgetPrefs.twilio_acc_sid;
 			var auth_token = widgetPrefs.twilio_auth_token;	
+			var isParent = "true";
+			if(TWILIO_CALLTYPE == "Incoming") {
+				isParent = "false";
+			}
 			var ApiCallUrl = "/core/api/widgets/twilio/getlastcall/" + acc_sid + "/" + auth_token + "/" + conn.parameters.CallSid + "/" + isParent;
 			console.log(ApiCallUrl);
 			if(!widgetDetails)
