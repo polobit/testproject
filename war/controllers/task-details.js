@@ -19,20 +19,24 @@ taskDetailView : function(id)
 												$("#content").html(getTemplate("task-detail", task.toJSON()));
 												task_details_tab.loadActivitiesView();
 
-								}else if(App_Calendar.tasksListView){
+								}
+								else if (App_Calendar.tasksListView)
+								{
 												var task = App_Calendar.tasksListView.collection.get(id);
 												taskDetailView = task;
 												$("#content").html(getTemplate("task-detail", task.toJSON()));
 												task_details_tab.loadActivitiesView();
-								}else{
+								}
+								else
+								{
 												var taskModel = Backbone.Model.extend({});
-												$.ajax({url:"core/api/tasks/getTaskObject/"+id,success:function(response){
+												$.ajax({ url : "core/api/tasks/getTaskObject/" + id, success : function(response)
+												{
 																taskDetailView = new taskModel(response);
-																$("#content").html(getTemplate("task-detail", 	taskDetailView.toJSON()));
+																$("#content").html(getTemplate("task-detail", taskDetailView.toJSON()));
 																task_details_tab.loadActivitiesView();
-												}});
-							
-												
+												} });
+
 								}
 				}
 
@@ -295,9 +299,23 @@ $(function()
 				{
 								e.preventDefault();
 								var id = $(this).attr('data');
-								var task = App_Calendar.allTasksListView.collection.get(id);
-								update_task(task.toJSON());
-						
+								var task
+								if (App_Calendar.allTasksListView)
+								{
+												task = App_Calendar.allTasksListView.collection.get(id);
+								}
+								else if (App_Calendar.tasksListView)
+								{
+												task = App_Calendar.tasksListView.collection.get(id);
+								}
+								else
+								{
+									task = taskDetailView;
+
+								}
+								if (task)
+												update_task(task.toJSON());
+
 				});
 
 				$('.task-add-contact').die().live('click', function(e)
