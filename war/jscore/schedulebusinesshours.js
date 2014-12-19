@@ -49,7 +49,10 @@ $("#btnSerialize").die().live('click', function(e){
 			success : function()
 			{
 			//window.location.reload(true);
-			  enable_save_button($(saveBtn));
+				 setTimeout(function() {
+					 enable_save_button($(saveBtn));
+			     	}, 2000);
+			 // 
 			},
 			error : function(error)
 			{
