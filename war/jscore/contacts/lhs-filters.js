@@ -141,7 +141,7 @@ $('#RHS input').die().live("blur keyup", function(e) {
 			$(this).attr('prev-val', currVal);
 		}
 		if($(this).parent().next().attr("id") == "RHS_NEW") {
-			if($(this).parent().next().find('input').val() != "" && currVal != "") {
+			if($(this).parent().next().find('input').val() != "") {
 				submitLhsFilter();
 				$(this).blur();
 			}
@@ -166,7 +166,7 @@ $('#RHS_NEW input').die().live("blur keyup", function(e) {
 			$(this).attr('prev-val', currVal);
 		}
 		if($(this).parent().prev().attr("id") == "RHS") {
-			if(currVal != "" && $(this).parent().prev().find('input').val() != "") {
+			if($(this).parent().prev().find('input').val() != "") {
 				submitLhsFilter();
 				$(this).blur();
 			}
