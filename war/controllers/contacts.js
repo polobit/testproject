@@ -979,15 +979,20 @@ var ContactsRouter = Backbone.Router.extend({
 				// show list of filters dropdown in contacts list
 				setupContactFilterList(el, App_Contacts.tag_id);
 			} });
-
-		// Defines appendItem for custom view
-		this.contact_custom_view.appendItem = contactTableView;
-
-		// Fetch collection
-		this.contact_custom_view.collection.fetch();
-
+		var _that = this;
+		$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
+				{
+					// Defines appendItem for custom view
+					_that.contact_custom_view.appendItem = function(base_model){
+						contactTableView(base_model,customDatefields,this);
+					};
+			
+					// Fetch collection
+					_that.contact_custom_view.collection.fetch();
+			
+				});
 		$('#content').html(this.contact_custom_view.el);
-
+		
 		// Activate Contacts Navbar tab
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
