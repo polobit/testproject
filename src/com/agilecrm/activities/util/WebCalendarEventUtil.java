@@ -152,7 +152,7 @@ public class WebCalendarEventUtil
 	if (StringUtils.isEmpty(usertimezone))
 	{
 	    AccountPrefs acprefs = AccountPrefsUtil.getAccountPrefs();
-	    usertimezone = acprefs.timezone;
+	    // usertimezone = acprefs.timezone;
 	    if (StringUtils.isEmpty(usertimezone))
 	    {
 		usertimezone = "UTC";
@@ -202,6 +202,9 @@ public class WebCalendarEventUtil
 	String[] night_hours = null; // array after spliting 9:00 into 9 and 00;
 	String night_endTime = null;
 	String night_endTimeMins = null;
+
+	String night_from_hours = null;
+	String[] night_hours_array = null;
 
 	// if(isActive) true i.e working day if not return empty list
 	if (business.getString("isActive") == "true")
@@ -277,12 +280,12 @@ public class WebCalendarEventUtil
 		    // we have to pass hour to calendar only 00 format.
 		    // calendar give time in sec according to date and hour
 
-		    night_from_hour = night_business.getString("timeFrom");
-		    night_start_hours = night_from_hour.split(":");
-		    night_fromtime = night_start_hours[0];
-		    night_fromTimeMins = night_start_hours[1];
+		    night_from_hours = night_business.getString("timeFrom");
+		    night_hours_array = night_from_hours.split(":");
+		    night_fromtime = night_hours_array[0];
+		    night_fromTimeMins = night_hours_array[1];
 		    night_till_hour = night_business.getString("timeTill");
-		    night_hours = tillHour.split(":");
+		    night_hours = night_till_hour.split(":");
 		    night_endTime = night_hours[0];
 		    night_endTimeMins = night_hours[1];
 
