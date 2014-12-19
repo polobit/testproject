@@ -981,6 +981,11 @@ var ContactsRouter = Backbone.Router.extend({
 			createCookie('sort_by_name', sort_key);
 		}
 		var template_key = "contacts-custom-view";
+		//if directly called the method, i.e on click of custom view link, 
+		//the url will be updated if any filter conditions are selected.
+		if(readData('dynamic_contact_filter')) {
+			url = 'core/api/filters/filter/dynamic-filter?data='+encodeURIComponent(readData('dynamic_contact_filter'));
+		}
 		if(is_lhs_filter) {
 			template_key = "contacts-custom-view-table";
 		}	
