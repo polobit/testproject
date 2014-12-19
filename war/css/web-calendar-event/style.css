@@ -385,7 +385,7 @@ box-sizing: content-box;
 	.timezone {
 		font-size: 14px;
 		display: block;
-		float: none;
+		float: right;
 	}
 	.timezone1 {
 		font-family: ProximaNova-bold;
