@@ -524,15 +524,16 @@ function deserializeChainedSelect1(form, el, element)
 			$('#tags_div').parent().find('a').addClass('bold-text');
 			$('#tags_div').removeClass('hide');
 			if(tagsConditionsCount == 0) {
-				currentElemnt = $($('#tags-lhs-filter-table').find("tr")[1]);
+				currentElemnt = $('#tags-lhs-filter-table').find("div.lhs-contact-filter-row:last")
 				$('#tags_div').prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 			} else {
-				var htmlContent = $($('#tags-lhs-filter-table').find("tr")[0]).clone();
-				htmlContent.find('div.hide').removeClass('hide').addClass('lhs-contact-filter-row');
+				var htmlContent = $('#tags-lhs-filter-table').find("div.hide").clone();
+				htmlContent.removeClass('hide').addClass('lhs-contact-filter-row');
 				addTagsDefaultTypeahead(htmlContent);
 				$(htmlContent).find("i.filter-tags-multiple-remove-lhs").css("display", "inline-block");
-				$('#tags-lhs-filter-table').find("tbody").append(htmlContent);
-				currentElemnt = $('#tags-lhs-filter-table').find("tbody").find('tr:last');
+				$(htmlContent).appendTo('#tags-lhs-filter-table');
+				//$('#tags-lhs-filter-table').find("div.lhs-contact-filter-row:last").append(htmlContent);
+				currentElemnt = $('#tags-lhs-filter-table').find("div.lhs-contact-filter-row:last");
 			}
 			tagsConditionsCount++;
 		} else {

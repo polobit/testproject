@@ -51,7 +51,7 @@ function setupLhsFilters(cel, is_company) {
 function loadCustomFiledsFilters(fields, cel, is_company) {
 	$('#custom-filter-fields', cel).html(getTemplate("contacts-lhs-filters-custom", fields));
 	//$('#custom-filter-fields', cel).find("input.date").datepicker({ format : 'mm/dd/yyyy'});
-	addTagsDefaultTypeahead($($('#tags-lhs-filter-table',cel).find("tr")[1]).find('#RHS'));
+	addTagsDefaultTypeahead($('#tags-lhs-filter-table',cel).find("div.lhs-contact-filter-row").find('#RHS'));
 	$("input.date", cel).datepicker({ format : 'mm/dd/yyyy', autoclose: true});
 	//$('#custom-filter-fields', cel).find("input.date").datepicker({ format : 'mm/dd/yyyy'});
 	$('select[name="CONDITION"]', cel).die().live('change', function(e)
@@ -93,20 +93,21 @@ function submitLhsFilter() {
 
 $('a.filter-tags-multiple-add-lhs').die().live("click", function(e) {
 	e.preventDefault();
-	var htmlContent = $($('#tags-lhs-filter-table').find("tr")[0]).clone();
-	htmlContent.find('div.hide').removeClass('hide').addClass("lhs-contact-filter-row");
+	var htmlContent = $('#tags-lhs-filter-table').find("div.hide").clone();
+	htmlContent.removeClass('hide').addClass("lhs-contact-filter-row");
 	addTagsDefaultTypeahead(htmlContent);
 	scramble_filter_input_names(htmlContent);
 	$(htmlContent).find("i.filter-tags-multiple-remove-lhs").css("display", "inline-block");
-	$(this).siblings("table").find("tbody").append(htmlContent);
-	$(this).siblings("table").find("tr:last").find('#RHS:visible').find(':not(input.date)').focus();
+	//$('#tags-lhs-filter-table').find("div.lhs-contact-filter-row:last").append(htmlContent);
+	$(htmlContent).appendTo('#tags-lhs-filter-table');
+	$('#tags-lhs-filter-table').find("div.lhs-contact-filter-row:last").find('#RHS:visible').find(':not(input.date)').focus();
 });
 
 // Filter Contacts- Remove Multiple
 	$("i.filter-tags-multiple-remove-lhs").die().live('click', function(e)
 	{
 		$(this).prev().val("").trigger('blur');
-		$(this).closest("tr").remove();
+		$(this).closest('div.lhs-contact-filter-row').remove();
 	});
 
 $('#clear-lhs-contact-filters').die().live("click", function(e) {
