@@ -152,6 +152,8 @@ public class SendEventReminderDeferredTask implements DeferredTask
 
 		    Event event = eventList.get(i);
 		    event.date = EventUtil.getHumanTimeFromEppoch(event.start, timezone, null);
+		    event.date_with_full_format = EventUtil.getHumanTimeFromEppoch(event.start, timezone,
+			    "EEE, MMMM d yyyy, h:mm a (z)");
 
 		    JSONObject pubnub_notification = new JSONObject();
 		    pubnub_notification.put("title", event.title);
