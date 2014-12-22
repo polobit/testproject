@@ -287,9 +287,19 @@ function populate_owners_in_trigger(trigger_form, owner_select_id, trigger_owner
 
 function populate_call_trigger_options(trigger_form)
 {
-	trigger_form.find('div#CALL').closest('div.control-group').css('display', '');
+	// Loads jquery.chained.min.js
+	head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+	{
+		trigger_form.find('div#CALL').closest('div.control-group').css('display', '');
 	
-	$('#CALL').chained('#LHS');	
+		var LHS, RHS;
+
+		LHS = $('#CALL', trigger_form);
+		RHS = $('#LHS', trigger_form);
+		
+		$(LHS).chained(RHS);
+		
+	});
 }
 
 /**
