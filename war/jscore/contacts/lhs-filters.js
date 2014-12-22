@@ -131,7 +131,7 @@ $('#lhs-filters-header').die().live("click", function(e) {
 	$(this).next().find('.lhs-contact-filter-row:visible').find('#RHS:visible').find(':not(input.date)').focus();
 });
 
-$('#RHS input').die().live("blur keyup", function(e) {
+$('#lhs-contact-filter-form #RHS input').die().live("blur keyup", function(e) {
 	if (e.type == 'focusout' || e.keyCode == '13')  {
 		var prevVal = $(this).attr('prev-val');
 		var currVal = $(this).val().trim();
@@ -152,11 +152,11 @@ $('#RHS input').die().live("blur keyup", function(e) {
 	}
 });
 
-$('#RHS select').die().live("change", function(e) {
+$('#lhs-contact-filter-form #RHS select').die().live("change", function(e) {
 	submitLhsFilter();
 });
 
-$('#RHS_NEW input').die().live("blur keyup", function(e) {
+$('#lhs-contact-filter-form #RHS_NEW input').die().live("blur keyup", function(e) {
 	if (e.type == 'focusout' || e.keyCode == '13')  {
 		var prevVal = $(this).attr('prev-val');
 		var currVal = $(this).val().trim();
