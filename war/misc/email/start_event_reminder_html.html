@@ -8,7 +8,7 @@
 					<tbody>
 						<tr>
 							<td valign="middle" height="32px"
-								style="padding: 0; color: white">Event Reminder: {{#events}}{{title}} @ {{date}}{{/events}}</td>
+								style="padding: 0; color: white">Event Reminder: {{#events}}{{title}}{{/events}}</td>
 							</td>
 						</tr>
 					</tbody>
@@ -21,7 +21,7 @@
 					<tbody>
 						{{#events}}
 				<tr style="line-height:20px;"><td style="vertical-align:top;width:11%">What&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td><td>{{title}}</td></tr>
-				<tr><td style="line-height:43px;">When&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td><td>{{date}}</td></tr>
+				<tr><td style="line-height:43px;">When&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td><td>{{date_with_full_format}}</td></tr>
 				{{#related}}
 					<tr><td style="vertical-align:top;line-height:43px;">Who&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</td><td style="vertical-align: top;margin-top:-20px">{{#related_contacts}} 
 						   		<div style="margin-right:30px">{{#owner.domain}}
@@ -55,7 +55,7 @@
 						   			<span style="vertical-align: top;padding-top: 15px;display: inline-block;padding-left: 5px;">{{#first_name}}{{value}}{{/first_name}}{{#last_name}} {{value}}{{/last_name}}{{#name}}{{value}}{{/name}}</span>
 						   		
 						   		</a></div>{{/related_contacts}}</td></tr>{{/related}}
-						   		<tr><td style="line-height:43px;">Calendar : </td><td><a  href="https://{{owner.domain}}.agilecrm.com/#calendar">View Agile Calendar</a></td></tr>
+						   		<br/><tr><td colspan="2"><div style="dispaly:block;"><a style="width: 100%;display: block;" href="https://{{owner.domain}}.agilecrm.com/#calendar">View this new event in Agile Calendar</a></div></td></tr>
 						{{/events}}
 				
 					</tbody>

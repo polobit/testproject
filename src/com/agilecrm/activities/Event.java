@@ -116,6 +116,12 @@ public class Event
     public String date;
 
     /**
+     * date with full format
+     */
+    @NotSaved
+    public String date_with_full_format;
+
+    /**
      * Related Contact
      */
     @NotSaved(IfDefault.class)
