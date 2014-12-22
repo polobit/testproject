@@ -130,7 +130,7 @@ public class QueryDocumentUtil
 				String newQuery = lhs + ":" + SearchUtil.normalizeString(value);
 
 				// For equals condition
-				if (condition.equals(SearchRule.RuleCondition.EQUALS) || condition.equals(SearchRule.RuleCondition.ON) || condition.equals(SearchRule.RuleCondition.CONTAINS))
+				if (condition.equals(SearchRule.RuleCondition.EQUALS) || condition.equals(SearchRule.RuleCondition.ON))
 				{
 					/*
 					 * Build query by passing condition old query and new query
@@ -163,6 +163,16 @@ public class QueryDocumentUtil
 					 * Build query by passing condition old query and new query
 					 */
 					query = buildNestedCondition("AND", query, newQuery);
+				}
+				
+				// Between given values
+				else if (condition.equals(SearchRule.RuleCondition.BETWEEN))
+				{
+					if (rhs_new != null)
+					{
+						query = buildNestedCondition("AND", query, lhs + " >= " + rhs);
+						query = buildNestedCondition("AND", query, lhs + " <= " + rhs_new);
+					}
 				}
 
 			}
@@ -444,7 +454,8 @@ public class QueryDocumentUtil
 			// support old data
 			epochQuery = lhs + "_epoch" + ">=" + dayStartEpochTime;
 
-			query = buildNestedCondition("AND", epochQuery, lhs + "_epoch" + "<=" + dayEndEpochTime);
+			query = buildNestedCondition("AND", query, epochQuery);
+			query = buildNestedCondition("AND", query, lhs + "_epoch" + "<=" + dayEndEpochTime);
 
 		}
 

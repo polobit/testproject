@@ -70,6 +70,7 @@ href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" type="text/css"
 href="/css/agilecrm.css" />
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 <style>
 .clickdesk_bubble {
 	display: none !important;

@@ -185,3 +185,54 @@ $(function(){
 		$('form', this).focus_first();
 	});
 });
+
+function serializeLhsFilters(element)
+{
+	var json_array = [];
+	var filters = {};
+	$(element).find('a#lhs-filters-header').removeClass('bold-text');
+	$.each($(element).find('.lhs-contact-filter-row'), function(index, data) {
+		var json_object = {};
+		var currentElement = $(data)[0];
+		var RHS_VALUE, RHS_NEW_VALUE;
+		var CONDITION = $(currentElement).find('[name="CONDITION"]').val();
+		
+		var RHS_ELEMENT = $(currentElement).find('.'+CONDITION).find('#RHS').children();
+		var RHS_NEW_ELEMENT = $(currentElement).find('.'+CONDITION).find('#RHS_NEW').children();
+		
+		RHS_VALUE = $(RHS_ELEMENT).val().trim();
+		if ($(RHS_ELEMENT).hasClass("date") && RHS_VALUE && RHS_VALUE != "") {
+			var date = new Date($(RHS_ELEMENT).val());
+			RHS_VALUE = getGMTTimeFromDate(date);
+		}
+		RHS_NEW_VALUE = $(RHS_NEW_ELEMENT).val();
+		if ($(RHS_NEW_ELEMENT).hasClass("date") && RHS_NEW_VALUE && RHS_NEW_VALUE !="") {
+			var date = new Date($(RHS_NEW_ELEMENT).val());
+			RHS_NEW_VALUE = getGMTTimeFromDate(date);
+		}
+		if(RHS_NEW_VALUE && typeof RHS_NEW_VALUE == "string") {
+			RHS_NEW_VALUE = RHS_NEW_VALUE.trim();
+		}
+		
+		// Set if value of input/select is valid
+		if (RHS_VALUE && RHS_VALUE != null && RHS_VALUE != "") {
+			//if rhs_new exists and is empty dont consider this condition.
+			if(RHS_NEW_ELEMENT && RHS_NEW_ELEMENT.length > 0 ) {
+				if(!RHS_NEW_VALUE || RHS_NEW_VALUE == null || RHS_NEW_VALUE == "") {
+					//in jquery each return is equivalent to continue.
+					return;
+				}
+			}
+			json_object["LHS"] = $(currentElement).find('[name="LHS"]').val();
+			json_object["CONDITION"] = CONDITION;
+			json_object["RHS"] = RHS_VALUE;
+			json_object["RHS_NEW"] = RHS_NEW_VALUE;
+			json_array.push(json_object);
+			$($(element).find('.lhs-row-filter')[index]).find('a#lhs-filters-header').addClass('bold-text');
+		}
+		// Pushes each rule built from chained select in to an JSON array
+	});
+	filters["rules"] = json_array;
+	filters["contact_type"] = $(element).find('#contact_type').val();
+	return filters;
+}
