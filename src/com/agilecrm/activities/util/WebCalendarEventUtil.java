@@ -278,6 +278,47 @@ public class WebCalendarEventUtil
     }
 
     /**
+     * if noght ours is the business hours then it will give the weekday before
+     * actual weekday to calculate business hours for before day also
+     * 
+     * @param if wkday is monday
+     * @return sunday
+     */
+    public static int getNightWeekDayAccordingToJS(int wkday)
+    {
+
+	if (wkday == 0)
+	{
+	    return 6;
+	}
+	else if (wkday == 1)
+	{
+	    return 0;
+	}
+	else if (wkday == 2)
+	{
+	    return 1;
+	}
+	else if (wkday == 3)
+	{
+	    return 2;
+	}
+	else if (wkday == 4)
+	{
+	    return 3;
+	}
+	else if (wkday == 5)
+	{
+	    return 4;
+	}
+	else if (wkday == 6)
+	{
+	    return 5;
+	}
+	return wkday;
+    }
+
+    /**
      * 
      * @param date
      *            date of the day number
