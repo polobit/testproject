@@ -282,11 +282,19 @@ public class ContactUtilServlet extends HttpServlet
 		    DaoBillingRestriction.ClassEntities.Contact.toString(), restriction);
 
 	    if (contactRestriction == null)
+	    {
 		return;
+	    }
+		
 
 	    // Returns if contacts limit is reached
 	    if (!contactRestriction.can_create())
+	    {
+		contactPrefs.inProgress = false;
+		contactPrefs.save();
 		return;
+	    }
+		
 	}
 
 	SyncService service = new SyncPrefsBuilder().config(contactPrefs).getService(contactPrefs.type.getClazz());

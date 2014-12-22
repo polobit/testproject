@@ -39,7 +39,6 @@
                                         <option value="RUNS_MONTHLY">Monthly</option>
 										<optgroup label="Payments">
 										<option value="STRIPE_CHARGE_EVENT" id="stripe-charge-event">Stripe Event</option>
-                                        <!--<option value="SHOPIFY_EVENT" id="shopify-event">Shopify Event</option>-->
 										<optgroup label="Email Bounces">
 										<option value="SOFT_BOUNCE">Soft Bounce</option>
 										<option value="HARD_BOUNCE">Hard Bounce</option>
@@ -49,6 +48,8 @@
 										<option value="EMAIL_LINK_CLICKED">Email Link Clicked</option>
 										<optgroup label="Calendar">
 										<option value="EVENT_IS_ADDED">Event is added</option>
+										<optgroup label="Ecommerce">
+										<option value="SHOPIFY_EVENT" id="shopify-event">Shopify Event</option>
 									</select>
                                 </div>
                             </div>
@@ -144,8 +145,8 @@
 									<option value="CUSTOMERS_CREATE">Customer created</option>
 									<option value="CUSTOMERS_UPDATE">Customer updated</option>
 									<option value="ORDERS_CREATE">Order created</option>
-									<option value="ORDERS_UPDATE">Order updated</option>
-									<option value="ORDERS_PAYMENT">Order payment</option>
+									<option value="ORDERS_UPDATED">Order updated</option>
+									<option value="ORDERS_PAID">Order payment</option>
 									<option value="ORDERS_DELETE">Order deleted</option>
 									<option value="ORDERS_FULFILLED">Order fulfilled</option>
 									<option value="ORDERS_CANCELLED">Order cancelled</option>
@@ -153,12 +154,15 @@
 									<option value="CHECKOUTS_UPDATE">Checkout updated</option>
 									<option value="CHECKOUTS_DELETE">Checkout deleted</option>
 							</select>
+							<div style="margin-top:12px;">
+								<small><i class="icon-info-sign"></i> You need to setup Webhooks in your Shopify account for this. In your stores Admin panel, go to Settings, Notifications, Webhooks, and create a webhook for the desired event with the below URL. <br> <a class="inbound-help-text">{{shopifyWebhook}}</a></small>
+							</div>
 							</div>	
 						</div>
 						<div id="trigger-inbound-mail-event" style="display:none;">
 						<div class="control-group">
 							<div class="controls" style="margin-left:220px!important; margin-top:-12px;">
-								<small><i class="icon-info-sign"></i> For Agile CRM to recognize your emails, please setup <a class="inbound-help-text">{{inboundMail}}</a> as forwarding email at your email server. The email's From address will be added as a contact and campaign will be run on it (only for the very first time).</small>								
+								<small><i class="icon-info-sign"></i> For Agile CRM to recognize your emails, please setup <a class="inbound-help-text">{{inboundMail}}</a> as forwarding email at your email server. When there is a new email to this address, the From address will be added to your Contacts and to the Campaign (in case it is a new Contact).</small>								
 							</div>
                 		</div>
 						</div>

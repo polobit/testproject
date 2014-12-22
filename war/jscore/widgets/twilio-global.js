@@ -188,7 +188,7 @@ function globalTwilioIOSetup()
 				Verfied_Number = twilioio_widget.prefs.twilio_from_number;
 			else
 				Verfied_Number = twilioio_widget.prefs.twilio_number;
-
+			
 			getGlobalToken();
 		}
 	}).error(function(data)
@@ -268,8 +268,6 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 {
 	console.log("Twilio twilio number " + twilioNumbers + "  " + verifiedNumbers);
 	console.log("Twilio twilio number " + twilioNumbers.length + "  " + verifiedNumbers.length);
-	// console.log("Twilio twilio number " + twilioNumbers[0].PhoneNumber+" "
-	// +verifiedNumbers[0].PhoneNumber );
 
 	// no twilio # as well as no verified #
 	if (twilioNumbers.length == 0 && verifiedNumbers.length == 0)
@@ -473,7 +471,7 @@ function createAppSid(twilioio_prefs, callback)
 	if (twilioio_prefs.twilio_number_sid != "")
 		numberSid = twilioio_prefs.twilio_number_sid;
 
-	$.get("/core/api/widgets/twilio/createappsid/" + twilioio_prefs.twilio_acc_sid + "/" + twilioio_prefs.twilio_auth_token + "/" + numberSid, function(result)
+	$.get("/core/api/widgets/twilio/createappsid/" + twilioio_prefs.twilio_acc_sid + "/" + twilioio_prefs.twilio_auth_token + "/" + numberSid+ "/" + twilioio_prefs.twilio_record, function(result)
 	{
 		console.log("Twilio createAppSid " + result);
 
@@ -776,7 +774,7 @@ function setUpGlobalTwilio()
 function twiliocall(phoneNumber, toName)
 {
 	// get the phone number to connect the call to
-	params = { "from" : Verfied_Number, "PhoneNumber" : phoneNumber };
+	params = { "from" : Verfied_Number, "PhoneNumber" : phoneNumber};
 	Twilio.Device.connect(params);
 
 	To_Number = phoneNumber;

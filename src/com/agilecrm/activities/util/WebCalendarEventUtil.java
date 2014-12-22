@@ -152,7 +152,7 @@ public class WebCalendarEventUtil
 	if (StringUtils.isEmpty(usertimezone))
 	{
 	    AccountPrefs acprefs = AccountPrefsUtil.getAccountPrefs();
-	    // usertimezone = acprefs.timezone;
+	    usertimezone = acprefs.timezone;
 	    if (StringUtils.isEmpty(usertimezone))
 	    {
 		usertimezone = "UTC";
@@ -357,6 +357,14 @@ public class WebCalendarEventUtil
 	return wkday;
     }
 
+    /**
+     * if noght ours is the business hours then it will give the weekday before
+     * actual weekday
+     * 
+     * @param wkday
+     *            is monday
+     * @return sunday
+     */
     public static int getNightWeekDayAccordingToJS(int wkday)
     {
 

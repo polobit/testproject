@@ -3460,6 +3460,7 @@ $(function()
 			icon_class = "icon-text-height";
 		return icon_class;
 	});
+
 	// To choose font awesome icon for custom fields
 	Handlebars.registerHelper('choose_custom_field_type', function(field_type) {
 		var field_type_name='';
@@ -3480,4 +3481,25 @@ $(function()
 		return field_type_name;
 	});
 
+	Handlebars.registerHelper('shopifyWebhook', function()
+	{
+		var agile_api = $.ajax({ type : 'GET', url : '/core/api/api-key', async : false, dataType : 'json' }).responseText;
+		agile_api = JSON.parse(agile_api);
+		var shopify_webhook = window.location.origin + "/shopifytrigger?api-key=" + agile_api.api_key;
+		return new Handlebars.SafeString(shopify_webhook);
+	});
 });
+
+// helper function return created time for event
+function getEventCreatedTime(due)
+{
+	// Get Todays Date
+	var eventStartDate = new Date(due);
+	due = eventStartDate.getTime() / 1000;
+	var date = new Date();
+	date.setHours(0, 0, 0, 0);
+
+	date = date.getTime() / 1000;
+	// console.log("Today " + date + " Due " + due);
+	return Math.floor((due - date) / (24 * 3600));
+}

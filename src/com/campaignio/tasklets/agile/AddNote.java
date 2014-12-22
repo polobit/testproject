@@ -4,13 +4,11 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.user.AgileUser;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
-import com.googlecode.objectify.Key;
 
 /**
  * <code>Add note</code> represents Add note node in workflow. It is used to add
@@ -50,11 +48,10 @@ public class AddNote extends TaskletAdapter
 	    // Get Contact Id
 	    String contactId = AgileTaskletUtil.getId(subscriberJSON);
 
-	    // Get Contact Owner Id.
-	    Long ownerId = ContactUtil.getContactOwnerId(Long.parseLong(contactId));
+	    String ownerId = AgileTaskletUtil.getContactOwnerIdFromSubscriberJSON(subscriberJSON);
 
 	    // Add note
-	    addNote(subject, description, contactId, ownerId == null ? null : AgileTaskletUtil.getAgileUserKey(ownerId));
+	    addNote(subject, description, contactId, ownerId);
 	}
 	catch (Exception e)
 	{
@@ -83,11 +80,23 @@ public class AddNote extends TaskletAdapter
      * @param owner
      *            - Contact Owner.
      */
-    private void addNote(String subject, String description, String contactId, Key<AgileUser> owner)
+    private void addNote(String subject, String description, String contactId, String ownerId)
     {
+	Long contactOwnerId = null;
+
+	if (ownerId == null)
+	{
+	    // Fetch contact owner
+	    contactOwnerId = ContactUtil.getContactOwnerId(Long.parseLong(contactId));
+
+	    ownerId = contactOwnerId == null ? null : contactOwnerId.toString();
+	}
+
 	Note note = new Note(subject, description);
 	note.addRelatedContacts(contactId);
-	note.setOwner(owner);
+	note.owner_id = ownerId;
+
 	note.save();
     }
+
 }

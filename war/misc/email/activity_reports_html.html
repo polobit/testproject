@@ -168,7 +168,7 @@
 							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
 								<ul>
 									{{#events.events_added}}
-										<li>Event '{{custom1}}' added on {{time_string}}</li>
+										<li>Event '{{custom1}}' ({{custom4}}) added on {{time_string}}</li>
 									{{/events.events_added}}
 								</ul>
 							</td>
@@ -255,6 +255,57 @@
 				</table>
 				{{/docs.doc_count}}
 				{{/docs}}
+				{{#calls}}
+				{{#calls.total_calls}}
+				<p style="font-size:1.2em;font-weight:bold;">Calls</p>
+				<table width="100%" cellpadding="5" cellspacing="0" style="margin-top:-40px;border-style:solid;border-radius:5px;border-color:darkgray;border-width:1px;">
+					<tbody>
+						{{#calls.done_count}}
+						<tr>
+							<td style="background-color:lightgray;width:30%;border-bottom-style:solid;border-bottom-width:1px !important;border-bottom-color:grey;vertical-align:top;">
+								<p style="margin:0px;font-weight:bold;">Done</p><span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{calls.done_count}}</span><p>Total duration {{calls.done_duration}}<br/>(Outgoing - {{calls.out_count}}, Incoming - {{calls.in_count}})</p>
+							</td>
+							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
+								<ul>
+									{{#calls.done_calls}}
+										<li>{{#label}}To <a href="https://{{domain}}.agilecrm.com/#contact/{{entity_id}}">{{label}}</a>{{/label}} ({{custom2}} - {{custom4}}) on {{time_string}}</li>
+									{{/calls.done_calls}}
+								</ul>
+							</td>
+						</tr>
+						{{/calls.done_count}}
+						{{#calls.no_ans_count}}
+						<tr>
+							<td style="background-color:lightgray;width:30%;border-bottom-style:solid;border-bottom-width:1px !important;border-bottom-color:grey;vertical-align:top;">
+								<p style="margin:0px;font-weight:bold;">No Answer</p><span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{calls.no_ans_count}}</span>
+							</td>
+							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
+								<ul>
+									{{#calls.no_ans_calls}}
+										<li>{{#label}}To <a href="https://{{domain}}.agilecrm.com/#contact/{{entity_id}}">{{label}}</a>{{/label}} ({{custom2}}) on {{time_string}}</li>
+									{{/calls.no_ans_calls}}
+								</ul>
+							</td>
+						</tr>
+						{{/calls.no_ans_count}}
+						{{#calls.failed_count}}
+						<tr>
+							<td style="background-color:lightgray;width:30%;vertical-align:top;">
+								<p style="margin:0px;font-weight:bold;">Failed</p><span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{calls.failed_count}}</span>
+							</td>
+							<td style="color:#777;">
+								<ul>
+									{{#calls.failed_calls}}
+										<li>{{#label}}To <a href="https://{{domain}}.agilecrm.com/#contact/{{entity_id}}">{{label}}</a>{{/label}} ({{custom2}}) on {{time_string}}</li>
+									{{/calls.failed_calls}}
+								</ul>
+							</td>
+						</tr>
+						{{/calls.failed_count}}
+					</tbody>
+				</table>
+				{{/calls.total_calls}}
+				{{/calls}}
 				{{/reports}}
 				<br />
 				<p>You are receiving this email as you have created a report 
