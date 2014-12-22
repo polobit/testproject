@@ -3375,6 +3375,20 @@ $(function()
 																return d1 + " - " + time;
 								}
 				});
+				
+				
+				//function used know weather event rescheduled or modified
+				Handlebars.registerHelper('get_event_rescheduled', function(value,options)
+						{       console.log(value);
+										var fields = value.replace(/[^a-zA-Z ^,]/g, " ").split(",");
+										if(fields.indexOf(" start date")!=-1){
+											return options.fn(value);
+										}
+
+										return options.inverse(value);
+
+						});
+				
 				// helper function return created time for event
 				function getEventCreatedTime(due)
 				{

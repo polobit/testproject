@@ -675,8 +675,16 @@ Modified  Event <a href="" data={{entity_id}} class="activity-deal-edit">{{label
 	</div>
 <div class="pull-left activity-tag">
 <div>
- Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> modified<br/>
-<i class="icon-calendar icon-white"></i> Event {{displayActivityFieldText custom3}} modified.{{#if related_contact_ids}}Event related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
+{{#get_event_rescheduled custom3}} 
+Event <a href="" data={{../entity_id}} class='activity-event-edit'">{{../label}}</a> Rescheduled<br/>
+<i class="icon-calendar icon-white"></i> Event start date changed to {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" ../entityObject.start}}.
+ {{else}}
+ Event <a href="" data={{../entity_id}} class='activity-event-edit'">{{../label}}</a> modified<br/>
+<i class="icon-calendar icon-white"></i> Event {{displayActivityFieldText ../custom3}} modified.
+{{/get_event_rescheduled}}
+{{#if related_contact_ids}}Event related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
+
+
 
 </div>
 <div>	
@@ -1147,12 +1155,12 @@ Deleted  {{custom1}} Documents<br/>
 <div>
 {{#if_equals "incoming" custom2}}
 Call from {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
-<i class="icon-phone"></i>{{callActivityFriendlyStatus custom3}} - {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}({{custom1}})
+<i class="icon-phone"></i>{{callActivityFriendlyStatus custom3}} - {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} ({{custom1}})
 {{/if_equals}}
 
 {{#if_equals "outgoing" custom2}}	
 Called {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
-<i class="icon-phone"></i>{{callActivityFriendlyStatus custom3}} - {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}({{custom1}})
+<i class="icon-phone"></i>{{callActivityFriendlyStatus custom3}} - {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} ({{custom1}})
 {{/if_equals}}
 
 
