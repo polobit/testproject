@@ -36,7 +36,7 @@ function insertSelectedMergeField(ele, target_id)
 function getMergeFields(type)
 {
 
-	var options = { "Select Merge Field" : "", "First Name" : "{{first_name}}", "Last Name" : "{{last_name}}", "Score" : "{{score}}",
+	var options = { "Select Merge Field" : "", "First Name" : "{{first_name}}", "First Name Fix" : "{{first_name_fix}}", "Last Name" : "{{last_name}}", "Last Name Fix" : "{{last_name_fix}}", "Name Fix" : "{{name_fix}}", "Score" : "{{score}}",
 		"Created Date" : "{{created_date}}", "Modified Date" : "{{modified_date}}", "Email" : "{{email}}", "Company" : "{{company}}", "Title" : "{{title}}",
 		"Website" : "{{website}}", "Phone" : "{{phone}}", "City" : "{{location.city}}", "State" : "{{location.state}}", "Country" : "{{location.country}}",
 		"Twitter Id" : "{{twitter_id}}", "LinkedIn Id" : "{{linkedin_id}}", "Owner Name" : "{{owner.name}}", "Owner Email" : "{{owner.email}}" , "Calendar URL" : "{{owner.calendar_url}}"};
