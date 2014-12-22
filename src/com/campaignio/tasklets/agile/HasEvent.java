@@ -1,13 +1,15 @@
 package com.campaignio.tasklets.agile;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Event.EventType;
 import com.agilecrm.activities.util.EventUtil;
-import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.Contact;
 import com.agilecrm.user.AgileUser;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
@@ -86,57 +88,34 @@ public class HasEvent extends TaskletAdapter
 	public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
 			throws Exception
 	{
-		String eventOwner = getStringValue(nodeJSON, subscriberJSON, data, OWNER_ID);
+		String givenOwnerID = getStringValue(nodeJSON, subscriberJSON, data, OWNER_ID);
 		String eventStatus = getStringValue(nodeJSON, subscriberJSON, data, EVENT_STATUS);
 		String eventType = getStringValue(nodeJSON, subscriberJSON, data, EVENT_TYPE);
 
 		try
 		{
-			Key<AgileUser> keyOfEvent = null;
 
-			// Get AgileUser Owner
-			if (eventOwner.equals(ANY_OWNER))
-				eventOwner = null;
-			else if (eventOwner.equals(CONTACT_OWNER))
-			{
-				Long contactOwnerId = null;
-				String contactId = AgileTaskletUtil.getId(subscriberJSON);
+			Key<AgileUser> contactOwnerKey = getContactOwnerKey(subscriberJSON, givenOwnerID);
 
-				// Get Contact Owner Id.
-				contactOwnerId = ContactUtil.getContactOwnerId(Long.parseLong(contactId));
-				keyOfEvent = new Key<AgileUser>(AgileUser.class, contactOwnerId);
-			}
-			else if (eventOwner != null)
-			{
-				// Event owner is the id of the domain User.
-				// Get AgileUser from domain User as event has the AgileUser as
-				// Owner
-				keyOfEvent = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUserFromDomainUser(Long
-						.parseLong(eventOwner)).id);
-			}
+			Key<Contact> contactKey = getContactKey(subscriberJSON);
 
-			// Set the eventStatus
-			if (ANY_STATUS.equals(eventStatus))
-				eventStatus = null;
-			if (UPCOMING_EVENT.equals(eventStatus))
-				eventStatus = "start > ";
-			if (COMPLETED_EVENT.equals(eventStatus))
-				eventStatus = "end <";
+			eventStatus = getEventStatus(eventStatus);
 
-			// Set enventType
-			EventType eventtype = null;
-			if (ANY_TYPE_EVENT.equals(eventType))
-				eventType = null;
-			if (ONLINE_APPOINTMENT_EVENT.equals(eventType))
-				eventtype = Event.EventType.WEB_APPOINTMENT;
+			EventType eventtype = getEventType(eventType);
+
+			List<Key<Event>> listofKeys = new ArrayList<Key<Event>>();
+
+			System.out.println("The contact key is:" + contactKey);
 
 			// Get list of AgileUsers for the given event conditions
-			List<Key<Event>> listofKeys = EventUtil.getEventsKey(keyOfEvent, eventStatus, eventtype);
+			if (contactKey != null)
+				listofKeys = EventUtil.getEventsKey(contactOwnerKey, eventStatus, eventtype, contactKey);
 
 			if (listofKeys.size() > 0)
+			{
 				TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_YES);
-			else
-				TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_NO);
+				return;
+			}
 
 		}
 		catch (Exception e)
@@ -145,5 +124,57 @@ public class HasEvent extends TaskletAdapter
 		}
 
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_NO);
+	}
+
+	private EventType getEventType(String eventType)
+	{
+		if (ANY_TYPE_EVENT.equals(eventType))
+			return null;
+		if (ONLINE_APPOINTMENT_EVENT.equals(eventType))
+			return Event.EventType.WEB_APPOINTMENT;
+		return null;
+	}
+
+	private String getEventStatus(String eventStatus)
+	{
+		if (ANY_STATUS.equals(eventStatus))
+			eventStatus = null;
+		if (UPCOMING_EVENT.equals(eventStatus))
+			eventStatus = "start > ";
+		if (COMPLETED_EVENT.equals(eventStatus))
+			eventStatus = "end <";
+		return eventStatus;
+	}
+
+	private Key<Contact> getContactKey(JSONObject subscriberJSON)
+	{
+		String contactID = AgileTaskletUtil.getId(subscriberJSON);
+		// Get contact's key
+		if (!StringUtils.isEmpty(contactID))
+			return new Key<Contact>(Contact.class, Long.parseLong(contactID));
+		return null;
+	}
+
+	private Key<AgileUser> getContactOwnerKey(JSONObject subscriberJSON, String givenOwnerID)
+	{
+		try
+		{
+			String contactOwnerID = AgileTaskletUtil.getContactOwnerIdFromSubscriberJSON(subscriberJSON);
+			Long actualOwnerID = null;
+
+			if (!StringUtils.isEmpty(contactOwnerID))
+				actualOwnerID = AgileTaskletUtil.getOwnerId(givenOwnerID, Long.parseLong(contactOwnerID));
+
+			if (actualOwnerID != null)
+				return new Key<AgileUser>(AgileUser.class,
+						AgileUser.getCurrentAgileUserFromDomainUser(actualOwnerID).id);
+			return null;
+		}
+		catch (Exception e)
+		{
+			System.out.println("Inside getContactOwnerKey in HasEvent.java :" + e.getMessage());
+			return null;
+		}
+
 	}
 }
