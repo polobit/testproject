@@ -223,25 +223,25 @@
 
  {{#if_equals "TASK_ADD" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;text-transform: capitalize;">
-         Task Created
+         Task Created for user {{custom1}}
 	</div>	
      {{/if_equals}}
 
  {{#if_equals "TASK_PROGRESS_CHANGE" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;text-transform: capitalize;">
-         Task Status Changed
+         Task progress changed from {{custom2}}% to {{custom1}}%
 	</div>	
      {{/if_equals}}
 
  {{#if_equals "TASK_OWNER_CHANGE" activity_type}}
-	<div style="background:none;border:none;margin-top: 8px;text-transform: capitalize;">
-      Task  Owner changed
+	<div style="background:none;border:none;margin-top: 8px;">
+      Task  Owner changed to {{custom1}}
 	</div>	
      {{/if_equals}}
 
  {{#if_equals "TASK_STATUS_CHANGE" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;text-transform: capitalize;">
-        Status updated
+        Status changed from {{displayTaskStatus custom2}} to {{displayTaskStatus custom1}}
 	</div>	
      {{/if_equals}}
 

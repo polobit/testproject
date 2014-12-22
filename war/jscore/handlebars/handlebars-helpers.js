@@ -1353,7 +1353,8 @@ $(function()
 				});
 				
 				/**
-				 * Returns plain customise text for activity remove underscore and other special charecter from string 
+				 * Returns plain customise text for activity remove underscore and other
+				 * special charecter from string
 				 */
 				Handlebars.registerHelper('displayActivityFieldText', function(value)
 				{       
@@ -1370,7 +1371,14 @@ $(function()
 								 }else{
 								 		text =	fields[fields.length-1].trim();
 								 }
-
+								 // update title
+         text = text.replace('subject','Title');
+         // update priority
+         text = text.replace('priority type','Priority');
+         // update category
+         text = text.replace('task type','Category');
+         // update due date
+         text = text.replace('due date','Due date');
 								return text;
 
 				});
@@ -4390,7 +4398,7 @@ $(function()
 				
 				
 				/**
-				 * Get activity type  without underscore and caps, for deal _details page.
+				 * Get activity type without underscore and caps, for deal _details page.
 				 */
 				Handlebars.registerHelper('get_normal_activity_type', function(name)
 				{
@@ -4399,9 +4407,9 @@ $(function()
 
 
 								var name_json = { "DEAL_ADD" : "Deal Created", "DEAL_EDIT" : "Deal Edited", "DEAL_CLOSE" : "Deal Closed", "DEAL_LOST" : "Deal Lost", "DEAL_RELATED_CONTACTS" : " Deal Contacts Changed", "DEAL_OWNER_CHANGE" : "Deal Owner Changed", "DEAL_MILESTONE_CHANGE" : "Deal Milestone Changed",
-												"NOTE_ADD" : "Note Added","TASK_ADD":"Task Created", "TASK_EDIT":"Task Updated", "TASK_PROGRESS_CHANGE":"Task Progress Changed", "TASK_OWNER_CHANGE":"Task Owner Changed", "TASK_STATUS_CHANGE":"Task Status Changed","TASK_COMPLETED":"Task Completed","TASK_DELETE":"Task Deleted",
-												"TASK_RELATED_CONTACTS":"Task Related Contacts Updated"
- };
+
+												"NOTE_ADD" : "Note Added","TASK_ADD":"Task Created", "TASK_EDIT":"Task Updated", "TASK_PROGRESS_CHANGE":"Progress Changed", "TASK_OWNER_CHANGE":"Owner Changed", "TASK_STATUS_CHANGE":"Status Changed","TASK_COMPLETED":"Task Completed","TASK_DELETE":"Task Deleted",
+												"TASK_RELATED_CONTACTS":"Contacts Modified"};
 
 								name = name.trim();
 
@@ -4947,7 +4955,8 @@ $(function()
 								return getPendingEmails();
 				});
 
-				// helper function to return agile bcc special email for inbound mail event trigger
+				// helper function to return agile bcc special email for inbound mail event
+				// trigger
 				Handlebars.registerHelper('inboundMail', function()
 				{
 								var agile_api = $.ajax({ type : 'GET', url : '/core/api/api-key', async : false, dataType : 'json' }).responseText;
@@ -4958,9 +4967,8 @@ $(function()
 
 				/**
 				 * ==============================================================
-				 * -------------------------- jitendra's start script ---------- 
-				 * Please do not add any function in this block
-				 * extract time from epochTime
+				 * -------------------------- jitendra's start script ---------- Please do
+				 * not add any function in this block extract time from epochTime
 				 */
 				Handlebars.registerHelper("getTime", function(date)
 				{
@@ -5243,8 +5251,7 @@ $(function()
 				}
 
 				/**
-				 * ------ End of jitendra script------
-				 * ======== Thank you =================
+				 * ------ End of jitendra script------ ======== Thank you =================
 				 */
 
 				// To pick randomly selected avatar url
@@ -5271,7 +5278,7 @@ $(function()
 				});
 				
 				
-				//@author Purushotham
+				// @author Purushotham
 				Handlebars.registerHelper('secondsToFriendlyTime', function(time) {
 					var hours = Math.floor(time / 3600);
 					if(hours > 0)
@@ -5334,8 +5341,8 @@ $(function()
 		return field_type_name;
 	});
 	
-	//@author Purushotham
-	//function to compare integer values
+	// @author Purushotham
+	// function to compare integer values
 	Handlebars.registerHelper('ifCond', function(v1, type, v2, options) {	
 		switch(type){
 			case "greaterthan":
@@ -5389,8 +5396,8 @@ $(function()
 		return new Handlebars.SafeString(shopify_webhook);
 	});
 	/**
-	 * getting convenient name of portlet
-	 */
+				 * getting convenient name of portlet
+				 */
 	Handlebars.registerHelper('get_portlet_name', function(p_name) {
 		var portlet_name = '';
 		if(p_name=='Filter Based')
@@ -5424,8 +5431,8 @@ $(function()
 		return portlet_name;
 	});
 	/**
-	 * getting portlet icons
-	 */
+				 * getting portlet icons
+				 */
 	Handlebars.registerHelper('get_portlet_icon', function(p_name) {
 		var icon_name = '';
 		if(p_name=='Filter Based')
@@ -5459,8 +5466,8 @@ $(function()
 		return icon_name;
 	});
 	/**
-	 * getting flitered contact portlet header name
-	 */
+				 * getting flitered contact portlet header name
+				 */
 	Handlebars.registerHelper('get_flitered_contact_portlet_header', function(filter_name) {
 		var header_name = '';
 		if(filter_name=='contacts')
@@ -5507,8 +5514,8 @@ $(function()
 	
 	
 	/**
-	 * returns tracks count of opportunity
-	 */
+				 * returns tracks count of opportunity
+				 */
 	Handlebars.registerHelper('getTracksCount', function(options)
 			{
 			if (parseInt(DEAL_TRACKS_COUNT) > 1)
@@ -5517,8 +5524,8 @@ $(function()
 				return options.inverse(this);
 			});
 	/**
-	 * getting flitered contact portlet header name
-	 */
+				 * getting flitered contact portlet header name
+				 */
 	Handlebars.registerHelper('get_deals_funnel_portlet_header', function(track_id) {
 		var header_name = '';
 		if(track_id==0)
@@ -5533,8 +5540,8 @@ $(function()
 	});
 	
 	/**
-	 * getting time in AM and PM format for event portlet
-	 */
+				 * getting time in AM and PM format for event portlet
+				 */
 	Handlebars.registerHelper('get_AM_PM_format', function(date_val) {
 		var date = new Date(date_val * 1000);
 		var hours = date.getHours();
@@ -5548,8 +5555,8 @@ $(function()
 	});
 	
 	/**
-	 * getting duration between two dates for event portlet
-	 */
+				 * getting duration between two dates for event portlet
+				 */
 	Handlebars.registerHelper('get_duration', function(startDate,endDate) {
 		var duration='';
 		var days=0;
@@ -5576,9 +5583,9 @@ $(function()
 	
 	
 	/**
-	 * Returns plain customise text for activity remove underscore and other
-	 * special charecter from string
-	 */
+				 * Returns plain customise text for activity remove underscore and other
+				 * special charecter from string
+				 */
 	Handlebars.registerHelper('displayActivityFieldText', function(value)
 	{
 		var fields = value.replace(/[^a-zA-Z ^,]/g, " ").split(",");
