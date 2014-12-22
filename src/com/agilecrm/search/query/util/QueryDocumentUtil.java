@@ -130,7 +130,7 @@ public class QueryDocumentUtil
 				String newQuery = lhs + ":" + SearchUtil.normalizeString(value);
 
 				// For equals condition
-				if (condition.equals(SearchRule.RuleCondition.EQUALS) || condition.equals(SearchRule.RuleCondition.ON))
+				if (condition.equals(SearchRule.RuleCondition.EQUALS) || condition.equals(SearchRule.RuleCondition.ON) ||condition.equals(SearchRule.RuleCondition.CONTAINS))
 				{
 					/*
 					 * Build query by passing condition old query and new query
@@ -138,7 +138,7 @@ public class QueryDocumentUtil
 					query = buildNestedCondition("AND", query, newQuery);
 				}
 
-				else if (condition.equals(SearchRule.RuleCondition.NOTEQUALS))
+				else if (condition.equals(SearchRule.RuleCondition.NOTEQUALS) || condition.equals(SearchRule.RuleCondition.NOT_CONTAINS))
 				{
 					// For not queries
 					query = buildNestedCondition("NOT", query, newQuery);
