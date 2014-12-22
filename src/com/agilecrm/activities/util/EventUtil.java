@@ -421,7 +421,8 @@ public class EventUtil
 	 * @return List of AgileUser owner keys
 	 * @author Kona
 	 */
-	public static List<Key<Event>> getEventsKey(Key<AgileUser> owner, String status, EventType eventType)
+	public static List<Key<Event>> getEventsKey(Key<AgileUser> owner, String status, EventType eventType,
+			Key<Contact> contactKey)
 	{
 		Map<String, Object> searchMap = new HashMap<String, Object>();
 
@@ -436,6 +437,8 @@ public class EventUtil
 
 		if (eventType != null)
 			searchMap.put("type", eventType);
+
+		searchMap.put("related_contacts", contactKey);
 
 		try
 		{
