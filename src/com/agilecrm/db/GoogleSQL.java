@@ -37,7 +37,7 @@ public class GoogleSQL
 				// Load the class that provides the new "jdbc:google:mysql://"
 				// prefix.
 				Class.forName("com.mysql.jdbc.GoogleDriver");
-				url = "jdbc:google:mysql://agiledbs:agile/stats?user=root&password=mysql123";
+				url = "jdbc:google:mysql://agiledbs:agile/stats?user=root";
 
 				System.out.println("Google sql url is " + url);
 			}
