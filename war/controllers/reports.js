@@ -18,7 +18,10 @@ var ReportsRouter = Backbone.Router.extend({
 	 */
 	reports : function()
 	{
-		$("#content").html(getTemplate('report-categories', {}));
+		var campaignsCollectionView = new Base_Collection_View({ url : '/core/api/workflows', templateKey : "report-categories",
+			individual_tag_name : 'tr'});
+		campaignsCollectionView.collection.fetch();
+		$("#content").html(campaignsCollectionView.el);
 		$(".active").removeClass("active");
 		$("#reportsmenu").addClass("active");
 	},

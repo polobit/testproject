@@ -54,39 +54,73 @@
 </script>
 
 
-<script type="text/html" id="report-categories-template">
+<script type="text/html" id="report-categories-collection-template">
 <div class="row">
     <div class="span12">
         <div class="page-header">
-            <h2>Reports</h2>
+            <h2>Email</h2>
         </div>
-
+	</div>
+</div>
 
 <div id="general" class="row-fluid">
 
-<!-- Email reports -->
+<!-- Contact reports -->
 <div class="span4">
     <div class="well" style="width:220px; height:200px; text-align: center;">
         <!-- Icon and Title -->
         <div>
             <div style="padding:20px 70px 10px;">
-                <i class="icon-envelope icon-4x"></i>
+                <i class="icon-group icon-4x"></i>
             </div>
-            <b>Email Reports</b>
+            <b>Contact Reports</b>
         </div>
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
-            Get periodic email report on activities of each user or new leads coming in.
+            Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
         </div>
         <!-- Add button -->
         <div style="/*margin: 40px auto;	width: 50%;*/">
-            <a class="btn btn-primary" href="#email-reports">Go</a>
+            <a class="btn btn-primary" href="#contact-reports">Go</a>
         </div>
     </div>
 </div>
 
 
+<!-- Activity reports -->
+
+<div class="span4">
+    <div class="well" style="width:220px; height:200px; text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 70px 10px;">
+                <i class="icon-cogs icon-4x"></i>
+            </div>
+            <b>Activity Reports</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
+          	Get a periodic  email digest of various activities by users in Agile.
+        </div>
+        <!-- Add button -->
+        <div style="/*margin: 40px auto;	width: 50%;*/">
+            <a class="btn btn-primary" href="#activity-reports">Go</a>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h2>Graphs</h2>
+        </div>
+	</div>
+</div>
+
+<div id="general" class="row-fluid">
 <!-- Growth reports -->
 
 <div class="span4">
@@ -133,11 +167,7 @@
     </div>
 </div>
 
-
-</div>
- 
-
-<div style="padding-top:50px" class="row-fluid">
+<!-- cohorts reports -->
 <div class="span4">
     <div class="well" style="width:220px; height:200px; text-align: center;">
         <!-- Icon and Title -->
@@ -158,7 +188,128 @@
         </div>
     </div>
 </div>
+
 </div>
-  </div>
+
+
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h2>Campaigns</h2>
+        </div>
+	</div>
+</div>
+
+<div id="general" class="row-fluid">
+
+<!-- Comparison -->
+<div class="span4">
+    <div class="well" style="width:220px; height:200px; text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 70px 10px;">
+                <i class="icon-sitemap icon-4x"></i>
+            </div>
+            <b>Comparison</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
+            Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
+        </div>
+		
+        <!-- Add button -->
+        <div style="/*margin: 40px auto;	width: 50%;*/">
+            <a class="btn btn-primary" href="#campaign-stats" id="campaign-stats">Go</a>
+        </div>
+    </div>
+</div>
+
+
+<!-- Performance Stats -->
+
+<div class="span4">
+    <div class="well" style="width:220px; height:200px; text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 70px 10px;">
+                <i class="icon-sitemap icon-4x"></i>
+            </div>
+            <b>Performance Stats</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
+          	Get a periodic  email digest of various activities by users in Agile.
+        </div>
+
+		
+        <!-- Add button -->
+        <div style="/*margin: 40px auto;	width: 50%;*/">
+            <a id="campaign_id" class="btn btn-primary" href="#email-reports/{{this.0.id}}">Go</a>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h2>Activities</h2>
+        </div>
+	</div>
+</div>
+
+<div id="general" class="row-fluid">
+
+<!-- Contact activities -->
+<div class="span4">
+    <div class="well" style="width:220px; height:200px; text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 70px 10px;">
+                <i class="icon-group icon-4x"></i>
+            </div>
+            <b>Contact activities</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
+            Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
+        </div>
+        <!-- Add button -->
+        <div style="/*margin: 40px auto;	width: 50%;*/">
+            <a class="btn btn-primary" href="#">Go</a>
+        </div>
+    </div>
+</div>
+
+
+<!-- User Activities -->
+
+<div class="span4">
+    <div class="well" style="width:220px; height:200px; text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 70px 10px;">
+                <i class="icon-cogs icon-4x"></i>
+            </div>
+            <b>User Activities</b>
+        </div>
+        <br />
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
+          	Get a periodic  email digest of various activities by users in Agile.
+        </div>
+        <!-- Add button -->
+        <div style="/*margin: 40px auto;	width: 50%;*/">
+            <a class="btn btn-primary" href="#activities">Go</a>
+        </div>
+    </div>
+</div>
+</div>
+
+
 
 </script>
