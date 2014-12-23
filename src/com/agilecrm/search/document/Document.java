@@ -56,10 +56,6 @@ public class Document
 		{
 		    e.printStackTrace();
 		}
-	    } else if (fieldDef != null && fieldDef.field_type == CustomFieldDef.Type.NUMBER)
-	    {
-	    	builder.setName(SearchUtil.normalizeTextSearchString(data.name));
-		    builder.setNumber(Double.valueOf(data.value));
 	    }
 	    else
 	    {
