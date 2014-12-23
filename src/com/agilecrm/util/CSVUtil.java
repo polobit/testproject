@@ -298,7 +298,15 @@ public class CSVUtil
 		    if (StringUtils.isBlank(csvValue))
 			continue;
 
-		    ContactField field = properties.get(j);
+		    ContactField field = null;
+		    if (j < properties.size())
+		    {
+			field = properties.get(j);
+		    }
+		    else
+		    {
+			break;
+		    }
 
 		    // This is hardcoding but found no way to get
 		    // tags
@@ -659,8 +667,15 @@ public class CSVUtil
 		String csvValue = csvValues[j];
 		if (StringUtils.isBlank(csvValue))
 		    continue;
-
-		ContactField field = properties.get(j);
+		ContactField field = null;
+		if (j < properties.size())
+		{
+		    field = properties.get(j);
+		}
+		else
+		{
+		    break;
+		}
 
 		// This is hardcoding but found no way to get
 		// tags
