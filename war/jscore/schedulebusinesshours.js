@@ -46,7 +46,10 @@ $("#btnSerialize").die().live('click', function(e){
 			data : JSON.stringify(json),
 			success : function()
 			{
-			window.location.reload(true);
+				 setTimeout(function() {
+					 enable_save_button($(saveBtn));
+			     	}, 2000);
+			 // 
 			},
 			error : function(error)
 			{

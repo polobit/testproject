@@ -157,7 +157,7 @@ var ReportsRouter = Backbone.Router.extend({
 	{
 		var count = 0;
 		$("#content").html(getRandomLoadingImg());
-		CONTACT_CUSTOM_FIELDS = undefined;
+		SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
 		var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "email-reports", isNew : true,
 			postRenderCallback : function(el)
 			{

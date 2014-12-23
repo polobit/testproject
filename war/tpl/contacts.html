@@ -43,11 +43,57 @@
 	<td><div>{{lead_score}}</div></td>
 </script>
 
+<script id="contacts-table-model-template" type="text/html">
+	<td style="cursor:default;" class="select_checkbox">
+			<input class="tbody_check" type="checkbox"/>
+	</td>
+	<td class="data" data="{{id}}">
+	<div class="row-fluid">
+    	<div style="display:inline;padding-right:5px;height:auto;">
+        	{{#if_contact_type "PERSON"}}
+        		<img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
+        	{{/if_contact_type}}
+    	</div>
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:70%">
+        	{{#if_contact_type "PERSON"}}
+        		<b>	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </b>
+        		<br />
+        		{{getPropertyValue properties "email"}}
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<b>{{getPropertyValue properties "name"}}</b></br>
+        		{{getPropertyValue properties "url"}}
+        	{{/if_contact_type}}
+	</div>
+	</div>
+	</td>
+	<td><div style="display:inline-block;vertical-align:top;">{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}</div>
+	</td>
+	<td> 
+<!-- <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:15em;overflow:hidden;"> --> 
+	 <div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;"> 	
+		{{#each tags}}
+	    	<span class="label">{{this}}</span>	
+		{{/each}}
+	</div>
+	
+	</td>
+	<td><div>{{lead_score}}</div></td>
+</script>
+
+
 <script id="contacts-collection-template" type="text/html">
 <div class="row">
 	<div class="span12">
 		<div class="page-header">
-			<h1><span id="contact-heading">Contacts</span> {{contacts_count}} </h1>
+			<h1><span id="contact-heading">Contacts </span><span id="contacts-count">{{contacts_count}}</span></h1>
 			<div class="btn-group right" id="view-list"
 				style="top: -29px;"></div>
 			<div class="btn-group right" id="filter-list"
@@ -80,30 +126,8 @@
 <div class="row">
 	<div class="span3">
 		<div class="data-block">
-			<div class="well" id="tags" style="background:none;box-shadow:0 0px 7px 0px #ddd;">
-				<header>
-				<div>
-					<h3 style="margin-left: 3px">
-						<span><i class="icon-tags"></i></span> <span>Tags</span><span
-							style="vertical-align: text-top; margin-left: -3px"> <img
-							border="0" src="/img/help.png"
-							style="height: 6px; vertical-align: top" rel="popover"
-							data-placement="right"
-							data-title:" data-content="Tags are unique identifiers added to contacts for easy sorting and retrieval. Search using tags and pull up a group of contacts quickly."
-							id="element" data-trigger="hover" ></span>
-						</span>
-					</h3>
-					<span class="pull-right">
-						<a id="refresh-tags" href="#">
-							 <i class="icon-refresh" style="vertical-align:bottom" ></i>
-						</a>
-					</span>
-				</div>
-				</header>
-
-				<div id="pie-tags-chart" style="width: 100%; height: 400px"></div>
-				<div id="tagslist" style="word-wrap: break-word;"></div>
-			</div>
+			<div class="well" id="lhs_filters_conatiner" style="background:none;box-shadow:0 0px 7px 0px #ddd;">
+						</div>
 		</div>
 	</div>
 	<div class="span9">
@@ -168,11 +192,33 @@
 	</td>
 </script>
 
+<script id="companies-table-model-template" type="text/html">
+<td style="cursor:default;" class="select_checkbox">
+			<input class="tbody_check" type="checkbox"/>
+	</td>
+	<td class="data" data="{{id}}">
+    	<div style="display:inline;padding-right:10px;height:auto;">
+        		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
+    	</div>
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:14em;overflow:hidden;">
+        		<b>{{getPropertyValue properties "name"}}</b></br>
+        		{{getPropertyValue properties "url"}}
+    	</div>
+	</td>
+	<td>
+		<div>{{setupRating star_value}}</div>
+	</td>
+	<td>
+		<div>{{owner.name}}</div>
+	</td>
+</script>
+
+
 <script id="companies-collection-template" type="text/html">
 <div class="row">
 	<div class="span12">
 		<div class="page-header">
-			<h1><span id="contact-heading">Companies</span> <small> {{count}}</small></h1>
+			<h1><span id="contact-heading">Companies </span><span id="contacts-count"><small>{{count}}</small></span></h1>
 			<div class="btn-group right" id="view-list"
 				style="top: -29px;"></div>
 			<div class="btn-group right" id="filter-list"
@@ -200,27 +246,8 @@
 <div class="row">
 	<div class="span3">
 		<div class="data-block">
-			<div class="well" id="tags" style="background:none;box-shadow:0 0px 7px 0px #ddd;">
-				<header>
-					<h3 style="margin-left: 3px">
-						<span><i class="icon-tags"></i></span> Tags <span
-							style="vertical-align: text-top; margin-left: -3px"> <img
-							border="0" src="/img/help.png"
-							style="height: 6px; vertical-align: top" rel="popover"
-							data-placement="right"
-							data-title:" data-content="Tags are unique identifiers added to contacts for easy sorting and retrieval. Search using tags and pull up a group of contacts quickly."
-							id="element" data-trigger="hover" />
-						</span>
-					</h3>
-					<span class="pull-right">
-						<a id="refresh-tags" href="#">
-							 <i class="icon-refresh" style="vertical-align:bottom" ></i>
-						</a>
-					</span>
-				</header>
-				<div id="pie-tags-chart" style="width: 100%; height: 400px"></div>
-				<div id="tagslist" style="word-wrap: break-word;"></div>
-			</div>
+			<div class="well" id="lhs_filters_conatiner" style="background:none;box-shadow:0 0px 7px 0px #ddd;">
+						</div>
 		</div>
 	</div>
 	<div class="span9">
@@ -245,7 +272,7 @@
 						<th>Owner</th>
 					</tr>
 				</thead>
-				<tbody id="companies-model-list" class="contacts-model-list"
+				<tbody id="companies-model-list" class="companies-model-list"
 					route="contact/" style="overflow: scroll;">
 				</tbody>
 			</table>
@@ -253,4 +280,469 @@
 	</div>
 	{{/if}}
 </div>
+</script>
+<script id="contacts-table-collection-template" type="text/html">
+{{#unless this.length}}
+			<div class="filter-criteria">
+					
+			</div>
+			<div id="slate"></div>
+	{{/unless}}
+		{{#if this.length}}
+		<div class="data">
+			<div class="data-container"></div>
+			<table id="contacts" class="table table-striped showCheckboxes agile-ellipsis-dynamic no-sorting"
+				url="core/api/bulk/update?action_type=DELETE">
+				<col width="30px">
+				<col width="41%">
+				<col width="24%">
+				<col width="24%">
+				<col width="12%">
+				<div class="filter-criteria"></div>
+				<thead>
+					<tr>
+						<th><input class="thead_check" type="checkbox"></input></th>
+						<th>Name</th>
+						<th>Work</th>
+						<th>Tags</th>
+						<th>Lead Score</th>
+					</tr>
+				</thead>
+				<tbody id="contacts-table-model-list" class="contacts-table-model-list"
+					route="contact/" style="overflow: scroll;overflow:hidden;">
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{{/if}}
+</script>
+<script id="companies-table-collection-template" type="text/html">
+{{#unless this.length}}
+			<div class="filter-criteria">
+					
+			</div>
+			<div id="slate"></div>
+	{{/unless}}
+		{{#if this.length}}
+		<div class="data">
+			<div class="data-container"></div>
+			<table id="companies" class="table table-striped showCheckboxes"
+				url="core/api/bulk/update?action_type=DELETE" style="overflow: scroll">
+				<div class="filter-criteria">
+					
+				</div>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Star Value</th>
+						<th>Owner</th>
+					</tr>
+				</thead>
+				<tbody id="companies-table-model-list" class="companies-table-model-list"
+					route="contact/" style="overflow: scroll;">
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{{/if}}
+
+</script>
+<script id="contacts-lhs-filters-custom-template" type="text/html">
+{{#each this}}
+<div class="control-group lhs-row-filter"> 
+	<a data-toggle="collapse" id="lhs-filters-header" 
+style="text-decoration:none;cursor:pointer;" class="changeIcon">
+{{field_label}}
+<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
+
+<div class="controls hide" id="{{replace_spaces field_label}}_div">
+	<div class="lhs-contact-filter-row">
+	{{#if_equals_or "CHECKBOX" field_type "TEXT" field_type "TEXTAREA" field_type}}
+	<input type="hidden" name="LHS" value="{{field_label}}" />
+	<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="f-left w-105p">
+		<option value="EQUALS" >is</option>
+		<option value="NOTEQUALS" >isn't</option>
+	</select>
+	<div class="EQUALS NOTEQUALS">
+		<span id="RHS">
+			<input type="text" placeholder="Value" prev-val="" class="required w-95p">
+		</span>
+	</div>
+	{{/if_equals_or}}
+
+	{{#if_equals "DATE" field_type}}
+	<input type="hidden" name="LHS" value="{{field_label}}_time" />
+	<select id="between_filter" name="CONDITION" class="w-105p f-left">
+		<option value="ON">on</option>
+		<option value="AFTER">is after</option>
+		<option value="BEFORE">is before</option>
+		<option value="BETWEEN">is between</option>
+		<option value="LAST">in last</option>
+		<option value="NEXT">in next</option>
+	</select>
+	<div class="AFTER BEFORE ON">
+		<span id="RHS">
+			<input type="text" placeholder="MM/DD/YYYY" prev-val="" class="date required w-95p" >
+		</span>
+	</div>
+	<div class="LAST NEXT hide">
+		<span id="RHS">
+			<input type="number" placeholder="Number of days" prev-val="" class="w-95p required">
+		</span>
+	</div>
+	<div class="BETWEEN hide">
+		<div class="clear" />
+		<span id="RHS">
+			<input type="text" placeholder="MM/DD/YYYY" prev-val="" class="date required w-95p">
+		</span>
+		<span id="RHS_NEW">
+			<input type="text" placeholder="MM/DD/YYYY" prev-val="" class="date required w-95p">
+		</span>
+	</div>
+	{{/if_equals}}
+	{{#if_equals "LIST" field_type}}
+	<input type="hidden" name="LHS" value="{{field_label}}" />
+	<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="f-left w-105p">
+		<option value="EQUALS" >is</option>
+		<option value="NOTEQUALS" >isn't</option>
+	</select>
+	<div class="EQUALS NOTEQUALS">
+		<span id="RHS">
+			<select id="{{replace_spaces field_label}}-values" prev-val="" class="required w-105p" name="temp">
+				<option value="">Select value</option>
+				{{{buildOptions field_data}}}
+			</select>
+		</span>
+	</div>
+	{{/if_equals}}
+	</div>
+</div>
+</div>
+{{/each}}
+</script>
+<script id="contacts-lhs-filters-template" type="text/html">
+<header>
+<div>
+	<h3 style="margin-left: 3px">
+		<span><span>Filter Contacts</span>
+		</span>
+	</h3>
+	<span class="pull-right" style="margin-top: 8px;">
+		<a id="clear-lhs-contact-filters" href="#">
+			 clear all</i>
+		</a>
+	</span>
+</div>
+</header>
+<form id="lhs-contact-filter-form" name="lhs-contact-filter-form">
+<input type="hidden" name="contact_type" id="contact_type" value="PERSON" />
+<div id="tagslist" style="word-wrap: break-word;">
+<fieldset>
+<div class="control-group lhs-row-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		style="text-decoration:none;cursor:pointer;" class="changeIcon">
+		Tags
+		<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
+	<div class="controls hide" id="tags_div">
+		<div id="tags-lhs-filter-table" class="ignore-collection">
+				<div class="hide">
+					<input type="hidden" name="LHS" value="tags" />
+					<select id="tags-filter" class="w-95p f-left" name="CONDITION">
+						<option value="EQUALS" class="tags">is</option>
+						<option value="NOTEQUALS" class="tags">isn't</option>
+					</select>
+					<div class="EQUALS NOTEQUALS">
+						<span id="RHS">
+							<input type="text" placeholder="Value" prev-val="" class="required w-95p">
+							<i class="filter-tags-multiple-remove-lhs icon-remove-circle" style="display: none;  cursor:pointer;"></i>
+						</span>
+					</div>
+				</div>
+				<div class="lhs-contact-filter-row">
+					<input type="hidden" name="LHS" value="tags" />
+					<select id="tags-filter" class="w-95p f-left" name="CONDITION">
+						<option value="EQUALS" class="tags">is</option>
+						<option value="NOTEQUALS" class="tags">isn't</option>
+					</select>
+					<div class="EQUALS NOTEQUALS">
+						<span id="RHS">
+							<input type="text" placeholder="Value" prev-val="" class="required w-95p">
+							<i class="filter-tags-multiple-remove-lhs icon-remove-circle" style="cursor:pointer;"></i>
+						</span>
+					</div>
+				</div>
+		</div>
+		<a href="#" class="filter-tags-multiple-add-lhs" style="text-decoration:none;margin-top:5px"><i class="icon-plus"></i> Add</a>
+	</div>
+</div>
+	
+<div class="control-group lhs-row-filter" id="deal-value-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		style="text-decoration:none;cursor:pointer;" class="changeIcon">
+		Score
+		<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
+	<div class="controls hide" id="lead_score_div">
+		<div class="lhs-contact-filter-row">
+		<input type="hidden" name="LHS" value="lead_score" />
+		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
+			<option value="IS_GREATER_THAN">greater than</option>
+			<option value="IS_LESS_THAN">less than</option>
+			<option value="BETWEEN">between</option>
+		</select>
+		<div class="IS_GREATER_THAN IS_LESS_THAN">
+			<span id="RHS">
+				<input type="number" min="0" placeholder="Value" prev-val="" class="w-95p required">
+			</span>
+		</div>
+		<div class="BETWEEN hide">
+			<div class="clear" />
+			<span id="RHS">
+				<input type="number" min="0" class="required w-95p" prev-val="" placeholder="Min Value"> 
+			</span>
+			<span id="RHS_NEW">
+				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required w-95p">
+			</span>
+		</div>
+		</div>
+	</div>
+</div>
+<div class="control-group lhs-row-filter" id="deal-value-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		style="text-decoration:none;cursor:pointer;" class="changeIcon">
+		Star Value
+		<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
+	<div class="controls hide" id="star_value_div">
+		<div class="lhs-contact-filter-row">
+		<input type="hidden" name="LHS" value="star_value" />
+		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
+			<option value="IS_GREATER_THAN">greater than</option>
+			<option value="IS_LESS_THAN">less than</option>
+			<option value="BETWEEN">between</option>
+		</select>
+		<div class="IS_GREATER_THAN IS_LESS_THAN">
+			<span id="RHS">
+				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="w-95p required">
+			</span>
+		</div>
+		<div class="BETWEEN hide">
+			<div class="clear" />
+			<span id="RHS">
+				<input type="number" min="0" max="5" class="required w-95p" prev-val="" placeholder="Min Value"> 
+			</span>
+			<span id="RHS_NEW">
+				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required w-95p">
+			</span>
+		</div>
+		</div>
+	</div>
+</div>
+<div class="control-group lhs-row-filter" id="deal-value-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		style="text-decoration:none;cursor:pointer;" class="changeIcon">
+		Owner
+		<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
+	<div class="controls hide" id="owner_id_div">
+		<div class="lhs-contact-filter-row">
+		<input type="hidden" name="LHS" value="owner_id" />
+		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
+			<option value="EQUALS" >is</option>
+			<option value="NOTEQUALS" >isn't</option>
+		</select>
+		
+		<div class="EQUALS NOTEQUALS">
+			<span id="RHS">
+				<select id="owner_select" class="required w-105p" name="temp1" prev-val="">
+					<option value="">Select value</option>
+					
+				</select>
+			</span>
+		</div>
+		</div>
+	</div>
+</div>
+
+<div class="control-group lhs-row-filter" id="deal-value-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		style="text-decoration:none;cursor:pointer;" class="changeIcon">
+		Created Date
+		<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
+	<div class="controls hide" id="created_time_div">
+		<div class="lhs-contact-filter-row">
+		<input type="hidden" name="LHS" value="created_time" />
+		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
+			<option value="ON">on</option>
+			<option value="AFTER">is after</option>
+			<option value="BEFORE">is before</option>
+			<option value="BETWEEN">is between</option>
+			<option value="LAST">in last</option>
+			<option value="NEXT">in next</option>
+		</select>
+		<div class="AFTER BEFORE ON">
+			<span id="RHS">
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="w-95p required date">
+			</span>
+		</div>
+		<div class="LAST NEXT hide">
+			<span id="RHS">
+				<input type="number" placeholder="Number of days" prev-val="" class="w-95p required">
+			</span>
+		</div>
+		<div class="BETWEEN hide">
+			<div class="clear" />
+			<span id="RHS">
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" class="w-95p date required" placeholder="MM/DD/YYYY">
+			</span>
+			<span id="RHS_NEW"> 
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="w-95p date required">
+			</span>
+		</div>
+		</div>
+	</div>
+</div>
+<div id="custom-filter-fields" ></div>
+	
+</div>
+
+</fieldset>
+</div>
+</form>
+</script>
+<script id="companies-lhs-filters-template" type="text/html">
+<header>
+<div>
+	<h3 style="margin-left: 3px">
+		<span><span>Filter Companies</span>
+		</span>
+	</h3>
+	<span class="pull-right" style="margin-top: 8px;">
+		<a id="clear-lhs-company-filters" href="#">
+			 clear all</i>
+		</a>
+	</span>
+</div>
+</header>
+<form id="lhs-contact-filter-form" name="lhs-contact-filter-form">
+<input type="hidden" name="contact_type" id="contact_type" value="COMPANY" />
+<div id="tagslist" style="word-wrap: break-word;">
+<fieldset>
+<div class="control-group lhs-row-filter" id="deal-value-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		style="text-decoration:none;cursor:pointer;" class="changeIcon">
+		Star Value
+		<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
+	<div class="controls hide" id="star_value_div">
+		<div class="lhs-contact-filter-row">
+		<input type="hidden" name="LHS" value="star_value" />
+		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
+			<option value="IS_GREATER_THAN">greater than</option>
+			<option value="IS_LESS_THAN">less than</option>
+			<option value="BETWEEN">between</option>
+		</select>
+		<div class="IS_GREATER_THAN IS_LESS_THAN">
+			<span id="RHS">
+				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="w-95p required">
+			</span>
+		</div>
+		<div class="BETWEEN hide">
+			<div class="clear" />
+			<span id="RHS">
+				<input type="number" min="0" max="5" class="required w-95p" prev-val="" placeholder="Min Value"> 
+			</span>
+			<span id="RHS_NEW">
+				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required w-95p">
+			</span>
+		</div>
+		</div>
+	</div>
+</div>
+<div class="control-group lhs-row-filter" id="deal-value-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		style="text-decoration:none;cursor:pointer;" class="changeIcon">
+		Owner
+		<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
+	<div class="controls hide" id="owner_id_div">
+		<div class="lhs-contact-filter-row">
+		<input type="hidden" name="LHS" value="owner_id" />
+		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
+			<option value="EQUALS" >is</option>
+			<option value="NOTEQUALS" >isn't</option>
+		</select>
+		
+		<div class="EQUALS NOTEQUALS">
+			<span id="RHS">
+				<select id="owner_select" class="required w-105p" prev-val="" name="temp1">
+					<option value="">Select value</option>
+					
+				</select>
+			</span>
+		</div>
+		</div>
+	</div>
+</div>
+
+<div class="control-group lhs-row-filter" id="deal-value-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		style="text-decoration:none;cursor:pointer;" class="changeIcon">
+		Created Date
+		<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
+	<div class="controls hide" id="created_time_div">
+		<div class="lhs-contact-filter-row">
+		<input type="hidden" name="LHS" value="created_time" />
+		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
+			<option value="ON">on</option>
+			<option value="AFTER">is after</option>
+			<option value="BEFORE">is before</option>
+			<option value="BETWEEN">is between</option>
+			<option value="LAST">in last</option>
+			<option value="NEXT">in next</option>
+		</select>
+		<div class="AFTER BEFORE ON">
+			<span id="RHS">
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="w-95p required date">
+			</span>
+		</div>
+		<div class="LAST NEXT hide">
+			<span id="RHS">
+				<input type="number" placeholder="Number of days" prev-val="" class="w-95p required">
+			</span>
+		</div>
+		<div class="BETWEEN hide">
+			<div class="clear" />
+			<span id="RHS">
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" class="w-95p date required" placeholder="MM/DD/YYYY">
+			</span>
+			<span id="RHS_NEW"> 
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="w-95p date required">
+			</span>
+		</div>
+		</div>
+	</div>
+</div>
+<div class="control-group lhs-row-filter" id="deal-value-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		style="text-decoration:none;cursor:pointer;" class="changeIcon">
+		Name
+		<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
+	<div class="controls hide" id="name_div">
+		<div class="lhs-contact-filter-row">
+		<input type="hidden" name="LHS" value="name" />
+		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
+			<option value="EQUALS" >is</option>
+			<option value="NOTEQUALS" >isn't</option>
+		</select>
+		<div class="EQUALS NOTEQUALS">
+			<span id="RHS">
+				<input type="text" placeholder="Value" prev-val="" class="w-95p required">
+			</span>
+		</div>
+		</div>
+	</div>
+</div>
+<div id="custom-filter-fields" ></div>
+	
+</div>
+
+</fieldset>
+</div>
+</form>
 </script>
