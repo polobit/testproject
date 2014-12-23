@@ -20,5 +20,9 @@
         <property name="ownerKey" direction="asc"/>
         <property name="close_date" direction="asc"/>
     </datastore-index>
+    
+    <datastore-index kind="Workflow" ancestor="false" source="auto">
+        <property name="name" direction="asc"/>
+    </datastore-index>
 
 </datastore-indexes>
