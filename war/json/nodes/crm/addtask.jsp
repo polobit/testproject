@@ -47,8 +47,8 @@
             "id": "priority",
             "title": "Select the priority type",
             "options": {
+            	"Normal": "NORMAL",
                 "High": "HIGH",
-                "Normal": "NORMAL",
                 "Low": "LOW"
             },
             "fieldType": "select",

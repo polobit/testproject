@@ -1,11 +1,14 @@
 package com.agilecrm.reports;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -129,6 +132,7 @@ public class ActivityReportsUtil
 	    activityReports.put("report_name", report.name);
 
 	    List<Map<String, Object>> userReport = new ArrayList<Map<String, Object>>();
+	    long allUserCount = 0;
 	    // For every user selected in the activity report.
 	    for (DomainUser user : users)
 	    {
@@ -136,8 +140,15 @@ public class ActivityReportsUtil
 		activityReport.put("user_id", user.id);
 		activityReport.put("user_name", user.name);
 		activityReports.put("domain", user.domain);
-		activityReport.put("pic",
-			UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id)).pic);
+		try
+		{
+		    activityReport.put("pic",
+			    UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id)).pic);
+		}
+		catch (NullPointerException ne)
+		{
+		    System.out.println("User not logged in upto now.");
+		}
 		int count = 0;
 		// Check for the entities/activities selected by the user for
 		// activity report.
@@ -177,13 +188,22 @@ public class ActivityReportsUtil
 			    getDocumentsActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
 		    count += getTotalCount((Map<String, Object>) activityReport.get("docs"), "doc_count");
 		}
+
+		if (activities.contains(ActivityReports.ActivityType.CALL))
+		{
+		    activityReport.put("calls",
+			    getCallActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+		    count += getTotalCount((Map<String, Object>) activityReport.get("calls"), "total_calls");
+		}
 		if (count > 0)
 		    activityReport.put("total", count);
 		else
 		    activityReport.put("message", "No activity form " + user.name);
+		allUserCount += count;
 		userReport.add(activityReport);
 	    }
 	    activityReports.put("reports", userReport);
+	    activityReports.put("all_reports_count", allUserCount);
 	}
 	catch (Exception je)
 	{
@@ -226,33 +246,46 @@ public class ActivityReportsUtil
 	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, Activity.EntityType.DEAL.toString(),
 		null, null, startTime, endTime, 0, null);
 
-	UserPrefs pref = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id));
-
-	// Separate the activities based on the activity type.
-	for (Activity act : activities)
+	UserPrefs pref = null;
+	try
 	{
-	    if (act.activity_type == Activity.ActivityType.DEAL_LOST)
-	    {
-		dealLost.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
-		act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
-		lostActivities.put(act.entity_id, act);
-	    }
-	    else if (act.activity_type == Activity.ActivityType.DEAL_CLOSE)
-	    {
-		dealWon.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
-		act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
-		wonActivities.put(act.entity_id, act);
-	    }
-	    else if (act.activity_type == Activity.ActivityType.DEAL_MILESTONE_CHANGE)
-	    {
-		mileChange.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
-		act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
-		mileChangeActivities.put(act.entity_id, act);
-	    }
-	    else
-		dealUpdated.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
+	    pref = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id));
 	}
+	catch (NullPointerException ne)
+	{
 
+	}
+	try
+	{
+	    // Separate the activities based on the activity type.
+	    for (Activity act : activities)
+	    {
+		if (act.activity_type == Activity.ActivityType.DEAL_LOST)
+		{
+		    dealLost.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
+		    act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
+		    lostActivities.put(act.entity_id, act);
+		}
+		else if (act.activity_type == Activity.ActivityType.DEAL_CLOSE)
+		{
+		    dealWon.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
+		    act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
+		    wonActivities.put(act.entity_id, act);
+		}
+		else if (act.activity_type == Activity.ActivityType.DEAL_MILESTONE_CHANGE)
+		{
+		    mileChange.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
+		    act.related_contact_ids = getActivityRelateContacts(act, user.domain, " related to ");
+		    mileChangeActivities.put(act.entity_id, act);
+		}
+		else
+		    dealUpdated.add(new Key<Opportunity>(Opportunity.class, act.entity_id));
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception is processing deal activities. - " + e.getMessage());
+	}
 	// Get the deals assigned to this user (Can be assigned by the other
 	// users also.)
 	List<String> activityTypeList = new ArrayList<String>();
@@ -288,7 +321,9 @@ public class ActivityReportsUtil
 	double lostValue = 0;
 	double newValue = 0;
 	double mileValue = 0;
-	String currency = pref.currency != null ? pref.currency.substring(pref.currency.indexOf("-") + 1) : "$";
+	String currency = "$";
+	if (pref != null)
+	    currency = pref.currency != null ? pref.currency.substring(pref.currency.indexOf("-") + 1) : "$";
 
 	// Fill the map object with required data to show in the report.
 	Map<String, Object> dealsReport = new HashMap<String, Object>();
@@ -400,22 +435,28 @@ public class ActivityReportsUtil
     public static Map<String, Object> getEventActivityReport(DomainUser user, Long startTime, Long endTime)
     {
 	// Events that are completed by the given user.
-	List<Event> events = EventUtil.getEvents(startTime, endTime,
-		AgileUser.getCurrentAgileUserFromDomainUser(user.id).id);
+	List<Event> events = new ArrayList<Event>();
 
-	List<Activity> eventAddActivity = new ArrayList<Activity>();
+	AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(user.id);
+	if (agileUser != null)
+	    events = EventUtil.getEvents(startTime, endTime, agileUser.id);
+
+	Map<Long, Activity> eventAddActivity = new HashMap<Long, Activity>();
 	List<Activity> eventMovedActivity = new ArrayList<Activity>();
 
 	// Get all the activities on the user performed on the events.
 	List<Activity> eventActivity = ActivityUtil.getActivitiesByFilter(user.id,
 		Activity.EntityType.EVENT.toString(), null, null, startTime, endTime, 0, null);
 
+	List<Key<Event>> addEvent = new ArrayList<Key<Event>>();
+
 	// Get activities of the events whose start time is changed.
 	for (Activity activity : eventActivity)
 	{
 	    if (activity.activity_type == Activity.ActivityType.EVENT_ADD)
 	    {
-		eventAddActivity.add(activity);
+		eventAddActivity.put(activity.entity_id, activity);
+		addEvent.add(new Key<Event>(Event.class, activity.entity_id));
 	    }
 	    else if (activity.activity_type == Activity.ActivityType.EVENT_EDIT
 		    && activity.custom3.indexOf("start_date") > 0)
@@ -435,11 +476,22 @@ public class ActivityReportsUtil
 	    }
 	}
 
-	for (Event event : events)
+	List<Event> addedEvents = Event.dao.fetchAllByKeys(addEvent);
+	try
 	{
-	    event.color = MustacheUtil.convertDate("MMM dd HH:mm", event.start);
+	    for (Event event : addedEvents)
+	    {
+		eventAddActivity.get(event.id).custom4 = convertDate(null, event.start);
+	    }
+	    for (Event event : events)
+	    {
+		event.color = MustacheUtil.convertDate("MMM dd HH:mm", event.start);
+	    }
 	}
-
+	catch (Exception e)
+	{
+	    System.out.println("Exception in processing events. - " + e.getMessage());
+	}
 	// Fill the map with the required data to show in the activity report.
 	Map<String, Object> eventsReport = new HashMap<String, Object>();
 	try
@@ -459,7 +511,7 @@ public class ActivityReportsUtil
 	    if (eventAddActivity.size() > 0)
 	    {
 		eventsReport.put("events_added_count", eventAddActivity.size());
-		eventsReport.put("events_added", eventAddActivity);
+		eventsReport.put("events_added", eventAddActivity.values());
 	    }
 
 	    int total = events.size() + eventMovedActivity.size() + eventAddActivity.size();
@@ -743,6 +795,119 @@ public class ActivityReportsUtil
 	return docReport;
     }
 
+    /**
+     * Generate the report on calls made and received by the selected user.
+     * 
+     * @param user
+     *            who made calls
+     * @param startTime
+     *            the lower bound of the time(start time) for getting activities
+     *            (Activities after this time).
+     * @param endTime
+     *            the upper bound of the time(end time) for getting activities
+     *            (Activities before this time).
+     * @return report on calls made and received.
+     */
+    public static Map<String, Object> getCallActivityReport(DomainUser user, Long startTime, Long endTime)
+    {
+	List<Activity> activities = ActivityUtil.getActivitiesByFilter(user.id, null,
+		Activity.ActivityType.CALL.toString(), null, startTime, endTime, 0, null);
+
+	List<Activity> doneCallActivities = new ArrayList<Activity>();
+	List<Activity> noAnsCallActivities = new ArrayList<Activity>();
+	List<Activity> failedCallActivities = new ArrayList<Activity>();
+	// List<Activity> missedCallActivities = new ArrayList<Activity>();
+	int inCount = 0;
+	int outCount = 0;
+	long doneDuration = 0;
+
+	for (Activity activity : activities)
+	{
+	    long custom4 = Long.parseLong(activity.custom4);
+	    String message = "";
+	    String link = null;
+
+	    if (activity.entity_id != null)
+		link = "<a href=\"https://" + user.domain + ".agilecrm.com/#contact/" + activity.entity_id
+			+ "\" target=\"_blank\">" + activity.label + "</a>";
+	    else
+		link = activity.label;
+
+	    if (activity.custom2.equalsIgnoreCase("incoming"))
+		message += "From " + link + " (Incoming";
+	    else
+		message += "To " + link + " (Outgoing";
+
+	    if (!StringUtils.isEmpty(activity.custom4) && custom4 > 0)
+	    {
+		message += " - " + convertSecToHours(Long.parseLong(activity.custom4), true);
+	    }
+
+	    message += ")";
+
+	    activity.custom4 = message;
+	    if (activity.custom3.equalsIgnoreCase("completed"))
+	    {
+		doneCallActivities.add(activity);
+		doneDuration += custom4;
+		if (activity.custom2.equalsIgnoreCase("incoming"))
+		    inCount++;
+		else
+		    outCount++;
+	    }
+	    else if (activity.custom3.equalsIgnoreCase("no-answer"))
+	    {
+		noAnsCallActivities.add(activity);
+	    }
+	    else if (activity.custom3.equalsIgnoreCase("failed"))
+	    {
+		failedCallActivities.add(activity);
+	    }
+	}
+
+	Map<String, Object> callReport = new HashMap<String, Object>();
+	int totalCalls = 0;
+	try
+	{
+	    if (activities.size() > 0)
+	    {
+		if (doneCallActivities.size() > 0)
+		{
+		    callReport.put("done_calls", doneCallActivities);
+		    totalCalls += doneCallActivities.size();
+		    callReport.put("done_count", doneCallActivities.size());
+		    callReport.put("in_count", inCount);
+		    callReport.put("out_count", outCount);
+		    callReport.put("done_duration", convertSecToHours(doneDuration, false));
+
+		}
+		if (failedCallActivities.size() > 0)
+		{
+		    callReport.put("failed_calls", failedCallActivities);
+		    totalCalls += failedCallActivities.size();
+		    callReport.put("failed_count", failedCallActivities.size());
+		}
+		if (noAnsCallActivities.size() > 0)
+		{
+		    callReport.put("no_ans_calls", noAnsCallActivities);
+		    totalCalls += noAnsCallActivities.size();
+		    callReport.put("no_ans_count", noAnsCallActivities.size());
+		}
+
+		if (totalCalls > 0)
+		{
+		    callReport.put("total_calls", totalCalls);
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception in preparing the calls report - " + e.getMessage());
+	}
+
+	return callReport;
+    }
+
     private static Map<String, Long> getTimeInterval(ActivityReports report)
     {
 	Calendar cal = Calendar.getInstance();
@@ -857,9 +1022,13 @@ public class ActivityReportsUtil
     public static void sendActivityReport(Long reportId, Long endTime)
     {
 	ActivityReports report = getActivityReport(reportId);
-	// Send reports email
-	SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, "activity_reports",
-		ActivityReportsUtil.generateActivityReports(reportId, endTime));
+	Map<String, Object> reports = ActivityReportsUtil.generateActivityReports(reportId, endTime);
+	Long recordsCount = (Long) reports.get("all_reports_count");
+	System.out.println("Total records count = " + recordsCount);
+	// Send reports email only if it has records.
+	if (recordsCount != null && recordsCount > 0)
+	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, "activity_reports",
+		    ActivityReportsUtil.generateActivityReports(reportId, endTime));
     }
 
     /**
@@ -919,5 +1088,33 @@ public class ActivityReportsUtil
 	    return (Integer) report.get(field);
 	}
 	return 0;
+    }
+
+    private static String convertDate(String format, Long epoch)
+    {
+	if (format == null)
+	    format = "dd MMM ''yy HH:mm";
+	if (epoch > 0)
+	{
+	    Date d = new Date(epoch * 1000);
+	    SimpleDateFormat df = new SimpleDateFormat(format);
+	    return df.format(d);
+	}
+	return "";
+    }
+
+    private static String convertSecToHours(Long seconds, boolean needSecs)
+    {
+	String result = "";
+	long hours = TimeUnit.SECONDS.toHours(seconds);
+	long minute = TimeUnit.SECONDS.toMinutes(seconds) - (TimeUnit.SECONDS.toHours(seconds) * 60);
+	long second = TimeUnit.SECONDS.toSeconds(seconds) - (TimeUnit.SECONDS.toMinutes(seconds) * 60);
+	if (hours > 0)
+	    result += hours + "h ";
+	if (minute > 0)
+	    result += minute + "m ";
+	if (needSecs && second > 0)
+	    result += second + "s";
+	return result;
     }
 }
