@@ -191,6 +191,11 @@ function showFacebookProfile(facebookid)
 	});
 }
 
+function getUserNameOrUserID(url) {
+    var n = url.lastIndexOf("/");
+    return url.substring(n+1);
+}
+
 	/**
 	 * ===facebook.js==== It is a pluginIn to be integrated with CRM, developed
 	 * based on the third party JavaScript API provided. It interacts with the
@@ -235,9 +240,37 @@ function showFacebookProfile(facebookid)
 		{
 			// Get Twitter id from URL and show profile
 			console.log("profile attched" + web_url)
-			tempurl = web_url.replace('@', '');
-			console.log(tempurl);
-			showFacebookProfile(tempurl);
+			var fbProfileLink = buildFacebookProfileURL(web_url);
+			var userNameOrId = getUserNameOrUserID(fbProfileLink);
+			var fbUserId = userNameOrId;
+			console.log(fbUserId);
+			if(isNaN(fbUserId)) {//if not ID
+				console.log("In getID facebook");
+				var getURL = "http://graph.facebook.com/"+fbUserId;
+				console.log(getURL);
+				var fbProfileDetails = $.parseJSON(
+	    		        $.ajax({
+	    		            url: getURL, 
+	    		            async: false,
+	    		            dataType: 'json'
+	    		        }).responseText
+	    		    );
+				console.log(fbProfileDetails);
+				
+				if(typeof fbProfileDetails.id != 'undefined') {
+					fbUserId = fbProfileDetails.id;				
+					var propertiesArray = [{ "name" : "website", "value" : "@"+fbUserId, "subtype" : "FACEBOOK" }];
+					console.log(propertiesArray);
+					agile_crm_update_contact_properties(propertiesArray);
+				} else {
+					if(typeof fbProfileDetails.error != 'undefined') {
+//						facebookError(fbProfileDetails.error.message);
+						facebookError("Facebook profile do not exist.("+fbProfileLink+")");
+						return;
+					}
+				}
+			}
+			showFacebookProfile(fbUserId);
 		}
 		else
 		{

@@ -3507,6 +3507,11 @@ $(function()
 			return options.inverse(this);
 		}
 	});
+	
+	Handlebars.registerHelper('buildFacebookProfileURL',function(url){
+		return buildFacebookProfileURL(url);
+	});
+	
 });
 
 // helper function return created time for event
