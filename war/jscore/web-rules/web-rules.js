@@ -13,9 +13,9 @@ function chainWebRules(el, data, isNew, actions)
 		if(data)
 			{
 				$.each(data, function(index, action){
-					if(action.action == "ASSIGN_CAMPAIGN")
+					if(index == "actions" && (action[0].action == "ASSIGN_CAMPAIGN" || action[0].action == "UNSUBSCRIBE_CAMPAIGN"))
 					{
-						$(select).find('option[value='+ action.RHS +']').attr("selected", "selected");
+						$(select).find('option[value='+ action[0].RHS +']').attr("selected", "selected");
 						return false;
 					}
 				});	
