@@ -1019,10 +1019,20 @@ var ContactsRouter = Backbone.Router.extend({
 					setupLhsFilters(el);
 				}
 			} });
+
+		var _that = this;
+		$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
+				{
+					// Defines appendItem for custom view
+					_that.contact_custom_view.appendItem = function(base_model){
+						contactTableView(base_model,customDatefields,this);
+					};
+			
+					// Fetch collection
+					_that.contact_custom_view.collection.fetch();
+			
+				});
 		
-		this.contact_custom_view.collection.fetch();
-		// Defines appendItem for custom view
-		this.contact_custom_view.appendItem = contactTableView;
 		if(!is_lhs_filter) {
 			$('#content').html(this.contact_custom_view.el);
 		} else {
@@ -1030,12 +1040,10 @@ var ContactsRouter = Backbone.Router.extend({
 			$('#bulk-actions').css('display', 'none');
 			CONTACTS_HARD_RELOAD = true;
 		}
+		
+		// Activate Contacts Navbar tab
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
-
-
-		
-
 	},
 	
 	addLead : function(first, last){
