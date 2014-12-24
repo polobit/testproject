@@ -263,11 +263,6 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			// Show bulk operations only when thead check box is checked
 			toggle_contacts_bulk_actions_dropdown(undefined, true,$('.thead_check').parents('table').attr('id'));
 			
-			// Tags re-fetching
-			if(App_Contacts.contactsListView){
-				setup_tags(App_Contacts.contactsListView.el);
-			}
-			
 			// Removes the entities from timeline, if they are deleted from contact detail view
 			if(App_Contacts.contactDetailView && Current_Route == "contact/"
 				+ App_Contacts.contactDetailView.model.get('id')){

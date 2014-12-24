@@ -111,8 +111,7 @@ public class Opportunity extends Cursor
     /**
      * Closed date for a deal.
      */
-    @NotSaved(IfDefault.class)
-    public Long close_date = 0L;
+    public Long close_date = null;
 
     /**
      * DomainUser Id who created Deal.

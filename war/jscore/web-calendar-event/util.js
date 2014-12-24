@@ -29,8 +29,11 @@ function getSlotDurations()
 								var json = JSON.parse(data[slotDetail]);
 								$('.segment1')
 										.append(
-												'<div class="col-sm-4"><p title="' + json.title + '" class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+												'<div class="col-sm-4"><p title="' + json.title + '" class="choose timeslot-view" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
 							}
+							$('.segment1')
+						       .append(
+						         '<div class="clearfix"></div>');
 						}
 						if (data.length == 2)
 						{
@@ -39,8 +42,11 @@ function getSlotDurations()
 								var json = JSON.parse(data[slotDetail]);
 								$('.segment1')
 										.append(
-												'<div class="col-sm-4" style="margin-left: 99px;"><p title="' + json.title + '" class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+												'<div class="col-sm-5 col-md-4" style="margin-left: 99px;"><p title="' + json.title + '" class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
 							}
+							 $('.segment1')
+						       .append(
+						         '<div class="clearfix"></div>');
 						}
 						if (data.length == 1)
 						{
