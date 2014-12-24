@@ -1866,3 +1866,14 @@ text-overflow:ellipsis;
 	border-radius: 0 4px 0 0;
 }
 
+.navbar_due_tasks{
+	background: red;
+padding: 0px 2px;
+font-size: 12px;
+border-radius: 2px;
+position: absolute;
+top: 2px;
+left: 22px;
+box-shadow: 0 0 2px 0px #000;
+}
+
