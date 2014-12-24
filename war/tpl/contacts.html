@@ -357,7 +357,7 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 
 <div class="controls hide" id="{{replace_spaces field_label}}_div">
 	<div class="lhs-contact-filter-row">
-	{{#if_equals_or "CHECKBOX" field_type "TEXT" field_type "TEXTAREA" field_type "NUMBER" field_type}}
+	{{#if_equals_or "CHECKBOX" field_type "TEXT" field_type "TEXTAREA" field_type}}
 	<input type="hidden" name="LHS" value="{{field_label}}" />
 	<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="f-left w-105p">
 		<option value="EQUALS" >is</option>
@@ -369,7 +369,29 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 		</span>
 	</div>
 	{{/if_equals_or}}
-
+	{{#if_equals "NUMBER" field_type}}
+		<input type="hidden" name="LHS" value="{{field_label}}_number" />
+		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
+			<option value="EQUALS">equals</option>
+			<option value="IS_LESS_THAN">less than</option>
+			<option value="IS_GREATER_THAN">greater than</option>
+			<option value="BETWEEN">between</option>
+		</select>
+		<div class="EQUALS IS_GREATER_THAN IS_LESS_THAN">
+			<span id="RHS">
+				<input type="number" min="0" placeholder="Value" prev-val="" class="w-95p required">
+			</span>
+		</div>
+		<div class="BETWEEN hide">
+			<div class="clear" />
+			<span id="RHS">
+				<input type="number" min="0" class="required w-95p" prev-val="" placeholder="Min Value"> 
+			</span>
+			<span id="RHS_NEW">
+				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required w-95p">
+			</span>
+		</div>
+	{{/if_equals}}
 	{{#if_equals "DATE" field_type}}
 	<input type="hidden" name="LHS" value="{{field_label}}_time" />
 	<select id="between_filter" name="CONDITION" class="w-105p f-left">
