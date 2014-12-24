@@ -87,7 +87,66 @@ $(".delete_user").die().live('click', function(e){
 					
 				   }
 		});
+		$(".refundpopup").live('click',function(e){
+			e.preventDefault();
+			
+			var chargeid = $(this).attr("chargeid");
+			var totalamount = $(this).attr("totalamount");
+			var refundedAmount = $(this).attr("refundedAmount");
+			$("#errormsg").html("");
+			$("#amount").val(totalamount - refundedAmount);
+			$("#hchargeid").val(chargeid);
+			$("#totamount").val(totalamount);
+			$("#partialrefund").button('reset');
+			$("#refundModal").modal("show");
+	        
+	    });
+
+
+
+		$("#partialrefund").die().live('click', function(e){
+			
+			e.preventDefault();
+			if (!isValidForm($("#CCform")))
+			{
+			    return;
+			}
+			$(this).button('loading');
+			var amount = $("#amount").val();
+			var totalamount = $(".totamount").val();
+			var chargeid=$("#hchargeid").val();
+			if(parseFloat(amount) <= 0)
+			{
+				
+				document.getElementById("errormsg").innerHTML="Amount should be > 0";
+				return;
+			}
+			
+			if(parseFloat(amount)>parseFloat(totalamount))
+			{
+				document.getElementById("errormsg").innerHTML="Amount Should not exceed "+totalamount;
+				
+				return;
+			}
+			
+			amount = 100*amount;
+				
+			$.ajax({
+				url: '/core/api/admin_panel/applypartialrefund?chargeid='+chargeid+'&amount='+amount, 
+				type : 'GET',
+				success : function(data)
+				{	
+					alert("successfully applied for refund");
+					location.reload(true);
+				},
+				error : function(response)
+				{
+					$("#partialrefund").button('reset');
+					showNotyPopUp("information", "error occured please try again", "top");
+				}
+			});
 		
+		});
 		
 		$(".refund").die().live('click', function(e){
 	
