@@ -651,7 +651,8 @@ function groupingCustomFields(base_model){
 function enableCustomFieldsSorting(el,connClass,connId){
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function(){
 		$('.'+connClass).sortable({
-			connectWith: '.'+connClass,
+			axis: "y" ,
+			containment: '.'+connClass,
 			iframeFix: false,
 			items:'tr',
 			opacity:0.8,
@@ -669,7 +670,9 @@ function enableCustomFieldsSorting(el,connClass,connId){
 			forceHelperSize:true,
 			placeholder:'<tr><td></td></tr>',
 			forcePlaceholderSize:true,
-			tolerance:'pointer'
+			tolerance:'pointer',
+			handle: ".icon-move",
+			cursor: "move",
 		});
 		
 		/*

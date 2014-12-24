@@ -15,8 +15,8 @@ $(function(){
     * by triggering the event agile_collection_loaded from base-collection render event, while loading the collection.
     */ 	
 	$('body').live('agile_collection_loaded', function(event, el) {
-		
-		var table_element = $('table', el);
+		//use class ignore-collection if any other table needs to be used inside the template.
+		var table_element = $('table:not(.ignore-collection)', el);
 		
 		  // Adds class to tbody to edit the table by validating the route attribute 
 		if($(table_element).find('tbody').attr('route'))
