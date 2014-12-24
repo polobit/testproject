@@ -635,7 +635,7 @@ if(json.close_date==0)
 						console.log(filterJSON.archived != 'all' && deal.archived != filterJSON.archived, deal.archived);
 						if(filterJSON.archived){
 							console.log(filterJSON.archived);
-							if(filterJSON.archived != 'all' && deal.archived != filterJSON.archived)
+							if(filterJSON.archived != 'all' && deal.archived.toString() != filterJSON.archived)
 								return;
 						}
 						
