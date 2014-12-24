@@ -70,17 +70,16 @@ public class LoginServlet extends HttpServlet
 	    response.sendRedirect(Globals.CHOOSE_DOMAIN);
 	    return;
 	}
-	
-	// If request is due to multiple logins, page is redirected to error page
-	String multipleLogin = (String)request.getParameter("ml");
-	
-	if(!StringUtils.isEmpty(multipleLogin))
+
+	// If request is due to multiple logins, page is redirected to error
+	// page
+	String multipleLogin = (String) request.getParameter("ml");
+
+	if (!StringUtils.isEmpty(multipleLogin))
 	{
 	    handleMulipleLogin(response);
 	    return;
 	}
-	
-	
 
 	// Check the type of authentication
 	try
@@ -171,6 +170,8 @@ public class LoginServlet extends HttpServlet
 	// Get Password
 	String password = request.getParameter("password");
 
+	String timezone = request.getParameter("account_timezone");
+
 	if (email == null || password == null)
 	    throw new Exception("Invalid Input. Email or password has been left blank.");
 
@@ -216,6 +217,8 @@ public class LoginServlet extends HttpServlet
 	    request.getSession().setMaxInactiveInterval(2 * 60 * 60);
 	}
 
+	request.getSession().setAttribute("account_timezone", timezone);
+
 	// Redirect to page in session is present - eg: user can access #reports
 	// but we store reports in session and then forward to auth. After auth,
 	// we forward back to the old page
@@ -229,7 +232,7 @@ public class LoginServlet extends HttpServlet
 
 	response.sendRedirect("/");
     }
-    
+
     private void handleMulipleLogin(HttpServletResponse response)
     {
 	try

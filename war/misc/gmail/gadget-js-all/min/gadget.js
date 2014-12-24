@@ -74,19 +74,27 @@ function agile_get_emails()
 				{ name_from : "Devika Jakkannagari" },
 				{ email_to : "abhi@gashok.mygbiz.com;rahul@gashok.mygbiz.com;dheeraj@gashok.mygbiz.com;chandan@gashok.mygbiz.com;abhiranjan@gashok.mygbiz.com" },
 				{ name_to : "Abhi;;D j p;;" }, { email_cc : "devikatest1@gmail.com;devikatest@gmail.com;teju@gmail.com" }, { name_cc : "Dev T1;;Teju" },
-				{ email : "devikatest@gmail.com" }, { email : "test1@gmail.com" }, { email : "test2@gmail.com" }, { email : "pbx.kumar@gmail.com" }
+				{ email : "devikatest@gmail.com" }, { email : "test1@gmail.com" }, { email : "test1@gmail.com" }, { email : "pbx.kumar@gmail.com" }
 		];
 
 		// emails = [{email:"devikatest@gmail.com"}];
+		//console.log(JSON.stringify(emails));
 
-		return parse_emails(emails);
+		return validateEmails(parse_emails(emails));
 	}
 
 	// Google Matches in 2D format
 	emails = google.contentmatch.getContentMatches();
-	console.log(emails);
-	console.log(JSON.stringify(emails));
-	return parse_emails(emails);
+	//console.log(emails);
+	//console.log(JSON.stringify(emails));
+	return validateEmails(parse_emails(emails));
+}
+
+function validateEmails(emails){
+	for(var email in emails){
+		console.log('--------',emails[email]);
+	}
+	return emails;
 }
 
 // Convert 2d to 1d
@@ -118,7 +126,7 @@ function collate_emails(emails, key)
 			emails1D.push(email);
 		});
 	}
-
+console.log('--------',emails1D);
 	return emails1D;
 }
 
@@ -161,7 +169,8 @@ var Is_Localhost = false;
 var Contacts_Json = {}; 
 
 var DEFAULT_GRAVATAR_url = "https://dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png";
-/**
+
+var PUBLIC_EMAIL_DOMAINS = ['gmail','yahoo','hotmail','gmx','googlemail','mail','web','live','aol','ymail'];/**
  * gadget-main.js is starting point of gadget. When we open any email, gmail
  * contextual gadget is triggered based on the extractor (defined in
  * agile-extractor.xml) definition. It loads agile-gadget.xml, window onload
@@ -237,7 +246,7 @@ function agile_show_delete(status)
 		$('#delete-button').show();
 	else
 		$('#delete-button').hide();
-	$('#delete-button').click(agile_delete_all_prefs);	
+	$('#delete-button').live('click',agile_delete_all_prefs);	
 }/**
  * Generate gadget main UI, when user is associated. And downloads library files
  * first then setup account.
@@ -255,14 +264,19 @@ function agile_user_associated() {
 	var emails = agile_get_emails();
 	
 	Contacts_Json = {};
+	//Contacts_Json[emails[0].email] = emails[0];
 	$.each(emails, function(index, value)
 	{
-		Contacts_Json[value.email] = value;
+		if(value.email != agile_get_prefs(PREFS_EMAIL))
+			Contacts_Json[value.email] = value;
 	});
-	console.log(Contacts_Json);
+	
+	delete Contacts_Json[agile_get_prefs(PREFS_EMAIL)];
 	head.js(LIB_PATH + 'lib/bootstrap.min.js', LIB_PATH + 'jscore/md5.js', function() {
 		
-		set_html($('#agile_content'), 'search', emails);
+		set_html($('#agile_content'), 'search', Contacts_Json);
+		$('#agile_content').prepend('<span style="float:right;cursor:pointer;margin-top:10px;" id="delete-button"><i class="icon-trash" style="font-size:1em;"></i></span>');
+		$('#delete-button').live('click',agile_delete_all_prefs);
 	});
 	
 }
@@ -729,17 +743,17 @@ function ucfirst(value)
 		var el = $(this).closest("div.gadget-contact-details-tab").find("div.show-form");
 		var That = $(this);
 		$('.gadget-deals-tab-list', el).hide();
-
+		
 		// ------ Get campaign work-flow data. ------
-		_agile.get_milestones({ success : function(Response)
+		_agile.get_pipelines({ success : function(Response)
 		{
-			Milestone_Array = Response.milestones.split(",");
+			/*Milestone_Array = Response.milestones.split(",");
 			for ( var Loop in Milestone_Array)
-				Milestone_Array.splice(Loop, 1, Milestone_Array[Loop].trim());
+				Milestone_Array.splice(Loop, 1, Milestone_Array[Loop].trim());*/
 
 			// ------ Take contact data from global object variable. ------
 			var Json = Contacts_Json[el.closest(".show-form").data("content")];
-			Json.milestones = Milestone_Array;
+			Json.pipelines = Response;
 
 			// ------ Compile template and generate UI. ------
 			var Handlebars_Template = getTemplate("gadget-deal", Json, 'no');
@@ -760,12 +774,44 @@ function ucfirst(value)
 			});
 			// ------ Adjust gadget height. ------
 			agile_gadget_adjust_height();
+			
+			console.log(Response);
+			if(Response.length==1){
+				console.log('auto select track');
+				$('#pipeline').val(Response[0].id);
+				$('#pipeline').trigger('change');
+				$('#pipeline').closest('.control-group').hide();
+			}
 
 		}, error : function(Response)
 		{
 
 		} });
 
+	});
+	
+	$('#pipeline').die().live('change',function(e){
+		var pipeline_id = $(this).val();
+		console.log('-----',pipeline_id);
+		if(pipeline_id.length >0)
+		_agile.get_milestones_by_pipeline(pipeline_id,{ success : function(Response)
+			{
+				Milestone_Array = Response.milestones.split(",");
+				for ( var Loop in Milestone_Array)
+					Milestone_Array.splice(Loop, 1, Milestone_Array[Loop].trim());
+				
+				var html = '';
+				for(var mile in Milestone_Array)
+					html+='<option value="'+Milestone_Array[mile]+'">'+Milestone_Array[mile]+'</option>';
+				$('#milestone').html(html);
+
+			}, error : function(Response)
+			{
+				console.log('Error in getting milestones',Response);
+				$('#milestone').html("");
+			} });
+		else
+			$('#milestone').html("");
 	});
 
 	// ------------------------------------------------- Click event for Action
@@ -1111,11 +1157,29 @@ $(function()
 		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 				.find("div.show-form");
+		var newContact = Contacts_Json[$(this).closest(".show-form").attr("data-content")];
 		//  ------ Build contact add template. ------ 
 		agile_build_form_template($(this), "gadget-add-contact", ".show-add-contact-form", function() {
 
 			$(".show-add-contact-form", el).toggle();
 			agile_gadget_adjust_height();
+			
+			console.log('add this email - ',newContact);
+			if(newContact.name.trim().length > 0){
+				console.log(newContact.name.split(' '));
+				$('#fname',el).val(newContact.name.split(' ')[0]);
+				$('#lname',el).val(newContact.name.substring(newContact.name.indexOf(' '),newContact.name.length));
+			} else if(newContact.email.length>0)
+				$('#fname',el).val(ucfirst(newContact.email.substring(0,newContact.email.indexOf('@'))));
+			
+			if(newContact.email.length>0){
+				var reg = new RegExp('@([a-z]+)\.');
+				if(reg.test(newContact.email)){
+					var comp = reg.exec(newContact.email)[1];
+					if(PUBLIC_EMAIL_DOMAINS.indexOf(comp)<0)
+						$('#company',el).val(ucfirst(comp));
+				}
+			}
 		});
 	});
 	
@@ -1245,6 +1309,7 @@ function agile_create_contact_ui(el, That, Email, Val){
 			$('.contact-search-status', el).show().delay(4000).hide(1,function(){
 				agile_gadget_adjust_width(el, $(".contact-search-status", el), false);
 			});
+			$('.gadget-add-contact', el).trigger('click');
 		}	
 		//  ------ Contact found, show contact summary. ------  
 		else {
@@ -1303,6 +1368,7 @@ function agile_add_mail_to_list(Val, Email, el){
 		else{
 			$("#agile_content").find('.contact-search-status:last').hide();
 			$("#agile_content").find(".contact-list-width:last").css("max-width", "95%");
+			$("#agile_content").find('.gadget-add-contact').trigger('click');
 		}
  	
 }

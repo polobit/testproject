@@ -57,7 +57,33 @@ public class RegisterVerificationServlet extends HttpServlet
 
 	    writeErrorMessage(response, "User with same email address already exists in our system for "
 		    + domainUser.domain + " domain");
+	    return;
+	}
+	
+	writeSussessMessage(response, "success");
+    }
+    
+    private void writeSussessMessage(HttpServletResponse response, String message)
+    {
+	PrintWriter writer = null;
+	try
+	{
+	    writer = response.getWriter();
+	    JSONObject success = new JSONObject();
+	    success.put("success", message);
 
+	    writer.print(success);
+	    writer.close();
+	}
+	catch (IOException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
 	}
     }
 
@@ -71,6 +97,7 @@ public class RegisterVerificationServlet extends HttpServlet
 	    error.put("error", message);
 
 	    writer.print(error);
+	    writer.close();
 	}
 	catch (IOException e)
 	{

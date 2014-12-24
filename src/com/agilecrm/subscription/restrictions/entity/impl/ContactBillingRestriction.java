@@ -112,4 +112,14 @@ public class ContactBillingRestriction extends DaoBillingRestriction
 
 	return can_update();
     }
+    
+    @Override
+    public int getPendingCount()
+    {
+	if(restriction.contacts_count == null || restriction.contacts_count == 0)
+	    return max_allowed;
+	
+        // TODO Auto-generated method stub
+        return max_allowed - restriction.contacts_count;
+    }
 }

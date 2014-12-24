@@ -7,7 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
+import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.queues.backend.BackendUtil;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskCore;
@@ -118,7 +120,9 @@ public class WorkflowSubscribeUtil
 		    workflowId.toString(), subscriberJSON.toString(), namespace);
 
 	    PullQueueUtil
-		    .addToPullQueue(AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, taskletWorkflowDeferredTask, namespace);
+		    .addToPullQueue(
+		            Globals.BULK_BACKENDS.equals(BackendUtil.getCurrentBackendName()) ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE
+		                    : AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, taskletWorkflowDeferredTask, namespace);
 	}
 	catch (Exception e)
 	{
