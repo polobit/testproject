@@ -190,10 +190,9 @@ $(function()
 
 		if ($('.end-timepicker').val() == '')
 			$('.end-timepicker').val(get_hh_mm(true));
-		
+		//sets the time in time picker if it is empty
 		if ($('.new-task-timepicker').val() == '')
 			$('.new-task-timepicker').val("12:00");
-
 		// Update will highlight the date of in date picker
 		$("input.date").datepicker('update');
 
