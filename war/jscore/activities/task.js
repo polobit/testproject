@@ -604,5 +604,9 @@ function complete_task(taskId, collection, ui, callback) {
 
 function getDueTasksCount(){
 	var msg = $.ajax({ type : "GET", url :'core/api/tasks/overdue/uptotoday', async : false, dataType : 'json' }).responseText;
-return msg;
+
+	if(!isNaN(msg)){
+		return msg;
+	}
+return 0;
 }
