@@ -198,12 +198,18 @@ public class TrackClickUtil
 	    contactJSON.remove("isUnsubscribedAll");
 	    contactJSON.remove("isBounce");
 	    contactJSON.remove("id");
-	    contactJSON.getJSONObject("data").remove("powered_by");
-	    contactJSON.getJSONObject("data").remove("created_date");
-	    contactJSON.getJSONObject("data").remove("modified_date");
-	    contactJSON.getJSONObject("data").remove("modified_time");
-	    contactJSON.getJSONObject("data").remove("score");
-	    contactJSON.getJSONObject("data").remove("owner");
+	    
+	    JSONObject data = contactJSON.getJSONObject("data");
+	    
+	    data.remove("powered_by");
+	    data.remove("created_date");
+	    data.remove("modified_date");
+	    data.remove("modified_time");
+	    data.remove("score");
+	    data.remove("owner");
+	    data.remove("first_name_fix");
+	    data.remove("last_name_fix");
+	    data.remove("name_fix");
 	}
 	catch (Exception e)
 	{
