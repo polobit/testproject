@@ -104,7 +104,10 @@ function getTwilioIOLogs(to)
 	{
 		console.log('In TwilioIO logs ');
 
+		// Get call logs from result
 		var logsJson = JSON.parse(logs);
+		
+		// Get page info from result
 		var pageInfo = logsJson.splice( 0, 1 )[0]; 
 		
 		// get and fill template with logs and show
@@ -207,7 +210,10 @@ function getNextLogs(to, page, pageToken)
 	{
 		console.log('In TwilioIO next logs ');
 
+		// Get call logs from result
 		var logsJson = JSON.parse(logs);
+		
+		// Get page info from result
 		var pageInfo = logsJson.splice( 0, 1 )[0]; 
 		
 		// get and fill template with logs and show
