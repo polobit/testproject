@@ -67,7 +67,7 @@ function agile_cookieTags(tags, action)
  * @param button
  * @param url
  */
-function agile_formCallback(error, button, url, contact_id)
+function agile_formCallback(error, button, url, contact_id, agile_form)
 {
 	if(!error[0]){
 		if(contact_id){
@@ -82,7 +82,11 @@ function agile_formCallback(error, button, url, contact_id)
 	setTimeout(function()
 	{
 		error[1].innerHTML = "";
-		window.location.replace(url);
+		if(agile_form.getAttribute("action")){
+			agile_form.submit();
+		}
+		else
+			window.location.replace(url);
 	}, 1500);
 }
 
@@ -115,16 +119,4 @@ function _agile_load_form_fields()
 	{
 		return;
 	} });
-}
-
-function _agile_form_tracking()
-{
-	var agile_form_data = document.getElementById('agile-form-data').getAttribute('name').split(" ");
-	var agile_domain = agile_form_data[0];
-	var agile_api = agile_form_data[1];
-	if (!(agile_id.get() && agile_id.getNamespace()))
-	{
-		_agile.set_account(agile_api, agile_domain);
-		_agile.track_page_view();
-	}
 }

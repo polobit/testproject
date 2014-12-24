@@ -194,7 +194,7 @@ form .popover form {
 	padding: 10px 16px !important;
 }
 
-.agile-field input[type="text"] input[type="email"] {
+.agile-field input[type="text"], .agile-field input[type="email"] {
 	padding: 6px 12px;
 }
 
@@ -211,24 +211,21 @@ form .popover form {
 	position: relative;
 }
 
-.agile-input-group input[type="text"] input[type="email"] {
+.agile-input-group input[type="text"], .agile-input-group input[type="email"] {
 	display: table-cell;
 }
 
-.agile-input-group input[type="text"]:first-child input[type="email"]:first-child, .agile-input-group .agile-group-addon:first-child
-	{
+.agile-input-group input[type="text"]:first-child, .agile-input-group input[type="email"]:first-child, .agile-input-group .agile-group-addon:first-child {
 	border-bottom-right-radius: 0;
 	border-top-right-radius: 0;
 }
 
-.agile-input-group input[type="text"]:last-child input[type="email"]:last-child, .agile-input-group .agile-group-addon:last-child
-	{
+.agile-input-group input[type="text"]:last-child, .agile-input-group input[type="email"]:last-child, .agile-input-group .agile-group-addon:last-child {
 	border-bottom-left-radius: 0;
 	border-top-left-radius: 0;
 }
 
-.agile-group-addon:first-child, .agile-input-group input[type="text"]:first-child input[type="email"]:first-child
-	{
+.agile-group-addon:first-child, .agile-input-group input[type="text"]:first-child, .agile-input-group input[type="email"]:first-child {
 	border-right: 0 none;
 }
 
@@ -258,8 +255,7 @@ input[type="text"], input[type="email"], textarea, input[type="password"] {
 	color: #555;
 	font-size: 14px;
 	line-height: 1.42857;
-	transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s
-		ease-in-out 0s;
+	transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s	ease-in-out 0s;
 	width: 100%;
 	margin: 0;
 }
@@ -291,4 +287,8 @@ legend {
 
 fieldset {
 	border: none;
+}
+
+.agile-custom-clear {
+	clear: both;
 }
