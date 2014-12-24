@@ -8,7 +8,7 @@
 	<div class="span12">
 		<div style="margin-bottom: 20px; margin-top:25px;"">
 			<div class="row-fluid"
-				style="border-bottom: 1px solid #ddd; padding-bottom: 30px;">
+				style="border-bottom: 1px solid #ddd; padding-bottom: 20px;">
 				<div>
 					<div>
 						<div class="span10 ">
@@ -26,7 +26,7 @@
 {{#if_equals this.pipeline.name "Default"}}{{else}}<span style="position: relative;top: -2px;" class="new-task-type label label-default" >{{pipeline.name}}</span>{{/if_equals}}
 						
 						 </div><br/>
-<div style="margin-bottom:4px;"> <span class="contact-profile-name mg-r-md" >{{currencySymbol}}{{numberWithCommas expected_value}}</span> <span style="margin-left:-6px;">({{probability}}%)</span></div>
+<div style="margin-bottom:4px;"> <span class="contact-profile-name mg-r-md" >{{currencySymbol}}{{numberWithCommas expected_value}}</span> <span style="margin-left:-14px;color: grey;">({{probability}}%)</span></div>
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}
         		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
