@@ -629,10 +629,15 @@ if(json.close_date==0)
 						if(!dealPipelineModel)
 							return;
 						var filterJSON = $.parseJSON(readCookie('deal-filters'));
+						console.log(deal.owner.id.toString() != filterJSON.owner_id, deal.owner.id.toString(), filterJSON.owner_id);
 						if(deal.owner.id.toString() != filterJSON.owner_id)
 							return;
-						if(filterJSON.archived != 'all' && deal.archived != filterJSON.archived)
-							return;
+						console.log(filterJSON.archived != 'all' && deal.archived != filterJSON.archived, deal.archived);
+						if(filterJSON.archived){
+							console.log(filterJSON.archived);
+							if(filterJSON.archived != 'all' && deal.archived != filterJSON.archived)
+								return;
+						}
 						
 						dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal));
 						try{
