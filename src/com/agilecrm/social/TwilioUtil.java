@@ -245,18 +245,12 @@ public class TwilioUtil
 			// retrieve call logs from Twilio
 			JSONArray array = getCallLogs(client, to, page, pageToken);
 			String callSid;
-
-			System.out.println("farah");
-
 			String url1 = array.getString(array.length() - 1);
-			System.out.println("url1:" + url1);
 			List<NameValuePair> params1 = URLEncodedUtils.parse(new URI(url1), "UTF-8");
-			System.out.println("params1:" + params1);
 			JSONObject nextLogsRequest1 = new JSONObject();
 
 			for (NameValuePair param1 : params1)
 			{
-				System.out.println("param1:" + param1);
 				if (param1.getName().equalsIgnoreCase("Page"))
 					nextLogsRequest1.put("page", param1.getValue().toString());
 				if (param1.getName().equalsIgnoreCase("PageToken"))
@@ -265,7 +259,7 @@ public class TwilioUtil
 
 			logs.put(nextLogsRequest1);
 
-			System.out.println("*******logs: " + logs);
+			System.out.println("logs: " + logs);
 
 			// Iterate through the array to get recordings
 			for (int i = 0; i < array.length(); i++)
@@ -291,7 +285,6 @@ public class TwilioUtil
 				logs.put(callWithRecordings);
 
 				System.out.println("Call Details: " + callWithRecordings);
-				System.out.println("farah1");
 			}
 
 			System.out.println("Twilio call logs : " + logs);
@@ -357,7 +350,7 @@ public class TwilioUtil
 			logs = calls.getJSONArray("Call");
 			logs.put(calls.get("nextpageuri"));
 
-			System.out.println("farah logs: " + logs);
+			System.out.println("In getCallLogs logs: " + logs);
 			return logs;
 		}
 		catch (JSONException e)
