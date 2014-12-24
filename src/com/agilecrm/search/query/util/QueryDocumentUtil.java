@@ -12,6 +12,7 @@ import org.apache.commons.lang.time.DateUtils;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.core.api.search.SearchAPI;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
@@ -49,21 +50,6 @@ public class QueryDocumentUtil
 	public static String buildNestedCondition(String condition, String query, String newQuery)
 	{
 
-		// If query string is empty return simple not query
-		if (query.isEmpty() && condition.equals("NOT"))
-		{
-			query = "NOT " + newQuery;
-			return query;
-		}
-
-		// If query String is not empty then create And condition with old query
-		// and add not query
-		if (!query.isEmpty() && condition.equals("NOT"))
-		{
-			query = "(" + query + ")" + " AND " + "(NOT " + newQuery + ")";
-			return query;
-		}
-
 		// If query is not empty should add AND condition
 		if (!query.isEmpty())
 		{
@@ -74,6 +60,20 @@ public class QueryDocumentUtil
 		// If query is empty and not "NOT" query return same new query
 		return newQuery;
 	}
+	
+	public static String buildNotNestedCondition(String joinCondition, String query, String newQuery)
+	{
+
+		// If query string is empty return simple not query
+		if (query.isEmpty())
+		{
+			query = "NOT " + newQuery;
+		} else {
+			query = "(" + query + ") " + joinCondition + " (NOT " + newQuery + ")";
+		}
+		return query;
+	}
+
 
 	/**
 	 * Constructs query based on list of search rules, generates Advanced search
@@ -81,9 +81,10 @@ public class QueryDocumentUtil
 	 * 
 	 * @param rules
 	 *            {@link List} of {@link SearchRule}
+	 * @param joinCondition TODO
 	 * @return
 	 */
-	public static String constructQuery(List<SearchRule> rules)
+	public static String constructQuery(List<SearchRule> rules, String joinCondition)
 	{
 		String query = "";
 
@@ -135,13 +136,13 @@ public class QueryDocumentUtil
 					/*
 					 * Build query by passing condition old query and new query
 					 */
-					query = buildNestedCondition("AND", query, newQuery);
+					query = buildNestedCondition(joinCondition, query, newQuery);
 				}
 
 				else if (condition.equals(SearchRule.RuleCondition.NOTEQUALS))
 				{
 					// For not queries
-					query = buildNestedCondition("NOT", query, newQuery);
+					query = buildNotNestedCondition(joinCondition, query, newQuery);
 				}
 
 				// For equals condition
@@ -152,7 +153,7 @@ public class QueryDocumentUtil
 					/*
 					 * Build query by passing condition old query and new query
 					 */
-					query = buildNestedCondition("AND", query, newQuery);
+					query = buildNestedCondition(joinCondition, query, newQuery);
 				}
 
 				else if (condition.equals(SearchRule.RuleCondition.IS_LESS_THAN))
@@ -162,7 +163,7 @@ public class QueryDocumentUtil
 					/*
 					 * Build query by passing condition old query and new query
 					 */
-					query = buildNestedCondition("AND", query, newQuery);
+					query = buildNestedCondition(joinCondition, query, newQuery);
 				}
 
 			}
@@ -170,13 +171,13 @@ public class QueryDocumentUtil
 			// Queries on created or updated times
 			if (lhs.contains("time") && !lhs.contains("tags"))
 			{
-				query = createTimeQueryEpoch(query, lhs, condition, rhs, rhs_new);
+				query = createTimeQueryEpoch(query, lhs, condition, rhs, rhs_new, joinCondition);
 			}
 
 			if (lhs.contains("time") && lhs.contains("tags"))
 			{
 				query = createTimeQueryEpoch(query, SearchUtil.normalizeTextSearchString(rhs) + "_time",
-						nestedCondition, nestedLhs, nestedRhs);
+						nestedCondition, nestedLhs, nestedRhs, joinCondition);
 			}
 		}
 		return query;
@@ -415,7 +416,7 @@ public class QueryDocumentUtil
 	}
 
 	public static String createTimeQueryEpoch(String query, String lhs, SearchRule.RuleCondition condition, String rhs,
-			String rhs_new)
+			String rhs_new, String joinCondition)
 	{
 
 		// Gets date from rhs (selected value)
@@ -444,7 +445,7 @@ public class QueryDocumentUtil
 			// support old data
 			epochQuery = lhs + "_epoch" + ">=" + dayStartEpochTime;
 
-			query = buildNestedCondition("AND", epochQuery, lhs + "_epoch" + "<=" + dayEndEpochTime);
+			query = buildNestedCondition(joinCondition, epochQuery, lhs + "_epoch" + "<=" + dayEndEpochTime);
 
 		}
 
@@ -453,7 +454,7 @@ public class QueryDocumentUtil
 		{
 			String epochQuery = lhs + "_epoch >= " + dayStartEpochTime;
 
-			query = buildNestedCondition("AND", query, epochQuery);
+			query = buildNestedCondition(joinCondition, query, epochQuery);
 		}
 
 		// Created before particular date
@@ -461,7 +462,7 @@ public class QueryDocumentUtil
 		{
 			String epochQuery = lhs + "_epoch < " + dayStartEpochTime;
 
-			query = buildNestedCondition("AND", query, epochQuery);
+			query = buildNestedCondition(joinCondition, query, epochQuery);
 		}
 
 		// Created Between given dates
@@ -476,9 +477,9 @@ public class QueryDocumentUtil
 
 				String epochQuery = lhs + "_epoch >= " + dayStartEpochTime;
 
-				epochQuery = buildNestedCondition("AND", epochQuery, lhs + "_epoch <= " + toDateEpoch);
+				epochQuery = buildNestedCondition(joinCondition, epochQuery, lhs + "_epoch <= " + toDateEpoch);
 
-				query = buildNestedCondition("AND", query, epochQuery);
+				query = buildNestedCondition(joinCondition, query, epochQuery);
 			}
 		}
 
@@ -506,12 +507,12 @@ public class QueryDocumentUtil
 
 			String epochQuery = lhs + "_epoch >= " + String.valueOf(fromDateInSecs);
 
-			epochQuery = buildNestedCondition("AND", epochQuery, lhs + "_epoch <= " + String.valueOf(currentEpochTime));
+			epochQuery = buildNestedCondition(joinCondition, epochQuery, lhs + "_epoch <= " + String.valueOf(currentEpochTime));
 
 			// Constructs OR query on both epoch query and date query, as ON
 			// date condition is not working we have an extra fields which save
 			// epoch time
-			query = buildNestedCondition("AND", query, epochQuery);
+			query = buildNestedCondition(joinCondition, query, epochQuery);
 
 		}
 		else if (condition.equals(SearchRule.RuleCondition.NEXT))
@@ -520,8 +521,8 @@ public class QueryDocumentUtil
 
 			long limitTime = currentTime + (Integer.parseInt(rhs) - 1) * 24 * 3600;
 
-			query = buildNestedCondition("AND", query, lhs + "_epoch >=" + currentTime);
-			query = buildNestedCondition("AND", query, lhs + "_epoch <=" + limitTime);
+			query = buildNestedCondition(joinCondition, query, lhs + "_epoch >=" + currentTime);
+			query = buildNestedCondition(joinCondition, query, lhs + "_epoch <=" + limitTime);
 		}
 
 		return query;
@@ -669,6 +670,21 @@ public class QueryDocumentUtil
 			}
 		}
 		String query = stringBuffer.toString();
+		return query;
+	}
+	
+	public static String constructFilterQuery(ContactFilter filter) {
+		// Construct query based on rules
+	    String query = "";
+		String andQuery = constructQuery(filter.rules, "AND");
+		String orQuery = null;
+		if(filter.or_rules != null && !filter.or_rules.isEmpty())
+			orQuery = constructQuery(filter.or_rules, "OR");
+		if(StringUtils.isNotEmpty(orQuery)) {
+			query = "("+andQuery + ") AND (" + orQuery + ")";
+		} else {
+			query = andQuery;
+		}
 		return query;
 	}
 }
