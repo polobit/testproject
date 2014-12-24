@@ -238,7 +238,7 @@ public class TwilioWidgetsAPI
 		{
 
 			// Calls TwilioUtil method to retrieve call logs for the "to" number
-			return TwilioUtil.getCallLogsWithRecordingsFromBothWidget(widget, to).toString();
+			return TwilioUtil.getCallLogsWithRecordingsFromTwilioIO(widget, to).toString();
 		}
 		catch (SocketTimeoutException e)
 		{
@@ -567,4 +567,47 @@ public class TwilioWidgetsAPI
 		return "";
 	}
 
+	/**
+	 * Connects to Twilio and fetches call logs for a given number based on the
+	 * accountSID
+	 * 
+	 * @param widgetId
+	 *            {@link String} widget id to get {@link Widget} preferences
+	 * @return {@link String} form of {@link JSONArray} of call logs
+	 */
+	@Path("call/nextlogs/{widget-id}/{to}/{page}/{pageToken}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getCallLogsByPage(@PathParam("widget-id") Long widgetId, @PathParam("to") String to,
+			@PathParam("page") String page, @PathParam("pageToken") String pageToken)
+	{
+		// Retrieve widget based on its id
+		Widget widget = WidgetUtil.getWidget(widgetId);
+
+		if (widget == null)
+			return null;
+
+		try
+		{
+
+			// Calls TwilioUtil method to retrieve call logs for the "to" number
+			return TwilioUtil.getCallLogsByPage(widget, to, page, pageToken).toString();
+		}
+		catch (SocketTimeoutException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and Please try again.").build());
+		}
+		catch (IOException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occurred. Refresh and Please try again.").build());
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+	}
 }

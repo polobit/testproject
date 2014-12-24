@@ -366,6 +366,9 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 		// Show twilio numbers list
 		$("#twilio_numbers").show();
 	}
+	
+	// Show record call option on form
+	$("#twilio_recording").show();
 }
 
 function setToValidate(data, showAlert)
@@ -498,6 +501,9 @@ function createAppSid(twilioio_prefs, callback)
 		// Show twilio numbers list
 		$("#twilio_numbers").hide();
 
+		// Hide record call option on form
+		$("#twilio_recording").hide();
+		
 		// Reset form fields after sending email
 		$("#twilioio_login_form").each(function()
 		{
@@ -633,8 +639,11 @@ function setUpGlobalTwilio()
 		Twilio.Device.disconnect(function(conn)
 		{
 			console.log("Twilio call is disconnected");
+
 			// Called for all disconnections
 			console.log(conn);
+			
+			var phoneNumber = To_Number;
 			var messageObj = conn.message;
 
 			if (Twilio.Device.status() != "busy")
@@ -645,7 +654,10 @@ function setUpGlobalTwilio()
 					// Get widget, Create token and set twilio device
 					globalTwilioIOSetup();
 				}
-			}
+			}			
+			
+			// Get all call logs for widget
+			getTwilioIOLogs(phoneNumber);	
 			
 			// notes related code			
 			console.log("calSid new  " + conn.parameters.CallSid);
@@ -698,7 +710,7 @@ function setUpGlobalTwilio()
 				}
 			} else {
 				return;
-			}
+			}											
 		});
 
 		Twilio.Device

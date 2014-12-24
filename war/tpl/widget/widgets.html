@@ -42,7 +42,17 @@
 <!-- <i class="{{icons name}}"></i> -->
 			</div>
 			<div class="widget_header_name overflow-elipsis" style="width:80%;padding:0px 0 0 5px;">
-		{{#if_equals name "Linkedin"}}LinkedIn{{else}}{{#if_equals name "GooglePlus"}}Google+{{else}}{{#if_equals name "HelpScout"}}Help Scout{{else}}{{name}}{{/if_equals}}{{/if_equals}}{{/if_equals}}
+		{{#if_equals name "Linkedin"}}LinkedIn
+        {{else}}{{#if_equals name "GooglePlus"}}Google+
+                {{else}}{{#if_equals name "HelpScout"}}Help Scout
+                        {{else}}{{#if_equals name "Twilio"}}Twilio Call Log
+                                {{else}}{{#if_equals name "TwilioIO"}}Twilio
+                                       {{else}}{{name}}
+                                       {{/if_equals}}
+                               {{/if_equals}}
+                        {{/if_equals}}
+                {{/if_equals}}
+        {{/if_equals}}
 			</div>
 <div class="clearfix"></div>
 		</div>

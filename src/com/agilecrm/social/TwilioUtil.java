@@ -1,8 +1,12 @@
 package com.agilecrm.social;
 
+import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -231,14 +235,37 @@ public class TwilioUtil
 	 * @return {@link JSONArray} of calls with their recordings
 	 * @throws Exception
 	 */
-	public static JSONArray getCallLogsWithRecordings(TwilioRestClient client, String to) throws Exception
+	public static JSONArray getCallLogsWithRecordings(TwilioRestClient client, String to, String page, String pageToken)
+			throws Exception
 	{
 		JSONArray logs = new JSONArray();
+
 		try
 		{
 			// retrieve call logs from Twilio
-			JSONArray array = getCallLogs(client, to);
+			JSONArray array = getCallLogs(client, to, page, pageToken);
 			String callSid;
+
+			System.out.println("farah");
+
+			String url1 = array.getString(array.length() - 1);
+			System.out.println("url1:" + url1);
+			List<NameValuePair> params1 = URLEncodedUtils.parse(new URI(url1), "UTF-8");
+			System.out.println("params1:" + params1);
+			JSONObject nextLogsRequest1 = new JSONObject();
+
+			for (NameValuePair param1 : params1)
+			{
+				System.out.println("param1:" + param1);
+				if (param1.getName().equalsIgnoreCase("Page"))
+					nextLogsRequest1.put("page", param1.getValue().toString());
+				if (param1.getName().equalsIgnoreCase("PageToken"))
+					nextLogsRequest1.put("pageToken", param1.getValue().toString());
+			}
+
+			logs.put(nextLogsRequest1);
+
+			System.out.println("*******logs: " + logs);
 
 			// Iterate through the array to get recordings
 			for (int i = 0; i < array.length(); i++)
@@ -264,6 +291,7 @@ public class TwilioUtil
 				logs.put(callWithRecordings);
 
 				System.out.println("Call Details: " + callWithRecordings);
+				System.out.println("farah1");
 			}
 
 			System.out.println("Twilio call logs : " + logs);
@@ -271,6 +299,7 @@ public class TwilioUtil
 		}
 		catch (JSONException e)
 		{
+			System.out.println(e.getMessage());
 			return logs;
 		}
 
@@ -288,11 +317,19 @@ public class TwilioUtil
 	 * @return {@link JSONArray} of call logs
 	 * @throws Exception
 	 */
-	private static JSONArray getCallLogs(TwilioRestClient client, String to) throws Exception
+	private static JSONArray getCallLogs(TwilioRestClient client, String to, String page, String pageToken)
+			throws Exception
 	{
 		// parameters required to retrieve logs
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("To", to);
+		params.put("PageSize", "10");
+
+		if (page != null && pageToken != null)
+		{
+			params.put("Page", page);
+			params.put("PageToken", pageToken);
+		}
 
 		// request the client to retrieve call logs
 		TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + client.getAccountSid()
@@ -318,6 +355,9 @@ public class TwilioUtil
 				return logs;
 
 			logs = calls.getJSONArray("Call");
+			logs.put(calls.get("nextpageuri"));
+
+			System.out.println("farah logs: " + logs);
 			return logs;
 		}
 		catch (JSONException e)
@@ -636,11 +676,9 @@ public class TwilioUtil
 		params.put("FriendlyName", "Agile CRM Twilio Saga");
 
 		// For Local Host
-		/*
-		 * params.put("VoiceUrl",
-		 * "http://1-dot-twiliovoicerecord.appspot.com/voice?record=" + record+
-		 * "&agileuserid=" + agileUserID);
-		 */
+
+		params.put("VoiceUrl", "http://1-dot-twiliovoicerecord.appspot.com/voice?record=" + record + "&agileuserid="
+				+ agileUserID);
 
 		// For Main
 		/*
@@ -650,9 +688,11 @@ public class TwilioUtil
 		 */
 
 		// For Beta
-		params.put("VoiceUrl", "https://" + NamespaceManager.get()
-				+ "-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiovoice?record=" + record + "&agileuserid="
-				+ agileUserID);
+		/*
+		 * params.put("VoiceUrl", "https://" + NamespaceManager.get() +
+		 * "-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiovoice?record=" +
+		 * record + "&agileuserid=" + agileUserID);
+		 */
 
 		params.put("VoiceMethod", "GET");
 
@@ -731,7 +771,7 @@ public class TwilioUtil
 		return responseJSON;
 	}
 
-	public static JSONArray getCallLogsWithRecordingsFromBothWidget(Widget widget, String to) throws Exception
+	public static JSONArray getCallLogsWithRecordingsFromTwilioIO(Widget widget, String to) throws Exception
 	{
 		JSONArray logs = new JSONArray();
 
@@ -750,9 +790,39 @@ public class TwilioUtil
 			 */
 			TwilioRestClient newClient = new TwilioRestClient(accountSid, accAuthToken, null);
 
-			logs = getCallLogsWithRecordings(newClient, to);
+			logs = getCallLogsWithRecordings(newClient, to, null, null);
 
 			System.out.println("TwilioIO call logs : " + logs);
+			return logs;
+		}
+		catch (JSONException e)
+		{
+			return logs;
+		}
+	}
+
+	public static JSONArray getCallLogsByPage(Widget widget, String to, String page, String pageToken) throws Exception
+	{
+		JSONArray logs = new JSONArray();
+
+		try
+		{
+			// Get New twilio call logs and recording
+			// Fetch account SID from widget preferences
+			String accountSid = widget.getProperty("twilio_acc_sid");
+
+			// Fetch auth token from widget preferences
+			String accAuthToken = widget.getProperty("twilio_auth_token");
+
+			/*
+			 * Build Twilio REST client with the account SID of the logged in
+			 * person and agile authentication token
+			 */
+			TwilioRestClient newClient = new TwilioRestClient(accountSid, accAuthToken, null);
+
+			logs = getCallLogsWithRecordings(newClient, to, page, pageToken);
+
+			System.out.println("getCallLogsByPage call logs : " + logs);
 			return logs;
 		}
 		catch (JSONException e)
