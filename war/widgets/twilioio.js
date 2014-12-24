@@ -39,7 +39,7 @@ $(function()
 		var to = $('#contact_number').val();
 
 		// Append loading img to btn
-		$(this).append(TWILIOIO_LOGS_LOAD_IMAGE);
+		$(this).append('<img src="img/ajax-loader.gif" style="margin-left: 10px;"></img>');
 		
 		// If single contact available
 		if (!to)
@@ -197,7 +197,7 @@ function addMoreButton(pageInfo)
 						'<a href="#" id="twilioio_more_call_logs" class="btn pull-right" page="' + pageInfo.page + '" pageToken="' + pageInfo.pageToken + '" style="text-decoration:none;" >More</a>');
 }
 
-//
+// Get next 10 calls, add in UI, do "More" btn settings
 function getNextLogs(to, page, pageToken)
 {
 	console.log("In getNextLogs:" + to);
