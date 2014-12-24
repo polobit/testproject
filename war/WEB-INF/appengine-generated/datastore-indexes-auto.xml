@@ -17,7 +17,7 @@
     <datastore-index kind="Event" ancestor="false" source="auto">
         <property name="owner" direction="asc"/>
         <property name="related_contacts" direction="asc"/>
-        <property name="start" direction="asc"/>
+        <property name="start" direction="desc"/>
     </datastore-index>
 
 </datastore-indexes>
