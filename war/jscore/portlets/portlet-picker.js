@@ -87,9 +87,9 @@ function set_p_portlets(base_model){
 	
 	if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Filter Based"){
 		if(base_model.get('settings').filter=="companies")
-			itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+base_model.get('settings').filter, templateKey : "portlets-companies", individual_tag_name : 'tr' });
+			itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+base_model.get('settings').filter+'&sortKey=-created_time', templateKey : "portlets-companies", sort_collection : false, individual_tag_name : 'tr', sortKey : "-created_time" });
 		else
-			itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+base_model.get('settings').filter, templateKey : "portlets-contacts", individual_tag_name : 'tr' });
+			itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+base_model.get('settings').filter+'&sortKey=-created_time', templateKey : "portlets-contacts", sort_collection : false, individual_tag_name : 'tr', sortKey : "-created_time"  });
 	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Emails Opened"){
 		itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+base_model.get('settings').duration, templateKey : 'portlets-contacts', individual_tag_name : 'tr' });
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Pending Deals"){
@@ -498,8 +498,11 @@ function dealsByMilestoneBarGraph(selector,milestonesList,milestoneValuesList,mi
 	        yAxis: {
 	            min: 0,
 	            title: {
-	                text: 'Deal Value ($)'
+	                text: 'Deal Value'
 	            }
+	        },
+	        legend: {
+	        	enabled: false
 	        },
 	        tooltip: {
 	        	formatter: function(){
@@ -521,7 +524,7 @@ function dealsByMilestoneBarGraph(selector,milestonesList,milestoneValuesList,mi
 	            }
 	        },
 	        series: [{
-	            name: 'Milestone',
+	            name: 'Deal',
 	            data: milestoneValuesList
 	        }],
 	        exporting: {
@@ -549,6 +552,9 @@ function closuresPerPersonBarGraph(selector,catges,data,text,name){
 	            title: {
 	                text: text
 	            }
+	        },
+	        legend: {
+	        	enabled: false
 	        },
 	        tooltip: {
 	        	formatter: function(){
@@ -606,7 +612,7 @@ function dealsFunnelGraph(selector,funnel_data){
 	            }
 	        },
 	        series: [{
-	            name: 'Deals Won',
+	            name: 'Deal',
 	            data: funnel_data
 	        }],
 	        exporting: {
@@ -634,6 +640,9 @@ function emailsSentBarGraph(selector,catges,mailsCountList){
 	            title: {
 	                text: 'No. of emails sent'
 	            }
+	        },
+	        legend: {
+	        	enabled: false
 	        },
 	        tooltip: {
 	        	formatter: function(){
@@ -753,6 +762,9 @@ function dealsAssignedBarGraph(selector,catges,dealsCountList){
 	            title: {
 	                text: 'No. of deals assigned'
 	            }
+	        },
+	        legend: {
+	        	enabled: false
 	        },
 	        tooltip: {
 	        	formatter: function(){

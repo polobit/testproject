@@ -984,13 +984,19 @@ public class OpportunityUtil
      */
     
     public static List<Opportunity> getPendingDealsRelatedToCurrentUser(long dueDate){
-    	List<String> milestoneList=new ArrayList<String>();
-    	milestoneList.add("New");
-    	milestoneList.add("Prospect");
-    	milestoneList.add("Proposal");
-    	return dao.ofy().query(Opportunity.class).filter("close_date <=", dueDate).filter("close_date !=", null).filter("milestone in",milestoneList).limit(50)
-    			.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-    			.order("close_date").list();
+    	List<Opportunity> pendingDealsList=new ArrayList<Opportunity>();
+    	try {
+    		List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class).filter("close_date <=", dueDate).filter("close_date !=", null).limit(50)
+        			.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+        			.order("close_date").list();
+    		for(Opportunity opportunity : allDealsList){
+    			if(opportunity.milestone!="Won" && opportunity.milestone!="Lost")
+    				pendingDealsList.add(opportunity);
+    		}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return pendingDealsList;
     }
     /**
      * Gets all the pending deals related to all users. Fetches the deals equals or less to current date
@@ -1000,12 +1006,18 @@ public class OpportunityUtil
      */
     
     public static List<Opportunity> getPendingDealsRelatedToAllUsers(long dueDate){
-    	List<String> milestoneList=new ArrayList<String>();
-    	milestoneList.add("New");
-    	milestoneList.add("Prospect");
-    	milestoneList.add("Proposal");
-    	return dao.ofy().query(Opportunity.class).filter("close_date <=", dueDate).filter("close_date !=", null).filter("milestone in",milestoneList).limit(50)
-    			.order("close_date").list();
+    	List<Opportunity> pendingDealsList=new ArrayList<Opportunity>();
+    	try {
+    		List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class).filter("close_date <=", dueDate).filter("close_date !=", null).limit(50)
+        			.order("close_date").list();
+    		for(Opportunity opportunity : allDealsList){
+    			if(opportunity.milestone!="Won" && opportunity.milestone!="Lost")
+    				pendingDealsList.add(opportunity);
+    		}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return pendingDealsList;
     }
     /**
      * Gets all the pending deals related to all users. Fetches the deals equals or less to current date
@@ -1014,7 +1026,7 @@ public class OpportunityUtil
      * current user.
      */
     
-    public static Map<Double,Integer> getTotalMilestoneValueAndNumber(String milestone,boolean owner,long dueDate,Long ownerId){
+    public static Map<Double,Integer> getTotalMilestoneValueAndNumber(String milestone,boolean owner,long dueDate,Long ownerId,Long trackId){
     	double totalMilestoneValue=0;
     	List<Opportunity> milestoneList = null;
     	Map<Double,Integer> map=new LinkedHashMap<Double, Integer>();
@@ -1023,9 +1035,11 @@ public class OpportunityUtil
     			milestoneList = dao.ofy().query(Opportunity.class).filter("milestone", milestone).filter("close_date <=",dueDate).filter("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId)).list();
     		}else{
     			if(owner)
-        			milestoneList = dao.ofy().query(Opportunity.class).filter("milestone", milestone).filter("close_date <=",dueDate).filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).list();
+        			milestoneList = dao.ofy().query(Opportunity.class).filter("milestone", milestone).filter("close_date <=",dueDate)
+        					.filter("pipeline", new Key<Milestone>(Milestone.class, trackId)).filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).list();
         		else
-        			milestoneList = dao.ofy().query(Opportunity.class).filter("milestone", milestone).filter("close_date <=",dueDate).list();
+        			milestoneList = dao.ofy().query(Opportunity.class)
+        					.filter("pipeline", new Key<Milestone>(Milestone.class, trackId)).filter("milestone", milestone).filter("close_date <=",dueDate).list();
     		}
     		for(Opportunity opportunity : milestoneList){
     			totalMilestoneValue+=opportunity.expected_value;

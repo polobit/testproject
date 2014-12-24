@@ -319,9 +319,9 @@ public class PortletUtil {
 							milestonesList.add(milestones[i]);
 							Map<Double,Integer> map=null;
 							if(json.get("deals").toString().equalsIgnoreCase("all-deals"))
-								map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],false,json.getLong("due-date"),null);
+								map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],false,json.getLong("due-date"),null,milestone.id);
 							else if(json.get("deals").toString().equalsIgnoreCase("my-deals"))
-								map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],true,json.getLong("due-date"),null);
+								map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],true,json.getLong("due-date"),null,milestone.id);
 							for(Map.Entry<Double, Integer> entry : map.entrySet()){
 								milestoneValuesList.add(entry.getKey());
 								milestoneNumbersList.add(entry.getValue());
@@ -384,7 +384,7 @@ public class PortletUtil {
 				domainUsersList=DomainUserUtil.getUsers(dUser.domain);
 			if(json!=null && json.get("due-date")!=null){
 				for(DomainUser domainUser : domainUsersList){
-					Map<Double,Integer> map = OpportunityUtil.getTotalMilestoneValueAndNumber("Won",true,json.getLong("due-date"),domainUser.id);
+					Map<Double,Integer> map = OpportunityUtil.getTotalMilestoneValueAndNumber("Won",true,json.getLong("due-date"),domainUser.id,null);
 					for(Map.Entry<Double, Integer> entry : map.entrySet()){
 						milestoneValuesList.add(entry.getKey());
 						milestoneNumbersList.add(entry.getValue());
@@ -401,19 +401,21 @@ public class PortletUtil {
 		}
 		return portlet;
 	}
-	public static List<Contact> getContactsList(JSONObject json)throws Exception{
+	public static List<Contact> getContactsList(JSONObject json, String sortKey)throws Exception{
 		List<Contact> contactsList=null;
 		if(json!=null && json.get("filter")!=null){
 			if(json.get("filter").toString().equalsIgnoreCase("contacts"))
-				contactsList=ContactUtil.getAllContacts(50,null);
+				contactsList=ContactUtil.getAllContactsByOrder(50,null,sortKey);
 			else if(json.get("filter").toString().equalsIgnoreCase("companies"))
-				contactsList=ContactUtil.getAllCompanies(50, null);
+				contactsList=ContactUtil.getAllCompaniesByOrder(50, null,sortKey);
 			else if(json.get("filter").toString().equalsIgnoreCase("recent"))
-				contactsList=ContactFilterUtil.getContacts("system-RECENT", 50, null,null);
+				contactsList=ContactFilterUtil.getContacts("system-RECENT", 50, null,sortKey);
 			else if(json.get("filter").toString().equalsIgnoreCase("myContacts"))
-				contactsList=ContactFilterUtil.getContacts("system-CONTACTS", 50, null,null);
+				contactsList=ContactFilterUtil.getContacts("system-CONTACTS", 50, null,sortKey);
 			else if(json.get("filter").toString().equalsIgnoreCase("leads"))
-				contactsList=ContactFilterUtil.getContacts("system-LEADS", 50, null,null);
+				contactsList=ContactFilterUtil.getContacts("system-LEADS", 50, null,sortKey);
+			else
+				contactsList=ContactFilterUtil.getContacts(json.get("filter").toString(), 50, null,sortKey);
 		}
 		return contactsList;
 	}
@@ -516,9 +518,9 @@ public class PortletUtil {
 						milestonesList.add(milestones[i]);
 						Map<Double,Integer> map=null;
 						if(json.get("deals").toString().equalsIgnoreCase("all-deals"))
-							map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],false,json.getLong("due-date"),null);
+							map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],false,json.getLong("due-date"),null,milestone.id);
 						else if(json.get("deals").toString().equalsIgnoreCase("my-deals"))
-							map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],true,json.getLong("due-date"),null);
+							map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],true,json.getLong("due-date"),null,milestone.id);
 						for(Map.Entry<Double, Integer> entry : map.entrySet()){
 							milestoneValuesList.add(entry.getKey());
 							milestoneNumbersList.add(entry.getValue());
@@ -550,7 +552,7 @@ public class PortletUtil {
 			domainUsersList=DomainUserUtil.getUsers(dUser.domain);
 		if(json!=null && json.get("due-date")!=null){
 			for(DomainUser domainUser : domainUsersList){
-				Map<Double,Integer> map = OpportunityUtil.getTotalMilestoneValueAndNumber("Won",true,json.getLong("due-date"),domainUser.id);
+				Map<Double,Integer> map = OpportunityUtil.getTotalMilestoneValueAndNumber("Won",true,json.getLong("due-date"),domainUser.id,null);
 				for(Map.Entry<Double, Integer> entry : map.entrySet()){
 					milestoneValuesList.add(entry.getKey());
 					milestoneNumbersList.add(entry.getValue());

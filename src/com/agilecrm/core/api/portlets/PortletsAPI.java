@@ -173,10 +173,12 @@ public class PortletsAPI {
 	@Path("/portletContacts")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Contact> getPortletContactsList(@QueryParam("filter") String filter)throws Exception {
+	public List<Contact> getPortletContactsList(@QueryParam("filter") String filter, @QueryParam("sortKey") String sortKey)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("filter",filter);
-		return PortletUtil.getContactsList(json);
+		if(sortKey==null)
+			sortKey = "-created_time";
+		return PortletUtil.getContactsList(json,sortKey);
 	}
 	/**
 	 * Gets Emails opened portlet data

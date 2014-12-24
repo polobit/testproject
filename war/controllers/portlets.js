@@ -13,6 +13,9 @@ var PortletsRouter = Backbone.Router
 															LIB_PATH + 'lib/jquery.gridster.js',function(){
 														var el = $(getTemplate('portlets', {}));
 														$("#content").html(el);
+														if (IS_FLUID){
+															$('#content').find('div.row').removeClass('row').addClass('row-fluid');
+														}
 														loadPortlets(el);
 													});
 												}
@@ -106,10 +109,9 @@ function addNewPortlet(portlet_type,p_name){
     			$('#no-portlets').hide();
         	Portlets_View.collection.add(model);
         	
-        	//set_up_portlets(Portlets_View.el, Portlets_View.el);
-        	
-        	//move the scroll bar to bottom for showing the newly added portlet
-        	window.scrollTo(0,document.body.scrollHeight);
+        	var scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
+        	//move the scroll bar for showing the newly added portlet
+        	window.scrollTo(0,scrollPosition);
         },
         error: function (model, response) {
         	hidePortletsPopup();
@@ -121,7 +123,7 @@ function addNewPortlet(portlet_type,p_name){
     			$('#no-portlets').hide();
         	Portlets_View.collection.add(model);
         	var scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
-        	//move the scroll bar to bottom for showing the newly added portlet
+        	//move the scroll bar for showing the newly added portlet
         	window.scrollTo(0,scrollPosition);
         }});
 	setTimeout(function(){
@@ -134,7 +136,7 @@ function hidePortletsPopup(){
 	$('.modal-backdrop').hide();
 }
 function deletePortlet(el){
-	if(confirm("Do you want delete this portlet")){
+	if(confirm("Delete this portlet?")){
 		/*var portlet = {};
 		for(var i=0;i<Portlets_View.collection.models.length;i++){
 			if(Portlets_View.collection.models[i].id==el.id.split("-close")[0]){

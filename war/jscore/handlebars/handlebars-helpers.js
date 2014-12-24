@@ -3554,6 +3554,26 @@ $(function()
 			icon_name = "icon-tasks";
 		return icon_name;
 	});
+	/**
+	 * getting flitered contact portlet header name
+	 */
+	Handlebars.registerHelper('get_flitered_contact_portlet_header', function(filter_name) {
+		var header_name = '';
+		if(filter_name=='contacts')
+			header_name = "All Conatcts";
+		else if(filter_name=='companies')
+			header_name = "All Companies";
+		else if(filter_name=='recent')
+			header_name = "Recent Contacts";
+		else if(filter_name=='myContacts')
+			header_name = "My Contacts";
+		else if(filter_name=='leads')
+			header_name = "Leads";
+		else 
+			header_name = "Contacts";
+		
+		return header_name;
+	});
 });
 
 // helper function return created time for event

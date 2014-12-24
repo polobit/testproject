@@ -1,5 +1,6 @@
 <div id="portletSettingsModal" class="modal hide fade">
 	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
 		<h3>Portlet Settings</h3>
 	</div>
 	<div class="modal-body">
@@ -8,14 +9,8 @@
 		<form id="portletsContactsFilterBasedSettingsForm" name="portletsContactsFilterBasedSettingsForm" method="post" style="display:none">
 			<div class="control-group">
 				<label class="control-label">Filter</label>
-				<div class="controls">
-					<select id="filter" name="filter" class="required">
-						<option value="contacts">Contacts</option>
-						<option value="companies">Companies</option>
-						<option value="recent">Recent</option>
-						<option value="myContacts">My Contacts</option>
-						<option value="leads">Leads</option>
-					</select>
+				<div class="controls" id="filterControls">
+					
 				</div>
 			</div>
 		</form>
@@ -79,7 +74,7 @@
 		</form>
 		
 		<form id="portletsPendingDealsSettingsForm" name="portletsPendingDealsSettingsForm" method="post" style="display:none">
-			<input type="text" class="hidden" />
+			<input type="text" class="hidden pull-right" />
 			<div class="control-group">
 				<label class="control-label">Deals</label>
 				<div class="controls">
@@ -92,19 +87,20 @@
 			<div class="control-group">
 				<label class="control-label">Due Date</label>
 				<div class="controls">
-                    <span><input id="due-date" type="text" name="due-date" class="required date" placeholder="MM/DD/YY" /></span>
+                    <span><input id="due-date" type="text" name="due-date" class="required date" placeholder="MM/DD/YYYY" /></span>
 				</div>
 			</div>
 		</form>
 		
 		<form id="portletsDealsByMilestoneSettingsForm" name="portletsDealsByMilestoneSettingsForm" method="post" style="display:none">
-			<input type="text" class="hidden" />
+			<input type="text" class="hidden pull-right" />
 			<div class="control-group">
 				<label class="control-label">Track</label>
 				<div class="controls">
 					<select id="track" name="track" class="required">
 						
 					</select>
+					<img class="loading-img" src="img/21-0.gif"></img>
 				</div>
 			</div>
 			<div class="control-group">
@@ -119,13 +115,13 @@
 			<div class="control-group">
 				<label class="control-label">Due Date</label>
 				<div class="controls">
-                    <span><input id="due-date" type="text" name="due-date" class="required date" placeholder="MM/DD/YY" /></span>
+                    <span><input id="due-date" type="text" name="due-date" class="required date" placeholder="MM/DD/YYYY" /></span>
                 </div>
 			</div>
 		</form>
 		
 		<form id="portletsDealsClosuresPerPersonSettingsForm" name="portletsDealsClosuresPerPersonSettingsForm" method="post" style="display:none">
-			<input type="text" class="hidden" />
+			<input type="text" class="hidden pull-right" />
 			<div class="control-group">
 				<label class="control-label">Group by</label>
 				<div class="controls">
@@ -138,7 +134,7 @@
 			<div class="control-group">
 				<label class="control-label">Due Date</label>
 				<div class="controls">
-                    <span><input id="due-date" type="text" name="due-date" class="required date" placeholder="MM/DD/YY" /></span>
+                    <span><input id="due-date" type="text" name="due-date" class="required date" placeholder="MM/DD/YYYY" /></span>
                 </div>
 			</div>
 		</form>
@@ -159,13 +155,14 @@
 		</form>
 		
 		<form id="portletsDealsFunnelSettingsForm" name="portletsDealsFunnelSettingsForm" method="post" style="display:none">
-			<input type="text" class="hidden" />
+			<input type="text" class="hidden pull-right" />
 			<div class="control-group">
 				<label class="control-label">Track</label>
 				<div class="controls">
 					<select id="track" name="track" class="required">
 						
 					</select>
+					<img class="loading-img" src="img/21-0.gif"></img>
 				</div>
 			</div>
 			<div class="control-group">
@@ -180,7 +177,7 @@
 			<div class="control-group">
 				<label class="control-label">Due Date</label>
 				<div class="controls">
-                    <span><input id="due-date" type="text" name="due-date" class="required date" placeholder="MM/DD/YY" /></span>
+                    <span><input id="due-date" type="text" name="due-date" class="required date" placeholder="MM/DD/YYYY" /></span>
                 </div>
 			</div>
 		</form>
@@ -223,6 +220,6 @@
 	</div>
 	<div class="modal-footer">
 		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-primary" href="#portlets">Save</a>
-		<a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>

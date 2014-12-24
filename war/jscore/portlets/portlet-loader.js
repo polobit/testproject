@@ -134,13 +134,14 @@ function set_up_portlets(el, portlets_el){
 	        	max_size: [3,3],
 	        	stop: function(event,ui){
 	        		
-	        		/*if($('#'+this.$resized_widget.attr('id')).height()<=200){
-	        			$('#'+this.$resized_widget.attr('id')).css("height","160px");
-	        			$('#'+this.$resized_widget.attr('id')).css("max-height","160px");
+	        		//for resizing portlet body
+	                if($('#'+this.$resized_widget.attr('id')).height()<=200){
+	        			$('#'+this.$resized_widget.attr('id')+' > .portlet_body').css("height","160px");
+	        			$('#'+this.$resized_widget.attr('id')+' > .portlet_body').css("max-height","160px");
 	        		}else{
-	        			$('#'+this.$resized_widget.attr('id')).css("height",$('#'+this.$resized_widget.attr('id')).height()-40+"px");
-	        			$('#'+this.$resized_widget.attr('id')).css("max-height",$('#'+this.$resized_widget.attr('id')).height()-40+"px");
-	        		}*/
+	        			$('#'+this.$resized_widget.attr('id')+' > .portlet_body').css("height",this.$resize_preview_holder.height()-40+"px");
+	        			$('#'+this.$resized_widget.attr('id')+' > .portlet_body').css("max-height",this.$resize_preview_holder.height()-40+"px");
+	        		}
 	        		$(window).trigger('resize');
 	        		
 	        		$('#'+this.$resized_widget.attr('id')+' > div.portlet_body').css('overflow-x','hidden').css('overflow-y','auto');
@@ -294,7 +295,14 @@ function showPortletSettings(el){
 	if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Filter Based"){
 		showPortletSettingsForm("portletsContactsFilterBasedSettingsForm");
 		elData = $('#portletsContactsFilterBasedSettingsForm');
-		$("#filter", elData).find('option[value='+ base_model.get("settings").filter +']').attr("selected", "selected");
+		portletContactFiltersListView = new Base_Collection_View({ url : '/core/api/filters', sort_collection : false, restKey : "ContactFilter", templateKey : "portlets-contact-filter-list",
+					individual_tag_name : 'option', sort_collection : false, postRenderCallback : function(el){
+						$("#filter", elData).find('option[value='+ base_model.get("settings").filter +']').attr("selected", "selected");
+					} });
+
+		// Fetchs filters
+		portletContactFiltersListView.collection.fetch();
+		$("#filterControls", elData).html(portletContactFiltersListView.render().el);
 	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Emails Opened"){
 		showPortletSettingsForm("portletsContactsEmailsOpenedSettingsForm");
 		elData = $('#portletsContactsEmailsOpenedSettingsForm');
@@ -347,7 +355,8 @@ function showPortletSettings(el){
 				else
 					options+="<option value="+milestoneId+">"+milestoneName+"</option>";
 			});
-			$('#track', elData).append(options);
+			$('#track', elData).html(options);
+			$('.loading-img').hide();
 		});
 		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
 		$("#due-date", elData).val(new Date(base_model.get("settings")["due-date"]*1000).format('mm/dd/yyyy'));
@@ -374,7 +383,8 @@ function showPortletSettings(el){
 				else
 					options+="<option value="+milestoneId+">"+milestoneName+"</option>";
 			});
-			$('#track', elData).append(options);
+			$('#track', elData).html(options);
+			$('.loading-img').hide();
 		});
 		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
 		$("#due-date", elData).val(new Date(base_model.get("settings")["due-date"]*1000).format('mm/dd/yyyy'));
@@ -457,6 +467,7 @@ $('.portlet-maximize').die().live('click', function(e){
 	$('#'+id).parent().find('.portlet_body').show();
 });
 $('.portlet-settings-save-modal').live('click', function(e){
+	var scrollPosition=$(window).scrollTop();
 	var form_id=$(this).parent().prev().find('form:visible').attr('id');
 	if (!isValidForm('#' + form_id))
 		return false;
@@ -496,15 +507,16 @@ $('.portlet-settings-save-modal').live('click', function(e){
 		model.save(portlet.toJSON(), {
 	        success: function (data) {
 	        	hidePortletSettingsAfterSave(form_id);
+	        	$(window).scrollTop(scrollPosition);
 	        	var model = data.toJSON();
 	        	Portlets_View.collection.get(model).set(new BaseModel(model));
 	        	//$('#'+this.parentNode.parentNode.parentNode.id).replaceWith($(getTemplate('portlets-model', model)));
 	        	var portletCollectionView;
 	        	if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Filter Based"){
 	        		if(data.get('settings').filter=="companies")
-	        			portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter, templateKey : 'portlets-companies', individual_tag_name : 'tr' });
+	        			portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter+'&sortKey=-created_time', templateKey : 'portlets-companies', sort_collection : false, individual_tag_name : 'tr', sortKey : "-created_time" });
 	        		else
-	        			portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter, templateKey : 'portlets-contacts', individual_tag_name : 'tr' });
+	        			portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter+'&sortKey=-created_time', templateKey : 'portlets-contacts', sort_collection : false, individual_tag_name : 'tr', sortKey : "-created_time" });
 	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Emails Opened"){
 	        		portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+data.get('settings').duration, templateKey : 'portlets-contacts', individual_tag_name : 'tr' });
 	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Pending Deals"){

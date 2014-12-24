@@ -29,7 +29,7 @@
 .gridster .preview-holder {
 	z-index: 1;
 	position: absolute;
-	background-color: red;
+	background-color: #bbb;
 	border-color: red;
 	opacity: .3
 }
