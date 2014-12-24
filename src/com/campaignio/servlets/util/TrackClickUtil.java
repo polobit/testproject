@@ -121,7 +121,7 @@ public class TrackClickUtil
     {
 	String params = "";
 
-	JSONObject contactJSON = AgileTaskletUtil.getSubscriberJSON(contact);
+	JSONObject contactJSON = AgileTaskletUtil.getSubscriberJSON(contact, true);
 
 	// if null returned due to exception, return empty
 	if (contactJSON == null)
@@ -199,6 +199,11 @@ public class TrackClickUtil
 	    contactJSON.remove("isBounce");
 	    contactJSON.remove("id");
 	    contactJSON.getJSONObject("data").remove("powered_by");
+	    contactJSON.getJSONObject("data").remove("created_date");
+	    contactJSON.getJSONObject("data").remove("modified_date");
+	    contactJSON.getJSONObject("data").remove("modified_time");
+	    contactJSON.getJSONObject("data").remove("score");
+	    contactJSON.getJSONObject("data").remove("owner");
 	}
 	catch (Exception e)
 	{
