@@ -82,7 +82,7 @@ function agile_formCallback(error, button, url, contact_id, agile_form)
 	setTimeout(function()
 	{
 		error[1].innerHTML = "";
-		if(agile_form.getAttribute("action")){
+		if(agile_form && agile_form.getAttribute("action")){
 			agile_form.submit();
 		}
 		else
