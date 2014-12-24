@@ -30,10 +30,13 @@ $(function()
 	{
 		e.preventDefault();
 
+		if($(this).attr("disabled"))
+			return;
+		
 		// Disable btn
 		$(this).attr("disabled", true);
 
-		// Get all detaila to get next logs
+		// Get all details to get next logs
 		var page = $(this).attr("page");
 		var pageToken = $(this).attr("pageToken");
 		var to = $('#contact_number').val();
