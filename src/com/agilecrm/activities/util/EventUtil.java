@@ -422,9 +422,9 @@ public class EventUtil
 	 * @author Kona
 	 * @param contactKey
 	 */
-	public static List<Key<Event>> getEventsKey(Key<AgileUser> owner, String status, EventType eventType,
-			Key<Contact> contactKey)
+	public static int getEventsKey(Key<AgileUser> owner, String status, EventType eventType, Key<Contact> contactKey)
 	{
+		System.out.println(owner + " ," + status + " ," + eventType + " ," + contactKey);
 		Map<String, Object> searchMap = new HashMap<String, Object>();
 
 		if (owner != null)
@@ -439,17 +439,17 @@ public class EventUtil
 		if (eventType != null)
 			searchMap.put("type", eventType);
 
-		searchMap.put("related_contacts", contactKey);
+		if (contactKey != null)
+			searchMap.put("related_contacts", contactKey);
 
 		try
 		{
-			List<Key<Event>> agileuserOwnerkey = dao.listKeysByProperty(searchMap);
-			return agileuserOwnerkey;
+			return dao.getCountByProperty(searchMap);
 		}
 		catch (Exception e)
 		{
 			System.err.println("Exception in getEventsKey in EventUtil Class" + e.getMessage());
-			return new ArrayList<Key<Event>>();
+			return 0;
 		}
 	}
 }

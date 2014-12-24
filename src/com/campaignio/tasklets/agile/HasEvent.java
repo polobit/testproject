@@ -1,8 +1,5 @@
 package com.campaignio.tasklets.agile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
@@ -103,15 +100,16 @@ public class HasEvent extends TaskletAdapter
 
 			EventType eventtype = getEventType(eventType);
 
-			List<Key<Event>> listofKeys = new ArrayList<Key<Event>>();
+			// List<Key<Event>> listofKeys = new ArrayList<Key<Event>>();
 
 			System.out.println("The contact key is:" + contactKey);
 
 			// Get list of AgileUsers for the given event conditions
-			if (contactKey != null)
-				listofKeys = EventUtil.getEventsKey(contactOwnerKey, eventStatus, eventtype, contactKey);
+			// if (contactKey != null)
+			// listofKeys = EventUtil.getEventsKey(contactOwnerKey, eventStatus,
+			// eventtype, contactKey);
 
-			if (listofKeys.size() > 0)
+			if (EventUtil.getEventsKey(contactOwnerKey, eventStatus, eventtype, contactKey) > 0)
 			{
 				TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_YES);
 				return;

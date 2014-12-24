@@ -80,6 +80,7 @@ public class Event
 	 * End time of event
 	 */
 	@NotSaved(IfDefault.class)
+	@Indexed
 	public Long end = 0L;
 
 	@NotSaved(IfDefault.class)

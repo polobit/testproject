@@ -18,6 +18,7 @@
         <property name="owner" direction="asc"/>
         <property name="related_contacts" direction="asc"/>
         <property name="start" direction="desc"/>
+        <property name="end" direction="desc"/>
     </datastore-index>
 
 </datastore-indexes>
