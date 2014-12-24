@@ -58,6 +58,7 @@ public class Event
 	 * Start time of event
 	 */
 	@NotSaved(IfDefault.class)
+	@Indexed
 	public Long start = 0L;
 
 	/**
