@@ -21,6 +21,8 @@ function organize_portlets(base_model){
 		$('#taksAndEvents', this.el).append($(itemView.render().el));
 	else if (portlet_type == "USERACTIVITY")
 		$('#userActivity', this.el).append($(itemView.render().el));
+	else if (portlet_type == "RSS")
+		$('#rssFeed', this.el).append($(itemView.render().el));
 }
 function set_p_portlets(base_model){
 	var itemView;
@@ -50,6 +52,8 @@ function set_p_portlets(base_model){
 		itemView = new Base_Model_View({ model : base_model, template : "portlets-tasksandevents-today-tasks-model", tagName : 'div' });
 	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Calls Per Person"){
 		itemView = new Base_Model_View({ model : base_model, template : "portlets-contacts-calls-per-person-model", tagName : 'div' });
+	}else if(base_model.get('portlet_type')=="RSS" && base_model.get('name')=="Agile CRM Blog"){
+		itemView = new Base_Model_View({ model : base_model, template : "portlets-useractivity-blog-model", tagName : 'div' });
 	}
 	//var itemView = new Base_Model_View({ model : base_model, template : "portlets-model", tagName : 'div', });
 
@@ -111,7 +115,7 @@ function set_p_portlets(base_model){
 		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')!="Deals By Milestone" 
 			&& base_model.get('name')!="Closures Per Person" && base_model.get('name')!="Deals Funnel" && base_model.get('name')!="Emails Sent"
 				&& base_model.get('name')!="Growth Graph" && base_model.get('name')!="Today Tasks" && base_model.get('name')!="Deals Assigned"
-					&& base_model.get('name')!="Calls Per Person"){
+					&& base_model.get('name')!="Calls Per Person" && base_model.get('name')!="Agile CRM Blog"){
 			$(this).html(getRandomLoadingImg());
 			$(this).html($(itemCollection.render().el));
 			
@@ -311,11 +315,11 @@ function set_p_portlets(base_model){
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==406){
 					// Show cause of error in saving
-					$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+					$save_info = $('<div class="portlet-error-message" style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
 							+ data.responseText
 							+ '</i></p></small></div>');
 					
-					$("#plan-limit-error-"+base_model.get('id')).html($save_info).show();
+					$('#'+selector).html($save_info).show();
 					
 					return;
 				}
@@ -446,6 +450,13 @@ function set_p_portlets(base_model){
 				callsPerPersonBarGraph(selector,domainUsersList,series,text,colors);
 			});
 			
+			if(base_model.get('is_minimized'))
+				$(this).hide();
+			
+			setPortletContentHeight(base_model);
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Agile CRM Blog"){
+			$(this).find('div').html(getRandomLoadingImg());
+			initBlogPortletSync($(this));
 			if(base_model.get('is_minimized'))
 				$(this).hide();
 			

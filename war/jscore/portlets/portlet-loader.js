@@ -677,7 +677,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			fetchPortletsGraphData(url,function(data1){
 	    				if(data1.status==406){
 	    					// Show cause of error in saving
-	    					$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+	    					$save_info = $('<div class="portlet-error-message" style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
 	    							+ data1.responseText
 	    							+ '</i></p></small></div>');
 	    					
@@ -837,4 +837,29 @@ function showPortletSettingsForm(formId){
 		else
 			$(this).hide();
 	});
+}
+function initBlogPortletSync(el)
+{
+	head
+			.js(
+					LIB_PATH + 'lib/jquery.feeds.min.js',
+					function()
+					{
+
+						$('#portlet_blog_sync_container',el)
+								.feeds(
+										{
+											feeds : { blog : "https://www.agilecrm.com/blog/feed/" },
+											max : 3,
+											entryTemplate : function(entry)
+											{
+												return '<strong>' + '<a href="' + entry.link + '" title = "' + entry.title + '" target="_blank" >' + entry.title + '</a></strong><div style="color:#999;font-size:11px;line-height: 13px;margin-bottom:5px">' 
+												+ new Date(entry.publishedDate).format('mmm d, yyyy') + '</div><p style="padding-top:5px;margin-bottom:15px">' 
+												+ entry.contentSnippet.replace('<a', '<a target="_blank"') + '</p>';
+											},
+											onComplete : function(e){
+												$('#portlet_blog_sync_container',el).append('<span class="pull-right"><a href="https://www.agilecrm.com/blog" target="_blank">Agile CRM Blog</a></span>');
+											} });
+					});
+
 }

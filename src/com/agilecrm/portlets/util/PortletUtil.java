@@ -69,6 +69,8 @@ public class PortletUtil {
 		allPortlets.add(new Portlet("Emails Sent",PortletType.USERACTIVITY));
 		allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
 		
+		allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
+		
 		setIsAddedStatus(allPortlets);
 
 		return allPortlets;

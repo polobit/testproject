@@ -498,7 +498,7 @@ width: auto!important;
 {
 	width:100%;
 	white-space:nowrap;
-	overflow:visible!important;
+	/* overflow:visible!important; */
 	text-overflow:ellipsis;
 }
 .portlet-time-view

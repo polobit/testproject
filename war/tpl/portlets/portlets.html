@@ -45,7 +45,7 @@
 		{{#if this.length}}
 		<!-- <div class="data">
 			<div class="data-container"></div> -->
-			<table id="contacts" class="table  agile-ellipsis-dynamic">
+			<table id="contacts" class="table agile-ellipsis-dynamic" style="overflow-x: hidden;overflow-y:auto;">
 				<col width="45%">
 				<col width="20%">
 				<col width="24%">
@@ -59,8 +59,8 @@
 						<!-- <th>Lead Score</th> -->
 					<!-- </tr>
 				</thead> -->
-				<tbody id="portlets-contacts-model-list" class="portlets-contacts-model-list"
-					route="contact/" style="overflow: scroll;overflow:hidden;">
+				<tbody id="portlets-contacts-model-list" class="portlets-contacts-model-list" style="word-break:normal!important;"
+					route="contact/">
 				</tbody>
 			</table>
 		<!-- </div>
@@ -200,9 +200,7 @@
   			<p style="width:60%;float:left;">{{#is_link subject}}<span class="activate-link" style="white-space: normal!important;">{{else}}<span style="white-space: normal!important;">{{/is_link}}{{safe_string subject}}</span></p>
   			<p style="max-width:39%;overflow:visible !important;float:right;"> 
 				<span class="label">{{task_property type}}</span>
-				{{#if_equals priority_type "NORMAL"}}{{else}}
-					<span style="margin-left:5px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
-				{{/if_equals}}
+				<span style="margin-left:5px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
 			</p>
 		</div>
         <div>
@@ -666,6 +664,33 @@
 			</div>
 		</div>
         <div class="portlet_body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+<script id="portlets-useractivity-blog-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
+				<ul class="portlet_header_control">
+					<!-- {{#if is_minimized}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-maximize icon-plus"></i></a></li>
+					{{else}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
+					{{/if}} -->
+                    <li><i id="{{id}}-close" class="icon-remove {{remove_spaces name}}-close" style="cursor:pointer;" onclick="deletePortlet(this);"></i></li>
+				</ul>
+			</div>
+			<div class="portlet_header_name">
+                <i class="{{get_portlet_icon name}} icon-1x"></i>
+                <span class="portlet-icon-divider"></span>
+				<span>
+                   Agile CRM Blog
+                </span>
+			</div>
+		</div>
+        <div class="portlet_body">
+			<div id="portlet_blog_sync_container" style="padding:10px;"></div>
+		</div>
      <div class="portlets" id="{{id}}">&nbsp;</div>
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>	

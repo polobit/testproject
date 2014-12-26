@@ -4,27 +4,27 @@
 }
 .gridster>* {
 	margin: 0 auto;
-	-webkit-transition: height .4s, width .4s;
+	/* -webkit-transition: height .4s, width .4s;
 	-moz-transition: height .4s, width .4s;
 	-o-transition: height .4s, width .4s;
 	-ms-transition: height .4s, width .4s;
-	transition: height .4s, width .4s
+	transition: height .4s, width .4s */
 }
 .gridster .gs-w {
 	z-index: 2;
 	position: absolute
 }
 .ready .gs-w:not(.preview-holder) {
-	-webkit-transition: opacity .3s, left .3s, top .3s;
+	/* -webkit-transition: opacity .3s, left .3s, top .3s;
 	-moz-transition: opacity .3s, left .3s, top .3s;
 	-o-transition: opacity .3s, left .3s, top .3s;
-	transition: opacity .3s, left .3s, top .3s
+	transition: opacity .3s, left .3s, top .3s */
 }
 .ready .gs-w:not(.preview-holder), .ready .resize-preview-holder {
-	-webkit-transition: opacity .3s, left .3s, top .3s, width .3s, height .3s;
+	/* -webkit-transition: opacity .3s, left .3s, top .3s, width .3s, height .3s;
 	-moz-transition: opacity .3s, left .3s, top .3s, width .3s, height .3s;
 	-o-transition: opacity .3s, left .3s, top .3s, width .3s, height .3s;
-	transition: opacity .3s, left .3s, top .3s, width .3s, height .3s
+	transition: opacity .3s, left .3s, top .3s, width .3s, height .3s */
 }
 .gridster .preview-holder {
 	z-index: 1;

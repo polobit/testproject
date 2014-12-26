@@ -51,6 +51,8 @@ function addNewPortlet(portlet_type,p_name){
 		obj.name="Deals Assigned";
 	else if(p_name=="CallsPerPerson")
 		obj.name="Calls Per Person";
+	else if(p_name=="AgileCRMBlog")
+		obj.name="Agile CRM Blog";
 	obj.portlet_type=portlet_type;
 	var max_row_position=0;
 	if(gridster!=undefined)
@@ -94,6 +96,8 @@ function addNewPortlet(portlet_type,p_name){
 		json['group-by']="number-of-calls";
 		json['duration']="1-day";
 	}
+	else if(portlet_type=="RSS" && p_name=="AgileCRMBlog")
+		obj.size_y=2;
 	var portlet = new BaseModel();
 	portlet.url = 'core/api/portlets/addPortlet';
 	portlet.set({ "prefs" : JSON.stringify(json) }, { silent : true });
@@ -127,7 +131,7 @@ function addNewPortlet(portlet_type,p_name){
         	window.scrollTo(0,scrollPosition);
         }});
 	setTimeout(function(){
-		gridster.add_widget($('#ui-id-'+model.column_position+'-'+model.row_position),1,1,model.column_position,model.row_position);
+		gridster.add_widget($('#ui-id-'+model.column_position+'-'+model.row_position),model.size_x,model.size_y,model.column_position,model.row_position);
 		gridster.set_dom_grid_height();
 	},1000);
 }
