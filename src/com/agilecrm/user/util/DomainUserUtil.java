@@ -1,6 +1,5 @@
 package com.agilecrm.user.util;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +10,6 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
-import com.agilecrm.thirdparty.levenshteindistance.Damerau;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
@@ -474,30 +472,12 @@ public class DomainUserUtil
 	if (StringUtils.isEmpty(namespace))
 	    return null;
 
-	List<DomainUser> domainusers = getUsers(namespace);
-	List<String> domainscheduleids = new ArrayList<>();
-	for (DomainUser dmuser : domainusers)
-	{
-	    domainscheduleids.add(dmuser.schedule_id);
-	}
-
-	Damerau levenshteinDistance = new Damerau(scheduleid, domainscheduleids);
-	String near_schedule_id = levenshteinDistance.computeNearestWord();
-	if (scheduleid.equals(near_schedule_id))
-	{
-	    System.out.print("You Entered a correct word : " + near_schedule_id);
-	}
-	else
-	{
-	    System.out.println("Did you mean : " + near_schedule_id);
-	}
-
 	NamespaceManager.set("");
 
 	try
 	{
 	    Map<String, Object> searchMap = new HashMap<String, Object>();
-	    searchMap.put("schedule_id", near_schedule_id);
+	    searchMap.put("schedule_id", scheduleid);
 	    searchMap.put("domain", namespace);
 	    return dao.getByProperty(searchMap);
 	}
