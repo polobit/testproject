@@ -101,8 +101,8 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 		}
 		var data = collection.toJSON();
 		data.sort(function(a, b){
-		    if (a.field_label < b.field_label) return -1;
-		    if (b.field_label < a.field_label) return 1;
+		    if (a.name < b.name) return -1;
+		    if (b.name < a.name) return 1;
 		    return 0;
 		});
 		// Iterates though each model in the collection and
