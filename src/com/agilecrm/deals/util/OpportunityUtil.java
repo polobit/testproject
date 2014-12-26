@@ -986,11 +986,11 @@ public class OpportunityUtil
     public static List<Opportunity> getPendingDealsRelatedToCurrentUser(long dueDate){
     	List<Opportunity> pendingDealsList=new ArrayList<Opportunity>();
     	try {
-    		List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class).filter("close_date <=", dueDate).filter("close_date !=", null).limit(50)
+    		List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class).filter("close_date <=", dueDate).limit(50)
         			.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
         			.order("close_date").list();
     		for(Opportunity opportunity : allDealsList){
-    			if(opportunity.milestone!="Won" && opportunity.milestone!="Lost")
+    			if(!opportunity.milestone.equals("Won") && !opportunity.milestone.equals("Lost"))
     				pendingDealsList.add(opportunity);
     		}
 		} catch (Exception e) {
@@ -1008,10 +1008,10 @@ public class OpportunityUtil
     public static List<Opportunity> getPendingDealsRelatedToAllUsers(long dueDate){
     	List<Opportunity> pendingDealsList=new ArrayList<Opportunity>();
     	try {
-    		List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class).filter("close_date <=", dueDate).filter("close_date !=", null).limit(50)
+    		List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class).filter("close_date <=", dueDate).limit(50)
         			.order("close_date").list();
     		for(Opportunity opportunity : allDealsList){
-    			if(opportunity.milestone!="Won" && opportunity.milestone!="Lost")
+    			if(!opportunity.milestone.equals("Won") && !opportunity.milestone.equals("Lost"))
     				pendingDealsList.add(opportunity);
     		}
 		} catch (Exception e) {

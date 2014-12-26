@@ -124,13 +124,13 @@
 <div id="dealsWonValue" class="dealsWonValue" style="display:none;font-weight:bold;"></div>
 {{#if this.length}}
 <table class="table  no-sorting agile-ellipsis-dynamic">
-<colgroup>
+<!-- <colgroup>
 	<col width="14%">
 	<col width="20%">
-	<col width="10%">
-	<!-- <col width="15%"> -->
-	<!-- <col width="15%"> -->
-</colgroup>          
+	<col width="10%"> 
+	<col width="15%"> 
+	<col width="15%"> 
+</colgroup> -->         
           			<!-- <thead>
                         <tr>
                             <th>Opportunity</th>
@@ -152,25 +152,28 @@
 
 <script id="portlets-opportunities-model-template" type="text/html">
 <td data="{{id}}" class="data">
-    <div style="height:auto;">
-		{{name}}
-    </div>
+	<div class="portlet-time-view">
+		<div style="width:50%;float:left;">
+			<div style="width:50%;float:left;">{{name}}</div> <div style="width:50%">| {{milestone}}({{probability}}%)</div>
+		</div>
+		{{#if this.contacts}}
+			<p class="activate-link" style="text-align: right; max-width: 50%; white-space: nowrap;float:right;">
+				{{#related_to_one contacts}}{{/related_to_one}}
+			</p>
+		{{/if}}
+		<div class="clearfix"></div>
+	</div>
+	<div>
+		<p style="width:70%;margin-bottom:0px;" class="pull-left">
+			<span>
+				<time class="time-ago" datetime="{{epochToHumanDate "" close_date}}" >{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>
+			</span>
+		</p>
+		<p class="pull-right" style="margin-bottom:0px;">
+			<span>{{currencySymbol}} {{numberWithCommas expected_value}}</span>
+		</p>
+	</div>
 </td>
-<td>
-	<div style="height:auto;display:inline-block;">
-		{{#each contacts}}
-        	{{#if_contact_type "PERSON"}}
-        		<a href="#contact/{{id}}" class="activate-link"><img class="portlet-roundimg img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 30}}" width="40px" height="40px" style="display:inline; width:30px; height:30px;  "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
-        	{{/if_contact_type}}
-			{{#if_contact_type "COMPANY"}}
-        		<a href="#contact/{{id}}" class="activate-link"><img class="portlet-roundimg" {{getCompanyImage "30" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
-        	{{/if_contact_type}}
-       {{/each}}
-	</div>{{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
-</td>
-<td><div style="height:auto;">{{currencySymbol}} {{numberWithCommas expected_value}}</div></td>
-<!-- <td><div style="height:auto;">{{milestone}}<br />({{probability}}%) </div></td> -->
-<!-- <td><div style="height:auto;"><time class="deal-close-time" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></div></td> -->
 </script>
 <script id="portlets-tasks-collection-template" type="text/html">
 <!-- <div class="line" style="text-align:centre;"><h3>Tasks</h3></div> -->
@@ -212,7 +215,7 @@
 <script id="portlets-events-collection-template" type="text/html">
 <!-- <div class="line" style="text-align:centre;"><h3>Events</h3></div> -->
 {{#if this.length}}
-<table class="table no-sorting">
+<table class="table no-sorting agile-ellipsis-dynamic">
 <!-- <colgroup>
 	<col width="14%">
     <col width="14%">
@@ -237,7 +240,7 @@
 <script id="portlets-events-model-template" type="text/html">
 <td data="{{id}}" class="data">
     <div class="portlet-time-view">
-     <div style="width:35%;padding:5px 0px 5px;">
+     <div style="width:35%;padding:5px 0px 5px;float:left;">
       <time class="event-start-time" datetime="{{epochToHumanDate "HH:MM" start}}" style="color:#000;font-size: 18px;">{{epochToHumanDate "HH" start}}</time>
 	  <span style="vertical-align: top;position: relative;top: -2px;">:</span>
 	  <time class="event-start-time" datetime="{{epochToHumanDate "HH:MM" start}}" style="color:#000;vertical-align:top;position:relative;top:-1px;">{{epochToHumanDate "MM" start}}</time> 
@@ -247,24 +250,25 @@
     <time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" end}}" style="color:#000;vertical-align:top;position:relative;top:-1px;">{{epochToHumanDate "MM" end}}</time>
 	 </div>
       {{#if this.contacts}}
-         <p class="activate-link" style="margin-top: -8%; text-align: right; max-width: 65%; margin-left: 36%;white-space: nowrap;">
+         <p class="activate-link" style="text-align: right; max-width: 65%; white-space: nowrap;float:right;">
 				{{#related_to_one contacts}}{{/related_to_one}}
          </p>
 	  {{/if}}
+		<div class="clearfix"></div>
      </div>
      <div>
-     <p style="width:70%" class="pull-left">
+     <p style="width:70%;margin-bottom:0px;" class="pull-left">
        <span>{{title}}</span>
 	 </p>
-     <p class="pull-right">
+     <p class="pull-right" style="margin-bottom:0px;">
       <span class="label label-{{#if_equals color "red"}}{{task_label_color "HIGH"}}{{/if_equals}}{{#if_equals color "#36C"}}{{task_label_color "NORMAL"}}{{/if_equals}}{{#if_equals color "green"}}{{task_label_color "LOW"}}{{/if_equals}}">{{#if_equals color "red"}}High{{/if_equals}}{{#if_equals color "#36C"}}Normal{{/if_equals}}{{#if_equals color "green"}}Low{{/if_equals}}</span>
      </p>
     </div>
     <!-- <div style="height:auto;">
 		<b>{{title}}</b>
-    </div>
+    </div> -->
 </td>
-<td><div><span class="label label-{{#if_equals color "red"}}{{task_label_color "HIGH"}}{{/if_equals}}{{#if_equals color "#36C"}}{{task_label_color "NORMAL"}}{{/if_equals}}{{#if_equals color "green"}}{{task_label_color "LOW"}}{{/if_equals}}">{{#if_equals color "red"}}High{{/if_equals}}{{#if_equals color "#36C"}}Normal{{/if_equals}}{{#if_equals color "green"}}Low{{/if_equals}}</span></div></td>
+<!-- <td><div><span class="label label-{{#if_equals color "red"}}{{task_label_color "HIGH"}}{{/if_equals}}{{#if_equals color "#36C"}}{{task_label_color "NORMAL"}}{{/if_equals}}{{#if_equals color "green"}}{{task_label_color "LOW"}}{{/if_equals}}">{{#if_equals color "red"}}High{{/if_equals}}{{#if_equals color "#36C"}}Normal{{/if_equals}}{{#if_equals color "green"}}Low{{/if_equals}}</span></div></td>
 <td><div><time class="event-end-time" datetime="{{epochToHumanDate "" end}}" style="border-bottom: dotted 1px #999;">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" end}}</time></div></td> -->
 </script>
 <script id="portlets-contacts-filterbased-model-template" type="text/html">
@@ -382,7 +386,7 @@
                 <i class="{{get_portlet_icon name}} icon-1x"></i>
                 <span class="portlet-icon-divider"></span>
 				<span>
-                   Contacts Growth Graph
+                   Tag Graph
                 </span>
 			</div>
 		</div>
@@ -739,7 +743,7 @@
 <script id="portlets-contact-filter-list-collection-template" type="text/html">
 <select id="filter" name="filter" class="required">
 	<option value="contacts">Contacts</option>
-	<option value="companies">Companies</option>
+	<!-- <option value="companies">Companies</option> -->
 	<option value="myContacts">My Contacts</option>
 	<option value="leads">Leads</option>
 	{{#if this.length}}

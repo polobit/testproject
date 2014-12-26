@@ -23,8 +23,7 @@ function loadPortlets(el){
 					set_up_portlets(el, portlets_el);
 					if(Portlets_View.collection.length==0)
 						$('.gridster > div:visible > div',el).removeClass('gs-w');
-				})
-
+				});
 			} });
 		this.Portlets_View.appendItem = set_p_portlets;
 

@@ -93,7 +93,10 @@ function set_p_portlets(base_model){
 	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Emails Opened"){
 		itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+base_model.get('settings').duration, templateKey : 'portlets-contacts', individual_tag_name : 'tr' });
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Pending Deals"){
-		itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+base_model.get('settings').deals+'&due-date='+base_model.get('settings')["due-date"], templateKey : 'portlets-opportunities', individual_tag_name : 'tr' });
+		itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+base_model.get('settings').deals+'&due-date='+base_model.get('settings')["due-date"], templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
+			postRenderCallback : function(p_el){
+				displayTimeAgo(p_el);
+			} });
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Won"){
 		itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletDealsWon?duration='+base_model.get('settings').duration, templateKey : 'portlets-opportunities', individual_tag_name : 'tr' });
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Agenda"){
@@ -146,7 +149,7 @@ function set_p_portlets(base_model){
 			var milestoneNumbersList=[];
 			
 			var milestoneMap=[];
-			
+			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				milestonesList=data["milestonesList"];
 				milestoneValuesList=data["milestoneValuesList"];
@@ -182,7 +185,7 @@ function set_p_portlets(base_model){
 			var milestoneNumbersList=[];
 			var milestoneValuesList=[];
 			var domainUsersList=[];
-			
+			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				milestoneNumbersList=data["milestoneNumbersList"];
 				milestoneValuesList=data["milestoneValuesList"];
@@ -229,7 +232,7 @@ function set_p_portlets(base_model){
 			var milestonesList=[];
 			var milestoneValuesList=[];
 			var milestoneMap=[];
-			
+			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				milestonesList=data["milestonesList"];
 				milestoneValuesList=data["milestoneValuesList"];
@@ -281,7 +284,7 @@ function set_p_portlets(base_model){
 			
 			var domainUsersList=[];
 			var mailsCountList=[];
-			
+			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				domainUsersList=data["domainUsersList"];
 				mailsCountList=data["mailsCountList"];
@@ -304,7 +307,7 @@ function set_p_portlets(base_model){
 			
 			var selector=$(this).attr('id');
 			var url='/core/api/portlets/portletGrowthGraph?tags='+base_model.get('settings').tags+'&frequency='+base_model.get('settings').frequency+'&start-date='+base_model.get('settings')["start-date"]+'&end-date='+base_model.get('settings')["end-date"];
-			
+			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==406){
 					// Show cause of error in saving
@@ -374,7 +377,7 @@ function set_p_portlets(base_model){
 			
 			var domainUsersList=[];
 			var dealsAssignedCountList=[];
-			
+			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				domainUsersList=data["domainUsersList"];
 				dealsAssignedCountList=data["assignedOpportunitiesCountList"];
@@ -403,7 +406,7 @@ function set_p_portlets(base_model){
 			var failedCallsCountList=[];
 			var completedCallsDurationList=[];
 			var domainUsersList=[];
-			
+			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				incomingCompletedCallsCountList=data["incomingCompletedCallsCountList"];
 				incomingFailedCallsCountList=data["incomingFailedCallsCountList"];
@@ -449,10 +452,6 @@ function set_p_portlets(base_model){
 			setPortletContentHeight(base_model);
 		}
 	});
-	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-		$(".task-due-time", this.el).timeago();
-		$(".event-end-time", this.el).timeago();
-	});
 	enablePortletTimeAndDates(base_model);
 }
 
@@ -481,8 +480,6 @@ function fetchPortletsGraphData(url, successCallback){
 	}); 
 }
 function dealsByMilestoneBarGraph(selector,milestonesList,milestoneValuesList,milestoneNumbersList){
-	$('#'+selector).html(getRandomLoadingImg());
-	
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
 		$('#'+selector).highcharts({
 	        chart: {
@@ -534,7 +531,6 @@ function dealsByMilestoneBarGraph(selector,milestonesList,milestoneValuesList,mi
 	});
 }
 function closuresPerPersonBarGraph(selector,catges,data,text,name){
-	$('#'+selector).html(getRandomLoadingImg());
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
 		$('#'+selector).highcharts({
 	        chart: {
@@ -584,7 +580,6 @@ function closuresPerPersonBarGraph(selector,catges,data,text,name){
 	});
 }
 function dealsFunnelGraph(selector,funnel_data){
-	$('#'+selector).html(getRandomLoadingImg());
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', LIB_PATH + 'lib/flot/funnel.js', function(){
 		$('#'+selector).highcharts({
 	        chart: {
@@ -607,8 +602,8 @@ function dealsFunnelGraph(selector,funnel_data){
 	                neckHeight: '20%',
 	                
 	                //-- Other available options
-	                height: '80%',
-	                width: '60%'
+	                height: '100%',
+	                width: '50%'
 	            }
 	        },
 	        series: [{
@@ -622,7 +617,6 @@ function dealsFunnelGraph(selector,funnel_data){
 	});
 }
 function emailsSentBarGraph(selector,catges,mailsCountList){
-	$('#'+selector).html(getRandomLoadingImg());
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
 		$('#'+selector).highcharts({
 	        chart: {
@@ -672,7 +666,6 @@ function emailsSentBarGraph(selector,catges,mailsCountList){
 	});
 }
 function portletGrowthGraph(selector,series,base_model){
-	$('#'+selector).html(getRandomLoadingImg());
 	var flag=true;
 	
 	/*if(base_model.get("settings").tags==""){
@@ -694,7 +687,7 @@ function portletGrowthGraph(selector,series,base_model){
 		flag=false;
 	}*/
 	if(base_model.get("settings").tags==""){
-		$('#'+selector).html("<div style='margin: 2%'>Please <a href='#' id='"+base_model.get("id")+"-settings' class='portlet-settings' dada-toggle='modal'>configure</a> the portlet and add the Tags.</div>");
+		$('#'+selector).html("<div class='portlet-error-message'>Please <a href='#' id='"+base_model.get("id")+"-settings' class='portlet-settings' dada-toggle='modal'>configure</a> the portlet and add the Tags.</div>");
 		flag=false;
 	}
 	if(flag){
@@ -744,7 +737,6 @@ function portletGrowthGraph(selector,series,base_model){
 	}
 }
 function dealsAssignedBarGraph(selector,catges,dealsCountList){
-	$('#'+selector).html(getRandomLoadingImg());
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
 		$('#'+selector).highcharts({
 	        chart: {
@@ -794,7 +786,6 @@ function dealsAssignedBarGraph(selector,catges,dealsCountList){
 	});
 }
 function callsPerPersonBarGraph(selector,domainUsersList,series,text,colors){
-	$('#'+selector).html(getRandomLoadingImg());
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
 		$('#'+selector).highcharts({
 	        chart: {

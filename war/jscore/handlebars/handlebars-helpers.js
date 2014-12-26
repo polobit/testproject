@@ -3494,7 +3494,7 @@ $(function()
 	Handlebars.registerHelper('get_portlet_name', function(p_name) {
 		var portlet_name = '';
 		if(p_name=='Filter Based')
-			portlet_name = 'Contact Filter';
+			portlet_name = 'Contact List';
 		else if(p_name=='Emails Opened')
 			portlet_name = 'Email Opens';
 		else if(p_name=='Emails Sent')
@@ -3527,7 +3527,7 @@ $(function()
 	Handlebars.registerHelper('get_portlet_icon', function(p_name) {
 		var icon_name = '';
 		if(p_name=='Filter Based')
-			icon_name = 'icon-filter';
+			icon_name = 'icon-user';
 		else if(p_name=='Emails Opened')
 			icon_name = 'icon-envelope';
 		else if(p_name=='Emails Sent')
