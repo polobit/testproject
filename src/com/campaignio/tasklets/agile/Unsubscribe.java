@@ -49,40 +49,47 @@ public class Unsubscribe extends TaskletAdapter
 
 		String campaignID = AgileTaskletUtil.getId(campaignJSON);
 
-		// Get list of all workflows
-		if (SELECT_ALL.equals(unsubscribeFrom))
-			if (unsubscribeAll(subscriberJSON, subscriberID, campaignID))
+		try
+		{
+			// Get list of all workflows
+			if (SELECT_ALL.equals(unsubscribeFrom))
+				if (unsubscribeAll(subscriberJSON, subscriberID, campaignID))
+				{
+					CampaignStatusUtil.setStatusOfCampaignWithName(subscriberID, campaignID, "", Status.DONE);
+					return;
+				}
+			List<String> campaignIDs = getListOfCampaignIDs(nodeJSON, subscriberJSON, subscriberID, campaignJSON);
+
+			int campaignIDsSize = campaignIDs.size();
+
+			List<String> campaignNames = new ArrayList<String>();
+
+			List<String> activeCampaigns = ContactUtil.workflowListOfAContact(Long.parseLong(subscriberID));
+
+			for (int i = 0; i < campaignIDsSize; i++)
+			{
+				if (activeCampaigns.contains(campaignIDs.get(i)))
+					campaignNames.add(setStatus(campaignIDs.get(i), subscriberID));
+			}
+			String message = "none.";
+			if (campaignNames.size() != 0)
+				message = getMessage(campaignNames);
+
+			System.out.println("Campaign in all method and the message is: " + message
+					+ " and the campaign names are :" + campaignNames);
+			LogUtil.addLogToSQL(campaignID, subscriberID, "Contact unsubscribed from " + message,
+					LogType.UNSUBSCRIBE.toString());
+
+			if (campaignIDs.contains(campaignID))
 			{
 				CampaignStatusUtil.setStatusOfCampaignWithName(subscriberID, campaignID, "", Status.DONE);
+
 				return;
 			}
-
-		List<String> campaignIDs = getListOfCampaignIDs(nodeJSON, subscriberJSON, subscriberID, campaignJSON);
-
-		int campaignIDsSize = campaignIDs.size();
-
-		List<String> campaignNames = new ArrayList<String>();
-
-		List<String> activeCampaigns = ContactUtil.workflowListOfAContact(Long.parseLong(subscriberID));
-
-		for (int i = 0; i < campaignIDsSize; i++)
-		{
-			if (activeCampaigns.contains(campaignIDs.get(i)))
-				campaignNames.add(setStatus(campaignIDs.get(i), subscriberID));
 		}
-
-		String message = getMessage(campaignNames);
-
-		System.out.println("Campaign in all method and the message is: " + message + " and the campaign names are :"
-				+ campaignNames);
-		LogUtil.addLogToSQL(campaignID, subscriberID, "Contact unsubscribed from " + message,
-				LogType.UNSUBSCRIBE.toString());
-
-		if (campaignIDs.contains(campaignID))
+		catch (Exception e)
 		{
-			CampaignStatusUtil.setStatusOfCampaignWithName(subscriberID, campaignID, "", Status.DONE);
-
-			return;
+			System.out.println(" Exception in Unsubscribe Node " + e.getMessage());
 		}
 
 		// Execute Next One in Loop
@@ -104,8 +111,9 @@ public class Unsubscribe extends TaskletAdapter
 			if (!workflow.equals(campaignID))
 				campaignName.add(setStatus(workflow, subscriberID));
 		}
-
-		String message = getMessage(campaignName);
+		String message = "none.";
+		if (campaignName.size() != 0)
+			message = getMessage(campaignName);
 
 		System.out.println("Campaign in all method and the message is: " + message + " and the campaign names are :"
 				+ campaignName);
