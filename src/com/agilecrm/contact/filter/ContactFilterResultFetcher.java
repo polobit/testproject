@@ -122,11 +122,10 @@ public class ContactFilterResultFetcher
 	try
 	{
 	    if(StringUtils.isNotEmpty(dynamic_filter)) {
-	    	Gson gson = new Gson();
-	    	ContactFilter contact_filter = gson.fromJson(dynamic_filter, ContactFilter.class);
+	    	ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(dynamic_filter);
 	    	this.filter = contact_filter;
 		    if (this.filter != null)
-			modifyFilterCondition();
+		    	modifyFilterCondition();
 	    }
 	}
 	catch (JsonSyntaxException e)

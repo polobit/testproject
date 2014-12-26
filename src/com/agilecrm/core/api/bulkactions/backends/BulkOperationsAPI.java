@@ -27,7 +27,9 @@ import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
 import com.agilecrm.contact.export.util.ContactExportBlobUtil;
 import com.agilecrm.contact.export.util.ContactExportEmailUtil;
+import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
+import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
@@ -667,7 +669,46 @@ public class BulkOperationsAPI
 	    // contacts are fetched at a time, so no need of editing existing
 	    // file.
 	    path = ContactExportBlobUtil.writeContactCSVToBlobstore(contacts_list, true);
+	} else if (!StringUtils.isEmpty(dynamicFilter))
+	{
+		BulkActionUtil.setSessionManager(currentUserId);
+		ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(dynamicFilter);
+	    contacts_list = new ArrayList<Contact>(contact_filter.queryContacts(BulkActionUtil.ENTITIES_FETCH_LIMIT, null, null));
+
+	    String currentCursor = null;
+	    String previousCursor = null;
+	    int firstTime = 0;
+
+	    do
+	    {
+		count += contacts_list.size();
+
+		// Create new file for first time, then append content to the
+		// existing file.
+		++firstTime;
+		if (firstTime == 1)
+		    path = ContactExportBlobUtil.writeContactCSVToBlobstore(contacts_list, false);
+		else
+		    ContactExportBlobUtil.editExistingBlobFile(path, contacts_list, false);
+
+		previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
+
+		if (!StringUtils.isEmpty(previousCursor))
+		{
+			contacts_list = new ArrayList<Contact>(contact_filter.queryContacts(BulkActionUtil.ENTITIES_FETCH_LIMIT, previousCursor, null));
+
+		    currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor
+			    : null;
+		    continue;
+		}
+
+		break;
+	    } while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
+
+	    // Close channel after contacts completed
+	    ContactExportBlobUtil.editExistingBlobFile(path, null, true);
 	}
+
 
 	// Retrieves partitions of data of a file having given path
 	List<String> fileData = ContactExportBlobUtil.retrieveBlobFileData(path);
