@@ -53,21 +53,21 @@ public class PortletUtil {
 		List<Portlet> allPortlets = new ArrayList<Portlet>();
 		
 		allPortlets.add(new Portlet("Filter Based",PortletType.CONTACTS));
-		allPortlets.add(new Portlet("Emails Opened",PortletType.CONTACTS));
+		//allPortlets.add(new Portlet("Emails Opened",PortletType.CONTACTS));
 		allPortlets.add(new Portlet("Growth Graph",PortletType.CONTACTS));
 		
 		allPortlets.add(new Portlet("Pending Deals",PortletType.DEALS));
-		allPortlets.add(new Portlet("Deals By Milestone",PortletType.DEALS));
-		allPortlets.add(new Portlet("Closures Per Person",PortletType.DEALS));
+		//allPortlets.add(new Portlet("Deals By Milestone",PortletType.DEALS));
+		//allPortlets.add(new Portlet("Closures Per Person",PortletType.DEALS));
 		allPortlets.add(new Portlet("Deals Won",PortletType.DEALS));
 		allPortlets.add(new Portlet("Deals Funnel",PortletType.DEALS));
-		allPortlets.add(new Portlet("Deals Assigned",PortletType.DEALS));
+		//allPortlets.add(new Portlet("Deals Assigned",PortletType.DEALS));
 		
 		allPortlets.add(new Portlet("Agenda",PortletType.TASKSANDEVENTS));
 		allPortlets.add(new Portlet("Today Tasks",PortletType.TASKSANDEVENTS));
 		
-		allPortlets.add(new Portlet("Emails Sent",PortletType.USERACTIVITY));
-		allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
+		//allPortlets.add(new Portlet("Emails Sent",PortletType.USERACTIVITY));
+		//allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
 		
 		allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
 		

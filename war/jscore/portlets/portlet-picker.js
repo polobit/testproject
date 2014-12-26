@@ -102,7 +102,10 @@ function set_p_portlets(base_model){
 				displayTimeAgo(p_el);
 			} });
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Won"){
-		itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletDealsWon?duration='+base_model.get('settings').duration, templateKey : 'portlets-opportunities', individual_tag_name : 'tr' });
+		itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletDealsWon?duration='+base_model.get('settings').duration, templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
+			postRenderCallback : function(p_el){
+				displayTimeAgo(p_el);
+			} });
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Agenda"){
 		itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda', templateKey : 'portlets-events', individual_tag_name : 'tr' });
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Today Tasks"){
