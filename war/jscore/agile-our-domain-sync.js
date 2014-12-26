@@ -304,6 +304,7 @@ function our_domain_sync() {
 
 			;
 			initWebrules();
+			add_referrar_info_as_note();
 
 		}, function(data) {
 			var name = CURRENT_DOMAIN_USER['name'];
@@ -582,4 +583,4 @@ $(function(){
 		console.log();
 	}
 	
-})
+});

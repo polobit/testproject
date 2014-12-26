@@ -78,6 +78,7 @@
 														<option value="phone">Phone Number</option>
 														<option value="lead_score">Score</option>
 														<option value="owner_id">Owner</option>
+														<option value="address">Address</option>
 													</optgroup>
 												
 													 <optgroup label="Custom Fields" id="custom-fields" class="hide">
@@ -112,6 +113,8 @@
 														</option>
 													<option value="EQUALS" class="tag org_tag">is</option>
 													<option value="ANYOF" class="tag">is any of</option>
+													<option value="CONTAINS" class="address">contains word</option>
+													<option value="NOT_CONTAINS" class="address">not contains word</option>
 												</select>
 											</div>
 										</td>
@@ -120,10 +123,10 @@
 												<input type="text" name="temp" style="width:92%"
 													class="LAST NEXT required" placeholder="Number of days"/>
 												<input type="text" name="temp" style="width:92%"
-													class="EQUALS NOTEQUALS ANYOF required"/>
+													class="EQUALS NOTEQUALS ANYOF CONTAINS NOT_CONTAINS required"/>
 												 
 												<input type="text" name="temp" 
-													class="MATCHES NOT_CONTAINS  required"/>
+													class="MATCHES  required"/>
 												<input type="text" name="temp" style="width:92%"
 													class="IS_GREATER_THAN IS_LESS_THAN number required"/> 
 													
@@ -385,7 +388,7 @@
 													class="EQUALS NOTEQUALS ANYOF required"/>
 												 
 												<input type="text" name="temp" 
-													class="MATCHES NOT_CONTAINS  required"/>
+													class="MATCHES  required"/>
 												<input type="text" name="temp" style="width:92%"
 													class="IS_GREATER_THAN IS_LESS_THAN number required"/> 
 													

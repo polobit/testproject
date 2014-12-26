@@ -1,8 +1,14 @@
 package com.agilecrm.activities.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.Event;
@@ -369,13 +375,6 @@ public class EventUtil
 	domain_events = dao.listByProperty("start", starttime);
 	System.out.println(domain_events.size() + " domainevents size in getlatesteventswithSameStarttime");
 	System.out.println(starttime + " StartTime in getLatestWithStartTime");
-	if (domain_events != null && domain_events.size() > 0)
-	{
-	    for (Event event : domain_events)
-	    {
-		event.date = getHumanTimeFromEppoch(event.start);
-	    }
-	}
 	return domain_events;
 
     }
@@ -396,11 +395,18 @@ public class EventUtil
      * @param epoch
      * @return
      */
-    public static String getHumanTimeFromEppoch(Long epoch)
+    public static String getHumanTimeFromEppoch(Long epoch, String timezone, String format)
     {
-	String date = new java.text.SimpleDateFormat("MMMM d yyyy, h:mm a (z)")
-	        .format(new java.util.Date(epoch * 1000));
+	if (StringUtils.isEmpty(format))
+	    format = "h:mm a (z)";
+	Calendar cal = Calendar.getInstance();
+	cal.setTimeInMillis(epoch * 1000);
 
-	return date;
+	TimeZone tz = TimeZone.getTimeZone(timezone);
+	DateFormat dateFormat = new SimpleDateFormat(format);
+	dateFormat.setTimeZone(tz);
+	cal.setTimeZone(tz);
+	return dateFormat.format(cal.getTime());
     }
+
 }

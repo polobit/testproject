@@ -10,11 +10,10 @@
 							<a data-toggle="modal" id="workflow-designer-help" class="right" style="font-size:10px;margin-top:-20px;cursor:pointer; clear:both;">Need help. Watch our tutorial.</a>
                             <input name="workflow-name" type="text" id="workflow-name" class="span3 required" placeholder="Name of campaign" />
                             <span id="workflow-msg" style="margin-left: 130px;"></span>
-							<a href="#workflows" class="btn right workflow-done" style="position:relative">Done</a>
 							{{#if is_new}}
 							<button class="btn btn-primary right" id="save-workflow-top" style="position:relative; margin-right:5px">Save Campaign</button>
 							{{else}}
-							<div class="btn-group right" style="position:relative; margin-right:5px">
+							<div class="btn-group right" style="position:relative;">
                             	<a href="#" class="btn" id="save-workflow-top"><i class="icon-plus-sign"></i> Save Campaign</a>
             					<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 								<ul class="dropdown-menu pull-right">
@@ -76,7 +75,6 @@
 							</ul>
                          </div>
                     {{/if}}
-                    <a href="#workflows" class="btn workflow-done">Done</a>
                     <div style="display:inline-block" class="save-workflow-img"></div>
                     <br />
                 </fieldset>
