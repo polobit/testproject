@@ -263,12 +263,12 @@
 						{{#calls.done_count}}
 						<tr>
 							<td style="background-color:lightgray;width:30%;border-bottom-style:solid;border-bottom-width:1px !important;border-bottom-color:grey;vertical-align:top;">
-								<p style="margin:0px;font-weight:bold;">Done</p><span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{calls.done_count}}</span><p>Total duration {{calls.done_duration}}<br/>(Outgoing - {{calls.out_count}}, Incoming - {{calls.in_count}})</p>
+								<p style="margin:0px;font-weight:bold;">Done</p><span style="margin:5px 20px;font-size:3em;vertical-align:middle;">{{calls.done_count}}</span><p>{{#calls.done_duration}}Total duration {{calls.done_duration}}<br/>{{/calls.done_duration}}(Outgoing - {{calls.out_count}}, Incoming - {{calls.in_count}})</p>
 							</td>
 							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
 								<ul>
 									{{#calls.done_calls}}
-										<li>{{#label}}To <a href="https://{{domain}}.agilecrm.com/#contact/{{entity_id}}">{{label}}</a>{{/label}} ({{custom2}} - {{custom4}}) on {{time_string}}</li>
+										<li>{{{custom4}}} on {{time_string}}</li>
 									{{/calls.done_calls}}
 								</ul>
 							</td>
@@ -282,7 +282,7 @@
 							<td style="border-bottom-width:1px !important;border-bottom:darkgray;border-bottom-style:solid;color:#777;">
 								<ul>
 									{{#calls.no_ans_calls}}
-										<li>{{#label}}To <a href="https://{{domain}}.agilecrm.com/#contact/{{entity_id}}">{{label}}</a>{{/label}} ({{custom2}}) on {{time_string}}</li>
+										<li>{{{custom4}}} on {{time_string}}</li>
 									{{/calls.no_ans_calls}}
 								</ul>
 							</td>
@@ -296,7 +296,7 @@
 							<td style="color:#777;">
 								<ul>
 									{{#calls.failed_calls}}
-										<li>{{#label}}To <a href="https://{{domain}}.agilecrm.com/#contact/{{entity_id}}">{{label}}</a>{{/label}} ({{custom2}}) on {{time_string}}</li>
+										<li>{{{custom4}}} on {{time_string}}</li>
 									{{/calls.failed_calls}}
 								</ul>
 							</td>

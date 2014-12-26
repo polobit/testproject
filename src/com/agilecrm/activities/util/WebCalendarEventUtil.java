@@ -765,7 +765,7 @@ public class WebCalendarEventUtil
 	    saveMe.save();
 
 	    // Check if the email exists with the current email address
-	    boolean isDuplicate = ContactUtil.isExists(contact.getContactFieldValue("EMAIL"));
+	    boolean isDuplicate = ContactUtil.isExists(contact.getContactFieldValue("EMAIL").toLowerCase());
 	    try
 	    {
 		// if it is not exists

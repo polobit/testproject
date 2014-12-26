@@ -129,9 +129,10 @@ ObjectMapper mapper = new ObjectMapper();
 					style="display: table;display:none">
 					<div class="numberlt" id="two">2</div>
 					<div class="event-title" style="margin-bottom:7px;">
-						Select Date and Time <span class="timezone"> <span
+						<span class="pull-left">Select Date and Time</span> <span class="timezone"> <span
 							class="timezone1">Timezone </span>
 						</span>
+						<div class="clearfix"></div>
 					</div>
 					<div class="col-md-4 col-sm-12 col-xs-12">
 						<div id="datepick" style="height:215px;"></div>
