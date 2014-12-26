@@ -40,6 +40,10 @@ $(function() {
 	 */
 	$('#activityModal').on('hidden', function(e) {
 
+		if ($(this).hasClass('in'))
+		{
+			return;
+		}
 		// Remove appended contacts from related-to
 		$("#taskForm").find("li").remove();
 

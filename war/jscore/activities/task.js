@@ -125,6 +125,11 @@ $(function() {
 	
 	$('#updateTaskModal').on('hidden', function() {
 
+		if ($(this).hasClass('in'))
+		{
+			return;
+		}
+		
 		$("#updateTaskForm").find("li").remove();
 		
 		resetForm($("#updateTaskForm"));
@@ -298,8 +303,7 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 
 			var task = data.toJSON();
 			
-			var due_task_count=getDueTasksCount();
-			$('#due_tasks_count').html(due_task_count);
+			
 			
 			if (Current_Route == 'calendar') {
 				if (isUpdate)

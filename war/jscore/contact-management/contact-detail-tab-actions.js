@@ -6,7 +6,10 @@ $(function(){
 		var id = $(this).attr('data');
 		var value = tasksView.collection.get(id).toJSON();
 		deserializeForm(value, $("#updateTaskForm"));
+		
     	$("#updateTaskModal").modal('show');
+    	
+    	$('.update-task-timepicker').val(fillTimePicker(value.due));
 		// Fills owner select element
 		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data){
 			$("#updateTaskForm").find("#owners-list").html(data);
