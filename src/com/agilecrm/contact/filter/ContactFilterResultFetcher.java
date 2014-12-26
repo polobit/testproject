@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -30,6 +31,8 @@ import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.googlecode.objectify.Key;
 
 /**
@@ -98,7 +101,7 @@ public class ContactFilterResultFetcher
 	this.max_fetch_set_size = max_fetch_set_size;
     }
 
-    public ContactFilterResultFetcher(String filter_id, int max_fetch_set_size, String contact_ids,
+    public ContactFilterResultFetcher(String filter_id, String dynamic_filter, int max_fetch_set_size, String contact_ids,
 	    Long currentDomainUserId)
     {
 	this.max_fetch_set_size = max_fetch_set_size;
@@ -115,6 +118,20 @@ public class ContactFilterResultFetcher
 	{
 	    if (filter_id != null)
 		this.systemFilter = getSystemFilter(filter_id);
+	}
+	try
+	{
+	    if(StringUtils.isNotEmpty(dynamic_filter)) {
+	    	Gson gson = new Gson();
+	    	ContactFilter contact_filter = gson.fromJson(dynamic_filter, ContactFilter.class);
+	    	this.filter = contact_filter;
+		    if (this.filter != null)
+			modifyFilterCondition();
+	    }
+	}
+	catch (JsonSyntaxException e)
+	{
+	    System.out.println("Exception while parsing dynamic filters for bulk operations : "+e);
 	}
 
 	BulkActionUtil.setSessionManager(domainUserId);

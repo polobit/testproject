@@ -72,10 +72,10 @@ public class BulkOperationsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void deleteContacts(@FormParam("ids") String model_ids, @FormParam("filter") String filter,
-	    @PathParam("current_user") Long current_user_id) throws JSONException
+	    @PathParam("current_user") Long current_user_id, @FormParam("dynamic_filter") String dynamicFilter) throws JSONException
     {
 	System.out.println(model_ids + " model ids " + filter + " filter " + current_user_id + " current user");
-	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200, model_ids, current_user_id);
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, model_ids, current_user_id);
 
 	while (fetcher.hasNextSet())
 	{
@@ -126,11 +126,11 @@ public class BulkOperationsAPI
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void changeOwnerToContacts(@FormParam("contact_ids") String contact_ids,
 	    @PathParam("new_owner") String new_owner, @FormParam("filter") String filter,
-	    @PathParam("current_user") Long current_user) throws JSONException
+	    @PathParam("current_user") Long current_user, @FormParam("dynamic_filter") String dynamicFilter) throws JSONException
     {
 	System.out.println(contact_ids + " model ids " + filter + " filter " + new_owner + " new_owner");
 
-	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200, contact_ids, current_user);
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids, current_user);
 
 	while (fetcher.hasNextSet())
 	{
@@ -182,11 +182,11 @@ public class BulkOperationsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public void subscribeContactsBulk(@FormParam("contact_ids") String contact_ids,
 	    @PathParam("workflow-id") Long workflowId, @FormParam("filter") String filter,
-	    @PathParam("current_user_id") Long current_user_id) throws JSONException
+	    @PathParam("current_user_id") Long current_user_id, @FormParam("dynamic_filter") String dynamicFilter) throws JSONException
     {
 	System.out.println(contact_ids + " model ids " + filter + " filter " + workflowId + " workflow id");
 
-	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200, contact_ids, current_user_id);
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids, current_user_id);
 
 	while (fetcher.hasNextSet())
 	{
@@ -240,7 +240,7 @@ public class BulkOperationsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void addTagsToContacts(@FormParam("contact_ids") String contact_ids, @FormParam("data") String tagsString,
-	    @FormParam("filter") String filter, @PathParam("current_user") Long current_user) throws JSONException
+	    @FormParam("filter") String filter, @PathParam("current_user") Long current_user, @FormParam("dynamic_filter") String dynamicFilter) throws JSONException
     {
 	System.out.println(filter);
 	System.out.println("current user : " + current_user);
@@ -268,7 +268,7 @@ public class BulkOperationsAPI
 	if (tagsArray == null)
 	    return;
 
-	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200, contact_ids, current_user);
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids, current_user);
 
 	while (fetcher.hasNextSet())
 	{
@@ -293,7 +293,7 @@ public class BulkOperationsAPI
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void removeTagsFromContacts(@FormParam("contact_ids") String contact_ids,
 	    @FormParam("data") String tagsString, @FormParam("filter") String filter,
-	    @PathParam("current_user") Long current_user) throws JSONException
+	    @PathParam("current_user") Long current_user, @FormParam("dynamic_filter") String dynamicFilter) throws JSONException
     {
 	System.out.println(filter);
 	System.out.println("current user : " + current_user);
@@ -320,7 +320,7 @@ public class BulkOperationsAPI
 	if (tagsArray == null)
 	    return;
 
-	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200, contact_ids, current_user);
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids, current_user);
 
 	while (fetcher.hasNextSet())
 	{
@@ -525,7 +525,7 @@ public class BulkOperationsAPI
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void sendEmail(@PathParam("current_user_id") Long currentUserId,
 	    @FormParam("contact_ids") String contact_ids, @FormParam("filter") String filter,
-	    @FormParam("data") String data) throws JSONException
+	    @FormParam("dynamic_filter") String dynamicFilter, @FormParam("data") String data) throws JSONException
     {
 
 	int count = 0;
@@ -534,7 +534,7 @@ public class BulkOperationsAPI
 	// System.out.println(emailData);
 	// System.out.println("-------------------------------------------------------------------");
 
-	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200, contact_ids, currentUserId);
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids, currentUserId);
 
 	int noEmailsCount = 0;
 
@@ -602,7 +602,7 @@ public class BulkOperationsAPI
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void exportContactsCSV(@PathParam("current_user_id") Long currentUserId,
 	    @FormParam("contact_ids") String contact_ids, @FormParam("filter") String filter,
-	    @FormParam("data") String data) throws JSONException
+	    @FormParam("dynamic_filter") String dynamicFilter, @FormParam("data") String data) throws JSONException
     {
 	int count = 0;
 
