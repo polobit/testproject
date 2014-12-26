@@ -45,7 +45,7 @@ public class Milestone
     /**
      * Milestone Dao
      */
-    private static ObjectifyGenericDao<Milestone> dao = new ObjectifyGenericDao<Milestone>(Milestone.class);
+    public static ObjectifyGenericDao<Milestone> dao = new ObjectifyGenericDao<Milestone>(Milestone.class);
 
     /**
      * Default Milestone

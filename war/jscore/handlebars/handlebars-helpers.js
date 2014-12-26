@@ -3535,6 +3535,18 @@ $(function()
 		return buildFacebookProfileURL(url);
 	});
 	
+	
+	/**
+	 * returns tracks count of opportunity
+	 */
+	Handlebars.registerHelper('getTracksCount', function(options)
+			{
+			if (parseInt(DEAL_TRACKS_COUNT) > 1)
+				return options.fn(this);
+             else
+				return options.inverse(this);
+			});
+	
 });
 
 // helper function return created time for event

@@ -3,6 +3,7 @@
  * 
  * @module Activities
  */
+var DEAL_TRACKS_COUNT;
 var DealDetailsRouter = Backbone.Router.extend({
 
 routes : {
@@ -14,7 +15,11 @@ dealdetails : function(id)
 	
 	this.dealDetailView = new Base_Model_View({ url : '/core/api/opportunity/' + id, template : "deal-detail", postRenderCallback : function(el)
 	{
-		
+		/**
+		 * gets the tracks count when user comes to deals page and stores in global variable
+		 */
+		if(!DEAL_TRACKS_COUNT)
+		DEAL_TRACKS_COUNT=getTracksCount();
 		load_deal_tab(el, "");
 		var deal_collection;
 		if(App_Deals.opportunityCollectionView && App_Deals.opportunityCollectionView.collection)
@@ -304,4 +309,17 @@ function deserialize_deal(value, template)
 
 	}, "DEAL")
 
+}
+
+/**
+ * 
+ * @returns due tasks count upto today
+ */
+function getTracksCount(){
+	var msg = $.ajax({ type : "GET", url :'core/api/milestone/tracks/count', async : false, dataType : 'json' }).responseText;
+
+	if(!isNaN(msg)){
+		return msg;
+	}
+return 0;
 }
