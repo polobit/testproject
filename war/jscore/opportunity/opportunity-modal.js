@@ -630,7 +630,7 @@ if(json.close_date==0)
 							return;
 						var filterJSON = $.parseJSON(readCookie('deal-filters'));
 						console.log(deal.owner.id.toString() != filterJSON.owner_id, deal.owner.id.toString(), filterJSON.owner_id);
-						if(deal.owner.id.toString() != filterJSON.owner_id)
+						if(filterJSON.owner_id.length > 0 && deal.owner.id.toString() != filterJSON.owner_id)
 							return;
 						console.log(filterJSON.archived != 'all' && deal.archived != filterJSON.archived, deal.archived);
 						if(filterJSON.archived){
