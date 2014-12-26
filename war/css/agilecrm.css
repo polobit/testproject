@@ -1910,3 +1910,7 @@ div.lhs-row-filter {
 #lhs-filters-header {
 	word-break:break-all;
 }
+
+.progress_slider_width_bottom {
+	margin-top:24px;
+}
