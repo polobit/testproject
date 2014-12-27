@@ -29,6 +29,7 @@ var deal_details_tab = {
 		load_deal_notes : function()
 		{
 		    var id = App_Deal_Details.dealDetailView.model.id;
+		    if(id){
 		    dealNotesView = new Base_Collection_View({
 	            url: '/core/api/opportunity/' + id + "/notes",
 	            restKey: "note",
@@ -44,6 +45,7 @@ var deal_details_tab = {
 	        });
 		    dealNotesView.collection.fetch();
 	        $('#dealnotes').html(dealNotesView.el);
+		    }
 		},
 		
 		load_deal_activities : function()
