@@ -1392,6 +1392,15 @@ public class ActivityUtil
 	}
     }
 
+    /**
+     * gets list of activities based on entity type and entity id
+     * 
+     * @param entity_type
+     * @param entity_id
+     * @param max
+     * @param cursor
+     * @return
+     */
     public static List<Activity> getActivitiesByEntityId(String entity_type, Long entity_id, Integer max, String cursor)
     {
 	try
