@@ -56,6 +56,7 @@ var deal_details_tab = {
 	            url: '/core/api/opportunity/' + id + "/activities",
 	            templateKey: "deal-detail-activities",
 	            individual_tag_name: 'li',
+	            scroll_symbol:'scroll',
 	            sortKey:"time",
 	            descending: true,
 	            cursor : true,

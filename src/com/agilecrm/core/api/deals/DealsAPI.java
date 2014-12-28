@@ -638,7 +638,6 @@ public class DealsAPI
 	    @QueryParam("page_size") String count) throws JSONException
     {
 
-	return ActivityUtil.getActivitiesByFilter(null, "DEAL", null, dealid, null, null, Integer.parseInt(count),
-	        cursor);
+	return ActivityUtil.getActivitiesByEntityId("DEAL", dealid, Integer.parseInt(count), cursor);
     }
 }

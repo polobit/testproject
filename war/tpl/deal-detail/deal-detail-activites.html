@@ -14,7 +14,9 @@
 
 {{#if this.length}}
 <div class="page-header" style="margin-top: 0px !important;border-bottom: 0px;"></div>
+<section class="scroll">
 	<ul id="deal-detail-activities-model-list" class="ativity-block-ul" style="margin:0px;"></ul>
+</section>
 {{/if}}
 </script>
 
@@ -85,7 +87,7 @@ Modified deal
 	 	<div class="clear">
 		
 		<small class="edit-hover" style="margin-right:10px"> 
-			<time  datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "dd mmm yyyy" time}}</time>
+			<time  datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999" title="{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}">{{epochToHumanDate "dd mmm yyyy" time}}</time>
 		</small>
 <span class="actions pull-right">
 {{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}
