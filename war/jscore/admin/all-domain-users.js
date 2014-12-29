@@ -118,14 +118,15 @@ $(".delete_user").die().live('click', function(e){
 			if(parseFloat(amount) <= 0)
 			{
 				
-				document.getElementById("errormsg").innerHTML="Amount should be > 0";
+				$("#errormsg").html("Amount should be > 0").show().delay(1500).hide(1);
+				$("#partialrefund").button('reset');
 				return;
 			}
 			
 			if(parseFloat(amount)>parseFloat(totalamount))
 			{
-				document.getElementById("errormsg").innerHTML="Amount Should not exceed "+totalamount;
-				
+				$("#errormsg").html("Amount Should not exceed "+totalamount).show().delay(1500).hide(1);
+				$("#partialrefund").button('reset');
 				return;
 			}
 			

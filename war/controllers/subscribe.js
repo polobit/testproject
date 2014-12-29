@@ -130,9 +130,10 @@ var SubscribeRouter = Backbone.Router.extend({
 			obj = {"invoice" : invoicedata,	"company" : companydata}
 			console.log("xxxxxxxxxxxxxxx");
 			console.log(obj);
-			
-			$('#content').html(getTemplate('invoice-detail',obj));
-			
+			head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
+			{
+				$('#content').html(getTemplate('invoice-detail',obj));
+			});
 		}
 		 	
 	},	

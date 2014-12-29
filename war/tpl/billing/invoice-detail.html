@@ -20,8 +20,8 @@
                     <tbody>
 						{{#if_not_equals company.company_name "My company"}}<tr>
                             <td class="pull-right"><strong>Company</strong></td>
-                            <td>{{company.company_name}}</td>
-                        {{/if_not_equals}}</tr>
+                            <td>{{company.company_name}}</td></tr>
+                        {{/if_not_equals}}
                         <tr>
                             <td class="pull-right"><strong>Date</strong></td>
                             <td>{{epochToHumanDate "mm-dd-yy" invoice.date}}</td>
