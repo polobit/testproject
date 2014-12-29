@@ -26,7 +26,7 @@
 {{else}}
 <span class="span2" style="text-transform: capitalize;">{{displayTaskStatus status}}</span>
 {{/if_equals}}
- <span class="span3">Due: {{epochToHumanDate "dd mmm yyyy" due}}</span>
+ <span class="span3" style="margin-left: 24px;">Due: {{epochToHumanDate "dd mmm yyyy" due}}</span>
 </div>
 
 <div class="pull-right">
@@ -222,38 +222,38 @@
      {{/if_equals}}
 
  {{#if_equals "TASK_ADD" activity_type}}
-	<div style="background:none;border:none;margin-top: 8px;text-transform: capitalize;">
-         Task Created for user {{custom1}}
+	<div style="background:none;border:none;margin-top: 8px;">
+         Task created for user {{ucfirst custom1}}
 	</div>	
      {{/if_equals}}
 
  {{#if_equals "TASK_PROGRESS_CHANGE" activity_type}}
-	<div style="background:none;border:none;margin-top: 8px;text-transform: capitalize;">
+	<div style="background:none;border:none;margin-top: 8px;">
          Task progress changed from {{custom2}}% to {{custom1}}%
 	</div>	
      {{/if_equals}}
 
  {{#if_equals "TASK_OWNER_CHANGE" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;">
-      Task  Owner changed to {{custom1}}
+      Task  owner changed to {{custom1}}
 	</div>	
      {{/if_equals}}
 
  {{#if_equals "TASK_STATUS_CHANGE" activity_type}}
-	<div style="background:none;border:none;margin-top: 8px;text-transform: capitalize;">
+	<div style="background:none;border:none;margin-top: 8px;">
         Status changed from {{displayTaskStatus custom2}} to {{displayTaskStatus custom1}}
 	</div>	
      {{/if_equals}}
 
 
  {{#if_equals "TASK_COMPLETED" activity_type}}
-	<div style="background:none;border:none;margin-top: 8px;text-transform: capitalize;">
-        Task Status Changed to Completed
+	<div style="background:none;border:none;margin-top: 8px;">
+        Task status changed to completed
 	</div>	
      {{/if_equals}}
 
  {{#if_equals "TASK_DELETE" activity_type}}
-	<div style="background:none;border:none;margin-top: 8px;text-transform: capitalize;">
+	<div style="background:none;border:none;margin-top: 8px;">
         Task is deleted
 	</div>	
      {{/if_equals}}
@@ -261,7 +261,7 @@
 
  {{#if_equals "TASK_RELATED_CONTACTS" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;">
-    {{#if related_contact_ids}}New Related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} attached to the task
+    {{#if related_contact_ids}}New related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} attached to the task
 	</div>	
      {{/if_equals}}
 

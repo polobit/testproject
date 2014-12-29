@@ -242,28 +242,31 @@ function highlight_task()
 function save_task(formId, modalId, isUpdate, saveBtn)
 {
 
-				// Returns, if the save button has disabled attribute
-				if ($(saveBtn).attr('disabled'))
-								return;
 
-				// Disables save button to prevent multiple click event issues
-				disable_save_button($(saveBtn));// $(saveBtn).attr('disabled', 'disabled');
+	// Returns, if the save button has disabled attribute
+	if ($(saveBtn).attr('disabled'))
+		return;
 
-				if (!isValidForm('#' + formId))
-				{
+	// Disables save button to prevent multiple click event issues
+	disable_save_button($(saveBtn));// $(saveBtn).attr('disabled', 'disabled');
 
-								// Removes disabled attribute of save button
-								enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
-								return false;
-				}
+	if (!isValidForm('#' + formId))
+	{
 
-				// Show loading symbol until model get saved
-				// $('#' + modalId).find('span.save-status').html(LOADING_HTML);
+		// Removes disabled attribute of save button
+		enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
+		return false;
+	}
 
-				var json = serializeForm(formId);
+	// Show loading symbol until model get saved
+	// $('#' + modalId).find('span.save-status').html(LOADING_HTML);
 
-				if (!isUpdate)
-								json.due = new Date(json.due).getTime();
+	var json = serializeForm(formId);
+
+	if (!isUpdate)
+		json.due = new Date(json.due).getTime();
+	var startarray = (json.task_ending_time).split(":");
+	json.due = new Date((json.due) * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
 
 				var newTask = new Backbone.Model();
 				newTask.url = 'core/api/tasks';
@@ -389,6 +392,7 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 																																App_Calendar.tasksListView.collection.add(data.toJSON());
 																																App_Calendar.tasksListView.render(true);
 																												}
+																												taskDetailView = data;
 																												$("#content").html(getTemplate("task-detail", data.toJSON()));
 																												task_details_tab.loadActivitiesView();
 
