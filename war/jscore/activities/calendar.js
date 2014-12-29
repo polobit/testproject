@@ -275,7 +275,9 @@ function showEventFilters(){
 		 if(users){
 			 $.each(users,function(i,user){
 				 if(CURRENT_DOMAIN_USER.id == user.domain_user_id)
-					 html = '<option value='+user.id+'>Me</option>';
+					 html += '<option value='+user.id+'>Me</option>';
+				 else
+					 html += '<option value='+user.id+'>'+user.domainUser.name+'</option>';
 			 });
 			 html += '<option value="">Any</option>';
 		 }
