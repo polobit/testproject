@@ -209,6 +209,8 @@ public class OpportunityUtil
 	if (ownerId != null)
 	    conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
 
+	conditionsMap.put("archived", false);
+
 	return dao.listByProperty(conditionsMap);
     }
 
@@ -379,14 +381,15 @@ public class OpportunityUtil
     {
 	return dao.ofy().query(Opportunity.class)
 		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-		.order("-created_time").limit(10).list();
+		.filter("archived", false).order("-created_time").limit(10).list();
     }
 
     public static List<Opportunity> getUpcomingDealsRelatedToCurrentUser(String pageSize)
     {
+	System.out.println("deals--------------------");
 	return dao.ofy().query(Opportunity.class)
 		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-		.order("close_date").limit(Integer.parseInt(pageSize)).list();
+		.filter("archived", false).order("close_date").limit(Integer.parseInt(pageSize)).list();
     }
 
     /**
