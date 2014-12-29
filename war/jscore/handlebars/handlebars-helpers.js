@@ -3442,15 +3442,15 @@ $(function()
 					var seconds = time - minutes * 60;
 					var friendlyTime = "";
 					if(hours == 1)
-						friendlyTime = hours+ " h ";
+						friendlyTime = hours+ "h ";
 					if(hours > 1)
-						friendlyTime = hours+ " h ";
+						friendlyTime = hours+ "h ";
 					if(minutes > 0)
-						friendlyTime += minutes + " m ";
+						friendlyTime += minutes + "m ";
 					if(seconds > 0)
-						friendlyTime += seconds + " s ";
+						friendlyTime += seconds + "s ";
 					if(friendlyTime != "")
-						return friendlyTime;
+						return ' - '+friendlyTime;
 					return friendlyTime;
 				});
 	// To pick randomly selected avatar url

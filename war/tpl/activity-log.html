@@ -1077,12 +1077,12 @@ Deleted Documents {{custom2}}
 
 {{#if_equals "incoming" custom2}}
 Call from {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
-<i class="icon-phone"></i>{{callActivityFriendlyStatus custom3 custom2}} - {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} ({{custom1}})
+<i class="icon-phone"></i>{{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
 {{/if_equals}}
 
 {{#if_equals "outgoing" custom2}}	
 Called {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
-<i class="icon-phone"></i>{{callActivityFriendlyStatus custom3 custom2}} - {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} ({{custom1}})
+<i class="icon-phone"></i>{{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
 {{/if_equals}}
 
 	</div>
