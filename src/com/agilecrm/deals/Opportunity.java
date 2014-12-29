@@ -157,7 +157,7 @@ public class Opportunity extends Cursor
      * Notes id's of related notes for a deal.
      */
     @NotSaved
-    private List<String> notes = new ArrayList<String>();
+    public List<String> notes = new ArrayList<String>();
 
     /**
      * Related notes objects fetched using notes id's.
@@ -169,6 +169,9 @@ public class Opportunity extends Cursor
      */
     @NotSaved
     public String note_description = null;
+
+    @NotSaved
+    public String note_subject = null;
 
     /**
      * Related notes objects fetched using notes id's.
@@ -479,7 +482,14 @@ public class Opportunity extends Cursor
 	    if (!this.note_description.trim().isEmpty())
 	    {
 		// Create note
-		Note note = new Note(null, this.note_description);
+		Note note = null;
+		// Create note
+		if (this.note_subject != null)
+		    note = new Note(this.note_subject, this.note_description);
+		else
+		    note = new Note(null, this.note_description);
+		// Save note
+		note.save();
 
 		// Save note
 		note.save();
@@ -513,8 +523,8 @@ public class Opportunity extends Cursor
     public String toString()
     {
 	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name
-		+ " description:" + description + " expectedValue: " + expected_value + " pipeline: " + pipeline_id
-		+ " milestone: " + milestone + " probability: " + probability + " Track: " + track + " Owner "
-		+ owner_id;
+	        + " description:" + description + " expectedValue: " + expected_value + " pipeline: " + pipeline_id
+	        + " milestone: " + milestone + " probability: " + probability + " Track: " + track + " Owner "
+	        + owner_id;
     }
 }

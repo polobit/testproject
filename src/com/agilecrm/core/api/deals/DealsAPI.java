@@ -640,4 +640,46 @@ public class DealsAPI
 
 	return ActivityUtil.getActivitiesByEntityId("DEAL", dealid, Integer.parseInt(count), cursor);
     }
+
+    @Path("/deals/notes")
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Opportunity saveDealNote(Note note)
+    {
+	String updatedOpportunityid = null;
+	List<String> deal_ids = note.deal_ids;
+	if (deal_ids != null && deal_ids.size() > 0)
+	{
+	    updatedOpportunityid = deal_ids.get(0);
+	    for (int i = 0; i <= deal_ids.size() - 1; i++)
+	    {
+		Opportunity opp = OpportunityUtil.getOpportunity(Long.parseLong(deal_ids.get(i)));
+		opp.note_description = note.description;
+		opp.note_subject = note.subject;
+		opp.save();
+	    }
+	}
+	if (updatedOpportunityid != null)
+	    return OpportunityUtil.getOpportunity(Long.parseLong(updatedOpportunityid));
+	return null;
+    }
+
+    @Path("/deals/notes")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Opportunity saveDealUpdateNote(Note note)
+    {
+	String updatedOpportunityid = null;
+	List<String> deal_ids = note.deal_ids;
+	if (deal_ids != null && deal_ids.size() > 0)
+	{
+	    updatedOpportunityid = deal_ids.get(0);
+	}
+	note.save();
+	if (updatedOpportunityid != null)
+	    return OpportunityUtil.getOpportunity(Long.parseLong(updatedOpportunityid));
+	return null;
+    }
 }

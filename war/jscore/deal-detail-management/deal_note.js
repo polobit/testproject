@@ -1,12 +1,13 @@
 $(".deal-edit-note").die().live('click', function(e)
 	{
+	
 		e.preventDefault();
-		console.log($(this).attr('data'));
+		if(App_Deal_Details.dealDetailView.model.get('archived') == true)
+		return;	
 		var note = dealNotesView.collection.get($(this).attr('data'));
 		console.log(note);
 		deserializeForm(note.toJSON(), $("#dealnoteUpdateForm",  $('#dealnoteupdatemodal')));
 		fill_relation_deal($('#dealnoteUpdateForm'));
-		agile_type_ahead("notes_related_to", $("#dealnoteUpdateForm"), deals_typeahead, false, "", "", "core/api/search/deals", false, true);
 		$('#dealnoteupdatemodal').modal('show');
 	});
 
@@ -38,7 +39,7 @@ $(".deal-edit-note").die().live('click', function(e)
 			
 
 
-			saveDealNote($("#dealnoteUpdateForm"), $("#dealnoteupdatemodal"), this, json);
+			saveDealUpdateNote($("#dealnoteUpdateForm"), $("#dealnoteupdatemodal"), this, json);
 		});
 		/**
 		 * Saves note model using "Bcakbone.Model" object, and adds saved data to
@@ -46,6 +47,7 @@ $(".deal-edit-note").die().live('click', function(e)
 		 */
 		$('#dealnote_validate').live('click', function(e)
 		{
+			
 			e.preventDefault();
 
 			// Returns, if the save button has disabled attribute
@@ -74,7 +76,8 @@ $(".deal-edit-note").die().live('click', function(e)
 		 */
 		$('#dealshow-note').live('click', function(e)
 		{
-			
+			if(App_Deal_Details.dealDetailView.model.get('archived') == true)
+				return;	
 			e.preventDefault();
 			$("#deal-note-modal").modal('show');
 
@@ -113,7 +116,7 @@ $(".deal-edit-note").die().live('click', function(e)
 
 			console.log(note);
 			var noteModel = new Backbone.Model();
-			noteModel.url = 'core/api/notes';
+			noteModel.url = 'core/api/opportunity/deals/notes';
 			noteModel.save(note, { success : function(data)
 			{
 
@@ -129,24 +132,48 @@ $(".deal-edit-note").die().live('click', function(e)
 				//modal.find('span.save-status img').remove();
 				modal.modal('hide');
 
-				var note = data.toJSON();
 
-				console.log(note);
-				
-				if (dealNotesView && dealNotesView.collection)
-				{
-					if(dealNotesView.collection.get(note.id))
-					{
-						dealNotesView.collection.get(note.id).set(new BaseModel(note));
-					}
-					else
-					{
-						dealNotesView.collection.add(new BaseModel(note), { sort : false });
-						dealNotesView.collection.sort();
-					}
-				}
+				App_Deal_Details.dealDetailView.model = data;
+				App_Deal_Details.dealDetailView.render(true)
+				Backbone.history.navigate("deal/"+data.toJSON().id , {
+		            trigger: true
+		        });
 				
 			
 				
 			} });
 		}
+		
+		function saveDealUpdateNote(form, modal, element, note)
+		{
+
+			console.log(note);
+			var noteModel = new Backbone.Model();
+			noteModel.url = 'core/api/opportunity/deals/notes';
+			noteModel.save(note, { success : function(data)
+			{
+
+				// Removes disabled attribute of save button
+				enable_save_button($(element));//$(element).removeAttr('disabled');
+
+				form.each(function()
+				{
+					this.reset();
+				});
+
+				// Removes loading symbol and hides the modal
+				//modal.find('span.save-status img').remove();
+				modal.modal('hide');
+
+
+				App_Deal_Details.dealDetailView.model = data;
+				App_Deal_Details.dealDetailView.render(true)
+				Backbone.history.navigate("deal/"+data.toJSON().id , {
+		            trigger: true
+		        });
+				
+			
+				
+			} });
+		}
+

@@ -13,7 +13,7 @@
 					<div>
 						<div class="span10 ">
 
-						<div class="contact-profile-name mg-r-md" style="margin-bottom:-10px;">{{#if name}}{{name}}{{/if}}
+						<div class="contact-profile-name mg-r-md" style="margin-bottom:-10px;">{{#if name}}{{name}}{{/if}}{{#if this.archived}}(Archived){{/if}}
 						
 						
 						{{#if_equals milestone "Won"}} <span style="position: relative;top: -2px;cursor: default;" class="deal-task-type label label-success">{{milestone}}</span>
@@ -42,12 +42,14 @@
 
 
 </div>
-                        
+ {{#if this.archived}}<div class="btn-group right"><button class="deal-restore-detail-view btn">Restore</button>{{else}}                       
 <div class="span2">
 <div style="width:100%;position:relative;">
 <div class="contact-navigation-view"><span class="navigation  contact-switching"></span></div></div>
 <div class="clearfix"></div>
-							<div class="btn-group right">
+							
+
+<div class="btn-group right">
 								
 								<a href="#" class="deal-add-contact btn" id="deal_details" style="border-radius: 4px 0px 0px 4px!important;margin-left: 6px;" ><i class="icon-edit"></i> Edit</a>
 								<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
@@ -60,6 +62,7 @@
 											class="icon-trash"></i> Delete</a></li>
 								</ul>
 							</div>
+
 						<div style="position:relative;">	
 							<div  class="deal-owner-position deal-owner-block">
 						<div class="change-owner-succes"></div>
@@ -83,6 +86,7 @@
 
 </div><!-- position relative -->
                         </div>
+{{/if}}
 						</div>
 					</div>
 				</div>

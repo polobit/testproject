@@ -28,6 +28,8 @@ dealdetails : function(id)
 		if (deal_collection != null)
 			deal_detail_view_navigation(id, deal_collection, el);
 		
+			
+		
 	} });
 
 	var ele = this.dealDetailView.render(true).el;
@@ -236,6 +238,9 @@ $('.deal-add-contact').live('click', function(e)
 $('.deal-note').live('click', function(e)
 {
 	e.preventDefault();
+	
+	if(App_Deal_Details.dealDetailView.model.get('archived') == true)
+		return;
 	var el = $("#dealnoteForm");
 
 	// Displays contact name, to indicate the note is related to the contact
@@ -310,6 +315,48 @@ function deserialize_deal(value, template)
 	}, "DEAL")
 
 }
+
+
+
+$('.deal-restore-detail-view').live('click', function(e) {
+	e.preventDefault();
+    if(!confirm("Restore Deal?"))
+		return;
+
+   
+	var currentDeal = App_Deal_Details.dealDetailView.model;
+	currentDeal.archived = false;
+    
+    var notes = [];
+	$.each(currentDeal.notes, function(index, note)
+	{
+		notes.push(note.id);
+	});
+	currentDeal.notes = notes;
+    if(currentDeal.note_description)
+		delete currentDeal.note_description;
+
+    if(!currentDeal.close_date || currentDeal.close_date==0)
+    	currentDeal.close_date = null;
+    currentDeal.owner_id = currentDeal.owner.id;
+    var arch_deal = new Backbone.Model();
+	arch_deal.url = '/core/api/opportunity';
+	arch_deal.save(currentDeal, {
+		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
+		success : function(data, response) {
+			// Remove the deal from the collection and remove the UI element.
+			App_Deal_Details.dealDetailView.model = data;
+			App_Deal_Details.dealDetailView.render(true)
+			enableArchivedField();
+			Backbone.history.navigate("deal/"+data.toJSON().id , {
+	            trigger: true
+	        });
+			
+		}
+	});
+});
+
+
 
 /**
  * 
