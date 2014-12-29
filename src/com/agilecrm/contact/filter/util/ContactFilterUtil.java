@@ -21,6 +21,7 @@ import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.datastore.Cursor;
+import com.google.gson.Gson;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -237,5 +238,16 @@ public class ContactFilterUtil
 	}
 
 	return new ArrayList<Key<Contact>>();
+    }
+    
+    public static ContactFilter getFilterFromJSONString(String filter) {
+    	Gson gson = new Gson();
+    	ContactFilter contact_filter = gson.fromJson(filter, ContactFilter.class);
+    	SearchRule rule = new SearchRule();
+	    rule.LHS = "type";
+	    rule.CONDITION = RuleCondition.EQUALS;
+	    rule.RHS = contact_filter.contact_type.toString();
+	    contact_filter.rules.add(rule);
+	    return contact_filter;
     }
 }

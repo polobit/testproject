@@ -376,38 +376,7 @@ public class CSVUtil
 
 				if (customDate != null && !customDate.isEmpty())
 				{
-				    // date is dd/MM/yyyy format
-				    String[] data = customDate.split("-");
-				    if (data.length == 3)
-				    {
-					try
-					{
-					    Calendar c = Calendar.getInstance();
-					    int year = Integer.parseInt(data[2].trim());
-					    int month = Integer.parseInt(data[1].trim());
-					    int day = Integer.parseInt(data[0].trim());
-					    c.set(year, month - 1, day);
-					    Date date = c.getTime();
-					    if (month > 11)
-					    {
-						field.value = null;
-					    }
-					    else
-					    {
-						field.value = "" + date.getTime() / 1000;
-					    }
-					}
-					catch (NumberFormatException e)
-					{
-					    e.printStackTrace();
-					}
-
-				    }
-				    else
-				    {
-					field.value = null;
-				    }
-
+				    field.value = getFormattedDate(customDate);
 				}
 
 			    }
@@ -732,39 +701,7 @@ public class CSVUtil
 
 			    if (customDate != null && !customDate.isEmpty())
 			    {
-				// date is dd-MM-yyyy format
-				String[] data = customDate.split("-");
-				if (data.length == 3)
-				{
-
-				    try
-				    {
-					Calendar c = Calendar.getInstance();
-					int year = Integer.parseInt(data[2].trim());
-					int month = Integer.parseInt(data[1].trim());
-					int day = Integer.parseInt(data[0].trim());
-					c.set(year, month - 1, day);
-					Date date = c.getTime();
-					if (month > 11)
-					{
-					    field.value = null;
-					}
-					else
-					{
-					    field.value = "" + date.getTime() / 1000;
-					}
-				    }
-				    catch (NumberFormatException e)
-				    {
-					e.printStackTrace();
-				    }
-
-				}
-				else
-				{
-				    field.value = null;
-				}
-
+				field.value = getFormattedDate(customDate);
 			    }
 
 			}
@@ -1554,5 +1491,44 @@ public class CSVUtil
 	    value = value.substring(0, MAX_ALLOWED_FIELD_VALUE_SIZE);
 
 	return value;
+    }
+
+    private String getFormattedDate(String dateString)
+    {
+	String formatedDate = null;
+	// date is MM-dd-yyyy or MM/dd/yyyy format
+	String[] data = dateString.split("[-/]");
+
+	if (data.length == 3)
+	{
+
+	    try
+	    {
+		Calendar c = Calendar.getInstance();
+		int year = Integer.parseInt(data[2].trim());
+		int day = Integer.parseInt(data[1].trim());
+		int month = Integer.parseInt(data[0].trim());
+		c.set(year, month - 1, day);
+		Date date = c.getTime();
+		if (month > 11)
+		{
+		    formatedDate = null;
+		}
+		else
+		{
+		    formatedDate = "" + date.getTime() / 1000;
+		}
+		if (year < 1000)
+		    return formatedDate = null;
+	    }
+	    catch (NumberFormatException e)
+	    {
+		System.out.println("Invalid date.. year must be 4 digit");
+		e.printStackTrace();
+	    }
+
+	}
+
+	return formatedDate;
     }
 }

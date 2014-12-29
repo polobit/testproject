@@ -158,13 +158,7 @@ public class ContactFilterAPI
     public List<Contact> filterContacts(@QueryParam("data") String data, @QueryParam("page_size") String count,
     	    @QueryParam("cursor") String cursor, @QueryParam("global_sort_key") String sortKey)
     {
-    	Gson gson = new Gson();
-    	ContactFilter contact_filter = gson.fromJson(data, ContactFilter.class);
-    	SearchRule rule = new SearchRule();
-	    rule.LHS = "type";
-	    rule.CONDITION = RuleCondition.EQUALS;
-	    rule.RHS = contact_filter.contact_type.toString();
-	    contact_filter.rules.add(rule);
+    	ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(data);
     	/*if(isDatastoreQuery(contact_filter.rules)) {
     		return ContactUtil.getContactsForTagRules(contact_filter.rules, Integer.parseInt(count), cursor, sortKey);
     	}*/
