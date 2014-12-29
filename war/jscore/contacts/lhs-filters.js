@@ -81,10 +81,12 @@ function submitLhsFilter() {
 	var contact_type = formData.contact_type;
 	if(contact_type == 'COMPANY') {
 		eraseData('dynamic_compnay_filter');
-		storeData('dynamic_company_filter', JSON.stringify(formData));
+		if(formData != null && formData.rules.length >0)
+			storeData('dynamic_company_filter', JSON.stringify(formData));
 	} else {
 		eraseData('dynamic_contact_filter');
-		storeData('dynamic_contact_filter', JSON.stringify(formData));
+		if(formData != null && formData.rules.length >0)
+			storeData('dynamic_contact_filter', JSON.stringify(formData));
 	}
 	
 	CONTACTS_HARD_RELOAD=true;
