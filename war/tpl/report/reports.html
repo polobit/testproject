@@ -224,7 +224,11 @@
 		
         <!-- Add button -->
         <div style="/*margin: 40px auto;	width: 50%;*/">
-            <a id="campaign_id" class="btn btn-primary" href="#email-reports/{{this.0.id}}">Go</a>
+			{{#if this.0.id}}
+           		<a id="campaign_id" class="btn btn-primary" href="#email-reports/{{this.0.id}}">Go</a>
+			{{else}}
+				<a id="campaign_id" class="btn btn-primary" href="#workflows">Go</a>
+			{{/if}}
         </div>
     </div>
 </div>
