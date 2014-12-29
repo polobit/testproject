@@ -541,6 +541,8 @@ public class ContactEmailUtil
     {
 	EmailPrefs emailPrefs = new EmailPrefs();
 	AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	boolean hasEmailAccountsConfigured = false;
+	boolean hasSharedEmailAccounts = false;
 	try
 	{
 	    DomainUser domainUser = agileUser.getDomainUser();
@@ -553,25 +555,49 @@ public class ContactEmailUtil
 	    Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
 	    SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(agileUser, socialPrefsTypeEnum);
 	    if (gmailPrefs != null)
+	    {
 		emailPrefs.setGmailUserName(gmailPrefs.email);
+		emailPrefs.setHasEmailAccountsConfigured(true);
+	    }
 	    // Get Imap prefs
 	    IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(agileUser);
 	    if (imapPrefs != null)
+	    {
 		emailPrefs.setImapUserName(imapPrefs.user_name);
+		emailPrefs.setHasEmailAccountsConfigured(true);
+	    }
 	    // Get Office365 prefs
 	    OfficeEmailPrefs officePrefs = OfficeEmailPrefsUtil.getOfficePrefs(agileUser);
 	    if (officePrefs != null)
+	    {
 		emailPrefs.setExchangeUserName(officePrefs.user_name);
+		emailPrefs.setHasEmailAccountsConfigured(true);
+	    }
+	    Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
+	    List<String> sharedGmailPrefs = getSharedGmailPrefs(agileUserKey);
+	    emailPrefs.setSharedGmailUserNames(sharedGmailPrefs);
+	    List<String> sharedImapPrefs = getSharedIMAPPrefs(agileUserKey);
+	    emailPrefs.setSharedImapUserNames(sharedImapPrefs);
+	    List<String> sharedOfficePrefs = getSharedToOfficePrefs(agileUserKey);
+	    emailPrefs.setSharedExchangeUserNames(sharedOfficePrefs);
+
+	    if (gmailPrefs != null || imapPrefs != null || officePrefs != null)
+		hasEmailAccountsConfigured = true;
+
+	    if ((sharedGmailPrefs != null && sharedGmailPrefs.size() > 0)
+		    || (sharedImapPrefs != null && sharedImapPrefs.size() > 0)
+		    || (sharedOfficePrefs != null && sharedOfficePrefs.size() > 0))
+		hasSharedEmailAccounts = true;
+
+	    emailPrefs.setHasEmailAccountsConfigured(hasEmailAccountsConfigured);
+	    emailPrefs.setHasSharedEmailAccounts(hasSharedEmailAccounts);
 
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	}
-	Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
-	emailPrefs.setSharedGmailUserNames(getSharedGmailPrefs(agileUserKey));
-	emailPrefs.setSharedImapUserNames(getSharedIMAPPrefs(agileUserKey));
-	emailPrefs.setSharedExchangeUserNames(getSharedToOfficePrefs(agileUserKey));
+
 	return emailPrefs;
     }
 

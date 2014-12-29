@@ -206,9 +206,9 @@ $(function()
 		e.preventDefault();
 		email_server_type = "agilecrm"
 		save_contact_tab_position_in_cookie("mail");
-		var mail_server_url = 'core/api/emails/agile-emails?e=';
-		contact_details_tab.load_mail_accounts();
-		contact_details_tab.load_mail(mail_server_url);
+//		var mail_server_url = 'core/api/emails/agile-emails?e=';
+//		contact_details_tab.load_mail_accounts();
+		contact_details_tab.load_mail();
 	});
 
 	/**
@@ -248,7 +248,8 @@ $(function()
 		$('#email-type-select').html($(this).html());
 		var url = $(this).attr('data-url');
 		email_server_type = $(this).attr('email-server-type');
-		url = url.concat(email_server_type);
+		if(url)
+			url = url.concat(email_server_type);
 		contact_details_tab.load_mail(url);
 	});
 
@@ -459,20 +460,17 @@ $(function()
 				var cc_emails = $parent_element.find('.cc-emails').data('cc');
 				var bcc_emails = $parent_element.find('.bcc-emails').data('bcc');
 
-				var email_sync_configured = contact_details_tab.email_sync_configured;
+				var email_sync_configured = contact_details_tab.configured_sync_email;
+
 				var configured_email;
 
 				if (email_sync_configured)
 				{
-					if (email_sync_configured["type"])
-						configured_email = email_sync_configured["email"];
-					else
-						configured_email = email_sync_configured["user_name"];
+					configured_email = email_sync_configured;
 				}
 
 				if (configured_email && to_emails)
 				{
-
 					// Merge both from and to removing configured email
 					to_emails = get_emails_to_reply(from + ', ' + to_emails, configured_email);
 				}
