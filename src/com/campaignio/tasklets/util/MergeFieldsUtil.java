@@ -66,6 +66,7 @@ public class MergeFieldsUtil
 	private static String getFirstUpperCaseChar(String name)
 	{
 		String firstUpperCaseCharacter = "";
+		name = name.replaceAll("[\\s&&[^\\n]]+", " ");
 		String nameArray[] = name.trim().split(" ");
 		for (String word : nameArray)
 			firstUpperCaseCharacter += Character.toString(word.charAt(0)).toUpperCase() + word.substring(1) + " ";
