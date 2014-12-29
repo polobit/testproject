@@ -107,10 +107,7 @@ function connectedCallNoty(message, type)
 				{ addClass : 'btn btn-primary noty_twilio_dialpad', text : 'Dialpad' }, { addClass : 'btn btn-danger noty_twilio_hangup', text : 'Hangup' }
 		] });
 		
-		// Add dialpad template in twilio content
-		var dialpad = $(getTemplate("twilioio-dialpad"), {});
-		$('.noty_buttons').prepend(dialpad);
-		
+		if(TWILIO_DIRECTION == "outbound-dial") {
 		var responseJson = $.parseJSON(
 		        $.ajax({
 		        	url: "core/api/voicemails",
@@ -119,12 +116,17 @@ function connectedCallNoty(message, type)
 		        }).responseText
 		    );
 		
-		console.log("json resp : ");
-		console.log(responseJson);
-		console.log(JSON.stringify(responseJson));
+//		console.log("json resp : ");
+//		console.log(responseJson);
+//		console.log(JSON.stringify(responseJson));
 		
 		var voicemailHTML = $(getTemplate("twilioio-voicemail",responseJson), {});
 		$('.noty_buttons').prepend(voicemailHTML);
+		}
+		
+		// Add dialpad template in twilio content
+		var dialpad = $(getTemplate("twilioio-dialpad"), {});
+		$('.noty_buttons').prepend(dialpad);
 
 		return;
 	}

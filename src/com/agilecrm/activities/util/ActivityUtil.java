@@ -1403,7 +1403,7 @@ public class ActivityUtil
 			return Call.FAILED;
 		} else if (status.equalsIgnoreCase("no-answer")) {
 			return Call.NO_ANSWER;
-		} else if (status.equalsIgnoreCase("in-progress")) {
+		} else if (status.equalsIgnoreCase("voicemail")) {
 			return Call.VOICEMAIL;
 		} else {
 			return null;

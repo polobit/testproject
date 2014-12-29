@@ -14,6 +14,7 @@ TWILIO_CONTACT_ID = 0;
 TWILIO_CALLTYPE = "";
 TWILIO_DIRECTION = "";
 TWILIO_CALLED_NO = "";
+TWILIO_IS_VOICEMAIL = false;
 
 $(function()
 {
@@ -145,6 +146,7 @@ $(function()
 		e.preventDefault();
 		TWILIO_CALLTYPE = "Outgoing";
 		TWILIO_DIRECTION = "outbound-dial";
+		TWILIO_IS_VOICEMAIL = false;
 		
 //		alert("connecting twilio call");
 		
@@ -707,6 +709,7 @@ function setUpGlobalTwilio()
 				{
 					TWILIO_CALLTYPE = "Incoming";
 					TWILIO_DIRECTION = "inbound";
+					TWILIO_IS_VOICEMAIL = false;
 					TWILIO_CONTACT_ID = 0;
 					console.log("Incoming connection from " + conn.parameters.From);
 
@@ -850,6 +853,7 @@ function closeTwilioNoty()
 
 function showNoteAfterCall(callRespJson,messageObj)
 {
+	if(TWILIO_IS_VOICEMAIL == false){
 	var	el = $("#noteForm");
 //	TWILIO_CONTACT_ID = 0;
 	if(TWILIO_CONTACT_ID) {
@@ -926,7 +930,7 @@ function showNoteAfterCall(callRespJson,messageObj)
 				//add note automatically
 				$.post( "/core/api/widgets/twilio/autosavenote", {
 					subject: noteSub,
-					message: "Call is "+friendlyStatus,
+					message: "Call status "+friendlyStatus,
 					contactid: TWILIO_CONTACT_ID
 					});
 			}
@@ -945,6 +949,7 @@ function showNoteAfterCall(callRespJson,messageObj)
 			duration : callRespJson.duration 
 			});
 		return showNewContactModal(phoneNumber);
+	}
 	}
 	
 }
@@ -997,18 +1002,31 @@ function searchForContact(from) {
 
 function sendVoiceAndEndCall(fileSelected) {
 	console.log("Sending voice mail...");
-//	alert("Voicemail will be sent to user.Current call will be closed.");
-	var messageObj = globalconnection.message;
-	if(twilioVoiceMailRedirect(fileSelected)) {
-		closeTwilioNoty();
-		if(TWILIO_CONTACT_ID) {		
-		//add note automatically
-		$.post( "/core/api/widgets/twilio/autosavenote", {
-			subject: TWILIO_CALLTYPE + " call - Left voicemail",
-			message: "",
-			contactid: TWILIO_CONTACT_ID
-			});
+	if(TWILIO_IS_VOICEMAIL == false) {
+	//	alert("Voicemail will be sent to user.Current call will be closed.");
+		var messageObj = globalconnection.message;
+		if(twilioVoiceMailRedirect(fileSelected)) {
+			closeTwilioNoty();
+			if(TWILIO_CONTACT_ID) {		
+			//add note automatically
+			$.post( "/core/api/widgets/twilio/autosavenote", {
+				subject: TWILIO_CALLTYPE + " call - Left voicemail",
+				message: "",
+				contactid: TWILIO_CONTACT_ID
+				});
+			
+			if(TWILIO_CALLED_NO != "") {
+				$.post( "/core/api/widgets/twilio/savecallactivity",{
+					direction: TWILIO_DIRECTION, 
+					phone: TWILIO_CALLED_NO, 
+					status : "voicemail",
+					duration : 0 
+					});
+			}
+			
+			}
 		}
+		TWILIO_IS_VOICEMAIL = true;
 	}
 }
 
