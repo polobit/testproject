@@ -530,7 +530,7 @@ if(json.close_date==0)
 				
 				
 				/*
-				 * Verifies whether the added task is related to the contact in
+				 * Verifies whether the added deal is related to the contact in
 				 * contact detail view or not
 				 */
 				$.each(deal.contacts, function(index, contact) {
@@ -542,7 +542,12 @@ if(json.close_date==0)
 
 						if (dealsView && dealsView.collection)
 						{
-							if(dealsView.collection.get(deal.id))
+							if(deal.archived == true)
+							{
+								dealsView.collection.remove(deal.id);
+								dealsView.collection.sort();
+							}
+							else if(dealsView.collection.get(deal.id))
 							{
 								dealsView.collection.get(deal.id).set(new BaseModel(deal));
 							}
