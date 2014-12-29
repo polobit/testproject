@@ -76,8 +76,8 @@ $(function()
 		scramble_input_names($(htmlContent));
 
 		// boolean parameter to avoid contacts/not-contacts fields in form
-		chainFilters(htmlContent, function(){
-		}, false);
+		chainFilters(htmlContent,undefined, function(){
+		}, false, true);
 
 //		$(this).hide();
 		// var htmlContent = $(this).closest("tr").clone();
@@ -95,8 +95,8 @@ $(function()
 		scramble_input_names($(htmlContent));
 
 		// boolean parameter to avoid contacts/not-contacts fields in form
-		chainFilters(htmlContent, function(){
-		}, false);
+		chainFilters(htmlContent,undefined, function(){
+		}, false, true);
 
 //		$(this).hide();
 		// var htmlContent = $(this).closest("tr").clone();

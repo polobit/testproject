@@ -314,7 +314,7 @@ function deserializeChainedSelect(form, el, el_self)
 			 * Chains dependencies of input fields with jquery.chained.js based
 			 * on the rule element
 			 */
-			chainFilters(rule_element, el);
+			chainFilters(rule_element);
 
 			$(parent_element).append(rule_element);
 			deserializeChainedElement(data, rule_element);

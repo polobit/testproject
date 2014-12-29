@@ -171,8 +171,10 @@ public class QueryDocumentUtil
 				{
 					if (rhs_new != null)
 					{
-						query = buildNestedCondition("AND", query, lhs + " >= " + rhs);
-						query = buildNestedCondition("AND", query, lhs + " <= " + rhs_new);
+						newQuery = lhs + " >= " + rhs;
+						newQuery = buildNestedCondition("AND", query, lhs + " <= " + rhs_new);
+						newQuery = "("+newQuery+")";
+						query = buildNestedCondition(joinCondition, query, newQuery);
 					}
 				}
 
@@ -193,7 +195,7 @@ public class QueryDocumentUtil
 		return query;
 	}
 
-	public static String createTimeQuery(String query, String lhs, SearchRule.RuleCondition condition, String rhs,
+	/*public static String createTimeQuery(String query, String lhs, SearchRule.RuleCondition condition, String rhs,
 			String rhs_new)
 	{
 		// Formated to build query
@@ -261,7 +263,7 @@ public class QueryDocumentUtil
 
 		return query;
 
-	}
+	}*/
 
 	/**
 	 * Creates query on Date/Time fields. As equals query is not working on date
@@ -282,18 +284,18 @@ public class QueryDocumentUtil
 	 * @param rhs_new
 	 * @return
 	 */
-	public static String createTimeQuery1(String query, String lhs, SearchRule.RuleCondition condition, String rhs,
+	/*public static String createTimeQuery1(String query, String lhs, SearchRule.RuleCondition condition, String rhs,
 			String rhs_new)
 	{
 
 		// Gets date from rhs (selected value)
 		Date startDate = new DateUtil(new Date(Long.parseLong(rhs))).toMidnight().getTime();
 
-		/*
+		
 		 * End date i.e., to the end time of start date, it counts complete one
 		 * day. Querying between start and end epoch times returns date equals
 		 * query query
-		 */
+		 
 		Date endDate = new DateUtil(startDate).addDays(1).toMidnight().getTime();
 
 		// Day start and end epoch times are calculated.
@@ -424,7 +426,7 @@ public class QueryDocumentUtil
 		return query;
 
 	}
-
+*/
 	public static String createTimeQueryEpoch(String query, String lhs, SearchRule.RuleCondition condition, String rhs,
 			String rhs_new, String joinCondition)
 	{
@@ -455,8 +457,9 @@ public class QueryDocumentUtil
 			// support old data
 			epochQuery = lhs + "_epoch" + ">=" + dayStartEpochTime;
 
-			query = buildNestedCondition("AND", query, epochQuery);
-			query = buildNestedCondition("AND", query, lhs + "_epoch" + "<=" + dayEndEpochTime);
+			epochQuery = buildNestedCondition("AND", epochQuery, lhs + "_epoch" + "<=" + dayEndEpochTime);
+			epochQuery = "("+epochQuery+")";
+			query = buildNestedCondition(joinCondition, query, epochQuery);
 
 		}
 
@@ -488,8 +491,8 @@ public class QueryDocumentUtil
 
 				String epochQuery = lhs + "_epoch >= " + dayStartEpochTime;
 
-				epochQuery = buildNestedCondition(joinCondition, epochQuery, lhs + "_epoch <= " + toDateEpoch);
-
+				epochQuery = buildNestedCondition("AND", epochQuery, lhs + "_epoch <= " + toDateEpoch);
+				epochQuery = "("+epochQuery+")";
 				query = buildNestedCondition(joinCondition, query, epochQuery);
 			}
 		}
@@ -518,8 +521,8 @@ public class QueryDocumentUtil
 
 			String epochQuery = lhs + "_epoch >= " + String.valueOf(fromDateInSecs);
 
-			epochQuery = buildNestedCondition(joinCondition, epochQuery, lhs + "_epoch <= " + String.valueOf(currentEpochTime));
-
+			epochQuery = buildNestedCondition("AND", epochQuery, lhs + "_epoch <= " + String.valueOf(currentEpochTime));
+			epochQuery = "("+epochQuery+")";
 			// Constructs OR query on both epoch query and date query, as ON
 			// date condition is not working we have an extra fields which save
 			// epoch time
@@ -532,8 +535,10 @@ public class QueryDocumentUtil
 
 			long limitTime = currentTime + (Integer.parseInt(rhs) - 1) * 24 * 3600;
 
-			query = buildNestedCondition(joinCondition, query, lhs + "_epoch >=" + currentTime);
-			query = buildNestedCondition(joinCondition, query, lhs + "_epoch <=" + limitTime);
+			String epochQuery = lhs + "_epoch >=" + currentTime;
+			epochQuery = buildNestedCondition("AND", epochQuery, lhs + "_epoch <=" + limitTime);
+			epochQuery = "("+epochQuery+")";
+			query = buildNestedCondition(joinCondition, query, epochQuery);
 		}
 
 		return query;
