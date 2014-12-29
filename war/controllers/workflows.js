@@ -319,11 +319,11 @@ var WorkflowsRouter = Backbone.Router
 				// Render tabs with id
 				$('#campaign-analysis-tabs').html(getTemplate("campaign-analysis-tabs", { "id" : id }));
 
-				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
+//				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+//				{
+//					this.navigate("workflows", { trigger : true });
+//					return;
+//				}
 
 //				/* Set the designer JSON. This will be deserialized */
 //				this.workflow_model = this.workflow_list_view.collection.get(id);
