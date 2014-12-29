@@ -337,7 +337,8 @@ function updateDeal(ele, editFromMilestoneView)
 	// Checking Whether the edit is from milestone view,
 	// if it is we are passing JSON object so no need to convert
 	var value = (editFromMilestoneView ? ele : ele.toJSON());
-	
+	if(value.archived == true)
+		return;
 	add_recent_view(new BaseModel(value));
 	
 	var dealForm = $("#opportunityUpdateForm");
