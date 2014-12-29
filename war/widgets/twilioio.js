@@ -197,7 +197,7 @@ function addMoreButton(pageInfo)
 	if (pageInfo.page)
 		$("#twilio-logs-panel")
 				.append(
-						'<a href="#" id="twilioio_more_call_logs" class="btn pull-right" page="' + pageInfo.page + '" pageToken="' + pageInfo.pageToken + '" style="text-decoration:none;" >More</a>');
+						'<a href="#" id="twilioio_more_call_logs" page="' + pageInfo.page + '" pageToken="' + pageInfo.pageToken + '" style="float: right;margin-bottom: 10px;">Show More</a>');
 }
 
 // Get next 10 calls, add in UI, do "More" btn settings
