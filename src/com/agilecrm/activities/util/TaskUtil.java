@@ -564,7 +564,11 @@ public class TaskUtil
 	}
     }
 
-    // Gets the current user pending tasks upto today midnight
+    /**
+     * Gets the current user pending tasks upto today midnight
+     * 
+     * @return due tasks count upto today
+     */
     public static int getOverDueTasksUptoTodayForCurrentUser()
     {
 	try

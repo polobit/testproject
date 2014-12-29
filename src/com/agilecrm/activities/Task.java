@@ -94,9 +94,9 @@ public class Task extends Cursor
     public Long due = 0L;
 
     /**
-     * Created time of task
+     * completed time of task
      */
-    public Long completed_time = 0L;
+    public Long task_completed_time = 0L;
 
     /**
      * start date of the task
@@ -372,7 +372,7 @@ public class Task extends Cursor
 
 	if (this.is_complete == true || this.progress == 100 || this.status == status.COMPLETED)
 	{
-	    completed_time = System.currentTimeMillis() / 1000;
+	    task_completed_time = System.currentTimeMillis() / 1000;
 	}
 
 	/************* New added code ******************/

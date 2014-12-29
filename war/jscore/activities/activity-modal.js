@@ -37,6 +37,7 @@ $(function() {
 	/**
 	 * Removes appended contacts from related-to field of task form and
 	 * validation error messages if any.
+	 * when timepicker editing it will be return
 	 */
 	$('#activityModal').on('hidden', function(e) {
 

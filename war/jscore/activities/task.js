@@ -112,10 +112,7 @@ $(function() {
 	});
 
 	/**
-	 * Hide event of update task modal. Removes the relatedTo field elements if
-	 * any, when the modal is hidden in order to not to show them again when the
-	 * modal is shown next
-	 * 
+	 * initialises task time picker
 	 */
 	
 	$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false, template : 'modal' });

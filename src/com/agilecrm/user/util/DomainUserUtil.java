@@ -460,8 +460,7 @@ public class DomainUserUtil
      * Gets domain user based on his scheduleid
      * 
      * @param name
-     *            is nothing but schedule id.and schedule id is nothing but his
-     *            name
+     *            is schedule id.and schedule id is nothing but his name
      * 
      * @return {@link DomainUser} object
      */

@@ -471,7 +471,7 @@ html {
 	width: 16px;
 	height: 16px;
 }
-/* Not to overide z-index of datepicker due to timepicker modal */
+/* Not to overide z-index of datepicker due to the timepicker modal  */
 .datepicker {
 	z-index: 2050 !important;
 }
