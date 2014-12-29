@@ -102,6 +102,7 @@ function addNewPortlet(portlet_type,p_name){
 	portlet.url = 'core/api/portlets/addPortlet';
 	portlet.set({ "prefs" : JSON.stringify(json) }, { silent : true });
 	var model;
+	var scrollPosition;
 	portlet.save(obj, {
         success: function (data) {
         	hidePortletsPopup();
@@ -113,7 +114,7 @@ function addNewPortlet(portlet_type,p_name){
     			$('#no-portlets').hide();
         	Portlets_View.collection.add(model);
         	
-        	var scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
+        	scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
         	//move the scroll bar for showing the newly added portlet
         	window.scrollTo(0,scrollPosition);
         },
@@ -133,6 +134,7 @@ function addNewPortlet(portlet_type,p_name){
 	setTimeout(function(){
 		gridster.add_widget($('#ui-id-'+model.column_position+'-'+model.row_position),model.size_x,model.size_y,model.column_position,model.row_position);
 		gridster.set_dom_grid_height();
+		window.scrollTo(0,scrollPosition);
 	},1000);
 }
 function hidePortletsPopup(){
@@ -140,41 +142,35 @@ function hidePortletsPopup(){
 	$('.modal-backdrop').hide();
 }
 function deletePortlet(el){
-	if(confirm("Delete this portlet?")){
-		/*var portlet = {};
-		for(var i=0;i<Portlets_View.collection.models.length;i++){
-			if(Portlets_View.collection.models[i].id==el.id.split("-close")[0]){
-				portlet=Portlets_View.collection.models[i];
-			}
-		}*/
-		var portlet = Portlets_View.collection.get(el.id.split("-close")[0]);
-		/*
-		 * Sends Delete request with portlet name as path parameter, and on
-		 * success fetches the portlets to reflect the changes is_added, to show
-		 * add portlet in the view instead of delete option
-		 */
-		$.ajax({ type : 'DELETE', url : '/core/api/portlets/' + portlet.get("id"), contentType : "application/json; charset=utf-8",
-
-		success : function(data){
-			Portlets_View.collection.remove(portlet);
-			//$('#'+el.parentNode.parentNode.parentNode.parentNode.parentNode.id).remove();
-			gridster.remove_widget($('#'+el.id.split("-close")[0]).parent(),false);
-			setTimeout(function(){
-				gridster.$changed.attr('id','ui-id-'+gridster.$changed.attr('data-col')+'-'+gridster.$changed.attr('data-row'));
-			},500);
-			$('#'+el.id.split("-close")[0]).parent().remove();
-			
-			
-			if($('.gridster-portlets > div').length==0)
-				$('#no-portlets').show();
-			/*head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function(){
-				var el = $(getTemplate('portlets', {}));
-				$("#content").html(el);
-				loadPortlets(el);
-			});*/
-		}, dataType : 'json' });
-	}
+	var p_id = el.id.split("-close")[0];
+	$('#portletDeleteModal').modal('show');
+	$('#portletDeleteModal > .modal-footer > .save-modal').attr('id',p_id);
+	$('#portletDeleteModal > .modal-body').html("Are you sure you want to delete Portlet - "+$('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()+" ?");
 }
+$('.portlet-delete-modal').live("click", function(e){
+	var portlet = Portlets_View.collection.get($(this).attr('id'));
+	/*
+	 * Sends Delete request with portlet name as path parameter, and on
+	 * success fetches the portlets to reflect the changes is_added, to show
+	 * add portlet in the view instead of delete option
+	 */
+	$.ajax({ type : 'DELETE', url : '/core/api/portlets/' + portlet.get("id"), contentType : "application/json; charset=utf-8",
+
+	success : function(data){
+		Portlets_View.collection.remove(portlet);
+		//$('#'+el.parentNode.parentNode.parentNode.parentNode.parentNode.id).remove();
+		gridster.remove_widget($('#'+portlet.get("id")).parent(),false);
+		setTimeout(function(){
+			gridster.$changed.attr('id','ui-id-'+gridster.$changed.attr('data-col')+'-'+gridster.$changed.attr('data-row'));
+		},500);
+		$('#'+portlet.get("id")).parent().remove();
+		
+		
+		if($('.gridster-portlets > div').length==0)
+			$('#no-portlets').show();
+		$('#portletDeleteModal').modal('hide');
+	}, dataType : 'json' });
+});
 $("#add-portlet").live("click", function(e){
 	this.Catalog_Portlets_View = new Base_Collection_View({ url : '/core/api/portlets/default', restKey : "portlet", templateKey : "portlets-add",
 		sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el){

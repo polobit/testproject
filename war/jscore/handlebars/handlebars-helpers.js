@@ -3564,7 +3564,7 @@ $(function()
 	Handlebars.registerHelper('get_flitered_contact_portlet_header', function(filter_name) {
 		var header_name = '';
 		if(filter_name=='contacts')
-			header_name = "All Conatcts";
+			header_name = "All Contacts";
 		else if(filter_name=='companies')
 			header_name = "All Companies";
 		else if(filter_name=='recent')
@@ -3573,9 +3573,12 @@ $(function()
 			header_name = "My Contacts";
 		else if(filter_name=='leads')
 			header_name = "Leads";
-		else 
-			header_name = "Contacts";
-		
+		else{
+			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/'+filter_name, async : false, dataType : 'json',
+				success: function(data){
+					header_name = "Contacts - "+data.name;
+				} });
+		} 	
 		return header_name;
 	});
 	
@@ -3600,6 +3603,37 @@ $(function()
 	
 	Handlebars.registerHelper('buildFacebookProfileURL',function(url){
 		return buildFacebookProfileURL(url);
+	});
+	
+	/**
+	 * getting flitered contact portlet header name
+	 */
+	Handlebars.registerHelper('get_deals_funnel_portlet_header', function(track_id) {
+		var header_name = '';
+		if(track_id==0)
+			header_name = "Default";
+		else{
+			var milestone = $.ajax({ type : 'GET', url : '/core/api/milestone/'+track_id, async : false, dataType : 'json',
+				success: function(data){
+					header_name = data.name;
+				} });
+		} 	
+		return header_name;
+	});
+	
+	/**
+	 * getting time in AM and PM format for event portlet
+	 */
+	Handlebars.registerHelper('get_AM_PM_format', function(date_val) {
+		var date = new Date(date_val * 1000);
+		var hours = date.getHours();
+		var minutes = date.getMinutes();
+		var ampm = hours >= 12 ? 'PM' : 'AM';
+		hours = hours % 12;
+		hours = hours ? hours : 12; // the hour '0' should be '12'
+		minutes = minutes < 10 ? '0'+minutes : minutes;
+		var strTime = hours + ':' + minutes + ' ' + ampm;
+		return strTime;
 	});
 	
 });

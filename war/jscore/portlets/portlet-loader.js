@@ -192,6 +192,7 @@ function set_up_portlets(el, portlets_el){
     		gridster.enable();
     		gridster.enable_resize();
     	}
+	    $(window).trigger('resize');
 	  });
 	//enablePortletSorting(portlets_el);
 }
@@ -863,3 +864,11 @@ function initBlogPortletSync(el)
 					});
 
 }
+$('.portlet_header').live("mouseover",function(e){
+	if(gridster!=undefined)
+		gridster.enable();
+});
+$('.portlet_body').live("mouseover",function(e){
+	if(gridster!=undefined)
+		gridster.disable();
+});

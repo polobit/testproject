@@ -140,7 +140,7 @@
                             <!-- <th>Close Date</th> -->
                         <!-- </tr>
                     </thead> -->
-              <tbody id="portlets-opportunities-model-list" class="portlets-opportunities-model-list" style="cursor:pointer;">
+              <tbody id="portlets-opportunities-model-list" class="portlets-opportunities-model-list" style="cursor:pointer;word-break:normal!important;">
           </tbody>
 	</table>
 {{else}}
@@ -153,25 +153,25 @@
 <script id="portlets-opportunities-model-template" type="text/html">
 <td data="{{id}}" class="data">
 	<div class="portlet-time-view">
-		<div style="width:50%;float:left;">
-			<div style="width:50%;float:left;">{{name}}</div> <div style="width:50%">| {{milestone}}({{probability}}%)</div>
+		<div style="width: 80%;float:left;">
+			<div style="max-width: 90%;float:left;">{{name}}</div> <span class="label" style="max-width: 10%;">{{milestone}}</span>
 		</div>
-		{{#if this.contacts}}
-			<p class="activate-link" style="text-align: right; max-width: 50%; white-space: nowrap;float:right;">
-				{{#related_to_one contacts}}{{/related_to_one}}
-			</p>
-		{{/if}}
+		<p class="pull-right" style="text-align: right; max-width: 20%; white-space: nowrap;float:right;font-weight:bold;">
+			<span>{{currencySymbol}} {{numberWithCommas expected_value}}</span>
+		</p>
 		<div class="clearfix"></div>
 	</div>
 	<div>
-		<p style="width:70%;margin-bottom:0px;" class="pull-left">
+		<p style="width: 30%;margin-bottom:0px;" class="pull-left">
 			<span>
 				<time class="time-ago" datetime="{{epochToHumanDate "" close_date}}" >{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>
 			</span>
 		</p>
-		<p class="pull-right" style="margin-bottom:0px;">
-			<span>{{currencySymbol}} {{numberWithCommas expected_value}}</span>
-		</p>
+		{{#if this.contacts}}
+			<p class="activate-link" style="margin-bottom:0px;">
+				{{#related_to_one contacts}}{{/related_to_one}}
+			</p>
+		{{/if}}
 	</div>
 </td>
 </script>
@@ -200,7 +200,9 @@
   			<p style="width:60%;float:left;">{{#is_link subject}}<span class="activate-link" style="white-space: normal!important;">{{else}}<span style="white-space: normal!important;">{{/is_link}}{{safe_string subject}}</span></p>
   			<p style="max-width:39%;overflow:visible !important;float:right;"> 
 				<span class="label">{{task_property type}}</span>
-				<span style="margin-left:5px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
+				{{#if_equals priority_type "NORMAL"}}{{else}}
+					<span style="margin-left:5px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
+				{{/if_equals}}
 			</p>
 		</div>
         <div>
@@ -237,15 +239,15 @@
 </script>
 <script id="portlets-events-model-template" type="text/html">
 <td data="{{id}}" class="data">
-    <div class="portlet-time-view">
-     <div style="width:35%;padding:5px 0px 5px;float:left;">
-      <time class="event-start-time" datetime="{{epochToHumanDate "HH:MM" start}}" style="color:#000;font-size: 18px;">{{epochToHumanDate "HH" start}}</time>
-	  <span style="vertical-align: top;position: relative;top: -2px;">:</span>
-	  <time class="event-start-time" datetime="{{epochToHumanDate "HH:MM" start}}" style="color:#000;vertical-align:top;position:relative;top:-1px;">{{epochToHumanDate "MM" start}}</time> 
+	<div class="portlet-time-view">
+     <div style="width:35%;float:left;">
+      <time class="event-start-time" datetime="{{get_AM_PM_format start}}" style="color:#000;font-weight: bold;">{{get_AM_PM_format start}}</time>
+	  <!-- <span style="vertical-align: top;position: relative;top: -2px;">:</span>
+	  <time class="event-start-time" datetime="{{epochToHumanDate "HH:MM" start}}" style="color:#000;vertical-align:top;position:relative;top:-1px;">{{epochToHumanDate "MM" start}}</time> -->
      <span class="times-space"></span>   
-    <time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" end}}" style="color:#000;font-size: 18px;">{{epochToHumanDate "HH" end}}</time>
-	<span style="vertical-align: top;position: relative;top: -2px;">:</span>
-    <time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" end}}" style="color:#000;vertical-align:top;position:relative;top:-1px;">{{epochToHumanDate "MM" end}}</time>
+    <time class="event-end-time" datetime="{{get_AM_PM_format end}}" style="color:#000;font-weight: bold;">{{get_AM_PM_format end}}</time>
+	<!-- <span style="vertical-align: top;position: relative;top: -2px;">:</span>
+    <time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" end}}" style="color:#000;vertical-align:top;position:relative;top:-1px;">{{epochToHumanDate "MM" end}}</time> -->
 	 </div>
       {{#if this.contacts}}
          <p class="activate-link" style="text-align: right; max-width: 65%; white-space: nowrap;float:right;">
@@ -259,7 +261,9 @@
        <span>{{title}}</span>
 	 </p>
      <p class="pull-right" style="margin-bottom:0px;">
-      <span class="label label-{{#if_equals color "red"}}{{task_label_color "HIGH"}}{{/if_equals}}{{#if_equals color "#36C"}}{{task_label_color "NORMAL"}}{{/if_equals}}{{#if_equals color "green"}}{{task_label_color "LOW"}}{{/if_equals}}">{{#if_equals color "red"}}High{{/if_equals}}{{#if_equals color "#36C"}}Normal{{/if_equals}}{{#if_equals color "green"}}Low{{/if_equals}}</span>
+	 {{#if_equals color "#36C"}}{{else}}
+		<span class="label label-{{#if_equals color "red"}}{{task_label_color "HIGH"}}{{/if_equals}}{{#if_equals color "green"}}{{task_label_color "LOW"}}{{/if_equals}}">{{#if_equals color "red"}}High{{/if_equals}}{{#if_equals color "green"}}Low{{/if_equals}}</span>
+	 {{/if_equals}}
      </p>
     </div>
     <!-- <div style="height:auto;">
@@ -540,7 +544,7 @@
                 <i class="{{get_portlet_icon name}} icon-1x"></i>
                 <span class="portlet-icon-divider"></span>
 				<span>
-                   Deals Funnel
+                   Deals Funnel - {{get_deals_funnel_portlet_header settings.track}}
                 </span>
 			</div>
 		</div>
