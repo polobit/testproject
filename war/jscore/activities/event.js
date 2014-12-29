@@ -263,9 +263,6 @@ $(function()
 		}
 
 		$("#activityForm").find("li").remove();
-$("#taskForm").find("li").remove();
-		
-		resetForm($("#taskForm"));
 		$('#event-time-1').closest('.control-group').show();
 		$('#event-date-2').closest('.row').show();
 		
