@@ -69,7 +69,7 @@ $(function () {
 			createCookie('deal-filters',JSON.stringify(json));
 		}
 	} else {
-		var json = {};
+		var json = {"owner_id":"","pipeline_id":"","milestone":"","value_filter":"equals","value":"","value_start":"","value_end":"","archived":"false","":false,"contact_ids":[]};
 		json.archived="false";
 		createCookie('deal-filters',JSON.stringify(json));
 	}
