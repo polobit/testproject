@@ -61,6 +61,15 @@ $(function () {
     	window.history.back();
     });
 	
+	//Check the archived filter for the first time and set it to false as default.
+	if(readCookie('deal-filters')){
+		var json = $.parseJSON(readCookie('deal-filters'));
+		if(!json.archived){
+			json.archived="false";
+			createCookie('deal-filters',JSON.stringify(json));
+		}
+	}
+	
 });
 
 /**
