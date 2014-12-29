@@ -254,7 +254,8 @@ $(function(){
 				}
 				else{
 					that.remove();
-					$('#'+id+' .deal-options').prepend('<a title="Archive" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>');
+					$('#'+id+' .deal-options').find('.deal-edit').remove();
+					$('#'+id+' .deal-options').prepend('<a title="Restore" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>');
 				}
 				console.log('archived deal----',model);
 				// Shows Milestones Pie
@@ -312,7 +313,9 @@ $(function(){
 				}
 				else{
 					that.remove();
-					$('#'+id+' .deal-options').prepend('<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>');
+					var htmllinks ='<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>';
+					htmllinks += '<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>';
+					$('#'+id+' .deal-options').prepend();
 				}
 				console.log('archived deal----',model);
 				// Shows Milestones Pie

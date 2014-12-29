@@ -68,6 +68,10 @@ $(function () {
 			json.archived="false";
 			createCookie('deal-filters',JSON.stringify(json));
 		}
+	} else {
+		var json = {};
+		json.archived="false";
+		createCookie('deal-filters',JSON.stringify(json));
 	}
 	
 });
