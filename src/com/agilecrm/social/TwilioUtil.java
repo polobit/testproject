@@ -743,7 +743,7 @@ public class TwilioUtil
 	{
         // Create a TwiML response and add our friendly message.
         TwiMLResponse twiml = new TwiMLResponse();
-        String filePath = "https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/" + NamespaceManager.get() + "/" + fileUrl;        
+        String filePath = "https://s3.amazonaws.com/agilecrm/audiofiles/" + NamespaceManager.get() + "/" + fileUrl;        
         // Play an MP3 for incoming callers.
         Play play = new Play(filePath);
         try {

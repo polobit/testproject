@@ -57,6 +57,13 @@ $(function(){
 //	   $(this).find("i").addClass("icon-pause");
 	   $(this).find("i").addClass("icon-stop");
 	   audio.trigger('play');
+	   var that = this;
+	   audio.bind('ended', function(){
+		   $(that).addClass("audioPlay");
+		   $(that).removeClass("audioPause");
+		   $(that).find("i").removeClass("icon-stop");
+		   $(that).find("i").addClass("icon-play");
+		});
    });
    
    $(".audioPause").live('click', function(e){
@@ -82,7 +89,7 @@ function saveVoiceMailFileURL(url, network, id)
 	
 	// Saving extension of document
 	var extension = url.split("?");
-	if(url.match("agilecrm/panel/uploaded-logo/"))
+	if(url.match("audiofiles/"))
 	{
 		extension = extension[0];
 		extension = extension.substring(extension.lastIndexOf("/")+1);
@@ -117,7 +124,7 @@ function saveVoiceMail(form_id, modal_id, saveBtn, json)
 		var url = $('#' + form_id).find('#upload_url').val();
 		if(url == "")
 		{
-			$('#' + form_id).find('#error').html('<div class="alert alert-error">Sorry! Wave file not uploaded properly.</div>');
+			$('#' + form_id).find('#error').html('<div class="alert alert-error">Sorry! Voice file not uploaded properly.</div>');
 			enable_save_button($(saveBtn));
 			return;
 		}

@@ -129,16 +129,16 @@ function isValid(){
 
 <form id="form" action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" onsubmit="return isValid();"> 
 
-<input type="hidden" id="key" name="key" value="panel/uploaded-logo/<%=request.getParameter("d")%>" /> 
+<input type="hidden" id="key" name="key" value="audiofiles/<%=request.getParameter("d")%>" /> 
 
 <input type="hidden" name="acl" value="public-read" /> 
-<input type="hidden" name="content-type" value="image/*" />
+<input type="hidden" name="content-type" value="audio/wav" />
 
 <input type="hidden" name="success_action_redirect" value="<%=request.getRequestURL()%>?id=<%=request.getParameter("id")%>" /> 
 
-<input type="hidden" name="AWSAccessKeyId" value="AKIAJ62OAFOKCJTDANVA" />
-<input type="hidden" name="policy" value="IHsKImV4cGlyYXRpb24iOiAiMjAyMC0wMS0wMVQxMjowMDowMC4wMDBaIiwKICAiY29uZGl0aW9ucyI6IFsKICAgIHsiYnVja2V0IjogImFnaWxlY3JtIiB9LAogICAgeyJhY2wiOiAicHVibGljLXJlYWQiIH0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRrZXkiLCAicGFuZWwvdXBsb2FkZWQtbG9nbyJdLAogICAgWyJzdGFydHMtd2l0aCIsICIkQ29udGVudC1UeXBlIiwgImltYWdlLyJdLAogICAgWyAiY29udGVudC1sZW5ndGgtcmFuZ2UiLCA1MTIsIDQxOTQzMDRdLAogICAgWyJzdGFydHMtd2l0aCIsICIkc3VjY2Vzc19hY3Rpb25fcmVkaXJlY3QiLCAiIiBdCiAgXQp9" />
-<input type="hidden" name="signature" value="kTLzXhH6RYKpZ/+5oToI59iSl5Q=" />
+<input type="hidden" name="AWSAccessKeyId" value="AKIAIBK7MQYG5BPFHSRQ" />
+<input type="hidden" name="policy" value="ewogICJleHBpcmF0aW9uIjogIjIwMjUtMDEtMDFUMTI6MDA6MDAuMDAwWiIsCiAgImNvbmRpdGlvbnMiOiBbCiAgICB7ImJ1Y2tldCI6ICJhZ2lsZWNybSIgfSwKICAgIHsiYWNsIjogInB1YmxpYy1yZWFkIiB9LAogICAgWyJzdGFydHMtd2l0aCIsICIka2V5IiwgImF1ZGlvZmlsZXMvIl0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRDb250ZW50LVR5cGUiLCAiYXVkaW8vIl0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRzdWNjZXNzX2FjdGlvbl9yZWRpcmVjdCIsICJodHRwIl0sCiAgXQp9" />
+<input type="hidden" name="signature" value="sbrZL4HGpxgbMIvooXG/63Hbn14=" />
 
 
 <p><input name="file" id='fileextension' type="file" /></p>
