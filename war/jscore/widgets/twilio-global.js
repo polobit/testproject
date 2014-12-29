@@ -210,8 +210,10 @@ function getGlobalToken()
 
 		setUpGlobalTwilio();
 
+		// Restart twilio after 24 hrs with new token, because token life is 24hrs
 		setTimeout(function()
 		{
+			// After 24hrs check where call is connected or not 
 			if (Twilio.Device.status() == "busy")
 			{
 				Restart_Twilio = true;
@@ -645,10 +647,13 @@ function setUpGlobalTwilio()
 			
 			var phoneNumber = To_Number;
 			var messageObj = conn.message;
-
+			
 			if (Twilio.Device.status() != "busy")
 			{
 				closeTwilioNoty();
+				
+				// after disconnect check If restart is set so restart twilio with new token.
+				// restart is set after 24hrs
 				if (Restart_Twilio == true)
 				{
 					// Get widget, Create token and set twilio device
@@ -656,8 +661,9 @@ function setUpGlobalTwilio()
 				}
 			}			
 			
-			// Get all call logs for widget
-			getTwilioIOLogs(phoneNumber);	
+			// Get all call logs for widget only on cotact detail page
+			if(window.location.hash.indexOf("contact/") != -1)
+			   getTwilioIOLogs(phoneNumber);	
 			
 			// notes related code			
 			console.log("calSid new  " + conn.parameters.CallSid);

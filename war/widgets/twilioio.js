@@ -79,6 +79,7 @@ function showListOfContactNumbers()
 	 */
 	$('#contact_number').die().live('change', function(e)
 	{
+		$('#twilio-logs-panel').html(TWILIOIO_LOGS_LOAD_IMAGE);
 		var to = $('#contact_number').val();
 		getTwilioIOLogs(to);
 	});
@@ -191,13 +192,15 @@ function addMoreButton(pageInfo)
 	if (!pageInfo)
 		return;
 
+	
+	$(".widget_tab_footer").remove();
 	$("#twilioio_more_call_logs").remove();
 
 	// If page and pageToken is present then only add more button else hide it
 	if (pageInfo.page)
 		$("#twilio-logs-panel")
 				.append(
-						'<a href="#" id="twilioio_more_call_logs" page="' + pageInfo.page + '" pageToken="' + pageInfo.pageToken + '" style="float: right;margin-bottom: 10px;">Show More</a>');
+						'<div class="widget_tab_footer" align="center" style="float:none"><a href="#" id="twilioio_more_call_logs" page="' + pageInfo.page + '" pageToken="' + pageInfo.pageToken + '" style="margin-bottom: 10px;"  title="Click to see more call logs">Show More</a></div>');
 }
 
 // Get next 10 calls, add in UI, do "More" btn settings
