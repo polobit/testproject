@@ -617,6 +617,14 @@ public class DealsAPI
 	return opportunity.getContacts();
     }
 
+    /**
+     * update the owner of deal from deal details page
+     * 
+     * @param new_owner
+     * @param dealid
+     * @return
+     * @throws JSONException
+     */
     @Path("/change-owner/{new_owner}/{dealid}")
     @PUT
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -631,6 +639,15 @@ public class DealsAPI
 	return opportunity;
     }
 
+    /**
+     * fetches activities of a deal in deal details page
+     * 
+     * @param dealid
+     * @param cursor
+     * @param count
+     * @return
+     * @throws JSONException
+     */
     @Path("/{dealid}/activities")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -641,6 +658,12 @@ public class DealsAPI
 	return ActivityUtil.getActivitiesByEntityId("DEAL", dealid, Integer.parseInt(count), cursor);
     }
 
+    /**
+     * save note of a deal from deal details page
+     * 
+     * @param note
+     * @return updated deal
+     */
     @Path("/deals/notes")
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -665,6 +688,12 @@ public class DealsAPI
 	return null;
     }
 
+    /**
+     * update note from deal details page
+     * 
+     * @param note
+     * @return updated deal
+     */
     @Path("/deals/notes")
     @PUT
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
