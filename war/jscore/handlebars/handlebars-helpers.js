@@ -3377,7 +3377,7 @@ $(function()
 				});
 				
 				
-				//function used know weather event rescheduled or modified
+				//function used know weather event rescheduled or modified and task due date is modified
 				Handlebars.registerHelper('get_event_rescheduled', function(value,options)
 						{       console.log(value);
 										var fields = value.replace(/[^a-zA-Z ^,]/g, " ").split(",");
