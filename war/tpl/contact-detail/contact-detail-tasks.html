@@ -69,7 +69,7 @@
        	{{/each}}
 		</div>
 		 <small class="edit-hover" style="margin-right:10px"> 
-			<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+			<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" created_time}}</time>
 		</small>
 		<span class="actions pull-right">
 			<a title="Edit"  data="{{id}}" class="task-edit-contact-tab" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
