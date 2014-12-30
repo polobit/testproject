@@ -212,6 +212,60 @@ $(function(){
 	});
 });
 
+$('.deal-archive').live('click', function(e) {
+	e.preventDefault();
+    if(!confirm("Archive Deal?"))
+		return;
+
+  
+    var currentDeal;
+    
+    // Get the current deal model from the collection.
+	currentDeal = App_Deal_Details.dealDetailView.model.toJSON();
+	currentDeal.archived = true;
+    var that = $(this);
+    
+    var notes = [];
+	$.each(currentDeal.notes, function(index, note)
+	{
+		notes.push(note.id);
+	});
+	currentDeal.notes = notes;
+    if(currentDeal.note_description)
+		delete currentDeal.note_description;
+
+    if(!currentDeal.close_date || currentDeal.close_date==0)
+    	currentDeal.close_date = null;
+    
+    currentDeal.owner_id = currentDeal.owner.id;
+    
+    var arch_deal = new Backbone.Model();
+	arch_deal.url = '/core/api/opportunity';
+	arch_deal.save(currentDeal, {
+		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
+		success : function(model, response) {
+			// Remove the deal from the collection and remove the UI element.
+			if(removeArchive(response)){
+				dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
+				$('#'+id).parent().remove();
+			}
+			else{
+				that.remove();
+				$('#'+id+' .deal-options').find('.deal-edit').remove();
+				$('#'+id+' .deal-options').prepend('<a title="Restore" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>');
+			}
+			console.log('archived deal----',model);
+			// Shows Milestones Pie
+			pieMilestones();
+
+			// Shows deals chart
+			dealsLineChart();
+			update_deal_collection(model.toJSON(), id, milestone, milestone);
+			
+		}
+	});
+});
+
 /**
  * Show deal popup for editing
  */ 

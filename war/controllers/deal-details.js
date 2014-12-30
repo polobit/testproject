@@ -246,7 +246,6 @@ $('.deal-note').live('click', function(e)
 	// Displays contact name, to indicate the note is related to the contact
 	fill_relation_deal(el);
 	$('#deal-note-modal').modal('show');
-	agile_type_ahead("notes_related_to", el, deals_typeahead, false, "", "", "core/api/search/deals", false, true);
 });
 
 /**
@@ -324,7 +323,7 @@ $('.deal-restore-detail-view').live('click', function(e) {
 		return;
 
    
-	var currentDeal = App_Deal_Details.dealDetailView.model;
+	var currentDeal = App_Deal_Details.dealDetailView.model.toJSON();
 	currentDeal.archived = false;
     
     var notes = [];
@@ -347,7 +346,6 @@ $('.deal-restore-detail-view').live('click', function(e) {
 			// Remove the deal from the collection and remove the UI element.
 			App_Deal_Details.dealDetailView.model = data;
 			App_Deal_Details.dealDetailView.render(true)
-			enableArchivedField();
 			Backbone.history.navigate("deal/"+data.toJSON().id , {
 	            trigger: true
 	        });

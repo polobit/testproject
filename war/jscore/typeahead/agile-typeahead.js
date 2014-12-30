@@ -7,11 +7,6 @@ var TYPEHEAD_TAGS = {};
 //Saves map of key: name and value: contact email
 var TYPEHEAD_EMAILS = {};
 
-// Saves Contact objects
-var SELECTED_CONTACT = {};
-
-var TYPEHEAD_DEALS = {};
-
 /**
  * This script file defines simple search keywords entered in input fields are 
  * sent to back end as query through bootstrap typeahead. Methods render, matcher 
@@ -36,7 +31,7 @@ var TYPEHEAD_DEALS = {};
  * @author Yaswanth
  * 
  */
-function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch,isDealSearch) {
+function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch) {
 
     // Turn off browser default auto complete
     $('#' + id, el).attr("autocomplete", "off");
@@ -130,15 +125,9 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         		 * Stores contacts in a map with first_name+last_name as key and id as value
         		 */
         		$.each(data, function (index, item){
-         			tag_name = items_list[index];
-        			// Used for related to contacts for ids
+        			tag_name = items_list[index];
         			TYPEHEAD_TAGS[tag_name] = item.id;
-        			// Used for related to contacts for emails in send-email
         			TYPEHEAD_EMAILS[tag_name] = getContactEmail(item);
-        			// Used for related to contacts for details in popover
-        			SELECTED_CONTACT[tag_name] = item;
-        			
-        			TYPEHEAD_DEALS[tag_name] = getDealName(item);
         		});
 
         		/*
@@ -219,7 +208,6 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
             // To verify whether the entity (task, deal etc..) related to same contact twice 
         	var tag_not_exist = true;
         	var email_not_exist = true;
-        	var deal_not_exist=true;
 
             /* Stores items in temp variable so that, shows first
              * name and last name separated by space
@@ -252,9 +240,6 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 
             // Return if items are not defined and it is not search in nav bar
             if (!items) return;
-            
-            // Filling contact details popover
-            var ele = getTemplate('contact-detail-popover', SELECTED_CONTACT[items]);
 
             if(isEmailSearch)
             {
@@ -267,53 +252,24 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
                     }
                 });
                 if(email_not_exist && (TYPEHEAD_EMAILS[items] != "No email"))
-                	$('#' + id, el).closest("div.controls").find(".tags").append("<li class='tag' style='display: inline-block;' data='" + TYPEHEAD_EMAILS[items] + "'><a class='related_to_popover' href='#contact/" + TYPEHEAD_TAGS[items] +
-            			      	"' data-toggle='popover' data-placement='bottom' title='' data-content='" + ele + "' data-original-title='" + items_temp + "'>" + items_temp + "</a><a class='close' id='remove_tag'>&times</a></li>");
+                	$('#' + id, el).closest("div.controls").find(".tags").append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_EMAILS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
             	
             }
-            
-         
             else
             {
-            	  if (isDealSearch)
-      			{
-      				 $.each($('.tags', el).children('li'), function(index, tag)
-      							{
-
-      								if ($(tag).attr('data') == TYPEHEAD_TAGS[items])
-      								{
-      									deal_not_exist = false;
-      									return;
-      								}
-      							});
-      				if (deal_not_exist && (TYPEHEAD_DEALS[items] != "No Deal"))
-      					$('#' + id, el)
-      							.closest("div.controls")
-      							.find(".tags")
-      							.append(
-      									'<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><a href="#deal/' + TYPEHEAD_TAGS[items] + '">' +items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
-
-      			}
-            	  else{
-            		  // If tag already exists returns
-      	            $.each($('.tags', el).children('li'), function (index, tag){
-      	
-      	                if ($(tag).attr('data') == TYPEHEAD_TAGS[items]){
-      	                    tag_not_exist = false;
-      	                    return;
-      	                }
-      	            });
-      	
-      	            // add tag
-      	            if (tag_not_exist)
-      	            	$('.tags', el).append("<li class='tag' style='display: inline-block;' data='" + TYPEHEAD_TAGS[items] + "'><a class='related_to_popover' href='#contact/" + TYPEHEAD_TAGS[items] + 
-      	            			"' data-toggle='popover' data-placement='top' title='' data-content='" + ele + "' data-original-title='" + items_temp + "'>" + items_temp + "</a><a class='close' id='remove_tag'>&times</a></li>");
-            	  }
-            
+	            // If tag already exists returns
+	            $.each($('.tags', el).children('li'), function (index, tag){
+	
+	                if ($(tag).attr('data') == TYPEHEAD_TAGS[items]){
+	                    tag_not_exist = false;
+	                    return;
+	                }
+	            });
+	
+	            // add tag
+	            if (tag_not_exist)
+	            	$('.tags', el).append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
             }
-            
-          
-            
         },
         // Needs to be overridden to set timedelay on search
         keyup: function (e) {
@@ -416,21 +372,6 @@ $('#remove_tag').die().live('click', function (event)
     $(this).parent().remove();
 });
 
-// Shows contact details popover on mouse enter
-$('.contacts > li').live('mouseenter', function () {
-	 $(this).find(".related_to_popover").popover('show');
-});
-
-// Hides popover
-$('.contacts > li').live('mouseleave', function(){
-	$(this).find(".related_to_popover").popover('hide');
-});
-
-// Hides popover on click
-$('.contacts > li').live('click', function(){
-	$(this).find(".related_to_popover").popover('hide');
-});
-
 /* Customization of Type-Ahead data */
 
 /**
@@ -477,18 +418,6 @@ function getContactEmail(contact)
 
 }
 
-function getDealName(deal)
-{
-	var dealname = deal.name;
-	dealname = dealname != undefined ? dealname.trim() : "";
-
-	if (dealname.length)
-		return dealname;
-	else
-		return "No Deal";
-
-}
-
 function checkEmailValidation(value)
 {
 	return /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/i.test(value);
@@ -504,12 +433,6 @@ function getContactName(contact)
 		last_name = last_name != undefined ? last_name.trim() : "";
 		first_name = first_name != undefined ? first_name.trim() : "";
 		name = (first_name + " " + last_name).trim();
-		if (contact.entity_type == "deal")
-		{
-			var deal_name = contact.name;
-			deal_name = deal_name != undefined ? deal_name.trim() : "";
-			name = deal_name.trim();
-		}
 	}	
 	else if(contact.type == "COMPANY")
 	{
@@ -528,46 +451,6 @@ function getContactName(contact)
 	// if nothing found, assume Company and return with id.
 	
 	return 'Company '+contact.id;
-}
-
-
-/* Customization of Type-Ahead data */
-
-/**
- * Returns list of contact names (with no space separation) for type ahead
- * 
- * @method contacts_typeahead
- * @param data
- *            contacts on querying, from type-ahead
- */
-function deals_typeahead(data)
-{
-
-	if (data == null)
-		return;
-
-	// To store contact names list
-	var deal_names_list = [];
-
-	/*
-	 * Iterates through all the contacts and get name property
-	 */
-	$.each(data, function(index, deal)
-	{
-
-		var deal_name;
-
-			// Appends first and last name to push in to a list
-			deal_name = deal.name + "-" + deal.id;
-
-			// Spaces are removed from the name, name should be used as a key in
-			// map "TYPEHEAD_TAGS"
-			deal_names_list.push(deal_name.split(" ").join(""));
-	});
-
-	console.log(deal_names_list);
-	return deal_names_list;
-
 }
 
 function buildcategorizedResultDropdown(items, options)

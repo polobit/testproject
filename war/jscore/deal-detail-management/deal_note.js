@@ -84,8 +84,6 @@ $(".deal-edit-note").die().live('click', function(e)
 			
 			var el = $("#dealnoteForm");
 			
-		//	agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch)
-			agile_type_ahead("notes_related_to", el, deals_typeahead,false,"","","core/api/search/deals",false,true);
 			
 		});
 		
