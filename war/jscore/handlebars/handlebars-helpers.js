@@ -3526,7 +3526,7 @@ $(function()
 	    case "busy":
 	    case "no-answer":
 	    	if(direction == 'outgoing')
-	    		return "Contact Busy";
+	    		return "Contact busy";
 	    	else
 	    		return "Not answered";
 	    	break;
