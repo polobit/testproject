@@ -106,10 +106,28 @@ function connectedCallNoty(message, type)
 		Twilio_Call_Noty = noty({ text : message, type : "success", layout : "bottomRight", buttons : [
 				{ addClass : 'btn btn-primary noty_twilio_dialpad', text : 'Dialpad' }, { addClass : 'btn btn-danger noty_twilio_hangup', text : 'Hangup' }
 		] });
-
+		
+		var voicemailLink = '<span class="pull-left"><a href="#" id="noty_twilio_voicemail">Voicemail</a></span>';
+		$('.noty_buttons').prepend(voicemailLink);
+		
 		// Add dialpad template in twilio content
 		var dialpad = $(getTemplate("twilioio-dialpad"), {});
 		$('.noty_buttons').prepend(dialpad);
+		
+		var responseJson = $.parseJSON(
+		        $.ajax({
+		        	url: "core/api/voicemails",
+		            async: false,
+		            dataType: 'json'
+		        }).responseText
+		    );
+		
+		console.log("json resp : ");
+		console.log(responseJson);
+		console.log(JSON.stringify(responseJson));
+		
+		var voicemailHTML = $(getTemplate("twilioio-voicemail",responseJson), {});
+		$('.noty_buttons').prepend(voicemailHTML);
 
 		return;
 	}

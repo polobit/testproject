@@ -16,6 +16,9 @@ import com.thirdparty.twilio.sdk.TwilioRestClient;
 import com.thirdparty.twilio.sdk.TwilioRestResponse;
 import com.twilio.sdk.client.TwilioCapability;
 import com.twilio.sdk.client.TwilioCapability.DomainException;
+import com.twilio.sdk.verbs.Play;
+import com.twilio.sdk.verbs.TwiMLException;
+import com.twilio.sdk.verbs.TwiMLResponse;
 
 /**
  * The <code>TwilioUtil</code> class acts as a Client to Twilio server
@@ -706,32 +709,43 @@ public class TwilioUtil
 	 * @created 28-Nov-2014
 	 * 
 	 */
-	public static JSONObject getLastCallLogStatus(String account_sid, String auth_token, String call_sid)
-			throws JSONException, Exception
+	public static JSONObject getLastCallLogStatus(String account_sid, String auth_token, String call_sid) throws JSONException, Exception
+    {
+	TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
+	Map<String, String> params = new HashMap<String, String>();
+	params.put("ParentCallSid", call_sid);
+	TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls.json", "GET", params);
+	JSONObject responseJSON = new JSONObject(response);	
+	return responseJSON;
+    }
+    
+    /**
+     * 
+     * @author Purushotham
+     * @created 28-Nov-2014
+     *
+     */
+    public static JSONObject getLastChildCallLogStatus(String account_sid, String auth_token, String call_sid) throws JSONException, Exception
+    {
+	TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
+	TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"+call_sid+".json", "GET", null);
+	JSONObject responseJSON = new JSONObject(response);
+	return responseJSON;
+    }
+    
+    public static String sendAudioFileToTwilio(String fileUrl)
 	{
-		TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("ParentCallSid", call_sid);
-		TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls.json",
-				"GET", params);
-		JSONObject responseJSON = new JSONObject(response);
-		return responseJSON;
+        // Create a TwiML response and add our friendly message.
+        TwiMLResponse twiml = new TwiMLResponse();
+        
+        // Play an MP3 for incoming callers.
+        Play play = new Play(fileUrl);
+        try {
+            twiml.append(play);
+        } catch (TwiMLException e) {
+            e.printStackTrace();
+        }
+        return twiml.toXML();
 	}
-
-	/**
-	 * 
-	 * @author Purushotham
-	 * @created 28-Nov-2014
-	 * 
-	 */
-	public static JSONObject getLastChildCallLogStatus(String account_sid, String auth_token, String call_sid)
-			throws JSONException, Exception
-	{
-		TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
-		TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"
-				+ call_sid + ".json", "GET", null);
-		JSONObject responseJSON = new JSONObject(response);
-		return responseJSON;
-	}
-
+	
 }

@@ -112,3 +112,19 @@
 </div>
 </div>
 </script>
+
+<script id="twilioio-voicemail-template" type="text/html">
+<div id="voicemail_in_twilio" class="muted" style="display:none;float:left;">
+{{#if this}}
+   Select WAV file &nbsp;&nbsp;<select id="tw_voicemails_select" name="tw_voicemails_select" class="input-medium">
+		{{#each this}}
+			<option value="{{url}}">{{name}}</option>
+		{{/each}}
+    </select>
+{{/if}}
+{{#unless this}}
+	No WAV files found.
+{{/unless}}
+</div>
+<div style="clear:both;"></div>
+</script>
