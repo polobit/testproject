@@ -68,7 +68,10 @@ $(function(){
 					});
 				});
 	});
-	
+	$("#campaign_id").die().live('click', function(e){
+		e.stopPropagation();
+		$(window).scrollTop(0);
+	});
 	$("#report-instant-results").die().live('click', function(e){
 		e.stopPropagation();
 		var id = $(this).attr('data');
