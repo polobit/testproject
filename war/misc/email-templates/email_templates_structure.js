@@ -8,8 +8,8 @@
                     "label": "Rocket Mail",
                     "title": "rocketmail",
                     "theme_preview": {
-                        "theme_small": "/misc/email-templates/newsletter/rocketmail/rocketmail-email-template/preview/theme-small-dark-bg.png",
-                        "theme_big": "/misc/email-templates/newsletter/rocketmail/rocketmail-email-template/preview/theme-small-dark-bg.png"
+                        "theme_small": "/misc/email-templates/newsletter/rocketmail/rocketmail-email-template/preview/theme-small-light-bg.png",
+                        "theme_big": "/misc/email-templates/newsletter/rocketmail/rocketmail-email-template/preview/theme-small-light-bg.png"
                     },
                     "layouts": [
                         {
@@ -447,19 +447,19 @@
                     "label": "Elena",
                     "title": "elena",
                     "theme_preview": {
-                        "theme_small": "/misc/email-templates/new_templates/elena/elena-email-template/preview/front-page.png",
-                        "theme_big": "/misc/email-templates/new_templates/elena/elena-email-template/preview/layout1.png"
+                        "theme_small": "/misc/email-templates/responsive/elena/elena-email-template/preview/front-page.png",
+                        "theme_big": "/misc/email-templates/responsive/elena/elena-email-template/preview/layout1.png"
                     },
                     "layouts": [
                         {
                             "title": "Elena-General",
-                            "href": "/misc/email-templates/new_templates/elena/elena-email-template/preview/layout1.png",
-                            "link": "/misc/email-templates/new_templates/elena/elena-email-template/layout1.html"
+                            "href": "/misc/email-templates/responsive/elena/elena-email-template/preview/layout1.png",
+                            "link": "/misc/email-templates/responsive/elena/elena-email-template/layout1.html"
                         },
                         {
                             "title": "Elena-General",
-                            "href": "/misc/email-templates/new_templates/elena/elena-email-template/preview/layout2.png",
-                            "link": "/misc/email-templates/new_templates/elena/elena-email-template/layout2.html"
+                            "href": "/misc/email-templates/responsive/elena/elena-email-template/preview/layout2.png",
+                            "link": "/misc/email-templates/responsive/elena/elena-email-template/layout2.html"
                         }
                     ]
                 },
@@ -468,14 +468,14 @@
                     "label": "Beacon",
                     "title": "beacon",
                     "theme_preview": {
-                        "theme_small": "/misc/email-templates/new_templates/beacon/beacon-email-template/preview/front-page.png",
-                        "theme_big": "/misc/email-templates/new_templates/beacon/beacon-email-template/preview/front-page-full.png"
+                        "theme_small": "/misc/email-templates/responsive/beacon/beacon-email-template/preview/front-page.png",
+                        "theme_big": "/misc/email-templates/responsive/beacon/beacon-email-template/preview/front-page-full.png"
                     },
                     "layouts": [
                         {
                             "title": "Beacon-General",
-                            "href": "/misc/email-templates/new_templates/beacon/beacon-email-template/preview/front-page-full.png",
-                            "link": "/misc/email-templates/new_templates/beacon/beacon-email-template/index.html"
+                            "href": "/misc/email-templates/responsive/beacon/beacon-email-template/preview/front-page-full.png",
+                            "link": "/misc/email-templates/responsive/beacon/beacon-email-template/index.html"
                         }
                     ]
                 
@@ -484,29 +484,29 @@
                     "label": "Mailora",
                     "title": "mailora",
                     "theme_preview": {
-                        "theme_small": "/misc/email-templates/new_templates/mailora/mailora-email-template/preview/front-page.png",
-                        "theme_big": "/misc/email-templates/new_templates/mailora/mailora-email-template/preview/front-page-full.png"
+                        "theme_small": "/misc/email-templates/responsive/mailora/mailora-email-template/preview/front-page.png",
+                        "theme_big": "/misc/email-templates/responsive/mailora/mailora-email-template/preview/front-page-full.png"
                     },
                     "layouts": [
                         {
                             "title": "mailora-default",
-                            "href": "/misc/email-templates/new_templates/mailora/mailora-email-template/preview/front-page-full.png",
-                            "link": "/misc/email-templates/new_templates/mailora/mailora-email-template/default/index.html"
+                            "href": "/misc/email-templates/responsive/mailora/mailora-email-template/preview/front-page-full.png",
+                            "link": "/misc/email-templates/responsive/mailora/mailora-email-template/default/index.html"
                         },
                         {
                             "title": "mailora-red",
-                            "href": "/misc/email-templates/new_templates/mailora/mailora-email-template/preview/front-page-full-red.png",
-                            "link": "/misc/email-templates/new_templates/mailora/mailora-email-template/red/index.html"
+                            "href": "/misc/email-templates/responsive/mailora/mailora-email-template/preview/front-page-full-red.png",
+                            "link": "/misc/email-templates/responsive/mailora/mailora-email-template/red/index.html"
                         },
                         {
                             "title": "mailora-purple",
-                            "href": "/misc/email-templates/new_templates/mailora/mailora-email-template/preview/front-page-full-purple.png",
-                            "link": "/misc/email-templates/new_templates/mailora/mailora-email-template/purple/index.html"
+                            "href": "/misc/email-templates/responsive/mailora/mailora-email-template/preview/front-page-full-purple.png",
+                            "link": "/misc/email-templates/responsive/mailora/mailora-email-template/purple/index.html"
                         },
                         {
                             "title": "mailora-green",
-                            "href": "/misc/email-templates/new_templates/mailora/mailora-email-template/preview/front-page-full-green.png",
-                            "link": "/misc/email-templates/new_templates/mailora/mailora-email-template/green/index.html"
+                            "href": "/misc/email-templates/responsive/mailora/mailora-email-template/preview/front-page-full-green.png",
+                            "link": "/misc/email-templates/responsive/mailora/mailora-email-template/green/index.html"
                         }
 
                     ]
@@ -515,278 +515,278 @@
                     "label": "Lancer",
                     "title": "lancer",
                     "theme_preview": {
-                        "theme_small": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/theme-small.png",
-                        "theme_big": "/misc/email-templates/new_templates/mailora/mailora-email-template/preview/front-page-full.png"
+                        "theme_small": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/theme-small.png",
+                        "theme_big": "/misc/email-templates/responsive/mailora/mailora-email-template/preview/front-page-full.png"
                     },
                     "layouts": [
                         {
                             "title": "layout1-blue",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout1-blue.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout1/blue/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout1-blue.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout1/blue/index.html"
                         },
                         {
 
                             "title": "layout1-cyan",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout1-cyan.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout1/cyan/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout1-cyan.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout1/cyan/index.html"
                         
                         },
                         {
 
                             "title": "layout1-green",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout1-green.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout1/green/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout1-green.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout1/green/index.html"
                         
                         },
                         {
 
                             "title": "layout1-orange",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout1-orange.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout1/orange/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout1-orange.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout1/orange/index.html"
                         
                         },
                         {
 
                             "title": "layout1-orange2",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout1-orange2.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout1/orange2/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout1-orange2.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout1/orange2/index.html"
                         
                         },
                         {
 
                             "title": "layout1-pink",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout1-pink.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout1/pink/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout1-pink.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout1/pink/index.html"
                         
                         },
                         {
 
                             "title": "layout1-purple",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout1-purple.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout1/purple/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout1-purple.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout1/purple/index.html"
                         
                         },
                         {
 
                             "title": "layout1-yellow",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout1-yellow.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout1/yellow/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout1-yellow.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout1/yellow/index.html"
                         
                         },
                         {
                             "title": "layout2-blue",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout2-blue.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout2/blue/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout2-blue.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout2/blue/index.html"
                         },
                         {
 
                             "title": "layout2-cyan",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout2-cyan.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout2/cyan/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout2-cyan.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout2/cyan/index.html"
                         
                         },
                         {
 
                             "title": "layout2-green",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout2-green.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout2/green/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout2-green.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout2/green/index.html"
                         
                         },
                         {
 
                             "title": "layout2-orange",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout2-orange.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout2/orange/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout2-orange.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout2/orange/index.html"
                         
                         },
                         {
 
                             "title": "layout2-orange2",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout2-orange2.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout2/orange2/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout2-orange2.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout2/orange2/index.html"
                         
                         },
                         {
 
                             "title": "layout2-pink",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout2-pink.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout2/pink/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout2-pink.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout2/pink/index.html"
                         
                         },
                         {
 
                             "title": "layout2-purple",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout2-purple.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout2/purple/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout2-purple.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout2/purple/index.html"
                         
                         },
                         {
 
                             "title": "layout2-yellow",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout2-yellow.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout2/yellow/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout2-yellow.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout2/yellow/index.html"
                         
                         },
                         {
                             "title": "layout3-blue",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout3-blue.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout3/blue/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout3-blue.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout3/blue/index.html"
                         },
                         {
 
                             "title": "layout3-cyan",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout3-cyan.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout3/cyan/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout3-cyan.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout3/cyan/index.html"
                         
                         },
                         {
 
                             "title": "layout3-green",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout3-green.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout3/green/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout3-green.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout3/green/index.html"
                         
                         },
                         {
 
                             "title": "layout3-orange",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout3-orange.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout3/orange/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout3-orange.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout3/orange/index.html"
                         
                         },
                         {
 
                             "title": "layout3-orange2",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout3-orange2.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout3/orange2/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout3-orange2.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout3/orange2/index.html"
                         
                         },
                         {
 
                             "title": "layout3-pink",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout3-pink.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout3/pink/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout3-pink.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout3/pink/index.html"
                         
                         },
                         {
 
                             "title": "layout3-purple",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout3-purple.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout3/purple/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout3-purple.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout3/purple/index.html"
                         
                         },
                         {
 
                             "title": "layout3-yellow",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout3-yellow.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout3/yellow/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout3-yellow.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout3/yellow/index.html"
                         
                         },
                         {
                             "title": "layout4-blue",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout4-blue.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout4/blue/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout4-blue.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout4/blue/index.html"
                         },
                         {
 
                             "title": "layout4-cyan",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout4-cyan.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout4/cyan/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout4-cyan.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout4/cyan/index.html"
                         
                         },
                         {
 
                             "title": "layout4-green",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout4-green.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout4/green/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout4-green.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout4/green/index.html"
                         
                         },
                         {
 
                             "title": "layout4-orange",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout4-orange.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout4/orange/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout4-orange.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout4/orange/index.html"
                         
                         },
                         {
 
                             "title": "layout4-orange2",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout4-orange2.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout4/orange2/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout4-orange2.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout4/orange2/index.html"
                         
                         },
                         {
 
                             "title": "layout4-pink",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout4-pink.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout4/pink/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout4-pink.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout4/pink/index.html"
                         
                         },
                         {
 
                             "title": "layout4-purple",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout4-purple.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout4/purple/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout4-purple.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout4/purple/index.html"
                         
                         },
                         {
 
                             "title": "layout4-yellow",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout4-yellow.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout4/yellow/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout4-yellow.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout4/yellow/index.html"
                         
                         },
                         {
                             "title": "layout5-blue",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout5-blue.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout5/blue/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout5-blue.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout5/blue/index.html"
                         },
                         {
 
                             "title": "layout5-cyan",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout5-cyan.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout5/cyan/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout5-cyan.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout5/cyan/index.html"
                         
                         },
                         {
 
                             "title": "layout5-green",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout5-green.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout5/green/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout5-green.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout5/green/index.html"
                         
                         },
                         {
 
                             "title": "layout5-orange",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout5-orange.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout5/orange/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout5-orange.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout5/orange/index.html"
                         
                         },
                         {
 
                             "title": "layout4-orange2",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout5-orange2.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout5/orange2/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout5-orange2.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout5/orange2/index.html"
                         
                         },
                         {
 
                             "title": "layout5-pink",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout5-pink.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout5/pink/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout5-pink.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout5/pink/index.html"
                         
                         },
                         {
 
                             "title": "layout5-purple",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout5-purple.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout5/purple/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout5-purple.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout5/purple/index.html"
                         
                         },
                         {
 
                             "title": "layout5-yellow",
-                            "href": "/misc/email-templates/new_templates/lancer/lancer-email-template/preview/layout5-yellow.png",
-                            "link": "/misc/email-templates/new_templates/lancer/lancer-email-template/layout5/yellow/index.html"
+                            "href": "/misc/email-templates/responsive/lancer/lancer-email-template/preview/layout5-yellow.png",
+                            "link": "/misc/email-templates/responsive/lancer/lancer-email-template/layout5/yellow/index.html"
                         
                         }
                         
