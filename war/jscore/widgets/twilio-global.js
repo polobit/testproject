@@ -1027,7 +1027,7 @@ function sendVoiceAndEndCall(fileSelected) {
 		
 		if(typeof callRespJson != "undefined") {
 			if(typeof callRespJson.status != "undefined" && callRespJson.status == 'in-progress') {
-				alert("Voicemail will be sent to user.Current call will be closed.");
+//				alert("Voicemail will be sent to user.Current call will be closed.");
 				var messageObj = globalconnection.message;
 				if(twilioVoiceMailRedirect(fileSelected)) {
 					closeTwilioNoty();
