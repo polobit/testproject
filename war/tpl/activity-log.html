@@ -1074,12 +1074,13 @@ Deleted Documents {{custom2}}
 	</div>
 <div class="pull-left activity-tag">
 <div>
+
 {{#if_equals "incoming" custom2}}	
-Incoming call (<span style="text-transform: capitalize;">{{custom1}}</span>) {{#if user.name}}to {{user.name}}{{/if}} {{#if entity_id}}by <a href="#contact/{{entity_id}}">{{label}}</a>{{else}}by {{label}}{{/if}}.<span style="text-transform: capitalize;">{{custom3}}</span> {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}
+Incoming call (<span style="text-transform: capitalize;">{{custom1}}</span>) {{#if user.name}}to {{user.name}}{{/if}} {{#if entity_id}}by <a href="#contact/{{entity_id}}">{{label}}</a>{{else}}by {{label}}{{/if}}.{{callActivityFriendlyStatus custom3 custom2}} {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}
 {{/if_equals}}
 
 {{#if_equals "outgoing" custom2}}	
-Outgoing call (<span style="text-transform: capitalize;">{{custom1}}</span>) {{#if user.name}}by {{user.name}}{{/if}} {{#if entity_id}}to <a href="#contact/{{entity_id}}">{{label}}</a>{{else}}to {{label}}{{/if}}.<span style="text-transform: capitalize;">{{custom3}}</span> {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}
+Outgoing call (<span style="text-transform: capitalize;">{{custom1}}</span>) {{#if user.name}}by {{user.name}}{{/if}} {{#if entity_id}}to <a href="#contact/{{entity_id}}">{{label}}</a>{{else}}to {{label}}{{/if}}.{{callActivityFriendlyStatus custom3 custom2}} {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}
 {{/if_equals}}
 
 	</div>
