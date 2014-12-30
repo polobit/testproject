@@ -176,7 +176,7 @@ public class QueryDocumentUtil
 				}
 				
 				// Between given values
-				else if (condition.equals(SearchRule.RuleCondition.BETWEEN))
+				else if (condition.equals(SearchRule.RuleCondition.BETWEEN) || condition.equals(SearchRule.RuleCondition.BETWEEN_NUMBER))
 				{
 					if (rhs_new != null)
 					{
