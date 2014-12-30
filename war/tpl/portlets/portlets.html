@@ -153,10 +153,10 @@
 <script id="portlets-opportunities-model-template" type="text/html">
 <td data="{{id}}" class="data">
 	<div class="portlet-time-view">
-		<div style="width: 80%;float:left;">
-			<div style="max-width: 90%;float:left;">{{name}}</div> <span class="label" style="max-width: 10%;">{{milestone}}</span>
+		<div style="width: 70%;float:left;">
+			<div style="max-width: 100%;float:left;">{{name}}</div> <!-- <span class="label" style="max-width: 10%;">{{milestone}}</span> -->
 		</div>
-		<p class="pull-right" style="text-align: right; max-width: 20%; white-space: nowrap;float:right;font-weight:bold;">
+		<p class="pull-right" style="text-align: right; max-width: 30%; white-space: nowrap;float:right;font-weight:bold;">
 			<span>{{currencySymbol}} {{numberWithCommas expected_value}}</span>
 		</p>
 		<div class="clearfix"></div>
@@ -199,10 +199,10 @@
 		<div>
   			<p style="width:60%;float:left;">{{#is_link subject}}<span class="activate-link" style="white-space: normal!important;">{{else}}<span style="white-space: normal!important;">{{/is_link}}{{safe_string subject}}</span></p>
   			<p style="max-width:39%;overflow:visible !important;float:right;"> 
-				<span class="label">{{task_property type}}</span>
 				{{#if_equals priority_type "NORMAL"}}{{else}}
 					<span style="margin-left:5px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
 				{{/if_equals}}
+				<span class="label">{{task_property type}}</span>
 			</p>
 		</div>
         <div>
@@ -771,7 +771,7 @@
 
 <script id="portlets-contact-filter-list-collection-template" type="text/html">
 <select id="filter" name="filter" class="required">
-	<option value="contacts">Contacts</option>
+	<option value="contacts">All Contacts</option>
 	<!-- <option value="companies">Companies</option> -->
 	<option value="myContacts">My Contacts</option>
 	<option value="leads">Leads</option>

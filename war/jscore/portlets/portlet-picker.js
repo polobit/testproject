@@ -61,7 +61,7 @@ function set_p_portlets(base_model){
 	var column_position = base_model.get('column_position');
 	var row_position = base_model.get('row_position');
 	var portlet_settings=base_model.get('settings');
-	
+	var pos = ''+column_position+''+row_position;
 	/*if(column_position==1){
 		if($('#col-0').children().length==0){
 			$('#col-0',this.el).html(getRandomLoadingImg());
@@ -97,20 +97,23 @@ function set_p_portlets(base_model){
 	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Emails Opened"){
 		itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+base_model.get('settings').duration, templateKey : 'portlets-contacts', individual_tag_name : 'tr' });
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Pending Deals"){
-		itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+base_model.get('settings').deals+'&due-date='+base_model.get('settings')["due-date"], templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
+		App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+base_model.get('settings').deals+'&due-date='+base_model.get('settings')["due-date"], templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				displayTimeAgo(p_el);
 			} });
+		App_Portlets.pendingDeals[parseInt(pos)].collection.fetch();
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Won"){
-		itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletDealsWon?duration='+base_model.get('settings').duration, templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
+		App_Portlets.dealsWon[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletDealsWon?duration='+base_model.get('settings').duration, templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				displayTimeAgo(p_el);
 			} });
+		App_Portlets.dealsWon[parseInt(pos)].collection.fetch();
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Agenda"){
-		itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda', templateKey : 'portlets-events', individual_tag_name : 'tr' });
+		App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda', templateKey : 'portlets-events', individual_tag_name : 'tr' });
+		App_Portlets.todayEventsCollection[parseInt(pos)].collection.fetch();
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Today Tasks"){
-		tasksCollection = new Base_Collection_View({ url : '/core/api/portlets/portletTodayTasks', templateKey : 'portlets-tasks', individual_tag_name : 'tr' });
-		tasksCollection.collection.fetch();
+		App_Portlets.tasksCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletTodayTasks', templateKey : 'portlets-tasks', individual_tag_name : 'tr' });
+		App_Portlets.tasksCollection[parseInt(pos)].collection.fetch();
 	}
 	if(itemCollection!=undefined)
 		itemCollection.collection.fetch();
@@ -118,34 +121,27 @@ function set_p_portlets(base_model){
 		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')!="Deals By Milestone" 
 			&& base_model.get('name')!="Closures Per Person" && base_model.get('name')!="Deals Funnel" && base_model.get('name')!="Emails Sent"
 				&& base_model.get('name')!="Growth Graph" && base_model.get('name')!="Today Tasks" && base_model.get('name')!="Deals Assigned"
-					&& base_model.get('name')!="Calls Per Person" && base_model.get('name')!="Agile CRM Blog"){
+					&& base_model.get('name')!="Calls Per Person" && base_model.get('name')!="Agile CRM Blog" && base_model.get('name')!="Agenda" 
+						&& base_model.get('name')!="Pending Deals" && base_model.get('name')!="Deals Won"){
 			$(this).html(getRandomLoadingImg());
 			$(this).html($(itemCollection.render().el));
-			
 			setPortletContentHeight(base_model);
-			
-			/*if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Won"){
-				var tempEl=$(this);
-				setTimeout(function(){
-					tempEl.find('.dealsWonValue').show();
-					var totalVal=0;
-					$.each(itemCollection.collection.models,function(index,model){
-						totalVal += parseInt(model.get("expected_value"));
-					});
-					tempEl.find('.dealsWonValue').append("Total won value:"+totalVal);
-				},2000);
-			}*/
-			
-			if(base_model.get('is_minimized'))
-				$(this).hide();
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Pending Deals"){
+			$(this).html(getRandomLoadingImg());
+			$(this).html($(App_Portlets.pendingDeals[parseInt(pos)].render().el));
+			setPortletContentHeight(base_model);
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Deals Won"){
+			$(this).html(getRandomLoadingImg());
+			$(this).html($(App_Portlets.dealsWon[parseInt(pos)].render().el));
+			setPortletContentHeight(base_model);
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Agenda"){
+			$(this).html(getRandomLoadingImg());
+			$(this).html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
+			setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Today Tasks"){
 			$(this).html(getRandomLoadingImg());
-			$(this).html($(tasksCollection.render().el));
-			if(base_model.get('is_minimized'))
-				$(this).hide();
-			
+			$(this).html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
-			
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Deals By Milestone"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 
@@ -621,7 +617,7 @@ function dealsFunnelGraph(selector,funnel_data){
 	            }
 	        },
 	        series: [{
-	            name: 'Deal',
+	            name: 'Value',
 	            data: funnel_data
 	        }],
 	        exporting: {

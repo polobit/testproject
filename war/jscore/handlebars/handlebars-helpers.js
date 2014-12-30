@@ -3576,7 +3576,7 @@ $(function()
 		else{
 			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/'+filter_name, async : false, dataType : 'json',
 				success: function(data){
-					header_name = "Contacts - "+data.name;
+					header_name = ""+data.name;
 				} });
 		} 	
 		return header_name;

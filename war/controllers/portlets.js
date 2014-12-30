@@ -66,7 +66,7 @@ function addNewPortlet(portlet_type,p_name){
 	obj.size_x=next_position.size_x;
 	obj.size_y=next_position.size_y;
 	if(portlet_type=="CONTACTS" && p_name=="FilterBased")
-		json['filter']="contacts";
+		json['filter']="myContacts";
 	else if(portlet_type=="CONTACTS" && p_name=="EmailsOpened")
 		json['duration']="2-days";
 	else if(portlet_type=="USERACTIVITY" && p_name=="EmailsSent")
@@ -78,11 +78,11 @@ function addNewPortlet(portlet_type,p_name){
 		json['end-date']=new Date(curDate.getFullYear(),curDate.getMonth(),curDate.getDate(),0,0,0).getTime();
 	}
 	else if(portlet_type=="DEALS" && p_name=="PendingDeals"){
-		json['deals']="all-deals";
+		json['deals']="my-deals";
 		json['due-date']=Math.round((new Date()).getTime()/1000);
 	}
 	else if(portlet_type=="DEALS" && (p_name=="DealsByMilestone" || p_name=="DealsFunnel")){
-		json['deals']="all-deals";
+		json['deals']="my-deals";
 		json['track']=0;
 		json['due-date']=Math.round((new Date()).getTime()/1000);
 	}else if(portlet_type=="DEALS" && p_name=="ClosuresPerPerson"){
@@ -194,9 +194,11 @@ $('#portlets-contacts-model-list > tr, #portlets-companies-model-list > tr').liv
 });
 $('#portlets-opportunities-model-list > tr').live('click', function(e) {
 	//e.preventDefault();
+	App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
 	updateDeal($(this).data());
 });
 $('#portlets-events-model-list > tr').live('click', function(e){
+	App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
 	var id = $(this).find(".data").attr("data");
 	var model = $(this).data().collection.get(id);
    	if(isNaN(id))
@@ -230,7 +232,7 @@ $('#portlets-events-model-list > tr').live('click', function(e){
    	return false;
 });
 $('#portlets-tasks-model-list > tr').live('click', function(e) {
-
+	App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
 	var value = $(this).data().toJSON();
 	deserializeForm(value, $("#updateTaskForm"));
 	$("#updateTaskModal").modal('show');

@@ -2,6 +2,7 @@ package com.agilecrm.portlets.util;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +60,7 @@ public class PortletUtil {
 		allPortlets.add(new Portlet("Pending Deals",PortletType.DEALS));
 		//allPortlets.add(new Portlet("Deals By Milestone",PortletType.DEALS));
 		//allPortlets.add(new Portlet("Closures Per Person",PortletType.DEALS));
-		allPortlets.add(new Portlet("Deals Won",PortletType.DEALS));
+		//allPortlets.add(new Portlet("Deals Won",PortletType.DEALS));
 		allPortlets.add(new Portlet("Deals Funnel",PortletType.DEALS));
 		//allPortlets.add(new Portlet("Deals Assigned",PortletType.DEALS));
 		
@@ -83,6 +84,8 @@ public class PortletUtil {
 	public static List<Portlet> getAddedPortletsForCurrentUser()throws Exception{
 		
 		Objectify ofy = ObjectifyService.begin();
+		
+		List<Portlet> added_portlets = new ArrayList<Portlet>();
 
 		// Creates Current AgileUser key
 		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
@@ -91,15 +94,22 @@ public class PortletUtil {
 		 * Fetches list of portlets related to AgileUser key
 		 */
 		List<Portlet> portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").list();
+		//If user first time login after portlets code deploy, we add some portlets by default
+		//in DB and one null portlet also
+		if(portlets!=null && portlets.size()==0)
+			addDefaultPortlets();
+		portlets = ofy.query(Portlet.class).ancestor(userKey).order("row_position").list();
 		for(Portlet portlet : portlets){
 			if(portlet.prefs!=null){
 				JSONObject json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
 				portlet.settings=json;
 			}
+			if(!portlet.name.equalsIgnoreCase("Dummy Blog"))
+				added_portlets.add(portlet);
 			//setPortletContent(portlet);
 		}
 		
-		return portlets;
+		return added_portlets;
 	}
 	/**
 	 * Gets {@link Portlet} by its id, queries portlet on id with user key
@@ -785,6 +795,44 @@ public class PortletUtil {
 		callsPerPersonJSON.put("domainUsersList",domainUserNamesList);
 		
 		return callsPerPersonJSON;	
+	}
+	public static void addDefaultPortlets(){
+		try {
+			//Added dummy portlet for recognizing whether Agile CRM Blog 
+			//portlet is deleted by user or not
+			Portlet dummyPortlet = new Portlet("Dummy Blog",PortletType.RSS,1,1,1,1);
+			Portlet eventsPortlet = new Portlet("Agenda",PortletType.TASKSANDEVENTS,1,1,1,1);
+			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,1,1,1);
+			Portlet blogPortlet = new Portlet("Agile CRM Blog",PortletType.RSS,3,1,1,2);
+			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,1,2,2,1);
+			Portlet pendingDealsPortlet = new Portlet("Pending Deals",PortletType.DEALS,1,3,2,1);
+			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,3,3,1,1);
+			
+			JSONObject filterBasedContactsPortletJSON = new JSONObject();
+			filterBasedContactsPortletJSON.put("filter","myContacts");
+			filterBasedContactsPortlet.prefs = filterBasedContactsPortletJSON.toString();
+			
+			JSONObject pendingDealsPortletJSON = new JSONObject();
+			pendingDealsPortletJSON.put("deals","my-deals");
+			pendingDealsPortletJSON.put("due-date",(new Date().getTime())/1000);
+			pendingDealsPortlet.prefs = pendingDealsPortletJSON.toString();
+			
+			JSONObject dealsFunnelPortletJSON = new JSONObject();
+			dealsFunnelPortletJSON.put("deals","my-deals");
+			dealsFunnelPortletJSON.put("track",0);
+			dealsFunnelPortletJSON.put("due-date",(new Date().getTime())/1000);
+			dealsFunnelPortlet.prefs = dealsFunnelPortletJSON.toString();
+			
+			dummyPortlet.save();
+			eventsPortlet.save();
+			tasksPortlet.save();
+			blogPortlet.save();
+			filterBasedContactsPortlet.save();
+			pendingDealsPortlet.save();
+			dealsFunnelPortlet.save();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

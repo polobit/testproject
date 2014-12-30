@@ -495,6 +495,16 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 																}
 
 												});
+								}else if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && Current_Route == 'portlets') 
+								{
+									if (isUpdate)
+										App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+									// Updates events list view
+									App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+									App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
+
 								}
 								else
 												App_Calendar.navigate("calendar", { trigger : true });

@@ -132,6 +132,15 @@ public class Portlet {
     	this.portlet_type=type;
     }
     
+    public Portlet(String name,PortletType type,int column_position,int row_position,int size_x,int size_y){
+    	this.name=name;
+    	this.portlet_type=type;
+    	this.column_position=column_position;
+    	this.row_position=row_position;
+    	this.size_x=size_x;
+    	this.size_y=size_y;
+    }
+    
     public void save(){
     	if (user == null)
     		user = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);

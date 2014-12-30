@@ -8,6 +8,10 @@ var portlet_template_loaded_map = {};
  * @param el
  */
 function loadPortlets(el){
+	App_Portlets.todayEventsCollection = new Array();
+	App_Portlets.tasksCollection = new Array();
+	App_Portlets.pendingDeals = new Array();
+	App_Portlets.dealsWon = new Array();
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
@@ -510,6 +514,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        	$(window).scrollTop(scrollPosition);
 	        	var model = data.toJSON();
 	        	Portlets_View.collection.get(model).set(new BaseModel(model));
+	        	var pos = ''+data.get("column_position")+''+data.get("row_position");
 	        	//$('#'+this.parentNode.parentNode.parentNode.id).replaceWith($(getTemplate('portlets-model', model)));
 	        	var portletCollectionView;
 	        	if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Filter Based"){
@@ -520,16 +525,31 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Emails Opened"){
 	        		portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+data.get('settings').duration, templateKey : 'portlets-contacts', individual_tag_name : 'tr' });
 	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Pending Deals"){
-	        		portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+data.get('settings').deals+'&due-date='+data.get('settings')["due-date"], templateKey : 'portlets-opportunities', individual_tag_name : 'tr' });
+	        		App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+data.get('settings').deals+'&due-date='+data.get('settings')["due-date"], templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
+	        			postRenderCallback : function(p_el){
+	        				displayTimeAgo(p_el);
+	        			} });
 	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Deals Won"){
-	        		portletCollectionView = new Base_Collection_View({ url : '/core/api/portlets/portletDealsWon?duration='+data.get('settings').duration, templateKey : 'portlets-opportunities', individual_tag_name : 'tr' });
+	        		App_Portlets.dealsWon[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletDealsWon?duration='+data.get('settings').duration, templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
+	        			postRenderCallback : function(p_el){
+	        				displayTimeAgo(p_el);
+	        			} });
 	        	}
 	        	if(portletCollectionView!=undefined)
 	        		portletCollectionView.collection.fetch();
-	        	if(data.get('name')!="Deals By Milestone" && data.get('name')!="Closures Per Person" && data.get('name')!="Deals Funnel" && data.get('name')!="Emails Sent" && data.get('name')!="Growth Graph" && data.get('name')!="Deals Assigned" && data.get('name')!="Calls Per Person"){
+	        	if(data.get('name')!="Deals By Milestone" && data.get('name')!="Closures Per Person" && data.get('name')!="Deals Funnel" && data.get('name')!="Emails Sent" 
+	        		&& data.get('name')!="Growth Graph" && data.get('name')!="Deals Assigned" && data.get('name')!="Calls Per Person" 
+	        			&& data.get('name')!="Pending Deals" && data.get('name')!="Deals Won"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(portletCollectionView.render().el));
-	        		
+	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Pending Deals"){
+	        		App_Portlets.pendingDeals[parseInt(pos)].collection.fetch();
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.pendingDeals[parseInt(pos)].render().el));
+	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Deals Won"){
+	        		App_Portlets.dealsWon[parseInt(pos)].collection.fetch();
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.dealsWon[parseInt(pos)].render().el));
 	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Deals By Milestone"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
 	        		var selector=idVal;
