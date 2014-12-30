@@ -1,24 +1,96 @@
-<!-- Indices written at Mon, 22 Dec 2014 23:51:38 IST -->
+<!-- Indices written at Tue, 30 Dec 2014 18:55:50 IST -->
 
 <datastore-indexes>
 
     <!-- Used 2 times in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="viewed.viewer_id" direction="asc"/>
+        <property name="viewed.viewed_time" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="ownerKey" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="is_complete" direction="asc"/>
+        <property name="owner" direction="asc"/>
+        <property name="due" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="CustomFieldDef" ancestor="false" source="auto">
+        <property name="scope" direction="asc"/>
+        <property name="position" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 4 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 8 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
         <property name="__key__" direction="asc"/>
         <property name="updated_time" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 2 times in query history -->
+    <!-- Used 12 times in query history -->
     <datastore-index kind="Widget" ancestor="true" source="auto">
         <property name="widget_type" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 8 times in query history -->
+    <datastore-index kind="Event" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="related_contacts" direction="asc"/>
+        <property name="start" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="false" source="auto">
+        <property name="related_contacts" direction="asc"/>
+        <property name="start" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="false" source="auto">
+        <property name="related_contacts" direction="asc"/>
+        <property name="type" direction="asc"/>
+        <property name="start" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Event" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="related_contacts" direction="asc"/>
+        <property name="type" direction="asc"/>
+        <property name="start" direction="asc"/>
     </datastore-index>
 
     <!-- Used 1 time in query history -->
     <datastore-index kind="Event" ancestor="false" source="auto">
         <property name="owner" direction="asc"/>
         <property name="related_contacts" direction="asc"/>
-        <property name="start" direction="desc"/>
-        <property name="end" direction="desc"/>
+        <property name="type" direction="asc"/>
+        <property name="end" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="false" source="auto">
+        <property name="related_contacts" direction="asc"/>
+        <property name="end" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Event" ancestor="false" source="auto">
+        <property name="related_contacts" direction="asc"/>
+        <property name="type" direction="asc"/>
+        <property name="end" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>
