@@ -109,7 +109,7 @@ public class SocialPrefsAPI
      */
     @Path("google-emails")
     @GET
-    @Produces({ MediaType.APPLICATION_JSON+ " ;charset=utf-8", MediaType.APPLICATION_XML+ " ;charset=utf-8" })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public List<EmailWrapper> getGoogleEmails(@QueryParam("from_email") String fromEmail,
 	    @QueryParam("search_email") String searchEmail, @QueryParam("page_size") String pageSize,
 	    @QueryParam("cursor") String cursor)

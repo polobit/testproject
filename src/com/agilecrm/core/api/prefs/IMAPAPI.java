@@ -106,7 +106,7 @@ public class IMAPAPI
 
     @Path("imap-emails")
     @GET
-    @Produces({ MediaType.APPLICATION_JSON+ " ;charset=utf-8", MediaType.APPLICATION_XML+ " ;charset=utf-8" })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public List<EmailWrapper> getIMAPEmails(@QueryParam("from_email") String fromEmail,
 	    @QueryParam("search_email") String searchEmail, @QueryParam("page_size") String pageSize,
 	    @QueryParam("cursor") String cursor)
@@ -141,7 +141,6 @@ public class IMAPAPI
 	return emails;
     }
 
-
     /**
      * Returns list of users ,current user IMAPEmailPrefs shared with these
      * users
@@ -150,7 +149,7 @@ public class IMAPAPI
      */
     @Path("shared-to-users")
     @GET
-    @Produces({ MediaType.APPLICATION_JSON+ " ;charset=utf-8", MediaType.APPLICATION_XML+ " ;charset=utf-8" })
+    @Produces({ MediaType.APPLICATION_JSON + " ;charset=utf-8", MediaType.APPLICATION_XML + " ;charset=utf-8" })
     public String getSharedToUsersList()
     {
 	List<AgileUser> agileUsers = null;
