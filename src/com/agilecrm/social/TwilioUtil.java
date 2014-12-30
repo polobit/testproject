@@ -770,7 +770,10 @@ public class TwilioUtil
     	params.put("Url", "http://demo.twilio.com/docs/voice.xml");
     } else {
     	//For BETA
-    	params.put("Url", "https://" + NamespaceManager.get() + "-dot-sandbox-dot-agilecrmbeta.appspot.com/twiml?type=1&fid="+fileSelected);    	
+    	//params.put("Url", "https://" + NamespaceManager.get() + "-dot-sandbox-dot-agilecrmbeta.appspot.com/twiml?type=1&fid="+fileSelected);    	
+    	
+    	//For Version
+    	params.put("Url", "https://" + NamespaceManager.get() + "-dot-5-0-dot-agile-crm-cloud.appspot.com/twiml?type=1&fid="+fileSelected);
     	
     	//For LIVE
     	//params.put("Url", "https://" + NamespaceManager.get() + ".agilecrm.com/twiml?type=1&fid="+fileSelected);
