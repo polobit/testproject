@@ -177,10 +177,15 @@ public class Opportunity extends Cursor
     private Key<Milestone> pipeline = null;
 
     /**
-     * note's description related to a task
+     * pipeline Id of the deal.
      */
     @NotSaved
     public Long pipeline_id = 0L;
+
+    /**
+     * To state whenther the deals is archived or not.
+     */
+    public boolean archived = false;
 
     /**
      * ObjectifyDao of Opportunity.
@@ -505,16 +510,26 @@ public class Opportunity extends Cursor
 
     }
 
-    /**
+    /*
      * (non-Javadoc)
      * 
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString()
     {
-	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name
-		+ " description:" + description + " expectedValue: " + expected_value + " pipeline: " + pipeline_id
-		+ " milestone: " + milestone + " probability: " + probability + " Track: " + track + " Owner "
-		+ owner_id;
+	StringBuilder builder = new StringBuilder();
+	builder.append("Opportunity [id=").append(id).append(", name=").append(name).append(", contact_ids=")
+		.append(contact_ids).append(", related_contacts=").append(related_contacts).append(", custom_data=")
+		.append(custom_data).append(", description=").append(description).append(", expected_value=")
+		.append(expected_value).append(", milestone=").append(milestone).append(", probability=")
+		.append(probability).append(", close_date=").append(close_date).append(", owner_id=").append(owner_id)
+		.append(", ownerKey=").append(ownerKey).append(", agileUser=").append(agileUser)
+		.append(", created_time=").append(created_time).append(", track=").append(track)
+		.append(", entity_type=").append(entity_type).append(", notes=").append(notes)
+		.append(", related_notes=").append(related_notes).append(", note_description=")
+		.append(note_description).append(", pipeline=").append(pipeline).append(", pipeline_id=")
+		.append(pipeline_id).append(", archived=").append(archived).append("]");
+	return builder.toString();
     }
 }
