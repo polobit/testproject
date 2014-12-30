@@ -1,5 +1,7 @@
 package com.agilecrm.export.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 import com.agilecrm.user.DomainUser;
@@ -38,8 +40,11 @@ public class DealExportEmailUtil
 
 	HashMap<String, String> map = new HashMap<String, String>();
 	map.put("count", total);
+	Date currentDate = new Date();
+	SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh:mm");
+	StringBuilder emailSubject = new StringBuilder("Deals_").append(df.format(currentDate)).append(".csv");
 
-	SendMail.sendMail(currentUser.email, SendMail.EXPORT_DEALS_CSV_SUBJECT, SendMail.EXPORT_DEALS_CSV, map,
+	SendMail.sendMail(currentUser.email, emailSubject.toString(), SendMail.EXPORT_DEALS_CSV, map,
 		SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
     }
 }
