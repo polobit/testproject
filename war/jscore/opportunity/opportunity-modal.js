@@ -315,7 +315,7 @@ $(function(){
 					that.remove();
 					var htmllinks ='<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>';
 					htmllinks += '<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>';
-					$('#'+id+' .deal-options').prepend();
+					$('#'+id+' .deal-options').prepend(htmllinks);
 				}
 				console.log('archived deal----',model);
 				// Shows Milestones Pie
