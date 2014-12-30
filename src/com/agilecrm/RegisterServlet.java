@@ -408,7 +408,8 @@ public class RegisterServlet extends HttpServlet
 		}
 		System.out.println("in cookies utm source " + utmsource + " utm medium " + utmmedium + " utm campaign "
 		        + utmcampaign + " reference domain " + utmreferencedomain);
-		cookie.setMaxAge(0);
+		if (cookie.getName().equals("agile_reference_domain"))
+		    cookie.setMaxAge(0);
 
 	    }
 	    if (StringUtils.isNotEmpty(utmsource) && StringUtils.isNotEmpty(utmcampaign)
