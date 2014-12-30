@@ -3516,31 +3516,25 @@ $(function()
 		return options.inverse(this);
 	});
 	
-	Handlebars.registerHelper('callActivityFriendlyStatus',function(status){
+	Handlebars.registerHelper('callActivityFriendlyStatus',function(status,direction){
 		
 		switch(status) {
-	    case "canceled":
-	    	return "Missed";
-	        break;
 	    case "completed":
-	    	return "Completed";
+	    case "answered":
+	    	return "";
 	    	break;
 	    case "busy":
-	    	return "Busy";
+	    case "no-answer":
+	    	if(direction == 'outgoing')
+	    		return "Contact Busy";
+	    	else
+	    		return "Not answered";
 	    	break;
 	    case "failed":
 	    	return "Failed";
 	    	break;
-	    case "no-answer":
-	    	return "No answer";
-	    	break;
-	    case "queued":
-	    	return "Waiting";
-	    	break;
-	    case "ringing":
-	    	return "Ringing";
-	    	break;
 	    case "in-progress":
+	    case "voicemail":
 	    	return "Left voicemail";
 	    	break; 	
 	    default:

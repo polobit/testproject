@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.Call;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
@@ -1284,33 +1285,38 @@ public class ActivityUtil
      * @created 28-Nov-2014
      *
      */
-    public static void createLogForCalls(String serviceType,String toOrFromNumber, String callType, String callStatus, String callDuration)
+    public static void createLogForCalls(String serviceType,String toOrFromNumber, String callType, String callStatus, 
+    		String callDuration, Contact contact)
     {
 	
 	// Search contact
 	if (toOrFromNumber != null)
 	{
-	    Contact contact = ContactUtil.searchContactByPhoneNumber(toOrFromNumber);
+		
+		String twilioStatus = getEnumValueOfTwilioStatus(callStatus);
+		if(twilioStatus != null) {
+		
 	    System.out.println("contact: " + contact);
 	    if (contact != null)
 	    {    	
 	    	String calledToName = "";
-	       	List<ContactField> properties = contact.properties;
-	    	for (ContactField f : properties){
-	    		System.out.println("\t" + f.name + " - " + f.value);
-	    		if(f.name.equals(contact.FIRST_NAME)) {
-	    			calledToName += f.value;
-	    		}
-	    		if(f.name.equals(contact.LAST_NAME)) {
-	    			calledToName += " " + f.value;
-	    		}
-	    	}
+	    	ContactField firstname = contact.getContactFieldByName("first_name");
+			ContactField lastname = contact.getContactFieldByName("last_name");
+
+			if (firstname != null)
+			    calledToName += firstname.value;
+
+			if (lastname != null)
+			{
+			    calledToName += " ";
+			    calledToName += lastname.value;
+			}
 	    	
 	    	Activity activity = new Activity();
 			activity.activity_type = ActivityType.CALL;
 			activity.custom1 = serviceType;
 			activity.custom2 = callType;
-			activity.custom3 = callStatus;
+			activity.custom3 = twilioStatus;
 			activity.custom4 = callDuration;
 			activity.label = calledToName;
 			activity.entity_type = EntityType.CONTACT;
@@ -1321,13 +1327,14 @@ public class ActivityUtil
 			activity.activity_type = ActivityType.CALL;
 			activity.custom1 = serviceType;
 			activity.custom2 = callType;
-			activity.custom3 = callStatus;
+			activity.custom3 = twilioStatus;
 			activity.custom4 = callDuration;
 			activity.label = toOrFromNumber;
 			activity.entity_type = null;
 			activity.entity_id = null;
 			activity.save();
 	    }
+		}
 	}
     }
     
@@ -1385,6 +1392,22 @@ public class ActivityUtil
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+    
+    public static String getEnumValueOfTwilioStatus(String status) {
+    	if (status.equalsIgnoreCase("completed")) {
+			return Call.ANSWERED;
+		} else if (status.equalsIgnoreCase("busy")) {
+			return Call.BUSY;
+		} else if (status.equalsIgnoreCase("failed")) {
+			return Call.FAILED;
+		} else if (status.equalsIgnoreCase("no-answer")) {
+			return Call.NO_ANSWER;
+		} else if (status.equalsIgnoreCase("in-progress")) {
+			return Call.VOICEMAIL;
+		} else {
+			return null;
+		}  		
     }
 
 }
