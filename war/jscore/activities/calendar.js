@@ -19,10 +19,16 @@ function isArray(a)
  */
 function load_events_from_google(callback)
 {
-	if(readCookie('event-filters') && JSON.parse(readCookie('event-filters')).type == 'agile')
-		return;
-	
-	// Name of the cookie to store/fetch calendar prefs. Current user id is set
+	if(readCookie('event-filters')){
+		if(JSON.parse(readCookie('event-filters')).type == 'agile')
+			return;
+		
+		//Check whether to show the google calendar events or not.
+		 if(JSON.parse(readCookie('event-filters')).owner_id.length >0 && CURRENT_AGILE_USER.id != JSON.parse(readCookie('event-filters')).owner_id)
+			 return;
+	}
+
+	 // Name of the cookie to store/fetch calendar prefs. Current user id is set
 	// in cookie name to avoid
 	// showing tasks in different users calendar if logged in same browser
 	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
@@ -89,8 +95,9 @@ function showCalendar() {
 	if(!readCookie('event-filters') || JSON.parse(readCookie('event-filters')).type != 'agile'){
 		 $.getJSON('/core/api/users/agileusers', function (users) {
 			 $.each(users,function(i,user){
-				 if(CURRENT_DOMAIN_USER.id == user.domain_user_id)
+				 if(CURRENT_DOMAIN_USER.id == user.domain_user_id && JSON.parse(readCookie('event-filters')).owner_id == user.id){
 					 _init_gcal_options();
+				 }
 			 });
 		 });
 	}
@@ -405,5 +412,14 @@ $(function(){
 	});
 	
 	loadDefaultFilters();
+	
+	//Save current agile user in global.
+	 $.getJSON('/core/api/users/agileusers', function (users) {
+		 $.each(users,function(i,user){
+			 if(CURRENT_DOMAIN_USER.id == user.domain_user_id ){
+				 CURRENT_AGILE_USER = user;
+			 }
+		 });
+	 });
 });
 
