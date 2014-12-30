@@ -98,6 +98,18 @@ public class SearchUtil
 		    e.printStackTrace();
 		}
 		continue;
+	    } else if (customField != null && customField.field_type == CustomFieldDef.Type.NUMBER)
+	    {
+		try
+		{
+		    doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_number")
+			    .setNumber(Double.valueOf(contactField.value)));
+		}
+		catch (NumberFormatException e)
+		{
+		    e.printStackTrace();
+		}
+		continue;
 	    }
 
 	    /*

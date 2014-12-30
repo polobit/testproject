@@ -575,6 +575,8 @@ var WorkflowsRouter = Backbone.Router
 								 */
 								fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', function fillCampaign()
 								{
+									$('#email-tracking-campaign-id option:first').after('<option value="0">All</option>');
+									
 									var value = currentTrigger.toJSON();
 									if (value)
 									{
