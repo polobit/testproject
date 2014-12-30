@@ -242,6 +242,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 		url: url,
 		type: 'POST',
 		data: json,
+		contentType : "application/x-www-form-urlencoded",
 		success: function() {
 			
 			if(url=='core/api/tasks/bulk'){
