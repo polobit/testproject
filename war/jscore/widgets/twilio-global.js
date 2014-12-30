@@ -912,8 +912,8 @@ function showNoteAfterCall(callRespJson,messageObj)
 		    	friendlyStatus = TWILIO_CALLTYPE + " call made to "+ phoneNumber +" has failed";
 		    	break;
 		    case "no-answer":
-		    	noteSub = TWILIO_CALLTYPE + " call - No Answer";
-		    	friendlyStatus = "No Answer";
+		    	noteSub = TWILIO_CALLTYPE + " call - No answer";
+		    	friendlyStatus = "No answer";
 		    	break;
 		    default:
 		        return;
@@ -930,7 +930,7 @@ function showNoteAfterCall(callRespJson,messageObj)
 				//add note automatically
 				$.post( "/core/api/widgets/twilio/autosavenote", {
 					subject: noteSub,
-					message: "Call status "+friendlyStatus,
+					message: "",
 					contactid: TWILIO_CONTACT_ID
 					});
 			}
