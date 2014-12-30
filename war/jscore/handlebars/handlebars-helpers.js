@@ -3442,15 +3442,15 @@ $(function()
 					var seconds = time - minutes * 60;
 					var friendlyTime = "";
 					if(hours == 1)
-						friendlyTime = hours+ " hr ";
+						friendlyTime = hours+ " h ";
 					if(hours > 1)
-						friendlyTime = hours+ " hrs ";
+						friendlyTime = hours+ " h ";
 					if(minutes > 0)
-						friendlyTime += minutes + " min ";
+						friendlyTime += minutes + " m ";
 					if(seconds > 0)
-						friendlyTime += seconds + " sec";
+						friendlyTime += seconds + " s ";
 					if(friendlyTime != "")
-						return "("+friendlyTime+")";
+						return friendlyTime;
 					return friendlyTime;
 				});
 	// To pick randomly selected avatar url
@@ -3521,7 +3521,7 @@ $(function()
 		switch(status) {
 	    case "completed":
 	    case "answered":
-	    	return "";
+	    	return "Call duration";
 	    	break;
 	    case "busy":
 	    case "no-answer":
