@@ -3,7 +3,7 @@
     "thumbnail": "json/nodes/images/crm/has_event.png",
     "icon": "json/nodes/icons/crm/has_event.png",
     "info": "Checks whether an Event exists for this contact.",
-    "help": "Check event help.",
+    "help": "Checks whether an Event exists for this contact.",
     "author": "Bhasuri",
     "company": "AgileCRM",
     "language": "en",
@@ -56,7 +56,7 @@
             "type": "select"
         },
         {
-            "label": "help of check events",
+            "label": "Checks whether an Event exists for this contact.",
             "category": "Help",
             "fieldType": "label",
             "type": "label"
