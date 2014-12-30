@@ -3071,8 +3071,23 @@ $(function()
 								return template;
 				});
 				
+				// checks if email type is agile or not
+				Handlebars.registerHelper('if_email_type_is_agile', function(value,options)
+				{
+					var type = email_server_type;
+					if (type)
+						if(value === type)
+							return options.fn(this);
+						else
+							return options.inverse(this);
+					else
+					{
+						 return options.fn(this);
+					}
+				});
+				
 				// Reads the gloabal varaible and returns it value
-				Handlebars.registerHelper('read_global_var', function(custom_fields, contacts)
+				Handlebars.registerHelper('read_global_var', function()
 				{
 					var type = email_server_type;
 					if (type)

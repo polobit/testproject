@@ -12,6 +12,8 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.SocialPrefs.Type;
 import com.agilecrm.user.util.SocialPrefsUtil;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 import com.thirdparty.google.GoogleServiceUtil;
 
 public class ContactGmailUtil
@@ -34,6 +36,41 @@ public class ContactGmailUtil
 	// Get Gmail Social Prefs
 	Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
 	SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(agileUser, socialPrefsTypeEnum);
+
+	if (gmailPrefs == null)
+	    return null;
+
+	if (gmailPrefs.expires_at > 0l && gmailPrefs.expires_at <= System.currentTimeMillis())
+	{
+	    resetAccessToken(gmailPrefs);
+	}
+
+	return ContactGmailUtil.getGmailURLForPrefs(gmailPrefs, searchEmail, offset, count);
+
+    }
+    
+    /**
+     * Returns GmailURL to fetch emails from given "from-email" gmail user-account.
+     * 
+     * @param fromEmail
+     *        -gmail username
+     * 
+     * @param searchEmail
+     *            - search email-id.
+     * @param offset
+     *            - offset.
+     * @param count
+     *            - count or limit to number of emails.
+     * @return String
+     */
+    @SuppressWarnings("deprecation")
+    public static String getGmailURL(AgileUser agileUser, String fromEmail, String searchEmail, String offset,
+	    String count)
+    {
+	// Get Gmail Social Prefs
+	Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
+	Objectify ofy = ObjectifyService.begin();
+	SocialPrefs gmailPrefs = ofy.query(SocialPrefs.class).filter("email", fromEmail).filter("type", socialPrefsTypeEnum).get();
 
 	if (gmailPrefs == null)
 	    return null;
