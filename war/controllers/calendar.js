@@ -460,7 +460,8 @@ function show_model(id)
 												$('#update-event-time-2').val((end.getHours() < 10 ? "0" : "") + end.getHours() + ":" + (end.getMinutes() < 10 ? "0" : "") + end.getMinutes());
 								}
 
-								$('#updateActivityModal').find("input[type='hidden']").val(id);
+								$('#updateActivityModal').find("input[name='id']").val(id);
+								$('#updateActivityModal').find("input[name='type']").val(event.type);
 				}
 }
 

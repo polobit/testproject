@@ -326,7 +326,6 @@ function our_domain_sync() {
 				add_custom_fields_to_our_domain();
 
 				initWebrules();
-				add_referrar_info_as_note();
 			});
 
 		})
@@ -582,4 +581,4 @@ $(function(){
 		console.log();
 	}
 	
-})
+});
