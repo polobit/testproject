@@ -195,7 +195,7 @@ public class SocialPrefsAPI
      */
     @Path("{type}/shared-to-users")
     @GET
-    @Produces({ MediaType.APPLICATION_JSON+ " ;charset=utf-8", MediaType.APPLICATION_XML+ " ;charset=utf-8" })
+    @Produces({ MediaType.APPLICATION_JSON + " ;charset=utf-8", MediaType.APPLICATION_XML + " ;charset=utf-8" })
     public String getSharedToUsersList()
     {
 	List<AgileUser> agileUsers = null;
@@ -223,23 +223,26 @@ public class SocialPrefsAPI
 		for (AgileUser agileUser : agileUsers)
 		{
 		    DomainUser domainUser = agileUser.getDomainUser();
-		    String name = domainUser.name;
-		    Long id = agileUser.id;
-		    JSONObject user = new JSONObject();
-		    user.put("id", id.toString());
-		    user.put("name", name);
-
-		    if (sharedUsers != null)
+		    if (domainUser != null)
 		    {
-			for (Key<AgileUser> sharedUser : sharedUsers)
+			String name = domainUser.name;
+			Long id = agileUser.id;
+			JSONObject user = new JSONObject();
+			user.put("id", id.toString());
+			user.put("name", name);
+
+			if (sharedUsers != null)
 			{
-			    if (sharedUser.getId() == id.longValue())
+			    for (Key<AgileUser> sharedUser : sharedUsers)
 			    {
-				user.put("selected", "selected");
+				if (sharedUser.getId() == id.longValue())
+				{
+				    user.put("selected", "selected");
+				}
 			    }
 			}
+			users.put(user);
 		    }
-		    users.put(user);
 		}
 	    }
 	}

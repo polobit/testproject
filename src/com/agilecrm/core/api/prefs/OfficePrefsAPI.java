@@ -190,23 +190,26 @@ public class OfficePrefsAPI
 		for (AgileUser agileUser : agileUsers)
 		{
 		    DomainUser domainUser = agileUser.getDomainUser();
-		    String name = domainUser.name;
-		    Long id = agileUser.id;
-		    JSONObject user = new JSONObject();
-		    user.put("id", id.toString());
-		    user.put("name", name);
-
-		    if (sharedUsers != null)
+		    if (domainUser != null)
 		    {
-			for (Key<AgileUser> sharedUser : sharedUsers)
+			String name = domainUser.name;
+			Long id = agileUser.id;
+			JSONObject user = new JSONObject();
+			user.put("id", id.toString());
+			user.put("name", name);
+
+			if (sharedUsers != null)
 			{
-			    if (sharedUser.getId() == id.longValue())
+			    for (Key<AgileUser> sharedUser : sharedUsers)
 			    {
-				user.put("selected", "selected=selected");
+				if (sharedUser.getId() == id.longValue())
+				{
+				    user.put("selected", "selected=selected");
+				}
 			    }
 			}
+			users.put(user);
 		    }
-		    users.put(user);
 		}
 	    }
 	}
