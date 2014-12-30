@@ -206,8 +206,6 @@ $(function()
 		e.preventDefault();
 		email_server_type = "agilecrm"
 		save_contact_tab_position_in_cookie("mail");
-//		var mail_server_url = 'core/api/emails/agile-emails?e=';
-//		contact_details_tab.load_mail_accounts();
 		contact_details_tab.load_mail();
 	});
 

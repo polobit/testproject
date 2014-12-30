@@ -118,7 +118,7 @@ public class OfficePrefsAPI
      */
     @Path("office365-emails")
     @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON+ " ;charset=utf-8", MediaType.APPLICATION_XML+ " ;charset=utf-8" })
     public List<EmailWrapper> getOffice365Emails(@QueryParam("from_email") String fromEmail,
 	    @QueryParam("search_email") String searchEmail, @QueryParam("page_size") String pageSize,
 	    @QueryParam("cursor") String cursor)
@@ -161,7 +161,7 @@ public class OfficePrefsAPI
      */
     @Path("shared-to-users")
     @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON + " ;charset=utf-8", MediaType.APPLICATION_XML + " ;charset=utf-8" })
     public String getSharedToUsersList()
     {
 
