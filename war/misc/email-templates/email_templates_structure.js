@@ -8,7 +8,7 @@
                     "label": "Rocket Mail",
                     "title": "rocketmail",
                     "theme_preview": {
-                        "theme_small": "/misc/email-templates/newsletter/rocketmail/rocketmail-email-template/preview/theme-small-light-bg.png",
+                        "theme_small": "/misc/email-templates/newsletter/rocketmail/rocketmail-email-template/preview/theme-small-light-bg.PNG",
                         "theme_big": "/misc/email-templates/newsletter/rocketmail/rocketmail-email-template/preview/theme-small-light-bg.PNG"
                     },
                     "layouts": [
