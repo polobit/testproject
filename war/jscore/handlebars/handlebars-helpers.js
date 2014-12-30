@@ -3384,6 +3384,9 @@ $(function()
 										if(fields.indexOf(" start date")!=-1){
 											return options.fn(value);
 										}
+										if(fields.indexOf(" due date ")!=-1){
+											return options.fn(value);
+										}
 
 										return options.inverse(value);
 
