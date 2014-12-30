@@ -969,13 +969,13 @@ function twilioSecondsToFriendly(time) {
 	var seconds = time - minutes * 60;
 	var friendlyTime = "";
 	if(hours == 1)
-		friendlyTime = hours+ " hr ";
+		friendlyTime = hours+ "h ";
 	if(hours > 1)
-		friendlyTime = hours+ " hrs ";
+		friendlyTime = hours+ "h ";
 	if(minutes > 0)
-		friendlyTime += minutes + " min ";
+		friendlyTime += minutes + "m ";
 	if(seconds > 0)
-		friendlyTime += seconds + " sec";
+		friendlyTime += seconds + "s ";
 	if(friendlyTime != "")
 	return friendlyTime;
 }
@@ -1003,30 +1003,57 @@ function searchForContact(from) {
 function sendVoiceAndEndCall(fileSelected) {
 	console.log("Sending voice mail...");
 	if(TWILIO_IS_VOICEMAIL == false) {
-	//	alert("Voicemail will be sent to user.Current call will be closed.");
-		var messageObj = globalconnection.message;
-		if(twilioVoiceMailRedirect(fileSelected)) {
-			closeTwilioNoty();
-			if(TWILIO_CONTACT_ID) {		
-			//add note automatically
-			$.post( "/core/api/widgets/twilio/autosavenote", {
-				subject: TWILIO_CALLTYPE + " call - Left voicemail",
-				message: "",
-				contactid: TWILIO_CONTACT_ID
-				});
-			
-			if(TWILIO_CALLED_NO != "") {
-				$.post( "/core/api/widgets/twilio/savecallactivity",{
-					direction: TWILIO_DIRECTION, 
-					phone: TWILIO_CALLED_NO, 
-					status : "voicemail",
-					duration : 0 
-					});
+		
+		var conn = globalconnection;
+		var widgetDetails = twilioGetWidgetDetails();
+		var widgetPrefs = $.parseJSON(widgetDetails.prefs);
+		var acc_sid = widgetPrefs.twilio_acc_sid;
+		var auth_token = widgetPrefs.twilio_auth_token;	
+		var isParent = "true";
+		var ApiCallUrl = "/core/api/widgets/twilio/getlastcall/" + acc_sid + "/" + auth_token + "/" + conn.parameters.CallSid + "/" + isParent;
+		if(!widgetDetails)
+			return;
+		
+		var callDetails  = twilioApiRequest(ApiCallUrl);
+		
+		if(!callDetails)
+			return;
+		
+		var callDetailsJson = $.parseJSON(callDetails.responseText);
+		if(isParent == "true")
+			var callRespJson = callDetailsJson.calls[0];
+		else
+			var callRespJson = callDetailsJson;
+		
+		if(typeof callRespJson != "undefined") {
+			if(typeof callRespJson.status != "undefined" && callRespJson.status == 'in-progress') {
+				alert("Voicemail will be sent to user.Current call will be closed.");
+				var messageObj = globalconnection.message;
+				if(twilioVoiceMailRedirect(fileSelected)) {
+					closeTwilioNoty();
+					if(TWILIO_CONTACT_ID) {		
+					//add note automatically
+					$.post( "/core/api/widgets/twilio/autosavenote", {
+						subject: TWILIO_CALLTYPE + " call - Left voicemail",
+						message: "",
+						contactid: TWILIO_CONTACT_ID
+						});
+					
+					if(TWILIO_CALLED_NO != "") {
+						$.post( "/core/api/widgets/twilio/savecallactivity",{
+							direction: TWILIO_DIRECTION, 
+							phone: TWILIO_CALLED_NO, 
+							status : "voicemail",
+							duration : 0 
+							});
+					}
+					TWILIO_IS_VOICEMAIL = true;					
+					}
+				}
 			}
-			
-			}
+		} else {
+			return;
 		}
-		TWILIO_IS_VOICEMAIL = true;
 	}
 }
 
