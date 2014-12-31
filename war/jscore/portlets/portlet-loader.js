@@ -168,8 +168,13 @@ function set_up_portlets(el, portlets_el){
 						model.set({ 'size_x' : parseInt($(this).attr("data-sizex")) }, { silent : true });
 						
 						model.set({ 'size_y' : parseInt($(this).attr("data-sizey")) }, { silent : true });
+						
+						model.set({ 'column_position' : parseInt($(this).attr("data-col")) }, { silent : true });
+						
+						model.set({ 'row_position' : parseInt($(this).attr("data-row")) }, { silent : true });
 
-						models.push({ id : model.get("id"), size_x : parseInt($(this).attr("data-sizex")), size_y : parseInt($(this).attr("data-sizey")) });
+						models.push({ id : model.get("id"), size_x : parseInt($(this).attr("data-sizex")), size_y : parseInt($(this).attr("data-sizey")), 
+							column_position : parseInt($(this).attr("data-col")), row_position : parseInt($(this).attr("data-row")) });
 					});
 					// Saves new width and height in server
 					$.ajax({ type : 'POST', url : '/core/api/portlets/widthAndHeight', data : JSON.stringify(models),

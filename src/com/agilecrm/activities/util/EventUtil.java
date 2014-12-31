@@ -315,8 +315,8 @@ public class EventUtil
 	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
 
 	    // Gets list of tasks filtered on given conditions
-	    return dao.ofy().query(Event.class).filter("owner", new Key<AgileUser>(AgileUser.class, agileUser.id)).filter("search_range >=", startTime).filter("search_range <=", endTime).limit(50)
-		    .order("search_range").list();
+	    return dao.ofy().query(Event.class).filter("owner", new Key<AgileUser>(AgileUser.class, agileUser.id)).filter("start >=", startTime).filter("start <=", endTime).limit(50)
+		    .order("start").list();
 	}
 	catch (Exception e)
 	{

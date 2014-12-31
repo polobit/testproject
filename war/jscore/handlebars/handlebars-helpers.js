@@ -3636,6 +3636,33 @@ $(function()
 		return strTime;
 	});
 	
+	/**
+	 * getting duration between two dates for event portlet
+	 */
+	Handlebars.registerHelper('get_duration', function(startDate,endDate) {
+		var duration='';
+		var days=0;
+		var hrs=0;
+		var mins=0;
+		var diffInSeconds = endDate - startDate;
+		days = Math.floor(diffInSeconds/(24*60*60));
+		hrs = Math.floor((diffInSeconds % (24*60*60))/(60*60));
+		mins = Math.floor(((diffInSeconds % (24*60*60)) % (60*60))/60);
+		if(days!=0 && days==1)
+			duration += ''+days+' Day ';
+		else if(days!=0 && days>1)
+			duration += ''+days+' Days ';
+		if(hrs!=0 && hrs==1)
+			duration += ''+hrs+' Hour ';
+		else if(hrs!=0 && hrs>1)
+			duration += ''+hrs+' Hours ';
+		if(mins!=0 && mins==1)
+			duration += ''+mins+' Minute';
+		else if(mins!=0 && mins>1)
+			duration += ''+mins+' Minutes';
+		return duration;
+	});
+	
 });
 
 // helper function return created time for event

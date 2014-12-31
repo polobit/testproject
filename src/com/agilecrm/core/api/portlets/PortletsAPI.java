@@ -117,6 +117,8 @@ public class PortletsAPI {
 			Portlet portlt = PortletUtil.getPortlet(portlet.id);
 			portlt.size_x = portlet.size_x;
 			portlt.size_y = portlet.size_y;
+			portlt.column_position = portlet.column_position;
+			portlt.row_position = portlet.row_position;
 			portlt.save();
 		}
 	}
