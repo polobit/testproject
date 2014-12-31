@@ -198,7 +198,7 @@ $(function(){
 	$("#opportunity_archive").die().live('click',function(e){
 		e.preventDefault();
 		$('#archived',$('#opportunityUpdateForm')).attr('checked','checked');
-		$("#opportunity_validate").trigger('click');
+		$("#opportunityUpdateModal #opportunity_validate").trigger('click');
 	});
 	$("#opportunity_unarchive").die().live('click',function(e){
 		e.preventDefault();
