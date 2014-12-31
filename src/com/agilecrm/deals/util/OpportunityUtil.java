@@ -209,6 +209,8 @@ public class OpportunityUtil
 	if (ownerId != null)
 	    conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
 
+	conditionsMap.put("archived", false);
+
 	return dao.listByProperty(conditionsMap);
     }
 
@@ -379,14 +381,15 @@ public class OpportunityUtil
     {
 	return dao.ofy().query(Opportunity.class)
 		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-		.order("-created_time").limit(10).list();
+		.filter("archived", false).order("-created_time").limit(10).list();
     }
 
     public static List<Opportunity> getUpcomingDealsRelatedToCurrentUser(String pageSize)
     {
+	System.out.println("deals--------------------");
 	return dao.ofy().query(Opportunity.class)
 		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-		.order("close_date").limit(Integer.parseInt(pageSize)).list();
+		.filter("archived", false).order("close_date").limit(Integer.parseInt(pageSize)).list();
     }
 
     /**
@@ -774,6 +777,12 @@ public class OpportunityUtil
 		searchMap.put("ownerKey",
 			new Key<DomainUser>(DomainUser.class, Long.parseLong(filterJson.getString("owner_id"))));
 
+	    if (checkJsonString(filterJson, "archived"))
+	    {
+		if (!filterJson.getString("archived").equals("all"))
+		    searchMap.put("archived", Boolean.parseBoolean(filterJson.getString("archived")));
+	    }
+
 	    if (checkJsonString(filterJson, "value_filter")
 		    && filterJson.getString("value_filter").equalsIgnoreCase("equals"))
 	    {
@@ -832,8 +841,6 @@ public class OpportunityUtil
 	     * getCustomFieldFilters(filterJson.getJSONObject("customFields"));
 	     * if (customFilters != null) searchMap.putAll(customFilters);
 	     */
-
-	    System.out.println("---------------" + searchMap.toString());
 
 	    if (count != 0)
 		return dao.fetchAllByOrder(count, cursor, searchMap, true, false, sortField);
@@ -974,5 +981,21 @@ public class OpportunityUtil
 
 	System.out.println("-----custom---------" + searchMap.toString());
 	return searchMap;
+    }
+
+    /**
+     * fetch opportunity related to contact using contact id
+     * 
+     * @param contactId
+     * @return
+     */
+
+    public static List<Opportunity> getAllOpportunity(Long contactId)
+    {
+
+	Map<String, Object> conditionsMap = new HashMap<String, Object>();
+
+	conditionsMap.put("related_contacts", new Key<Contact>(Contact.class, contactId));
+	return dao.listByProperty(conditionsMap);
     }
 }

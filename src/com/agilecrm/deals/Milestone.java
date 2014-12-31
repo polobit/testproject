@@ -42,6 +42,8 @@ public class Milestone
     @NotSaved(IfDefault.class)
     public String name;
 
+    public boolean isDefault = false;
+
     /**
      * Milestone Dao
      */

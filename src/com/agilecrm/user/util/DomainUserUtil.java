@@ -232,7 +232,7 @@ public class DomainUserUtil
 	    NamespaceManager.set(namespace);
 	}
     }
-    
+
     public static DomainUser getDomainUserByEmailFromParticularDomain(String email, String domain)
     {
 	String namespace = NamespaceManager.get();
@@ -377,7 +377,7 @@ public class DomainUserUtil
 	NamespaceManager.set("");
 
 	DomainUser user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true)
-		.get();
+	        .get();
 
 	NamespaceManager.set(oldNamespace);
 	return user;
@@ -460,8 +460,7 @@ public class DomainUserUtil
      * Gets domain user based on his scheduleid
      * 
      * @param name
-     *            is nothing but schedule id.and schedule id is nothing but his
-     *            name
+     *            is schedule id.and schedule id is nothing but his name
      * 
      * @return {@link DomainUser} object
      */
@@ -485,6 +484,7 @@ public class DomainUserUtil
 	{
 	    NamespaceManager.set(oldnamespace);
 	}
+
     }
 
     /**

@@ -3094,8 +3094,23 @@ $(function()
 								return template;
 				});
 				
+				// checks if email type is agile or not
+				Handlebars.registerHelper('if_email_type_is_agile', function(value,options)
+				{
+					var type = email_server_type;
+					if (type)
+						if(value === type)
+							return options.fn(this);
+						else
+							return options.inverse(this);
+					else
+					{
+						 return options.fn(this);
+					}
+				});
+				
 				// Reads the gloabal varaible and returns it value
-				Handlebars.registerHelper('read_global_var', function(custom_fields, contacts)
+				Handlebars.registerHelper('read_global_var', function()
 				{
 					var type = email_server_type;
 					if (type)
@@ -3450,15 +3465,15 @@ $(function()
 					var seconds = time - minutes * 60;
 					var friendlyTime = "";
 					if(hours == 1)
-						friendlyTime = hours+ " hr ";
+						friendlyTime = hours+ "h ";
 					if(hours > 1)
-						friendlyTime = hours+ " hrs ";
+						friendlyTime = hours+ "h ";
 					if(minutes > 0)
-						friendlyTime += minutes + " min ";
+						friendlyTime += minutes + "m ";
 					if(seconds > 0)
-						friendlyTime += seconds + " sec";
+						friendlyTime += seconds + "s ";
 					if(friendlyTime != "")
-						return "("+friendlyTime+")";
+						return ' - '+friendlyTime;
 					return friendlyTime;
 				});
 	// To pick randomly selected avatar url
@@ -3502,6 +3517,53 @@ $(function()
 		else if(field_type=="FORMULA")
 			field_type_name = "Formula";
 		return field_type_name;
+	});
+	
+	//@author Purushotham
+	//function to compare integer values
+	Handlebars.registerHelper('ifCond', function(v1, type, v2, options) {	
+		switch(type){
+			case "greaterthan":
+				if(parseInt(v1) > parseInt(v2))
+					return options.fn(this);
+				break;
+			case "lessthan":
+				if(parseInt(v1) < parseInt(v2))
+					return options.fn(this);
+				break;
+			case "equals":
+				if(parseInt(v1) === parseInt(v2))
+					return options.fn(this);
+				break;
+		}
+		return options.inverse(this);
+	});
+	
+	Handlebars.registerHelper('callActivityFriendlyStatus',function(status,direction){
+		
+		switch(status) {
+	    case "completed":
+	    case "answered":
+	    	return "Call duration";
+	    	break;
+	    case "busy":
+	    case "no-answer":
+	    	if(direction == 'outgoing')
+	    		return "Contact busy";
+	    	else
+	    		return "Not answered";
+	    	break;
+	    case "failed":
+	    	return "Failed";
+	    	break;
+	    case "in-progress":
+	    case "voicemail":
+	    	return "Left voicemail";
+	    	break; 	
+	    default:
+	        return "";
+		}
+		
 	});
 
 	Handlebars.registerHelper('shopifyWebhook', function()

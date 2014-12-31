@@ -153,6 +153,10 @@ function getTemplateUrls(templateName)
 	if (templateName.indexOf("document") == 0)
 	{
 		template_relative_urls.push("document.js");
+	}	
+	if (templateName.indexOf("voice-mail") == 0)
+	{
+		template_relative_urls.push("voice-mail.js");
 	}
 	if (templateName.indexOf("gmap") == 0)
 	{

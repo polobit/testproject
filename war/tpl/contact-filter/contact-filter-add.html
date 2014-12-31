@@ -97,7 +97,8 @@
 														class="first_name company owner org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 													<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="NOTEQUALS" class="tags">isn't</option>
-
+													<option value="EQUALS" class="lead_score">equals</option>
+													<option value="BETWEEN_NUMBER" class="lead_score">between</option>
 													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
 													<option value="IS_LESS_THAN" class="lead_score">less than</option>
 													<option value="ON" class="updated_time created_time">on</option>
@@ -134,6 +135,8 @@
 													class="tags tags_time required"
 													style="margin: 0px;width:92%" /> 
                                                 <input type="text" name="temp" class="email required" style="width:92%"/>
+												<input type="text" name="temp" style="width:92%"
+													class="BETWEEN_NUMBER number required"/>
 												<input id="updated_date" type="text" name="updated_date" style="width:92%; text-overflow:none; "
 													class="ON AFTER BEFORE BETWEEN input required date"
 													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
@@ -141,6 +144,8 @@
 										</td>
 										<td class="rhs-new-block controls span2" style="vertical-align:top; " >
 											<div id="RHS-NEW" name="RHS_NEW">
+												<input type="text" name="temp" style="width:92%"
+													class="BETWEEN_NUMBER number required"/>
 												<input id="date_between" type="text" name="temp" data-date-format="mm/dd/yyyy"
 													class="BETWEEN input date required" style="width: 92%" placeholder="MM/DD/YY" />
 											</div>
@@ -230,9 +235,6 @@
 														class="name company owner org_tag title email url phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 													<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="NOTEQUALS" class="tags">isn't</option>
-
-													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
-													<option value="IS_LESS_THAN" class="lead_score">less than</option>
 													<option value="ON" class="updated_time created_time">on</option>
 													<option value="AFTER" class="created_time updated_time">is
 														after</option>
