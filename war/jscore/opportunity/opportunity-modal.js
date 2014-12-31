@@ -203,7 +203,7 @@ $(function(){
 	$("#opportunity_unarchive").die().live('click',function(e){
 		e.preventDefault();
 		$('#archived',$('#opportunityUpdateForm')).removeAttr('checked');
-		$("#opportunity_validate").trigger('click');
+		$('#opportunityUpdateModal #opportunity_validate').trigger('click');
 	});
 	
 	
