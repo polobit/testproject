@@ -239,6 +239,7 @@
         <property name="pipeline" direction="asc"/>
         <property name="close_date" direction="asc"/>
     </datastore-index>
+<<<<<<< HEAD
 	
 	<datastore-index kind="Opportunity" ancestor="false" source="auto">
 	    <property name="archived" direction="asc"/>
@@ -306,6 +307,10 @@
     <datastore-index kind="Note" ancestor="false" source="auto">
         <property name="related_contacts" direction="asc"/>
         <property name="created_time" direction="desc"/>
+    </datastore-index>
+    
+	<datastore-index kind="Portlet" ancestor="true" source="manual">
+        <property name="row_position" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>

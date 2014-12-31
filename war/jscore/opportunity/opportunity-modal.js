@@ -340,8 +340,7 @@ function updateDeal(ele, editFromMilestoneView)
 	// Checking Whether the edit is from milestone view,
 	// if it is we are passing JSON object so no need to convert
 	var value = (editFromMilestoneView ? ele : ele.toJSON());
-	if(value.archived == true)
-		return;
+
 	add_recent_view(new BaseModel(value));
 	
 	var dealForm = $("#opportunityUpdateForm");
@@ -665,6 +664,29 @@ if(json.close_date==0)
 						data.attributes.cursor = App_Deals.opportunityCollectionView.collection.last().toJSON().cursor;
 						App_Deals.opportunityCollectionView.collection.add(data);
 						App_Deals.opportunityCollectionView.render(true);
+				}
+
+			}
+			else if (Current_Route == 'portlets') 
+			{
+				if(App_Portlets.currentPosition && App_Portlets.pendingDeals && App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)]){
+					if (isUpdate)
+						App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+					// Updates task list view
+					if(json.milestone!="Won" && json.milestone!="Lost")
+						App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+					App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].render(true);
+				}
+				if(App_Portlets.currentPosition && App_Portlets.dealsWon && App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)]){
+					if (isUpdate)
+						App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+					// Updates task list view
+					App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+					App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)].render(true);
 				}
 
 			}
