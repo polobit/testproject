@@ -193,7 +193,7 @@ $('#portlets-contacts-model-list > tr, #portlets-companies-model-list > tr').liv
 	App_Contacts.navigate("contact/" + id, { trigger : true });
 });
 $('#portlets-opportunities-model-list > tr').live('click', function(e) {
-	//e.preventDefault();
+	e.preventDefault();
 	App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
 	updateDeal($(this).data());
 });
