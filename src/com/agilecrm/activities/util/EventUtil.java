@@ -346,6 +346,7 @@ public class EventUtil
 	System.out.println(starttime + "----------------------------" + endtime);
 
 	List<Event> domain_events = new ArrayList<>();
+	List<String> default_events = getDefaultEventNames();
 
 	List<Event> events = dao.ofy().query(Event.class).filter("start >=", starttime).filter("start <=", endtime)
 	        .order("start").list();
@@ -353,7 +354,15 @@ public class EventUtil
 	{
 	    Event event = events.get(0);
 	    domain_events = getLatestWithSameStartTime(event.start);
-	    return domain_events;
+
+	    List<Event> list_events = new ArrayList<>();
+
+	    for (Event ts : domain_events)
+	    {
+		if (!default_events.contains(ts.title))
+		    list_events.add(ts);
+	    }
+	    return list_events;
 
 	}
 
@@ -373,7 +382,7 @@ public class EventUtil
 
 	List<Event> domain_events = new ArrayList<>();
 
-	domain_events = dao.listByProperty("start", starttime);
+	domain_events = dao.ofy().query(Event.class).filter("start", starttime).list();
 	System.out.println(domain_events.size() + " domainevents size in getlatesteventswithSameStarttime");
 	System.out.println(starttime + " StartTime in getLatestWithStartTime");
 	return domain_events;
@@ -417,6 +426,18 @@ public class EventUtil
 	dateFormat.setTimeZone(tz);
 	cal.setTimeZone(tz);
 	return dateFormat.format(cal.getTime());
+    }
+
+    /**
+     * 
+     * @return defaults task names as a list to stop due task mails
+     */
+    public static List<String> getDefaultEventNames()
+    {
+	List<String> default_event = new ArrayList<>();
+	default_event.add("Gossip at water cooler");
+	default_event.add("Discuss today's Dilbert strip");
+	return default_event;
     }
 
 }

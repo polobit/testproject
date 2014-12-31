@@ -1,5 +1,6 @@
 package com.agilecrm.activities.util;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
@@ -251,12 +252,28 @@ public class TaskUtil
 
 	System.out.println("check for " + startTime + " " + endTime);
 
+	List<String> default_tasks = getDefaultTaskNames();
 	// Gets list of tasks filtered on given conditions
 	List<Task> dueTasks = dao.ofy().query(Task.class)
 	        .filter("owner", new Key<DomainUser>(DomainUser.class, domainUserId)).filter("due >", startTime)
 	        .filter("due <=", endTime).filter("is_complete", false).list();
 
-	return dueTasks;
+	List<Task> dueTaskList = new ArrayList<>();
+
+	if (dueTasks.isEmpty())
+	{
+	    return null;
+	}
+	for (Task ts : dueTasks)
+	{
+	    if (!default_tasks.contains(ts.subject) && !ts.subject.contains("Tweet about Agile")
+		    && !ts.subject.contains("Like Agile on Facebook"))
+		dueTaskList.add(ts);
+	}
+
+	for (Task due : dueTaskList)
+	    System.out.println(due.subject);
+	return dueTaskList;
     }
 
     public static List<Task> getTasksRelatedToCurrentUser()
@@ -586,6 +603,23 @@ public class TaskUtil
 	    e.printStackTrace();
 	    return 0;
 	}
+    }
+
+    /**
+     * 
+     * @return defaults task names as a list to stop due task mails
+     */
+    public static List<String> getDefaultTaskNames()
+    {
+	List<String> default_task = new ArrayList<>();
+	default_task.add("Give feedback about Agile");
+	default_task.add("Call Grandmother");
+	default_task.add("Meet Homer to finalize the Deal (Bring Donuts!)");
+	default_task
+	        .add("<a href=\"https://twitter.com/share?url=https%3A%2F%2Fwww.agilecrm.com&amp;text=Sell%20like%20Fortune%20500%20with%20%23AgileCRM%20-%20\" target=\"_blank\"rel=\"nofollow\" title=\"Link: https://twitter.com/share?url=https%3A%2F%2Fwww.agilecrm.com&amp;text=Sell%20like%20Fortune%20500%20with%20%23AgileCRM%20-%20\">Tweet about Agile</a>");
+	default_task
+	        .add("<a href=\"https://www.facebook.com/crmagile\" target=\"_blank\" rel=\"nofollow\" title=\"Link: https://www.facebook.com/crmagile\">Like Agile on Facebook</a>");
+	return default_task;
     }
 
     /***************************************************************************/
