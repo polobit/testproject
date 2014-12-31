@@ -600,7 +600,36 @@ public class ContactEmailUtil
 
 	return emailPrefs;
     }
-
+    /**
+	 * Returns emails opened in specific duration
+	 * 
+	 * @param {@Link Long} - minTime, {@Link Long} - maxTime
+	 * @return {@Link List<ContactEmail>}
+	 */
+	public static List<ContactEmail> getEmailsOpened(Long minTime,Long maxTime){
+		List<ContactEmail> contactEmailsList=null;
+		try {
+			contactEmailsList = dao.ofy().query(ContactEmail.class).filter("email_opened_at >= ", minTime).filter("email_opened_at <= ", maxTime).filter("is_email_opened", true).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return contactEmailsList;
+	}
+	/**
+	 * Gets emails list sent by each user in specific duration
+	 * 
+	 * @param {@Link String} - userEmail,{@Link Long} - minTime, {@Link Long} - maxTime
+	 * @return {@Link List<ContactEmail>}
+	 */
+	public static List<ContactEmail> getEmailsSent(DomainUser domainUser,Long minTime,Long maxTime){
+		List<ContactEmail> contactEmailsList=null;
+		try {
+			contactEmailsList = dao.ofy().query(ContactEmail.class).filter("from", domainUser.name+" <"+domainUser.email+">").filter("date_secs >= ", minTime*1000).filter("date_secs <= ", maxTime*1000).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return contactEmailsList;
+	}
     /**
      * Gets list of Shared Gmail prefs with this Current User
      * 

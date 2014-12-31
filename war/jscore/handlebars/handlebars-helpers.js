@@ -3550,6 +3550,99 @@ $(function()
 		var shopify_webhook = window.location.origin + "/shopifytrigger?api-key=" + agile_api.api_key;
 		return new Handlebars.SafeString(shopify_webhook);
 	});
+	/**
+	 * getting convenient name of portlet
+	 */
+	Handlebars.registerHelper('get_portlet_name', function(p_name) {
+		var portlet_name = '';
+		if(p_name=='Filter Based')
+			portlet_name = 'Contact List';
+		else if(p_name=='Emails Opened')
+			portlet_name = 'Email Opens';
+		else if(p_name=='Emails Sent')
+			portlet_name = 'Emails';
+		else if(p_name=='Growth Graph')
+			portlet_name = 'Tag Graph';
+		else if(p_name=='Calls Per Person')
+			portlet_name = 'Calls';
+		else if(p_name=='Pending Deals')
+			portlet_name = 'Pending Deals';
+		else if(p_name=='Deals By Milestone')
+			portlet_name = 'Deals by Milestone';
+		else if(p_name=='Closures Per Person')
+			portlet_name = 'Closures per Person';
+		else if(p_name=='Deals Won')
+			portlet_name = 'Deals Won';
+		else if(p_name=='Deals Funnel')
+			portlet_name = 'Deals Funnel';
+		else if(p_name=='Deals Assigned')
+			portlet_name = 'Deals Assigned';
+		else if(p_name=='Agenda')
+			portlet_name = "Today's Events";
+		else if(p_name=='Today Tasks')
+			portlet_name = "Today's Tasks";
+		else if(p_name=='Agile CRM Blog')
+			portlet_name = "Agile CRM Blog";
+		return portlet_name;
+	});
+	/**
+	 * getting portlet icons
+	 */
+	Handlebars.registerHelper('get_portlet_icon', function(p_name) {
+		var icon_name = '';
+		if(p_name=='Filter Based')
+			icon_name = 'icon-user';
+		else if(p_name=='Emails Opened')
+			icon_name = 'icon-envelope';
+		else if(p_name=='Emails Sent')
+			icon_name = 'icon-envelope';
+		else if(p_name=='Growth Graph')
+			icon_name = 'icon-bar-chart';
+		else if(p_name=='Calls Per Person')
+			icon_name = 'icon-phone';
+		else if(p_name=='Pending Deals')
+			icon_name = 'icon-time';
+		else if(p_name=='Deals By Milestone')
+			icon_name = 'icon-flag-checkered';
+		else if(p_name=='Closures Per Person')
+			icon_name = 'icon-thumbs-up';
+		else if(p_name=='Deals Won')
+			icon_name = 'icon-briefcase';
+		else if(p_name=='Deals Funnel')
+			icon_name = 'icon-filter';
+		else if(p_name=='Deals Assigned')
+			icon_name = 'icon-user';
+		else if(p_name=='Agenda')
+			icon_name = "icon-calendar";
+		else if(p_name=='Today Tasks')
+			icon_name = "icon-tasks";
+		else if(p_name=='Agile CRM Blog')
+			icon_name = "icon-rss-sign";
+		return icon_name;
+	});
+	/**
+	 * getting flitered contact portlet header name
+	 */
+	Handlebars.registerHelper('get_flitered_contact_portlet_header', function(filter_name) {
+		var header_name = '';
+		if(filter_name=='contacts')
+			header_name = "All Contacts";
+		else if(filter_name=='companies')
+			header_name = "All Companies";
+		else if(filter_name=='recent')
+			header_name = "Recent Contacts";
+		else if(filter_name=='myContacts')
+			header_name = "My Contacts";
+		else if(filter_name=='leads')
+			header_name = "Leads";
+		else{
+			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/'+filter_name, async : false, dataType : 'json',
+				success: function(data){
+					header_name = ""+data.name;
+				} });
+		} 	
+		return header_name;
+	});
 	
 	Handlebars.registerHelper('if_equals_or', function()
 	{
@@ -3572,6 +3665,64 @@ $(function()
 	
 	Handlebars.registerHelper('buildFacebookProfileURL',function(url){
 		return buildFacebookProfileURL(url);
+	});
+	
+	/**
+	 * getting flitered contact portlet header name
+	 */
+	Handlebars.registerHelper('get_deals_funnel_portlet_header', function(track_id) {
+		var header_name = '';
+		if(track_id==0)
+			header_name = "Default";
+		else{
+			var milestone = $.ajax({ type : 'GET', url : '/core/api/milestone/'+track_id, async : false, dataType : 'json',
+				success: function(data){
+					header_name = data.name;
+				} });
+		} 	
+		return header_name;
+	});
+	
+	/**
+	 * getting time in AM and PM format for event portlet
+	 */
+	Handlebars.registerHelper('get_AM_PM_format', function(date_val) {
+		var date = new Date(date_val * 1000);
+		var hours = date.getHours();
+		var minutes = date.getMinutes();
+		var ampm = hours >= 12 ? 'PM' : 'AM';
+		hours = hours % 12;
+		hours = hours ? hours : 12; // the hour '0' should be '12'
+		minutes = minutes < 10 ? '0'+minutes : minutes;
+		var strTime = hours + ':' + minutes + ' ' + ampm;
+		return strTime;
+	});
+	
+	/**
+	 * getting duration between two dates for event portlet
+	 */
+	Handlebars.registerHelper('get_duration', function(startDate,endDate) {
+		var duration='';
+		var days=0;
+		var hrs=0;
+		var mins=0;
+		var diffInSeconds = endDate - startDate;
+		days = Math.floor(diffInSeconds/(24*60*60));
+		hrs = Math.floor((diffInSeconds % (24*60*60))/(60*60));
+		mins = Math.floor(((diffInSeconds % (24*60*60)) % (60*60))/60);
+		if(days!=0 && days==1)
+			duration += ''+days+' Day ';
+		else if(days!=0 && days>1)
+			duration += ''+days+' Days ';
+		if(hrs!=0 && hrs==1)
+			duration += ''+hrs+' Hour ';
+		else if(hrs!=0 && hrs>1)
+			duration += ''+hrs+' Hours ';
+		if(mins!=0 && mins==1)
+			duration += ''+mins+' Minute';
+		else if(mins!=0 && mins>1)
+			duration += ''+mins+' Minutes';
+		return duration;
 	});
 	
 });

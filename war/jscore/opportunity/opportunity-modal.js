@@ -667,6 +667,29 @@ if(json.close_date==0)
 				}
 
 			}
+			else if (Current_Route == 'portlets') 
+			{
+				if(App_Portlets.currentPosition && App_Portlets.pendingDeals && App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)]){
+					if (isUpdate)
+						App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+					// Updates task list view
+					if(json.milestone!="Won" && json.milestone!="Lost")
+						App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+					App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].render(true);
+				}
+				if(App_Portlets.currentPosition && App_Portlets.dealsWon && App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)]){
+					if (isUpdate)
+						App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+					// Updates task list view
+					App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+					App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)].render(true);
+				}
+
+			}
 			else {
 				App_Deals.navigate("deals", {
 					trigger : true

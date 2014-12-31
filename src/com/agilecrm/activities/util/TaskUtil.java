@@ -12,7 +12,9 @@ import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.googlecode.objectify.Key;
@@ -563,6 +565,33 @@ public class TaskUtil
 	    return null;
 	}
     }
+    /**
+     * Gets the list of tasks which have been pending for Today
+     * 
+     * @return List of tasks that have been pending for Today
+     */
+    public static List<Task> getTodayPendingTasks(){
+    	try{
+    		// Gets Today's date
+    		DateUtil startDateUtil = new DateUtil();
+    		Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
+    		//Date startDate = new Date();
+    		//Long startTime = startDate.getTime() / 1000;
+    		
+    		// Gets Date after numDays days
+    		DateUtil endDateUtil = new DateUtil();
+    		Long endTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
+    		
+    		DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+    		
+    		// Gets list of tasks filtered on given conditions
+    		return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, domainUser.id)).filter("due >=", startTime).filter("due <=", endTime)
+    				.filter("is_complete", false).limit(50).list();
+	    }catch(Exception e){
+	    	e.printStackTrace();
+	    	return null;
+	    }
+	}
 
     /**
      * Gets the current user pending tasks upto today midnight
