@@ -67,10 +67,12 @@ function agile_cookieTags(tags, action)
  * @param button
  * @param url
  */
-function agile_formCallback(error, button, url, contact_id, agile_form)
+function agile_formCallback(error, button, url, agile_form, contact_id)
 {
-	if(!error[0]){
-		if(contact_id){
+	if (!error[0])
+	{
+		if (contact_id)
+		{
 			var form_name = document.getElementById("agile-form-data").innerHTML;
 			var trigger_url = agile_id.getURL() + "/formsubmit?id=" + agile_id.get() + "&contactid=" + encodeURIComponent(contact_id) + "&formname=" + encodeURIComponent(form_name);
 			agile_json(trigger_url);
@@ -82,7 +84,10 @@ function agile_formCallback(error, button, url, contact_id, agile_form)
 	setTimeout(function()
 	{
 		error[1].innerHTML = "";
-		if(agile_form && agile_form.getAttribute("action")){
+		if (agile_form)
+		{
+			if (!agile_form.getAttribute("action") || agile_form.getAttribute("action") == "#")
+				agile_form.setAttribute("action", url);
 			agile_form.submit();
 		}
 		else

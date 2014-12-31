@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.forms;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -41,30 +42,43 @@ public class FormsAPI
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void saveForm(@Context HttpServletResponse response, String formString)
+    public void saveForm(@Context HttpServletResponse response, String formString) throws IOException
     {
 	try
 	{
-	    System.out.println(formString);
 	    JSONObject formJson = new JSONObject(formString);
 	    Long formId = null;
+	    Form form = null;
+
 	    if (formJson.has("id"))
 		formId = formJson.getLong("id");
-	    Form form = null;
+
 	    if (formId != null)
-	    {
 		form = FormUtil.getFormById(formId);
-	    }
+
 	    if (form == null)
-		form = new Form();
+	    {
+		if (FormUtil.getFormByName(formJson.getString("formName")) == null)
+		    form = new Form();
+		else
+		{
+		    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+		    return;
+		}
+	    }
+
 	    form.formName = formJson.getString("formName");
 	    form.formJson = formJson.getString("formJson");
 	    form.save();
+
+	    response.setStatus(HttpServletResponse.SC_OK);
+	    return;
 	}
 	catch (JSONException e)
 	{
 	    System.out.println(e.getMessage());
-	    System.out.println("saving form failed");
+	    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+	    return;
 	}
     }
 

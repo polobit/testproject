@@ -4,6 +4,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -12,6 +13,10 @@ public class Form
 {
     @Id
     public Long id;
+
+    @Indexed
+    @NotSaved(IfDefault.class)
+    public Long updated_time = System.currentTimeMillis() / 1000;
 
     @NotSaved(IfDefault.class)
     public String formName = null;
@@ -34,6 +39,7 @@ public class Form
 
     public void save()
     {
+	this.updated_time = System.currentTimeMillis() / 1000;
 	dao.put(this);
     }
 }

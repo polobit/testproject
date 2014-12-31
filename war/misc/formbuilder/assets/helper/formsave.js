@@ -19,6 +19,9 @@ define([
 			success: function(){
 				var url = window.location.origin + "/#forms";
 				window.location.replace(url);
+			},
+			error: function(){
+				alert("Form with this name is already saved. Please change form name and try again.");
 			}});
 	}}
 });

@@ -1294,6 +1294,10 @@ public class JSAPI
 	    if (contactId == null || form == null)
 		return;
 
+	    Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
+	    contact.formId = form.id;
+	    contact.save();
+
 	    List<Trigger> triggers = TriggerUtil.getAllTriggers();
 	    for (Trigger trigger : triggers)
 	    {
@@ -1303,8 +1307,7 @@ public class JSAPI
 		    if (StringUtils.equals(trigger.trigger_form_event, form.id.toString()))
 		    {
 			System.out.println("Assigning campaign to contact ...");
-			WorkflowSubscribeUtil.subscribeDeferred(ContactUtil.getContact(Long.parseLong(contactId)),
-			        trigger.campaign_id, null);
+			WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id, null);
 		    }
 		}
 	    }
