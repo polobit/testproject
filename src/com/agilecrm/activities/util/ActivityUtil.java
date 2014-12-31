@@ -1286,54 +1286,57 @@ public class ActivityUtil
      *
      */
     public static void createLogForCalls(String serviceType, String toOrFromNumber, String callType, String callStatus,
-	    String callDuration)
+	    String callDuration, Contact contact)
     {
 
 	// Search contact
 	if (toOrFromNumber != null)
 	{
-	    Contact contact = ContactUtil.searchContactByPhoneNumber(toOrFromNumber);
-	    System.out.println("contact: " + contact);
-	    if (contact != null)
-	    {
-		String calledToName = "";
-		List<ContactField> properties = contact.properties;
-		for (ContactField f : properties)
-		{
-		    System.out.println("\t" + f.name + " - " + f.value);
-		    if (f.name.equals(contact.FIRST_NAME))
-		    {
-			calledToName += f.value;
-		    }
-		    if (f.name.equals(contact.LAST_NAME))
-		    {
-			calledToName += " " + f.value;
-		    }
-		}
 
-		Activity activity = new Activity();
-		activity.activity_type = ActivityType.CALL;
-		activity.custom1 = serviceType;
-		activity.custom2 = callType;
-		activity.custom3 = callStatus;
-		activity.custom4 = callDuration;
-		activity.label = calledToName;
-		activity.entity_type = EntityType.CONTACT;
-		activity.entity_id = contact.id;
-		activity.save();
-	    }
-	    else
+	    String twilioStatus = getEnumValueOfTwilioStatus(callStatus);
+	    if (twilioStatus != null)
 	    {
-		Activity activity = new Activity();
-		activity.activity_type = ActivityType.CALL;
-		activity.custom1 = serviceType;
-		activity.custom2 = callType;
-		activity.custom3 = callStatus;
-		activity.custom4 = callDuration;
-		activity.label = toOrFromNumber;
-		activity.entity_type = null;
-		activity.entity_id = null;
-		activity.save();
+
+		System.out.println("contact: " + contact);
+		if (contact != null)
+		{
+		    String calledToName = "";
+		    ContactField firstname = contact.getContactFieldByName("first_name");
+		    ContactField lastname = contact.getContactFieldByName("last_name");
+
+		    if (firstname != null)
+			calledToName += firstname.value;
+
+		    if (lastname != null)
+		    {
+			calledToName += " ";
+			calledToName += lastname.value;
+		    }
+
+		    Activity activity = new Activity();
+		    activity.activity_type = ActivityType.CALL;
+		    activity.custom1 = serviceType;
+		    activity.custom2 = callType;
+		    activity.custom3 = twilioStatus;
+		    activity.custom4 = callDuration;
+		    activity.label = calledToName;
+		    activity.entity_type = EntityType.CONTACT;
+		    activity.entity_id = contact.id;
+		    activity.save();
+		}
+		else
+		{
+		    Activity activity = new Activity();
+		    activity.activity_type = ActivityType.CALL;
+		    activity.custom1 = serviceType;
+		    activity.custom2 = callType;
+		    activity.custom3 = twilioStatus;
+		    activity.custom4 = callDuration;
+		    activity.label = toOrFromNumber;
+		    activity.entity_type = null;
+		    activity.entity_id = null;
+		    activity.save();
+		}
 	    }
 	}
     }
