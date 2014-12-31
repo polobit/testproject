@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.datanucleus.util.StringUtils;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
@@ -482,7 +483,7 @@ public class Opportunity extends Cursor
 	agileUser = new Key<AgileUser>(AgileUser.class, user.id);
 
 	// If new note is added to deal
-	if (this.note_description != null)
+	if (!StringUtils.isEmpty(this.note_description))
 	{
 	    if (!this.note_description.trim().isEmpty())
 	    {
@@ -505,6 +506,22 @@ public class Opportunity extends Cursor
 
 	    // Make temp note null
 	    this.note_description = null;
+	}
+	else if (this.note_subject != null)
+	{
+	    if (!this.note_subject.trim().isEmpty())
+	    {
+		// Create note
+		Note note = null;
+		// Create note
+		if (this.note_subject != null)
+		    note = new Note(this.note_subject, null);
+		// Save note
+		note.save();
+
+		// Add note to task
+		this.related_notes.add(new Key<Note>(Note.class, note.id));
+	    }
 	}
 
 	if (this.notes != null)
