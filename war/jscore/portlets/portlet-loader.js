@@ -890,7 +890,7 @@ function initBlogPortletSync(el)
 					});
 
 }
-$('.portlet_header').live("click",function(e){
+$('.portlet_header').live("mouseover",function(e){
 	if(gridster!=undefined)
 		gridster.enable();
 });
