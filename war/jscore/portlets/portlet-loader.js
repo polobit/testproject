@@ -101,6 +101,7 @@ function set_up_portlets(el, portlets_el){
 	        min_cols: 3,
 	        autogenerate_stylesheet: true,
 	        draggable: {
+	        	ignore_dragging: [".portlet_body"],
 	        	stop: function(event,ui){
 	        		
 	        		//$('#'+this.$player.attr('id')).attr('id','ui-id-'+this.$player.attr('data-col')+'-'+this.$player.attr('data-row'));
@@ -889,11 +890,11 @@ function initBlogPortletSync(el)
 					});
 
 }
-$('.portlet_header').live("mouseover",function(e){
+/*$('.portlet_header').live("click",function(e){
 	if(gridster!=undefined)
 		gridster.enable();
 });
 $('.portlet_body').live("mouseover",function(e){
 	if(gridster!=undefined)
 		gridster.disable();
-});
+});*/

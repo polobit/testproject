@@ -488,7 +488,8 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 						App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].collection.remove(json);
 
 					// Updates task list view
-					App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].collection.add(data);
+					if(json.milestone!="Won" && json.milestone!="Lost")
+						App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].collection.add(data);
 
 					App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].render(true);
 				}
