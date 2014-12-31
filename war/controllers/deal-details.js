@@ -315,7 +315,47 @@ function deserialize_deal(value, template)
 
 }
 
+$('#dealdetail-archive').live('click', function(e) {
+	e.preventDefault();
+    if(!confirm("Archive Deal?"))
+		return;
 
+ 
+    var currentDeal=App_Deal_Details.dealDetailView.model.toJSON();;
+    
+    // Get the current deal model from the collection.
+	currentDeal.archived = true;
+    var that = $(this);
+    
+    var notes = [];
+	$.each(currentDeal.notes, function(index, note)
+	{
+		notes.push(note.id);
+	});
+	currentDeal.notes = notes;
+    if(currentDeal.note_description)
+		delete currentDeal.note_description;
+
+    if(!currentDeal.close_date || currentDeal.close_date==0)
+    	currentDeal.close_date = null;
+    
+    currentDeal.owner_id = currentDeal.owner.id;
+    
+    var arch_deal = new Backbone.Model();
+	arch_deal.url = '/core/api/opportunity';
+	arch_deal.save(currentDeal, {
+		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
+		success : function(data, response) {
+			App_Deal_Details.dealDetailView.model = data;
+			App_Deal_Details.dealDetailView.render(true)
+			Backbone.history.navigate("deal/"+data.toJSON().id , {
+	            trigger: true
+	        });
+			
+			
+		}
+	});
+});
 
 $('.deal-restore-detail-view').live('click', function(e) {
 	e.preventDefault();
