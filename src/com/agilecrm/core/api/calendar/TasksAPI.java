@@ -453,5 +453,13 @@ public class TasksAPI
 	return TaskUtil.getTasksRelatedToOwnerOfTypeAndCategory(criteria, type, owner, pending, null, null);
     }
 
+    @Path("/overdue/uptotoday")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public int getDueTaskCountUptoToday()
+    {
+	return TaskUtil.getOverDueTasksUptoTodayForCurrentUser();
+    }
+
     /***************************************************************************/
 }

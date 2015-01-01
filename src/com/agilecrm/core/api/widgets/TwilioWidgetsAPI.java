@@ -14,10 +14,14 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
+import com.agilecrm.activities.Call;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
@@ -455,13 +459,13 @@ public class TwilioWidgetsAPI
 
 	}
 
-	@Path("createappsid/{acc-sid}/{auth-token}/{number-sid}")
+	@Path("createappsid/{acc-sid}/{auth-token}/{number-sid}/{record}")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String createAppSid(@PathParam("acc-sid") String accountSID, @PathParam("auth-token") String authToken,
-			@PathParam("number-sid") String numberSid)
+			@PathParam("number-sid") String numberSid, @PathParam("record") String record)
 	{
-		System.out.println("In createAppSid" + accountSID + " " + authToken + " " + numberSid);
+		System.out.println("In createAppSid" + accountSID + " " + authToken + " " + numberSid + " " + record);
 
 		try
 		{
@@ -469,7 +473,7 @@ public class TwilioWidgetsAPI
 			 * Create a Twilio Application for Agile in Agile User Twilio
 			 * account
 			 */
-			return TwilioUtil.createAppSidTwilioIO(accountSID, authToken, numberSid);
+			return TwilioUtil.createAppSidTwilioIO(accountSID, authToken, numberSid, record);
 		}
 		catch (SocketTimeoutException e)
 		{
@@ -487,26 +491,27 @@ public class TwilioWidgetsAPI
 					.build());
 		}
 	}
+
 	/**
 	 * 
 	 * @author Purushotham
 	 * @created 28-Nov-2014
-	 *
+	 * 
 	 */
 	@Path("getlastcall/{acc-sid}/{auth-token}/{call-sid}/{parent}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getTwilioLastCallLog(@PathParam("acc-sid") String accountSID,
-			@PathParam("auth-token") String authToken, @PathParam("call-sid") String callSID, 
+			@PathParam("auth-token") String authToken, @PathParam("call-sid") String callSID,
 			@PathParam("parent") String isParent)
 	{
 
 		try
 		{
-			if(isParent.equals("true"))
-			return TwilioUtil.getLastCallLogStatus(accountSID, authToken, callSID).toString();
+			if (isParent.equals("true"))
+				return TwilioUtil.getLastCallLogStatus(accountSID, authToken, callSID).toString();
 			else
-			return TwilioUtil.getLastChildCallLogStatus(accountSID, authToken, callSID).toString();
+				return TwilioUtil.getLastChildCallLogStatus(accountSID, authToken, callSID).toString();
 		}
 		catch (SocketTimeoutException e)
 		{
@@ -525,40 +530,86 @@ public class TwilioWidgetsAPI
 		}
 
 	}
+
 	/**
 	 * 
 	 * @author Purushotham
 	 * @created 28-Nov-2014
-	 *
+	 * 
 	 */
 	@Path("savecallactivity")
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public String saveCallActivity(@FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration) {		
+		
+		if (StringUtils.isBlank(phone))
+			return "";
+
+		Contact contact = ContactUtil.searchContactByPhoneNumber(phone);
+		
 		if(direction.equalsIgnoreCase("outbound-dial"))
-			ActivityUtil.createLogForCalls("twilio", phone, "outgoing", status, duration);
+			ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.OUTBOUND, status, duration, contact);
 		if(direction.equalsIgnoreCase("inbound"))
-			ActivityUtil.createLogForCalls("twilio", phone, "incoming", status, duration);		
+			ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.INBOUND, status, duration, contact);
+		return "";
+	}
+
+	/**
+	 * 
+	 * @author Purushotham
+	 * @created 28-Nov-2014
+	 * 
+	 */
+	@Path("autosavenote")
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String autoSaveNote(@FormParam("subject") String subject, @FormParam("message") String message,
+			@FormParam("contactid") String contactid)
+	{
+		Long contactId = Long.parseLong(contactid);
+		Note note = new Note(subject, message);
+		note.addRelatedContacts(contactId.toString());
+		note.save();
 		return "";
 	}
 	
 	/**
 	 * 
 	 * @author Purushotham
-	 * @created 28-Nov-2014
+	 * @created 10-Dec-2014
 	 *
 	 */
-	@Path("autosavenote")
-	@POST
-	@Produces(MediaType.TEXT_PLAIN)
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String autoSaveNote(@FormParam("subject") String subject,@FormParam("message") String message,@FormParam("contactid") String contactid) {		
-		Long contactId = Long.parseLong(contactid);
-		Note note = new Note(subject, message);
-		note.addRelatedContacts(contactId.toString());
-		note.save();
-		return "";
+	
+	@Path("setvoicemail/{acc-sid}/{auth-token}/{call-sid}/{file-selected}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String setVoiceMailRedirect(@PathParam("acc-sid") String accountSID,
+			@PathParam("auth-token") String authToken, @PathParam("call-sid") String callSID, @PathParam("file-selected") String fileSelected)
+	{
+
+		try
+		{
+			TwilioUtil.sendVoiceMailRedirect(accountSID, authToken, callSID, fileSelected);
+			return "{}";//empty JSON Object
+		}
+		catch (SocketTimeoutException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and Please try again.").build());
+		}
+		catch (IOException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occurred. Refresh and Please try again.").build());
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
 	}
 
 }

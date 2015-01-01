@@ -153,6 +153,10 @@ function getTemplateUrls(templateName)
 	if (templateName.indexOf("document") == 0)
 	{
 		template_relative_urls.push("document.js");
+	}	
+	if (templateName.indexOf("voice-mail") == 0)
+	{
+		template_relative_urls.push("voice-mail.js");
 	}
 	if (templateName.indexOf("gmap") == 0)
 	{
@@ -241,6 +245,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("facebook.js");
 	}
+	else if (templateName.indexOf("callscript") == 0)
+	{
+	template_relative_urls.push("callscript.js");
+	}
 	if (templateName.indexOf("chargify") == 0)
 	{
 		template_relative_urls.push("chargify.js");
@@ -255,6 +263,10 @@ function getTemplateUrls(templateName)
 
 		if (HANDLEBARS_PRECOMPILATION)
 			template_relative_urls.push("socialsuite.html");
+	}
+	if (templateName.indexOf("portlet") == 0)
+	{
+		template_relative_urls.push("portlets.js");
 	}
 	return template_relative_urls;
 }
@@ -605,51 +617,65 @@ function getContactCustomProperties(items)
 	}
 	//Added for formula type custom field
 	var type='';
-	for(var i=0;i<App_Contacts.customFieldsList.collection.models.length;i++){
-		if(App_Contacts.customFieldsList.collection.models[i].get("field_label")==fieldName){
-			type = App_Contacts.customFieldsList.collection.models[i].get("scope");
-			break;
+	if(App_Contacts.customFieldsList!=undefined && App_Contacts.customFieldsList!=null){
+		for(var i=0;i<App_Contacts.customFieldsList.collection.models.length;i++){
+			if(App_Contacts.customFieldsList.collection.models[i].get("field_label")==fieldName){
+				type = App_Contacts.customFieldsList.collection.models[i].get("scope");
+				break;
+			}
 		}
 	}
 	var datajson={};
 	var formulaFields=[];
 	var finalFields=[];
-	$.each(App_Contacts.contactDetailView.model.get("properties"),function(index,customField){
-		datajson[''+customField.name]=customField.value;
-	});
+	if(App_Contacts.contactDetailView!=undefined && App_Contacts.contactDetailView!=null){
+		$.each(App_Contacts.contactDetailView.model.get("properties"),function(index,customField){
+			datajson[''+customField.name]=customField.value;
+		});
+	}
 	var j=0;
-	for(var i=0;i<App_Contacts.customFieldsList.collection.models.length;i++){
-		var json={};
-		if(App_Contacts.customFieldsList.collection.models[i].get("scope")==type && App_Contacts.customFieldsList.collection.models[i].get("field_type")=="FORMULA"){
-			
-			var tplEle = Handlebars.compile(App_Contacts.customFieldsList.collection.models[i].get("field_data"));
-			var tplEleData = tplEle(datajson);
-			var evalFlag = true;
-			var tplEleDataAftEval;
-			try{
-				tplEleDataAftEval = eval(tplEleData)
-			}catch(err){
-				console.log(err.message);
-				evalFlag = false;
+	if(App_Contacts.customFieldsList!=undefined && App_Contacts.customFieldsList!=null){
+		if(type=='')
+			type='CONTACT';
+		for(var i=0;i<App_Contacts.customFieldsList.collection.models.length;i++){
+			var json={};
+			if(App_Contacts.customFieldsList.collection.models[i].get("scope")==type && App_Contacts.customFieldsList.collection.models[i].get("field_type")=="FORMULA"){
+				
+				var tplEle = Handlebars.compile(App_Contacts.customFieldsList.collection.models[i].get("field_data"));
+				var tplEleData = tplEle(datajson);
+				var evalFlag = true;
+				var tplEleDataAftEval;
+				try{
+					tplEleDataAftEval = eval(tplEleData)
+				}catch(err){
+					console.log(err.message);
+					evalFlag = false;
+				}
+				if(!evalFlag)
+					tplEleDataAftEval = tplEleData;
+				
+				json.name=App_Contacts.customFieldsList.collection.models[i].get("field_label");
+				json.type="CUSTOM";
+				json.position=App_Contacts.customFieldsList.collection.models[i].get("position");
+				json.value=tplEleDataAftEval;
+				formulaFields.push(json);
+				j++;
 			}
-			if(!evalFlag)
-				tplEleDataAftEval = tplEleData;
-			
-			json.name=App_Contacts.customFieldsList.collection.models[i].get("field_label");
-			json.type="CUSTOM";
-			json.position=App_Contacts.customFieldsList.collection.models[i].get("position");
-			json.value=tplEleDataAftEval;
-			formulaFields.push(json);
-			j++;
 		}
 	}
-	for(var i=0;i<=fields.length;i++){
-		for(var k=0;k<formulaFields.length;k++){
-			if(i+1==formulaFields[k].position)
-				finalFields.push(formulaFields[k]);
+	if(fields.length>0){
+		for(var i=0;i<=fields.length;i++){
+			for(var k=0;k<formulaFields.length;k++){
+				if(i+1==formulaFields[k].position)
+					finalFields.push(formulaFields[k]);
+			}
+			if(i!=fields.length)
+				finalFields.push(fields[i]);
 		}
-		if(i!=fields.length)
-			finalFields.push(fields[i]);
+	}else{
+		for(var k=0;k<formulaFields.length;k++){
+			finalFields.push(formulaFields[k]);	
+		}
 	}
 	return finalFields;
 }

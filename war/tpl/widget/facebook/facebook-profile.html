@@ -69,7 +69,9 @@
 		<a class="btn" id="fb_post_on_wall" style="margin-top:10px;cursor:pointer;" href= "#" onClick="window.open('https://www.facebook.com/dialog/send?app_id=1472694689634803&display=popup&to={{user.id}}&link=https://www.agilecrm.com/&redirect_uri=https://my.agilecrm.com/backend/googleservlet?act=facebook','Sample','toolbar=no,width=1000,height=500,left=200,top=200, status=no,scrollbars=no,resize=no');return false">Post</a>
 </div>
 {{else}}
-Authentication Error. Please reconfigure your Facebook widget.
+{{#if user.error}}
+{{user.error.message}}
+{{/if}}
 {{/if}}	
 </div>
 </script>

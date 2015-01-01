@@ -21,8 +21,11 @@ $(function() {
  * @param {String}
  *            tag - to set tag property of Notification. Here tag is contact-id + notification-type
  */
-function show_desktop_notification(imageURL, title, message, link, tag) {
+function show_desktop_notification(imageURL, title, message, link, tag,timeout) {
 
+	if(!timeout){
+		timeout=30000;
+	}
 	head.js(LIB_PATH +'lib/desktop-notify-min.js',function(){
 		
 		var notification = notify.createNotification(title, {
@@ -44,7 +47,7 @@ function show_desktop_notification(imageURL, title, message, link, tag) {
 		
 		setTimeout(function() {
 			notification.close();
-		}, '30000');
+		}, timeout);
 		
 		// Show when tab is inactive
 		if (!window.closed)

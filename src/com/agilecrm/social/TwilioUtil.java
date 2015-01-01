@@ -12,10 +12,14 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
 import com.thirdparty.twilio.sdk.TwilioRestResponse;
 import com.twilio.sdk.client.TwilioCapability;
 import com.twilio.sdk.client.TwilioCapability.DomainException;
+import com.twilio.sdk.verbs.Play;
+import com.twilio.sdk.verbs.TwiMLException;
+import com.twilio.sdk.verbs.TwiMLResponse;
 
 /**
  * The <code>TwilioUtil</code> class acts as a Client to Twilio server
@@ -635,7 +639,8 @@ public class TwilioUtil
 		return outgoingCallerIds.getJSONArray("OutgoingCallerId");
 	}
 
-	public static String createAppSidTwilioIO(String accountSID, String authToken, String numberSid) throws Exception
+	public static String createAppSidTwilioIO(String accountSID, String authToken, String numberSid, String record)
+			throws Exception
 	{
 		System.out.println("In createAppSidTwilioIO");
 
@@ -646,18 +651,16 @@ public class TwilioUtil
 		// parameters required to create application
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("FriendlyName", "Agile CRM Twilio Saga");
-		// params.put("VoiceUrl",
-		// "http://1-dot-onlyvoiceservlet.appspot.com/voice");
 
 		// params.put("VoiceUrl",
-		// "http://1-dot-bothservlet.appspot.com/backend/twilioiovoice");
-		params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice");
+		// "http://1-dot-twiliovoicerecord.appspot.com/voice?record=" + record);
+		params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice?record=" + record);
 		params.put("VoiceMethod", "GET");
-		// params.put("StatusCallback",+
-		// "http://1-dot-bothservlet.appspot.com/backend/twilioiostatuscallback");
-		params.put("StatusCallback", "https://" + NamespaceManager.get()
-				+ ".agilecrm.com/twilioiostatuscallback?sessionmngrid=" + SessionManager.get().getDomainId());
-		params.put("StatusCallbackMethod", "GET");
+
+		// params.put("StatusCallback", "https://" + NamespaceManager.get()
+		// + ".agilecrm.com/twilioiostatuscallback?sessionmngrid=" +
+		// SessionManager.get().getDomainId());
+		// params.put("StatusCallbackMethod", "GET");
 
 		// Make a POST request to create application
 		TwilioRestResponse response = client.request("/2010-04-01/Accounts/" + client.getAccountSid()
@@ -700,12 +703,12 @@ public class TwilioUtil
 		}
 		return appSid;
 	}
-	
+
 	/**
 	 * 
 	 * @author Purushotham
 	 * @created 28-Nov-2014
-	 *
+	 * 
 	 */
 	public static JSONObject getLastCallLogStatus(String account_sid, String auth_token, String call_sid) throws JSONException, Exception
     {
@@ -729,6 +732,57 @@ public class TwilioUtil
 	TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"+call_sid+".json", "GET", null);
 	JSONObject responseJSON = new JSONObject(response);
 	return responseJSON;
+    }
+    /**
+     * 
+     * @author Purushotham
+     * @created 04-Dec-2014
+     *
+     */
+    public static String sendAudioFileToTwilio(String fileUrl)
+	{
+        // Create a TwiML response and add our friendly message.
+        TwiMLResponse twiml = new TwiMLResponse();
+        String filePath = "https://s3.amazonaws.com/agilecrm/audiofiles/" + NamespaceManager.get() + "/" + fileUrl;        
+        // Play an MP3 for incoming callers.
+        Play play = new Play(filePath);
+        try {
+            twiml.append(play);
+        } catch (TwiMLException e) {
+            e.printStackTrace();
+        }
+        return twiml.toXML();
+	}
+    
+    /**
+     * 
+     * @author Purushotham
+     * @created 10-Dec-2014
+     *
+     */
+    public static void sendVoiceMailRedirect(String account_sid, String auth_token, String call_sid, String fileSelected) throws JSONException, Exception
+    {
+	TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
+    Map<String, String> params = new HashMap<String, String>();
+    
+    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development) {
+    	//For LOCAL
+    	params.put("Url", "http://demo.twilio.com/docs/voice.xml");
+    } else {
+    	//For BETA
+    	//params.put("Url", "https://" + NamespaceManager.get() + "-dot-sandbox-dot-agilecrmbeta.appspot.com/twiml?type=1&fid="+fileSelected);    	
+    	
+    	//For Version
+    	//params.put("Url", "https://" + NamespaceManager.get() + "-dot-5-0-dot-agile-crm-cloud.appspot.com/twiml?type=1&fid="+fileSelected);
+    	
+    	//For LIVE
+    	params.put("Url", "https://" + NamespaceManager.get() + ".agilecrm.com/twiml?type=1&fid="+fileSelected);
+    }
+    
+    params.put("Method", "POST");
+//    params.put("Status", "completed");
+    client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"+call_sid+".json", "POST", params);
+	return;
     }
 	
 }

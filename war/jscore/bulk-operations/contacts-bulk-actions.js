@@ -539,7 +539,10 @@ $(function()
 			
 			// serialize form.
 			var form_json = serializeForm("emailForm");
-			
+			if(form_json.from_email != CURRENT_DOMAIN_USER.email && form_json.from_name == CURRENT_DOMAIN_USER.name)
+			{
+				form_json.from_name = "";
+			}
 			var url = '/core/api/bulk/update?action_type=SEND_EMAIL';
 			
 			var json = {};
@@ -804,11 +807,17 @@ function getSelectionCriteria()
  */
 function postBulkOperationData(url, data, form, contentType, callback, error_message)
 {
+	var dynamic_filter = getDynamicFilters();
+	if(dynamic_filter != null) {
+		data.dynamic_filter = dynamic_filter;
+	}
 	if (data.contact_ids && data.contact_ids.length == 0)
 	{
 		console.log(data.contact_ids);
 		console.log(getSelectionCriteria());
-		url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+		if(dynamic_filter == null) {			
+			url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+		}
 		console.log(url);
 	}
 	else
@@ -849,4 +858,24 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 			}
 			showNotyPopUp('information', error_message, "top", 5000);
 	} });
+}
+
+function getDynamicFilters() {
+	var dynamic_filter = null;
+	if (readCookie('company_filter'))
+	{
+		dynamic_filter = readData('dynamic_company_filter')
+	} else {
+		dynamic_filter = readData('dynamic_contact_filter')
+	}
+	
+	if(!dynamic_filter || dynamic_filter == null) {
+		return null;
+	} else {
+		if(JSON.parse(dynamic_filter).rules.length >0) {
+			return dynamic_filter;
+		} else {
+			return null;
+		}
+	}
 }

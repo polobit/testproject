@@ -471,7 +471,7 @@ html {
 	width: 16px;
 	height: 16px;
 }
-/* Not to overide z-index of datepicker due to timepicker modal */
+/* Not to overide z-index of datepicker due to the timepicker modal  */
 .datepicker {
 	z-index: 2050 !important;
 }
@@ -1141,7 +1141,7 @@ time {
 	display: block!important;
 }
 /** documents icon  **/
-#documents-model-list tr:hover td.data div b.activate-link {
+#documents-model-list tr:hover td.data div b.activate-link,#voice-mail-model-list tr:hover td .tdVoiceMailOver{
 	display: inline!important;
 }
 /** custom feilds modals **/
@@ -1828,8 +1828,8 @@ text-overflow:ellipsis;
 
 /** call script rules sorting **/
 .csr-sortable > tr.pseduo-row td {
-	border-top: 0px #f5f5f5!important;
-	background-color: #f5f5f5!important;
+	border-top: 0px #FFFFFF!important;
+	background-color: #FFFFFF!important;
 }
 .csr-sortable > tr.pseduo-row td input[type="checkbox"] {
 	display: none;
@@ -1848,3 +1848,69 @@ text-overflow:ellipsis;
 	margin-left:-4px;
 }
 
+.custom-fields-table tbody tr td:nth-child(n+2) {
+	border-left: none;
+}
+.custom-fields-table {
+	border-top: medium none;
+}
+.custom-fields-table tbody tr:first-child td:first-child {
+	border-top: 1px solid #ddd;
+	border-radius: 4px 0 0;
+}
+.custom-fields-table tbody tr:first-child td:nth-child(2){
+	border-top: 1px solid #ddd;
+}
+.custom-fields-table tbody tr:first-child td:nth-child(3){
+	border-top: 1px solid #ddd;
+	border-radius: 0 4px 0 0;
+}
+.w-95p {
+	width:95px !important;
+}
+
+.w-105p {
+	width:105px !important;
+}
+
+.w-220p {
+	width:220px;
+}
+
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.clear {
+	clear:both;
+	display:block;
+}
+
+.navbar_due_tasks{
+	background: red;
+padding: 0px 2px;
+font-size: 12px;
+border-radius: 2px;
+position: absolute;
+top: 2px;
+left: 22px;
+box-shadow: 0 0 2px 0px #000;
+}
+
+select.f-left {
+	float:left;
+	margin-right:2px;
+}
+div.lhs-row-filter {
+	border-bottom: 1px solid #f5f5f5;
+	padding-bottom: 10px;
+}
+#lhs-filters-header {
+	word-break:break-all;
+}
+
+.progress_slider_width_bottom {
+	margin-top:24px;
+}

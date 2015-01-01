@@ -183,4 +183,6 @@ public class Globals
     // public static final String SHOPIFY_SECRET_KEY =
     // "a1f88bc91e5c70c34c215bf224ebd7d3";
 
+    public static final String COMPANY_DOMAIN = "our";
+
 }

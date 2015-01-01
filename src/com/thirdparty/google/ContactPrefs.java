@@ -5,6 +5,8 @@
 package com.thirdparty.google;
 
 import java.io.Serializable;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -206,7 +208,18 @@ public class ContactPrefs extends SyncPrefs implements Serializable
 	if (type == Type.GOOGLE)
 	{
 	    fillGroups();
+	    if(sync_from_group != null)
+	    {
+		sync_from_group = URLDecoder.decode(sync_from_group);
+		
+	    }
+	    if(sync_to_group != null)
+	    {
+		sync_to_group = URLDecoder.decode(sync_to_group);
+		
+	    }
 	}
+	
     }
 
     /**

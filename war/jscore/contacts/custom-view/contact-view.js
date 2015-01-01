@@ -16,17 +16,18 @@
  * @param base_model
  */
 var CURRENT_VIEW_OBJECT;
-function contactTableView(base_model) {
 
+function contactTableView(base_model,customDatefields,view) {
+	
 	// Creates list view for
 	var itemView = new Base_List_View({
 		model : base_model,
 		template : 'contacts-custom-view-model',
-		tagName : this.options.individual_tag_name
+		tagName : view.options.individual_tag_name
 	});
 
 	// Reads the modelData (customView object)
-	var modelData = this.options.modelData;
+	var modelData = view.options.modelData;
 
 	// Reads fields_set from modelData
 	var fields = modelData['fields_set'];
@@ -34,8 +35,7 @@ function contactTableView(base_model) {
 	// Converts base_model (contact) in to JSON
 	var contact = base_model.toJSON();
 	var el = itemView.el;
-	$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
-			{
+	
 				// Clears the template, because all the fields are appended, has to be reset
 				// for each contact
 				// $('#contacts-custom-view-model-template').empty();
@@ -65,12 +65,12 @@ function contactTableView(base_model) {
 							getTemplate('contacts-custom-view-' + field_name, contact));*/
 					$(el).append(getTemplate('contacts-custom-view-' + field_name, contact));
 				});
-			});
+				
 	// Appends model to model-list template in collection template
-	$(('#contacts-custom-view-model-list'), this.el).append(el);
+	$(('#contacts-custom-view-model-list'), view.el).append(el);
 
 	// Sets data to tr
-	$(('#contacts-custom-view-model-list'), this.el).find('tr:last').data(
+	$(('#contacts-custom-view-model-list'), view.el).find('tr:last').data(
 			base_model);
 
 }
