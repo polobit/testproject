@@ -104,7 +104,7 @@ function serializeForm(form_id) {
 	var chained_selects = $('#' + form_id + ' .chained-table:visible');
 	$.each(chained_selects, function(index, element){
 		var json_array = [];
-	arr = arr.concat($(element).find('.chained').map(function() {
+	arr = arr.concat($(element).find('.chained:visible').map(function() {
 		
 		var json_object = serializeChainedElement(this);
 		json_array.push(json_object);

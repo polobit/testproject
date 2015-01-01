@@ -34,7 +34,7 @@ $(function()
 		e.preventDefault();
 		// To solve chaining issue when cloned
 		var htmlContent = $($(getTemplate("filter-contacts", {})).find('.chained-table.contact')[0]).find('tr').clone();
-		
+		$(htmlContent).removeClass('hide');
 		scramble_input_names($(htmlContent));
 
 		// boolean parameter to avoid contacts/not-contacts fields in form
@@ -53,7 +53,7 @@ $(function()
 		e.preventDefault();
 		// To solve chaining issue when cloned
 		var htmlContent = $($(getTemplate("filter-contacts", {})).find('.chained-table.contact')[1]).find('tr').clone();
-		
+		$(htmlContent).removeClass('hide');
 		scramble_input_names($(htmlContent));
 
 		// boolean parameter to avoid contacts/not-contacts fields in form
@@ -72,7 +72,7 @@ $(function()
 		e.preventDefault();
 		// To solve chaining issue when cloned
 		var htmlContent = $($(getTemplate("filter-contacts", {})).find('.chained-table.company')[0]).find('tr').clone();
-		
+		$(htmlContent).removeClass('hide');
 		scramble_input_names($(htmlContent));
 
 		// boolean parameter to avoid contacts/not-contacts fields in form
@@ -91,7 +91,7 @@ $(function()
 		e.preventDefault();
 		// To solve chaining issue when cloned
 		var htmlContent = $($(getTemplate("filter-contacts", {})).find('.chained-table.company')[1]).find('tr').clone();
-		
+		$(htmlContent).removeClass('hide');
 		scramble_input_names($(htmlContent));
 
 		// boolean parameter to avoid contacts/not-contacts fields in form

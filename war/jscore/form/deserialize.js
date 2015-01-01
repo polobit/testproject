@@ -329,7 +329,7 @@ function deserializeChainedSelect(form, el, el_self)
 }
 
 function deserializeChainedElement(data, rule_element)
-{
+{	$(rule_element).removeClass('hide');
 	$.each(data, function(i, value)
 	{
 		var input_element = ($(rule_element).find('*[name="' + i + '"]').children())[0];
