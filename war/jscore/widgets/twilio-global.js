@@ -24,7 +24,7 @@ $(function()
 		{
 			globalTwilioIOSetup();
 		}
-	}, 15000); // 15 sec
+	}, 10000); // 15 sec
 
 	$(".noty_twilio_hangup").die().live('click', function(e)
 	{
@@ -155,6 +155,16 @@ $(function()
 		e.preventDefault();
 		$("#note-number-not-available").hide();
 	});
+	
+	$(".twilioio-advance-settings").die().live('click', function(e)
+	 {
+		e.preventDefault();
+		$(".twilioio-advance-settings-hide").toggle();
+	    $(".twilioio-advance-settings-show").toggle();
+	    $("#twilio_recording").toggle();
+	    $("#twilio_twimlet_url_controls").toggle();
+	 });
+	
 });
 
 /*
@@ -370,7 +380,10 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 	}
 	
 	// Show record call option on form
-	$("#twilio_recording").show();
+	//$("#twilio_recording").show();
+	
+	// Show twimlet url controls
+	//$("#twilio_twimlet_url_controls").show();
 }
 
 function setToValidate(data, showAlert)
@@ -476,7 +489,7 @@ function createAppSid(twilioio_prefs, callback)
 	if (twilioio_prefs.twilio_number_sid != "")
 		numberSid = twilioio_prefs.twilio_number_sid;
 
-	$.get("/core/api/widgets/twilio/createappsid/" + twilioio_prefs.twilio_acc_sid + "/" + twilioio_prefs.twilio_auth_token + "/" + numberSid+ "/" + twilioio_prefs.twilio_record, function(result)
+	$.get("/core/api/widgets/twilio/createappsid/" + twilioio_prefs.twilio_acc_sid + "/" + twilioio_prefs.twilio_auth_token + "/" + numberSid+ "/" + twilioio_prefs.twilio_record+ "/" + encodeURIComponent(twilioio_prefs.twilio_twimlet_url), function(result)
 	{
 		console.log("Twilio createAppSid " + result);
 
@@ -504,7 +517,10 @@ function createAppSid(twilioio_prefs, callback)
 		$("#twilio_numbers").hide();
 
 		// Hide record call option on form
-		$("#twilio_recording").hide();
+		//$("#twilio_recording").hide();
+		
+		// Hide twimlet url controls
+		//$("#twilio_twimlet_url_controls").hide();
 		
 		// Reset form fields after sending email
 		$("#twilioio_login_form").each(function()

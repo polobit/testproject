@@ -423,6 +423,7 @@ function saveTwilioIOWidgetPrefs()
 	twilioio_prefs["twilio_from_number"] = $("#twilio_from_numbers option:selected").val();
 	twilioio_prefs["twilio_number"] = $("#twilio_numbers option:selected").val();
 	twilioio_prefs["twilio_number_sid"] = $("#twilio_number_sid").val();
+	twilioio_prefs["twilio_twimlet_url"] = $("#twilio_twimlet_url").val();
 	
 	if ($('#twilio_record').is(':checked'))
 		twilioio_prefs["twilio_record"] = "true";

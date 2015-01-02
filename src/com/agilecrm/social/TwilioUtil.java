@@ -1,6 +1,7 @@
 package com.agilecrm.social;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -347,8 +348,15 @@ public class TwilioUtil
 			if (Integer.parseInt(calls.getString("total")) == 0)
 				return logs;
 
-			logs = calls.getJSONArray("Call");
-			logs.put(calls.get("nextpageuri"));
+			// When single call log, need to make array from object
+			if (Integer.parseInt(calls.getString("total")) == 1)
+				logs = new JSONArray("[" + calls.getJSONObject("Call").toString() + "]");
+			else
+				// When multiple call logs, get array
+				logs = calls.getJSONArray("Call");
+
+			// To fetch next page of call logs
+			logs.put(calls.getString("nextpageuri"));
 
 			System.out.println("In getCallLogs logs: " + logs);
 			return logs;
@@ -655,11 +663,14 @@ public class TwilioUtil
 		return outgoingCallerIds.getJSONArray("OutgoingCallerId");
 	}
 
-	public static String createAppSidTwilioIO(String accountSID, String authToken, String numberSid, String record)
-			throws Exception
+	public static String createAppSidTwilioIO(String accountSID, String authToken, String numberSid, String record,
+			String twimletUrl) throws Exception
 	{
 		// Get current logged in agile user
 		Long agileUserID = AgileUser.getCurrentAgileUser().id;
+
+		// Encode twimlet url
+		String twimletUrlToSend = URLEncoder.encode(twimletUrl, "UTF-8");
 
 		// Get Twilio client configured with account SID and authToken
 		TwilioRestClient client = new TwilioRestClient(accountSID, authToken, null);
@@ -669,23 +680,23 @@ public class TwilioUtil
 		params.put("FriendlyName", "Agile CRM Twilio Saga");
 
 		// For Local Host
-
-		params.put("VoiceUrl", "http://1-dot-twiliovoicerecord.appspot.com/voice?record=" + record + "&agileuserid="
-				+ agileUserID);
+		/*
+		 * params.put("VoiceUrl",
+		 * "http://1-dot-twiliovoicerecord.appspot.com/voice?record=" + record +
+		 * "&agileuserid=" + agileUserID + "&twimleturl=" + twimletUrlToSend);
+		 */
 
 		// For Main
 		/*
 		 * params.put("VoiceUrl", "https://" + NamespaceManager.get() +
 		 * ".agilecrm.com/twilioiovoice?record=" + record + "&agileuserid=" +
-		 * agileUserID);
+		 * agileUserID+ "&twimleturl=" + twimletUrlToSend);
 		 */
 
 		// For Beta
-		/*
-		 * params.put("VoiceUrl", "https://" + NamespaceManager.get() +
-		 * "-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiovoice?record=" +
-		 * record + "&agileuserid=" + agileUserID);
-		 */
+		params.put("VoiceUrl", "https://" + NamespaceManager.get()
+				+ "-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiovoice?record=" + record + "&agileuserid="
+				+ agileUserID + "&twimleturl=" + twimletUrlToSend);
 
 		params.put("VoiceMethod", "GET");
 

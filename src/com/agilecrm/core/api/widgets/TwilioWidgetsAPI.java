@@ -455,11 +455,12 @@ public class TwilioWidgetsAPI
 
 	}
 
-	@Path("createappsid/{acc-sid}/{auth-token}/{number-sid}/{record}")
+	@Path("createappsid/{acc-sid}/{auth-token}/{number-sid}/{record}/{twimlet-url}")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String createAppSid(@PathParam("acc-sid") String accountSID, @PathParam("auth-token") String authToken,
-			@PathParam("number-sid") String numberSid, @PathParam("record") String record)
+			@PathParam("number-sid") String numberSid, @PathParam("record") String record,
+			@PathParam("twimlet-url") String twimletUrl)
 	{
 		System.out.println("In createAppSid" + accountSID + " " + authToken + " " + numberSid + " " + record);
 
@@ -469,7 +470,7 @@ public class TwilioWidgetsAPI
 			 * Create a Twilio Application for Agile in Agile User Twilio
 			 * account
 			 */
-			return TwilioUtil.createAppSidTwilioIO(accountSID, authToken, numberSid, record);
+			return TwilioUtil.createAppSidTwilioIO(accountSID, authToken, numberSid, record, twimletUrl);
 		}
 		catch (SocketTimeoutException e)
 		{
