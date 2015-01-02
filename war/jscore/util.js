@@ -326,7 +326,8 @@ function buildFacebookProfileURL(URL) {
 		URL = 'https://www.facebook.com/'+URL;
 	} else if ( URL && isFBURL && URL.indexOf( 'www.facebook.com' ) === -1 ) {
 		URL = URL.replace( 'facebook.com', 'www.facebook.com' );
-	} else if ( URL && !hasScheme ) {
+	}
+	if ( URL && !hasScheme ) {
 		URL = 'http://'+URL;
 	}
 	return URL;

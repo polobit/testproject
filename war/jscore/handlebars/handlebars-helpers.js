@@ -63,8 +63,8 @@ $(function()
 				Handlebars.registerHelper('getTwitterHandleByURL', function(value)
 				{
 
-								if (value.indexOf("https://twitter.com/") != -1)
-												return value;
+//								if (value.indexOf("https://twitter.com/") != -1)
+//												return value;
 
 								value = value.substring(value.lastIndexOf("/") + 1);
 								console.log(value);
