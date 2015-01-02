@@ -51,7 +51,7 @@
 
 <div class="btn-group right">
 								
-								<a href="#" class="deal-restore-detail-view btn"  style="border-radius: 4px 0px 0px 4px!important;margin-left: 6px;" ><i class="icon-mail-reply"></i> Restore</a>
+								<a href="#" class="deal-restore-detail-view btn"  style="border-radius: 4px 2px 3px 4px!important;margin-left: 6px;" ><i class="icon-mail-reply"></i> Restore</a>
 								
 							</div>
 
@@ -87,7 +87,7 @@
 
 <div class="btn-group right">
 								
-								<a href="#" class="deal-add-contact btn" id="deal_details" style="border-radius: 4px 0px 0px 4px!important;margin-left: 6px;" ><i class="icon-edit"></i> Edit</a>
+								<a href="#" class="deal-detail-edit-deal btn" id="deal_details" style="border-radius: 4px 0px 0px 4px!important;margin-left: 6px;" ><i class="icon-edit"></i> Edit</a>
 								<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 								<ul class="dropdown-menu pull-right">
 
@@ -168,10 +168,12 @@
 							<div  style="margin-top:3px;">
 								
 								<div style="padding-right:0px!important;font-size:13px;line-height:20px;">
+                               {{#if custom_data}}
 								<div class="pull-left" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: 18em;margin-top:-15px;font-size: 16px;">
 								<i class="icon icon-info" style="font-size: 13px;margin-left:4px;"></i>Custom Data
 									
 							</div>	
+                           {{/if}}
 
 <div class="deal-custom-data"> 
 								

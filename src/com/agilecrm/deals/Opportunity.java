@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.datanucleus.util.StringUtils;
 
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.cursor.Cursor;
@@ -497,8 +498,10 @@ public class Opportunity extends Cursor
 		// Save note
 		note.save();
 
-		// Save note
-		note.save();
+		if (this.id != null)
+		{
+		    ActivitySave.createNoteAddForDeal(note, this);
+		}
 
 		// Add note to task
 		this.related_notes.add(new Key<Note>(Note.class, note.id));
@@ -518,6 +521,10 @@ public class Opportunity extends Cursor
 		    note = new Note(this.note_subject, null);
 		// Save note
 		note.save();
+		if (this.id != null)
+		{
+		    ActivitySave.createNoteAddForDeal(note, this);
+		}
 
 		// Add note to task
 		this.related_notes.add(new Key<Note>(Note.class, note.id));

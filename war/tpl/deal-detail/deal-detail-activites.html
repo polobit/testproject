@@ -34,23 +34,24 @@
 		{{else}}
 			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
 		{{/if}}
+<span class="owner-name">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
 		
 	</span>
 	<h4><a style="text-decoration: none"><b>{{get_normal_activity_type activity_type}}</b></a></h4><br/>
 	<div style="background:none;border:none;">
 {{#if_equals "DEAL_ADD" activity_type}}
-        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Deal created for {{custom1}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%) </pre>
+        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Deal created for {{custom1}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%). </pre>
      {{/if_equals}}
 
 {{#if_equals "DEAL_EDIT" activity_type}}
-        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{displayActivityFieldText custom3}} modified </pre>
+        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{displayActivityFieldText custom3}} modified. </pre>
      {{/if_equals}}
 
 {{#if_equals "DEAL_CLOSE" activity_type}}
-        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Hurray. {{entityObject.owner.name}} has won deal worth {{currencySymbol}} {{numberWithCommas entityObject.expected_value}} </pre>
+        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Hurray. {{entityObject.owner.name}} has won deal worth {{currencySymbol}} {{numberWithCommas entityObject.expected_value}}. </pre>
      {{/if_equals}}
 {{#if_equals "DEAL_LOST" activity_type}}
-        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Alas. Lost the deal worth {{currencySymbol}} {{numberWithCommas entityObject.expected_value}}</pre>
+        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Alas. Lost the deal worth {{currencySymbol}} {{numberWithCommas entityObject.expected_value}}.</pre>
      {{/if_equals}}
 
 {{#if_equals "DEAL_MILESTONE_CHANGE" activity_type}}
@@ -64,22 +65,22 @@
 {{#if_equals "DEAL_RELATED_CONTACTS" activity_type}}
          {{#if related_contact_ids}}
 {{#if_equals "removed_all_relatedcontacts" custom3}}
-<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal</pre>
+<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal.</pre>
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
-<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal</pre>
+<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal.</pre>
 {{/if_equals}} 
 {{#if_equals "added_relatedcontacts" custom3}}
-<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to deal</pre>  
+<pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to deal.</pre>  
 {{/if_equals}}
 {{else}}
-Modified deal   
+Modified deal.   
 
 {{/if}} 
      {{/if_equals}}
 
 {{#if_equals "NOTE_ADD" activity_type}}
-        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{custom1}}<br/>{{custom2}} </pre>
+        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">{{custom1}}<br/>{{custom2}}. </pre>
      {{/if_equals}}
 		
 	</div>	
@@ -89,9 +90,7 @@ Modified deal
 		<small class="edit-hover" style="margin-right:10px"> 
 			<time  datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999" title="{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}">{{epochToHumanDate "dd mmm yyyy" time}}</time>
 		</small>
-<span class="actions pull-right">
-{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}
-        </span>
+
 	</div>
 </div>
 </div>

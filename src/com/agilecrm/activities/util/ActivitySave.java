@@ -543,6 +543,17 @@ public class ActivitySave
     }
 
     /**
+     * 
+     */
+    public static void createNoteAddForDeal(Note note, Opportunity opportunity)
+    {
+
+	ActivityUtil.createDealActivity(ActivityType.NOTE_ADD, opportunity, note.subject, note.description,
+	        note.id.toString(), null);
+
+    }
+
+    /**
      * create TAG_ADD activity
      * 
      * @param contact

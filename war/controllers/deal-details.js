@@ -25,7 +25,7 @@ dealdetails : function(id)
 		if(App_Deals.opportunityCollectionView && App_Deals.opportunityCollectionView.collection)
 			deal_collection = App_Deals.opportunityCollectionView.collection;
 
-		if (deal_collection != null)
+		if (deal_collection != null && readCookie("agile_deal_view"))
 			deal_detail_view_navigation(id, deal_collection, el);
 		
 			
@@ -232,8 +232,22 @@ $('.deal-add-contact').live('click', function(e)
 	console.log(App_Deal_Details.dealDetailView.model.toJSON());
 	var currentdeal = App_Deal_Details.dealDetailView.model;
 	updateDeal(currentdeal);
+	
+	setTimeout(function() {
+		$('#opportunityUpdateForm').find("input[name='relates_to']").focus();
+	}, 800);
 
 });
+
+$('.deal-detail-edit-deal').live('click', function(e)
+		{
+			e.preventDefault();
+			console.log(App_Deal_Details.dealDetailView.model.toJSON());
+			var currentdeal = App_Deal_Details.dealDetailView.model;
+			updateDeal(currentdeal);
+			
+
+		});
 
 $('.deal-note').live('click', function(e)
 {
