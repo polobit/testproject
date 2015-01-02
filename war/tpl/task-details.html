@@ -1,5 +1,5 @@
 <script id="task-detail-template" type="text/html">
-<div class="row">
+<div class="row-fluid">
        <div class="span12">
 			<div class="row-fluid">
                  <span class="pull-left taskDetail-text"> 
@@ -23,10 +23,21 @@
 <div class="span8" style="margin-bottom: -30px;">
 {{#if_equals "IN_PROGRESS" status}}
 <span class="span2" style="text-transform: capitalize;">{{displayTaskStatus status}} ({{progress}}%)</span> 
-{{else}}
-<span class="span2" style="text-transform: capitalize;">{{displayTaskStatus status}}</span>
-{{/if_equals}}
  <span class="span3" style="margin-left: 24px;">Due: {{epochToHumanDate "dd mmm yyyy" due}}</span>
+{{/if_equals}}
+
+{{#if_equals "COMPLETED" status}}
+<span class="span4" style="text-transform: capitalize;">{{displayTaskStatus status}}
+{{#if task_completed_time}}<time datetime="{{epochToHumanDate "dd mmm yyyy" task_completed_time}}">({{epochToHumanDate "dd mmm yyyy" task_completed_time}})</time>{{/if}}
+</span>
+
+{{/if_equals}}
+
+{{#if_equals "YET_TO_START" status}}
+<span class="span4" style="text-transform: capitalize;">{{displayTaskStatus status}}
+<time datetime="{{epochToHumanDate "dd mmm yyyy" due}}">(Due {{epochToHumanDate "dd mmm yyyy" due}})</time>
+</span>
+{{/if_equals}}
 </div>
 
 <div class="pull-right">
@@ -62,8 +73,7 @@
 </div>
 
 <div class="row-fluid"  style="border-bottom: 1px solid #ddd;margin-bottom: 15px; padding-bottom: 30px;height: 40px;">
-<div class="span2" id="task-contact-img" style="margin-top: 7px;">
-<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:104px;overflow:hidden;display:inline-block;">
+<div class="row-fluid" id="task-contact-img" style="margin-top: 7px;">
         	{{#each contacts}}
         		{{#if_contact_type "PERSON"}}
         			<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
@@ -72,7 +82,6 @@
         			<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
         		{{/if_contact_type}}
         	{{/each}}
-		</div>
 </div>
 </div> 
 
@@ -261,7 +270,7 @@
 
  {{#if_equals "TASK_RELATED_CONTACTS" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;">
-    {{#if related_contact_ids}}New related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} attached to the task
+    {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} attached to the task
 	</div>	
      {{/if_equals}}
 
