@@ -34,6 +34,7 @@ import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
+import com.agilecrm.portlets.Portlet;
 import com.agilecrm.reports.ActivityReports;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.shopify.ShopifyApp;
@@ -51,6 +52,7 @@ import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.voicemail.VoiceMail;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
@@ -172,6 +174,12 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	// For all Activities
 	ObjectifyService.register(Activity.class);
+	
+	// Voice Mail
+	ObjectifyService.register(VoiceMail.class);
+
+	// For all Activities
+	ObjectifyService.register(Portlet.class);
 
     }
 

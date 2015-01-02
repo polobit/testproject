@@ -519,6 +519,10 @@ function fillCustomFields(fields, el, callback, is_webrules)
 		{
 			lhs_element.append('<option value="'+field.field_label+'_time" field_type="'+field.field_type+'">'+field.field_label+'</option>');
 			condition.find("option.created_time").addClass(field.field_label+'_time');
+		} else if(field.field_type == "NUMBER")
+		{
+			lhs_element.append('<option value="'+field.field_label+'_number" field_type="'+field.field_type+'">'+field.field_label+'</option>');
+			condition.find("option.lead_score").addClass(field.field_label+'_number');
 		}
 		else
 		{

@@ -194,6 +194,141 @@ $(function(){
 			$("#milestone", el).closest('div').find('.loading-img').hide();
 		});
 	});
+	
+	$("#opportunity_archive").die().live('click',function(e){
+		e.preventDefault();
+		$('#archived',$('#opportunityUpdateForm')).attr('checked','checked');
+		$("#opportunityUpdateModal #opportunity_validate").trigger('click');
+	});
+	$("#opportunity_unarchive").die().live('click',function(e){
+		e.preventDefault();
+		$('#archived',$('#opportunityUpdateForm')).removeAttr('checked');
+		$('#opportunityUpdateModal #opportunity_validate').trigger('click');
+	});
+	
+	
+	
+	/**
+	 * Milestone view deal delete
+	 */
+	$('.deal-archive').live('click', function(e) {
+		e.preventDefault();
+        if(!confirm("Archive Deal?"))
+			return;
+
+        var id = $(this).closest('.data').attr('id');
+        var milestone = ($(this).closest('ul').attr("milestone")).trim();
+        var currentDeal;
+        
+        // Get the current deal model from the collection.
+        var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
+    	if(!dealPipelineModel)
+    		return;
+    	currentDeal = dealPipelineModel[0].get('dealCollection').get(id).toJSON();
+    	currentDeal.archived = true;
+        var that = $(this);
+        
+        var notes = [];
+    	$.each(currentDeal.notes, function(index, note)
+    	{
+    		notes.push(note.id);
+    	});
+    	currentDeal.notes = notes;
+        if(currentDeal.note_description)
+    		delete currentDeal.note_description;
+
+        if(!currentDeal.close_date || currentDeal.close_date==0)
+        	currentDeal.close_date = null;
+        
+        currentDeal.owner_id = currentDeal.owner.id;
+        
+        var arch_deal = new Backbone.Model();
+		arch_deal.url = '/core/api/opportunity';
+		arch_deal.save(currentDeal, {
+			// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
+			success : function(model, response) {
+				// Remove the deal from the collection and remove the UI element.
+				if(removeArchive(response)){
+					dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
+					$('#'+id).parent().remove();
+				}
+				else{
+					that.remove();
+					$('#'+id+' .deal-options').find('.deal-edit').remove();
+					$('#'+id+' .deal-options').prepend('<a title="Restore" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>');
+				}
+				console.log('archived deal----',model);
+				// Shows Milestones Pie
+				pieMilestones();
+	
+				// Shows deals chart
+				dealsLineChart();
+				update_deal_collection(model.toJSON(), id, milestone, milestone);
+				
+			}
+		});
+	});
+	
+	/**
+	 * Milestone view deal delete
+	 */
+	$('.deal-restore').live('click', function(e) {
+		e.preventDefault();
+        if(!confirm("Restore Deal?"))
+			return;
+
+        var id = $(this).closest('.data').attr('id');
+        var milestone = ($(this).closest('ul').attr("milestone")).trim();
+        var currentDeal;
+        
+        // Get the current deal model from the collection.
+        var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
+    	if(!dealPipelineModel)
+    		return;
+    	currentDeal = dealPipelineModel[0].get('dealCollection').get(id).toJSON();
+    	currentDeal.archived = false;
+        var that = $(this);
+        
+        var notes = [];
+    	$.each(currentDeal.notes, function(index, note)
+    	{
+    		notes.push(note.id);
+    	});
+    	currentDeal.notes = notes;
+        if(currentDeal.note_description)
+    		delete currentDeal.note_description;
+
+        if(!currentDeal.close_date || currentDeal.close_date==0)
+        	currentDeal.close_date = null;
+        currentDeal.owner_id = currentDeal.owner.id;
+        var arch_deal = new Backbone.Model();
+		arch_deal.url = '/core/api/opportunity';
+		arch_deal.save(currentDeal, {
+			// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
+			success : function(model, response) {
+				// Remove the deal from the collection and remove the UI element.
+				if(removeArchive(response)){
+					dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
+					$('#'+id).parent().remove();
+				}
+				else{
+					that.remove();
+					var htmllinks ='<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>';
+					htmllinks += '<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>';
+					$('#'+id+' .deal-options').prepend(htmllinks);
+				}
+				console.log('archived deal----',model);
+				// Shows Milestones Pie
+				pieMilestones();
+	
+				// Shows deals chart
+				dealsLineChart();
+				update_deal_collection(model.toJSON(), id, milestone, milestone);
+				
+			}
+		});
+	});
+	
 });
 
 /**
@@ -205,7 +340,7 @@ function updateDeal(ele, editFromMilestoneView)
 	// Checking Whether the edit is from milestone view,
 	// if it is we are passing JSON object so no need to convert
 	var value = (editFromMilestoneView ? ele : ele.toJSON());
-	
+
 	add_recent_view(new BaseModel(value));
 	
 	var dealForm = $("#opportunityUpdateForm");
@@ -216,7 +351,15 @@ function updateDeal(ele, editFromMilestoneView)
 	
 	$("#opportunityUpdateModal").modal('show');
 	
-	
+	// Hide archive button, if the is already archived.
+	if(value.archived){
+		$('#opportunity_archive').hide();
+		$('#opportunity_unarchive').show();
+	}
+	else{
+		$('#opportunity_unarchive').hide();
+		$('#opportunity_archive').show();
+	}
 	
 	// Call setupTypeAhead to get contacts
 	agile_type_ahead("relates_to", dealForm, contacts_typeahead);
@@ -320,6 +463,21 @@ function checkPipeline(pipeId){
 	return false;
 }
 
+function removeArchive(deal){
+	var result = false;
+	if(readCookie('deal-filters')){
+		var arch = $.parseJSON(readCookie('deal-filters')).archived;
+		if(arch == 'false' && deal.archived==true)
+			return true;
+		else if(arch=='true' && deal.archived==false)
+			return true;
+		else
+			return false;
+		
+	}else 
+	return result;
+}
+
 /**
  * Updates or Saves a deal
  */ 
@@ -339,7 +497,8 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 
 	// Shows loading symbol until model get saved
     // $('#' + modalId).find('span.save-status').html(getRandomLoadingImg());
-
+if(json.close_date==0)
+	json.close_date=null;
 	var newDeal = new Backbone.Model();
 	newDeal.url = 'core/api/opportunity';
 	newDeal.save(json, {
@@ -370,7 +529,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 				
 				
 				/*
-				 * Verifies whether the added task is related to the contact in
+				 * Verifies whether the added deal is related to the contact in
 				 * contact detail view or not
 				 */
 				$.each(deal.contacts, function(index, contact) {
@@ -382,7 +541,12 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 
 						if (dealsView && dealsView.collection)
 						{
-							if(dealsView.collection.get(deal.id))
+							if(deal.archived == true)
+							{
+								dealsView.collection.remove(deal.id);
+								dealsView.collection.sort();
+							}
+							else if(dealsView.collection.get(deal.id))
 							{
 								dealsView.collection.get(deal.id).set(new BaseModel(deal));
 							}
@@ -457,10 +621,31 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 							$("#" + newMilestone.replace(/ +/g, '')).find("#" + id).parent().html(getTemplate('deals-by-paging-model', deal));
 						}
 						
+						if(removeArchive(deal)){
+							
+							console.log('removing the deal when archived');
+							$("#" + oldMilestone.replace(/ +/g, '')).find("#" + id).parent().remove();
+							try{
+								$('#'+oldMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+oldMilestone.replace(/ +/g, '')+'_count').text())-1);
+							} catch(err){
+								console.log(err);
+							}
+						}
+						
 					} else if(checkPipeline(deal.pipeline_id)){
 						var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
 						if(!dealPipelineModel)
 							return;
+						var filterJSON = $.parseJSON(readCookie('deal-filters'));
+						console.log(deal.owner.id.toString() != filterJSON.owner_id, deal.owner.id.toString(), filterJSON.owner_id);
+						if(filterJSON.owner_id.length > 0 && deal.owner.id.toString() != filterJSON.owner_id)
+							return;
+						console.log(filterJSON.archived != 'all' && deal.archived != filterJSON.archived, deal.archived);
+						if(filterJSON.archived){
+							console.log(filterJSON.archived);
+							if(filterJSON.archived != 'all' && deal.archived.toString() != filterJSON.archived)
+								return;
+						}
 						
 						dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal));
 						try{
@@ -476,8 +661,32 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 					if (isUpdate)
 						 App_Deals.opportunityCollectionView.collection.remove(json);
 					
+						data.attributes.cursor = App_Deals.opportunityCollectionView.collection.last().toJSON().cursor;
 						App_Deals.opportunityCollectionView.collection.add(data);
 						App_Deals.opportunityCollectionView.render(true);
+				}
+
+			}
+			else if (Current_Route == 'portlets') 
+			{
+				if(App_Portlets.currentPosition && App_Portlets.pendingDeals && App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)]){
+					if (isUpdate)
+						App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+					// Updates task list view
+					if(json.milestone!="Won" && json.milestone!="Lost")
+						App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+					App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].render(true);
+				}
+				if(App_Portlets.currentPosition && App_Portlets.dealsWon && App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)]){
+					if (isUpdate)
+						App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+					// Updates task list view
+					App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+					App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)].render(true);
 				}
 
 			}

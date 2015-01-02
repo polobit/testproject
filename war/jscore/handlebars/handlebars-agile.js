@@ -153,6 +153,10 @@ function getTemplateUrls(templateName)
 	if (templateName.indexOf("document") == 0)
 	{
 		template_relative_urls.push("document.js");
+	}	
+	if (templateName.indexOf("voice-mail") == 0)
+	{
+		template_relative_urls.push("voice-mail.js");
 	}
 	if (templateName.indexOf("gmap") == 0)
 	{
@@ -259,6 +263,10 @@ function getTemplateUrls(templateName)
 
 		if (HANDLEBARS_PRECOMPILATION)
 			template_relative_urls.push("socialsuite.html");
+	}
+	if (templateName.indexOf("portlet") == 0)
+	{
+		template_relative_urls.push("portlets.js");
 	}
 	return template_relative_urls;
 }

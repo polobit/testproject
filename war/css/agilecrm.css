@@ -471,7 +471,7 @@ html {
 	width: 16px;
 	height: 16px;
 }
-/* Not to overide z-index of datepicker due to timepicker modal */
+/* Not to overide z-index of datepicker due to the timepicker modal  */
 .datepicker {
 	z-index: 2050 !important;
 }
@@ -1141,7 +1141,7 @@ time {
 	display: block!important;
 }
 /** documents icon  **/
-#documents-model-list tr:hover td.data div b.activate-link {
+#documents-model-list tr:hover td.data div b.activate-link,#voice-mail-model-list tr:hover td .tdVoiceMailOver{
 	display: inline!important;
 }
 /** custom feilds modals **/
@@ -1894,6 +1894,17 @@ div.clear {
 	display:block;
 }
 
+.navbar_due_tasks{
+	background: red;
+padding: 0px 2px;
+font-size: 12px;
+border-radius: 2px;
+position: absolute;
+top: 2px;
+left: 22px;
+box-shadow: 0 0 2px 0px #000;
+}
+
 select.f-left {
 	float:left;
 	margin-right:2px;
@@ -1904,4 +1915,8 @@ div.lhs-row-filter {
 }
 #lhs-filters-header {
 	word-break:break-all;
+}
+
+.progress_slider_width_bottom {
+	margin-top:24px;
 }

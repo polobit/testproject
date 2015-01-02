@@ -134,9 +134,15 @@ var contact_details_tab = {
 		},
 		load_mail_accounts : function()
 		{
+			var contact_details_tab_scope = this;
 			var mailAccountsView = new Base_Model_View({ url : 'core/api/emails/synced-accounts', template : "email-account-types",
 				postRenderCallback : function(el)
 				{
+//					var model = mailAccountsView.model.toJSON();
+//					if(model.hasEmailAccountsConfigured)
+//						contact_details_tab_scope.email_sync_configured = true;
+//					else
+//						contact_details_tab_scope.email_sync_configured = false;
 				} });
 
 			$('#mail-account-types', App_Contacts.contactDetailView.el).html(mailAccountsView.render().el);
@@ -145,21 +151,27 @@ var contact_details_tab = {
 		{
 			var contact = App_Contacts.contactDetailView.model;
 			var json = contact.toJSON();
-			this.email_sync_configured = {};
+			this.configured_sync_email = "";
 			var cursor = true;
-
+		
 			// Get email of the contact in contact detail
 			var email = getAllPropertyValuesByName(json.properties, "email", ",");
-
+		
 			// By default showing Agile emails
 			if (!mail_server_url)
 			{
 				this.load_mail_accounts();
-				mail_server_url = 'core/api/emails/agile-emails?e=';
+				mail_server_url = 'core/api/emails/agile-emails?e='+encodeURIComponent(email);
 				email_server_type = "agilecrm";
 				cursor = false;
 			}
-
+			else
+			{
+				mail_server_url = mail_server_url + '&search_email='+encodeURIComponent(email);
+			}
+		
+			var contact_details_tab_scope = this;
+			
 			// Shows an error alert, when there is no email to the contact
 			if (!email)
 			{
@@ -168,13 +180,11 @@ var contact_details_tab = {
 								'<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the mails.</div>');
 				return;
 			}
-
-			var contact_details_tab_scope = this;
-
+		
 			$('#email-type-select-dropdown').attr('disabled', 'disabled');
-
+		
 			// Fetches mails collection
-			var mailsView = new Base_Collection_View({ url : mail_server_url + encodeURIComponent(email), cursor : cursor, page_size : 10,
+			var mailsView = new Base_Collection_View({ url : mail_server_url , cursor : cursor, page_size : 10,
 				templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 				postRenderCallback : function(el)
 				{
@@ -183,7 +193,7 @@ var contact_details_tab = {
 					{
 						$(".email-sent-time", el).each(function(index, element)
 						{
-
+		
 							// console.log("before :" + $(element).html())
 							// console.log("converted manually" +
 							// jQuery.timeago($(element).html()));
@@ -191,7 +201,10 @@ var contact_details_tab = {
 							// console.log($(element).html())
 						});
 					});
-
+					
+					if(email_server_type!="agilecrm")
+						contact_details_tab_scope.configured_sync_email = email_server_type;
+					
 					var gmail;
 					queueGetRequest('email_prefs_queue', '/core/api/social-prefs/GMAIL', 'json', function(data)
 					{
@@ -207,21 +220,12 @@ var contact_details_tab = {
 
 					queueGetRequest('email_prefs_queue', '/core/api/office', 'json', function(office_exchange)
 					{
-
-						// contact_details_tab_scope.email_sync_configured is used
-						// in
-						if (gmail)
-							contact_details_tab_scope.email_sync_configured = gmail;
-						else if (imap)
-							contact_details_tab_scope.email_sync_configured = imap;
-						else if (office_exchange)
-							contact_details_tab_scope.email_sync_configured = office_exchange;
-
 						if (!imap && !office_exchange && !gmail)
-							$('#email-prefs-verification', el).css('display', 'block');
+							$('#email-prefs-verification', el).css('display', 'block');					
 					});
-				} });
-
+				}
+			});
+		
 			mailsView.collection.fetch();
 			$('#mails', App_Contacts.contactDetailView.el).html(mailsView.render().el);
 		},
