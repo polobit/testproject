@@ -34,6 +34,7 @@ import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
+import com.agilecrm.portlets.Portlet;
 import com.agilecrm.reports.ActivityReports;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.shopify.ShopifyApp;
@@ -176,6 +177,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	
 	// Voice Mail
 	ObjectifyService.register(VoiceMail.class);
+
+	// For all Activities
+	ObjectifyService.register(Portlet.class);
 
     }
 

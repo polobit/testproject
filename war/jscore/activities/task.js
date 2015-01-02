@@ -380,6 +380,15 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 						return false;
 					}
 				});
+			} else if (App_Portlets.currentPosition && App_Portlets.tasksCollection && App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)] && Current_Route == 'portlets') {
+				if (isUpdate)
+					App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+				// Updates task list view
+				App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+				App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)].render(true);
+
 			} else {
 				App_Calendar.navigate("calendar", {
 					trigger : true

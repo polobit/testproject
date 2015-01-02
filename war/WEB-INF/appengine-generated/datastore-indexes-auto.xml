@@ -307,5 +307,9 @@
         <property name="related_contacts" direction="asc"/>
         <property name="created_time" direction="desc"/>
     </datastore-index>
+    
+	<datastore-index kind="Portlet" ancestor="true" source="manual">
+        <property name="row_position" direction="asc"/>
+    </datastore-index>
 
 </datastore-indexes>
