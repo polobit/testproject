@@ -417,6 +417,19 @@ public class DomainUserUtil
 		 if(!user.is_account_owner)
 		 {
 		     user.is_account_owner = true;
+		     user.is_admin = true;
+		     user.save();
+		 }
+	     }
+	     else
+	     {
+		 // If admin is not there in account, first user is made admin and account owner
+		 query = dao.ofy().query(DomainUser.class).filter("domain", domain).limit(1).order("id");
+		 user = query.get();
+		 if(user != null && !user.is_account_owner)
+		 {
+		     user.is_admin = true;
+		     user.is_account_owner = true;
 		     user.save();
 		 }
 	     }
