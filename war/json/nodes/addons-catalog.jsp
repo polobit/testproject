@@ -15,7 +15,7 @@
     String[] MOBILE_CATALOG = { "json/nodes/sms/addons/sendmessage.js"};
 		   /* ,"json/nodes/sms/getmessage.js", "json/nodes/sms/menusms.js" };  */
     String[] DEVELOPERS_CATALOG = { "json/nodes/developers/addons/jsonio.js", "json/nodes/developers/addons/condition.js"};
-    String[] CRM_CATALOG = {"json/nodes/crm/addons/adddeal.jsp","json/nodes/crm/addons/addnote.js","json/nodes/crm/addons/addtask.jsp","json/nodes/common/addons/add_case.js","json/nodes/crm/addons/tags.js", "json/nodes/common/addons/score.js", "json/nodes/crm/addons/notify.js"};
+    String[] CRM_CATALOG = {"json/nodes/crm/addons/adddeal.jsp","json/nodes/crm/addons/addnote.js","json/nodes/crm/addons/addtask.jsp","json/nodes/common/addons/add_case.js","json/nodes/crm/addons/tags.js", "json/nodes/common/addons/score.js", "json/nodes/crm/addons/notify.js", "json/nodes/crm/addons/add_event.js"};
     String[] SOCIAL_CATALOG = {"json/nodes/social/addons/tweet.js"};
     String [] WEB_CATALOG = {"json/nodes/common/addons/url.js"};
 
