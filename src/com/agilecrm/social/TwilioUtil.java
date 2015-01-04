@@ -680,11 +680,8 @@ public class TwilioUtil
 		params.put("FriendlyName", "Agile CRM Twilio Saga");
 
 		// For Local Host
-		/*
-		 * params.put("VoiceUrl",
-		 * "http://1-dot-twiliovoicerecord.appspot.com/voice?record=" + record +
-		 * "&agileuserid=" + agileUserID + "&twimleturl=" + twimletUrlToSend);
-		 */
+		params.put("VoiceUrl", "http://1-dot-twiliovoicerecord.appspot.com/voice?record=" + record + "&agileuserid="
+				+ agileUserID + "&twimleturl=" + twimletUrlToSend);
 
 		// For Main
 		/*
@@ -694,9 +691,12 @@ public class TwilioUtil
 		 */
 
 		// For Beta
-		params.put("VoiceUrl", "https://" + NamespaceManager.get()
-				+ "-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiovoice?record=" + record + "&agileuserid="
-				+ agileUserID + "&twimleturl=" + twimletUrlToSend);
+		/*
+		 * params.put("VoiceUrl", "https://" + NamespaceManager.get() +
+		 * "-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiovoice?record=" +
+		 * record + "&agileuserid=" + agileUserID+ "&twimleturl=" +
+		 * twimletUrlToSend);
+		 */
 
 		params.put("VoiceMethod", "GET");
 

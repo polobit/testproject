@@ -159,6 +159,12 @@ $(function()
 	$(".twilioio-advance-settings").die().live('click', function(e)
 	 {
 		e.preventDefault();
+		
+		// If twimlet url is none so display nothing
+		if("None" == $("#twilio_twimlet_url").val())
+			$("#twilio_twimlet_url").val(""); 
+		
+		// Toggle advance settings
 		$(".twilioio-advance-settings-hide").toggle();
 	    $(".twilioio-advance-settings-show").toggle();
 	    $("#twilio_recording").toggle();
@@ -489,6 +495,9 @@ function createAppSid(twilioio_prefs, callback)
 	if (twilioio_prefs.twilio_number_sid != "")
 		numberSid = twilioio_prefs.twilio_number_sid;
 
+	if (twilioio_prefs.twilio_twimlet_url == "")
+		twilioio_prefs.twilio_twimlet_url = "None";
+	
 	$.get("/core/api/widgets/twilio/createappsid/" + twilioio_prefs.twilio_acc_sid + "/" + twilioio_prefs.twilio_auth_token + "/" + numberSid+ "/" + twilioio_prefs.twilio_record+ "/" + encodeURIComponent(twilioio_prefs.twilio_twimlet_url), function(result)
 	{
 		console.log("Twilio createAppSid " + result);

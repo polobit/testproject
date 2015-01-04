@@ -3,7 +3,6 @@ package com.thirdparty.twilio;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServlet;
@@ -62,8 +61,11 @@ public class TwilioIOVoiceServlet extends HttpServlet
 					// If twimlet url is given
 					if (twimletUrl != null)
 					{
-						// Decode url
-						twimletUrl = URLDecoder.decode(twimletUrl, "UTF-8");
+						System.out.println("In redirect...");
+
+						// Replace & with &amp;
+						twimletUrl = twimletUrl.replace("&", "&amp;");
+						System.out.println("twimletUrl replace &:" + twimletUrl);
 
 						// Create redirect verb
 						Redirect redirect = new Redirect(twimletUrl);
@@ -103,10 +105,11 @@ public class TwilioIOVoiceServlet extends HttpServlet
 					// it
 					// will be executed after call completion
 					if (twimletUrl != null)
-						dial.set(
-								"action",
-								request.getRequestURI() + "?isforward=true&amp;twimleturl="
-										+ URLEncoder.encode(twimletUrl, "UTF-8"));
+						if (!twimletUrl.equalsIgnoreCase("None"))
+							dial.set(
+									"action",
+									request.getRequestURI() + "?isforward=true&amp;twimleturl="
+											+ URLEncoder.encode(twimletUrl, "UTF-8"));
 
 					// Append client
 					dial.append(new Client("agileclient" + agileuserid));
