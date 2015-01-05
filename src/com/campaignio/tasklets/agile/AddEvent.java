@@ -1,5 +1,7 @@
 package com.campaignio.tasklets.agile;
 
+import java.util.Calendar;
+
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
@@ -25,7 +27,11 @@ public class AddEvent extends TaskletAdapter
 
     public static String PRIORITY = "priority";
 
-    public static String DAYS_TO_START = "days_to_start";
+    public static String START_DATE = "start_date";
+
+    public static String AT = "at";
+
+    public static String TIMEZONE = "time_zone";
 
     public static String EVENT_DURATION = "event_duration";
 
@@ -38,7 +44,10 @@ public class AddEvent extends TaskletAdapter
 	/** Reads each value of Add Event **/
 	String eventName = getStringValue(nodeJSON, subscriberJSON, data, EVENT_NAME);
 	String priority = getStringValue(nodeJSON, subscriberJSON, data, PRIORITY);
-	String daysToStart = getStringValue(nodeJSON, subscriberJSON, data, DAYS_TO_START);
+	String daysToStart = getStringValue(nodeJSON, subscriberJSON, data, START_DATE);
+
+	String at = getStringValue(nodeJSON, subscriberJSON, data, AT);
+	String timeZone = getStringValue(nodeJSON, subscriberJSON, data, TIMEZONE);
 	String eventDuration = getStringValue(nodeJSON, subscriberJSON, data, EVENT_DURATION);
 	String givenOwnerId = getStringValue(nodeJSON, subscriberJSON, data, OWNER_ID);
 
@@ -53,10 +62,35 @@ public class AddEvent extends TaskletAdapter
 
 	    // Calculates Start and End times
 	    DateUtil dateUtil = new DateUtil();
-	    dateUtil.addDays(Integer.parseInt(daysToStart));
+	    dateUtil.toTZ(timeZone);
 
-	    // Start time
-	    Long startTime = dateUtil.getTime().getTime() / 1000;
+	    // Replace plus sign from duration e.g., +2 to 2
+	    if (daysToStart.contains("+"))
+		daysToStart = daysToStart.replaceAll("\\+", "");
+
+	    // Trim spaces
+	    daysToStart = StringUtils.trim(daysToStart);
+
+	    Long startTime = null;
+
+	    // Expecting days containing not more than 4 digits
+	    if (daysToStart.matches("[0-9]+") && daysToStart.length() <= 4)
+	    {
+		String hours = at.substring(0, 2);
+		String minutes = at.substring(3);
+
+		dateUtil.setHoursAndMinutes(Integer.parseInt(hours), Integer.parseInt(minutes));
+		dateUtil.addDays(Integer.parseInt(daysToStart));
+
+		startTime = dateUtil.getTime().getTime() / 1000;
+	    }
+	    else
+	    {
+		Calendar cal = DateUtil.getCalendar(daysToStart, timeZone, at);
+		startTime = cal.getTimeInMillis() / 1000;
+
+		dateUtil.setCalendar(cal);
+	    }
 
 	    Long endTime = null;
 	    boolean allDay = false;
@@ -64,9 +98,10 @@ public class AddEvent extends TaskletAdapter
 	    // All day event
 	    if (StringUtils.equals(eventDuration, "all_day"))
 	    {
-		// Add 24 hours
-		dateUtil.addMinutes(23 * 60 + 59);
+		dateUtil.setHoursAndMinutes(00, 00);
+		startTime = dateUtil.getTime().getTime() / 1000;
 
+		dateUtil.setHoursAndMinutes(23, 45);
 		endTime = dateUtil.getTime().getTime() / 1000;
 
 		allDay = true;
@@ -86,10 +121,12 @@ public class AddEvent extends TaskletAdapter
 	    LogUtil.addLogToSQL(
 		    AgileTaskletUtil.getId(campaignJSON),
 		    AgileTaskletUtil.getId(subscriberJSON),
-		    "Event Name: " + eventName + "<br/> Priority: " + priority + "<br/> Start Time: "
-		            + DateUtil.getCalendarStringInUTC(startTime * 1000, "d MMM yyyy hh:mm aaa")
-		            + "<br/> End Time: "
-		            + DateUtil.getCalendarStringInUTC(endTime * 1000, "d MMM yyyy hh:mm aaa"),
+		    "Event Name: "
+		            + eventName
+		            + "<br/> Start Time: "
+		            + DateUtil.getCalendarString(startTime * 1000, "d MMM yyyy hh:mm a zzz", timeZone)
+		            + (allDay ? " (all day)" : "<br/> End Time: "
+		                    + DateUtil.getCalendarString(endTime * 1000, "d MMM yyyy hh:mm a zzz", timeZone)),
 		    LogType.ADD_EVENT.toString());
 	}
 	catch (Exception e)

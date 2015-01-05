@@ -42,6 +42,8 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Utility class for date manipulation. This class gives a simple interface for
  * common Date, Calendar and Timezone operations. It is possible to apply
@@ -100,6 +102,11 @@ public class DateUtil
     public String getTZ()
     {
 	return cal.getTimeZone().getID();
+    }
+
+    public Calendar getCalendar()
+    {
+	return cal;
     }
 
     /**
@@ -197,6 +204,14 @@ public class DateUtil
 	return this;
     }
 
+    public DateUtil setHoursAndMinutes(int hours, int minutes)
+    {
+	cal.set(Calendar.HOUR_OF_DAY, hours);
+	cal.set(Calendar.MINUTE, minutes);
+
+	return this;
+    }
+
     /**
      * Get the days passed from the specified date up to the date provided in
      * the constructor
@@ -234,6 +249,11 @@ public class DateUtil
 	return cal.after(cal2);
     }
 
+    public void setCalendar(Calendar cal)
+    {
+	this.cal = cal;
+    }
+
     /**
      * Gets Calendar in Pacific. Returns date in specified format and time zone
      * for the give epoch time.
@@ -261,11 +281,15 @@ public class DateUtil
      * @param timeout
      * @return
      */
-    public static String getCalendarStringInUTC(long timeout, String format)
+    public static String getCalendarString(long timeout, String format, String timezone)
     {
 	// Defines output format and print
 	SimpleDateFormat sdf = new SimpleDateFormat(format);
 
+	if (StringUtils.isEmpty(timezone))
+	    timezone = "GMT";
+
+	sdf.setTimeZone(TimeZone.getTimeZone(timezone));
 	Calendar calendar = Calendar.getInstance();
 	calendar.setTimeInMillis(timeout);
 

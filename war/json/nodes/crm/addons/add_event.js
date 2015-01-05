@@ -4,5 +4,5 @@
     "icon": "json/nodes/icons/crm/add_event.png",
     "info": "Add an Event to Contact in Agile.",
     "help": "Add an Event to Contact in Agile.",
-    "path": "json/nodes/crm/add_event.js"
+    "path": "json/nodes/crm/add_event.jsp"
 }
