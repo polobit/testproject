@@ -658,8 +658,8 @@ public class ActivityUtil
 	    JSONObject js = new JSONObject(new Gson().toJson(obj));
 	    JSONArray jsn = js.getJSONArray("contact_ids");
 	    List<Contact> contacts = oldobj.getContacts();
-
-	    getDealRelatedContacts(contacts, jsn, obj);
+	    if (jsn != null && (jsn.length() != contacts.size()))
+		getDealRelatedContacts(contacts, jsn, obj);
 
 	}
 	catch (Exception e)
@@ -887,8 +887,8 @@ public class ActivityUtil
 
 	    List<Contact> contacts = oldobj.getContacts();
 	    List<String> old_cont_ids = getContactIds(contacts);
-
-	    getEventRelatedContacts(contacts, jsn, obj);
+	    if (jsn != null && (jsn.length() != contacts.size()))
+		getEventRelatedContacts(contacts, jsn, obj);
 	}
 	catch (Exception e)
 	{
@@ -994,8 +994,8 @@ public class ActivityUtil
 
 	    List<Contact> contacts = oldobj.getContacts();
 	    List<String> old_cont_ids = getContactIds(contacts);
-
-	    getTaskRelatedContacts(contacts, jsn, obj);
+	    if (jsn != null && (jsn.length() != contacts.size()))
+		getTaskRelatedContacts(contacts, jsn, obj);
 	}
 	catch (Exception e)
 	{
@@ -1453,6 +1453,35 @@ public class ActivityUtil
 	}
 	else
 	{
+	    return null;
+	}
+    }
+
+    /**
+     * gets list of activities based on entity type and entity id
+     * 
+     * @param entity_type
+     * @param entity_id
+     * @param max
+     * @param cursor
+     * @return
+     */
+    public static List<Activity> getActivitiesByEntityId(String entity_type, Long entity_id, Integer max, String cursor)
+    {
+	try
+	{
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    searchMap.put("entity_type", entity_type);
+	    searchMap.put("entity_id", entity_id);
+
+	    if (max != 0)
+		return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
+
+	    return dao.listByProperty(searchMap);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
 	    return null;
 	}
     }

@@ -18,6 +18,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -497,7 +498,7 @@ public class ActivitySave
      * @throws JSONException
      */
 
-    public static void createNoteAddActivityToContact(Note note) throws JSONException
+    public static void createNoteAddActivity(Note note) throws JSONException
     {
 
 	JSONObject js = new JSONObject(new Gson().toJson(note));
@@ -517,6 +518,35 @@ public class ActivitySave
 	    }
 
 	}
+	else
+	{
+
+	    JSONArray jsndealids = js.getJSONArray("deal_ids");
+
+	    if (jsndealids != null && jsndealids.length() > 0)
+	    {
+
+		for (int k = 0; k <= jsndealids.length() - 1; k++)
+		{
+
+		    Opportunity opportunity = OpportunityUtil.getOpportunity(jsndealids.getLong(k));
+		    ActivityUtil.createDealActivity(ActivityType.NOTE_ADD, opportunity, note.subject, note.description,
+			    note.id.toString(), null);
+		}
+
+	    }
+	}
+
+    }
+
+    /**
+     * 
+     */
+    public static void createNoteAddForDeal(Note note, Opportunity opportunity)
+    {
+
+	ActivityUtil.createDealActivity(ActivityType.NOTE_ADD, opportunity, note.subject, note.description,
+	        note.id.toString(), null);
 
     }
 

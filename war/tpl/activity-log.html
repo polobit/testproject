@@ -188,11 +188,16 @@ Changed Due Date of Task {{../label}}<br/>
 	</div>
 <div class="pull-left activity-tag">
 <div>	
+<<<<<<< HEAD
 Changed Owner of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}} <br/>
 <span class="activities_second_line">
 <i class="icon-tasks"></i> Task Owner changed to {{custom1}}. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
 </span>	
 </div>
+=======
+ Reassigned Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> to  {{custom1}} {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
+	</div>
+>>>>>>> ccd45173e2bb18282ad73a286a832e661bc27eac
 <div>	
 		<small class="edit-hover pull-right activity_time" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" time}}</time>
