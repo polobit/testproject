@@ -37,7 +37,8 @@ public class TwilioIOVoiceServlet extends HttpServlet
 		String record = request.getParameter("record");
 
 		/* Call Redirect to twimletUrl */
-		String twimletUrl = request.getParameter("twimletUrl");
+		String twimletUrl = request.getParameter("twimleturl");
+		System.out.println("twimletUrl: " + twimletUrl);
 
 		/* User want to apply twimlet url */
 		String isForward = request.getParameter("isforward");

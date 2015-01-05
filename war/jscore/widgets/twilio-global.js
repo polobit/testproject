@@ -777,6 +777,10 @@ function setUpGlobalTwilio()
 
 					showCallNotyPopup("incoming", "Twilio",
 							'<i class="icon icon-phone"></i><b>Incoming call :</b><br> ' + To_Name + "   " + To_Number + "<br>", false);
+					
+					// Show contact detail page
+					if(TWILIO_CONTACT_ID)
+					window.location.href = "#contact/"+TWILIO_CONTACT_ID;
 				});
 
 		// If any network failure, show error
@@ -981,7 +985,6 @@ function twilioSecondsToFriendly(time) {
 	return friendlyTime;
 }
 
-
 function searchForContact(from) {
 	console.log("searchForContact : " + from);	
 	var fromName = "";
@@ -992,7 +995,9 @@ function searchForContact(from) {
 	            dataType: 'json'
 	        }).responseText
 	    );
+	console.log("**** responseJson ****");
 	console.log(responseJson);
+	
 	if(responseJson != null) {
 		TWILIO_CONTACT_ID = responseJson.id;
 		console.log("TWILIO_CONTACT_ID : "+TWILIO_CONTACT_ID);
