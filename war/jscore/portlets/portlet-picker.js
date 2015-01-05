@@ -93,26 +93,40 @@ function set_p_portlets(base_model){
 		if(base_model.get('settings').filter=="companies")
 			itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+base_model.get('settings').filter+'&sortKey=-created_time', templateKey : "portlets-companies", sort_collection : false, individual_tag_name : 'tr', sortKey : "-created_time" });
 		else
-			itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+base_model.get('settings').filter+'&sortKey=-created_time', templateKey : "portlets-contacts", sort_collection : false, individual_tag_name : 'tr', sortKey : "-created_time"  });
+			itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+base_model.get('settings').filter+'&sortKey=-created_time', templateKey : "portlets-contacts", sort_collection : false, individual_tag_name : 'tr', sortKey : "-created_time",
+				postRenderCallback : function(p_el){
+					addWidgetToGridster(base_model);
+				} });
 	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Emails Opened"){
-		itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+base_model.get('settings').duration, templateKey : 'portlets-contacts', individual_tag_name : 'tr' });
+		itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+base_model.get('settings').duration, templateKey : 'portlets-contacts', individual_tag_name : 'tr',
+			postRenderCallback : function(p_el){
+				addWidgetToGridster(base_model);
+			} });
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Pending Deals"){
 		App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+base_model.get('settings').deals, templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				displayTimeAgo(p_el);
+				addWidgetToGridster(base_model);
 			} });
 		App_Portlets.pendingDeals[parseInt(pos)].collection.fetch();
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Won"){
 		App_Portlets.dealsWon[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletDealsWon?duration='+base_model.get('settings').duration, templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				displayTimeAgo(p_el);
+				addWidgetToGridster(base_model);
 			} });
 		App_Portlets.dealsWon[parseInt(pos)].collection.fetch();
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Agenda"){
-		App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda', templateKey : 'portlets-events', individual_tag_name : 'tr' });
+		App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda', templateKey : 'portlets-events', individual_tag_name : 'tr',
+			postRenderCallback : function(p_el){
+				addWidgetToGridster(base_model);
+			} });
 		App_Portlets.todayEventsCollection[parseInt(pos)].collection.fetch();
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Today Tasks"){
-		App_Portlets.tasksCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletTodayTasks', templateKey : 'portlets-tasks', individual_tag_name : 'tr' });
+		App_Portlets.tasksCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletTodayTasks', templateKey : 'portlets-tasks', individual_tag_name : 'tr',
+			postRenderCallback : function(p_el){
+				addWidgetToGridster(base_model);
+			} });
 		App_Portlets.tasksCollection[parseInt(pos)].collection.fetch();
 	}
 	if(itemCollection!=undefined)
@@ -159,6 +173,8 @@ function set_p_portlets(base_model){
 				milestoneNumbersList=data["milestoneNumbersList"];
 				milestoneMap=data["milestoneMap"];
 				dealsByMilestoneBarGraph(selector,milestonesList,milestoneValuesList,milestoneNumbersList);
+				
+				addWidgetToGridster(base_model);
 				
 				//Added track options
 				var options='';
@@ -219,6 +235,8 @@ function set_p_portlets(base_model){
 				}
 				
 				closuresPerPersonBarGraph(selector,catges,data2,text,name);
+				
+				addWidgetToGridster(base_model);
 			});
 			
 			if(base_model.get('is_minimized'))
@@ -263,6 +281,8 @@ function set_p_portlets(base_model){
 				
 				dealsFunnelGraph(selector,funnel_data);
 				
+				addWidgetToGridster(base_model);
+				
 				//Added track options
 				var options='';
 				$.each(milestoneMap,function(milestoneId,milestoneName){
@@ -300,6 +320,8 @@ function set_p_portlets(base_model){
 				});
 				
 				emailsSentBarGraph(selector,catges,mailsCountList);
+				
+				addWidgetToGridster(base_model);
 			});
 			
 			if(base_model.get('is_minimized'))
@@ -354,6 +376,8 @@ function set_p_portlets(base_model){
 				});
 				
 				portletGrowthGraph(selector,series,base_model);
+				
+				addWidgetToGridster(base_model);
 			});
 			
 			if(base_model.get('is_minimized'))
@@ -388,6 +412,8 @@ function set_p_portlets(base_model){
 				dealsAssignedCountList=data["assignedOpportunitiesCountList"];
 				
 				dealsAssignedBarGraph(selector,domainUsersList,dealsAssignedCountList);
+				
+				addWidgetToGridster(base_model);
 			});
 			
 			if(base_model.get('is_minimized'))
@@ -449,6 +475,8 @@ function set_p_portlets(base_model){
 				}
 				
 				callsPerPersonBarGraph(selector,domainUsersList,series,text,colors);
+				
+				addWidgetToGridster(base_model);
 			});
 			
 			if(base_model.get('is_minimized'))
@@ -462,6 +490,8 @@ function set_p_portlets(base_model){
 				$(this).hide();
 			
 			setPortletContentHeight(base_model);
+			
+			addWidgetToGridster(base_model);
 		}
 	});
 	enablePortletTimeAndDates(base_model);

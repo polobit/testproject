@@ -516,8 +516,8 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	var flag=true;
 	var json={};
 	var obj={};
-	var portletType=$('#portlet-type').val();
-	var portletName=$('#portlet-name').val();
+	var portletType=$('#portlet-type',$('#'+modal_id)).val();
+	var portletName=$('#portlet-name',$('#'+modal_id)).val();
 	json = serializeForm(form_id);
 	if(portletType=="CONTACTS" && portletName=="Growth Graph"){
 		var tags='';

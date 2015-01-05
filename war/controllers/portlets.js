@@ -126,15 +126,15 @@ function addNewPortlet(portlet_type,p_name){
         	if($('#no-portlets').is(':visible'))
     			$('#no-portlets').hide();
         	Portlets_View.collection.add(model);
-        	var scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
+        	scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
         	//move the scroll bar for showing the newly added portlet
         	window.scrollTo(0,scrollPosition);
         }});
-	setTimeout(function(){
+	/*setTimeout(function(){
 		gridster.add_widget($('#ui-id-'+model.column_position+'-'+model.row_position),model.size_x,model.size_y,model.column_position,model.row_position);
 		gridster.set_dom_grid_height();
 		window.scrollTo(0,scrollPosition);
-	},1000);
+	},1000);*/
 }
 function hidePortletsPopup(){
 	$('#portletStreamModal').modal('hide');
@@ -271,3 +271,17 @@ $('.portlet-settings').live('click',function(e){
 	e.preventDefault();
 	showPortletSettings(this.id);
 });
+function addWidgetToGridster(base_model){
+	var add_flag = true;
+	if(gridster!=undefined){
+		gridster.$widgets.each(function(index,widget){
+			if(widget.id=='ui-id-'+base_model.get("column_position")+'-'+base_model.get("row_position")+'')
+				add_flag=false;
+		});
+		if(add_flag){
+			gridster.add_widget($('#ui-id-'+base_model.get("column_position")+'-'+base_model.get("row_position")),base_model.get("size_x"),base_model.get("size_y"),base_model.get("column_position"),base_model.get("row_position"));
+			gridster.set_dom_grid_height();
+			window.scrollTo(0,((parseInt($('#ui-id-'+base_model.get("column_position")+'-'+base_model.get("row_position")).attr('data-row'))-1)*200)+5);
+		}
+	}
+}
