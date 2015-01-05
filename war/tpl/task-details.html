@@ -20,10 +20,10 @@
   <!--------- task status ---------------->
 
 <div class="row-fluid">
-<div class="span8" style="margin-bottom: -30px;">
+<div class="span10" >
 {{#if_equals "IN_PROGRESS" status}}
 <span class="span2" style="text-transform: capitalize;">{{displayTaskStatus status}} ({{progress}}%)</span> 
- <span class="span3" style="margin-left: 23px;">Due: {{epochToHumanDate "dd mmm yyyy" due}}</span>
+ <span class="span2" style="margin-left: 0px;">Due: {{epochToHumanDate "dd mmm yyyy" due}}</span>
 {{/if_equals}}
 
 {{#if_equals "COMPLETED" status}}
@@ -39,10 +39,11 @@
 </span>
 {{/if_equals}}
 </div>
-
-<div class="pull-right">
+<div class="span2">
+<div class="pull-right" style="position: relative;width: 100%;">
+<div class="contact-owner-position" style="top: 0px;">
 <div class="change-owner-succes"></div>
-  <span title="Owner">
+  <span title="Owner" class="contact-owner-view">
       	<span class="contact-owner" id="change-owner-element">
         	<span class="contact-owner-text">Owner:&nbsp;&nbsp;</span>
 			{{#if taskOwner}}
@@ -63,10 +64,12 @@
     </span>
 </div>
 </div>
+</div>
+</div>
 
 <div class="row-fluid">
 {{#if_equals "IN_PROGRESS" status}} 
-<div  style="width:20%;height:5px;margin-bottom: 1px !important;margin-top: 2px !important;" class="progress progress-info">
+<div  style="width:20%;height:5px;margin-bottom: 1px !important;margin-top: -10px !important;" class="progress progress-info">
           <div class="bar" style="width: {{progress}}%;"></div>
      </div>
 {{/if_equals}} 
@@ -219,45 +222,49 @@
 <div class="activity-text-block" style="background: #f5f5f5;">
 	<span class="activity-block-owner">
        
-         <img class="thumbnail img-inital"  src="{{userPic}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
+        {{#if userPic}}
+        	 <img class="thumbnail img-inital"  src="{{userPic}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
+	{{else}}
+			<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px"/>
+	{{/if}}
 	</span>
 	<h4><b>{{get_normal_activity_type activity_type}}</b></h4>
 
 
    {{#if_equals "TASK_EDIT" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;">
-         {{displayActivityFieldText custom3}} updated
+         {{displayActivityFieldText custom3}} updated.
 	</div>	
      {{/if_equals}}
 
  {{#if_equals "TASK_ADD" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;">
-         Task created for user {{ucfirst custom1}}
+         Task created for user {{ucfirst custom1}}.
 	</div>	
      {{/if_equals}}
 
  {{#if_equals "TASK_PROGRESS_CHANGE" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;">
-         Task progress changed from {{custom2}}% to {{custom1}}%
+         Task progress changed from {{custom2}}% to {{custom1}}%.
 	</div>	
      {{/if_equals}}
 
  {{#if_equals "TASK_OWNER_CHANGE" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;">
-      Task  owner changed to {{custom1}}
+      Task  owner changed to {{custom1}}.
 	</div>	
      {{/if_equals}}
 
  {{#if_equals "TASK_STATUS_CHANGE" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;">
-        Status changed from {{displayTaskStatus custom2}} to {{displayTaskStatus custom1}}
+        Status changed from {{displayTaskStatus custom2}} to {{displayTaskStatus custom1}}.
 	</div>	
      {{/if_equals}}
 
 
  {{#if_equals "TASK_COMPLETED" activity_type}}
 	<div style="background:none;border:none;margin-top: 8px;">
-        Task status changed to completed
+        Task status changed to completed.
 	</div>	
      {{/if_equals}}
 
