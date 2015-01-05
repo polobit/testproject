@@ -258,18 +258,8 @@ public class ActivitySave
 
 	String owner_name = DomainUserUtil.getDomainUser(Long.parseLong(opportunity.owner_id)).name;
 
-	List<Note> notes = opportunity.getNotes();
-
-	if (notes.size() == 1)
-	{
-	    Note note = notes.get(0);
-	    String note_subject = note.subject;
-	    String note_description = note.description;
-	    ActivityUtil.createDealActivity(ActivityType.NOTE_ADD, opportunity, note_subject, note_description,
-		    note.id.toString(), jsn);
-	}
-
-	ActivityUtil.createDealActivity(ActivityType.DEAL_ADD, opportunity, owner_name, "", "Deal_owner_name", jsn);
+	ActivityUtil.createDealActivity(ActivityType.DEAL_ADD, opportunity, owner_name,
+	        opportunity.expected_value.toString(), String.valueOf(opportunity.probability), jsn);
 
     }
 
@@ -291,7 +281,8 @@ public class ActivitySave
 
 	String owner_name = DomainUserUtil.getDomainUser(Long.parseLong(task.owner_id)).name;
 
-	ActivityUtil.createTaskActivity(ActivityType.TASK_ADD, task, owner_name, "", "Task_owner_name", jsn);
+	ActivityUtil.createTaskActivity(ActivityType.TASK_ADD, task, owner_name, task.due.toString(),
+	        "Task_owner_name", jsn);
 
     }
 
@@ -311,7 +302,8 @@ public class ActivitySave
 	    jsn = ActivityUtil.getContactIdsJson(contacts);
 	}
 
-	ActivityUtil.createEventActivity(ActivityType.EVENT_ADD, event, event.title, "", "event title", jsn);
+	ActivityUtil.createEventActivity(ActivityType.EVENT_ADD, event, event.title, event.start.toString(),
+	        "event title", jsn);
 
     }
 
