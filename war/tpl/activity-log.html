@@ -114,7 +114,7 @@ Completed Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}<
 	</div>
 <div class="pull-left activity-tag">
 <div>	
- Deleted Task {{label}} <br/>
+ {{label}} (deleted) <br/>
 <span class="activities_second_line">
 {{#if related_contact_ids}}<i class="icon-tasks"></i> Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} was deleted {{/if}} 
 </span>
@@ -673,18 +673,18 @@ Changed Milestone of Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}"
 {{#if_equals "removed_all_relatedcontacts" custom3}}
 Removed Contact from Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a><br/> 
 <span class="activities_second_line">
-<i class="icon-calendar icon-white"></i> {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from the event 
+<i class="icon-calendar icon-white"></i> {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from the Event 
 </span>
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
 Removed Contact from Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a><br/> 
 <span class="activities_second_line">
-<i class="icon-calendar icon-white"></i> {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from the event {{/if_equals}} 
+<i class="icon-calendar icon-white"></i> {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from the Event {{/if_equals}} 
 </span>
 {{#if_equals "added_relatedcontacts" custom3}}
 Added Contact to Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a><br/> 
 <span class="activities_second_line">
-<i class="icon-calendar icon-white"></i> {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to the event {{/if_equals}}
+<i class="icon-calendar icon-white"></i> {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to the Event {{/if_equals}}
 </span>
 {{else}}
 Modified  Event <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
@@ -748,7 +748,7 @@ Modified  Event <a href="" data={{entity_id}} class="activity-deal-edit">{{label
 	</div>
 <div class="pull-left activity-tag">
 <div>	
- Deleted Event {{label}} <br/>
+ {{label}} (deleted)<br/>
 <span class="activities_second_line">
  <i class="icon-calendar icon-white"></i> Event {{#if related_contact_ids}} related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}.
 </span>
@@ -796,9 +796,10 @@ Rescheduled Event <a href="" data={{../entity_id}} class='activity-event-edit'">
  Modified Event <a href="" data={{../entity_id}} class='activity-event-edit'">{{../label}}</a> <br/>
 <span class="activities_second_line">
 <i class="icon-calendar icon-white"></i> Event {{displayActivityFieldText ../custom3}} modified.
+</span>
 {{/get_event_rescheduled}}
 {{/if}}
-
+<span class="activities_second_line">
  {{#if related_contact_ids}} Event related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}  
 </span>
 </div>
