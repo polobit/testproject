@@ -426,7 +426,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    // If user is account owner then account owner should be set to true
 	    // when it is being updated
 	    this.is_account_owner = true;
-
+	    this.is_disabled = false;
 	    if (!is_admin)
 		throw new Exception(user.name + " is the owner of '" + user.domain
 			+ "' domain and should be an <b>admin</b>. You can change the Email and Name instead.");
