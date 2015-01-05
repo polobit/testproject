@@ -3759,6 +3759,43 @@ $(function()
 		return duration;
 	});
 	
+	
+	/**
+	 * Returns plain customise text for activity remove underscore and other
+	 * special charecter from string
+	 */
+	Handlebars.registerHelper('displayActivityFieldText', function(value)
+	{
+		var fields = value.replace(/[^a-zA-Z ^,]/g, " ").split(",");
+		var text = "";
+		if (fields.length > 1)
+		{
+			for (var i = 0; i < fields.length - 1; i++)
+			{
+				text += " " + fields[i].trim();
+				if (i != fields.length - 2)
+				{
+					text += ",";
+				}
+			}
+			text += " and " + fields[fields.length - 1].trim() +;
+		}
+		else
+		{
+			text = fields[fields.length - 1].trim();
+		}
+		// update title
+		text = text.replace('subject', 'Title');
+		// update priority
+		text = text.replace('priority type', 'Priority');
+		// update category
+		text = text.replace('task type', 'Category');
+		// update due date
+		text = text.replace('due date', 'Due date');
+		return text;
+
+	});
+	
 });
 
 // helper function return created time for event
