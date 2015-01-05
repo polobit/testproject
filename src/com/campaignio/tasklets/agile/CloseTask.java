@@ -58,13 +58,19 @@ public class CloseTask extends TaskletAdapter
 			Key<Contact> contactKey = getContactKey(subscriberJSON);
 
 			List<Task> incompleteTasks = TaskUtil.getIncompleteTasks(contactOwnerKey, contactKey);
+			String message = "";
 
 			if (incompleteTasks.size() > 0)
+			{
 				TaskUtil.setStatusAsComplete(incompleteTasks);
-
-			// Creates log for sending email
-			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-					"Close task campaign log text", LogType.CLOSE_TASK.toString());
+				message = getMessage(incompleteTasks);
+				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+						"Marked Task " + message + "  as completed.", LogType.CLOSED_TASK.toString());
+			}
+			else
+				// Creates log for sending email
+				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+						"No tasks found.", LogType.CLOSED_TASK.toString());
 
 		}
 		catch (Exception e)
@@ -113,5 +119,25 @@ public class CloseTask extends TaskletAdapter
 		}
 		return null;
 
+	}
+
+	private String getMessage(List<Task> incompleteTasks)
+	{
+		String message = "";
+		int listSize = incompleteTasks.size();
+		if (listSize == 1)
+			return "'" + incompleteTasks.get(0).subject + "'.";
+		else
+		{
+			for (int i = 0; i < listSize - 1; i++)
+			{
+				message += " '" + incompleteTasks.get(i).subject + "'";
+				if ((i + 1) != (listSize - 1))
+					message += ", ";
+			}
+			message += " and '" + incompleteTasks.get(listSize - 1).subject + "'.";
+
+		}
+		return message;
 	}
 }

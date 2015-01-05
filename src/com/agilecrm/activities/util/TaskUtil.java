@@ -581,10 +581,10 @@ public class TaskUtil
 	{
 		Map<String, Object> searchMap = new HashMap<String, Object>();
 
-		if (contactKey != null)
+		if (domainUserOwnerKey != null)
 			searchMap.put("owner", domainUserOwnerKey);
 
-		if (domainUserOwnerKey != null)
+		if (contactKey != null)
 			searchMap.put("related_contacts", contactKey);
 
 		searchMap.put("is_complete", false);

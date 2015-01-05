@@ -1,9 +1,9 @@
 {
     "name": "Close Task",
-    "thumbnail": "json/nodes/images/crm/close_task.png",
-    "icon": "json/nodes/icons/crm/close_task.png",
-    "info": "Close task info",
-    "help": "Close task help1",
+    "thumbnail": "json/nodes/images/crm/closed_task.png",
+    "icon": "json/nodes/icons/crm/closed_task.png",
+    "info": "Mark the tasks related to the contact as completed.",
+    "help": "Mark the tasks related to the contact as completed. You can optionally choose to complete only a particular user’s tasks.",
     "author": "Bhasuri",
     "company": "AgileCRM",
     "language": "en",
@@ -29,7 +29,7 @@
             "type": "select"
         },
 		{
-            "label": "help2",
+            "label": "Mark the tasks related to the contact as completed.You can optionally choose to complete only a particular user’s tasks.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 
