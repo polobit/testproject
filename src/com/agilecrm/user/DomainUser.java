@@ -431,6 +431,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		throw new Exception(user.name + " is the owner of '" + user.domain
 			+ "' domain and should be an <b>admin</b>. You can change the Email and Name instead.");
 	}
+	
     }
 
     /**
@@ -522,6 +523,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    // Checks if super user is disabled, and throws exception if super
 	    // is disabled
 	    checkSuperUserDisabled(user);
+	    checkAdminDisabled();
 	}
 
 	// Check if namespace is null or empty. Then, do not allow to be created
