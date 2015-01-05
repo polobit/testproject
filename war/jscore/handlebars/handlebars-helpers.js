@@ -3778,7 +3778,7 @@ $(function()
 					text += ",";
 				}
 			}
-			text += " and " + fields[fields.length - 1].trim() +;
+			text += " and " + fields[fields.length - 1].trim();
 		}
 		else
 		{
