@@ -167,9 +167,9 @@ $(function()
 												// Showing updated owner
 												show_task_owner();
 												taskDetailView = model;
+												task_details_tab.loadActivitiesView();   
 
 								} });
-
 				});
 
 				$('#change-owner-element > .task-owner-add').live('click', function(e)
