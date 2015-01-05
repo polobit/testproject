@@ -1,7 +1,6 @@
 $(function()
 {
 	
-
 	/**
 	 * Helper function to return the value of a property matched with the given
 	 * name from the array of properties
