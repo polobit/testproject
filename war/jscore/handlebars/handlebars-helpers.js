@@ -2682,7 +2682,7 @@ $(function()
 				});
 
 
-	});
+
 
 	Handlebars.registerHelper('get_subscribers_type_from_hash', function()
 	{
@@ -3785,23 +3785,26 @@ $(function()
 		var field = fields.replace(/[^a-zA-Z ^,]/g, " ").split(",");
 		var value = values.replace(/[^a-zA-Z0-9 ^,]/g, " ").split(",");
 		var json = {};
+		
+		for(var id=0;id<field.length;id++){
+			field[id]=field[id].trim();
+			value[id]=value[id].trim();
+		}
 		for (var i = 0; i < field.length; i++)
 		{
 
-			json[field[i].trim()] = value[i].trim();
+			json[field[i]] = value[i];
 		}
 
 		if (field.indexOf("due date") != -1)
 		{
-			console.log(json);
-			console.log(json['due date']);
-			return convertToHumanDate(json['due date'].trim());
+			var dat=parseFloat(json['due date']);
+			return convertToHumanDate("ddd mmm dd yyyy h:MM TT",dat);
 		}
 		if (field.indexOf("start date") != -1)
 		{
-			console.log(json);
-			console.log(json['start date']);
-			return convertToHumanDate(json['start date'].trim());
+			var dat=parseFloat(json['start date']);
+			return convertToHumanDate("ddd mmm dd yyyy h:MM TT",dat);
 		}
 
 	});
@@ -3883,6 +3886,21 @@ $(function()
 		text = text.replace('task type', 'Category');
 		// update due date
 		text = text.replace('due date', 'Due date');
+		
+		text = text.replace('name', 'Name');
+		// update priority
+		text = text.replace('probability', 'Probability');
+		// update category
+		text = text.replace('expected value', 'Expected value');
+		// update due date
+		text = text.replace('close date', 'Close date');
+		
+		text = text.replace('end date', 'End time');
+		// update priority
+		text = text.replace('priority', 'Priority');
+		// update category
+		text = text.replace('title', 'Title');
+		
 		return text;
 
 	});

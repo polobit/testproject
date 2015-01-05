@@ -841,8 +841,8 @@ public class ActivityUtil
 		if (!obj.start.equals(oldobj.start))
 		{
 		    Object[] mapvalue = new Object[3];
-		    mapvalue[0] = getTimeFromEppoch(obj.start);
-		    mapvalue[1] = getTimeFromEppoch(oldobj.start);
+		    mapvalue[0] = obj.start;
+		    mapvalue[1] = oldobj.start;
 		    mapvalue[2] = "start_date";
 		    eventmap.put("start_date", mapvalue);
 
@@ -852,8 +852,8 @@ public class ActivityUtil
 		{
 
 		    Object[] mapvalue = new Object[3];
-		    mapvalue[0] = getTimeFromEppoch(obj.end);
-		    mapvalue[1] = getTimeFromEppoch(oldobj.end);
+		    mapvalue[0] = obj.end;
+		    mapvalue[1] = oldobj.end;
 		    mapvalue[2] = "end_date";
 		    eventmap.put("end_date", mapvalue);
 
