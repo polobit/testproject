@@ -10,7 +10,7 @@ $(function()
 	 *            items array of objects
 	 * @param {String}
 	 *            name to get matched object value
-	 * @returns value of the matched object
+	 * @returns value of the matched object..
 	 */
 	Handlebars.registerHelper('getPropertyValue', function(items, name)
 	{
