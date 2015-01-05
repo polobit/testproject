@@ -221,6 +221,10 @@ $('.deal-owner-list').live('click', function()
 		// Showing updated owner
 		show_deal_owner();
 		App_Deal_Details.dealDetailView.model = model;
+		App_Deal_Details.dealDetailView.render(true)
+		Backbone.history.navigate("deal/"+data.toJSON().id , {
+            trigger: true
+        });
 
 	} });
 

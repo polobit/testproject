@@ -658,8 +658,8 @@ public class ActivityUtil
 	    JSONObject js = new JSONObject(new Gson().toJson(obj));
 	    JSONArray jsn = js.getJSONArray("contact_ids");
 	    List<Contact> contacts = oldobj.getContacts();
-
-	    getDealRelatedContacts(contacts, jsn, obj);
+	    if (jsn != null && (jsn.length() != contacts.size()))
+		getDealRelatedContacts(contacts, jsn, obj);
 
 	}
 	catch (Exception e)
@@ -887,8 +887,8 @@ public class ActivityUtil
 
 	    List<Contact> contacts = oldobj.getContacts();
 	    List<String> old_cont_ids = getContactIds(contacts);
-
-	    getEventRelatedContacts(contacts, jsn, obj);
+	    if (jsn != null && (jsn.length() != contacts.size()))
+		getEventRelatedContacts(contacts, jsn, obj);
 	}
 	catch (Exception e)
 	{
@@ -994,8 +994,8 @@ public class ActivityUtil
 
 	    List<Contact> contacts = oldobj.getContacts();
 	    List<String> old_cont_ids = getContactIds(contacts);
-
-	    getTaskRelatedContacts(contacts, jsn, obj);
+	    if (jsn != null && (jsn.length() != contacts.size()))
+		getTaskRelatedContacts(contacts, jsn, obj);
 	}
 	catch (Exception e)
 	{

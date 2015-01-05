@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.activities.Activity;
+import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
@@ -634,7 +635,30 @@ public class DealsAPI
     {
 
 	Opportunity opportunity = OpportunityUtil.getOpportunity(dealid);
+	try
+	{
+
+	    String oldownername = opportunity.getOwner().name;
+
+	    String new_owner_name = DomainUserUtil.getDomainUser(Long.parseLong(new_owner)).name;
+
+	    List<Contact> contacts = opportunity.getContacts();
+	    JSONArray jsn = null;
+	    if (contacts != null && contacts.size() > 0)
+	    {
+		jsn = ActivityUtil.getContactIdsJson(contacts);
+	    }
+
+	    ActivityUtil.createDealActivity(ActivityType.DEAL_OWNER_CHANGE, opportunity, new_owner_name, oldownername,
+		    "owner_name", jsn);
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 	opportunity.owner_id = new_owner;
+
 	opportunity.save();
 	return opportunity;
     }
