@@ -222,7 +222,7 @@ $('.deal-owner-list').live('click', function()
 		show_deal_owner();
 		App_Deal_Details.dealDetailView.model = model;
 		App_Deal_Details.dealDetailView.render(true)
-		Backbone.history.navigate("deal/"+data.toJSON().id , {
+		Backbone.history.navigate("deal/"+model.toJSON().id , {
             trigger: true
         });
 
