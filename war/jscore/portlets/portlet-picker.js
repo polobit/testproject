@@ -97,7 +97,7 @@ function set_p_portlets(base_model){
 	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Emails Opened"){
 		itemCollection = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+base_model.get('settings').duration, templateKey : 'portlets-contacts', individual_tag_name : 'tr' });
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Pending Deals"){
-		App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+base_model.get('settings').deals+'&due-date='+base_model.get('settings')["due-date"], templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
+		App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+base_model.get('settings').deals, templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				displayTimeAgo(p_el);
 			} });
@@ -242,7 +242,7 @@ function set_p_portlets(base_model){
 				milestoneMap=data["milestoneMap"];
 				
 				var funnel_data=[];
-				var temp=0;
+				var temp;
 				
 				$.each(milestonesList,function(index,milestone){
 					var each_data=[];
@@ -256,8 +256,10 @@ function set_p_portlets(base_model){
 				});
 				
 				var temp_data=[];
-				temp_data.push(milestonesList[temp],milestoneValuesList[temp]);
-				funnel_data.push(temp_data);
+				if(temp!=undefined){
+					temp_data.push(milestonesList[temp],milestoneValuesList[temp]);
+					funnel_data.push(temp_data);
+				}
 				
 				dealsFunnelGraph(selector,funnel_data);
 				
@@ -604,7 +606,7 @@ function dealsFunnelGraph(selector,funnel_data){
 	        	series: {
 	                dataLabels: {
 	                    enabled: true,
-	                    format: '<b>{point.name}</b> ({point.y:,.0f})',
+	                    format: '<b>{point.name}</b> ($ {point.y:,.0f})',
 	                    color: 'black',
 	                    softConnector: true
 	                },
@@ -615,6 +617,11 @@ function dealsFunnelGraph(selector,funnel_data){
 	                height: '100%',
 	                width: '50%'
 	            }
+	        },
+	        tooltip: {
+	        	pointFormat: '<span>{series.name}:<b>$ {point.y:,.0f}</b></span>',
+	            shared: true,
+	            useHTML: true
 	        },
 	        series: [{
 	            name: 'Value',

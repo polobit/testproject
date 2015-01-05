@@ -986,7 +986,7 @@ public class OpportunityUtil
     public static List<Opportunity> getPendingDealsRelatedToCurrentUser(long dueDate){
     	List<Opportunity> pendingDealsList=new ArrayList<Opportunity>();
     	try {
-    		List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class).filter("close_date <=", dueDate).limit(50)
+    		List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class).filter("close_date <=", (new Date()).getTime() / 1000).filter("archived",false).limit(50)
         			.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
         			.order("close_date").list();
     		for(Opportunity opportunity : allDealsList){
@@ -1008,7 +1008,7 @@ public class OpportunityUtil
     public static List<Opportunity> getPendingDealsRelatedToAllUsers(long dueDate){
     	List<Opportunity> pendingDealsList=new ArrayList<Opportunity>();
     	try {
-    		List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class).filter("close_date <=", dueDate).limit(50)
+    		List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class).filter("close_date <=", (new Date()).getTime() / 1000).filter("archived",false).limit(50)
         			.order("close_date").list();
     		for(Opportunity opportunity : allDealsList){
     			if(!opportunity.milestone.equals("Won") && !opportunity.milestone.equals("Lost"))
@@ -1032,14 +1032,17 @@ public class OpportunityUtil
     	Map<Double,Integer> map=new LinkedHashMap<Double, Integer>();
     	try {
     		if(ownerId!=null){
-    			milestoneList = dao.ofy().query(Opportunity.class).filter("milestone", milestone).filter("close_date <=",dueDate).filter("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId)).list();
+    			milestoneList = dao.ofy().query(Opportunity.class).filter("milestone", milestone).filter("close_date <=",dueDate).filter("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId))
+    					.filter("archived",false).list();
     		}else{
     			if(owner)
         			milestoneList = dao.ofy().query(Opportunity.class).filter("milestone", milestone).filter("close_date <=",dueDate)
-        					.filter("pipeline", new Key<Milestone>(Milestone.class, trackId)).filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).list();
+        					.filter("pipeline", new Key<Milestone>(Milestone.class, trackId)).filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+        					.filter("archived",false).list();
         		else
         			milestoneList = dao.ofy().query(Opportunity.class)
-        					.filter("pipeline", new Key<Milestone>(Milestone.class, trackId)).filter("milestone", milestone).filter("close_date <=",dueDate).list();
+        					.filter("pipeline", new Key<Milestone>(Milestone.class, trackId)).filter("milestone", milestone).filter("close_date <=",dueDate)
+        					.filter("archived",false).list();
     		}
     		for(Opportunity opportunity : milestoneList){
     			totalMilestoneValue+=opportunity.expected_value;

@@ -79,7 +79,6 @@ function addNewPortlet(portlet_type,p_name){
 	}
 	else if(portlet_type=="DEALS" && p_name=="PendingDeals"){
 		json['deals']="my-deals";
-		json['due-date']=Math.round((new Date()).getTime()/1000);
 	}
 	else if(portlet_type=="DEALS" && (p_name=="DealsByMilestone" || p_name=="DealsFunnel")){
 		json['deals']="my-deals";

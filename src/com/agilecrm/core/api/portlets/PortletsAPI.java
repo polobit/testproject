@@ -203,10 +203,9 @@ public class PortletsAPI {
 	@Path("/portletPendingDeals")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Opportunity> getPortletPendingDealsList(@QueryParam("deals") String deals,@QueryParam("due-date") String dueDate)throws Exception {
+	public List<Opportunity> getPortletPendingDealsList(@QueryParam("deals") String deals)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("deals",deals);
-		json.put("due-date",dueDate);
 		return PortletUtil.getPendingDealsList(json);
 	}
 	/**
