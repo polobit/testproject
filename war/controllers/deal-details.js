@@ -253,8 +253,7 @@ $('.deal-note').live('click', function(e)
 {
 	e.preventDefault();
 	
-	if(App_Deal_Details.dealDetailView.model.get('archived') == true)
-		return;
+
 	var el = $("#dealnoteForm");
 
 	// Displays contact name, to indicate the note is related to the contact

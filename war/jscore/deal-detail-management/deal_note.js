@@ -2,8 +2,7 @@ $(".deal-edit-note").die().live('click', function(e)
 	{
 	
 		e.preventDefault();
-		if(App_Deal_Details.dealDetailView.model.get('archived') == true)
-		return;	
+	
 		var note = dealNotesView.collection.get($(this).attr('data'));
 		console.log(note);
 		deserializeForm(note.toJSON(), $("#dealnoteUpdateForm",  $('#dealnoteupdatemodal')));

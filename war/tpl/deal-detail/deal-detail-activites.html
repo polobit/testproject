@@ -48,10 +48,10 @@
      {{/if_equals}}
 
 {{#if_equals "DEAL_CLOSE" activity_type}}
-        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Hurray. {{entityObject.owner.name}} has won deal worth {{currencySymbol}} {{numberWithCommas entityObject.expected_value}}. </pre>
+        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Hurray. {{entityObject.owner.name}} has won deal worth {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}. </pre>
      {{/if_equals}}
 {{#if_equals "DEAL_LOST" activity_type}}
-        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Alas. Lost the deal worth {{currencySymbol}} {{numberWithCommas entityObject.expected_value}}.</pre>
+        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Alas. {{entityObject.owner.name}} has lost the deal worth {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}.</pre>
      {{/if_equals}}
 
 {{#if_equals "DEAL_MILESTONE_CHANGE" activity_type}}
