@@ -3792,6 +3792,15 @@ $(function()
 		text = text.replace('task type', 'Category');
 		// update due date
 		text = text.replace('due date', 'Due date');
+		
+		text = text.replace('name', 'Name');
+		// update priority
+		text = text.replace('probability', 'Probability');
+		// update category
+		text = text.replace('expected value', 'Expected value');
+		// update due date
+		text = text.replace('close date', 'Close date');
+		
 		return text;
 
 	});
