@@ -921,8 +921,8 @@ public class ActivityUtil
 	    if (!oldobj.due.equals(obj.due))
 	    {
 		Object[] mapvalue = new Object[3];
-		mapvalue[0] = getTimeFromEppoch(obj.due);
-		mapvalue[1] = getTimeFromEppoch(oldobj.due);
+		mapvalue[0] = obj.due;
+		mapvalue[1] = oldobj.due;
 		mapvalue[2] = "due_date";
 		taskmap.put("due", mapvalue);
 
