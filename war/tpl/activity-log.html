@@ -1219,7 +1219,7 @@ Added Tag to <a href="#contact/{{entity_id}}">{{label}}</a><br/>
 {{#if_equals "1" custom2}}
    Added Contact to Document <a href="{{custom1}}" target="_blank">{{label}}</a><br/>
 <span class="activities_second_line">   
-<i class="icon-file icon-white"></i>{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Document.{{/if}}
+{{#if related_contact_ids}}<i class="icon-file icon-white"></i>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Document.{{/if}}
 </span>
 {{else}} 
 {{#if_equals "no related contacts" custom3}}
@@ -1230,7 +1230,7 @@ Added Tag to <a href="#contact/{{entity_id}}">{{label}}</a><br/>
 {{else}}
 	 Added Contacts to Document <a href="{{custom1}}" target="_blank">{{label}}</a> <br/>
 <span class="activities_second_line">
-<i class="icon-file icon-white"></i>{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Document.{{/if}}
+{{#if related_contact_ids}}<i class="icon-file icon-white"></i>{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Document.{{/if}}
 </span>
 {{/if_equals}} 
 {{/if_equals}}	
@@ -1258,12 +1258,12 @@ Added Tag to <a href="#contact/{{entity_id}}">{{label}}</a><br/>
 {{#if_equals "1" custom2}}
    Removed contact from Document <a href="{{custom1}}" target="_blank">{{label}}</a><br/>
 <span class="activities_second_line"> 
- <i class="icon-file"></i>{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Document.{{/if}}. 
+ {{#if related_contact_ids}} <i class="icon-file"></i> {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Document.{{/if}} 
 </span>
 {{else}} 
  Removed contacts from Document <a href="{{custom1}}" target="_blank">{{label}}</a><br/>
 <span class="activities_second_line">
-<i class="icon-file"></i>{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Document.{{/if}}
+{{#if related_contact_ids}}<i class="icon-file"></i> {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Document.{{/if}}
 </span>
 {{/if_equals}}	
 </div>
