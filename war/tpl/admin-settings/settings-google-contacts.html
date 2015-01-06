@@ -64,9 +64,9 @@
 					{{#if_equals groupName "Agile"}}
 						{{else}}
 					{{#if_equals groupName "Contacts"}}
-						<option value="{{atomId}}">My Contacts (Recommended)</option>
+						<option value="{{atomIdDecoded}}">My Contacts (Recommended)</option>
 						{{else}}
-						<option value="{{atomId}}">{{groupName}}</option>
+						<option value="{{atomIdDecoded}}">{{groupName}}</option>
 				{{/if_equals}}
 					{{/if_equals}}
 				{{/each}}
@@ -90,14 +90,14 @@
 				<select name="sync_to_group" class="required">
 				{{#each groups}}
 					{{#if_equals groupName "Agile"}}
-						{{#if atomId}}
-								<option value="{{atomId}}" selected="selected">{{groupName}}  (Recommended)</option>
+						{{#if atomIdDecoded}}
+								<option value="{{atomIdDecoded}}" selected="selected">{{groupName}}  (Recommended)</option>
 							{{else}}
 								<option value="{{groupName}}" selected="selected">{{groupName}}  (Recommended)</option>
 						{{/if}}
 					{{/if_equals}}
 					{{#if_equals groupName "Contacts"}}
-						<option value="{{atomId}}">My Contacts</option>
+						<option value="{{atomIdDecoded}}">My Contacts</option>
 					{{/if_equals}}
 				{{/each}}
 				</select>

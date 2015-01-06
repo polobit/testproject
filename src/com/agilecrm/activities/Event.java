@@ -16,8 +16,10 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
+import com.agilecrm.workflows.triggers.util.EventTriggerUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
+import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -59,6 +61,21 @@ public class Event
     public Long start = 0L;
 
     /**
+     * Type of the contact (person or company)
+     * 
+     */
+    public static enum EventType
+    {
+	WEB_APPOINTMENT, AGILE
+    };
+
+    /**
+     * type of event
+     */
+    @Indexed
+    public EventType type = EventType.AGILE;
+
+    /**
      * End time of event
      */
     @NotSaved(IfDefault.class)
@@ -97,6 +114,12 @@ public class Event
      */
     @NotSaved
     public String date;
+
+    /**
+     * date with full format
+     */
+    @NotSaved
+    public String date_with_full_format;
 
     /**
      * Related Contact
@@ -233,6 +256,28 @@ public class Event
      */
     public void save()
     {
+	if (this.contacts != null)
+	{
+	    // Create list of Contact keys
+	    for (String contact_id : this.contacts)
+	    {
+		this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id)));
+	    }
+
+	    this.contacts = null;
+	}
+
+	// Create owner key
+	if (owner == null)
+	{
+	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	    if (agileUser != null)
+		this.owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
+	}
+
+	if (id == null)
+	    EventTriggerUtil.executeTriggerForNewEvent(this);
+
 	dao.put(this);
 
 	System.out.println("Event object " + this);
@@ -249,28 +294,9 @@ public class Event
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
 
-	if (this.contacts != null)
-	{
-	    // Create list of Contact keys
-	    for (String contact_id : this.contacts)
-	    {
-		this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id)));
-	    }
-
-	    this.contacts = null;
-	}
-
 	search_range = new ArrayList<Long>();
 	search_range.add(start);
 	search_range.add(end);
-
-	// Create owner key
-	if (owner == null)
-	{
-	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
-	    if (agileUser != null)
-		this.owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
-	}
     }
 
     public String toString()

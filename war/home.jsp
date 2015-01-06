@@ -70,6 +70,7 @@ href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" type="text/css"
 href="/css/agilecrm.css" />
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 <style>
 .clickdesk_bubble {
 	display: none !important;
@@ -130,7 +131,7 @@ Use = [<]%@ include file="tpl/min/tpl.js" %[>] -->
 
 <!-- Determine Console.logging - we log in local boxes -->
 <%
-boolean debug = true;
+boolean debug = false;
 boolean production = false;
 boolean HANDLEBARS_PRECOMPILATION = false;
 if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)

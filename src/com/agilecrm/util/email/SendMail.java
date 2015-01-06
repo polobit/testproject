@@ -100,7 +100,6 @@ public class SendMail
     public static final String DUE_TASK_REMINDER_SUBJECT = "Your Due Tasks.";
 
     public static final String START_EVENT_REMINDER = "start_event_reminder";
-    public static final String START_EVENT_REMINDER_SUBJECT = "Event Starting In Next Ten Minutes.";
 
     public static final String PASSWORD_CHANGE_NOTIFICATION = "password_change_notification";
     public static final String PASSWORD_CHANGE_NOTIFICATION_SUBJECT = "Your Password has been changed.";

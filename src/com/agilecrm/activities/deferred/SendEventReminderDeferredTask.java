@@ -7,10 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONObject;
 
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.EventReminder;
 import com.agilecrm.activities.util.EventUtil;
@@ -144,8 +146,14 @@ public class SendEventReminderDeferredTask implements DeferredTask
 			continue;
 		    List<Event> listobj = new ArrayList<>();
 		    listobj.add(eventList.get(i));
+		    String timezone = domainuser.timezone;
+		    if (StringUtils.isEmpty(timezone))
+			timezone = AccountPrefsUtil.getAccountPrefs().timezone;
 
 		    Event event = eventList.get(i);
+		    event.date = EventUtil.getHumanTimeFromEppoch(event.start, timezone, null);
+		    event.date_with_full_format = EventUtil.getHumanTimeFromEppoch(event.start, timezone,
+			    "EEE, MMMM d yyyy, h:mm a (z)");
 
 		    JSONObject pubnub_notification = new JSONObject();
 		    pubnub_notification.put("title", event.title);
@@ -154,7 +162,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    pubnub_notification.put("priority", event.color);
 		    pubnub_notification.put("username", domainuser.name);
 		    pubnub_notification.put("useremail", domainuser.email);
-		    pubnub_notification.put("type", "CALENDER_REMINDER");
+		    pubnub_notification.put("type", "EVENT_REMINDER");
 		    System.out.println("domain name before pubnubnotification " + domain);
 		    System.out.println("namespace manager name before sending pubnub " + NamespaceManager.get());
 
@@ -251,8 +259,8 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    map.put("events", eventListMap);
 
 		    // Sends mail to the domain user.
-		    SendMail.sendMail("maildummy800@gmail.com", "Event Reminder: " + event.title + "@" + event.date
-			    + " domain name " + domain, SendMail.START_EVENT_REMINDER, map);
+		    SendMail.sendMail("maildummy800@gmail.com", "Event Reminder: " + event.title + " - " + event.date,
+			    SendMail.START_EVENT_REMINDER, map);
 		}
 	    }
 

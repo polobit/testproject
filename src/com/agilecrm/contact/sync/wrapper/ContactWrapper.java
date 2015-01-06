@@ -12,6 +12,7 @@ import org.scribe.utils.Preconditions;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
+import com.thirdparty.google.ContactPrefs;
 
 /**
  * <code>ContactWrapper</code> Abstraction of ContactWapper every third party
@@ -25,6 +26,8 @@ public abstract class ContactWrapper implements WrapperService
 
     /**  Object */
     protected Object object;
+    
+    protected ContactPrefs prefs;
 
     /*
      * (non-Javadoc)
@@ -42,6 +45,22 @@ public abstract class ContactWrapper implements WrapperService
 	this.object = object;
 
 	return this;
+    }
+    
+    @Override
+    public ContactWrapper getWrapper(Object object, ContactPrefs prefs)
+    {
+
+	Preconditions.checkNotNull(object, "Contact entry object cannot be null");
+	ContactWrapper wrapper = getWrapper(object);
+	wrapper.prefs = prefs;
+	return this;
+    }
+    
+    
+    public ContactPrefs getPrefs()
+    {
+	return prefs;
     }
 
     /*

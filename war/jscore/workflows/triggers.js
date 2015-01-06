@@ -38,6 +38,22 @@ $(function()
 		if($(this).val() !== 'INBOUND_MAIL_EVENT'){
 			$('form#addTriggerForm').find('div#trigger-inbound-mail-event').css('display', 'none');
 		}
+		
+		if($(this).val() != 'EMAIL_OPENED' || $(this).val() != 'EMAIL_LINK_CLICKED'){
+			$('form#addTriggerForm').find('select#email-tracking-type').closest('div.control-group').css('display', 'none');
+			
+			$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', 'none');
+			
+			$('form#addTriggerForm').find('#custom-link-clicked').closest('div.control-group').css('display', 'none');
+		}
+		
+		if($(this).val() != 'EVENT_IS_ADDED')
+		{
+			$('form#addTriggerForm').find('select#event-owner-id').closest('div.control-group').css('display', 'none');
+			
+			$('form#addTriggerForm').find('select#event-type').closest('div.control-group').css('display', 'none');
+		}
+			
 
 		// Initialize tags typeahead
 		if ($(this).val() == 'TAG_IS_ADDED' || $(this).val() == 'TAG_IS_DELETED')
@@ -81,6 +97,21 @@ $(function()
 		{
 			populate_inbound_mail_events_in_trigger($('form#addTriggerForm'), 'trigger-inbound-mail-event');
 		}
+		
+		if($(this).val() == 'EMAIL_OPENED' || $(this).val() == 'EMAIL_LINK_CLICKED'){
+			$('form#addTriggerForm').find('#email-tracking-type').closest('div.control-group').css('display', '');
+			
+			if($(this).val() == 'EMAIL_LINK_CLICKED')
+				$('form#addTriggerForm').find('#custom-link-clicked').closest('div.control-group').css('display', '');
+		}
+		
+		if($(this).val() == 'EVENT_IS_ADDED')
+		{
+			$('form#addTriggerForm').find('select#event-type').closest('div.control-group').css('display', '');
+			
+			populate_owners_in_trigger($('form#addTriggerForm'), 'event-owner-id');
+		}
+			
 	});
 	
 	// When cancel clicked, take to Back page
@@ -90,6 +121,44 @@ $(function()
 
 		if (history !== undefined)
 			history.back(-1);
+	});
+	
+	$('#email-tracking-type').die().live('change', function(e){
+		
+		e.preventDefault();
+		
+		if($(this).val() == 'ANY' || $(this).val() == 'PERSONAL')
+		{
+			// Show milestones select element
+			$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', 'none');
+			return;
+		}
+		
+		// Show campaign select element
+		$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', '');
+
+		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+		
+		/**
+		 * Fills campaign select with existing Campaigns.
+		 * 
+		 * @param campaign-select -
+		 *            Id of select element of Campaign
+		 * @param /core/api/workflows -
+		 *            Url to get workflows
+		 * @param 'workflow' -
+		 *            parse key
+		 * @param no-callback -
+		 *            No callback
+		 * @param optionsTemplate-
+		 *            to fill options with workflows
+		 */
+		fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', function()
+				{
+					
+					$('#email-tracking-campaign-id option:first').after('<option value="0">All</option>');
+					
+				}, optionsTemplate, false);
 	});
 });
 
@@ -189,6 +258,26 @@ function populate_shopify_events_in_trigger(trigger_form, shopify_event_select_i
 function populate_inbound_mail_events_in_trigger(trigger_form, inbound_mail_event_div_class)
 {
 	trigger_form.find('div#' + inbound_mail_event_div_class).css('display','');
+}
+
+function populate_owners_in_trigger(trigger_form, owner_select_id, trigger_owner_id)
+{
+	// Show milestones select element
+	trigger_form.find('select#' + owner_select_id).closest('div.control-group').css('display', '');
+
+	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+	
+	fillSelect(owner_select_id, '/core/api/users', 'users', function()
+			{
+		
+			$("#" + owner_select_id +' option:first').after('<option value="ANY">Any Owner</option>');
+			
+			if (trigger_owner_id)
+			{
+				$('#'+owner_select_id, trigger_form).find('option[value=' + trigger_owner_id + ']').attr('selected', 'selected');
+			}
+		
+	}, optionsTemplate, false, undefined, "Select Event Owner");
 }
 
 /**
