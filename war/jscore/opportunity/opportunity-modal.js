@@ -1,3 +1,5 @@
+
+
 $(function(){
 	
 	/**
@@ -27,6 +29,12 @@ $(function(){
        	else
        		saveDeal(form_id, modal_id, this, json, true);
 	});
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * To avoid showing previous errors of the modal.
@@ -100,7 +108,12 @@ $(function(){
     */
     $('#opportunities-model-list > tr > td:not(":first-child")').live('click', function(e) {
 		e.preventDefault();
-		updateDeal($(this).closest('tr').data());
+		$('.popover').remove();
+		var currentdeal=$(this).closest('tr').data();
+		Backbone.history.navigate("deal/"+currentdeal.id , {
+            trigger: true
+        });
+	//	updateDeal($(this).closest('tr').data());
 	});
     
     /**
@@ -108,7 +121,10 @@ $(function(){
      */
 	$('#dashboard-opportunities-model-list > tr').live('click', function(e) {
 		e.preventDefault();
-		updateDeal($(this).data());
+		var currentdeal=$(this).closest('tr').data();
+		Backbone.history.navigate("deal/"+currentdeal.id , {
+            trigger: true
+        });
 	});
 	
 	$('.milestones > li').live('mouseenter', function () {
@@ -691,9 +707,14 @@ if(json.close_date==0)
 
 			}
 			else {
-				App_Deals.navigate("deals", {
-					trigger : true
-				});
+				App_Deal_Details.dealDetailView.model = data;
+				App_Deal_Details.dealDetailView.render(true)
+				Backbone.history.navigate("deal/"+data.toJSON().id , {
+		            trigger: true
+		        });
+					
+					
+					
 			}
 		}
 	});

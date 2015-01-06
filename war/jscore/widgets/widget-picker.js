@@ -60,7 +60,12 @@ function organize_widgets(base_model)
 		$('#email', this.el).append($(itemView.render().el).addClass('span4').css("margin-left", "0px"));
 
 	if (widget_type == "CALL")
-		$('#call', this.el).append($(itemView.render().el).addClass('span4').css("margin-left", "0px"));
+	{
+	  if( base_model.get('name') == "Twilio" && !base_model.get('is_added'))
+		  console.log("It is old twilio");
+	  else
+	      $('#call', this.el).append($(itemView.render().el).addClass('span4').css("margin-left", "0px"));
+	}	
 
 	if (widget_type == "BILLING")
 		$('#billing', this.el).append($(itemView.render().el).addClass('span4').css("margin-left", "0px"));

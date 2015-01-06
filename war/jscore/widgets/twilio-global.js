@@ -26,7 +26,7 @@ $(function()
 		{
 			globalTwilioIOSetup();
 		}
-	}, 15000); // 15 sec
+	}, 10000); // 15 sec
 
 	$(".noty_twilio_hangup").die().live('click', function(e)
 	{
@@ -170,6 +170,22 @@ $(function()
 		e.preventDefault();
 		$("#note-number-not-available").hide();
 	});
+	
+	$(".twilioio-advance-settings").die().live('click', function(e)
+	 {
+		e.preventDefault();
+		
+		// If twimlet url is none so display nothing
+		if("None" == $("#twilio_twimlet_url").val())
+			$("#twilio_twimlet_url").val(""); 
+		
+		// Toggle advance settings
+		$(".twilioio-advance-settings-hide").toggle();
+	    $(".twilioio-advance-settings-show").toggle();
+	    $("#twilio_recording").toggle();
+	    $("#twilio_twimlet_url_controls").toggle();
+	 });
+	
 });
 
 /*
@@ -225,8 +241,10 @@ function getGlobalToken()
 
 		setUpGlobalTwilio();
 
+		// Restart twilio after 24 hrs with new token, because token life is 24hrs
 		setTimeout(function()
 		{
+			// After 24hrs check where call is connected or not 
 			if (Twilio.Device.status() == "busy")
 			{
 				Restart_Twilio = true;
@@ -381,6 +399,12 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 		// Show twilio numbers list
 		$("#twilio_numbers").show();
 	}
+	
+	// Show record call option on form
+	//$("#twilio_recording").show();
+	
+	// Show twimlet url controls
+	//$("#twilio_twimlet_url_controls").show();
 }
 
 function setToValidate(data, showAlert)
@@ -486,7 +510,10 @@ function createAppSid(twilioio_prefs, callback)
 	if (twilioio_prefs.twilio_number_sid != "")
 		numberSid = twilioio_prefs.twilio_number_sid;
 
-	$.get("/core/api/widgets/twilio/createappsid/" + twilioio_prefs.twilio_acc_sid + "/" + twilioio_prefs.twilio_auth_token + "/" + numberSid+ "/" + twilioio_prefs.twilio_record, function(result)
+	if (twilioio_prefs.twilio_twimlet_url == "")
+		twilioio_prefs.twilio_twimlet_url = "None";
+	
+	$.get("/core/api/widgets/twilio/createappsid/" + twilioio_prefs.twilio_acc_sid + "/" + twilioio_prefs.twilio_auth_token + "/" + numberSid+ "/" + twilioio_prefs.twilio_record+ "/" + encodeURIComponent(twilioio_prefs.twilio_twimlet_url), function(result)
 	{
 		console.log("Twilio createAppSid " + result);
 
@@ -513,6 +540,12 @@ function createAppSid(twilioio_prefs, callback)
 		// Show twilio numbers list
 		$("#twilio_numbers").hide();
 
+		// Hide record call option on form
+		//$("#twilio_recording").hide();
+		
+		// Hide twimlet url controls
+		//$("#twilio_twimlet_url_controls").hide();
+		
 		// Reset form fields after sending email
 		$("#twilioio_login_form").each(function()
 		{
@@ -648,19 +681,29 @@ function setUpGlobalTwilio()
 		Twilio.Device.disconnect(function(conn)
 		{
 			console.log("Twilio call is disconnected");
+
 			// Called for all disconnections
 			console.log(conn);
+			
+			var phoneNumber = To_Number;
 			var messageObj = conn.message;
-
+			
 			if (Twilio.Device.status() != "busy")
 			{
 				closeTwilioNoty();
+				
+				// after disconnect check If restart is set so restart twilio with new token.
+				// restart is set after 24hrs
 				if (Restart_Twilio == true)
 				{
 					// Get widget, Create token and set twilio device
 					globalTwilioIOSetup();
 				}
-			}
+			}			
+			
+			// Get all call logs for widget only on cotact detail page
+			if(window.location.hash.indexOf("contact/") != -1)
+			   getTwilioIOLogs(phoneNumber);	
 			
 			// notes related code			
 			console.log("calSid new  " + conn.parameters.CallSid);
@@ -701,7 +744,7 @@ function setUpGlobalTwilio()
 				}
 			} else {
 				return;
-			}
+			}											
 		});
 
 		Twilio.Device
@@ -738,6 +781,10 @@ function setUpGlobalTwilio()
 
 					showCallNotyPopup("incoming", "Twilio",
 							'<i class="icon icon-phone"></i><b>Incoming call :</b><br> ' + To_Name + "   " + To_Number + "<br>", false);
+					
+					// Show contact detail page
+					if(TWILIO_CONTACT_ID)
+					window.location.href = "#contact/"+TWILIO_CONTACT_ID;
 				});
 
 		// If any network failure, show error
@@ -980,7 +1027,6 @@ function twilioSecondsToFriendly(time) {
 	return friendlyTime;
 }
 
-
 function searchForContact(from) {
 	console.log("searchForContact : " + from);	
 	var fromName = "";
@@ -991,7 +1037,9 @@ function searchForContact(from) {
 	            dataType: 'json'
 	        }).responseText
 	    );
+	console.log("**** responseJson ****");
 	console.log(responseJson);
+	
 	if(responseJson != null) {
 		TWILIO_CONTACT_ID = responseJson.id;
 		console.log("TWILIO_CONTACT_ID : "+TWILIO_CONTACT_ID);

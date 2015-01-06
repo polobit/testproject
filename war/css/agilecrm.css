@@ -1848,6 +1848,15 @@ text-overflow:ellipsis;
 	margin-left:-4px;
 }
 
+
+.deal-owner-position
+{
+position: absolute;
+top: 32px;
+right: 0;
+width:100%;	
+}
+
 .custom-fields-table tbody tr td:nth-child(n+2) {
 	border-left: none;
 }

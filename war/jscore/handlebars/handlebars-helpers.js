@@ -2574,6 +2574,29 @@ $(function()
 								return name;
 
 				});
+				
+				
+				
+				/**
+				 * Get activity type  without underscore and caps, for deal _details page.
+				 */
+				Handlebars.registerHelper('get_normal_activity_type', function(name)
+				{
+								if (!name)
+												return;
+
+								var name_json = { "DEAL_ADD" : "Deal Created", "DEAL_EDIT" : "Deal Edited", "DEAL_CLOSE" : "Deal Closed", "DEAL_LOST" : "Deal Lost", "DEAL_RELATED_CONTACTS" : " Deal Contacts Changed", "DEAL_OWNER_CHANGE" : "Deal Owner Changed", "DEAL_MILESTONE_CHANGE" : "Deal Milestone Changed",
+												"NOTE_ADD" : "Note Added" };
+
+								name = name.trim();
+
+								if (name_json[name])
+												return name_json[name];
+
+								return name;
+
+				});
+
 
 				/**
 				 * put user address location togather separated by comma.
@@ -3667,6 +3690,17 @@ $(function()
 		return buildFacebookProfileURL(url);
 	});
 	
+	
+	/**
+	 * returns tracks count of opportunity
+	 */
+	Handlebars.registerHelper('getTracksCount', function(options)
+			{
+			if (parseInt(DEAL_TRACKS_COUNT) > 1)
+				return options.fn(this);
+             else
+				return options.inverse(this);
+			});
 	/**
 	 * getting flitered contact portlet header name
 	 */
@@ -3723,6 +3757,43 @@ $(function()
 		else if(mins!=0 && mins>1)
 			duration += ''+mins+' Minutes';
 		return duration;
+	});
+	
+	
+	/**
+	 * Returns plain customise text for activity remove underscore and other
+	 * special charecter from string
+	 */
+	Handlebars.registerHelper('displayActivityFieldText', function(value)
+	{
+		var fields = value.replace(/[^a-zA-Z ^,]/g, " ").split(",");
+		var text = "";
+		if (fields.length > 1)
+		{
+			for (var i = 0; i < fields.length - 1; i++)
+			{
+				text += " " + fields[i].trim();
+				if (i != fields.length - 2)
+				{
+					text += ",";
+				}
+			}
+			text += " and " + fields[fields.length - 1].trim();
+		}
+		else
+		{
+			text = fields[fields.length - 1].trim();
+		}
+		// update title
+		text = text.replace('subject', 'Title');
+		// update priority
+		text = text.replace('priority type', 'Priority');
+		// update category
+		text = text.replace('task type', 'Category');
+		// update due date
+		text = text.replace('due date', 'Due date');
+		return text;
+
 	});
 	
 });

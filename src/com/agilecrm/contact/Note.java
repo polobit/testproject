@@ -68,6 +68,9 @@ public class Note
     @NotSaved
     private List<String> contact_ids = new ArrayList<String>();
 
+    @NotSaved
+    public List<String> deal_ids = new ArrayList<String>();
+
     /**
      * Owner key of AgileUser id.
      */
