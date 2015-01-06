@@ -838,7 +838,7 @@ $(function()
 			console.log(twilio_prefs);
 
 			// Because of new widget it is deprecated and all functions are commented.
-			twilioError(Twilio_PLUGIN_NAME, 'Please delete this widget and the new Twilio widget from <a href="#add-widget" >widget settings page</a>.');
+			twilioError(Twilio_PLUGIN_NAME, 'Please delete this widget and add the new improved Twilio widget from the <a href="#add-widget" >widget settings page</a>.');
 			
 			/*
 			 * Check if Twilio account has registered numbers and shows set up to verify
