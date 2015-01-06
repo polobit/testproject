@@ -40,7 +40,7 @@
 	<h4><a style="text-decoration: none"><b>{{get_normal_activity_type activity_type}}</b></a></h4><br/>
 	<div style="background:none;border:none;">
 {{#if_equals "DEAL_ADD" activity_type}}
-        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Deal created for {{custom1}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%). </pre>
+        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Deal created for {{custom1}} ({{currencySymbol}} {{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%). </pre>
      {{/if_equals}}
 
 {{#if_equals "DEAL_EDIT" activity_type}}
@@ -48,10 +48,10 @@
      {{/if_equals}}
 
 {{#if_equals "DEAL_CLOSE" activity_type}}
-        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Hurray. {{entityObject.owner.name}} has won deal worth {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}. </pre>
+        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Hurray. {{entityObject.owner.name}} has won deal worth {{currencySymbol}} {{numberWithCommas entityObject.expected_value}}. </pre>
      {{/if_equals}}
 {{#if_equals "DEAL_LOST" activity_type}}
-        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Alas. {{entityObject.owner.name}} has lost the deal worth {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}.</pre>
+        <pre style="background-color:#fff;border:none;font-family:'PT Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;">Alas. {{entityObject.owner.name}} has lost the deal worth {{currencySymbol}} {{numberWithCommas entityObject.expected_value}}.</pre>
      {{/if_equals}}
 
 {{#if_equals "DEAL_MILESTONE_CHANGE" activity_type}}
