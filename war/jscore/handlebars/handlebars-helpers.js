@@ -1950,7 +1950,7 @@ $(function()
 												// Avoid comma appending to last element
 												if (i < j - 1)
 												{
-																ret = ret + ", ";
+																ret = ret + ",";
 												}
 												;
 								}
