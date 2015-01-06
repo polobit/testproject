@@ -137,8 +137,8 @@
       <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time>
       <div class="task-actions">
            <i class="task-action icon icon-check is-task-complete" data="{{id}}" title="Mark as Complete"></i>
-           <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>           
-           <i class="task-action icon icon-trash delete-task" data="{{id}}" title="Delete Task"></i>
+            <a href="#task/{{id}}"><i class="task-action icon icon-edit " data="{{id}}" title="Edit Task"></i> </a>          
+          <i class="task-action icon icon-trash delete-task" data="{{id}}" title="Delete Task"></i>
            {{#if notes}} 
              <i class="task-action icon icon-comment notes-task-popover edit-task" data="{{id}}" title="Notes"></i>
              <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
