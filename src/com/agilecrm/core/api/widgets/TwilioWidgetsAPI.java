@@ -23,6 +23,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.TwilioUtil;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
@@ -241,7 +242,7 @@ public class TwilioWidgetsAPI
 		{
 
 			// Calls TwilioUtil method to retrieve call logs for the "to" number
-			return TwilioUtil.getCallLogsWithRecordings(widget, to).toString();
+			return TwilioUtil.getCallLogsWithRecordingsFromTwilioIO(widget, to).toString();
 		}
 		catch (SocketTimeoutException e)
 		{
@@ -312,17 +313,16 @@ public class TwilioWidgetsAPI
 	{
 		Widget twilioio = WidgetUtil.getWidget("TwilioIO");
 
-		/*
-		 * String clientName = "c"; clientName =
-		 * clientName.concat((AgileUser.getCurrentAgileUser().id).toString());
-		 */
+		// Get current logged in agile user
+		Long agileUserID = AgileUser.getCurrentAgileUser().id;
+
 		// Find an application Sid from twilio.com/user/account/apps
 		String applicationSid = twilioio.getProperty("twilio_app_sid");
 		TwilioCapability capability = new TwilioCapability(twilioio.getProperty("twilio_acc_sid"),
 				twilioio.getProperty("twilio_auth_token"));
 		capability.allowClientOutgoing(applicationSid);
 		// capability.allowClientIncoming("jenny");
-		capability.allowClientIncoming("agileclient");
+		capability.allowClientIncoming("agileclient" + agileUserID);
 
 		String token = null;
 
@@ -459,11 +459,12 @@ public class TwilioWidgetsAPI
 
 	}
 
-	@Path("createappsid/{acc-sid}/{auth-token}/{number-sid}/{record}")
+	@Path("createappsid/{acc-sid}/{auth-token}/{number-sid}/{record}/{twimlet-url}")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String createAppSid(@PathParam("acc-sid") String accountSID, @PathParam("auth-token") String authToken,
-			@PathParam("number-sid") String numberSid, @PathParam("record") String record)
+			@PathParam("number-sid") String numberSid, @PathParam("record") String record,
+			@PathParam("twimlet-url") String twimletUrl)
 	{
 		System.out.println("In createAppSid" + accountSID + " " + authToken + " " + numberSid + " " + record);
 
@@ -473,7 +474,7 @@ public class TwilioWidgetsAPI
 			 * Create a Twilio Application for Agile in Agile User Twilio
 			 * account
 			 */
-			return TwilioUtil.createAppSidTwilioIO(accountSID, authToken, numberSid, record);
+			return TwilioUtil.createAppSidTwilioIO(accountSID, authToken, numberSid, record, twimletUrl);
 		}
 		catch (SocketTimeoutException e)
 		{
@@ -612,4 +613,47 @@ public class TwilioWidgetsAPI
 
 	}
 
+	/**
+	 * Connects to Twilio and fetches call logs for a given number based on the
+	 * accountSID
+	 * 
+	 * @param widgetId
+	 *            {@link String} widget id to get {@link Widget} preferences
+	 * @return {@link String} form of {@link JSONArray} of call logs
+	 */
+	@Path("call/nextlogs/{widget-id}/{to}/{page}/{pageToken}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getCallLogsByPage(@PathParam("widget-id") Long widgetId, @PathParam("to") String to,
+			@PathParam("page") String page, @PathParam("pageToken") String pageToken)
+	{
+		// Retrieve widget based on its id
+		Widget widget = WidgetUtil.getWidget(widgetId);
+
+		if (widget == null)
+			return null;
+
+		try
+		{
+
+			// Calls TwilioUtil method to retrieve call logs for the "to" number
+			return TwilioUtil.getCallLogsByPage(widget, to, page, pageToken).toString();
+		}
+		catch (SocketTimeoutException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and Please try again.").build());
+		}
+		catch (IOException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occurred. Refresh and Please try again.").build());
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+	}
 }

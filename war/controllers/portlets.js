@@ -186,7 +186,7 @@ $("#add-portlet").live("click", function(e){
 	$('#portletStreamModal').modal('show');
 
 	// Add social network types template
-	$("#streamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);
+	$("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);
 });
 $('#portlets-contacts-model-list > tr, #portlets-companies-model-list > tr').live('click', function(e){
 	var id = $(this).find(".data").attr("data");
