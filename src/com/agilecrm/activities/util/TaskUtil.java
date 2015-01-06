@@ -260,6 +260,11 @@ public class TaskUtil
 
 	List<Task> dueTaskList = new ArrayList<>();
 
+	if (dueTasks.isEmpty())
+	{
+	    return dueTasks;
+	}
+
 	for (Task ts : dueTasks)
 	{
 	    if (!default_tasks.contains(ts.subject) && !ts.subject.contains("Tweet about Agile")
