@@ -63,8 +63,8 @@ $(function()
 				Handlebars.registerHelper('getTwitterHandleByURL', function(value)
 				{
 
-								if (value.indexOf("https://twitter.com/") != -1)
-												return value;
+//								if (value.indexOf("https://twitter.com/") != -1)
+//												return value;
 
 								value = value.substring(value.lastIndexOf("/") + 1);
 								console.log(value);
@@ -1950,7 +1950,7 @@ $(function()
 												// Avoid comma appending to last element
 												if (i < j - 1)
 												{
-																ret = ret + ", ";
+																ret = ret + ",";
 												}
 												;
 								}
@@ -3792,6 +3792,15 @@ $(function()
 		text = text.replace('task type', 'Category');
 		// update due date
 		text = text.replace('due date', 'Due date');
+		
+		text = text.replace('name', 'Name');
+		// update priority
+		text = text.replace('probability', 'Probability');
+		// update category
+		text = text.replace('expected value', 'Expected value');
+		// update due date
+		text = text.replace('close date', 'Close date');
+		
 		return text;
 
 	});
