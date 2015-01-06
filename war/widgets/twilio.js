@@ -766,6 +766,8 @@ function twilioError(id, message)
 	 * with given id
 	 */
 	$('#' + id).html(getTemplate('twilio-error', error_json));
+	//$('#' + id).append('<a href="#add-widget" >widget settings page.</a>');
+	$('#' + id).append('<a class="btn" id="delete-widget" widget-name="Twilio" style="margin-top: 5px;">Delete Widget</a>');
 }
 
 /**
@@ -835,11 +837,14 @@ $(function()
 			var twilio_prefs = JSON.parse(twilio_widget.prefs);
 			console.log(twilio_prefs);
 
+			// Because of new widget it is deprecated and all functions are commented.
+			twilioError(Twilio_PLUGIN_NAME, 'Please delete this widget and the new Twilio widget from <a href="#add-widget" >widget settings page</a>.');
+			
 			/*
 			 * Check if Twilio account has registered numbers and shows set up to verify
 			 * if no numbers available, else generates token required to make calls
 			 */
-			checkTwilioNumbersAndGenerateToken(twilio_prefs);
+			//checkTwilioNumbersAndGenerateToken(twilio_prefs);
 
 			/*
 			 * If Twilio account doesn't have numbers, we need to verify numbers in

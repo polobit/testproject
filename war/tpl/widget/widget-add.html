@@ -35,8 +35,10 @@
     			<a class="btn btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>
                 {{#if_equals name "CallScript"}}  
                    <a href="#callscript/{{id}}" class="btn" id="setting-widget" set-widget-name="{{name}}">Settings</a>
-                {{else}}
-				   <a href="#{{name}}/{{id}}" class="btn" id="setting-widget" set-widget-name="{{name}}">Settings</a>
+                {{else}}{{#if_equals name "Twilio"}}
+                           <a></a>
+                        {{else}}
+				           <a href="#{{name}}/{{id}}" class="btn" id="setting-widget" set-widget-name="{{name}}">Settings</a>
                 {{/if_equals}}
     		{{else}}
 				{{#check_plan "FREE"}}
@@ -46,8 +48,11 @@
 							{{#if_equals widget_type "CALL"}}
                                {{#if_equals name "CallScript"}}
 								   <a class="btn btn-primary add-widget" href="#callscript" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
-                               {{else}}
-                                   <a class="btn btn-primary add-widget" href="#{{name}}" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
+                               {{else}}{{#if_equals name "Twilio"}}
+                                            <a></a>
+                                       {{else}}
+                                            <a class="btn btn-primary add-widget" href="#{{name}}" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
+							           {{/if_equals}}
 							   {{/if_equals}}
 							{{else}}
 								<a class="btn btn-primary" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Add</a><span style="margin-left:5px"><i>Paid accounts only</i></span>
@@ -56,9 +61,12 @@
 					{{else}}
                        {{#if_equals name "CallScript"}}
                           <a class="btn btn-primary add-widget" href="#callscript" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
-                       {{else}}
-                          <a class="btn btn-primary add-widget" href="#{{name}}" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
-                       {{/if_equals}}    				
+                       {{else}}{{#if_equals name "Twilio"}}
+                                   <a></a>
+                               {{else}}
+     				               <a class="btn btn-primary add-widget" href="#{{name}}" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
+                               {{/if_equals}}
+                       {{/if_equals}}    	
 				{{/check_plan}}
     		{{/if}}
 		{{/if_equals}}
