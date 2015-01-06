@@ -196,11 +196,17 @@ public class CustomFieldDefUtil
         		
         		//For old custom fields position column is not existed in DB so get them without position order
         		customFieldsListWithoutPosition = dao.ofy().query(CustomFieldDef.class).filter("scope in", scList).list();
+        		System.out.println("----customFieldsListWithoutPosition loop---");
         		for(CustomFieldDef cfd : customFieldsListWithoutPosition){
+        			System.out.println("Custom field name----"+cfd.field_label);
+        			System.out.println("Custom field position----"+cfd.position);
         			if(cfd.position==0)
         				customFieldsList.add(cfd);
         		}
+        		System.out.println("----customFieldsListWithPosition loop---");
         		for(CustomFieldDef cfd : customFieldsListWithPosition){
+        			System.out.println("Custom field name----"+cfd.field_label);
+        			System.out.println("Custom field position----"+cfd.position);
         			customFieldsList.add(cfd);
         		}
     		}else{
