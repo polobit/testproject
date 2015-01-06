@@ -126,7 +126,7 @@ public class CloseTask extends TaskletAdapter
 		String message = "";
 		int listSize = incompleteTasks.size();
 		if (listSize == 1)
-			return "'" + incompleteTasks.get(0).subject + "'.";
+			return "'" + incompleteTasks.get(0).subject + "'";
 		else
 		{
 			for (int i = 0; i < listSize - 1; i++)
@@ -135,7 +135,7 @@ public class CloseTask extends TaskletAdapter
 				if ((i + 1) != (listSize - 1))
 					message += ", ";
 			}
-			message += " and '" + incompleteTasks.get(listSize - 1).subject + "'.";
+			message += " and '" + incompleteTasks.get(listSize - 1).subject + "'";
 
 		}
 		return message;
