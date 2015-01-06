@@ -619,6 +619,7 @@ function getContactCustomProperties(items)
 	}
 	var datajson={};
 	var formulaFields=[];
+	var allCustomFields=[];
 	var finalFields=[];
 	if(App_Contacts.contactDetailView!=undefined && App_Contacts.contactDetailView!=null){
 		$.each(App_Contacts.contactDetailView.model.get("properties"),function(index,customField){
@@ -650,25 +651,44 @@ function getContactCustomProperties(items)
 				json.type="CUSTOM";
 				json.position=App_Contacts.customFieldsList.collection.models[i].get("position");
 				json.value=tplEleDataAftEval;
-				formulaFields.push(json);
+				json.field_type=App_Contacts.customFieldsList.collection.models[i].get("field_type");
+				allCustomFields.push(json);
 				j++;
+			}else if(App_Contacts.customFieldsList.collection.models[i].get("scope")==type){
+				json.name=App_Contacts.customFieldsList.collection.models[i].get("field_label");
+				json.type="CUSTOM";
+				json.position=App_Contacts.customFieldsList.collection.models[i].get("position");
+				json.field_type=App_Contacts.customFieldsList.collection.models[i].get("field_type");
+				allCustomFields.push(json);
 			}
 		}
 	}
 	if(fields.length>0){
-		for(var i=0;i<=fields.length;i++){
-			for(var k=0;k<formulaFields.length;k++){
-				if(i+1==formulaFields[k].position)
-					finalFields.push(formulaFields[k]);
+		if(allCustomFields.length>0){
+			for(var i=0;i<allCustomFields.length;i++){
+				if(allCustomFields[i].field_type=="FORMULA"){
+					finalFields.push(allCustomFields[i]);
+				}else{
+					for(var j=0;j<fields.length;j++){
+						if(allCustomFields[i].name==fields[j].name){
+							finalFields.push(fields[j]);
+							break;
+						}
+					}
+				}
 			}
-			if(i!=fields.length)
-				finalFields.push(fields[i]);
+		}else{
+			for(var k=0;k<fields.length;k++){
+				finalFields.push(fields[k]);	
+			}
 		}
+		
 	}else{
-		for(var k=0;k<formulaFields.length;k++){
-			finalFields.push(formulaFields[k]);	
+		for(var k=0;k<allCustomFields.length;k++){
+			finalFields.push(allCustomFields[k]);	
 		}
 	}
+	
 	return finalFields;
 }
 

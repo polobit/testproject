@@ -426,7 +426,7 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		//For getting custom fields
 		if(App_Contacts.customFieldsList == null || App_Contacts.customFieldsList == undefined){
-			App_Contacts.customFieldsList = new Base_Collection_View({ url : '/core/api/custom-fields', restKey : "customFieldDefs",
+			App_Contacts.customFieldsList = new Base_Collection_View({ url : '/core/api/custom-fields/position', sort_collection : false, restKey : "customFieldDefs",
 				templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
 			App_Contacts.customFieldsList.collection.fetch();
 		}
