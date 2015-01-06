@@ -39,8 +39,7 @@ taskDetailView : function(id)
 
 								}
 				}
-		  var contacts =  $('#task-contact-img').children().length;
-	   console.log(contacts);
+	
 }
 
 });
