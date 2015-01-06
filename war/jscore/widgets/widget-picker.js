@@ -164,6 +164,11 @@ $(function()
 			$('#Linkedin-container').hide();
 
 		});
+	
+	if(widget_name == "Twilio")
+		$('#Twilio-container').hide();
+
+	});
 
 	$('#remove-widget').die().live('click', function(e)
 	{
