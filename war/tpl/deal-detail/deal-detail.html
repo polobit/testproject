@@ -26,7 +26,7 @@
 {{#getTracksCount}}<span style="position: relative;top: -2px;cursor: default;" class="deal-task-type label label-default" >{{pipeline.name}}</span>{{/getTracksCount}}
 						
 						{{/if}} </div><br/>
-<div style="margin-bottom:4px;"> <span class="contact-profile-name mg-r-md" style="vertical-align:top;">{{currencySymbol}}{{numberWithCommas expected_value}}</span> <span style="margin-left:-14px;color: grey;">({{probability}}%)</span></div>
+<div style="margin-bottom:4px;"> <span class="contact-profile-name mg-r-md" style="vertical-align:top;">{{currencySymbol}} {{numberWithCommas expected_value}}</span> <span style="margin-left:-14px;color: grey;">({{probability}}%)</span></div>
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}
         		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
@@ -51,7 +51,7 @@
 
 <div class="btn-group right">
 								
-								<a href="#" class="deal-restore-detail-view btn"  style="border-radius: 4px 2px 3px 4px!important;margin-left: 6px;" ><i class="icon-mail-reply"></i> Restore</a>
+								<a href="#" class="deal-restore-detail-view btn"  style="border-radius: 4px 4px 4px 4px!important;margin-left: 6px;" ><i class="icon-mail-reply"></i> Restore</a>
 								
 							</div>
 
