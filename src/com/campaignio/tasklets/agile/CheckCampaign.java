@@ -73,7 +73,10 @@ public class CheckCampaign extends TaskletAdapter
 		{
 			if (ContactUtil.workflowListOfAContact(Long.parseLong(AgileTaskletUtil.getId(subscriberJSON)),
 					campaignID.equals(ANY_CAMPAIGN) ? null : Long.parseLong(campaignID), campaignStatus).size() > 0)
+			{
 				TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_YES);
+				return;
+			}
 
 		}
 		catch (Exception e)

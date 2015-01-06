@@ -1306,12 +1306,9 @@ public class ContactUtil
 					CampaignStatus campaignStatus = statusIterator.next();
 
 					if (StringUtils.containsIgnoreCase(campaignStatus.status, status))
-					{
 						givenStatusList.add(campaignStatus);
-						return givenStatusList;
-					}
-
 				}
+				return givenStatusList;
 			}
 			else
 			{
