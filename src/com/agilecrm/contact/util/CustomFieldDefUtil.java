@@ -187,27 +187,27 @@ public class CustomFieldDefUtil
     	List<CustomFieldDef> customFieldsListWithPosition = new ArrayList<CustomFieldDef>();
     	try {
     		if(scope!=null && (scope==SCOPE.CONTACT || scope==SCOPE.PERSON)){
-    			List<SCOPE> scList=new ArrayList<SCOPE>();
-    			scList.add(SCOPE.CONTACT);
-    			scList.add(SCOPE.PERSON);
-    			scList.add(null);
+    			
     			//For new custom fields position column is existed in DB so get them with position order
-        		customFieldsListWithPosition = dao.ofy().query(CustomFieldDef.class).filter("scope in ", scList).order("position").list();
+        		customFieldsListWithPosition = dao.ofy().query(CustomFieldDef.class).order("position").list();
         		
         		//For old custom fields position column is not existed in DB so get them without position order
-        		customFieldsListWithoutPosition = dao.ofy().query(CustomFieldDef.class).filter("scope in", scList).list();
+        		customFieldsListWithoutPosition = dao.ofy().query(CustomFieldDef.class).list();
         		System.out.println("----customFieldsListWithoutPosition loop---");
         		for(CustomFieldDef cfd : customFieldsListWithoutPosition){
         			System.out.println("Custom field name----"+cfd.field_label);
         			System.out.println("Custom field position----"+cfd.position);
-        			if(cfd.position==0)
+        			System.out.println("Custom field scope----"+cfd.scope);
+        			if(cfd.position==0 && (cfd.scope==SCOPE.CONTACT || cfd.scope==SCOPE.PERSON || cfd.scope==null))
         				customFieldsList.add(cfd);
         		}
         		System.out.println("----customFieldsListWithPosition loop---");
         		for(CustomFieldDef cfd : customFieldsListWithPosition){
         			System.out.println("Custom field name----"+cfd.field_label);
         			System.out.println("Custom field position----"+cfd.position);
-        			customFieldsList.add(cfd);
+        			System.out.println("Custom field scope----"+cfd.scope);
+        			if(cfd.scope==SCOPE.CONTACT || cfd.scope==SCOPE.PERSON || cfd.scope==null)
+        				customFieldsList.add(cfd);
         		}
     		}else{
     			//For new custom fields position column is existed in DB so get them with position order
