@@ -39,7 +39,8 @@ taskDetailView : function(id)
 
 								}
 				}
-
+		  var contacts =  $('#task-contact-img').children().length;
+	   console.log(contacts);
 }
 
 });
@@ -252,6 +253,9 @@ $(function()
 
 								saveTaskNote($("#tasknoteUpdateForm"), $("#tasknoteupdatemodal"), this, json);
 				})
+				
+				// set height dynomicaly if no related contacts found in task details
+			
 
 });
 
@@ -476,3 +480,4 @@ function saveTaskNote(form, noteModal, element, note)
 
 				} });
 }
+

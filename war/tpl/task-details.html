@@ -75,7 +75,7 @@
 {{/if_equals}} 
 </div>
 
-<div class="row-fluid"  style="border-bottom: 1px solid #ddd;margin-bottom: 15px; padding-bottom: 30px;height: 40px;">
+<div class="row-fluid"  style="border-bottom: 1px solid #ddd;margin-bottom: 15px; padding-bottom: 30px;">
 <div class="row-fluid" id="task-contact-img" style="margin-top: 7px;">
         	{{#each contacts}}
         		{{#if_contact_type "PERSON"}}
@@ -227,6 +227,7 @@
 	{{else}}
 			<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px"/>
 	{{/if}}
+      <span class="owner-name">{{user.name}}</span>
 	</span>
 	<h4><b>{{get_normal_activity_type activity_type}}</b></h4>
 
@@ -282,10 +283,6 @@
      {{/if_equals}}
 
 	<div class="clear">
-		<div style="margin-bottom: 16px;" class="pull-right">	
-		 <a href="javascript:void(0)">{{user.name}}</a>
-		</div>
-
 		<small class="edit-hover" style="margin-right:10px"> 
 			<time  datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "dd mmm yyyy" time}}</time>
 		</small>

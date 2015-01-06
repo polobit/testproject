@@ -19,15 +19,18 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.TaskReminder;
 import com.agilecrm.activities.util.ActivitySave;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.user.util.DomainUserUtil;
 
 /**
  * <code>TaskAPI</code> includes REST calls to interact with {@link Task} class
@@ -515,8 +518,26 @@ public class TasksAPI
     {
 
 	Task task = TaskUtil.getTask(taskId);
+	try
+	{
+	    String prevOwner = task.getTaskOwner().name;
+	    String new_owner_name = DomainUserUtil.getDomainUser(Long.parseLong(new_owner)).name;
+	    List<Contact> contacts = task.getContacts();
+	    JSONArray jsn = null;
+	    if (contacts != null && contacts.size() > 0)
+	    {
+		jsn = ActivityUtil.getContactIdsJson(contacts);
+	    }
+	    ActivityUtil.createTaskActivity(ActivityType.TASK_OWNER_CHANGE, task, new_owner_name, prevOwner,
+		    "owner_name", jsn);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
 	task.owner_id = new_owner;
 	task.save();
+
 	return task;
     }
 
