@@ -71,7 +71,6 @@ $(function(){
 	$("#campaign_id").die().live('click', function(e){
 		e.preventDefault();
 		e.stopPropagation();
-		$(window).scrollTop(0);
 		$.ajax({
 			url: '/core/api/workflows?page_size=1', 
 			type : 'GET',
