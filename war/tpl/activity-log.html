@@ -322,7 +322,7 @@ Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{
 {{else}} 
 	Deleted {{custom1}} Tasks <br/>
 <span class="activities_second_line">    
-{{#if custom2}}<i class="icon-tasks"></i> {{custom2}} {{/if}} 
+{{#if custom2}}<i class="icon-tasks"></i> {{custom2}}. {{/if}} 
 </span>
 {{/if_equals}}
 </div>	
@@ -356,7 +356,7 @@ Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{
  Created Deal {{#if entityObject}}<a href="#deal/{{entity_id}}">{{label}}</a> {{else}}'{{label}}'{{/if}}<br/>
 <span class="activities_second_line">
 {{#if custom2}}
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}Deal ({{currencySymbol}} {{numberWithCommasForActivities custom2}} - {{custom3}}%) added. {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}Deal ({{currencySymbol}} {{numberWithCommasForActivities custom2}} - {{custom3}}%) added {{#if entityObject}}to track '{{entityObject.pipeline.name}}'{{/if}}. {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 {{else}}
  <i class="icon-money icon-white"></i>{{#unless this.entityObject}} Deal deleted later.{{/unless}} Deal {{#if this.entityObject}} ({{currencySymbol}} {{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) added to track '{{entityObject.pipeline.name}}'.{{/if}} {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
 {{/if}}	
@@ -507,7 +507,7 @@ Modified  Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}
 <div>
 Added note to Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <span class="activities_second_line">
-<i class="icon-pencil"></i>{{#unless this.entityObject}}Deal deleted later. {{/unless}}{{custom1}} {{#if custom2}}- {{custom2}}{{/if}}<br/>
+<i class="icon-pencil"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}{{custom1}} {{#if custom2}}- {{custom2}}{{/if}}<br/>
 </span>
 </div>
 <div>		
@@ -609,12 +609,12 @@ Changed Milestone of Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}"
     {{#if_equals "1" custom1}}
   Deleted {{custom1}} Deal<br/>
 <span class="activities_second_line">
-  {{#if custom2}}<i class="icon-money icon-white"></i> {{custom2}}{{/if}}
+  {{#if custom2}}<i class="icon-money icon-white"></i> {{custom2}}.{{/if}}
 </span>
 {{else}} 
 	Deleted {{custom1}} Deals <br/>
 <span class="activities_second_line">
- {{#if custom2}}<i class="icon-money icon-white"></i> {{custom2}}{{/if}}
+ {{#if custom2}}<i class="icon-money icon-white"></i> {{custom2}}.{{/if}}
 </span>
 {{/if_equals}}
 
