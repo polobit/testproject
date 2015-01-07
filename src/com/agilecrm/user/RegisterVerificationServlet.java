@@ -23,7 +23,7 @@ public class RegisterVerificationServlet extends HttpServlet
     static {
 	invalid_domains.add("gmail");
 	invalid_domains.add("zoho");
-	invalid_domains.add("yaden");
+	invalid_domains.add("yandex");
 	invalid_domains.add("hotmail");
 	invalid_domains.add("yahoo");
     }
@@ -48,14 +48,15 @@ public class RegisterVerificationServlet extends HttpServlet
 	if(!StringUtils.isEmpty(email))
 	{
 	    String emailDomainSubstring = email.split("@")[1];
-	    
+	    System.out.println(emailDomainSubstring);
 	    if(StringUtils.isEmpty(emailDomainSubstring))
 	    {
 		writeErrorMessage(response, "Agile CRM needs your business email to signup");
 		    return;
 	    }
 	    
-	    String emailDomain = emailDomainSubstring.split(".")[0];
+	    String emailDomain = emailDomainSubstring.split("\\.")[0];
+	    
 	    
 	    if(!StringUtils.isEmpty(emailDomain))
 	    {
@@ -144,4 +145,5 @@ public class RegisterVerificationServlet extends HttpServlet
 	}
 
     }
+
 }
