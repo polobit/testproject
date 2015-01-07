@@ -54,7 +54,7 @@
 </script>
 
 
-<script type="text/html" id="report-categories-collection-template">
+<script type="text/html" id="report-categories-template">
 <div class="row">
     <div class="span12">
         <div class="page-header">
@@ -224,11 +224,9 @@
 		
         <!-- Add button -->
         <div style="/*margin: 40px auto;	width: 50%;*/">
-			{{#if this.0.id}}
-           		<a id="campaign_id" class="btn btn-primary" href="#email-reports/{{this.0.id}}">Go</a>
-			{{else}}
-				<a id="campaign_id" class="btn btn-primary" href="#workflows">Go</a>
-			{{/if}}
+			
+           		<a id="campaign_id" class="btn btn-primary" href="#">Go</a>
+			
         </div>
     </div>
 </div>

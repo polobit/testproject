@@ -69,8 +69,35 @@ $(function(){
 				});
 	});
 	$("#campaign_id").die().live('click', function(e){
+		e.preventDefault();
 		e.stopPropagation();
 		$(window).scrollTop(0);
+		$.ajax({
+			url: '/core/api/workflows?page_size=1', 
+			type : 'GET',
+			dataType:"json",
+			accept: {
+				  json: 'application/json',
+				  xml: 'application/xml'
+				},
+			success : function(data)
+			{
+				if(data[0])
+					window.document.location = "#email-reports/"+data[0].id;
+				else
+					window.document.location = "#workflows";
+				
+				return;
+	           
+			},
+			error : function(response)
+			{
+				alert("error occured Please try again");
+				window.document.location = "#reports";
+			} });
+		
+		
+		
 	});
 	$("#report-instant-results").die().live('click', function(e){
 		e.stopPropagation();
