@@ -322,6 +322,9 @@ $(function()
 								else if (App_Calendar.tasksListView)
 								{
 												task = App_Calendar.tasksListView.collection.get(id);
+												if(!task){
+																task = taskDetailView;
+												}
 								}
 								else
 								{
