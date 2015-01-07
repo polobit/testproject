@@ -93,16 +93,7 @@ function get_google_calendar_event_source(data, callback)
 function showCalendar()
 {
 
-				//Check whether to show the google calendar events or not.
-				if(!readCookie('event-filters') || JSON.parse(readCookie('event-filters')).type != 'agile'){
-					 $.getJSON('/core/api/users/agileusers', function (users) {
-						 $.each(users,function(i,user){
-							 if(CURRENT_DOMAIN_USER.id == user.domain_user_id && JSON.parse(readCookie('event-filters')).owner_id == user.id){
-								 _init_gcal_options();
-							 }
-						 });
-					 });
-				}
+				_init_gcal_options();
 
 				$('#calendar_event')
 												.fullCalendar(
