@@ -348,6 +348,14 @@ var SettingsRouter = Backbone.Router.extend({
 			register_focus_on_tinymce('email-template-html');
 		});
 		
+		// Fills owner select element
+		populateUsers("email-tmplt-owners-list", $("#templatePrefs"), undefined, undefined,
+				function(data) {
+					$("#templatePrefs").find("#email-tmplt-owners-list").html(data);
+					$("#email-tmplt-owners-list", $("#templatePrefs")).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
+					$("#email-tmplt-owners-list", $("#templatePrefs")).closest('div').find('.loading-img').hide();
+		});
+		
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-templates-tab').addClass('active');
 		// $('#content').html(view.render().el);
@@ -395,6 +403,21 @@ var SettingsRouter = Backbone.Router.extend({
 		});
 		
 		/**End of TinyMCE**/
+		
+		var value = currentTemplate.toJSON();
+		
+		// Fills owner select element
+		populateUsers("email-tmplt-owners-list", $("#templatePrefs"), value, 'emailTemplateOwner',
+				function(data) {
+					$("#templatePrefs").find("#email-tmplt-owners-list").html(data);
+					if (value.emailTemplateOwner) {
+						$("#email-tmplt-owners-list", $("#templatePrefs")).find(
+								'option[value=' + value['emailTemplateOwner'].id + ']')
+								.attr("selected", "selected");
+					}
+					$("#email-tmplt-owners-list", $("#templatePrefs")).closest('div').find('.loading-img').hide();
+				});
+		
 		
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-templates-tab').addClass('active');
