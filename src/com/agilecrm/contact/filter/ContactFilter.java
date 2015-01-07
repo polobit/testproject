@@ -8,13 +8,23 @@ import java.util.List;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -47,136 +57,250 @@ import com.googlecode.objectify.condition.IfDefault;
 @Cached
 public class ContactFilter implements Serializable, Comparable<ContactFilter>
 {
-    // Key
-    @Id
-    public Long id;
+	// Key
+	@Id
+	public Long id;
 
-    /**
-     * Default filters
-     */
-    public enum DefaultFilter
-    {
-	LEADS, RECENT, CONTACTS;
-    };
-
-    /**
-     * Name of the filter/Advanced search criteria
-     */
-    @NotSaved(IfDefault.class)
-    public String name = null;
-    
-    /**
-     * Type fo conatct filter.
-     */
-    @NotSaved(IfDefault.class)
-    public Type contact_type = Type.PERSON;
-
-    /**
-     * Represents list of {@link SearchRule}, query is built on these list of
-     * conditions
-     */
-    @NotSaved(IfDefault.class)
-    @Embedded
-    public List<SearchRule> rules = new ArrayList<SearchRule>();
-
-    public static ObjectifyGenericDao<ContactFilter> dao = new ObjectifyGenericDao<ContactFilter>(ContactFilter.class);
-
-    public ContactFilter()
-    {
-
-    }
-
-    public ContactFilter(List<SearchRule> rules)
-    {
-	this.rules = rules;
-    }
-
-    public ContactFilter(String name, List<SearchRule> rules)
-    {
-	this.name = name;
-	this.rules = rules;
-    }
-
-    /**
-     * Fetches {@link ContactFilter} based on the id
-     * 
-     * @param id
-     *            {@link Long}
-     * @return {@link ContactFilter}
-     */
-    public static ContactFilter getContactFilter(Long id)
-    {
-	try
+	/**
+	 * Default filters
+	 */
+	public enum DefaultFilter
 	{
-	    return dao.get(id);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
+		LEADS, RECENT, CONTACTS;
+	};
 
-    /**
-     * Fetches list of contact filters
-     * 
-     * @return {@link List} of {@link ContactFilter}
-     */
-    public static List<ContactFilter> getAllContactFilters()
-    {
+	/**
+	 * Name of the filter/Advanced search criteria
+	 */
+	@NotSaved(IfDefault.class)
+	public String name = null;
+
+	/**
+	 * Type fo conatct filter.
+	 */
+	@NotSaved(IfDefault.class)
+	public Type contact_type = Type.PERSON;
+
+	/**
+	 * Represents list of {@link SearchRule}, query is built on these list of
+	 * conditions
+	 */
+	@NotSaved(IfDefault.class)
+	@Embedded
+	public List<SearchRule> rules = new ArrayList<SearchRule>();
+
+	/******************************** New Field ********************/
+	/**
+	 * DomainUser Id who created Filter.
+	 */
+	@NotSaved
+	public String owner_id = null;
+
+	/**
+	 * Key object of DomainUser.
+	 */
+	@NotSaved(IfDefault.class)
+	private Key<DomainUser> owner = null;
+
+	/**
+	 * Created time of filter
+	 */
+	public Long created_time = 0L;
+	/***************************************************************/
+
+	public static ObjectifyGenericDao<ContactFilter> dao = new ObjectifyGenericDao<ContactFilter>(ContactFilter.class);
+
+	public ContactFilter()
+	{
+
+	}
+
+	public ContactFilter(List<SearchRule> rules)
+	{
+		this.rules = rules;
+	}
+
+	public ContactFilter(String name, List<SearchRule> rules)
+	{
+		this.name = name;
+		this.rules = rules;
+	}
+
+	/**
+	 * Fetches {@link ContactFilter} based on the id
+	 * 
+	 * @param id
+	 *            {@link Long}
+	 * @return {@link ContactFilter}
+	 */
+	public static ContactFilter getContactFilter(Long id)
+	{
+		try
+		{
+			return dao.get(id);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Fetches list of contact filters
+	 * 
+	 * @return {@link List} of {@link ContactFilter}
+	 */
+	public static List<ContactFilter> getAllContactFilters()
+	{
 		// Fetches all the Views
 		List<ContactFilter> cotactFilters = dao.fetchAll();
-		if(cotactFilters == null || cotactFilters.isEmpty()) {
+		if (cotactFilters == null || cotactFilters.isEmpty())
+		{
 			return cotactFilters;
 		}
 		Collections.sort(cotactFilters);
 		return cotactFilters;
-    }
+	}
 
-    /**
-     * Saves {@link ContactFilter} entity
-     */
-    public void save()
-    {
-	dao.put(this);
-    }
+	/**
+	 * Saves {@link ContactFilter} entity
+	 */
+	public void save()
+	{
+		dao.put(this);
+	}
 
-    /**
-     * Queries contacts based on {@link List} of {@link SearchRule} specified,
-     * applying 'AND' condition on after each {@link SearchRule}. Builds a query
-     * and returns search results using {@link AppengineSearch}.
-     * 
-     * @return {@link Collection}
-     */
-    @SuppressWarnings("rawtypes")
-    public Collection queryContacts(Integer count, String cursor, String orderBy)
-    {
+	/**
+	 * Queries contacts based on {@link List} of {@link SearchRule} specified,
+	 * applying 'AND' condition on after each {@link SearchRule}. Builds a query
+	 * and returns search results using {@link AppengineSearch}.
+	 * 
+	 * @return {@link Collection}
+	 */
+	@SuppressWarnings("rawtypes")
+	public Collection queryContacts(Integer count, String cursor, String orderBy)
+	{
 
-	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules, count, cursor, orderBy);
-    }
+		return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules, count, cursor, orderBy);
+	}
 
-    /**
-     * Queries contacts based on {@link List} of {@link SearchRule} specified,
-     * applying 'AND' condition on after each {@link SearchRule}. Builds a query
-     * and returns the count as opposed to actual results using
-     * {@link AppengineSearch}. Very useful while running query reports
-     * 
-     * @return {@link Collection}
-     */
-    public int queryContactsCount()
-    {
-	return new AppengineSearch<Contact>(Contact.class).getAdvancedSearchResultsCount(rules);
-    }
+	/**
+	 * Queries contacts based on {@link List} of {@link SearchRule} specified,
+	 * applying 'AND' condition on after each {@link SearchRule}. Builds a query
+	 * and returns the count as opposed to actual results using
+	 * {@link AppengineSearch}. Very useful while running query reports
+	 * 
+	 * @return {@link Collection}
+	 */
+	public int queryContactsCount()
+	{
+		return new AppengineSearch<Contact>(Contact.class).getAdvancedSearchResultsCount(rules);
+	}
 
 	@Override
-	public int compareTo(ContactFilter contactFilter) {
-		if(this.name == null && contactFilter.name != null) {
+	public int compareTo(ContactFilter contactFilter)
+	{
+		if (this.name == null && contactFilter.name != null)
+		{
 			return -1;
-		} else if(this.name != null && contactFilter.name == null) {
+		}
+		else if (this.name != null && contactFilter.name == null)
+		{
 			return 1;
-		} else if(this.name == null && contactFilter.name == null) {
+		}
+		else if (this.name == null && contactFilter.name == null)
+		{
 			return 0;
 		}
 		return this.name.compareToIgnoreCase(contactFilter.name);
 	}
+
+	/******************************** New Field related method ********************/
+	@JsonIgnore
+	public void setOwner(Key<DomainUser> user)
+	{
+		owner = user;
+	}
+
+	/**
+	 * Gets picture of owner who created filter. Owner picture is retrieved from
+	 * user prefs of domain user who created filter and is used to display owner
+	 * picture in filters list.
+	 * 
+	 * @return picture of owner.
+	 * @throws Exception
+	 *             when agileuser doesn't exist with respect to owner key.
+	 */
+	@XmlElement(name = "ownerPic")
+	public String getOwnerPic() throws Exception
+	{
+		AgileUser agileuser = null;
+		UserPrefs userprefs = null;
+
+		try
+		{
+			// Get owner pic through agileuser prefs
+			if (owner != null)
+				agileuser = AgileUser.getCurrentAgileUserFromDomainUser(owner.getId());
+
+			if (agileuser != null)
+				userprefs = UserPrefsUtil.getUserPrefs(agileuser);
+
+			if (userprefs != null)
+				return userprefs.pic;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+
+		}
+
+		return "";
+	}
+
+	/**
+	 * Gets domain user with respect to owner id if exists, otherwise null.
+	 * 
+	 * @return Domain user object.
+	 * @throws Exception
+	 *             when Domain User not exists with respect to id.
+	 */
+	@XmlElement(name = "filterOwner")
+	public DomainUser getFilterOwner() throws Exception
+	{
+		if (owner != null)
+		{
+			try
+			{
+				// Gets Domain User Object
+				return DomainUserUtil.getDomainUser(owner.getId());
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Assigns created time for the new one, creates filter with owner key.
+	 */
+	@PrePersist
+	private void PrePersist()
+	{
+		// Store Created Time
+		if (created_time == 0L)
+			created_time = System.currentTimeMillis() / 1000;
+
+		System.out.println("Owner_id : " + this.owner_id);
+
+		// Saves domain user key
+		if (owner_id != null)
+			owner = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
+
+		System.out.println("Owner : " + this.owner);
+	}
+	/******************************************************************************/
 }
