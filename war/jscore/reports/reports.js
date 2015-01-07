@@ -82,7 +82,10 @@ $(function(){
 			success : function(data)
 			{
 				if(data[0])
+				{
 					window.document.location = "#email-reports/"+data[0].id;
+					$(window).scrollTop(0);
+				}
 				else
 					window.document.location = "#workflows";
 				
