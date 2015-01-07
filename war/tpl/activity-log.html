@@ -149,7 +149,7 @@
 	</div>
 <div class="pull-left activity-tag">
 <div>	
- Assigned Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> to  {{custom1}} {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
+ Reassigned Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> to  {{custom1}} {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
 	</div>
 <div>	
 		<small class="edit-hover pull-left" > 
@@ -1076,11 +1076,11 @@ Deleted Documents {{custom2}}
 <div>
 
 {{#if_equals "incoming" custom2}}	
-Incoming call (<span style="text-transform: capitalize;">{{custom1}}</span>) {{#if user.name}}to {{user.name}}{{/if}} {{#if entity_id}}by <a href="#contact/{{entity_id}}">{{label}}</a>{{else}}by {{label}}{{/if}}.{{callActivityFriendlyStatus custom3 custom2}} {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}
+Incoming call (<span style="text-transform: capitalize;">{{custom1}}</span>) {{#if user.name}}to {{user.name}}{{/if}} {{#if entity_id}}by <a href="#contact/{{entity_id}}">{{label}}</a>{{else}}by {{label}}{{/if}}. {{callActivityFriendlyStatus custom3 custom2}} {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}
 {{/if_equals}}
 
 {{#if_equals "outgoing" custom2}}	
-Outgoing call (<span style="text-transform: capitalize;">{{custom1}}</span>) {{#if user.name}}by {{user.name}}{{/if}} {{#if entity_id}}to <a href="#contact/{{entity_id}}">{{label}}</a>{{else}}to {{label}}{{/if}}.{{callActivityFriendlyStatus custom3 custom2}} {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}
+Outgoing call (<span style="text-transform: capitalize;">{{custom1}}</span>) {{#if user.name}}by {{user.name}}{{/if}} {{#if entity_id}}to <a href="#contact/{{entity_id}}">{{label}}</a>{{else}}to {{label}}{{/if}}. {{callActivityFriendlyStatus custom3 custom2}} {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}
 {{/if_equals}}
 
 	</div>

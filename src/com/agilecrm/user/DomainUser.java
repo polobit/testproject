@@ -426,11 +426,12 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    // If user is account owner then account owner should be set to true
 	    // when it is being updated
 	    this.is_account_owner = true;
-
+	    this.is_disabled = false;
 	    if (!is_admin)
 		throw new Exception(user.name + " is the owner of '" + user.domain
 			+ "' domain and should be an <b>admin</b>. You can change the Email and Name instead.");
 	}
+	
     }
 
     /**
@@ -514,6 +515,15 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    }
 
 	    sendPasswordChangedNotification(domainUser.encrypted_password);
+	}
+	else if(id != null && !is_account_owner)
+	{
+	    DomainUser user = DomainUserUtil.getDomainUser(id);
+	    
+	    // Checks if super user is disabled, and throws exception if super
+	    // is disabled
+	    checkSuperUserDisabled(user);
+	    checkAdminDisabled();
 	}
 
 	// Check if namespace is null or empty. Then, do not allow to be created
