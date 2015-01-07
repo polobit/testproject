@@ -31,9 +31,11 @@ taskDetailView : function(id)
 												}
 												else
 												{
+																var taskModel = Backbone.Model.extend({});
 																$.ajax({ url : "core/api/tasks/getTaskObject/" + id, success : function(response)
 																{
-																				$("#content").html(getTemplate("task-detail", response));
+																				taskDetailView = new taskModel(response);
+																				$("#content").html(getTemplate("task-detail", taskDetailView.toJSON()));
 																				task_details_tab.loadActivitiesView();
 																} });
 												}
