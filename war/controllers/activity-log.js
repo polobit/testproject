@@ -11,7 +11,10 @@ var ActivitylogRouter = Backbone.Router.extend({
 
 	activities : function(id)
 	{
+		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+				{ 
 		$('#content').html(getTemplate("activity-list-header", {}));
+		initActivitiesDateRange();
 		$(".activity-log-button").hide();
 		var selecteduser = readCookie("selecteduser");
 		var selectedentity = readCookie("selectedentity");
@@ -56,9 +59,8 @@ var ActivitylogRouter = Backbone.Router.extend({
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 						{
 							$("time", el).timeago();
+									
 						});
-
-					
 
 					}, appendItemCallback : function(el)
 					{
@@ -76,10 +78,9 @@ var ActivitylogRouter = Backbone.Router.extend({
 
 		}, optionsTemplate, true);
 
-	}
-
 });
-
+}
+});
 $(function()
 {
 	// Click events to agents dropdown and department
@@ -89,8 +90,6 @@ $(function()
 
 		// Show selected name
 		var name = $(this).html(), id = $(this).attr("href");
-
-		console.log(name + "  idlllllllllllllll " + id);
 
 		$(this).closest("ul").data("selected_item", id);
 		$(this).closest(".btn-group").find(".selected_name").text(name);
@@ -122,3 +121,4 @@ $(function()
 	});
 
 });
+

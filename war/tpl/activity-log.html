@@ -1101,6 +1101,14 @@ Outgoing call (<span style="text-transform: capitalize;">{{custom1}}</span>) {{#
     <div class="span12">
         <div class="page-header">
             <h1 class="activity-heading"><span>Activities</span>&nbsp;<small class="activity-sub-heading" ></small>&nbsp;<small class="activity-user" ></small></h1>
+		
+		<div id="activities_date_range" class="btn-group pull-right activity-date-filter" style="cursor:pointer;margin-right:15px;top: -28px;">
+               <i class="icon-calendar icon-large"></i>
+                <span id="range">{{date-range "today" "-6"}}</span>
+                <span class="caret"></span>
+              
+            </div>
+		
 		<div class="btn-group pull-right type-task-button" style="cursor:pointer;margin-right:15px;top: -28px;">
                 <div class="btn selected_name" id="selectedentity_type">All Activities</div>
                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -1123,6 +1131,9 @@ Outgoing call (<span style="text-transform: capitalize;">{{custom1}}</span>) {{#
                 </a>
                 <ul class="dropdown-menu" id="user-select"></ul>
             </div>
+            
+            
+          
 
             
         </div>
