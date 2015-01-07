@@ -1,5 +1,6 @@
 package com.agilecrm.deals;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,9 +55,10 @@ import com.googlecode.objectify.condition.IfDefault;
  * @author Yaswanth
  * 
  */
+@SuppressWarnings("serial")
 @XmlRootElement
 @Cached
-public class Opportunity extends Cursor
+public class Opportunity extends Cursor implements Serializable
 {
     /**
      * Opportunity Id.
@@ -382,10 +384,15 @@ public class Opportunity extends Cursor
 	this.ownerKey = ownerKey;
     }
 
+    public void save()
+    {
+	save(true);
+    }
+
     /**
      * Saves opportuntiy in dao.
      */
-    public void save()
+    public void save(boolean arg)
     {
 	if (contact_ids != null)
 	{
@@ -416,21 +423,24 @@ public class Opportunity extends Cursor
 	// Executes trigger
 	DealTriggerUtil.executeTriggerToDeal(oldOpportunity, this);
 
-	// Enables to build "Document" search on current entity
-	AppengineSearch<Opportunity> search = new AppengineSearch<Opportunity>(Opportunity.class);
-
-	// If contact is new then add it to document else edit document
-	if (id == null)
+	if (arg)
 	{
-	    search.add(this);
 
-	    // New Deal Notification
-	    DealNotificationPrefsUtil.executeNotificationForNewDeal(this);
+	    // Enables to build "Document" search on current entity
+	    AppengineSearch<Opportunity> search = new AppengineSearch<Opportunity>(Opportunity.class);
 
-	    return;
+	    // If contact is new then add it to document else edit document
+	    if (id == null)
+	    {
+		search.add(this);
+
+		// New Deal Notification
+		DealNotificationPrefsUtil.executeNotificationForNewDeal(this);
+
+		return;
+	    }
+	    search.edit(this);
 	}
-	search.edit(this);
-
     }
 
     /**
@@ -453,7 +463,7 @@ public class Opportunity extends Cursor
 	    created_time = System.currentTimeMillis() / 1000;
 
 	// If owner_id is null
-	if (owner_id == null)
+	if (owner_id == null && ownerKey == null)
 	{
 	    UserInfo userInfo = SessionManager.get();
 	    if (userInfo == null)
@@ -463,7 +473,8 @@ public class Opportunity extends Cursor
 	}
 
 	// Saves domain user key
-	ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
+	if (owner_id != null)
+	    ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
 	System.out.println("OwnerKey" + ownerKey);
 
 	// Session doesn't exist when adding deal from Campaigns.

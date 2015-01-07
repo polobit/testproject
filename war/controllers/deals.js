@@ -65,6 +65,7 @@ var DealsRouter = Backbone.Router.extend({
 					pieMilestonesByPipeline(pipeline_id);
 					// Shows deals chart
 					dealsLineChartByPipeline(pipeline_id);
+					deal_bulk_actions.init_dom();
 					setupDealsTracksList(cel);
 					setupDealFilters(cel);
 				},
@@ -74,6 +75,7 @@ var DealsRouter = Backbone.Router.extend({
 
 					// To show timeago for models appended by infini scroll
 					includeTimeAgo(el);
+					
 				}
 				});
 			this.opportunityCollectionView.collection.fetch();
