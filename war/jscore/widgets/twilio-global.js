@@ -688,7 +688,12 @@ function setUpGlobalTwilio()
 			
 			// Get all call logs for widget only on cotact detail page
 			if(window.location.hash.indexOf("contact/") != -1)
-			   getTwilioIOLogs(phoneNumber);	
+			  {
+				getTwilioIOLogs(phoneNumber);
+				
+				// Change selected number if its different than calling number.
+				
+			  }			   	
 			
 			// notes related code			
 			console.log("calSid new  " + conn.parameters.CallSid);
