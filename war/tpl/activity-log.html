@@ -288,7 +288,7 @@ Changed Progress of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" 
 	</div>
 <div class="pull-left activity-tag">
 <div>	
-Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{{label}}</a>{{else}}{{label}}{{/if}} <br/>  
+Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>  
 <span class="activities_second_line"> 
 <i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}Task Status changed from {{get_normal_name custom2}} to {{get_normal_name custom1}}. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}	
 </span>
@@ -607,14 +607,14 @@ Changed Milestone of Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}"
 <div class="pull-left activity-tag">
 <div>	
     {{#if_equals "1" custom1}}
-  Deleted {{custom2}} Deal<br/>
+  Deleted {{custom1}} Deal<br/>
 <span class="activities_second_line">
-  {{#if custom2}}<i class="icon-money icon-white"></i> {{custom1}}{{/if}}
+  {{#if custom2}}<i class="icon-money icon-white"></i> {{custom2}}{{/if}}
 </span>
 {{else}} 
-	Deleted {{custom2}} Deals <br/>
+	Deleted {{custom1}} Deals <br/>
 <span class="activities_second_line">
- {{#if custom2}}<i class="icon-money icon-white"></i> {{custom1}}{{/if}}
+ {{#if custom2}}<i class="icon-money icon-white"></i> {{custom2}}{{/if}}
 </span>
 {{/if_equals}}
 
@@ -890,7 +890,7 @@ Sent email to <a href="#contact/{{entity_id}}">{{label}}</a><br/>
 <div>	
 Added  tag to {{custom3}} contacts<br/>
 <span class="activities_second_line">
-<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} added
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} added.
 </span>
 
 	</div>
@@ -916,7 +916,7 @@ Added  tag to {{custom3}} contacts<br/>
 <div>	
  Removed tag from {{custom3}} contacts<br/>
 <span class="activities_second_line">
-<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} removed
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} removed.
 </span>
 
 	</div>
@@ -943,12 +943,12 @@ Added  tag to {{custom3}} contacts<br/>
 	{{#if_equals "1" custom3}}
 		Added {{custom3}} contact to Campaign<br/>
 <span class="activities_second_line">   
-<i class="icon-sitemap icon-white"></i> {{custom2}} 
+<i class="icon-sitemap icon-white"></i> {{custom2}}. 
 </span>
 {{else}}
 Added {{custom3}} Contacts to Campaign <br/>
 <span class="activities_second_line">
-<i class="icon-sitemap icon-white"></i> {{custom2}}
+<i class="icon-sitemap icon-white"></i> {{custom2}}.
 </span> 
 {{/if_equals}}
 </div>
@@ -1043,12 +1043,12 @@ Sent a bulk email to {{custom3}} companies<br/>
 {{#if_equals "1" custom3}}
 Changed owner for {{custom3}} contact <br/>
 <span class="activities_second_line">
-<i class="icon-user icon-white"></i> Contact assigned to {{custom2}}
+<i class="icon-user icon-white"></i> Contact assigned to {{custom2}}.
 </span>
 {{else}}
 	Changed owner for {{custom3}} contacts <br/>
 <span class="activities_second_line">
-<i class="icon-user icon-white"></i> Contacts assigned to {{custom2}}
+<i class="icon-user icon-white"></i> Contacts assigned to {{custom2}}.
 </span>
 {{/if_equals}}
 </div>
@@ -1072,12 +1072,12 @@ Changed owner for {{custom3}} contact <br/>
 {{#if_equals "1" custom3}}
 Changed owner for {{custom3}} company <br/>
 <span class="activities_second_line">
-<i class="icon-user icon-white"></i> Company assigned to {{custom2}}
+<i class="icon-user icon-white"></i> Company assigned to {{custom2}}.
 </span>
 {{else}}
 	Changed owner for {{custom3}} companies <br/>
 <span class="activities_second_line">
-<i class="icon-user icon-white"></i> Companies assigned to {{custom2}}
+<i class="icon-user icon-white"></i> Companies assigned to {{custom2}}.
 </span>
 {{/if_equals}}
 </div>
@@ -1160,7 +1160,7 @@ Changed owner for {{custom3}} company <br/>
 <div>	
 	Added <a href="#contact/{{entity_id}}">{{label}}</a> to Campaign <br/>
 <span class="activities_second_line">  
-<i class="icon-sitemap icon-white"></i> {{custom2}}
+<i class="icon-sitemap icon-white"></i> {{custom2}}.
 </span>
 	</div>
 <div>	
@@ -1187,7 +1187,7 @@ Changed owner for {{custom3}} company <br/>
 <div>	
 Added Tag to <a href="#contact/{{entity_id}}">{{label}}</a><br/>
 <span class="activities_second_line">
-<i class="icon-tag icon-white"></i> {{removeDoubleCoutes custom1}} added
+<i class="icon-tag icon-white"></i> {{removeDoubleCoutes custom1}} added.
 </span>
 	</div>
 <div>
