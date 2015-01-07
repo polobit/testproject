@@ -341,7 +341,7 @@ function showEventFilters()
 
 }
 
-function loadDefaultFilters()
+function loadDefaultFilters(callback)
 {
 				// Create a cookie with default option, if there is no cookie related to
 				// event filter.
@@ -363,6 +363,9 @@ function loadDefaultFilters()
 																				}
 																});
 												}
+												
+												if(callback)
+													callback();
 								});
 				}
 }
