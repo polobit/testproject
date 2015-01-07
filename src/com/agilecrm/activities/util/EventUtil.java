@@ -10,6 +10,7 @@ import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.Event;
 import com.agilecrm.contact.Contact;
@@ -401,6 +402,14 @@ public class EventUtil
     {
 	if (StringUtils.isEmpty(format))
 	    format = "h:mm a (z)";
+	if (StringUtils.isEmpty(timezone))
+	{
+	    timezone = AccountPrefsUtil.getAccountPrefs().timezone;
+	    if (StringUtils.isEmpty(timezone))
+	    {
+		timezone = "UTC";
+	    }
+	}
 	Calendar cal = Calendar.getInstance();
 	cal.setTimeInMillis(epoch * 1000);
 

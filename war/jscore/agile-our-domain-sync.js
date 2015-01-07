@@ -304,7 +304,6 @@ function our_domain_sync() {
 
 			;
 			initWebrules();
-			add_referrar_info_as_note();
 
 		}, function(data) {
 			var name = CURRENT_DOMAIN_USER['name'];
@@ -327,7 +326,6 @@ function our_domain_sync() {
 				add_custom_fields_to_our_domain();
 
 				initWebrules();
-				add_referrar_info_as_note();
 			});
 
 		})
