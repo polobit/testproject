@@ -23,9 +23,20 @@ taskDetailView : function(id)
 								else if (App_Calendar.tasksListView)
 								{
 												var task = App_Calendar.tasksListView.collection.get(id);
-												taskDetailView = task;
-												$("#content").html(getTemplate("task-detail", task.toJSON()));
-												task_details_tab.loadActivitiesView();
+												if (task)
+												{
+																taskDetailView = task;
+																$("#content").html(getTemplate("task-detail", task.toJSON()));
+																task_details_tab.loadActivitiesView();
+												}
+												else
+												{
+																$.ajax({ url : "core/api/tasks/getTaskObject/" + id, success : function(response)
+																{
+																				$("#content").html(getTemplate("task-detail", response));
+																				task_details_tab.loadActivitiesView();
+																} });
+												}
 								}
 								else
 								{
@@ -39,7 +50,7 @@ taskDetailView : function(id)
 
 								}
 				}
-	
+
 }
 
 });
@@ -167,7 +178,7 @@ $(function()
 												// Showing updated owner
 												show_task_owner();
 												taskDetailView = model;
-												task_details_tab.loadActivitiesView();   
+												task_details_tab.loadActivitiesView();
 
 								} });
 				});
@@ -252,9 +263,8 @@ $(function()
 
 								saveTaskNote($("#tasknoteUpdateForm"), $("#tasknoteupdatemodal"), this, json);
 				})
-				
+
 				// set height dynomicaly if no related contacts found in task details
-			
 
 });
 
@@ -313,7 +323,7 @@ $(function()
 								}
 								else
 								{
-									task = taskDetailView;
+												task = taskDetailView;
 
 								}
 								if (task)
@@ -479,4 +489,3 @@ function saveTaskNote(form, noteModal, element, note)
 
 				} });
 }
-
