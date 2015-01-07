@@ -14,9 +14,9 @@
         {{#if this.length}}
         <table class="table table-bordered showCheckboxes" url="core/api/filters/bulk" id="contact-filter-list">
             <thead>
-                <tr>
-                    <th>Name</th>
+                <tr>                    
                     <th>Owner</th>
+                    <th>Name</th>
                     <th>Created Date</th>
                 </tr>
             </thead>
@@ -37,7 +37,6 @@
 </script>
 
 <script id="contact-filter-model-template" type="text/html">
-<td data='{{id}}' class='data' style="cursor:pointer"> {{name}} </td>
 <td>  
   <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;max-width:5em;overflow:hidden;">
 	{{#if ownerPic}}
@@ -47,5 +46,6 @@
 	{{/if}}
   </div>
 </td>
+<td data='{{id}}' class='data' style="cursor:pointer"> {{name}} </td>
 <td><div><time class="created_time" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time></div></td>
 </script>
