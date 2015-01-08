@@ -301,35 +301,39 @@ function showCalendar()
 
 function showEventFilters()
 {
-				$.getJSON('/core/api/users/agileusers', function(users)
-				{
-								 var html = '', html1='';
-								 if(users){
-									 $.each(users,function(i,user){
-										 if(CURRENT_DOMAIN_USER.id == user.domain_user_id)
-											 html1 = '<option value='+user.id+'>Me</option>';
-										 else
-											 html += '<option value='+user.id+'>'+user.domainUser.name+'</option>';
-									 });
-									 html += '<option value="">Any</option>';
-								 }
-								 $('#event-owner').html(html1+html);
-								$('#filter_options').show();
+	$('#filter_options').show();
 
 
-								if (readCookie("agile_calendar_view"))
-												$('#filter_options .calendar-view').hide();
-								else
-												$('#filter_options .list-view').hide();
+	if (readCookie("agile_calendar_view"))
+					$('#filter_options .calendar-view').hide();
+	else
+					$('#filter_options .list-view').hide();
+	
+	if (readCookie('event-filters'))
+	{
+					var eventFilters = JSON.parse(readCookie('event-filters'));
+					$('#event-owner').val(eventFilters.owner_id);
+					$('#event_type').val(eventFilters.type);
+	}
 
-								if (readCookie('event-filters'))
-								{
-												var eventFilters = JSON.parse(readCookie('event-filters'));
-												$('#event-owner').val(eventFilters.owner_id);
-												$('#event_type').val(eventFilters.type);
-								}
-				});
+}
 
+function buildEventFilters()
+{
+	$.getJSON('/core/api/users/agileusers', function(users)
+			{
+							 var html = '', html1='';
+							 if(users){
+								 $.each(users,function(i,user){
+									 if(CURRENT_DOMAIN_USER.id == user.domain_user_id)
+										 html1 = '<option value='+user.id+'>Me</option>';
+									 else
+										 html += '<option value='+user.id+'>'+user.domainUser.name+'</option>';
+								 });
+								 html += '<option value="">Any</option>';
+							 }
+							 $('#event-owner').html(html1+html);
+			});
 }
 
 function loadDefaultFilters(callback)
@@ -340,7 +344,6 @@ function loadDefaultFilters(callback)
 				{
 								$.getJSON('/core/api/users/agileusers', function(users)
 								{
-												var html = '';
 												if (users)
 												{
 																$.each(users, function(i, user)
