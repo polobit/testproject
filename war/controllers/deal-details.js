@@ -123,8 +123,11 @@ $('#deal-owner').live('click', function(e)
 
 $('#opportunity-actions-delete').live('click', function(e)
 {
+	e.preventDefault();
+	
 	  if(!confirm("Are you sure you want to delete?"))
 			return;
+	  
       
       var id = $(this).closest('.deal_detail_delete').attr('data');
 	
