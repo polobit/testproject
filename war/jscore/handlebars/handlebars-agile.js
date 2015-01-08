@@ -607,6 +607,14 @@ function getContactCustomProperties(items)
 			fields.push(items[i]);
 		}
 	}
+	
+	//For getting custom fields
+	if(App_Contacts.customFieldsList == null || App_Contacts.customFieldsList == undefined){
+		App_Contacts.customFieldsList = new Base_Collection_View({ url : '/core/api/custom-fields/position', sort_collection : false, restKey : "customFieldDefs",
+			templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
+		App_Contacts.customFieldsList.collection.fetch();
+	}
+	
 	//Added for formula type custom field
 	var type='';
 	if(App_Contacts.customFieldsList!=undefined && App_Contacts.customFieldsList!=null){
