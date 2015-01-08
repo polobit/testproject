@@ -8,7 +8,10 @@ function startGettingDeals(criteria, pending)
 		$('#new-opportunity-list-paging').html(html);
 		return;
 	}
-		
+	if(readCookie('agile_deal_track')){
+		if(readCookie('agile_deal_track') != pipeline_id)
+			createCookie('agile_deal_track',pipeline_id);
+	}
 	var milestones = trackListView.collection.get(pipeline_id).toJSON().milestones.split(',');
 	console.log(milestones);
 	createDealsNestedCollection(pipeline_id,milestones);

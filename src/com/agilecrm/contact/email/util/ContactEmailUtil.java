@@ -1,6 +1,7 @@
 package com.agilecrm.contact.email.util;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,6 +32,9 @@ import com.agilecrm.user.util.SocialPrefsUtil;
 import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 
 /**
  * <code>ConactEmailUtil</code> is the utility class for {@link ContactEmail}.
@@ -107,7 +111,7 @@ public class ContactEmailUtil
 	    {
 		contactId = contact.id.toString();
 		saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, signature, contact.id, openTrackerId,
-			documentIds);
+		        documentIds);
 	    }
 	    else
 	    {
@@ -122,7 +126,7 @@ public class ContactEmailUtil
 		    {
 			contactId = contact.id.toString();
 			saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, signature, contact.id,
-				openTrackerId, documentIds);
+			        openTrackerId, documentIds);
 		    }
 		}
 	    }
@@ -475,7 +479,7 @@ public class ContactEmailUtil
 
 	return signature;
     }
-    
+
     /**
      * Fetches emails from server, server can be either IMAP,Microsoft Exchange
      * Fetches emails based on pageSize and cursor
@@ -528,7 +532,6 @@ public class ContactEmailUtil
 	return emailsList;
     }
 
-
     /**
      * Gets the list of synced email account names of this Agile user
      * 
@@ -537,9 +540,11 @@ public class ContactEmailUtil
     public static EmailPrefs getEmailPrefs()
     {
 	EmailPrefs emailPrefs = new EmailPrefs();
+	AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	boolean hasEmailAccountsConfigured = false;
+	boolean hasSharedEmailAccounts = false;
 	try
 	{
-	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
 	    DomainUser domainUser = agileUser.getDomainUser();
 	    if (domainUser != null)
 	    {
@@ -550,21 +555,138 @@ public class ContactEmailUtil
 	    Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
 	    SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(agileUser, socialPrefsTypeEnum);
 	    if (gmailPrefs != null)
+	    {
 		emailPrefs.setGmailUserName(gmailPrefs.email);
+		emailPrefs.setHasEmailAccountsConfigured(true);
+	    }
 	    // Get Imap prefs
 	    IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(agileUser);
 	    if (imapPrefs != null)
+	    {
 		emailPrefs.setImapUserName(imapPrefs.user_name);
+		emailPrefs.setHasEmailAccountsConfigured(true);
+	    }
 	    // Get Office365 prefs
 	    OfficeEmailPrefs officePrefs = OfficeEmailPrefsUtil.getOfficePrefs(agileUser);
 	    if (officePrefs != null)
+	    {
 		emailPrefs.setExchangeUserName(officePrefs.user_name);
+		emailPrefs.setHasEmailAccountsConfigured(true);
+	    }
+	    Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
+	    List<String> sharedGmailPrefs = getSharedGmailPrefs(agileUserKey);
+	    emailPrefs.setSharedGmailUserNames(sharedGmailPrefs);
+	    List<String> sharedImapPrefs = getSharedIMAPPrefs(agileUserKey);
+	    emailPrefs.setSharedImapUserNames(sharedImapPrefs);
+	    List<String> sharedOfficePrefs = getSharedToOfficePrefs(agileUserKey);
+	    emailPrefs.setSharedExchangeUserNames(sharedOfficePrefs);
+
+	    if (gmailPrefs != null || imapPrefs != null || officePrefs != null)
+		hasEmailAccountsConfigured = true;
+
+	    if ((sharedGmailPrefs != null && sharedGmailPrefs.size() > 0)
+		    || (sharedImapPrefs != null && sharedImapPrefs.size() > 0)
+		    || (sharedOfficePrefs != null && sharedOfficePrefs.size() > 0))
+		hasSharedEmailAccounts = true;
+
+	    emailPrefs.setHasEmailAccountsConfigured(hasEmailAccountsConfigured);
+	    emailPrefs.setHasSharedEmailAccounts(hasSharedEmailAccounts);
+
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	}
+
 	return emailPrefs;
+    }
+    /**
+	 * Returns emails opened in specific duration
+	 * 
+	 * @param {@Link Long} - minTime, {@Link Long} - maxTime
+	 * @return {@Link List<ContactEmail>}
+	 */
+	public static List<ContactEmail> getEmailsOpened(Long minTime,Long maxTime){
+		List<ContactEmail> contactEmailsList=null;
+		try {
+			contactEmailsList = dao.ofy().query(ContactEmail.class).filter("email_opened_at >= ", minTime).filter("email_opened_at <= ", maxTime).filter("is_email_opened", true).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return contactEmailsList;
+	}
+	/**
+	 * Gets emails list sent by each user in specific duration
+	 * 
+	 * @param {@Link String} - userEmail,{@Link Long} - minTime, {@Link Long} - maxTime
+	 * @return {@Link List<ContactEmail>}
+	 */
+	public static List<ContactEmail> getEmailsSent(DomainUser domainUser,Long minTime,Long maxTime){
+		List<ContactEmail> contactEmailsList=null;
+		try {
+			contactEmailsList = dao.ofy().query(ContactEmail.class).filter("from", domainUser.name+" <"+domainUser.email+">").filter("date_secs >= ", minTime*1000).filter("date_secs <= ", maxTime*1000).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return contactEmailsList;
+	}
+    /**
+     * Gets list of Shared Gmail prefs with this Current User
+     * 
+     * @return
+     */
+    private static List<String> getSharedGmailPrefs(Key<AgileUser> agileUserKey)
+    {
+	Objectify ofy = ObjectifyService.begin();
+	// Fetching sharedSocialPrefs
+	SocialPrefs.Type type = SocialPrefs.Type.GMAIL;
+	List<SocialPrefs> sharedSocialPrefs = ofy.query(SocialPrefs.class).filter("sharedWithUsers", agileUserKey)
+	        .filter("type", type).list();
+	List<String> sharedSocialUsers = new ArrayList<String>();
+	for (SocialPrefs socialPrefs : sharedSocialPrefs)
+	{
+	    sharedSocialUsers.add(socialPrefs.email);
+	}
+	return sharedSocialUsers;
+    }
+
+    /**
+     * Gets list of Shared IMAP prefs with this current user
+     * 
+     * @param agileUserKey
+     * @return
+     */
+    private static List<String> getSharedIMAPPrefs(Key<AgileUser> agileUserKey)
+    {
+	// Fetching sharedImapPrefs
+	Objectify ofy = ObjectifyService.begin();
+	List<IMAPEmailPrefs> sharedImapPrefs = ofy.query(IMAPEmailPrefs.class).filter("sharedWithUsers", agileUserKey)
+	        .list();
+	List<String> sharedImapUsers = new ArrayList<String>();
+	for (IMAPEmailPrefs imapEmailPrefs : sharedImapPrefs)
+	{
+	    sharedImapUsers.add(imapEmailPrefs.user_name);
+	}
+	return sharedImapUsers;
+    }
+
+    /**
+     * Gets list of Shared Office prefs with this current user
+     * 
+     * @param agileUserKey
+     * @return
+     */
+    private static List<String> getSharedToOfficePrefs(Key<AgileUser> agileUserKey)
+    {
+	Objectify ofy = ObjectifyService.begin();
+	List<OfficeEmailPrefs> sharedOfficePrefs = ofy.query(OfficeEmailPrefs.class)
+	        .filter("sharedWithUsers", agileUserKey).list();
+	List<String> sharedOfficeUsers = new ArrayList<String>();
+	for (OfficeEmailPrefs officeEmailPrefs : sharedOfficePrefs)
+	{
+	    sharedOfficeUsers.add(officeEmailPrefs.user_name);
+	}
+	return sharedOfficeUsers;
     }
 
 }

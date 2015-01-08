@@ -242,7 +242,14 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 		url: url,
 		type: 'POST',
 		data: json,
+		contentType : "application/x-www-form-urlencoded",
 		success: function() {
+			
+			if(url=='core/api/tasks/bulk'){
+				var due_task_count=getDueTasksCount();
+				$('#due_tasks_count').html(due_task_count);
+			}
+			
 			$(".bulk-delete-loading").remove();	
 			
 			if($(table).attr('id') == "contacts")
@@ -281,7 +288,8 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 					var $removeItem = $( '#' + data.id );
 					$('#timeline').isotope('remove', $removeItem);
 				});
-			}			
+			}	
+			
 		}
 	});
 }

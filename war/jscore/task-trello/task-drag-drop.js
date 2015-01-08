@@ -124,7 +124,7 @@ function updateDraggedTask(oldTask, criteria, oldTaskListOwnerId, oldTaskListId,
 		// Criteria is due
 		if (oldTask.taskOwner)
 			oldTask.owner_id = oldTask.taskOwner.id;
-		oldTask["due"] = getNewDueDate(newTaskListId);
+		oldTask["due"] = getNewDueDateBasedOnTime(newTaskListId,oldTask['due']);
 	}
 	else if (fieldToChange == "taskOwner.name")
 	{
@@ -202,5 +202,7 @@ function saveAfterDrop(oldTask, criteria, newTaskListId, newTaskListOwnerId, tas
 
 		// Change count of new task list.
 		changeTaskCount(modelNewTaskList[0].toJSON(), true);
+		var due_task_count=getDueTasksCount();
+		$('#due_tasks_count').html(due_task_count);
 	} });
 }

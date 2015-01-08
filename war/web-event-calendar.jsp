@@ -15,7 +15,7 @@ System.out.println(url);
 String[] ar=url.split("/");
 String scheduleid=ar[ar.length-1];
 URL ur=new URL(url);
-String d_name=NamespaceUtil.getNamespaceFromURL(ur);
+String d_name= NamespaceUtil.getNamespaceFromURL(ur);
 System.out.println(d_name);
 System.out.println("====================================domainname from url");
 
@@ -56,6 +56,10 @@ if (scheduleid != null)
           
 	      AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
 	      System.out.println("agileUser " + agileUser);
+	      if(agileUser==null){
+		  out.print("Sorry, user is not enrolled with Agile CRM.");
+		  return;
+	      }
 	      	
 	      UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
 	      System.out.println("userPrefs " + userPrefs.pic);

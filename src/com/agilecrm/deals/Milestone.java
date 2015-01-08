@@ -42,10 +42,12 @@ public class Milestone
     @NotSaved(IfDefault.class)
     public String name;
 
+    public boolean isDefault = false;
+
     /**
      * Milestone Dao
      */
-    private static ObjectifyGenericDao<Milestone> dao = new ObjectifyGenericDao<Milestone>(Milestone.class);
+    public static ObjectifyGenericDao<Milestone> dao = new ObjectifyGenericDao<Milestone>(Milestone.class);
 
     /**
      * Default Milestone

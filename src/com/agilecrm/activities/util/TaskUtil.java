@@ -13,6 +13,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.googlecode.objectify.Key;
@@ -253,8 +254,8 @@ public class TaskUtil
 
 	// Gets list of tasks filtered on given conditions
 	List<Task> dueTasks = dao.ofy().query(Task.class)
-		.filter("owner", new Key<DomainUser>(DomainUser.class, domainUserId)).filter("due >", startTime)
-		.filter("due <=", endTime).filter("is_complete", false).list();
+	        .filter("owner", new Key<DomainUser>(DomainUser.class, domainUserId)).filter("due >", startTime)
+	        .filter("due <=", endTime).filter("is_complete", false).list();
 
 	return dueTasks;
     }
@@ -262,8 +263,8 @@ public class TaskUtil
     public static List<Task> getTasksRelatedToCurrentUser()
     {
 	return dao.ofy().query(Task.class)
-		.filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-		.order("-created_time").list();
+	        .filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+	        .order("-created_time").list();
     }
 
     /**
@@ -387,7 +388,7 @@ public class TaskUtil
     public static int getTaskCountForContact(String taskType, Long contactId) throws Exception
     {
 	Query<Task> query = dao.ofy().query(Task.class)
-		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
+	        .filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
 
 	if (!StringUtils.isEmpty(taskType))
 	    query.filter("type =", taskType);
@@ -409,7 +410,7 @@ public class TaskUtil
     public static List<Task> getContactSortedTasks(String taskType, Long contactId) throws Exception
     {
 	Query<Task> query = dao.ofy().query(Task.class)
-		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId)).order("due");
+	        .filter("related_contacts =", new Key<Contact>(Contact.class, contactId)).order("due");
 
 	if (!StringUtils.isEmpty(taskType))
 	    query.filter("type =", taskType);
@@ -478,16 +479,17 @@ public class TaskUtil
 	    }
 	    else if (type.equalsIgnoreCase("TODAY"))
 	    {
-		searchMap.put("due", startTime);
+		searchMap.put("due >=", startTime);
+		searchMap.put("due <", endTime);
 	    }
 	    else if (type.equalsIgnoreCase("TOMORROW"))
 	    {
-		searchMap.put("due >", startTime);
-		searchMap.put("due <=", endTime);
+		searchMap.put("due >=", endTime);
+		searchMap.put("due <", endTime + 86400);
 	    }
 	    else if (type.equalsIgnoreCase("LATER"))
 	    {
-		searchMap.put("due >", endTime);
+		searchMap.put("due >=", endTime + 86400);
 	    }
 
 	    if (StringUtils.isNotBlank(owner))
@@ -560,6 +562,63 @@ public class TaskUtil
 	{
 	    e.printStackTrace();
 	    return null;
+	}
+    }
+
+    /**
+     * Gets the list of tasks which have been pending for Today
+     * 
+     * @return List of tasks that have been pending for Today
+     */
+    public static List<Task> getTodayPendingTasks()
+    {
+	try
+	{
+	    // Gets Today's date
+	    DateUtil startDateUtil = new DateUtil();
+	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
+	    // Date startDate = new Date();
+	    // Long startTime = startDate.getTime() / 1000;
+
+	    // Gets Date after numDays days
+	    DateUtil endDateUtil = new DateUtil();
+	    Long endTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000) - 1;
+
+	    DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+
+	    // Gets list of tasks filtered on given conditions
+	    return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, domainUser.id))
+		    .filter("due >=", startTime).filter("due <=", endTime).filter("is_complete", false).limit(50)
+		    .list();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Gets the current user pending tasks upto today midnight
+     * 
+     * @return due tasks count upto today
+     */
+    public static int getOverDueTasksUptoTodayForCurrentUser()
+    {
+	try
+	{
+
+	    DateUtil due_date_util = new DateUtil();
+	    Long due_time = (due_date_util.addDays(1).toMidnight().getTime().getTime() / 1000) - 1;
+	    int count = dao.ofy().query(Task.class)
+		    .filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+		    .filter("due <", due_time).filter("is_complete", false).count();
+	    return count;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return 0;
 	}
     }
 
