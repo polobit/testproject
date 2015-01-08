@@ -360,5 +360,11 @@
         <property name="related_deals" direction="asc"/>
         <property name="created_time" direction="desc"/>
     </datastore-index>
+    
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="campaignStatus.status" direction="asc"/>
+         <property name="id" direction="asc"/>
+        <property name="campaignStatus.campaign_id" direction="desc"/>
+	</datastore-index>
 
 </datastore-indexes>
