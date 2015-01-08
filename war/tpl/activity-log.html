@@ -51,7 +51,7 @@
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>
 Created Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}} '{{label}}'{{/if}} <br/>
 <span class="activities_second_line">
@@ -85,7 +85,7 @@ Created Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
 Completed Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
 <span class="activities_second_line">
@@ -111,7 +111,7 @@ Completed Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}<
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
  Deleted Task '{{label}}' <br/>
 <span class="activities_second_line">
@@ -137,7 +137,7 @@ Completed Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}<
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>
 {{#if this.entityObject}}	
 {{#get_event_rescheduled custom3}} 
@@ -186,7 +186,7 @@ Changed Due date of Task '{{../label}}'<br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
 Reassigned Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <span class="activities_second_line">
@@ -213,7 +213,7 @@ Reassigned Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>
 {{#if related_contact_ids}}
 {{#if_equals "removed_all_relatedcontacts" custom3}}
@@ -260,7 +260,7 @@ Modified Task. <br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
 Changed Progress of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}  <br/>   
 <span class="activities_second_line">
@@ -286,7 +286,7 @@ Changed Progress of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" 
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
 Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>  
 <span class="activities_second_line"> 
@@ -312,7 +312,7 @@ Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>	
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>
 {{#if_equals "1" custom1}}
   Deleted {{custom1}} Task <br/>
@@ -351,7 +351,7 @@ Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>	
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>
  Created Deal {{#if entityObject}}<a href="#deal/{{entity_id}}">{{label}}</a> {{else}}'{{label}}'{{/if}}<br/>
 <span class="activities_second_line">
@@ -379,7 +379,7 @@ Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
  Won Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
 <span class="activities_second_line">
@@ -404,7 +404,7 @@ Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>
  Modified Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}  <br/> 
 <span class="activities_second_line">
@@ -429,7 +429,7 @@ Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
 Deleted Deal '{{label}}' <br/> 
 <span class="activities_second_line">
@@ -453,7 +453,7 @@ Deleted Deal '{{label}}' <br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">	
+<div class="activity-tag">	
 <div>
 {{#if related_contact_ids}}
 {{#if_equals "removed_all_relatedcontacts" custom3}}
@@ -503,7 +503,7 @@ Modified  Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>	
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>
 Added note to Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <span class="activities_second_line">
@@ -529,7 +529,7 @@ Added note to Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{lab
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>
 Reassigned Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} to {{custom1}}<br/>
 <span class="activities_second_line">
@@ -553,7 +553,7 @@ Reassigned Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
 Changed Milestone of Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <span class="activities_second_line"> 
@@ -578,7 +578,7 @@ Changed Milestone of Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}"
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>	
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>
  Lost Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <span class="activities_second_line">
@@ -604,7 +604,7 @@ Changed Milestone of Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}"
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
     {{#if_equals "1" custom1}}
   Deleted {{custom1}} Deal<br/>
@@ -642,7 +642,7 @@ Changed Milestone of Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}"
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
  Created Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <span class="activities_second_line">
@@ -672,7 +672,7 @@ Changed Milestone of Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}"
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 {{#if related_contact_ids}}
 {{#if_equals "removed_all_relatedcontacts" custom3}}
 Removed Contact(s) from Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
@@ -719,7 +719,7 @@ Modified Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
     {{#if_equals "1" custom1}}
   Deleted {{custom1}} Event <br/>
@@ -756,7 +756,7 @@ Modified Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
 Deleted Event '{{label}}'<br/>
 <span class="activities_second_line">
@@ -781,7 +781,7 @@ Deleted Event '{{label}}'<br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 
 <div>
 
@@ -837,7 +837,7 @@ Rescheduled Event '{{../label}}'<br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>
 Added note to contact <a href="#contact/{{entity_id}}">{{label}}</a><br/>	
 <span class="activities_second_line">
@@ -862,7 +862,7 @@ Added note to contact <a href="#contact/{{entity_id}}">{{label}}</a><br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>
 Sent email to <a href="#contact/{{entity_id}}">{{label}}</a><br/>	
 <span class="activities_second_line"> 
@@ -916,7 +916,7 @@ Added  tag to {{custom3}} contacts<br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
  Removed tag from {{custom3}} contacts<br/>
 <span class="activities_second_line">
@@ -942,7 +942,7 @@ Added  tag to {{custom3}} contacts<br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>
 	{{#if_equals "1" custom3}}
 		Added {{custom3}} contact to Campaign<br/>
@@ -976,7 +976,7 @@ Added {{custom3}} Contacts to Campaign <br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div >
 {{#if_equals "1" custom3}}	
 Sent a email to {{custom3}} contact<br/>
@@ -1006,7 +1006,7 @@ Sent a bulk email to {{custom3}} contacts<br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
 {{#if_equals "1" custom3}}
 Sent a email to {{custom3}} company<br/>
@@ -1042,7 +1042,7 @@ Sent a bulk email to {{custom3}} companies<br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
 {{#if_equals "1" custom3}}
 Changed owner for {{custom3}} contact <br/>
@@ -1071,7 +1071,7 @@ Changed owner for {{custom3}} contact <br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
 {{#if_equals "1" custom3}}
 Changed owner for {{custom3}} company <br/>
@@ -1105,7 +1105,7 @@ Changed owner for {{custom3}} company <br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>
 {{#if_equals "1" custom3}}
 		Deleted {{custom3}} Contact
@@ -1128,7 +1128,7 @@ Changed owner for {{custom3}} company <br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>
 {{#if_equals "1" custom3}}
 		Deleted {{custom3}} company
@@ -1160,7 +1160,7 @@ Changed owner for {{custom3}} company <br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
 	Added <a href="#contact/{{entity_id}}">{{label}}</a> to Campaign <br/>
 <span class="activities_second_line">  
@@ -1217,7 +1217,7 @@ Added Tag to <a href="#contact/{{entity_id}}">{{label}}</a><br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>
 
 {{#if_equals "1" custom2}}
@@ -1257,7 +1257,7 @@ Added Tag to <a href="#contact/{{entity_id}}">{{label}}</a><br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
 {{#if_equals "1" custom2}}
    Removed Contact from Document {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
@@ -1289,7 +1289,7 @@ Added Tag to <a href="#contact/{{entity_id}}">{{label}}</a><br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>	
     {{#if_equals "1" custom1}}
   Deleted {{custom1}} Document <br/>
@@ -1322,7 +1322,7 @@ Deleted  {{custom1}} Documents<br/>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
+<div class="activity-tag">
 <div>
 {{#if_equals "incoming" custom2}}
 Call from {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
