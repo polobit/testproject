@@ -115,7 +115,7 @@ Completed Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}<
 <div>	
  Deleted Task '{{label}}' <br/>
 <span class="activities_second_line">
-{{#if related_contact_ids}}<i class="icon-tasks"></i> Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} was deleted. {{/if}} 
+{{#if related_contact_ids}}<i class="icon-tasks"></i> Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}. {{/if}} 
 </span>
 </div>
 <div>	
@@ -188,9 +188,9 @@ Changed Due date of Task '{{../label}}'<br/>
 	</div>
 <div class="pull-left activity-tag">
 <div>	
-Changed Owner of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+Reassigned Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <span class="activities_second_line">
-<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later.{{/unless}} Task Owner changed to '{{custom1}}'. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
+<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later.{{/unless}} Task Owner changed to {{custom1}}. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
 </span>	
 </div>
 	
@@ -217,27 +217,27 @@ Changed Owner of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{l
 <div>
 {{#if related_contact_ids}}
 {{#if_equals "removed_all_relatedcontacts" custom3}}
-Removed Contact from Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+Removed Contact(s) from Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
 <span class="activities_second_line">
 <i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Task.
 </span>
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
-Removed Contact from Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+Removed Contact(s) from Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
 <span class="activities_second_line">
 <i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Task.
 </span>
 {{/if_equals}} 
 {{#if_equals "added_relatedcontacts" custom3}}
-Added Contact to Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+Added Contact(s) to Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
 <span class="activities_second_line">
 <i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Task. 
 {{/if_equals}}
 {{else}}
 Modified Task. <br/>
-
+<span class="activities_second_line">
 <i class="icon-tasks"></i> <a href="#task/{{entity_id}}">{{label}}</a> Modified  
-
+</span>
 {{/if}} 
 </span>
 	</div>
@@ -457,25 +457,25 @@ Deleted Deal '{{label}}' <br/>
 <div>
 {{#if related_contact_ids}}
 {{#if_equals "removed_all_relatedcontacts" custom3}}
-Removed Contact from Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
+Removed Contact(s) from Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
 <span class="activities_second_line">
 <i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}} {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from  Deal {{#if this.entityObject}}({{currencySymbol}} {{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}.{{/if}} 
 </span>
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
-Removed Contact from Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
+Removed Contact(s) from Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
 <span class="activities_second_line">
 <i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}  {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Deal {{#if this.entityObject}}({{currencySymbol}} {{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}.{{/if}}
 </span>
 {{/if_equals}} 
 {{#if_equals "added_relatedcontacts" custom3}}
-Added Contact to Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+Added Contact(s) to Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}{{label}}{{/if}}<br/>
 <span class="activities_second_line">
  <i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Deal {{#if this.entityObject}}({{currencySymbol}} {{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}.{{/if}}
 </span>
 {{/if_equals}}
 {{else}}
-Modified  Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}{{label}}{{/if}}. <br/>
+Modified  Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}. <br/>
 <span class="activities_second_line">
 {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
 </span>
@@ -531,7 +531,7 @@ Added note to Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{lab
 	</div>
 <div class="pull-left activity-tag">
 <div>
-Assigned Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} to '{{custom1}}'<br/>
+Reassigned Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} to {{custom1}}<br/>
 <span class="activities_second_line">
 <i class="icon-money icon-white"></i> {{#unless entityObject}} Deal deleted later.{{/unless}} Deal{{#if this.entityObject}}({{currencySymbol}} {{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}} assigned to '{{custom1}}'. {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}	
 </span>
@@ -675,26 +675,30 @@ Changed Milestone of Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}"
 <div class="pull-left activity-tag">
 {{#if related_contact_ids}}
 {{#if_equals "removed_all_relatedcontacts" custom3}}
-Removed Contact from Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
+Removed Contact(s) from Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
 <span class="activities_second_line">
 <i class="icon-calendar icon-white"></i> {{#unless this.entityObject}}Event deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Event. 
 </span>
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
-Removed Contact from Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
+Removed Contact(s) from Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
 <span class="activities_second_line">
 <i class="icon-calendar icon-white"></i> {{#unless this.entityObject}}Event deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Event.
 {{/if_equals}} 
 </span>
 {{#if_equals "added_relatedcontacts" custom3}}
-Added Contact to Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
+Added Contact(s) to Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
 <span class="activities_second_line">
 <i class="icon-calendar icon-white"></i> {{#unless this.entityObject}}Event deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Event.
  {{/if_equals}}
 </span>
 {{else}}
-Modified Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
+Modified Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
+<span class="activities_second_line">
+{{#if related_contact_ids}}
+<i class="icon-calendar icon-white"></i>Event related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
 {{/if}}	
+</span>
 <div>
 
 </div>
@@ -862,7 +866,7 @@ Added note to contact <a href="#contact/{{entity_id}}">{{label}}</a><br/>
 <div>
 Sent email to <a href="#contact/{{entity_id}}">{{label}}</a><br/>	
 <span class="activities_second_line"> 
-<i class="icon-envelope-alt"></i> Email subject- <a href="" class="email-details" data="{{id}}">{{custom3}}</a> 
+<i class="icon-envelope-alt"></i> Email subject - <a href="" class="email-details" data="{{id}}">{{custom3}}</a> 
 </span>
 </div>
 <div>
@@ -1043,12 +1047,12 @@ Sent a bulk email to {{custom3}} companies<br/>
 {{#if_equals "1" custom3}}
 Changed owner for {{custom3}} contact <br/>
 <span class="activities_second_line">
-<i class="icon-user icon-white"></i> Contact assigned to '{{custom2}}'.
+<i class="icon-user icon-white"></i> Contact assigned to {{custom2}}.
 </span>
 {{else}}
 	Changed owner for {{custom3}} contacts <br/>
 <span class="activities_second_line">
-<i class="icon-user icon-white"></i> Contacts assigned to '{{custom2}}'.
+<i class="icon-user icon-white"></i> Contacts assigned to {{custom2}}.
 </span>
 {{/if_equals}}
 </div>
@@ -1072,12 +1076,12 @@ Changed owner for {{custom3}} contact <br/>
 {{#if_equals "1" custom3}}
 Changed owner for {{custom3}} company <br/>
 <span class="activities_second_line">
-<i class="icon-user icon-white"></i> Company assigned to '{{custom2}}'.
+<i class="icon-user icon-white"></i> Company assigned to {{custom2}}.
 </span>
 {{else}}
 	Changed owner for {{custom3}} companies <br/>
 <span class="activities_second_line">
-<i class="icon-user icon-white"></i> Companies assigned to '{{custom2}}'.
+<i class="icon-user icon-white"></i> Companies assigned to {{custom2}}.
 </span>
 {{/if_equals}}
 </div>
@@ -1217,18 +1221,18 @@ Added Tag to <a href="#contact/{{entity_id}}">{{label}}</a><br/>
 <div>
 
 {{#if_equals "1" custom2}}
-   Added Contact to Document <a href="{{custom1}}" target="_blank">{{label}}</a><br/>
+   Added Contact to Document {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
 <span class="activities_second_line">   
 <i class="icon-file icon-white"></i> {{#unless entityObject}}Document deleted later. {{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Document.{{/if}}
 </span>
 {{else}} 
 {{#if_equals "no related contacts" custom3}}
-   Added Document <a href="{{custom1}}" target="_blank">{{label}}</a><br/>
+   Added Document {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
 <span class="activities_second_line">   
 <i class="icon-file icon-white"></i> {{#unless entityObject}}Document deleted later. {{/unless}}{{#if entityObject}}Document type - {{network entityObject.network_type}}{{/if}}
 </span>
 {{else}}
-	 Added Contacts to Document <a href="{{custom1}}" target="_blank">{{label}}</a> <br/>
+	 Added Contacts to Document {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <span class="activities_second_line">
 <i class="icon-file icon-white"></i> {{#unless entityObject}}Document deleted later. {{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Document.{{/if}}
 </span>
@@ -1256,12 +1260,12 @@ Added Tag to <a href="#contact/{{entity_id}}">{{label}}</a><br/>
 <div class="pull-left activity-tag">
 <div>	
 {{#if_equals "1" custom2}}
-   Removed Contact from Document <a href="{{custom1}}" target="_blank">{{label}}</a><br/>
+   Removed Contact from Document {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
 <span class="activities_second_line"> 
   <i class="icon-file"></i> {{#unless entityObject}}Document deleted later.{{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Document.{{/if}} 
 </span>
 {{else}} 
- Removed Contacts from Document <a href="{{custom1}}" target="_blank">{{label}}</a><br/>
+ Removed Contacts from Document {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
 <span class="activities_second_line">
 <i class="icon-file"></i> {{#unless entityObject}}Document deleted later. {{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Document.{{/if}}
 </span>
