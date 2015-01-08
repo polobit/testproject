@@ -218,13 +218,18 @@
 <div style="display:block;" class="activity">
 <div class="activity-text-block" style="background: #f5f5f5;">
 	<span class="activity-block-owner">
-       
-        {{#if userPic}}
-        	 <img class="thumbnail img-inital"  src="{{userPic}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
-	{{else}}
-			<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px"/>
-	{{/if}}
-      <span class="owner-name">{{user.name}}</span>
+         {{#if user}}
+			{{#if userPic}}
+				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{userPic}}" >
+			{{else}}
+				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{defaultGravatarurl 40}}" >
+			{{/if}}
+		{{else}}
+			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
+		{{/if}}
+
+     <span class="owner-name">{{user.name}}</span>
+
 	</span>
 	<h4><b>{{get_normal_activity_type activity_type}}</b></h4>
 
