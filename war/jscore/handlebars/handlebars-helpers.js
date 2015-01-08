@@ -1219,8 +1219,12 @@ $(function()
 				 */
 				Handlebars.registerHelper('numberWithCommas', function(value)
 				{
-								if (value)
-												return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
+					if(value==0){
+						return value;
+					}			
+					if (value){
+									return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
+								}
 				});
 
 				/**
@@ -3812,6 +3816,9 @@ $(function()
 	Handlebars.registerHelper('numberWithCommasForActivities', function(value)
 	{
 		value = parseFloat(value);
+		if(value==0){
+			return value;
+		}	
 		if (value)
 			return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
 	});
