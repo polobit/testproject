@@ -5,6 +5,8 @@ import java.net.URLEncoder;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.OfficeEmailPrefs;
 import com.agilecrm.user.util.OfficeEmailPrefsUtil;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 
 public class ContactOfficeUtil
 {
@@ -30,6 +32,33 @@ public class ContactOfficeUtil
 
 		return ContactOfficeUtil.getOfficeURLForPrefs(officePrefs, searchEmail, offset, count);
 	}
+	
+	/**
+	     * Returns url to fetch emails from given "fromemail" office  account.
+	     * 
+	     * @param searchEmail
+	     *            - search email-id.
+	     * @param fromEmail
+	     *            - username of the office365 account
+	     * 
+	     * @param offset
+	     *            - offset.
+	     * @param count
+	     *            - count or limit to number of emails.
+	     * @return String
+	     */
+	    public static String getOfficeURL(AgileUser agileUser, String fromEmail, String searchEmail, String offset,
+		    String count)
+	    {
+		// Get Office Exchange Prefs
+		Objectify ofy = ObjectifyService.begin();
+		OfficeEmailPrefs officePrefs = ofy.query(OfficeEmailPrefs.class).filter("user_name", fromEmail).get();
+
+		if (officePrefs == null)
+		    return null;
+
+		return ContactOfficeUtil.getOfficeURLForPrefs(officePrefs, searchEmail, offset, count);
+	    }
 
 	/**
 	 * Returns Office url

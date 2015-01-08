@@ -1,5 +1,8 @@
 package com.agilecrm.user;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -98,6 +101,17 @@ public class IMAPEmailPrefs
     @Parent
     @JsonIgnore
     private Key<AgileUser> agileUser;
+    
+    
+    /**
+     * Sharing this object following list of users
+     */
+    @JsonIgnore
+    @NotSaved(IfDefault.class)
+    public List<Key<AgileUser>> sharedWithUsers;
+
+    @NotSaved
+    public List<String> shared_with_users_ids;
 
     /**
      * IMAPEmailPrefs Dao.
@@ -166,6 +180,26 @@ public class IMAPEmailPrefs
     {
 	return agileUser;
     }
+    
+    /**
+     * Returns list of users, to which current user IMAP settings are sharing
+     * 
+     * @return
+     */
+    public List<Key<AgileUser>> getSharedWithUsers()
+    {
+	return sharedWithUsers;
+    }
+
+    /**
+     * Sets list of users, to which current user IMAP settings are sharing
+     * 
+     * @return
+     */
+    public void setSharedWithUsers(List<Key<AgileUser>> sharedUsers)
+    {
+	this.sharedWithUsers = sharedUsers;
+    }
 
     /**
      * Saves IMAPEmailPrefs.
@@ -176,6 +210,17 @@ public class IMAPEmailPrefs
 	try
 	{
 	    IMAPEmailPrefsUtil.checkImapPrefs(this);
+	  //Sharing current prefs with specified users
+	    if (shared_with_users_ids != null)
+	    {
+		sharedWithUsers = new ArrayList<Key<AgileUser>>();
+		for (int i = 0; i < shared_with_users_ids.size(); i++)
+		{
+		    Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, Long.parseLong(shared_with_users_ids
+			    .get(i)));
+		    sharedWithUsers.add(userKey);
+		}
+	    }
 	}
 	catch (Exception e)
 	{

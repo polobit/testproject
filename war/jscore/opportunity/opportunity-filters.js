@@ -58,6 +58,7 @@ $(function () {
 		$('#dealsFilterForm select.filter_type').val('equals');
 		$('#filter_options .between').hide();
 		$('#filter_options .equals').show();
+		$('#dealsFilterForm #archived').val('false');
 		$('#filter_options').find('.control-group').each(function(index){
 			if($(this).find('.controls').height()>0)
 				$(this).find('a.changeIcon').trigger('click');
@@ -76,20 +77,20 @@ function setupDealFilters(cel){
 	var el = $('#filter_options');
 	// Fills owner select element
 	
-	populateUsers("owners-list", el, undefined, undefined, function(data){
+	populateUsers("owners-list-filters", el, undefined, undefined, function(data){
 		
-		$("#deals-filter").find("#owners-list").html(data);
+		$("#deals-filter").find("#owners-list-filters").html(data);
 		//Select none by default.
 		if(readCookie('deal-filters')){
 			var json = $.parseJSON(readCookie('deal-filters'));
 		}
-		$("#owners-list", $("#dealsFilterForm")).closest('div').find('.loading-img').hide();
+		$("#owners-list-filters", $("#dealsFilterForm")).closest('div').find('.loading-img').hide();
 	
 	// Populate pipeline in the select box.
 	populateTracks(el, undefined, undefined, function(data){
 		//Select none by default.
 		$('#pipeline').val('');
-		$('#owners-list').val('');
+		$('#owners-list-filters').val('');
 		if(readCookie('deal-filters')){
 			var json = $.parseJSON(readCookie('deal-filters'));
 			$.each(json,function(key,value){
@@ -113,7 +114,7 @@ function setupDealFilters(cel){
 					if(key=='pipeline_id')
 						$('#pipeline').val(value);
 					else if(key=='owner_id')
-						$('#owners-list').val(value);
+						$('#owners-list-filters').val(value);
 					else if($('#'+key).hasClass('date'))
 						$('#'+key).val(new Date(value * 1000).format('mm/dd/yyyy'));
 					
@@ -155,6 +156,9 @@ function updateFilterColor(){
 		if(json.pipeline_id.length > 0)
 			filters_count++;
 	}
+	
+	if(json.archived != 'false')
+		filters_count++;
 	
 	if(filters_count > 0)
 	$('#show-filter-button').addClass('btn-primary');
