@@ -126,10 +126,10 @@
 							<li class="nav-bar-search">
 								<form id="searchForm" class=" navbar-search"
 									style="margin: 5px;">
-									<input id="searchText" type="text" style="line-height: 17px"
+									<input id="searchText" type="text" style="line-height: 17px;"
 										data-provide="typeahead"
 										class="typeahead typeahead_contacts search-query"
-										placeholder="Search"></input> <input id="search-results"
+										placeholder="Search"></input> <input id="search-results" 
 										type="image" src="img/SearchIcon.png" class="searchbox" />
 								</form>
 							</li>
@@ -145,6 +145,8 @@
 							</a>
 								<ul class="dropdown-menu" style="width: 25em; right: -11px;">
 								</ul></li>
+								
+								
 
 							<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 								data-toggle="dropdown" href="">Add New <i class='caret'></i></a>

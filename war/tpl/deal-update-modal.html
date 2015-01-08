@@ -91,6 +91,10 @@
 						</div>
 					</div>
 				</div>
+				<div class="control-group hidden">	
+					<label class="control-label">
+					<input type="checkbox" id="archived" class="input" name="archived" style="margin: 0px 5px;">Archive </label>
+				</div>
 				<div id="custom-field-deals">
 				</div>
 				<div class="control-group">
@@ -102,18 +106,17 @@
 				</div>
 				<div class="row-fluid">
 					    <div class="control-group">
-							<label for="notes" id="deal-note-label" class="control-label hide deal-note-label"><b>Notes</b></label>
-							<div class="controls deal-add-note">
-								<a href="#"><i class="icon-plus" /> Add Note</a>
-							</div>
+							
 							<div id="forNoteForm" class="controls"></div>
-							<ul id="notes" name="notes" class="notes"></ul>
+							<ul style="display:none;" id="notes" name="notes" class="notes"></ul>
 						</div>
 				</div>
 			</fieldset>
 		</form>
 	</div>
 	<div class="modal-footer">
+		<a href="#" class="btn" id="opportunity_archive" title="Archive deal">Archive</a>
+		<a href="#" class="btn" id="opportunity_unarchive" title="Move Deal from Archive to Active state">Restore</a>
 		<a href="#" class="btn btn-primary" id="opportunity_validate">Save
 			Changes</a> <span class="save-status"></span>
 	</div>
