@@ -22,6 +22,7 @@ var CalendarRouter = Backbone.Router.extend({
 								// rendar default view
 								// var view = readCookie("agile_calendar_view");
 								$('#content').html(getTemplate("calendar", {}));
+								buildEventFilters();
 								var view = readCookie("agile_calendar_view");
 								
 								if (view)
@@ -42,9 +43,6 @@ var CalendarRouter = Backbone.Router.extend({
 												// change it there too
 												head.js(LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
 												{
-													if (!readCookie('event-filters'))
-														loadDefaultFilters(showCalendar());
-													else
 														showCalendar();
 
 												});
