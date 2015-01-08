@@ -36,8 +36,9 @@
 			if (callback && typeof (callback) === "function")
 				callback(data);
 
-			// On save back to contacts list
-			Backbone.history.navigate("deals", { trigger : true });  
+			// On save back to deals list
+			//Backbone.history.navigate("deals", { trigger : true });  
+			App_Deals.deals();
 			
 			// If no_noty is given as error message, neglect noty
 			if(error_message === "no_noty")
