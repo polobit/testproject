@@ -634,9 +634,7 @@ function getContactCustomProperties(items)
 		for(var i=0;i<App_Contacts.customFieldsList.collection.models.length;i++){
 			var json={};
 			if(App_Contacts.customFieldsList.collection.models[i].get("scope")==type && App_Contacts.customFieldsList.collection.models[i].get("field_type")=="FORMULA"){
-				
-				var tplEle = Handlebars.compile(App_Contacts.customFieldsList.collection.models[i].get("field_data"));
-				var tplEleData = tplEle(datajson);
+				var tplEleData = Mustache.render(App_Contacts.customFieldsList.collection.models[i].get("field_data"),datajson);
 				var evalFlag = true;
 				var tplEleDataAftEval;
 				try{
