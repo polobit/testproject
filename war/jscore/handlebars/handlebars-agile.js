@@ -645,7 +645,7 @@ function getContactCustomProperties(items)
 				}
 				if(!evalFlag)
 					tplEleDataAftEval = tplEleData;
-				if(evalFlag){
+				if(evalFlag && tplEleDataAftEval!=undefined && tplEleDataAftEval!=null && tplEleDataAftEval!=""){
 					json.name=App_Contacts.customFieldsList.collection.models[i].get("field_label");
 					json.type="CUSTOM";
 					json.position=App_Contacts.customFieldsList.collection.models[i].get("position");
