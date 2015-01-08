@@ -27,26 +27,26 @@
             <div id="overdue-heading" style="display: none;"><b >Overdue</b>
 			&nbsp<small class="count" count="0">(10)</small></div>
 			<colgroup><col width="30px"><col width="99%"></colgroup>
-            <tbody id="overdue" style="display: inline;"></tbody>
+            <tbody id="overdue" style="display: inline;" route="task/" class="agile-edit-row"></tbody>
         </table>
         <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
             <div id="today-heading" style="display: none"><b >Today</b>	
 			&nbsp<small class="count" count="0">(10)</small></div>
 			<colgroup><col width="30px"><col width="99%"></colgroup>
-            <tbody id="today" style="display: inline;"></tbody>
+            <tbody id="today" style="display: inline;" route="task/" class="agile-edit-row"></tbody>
         </table>
         <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
             <div id="tomorrow-heading" style="display: none"><b >Tomorrow</b>
 			&nbsp<small class="count" count="0">(10)</small></div>
 			<colgroup><col width="30px"><col width="99%"></colgroup>
-            <tbody id="tomorrow" style="display: inline;"></tbody>
+            <tbody id="tomorrow" style="display: inline;" route="task/" class="agile-edit-row"></tbody>
         </table>
         <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
 		<div id="next-week-heading" style="display: none">
             <b >Later</b>
 			&nbsp<small class="count" count="0">(10)</small></div>
 			<colgroup><col width="30px"><col width="99%"></colgroup>
-            <tbody id="next-week" style="display: inline;"></tbody>
+            <tbody id="next-week" style="display: inline;" route="task/" class="agile-edit-row"></tbody>
         </table>
     </form>
 </section>
@@ -55,12 +55,12 @@
 </script>
 
 <script id="tasks-model-template" type="text/html">
-	<td style="border-top:1px dotted #DDD;"> <input type="checkbox" data='{{id}}' class='tasks-select'> </td>
+	<td style="border-top:1px dotted #DDD;" class="data" data="{{id}}"> <input type="checkbox" data='{{id}}' class='tasks-select'> </td>
 	<td style="width:100%!important;">
 		<div>
-  			<p style="word-break: break-word!important;-ms-word-break: break-all;word-break: break-all;">{{#is_link subject}}<b class="activate-link" style="white-space: normal!important;">{{else}}<b style="white-space: normal!important;">{{/is_link}}{{safe_string subject}}</b></p>
+  			<p style="word-break: break-word!important;-ms-word-break: break-all;word-break: break-all;">{{#is_link subject}}<b  style="white-space: normal!important;">{{else}}<b style="white-space: normal!important;">{{/is_link}}{{safe_string subject}}</b></p>
   			{{#if this.contacts}}
-				<p class="activate-link" style="white-space: nowrap;">{{#related_to_one contacts}}{{/related_to_one}}</p>
+				<p  style="white-space: nowrap;">{{#related_to_one contacts}}{{/related_to_one}}</p>
 			{{/if}}
   			<p style="margin:0px 0px 5px 0px;line-height: 20px;"> 
 				<span class="label">{{task_property type}}</span>

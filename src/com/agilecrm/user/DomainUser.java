@@ -426,11 +426,12 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    // If user is account owner then account owner should be set to true
 	    // when it is being updated
 	    this.is_account_owner = true;
-
+	    this.is_disabled = false;
 	    if (!is_admin)
 		throw new Exception(user.name + " is the owner of '" + user.domain
 			+ "' domain and should be an <b>admin</b>. You can change the Email and Name instead.");
 	}
+	
     }
 
     /**
@@ -514,6 +515,15 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    }
 
 	    sendPasswordChangedNotification(domainUser.encrypted_password);
+	}
+	else if(id != null && !is_account_owner)
+	{
+	    DomainUser user = DomainUserUtil.getDomainUser(id);
+	    
+	    // Checks if super user is disabled, and throws exception if super
+	    // is disabled
+	    checkSuperUserDisabled(user);
+	    checkAdminDisabled();
 	}
 
 	// Check if namespace is null or empty. Then, do not allow to be created
@@ -762,7 +772,41 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    {
 		menu_scopes = new LinkedHashSet<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
 	    }
-
+	    JSONObject domain_user_info = new JSONObject(info_json_string);
+	    Long created_time = domain_user_info.getLong("created_time");
+	    if(domain_user_info.has("last_logged_in_time"))
+	    {
+        	    Long last_logged_in_time = domain_user_info.getLong("last_logged_in_time");
+        	    
+        	    if(last_logged_in_time <= 1420732800)
+        	    {
+        		
+        		if (!menu_scopes.contains(NavbarConstants.ACTIVITY))
+        		{
+        		    if (menu_scopes.contains(NavbarConstants.REPORT))
+        		    {
+        			menu_scopes.remove(NavbarConstants.REPORT);
+        		        menu_scopes.add(NavbarConstants.ACTIVITY);
+        		        menu_scopes.add(NavbarConstants.REPORT);
+        		    }
+        		    else
+        			 menu_scopes.add(NavbarConstants.ACTIVITY);
+        		}
+        	    }
+	    }else if(created_time <= 1420732800)
+	    {
+		if (!menu_scopes.contains(NavbarConstants.ACTIVITY))
+		{
+		    if (menu_scopes.contains(NavbarConstants.REPORT))
+		    {
+			menu_scopes.remove(NavbarConstants.REPORT);
+		        menu_scopes.add(NavbarConstants.ACTIVITY);
+		        menu_scopes.add(NavbarConstants.REPORT);
+		    }
+		    else
+			 menu_scopes.add(NavbarConstants.ACTIVITY);
+		}
+	    }
 	}
 	catch (Exception e)
 	{

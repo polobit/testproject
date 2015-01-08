@@ -1,3 +1,5 @@
+
+
 $(function(){
 	
 	/**
@@ -27,6 +29,12 @@ $(function(){
        	else
        		saveDeal(form_id, modal_id, this, json, true);
 	});
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * To avoid showing previous errors of the modal.
@@ -100,7 +108,12 @@ $(function(){
     */
     $('#opportunities-model-list > tr > td:not(":first-child")').live('click', function(e) {
 		e.preventDefault();
-		updateDeal($(this).closest('tr').data());
+		$('.popover').remove();
+		var currentdeal=$(this).closest('tr').data();
+		Backbone.history.navigate("deal/"+currentdeal.id , {
+            trigger: true
+        });
+	//	updateDeal($(this).closest('tr').data());
 	});
     
     /**
@@ -108,7 +121,10 @@ $(function(){
      */
 	$('#dashboard-opportunities-model-list > tr').live('click', function(e) {
 		e.preventDefault();
-		updateDeal($(this).data());
+		var currentdeal=$(this).closest('tr').data();
+		Backbone.history.navigate("deal/"+currentdeal.id , {
+            trigger: true
+        });
 	});
 	
 	$('.milestones > li').live('mouseenter', function () {
@@ -198,12 +214,12 @@ $(function(){
 	$("#opportunity_archive").die().live('click',function(e){
 		e.preventDefault();
 		$('#archived',$('#opportunityUpdateForm')).attr('checked','checked');
-		$("#opportunity_validate").trigger('click');
+		$("#opportunityUpdateModal #opportunity_validate").trigger('click');
 	});
 	$("#opportunity_unarchive").die().live('click',function(e){
 		e.preventDefault();
 		$('#archived',$('#opportunityUpdateForm')).removeAttr('checked');
-		$("#opportunity_validate").trigger('click');
+		$('#opportunityUpdateModal #opportunity_validate').trigger('click');
 	});
 	
 	
@@ -340,8 +356,7 @@ function updateDeal(ele, editFromMilestoneView)
 	// Checking Whether the edit is from milestone view,
 	// if it is we are passing JSON object so no need to convert
 	var value = (editFromMilestoneView ? ele : ele.toJSON());
-	if(value.archived == true)
-		return;
+
 	add_recent_view(new BaseModel(value));
 	
 	var dealForm = $("#opportunityUpdateForm");
@@ -668,10 +683,38 @@ if(json.close_date==0)
 				}
 
 			}
+			else if (Current_Route == 'portlets') 
+			{
+				if(App_Portlets.currentPosition && App_Portlets.pendingDeals && App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)]){
+					if (isUpdate)
+						App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+					// Updates task list view
+					if(json.milestone!="Won" && json.milestone!="Lost")
+						App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+					App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)].render(true);
+				}
+				if(App_Portlets.currentPosition && App_Portlets.dealsWon && App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)]){
+					if (isUpdate)
+						App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+					// Updates task list view
+					App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+					App_Portlets.dealsWon[parseInt(App_Portlets.currentPosition)].render(true);
+				}
+
+			}
 			else {
-				App_Deals.navigate("deals", {
-					trigger : true
-				});
+				App_Deal_Details.dealDetailView.model = data;
+				App_Deal_Details.dealDetailView.render(true)
+				Backbone.history.navigate("deal/"+data.toJSON().id , {
+		            trigger: true
+		        });
+					
+					
+					
 			}
 		}
 	});

@@ -32,7 +32,11 @@ public class DealExportEmailUtil
 
 	// Mandrill attachment should contain mime-type, file-name and
 	// file-content.
-	String[] strArr = { "text/csv", "LocalDeals.csv", data };
+	Date currentDate = new Date();
+	SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh:mm");
+	StringBuilder exportedFileName = new StringBuilder("Deals_").append(df.format(currentDate)).append(".csv");
+
+	String[] strArr = { "text/csv", exportedFileName.toString(), data };
 
 	System.out.println("Namespace in exportDealCSVAsEmail " + NamespaceManager.get());
 	System.out.println("Domain is  " + currentUser.domain);
@@ -40,11 +44,8 @@ public class DealExportEmailUtil
 
 	HashMap<String, String> map = new HashMap<String, String>();
 	map.put("count", total);
-	Date currentDate = new Date();
-	SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh:mm");
-	StringBuilder emailSubject = new StringBuilder("Deals_").append(df.format(currentDate)).append(".csv");
 
-	SendMail.sendMail(currentUser.email, emailSubject.toString(), SendMail.EXPORT_DEALS_CSV, map,
+	SendMail.sendMail(currentUser.email, SendMail.EXPORT_DEALS_CSV_SUBJECT, SendMail.EXPORT_DEALS_CSV, map,
 		SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
     }
 }

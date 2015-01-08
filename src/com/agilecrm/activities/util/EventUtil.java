@@ -312,10 +312,12 @@ public class EventUtil
 	    // Gets Date after numDays days
 	    DateUtil endDateUtil = new DateUtil();
 	    Long endTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000) - 1;
+	    
+	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
 
 	    // Gets list of tasks filtered on given conditions
-	    return dao.ofy().query(Event.class).filter("search_range >=", startTime).filter("search_range <=", endTime)
-		    .order("search_range").list();
+	    return dao.ofy().query(Event.class).filter("owner", new Key<AgileUser>(AgileUser.class, agileUser.id)).filter("start >=", startTime).filter("start <=", endTime).limit(50)
+		    .order("start").list();
 	}
 	catch (Exception e)
 	{

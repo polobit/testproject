@@ -368,6 +368,14 @@
         <url-pattern>/twilioiostatuscallback</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>TwilioIOTwiml</servlet-name>
+        <servlet-class>com.thirdparty.twilio.TwilioIOTwiml</servlet-class>
+    </servlet> 
+    <servlet-mapping>
+        <servlet-name>TwilioIOTwiml</servlet-name>
+        <url-pattern>/twiml</url-pattern>
+    </servlet-mapping>
     
 	<servlet>
 		<servlet-name>ForgotDomain</servlet-name>

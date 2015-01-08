@@ -348,9 +348,12 @@ public class RegisterServlet extends HttpServlet
 	    contact.save();
 	    System.out.println("contact after saving : " + contact);
 	    String referrar_note_description = getReferrarParameters(request);
-	    Note note = new Note("Referrer", referrar_note_description);
-	    note.addContactIds((contact.id).toString());
-	    note.save();
+	    if (StringUtils.isNotEmpty(referrar_note_description))
+	    {
+		Note note = new Note("Referrer", referrar_note_description);
+		note.addContactIds((contact.id).toString());
+		note.save();
+	    }
 	}
 	catch (Exception e)
 	{
@@ -414,7 +417,7 @@ public class RegisterServlet extends HttpServlet
 	    }
 	    if (StringUtils.isNotEmpty(utmsource) && StringUtils.isNotEmpty(utmcampaign)
 		    && StringUtils.isNotEmpty(utmmedium) && StringUtils.isNotEmpty(utmreferencedomain))
-		referrar_note_description = "Source - " + utmsource + "\n Campaign -  " + utmcampaign + "\n Medium - "
+		referrar_note_description = " Source - " + utmsource + "\n Campaign -  " + utmcampaign + "\n Medium - "
 		        + utmmedium + "\n Reference Domain -" + utmreferencedomain;
 
 	}
