@@ -140,6 +140,7 @@ var ContactsRouter = Backbone.Router.extend({
 			eraseCookie('contact_filter');
 			eraseCookie('company_filter');
 			eraseCookie('contact_filter_type');
+			eraseData('dynamic_contact_filter');
 
 			if (this.contactsListView && this.contactsListView.collection)
 			{
@@ -150,17 +151,8 @@ var ContactsRouter = Backbone.Router.extend({
 				}
 			}
 
-			if (readCookie("contact_view"))
-			{
-				this.customView(readCookie("contact_view"), undefined, 'core/api/tags/' + tag_id, tag_id);
-				return;
-			}
-
-			filter_id = null;
-
-			url = '/core/api/tags/' + tag_id;
-
-			tag_id = unescape(tag_id);
+			this.customView(readCookie("contact_view"), undefined, 'core/api/tags/' + tag_id, tag_id);
+			return;
 			
 		}
 		else
