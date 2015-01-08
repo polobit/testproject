@@ -56,13 +56,13 @@
 		console.log('restore',getDealsBulkIds());
 		console.log('archive',getDealsBulkIds());
 		var url = '/core/api/opportunity/bulk/restore';
-		postBulkActionDealsData(url,undefined,function(){},'started action.');
+		postBulkActionDealsData(url,undefined,function(){},'Restore deals scheduled.');
 	};
 	
 	var bulkArchiveDeals = function(){
 		console.log('archive',getDealsBulkIds());
 		var url = '/core/api/opportunity/bulk/archive';
-		postBulkActionDealsData(url,undefined,function(){},'started action.');
+		postBulkActionDealsData(url,undefined,function(){},'Archive deals scheduled.');
 	};
 	
 	var bulkOwnerChangeDeals = function(){
@@ -72,13 +72,13 @@
 		var url = '/core/api/opportunity/bulk/change-owner/'+owner_id;
 		postBulkActionDealsData(url,undefined,function(){
 			$("#deal_owner_change_modal").modal('hide');
-		},'started action.');
+		},'Deals owner change scheduled.');
 	};
 	
 	var bulkDeleteDeals = function(){
 		console.log('Delete',getDealsBulkIds());
 		var url = '/core/api/opportunity/bulk';
-		postBulkActionDealsData(url,undefined,function(){},'started action.');
+		postBulkActionDealsData(url,undefined,function(){},'Delete deals scheduled.');
 	};
 	
 	var bulkMilestoneChange = function(saveBtn){

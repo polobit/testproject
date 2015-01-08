@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.deals;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -58,16 +59,31 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters);
+	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    System.out.println("total deals -----" + deals.size());
 
+	    List<Opportunity> subList = new ArrayList<Opportunity>();
 	    for (Opportunity deal : deals)
 	    {
 		deal.archived = true;
+		subList.add(deal);
+		if (subList.size() >= 100)
+		{
+		    Opportunity.dao.putAll(subList);
+		    OpportunityUtil.updateSearchDoc(subList);
+		    System.out.println("total sublist -----" + subList.size());
+		    subList.clear();
+		}
 	    }
-	    Opportunity.dao.putAll(deals);
+
+	    if (!subList.isEmpty())
+	    {
+		Opportunity.dao.putAll(subList);
+		OpportunityUtil.updateSearchDoc(subList);
+		System.out.println("total sublist -----" + subList.size());
+	    }
 
 	    BulkActionNotifications.publishNotification(deals.size() + " deals are archived.");
-	    OpportunityUtil.updateSearchDoc(deals);
 	}
 	catch (Exception je)
 	{
@@ -99,16 +115,31 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters);
+	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    System.out.println("total deals -----" + deals.size());
 
+	    List<Opportunity> subList = new ArrayList<Opportunity>();
 	    for (Opportunity deal : deals)
 	    {
 		deal.archived = false;
+		subList.add(deal);
+		if (subList.size() >= 100)
+		{
+		    Opportunity.dao.putAll(subList);
+		    OpportunityUtil.updateSearchDoc(subList);
+		    System.out.println("total sublist -----" + subList.size());
+		    subList.clear();
+		}
 	    }
-	    Opportunity.dao.putAll(deals);
+
+	    if (!subList.isEmpty())
+	    {
+		Opportunity.dao.putAll(subList);
+		OpportunityUtil.updateSearchDoc(subList);
+		System.out.println("total sublist -----" + subList.size());
+	    }
 
 	    BulkActionNotifications.publishNotification(deals.size() + " deals are restored.");
-	    OpportunityUtil.updateSearchDoc(deals);
 	}
 	catch (Exception je)
 	{
@@ -140,15 +171,31 @@ public class DealsBulkActionsAPI
 
 	try
 	{
-	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters);
+	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    System.out.println("total deals -----" + deals.size());
 
+	    List<Opportunity> subList = new ArrayList<Opportunity>();
 	    for (Opportunity deal : deals)
 	    {
 		deal.owner_id = String.valueOf(ownerId);
+		subList.add(deal);
+		if (subList.size() >= 100)
+		{
+		    Opportunity.dao.putAll(subList);
+		    OpportunityUtil.updateSearchDoc(subList);
+		    System.out.println("total sublist -----" + subList.size());
+		    subList.clear();
+		}
 	    }
-	    Opportunity.dao.putAll(deals);
+
+	    if (!subList.isEmpty())
+	    {
+		Opportunity.dao.putAll(subList);
+		OpportunityUtil.updateSearchDoc(subList);
+		System.out.println("total sublist -----" + subList.size());
+	    }
+
 	    BulkActionNotifications.publishNotification("Owner changed for " + deals.size() + " deals.");
-	    OpportunityUtil.updateSearchDoc(deals);
 	}
 	catch (Exception je)
 	{
@@ -184,18 +231,35 @@ public class DealsBulkActionsAPI
 	    JSONObject formJSON = new JSONObject(form);
 	    System.out.println("------------" + formJSON.toString());
 
-	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters);
+	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    System.out.println("total deals -----" + deals.size());
 
+	    List<Opportunity> subList = new ArrayList<Opportunity>();
 	    for (Opportunity deal : deals)
 	    {
 		if (formJSON.has("pipeline"))
 		    deal.pipeline_id = formJSON.getLong("pipeline");
 		if (formJSON.has("milestone"))
 		    deal.milestone = formJSON.getString("milestone");
+
+		subList.add(deal);
+		if (subList.size() >= 100)
+		{
+		    Opportunity.dao.putAll(subList);
+		    OpportunityUtil.updateSearchDoc(subList);
+		    System.out.println("total sublist -----" + subList.size());
+		    subList.clear();
+		}
 	    }
-	    Opportunity.dao.putAll(deals);
+
+	    if (!subList.isEmpty())
+	    {
+		Opportunity.dao.putAll(subList);
+		OpportunityUtil.updateSearchDoc(subList);
+		System.out.println("total sublist -----" + subList.size());
+	    }
+
 	    BulkActionNotifications.publishNotification("Milestone changed for " + deals.size() + " deals.");
-	    OpportunityUtil.updateSearchDoc(deals);
 	}
 	catch (Exception je)
 	{

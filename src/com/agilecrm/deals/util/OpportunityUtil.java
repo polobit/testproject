@@ -25,10 +25,12 @@ import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
-import com.agilecrm.deals.deferred.AddDealToSearchDeferredTask;
+import com.agilecrm.search.AppengineSearch;
+import com.agilecrm.search.document.OpportunityDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.google.appengine.api.backends.BackendServiceFactory;
+import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -1159,7 +1161,17 @@ public class OpportunityUtil
 		.list();
     }
 
-    public static List<Opportunity> getOpportunitiesForBulkActions(String ids, String filters)
+    /**
+     * Get deals based on the given ids, If no ids then get the deals from
+     * filters.
+     * 
+     * @param ids
+     *            ids of deals.
+     * @param filters
+     *            deals filters.
+     * @return list of deals.
+     */
+    public static List<Opportunity> getOpportunitiesForBulkActions(String ids, String filters, int count)
     {
 	List<Opportunity> deals = new ArrayList<Opportunity>();
 	try
@@ -1174,17 +1186,30 @@ public class OpportunityUtil
 	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
 	    System.out.println("------------" + filterJSON.toString());
 
-	    if (idsArray != null)
+	    if (idsArray != null && idsArray.length() > 0)
 	    {
 		List<Key<Opportunity>> dealIds = new ArrayList<Key<Opportunity>>();
 		for (int i = 0; i < idsArray.length(); i++)
+		{
 		    dealIds.add(new Key<Opportunity>(Opportunity.class, Long.parseLong(idsArray.getString(i))));
-
-		deals = Opportunity.dao.fetchAllByKeys(dealIds);
+		    if (dealIds.size() >= count)
+		    {
+			deals.addAll(Opportunity.dao.fetchAllByKeys(dealIds));
+			dealIds.clear();
+		    }
+		}
+		if (!dealIds.isEmpty())
+		    deals.addAll(Opportunity.dao.fetchAllByKeys(dealIds));
 	    }
 	    else
 	    {
-		deals = OpportunityUtil.getOpportunitiesByFilter(filterJSON, 0, null);
+		deals = OpportunityUtil.getOpportunitiesByFilter(filterJSON, count, null);
+		String cursor = deals.get(deals.size() - 1).cursor;
+		while (cursor != null)
+		{
+		    deals.addAll(OpportunityUtil.getOpportunitiesByFilter(filterJSON, count, cursor));
+		    cursor = deals.get(deals.size() - 1).cursor;
+		}
 	    }
 	}
 	catch (JSONException je)
@@ -1195,17 +1220,24 @@ public class OpportunityUtil
 
     }
 
+    /**
+     * Update deals in the search document. Maximum deals size in list should be
+     * below 200 (150 recomended).
+     * 
+     * @param deals
+     */
     public static void updateSearchDoc(List<Opportunity> deals)
     {
 
-	AddDealToSearchDeferredTask dealTracks = new AddDealToSearchDeferredTask(deals);
-	// Initialize task here
-	Queue queue = QueueFactory.getQueue("pipeline-queue");
+	AppengineSearch<Opportunity> search = new AppengineSearch<Opportunity>(Opportunity.class);
+	OpportunityDocument oppDocs = new OpportunityDocument();
+	List<Builder> builderObjects = new ArrayList<Builder>();
+	for (Opportunity deal : deals)
+	{
+	    builderObjects.add(oppDocs.buildOpportunityDoc(deal));
+	}
 
-	// Create Task and push it into Task Queue
-	TaskOptions taskOptions = TaskOptions.Builder.withPayload(dealTracks);
-
-	queue.add(taskOptions);
+	search.index.putAsync(builderObjects.toArray(new Builder[deals.size()]));
     }
 
 }

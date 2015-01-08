@@ -574,7 +574,7 @@ public class DealsAPI
     }
 
     /**
-     * Call backends for updating deals pipeline.
+     * Call backends archive deals.
      */
     @Path("/bulk/archive")
     @POST
@@ -603,7 +603,7 @@ public class DealsAPI
     }
 
     /**
-     * Call backends for updating deals pipeline.
+     * Call backends for restoring deals.
      */
     @Path("/bulk/restore")
     @POST
@@ -632,7 +632,7 @@ public class DealsAPI
     }
 
     /**
-     * Call backends for updating deals pipeline.
+     * Call backends for updating deals owner.
      */
     @Path("/bulk/change-owner/{owner_id}")
     @POST
@@ -664,7 +664,7 @@ public class DealsAPI
     }
 
     /**
-     * Call backends for updating deals pipeline.
+     * Call backends for updating deals pipeline and milestone.
      */
     @Path("/bulk/change-milestone")
     @POST
