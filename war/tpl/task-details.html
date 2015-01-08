@@ -22,8 +22,13 @@
 <div class="row-fluid">
 <div class="span10" >
 {{#if_equals "IN_PROGRESS" status}}
-<span class="span2" style="text-transform: capitalize;">{{displayTaskStatus status}} ({{progress}}%)</span> 
- <span class="span2" style="margin-left: -6px;">Due: {{epochToHumanDate "dd mmm yyyy" due}}</span>
+<div style="width:230px">
+<div class="pull-left" style="text-transform: capitalize;width:50%;">{{displayTaskStatus status}} ({{progress}}%)</div>
+ <div class="pull-right" style="width:50%;text-align: right;">Due: {{epochToHumanDate "dd mmm yyyy" due}}</div>
+<div   style="width: 100%;height:5px;" class="progress progress-info">
+          <div class="bar" style="width: {{progress}}%;"></div>
+     </div>
+</div>
 {{/if_equals}}
 
 {{#if_equals "COMPLETED" status}}
@@ -65,14 +70,6 @@
 </div>
 </div>
 </div>
-</div>
-
-<div class="row-fluid">
-{{#if_equals "IN_PROGRESS" status}} 
-<div  style="width:20%;height:5px;margin-bottom: 1px !important;margin-top: -10px !important;" class="progress progress-info">
-          <div class="bar" style="width: {{progress}}%;"></div>
-     </div>
-{{/if_equals}} 
 </div>
 
 <div class="row-fluid"  style="border-bottom: 1px solid #ddd;margin-bottom: 15px; padding-bottom: 30px;">
