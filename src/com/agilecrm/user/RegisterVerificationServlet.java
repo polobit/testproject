@@ -26,6 +26,10 @@ public class RegisterVerificationServlet extends HttpServlet
 	invalid_domains.add("yandex");
 	invalid_domains.add("hotmail");
 	invalid_domains.add("yahoo");
+	invalid_domains.add("aol");
+	invalid_domains.add("outlook");
+	invalid_domains.add("rossbergercom");
+	invalid_domains.add("fastmail");
     }
     /**
      * 
