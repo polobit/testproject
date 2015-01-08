@@ -692,7 +692,11 @@ function setUpGlobalTwilio()
 				getTwilioIOLogs(phoneNumber);
 				
 				// Change selected number if its different than calling number.
-				
+				var selectedNumber = $('#contact_number').val();
+				if(selectedNumber != phoneNumber)
+				{
+					$("#contact_number").val(phoneNumber);
+				}
 			  }			   	
 			
 			// notes related code			
