@@ -19,8 +19,7 @@ public class ActivityApi
     @Path("/getAllActivities")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Activity> getAllActivities(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
-	    @QueryParam("start_time") Long starttime, @QueryParam("end_time") Long endtime)
+    public List<Activity> getAllActivities(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
     {
 
 	if (count != null)
