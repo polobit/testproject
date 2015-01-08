@@ -36,7 +36,8 @@ public class QuickBookAPI
     @Path("/import-settings")
     public void savePrefs(ContactPrefs prefs)
     {
-	ContactPrefs contactPrefs = ContactPrefsUtil.get(prefs.id);
+
+	ContactPrefs contactPrefs = ContactPrefsUtil.mergePrefs(ContactPrefsUtil.get(prefs.id), prefs);
 	contactPrefs.save();
 
 	if (!contactPrefs.token.isEmpty() && contactPrefs != null)
