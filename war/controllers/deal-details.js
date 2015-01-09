@@ -12,6 +12,13 @@ routes : {
 
 dealdetails : function(id)
 {
+	//For getting custom fields
+	if(App_Deals.customFieldsList == null || App_Deals.customFieldsList == undefined)
+	{
+		App_Deals.customFieldsList = new Base_Collection_View({ url : '/core/api/custom-fields/scope/position?scope=DEAL', sort_collection : false, 
+			restKey : "customFieldDefs", templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
+		App_Deals.customFieldsList.collection.fetch();
+	}
 	
 	this.dealDetailView = new Base_Model_View({ url : '/core/api/opportunity/' + id, template : "deal-detail", postRenderCallback : function(el)
 	{

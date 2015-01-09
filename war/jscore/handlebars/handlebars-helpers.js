@@ -3805,6 +3805,16 @@ $(function()
 
 	});
 	
+	Handlebars.registerHelper('getDealCustomProperties', function(items, options)
+			{
+							var fields = getDealCustomProperties(items);
+							if (fields.length == 0)
+											return options.inverse(fields);
+
+							return options.fn(fields);
+
+			});
+	
 });
 
 // helper function return created time for event
