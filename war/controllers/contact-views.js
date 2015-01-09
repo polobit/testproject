@@ -14,7 +14,7 @@ var ContactViewsRouter = Backbone.Router.extend({
 		var contactView = new Base_Model_View({ url : 'core/api/contact-view-prefs', template : "contact-view",change: false, 
 			restKey : "contactView", window : "contacts", postRenderCallback : function(el, modelData)
 			{
-				fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function(data)
+				fillSelect("custom-fields-optgroup", "core/api/custom-fields/scope?scope=CONTACT", undefined, function(data)
 				{
 					head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/jquery.multi-select.js', function()
 					{
