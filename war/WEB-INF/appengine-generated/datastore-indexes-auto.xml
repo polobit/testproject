@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 <!-- Indices written at Tue, 9 Dec 2014 14:18:27 IST -->
 
@@ -325,13 +324,8 @@
         <property name="archived" direction="asc"/>
         <property name="pipeline" direction="asc"/>
         <property name="close_date" direction="asc"/>
-
-	 <datastore-index kind="Contact" ancestor="false" source="auto">
-        <property name="owner" direction="asc"/>
-        <property name="related_contacts" direction="asc"/>
-        <property name="is_complete" direction="asc"/>
     </datastore-index>
-    
+
     <!-- Used 7 times in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">
         <property name="viewed.viewer_id" direction="asc"/>
@@ -366,11 +360,11 @@
         <property name="related_deals" direction="asc"/>
         <property name="created_time" direction="desc"/>
     </datastore-index>
-    
-    <datastore-index kind="Contact" ancestor="false" source="auto">
-        <property name="campaignStatus.status" direction="asc"/>
-         <property name="id" direction="asc"/>
+
+	<datastore-index kind="Contact" ancestor="false" source="auto">
+    	<property name="campaignStatus.status" direction="asc"/>
+		<property name="id" direction="asc"/>
         <property name="campaignStatus.campaign_id" direction="desc"/>
 	</datastore-index>
-
+	
 </datastore-indexes>
