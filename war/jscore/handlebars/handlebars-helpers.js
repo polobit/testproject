@@ -1219,8 +1219,12 @@ $(function()
 				 */
 				Handlebars.registerHelper('numberWithCommas', function(value)
 				{
-								if (value)
-												return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
+					if(value==0)
+						return value;
+								
+					if (value){
+									return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
+								}
 				});
 
 				/**
@@ -1352,37 +1356,7 @@ $(function()
 
 				});
 				
-				/**
-				 * Returns plain customise text for activity remove underscore and other
-				 * special charecter from string
-				 */
-				Handlebars.registerHelper('displayActivityFieldText', function(value)
-				{       
-								 var fields = value.replace(/[^a-zA-Z ^,]/g, " ").split(",");
-								 var text="";
-								 if(fields.length >1){
-								 for(var i=0;i<fields.length-1;i++){
-								 				text +=" "+fields[i].trim();
-								 				if(i != fields.length-2){
-								 								text +=",";
-								 				}
-								 }
-								 text +=" and "+fields[fields.length-1].trim() +" are";
-								 }else{
-								 		text =	fields[fields.length-1].trim();
-								 }
-								 // update title
-         text = text.replace('subject','Title');
-         // update priority
-         text = text.replace('priority type','Priority');
-         // update category
-         text = text.replace('task type','Category');
-         // update due date
-         text = text.replace('due date','Due date');
-								return text;
-
-				});
-
+			
 				Handlebars.registerHelper('getCurrentContactProperty', function(value)
 				{
 								if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
@@ -3103,7 +3077,6 @@ $(function()
 				 */
 				Handlebars.registerHelper('if_propertyName', function(pname, options)
 				{
->>>>>>> 2ca973c... Added task details activity 
 								for (var i = 0; i < this.properties.length; i++)
 								{
 												if (this.properties[i].name == pname)
@@ -4121,7 +4094,7 @@ $(function()
 												// Iterates inorder to insert each field into json
 												for (var i = 0; i < email_fields.length; i++)
 												{
-																// Splits based on colon. E.g "To: naresh@agilecrm.com"
+																// Splits based on colon. E.g "To: naresh@agilecrm.com  "
 																var arrcolon = email_fields[i].split(":");
 
 																// Inserts LHS of colon as key. E.g., To
@@ -4129,7 +4102,7 @@ $(function()
 																key = key.trim(); // if key starts with space, it can't
 																// accessible
 
-																// Inserts RHS of colon as value. E.g., naresh@agilecrm.com
+																// Inserts RHS of colon as value. E.g., naresh@agilecrm.com  
 																var value = arrcolon.slice(1).join(":"); // join the
 																// remaining string
 																// based on colon,
@@ -5623,7 +5596,89 @@ $(function()
 		// update due date
 		text = text.replace('close date', 'Close date');
 		
+        text = text.replace('close date', 'Close date');
+		
+		text = text.replace('end date', 'End time');
+		// update priority
+		text = text.replace('priority', 'Priority');
+		// update category
+		text = text.replace('title', 'Title');
+		
 		return text;
+
+	});
+	
+	
+    /*
+	 * To represent a number with commas in deals from activities menu
+	 */
+	Handlebars.registerHelper('numberWithCommasForActivities', function(value)
+	{
+		value = parseFloat(value);
+		if(value==0)
+			return value;
+	
+		if (value)
+			return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
+	});
+
+
+// function used know weather event rescheduled or modified and task due
+	// date is modified
+	Handlebars.registerHelper('get_event_rescheduled', function(value, options)
+	{
+		console.log(value);
+		var modieied_fields = value.replace(/[^a-zA-Z ^,]/g, " ").split(",");
+		var fields = [];
+		if (modieied_fields)
+		{
+			for (var i = 0; i < modieied_fields.length; i++)
+			{
+				fields.push(modieied_fields[i].trim());
+			}
+		}
+		if (fields.indexOf("start date") != -1)
+		{
+			return options.fn(value);
+		}
+		if (fields.indexOf("due date") != -1)
+		{
+			return options.fn(value);
+		}
+
+		return options.inverse(value);
+
+	});
+
+/**
+	 * gets the duedate and starttime modification value for activities
+	 */
+	Handlebars.registerHelper('getDueDateOfTask', function(fields, values)
+	{
+		var field = fields.replace(/[^a-zA-Z ^,]/g, " ").split(",");
+		var value = values.replace(/[^a-zA-Z0-9 ^,]/g, " ").split(",");
+		var json = {};
+		
+		for(var id=0;id<field.length;id++){
+			field[id]=field[id].trim();
+			value[id]=value[id].trim();
+		}
+		for (var i = 0; i < field.length; i++)
+		{
+
+			json[field[i]] = value[i];
+		}
+
+		if (field.indexOf("due date") != -1)
+		{
+			var dat=parseFloat(json['due date']);
+			return convertToHumanDate("ddd mmm dd yyyy h:MM TT",dat);
+		}
+		if (field.indexOf("start date") != -1)
+		{
+			var dat=parseFloat(json['start date']);
+			return convertToHumanDate("ddd mmm dd yyyy h:MM TT",dat);
+		}
 
 	});
 	

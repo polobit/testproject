@@ -620,6 +620,14 @@ function getContactCustomProperties(items)
 			fields.push(items[i]);
 		}
 	}
+	
+	//For getting custom fields
+	if(App_Contacts.customFieldsList == null || App_Contacts.customFieldsList == undefined){
+		App_Contacts.customFieldsList = new Base_Collection_View({ url : '/core/api/custom-fields/position', sort_collection : false, restKey : "customFieldDefs",
+			templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
+		App_Contacts.customFieldsList.collection.fetch();
+	}
+	
 	//Added for formula type custom field
 	var type='';
 	if(App_Contacts.customFieldsList!=undefined && App_Contacts.customFieldsList!=null){
@@ -632,10 +640,12 @@ function getContactCustomProperties(items)
 	}
 	var datajson={};
 	var formulaFields=[];
+	var allCustomFields=[];
 	var finalFields=[];
 	if(App_Contacts.contactDetailView!=undefined && App_Contacts.contactDetailView!=null){
 		$.each(App_Contacts.contactDetailView.model.get("properties"),function(index,customField){
-			datajson[''+customField.name]=customField.value;
+			if(customField.type=="CUSTOM")
+				datajson[''+customField.name]=customField.value;
 		});
 	}
 	var j=0;
@@ -645,9 +655,7 @@ function getContactCustomProperties(items)
 		for(var i=0;i<App_Contacts.customFieldsList.collection.models.length;i++){
 			var json={};
 			if(App_Contacts.customFieldsList.collection.models[i].get("scope")==type && App_Contacts.customFieldsList.collection.models[i].get("field_type")=="FORMULA"){
-				
-				var tplEle = Handlebars.compile(App_Contacts.customFieldsList.collection.models[i].get("field_data"));
-				var tplEleData = tplEle(datajson);
+				var tplEleData = Mustache.render(App_Contacts.customFieldsList.collection.models[i].get("field_data"),datajson);
 				var evalFlag = true;
 				var tplEleDataAftEval;
 				try{
@@ -658,30 +666,52 @@ function getContactCustomProperties(items)
 				}
 				if(!evalFlag)
 					tplEleDataAftEval = tplEleData;
-				
+				if(evalFlag && tplEleDataAftEval!=undefined && tplEleDataAftEval!=null && tplEleDataAftEval!=""){
+					json.name=App_Contacts.customFieldsList.collection.models[i].get("field_label");
+					json.type="CUSTOM";
+					json.position=App_Contacts.customFieldsList.collection.models[i].get("position");
+					json.value=tplEleDataAftEval;
+					json.field_type=App_Contacts.customFieldsList.collection.models[i].get("field_type");
+					allCustomFields.push(json);
+					
+					formulaFields.push(json);
+				}
+				j++;
+			}else if(App_Contacts.customFieldsList.collection.models[i].get("scope")==type){
 				json.name=App_Contacts.customFieldsList.collection.models[i].get("field_label");
 				json.type="CUSTOM";
 				json.position=App_Contacts.customFieldsList.collection.models[i].get("position");
-				json.value=tplEleDataAftEval;
-				formulaFields.push(json);
-				j++;
+				json.field_type=App_Contacts.customFieldsList.collection.models[i].get("field_type");
+				allCustomFields.push(json);
 			}
 		}
 	}
 	if(fields.length>0){
-		for(var i=0;i<=fields.length;i++){
-			for(var k=0;k<formulaFields.length;k++){
-				if(i+1==formulaFields[k].position)
-					finalFields.push(formulaFields[k]);
+		if(allCustomFields.length>0){
+			for(var i=0;i<allCustomFields.length;i++){
+				if(allCustomFields[i].field_type=="FORMULA"){
+					finalFields.push(allCustomFields[i]);
+				}else{
+					for(var j=0;j<fields.length;j++){
+						if(allCustomFields[i].name==fields[j].name){
+							finalFields.push(fields[j]);
+							break;
+						}
+					}
+				}
 			}
-			if(i!=fields.length)
-				finalFields.push(fields[i]);
+		}else{
+			for(var k=0;k<fields.length;k++){
+				finalFields.push(fields[k]);	
+			}
 		}
+		
 	}else{
 		for(var k=0;k<formulaFields.length;k++){
 			finalFields.push(formulaFields[k]);	
 		}
 	}
+	
 	return finalFields;
 }
 

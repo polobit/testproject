@@ -19,13 +19,23 @@ function _init_gcal_options()
 	fc.sourceFetchers.push(function(sourceOptions, start, end) {
 		if (sourceOptions.dataType == 'agile-gcal') {
 			
-			// Fetches access token. Fetched here to avoid unnecessary loading of client.js and gapi helper without access token
-			load_events_from_google(function(data) {
-				if(!data)
-					return;
-				
-				return agile_transform_options(data, start, end);	
-			});
+			//Check whether to show the google calendar events or not.
+			if(!readCookie('event-filters') || JSON.parse(readCookie('event-filters')).type != 'agile'){
+				 $.getJSON('/core/api/users/agileusers', function (users) {
+					 $.each(users,function(i,user){
+						 if(CURRENT_DOMAIN_USER.id == user.domain_user_id && (JSON.parse(readCookie('event-filters')).owner_id == user.id || JSON.parse(readCookie('event-filters')).owner_id.length ==0)){
+							// Fetches access token. Fetched here to avoid unnecessary loading of client.js and gapi helper without access token
+								load_events_from_google(function(data) {
+									if(!data)
+										return;
+									
+									return agile_transform_options(data, start, end);	
+								});
+						 }
+					 });
+				 });
+			}
+			
 		}
 	});
 	
