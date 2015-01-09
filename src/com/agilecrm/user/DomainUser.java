@@ -778,7 +778,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    {
         	    Long last_logged_in_time = domain_user_info.getLong("last_logged_in_time");
         	    
-        	    if(last_logged_in_time <= 1420732800)
+        	    if(last_logged_in_time <= 1420783200)
         	    {
         		
         		if (!menu_scopes.contains(NavbarConstants.ACTIVITY))
@@ -793,7 +793,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
         			 menu_scopes.add(NavbarConstants.ACTIVITY);
         		}
         	    }
-	    }else if(created_time <= 1420732800)
+	    }else if(created_time <= 1420783200)
 	    {
 		if (!menu_scopes.contains(NavbarConstants.ACTIVITY))
 		{
