@@ -396,6 +396,7 @@ public class EventUtil
      * converts eppoch to server timezone
      * 
      * @param epoch
+     *            in seconds
      * @return
      */
     public static String getHumanTimeFromEppoch(Long epoch, String timezone, String format)

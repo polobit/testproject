@@ -19,8 +19,14 @@ function isArray(a)
  */
 function load_events_from_google(callback)
 {
-				if (readCookie('event-filters') && JSON.parse(readCookie('event-filters')).type == 'agile')
-								return;
+				if(readCookie('event-filters')){
+					if(JSON.parse(readCookie('event-filters')).type == 'agile')
+						return;
+					
+					//Check whether to show the google calendar events or not.
+					 if(JSON.parse(readCookie('event-filters')).owner_id.length >0 && CURRENT_AGILE_USER.id != JSON.parse(readCookie('event-filters')).owner_id)
+						 return;
+				}
 
 				// Name of the cookie to store/fetch calendar prefs. Current user id is set
 				// in cookie name to avoid
@@ -87,9 +93,16 @@ function get_google_calendar_event_source(data, callback)
 function showCalendar()
 {
 
-				// Customized fetch options
-				if (!readCookie('event-filters') || JSON.parse(readCookie('event-filters')).type != 'agile')
-								_init_gcal_options();
+				//Check whether to show the google calendar events or not.
+				if(!readCookie('event-filters') || JSON.parse(readCookie('event-filters')).type != 'agile'){
+					 $.getJSON('/core/api/users/agileusers', function (users) {
+						 $.each(users,function(i,user){
+							 if(CURRENT_DOMAIN_USER.id == user.domain_user_id && JSON.parse(readCookie('event-filters')).owner_id == user.id){
+								 _init_gcal_options();
+							 }
+						 });
+					 });
+				}
 
 				$('#calendar_event')
 												.fullCalendar(
@@ -299,17 +312,17 @@ function showEventFilters()
 {
 				$.getJSON('/core/api/users/agileusers', function(users)
 				{
-								var html = '';
-								if (users)
-								{
-												$.each(users, function(i, user)
-												{
-																if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-																				html = '<option value=' + user.id + '>Me</option>';
-												});
-												html += '<option value="">Any</option>';
-								}
-								$('#event-owner').html(html);
+								 var html = '', html1='';
+								 if(users){
+									 $.each(users,function(i,user){
+										 if(CURRENT_DOMAIN_USER.id == user.domain_user_id)
+											 html1 = '<option value='+user.id+'>Me</option>';
+										 else
+											 html += '<option value='+user.id+'>'+user.domainUser.name+'</option>';
+									 });
+									 html += '<option value="">Any</option>';
+								 }
+								 $('#event-owner').html(html1+html);
 								$('#filter_options').show();
 
 
@@ -437,6 +450,22 @@ $(function()
 								loadDefaultFilters();
 								showEventFilters();
 				});
+				
+				$('#event_type').live('change',function(){
+					console.log("----------",this.options[this.selectedIndex].text);
+					var dd = document.getElementById('event-owner');
+					var opt = $(this).val();
+					if(opt == 'google' && dd.options[dd.selectedIndex].text != 'Any'){
+						dd.selectedIndex = 0;
+					}
+				});
+				
+				$('#event-owner').live('change',function(){
+					console.log("----------",this.options[this.selectedIndex].text);
+					var opt = this.options[this.selectedIndex].text;
+					if(opt != 'Me' && opt != 'Any')
+						$('#event_type').val('agile');
+				});
 
 				/**
 				 * Hide the filters window when click on out side of the filters pop up.
@@ -456,4 +485,13 @@ $(function()
 				});
 
 				loadDefaultFilters();
+				
+				//Save current agile user in global.
+				 $.getJSON('/core/api/users/agileusers', function (users) {
+					 $.each(users,function(i,user){
+						 if(CURRENT_DOMAIN_USER.id == user.domain_user_id ){
+							 CURRENT_AGILE_USER = user;
+						 }
+					 });
+				 });
 });

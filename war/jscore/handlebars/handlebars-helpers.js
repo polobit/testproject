@@ -63,8 +63,8 @@ $(function()
 				Handlebars.registerHelper('getTwitterHandleByURL', function(value)
 				{
 
-								if (value.indexOf("https://twitter.com/") != -1)
-												return value;
+//								if (value.indexOf("https://twitter.com/") != -1)
+//												return value;
 
 								value = value.substring(value.lastIndexOf("/") + 1);
 								console.log(value);
@@ -1950,7 +1950,7 @@ $(function()
 												// Avoid comma appending to last element
 												if (i < j - 1)
 												{
-																ret = ret + ", ";
+																ret = ret + ",";
 												}
 												;
 								}
@@ -2574,6 +2574,29 @@ $(function()
 								return name;
 
 				});
+				
+				
+				
+				/**
+				 * Get activity type  without underscore and caps, for deal _details page.
+				 */
+				Handlebars.registerHelper('get_normal_activity_type', function(name)
+				{
+								if (!name)
+												return;
+
+								var name_json = { "DEAL_ADD" : "Deal Created", "DEAL_EDIT" : "Deal Edited", "DEAL_CLOSE" : "Deal Closed", "DEAL_LOST" : "Deal Lost", "DEAL_RELATED_CONTACTS" : " Deal Contacts Changed", "DEAL_OWNER_CHANGE" : "Deal Owner Changed", "DEAL_MILESTONE_CHANGE" : "Deal Milestone Changed",
+												"NOTE_ADD" : "Note Added" };
+
+								name = name.trim();
+
+								if (name_json[name])
+												return name_json[name];
+
+								return name;
+
+				});
+
 
 				/**
 				 * put user address location togather separated by comma.
@@ -3071,8 +3094,23 @@ $(function()
 								return template;
 				});
 				
+				// checks if email type is agile or not
+				Handlebars.registerHelper('if_email_type_is_agile', function(value,options)
+				{
+					var type = email_server_type;
+					if (type)
+						if(value === type)
+							return options.fn(this);
+						else
+							return options.inverse(this);
+					else
+					{
+						 return options.fn(this);
+					}
+				});
+				
 				// Reads the gloabal varaible and returns it value
-				Handlebars.registerHelper('read_global_var', function(custom_fields, contacts)
+				Handlebars.registerHelper('read_global_var', function()
 				{
 					var type = email_server_type;
 					if (type)
@@ -3427,15 +3465,15 @@ $(function()
 					var seconds = time - minutes * 60;
 					var friendlyTime = "";
 					if(hours == 1)
-						friendlyTime = hours+ " hr ";
+						friendlyTime = hours+ "h ";
 					if(hours > 1)
-						friendlyTime = hours+ " hrs ";
+						friendlyTime = hours+ "h ";
 					if(minutes > 0)
-						friendlyTime += minutes + " min ";
+						friendlyTime += minutes + "m ";
 					if(seconds > 0)
-						friendlyTime += seconds + " sec";
+						friendlyTime += seconds + "s ";
 					if(friendlyTime != "")
-						return "("+friendlyTime+")";
+						return ' - '+friendlyTime;
 					return friendlyTime;
 				});
 	// To pick randomly selected avatar url
@@ -3479,6 +3517,53 @@ $(function()
 		else if(field_type=="FORMULA")
 			field_type_name = "Formula";
 		return field_type_name;
+	});
+	
+	//@author Purushotham
+	//function to compare integer values
+	Handlebars.registerHelper('ifCond', function(v1, type, v2, options) {	
+		switch(type){
+			case "greaterthan":
+				if(parseInt(v1) > parseInt(v2))
+					return options.fn(this);
+				break;
+			case "lessthan":
+				if(parseInt(v1) < parseInt(v2))
+					return options.fn(this);
+				break;
+			case "equals":
+				if(parseInt(v1) === parseInt(v2))
+					return options.fn(this);
+				break;
+		}
+		return options.inverse(this);
+	});
+	
+	Handlebars.registerHelper('callActivityFriendlyStatus',function(status,direction){
+		
+		switch(status) {
+	    case "completed":
+	    case "answered":
+	    	return "Call duration";
+	    	break;
+	    case "busy":
+	    case "no-answer":
+	    	if(direction == 'outgoing')
+	    		return "Contact busy";
+	    	else
+	    		return "Not answered";
+	    	break;
+	    case "failed":
+	    	return "Failed";
+	    	break;
+	    case "in-progress":
+	    case "voicemail":
+	    	return "Left voicemail";
+	    	break; 	
+	    default:
+	        return "";
+		}
+		
 	});
 
 	Handlebars.registerHelper('shopifyWebhook', function()
@@ -3605,6 +3690,17 @@ $(function()
 		return buildFacebookProfileURL(url);
 	});
 	
+	
+	/**
+	 * returns tracks count of opportunity
+	 */
+	Handlebars.registerHelper('getTracksCount', function(options)
+			{
+			if (parseInt(DEAL_TRACKS_COUNT) > 1)
+				return options.fn(this);
+             else
+				return options.inverse(this);
+			});
 	/**
 	 * getting flitered contact portlet header name
 	 */
@@ -3661,6 +3757,52 @@ $(function()
 		else if(mins!=0 && mins>1)
 			duration += ''+mins+' Minutes';
 		return duration;
+	});
+	
+	
+	/**
+	 * Returns plain customise text for activity remove underscore and other
+	 * special charecter from string
+	 */
+	Handlebars.registerHelper('displayActivityFieldText', function(value)
+	{
+		var fields = value.replace(/[^a-zA-Z ^,]/g, " ").split(",");
+		var text = "";
+		if (fields.length > 1)
+		{
+			for (var i = 0; i < fields.length - 1; i++)
+			{
+				text += " " + fields[i].trim();
+				if (i != fields.length - 2)
+				{
+					text += ",";
+				}
+			}
+			text += " and " + fields[fields.length - 1].trim();
+		}
+		else
+		{
+			text = fields[fields.length - 1].trim();
+		}
+		// update title
+		text = text.replace('subject', 'Title');
+		// update priority
+		text = text.replace('priority type', 'Priority');
+		// update category
+		text = text.replace('task type', 'Category');
+		// update due date
+		text = text.replace('due date', 'Due date');
+		
+		text = text.replace('name', 'Name');
+		// update priority
+		text = text.replace('probability', 'Probability');
+		// update category
+		text = text.replace('expected value', 'Expected value');
+		// update due date
+		text = text.replace('close date', 'Close date');
+		
+		return text;
+
 	});
 	
 });

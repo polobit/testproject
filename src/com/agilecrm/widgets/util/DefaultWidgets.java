@@ -54,7 +54,8 @@ public class DefaultWidgets
 				"Zendesk streamlines communication within a ticket that has organized workflow towards resolution of the customer issue.",
 				"/widgets/zendesk.js", "/img/plugins/zendesk_logo.png", "/widgets/zendesk-logo-small.png", null,
 				WidgetType.SUPPORT));
-		widgets.add(new Widget("Twilio", " See the Twilio call history for contact.", "/widgets/twilio.js",
+		widgets.add(new Widget("Twilio",
+				" This widget is now deprecated and a new improved Twilio widget is available.", "/widgets/twilio.js",
 				"/img/plugins/twilio.png", "/widgets/twilio-small-logo.png", null, WidgetType.CALL));
 		widgets.add(new Widget(
 				"FreshBooks",
@@ -94,9 +95,8 @@ public class DefaultWidgets
 		widgets.add(new Widget("GooglePlus",
 				"Keep tabs on your customers' activity on Google+ and engage with them better.",
 				"/widgets/googleplus.js", "/widgets/gplus.png", "/widgets/gplusicon.png", null, WidgetType.SOCIAL));
-		widgets.add(new Widget("CallScript",
-				"Shows you the script for the call base on predefined rules you have set.", "/widgets/callscript.js",
-				null, null, null, WidgetType.CALL));
+		widgets.add(new Widget("CallScript", "Shows you the script for a call based on your preset rules.",
+				"/widgets/callscript.js", null, null, null, WidgetType.CALL));
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);
