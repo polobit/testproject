@@ -202,6 +202,12 @@ public class AnalyticsSQLUtil
 		}
 		catch (SQLException e)
 		{
+			System.out.println("SQLException in AnalyTicsSQLUtil.." + e.getMessage());
+			e.printStackTrace();
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception in AnalyTicsSQLUtil.." + e.getMessage());
 			e.printStackTrace();
 		}
 		finally
