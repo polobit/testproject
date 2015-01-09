@@ -787,11 +787,7 @@ function setUpGlobalTwilio()
 					Twilio_Call_Noty_IMG = addContactImg("Incoming");
 					
 					showCallNotyPopup("incoming", "Twilio",
-							Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Incoming call :</b><br> ' + To_Name + "   " + To_Number + '<br></span><div class="clearfix"></div>', false);
-					
-					// Show contact detail page
-					/*if(TWILIO_CONTACT_ID)
-					window.location.href = "#contact/"+TWILIO_CONTACT_ID;*/
+							Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Incoming call :</b><br> ' + To_Name + "   " + To_Number + '<br></span><div class="clearfix"></div>', false);										
 				});
 
 		// If any network failure, show error

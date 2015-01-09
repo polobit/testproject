@@ -3488,6 +3488,14 @@ $(function()
 		var shopify_webhook = window.location.origin + "/shopifytrigger?api-key=" + agile_api.api_key;
 		return new Handlebars.SafeString(shopify_webhook);
 	});
+	
+	Handlebars.registerHelper('toProperFormat', function(timeInSec)
+			{
+		      if(timeInSec == "0")
+			    return "0 sec";
+		      
+			  return twilioSecondsToFriendly(timeInSec);		
+			});
 });
 
 // helper function return created time for event
