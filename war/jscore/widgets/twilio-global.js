@@ -1,5 +1,6 @@
 // Twilio call noty when user change tab
 var Twilio_Call_Noty;
+var Twilio_Call_Noty_IMG = "";
 
 var To_Number;
 var To_Name = "";
@@ -660,7 +661,7 @@ function setUpGlobalTwilio()
 			console.log(conn._status);
 			globalconnection = conn;
 
-			showCallNotyPopup("connected", "Twilio", "<b>On call : </b><br>" + To_Name + "   " + To_Number + "<br>", false);
+			showCallNotyPopup("connected", "Twilio", Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><b>On call : </b><br>' + To_Name + "   " + To_Number + '<br></span><div class="clearfix"></div>', false);
 		});
 
 		Twilio.Device.disconnect(function(conn)
@@ -765,7 +766,7 @@ function setUpGlobalTwilio()
 					{
 						console.log("getting one more call.");
 
-						showCallNotyPopup("missedCall", "error", "<b>Missed call : </b><br>" + conn.parameters.From + "<br>", 5000);
+						showCallNotyPopup("missedCall", "error", Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><b>Missed call : </b><br>' + conn.parameters.From + '<br></span><div class="clearfix"></div>', 5000);
 
 						conn.reject();						
 						if (conn)
@@ -783,13 +784,14 @@ function setUpGlobalTwilio()
 					// conn.accept();
 					To_Number = globalconnection.parameters.From;
 					To_Name = searchForContact(To_Number);
-
+					Twilio_Call_Noty_IMG = addContactImg("Incoming");
+					
 					showCallNotyPopup("incoming", "Twilio",
-							'<i class="icon icon-phone"></i><b>Incoming call :</b><br> ' + To_Name + "   " + To_Number + "<br>", false);
+							Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Incoming call :</b><br> ' + To_Name + "   " + To_Number + '<br></span><div class="clearfix"></div>', false);
 					
 					// Show contact detail page
-					if(TWILIO_CONTACT_ID)
-					window.location.href = "#contact/"+TWILIO_CONTACT_ID;
+					/*if(TWILIO_CONTACT_ID)
+					window.location.href = "#contact/"+TWILIO_CONTACT_ID;*/
 				});
 
 		// If any network failure, show error
@@ -835,8 +837,9 @@ function twiliocall(phoneNumber, toName)
 
 	To_Number = phoneNumber;
 	To_Name = toName;
-
-	showCallNotyPopup("outgoing", "Twilio", '<i class="icon icon-phone"></i><b>Calling :</b><br> ' + To_Name + "   " + To_Number + "<br>", false);
+	Twilio_Call_Noty_IMG = addContactImg("Outgoing"); 
+		
+	showCallNotyPopup("outgoing", "Twilio", Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Calling :</b><br> ' + To_Name + "   " + To_Number + '<br></span><div class="clearfix"></div>', false);
 }
 
 // Send DTMF signal to twilio active connection from dialpad.
@@ -1004,7 +1007,7 @@ function searchForContact(from) {
 	            dataType: 'json'
 	        }).responseText
 	    );
-	console.log("**** responseJson ****");
+	console.log("responseJson");
 	console.log(responseJson);
 	
 	if(responseJson != null) {
@@ -1013,4 +1016,64 @@ function searchForContact(from) {
 		fromName = getContactName(responseJson);
 	}
 	return fromName;
+}
+
+// Get contact from DB and then return contact img
+function searchForContactImg(from) {
+	console.log("searchForContactImg : " + from);	
+	var contactImg = "";
+	var responseJson = $.parseJSON(
+	        $.ajax({
+	        	url: "core/api/contacts/search/phonenumber/"+from,
+	            async: false,
+	            dataType: 'json'
+	        }).responseText
+	    );
+	console.log("**** responseJson ****");
+	console.log(responseJson);
+	
+	if(responseJson != null) 
+	{
+		contactImg = getPropertyValue(responseJson.properties, "image");
+		contactImg = contactImg != undefined ? contactImg.trim() : "Default";	
+	}
+	
+	 console.log("contactImg: "+contactImg);
+	return contactImg;
+}
+
+// Add contact img in html for call noty text with contact url
+function addContactImg(callType)
+{
+  // Default img 
+  var notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+DEFAULT_GRAVATAR_url+'" style="display:inline;"></a>';
+	
+  // For outgoing call
+  if(callType == "Outgoing")
+    {	 	
+	 // If contact have img 
+	 if(TwilioIOContactImg.length)
+		  notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+TwilioIOContactImg[0].value+'" style="display:inline;"></a>';
+	 
+	 console.log("notyContactImg: "+notyContactImg);
+	 return notyContactImg;
+    }
+ else // For incoming call 
+	{	 
+	 // Get contact img
+	 var contactImg = searchForContactImg(To_Number);
+	 
+	 // Suppose contact do not have img
+	 if(contactImg == "Default")
+		 return notyContactImg;
+	 // If img is not empty, make html for call noty
+	 else if(contactImg && contactImg != "")
+	   notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+contactImg+'" style="display:inline;"></a>';
+	 else
+		// Contact not saved
+		 notyContactImg = "";
+	 
+	 console.log("notyContactImg: "+notyContactImg);
+	 return notyContactImg;
+	} 
 }
