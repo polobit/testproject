@@ -653,9 +653,8 @@ function enableCustomFieldsSorting(el,connClass,connId){
 		$('.'+connClass).sortable({
 			axis: "y" ,
 			containment: '.'+connClass,
-			iframeFix: false,
+			scroll: false,
 			items:'tr',
-			opacity:0.8,
 			helper: function(e, tr){
 			    var $originals = tr.children();
 			    var $helper = tr.clone();
@@ -666,11 +665,9 @@ function enableCustomFieldsSorting(el,connClass,connId){
 			    });
 			    return $helper;
 			},
-			revert:true,
 			forceHelperSize:true,
 			placeholder:'<tr><td></td></tr>',
 			forcePlaceholderSize:true,
-			tolerance:'pointer',
 			handle: ".icon-move",
 			cursor: "move",
 		});
