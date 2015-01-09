@@ -1217,6 +1217,1789 @@ $(function()
 				 */
 				Handlebars.registerHelper('numberWithCommas', function(value)
 				{
+					if(value==0)
+						return value;
+								
+					if (value){
+									return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
+								}
+				});
+
+				/**
+				 * Converts reports/view field element as comma seprated values and returns
+				 * as handlebars safe string.
+				 */
+				Handlebars.registerHelper('field_Element', function(properties)
+				{
+								var el = "";
+								var count = properties.length;
+
+								$.each(properties, function(key, value)
+								{
+
+												if (value.indexOf("properties_") != -1)
+																value = value.split("properties_")[1];
+												else if (value.indexOf("custom_") != -1)
+																value = value.split("custom_")[1];
+												else if (value.indexOf("CUSTOM_") != -1)
+																value = value.split("CUSTOM_")[1];
+												else if (value == "created_time")
+																value = "Created Date";
+												else if (value == "updated_time")
+																value = "Updated Date";
+
+												value = value.replace("_", " ");
+
+												if (--count == 0)
+												{
+																el = el.concat(value);
+																return;
+												}
+												el = el.concat(value + ", ");
+								});
+
+								return new Handlebars.SafeString(el);
+				});
+
+				/**
+				 * Converts string to JSON
+				 */
+				Handlebars.registerHelper('stringToJSON', function(object, key, options)
+				{
+								console.log(object);
+								console.log(key);
+								if (key)
+								{
+												try
+												{
+
+																object[key] = JSON.parse(object[key]);
+												}
+												finally
+												{
+																return options.fn(object[key]);
+												}
+								}
+
+								try
+								{
+												return options.fn(JSON.parse(object));
+								}
+								catch (err)
+								{
+												return options.fn(object);
+								}
+				});
+
+				/**
+				 * Checks the existence of property name and prints value
+				 */
+				Handlebars.registerHelper('if_propertyName', function(pname, options)
+				{
+								var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+
+								if (value.search(exp) != -1)
+												return options.fn(this);
+								else
+												return options.inverse(this);
+				});
+
+				Handlebars.registerHelper('show_link_in_statement', function(value)
+				{
+
+								var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+
+								try
+								{
+												value = value.replace(exp, "<a href='$1' target='_blank' class='cd_hyperlink'>$1</a>");
+												return new Handlebars.SafeString(value);
+								}
+								catch (err)
+								{
+												return value;
+								}
+
+				});
+
+				/**
+				 * Returns table headings for custom contacts list view
+				 */
+				Handlebars.registerHelper('displayPlan', function(value)
+				{
+
+								return ucfirst(value).replaceAll("_", " ");
+
+				});
+
+				/**
+				 * Returns plain text removes underscore from text
+				 */
+				Handlebars.registerHelper('displayPlainText', function(value)
+				{
+
+								return value.split("_").join(" ");
+
+				});
+				
+				/**
+				 * Returns plain text removes underscore from text
+				 */
+				Handlebars.registerHelper('displayTaskStatus', function(value)
+				{
+           var val = value.split("_").join("").trim().toLowerCase();
+           if(val == "yettostart")
+           				return  "Not Started";
+           else 
+								return ucfirst(value.split("_").join(" ").trim());
+
+				});
+				
+			
+				Handlebars.registerHelper('getCurrentContactProperty', function(value)
+				{
+								if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+								{
+												var contact_properties = App_Contacts.contactDetailView.model.get('properties')
+												console.log(App_Contacts.contactDetailView.model.toJSON());
+												return getPropertyValue(contact_properties, value);
+								}
+				});
+
+				Handlebars.registerHelper('safe_string', function(data)
+				{
+
+								data = data.replace(/\n/, "<br/>");
+								return new Handlebars.SafeString(data);
+				});
+
+				Handlebars.registerHelper('string_to_date', function(format, date)
+				{
+
+								return new Date(date).format(format);
+				});
+
+				Handlebars.registerHelper('isArray', function(data, options)
+				{
+								if (isArray(data))
+												return options.fn(this);
+								return options.inverse(this);
+				});
+
+				Handlebars.registerHelper('is_string', function(data, options)
+				{
+								if (typeof data == "string")
+												return options.fn(this);
+								return options.inverse(this);
+
+				});
+
+				Handlebars.registerHelper("bindData", function(data)
+				{
+
+								return JSON.stringify(data);
+				});
+
+				Handlebars.registerHelper("getCurrentUserPrefs", function(options)
+				{
+								if (CURRENT_USER_PREFS)
+												;
+								return options.fn(CURRENT_USER_PREFS);
+				});
+
+				Handlebars.registerHelper("getCurrentDomain", function(options)
+				{
+
+								var url = window.location.host;
+
+								var exp = /(\.)/;
+
+								if (url.search(exp) >= 0)
+												return url.split(exp)[0];
+
+								return " ";
+				});
+
+				// Gets date in given range
+				Handlebars.registerHelper('date-range', function(from_date_string, no_of_days, options)
+				{
+								var from_date = Date.parse(from_date_string);
+								var to_date = Date.today().add({ days : parseInt(no_of_days) });
+								return to_date.toString('MMMM d, yyyy') + " - " + from_date.toString('MMMM d, yyyy');
+
+				});
+
+				Handlebars.registerHelper("extractEmail", function(content, options)
+				{
+
+								console.log(content);
+
+								return options.fn(content.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0]);
+				});
+
+				Handlebars.registerHelper('getCurrentContactPropertyBlock', function(value, options)
+				{
+								if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+								{
+												var contact_properties = App_Contacts.contactDetailView.model.get('properties')
+												console.log(App_Contacts.contactDetailView.model.toJSON());
+												return options.fn(getPropertyValue(contact_properties, value));
+								}
+				});
+
+				Handlebars.registerHelper('isDuplicateContactProperty', function(properties, key, options)
+				{
+								if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+								{
+												var contact_properties = App_Contacts.contactDetailView.model.get('properties')
+												var currentContactEntity = getPropertyValue(contact_properties, key);
+												var contactEntity = getPropertyValue(properties, key);
+
+												if (!currentContactEntity || !contactEntity)
+												{
+																currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
+																contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
+												}
+
+												if (currentContactEntity == contactEntity)
+																return options.fn(this);
+
+												return options.inverse(this)
+								}
+				});
+
+				Handlebars.registerHelper('containString', function(value, target, options)
+				{
+								if (target.search(value) != -1)
+												return options.fn(this);
+
+								return options.inverse(this);
+				});
+				Handlebars.registerHelper('is_emailPlan', function(planId, options)
+				{
+
+								if (planId.search("email") != -1)
+												return options.fn(this);
+
+								return options.inverse(this);
+
+				});
+				Handlebars.registerHelper('is_userPlan', function(planId, options)
+				{
+								if (planId.search("email") != -1)
+												return options.inverse(this);
+								return options.fn(this);
+
+				});
+
+				Handlebars.registerHelper('numeric_operation', function(operand1, operand2, operator)
+				{
+
+								var operators = "/*-+";
+
+								if (operators.indexOf(operator) == -1)
+												return "";
+
+								if (operator == "+")
+												return operand1 + operand2;
+
+								if (operator == "-")
+												return operand1 - operand2;
+
+								if (operator == "*")
+												return operand1 * operand2;
+
+								if (operator == "/")
+												return operand1 / operand2;
+				});
+				Handlebars.registerHelper('get_total_amount', function(operand1, operand2)
+				{
+
+								return (operand1 / 100) * operand2;
+				});
+
+				Handlebars.registerHelper('check_length', function(content, length, options)
+				{
+
+								if (parseInt(content.length) > parseInt(length))
+												return options.fn(this);
+
+								return options.inverse(this);
+				});
+				Handlebars.registerHelper('get_unrefunded_amount', function(operand1, operand2)
+				{
+								return (operand1 - operand2) / 100;
+
+				});
+
+				Handlebars.registerHelper('check_json_length', function(content, length, options)
+				{
+								var json_length = 0;
+								for ( var prop in content)
+								{
+												json_length++;
+								}
+
+								if (json_length == parseInt(length))
+								{
+												for ( var prop in content)
+												{
+																return options.fn({ property : prop, value : content[prop], last : true });
+												}
+								}
+
+								return options.inverse(content);
+				});
+
+				Handlebars.registerHelper('iterate_json', function(context, options)
+				{
+								var result = "";
+								var count = 0;
+								var length = 0;
+								for ( var prop in context)
+								{
+												length++;
+								}
+
+								for ( var prop in context)
+								{
+												count++;
+												if (count == length)
+																result = result + options.fn({ property : prop, value : context[prop], last : true });
+												else
+																result = result + options.fn({ property : prop, value : context[prop], last : false });
+
+								}
+
+								console.log(result);
+								return result;
+				});
+
+				Handlebars.registerHelper('get_social_icon', function(name)
+				{
+								return get_social_icon(name);
+
+				});
+
+				Handlebars.registerHelper("each_with_index", function(array, options)
+				{
+								var buffer = "";
+								for (var i = 0, j = array.length; i < j; i++)
+								{
+												var item = array[i];
+
+												// stick an index property onto the item, starting with 1, may make
+												// configurable later
+												item.index = i + 1;
+
+												console.log(item);
+												// show the inside of the block
+												buffer += options.fn(item);
+								}
+
+								// return the finished buffer
+								return buffer;
+
+				});
+
+				Handlebars.registerHelper('if_json', function(context, options)
+				{
+
+								try
+								{
+												var json = $.parseJSON(context);
+
+												if (typeof json === 'object')
+																return options.fn(this);
+												return options.inverse(this);
+								}
+								catch (err)
+								{
+												return options.inverse(this);
+								}
+				});
+
+				Handlebars.registerHelper('add_tag', function(tag)
+				{
+								addTagAgile(tag);
+				});
+
+				Handlebars.registerHelper('set_up_dashboard_padcontent', function(key)
+				{
+								return new Handlebars.SafeString(getTemplate("empty-collection-model", CONTENT_JSON.dashboard[key]));
+				});
+
+				/**
+				 * Removes surrounded square brackets
+				 */
+				Handlebars.registerHelper('removeSquareBrackets', function(value)
+				{
+								return value.replace(/[\[\]]+/g, '');
+				});
+
+				/**
+				 * Removes "" with single quotes brackets
+				 */
+				Handlebars.registerHelper('removeDoubleCoutes', function(value)
+				{
+								var strings = value.replace(/[\[\]]+/g, '');
+								var charwithsinglequote = strings.replace(/"/g, "'");
+								return charwithsinglequote;
+				});
+
+				/**
+				 * Shows list of triggers separated by comma
+				 */
+				Handlebars.registerHelper('toLinkTrigger', function(context, options)
+				{
+								var ret = "";
+								for (var i = 0, j = context.length; i < j; i++)
+								{
+												ret = ret + options.fn(context[i]);
+
+												// Avoid comma appending to last element
+												if (i < j - 1)
+												{
+																ret = ret + ", ";
+												}
+												;
+								}
+								return ret;
+				});
+
+				// Gets minutes from milli seconds
+				Handlebars.registerHelper('millSecondsToMinutes', function(timeInMill)
+				{
+								if (isNaN(timeInMill))
+												return;
+								var sec = timeInMill / 1000;
+								var min = Math.floor(sec / 60);
+
+								if (min < 1)
+												return Math.ceil(sec) + " secs";
+
+								var remainingSec = Math.ceil(sec % 60);
+
+								return min + " mins, " + remainingSec + " secs";
+				});
+
+				Handlebars.registerHelper('if_overflow', function(content, div_height, options)
+				{
+
+								if (!content)
+												return;
+
+								console.log($('#Linkedin').width());
+								content = content.trim();
+								var element = $("<div style='width:" + $('#Linkedin').width() + "px;" + "word-break:normal;word-wrap:break-word;display:none;'>" + content + "</div>");
+
+								$("#content").append(element);
+
+								console.log(element.height() + " " + parseInt(div_height))
+								if (element.height() > parseInt(div_height))
+												return options.fn(this);
+								return options.inverse(this);
+				});
+
+				/**
+				 * To set up star rating in contacts listing
+				 */
+				Handlebars.registerHelper('setupRating', function(value)
+				{
+
+								var element = "";
+								for (var i = 0; i < 5; i++)
+								{
+												if (i < parseInt(value))
+												{
+																element = element.concat('<li style="display: inline;"><img src="img/star-on.png" alt="' + i + '"></li>');
+																continue;
+												}
+												element = element.concat('<li style="display: inline;"><img src="img/star-off.png" alt="' + i + '"></li>');
+								}
+								return new Handlebars.SafeString(element);
+				});
+
+				/**
+				 * Builds options to be shown in the table heading of CSV import. Also tries
+				 * to match headings in select field
+				 */
+				Handlebars.registerHelper('setupCSVUploadOptions', function(type, key, context)
+				{
+								// console.log(context.toJSON());
+								var template;
+								if (type == "contacts")
+								{
+												template = $(getTemplate('csv_upload_options', context));
+								}
+								else if (type == "company")
+								{
+												template = $(getTemplate('csv_companies_upload_options', context));
+								}
+								else if (type == "deals")
+								{
+												template = $(getTemplate('csv_deals_options', context));
+								}
+
+								// Replaces _ with spaces
+								key = key.replace("_", " ");
+
+								var isFound = false;
+
+								var match_weight = 0;
+
+								var key_length = key.length;
+								var key = key.toLowerCase();
+								var matched_value;
+
+								var selected_element;
+								template.find('option').each(function(index, element)
+								{
+												if ($(element).text().toLowerCase().indexOf(key) != -1)
+												{
+
+																var current_match_weight = key_length / $(element).text().length;
+																if (match_weight >= current_match_weight)
+																				return;
+
+																selected_element = $(element);
+																matched_value = $(element).text();
+																match_weight = current_match_weight;
+												}
+								})
+
+								console.log(matched_value + ", " + key + " : " + match_weight);
+
+								for (var i = 0; i < key.length - 3; i++)
+								{
+												template.find('option').each(function(index, element)
+												{
+																if ($(element).text().toLowerCase().indexOf(key.substr(0, key.length - i).toLowerCase()) != -1)
+																{
+																				console.log(key.substr(0, key.length - i) + " , " + $(element).text());
+																				var current_match_weight = key.substr(0, key.length - i).length / $(element).text().length;
+																				console.log(current_match_weight);
+																				if (match_weight >= current_match_weight)
+																								return;
+																				selected_element = $(element);
+																				matched_value = $(element).text();
+																				match_weight = current_match_weight;
+																}
+												})
+								}
+
+								$(selected_element).attr("selected", true);
+
+								/*
+								 * // Iterates to create various combinations and check with the header
+								 * for ( var i = 0; i < key.length - 3; i++) {
+								 * template.find('option').each(function(index, element) { if
+								 * ($(element).val().toLowerCase().indexOf(key) != -1) { isFound = true;
+								 * $(element).attr("selected", true); return false; } else if
+								 * ($(element).val().toLowerCase().indexOf(key.substr(0, key.length -
+								 * i).toLowerCase()) != -1) { isFound = true;
+								 * $(element).attr("selected", true); return false; }
+								 * 
+								 * }); if (isFound) break; }
+								 */
+								return new Handlebars.SafeString($('<div>').html(template).html());
+				});
+
+				/**
+				 * Converts total seconds into hours, minutes and seconds. For e.g. 3600
+				 * secs - 1hr 0 mins 0secs
+				 */
+				Handlebars.registerHelper('convertSecondsToHour', function(totalSec)
+				{
+								var hours = parseInt(totalSec / 3600) % 24;
+								var minutes = parseInt(totalSec / 60) % 60;
+								var seconds = totalSec % 60;
+
+								// show only seconds if hours and mins are zero
+								if (hours == 0 && minutes == 0)
+												return (seconds + "s");
+
+								// show mins and secs if hours are zero.
+								if (hours == 0)
+												return (minutes + "m ") + (seconds + "s");
+
+								var result = (hours + "h ") + (minutes + "m ") + (seconds + "s");
+								return result;
+				});
+
+				/**
+				 * To check and return value of original referrer
+				 */
+				Handlebars.registerHelper('checkOriginalRef', function(original_ref)
+				{
+								if (!getCurrentContactProperty(original_ref))
+												return "unknown";
+
+								var url = getCurrentContactProperty(original_ref);
+
+								url = url.split('/');
+								url = (url[0] + '//' + url[2]);
+								return new Handlebars.SafeString(
+																'<a style="text-decoration: none" target="_blank" href="' + getCurrentContactProperty(original_ref) + '">' + url + '</a>');
+				});
+
+				/**
+				 * To check google url and key words
+				 */
+				Handlebars.registerHelper('queryWords', function(original_ref)
+				{
+								// Check if original referrer exists
+								if (getCurrentContactProperty(original_ref))
+								{
+												// Get input url from contact properties and initialize reference
+												// url
+												var inputUrl = getCurrentContactProperty(original_ref);
+												var referenceUrl = 'www.google.';
+
+												// Get host from input url and compare with reference url if equal
+												var tempUrl = inputUrl.split('/');
+												tempUrl = tempUrl[2].slice(0, 11);
+												if (tempUrl === referenceUrl)
+												{
+																// Get search term from input url
+																var parser = document.createElement('a');
+																parser.href = inputUrl;
+																var search = parser.search;
+
+																// If search term exists, check if 'q' parameter exists, and
+																// return its value
+																if (search.length > 1)
+																{
+																				search = search.split('&');
+																				var length = search.length;
+																				for (var i = 0; i < length; i++)
+																				{
+																								if (search[i].indexOf('q=') != -1)
+																								{
+																												search = search[i].split('=');
+																												return new Handlebars.SafeString('( Keyword : ' + search[1].split('+').join(" ") + ' )');
+																								}
+																				}
+																}
+												}
+												else
+																return;
+								}
+				});
+
+				/**
+				 * Returns contact full name if last-name exists, otherwise only first_name
+				 * for contact type PERSON. It returns company name for other contact type.
+				 * 
+				 */
+				Handlebars.registerHelper('contact_name', function(properties, type)
+				{
+
+								if (type === 'PERSON')
+								{
+												for (var i = 0; i < properties.length; i++)
+												{
+
+																// if last-name exists, return full name.
+																if (properties[i].name === "last_name")
+																				return (getPropertyValue(properties, "first_name") + " " + properties[i].value);
+
+																else if (properties[i].name === "first_name")
+																				return properties[i].value;
+												}
+
+												return "Contact";
+								}
+
+								// COMPANY type
+								for (var i = 0; i < properties.length; i++)
+								{
+												if (properties[i].name === "name")
+																return properties[i].value;
+								}
+								return "Company";
+				});
+
+				/**
+				 * Returns full name of contact. Use this when empty value is not
+				 * acceptable. Takes care that, even when no names are defined, returns
+				 * email(necessary for PERSON) or Company <id>. Calls function
+				 * getContactName defined in agile-typeahead.js. Also typeahead uses this
+				 * fxn to append values as tags.
+				 */
+				Handlebars.registerHelper('contact_name_necessary', function(contact)
+				{
+								return getContactName(contact);
+				});
+
+				/**
+				 * To check if string is blank
+				 */
+				Handlebars.registerHelper('is_blank', function(value, options)
+				{
+								value = value.trim();
+
+								if (value == "")
+												return options.fn(value);
+								else
+												return options.inverse(value);
+				})
+
+				/**
+				 * Iterate through list of values (not json)
+				 */
+				Handlebars.registerHelper("each_with_index1", function(array, options)
+				{
+								console.log(array);
+								var buffer = "";
+								for (var i = 0, j = array.length; i < j; i++)
+								{
+												var item = {};
+												item["value"] = array[i];
+
+												console.log(item);
+												// stick an index property onto the item, starting with 1, may make
+												// configurable later
+												item["index"] = i + 1;
+
+												console.log(item);
+												// show the inside of the block
+												buffer += options.fn(item);
+								}
+
+								// return the finished buffer
+								return buffer;
+
+				});
+
+				/**
+				 * If log_type equals true otherwise false
+				 */
+				Handlebars.registerHelper("if_log_type_equals", function(object, key, log_type, options)
+				{
+
+								if (object[key] == log_type)
+												return options.fn(object);
+
+								return options.inverse(object);
+
+				});
+
+				/**
+				 * Identifies EMAIL_SENT campaign-log string and splits the log string based
+				 * on '_aGiLeCrM' delimiter into To, From, Subject and Body.
+				 * 
+				 */
+				Handlebars.registerHelper("if_email_sent", function(object, key, options)
+				{
+
+								// delimiter for campaign send-email log
+								var _AGILE_CRM_DELIMITER = "_aGiLeCrM";
+
+								// if log_type is EMAIL_SENT
+								if (object[key] === "EMAIL_SENT")
+								{
+												// Splits logs message
+												var email_fields = object["message"].split(_AGILE_CRM_DELIMITER, 4);
+
+												// Json to apply for handlebar template
+												var json = {};
+
+												if (email_fields === undefined)
+																return options.inverse(object);
+
+												// Iterates inorder to insert each field into json
+												for (var i = 0; i < email_fields.length; i++)
+												{
+																// Splits based on colon. E.g "To: naresh@agilecrm.com "
+																var arrcolon = email_fields[i].split(":");
+
+																// Inserts LHS of colon as key. E.g., To
+																var key = arrcolon[0];
+																key = key.trim(); // if key starts with space, it
+																// can't
+																// accessible
+
+																// Inserts RHS of colon as value. E.g.,
+																// naresh@agilecrm.com
+																var value = arrcolon.slice(1).join(":"); // join the
+																// remaining string
+																// based on colon,
+																// only first occurence of colon is needed
+																value = value.trim();
+
+																json[key] = value;
+												}
+
+												// inserts time into json
+												json.time = object["time"];
+
+												// apply customized json to template.
+												return options.fn(json);
+								}
+
+								// if not EMAIL_SENT log, goto else in the template
+								return options.inverse(object);
+
+				});
+
+				Handlebars.registerHelper('remove_spaces', function(value)
+				{
+								return value.replace(/ +/g, '');
+
+				});
+
+				Handlebars.registerHelper('replace_spaces', function(value)
+				{
+								return value.replace(/ +/g, '_');
+
+				});
+
+				/***************************************************************************
+				 * Returns campaignStatus object from contact campaignStatus array having
+				 * same campaign-id. It is used to get start and completed time from array.
+				 **************************************************************************/
+				Handlebars.registerHelper('if_same_campaign', function(object, data, options)
+				{
+
+								var campaignStatusArray = object[data];
+
+								// if campaignStatus key doesn't exist return.
+								if (data === undefined || campaignStatusArray === undefined)
+												return;
+
+								// Get campaign-id from hash
+								var current_campaign_id = getIdFromHash();
+
+								for (var i = 0, len = campaignStatusArray.length; i < len; i++)
+								{
+
+												// compares campaign-id of each element of array with
+												// current campaign-id
+												if (campaignStatusArray[i].campaign_id === current_campaign_id)
+												{
+																// if equal, execute template current json
+																return options.fn(campaignStatusArray[i]);
+												}
+								}
+
+				});
+
+				/**
+				 * Returns other active campaigns in campaign-active subscribers.
+				 */
+				Handlebars.registerHelper('if_other_active_campaigns', function(object, data, options)
+				{
+
+								if (object === undefined || object[data] === undefined)
+												return;
+
+								var other_campaigns = {};
+								var other_active_campaigns = [];
+								var other_completed_campaigns = [];
+								var campaignStatusArray = object[data];
+
+								var current_campaign_id = getIdFromHash();
+
+								for (var i = 0, len = campaignStatusArray.length; i < len; i++)
+								{
+												// neglect same campaign
+												if (current_campaign_id === campaignStatusArray[i].campaign_id)
+																continue;
+
+												// push all other active campaigns
+												if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
+																other_active_campaigns.push(campaignStatusArray[i])
+
+																// push all done campaigns
+												if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
+																other_completed_campaigns.push(campaignStatusArray[i]);
+								}
+
+								other_campaigns["active"] = other_active_campaigns;
+								other_campaigns["done"] = other_completed_campaigns;
+
+								return options.fn(other_campaigns);
+
+				});
+
+				/**
+				 * Returns Contact Model from contactDetailView collection.
+				 * 
+				 */
+				Handlebars.registerHelper('contact_model', function(options)
+				{
+
+								if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+								{
+
+												// To show Active Campaigns list immediately after campaign
+												// assigned.
+												if (CONTACT_ASSIGNED_TO_CAMPAIGN)
+												{
+																CONTACT_ASSIGNED_TO_CAMPAIGN = false;
+
+																// fetches updated contact json
+																var contact_json = $.ajax({ type : 'GET', url : '/core/api/contacts/' + App_Contacts.contactDetailView.model.get('id'), async : false,
+																				dataType : 'json' }).responseText;
+
+																// Updates Contact Detail model
+																App_Contacts.contactDetailView.model.set(JSON.parse(contact_json));
+
+																return options.fn(JSON.parse(contact_json));
+												}
+
+												// if simply Campaigns tab clicked, use current collection
+												return options.fn(App_Contacts.contactDetailView.model.toJSON());
+								}
+				});
+
+				/**
+				 * Returns json object of active and done subscribers from contact object's
+				 * campaignStatus.
+				 */
+				Handlebars.registerHelper('contact_campaigns', function(object, data, options)
+				{
+
+								// if campaignStatus is not defined, return
+								if (object === undefined || object[data] === undefined)
+												return;
+
+								// Temporary json to insert active and completed campaigns
+								var campaigns = {};
+
+								var active_campaigns = [];
+								var completed_campaigns = [];
+
+								// campaignStatus object of contact
+								var campaignStatusArray = object[data];
+
+								for (var i = 0, len = campaignStatusArray.length; i < len; i++)
+								{
+												// push all active campaigns
+												if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
+																active_campaigns.push(campaignStatusArray[i])
+
+																// push all done campaigns
+												if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
+																completed_campaigns.push(campaignStatusArray[i]);
+								}
+
+								campaigns["active"] = active_campaigns;
+								campaigns["done"] = completed_campaigns;
+
+								// apply obtained campaigns context within
+								// contact_campaigns block
+								return options.fn(campaigns);
+				});
+
+				/**
+				 * Verifies given urls length and returns options hash based on restricted
+				 * count value.
+				 * 
+				 */
+				Handlebars.registerHelper("if_more_urls", function(url_json, url_json_length, options)
+				{
+								var RESTRICT_URLS_COUNT = 3;
+								var temp_urls_array = [];
+								var context_json = {};
+
+								// If length is less than restricted, compile
+								// else block with given url_json
+								if (url_json_length < RESTRICT_URLS_COUNT)
+												return options.inverse(url_json);
+
+								// Insert urls until restricted count reached
+								for (var i = 0; i < url_json.length; i++)
+								{
+												if (i === RESTRICT_URLS_COUNT)
+																break;
+
+												temp_urls_array.push(url_json[i]);
+								}
+
+								context_json.urls = temp_urls_array;
+
+								// More remained
+								context_json.more = url_json_length - RESTRICT_URLS_COUNT;
+
+								return options.fn(context_json);
+
+				});
+
+				/**
+				 * Returns first occurence string from string having underscores E.g,
+				 * mac_os_x to mac
+				 */
+				Handlebars.registerHelper('normalize_os', function(data)
+				{
+								if (data === undefined || data.indexOf('_') === -1)
+												return data;
+
+								// if '_' exists splits
+								return data.split('_')[0];
+				});
+
+				Handlebars.registerHelper('safe_tweet', function(data)
+				{
+								data = data.trim();
+								return new Handlebars.SafeString(data);
+				});
+				/**
+				 * Get stream icon for social suite streams.
+				 */
+				Handlebars.registerHelper('get_stream_icon', function(name)
+				{
+								if (!name)
+												return;
+
+								var icon_json = { "Home" : "icon-home", "Retweets" : "icon-retweet", "DM_Inbox" : "icon-download-alt", "DM_Outbox" : "icon-upload-alt",
+												"Favorites" : "icon-star", "Sent" : "icon-share-alt", "Search" : "icon-search", "Scheduled" : "icon-time", "All_Updates" : "icon-home",
+												"My_Updates" : "icon-share-alt" };
+
+								name = name.trim();
+
+								if (icon_json[name])
+												return icon_json[name];
+
+								return "icon-globe";
+
+				});
+
+				/**
+				 * Get task list name without underscore and caps, for new task UI.
+				 */
+				Handlebars.registerHelper('get_normal_name', function(name)
+				{
+								if (!name)
+												return;
+
+								var name_json = { "HIGH" : "High", "LOW" : "Low", "NORMAL" : "Normal", "EMAIL" : "Email", "CALL" : "Call", "SEND" : "Send", "TWEET" : "Tweet",
+												"FOLLOW_UP" : "Follow Up", "MEETING" : "Meeting", "MILESTONE" : "Milestone", "OTHER" : "Other", "YET_TO_START" : "Yet To Start",
+												"IN_PROGRESS" : "In Progress", "COMPLETED" : "Completed", "TODAY" : "Today", "TOMORROW" : "Tomorrow", "OVERDUE" : "Overdue", "LATER" : "Later" };
+
+								name = name.trim();
+
+								if (name_json[name])
+												return name_json[name];
+
+								return name;
+
+				});
+
+				/**
+				 * put user address location togather separated by comma.
+				 */
+				Handlebars.registerHelper('user_location', function()
+				{
+
+								var City = this.city == "?" ? "" : (this.city + ", ");
+								var Region = this.region == "?" ? "" : (this.region + ", ");
+								var Country = this.country;
+								if (this.city == "?" && this.region == "?")
+												Country = this.country == "?" ? this.city_lat_long : (this.city_lat_long + " ( " + this.country + " )");
+
+								return (City + Region + Country).trim();
+				});
+
+				/**
+				 * Trims trailing spaces
+				 */
+				Handlebars.registerHelper('trim_space', function(value)
+				{
+
+								if (value === undefined)
+												return value;
+
+								return value.trim();
+				});
+
+				/**
+				 * Returns reputation name based on value
+				 * 
+				 */
+				Handlebars.registerHelper('get_subaccount_reputation', function(value)
+				{
+								var type = "";
+								var reputation = "Unknown";
+
+								if (value > 1 && value < 40)
+								{
+												type = "important";
+												reputation = "Poor";
+								}
+								else if (value >= 40 && value < 75)
+								{
+												type = "";
+												reputation = "Ok";
+								}
+								else if (value >= 75 && value < 90)
+								{
+												type = "success";
+												reputation = "Good";
+								}
+								else if (value >= 90)
+								{
+												type = "success";
+												reputation = "Excellent";
+								}
+
+								return "<span style='font-size:13px;position: relative;top: -3px' class='label label-" + type
+
+								+ "'>" + reputation + "</span> <!--<span class='badge badge-" + type + "'>" + value + "</span>-->";
+
+				});
+
+				/**
+				 * Returns id from hash. It returns id from hash iff id exists at last.
+				 * 
+				 */
+				Handlebars.registerHelper('get_id_from_hash', function()
+				{
+
+								return getIdFromHash();
+
+				});
+
+				Handlebars.registerHelper('get_subscribers_type_from_hash', function()
+				{
+
+								// Returns "workflows" from "#workflows"
+								var hash = window.location.hash.substr(1);
+
+								if (hash.indexOf("all") != -1)
+												return "All";
+
+								if (hash.indexOf("active") != -1)
+												return "Active";
+
+								if (hash.indexOf("completed") != -1)
+												return "Completed";
+
+								if (hash.indexOf("removed") != -1)
+												return "Removed";
+
+								if (hash.indexOf("unsubscribed") != -1)
+												return "Unsubscribed";
+
+								if (hash.indexOf("hardbounced") != -1)
+												return "Hard Bounced";
+
+								if (hash.indexOf("softbounced") != -1)
+												return "Soft Bounced";
+
+								if (hash.indexOf("spam-reported") != -1)
+												return "Spam Reported";
+				});
+
+				Handlebars.registerHelper("check_plan", function(plan, options)
+				{
+								console.log(plan);
+
+								if (!_billing_restriction)
+												return options.fn(this);
+
+								if (_billing_restriction.currentLimits.planName == plan)
+												return options.fn(this);
+
+								return options.inverse(this);
+
+				});
+
+				/**
+				 * Safari browser doesn't supporting few CSS properties like margin-top,
+				 * margin-bottom etc. So this helper is used to add compatible CSS
+				 * properties to Safari
+				 */
+				Handlebars.registerHelper("isSafariBrowser", function(options)
+				{
+
+								if (navigator.userAgent.indexOf('Safari') !== -1 && navigator.userAgent.indexOf('Chrome') === -1)
+												return options.fn(this);
+
+								return options.inverse(this);
+				});
+
+				/**
+				 * give custome status base on xerotype
+				 */
+
+				Handlebars.registerHelper('xeroType', function(type)
+				{
+								return (type == "ACCPAY") ? "Payable" : "Receivable";
+				});
+
+				/**
+				 * give custom type to xero type
+				 */
+				Handlebars.registerHelper('xeroTypeToolTip', function(type)
+				{
+								return (type == "ACCPAY") ? "Payable" : "Receivable";
+				});
+
+				/**
+				 * gives first latter capital for given input
+				 */
+				Handlebars.registerHelper('capFirstLetter', function(data)
+				{
+								if (data === "DEFAULT")
+								{
+												// console.log("return empty");
+												return "";
+								}
+								else
+								{
+												var temp = data.toLowerCase();
+												return temp.charAt(0).toUpperCase() + temp.slice(1);
+								}
+				});
+
+				Handlebars.registerHelper('qbStatus', function(Balance)
+				{
+								console.log(this);
+								console.log(this.TotalAmt);
+								if (Balance == 0)
+								{
+												return "Paid"
+								}
+								else
+								{
+												return "Due"
+								}
+				});
+				Handlebars.registerHelper('currencyFormat', function(data)
+				{
+
+								return Number(data).toLocaleString('en');
+								// data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+				});
+
+				Handlebars.registerHelper('QbDateFormat', function(data)
+				{
+
+								var i = [];
+								i = data.split("-");
+								return i[0] + "-" + i[2] + "-" + i[1];
+				});
+
+				Handlebars.registerHelper("hasScope", function(scope_constant, options)
+				{
+								if (CURRENT_DOMAIN_USER.scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.scopes) != -1)
+												return options.fn(this);
+
+								return options.inverse(this);
+				});
+
+				Handlebars.registerHelper("canSyncContacts", function(options)
+				{
+								if (canImportContacts())
+												return options.fn(this);
+
+								return options.inverse(this);
+				});
+
+				/**
+				 * To check Access controls for showing icons on dashboard
+				 */
+				Handlebars.registerHelper('hasMenuScope', function(item, options)
+				{
+								if ((CURRENT_DOMAIN_USER.menu_scopes).indexOf(item) != -1)
+												return options.fn(this);
+								else
+												return options.inverse(this);
+				});
+
+				Handlebars.registerHelper('fetchXeroUser', function(data)
+				{
+								return JSON.parse(data).xeroemail;
+				});
+
+				Handlebars.registerHelper('getfbreturndomain', function(data)
+				{
+								var arr = window.location.href.split('/')
+								return arr[2];
+				});
+
+				Handlebars
+												.registerHelper(
+																				'tagManagementCollectionSetup',
+																				function(tags)
+																				{
+
+																								console.log(tags);
+																								var json = {};
+
+																								var keys = [];
+																								// Store tags in a json, starting letter as key
+																								for (var i = 0; i < tags.length; i++)
+																								{
+																												var tag = tags[i].tag;
+																												var key = tag.charAt(0).toUpperCase();
+																												// console.log(tag);
+																												if (jQuery.inArray(key, keys) == -1)
+																																keys.push(key);
+																								}
+
+																								console.log(keys);
+																								var html_temp = "";
+
+																								for (var i = 0; i < keys.length; i++)
+																												html_temp += "<div class=\"clearfix\"></div><div style='margin-right:10px;'><div class='tag-key tag-management-key'>" + keys[i] + "</div><div class=\"clearfix\"></div><div class='left' tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div>";
+
+																								console.log(html_temp);
+																								return new Handlebars.SafeString(html_temp);
+																				});
+
+				Handlebars.registerHelper('containsScope', function(item, list, options)
+				{
+								if (list.length == 0 || !item)
+												return options.inverse(this);
+
+								if (jQuery.inArray(item, list) == -1)
+												return options.inverse(this);
+
+								return options.fn(this);
+
+				});
+
+				Handlebars.registerHelper('isOwnerOfContact', function(owner_id, options)
+				{
+
+								if (CURRENT_DOMAIN_USER.id == owner_id)
+												return options.fn(this);
+								return options.inverse(this);
+				});
+
+				Handlebars.registerHelper('canEditContact', function(owner_id, options)
+				{
+								if (canEditContact(owner_id))
+												return options.fn(this);
+
+								return options.inverse(this)
+				});
+
+				Handlebars.registerHelper('canEditCurrentContact', function(owner_id, options)
+				{
+								if (canEditCurrentContact())
+												return options.fn(this);
+
+								return options.inverse(this)
+				})
+
+				Handlebars.registerHelper('gateway_exists', function(value, target, options)
+				{
+
+								for (var i = 0; i < target.length; i++)
+								{
+
+												var prefs = JSON.parse(target[i].prefs);
+
+												if (target[i].name == "EmailGateway")
+												{
+
+																if (prefs.email_api == value)
+																				return options.fn(target[i]);
+												}
+
+												if (target[i].name == "SMS-Gateway")
+												{
+																if (prefs.sms_api == value)
+																				return options.fn(target[i]);
+												}
+								}
+								return options.inverse(this);
+				});
+
+				Handlebars.registerHelper("each_index_slice", function(array, index, options)
+				{
+								var buffer = "";
+								for (var i = index; i < array.length; i++)
+								{
+												var item = array[i];
+
+												// stick an index property onto the item, starting with 1, may make
+												// configurable later
+												// item.index = i + 1;
+
+												console.log(item);
+												// show the inside of the block
+												buffer += options.fn(item);
+								}
+
+								// return the finished buffer
+								return buffer;
+
+				});
+
+				Handlebars.registerHelper('gateway_exists', function(value, target, options)
+				{
+
+								for (var i = 0; i < target.length; i++)
+								{
+
+												var prefs = JSON.parse(target[i].prefs);
+
+												if (target[i].name == "EmailGateway")
+												{
+
+																if (prefs.email_api == value)
+																				return options.fn(target[i]);
+												}
+
+												if (target[i].name == "SMS-Gateway")
+												{
+																if (prefs.sms_api == value)
+																				return options.fn(target[i]);
+												}
+								}
+								return options.inverse(this);
+				});
+
+				Handlebars.registerHelper('isOwnerOfContact', function(owner_id, options)
+				{
+
+								if (CURRENT_DOMAIN_USER.id == owner_id)
+												return options.fn(this);
+								return options.inverse(this);
+				});
+
+				Handlebars.registerHelper('canEditContact', function(owner_id, options)
+				{
+								if ((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+												return options.fn(this);
+
+								return options.inverse(this)
+				});
+
+				Handlebars.registerHelper('getAccountPlanName', function(plan_name)
+				{
+								if (!plan_name)
+												return "Free";
+
+								var plan_fragments = plan_name.split("_");
+
+								return ucfirst(plan_fragments[0]);
+
+				});
+
+				Handlebars.registerHelper('getAccountPlanInteval', function(plan_name)
+				{
+								if (!plan_name)
+												return "Monthly";
+
+								var plan_fragments = plan_name.split("_");
+
+								return ucfirst(plan_fragments[1]);
+
+				});
+
+				Handlebars.registerHelper('getSubscriptionBasedOnPlan', function(customer, plan, options)
+				{
+								var subscription = getSubscriptionWithAmount(customer, plan);
+
+								if (subscription != null)
+												return options.fn(subscription);
+
+								return options.inverse(this);
+				});
+
+				// handling with iso date
+				Handlebars.registerHelper("iso_date_to_normalizeDate", function(dateString)
+				{
+
+								/*
+								 * var myDate = new Date(dateString); var timestamp = myDate.getTime();
+								 * var d = new Date(parseInt(timestamp) / 1000).format("dd-MM-yyyy");
+								 * return d;
+								 */
+								if (dateString.length <= 0)
+												return;
+								var arr = dateString.split("T");
+								console.log("normalize date " + arr[0]);
+								// var d = new Date(arr[0]).format("dd-MM-yyyy");
+								return arr[0];
+
+				});
+
+				/**
+				 * Index starts from 1
+				 */
+				Handlebars.registerHelper("getMonthFromIndex", function(month_index)
+				{
+								var monthArray = [
+																"January", "february", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+								];
+								if (month_index > 12)
+												return monthArray[11];
+
+								return monthArray[month_index - 1];
+				});
+
+				Handlebars.registerHelper('xeroOrganisationShortCode', function(block)
+				{
+								if (typeof SHORT_CODE == "undefined" || SHORT_CODE == "")
+								{
+												return false;
+								}
+								else
+								{
+												return SHORT_CODE;
+								}
+				});
+				Handlebars.registerHelper('if_id', function(ctype, options)
+				{
+								if (this.type == ctype)
+								{
+												return options.fn(this);
+								}
+				});
+
+				/**
+				 * extract time from epochTime
+				 */
+				Handlebars.registerHelper("getTime", function(date)
+				{
+
+								if (!date)
+												return;
+
+								if ((date / 100000000000) > 1)
+								{
+												var d = new Date(parseInt(date));
+												var hours = d.getHours();
+												if (hours > 12)
+																hours = hours - 12;
+												var min = d.getMinutes();
+												if (min == 0)
+																min = "00"
+												var ampm = hours >= 12 ? "PM" : "AM";
+												return hours + ":" + min + " " + ampm;
+								}
+								// date form milliseconds
+
+								var d = new Date(parseInt(date) * 1000);
+								var hours = d.getHours();
+								if (hours > 12)
+												hours = hours - 12;
+								var min = d.getMinutes();
+								if (min == 0)
+												min = "00"
+								var ampm = hours >= 12 ? "PM" : "AM";
+								return hours + ":" + min + " " + ampm;
+
+				});
+
+				/**
+				 * get custom date with time
+				 */
+
+				Handlebars.registerHelper("getCustomDateWithTime", function(start, end)
+				{
+								var day1 = getDay(start);
+								var day2 = getDay(end);
+
+								var d1 = getCustomFormatedDate(start);
+								var d2 = getCustomFormatedDate(end);
+								var time = extractTimeFromDate(end);
+
+								if (day1 != day2)
+												return d1 + " - " + d2;
+								else
+												return d1 + " - " + time;
+
+				});
+
+				function getCustomFormatedDate(date)
+				{
+
+								var months = [
+																'Jan', 'Feb', 'March', 'April', 'May', 'Jun', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'
+								];
+
+								if (!date)
+												return;
+
+								if ((date / 100000000000) > 1)
+								{
+												var d = new Date(parseInt(date));
+												var hours = d.getHours();
+												var year = d.getFullYear();
+												var date = d.getDate();
+												var month = d.getMonth();
+												var min = d.getMinutes();
+												if (min == 0)
+																min = "00"
+												var ampm = hours >= 12 ? "PM" : "AM";
+												if (hours > 12)
+																hours = hours - 12;
+												return months[month] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
+
+								}
+								// date form milliseconds
+
+								var d = new Date(parseInt(date) * 1000);
+								var hours = d.getHours();
+								var year = d.getFullYear();
+								var date = d.getDate();
+								var month = d.getMonth();
+								var min = d.getMinutes();
+								if (min == 0)
+												min = "00"
+								var ampm = hours >= 12 ? "PM" : "AM";
+								if (hours > 12)
+												hours = hours - 12;
+								return months[month] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
+
+				}
+				function extractTimeFromDate(date)
+				{
+								if (!date)
+												return;
+
+								if ((date / 100000000000) > 1)
+								{
+												var d = new Date(parseInt(date));
+												var hours = d.getHours();
+
+												var min = d.getMinutes();
+												if (min == 0)
+																min = "00"
+												var ampm = hours >= 12 ? "PM" : "AM";
+												if (hours > 12)
+																hours = hours - 12;
+												return hours + ":" + min + " " + ampm;
+								}
+								// date form milliseconds
+
+								var d = new Date(parseInt(date) * 1000);
+								var hours = d.getHours();
+								var min = d.getMinutes();
+								if (min == 0)
+												min = "00"
+								var ampm = hours >= 12 ? "PM" : "AM";
+								if (hours > 12)
+												hours = hours - 12;
+								return hours + ":" + min + " " + ampm;
+				}
+
+				function getDay(date)
+				{
+								if ((date / 100000000000) > 1)
+								{
+												var sDate = new Date(parseInt(date));
+												return sDate.getDate();
+								}
+								else
+								{
+												var sDate = new Date(parseInt(date) * 1000);
+												return sDate.getDate();
+								}
+				}
+
+				Handlebars.registerHelper('buildOptions', function(field_data)
+				{
+								var list_values = field_data.split(";");
+								var list_options = '';
+								// Create options based on list values
+								$.each(list_values, function(index, value)
+								{
+												if (value != "")
+																list_options = list_options.concat('<option value="' + value + '">' + value + '</option>');
+								});
+
+								return list_options;
+				});
+
+				Handlebars.registerHelper('address_Template', function(properties)
+				{
+
+								for (var i = 0, l = properties.length; i < l; i++)
+								{
+
+												if (properties[i].name == "address")
+												{
+																var el = '';
+
+																var address = {};
+																try
+																{
+																				address = JSON.parse(properties[i].value);
+																}
+																catch (err)
+																{
+																				address['address'] = properties[i].value;
+																}
+
+																// Gets properties (keys) count of given json
+																// object
+																var count = countJsonProperties(address);
+
+																$.each(address, function(key, val)
+																{
+																				if (--count == 0)
+																				{
+																								el = el.concat(val + ".");
+																								return;
+																				}
+																				el = el.concat(val + ", ");
+																});
+																/*
+																 * if (properties[i].subtype) el = el.concat(" <span
+																 * class='label'>" + properties[i].subtype + "</span>");
+																 */
+
+																return new Handlebars.SafeString(el);
+												}
+								}
+				});
+
+				// To show related to contacts for contacts as well as companies
+				Handlebars.registerHelper('related_to_contacts', function(data, options)
+				{
+								var el = "";
+								var count = data.length;
+								$.each(data, function(key, value)
+								{
+												var html = getTemplate("related-to-contacts", value);
+												if (--count == 0)
+												{
+																el = el.concat(html);
+																return;
+												}
+												el = el.concat(html + ", ");
+								});
+								return new Handlebars.SafeString(el);
+				});
+
+				// To show only one related to contacts or companies in deals
+				Handlebars.registerHelper('related_to_one', function(data, options)
+				{
+								// return "<span>" + getTemplate("related-to-contacts", data[0]) +
+								// "</span>";
+								var el = "";
+								var count = data.length;
+								$.each(data, function(key, value)
+								{
+												if (key <= 3)
+												{
+																var html = getTemplate("related-to-contacts", value);
+																if (--count == 0 || key == 3)
+																{
+																				el = el.concat(html);
+																				return;
+																}
+																el = el.concat(html + ", ");
+												}
+
+								});
+								return new Handlebars.SafeString(el);
+
+				});
+
+				/**
+				 * To represent a number with commas in deals
+				 */
+				Handlebars.registerHelper('numberWithCommas', function(value)
+				{
 								if (value)
 												return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
 				});
@@ -1646,6 +3429,16 @@ $(function()
 				{
 
 								return ucfirst(value).replaceAll("_", " ");
+
+				});
+				
+				/**
+				 * Returns plain text removes underscore from text
+				 */
+				Handlebars.registerHelper('displayPlainText', function(value)
+				{
+
+								return ucfirst(value).replace("_", " ");
 
 				});
 
@@ -2299,7 +4092,7 @@ $(function()
 												// Iterates inorder to insert each field into json
 												for (var i = 0; i < email_fields.length; i++)
 												{
-																// Splits based on colon. E.g "To: naresh@agilecrm.com"
+																// Splits based on colon. E.g "To: naresh@agilecrm.com  "
 																var arrcolon = email_fields[i].split(":");
 
 																// Inserts LHS of colon as key. E.g., To
@@ -2307,7 +4100,7 @@ $(function()
 																key = key.trim(); // if key starts with space, it can't
 																// accessible
 
-																// Inserts RHS of colon as value. E.g., naresh@agilecrm.com
+																// Inserts RHS of colon as value. E.g., naresh@agilecrm.com  
 																var value = arrcolon.slice(1).join(":"); // join the
 																// remaining string
 																// based on colon,
@@ -2576,15 +4369,18 @@ $(function()
 				
 				
 				/**
-				 * Get activity type  without underscore and caps, for deal _details page.
+				 * Get activity type without underscore and caps, for deal _details page.
 				 */
 				Handlebars.registerHelper('get_normal_activity_type', function(name)
 				{
 								if (!name)
 												return;
 
+
 								var name_json = { "DEAL_ADD" : "Deal Created", "DEAL_EDIT" : "Deal Edited", "DEAL_CLOSE" : "Deal Closed", "DEAL_LOST" : "Deal Lost", "DEAL_RELATED_CONTACTS" : " Deal Contacts Changed", "DEAL_OWNER_CHANGE" : "Deal Owner Changed", "DEAL_MILESTONE_CHANGE" : "Deal Milestone Changed",
-												"NOTE_ADD" : "Note Added" };
+
+												"NOTE_ADD" : "Note Added","TASK_ADD":"Task Created", "TASK_EDIT":"Task Updated", "TASK_PROGRESS_CHANGE":"Progress Changed", "TASK_OWNER_CHANGE":"Owner Changed", "TASK_STATUS_CHANGE":"Status Changed","TASK_COMPLETED":"Task Completed","TASK_DELETE":"Task Deleted",
+												"TASK_RELATED_CONTACTS":"Contacts Modified"};
 
 								name = name.trim();
 
@@ -3130,7 +4926,8 @@ $(function()
 								return getPendingEmails();
 				});
 
-				// helper function to return agile bcc special email for inbound mail event trigger
+				// helper function to return agile bcc special email for inbound mail event
+				// trigger
 				Handlebars.registerHelper('inboundMail', function()
 				{
 								var agile_api = $.ajax({ type : 'GET', url : '/core/api/api-key', async : false, dataType : 'json' }).responseText;
@@ -3141,9 +4938,8 @@ $(function()
 
 				/**
 				 * ==============================================================
-				 * -------------------------- jitendra's start script ---------- 
-				 * Please do not add any function in this block
-				 * extract time from epochTime
+				 * -------------------------- jitendra's start script ---------- Please do
+				 * not add any function in this block extract time from epochTime
 				 */
 				Handlebars.registerHelper("getTime", function(date)
 				{
@@ -3426,8 +5222,7 @@ $(function()
 				}
 
 				/**
-				 * ------ End of jitendra script------
-				 * ======== Thank you =================
+				 * ------ End of jitendra script------ ======== Thank you =================
 				 */
 
 				// To pick randomly selected avatar url
@@ -3454,7 +5249,7 @@ $(function()
 				});
 				
 				
-				//@author Purushotham
+				// @author Purushotham
 				Handlebars.registerHelper('secondsToFriendlyTime', function(time) {
 					var hours = Math.floor(time / 3600);
 					if(hours > 0)
@@ -3517,8 +5312,8 @@ $(function()
 		return field_type_name;
 	});
 	
-	//@author Purushotham
-	//function to compare integer values
+	// @author Purushotham
+	// function to compare integer values
 	Handlebars.registerHelper('ifCond', function(v1, type, v2, options) {	
 		switch(type){
 			case "greaterthan":
@@ -3572,8 +5367,8 @@ $(function()
 		return new Handlebars.SafeString(shopify_webhook);
 	});
 	/**
-	 * getting convenient name of portlet
-	 */
+				 * getting convenient name of portlet
+				 */
 	Handlebars.registerHelper('get_portlet_name', function(p_name) {
 		var portlet_name = '';
 		if(p_name=='Filter Based')
@@ -3607,8 +5402,8 @@ $(function()
 		return portlet_name;
 	});
 	/**
-	 * getting portlet icons
-	 */
+				 * getting portlet icons
+				 */
 	Handlebars.registerHelper('get_portlet_icon', function(p_name) {
 		var icon_name = '';
 		if(p_name=='Filter Based')
@@ -3642,8 +5437,8 @@ $(function()
 		return icon_name;
 	});
 	/**
-	 * getting flitered contact portlet header name
-	 */
+				 * getting flitered contact portlet header name
+				 */
 	Handlebars.registerHelper('get_flitered_contact_portlet_header', function(filter_name) {
 		var header_name = '';
 		if(filter_name=='contacts')
@@ -3690,8 +5485,8 @@ $(function()
 	
 	
 	/**
-	 * returns tracks count of opportunity
-	 */
+				 * returns tracks count of opportunity
+				 */
 	Handlebars.registerHelper('getTracksCount', function(options)
 			{
 			if (parseInt(DEAL_TRACKS_COUNT) > 1)
@@ -3700,8 +5495,8 @@ $(function()
 				return options.inverse(this);
 			});
 	/**
-	 * getting flitered contact portlet header name
-	 */
+				 * getting flitered contact portlet header name
+				 */
 	Handlebars.registerHelper('get_deals_funnel_portlet_header', function(track_id) {
 		var header_name = '';
 		if(track_id==0)
@@ -3716,8 +5511,8 @@ $(function()
 	});
 	
 	/**
-	 * getting time in AM and PM format for event portlet
-	 */
+				 * getting time in AM and PM format for event portlet
+				 */
 	Handlebars.registerHelper('get_AM_PM_format', function(date_val) {
 		var date = new Date(date_val * 1000);
 		var hours = date.getHours();
@@ -3731,8 +5526,8 @@ $(function()
 	});
 	
 	/**
-	 * getting duration between two dates for event portlet
-	 */
+				 * getting duration between two dates for event portlet
+				 */
 	Handlebars.registerHelper('get_duration', function(startDate,endDate) {
 		var duration='';
 		var days=0;
@@ -3759,9 +5554,9 @@ $(function()
 	
 	
 	/**
-	 * Returns plain customise text for activity remove underscore and other
-	 * special charecter from string
-	 */
+				 * Returns plain customise text for activity remove underscore and other
+				 * special charecter from string
+				 */
 	Handlebars.registerHelper('displayActivityFieldText', function(value)
 	{
 		var fields = value.replace(/[^a-zA-Z ^,]/g, " ").split(",");
@@ -3799,7 +5594,89 @@ $(function()
 		// update due date
 		text = text.replace('close date', 'Close date');
 		
+        text = text.replace('close date', 'Close date');
+		
+		text = text.replace('end date', 'End time');
+		// update priority
+		text = text.replace('priority', 'Priority');
+		// update category
+		text = text.replace('title', 'Title');
+		
 		return text;
+
+	});
+	
+	
+    /*
+	 * To represent a number with commas in deals from activities menu
+	 */
+	Handlebars.registerHelper('numberWithCommasForActivities', function(value)
+	{
+		value = parseFloat(value);
+		if(value==0)
+			return value;
+	
+		if (value)
+			return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
+	});
+
+
+// function used know weather event rescheduled or modified and task due
+	// date is modified
+	Handlebars.registerHelper('get_event_rescheduled', function(value, options)
+	{
+		console.log(value);
+		var modieied_fields = value.replace(/[^a-zA-Z ^,]/g, " ").split(",");
+		var fields = [];
+		if (modieied_fields)
+		{
+			for (var i = 0; i < modieied_fields.length; i++)
+			{
+				fields.push(modieied_fields[i].trim());
+			}
+		}
+		if (fields.indexOf("start date") != -1)
+		{
+			return options.fn(value);
+		}
+		if (fields.indexOf("due date") != -1)
+		{
+			return options.fn(value);
+		}
+
+		return options.inverse(value);
+
+	});
+
+/**
+	 * gets the duedate and starttime modification value for activities
+	 */
+	Handlebars.registerHelper('getDueDateOfTask', function(fields, values)
+	{
+		var field = fields.replace(/[^a-zA-Z ^,]/g, " ").split(",");
+		var value = values.replace(/[^a-zA-Z0-9 ^,]/g, " ").split(",");
+		var json = {};
+		
+		for(var id=0;id<field.length;id++){
+			field[id]=field[id].trim();
+			value[id]=value[id].trim();
+		}
+		for (var i = 0; i < field.length; i++)
+		{
+
+			json[field[i]] = value[i];
+		}
+
+		if (field.indexOf("due date") != -1)
+		{
+			var dat=parseFloat(json['due date']);
+			return convertToHumanDate("ddd mmm dd yyyy h:MM TT",dat);
+		}
+		if (field.indexOf("start date") != -1)
+		{
+			var dat=parseFloat(json['start date']);
+			return convertToHumanDate("ddd mmm dd yyyy h:MM TT",dat);
+		}
 
 	});
 	

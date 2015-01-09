@@ -97,12 +97,12 @@
 <div class="pull-left task-content-view">
 <div class="pull-left" style="width:68%">
       {{#if is_complete}}
-         {{#is_link subject}}<span class="new-task-subject activate-link task-completed">{{else}}<span class="new-task-subject task-completed">{{/is_link}}{{safe_string subject}}</span>
+         {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject activate-link task-completed">{{else}}<a href="#task/{{id}}"><span class="new-task-subject task-completed">{{/is_link}}{{safe_string subject}}</span></a>
       {{else}}
          {{#if_equals status "COMPLETED"}}
-           {{#is_link subject}}<span class="new-task-subject activate-link task-completed">{{else}}<span class="new-task-subject task-completed">{{/is_link}}{{safe_string subject}}</span>
+           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject activate-link task-completed">{{else}}<a href="#task/{{id}}"><span class="new-task-subject task-completed">{{/is_link}}{{safe_string subject}}</span></a>
          {{else}}
-           {{#is_link subject}}<span class="new-task-subject activate-link">{{else}}<span class="new-task-subject">{{/is_link}}{{safe_string subject}}</span>
+           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject activate-link">{{else}}<a href="#task/{{id}}"><span class="new-task-subject">{{/is_link}}{{safe_string subject}}</span></a>
          {{/if_equals}}       
       {{/if}}      
 </div>
@@ -137,8 +137,8 @@
       <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time>
       <div class="task-actions">
            <i class="task-action icon icon-check is-task-complete" data="{{id}}" title="Mark as Complete"></i>
-           <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>           
-           <i class="task-action icon icon-trash delete-task" data="{{id}}" title="Delete Task"></i>
+           <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>          
+          <i class="task-action icon icon-trash delete-task" data="{{id}}" title="Delete Task"></i>
            {{#if notes}} 
              <i class="task-action icon icon-comment notes-task-popover edit-task" data="{{id}}" title="Notes"></i>
              <span class="txt-small note-count" title="Notes">{{notes.length}}</span>

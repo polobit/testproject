@@ -218,6 +218,9 @@ head.js(LIB_PATH + 'lib/country-from-code.js');
 <!-- Inital.js Text avatars -->
 head.js(LIB_PATH + 'lib/text-avatar/initial.min.js');
 
+<!-- mustache.js -->
+head.js('//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js');
+
 // Fetch/Create contact from our domain
 var Agile_Contact = {};
 
