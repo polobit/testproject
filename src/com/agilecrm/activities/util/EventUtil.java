@@ -312,12 +312,12 @@ public class EventUtil
 	    // Gets Date after numDays days
 	    DateUtil endDateUtil = new DateUtil();
 	    Long endTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000) - 1;
-	    
+
 	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
 
 	    // Gets list of tasks filtered on given conditions
-	    return dao.ofy().query(Event.class).filter("owner", new Key<AgileUser>(AgileUser.class, agileUser.id)).filter("start >=", startTime).filter("start <=", endTime).limit(50)
-		    .order("start").list();
+	    return dao.ofy().query(Event.class).filter("owner", new Key<AgileUser>(AgileUser.class, agileUser.id))
+		    .filter("start >=", startTime).filter("start <=", endTime).limit(50).order("start").list();
 	}
 	catch (Exception e)
 	{
@@ -350,25 +350,28 @@ public class EventUtil
 	List<Event> domain_events = new ArrayList<>();
 	List<String> default_events = getDefaultEventNames();
 
-	List<Event> events = dao.ofy().query(Event.class).filter("start >=", starttime).filter("start <=", endtime)
-	        .order("start").list();
-	if (events != null && events.size() > 0)
+	List<Event> list_events = dao.ofy().query(Event.class).filter("start >=", starttime)
+	        .filter("start <=", endtime).order("start").list();
+
+	List<Event> events = new ArrayList<>();
+
+	for (Event ts : list_events)
+	{
+	    if (!default_events.contains(ts.title))
+		events.add(ts);
+	}
+
+	if (events.isEmpty())
+	    return events;
+
+	else
 	{
 	    Event event = events.get(0);
 	    domain_events = getLatestWithSameStartTime(event.start);
-
-	    List<Event> list_events = new ArrayList<>();
-
-	    for (Event ts : domain_events)
-	    {
-		if (!default_events.contains(ts.title))
-		    list_events.add(ts);
-	    }
-	    return list_events;
+	    return domain_events;
 
 	}
 
-	return null;
     }
 
     /**
@@ -380,14 +383,16 @@ public class EventUtil
     public static List<Event> getLatestWithSameStartTime(Long starttime)
     {
 
-	System.out.println("in getLatest EventsWithSameStartTime " + NamespaceManager.get());
+	List<String> default_events = getDefaultEventNames();
 
-	List<Event> domain_events = new ArrayList<>();
-
-	domain_events = dao.ofy().query(Event.class).filter("start", starttime).list();
-	System.out.println(domain_events.size() + " domainevents size in getlatesteventswithSameStarttime");
-	System.out.println(starttime + " StartTime in getLatestWithStartTime");
-	return domain_events;
+	List<Event> domain_events = dao.listByProperty("start", starttime);
+	List<Event> events = new ArrayList<>();
+	for (Event event : domain_events)
+	{
+	    if (!default_events.contains(event.title))
+		events.add(event);
+	}
+	return events;
 
     }
 
