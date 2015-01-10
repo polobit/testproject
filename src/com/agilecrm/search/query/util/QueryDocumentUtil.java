@@ -13,6 +13,7 @@ import org.apache.commons.lang.time.DateUtils;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.core.api.search.SearchAPI;
+import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -22,6 +23,7 @@ import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
+import com.agilecrm.util.StringUtils2;
 import com.googlecode.objectify.Key;
 
 /**
@@ -691,5 +693,20 @@ public class QueryDocumentUtil
 		}
 		String query = stringBuffer.toString();
 		return query;
+	}
+
+	public static Contact getContactsByPhoneNumber(String phoneNumber) {
+		StringBuilder query = new StringBuilder();
+		phoneNumber = StringUtils2.extractNumber(phoneNumber);
+		query.append("phone=").append(phoneNumber);
+		if(phoneNumber.length() >=8) {
+			query.append(" OR phone=").append(phoneNumber.substring(phoneNumber.length() -8));
+		}
+		AppengineSearch<Contact> appEngineSearch = new AppengineSearch<Contact>(Contact.class);
+		List<Contact> contacts = new ArrayList<Contact>(appEngineSearch.getSearchResults(query.toString(), null, null));
+		if(contacts!= null && !contacts.isEmpty()) {
+			return contacts.get(0);
+		}
+		return null;
 	}
 }
