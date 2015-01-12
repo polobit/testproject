@@ -478,7 +478,7 @@ public class OpportunityUtil
 
 	// Create Task and push it into Task Queue
 	Queue queue = QueueFactory.getQueue(AgileQueues.DEALS_EXPORT_QUEUE);
-	TaskOptions taskOptions = null;
+	TaskOptions taskOptions = TaskOptions.Builder.withUrl(uri);
 
 	if (data.length > 1 && !StringUtils.isEmpty(data[1]))
 	{
@@ -493,9 +493,15 @@ public class OpportunityUtil
 	    return;
 	}
 
-	taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0])
-		.header("Content-Type", "application/x-www-form-urlencoded").header("Host", url).method(Method.POST);
-
+	if (data.length > 0)
+	{
+	    taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0])
+		    .header("Content-Type", "application/x-www-form-urlencoded").header("Host", url)
+		    .method(Method.POST);
+	    queue.addAsync(taskOptions);
+	    return;
+	}
+	taskOptions = TaskOptions.Builder.withUrl(uri).header("Host", url).method(Method.POST);
 	queue.addAsync(taskOptions);
     }
 
