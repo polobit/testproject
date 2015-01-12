@@ -2,13 +2,13 @@
 <div class="row-fluid">
        <div class="span12">
             <div style="margin-bottom: 20px; margin-top:25px;">
-			<div class="row-fluid">
+			<div class="row-fluid" style="margin-bottom: -10px;">
                  <span class="pull-left taskDetail-text" style="margin-bottom: -10px;"> 
                     <h2 style="text-transform: capitalize;">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></h2>
                   </span>
 					<span class="label" style="margin-top: 11px;display: inline-block;margin-left: 10px">{{task_property type}}</span>                  
                     {{#if_not_equals priority_type "NORMAL" }}
-                   <span class="label label-{{task_label_color priority_type}}" style="margin-top: 11px;display: inline-block;margin-left: 4px">{{ucfirst priority_type}}</span>
+                   <span class="label label-{{task_label_color priority_type}}" style="display: inline-block;margin-left: 4px">{{ucfirst priority_type}}</span>
                          {{/if_not_equals}}
                  	<!--  starting rating,edit,owner -->
 
