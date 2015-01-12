@@ -95,6 +95,7 @@
 			  <a href="#" id="save_prefs" class="btn btn-primary" style="text-decoration:none;display:none;">Save</a>
 			  <a href="#add-widget" class="btn ml_5" style="text-decoration:none;">Cancel</a>              
 		 </fieldset>
+<br><a href="#voicemail">Manage voicemails</a>
     </form>
 </div>
 </script>
@@ -102,7 +103,7 @@
 
 
 <script id="twilioio-dialpad-template" type="text/html">
-<div id="dialpad_in_twilio" style="display:none;"> 
+<div id="dialpad_in_twilio" style="display:none;float: right;"> 
   <div style="max-width: 100%;background-color: transparent;border-collapse: collapse;border-spacing: 0;display: table;">
    <div style="display: table-row-group;vertical-align: middle;border-color: inherit;"> 
     <div style="display: table-row;vertical-align: inherit;border-color: inherit;">
@@ -128,4 +129,21 @@
     </div>
 </div>
 </div>
+<div style="clear:both"></div>
+</script>
+
+<script id="twilioio-voicemail-template" type="text/html">
+{{#if this}}
+<div class="btn-group dropup pull-left">
+<button class="btn" id="noty_twilio_voicemail" data-length="{{length}}" data-src="{{this.0.extension}}">Leave Voicemail</button>
+{{#ifCond length "greaterthan" 1}}
+<button class="btn dropdown-toggle" data-toggle="dropdown" onclick="voiceMailDropAction()" id="splitButtonVoicemail" ><span class="caret"></span></button>
+<ul class="dropdown-menu" style="text-align:left;">
+{{#each this}}
+<li><a href="#" data-src="{{extension}}" class="voiceMailItem">{{name}}</a></li>
+{{/each}}
+</ul>
+{{/ifCond}}
+</div>
+{{/if}}
 </script>

@@ -1,9 +1,13 @@
 <script id="widgets-add-model-template" type="text/html"> 
 <div class="well widget-add" style="width:220px; height:200px;">
    {{#if_equals name "Sip"}}    
-    <span style="font-size: 55px;width: 210px;height: 70px; text-align:center;" class="thumbnail"><span style="margin-top: 7px;display: block;><i class="icon icon-phone"></i>SIP <span class="label label-important">Beta</span></span></span>
+    <span style="font-size: 55px;width: 210px;height: 70px; text-align:center;" class="thumbnail"><span style="margin-top: 7px;display: block;"><i class="icon icon-phone"></i>SIP <span class="label label-important">Beta</span></span></span>
    {{else}} 
-    <img class="thumbnail" src="{{logo_url}}" style="width:210px; height:70px;" />
+      {{#if_equals name "CallScript"}}    
+        <span style="font-size: 34px;width: 210px;height: 70px; text-align:center;" class="thumbnail"><span style="margin-top: 12px;display: block;"><i class="icon icon-comment" style="margin-right: 4px;"></i>Call Script</span></span>
+      {{else}} 
+        <img class="thumbnail" src="{{logo_url}}" style="width:210px; height:70px;" />
+      {{/if_equals}}
    {{/if_equals}}
 	<br />
     <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
@@ -20,7 +24,7 @@
 						<li><a id="remove-widget" widget-name="{{name}}">Uninstall</a></li>
 					</ul>
 				</div>
-				<a href="#Custom-widget/{{id}}" class="btn" style="display:inline-block;margin-top:-22px;" id="setting-widget" set-widget-name="{{name}}">Settings</a>
+				<!--<a href="#Custom-widget/{{id}}" class="btn" style="display:inline-block;margin-top:-22px;" id="setting-widget" set-widget-name="{{name}}">Settings</a>-->
     		{{else}}
     			<a class="btn btn-primary install-custom-widget" href="#Custom-widget" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
 				<a class="btn btn-danger" id="remove-widget" widget-name="{{name}}">Uninstall</a>    		
@@ -29,10 +33,13 @@
 			{{#if is_added}}
 				{{add_tag "Widgets"}}
     			<a class="btn btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>
-                {{#if_equals name "Twilio"}}
-                    <a></a>
-                {{else}}
-				    <a href="#{{name}}/{{id}}" class="btn" id="setting-widget" set-widget-name="{{name}}">Settings</a>
+                {{#if_equals name "CallScript"}}  
+                   <a href="#callscript/{{id}}" class="btn" id="setting-widget" set-widget-name="{{name}}">Settings</a>
+                {{else}}{{#if_equals name "Twilio"}}
+                           <a></a>
+                        {{else}}
+				           <a href="#{{name}}/{{id}}" class="btn" id="setting-widget" set-widget-name="{{name}}">Settings</a>
+                        {{/if_equals}}
                 {{/if_equals}}
     		{{else}}
 				{{#check_plan "FREE"}}
@@ -40,21 +47,27 @@
 						<a class="btn btn-primary add-widget" href="#{{name}}" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
 						{{else}}
 							{{#if_equals widget_type "CALL"}}
-                                  {{#if_equals name "Twilio"}}
-                                     <a></a>
-                                  {{else}}
-								     <a class="btn btn-primary add-widget" href="#{{name}}" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
-                                  {{/if_equals}}
-								{{else}}
+                               {{#if_equals name "CallScript"}}
+								   <a class="btn btn-primary add-widget" href="#callscript" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
+                               {{else}}{{#if_equals name "Twilio"}}
+                                            <a></a>
+                                       {{else}}
+                                            <a class="btn btn-primary add-widget" href="#{{name}}" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
+							           {{/if_equals}}
+							   {{/if_equals}}
+							{{else}}
 								<a class="btn btn-primary" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Add</a><span style="margin-left:5px"><i>Paid accounts only</i></span>
 							{{/if_equals}}
 					{{/if_equals}}
-				{{else}}
-                       {{#if_equals name "Twilio"}}
-                           <a></a>
-                       {{else}}
-     				       <a class="btn btn-primary add-widget" href="#{{name}}" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
-                       {{/if_equals}}
+					{{else}}
+                       {{#if_equals name "CallScript"}}
+                          <a class="btn btn-primary add-widget" href="#callscript" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
+                       {{else}}{{#if_equals name "Twilio"}}
+                                   <a></a>
+                               {{else}}
+     				               <a class="btn btn-primary add-widget" href="#{{name}}" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
+                               {{/if_equals}}
+                       {{/if_equals}}    	
 				{{/check_plan}}
     		{{/if}}
 		{{/if_equals}}
@@ -180,7 +193,11 @@
 {{#if_equals name "Sip"}}
     <center><span style="font-size: 55px;text-align:center;width: 210px;height: 70px;" class="thumbnail"><span style="margin-top:7px;display:block"><i class="icon icon-phone"></i>SIP</span></span></center>
 {{else}}
-    <center><img class="thumbnail" src="{{logo_url}}" style="width:210px; height:70px;" /></center>
+    {{#if_equals name "CallScript"}}
+        <center><span style="font-size: 38px;width: 210px;height: 70px; text-align:center;" class="thumbnail"><span style="margin-top: 12px;display: block;"><i class="icon icon-comment" style="margin-right: 4px;"></i>Call Script</span></span></center>
+    {{else}}
+        <center><img class="thumbnail" src="{{logo_url}}" style="width:210px; height:70px;" /></center>
+    {{/if_equals}}
 {{/if_equals}}  
 	<div class='widget_content' id="widget-settings" style='border-bottom:none;line-height: 160%;' widget-name="{{name}}">
 	</div>

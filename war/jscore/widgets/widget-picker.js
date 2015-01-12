@@ -162,8 +162,11 @@ $(function()
 		delete_widget(widget_name);
 		if(widget_name == "Linkedin")
 			$('#Linkedin-container').hide();
+		
+		if(widget_name == "Twilio")
+			$('#Twilio-container').hide();
 
-		});
+		});	
 
 	$('#remove-widget').die().live('click', function(e)
 	{
@@ -179,7 +182,7 @@ $(function()
 		 * success fetches the widgets to reflect the changes is_added, to show
 		 * add widget in the view instead of delete option
 		 */
-		$.ajax({ type : 'DELETE', url : '/core/api/widgets/remove/' + widget_name, contentType : "application/json; charset=utf-8",
+		$.ajax({ type : 'DELETE', url : '/core/api/widgets/remove?widget_name=' + widget_name, contentType : "application/json; charset=utf-8",
 
 		success : function(data)
 		{
@@ -203,7 +206,7 @@ function delete_widget(widget_name)
 	 * success fetches the widgets to reflect the changes is_added, to show
 	 * add widget in the view instead of delete option
 	 */
-	$.ajax({ type : 'DELETE', url : '/core/api/widgets/' + widget_name, contentType : "application/json; charset=utf-8",
+	$.ajax({ type : 'DELETE', url : '/core/api/widgets?widget_name=' + widget_name, contentType : "application/json; charset=utf-8",
 
 	success : function(data)
 	{

@@ -99,10 +99,15 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 
 			$("#" + selectId, el).empty().append('<option class="default-select" value="">' + defaultSelectOption + '</option>');
 		}
-
+		var data = collection.toJSON();
+		data.sort(function(a, b){
+		    if (a.name < b.name) return -1;
+		    if (b.name < a.name) return 1;
+		    return 0;
+		});
 		// Iterates though each model in the collection and
 		// populates the template using handlebars
-		$.each(collection.toJSON(), function(index, model)
+		$.each(data, function(index, model)
 		{
 			// Convert template into HTML
 			var modelTemplate = Handlebars.compile(template);
@@ -312,3 +317,17 @@ function getLocalTimeFromGMTMilliseconds(time_in_milliseconds)
 	return date.getTime() - date.getTimezoneOffset();
 }
 
+
+function buildFacebookProfileURL(URL) {
+	URL = URL.replace('@', '');
+	var hasScheme = ( URL.indexOf( 'http://' ) === 0 || URL.indexOf( 'https://' ) === 0 );
+	var isFBURL   = ( URL.indexOf( 'facebook.com' ) !== -1 );
+	if ( URL && !hasScheme && !isFBURL ) {
+		URL = 'https://www.facebook.com/'+URL;
+	} else if ( URL && isFBURL && URL.indexOf( 'www.facebook.com' ) === -1 ) {
+		URL = URL.replace( 'facebook.com', 'www.facebook.com' );
+	} else if ( URL && !hasScheme ) {
+		URL = 'http://'+URL;
+	}
+	return URL;
+}

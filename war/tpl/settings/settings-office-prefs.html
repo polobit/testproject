@@ -37,6 +37,24 @@
                     </label>
                 </div>
             </div>
+            <div class="control-group" style="margin-top:20px">
+	            <div class="controls">
+	                <a href="#" class="office-share-settings-select"><i class='icon-plus-sign'/></i> Sharing settings</a>
+	                <span class ="office-share-settings-txt" style="vertical-align:text-top;margin-left:-3px">         
+       				 <img border="0" src="/img/help.png" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="You can share this email integration with other users. This allows them to see emails you have exchanged with a Contact. The shared users will see your email account in the Mail tab when they open a Contact." id="element-title" data-trigger="hover" data-original-title="Email Account Sharing">
+        			</span>
+				    <span class="office-share-select" style="display:none;">
+				   	<a href="#" class="office-share-settings-cancel" style="margin-bottom:20px"><i class='icon-minus-sign'/></i> Sharing settings</a>
+				   	<span style="vertical-align:text-top;margin-left:-3px">         
+       				 <img border="0" src="/img/help.png" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="You can share this email integration with other users. This allows them to see emails you have exchanged with a Contact. The shared users will see your email account in the Mail tab when they open a Contact." id="element-title" data-trigger="hover" data-original-title="Email Account Sharing">
+        			</span>
+				   	<label class="control-label" style="margin-top:10px">Select users to share with</label>
+					<select name="shared_with_users_ids" multiple id="office-share-user-select" class = "multi-select" style="margin-bottom: 5px; overflow: auto">
+					</select>
+	             	<span class="office-share-status"></span>
+					</span>
+			    </div>
+			</div>
             <div class="form-actions"> 
                 <button type="submit" class="save btn btn-primary" style="margin-left:-15pt">Save </button>
                 <a href="#email" class="btn">Cancel</a>

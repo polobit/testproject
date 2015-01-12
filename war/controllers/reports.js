@@ -157,7 +157,7 @@ var ReportsRouter = Backbone.Router.extend({
 	{
 		var count = 0;
 		$("#content").html(getRandomLoadingImg());
-		CONTACT_CUSTOM_FIELDS = undefined;
+		SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
 		var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "email-reports", isNew : true,
 			postRenderCallback : function(el)
 			{
@@ -295,13 +295,17 @@ var ReportsRouter = Backbone.Router.extend({
 
 		var report_results_view = new Base_Collection_View({ url : "core/api/reports/show-results/" + id, modelData : report, templateKey : "report-search",
 			individual_tag_name : 'tr', cursor : true, sort_collection : false, page_size : 15, });// Collection
-
-		// Report built with custom table, as reports should be shown with
-		// custom order selected by user
-		report_results_view.appendItem = reportsContactTableView;
-
-		report_results_view.collection.fetch();
-
+		var _that = this;
+		$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
+				{
+					// Report built with custom table, as reports should be shown with
+					// custom order selected by user
+					report_results_view.appendItem = function(base_model){
+						reportsContactTableView(base_model,customDatefields,this);
+					};
+			
+					report_results_view.collection.fetch();
+				});
 		$("#content").html(report_results_view.render().el);
 	},
 

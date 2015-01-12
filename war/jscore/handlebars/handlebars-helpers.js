@@ -63,8 +63,8 @@ $(function()
 				Handlebars.registerHelper('getTwitterHandleByURL', function(value)
 				{
 
-								if (value.indexOf("https://twitter.com/") != -1)
-												return value;
+//								if (value.indexOf("https://twitter.com/") != -1)
+//												return value;
 
 								value = value.substring(value.lastIndexOf("/") + 1);
 								console.log(value);
@@ -1950,7 +1950,7 @@ $(function()
 												// Avoid comma appending to last element
 												if (i < j - 1)
 												{
-																ret = ret + ", ";
+																ret = ret + ",";
 												}
 												;
 								}
@@ -2574,6 +2574,29 @@ $(function()
 								return name;
 
 				});
+				
+				
+				
+				/**
+				 * Get activity type  without underscore and caps, for deal _details page.
+				 */
+				Handlebars.registerHelper('get_normal_activity_type', function(name)
+				{
+								if (!name)
+												return;
+
+								var name_json = { "DEAL_ADD" : "Deal Created", "DEAL_EDIT" : "Deal Edited", "DEAL_CLOSE" : "Deal Closed", "DEAL_LOST" : "Deal Lost", "DEAL_RELATED_CONTACTS" : " Deal Contacts Changed", "DEAL_OWNER_CHANGE" : "Deal Owner Changed", "DEAL_MILESTONE_CHANGE" : "Deal Milestone Changed",
+												"NOTE_ADD" : "Note Added" };
+
+								name = name.trim();
+
+								if (name_json[name])
+												return name_json[name];
+
+								return name;
+
+				});
+
 
 				/**
 				 * put user address location togather separated by comma.
@@ -3071,8 +3094,23 @@ $(function()
 								return template;
 				});
 				
+				// checks if email type is agile or not
+				Handlebars.registerHelper('if_email_type_is_agile', function(value,options)
+				{
+					var type = email_server_type;
+					if (type)
+						if(value === type)
+							return options.fn(this);
+						else
+							return options.inverse(this);
+					else
+					{
+						 return options.fn(this);
+					}
+				});
+				
 				// Reads the gloabal varaible and returns it value
-				Handlebars.registerHelper('read_global_var', function(custom_fields, contacts)
+				Handlebars.registerHelper('read_global_var', function()
 				{
 					var type = email_server_type;
 					if (type)
@@ -3427,15 +3465,15 @@ $(function()
 					var seconds = time - minutes * 60;
 					var friendlyTime = "";
 					if(hours == 1)
-						friendlyTime = hours+ " hr ";
+						friendlyTime = hours+ "h ";
 					if(hours > 1)
-						friendlyTime = hours+ " hrs ";
+						friendlyTime = hours+ "h ";
 					if(minutes > 0)
-						friendlyTime += minutes + " min ";
+						friendlyTime += minutes + "m ";
 					if(seconds > 0)
-						friendlyTime += seconds + " sec";
+						friendlyTime += seconds + "s ";
 					if(friendlyTime != "")
-						return "("+friendlyTime+")";
+						return ' - '+friendlyTime;
 					return friendlyTime;
 				});
 	// To pick randomly selected avatar url
@@ -3480,6 +3518,53 @@ $(function()
 			field_type_name = "Formula";
 		return field_type_name;
 	});
+	
+	//@author Purushotham
+	//function to compare integer values
+	Handlebars.registerHelper('ifCond', function(v1, type, v2, options) {	
+		switch(type){
+			case "greaterthan":
+				if(parseInt(v1) > parseInt(v2))
+					return options.fn(this);
+				break;
+			case "lessthan":
+				if(parseInt(v1) < parseInt(v2))
+					return options.fn(this);
+				break;
+			case "equals":
+				if(parseInt(v1) === parseInt(v2))
+					return options.fn(this);
+				break;
+		}
+		return options.inverse(this);
+	});
+	
+	Handlebars.registerHelper('callActivityFriendlyStatus',function(status,direction){
+		
+		switch(status) {
+	    case "completed":
+	    case "answered":
+	    	return "Call duration";
+	    	break;
+	    case "busy":
+	    case "no-answer":
+	    	if(direction == 'outgoing')
+	    		return "Contact busy";
+	    	else
+	    		return "Not answered";
+	    	break;
+	    case "failed":
+	    	return "Failed";
+	    	break;
+	    case "in-progress":
+	    case "voicemail":
+	    	return "Left voicemail";
+	    	break; 	
+	    default:
+	        return "";
+		}
+		
+	});
 
 	Handlebars.registerHelper('shopifyWebhook', function()
 	{
@@ -3496,6 +3581,240 @@ $(function()
 		      
 			  return twilioSecondsToFriendly(timeInSec);		
 			});
+
+	/**
+	 * getting convenient name of portlet
+	 */
+	Handlebars.registerHelper('get_portlet_name', function(p_name) {
+		var portlet_name = '';
+		if(p_name=='Filter Based')
+			portlet_name = 'Contact List';
+		else if(p_name=='Emails Opened')
+			portlet_name = 'Email Opens';
+		else if(p_name=='Emails Sent')
+			portlet_name = 'Emails';
+		else if(p_name=='Growth Graph')
+			portlet_name = 'Tag Graph';
+		else if(p_name=='Calls Per Person')
+			portlet_name = 'Calls';
+		else if(p_name=='Pending Deals')
+			portlet_name = 'Pending Deals';
+		else if(p_name=='Deals By Milestone')
+			portlet_name = 'Deals by Milestone';
+		else if(p_name=='Closures Per Person')
+			portlet_name = 'Closures per Person';
+		else if(p_name=='Deals Won')
+			portlet_name = 'Deals Won';
+		else if(p_name=='Deals Funnel')
+			portlet_name = 'Deals Funnel';
+		else if(p_name=='Deals Assigned')
+			portlet_name = 'Deals Assigned';
+		else if(p_name=='Agenda')
+			portlet_name = "Today's Events";
+		else if(p_name=='Today Tasks')
+			portlet_name = "Today's Tasks";
+		else if(p_name=='Agile CRM Blog')
+			portlet_name = "Agile CRM Blog";
+		return portlet_name;
+	});
+	/**
+	 * getting portlet icons
+	 */
+	Handlebars.registerHelper('get_portlet_icon', function(p_name) {
+		var icon_name = '';
+		if(p_name=='Filter Based')
+			icon_name = 'icon-user';
+		else if(p_name=='Emails Opened')
+			icon_name = 'icon-envelope';
+		else if(p_name=='Emails Sent')
+			icon_name = 'icon-envelope';
+		else if(p_name=='Growth Graph')
+			icon_name = 'icon-bar-chart';
+		else if(p_name=='Calls Per Person')
+			icon_name = 'icon-phone';
+		else if(p_name=='Pending Deals')
+			icon_name = 'icon-time';
+		else if(p_name=='Deals By Milestone')
+			icon_name = 'icon-flag-checkered';
+		else if(p_name=='Closures Per Person')
+			icon_name = 'icon-thumbs-up';
+		else if(p_name=='Deals Won')
+			icon_name = 'icon-briefcase';
+		else if(p_name=='Deals Funnel')
+			icon_name = 'icon-filter';
+		else if(p_name=='Deals Assigned')
+			icon_name = 'icon-user';
+		else if(p_name=='Agenda')
+			icon_name = "icon-calendar";
+		else if(p_name=='Today Tasks')
+			icon_name = "icon-tasks";
+		else if(p_name=='Agile CRM Blog')
+			icon_name = "icon-rss-sign";
+		return icon_name;
+	});
+	/**
+	 * getting flitered contact portlet header name
+	 */
+	Handlebars.registerHelper('get_flitered_contact_portlet_header', function(filter_name) {
+		var header_name = '';
+		if(filter_name=='contacts')
+			header_name = "All Contacts";
+		else if(filter_name=='companies')
+			header_name = "All Companies";
+		else if(filter_name=='recent')
+			header_name = "Recent Contacts";
+		else if(filter_name=='myContacts')
+			header_name = "My Contacts";
+		else if(filter_name=='leads')
+			header_name = "Leads";
+		else{
+			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/'+filter_name, async : false, dataType : 'json',
+				success: function(data){
+					header_name = ""+data.name;
+				} });
+		} 	
+		return header_name;
+	});
+	
+	Handlebars.registerHelper('if_equals_or', function()
+	{
+		var options = arguments[arguments.length-1];
+		try {
+			for(var i = 0; i < arguments.length-1; i=i+2) {
+				value = arguments[i];
+				target = arguments[i+1];
+				if ((typeof target === "undefined") || (typeof value === "undefined"))
+					return options.inverse(this);
+				if (value.toString().trim() == target.toString().trim())
+					return options.fn(this);
+			}
+			return options.inverse(this);
+		} catch(err) {
+			console.log("error while if_equals_or of handlebars helper : "+ err.message);
+			return options.inverse(this);
+		}
+	});
+	
+	Handlebars.registerHelper('buildFacebookProfileURL',function(url){
+		return buildFacebookProfileURL(url);
+	});
+	
+	
+	/**
+	 * returns tracks count of opportunity
+	 */
+	Handlebars.registerHelper('getTracksCount', function(options)
+			{
+			if (parseInt(DEAL_TRACKS_COUNT) > 1)
+				return options.fn(this);
+             else
+				return options.inverse(this);
+			});
+	/**
+	 * getting flitered contact portlet header name
+	 */
+	Handlebars.registerHelper('get_deals_funnel_portlet_header', function(track_id) {
+		var header_name = '';
+		if(track_id==0)
+			header_name = "Default";
+		else{
+			var milestone = $.ajax({ type : 'GET', url : '/core/api/milestone/'+track_id, async : false, dataType : 'json',
+				success: function(data){
+					header_name = data.name;
+				} });
+		} 	
+		return header_name;
+	});
+	
+	/**
+	 * getting time in AM and PM format for event portlet
+	 */
+	Handlebars.registerHelper('get_AM_PM_format', function(date_val) {
+		var date = new Date(date_val * 1000);
+		var hours = date.getHours();
+		var minutes = date.getMinutes();
+		var ampm = hours >= 12 ? 'PM' : 'AM';
+		hours = hours % 12;
+		hours = hours ? hours : 12; // the hour '0' should be '12'
+		minutes = minutes < 10 ? '0'+minutes : minutes;
+		var strTime = hours + ':' + minutes + ' ' + ampm;
+		return strTime;
+	});
+	
+	/**
+	 * getting duration between two dates for event portlet
+	 */
+	Handlebars.registerHelper('get_duration', function(startDate,endDate) {
+		var duration='';
+		var days=0;
+		var hrs=0;
+		var mins=0;
+		var diffInSeconds = endDate - startDate;
+		days = Math.floor(diffInSeconds/(24*60*60));
+		hrs = Math.floor((diffInSeconds % (24*60*60))/(60*60));
+		mins = Math.floor(((diffInSeconds % (24*60*60)) % (60*60))/60);
+		if(days!=0 && days==1)
+			duration += ''+days+' Day ';
+		else if(days!=0 && days>1)
+			duration += ''+days+' Days ';
+		if(hrs!=0 && hrs==1)
+			duration += ''+hrs+' Hour ';
+		else if(hrs!=0 && hrs>1)
+			duration += ''+hrs+' Hours ';
+		if(mins!=0 && mins==1)
+			duration += ''+mins+' Minute';
+		else if(mins!=0 && mins>1)
+			duration += ''+mins+' Minutes';
+		return duration;
+	});
+	
+	
+	/**
+	 * Returns plain customise text for activity remove underscore and other
+	 * special charecter from string
+	 */
+	Handlebars.registerHelper('displayActivityFieldText', function(value)
+	{
+		var fields = value.replace(/[^a-zA-Z ^,]/g, " ").split(",");
+		var text = "";
+		if (fields.length > 1)
+		{
+			for (var i = 0; i < fields.length - 1; i++)
+			{
+				text += " " + fields[i].trim();
+				if (i != fields.length - 2)
+				{
+					text += ",";
+				}
+			}
+			text += " and " + fields[fields.length - 1].trim();
+		}
+		else
+		{
+			text = fields[fields.length - 1].trim();
+		}
+		// update title
+		text = text.replace('subject', 'Title');
+		// update priority
+		text = text.replace('priority type', 'Priority');
+		// update category
+		text = text.replace('task type', 'Category');
+		// update due date
+		text = text.replace('due date', 'Due date');
+		
+		text = text.replace('name', 'Name');
+		// update priority
+		text = text.replace('probability', 'Probability');
+		// update category
+		text = text.replace('expected value', 'Expected value');
+		// update due date
+		text = text.replace('close date', 'Close date');
+		
+		return text;
+
+	});
+	
+
 });
 
 // helper function return created time for event

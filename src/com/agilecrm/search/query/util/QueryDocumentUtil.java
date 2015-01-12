@@ -13,6 +13,7 @@ import org.apache.commons.lang.time.DateUtils;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.core.api.search.SearchAPI;
+import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -22,6 +23,7 @@ import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
+import com.agilecrm.util.StringUtils2;
 import com.googlecode.objectify.Key;
 
 /**
@@ -130,15 +132,25 @@ public class QueryDocumentUtil
 				String newQuery = lhs + ":" + SearchUtil.normalizeString(value);
 
 				// For equals condition
-				if (condition.equals(SearchRule.RuleCondition.EQUALS) || condition.equals(SearchRule.RuleCondition.ON) || condition.equals(SearchRule.RuleCondition.CONTAINS))
+				if (condition.equals(SearchRule.RuleCondition.EQUALS))
 				{
 					/*
 					 * Build query by passing condition old query and new query
 					 */
+					//double quotes for exact match of value.
+					query = buildNestedCondition("AND", query, lhs + ":\"" + SearchUtil.normalizeString(value)+"\"");
+				} 
+				else if (condition.equals(SearchRule.RuleCondition.ON) || condition.equals(SearchRule.RuleCondition.CONTAINS)) 
+				{
 					query = buildNestedCondition("AND", query, newQuery);
 				}
-
 				else if (condition.equals(SearchRule.RuleCondition.NOTEQUALS))
+				{
+					// double quotes for exact match of value.
+					query = buildNestedCondition("NOT", query, lhs + ":\"" + SearchUtil.normalizeString(value)+"\"");
+				}
+
+				else if (condition.equals(SearchRule.RuleCondition.NOT_CONTAINS))
 				{
 					// For not queries
 					query = buildNestedCondition("NOT", query, newQuery);
@@ -163,6 +175,16 @@ public class QueryDocumentUtil
 					 * Build query by passing condition old query and new query
 					 */
 					query = buildNestedCondition("AND", query, newQuery);
+				}
+				
+				// Between given values
+				else if (condition.equals(SearchRule.RuleCondition.BETWEEN) || condition.equals(SearchRule.RuleCondition.BETWEEN_NUMBER))
+				{
+					if (rhs_new != null)
+					{
+						query = buildNestedCondition("AND", query, lhs + " >= " + rhs);
+						query = buildNestedCondition("AND", query, lhs + " <= " + rhs_new);
+					}
 				}
 
 			}
@@ -444,7 +466,8 @@ public class QueryDocumentUtil
 			// support old data
 			epochQuery = lhs + "_epoch" + ">=" + dayStartEpochTime;
 
-			query = buildNestedCondition("AND", epochQuery, lhs + "_epoch" + "<=" + dayEndEpochTime);
+			query = buildNestedCondition("AND", query, epochQuery);
+			query = buildNestedCondition("AND", query, lhs + "_epoch" + "<=" + dayEndEpochTime);
 
 		}
 
@@ -670,5 +693,20 @@ public class QueryDocumentUtil
 		}
 		String query = stringBuffer.toString();
 		return query;
+	}
+
+	public static Contact getContactsByPhoneNumber(String phoneNumber) {
+		StringBuilder query = new StringBuilder();
+		phoneNumber = StringUtils2.extractNumber(phoneNumber);
+		query.append("phone=").append(phoneNumber);
+		if(phoneNumber.length() >=8) {
+			query.append(" OR phone=").append(phoneNumber.substring(phoneNumber.length() -8));
+		}
+		AppengineSearch<Contact> appEngineSearch = new AppengineSearch<Contact>(Contact.class);
+		List<Contact> contacts = new ArrayList<Contact>(appEngineSearch.getSearchResults(query.toString(), null, null));
+		if(contacts!= null && !contacts.isEmpty()) {
+			return contacts.get(0);
+		}
+		return null;
 	}
 }

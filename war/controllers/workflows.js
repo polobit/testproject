@@ -238,11 +238,11 @@ var WorkflowsRouter = Backbone.Router
 				// Render tabs
 				$('#campaign-analysis-tabs').html(getTemplate("campaign-analysis-tabs", { "id" : id }));
 
-				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
+//				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+//				{
+//					this.navigate("workflows", { trigger : true });
+//					return;
+//				}
 
 				/* Set the designer JSON. This will be deserialized */
 //				this.workflow_model = this.workflow_list_view.collection.get(id);
@@ -319,11 +319,11 @@ var WorkflowsRouter = Backbone.Router
 				// Render tabs with id
 				$('#campaign-analysis-tabs').html(getTemplate("campaign-analysis-tabs", { "id" : id }));
 
-				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
+//				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+//				{
+//					this.navigate("workflows", { trigger : true });
+//					return;
+//				}
 
 //				/* Set the designer JSON. This will be deserialized */
 //				this.workflow_model = this.workflow_list_view.collection.get(id);
@@ -575,6 +575,8 @@ var WorkflowsRouter = Backbone.Router
 								 */
 								fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', function fillCampaign()
 								{
+									$('#email-tracking-campaign-id option:first').after('<option value="0">All</option>');
+									
 									var value = currentTrigger.toJSON();
 									if (value)
 									{
@@ -806,11 +808,11 @@ var WorkflowsRouter = Backbone.Router
 				// Render tabs
 				$('#campaign-analysis-tabs').html(getTemplate("campaign-analysis-tabs", { "id" : id }));
 
-				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
+//				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+//				{
+//					this.navigate("workflows", { trigger : true });
+//					return;
+//				}
 
 				var all_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/all-subscribers/' + id,
 						'workflow-other-subscribers');

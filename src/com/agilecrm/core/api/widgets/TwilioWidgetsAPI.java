@@ -14,10 +14,14 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
+import com.agilecrm.activities.Call;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
@@ -537,14 +541,18 @@ public class TwilioWidgetsAPI
 	@Path("savecallactivity")
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String saveCallActivity(@FormParam("direction") String direction, @FormParam("phone") String phone,
-			@FormParam("status") String status, @FormParam("duration") String duration)
-	{
-		if (direction.equalsIgnoreCase("outbound-dial"))
-			ActivityUtil.createLogForCalls("twilio", phone, "outgoing", status, duration);
-		if (direction.equalsIgnoreCase("inbound"))
-			ActivityUtil.createLogForCalls("twilio", phone, "incoming", status, duration);
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String saveCallActivity(@FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration) {		
+		
+		if (StringUtils.isBlank(phone))
+			return "";
+
+		Contact contact = ContactUtil.searchContactByPhoneNumber(phone);
+		
+		if(direction.equalsIgnoreCase("outbound-dial"))
+			ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.OUTBOUND, status, duration, contact);
+		if(direction.equalsIgnoreCase("inbound"))
+			ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.INBOUND, status, duration, contact);
 		return "";
 	}
 
@@ -566,6 +574,43 @@ public class TwilioWidgetsAPI
 		note.addRelatedContacts(contactId.toString());
 		note.save();
 		return "";
+	}
+	
+	/**
+	 * 
+	 * @author Purushotham
+	 * @created 10-Dec-2014
+	 *
+	 */
+	
+	@Path("setvoicemail/{acc-sid}/{auth-token}/{call-sid}/{file-selected}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String setVoiceMailRedirect(@PathParam("acc-sid") String accountSID,
+			@PathParam("auth-token") String authToken, @PathParam("call-sid") String callSID, @PathParam("file-selected") String fileSelected)
+	{
+
+		try
+		{
+			TwilioUtil.sendVoiceMailRedirect(accountSID, authToken, callSID, fileSelected);
+			return "{}";//empty JSON Object
+		}
+		catch (SocketTimeoutException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and Please try again.").build());
+		}
+		catch (IOException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occurred. Refresh and Please try again.").build());
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
 	}
 
 	/**

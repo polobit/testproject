@@ -68,6 +68,7 @@ $(function()
 
 function update_collection_with_prefs(data)
 {
+	console.log("In update_collection_with_prefs");
 	console.log(data);
 	if (App_Widgets.Catalog_Widgets_View && App_Widgets.Catalog_Widgets_View.collection)
 	{
@@ -449,6 +450,63 @@ function saveTwilioIOWidgetPrefs()
 	});
 }
 
+/**
+ * Shows setup if user adds call script widget for the first time or clicks on
+ * reset icon on call script panel in the UI
+ * 
+ */
+function callscript_save_widget_prefs()
+{
+	$('#save_prefs').unbind("click");
+
+	// On click of save button, check input and save details
+	$('#save_prefs').die().live('click', function(e)
+	{
+		e.preventDefault();		
+
+		if ($(this).text() == "Saving..." || $(this).text() == "Loading...")
+		{
+			console.log("Do not hit me again " + $(this).text());
+			return;
+		}
+
+		// Checks whether all input fields are given
+		if (!isValidForm($("#callscriptruleForm")))
+		{
+			return;
+		}		
+
+		// Saves call script preferences in callscript widget object
+		saveCallScriptWidgetPrefs();
+	});
+}
+
+/**
+ * Calls method in script API (agile_widget.js) to save CallScript preferences in
+ * CallScript widget object
+ */
+function saveCallScriptWidgetPrefs()
+{
+	$("#save_prefs").text("Saving...");
+	$("#save_prefs").attr("disabled", true);
+	
+	// Retrieve and store the Sip preferences entered by the user as
+	// JSON
+	var callscript_prefs = makeRule();	
+	
+	console.log(callscript_prefs);
+
+	// Saves the preferences into widget with sip widget name
+	save_widget_prefs("CallScript", JSON.stringify(callscript_prefs), function(data)
+	{
+		console.log('In call script save success');
+		console.log(data);		
+		
+		// Redirect to show call script rules page
+		window.location.href = "#callscript/rules";
+	});	
+}
+
 function save_widget_prefs(pluginName, prefs, callback)
 {
 	console.log("In save_widget_prefs.");
@@ -478,8 +536,12 @@ function save_widget_prefs(pluginName, prefs, callback)
 
 		data.set('is_added', true);
 		models[0].set(data);
+		
+		// If plugin name is CallScript do not redirect
+		if (pluginName != "CallScript")
 		window.location.href = "#add-widget";
 
+		console.log("data******");
 		console.log(data);
 
 		update_collection_with_prefs(data);
@@ -504,6 +566,9 @@ function save_widget_prefs(pluginName, prefs, callback)
 			// Get widget, Create token and set twilio device
 			globalTwilioIOSetup();
 		}
+		
+		if (callback && typeof (callback) === "function")
+			callback(data);
 	} });
 }
 
@@ -569,6 +634,8 @@ function show_set_up_widget(widget_name, template_id, url, model)
 	else if (widget_name == "Chargify")
 		chargify_save_widget_prefs();
 
+	else if (widget_name == "CallScript")
+		callscript_save_widget_prefs();
 
 	// Shows available widgets in the content
 	if (url)
@@ -685,12 +752,15 @@ function fill_form(id, widget_name, template_id)
 
 	var model = App_Widgets.Catalog_Widgets_View.collection.get(id);
 	console.log(model.get("prefs"));
+	console.log(model.length);
 
 	show_set_up_widget(widget_name, template_id);
 
 	if (model && model.get("prefs"))
 	{
 		var prefsJSON = JSON.parse(model.get("prefs"));
+		console.log("prefsJSON:");
+		console.log(prefsJSON);
 		fill_fields(prefsJSON);
 	}
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -209,6 +210,8 @@ public class OpportunityUtil
 	if (ownerId != null)
 	    conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
 
+	conditionsMap.put("archived", false);
+
 	return dao.listByProperty(conditionsMap);
     }
 
@@ -379,14 +382,15 @@ public class OpportunityUtil
     {
 	return dao.ofy().query(Opportunity.class)
 		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-		.order("-created_time").limit(10).list();
+		.filter("archived", false).order("-created_time").limit(10).list();
     }
 
     public static List<Opportunity> getUpcomingDealsRelatedToCurrentUser(String pageSize)
     {
+	System.out.println("deals--------------------");
 	return dao.ofy().query(Opportunity.class)
 		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-		.order("close_date").limit(Integer.parseInt(pageSize)).list();
+		.filter("archived", false).order("close_date").limit(Integer.parseInt(pageSize)).list();
     }
 
     /**
@@ -774,6 +778,12 @@ public class OpportunityUtil
 		searchMap.put("ownerKey",
 			new Key<DomainUser>(DomainUser.class, Long.parseLong(filterJson.getString("owner_id"))));
 
+	    if (checkJsonString(filterJson, "archived"))
+	    {
+		if (!filterJson.getString("archived").equals("all"))
+		    searchMap.put("archived", Boolean.parseBoolean(filterJson.getString("archived")));
+	    }
+
 	    if (checkJsonString(filterJson, "value_filter")
 		    && filterJson.getString("value_filter").equalsIgnoreCase("equals"))
 	    {
@@ -832,8 +842,6 @@ public class OpportunityUtil
 	     * getCustomFieldFilters(filterJson.getJSONObject("customFields"));
 	     * if (customFilters != null) searchMap.putAll(customFilters);
 	     */
-
-	    System.out.println("---------------" + searchMap.toString());
 
 	    if (count != 0)
 		return dao.fetchAllByOrder(count, cursor, searchMap, true, false, sortField);
@@ -974,5 +982,122 @@ public class OpportunityUtil
 
 	System.out.println("-----custom---------" + searchMap.toString());
 	return searchMap;
+    }
+
+    /**
+     * fetch opportunity related to contact using contact id
+     * 
+     * @param contactId
+     * @return
+     */
+
+    public static List<Opportunity> getAllOpportunity(Long contactId)
+    {
+
+	Map<String, Object> conditionsMap = new HashMap<String, Object>();
+
+	conditionsMap.put("related_contacts", new Key<Contact>(Contact.class, contactId));
+	return dao.listByProperty(conditionsMap);
+    }
+    /**
+     * Gets all the pending deals related to current user. Fetches the deals equals or less to current date
+     * and deals which are not won or lost
+     * @return List<Opportunity> having total pending deals with respect to
+     * current user.
+     */
+    
+    public static List<Opportunity> getPendingDealsRelatedToCurrentUser(long dueDate){
+    	List<Opportunity> pendingDealsList=new ArrayList<Opportunity>();
+    	try {
+    		List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class).filter("close_date <=", dueDate).limit(50)
+        			.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+        			.order("close_date").list();
+    		for(Opportunity opportunity : allDealsList){
+    			if(!opportunity.milestone.equals("Won") && !opportunity.milestone.equals("Lost"))
+    				pendingDealsList.add(opportunity);
+    		}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return pendingDealsList;
+    }
+    /**
+     * Gets all the pending deals related to all users. Fetches the deals equals or less to current date
+     * and deals which are not won or lost
+     * @return List<Opportunity> having total pending deals with respect to
+     * current user.
+     */
+    
+    public static List<Opportunity> getPendingDealsRelatedToAllUsers(long dueDate){
+    	List<Opportunity> pendingDealsList=new ArrayList<Opportunity>();
+    	try {
+    		List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class).filter("close_date <=", dueDate).limit(50)
+        			.order("close_date").list();
+    		for(Opportunity opportunity : allDealsList){
+    			if(!opportunity.milestone.equals("Won") && !opportunity.milestone.equals("Lost"))
+    				pendingDealsList.add(opportunity);
+    		}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return pendingDealsList;
+    }
+    /**
+     * Gets all the pending deals related to all users. Fetches the deals equals or less to current date
+     * and deals which are not won or lost
+     * @return List<Opportunity> having total pending deals with respect to
+     * current user.
+     */
+    
+    public static Map<Double,Integer> getTotalMilestoneValueAndNumber(String milestone,boolean owner,long dueDate,Long ownerId,Long trackId){
+    	double totalMilestoneValue=0;
+    	List<Opportunity> milestoneList = null;
+    	Map<Double,Integer> map=new LinkedHashMap<Double, Integer>();
+    	try {
+    		if(ownerId!=null){
+    			milestoneList = dao.ofy().query(Opportunity.class).filter("milestone", milestone).filter("close_date <=",dueDate).filter("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId)).list();
+    		}else{
+    			if(owner)
+        			milestoneList = dao.ofy().query(Opportunity.class).filter("milestone", milestone).filter("close_date <=",dueDate)
+        					.filter("pipeline", new Key<Milestone>(Milestone.class, trackId)).filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).list();
+        		else
+        			milestoneList = dao.ofy().query(Opportunity.class)
+        					.filter("pipeline", new Key<Milestone>(Milestone.class, trackId)).filter("milestone", milestone).filter("close_date <=",dueDate).list();
+    		}
+    		for(Opportunity opportunity : milestoneList){
+    			totalMilestoneValue+=opportunity.expected_value;
+    		}
+    		if(milestoneList!=null)
+    			map.put(totalMilestoneValue,milestoneList.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return map;
+    	
+    }
+    /**
+     * Gets list of opportunities won with respect to closed date and given time
+     * period.
+     * 
+     * @param minTime
+     *            - Given time less than closed date.
+     * @param maxTime
+     *            - Given time greater than closed date.
+     * @return list of opportunities with closed date in between min and max
+     *         times.
+     */
+    public static List<Opportunity> getOpportunitiesWon(long minTime, long maxTime){
+    	return dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime).filter("milestone","Won").limit(50)
+	        .list();
+    }
+    /**
+     * Gets list of opportunities assigned to a particular user.
+     * 
+     * @param ownerId
+     *            - Given owner id.
+     * @return list of opportunities assigned to a particular user.
+     */
+    public static List<Opportunity> getOpportunitiesAsignedToUser(Long ownerId){
+    	return dao.ofy().query(Opportunity.class).filter("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId)).list();
     }
 }

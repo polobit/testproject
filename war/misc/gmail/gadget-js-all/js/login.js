@@ -38,5 +38,5 @@ function agile_show_delete(status)
 		$('#delete-button').show();
 	else
 		$('#delete-button').hide();
-	$('#delete-button').click(agile_delete_all_prefs);	
+	$('#delete-button').live('click',agile_delete_all_prefs);	
 }

@@ -112,7 +112,9 @@ function modelAction(elem)
 	}	
 	else if(type=='deal')
 	{
-		updateDeal(entity);
+		App_Deal_Details.navigate("deal/"+id,{trigger:true});
+		$('#contactsmenu').parent().find('.active').removeClass('active');
+		$('#contactsmenu').addClass('active');
 	}
 	else if(type == 'case')
 	{

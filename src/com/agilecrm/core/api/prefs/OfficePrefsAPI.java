@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.prefs;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -13,11 +14,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.email.util.ContactOfficeUtil;
 import com.agilecrm.email.wrappers.EmailWrapper;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.OfficeEmailPrefs;
 import com.agilecrm.user.util.OfficeEmailPrefsUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
@@ -115,8 +119,9 @@ public class OfficePrefsAPI
     @Path("office365-emails")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<EmailWrapper> getOffice365Emails(@QueryParam("e") String searchEmail,
-	    @QueryParam("page_size") String pageSize, @QueryParam("cursor") String cursor)
+    public List<EmailWrapper> getOffice365Emails(@QueryParam("from_email") String fromEmail,
+	    @QueryParam("search_email") String searchEmail, @QueryParam("page_size") String pageSize,
+	    @QueryParam("cursor") String cursor)
     {
 	List<EmailWrapper> emails = null;
 	try
@@ -124,11 +129,14 @@ public class OfficePrefsAPI
 	    if (StringUtils.isBlank(cursor))
 		cursor = "0";
 	    // Removes unwanted spaces in between commas
-	    String normalisedEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', searchEmail);
+	    String normalisedSearchEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', searchEmail);
+
+	    // Removes unwanted spaces in between commas
+	    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
 
 	    // Gets office365Prefs url if not null, otherwise imap url.
-	    String url = ContactOfficeUtil.getOfficeURL(AgileUser.getCurrentAgileUser(), normalisedEmail, cursor,
-		    pageSize);
+	    String url = ContactOfficeUtil.getOfficeURL(AgileUser.getCurrentAgileUser(), normalisedFromEmail,
+		    normalisedSearchEmail, cursor, pageSize);
 
 	    // If both are not set, return Contact emails.
 	    if (StringUtils.isNotBlank(url))
@@ -138,10 +146,80 @@ public class OfficePrefsAPI
 	}
 	catch (Exception e)
 	{
-	    System.out.println("Got an exception in EmailsAPI: " + e.getMessage());
+	    System.out.println("Got an exception in OfficePrefsAPI: " + e.getMessage());
 	    e.printStackTrace();
 	    return null;
 	}
 	return emails;
+    }
+
+    /**
+     * /** Returns list of users ,current user OfficeEmailPrefs shared with
+     * these users
+     * 
+     * @return
+     */
+    @Path("shared-to-users")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON + " ;charset=utf-8", MediaType.APPLICATION_XML + " ;charset=utf-8" })
+    public String getSharedToUsersList()
+    {
+
+	List<AgileUser> agileUsers = null;
+	JSONArray users = new JSONArray();
+	String result = null;
+	try
+	{
+	    agileUsers = AgileUser.getUsers();
+	    if (agileUsers != null)
+	    {
+		Iterator<AgileUser> itr = agileUsers.iterator();
+		AgileUser currentAgileUser = AgileUser.getCurrentAgileUser();
+		while (itr.hasNext())
+		{
+		    AgileUser user = itr.next();
+		    if (user.id.longValue() == currentAgileUser.id.longValue())
+			itr.remove();
+		}
+		OfficeEmailPrefs imapEmailPrefs = OfficeEmailPrefsUtil.getOfficePrefs(currentAgileUser);
+		List<Key<AgileUser>> sharedUsers = null;
+		if (imapEmailPrefs != null)
+		{
+		    sharedUsers = imapEmailPrefs.getSharedWithUsers();
+		}
+		for (AgileUser agileUser : agileUsers)
+		{
+		    DomainUser domainUser = agileUser.getDomainUser();
+		    if (domainUser != null)
+		    {
+			String name = domainUser.name;
+			Long id = agileUser.id;
+			JSONObject user = new JSONObject();
+			user.put("id", id.toString());
+			user.put("name", name);
+
+			if (sharedUsers != null)
+			{
+			    for (Key<AgileUser> sharedUser : sharedUsers)
+			    {
+				if (sharedUser.getId() == id.longValue())
+				{
+				    user.put("selected", "selected=selected");
+				}
+			    }
+			}
+			users.put(user);
+		    }
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got an exception in EmailsAPI: " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+	result = users.toString();
+	return result;
     }
 }
