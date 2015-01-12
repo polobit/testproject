@@ -161,6 +161,13 @@
 			bulkDeleteDeals();
 		});
 		
+		$("#deal_bulk_delete_modal,#deal_owner_change_modal,#deal_mile_change_modal,#deal_bulk_archive_modal,#deal_bulk_restore_modal").on('show',function(){
+			if(SELECT_ALL_DEALS)
+				$(this).find('span.count').text(getAvailableDeals());
+			else
+				$(this).find('span.count').text(getDealsBulkIds().length);
+		})
+		
 		$("#pipeline-list-bulk").die().live('change',function(e){
 			populateMilestones($("#deal_mile_change_modal"), undefined,$(this).val(), undefined, function(data){
 				$("#milestone-list-bulk").html(data);
@@ -176,7 +183,13 @@
 		$('#select-all-available-deals').die().live('click',function(e){
 			e.preventDefault();
 			SELECT_ALL_DEALS = true;
-			$('body').find('#bulk-select').hide()
+			$('body').find('#bulk-select').html("Selected " + getAvailableDeals() + " deals. <a id='select-choosen-deals' href='#'>Select choosen deals only.</a>");
+		});
+		
+		$('#select-choosen-deals').die().live('click',function(e){
+			e.preventDefault();
+			SELECT_ALL_DEALS = false;
+			$('body').find('#bulk-select').html("Selected " + App_Deals.opportunityCollectionView.collection.length + " deals. <a id='select-all-available-deals' href='#'>Select all " + getAvailableDeals() + " deals</a>");
 		});
 		
 	};
@@ -207,13 +220,13 @@
 						.find('#bulk-select')
 						.show()
 						.html(
-								"Selected " + App_Deals.opportunityCollectionView.collection.length + " deals. <a id='select-all-available-deals' href='#'>Select all " + total_available_deals + " contacts</a>");
+								"Selected " + App_Deals.opportunityCollectionView.collection.length + " deals. <a id='select-all-available-deals' href='#'>Select all " + total_available_deals + " deals</a>");
 		}
 		else
 		{
 			if (isBulk)
 			{
-				$('#bulk-actions').css('display', 'none');
+				$('#bulk-actions,#bulk-select').css('display', 'none');
 				return;
 			}
 
