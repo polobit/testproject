@@ -3577,7 +3577,7 @@ $(function()
 	Handlebars.registerHelper('toProperFormat', function(timeInSec)
 			{
 		      if(timeInSec == "0")
-			    return "0 sec";
+			    return "0 s";
 		      
 			  return twilioSecondsToFriendly(timeInSec);		
 			});
