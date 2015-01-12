@@ -54,7 +54,7 @@ public class PortletUtil {
 		List<Portlet> allPortlets = new ArrayList<Portlet>();
 		
 		allPortlets.add(new Portlet("Filter Based",PortletType.CONTACTS));
-		//allPortlets.add(new Portlet("Emails Opened",PortletType.CONTACTS));
+		allPortlets.add(new Portlet("Emails Opened",PortletType.CONTACTS));
 		allPortlets.add(new Portlet("Growth Graph",PortletType.CONTACTS));
 		
 		allPortlets.add(new Portlet("Pending Deals",PortletType.DEALS));
