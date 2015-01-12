@@ -12,8 +12,7 @@ $(function()
 
 	$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false, template : 'modal' });
 	$('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false, template : 'modal' });
-	
-	
+
 	// Loads progress slider in add task / update modal.
 	loadProgressSlider($("#taskForm"));
 	loadProgressSlider($("#updateTaskForm"));
@@ -116,7 +115,7 @@ $(function()
 		{
 			return;
 		}
-		
+
 		$("#updateTaskForm").find("li").remove();
 
 		resetForm($("#updateTaskForm"));
@@ -133,7 +132,7 @@ $(function()
 	 */
 	$('#updateTaskModal').on('shown', function()
 	{
-	
+
 		var el = $("#updateTaskForm");
 		agile_type_ahead("update_task_related_to", el, contacts_typeahead);
 
@@ -225,12 +224,6 @@ function highlight_task()
 	$('input.date').val(new Date().format('mm/dd/yyyy')).datepicker('update');
 }
 
-
-
-
-
-
-
 /**
  * Creates or updates a task and adds the saved object to the suitable
  * collection by verifying the current window location.
@@ -274,147 +267,150 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 	var startarray = (json.task_ending_time).split(":");
 	json.due = new Date((json.due) * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
 
-				var newTask = new Backbone.Model();
-				newTask.url = 'core/api/tasks';
-				newTask
-												.save(
-																				json,
-																				{ success : function(data)
-																				{
+	var newTask = new Backbone.Model();
+	newTask.url = 'core/api/tasks';
+	newTask
+			.save(
+					json,
+					{ success : function(data)
+					{
 
-																								// Removes disabled attribute of save button
-																								enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
+						// Removes disabled attribute of save button
+						enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
 
-																								$('#' + formId).each(function()
-																								{
-																												this.reset();
-																								});
+						$('#' + formId).each(function()
+						{
+							this.reset();
+						});
 
-																								// $('#' + modalId).find('span.save-status
-																								// img').remove();
-																								$('#' + modalId).modal('hide');
+						// $('#' + modalId).find('span.save-status
+						// img').remove();
+						$('#' + modalId).modal('hide');
 
-																								var task = data.toJSON();
-																								if (Current_Route == 'calendar')
-																								{
-																												if (isUpdate)
-																																App_Calendar.tasksListView.collection.remove(json);
+						var task = data.toJSON();
+						
+						var due_task_count=getDueTasksCount();
+						$('#due_tasks_count').html(due_task_count);
+						if (Current_Route == 'calendar')
+						{
+							if (isUpdate)
+								App_Calendar.tasksListView.collection.remove(json);
 
-																												// Updates task list view
-																												if (!data.toJSON().is_complete && data.toJSON().owner_id == CURRENT_DOMAIN_USER.id)
-																																App_Calendar.tasksListView.collection.add(data);
+							// Updates task list view
+							if (!data.toJSON().is_complete && data.toJSON().owner_id == CURRENT_DOMAIN_USER.id)
+								App_Calendar.tasksListView.collection.add(data);
 
-																												App_Calendar.tasksListView.render(true);
+							App_Calendar.tasksListView.render(true);
 
-																								}
-																								else if (Current_Route == 'tasks-old')
-																								{
+						}
+						else if (Current_Route == 'tasks-old')
+						{
 
-																												/*
-																												 * To do without reloading the page should check the
-																												 * condition of (Owner and Category)
-																												 */
+							/*
+							 * To do without reloading the page should check the
+							 * condition of (Owner and Category)
+							 */
 
-																												var old_owner_id = $('#content').find('.type-task-button').find(".selected_name").text();
-																												var old_type = $('#content').find('.owner-task-button').find(".selected_name").text();
+							var old_owner_id = $('#content').find('.type-task-button').find(".selected_name").text();
+							var old_type = $('#content').find('.owner-task-button').find(".selected_name").text();
 
-																												if (isUpdate)
-																																App_Calendar.allTasksListView.collection.remove(json);
+							if (isUpdate)
+								App_Calendar.allTasksListView.collection.remove(json);
 
-																												if ((old_owner_id == "All Categories" || old_owner_id.toUpperCase() == json.type) && (old_type == "All Tasks" || json.owner_id == CURRENT_DOMAIN_USER.id))
-																																App_Calendar.allTasksListView.collection.add(data);
+							if ((old_owner_id == "All Categories" || old_owner_id.toUpperCase() == json.type) && (old_type == "All Tasks" || json.owner_id == CURRENT_DOMAIN_USER.id))
+								App_Calendar.allTasksListView.collection.add(data);
 
-																												App_Calendar.allTasksListView.render(true);
-																								}
-																								else if (Current_Route == 'tasks')
-																								{
-																												var criteria = getCriteria();
+							App_Calendar.allTasksListView.render(true);
+						}
+						else if (Current_Route == 'tasks')
+						{
+							var criteria = getCriteria();
 
-																												if (criteria == "LIST")
-																												{
-																																if (isUpdate)
-																																				App_Calendar.allTasksListView.collection.remove(json);
+							if (criteria == "LIST")
+							{
+								if (isUpdate)
+									App_Calendar.allTasksListView.collection.remove(json);
 
-																																App_Calendar.allTasksListView.collection.add(data);
-																																App_Calendar.allTasksListView.render(true);
-																																return;
-																												}
+								App_Calendar.allTasksListView.collection.add(data);
+								App_Calendar.allTasksListView.render(true);
+								return;
+							}
 
-																												updateTask(isUpdate, data, json);
-																								}
-																								// Updates data to temeline
-																								else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
-																								{
+							updateTask(isUpdate, data, json);
+						}
+						// Updates data to temeline
+						else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+						{
 
-																												/*
-																												 * Verifies whether the added task is related to the
-																												 * contact in contact detail view or not
-																												 */
-																												$.each(task.contacts, function(index, contact)
-																												{
-																																if (contact.id == App_Contacts.contactDetailView.model.get('id'))
-																																{
+							/*
+							 * Verifies whether the added task is related to the
+							 * contact in contact detail view or not
+							 */
+							$.each(task.contacts, function(index, contact)
+							{
+								if (contact.id == App_Contacts.contactDetailView.model.get('id'))
+								{
 
-																																				// Add model to collection. Disabled sort
-																																				// while adding and called
-																																				// sort explicitly, as sort is not working
-																																				// when it is called by add
-																																				// function
-																																				if (tasksView && tasksView.collection)
-																																				{
-																																								if (tasksView.collection.get(data.id))
-																																								{
-																																												tasksView.collection.get(data.id).set(new BaseModel(data));
-																																								}
-																																								else
-																																								{
-																																												tasksView.collection.add(new BaseModel(data), { sort : false });
-																																												tasksView.collection.sort();
-																																								}
-																																				}
+									// Add model to collection. Disabled sort
+									// while adding and called
+									// sort explicitly, as sort is not working
+									// when it is called by add
+									// function
+									if (tasksView && tasksView.collection)
+									{
+										if (tasksView.collection.get(data.id))
+										{
+											tasksView.collection.get(data.id).set(new BaseModel(data));
+										}
+										else
+										{
+											tasksView.collection.add(new BaseModel(data), { sort : false });
+											tasksView.collection.sort();
+										}
+									}
 
-																																				// Activates "Timeline" tab and its tab
-																																				// content in
-																																				// contact detail view
-																																				// activate_timeline_tab();
-																																				add_entity_to_timeline(data);
+									// Activates "Timeline" tab and its tab
+									// content in
+									// contact detail view
+									// activate_timeline_tab();
+									add_entity_to_timeline(data);
 
-																																				return false;
-																																}
-																												});
-																								}
-																								else if (App_Portlets.currentPosition && App_Portlets.tasksCollection && App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)] && Current_Route == 'portlets') 
-																								{
-																									if (isUpdate)
-																										App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+									return false;
+								}
+							});
+						}
+						else if (App_Portlets.currentPosition && App_Portlets.tasksCollection && App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)] && Current_Route == 'portlets')
+						{
+							if (isUpdate)
+								App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);
 
-																									// Updates task list view
-																									App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)].collection.add(data);
+							// Updates task list view
+							App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)].collection.add(data);
 
-																									App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)].render(true);
+							App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)].render(true);
 
-																								}
-																								else
-																								{
+						}
+						else
+						{
 
-																												if (App_Calendar.allTasksListView)
-																												{
-																																App_Calendar.allTasksListView.collection.remove(data.toJSON());
-																																App_Calendar.allTasksListView.collection.add(data.toJSON());
-																																App_Calendar.allTasksListView.render(true);
-																												}
-																												else if (App_Calendar.tasksListView)
-																												{
-																																App_Calendar.tasksListView.collection.remove(data.toJSON());
-																																App_Calendar.tasksListView.collection.add(data.toJSON());
-																																App_Calendar.tasksListView.render(true);
-																												}
-																												taskDetailView = data;
-																												$("#content").html(getTemplate("task-detail", data.toJSON()));
-																												task_details_tab.loadActivitiesView();
+							if (App_Calendar.allTasksListView)
+							{
+								App_Calendar.allTasksListView.collection.remove(data.toJSON());
+								App_Calendar.allTasksListView.collection.add(data.toJSON());
+								App_Calendar.allTasksListView.render(true);
+							}
+							else if (App_Calendar.tasksListView)
+							{
+								App_Calendar.tasksListView.collection.remove(data.toJSON());
+								App_Calendar.tasksListView.collection.add(data.toJSON());
+								App_Calendar.tasksListView.render(true);
+							}
+							taskDetailView = data;
+							$("#content").html(getTemplate("task-detail", data.toJSON()));
+							task_details_tab.loadActivitiesView();
 
-																								}
-																				} });
+						}
+					} });
 }
 
 /**
@@ -605,9 +601,9 @@ function complete_task(taskId, collection, ui, callback)
 	{
 		collection.remove(model);
 
-		var due_task_count=getDueTasksCount();
+		var due_task_count = getDueTasksCount();
 		$('#due_tasks_count').html(due_task_count);
-		
+
 		if (ui)
 			ui.fadeOut(2000);
 
@@ -636,11 +632,13 @@ function complete_task(taskId, collection, ui, callback)
  * 
  * @returns due tasks count upto today
  */
-function getDueTasksCount(){
-	var msg = $.ajax({ type : "GET", url :'core/api/tasks/overdue/uptotoday', async : false, dataType : 'json' }).responseText;
+function getDueTasksCount()
+{
+	var msg = $.ajax({ type : "GET", url : 'core/api/tasks/overdue/uptotoday', async : false, dataType : 'json' }).responseText;
 
-	if(!isNaN(msg)){
+	if (!isNaN(msg))
+	{
 		return msg;
 	}
-return 0;
+	return 0;
 }
