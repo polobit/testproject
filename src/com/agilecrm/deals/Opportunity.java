@@ -409,12 +409,6 @@ public class Opportunity extends Cursor implements Serializable
 
 	}
 
-	// Set Deal Pipeline.
-	if (pipeline_id != null && pipeline_id > 0)
-	{
-	    this.pipeline = new Key<Milestone>(Milestone.class, pipeline_id);
-	}
-
 	Long id = this.id;
 
 	// old opportunity (or deal) having id.
@@ -475,6 +469,12 @@ public class Opportunity extends Cursor implements Serializable
 	// Initializes created Time
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
+
+	// Set Deal Pipeline.
+	if (pipeline_id != null && pipeline_id > 0)
+	{
+	    this.pipeline = new Key<Milestone>(Milestone.class, pipeline_id);
+	}
 
 	// If owner_id is null
 	if (owner_id == null && ownerKey == null)

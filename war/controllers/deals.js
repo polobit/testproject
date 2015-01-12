@@ -65,7 +65,7 @@ var DealsRouter = Backbone.Router.extend({
 					pieMilestonesByPipeline(pipeline_id);
 					// Shows deals chart
 					dealsLineChartByPipeline(pipeline_id);
-					deal_bulk_actions.init_dom();
+					deal_bulk_actions.init_dom(el);
 					setupDealsTracksList(cel);
 					setupDealFilters(cel);
 				},

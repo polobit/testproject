@@ -259,7 +259,7 @@ public class DealsBulkActionsAPI
 		System.out.println("total sublist -----" + subList.size());
 	    }
 
-	    BulkActionNotifications.publishNotification("Milestone changed for " + deals.size() + " deals.");
+	    BulkActionNotifications.publishNotification("Track/Milestone changed for " + deals.size() + " deals.");
 	}
 	catch (Exception je)
 	{
