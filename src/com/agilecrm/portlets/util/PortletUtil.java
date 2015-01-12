@@ -428,7 +428,10 @@ public class PortletUtil {
 	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
 			}
 			List<Integer> mailsCountList=new ArrayList<Integer>();
-			List<DomainUser> domainUsersList=DomainUserUtil.getAllUsers();
+			List<DomainUser> domainUsersList=null;
+			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
+			if(dUser!=null)
+				domainUsersList=DomainUserUtil.getUsers(dUser.domain);
 			List<String> domainUserNamesList=new ArrayList<String>();
 			List<Integer> mailsOpenedCountList=new ArrayList<Integer>();
 			for(DomainUser domainUser : domainUsersList){
@@ -495,7 +498,10 @@ public class PortletUtil {
 	    		DateUtil endDateUtil = new DateUtil();
 	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
 			}
-			List<DomainUser> domainUsersList=DomainUserUtil.getAllUsers();
+			List<DomainUser> domainUsersList=null;
+			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
+			if(dUser!=null)
+				domainUsersList=DomainUserUtil.getUsers(dUser.domain);
 			List<String> domainUserNamesList=new ArrayList<String>();
 			List<Integer> assignedOpportunitiesCountList=new ArrayList<Integer>();
 			for(DomainUser domainUser : domainUsersList){
@@ -543,7 +549,10 @@ public class PortletUtil {
 	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
 			}
 		}
-		List<DomainUser> domainUsersList=DomainUserUtil.getAllUsers();
+		List<DomainUser> domainUsersList=null;
+		DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
+		if(dUser!=null)
+			domainUsersList=DomainUserUtil.getUsers(dUser.domain);
 		List<String> domainUserNamesList=new ArrayList<String>();
 		
 		List<Integer> incomingCompletedCallsCountList=new ArrayList<Integer>();
