@@ -135,4 +135,11 @@ public class MilestoneUtil
 	    }
 	return count;
     }
+
+    // returns all deals count
+    public static int getCount()
+    {
+
+	return Milestone.dao.count();
+    }
 }

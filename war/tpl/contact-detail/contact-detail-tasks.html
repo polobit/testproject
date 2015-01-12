@@ -49,7 +49,7 @@
 				{{/if_equals}}</h4></div>
 	{{/if}}
   <div style="margin-left:22px;">
-	<p><i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}<span style="margin-left:20px;">Due : <time class="task-created-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span></p>
+	<p><i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}<span style="margin-left:20px;">Due : <time class="task-created-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</span></p>
 	<div class="clear">
 		<div style="margin-bottom: 9px;">	
 		{{#each contacts}}

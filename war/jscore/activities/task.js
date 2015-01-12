@@ -112,13 +112,21 @@ $(function() {
 	});
 
 	/**
-	 * Hide event of update task modal. Removes the relatedTo field elements if
-	 * any, when the modal is hidden in order to not to show them again when the
-	 * modal is shown next
-	 * 
+	 * initialises task time picker
 	 */
+	
+	$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false, template : 'modal' });
+	$('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false, template : 'modal' });
+	
+	
+	
 	$('#updateTaskModal').on('hidden', function() {
 
+		if ($(this).hasClass('in'))
+		{
+			return;
+		}
+		
 		$("#updateTaskForm").find("li").remove();
 		
 		resetForm($("#updateTaskForm"));
@@ -160,6 +168,9 @@ $(function() {
 		var value = $(ele).data().toJSON();
 		deserializeForm(value, $("#updateTaskForm"));
 		$("#updateTaskModal").modal('show');
+		
+		$('.update-task-timepicker').val(fillTimePicker(value.due));
+
 		// Fills owner select element
 		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner',
 				function(data) {
@@ -224,6 +235,12 @@ function highlight_task() {
 	$('input.date').val(new Date().format('mm/dd/yyyy')).datepicker('update');
 }
 
+
+
+
+
+
+
 /**
  * Creates or updates a task and adds the saved object to the suitable
  * collection by verifying the current window location.
@@ -263,6 +280,9 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 	if (!isUpdate)
 		json.due = new Date(json.due).getTime();
 	
+	var startarray = (json.task_ending_time).split(":");
+	json.due = new Date((json.due) * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
+	
 	var newTask = new Backbone.Model();
 	newTask.url = 'core/api/tasks';
 	newTask.save(json, {
@@ -279,6 +299,9 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 			$('#' + modalId).modal('hide');
 
 			var task = data.toJSON();
+			
+			
+			
 			if (Current_Route == 'calendar') {
 				if (isUpdate)
 					App_Calendar.tasksListView.collection.remove(json);
@@ -357,6 +380,15 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 						return false;
 					}
 				});
+			} else if (App_Portlets.currentPosition && App_Portlets.tasksCollection && App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)] && Current_Route == 'portlets') {
+				if (isUpdate)
+					App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+				// Updates task list view
+				App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+				App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)].render(true);
+
 			} else {
 				App_Calendar.navigate("calendar", {
 					trigger : true
@@ -552,6 +584,8 @@ function complete_task(taskId, collection, ui, callback) {
 		success : function(model, response) {
 			collection.remove(model);
 
+			var due_task_count=getDueTasksCount();
+			$('#due_tasks_count').html(due_task_count);
 			if (ui)
 				ui.fadeOut(2000);
 
@@ -574,4 +608,15 @@ function complete_task(taskId, collection, ui, callback) {
 	 * ui.fadeOut(2000); }} );
 	 */
 
+}
+
+
+
+function getDueTasksCount(){
+	var msg = $.ajax({ type : "GET", url :'core/api/tasks/overdue/uptotoday', async : false, dataType : 'json' }).responseText;
+
+	if(!isNaN(msg)){
+		return msg;
+	}
+return 0;
 }

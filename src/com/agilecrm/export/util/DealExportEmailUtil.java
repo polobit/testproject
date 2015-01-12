@@ -1,5 +1,7 @@
 package com.agilecrm.export.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 import com.agilecrm.user.DomainUser;
@@ -30,7 +32,11 @@ public class DealExportEmailUtil
 
 	// Mandrill attachment should contain mime-type, file-name and
 	// file-content.
-	String[] strArr = { "text/csv", "LocalDeals.csv", data };
+	Date currentDate = new Date();
+	SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh:mm");
+	StringBuilder exportedFileName = new StringBuilder("Deals_").append(df.format(currentDate)).append(".csv");
+
+	String[] strArr = { "text/csv", exportedFileName.toString(), data };
 
 	System.out.println("Namespace in exportDealCSVAsEmail " + NamespaceManager.get());
 	System.out.println("Domain is  " + currentUser.domain);

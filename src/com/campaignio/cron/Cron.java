@@ -115,7 +115,7 @@ public class Cron extends HttpServlet
 	public static final String DURATION_TYPE_HOURS = "hours";
 	public static final String DURATION_TYPE_DAYS = "days";
 	public static final String DURATION_TYPE_WEEK = "week";
-	public static final String DURATION_TYPE_BUSINESS_DAYS = "business_days";
+	public static final String DURATION_TYPE_BUSINESS_DAYS = "business days";
 	/**
 	 * Wake up or Interrupt.
 	 */

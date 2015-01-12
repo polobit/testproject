@@ -365,18 +365,13 @@ public class CronUtil
 		// TODO Auto-generated method stub
 		int duration = Integer.parseInt(durationString);
 		// TimeZone timeZone = TimeZone.getTimeZone(timezone);
-		Calendar calendar = Calendar.getInstance();
+		Calendar calendar = null;
 
 		// Set timezone
 		if (!Wait.DEFAULT_TIMEZONE.equals(timezone) && !StringUtils.isEmpty(timezone))
 		{
-			// Zone
-			String timeZone = timezone.substring(timezone.indexOf("GMT"));
-
-			// Get in quotes (GMT-12:00)
-			String tz = timeZone.substring(0, timeZone.indexOf(")"));
-
-			calendar.setTimeZone(TimeZone.getTimeZone(tz.trim()));
+			TimeZone timeZone = TimeZone.getTimeZone(timezone.substring(1));
+			calendar = Calendar.getInstance(timeZone);
 		}
 
 		// Days
@@ -391,8 +386,8 @@ public class CronUtil
 		if (durationType.equalsIgnoreCase(Cron.DURATION_TYPE_MINS))
 			calendar.add(Calendar.MINUTE, duration);
 
-		// Business days
-		if (durationType.equalsIgnoreCase(Cron.DURATION_TYPE_BUSINESS_DAYS))
+		// Business days - Bhasuri
+		if ((Cron.DURATION_TYPE_BUSINESS_DAYS).equalsIgnoreCase(durationType))
 		{
 			int i = 1;
 			while (i <= duration)

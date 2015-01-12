@@ -8,6 +8,30 @@ public class EmailPrefs
 {
     private String agileUserName;
 
+    private boolean hasEmailAccountsConfigured;
+
+    private boolean hasSharedEmailAccounts;
+
+    public boolean isHasEmailAccountsConfigured()
+    {
+	return hasEmailAccountsConfigured;
+    }
+
+    public void setHasEmailAccountsConfigured(boolean hasEmailAccountsConfigured)
+    {
+	this.hasEmailAccountsConfigured = hasEmailAccountsConfigured;
+    }
+
+    public boolean isHasSharedEmailAccounts()
+    {
+	return hasSharedEmailAccounts;
+    }
+
+    public void setHasSharedEmailAccounts(boolean hasSharedEmailAccounts)
+    {
+	this.hasSharedEmailAccounts = hasSharedEmailAccounts;
+    }
+
     public String getAgileUserName()
     {
 	return agileUserName;

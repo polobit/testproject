@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonNode;
@@ -15,6 +16,7 @@ import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.MappingJsonFactory;
 import org.json.JSONObject;
 
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.util.FileStreamUtil;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
@@ -100,12 +102,14 @@ public class MustacheUtil
 
     public static String convertDate(String format, Long epoch)
     {
+	String timezone = AccountPrefsUtil.getAccountPrefs().timezone;
 	if (format == null)
 	    format = "EEE, MMM dd, yyyy";
 	if (epoch > 0)
 	{
 	    Date d = new Date(epoch * 1000);
 	    SimpleDateFormat df = new SimpleDateFormat(format);
+	    df.setTimeZone(TimeZone.getTimeZone(timezone));
 	    return df.format(d);
 	}
 	return "";

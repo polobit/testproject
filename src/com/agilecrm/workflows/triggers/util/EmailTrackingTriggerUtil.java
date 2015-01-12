@@ -119,7 +119,8 @@ public class EmailTrackingTriggerUtil
 	}
 
 	// Trigger only if email opened belongs to Given Campaign
-	if (trigger.email_tracking_type.equals("CAMPAIGNS") && trigger.email_tracking_campaign_id.equals(workflowId)
+	if (trigger.email_tracking_type.equals("CAMPAIGNS")
+	        && (trigger.email_tracking_campaign_id == 0 || trigger.email_tracking_campaign_id.equals(workflowId))
 	        && !trigger.email_tracking_campaign_id.equals(trigger.campaign_id))
 	    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
     }

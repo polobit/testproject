@@ -254,15 +254,6 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     	return "<select onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "' id='" + uiFieldDefinition.id + "'"+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes + "</select>";
     
   
-    if(uiFieldDefinition.fieldType == "timezone"){
-    	
-    	var currentUserTimezone =window.parent.CURRENT_DOMAIN_USER.timezone;
-    	
-    	 return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "' id='timezone'" +(currentUserTimezone ? ("value ='" + currentUserTimezone+"'") : "value ='empty_timezone'" )+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " +(currentUserTimezone ? ("") : "<option value='empty_timezone'>Select time zone</option>" )+ selectOptionAttributes + "</select>";
-    	   
-    }
-    	
-    	
     if(uiFieldDefinition.fieldType == "campaign_list")
     return "<select multiple name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'"+getStyleAttribute(uiFieldDefinition.style)+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes +  "</select>";
      

@@ -25,7 +25,7 @@ function scramble_input_names(el)
 
 $(function()
 {
-	CONTACT_CUSTOM_FIELDS = undefined;
+	SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
 	COMPANY_CUSTOM_FIELDS = undefined;
 	
 	// Filter Contacts- Clone Multiple
@@ -80,7 +80,7 @@ $(function()
 
 		e.preventDefault();
 		eraseCookie('company_filter');
-		
+		eraseData('dynamic_contact_filter');
 
 		var filter_id = $(this).attr('id');
 		var filter_type = $(this).attr('filter_type');
@@ -280,6 +280,7 @@ function revertToDefaultContacts()
 	eraseCookie('contact_filter');
 	eraseCookie('contact_filter_type');
 	eraseCookie('company_filter');
+	eraseData('dynamic_filter');
 
 	if (App_Contacts.contactsListView)
 		App_Contacts.contactsListView = undefined;
@@ -323,9 +324,10 @@ function chainFilters(el, data, callback, is_webrules, is_company)
 		});
 		return;
 	} else {
-		if(!CONTACT_CUSTOM_FIELDS)
-		{
-			$("#content").html(getRandomLoadingImg());
+		if(!SEARCHABLE_CONTACT_CUSTOM_FIELDS)
+		{			
+			if(window.location.hash.indexOf("contact-filter") != -1)
+			   $("#content").html(getRandomLoadingImg());
 			fillContactCustomFieldsInFilters(el, function(){
 				show_chained_fields(el, data, true);
 				if (callback && typeof (callback) === "function")
@@ -337,7 +339,7 @@ function chainFilters(el, data, callback, is_webrules, is_company)
 			return;
 		}
 		
-		fillCustomFields(CONTACT_CUSTOM_FIELDS, el, undefined, false)
+		fillCustomFields(SEARCHABLE_CONTACT_CUSTOM_FIELDS, el, undefined, false)
 	}
 	
 	
@@ -480,7 +482,7 @@ function fillContactCustomFieldsInFilters(el, callback, is_webrules)
 
 	$.getJSON("core/api/custom-fields/searchable/scope?scope=CONTACT", function(fields){
 		console.log(fields);
-		CONTACT_CUSTOM_FIELDS = fields;
+		SEARCHABLE_CONTACT_CUSTOM_FIELDS = fields;
 		fillCustomFields(fields, el, callback, is_webrules)
 	})
 }
@@ -517,6 +519,10 @@ function fillCustomFields(fields, el, callback, is_webrules)
 		{
 			lhs_element.append('<option value="'+field.field_label+'_time" field_type="'+field.field_type+'">'+field.field_label+'</option>');
 			condition.find("option.created_time").addClass(field.field_label+'_time');
+		} else if(field.field_type == "NUMBER")
+		{
+			lhs_element.append('<option value="'+field.field_label+'_number" field_type="'+field.field_type+'">'+field.field_label+'</option>');
+			condition.find("option.lead_score").addClass(field.field_label+'_number');
 		}
 		else
 		{

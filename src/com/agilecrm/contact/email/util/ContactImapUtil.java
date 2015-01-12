@@ -8,6 +8,8 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.util.IMAPEmailPrefsUtil;
 import com.google.appengine.api.utils.SystemProperty;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 
 public class ContactImapUtil
 {
@@ -33,6 +35,34 @@ public class ContactImapUtil
 
 	return ContactImapUtil.getIMAPURLForPrefs(imapPrefs, searchEmail, offset, count);
     }
+    
+    /**
+     * Returns url to fetch emails from given "from-email" imap account.
+     * 
+     * @param fromEmail
+     *        - imapPrefs userName
+     * 
+     * @param searchEmail
+     *            - search email-id.
+     * @param offset
+     *            - offset.
+     * @param count
+     *            - count or limit to number of emails.
+     * @return String
+     */
+    public static String getIMAPURL(AgileUser agileUser, String fromEmail, String searchEmail, String offset,
+	    String count)
+    {
+	// Fetching ImapPrefs
+	Objectify ofy = ObjectifyService.begin();
+	IMAPEmailPrefs imapPrefs = ofy.query(IMAPEmailPrefs.class).filter("user_name", fromEmail).get();
+	if (imapPrefs == null)
+	    return null;
+
+	return ContactImapUtil.getIMAPURLForPrefs(imapPrefs, searchEmail, offset, count);
+
+    }
+
 
     /**
      * Returns IMAP url

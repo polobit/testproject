@@ -182,7 +182,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     public String business_hours = getDefaultBusinessHours();
 
     @NotSaved(IfDefault.class)
-    public String timezone = "UTC";
+    public String timezone = null;
 
     @NotSaved(IfDefault.class)
     public String meeting_durations = "{\"15mins\":\"say hi\",\"30mins\":\"let's keep it short\",\"60mins\":\"let's chat\"}";
@@ -332,13 +332,13 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    // Limits users to global trail users count
 	    if (subscription.isFreePlan() && DomainUserUtil.count() >= Globals.TRIAL_USERS_COUNT)
 		throw new Exception("Please upgrade. You cannot add more than " + Globals.TRIAL_USERS_COUNT
-		        + " users in the free plan");
+			+ " users in the free plan");
 
 	    // If Subscription is not null then limits users to current plan
 	    // quantity).
 	    if (!subscription.isFreePlan() && DomainUserUtil.count() >= subscription.plan.quantity)
 		throw new Exception("Please upgrade. You cannot add more than " + subscription.plan.quantity
-		        + " users in the current plan");
+			+ " users in the current plan");
 
 	    return false;
 	}
@@ -426,11 +426,12 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    // If user is account owner then account owner should be set to true
 	    // when it is being updated
 	    this.is_account_owner = true;
-
+	    this.is_disabled = false;
 	    if (!is_admin)
 		throw new Exception(user.name + " is the owner of '" + user.domain
-		        + "' domain and should be an <b>admin</b>. You can change the Email and Name instead.");
+			+ "' domain and should be an <b>admin</b>. You can change the Email and Name instead.");
 	}
+	
     }
 
     /**
@@ -497,7 +498,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    if (this.id == null || (this.id != null && !this.id.equals(domainUser.id)))
 	    {
 		throw new Exception("User with this email address " + domainUser.email + " already exists in "
-		        + domainUser.domain + " domain.");
+			+ domainUser.domain + " domain.");
 	    }
 
 	    // Checks if super user is disabled, and throws exception if super
@@ -514,6 +515,15 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    }
 
 	    sendPasswordChangedNotification(domainUser.encrypted_password);
+	}
+	else if(id != null && !is_account_owner)
+	{
+	    DomainUser user = DomainUserUtil.getDomainUser(id);
+	    
+	    // Checks if super user is disabled, and throws exception if super
+	    // is disabled
+	    checkSuperUserDisabled(user);
+	    checkAdminDisabled();
 	}
 
 	// Check if namespace is null or empty. Then, do not allow to be created
@@ -819,7 +829,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     public String toString()
     {
 	return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: "
-	        + this.id + " Name: " + this.name + "\n " + info_json;
+		+ this.id + " Name: " + this.name + "\n " + info_json;
     }
 
 }

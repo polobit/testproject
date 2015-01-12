@@ -67,14 +67,22 @@ public class Wait extends TaskletAdapter
 
 		System.out.println("Waiting for " + duration + " " + durationType);
 
-		// Creates log for wait
-		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-				"Wait duration - " + duration + " " + durationType, LogType.WAIT.toString());
+		try
+		{
+			// Creates log for wait
+			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+					"Wait duration - " + duration + " " + durationType, LogType.WAIT.toString());
 
-		// Add ourselves to Cron Queue
-		long timeout = CronUtil.getTimer(duration, durationType, timezone, at);
+			// Add ourselves to Cron Queue
+			long timeout = CronUtil.getTimer(duration, durationType, timezone, at);
 
-		CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, null, null, null);
+			CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, null, null, null);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception in wait :" + e.getMessage());
+		}
+
 	}
 
 	/*

@@ -8,16 +8,32 @@ function addDetailsInCookie(elmnt)
 
 	var taskField = null;
 	var taskFieldValue = null;
+	var taskFieldForGroupView = null;
+	var taskFieldValueForGroupView = null;
 
 	if ($(elmnt).closest("ul").attr('id') == "new-type-tasks")
+	   {
 		taskField = "task_criteria";
+		taskFieldForGroupView = "task_criteria_forgroupview";
+	   }	
 	else if ($(elmnt).closest("ul").attr('id') == "new-owner-tasks")
+	   {
 		taskField = "task_owner";
-
+		taskFieldForGroupView = "task_owner_forgroupview";
+	   }		
+	
 	taskFieldValue = name + "_" + id;
+	taskFieldValueForGroupView = name + "_" + id;
 
 	// Creates the cookie
 	createCookie(taskField, taskFieldValue);
+	
+	// Save setting for group view	
+	if(getCriteria() != "LIST")
+		{
+		 // Creates the cookie
+		 createCookie(taskFieldForGroupView, taskFieldValueForGroupView);
+		}	
 }
 
 function readDetailsFromCookie()
