@@ -248,11 +248,21 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
            // Needed right align for Text and Html tab of Send Email node.
     	   return "<select style='position:relative;float:right;cursor:pointer' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes + "</select>";
     	}
-     
+    
+    
     if(selectEventHandler)
     	return "<select onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "' id='" + uiFieldDefinition.id + "'"+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes + "</select>";
     
   
+    if(uiFieldDefinition.fieldType == "timezone"){
+    	
+    	var currentUserTimezone =window.parent.CURRENT_DOMAIN_USER.timezone;
+    	
+    	 return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "' id='timezone'" +(currentUserTimezone ? ("value ='" + currentUserTimezone+"'") : "value ='empty_timezone'" )+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " +(currentUserTimezone ? ("") : "<option value='empty_timezone'>Select time zone</option>" )+ selectOptionAttributes + "</select>";
+    	   
+    }
+    	
+    	
     if(uiFieldDefinition.fieldType == "campaign_list")
     return "<select multiple name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'"+getStyleAttribute(uiFieldDefinition.style)+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes +  "</select>";
      
@@ -551,7 +561,7 @@ function _generateUIFields(selector, ui) {
         }
 
         // Options
-        if (uiFieldType == "select") {
+        if (uiFieldType == "select" || uiFieldType == "timezone") {
             addLabel(uiFieldDefinition.label, container);
             uiField = generateSelectUI(uiFieldDefinition,uiFieldDefinition.select_event_callback);
             $(uiField).appendTo(container);
