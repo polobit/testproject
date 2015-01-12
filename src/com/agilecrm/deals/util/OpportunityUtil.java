@@ -1059,13 +1059,12 @@ public class OpportunityUtil
     					.filter("archived",false).list();
     		}else{
     			if(owner)
-        			milestoneList = dao.ofy().query(Opportunity.class).filter("milestone", milestone).filter("close_date <=",dueDate)
-        					.filter("pipeline", new Key<Milestone>(Milestone.class, trackId)).filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+        			milestoneList = dao.ofy().query(Opportunity.class).filter("milestone", milestone).filter("pipeline", new Key<Milestone>(Milestone.class, trackId))
+        					.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
         					.filter("archived",false).list();
         		else
         			milestoneList = dao.ofy().query(Opportunity.class)
-        					.filter("pipeline", new Key<Milestone>(Milestone.class, trackId)).filter("milestone", milestone).filter("close_date <=",dueDate)
-        					.filter("archived",false).list();
+        					.filter("pipeline", new Key<Milestone>(Milestone.class, trackId)).filter("milestone", milestone).filter("archived",false).list();
     		}
     		for(Opportunity opportunity : milestoneList){
     			totalMilestoneValue+=opportunity.expected_value;
@@ -1079,8 +1078,7 @@ public class OpportunityUtil
     	
     }
     /**
-     * Gets list of opportunities won with respect to closed date and given time
-     * period.
+     * Gets list of all opportunities won.
      * 
      * @param minTime
      *            - Given time less than closed date.
@@ -1089,9 +1087,18 @@ public class OpportunityUtil
      * @return list of opportunities with closed date in between min and max
      *         times.
      */
-    public static List<Opportunity> getOpportunitiesWon(long minTime, long maxTime){
-    	return dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime).filter("milestone","Won").limit(50)
-	        .list();
+    public static List<Opportunity> getOpportunitiesWon(Long ownerId){
+    	try {
+    		if(ownerId!=null)
+    			return dao.ofy().query(Opportunity.class).filter("milestone","Won").filter("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId))
+    					.filter("archived",false).list();
+    		else
+    			return dao.ofy().query(Opportunity.class).filter("milestone","Won").filter("archived",false).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+    	
     }
     /**
      * Gets list of opportunities assigned to a particular user.
@@ -1101,6 +1108,6 @@ public class OpportunityUtil
      * @return list of opportunities assigned to a particular user.
      */
     public static List<Opportunity> getOpportunitiesAsignedToUser(Long ownerId){
-    	return dao.ofy().query(Opportunity.class).filter("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId)).list();
+    	return dao.ofy().query(Opportunity.class).filter("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId)).filter("archived",false).list();
     }
 }

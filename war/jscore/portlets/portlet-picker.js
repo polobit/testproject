@@ -160,7 +160,7 @@ function set_p_portlets(base_model){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 
 			var selector=$(this).attr('id');
-			var url='/core/api/portlets/portletDealsByMilestone?deals='+base_model.get('settings').deals+'&track='+base_model.get('settings').track+'&due-date='+base_model.get('settings')["due-date"];
+			var url='/core/api/portlets/portletDealsByMilestone?deals='+base_model.get('settings').deals+'&track='+base_model.get('settings').track;
 			var milestonesList=[];
 			var milestoneValuesList=[];
 			var milestoneNumbersList=[];
@@ -248,7 +248,7 @@ function set_p_portlets(base_model){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 			
 			var selector=$(this).attr('id');
-			var url='/core/api/portlets/portletDealsFunnel?deals='+base_model.get('settings').deals+'&track='+base_model.get('settings').track+'&due-date='+base_model.get('settings')["due-date"];
+			var url='/core/api/portlets/portletDealsFunnel?deals='+base_model.get('settings').deals+'&track='+base_model.get('settings').track;
 			
 			var milestonesList=[];
 			var milestoneValuesList=[];
@@ -309,17 +309,36 @@ function set_p_portlets(base_model){
 			
 			var domainUsersList=[];
 			var mailsCountList=[];
+			var mailsOpenedCountList=[];
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				domainUsersList=data["domainUsersList"];
 				mailsCountList=data["mailsCountList"];
+				mailsOpenedCountList=data["mailsOpenedCountList"];
 				
-				var catges=[];
+				/*var catges=[];
 				$.each(domainUsersList,function(index,domainUser){
 					catges.push(domainUser);
 				});
 				
-				emailsSentBarGraph(selector,catges,mailsCountList);
+				emailsSentBarGraph(selector,catges,mailsCountList);*/
+				
+				var series=[];
+				var text='';
+				var colors;
+				
+				var tempData={};
+				tempData.name="Emails Sent";
+				tempData.data=mailsCountList;
+				series[0]=tempData;
+				tempData={};
+				tempData.name="Emails Opened";
+				tempData.data=mailsOpenedCountList;
+				series[1]=tempData;
+				text="No. of Emails";
+				colors=['green','red'];
+				
+				callsPerPersonBarGraph(selector,domainUsersList,series,text,colors);
 				
 				addWidgetToGridster(base_model);
 			});

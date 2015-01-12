@@ -251,11 +251,11 @@ public class PortletsAPI {
 	@Path("/portletDealsByMilestone")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getPortletDealsByMilestoneData(@QueryParam("deals") String deals,@QueryParam("track") String track,@QueryParam("due-date") String dueDate)throws Exception {
+	public JSONObject getPortletDealsByMilestoneData(@QueryParam("deals") String deals,@QueryParam("track") String track)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("deals",deals);
 		json.put("track",track);
-		json.put("due-date",dueDate);
+		//json.put("due-date",dueDate);
 		return PortletUtil.getDealsByMilestoneData(json);
 	}
 	/**
@@ -279,11 +279,11 @@ public class PortletsAPI {
 	@Path("/portletDealsFunnel")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getPortletDealsFunnelData(@QueryParam("deals") String deals,@QueryParam("track") String track,@QueryParam("due-date") String dueDate)throws Exception {
+	public JSONObject getPortletDealsFunnelData(@QueryParam("deals") String deals,@QueryParam("track") String track)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("deals",deals);
 		json.put("track",track);
-		json.put("due-date",dueDate);
+		//json.put("due-date",dueDate);
 		return PortletUtil.getDealsByMilestoneData(json);
 	}
 	/**

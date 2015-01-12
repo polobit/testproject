@@ -58,17 +58,17 @@ public class PortletUtil {
 		allPortlets.add(new Portlet("Growth Graph",PortletType.CONTACTS));
 		
 		allPortlets.add(new Portlet("Pending Deals",PortletType.DEALS));
-		//allPortlets.add(new Portlet("Deals By Milestone",PortletType.DEALS));
-		//allPortlets.add(new Portlet("Closures Per Person",PortletType.DEALS));
-		//allPortlets.add(new Portlet("Deals Won",PortletType.DEALS));
+		allPortlets.add(new Portlet("Deals By Milestone",PortletType.DEALS));
+		allPortlets.add(new Portlet("Closures Per Person",PortletType.DEALS));
+		allPortlets.add(new Portlet("Deals Won",PortletType.DEALS));
 		allPortlets.add(new Portlet("Deals Funnel",PortletType.DEALS));
 		//allPortlets.add(new Portlet("Deals Assigned",PortletType.DEALS));
 		
 		allPortlets.add(new Portlet("Agenda",PortletType.TASKSANDEVENTS));
 		allPortlets.add(new Portlet("Today Tasks",PortletType.TASKSANDEVENTS));
 		
-		//allPortlets.add(new Portlet("Emails Sent",PortletType.USERACTIVITY));
-		//allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
+		allPortlets.add(new Portlet("Emails Sent",PortletType.USERACTIVITY));
+		allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
 		
 		allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
 		
@@ -255,7 +255,7 @@ public class PortletUtil {
 	public static List<Opportunity> getDealsWonList(JSONObject json)throws Exception{
 		long minTime=0L;
 		long maxTime=0L;
-		List<Opportunity> dealsList=null;
+		List<Opportunity> finalDealsList = new ArrayList<Opportunity>();
 		if(json!=null && json.get("duration")!=null){
 			if(json.get("duration").toString().equalsIgnoreCase("1-week")){
 				DateUtil startDateUtil = new DateUtil();
@@ -289,9 +289,25 @@ public class PortletUtil {
 	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
 			}
 
-    		dealsList=OpportunityUtil.getOpportunitiesWon(minTime,maxTime);
+			List<Opportunity> dealsList = OpportunityUtil.getOpportunitiesWon(null);
+    		List<Activity> wonDealsActivityList = ActivityUtil.getWonDealsActivityList(minTime,maxTime);
+    		Map<Long,Opportunity> dealsMap = new LinkedHashMap<Long,Opportunity>();
+    		Map<Long,Opportunity> wonDealsActivityMap = new LinkedHashMap<Long,Opportunity>();
+    		if(dealsList!=null)
+    			for(Opportunity opportunity : dealsList){
+    				dealsMap.put(opportunity.id,opportunity);
+    			}
+    		if(wonDealsActivityList!=null)
+    			for(Activity activity : wonDealsActivityList){
+    				if(dealsMap.containsKey(activity.entity_id))
+    					if(!wonDealsActivityMap.containsKey(activity.entity_id)){
+    						wonDealsActivityMap.put(activity.entity_id,dealsMap.get(activity.entity_id));
+    						finalDealsList.add(dealsMap.get(activity.entity_id));
+    					}
+    			}
+    				
 		}
-		return dealsList;
+		return finalDealsList;
 	}
 	public static List<Event> getAgendaList()throws Exception{
 		return EventUtil.getTodayPendingEvents();
@@ -302,7 +318,7 @@ public class PortletUtil {
 	public static JSONObject getDealsByMilestoneData(JSONObject json)throws Exception{
 		JSONObject dealsByMilestoneJSON=new JSONObject();
 		if(json!=null){
-			if(json.get("deals")!=null && (json.get("deals").toString().equalsIgnoreCase("all-deals") || json.get("deals").toString().equalsIgnoreCase("my-deals")) && json.get("track")!=null && json.get("due-date")!=null){
+			if(json.get("deals")!=null && (json.get("deals").toString().equalsIgnoreCase("all-deals") || json.get("deals").toString().equalsIgnoreCase("my-deals")) && json.get("track")!=null){
 				List<String> milestonesList=new ArrayList<String>();
 				List<Double> milestoneValuesList=new ArrayList<Double>();
 				List<Integer> milestoneNumbersList=new ArrayList<Integer>();
@@ -313,9 +329,9 @@ public class PortletUtil {
 						milestonesList.add(milestones[i]);
 						Map<Double,Integer> map=null;
 						if(json.get("deals").toString().equalsIgnoreCase("all-deals"))
-							map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],false,json.getLong("due-date"),null,milestone.id);
+							map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],false,0,null,milestone.id);
 						else if(json.get("deals").toString().equalsIgnoreCase("my-deals"))
-							map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],true,json.getLong("due-date"),null,milestone.id);
+							map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],true,0,null,milestone.id);
 						for(Map.Entry<Double, Integer> entry : map.entrySet()){
 							milestoneValuesList.add(entry.getKey());
 							milestoneNumbersList.add(entry.getValue());
@@ -345,16 +361,36 @@ public class PortletUtil {
 		DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
 		if(dUser!=null)
 			domainUsersList=DomainUserUtil.getUsers(dUser.domain);
+		List<Activity> wonDealsActivityList = null;
 		if(json!=null && json.get("due-date")!=null){
-			for(DomainUser domainUser : domainUsersList){
-				Map<Double,Integer> map = OpportunityUtil.getTotalMilestoneValueAndNumber("Won",true,json.getLong("due-date"),domainUser.id,null);
-				for(Map.Entry<Double, Integer> entry : map.entrySet()){
-					milestoneValuesList.add(entry.getKey());
-					milestoneNumbersList.add(entry.getValue());
-				}
-				domainUserNamesList.add(domainUser.name);
-			}
+			wonDealsActivityList = ActivityUtil.getWonDealsActivityList(0,json.getLong("due-date")+(24*60*60));
 		}
+		for(DomainUser domainUser : domainUsersList){
+			double totalMilestoneValue=0;
+			List<Opportunity> finalDealsList = new ArrayList<Opportunity>();
+			List<Opportunity> dealsList = OpportunityUtil.getOpportunitiesWon(domainUser.id);
+			Map<Long,Opportunity> dealsMap = new LinkedHashMap<Long,Opportunity>();
+			Map<Long,Opportunity> wonDealsActivityMap = new LinkedHashMap<Long,Opportunity>();
+			if(dealsList!=null)
+				for(Opportunity opportunity : dealsList){
+					dealsMap.put(opportunity.id,opportunity);
+				}
+			if(wonDealsActivityList!=null)
+				for(Activity activity : wonDealsActivityList){
+					if(dealsMap.containsKey(activity.entity_id))
+						if(!wonDealsActivityMap.containsKey(activity.entity_id)){
+							wonDealsActivityMap.put(activity.entity_id,dealsMap.get(activity.entity_id));
+							finalDealsList.add(dealsMap.get(activity.entity_id));
+						}
+				}
+			for(Opportunity opportunity1 : finalDealsList){
+    			totalMilestoneValue+=opportunity1.expected_value;
+    		}
+			milestoneValuesList.add(totalMilestoneValue);
+			milestoneNumbersList.add(finalDealsList.size());
+			domainUserNamesList.add(domainUser.name);
+		}
+		
 		closuresPerPersonJSON.put("milestoneNumbersList",milestoneNumbersList);
 		closuresPerPersonJSON.put("milestoneValuesList",milestoneValuesList);
 		closuresPerPersonJSON.put("domainUsersList",domainUserNamesList);
@@ -394,17 +430,24 @@ public class PortletUtil {
 			List<Integer> mailsCountList=new ArrayList<Integer>();
 			List<DomainUser> domainUsersList=DomainUserUtil.getAllUsers();
 			List<String> domainUserNamesList=new ArrayList<String>();
+			List<Integer> mailsOpenedCountList=new ArrayList<Integer>();
 			for(DomainUser domainUser : domainUsersList){
 				List<ContactEmail> emailsList=ContactEmailUtil.getEmailsSent(domainUser,minTime,maxTime);
+				List<ContactEmail> emailsOpenedList=ContactEmailUtil.getEmailsOpenedByUser(domainUser,minTime,maxTime);
 				if(emailsList!=null)
 					mailsCountList.add(emailsList.size());
 				else
 					mailsCountList.add(0);
+				if(emailsOpenedList!=null)
+					mailsOpenedCountList.add(emailsOpenedList.size());
+				else
+					mailsOpenedCountList.add(0);
 				domainUserNamesList.add(domainUser.name);
 			}
 			
 			emailsSentJSON.put("domainUsersList",domainUserNamesList);
 			emailsSentJSON.put("mailsCountList",mailsCountList);
+			emailsSentJSON.put("mailsOpenedCountList",mailsOpenedCountList);
 		}
 		return emailsSentJSON;
 	}
