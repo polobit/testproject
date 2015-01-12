@@ -527,7 +527,7 @@ function deserializeChainedSelect1(form, el, element)
 				currentElemnt = $('#tags-lhs-filter-table').find("div.lhs-contact-filter-row:last")
 				$('#tags_div').prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 			} else {
-				var htmlContent = $('#tags-lhs-filter-table').find("div.hide").clone();
+				var htmlContent = $('#tags-lhs-filter-table').find("div.hide.master-tags-add-div").clone();
 				htmlContent.removeClass('hide').addClass('lhs-contact-filter-row');
 				addTagsDefaultTypeahead(htmlContent);
 				$(htmlContent).find("i.filter-tags-multiple-remove-lhs").css("display", "inline-block");

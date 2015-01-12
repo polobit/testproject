@@ -128,6 +128,8 @@ var ContactsRouter = Backbone.Router.extend({
 			eraseCookie('contact_filter_type');
 			is_company = true;
 		}
+		if (readCookie('contact_filter_type') && readCookie('contact_filter_type') == 'COMPANY')
+			is_company = true;
 		// Tags, Search & default browse comes to the same function
 		if (tag_id)
 		{
@@ -184,12 +186,14 @@ var ContactsRouter = Backbone.Router.extend({
 		{
 			collection_is_reverse = false;
 			url = "core/api/filters/query/" + filter_id;
+			if (readCookie('contact_filter_type') && readCookie('contact_filter_type') == 'COMPANY')
+				template_key = "companies";
 		}
 
 		// If view is set to custom view, load the custom view
 		// If Company filter active-don't load any Custom View Show
 		// default
-		if ((!readCookie('company_filter') || (readCookie('contact_filter_type') && readCookie('contact_filter_type') != 'COMPANY')) && !readCookie("agile_contact_view"))
+		if ((!readCookie('company_filter') && (readCookie('contact_filter_type') && readCookie('contact_filter_type') != 'COMPANY')) && !readCookie("agile_contact_view"))
 		{
 			if(readData('dynamic_contact_filter')) {
 				// Then call customview function with filter url
