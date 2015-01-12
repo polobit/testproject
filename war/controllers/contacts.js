@@ -930,7 +930,7 @@ var ContactsRouter = Backbone.Router.extend({
 						return;
 					}
 					App_Contacts.contactViewModel = data.toJSON();
-					App_Contacts.customView(undefined, App_Contacts.contactViewModel, url, tag_id);
+					App_Contacts.customView(undefined, App_Contacts.contactViewModel, url, tag_id, is_lhs_filter);
 
 				} });
 				return;
