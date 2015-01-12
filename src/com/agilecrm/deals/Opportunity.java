@@ -10,6 +10,7 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.Contact;
@@ -188,6 +189,11 @@ public class Opportunity extends Cursor implements Serializable
      * To state whenther the deals is archived or not.
      */
     public boolean archived = false;
+
+    /**
+     * Won date for a deal.
+     */
+    public Long won_date = null;
 
     /**
      * ObjectifyDao of Opportunity.
@@ -417,6 +423,14 @@ public class Opportunity extends Cursor implements Serializable
 	// cache old data to compare new and old in triggers
 	if (id != null)
 	    oldOpportunity = OpportunityUtil.getOpportunity(id);
+	if (oldOpportunity != null && StringUtils.isNotEmpty(this.milestone)
+		&& StringUtils.isNotEmpty(oldOpportunity.milestone))
+	{
+	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equals("WON"))
+		this.won_date = System.currentTimeMillis() / 1000;
+	}
+	else if (oldOpportunity == null && this.milestone.equals("WON"))
+	    this.won_date = System.currentTimeMillis() / 1000;
 
 	dao.put(this);
 
