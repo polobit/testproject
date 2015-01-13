@@ -81,7 +81,7 @@ public class JSAPI
      */
     @Path("contact/email")
     @GET
-    @Produces("application/x-javascript")
+    @Produces("application/x-javascript;charset=UTF-8;")
     public String getContact(@QueryParam("email") String email)
     {
 	try
@@ -124,7 +124,7 @@ public class JSAPI
      */
     @Path("contacts")
     @GET
-    @Produces("application/x-javascript")
+    @Produces("application/x-javascript;charset=UTF-8;")
     public String createContact(@QueryParam("contact") String json, @QueryParam("id") String apiKey)
     {
 	try
@@ -173,7 +173,7 @@ public class JSAPI
      */
     @Path("contact/delete")
     @GET
-    @Produces("application/x-javascript")
+    @Produces("application/x-javascript;charset=UTF-8;")
     public String deleteContact(@QueryParam("email") String email)
     {
 	try
@@ -213,7 +213,7 @@ public class JSAPI
      */
     @Path("/task")
     @GET
-    @Produces("application/x-javascript")
+    @Produces("application/x-javascript;charset=UTF-8;")
     public String createTask(@QueryParam("email") String email, @QueryParam("task") String json,
 	    @QueryParam("id") String key)
     {
@@ -267,7 +267,7 @@ public class JSAPI
      */
     @Path("/opportunity")
     @GET
-    @Produces("application/x-javascript")
+    @Produces("application/x-javascript;charset=UTF-8;")
     public String createOpportunity(@QueryParam("email") String email, @QueryParam("opportunity") String json,
 	    @QueryParam("id") String apiKey)
     {
@@ -320,7 +320,7 @@ public class JSAPI
      */
     @Path("contacts/add-tags")
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8;")
     public String addTags(@QueryParam("email") String email, @QueryParam("tags") String tags)
     {
 	try
@@ -368,7 +368,7 @@ public class JSAPI
      */
     @Path("contacts/remove-tags")
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8;")
     public String removeTags(@QueryParam("email") String email, @QueryParam("tags") String tags)
     {
 	try
@@ -414,7 +414,7 @@ public class JSAPI
      */
     @Path("contacts/add-score")
     @GET
-    @Produces("application/x-javascript")
+    @Produces("application/x-javascript;charset=UTF-8;")
     public String addScore(@QueryParam("email") String email, @QueryParam("score") Integer score)
     {
 	try
@@ -452,7 +452,7 @@ public class JSAPI
      */
     @Path("contacts/subtract-score")
     @GET
-    @Produces("application/x-javascript")
+    @Produces("application/x-javascript;charset=UTF-8;")
     public String subtractScore(@QueryParam("email") String email, @QueryParam("score") Integer score)
     {
 	try
@@ -517,7 +517,7 @@ public class JSAPI
      */
     @Path("contacts/add-property")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String addProperty(@QueryParam("data") String json, @QueryParam("email") String email)
     {
 	try
@@ -571,7 +571,7 @@ public class JSAPI
      */
     @Path("contacts/add-note")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String addNote(@QueryParam("data") String json, @QueryParam("email") String email)
     {
 	try
@@ -604,7 +604,7 @@ public class JSAPI
      */
     @Path("contacts/get-score")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String getScore(@QueryParam("email") String email)
     {
 	try
@@ -637,7 +637,7 @@ public class JSAPI
      */
     @Path("contacts/get-notes")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String getNotes(@QueryParam("email") String email)
     {
 	try
@@ -676,7 +676,7 @@ public class JSAPI
      */
     @Path("contacts/get-tags")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String getTags(@QueryParam("email") String email, @QueryParam("tags") String tags)
     {
 	try
@@ -718,7 +718,7 @@ public class JSAPI
      */
     @Path("contacts/get-tasks")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String getTasks(@QueryParam("email") String email)
     {
 	try
@@ -754,7 +754,7 @@ public class JSAPI
      */
     @Path("contacts/get-deals")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String getDeals(@QueryParam("email") String email)
     {
 	try
@@ -790,7 +790,7 @@ public class JSAPI
      */
     @Path("contacts/add-campaign")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String addCampaign(@QueryParam("data") String json, @QueryParam("email") String email)
     {
 	try
@@ -822,7 +822,7 @@ public class JSAPI
      */
     @Path("contacts/get-campaigns")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String getCampaigns(@QueryParam("email") String email)
     {
 	try
@@ -860,7 +860,7 @@ public class JSAPI
      */
     @Path("contacts/get-campaign-logs")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String getCampaignLogs(@QueryParam("email") String email)
     {
 	try
@@ -895,7 +895,7 @@ public class JSAPI
      */
     @Path("contacts/get-workflows")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String getWorkflows()
     {
 	try
@@ -926,7 +926,7 @@ public class JSAPI
      */
     @Path("contact/get-milestones")
     @GET
-    @Produces("application/x-javascript")
+    @Produces("application/x-javascript;charset=UTF-8;")
     public String getMilestones()
     {
 	try
@@ -949,7 +949,7 @@ public class JSAPI
      */
     @Path("milestone/get-pipelines")
     @GET
-    @Produces("application/x-javascript")
+    @Produces("application/x-javascript;charset=UTF-8;")
     public String getPipelines()
     {
 	try
@@ -972,7 +972,7 @@ public class JSAPI
      */
     @Path("milestone/get-milestones")
     @GET
-    @Produces("application/x-javascript")
+    @Produces("application/x-javascript;charset=UTF-8;")
     public String getMilestonesByPipeline(@QueryParam("pipeline_id") Long pipelineId)
     {
 	try
@@ -999,7 +999,7 @@ public class JSAPI
      */
     @Path("contact/update")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String updateContact(@QueryParam("email") String email, @QueryParam("data") String json,
 	    @QueryParam("id") String apiKey)
     {
@@ -1053,7 +1053,7 @@ public class JSAPI
      */
     @Path("/email")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String getEmail(@QueryParam("email") String email)
     {
 	try
@@ -1080,7 +1080,7 @@ public class JSAPI
      */
     @Path("/company")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String createCompany(@QueryParam("data") String json, @QueryParam("id") String apiKey)
     {
 	try
@@ -1115,7 +1115,7 @@ public class JSAPI
      */
     @Path("contacts/get-property")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String getProperty(@QueryParam("name") String name, @QueryParam("email") String email)
     {
 	try
@@ -1141,7 +1141,7 @@ public class JSAPI
      */
     @Path("contacts/remove-property")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String removeProperty(@QueryParam("name") String name, @QueryParam("email") String email,
 	    @QueryParam("id") String apiKey)
     {
@@ -1173,7 +1173,7 @@ public class JSAPI
      * */
     @Path("gmail-template")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String getGadgetTemplate(@QueryParam("template") String template)
     {
 
@@ -1203,7 +1203,7 @@ public class JSAPI
 
     @Path("web-rules")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String getWebRules(@Context HttpServletRequest request)
     {
 	List<WebRule> webRules = WebRuleUtil.getAllWebRules();
@@ -1234,7 +1234,7 @@ public class JSAPI
      */
     @Path("contacts/unsubscribe-campaign")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String unsubscribeCampaign(@QueryParam("data") String json, @QueryParam("email") String email)
     {
 	try
@@ -1264,7 +1264,7 @@ public class JSAPI
      */
     @Path("allowed-domains")
     @GET
-    @Produces("application / x-javascript")
+    @Produces("application / x-javascript;charset=UTF-8;")
     public String getAllowedDomains()
     {
 	try

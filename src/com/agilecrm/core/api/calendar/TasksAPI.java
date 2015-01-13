@@ -19,14 +19,18 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.TaskReminder;
 import com.agilecrm.activities.util.ActivitySave;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.user.util.DomainUserUtil;
 
 /**
  * <code>TaskAPI</code> includes REST calls to interact with {@link Task} class
@@ -255,7 +259,7 @@ public class TasksAPI
     {
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
 	ActivitySave.createLogForBulkDeletes(EntityType.TASK, tasksJSONArray, String.valueOf(tasksJSONArray.length()),
-	        "");
+		"");
 	Task.dao.deleteBulkByIds(tasksJSONArray);
     }
 
@@ -428,7 +432,7 @@ public class TasksAPI
 	}
 
 	return TaskUtil.getTasksRelatedToOwnerOfTypeAndDue(criteria, type, owner, pending, null, null, startTime,
-	        endTime);
+		endTime);
     }
 
     /**
@@ -459,6 +463,82 @@ public class TasksAPI
     public int getDueTaskCountUptoToday()
     {
 	return TaskUtil.getOverDueTasksUptoTodayForCurrentUser();
+    }
+
+    /**
+     * get all task related notes
+     */
+    @Path("/{task-id}/notes")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Note> getNotes(@PathParam("task-id") Long id)
+    {
+	try
+	{
+	    Task task = TaskUtil.getTask(id);
+	    return task.getNotes();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * get all contacts related to task
+     */
+    @Path("/{task-id}/contacts")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> getRelatedContacts(@PathParam("task-id") Long id)
+    {
+	try
+	{
+	    Task task = TaskUtil.getTask(id);
+	    return task.getContacts();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * change task owner assign new owner to task
+     */
+
+    @Path("/change-owner/{new_owner}/{taskId}")
+    @PUT
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Task changeTaskOwner(@PathParam("new_owner") String new_owner, @PathParam("taskId") Long taskId)
+	    throws JSONException
+    {
+
+	Task task = TaskUtil.getTask(taskId);
+	try
+	{
+	    String prevOwner = task.getTaskOwner().name;
+	    String new_owner_name = DomainUserUtil.getDomainUser(Long.parseLong(new_owner)).name;
+	    List<Contact> contacts = task.getContacts();
+	    JSONArray jsn = null;
+	    if (contacts != null && contacts.size() > 0)
+	    {
+		jsn = ActivityUtil.getContactIdsJson(contacts);
+	    }
+	    ActivityUtil.createTaskActivity(ActivityType.TASK_OWNER_CHANGE, task, new_owner_name, prevOwner,
+		    "owner_name", jsn);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	task.owner_id = new_owner;
+	task.save();
+
+	return task;
     }
 
     /***************************************************************************/

@@ -1,52 +1,55 @@
 <script id="email-account-types-template" type="text/html">
 	<div class="btn-group right" style='position:relative'>
-	<button class="btn filter-dropdown" id="email-type-select"></i>Agile</button>
+	<button class="btn filter-dropdown" id="email-type-select">Agile</button>
 	<button class="btn dropdown-toggle" id="email-type-select-dropdown" data-toggle="dropdown">
 	<span class="caret"></span>
 	</button>
 	<ul id = "mail-account-type-select" class="pull-right dropdown-menu">
 	{{#if agileUserName}}
 	<li>
-	<a href="" class="agile-emails" data-url="" email-server-type={{agileUserName}}></i>Agile</a>
+	<a href="" class="agile-emails" email-server="agile" data-url="core/api/emails/agile-emails?e=" email-server-type={{agileUserName}}><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>Agile</a>
 	</li>
 	{{/if}}
 	{{#if gmailUserName}}
 	<li>
-	<a href="" class="agile-emails" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{gmailUserName}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{gmailUserName}}</a>
+	<a href="" class="agile-emails" email-server="google" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{gmailUserName}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{gmailUserName}}</a>
 	</li>
 	{{/if}}
 	{{#if imapUserName}}
 	<li>
-	<a href="" class="agile-emails" data-url="core/api/imap/imap-emails?from_email=" email-server-type={{imapUserName}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{imapUserName}}</a>
+	<a href="" class="agile-emails" email-server="imap" data-url="core/api/imap/imap-emails?from_email=" email-server-type={{imapUserName}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{imapUserName}}</a>
 	</li>
 	{{/if}}
 	{{#if exchangeUserName}}
 	<li>
-	<a href="" class="agile-emails" data-url="core/api/office/office365-emails?from_email=" email-server-type={{exchangeUserName}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{exchangeUserName}}</a>
+	<a href="" class="agile-emails" email-server="exchange" data-url="core/api/office/office365-emails?from_email=" email-server-type={{exchangeUserName}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{exchangeUserName}}</a>
 	</li>
 	{{/if}}
 	{{#if sharedGmailUserNames}}
 	{{#each sharedGmailUserNames}}
 	<li>
-	<a href="" class="agile-emails" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{this}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	<a href="" class="agile-emails" email-server="google" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{this}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
 	</li>
 	{{/each}}
 	{{/if}}
 	{{#if sharedImapUserNames}}
 	{{#each sharedImapUserNames}}
 	<li>
-	<a href="" class="agile-emails" data-url="core/api/imap/imap-emails?from_email=" email-server-type={{this}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	<a href="" class="agile-emails" email-server="imap" data-url="core/api/imap/imap-emails?from_email=" email-server-type={{this}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
 	</li>
 	{{/each}}
 	{{/if}}
 	{{#if sharedExchangeUserNames}}
 	{{#each sharedExchangeUserNames}}
 	<li>
-	<a href="" class="agile-emails" data-url="core/api/office/office365-emails?from_email=" email-server-type={{this}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	<a href="" class="agile-emails" email-server="exchange" data-url="core/api/office/office365-emails?from_email=" email-server-type={{this}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
 	</li>
 	{{/each}}
 	{{/if}}
 	</ul>
+	
+	<label id="has_email_configured" style="display:none">{{#if hasEmailAccountsConfigured}}{{hasEmailAccountsConfigured}}{{else}}false{{/if}}</label>
+	
 	</div>
 	</div>
 	<div class="clearfix"></div>
