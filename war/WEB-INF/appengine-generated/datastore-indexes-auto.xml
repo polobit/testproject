@@ -387,4 +387,65 @@
         <property name="campaignStatus.campaign_id" direction="desc"/>
 	</datastore-index>
 	
+	 <!-- Used 8 times in query history -->
+    <datastore-index kind="Event" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="related_contacts" direction="asc"/>
+        <property name="start" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="false" source="auto">
+        <property name="related_contacts" direction="asc"/>
+        <property name="start" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="false" source="auto">
+        <property name="related_contacts" direction="asc"/>
+        <property name="type" direction="asc"/>
+        <property name="start" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Event" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="related_contacts" direction="asc"/>
+        <property name="type" direction="asc"/>
+        <property name="start" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="related_contacts" direction="asc"/>
+        <property name="type" direction="asc"/>
+        <property name="end" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="false" source="auto">
+        <property name="related_contacts" direction="asc"/>
+        <property name="end" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Event" ancestor="false" source="auto">
+        <property name="related_contacts" direction="asc"/>
+        <property name="type" direction="asc"/>
+        <property name="end" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Event" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="related_contacts" direction="asc"/>
+        <property name="end" direction="asc"/>
+    </datastore-index>
+    
+     <datastore-index kind="Event" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="related_contacts" direction="asc"/>
+        <property name="start" direction="asc"/>
+    </datastore-index>
+	
 </datastore-indexes>
