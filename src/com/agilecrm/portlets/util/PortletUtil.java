@@ -384,7 +384,8 @@ public class PortletUtil {
 						}
 				}
 			for(Opportunity opportunity1 : finalDealsList){
-    			totalMilestoneValue+=opportunity1.expected_value;
+				if(opportunity1!=null && (totalMilestoneValue+opportunity1.expected_value)<=Double.MAX_VALUE)
+					totalMilestoneValue+=opportunity1.expected_value;
     		}
 			milestoneValuesList.add(totalMilestoneValue);
 			milestoneNumbersList.add(finalDealsList.size());
