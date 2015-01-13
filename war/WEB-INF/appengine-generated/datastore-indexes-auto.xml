@@ -53,5 +53,16 @@
         <property name="related_deals" direction="asc"/>
         <property name="created_time" direction="desc"/>
     </datastore-index>
+    
+    <datastore-index kind="ContactEmail" ancestor="false" source="auto">
+        <property name="from" direction="asc"/>
+        <property name="date_secs" direction="asc"/>
+    </datastore-index>
+
+    <datastore-index kind="ContactEmail" ancestor="false" source="auto">
+        <property name="from" direction="asc"/>
+        <property name="is_email_opened" direction="asc"/>
+        <property name="email_opened_at" direction="asc"/>
+    </datastore-index>
 
 </datastore-indexes>
