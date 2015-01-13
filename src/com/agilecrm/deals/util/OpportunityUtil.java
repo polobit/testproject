@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.AgileQueues;
+import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
@@ -473,7 +474,7 @@ public class OpportunityUtil
     public static void postDataToDealBackend(String uri, String... data)
     {
 
-	String url = BackendServiceFactory.getBackendService().getBackendAddress("b1-sandbox");
+	String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
 
 	// Create Task and push it into Task Queue
 	Queue queue = QueueFactory.getQueue(AgileQueues.DEALS_EXPORT_QUEUE);
