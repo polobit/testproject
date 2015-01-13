@@ -1067,7 +1067,8 @@ public class OpportunityUtil
         					.filter("pipeline", new Key<Milestone>(Milestone.class, trackId)).filter("milestone", milestone).filter("archived",false).list();
     		}
     		for(Opportunity opportunity : milestoneList){
-    			totalMilestoneValue+=opportunity.expected_value;
+    			if((totalMilestoneValue+opportunity.expected_value)<=Double.MAX_VALUE)
+    				totalMilestoneValue+=opportunity.expected_value;
     		}
     		if(milestoneList!=null)
     			map.put(totalMilestoneValue,milestoneList.size());
