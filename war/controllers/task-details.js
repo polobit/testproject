@@ -493,12 +493,16 @@ function saveTaskNote(form, noteModal, element, note)
 																});
 
 																notes.push(note.id);
-
+														
 																taskJSON.contacts = contacts;
 																taskJSON.notes = notes;
-
-																taskDetailView.url = 'core/api/tasks';
-																taskDetailView.save(taskJSON, { success : function(data)
+																
+																if (taskJSON.taskOwner)
+																				taskJSON.owner_id = taskJSON.taskOwner.id;
+																var newTaskModel = new Backbone.Model();
+																
+                newTaskModel.url = 'core/api/tasks';
+                newTaskModel.save(taskJSON, { success : function(data)
 																{
 
 																				notesView.collection.add(new BaseModel(note), { sort : false });
