@@ -83,7 +83,7 @@ public class DealsBulkActionsAPI
 		System.out.println("total sublist -----" + subList.size());
 	    }
 
-	    BulkActionNotifications.publishNotification(deals.size() + " deals are archived.");
+	    BulkActionNotifications.publishNotification(deals.size() + " Deals are archived.");
 	}
 	catch (Exception je)
 	{
@@ -139,7 +139,7 @@ public class DealsBulkActionsAPI
 		System.out.println("total sublist -----" + subList.size());
 	    }
 
-	    BulkActionNotifications.publishNotification(deals.size() + " deals are restored.");
+	    BulkActionNotifications.publishNotification(deals.size() + " Deals are restored.");
 	}
 	catch (Exception je)
 	{
@@ -195,7 +195,7 @@ public class DealsBulkActionsAPI
 		System.out.println("total sublist -----" + subList.size());
 	    }
 
-	    BulkActionNotifications.publishNotification("Owner changed for " + deals.size() + " deals.");
+	    BulkActionNotifications.publishNotification("Owner changed for " + deals.size() + " Deals.");
 	}
 	catch (Exception je)
 	{
@@ -259,7 +259,7 @@ public class DealsBulkActionsAPI
 		System.out.println("total sublist -----" + subList.size());
 	    }
 
-	    BulkActionNotifications.publishNotification("Track/Milestone changed for " + deals.size() + " deals.");
+	    BulkActionNotifications.publishNotification("Track/Milestone changed for " + deals.size() + " Deals.");
 	}
 	catch (Exception je)
 	{
