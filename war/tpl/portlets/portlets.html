@@ -450,10 +450,10 @@
                 <span class="portlet-icon-divider"></span>
 				<span>
 					{{#if_equals settings.deals "all-deals"}}
-						All Deals By Milestone
+						All Deals By Milestone - {{get_deals_funnel_portlet_header settings.track}}
 					{{/if_equals}}
 					{{#if_equals settings.deals "my-deals"}}
-						My Deals By Milestone
+						My Deals By Milestone - {{get_deals_funnel_portlet_header settings.track}}
 					{{/if_equals}}
                 </span>
 			</div>
@@ -546,7 +546,12 @@
                 <i class="{{get_portlet_icon name}} icon-1x"></i>
                 <span class="portlet-icon-divider"></span>
 				<span>
-                   Deals Funnel - {{get_deals_funnel_portlet_header settings.track}}
+					{{#if_equals settings.deals "all-deals"}}
+						All Deals Funnel - {{get_deals_funnel_portlet_header settings.track}}
+					{{/if_equals}}
+					{{#if_equals settings.deals "my-deals"}}
+						My Deals Funnel - {{get_deals_funnel_portlet_header settings.track}}
+					{{/if_equals}}
                 </span>
 			</div>
 		</div>

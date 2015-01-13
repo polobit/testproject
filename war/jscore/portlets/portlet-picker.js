@@ -569,7 +569,7 @@ function dealsByMilestoneBarGraph(selector,milestonesList,milestoneValuesList,mi
 	        		        '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+'s: </td>' + 
 	        		        '<td style="padding:0"><b>'+milestoneNumbersList[this.points[0].point.x]+'</b></td></tr>' + 
 	        		        '<tr><td style="color:'+this.points[0].series.color+';padding:0">Deal Value: </td>' + 
-	        		        '<td style="padding:0"><b>'+milestoneValuesList[this.points[0].point.x]+' $</b></td></tr>' +
+	        		        '<td style="padding:0"><b>'+getPortletsCurrencySymbol()+' '+milestoneValuesList[this.points[0].point.x].toLocaleString()+'</b></td></tr>' +
 	        		        '</table>';
 	        	},
 	            shared: true,
@@ -655,7 +655,7 @@ function dealsFunnelGraph(selector,funnel_data){
 	        	series: {
 	                dataLabels: {
 	                    enabled: true,
-	                    format: '<b>{point.name}</b> ($ {point.y:,.0f})',
+	                    format: '<b>{point.name}</b> ('+getPortletsCurrencySymbol()+' {point.y:,.0f})',
 	                    color: 'black',
 	                    softConnector: true
 	                },
@@ -668,7 +668,7 @@ function dealsFunnelGraph(selector,funnel_data){
 	            }
 	        },
 	        tooltip: {
-	        	pointFormat: '<span>{series.name}:<b>$ {point.y:,.0f}</b></span>',
+	        	pointFormat: '<span>{series.name}:<b>'+getPortletsCurrencySymbol()+' {point.y:,.0f}</b></span>',
 	            shared: true,
 	            useHTML: true
 	        },
@@ -923,4 +923,9 @@ function setPortletContentHeight(base_model){
 		$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+20-40+"px");
 		$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+20-40+"px");
 	}
+}
+function getPortletsCurrencySymbol(){
+	var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
+	var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
+	return symbol;
 }

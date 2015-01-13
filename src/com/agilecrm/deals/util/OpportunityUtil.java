@@ -1067,7 +1067,7 @@ public class OpportunityUtil
         					.filter("pipeline", new Key<Milestone>(Milestone.class, trackId)).filter("milestone", milestone).filter("archived",false).list();
     		}
     		for(Opportunity opportunity : milestoneList){
-    			if((totalMilestoneValue+opportunity.expected_value)<=Double.MAX_VALUE)
+    			if(opportunity.expected_value!=null)
     				totalMilestoneValue+=opportunity.expected_value;
     		}
     		if(milestoneList!=null)
