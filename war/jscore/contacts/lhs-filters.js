@@ -80,9 +80,11 @@ function submitLhsFilter() {
 	//eraseCookie('company_filter');
 	var contact_type = formData.contact_type;
 	if(contact_type == 'COMPANY') {
-		eraseData('dynamic_compnay_filter');
-		if(formData != null && formData.rules.length >0)
+		eraseData('dynamic_company_filter');
+		if(formData != null && formData.rules.length >0) {
 			storeData('dynamic_company_filter', JSON.stringify(formData));
+			createCookie('company_filter', "Companies");
+		}
 	} else {
 		eraseData('dynamic_contact_filter');
 		if(formData != null && formData.rules.length >0)
@@ -95,7 +97,7 @@ function submitLhsFilter() {
 
 $('a.filter-tags-multiple-add-lhs').die().live("click", function(e) {
 	e.preventDefault();
-	var htmlContent = $('#tags-lhs-filter-table').find("div.hide").clone();
+	var htmlContent = $('#tags-lhs-filter-table').find("div.hide.master-tags-add-div").clone();
 	htmlContent.removeClass('hide').addClass("lhs-contact-filter-row");
 	addTagsDefaultTypeahead(htmlContent);
 	scramble_filter_input_names(htmlContent);

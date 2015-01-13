@@ -387,7 +387,7 @@ public class ContactFilterResultFetcher
 
 	// Fetches first 200 contacts
 	Collection<Contact> contactCollection = new QueryDocument<Contact>(new ContactDocument().getIndex(),
-		Contact.class).advancedSearch(filter.rules, max_fetch_set_size, cursor, null);
+		Contact.class).advancedSearch(filter, max_fetch_set_size, cursor, null);
 
 	if (contactCollection == null || contactCollection.size() == 0)
 	{
