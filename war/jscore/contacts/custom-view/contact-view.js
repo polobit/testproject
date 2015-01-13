@@ -67,10 +67,10 @@ function contactTableView(base_model,customDatefields,view) {
 				});
 				
 	// Appends model to model-list template in collection template
-	$(('#contacts-custom-view-model-list'), view.el).append(el);
+	$(('#'+view.options.templateKey+'-model-list'), view.el).append(el);
 
 	// Sets data to tr
-	$(('#contacts-custom-view-model-list'), view.el).find('tr:last').data(
+	$(('#'+view.options.templateKey+'-model-list'), view.el).find('tr:last').data(
 			base_model);
 
 }
