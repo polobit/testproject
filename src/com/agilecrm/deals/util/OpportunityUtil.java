@@ -1050,7 +1050,7 @@ public class OpportunityUtil
      */
     
     public static Map<Double,Integer> getTotalMilestoneValueAndNumber(String milestone,boolean owner,long dueDate,Long ownerId,Long trackId){
-    	double totalMilestoneValue=0;
+    	Double totalMilestoneValue=0.0d;
     	List<Opportunity> milestoneList = null;
     	Map<Double,Integer> map=new LinkedHashMap<Double, Integer>();
     	try {

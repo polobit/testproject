@@ -326,13 +326,13 @@ public class PortletUtil {
 				if(milestone!=null && milestone.milestones!=null){
 					String[] milestones=milestone.milestones.split(",");
 					for(int i=0;i<milestones.length;i++){
-						milestonesList.add(milestones[i]);
 						Map<Double,Integer> map=null;
 						if(json.get("deals").toString().equalsIgnoreCase("all-deals"))
 							map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],false,0,null,milestone.id);
 						else if(json.get("deals").toString().equalsIgnoreCase("my-deals"))
 							map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],true,0,null,milestone.id);
 						for(Map.Entry<Double, Integer> entry : map.entrySet()){
+							milestonesList.add(milestones[i]);
 							milestoneValuesList.add(entry.getKey());
 							milestoneNumbersList.add(entry.getValue());
 						}
