@@ -246,7 +246,7 @@ public class WebCalendarEventUtil
 		    // calendar give time in sec according to date and hour
 
 		    night_from_hour = night_business_hours.getString("timeFrom");
-		    night_start_hours = tillHour.split(":");
+		    night_start_hours = night_from_hour.split(":");
 		    night_fromtime = night_start_hours[0];
 		    night_fromTimeMins = night_start_hours[1];
 		    night_till_hour = night_business_hours.getString("timeTill");

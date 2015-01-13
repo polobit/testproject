@@ -104,10 +104,7 @@ public class IcalendarUtil
 	{
 	    _organizerName = name;
 
-	    if (name.contains(" "))
-	    {
-		name = name.replaceAll("\\s+", "");
-	    }
+	    name = name.replaceAll("\\W", "");
 	    _organizerEmail = name + "@yourinvoxagilecrm.com";
 	}
 
