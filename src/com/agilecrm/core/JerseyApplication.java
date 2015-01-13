@@ -26,6 +26,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.reports.ReportsAPI.class);
 	s.add(com.agilecrm.core.api.calendar.TasksAPI.class);
 	s.add(com.agilecrm.core.api.prefs.UserPrefsAPI.class);
+	s.add(com.agilecrm.core.api.prefs.ContactViewPrefsAPI.class);
 	s.add(com.agilecrm.core.api.contacts.customview.CustomViewAPI.class);
 	s.add(com.agilecrm.core.api.contacts.ContactsAPI.class);
 	s.add(com.agilecrm.core.api.deals.DealsAPI.class);

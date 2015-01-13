@@ -119,6 +119,7 @@ $(function()
 		e.preventDefault();
 		eraseCookie('company_filter');
 		eraseData('dynamic_contact_filter');
+		eraseData('dynamic_company_filter');
 
 		var filter_id = $(this).attr('id');
 		var filter_type = $(this).attr('filter_type');
