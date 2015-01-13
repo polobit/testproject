@@ -444,6 +444,9 @@ function deserializeChainedElementWebrule(data, rule_element)
 			// Selects the option
 			if ($(element).attr('value') == value)
 			{
+				if((value == "UNSUBSCRIBE_CAMPAIGN" || value == "ADD_CAMPAIGN") && data['RHS']) {
+					$(element).attr('data', data['RHS']);
+				}
 				$(element).attr("selected", "selected");
 				$(input_element).trigger("change");
 				return;
