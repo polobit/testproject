@@ -624,15 +624,18 @@ public class ContactEmailUtil
 	public static List<ContactEmail> getEmailsSent(DomainUser domainUser,Long minTime,Long maxTime){
 		List<ContactEmail> contactEmailsList=null;
 		try {
-			System.out.println("getEmailsSent(-,-,-)-------Name:---"+domainUser.name+"Email:----"+domainUser.email);
+			System.out.println("Start getEmailsSent(-,-,-)-------Name:---"+domainUser.name+"Email:----"+domainUser.email);
+			System.out.println("Start try block");
 			contactEmailsList = dao.ofy().query(ContactEmail.class).filter("from", domainUser.name+" <"+domainUser.email+">").filter("date_secs >= ", minTime*1000).filter("date_secs <= ", maxTime*1000).list();
 			if(contactEmailsList!=null)
 				System.out.println("contactEmailsList Size---"+contactEmailsList.size());
 			else
 				System.out.println("contactEmailsList is null");
+			System.out.println("End try block----"+contactEmailsList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("End getEmailsSent(-,-,-)");
 		return contactEmailsList;
 	}
     /**
