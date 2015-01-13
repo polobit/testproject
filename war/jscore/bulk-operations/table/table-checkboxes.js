@@ -132,7 +132,6 @@ function append_checkboxes(el)
 		return;
 	}
 
-		alert(deal_bulk_actions.SELECT_ALL_DEALS);
 	// If select all is chosen then all the upcomming models with in table should have checked checkboxes
 	if(SELECT_ALL == true || (Current_Route == 'deals' && deal_bulk_actions.SELECT_ALL_DEALS==true))
 		$('tr:last', el).prepend('<td><input class="tbody_check" type="checkbox" checked="checked"/></td>');
