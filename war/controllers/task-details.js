@@ -266,7 +266,21 @@ $(function()
 								saveTaskNote($("#tasknoteUpdateForm"), $("#tasknoteupdatemodal"), this, json);
 				})
 
-				// set height dynomicaly if no related contacts found in task details
+				$('.delete_task').live('click', function(e)
+				{
+								var id = $('.delete_task').attr('data');
+								e.preventDefault();
+								if(!confirm("Are you sure you want to delete?"))
+						    		return false;
+								$.ajax({
+												url:'core/api/tasks/'+id,
+												type:'DELETE',
+												success:function(response){
+																document.location.href = document.location.origin+"#/tasks";
+												}
+								})
+				})
+				
 
 });
 
