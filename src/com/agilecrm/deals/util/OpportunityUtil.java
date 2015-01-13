@@ -498,6 +498,8 @@ public class OpportunityUtil
 	    taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0])
 		    .header("Content-Type", "application/x-www-form-urlencoded").header("Host", url)
 		    .method(Method.POST);
+	    if (data.length > 2 && !StringUtils.isEmpty(data[2]))
+		taskOptions.param("form", data[2]);
 	    queue.addAsync(taskOptions);
 	    return;
 	}
