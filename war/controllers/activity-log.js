@@ -28,16 +28,23 @@ var ActivitylogRouter = Backbone.Router.extend({
 		{
 			$('#content').find("#user-select").append("<li><a href=''>All Users</a></li>");
 
-			if (selecteduser || selectedentity)
+			var selected_start_time= readCookie("selectedStartTime");
+			var selected_end_time=readCookie("selectedEndTime");
+			
+			if (selecteduser || selectedentity||(selected_start_time&&selected_end_time))
 			{
 
 				$('ul#user-select li a').closest("ul").data("selected_item", selecteduser);
 				$('ul#entity_type li a').closest("ul").data("selected_item", selectedentity);
-
+				if(selected_start_time&&selected_end_time){
+					$('#activities_date_range #range').html(selected_start_time + ' - ' + selected_end_time);
+				}
 				updateActivty(getParameters());
 
 				var username_value = readCookie("selecteduser_value");
 				var entity_value = readCookie("selectedentity_value");
+				
+				
 				if (username_value)
 				{
 					$('#selectedusername').html(username_value);

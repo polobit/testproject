@@ -139,6 +139,8 @@ function initActivitiesDateRange()
 			Date.today().moveToFirstDayOfMonth().add({ months : -1 }), Date.today().moveToFirstDayOfMonth().add({ days : -1 })
 	] } }, function(start, end)
 	{
+		createCookie("selectedStartTime", start.toString('MMMM d, yyyy'), 90);
+		createCookie("selectedEndTime", end.toString('MMMM d, yyyy'), 90);
 		$('#activities_date_range #range').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
 		
 		updateActivty(getParameters());
