@@ -199,7 +199,7 @@ function sort_filters(table)
 	$(table).tablesorter({ 
         headers: {
         	0 : {sorter : false},
-        	1 : {sorter : false},
+        	1 : {sorter : 'text'},
         	2 : {sorter : 'text'},
         	3 : {sorter : 'time-ago'}      	
         } 

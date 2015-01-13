@@ -292,15 +292,20 @@ public class ContactFilter implements Serializable, Comparable<ContactFilter>
 	{
 		// Store Created Time
 		if (created_time == 0L)
+		{
 			created_time = System.currentTimeMillis() / 1000;
 
-		System.out.println("Owner_id : " + this.owner_id);
+			System.out.println("Owner_id : " + this.owner_id);
 
-		// Saves domain user key
-		if (owner_id != null)
-			owner = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
+			DomainUser du = DomainUserUtil.getCurrentDomainUser();
+			owner_id = du.id.toString();
 
-		System.out.println("Owner : " + this.owner);
+			// Saves domain user key
+			if (owner_id != null)
+				owner = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
+
+			System.out.println("Owner : " + this.owner);
+		}
 	}
 	/******************************************************************************/
 }

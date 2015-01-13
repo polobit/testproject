@@ -44,15 +44,7 @@ var ContactFiltersRouter = Backbone.Router.extend({
 					chainFiltersForContactAndCompany(el, undefined, function()
 					{
 						$('#content').html(el);
-						$("#contact_type").trigger('change');
-						
-						// Fills owner select element
-						populateUsers("filter-owners-list", $("#filterContactForm"), undefined, undefined,
-								function(data) {
-									$("#filterContactForm").find("#filter-owners-list").html(data);
-									$("#filter-owners-list", $("#filterContactForm")).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
-									$("#filter-owners-list", $("#filterContactForm")).closest('div').find('.loading-img').hide();
-						});
+						$("#contact_type").trigger('change');						
 					});
 				});				
 			} });
@@ -84,20 +76,6 @@ var ContactFiltersRouter = Backbone.Router.extend({
 					chainFiltersForContactAndCompany(el, contact_filter.toJSON(), function()
 						{
 							$('#content').html(el);
-							
-							var value = contact_filter.toJSON();
-							
-							// Fills owner select element
-							populateUsers("filter-owners-list", $("#filterContactForm"), value, 'filterOwner',
-									function(data) {
-										$("#filterContactForm").find("#filter-owners-list").html(data);
-										if (value.filterOwner) {
-											$("#filter-owners-list", $("#filterContactForm")).find(
-													'option[value=' + value['filterOwner'].id + ']')
-													.attr("selected", "selected");
-										}
-										$("#filter-owners-list", $("#filterContactForm")).closest('div').find('.loading-img').hide();
-									});
 						});
 					scramble_input_names($(el).find('#filter-settings'));
 				})
