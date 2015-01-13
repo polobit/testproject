@@ -12,7 +12,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.datanucleus.util.StringUtils;
 
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
@@ -580,16 +579,16 @@ public class Opportunity extends Cursor implements Serializable
 
 	StringBuilder builder = new StringBuilder();
 	builder.append("Opportunity [id=").append(id).append(", name=").append(name).append(", contact_ids=")
-	        .append(contact_ids).append(", related_contacts=").append(related_contacts).append(", custom_data=")
-	        .append(custom_data).append(", description=").append(description).append(", expected_value=")
-	        .append(expected_value).append(", milestone=").append(milestone).append(", probability=")
-	        .append(probability).append(", close_date=").append(close_date).append(", owner_id=").append(owner_id)
-	        .append(", ownerKey=").append(ownerKey).append(", agileUser=").append(agileUser)
-	        .append(", created_time=").append(created_time).append(", track=").append(track)
-	        .append(", entity_type=").append(entity_type).append(", notes=").append(notes)
-	        .append(", related_notes=").append(related_notes).append(", note_description=")
-	        .append(note_description).append(", pipeline=").append(pipeline).append(", pipeline_id=")
-	        .append(pipeline_id).append(", archived=").append(archived).append("]");
+		.append(contact_ids).append(", related_contacts=").append(related_contacts).append(", custom_data=")
+		.append(custom_data).append(", description=").append(description).append(", expected_value=")
+		.append(expected_value).append(", milestone=").append(milestone).append(", probability=")
+		.append(probability).append(", close_date=").append(close_date).append(", owner_id=").append(owner_id)
+		.append(", ownerKey=").append(ownerKey).append(", agileUser=").append(agileUser)
+		.append(", created_time=").append(created_time).append(", track=").append(track)
+		.append(", entity_type=").append(entity_type).append(", notes=").append(notes)
+		.append(", related_notes=").append(related_notes).append(", note_description=")
+		.append(note_description).append(", pipeline=").append(pipeline).append(", pipeline_id=")
+		.append(pipeline_id).append(", archived=").append(archived).append("]");
 	return builder.toString();
     }
 }
