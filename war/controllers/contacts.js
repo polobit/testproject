@@ -956,7 +956,6 @@ var ContactsRouter = Backbone.Router.extend({
 			//setup_tags(el);
 			//pieTags(el);
 			setupViews(el, view_data.name);
-			setupLhsFilters(el);
 			setupContactFilterList(el, tag_id);
 
 			$(".active").removeClass("active"); // Activate Contacts
