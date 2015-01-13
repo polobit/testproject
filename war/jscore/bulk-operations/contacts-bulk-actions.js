@@ -118,6 +118,24 @@ $(function()
 							return;
 						});
 		}
+		if(is_free_plan() && has_more_than_limit())
+		{
+			showModalConfirmation("Add to Campaign", 
+				"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.", 
+				function()
+					{
+						Backbone.history.navigate("subscribe", {
+								trigger: true
+							});
+					}
+				, function(){
+					// No callback
+					return;
+					},
+					function(){
+						return;
+					}, "Upgrade", "Close");
+		}
 	else
 		{
 			show_bulk_campaign_assign_page()
@@ -419,6 +437,24 @@ $(function()
 						function(){
 							return;
 						});
+		}
+		if(is_free_plan() && has_more_than_limit())
+		{
+			showModalConfirmation("Send Email", 
+					"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.", 
+				function()
+					{
+						Backbone.history.navigate("subscribe", {
+								trigger: true
+							});
+					}
+				, function(){
+					// No callback
+					return;
+					},
+					function(){
+						return;
+					}, "Upgrade", "Close");
 		}
 		else
 		{
@@ -878,4 +914,30 @@ function getDynamicFilters() {
 			return null;
 		}
 	}
+}
+
+
+function bulkOperationContactsCount()
+{
+	if (SELECT_ALL == true)
+		{
+			return getAvailableContacts();
+		}
+		
+	else
+		{
+			var id_array = get_contacts_bulk_ids();
+			return id_array.length;
+		}
+}
+
+/**
+ * Limit on free user bulk operations
+ */
+function has_more_than_limit()
+{
+	if(bulkOperationContactsCount() > 25)
+		return true;
+	
+	return false;
 }

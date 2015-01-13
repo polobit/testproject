@@ -49,6 +49,23 @@ public class ActivityApi
 	        starttime, endtime);
     }
 
+    /**
+     * 
+     * @param cursor
+     * @param max
+     * @return
+     */
+
+    @Path("/getActivityByEntityId")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Activity> getActivities(@QueryParam("entity_id") Long entity_id, @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count)
+    {
+
+	return ActivityUtil.getActivitites(entity_id, Integer.parseInt(count), cursor);
+    }
+
     // fetches current user activities
 
     @Path("/getActivitiesofcurrentdomainuser")

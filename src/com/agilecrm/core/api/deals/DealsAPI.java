@@ -272,11 +272,12 @@ public class DealsAPI
     @Path("{opportunity-id}")
     @DELETE
     public void deleteOpportunity(@PathParam("opportunity-id") Long id)
-	    throws com.google.appengine.labs.repackaged.org.json.JSONException
+	    throws com.google.appengine.labs.repackaged.org.json.JSONException, JSONException
     {
 	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
 	if (opportunity != null)
 	{
+	    ActivitySave.createDealDeleteActivity(opportunity);
 	    if (!opportunity.getNotes().isEmpty())
 		NoteUtil.deleteBulkNotes(opportunity.getNotes());
 	    opportunity.delete();

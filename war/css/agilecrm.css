@@ -1417,7 +1417,13 @@ height: 30px;
 .activity-tag
 {
 	word-wrap:break-word;
-	width:95%;
+	/* width:95%; */
+	position:relative;
+}
+.activity_time{
+position: absolute;
+right: 0;
+top: 0;
 }
 .footer-left a,#refresh-tags,#documents-model-list a,#admin-prefs-tabs-content .tab-content a,#show-schedule-url,#subscribe-ical,span[title='Owner'] i,#contact-documents-model-list i
 {
@@ -1937,5 +1943,22 @@ div.lhs-row-filter {
 	line-height: 18px;
 	cursor: pointer;
 	margin-top:-3px;
+}
 	
+.taskDetail-text {
+	font-size: 20px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	width: auto;
+	max-width: 75%;
+	height: auto;
+	padding-bottom: 2px;
+}
+.tasktop-imageview:empty 
+{
+	display:none;
+}
+.activities_second_line{
+	color: #999999;
 }
