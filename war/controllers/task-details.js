@@ -460,12 +460,14 @@ function saveTaskNote(form, noteModal, element, note)
 								noteModal.modal('hide');
 
 								var note = data.toJSON();
-
+       
 								console.log(note);
-								console.log(notesView.collection.toJSON());
 								// Add model to collection. Disabled sort while adding and called
 								// sort explicitly, as sort is not working when it is called by add
 								// function
+								if(!notesView){
+												notesView = new Base_Collection_View(data);
+								}
 								if (notesView && notesView.collection)
 								{
 												if (notesView.collection.get(note.id))
