@@ -875,6 +875,9 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,text,colors){
 	            useHTML: true
 	        },
 	        plotOptions: {
+	        	series: {
+	                stacking: 'normal'
+	            },
 	            column: {
 	                pointPadding: 0.2,
 	                borderWidth: 0
