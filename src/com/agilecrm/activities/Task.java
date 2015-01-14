@@ -414,8 +414,7 @@ public class Task extends Cursor
      * includes complete note object.
      * 
      * @return List of note objects
-     */
-    @XmlElement
+     */   
     public List<Note> getNotes()
     {
 	return Note.dao.fetchAllByKeys(this.related_notes);

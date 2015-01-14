@@ -33,6 +33,8 @@ function sipStackEventsListener(e /* SIPml.Stack.Event */)
 		User_Name = null;
 		User_Number = null;
 		User_Img = null;
+		User_ID = null;
+		SIP_Call_Noty_IMG = "";
 
 		// Stop sound.		
 		stopRingTone();
@@ -125,7 +127,7 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			stopRingTone();
 
 			// Display.
-			showCallNotyPopup("connected", "success", "<b>On call : </b><br>" + User_Name + "   " + User_Number + "<br>", false);
+			showCallNotyPopup("connected", "success", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><b>On call  </b>' + User_Number +"<br>" + User_Name +  '<br></span><div class="clearfix"></div>', false);
 
 			// Close html5 notification.
 			if (Notify_Call)
@@ -148,6 +150,8 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			User_Name = null;
 			User_Number = null;
 			User_Img = null;
+			User_ID = null;
+			SIP_Call_Noty_IMG = "";
 
 			if (Sip_Updated == true && e.description == "Disconnecting...")
 			{
@@ -170,7 +174,7 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 
 			// Show state of call.
 			if (e.description == "Request Cancelled")
-				showCallNotyPopup("missedCall", "error", "<b>Missed call : </b><br>" + User_Name + "   " + User_Number + "<br>", false);
+				showCallNotyPopup("missedCall", "error", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><b>Missed call </b>' + User_Number +"<br>" + User_Name + '<br></span><div class="clearfix"></div>', false);
 			else if (e.description == "PSTN calls are forbidden")
 				showCallNotyPopup("forbidden", "error", "SIP: PSTN calls are forbidden.", false);
 			else if (e.description == "Not acceptable here")
@@ -178,7 +182,7 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			else if (e.description == "Media stream permission denied")
 				showCallNotyPopup("permissiondenied", "error", "SIP: Media stream permission denied.");
 			else if (e.description == "Call terminated")
-				showCallNotyPopup("hangup", "information", "<b>Call ended with : <b><br>" + User_Name + "   " + User_Number + "<br>", false);
+				showCallNotyPopup("hangup", "information", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><b>Call ended with  <b>' + User_Number +"<br>" + User_Name + '<br></span><div class="clearfix"></div>', false);
 			else if (e.description == "Decline")
 				showCallNotyPopup("decline", "error", "Call Decline.", false);
 			else if (e.description == "Request Timeout")
@@ -196,6 +200,8 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			User_Name = null;
 			User_Number = null;
 			User_Img = null;
+			User_ID = null;
+			SIP_Call_Noty_IMG = "";
 
 			// Close html5 notification.
 			if (Notify_Call)

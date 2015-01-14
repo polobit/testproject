@@ -20,6 +20,8 @@ var Sip_Widget_Object;
 var User_Name;
 var User_Img;
 var User_Number;
+var User_ID;
+var SIP_Call_Noty_IMG = "";
 
 // Call noty.
 var CALL;

@@ -45,7 +45,7 @@ $(function()
 			User_Number = "sip:farah@sip2sip.info";
 
 			// Display
-			showCallNotyPopup("outgoing", "confirm", '<i class="icon icon-phone"></i><b>Calling :</b><br> ' + User_Name + "  " + User_Number + "<br>", false);
+			showCallNotyPopup("outgoing", "confirm", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Calling </b>' + User_Number +'<br>' + User_Name + '<br></span><div class="clearfix"></div>', false);
 		}
 	});
 
@@ -58,8 +58,7 @@ $(function()
 		e.preventDefault();
 
 		// Get details from UI
-		var name = $(this).attr('fname') + " " + $(this).attr('lname');
-		var image = $(this).attr('image');
+		var userid = $(this).attr('userid');
 		var phone = $(this).attr('phone');
 
 		// Check number is available.
@@ -73,12 +72,14 @@ $(function()
 		if (makeCall(phone))
 		{
 			// Assign details to set in noty.
-			User_Name = name;
-			User_Number = phone;
-			User_Img = image;
+			User_Name = getCurrentContactProperty("first_name")+" "+getCurrentContactProperty("last_name");
+			User_Number = removeBracesFromNumber(phone);
+			User_Img = getCurrentContactProperty("image");
+			User_ID = App_Contacts.contactDetailView.model.id;
+			SIP_Call_Noty_IMG = addSipContactImg();
 
 			// Display
-			showCallNotyPopup("outgoing", "confirm", '<i class="icon icon-phone"></i><b>Calling : </b><br>' + User_Name + "   " + User_Number + "<br>", false);
+			showCallNotyPopup("outgoing", "confirm", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Calling  </b>' + User_Number +"<br>" + User_Name + '<br></span><div class="clearfix"></div>', false);
 		}
 	});
 
@@ -90,7 +91,7 @@ $(function()
 		e.preventDefault();
 
 		// Display
-		showCallNotyPopup("hangup", "information", "<b>Call ended with : </b><br>" + User_Name + "   " + User_Number + "<br>", false);
+		showCallNotyPopup("hangup", "information", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><b>Call ended with  </b>' + User_Number + "<br>" + User_Name + '<br></span><div class="clearfix"></div>', false);
 
 		// SIP hangup call.
 		hangupCall();
@@ -102,7 +103,7 @@ $(function()
 	$('.ignore').die().live("click", function(e)
 	{
 		// Display
-		showCallNotyPopup("ignored", "error", "<b>Ignored call : </b><br>" + User_Name + "   " + User_Number + "<br>", 5000);
+		showCallNotyPopup("ignored", "error", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><b>Ignored call  </b>'+ User_Number + "<br>" + User_Name + '<br></span><div class="clearfix"></div>', 5000);
 
 		// SIP rehject call.
 		Sip_Session_Call.reject(Config_Call);
@@ -125,3 +126,35 @@ $(function()
 	});
 
 });
+
+//Add contact img in html for call noty text with contact url
+function addSipContactImg()
+{
+  console.log("User_Img:");
+  console.log(User_Img);
+	
+  var contactLink = "";
+  
+  if(User_ID)
+	  contactLink = contactLink+"contact/"+User_ID;
+	  
+  // Default img 
+  var notyContactImg = '<a href="#'+contactLink+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+DEFAULT_GRAVATAR_url+'" style="display:inline;"></a>';
+	
+  // If contact have img
+  if(User_Img)
+     notyContactImg = '<a href="#'+contactLink+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+User_Img+'" style="display:inline;"></a>';
+	 
+  console.log("notyContactImg: "+notyContactImg);
+  return notyContactImg;     
+}
+
+// Remove <> from sip number
+function removeBracesFromNumber(number)
+{
+	console.log("number: "+number);
+	if(number.match("^<") && number.match(">$"))
+		number = number.substr(1, number.length-2)
+	
+	return number;
+}
