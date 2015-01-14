@@ -923,6 +923,8 @@ function setPortletContentHeight(base_model){
 		$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+20-40+"px");
 		$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+20-40+"px");
 	}
+	$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-x","hidden");
+	$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-y","auto");
 }
 function getPortletsCurrencySymbol(){
 	var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
