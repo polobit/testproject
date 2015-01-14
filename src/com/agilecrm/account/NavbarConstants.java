@@ -26,7 +26,7 @@ public enum NavbarConstants
 
     DOCUMENT("Documents", "#documents", "icon-file", "documentsmenu"),
     
-    ACTIVITY("Activities", "#activities", "icon-cogs", "activitiesmenu"),
+    //ACTIVITY("Activities", "#activities", "icon-cogs", "activitiesmenu"),
 
     REPORT("Reports", "#reports", "icon-bar-chart", "reportsmenu");
 
