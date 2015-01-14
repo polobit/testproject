@@ -64,5 +64,10 @@
         <property name="is_email_opened" direction="asc"/>
         <property name="email_opened_at" direction="asc"/>
     </datastore-index>
+    
+    <datastore-index kind="ContactEmail" ancestor="false" source="auto">
+        <property name="is_email_opened" direction="asc"/>
+        <property name="email_opened_at" direction="asc"/>
+    </datastore-index>
 
 </datastore-indexes>

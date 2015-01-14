@@ -13,6 +13,7 @@ import net.sf.json.JSONSerializer;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.activities.Activity;
+import com.agilecrm.activities.Call;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.ActivityUtil;
@@ -584,20 +585,20 @@ public class PortletUtil {
 			
 			List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
 			for(Activity activity : callActivitiesList){
-				if(activity.custom2!=null && activity.custom2.equalsIgnoreCase("incoming")){
-					if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("completed")){
+				if(activity.custom2!=null && activity.custom2.equalsIgnoreCase(Call.INBOUND)){
+					if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.ANSWERED)){
 						incomingCompletedCallsCount++;
 						if(activity.custom4!=null)
 							incomingCompletedCallsDuration += Long.valueOf(activity.custom4);
-					}else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("failed")){
+					}else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED)){
 						incomingFailedCallsCount++;
 					}
-				}else if(activity.custom2!=null && activity.custom2.equalsIgnoreCase("outgoing")){
-					if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("completed")){
+				}else if(activity.custom2!=null && activity.custom2.equalsIgnoreCase(Call.OUTBOUND)){
+					if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.ANSWERED)){
 						outgoingCompletedCallsCount++;
 						if(activity.custom4!=null)
 							outgoingCompletedCallsDuration += Long.valueOf(activity.custom4);
-					}else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("failed")){
+					}else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED)){
 						outgoingFailedCallsCount++;
 					}
 				}
