@@ -20,6 +20,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.util.StringUtils2;
+import com.agilecrm.workflows.status.CampaignStatus;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
 
@@ -342,4 +343,37 @@ public class SearchUtil
 	// Formated to build query
 	return formatter.format(truncatedDate);
     }
+    
+    
+    /**
+     * Returns campaign status string with each campaign status separated by space
+     * 
+     * @param contact
+     * @return
+     */
+    public static String getCampaignStatus(Contact contact)
+    {
+
+	String campaignStatus = "";
+	
+	try
+	{
+	    for(CampaignStatus campaignStatusObj : contact.campaignStatus)
+	    {
+		if(campaignStatusObj == null)
+		    continue;
+	    
+		campaignStatus += (campaignStatus == "" ? "": " ") + campaignStatusObj.status.replaceAll("-", "_");
+	    }
+	}
+	catch(Exception e)
+	{
+	    System.err.println("Exception occured while getting campaign status in string..." + e.getMessage());
+	    e.printStackTrace();
+	}
+	
+	return campaignStatus;
+	
+    }
+    
 }
