@@ -37,7 +37,7 @@
 					{{#unless Stats-Type}}
 					<h4 style="text-align: left;">No SMS gateway configured. <a href="#integrations">Configure Now</a></h4>
 					{{/unless}}
-		{{#if_equals "SMS-Stats" Stats-Type}}
+		{{#if_equals "TWILIO" Stats-Type}}
 		<div class="row-fluid">
         	<div class="span6">
             	<h3 style="text-align: center;">SMS Sent</h3>
@@ -51,7 +51,7 @@
 				</table>
         	</div>
         	<div class="span6">
-            	<h3 style="text-align: center;">Delivery Status (Last 30 Days)</h3>
+            	<h3 style="text-align: center;">Delivery Status (Last 50 Messages)</h3>
 				<table class="table table-bordered">
 					<tbody>
 						<tr><th>Queued</th><td>{{numberWithCommas Queued}} </td></tr>
@@ -72,6 +72,9 @@
 				</table>
         	</div>
     	</div>
+		{{/if_equals}}
+		{{#if_equals "PLIVO" Stats-Type}}
+		<h4 style="text-align: left;">No stats available for Plivo SMS Gateway.</h4>			
 		{{/if_equals}}
 	</div>
 </div>

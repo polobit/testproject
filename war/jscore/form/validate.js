@@ -86,6 +86,28 @@ function isValidForm(form) {
 		return $(element).closest(".control-group").find('ul.tags > li').length > 0 ? true : false;
 	}," This field is required.");
 	
+	jQuery.validator.addMethod("formulaData", function(value, element){
+		var source = $(element).val();
+		var tpl;
+		var compiled=true;
+		try{
+			tpl = Handlebars.precompile(source);
+		}catch(err){
+			err.message;
+			compiled=false;
+		}
+		return compiled ? true : false;
+	}," Please enter a valid formula.");
+	
+	//Number validation
+	jQuery.validator.addMethod("number_input", function(value, element){
+		
+		if(value=="")
+			return false;
+		
+		return /^[0-9\-]+$/.test(value);
+	}," Please enter a valid number.");
+	
 	$(form).validate({
 		rules : {
 			atleastThreeMonths : true,

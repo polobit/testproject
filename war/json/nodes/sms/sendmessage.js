@@ -16,8 +16,8 @@
             "category": "Settings",
 			"name": "from",
             "id":"from",
-           	"title": "Select Twilio Number",
-			"fieldType": "twilio_incoming_list",
+           	"title": "Select Number",
+			"fieldType": "incoming_list",
             "type": "select",
             "style": {
                 "width": "66%"

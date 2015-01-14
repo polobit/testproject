@@ -205,9 +205,23 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     }
     
     
+    if(uiFieldDefinition.fieldType == "incoming_list")
+    {
+    	options = getTwilioIncomingList("incoming_list");
+    	
+    }
+    
     if(uiFieldDefinition.fieldType == "twilio_incoming_list")
     {
     	options = getTwilioIncomingList("twilio_incoming_list");
+    	
+    }
+    
+    
+    
+    if(uiFieldDefinition.fieldType == "campaign_list")
+    {
+    	options = getCampaignList("campaign_list");
     	
     }
     
@@ -238,6 +252,10 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     if(selectEventHandler)
     	return "<select onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "' id='" + uiFieldDefinition.id + "'"+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes + "</select>";
     
+  
+    if(uiFieldDefinition.fieldType == "campaign_list")
+    return "<select multiple name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'"+getStyleAttribute(uiFieldDefinition.style)+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes +  "</select>";
+     
 	  // retun select field with name and title attributes(Yasin(14-09-10)) 
     return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'"+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes + "</select>";
            
@@ -342,14 +360,14 @@ function generateDefaultUI(uiFieldDefinition) {
 		 return ("<" + tagName + " " + attributes + " />");
 	}else
 
-    return "<" + tagName + " " + attributes + getStyleAttribute(uiFieldDefinition.style);
+    return "<" + tagName + " " + attributes + getStyleAttribute(uiFieldDefinition.style)+"/>";
 
 }
 //Bhasuri 
 function getStyleAttribute(styleAttributes)
 {
 	if(styleAttributes == undefined)
-		return " style='width:75%'/>";
+		return " style='width:75%'";
 	
 	var style=" style='";
 	$.each(
@@ -357,7 +375,7 @@ function getStyleAttribute(styleAttributes)
 				style+=key+":"+value+";";
 			} );
 	
-		return style+"'/>";
+		return style+"'";
 	}
 
 function loadTinyMCE(name)
@@ -653,7 +671,29 @@ function _generateUIFields(selector, ui) {
                 
         }
         
+        if(uiFieldType == "incoming_list")
+        {
+           addLabel(uiFieldDefinition.label, container);
+          
+           
+           uiField = generateSelectUI(uiFieldDefinition);
+           
+           $(uiField).appendTo(container);
+           continue;
+        }
+        
         if(uiFieldType == "twilio_incoming_list")
+        {
+           addLabel(uiFieldDefinition.label, container);
+          
+           
+           uiField = generateSelectUI(uiFieldDefinition);
+           
+           $(uiField).appendTo(container);
+           continue;
+        }
+        
+        if(uiFieldType == "campaign_list")
         {
            addLabel(uiFieldDefinition.label, container);
           

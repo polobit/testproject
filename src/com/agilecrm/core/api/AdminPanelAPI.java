@@ -46,6 +46,7 @@ import com.google.gson.Gson;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.model.Customer;
+import com.stripe.model.Invoice;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 
 @Path("/api/admin_panel")
@@ -458,6 +459,25 @@ public class AdminPanelAPI
 
 		StripeUtil.deleteSubscription(sub_id, cus_id);
 
+	}
+
+	// get perticular invoice
+	@Path("/getinvoice")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Invoice getInvoice(@QueryParam("d") String invoice_id)
+	{
+		try
+		{
+			return StripeUtil.getInvoice(invoice_id);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+
+		}
 	}
 
 }

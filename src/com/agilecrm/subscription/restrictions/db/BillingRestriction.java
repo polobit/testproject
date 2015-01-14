@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
@@ -60,11 +61,26 @@ public class BillingRestriction
     public Integer pageviews_count;
     public Integer emails_count;
     public Integer users_count;
-    
+
     public Integer companies_count;
     
-    public Integer one_time_emails_count;
+    /**
+     * New limits
+     */
+    @NotSaved(IfDefault.class)
+    public Integer reports_count = 0;
     
+    @NotSaved(IfDefault.class)
+    public Integer triggers_count = 0;
+    
+    @NotSaved(IfDefault.class)
+    public Integer widgets_count = 0;
+    
+
+    public Integer one_time_emails_count = 0;
+
+    public Integer max_emails_count;
+
     public Long email_pack_start_time = 0L;
 
     @NotSaved(IfDefault.class)
@@ -98,6 +114,8 @@ public class BillingRestriction
     private BillingRestriction(PlanLimits limits)
     {
 	planDetails = limits;
+
+	planDetails.setEmailWhiteLabelEnabled(max_emails_count != null && max_emails_count > 0);
     }
 
     /**
@@ -165,6 +183,9 @@ public class BillingRestriction
      */
     public PlanLimits getCurrentLimits()
     {
+	if (one_time_emails_count != null && one_time_emails_count > 0)
+	    planDetails.setEmailWhiteLabelEnabled(true);
+	
 	return planDetails;
     }
 
@@ -265,5 +286,21 @@ public class BillingRestriction
 	    return true;
 
 	return false;
+    }
+    
+    @PostLoad
+    private void postLoad()
+    {
+	if(one_time_emails_count == null)
+	    one_time_emails_count = 0;
+	
+	if(max_emails_count == null)
+	    max_emails_count = 0;
+	
+	if(one_time_emails_count > 0 && (max_emails_count == null || max_emails_count == 0))
+	{
+	    max_emails_count = one_time_emails_count;
+	    this.save();
+	}
     }
 }

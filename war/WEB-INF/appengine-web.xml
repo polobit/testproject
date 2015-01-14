@@ -75,6 +75,7 @@
 			<url-blacklist>https://*.*.*/war/widgets/*.js</url-blacklist> -->
 		<url-blacklist>https://*/formbuilder/assets/templates/*</url-blacklist>
 		<url-blacklist>https://*/war/misc/formbuilder/*</url-blacklist>
+		<url-blacklist>https://*/misc/modal-templates/*</url-blacklist>
 		<enabled-rewriter>MoveCssToHead</enabled-rewriter>
 		<enabled-rewriter>CombineCss</enabled-rewriter>
 		<enabled-rewriter>MinifyCss</enabled-rewriter>

@@ -10,7 +10,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.datanucleus.util.StringUtils;
 
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.cursor.Cursor;
@@ -111,8 +113,7 @@ public class Opportunity extends Cursor
     /**
      * Closed date for a deal.
      */
-    @NotSaved(IfDefault.class)
-    public Long close_date = 0L;
+    public Long close_date = null;
 
     /**
      * DomainUser Id who created Deal.
@@ -158,7 +159,7 @@ public class Opportunity extends Cursor
      * Notes id's of related notes for a deal.
      */
     @NotSaved
-    private List<String> notes = new ArrayList<String>();
+    public List<String> notes = new ArrayList<String>();
 
     /**
      * Related notes objects fetched using notes id's.
@@ -171,6 +172,9 @@ public class Opportunity extends Cursor
     @NotSaved
     public String note_description = null;
 
+    @NotSaved
+    public String note_subject = null;
+
     /**
      * Related notes objects fetched using notes id's.
      */
@@ -178,10 +182,15 @@ public class Opportunity extends Cursor
     private Key<Milestone> pipeline = null;
 
     /**
-     * note's description related to a task
+     * pipeline Id of the deal.
      */
     @NotSaved
     public Long pipeline_id = 0L;
+
+    /**
+     * To state whenther the deals is archived or not.
+     */
+    public boolean archived = false;
 
     /**
      * ObjectifyDao of Opportunity.
@@ -475,15 +484,24 @@ public class Opportunity extends Cursor
 	agileUser = new Key<AgileUser>(AgileUser.class, user.id);
 
 	// If new note is added to deal
-	if (this.note_description != null)
+	if (!StringUtils.isEmpty(this.note_description))
 	{
 	    if (!this.note_description.trim().isEmpty())
 	    {
 		// Create note
-		Note note = new Note(null, this.note_description);
-
+		Note note = null;
+		// Create note
+		if (this.note_subject != null)
+		    note = new Note(this.note_subject, this.note_description);
+		else
+		    note = new Note(null, this.note_description);
 		// Save note
 		note.save();
+
+		if (this.id != null)
+		{
+		    ActivitySave.createNoteAddForDeal(note, this);
+		}
 
 		// Add note to task
 		this.related_notes.add(new Key<Note>(Note.class, note.id));
@@ -491,6 +509,26 @@ public class Opportunity extends Cursor
 
 	    // Make temp note null
 	    this.note_description = null;
+	}
+	else if (this.note_subject != null)
+	{
+	    if (!this.note_subject.trim().isEmpty())
+	    {
+		// Create note
+		Note note = null;
+		// Create note
+		if (this.note_subject != null)
+		    note = new Note(this.note_subject, null);
+		// Save note
+		note.save();
+		if (this.id != null)
+		{
+		    ActivitySave.createNoteAddForDeal(note, this);
+		}
+
+		// Add note to task
+		this.related_notes.add(new Key<Note>(Note.class, note.id));
+	    }
 	}
 
 	if (this.notes != null)
@@ -506,16 +544,27 @@ public class Opportunity extends Cursor
 
     }
 
-    /**
+    /*
      * (non-Javadoc)
      * 
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString()
     {
-	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name
-		+ " description:" + description + " expectedValue: " + expected_value + " pipeline: " + pipeline_id
-		+ " milestone: " + milestone + " probability: " + probability + " Track: " + track + " Owner "
-		+ owner_id;
+
+	StringBuilder builder = new StringBuilder();
+	builder.append("Opportunity [id=").append(id).append(", name=").append(name).append(", contact_ids=")
+	        .append(contact_ids).append(", related_contacts=").append(related_contacts).append(", custom_data=")
+	        .append(custom_data).append(", description=").append(description).append(", expected_value=")
+	        .append(expected_value).append(", milestone=").append(milestone).append(", probability=")
+	        .append(probability).append(", close_date=").append(close_date).append(", owner_id=").append(owner_id)
+	        .append(", ownerKey=").append(ownerKey).append(", agileUser=").append(agileUser)
+	        .append(", created_time=").append(created_time).append(", track=").append(track)
+	        .append(", entity_type=").append(entity_type).append(", notes=").append(notes)
+	        .append(", related_notes=").append(related_notes).append(", note_description=")
+	        .append(note_description).append(", pipeline=").append(pipeline).append(", pipeline_id=")
+	        .append(pipeline_id).append(", archived=").append(archived).append("]");
+	return builder.toString();
     }
 }

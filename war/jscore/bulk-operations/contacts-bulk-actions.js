@@ -422,6 +422,54 @@ $(function()
 		}
 		else
 		{
+			// Selected Contact ids
+			var id_array = get_contacts_bulk_ids();
+			
+			// when SELECT_ALL is true i.e., all contacts are selected.
+			if(id_array.length === 0)
+			   count = getAvailableContacts();
+			else
+				count = id_array.length;
+			
+			if(!canSendEmails(count))
+			{
+				var pendingEmails = getPendingEmails();
+				
+				var yes = "Yes";
+				var no = "No"
+					
+				var message = "";
+				var upgrade_link =  'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>';
+				var title = "Not enough emails left"
+				if(pendingEmails <= 0)
+					{
+						title = "Emails limit";
+						yes = "";
+						no = "Ok"
+						message = "You have used up all emails in your quota. " + upgrade_link;
+					}
+				else
+					message = "You have only "+ pendingEmails + " emails remaining as per your quota. " + upgrade_link +
+					" Continuing with this operation may not send the email to some contacts. <br/><br/>" +
+					"Do you want to proceed?";
+				
+				showModalConfirmation(title, 
+						message, 
+					show_bulk_email_form
+					, function(element){
+							
+						// No callback
+						if(!element)
+						return;
+						
+						if($(element).attr('subscribe'))
+							Backbone.history.navigate( "subscribe", { trigger : true });
+						},
+						function(element){
+						}, yes, no);
+				return;
+			}
+			
 			show_bulk_email_form()
 		}
 		
@@ -491,7 +539,10 @@ $(function()
 			
 			// serialize form.
 			var form_json = serializeForm("emailForm");
-			
+			if(form_json.from_email != CURRENT_DOMAIN_USER.email && form_json.from_name == CURRENT_DOMAIN_USER.name)
+			{
+				form_json.from_name = "";
+			}
 			var url = '/core/api/bulk/update?action_type=SEND_EMAIL';
 			
 			var json = {};
@@ -756,11 +807,17 @@ function getSelectionCriteria()
  */
 function postBulkOperationData(url, data, form, contentType, callback, error_message)
 {
+	var dynamic_filter = getDynamicFilters();
+	if(dynamic_filter != null) {
+		data.dynamic_filter = dynamic_filter;
+	}
 	if (data.contact_ids && data.contact_ids.length == 0)
 	{
 		console.log(data.contact_ids);
 		console.log(getSelectionCriteria());
-		url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+		if(dynamic_filter == null) {			
+			url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+		}
 		console.log(url);
 	}
 	else
@@ -801,4 +858,24 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 			}
 			showNotyPopUp('information', error_message, "top", 5000);
 	} });
+}
+
+function getDynamicFilters() {
+	var dynamic_filter = null;
+	if (readCookie('company_filter'))
+	{
+		dynamic_filter = readData('dynamic_company_filter')
+	} else {
+		dynamic_filter = readData('dynamic_contact_filter')
+	}
+	
+	if(!dynamic_filter || dynamic_filter == null) {
+		return null;
+	} else {
+		if(JSON.parse(dynamic_filter).rules.length >0) {
+			return dynamic_filter;
+		} else {
+			return null;
+		}
+	}
 }

@@ -3,11 +3,11 @@
 <div class="widget_content">
 <div class="row-fluid">
 	{{#if user_info.photo.content_url}}
-		<div class="span3"><img src="{{user_info.photo.content_url}}" width="36" height="36" alt="" class="img-rounded pull-left"/></div>
+		<div class="span2"><img src="{{user_info.photo.content_url}}" width="36" height="36" alt="" class="img-rounded pull-left"/></div>
 	{{else}}
-		<div class="span3"><img src="https://secure.gravatar.com/avatar/51200e80ab8b12eaaae230fcfe7dd1c6?d=https%3A//assets.zendesk.com/images/types/user_sm.png&s=30&r=g" width="36" height="36" alt="" class="img-rounded pull-left"/></div>
+		<div class="span2"><img src="https://secure.gravatar.com/avatar/51200e80ab8b12eaaae230fcfe7dd1c6?d=https%3A//assets.zendesk.com/images/types/user_sm.png&s=30&r=g" width="36" height="36" alt="" class="img-rounded pull-left"/></div>
 	{{/if}}
-	<div class="pull-left ml_5 span8">
+	<div class="pull-left ml_5 span10">
 		{{#if user_info.name}}
 			<p class="title_txt">{{user_info.name}}</p>
 		{{else}}
@@ -15,7 +15,7 @@
 		{{/if}}
 	</div>
 </div>
-<div class="clearfix" style="margin-top:5px;"><a class="btn" id="add_ticket"><i class="icon-plus"></i>New Ticket</a></div>						
+<div class="clearfix" style="margin-top:5px;"><a  id="add_ticket"><i class="icon-plus"></i>New Ticket</a></div>						
 </div>
 <div class="clearfix" id="add-ticket-error-panel" style="display:none; color:red;">
 </div>
@@ -176,11 +176,11 @@
 
 <script id="zendesk-error-template" type="text/html">
 {{#check_length message "140"}}
-	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:10px">
+	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:0px">
 		{{message}}
 	</div>
 {{else}}
-	<div style="line-height:160%;word-wrap: break-word;padding:10px">
+	<div style="line-height:160%;word-wrap: break-word;padding:0px">
 		{{message}}
 	</div>
 {{/check_length}}

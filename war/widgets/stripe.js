@@ -3,63 +3,6 @@
  * on the third party JavaScript API provided. It interacts with the application
  * based on the function provided on agile_widgets.js (Third party API).
  */
-$(function()
-{
-	// Stripe widget name as a global variable
-	Stripe_PLUGIN_NAME = "Stripe";
-
-	// Stripe profile loading image declared as global
-	STRIPE_PROFILE_LOAD_IMAGE = '<center><img id="stripe_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
-
-	// Retrieves widget which is fetched using script API
-	var stripe_widget = agile_crm_get_widget(Stripe_PLUGIN_NAME);
-
-	console.log('In Stripe');
-	console.log(stripe_widget);
-
-	// ID of the Stripe widget as global variable
-	Stripe_Plugin_Id = stripe_widget.id;
-
-	/*
-	 * Gets Stripe widget preferences, required to check whether to show setup
-	 * button or to fetch details. If undefined - considering first time usage
-	 * of widget, setupStripeOAuth is shown and returned
-	 */
-	if (stripe_widget.prefs == undefined)
-	{
-		setupStripeOAuth();
-		return;
-	}
-
-	// Parse string Stripe widget preferences as JSON
-	var stripe_widget_prefs = JSON.parse(stripe_widget.prefs);
-	
-	console.log(stripe_widget_prefs);
-
-	/*
-	 * Retrieve name of the custom field in which Stripe customer IDs are
-	 * stored. We store it as "stripe_field_name" in Stripe Widget preferences
-	 */
-	var stripe_custom_field_name = stripe_widget_prefs['stripe_field_name'];
-
-	/*
-	 * If stripe_custom_field_name is not defined, call setUpStripeCustomField
-	 * method which asks the user to select the field in which Stripe customer
-	 * IDs are stored from list of custom fields
-	 */
-	if (!stripe_custom_field_name)
-	{
-		setUpStripeCustomField(stripe_widget_prefs);
-		return;
-	}
-
-	/*
-	 * If stripe_custom_field_name is defined, shows customer details and
-	 * invoices from Stripe
-	 */
-	showStripeProfile(stripe_custom_field_name);
-
-});
 
 /**
  * Shows setup if user adds Stripe widget for the first time. Uses ScribeServlet
@@ -180,7 +123,7 @@ function showStripeProfile(stripe_custom_field_name)
 			  });
 	
 	
-		 $('#Stripe').html("<div><form class='widget_content' style='border-bottom:none;' id='stripe_contact_id_form' name='stripe_contact_id_form' method='post'>" +
+		 $('#Stripe').html("<div><form class='widget_content' style='border-bottom:none;margin-bottom:5px;' id='stripe_contact_id_form' name='stripe_contact_id_form' method='post'>" +
 		    "<fieldset><p>Please provide the Stripe customer id for this contact</p>" +
 		    "<div class='control-group' style='margin-bottom:0px'><div class='controls'>" +
 		    "<input type='text' class='required' name='stripe_contact_id' style='width:90%' id='stripe_contact_id' placeholder='Stripe customer id' onkeydown='if (event.keyCode == 13) { event.preventDefault(); }'></input>" +
@@ -263,3 +206,61 @@ function stripeError(id, message)
 	 */
 	$('#' + id).html(getTemplate('stripe-error', error_json));
 }
+
+$(function()
+		{
+			// Stripe widget name as a global variable
+			Stripe_PLUGIN_NAME = "Stripe";
+
+			// Stripe profile loading image declared as global
+			STRIPE_PROFILE_LOAD_IMAGE = '<center><img id="stripe_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+
+			// Retrieves widget which is fetched using script API
+			var stripe_widget = agile_crm_get_widget(Stripe_PLUGIN_NAME);
+
+			console.log('In Stripe');
+			console.log(stripe_widget);
+
+			// ID of the Stripe widget as global variable
+			Stripe_Plugin_Id = stripe_widget.id;
+
+			/*
+			 * Gets Stripe widget preferences, required to check whether to show setup
+			 * button or to fetch details. If undefined - considering first time usage
+			 * of widget, setupStripeOAuth is shown and returned
+			 */
+			if (stripe_widget.prefs == undefined)
+			{
+				setupStripeOAuth();
+				return;
+			}
+
+			// Parse string Stripe widget preferences as JSON
+			var stripe_widget_prefs = JSON.parse(stripe_widget.prefs);
+			
+			console.log(stripe_widget_prefs);
+
+			/*
+			 * Retrieve name of the custom field in which Stripe customer IDs are
+			 * stored. We store it as "stripe_field_name" in Stripe Widget preferences
+			 */
+			var stripe_custom_field_name = stripe_widget_prefs['stripe_field_name'];
+
+			/*
+			 * If stripe_custom_field_name is not defined, call setUpStripeCustomField
+			 * method which asks the user to select the field in which Stripe customer
+			 * IDs are stored from list of custom fields
+			 */
+			if (!stripe_custom_field_name)
+			{
+				setUpStripeCustomField(stripe_widget_prefs);
+				return;
+			}
+
+			/*
+			 * If stripe_custom_field_name is defined, shows customer details and
+			 * invoices from Stripe
+			 */
+			showStripeProfile(stripe_custom_field_name);
+
+		});

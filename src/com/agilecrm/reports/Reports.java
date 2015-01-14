@@ -121,7 +121,7 @@ public class Reports implements Serializable
     @SuppressWarnings("rawtypes")
     public Collection generateReports(int count, String cursor)
     {
-	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules, count, cursor);
+	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules, count, cursor, null);
     }
 
     @JsonIgnore

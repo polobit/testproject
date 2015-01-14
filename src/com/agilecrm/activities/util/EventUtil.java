@@ -1,7 +1,16 @@
 package com.agilecrm.activities.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.Event;
 import com.agilecrm.contact.Contact;
@@ -12,6 +21,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.IcalendarUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -184,6 +194,7 @@ public class EventUtil
      * @throws Exception
      */
     public static List<Event> getContactSortedEvents(Long contactId) throws Exception
+
     {
 	Query<Event> query = dao.ofy().query(Event.class)
 	        .filter("related_contacts =", new Key<Contact>(Contact.class, contactId)).order("start");
@@ -197,6 +208,7 @@ public class EventUtil
      *            method used to send ical event for to contacts added in
      *            related_to filed in event
      */
+    @Deprecated
     public static void sendIcal(Event event)
     {
 	List<Contact> contacts = event.getContacts();
@@ -214,12 +226,13 @@ public class EventUtil
 		    ContactField toemail = con.getContactFieldByName("email");
 
 		    if (toemail != null)
+
 		    {
 			net.fortuna.ical4j.model.Calendar iCal = IcalendarUtil.getICalFromEvent(event, user,
 			        toemail.value, null);
 			String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 			EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", toemail.value, null,
-			        null, subject, null, null, null, null, attachments);
+			        null, subject, null, null, null, null, null, attachments);
 		    }
 		}
 	    }
@@ -231,7 +244,7 @@ public class EventUtil
 		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
 
 		EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", user.email, null, null, subject,
-		        null, null, null, null, attachments_to_agile_user);
+		        null, null, null, null, null, attachments_to_agile_user);
 
 	    }
 	}
@@ -239,13 +252,56 @@ public class EventUtil
     }
 
     /**
-     * Gets the list of events which have been pending for Today
+     * get All events base on cursor value
      * 
+     * @param max
+     * @param cursor
+     * @return List of Events
+     */
+    public static List<Event> getAllEvents(int max, String cursor)
+    {
+	Query<Event> query = dao.ofy().query(Event.class).order("start");
+	return dao.fetchAllWithCursor(max, cursor, query, false, false);
+    }
+
+    /**
+     * get All events base on cursor value and start date
+     * 
+     * @param max
+     * @param cursor
+     * @return List of Events
+     */
+    public static List<Event> getEventList(int max, String cursor)
+    {
+	Date d = new Date();
+	Long startDate = (d.getTime()) / 1000;
+	Query<Event> query = dao.ofy().query(Event.class).filter("start >=", startDate);
+	return dao.fetchAllWithCursor(max, cursor, query, false, false);
+    }
+
+    /**
+     * get All events base on cursor value and start date
+     * 
+     * @param max
+     * @param cursor
+     * @return List of Events
+     */
+    public static List<Event> getEventList(int max, String cursor, Long ownerId)
+    {
+	Date d = new Date();
+	Long startDate = d.getTime();
+	Query<Event> query = dao.ofy().query(Event.class).filter("start >=", startDate / 1000)
+	        .filter("owner", new Key<AgileUser>(AgileUser.class, ownerId));
+	return dao.fetchAllWithCursor(max, cursor, query, false, false);
+    }
+
+    /**
      * @return List of events that have been pending for Today
      */
     public static List<Event> getTodayPendingEvents()
     {
 	try
+
 	{
 	    // Gets Today's date
 	    DateUtil startDateUtil = new DateUtil();
@@ -256,10 +312,12 @@ public class EventUtil
 	    // Gets Date after numDays days
 	    DateUtil endDateUtil = new DateUtil();
 	    Long endTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000) - 1;
+	    
+	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
 
 	    // Gets list of tasks filtered on given conditions
-	    return dao.ofy().query(Event.class).filter("search_range >=", startTime).filter("search_range <=", endTime)
-		    .order("search_range").list();
+	    return dao.ofy().query(Event.class).filter("owner", new Key<AgileUser>(AgileUser.class, agileUser.id)).filter("start >=", startTime).filter("start <=", endTime).limit(50)
+		    .order("start").list();
 	}
 	catch (Exception e)
 	{
@@ -267,4 +325,100 @@ public class EventUtil
 	    return null;
 	}
     }
+
+    /**
+     * fetches the latest events to send event reminders
+     * 
+     * @param starttime
+     * @return
+     */
+    public static List<Event> getLatestEvents(Long starttime)
+    {
+	System.out.println("in getLatest Events Domain name " + NamespaceManager.get());
+
+	int duration = 3600;
+	Long currenttime = System.currentTimeMillis() / 1000;
+	if (starttime == null)
+	    starttime = currenttime + 900;
+	else
+	    starttime = starttime + 120;
+
+	Long endtime = starttime + duration;
+
+	System.out.println(starttime + "----------------------------" + endtime);
+
+	List<Event> domain_events = new ArrayList<>();
+
+	List<Event> events = dao.ofy().query(Event.class).filter("start >=", starttime).filter("start <=", endtime)
+	        .order("start").list();
+	if (events != null && events.size() > 0)
+	{
+	    Event event = events.get(0);
+	    domain_events = getLatestWithSameStartTime(event.start);
+	    return domain_events;
+
+	}
+
+	return null;
+    }
+
+    /**
+     * fetches the events which are starting at same time
+     * 
+     * @param starttime
+     * @return
+     */
+    public static List<Event> getLatestWithSameStartTime(Long starttime)
+    {
+
+	System.out.println("in getLatest EventsWithSameStartTime " + NamespaceManager.get());
+
+	List<Event> domain_events = new ArrayList<>();
+
+	domain_events = dao.listByProperty("start", starttime);
+	System.out.println(domain_events.size() + " domainevents size in getlatesteventswithSameStarttime");
+	System.out.println(starttime + " StartTime in getLatestWithStartTime");
+	return domain_events;
+
+    }
+
+    /**
+     * return list of events based on event owner id
+     */
+
+    public static List<Event> getEvents(int count, String cursor, Long ownerId)
+    {
+	return dao.ofy().query(Event.class).order("start")
+	        .filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
+    }
+
+    /**
+     * converts eppoch to server timezone
+     * 
+     * @param epoch
+     *            in seconds
+     * @return
+     */
+    public static String getHumanTimeFromEppoch(Long epoch, String timezone, String format)
+    {
+	if (StringUtils.isEmpty(format))
+	    format = "h:mm a (z)";
+	if (StringUtils.isEmpty(timezone))
+	{
+	    timezone = AccountPrefsUtil.getAccountPrefs().timezone;
+	    if (StringUtils.isEmpty(timezone))
+	    {
+		timezone = "UTC";
+	    }
+	}
+	Calendar cal = Calendar.getInstance();
+	cal.setTimeInMillis(epoch * 1000);
+
+	TimeZone tz = TimeZone.getTimeZone(timezone);
+	DateFormat dateFormat = new SimpleDateFormat(format);
+	dateFormat.setTimeZone(tz);
+	cal.setTimeZone(tz);
+	return dateFormat.format(cal.getTime());
+    }
+
 }

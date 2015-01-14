@@ -10,10 +10,12 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.agilecrm.account.util.SMSGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.util.ContactUtil;
@@ -118,6 +120,8 @@ public class WidgetsAPI
 		System.out.println("In custom widgets api create");
 		if (customWidget == null)
 			return null;
+		
+		customWidget.name = customWidget.name.replaceAll("[^a-zA-Z]+","");
 
 		if (WidgetUtil.checkIfWidgetNameExists(customWidget.name))
 			return null;
@@ -153,10 +157,9 @@ public class WidgetsAPI
 	 * @param widget_name
 	 *            {@link String}
 	 */
-	@Path("{widget_name}")
 	@DELETE
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void deleteWidget(@PathParam("widget_name") String widget_name)
+	public void deleteWidget(@QueryParam("widget_name") String widget_name)
 	{
 		// Deletes widget based on name
 		Widget widget = WidgetUtil.getWidget(widget_name);
@@ -175,10 +178,10 @@ public class WidgetsAPI
 	 * @param widget_name
 	 *            {@link String}
 	 */
-	@Path("/remove/{widget_name}")
+	@Path("/remove")
 	@DELETE
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void removeCustomWidget(@PathParam("widget_name") String widget_name)
+	public void removeCustomWidget(@QueryParam("widget_name") String widget_name)
 	{
 		// Deletes widget based on name
 		CustomWidget customWidget = CustomWidgets.getCustomWidget(widget_name);
@@ -312,7 +315,9 @@ public class WidgetsAPI
 	public void deleteGatewayWidget(@PathParam("id") Long id)
 	{
 
-		Widget widget = WidgetUtil.getWidget(id);
-		widget.delete();
+		Widget widget = SMSGatewayUtil.getSMSGatewayWidget();
+		if (widget != null)
+			widget.delete();
+		System.err.println("The widget is null and id is " + id);
 	}
 }

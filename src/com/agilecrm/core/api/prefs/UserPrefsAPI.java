@@ -1,23 +1,16 @@
 package com.agilecrm.core.api.prefs;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONException;
 
-import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -76,6 +69,7 @@ public class UserPrefsAPI
 	    userPrefs.template = prefs.template;
 	    userPrefs.width = prefs.width;
 	    userPrefs.task_reminder = prefs.task_reminder;
+	    userPrefs.event_reminder = prefs.event_reminder;
 	    userPrefs.timezone = prefs.timezone;
 	    userPrefs.currency = prefs.currency;
 	    userPrefs.keyboard_shotcuts = prefs.keyboard_shotcuts;
@@ -92,12 +86,14 @@ public class UserPrefsAPI
 
     /**
      * To change current domain user password
-     * @throws Exception 
+     * 
+     * @throws Exception
      */
     @Path("/changePassword")
     @PUT
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void changePasswordOfCurrentDomainUser(@FormParam("current_pswd") String currentPassword, @FormParam("new_pswd") String newPassword) throws Exception
+    public void changePasswordOfCurrentDomainUser(@FormParam("current_pswd") String currentPassword,
+	    @FormParam("new_pswd") String newPassword) throws Exception
     {
 	DomainUser currentDomainUser = DomainUserUtil.getCurrentDomainUser();
 	if (StringUtils.equals(MD5Util.getMD5HashedPassword(currentPassword), currentDomainUser.getHashedString()))
@@ -109,15 +105,14 @@ public class UserPrefsAPI
 	    }
 	    catch (Exception e)
 	    {
-		e.printStackTrace();	
+		e.printStackTrace();
 		System.out.println(e.getMessage());
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		        .build());
 	    }
 	}
 	else
 	    throw new Exception("Current Password not matched");
     }
-    
-    
-   
+
 }

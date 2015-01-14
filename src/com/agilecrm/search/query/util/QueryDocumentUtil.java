@@ -130,15 +130,25 @@ public class QueryDocumentUtil
 				String newQuery = lhs + ":" + SearchUtil.normalizeString(value);
 
 				// For equals condition
-				if (condition.equals(SearchRule.RuleCondition.EQUALS) || condition.equals(SearchRule.RuleCondition.ON))
+				if (condition.equals(SearchRule.RuleCondition.EQUALS))
 				{
 					/*
 					 * Build query by passing condition old query and new query
 					 */
+					//double quotes for exact match of value.
+					query = buildNestedCondition("AND", query, lhs + ":\"" + SearchUtil.normalizeString(value)+"\"");
+				} 
+				else if (condition.equals(SearchRule.RuleCondition.ON) || condition.equals(SearchRule.RuleCondition.CONTAINS)) 
+				{
 					query = buildNestedCondition("AND", query, newQuery);
 				}
-
 				else if (condition.equals(SearchRule.RuleCondition.NOTEQUALS))
+				{
+					// double quotes for exact match of value.
+					query = buildNestedCondition("NOT", query, lhs + ":\"" + SearchUtil.normalizeString(value)+"\"");
+				}
+
+				else if (condition.equals(SearchRule.RuleCondition.NOT_CONTAINS))
 				{
 					// For not queries
 					query = buildNestedCondition("NOT", query, newQuery);
@@ -163,6 +173,16 @@ public class QueryDocumentUtil
 					 * Build query by passing condition old query and new query
 					 */
 					query = buildNestedCondition("AND", query, newQuery);
+				}
+				
+				// Between given values
+				else if (condition.equals(SearchRule.RuleCondition.BETWEEN) || condition.equals(SearchRule.RuleCondition.BETWEEN_NUMBER))
+				{
+					if (rhs_new != null)
+					{
+						query = buildNestedCondition("AND", query, lhs + " >= " + rhs);
+						query = buildNestedCondition("AND", query, lhs + " <= " + rhs_new);
+					}
 				}
 
 			}
@@ -444,7 +464,8 @@ public class QueryDocumentUtil
 			// support old data
 			epochQuery = lhs + "_epoch" + ">=" + dayStartEpochTime;
 
-			query = buildNestedCondition("AND", epochQuery, lhs + "_epoch" + "<=" + dayEndEpochTime);
+			query = buildNestedCondition("AND", query, epochQuery);
+			query = buildNestedCondition("AND", query, lhs + "_epoch" + "<=" + dayEndEpochTime);
 
 		}
 
@@ -516,12 +537,12 @@ public class QueryDocumentUtil
 		}
 		else if (condition.equals(SearchRule.RuleCondition.NEXT))
 		{
-			long currentTime = new Date().getTime();
+			long currentTime = new Date().getTime()/1000;
 
 			long limitTime = currentTime + (Integer.parseInt(rhs) - 1) * 24 * 3600;
 
-			query = buildNestedCondition("AND", query, lhs + " >=" + currentTime);
-			query = buildNestedCondition("AND", query, lhs + " <=" + limitTime);
+			query = buildNestedCondition("AND", query, lhs + "_epoch >=" + currentTime);
+			query = buildNestedCondition("AND", query, lhs + "_epoch <=" + limitTime);
 		}
 
 		return query;

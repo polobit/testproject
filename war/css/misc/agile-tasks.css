@@ -81,7 +81,7 @@
 .list-header {
 	font-size: 17px;
 	font-weight: normal;
-	padding: 7px 9px;
+	padding: 6px 9px;
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -222,6 +222,20 @@
 
 .new-task-type {
 	background: #777;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	color: #fff;
+	padding: 2px 4px 2px 4px;
+	/* position: absolute; */
+	/* right: 5px; */
+	/* top: 4px; */
+	/* text-align: center; */
+	cursor: move;
+	text-shadow: none;
+}
+
+.deal-task-type {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;

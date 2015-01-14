@@ -23,7 +23,6 @@
         },
         {
             "label": "Add Note",
-            "required": "required",
             "category": "Info",
             "name": "description",
             "id": "description",

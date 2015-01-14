@@ -20,9 +20,9 @@
 	{{/if}}
 </div>
 <div class="sub_header">
-	<h4>Subscription Details</h4>
+	<div>Subscription Details</div>
 </div>
-<ul style="margin:0px;padding:10px;border-bottom:1px solid #ddd;">
+<ul style="margin:0px;padding:10px 0px;border-bottom:1px solid #eee;">
 	{{#if customer.subscription}}
 		<li class="row-fluid">	
 			<div class="span5">Start Date
@@ -77,7 +77,7 @@
 </ul>
 
 <div class="sub_header">
-		<h4>Invoices</h4>
+		<div>Invoices</div>
 </div>
 <ul style="margin:0px;">
 {{#if invoice.length}}
@@ -135,11 +135,11 @@
 
 <script id="stripe-error-template" type="text/html">
 {{#check_length message "140"}}
-	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:10px">
+	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:auto;word-wrap: break-word;font-size:13px;">
 		{{{message}}}
 	</div>
 {{else}}
-	<div style="line-height:160%;word-wrap: break-word;padding:10px">
+	<div style="line-height:160%;word-wrap: break-word;padding:0px">
 		{{{message}}}
 	</div>
 {{/check_length}}

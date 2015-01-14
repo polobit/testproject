@@ -61,6 +61,19 @@ $(function () {
     	window.history.back();
     });
 	
+	//Check the archived filter for the first time and set it to false as default.
+	if(readCookie('deal-filters')){
+		var json = $.parseJSON(readCookie('deal-filters'));
+		if(!json.archived){
+			json.archived="false";
+			createCookie('deal-filters',JSON.stringify(json));
+		}
+	} else {
+		var json = {"owner_id":"","pipeline_id":"","milestone":"","value_filter":"equals","value":"","value_start":"","value_end":"","archived":"false","":false,"contact_ids":[]};
+		json.archived="false";
+		createCookie('deal-filters',JSON.stringify(json));
+	}
+	
 });
 
 /**
@@ -149,6 +162,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 			if(jsonModel.length==1){
 				$('#pipeline',el).closest('div.control-group').hide();
 				$('#milestone',el).closest('div.control-group').css("margin-left","0px");
+				$('#dealsFilterForm #pipeline',el).closest('div.control-group').show();
 			}
 			
 			if (callback && typeof (callback) === "function") {
@@ -253,9 +267,6 @@ function setupDealsTracksList(cel){
 	
 }
 
-function setupDealFilters(cel){
-	$('#deal-list-filters').html(getTemplate('deal-filter'));
-}
 /**
  * Copy the cursor in the last model of collection to the new model while adding it to the collection. 
  * @param dealPipelineModel
@@ -303,7 +314,6 @@ function appendCustomfields(el){
 			 $(el).find('#opportunities-model-list tr').each(function(index,element){
 				 var row = '';
 				 $.each(customfields, function(i,customfield){
-						console.log(customfield);
 						 row += '<td class="deal_custom_replace"><div style="width:6em;text-overflow:ellipsis;">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
 					});
 				 $(this).append(row);
@@ -320,7 +330,6 @@ function appendCustomfields(el){
  * @returns {String} value of the custom field.
  */
 function dealCustomFieldValue(name, data){
-	console.log(data);
 	var value = '';
 	$.each(data,function(index, field){
 		if(field.name == name){

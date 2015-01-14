@@ -124,13 +124,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     public String name = null;
 
     /**
-     * schedule_id is nothing but name of the domain user at this time we are
-     * not allowing user to change this but in future we give edit feature also
-     */
-    @NotSaved(IfDefault.class)
-    public String schedule_id = null;
-
-    /**
      * Assigns its value to password attribute
      */
     public static final String MASKED_PASSWORD = "PASSWORD";
@@ -164,6 +157,35 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
      */
     @NotSaved
     private JSONObject info_json = new JSONObject();
+
+    /**
+     * schedule_id is nothing but name of the domain user at this time we are
+     * not allowing user to change this but in future we give edit feature also
+     */
+    @NotSaved(IfDefault.class)
+    public String schedule_id = null;
+
+    /**
+     * meeting types
+     */
+    @NotSaved(IfDefault.class)
+    public String meeting_types = "In Person, Phone, Skype, Google Hangouts";
+
+    @NotSaved
+    public String businesshours_prefs;
+
+    /**
+     * according to user timings businesshous will be displayed in scheduling
+     * page
+     */
+    @NotSaved(IfDefault.class)
+    public String business_hours = getDefaultBusinessHours();
+
+    @NotSaved(IfDefault.class)
+    public String timezone = null;
+
+    @NotSaved(IfDefault.class)
+    public String meeting_durations = "{\"15mins\":\"say hi\",\"30mins\":\"let's keep it short\",\"60mins\":\"let's chat\"}";
 
     /**
      * Info Keys of the user
@@ -404,11 +426,12 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    // If user is account owner then account owner should be set to true
 	    // when it is being updated
 	    this.is_account_owner = true;
-
+	    this.is_disabled = false;
 	    if (!is_admin)
 		throw new Exception(user.name + " is the owner of '" + user.domain
 			+ "' domain and should be an <b>admin</b>. You can change the Email and Name instead.");
 	}
+	
     }
 
     /**
@@ -492,6 +515,15 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    }
 
 	    sendPasswordChangedNotification(domainUser.encrypted_password);
+	}
+	else if(id != null && !is_account_owner)
+	{
+	    DomainUser user = DomainUserUtil.getDomainUser(id);
+	    
+	    // Checks if super user is disabled, and throws exception if super
+	    // is disabled
+	    checkSuperUserDisabled(user);
+	    checkAdminDisabled();
 	}
 
 	// Check if namespace is null or empty. Then, do not allow to be created
@@ -647,6 +679,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		else
 		    this.schedule_id = domainuser.schedule_id;
 	    }
+
 	}
 	else
 	{
@@ -778,6 +811,17 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    scheduleid = name;
 	    return scheduleid;
 	}
+    }
+
+    /**
+     * 
+     * @return default business hours
+     */
+    public String getDefaultBusinessHours()
+    {
+
+	String str = "[{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":true,\"timeTill\":\"18:00\",\"timeFrom\":\"09:00\"},{\"isActive\":false,\"timeTill\":null,\"timeFrom\":null},{\"isActive\":false,\"timeTill\":null,\"timeFrom\":null}]";
+	return str;
     }
 
     // To String

@@ -24,7 +24,12 @@ $(function() {
 		} else {
 
 			// Save functionality for event
-			save_event('activityForm', 'activityModal', false, this);
+			save_event('activityForm', 'activityModal', false, this,function(data){
+						//	eventCollectionView.collection.comparator ='start';
+									eventCollectionView.collection.add(data.toJSON());
+									eventCollectionView.collection.sort();
+							
+			});
 		}
 	}); // End of Task and Event Validation function
 
@@ -32,9 +37,14 @@ $(function() {
 	/**
 	 * Removes appended contacts from related-to field of task form and
 	 * validation error messages if any.
+	 * when timepicker editing it will be return
 	 */
 	$('#activityModal').on('hidden', function(e) {
 
+		if ($(this).hasClass('in'))
+		{
+			return;
+		}
 		// Remove appended contacts from related-to
 		$("#taskForm").find("li").remove();
 

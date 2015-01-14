@@ -2,10 +2,13 @@ package com.agilecrm.util.email;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonNode;
@@ -13,6 +16,7 @@ import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.MappingJsonFactory;
 import org.json.JSONObject;
 
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.util.FileStreamUtil;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
@@ -96,6 +100,21 @@ public class MustacheUtil
 	}
     }
 
+    public static String convertDate(String format, Long epoch)
+    {
+	String timezone = AccountPrefsUtil.getAccountPrefs().timezone;
+	if (format == null)
+	    format = "EEE, MMM dd, yyyy";
+	if (epoch > 0)
+	{
+	    Date d = new Date(epoch * 1000);
+	    SimpleDateFormat df = new SimpleDateFormat(format);
+	    df.setTimeZone(TimeZone.getTimeZone(timezone));
+	    return df.format(d);
+	}
+	return "";
+    }
+
     /**
      * Converts JSONNode into Map object. If JSONNode is array, it iterates
      * through the array and adds each object to map.
@@ -128,6 +147,22 @@ public class MustacheUtil
 		    {
 			Map.Entry<String, JsonNode> next = i.next();
 			Object o = toObject(next.getValue());
+			if (next.getKey().indexOf("time") > -1 || next.getKey().indexOf("date") > -1)
+			{
+			    try
+			    {
+				if (next.getValue().isNumber())
+				{
+				    Object d = convertDate("dd MMM, HH:mm", next.getValue().asLong());
+				    put(next.getKey() + "_string", d);
+				}
+			    }
+			    catch (Exception e)
+			    {
+				System.out.println("Exception in generating map for mustache - " + e.getMessage());
+			    }
+
+			}
 			put(next.getKey(), o);
 		    }
 		}

@@ -214,7 +214,8 @@ public class JSAPI
     @Path("/task")
     @GET
     @Produces("application/x-javascript")
-    public String createTask(@QueryParam("email") String email, @QueryParam("task") String json, @QueryParam("id") String key)
+    public String createTask(@QueryParam("email") String email, @QueryParam("task") String json,
+	    @QueryParam("id") String key)
     {
 	try
 	{
@@ -267,7 +268,8 @@ public class JSAPI
     @Path("/opportunity")
     @GET
     @Produces("application/x-javascript")
-    public String createOpportunity(@QueryParam("email") String email, @QueryParam("opportunity") String json, @QueryParam("id") String apiKey)
+    public String createOpportunity(@QueryParam("email") String email, @QueryParam("opportunity") String json,
+	    @QueryParam("id") String apiKey)
     {
 	try
 	{
@@ -941,6 +943,56 @@ public class JSAPI
     }
 
     /**
+     * Get all milestones of domain
+     * 
+     * @return String
+     */
+    @Path("milestone/get-pipelines")
+    @GET
+    @Produces("application/x-javascript")
+    public String getPipelines()
+    {
+	try
+	{
+	    List<Milestone> milestones = MilestoneUtil.getMilestonesList();
+	    ObjectMapper mapper = new ObjectMapper();
+	    return mapper.writeValueAsString(milestones);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Get all milestones of domain
+     * 
+     * @return String
+     */
+    @Path("milestone/get-milestones")
+    @GET
+    @Produces("application/x-javascript")
+    public String getMilestonesByPipeline(@QueryParam("pipeline_id") Long pipelineId)
+    {
+	try
+	{
+	    Milestone milestone = null;
+	    if (pipelineId != null && pipelineId > 0)
+		milestone = MilestoneUtil.getMilestone(pipelineId);
+	    else
+		milestone = MilestoneUtil.getMilestones();
+	    ObjectMapper mapper = new ObjectMapper();
+	    return mapper.writeValueAsString(milestone);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
      * Update a existing contact
      * 
      * @return String
@@ -948,7 +1000,8 @@ public class JSAPI
     @Path("contact/update")
     @GET
     @Produces("application / x-javascript")
-    public String updateContact(@QueryParam("email") String email, @QueryParam("data") String json, @QueryParam("id") String apiKey)
+    public String updateContact(@QueryParam("email") String email, @QueryParam("data") String json,
+	    @QueryParam("id") String apiKey)
     {
 	try
 	{
@@ -1089,7 +1142,8 @@ public class JSAPI
     @Path("contacts/remove-property")
     @GET
     @Produces("application / x-javascript")
-    public String removeProperty(@QueryParam("name") String name, @QueryParam("email") String email, @QueryParam("id") String apiKey)
+    public String removeProperty(@QueryParam("name") String name, @QueryParam("email") String email,
+	    @QueryParam("id") String apiKey)
     {
 	try
 	{
@@ -1193,7 +1247,8 @@ public class JSAPI
 	    Workflow workflow = mapper.readValue(json, Workflow.class);
 
 	    CronUtil.removeTask(workflow.id.toString(), contact.id.toString());
-	    CampaignStatusUtil.setStatusOfCampaign(contact.id.toString(), workflow.id.toString(), workflow.name, Status.REMOVED);
+	    CampaignStatusUtil.setStatusOfCampaign(contact.id.toString(), workflow.id.toString(), workflow.name,
+		    Status.REMOVED);
 
 	    return mapper.writeValueAsString(contact);
 	}

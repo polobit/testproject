@@ -1,6 +1,59 @@
+<script id="email-account-types-template" type="text/html">
+	<div class="btn-group right" style='position:relative'>
+	<button class="btn filter-dropdown" id="email-type-select"></i>Agile</button>
+	<button class="btn dropdown-toggle" id="email-type-select-dropdown" data-toggle="dropdown">
+	<span class="caret"></span>
+	</button>
+	<ul id = "mail-account-type-select" class="pull-right dropdown-menu">
+	{{#if agileUserName}}
+	<li>
+	<a href="" class="agile-emails" data-url="" email-server-type={{agileUserName}}></i>Agile</a>
+	</li>
+	{{/if}}
+	{{#if gmailUserName}}
+	<li>
+	<a href="" class="agile-emails" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{gmailUserName}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{gmailUserName}}</a>
+	</li>
+	{{/if}}
+	{{#if imapUserName}}
+	<li>
+	<a href="" class="agile-emails" data-url="core/api/imap/imap-emails?from_email=" email-server-type={{imapUserName}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{imapUserName}}</a>
+	</li>
+	{{/if}}
+	{{#if exchangeUserName}}
+	<li>
+	<a href="" class="agile-emails" data-url="core/api/office/office365-emails?from_email=" email-server-type={{exchangeUserName}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{exchangeUserName}}</a>
+	</li>
+	{{/if}}
+	{{#if sharedGmailUserNames}}
+	{{#each sharedGmailUserNames}}
+	<li>
+	<a href="" class="agile-emails" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{this}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if sharedImapUserNames}}
+	{{#each sharedImapUserNames}}
+	<li>
+	<a href="" class="agile-emails" data-url="core/api/imap/imap-emails?from_email=" email-server-type={{this}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if sharedExchangeUserNames}}
+	{{#each sharedExchangeUserNames}}
+	<li>
+	<a href="" class="agile-emails" data-url="core/api/office/office365-emails?from_email=" email-server-type={{this}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	</ul>
+	</div>
+	</div>
+	<div class="clearfix"></div>
+</script>
 <script id="email-social-collection-template" type="text/html">
 {{#unless this.length}}
-    <div class="slate">
+    <div class="slate" style="margin-top:10px">
             <div class="slate-content">
                 <div class="box-left">
                     <img alt="Clipboard" src="/img/clipboard.png" />
@@ -8,9 +61,11 @@
                 <div class="box-right">
                     <h3>You have no emails for {{contactShortName}}.</h3>
                     <div class="text">
-                        Emails communicated with {{contactShortName}} through agilecrm or given imap email are shown here.
+                        You have no emails for {{contactShortName}} in {{read_global_var}} account.
                     </div>
+                    {{#if_email_type_is_agile "agilecrm"}}
                     <a href="#send-email/{{getCurrentContactProperty "email"}}" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i> Send Email</a>
+                    {{/if_email_type_is_agile}}
                 </div>
             </div>
         </div>
@@ -26,6 +81,8 @@
             </div>
         </ul>
 	<ul id="email-social-model-list" class="ativity-block-ul"></ul>
+	<table style="margin-top:18px">
+	</table>
 {{/if}}
 </script>
 
@@ -72,7 +129,7 @@
 					</li>
                     {{#if cc}}
                     <li>
-                    <div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
+                    <div class="caption cc-emails" data-cc="{{cc}}" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
                     	<strong>Cc:</strong> {{cc}}
             		</div>
           			</li>
@@ -80,7 +137,7 @@
 
                     {{#if bcc}}
                     <li>
-            		<div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
+            		<div class="caption bcc-emails" data-bcc="{{bcc}}" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
               			<strong>Bcc:</strong> {{bcc}}
             		</div>
           			</li>

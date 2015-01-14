@@ -422,7 +422,7 @@ function create_tour_steps(el)
 	 * Calendar
 	 */
 	Agile_Tour["calendar"] = [
-			{ "element" : "#calendar", "title" : "Calendar Events", "content" : "Events are time based such as meetings.<br/> They show up in calendar.<br/>",
+			{ "element" : "#calendar_event", "title" : "Calendar Events", "content" : "Events are time based such as meetings.<br/> They show up in calendar.<br/>",
 				"placement" : "left",
 				// "el": el,
 				"backdrop" : true, },
@@ -718,6 +718,7 @@ function subscribeToPubNub(domain)
 		pubnub.ready();
 		pubnub.subscribe({ channel : domain, callback : function(message)
 		{
+			console.log(message);
 			if(message.type  == "LOGIN_INSTANCE")
 			{
 				check_login_instance(message);
@@ -729,6 +730,16 @@ function subscribeToPubNub(domain)
 			{
 				bulkActivitiesNoty('information', message);
 				return;
+			}
+			
+			if (message.type == "EVENT_REMINDER")
+			{
+				if(CURRENT_DOMAIN_USER['email']==message.useremail){
+				var html = getTemplate("event-notification", message);
+				showNoty('information', html, "bottomRight", "EVENT_REMINDER",undefined,3000000);
+				return;
+				}
+			
 			}
 			
 			
@@ -1040,11 +1051,17 @@ function showSwitchChanges(el)
  * @param notification_type -
  *            notification type - TAG_CREATED, TAG_DELETED etc.
  */
-function showNoty(type, message, position, notification_type, onCloseCallback)
+function showNoty(type, message, position, notification_type, onCloseCallback,timeout)
 {
+	if(!timeout){
+		timeout=30000;
+	}
 	// Don't show notifications when disabled by user. Neglect campaign ones
-	if (notification_type != "CAMPAIGN_NOTIFY" && !notification_prefs.control_notifications)
+	if(notification_type != "EVENT_REMINDER" ){
+	
+	if (notification_type != "CAMPAIGN_NOTIFY"&& !notification_prefs.control_notifications)
 		return;
+	}
 
 	// Check for html5 notification permission.
 	if (notify && notify.isSupported && notify.permissionLevel() == notify.PERMISSION_GRANTED)
@@ -1068,6 +1085,14 @@ function showNoty(type, message, position, notification_type, onCloseCallback)
 			return;
 		}
 		
+		if(notification_type=="EVENT_REMINDER"){
+			
+			show_desktop_notification(getImageUrl(message,notification_type), getNotificationType(notification_type), getTextMessage(message), getId(message), getId(message).split(
+			'/')[1] + '-' + notification_type,3000000);
+			return;
+		}
+		
+		
 		show_desktop_notification(getImageUrl(message,notification_type), getNotificationType(notification_type), getTextMessage(message), getId(message), getId(message).split(
 				'/')[1] + '-' + notification_type);
 		return;
@@ -1078,7 +1103,7 @@ function showNoty(type, message, position, notification_type, onCloseCallback)
 			LIB_PATH + 'lib/noty/themes/default.js', function()
 			{
 
-			var n = noty({ text : message, layout : position, type : type, timeout : 30000, 
+			var n = noty({ text : message, layout : position, type : type, timeout : timeout, 
 			
 				closeCallback : 
 					(onCloseCallback && typeof onCloseCallback == 'function') ? onCloseCallback : undefined,
@@ -1124,6 +1149,7 @@ function showNoty(type, message, position, notification_type, onCloseCallback)
 					if (n.options.type == "information")
 					{
 						var link = $(this).find("a").attr("href");
+						if(link)
 						Backbone.history.navigate(link, { trigger : true });
 					}
 
@@ -1147,6 +1173,12 @@ function getTextMessage(message)
 	{
 		name = $(message).find('#notification-contact-id').text();
 		return name + " " + type;
+	}
+	
+	if ($(message).find('#noty_text').text() != "")
+	{
+		name = $(message).find('#noty_text').text();
+		return name;
 	}
 
 	name = $(message).find('#notification-deal-id').text();
@@ -1177,6 +1209,10 @@ function getNotificationType(notification_type)
  */
 function getId(message)
 {
+	if(($(message).find('#noty_text').text() != "")){
+		return $(message).find('#noty_text').text();
+	}
+	
 	if ($(message).find('#notification-contact-id').text() != "")
 	{
 		return $(message).find('#notification-contact-id').attr('href');
@@ -1195,6 +1231,11 @@ function getId(message)
  */
 function getImageUrl(message, notification_type)
 {
+	if(notification_type == "EVENT_REMINDER"){
+		
+		return '/img/eventreminder.png';
+	}
+	
 	if ($(message).find('#notification-contact-id').text() != "")
 		{
 		
@@ -1229,8 +1270,7 @@ function notification_play_button()
 		play_sound(sound);
 	});
 
-}
-$(function() {
+}$(function() {
 	
 	// Request for html5 notification permission.
 	request_notification_permission();
@@ -1253,8 +1293,11 @@ $(function() {
  * @param {String}
  *            tag - to set tag property of Notification. Here tag is contact-id + notification-type
  */
-function show_desktop_notification(imageURL, title, message, link, tag) {
+function show_desktop_notification(imageURL, title, message, link, tag,timeout) {
 
+	if(!timeout){
+		timeout=30000;
+	}
 	head.js(LIB_PATH +'lib/desktop-notify-min.js',function(){
 		
 		var notification = notify.createNotification(title, {
@@ -1276,7 +1319,7 @@ function show_desktop_notification(imageURL, title, message, link, tag) {
 		
 		setTimeout(function() {
 			notification.close();
-		}, '30000');
+		}, timeout);
 		
 		// Show when tab is inactive
 		if (!window.closed)
@@ -1527,30 +1570,39 @@ $(function(){
 								var token = $('#freshbooks_apiKey').val();
 								if (isBlank(url))
 								{
-												alert("Please Enter Freshbooks Domain Name");
+												// alert("Please Enter Freshbooks Domain Name");
+												$("#domainerror").removeClass('hide');
+												$("#freshbooks_url").focus();
+												$("#freshbooks_url").keypress(function(){
+																$("#domainerror").addClass('hide');
+												});
 												return false;
 								}
 								else if (new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?").test(url))
 								{
 												alert("Please Enter Domain Name only");
+												$("#domainerror").removeClass('hide');
 												$("#freshbooks_url").focus();
+												$("#freshbooks_url").keypress(function(){
+																$("#domainerror").addClass('hide');
+												});
 												return false;
 								}
 
 								if (isBlank(token))
 								{
-												alert("Please Enter Freshbooks API Token");
+												$("#apierror").removeClass('hide');
 												$('#freshbooks_apiKey').focus();
+												$("#freshbooks_apiKey").keypress(function(){
+																$("#apierror").addClass('hide');
+												});
 												return false;
 								}else if(token.length !=32){
-												alert("Invalid Freshbooks API Token");
+												$("#apierror").removeClass('hide');
 												$('#freshbooks_apiKey').focus();
-												return false;
-								}
-								else if (token.length != 32)
-								{
-												alert("Invalid Freshbooks API Token");
-												$('#freshbooks_apiKey').focus();
+												$("#freshbooks_apiKey").keypress(function(){
+																$("#apierror").addClass('hide');
+												});
 												return false;
 								}
 								$.ajax({ url : 'core/api/freshbooks/save/' + token + '/' + url + '', async : false, success : function(data)
@@ -2396,367 +2448,322 @@ function constructCustomfieldOptions(type, callback)
 
 var dup_contacts1_array = [];
 
-$(function() {
-	$('#duplicate-contacts-cancel').die().live('click', function(event) {
-		event.preventDefault();
-		dup_contacts1_array.length = 0;
-		var master_record = App_Contacts.contactDetailView.model.toJSON();
-		Backbone.history.navigate("contact/"+master_record.id, {
-			trigger : true
-		});
-	});
-
-	$('#contact-merge-cancel').die().live('click', function(event) {
-		event.preventDefault();
-		dup_contacts1_array.length = 0;
-		var master_record = App_Contacts.contactDetailView.model.toJSON();
-		Backbone.history.navigate("duplicate-contacts/"+master_record.id, {
-			trigger : true
-		});
-//		Backbone.history.navigate("contacts", {
-//			trigger : true
-//		});
-	});
-
-	/**
-	 * Validates the checkbox status of each row in duplicate contacts table and
-	 * sends these contacts to merge contacts page
-	 * 
-	 */
-	$('#duplicate-contacts-checked-grid')
-			.die()
-			.live(
-					'click',
-					function(event) {
-						event.preventDefault();
-						var index_array = [];
-						var data_array = [];
-						var checked = false;
-						var table = $('body').find('.showCheckboxes');
-						$(table).find('.tbody_check').each(
-								function(index, element) {
-									// If element is checked store it's id in an
-									// array
-									if ($(element).is(':checked')) {
-										dup_contacts1_array.push($(element)
-												.closest('tr').find('td.data')
-												.attr('data'));
-										checked = true;
-									}
-								});
-						if (checked) {
-							if (dup_contacts1_array.length > 2) {
-								alert('You can merge maximum of 2 records at a time with master record.');
+$(function()
+{
+				$('#duplicate-contacts-cancel').die().live('click', function(event)
+				{
+								event.preventDefault();
 								dup_contacts1_array.length = 0;
-								return;
-							}
-							Backbone.history.navigate("merge-contacts", {
-								trigger : true
-							});
-						} else
-							$('body')
-									.find(".select-none")
-									.html(
-											'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to merge. Please select at least one record to continue.</div>')
-									.show().delay(3000).hide(1);
-					});
+								var master_record = App_Contacts.contactDetailView.model.toJSON();
+								Backbone.history.navigate("contact/" + master_record.id, { trigger : true });
+				});
 
-	/**
-	 * Merges the selected duplicate contacts properties with the Master contact
-	 * object and deletes the duplicate contact objects from the datastore
-	 * 
-	 */
-	$('#merge-contacts-model')
-			.die()
-			.live(
-					'click',
-					function(event) {
-						event.preventDefault();
-						if (dup_contacts1_array.length > 1) {
-							if (!confirm(" Delete "
-									+ dup_contacts1_array.length
-									+ " duplicate contacts and merge data to master record?"))
-								return;
-						} else if (!confirm(" Delete 1 duplicate contact and merge data to master record?"))
-							return;
-						$(this).attr('disabled', 'disabled');
-						$('#contact-merge-cancel').attr('disabled', 'disabled');
-						$('#contact-merge-cancel').after('<img class="contact-merge-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
-						var checked = false;
-						var selected_fields = [];
-						var table = $('body').find('#merge-contacts-table');
-						var tbody = $(table).find('tbody');
-						var phones = [];
-						var emails = [];   
-						var websites = [];
-						var tags = [];
-						var custom_fields = [];
-						var remove_fields = [];
-						var master_record = App_Contacts.contactDetailView.model;
-						var master_record_dup = JSON.parse(JSON
-								.stringify(master_record.toJSON()));
-						var master_id = master_record.id;
-						console.log(master_record.toJSON());
+				$('#contact-merge-cancel').die().live('click', function(event)
+				{
+								event.preventDefault();
+								dup_contacts1_array.length = 0;
+								var master_record = App_Contacts.contactDetailView.model.toJSON();
+								Backbone.history.navigate("duplicate-contacts/" + master_record.id, { trigger : true });
+								// Backbone.history.navigate("contacts", {
+								// trigger : true
+								// });
+				});
 
-						tbody
-								.children()
-								.each(
-										function(index, element) {
-											$(element)
-													.find(
-															"[type=radio]:checked")
-													.each(
-															function(index,
-																	element) {
-																if ($(element)
-																		.attr(
-																				"oid") != master_id) {
-																	var fieldName = $(
-																			element)
-																			.attr(
-																					"field");
-																	var fieldValue = $(
-																			element)
-																			.attr(
-																					"data");
-																	var fieldType = $(
-																			element)
-																			.attr(
-																					"fieldtype");
-																	if (typeof fieldType !== typeof undefined
-																			&& fieldType !== false) {
-																		if (fieldValue) {
-																			custom_field = {};
-																			custom_field['name'] = fieldName;
-																			custom_field['value'] = fieldValue;
-																			custom_field['type'] = 'CUSTOM';
-																			custom_fields
-																					.push(custom_field);
-																		} else {
-																			remove_field = {};
-																			remove_field['name'] = fieldName;
-																			remove_field['type'] = 'CUSTOM';
-																			remove_fields
-																					.push(remove_field);
-																		}
-																	} else {
-																		if (fieldValue) {
-																			selected_field = {};
-																			selected_field['name'] = fieldName;
-																			selected_field['value'] = fieldValue;
-																			selected_fields
-																					.push(selected_field);
-																			if (fieldName
-																					.toLowerCase() == 'company') {
-																				var company_id = $(
-																						element)
-																						.attr(
-																								"company_id");
-																				master_record
-																						.set({
-																							"contact_company_id" : company_id
-																						});
-																			}
-																		} else {
-																			remove_field = {};
-																			remove_field['name'] = fieldName;
-																			remove_field['type'] = 'SYSTEM';
-																			remove_fields
-																					.push(remove_field);
-																		}
-																	}
+				/**
+				 * Validates the checkbox status of each row in duplicate contacts table and
+				 * sends these contacts to merge contacts page
+				 * 
+				 */
+				$('#duplicate-contacts-checked-grid')
+												.die()
+												.live(
+																				'click',
+																				function(event)
+																				{
+																								event.preventDefault();
+																								var index_array = [];
+																								var data_array = [];
+																								var checked = false;
+																								var table = $('body').find('.showCheckboxes');
+																								$(table).find('.tbody_check').each(function(index, element)
+																								{
+																												// If element is checked store it's id in an
+																												// array
+																												if ($(element).is(':checked'))
+																												{
+																																dup_contacts1_array.push($(element).closest('tr').find('td.data').attr('data'));
+																																checked = true;
+																												}
+																								});
+																								if (checked)
+																								{
+																												if (dup_contacts1_array.length > 2)
+																												{
+																																alert('You can merge maximum of 2 records at a time with master record.');
+																																dup_contacts1_array.length = 0;
+																																return;
+																												}
+																												Backbone.history.navigate("merge-contacts", { trigger : true });
+																								}
+																								else
+																												$('body')
+																																				.find(".select-none")
+																																				.html(
+																																												'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to merge. Please select at least one record to continue.</div>')
+																																				.show().delay(3000).hide(1);
+																				});
+
+				/**
+				 * Merges the selected duplicate contacts properties with the Master contact
+				 * object and deletes the duplicate contact objects from the datastore
+				 * 
+				 */
+				$('#merge-contacts-model').die().live('click', function(event)
+				{
+								event.preventDefault();
+								if (dup_contacts1_array.length > 1)
+								{
+												if (!confirm(" Delete " + dup_contacts1_array.length + " duplicate contacts and merge data to master record?"))
+																return;
+								}
+								else if (!confirm(" Delete 1 duplicate contact and merge data to master record?"))
+												return;
+								$(this).attr('disabled', 'disabled');
+								$('#contact-merge-cancel').attr('disabled', 'disabled');
+								$('#contact-merge-cancel').after('<img class="contact-merge-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+								var checked = false;
+								var selected_fields = [];
+								var table = $('body').find('#merge-contacts-table');
+								var tbody = $(table).find('tbody');
+								var phones = [];
+								var emails = [];
+								var websites = [];
+								var tags = [];
+								var custom_fields = [];
+								var remove_fields = [];
+								var master_record = App_Contacts.contactDetailView.model;
+								var master_record_dup = JSON.parse(JSON.stringify(master_record.toJSON()));
+								var master_id = master_record.id;
+								console.log(master_record.toJSON());
+
+								tbody.children().each(function(index, element)
+								{
+												$(element).find("[type=radio]:checked").each(function(index, element)
+												{
+																if ($(element).attr("oid") != master_id)
+																{
+																				var fieldName = $(element).attr("field");
+																				var fieldValue = $(element).attr("data");
+																				var fieldType = $(element).attr("fieldtype");
+																				if (typeof fieldType !== typeof undefined && fieldType !== false)
+																				{
+																								if (fieldValue)
+																								{
+																												custom_field = {};
+																												custom_field['name'] = fieldName;
+																												custom_field['value'] = fieldValue;
+																												custom_field['type'] = 'CUSTOM';
+																												custom_fields.push(custom_field);
+																								}
+																								else
+																								{
+																												remove_field = {};
+																												remove_field['name'] = fieldName;
+																												remove_field['type'] = 'CUSTOM';
+																												remove_fields.push(remove_field);
+																								}
+																				}
+																				else
+																				{
+																								if (fieldValue)
+																								{
+																												selected_field = {};
+																												selected_field['name'] = fieldName;
+																												selected_field['value'] = fieldValue;
+																												selected_fields.push(selected_field);
+																												if (fieldName.toLowerCase() == 'company')
+																												{
+																																var company_id = $(element).attr("company_id");
+																																master_record.set({ "contact_company_id" : company_id });
+																												}
+																								}
+																								else
+																								{
+																												remove_field = {};
+																												remove_field['name'] = fieldName;
+																												remove_field['type'] = 'SYSTEM';
+																												remove_fields.push(remove_field);
+																								}
+																				}
 																}
-															});
-											$(element)
-													.find(
-															"[type=checkbox]:checked")
-													.each(
-															function(index,
-																	element) {
-																var fieldName = $(
-																		element)
-																		.attr(
-																				"field");
-																var fieldValue = $(
-																		element)
-																		.attr(
-																				"data");
-																var fieldType = $(
-																		element)
-																		.attr(
-																				"fieldtype");
-																if (fieldName === "email") {
-																	var subtype = $(
-																			element)
-																			.attr(
-																					"subtype");
-																	email = {};
-																	email['value'] = fieldValue;
-																	if (subtype)
-																		email['subtype'] = subtype;
-																	emails
-																			.push(email);
-																} else if (fieldName === "website") {
-																	var subtype = $(
-																			element)
-																			.attr(
-																					"subtype");
-																	website = {};
-																	website['value'] = fieldValue;
-																	if (subtype)
-																		website['subtype'] = subtype;
-																	websites
-																			.push(website);
-																} else if (fieldName === "phone") {
-																	var subtype = $(
-																			element)
-																			.attr(
-																					"subtype");
-																	phone = {};
-																	phone['value'] = fieldValue;
-																	if (subtype)
-																		phone['subtype'] = subtype;
-																	phones
-																			.push(phone);
-																} else if (fieldName === "tags") {
-																	tags
-																			.push(fieldValue);
+												});
+												$(element).find("[type=checkbox]:checked").each(function(index, element)
+												{
+																var fieldName = $(element).attr("field");
+																var fieldValue = $(element).attr("data");
+																var fieldType = $(element).attr("fieldtype");
+																if (fieldName === "email")
+																{
+																				var subtype = $(element).attr("subtype");
+																				email = {};
+																				email['value'] = fieldValue;
+																				if (subtype)
+																								email['subtype'] = subtype;
+																				emails.push(email);
 																}
-															});
-										});
-						var properties = master_record_dup.properties;
-						master_record.set({
-							"tags" : tags
-						});
-						merge_duplicate_contacts(master_record, properties,
-								selected_fields, custom_fields, remove_fields,
-								websites, emails, phones);
-					});
+																else if (fieldName === "website")
+																{
+																				var subtype = $(element).attr("subtype");
+																				website = {};
+																				website['value'] = fieldValue;
+																				if (subtype)
+																								website['subtype'] = subtype;
+																				websites.push(website);
+																}
+																else if (fieldName === "phone")
+																{
+																				var subtype = $(element).attr("subtype");
+																				phone = {};
+																				phone['value'] = fieldValue;
+																				if (subtype)
+																								phone['subtype'] = subtype;
+																				phones.push(phone);
+																}
+																else if (fieldName === "tags")
+																{
+																				tags.push(fieldValue);
+																}
+												});
+								});
+								var properties = master_record_dup.properties;
+								master_record.set({ "tags" : tags });
+								merge_duplicate_contacts(master_record, properties, selected_fields, custom_fields, remove_fields, websites, emails, phones);
+				});
 });
 
-function merge_duplicate_contacts(master_record, properties, selected_fields,
-		custom_fields, remove_fields, websites, emails, phones) {
-	for (var i = properties.length - 1; i >= 0; i--) {
-		if (properties[i].name.toLowerCase() === 'email'
-				|| properties[i].name.toLowerCase() === 'website'
-				|| properties[i].name.toLowerCase() === 'phone') {
-			properties.splice(i, 1);
-		}
-	}
-	for (var i = 0; i < remove_fields.length; i++) {
-		for (var j = 0; j < properties.length; j++) {
-			var property = properties[j];
-			if (property.name.toLowerCase() === remove_fields[i].name
-					.toLowerCase()
-					&& property.type.toLowerCase() === remove_fields[i].type
-							.toLowerCase()) {
-				properties.splice(j, 1);
-				break;
-			}
-		}
-	}
-	for (var j = 0; j < selected_fields.length; j++) {
-		var element = selected_fields[j];
-		for (var k = 0; k < properties.length; k++) {
-			if (properties[k].name.toLowerCase() === element['name']
-					.toLowerCase()) {
-				properties[k].value = element['value'];
-				break;
-			} else if (k == properties.length - 1) {
-				var object = {};
-				object['name'] = element['name'];
-				object['value'] = element['value'];
-				object['type'] = 'SYSTEM';
-				properties.push(object);
-				break;
-			}
-		}
-	}
-	if (custom_fields.length > 0) {
-		for (var i = 0; i < custom_fields.length; i++) {
-			var element = custom_fields[i];
-			for (var j = 0; j < properties.length; j++) {
-				if (properties[j].name.toLowerCase() === element['name']
-						.toLowerCase()
-						&& properties[j].type === 'CUSTOM') {
-					properties[j].value = element['value'];
-					break;
-				} else if (j == properties.length - 1) {
-					if (custom_fields[i].value) {
-						var object = {};
-						object['name'] = custom_fields[i].name;
-						object['value'] = custom_fields[i].value;
-						object['type'] = 'CUSTOM';
-						properties.push(object);
-						break;
-					}
+function merge_duplicate_contacts(master_record, properties, selected_fields, custom_fields, remove_fields, websites, emails, phones)
+{
+				for (var i = properties.length - 1; i >= 0; i--)
+				{
+								if (properties[i].name.toLowerCase() === 'email' || properties[i].name.toLowerCase() === 'website' || properties[i].name.toLowerCase() === 'phone')
+								{
+												properties.splice(i, 1);
+								}
 				}
-			}
-		}
-	}
-	if (emails.length > 0) {
-		for (var i = 0; i < emails.length; i++) {
-			var object = {};
-			object['name'] = 'email';
-			object['value'] = emails[i].value;
-			object['type'] = 'SYSTEM';
-			if (emails[i].subtype)
-				object['subtype'] = emails[i].subtype;
-			properties.push(object);
-		}
-	}
-	if (phones.length > 0) {
-		for (var i = 0; i < phones.length; i++) {
-			var object = {};
-			object['name'] = 'phone';
-			object['value'] = phones[i].value;
-			object['type'] = 'SYSTEM';
-			if (phones[i].subtype)
-				object['subtype'] = phones[i].subtype;
-			properties.push(object);
-		}
-	}
-	if (websites.length > 0) {
-		for (var i = 0; i < websites.length; i++) {
-			var object = {};
-			object['name'] = 'website';
-			object['value'] = websites[i].value;
-			object['type'] = 'SYSTEM';
-			if (websites[i].subtype)
-				object['subtype'] = websites[i].subtype;
-			properties.push(object);
-		}
-	}
-	master_record.set({
-		"properties" : properties
-	});
-	delete_duplicate_contacts('/core/api/bulk/update?action_type=DELETE',
-			dup_contacts1_array, master_record);
+				for (var i = 0; i < remove_fields.length; i++)
+				{
+								for (var j = 0; j < properties.length; j++)
+								{
+												var property = properties[j];
+												if (property.name.toLowerCase() === remove_fields[i].name.toLowerCase() && property.type.toLowerCase() === remove_fields[i].type.toLowerCase())
+												{
+																properties.splice(j, 1);
+																break;
+												}
+								}
+				}
+				for (var j = 0; j < selected_fields.length; j++)
+				{
+								var element = selected_fields[j];
+								for (var k = 0; k < properties.length; k++)
+								{
+												if (properties[k].name.toLowerCase() === element['name'].toLowerCase())
+												{
+																properties[k].value = element['value'];
+																break;
+												}
+												else if (k == properties.length - 1)
+												{
+																var object = {};
+																object['name'] = element['name'];
+																object['value'] = element['value'];
+																object['type'] = 'SYSTEM';
+																properties.push(object);
+																break;
+												}
+								}
+				}
+				if (custom_fields.length > 0)
+				{
+								for (var i = 0; i < custom_fields.length; i++)
+								{
+												var element = custom_fields[i];
+												for (var j = 0; j < properties.length; j++)
+												{
+																if (properties[j].name.toLowerCase() === element['name'].toLowerCase() && properties[j].type === 'CUSTOM')
+																{
+																				properties[j].value = element['value'];
+																				break;
+																}
+																else if (j == properties.length - 1)
+																{
+																				if (custom_fields[i].value)
+																				{
+																								var object = {};
+																								object['name'] = custom_fields[i].name;
+																								object['value'] = custom_fields[i].value;
+																								object['type'] = 'CUSTOM';
+																								properties.push(object);
+																								break;
+																				}
+																}
+												}
+								}
+				}
+				if (emails.length > 0)
+				{
+								for (var i = 0; i < emails.length; i++)
+								{
+												var object = {};
+												object['name'] = 'email';
+												object['value'] = emails[i].value;
+												object['type'] = 'SYSTEM';
+												if (emails[i].subtype)
+																object['subtype'] = emails[i].subtype;
+												properties.push(object);
+								}
+				}
+				if (phones.length > 0)
+				{
+								for (var i = 0; i < phones.length; i++)
+								{
+												var object = {};
+												object['name'] = 'phone';
+												object['value'] = phones[i].value;
+												object['type'] = 'SYSTEM';
+												if (phones[i].subtype)
+																object['subtype'] = phones[i].subtype;
+												properties.push(object);
+								}
+				}
+				if (websites.length > 0)
+				{
+								for (var i = 0; i < websites.length; i++)
+								{
+												var object = {};
+												object['name'] = 'website';
+												object['value'] = websites[i].value;
+												object['type'] = 'SYSTEM';
+												if (websites[i].subtype)
+																object['subtype'] = websites[i].subtype;
+												properties.push(object);
+								}
+				}
+				master_record.set({ "properties" : properties });
+				merge_related_entity_in_master_record(master_record,dup_contacts1_array);
 }
-function delete_duplicate_contacts(url, id_array, master_record) {
-	for (var i = 0; i < id_array.length; i++) {
-		$.ajax({
-			url : '/core/api/contacts/' + id_array[i],
-			type : 'DELETE',
-			async : false,
-			success : function() {
-				if (i === id_array.length - 1) {
-					master_record.save({}, {
-						url : '/core/api/contacts/',
-						success : function() {
-							$(".contact-merge-loading").remove();	
-							CONTACTS_HARD_RELOAD = true;
-							var id = master_record.toJSON().id;
-							Backbone.history.navigate("contact/" + id, {
-								trigger : true
-							});
-						}
-					});
-				}
-			}
-		});
-	}
-}/**
+
+
+function merge_related_entity_in_master_record(master_record,duplicate_contacts){
+				master_record.save({}, { url : '/core/api/contacts/merge/'+duplicate_contacts.toString(), success : function()
+								{
+												$(".contact-merge-loading").remove();
+												CONTACTS_HARD_RELOAD = true;
+												var id = master_record.toJSON().id;
+												Backbone.history.navigate("contact/" + id, { trigger : true });
+								} });
+}
+/**
  * contactTableView is customized function (customization of appendedItem
 
  * function in Base_Collection_View), when custom view is selected, this
@@ -2774,17 +2781,18 @@ function delete_duplicate_contacts(url, id_array, master_record) {
  * @param base_model
  */
 var CURRENT_VIEW_OBJECT;
-function contactTableView(base_model) {
 
+function contactTableView(base_model,customDatefields,view) {
+	
 	// Creates list view for
 	var itemView = new Base_List_View({
 		model : base_model,
 		template : 'contacts-custom-view-model',
-		tagName : this.options.individual_tag_name
+		tagName : view.options.individual_tag_name
 	});
 
 	// Reads the modelData (customView object)
-	var modelData = this.options.modelData;
+	var modelData = view.options.modelData;
 
 	// Reads fields_set from modelData
 	var fields = modelData['fields_set'];
@@ -2792,39 +2800,54 @@ function contactTableView(base_model) {
 	// Converts base_model (contact) in to JSON
 	var contact = base_model.toJSON();
 	var el = itemView.el;
-	// Clears the template, because all the fields are appended, has to be reset
-	// for each contact
-	// $('#contacts-custom-view-model-template').empty();
 	
-	// Iterates through, each field name and appends the field according to
-	// order of the fields
-	$.each(fields, function(index, field_name) {
-		if(field_name.indexOf("CUSTOM_") != -1)
-		{
-			field_name = field_name.split("CUSTOM_")[1]; 			
-			var property = getProperty(contact.properties, field_name);
-			if(!property)
-			{
-				$(el).append(getTemplate('contacts-custom-view-custom', {}));
-				return;
-			}
-			
-			$(el).append(getTemplate('contacts-custom-view-custom', property));
-			return;
-		}
-		
-/*		$('#contacts-custom-view-model-template').append(
-				getTemplate('contacts-custom-view-' + field_name, contact));*/
-		$(el).append(getTemplate('contacts-custom-view-' + field_name, contact));
-	});
-
+				// Clears the template, because all the fields are appended, has to be reset
+				// for each contact
+				// $('#contacts-custom-view-model-template').empty();
+				
+				// Iterates through, each field name and appends the field according to
+				// order of the fields
+				$.each(fields, function(index, field_name) {
+					if(field_name.indexOf("CUSTOM_") != -1)
+					{
+						field_name = field_name.split("CUSTOM_")[1]; 			
+						var property = getProperty(contact.properties, field_name);
+						if(!property)
+						{
+							$(el).append(getTemplate('contacts-custom-view-custom', {}));
+							return;
+						}
+						if(isDateCustomField(customDatefields,property)){
+							console.log('got true');
+							$(el).append(getTemplate('contacts-custom-view-custom-date', property));
+						}
+						else
+							$(el).append(getTemplate('contacts-custom-view-custom', property));
+						return;
+					}
+					
+			/*		$('#contacts-custom-view-model-template').append(
+							getTemplate('contacts-custom-view-' + field_name, contact));*/
+					$(el).append(getTemplate('contacts-custom-view-' + field_name, contact));
+				});
+				
 	// Appends model to model-list template in collection template
-	$(('#contacts-custom-view-model-list'), this.el).append(el);
+	$(('#contacts-custom-view-model-list'), view.el).append(el);
 
 	// Sets data to tr
-	$(('#contacts-custom-view-model-list'), this.el).find('tr:last').data(
+	$(('#contacts-custom-view-model-list'), view.el).find('tr:last').data(
 			base_model);
 
+}
+
+// Check whether the given fields list has the property name.
+function isDateCustomField(customDatefields,property){
+	var count = 0;
+	$.each(customDatefields,function(index,field){
+		if(field.field_label==property.name)
+			count++;
+	});
+	return count>0;
 }
 
 /**
@@ -2843,35 +2866,86 @@ function contactTableView(base_model) {
 function setupViews(cel, button_name) {
 
 	// Creates a view for custom views
-	
-	var customView = new Base_Collection_View({
-		url : 'core/api/contact-view',
-		restKey : "contactView",
-		templateKey : "contact-view",
-		individual_tag_name : 'li',
-		id : 'view-list',
-		postRenderCallback : function(el) {
-
-			// If button_name is defined, then view is selected then the name of
-			// the view is show in the custom view button.
-			if (button_name)
-				$(el).find('.custom_view').append(button_name);
-		}
-	});
-
-	// Fetches the list of custom fields, and shows is the the contact page
-	customView.collection.fetch({
-		success : function() {
-			$("#view-list", cel).html(customView.el);
-			
-			if(readCookie('company_filter'))
-			{
-				$('#contact-view-model-list>li').css('display','none');
-				$('#contact-view-model-list>li:first').css('display','list-item');
+	head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
+	{
+		var customView = new Base_Collection_View({
+			url : 'core/api/contact-view',
+			restKey : "contactView",
+			templateKey : "contact-view",
+			individual_tag_name : 'li',
+			id : 'view-list',
+			sort_collection : false,
+			postRenderCallback : function(el) {
+				$(el).find('.dropdown-menu').find(".dropdown-submenu").on("click",function(e){
+				    e.stopImmediatePropagation();
+				});
+				// If button_name is defined, then view is selected then the name of
+				// the view is show in the custom view button.
+				if (button_name)
+					$(el).find('.custom_view').append(button_name);
+				//updates the selected sort item to bold
+				updateSelectedSortKey(el);
+				addClickEventsForSorting(el);
 			}
-		}
-	})
+		});
+		// Fetches the list of custom fields, and shows is the the contact page
+		customView.collection.fetch({
+			success : function() {
+				$("#view-list", cel).html(customView.el);
+				
+				if(readCookie('company_filter') || readCookie('contact_filter_type') == 'COMPANY')
+				{
+					$('#contact-view-model-list>li').css('display','none');
+					$('#contact-view-model-list>li:first').css('display','list-item');
+				}
+			}
+		})
+	});
 }
+
+function updateSelectedSortKey(el) {
+	var sort_key = readCookie("sort_by_name");
+	if(sort_key && sort_key != null) {
+		var idSuffix = '-asc';
+		if(sort_key.indexOf('-') == 0) {
+			sort_key = sort_key.substring(1);
+			idSuffix = '-desc'
+		}
+		var elementId = 'sort-by-'+sort_key+idSuffix;
+		$(el).find('#'+elementId).addClass('bold-text');
+	}
+}
+
+	function addClickEventsForSorting(el) {
+		// Fetch sort result without changing route on click
+		$(el).find('.sort').on("click", function(e)
+		{
+
+			e.preventDefault();
+			eraseCookie('sort_by_name');
+
+			// Gets name of the attribut to sort, which is set as data
+			// attribute in the link
+			sort_by = $(this).attr('data');
+			
+			// Saves Sort By in cookie
+			createCookie('sort_by_name', sort_by);
+
+			CONTACTS_HARD_RELOAD=true;
+			// If filter is not set then show view on the default contacts
+			// list
+			if(!App_Contacts.tag_id)
+			{
+				App_Contacts.contacts();
+				return;
+			}
+			
+			// If tag filter is applied send tags fetch url and tag_id, which is tobe shown on contacts table.
+			App_Contacts.contacts(App_Contacts.tag_id);
+			return;
+		});
+
+	}
 
 /**
  * Init function to define actions on events on the custom view list
@@ -2985,6 +3059,43 @@ $(function() {
 
 	});
 });
+function displayTimeZone(results)
+{
+	console.log("In displayTimeZone");
+		
+	var latitude;
+	var longitude;
+	var i = 0;
+	$.each(results[0].geometry.location, function(idx, obj) {
+		console.log(obj);
+		if(i==0)
+		  latitude = obj;
+		else if(i==1) 
+		  longitude = obj;
+		i++;
+	});
+
+	if(!latitude || !longitude)
+		return;
+	
+	$.ajax({ 
+		url : "/core/api/contacts/gettz/" + latitude + "/" + longitude, 
+		type : 'GET', 
+		dataType : 'text', 
+		success : function(data)
+	   {
+		if (data == null || data == "")
+			return;
+
+		$(".contacts-time").html("Local time: "+data);
+		$("#contacts-local-time").show();
+
+	   }, error : function(jqXHR, textStatus, errorThrown)
+	   {
+		console.log("jqXHR: " + jqXHR.status + "\ntextStatus: " + textStatus + "\nerrorThrown: " + errorThrown);
+	   } 
+	   });
+}
 /**
  * Defines actions on events on imports contacts element, which does validation
  * on the import template, whether contact have first_name last_name which are
@@ -3165,6 +3276,34 @@ $(function()
 		
 	});
 	
+	$('#freshbooks_sync_prefs').die().live('click',function(e){
+					e.preventDefault();
+					var disable = $(this).attr('disabled');
+					if(disable)
+						return false;
+					$(this).attr("disabled", "disabled");
+					$(this).text("Syncing");
+					
+					var freshbooks_prefs = serializeForm("freshbooks-form");
+					freshbooks_prefs['inProgress'] = true;
+					
+					App_Widgets.freshbooks_import_settings.model.set(freshbooks_prefs, {silent:true});
+					var url = App_Widgets.freshbooks_import_settings.model.url;
+
+					$(this).after(getRandomLoadingImg());
+					App_Widgets.freshbooks_import_settings.model.url = url + "?sync=true"
+					App_Widgets.freshbooks_import_settings.model.save({}, {success : function(data){
+					
+						App_Widgets.freshbooks_import_settings.render(true);
+						App_Widgets.freshbooks_import_settings.model.url = url;	
+							show_success_message_after_save_button("Sync Initiated", App_Widgets.freshbooks_import_settings.el);
+							showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+						}});
+					
+				});
+
+
+	
 });
 
 function show_success_message_after_save_button(message, el)
@@ -3245,7 +3384,7 @@ $(function() {
 		event.preventDefault();
 		var type = $(this).attr("type");
 		
-		showCustomFieldModel({"scope" : type});
+		showCustomFieldModel({"scope" : type, "position" : $(this).parent().parent().find('table > tbody > tr').length+1});
 		
 	});
 	
@@ -3258,6 +3397,8 @@ $(function() {
 			$("input",  $("#custom-field-data")).removeAttr("name");
 			$("#custom-field-list-values").show();
 			$("input",  $("#custom-field-list-values")).attr("name", "field_data");
+			$("#custom-field-formula-data").hide();
+			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
 		}
 		else if(value == "TEXTAREA")
 		{
@@ -3265,11 +3406,23 @@ $(function() {
 			$("input",  $("#custom-field-data")).attr("name", "field_data");
 			$("#custom-field-list-values").hide();
 			$("input",  $("#custom-field-list-values")).removeAttr("name");
+			$("#custom-field-formula-data").hide();
+			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
+		}
+		else if(value == "FORMULA")
+		{
+			$("#custom-field-data").hide();
+			$("input",  $("#custom-field-data")).removeAttr("name");
+			$("#custom-field-list-values").hide();
+			$("input",  $("#custom-field-list-values")).removeAttr("name");
+			$("#custom-field-formula-data").show();
+			$("textarea",  $("#custom-field-formula-data")).attr("name", "field_data");
 		}
 		else
 		{
 			$("#custom-field-data").hide();
 			$("#custom-field-list-values").hide();
+			$("#custom-field-formula-data").hide();
 		}
 		
 	})
@@ -3279,6 +3432,32 @@ $(function() {
 		var custom_field = $(this).closest('tr').data();
 		console.log(custom_field);
 		showCustomFieldModel(custom_field.toJSON());
+	});
+	$('#edit-custom-field').live('click', function(e) {
+		e.preventDefault();
+		var custom_field = $(this).closest('tr').data();
+		console.log(custom_field);
+		showCustomFieldModel(custom_field.toJSON());
+	});
+	$('#delete-custom-field').live('click', function(e) {
+		if(confirm("Are you sure you want to delete?")){
+			e.preventDefault();
+			var custom_field = $(this).closest('tr').data();
+			console.log(custom_field);
+			var currentElement=$(this);
+			$.ajax({ type : 'DELETE', url : '/core/api/custom-fields/' + custom_field.id, contentType : "application/json; charset=utf-8",
+				success : function(data){
+					if(custom_field.get("scope")=="CONTACT")
+						App_Admin_Settings.contactCustomFieldsListView.collection.remove(custom_field.id);
+					else if(custom_field.get("scope")=="COMPANY")
+						App_Admin_Settings.companyCustomFieldsListView.collection.remove(custom_field.id);
+					else if(custom_field.get("scope")=="DEAL")
+						App_Admin_Settings.dealCustomFieldsListView.collection.remove(custom_field.id);
+					else if(custom_field.get("scope")=="CASE")
+						App_Admin_Settings.caseCustomFieldsListView.collection.remove(custom_field.id);
+					currentElement.closest('tr').remove();
+				}, dataType : 'json' });
+		}
 	});
 });
 
@@ -3304,21 +3483,50 @@ function showCustomFieldModel(data)
 		saveCallback : function(model)
 		{
 			console.log(model);
-			var custom_field_model_json = App_Admin_Settings.customFieldsListView.collection.get(model.id);
+			//var custom_field_model_json = App_Admin_Settings.customFieldsListView.collection.get(model.id);
+			var custom_field_model_json;
+			if(model.scope=="CONTACT")
+				custom_field_model_json = App_Admin_Settings.contactCustomFieldsListView.collection.get(model.id);
+			else if(model.scope=="COMPANY")
+				custom_field_model_json = App_Admin_Settings.companyCustomFieldsListView.collection.get(model.id);
+			else if(model.scope=="DEAL")
+				custom_field_model_json = App_Admin_Settings.dealCustomFieldsListView.collection.get(model.id);
+			else if(model.scope=="CASE")
+				custom_field_model_json = App_Admin_Settings.caseCustomFieldsListView.collection.get(model.id);
+			
 			
 			if(custom_field_model_json)
 			{
 				//App_Admin_Settings.customFieldsListView.collection.remove(custom_field_model_json);
 				custom_field_model_json.set(new BaseModel(model),{silent:true});
-				App_Admin_Settings.customFieldsListView.render(true);
+				if(model.scope=="CONTACT")
+					App_Admin_Settings.contactCustomFieldsListView.render(true);
+				else if(model.scope=="COMPANY")
+					App_Admin_Settings.companyCustomFieldsListView.render(true);
+				else if(model.scope=="DEAL")
+					App_Admin_Settings.dealCustomFieldsListView.render(true);
+				else if(model.scope=="CASE")
+					App_Admin_Settings.caseCustomFieldsListView.render(true);
 			}
 			
 			else
 			{
-				
-				App_Admin_Settings.customFieldsListView.collection.add(model);
+				if(model.scope=="CONTACT"){
+					App_Admin_Settings.contactCustomFieldsListView.collection.add(model);
+					App_Admin_Settings.contactCustomFieldsListView.render(true);
+				}else if(model.scope=="COMPANY"){
+					App_Admin_Settings.companyCustomFieldsListView.collection.add(model);
+					App_Admin_Settings.companyCustomFieldsListView.render(true);
+				}else if(model.scope=="DEAL"){
+					App_Admin_Settings.dealCustomFieldsListView.collection.add(model);
+					App_Admin_Settings.dealCustomFieldsListView.render(true);
+				}else if(model.scope=="CASE"){
+					App_Admin_Settings.caseCustomFieldsListView.collection.add(model);
+					App_Admin_Settings.caseCustomFieldsListView.render(true);
+				}
+				/*App_Admin_Settings.customFieldsListView.collection.add(model);
 				if(App_Admin_Settings.customFieldsListView.collection.length == 1)
-					App_Admin_Settings.customFieldsListView.render(true);
+					App_Admin_Settings.customFieldsListView.render(true);*/
 			}
 			$('.modal-backdrop').remove();	
 			$("#custom-field-add-modal").modal('hide');
@@ -3360,6 +3568,7 @@ function add_custom_fields_to_form(context, callback, scope) {
 			$.each(custom_field_data.toJSON(), function(index, value) {
 				custom_fields_list.push(value);
 			});
+			App_Contacts.custom_fields = custom_fields_list;
 
 			// var contact = contact.toJSON();
 
@@ -3521,6 +3730,38 @@ function show_custom_fields_helper(custom_fields, properties){
 							+field.id+' name="'
 							+field.field_label
 							+'"></textarea></div></div>');
+			return;
+		}
+		else if(field.field_type.toLowerCase() == "number")
+		{
+			field_type = "number";
+			if(field.is_required)
+				el = el.concat('<div class="control-group">	<label class="control-label">'
+						+field.field_label
+						+' <span class="field_req">*</span></label><div class="controls custom-number-controls"><input type="number" style="max-width:420px;" class="'
+						+field.field_type.toLowerCase()
+						+'_input custom_field required" id="'
+						+field.id+'" name="'
+						+field.field_label
+						+'" value="0"></input>'
+						+'</div></div>');
+			else
+				el = el.concat('<div class="control-group">	<label class="control-label">'
+						+field.field_label
+						+'</label><div class="controls custom-number-controls"><input type="number" style="max-width:420px;" class="'
+						+field.field_type.toLowerCase()
+						+'_input custom_field" id="'
+						+field.id+'" name="'
+						+field.field_label
+						+'" value="0"></input>'
+						+'</div></div>');
+			
+				
+			return;
+		}
+		else if(field.field_type.toLowerCase() == "formula")
+		{
+			//If custom field is formula we return without appending anything	
 			return;
 		}
 		
@@ -3738,7 +3979,280 @@ function serialize_custom_fields(form)
         arr.push(json);
     });
    return arr;
-}/**
+}
+function groupingCustomFields(base_model){
+	var templateKey = "admin-settings-customfields-"+base_model.get("scope").toLowerCase();
+	if(base_model.get("scope")=="CONTACT"){
+		App_Admin_Settings.contactCustomFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields/scope/position?scope='+base_model.get("scope"), sortKey : "position", restKey : "customFieldDefs",
+			templateKey : templateKey, individual_tag_name : 'tr',
+			postRenderCallback : function(custom_el){
+				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
+			}});
+		App_Admin_Settings.contactCustomFieldsListView.collection.fetch();
+		$('#'+base_model.get("scope")+'-custom-fields', this.el).append($(App_Admin_Settings.contactCustomFieldsListView.render().el));
+	}else if(base_model.get("scope")=="COMPANY"){
+		App_Admin_Settings.companyCustomFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields/scope/position?scope='+base_model.get("scope"), sortKey : "position", restKey : "customFieldDefs",
+			templateKey : templateKey, individual_tag_name : 'tr',
+			postRenderCallback : function(custom_el){
+				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
+			}});
+		App_Admin_Settings.companyCustomFieldsListView.collection.fetch();
+		$('#'+base_model.get("scope")+'-custom-fields', this.el).append($(App_Admin_Settings.companyCustomFieldsListView.render().el));
+	}else if(base_model.get("scope")=="DEAL"){
+		App_Admin_Settings.dealCustomFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields/scope/position?scope='+base_model.get("scope"), sortKey : "position", restKey : "customFieldDefs",
+			templateKey : templateKey, individual_tag_name : 'tr',
+			postRenderCallback : function(custom_el){
+				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
+			}});
+		App_Admin_Settings.dealCustomFieldsListView.collection.fetch();
+		$('#'+base_model.get("scope")+'-custom-fields', this.el).append($(App_Admin_Settings.dealCustomFieldsListView.render().el));
+	}else if(base_model.get("scope")=="CASE"){
+		App_Admin_Settings.caseCustomFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields/scope/position?scope='+base_model.get("scope"), sortKey : "position", restKey : "customFieldDefs",
+			templateKey : templateKey, individual_tag_name : 'tr',
+			postRenderCallback : function(custom_el){
+				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
+			}});
+		App_Admin_Settings.caseCustomFieldsListView.collection.fetch();
+		$('#'+base_model.get("scope")+'-custom-fields', this.el).append($(App_Admin_Settings.caseCustomFieldsListView.render().el));
+	}
+}
+function enableCustomFieldsSorting(el,connClass,connId){
+	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function(){
+		$('.'+connClass).sortable({
+			axis: "y" ,
+			containment: '.'+connClass,
+			iframeFix: false,
+			items:'tr',
+			opacity:0.8,
+			helper: function(e, tr){
+			    var $originals = tr.children();
+			    var $helper = tr.clone();
+			    $helper.children().each(function(index)
+			    {
+			      // Set helper cell sizes to match the original sizes
+			      $(this).width($originals.eq(index).width());
+			    });
+			    return $helper;
+			},
+			revert:true,
+			forceHelperSize:true,
+			placeholder:'<tr><td></td></tr>',
+			forcePlaceholderSize:true,
+			tolerance:'pointer',
+			handle: ".icon-move",
+			cursor: "move",
+		});
+		
+		/*
+		 * This event is called after sorting stops to save new positions of
+		 * custom fields
+		 */
+		$('.'+connClass,el).on("sortstop",function(event, ui){
+			var models=[];
+			$('#'+connId+' > tr').each(function(column){
+				var model_id = $(this).data().id;
+				
+				models.push({ id : model_id, position : column+1 });
+			});
+			// Saves new positions in server
+			$.ajax({ type : 'POST', url : '/core/api/custom-fields/positions', data : JSON.stringify(models),
+				contentType : "application/json; charset=utf-8", dataType : 'json' });
+		});
+	});
+}
+/*$('#formulaData').live("change",function(e){
+	var source = $(this).val();
+	var tpl;
+	var compiled=true;
+	try{
+		tpl = Handlebars.precompile(source);
+	}catch(err){
+		err.message;
+		compiled=false;
+		return false;
+	}
+});*//**
+ * This file is used for filters shown in lhs of contacts page.
+ */
+
+var scrambled_index=0;
+function scramble_filter_input_names(el)
+{
+	$(el).find("input[type=text],input[type=number]").each(function(){
+		$(this).attr('name','temp-'+scrambled_index);
+		$(this).attr('id','temp-'+scrambled_index);
+		scrambled_index+=1;
+	});
+}
+ 
+function setupLhsFilters(cel, is_company) {
+	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+	if(is_company) {
+		$('#lhs_filters_conatiner', cel).html(getTemplate("companies-lhs-filters"));
+		fillSelect('owner_select','/core/api/users', 'domainUser', function() {
+			if(!COMPANY_CUSTOM_FIELDS)
+			{
+				$.getJSON("core/api/custom-fields/searchable/scope?scope=COMPANY", function(fields){
+				COMPANY_CUSTOM_FIELDS = fields;
+				loadCustomFiledsFilters(fields, cel, is_company);
+				return;
+			})
+			} else {		
+				loadCustomFiledsFilters(COMPANY_CUSTOM_FIELDS, cel, is_company);
+			}
+		}, optionsTemplate, false, $('#lhs_filters_conatiner', cel)); 
+
+	} else {
+		$('#lhs_filters_conatiner', cel).html(getTemplate("contacts-lhs-filters"));
+		fillSelect('owner_select','/core/api/users', 'domainUser', function() {
+			if(!SEARCHABLE_CONTACT_CUSTOM_FIELDS)
+			{
+				$.getJSON("core/api/custom-fields/searchable/scope?scope=CONTACT", function(fields){
+				SEARCHABLE_CONTACT_CUSTOM_FIELDS = fields;
+				loadCustomFiledsFilters(fields, cel, is_company);
+				return;
+			})
+			} else {		
+				loadCustomFiledsFilters(SEARCHABLE_CONTACT_CUSTOM_FIELDS, cel, is_company);
+			}
+		}, optionsTemplate, false, $('#lhs_filters_conatiner', cel)); 
+
+	}
+		
+}
+
+function loadCustomFiledsFilters(fields, cel, is_company) {
+	$('#custom-filter-fields', cel).html(getTemplate("contacts-lhs-filters-custom", fields));
+	//$('#custom-filter-fields', cel).find("input.date").datepicker({ format : 'mm/dd/yyyy'});
+	addTagsDefaultTypeahead($('#tags-lhs-filter-table',cel).find("div.lhs-contact-filter-row").find('#RHS'));
+	$("input.date", cel).datepicker({ format : 'mm/dd/yyyy', autoclose: true});
+	//$('#custom-filter-fields', cel).find("input.date").datepicker({ format : 'mm/dd/yyyy'});
+	$('select[name="CONDITION"]', cel).die().live('change', function(e)
+	{
+		var selected = $(this).val();
+		$(this).parent().find('div').addClass('hide');
+		$(this).parent().find('div').find('input').val("").attr('prev-val', "");;
+		$(this).parent().find('div').find('select').val("").attr('prev-val', "");;
+		$(this).parent().find('div.'+selected).removeClass('hide');
+		$(this).parent().find('div.'+selected).find('#RHS :not(input.date)').focus();
+	});
+	scramble_filter_input_names(cel);
+	if(is_company && readData('dynamic_company_filter')) {
+		deserializeLhsFilters($('#lhs-contact-filter-form'), readData('dynamic_company_filter'));
+	} 
+	if(!is_company && readData('dynamic_contact_filter')) {
+		deserializeLhsFilters($('#lhs-contact-filter-form'), readData('dynamic_contact_filter'));
+	}
+}
+
+function submitLhsFilter() {
+	var formData = serializeLhsFilters($('#lhs-contact-filter-form'))
+	// erase filter cookies
+	eraseCookie('contact_filter');
+	eraseCookie('contact_filter_type');
+	//eraseCookie('company_filter');
+	var contact_type = formData.contact_type;
+	if(contact_type == 'COMPANY') {
+		eraseData('dynamic_compnay_filter');
+		if(formData != null && formData.rules.length >0)
+			storeData('dynamic_company_filter', JSON.stringify(formData));
+	} else {
+		eraseData('dynamic_contact_filter');
+		if(formData != null && formData.rules.length >0)
+			storeData('dynamic_contact_filter', JSON.stringify(formData));
+	}
+	
+	CONTACTS_HARD_RELOAD=true;
+	App_Contacts.contacts(undefined, undefined, undefined, true);
+}
+
+$('a.filter-tags-multiple-add-lhs').die().live("click", function(e) {
+	e.preventDefault();
+	var htmlContent = $('#tags-lhs-filter-table').find("div.hide").clone();
+	htmlContent.removeClass('hide').addClass("lhs-contact-filter-row");
+	addTagsDefaultTypeahead(htmlContent);
+	scramble_filter_input_names(htmlContent);
+	$(htmlContent).find("i.filter-tags-multiple-remove-lhs").css("display", "inline-block");
+	//$('#tags-lhs-filter-table').find("div.lhs-contact-filter-row:last").append(htmlContent);
+	$(htmlContent).appendTo('#tags-lhs-filter-table');
+	$('#tags-lhs-filter-table').find("div.lhs-contact-filter-row:last").find('#RHS:visible').find(':not(input.date)').focus();
+});
+
+// Filter Contacts- Remove Multiple
+	$("i.filter-tags-multiple-remove-lhs").die().live('click', function(e)
+	{
+		$(this).prev().val("").trigger('blur');
+		$(this).closest('div.lhs-contact-filter-row').remove();
+	});
+
+$('#clear-lhs-contact-filters').die().live("click", function(e) {
+	e.preventDefault();
+	eraseData('dynamic_contact_filter');
+	CONTACTS_HARD_RELOAD=true;
+	App_Contacts.contacts();
+});
+
+$('#clear-lhs-company-filters').die().live("click", function(e) {
+	e.preventDefault();
+	eraseData('dynamic_company_filter');
+	CONTACTS_HARD_RELOAD=true;
+	App_Contacts.contacts();
+});
+
+$('#lhs-filters-header').die().live("click", function(e) {
+	e.preventDefault();
+	$(this).find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
+	$(this).next().toggleClass('hide');
+	$(this).next().find('.lhs-contact-filter-row:visible').find('#RHS:visible').find(':not(input.date)').focus();
+});
+
+$('#lhs-contact-filter-form #RHS input').die().live("blur keyup", function(e) {
+	if (e.type == 'focusout' || e.keyCode == '13')  {
+		var prevVal = $(this).attr('prev-val');
+		var currVal = $(this).val().trim();
+		if(prevVal == currVal) {
+			return;
+		} else {
+			$(this).attr('prev-val', currVal);
+		}
+		if($(this).parent().next().attr("id") == "RHS_NEW") {
+			if($(this).parent().next().find('input').val() != "") {
+				submitLhsFilter();
+				$(this).blur();
+			}
+		} else {
+			submitLhsFilter();
+			$(this).blur();
+		}
+	}
+});
+
+$('#lhs-contact-filter-form #RHS select').die().live("change", function(e) {
+	submitLhsFilter();
+});
+
+$('#lhs-contact-filter-form #RHS_NEW input').die().live("blur keyup", function(e) {
+	if (e.type == 'focusout' || e.keyCode == '13')  {
+		var prevVal = $(this).attr('prev-val');
+		var currVal = $(this).val().trim();
+		if(prevVal == currVal) {
+			return;
+		} else {
+			$(this).attr('prev-val', currVal);
+		}
+		if($(this).parent().prev().attr("id") == "RHS") {
+			if($(this).parent().prev().find('input').val() != "") {
+				submitLhsFilter();
+				$(this).blur();
+			}
+		} else {
+			if(currVal != "") {
+				submitLhsFilter();
+				$(this).blur();
+			}
+		}
+	}
+});/**
  * Loads the "google map API" by appending the url as script to html document
  * body and displays the map (using callback of url) based on the address of the
  * contact. If the google map is already loaded, just displays the map.
@@ -3827,6 +4341,9 @@ function display_google_map() {
 				+ address.state + ', ' + address.country + ', ' + address.zip + '"'
 	}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
+			
+			console.log(results);
+			displayTimeZone(results);
 
 			// Displays map portion
 			$("#map").css('display', 'block');
@@ -3915,7 +4432,87 @@ $(function() {
 		    
 		});
 	});
-});/**
+});var businessHoursManager;
+$(function()
+{
+	
+$("#btnSerialize").die().live('click', function(e){
+	e.preventDefault();
+	
+	
+	if(!$.trim($("#15mins").val())&&!$.trim($("#30mins").val())&&!$.trim($("#60mins").val())){
+		$('#meeting_duration_message').fadeIn('slow');
+        setTimeout(function() {
+     	    $('#meeting_duration_message').fadeOut('slow');
+     	}, 5000);
+    	return;
+	}
+	
+	if($("#15mins").val().charCodeAt(0)== ' ' && $("#30mins").val().charCodeAt(0)== ' ' && $("#60mins").val().charCodeAt(0)== ' '){
+		$('#meeting_duration_message').fadeIn('slow');
+        setTimeout(function() {
+     	    $('#meeting_duration_message').fadeOut('slow');
+     	}, 5000);
+    	return;
+	}
+	
+	
+	var saveBtn = $(this);
+	disable_save_button($(saveBtn));
+	
+	var json = serializeForm("scheduleform");
+	var meeting_durations = formToJSON();
+	console.log(meeting_durations);
+	
+	 var business_hours=JSON.stringify(businessHoursManager.serialize());
+		
+		json['businesshours_prefs']=business_hours;
+		json['meeting_durations']=meeting_durations;
+		json['timezone']=$("#timezone").val();
+		console.log(business_hours);
+		
+	//	$("#schedule-preferences").html(getRandomLoadingImg());
+		$.ajax({
+			url : '/core/api/scheduleprefs',
+			type : 'PUT',
+			contentType:'application/json',
+			async:false,
+			data : JSON.stringify(json),
+			success : function()
+			{
+				 setTimeout(function() {
+					 enable_save_button($(saveBtn));
+			     	}, 2000);
+			 // 
+			},
+			error : function(error)
+			{
+				$('#error_message').html("Due to "+error.statusText+" scheduling preferences not updated. Please try again in few hours");
+				enable_save_button($(saveBtn));
+			} });
+	
+});
+
+
+});
+
+/**
+ * meeting duration form will be serialized manually becoz to trim spaces
+ * @returns  serialized meeting duration form.
+ */
+
+function formToJSON() {
+    return JSON.stringify({
+        "15mins": $('#15mins').val().trim(),
+        "30mins": $('#30mins').val().trim(),
+        "60mins": $('#60mins').val().trim()
+        });
+}
+
+
+
+
+/**
  * Cookie.js deals with functions used to create, read and erase a cookie.
  * @module jscore
  */
@@ -4433,7 +5030,12 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 						
 						if(!checkPipeline(deal.pipeline_id)){
 							console.log('removing the deal');
-							$("#" + oldMilestone).find("#" + id).parent().remove();
+							$("#" + oldMilestone.replace(/ +/g, '')).find("#" + id).parent().remove();
+							try{
+								$('#'+oldMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+oldMilestone.replace(/ +/g, '')+'_count').text())-1);
+							} catch(err){
+								console.log(err);
+							}
 						}else if(newMilestone != oldMilestone){
 							
 							dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
@@ -4441,7 +5043,14 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 								return;
 							
 							dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal));
-							$("#" + oldMilestone).find("#" + id).parent().remove();
+							$("#" + oldMilestone.replace(/ +/g, '')).find("#" + id).parent().remove();
+							
+							try{
+								$('#'+newMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text())+1);
+								$('#'+oldMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+oldMilestone.replace(/ +/g, '')+'_count').text())-1);
+							} catch(err){
+								console.log(err);
+							}
 						}else {
 							dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
 							if(!dealPipelineModel)
@@ -4449,7 +5058,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 							
 							dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal), {silent:true});
 							console.log('Updating html - ',deal);
-							$("#" + newMilestone).find("#" + id).parent().html(getTemplate('deals-by-paging-model', deal));
+							$("#" + newMilestone.replace(/ +/g, '')).find("#" + id).parent().html(getTemplate('deals-by-paging-model', deal));
 						}
 						
 					} else if(checkPipeline(deal.pipeline_id)){
@@ -4458,8 +5067,13 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 							return;
 						
 						dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal));
+						try{
+							$('#'+newMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text())+1);
+						} catch(err){
+							console.log(err);
+						}
 					}
-					includeTimeAgo($("#" + newMilestone));
+					includeTimeAgo($("#" + newMilestone.replace(/ +/g, '')));
 					$('a.deal-notes').tooltip();
 				}else 
 				{
@@ -4629,6 +5243,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 			if(jsonModel.length==1){
 				$('#pipeline',el).closest('div.control-group').hide();
 				$('#milestone',el).closest('div.control-group').css("margin-left","0px");
+				$('#dealsFilterForm #pipeline',el).closest('div.control-group').show();
 			}
 			
 			if (callback && typeof (callback) === "function") {
@@ -4825,6 +5440,15 @@ function dealCustomFieldValue(name, data){
 	$('#opportunity-track-list-model-list a.pipeline').live('click',function(e){
 		e.preventDefault();
 		createCookie("agile_deal_track", $(this).attr('id'));
+		if(readCookie('deal-filters')){
+			var json = $.parseJSON(readCookie('deal-filters'));
+			var track = $(this).attr('id');
+			if(track == '1')
+				json.pipeline_id = '';
+			else
+				json.pipeline_id = $(this).attr('id');
+			createCookie('deal-filters',JSON.stringify(json));
+		}
 		App_Deals.deals();
 	});
 	
@@ -4923,6 +5547,12 @@ function dealCustomFieldValue(name, data){
 					$('#pipeline-delete-modal').modal('hide');
 					if(readCookie("agile_deal_track") && readCookie("agile_deal_track") == id)
 						eraseCookie("agile_deal_track");
+					if(readCookie("deal-filters")){
+						var json = $.parseJSON(readCookie("deal-filters"));
+						if(json.pipeline_id = id)
+							eraseCookie("deal-filters");
+					}
+					
 					App_Admin_Settings.milestones();
 				},
 				error: function(jqXHR, status, errorThrown){
@@ -4964,9 +5594,8 @@ function dealCustomFieldValue(name, data){
     	
     	e.preventDefault();
     	var form = $(this).closest('form');
-    	
     	var new_milestone = form.find(".add_new_milestone").val().trim();
-    	
+
     	if(!new_milestone || new_milestone.length <= 0 || !(/^[a-zA-Z0-9-_ ]*$/).test(new_milestone))
 		{
     		$('#milestone-error-modal').modal('show');
@@ -5169,6 +5798,13 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone) {
 	var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : oldMilestone });
 	if(!dealPipelineModel)
 		return;
+	try{
+		$('#'+newMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text())+1);
+		$('#'+oldMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+oldMilestone.replace(/ +/g, '')+'_count').text())-1);
+	} catch(err){
+		console.log(err);
+	}
+	
 	dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
 
 	// Add the deal in to new milestone collection.
@@ -5268,7 +5904,11 @@ function createDealsNestedCollection(pipeline_id,milestones)
 	initDealListCollection(milestones);
 	
 	// Url to call DB
-	var initialURL = '/core/api/opportunity/based?pipeline_id='+pipeline_id;
+	var initialURL = '/core/api/opportunity/based?pipeline_id='+pipeline_id+'&order_by=close_date';
+	
+	if(readCookie('deal-filters')){
+		initialURL += '&filters='+encodeURIComponent(getDealFilters());
+	}
 
 	// Creates main collection with deals lists
 	for ( var i in milestones)
@@ -5394,6 +6034,14 @@ function dealsFetch(index,milestones)
 		$('#'+base_model.get("heading").replace(/ +/g, '')+'-list-container').html(dealCollection.render(true).el)
 		console.log($('#'+base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').length);
 		$('#'+base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').hide();
+		try {
+			var count = data.at(0)?data.at(0).toJSON().count:0;
+			$('#'+base_model.get("heading").replace(/ +/g, '')+'_count').text(data.at(0)?data.at(0).toJSON().count:0);
+		}
+		catch(err) {
+		    console.log(err);
+		}
+		
 		$('a.deal-notes').tooltip();
 		// Counter to fetch next sub collection
 		pipeline_count++;
@@ -5451,61 +6099,225 @@ console.log(targetCollection);
  * 
  **/
 $(function () {
-	$('.deals-filter').live('click', function(e){
+	
+	// Show filter drop down.
+	$('#show-filter-button').live('click', function(e){
 		e.preventDefault();
-		
-		showFilters();
+		if($('#filter_options').is(':visible'))
+			$('#filter_options').hide();
+		else
+			showFilters();
 	});
 	
+	// Filter deals.
 	$('#deals-filter-validate').live('click', function(e){
 		e.preventDefault();
 		filterDeals($(this));
 	});
 	
-	$('#dealsFilterForm input[type="checkbox"]').live('click',function(e){
-		var id = $(this).attr('data');
-		alert('add required to '+id);
-		$('#dealsFilterForm #'+id).addClass('required');
+	// For updating the filter inequality and the fields based on the filter type selected.
+	$('#filter_options .filter_type').live('change',function(e){
+		var filter = $(this).closest('.control-group').attr('id');
+		if($(this).val()=='equals'){
+			$('#'+filter+' .equals').show();
+			$('#'+filter+' .between').hide();
+		}
+		else {
+			var msg = "You can only use one 'between' condition for filtering. Press Ok to change other conditions to equal.";
+			var bwCount = $("#filter_options").find('select option[value="between"]:selected').length;
+			var valid = true;
+			if(bwCount > 1)
+				valid = false;
+			if(valid){
+				$('#filter_options .filter_type').val('equal');
+				$(this).val('between');
+				$('#sort_field').val($(this).attr('data'));
+				$('#filter_options .between').hide();
+				$('#filter_options .equals').show();
+				$('#'+filter+' .equals').hide();
+				$('#'+filter+' .between').show();
+			} else {
+				alert("Sorry. You can't have multiple 'Between' conditions.");
+				$(this).val('equals');
+			}
+			
+		}
 	});
+	
+	// Clear the deal filter form and remove the cookie.
+	$('#clear-deal-filters').live('click',function(e){
+		$('#dealsFilterForm input').val('');
+	 	$('#dealsFilterForm select').filter(':visible').val('');
+		$('#dealsFilterForm select.filter_type').val('equals');
+		$('#filter_options .between').hide();
+		$('#filter_options .equals').show();
+		$('#filter_options').find('.control-group').each(function(index){
+			if($(this).find('.controls').height()>0)
+				$(this).find('a.changeIcon').trigger('click');
+		});
+		eraseCookie('deal-filters');
+		$('#show-filter-button').removeClass('btn-primary');
+	});
+	
+	$('#filter_options a.changeIcon').live('click',function(e){$(this).find('i').toggleClass('icon-plus icon-minus')});
+	
 });
 
-function showFilters(){
-	var el = $("#deals-filter");
-
-	$("#deals-filter").modal('show');
+function setupDealFilters(cel){
 	
-	add_custom_fields_to_form({}, function(data){
-		var el_custom_fields = show_custom_fields_helper(data["custom_fields"], []);
-		$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
-		
-	}, "DEAL")
-	
-	
-	
+	$('#deal-list-filters').html(getTemplate('deal-filter'));
+	var el = $('#filter_options');
 	// Fills owner select element
+	
 	populateUsers("owners-list", el, undefined, undefined, function(data){
 		
 		$("#deals-filter").find("#owners-list").html(data);
-		$("#owners-list", $("#dealsFilterForm")).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
+		//Select none by default.
+		if(readCookie('deal-filters')){
+			var json = $.parseJSON(readCookie('deal-filters'));
+		}
 		$("#owners-list", $("#dealsFilterForm")).closest('div').find('.loading-img').hide();
+	
+	// Populate pipeline in the select box.
+	populateTracks(el, undefined, undefined, function(data){
+		//Select none by default.
+		$('#pipeline').val('');
+		$('#owners-list').val('');
+		if(readCookie('deal-filters')){
+			var json = $.parseJSON(readCookie('deal-filters'));
+			$.each(json,function(key,value){
+				
+				// Fill the filters based on previosly selected filters in cookie.
+				if(value){
+					if($('[name="'+key+'"]').closest('.controls').height()== 0 && key.indexOf('_filter')<0){
+						$('[name="'+key+'"]').closest('.controls').addClass('in');
+						$('[name="'+key+'"]').closest('.control-group').find('a.changeIcon').find('i').toggleClass('icon-plus icon-minus');
+					}
+					
+					if(key=='pipeline_id'){
+						// Fills milestone and select element
+						populateMilestones(el, undefined,json.pipeline_id, undefined, function(data){
+							$("#milestone", el).html(data);
+							$("#milestone", el).closest('div').find('.loading-img').hide();
+							$("#milestone",el).val(json.milestone);
+						});
+					}
+					$('#'+key).val(value);
+					if(key=='pipeline_id')
+						$('#pipeline').val(value);
+					else if(key=='owner_id')
+						$('#owners-list').val(value);
+					else if($('#'+key).hasClass('date'))
+						$('#'+key).val(new Date(value * 1000).format('mm/dd/yyyy'));
+					
+					if(key.indexOf('_filter')>0)
+						$('#'+key).trigger('change');
+					
+				}
+			});
+			//deserializeForm(json, $('#dealsFilterForm'));
+			updateFilterColor();
+		}
+		// Enable the datepicker
+		$('#filter_options .date').datepicker({
+			format : 'mm/dd/yyyy',
+		});
+		if(!readCookie("agile_deal_view")){
+			$('#pipeline').closest('.control-group').hide();
+			$('#milestone').closest('.control-group').hide();
+		}
+		$('#filter_options select').find('option[value=""]').text('Any');
 	});
-	// Contacts type-ahead
-	agile_type_ahead("relates_to", el, contacts_typeahead);
-
-	populateTracks(el, undefined, undefined, function(data){});
+	});
 }
 
+function updateFilterColor(){
+	var filters_count = 0;
+	var json = $.parseJSON(readCookie('deal-filters'));
+	if(json.owner_id.length > 0)
+		filters_count++;
+	if(json.value_filter == 'equals'){
+		if(json.value.length > 0)
+			filters_count++;
+	}else {
+		if(json.value_start.length > 0 || json.value_end.length > 0)
+			filters_count++;
+	}
+	
+	if (readCookie("agile_deal_view")){
+		if(json.pipeline_id.length > 0)
+			filters_count++;
+	}
+	
+	if(filters_count > 0)
+	$('#show-filter-button').addClass('btn-primary');
+}
+
+/**
+ * Show filters drop down and fill the options.
+ */
+function showFilters(){
+	var el = $('#filter_options');
+
+	el.show();
+	//$("#deals-filter").modal('show');
+	
+
+	/*add_custom_fields_to_form({}, function(data){
+		console.log('----------------',data);
+		var el_custom_fields = getTemplate("deal-custom-filter",data["custom_fields"]);
+		//$(el_custom_fields).find('div.control-group').addClass('row-filter');
+		$("#dealsCustomFilterForm fieldset", el).html($(el_custom_fields)).find('div.control-group').addClass('row-filter');
+		
+	}, "DEAL");*/
+	
+}
+
+/**
+ * Deserialize the filters form and save them in the cookie as JSON string and reload the page.
+ * @param saveBtn
+ */
 function filterDeals(saveBtn){
-	// Returns, if the save button has disabled attribute
+	// Returns, if the sav	e button has disabled attribute
 	if (saveBtn.attr('disabled'))
 		return;
-	var formId = $("#dealsFilterForm");
-
-	if (!isValidForm('#' + formId)) {
+	saveBtn.attr('disabled','disabled');
+	$('#filter_options').hide();
+	var formId = 'dealsFilterForm';
+	/*if (!isValidForm('#' + formId)) {
 		// Removes disabled attribute of save button
 		enable_save_button(saveBtn);//$(saveBtn).removeAttr('disabled');
 		return false;
+	}*/
+	var json = serializeForm(formId);
+	//var customJson = serializeForm('dealsCustomFilterForm');
+	//json.customFields=customJson;
+	if(readCookie("agile_deal_track") && json.pipeline_id.length > 1 && readCookie("agile_deal_track") != json.pipeline_id)
+		createCookie("agile_deal_track", json.pipeline_id)
+	createCookie('deal-filters',JSON.stringify(json));
+	saveBtn.removeAttr('disabled');
+	// Loads the deals
+	App_Deals.deals();
+}
+
+/**
+ * Get the deal filters in the cookie.
+ * @returns
+ */
+function getDealFilters(){
+	var query = ''
+	if(readCookie('deal-filters')){
+		query = readCookie('deal-filters');
+		// Remove the milestone field in the filters if it is milestone view.
+		if(!readCookie("agile_deal_view")){
+			var json = $.parseJSON(query);
+			if(json.pipeline_id.length == 0)
+				json.pipeline_id = readCookie('agile_deal_track');
+			json.milestone = '';
+			return JSON.stringify(json);
+		}
 	}
+	return query;
 }/*
  * Creates an view object on the model, with events click on .delete, .edit,
  * .agile_delete and respective funtionalities are defined and binds to current
@@ -5922,7 +6734,19 @@ function addTagsArrayasTypeaheadSource(tagsJSON, element) {
 }
 
 function showModalConfirmation(title, body, yes_callback, no_callback,
-		close_callback) {
+		close_callback, yes_button_text, no_button_text) {
+	if(!yes_button_text && !no_button_text)
+	{
+		yes_button_text = "Yes";
+		no_button_text = "No";
+	}
+	var yes_action = "";
+	var no_action = "";
+	if(yes_button_text)
+		yes_action = '<a href="#" id="confirm" class="action btn btn-primary" action="confirm">'+yes_button_text+'</a>';
+	if(no_button_text)
+		no_action = '<a  href="#" id="deny" class="btn action" data-dismiss="modal" action="deny">'+no_button_text+'</a>';
+		
 	var confirmationModal = $('<div id="confirmation" class="modal fade in">'
 			+ '<div class="modal-header" >'
 			+ '<a href="#" data-dismiss="modal" class="close">&times;</a>'
@@ -5934,8 +6758,8 @@ function showModalConfirmation(title, body, yes_callback, no_callback,
 			+ '</div>'
 			+ '<div class="modal-footer">'
 			+ '<div>'
-			+ '<a  href="#" id="deny" class="btn action" data-dismiss="modal" action="deny">No</a>' 
-			+ '<a href="#" id="confirm" class="action btn btn-primary" action="confirm">Yes</a>'
+			+ no_action
+			+ yes_action
 			+ '</div>' + '</div>' + '</div>' + '</div>');
 
 	confirmationModal.modal('show');
@@ -5961,7 +6785,7 @@ function showModalConfirmation(title, body, yes_callback, no_callback,
 				}
 
 				if (no_callback && typeof no_callback == "function")
-					no_callback();
+					no_callback(this);
 
 			})
 
@@ -5969,6 +6793,9 @@ function showModalConfirmation(title, body, yes_callback, no_callback,
  * sound.js plays sounds within the browser. It uses HTML5 Audio to play sounds.
  * @param sound - sound name.
  **/
+// Global variable to use in twilio.js
+audio = null;
+
 function play_sound(sound, is_web_url)
 {
 	var sound_url;
@@ -5983,7 +6810,7 @@ function play_sound(sound, is_web_url)
 	try
 	{
 		// If browser supports html5 audio
-		var audio = new Audio(sound_url);
+		audio = new Audio(sound_url);
 		audio.play();
 	}
 	catch (err)
@@ -7023,6 +7850,18 @@ $(function(){
 	
 });
 
+function modalAlert(templateName,message,title){
+	
+	if(templateName == undefined || message == undefined || title == undefined)
+		return;
+	var alertJSON = {};
+	alertJSON["title"] = title;
+	alertJSON["message"] = message;
+	var template = $(getTemplate(templateName,alertJSON));
+	template.modal('show');
+	return;
+}
+
 
 
 /**
@@ -7424,6 +8263,20 @@ function getLocalTimeFromGMTMilliseconds(time_in_milliseconds)
 	return date.getTime() - date.getTimezoneOffset();
 }
 
+
+function buildFacebookProfileURL(URL) {
+	URL = URL.replace('@', '');
+	var hasScheme = ( URL.indexOf( 'http://' ) === 0 || URL.indexOf( 'https://' ) === 0 );
+	var isFBURL   = ( URL.indexOf( 'facebook.com' ) !== -1 );
+	if ( URL && !hasScheme && !isFBURL ) {
+		URL = 'https://www.facebook.com/'+URL;
+	} else if ( URL && isFBURL && URL.indexOf( 'www.facebook.com' ) === -1 ) {
+		URL = URL.replace( 'facebook.com', 'www.facebook.com' );
+	} else if ( URL && !hasScheme ) {
+		URL = 'http://'+URL;
+	}
+	return URL;
+}
 /**
  * Tags
  */
@@ -7442,167 +8295,7 @@ var ACCOUNT_CANCELED_NOTE_SUBJECT = "Account Canceled";
 // Account cancellation cusom field
 var ACCOUNT_CANCELED_CUSTOM_FIELD_NAME = "Cancel Reason";
 
-/**
- * Adds domain and loggedin date in contact in our domain
- */
-function add_custom_fields_to_our_domain()
-{
-	// Gets domain property from contact
-	var domain_custom_field = getProperty(Agile_Contact.properties, 'Domain');
-
-	// If domain custom field doesn't exists or value of and its value is not
-	// current domain
-	if (!domain_custom_field || domain_custom_field.value != CURRENT_DOMAIN_USER["domain"])
-	{
-		// Add custom property to contact
-		_agile.add_property(create_contact_custom_field("Domain", CURRENT_DOMAIN_USER["domain"], "CUSTOM"), function(data)
-		{
-			add_tag_our_domain(SIGN_UP, function()
-			{
-				add_current_loggedin_time();
-			})
-
-		});
-		return;
-	}
-
-	add_tag_our_domain(SIGN_UP, function()
-	{
-		add_current_loggedin_time();
-	})
-}
-
-/**
- * Checks if logged in time is added to contact in 'our' domain. If it is added
- * and not value is not equal to current loggedin date, then field is updated
- */
-function add_current_loggedin_time()
-{// Gets current time, and updates the last loggedin time.
-	var current_date_object = new Date();
-	var current_date_string = current_date_object.getUTCMonth() + 1 + "/" + current_date_object.getUTCDate() + "/" + current_date_object.getUTCFullYear();
-
-	console.log(parseInt(current_date_object.getTime() / 1000));
-
-	// Gets logged in time property.
-	var loggedin_time_property = getProperty(Agile_Contact.properties, 'Last login');
-	var existing_date_string = "";
-
-	// To whether custom is new or old.
-	var is_new_customer = true;
-	if (loggedin_time_property)
-	{
-		var existing_date_object = new Date(parseFloat(loggedin_time_property.value) * 1000);
-		existing_date_string = existing_date_object.getUTCMonth() + 1 + "/" + existing_date_object.getUTCDate() + "/" + existing_date_object.getUTCFullYear();
-		is_new_customer = false;
-	}
-
-	// If loggedin time is defined and it is not equal to current date then it
-	// is updated
-	if (existing_date_string && existing_date_string == current_date_string)
-		return;
-
-	loggedin_time_property = create_contact_custom_field("Last login", parseInt(current_date_object.getTime() / 1000), 'CUSTOM');
-
-	_agile.add_property(loggedin_time_property, function(data)
-	{
-		Agile_Contact = data;
-
-		// Adds timezone if customer is new
-		if (is_new_customer)
-			add_timezone_tag();
-	});
-}
-
-function create_contact_custom_field(name, value, type, subtype)
-{
-	if (!name)
-		return;
-
-	var json = {};
-	json["name"] = name;
-	json["value"] = value;
-	json["subtype"] = type;
-
-	console.log(value);
-	return json;
-
-}
-
-function add_account_canceled_info(info, callback)
-{
-	var custom_field = create_contact_custom_field(ACCOUNT_CANCELED_CUSTOM_FIELD_NAME, info["reason"], 'CUSTOM');
-	_agile.add_property(custom_field, function(data)
-	{
-		add_tag_our_domain(CANCELED, function(data)
-		{
-
-			if (info["reason_info"])
-			{
-				var note = {};
-				note.subject = ACCOUNT_CANCELED_NOTE_SUBJECT;
-				note.description = info["reason_info"];
-
-				_agile.add_note(note, function(data)
-				{
-					console.log(data);
-					Agile_Contact = data;
-
-					if (callback && typeof (callback) === "function")
-					{
-						callback();
-					}
-
-				});
-				return;
-			}
-
-			if (callback && typeof (callback) === "function")
-			{
-				callback();
-			}
-
-		});
-	});
-}
-
-/**
- * adds referral info as a note while adding contact as a note in our domain
- */
-
-function add_referrar_info_as_note()
-{
-	var utmsource = readCookie("_agile_utm_source");
-	var utmcampaign = readCookie("_agile_utm_campaign");
-	var utmmedium = readCookie("_agile_utm_medium");
-	var utmreferencedomain = readCookie("agile_reference_domain");
-	if (utmsource && utmcampaign && utmmedium && utmreferencedomain)
-	{
-		var note = {};
-		note.subject = "Referrer";
-		note.description = "Source - "+ utmsource +"\n Campaign -  "+ utmcampaign +"\n Medium - " + utmmedium + "\n Reference Domain -" + utmreferencedomain;
-
-		_agile.add_note(note, function(data)
-		{
-			console.log(data);
-			Agile_Contact = data;
-
-		});
-	}
-}
-
-// add GMT tag for user who is in between 4am to 6pm GMT
-function add_timezone_tag()
-{
-	var date = new Date();
-	var startTime = date.getUTCHours();
-	if (startTime >= 3 && startTime <= 15)
-	{
-		add_tag_our_domain("GMT");
-	}
-}
-
-function our_domain_set_account()
-{
+function our_domain_set_account() {
 	// If it is local server then add contacts to local domain instead of
 	// our domain
 	if (LOCAL_SERVER)
@@ -7616,11 +8309,259 @@ function our_domain_set_account()
 	// Track page view code
 	_agile.track_page_view();
 }
-function our_domain_sync()
-{
 
-	try
-	{
+
+/**
+ * Adds domain and loggedin date in contact in our domain
+ */
+function add_custom_fields_to_our_domain(callback) {
+	add_init_tags(function() {
+		get_new_custom_properties_to_add();
+		add_referrar_info_as_note();
+	});
+}
+
+/**
+ * Creates custom field for domain field
+ * @returns {___anonymous6182_6183}
+ */
+function getDomainCustomField() {
+	// Gets domain property from contact
+	var domain_custom_field = getProperty(Agile_Contact.properties, 'Domain');
+
+	if (!domain_custom_field
+			|| domain_custom_field.value != CURRENT_DOMAIN_USER["domain"]) {
+		return create_contact_custom_field("Domain",
+				CURRENT_DOMAIN_USER["domain"], "CUSTOM");
+	}
+}
+
+/**
+ * Creates loggedin time and domain fields
+ * @param callback
+ */
+function get_new_custom_properties_to_add(callback) {
+		addLoggedInTime(function(){
+			addDomain(callback);
+		});
+}
+
+/**
+ * Creates domain
+ * @param callback
+ */
+function addDomain(callback) {
+	var domainField = getDomainCustomField();
+	if (!domainField) {
+		if (callback && typeof callback === "function")
+			callback();
+		return;
+	}
+	property_request(domainField, callback);
+}
+
+function addLoggedInTime(callback) {
+	var timeField = new_current_loggedin_time();
+	if (!timeField) {
+		
+		processCallback(callback);
+		return;
+	}
+
+	property_request(timeField, callback);
+}
+
+/**
+ * Processes callback
+ * @param callback
+ */
+function processCallback(callback)
+{
+	if (callback && typeof callback === "function")
+		callback();
+}
+
+function property_request(property, callback)
+{
+	_agile.add_property(property,
+			function(data) {
+				Agile_Contact = data;
+				_agile_contact = data;
+
+				processCallback(callback)
+			});	
+}
+
+/**
+ * Adds all tags in single reqeust
+ * @param callback
+ */
+function add_init_tags(callback) {
+	var tag = "";
+	tag = SIGN_UP;
+	if (CURRENT_DOMAIN_USER['is_account_owner']) {
+		tag += "," + "Domain Owner";
+	}
+
+	add_miltiple_tags(tag, callback);
+}
+
+function add_miltiple_tags(tags, callback) {
+	var tags_array = tags.split(",");
+
+	var finalizedTags = "";
+
+	for (var i = 0; i < tags_array.length; i++) {
+		if (hasTagInContact(tags_array[i]))
+			continue;
+
+		if (finalizedTags.length > 0)
+			finalizedTags += "," + tags_array[i];
+		else
+			finalizedTags += tags_array[i];
+	}
+
+	if (finalizedTags.length == 0) {
+		if (callback && typeof (callback) === "function") {
+			callback();
+		}
+
+		return;
+	}
+	add_multiple_tags_request(finalizedTags.trim(), callback)
+}
+
+function add_multiple_tags_request(finalizedTags, callback) {
+	_agile.add_tag(finalizedTags, function(data) {
+		Agile_Contact = data;
+
+		if (callback && typeof (callback) === "function") {
+			callback(data);
+		}
+	});
+}
+
+/***************************************/
+
+function new_current_loggedin_time() {
+	// Gets current time, and updates the last loggedin time.
+	var current_date_object = new Date();
+	var current_date_string = current_date_object.getUTCMonth() + 1 + "/"
+			+ current_date_object.getUTCDate() + "/"
+			+ current_date_object.getUTCFullYear();
+
+	console.log(parseInt(current_date_object.getTime() / 1000));
+
+	// Gets logged in time property.
+	var loggedin_time_property = getProperty(Agile_Contact.properties,
+			'Last login');
+	var existing_date_string = "";
+
+	// To whether custom is new or old.
+	var is_new_customer = true;
+	if (loggedin_time_property) {
+		var existing_date_object = new Date(
+				parseFloat(loggedin_time_property.value) * 1000);
+		existing_date_string = existing_date_object.getUTCMonth() + 1 + "/"
+				+ existing_date_object.getUTCDate() + "/"
+				+ existing_date_object.getUTCFullYear();
+		is_new_customer = false;
+	}
+
+	// If loggedin time is defined and it is not equal to current date then it
+	// is updated
+	if (existing_date_string && existing_date_string == current_date_string)
+		return;
+
+	loggedin_time_property = create_contact_custom_field("Last login",
+			parseInt(current_date_object.getTime() / 1000), 'CUSTOM');
+
+	return loggedin_time_property;
+}
+
+
+function create_contact_custom_field(name, value, type, subtype) {
+	if (!name)
+		return;
+
+	var json = {};
+	json["name"] = name;
+	json["value"] = value;
+	json["subtype"] = type;
+
+	console.log(value);
+	return json;
+
+}
+
+function add_account_canceled_info(info, callback) {
+	var custom_field = create_contact_custom_field(
+			ACCOUNT_CANCELED_CUSTOM_FIELD_NAME, info["reason"], 'CUSTOM');
+	_agile.add_property(custom_field, function(data) {
+		add_tag_our_domain(CANCELED, function(data) {
+
+			if (info["reason_info"]) {
+				var note = {};
+				note.subject = ACCOUNT_CANCELED_NOTE_SUBJECT;
+				note.description = info["reason_info"];
+
+				_agile.add_note(note, function(data) {
+					console.log(data);
+					Agile_Contact = data;
+
+					if (callback && typeof (callback) === "function") {
+						callback();
+					}
+
+				});
+				return;
+			}
+
+			if (callback && typeof (callback) === "function") {
+				callback();
+			}
+
+		});
+	});
+}
+
+/**
+ * adds referral info as a note while adding contact as a note in our domain
+ */
+
+function add_referrar_info_as_note() {
+	var utmsource = readCookie("_agile_utm_source");
+	var utmcampaign = readCookie("_agile_utm_campaign");
+	var utmmedium = readCookie("_agile_utm_medium");
+	var utmreferencedomain = readCookie("agile_reference_domain");
+	if (utmsource && utmcampaign && utmmedium && utmreferencedomain) {
+		var note = {};
+		note.subject = "Referrer";
+		note.description = "Source - " + utmsource + "\n Campaign -  "
+				+ utmcampaign + "\n Medium - " + utmmedium
+				+ "\n Reference Domain -" + utmreferencedomain;
+
+		_agile.add_note(note, function(data) {
+			console.log(data);
+			eraseCookie("agile_reference_domain");
+
+		});
+	}
+}
+
+// add GMT tag for user who is in between 4am to 6pm GMT
+function add_timezone_tag() {
+	var date = new Date();
+	var startTime = date.getUTCHours();
+	if (startTime >= 3 && startTime <= 15) {
+		add_tag_our_domain("GMT");
+	}
+}
+
+
+function our_domain_sync() {
+
+	try {
 
 		our_domain_set_account();
 
@@ -7628,113 +8569,78 @@ function our_domain_sync()
 
 		// Sets different cookie if user logs into different domain
 		if (!domain || domain != CURRENT_DOMAIN_USER["domain"])
-			createCookieInAllAgileSubdomains(DOMAIN_COOKIE_FOR_WEBSITE, CURRENT_DOMAIN_USER["domain"]);
+			createCookieInAllAgileSubdomains(DOMAIN_COOKIE_FOR_WEBSITE,
+					CURRENT_DOMAIN_USER["domain"]);
 
-		get_contact_from_our_domain(function(data)
-		{
+		get_contact_from_our_domain(function(data) {
 			// Shows noty
 			// set_profile_noty();
 			Agile_Contact = data;
 
-			var email_from_our_website = readCookie("_agile_our_website_email");
-
-			if (email_from_our_website)
-			{
-				if (email_from_our_website == CURRENT_DOMAIN_USER['email'])
-				{
-
-					var name = CURRENT_DOMAIN_USER['name'];
-					// var first_name = name; var last_name = name;
-					name = name.trim();
-
-					var first_name = name.split(" ")[0].trim();
-					var last_name = (first_name.length < name.length) ? name.substring(first_name.length + 1).trim() : '';
-
-					_agile.update_contact({ "first_name" : first_name, "last_name" : last_name }, function(data)
-					{
-
-						Agile_Contact = data;
-						eraseCookie('_agile_our_website_email');
-
-					});
-
-				}
-			}
 			// Adds signup tag, if it is not added previously.
 			// set_profile_noty();
 			add_custom_fields_to_our_domain();
 
-			if (CURRENT_DOMAIN_USER['is_account_owner'])
-			{
-				add_tag_our_domain("Domain Owner");
-
-			}
+			;
 			initWebrules();
-		}, function(data)
-		{
+
+		}, function(data) {
 			var name = CURRENT_DOMAIN_USER['name'];
 
 			// var first_name = name, last_name = name;
 			name = name.trim();
 			var first_name = name.split(" ")[0].trim();
-			var last_name = (first_name.length < name.length) ? name.substring(first_name.length + 1).trim() : '';
+			var last_name = (first_name.length < name.length) ? name.substring(
+					first_name.length + 1).trim() : '';
 
 			// Creates a new contact and assigns it to global value
-			_agile.create_contact({ "email" : CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name" : last_name }, function(data)
-			{
+			_agile.create_contact({
+				"email" : CURRENT_DOMAIN_USER['email'],
+				"first_name" : first_name,
+				"last_name" : last_name
+			}, function(data) {
 				Agile_Contact = data;
 				// Shows noty
 				// set_profile_noty();
 				add_custom_fields_to_our_domain();
-				if (CURRENT_DOMAIN_USER['is_account_owner'])
-				{
-					add_tag_our_domain("Domain Owner");
 
-				}
 				initWebrules();
-				add_referrar_info_as_note();
 			});
 
 		})
 		// Gets contact based on the the email of the user logged in
 
-	}
-	catch (err)
-	{
+	} catch (err) {
 
 	}
 }
 
-function get_contact_from_our_domain(successCallback, errorCallback)
-{
+function get_contact_from_our_domain(successCallback, errorCallback) {
 
 	// Gets contact based on the the email of the user logged in
-	agile_getContact(CURRENT_DOMAIN_USER['email'], { success : function(data)
-	{
-		Agile_Contact = data;
-		if (successCallback && typeof (successCallback) === "function")
-			successCallback(data);
-	}, error : function(data)
-	{
-		if (errorCallback && typeof (errorCallback) === "function")
-			errorCallback(data);
-	} })
+	agile_getContact(CURRENT_DOMAIN_USER['email'], {
+		success : function(data) {
+			Agile_Contact = data;
+			if (successCallback && typeof (successCallback) === "function")
+				successCallback(data);
+		},
+		error : function(data) {
+			if (errorCallback && typeof (errorCallback) === "function")
+				errorCallback(data);
+		}
+	})
 
 }
 
-function add_signup_tag(callback)
-{
-	if (!Agile_Contact.tags || Agile_Contact.tags.indexOf(SIGN_UP) < 0)
-	{
-		add_tag_our_domain(SIGN_UP, function(data)
-		{
+function add_signup_tag(callback) {
+	if (!Agile_Contact.tags || Agile_Contact.tags.indexOf(SIGN_UP) < 0) {
+		add_tag_our_domain(SIGN_UP, function(data) {
 			// Calling to add custom fields here so avoid data loss
 			// due to asyn
 			// requests
 			add_custom_fields_to_our_domain();
 
-			if (callback && typeof (callback) === "function")
-			{
+			if (callback && typeof (callback) === "function") {
 				callback();
 			}
 		})
@@ -7744,68 +8650,16 @@ function add_signup_tag(callback)
 	// Calling to add custom fields here so avoid data loss due to asyn requests
 	add_custom_fields_to_our_domain();
 }
-function hasTagInContact(tag)
-{
-	if (!tag)
-		return false;
 
-	if (Agile_Contact && (!Agile_Contact.tags || Agile_Contact.tags.indexOf(tag) < 0))
-		return false;
 
-	return true;
-
-}
-function add_tag_our_domain(tag, callback)
-{
-	if (hasTagInContact(tag))
-	{
-		if (callback && typeof (callback) === "function")
-		{
-			callback(Agile_Contact);
-		}
-		return;
-	}
-
-	_agile.add_tag(tag, function(data)
-	{
-		Agile_Contact = data;
-
-		if (callback && typeof (callback) === "function")
-		{
-			callback(data);
-		}
-	});
-}
-
-function setup_our_domain_sync()
-{
+function setup_our_domain_sync() {
 	our_domain_sync();
 }
 
-/**
- * Adds tag to 'OUR' domain.
- * 
- * @param tag
- */
-function addTagAgile(tag)
-{
-	// Checks if tag is already available.
-	if (checkTagAgile(tag))
-		return;
 
-	// Adds tag
-	_agile.add_tag(tag, function(data)
-	{
-		Agile_Contact = data;
-		if (!checkTagAgile(tag))
-			Agile_Contact.tags.push(tag)
-			// set_profile_noty();
-	});
-}
 
 // Checks if tag exists
-function checkTagAgile(tag)
-{
+function checkTagAgile(tag) {
 
 	console.log(Agile_Contact);
 	if (Agile_Contact && Agile_Contact.tags)
@@ -7814,19 +8668,84 @@ function checkTagAgile(tag)
 	return false;
 }
 
+function hasTagInContact(tag) {
+	if (!tag)
+		return false;
+
+	if (Agile_Contact
+			&& (!Agile_Contact.tags || Agile_Contact.tags.indexOf(tag) < 0))
+		return false;
+
+	return true;
+
+}
+
+function add_tag_our_domain(tag, callback) {
+	if (hasTagInContact(tag)) {
+		if (callback && typeof (callback) === "function") {
+			callback(Agile_Contact);
+		}
+		return;
+	}
+
+	_agile.add_tag(tag, function(data) {
+		Agile_Contact = data;
+
+		if (callback && typeof (callback) === "function") {
+			callback(data);
+		}
+	});
+}
+
+/**
+ * Adds tag to 'OUR' domain.
+ * 
+ * @param tag
+ */
+function addTagAgile(tag) {
+	// Checks if tag is already available.
+	if (checkTagAgile(tag))
+		return;
+
+	// Adds tag
+	_agile.add_tag(tag, function(data) {
+		Agile_Contact = data;
+		if (!checkTagAgile(tag))
+			Agile_Contact.tags.push(tag)
+			// set_profile_noty();
+	});
+}
+
+function add_property(name, value, type, callback) {
+	// alert(Agile_Contact.properties);
+	var property = getProperty(Agile_Contact.properties, name);
+	if (property && property.value == value && type == property.type) {
+		callback(Agile_Contact);
+		return false;
+
+	}
+	_agile.add_property(create_contact_custom_field(name, value, type),
+			function(data) {
+				Agile_Contact = data;
+				_agile_contact = data;
+
+				if (callback && typeof callback == "function")
+					callback(data);
+			});
+}
+
 var GLOBAL_WEBRULE_FLAG;
-function initWebrules()
-{
+function initWebrules() {
 	_agile_execute_web_rules();
 	GLOBAL_WEBRULE_FLAG = true;
 }
 
-function add_properties_from_popup(phone_number, company_size)
-{
-	_agile.add_property(create_contact_custom_field("Company Size", company_size, "CUSTOM"), function(data)
-	{
-		_agile.add_property(create_contact_custom_field("phone", phone_number, "SYSTEM", "home"), function(data)
-		{
+
+function add_properties_from_popup(phone_number, company_size) {
+	_agile.add_property(create_contact_custom_field("Company Size",
+			company_size, "CUSTOM"), function(data) {
+		_agile.add_property(create_contact_custom_field("phone", phone_number,
+				"SYSTEM", "home"), function(data) {
 
 			console.log(data);
 			_agile_contact = data;
@@ -7837,43 +8756,111 @@ function add_properties_from_popup(phone_number, company_size)
 	});
 }
 
-function add_property(name, value, type, callback)
-{
-	// alert(Agile_Contact.properties);
-	var property = getProperty(Agile_Contact.properties, name);
-	if (property && property.value == value && type == property.type)
-	{
-		callback(Agile_Contact);
-		return false;
-
-	}
-	_agile.add_property(create_contact_custom_field(name, value, type), function(data)
-	{
-		Agile_Contact = data;
-		_agile_contact = data;
-
-		if (callback && typeof callback == "function")
-			callback(data);
-	});
-}
-
 /**
  * adds user info as a note to account owner when user created called from
  * user-add route
  */
-function add_created_user_info_as_note_to_owner(owner, callback)
-{
+function add_created_user_info_as_note_to_owner(owner, callback) {
 	var note = {};
 	note.subject = "User created";
-	note.description = " Domain - " + owner['domain'] + "\n User Email -  " + owner['created_user_email'];
-	_agile.add_note(note, function(data)
-	{
+	note.description = " Domain - " + owner['domain'] + "\n User Email -  "
+			+ owner['created_user_email'];
+	_agile.add_note(note, function(data) {
 		if (callback && typeof callback == "function")
 			callback(data);
 
 	}, owner['email']);
 
 }
+
+// add note to owner when subscription is cancelled
+function add_cancel_subscription_info_as_note_to_owner(cus_email, callback) {
+	var note = {};
+	note.subject = "Subscription Cancelled";
+	note.description = " Subscription cancelled by "
+			+ CURRENT_DOMAIN_USER.email;
+	_agile.add_note(note, function(data) {
+		if (callback && typeof callback == "function")
+			callback(data);
+
+	}, cus_email);
+}
+function add_delete_user_info_as_note_to_owner(cus_email, callback) {
+	var note = {};
+	note.subject = "User Deleted ";
+	note.description = " One user deleted by " + CURRENT_DOMAIN_USER.email;
+	_agile.add_note(note, function(data) {
+		if (callback && typeof callback == "function")
+			callback(data);
+
+	}, cus_email);
+
+}
+function add_refunded_info_as_note_to_owner(cus_email, amount, callback) {
+	var note = {};
+	note.subject = "Amount Refunded ";
+	note.description = "Amount $" + amount + " refunded by "
+			+ CURRENT_DOMAIN_USER.email;
+	_agile.add_note(note, function(data) {
+		if (callback && typeof callback == "function")
+			callback(data);
+
+	}, cus_email);
+
+}
+function add_password_change_info_as_note_to_owner(cus_email, callback) {
+	var note = {};
+	note.subject = "Password Changed ";
+	note.description = " Password changed by " + CURRENT_DOMAIN_USER.email;
+	_agile.add_note(note, function(data) {
+		if (callback && typeof callback == "function")
+			callback(data);
+
+	}, cus_email);
+
+}
+
+/**
+ * Adds plan changed info as a note
+ * @param cus_email
+ * @param plan_type
+ * @param plan_id
+ * @param quantity
+ * @param callback
+ */
+function add_plan_change_info_as_note_to_owner(cus_email, plan_type, plan_id,
+		quantity, callback) {
+	var note = {};
+	note.subject = "Plan Changed ";
+	note.description = " Plan changed to " + plan_type + " (" + plan_id + "*"
+			+ quantity + ") by " + CURRENT_DOMAIN_USER.email;
+	_agile.add_note(note, function(data) {
+		if (callback && typeof callback == "function")
+			callback(data);
+
+	}, cus_email);
+
+}
+
+$(function(){
+	try
+	{
+		if(_agile)
+		{
+			setup_our_domain_sync();
+			return;
+		}
+		head.js("stats/min/agile-min.js", function(){
+			setup_our_domain_sync();
+		})
+		
+	}
+	catch(err)
+	{
+		console.log();
+	}
+	
+});
 $(function(){ 
 	
 	/**
@@ -7955,7 +8942,7 @@ $(function(){
 	/**
 	 * To validate the document add or edit forms
 	 */
-    $('#document_validate, #document_update_validate').on('click',function(e){
+    $('#document_validate, #document_update_validate').live('click',function(e){
  		e.preventDefault();
 
  		var modal_id = $(this).closest('.upload-document-modal').attr("id");
@@ -8050,7 +9037,8 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 	
 	// While attaching document is from existing documenst list, no need of form verification.
 	if(form_id)
-	{
+	{	
+		
 		if (!isValidForm('#' + form_id)) {
 
 			// Removes disabled attribute of save button
@@ -8158,6 +9146,51 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 			}
 		}
 	});
+}$(function(){ 
+
+	$("#choose-avatar-modal table td a").die().live('click', function(e) {
+	
+			e.preventDefault();
+	
+			var modalId = $(this).closest('.modal').attr("id");
+	
+			var source = $(this).find("img").attr("src");
+	
+			$(this).closest(".modal-body").find("input[type='hidden']").val(source);
+	
+			$(this).closest('.modal').modal('hide');
+	});
+	
+	$('#choose-avatar-modal').die().live('hide', function() {
+	
+			var selectedSource = $(this).find(".modal-body input[type='hidden']").val();
+			
+			if(selectedSource)
+			{
+				$("input[name='custom_image']").val(selectedSource);
+				
+				setImageURL(selectedSource);
+				
+				/*var modalId = $(this).attr("id");
+				$("a[href='#" + modalId + "']").find("img").attr('src', selectedSource);*/
+				//$(".preview-avatar").attr("src", selectedSource);
+			}
+	});
+	
+});
+
+// selects default avatars randomly
+function choose_random_avatar()
+{
+	var avatar = ["https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/86.png",
+	              "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/72.png",
+	              "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/17.png",
+	              "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/5.png",
+	              "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/3.png"];
+
+	var random = Math.floor((Math.random() * avatar.length));
+
+	return avatar[random];
 }/**
  * Chrome extension id
  *//*
@@ -8364,2990 +9397,3532 @@ function Toggle_Extension_Loader(type)
 */$(function()
 {
 
-	/**
-	 * Helper function to return the value of a property matched with the given
-	 * name from the array of properties
-	 * 
-	 * @method getPropertyValue
-	 * @param {Object}
-	 *            items array of objects
-	 * @param {String}
-	 *            name to get matched object value
-	 * @returns value of the matched object
-	 */
-	Handlebars.registerHelper('getPropertyValue', function(items, name)
-	{
-		return getPropertyValue(items, name);
-	});
-	
-	/**
-	 * Helper function to return the checkbox html element with value of a property matched with the given
-	 * name from the array of properties
-	 * 
-	 * @method getPropertyValue
-	 * @param {Object}
-	 *            items array of objects
-	 * @param {String}
-	 *            name to get matched object value
-	 * @returns heckbox html element with value of the matched object
-	 */
-	Handlebars.registerHelper('getPropertyValueInCheckbox', function(items, name, separator,checked)
-			{
-				return getPropertyValueInCheckbox(items, name, separator,checked);
-			});
-	
-	Handlebars.registerHelper('get_correct_count', function(count)
-			{
-				return count-1;
-			});
-
-	/**
-	 * Helper function to return the value of property based on sub-type of the
-	 * property
-	 */
-	Handlebars.registerHelper('getPropertyValueBySubtype', function(items, name, subtype)
-	{
-		return getPropertyValueBySubtype(items, name, subtype);
-	});
-
-	/**
-	 * Helper function to return the value of property based on type of the
-	 * property
-	 */
-	Handlebars.registerHelper('getPropertyValueBytype', function(items, name, type, subtype)
-	{
-		return getPropertyValueBytype(items, name, type, subtype);
-	});
-
-	/**
-	 * Returns twitter handle based on the twitter url of the profile. Accepts
-	 * string URL and splits at last "/" and returns handle.
-	 */
-	Handlebars.registerHelper('getTwitterHandleByURL', function(value)
-	{
-
-		if (value.indexOf("https://twitter.com/") != -1)
-			return value;
-
-		value = value.substring(value.lastIndexOf("/") + 1);
-		console.log(value);
-
-		return value;
-	});
-
-	/**
-	 * 
-	 */
-	Handlebars.registerHelper('getContactCustomProperties', function(items, options)
-	{
-		var fields = getContactCustomProperties(items);
-		if (fields.length == 0)
-			return options.inverse(fields);
-
-		return options.fn(fields);
-
-	});
-
-	/**
-	 * Returns custom fields without few fields like LINKEDIN or TWITTER or
-	 * title fields
-	 */
-	Handlebars.registerHelper('getContactCustomPropertiesExclusively', function(items, options)
-	{
-
-		var exclude_by_subtype = [
-				"LINKEDIN", "TWITTER"
-		];
-		var exclude_by_name = [
-			"title"
-		];
-
-		var fields = getContactCustomProperties(items);
-
-		var exclusive_fields = [];
-		for (var i = 0; i < fields.length; i++)
-		{
-			if (jQuery.inArray(fields[i].name, exclude_by_name) != -1 || (fields[i].subtype && jQuery.inArray(fields[i].subtype, exclude_by_subtype) != -1))
-			{
-				continue;
-			}
-
-			exclusive_fields.push(jQuery.extend(true, {}, fields[i]));
-		}
-		if (exclusive_fields.length == 0)
-			return options.inverse(exclusive_fields);
-
-		$.getJSON("core/api/custom-fields/type/DATE", function(data)
-		{
-
-			if (data.length == 0)
-				return;
-
-			for (var j = 0; j < data.length; j++)
-			{
-				for (var i = 0; i < exclusive_fields.length; i++)
+				/**
+				 * Helper function to return the value of a property matched with the given
+				 * name from the array of properties
+				 * 
+				 * @method getPropertyValue
+				 * @param {Object}
+				 *         items array of objects
+				 * @param {String}
+				 *         name to get matched object value
+				 * @returns value of the matched object
+				 */
+				Handlebars.registerHelper('getPropertyValue', function(items, name)
 				{
-					if (exclusive_fields[i].name == data[j].field_label)
-						try
-						{
-							var value = exclusive_fields[i].value * 1000;
+								return getPropertyValue(items, name);
+				});
 
-							if (!isNaN(value))
-							{
-								exclusive_fields[i].value = value;
-								exclusive_fields[i]["subtype"] = data[j].field_type;
-							}
+				/**
+				 * Helper function to return the checkbox html element with value of a
+				 * property matched with the given name from the array of properties
+				 * 
+				 * @method getPropertyValue
+				 * @param {Object}
+				 *         items array of objects
+				 * @param {String}
+				 *         name to get matched object value
+				 * @returns heckbox html element with value of the matched object
+				 */
+				Handlebars.registerHelper('getPropertyValueInCheckbox', function(items, name, separator, checked)
+				{
+								return getPropertyValueInCheckbox(items, name, separator, checked);
+				});
 
-						}
-						catch (err)
-						{
-							exclusive_fields[i].value = exclusive_fields[i].value;
-						}
-				}
-			}
-			updateCustomData(options.fn(exclusive_fields));
-		});
+				Handlebars.registerHelper('get_correct_count', function(count)
+				{
+								return count - 1;
+				});
 
-		return options.fn(exclusive_fields)
+				/**
+				 * Helper function to return the value of property based on sub-type of the
+				 * property
+				 */
+				Handlebars.registerHelper('getPropertyValueBySubtype', function(items, name, subtype)
+				{
+								return getPropertyValueBySubtype(items, name, subtype);
+				});
 
-	});
+				/**
+				 * Helper function to return the value of property based on type of the
+				 * property
+				 */
+				Handlebars.registerHelper('getPropertyValueBytype', function(items, name, type, subtype)
+				{
+								return getPropertyValueBytype(items, name, type, subtype);
+				});
 
-	Handlebars.registerHelper('urlEncode', function(url, key, data)
-	{
-
-		var startChar = "&";
-		if (url.indexOf("?") != -1)
-			startChar = "&";
-
-		var encodedUrl = url + startChar + key + "=" + escape(JSON.stringify(data));
-		// console.log(encodedUrl.length + " " + encodedUrl);
-		return encodedUrl;
-	});
-
-	Handlebars.registerHelper('encodeString', function(url)
-	{
-		return encodeURIComponent(url);
-	});
-
-	/**
-	 * Helper function to return image for an entity (contact). Checks for
-	 * existing image, if not found checks for an image using the email of the
-	 * entity, if again failed to found returns a default image link.
-	 * 
-	 * @method gravatarurl
-	 * @param {Object}
-	 *            items array of objects
-	 * @param {Number}
-	 *            width to specify the width of the image
-	 * @returns image link
-	 * 
-	 */
-	Handlebars.registerHelper('gravatarurl', function(items, width)
-	{
-
-		if (items == undefined)
-			return;
-
-		// Checks if properties already has an image, to return it
-		var agent_image = getPropertyValue(items, "image");
-		if (agent_image)
-			return agent_image;
-
-		// Default image
-		var img = DEFAULT_GRAVATAR_url;
-
-		var email = getPropertyValue(items, "email");
-		if (email)
-		{
-			return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + "&d=" + escape(img);
-		}
-
-		return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
-
-	});
-
-	Handlebars.registerHelper('defaultGravatarurl', function(width)
-	{
-		// Default image
-		var img = DEFAULT_GRAVATAR_url;
-
-		return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
-	});
-
-	Handlebars.registerHelper('emailGravatarurl', function(width, email)
-	{
-		// Default image
-		var img = DEFAULT_GRAVATAR_url;
-
-		if (email)
-		{
-			return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + "&d=" + escape(img);
-		}
-
-		return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
-	});
-
-	/**
-	 * CSS text avatars
-	 */
-	Handlebars.registerHelper('nameAvatar', function(items, width)
-	{
-
-		if (items == undefined)
-			return;
-
-		// Checks if properties already has an image, to return it
-		var agent_image = getPropertyValue(items, "image");
-		if (agent_image)
-			return agent_image;
-
-		var email = getPropertyValue(items, "email");
-		if (email)
-		{
-			return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + '&d=404';
-		}
-
-		return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '&d=404';
-
-	});
-
-	/**
-	 * To add data-name attribute to image tags
-	 */
-	Handlebars.registerHelper('dataNameAvatar', function(items)
-	{
-
-		if (items == undefined)
-			return;
-
-		var name = "";
-
-		if (getPropertyValue(items, "first_name"))
-			name = name + "" + getPropertyValue(items, "first_name").substr(0, 1);
-
-		if (getPropertyValue(items, "last_name"))
-			name = name + "" + getPropertyValue(items, "last_name").substr(0, 1);
-
-		return name;
-
-	});
-
-	/**
-	 * Helper function to return icons based on given name
-	 * 
-	 * @method icons
-	 * @param {String}
-	 *            item name to get icon
-	 * @returns icon name
-	 */
-	Handlebars.registerHelper('icons', function(item)
-	{
-		item = item.toLowerCase();
-		if (item == "email")
-			return "icon-envelope-alt";
-		if (item == "phone")
-			return "icon-headphones";
-		if (item == "url")
-			return "icon-home";
-		if (item == "call")
-			return "icon-phone-sign";
-		if (item == "follow_up")
-			return "icon-signout";
-		if (item == "meeting")
-			return "icon-group";
-		if (item == "milestone")
-			return "icon-cog";
-		if (item == "send")
-			return "icon-reply";
-		if (item == "tweet")
-			return "icon-share-alt";
-		if (item == "other")
-			return "icon-tasks";
-
-	});
-
-	Handlebars.registerHelper('eachkeys', function(context, options)
-	{
-		var fn = options.fn, inverse = options.inverse;
-		var ret = "";
-
-		var empty = true;
-		for (key in context)
-		{
-			empty = false;
-			break;
-		}
-
-		if (!empty)
-		{
-			for (key in context)
-			{
-				ret = ret + fn({ 'key' : key, 'value' : context[key] });
-			}
-		}
-		else
-		{
-			ret = inverse(this);
-		}
-		return ret;
-	});
-
-	/**
-	 * Turns the first letter of the given string to upper-case and the
-	 * remaining to lower-case (EMaiL to Email).
-	 * 
-	 * @method ucfirst
-	 * @param {String}
-	 *            value to convert as ucfirst
-	 * @returns converted string
-	 */
-	Handlebars.registerHelper('ucfirst', function(value)
-	{
-		return (value && typeof value === 'string') ? (value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()) : '';
-	});
-
-	/**
-	 * Returns Contact short name
-	 */
-	Handlebars.registerHelper('contactShortName', function()
-	{
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
-		{
-
-			var contact_properties = App_Contacts.contactDetailView.model.get('properties');
-
-			if (App_Contacts.contactDetailView.model.get('type') == 'PERSON')
-			{
-				for (var i = 0; i < contact_properties.length; i++)
+				/**
+				 * Returns twitter handle based on the twitter url of the profile. Accepts
+				 * string URL and splits at last "/" and returns handle.
+				 */
+				Handlebars.registerHelper('getTwitterHandleByURL', function(value)
 				{
 
-					if (contact_properties[i].name == "last_name")
-						return contact_properties[i].value;
-					else if (contact_properties[i].name == "first_name")
-						return contact_properties[i].value;
-				}
-				return "Contact";
-			}
-			else
-			{
-				for (var i = 0; i < contact_properties.length; i++)
+								if (value.indexOf("https://twitter.com/") != -1)
+												return value;
+
+								value = value.substring(value.lastIndexOf("/") + 1);
+								console.log(value);
+
+								return value;
+				});
+
+				/**
+				 * 
+				 */
+				Handlebars.registerHelper('getContactCustomProperties', function(items, options)
 				{
-					if (contact_properties[i].name == "name")
-						return contact_properties[i].value;
-				}
-				return "Company";
-			}
-		}
-	});
+								var fields = getContactCustomProperties(items);
+								if (fields.length == 0)
+												return options.inverse(fields);
 
-	/**
-	 * Returns workflow name surrounded by quotations if exists, otherwise this
-	 */
-	Handlebars.registerHelper('workflowName', function()
-	{
-		if (App_Workflows.workflow_model)
-		{
-			var workflowName = App_Workflows.workflow_model.get("name");
-			return "\'" + workflowName + "\'";
-		}
+								return options.fn(fields);
 
-		return "this";
-	});
+				});
 
-	/**
-	 * 
-	 * @method task_property
-	 * @param {String}
-	 *            change property value in view
-	 * @returns converted string
-	 */
-	Handlebars.registerHelper('task_property', function(value)
-	{
+				/**
+				 * Returns custom fields without few fields like LINKEDIN or TWITTER or
+				 * title fields
+				 */
+				Handlebars.registerHelper('getContactCustomPropertiesExclusively', function(items, options)
+				{
 
-		if (value == "FOLLOW_UP")
-			return "Follow Up";
-		else
-			return ucfirst(value);
+								var exclude_by_subtype = [
+																"LINKEDIN", "TWITTER"
+								];
+								var exclude_by_name = [
+												"title"
+								];
 
-	});
-	
-	
-	/**
-	 * Adds Custom Fields to contact merge form, where this helper function is called
-	 */
-	Handlebars.registerHelper('show_custom_fields_for_merge', function(custom_fields, contacts)
-	{
+								var fields = getContactCustomProperties(items);
 
-		var el = show_custom_fields_helper_for_merge(custom_fields, contacts);
-		return new Handlebars.SafeString(el);
-
-	});
-
-	/**
-	 * this is useful in activity when note characters exceeds abouve 50 simply
-	 * show dots
-	 */
-	Handlebars.registerHelper('add_dots_end', function(value)
-	{
-
-		if (value.length > 50)
-		{
-			var subst = value.substr(0, 50);
-			subst = subst + "....";
-			return subst;
-		}
-
-		return value;
-
-	});
-
-	// Tip on using Gravar with JS:
-	// http://www.deluxeblogtips.com/2010/04/get-gravatar-using-only-javascript.html
-	/**
-	 * Helper function to generate a html string as desired to show-up the
-	 * tags-view
-	 * 
-	 * @method tagslist
-	 * @param {Object}
-	 *            tags array containing all tags
-	 */
-	Handlebars.registerHelper('tagslist', function(tags)
-	{
-
-		console.log(tags);
-		var json = {};
-
-		// Store tags in a json, starting letter as key
-		for (var i = 0; i < tags.length; i++)
-		{
-
-			var tag = tags[i].tag;
-			// console.log(tag);
-			var start = tag.charAt(0).toUpperCase();
-
-			var array = new Array();
-
-			// see if it is already present
-			if (json[start] != undefined)
-			{
-				array = json[start];
-			}
-
-			array.push(tag);
-			json[start] = array;
-
-		}
-
-		// To sort tags in case-insensitive order i.e. keys in json object
-		var keys = Object.keys(json);
-		keys.sort();
-
-		// Sorts it based on characters and then draws it
-		var html = "";
-
-		for ( var i in keys)
-		{
-
-			var array = json[keys[i]];
-
-			html += "<div class='tag-element'><div class='tag-key'>" + keys[i] + "</div> ";
-
-			html += "<div class='tag-values'>";
-
-			for (var i = 0; i < array.length; i++)
-			{
-				console.log("************************");
-				console.log(array[i]);
-				var hrefTag = "#tags/" + encodeURIComponent(array[i]);
-
-				html += ('<a href=\"' + hrefTag + '\" >' + array[i] + '</a> ');
-			}
-			html += "</div></div>";
-
-		}
-
-		return html;
-	});
-
-	Handlebars
-			.registerHelper(
-					'setupTags',
-					function(tags)
-					{
-
-						console.log(tags);
-						var json = {};
-
-						var keys = [];
-						// Store tags in a json, starting letter as key
-						for (var i = 0; i < tags.length; i++)
-						{
-							var tag = tags[i].tag;
-							var key = tag.charAt(0).toUpperCase();
-							// console.log(tag);
-							if (jQuery.inArray(key, keys) == -1)
-								keys.push(key);
-						}
-
-						// To sort tags in case-insensitive order i.e. keys in
-						// json object
-						keys.sort();
-						console.log(keys);
-						var html = "";
-						for (var i = 0; i < keys.length; i++)
-						{
-							html += "<div class='tag-element' style='margin-right:10px;'><div class='tag-key'>" + keys[i] + "</div><div class='tag-values' tag-alphabet=\"" + encodeURI(keys[i]) + "\"></div></div>";
-						}
-						return new Handlebars.SafeString(html);
-					});
-
-	// To show milestones as columns in deals
-	Handlebars
-			.registerHelper(
-					'deals_by_milestones',
-					function(data)
-					{
-						var html = "";
-						var count = Object.keys(data).length;
-						$
-								.each(
-										data,
-										function(key, value)
-										{
-											if (count == 1 && key == "")
-											{
-												html += '<div class="slate" style="margin:0px;"><div class="slate-content"><div class="box-left"><img alt="Clipboard" src="/img/clipboard.png"></div><div class="box-right"><h3>You have no milestones defined</h3><br><a href="#milestones" class="btn"><i class="icon icon-plus-sign"></i> Add Milestones</a></div></div></div>';
-											}
-											else
-											{
-												html += "<div class='milestone-column'><div class='dealtitle-angular'><p class='milestone-heading'>" + key + "</p><span></span></div><ul class='milestones' milestone='" + key + "'>";
-												for ( var i in value)
+								var exclusive_fields = [];
+								for (var i = 0; i < fields.length; i++)
+								{
+												if (jQuery.inArray(fields[i].name, exclude_by_name) != -1 || (fields[i].subtype && jQuery.inArray(fields[i].subtype, exclude_by_subtype) != -1))
 												{
-													if (value[i].id)
-														html += "<li id='" + value[i].id + "'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
+																continue;
 												}
-												html += "</ul></div>";
-											}
-										});
-						return html;
-					});
-
-	// To show milestones as sortable list
-	Handlebars
-			.registerHelper(
-					'milestone_ul',
-					function(data)
-					{
-						var html = "<ul class='milestone-value-list tagsinput' style='padding:1px;list-style:none;'>";
-						if (data)
-						{
-							var milestones = data.split(",");
-							for ( var i in milestones)
-							{
-								html += "<li data='" + milestones[i] + "'><div><span>" + milestones[i] + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>";
-							}
-						}
-						html += "</ul>";
-						return html;
-					});
-
-	/**
-	 * Helper function to return date string from epoch time
-	 */
-	Handlebars.registerHelper('epochToHumanDate', function(format, date)
-	{
-
-		if (!format)
-			format = "mmm dd yyyy HH:MM:ss";
-
-		if (!date)
-			return;
-
-		if ((date / 100000000000) > 1)
-		{
-			console.log(new Date(parseInt(date)).format(format));
-			return new Date(parseInt(date)).format(format, 0);
-		}
-		// date form milliseconds
-		var d = new Date(parseInt(date) * 1000).format(format);
-
-		return d
-
-		// return $.datepicker.formatDate(format , new Date( parseInt(date) *
-		// 1000));
-	});
-
-	/**
-	 * Helper function to return the date string converting to local timezone.
-	 */
-	Handlebars.registerHelper('toLocalTimezone', function(dateString)
-	{
-		var date = new Date(dateString);
-
-		return date.toDateString() + ' ' + date.toLocaleTimeString();
-	});
-
-	/**
-	 * Helper function to return the date string converting to local timezone
-	 * from UTC.
-	 */
-	Handlebars.registerHelper('toLocalTimezoneFromUtc', function(dateString)
-	{
-		var date = new Date(dateString + ' GMT+0000');
-
-		return date.toDateString() + ' ' + date.toLocaleTimeString();
-	});
-
-	/**
-	 * Helper function to return task date (MM dd, ex: Jan 10 ) from epoch time
-	 */
-	Handlebars.registerHelper('epochToTaskDate', function(date)
-	{
-
-		var intMonth, intDay;
-
-		// Verifies whether date is in milliseconds, then
-		// no need to multiply with 1000
-		if ((date / 100000000000) > 1)
-		{
-			intMonth = new Date(date).getMonth();
-			intDay = new Date(date).getDate();
-		}
-		else
-		{
-			intMonth = new Date(parseInt(date) * 1000).getMonth();
-			intDay = new Date(parseInt(date) * 1000).getDate();
-		}
-		var monthArray = [
-				"Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"
-		];
-
-		return (monthArray[intMonth] + " " + intDay);
-	});
-
-	/**
-	 * Helper function to return task color based on it's priority
-	 */
-	Handlebars.registerHelper('task_label_color', function(priority)
-	{
-		if (priority == 'HIGH' || priority == 'red')
-			return 'important';
-		if (priority == 'NORMAL' || priority == '#36C')
-			return 'info';
-		if (priority == 'LOW')
-			return '';
-		if (priority == 'green')
-			return 'success';
-	});
-
-	/**
-	 * Helper function to return event label based on it's priority
-	 */
-	Handlebars.registerHelper('event_priority', function(priority)
-	{
-		if (priority == 'red')
-			return 'High';
-		if (priority == '#36C')
-			return 'Normal';
-		if (priority == 'green')
-			return 'Low';
-	});
-
-	/**
-	 * Helper function to return type based on it's network type
-	 */
-	Handlebars.registerHelper('network', function(type)
-	{
-		if (type == 'GOOGLE')
-			return 'Google Drive';
-		if (type == 'S3')
-			return 'Uploaded Doc';
-	});
-
-	/**
-	 * Helper function to return date (Jan 10, 2012) from epoch time (users
-	 * table)
-	 * 
-	 * @param {Object}
-	 *            info_json json object containing information about
-	 *            createdtime, last logged in time etc..
-	 * @param {String}
-	 *            date_type specifies the type of date to return (created or
-	 *            logged in)
-	 */
-	Handlebars.registerHelper('epochToDate', function(info_json, date_type)
-	{
-
-		var obj = JSON.parse(info_json);
-
-		if (!obj[date_type])
-			return "-";
-		if (date_type != "created_time")
-		{
-			if ((obj[date_type] / 100000000000) > 1)
-			{
-				return new Date(parseInt(obj[date_type])).format("mmm dd yyyy HH:MM:ss", 0);
-			}
-			// date form milliseconds
-			return new Date(parseInt(obj[date_type]) * 1000).format("mmm dd yyyy HH:MM:ss", 0);
-		}
-		else
-		{
-			var intMonth = new Date(parseInt(obj[date_type]) * 1000).getMonth();
-			var intDay = new Date(parseInt(obj[date_type]) * 1000).getDate();
-			var intYear = new Date(parseInt(obj[date_type]) * 1000).getFullYear();
-
-			var monthArray = [
-					"Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"
-			];
-
-			return (monthArray[intMonth] + " " + intDay + ", " + intYear);
-		}
-	});
-
-	/**
-	 * Returns currency symbol based on the currency value (deals)
-	 */
-	Handlebars.registerHelper('currencySymbol', function()
-	{
-		var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
-		var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
-		return symbol;
-	});
-
-	/**
-	 * Calculates the "pipeline" for deals based on their value and probability
-	 * (value * probability)
-	 * 
-	 * @param {Number}
-	 *            value of the deal
-	 * @param {Number}
-	 *            probability of the deal
-	 */
-	Handlebars.registerHelper('calculatePipeline', function(value, probability)
-	{
-
-		var pipeline = parseInt(value) * parseInt(probability) / 100;
-		return pipeline;
-	});
-
-	/**
-	 * Returns required log (time or message) from logs (campaign logs)
-	 */
-	Handlebars.registerHelper('getRequiredLog', function(log_array_string, name)
-	{
-		var logArray = JSON.parse(log_array_string);
-		if (name == "t")
-		{
-			var readableTime = new Date(logArray[0][name] * 1000);
-			return readableTime;
-		}
-		return logArray[0][name];
-	});
-
-	/**
-	 * Returns table headings for custom contacts list view
-	 */
-	Handlebars.registerHelper('contactTableHeadings', function(item)
-	{
-
-		var el = "";
-		$.each(App_Contacts.contactViewModel[item], function(index, element)
-		{
-
-			element = element.replace("_", " ")
-
-			el = el.concat('<th>' + ucfirst(element) + '</th>');
-
-		});
-
-		return new Handlebars.SafeString(el);
-	});
-
-	/**
-	 * Returns table headings for reports custom contacts list view
-	 */
-	Handlebars.registerHelper('reportsContactTableHeadings', function(item)
-	{
-
-		var el = "";
-		$.each(REPORT[item], function(index, element)
-		{
-
-			if (element.indexOf("properties_") != -1)
-				element = element.split("properties_")[1];
-			if (element.indexOf("custom_") == 0)
-				element = element.split("custom_")[1];
-
-			element = element.replace("_", " ")
-
-			el = el.concat('<th>' + ucfirst(element) + '</th>');
-
-		});
-
-		return new Handlebars.SafeString(el);
-	});
-
-	/**
-	 * Helper function, which executes different templates (entity related)
-	 * based on entity type. Here "this" reffers the current entity object.
-	 * (used in timeline)
-	 * 
-	 */
-	Handlebars.registerHelper('if_entity', function(item, options)
-	{
-
-		if (this.entity_type == item)
-		{
-			return options.fn(this);
-		}
-		if (!this.entity && this[item] != undefined)
-		{
-			return options.fn(this);
-		}
-	});
-
-	/**
-	 * Returns trigger type, by removing underscore and converting into
-	 * lowercase, excluding first letter.
-	 */
-	Handlebars.registerHelper('titleFromEnums', function(value)
-	{
-		if (!value)
-			return;
-
-		var str = value.replace(/_/g, ' ');
-		return ucfirst(str.toLowerCase());
-
-	});
-
-	Handlebars.registerHelper('actionTemplate', function(actions)
-	{
-		if (!actions)
-			return;
-
-		var actions_count = actions.length;
-
-		var el = '<div style="white-space: normal!important;word-break: break-word;">';
-
-		$.each(actions, function(key, val)
-		{
-			if (--actions_count == 0)
-			{
-				el = el.concat(titleFromEnums(val.action));
-				return;
-			}
-			el = el.concat(titleFromEnums(val.action) + ", ");
-		});
-
-		el = el.concat('</div>');
-		return new Handlebars.SafeString(el);
-
-	});
-
-	Handlebars.registerHelper('triggerType', function(value)
-	{
-		if (value == 'ADD_SCORE')
-			return value.replace('ADD_SCORE', 'Score (>=)');
-
-		return titleFromEnums(value);
-	});
-
-	/**
-	 * Returns notification type,by replacing 'has been' with underscore and
-	 * converting into lowercase.
-	 */
-	Handlebars.registerHelper('if_notification_type', function()
-	{
-
-		// Makes 'CONTACT CREATED' To 'COMPANY CREATED'
-		if (this.type == "COMPANY")
-		{
-			var arr = this.notification.split('_');
-			var temp = ucfirst(arr[0].replace('CONTACT', 'COMPANY')) + " " + ucfirst(arr[1]);
-			return " - " + temp;
-		}
-
-		// Replaces '_' with ' '
-		var str = this.notification.replace(/_/, ' ');
-
-		switch (str) {
-		case "IS BROWSING":
-			return str.toLowerCase() + " " + this.custom_value;
-
-		case "CLICKED LINK":
-			var customJSON = JSON.parse(this.custom_value);
-
-			if (customJSON["workflow_name"] == undefined)
-				return str.toLowerCase() + " " + customJSON.url_clicked;
-
-			return str.toLowerCase() + " " + customJSON.url_clicked + " " + " of campaign " + "\"" + customJSON.workflow_name + "\""
-
-		case "OPENED EMAIL":
-			var customJSON = JSON.parse(this.custom_value);
-
-			if (customJSON.hasOwnProperty("workflow_name"))
-				return str.toLowerCase() + " " + " of campaign " + "\"" + customJSON.workflow_name + "\"";
-
-			return str.toLowerCase() + " with subject " + "\"" + customJSON.email_subject + "\"";
-
-		case "CONTACT ADDED":
-			return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
-
-		case "CONTACT DELETED":
-			return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
-
-		case "DEAL CREATED":
-			return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
-
-		case "DEAL CLOSED":
-			return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
-
-		case "TAG ADDED":
-			return " - " + "\"" + this.custom_value + "\" " + str.toLowerCase().split(' ')[0] + " has been " + str.toLowerCase().split(' ')[1];
-
-		case "TAG DELETED":
-			return " - " + "\"" + this.custom_value + "\" " + str.toLowerCase().split(' ')[0] + " has been " + str.toLowerCase().split(' ')[1];
-
-		default:
-			return str.toLowerCase();
-		}
-	});
-
-	/**
-	 * Converts Epoch Time to Human readable date of default format.Used for
-	 * campaign-logs.
-	 */
-	Handlebars.registerHelper('epochToLogDate', function(logTime)
-	{
-		return new Date(logTime * 1000);
-	});
-
-	/**
-	 * Returns country name from country code.
-	 */
-	Handlebars.registerHelper('getCountryName', function(countrycode)
-	{
-		// retrieves country name from code using country-from-code.js
-		return getCode(countrycode);
-	});
-
-	/**
-	 * Replace '+' symbols with space.Used in notification.
-	 */
-	Handlebars.registerHelper('replace_plus_symbol', function(name)
-	{
-
-		return name.replace(/\+/, ' ');
-	});
-
-	/**
-	 * Removes forward slash. Makes A/B to AB. Used in contact-detail-campaigns
-	 */
-	Handlebars.registerHelper('removeSlash', function(value)
-	{
-		if (value == 'A/B')
-			return value.replace(/\//, '');
-
-		return value;
-	});
-
-	/**
-	 * Displays all the properties of a contact in its detail view, excluding
-	 * the function parameters (fname, lname, company etc..)
-	 */
-	Handlebars
-			.registerHelper(
-					'if_property',
-					function(fname, lname, company, title, image, email, phone, website, address, options)
-					{
-
-						if (this.name != fname && this.name != lname && this.name != company && this.name != title && this.name != image && this.name != email && this.name != phone && this.name != website && this.name != address)
-							return options.fn(this);
-					});
-
-	/**
-	 * Counts the existence of property name which occurred multiple times.
-	 */
-	Handlebars.registerHelper('property_is_exists', function(name, properties, options)
-	{
-
-		if (getPropertyValue(properties, name))
-			return options.fn(this);
-		return options.inverse(this);
-	});
-
-	/**
-	 * returns online scheduling url of current user
-	 */
-	Handlebars.registerHelper('online_schedule_URL', function()
-	{
-		return ONLINE_SCHEDULING_URL;
-	});
-
-	// gets the refernce code of current domain
-
-	Handlebars.registerHelper('get_current_domain', function()
-	{
-		return CURRENT_DOMAIN_USER.domain;
-	});
-
-	/*
-	 * To add comma in between the elements.
-	 */
-	Handlebars.registerHelper('comma_in_between_property', function(value1, value2, properties, options)
-	{
-
-		if (getPropertyValue(properties, value1) && getPropertyValue(properties, value2))
-			return ",";
-	});
-
-	Handlebars.registerHelper('property_subtype_is_exists', function(name, subtype, properties, options)
-	{
-
-		if (getPropertyValueBySubtype(properties, name, subtype))
-			return options.fn(this);
-		return options.inverse(this);
-	});
-
-	/**
-	 * Displays multiple times occurred properties of a contact in its detail
-	 * view in single entity
-	 */
-	Handlebars.registerHelper('multiple_Property_Element', function(name, properties, options)
-	{
-
-		var matching_properties_list = agile_crm_get_contact_properties_list(name)
-		if (matching_properties_list.length > 0)
-			return options.fn(matching_properties_list);
-	});
-
-	/**
-	 * Converts address as comma seprated values and returns as handlebars safe
-	 * string.
-	 */
-	Handlebars
-			.registerHelper(
-					'address_Element',
-					function(properties)
-					{
-						var properties_count = 0;
-						for (var i = 0, l = properties.length; i < l; i++)
-						{
-
-							if (properties[i].name == "address")
-							{
-								var el = '<div style="display: inline-block; vertical-align: top;text-align:right;margin-top:0px" class="span4"><span><strong style="color:gray">Address</strong></span></div>';
-
-								var address = {};
+
+												exclusive_fields.push(jQuery.extend(true, {}, fields[i]));
+								}
+								if (exclusive_fields.length == 0)
+												return options.inverse(exclusive_fields);
+
+								$.getJSON("core/api/custom-fields/type/DATE", function(data)
+								{
+
+												if (data.length == 0)
+																return;
+
+												for (var j = 0; j < data.length; j++)
+												{
+																for (var i = 0; i < exclusive_fields.length; i++)
+																{
+																				if (exclusive_fields[i].name == data[j].field_label)
+																								try
+																								{
+																												var value = exclusive_fields[i].value;
+
+																												if (!isNaN(value))
+																												{
+																																exclusive_fields[i].value = value;
+																																exclusive_fields[i]["subtype"] = data[j].field_type;
+																												}
+
+																								}
+																								catch (err)
+																								{
+																												exclusive_fields[i].value = exclusive_fields[i].value;
+																								}
+																}
+												}
+												updateCustomData(options.fn(exclusive_fields));
+								});
+
+								return options.fn(exclusive_fields)
+
+				});
+
+				Handlebars.registerHelper('urlEncode', function(url, key, data)
+				{
+
+								var startChar = "&";
+								if (url.indexOf("?") != -1)
+												startChar = "&";
+
+								var encodedUrl = url + startChar + key + "=" + escape(JSON.stringify(data));
+								// console.log(encodedUrl.length + " " + encodedUrl);
+								return encodedUrl;
+				});
+
+				Handlebars.registerHelper('encodeString', function(url)
+				{
+								return encodeURIComponent(url);
+				});
+
+				/**
+				 * Helper function to return image for an entity (contact). Checks for
+				 * existing image, if not found checks for an image using the email of the
+				 * entity, if again failed to found returns a default image link.
+				 * 
+				 * @method gravatarurl
+				 * @param {Object}
+				 *         items array of objects
+				 * @param {Number}
+				 *         width to specify the width of the image
+				 * @returns image link
+				 * 
+				 */
+				Handlebars.registerHelper('gravatarurl', function(items, width)
+				{
+
+								if (items == undefined)
+												return;
+
+								// Checks if properties already has an image, to return it
+								var agent_image = getPropertyValue(items, "image");
+								if (agent_image)
+												return agent_image;
+
+								// Default image
+								var img = DEFAULT_GRAVATAR_url;
+
+								var email = getPropertyValue(items, "email");
+								if (email)
+								{
+												return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + "&d=" + escape(img);
+								}
+
+								return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
+
+				});
+
+				Handlebars.registerHelper('defaultGravatarurl', function(width)
+				{
+								// Default image
+								var img = DEFAULT_GRAVATAR_url;
+
+								return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
+				});
+
+				Handlebars.registerHelper('emailGravatarurl', function(width, email)
+				{
+								// Default image
+								var img = DEFAULT_GRAVATAR_url;
+
+								if (email)
+								{
+												return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + "&d=" + escape(img);
+								}
+
+								return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
+				});
+
+				/**
+				 * CSS text avatars
+				 */
+				Handlebars.registerHelper('nameAvatar', function(items, width)
+				{
+
+								if (items == undefined)
+												return;
+
+								// Checks if properties already has an image, to return it
+								var agent_image = getPropertyValue(items, "image");
+								if (agent_image)
+												return agent_image;
+
+								var email = getPropertyValue(items, "email");
+								if (email)
+								{
+												return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + '&d=404';
+								}
+
+								return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '&d=404';
+
+				});
+
+				/**
+				 * To add data-name attribute to image tags
+				 */
+				Handlebars.registerHelper('dataNameAvatar', function(items)
+				{
+
+								if (items == undefined)
+												return;
+
+								var name = "";
+
+								if (getPropertyValue(items, "first_name"))
+												name = name + "" + getPropertyValue(items, "first_name").substr(0, 1);
+
+								if (getPropertyValue(items, "last_name"))
+												name = name + "" + getPropertyValue(items, "last_name").substr(0, 1);
+
+								return name;
+
+				});
+
+				/**
+				 * Helper function to return icons based on given name
+				 * 
+				 * @method icons
+				 * @param {String}
+				 *         item name to get icon
+				 * @returns icon name
+				 */
+				Handlebars.registerHelper('icons', function(item)
+				{
+
+								item = item.toLowerCase().trim();
+								console.log(item);
+								if (item == "email")
+												return "icon-envelope-alt";
+								if (item == "phone")
+												return "icon-headphones";
+								if (item == "url")
+												return "icon-home";
+								if (item == "call")
+												return "icon-phone-sign";
+								if (item == "follow_up")
+												return "icon-signout";
+								if (item == "meeting")
+												return "icon-group";
+								if (item == "milestone")
+												return "icon-cog";
+								if (item == "send")
+												return "icon-reply";
+								if (item == "tweet")
+												return "icon-share-alt";
+								if (item == "other")
+												return "icon-tasks";
+								if (item == "twitter")
+												return "icon-twitter";
+								if (item == "facebook")
+												return "icon-facebook";
+
+				});
+
+				Handlebars.registerHelper('eachkeys', function(context, options)
+				{
+								var fn = options.fn, inverse = options.inverse;
+								var ret = "";
+
+								var empty = true;
+								for (key in context)
+								{
+												empty = false;
+												break;
+								}
+
+								if (!empty)
+								{
+												for (key in context)
+												{
+																ret = ret + fn({ 'key' : key, 'value' : context[key] });
+												}
+								}
+								else
+								{
+												ret = inverse(this);
+								}
+								return ret;
+				});
+
+				/**
+				 * Turns the first letter of the given string to upper-case and the
+				 * remaining to lower-case (EMaiL to Email).
+				 * 
+				 * @method ucfirst
+				 * @param {String}
+				 *         value to convert as ucfirst
+				 * @returns converted string
+				 */
+				Handlebars.registerHelper('ucfirst', function(value)
+				{
+								return (value && typeof value === 'string') ? (value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()) : '';
+				});
+
+				/**
+				 * Returns Contact short name
+				 */
+				Handlebars.registerHelper('contactShortName', function()
+				{
+								if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+								{
+
+												var contact_properties = App_Contacts.contactDetailView.model.get('properties');
+
+												if (App_Contacts.contactDetailView.model.get('type') == 'PERSON')
+												{
+																for (var i = 0; i < contact_properties.length; i++)
+																{
+
+																				if (contact_properties[i].name == "last_name")
+																								return contact_properties[i].value;
+																				else if (contact_properties[i].name == "first_name")
+																								return contact_properties[i].value;
+																}
+																return "Contact";
+												}
+												else
+												{
+																for (var i = 0; i < contact_properties.length; i++)
+																{
+																				if (contact_properties[i].name == "name")
+																								return contact_properties[i].value;
+																}
+																return "Company";
+												}
+								}
+				});
+
+				/**
+				 * Returns workflow name surrounded by quotations if exists, otherwise this
+				 */
+				Handlebars.registerHelper('workflowName', function()
+				{
+								if (App_Workflows.workflow_model)
+								{
+												var workflowName = App_Workflows.workflow_model.get("name");
+												return "\'" + workflowName + "\'";
+								}
+
+								return "this";
+				});
+
+				/**
+				 * 
+				 * @method task_property
+				 * @param {String}
+				 *         change property value in view
+				 * @returns converted string
+				 */
+				Handlebars.registerHelper('task_property', function(value)
+				{
+
+								if (value == "FOLLOW_UP")
+												return "Follow Up";
+								else
+												return ucfirst(value);
+
+				});
+
+				/**
+				 * Adds Custom Fields to contact merge form, where this helper function is
+				 * called
+				 */
+				Handlebars.registerHelper('show_custom_fields_for_merge', function(custom_fields, contacts)
+				{
+
+								var el = show_custom_fields_helper_for_merge(custom_fields, contacts);
+								return new Handlebars.SafeString(el);
+
+				});
+
+				/**
+				 * this is useful in activity when note characters exceeds abouve 50 simply
+				 * show dots
+				 */
+				Handlebars.registerHelper('add_dots_end', function(value)
+				{
+
+								if (value)
+								{
+												if (value.length > 50)
+												{
+																var subst = value.substr(0, 50);
+																subst = subst + "....";
+																return subst;
+												}
+								}
+								return value;
+
+				});
+
+				// Tip on using Gravar with JS:
+				// http://www.deluxeblogtips.com/2010/04/get-gravatar-using-only-javascript.html
+				/**
+				 * Helper function to generate a html string as desired to show-up the
+				 * tags-view
+				 * 
+				 * @method tagslist
+				 * @param {Object}
+				 *         tags array containing all tags
+				 */
+				Handlebars.registerHelper('tagslist', function(tags)
+				{
+
+								console.log(tags);
+								var json = {};
+
+								// Store tags in a json, starting letter as key
+								for (var i = 0; i < tags.length; i++)
+								{
+
+												var tag = tags[i].tag;
+												// console.log(tag);
+												var start = tag.charAt(0).toUpperCase();
+
+												var array = new Array();
+
+												// see if it is already present
+												if (json[start] != undefined)
+												{
+																array = json[start];
+												}
+
+												array.push(tag);
+												json[start] = array;
+
+								}
+
+								// To sort tags in case-insensitive order i.e. keys in json object
+								var keys = Object.keys(json);
+								keys.sort();
+
+								// Sorts it based on characters and then draws it
+								var html = "";
+
+								for ( var i in keys)
+								{
+
+												var array = json[keys[i]];
+
+												html += "<div class='tag-element'><div class='tag-key'>" + keys[i] + "</div> ";
+
+												html += "<div class='tag-values'>";
+
+												for (var i = 0; i < array.length; i++)
+												{
+																console.log("************************");
+																console.log(array[i]);
+																var hrefTag = "#tags/" + encodeURIComponent(array[i]);
+
+																html += ('<a href=\"' + hrefTag + '\" >' + array[i] + '</a> ');
+												}
+												html += "</div></div>";
+
+								}
+
+								return html;
+				});
+
+				Handlebars
+												.registerHelper(
+																				'setupTags',
+																				function(tags)
+																				{
+
+																								console.log(tags);
+																								var json = {};
+
+																								var keys = [];
+																								// Store tags in a json, starting letter as key
+																								for (var i = 0; i < tags.length; i++)
+																								{
+																												var tag = tags[i].tag;
+																												var key = tag.charAt(0).toUpperCase();
+																												// console.log(tag);
+																												if (jQuery.inArray(key, keys) == -1)
+																																keys.push(key);
+																								}
+
+																								// To sort tags in case-insensitive order i.e. keys in
+																								// json object
+																								keys.sort();
+																								console.log(keys);
+																								var html = "";
+																								for (var i = 0; i < keys.length; i++)
+																								{
+																												html += "<div class='tag-element' style='margin-right:10px;'><div class='tag-key'>" + keys[i] + "</div><div class='tag-values' tag-alphabet=\"" + encodeURI(keys[i]) + "\"></div></div>";
+																								}
+																								return new Handlebars.SafeString(html);
+																				});
+
+				// To show milestones as columns in deals
+				Handlebars
+												.registerHelper(
+																				'deals_by_milestones',
+																				function(data)
+																				{
+																								var html = "";
+																								var count = Object.keys(data).length;
+																								$
+																																.each(
+																																								data,
+																																								function(key, value)
+																																								{
+																																												if (count == 1 && key == "")
+																																												{
+																																																html += '<div class="slate" style="margin:0px;"><div class="slate-content"><div class="box-left"><img alt="Clipboard" src="/img/clipboard.png"></div><div class="box-right"><h3>You have no milestones defined</h3><br><a href="#milestones" class="btn"><i class="icon icon-plus-sign"></i> Add Milestones</a></div></div></div>';
+																																												}
+																																												else
+																																												{
+																																																html += "<div class='milestone-column'><div class='dealtitle-angular'><p class='milestone-heading'>" + key + "</p><span></span></div><ul class='milestones' milestone='" + key + "'>";
+																																																for ( var i in value)
+																																																{
+																																																				if (value[i].id)
+																																																								html += "<li id='" + value[i].id + "'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
+																																																}
+																																																html += "</ul></div>";
+																																												}
+																																								});
+																								return html;
+																				});
+
+				// To show milestones as sortable list
+				Handlebars
+												.registerHelper(
+																				'milestone_ul',
+																				function(data)
+																				{
+																								var html = "<ul class='milestone-value-list tagsinput' style='padding:1px;list-style:none;'>";
+																								if (data)
+																								{
+																												var milestones = data.split(",");
+																												for ( var i in milestones)
+																												{
+																																html += "<li data='" + milestones[i] + "'><div><span>" + milestones[i] + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>";
+																												}
+																								}
+																								html += "</ul>";
+																								return html;
+																				});
+
+				/**
+				 * Helper function to return date string from epoch time
+				 */
+				Handlebars.registerHelper('epochToHumanDate', function(format, date)
+				{
+
+								if (!format)
+												format = "mmm dd yyyy HH:MM:ss";
+
+								if (!date)
+												return;
+
+								if ((date / 100000000000) > 1)
+								{
+												console.log(new Date(parseInt(date)).format(format));
+												return new Date(parseInt(date)).format(format, 0);
+								}
+								// date form milliseconds
+								var d = new Date(parseInt(date) * 1000).format(format);
+
+								return d
+
+								// return $.datepicker.formatDate(format , new Date( parseInt(date) *
+								// 1000));
+				});
+
+				/**
+				 * Helper function to return the date string converting to local timezone.
+				 */
+				Handlebars.registerHelper('toLocalTimezone', function(dateString)
+				{
+								var date = new Date(dateString);
+
+								return date.toDateString() + ' ' + date.toLocaleTimeString();
+				});
+
+				/**
+				 * Helper function to return the date string converting to local timezone
+				 * from UTC.
+				 */
+				Handlebars.registerHelper('toLocalTimezoneFromUtc', function(dateString)
+				{
+								var date = new Date(dateString + ' GMT+0000');
+
+								return date.toDateString() + ' ' + date.toLocaleTimeString();
+				});
+
+				/**
+				 * Helper function to return task date (MM dd, ex: Jan 10 ) from epoch time
+				 */
+				Handlebars.registerHelper('epochToTaskDate', function(date)
+				{
+
+								var intMonth, intDay;
+
+								// Verifies whether date is in milliseconds, then
+								// no need to multiply with 1000
+								if ((date / 100000000000) > 1)
+								{
+												intMonth = new Date(date).getMonth();
+												intDay = new Date(date).getDate();
+								}
+								else
+								{
+												intMonth = new Date(parseInt(date) * 1000).getMonth();
+												intDay = new Date(parseInt(date) * 1000).getDate();
+								}
+								var monthArray = [
+																"Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+								];
+
+								return (monthArray[intMonth] + " " + intDay);
+				});
+
+				/**
+				 * Helper function to return task color based on it's priority
+				 */
+				Handlebars.registerHelper('task_label_color', function(priority)
+				{
+								if (priority == 'HIGH' || priority == 'red')
+												return 'important';
+								if (priority == 'NORMAL' || priority == '#36C')
+												return 'info';
+								if (priority == 'LOW')
+												return '';
+								if (priority == 'green')
+												return 'success';
+				});
+
+				/**
+				 * Helper function to return event label based on it's priority
+				 */
+				Handlebars.registerHelper('event_priority', function(priority)
+				{
+								if (priority == 'red')
+												return 'High';
+								if (priority == '#36C')
+												return 'Normal';
+								if (priority == 'green')
+												return 'Low';
+				});
+
+				/**
+				 * Helper function to return type based on it's network type
+				 */
+				Handlebars.registerHelper('network', function(type)
+				{
+								if (type == 'GOOGLE')
+												return 'Google Drive';
+								if (type == 'S3')
+												return 'Uploaded Doc';
+				});
+
+				/**
+				 * Helper function to return date (Jan 10, 2012) from epoch time (users
+				 * table)
+				 * 
+				 * @param {Object}
+				 *         info_json json object containing information about createdtime,
+				 *         last logged in time etc..
+				 * @param {String}
+				 *         date_type specifies the type of date to return (created or logged
+				 *         in)
+				 */
+				Handlebars.registerHelper('epochToDate', function(info_json, date_type)
+				{
+
+								var obj = JSON.parse(info_json);
+
+								if (!obj[date_type])
+												return "-";
+								if (date_type != "created_time")
+								{
+												if ((obj[date_type] / 100000000000) > 1)
+												{
+																return new Date(parseInt(obj[date_type])).format("mmm dd yyyy HH:MM:ss", 0);
+												}
+												// date form milliseconds
+												return new Date(parseInt(obj[date_type]) * 1000).format("mmm dd yyyy HH:MM:ss", 0);
+								}
+								else
+								{
+												var intMonth = new Date(parseInt(obj[date_type]) * 1000).getMonth();
+												var intDay = new Date(parseInt(obj[date_type]) * 1000).getDate();
+												var intYear = new Date(parseInt(obj[date_type]) * 1000).getFullYear();
+
+												var monthArray = [
+																				"Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+												];
+
+												return (monthArray[intMonth] + " " + intDay + ", " + intYear);
+								}
+				});
+
+				/**
+				 * Returns currency symbol based on the currency value (deals)
+				 */
+				Handlebars.registerHelper('currencySymbol', function()
+				{
+								var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
+								var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
+								return symbol;
+				});
+
+				/**
+				 * Calculates the "pipeline" for deals based on their value and probability
+				 * (value * probability)
+				 * 
+				 * @param {Number}
+				 *         value of the deal
+				 * @param {Number}
+				 *         probability of the deal
+				 */
+				Handlebars.registerHelper('calculatePipeline', function(value, probability)
+				{
+
+								var pipeline = parseInt(value) * parseInt(probability) / 100;
+								return pipeline;
+				});
+
+				/**
+				 * Returns required log (time or message) from logs (campaign logs)
+				 */
+				Handlebars.registerHelper('getRequiredLog', function(log_array_string, name)
+				{
+								var logArray = JSON.parse(log_array_string);
+								if (name == "t")
+								{
+												var readableTime = new Date(logArray[0][name] * 1000);
+												return readableTime;
+								}
+								return logArray[0][name];
+				});
+
+				/**
+				 * Returns table headings for custom contacts list view
+				 */
+				Handlebars.registerHelper('contactTableHeadings', function(item)
+				{
+
+								var el = "";
+								$.each(App_Contacts.contactViewModel[item], function(index, element)
+								{
+
+												element = element.replace("_", " ")
+
+												el = el.concat('<th>' + ucfirst(element) + '</th>');
+
+								});
+
+								return new Handlebars.SafeString(el);
+				});
+
+				/**
+				 * Returns table headings for reports custom contacts list view
+				 */
+				Handlebars.registerHelper('reportsContactTableHeadings', function(item)
+				{
+
+								var el = "";
+								$.each(REPORT[item], function(index, element)
+								{
+
+												if (element.indexOf("properties_") != -1)
+																element = element.split("properties_")[1];
+												if (element.indexOf("custom_") == 0)
+																element = element.split("custom_")[1];
+
+												element = element.replace("_", " ")
+
+												el = el.concat('<th>' + ucfirst(element) + '</th>');
+
+								});
+
+								return new Handlebars.SafeString(el);
+				});
+
+				/**
+				 * Helper function, which executes different templates (entity related)
+				 * based on entity type. Here "this" reffers the current entity object.
+				 * (used in timeline)
+				 * 
+				 */
+				Handlebars.registerHelper('if_entity', function(item, options)
+				{
+
+								if (this.entity_type == item)
+								{
+												return options.fn(this);
+								}
+								if (!this.entity && this[item] != undefined)
+								{
+												return options.fn(this);
+								}
+				});
+
+				/**
+				 * Returns trigger type, by removing underscore and converting into
+				 * lowercase, excluding first letter.
+				 */
+				Handlebars.registerHelper('titleFromEnums', function(value)
+				{
+								if (!value)
+												return;
+
+								var str = value.replace(/_/g, ' ');
+								return ucfirst(str.toLowerCase());
+
+				});
+
+				Handlebars.registerHelper('actionTemplate', function(actions)
+				{
+								if (!actions)
+												return;
+
+								var actions_count = actions.length;
+
+								var el = '<div style="white-space: normal!important;word-break: break-word;">';
+
+								$.each(actions, function(key, val)
+								{
+												if (--actions_count == 0)
+												{
+																el = el.concat(titleFromEnums(val.action));
+																return;
+												}
+												el = el.concat(titleFromEnums(val.action) + ", ");
+								});
+
+								el = el.concat('</div>');
+								return new Handlebars.SafeString(el);
+
+				});
+
+				Handlebars.registerHelper('triggerType', function(value)
+				{
+								if (value == 'ADD_SCORE')
+												return value.replace('ADD_SCORE', 'Score (>=)');
+
+								return titleFromEnums(value);
+				});
+
+				/**
+				 * Returns notification type,by replacing 'has been' with underscore and
+				 * converting into lowercase.
+				 */
+				Handlebars.registerHelper('if_notification_type', function()
+				{
+
+								// Makes 'CONTACT CREATED' To 'COMPANY CREATED'
+								if (this.type == "COMPANY")
+								{
+												var arr = this.notification.split('_');
+												var temp = ucfirst(arr[0].replace('CONTACT', 'COMPANY')) + " " + ucfirst(arr[1]);
+												return " - " + temp;
+								}
+
+								// Replaces '_' with ' '
+								var str = this.notification.replace(/_/, ' ');
+
+								switch (str) {
+								case "IS BROWSING":
+												return str.toLowerCase() + " " + this.custom_value;
+
+								case "CLICKED LINK":
+												var customJSON = JSON.parse(this.custom_value);
+
+												if (customJSON["workflow_name"] == undefined)
+																return str.toLowerCase() + " " + customJSON.url_clicked;
+
+												return str.toLowerCase() + " " + customJSON.url_clicked + " " + " of campaign " + "\"" + customJSON.workflow_name + "\""
+
+								case "OPENED EMAIL":
+												var customJSON = JSON.parse(this.custom_value);
+
+												if (customJSON.hasOwnProperty("workflow_name"))
+																return str.toLowerCase() + " " + " of campaign " + "\"" + customJSON.workflow_name + "\"";
+
+												return str.toLowerCase() + " with subject " + "\"" + customJSON.email_subject + "\"";
+
+								case "CONTACT ADDED":
+												return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
+
+								case "CONTACT DELETED":
+												return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
+
+								case "DEAL CREATED":
+												return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
+
+								case "DEAL CLOSED":
+												return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
+
+								case "TAG ADDED":
+												return " - " + "\"" + this.custom_value + "\" " + str.toLowerCase().split(' ')[0] + " has been " + str.toLowerCase().split(' ')[1];
+
+								case "TAG DELETED":
+												return " - " + "\"" + this.custom_value + "\" " + str.toLowerCase().split(' ')[0] + " has been " + str.toLowerCase().split(' ')[1];
+
+								default:
+												return str.toLowerCase();
+								}
+				});
+
+				/**
+				 * Converts Epoch Time to Human readable date of default format.Used for
+				 * campaign-logs.
+				 */
+				Handlebars.registerHelper('epochToLogDate', function(logTime)
+				{
+								return new Date(logTime * 1000);
+				});
+
+				/**
+				 * Returns country name from country code.
+				 */
+				Handlebars.registerHelper('getCountryName', function(countrycode)
+				{
+								// retrieves country name from code using country-from-code.js
+								return getCode(countrycode);
+				});
+
+				/**
+				 * Replace '+' symbols with space.Used in notification.
+				 */
+				Handlebars.registerHelper('replace_plus_symbol', function(name)
+				{
+
+								return name.replace(/\+/, ' ');
+				});
+
+				/**
+				 * Removes forward slash. Makes A/B to AB. Used in contact-detail-campaigns
+				 */
+				Handlebars.registerHelper('removeSlash', function(value)
+				{
+								if (value == 'A/B')
+												return value.replace(/\//, '');
+
+								return value;
+				});
+
+				/**
+				 * Displays all the properties of a contact in its detail view, excluding
+				 * the function parameters (fname, lname, company etc..)
+				 */
+				Handlebars
+												.registerHelper(
+																				'if_property',
+																				function(fname, lname, company, title, image, email, phone, website, address, options)
+																				{
+
+																								if (this.name != fname && this.name != lname && this.name != company && this.name != title && this.name != image && this.name != email && this.name != phone && this.name != website && this.name != address)
+																												return options.fn(this);
+																				});
+
+				/**
+				 * Counts the existence of property name which occurred multiple times.
+				 */
+				Handlebars.registerHelper('property_is_exists', function(name, properties, options)
+				{
+
+								if (getPropertyValue(properties, name))
+												return options.fn(this);
+								return options.inverse(this);
+				});
+
+				/**
+				 * returns online scheduling url of current user
+				 */
+				Handlebars.registerHelper('online_schedule_URL', function()
+				{
+								return ONLINE_SCHEDULING_URL;
+				});
+
+				// gets the refernce code of current domain
+
+				Handlebars.registerHelper('get_current_domain', function()
+				{
+								return CURRENT_DOMAIN_USER.domain;
+				});
+
+				/*
+				 * To add comma in between the elements.
+				 */
+				Handlebars.registerHelper('comma_in_between_property', function(value1, value2, properties, options)
+				{
+
+								if (getPropertyValue(properties, value1) && getPropertyValue(properties, value2))
+												return ",";
+				});
+
+				Handlebars.registerHelper('property_subtype_is_exists', function(name, subtype, properties, options)
+				{
+
+								if (getPropertyValueBySubtype(properties, name, subtype))
+												return options.fn(this);
+								return options.inverse(this);
+				});
+
+				/**
+				 * Displays multiple times occurred properties of a contact in its detail
+				 * view in single entity
+				 */
+				Handlebars.registerHelper('multiple_Property_Element', function(name, properties, options)
+				{
+
+								var matching_properties_list = agile_crm_get_contact_properties_list(name)
+								if (matching_properties_list.length > 0)
+												return options.fn(matching_properties_list);
+				});
+
+				/**
+				 * Converts address as comma seprated values and returns as handlebars safe
+				 * string.
+				 */
+				Handlebars
+												.registerHelper(
+																				'address_Element',
+																				function(properties)
+																				{
+																								var properties_count = 0;
+																								for (var i = 0, l = properties.length; i < l; i++)
+																								{
+
+																												if (properties[i].name == "address")
+																												{
+																																var el = '';
+
+																																var address = {};
+																																try
+																																{
+																																				address = JSON.parse(properties[i].value);
+																																}
+																																catch (err)
+																																{
+																																				address['address'] = properties[i].value;
+																																}
+
+																																// Gets properties (keys) count of given json
+																																// object
+																																var count = countJsonProperties(address);
+
+																																if (properties_count != 0)
+
+																																				el = el
+																																												.concat('<div class="contact-addressview"><div><div class="pull-left" style="width:25px"><i class="icon icon-map-marker"></i></div><div class="pull-left" style="width:90%">');
+																																else
+																																				el = el
+																																												.concat('<div class="contact-addressview"><div><div class="pull-left" style="width:25px"><i class="icon icon-map-marker"></i></div><div class="pull-left" style="width:90%">');
+
+																																$.each(address, function(key, val)
+																																{
+																																				if (--count == 0)
+																																				{
+																																								el = el.concat(val + ".");
+																																								return;
+																																				}
+																																				el = el.concat(val + ", ");
+																																});
+
+																																if (properties[i].subtype)
+																																				el = el.concat('<span class="label">' + properties[i].subtype + '</span>');
+																																el = el.concat('</span></div></div>');
+																																return new Handlebars.SafeString(el);
+																												}
+																												else if (properties[i].name == "phone" || properties[i].name == "email")
+																												{
+																																++properties_count;
+																												}
+																								}
+																				});
+
+				Handlebars.registerHelper('address_Template', function(properties)
+				{
+
+								for (var i = 0, l = properties.length; i < l; i++)
+								{
+
+												if (properties[i].name == "address")
+												{
+																var el = '';
+
+																var address = {};
+																try
+																{
+																				address = JSON.parse(properties[i].value);
+																}
+																catch (err)
+																{
+																				address['address'] = properties[i].value;
+																}
+
+																// Gets properties (keys) count of given json
+																// object
+																var count = countJsonProperties(address);
+
+																$.each(address, function(key, val)
+																{
+																				if (--count == 0)
+																				{
+																								el = el.concat(val + ".");
+																								return;
+																				}
+																				el = el.concat(val + ", ");
+																});
+																/*
+																 * if (properties[i].subtype) el = el.concat(" <span
+																 * class='label'>" + properties[i].subtype + "</span>");
+																 */
+
+																return new Handlebars.SafeString(el);
+												}
+								}
+				});
+
+				// To show related to contacts for contacts as well as companies
+				Handlebars.registerHelper('related_to_contacts', function(data, options)
+				{
+								var el = "";
+								var count = data.length;
+								$.each(data, function(key, value)
+								{
+												var html = getTemplate("related-to-contacts", value);
+												if (--count == 0)
+												{
+																el = el.concat(html);
+																return;
+												}
+												el = el.concat(html + ", ");
+								});
+								return new Handlebars.SafeString(el);
+				});
+
+				// To show only one related to contacts or companies in deals
+				Handlebars.registerHelper('related_to_one', function(data, options)
+				{
+								// return "<span>" + getTemplate("related-to-contacts", data[0]) +
+								// "</span>";
+								var el = "";
+								var count = data.length;
+								$.each(data, function(key, value)
+								{
+												if (key <= 3)
+												{
+																var html = getTemplate("related-to-contacts", value);
+																if (--count == 0 || key == 3)
+																{
+																				el = el.concat(html);
+																				return;
+																}
+																el = el.concat(html + ", ");
+												}
+
+								});
+								return new Handlebars.SafeString(el);
+
+				});
+
+				/**
+				 * To represent a number with commas in deals
+				 */
+				Handlebars.registerHelper('numberWithCommas', function(value)
+				{
+								if (value)
+												return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
+				});
+
+				/**
+				 * Converts reports/view field element as comma seprated values and returns
+				 * as handlebars safe string.
+				 */
+				Handlebars.registerHelper('field_Element', function(properties)
+				{
+								var el = "";
+								var count = properties.length;
+
+								$.each(properties, function(key, value)
+								{
+
+												if (value.indexOf("properties_") != -1)
+																value = value.split("properties_")[1];
+												else if (value.indexOf("custom_") != -1)
+																value = value.split("custom_")[1];
+												else if (value.indexOf("CUSTOM_") != -1)
+																value = value.split("CUSTOM_")[1];
+												else if (value == "created_time")
+																value = "Created Date";
+												else if (value == "updated_time")
+																value = "Updated Date";
+
+												value = value.replace("_", " ");
+
+												if (--count == 0)
+												{
+																el = el.concat(value);
+																return;
+												}
+												el = el.concat(value + ", ");
+								});
+
+								return new Handlebars.SafeString(el);
+				});
+
+				/**
+				 * Converts string to JSON
+				 */
+				Handlebars.registerHelper('stringToJSON', function(object, key, options)
+				{
+								console.log(object);
+								console.log(key);
+								if (key)
+								{
+												try
+												{
+
+																object[key] = JSON.parse(object[key]);
+												}
+												finally
+												{
+																return options.fn(object[key]);
+												}
+								}
+
 								try
 								{
-									address = JSON.parse(properties[i].value);
+												return options.fn(JSON.parse(object));
 								}
 								catch (err)
 								{
-									address['address'] = properties[i].value;
+												return options.fn(object);
+								}
+				});
+
+				/**
+				 * Checks the existence of property name and prints value
+				 */
+				Handlebars.registerHelper('if_propertyName', function(pname, options)
+				{
+								for (var i = 0; i < this.properties.length; i++)
+								{
+												if (this.properties[i].name == pname)
+																return options.fn(this.properties[i]);
+								}
+								return options.inverse(this);
+				});
+
+				/*
+				 * Gets company image from a contact object.
+				 * 
+				 * --If image uploaded, returns that ( the frame size requested ). --Else if
+				 * url present, fetch icon from the url via Google S2 service (frame
+				 * size=32x32) --Else return img/company.png ( the frame size requested ).
+				 * 
+				 * --CSS for frame is adjusted when fetching from url ( default padding =
+				 * 4px , now 4+adjust ). --'onError' is an attribute (js function) fired
+				 * when image fails to download, maybe due to remote servers being down It
+				 * defaults to img/company.png which should be present in server as static
+				 * file
+				 * 
+				 * Usage: e.g. <img {{getCompanyImage "40" "display:inline"}} class="..."
+				 * ... >
+				 * 
+				 * This helper sets src,onError & style attribute. "40" is full frame size
+				 * requested. Additional styles like "display:inline;" or "display:block;"
+				 * can be specified in 2nd param.
+				 * 
+				 * @author Chandan
+				 */
+				Handlebars
+												.registerHelper(
+																				'getCompanyImage',
+																				function(frame_size, additional_style)
+																				{
+
+																								var full_size = parseInt(frame_size); // size
+																								// requested,full
+																								// frame
+																								var size_diff = 4 + ((full_size - 32) / 2); // calculating
+																								// padding,
+																								// for small
+																								// favicon
+																								// 16x16 as
+																								// 32x32,
+																								// fill rest frame with padding
+
+																								// default when we can't find image uploaded or url to
+																								// fetch from
+																								var default_return = "src='img/company.png' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
+
+																								// when the image from uploaded one or favicon can't be
+																								// fetched, then show company.png, adjust CSS ( if style
+																								// broken by favicon ).
+																								var error_fxn = "";
+
+																								for (var i = 0; i < this.properties.length; i++)
+																								{
+																												if (this.properties[i].name == "image")
+																												{
+																																default_return = "src='" + this.properties[i].value + "' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + ";'";
+																																// found uploaded image, break, no need to
+																																// lookup url
+
+																																error_fxn = "this.src='img/company.png'; this.onerror=null;";
+																																// no need to resize, company.png is of good
+																																// quality & can be scaled to this size
+
+																																break;
+																												}
+																												if (this.properties[i].name == "url")
+																												{
+																																default_return = "src='https://www.google.com/s2/favicons?domain=" + this.properties[i].value + "' " + "style='width:32px; height:32px; padding:" + size_diff + "px; " + additional_style + " ;'";
+																																// favicon fetch -- Google S2 Service, 32x32,
+																																// rest padding added
+
+																																error_fxn = "this.src='img/company.png'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
+																																// resize needed as favicon is 16x16 & scaled to
+																																// just 32x32, company.png is adjusted on error
+																												}
+																								}
+																								// return safe string so that our html is not escaped
+																								return new Handlebars.SafeString(default_return + " onError=\"" + error_fxn + "\"");
+																				});
+
+				/**
+				 * Get appropriate link i.e. protocol://whatever.xxx. If no protocol
+				 * present, assume http
+				 */
+				Handlebars.registerHelper('getHyperlinkFromURL', function(url)
+				{
+								if (url.match(/((http|http[s]|ftp|file):\/\/)/) != null)
+												return url;
+								return 'http://' + url;
+				});
+
+				Handlebars.registerHelper('getSkypeURL', function(url)
+				{
+								if (url.match("skype:") != null)
+												return url;
+								return 'skype:' + url;
+				});
+
+				Handlebars.registerHelper('getFacebookURL', function(url)
+				{
+								return url.replace('@', '');
+				});
+
+				// Get Count
+				Handlebars.registerHelper('count', function()
+				{
+								return getCount(this);
+				});
+
+				Handlebars
+												.registerHelper(
+																				'contacts_count',
+																				function()
+																				{
+																								var count_message;
+																								if (this[0] && this[0].count && (this[0].count != -1))
+																								{
+
+																												if (this[0].count > 9999 && readCookie('contact_filter'))
+																																count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+
+																												else
+																																count_message = "<small> (" + this[0].count + " Total) </small>";
+																								}
+																								else
+																												count_message = "<small> (" + this.length + " Total) </small>";
+
+																								return new Handlebars.SafeString(count_message);
+																				});
+
+				Handlebars.registerHelper('duplicate_contacts_count', function()
+				{
+								var count_message;
+								if (this[0] && this[0].count && (this[0].count != -1))
+								{
+												var count = this[0].count - 1;
+												count_message = "<small> (" + count + " Total) </small>";
+								}
+								else
+												count_message = "<small> (" + this.length + " Total) </small>";
+
+								return new Handlebars.SafeString(count_message);
+				});
+
+				/**
+				 * 
+				 * Returns subscribers count without parenthesis
+				 * 
+				 */
+				Handlebars.registerHelper('subscribers_count', function()
+				{
+
+								if (this[0] && this[0].count && (this[0].count != -1))
+												return this[0].count;
+
+								return this.length;
+
+				});
+
+				/**
+				 * Convert string to lower case
+				 */
+				Handlebars.registerHelper('toLowerCase', function(value)
+				{
+								if (!value)
+												return;
+								return value.toLowerCase();
+				});
+
+				/**
+				 * Convert string to lower case
+				 */
+				Handlebars.registerHelper('toUpperCase', function(value)
+				{
+								if (!value)
+												return;
+								return value.toUpperCase();
+				});
+
+				/**
+				 * Executes template, based on contact type (person or company)
+				 */
+				Handlebars.registerHelper('if_contact_type', function(ctype, options)
+				{
+								if (this.type == ctype)
+								{
+												return options.fn(this);
+								}
+				});
+
+				Handlebars.registerHelper('wrap_entity', function(item, options)
+				{
+
+								if (item)
+												return options.fn(item);
+				});
+
+				/**
+				 * Returns modified message for timeline logs
+				 */
+				Handlebars.registerHelper('tl_log_string', function(string)
+				{
+
+								return string.replace("Sending email From:", "Email sent From:");
+				});
+
+				/**
+				 * Returns "Lead Score" of a contact, when it is greater than zero only
+				 */
+				Handlebars.registerHelper('lead_score', function(value)
+				{
+								if (this.lead_score > 0)
+												return this.lead_score;
+								else
+												return "";
+				});
+
+				/**
+				 * Returns task completion status (Since boolean false is not getting
+				 * printed, converted it into string and returned.)
+				 */
+				Handlebars.registerHelper('task_status', function(status)
+				{
+								if (status)
+												return true;
+
+								// Return false as string as the template can not print boolean false
+								return "false";
+
+				});
+
+				/**
+				 * Compares the arguments (value and target) and executes the template based
+				 * on the result (used in contacts typeahead)
+				 */
+				Handlebars.registerHelper('if_equals', function(value, target, options)
+				{
+
+								/*
+								 * console.log("typeof target: " + typeof target + " target: " +
+								 * target); console.log("typeof value: " + typeof value + " value: " +
+								 * value);
+								 */
+								/*
+								 * typeof is used beacuse !target returns true if it is empty string,
+								 * when string is empty it should not go undefined
+								 */
+								if ((typeof target === "undefined") || (typeof value === "undefined"))
+												return options.inverse(this);
+
+								if (value.toString().trim() == target.toString().trim())
+												return options.fn(this);
+								else
+												return options.inverse(this);
+				});
+				Handlebars.registerHelper('if_not_equals', function(value, target, options)
+				{
+
+								if ((typeof target === "undefined") || (typeof value === "undefined"))
+												return options.inverse(this);
+
+								if (value.toString().trim() != target.toString().trim())
+												return options.fn(this);
+								else
+												return options.inverse(this);
+				});
+
+				/**
+				 * Compares the arguments (value and target) and executes the template based
+				 * on the result (used in contacts typeahead)
+				 */
+				Handlebars.registerHelper('if_greater', function(value, target, options)
+				{
+								if (parseInt(target) > value)
+												return options.inverse(this);
+								else
+												return options.fn(this);
+				});
+
+				/**
+				 * Compares the arguments (value and target) and executes the template based
+				 * on the result (used in contacts typeahead)
+				 */
+				Handlebars.registerHelper('if_less_than', function(value, target, options)
+				{
+								if (target < value)
+												return options.inverse(this);
+								else
+												return options.fn(this);
+				});
+
+				Handlebars.registerHelper('campaigns_heading', function(value, options)
+				{
+								var val = 0;
+								if (value && value[0] && value[0].count)
+												val = value[0].count;
+
+								if (val <= 20)
+												return "Workflows";
+
+								return "(" + val + " Total)";
+				});
+
+				/**
+				 * Adds Custom Fields to forms, where this helper function is called
+				 */
+				Handlebars.registerHelper('show_custom_fields', function(custom_fields, properties)
+				{
+
+								var el = show_custom_fields_helper(custom_fields, properties);
+								return new Handlebars.SafeString(fill_custom_field_values($(el), properties));
+
+				});
+
+				Handlebars.registerHelper('is_link', function(value, options)
+				{
+
+								var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+
+								if (value.search(exp) != -1)
+												return options.fn(this);
+								else
+												return options.inverse(this);
+				});
+
+				Handlebars.registerHelper('show_link_in_statement', function(value)
+				{
+
+								var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+
+								try
+								{
+												value = value.replace(exp, "<a href='$1' target='_blank' class='cd_hyperlink'>$1</a>");
+												return new Handlebars.SafeString(value);
+								}
+								catch (err)
+								{
+												return value;
 								}
 
-								// Gets properties (keys) count of given json
-								// object
-								var count = countJsonProperties(address);
-
-								if (properties_count != 0)
-
-									el = el
-											.concat('<div style="display:inline;padding-right: 0px!important;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8 contact-detail-entity-list"><div style="padding-top:3px;"><span>');
-								else
-									el = el
-											.concat('<div style="display:inline;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8"><div><span>');
-
-								$.each(address, function(key, val)
-								{
-									if (--count == 0)
-									{
-										el = el.concat(val + ".");
-										return;
-									}
-									el = el.concat(val + ", ");
-								});
-
-								if (properties[i].subtype)
-									el = el.concat(" <span class='label'>" + properties[i].subtype + "</span>");
-								el = el.concat('</span></div></div>');
-								return new Handlebars.SafeString(el);
-							}
-							else if (properties[i].name == "phone" || properties[i].name == "email")
-							{
-								++properties_count;
-							}
-						}
-					});
-
-	Handlebars.registerHelper('address_Template', function(properties)
-	{
-
-		for (var i = 0, l = properties.length; i < l; i++)
-		{
-
-			if (properties[i].name == "address")
-			{
-				var el = '';
-
-				var address = {};
-				try
-				{
-					address = JSON.parse(properties[i].value);
-				}
-				catch (err)
-				{
-					address['address'] = properties[i].value;
-				}
-
-				// Gets properties (keys) count of given json
-				// object
-				var count = countJsonProperties(address);
-
-				$.each(address, function(key, val)
-				{
-					if (--count == 0)
-					{
-						el = el.concat(val + ".");
-						return;
-					}
-					el = el.concat(val + ", ");
 				});
-				/*
-				 * if (properties[i].subtype) el = el.concat(" <span
-				 * class='label'>" + properties[i].subtype + "</span>");
+
+				/**
+				 * Returns table headings for custom contacts list view
+				 */
+				Handlebars.registerHelper('displayPlan', function(value)
+				{
+
+								return ucfirst(value).replaceAll("_", " ");
+
+				});
+
+				Handlebars.registerHelper('getCurrentContactProperty', function(value)
+				{
+								if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+								{
+												var contact_properties = App_Contacts.contactDetailView.model.get('properties')
+												console.log(App_Contacts.contactDetailView.model.toJSON());
+												return getPropertyValue(contact_properties, value);
+								}
+				});
+
+				Handlebars.registerHelper('safe_string', function(data)
+				{
+
+								data = data.replace(/\n/, "<br/>");
+								return new Handlebars.SafeString(data);
+				});
+
+				Handlebars.registerHelper('string_to_date', function(format, date)
+				{
+
+								return new Date(date).format(format);
+				});
+
+				Handlebars.registerHelper('isArray', function(data, options)
+				{
+								if (isArray(data))
+												return options.fn(this);
+								return options.inverse(this);
+				});
+
+				Handlebars.registerHelper('is_string', function(data, options)
+				{
+								if (typeof data == "string")
+												return options.fn(this);
+								return options.inverse(this);
+
+				});
+
+				Handlebars.registerHelper("bindData", function(data)
+				{
+
+								return JSON.stringify(data);
+				});
+
+				Handlebars.registerHelper("getCurrentUserPrefs", function(options)
+				{
+								if (CURRENT_USER_PREFS)
+												;
+								return options.fn(CURRENT_USER_PREFS);
+				});
+
+				Handlebars.registerHelper("getCurrentDomain", function(options)
+				{
+
+								var url = window.location.host;
+
+								var exp = /(\.)/;
+
+								if (url.search(exp) >= 0)
+												return url.split(exp)[0];
+
+								return " ";
+				});
+
+				// Gets date in given range
+				Handlebars.registerHelper('date-range', function(from_date_string, no_of_days, options)
+				{
+								var from_date = Date.parse(from_date_string);
+								var to_date = Date.today().add({ days : parseInt(no_of_days) });
+								return to_date.toString('MMMM d, yyyy') + " - " + from_date.toString('MMMM d, yyyy');
+
+				});
+
+				Handlebars.registerHelper("extractEmail", function(content, options)
+				{
+
+								console.log(content);
+
+								return options.fn(content.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0]);
+				});
+
+				Handlebars.registerHelper('getCurrentContactPropertyBlock', function(value, options)
+				{
+								if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+								{
+												var contact_properties = App_Contacts.contactDetailView.model.get('properties')
+												console.log(App_Contacts.contactDetailView.model.toJSON());
+												return options.fn(getPropertyValue(contact_properties, value));
+								}
+				});
+
+				Handlebars.registerHelper('isDuplicateContactProperty', function(properties, key, options)
+				{
+								if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+								{
+												var contact_properties = App_Contacts.contactDetailView.model.get('properties')
+												var currentContactEntity = getPropertyValue(contact_properties, key);
+												var contactEntity = getPropertyValue(properties, key);
+
+												if (!currentContactEntity || !contactEntity)
+												{
+																currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
+																contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
+												}
+
+												if (currentContactEntity == contactEntity)
+																return options.fn(this);
+
+												return options.inverse(this)
+								}
+				});
+
+				Handlebars.registerHelper('containString', function(value, target, options)
+				{
+								if (target.search(value) != -1)
+												return options.fn(this);
+
+								return options.inverse(this);
+				});
+				Handlebars.registerHelper('is_emailPlan', function(planId, options)
+				{
+
+								if (planId.search("email") != -1)
+												return options.fn(this);
+
+								return options.inverse(this);
+
+				});
+				Handlebars.registerHelper('is_userPlan', function(planId, options)
+				{
+								if (planId.search("email") != -1)
+												return options.inverse(this);
+								return options.fn(this);
+
+				});
+
+				Handlebars.registerHelper('numeric_operation', function(operand1, operand2, operator)
+				{
+
+								var operators = "/*-+";
+
+								if (operators.indexOf(operator) == -1)
+												return "";
+
+								if (operator == "+")
+												return operand1 + operand2;
+
+								if (operator == "-")
+												return operand1 - operand2;
+
+								if (operator == "*")
+												return operand1 * operand2;
+
+								if (operator == "/")
+												return operand1 / operand2;
+				});
+				Handlebars.registerHelper('get_total_amount', function(operand1, operand2)
+				{
+
+								return (operand1 / 100) * operand2;
+				});
+
+				Handlebars.registerHelper('check_length', function(content, length, options)
+				{
+
+								if (parseInt(content.length) > parseInt(length))
+												return options.fn(this);
+
+								return options.inverse(this);
+				});
+
+				Handlebars.registerHelper('check_json_length', function(content, length, options)
+				{
+								var json_length = 0;
+								for ( var prop in content)
+								{
+												json_length++;
+								}
+
+								if (json_length == parseInt(length))
+								{
+												for ( var prop in content)
+												{
+																return options.fn({ property : prop, value : content[prop], last : true });
+												}
+								}
+
+								return options.inverse(content);
+				});
+
+				Handlebars.registerHelper('iterate_json', function(context, options)
+				{
+								var result = "";
+								var count = 0;
+								var length = 0;
+								for ( var prop in context)
+								{
+												length++;
+								}
+
+								for ( var prop in context)
+								{
+												count++;
+												if (count == length)
+																result = result + options.fn({ property : prop, value : context[prop], last : true });
+												else
+																result = result + options.fn({ property : prop, value : context[prop], last : false });
+
+								}
+
+								console.log(result);
+								return result;
+				});
+
+				Handlebars.registerHelper('get_social_icon', function(name)
+				{
+								return get_social_icon(name);
+
+				});
+
+				Handlebars.registerHelper("each_with_index", function(array, options)
+				{
+								var buffer = "";
+								for (var i = 0, j = array.length; i < j; i++)
+								{
+												var item = array[i];
+
+												// stick an index property onto the item, starting with 1, may make
+												// configurable later
+												item.index = i + 1;
+
+												console.log(item);
+												// show the inside of the block
+												buffer += options.fn(item);
+								}
+
+								// return the finished buffer
+								return buffer;
+
+				});
+
+				Handlebars.registerHelper('if_json', function(context, options)
+				{
+
+								try
+								{
+												var json = $.parseJSON(context);
+
+												if (typeof json === 'object')
+																return options.fn(this);
+												return options.inverse(this);
+								}
+								catch (err)
+								{
+												return options.inverse(this);
+								}
+				});
+
+				Handlebars.registerHelper('add_tag', function(tag)
+				{
+								addTagAgile(tag);
+				});
+
+				Handlebars.registerHelper('set_up_dashboard_padcontent', function(key)
+				{
+								return new Handlebars.SafeString(getTemplate("empty-collection-model", CONTENT_JSON.dashboard[key]));
+				});
+
+				/**
+				 * Removes surrounded square brackets
+				 */
+				Handlebars.registerHelper('removeSquareBrackets', function(value)
+				{
+								return value.replace(/[\[\]]+/g, '');
+				});
+
+				/**
+				 * Removes "" with single quotes brackets
+				 */
+				Handlebars.registerHelper('removeDoubleCoutes', function(value)
+				{
+								var strings = value.replace(/[\[\]]+/g, '');
+								var charwithsinglequote = strings.replace(/"/g, "'");
+								return charwithsinglequote;
+				});
+
+				/**
+				 * Shows list of triggers separated by comma
+				 */
+				Handlebars.registerHelper('toLinkTrigger', function(context, options)
+				{
+								var ret = "";
+								for (var i = 0, j = context.length; i < j; i++)
+								{
+												ret = ret + options.fn(context[i]);
+
+												// Avoid comma appending to last element
+												if (i < j - 1)
+												{
+																ret = ret + ", ";
+												}
+												;
+								}
+								return ret;
+				});
+
+				// Gets minutes from milli seconds
+				Handlebars.registerHelper('millSecondsToMinutes', function(timeInMill)
+				{
+								if (isNaN(timeInMill))
+												return;
+								var sec = timeInMill / 1000;
+								var min = Math.floor(sec / 60);
+
+								if (min < 1)
+												return Math.ceil(sec) + " secs";
+
+								var remainingSec = Math.ceil(sec % 60);
+
+								return min + " mins, " + remainingSec + " secs";
+				});
+
+				Handlebars.registerHelper('if_overflow', function(content, div_height, options)
+				{
+
+								if (!content)
+												return;
+
+								console.log($('#Linkedin').width());
+								content = content.trim();
+								var element = $("<div style='width:" + $('#Linkedin').width() + "px;" + "word-break:normal;word-wrap:break-word;display:none;'>" + content + "</div>");
+
+								$("#content").append(element);
+
+								console.log(element.height() + " " + parseInt(div_height))
+								if (element.height() > parseInt(div_height))
+												return options.fn(this);
+								return options.inverse(this);
+				});
+
+				/**
+				 * To set up star rating in contacts listing
+				 */
+				Handlebars.registerHelper('setupRating', function(value)
+				{
+
+								var element = "";
+								for (var i = 0; i < 5; i++)
+								{
+												if (i < parseInt(value))
+												{
+																element = element.concat('<li style="display: inline;"><img src="img/star-on.png" alt="' + i + '"></li>');
+																continue;
+												}
+												element = element.concat('<li style="display: inline;"><img src="img/star-off.png" alt="' + i + '"></li>');
+								}
+								return new Handlebars.SafeString(element);
+				});
+
+				/**
+				 * Builds options to be shown in the table heading of CSV import. Also tries
+				 * to match headings in select field
+				 */
+				Handlebars.registerHelper('setupCSVUploadOptions', function(type, key, context)
+				{
+								// console.log(context.toJSON());
+								var template;
+								if (type == "contacts")
+								{
+												template = $(getTemplate('csv_upload_options', context));
+								}
+								else if (type == "company")
+								{
+												template = $(getTemplate('csv_companies_upload_options', context));
+								}
+								else if (type == "deals")
+								{
+												template = $(getTemplate('csv_deals_options', context));
+								}
+
+								// Replaces _ with spaces
+								key = key.replace("_", " ");
+
+								var isFound = false;
+
+								var match_weight = 0;
+
+								var key_length = key.length;
+								var key = key.toLowerCase();
+								var matched_value;
+
+								var selected_element;
+								template.find('option').each(function(index, element)
+								{
+												if ($(element).text().toLowerCase().indexOf(key) != -1)
+												{
+
+																var current_match_weight = key_length / $(element).text().length;
+																if (match_weight >= current_match_weight)
+																				return;
+
+																selected_element = $(element);
+																matched_value = $(element).text();
+																match_weight = current_match_weight;
+												}
+								})
+
+								console.log(matched_value + ", " + key + " : " + match_weight);
+
+								for (var i = 0; i < key.length - 3; i++)
+								{
+												template.find('option').each(function(index, element)
+												{
+																if ($(element).text().toLowerCase().indexOf(key.substr(0, key.length - i).toLowerCase()) != -1)
+																{
+																				console.log(key.substr(0, key.length - i) + " , " + $(element).text());
+																				var current_match_weight = key.substr(0, key.length - i).length / $(element).text().length;
+																				console.log(current_match_weight);
+																				if (match_weight >= current_match_weight)
+																								return;
+																				selected_element = $(element);
+																				matched_value = $(element).text();
+																				match_weight = current_match_weight;
+																}
+												})
+								}
+
+								$(selected_element).attr("selected", true);
+
+								/*
+								 * // Iterates to create various combinations and check with the header
+								 * for ( var i = 0; i < key.length - 3; i++) {
+								 * template.find('option').each(function(index, element) { if
+								 * ($(element).val().toLowerCase().indexOf(key) != -1) { isFound = true;
+								 * $(element).attr("selected", true); return false; } else if
+								 * ($(element).val().toLowerCase().indexOf(key.substr(0, key.length -
+								 * i).toLowerCase()) != -1) { isFound = true;
+								 * $(element).attr("selected", true); return false; }
+								 * 
+								 * }); if (isFound) break; }
+								 */
+								return new Handlebars.SafeString($('<div>').html(template).html());
+				});
+
+				/**
+				 * Converts total seconds into hours, minutes and seconds. For e.g. 3600
+				 * secs - 1hr 0 mins 0secs
+				 */
+				Handlebars.registerHelper('convertSecondsToHour', function(totalSec)
+				{
+								var hours = parseInt(totalSec / 3600) % 24;
+								var minutes = parseInt(totalSec / 60) % 60;
+								var seconds = totalSec % 60;
+
+								// show only seconds if hours and mins are zero
+								if (hours == 0 && minutes == 0)
+												return (seconds + "s");
+
+								// show mins and secs if hours are zero.
+								if (hours == 0)
+												return (minutes + "m ") + (seconds + "s");
+
+								var result = (hours + "h ") + (minutes + "m ") + (seconds + "s");
+								return result;
+				});
+
+				/**
+				 * To check and return value of original referrer
+				 */
+				Handlebars.registerHelper('checkOriginalRef', function(original_ref)
+				{
+								if (!getCurrentContactProperty(original_ref))
+												return "unknown";
+
+								var url = getCurrentContactProperty(original_ref);
+
+								url = url.split('/');
+								url = (url[0] + '//' + url[2]);
+								return new Handlebars.SafeString(
+																'<a style="text-decoration: none" target="_blank" href="' + getCurrentContactProperty(original_ref) + '">' + url + '</a>');
+				});
+
+				/**
+				 * To check google url and key words
+				 */
+				Handlebars.registerHelper('queryWords', function(original_ref)
+				{
+								// Check if original referrer exists
+								if (getCurrentContactProperty(original_ref))
+								{
+												// Get input url from contact properties and initialize reference
+												// url
+												var inputUrl = getCurrentContactProperty(original_ref);
+												var referenceUrl = 'www.google.';
+
+												// Get host from input url and compare with reference url if equal
+												var tempUrl = inputUrl.split('/');
+												tempUrl = tempUrl[2].slice(0, 11);
+												if (tempUrl === referenceUrl)
+												{
+																// Get search term from input url
+																var parser = document.createElement('a');
+																parser.href = inputUrl;
+																var search = parser.search;
+
+																// If search term exists, check if 'q' parameter exists, and
+																// return its value
+																if (search.length > 1)
+																{
+																				search = search.split('&');
+																				var length = search.length;
+																				for (var i = 0; i < length; i++)
+																				{
+																								if (search[i].indexOf('q=') != -1)
+																								{
+																												search = search[i].split('=');
+																												return new Handlebars.SafeString('( Keyword : ' + search[1].split('+').join(" ") + ' )');
+																								}
+																				}
+																}
+												}
+												else
+																return;
+								}
+				});
+
+				/**
+				 * Returns contact full name if last-name exists, otherwise only first_name
+				 * for contact type PERSON. It returns company name for other contact type.
+				 * 
+				 */
+				Handlebars.registerHelper('contact_name', function(properties, type)
+				{
+
+								if (type === 'PERSON')
+								{
+												for (var i = 0; i < properties.length; i++)
+												{
+
+																// if last-name exists, return full name.
+																if (properties[i].name === "last_name")
+																				return (getPropertyValue(properties, "first_name") + " " + properties[i].value);
+
+																else if (properties[i].name === "first_name")
+																				return properties[i].value;
+												}
+
+												return "Contact";
+								}
+
+								// COMPANY type
+								for (var i = 0; i < properties.length; i++)
+								{
+												if (properties[i].name === "name")
+																return properties[i].value;
+								}
+								return "Company";
+				});
+
+				/**
+				 * Returns full name of contact. Use this when empty value is not
+				 * acceptable. Takes care that, even when no names are defined, returns
+				 * email(necessary for PERSON) or Company <id>. Calls function
+				 * getContactName defined in agile-typeahead.js. Also typeahead uses this
+				 * fxn to append values as tags.
+				 */
+				Handlebars.registerHelper('contact_name_necessary', function(contact)
+				{
+								return getContactName(contact);
+				});
+
+				/**
+				 * To check if string is blank
+				 */
+				Handlebars.registerHelper('is_blank', function(value, options)
+				{
+								value = value.trim();
+
+								if (value == "")
+												return options.fn(value);
+								else
+												return options.inverse(value);
+				})
+
+				/**
+				 * Iterate through list of values (not json)
+				 */
+				Handlebars.registerHelper("each_with_index1", function(array, options)
+				{
+								console.log(array);
+								var buffer = "";
+								for (var i = 0, j = array.length; i < j; i++)
+								{
+												var item = {};
+												item["value"] = array[i];
+
+												console.log(item);
+												// stick an index property onto the item, starting with 1, may make
+												// configurable later
+												item["index"] = i + 1;
+
+												console.log(item);
+												// show the inside of the block
+												buffer += options.fn(item);
+								}
+
+								// return the finished buffer
+								return buffer;
+
+				});
+
+				/**
+				 * If log_type equals true otherwise false
+				 */
+				Handlebars.registerHelper("if_log_type_equals", function(object, key, log_type, options)
+				{
+
+								if (object[key] == log_type)
+												return options.fn(object);
+
+								return options.inverse(object);
+
+				});
+
+				/**
+				 * Identifies EMAIL_SENT campaign-log string and splits the log string based
+				 * on '_aGiLeCrM' delimiter into To, From, Subject and Body.
+				 * 
+				 */
+				Handlebars.registerHelper("if_email_sent", function(object, key, options)
+				{
+
+								// delimiter for campaign send-email log
+								var _AGILE_CRM_DELIMITER = "_aGiLeCrM";
+
+								// if log_type is EMAIL_SENT
+								if (object[key] === "EMAIL_SENT")
+								{
+												// Splits logs message
+												var email_fields = object["message"].split(_AGILE_CRM_DELIMITER, 4);
+
+												// Json to apply for handlebar template
+												var json = {};
+
+												if (email_fields === undefined)
+																return options.inverse(object);
+
+												// Iterates inorder to insert each field into json
+												for (var i = 0; i < email_fields.length; i++)
+												{
+																// Splits based on colon. E.g "To: naresh@agilecrm.com"
+																var arrcolon = email_fields[i].split(":");
+
+																// Inserts LHS of colon as key. E.g., To
+																var key = arrcolon[0];
+																key = key.trim(); // if key starts with space, it can't
+																// accessible
+
+																// Inserts RHS of colon as value. E.g., naresh@agilecrm.com
+																var value = arrcolon.slice(1).join(":"); // join the
+																// remaining string
+																// based on colon,
+																// only first occurence of colon is needed
+																value = value.trim();
+
+																json[key] = value;
+												}
+
+												// inserts time into json
+												json.time = object["time"];
+
+												// apply customized json to template.
+												return options.fn(json);
+								}
+
+								// if not EMAIL_SENT log, goto else in the template
+								return options.inverse(object);
+
+				});
+
+				Handlebars.registerHelper('remove_spaces', function(value)
+				{
+								return value.replace(/ +/g, '');
+
+				});
+
+				Handlebars.registerHelper('replace_spaces', function(value)
+				{
+								return value.replace(/ +/g, '_');
+
+				});
+
+				/***************************************************************************
+				 * Returns campaignStatus object from contact campaignStatus array having
+				 * same campaign-id. It is used to get start and completed time from array.
+				 **************************************************************************/
+				Handlebars.registerHelper('if_same_campaign', function(object, data, options)
+				{
+
+								var campaignStatusArray = object[data];
+
+								// if campaignStatus key doesn't exist return.
+								if (data === undefined || campaignStatusArray === undefined)
+												return;
+
+								// Get campaign-id from hash
+								var current_campaign_id = getIdFromHash();
+
+								for (var i = 0, len = campaignStatusArray.length; i < len; i++)
+								{
+
+												// compares campaign-id of each element of array with
+												// current campaign-id
+												if (campaignStatusArray[i].campaign_id === current_campaign_id)
+												{
+																// if equal, execute template current json
+																return options.fn(campaignStatusArray[i]);
+												}
+								}
+
+				});
+
+				/**
+				 * Returns other active campaigns in campaign-active subscribers.
+				 */
+				Handlebars.registerHelper('if_other_active_campaigns', function(object, data, options)
+				{
+
+								if (object === undefined || object[data] === undefined)
+												return;
+
+								var other_campaigns = {};
+								var other_active_campaigns = [];
+								var other_completed_campaigns = [];
+								var campaignStatusArray = object[data];
+
+								var current_campaign_id = getIdFromHash();
+
+								for (var i = 0, len = campaignStatusArray.length; i < len; i++)
+								{
+												// neglect same campaign
+												if (current_campaign_id === campaignStatusArray[i].campaign_id)
+																continue;
+
+												// push all other active campaigns
+												if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
+																other_active_campaigns.push(campaignStatusArray[i])
+
+																// push all done campaigns
+												if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
+																other_completed_campaigns.push(campaignStatusArray[i]);
+								}
+
+								other_campaigns["active"] = other_active_campaigns;
+								other_campaigns["done"] = other_completed_campaigns;
+
+								return options.fn(other_campaigns);
+
+				});
+
+				/**
+				 * Returns Contact Model from contactDetailView collection.
+				 * 
+				 */
+				Handlebars.registerHelper('contact_model', function(options)
+				{
+
+								if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+								{
+
+												// To show Active Campaigns list immediately after campaign
+												// assigned.
+												if (CONTACT_ASSIGNED_TO_CAMPAIGN)
+												{
+																CONTACT_ASSIGNED_TO_CAMPAIGN = false;
+
+																// fetches updated contact json
+																var contact_json = $.ajax({ type : 'GET', url : '/core/api/contacts/' + App_Contacts.contactDetailView.model.get('id'), async : false,
+																				dataType : 'json' }).responseText;
+
+																// Updates Contact Detail model
+																App_Contacts.contactDetailView.model.set(JSON.parse(contact_json));
+
+																return options.fn(JSON.parse(contact_json));
+												}
+
+												// if simply Campaigns tab clicked, use current collection
+												return options.fn(App_Contacts.contactDetailView.model.toJSON());
+								}
+				});
+
+				/**
+				 * Returns json object of active and done subscribers from contact object's
+				 * campaignStatus.
+				 */
+				Handlebars.registerHelper('contact_campaigns', function(object, data, options)
+				{
+
+								// if campaignStatus is not defined, return
+								if (object === undefined || object[data] === undefined)
+												return;
+
+								// Temporary json to insert active and completed campaigns
+								var campaigns = {};
+
+								var active_campaigns = [];
+								var completed_campaigns = [];
+
+								// campaignStatus object of contact
+								var campaignStatusArray = object[data];
+
+								for (var i = 0, len = campaignStatusArray.length; i < len; i++)
+								{
+												// push all active campaigns
+												if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
+																active_campaigns.push(campaignStatusArray[i])
+
+																// push all done campaigns
+												if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
+																completed_campaigns.push(campaignStatusArray[i]);
+								}
+
+								campaigns["active"] = active_campaigns;
+								campaigns["done"] = completed_campaigns;
+
+								// apply obtained campaigns context within
+								// contact_campaigns block
+								return options.fn(campaigns);
+				});
+
+				/**
+				 * Verifies given urls length and returns options hash based on restricted
+				 * count value.
+				 * 
+				 */
+				Handlebars.registerHelper("if_more_urls", function(url_json, url_json_length, options)
+				{
+								var RESTRICT_URLS_COUNT = 3;
+								var temp_urls_array = [];
+								var context_json = {};
+
+								// If length is less than restricted, compile
+								// else block with given url_json
+								if (url_json_length < RESTRICT_URLS_COUNT)
+												return options.inverse(url_json);
+
+								// Insert urls until restricted count reached
+								for (var i = 0; i < url_json.length; i++)
+								{
+												if (i === RESTRICT_URLS_COUNT)
+																break;
+
+												temp_urls_array.push(url_json[i]);
+								}
+
+								context_json.urls = temp_urls_array;
+
+								// More remained
+								context_json.more = url_json_length - RESTRICT_URLS_COUNT;
+
+								return options.fn(context_json);
+
+				});
+
+				/**
+				 * Returns first occurence string from string having underscores E.g,
+				 * mac_os_x to mac
+				 */
+				Handlebars.registerHelper('normalize_os', function(data)
+				{
+								if (data === undefined || data.indexOf('_') === -1)
+												return data;
+
+								// if '_' exists splits
+								return data.split('_')[0];
+				});
+
+				Handlebars.registerHelper('safe_tweet', function(data)
+				{
+								data = data.trim();
+								return new Handlebars.SafeString(data);
+				});
+				/**
+				 * Get stream icon for social suite streams.
+				 */
+				Handlebars.registerHelper('get_stream_icon', function(name)
+				{
+								if (!name)
+												return;
+
+								var icon_json = { "Home" : "icon-home", "Retweets" : "icon-retweet", "DM_Inbox" : "icon-download-alt", "DM_Outbox" : "icon-upload-alt",
+												"Favorites" : "icon-star", "Sent" : "icon-share-alt", "Search" : "icon-search", "Scheduled" : "icon-time", "All_Updates" : "icon-home",
+												"My_Updates" : "icon-share-alt" };
+
+								name = name.trim();
+
+								if (icon_json[name])
+												return icon_json[name];
+
+								return "icon-globe";
+
+				});
+
+				/**
+				 * Get task list name without underscore and caps, for new task UI.
+				 */
+				Handlebars.registerHelper('get_normal_name', function(name)
+				{
+								if (!name)
+												return;
+
+								var name_json = { "HIGH" : "High", "LOW" : "Low", "NORMAL" : "Normal", "EMAIL" : "Email", "CALL" : "Call", "SEND" : "Send", "TWEET" : "Tweet",
+												"FOLLOW_UP" : "Follow Up", "MEETING" : "Meeting", "MILESTONE" : "Milestone", "OTHER" : "Other", "YET_TO_START" : "Yet To Start",
+												"IN_PROGRESS" : "In Progress", "COMPLETED" : "Completed", "TODAY" : "Today", "TOMORROW" : "Tomorrow", "OVERDUE" : "Overdue", "LATER" : "Later" };
+
+								name = name.trim();
+
+								if (name_json[name])
+												return name_json[name];
+
+								return name;
+
+				});
+
+				/**
+				 * put user address location togather separated by comma.
+				 */
+				Handlebars.registerHelper('user_location', function()
+				{
+
+								var City = this.city == "?" ? "" : (this.city + ", ");
+								var Region = this.region == "?" ? "" : (this.region + ", ");
+								var Country = this.country;
+								if (this.city == "?" && this.region == "?")
+												Country = this.country == "?" ? this.city_lat_long : (this.city_lat_long + " ( " + this.country + " )");
+
+								return (City + Region + Country).trim();
+				});
+
+				/**
+				 * Trims trailing spaces
+				 */
+				Handlebars.registerHelper('trim_space', function(value)
+				{
+
+								if (value === undefined)
+												return value;
+
+								return value.trim();
+				});
+
+				/**
+				 * Returns reputation name based on value
+				 * 
+				 */
+				Handlebars
+												.registerHelper(
+																				'get_subaccount_reputation',
+																				function(value)
+																				{
+																								var type = "";
+																								var reputation = "Unknown";
+
+																								if (value > 1 && value < 40)
+																								{
+																												type = "important";
+																												reputation = "Poor";
+																								}
+																								else if (value >= 40 && value < 75)
+																								{
+																												type = "";
+																												reputation = "Ok";
+																								}
+																								else if (value >= 75 && value < 90)
+																								{
+																												type = "success";
+																												reputation = "Good";
+																								}
+																								else if (value >= 90)
+																								{
+																												type = "success";
+																												reputation = "Excellent";
+																								}
+
+																								return "<span style='font-size:13px;position: relative;top: -3px' class='label label-" + type + "'>" + reputation + "</span> <!--<span class='badge badge-" + type + "'>" + value + "</span>-->";
+
+																				});
+
+				/**
+				 * Returns id from hash. It returns id from hash iff id exists at last.
+				 * 
+				 */
+				Handlebars.registerHelper('get_id_from_hash', function()
+				{
+
+								return getIdFromHash();
+
+				});
+
+				Handlebars.registerHelper('get_subscribers_type_from_hash', function()
+				{
+
+								// Returns "workflows" from "#workflows"
+								var hash = window.location.hash.substr(1);
+
+								if (hash.indexOf("all") != -1)
+												return "All";
+
+								if (hash.indexOf("active") != -1)
+												return "Active";
+
+								if (hash.indexOf("completed") != -1)
+												return "Completed";
+
+								if (hash.indexOf("removed") != -1)
+												return "Removed";
+
+								if (hash.indexOf("unsubscribed") != -1)
+												return "Unsubscribed";
+
+								if (hash.indexOf("hardbounced") != -1)
+												return "Hard Bounced";
+
+								if (hash.indexOf("softbounced") != -1)
+												return "Soft Bounced";
+
+								if (hash.indexOf("spam-reported") != -1)
+												return "Spam Reported";
+				});
+
+				Handlebars.registerHelper("check_plan", function(plan, options)
+				{
+								console.log(plan);
+
+								if (!_billing_restriction)
+												return options.fn(this);
+
+								if (_billing_restriction.currentLimits.planName == plan)
+												return options.fn(this);
+
+								return options.inverse(this);
+
+				});
+
+				/**
+				 * Safari browser doesn't supporting few CSS properties like margin-top,
+				 * margin-bottom etc. So this helper is used to add compatible CSS
+				 * properties to Safari
+				 */
+				Handlebars.registerHelper("isSafariBrowser", function(options)
+				{
+
+								if (navigator.userAgent.indexOf('Safari') !== -1 && navigator.userAgent.indexOf('Chrome') === -1)
+												return options.fn(this);
+
+								return options.inverse(this);
+				});
+
+				/**
+				 * give custome status base on xerotype
 				 */
 
-				return new Handlebars.SafeString(el);
-			}
-		}
-	});
-
-	// To show related to contacts for contacts as well as companies
-	Handlebars.registerHelper('related_to_contacts', function(data, options)
-	{
-		var el = "";
-		var count = data.length;
-		$.each(data, function(key, value)
-		{
-			var html = getTemplate("related-to-contacts", value);
-			if (--count == 0)
-			{
-				el = el.concat(html);
-				return;
-			}
-			el = el.concat(html + ", ");
-		});
-		return new Handlebars.SafeString(el);
-	});
-
-	// To show only one related to contacts or companies in deals
-	Handlebars.registerHelper('related_to_one', function(data, options)
-	{
-		// return "<span>" + getTemplate("related-to-contacts", data[0]) +
-		// "</span>";
-		var el = "";
-		var count = data.length;
-		$.each(data, function(key, value)
-		{
-			if (key <= 3)
-			{
-				var html = getTemplate("related-to-contacts", value);
-				if (--count == 0 || key == 3)
+				Handlebars.registerHelper('xeroType', function(type)
 				{
-					el = el.concat(html);
-					return;
-				}
-				el = el.concat(html + ", ");
-			}
+								return (type == "ACCPAY") ? "Payable" : "Receivable";
+				});
 
-		});
-		return new Handlebars.SafeString(el);
+				/**
+				 * give custom type to xero type
+				 */
+				Handlebars.registerHelper('xeroTypeToolTip', function(type)
+				{
+								return (type == "ACCPAY") ? "Payable" : "Receivable";
+				});
 
-	});
+				/**
+				 * gives first latter capital for given input
+				 */
+				Handlebars.registerHelper('capFirstLetter', function(data)
+				{
+								if (data === "DEFAULT")
+								{
+												// console.log("return empty");
+												return "";
+								}
+								else
+								{
+												var temp = data.toLowerCase();
+												return temp.charAt(0).toUpperCase() + temp.slice(1);
+								}
+				});
 
-	/**
-	 * To represent a number with commas in deals
-	 */
-	Handlebars.registerHelper('numberWithCommas', function(value)
-	{
-		if (value)
-			return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
-	});
+				Handlebars.registerHelper('qbStatus', function(Balance)
+				{
+								console.log(this);
+								console.log(this.TotalAmt);
+								if (Balance == 0)
+								{
+												return "Paid"
+								}
+								else
+								{
+												return "Due"
+								}
+				});
+				Handlebars.registerHelper('currencyFormat', function(data)
+				{
 
-	/**
-	 * Converts reports/view field element as comma seprated values and returns
-	 * as handlebars safe string.
-	 */
-	Handlebars.registerHelper('field_Element', function(properties)
-	{
-		var el = "";
-		var count = properties.length;
+								return Number(data).toLocaleString('en');
+								// data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+				});
 
-		$.each(properties, function(key, value)
-		{
+				Handlebars.registerHelper('QbDateFormat', function(data)
+				{
 
-			if (value.indexOf("properties_") != -1)
-				value = value.split("properties_")[1];
-			else if (value.indexOf("custom_") != -1)
-				value = value.split("custom_")[1];
-			else if (value.indexOf("CUSTOM_") != -1)
-				value = value.split("CUSTOM_")[1];
-			else if (value == "created_time")
-				value = "Created Date";
-			else if (value == "updated_time")
-				value = "Updated Date";
+								var i = [];
+								i = data.split("-");
+								return i[0] + "-" + i[2] + "-" + i[1];
+				});
 
-			value = value.replace("_", " ");
+				Handlebars.registerHelper("hasScope", function(scope_constant, options)
+				{
+								if (CURRENT_DOMAIN_USER.scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.scopes) != -1)
+												return options.fn(this);
 
-			if (--count == 0)
-			{
-				el = el.concat(value);
-				return;
-			}
-			el = el.concat(value + ", ");
-		});
+								return options.inverse(this);
+				});
 
-		return new Handlebars.SafeString(el);
-	});
+				Handlebars.registerHelper("canSyncContacts", function(options)
+				{
+								if (canImportContacts())
+												return options.fn(this);
 
-	/**
-	 * Converts string to JSON
-	 */
-	Handlebars.registerHelper('stringToJSON', function(object, key, options)
-	{
-		console.log(object);
-		console.log(key);
-		if (key)
-		{
-			try
-			{
+								return options.inverse(this);
+				});
 
-				object[key] = JSON.parse(object[key]);
-			}
-			finally
-			{
-				return options.fn(object[key]);
-			}
-		}
+				/**
+				 * To check Access controls for showing icons on dashboard
+				 */
+				Handlebars.registerHelper('hasMenuScope', function(item, options)
+				{
+								if ((CURRENT_DOMAIN_USER.menu_scopes).indexOf(item) != -1)
+												return options.fn(this);
+								else
+												return options.inverse(this);
+				});
 
-		try
-		{
-			return options.fn(JSON.parse(object));
-		}
-		catch (err)
-		{
-			return options.fn(object);
-		}
-	});
+				Handlebars.registerHelper('fetchXeroUser', function(data)
+				{
+								return JSON.parse(data).xeroemail;
+				});
 
-	/**
-	 * Checks the existence of property name and prints value
-	 */
-	Handlebars.registerHelper('if_propertyName', function(pname, options)
-	{
-		for (var i = 0; i < this.properties.length; i++)
-		{
-			if (this.properties[i].name == pname)
-				return options.fn(this.properties[i]);
-		}
-		return options.inverse(this);
-	});
+				Handlebars.registerHelper('isContactType', function(contact_type, contact_type_2, options)
+				{
+								if (!contact_type && contact_type_2 == 'PERSON')
+								{
+												return options.fn(this);
+								}
+								else if (contact_type == contact_type_2)
+												return options.fn(this);
 
-	/*
-	 * Gets company image from a contact object.
-	 * 
-	 * --If image uploaded, returns that ( the frame size requested ). --Else if
-	 * url present, fetch icon from the url via Google S2 service (frame
-	 * size=32x32) --Else return img/company.png ( the frame size requested ).
-	 * 
-	 * --CSS for frame is adjusted when fetching from url ( default padding =
-	 * 4px , now 4+adjust ). --'onError' is an attribute (js function) fired
-	 * when image fails to download, maybe due to remote servers being down It
-	 * defaults to img/company.png which should be present in server as static
-	 * file
-	 * 
-	 * Usage: e.g. <img {{getCompanyImage "40" "display:inline"}} class="..."
-	 * ... >
-	 * 
-	 * This helper sets src,onError & style attribute. "40" is full frame size
-	 * requested. Additional styles like "display:inline;" or "display:block;"
-	 * can be specified in 2nd param.
-	 * 
-	 * @author Chandan
-	 */
-	Handlebars
-			.registerHelper(
-					'getCompanyImage',
-					function(frame_size, additional_style)
+								return options.inverse(this);
+				});
+
+				Handlebars.registerHelper('getfbreturndomain', function(data)
+				{
+								var arr = window.location.href.split('/')
+								return arr[2];
+				});
+
+				Handlebars
+												.registerHelper(
+																				'tagManagementCollectionSetup',
+																				function(tags)
+																				{
+
+																								console.log(tags);
+																								var json = {};
+
+																								var keys = [];
+																								// Store tags in a json, starting letter as key
+																								for (var i = 0; i < tags.length; i++)
+																								{
+																												var tag = tags[i].tag;
+																												var key = tag.charAt(0).toUpperCase();
+																												// console.log(tag);
+																												if (jQuery.inArray(key, keys) == -1)
+																																keys.push(key);
+																								}
+
+																								console.log(keys);
+																								var html_temp = "";
+
+																								for (var i = 0; i < keys.length; i++)
+																												html_temp += "<div class=\"clearfix\"></div><div style='margin-right:10px;'><div class='tag-key tag-management-key'>" + keys[i] + "</div><div class=\"clearfix\"></div><div class='left' tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div>";
+
+																								console.log(html_temp);
+																								return new Handlebars.SafeString(html_temp);
+																				});
+
+				Handlebars.registerHelper('containsScope', function(item, list, options)
+				{
+								if (list.length == 0 || !item)
+												return options.inverse(this);
+
+								if (jQuery.inArray(item, list) == -1)
+												return options.inverse(this);
+
+								return options.fn(this);
+
+				});
+
+				Handlebars.registerHelper('isOwnerOfContact', function(owner_id, options)
+				{
+
+								if (CURRENT_DOMAIN_USER.id == owner_id)
+												return options.fn(this);
+								return options.inverse(this);
+				});
+
+				Handlebars.registerHelper('canEditContact', function(owner_id, options)
+				{
+								if (canEditContact(owner_id))
+												return options.fn(this);
+
+								return options.inverse(this)
+				});
+
+				Handlebars.registerHelper('canEditCurrentContact', function(owner_id, options)
+				{
+								if (canEditCurrentContact())
+												return options.fn(this);
+
+								return options.inverse(this)
+				})
+
+				Handlebars.registerHelper('gateway_exists', function(value, target, options)
+				{
+
+								for (var i = 0; i < target.length; i++)
+								{
+
+												var prefs = JSON.parse(target[i].prefs);
+
+												if (target[i].name == "EmailGateway")
+												{
+
+																if (prefs.email_api == value)
+																				return options.fn(target[i]);
+												}
+
+												if (target[i].name == "SMS-Gateway")
+												{
+																if (prefs.sms_api == value)
+																				return options.fn(target[i]);
+												}
+								}
+								return options.inverse(this);
+				});
+
+				Handlebars.registerHelper("each_index_slice", function(array, index, options)
+				{
+								var buffer = "";
+								for (var i = index; i < array.length; i++)
+								{
+												var item = array[i];
+
+												// stick an index property onto the item, starting with 1, may make
+												// configurable later
+												// item.index = i + 1;
+
+												console.log(item);
+												// show the inside of the block
+												buffer += options.fn(item);
+								}
+
+								// return the finished buffer
+								return buffer;
+
+				});
+
+				Handlebars.registerHelper('gateway_exists', function(value, target, options)
+				{
+
+								for (var i = 0; i < target.length; i++)
+								{
+
+												var prefs = JSON.parse(target[i].prefs);
+
+												if (target[i].name == "EmailGateway")
+												{
+
+																if (prefs.email_api == value)
+																				return options.fn(target[i]);
+												}
+
+												if (target[i].name == "SMS-Gateway")
+												{
+																if (prefs.sms_api == value)
+																				return options.fn(target[i]);
+												}
+								}
+								return options.inverse(this);
+				});
+
+				Handlebars.registerHelper('isOwnerOfContact', function(owner_id, options)
+				{
+
+								if (CURRENT_DOMAIN_USER.id == owner_id)
+												return options.fn(this);
+								return options.inverse(this);
+				});
+
+				Handlebars.registerHelper('canEditContact', function(owner_id, options)
+				{
+								if ((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+												return options.fn(this);
+
+								return options.inverse(this)
+				});
+
+				Handlebars.registerHelper('getAccountPlanName', function(plan_name)
+				{
+								if (!plan_name)
+												return "Free";
+
+								var plan_fragments = plan_name.split("_");
+
+								return ucfirst(plan_fragments[0]);
+
+				});
+
+				Handlebars.registerHelper('getAccountPlanInteval', function(plan_name)
+				{
+								if (!plan_name)
+												return "Monthly";
+
+								var plan_fragments = plan_name.split("_");
+
+								return ucfirst(plan_fragments[1]);
+
+				});
+
+				Handlebars.registerHelper('getSubscriptionBasedOnPlan', function(customer, plan, options)
+				{
+								var subscription = getSubscriptionWithAmount(customer, plan);
+
+								if (subscription != null)
+												return options.fn(subscription);
+
+								return options.inverse(this);
+				});
+
+				// handling with iso date
+				Handlebars.registerHelper("iso_date_to_normalizeDate", function(dateString)
+				{
+
+								/*
+								 * var myDate = new Date(dateString); var timestamp = myDate.getTime();
+								 * var d = new Date(parseInt(timestamp) / 1000).format("dd-MM-yyyy");
+								 * return d;
+								 */
+								if (dateString.length <= 0)
+												return;
+								var arr = dateString.split("T");
+								console.log("normalize date " + arr[0]);
+								// var d = new Date(arr[0]).format("dd-MM-yyyy");
+								return arr[0];
+
+				});
+
+				/**
+				 * Index starts from 1
+				 */
+				Handlebars.registerHelper("getMonthFromIndex", function(month_index)
+				{
+								var monthArray = [
+																"January", "february", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+								];
+								if (month_index > 12)
+												return monthArray[11];
+
+								return monthArray[month_index - 1];
+				});
+
+				Handlebars.registerHelper('xeroOrganisationShortCode', function(block)
+				{
+								if (typeof SHORT_CODE == "undefined" || SHORT_CODE == "")
+								{
+												return false;
+								}
+								else
+								{
+												return SHORT_CODE;
+								}
+				});
+
+				Handlebars.registerHelper('buildOptions', function(field_data)
+				{
+								var list_values = field_data.split(";");
+								var list_options = '';
+								// Create options based on list values
+								$.each(list_values, function(index, value)
+								{
+												if (value != "")
+																list_options = list_options.concat('<option value="' + value + '">' + value + '</option>');
+								});
+
+								return list_options;
+				});
+
+				/**
+				 * Choose Avatar templates
+				 */
+				Handlebars.registerHelper('get_avatars_template', function(options)
+				{
+								var template = getTemplate("choose-avatar-images-modal", {});
+								return template;
+				});
+				
+				// Reads the gloabal varaible and returns it value
+				Handlebars.registerHelper('read_global_var', function(custom_fields, contacts)
+				{
+					var type = email_server_type;
+					if (type)
+						return type;
+					else
 					{
-
-						var full_size = parseInt(frame_size); // size
-						// requested,full
-						// frame
-						var size_diff = 4 + ((full_size - 32) / 2); // calculating
-						// padding,
-						// for small
-						// favicon
-						// 16x16 as
-						// 32x32,
-						// fill rest frame with padding
-
-						// default when we can't find image uploaded or url to
-						// fetch from
-						var default_return = "src='img/company.png' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
-
-						// when the image from uploaded one or favicon can't be
-						// fetched, then show company.png, adjust CSS ( if style
-						// broken by favicon ).
-						var error_fxn = "";
-
-						for (var i = 0; i < this.properties.length; i++)
-						{
-							if (this.properties[i].name == "image")
-							{
-								default_return = "src='" + this.properties[i].value + "' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + ";'";
-								// found uploaded image, break, no need to
-								// lookup url
-
-								error_fxn = "this.src='img/company.png'; this.onerror=null;";
-								// no need to resize, company.png is of good
-								// quality & can be scaled to this size
-
-								break;
-							}
-							if (this.properties[i].name == "url")
-							{
-								default_return = "src='https://www.google.com/s2/favicons?domain=" + this.properties[i].value + "' " + "style='width:32px; height:32px; padding:" + size_diff + "px; " + additional_style + " ;'";
-								// favicon fetch -- Google S2 Service, 32x32,
-								// rest padding added
-
-								error_fxn = "this.src='img/company.png'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
-								// resize needed as favicon is 16x16 & scaled to
-								// just 32x32, company.png is adjusted on error
-							}
-						}
-						// return safe string so that our html is not escaped
-						return new Handlebars.SafeString(default_return + " onError=\"" + error_fxn + "\"");
-					});
-
-	/**
-	 * Get appropriate link i.e. protocol://whatever.xxx. If no protocol
-	 * present, assume http
-	 */
-	Handlebars.registerHelper('getHyperlinkFromURL', function(url)
-	{
-		if (url.match(/((http|http[s]|ftp|file):\/\/)/) != null)
-			return url;
-		return 'http://' + url;
-	});
-
-	Handlebars.registerHelper('getSkypeURL', function(url)
-	{
-		if (url.match("skype:") != null)
-			return url;
-		return 'skype:' + url;
-	});
-
-	Handlebars.registerHelper('getFacebookURL', function(url)
-	{
-		return url.replace('@', '');
-	});
-
-	// Get Count
-	Handlebars.registerHelper('count', function()
-	{
-		return getCount(this);
-	});
-
-	Handlebars
-			.registerHelper(
-					'contacts_count',
-					function()
-					{
-						var count_message;
-						if (this[0] && this[0].count && (this[0].count != -1))
-						{
-
-							if (this[0].count > 9999 && readCookie('contact_filter'))
-								count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
-
-							else
-								count_message = "<small> (" + this[0].count + " Total) </small>";
-						}
-						else
-							count_message = "<small> (" + this.length + " Total) </small>";
-
-						return new Handlebars.SafeString(count_message);
-					});
-	
-	Handlebars
-	.registerHelper(
-			'duplicate_contacts_count',
-			function()
-			{
-				var count_message;
-				if (this[0] && this[0].count && (this[0].count != -1))
-				{
-					var count = this[0].count-1;
-					count_message = "<small> (" + count + " Total) </small>";
-				}
-				else
-					count_message = "<small> (" + this.length + " Total) </small>";
-
-				return new Handlebars.SafeString(count_message);
-			});
-	
-	
-
-	/**
-	 * 
-	 * Returns subscribers count without parenthesis
-	 * 
-	 */
-	Handlebars.registerHelper('subscribers_count', function()
-	{
-
-		if (this[0] && this[0].count && (this[0].count != -1))
-			return this[0].count;
-
-		return this.length;
-
-	});
-
-	/**
-	 * Convert string to lower case
-	 */
-	Handlebars.registerHelper('toLowerCase', function(value)
-	{
-		if (!value)
-			return;
-		return value.toLowerCase();
-	});
-
-	/**
-	 * Convert string to lower case
-	 */
-	Handlebars.registerHelper('toUpperCase', function(value)
-	{
-		if (!value)
-			return;
-		return value.toUpperCase();
-	});
-
-	/**
-	 * Executes template, based on contact type (person or company)
-	 */
-	Handlebars.registerHelper('if_contact_type', function(ctype, options)
-	{
-		if (this.type == ctype)
-		{
-			return options.fn(this);
-		}
-	});
-
-	Handlebars.registerHelper('wrap_entity', function(item, options)
-	{
-
-		if (item)
-			return options.fn(item);
-	});
-
-	/**
-	 * Returns modified message for timeline logs
-	 */
-	Handlebars.registerHelper('tl_log_string', function(string)
-	{
-
-		return string.replace("Sending email From:", "Email sent From:");
-	});
-
-	/**
-	 * Returns "Lead Score" of a contact, when it is greater than zero only
-	 */
-	Handlebars.registerHelper('lead_score', function(value)
-	{
-		if (this.lead_score > 0)
-			return this.lead_score;
-		else
-			return "";
-	});
-
-	/**
-	 * Returns task completion status (Since boolean false is not getting
-	 * printed, converted it into string and returned.)
-	 */
-	Handlebars.registerHelper('task_status', function(status)
-	{
-		if (status)
-			return true;
-
-		// Return false as string as the template can not print boolean false
-		return "false";
-
-	});
-
-	/**
-	 * Compares the arguments (value and target) and executes the template based
-	 * on the result (used in contacts typeahead)
-	 */
-	Handlebars.registerHelper('if_equals', function(value, target, options)
-	{
-
-		/*
-		 * console.log("typeof target: " + typeof target + " target: " +
-		 * target); console.log("typeof value: " + typeof value + " value: " +
-		 * value);
-		 */
-		/*
-		 * typeof is used beacuse !target returns true if it is empty string,
-		 * when string is empty it should not go undefined
-		 */
-		if ((typeof target === "undefined") || (typeof value === "undefined"))
-			return options.inverse(this);
-
-		if (value.toString().trim() == target.toString().trim())
-			return options.fn(this);
-		else
-			return options.inverse(this);
-	});
-
-	/**
-	 * Compares the arguments (value and target) and executes the template based
-	 * on the result (used in contacts typeahead)
-	 */
-	Handlebars.registerHelper('if_greater', function(value, target, options)
-	{
-		if (parseInt(target) > value)
-			return options.inverse(this);
-		else
-			return options.fn(this);
-	});
-
-	/**
-	 * Compares the arguments (value and target) and executes the template based
-	 * on the result (used in contacts typeahead)
-	 */
-	Handlebars.registerHelper('if_less_than', function(value, target, options)
-	{
-		if (target < value)
-			return options.inverse(this);
-		else
-			return options.fn(this);
-	});
-
-	Handlebars.registerHelper('campaigns_heading', function(value, options)
-	{
-		var val = 0;
-		if (value && value[0] && value[0].count)
-			val = value[0].count;
-
-		if (val <= 20)
-			return "Workflows";
-
-		return "(" + val + " Total)";
-	});
-
-	/**
-	 * Adds Custom Fields to forms, where this helper function is called
-	 */
-	Handlebars.registerHelper('show_custom_fields', function(custom_fields, properties)
-	{
-
-		var el = show_custom_fields_helper(custom_fields, properties);
-		return new Handlebars.SafeString(fill_custom_field_values($(el), properties));
-
-	});
-
-	Handlebars.registerHelper('is_link', function(value, options)
-	{
-
-		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-
-		if (value.search(exp) != -1)
-			return options.fn(this);
-		else
-			return options.inverse(this);
-	});
-
-	Handlebars.registerHelper('show_link_in_statement', function(value)
-	{
-
-		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-
-		try
-		{
-			value = value.replace(exp, "<a href='$1' target='_blank' class='cd_hyperlink'>$1</a>");
-			return new Handlebars.SafeString(value);
-		}
-		catch (err)
-		{
-			return value;
-		}
-
-	});
-
-	/**
-	 * Returns table headings for custom contacts list view
-	 */
-	Handlebars.registerHelper('displayPlan', function(value)
-	{
-
-		return ucfirst(value).replaceAll("_", " ");
-
-	});
-
-	Handlebars.registerHelper('getCurrentContactProperty', function(value)
-	{
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
-		{
-			var contact_properties = App_Contacts.contactDetailView.model.get('properties')
-			console.log(App_Contacts.contactDetailView.model.toJSON());
-			return getPropertyValue(contact_properties, value);
-		}
-	});
-
-	Handlebars.registerHelper('safe_string', function(data)
-	{
-
-		data = data.replace(/\n/, "<br/>");
-		return new Handlebars.SafeString(data);
-	});
-
-	Handlebars.registerHelper('string_to_date', function(format, date)
-	{
-
-		return new Date(date).format(format);
-	});
-
-	Handlebars.registerHelper('isArray', function(data, options)
-	{
-		if (isArray(data))
-			return options.fn(this);
-		return options.inverse(this);
-	});
-
-	Handlebars.registerHelper('is_string', function(data, options)
-	{
-		if (typeof data == "string")
-			return options.fn(this);
-		return options.inverse(this);
-
-	});
-
-	Handlebars.registerHelper("bindData", function(data)
-	{
-
-		return JSON.stringify(data);
-	});
-
-	Handlebars.registerHelper("getCurrentUserPrefs", function(options)
-	{
-		if (CURRENT_USER_PREFS)
-			;
-		return options.fn(CURRENT_USER_PREFS);
-	});
-
-	Handlebars.registerHelper("getCurrentDomain", function(options)
-	{
-
-		var url = window.location.host;
-
-		var exp = /(\.)/;
-
-		if (url.search(exp) >= 0)
-			return url.split(exp)[0];
-
-		return " ";
-	});
-
-	// Gets date in given range
-	Handlebars.registerHelper('date-range', function(from_date_string, no_of_days, options)
-	{
-		var from_date = Date.parse(from_date_string);
-		var to_date = Date.today().add({ days : parseInt(no_of_days) });
-		return to_date.toString('MMMM d, yyyy') + " - " + from_date.toString('MMMM d, yyyy');
-
-	});
-
-	Handlebars.registerHelper("extractEmail", function(content, options)
-	{
-
-		console.log(content);
-
-		return options.fn(content.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0]);
-	});
-
-	Handlebars.registerHelper('getCurrentContactPropertyBlock', function(value, options)
-	{
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
-		{
-			var contact_properties = App_Contacts.contactDetailView.model.get('properties')
-			console.log(App_Contacts.contactDetailView.model.toJSON());
-			return options.fn(getPropertyValue(contact_properties, value));
-		}
-	});
-
-	Handlebars.registerHelper('isDuplicateContactProperty', function(properties, key, options)
-	{
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
-		{
-			var contact_properties = App_Contacts.contactDetailView.model.get('properties')
-			var currentContactEntity = getPropertyValue(contact_properties, key);
-			var contactEntity = getPropertyValue(properties, key);
-
-			if (!currentContactEntity || !contactEntity)
-			{
-				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
-				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
-			}
-
-			if (currentContactEntity == contactEntity)
-				return options.fn(this);
-
-			return options.inverse(this)
-		}
-	});
-
-	Handlebars.registerHelper('containString', function(value, target, options)
-	{
-		if (target.search(value) != -1)
-			return options.fn(this);
-
-		return options.inverse(this);
-	});
-
-	Handlebars.registerHelper('numeric_operation', function(operand1, operand2, operator)
-	{
-
-		var operators = "/*-+";
-
-		if (operators.indexOf(operator) == -1)
-			return "";
-
-		if (operator == "+")
-			return operand1 + operand2;
-
-		if (operator == "-")
-			return operand1 - operand2;
-
-		if (operator == "*")
-			return operand1 * operand2;
-
-		if (operator == "/")
-			return operand1 / operand2;
-	});
-
-	Handlebars.registerHelper('check_length', function(content, length, options)
-	{
-
-		if (parseInt(content.length) > parseInt(length))
-			return options.fn(this);
-
-		return options.inverse(this);
-	});
-
-	Handlebars.registerHelper('check_json_length', function(content, length, options)
-	{
-		var json_length = 0;
-		for ( var prop in content)
-		{
-			json_length++;
-		}
-
-		if (json_length == parseInt(length))
-		{
-			for ( var prop in content)
-			{
-				return options.fn({ property : prop, value : content[prop], last : true });
-			}
-		}
-
-		return options.inverse(content);
-	});
-
-	Handlebars.registerHelper('iterate_json', function(context, options)
-	{
-		var result = "";
-		var count = 0;
-		var length = 0;
-		for ( var prop in context)
-		{
-			length++;
-		}
-
-		for ( var prop in context)
-		{
-			count++;
-			if (count == length)
-				result = result + options.fn({ property : prop, value : context[prop], last : true });
-			else
-				result = result + options.fn({ property : prop, value : context[prop], last : false });
-
-		}
-
-		console.log(result);
-		return result;
-	});
-
-	Handlebars.registerHelper('get_social_icon', function(name)
-	{
-		return get_social_icon(name);
-
-	});
-
-	Handlebars.registerHelper("each_with_index", function(array, options)
-	{
-		var buffer = "";
-		for (var i = 0, j = array.length; i < j; i++)
-		{
-			var item = array[i];
-
-			// stick an index property onto the item, starting with 1, may make
-			// configurable later
-			item.index = i + 1;
-
-			console.log(item);
-			// show the inside of the block
-			buffer += options.fn(item);
-		}
-
-		// return the finished buffer
-		return buffer;
-
-	});
-
-	Handlebars.registerHelper('if_json', function(context, options)
-	{
-
-		try
-		{
-			var json = $.parseJSON(context);
-
-			if (typeof json === 'object')
-				return options.fn(this);
-			return options.inverse(this);
-		}
-		catch (err)
-		{
-			return options.inverse(this);
-		}
-	});
-
-	Handlebars.registerHelper('add_tag', function(tag)
-	{
-		addTagAgile(tag);
-	});
-
-	Handlebars.registerHelper('set_up_dashboard_padcontent', function(key)
-	{
-		return new Handlebars.SafeString(getTemplate("empty-collection-model", CONTENT_JSON.dashboard[key]));
-	});
-
-	/**
-	 * Removes surrounded square brackets
-	 */
-	Handlebars.registerHelper('removeSquareBrackets', function(value)
-	{
-		return value.replace(/[\[\]]+/g, '');
-	});
-
-	/**
-	 * Removes "" with single quotes brackets
-	 */
-	Handlebars.registerHelper('removeDoubleCoutes', function(value)
-	{
-		var strings = value.replace(/[\[\]]+/g, '');
-		var charwithsinglequote = strings.replace(/"/g, "'");
-		return charwithsinglequote;
-	});
-
-	/**
-	 * Shows list of triggers separated by comma
-	 */
-	Handlebars.registerHelper('toLinkTrigger', function(context, options)
-	{
-		var ret = "";
-		for (var i = 0, j = context.length; i < j; i++)
-		{
-			ret = ret + options.fn(context[i]);
-
-			// Avoid comma appending to last element
-			if (i < j - 1)
-			{
-				ret = ret + ", ";
-			}
-			;
-		}
-		return ret;
-	});
-
-	// Gets minutes from milli seconds
-	Handlebars.registerHelper('millSecondsToMinutes', function(timeInMill)
-	{
-		if (isNaN(timeInMill))
-			return;
-		var sec = timeInMill / 1000;
-		var min = Math.floor(sec / 60);
-
-		if (min < 1)
-			return Math.ceil(sec) + " secs";
-
-		var remainingSec = Math.ceil(sec % 60);
-
-		return min + " mins, " + remainingSec + " secs";
-	});
-
-	Handlebars.registerHelper('if_overflow', function(content, div_height, options)
-	{
-
-		if (!content)
-			return;
-
-		console.log($('#Linkedin').width());
-		content = content.trim();
-		var element = $("<div style='width:" + $('#Linkedin').width() + "px;" + "word-break:normal;word-wrap:break-word;display:none;'>" + content + "</div>");
-
-		$("#content").append(element);
-
-		console.log(element.height() + " " + parseInt(div_height))
-		if (element.height() > parseInt(div_height))
-			return options.fn(this);
-		return options.inverse(this);
-	});
-
-	/**
-	 * To set up star rating in contacts listing
-	 */
-	Handlebars.registerHelper('setupRating', function(value)
-	{
-
-		var element = "";
-		for (var i = 0; i < 5; i++)
-		{
-			if (i < parseInt(value))
-			{
-				element = element.concat('<li style="display: inline;"><img src="img/star-on.png" alt="' + i + '"></li>');
-				continue;
-			}
-			element = element.concat('<li style="display: inline;"><img src="img/star-off.png" alt="' + i + '"></li>');
-		}
-		return new Handlebars.SafeString(element);
-	});
-
-	/**
-	 * Builds options to be shown in the table heading of CSV import. Also tries
-	 * to match headings in select field
-	 */
-	Handlebars.registerHelper('setupCSVUploadOptions', function(type, key, context)
-	{
-		// console.log(context.toJSON());
-		var template;
-		if (type == "contacts")
-		{
-			template = $(getTemplate('csv_upload_options', context));
-		}
-		else if (type == "company")
-		{
-			template = $(getTemplate('csv_companies_upload_options', context));
-		}
-		else if (type == "deals")
-		{
-			template = $(getTemplate('csv_deals_options', context));
-		}
-
-		// Replaces _ with spaces
-		key = key.replace("_", " ");
-
-		var isFound = false;
-
-		var match_weight = 0;
-
-		var key_length = key.length;
-		var key = key.toLowerCase();
-		var matched_value;
-
-		var selected_element;
-		template.find('option').each(function(index, element)
-		{
-			if ($(element).text().toLowerCase().indexOf(key) != -1)
-			{
-
-				var current_match_weight = key_length / $(element).text().length;
-				if (match_weight >= current_match_weight)
-					return;
-
-				selected_element = $(element);
-				matched_value = $(element).text();
-				match_weight = current_match_weight;
-			}
-		})
-
-		console.log(matched_value + ", " + key + " : " + match_weight);
-
-		for (var i = 0; i < key.length - 3; i++)
-		{
-			template.find('option').each(function(index, element)
-			{
-				if ($(element).text().toLowerCase().indexOf(key.substr(0, key.length - i).toLowerCase()) != -1)
-				{
-					console.log(key.substr(0, key.length - i) + " , " + $(element).text());
-					var current_match_weight = key.substr(0, key.length - i).length / $(element).text().length;
-					console.log(current_match_weight);
-					if (match_weight >= current_match_weight)
-						return;
-					selected_element = $(element);
-					matched_value = $(element).text();
-					match_weight = current_match_weight;
-				}
-			})
-		}
-
-		$(selected_element).attr("selected", true);
-
-		/*
-		 * // Iterates to create various combinations and check with the header
-		 * for ( var i = 0; i < key.length - 3; i++) {
-		 * template.find('option').each(function(index, element) { if
-		 * ($(element).val().toLowerCase().indexOf(key) != -1) { isFound = true;
-		 * $(element).attr("selected", true); return false; } else if
-		 * ($(element).val().toLowerCase().indexOf(key.substr(0, key.length -
-		 * i).toLowerCase()) != -1) { isFound = true;
-		 * $(element).attr("selected", true); return false; }
-		 * 
-		 * }); if (isFound) break; }
-		 */
-		return new Handlebars.SafeString($('<div>').html(template).html());
-	});
-
-	/**
-	 * Converts total seconds into hours, minutes and seconds. For e.g. 3600
-	 * secs - 1hr 0 mins 0secs
-	 */
-	Handlebars.registerHelper('convertSecondsToHour', function(totalSec)
-	{
-		var hours = parseInt(totalSec / 3600) % 24;
-		var minutes = parseInt(totalSec / 60) % 60;
-		var seconds = totalSec % 60;
-
-		// show only seconds if hours and mins are zero
-		if (hours == 0 && minutes == 0)
-			return (seconds + "s");
-
-		// show mins and secs if hours are zero.
-		if (hours == 0)
-			return (minutes + "m ") + (seconds + "s");
-
-		var result = (hours + "h ") + (minutes + "m ") + (seconds + "s");
-		return result;
-	});
-
-	/**
-	 * To check and return value of original referrer
-	 */
-	Handlebars.registerHelper('checkOriginalRef', function(original_ref)
-	{
-		if (!getCurrentContactProperty(original_ref))
-			return "unknown";
-
-		var url = getCurrentContactProperty(original_ref);
-
-		url = url.split('/');
-		url = (url[0] + '//' + url[2]);
-		return new Handlebars.SafeString(
-				'<a style="text-decoration: none" target="_blank" href="' + getCurrentContactProperty(original_ref) + '">' + url + '</a>');
-	});
-
-	/**
-	 * To check google url and key words
-	 */
-	Handlebars.registerHelper('queryWords', function(original_ref)
-	{
-		// Check if original referrer exists
-		if (getCurrentContactProperty(original_ref))
-		{
-			// Get input url from contact properties and initialize reference
-			// url
-			var inputUrl = getCurrentContactProperty(original_ref);
-			var referenceUrl = 'www.google.';
-
-			// Get host from input url and compare with reference url if equal
-			var tempUrl = inputUrl.split('/');
-			tempUrl = tempUrl[2].slice(0, 11);
-			if (tempUrl === referenceUrl)
-			{
-				// Get search term from input url
-				var parser = document.createElement('a');
-				parser.href = inputUrl;
-				var search = parser.search;
-
-				// If search term exists, check if 'q' parameter exists, and
-				// return its value
-				if (search.length > 1)
-				{
-					search = search.split('&');
-					var length = search.length;
-					for (var i = 0; i < length; i++)
-					{
-						if (search[i].indexOf('q=') != -1)
-						{
-							search = search[i].split('=');
-							return new Handlebars.SafeString('( Keyword : ' + search[1].split('+').join(" ") + ' )');
-						}
+						return "agilecrm";
 					}
+				});
+
+				// To pick randomly selected avatar url
+				Handlebars.registerHelper('pick_random_avatar_url', function(options)
+				{
+								return choose_random_avatar();
+				});
+
+				Handlebars.registerHelper('getRemaininaEmails', function()
+				{
+								return getPendingEmails();
+				});
+
+				// helper function to return agile bcc special email for inbound mail event trigger
+				Handlebars.registerHelper('inboundMail', function()
+				{
+								var agile_api = $.ajax({ type : 'GET', url : '/core/api/api-key', async : false, dataType : 'json' }).responseText;
+								agile_api = JSON.parse(agile_api);
+								var inbound_email = window.location.hostname.split('.')[0] + "-" + agile_api.api_key + "@agle.cc";
+								return new Handlebars.SafeString(inbound_email);
+				});
+
+				/**
+				 * ==============================================================
+				 * -------------------------- jitendra's start script ---------- 
+				 * Please do not add any function in this block
+				 * extract time from epochTime
+				 */
+				Handlebars.registerHelper("getTime", function(date)
+				{
+
+								if (!date)
+												return;
+
+								if ((date / 100000000000) > 1)
+								{
+												var d = new Date(parseInt(date));
+												var hours = d.getHours();
+												if (hours > 12)
+																hours = hours - 12;
+												var min = d.getMinutes();
+												if (min == 0)
+																min = "00"
+												var ampm = hours >= 12 ? "PM" : "AM";
+												return hours + ":" + min + " " + ampm;
+								}
+								// date form milliseconds
+
+								var d = new Date(parseInt(date) * 1000);
+								var hours = d.getHours();
+								if (hours > 12)
+												hours = hours - 12;
+								var min = d.getMinutes();
+								if (min == 0)
+												min = "00"
+								var ampm = hours >= 12 ? "PM" : "AM";
+								return hours + ":" + min + " " + ampm;
+
+				});
+
+				/**
+				 * get custom date with time
+				 */
+
+				Handlebars.registerHelper("getCustomDateWithTime", function(start, end)
+				{
+								var day1 = getDay(start);
+								var day2 = getDay(end);
+
+								var d1 = getCustomFormatedDate(start);
+								var d2 = getCustomFormatedDate(end);
+								var time = extractTimeFromDate(end);
+
+								if (day1 != day2)
+												return d1 + " - " + d2;
+								else
+												return d1 + " - " + time;
+
+				});
+
+				function getCustomFormatedDate(date)
+				{
+
+								var months = [
+																'Jan', 'Feb', 'March', 'April', 'May', 'Jun', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'
+								];
+
+								if (!date)
+												return;
+
+								if ((date / 100000000000) > 1)
+								{
+												var d = new Date(parseInt(date));
+												var hours = d.getHours();
+												var year = d.getFullYear();
+												var date = d.getDate();
+												var month = d.getMonth();
+												var min = d.getMinutes();
+												if (min == 0)
+																min = "00"
+												var ampm = hours >= 12 ? "PM" : "AM";
+												if (hours > 12)
+																hours = hours - 12;
+												return months[month] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
+
+								}
+								// date form milliseconds
+
+								var d = new Date(parseInt(date) * 1000);
+								var hours = d.getHours();
+								var year = d.getFullYear();
+								var date = d.getDate();
+								var month = d.getMonth();
+								var min = d.getMinutes();
+								if (min == 0)
+												min = "00"
+								var ampm = hours >= 12 ? "PM" : "AM";
+								if (hours > 12)
+												hours = hours - 12;
+								return months[month] + " " + date + ", " + year + " " + hours + ":" + min + " " + ampm;
+
 				}
-			}
-			else
-				return;
-		}
-	});
-
-	/**
-	 * Returns contact full name if last-name exists, otherwise only first_name
-	 * for contact type PERSON. It returns company name for other contact type.
-	 * 
-	 */
-	Handlebars.registerHelper('contact_name', function(properties, type)
-	{
-
-		if (type === 'PERSON')
-		{
-			for (var i = 0; i < properties.length; i++)
-			{
-
-				// if last-name exists, return full name.
-				if (properties[i].name === "last_name")
-					return (getPropertyValue(properties, "first_name") + " " + properties[i].value);
-
-				else if (properties[i].name === "first_name")
-					return properties[i].value;
-			}
-
-			return "Contact";
-		}
-
-		// COMPANY type
-		for (var i = 0; i < properties.length; i++)
-		{
-			if (properties[i].name === "name")
-				return properties[i].value;
-		}
-		return "Company";
-	});
-
-	/**
-	 * Returns full name of contact. Use this when empty value is not
-	 * acceptable. Takes care that, even when no names are defined, returns
-	 * email(necessary for PERSON) or Company <id>. Calls function
-	 * getContactName defined in agile-typeahead.js. Also typeahead uses this
-	 * fxn to append values as tags.
-	 */
-	Handlebars.registerHelper('contact_name_necessary', function(contact)
-	{
-		return getContactName(contact);
-	});
-
-	/**
-	 * To check if string is blank
-	 */
-	Handlebars.registerHelper('is_blank', function(value, options)
-	{
-		value = value.trim();
-
-		if (value == "")
-			return options.fn(value);
-		else
-			return options.inverse(value);
-	})
-
-	/**
-	 * Iterate through list of values (not json)
-	 */
-	Handlebars.registerHelper("each_with_index1", function(array, options)
-	{
-		console.log(array);
-		var buffer = "";
-		for (var i = 0, j = array.length; i < j; i++)
-		{
-			var item = {};
-			item["value"] = array[i];
-
-			console.log(item);
-			// stick an index property onto the item, starting with 1, may make
-			// configurable later
-			item["index"] = i + 1;
-
-			console.log(item);
-			// show the inside of the block
-			buffer += options.fn(item);
-		}
-
-		// return the finished buffer
-		return buffer;
-
-	});
-
-	/**
-	 * If log_type equals true otherwise false
-	 */
-	Handlebars.registerHelper("if_log_type_equals", function(object, key, log_type, options)
-	{
-
-		if (object[key] == log_type)
-			return options.fn(object);
-
-		return options.inverse(object);
-
-	});
-
-	/**
-	 * Identifies EMAIL_SENT campaign-log string and splits the log string based
-	 * on '_aGiLeCrM' delimiter into To, From, Subject and Body.
-	 * 
-	 */
-	Handlebars.registerHelper("if_email_sent", function(object, key, options)
-	{
-
-		// delimiter for campaign send-email log
-		var _AGILE_CRM_DELIMITER = "_aGiLeCrM";
-
-		// if log_type is EMAIL_SENT
-		if (object[key] === "EMAIL_SENT")
-		{
-			// Splits logs message
-			var email_fields = object["message"].split(_AGILE_CRM_DELIMITER, 4);
-
-			// Json to apply for handlebar template
-			var json = {};
-
-			if (email_fields === undefined)
-				return options.inverse(object);
-
-			// Iterates inorder to insert each field into json
-			for (var i = 0; i < email_fields.length; i++)
-			{
-				// Splits based on colon. E.g "To: naresh@agilecrm.com"
-				var arrcolon = email_fields[i].split(":");
-
-				// Inserts LHS of colon as key. E.g., To
-				var key = arrcolon[0];
-				key = key.trim(); // if key starts with space, it can't
-				// accessible
-
-				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com
-				var value = arrcolon.slice(1).join(":"); // join the
-				// remaining string
-				// based on colon,
-				// only first occurence of colon is needed
-				value = value.trim();
-
-				json[key] = value;
-			}
-
-			// inserts time into json
-			json.time = object["time"];
-
-			// apply customized json to template.
-			return options.fn(json);
-		}
-
-		// if not EMAIL_SENT log, goto else in the template
-		return options.inverse(object);
-
-	});
-
-	Handlebars.registerHelper('remove_spaces', function(value)
-	{
-		return value.replace(/ +/g, '');
-
-	});
-
-	/***************************************************************************
-	 * Returns campaignStatus object from contact campaignStatus array having
-	 * same campaign-id. It is used to get start and completed time from array.
-	 **************************************************************************/
-	Handlebars.registerHelper('if_same_campaign', function(object, data, options)
-	{
-
-		var campaignStatusArray = object[data];
-
-		// if campaignStatus key doesn't exist return.
-		if (data === undefined || campaignStatusArray === undefined)
-			return;
-
-		// Get campaign-id from hash
-		var current_campaign_id = getIdFromHash();
-
-		for (var i = 0, len = campaignStatusArray.length; i < len; i++)
-		{
-
-			// compares campaign-id of each element of array with
-			// current campaign-id
-			if (campaignStatusArray[i].campaign_id === current_campaign_id)
-			{
-				// if equal, execute template current json
-				return options.fn(campaignStatusArray[i]);
-			}
-		}
-
-	});
-
-	/**
-	 * Returns other active campaigns in campaign-active subscribers.
-	 */
-	Handlebars.registerHelper('if_other_active_campaigns', function(object, data, options)
-	{
-
-		if (object === undefined || object[data] === undefined)
-			return;
-
-		var other_campaigns = {};
-		var other_active_campaigns = [];
-		var other_completed_campaigns = [];
-		var campaignStatusArray = object[data];
-
-		var current_campaign_id = getIdFromHash();
-
-		for (var i = 0, len = campaignStatusArray.length; i < len; i++)
-		{
-			// neglect same campaign
-			if (current_campaign_id === campaignStatusArray[i].campaign_id)
-				continue;
-
-			// push all other active campaigns
-			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
-				other_active_campaigns.push(campaignStatusArray[i])
-
-				// push all done campaigns
-			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
-				other_completed_campaigns.push(campaignStatusArray[i]);
-		}
-
-		other_campaigns["active"] = other_active_campaigns;
-		other_campaigns["done"] = other_completed_campaigns;
-
-		return options.fn(other_campaigns);
-
-	});
-
-	/**
-	 * Returns Contact Model from contactDetailView collection.
-	 * 
-	 */
-	Handlebars.registerHelper('contact_model', function(options)
-	{
-
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
-		{
-
-			// To show Active Campaigns list immediately after campaign
-			// assigned.
-			if (CONTACT_ASSIGNED_TO_CAMPAIGN)
-			{
-				CONTACT_ASSIGNED_TO_CAMPAIGN = false;
-
-				// fetches updated contact json
-				var contact_json = $.ajax({ type : 'GET', url : '/core/api/contacts/' + App_Contacts.contactDetailView.model.get('id'), async : false,
-					dataType : 'json' }).responseText;
-
-				// Updates Contact Detail model
-				App_Contacts.contactDetailView.model.set(JSON.parse(contact_json));
-
-				return options.fn(JSON.parse(contact_json));
-			}
-
-			// if simply Campaigns tab clicked, use current collection
-			return options.fn(App_Contacts.contactDetailView.model.toJSON());
-		}
-	});
-
-	/**
-	 * Returns json object of active and done subscribers from contact object's
-	 * campaignStatus.
-	 */
-	Handlebars.registerHelper('contact_campaigns', function(object, data, options)
-	{
-
-		// if campaignStatus is not defined, return
-		if (object === undefined || object[data] === undefined)
-			return;
-
-		// Temporary json to insert active and completed campaigns
-		var campaigns = {};
-
-		var active_campaigns = [];
-		var completed_campaigns = [];
-
-		// campaignStatus object of contact
-		var campaignStatusArray = object[data];
-
-		for (var i = 0, len = campaignStatusArray.length; i < len; i++)
-		{
-			// push all active campaigns
-			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
-				active_campaigns.push(campaignStatusArray[i])
-
-				// push all done campaigns
-			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
-				completed_campaigns.push(campaignStatusArray[i]);
-		}
-
-		campaigns["active"] = active_campaigns;
-		campaigns["done"] = completed_campaigns;
-
-		// apply obtained campaigns context within
-		// contact_campaigns block
-		return options.fn(campaigns);
-	});
-
-	/**
-	 * Verifies given urls length and returns options hash based on restricted
-	 * count value.
-	 * 
-	 */
-	Handlebars.registerHelper("if_more_urls", function(url_json, url_json_length, options)
-	{
-		var RESTRICT_URLS_COUNT = 3;
-		var temp_urls_array = [];
-		var context_json = {};
-
-		// If length is less than restricted, compile
-		// else block with given url_json
-		if (url_json_length < RESTRICT_URLS_COUNT)
-			return options.inverse(url_json);
-
-		// Insert urls until restricted count reached
-		for (var i = 0; i < url_json.length; i++)
-		{
-			if (i === RESTRICT_URLS_COUNT)
-				break;
-
-			temp_urls_array.push(url_json[i]);
-		}
-
-		context_json.urls = temp_urls_array;
-
-		// More remained
-		context_json.more = url_json_length - RESTRICT_URLS_COUNT;
-
-		return options.fn(context_json);
-
-	});
-
-	/**
-	 * Returns first occurence string from string having underscores E.g,
-	 * mac_os_x to mac
-	 */
-	Handlebars.registerHelper('normalize_os', function(data)
-	{
-		if (data === undefined || data.indexOf('_') === -1)
-			return data;
-
-		// if '_' exists splits
-		return data.split('_')[0];
-	});
-
-	Handlebars.registerHelper('safe_tweet', function(data)
-	{
-		data = data.trim();
-		return new Handlebars.SafeString(data);
-	});
-	/**
-	 * Get stream icon for social suite streams.
-	 */
-	Handlebars.registerHelper('get_stream_icon', function(name)
-	{
-		if (!name)
-			return;
-
-		var icon_json = { "Home" : "icon-home", "Retweets" : "icon-retweet", "DM_Inbox" : "icon-download-alt", "DM_Outbox" : "icon-upload-alt",
-			"Favorites" : "icon-star", "Sent" : "icon-share-alt", "Search" : "icon-search", "Scheduled" : "icon-time", "All_Updates" : "icon-home",
-			"My_Updates" : "icon-share-alt" };
-
-		name = name.trim();
-
-		if (icon_json[name])
-			return icon_json[name];
-
-		return "icon-globe";
-
-	});
-
-	/**
-	 * Get task list name without underscore and caps, for new task UI.
-	 */
-	Handlebars.registerHelper('get_normal_name', function(name)
-	{
-		if (!name)
-			return;
-
-		var name_json = { "HIGH" : "High", "LOW" : "Low", "NORMAL" : "Normal", "EMAIL" : "Email", "CALL" : "Call", "SEND" : "Send", "TWEET" : "Tweet",
-			"FOLLOW_UP" : "Follow Up", "MEETING" : "Meeting", "MILESTONE" : "Milestone", "OTHER" : "Other", "YET_TO_START" : "Yet To Start",
-			"IN_PROGRESS" : "In Progress", "COMPLETED" : "Completed", "TODAY" : "Today", "TOMORROW" : "Tomorrow", "OVERDUE" : "Overdue", "LATER" : "Later" };
-
-		name = name.trim();
-
-		if (name_json[name])
-			return name_json[name];
-
-		return name;
-
-	});
-
-	/**
-	 * put user address location togather separated by comma.
-	 */
-	Handlebars.registerHelper('user_location', function()
-	{
-
-		var City = this.city == "?" ? "" : (this.city + ", ");
-		var Region = this.region == "?" ? "" : (this.region + ", ");
-		var Country = this.country;
-		if (this.city == "?" && this.region == "?")
-			Country = this.country == "?" ? this.city_lat_long : (this.city_lat_long + " ( " + this.country + " )");
-
-		return (City + Region + Country).trim();
-	});
-
-	/**
-	 * Trims trailing spaces
-	 */
-	Handlebars.registerHelper('trim_space', function(value)
-	{
-
-		if (value === undefined)
-			return value;
-
-		return value.trim();
-	});
-
-	/**
-	 * Returns reputation name based on value
-	 * 
-	 */
-	Handlebars
-			.registerHelper(
-					'get_subaccount_reputation',
-					function(value)
-					{
-						var type = "";
-						var reputation = "Unknown";
-
-						if (value > 1 && value < 40)
-						{
-							type = "important";
-							reputation = "Poor";
-						}
-						else if (value >= 40 && value < 75)
-						{
-							type = "";
-							reputation = "Ok";
-						}
-						else if (value >= 75 && value < 90)
-						{
-							type = "success";
-							reputation = "Good";
-						}
-						else if (value >= 90)
-						{
-							type = "success";
-							reputation = "Excellent";
-						}
-
-						return "<span style='font-size:13px;' class='label label-" + type + "'>" + reputation + "</span> <!--<span class='badge badge-" + type + "'>" + value + "</span>-->";
-
-					});
-
-	/**
-	 * Returns id from hash. It returns id from hash iff id exists at last.
-	 * 
-	 */
-	Handlebars.registerHelper('get_id_from_hash', function()
-	{
-
-		return getIdFromHash();
-
-	});
-
-	Handlebars.registerHelper('get_subscribers_type_from_hash', function()
-	{
-
-		// Returns "workflows" from "#workflows"
-		var hash = window.location.hash.substr(1);
-
-		if (hash.indexOf("all") != -1)
-			return "All";
-
-		if (hash.indexOf("active") != -1)
-			return "Active";
-
-		if (hash.indexOf("completed") != -1)
-			return "Completed";
-
-		if (hash.indexOf("removed") != -1)
-			return "Removed";
-
-		if (hash.indexOf("unsubscribed") != -1)
-			return "Unsubscribed";
-
-		if (hash.indexOf("hardbounced") != -1)
-			return "Hard Bounced";
-
-		if (hash.indexOf("softbounced") != -1)
-			return "Soft Bounced";
-
-		if (hash.indexOf("spam-reported") != -1)
-			return "Spam Reported";
-	});
-
-	Handlebars.registerHelper("check_plan", function(plan, options)
-	{
-		console.log(plan);
-
-		if (!_billing_restriction)
-			return options.fn(this);
-
-		if (_billing_restriction.currentLimits.planName == plan)
-			return options.fn(this);
-
-		return options.inverse(this);
-
-	});
-
-	/**
-	 * Safari browser doesn't supporting few CSS properties like margin-top,
-	 * margin-bottom etc. So this helper is used to add compatible CSS
-	 * properties to Safari
-	 */
-	Handlebars.registerHelper("isSafariBrowser", function(options)
-	{
-
-		if (navigator.userAgent.indexOf('Safari') !== -1 && navigator.userAgent.indexOf('Chrome') === -1)
-			return options.fn(this);
-
-		return options.inverse(this);
-	});
-
-	/**
-	 * give custome status base on xerotype
-	 */
-
-	Handlebars.registerHelper('xeroType', function(type)
-	{
-		return (type == "ACCPAY") ? "Payable" : "Receivable";
-	});
-
-	/**
-	 * give custom type to xero type
-	 */
-	Handlebars.registerHelper('xeroTypeToolTip', function(type)
-	{
-		return (type == "ACCPAY") ? "Payable" : "Receivable";
-	});
-
-	/**
-	 * gives first latter capital for given input
-	 */
-	Handlebars.registerHelper('capFirstLetter', function(data)
-	{
-		if (data === "DEFAULT")
-		{
-			// console.log("return empty");
-			return "";
-		}
-		else
-		{
-			var temp = data.toLowerCase();
-			return temp.charAt(0).toUpperCase() + temp.slice(1);
-		}
-	});
-
-	Handlebars.registerHelper('qbStatus', function(Balance)
-	{
-		console.log(this);
-		console.log(this.TotalAmt);
-		if (Balance == 0)
-		{
-			return "Paid"
-		}
-		else
-		{
-			return "Due"
-		}
-	});
-	Handlebars.registerHelper('currencyFormat', function(data)
-	{
-
-		return Number(data).toLocaleString('en');
-		// data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
-	});
-
-	Handlebars.registerHelper('QbDateFormat', function(data)
-	{
-
-		var i = [];
-		i = data.split("-");
-		return i[0] + "-" + i[2] + "-" + i[1];
-	});
-
-	Handlebars.registerHelper("hasScope", function(scope_constant, options)
-	{
-		if (CURRENT_DOMAIN_USER.scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.scopes) != -1)
-			return options.fn(this);
-
-		return options.inverse(this);
+				function extractTimeFromDate(date)
+				{
+								if (!date)
+												return;
+
+								if ((date / 100000000000) > 1)
+								{
+												var d = new Date(parseInt(date));
+												var hours = d.getHours();
+
+												var min = d.getMinutes();
+												if (min == 0)
+																min = "00"
+												var ampm = hours >= 12 ? "PM" : "AM";
+												if (hours > 12)
+																hours = hours - 12;
+												return hours + ":" + min + " " + ampm;
+								}
+								// date form milliseconds
+
+								var d = new Date(parseInt(date) * 1000);
+								var hours = d.getHours();
+								var min = d.getMinutes();
+								if (min == 0)
+												min = "00"
+								var ampm = hours >= 12 ? "PM" : "AM";
+								if (hours > 12)
+												hours = hours - 12;
+								return hours + ":" + min + " " + ampm;
+				}
+
+				function getDay(date)
+				{
+								if ((date / 100000000000) > 1)
+								{
+												var sDate = new Date(parseInt(date));
+												return sDate.getDate();
+								}
+								else
+								{
+												var sDate = new Date(parseInt(date) * 1000);
+												return sDate.getDate();
+								}
+				}
+				/**
+				 * return contact property value base on type if contact type is COMPANY
+				 * then return company name other wise retun contact first_name + last_name
+				 * as name
+				 */
+
+				Handlebars.registerHelper('getContactDisplayValue', function(contact)
+				{
+								var displayName;
+
+								var type = contact.type;
+								var properties = contact.properties;
+								if (properties)
+								{
+												if (type == "COMPANY")
+												{
+
+																for (var i = 0; i < properties.length; i++)
+																{
+																				if (properties[i].name == 'name')
+																				{
+																								displayName = properties[i].value;
+																								break;
+																				}
+																}
+												}
+												else
+												{
+																var firstName;
+																var lastName;
+																for (var i = 0; i < properties.length; i++)
+																{
+																				if (properties[i].name == 'first_name')
+																				{
+																								firstName = properties[i].value;
+
+																				}
+
+																				if (properties[i].name == 'last_name')
+																				{
+																								lastName = properties[i].value;
+
+																				}
+
+																}
+																if (!firstName)
+																{
+																				firstName = '';
+																}
+																if (!lastName)
+																{
+																				lastName == '';
+																}
+																displayName = firstName + " " + lastName;
+												}
+								}
+								return displayName;
+				});
+
+				// return google event custom date and time
+
+				Handlebars.registerHelper('getGoogleEventCustomTime', function(start, end)
+				{
+								var startDate = new Date(start);
+								var endDate = new Date(end);
+
+								return getGoogleCustomFormatteDate(startDate.getTime(), endDate.getTime());
+
+				});
+
+				function getGoogleCustomFormatteDate(start, end)
+				{
+
+								var day1 = getDay(start);
+								var day2 = getDay(end);
+
+								var d1 = getCustomFormatedDate(start);
+								var d2 = getCustomFormatedDate(end);
+								var time = extractTimeFromDate(end);
+								var createdTime = getEventCreatedTime(start);
+								if (createdTime == 0 || createdTime == 1)
+								{
+												var t1 = extractTimeFromDate(start);
+												var t2 = extractTimeFromDate(end);
+												if (t1 && t2)
+																return t1 + " - " + t2;
+												if (t2)
+																return t1 + " - " + t2;
+												else
+																return t1;
+								}
+								else
+								{
+
+												if (day1 != day2)
+												{
+																if (d2)
+																				return d1 + " - " + d2;
+																else
+																				return d1;
+												}
+												else
+																return d1 + " - " + time;
+								}
+				}
+
+				Handlebars.registerHelper("displayCustomDateTime", function(start, end)
+				{
+								var eventCreateTime = get_activity_created_time(start);
+
+								var day1 = getDay(start);
+								var day2 = getDay(end);
+
+								var d1 = getCustomFormatedDate(start);
+								var d2 = getCustomFormatedDate(end);
+								var time = extractTimeFromDate(end);
+								if (eventCreateTime == 0 || eventCreatedTime == 1)
+								{
+												return time;
+								}
+								else
+								{
+												if (day1 != day2)
+																return d1 + " - " + d2;
+												else
+																return d1 + " - " + time;
+								}
+				});
+				// helper function return created time for event
+				function getEventCreatedTime(due)
+				{
+								// Get Todays Date
+								var eventStartDate = new Date(due);
+								due = eventStartDate.getTime() / 1000;
+								var date = new Date();
+								date.setHours(0, 0, 0, 0);
+
+								date = date.getTime() / 1000;
+								// console.log("Today " + date + " Due " + due);
+								return Math.floor((due - date) / (24 * 3600));
+				}
+
+				/**
+				 * ------ End of jitendra script------
+				 * ======== Thank you =================
+				 */
+
+				// To pick randomly selected avatar url
+				Handlebars.registerHelper('arrayToCamelcase', function(values) {
+					var result = '';
+					for(var i = 0;i<values.length;i++){
+						result += ucfirst(values[i]);
+						if(i+1<values.length)
+							result += ', ';
+					}
+					return result;
+				});
+				
+				// To pick randomly selected avatar url
+				Handlebars.registerHelper('namesFromObject', function(jsonArray,fieldName) {
+					var result = '';
+					console.log(jsonArray.length);
+					for(var i = 0;i<jsonArray.length;i++){
+						result += jsonArray[i][fieldName];
+						if(i+1<jsonArray.length)
+							result += ', ';
+					}
+					return result;
+				});
+				
+				
+				//@author Purushotham
+				Handlebars.registerHelper('secondsToFriendlyTime', function(time) {
+					var hours = Math.floor(time / 3600);
+					if(hours > 0)
+					time = time - hours*60*60;
+					var minutes = Math.floor(time / 60);
+					var seconds = time - minutes * 60;
+					var friendlyTime = "";
+					if(hours == 1)
+						friendlyTime = hours+ " hr ";
+					if(hours > 1)
+						friendlyTime = hours+ " hrs ";
+					if(minutes > 0)
+						friendlyTime += minutes + " min ";
+					if(seconds > 0)
+						friendlyTime += seconds + " sec";
+					if(friendlyTime != "")
+						return "("+friendlyTime+")";
+					return friendlyTime;
+				});
+	// To pick randomly selected avatar url
+	Handlebars.registerHelper('pick_random_avatar_url', function(options) {
+		return choose_random_avatar();
 	});
 	
-	Handlebars.registerHelper("canSyncContacts", function(options)
-			{
-				if(canImportContacts())
+	// To choose font awesome icon for custom fields
+	Handlebars.registerHelper('choose_custom_field_font_icon', function(field_type) {
+		var icon_class='';
+		if(field_type=="TEXT")
+			icon_class = "icon-text-height";
+		else if(field_type=="TEXTAREA")
+			icon_class = "icon-file-alt";
+		else if(field_type=="DATE")
+			icon_class = "icon-calendar";
+		else if(field_type=="CHECKBOX")
+			icon_class = "icon-check";
+		else if(field_type=="LIST")
+			icon_class = "icon-list-ul";
+		else if(field_type=="NUMBER")
+			icon_class = "icon-text-height";
+		return icon_class;
+	});
+
+	// To choose font awesome icon for custom fields
+	Handlebars.registerHelper('choose_custom_field_type', function(field_type) {
+		var field_type_name='';
+		if(field_type=="TEXT")
+			field_type_name = "Text Field";
+		else if(field_type=="TEXTAREA")
+			field_type_name = "Text Area";
+		else if(field_type=="DATE")
+			field_type_name = "Date";
+		else if(field_type=="CHECKBOX")
+			field_type_name = "Checkbox";
+		else if(field_type=="LIST")
+			field_type_name = "List";
+		else if(field_type=="NUMBER")
+			field_type_name = "Number";
+		else if(field_type=="FORMULA")
+			field_type_name = "Formula";
+		return field_type_name;
+	});
+
+	Handlebars.registerHelper('shopifyWebhook', function()
+	{
+		var agile_api = $.ajax({ type : 'GET', url : '/core/api/api-key', async : false, dataType : 'json' }).responseText;
+		agile_api = JSON.parse(agile_api);
+		var shopify_webhook = window.location.origin + "/shopifytrigger?api-key=" + agile_api.api_key;
+		return new Handlebars.SafeString(shopify_webhook);
+	});
+	
+	Handlebars.registerHelper('if_equals_or', function()
+	{
+		var options = arguments[arguments.length-1];
+		try {
+			for(var i = 0; i < arguments.length-1; i=i+2) {
+				value = arguments[i];
+				target = arguments[i+1];
+				if ((typeof target === "undefined") || (typeof value === "undefined"))
+					return options.inverse(this);
+				if (value.toString().trim() == target.toString().trim())
 					return options.fn(this);
-
-				return options.inverse(this);
-			});
-
-	/**
-	 * To check Access controls for showing icons on dashboard
-	 */
-	Handlebars.registerHelper('hasMenuScope', function(item, options)
-	{
-		if ((CURRENT_DOMAIN_USER.menu_scopes).indexOf(item) != -1)
-			return options.fn(this);
-		else
+			}
 			return options.inverse(this);
-	});
-
-	Handlebars.registerHelper('fetchXeroUser', function(data)
-	{
-		return JSON.parse(data).xeroemail;
-	});
-
-	Handlebars.registerHelper('getfbreturndomain', function(data)
-	{
-		var arr = window.location.href.split('/')
-		return arr[2];
-	});
-
-	Handlebars
-			.registerHelper(
-					'tagManagementCollectionSetup',
-					function(tags)
-					{
-
-						console.log(tags);
-						var json = {};
-
-						var keys = [];
-						// Store tags in a json, starting letter as key
-						for (var i = 0; i < tags.length; i++)
-						{
-							var tag = tags[i].tag;
-							var key = tag.charAt(0).toUpperCase();
-							// console.log(tag);
-							if (jQuery.inArray(key, keys) == -1)
-								keys.push(key);
-						}
-
-						console.log(keys);
-						var html_temp = "";
-
-						for (var i = 0; i < keys.length; i++)
-							html_temp += "<div class=\"clearfix\"></div><div style='margin-right:10px;'><div class='tag-key tag-management-key'>" + keys[i] + "</div><div class=\"clearfix\"></div><div class='left' tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div>";
-
-						console.log(html_temp);
-						return new Handlebars.SafeString(html_temp);
-					});
-
-	Handlebars.registerHelper('containsScope', function(item, list, options)
-	{
-		if (list.length == 0 || !item)
+		} catch(err) {
+			console.log("error while if_equals_or of handlebars helper : "+ err.message);
 			return options.inverse(this);
-
-		if (jQuery.inArray(item, list) == -1)
-			return options.inverse(this);
-
-		return options.fn(this);
-
-	});
-
-	Handlebars.registerHelper('isOwnerOfContact', function(owner_id, options)
-	{
-
-		if (CURRENT_DOMAIN_USER.id == owner_id)
-			return options.fn(this);
-		return options.inverse(this);
-	});
-
-	Handlebars.registerHelper('canEditContact', function(owner_id, options)
-	{
-		if (canEditContact(owner_id))
-			return options.fn(this);
-
-		return options.inverse(this)
+		}
 	});
 	
-	Handlebars.registerHelper('canEditCurrentContact', function(owner_id, options){
-		if (canEditCurrentContact())
-			return options.fn(this);
-
-		return options.inverse(this)
-	})
+	Handlebars.registerHelper('buildFacebookProfileURL',function(url){
+		return buildFacebookProfileURL(url);
+	});
 	
-
-	Handlebars.registerHelper('gateway_exists', function(value, target, options)
-	{
-
-		for (var i = 0; i < target.length; i++)
-		{
-
-			var prefs = JSON.parse(target[i].prefs);
-
-			if (target[i].name == "EmailGateway")
-			{
-
-				if (prefs.email_api == value)
-					return options.fn(target[i]);
-			}
-
-			if (target[i].name == "SMS-Gateway")
-			{
-				if (prefs.sms_api == value)
-					return options.fn(target[i]);
-			}
-		}
-		return options.inverse(this);
-	});
-
-	Handlebars.registerHelper("each_index_slice", function(array, index, options)
-	{
-		var buffer = "";
-		for (var i = index; i < array.length; i++)
-		{
-			var item = array[i];
-
-			// stick an index property onto the item, starting with 1, may make
-			// configurable later
-			// item.index = i + 1;
-
-			console.log(item);
-			// show the inside of the block
-			buffer += options.fn(item);
-		}
-
-		// return the finished buffer
-		return buffer;
-
-	});
-
-	Handlebars.registerHelper('gateway_exists', function(value, target, options)
-	{
-
-		for (var i = 0; i < target.length; i++)
-		{
-
-			var prefs = JSON.parse(target[i].prefs);
-
-			if (target[i].name == "EmailGateway")
-			{
-
-				if (prefs.email_api == value)
-					return options.fn(target[i]);
-			}
-
-			if (target[i].name == "SMS-Gateway")
-			{
-				if (prefs.sms_api == value)
-					return options.fn(target[i]);
-			}
-		}
-		return options.inverse(this);
-	});
-
-	Handlebars.registerHelper('isOwnerOfContact', function(owner_id, options)
-	{
-
-		if (CURRENT_DOMAIN_USER.id == owner_id)
-			return options.fn(this);
-		return options.inverse(this);
-	});
-
-	Handlebars.registerHelper('canEditContact', function(owner_id, options)
-	{
-		if ((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
-			return options.fn(this);
-
-		return options.inverse(this)
-	});
-
-	Handlebars.registerHelper('getAccountPlanName', function(plan_name)
-	{
-		if (!plan_name)
-			return "Free";
-
-		var plan_fragments = plan_name.split("_");
-
-		return ucfirst(plan_fragments[0]);
-
-	});
-
-	Handlebars.registerHelper('getAccountPlanInteval', function(plan_name)
-	{
-		if (!plan_name)
-			return "Monthly";
-
-		var plan_fragments = plan_name.split("_");
-
-		return ucfirst(plan_fragments[1]);
-
-	});
-
-	Handlebars.registerHelper('getSubscriptionBasedOnPlan', function(customer, plan, options)
-	{
-		var subscription = getSubscriptionWithAmount(customer, plan);
-
-		if (subscription != null)
-			return options.fn(subscription);
-
-		return options.inverse(this);
-	});
-
-	// handling with iso date
-	Handlebars.registerHelper("iso_date_to_normalizeDate", function(dateString)
-	{
-
-		/*
-		 * var myDate = new Date(dateString); var timestamp = myDate.getTime();
-		 * var d = new Date(parseInt(timestamp) / 1000).format("dd-MM-yyyy");
-		 * return d;
-		 */
-		if (dateString.length <= 0)
-			return;
-		var arr = dateString.split("T");
-		console.log("normalize date " + arr[0]);
-		// var d = new Date(arr[0]).format("dd-MM-yyyy");
-		return arr[0];
-
-	});
-
-	/**
-	 * Index starts from 1
-	 */
-	Handlebars.registerHelper("getMonthFromIndex", function(month_index)
-	{
-		var monthArray = [
-				"January", "february", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
-		];
-		if (month_index > 12)
-			return monthArray[11];
-
-		return monthArray[month_index - 1];
-	});
-
 });
-// We store one template compiled - if repetitive templates are called, we save time on compilations
+
+// helper function return created time for event
+function getEventCreatedTime(due)
+{
+	// Get Todays Date
+	var eventStartDate = new Date(due);
+	due = eventStartDate.getTime() / 1000;
+	var date = new Date();
+	date.setHours(0, 0, 0, 0);
+
+	date = date.getTime() / 1000;
+	// console.log("Today " + date + " Due " + due);
+	return Math.floor((due - date) / (24 * 3600));
+}// We store one template compiled - if repetitive templates are called, we save time on compilations
 var Handlebars_Compiled_Templates = {};
 
 /**
@@ -11574,6 +13149,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("twitter.js");
 	}
+	else if (templateName.indexOf("googleplus") == 0)
+	{
+		template_relative_urls.push("googleplus.js");
+	}	
 	else if (templateName.indexOf("xero") == 0)
 	{
 		template_relative_urls.push("xero.js");
@@ -11586,11 +13165,18 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("facebook.js");
 	}
+	else if (templateName.indexOf("callscript") == 0)
+	{
+	template_relative_urls.push("callscript.js");
+	}
 	if (templateName.indexOf("chargify") == 0)
 	{
 		template_relative_urls.push("chargify.js");
 	}
-
+	if (templateName.indexOf("shopify") == 0)
+	{
+		template_relative_urls.push("shopify.js");
+	}
 	if (templateName.indexOf("socialsuite") == 0)
 	{
 		template_relative_urls.push("socialsuite.js");
@@ -11935,14 +13521,79 @@ function getContactCustomProperties(items)
 		return items;
 
 	var fields = [];
+	var fieldName='';
 	for (var i = 0; i < items.length; i++)
 	{
 		if (items[i].type == "CUSTOM" && items[i].name != "image")
 		{
+			if(fieldName=='')
+				fieldName=items[i].name;
 			fields.push(items[i]);
 		}
 	}
-	return fields;
+	//Added for formula type custom field
+	var type='';
+	if(App_Contacts.customFieldsList!=undefined && App_Contacts.customFieldsList!=null){
+		for(var i=0;i<App_Contacts.customFieldsList.collection.models.length;i++){
+			if(App_Contacts.customFieldsList.collection.models[i].get("field_label")==fieldName){
+				type = App_Contacts.customFieldsList.collection.models[i].get("scope");
+				break;
+			}
+		}
+	}
+	var datajson={};
+	var formulaFields=[];
+	var finalFields=[];
+	if(App_Contacts.contactDetailView!=undefined && App_Contacts.contactDetailView!=null){
+		$.each(App_Contacts.contactDetailView.model.get("properties"),function(index,customField){
+			datajson[''+customField.name]=customField.value;
+		});
+	}
+	var j=0;
+	if(App_Contacts.customFieldsList!=undefined && App_Contacts.customFieldsList!=null){
+		if(type=='')
+			type='CONTACT';
+		for(var i=0;i<App_Contacts.customFieldsList.collection.models.length;i++){
+			var json={};
+			if(App_Contacts.customFieldsList.collection.models[i].get("scope")==type && App_Contacts.customFieldsList.collection.models[i].get("field_type")=="FORMULA"){
+				
+				var tplEle = Handlebars.compile(App_Contacts.customFieldsList.collection.models[i].get("field_data"));
+				var tplEleData = tplEle(datajson);
+				var evalFlag = true;
+				var tplEleDataAftEval;
+				try{
+					tplEleDataAftEval = eval(tplEleData)
+				}catch(err){
+					console.log(err.message);
+					evalFlag = false;
+				}
+				if(!evalFlag)
+					tplEleDataAftEval = tplEleData;
+				
+				json.name=App_Contacts.customFieldsList.collection.models[i].get("field_label");
+				json.type="CUSTOM";
+				json.position=App_Contacts.customFieldsList.collection.models[i].get("position");
+				json.value=tplEleDataAftEval;
+				formulaFields.push(json);
+				j++;
+			}
+		}
+	}
+	if(fields.length>0){
+		for(var i=0;i<=fields.length;i++){
+			for(var k=0;k<formulaFields.length;k++){
+				if(i+1==formulaFields[k].position)
+					finalFields.push(formulaFields[k]);
+			}
+			if(i!=fields.length)
+				finalFields.push(fields[i]);
+		}
+	}else{
+		for(var k=0;k<formulaFields.length;k++){
+			finalFields.push(formulaFields[k]);	
+		}
+	}
+	return finalFields;
 }
 
 /**
@@ -14786,6 +16437,28 @@ function isValidForm(form) {
 		return $(element).closest(".control-group").find('ul.tags > li').length > 0 ? true : false;
 	}," This field is required.");
 	
+	jQuery.validator.addMethod("formulaData", function(value, element){
+		var source = $(element).val();
+		var tpl;
+		var compiled=true;
+		try{
+			tpl = Handlebars.precompile(source);
+		}catch(err){
+			err.message;
+			compiled=false;
+		}
+		return compiled ? true : false;
+	}," Please enter a valid formula.");
+	
+	//Number validation
+	jQuery.validator.addMethod("number_input", function(value, element){
+		
+		if(value=="")
+			return false;
+		
+		return /^[0-9\-]+$/.test(value);
+	}," Please enter a valid number.");
+	
 	$(form).validate({
 		rules : {
 			atleastThreeMonths : true,
@@ -14950,7 +16623,7 @@ function serializeForm(form_id) {
 	 */
 	// Stores build rules based on chained select
 	
-	var chained_selects = $('#' + form_id + ' .chained-table');
+	var chained_selects = $('#' + form_id + ' .chained-table:visible');
 	$.each(chained_selects, function(index, element){
 		var json_array = [];
 	arr = arr.concat($(element).find('.chained').map(function() {
@@ -15033,7 +16706,59 @@ $(function(){
 	$('.modal').on('shown', function(event){
 		$('form', this).focus_first();
 	});
-});/**
+});
+
+function serializeLhsFilters(element)
+{
+	var json_array = [];
+	var filters = {};
+	$(element).find('a#lhs-filters-header').removeClass('bold-text');
+	$.each($(element).find('.lhs-contact-filter-row'), function(index, data) {
+		var json_object = {};
+		var currentElement = $(data)[0];
+		var RHS_VALUE, RHS_NEW_VALUE;
+		var CONDITION = $(currentElement).find('[name="CONDITION"]').val();
+		
+		var RHS_ELEMENT = $(currentElement).find('.'+CONDITION).find('#RHS').children();
+		var RHS_NEW_ELEMENT = $(currentElement).find('.'+CONDITION).find('#RHS_NEW').children();
+		
+		RHS_VALUE = $(RHS_ELEMENT).val().trim();
+		if ($(RHS_ELEMENT).hasClass("date") && RHS_VALUE && RHS_VALUE != "") {
+			var date = new Date($(RHS_ELEMENT).val());
+			RHS_VALUE = getGMTTimeFromDate(date);
+		}
+		RHS_NEW_VALUE = $(RHS_NEW_ELEMENT).val();
+		if ($(RHS_NEW_ELEMENT).hasClass("date") && RHS_NEW_VALUE && RHS_NEW_VALUE !="") {
+			var date = new Date($(RHS_NEW_ELEMENT).val());
+			RHS_NEW_VALUE = getGMTTimeFromDate(date);
+		}
+		if(RHS_NEW_VALUE && typeof RHS_NEW_VALUE == "string") {
+			RHS_NEW_VALUE = RHS_NEW_VALUE.trim();
+		}
+		
+		// Set if value of input/select is valid
+		if (RHS_VALUE && RHS_VALUE != null && RHS_VALUE != "") {
+			//if rhs_new exists and is empty dont consider this condition.
+			if(RHS_NEW_ELEMENT && RHS_NEW_ELEMENT.length > 0 ) {
+				if(!RHS_NEW_VALUE || RHS_NEW_VALUE == null || RHS_NEW_VALUE == "") {
+					//in jquery each return is equivalent to continue.
+					return;
+				}
+			}
+			json_object["LHS"] = $(currentElement).find('[name="LHS"]').val();
+			json_object["CONDITION"] = CONDITION;
+			json_object["RHS"] = RHS_VALUE;
+			json_object["RHS_NEW"] = RHS_NEW_VALUE;
+			json_array.push(json_object);
+			$($(element).find('.lhs-row-filter')[index]).find('a#lhs-filters-header').addClass('bold-text');
+		}
+		// Pushes each rule built from chained select in to an JSON array
+	});
+	filters["rules"] = json_array;
+	filters["contact_type"] = $(element).find('#contact_type').val();
+	return filters;
+}
+/**
  * Deserialize.js It deserializes the form with the data, it is used while
  * editing data, it pre fills the form with the data to be edited.
  * 
@@ -15543,6 +17268,64 @@ function deserializeChainedSelect1(form, el, element)
 		deserializeChainedElementWebrule(data, rule_element);
 	})
 }
+	
+	function deserializeLhsFilters(element, data)
+{
+	var json_object = JSON.parse(data);
+	var tagsConditionsCount =0;
+	$.each(json_object.rules, function(index, filter) {
+		var LHS = filter.LHS;
+		var CONDITION = filter.CONDITION;
+		var RHS_VALUE = filter.RHS;
+		var RHS_NEW_VALUE = filter.RHS_NEW;
+		var fieldName = LHS.replace(/ +/g, '_');
+		var currentElemnt = $(element).find('#'+fieldName+'_div');
+		if(LHS == 'tags') {
+			$('#tags_div').parent().find('a').addClass('bold-text');
+			$('#tags_div').removeClass('hide');
+			if(tagsConditionsCount == 0) {
+				currentElemnt = $('#tags-lhs-filter-table').find("div.lhs-contact-filter-row:last")
+				$('#tags_div').prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
+			} else {
+				var htmlContent = $('#tags-lhs-filter-table').find("div.hide").clone();
+				htmlContent.removeClass('hide').addClass('lhs-contact-filter-row');
+				addTagsDefaultTypeahead(htmlContent);
+				$(htmlContent).find("i.filter-tags-multiple-remove-lhs").css("display", "inline-block");
+				$(htmlContent).appendTo('#tags-lhs-filter-table');
+				//$('#tags-lhs-filter-table').find("div.lhs-contact-filter-row:last").append(htmlContent);
+				currentElemnt = $('#tags-lhs-filter-table').find("div.lhs-contact-filter-row:last");
+			}
+			tagsConditionsCount++;
+		} else {
+			$(currentElemnt).prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
+		}
+		$(currentElemnt).parent().find("a").addClass('bold-text');
+		$(currentElemnt).removeClass('hide');
+		$(currentElemnt).find('[name="CONDITION"]').val(CONDITION);
+		$(currentElemnt).find('[name="CONDITION"]').trigger('change');
+		var RHS_ELEMENT = $(currentElemnt).find('.'+CONDITION).find('#RHS').children();
+		var RHS_NEW_ELEMENT = $(currentElemnt).find('.'+CONDITION).find('#RHS_NEW').children();
+		if ($(RHS_ELEMENT).hasClass("date")) {
+			RHS_VALUE = getLocalTimeFromGMTMilliseconds(RHS_VALUE);
+			$(RHS_ELEMENT).val(new Date(parseInt(RHS_VALUE)).format('mm/dd/yyyy'));
+			$(RHS_ELEMENT).attr('prev-val', new Date(parseInt(RHS_VALUE)).format('mm/dd/yyyy'));
+		} else {
+			$(RHS_ELEMENT).val(RHS_VALUE);
+			$(RHS_ELEMENT).attr('prev-val', RHS_VALUE);
+		}
+		if(RHS_NEW_ELEMENT) {
+			if ($(RHS_NEW_ELEMENT).hasClass("date")) {
+				RHS_NEW_VALUE = getLocalTimeFromGMTMilliseconds(RHS_NEW_VALUE);
+				$(RHS_NEW_ELEMENT).val(new Date(parseInt(RHS_NEW_VALUE)).format('mm/dd/yyyy'));
+				$(RHS_NEW_ELEMENT).attr('prev-val', new Date(parseInt(RHS_NEW_VALUE)).format('mm/dd/yyyy'));
+			} else {
+				$(RHS_NEW_ELEMENT).val(RHS_NEW_VALUE);
+				$(RHS_NEW_ELEMENT).attr('prev-val', RHS_NEW_VALUE);
+			}
+		}
+
+	});
+}
 $(function(){
 	$("#api_key_generate_icon").live('click', function(e){e.preventDefault(); regenerate_api_key('core/api/api-key/key');});
 	$("#jsapi_key_generate_icon").live('click', function(e){e.preventDefault(); regenerate_api_key('core/api/api-key/jskey');});
@@ -15626,6 +17409,9 @@ function canEditCurrentContact()
 	if(!contact_model)
 		return;
 	var contact = contact_model.toJSON();
+	
+	if(!contact.owner)
+		return true;
 	
 	return canEditContact(contact.owner.id);
 }
@@ -15712,19 +17498,49 @@ function change_availability_date(selected_date)
 // Get slot details time n description
 function getSlotDurations()
 {
+
 	// Send request to get slot details time n description
-	var initialURL = '/core/api/webevents/getslotdetails';
+	var initialURL = '/core/api/webevents/getslotdetails?userid=' + User_Id;
 	$
 			.getJSON(
 					initialURL,
 					function(data)
 					{
-						for ( var slotDetail in data)
+						if (data.length == 3)
 						{
-							var json = JSON.parse(data[slotDetail]);
+							for ( var slotDetail in data)
+							{
+								var json = JSON.parse(data[slotDetail]);
+								$('.segment1')
+										.append(
+												'<div class="col-sm-4"><p title="' + json.title + '" class="choose timeslot-view" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+							}
 							$('.segment1')
-									.append(
-											'<div class="col-sm-4"><p class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + json.title + '</p></div>');
+						       .append(
+						         '<div class="clearfix"></div>');
+						}
+						if (data.length == 2)
+						{
+							for ( var slotDetail in data)
+							{
+								var json = JSON.parse(data[slotDetail]);
+								$('.segment1')
+										.append(
+												'<div class="col-sm-5 col-md-4" style="margin-left: 99px;"><p title="' + json.title + '" class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+							}
+							 $('.segment1')
+						       .append(
+						         '<div class="clearfix"></div>');
+						}
+						if (data.length == 1)
+						{
+							for ( var slotDetail in data)
+							{
+								var json = JSON.parse(data[slotDetail]);
+								$('.segment1')
+										.append(
+												'<div class="col-sm-12" align="center"><p title="' + json.title + '" class="choose" data="' +json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+							}
 						}
 					});
 }
@@ -15772,6 +17588,7 @@ function resetAll()
 // calendar.
 function get_slots(s_date, s_slot)
 {
+
 	console.log("in get_slots");
 	console.log(s_date + " " + s_slot);
 
@@ -15793,8 +17610,9 @@ function get_slots(s_date, s_slot)
 	var epochTime = getEpochTimeFromDate(s_date); // milliseconds
 	console.log(epochTime);
 
-	var d = new Date(s_date)
-	console.log(d);
+	var d = new Date(s_date);
+	var secs = epochTime+d.getSeconds() + (60 * d.getMinutes()) + (60 * 60 * d.getHours());
+	console.log(secs);
 
 	var start_time = getEpochTimeFromDate(d);
 	d.setDate(d.getDate() + 1)
@@ -15802,7 +17620,7 @@ function get_slots(s_date, s_slot)
 	console.log(start_time + "  " + end_time);
 
 	// Send request to get available slot
-	var initialURL = '/core/api/webevents/getslots?&user_name=' + User_Name + '&user_id=' + User_Id + '&timezone=' + timezone + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneAbbr + "&epoch_time=" + epochTime + "&start_time=" + start_time + "&end_time=" + end_time;
+	var initialURL = '/core/api/webevents/getslots?&user_id=' + User_Id + '&timezone=' + timezone + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneName + "&epoch_time=" + epochTime + "&start_time=" + start_time + "&end_time=" + end_time +"&agile_user_id=" + Agile_User_Id+"&current_secs=" + secs ;
 	$.getJSON(initialURL, function(data)
 	{
 
@@ -15825,9 +17643,15 @@ function displayNoSlotsMsg()
 {
 	// Empty div where all slots listed, to display new slots
 	$('.checkbox-main-grid').html('');
+	
+	
+	var date = new Date(selecteddate);
+	console.log(date);
+
+	$('.availability').html("No slots available for " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
 
 	// Add msg
-	$('.checkbox-main-grid').append('<label for="no-slots" style="margin-left:112px;">Slots are not available for selected day.</label>');
+	//$('.checkbox-main-grid').append('<label for="no-slots" style="margin-left:112px;">Slots are not available for selected day.</label>');
 }
 
 // Add slots in grid checkbox in checkbox list
@@ -15837,26 +17661,29 @@ function displaySlots()
 
 	// Empty div where all slots listed, to display new slots
 	$('.checkbox-main-grid').html('');
-	
+
 	console.log(Available_Slots.length);
-	
-	var after_now=[];
-	var date=new Date();
-	for(var s=0;s<Available_Slots.length;s++){
-		if(Available_Slots[s][0]*1000>date.getTime()){
-			
+
+	var after_now = [];
+	var date = new Date();
+	for (var s = 0; s < Available_Slots.length; s++)
+	{
+		if (Available_Slots[s][0] * 1000 > date.getTime())
+		{
+
 			after_now.push(Available_Slots[s]);
 		}
-		
+
 	}
 	console.log(after_now.length);
-	Available_Slots="";
-	Available_Slots=after_now;
-	if(Available_Slots.length==0){
+	Available_Slots = "";
+	Available_Slots = after_now;
+	if (Available_Slots.length == 0)
+	{
 		displayNoSlotsMsg();
 		return;
 	}
-	
+
 	// Number of row
 	var numRow = Available_Slots.length / 5;
 
@@ -15893,6 +17720,8 @@ function isValid(formId)
 	return $(formId).valid();
 }
 
+
+
 /*
  * // Validates phone number function validatePhone(txtPhone) { var a =
  * document.getElementById(txtPhone).value; var filter = /^[0-9-+]+$/; if
@@ -15908,11 +17737,11 @@ function save_web_event(formId, confirmBtn)
 		$('#' + formId).find("input").focus();
 		return false;
 	}
-	
+
 	// Get details
 	var data = $('#' + formId).serializeArray();
 	console.log(data);
-	
+
 	// Make json
 	var web_calendar_event = {};
 	$.each(data, function()
@@ -15999,12 +17828,11 @@ function save_web_event(formId, confirmBtn)
 
 					if (status == "success")
 					{
-
 						$('#mainwrap').addClass("appointment-wrap");
 
 						var temp = '<div style="margin: 25px;font-size:15px;">'
 
-						+ '<div id="info" ><h3 style="border-bottom: 1px solid #ddd;padding-bottom:8px;margin-bottom:15px;"><b>Appointment Scheduled</b></h3>' + '<p >Your appointment was scheduled with <b>' + User_Name + '</b> on ' + start + '</div>' + '<div class="row">' + '<div class="col-md-12">' + '<p>Duration: ' + web_calendar_event.slot_time + ' Minutes </p>' + '</div>' + '</div>' + '<div class="row">' + '<div class="col-md-12">' + '<div class="left">' + '<a class="btn btn-primary" id="create_new_appointment" style="margin-top:20px;">Schedule Another Appointment</a>' + '</div>' + '</div>' + '</div>' + '</div>' + '<div align="right" style="position: absolute;right: 280px;bottom: -80px;">' + '<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 71px;">Powered by</span> <a href="https://www.agilecrm.com?utm_source=powered-by&amp;medium=event_scheduler&amp;utm_campaign=' + domainname + '" rel="nofollow" target="_blank"><img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 135px;"></a>' + '</div>'
+						+ '<div id="info" ><h3 style="border-bottom: 1px solid #ddd;padding-bottom:8px;margin-bottom:15px;"><b>Appointment Scheduled</b></h3>' + '<p >Your appointment ('+appointmenttype+') has been scheduled with <b>'+User_Name+'</b> for '+web_calendar_event.slot_time+' mins on '+start+'. </div>' + '<div class="row">' + '<div class="col-md-12">' + '<div class="row">' + '<div class="col-md-12">' + '<div class="left">' + '<a class="btn btn-primary" id="create_new_appointment" style="margin-top:20px;">Schedule Another Appointment</a>' + '</div>' + '</div>' + '</div>' + '</div>' + '<div align="right" style="position: absolute;right: 280px;bottom: -80px;">' + '<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 71px;">Powered by</span> <a href="https://www.agilecrm.com?utm_source=powered-by&amp;medium=event_scheduler&amp;utm_campaign=' + domainname + '" rel="nofollow" target="_blank"><img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 135px;"></a>' + '</div>'
 
 						resetAll();
 
@@ -16013,7 +17841,7 @@ function save_web_event(formId, confirmBtn)
 					}
 					else
 					{
-						alert("Your appointment not scheduled. please try again");
+						alert("Something went wrong as your appointment was not scheduled. Please try again in few hours. Error: "+res.statusText);
 						resetAll();
 						location.reload(true);
 					}
@@ -16043,10 +17871,28 @@ function convertToHumanDate(format, date)
 
 $("#create_new_appointment").die().live('click', function(e)
 {
-
+ //reloads the page
 	location.reload(true);
 
-});$(function()
+});
+
+/**
+ * if value morethan 50 adds .. at the end
+ */
+function addDotsAtEnd(title){
+if (title)
+{
+	if (title.length > 50)
+	{
+		var subst = title.substr(0, 50);
+		subst = subst + "....";
+		return subst;
+	}
+}
+
+return title;
+}
+$(function()
 {
 	// Total available slots on selected date with selecetd slot
 	var Available_Slots = null;
@@ -16057,6 +17903,18 @@ $("#create_new_appointment").die().live('click', function(e)
 		e.preventDefault();
 
 		Selected_Time = $(this).attr('data');
+
+		var json_meeting_duration=JSON.parse(meeting_duration);
+		console.log(json_meeting_duration);
+		if(Selected_Time==15){
+			appointmenttype=json_meeting_duration['15mins'];
+		}
+		else if(Selected_Time==30){
+			appointmenttype=json_meeting_duration['30mins'];;
+		}
+        else if(Selected_Time==60){
+        	appointmenttype=json_meeting_duration['60mins'];;
+		}
 
 		$(".activemin").removeClass("activemin");
 		$(this).find('.minutes').addClass("activemin");
@@ -16072,7 +17930,7 @@ $("#create_new_appointment").die().live('click', function(e)
 		 if(isFirefox){
 			 $('#datepick').DatePickerSetDate(current_date_mozilla, true);
 		 }
-		
+		 $('.checkbox-main-grid').html('<img class="loading-img" src="../img/21-0.gif" style="width: 40px;margin-left: 216px;"></img>');
 		if (!selecteddate)
 		{
 			selecteddate = new Date();
@@ -16493,6 +18351,7 @@ var Base_Collection_View = Backbone.View
 					 * If page size is not defined then sets page size to 20.
 					 */
 					this.page_size = this.options.page_size;
+					this.global_sort_key = this.options.global_sort_key;
 					if (!this.page_size)
 						this.page_size = 20;
 
@@ -16515,7 +18374,7 @@ var Base_Collection_View = Backbone.View
 						 * view
 						 */
 						$(".scroll-loading", that.el).remove();
-					}, untilAttr : 'cursor', param : 'cursor', strict : true, pageSize : this.page_size,
+					}, untilAttr : 'cursor', param : 'cursor', strict : true, pageSize : this.page_size,global_sort_key: this.global_sort_key,
 
 					/*
 					 * Shows loading on fetch, at the bottom of the table
@@ -16542,6 +18401,7 @@ var Base_Collection_View = Backbone.View
 					// Store in a variable for us to access in the custom fetch
 					// as this is different
 					var page_size = this.page_size;
+					var global_sort_key = this.global_sort_key;
 
 					// Set the URL
 					this.collection.fetch = function(options)
@@ -16549,6 +18409,8 @@ var Base_Collection_View = Backbone.View
 						options || (options = {})
 						options.data || (options.data = {});
 						options.data['page_size'] = page_size;
+						if(global_sort_key && global_sort_key != null)
+							options.data['global_sort_key'] = global_sort_key;
 						return Backbone.Collection.prototype.fetch.call(this, options);
 					};
 
@@ -16729,7 +18591,7 @@ var Base_Collection_View = Backbone.View
 				if (callback && typeof (callback) === "function")
 				{
 					// execute the callback, passing parameters as necessary
-					callback($(this.el));
+					callback($(this.el), this.collection);
 				}
 
 				// Add checkboxes to specified tables by triggering view event
@@ -17330,7 +19192,7 @@ var Base_Model_View = Backbone.View
 				 */
 				if (callback && typeof (callback) === "function") {
 					// execute the callback, passing parameters as necessary
-					callback($(this.el));
+					callback($(this.el),this.model.toJSON());
 				}
 
 				// If isNew is not true, then serialize the form data
@@ -18858,7 +20720,10 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback)
 				toolbar2 : toolbar_2, valid_elements : "*[*]",
 				toolbar_items_size: 'small',
 				browser_spellcheck : true,
+				relative_urls : false,
+				convert_urls : false,
 		        gecko_spellcheck: true,
+		        forced_root_block : false,
 				extended_valid_elements : "*[*]", setup : function(editor)
 				{
 					editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : set_up_merge_fields(editor) });
@@ -19100,7 +20965,8 @@ function get_merge_fields()
 	"State":"{{location.state}}",
 	"Country":"{{location.country}}",
 	"Owner Name":"{{owner.name}}",
-	"Owner Email":"{{owner.email}}"
+	"Owner Email":"{{owner.email}}", 
+	"Calendar URL" : "{{owner.calendar_url}}"
 	}
 
 	// Get Custom Fields in template format
@@ -19271,6 +21137,23 @@ function get_formatted_date(epoch_time, format)
 	return date + " " + month_names[month] 
 			+ " " + year;
 }
+
+function register_focus_on_tinymce(selector)
+{
+	var document = $("iframe#"+selector+"_ifr").contents()[0];
+	
+	if(!document)
+		return;
+	
+	$(document).die().live('click', function(e){
+		
+		e.preventDefault();
+		
+		$(this).find('body').focus();
+		
+	});
+}
+
 /**
  * Onclick of number buttons in dialpad, It send dtmf tone to SIP and will play
  * sound on success.
@@ -19800,7 +21683,8 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 		}
 		else if (e.session == Sip_Session_Call)
 		{
-			// call terminated.
+			// Call terminated.
+			Sip_Session_Call = null;
 			stopRingTone();
 
 			// Show state of call.
@@ -19822,10 +21706,12 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 				showCallNotyPopup("hackersForbidden", "error", "SIP: Hackers Forbidden.", false);
 			else if (e.description == "User not found")
 				showCallNotyPopup("userNotFound", "error", "SIP: User not found.", false);
-			
+			else if(e.description == "Call terminating...")
+			    console.log("SIP : Terminated because " + e.description);
+			else
+				showCallNotyPopup("disconnected", 'error', "SIP : Terminated because " + e.description, 5000);
 
-			// Call terminated.
-			Sip_Session_Call = null;
+			// call terminated.			
 			User_Name = null;
 			User_Number = null;
 			User_Img = null;
@@ -20078,13 +21964,13 @@ function hangupCall()
  * adding sip widget / updating sip widget / re-login user.
  */
 function sipStart()
-{	
+{
 	// After 15 sec procedure will start.
 	setTimeout(function()
-	{		
+	{
 		// after DOM ready.
 		if (document.readyState === "complete")
-		{	
+		{
 			// If sip already register.
 			if (Sip_Start == true)
 				return;
@@ -20103,7 +21989,7 @@ function sipStart()
 					head.js(LIB_PATH + 'lib/telephony/SIPml-api.js', function()
 					{
 						SIPml.setDebugLevel("error");
-						
+
 						// initialize SIPML5
 						if (SIPml.isInitialized()) // If already done.
 							sipRegister();
@@ -20128,7 +22014,7 @@ function sipRegister()
 {
 	// Add audio tags in home page.
 	addAudio();
-	
+
 	// Properties for session object.
 	Config_Call = { audio_remote : document.getElementById('audio_remote'), events_listener : { events : '*', listener : sipSessionEventsListener } };
 
@@ -20162,7 +22048,15 @@ function sipRegister()
 		{
 			// Check websocket_proxy_url
 			if (credentials.sip_wsenable == "true")
-				url = "ws://54.83.12.176:10060";
+			{
+				console.log(window.location.protocol);
+				if (window.location.protocol != "https:")
+					//url = "ws://54.83.12.176:10060/ws"; // http
+					url = "ws://rtc.agilecrm.com:10060/ws"; 
+				else
+					url = "wss://rtc.agilecrm.com:10062/wss"; 
+					//url = "wss://54.83.12.176:10062/wss"; // https
+			}
 
 			// Define sip stack
 			Sip_Stack = new SIPml.Stack({ realm : credentials.sip_realm, impi : credentials.sip_privateid, impu : credentials.sip_publicid,
@@ -21056,12 +22950,23 @@ $(function()
 					
 					agile_addNote(note,'', CURRENT_DOMAIN_USER.email);
 					
-					// Enables Send Email button.
-				    enable_send_button($('#send-delete-request'));
-				    $("#send-cancellation").modal('hide');	
-				    
-				    // Showing Noty
-				    showNotyPopUp("information", "Cancellation request sent. You should hear back from us in one working day.", "top", 3000);
+					/**
+					 * Sends cancel request to cancel subscription
+					 */
+					$.ajax({
+						type : "DELETE",
+						url : "core/api/subscription/delete/account",
+						success : function()
+						{
+							// Enables Send Email button.
+						    enable_send_button($('#send-delete-request'));
+						    $("#send-cancellation").modal('hide');	
+						    
+						    // Showing Noty
+						    showNotyPopUp("information", "Cancellation request sent. You should hear back from us in one working day.", "top", 3000);
+						}
+					});
+
 				});
 				
 			});
@@ -21415,7 +23320,11 @@ var AdminPanelRouter = Backbone.Router.extend({
 
 	// get domain details
 
-	"getDomainUserDetails/:id" : "getDomainUserDetails"
+	"getDomainUserDetails/:id" : "getDomainUserDetails",
+		
+	
+	
+	
 
 	},
 
@@ -21440,6 +23349,9 @@ var AdminPanelRouter = Backbone.Router.extend({
 		} });
 
 	},
+	
+	
+	
 
 	// function will be called from getDomainDetails Navigation
 	// todisplay get subscription object for particular domain
@@ -21687,15 +23599,13 @@ var AdminPanelRouter = Backbone.Router.extend({
 	}
 
 });
-
 /**
  * Creates a backbone router to perform admin activities (account preferences,
  * users management, custom fields, milestones and etc..).
  * 
  */
-var view={};
+var view = {};
 var AdminSettingsRouter = Backbone.Router.extend({
-
 	routes : {
 	/* Admin-Settings */
 	"admin" : "adminSettings",
@@ -21710,8 +23620,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"custom-fields" : "customFields",
 
 	/* Api & Analytics */
-	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode", 
-	
+	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode",
+
 	/* Milestones */
 	"milestones" : "milestones",
 
@@ -21719,22 +23629,21 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"menu-settings" : "menu_settings",
 
 	/* Mandrill Email Activity */
-	"email-stats" : "emailStats",
+	/* "email-stats" : "emailStats", */
+
+	/* Integrations Stats */
+	"integrations-stats" : "integrationsStats",
 
 	/* Web to Lead */
 	"integrations" : "integrations",
 
 	"tag-management" : "tagManagement",
-	
 
 	"email-gateways/:id" : "emailGateways",
-	
 
 	"sms-gateways/:id" : "smsGateways"
 
-	
-		},
-
+	},
 
 	/**
 	 * Show menu-settings modules selection ( calendar, cases, deals, campaign ) &
@@ -21826,10 +23735,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			{
 				$.getJSON("core/api/users/current-owner", function(data)
 				{
+					if(data){
 					data["created_user_email"] = response.email;
 
 					add_created_user_info_as_note_to_owner(data);
-
+					}
 				});
 			} });
 
@@ -21923,8 +23833,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		this.customFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields', restKey : "customFieldDefs",
+		this.customFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields/allScopes', restKey : "customFieldDefs",
 			templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
+		
+		this.customFieldsListView.appendItem = groupingCustomFields;
 
 		this.customFieldsListView.collection.fetch();
 
@@ -21994,7 +23906,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			// $('#content').html(view.el);
 		});
 	},
-	
+
 	/**
 	 * Creates a Model to show and edit milestones, reloads the page on save
 	 * success
@@ -22007,10 +23919,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		this.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones", individual_tag_name : 'div', sortKey: "name", postRenderCallback : function(el)
-		{
-			setup_milestones(el);
-		} });
+		this.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones",
+			individual_tag_name : 'div', sortKey : "name", postRenderCallback : function(el)
+			{
+				setup_milestones(el);
+			} });
 		this.pipelineGridView.collection.fetch();
 		$('#content').find('#admin-prefs-tabs-content').html(this.pipelineGridView.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
@@ -22018,21 +23931,55 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	},
 
 	/**
-	 * Fetches Mandrill subaccount usage info.
+	 * Fetches Stats of integrations - usage info.
 	 */
-	emailStats : function()
+	integrationsStats : function()
 	{
+		/*
+		 * if (!CURRENT_DOMAIN_USER.is_admin) { $('#content').html("You have no
+		 * Admin Privileges"); return; }
+		 * $("#content").html(getTemplate("admin-settings"), {}); var
+		 * emailStatsModelView = new Base_Model_View({ url :
+		 * 'core/api/emails/email-stats', template :
+		 * 'admin-settings-email-stats', });
+		 * 
+		 * $('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render().el);
+		 * $('#content').find('#AdminPrefsTab .active').removeClass('active');
+		 * $('#content').find('.stats-tab').addClass('active');
+		 */
+
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
 			$('#content').html("You have no Admin Privileges");
 			return;
 		}
-		$("#content").html(getTemplate("admin-settings"), {});
-		var emailStatsModelView = new Base_Model_View({ url : 'core/api/emails/email-stats', template : 'admin-settings-email-stats', });
 
-		$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render().el);
+		$("#content").html(getTemplate("admin-settings"), {});
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.stats-tab').addClass('active');
+		$('#content').find('#admin-prefs-tabs-content').html(getRandomLoadingImg());
+
+		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
+		{
+
+			var email_stats = {};
+			var sms_stats = {};
+			$.ajax({ url : 'core/api/emails/email-stats', type : "GET", dataType : 'json', success : function(stats)
+			{
+				email_stats = stats;
+				$.ajax({ url : 'core/api/sms-gateway/SMSlogs', type : "GET", dataType : 'json', success : function(stats)
+				{
+					sms_stats = stats;
+					var totalLogs = {};
+					totalLogs = $.extend(email_stats, sms_stats);
+
+					var emailStatsModelView = new Base_Model_View({ template : 'admin-settings-integrations-stats', data : totalLogs });
+
+					$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render(true).el);
+				} });
+
+			} });
+		});
 
 	},
 
@@ -22047,16 +23994,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		
-		this.integrations = new Base_Collection_View({
-			url : 'core/api/widgets/integrations',
-			templateKey: 'admin-settings-web-to-lead'
-		});
-		
+
+		this.integrations = new Base_Collection_View({ url : 'core/api/widgets/integrations', templateKey : 'admin-settings-web-to-lead' });
+
 		this.integrations.collection.fetch();
-		
+
 		$('#content').find('#admin-prefs-tabs-content').html(this.integrations.render().el);
-		
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
 	},
@@ -22068,24 +24011,25 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html("You have no Admin Privileges");
 			return;
 		}
-		
+
 		$("#content").html(getTemplate("admin-settings"), {});
-		
-		this.tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li', sort_collection: true, sortKey : 'tag', postRenderCallback: function(el){
-		}});
+
+		this.tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li',
+			sort_collection : true, sortKey : 'tag', postRenderCallback : function(el)
+			{
+			} });
 		this.tagsview1.appendItem = append_tag_management;
-		
-//		var tagsView = new Base_Model_View({ url : 'core/api/tags', template : 'admin-settings-tags-model', });
+
+		// var tagsView = new Base_Model_View({ url : 'core/api/tags', template
+		// : 'admin-settings-tags-model', });
 		console.log(this.tagsview1);
 		this.tagsview1.collection.fetch();
-		
+
 		$('#content').find('#admin-prefs-tabs-content').html(this.tagsview1.render().el);
-		
+
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.tag-management-tab').addClass('active');
 	},
-	
-
 
 	emailGateways : function(id)
 	{
@@ -22093,139 +24037,156 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$("#content").html(getTemplate("admin-settings"), {});
 
 		// On Reload, navigate to integrations
-		if(!this.integrations || this.integrations.collection==undefined)
+		if (!this.integrations || this.integrations.collection == undefined)
 		{
-		    this.navigate("integrations", {trigger: true});
+			this.navigate("integrations", { trigger : true });
 			return;
 		}
-		
+
 		var value = 'SEND_GRID';
 
 		if (id == 'mandrill')
 			value = 'MANDRILL';
-		
 
-		
-		 this.email_gateway = new Base_Model_View({url : 'core/api/email-gateway',
+		this.email_gateway = new Base_Model_View({ url : 'core/api/email-gateway',
 
-			template : 'settings-email-gateway', postRenderCallback : function(el)
+		template : 'settings-email-gateway', postRenderCallback : function(el)
+		{
+			// Loads jquery.chained.min.js
+			head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 			{
-				// Loads jquery.chained.min.js
-				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+				var LHS, RHS;
+
+				// Assigning elements with ids LHS
+				// and RHS
+				// in trigger-add.html
+				LHS = $("#LHS", el);
+				RHS = $("#RHS", el);
+
+				// Chaining dependencies of input
+				// fields
+				// with jquery.chained.js
+				RHS.chained(LHS);
+
+				// Trigger change on email api select
+				setTimeout(function()
 				{
-					var LHS, RHS;
+					$('#email-api', el).val(value).attr("selected", "selected").trigger('change')
+				}, 1);
+			});
+		}, saveCallback : function()
+		{
+			// On saved, navigate to integrations
+			Backbone.history.navigate("integrations", { trigger : true });
 
-					// Assigning elements with ids LHS
-					// and RHS
-					// in trigger-add.html
-					LHS = $("#LHS", el);
-					RHS = $("#RHS", el);
+			data = App_Admin_Settings.email_gateway.model.toJSON();
 
+			// Add webhook
+			if (data.email_api == "MANDRILL")
+			{
+				// Add mandrill webhook
+				$.getJSON("core/api/email-gateway/add-webhook?api_key=" + data.api_key + "&type=" + data.email_api, function(data)
+				{
 
-					// Chaining dependencies of input
-					// fields
-					// with jquery.chained.js
-					RHS.chained(LHS);
+					console.log(data);
 
-
-					// Trigger change on email api select
-					setTimeout(function()
-					{
-						$('#email-api', el).val(value).attr("selected", "selected").trigger('change')
-					}, 1);
 				});
-			},
-			saveCallback: function()
-			{
-				// On saved, navigate to integrations
-				Backbone.history.navigate("integrations",{trigger:true});
-				
-
-				data = App_Admin_Settings.email_gateway.model.toJSON();
-
-
-				// Add webhook
-				if(data.email_api == "MANDRILL")
-				{
-					// Add mandrill webhook
-					$.getJSON("core/api/email-gateway/add-webhook?api_key="+ data.api_key+"&type="+data.email_api, function(data){
-						
-						console.log(data);
-						
-					});
-				}
 			}
-			
+		}
+
 		});
-		
-		
-		
 
 		$('#content').find('#admin-prefs-tabs-content').html(this.email_gateway.render().el);
-
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
-	} ,
-	
+	},
+
 	smsGateways : function(id)
 	{
 		console.log("inside sms gateways");
 		$("#content").html(getTemplate("admin-settings"), {});
 
 		// On Reload, navigate to integrations
-		if(!this.integrations || this.integrations.collection==undefined)
+		if (!this.integrations || this.integrations.collection == undefined)
 		{
-		    this.navigate("integrations", {trigger: true});
+			this.navigate("integrations", { trigger : true });
 			return;
 		}
-	
 		
-		 view = new Base_Model_View({ model : App_Admin_Settings.integrations.collection.where({name:"SMS-Gateway"})[0], url : 'core/api/sms-gateway',
-			template : 'settings-sms-gateway',prePersist: function(model){
-				view=model.attributes.account_sid;
-				var prefJSON={
-						account_sid:model.attributes.account_sid,
-						auth_token:model.attributes.auth_token,
-						endpoint:model.attributes.endpoint,
-						sms_api:"TWILIO"
-							};
-				
-				model.set({prefs : JSON.stringify(prefJSON)}, {silent:true});
-				}, postRenderCallback : function(el)
-					{
-				// Loads jquery.chained.min.js
-				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
-				{
-					var LHS, RHS;
-					LHS = $("#LHS", el);
-					RHS = $("#RHS", el);
-					RHS.chained(LHS);
-					});
-			},
-			saveCallback: function(data)
+		var value,accountID;
+		if (id == "plivo"){
+			value = 'PLIVO';
+			accountID = "account_id";
+		}
+		if (id == "twilio"){
+			value = 'TWILIO';
+			accountID = "account_sid";
+		}
+		
+		var smsGateway;
+		$.each(this.integrations.collection.models,function(key,value){
+			var prefJSON = JSON.parse(value.attributes.prefs);
+			if(prefJSON["sms_api"])
+				smsGateway = prefJSON["sms_api"];
+			});
+		
+		//allow one sms gateway configured at a time
+		if(smsGateway != undefined)//check if sms gateway exist
+		{
+			if(smsGateway.toUpperCase() != value)//checks if the current sms gateway is the same as the clicked one
+			{
+			modalAlert("sms-integration-alert-modal","You have a SMS Gateway already configured. Please disable that to configure a new one.","SMS Gateway Configured");
+			this.navigate("integrations", { trigger : true });
+			return;	
+			}
+		}
+		
+		view = new Base_Model_View({
+			model : App_Admin_Settings.integrations.collection.where({ name : "SMS-Gateway" })[0],
+			url : 'core/api/sms-gateway',
+			template : 'settings-sms-gateway',
+			prePersist : function(model)
+			{
+				if (id == "plivo")
+				var prefJSON = { account_id : model.attributes.account_id, auth_token : model.attributes.auth_token, endpoint : model.attributes.endpoint, sms_api : value }; 
+				if (id == "twilio")
+				var prefJSON = { account_sid : model.attributes.account_sid, auth_token : model.attributes.auth_token, endpoint : model.attributes.endpoint, sms_api : value}; 
+				model.set({ prefs : JSON.stringify(prefJSON) }, { silent : true });
+			}, postRenderCallback : function(el)
+			{
+				if(id=="plivo"){
+					$("#integrations-image",el).attr("src","/img/plugins/plivo.png");
+					$("#accoundID",el).attr("name","account_id");
+					$("#accoundID",el).attr("placeholder","Auth ID");
+					$("#integrations-label",el).text("You need a Paid Plivo account to be able to send SMS");
+				}
+				if(id=="twilio"){
+					$("#integrations-image",el).attr("src","/img/plugins/twilio.png");
+					$("#accoundID",el).attr("name","account_sid");
+					$("#accoundID",el).attr("placeholder","Account SID");
+					$("#integrations-label",el).text("Please provide your account details");
+				}
+			}, saveCallback : function(data)
 			{
 				// On saved, navigate to integrations
-				Backbone.history.navigate("integrations",{trigger:true});
-			},
-			errorCallback: function(data){
-				if($("#twilio-error").is(":visible"))
-					$("#twilio-error").remove();
-				
-				$responceText="<div style='color:#B94A48; font-size:14px' id='twilio-error'><i>"+data.responseText+"</i></div>";
-				$(".form-actions", this.el).append($responceText);
+				Backbone.history.navigate("integrations", { trigger : true });
+			}, errorCallback : function(data)
+			{
+				if ($("#sms-gateway-error").is(":visible"))
+					$("#sms-gateway-error").remove();
+
+				$responceText = "<div style='color:#B94A48; font-size:14px' id='sms-gateway-error'><i>" + data.responseText + "</i></div>";
+				$("#sms-integration-error", this.el).append($responceText);
 			}
-			
 		});
 
+		
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
-
 	} 
 
-	
-});
-/**
+});/**
  * Creates a backbone router to perform config activities (onboarding and etc..).
  * 
  */
@@ -22316,7 +24277,7 @@ $(function()
 	 * events, and dispatching routes
 	 */
 	Backbone.history.start();
-	setup_our_domain_sync();
+//	setup_our_domain_sync();
 });
 
 // Global variable to store current route
@@ -22384,95 +24345,731 @@ function load_clickdesk_code()
  * 
  * @module Activities
  */
+
+var eventCollectionView;
+var googleEventCollectionView;
+var googleNextPageToken;
 var CalendarRouter = Backbone.Router.extend({
 
-	routes : {
-	/* Shows fullCalendar page */
-	"calendar" : "calendar", "tasks" : "tasks_new", "tasks-new" : "tasks_new" },
-	/**
-	 * Activates the calendar menu and loads minified fullcalendar and jquery-ui
-	 * to show calendar view. Also shows tasks list in separate section.
-	 */
-	calendar : function()
-	{
-
-		$(".active").removeClass("active");
-		$("#calendarmenu").addClass("active");
-
-		$('#content').html(getTemplate("calendar", {}));
-
-		// Typahead also uses jqueryui - if you are changing the version here,
-		// change it there too
-		head.js(LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
-		{
-			showCalendar();
-			
-			
-		});
-
-		
-		this.tasksListView = new Base_Collection_View({ url : '/core/api/tasks', restKey : "task", templateKey : "tasks", individual_tag_name : 'tr',
-			postRenderCallback : function(el)
-			{
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				routes : {
+				/* Shows fullCalendar page */
+				"calendar" : "calendar", "tasks" : "tasks_new", "tasks-new" : "tasks_new" },
+				/**
+				 * Activates the calendar menu and loads minified fullcalendar and jquery-ui
+				 * to show calendar view. Also shows tasks list in separate section.
+				 */
+				calendar : function()
 				{
-					$(".task-due-time", el).timeago();
+								// read cookie for view if list_view is there then rendar list view else
+								// rendar default view
+								// var view = readCookie("agile_calendar_view");
+								$('#content').html(getTemplate("calendar", {}));
+								var view = readCookie("agile_calendar_view");
+								if (view)
+								{
+
+												loadGoogleEvents();
+												loadAgileEvents();
+								}
+								else
+								{
+
+												$(".active").removeClass("active");
+												$("#calendarmenu").addClass("active");
+												$('#agile_event_list').addClass('hide');
+
+												// Typahead also uses jqueryui - if you are changing the version
+												// here,
+												// change it there too
+												head.js(LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
+												{
+																showCalendar();
+
+												});
+
+												$('#grp_filter').css('display', 'none');
+												$('#event_tab').css('display', 'none');
+
+								}
+
+								this.tasksListView = new Base_Collection_View({ url : '/core/api/tasks', restKey : "task", templateKey : "tasks", individual_tag_name : 'tr',
+												postRenderCallback : function(el)
+												{
+																head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+																{
+																				$(".task-due-time", el).timeago();
+																});
+
+												} });
+
+								// Tasks has its own appendItem function to show the status
+								// (overdue,
+								// today, tomorrow and next-week)
+								this.tasksListView.appendItem = append_tasks;
+								this.tasksListView.collection.fetch();
+
+								$('#tasks').html(this.tasksListView.el);
+								$('#event-list-filters').html(getTemplate('event-filter'));
+
+				},
+
+				/* Show tasks list when All Tasks clicked under calendar page. */
+				tasks : function()
+				{
+
+								$('#content').html(getTemplate("tasks-list-header", {}));
+
+								fillSelect("owner-tasks", '/core/api/users/current-user', 'domainUser', function fillOwner()
+								{
+
+												$('#content').find("#owner-tasks").prepend("<li><a href=''>All Tasks</a></li>");
+												$('#content').find("#owner-tasks").append("<li><a href='my-pending-tasks'>My Pending Tasks</a></li>");
+
+												// To Updated task list based on user selection of type and owner
+												initOwnerslist();
+								}, "<li><a href='{{id}}'>My Tasks</a></li>", true);
+
+								$(".active").removeClass("active");
+								$("#calendarmenu").addClass("active");
+				},
+
+				/* Show new view of tasks. */
+				tasks_new : function()
+				{
+								$('#content').html(getTemplate("new-tasks-list-header", {}));
+
+								fillSelect("new-owner-tasks", '/core/api/users/current-user', 'domainUser', function fillOwner()
+								{
+												$('#content').find("#new-owner-tasks").prepend("<li><a href=''>All Tasks</a></li>");
+												$('#content').find("#new-owner-tasks").append("<li><a href='all-pending-tasks' class='hide-on-status'>All Pending Tasks</a></li>");
+												$('#content').find("#new-owner-tasks").append("<li><a href='my-pending-tasks' class='hide-on-owner hide-on-status'>My Pending Tasks</a></li>");
+
+												// Read stored selections from cookie and Creates nested collection
+												readDetailsFromCookie();
+												// Bind dropdown events
+												bindDropdownEvents();
+
+								}, "<li><a href='{{id}}' class='hide-on-owner'>My Tasks</a></li>", true);
+
+								$('.loading').remove();
+
+								$(".active").removeClass("active");
+								$("#calendarmenu").addClass("active");
+
+								// Hide owner's and status task selection options from dropdown
+								$(".hide-on-pending").hide();
+
+				},
+
+// list view of event
+
+});
+
+$(function()
+{
+
+				$(".c_list").die().live('click', function(e)
+				{
+								e.preventDefault();
+								// Creates the cookie
+
+								if (readCookie('event-filters') && JSON.parse(readCookie('event-filters')).time == 'future')
+												createCookie("agile_calendar_view", "calendar_list_view_future");
+								else
+												createCookie("agile_calendar_view", "calendar_list_view");
+
+								// Loads the calendar
+								App_Calendar.calendar();
 				});
 
-			} });
+				$(".c_cal").die().live('click', function(e)
+				{
+								e.preventDefault();
+								// Erases the cookie
+								eraseCookie("agile_calendar_view");
+							
+								// Loads the calendar
+								App_Calendar.calendar();
+				});
 
-		// Tasks has its own appendItem function to show the status (overdue,
-		// today, tomorrow and next-week)
-		this.tasksListView.appendItem = append_tasks;
-		this.tasksListView.collection.fetch();
+				$(".c_list_view_future").die().live('click', function(e)
+				{
+								e.preventDefault();
+								// Creates the cookie
+								createCookie("agile_calendar_view", "calendar_list_view_future");
 
-		$('#tasks').html(this.tasksListView.el);
-	},
+								// Loads the calendar
+								App_Calendar.calendar();
+				});
 
-	/* Show tasks list when All Tasks clicked under calendar page. */
-	tasks : function()
-	{
+				if (readCookie("agile_calendar_view"))
+				{
+								$('#grp_filter').removeClass('hide');
+				}
 
-		$('#content').html(getTemplate("tasks-list-header", {}));
+				// intialize event tab
+				$('#event_tab').tab();
+				if(!readCookie("agile_calendar_view"))
+								$('#agile_event_list').addClass('hide');
+				else{
+								if($('#agile_event_list').hasClass('hide'))
+												$('#agile_event_list').removeClass('hide')
+				}
 
-		fillSelect("owner-tasks", '/core/api/users/current-user', 'domainUser', function fillOwner()
-		{
+});
 
-			$('#content').find("#owner-tasks").prepend("<li><a href=''>All Tasks</a></li>");
-			$('#content').find("#owner-tasks").append("<li><a href='my-pending-tasks'>My Pending Tasks</a></li>");
+$(function()
+{
 
-			// To Updated task list based on user selection of type and owner
-			initOwnerslist();
-		}, "<li><a href='{{id}}'>My Tasks</a></li>", true);
+				$(".c_list").die().live('click', function(e)
+				{
+								e.preventDefault();
+								// Creates the cookie
+								if (readCookie('event-filters') && JSON.parse(readCookie('event-filters')).time == 'future')
+												createCookie("agile_calendar_view", "calendar_list_view_future");
+								else
+												createCookie("agile_calendar_view", "calendar_list_view");
 
-		$(".active").removeClass("active");
-		$("#calendarmenu").addClass("active");
-	},
+								// Loads the calendar
+								App_Calendar.calendar();
+				});
 
-	/* Show new view of tasks. */
-	tasks_new : function()
-	{
-		$('#content').html(getTemplate("new-tasks-list-header", {}));
-		
-		fillSelect("new-owner-tasks", '/core/api/users/current-user', 'domainUser', function fillOwner()
-		{			
-			$('#content').find("#new-owner-tasks").prepend("<li><a href=''>All Tasks</a></li>");
-			$('#content').find("#new-owner-tasks").append("<li><a href='all-pending-tasks' class='hide-on-status'>All Pending Tasks</a></li>");
-			$('#content').find("#new-owner-tasks").append("<li><a href='my-pending-tasks' class='hide-on-owner hide-on-status'>My Pending Tasks</a></li>");
-			
-			// Read stored selections from cookie and Creates nested collection
-			readDetailsFromCookie();
+				$(".c_cal").die().live('click', function(e)
+				{
+								e.preventDefault();
+								// Erases the cookie
+								eraseCookie("agile_calendar_view");
 
-		}, "<li><a href='{{id}}' class='hide-on-owner'>My Tasks</a></li>", true);
+								// Loads the calendar
+								App_Calendar.calendar();
+				});
 
-		$('.loading').remove();
-		
-		$(".active").removeClass("active");
-		$("#calendarmenu").addClass("active");
+				$(".c_list_view_future").die().live('click', function(e)
+				{
+								e.preventDefault();
+								// Creates the cookie
+								createCookie("agile_calendar_view", "calendar_list_view_future");
 
-		// Hide owner's and status task selection options from dropdown
-		$(".hide-on-pending").hide();
-	} });
+								// Loads the calendar
+								App_Calendar.calendar();
+				});
+
+				// intialize event tab
+				$('#event_tab').tab();
+
+				$(window).scroll(function()
+				{
+								if ($('#google').hasClass('active'))
+								{
+
+												if ($(window).scrollTop() + $(window).height() == $(document).height())
+												{
+																loadMoreEventsFromGoogle();
+												}
+								}
+
+				})
+
+});
+
+// append events in category base
+function appendItem1(base_model)
+{
+				var itemView = new Base_List_View({ model : base_model, "view" : "inline", template : this.options.templateKey + "-model", tagName : 'tr', });
+
+				// add to the right box - overdue, today, tomorrow etc.
+				console.log(base_model.get('title'));
+				var createdtime = get_activity_created_time(base_model.get('start'));
+
+				// Today
+				// Today
+				if (createdtime == 0)
+				{
+
+								var heading = $('#today-heading', this.el);
+
+								$('#today-event', this.el).append(itemView.render().el);
+								$('#today-event', this.el).parent('table').css("display", "block");
+								$('#today-event', this.el).show();
+								$('#today-heading', this.el).show();
+				}
+				// if create time is 1 then that events belongs to tomarrow
+				else if (createdtime == 1)
+				{
+
+								var heading = $('#tomorrow-heading', this.el);
+
+								$('#tomorrow-event', this.el).append(itemView.render().el);
+								$('#tomorrow-event', this.el).parent('table').css("display", "block");
+								$('#tomorrow-event', this.el).show();
+								$('#tomorrow-heading', this.el).show();
+				}
+				else if (createdtime > 1)
+				{
+
+								var heading = $('#next-week-heading', this.el);
+
+								$('#next-week-event', this.el).append(itemView.render().el);
+								$('#next-week-event', this.el).parent('table').css("display", "block");
+								$('#next-week-event', this.el).show();
+								if ($('#tomorrow-event').children().length > 0 || $('#today-event').children().length > 0)
+								{
+												$('#next-week-heading', this.el).show();
+
+								}
+				}
+
+				var jsonObject = $.parseJSON(readCookie('event-filters'));
+				var owner = jsonObject.owner_id;
+				// if no owner then its all
+				if (owner != "")
+				{
+								$('.e_owner').addClass('hide');
+				}
+				else
+				{
+								if ($('.e_owner').hasClass('hide'))
+												$('.e_owner').removeClass('hide');
+				}
+
+				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",", "").trim());
+}
+
+// append all events
+function appendItem2(base_model)
+{
+				var itemView = new Base_List_View({ model : base_model, "view" : "inline", template : this.options.templateKey + "-model", tagName : 'tr', });
+
+				// add to the right box - overdue, today, tomorrow etc.
+
+				var heading = $('#event-heading', this.el);
+
+				$('#eventAll', this.el).append(itemView.render().el);
+				$('#eventAll', this.el).parent('table').css("display", "block");
+				$('#eventAll', this.el).show();
+				$('#event-heading', this.el).show();
+
+				// check for all selected
+				// on landing of page
+
+				var jsonObject = $.parseJSON(readCookie('event-filters'));
+				var owner = jsonObject.owner_id;
+				// if no owner then its all
+				if (owner != "")
+				{
+								$('.e_owner').addClass('hide');
+				}
+				else
+				{
+								if ($('.e_owner').hasClass('hide'))
+												$('.e_owner').removeClass('hide');
+				}
+
+				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",", "").trim());
+
+}
+
+// append all google events
+function appendGoogleEvent(base_model)
+{
+				var itemView = new Base_List_View({ model : base_model, "view" : "inline", template : this.options.templateKey + "-model", tagName : 'tr', });
+
+				// add to the right box - overdue, today, tomorrow etc.
+
+				$('#google_event', this.el).append(itemView.render().el);
+				$('#google_event', this.el).parent('table').css("display", "block");
+				$('#google_event', this.el).show();
+				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",", "").trim());
+
+}
+
+function appendGoogleEventCategorization(base_model)
+{
+				var itemView = new Base_List_View({ model : base_model, "view" : "inline", template : this.options.templateKey + "-model", tagName : 'tr', });
+
+				// add to the right box - overdue, today, tomorrow etc.
+				console.log(base_model.get('title'));
+				var eventStartDate = base_model.get('start');
+				var d = new Date(eventStartDate);
+				var createdtime = get_activity_created_time(d.getTime() / 1000);
+
+				// Today
+				// Today
+				if (createdtime == 0)
+				{
+								$('#today-event', this.el).append(itemView.render().el);
+								$('#today-event', this.el).parent('table').css("display", "block");
+								$('#today-event', this.el).show();
+								$('#today-heading', this.el).show();
+				}
+				// if create time is 1 then that events belongs to tomarrow
+				else if (createdtime == 1)
+				{
+
+								$('#tomorrow-event', this.el).append(itemView.render().el);
+								$('#tomorrow-event', this.el).parent('table').css("display", "block");
+								$('#tomorrow-event', this.el).show();
+								$('#tomorrow-heading', this.el).show();
+				}
+				else if (createdtime > 1)
+				{
+
+								$('#next-week-event', this.el).append(itemView.render().el);
+								$('#next-week-event', this.el).parent('table').css("display", "block");
+								$('#next-week-event', this.el).show();
+								if ($('#tomorrow-event', this.el).children().length > 0 || $('#today-event', this.el).children().length > 0)
+								{
+												$('#next-week-heading', this.el).show();
+
+								}
+				}
+				$('.contact_text').children().last().text($('.contact_text').children().last().text().replace(",", "").trim());
+
+}
+
+function show_model(id)
+{
+
+				if ($(window.event.target).is('a'))
+				{
+								window.event.stopPropagation();
+				}
+				else
+				{
+								$('#updateActivityModal').modal('show');
+
+								var event = eventCollectionView.collection.get(id).toJSON();
+								console.log("clicked event " + event);
+
+								var contactList = event.contacts;
+								for (var i = 0; i < contactList.length; i++)
+
+								{
+												if (contactList[i].type == "COMPANY")
+												{
+
+																$('#updateActivityModal')
+																								.find("ul[name='contacts']")
+																								.append(
+																																'<li class="tag" data="' + contactList[i].id + '" style="display: inline-block; "><a href="#contact/' + contactList[i].id + '">' + getCompanyName(contactList[i].properties) + '</a><a class="close" id="remove_tag">x</a></li>');
+
+												}
+												else
+												{
+																$('#updateActivityModal')
+																								.find("ul[name='contacts']")
+																								.append(
+																																'<li class="tag" data="' + contactList[i].id + '" style="display: inline-block; "><a href="#contact/' + contactList[i].id + '">' + getName(contactList[i].properties) + '</a><a class="close" id="remove_tag">x</a></li>');
+												}
+								}
+
+								var priority = event.color;
+
+								$('#updateActivityModal').find("select").children().each(function()
+								{
+												if (this.value == priority)
+																$(this).attr('selected', 'selected');
+								});
+
+								if (event.allDay)
+								{
+												$('#updateActivityModal').find("input[name='allDay']").attr('checked', 'checked');
+								}
+								else
+								{
+												$('#updateActivityModal').find("input[name='allDay']").removeAttr("checked");
+								}
+								$('#updateActivityModal').find("input[name='title']").val(event.title);
+								highlight_event();
+
+								start = getDate(event.start);
+								end = getDate(event.end);
+								// Set Date for Event
+
+								$("#update-event-date-1").val(getFormattedDate(event.start));
+								$("#update-event-date-2").val(getFormattedDate(event.end));
+
+								// Set Time for Event
+								if ((start.getHours() == 00) && (end.getHours() == 00) && (end.getMinutes() == 00))
+								{
+												$('#update-event-time-1').val('');
+												$('#update-event-time-2').val('');
+								}
+								else
+								{
+												$('#update-event-time-1').val(
+																				(start.getHours() < 10 ? "0" : "") + start.getHours() + ":" + (start.getMinutes() < 10 ? "0" : "") + start.getMinutes());
+												$('#update-event-time-2').val((end.getHours() < 10 ? "0" : "") + end.getHours() + ":" + (end.getMinutes() < 10 ? "0" : "") + end.getMinutes());
+								}
+
+								$('#updateActivityModal').find("input[name='id']").val(id);
+								$('#updateActivityModal').find("input[name='type']").val(event.type);
+				}
+}
+
+function getFormattedDate(date)
+{
+				var dateFormat = 'mm/dd/yyyy';
+				if ((date / 100000000000) > 1)
+				{
+								var d = new Date(parseInt(date));
+								return d.format(dateFormat);
+				}
+				else
+				{
+								var d = new Date(parseInt(date) * 1000);
+								return d.format(dateFormat);
+				}
+}
+
+function getDate(date)
+{
+
+				if ((date / 100000000000) > 1)
+				{
+								return new Date(parseInt(date));
+				}
+				else
+				{
+								return new Date(parseInt(date) * 1000);
+				}
+}
+
+function getName(properties)
+{
+				var name;
+				var firstName;
+				var lastName;
+				for (var i = 0; i < properties.length; i++)
+				{
+								if (properties[i].name == 'first_name')
+												firstName = properties[i].value;
+								if (properties[i].name == 'last_name')
+												lastName = properties[i].value;
+
+				}
+				name = firstName + " " + lastName;
+
+				return name.replace("undefined", "").trim();
+}
+
+function getCompanyName(properties)
+{
+
+				var name;
+				for (var i = 0; i < properties.length; i++)
+				{
+								if (properties[i].name == 'name')
+												name = properties[i].value;
+				}
+				return name;
+}
+function loadAgileEvents()
+{
+				var calEnable = false;
+
+				$.ajax({ url : 'core/api/calendar-prefs/get', async : false, success : function(response)
+				{
+								if (response)
+												calEnable = true;
+
+				} });
+				var jsonObject = $.parseJSON(readCookie('event-filters'));
+				var ownerId = jsonObject.owner_id;
+
+				var view = readCookie("agile_calendar_view");
+				if (view == "calendar_list_view")
+				{
+								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/list?ownerId=' + ownerId + '', templateKey : "events",
+												individual_tag_name : 'tr', sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25 });
+								eventCollectionView.appendItem = appendItem2;
+								eventCollectionView.collection.fetch();
+								if(calEnable){
+												$('#agile').html(this.eventCollectionView.render().el);
+												$('#agile_event_list').addClass('hide');
+								}
+								else
+												$('#agile_event').html(this.eventCollectionView.render().el);
+
+				}
+				else if (view == "calendar_list_view_future")
+				{
+								eventCollectionView = new Base_Collection_View({ url : 'core/api/events/future/list?ownerId=' + ownerId + '', templateKey : "future",
+												individual_tag_name : 'tr', sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25 });
+								eventCollectionView.appendItem = appendItem1;
+								eventCollectionView.collection.fetch();
+								if(calEnable){
+												$('#agile').html(this.eventCollectionView.render().el);
+												$('#agile_event_list').addClass('hide');
+								}
+								else
+												$('#agile_event').html(this.eventCollectionView.render().el);
+				}
+}
+
+function loadGoogleEvents()
+{
+
+				$.getJSON('core/api/calendar-prefs/get', function(response)
+				{
+								console.log(response);
+								if (response)
+								{
+												createCookie('google_event_token', response.access_token);
+
+												head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
+												{
+																setupGC(function()
+																{
+
+																				gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
+
+																				// Retrieve the events from primary
+																				var view = readCookie("agile_calendar_view");
+																				if (view == "calendar_list_view")
+																				{
+																								var request = gapi.client.calendar.events
+																																.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, orderBy : 'startTime' });
+																								request.execute(function(resp)
+																								{
+																												var events = new Array();
+																												console.log(resp);
+																												for (var i = 0; i < resp.items.length; i++)
+																												{
+																																var fc_event = google2fcEvent(resp.items[i]);
+																																console.log(fc_event);
+																																events.push(fc_event);
+
+																												}
+																												googleNextPageToken = resp.nextPageToken;
+																												googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "google-event", individual_tag_name : 'tr',
+																																sort_collection : true, sortKey : 'start', descending : false });
+																												googleEventCollectionView.appendItem = appendGoogleEvent;
+																												$('#google').html(googleEventCollectionView.render(true).el);
+
+																								});
+
+																				}
+																				else
+																				{
+																								var startDate = new Date();
+																								var gDate = startDate.toISOString();
+																								var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, timeMin : gDate });
+																								request.execute(function(resp)
+																								{
+																												var events = new Array();
+																												console.log(resp);
+																												for (var i = 0; i < resp.items.length; i++)
+																												{
+																																var fc_event = google2fcEvent(resp.items[i]);
+																																console.log(fc_event);
+																																events.push(fc_event);
+
+																												}
+																												googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "googleEventCategorization",
+																																individual_tag_name : 'tr', sort_collection : true, sortKey : 'start', descending : false });
+																												googleEventCollectionView.appendItem = appendGoogleEventCategorization;
+																												$('#google').html(googleEventCollectionView.render(true).el);
+
+																								});
+
+																				}
+
+																});
+																return;
+												});
+								}
+								else
+								{
+												$('#event_tab').addClass('hide');
+												$('#agile_event').removeClass('hide');
+								}
+
+				});
+}
+
+function loadMoreEventsFromGoogle()
+{
+				var accessToken = readCookie('google_event_token');
+				if (googleNextPageToken)
+				{
+								if (accessToken)
+								{
+
+												gapi.auth.setToken({ access_token : accessToken, state : "https://www.googleapis.com/auth/calendar" });
+
+												// Retrieve the events from primary
+												var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary', maxResults : 20, singleEvents : true, pageToken : googleNextPageToken,
+																orderBy : 'startTime' });
+
+												request.execute(function(resp)
+												{
+																var events = new Array();
+																console.log(resp);
+																for (var i = 0; i < resp.items.length; i++)
+																{
+																				var fc_event = google2fcEvent(resp.items[i]);
+																				console.log(fc_event);
+																				events.push(fc_event);
+
+																}
+																googleNextPageToken = resp.nextPageToken;
+																var view = readCookie("agile_calendar_view");
+																if (view == "calendar_list_view")
+																{
+																				googleEventCollectionView.collection.add(events);
+																				googleEventCollectionView.collection.sort();
+																}
+																else
+																{
+																				googleEventCollectionView.collection.add(events);
+																				googleEventCollectionView.collection.sort();
+																}
+
+												})
+
+								}
+								else
+								{
+
+												$.getJSON('core/api/calendar-prefs/get', function(response)
+												{
+
+																gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
+
+																// Retrieve the events from primary
+																var request = gapi.client.calendar.events.list({ 'calendarId' : 'primary', maxResults : 1000, singleEvents : true,
+																				pageToken : googleNextPageToken });
+
+																request.execute(function(resp)
+																{
+																				var events = new Array();
+																				console.log(resp);
+																				for (var i = 0; i < resp.items.length; i++)
+																				{
+																								var fc_event = google2fcEvent(resp.items[i]);
+																								console.log(fc_event);
+																								events.push(fc_event);
+
+																				}
+																				googleNextPageToken = resp.nextSyncToken;
+																				var view = readCookie("agile_calendar_view");
+																				if (view == "calendar_list_view")
+																				{
+																								googleEventCollectionView.collection.add(events);
+																								googleEventCollectionView.collection.sort();
+																				}
+																				else
+																				{
+																								googleEventCollectionView.collection.add(events);
+																								googleEventCollectionView.collection.sort();
+																				}
+
+																});
+												});
+								}
+				}
+}
 /**
  * Creates backbone router for Case create, read and update operations
  */
@@ -22600,6 +25197,7 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 		else
 		{
 			$("#content").html(getTemplate("send-email", {}));
+			$("#emailForm").find('.add-attachment-select').hide();
 			$('body').trigger('fill_emails');
 		}
 	}
@@ -22620,7 +25218,7 @@ var ContactFiltersRouter = Backbone.Router.extend({
 		
 		"contact-filter-edit/:id" : "contactFilterEdit",
 		
-		"contact-filter/:id" : "showFilterContacts",
+		"contact-filter/:id" : "showFilterContacts"
 		
 	},
 	
@@ -22630,7 +25228,7 @@ var ContactFiltersRouter = Backbone.Router.extend({
 	contactfilters : function()
 	{
 		this.contactFiltersList = new Base_Collection_View({ url : '/core/api/filters', restKey : "ContactFilter", templateKey : "contact-filter",
-			individual_tag_name : 'tr' });
+			individual_tag_name : 'tr', sort_collection : false});
 
 		this.contactFiltersList.collection.fetch();
 		$("#content").html(this.contactFiltersList.render().el);
@@ -22648,9 +25246,10 @@ var ContactFiltersRouter = Backbone.Router.extend({
 
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 				{
-					chainFilters(el, undefined, function()
+					chainFiltersForContactAndCompany(el, undefined, function()
 					{
 						$('#content').html(el);
+						$("#contact_type").trigger('change');
 					});
 
 				})
@@ -22675,14 +25274,16 @@ var ContactFiltersRouter = Backbone.Router.extend({
 		var ContactFilter = new Base_Model_View({ url : 'core/api/filters', model : contact_filter, template : "filter-contacts",
 			window : 'contact-filters', postRenderCallback : function(el)
 			{
-
+				$(el).live('agile_model_loaded', function(e) {
+					$("#contact_type").trigger('change');
+				})
 				$("#content").html(LOADING_HTML);
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 				{
-					chainFilters(el, contact_filter.toJSON(), function()
-					{
-						$("#content").html(el);
-					});
+					chainFiltersForContactAndCompany(el, contact_filter.toJSON(), function()
+						{
+							$('#content').html(el);
+						});
 					scramble_input_names($(el).find('#filter-settings'));
 				})
 			}, saveCallback : function(data)
@@ -22704,7 +25305,7 @@ var ContactFiltersRouter = Backbone.Router.extend({
 	{
 		if (App_Contacts)
 			App_Contacts.contacts(undefined, filter_id);
-	},
+	}
 	
 	
 });/**
@@ -22778,7 +25379,7 @@ var ContactViewsRouter = Backbone.Router.extend({
 	contactViews : function()
 	{
 		this.contactViewListView = new Base_Collection_View({ url : '/core/api/contact-view', restKey : "contactView",
-			templateKey : "contact-custom-view", individual_tag_name : 'tr' });
+			templateKey : "contact-custom-view", individual_tag_name : 'tr', sort_collection : false });
 		this.contactViewListView.collection.fetch();
 		$('#content').html(this.contactViewListView.render().el);
 	},
@@ -22929,10 +25530,10 @@ var ContactsRouter = Backbone.Router.extend({
 
 		head.js(LIB_PATH + 'lib/jquery.timeago.js', LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
 		{
-			var el = $(getTemplate('dashboard1', { time_sec : (time_date).toString().toLowerCase(), time_format : "" }));
+			var el = $(getTemplate('dashboard1', { time_sec : (time_date).toString().toLowerCase(), time_format : time_date.getTime()/1000 }));
 			$("#content").html(el);
 			
-			$("span#last-login-time").timeago();
+			$("#last-login-time").timeago();
 			
 			setup_dashboard(el);
 			// loadDynamicTimeline("my-timeline", el);
@@ -22949,7 +25550,7 @@ var ContactsRouter = Backbone.Router.extend({
 	 * (25 in count) step by step on scrolling down instead of fetching
 	 * all at once.
 	 */
-	contacts : function(tag_id, filter_id, grid_view)
+	contacts : function(tag_id, filter_id, grid_view, is_lhs_filter)
 	{
 		if(SCROLL_POSITION)
 		{
@@ -22961,8 +25562,15 @@ var ContactsRouter = Backbone.Router.extend({
 		SELECT_ALL = false;
 
 		var max_contacts_count = 20;
+		var is_company = false;
 		var template_key = "contacts";
 		var individual_tag_name = "tr";
+		var sort_key = readCookie("sort_by_name");
+		if(!sort_key || sort_key == null) {
+			sort_key = '-created_time';
+			// Saves Sort By in cookie
+			createCookie('sort_by_name', sort_key);
+		}
 		
 		// Checks if user is using custom view. It check for grid view
 		if (grid_view || readCookie("agile_contact_view"))
@@ -22980,6 +25588,8 @@ var ContactsRouter = Backbone.Router.extend({
 		if (readCookie('company_filter'))
 		{
 			eraseCookie('contact_filter');
+			eraseCookie('contact_filter_type');
+			is_company = true;
 		}
 		// Tags, Search & default browse comes to the same function
 		if (tag_id)
@@ -22992,6 +25602,7 @@ var ContactsRouter = Backbone.Router.extend({
 			// erase filter cookie
 			eraseCookie('contact_filter');
 			eraseCookie('company_filter');
+			eraseCookie('contact_filter_type');
 
 			if (this.contactsListView && this.contactsListView.collection)
 			{
@@ -23049,8 +25660,13 @@ var ContactsRouter = Backbone.Router.extend({
 		// If view is set to custom view, load the custom view
 		// If Company filter active-don't load any Custom View Show
 		// default
-		if (!readCookie('company_filter') && readCookie("contact_view"))
+		if ((!readCookie('company_filter') || (readCookie('contact_filter_type') && readCookie('contact_filter_type') != 'COMPANY')) && readCookie("contact_view"))
 		{
+			if(readData('dynamic_contact_filter')) {
+				// Then call customview function with filter url
+				this.customView(readCookie("contact_view"), undefined, 'core/api/filters/filter/dynamic-filter?data='+encodeURIComponent(readData('dynamic_contact_filter')), undefined,  is_lhs_filter);
+				return;
+			}
 			// If there is a filter saved in cookie then show filter
 			// results in custom view saved
 			if (readCookie('contact_filter'))
@@ -23088,15 +25704,31 @@ var ContactsRouter = Backbone.Router.extend({
 			$("#contactsmenu").addClass("active");
 			return;
 		}
+		if(readData('dynamic_contact_filter') && !readCookie('company_filter')) {
+			url = 'core/api/filters/filter/dynamic-filter?data='+encodeURIComponent(readData('dynamic_contact_filter'));
+		} else if(readData('dynamic_company_filter') && readCookie('company_filter')) {
+			url = 'core/api/filters/filter/dynamic-filter?data='+encodeURIComponent(readData('dynamic_company_filter'));
+		}
 
 		var slateKey = getContactPadcontentKey(url);
+		if(is_lhs_filter) {
+			template_key = "contacts-table";
+			if (grid_view || readCookie("agile_contact_view"))
+			{
+				template_key = "contacts-grid-table";
+				individual_tag_name = "div";
+			}
+			if(readCookie('company_filter')) {
+				template_key = "companies-table";
+			}
+		}
 		
 		/*
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.contactsListView = new Base_Collection_View({ url : url, templateKey : template_key, individual_tag_name : individual_tag_name,
-			cursor : true, page_size : 25, sort_collection : collection_is_reverse, slateKey : slateKey,  postRenderCallback : function(el)
+		this.contactsListView = new Base_Collection_View({ url : url, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
+			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey,  postRenderCallback : function(el, collection)
 			{
 
 				// Contacts are fetched when the app loads in
@@ -23105,34 +25737,35 @@ var ContactsRouter = Backbone.Router.extend({
 				var collection = App_Contacts.contactsListView.collection;
 
 				// To set heading in template
-				if (readCookie('company_filter'))
-				{
-					// $('#contact-heading',el).text('Companies');
+				if(is_lhs_filter) {
+					var count = 0;
+					if(collection.models.length > 0) {
+						count = collection.models[0].attributes.count || collection.models.length;
+					}
+					$('#contacts-count').html("<small>(" + count + " Total)</small>");
+					setupViews();
+					setupContactFilterList();
+				} else {					
+					setupLhsFilters(cel, is_company);
+					setupViews(cel);
+					setupContactFilterList(cel, tag_id);
 				}
-
-				// To set chats and view when contacts are fetch by
-				// infiniscroll
-				setup_tags(cel);
-				pieTags(cel);
-				setupViews(cel);
-
-				/*
-				 * Show list of filters dropdown in contacts list, If
-				 * filter is saved in cookie then show the filter name
-				 * on dropdown button
-				 */
-				setupContactFilterList(cel, tag_id);
+				
 				start_tour("contacts", el);
 			} });
 
 		// Contacts are fetched when the app loads in the initialize
+		
 		this.contactsListView.collection.fetch();
-
-		$('#content').html(this.contactsListView.render().el);
-
+		if(!is_lhs_filter) {
+			$('#content').html(this.contactsListView.render().el);
+		} else {
+			$('#content').find('.span9').html(this.contactsListView.render().el);
+			$('#bulk-actions').css('display', 'none');
+			CONTACTS_HARD_RELOAD = true;
+		}
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
-
 	},
 	
 	/**
@@ -23253,10 +25886,18 @@ var ContactsRouter = Backbone.Router.extend({
 	{
 
 		var contact_collection;
+		
+		//For getting custom fields
+		if(App_Contacts.customFieldsList == null || App_Contacts.customFieldsList == undefined){
+			App_Contacts.customFieldsList = new Base_Collection_View({ url : '/core/api/custom-fields', restKey : "customFieldDefs",
+				templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
+			App_Contacts.customFieldsList.collection.fetch();
+		}
+		
 
 		if (!contact && this.contactDetailView && this.contactDetailView.model != null)
 		{
-			contact_collection = this.contactDetailView;
+			//contact_collection = this.contactDetailView;
 
 			if (id == this.contactDetailView.model.toJSON()['id'])
 			{
@@ -23306,9 +25947,11 @@ var ContactsRouter = Backbone.Router.extend({
 
 			this.contactsListView.collection.url = "core/api/contacts";
 			contact = this.contactsListView.collection.get(id);
-			contact_collection = this.contactsListView.collection;
-
 		}
+		
+		// Assigning contact collection
+		if(this.contactsListView && this.contactsListView.collection)
+			contact_collection = this.contactsListView.collection;
 
 		add_recent_view(contact);
 
@@ -23579,22 +26222,67 @@ var ContactsRouter = Backbone.Router.extend({
 	 * populate_send_email_details is called from the
 	 * postRenderCallback.
 	 */
-	sendEmail : function(id, subject, body)
+	sendEmail : function(id, subject, body, cc, bcc)
 	{
-		
 		var model = {};
 		
+		if(!canSendEmails(1))
+		{
+			var pendingEmails = getPendingEmails();
+			window.history.back();
+			var title = "Emails limit";
+			var yes = "";
+			var no = "Ok"
+			var upgrade_link =  'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>';
+			var message = "You have used up all emails in your quota. " + upgrade_link;
+			
+			showModalConfirmation(title, 
+					message, 
+					""
+				, function(element){
+						
+					// No callback
+						Backbone.history.navigate( "subscribe", { trigger : true });
+						return;
+					},
+					function(element){
+						
+					}, yes, no);
+			return;
+		}
 		// Takes back to contacts if contacts detail view is not defined
 		if (this.contactDetailView && !this.contactDetailView.model.get(id))
 		{
 			// Show the email form with the email prefilled from the curtrent contact
 			model = this.contactDetailView.model.toJSON();
 		}
-		
 		var el = $("#content").html(getTemplate("send-email", model));
 		
+		// Call setupTypeAhead to get contacts
+		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true);
+		
+		agile_type_ahead("email_cc", el, contacts_typeahead, null, null, "email-search", null, true);
+		
+		agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, "email-search", null, true);
+		
 		if (id)
-			$("#emailForm", el).find('input[name="to"]').val(id);
+		{
+/*			var name;
+			if(model)
+			{
+				var first_name = getPropertyValue(model, "first_name");
+				var last_name = getPropertyValue(model, "last_name");
+				if(first_name || last_name)
+				{
+					name = first_name?first_name:"";
+					name = (name + " " + (last_name?last_name:"")).trim();
+				}
+			}
+			if(name.length)
+				$('#to', el).closest("div.controls").find(".tags").append('<li class="tag" style="display: inline-block;" data="' + id + '"><a href="#contact/' + model.id +'">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
+			else*/
+				$("#emailForm", el).find('input[name="to"]').val(id);
+		}
 		else
 			$("#emailForm", el).find('input[name="to"]').val('');
 
@@ -23615,6 +26303,18 @@ var ContactsRouter = Backbone.Router.extend({
 		if(subject)
 			$("#emailForm",el).find('input[name="subject"]').val(subject);
 		
+		if(cc)
+		{
+			$("#emailForm",el).find('#email_cc').closest('.control-group').show();
+			$("#emailForm",el).find('input[name="email_cc"]').val(cc);
+		}
+		
+		if(bcc)
+		{
+			$("#emailForm",el).find('#email_bcc').closest('.control-group').show();
+			$("#emailForm",el).find('input[name="email_bcc"]').val(bcc);
+		}
+		
 		// Setup HTML Editor
 		if(id)
 		{		
@@ -23625,6 +26325,9 @@ var ContactsRouter = Backbone.Router.extend({
 				
 					// Add tinymce content
 					set_tinymce_content('email-body', body);
+					
+					// Register focus
+					register_focus_on_tinymce('email-body');
 			
 				});
 		}
@@ -23637,6 +26340,9 @@ var ContactsRouter = Backbone.Router.extend({
 				
 					// Add tinymce content
 					set_tinymce_content('email-body', body);
+					
+					// Register focus
+					register_focus_on_tinymce('email-body')
 			});
 		}
 		
@@ -23647,7 +26353,7 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	// Id = custom-view-id, view_data = custom view data if already
 	// availabel, url = filter url if there is any filter
-	customView : function(id, view_data, url, tag_id)
+	customView : function(id, view_data, url, tag_id, is_lhs_filter)
 	{
 		SELECT_ALL = false;
 		App_Contacts.tag_id = tag_id;
@@ -23718,9 +26424,10 @@ var ContactsRouter = Backbone.Router.extend({
 			if (readCookie('company_filter'))
 				$('#contact-heading', el).text('Companies');
 
-			setup_tags(el);
-			pieTags(el);
+			//setup_tags(el);
+			//pieTags(el);
 			setupViews(el, view_data.name);
+			setupLhsFilters(el);
 			setupContactFilterList(el, tag_id);
 
 			$(".active").removeClass("active"); // Activate Contacts
@@ -23730,10 +26437,25 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		var slateKey = getContactPadcontentKey(url);
+		var sort_key = readCookie("sort_by_name");
+		if(!sort_key || sort_key == null) {
+			sort_key = '-created_time';
+			// Saves Sort By in cookie
+			createCookie('sort_by_name', sort_key);
+		}
+		var template_key = "contacts-custom-view";
+		//if directly called the method, i.e on click of custom view link, 
+		//the url will be updated if any filter conditions are selected.
+		if(readData('dynamic_contact_filter')) {
+			url = 'core/api/filters/filter/dynamic-filter?data='+encodeURIComponent(readData('dynamic_contact_filter'));
+		}
+		if(is_lhs_filter) {
+			template_key = "contacts-custom-view-table";
+		}	
 		
-		this.contact_custom_view = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data,
-			templateKey : "contacts-custom-view", individual_tag_name : 'tr', slateKey : slateKey, cursor : true, page_size : 25, sort_collection : false,
-			postRenderCallback : function(el)
+		this.contact_custom_view = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
+			templateKey : template_key, individual_tag_name : 'tr', slateKey : slateKey, cursor : true, page_size : 25, sort_collection : false,
+			postRenderCallback : function(el, collection)
 			{
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
 
@@ -23743,23 +26465,45 @@ var ContactsRouter = Backbone.Router.extend({
 
 				// To set chats and view when contacts are fetch by
 				// infiniscroll
-				setup_tags(el);
+				//setup_tags(el);
 
-				pieTags(el);
+				//pieTags(el);
 				setupViews(el, view_data.name);
 
 				// show list of filters dropdown in contacts list
 				setupContactFilterList(el, App_Contacts.tag_id);
+				if(is_lhs_filter) {
+					var count = 0;
+					if(collection.models.length > 0) {
+						count = collection.models[0].attributes.count || collection.models.length;
+					}
+					$('#contacts-count').html("<small>(" + count + " Total)</small>");
+				} else {					
+					setupLhsFilters(el);
+				}
 			} });
 
-		// Defines appendItem for custom view
-		this.contact_custom_view.appendItem = contactTableView;
-
-		// Fetch collection
-		this.contact_custom_view.collection.fetch();
-
-		$('#content').html(this.contact_custom_view.el);
-
+		var _that = this;
+		$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
+				{
+					// Defines appendItem for custom view
+					_that.contact_custom_view.appendItem = function(base_model){
+						contactTableView(base_model,customDatefields,this);
+					};
+			
+					// Fetch collection
+					_that.contact_custom_view.collection.fetch();
+			
+				});
+		
+		if(!is_lhs_filter) {
+			$('#content').html(this.contact_custom_view.el);
+		} else {
+			$('#content').find('.span9').html(this.contact_custom_view.el);
+			$('#bulk-actions').css('display', 'none');
+			CONTACTS_HARD_RELOAD = true;
+		}
+		
 		// Activate Contacts Navbar tab
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
@@ -23772,7 +26516,8 @@ var ContactsRouter = Backbone.Router.extend({
 		});
 		$("#personModal").modal();
 	}
-});
+	
+	});
 /**
  * Creates backbone router for Deals/Opportunities create, read and update
  * operations
@@ -23816,12 +26561,17 @@ var DealsRouter = Backbone.Router.extend({
 			deal_fetching = false;
 			DEALS_LIST_COLLECTION = null;
 			setupDealsTracksList();
+			setupDealFilters();
 		}
 		else
 		{
 			DEALS_LIST_COLLECTION = null;
+			var query = ''
+				if(readCookie('deal-filters')){
+					query = '&filters='+encodeURIComponent(getDealFilters());
+				}
 			// Fetches deals as list
-			this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity/based?pipeline_id='+pipeline_id, templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
+			this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity/based?pipeline_id='+pipeline_id+query, templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
 				postRenderCallback : function(el)
 				{
 					if(pipeline_id == 1)
@@ -23836,6 +26586,7 @@ var DealsRouter = Backbone.Router.extend({
 					// Shows deals chart
 					dealsLineChartByPipeline(pipeline_id);
 					setupDealsTracksList(cel);
+					setupDealFilters(cel);
 				},
 				appendItemCallback : function(el)
 				{ 
@@ -23864,7 +26615,8 @@ var DealsRouter = Backbone.Router.extend({
 		$('#content').html(getTemplate("import-deals", {}));
 	},
 
-});/**
+});
+/**
  * Creates backbone router for Documents create, read and update operations
  */
 var DocumentsRouter = Backbone.Router.extend({
@@ -23940,7 +26692,8 @@ var ReportsRouter = Backbone.Router.extend({
 	routes : {
 
 	/* Reports */
-	"reports" : "reports", "email-reports" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
+	"reports" : "reports", "email-reports" : "emailReportTypes","activity-reports":"activityReports", "activity-report-add" : "activityReportAdd", "activity-report-edit/:id" : "activityReportEdit",
+	"acivity-report-results/:id" : "activityReportInstantResults", "contact-reports" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
 		"report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts", "report-funnel/:tags" : "showFunnelReport",
 		"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport" },
 
@@ -23955,17 +26708,128 @@ var ReportsRouter = Backbone.Router.extend({
 	},
 
 	/**
+	 * Shows email-reports categories
+	 */
+	emailReportTypes : function()
+	{
+		$("#content").html(getTemplate('email-report-categories', {}));
+		$(".active").removeClass("active");
+		$("#reportsmenu").addClass("active");
+	},
+	
+	activityReports : function()
+	{
+		$("#content").html(getRandomLoadingImg());
+		this.activityReports = new Base_Collection_View({ url : '/core/api/activity-reports', restKey : "activityReports", templateKey : "activity-report", individual_tag_name : 'tr'});
+		this.activityReports.collection.fetch();
+		$("#content").html(this.activityReports.render().el);
+
+		$(".active").removeClass("active");
+		$("#reportsmenu").addClass("active");
+	},
+	
+	activityReportAdd : function(){
+		$("#content").html(getRandomLoadingImg());
+		var count = 0;
+		var activity_report_add = new Base_Model_View({ url : 'core/api/activity-reports', template : "activity-reports-add", window : "activity-reports", isNew : true,
+			postRenderCallback : function(el)
+			{
+				if (count != 0)
+					return;
+				// Fills owner select element
+				fillSelect("users-list", '/core/api/users', 'domainUser', function()
+						{
+							head.js(LIB_PATH + 'lib/jquery.multi-select.js', function()
+							{
+								$('#activity-type-list, #users-list',el).multiSelect();
+								$('#ms-activity-type-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "activity").attr("id", "activity_type");
+								$('#ms-users-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id", "user_ids");
+								++count;
+								if (count > 0)
+									$("#content").html(el)
+							});
+						}, '<option value="{{id}}">{{name}}</option>', true, el);
+			} });
+
+		$("#content").html(getRandomLoadingImg());
+		activity_report_add.render();
+
+	},
+	
+	/**
+	 * Edits a report by de-serializing the existing report into its saving
+	 * form, from there it can be edited and saved. Populates users and loads
+	 * agile.jquery.chained.min.js to match the conditions with the values of
+	 * input fields.
+	 */
+	activityReportEdit : function(id)
+	{
+		$("#content").html(getRandomLoadingImg());
+		// Counter to set when script is loaded. Used to avoid flash in page
+		var count = 0;
+
+		// If reports view is not defined, navigates to reports
+		if (!this.activityReports || !this.activityReports.collection || this.activityReports.collection.length == 0 || this.activityReports.collection.get(id) == null)
+		{
+			this.navigate("activity-reports", { trigger : true });
+			return;
+		}
+
+		// Gets a report to edit, from reports collection, based on id
+		var activityReport = this.activityReports.collection.get(id);
+		var report_model = new Base_Model_View({ url : 'core/api/activity-reports', change : false, model : activityReport, template : "activity-reports-add", window : "activity-reports",
+			postRenderCallback : function(el)
+			{
+				if (count != 0)
+					return;
+				fillSelect("users-list", '/core/api/users', 'domainUser', function()
+						{
+							var json = activityReport.toJSON();
+							deserializeForm(json,$('#activityReportsForm',el));
+							
+							head.js(LIB_PATH + 'lib/jquery.multi-select.js', function()
+							{
+
+								$('#activity-type-list, #users-list',el).multiSelect();
+								$('#ms-activity-type-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "activity").attr("id", "activity_type");
+								$('#ms-users-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id", "user_ids");
+								
+								$("#content").html(el)
+								$.each(json.user_ids,function(i,user_id){
+									$('#users-list').multiSelect('select',user_id);
+									console.log('select user---',user_id);
+								});
+								$.each(json.activity,function(i,activity){
+									$('#activity-type-list').multiSelect('select',activity);
+									console.log('select activity-------',activity);
+								});
+								$('#ms-activity-type-list .ms-selection').children('ul').addClass('multiSelect').attr("name", "activity").attr("id", "activity_type");
+								$('#ms-users-list .ms-selection').children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id", "user_ids");
+								
+							});
+						}, '<option value="{{id}}">{{name}}</option>', true, el);
+				
+			} });
+
+		$("#content").html(getRandomLoadingImg());
+		report_model.render();
+
+	},
+
+	
+	/**
 	 * Shows list of reports, with an option to add new report
 	 */
 	emailReports : function()
 	{
-		this.reports = new Base_Collection_View({ url : '/core/api/reports', restKey : "reports", templateKey : "report", individual_tag_name : 'tr' });
+	
+			this.reports = new Base_Collection_View({ url : '/core/api/reports', restKey : "reports", templateKey : "report", individual_tag_name : 'tr' });
 
-		this.reports.collection.fetch();
-		$("#content").html(this.reports.render().el);
+			this.reports.collection.fetch();
+			$("#content").html(this.reports.render().el);
 
-		$(".active").removeClass("active");
-		$("#reportsmenu").addClass("active");
+			$(".active").removeClass("active");
+			$("#reportsmenu").addClass("active");
 	},
 
 	/**
@@ -23977,7 +26841,7 @@ var ReportsRouter = Backbone.Router.extend({
 	{
 		var count = 0;
 		$("#content").html(getRandomLoadingImg());
-		CUSTOM_FIELDS = undefined;
+		SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
 		var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "email-reports", isNew : true,
 			postRenderCallback : function(el)
 			{
@@ -24040,7 +26904,7 @@ var ReportsRouter = Backbone.Router.extend({
 
 		// Gets a report to edit, from reports collection, based on id
 		var report = this.reports.collection.get(id);
-		var report_model = new Base_Model_View({ url : 'core/api/reports', change : false, model : report, template : "reports-add", window : "email-reports",
+		var report_model = new Base_Model_View({ url : 'core/api/reports', change : false, model : report, template : "reports-add", window : "contact-reports",
 			postRenderCallback : function(el)
 			{
 				if (count != 0)
@@ -24115,13 +26979,17 @@ var ReportsRouter = Backbone.Router.extend({
 
 		var report_results_view = new Base_Collection_View({ url : "core/api/reports/show-results/" + id, modelData : report, templateKey : "report-search",
 			individual_tag_name : 'tr', cursor : true, sort_collection : false, page_size : 15, });// Collection
-
-		// Report built with custom table, as reports should be shown with
-		// custom order selected by user
-		report_results_view.appendItem = reportsContactTableView;
-
-		report_results_view.collection.fetch();
-
+		var _that = this;
+		$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
+				{
+					// Report built with custom table, as reports should be shown with
+					// custom order selected by user
+					report_results_view.appendItem = function(base_model){
+						reportsContactTableView(base_model,customDatefields,this);
+					};
+			
+					report_results_view.collection.fetch();
+				});
 		$("#content").html(report_results_view.render().el);
 	},
 
@@ -24296,6 +27164,9 @@ var SettingsRouter = Backbone.Router.extend({
 			/* Notifications */
 			"notification-prefs" : "notificationPrefs",
 			
+			/* scheduling */
+			"scheduler-prefs" : "scheduler",
+			
 			/* support page */
 			"help" : "support",
 			
@@ -24330,7 +27201,13 @@ var SettingsRouter = Backbone.Router.extend({
 						postRenderCallback: function(el)
 						{
 							// setup TinyMCE
-							setupTinyMCEEditor('textarea#WYSItextarea', true, ["textcolor link image preview code"]);
+							setupTinyMCEEditor('textarea#WYSItextarea', true, [
+								"textcolor link image preview code"
+							], function(){
+								
+								// Register focus
+								register_focus_on_tinymce('WYSItextarea');
+							});
 						}
 			 		});
 		
@@ -24596,7 +27473,10 @@ var SettingsRouter = Backbone.Router.extend({
 		setupTinyMCEEditor('textarea#email-template-html', false, undefined, function(){
 			
 			// Reset tinymce
-			set_tinymce_content('email-template-html', '');			
+			set_tinymce_content('email-template-html', '');		
+			
+			// Register focus
+			register_focus_on_tinymce('email-template-html');
 		});
 		
 		$('#PrefsTab .active').removeClass('active');
@@ -24640,6 +27520,9 @@ var SettingsRouter = Backbone.Router.extend({
 			
 			// Insert content into tinymce
 			set_tinymce_content('email-template-html', currentTemplate.toJSON().text);			
+			
+			// Register focus
+			register_focus_on_tinymce('email-template-html');
 		});
 		
 		/**End of TinyMCE**/
@@ -24699,6 +27582,78 @@ var SettingsRouter = Backbone.Router.extend({
 	support : function()
 	{
 		$("#content").html(getTemplate("support-form"), {});
+	/*	var CLICKDESK_Live_Chat  = "offline";
+		try {
+				CLICKDESK_Live_Chat.onStatus(function(status) {
+
+					if(status == "online")
+						$("#clickdesk_status").html('Chat with our support representative.<br/> <a style="cursor:pointer" onclick="clickdesk_show_livechat_popup();">Start chat</a>.');
+					else
+						$("#clickdesk_status").html('No chat support representative is available at the moment. Please<br/> <a href="#contact-us" id="show_support">leave a message</a>.');
+				});
+			
+		} catch (e) {
+			
+			setTimeout(function(){
+				
+				CLICKDESK_Live_Chat.onStatus(function(status) {
+
+					if(status == "online")
+						$("#clickdesk_status").html('Chat with our support representative.<br/> <a style="cursor:pointer" onclick="clickdesk_show_livechat_popup();">Start chat</a>.');
+					else
+						$("#clickdesk_status").html('No chat support representative is available at the moment. Please<br/> <a href="#contact-us" id="show_support">leave a message</a>.');
+				});
+				
+			}, 5000);
+			
+			
+		}*/
+		$("#clickdesk_status").html('No chat support representative is available at the moment. Please<br/> <a href="#contact-us" id="show_support">leave a message</a>.');
+	},
+	
+	scheduler : function()
+	{
+		$("#content").html(getTemplate("settings"), {});
+		var view = new Base_Model_View({
+			url : 'core/api/users/current-user',
+			template : 'settings-business-prefs',
+			postRenderCallback : function(el)
+			{
+				var onlineschedulingURL = "https://" + view.model.get('domain') + ".agilecrm.com/calendar/" + view.model.get('schedule_id');
+				var hrefvalue="https://"+view.model.get('domain')+".agilecrm.com/calendar/";
+				$("#scheduleurl").attr("href", onlineschedulingURL);
+				$("#hrefvalue").html(hrefvalue);
+				$("#schedule_id").html(view.model.get('schedule_id'));
+				
+				$("#scheduleurl").removeClass("nounderline");
+				
+				head.js(CSS_PATH + 'css/businesshours/businesshours.css',CSS_PATH + 'css/businesshours/jquerytimepicker.css', LIB_PATH + 'lib/businesshours/businesshours.js',LIB_PATH + 'lib/businesshours/jquerytimepicker.js', function()
+						{
+					var json=JSON.parse(view.model.get('business_hours'));
+					console.log();
+					 businessHoursManager = 
+						 $("#define-business-hours").businessHours({
+			                    operationTime:json,/* array of JSON objects */
+			                    
+			                    postInit:function(){
+			                        $('.operationTimeFrom, .operationTimeTill').timepicker({
+			                            'timeFormat': 'H:i',
+			                            'step': 30
+			                            });
+			                    },
+			                });
+			            
+			     
+					 $(".mini-time").keydown(false);
+					 
+				});
+				
+                
+			} });
+		$('#prefs-tabs-content').html(view.render().el);
+		$('#PrefsTab .active').removeClass('active');
+		$('.scheduler-prefs-tab').addClass('active');
+
 	},
 
 	/**
@@ -24710,8 +27665,7 @@ var SettingsRouter = Backbone.Router.extend({
 		$("#content").html(getTemplate("help-mail-form"), {});
 	}
 
-});
-var ShopifyRouter = Backbone.Router.extend({
+});var ShopifyRouter = Backbone.Router.extend({
 	routes: {
 		"shopify/:shopurl" : "shopify","shopify":"shopify"
 	},
@@ -25214,7 +28168,17 @@ var SubscribeRouter = Backbone.Router.extend({
 						that.setup_email_plan(subscription);
 					})
 					
-					$("#email-quantity", el).die().live('keydown', function(e){
+							// Phone number validation
+					jQuery.validator.addMethod("email_plan_minimum", function(value, element) {
+	
+								if (this.optional(element))
+									return true;
+
+								return parseInt(value) >= 5;
+							}, " Should purchase a minimum of 5000 emails.");
+					
+					$("#email-quantity", el).die().live('keyup', function(e){
+						isValidForm($("#email-plan-form", el));
 						if(e.which == 13)
 							{
 								e.preventDefault();
@@ -25392,6 +28356,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		 * page
 		 */
 		$.getJSON("core/api/subscription?reload=true", function(data){
+			_billing_restriction = data.cachedData;
 			$("#content").html(getTemplate("subscribe", data))
 		
 			var subscription_model = new BaseModel(data);
@@ -25668,15 +28633,63 @@ var SubscribeRouter = Backbone.Router.extend({
 			customerId = subscription.get("billingData").id;
 		}
 		
-		var invoice_collection = new Base_Collection_View({ url : "core/api/subscription/charges/"+customerId+"?page_size=3" , templateKey : "charge",
+		var invoice_collection = new Base_Collection_View({ url : "core/api/subscription/charges/"+customerId+"?page_size=20" , templateKey : "charge",
 
-		individual_tag_name : 'tr',sortKey : 'createdtime', descending : true });
+		individual_tag_name : 'tr',sortKey : 'created', descending : true });
 		invoice_collection.collection.fetch();
 
 		$("#invoice-details-holder").html(invoice_collection.render().el);
 	},
 
 });
+
+function getPendingEmails()
+{
+	var count = _billing_restriction.one_time_emails_count;
+	
+	var max = getMaxEmailsLimit();
+	
+	// if max is greater than zero, we consider user is subscrbed to email plan
+	if(max > 0)
+	{
+		// In case of count is less than zero we return 0;
+		if(count < 0)
+			return 0;
+		
+		return count;
+	}
+	
+	// If max is zero then it is free plan
+	if(max == 0)
+	{
+		// Count comes as a negavie value here
+		var remaining =  5000 + count;
+		if(remaining < 0)
+			return 0;
+		
+		return remaining;
+	}
+	
+	return count;
+}
+
+function getMaxEmailsLimit()
+{
+	var max = _billing_restriction.max_emails_count;
+	
+	if(max == undefined)
+		max = 0;
+	
+	return max;
+}
+function canSendEmails(emails_to_send)
+{
+	var pending = getPendingEmails();
+	if(pending >= emails_to_send)
+		return true;
+	
+	return false;
+}
 var VisitorsRouter = Backbone.Router.extend({
 
 routes : { "visitors" : "loadGmap" },
@@ -25829,6 +28842,8 @@ var WidgetsRouter = Backbone.Router
 												"Linkedin" : "Linkedin", "Linkedin/:id" : "Linkedin",
 
 												"Twitter" : "Twitter", "Twitter/:id" : "Twitter",
+												
+												"GooglePlus" : "GooglePlus", "GooglePlus/:id" : "GooglePlus",
 
 												"Rapleaf" : "Rapleaf", "Rapleaf/:id" : "Rapleaf",
 
@@ -25857,10 +28872,13 @@ var WidgetsRouter = Backbone.Router
 												"Facebook" : "Facebook", "Facebook/:id" : "Facebook", "Shopify" : "Shopify", "Shopify/:id" : "Shopify",
 
 												"Chargify" : "Chargify", "Chargify/:id" : "Chargify",
+												
+												"callscript/rules" : "CallScriptShow", "callscript/add-rules" : "CallScriptAdd","callscript/editrules/:id" : "CallScriptEdit",
+												"callscript" : "CallScript", "callscript/:id" : "CallScript",												
 
 												"sync" : "contactSync", "sync/contacts" : "google_apps_contacts", "sync/calendar" : "google_apps_calendar", "sync/stripe-import" : "stripe_sync",
 																"sync/shopify" : "shopify", "sync/salesforce" : "salesforce", "sync/zoho-import" : "zoho_sync", "sync/quickbook" : "quickbook_import",
-																"sync/xero" : "xero_import","sync/freshbooks":"freshbooks_sync","sync/freshbooks/setting":"freshbooks_sync_setting" },
+																"sync/xero" : "xero_import","sync/freshbooks":"freshbooks_sync","sync/freshbooks/setting":"freshbooks_sync_setting"},
 
 												/**
 												 * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
@@ -26307,9 +29325,12 @@ var WidgetsRouter = Backbone.Router
 																				{
 																								$
 																																.getJSON(
-																																								"core/api/custom-fields",
+																																								"core/api/widgets/Xero",
 																																								function(data)
 																																								{
+																																									if(typeof data.prefs != "undefined") {
+																																										data.prefsObj = JSON.parse(data.prefs);
+																																									}
 																																												set_up_access(
 																																																				"Xero",
 																																																				'xero-login',
@@ -26330,7 +29351,7 @@ var WidgetsRouter = Backbone.Router
 																																								{
 																																												$
 																																																				.getJSON(
-																																																												"core/api/custom-fields",
+																																																												"core/api/widgets/Xero",
 																																																												function(data)
 																																																												{
 																																																																set_up_access(
@@ -26575,7 +29596,9 @@ var WidgetsRouter = Backbone.Router
 																this.shopify_sync = new Base_Model_View({ url : 'core/api/shopify/import-settings',
 																				template : 'admin-settings-import-shopify-contact-syncPrefs' });
 																$('#shopify').append(this.shopify_sync.render().el);
-
+																
+																this.freshbooks_sync = new Base_Model_View({url:'core/api/freshbooks/import-settings',template:'admin-settings-import-freshbooks-contacts-syncPrefs'});
+																$('#freshbook').append(this.freshbooks_sync.render().el);
 																/* salesforce import template */
 																// this.salesforce = new
 																// Base_Model_View({url:'core/api/salesforce/get-prefs',template:'admin-settings-salesforce-contact-sync'});
@@ -26718,7 +29741,7 @@ var WidgetsRouter = Backbone.Router
 
 																$("#prefs-tabs-content").html(this.shopify_sync_setting.render().el);
 												},
-		
+												
 												freshbooks_sync : function()
 												{
 
@@ -26804,6 +29827,93 @@ var WidgetsRouter = Backbone.Router
 
 																$("#prefs-tabs-content").html(this.xero_import_settings.render().el);
 
+												},
+												
+												//Reddy code
+												/**
+												 * Manages GooglePlus widget
+												 */
+												GooglePlus: function(id) {
+
+												    if (!id) {
+												        show_set_up_widget("GooglePlus", 'googleplus-login',
+												            '/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.href) + "/googleplus");
+												    } else {
+												    	
+												    	var widgetDetails = $.parseJSON(
+											    		        $.ajax({
+											    		            url: "core/api/widgets/GooglePlus", 
+											    		            async: false,
+											    		            dataType: 'json'
+											    		        }).responseText
+											    		    );
+												    	
+												    	console.clear();
+												    	console.log("In google Plus widget Router");
+											    		console.log(widgetDetails);												    		
+											    		
+											    		if (widgetDetails) {
+								                        	 widgetPrefGP = JSON.parse(widgetDetails.prefs);
+								                        	
+								                        	var userData = $.parseJSON(
+												    		        $.ajax({
+												    		            url: "https://www.googleapis.com/plus/v1/people/me?access_token="+ widgetPrefGP['access_token'], 
+												    		            async: false,
+												    		            dataType: 'json'
+												    		        }).responseText
+												    		    );
+								                        	
+								                        	set_up_access(
+										                            "GooglePlus",
+										                            'googleplus-login',
+										                            userData,
+										                            '/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#GooglePlus/googleplus"));
+								                        	
+								                        	
+								                        } else {
+								                            show_set_up_widget("GooglePlus", 'googleplus-login',
+								                            		'/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.href) + "/googleplus");												                            
+								                            return;
+								                        }
+												    }
+
+												},//End of Gplus
+												
+												/**
+												 * Manages CallScript widget
+												 */
+												CallScript : function(id)
+												{
+																if (!id)
+																				show_set_up_widget("CallScript", 'callscript-login');
+																else
+																				fill_form(id, "CallScript", 'callscript-login');
+																                adjust_form();
+
+												},
+												
+												/**
+												 * Show CallScript rules
+												 */
+												CallScriptShow : function()
+												{	
+													showCallScriptRule();
+												},
+												
+												/**
+												 * Add CallScript rules
+												 */
+												CallScriptAdd : function()
+												{
+													addCallScriptRule();
+												},
+												
+												/**
+												 * Edit CallScript rules
+												 */
+												CallScriptEdit : function(id)
+												{
+													editCallScriptRule(id);
 												}
 								});
 
@@ -27054,8 +30164,8 @@ var WorkflowsRouter = Backbone.Router
 				}
 
 				/* Set the designer JSON. This will be deserialized */
-				this.workflow_model = this.workflow_list_view.collection.get(id);
-				var workflowName = this.workflow_model.get("name");
+//				this.workflow_model = this.workflow_list_view.collection.get(id);
+//				var workflowName = this.workflow_model.get("name");
 
 				if (log_type == undefined || log_type == "ALL")
 					log_type = "";
@@ -27078,7 +30188,7 @@ var WorkflowsRouter = Backbone.Router
 				logsListView.collection.fetch({ success : function(collection)
 				{
 					if (collection.length === 0)
-						fill_logs_slate('logs-slate', log_type.split('=')[1], workflowName);
+						fill_logs_slate('logs-slate', log_type.split('=')[1]);
 				} });
 
 				$('#campaign-analysis-tabs-content').html(logsListView.el);
@@ -27134,9 +30244,9 @@ var WorkflowsRouter = Backbone.Router
 					return;
 				}
 
-				/* Set the designer JSON. This will be deserialized */
-				this.workflow_model = this.workflow_list_view.collection.get(id);
-				var workflowName = this.workflow_model.get("name");
+//				/* Set the designer JSON. This will be deserialized */
+//				this.workflow_model = this.workflow_list_view.collection.get(id);
+//				var workflowName = this.workflow_model.get("name");
 
 				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 				{
@@ -27347,6 +30457,72 @@ var WorkflowsRouter = Backbone.Router
 						{
 							var shopify_event_type = currentTrigger.toJSON()['trigger_shopify_event'];
 							populate_shopify_events_in_trigger($('form#addTriggerForm', el), 'trigger-shopify-event', shopify_event_type);
+						}
+
+						if(type == 'INBOUND_MAIL_EVENT')
+						{
+							populate_inbound_mail_events_in_trigger($('form#addTriggerForm', el), 'trigger-inbound-mail-event');
+						}
+						
+						if(type == 'EMAIL_OPENED' || type == 'EMAIL_LINK_CLICKED')
+						{
+							// Show custom tags textbox
+							$('#email-tracking-type', el).closest('div.control-group').css('display', '');
+							
+							$('#email-tracking-type', el).find('option[value=' + currentTrigger.toJSON()["email_tracking_type"] + ']').attr('selected', 'selected').trigger('change');
+							
+							if(currentTrigger.toJSON()["email_tracking_type"] == "CAMPAIGNS")
+							{
+								$('#email-tracking-campaign-id',el).closest('div.control-group').css('display', '');
+								
+								var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+
+								/**
+								 * Fills campaign select drop down with existing
+								 * Campaigns and shows previous option as selected.
+								 * 
+								 * @param campaign-select -
+								 *            Id of select element of Campaign
+								 * @param /core/api/workflows -
+								 *            Url to get workflows
+								 * @param 'workflow' -
+								 *            parse key
+								 * @param callback-function -
+								 *            Shows previous option selected
+								 * @param optionsTemplate-
+								 *            to fill options with workflows
+								 */
+								fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', function fillCampaign()
+								{
+									$('#email-tracking-campaign-id option:first').after('<option value="0">All</option>');
+									
+									var value = currentTrigger.toJSON();
+									if (value)
+									{
+										$('#email-tracking-campaign-id', el).find('option[value=' + value.email_tracking_campaign_id + ']').attr('selected', 'selected');
+									}
+									
+									// Remove loading image
+									$('.loading', el).remove();
+									
+								}, optionsTemplate, false, el);
+							}
+							
+							if(type == 'EMAIL_LINK_CLICKED')
+							{
+								// Show custom tags textbox
+								$('#custom-link-clicked', el).closest('div.control-group').css('display', '');
+							}
+							
+						}
+						
+						if(type == 'EVENT_IS_ADDED')
+						{
+							$('form#addTriggerForm', el).find('select#event-type').closest('div.control-group').css('display', '');
+							
+							$('#email-type', el).find('option[value=' + currentTrigger.toJSON()["email_type"] + ']').attr('selected', 'selected').trigger('change');
+							
+							populate_owners_in_trigger($('form#addTriggerForm', el), 'event-owner-id', currentTrigger.toJSON()["event_owner_id"]);
 						}
 
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
@@ -27939,7 +31115,7 @@ function starify(el) {
     	var contact_model  =  App_Contacts.contactDetailView.model;
     	
     	// If contact update is not allowed then start rating does not allow user to change it
-    	if(!canEditContact(App_Contacts.contactDetailView.model.get('owner').id))
+    	if(App_Contacts.contactDetailView.model.get('owner') && !canEditContact(App_Contacts.contactDetailView.model.get('owner').id))
     	{
     			$('#star', el).raty({
     			 'readOnly': true,
@@ -28024,7 +31200,7 @@ function fill_owners(el, data, callback){
  * To show owner on change
  */
 function show_owner(){
-	$('#change-owner-element').css('display', 'inline-block');
+	$('.contact-owner-pic').css('visibility', 'visible');
 	$('#contact-owner').css('display', 'inline-block');
 }
 
@@ -28292,15 +31468,15 @@ function contact_detail_view_navigation(id, contact_collection, el){
     	next_contact_id = contact_collection.at(current_index + 1).id
     }
 
-    if (collection_length > 0 && current_index != 0) {
+    if (collection_length > 0 && current_index != 0 && contact_collection.at(current_index - 1) && contact_collection.at(current_index - 1).has("id")) {
 
     	previous_contact_id = contact_collection.at(current_index - 1).id
     }
 
     if(previous_contact_id != null)
-    	$('.navigation', el).append('<a style="float:left;" href="#contact/' + previous_contact_id + '" class=""><i class="icon-caret-left"></i>&nbsp;Previous</a>');
+    	$('.navigation', el).append('<a style="float:left;" href="#contact/' + previous_contact_id + '" class=""><i class="icon icon-chevron-left"></i></a>');
     if(next_contact_id != null)
-    	$('.navigation', el).append('<a style="float:right;" href="#contact/'+ next_contact_id + '" class="">Next&nbsp;<i class="icon-caret-right"></i></a>');
+    	$('.navigation', el).append('<a style="float:right;" href="#contact/'+ next_contact_id + '" class=""><i class="icon icon-chevron-right"></i></a>');
 	
 }
 
@@ -28397,35 +31573,45 @@ $(function(){
     	e.preventDefault();
         $(this).popover('show');
     });
-	   
-    $('#change-owner-element').live('mouseenter',function(e){
+/*	   
+    $('.change-owner-element').live('mouseenter',function(e){
     	e.preventDefault();
     	$('#change-owner-ul').css('display', 'none');
         $(this).popover({
         	template:'<div class="popover"><div class="arrow"></div><div class="popover-inner"><div class="popover-content"><p></p></div></div></div>'
         });
         $(this).popover('show');
-    });
+    });*/
     
-    $('#change-owner-element').live('click',function(e){
+    $('#change-owner-element > #contact-owner').live('click',function(e){
     	e.preventDefault();
     	
     	fill_owners(undefined, undefined, function(){
-    		$('#change-owner-element').popover('hide');
-        	
-        	// Hiding the owner name
-        	$('#change-owner-element').css('display', 'none');
+
         	$('#contact-owner').css('display', 'none');
+
+        	$('#change-owner-ul').css('display', 'inline-block');
         	
-        	if($('#change-owner-ul').css('display') == 'inline-block')
-        		$('#change-owner-ul').css('display', 'none');
-        	
-        	else
-        		$('#change-owner-ul').css('display', 'inline-block');
+        	 if($('#change-owner-element > #change-owner-ul').css('display') == 'inline-block')
+                 $("#change-owner-element").find(".loading").remove();
     	});
-    	
-    	
     });
+    
+    $('#change-owner-element > .contact-owner-add').live('click',function(e){
+    	e.preventDefault();
+    	
+    	fill_owners(undefined, undefined, function(){
+
+        	$('.contact-owner-add').css('display', 'none');
+
+        	$('#change-owner-ul').css('display', 'inline-block');
+        	$('#change-owner-ul').addClass("open");
+        	
+        	 if($('#change-owner-element > #change-owner-ul').css('display') == 'inline-block')
+        		 $("#change-owner-element").find(".loading").remove();
+    	});
+    });
+    
 });
 /**
  * note.js script file defines the functionality of saving a note in Note
@@ -28457,6 +31643,7 @@ $(function()
 		$("#noteForm", noteModal).parent().parent().find(".modal-header > h3").html('<i class="icon-edit"></i>&nbsp;Edit Note');
 		$("#noteForm", noteModal).attr('id', "noteUpdateForm");
 		noteModal.attr('id', "noteUpdateModal");
+		agile_type_ahead("note_related_to", $("#noteUpdateForm", noteModal), contacts_typeahead);
 		$("#note_validate", noteModal).attr("id", "note_update");
 		deserializeForm(note.toJSON(), $("#noteUpdateForm", noteModal));
 
@@ -28863,10 +32050,10 @@ function fill_relation(el){
  	$('.tags',el).html('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ json.id +'">'+contact_name+'</li>');
 
 }/**
- * contact-details-tabs.js fetches the contact (which is in contact detail view) 
- * related details (notes, tasks, deals, campaigns and mails etc..) and presents 
- * in tab content as specified, when the corresponding tab is clicked. 
- * Timeline tab is activated by default to show all the details as vertical time-line.
+ * contact-details-tabs.js fetches the contact (which is in contact detail view)
+ * related details (notes, tasks, deals, campaigns and mails etc..) and presents
+ * in tab content as specified, when the corresponding tab is clicked. Timeline
+ * tab is activated by default to show all the details as vertical time-line.
  * 
  * @module Contact management
  * @author Rammohan
@@ -28878,170 +32065,172 @@ var CONTACT_ASSIGNED_TO_CAMPAIGN = false;
 
 var NO_WEB_STATS_SETUP = true;
 
+var email_server_type = "agilecrm";
+
 function fill_company_related_contacts(companyId, htmlId)
 {
-	$('#'+htmlId).html(LOADING_HTML);
-	
-	var companyContactsView = new Base_Collection_View({
-		url : 'core/api/contacts/related/' + companyId,
-		templateKey : 'company-contacts',
-		individual_tag_name : 'tr',
-		cursor : true,
-		page_size : 25,
-		sort_collection : false,
-		postRenderCallback : function(el) {
+	$('#' + htmlId).html(LOADING_HTML);
+
+	var companyContactsView = new Base_Collection_View({ url : 'core/api/contacts/related/' + companyId, templateKey : 'company-contacts',
+		individual_tag_name : 'tr', cursor : true, page_size : 25, sort_collection : false, postRenderCallback : function(el)
+		{
 			// var cel = App_Contacts.contactsListView.el;
 			// var collection = App_Contacts.contactsListView.collection;
-		}
-	});
+		} });
 
 	companyContactsView.collection.fetch();
 
 	$('#' + htmlId).html(companyContactsView.render().el);
 }
-$(function(){ 
+$(function()
+{
 
 	var id;
-	
+
 	/**
-	 * Activates the Timeline tab-content to show the time-line with all details,
-	 * which are already added to time-line, when the contact is getting to its
-	 * detail view.  
+	 * Activates the Timeline tab-content to show the time-line with all
+	 * details, which are already added to time-line, when the contact is
+	 * getting to its detail view.
 	 */
-	$('#contactDetailsTab a[href="#timeline"]').live('click', function (e){
+	$('#contactDetailsTab a[href="#timeline"]').live('click', function(e)
+	{
 		e.preventDefault();
-		
+
 		save_contact_tab_position_in_cookie("timeline");
-		
+
 		contact_details_tab.load_timeline();
 	});
-	
-	$('.email-subject').die().live('click', function(e) {
+
+	$('.email-subject').die().live('click', function(e)
+	{
 		e.preventDefault();
 		var href = $(this).attr("href");
 		var id = $(this).attr('id');
 		$(".collapse-" + id).hide();
 		$(href).collapse('toggle');
-		
-		$(href).on("hidden", function(){
+
+		$(href).on("hidden", function()
+		{
 			$(".collapse-" + id).show();
 		})
-		
-	});	
-	
+
+	});
+
 	// Hide More link and truncated webstats and show complete web stats.
-	$('#more-page-urls').die().live('click',function(e){
+	$('#more-page-urls').die().live('click', function(e)
+	{
 		e.preventDefault();
-		
-		$(this).css('display','none');
-		$(this).parent().parent().find('#truncated-webstats').css('display','none');
-		
+
+		$(this).css('display', 'none');
+		$(this).parent().parent().find('#truncated-webstats').css('display', 'none');
+
 		$(this).parent().parent().find('#complete-webstats').removeAttr('style');
 	});
-	
-	//to remove contact from active campaign.
-	$('.remove-active-campaign').die().live('click',function(e){
+
+	// to remove contact from active campaign.
+	$('.remove-active-campaign').die().live('click', function(e)
+	{
 		e.preventDefault();
-		
-		if(!confirm("Are you sure to remove "+$(this).attr("contact_name")+" from "+$(this).attr("campaign_name")+" campaign?"))
+
+		if (!confirm("Are you sure to remove " + $(this).attr("contact_name") + " from " + $(this).attr("campaign_name") + " campaign?"))
 			return;
-		
+
 		var campaign_id = $(this).closest('li').attr('data');
 		var contact_id;
-		
+
 		// Fetch contact id from model
-		if(App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
 			contact_id = App_Contacts.contactDetailView.model.get('id');
-		
-	    // Url to delete
-		var deleteUrl = 'core/api/workflows/remove-active-subscriber/'+campaign_id+'/'+contact_id;
-	    
-	    var $removeActiveCampaign = $(this);
-	    
-	    $.ajax({
-	    	url: deleteUrl,
-	    	type: 'DELETE',
-	    	success: function(data){
-	    	
-	    	var contact_json = App_Contacts.contactDetailView.model.toJSON();
-	    	var campaign_status = contact_json.campaignStatus;
-	    	
-	    	// On success callback, remove from both UI and backbone contact model.
-	    	if(campaign_status !== undefined)
-	    		{
-	    			for(var i = 0,len = campaign_status.length;i<len;i++)
-	    			{
-	    				if(campaign_id === campaign_status[i].campaign_id)
-	    				{
-	    					// Remove from campaignStatus array of contact model
-	    					campaign_status.splice(i,1);
-	    					break;
-	    				}
-	    			}
-	    		}
-	    	
-	    	// Remove li 
-	    	$removeActiveCampaign.closest('li').remove();
-	    	
-	    	}
-	    });
-		
+
+		// Url to delete
+		var deleteUrl = 'core/api/workflows/remove-active-subscriber/' + campaign_id + '/' + contact_id;
+
+		var $removeActiveCampaign = $(this);
+
+		$.ajax({ url : deleteUrl, type : 'DELETE', success : function(data)
+		{
+
+			var contact_json = App_Contacts.contactDetailView.model.toJSON();
+			var campaign_status = contact_json.campaignStatus;
+
+			// On success callback, remove from both UI and backbone contact
+			// model.
+			if (campaign_status !== undefined)
+			{
+				for (var i = 0, len = campaign_status.length; i < len; i++)
+				{
+					if (campaign_id === campaign_status[i].campaign_id)
+					{
+						// Remove from campaignStatus array of contact model
+						campaign_status.splice(i, 1);
+						break;
+					}
+				}
+			}
+
+			// Remove li
+			$removeActiveCampaign.closest('li').remove();
+
+		} });
+
 	});
-/*	
-	$('.ativity-block-ul > li')
-	.live('mouseenter',function(){
-		console.log("hover");
-	})
-	.live('mouseleave',function(){
-		console.log("hout");
-	}); */
-	
-	
+	/*
+	 * $('.ativity-block-ul > li') .live('mouseenter',function(){
+	 * console.log("hover"); }) .live('mouseleave',function(){
+	 * console.log("hout"); });
+	 */
+
 	/**
-	 * Fetches all the notes related to the contact and shows the notes collection 
-	 * as a table in its tab-content, when "Notes" tab is clicked.
-	 */ 
-	$('#contactDetailsTab a[href="#notes"]').live('click', function (e){
+	 * Fetches all the notes related to the contact and shows the notes
+	 * collection as a table in its tab-content, when "Notes" tab is clicked.
+	 */
+	$('#contactDetailsTab a[href="#notes"]').live('click', function(e)
+	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("notes");
 		contact_details_tab.load_notes();
 	});
-	
+
 	/**
-	 * Fetches all the events related to the contact and shows the events collection 
-	 * as a table in its tab-content, when "Events" tab is clicked.
+	 * Fetches all the events related to the contact and shows the events
+	 * collection as a table in its tab-content, when "Events" tab is clicked.
 	 */
-	$('#contactDetailsTab a[href="#events"]').live('click', function (e){
+	$('#contactDetailsTab a[href="#events"]').live('click', function(e)
+	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("events");
 		contact_details_tab.load_events();
 	});
-	
+
 	/**
-	 * Fetches all the documents related to the contact and shows the documents collection 
-	 * as a table in its tab-content, when "Documents" tab is clicked.
+	 * Fetches all the documents related to the contact and shows the documents
+	 * collection as a table in its tab-content, when "Documents" tab is
+	 * clicked.
 	 */
-	$('#contactDetailsTab a[href="#documents"]').live('click', function (e){
+	$('#contactDetailsTab a[href="#documents"]').live('click', function(e)
+	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("documents");
 		contact_details_tab.load_documents();
 	});
-	
+
 	/**
-	 * Fetches all the notes related to the contact and shows the tasks collection 
-	 * as a table in its tab-content, when "Tasks" tab is clicked.
+	 * Fetches all the notes related to the contact and shows the tasks
+	 * collection as a table in its tab-content, when "Tasks" tab is clicked.
 	 */
-	$('#contactDetailsTab a[href="#tasks"]').live('click', function (e){
+	$('#contactDetailsTab a[href="#tasks"]').live('click', function(e)
+	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("tasks");
 		contact_details_tab.load_tasks();
 	});
-	
+
 	/**
-	 * Fetches all the deals related to the contact and shows the deals collection 
-	 * as a table in its tab-content, when "Deals" tab is clicked.
+	 * Fetches all the deals related to the contact and shows the deals
+	 * collection as a table in its tab-content, when "Deals" tab is clicked.
 	 */
-	$('#contactDetailsTab a[href="#deals"]').live('click', function (e){
+	$('#contactDetailsTab a[href="#deals"]').live('click', function(e)
+	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("deals");
 		contact_details_tab.load_deals();
@@ -29050,233 +32239,336 @@ $(function(){
 	/**
 	 * Fetches all the cases related to the contact and shows the collection.
 	 */
-	$('#contactDetailsTab a[href="#cases"]').live('click', function (e){
+	$('#contactDetailsTab a[href="#cases"]').live('click', function(e)
+	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("cases");
-		
+
 		contact_details_tab.load_cases();
 	});
-	
+
 	/**
-	 * Gets every conversation of the contact (if it has email) with the associated 
-	 * email (gmail or imap) in Email-preferences of this CRM, when "Mail" tab is 
-	 * clicked.  
+	 * Gets every conversation of the contact (if it has email) with the
+	 * associated email (gmail or imap) in Email-preferences of this CRM, when
+	 * "Mail" tab is clicked.
 	 */
-	$('#contactDetailsTab a[href="#mail"]').live('click', function (e){
+	$('#contactDetailsTab a[href="#mail"]').live('click', function(e)
+	{
 		e.preventDefault();
+		email_server_type = "agilecrm"
 		save_contact_tab_position_in_cookie("mail");
-		contact_details_tab.load_mail();
+		var mail_server_url = 'core/api/emails/agile-emails?e=';
+		contact_details_tab.load_mail_accounts();
+		contact_details_tab.load_mail(mail_server_url);
 	});
-	
+
 	/**
-	 * Gets the activities of a contact from browsing history, using its
-	 * email. To do so the email should be run in analytics script provided by 
+	 * Gets the activities of a contact from browsing history, using its email.
+	 * To do so the email should be run in analytics script provided by
 	 * agileCRM.
-	 */ 
-	$('#contactDetailsTab a[href="#stats"]').live('click', function (e){
+	 */
+	$('#contactDetailsTab a[href="#stats"]').live('click', function(e)
+	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("stats");
 		contact_details_tab.load_stats();
-        
+
 	});
-	
+
 	/**
-	 * Fetches all the logs of the campaigns that the contact is subscribed to and
-	 * shows them in a table. Also shows a campaigns drop down list to subscribe
-	 * the contact to the selected campaign.  
+	 * Fetches all the logs of the campaigns that the contact is subscribed to
+	 * and shows them in a table. Also shows a campaigns drop down list to
+	 * subscribe the contact to the selected campaign.
 	 */
-	$('#contactDetailsTab a[href="#campaigns"]').live('click', function (e){
+	$('#contactDetailsTab a[href="#campaigns"]').live('click', function(e)
+	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("campaigns");
 		contact_details_tab.load_campaigns();
 	});
-	
-	$('#contactDetailsTab a[href="#company-contacts"]').live('click',function(e)
+
+	$('#contactDetailsTab a[href="#company-contacts"]').live('click', function(e)
 	{
 		e.preventDefault();
-		fill_company_related_contacts(App_Contacts.contactDetailView.model.id,'company-contacts');       
+		fill_company_related_contacts(App_Contacts.contactDetailView.model.id, 'company-contacts');
 	});
-	    
-	 
+
+	$('.agile-emails').die().live('click', function(e)
+	{
+		e.preventDefault();
+		$('#email-type-select').html($(this).html());
+		var url = $(this).attr('data-url');
+		email_server_type = $(this).attr('email-server-type');
+		contact_details_tab.load_mail(url);
+	});
+
 	/**
-	 * Populates subject and description using email templates, on select option 
+	 * Populates subject and description using email templates, on select option
 	 * change of "Fill From Templates" field.
 	 */
-	$('.emailSelect').die().live('change',function(e){
+	$('.emailSelect').die().live('change', function(e)
+	{
 		e.preventDefault();
-		
+
 		// To remove previous errors
 		$('#emailForm').find('.error').removeClass('error');
-		$('#emailForm').find('.help-inline').css('display','none');
+		$('#emailForm').find('.help-inline').css('display', 'none');
 
 		var model_id = $('.emailSelect option:selected').attr('value');
-	
+
 		// When default option selected make subject and body empty
-		if(!model_id)
-			{
+		if (!model_id)
+		{
 			// Fill subject and body of send email form
-			$("#emailForm").find( 'input[name="subject"]' ).val("");
-			
+			$("#emailForm").find('input[name="subject"]').val("");
+
 			set_tinymce_content('email-body', '');
-			
-			$("#emailForm").find( 'textarea[name="body"]' ).val("");
+
+			$("#emailForm").find('textarea[name="body"]').val("");
 			return;
-			}
-		
-		var emailTemplatesModel = Backbone.Model.extend({
-		     url: '/core/api/email/templates/' + model_id,
-		     restKey: "emailTemplates"
-		});
+		}
+
+		var emailTemplatesModel = Backbone.Model.extend({ url : '/core/api/email/templates/' + model_id, restKey : "emailTemplates" });
 		var templateModel = new emailTemplatesModel();
-			templateModel.fetch({success: function(data){
-				var model = data.toJSON();
-				
-				var subject = model.subject;
-				var text = model.text;
-				
-				// Apply handlebars template on send-email route 
-				if(Current_Route !== 'bulk-email' && Current_Route !== 'send-email')
-				{
-				
+		templateModel.fetch({ success : function(data)
+		{
+			var model = data.toJSON();
+
+			var subject = model.subject;
+			var text = model.text;
+
+			// Apply handlebars template on send-email route
+			if (Current_Route !== 'bulk-email' && Current_Route !== 'send-email')
+			{
+
 				// Get Current Contact
-/*				var contact = App_Contacts.contactDetailView.model;
-				var json = contact.toJSON();*/
-				
 				/*
-				 * Get Contact properties json to fill the templates
-				 * using handlebars
-				 */  
+				 * var contact = App_Contacts.contactDetailView.model; var json =
+				 * contact.toJSON();
+				 */
+
+				/*
+				 * Get Contact properties json to fill the templates using
+				 * handlebars
+				 */
 				var json = get_contact_json_for_merge_fields();
 				var template;
-					
-					// Templatize it
-					try
-					{
-						template = Handlebars.compile(subject);
-						subject =  template(json);
-					}
-					catch(err)
-					{
-						subject = add_square_brackets_to_merge_fields(subject);
-						
-						template = Handlebars.compile(subject);
-						subject =  template(json);
-					}
-				    
-					try
-					{
-						template = Handlebars.compile(text);
-						text =  template(json);
-					}
-					catch(err)
-					{
-						text = add_square_brackets_to_merge_fields(text);
-						
-						template = Handlebars.compile(text);
-						text =  template(json);
-					}
+
+				// Templatize it
+				try
+				{
+					template = Handlebars.compile(subject);
+					subject = template(json);
 				}
-				
-				// Fill subject and body of send email form
-				$("#emailForm").find( 'input[name="subject"]' ).val(subject);
-				
-				// Insert content into tinymce
-				set_tinymce_content('email-body', text);
-			}});
-		    
-	});
-	
-	/**
-	 * Sends email to the target email. Before sending, validates and serializes email form. 
-	 */ 
-	$('#sendEmail').die().live('click',function(e){
-		e.preventDefault();
-		
-		 if($(this).attr('disabled'))
-	   	     return;
-		 
-		// Is valid
-		if(!isValidForm($('#emailForm')))
-	      	return;
-		
-		// Disables send button and change text to Sending...
-		disable_send_button($(this));
-		
-		// Saves tinymce content to textarea
-		save_content_to_textarea('email-body');
-		
-		// serialize form.
-		var json = serializeForm("emailForm");
-		
-		// Navigates to previous page on sending email
-		$.ajax({
-				type:'POST',
-				data: json,
-				url: 'core/api/emails/contact/send-email',
-				success:function(){
-					
-					    // Enables Send Email button.
-					    enable_send_button($('#sendEmail'));
-					    
-			            window.history.back();
-			            
-		                 },
-		        error: function()
-		               {
-		        	      enable_send_button($('#sendEmail'));
-		        	      
-		        	      console.log("Error occured while sending email");
-		               }
-		});
+				catch (err)
+				{
+					subject = add_square_brackets_to_merge_fields(subject);
 
-	});
-	
-	/**
-	 * Close button click event of send email form. Navigates to contact
-	 * detail view.
-	 */
-	$('#send-email-close').die().live('click',function(e){
-		e.preventDefault();
-		
-		window.history.back();
-	});	
-	
-	$('#email-reply').die().live('click', function(e){
-		e.preventDefault();
-	
-		var from = $(this).data('from');
-		
-		var $parent_element = $(this).parent().parent();
-		
-		var to_emails = $parent_element.find('.to-emails').data('to');
-		
-		if(to_emails){
-			
-			var to_array = to_emails.split(',');
-		
-			to_emails = "";
-			
-			for(var i=0, len = to_array.length; i < len; i++)
-			{
+					template = Handlebars.compile(subject);
+					subject = template(json);
+				}
 
-				to_emails += to_array[i].match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
-				
-				// Append comma without trailing
-				if(i < len-1)
-					to_emails += ', ';
-			
+				try
+				{
+					template = Handlebars.compile(text);
+					text = template(json);
+				}
+				catch (err)
+				{
+					text = add_square_brackets_to_merge_fields(text);
+
+					template = Handlebars.compile(text);
+					text = template(json);
+				}
 			}
-		}
-		
-		// Change url only without triggerring function
-		App_Contacts.navigate('send-email');
-		
-		// Trigger route callback
-		App_Contacts.sendEmail(to_emails, "Re: " + $parent_element.find('.email-subject').text(), '<p></p><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex;">'+ $parent_element.find('.email-body').html()+'</blockquote>');
-		
+
+			// Fill subject and body of send email form
+			$("#emailForm").find('input[name="subject"]').val(subject);
+
+			// Insert content into tinymce
+			set_tinymce_content('email-body', text);
+		} });
+
 	});
-	
-	$('#email-reply-div').live('hover', function(e){
+
+	/**
+	 * Sends email to the target email. Before sending, validates and serializes
+	 * email form.
+	 */
+	$('#sendEmail')
+			.die()
+			.live(
+					'click',
+					function(e)
+					{
+						e.preventDefault();
+
+						if ($(this).attr('disabled'))
+							return;
+						var $form = $('#emailForm');					 
+						// Is valid
+						if(!isValidForm($form))
+						  	return;
+						var network_type = $('#attachment-select').find(":selected").attr('network_type');
+						// checking email attachment type , email doesn't allow
+						// google drive documents as attachments
+						if (network_type)
+						{
+							if (network_type.toUpperCase() === 'GOOGLE')
+								return;
+						}
+
+						// Saves tinymce content to textarea
+						save_content_to_textarea('email-body');
+
+						// serialize form.
+						var json = serializeForm("emailForm");
+						if(json.from_email != CURRENT_DOMAIN_USER.email && json.from_name == CURRENT_DOMAIN_USER.name)
+						{
+							json.from_name = "";
+						}
+						if ((json.contact_to_ids).join())
+							json.to += ((json.to != "") ? "," : "") + (json.contact_to_ids).join();
+
+						if ((json.contact_cc_ids).join())
+							json.email_cc += ((json.email_cc != "") ? "," : "") + (json.contact_cc_ids).join();
+
+						if ((json.contact_bcc_ids).join())
+							json.email_bcc += ((json.email_bcc != "") ? "," : "") + (json.contact_bcc_ids).join();
+
+						if (json.to == "" || json.to == null || json.to == undefined)
+						{
+							// Appends error info to form actions block.
+							$save_info = $('<span style="display:inline-block;color:#df382c;">This field is required.</span>');
+							$('#emailForm').find("#to").closest(".controls > div").append($save_info);
+							$('#emailForm').find("#to").focus();
+							// Hides the error message after 3 seconds
+							$save_info.show().delay(3000).hide(1);
+
+							enable_send_button($('#sendEmail'));
+							return;
+						}
+
+						// Is valid
+						if (!isValidForm($('#emailForm')))
+							return;
+
+						// Disables send button and change text to Sending...
+						disable_send_button($(this));
+
+						// Navigates to previous page on sending email
+						$
+								.ajax({
+									type : 'POST',
+									data : json,
+									url : 'core/api/emails/contact/send-email',
+									success : function()
+									{
+
+										// Enables Send Email button.
+										enable_send_button($('#sendEmail'));
+
+										window.history.back();
+
+									},
+									error : function(response)
+									{
+										enable_send_button($('#sendEmail'));
+
+										// Show cause of error in saving
+										$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
+
+										// Appends error info to form actions
+										// block.
+										$($('#sendEmail')).closest(".form-actions", this.el).append($save_info);
+
+										// Hides the error message after 3
+										// seconds
+										if (response.status != 406)
+											$save_info.show().delay(10000).hide(1);
+									} });
+
+					});
+
+	/**
+	 * Close button click event of send email form. Navigates to contact detail
+	 * view.
+	 */
+	$('#send-email-close').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		window.history.back();
+	});
+
+	$('#email-reply').die().live(
+			'click',
+			function(e)
+			{
+				e.preventDefault();
+
+				var from = $(this).data('from');
+
+				var $parent_element = $(this).parent().parent();
+
+				var to_emails = $parent_element.find('.to-emails').data('to');
+				var cc_emails = $parent_element.find('.cc-emails').data('cc');
+				var bcc_emails = $parent_element.find('.bcc-emails').data('bcc');
+
+				var email_sync_configured = contact_details_tab.email_sync_configured;
+				var configured_email;
+
+				if (email_sync_configured)
+				{
+					if (email_sync_configured["type"])
+						configured_email = email_sync_configured["email"];
+					else
+						configured_email = email_sync_configured["user_name"];
+				}
+
+				if (configured_email && to_emails)
+				{
+
+					// Merge both from and to removing configured email
+					to_emails = get_emails_to_reply(from + ', ' + to_emails, configured_email);
+				}
+
+				if (configured_email && cc_emails)
+				{
+
+					cc_emails = get_emails_to_reply(cc_emails, configured_email);
+				}
+
+				if (configured_email && bcc_emails)
+				{
+
+					bcc_emails = get_emails_to_reply(bcc_emails, configured_email);
+				}
+
+				// Change url only without triggerring function
+				App_Contacts.navigate('send-email');
+
+				// Reply all emails
+				reply_email = to_emails;
+
+				// Removes leading and trailing commas
+				reply_email = reply_email.replace(/(, $)/g, "");
+
+				if (cc_emails)
+					cc_emails = cc_emails.replace(/(, $)/g, "");
+
+				if (bcc_emails)
+					bcc_emails = bcc_emails.replace(/(, $)/g, "");
+
+				// Trigger route callback
+				App_Contacts.sendEmail(reply_email, "Re: " + $parent_element.find('.email-subject').text(),
+						'<p></p><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex;">' + $parent_element.find('.email-body')
+								.html() + '</blockquote>', cc_emails, bcc_emails);
+
+			});
+
+	$('#email-reply-div').live('hover', function(e)
+	{
 		e.preventDefault();
 
 		$(this).find('#email-reply').toggle();
@@ -29285,12 +32577,13 @@ $(function(){
 	/**
 	 * Delete functionality for activity blocks in contact details
 	 */
-	$('.activity-delete').die().live('click', function(e){
+	$('.activity-delete').die().live('click', function(e)
+	{
 		e.preventDefault();
-		
+
 		var model = $(this).parents('li').data();
-		
-		if(model && model.collection)
+
+		if (model && model.collection)
 		{
 			model.collection.remove(model);
 		}
@@ -29301,146 +32594,165 @@ $(function(){
 		// Gets the url to which delete request is to be sent
 		var entity_url = $(this).attr('url');
 
-		if(!entity_url)
+		if (!entity_url)
 			return;
-		
+
 		var id_array = [];
 		var id_json = {};
-		
+
 		// Create array with entity id.
 		id_array.push(entity_id);
-		
-		// Set entity id array in to json object with key ids, 
+
+		// Set entity id array in to json object with key ids,
 		// where ids are read using form param
 		id_json.ids = JSON.stringify(id_array);
 		var that = this;
 
-		// Add loading. Adds loading only if there is no loaded image added already i.e., 
+		// Add loading. Adds loading only if there is no loaded image added
+		// already i.e.,
 		// to avoid multiple loading images on hitting delete multiple times
-		if($(this).find('.loading').length == 0)
+		if ($(this).find('.loading').length == 0)
 			$(this).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
-		
-		$.ajax({
-			url: entity_url,
-			type: 'POST',
-			data: id_json,
-			success: function() {
-				// Removes activity from list
-				$(that).parents(".activity").fadeOut(400, function(){ $(this).remove(); });
-				removeItemFromTimeline($("#" + entity_id, $("#timeline")));
-			}
-		});
+
+		$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
+		{
+			// Removes activity from list
+			$(that).parents(".activity").fadeOut(400, function()
+			{
+				$(this).remove();
+			});
+			removeItemFromTimeline($("#" + entity_id, $("#timeline")));
+		} });
 	});
-	
-	$('#cc-link, #bcc-link').die().live('click', function(e){
+
+	$('#cc-link, #bcc-link').die().live('click', function(e)
+	{
 		e.preventDefault();
-		
+
 		// Hide link
 		$(this).hide();
-		
-		if($(this).attr('id') === 'cc-link')
+
+		if ($(this).attr('id') === 'cc-link')
 		{
 			$('#email_cc').closest('.control-group').show();
-			
+
 			// Hide div.control-group to reduce space between subject
-			if($(this).parent().find('#bcc-link').css('display') === 'none')
+			if ($(this).parent().find('#bcc-link').css('display') === 'none')
 				$(this).closest('.control-group').hide();
-			
+
 			return;
 		}
-		
-		if($(this).parent().find('#cc-link').css('display') === 'none')
+
+		if ($(this).parent().find('#cc-link').css('display') === 'none')
 			$(this).closest('.control-group').hide();
-		
+
 		$('#email_bcc').closest('.control-group').show();
 	});
-	
+
+	$('#from_email_link').die().live('click', function(e){
+		e.preventDefault();
+		$(this).closest('.control-group').hide();
+		$('#from_email').closest('.control-group').show();
+		$('#from_name_link').closest('.control-group').show();
+		return;
+	});
+	$('#from_name_link').die().live('click', function(e){
+		e.preventDefault();
+		$(this).closest('.control-group').hide();
+		$('#from_name').closest('.control-group').show();
+		return;
+	});
+
 });
 
 /**
  * Returns contact properties in a json
  * 
  * @method get_property_JSON
- * @param {Object} contactJSON
- * 			contact as json object
- */  
+ * @param {Object}
+ *            contactJSON contact as json object
+ */
 function get_property_JSON(contactJSON)
-{	
+{
 	var properties = contactJSON.properties;
-    var json = {};
+	var json = {};
 	$.each(properties, function(i, val)
-			{
-				json[this.name] = this.value;
-			});
+	{
+		json[this.name] = this.value;
+	});
 	console.log(json);
 	return json;
 }
 
 /**
- * Populates send email details (from address, to address, signature and
- * email templates) 
+ * Populates send email details (from address, to address, signature and email
+ * templates)
  * 
  * @method populate_send_email_details
- * @param {Object} el
- * 			html object of send email form
+ * @param {Object}
+ *            el html object of send email form
  */
-function populate_send_email_details(el){
+function populate_send_email_details(el)
+{
 
-	$("#emailForm",el).find('input[name="from_name"]').val(CURRENT_DOMAIN_USER.name);
-	$("#emailForm", el).find( 'input[name="from_email"]' ).val(CURRENT_DOMAIN_USER.email);
-	
-	// Fill hidden signature field using userprefs 
-	//$("#emailForm").find( 'input[name="signature"]' ).val(CURRENT_USER_PREFS.signature);
+	$("#emailForm", el).find('input[name="from_name"]').val(CURRENT_DOMAIN_USER.name);
+	$("#emailForm", el).find('input[name="from_email"]').val(CURRENT_DOMAIN_USER.email);
+
+	// Fill hidden signature field using userprefs
+	// $("#emailForm").find( 'input[name="signature"]'
+	// ).val(CURRENT_USER_PREFS.signature);
 
 	// Prefill the templates
 	var optionsTemplate = "<option value='{{id}}'> {{#if name}}{{name}}{{else}}{{subject}}{{/if}}</option>";
-	fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined , optionsTemplate, false, el, '- Fill from Template -');
+	fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined, optionsTemplate, false, el, '- Fill from Template -');
 }
 
 /**
- * Activates "Timeline" tab and its tab-content in contact details and
- * also deactivates the other activated tabs.
+ * Activates "Timeline" tab and its tab-content in contact details and also
+ * deactivates the other activated tabs.
  * 
  * @method activate_timeline_tab
  * 
- * Changed to activate first tab in the list ( on contact-details page , works even on company-details page
+ * Changed to activate first tab in the list ( on contact-details page , works
+ * even on company-details page
  * @modified Chandan
  */
-function activate_timeline_tab(){
+function activate_timeline_tab()
+{
 	$('#contactDetailsTab').find('li.active').removeClass('active');
 	$('#contactDetailsTab li:first-child').addClass('active');
-	
+
 	$('div.tab-content').find('div.active').removeClass('active');
 	$('div.tab-content > div:first-child').addClass('active');
-	
-	//	$('#time-line').addClass('active');  //old original code for flicking timeline
-	
-	if(App_Contacts.contactDetailView.model.get('type')=='COMPANY')
+
+	// $('#time-line').addClass('active'); //old original code for flicking
+	// timeline
+
+	if (App_Contacts.contactDetailView.model.get('type') == 'COMPANY')
 	{
-		fill_company_related_contacts(App_Contacts.contactDetailView.model.id,'company-contacts'); 
+		fill_company_related_contacts(App_Contacts.contactDetailView.model.id, 'company-contacts');
 	}
 }
 
 /**
  * Disables Send button of SendEmail and change text from Send to Sending...
  * 
- * @param elem - element to be disabled.
+ * @param elem -
+ *            element to be disabled.
  * 
- **/
+ */
 function disable_send_button(elem)
 {
-	elem.css('min-width',elem.width()+'px')
-		.attr('disabled', 'disabled')
-		.attr('data-send-text',elem.text())
-		.text('Sending...');
+	elem.css('min-width', elem.width() + 'px').attr('disabled', 'disabled').attr('data-send-text', elem.text()).text('Sending...');
 }
 
 /**
  * Enables disabled Send button and keep old text
  * 
- * @param elem - element to be enabled.
+ * @param elem -
+ *            element to be enabled.
  * 
- **/
+ */
 function enable_send_button(elem)
 {
 	elem.text(elem.attr('data-send-text')).removeAttr('disabled data-send-text');
@@ -29448,21 +32760,21 @@ function enable_send_button(elem)
 
 /**
  * Returns webstats count w.r.t domain
- **/
+ */
 function get_web_stats_count_for_domain()
 {
 	// Returns web-stats count
-	return $.ajax({type: "GET", url: 'core/api/web-stats/JSAPI-status', async: false}).responseText;
+	return $.ajax({ type : "GET", url : 'core/api/web-stats/JSAPI-status', async : false }).responseText;
 }
 
 function save_contact_tab_position_in_cookie(tab_href)
 {
-	
+
 	var position = readCookie(contact_tab_position_cookie_name);
-	
-	if(position == tab_href)
+
+	if (position == tab_href)
 		return;
-	
+
 	createCookie(contact_tab_position_cookie_name, tab_href);
 }
 
@@ -29470,27 +32782,56 @@ function load_contact_tab(el, contactJSON)
 {
 	timeline_collection_view = null;
 	var position = readCookie(contact_tab_position_cookie_name);
-	
-	$('#contactDetailsTab a[href="#'+position+'"]', el).tab('show');
-	
-	if(!position || position == "timeline")
+
+	$('#contactDetailsTab a[href="#' + position + '"]', el).tab('show');
+
+	if (!position || position == "timeline")
 	{
 		activate_timeline_tab()
 		contact_details_tab.load_timeline();
 		return;
 	}
-	
-	if(contact_details_tab["load_" + position])
+
+	if (contact_details_tab["load_" + position])
 	{
-		
-		
-		// Should add active class, tab is not enough as content might not be shown in view.
+
+		// Should add active class, tab is not enough as content might not be
+		// shown in view.
 		$(".tab-content", el).find("#" + position).addClass("active");
 		contact_details_tab["load_" + position]();
 	}
-		
+
 }
 
+function get_emails_to_reply(emails, configured_email)
+{
+	var emails_array = emails.split(',');
+
+	emails = "";
+
+	for (var i = 0, len = emails_array.length; i < len; i++)
+	{
+
+		var email = emails_array[i].match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
+
+		// Skip configured email
+		if (configured_email && email == configured_email)
+			continue;
+
+		// Skip current user email
+		if (email == CURRENT_DOMAIN_USER.email)
+			continue;
+
+		emails += email;
+
+		// Append comma without trailing
+		if (i < len - 1)
+			emails += ', ';
+
+	}
+
+	return emails;
+}
 /**
  * Fetches all the entities (notes, deals, tasks, logs and mails) simultaneously, 
  * which are related to a contact (in contactDetailView) and initiates isotope 
@@ -31325,7 +34666,7 @@ var contact_details_tab = {
 		{
 			 id = App_Contacts.contactDetailView.model.id;
 			 documentsView = new Base_Collection_View({
-		            url: '/core/api/documents/' + id + "/docs",
+		            url: '/core/api/documents/contact/' + id + "/docs",
 		            restKey: "document",
 		            templateKey: "contact-documents",
 		            individual_tag_name: 'li',
@@ -31397,64 +34738,98 @@ var contact_details_tab = {
 			casesView.collection.fetch();
 	        $('#cases', App_Contacts.contactDetailView.el).html(casesView.el);
 		},
-		load_mail : function()
+		load_mail_accounts : function()
+		{
+			var mailAccountsView = new Base_Model_View({ url : 'core/api/emails/synced-accounts', template : "email-account-types",
+				postRenderCallback : function(el)
+				{
+				} });
+
+			$('#mail-account-types', App_Contacts.contactDetailView.el).html(mailAccountsView.render().el);
+		},
+		load_mail : function(mail_server_url)
 		{
 			var contact = App_Contacts.contactDetailView.model;
 			var json = contact.toJSON();
-			 
+			this.email_sync_configured = {};
+			var cursor = true;
+
 			// Get email of the contact in contact detail
 			var email = getAllPropertyValuesByName(json.properties, "email", ",");
-			
-			// Shows an error alert, when there is no email to the contact 
 
-			if(!email){
-				$('#mail', App_Contacts.contactDetailView.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the mails.</div>');
-				return;	
-			}	
-			
+			// By default showing Agile emails
+			if (!mail_server_url)
+			{
+				this.load_mail_accounts();
+				mail_server_url = 'core/api/emails/agile-emails?e=';
+				email_server_type = "agilecrm";
+				cursor = false;
+			}
+
+			// Shows an error alert, when there is no email to the contact
+			if (!email)
+			{
+				$('#mail', App_Contacts.contactDetailView.el)
+						.html(
+								'<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the mails.</div>');
+				return;
+			}
+
+			var contact_details_tab_scope = this;
+
+			$('#email-type-select-dropdown').attr('disabled', 'disabled');
+
 			// Fetches mails collection
-			var mailsView = new Base_Collection_View({
-				url: 'core/api/emails/imap-email?e=' + encodeURIComponent(email) + '&c=10&o=0',
-	            templateKey: "email-social",
-	            restKey: "emails",
-	            sortKey:"date_secs",
-	            descending: true,
-	            individual_tag_name: 'li',
-	            postRenderCallback: function(el) {
-	        	
-	          	head.js(LIB_PATH + 'lib/jquery.timeago.js', function() { 
-	    			$(".email-sent-time", el).each(function(index, element) {
-	    				
-	    				//console.log("before :" + $(element).html())
-	    				//console.log("converted manually" + jQuery.timeago($(element).html()));
-	    				$(element).timeago();
-	    				//console.log($(element).html())
-	    			});
-				});
-	          	
-	          	 var imap;
-	          	 queueGetRequest('email_prefs_queue','/core/api/imap','json', 
-	          			 function(data){
-	          		     imap = data;
-	          	 });
-	          	 
-	          	 var office_exchange;
-	          	 queueGetRequest('email_prefs_queue','/core/api/office','json', 
-	          			 function(data){
-	          		office_exchange = data;
-	          	 });
-	          	 
+			var mailsView = new Base_Collection_View({ url : mail_server_url + encodeURIComponent(email), cursor : cursor, page_size : 10,
+				templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
+				postRenderCallback : function(el)
+				{
+					$('#email-type-select-dropdown').removeAttr('disabled');
+					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+					{
+						$(".email-sent-time", el).each(function(index, element)
+						{
 
-	          	 queueGetRequest('email_prefs_queue','/core/api/social-prefs/GMAIL', 'json',
-	          			 function(gmail){
-	          		 if(!imap && !office_exchange && !gmail)
-	              		 $('#email-prefs-verification',el).css('display','block');
-	             });
-	            }
-			});
-	       
-	        $('#mail', App_Contacts.contactDetailView.el).html(mailsView.render().el);
-	        mailsView.collection.fetch();
+							// console.log("before :" + $(element).html())
+							// console.log("converted manually" +
+							// jQuery.timeago($(element).html()));
+							$(element).timeago();
+							// console.log($(element).html())
+						});
+					});
+
+					var gmail;
+					queueGetRequest('email_prefs_queue', '/core/api/social-prefs/GMAIL', 'json', function(data)
+					{
+						gmail = data;
+
+					});
+
+					var imap;
+					queueGetRequest('email_prefs_queue', '/core/api/imap', 'json', function(data)
+					{
+						imap = data;
+					});
+
+					queueGetRequest('email_prefs_queue', '/core/api/office', 'json', function(office_exchange)
+					{
+
+						// contact_details_tab_scope.email_sync_configured is used
+						// in
+						if (gmail)
+							contact_details_tab_scope.email_sync_configured = gmail;
+						else if (imap)
+							contact_details_tab_scope.email_sync_configured = imap;
+						else if (office_exchange)
+							contact_details_tab_scope.email_sync_configured = office_exchange;
+
+						if (!imap && !office_exchange && !gmail)
+							$('#email-prefs-verification', el).css('display', 'block');
+					});
+				} });
+
+			mailsView.collection.fetch();
+			$('#mails', App_Contacts.contactDetailView.el).html(mailsView.render().el);
 		},
 		load_stats : function()
 		{
@@ -32488,6 +35863,63 @@ function existing_document_attach(document_id, saveBtn)
     	return;
     }
 }/**
+ * 
+ */
+	/**
+	 * For showing existing documents for attaching as attachments in the send-email form 
+	 */
+    $(function(){
+	$(".add-attachment-select").die().live('click', function(e){
+		e.preventDefault();
+		 //activity-text-blocksendEmail
+		var el = $(this).closest("div");
+		$(this).css("display", "none");
+		el.find(".attachment-document-select").css("display", "inline");
+		var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}'>{{name}}</option>";
+	    fillSelect('#attachment-select','core/api/documents/', 'documents', function fillNew()
+		{
+	    	
+		}, optionsTemplate, false, el); 
+	});
+	
+	/**
+	 * To cancel the add attachment request in send-email form
+	 */
+	$(".add-attachment-cancel").die().live('click', function(e){
+		e.preventDefault();
+		$('#attachment-select').closest("span").find('.attachment-status').find("span").fadeOut(0);
+		$('#attachment-select').css({"border":"1px solid #bbb"});	 
+		$('#attachment-select').find('option:first').attr('selected', 'selected');
+		var el = $(this).closest("div");
+		el.find(".attachment-document-select").css("display", "none");
+		el.find(".add-attachment-select").css("display", "inline");
+	});
+	
+	/**
+	 * 
+	 */
+	$('#attachment-select').live('change',function(e){
+		e.preventDefault();
+		var network_type = $(this).find(":selected").attr('network_type');
+		if(network_type){
+			if(network_type.toUpperCase() === 'GOOGLE'){
+				$(this).closest("span").find(".attachment-status").html("<span style='color:#df382c;margin-top:10px; display:block'>Can not attach Google Drive doc to email. You can add a link instead in the email.</span>");
+				$(this).css({'border': '1px solid #df382c',
+					         'outline': 'none'
+					         });		            
+			}
+			else{
+				$(this).closest("span").find('.attachment-status').find("span").fadeOut(0);
+				$(this).css({"border":"1px solid #bbb"});	 
+			}
+		}
+		else{
+			$(this).closest("span").find('.attachment-status').find("span").fadeOut(0);
+			$(this).css({"border":"1px solid #bbb"});	 
+		}
+	});
+    });
+	/**
  * task.js is a script file to deal with all the actions (CRUD) of tasks from
  * client side.
  * 
@@ -32496,7 +35928,7 @@ function existing_document_attach(document_id, saveBtn)
  * author: Rammohan
  */
 
-$(function() {
+$(function() {	
 	
 	// Loads progress slider in add task / update modal.
 	loadProgressSlider($("#taskForm"));
@@ -32514,7 +35946,7 @@ $(function() {
 	 * relatedTo field typeahead, changing color and font-weight) when we click
 	 * on task link in activities modal.
 	 */
-	$("#task").click(function(e) {
+	$("#task").live('click',function(e) {
 		e.preventDefault();
 		var el = $("#taskForm");
 		highlight_task();
@@ -32533,7 +35965,8 @@ $(function() {
 	 */
 	$(".add-task").live('click', function(e) {
 		e.preventDefault();
-
+		
+		var forAddTask = this;
 		var el = $("#taskForm");
 		
 		agile_type_ahead("task_related_to", el, contacts_typeahead);
@@ -32545,9 +35978,11 @@ $(function() {
 				function(data) {
 					$("#taskForm").find("#owners-list").html(data);
 					$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
-					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
-		});
-
+					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();	
+					
+					// Add selected task list details in add task modal
+					addTasklListDetails(forAddTask);
+		});				
 	});
 
 	/**
@@ -32592,7 +36027,7 @@ $(function() {
 	 * When clicked on update button of task-update-modal, the task will get
 	 * updated by calling save_task function
 	 */
-	$('#update_task_validate').click(function(e) {
+	$('#update_task_validate').live('click',function(e) {
 		e.preventDefault();
 		save_task('updateTaskForm', 'updateTaskModal', true, this);
 	});
@@ -32703,6 +36138,9 @@ function highlight_task() {
 	$("#relatedEvent").css("display", "none");
 	$("#relatedTask").css("display", "block");
 	
+	if($("#activityForm").find("#event_related_to").closest(".controls").find("ul").children())
+		$("#taskForm").find("#task_related_to").closest(".controls").find("ul").html($("#activityForm").find("#event_related_to").closest(".controls").find("ul").children());
+	
 	// Date().format('mm/dd/yyyy'));
 	$('input.date').val(new Date().format('mm/dd/yyyy')).datepicker('update');
 }
@@ -32745,8 +36183,7 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 		
 	if (!isUpdate)
 		json.due = new Date(json.due).getTime();
-
-	console.log(json);
+	
 	var newTask = new Backbone.Model();
 	newTask.url = 'core/api/tasks';
 	newTask.save(json, {
@@ -32790,6 +36227,18 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 			}
 			else if (Current_Route == 'tasks')
 			{
+				var criteria = getCriteria();
+				
+				if(criteria == "LIST")
+					{					
+					  if (isUpdate)
+						App_Calendar.allTasksListView.collection.remove(json);
+					  
+	  				  App_Calendar.allTasksListView.collection.add(data);	  				
+					  App_Calendar.allTasksListView.render(true);					
+					  return;
+					}
+				
 				updateTask(isUpdate, data, json);
 			}
 			// Updates data to temeline
@@ -33136,6 +36585,11 @@ function getParameters()
 		params += ("&entity_type=" + entitytype);
 		return params;
 	}
+	else if (entitytype == 'CALL')
+	{
+		params += ("&entity_type=" + entitytype);
+		return params;
+	}
 	else
 	{
 		params += ("&entity_type=ALL");
@@ -33446,7 +36900,12 @@ $(function() {
 		} else {
 
 			// Save functionality for event
-			save_event('activityForm', 'activityModal', false, this);
+			save_event('activityForm', 'activityModal', false, this,function(data){
+						//	eventCollectionView.collection.comparator ='start';
+									eventCollectionView.collection.add(data.toJSON());
+									eventCollectionView.collection.sort();
+							
+			});
 		}
 	}); // End of Task and Event Validation function
 
@@ -33523,245 +36982,270 @@ $(function() {
 
 $(function()
 {
-	/**
-	 * Shows activity modal, and highlights the event form features (Shows event
-	 * form and hides task form, changes color and font-weight)
-	 * 
-	 */
-	$('#show-activity').live('click', function(e)
-	{
-		e.preventDefault();
-		highlight_event();
 
-		$("#activityModal").modal('show');
-	});
+				/**
+				 * Shows activity modal, and highlights the event form features (Shows event
+				 * form and hides task form, changes color and font-weight)
+				 * 
+				 */
+				$('#show-activity').live('click', function(e)
+				{
+								e.preventDefault();
+								highlight_event();
 
-	/**
-	 * Shows the event form fields in activity modal
-	 */
-	$(".add-event").live('click', function(e)
-	{
-		e.preventDefault();
+								$("#activityModal").modal('show');
+				});
 
-		$('#activityModal').modal('show');
-		highlight_event();
-		
-		/*
-		 * $('#task-date-1').val(new Date().format('mm/dd/yyyy'));
-		 * $("#event-date-1").val(new Date().format('mm/dd/yyyy'));
-		 * $("#event-date-2").val(new Date().format('mm/dd/yyyy'));
-		 */
+				/**
+				 * Shows the event form fields in activity modal
+				 */
+				$(".add-event").live('click', function(e)
+				{
+								e.preventDefault();
 
-		
-		return;
-	});
+								$('#activityModal').modal('show');
+								highlight_event();
 
-	/**
-	 * When clicked on update button of event-update-modal, the event will get
-	 * updated by calling save_event function
-	 * 
-	 */
-	$('#update_event_validate').die().live('click', function(e)
-	{
-		e.preventDefault();
-		save_event('updateActivityForm', 'updateActivityModal', true, this);
-	});
+								/*
+								 * $('#task-date-1').val(new Date().format('mm/dd/yyyy'));
+								 * $("#event-date-1").val(new Date().format('mm/dd/yyyy'));
+								 * $("#event-date-2").val(new Date().format('mm/dd/yyyy'));
+								 */
 
-	/**
-	 * Deletes an event from calendar by calling ajax DELETE request with an
-	 * appropriate url
-	 */
-	$('#event_delete').die().live('click', function(e)
-	{
-		e.preventDefault();
-		
-		if($(this).attr('disabled')=='disabled')return;
+								return;
+				});
 
-		/**
-		 * Confirmation alert to delete an event
-		 */
-		if (!confirm("Are you sure you want to delete?"))
-			return;
+				/**
+				 * When clicked on update button of event-update-modal, the event will get
+				 * updated by calling save_event function
+				 * 
+				 */
+				$('#update_event_validate').die().live('click', function(e)
+				{
+								e.preventDefault();
+								var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
+								save_event('updateActivityForm', 'updateActivityModal', true, this, function(data)
+								{
+												console.log(data);
+												var eventModel = eventCollectionView.collection.get(eventId);
+												eventModel.set(data.toJSON(), { merge : true });
+												eventCollectionView.render(true);
+								});
 
-		var event_id = $('#updateActivityForm input[name=id]').val()
-		var save_button=$(this);
-		
-		disable_save_button(save_button);
-		/**
-		 * Shows loading symbol until model get saved
-		 */
-		//$('#updateActivityModal').find('span.save-status').html(getRandomLoadingImg());
-		$.ajax({ url : 'core/api/events/' + event_id, type : 'DELETE', success : function()
-		{
+				});
 
-			//$('#updateActivityModal').find('span.save-status img').remove();
-			enable_save_button(save_button);
-			$("#updateActivityModal").modal('hide');
+				/**
+				 * Deletes an event from calendar by calling ajax DELETE request with an
+				 * appropriate url
+				 */
+				$('#event_delete').die().live('click', function(e)
+				{
+								e.preventDefault();
 
-			$('#calendar').fullCalendar('removeEvents', event_id);
-		} });
-	});
+								if ($(this).attr('disabled') == 'disabled')
+												return;
 
-	/**
-	 * Activates the date picker to the corresponding fields in activity modal
-	 * and activity-update modal
-	 */
-	var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev) {
-		// If event start date is changed and end date is less than start date, change the value of the end date to start date.
-		var eventDate2 = new Date($('#event-date-2').val());
-		  if (ev.date.valueOf() > eventDate2.valueOf()) {
-			    $('#event-date-2').val($('#event-date-1').val());
-			  }
-			 
-			});
+								/**
+								 * Confirmation alert to delete an event
+								 */
+								if (!confirm("Are you sure you want to delete?"))
+												return;
 
-	$('#event-date-2').datepicker({ format : 'mm/dd/yyyy' });
-	$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev) {
-		// If event start date is changed and end date is less than start date, change the value of the end date to start date.
-		var eventDate2 = new Date($('#update-event-date-2').val());
-		  if (ev.date.valueOf() > eventDate2.valueOf()) {
-			    $('#update-event-date-2').val($('#update-event-date-1').val());
-			  }
-			 
-			});
-	$('#update-event-date-2').datepicker({ format : 'mm/dd/yyyy' });
+								var event_id = $('#updateActivityForm input[name=id]').val();
+								var save_button = $(this);
 
-	/**
-	 * Activates time picker for start time to the fields with class
-	 * start-timepicker
-	 */
-	$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' })
-						.on('hide.timepicker',function(e){
-								
-							if($('#activityModal #allDay').is(':checked'))
-							{
-								$('#event-time-1').closest('.control-group').hide();
-								$('#event-date-2').closest('.row').hide();
-							}	
-							
+								disable_save_button(save_button);
+								/**
+								 * Shows loading symbol until model get saved
+								 */
+								// $('#updateActivityModal').find('span.save-status').html(getRandomLoadingImg());
+								$.ajax({ url : 'core/api/events/' + event_id, type : 'DELETE', success : function()
+								{
+
+												// $('#updateActivityModal').find('span.save-status img').remove();
+												enable_save_button(save_button);
+												$("#updateActivityModal").modal('hide');
+
+												var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
+												$('#calendar_event').fullCalendar('removeEvents', eventId);
+								} });
+								if (readCookie("agile_calendar_view"))
+								{
+												var eventModel = eventCollectionView.collection.get(event_id);
+												eventModel.set(eventModel, { remove : true });
+												document.location.reload();
+
+								}
+
+				});
+
+				/**
+				 * Activates the date picker to the corresponding fields in activity modal
+				 * and activity-update modal
+				 */
+				var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev)
+				{
+								// If event start date is changed and end date is less than start date,
+								// change the value of the end date to start date.
+								var eventDate2 = new Date($('#event-date-2').val());
+								if (ev.date.valueOf() > eventDate2.valueOf())
+								{
+												$('#event-date-2').val($('#event-date-1').val());
+								}
+
+				});
+
+				$('#event-date-2').datepicker({ format : 'mm/dd/yyyy' });
+				$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev)
+				{
+								// If event start date is changed and end date is less than start date,
+								// change the value of the end date to start date.
+								var eventDate2 = new Date($('#update-event-date-2').val());
+								if (ev.date.valueOf() > eventDate2.valueOf())
+								{
+												$('#update-event-date-2').val($('#update-event-date-1').val());
+								}
+
+				});
+				$('#update-event-date-2').datepicker({ format : 'mm/dd/yyyy' });
+
+				/**
+				 * Activates time picker for start time to the fields with class
+				 * start-timepicker
+				 */
+				$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' }).on('hide.timepicker', function(e)
+				{
+
+								if ($('#activityModal #allDay').is(':checked'))
+								{
+												$('#event-time-1').closest('.control-group').hide();
+												$('#event-date-2').closest('.row').hide();
+								}
+
 								e.stopImmediatePropagation();
 								return false;
-							});
+				});
 
-	/**
-	 * Activates time picker for end time to the fields with class
-	 * end-timepicker
-	 */
-	$('.end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false, template : 'modal' });
+				/**
+				 * Activates time picker for end time to the fields with class
+				 * end-timepicker
+				 */
+				$('.end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false, template : 'modal' });
 
-	/**
-	 * Activates time picker for start time to the fields with class
-	 * update-start-timepicker
-	 */
-	$('.update-start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' });
+				/**
+				 * Activates time picker for start time to the fields with class
+				 * update-start-timepicker
+				 */
+				$('.update-start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' });
 
-	/**
-	 * Activates time picker for end time to the fields with class
-	 * update-end-timepicker
-	 */
-	$('.update-end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false, template : 'modal' });
+				/**
+				 * Activates time picker for end time to the fields with class
+				 * update-end-timepicker
+				 */
+				$('.update-end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false, template : 'modal' });
 
-	/**
-	 * Sets the start time with current time and end time half an hour more than
-	 * start time, when they have no values by the time the modal is shown.
-	 */
-	$('#activityModal').on('shown', function()
-	{
-        // Show related to contacts list
-		var el = $("#activityForm");
-		agile_type_ahead("event_related_to", el, contacts_typeahead);
-		
-		/**
-		 * Fills current time only when there is no time in the fields
-		 */
-		if ($('.start-timepicker').val() == '')
-			$('.start-timepicker').val(get_hh_mm());
+				/**
+				 * Sets the start time with current time and end time half an hour more than
+				 * start time, when they have no values by the time the modal is shown.
+				 */
+				$('#activityModal').on('shown', function()
+				{
+								// Show related to contacts list
+								var el = $("#activityForm");
+								agile_type_ahead("event_related_to", el, contacts_typeahead);
 
-		if ($('.end-timepicker').val() == '')
-			$('.end-timepicker').val(get_hh_mm(true));
+								/**
+								 * Fills current time only when there is no time in the fields
+								 */
+								if ($('.start-timepicker').val() == '')
+												$('.start-timepicker').val(get_hh_mm());
 
-		// Update will highlight the date of in date picker
-		$("input.date").datepicker('update');
+								if ($('.end-timepicker').val() == '')
+												$('.end-timepicker').val(get_hh_mm(true));
 
-	});
+								// Update will highlight the date of in date picker
+								$("input.date").datepicker('update');
 
-	/**
-	 * To avoid showing previous errors of the modal.
-	 */
-	$('#updateActivityModal').on('show', function()
-	{
-        // Show related to contacts list
-		var el = $("#updateActivityForm");
-		agile_type_ahead("event_related_to", el, contacts_typeahead);
-		
-		if($('#updateActivityModal #allDay').is(':checked'))
-		{
-			$('#update-event-time-1').closest('.control-group').hide();
-			$('#update-event-date-2').closest('.row').hide();
-		}	
-		
-		// Removes alert message of error related date and time.
-		$('#' + this.id).find('.alert').css('display', 'none');
+				});
 
-		// Removes error class of input fields
-		$('#' + this.id).find('.error').removeClass('error');
+				/**
+				 * To avoid showing previous errors of the modal.
+				 */
+				$('#updateActivityModal').on('show', function()
+				{
+								// Show related to contacts list
+								var el = $("#updateActivityForm");
+								agile_type_ahead("event_related_to", el, contacts_typeahead);
 
-		$("input.date").datepicker('update');
+								if ($('#updateActivityModal #allDay').is(':checked'))
+								{
+												$('#update-event-time-1').closest('.control-group').hide();
+												$('#update-event-date-2').closest('.row').hide();
+								}
 
-	});
+								// Removes alert message of error related date and time.
+								$('#' + this.id).find('.alert').css('display', 'none');
 
-	/**
-	 * To avoid showing previous errors of the modal.
-	 */
-	$('#activityModal').on('show', function(e)
-	{
+								// Removes error class of input fields
+								$('#' + this.id).find('.error').removeClass('error');
 
-		// Removes alert message of error related date and time.
-		$('#' + this.id).find('.alert').css('display', 'none');
+								$("input.date").datepicker('update');
 
-		// Removes error class of input fields
-		$('#' + this.id).find('.error').removeClass('error');
-		
-	});
-	
-	/**
-	 * Hide event of update task modal. Removes the relatedTo field elements if
-	 * any, when the modal is hidden in order to not to show them again when the
-	 * modal is shown next
-	 * 
-	 */
-	$('#updateActivityModal').on('hidden', function() {
-		if($(this).hasClass('in'))
-		{
-			return;
-		}
-		
-		$("#updateActivityForm").find("li").remove();
-		$('#update-event-time-1').closest('.control-group').show();
-		$('#update-event-date-2').closest('.row').show();
-	});
-	$('#activityModal').on('hidden', function() {
+				});
 
-		if($(this).hasClass('in'))
-		{
-			return;
-		}
-		
-		$("#activityForm").find("li").remove();
-		$('#event-time-1').closest('.control-group').show();
-		$('#event-date-2').closest('.row').show();
-	});
+				/**
+				 * To avoid showing previous errors of the modal.
+				 */
+				$('#activityModal').on('show', function(e)
+				{
 
+								// Removes alert message of error related date and time.
+								$('#' + this.id).find('.alert').css('display', 'none');
 
-	/**
-	 * Highlights the event features (Shows event form and hides task form,
-	 * changing color and font-weight)
-	 */
-	$("#event").click(function(e)
-	{
-		e.preventDefault();
-		highlight_event();
-	});
+								// Removes error class of input fields
+								$('#' + this.id).find('.error').removeClass('error');
+
+				});
+
+				/**
+				 * Hide event of update task modal. Removes the relatedTo field elements if
+				 * any, when the modal is hidden in order to not to show them again when the
+				 * modal is shown next
+				 * 
+				 */
+				$('#updateActivityModal').on('hidden', function()
+				{
+								if ($(this).hasClass('in'))
+								{
+												return;
+								}
+
+								$("#updateActivityForm").find("li").remove();
+								$('#update-event-time-1').closest('.control-group').show();
+								$('#update-event-date-2').closest('.row').show();
+				});
+				$('#activityModal').on('hidden', function()
+				{
+
+								if ($(this).hasClass('in'))
+								{
+												return;
+								}
+
+								$("#activityForm").find("li").remove();
+								$('#event-time-1').closest('.control-group').show();
+								$('#event-date-2').closest('.row').show();
+				});
+
+				/**
+				 * Highlights the event features (Shows event form and hides task form,
+				 * changing color and font-weight)
+				 */
+				$("#event").live('click', function(e)
+				{
+								e.preventDefault();
+								highlight_event();
+				});
 
 });
 
@@ -33771,14 +37255,18 @@ $(function()
  */
 function highlight_event()
 {
-	$("#hiddentask").val("event");
-	$("#event").css({ "color" : "black" });
-	$("#task").css({ "color" : "red" });
-	$("#relatedTask").css("display", "none");
-	$("#relatedEvent").css("display", "block");
+				$("#hiddentask").val("event");
+				$("#event").css({ "color" : "black" });
+				$("#task").css({ "color" : "red" });
+				$("#relatedTask").css("display", "none");
+				$("#relatedEvent").css("display", "block");
 
-	// Date().format('mm/dd/yyyy'));
-	$('input.date').val(new Date().format('mm/dd/yyyy'));
+				if ($("#taskForm").find("#task_related_to").closest(".controls").find("ul").children())
+								$("#activityForm").find("#event_related_to").closest(".controls").find("ul").html(
+																$("#taskForm").find("#task_related_to").closest(".controls").find("ul").children());
+
+				// Date().format('mm/dd/yyyy'));
+				$('input.date').val(new Date().format('mm/dd/yyyy'));
 }
 
 /**
@@ -33788,51 +37276,51 @@ function highlight_event()
  * 
  * @method is_valid_range
  * @param {Number}
- *            startDate start date of an event
+ *         startDate start date of an event
  * @param {Number}
- *            endDate end date of an event
+ *         endDate end date of an event
  * @param {Number}
- *            startTime start time of an event
+ *         startTime start time of an event
  * @param {Number}
- *            endTime end time of an event
+ *         endTime end time of an event
  * @param {String}
- *            modalId the unique id for the modal to identify it
+ *         modalId the unique id for the modal to identify it
  */
 function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 {
-	if (endDate - startDate >= 86400000)
-	{
-		return true;
-	}
-	else if (startDate > endDate)
-	{
-		$('#' + modalName)
-				.find(".invalid-range")
-				.html(
-						'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date. Please change.</div>');
+				if (endDate - startDate >= 86400000)
+				{
+								return true;
+				}
+				else if (startDate > endDate)
+				{
+								$('#' + modalName)
+																.find(".invalid-range")
+																.html(
+																								'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date. Please change.</div>');
 
-		return false;
-	}
-	else if (startTime[0] > endTime[0])
-	{
-		$('#' + modalName)
-				.find(".invalid-range")
-				.html(
-						'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater than end time. Please change.</div>');
+								return false;
+				}
+				else if (startTime[0] > endTime[0])
+				{
+								$('#' + modalName)
+																.find(".invalid-range")
+																.html(
+																								'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater than end time. Please change.</div>');
 
-		return false;
-	}
-	else if (startTime[0] == endTime[0] && startTime[1] >= endTime[1])
-	{
-		$('#' + modalName)
-				.find(".invalid-range")
-				.html(
-						'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater or equal to end time. Please change.</div>');
+								return false;
+				}
+				else if (startTime[0] == endTime[0] && startTime[1] >= endTime[1])
+				{
+								$('#' + modalName)
+																.find(".invalid-range")
+																.html(
+																								'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater or equal to end time. Please change.</div>');
 
-		return false;
-	}
-	else
-		return true;
+								return false;
+				}
+				else
+								return true;
 }
 
 // Save event
@@ -33843,135 +37331,149 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
  * 
  * @method save_event
  * @param {String}
- *            formId the unique id for the form to identify it
+ *         formId the unique id for the form to identify it
  * @param {String}
- *            modalId the unique id for the modal to identify it
+ *         modalId the unique id for the modal to identify it
  * @param {Boolean}
- *            isUpdate the boolean value to identify weather saving the new one
- *            or updating the existing one
+ *         isUpdate the boolean value to identify weather saving the new one or
+ *         updating the existing one
  * 
  */
-function save_event(formId, modalName, isUpdate, saveBtn)
+function save_event(formId, modalName, isUpdate, saveBtn, callback)
 {
 
-	// Returns, if the save button has disabled attribute
-	if ($(saveBtn).attr('disabled'))
-		return;
+				// Returns, if the save button has disabled attribute
+				if ($(saveBtn).attr('disabled'))
+								return;
 
-	// Disables save button to prevent multiple click event issues
-	disable_save_button($(saveBtn));
+				// Disables save button to prevent multiple click event issues
+				disable_save_button($(saveBtn));
 
-	// Save functionality for event
-	if (!isValidForm('#' + formId))
-	{
+				// Save functionality for event
+				if (!isValidForm('#' + formId))
+				{
 
-		// Removes disabled attribute of save button
-		enable_save_button($(saveBtn));
-		return false;
-	}
+								// Removes disabled attribute of save button
+								enable_save_button($(saveBtn));
+								return false;
 
-	var json = serializeForm(formId);
-
-	if(json.allDay){ json.end=json.start; json.start_time="00:00"; json.end_time="23:45"; }// for all day, assume ending in last of that day.
-	
-	// For validation
-	if (!is_valid_range(json.start * 1000, json.end * 1000, (json.start_time).split(":"), (json.end_time).split(":"), modalName))
-	{
-
-		// Removes disabled attribute of save button
-		enable_save_button($(saveBtn));
-		return;
-	}
-
-	// Show loading symbol until model get saved
-	//$('#' + modalName).find('span.save-status').html(getRandomLoadingImg());
-
-	// Appending start time to start date
-	var startarray = (json.start_time).split(":");
-	json.start = new Date(json.start * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
-
-	// Appending end time to end date
-	var endarray = (json.end_time).split(":");
-	json.end = new Date(json.end * 1000).setHours(endarray[0], endarray[1]) / 1000.0;
-
-	$('#' + modalName).modal('hide');
-
-	$('#' + formId).each(function()
-	{
-		this.reset();
-	});
-
-	// Deleting start_time and end_time from json
-	delete json.start_time;
-	delete json.end_time;
-
-	var eventModel = new Backbone.Model();
-	eventModel.url = 'core/api/events';
-	eventModel.save(json, { success : function(data)
-	{
-
-		// Removes disabled attribute of save button
-		enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
-
-		$('#' + formId).each(function()
-		{
-			this.reset();
-		});
-
-		//$('#' + modalName).find('span.save-status img').remove();
-		$('#' + modalName).modal('hide');
-
-		// $('#calendar').fullCalendar( 'refetchEvents' );
-		var event = data.toJSON();
-		if (Current_Route == 'calendar') {
-			
-			// When updating an event remove the old event from fullCalendar
-			if (isUpdate)
-				$('#calendar').fullCalendar('removeEvents', json.id);
-
-			$('#calendar').fullCalendar('renderEvent', data.toJSON());
-		}
-		// Updates data to temeline
-		else if (App_Contacts.contactDetailView
-				&& Current_Route == "contact/"
-						+ App_Contacts.contactDetailView.model.get('id')) {
-
-			/*
-			 * Verifies whether the added task is related to the contact in
-			 * contact detail view or not
-			 */
-			$.each(event.contacts, function(index, contact) {
-				if (contact.id == App_Contacts.contactDetailView.model
-						.get('id')) {
-
-					// Add model to collection. Disabled sort while adding and called
-					// sort explicitly, as sort is not working when it is called by add
-					// function
-					if (eventsView && eventsView.collection)
-					{
-						if(eventsView.collection.get(data.id))
-						{
-							eventsView.collection.get(data.id).set(new BaseModel(data));
-						}
-						else
-						{
-							eventsView.collection.add(new BaseModel(data), { sort : false });
-							eventsView.collection.sort();
-						}
-					}
-					
-					// Activates "Timeline" tab and its tab content in
-					// contact detail view
-					// activate_timeline_tab();
-					//add_entity_to_timeline(data);
-
-					return false;
 				}
-			});
-		}
-		else
-			App_Calendar.navigate("calendar", { trigger : true });
-	} });
+
+				var json = serializeForm(formId);
+
+				if (json.allDay)
+				{
+								json.end = json.start;
+								json.start_time = "00:00";
+								json.end_time = "23:45";
+				}// for all day, assume ending in last of that day.
+
+				// For validation
+				if (!is_valid_range(json.start * 1000, json.end * 1000, (json.start_time).split(":"), (json.end_time).split(":"), modalName))
+				{
+
+								// Removes disabled attribute of save button
+								enable_save_button($(saveBtn));
+								return;
+				}
+
+				// Show loading symbol until model get saved
+				// $('#' + modalName).find('span.save-status').html(getRandomLoadingImg());
+
+				// Appending start time to start date
+				var startarray = (json.start_time).split(":");
+				json.start = new Date(json.start * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
+
+				// Appending end time to end date
+				var endarray = (json.end_time).split(":");
+				json.end = new Date(json.end * 1000).setHours(endarray[0], endarray[1]) / 1000.0;
+
+				$('#' + modalName).modal('hide');
+
+				$('#' + formId).each(function()
+				{
+								this.reset();
+				});
+
+				// Deleting start_time and end_time from json
+				delete json.start_time;
+				delete json.end_time;
+
+				var eventModel = new Backbone.Model();
+				eventModel.url = 'core/api/events';
+				eventModel.save(json, { success : function(data)
+				{
+
+								// Removes disabled attribute of save button
+								enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
+
+								$('#' + formId).each(function()
+								{
+												this.reset();
+								});
+
+								// $('#' + modalName).find('span.save-status img').remove();
+								$('#' + modalName).modal('hide');
+
+								// $('#calendar').fullCalendar( 'refetchEvents' );
+								var event = data.toJSON();
+								if (Current_Route == 'calendar' && !readCookie("agile_calendar_view"))
+								{
+
+												// When updating an event remove the old event from fullCalendar
+												if (isUpdate)
+
+																$('#calendar_event').fullCalendar('removeEvents', json.id);
+
+												$('#calendar_event').fullCalendar('renderEvent', data.toJSON());
+								}
+								// Updates data to temeline
+								else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+								{
+
+												/*
+												 * Verifies whether the added task is related to the contact in
+												 * contact detail view or not
+												 */
+												$.each(event.contacts, function(index, contact)
+												{
+																if (contact.id == App_Contacts.contactDetailView.model.get('id'))
+																{
+
+																				// Add model to collection. Disabled sort while adding and
+																				// called
+																				// sort explicitly, as sort is not working when it is called
+																				// by add
+																				// function
+																				if (eventsView && eventsView.collection)
+																				{
+																								if (eventsView.collection.get(data.id))
+																								{
+																												eventsView.collection.get(data.id).set(new BaseModel(data));
+																								}
+																								else
+																								{
+																												eventsView.collection.add(new BaseModel(data), { sort : false });
+																												eventsView.collection.sort();
+																								}
+																				}
+
+																				// Activates "Timeline" tab and its tab content in
+																				// contact detail view
+																				// activate_timeline_tab();
+																				// add_entity_to_timeline(data);
+
+																				return false;
+																}
+
+												});
+								}
+								else
+												App_Calendar.navigate("calendar", { trigger : true });
+
+								if (callback && typeof callback === 'function')
+												callback(data);
+				} });
 }
 
 /**
@@ -33979,57 +37481,57 @@ function save_event(formId, modalName, isUpdate, saveBtn)
  * 
  * @method get_hh_mm
  * @param {Boolean}
- *            end_time to make end time 30 minutes more than start time
+ *         end_time to make end time 30 minutes more than start time
  * 
  */
 function get_hh_mm(end_time)
 {
 
-	var hours = new Date().getHours();
-	var minutes = new Date().getMinutes();
+				var hours = new Date().getHours();
+				var minutes = new Date().getMinutes();
 
-	if (minutes % 15 != 0)
-		minutes = minutes - (minutes % 15);
+				if (minutes % 15 != 0)
+								minutes = minutes - (minutes % 15);
 
-	// Make end time 30 minutes more than start time
-	if (end_time)
-	{
-		if (minutes == "30")
-		{
-			hours = hours + 1;
-			minutes = 0;
-		}
-		else if (minutes == "45")
-		{
-			hours = hours + 1;
-			minutes = 15;
-		}
-		else
-			minutes = minutes + 30;
-	}
+				// Make end time 30 minutes more than start time
+				if (end_time)
+				{
+								if (minutes == "30")
+								{
+												hours = hours + 1;
+												minutes = 0;
+								}
+								else if (minutes == "45")
+								{
+												hours = hours + 1;
+												minutes = 15;
+								}
+								else
+												minutes = minutes + 30;
+				}
 
-	if (hours < 10)
-	{
-		hours = "0" + hours;
-	}
-	if (minutes < 10)
-	{
-		minutes = "0" + minutes;
-	}
+				if (hours < 10)
+				{
+								hours = "0" + hours;
+				}
+				if (minutes < 10)
+				{
+								minutes = "0" + minutes;
+				}
 
-	return hours + ':' + minutes;
+				return hours + ':' + minutes;
 }
 /**
  * 
  * Describes the given object is an array or not
  * 
  * @param {Object}
- *            a to verify array or not
+ *         a to verify array or not
  * @returns {Boolean} true if given param is array else false
  */
 function isArray(a)
 {
-    return Object.prototype.toString.apply(a) === '[object Array]';
+				return Object.prototype.toString.apply(a) === '[object Array]';
 }
 
 /**
@@ -34040,44 +37542,49 @@ function isArray(a)
  */
 function load_events_from_google(callback)
 {
-	// Name of the cookie to store/fetch calendar prefs. Current user id is set
-	// in cookie name to avoid
-	// showing tasks in different users calendar if logged in same browser
-	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
-	
-	// Reads existing cookie
-	var _agile_calendar_prefs_cookie = readCookie(google_calendar_cookie_name);
-	
-	// If cookie is not null, then it check it token is still valid; checks
-	// based on expiry time.
-	if(_agile_calendar_prefs_cookie && _agile_calendar_prefs_cookie != "null")
-	{
-		var prefs = JSON.parse(_agile_calendar_prefs_cookie);
+				if (readCookie('event-filters') && JSON.parse(readCookie('event-filters')).type == 'agile')
+								return;
 
-		// Checks if token expired. It considers expire before 2 minutes window
-		// of actual expiry time.
-		if(prefs.expires_at - (2 * 60 * 1000)  >= new Date().getTime())
-		{
-			// Returns token to the callback accoring to specification of gcal
-			get_google_calendar_event_source(prefs, callback);
-			return;
-		}
-		
-		// Erases cookie if token is expired and sends request to backend to
-		// acquire new token
-		erase_google_calendar_prefs_cookie()
-		
-	}
-	
-	// Fetch new token from backen, saves in cookie, and token is returned to gcal  
-	$.getJSON('/core/api/calendar-prefs/refresh-token', function (prefs) {
-		if(!prefs)
-			return;
-		
-		// Creates cookie
-		createCookie(google_calendar_cookie_name, JSON.stringify(prefs));
-		get_google_calendar_event_source(prefs, callback);
- 	});
+				// Name of the cookie to store/fetch calendar prefs. Current user id is set
+				// in cookie name to avoid
+				// showing tasks in different users calendar if logged in same browser
+				var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
+
+				// Reads existing cookie
+				var _agile_calendar_prefs_cookie = readCookie(google_calendar_cookie_name);
+
+				// If cookie is not null, then it check it token is still valid; checks
+				// based on expiry time.
+				if (_agile_calendar_prefs_cookie && _agile_calendar_prefs_cookie != "null")
+				{
+								var prefs = JSON.parse(_agile_calendar_prefs_cookie);
+
+								// Checks if token expired. It considers expire before 2 minutes window
+								// of actual expiry time.
+								if (prefs.expires_at - (2 * 60 * 1000) >= new Date().getTime())
+								{
+												// Returns token to the callback accoring to specification of gcal
+												get_google_calendar_event_source(prefs, callback);
+												return;
+								}
+
+								// Erases cookie if token is expired and sends request to backend to
+								// acquire new token
+								erase_google_calendar_prefs_cookie()
+
+				}
+
+				// Fetch new token from backen, saves in cookie, and token is returned to
+				// gcal
+				$.getJSON('/core/api/calendar-prefs/refresh-token', function(prefs)
+				{
+								if (!prefs)
+												return;
+
+								// Creates cookie
+								createCookie(google_calendar_cookie_name, JSON.stringify(prefs));
+								get_google_calendar_event_source(prefs, callback);
+				});
 }
 
 /**
@@ -34085,230 +37592,394 @@ function load_events_from_google(callback)
  */
 function erase_google_calendar_prefs_cookie()
 {
-	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
-	eraseCookie(google_calendar_cookie_name);
+				var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
+				eraseCookie(google_calendar_cookie_name);
 }
 
 // Returns token in to gcal callback in specified format
 function get_google_calendar_event_source(data, callback)
 {
-	
-	if (callback && typeof (callback) === "function")
-		callback({token:data.access_token, dataType:'agile-gcal', className:"agile-gcal"});
+
+				if (callback && typeof (callback) === "function")
+								callback({ token : data.access_token, dataType : 'agile-gcal', className : "agile-gcal" });
 }
-
-
 
 /**
  * Shows the calendar
  */
-function showCalendar() {
-	
-	// Customized fetch options
-	_init_gcal_options();
-	
-  $('#calendar').fullCalendar({
-    	
-       /**
-		 * Renders the events displaying currently on fullCalendar
-		 * 
-		 * @method events
-		 * @param {Object}
-		 *            start fullCalendar current section start day date object
-		 * @param {Object}
-		 *            end fullCalendar current section end day date object
-		 * @param {function}
-		 *            callback displays the events on fullCalendar
-		 * 
-		 */
-    	
-        eventSources :[{events: function (start, end, callback) {
-        
-            $.getJSON('/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000, function (doc) {
-                
-            	if(doc)
-            	{
-            		  
-            	    callback(doc);
-            		
-            	}
-            });
-        }},
-        {
-        	dataType : 'agile-gcal'
-        }],
-        header: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'month,agendaWeek,agendaDay'
-        },
-        loading: function (bool) {
-            if (bool) {
-            	
-            	  $("#loading_calendar_events").remove();
-            	  $('.fc-header-left').append('<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle">loading...</span>').show();
-                $('.fc-header-left').show();
-                
-            } else {
-              // $('#loading').hide();
-            	 $("#loading_calendar_events").hide();
-                start_tour('calendar');
-            }
-        },
-        selectable: true,
-		selectHelper: true,
-		editable: true,
-		theme: false,
-	   /**
-		 * Shows event pop-up modal with pre-filled date and time values, when
-		 * we select a day or multiple days of the fullCalendar
-		 * 
-		 * @method select
-		 * @param {Object}
-		 *            start start-date of the event
-		 * @param {Object}
-		 *            end end-date of the event
-		 * @param {Boolean}
-		 *            allDay
-		 */	
-        select: function(start, end, allDay) {
-        	// Show a new event
-            $('#activityModal').modal('show');
-            highlight_event();
-            
-            // Set Date for Event
-            var dateFormat = 'mm/dd/yyyy';
-            $('#task-date-1').val(start.format(dateFormat));
-            $("#event-date-1").val(start.format(dateFormat));
-            $("#event-date-2").val(end.format(dateFormat));
+function showCalendar()
+{
 
-            
-            // Set Time for Event
-            if ((start.getHours() == 00) && (end.getHours() == 00) && (end.getMinutes() == 00)) {
-                $('#event-time-1').val('');
-                $('#event-time-2').val('');
-            } else {
-                $('#event-time-1').val((start.getHours() < 10 ? "0" : "") + start.getHours() + ":" + (start.getMinutes() < 10 ? "0" : "") + start.getMinutes());
-                $('#event-time-2').val((end.getHours() < 10 ? "0" : "") + end.getHours() + ":" + (end.getMinutes() < 10 ? "0" : "") + end.getMinutes());
-            }
-            
-		},
-	   /**
-		 * Updates the event by changing start and end date, when it is dragged
-		 * to another location on fullCalendar.
-		 * 
-		 * @method eventDrop
-		 * @param {Object}
-		 *            event1 event with new start and end date
-		 * @param {Number}
-		 *            dayDelta holds the number of days the event was moved
-		 *            forward
-		 * @param {Number}
-		 *            minuteDelta holds the number of minutes the event was
-		 *            moved forward
-		 * @param {Boolean}
-		 *            allDay weather the event has been dropped on a day in
-		 *            month view or not
-		 * @param {Function}
-		 *            revertFunc sets the event back to it's original position
-		 */	
-		eventDrop: function(event1, dayDelta, minuteDelta, allDay, revertFunc) {      
-	    
-			
-			// Confirm from the user about the change
-			if (!confirm("Are you sure about this change?")) {
-	            revertFunc();
-	            return;
-	        }
-			
-			var event = $.extend(true, {}, event1);
-			
-			
-			// Update event if the user changes it in the calendar
-			event.start = new Date(event.start).getTime()/1000;
-	        event.end = new Date(event.end).getTime()/1000;
-	        if(event.end == null || event.end == 0)	        	
-	        	event.end = event.start;
-	        var eventModel = new Backbone.Model();
-	        eventModel.url = 'core/api/events';
-	        
-	        eventModel.save(event);	        
-   	    },
-   	   /**
-		 * Updates or deletes an event by clicking on it
-		 * 
-		 * @method eventClick
-		 * @param {Object}
-		 *            event to update or delete
-		 */ 
-   	    eventClick: function (event) {
-   	    	if(isNaN(event.id))
-   	    		return;
-   	    	// Deserialize
-   	    	deserializeForm(event, $("#updateActivityForm"));
-   	    	
-   	    	// Set time for update Event
-            $('#update-event-time-1').val((event.start.getHours() < 10 ? "0" : "") + event.start.getHours() + ":" + (event.start.getMinutes() < 10 ? "0" : "") +event.start.getMinutes());
-            $('#update-event-time-2').val((event.end.getHours() < 10 ? "0" : "") + event.end.getHours() + ":" + (event.end.getMinutes() < 10 ? "0" : "") + event.end.getMinutes());
-           
-         // Set date for update Event
-            var dateFormat = 'mm/dd/yyyy';
-            $("#update-event-date-1").val((event.start).format(dateFormat));
-            $("#update-event-date-2").val((event.end).format(dateFormat));
-            
-   	    	// hide end date & time for all day events
-            if(event.allDay)
-            {
-            	$("#update-event-date-2").closest('.row').hide();
-            	$('#update-event-time-1').closest('.control-group').hide();
-            }
-            else 
-            {
-            	$('#update-event-time-1').closest('.control-group').show();
-            	$("#update-event-date-2").closest('.row').show();
-            }
-   	    	
-         // Show edit modal for the event
-            $("#updateActivityModal").modal('show');
-   	    	return false;
-   	    }
-   	    
-    });
+				// Customized fetch options
+				if (!readCookie('event-filters') || JSON.parse(readCookie('event-filters')).type != 'agile')
+								_init_gcal_options();
+
+				$('#calendar_event')
+												.fullCalendar(
+																				{
+
+																								/**
+																								 * Renders the events displaying currently on
+																								 * fullCalendar
+																								 * 
+																								 * @method events
+																								 * @param {Object}
+																								 *         start fullCalendar current section start day
+																								 *         date object
+																								 * @param {Object}
+																								 *         end fullCalendar current section end day date
+																								 *         object
+																								 * @param {function}
+																								 *         callback displays the events on fullCalendar
+																								 * 
+																								 */
+
+																								eventSources : [
+																																{ events : function(start, end, callback)
+																																{
+
+																																				var eventFilters = JSON.parse(readCookie('event-filters'));
+																																				if (readCookie('event-filters') && eventFilters.type == 'google')
+																																				{
+																																								$("#loading_calendar_events").hide();
+																																								return;
+																																				}
+
+																																				var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
+																																				if (readCookie('event-filters') && eventFilters.owner_id.length > 0)
+																																								eventsURL += '&owner_id=' + eventFilters.owner_id;
+																																				console.log('-----------------', eventsURL);
+																																				$.getJSON(eventsURL, function(doc)
+																																				{
+
+																																								if (doc)
+																																								{
+
+																																												callback(doc);
+
+																																								}
+																																				});
+																																} }, { dataType : 'agile-gcal' }
+																								],
+																								header : { left : 'prev,next today', center : 'title', right : 'month,agendaWeek,agendaDay' },
+																								loading : function(bool)
+																								{
+																												if (bool)
+																												{
+
+																																$("#loading_calendar_events").remove();
+																																$('.fc-header-left').append(
+																																								'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle">loading...</span>').show();
+																																$('.fc-header-left').show();
+
+																												}
+																												else
+																												{
+																																// $('#loading').hide();
+																																$("#loading_calendar_events").hide();
+																																start_tour('calendar');
+																												}
+																								},
+																								selectable : true,
+																								selectHelper : true,
+																								editable : true,
+																								theme : false,
+																								/**
+																								 * Shows event pop-up modal with pre-filled date and
+																								 * time values, when we select a day or multiple days of
+																								 * the fullCalendar
+																								 * 
+																								 * @method select
+																								 * @param {Object}
+																								 *         start start-date of the event
+																								 * @param {Object}
+																								 *         end end-date of the event
+																								 * @param {Boolean}
+																								 *         allDay
+																								 */
+																								select : function(start, end, allDay)
+																								{
+																												// Show a new event
+																												$('#activityModal').modal('show');
+																												highlight_event();
+
+																												// Set Date for Event
+																												var dateFormat = 'mm/dd/yyyy';
+																												$('#task-date-1').val(start.format(dateFormat));
+																												$("#event-date-1").val(start.format(dateFormat));
+																												$("#event-date-2").val(end.format(dateFormat));
+
+																												// Set Time for Event
+																												if ((start.getHours() == 00) && (end.getHours() == 00) && (end.getMinutes() == 00))
+																												{
+																																$('#event-time-1').val('');
+																																$('#event-time-2').val('');
+																												}
+																												else
+																												{
+																																$('#event-time-1')
+																																								.val(
+																																																(start.getHours() < 10 ? "0" : "") + start.getHours() + ":" + (start.getMinutes() < 10 ? "0" : "") + start
+																																																								.getMinutes());
+																																$('#event-time-2').val(
+																																								(end.getHours() < 10 ? "0" : "") + end.getHours() + ":" + (end.getMinutes() < 10 ? "0" : "") + end.getMinutes());
+																												}
+
+																								},
+																								/**
+																								 * Updates the event by changing start and end date,
+																								 * when it is dragged to another location on
+																								 * fullCalendar.
+																								 * 
+																								 * @method eventDrop
+																								 * @param {Object}
+																								 *         event1 event with new start and end date
+																								 * @param {Number}
+																								 *         dayDelta holds the number of days the event
+																								 *         was moved forward
+																								 * @param {Number}
+																								 *         minuteDelta holds the number of minutes the
+																								 *         event was moved forward
+																								 * @param {Boolean}
+																								 *         allDay weather the event has been dropped on
+																								 *         a day in month view or not
+																								 * @param {Function}
+																								 *         revertFunc sets the event back to it's
+																								 *         original position
+																								 */
+																								eventDrop : function(event1, dayDelta, minuteDelta, allDay, revertFunc)
+																								{
+
+																												// Confirm from the user about the change
+																												if (!confirm("Are you sure about this change?"))
+																												{
+																																revertFunc();
+																																return;
+																												}
+
+																												var event = $.extend(true, {}, event1);
+
+																												// Update event if the user changes it in the
+																												// calendar
+																												event.start = new Date(event.start).getTime() / 1000;
+																												event.end = new Date(event.end).getTime() / 1000;
+																												if (event.end == null || event.end == 0)
+																																event.end = event.start;
+																												var eventModel = new Backbone.Model();
+																												eventModel.url = 'core/api/events';
+
+																												eventModel.save(event);
+																								},
+																								/**
+																								 * Updates or deletes an event by clicking on it
+																								 * 
+																								 * @method eventClick
+																								 * @param {Object}
+																								 *         event to update or delete
+																								 */
+																								eventClick : function(event)
+																								{
+																												if (isNaN(event.id))
+																																return;
+																												// Deserialize
+																												deserializeForm(event, $("#updateActivityForm"));
+
+																												// Set time for update Event
+																												$('#update-event-time-1')
+																																				.val(
+																																												(event.start.getHours() < 10 ? "0" : "") + event.start.getHours() + ":" + (event.start.getMinutes() < 10 ? "0" : "") + event.start
+																																																				.getMinutes());
+																												$('#update-event-time-2').val(
+																																				(event.end.getHours() < 10 ? "0" : "") + event.end.getHours() + ":" + (event.end.getMinutes() < 10 ? "0" : "") + event.end
+																																												.getMinutes());
+
+																												// Set date for update Event
+																												var dateFormat = 'mm/dd/yyyy';
+																												$("#update-event-date-1").val((event.start).format(dateFormat));
+																												$("#update-event-date-2").val((event.end).format(dateFormat));
+
+																												// hide end date & time for all day events
+																												if (event.allDay)
+																												{
+																																$("#update-event-date-2").closest('.row').hide();
+																																$('#update-event-time-1').closest('.control-group').hide();
+																												}
+																												else
+																												{
+																																$('#update-event-time-1').closest('.control-group').show();
+																																$("#update-event-date-2").closest('.row').show();
+																												}
+
+																												// Show edit modal for the event
+																												$("#updateActivityModal").modal('show');
+																												return false;
+																								}
+
+																				});
 }
 
-$(function(){
-	$("#sync-google-calendar").die().live('click', function(e){
-		e.preventDefault();
-		
-		// URL to return, after fetching token and secret key from LinkedIn
-		var callbackURL = window.location.href;
-		
-		// For every request of import, it will ask to grant access
-		window.location = "/scribe?service=google_calendar&return_url=" + encodeURIComponent(callbackURL);
-	});
-	
-	$("#sync-google-calendar-delete").die().live('click', function(e){
-		e.preventDefault();
-		
-		var disabled = $(this).attr("disabled");
-		if(disabled)
-			return;
-		
-		$(this).attr("disabled", "disabled");
-		
-		$(this).after(getRandomLoadingImg());
-		App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs"
-		console.log(App_Widgets.calendar_sync_google.model.destroy({success : function(){
-			
-			App_Widgets.calendar_sync_google.model.clear();
-			App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs/get"
-				App_Widgets.calendar_sync_google.render(true);
-			erase_google_calendar_prefs_cookie();
-			
-		}}));
-	});
-});
+function showEventFilters()
+{
+				$.getJSON('/core/api/users/agileusers', function(users)
+				{
+								var html = '';
+								if (users)
+								{
+												$.each(users, function(i, user)
+												{
+																if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
+																				html = '<option value=' + user.id + '>Me</option>';
+												});
+												html += '<option value="">Any</option>';
+								}
+								$('#event-owner').html(html);
+								$('#filter_options').show();
 
+
+								if (readCookie("agile_calendar_view"))
+												$('#filter_options .calendar-view').hide();
+								else
+												$('#filter_options .list-view').hide();
+
+								if (readCookie('event-filters'))
+								{
+												var eventFilters = JSON.parse(readCookie('event-filters'));
+												$('#event-owner').val(eventFilters.owner_id);
+												$('#event_type').val(eventFilters.type);
+								}
+				});
+
+}
+
+function loadDefaultFilters()
+{
+				// Create a cookie with default option, if there is no cookie related to
+				// event filter.
+				if (!readCookie('event-filters'))
+				{
+								$.getJSON('/core/api/users/agileusers', function(users)
+								{
+												var html = '';
+												if (users)
+												{
+																$.each(users, function(i, user)
+																{
+																				if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
+																				{
+																								var json = {};
+																								json.owner_id = user.id.toString();
+																								json.type = '';
+																								createCookie('event-filters', JSON.stringify(json));
+																				}
+																});
+												}
+								});
+				}
+}
+
+$(function()
+{
+				$("#sync-google-calendar").die().live('click', function(e)
+				{
+								e.preventDefault();
+
+								// URL to return, after fetching token and secret key from LinkedIn
+								var callbackURL = window.location.href;
+
+								// For every request of import, it will ask to grant access
+								window.location = "/scribe?service=google_calendar&return_url=" + encodeURIComponent(callbackURL);
+				});
+
+				$("#sync-google-calendar-delete").die().live('click', function(e)
+				{
+								e.preventDefault();
+
+								var disabled = $(this).attr("disabled");
+								if (disabled)
+												return;
+
+								$(this).attr("disabled", "disabled");
+
+								$(this).after(getRandomLoadingImg());
+								App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs"
+								console.log(App_Widgets.calendar_sync_google.model.destroy({ success : function()
+								{
+
+												App_Widgets.calendar_sync_google.model.clear();
+												App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs/get"
+												App_Widgets.calendar_sync_google.render(true);
+												erase_google_calendar_prefs_cookie();
+
+								} }));
+				});
+
+				// Show filter drop down.
+				$('#event-filter-button').live('click', function(e)
+				{
+								e.preventDefault();
+								showEventFilters();
+				});
+
+				$('#event-filter-validate').live('click', function(e)
+				{
+								$('#filter_options').hide();
+								var formId = 'eventsFilterForm';
+								var json = serializeForm(formId);
+								createCookie('event-filters', JSON.stringify(json));
+
+								if (readCookie("agile_calendar_view"))
+								{
+												if (json.time === 'future')
+																createCookie("agile_calendar_view", "calendar_list_view_future");
+												else
+																createCookie("agile_calendar_view", "calendar_list_view");
+								}
+
+								// if list view
+								if (!readCookie("agile_calendar_view"))
+								{
+												$('#calendar_event').html('');
+												// App_Calendar.calendar();
+												showCalendar();
+								}
+								else
+								{
+
+												loadAgileEvents();
+												loadGoogleEvents();
+
+								}
+				});
+
+				// Show filter drop down.
+				$('#clear-event-filters').live('click', function(e)
+				{
+								e.preventDefault();
+								$('#filter_options select').val('');
+								eraseCookie('event-filters');
+								loadDefaultFilters();
+								showEventFilters();
+				});
+
+				/**
+				 * Hide the filters window when click on out side of the filters pop up.
+				 */
+				$(document).mouseup(function(e)
+				{
+								var container = $("#filter_options");
+
+								if (!container.is(e.target) // if the target of the click isn't the
+																// container...
+																&& container.has(e.target).length === 0) // ... nor a
+								// descendant of the
+								// container
+								{
+												container.hide();
+								}
+				});
+
+				loadDefaultFilters();
+});
 /*!
  * FullCalendar v1.6.4 Google Calendar Plugin
  * Docs & License: http://arshaw.com/fullcalendar/
@@ -34398,7 +38069,7 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
 			
 			if(fc_event)
 			// Add event
-			$('#calendar').fullCalendar( 'renderEvent', fc_event  )
+			$('#calendar_event').fullCalendar( 'renderEvent', fc_event  )
 		}
 	});
 }
@@ -34422,9 +38093,16 @@ function google2fcEvent(google) {
     if (fc.allDay) {
       // subtract 1 from end date: Google all-day end dates are exclusive
       // FullCalendar's are inclusive
-      var end = $.fullCalendar.parseDate(fc.end);
+    				var end;
+    				if(fc.end.length >10){
+         end = $.fullCalendar.parseDate(fc.end);
+         fc.end = $.fullCalendar.formatDate(end, 'yyyy-MM-dd');
+    				}else{
+    								end = new Date(fc.end);
+    				}
       end.setDate(end.getDate() - 1);
-      fc.end = $.fullCalendar.formatDate(end, 'yyyy-MM-dd');
+      fc.end = end.format('yyyy-MM-dd');
+    				
     }
     return fc;
 }
@@ -34825,14 +38503,14 @@ function campaignAlert(alertType)
 		}
 
 	 
-	if(alertType == "EmptyTwilio")
+	if(alertType == "Empty")
 		{
 		alertJSON["title"]="No Twilio Number";
 		alertJSON["message"]="The Twilio SMS gateway you configured does not have a purchased number. Please purchase a number from Twilio to start sending SMS.";
 		alertTemplate = $(getTemplate('SMSGateway-integration-alert-modal',alertJSON));
 		}
 	
-	if(alertType == "UnauthorisedTwilio")
+	if(alertType == "Unauthorised")
 		{
 		alertJSON["title"]="SMS Gateway not Configured";
 		alertJSON["message"]="You need to enable SMS Gateway integration to use this option. Please enable it in Admin Settings -> Integrations";
@@ -34977,8 +38655,8 @@ function getAvailableActiveContacts()
 function get_campaign_subscribers_collection(workflow_id, fetch_url, template_key)
 {
 	/* Set the designer JSON. This will be deserialized */
-	var workflow_model = App_Workflows.workflow_list_view.collection.get(workflow_id);
-	var workflow_name = workflow_model.get("name");
+	//var workflow_model = App_Workflows.workflow_list_view.collection.get(workflow_id);
+	//var workflow_name = workflow_model.get("name");
 
 	var subscribers_collection = new Base_Collection_View({ 
 		url : fetch_url, 
@@ -34994,7 +38672,7 @@ function get_campaign_subscribers_collection(workflow_id, fetch_url, template_ke
 				$("time.campaign-completed-time", el).timeago();
 			});
 
-			$('#subscribers-campaign-name').text(workflow_name);
+			//$('#subscribers-campaign-name').text(workflow_name);
 
 		},
 		appendItemCallback : function(el)
@@ -35104,6 +38782,27 @@ $(function()
 			$('form#addTriggerForm').find('select#trigger-shopify-event').val("");
 		}
 		
+		// Hide trigger inbound mail event div for other trigger conditions.
+		if($(this).val() !== 'INBOUND_MAIL_EVENT'){
+			$('form#addTriggerForm').find('div#trigger-inbound-mail-event').css('display', 'none');
+		}
+		
+		if($(this).val() != 'EMAIL_OPENED' || $(this).val() != 'EMAIL_LINK_CLICKED'){
+			$('form#addTriggerForm').find('select#email-tracking-type').closest('div.control-group').css('display', 'none');
+			
+			$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', 'none');
+			
+			$('form#addTriggerForm').find('#custom-link-clicked').closest('div.control-group').css('display', 'none');
+		}
+		
+		if($(this).val() != 'EVENT_IS_ADDED')
+		{
+			$('form#addTriggerForm').find('select#event-owner-id').closest('div.control-group').css('display', 'none');
+			
+			$('form#addTriggerForm').find('select#event-type').closest('div.control-group').css('display', 'none');
+		}
+			
+
 		// Initialize tags typeahead
 		if ($(this).val() == 'TAG_IS_ADDED' || $(this).val() == 'TAG_IS_DELETED')
 		{
@@ -35141,6 +38840,26 @@ $(function()
 		{
 			populate_shopify_events_in_trigger($('form#addTriggerForm'), 'trigger-shopify-event');
 		}
+
+		if($(this).val() == 'INBOUND_MAIL_EVENT')
+		{
+			populate_inbound_mail_events_in_trigger($('form#addTriggerForm'), 'trigger-inbound-mail-event');
+		}
+		
+		if($(this).val() == 'EMAIL_OPENED' || $(this).val() == 'EMAIL_LINK_CLICKED'){
+			$('form#addTriggerForm').find('#email-tracking-type').closest('div.control-group').css('display', '');
+			
+			if($(this).val() == 'EMAIL_LINK_CLICKED')
+				$('form#addTriggerForm').find('#custom-link-clicked').closest('div.control-group').css('display', '');
+		}
+		
+		if($(this).val() == 'EVENT_IS_ADDED')
+		{
+			$('form#addTriggerForm').find('select#event-type').closest('div.control-group').css('display', '');
+			
+			populate_owners_in_trigger($('form#addTriggerForm'), 'event-owner-id');
+		}
+			
 	});
 	
 	// When cancel clicked, take to Back page
@@ -35150,6 +38869,44 @@ $(function()
 
 		if (history !== undefined)
 			history.back(-1);
+	});
+	
+	$('#email-tracking-type').die().live('change', function(e){
+		
+		e.preventDefault();
+		
+		if($(this).val() == 'ANY' || $(this).val() == 'PERSONAL')
+		{
+			// Show milestones select element
+			$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', 'none');
+			return;
+		}
+		
+		// Show campaign select element
+		$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', '');
+
+		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+		
+		/**
+		 * Fills campaign select with existing Campaigns.
+		 * 
+		 * @param campaign-select -
+		 *            Id of select element of Campaign
+		 * @param /core/api/workflows -
+		 *            Url to get workflows
+		 * @param 'workflow' -
+		 *            parse key
+		 * @param no-callback -
+		 *            No callback
+		 * @param optionsTemplate-
+		 *            to fill options with workflows
+		 */
+		fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', function()
+				{
+					
+					$('#email-tracking-campaign-id option:first').after('<option value="0">All</option>');
+					
+				}, optionsTemplate, false);
 	});
 });
 
@@ -35244,6 +39001,31 @@ function populate_shopify_events_in_trigger(trigger_form, shopify_event_select_i
 	{
 		trigger_form.find('select#' + shopify_event_select_id).val(shopify_event_value).attr('selected', 'selected').trigger('change');
 	}
+}
+
+function populate_inbound_mail_events_in_trigger(trigger_form, inbound_mail_event_div_class)
+{
+	trigger_form.find('div#' + inbound_mail_event_div_class).css('display','');
+}
+
+function populate_owners_in_trigger(trigger_form, owner_select_id, trigger_owner_id)
+{
+	// Show milestones select element
+	trigger_form.find('select#' + owner_select_id).closest('div.control-group').css('display', '');
+
+	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+	
+	fillSelect(owner_select_id, '/core/api/users', 'users', function()
+			{
+		
+			$("#" + owner_select_id +' option:first').after('<option value="ANY">Any Owner</option>');
+			
+			if (trigger_owner_id)
+			{
+				$('#'+owner_select_id, trigger_form).find('option[value=' + trigger_owner_id + ']').attr('selected', 'selected');
+			}
+		
+	}, optionsTemplate, false, undefined, "Select Event Owner");
 }
 
 /**
@@ -35422,6 +39204,8 @@ $(function(){
             	
             	enable_save_button($clicked_button);
             	
+            	show_campaign_save();
+            	
             	// Adds tag in our domain
             	add_tag_our_domain(CAMPAIGN_TAG);
             	
@@ -35549,26 +39333,6 @@ $(function(){
 		
 	});
 	
-	// Clicking on done, save changes and exit
-	$(".workflow-done").live('click', function(e){
-		e.preventDefault();
-		
-		if($('#workflow-edit-msg').is(':visible'))
-		{
-			if(!confirm("You have unsaved changes. Save & Exit?"))
-			return;
-		
-			// Trigger click
-			$('#save-workflow-top').trigger("click", [{"navigate": true}]);
-			return;
-		}
-		
-		Backbone.history.navigate("workflows", {
-            trigger: true
-        });
-		
-	});
-
 });
 
 /**
@@ -35593,6 +39357,10 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
 
     	    	// Removes disabled attribute of save button
     	    	enable_save_button($clicked_button);
+    	    	
+    	    	// Shows Campaign save message
+    	    	show_campaign_save();
+    	    	
     	    	// $('#workflowform').find('#save-workflow').removeAttr('disabled');
     	    	
     	    	// Hide edit message
@@ -35607,6 +39375,9 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
                       trigger: true
                   });
     	    	}
+    	    	
+    	    	// Updates workflow model
+    	    	App_Workflows.workflow_model = workflow;
     	    },
             
             error: function(jqXHR, status, errorThrown){ 
@@ -35637,7 +39408,7 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
 
 					// Appends error info to form actions
 					// block.
-					$("#workflow-limit-reached-msg").html(
+					$("#workflow-msg").html(
 							$save_info).show();
             	  }
                 }
@@ -35652,7 +39423,7 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
  * @param type - 
  *          to match with LOGS_PAD_CONTENT json key
  **/
-function fill_logs_slate(id, type, workflow_name)
+function fill_logs_slate(id, type)
 {
 	if(type == undefined)
 		type="ALL";
@@ -35694,6 +39465,14 @@ function fill_logs_slate(id, type, workflow_name)
 
 	$("#" + id).html(getTemplate("empty-collection-model", LOGS_PAD_CONTENT[type]));
 }
+
+function show_campaign_save()
+{
+	// Campaign save message
+	var $save_info = '<span style="color: green; margin-left: 85px;">Campaign saved.</span>';
+
+	$("#workflow-msg").html($save_info).show().fadeOut(3000);
+}
 /**
  * Zoomifier code to show their template in send email template
  */
@@ -35721,7 +39500,64 @@ function fill_logs_slate(id, type, workflow_name)
 			editor.focus();
 			wysihtml5.editor.composer.commands.exec("insertHTML",data);
 		}
-  }function initZeroClipboard(id, source) {
+  }/**
+ * local-storage.js deals with functions used to store data in the client side.
+ * Stores in localstorage if available otherwise usrs cookies.
+ * @module jscore
+ */
+
+/**
+ * stores data with given name in local storage or cookies.
+ * 
+ * @param name
+ *            name of the variable example : agile-email etc.
+ * @param value
+ *            value of the variable example: agilecrm@example.com
+ * @param days
+ *            time in days before the variable expires example : 15*365
+ * @returns cookie
+ */
+function storeData(name, value, days)
+{
+	if(typeof(Storage) !== "undefined") {
+		localStorage.setItem(name, value);
+	} else {
+	    createCookie(name, value, days);
+	}
+}
+
+/**
+ * Used to read a particular variable's value from local storage
+ * 
+ * @param name
+ *            the name of the cookie variable to read example :
+ *            agile-crm-session_start_time
+ * @returns value of the cookie variable else it returns null
+ */
+function readData(name)
+{
+	if(typeof(Storage) !== "undefined") {
+		return localStorage.getItem(name);
+	} else {
+	    return raedCookie(name);
+	}
+}
+
+/**
+ * Used to delete a variable from storage
+ * 
+ * @param name
+ *            name of the variable to be removed from the cookie
+ */
+function eraseData(name)
+{
+
+	if(typeof(Storage) !== "undefined") {
+		return localStorage.removeItem(name);
+	} else {
+	    return eraseCookie(name);
+	}
+}function initZeroClipboard(id, source) {
 
 	 try {
 	
@@ -36251,8 +40087,8 @@ var CONTENT_JSON = {
 		"image" : "/img/clipboard.png"
 	},
 	"deals" : {
-		"title" : "You do not have any deals currently.",
-		"description" : "Deals are sales opportunities you track continuously throughout its lifecycle.",
+		"title" : "No deals found.",
+		"description" : "You either do not have any deals currently, or there are none matching the filter conditions. <br/>Deals are sales opportunities you track continuously throughout its lifecycle.",
 		//"learn_more" : "click here to learn more",
 		"button_text" : "Add Deal",
 		"route" : "#",
@@ -36265,6 +40101,14 @@ var CONTENT_JSON = {
 		//"learn_more" : "click here to learn more",
 		"button_text" : "Add Report",
 		"route" : "#report-add",
+		"image" : "/img/clipboard.png"
+	},
+	"activity-reports" : {
+		"title" : "You do not have any activity reports currently.",
+		"description" : "Get a periodic  email digest of various activities by users in Agile.",
+		//"learn_more" : "click here to learn more",
+		"button_text" : "Add Report",
+		"route" : "#activity-report-add",
 		"image" : "/img/clipboard.png"
 	},
 	"contact-filters" : {
@@ -37118,6 +40962,12 @@ $(function(){
 		uploadImage("contact-container");
 	});
 	
+	//Upload personal prefs
+	$(".upload_prefs_s3").live('click', function(e){
+		e.preventDefault();
+		uploadImage("upload-in-modal");
+	});
+	
 });	
 
 function uploadImage(id)
@@ -37130,12 +40980,28 @@ function uploadImage(id)
 	return false;
 }
 
+function setImageURLInModal(url)
+{
+	var id = "upload-in-modal";
+	// Set the media stream
+	$('#' + id).find('.imgholder').html('');
+	$('#' + id).find('.imgholder').html('<img class="thumbnail" src="' + url + '" height="50" width="50"/>');
+	
+	var  modalId = $('#' + id).closest(".modal").attr("id");
+	
+	// Set the value of selector for input
+	$("#" + modalId).find(".modal-body input[type='hidden']").val(url);
+	
+	$("#" + modalId).closest('.modal').modal('hide');
+	
+}
+
 function setImageURL(url)
 {
 	var id = "upload-container";
 	// Set the media stream
 	$('#' + id).find('.imgholder').html('');
-	$('#' + id).find('.imgholder').html('<img src="' + url + '" height="100" width="100"/>');
+	$('#' + id).find('.imgholder').html('<img class="thumbnail" src="' + url + '" height="75" width="75"/>');
 	
 	// Set the value of selector for input
 	$('#' + id).find('#upload_url').val(url);
@@ -37900,23 +41766,30 @@ $(function()
 	});
 	
 	// Click events to agents dropdown of Owner's list and Criteria's list
-	$("ul#new-owner-tasks li a, ul#new-type-tasks li a").die().live("click", function(e)
+	/*$("ul#new-owner-tasks li a, ul#new-type-tasks li a").die().live("click", function(e)
 	{
-		e.preventDefault();
+		e.preventDefault();			
+		
+		// Hide list view and show column view with loading img
+		hideListViewAndShowLoading();		
 		
 		// Show selected name
 		var name = $(this).html(), id = $(this).attr("href");
-
-		$(this).closest("ul").data("selected_item", id);
+		
+		var selectedDropDown = $(this).closest("ul").attr("id");
+				
+		if(selectedDropDown == "new-type-tasks") // criteria type
+		    $(this).closest("ul.main-menu").data("selected_item", id);
+		else  // owner type
+			$(this).closest("ul").data("selected_item", id);
+		
 		$(this).closest(".btn-group").find(".selected_name").text(name);
 
 		// Empty collection
+		if(TASKS_LIST_COLLECTION != null)
 		TASKS_LIST_COLLECTION.collection.reset();
-				
-		// Shows loading image untill data gets ready for displaying
-		$('#new-task-list-based-condition').html(LOADING_HTML);	
 		
-		// Add selected details of dropdown in cookie
+		//Add selected details of dropdown in cookie
 		addDetailsInCookie(this);
 		
 		setTimeout(function() { // Do something after 2 seconds
@@ -37930,7 +41803,7 @@ $(function()
 	{		
 		// Change heading of page
 		changeHeadingOfPage($('#new-owner-tasks').closest(".btn-group").find(".selected_name").html());
-	});
+	});*/
 
 	/*
 	 * In new/update task modal, on selection of status, show progress slider
@@ -37938,9 +41811,20 @@ $(function()
 	 */
 	$(".status").change(function()
 	{
+		console.log("status change event");
+		
 		// Change status UI and input field
 		changeStatus($(this).attr("value"), $(this).closest("form"));
-	});
+	});	
+	
+	$(".group-view").die().live('click', function(event)
+	{
+		event.preventDefault();
+		console.log("group-view event");
+				
+		// Change UI and input field
+		applyDetailsFromGroupView();
+	});	
 });
 // Adds task to task list
 function addTaskToTaskList(headingToSearch, tasksToAdd, conditionToCheck)
@@ -38115,7 +41999,7 @@ function changeStatus(status, parentForm)
  * progress in task edit modal.
  */
 function changeProgress(value, status, parentForm)
-{
+{	
 	// Add progress % to input field
 	$("#progress", parentForm).val(value);
 
@@ -38128,7 +42012,7 @@ function changeProgress(value, status, parentForm)
  * update modal.
  */
 function showProgressSlider(value, status, parentForm)
-{
+{	
 	if (value == 100 || status == COMPLETED)
 	{
 		$(".status", parentForm).val(COMPLETED);
@@ -38138,7 +42022,7 @@ function showProgressSlider(value, status, parentForm)
 	else
 		$("#is_complete", parentForm).val(false);
 
-	if (status == "IN_PROGRESS")
+	if (status == IN_PROGRESS)
 		$(parentForm).find(".progress-slider").css("display", "block");
 	else
 		$(parentForm).find(".progress-slider").css("display", "none");
@@ -38365,7 +42249,208 @@ function adjustHeightOfTaskListAndScroll()
 	$("#new-task-list-based-condition").height(bodyheight - 155);
 	$(".list-tasks").css('max-height', bodyheight - 245);
 }
-$(function()
+
+/**
+ * Hide task in list view and display column view with loading img. 
+ */
+function hideListViewAndShowLoading()
+{	
+	// Hide list view and show column view
+	$('#new-task-list-based-condition').show();
+	$('#task-list-based-condition').hide();
+	$('.tasks-count').html("");
+	
+	// Shows loading image untill data gets ready for displaying
+	$('#new-task-list-based-condition').html(LOADING_HTML);	
+}
+
+/**
+ * Display task in list view with selected filter. 
+ */
+function displayListView()
+{
+	console.log("in displayListView");
+	$('#new-task-list-based-condition').hide();
+	$('#task-list-based-condition').show();
+	
+	// Display group view
+	$(".group-view").show();
+	
+	// Hide group by
+	$(".do-onclick-nothing").hide();
+	
+	// Hide list view
+	$(".list-view").hide();
+	
+	var url = getParamsNew();
+	
+	// When user hit list view first time and my pending is selected as default one, we have to set pending true.
+	var owner = $('#new-owner-tasks').data("selected_item");
+	if(owner == undefined)
+		url = url  + "&pending=" + true;
+	
+	console.log("url for list view: "+url);	
+	
+	updateData(url);
+}
+
+//
+function bindDropdownEvents()
+{
+	$('.dropdown-menu').find(".do-onclick-nothing").on("click",function(e)
+	 {
+	    e.stopImmediatePropagation();
+	 });
+	
+	// Click events to agents dropdown of Owner's list and Criteria's list
+	$("ul#new-owner-tasks li a,ul#new-type-tasks .new-type-task").on("click", function(e)
+	{        
+		e.preventDefault();			
+				
+		// Hide list view and show column view with loading img
+		hideListViewAndShowLoading();		
+		
+		// Hide dropdown
+		if($(".type-task-button").hasClass("open"))
+			$(".type-task-button").removeClass("open");
+		
+		// Show selected name
+		var name = $(this).html(), id = $(this).attr("href");
+		
+		var selectedDropDown = $(this).closest("ul").attr("id");
+				
+		if(selectedDropDown == "new-type-tasks") // criteria type
+		    $(this).closest("ul.main-menu").data("selected_item", id);
+		else  // owner type
+			$(this).closest("ul").data("selected_item", id);
+		
+		$(this).closest(".btn-group").find(".selected_name").text(name);
+
+		// Empty collection
+		if(TASKS_LIST_COLLECTION != null)
+		TASKS_LIST_COLLECTION.collection.reset();
+		
+		// Add selected details of dropdown in cookie
+		addDetailsInCookie(this);
+				
+		setTimeout(function() { // Do something after 2 seconds
+			// Get details from dropdown and call function to create collection
+			getDetailsForCollection();
+		}, 2000);
+	});
+
+	// Change page heading as per owner selection
+	$("ul#new-owner-tasks li a").on("click", function()
+	{		
+		// Change heading of page
+		changeHeadingOfPage($('#new-owner-tasks').closest(".btn-group").find(".selected_name").html());
+	});	
+}
+
+// Change UI and input field 
+function applyDetailsFromGroupView()
+{
+	console.log("In applyDetailsFromGroupView");
+	
+	var task_criteria_forgroupview = readCookie("task_criteria_forgroupview");
+	var task_owner_forgroupview = readCookie("task_owner_forgroupview");
+
+	console.log(task_criteria_forgroupview + " " + task_owner_forgroupview);
+			
+	withoutEventChangeDropDowns(task_criteria_forgroupview, task_owner_forgroupview, true);	
+
+	// Hide group view
+	$(".group-view").hide();
+	
+	// Display group by
+	$(".do-onclick-nothing").show();
+	
+	// Display list view
+	$(".list-view").show();
+	
+	var ownerType = $('#new-owner-tasks').data("selected_item");
+	
+	// Add owner type in cookie
+	addDetailsInCookie($("ul#new-owner-tasks").find('a[href='+ownerType+']'));
+	
+	// Add task type in cookie
+	addDetailsInCookie($("ul#new-type-tasks").find('a[href='+getCriteria()+']'));
+}
+
+//
+function withoutEventChangeDropDowns(task_criteria, task_owner, apply_groupview)
+{
+	console.log("In withoutEventChangeDropDowns");
+	console.log(task_criteria + " " + task_owner);	
+	
+	if (task_criteria)
+	{
+		var res = task_criteria.split("_");
+
+		console.log(res);
+
+		$('#new-type-tasks').data("selected_item", res[1]);
+		$('#new-type-tasks').closest(".btn-group").find(".selected_name").text(res[0]);
+	}
+
+	if (task_owner)
+	{
+		var res = task_owner.split("_")
+
+		console.log(res);
+
+		$('#new-owner-tasks').data("selected_item", res[1]);
+		$('#new-owner-tasks').closest(".btn-group").find(".selected_name").text(res[0]);
+	}
+
+	if(!task_criteria && !task_owner && apply_groupview)
+	  {
+		// Type of task
+		$('#new-type-tasks').data("selected_item", "DUE");
+		$('#new-type-tasks').closest(".btn-group").find(".selected_name").text("Due");		
+	  }
+	
+	// Change heading of page
+	changeHeadingOfPage($('#new-owner-tasks').closest(".btn-group").find(".selected_name").html());
+
+	// Get details from dropdown and call function to create collection
+	getDetailsForCollection();
+}
+
+//Add details about task list where add task btn is clicked
+function addTasklListDetails(addTaskElement)
+{
+	console.log("In addTasklListDetails");
+	console.log(addTaskElement);	
+	
+	if(!$(addTaskElement).hasClass("list-bottom"))
+		return;	
+	
+	switch (getCriteria()) {
+	case "STATUS":
+	{ 
+		$("#status", $("#taskForm")).val($(addTaskElement).attr("heading"));
+		changeStatus($(addTaskElement).attr("heading"), $("#taskForm"));
+	}
+		break;	
+	case "CATEGORY":
+	{$("#type", $("#taskForm")).val($(addTaskElement).attr("heading"));}
+		break;
+	case "OWNER":
+	{$("#owners-list", $("#taskForm")).val($(addTaskElement).attr("ownerID"));}
+		break;
+	case "DUE":
+	{		
+		var epochTime = getNewDueDate($(addTaskElement).attr("heading"));
+		var startDate = new Date(epochTime *1000).format('mm/dd/yyyy');
+		$("#taskForm").find("input.date").val(new Date(startDate).format('mm/dd/yyyy')).datepicker('update');		
+	}
+		break;		
+	case "PRIORITY":
+	{$("#priority_type", $("#taskForm")).val($(addTaskElement).attr("heading"));}
+		break;	
+	}	
+}$(function()
 {
 	/**
 	 * Displays note modal. Also prepends the contact name to related to field
@@ -38677,22 +42762,39 @@ function getParamsNew()
 }function addDetailsInCookie(elmnt)
 {
 	console.log("In addDetailsInCookie");
+	console.log($(elmnt));
 
 	var name = $(elmnt).html();
 	var id = $(elmnt).attr("href");
 
 	var taskField = null;
 	var taskFieldValue = null;
+	var taskFieldForGroupView = null;
+	var taskFieldValueForGroupView = null;
 
 	if ($(elmnt).closest("ul").attr('id') == "new-type-tasks")
+	   {
 		taskField = "task_criteria";
+		taskFieldForGroupView = "task_criteria_forgroupview";
+	   }	
 	else if ($(elmnt).closest("ul").attr('id') == "new-owner-tasks")
+	   {
 		taskField = "task_owner";
-
+		taskFieldForGroupView = "task_owner_forgroupview";
+	   }		
+	
 	taskFieldValue = name + "_" + id;
+	taskFieldValueForGroupView = name + "_" + id;
 
 	// Creates the cookie
 	createCookie(taskField, taskFieldValue);
+	
+	// Save setting for group view	
+	if(getCriteria() != "LIST")
+		{
+		 // Creates the cookie
+		 createCookie(taskFieldForGroupView, taskFieldValueForGroupView);
+		}	
 }
 
 function readDetailsFromCookie()
@@ -38703,39 +42805,26 @@ function readDetailsFromCookie()
 	var task_owner = readCookie("task_owner");
 
 	console.log(task_criteria + " " + task_owner);
-
-	if (task_criteria)
-	{
-		var res = task_criteria.split("_");
-
-		console.log(res);
-
-		$('#new-type-tasks').data("selected_item", res[1]);
-		$('#new-type-tasks').closest(".btn-group").find(".selected_name").text(res[0]);
-	}
-
-	if (task_owner)
-	{
-		var res = task_owner.split("_")
-
-		console.log(res);
-
-		$('#new-owner-tasks').data("selected_item", res[1]);
-		$('#new-owner-tasks').closest(".btn-group").find(".selected_name").text(res[0]);
-	}
-
-	// Change heading of page
-	changeHeadingOfPage($('#new-owner-tasks').closest(".btn-group").find(".selected_name").html());
-
-	// Get details from dropdown and call function to create collection
-	getDetailsForCollection();
+	
+	withoutEventChangeDropDowns(task_criteria, task_owner, undefined);	
 }
 // Before selecting proper type array from map, need to fill map with user's detail.
 function startMakingCollection(criteria, pending)
 {
-	// Shows loading image untill data gets ready for displaying
-	$('#new-task-list-based-condition').html(LOADING_HTML);
-
+	console.log("in startMakingCollection");
+	console.log(criteria+" "+ pending);
+	
+	// Check for list view 
+	if(criteria == "LIST")
+		{	
+		  // Display list view
+		  displayListView();
+		  return;
+		}	
+	
+	// Hide list view and show column view with loading img
+	hideListViewAndShowLoading();
+			
 	// Get user details and add into GROUPING_MAP's owner array.
 	if (criteria == "OWNER" && GROUPING_MAP[criteria].type.length == 0)
 		getUserDetails(function(data)
@@ -38819,7 +42908,7 @@ function initTaskListCollection()
 			$('.loading', el).remove();
 
 			// Adjust Height Of Task List And Scroll as per window size
-			adjustHeightOfTaskListAndScroll();
+			adjustHeightOfTaskListAndScroll();			
 		} });
 
 	// Over write append function
@@ -39005,8 +43094,14 @@ function getOptions()
 	// to 1375727400000
 	var start_time = Date.parse($.trim(range[0])).valueOf();
 
+	var end_value = $.trim(range[1]);
+	
+	// To make end value as end time of day
+	if(end_value)
+		end_value = end_value + " 23:59:59";
+	
 	// Returns milliseconds from end date.
-	var end_time = Date.parse($.trim(range[1])).valueOf();
+	var end_time = Date.parse(end_value).valueOf();
 
 	// Adds start_time, end_time and timezone offset to params.
 	options += ("start_time=" + start_time + "&end_time=" + end_time);
@@ -39134,7 +43229,7 @@ $(function(){
 })
 
 
-function reportsContactTableView(base_model) 
+function reportsContactTableView(base_model,customDatefields,view) 
 {
 /* Old Code :
  * Using this fails on firefox, works on Chrome though
@@ -39174,42 +43269,48 @@ function reportsContactTableView(base_model)
 			itemView.render().el); // ----------- this line fails on Firefox
 */
 	
-	var modelData = this.options.modelData;	// Reads the modelData (customView object)
+	var modelData = view.options.modelData;	// Reads the modelData (customView object)
 	var fields = modelData['fields_set']; // Reads fields_set from modelData
 	var contact = base_model.toJSON(); // Converts base_model (contact) in to JSON
-	var final_html_content="";
-	var element_tag=this.options.individual_tag_name;
+	var final_html_content = "";
+	var element_tag = view.options.individual_tag_name;
+	var templateKey = view.options.templateKey;
 	
-	// Iterates through, each field name and appends the field according to
-	// order of the fields
-	$.each(fields, function(index, field_name) {
-		
-		if(field_name.indexOf("custom_") != -1)
-		{
-			field_name = field_name.split("custom_")[1]; 	
-			var property = getProperty(contact.properties, field_name);
-			if(!property)
-				property = {};
+				// Iterates through, each field name and appends the field according to
+				// order of the fields
+				$.each(fields, function(index, field_name) {
+					
+					if(field_name.indexOf("custom_") != -1)
+					{
+						field_name = field_name.split("custom_")[1]; 	
+						var property = getProperty(contact.properties, field_name);
+						if(!property)
+							property = {};
 
-			final_html_content += getTemplate('contacts-custom-view-custom', property);
-			return;
-		}
-		
-		
-		
-		if(field_name.indexOf("properties_") != -1)
-			field_name = field_name.split("properties_")[1];
-		
-		final_html_content+=getTemplate('contacts-custom-view-' + field_name, contact);
-	});
+						if(isDateCustomField(customDatefields,property))
+							final_html_content += getTemplate('contacts-custom-view-custom-date', property);
+						else
+							final_html_content += getTemplate('contacts-custom-view-custom', property);
+						
+						return;
+					}
+					
+					
+					
+					if(field_name.indexOf("properties_") != -1)
+						field_name = field_name.split("properties_")[1];
+					
+					final_html_content+=getTemplate('contacts-custom-view-' + field_name, contact);
+				});
+				
+				// Appends model to model-list template in collection template
+				$(("#" + templateKey + '-model-list'), view.el).append(
+						'<'+element_tag+'>'+final_html_content+'</'+element_tag+'>');	
+				
+				// Sets data to tr
+				$(('#' + templateKey + '-model-list'), view.el).find('tr:last').data(
+						base_model);
 
-	// Appends model to model-list template in collection template
-	$(("#" + this.options.templateKey + '-model-list'), this.el).append(
-			'<'+element_tag+'>'+final_html_content+'</'+element_tag+'>');	
-	
-	// Sets data to tr
-	$(('#' + this.options.templateKey + '-model-list'), this.el).find('tr:last').data(
-			base_model);
 }
 
 function deserialize_multiselect(data, el)
@@ -39224,7 +43325,151 @@ function deserialize_multiselect(data, el)
 	});
 
 	$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id", "fields_set").sortable();
-}$(function(){
+}function saveActivityReport(saveBtn){
+	// Returns, if the save button has disabled attribute
+	if ($(saveBtn).attr('disabled'))
+		return;
+
+	// Disables save button to prevent multiple click event issues
+	disable_save_button(saveBtn);
+	/*if(!isValidForm('#activityReportsForm')){
+		// Removes disabled attribute of save button
+		enable_save_button(saveBtn);
+		return;
+	}*/
+	
+	var json = serializeForm('activityReportsForm');
+	json.activity = $('#activity-type-list').val();
+	json.user_ids = $('#users-list').val();
+	console.log(json);
+	
+	// Saving that pipeline object
+	var activityReportModel = new Backbone.Model();
+	activityReportModel.url = '/core/api/activity-reports';
+	activityReportModel.save(json, {
+		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
+		success : function(model, response) {
+			console.log(model);
+			App_Reports.activityReports.collection.add(model);
+			$('#activityReportModal').modal('hide');
+		},
+		error: function(data,response){
+			enable_save_button(saveBtn);
+			console.log(response);
+		}
+	});
+	
+}
+
+function updateActivityReport(id){
+	alert(id);
+	var json = App_Reports.activityReports.collection.get(6528900045733888).toJSON();
+	$('#activityReportModal').modal('show');
+	deserializeForm(json,$('#activityReportsForm'));
+	$.each(json.user_ids,function(i,user_id){
+		$('#users-list').multiSelect('select',user_id);
+	});
+	$.each(json.activity,function(i,activity){
+		$('#activity-type-list').multiSelect('select',activity);
+	});
+	
+}
+
+$(function(){
+	
+	$('#activityReportModal').live('hidden.bs.modal',function(e){
+		$('#users-list, #activity-type-list').multiSelect('deselect_all');
+	});
+	
+	$('#activity-reports-email-now').die().live('click',function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		var id = $(this).attr('data');
+		var confirmationModal = $('<div id="report-send-confirmation" class="modal fade in">' +
+				'<div class="modal-header" >'+
+					'<a href="#" data-dismiss="modal" class="close">&times;</a>' +
+						'<h3>Send Report</h3></div>' +
+							'<div class="modal-body">' +
+								'<p>You are about to send report.</p>' +
+								'<p>Do you want to proceed?</p>' +
+							'</div>' +	
+					'<div class="modal-footer">' +
+						'<div><span class="report-message" style="margin-right:5px"></span></div>' +
+						'<div>' +
+						'<a href="#" id="report-send-confirm" class="btn btn-primary">Yes</a>' +
+						'<a  href="#" class="btn close" data-dismiss="modal" >No</a>'+ 
+						'</div>' +
+					'</div>' +
+				'</div>' + 
+			'</div>');
+
+		confirmationModal.modal('show');
+		var date = Math.floor(Date.now()/1000);
+		$("#report-send-confirm", confirmationModal).click(
+				function(event)
+				{
+					event.preventDefault();
+					
+					if ($(this).attr("disabled")) return;
+					
+					$(this).attr("disabled", "disabled");
+					$.get('/core/api/activity-reports/email/' + id +'?end_time='+date, function(data){
+						
+						console.log("sending email");
+							$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Report will be sent shortly</i></p></small></div>');
+				
+							$('.report-message').html($save_info);
+				
+							$save_info.show();
+
+							setTimeout(function ()
+							            {
+								   (confirmationModal).modal('hide');
+							            }, 2000);
+
+					}).fail(function(response){
+						$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'+response.responseText+'</i></p></small></div>');
+						
+						$('.report-message').html($save_info);
+			
+						$save_info.show();
+
+						setTimeout(function ()
+						            {
+							   (confirmationModal).modal('hide');
+						            }, 2000);
+
+					});
+				});
+	});
+	
+	$('#activity-type-list-select-all').die().live('click',function(e){
+		e.preventDefault();
+		$('#activity-type-list').multiSelect('select_all');
+	});
+	$('#activity-type-list-select-none').die().live('click',function(e){
+		e.preventDefault();
+		$('#activity-type-list').multiSelect('deselect_all');
+	});
+	
+	$('#users-list-select-all').die().live('click',function(e){
+		e.preventDefault();
+		$('#users-list').multiSelect('select_all');
+	});
+	$('#users-list-select-none').die().live('click',function(e){
+		e.preventDefault();
+		$('#users-list').multiSelect('deselect_all');
+	});
+	
+	/** 
+	    * Deal list view edit
+	    
+	    $('#activity-report-model-list > tr > td:not(":first-child")').live('click', function(e) {
+			e.preventDefault();
+			updateActivityReport($(this).closest('tr').find('.data').attr('data'));
+		});
+	*/
+});$(function(){
 	$(".report-chorts").die().live('click', function(e){
 		e.preventDefault();
 		var formelement = $(this).parents('form'); 
@@ -39392,20 +43637,20 @@ function scramble_input_names(el)
 
 $(function()
 {
-	CUSTOM_FIELDS = undefined;
+	SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
+	COMPANY_CUSTOM_FIELDS = undefined;
 	
 	// Filter Contacts- Clone Multiple
 	$(".filter-contacts-multiple-add").die().live('click', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
-		var htmlContent = $(getTemplate("filter-contacts", {})).find('tr').clone();
+		var htmlContent = $(getTemplate("filter-contacts", {})).find('.chained-table.contact').find('tr').clone();
 		
 		scramble_input_names($(htmlContent));
 
 		// boolean parameter to avoid contacts/not-contacts fields in form
 		chainFilters(htmlContent, function(){
-			
 		}, false);
 
 //		$(this).hide();
@@ -39414,6 +43659,24 @@ $(function()
 		$(this).siblings("table").find("tbody").append(htmlContent);
 	});
 	
+	// Filter Contacts- Clone Multiple
+	$(".filter-companies-multiple-add").die().live('click', function(e)
+	{
+		e.preventDefault();
+		// To solve chaining issue when cloned
+		var htmlContent = $(getTemplate("filter-contacts", {})).find('.chained-table.company').find('tr').clone();
+		
+		scramble_input_names($(htmlContent));
+
+		// boolean parameter to avoid contacts/not-contacts fields in form
+		chainFilters(htmlContent, function(){
+		}, false);
+
+//		$(this).hide();
+		// var htmlContent = $(this).closest("tr").clone();
+		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+		$(this).siblings("table").find("tbody").append(htmlContent);
+	});
 	
 	
 
@@ -39429,11 +43692,14 @@ $(function()
 
 		e.preventDefault();
 		eraseCookie('company_filter');
+		eraseData('dynamic_contact_filter');
 
 		var filter_id = $(this).attr('id');
+		var filter_type = $(this).attr('filter_type');
 
 		// Saves Filter in cookie
 		createCookie('contact_filter', filter_id)
+		createCookie('contact_filter_type', filter_type)
 
 		// Gets name of the filter, which is set as data
 		// attribute in filter
@@ -39445,7 +43711,6 @@ $(function()
 		// /removed old code from below,
 		// now filters will work only on contact, not company
 	});
-
 	/*
 	 * If default filter is selected, removes filter cookies an load contacts
 	 * with out any query condition
@@ -39468,6 +43733,7 @@ $(function()
 
 		e.preventDefault();
 		eraseCookie('contact_filter');
+		eraseCookie('contact_filter_type');
 
 		createCookie('company_filter', "Companies");
 		CONTACTS_HARD_RELOAD = true;
@@ -39517,6 +43783,17 @@ $(function()
 		
 	})
 	
+	$("#contact_type").die().live('change', function(e)
+	{
+		if($(this).val() == 'COMPANY') {
+			$('#companies-filter-wrapper').show();
+			$('#contacts-filter-wrapper').hide();
+		} else {
+			$('#companies-filter-wrapper').hide();
+			$('#contacts-filter-wrapper').show();
+		}
+	});
+	
 	
 });
 
@@ -39538,12 +43815,14 @@ function setupContactFilterList(cel, tag_id)
 						
 
 	var filter_id = null;
-	contactFiltersListView = new Base_Collection_View(
+		contactFiltersListView = new Base_Collection_View(
 			{
 				url : '/core/api/filters',
+				sort_collection : false,
 				restKey : "ContactFilter",
 				templateKey : "contact-filter-list",
 				individual_tag_name : 'li',
+				sort_collection : false,
 				postRenderCallback : function(el)
 				{
 					var filter_name;
@@ -39594,13 +43873,13 @@ function setupContactFilterList(cel, tag_id)
 						
 				} });
 
-	// Fetchs filters
-	contactFiltersListView.collection.fetch();
-
-	var filter_dropdown_element = contactFiltersListView.render().el;
-
-	// Shows in contacts list
-	$('#filter-list', cel).html(contactFiltersListView.render().el);
+			// Fetchs filters
+			contactFiltersListView.collection.fetch();
+		
+			var filter_dropdown_element = contactFiltersListView.render().el;
+		
+			// Shows in contacts list
+			$('#filter-list', cel).html(contactFiltersListView.render().el);
 }
 
 /**
@@ -39611,7 +43890,9 @@ function revertToDefaultContacts()
 {
 	// Erase filter cookie. Erases both contact and company filter
 	eraseCookie('contact_filter');
+	eraseCookie('contact_filter_type');
 	eraseCookie('company_filter');
+	eraseData('dynamic_filter');
 
 	if (App_Contacts.contactsListView)
 		App_Contacts.contactsListView = undefined;
@@ -39622,28 +43903,58 @@ function revertToDefaultContacts()
 	App_Contacts.contacts();
 }
 
+function chainFiltersForContactAndCompany(el, data, callback) {
+	if(data && data.contact_type) {
+		if(data.contact_type == 'PERSON') {
+			chainFilters($(el).find('.chained-table.contact'), data, undefined, false, false);
+			chainFilters($(el).find('.chained-table.company'), undefined, callback, false, true);
+		} else if(data.contact_type == 'COMPANY') {
+			chainFilters($(el).find('.chained-table.company'), data, undefined, false, true);
+			chainFilters($(el).find('.chained-table.contact'), undefined, callback, false, false);
+		}
+	} else {
+		chainFilters($(el).find('.chained-table.contact'), undefined, undefined, false, false);
+		chainFilters($(el).find('.chained-table.company'), undefined, callback, false, true);
+	}
+}
+
 /**
  * Chains fields using jquery.chained library. It deserialzed data into form
  * 
  * @param el
  */
-function chainFilters(el, data, callback, is_webrules)
+function chainFilters(el, data, callback, is_webrules, is_company)
 {
-	if(!CUSTOM_FIELDS)
-	{
-		$("#content").html(getRandomLoadingImg());
-		fillCustomFieldsInFilters(el, function(){
+	if(is_company) {
+		fillCompanyCustomFieldsInFilters(el, function(){
 			show_chained_fields(el, data, true);
 			if (callback && typeof (callback) === "function")
 			{
 				// execute the callback, passing parameters as necessary
 				callback();
 			}
-		}, is_webrules)
+		});
 		return;
+	} else {
+		if(!SEARCHABLE_CONTACT_CUSTOM_FIELDS)
+		{			
+			if(window.location.hash.indexOf("contact-filter") != -1)
+			   $("#content").html(getRandomLoadingImg());
+			fillContactCustomFieldsInFilters(el, function(){
+				show_chained_fields(el, data, true);
+				if (callback && typeof (callback) === "function")
+				{
+					// execute the callback, passing parameters as necessary
+					callback();
+				}
+			}, is_webrules)
+			return;
+		}
+		
+		fillCustomFields(SEARCHABLE_CONTACT_CUSTOM_FIELDS, el, undefined, false)
 	}
 	
-	fillCustomFields(CUSTOM_FIELDS, el)
+	
 	show_chained_fields(el, data);
 	if (callback && typeof (callback) === "function")
 	{
@@ -39670,7 +43981,6 @@ function show_chained_fields(el, data, forceShow)
 	NESTED_RHS = $("#nested_rhs", el);
 	NESTED_LHS = $("#nested_lhs", el);
 	
-	// Chaining dependencies of input fields with jquery.chained.js
 	RHS.chained(condition, function(chained_el, self){
 		var selected_field = $(chained_el).find('option:selected');
 		var placeholder = $(selected_field).attr("placeholder");
@@ -39684,6 +43994,7 @@ function show_chained_fields(el, data, forceShow)
 				$(this).remove();
 		})
 		
+		
 		if(placeholder)
 		{
 			$("input", self).attr("placeholder", placeholder);
@@ -39694,6 +44005,7 @@ function show_chained_fields(el, data, forceShow)
 			
 			$("input", self).remove();
 			$($('select[name="'+field_name+'"]', self)[0]).show();
+			$('select:not([name="'+field_name+'"])', self).remove();
 		}
 		
 		
@@ -39705,10 +44017,10 @@ function show_chained_fields(el, data, forceShow)
 	NESTED_LHS.chained(NESTED_CONDITION);
 	NESTED_RHS.chained(NESTED_CONDITION);
 
-
-
-	if(data && data.rules)
-		deserializeChainedSelect($(el).find('form'), data.rules, el_self.find('form'));
+	if(data && data.rules) {
+		deserializeChainedSelect(el, data.rules, el_self);
+	}
+		
 	
 	// If LHS selected is tags then typeahead is enabled on rhs field
 	if ($(':selected', LHS).val() && ($(':selected', LHS).val()).indexOf('tags') != -1)
@@ -39777,14 +44089,28 @@ function addTagsArrayasTypeaheadSource(tagsJSON, element)
 }
 
 
-function fillCustomFieldsInFilters(el, callback, is_webrules)
+function fillContactCustomFieldsInFilters(el, callback, is_webrules)
 {
 
 	$.getJSON("core/api/custom-fields/searchable/scope?scope=CONTACT", function(fields){
 		console.log(fields);
-		CUSTOM_FIELDS = fields;
+		SEARCHABLE_CONTACT_CUSTOM_FIELDS = fields;
 		fillCustomFields(fields, el, callback, is_webrules)
 	})
+}
+
+function fillCompanyCustomFieldsInFilters(el, callback)
+{
+	if(!COMPANY_CUSTOM_FIELDS)
+	{
+		$.getJSON("core/api/custom-fields/searchable/scope?scope=COMPANY", function(fields){
+			console.log(fields);
+			COMPANY_CUSTOM_FIELDS = fields;
+			fillCustomFields(fields, el, callback, false);
+		});
+	} else {
+		fillCustomFields(COMPANY_CUSTOM_FIELDS, el, callback, false)
+	}
 }
 
 function fillCustomFields(fields, el, callback, is_webrules)
@@ -39793,12 +44119,14 @@ function fillCustomFields(fields, el, callback, is_webrules)
 	var rhs_element = $("#RHS", el);
 	var condition = $("#condition > select", el);
 
+	var _AGILE_CUSTOM_DIVIDER_ = ' _AGILE_CUSTOM_DIVIDER_';
 	for(var i = 0; i < fields.length ; i++)
 	{
 		if(i == 0)
 			lhs_element.show();
 		var field = fields[i];
 
+		field.field
 		if(field.field_type == "DATE")
 		{
 			lhs_element.append('<option value="'+field.field_label+'_time" field_type="'+field.field_type+'">'+field.field_label+'</option>');
@@ -39808,13 +44136,13 @@ function fillCustomFields(fields, el, callback, is_webrules)
 		{
 			lhs_element.append('<option value="'+field.field_label+'" field_type="'+field.field_type+'" >'+field.field_label+'</option>');
 		}
-		condition.append('<option value="EQUALS" class="'+field.field_label+' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is</option>');
-		condition.append('<option value="NOTEQUALS" class="'+field.field_label+' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">isn\'t</option>');
+		condition.append('<option value="EQUALS" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is</option>');
+		condition.append('<option value="NOTEQUALS" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">isn\'t</option>');
 		
 		// Contacts and not contains should only be in webrules form
 		if(is_webrules)
 		{
-			condition.append('<option value="MATCHES" class="'+field.field_label+' custom_field" field_name="'+field.field_label+'">contains</option>');
+			condition.append('<option value="MATCHES" class="'+field.field_label +' custom_field" field_name="'+field.field_label+'">contains</option>');
 			condition.append('<option value="NOT_CONTAINS" class="'+field.field_label+' custom_field" field_name="'+field.field_label+'">doesn\'t contain</option>');
 		}
 		
@@ -40262,6 +44590,54 @@ $(function()
 		}
 		else
 		{
+			// Selected Contact ids
+			var id_array = get_contacts_bulk_ids();
+			
+			// when SELECT_ALL is true i.e., all contacts are selected.
+			if(id_array.length === 0)
+			   count = getAvailableContacts();
+			else
+				count = id_array.length;
+			
+			if(!canSendEmails(count))
+			{
+				var pendingEmails = getPendingEmails();
+				
+				var yes = "Yes";
+				var no = "No"
+					
+				var message = "";
+				var upgrade_link =  'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>';
+				var title = "Not enough emails left"
+				if(pendingEmails <= 0)
+					{
+						title = "Emails limit";
+						yes = "";
+						no = "Ok"
+						message = "You have used up all emails in your quota. " + upgrade_link;
+					}
+				else
+					message = "You have only "+ pendingEmails + " emails remaining as per your quota. " + upgrade_link +
+					" Continuing with this operation may not send the email to some contacts. <br/><br/>" +
+					"Do you want to proceed?";
+				
+				showModalConfirmation(title, 
+						message, 
+					show_bulk_email_form
+					, function(element){
+							
+						// No callback
+						if(!element)
+						return;
+						
+						if($(element).attr('subscribe'))
+							Backbone.history.navigate( "subscribe", { trigger : true });
+						},
+						function(element){
+						}, yes, no);
+				return;
+			}
+			
 			show_bulk_email_form()
 		}
 		
@@ -40331,7 +44707,10 @@ $(function()
 			
 			// serialize form.
 			var form_json = serializeForm("emailForm");
-			
+			if(form_json.from_email != CURRENT_DOMAIN_USER.email && form_json.from_name == CURRENT_DOMAIN_USER.name)
+			{
+				form_json.from_name = "";
+			}
 			var url = '/core/api/bulk/update?action_type=SEND_EMAIL';
 			
 			var json = {};
@@ -40596,11 +44975,17 @@ function getSelectionCriteria()
  */
 function postBulkOperationData(url, data, form, contentType, callback, error_message)
 {
+	var dynamic_filter = getDynamicFilters();
+	if(dynamic_filter != null) {
+		data.dynamic_filter = dynamic_filter;
+	}
 	if (data.contact_ids && data.contact_ids.length == 0)
 	{
 		console.log(data.contact_ids);
 		console.log(getSelectionCriteria());
-		url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+		if(dynamic_filter == null) {			
+			url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+		}
 		console.log(url);
 	}
 	else
@@ -40641,6 +45026,26 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 			}
 			showNotyPopUp('information', error_message, "top", 5000);
 	} });
+}
+
+function getDynamicFilters() {
+	var dynamic_filter = null;
+	if (readCookie('company_filter'))
+	{
+		dynamic_filter = readData('dynamic_company_filter')
+	} else {
+		dynamic_filter = readData('dynamic_contact_filter')
+	}
+	
+	if(!dynamic_filter || dynamic_filter == null) {
+		return null;
+	} else {
+		if(JSON.parse(dynamic_filter).rules.length >0) {
+			return dynamic_filter;
+		} else {
+			return null;
+		}
+	}
 }
 /**
  * Deletes the selected row related entities from the database based on the url 
@@ -40698,8 +45103,12 @@ $(function(){
 					var url = $(table).attr('url');
 					if(SELECT_ALL == true)
 					{
-						if($(table).attr('id') == "contacts" || $(table).attr('id') == "companies" )
-							url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+						if($(table).attr('id') == "contacts" || $(table).attr('id') == "companies" ) {
+							var dynamic_filter = getDynamicFilters();
+							if(dynamic_filter == null) {								
+								url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+							}
+						}
 					}
 					
 					// For Active Subscribers table
@@ -40734,8 +45143,12 @@ $(function(){
 				var url = $(table).attr('url');
 				if(SELECT_ALL == true)
 				{
-					if($(table).attr('id') == "contacts" || $(table).attr('id') == "companies" )
-						url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+					if($(table).attr('id') == "contacts" || $(table).attr('id') == "companies" ) {
+						var dynamic_filter = getDynamicFilters();
+						if(dynamic_filter == null) {								
+							url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+						}
+					}
 				}
 				
 				// For Active Subscribers table
@@ -40867,7 +45280,12 @@ function customize_bulk_delete(id_array, data_array){
  */
 function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, data_array){
 	var json = {};
-	json.ids = JSON.stringify(id_array);
+	if(!SELECT_ALL)
+		json.ids = JSON.stringify(id_array);
+	var dynamic_filter = getDynamicFilters();
+	if(dynamic_filter != null) {
+		json.dynamic_filter = dynamic_filter;
+	}
 		
 	$.ajax({
 		url: url,
@@ -40900,11 +45318,6 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			
 			// Show bulk operations only when thead check box is checked
 			toggle_contacts_bulk_actions_dropdown(undefined, true,$('.thead_check').parents('table').attr('id'));
-			
-			// Tags re-fetching
-			if(App_Contacts.contactsListView){
-				setup_tags(App_Contacts.contactsListView.el);
-			}
 			
 			// Removes the entities from timeline, if they are deleted from contact detail view
 			if(App_Contacts.contactDetailView && Current_Route == "contact/"
@@ -41154,8 +45567,8 @@ $(function(){
     * by triggering the event agile_collection_loaded from base-collection render event, while loading the collection.
     */ 	
 	$('body').live('agile_collection_loaded', function(event, el) {
-		
-		var table_element = $('table', el);
+		//use class ignore-collection if any other table needs to be used inside the template.
+		var table_element = $('table:not(.ignore-collection)', el);
 		
 		  // Adds class to tbody to edit the table by validating the route attribute 
 		if($(table_element).find('tbody').attr('route'))
@@ -41579,6 +45992,49 @@ $(".delete_user").die().live('click', function(e){
 				} });
 			
 		});
+		$("#delete_userplan").die().live('click',function(e) {
+			e.preventDefault();
+			if (!confirm("Are you sure you want to cancel this subscription ?" ))
+				return;
+			var sub_id = $("#delete_userplan").attr("sub_id");
+			var cus_id = $("#delete_userplan").attr("cus_id");
+			$.ajax({url : 'core/api/admin_panel/deletesubscription?subscription_id='+sub_id+'&cus_id='+cus_id,
+				type : 'DELETE',
+				
+				success: function()
+			{
+				
+				location.reload(true);
+			},error : function(response)
+			{
+
+				console.log(response);
+			}
+			
+		});
+		});
+		$("#delete_emailplan").die().live('click',function(e) {
+			e.preventDefault();
+			if (!confirm("Are you sure you want to cancel this subscription ?" ))
+				return;
+			var sub_id = $("#delete_emailplan").attr("sub_id");
+			var cus_id = $("#delete_emailplan").attr("cus_id");
+			$.ajax({url : 'core/api/admin_panel/deletesubscription?subscription_id='+sub_id+'&cus_id='+cus_id,
+				type : 'DELETE',
+				
+				success: function()
+			{
+				
+					location.reload(true);
+			},error : function(response)
+			{
+
+				console.log(response);
+			}
+			
+		});
+			
+		});
 		
 		
 	
@@ -41591,6 +46047,9 @@ var QUERY_RESULTS;
 
 // Saves map of key: name and value: contact id
 var TYPEHEAD_TAGS = {};
+
+//Saves map of key: name and value: contact email
+var TYPEHEAD_EMAILS = {};
 
 /**
  * This script file defines simple search keywords entered in input fields are 
@@ -41616,7 +46075,7 @@ var TYPEHEAD_TAGS = {};
  * @author Yaswanth
  * 
  */
-function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url) {
+function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch) {
 
     // Turn off browser default auto complete
     $('#' + id, el).attr("autocomplete", "off");
@@ -41686,7 +46145,12 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         		 */
         		if (data.length == 0) {
         			var txt='<b>No Results Found</b>';
+
         			if(noResultText && noResultText.length)txt=noResultText;
+        			
+        			// Not to show "no Results Found" for email search
+        			if(txt == "email-search"){that.$menu.hide();return;}
+        			
         			that.$menu.html('<div style="margin-top:10px"><p align="center">'+txt+'<p></div>');
         			that.render();
         			return;
@@ -41707,6 +46171,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         		$.each(data, function (index, item){
         			tag_name = items_list[index];
         			TYPEHEAD_TAGS[tag_name] = item.id;
+        			TYPEHEAD_EMAILS[tag_name] = getContactEmail(item);
         		});
 
         		/*
@@ -41786,6 +46251,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         updater: function (items) {
             // To verify whether the entity (task, deal etc..) related to same contact twice 
         	var tag_not_exist = true;
+        	var email_not_exist = true;
 
             /* Stores items in temp variable so that, shows first
              * name and last name separated by space
@@ -41819,21 +46285,35 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
             // Return if items are not defined and it is not search in nav bar
             if (!items) return;
 
-            // If tag already exists returns
-            $.each($('.tags', el).children('li'), function (index, tag){
+            if(isEmailSearch)
+            {
+                // If email already exists returns
+               $.each($('#' + id, el).closest("div.controls").find(".tags").children('li'), function (index, tag){
 
-                if ($(tag).attr('data') == TYPEHEAD_TAGS[items]){
-                    tag_not_exist = false;
-                    return;
-                }
-            });
-
-            // add tag
-            if (tag_not_exist)
-            	{
+                    if ($(tag).attr('data') == TYPEHEAD_EMAILS[items]){
+                    	email_not_exist = false;
+                        return;
+                    }
+                });
+                if(email_not_exist && (TYPEHEAD_EMAILS[items] != "No email"))
+                	$('#' + id, el).closest("div.controls").find(".tags").append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_EMAILS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
             	
-            		$('.tags', el).append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
-            	}
+            }
+            else
+            {
+	            // If tag already exists returns
+	            $.each($('.tags', el).children('li'), function (index, tag){
+	
+	                if ($(tag).attr('data') == TYPEHEAD_TAGS[items]){
+	                    tag_not_exist = false;
+	                    return;
+	                }
+	            });
+	
+	            // add tag
+	            if (tag_not_exist)
+	            	$('.tags', el).append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
+            }
         },
         // Needs to be overridden to set timedelay on search
         keyup: function (e) {
@@ -41848,14 +46328,36 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
               case 9: // tab
               case 13: // enter
                 if (!this.shown) return
-                this.select()
+                if(isEmailSearch && !CONTACTS.length)this.hide();else this.select();
                 break
 
               case 27: // escape
                 if (!this.shown) return
                 this.hide()
                 break
+                
+              case 188:
+            	  if(isEmailSearch)
+            	  {
+            		  if(checkEmailValidation(($('#' + id, el).val()).slice(0,-1)))
+            		  {
+                 		 var email_check = true;
+                		 var email_value = ($('#' + id, el).val()).slice(0,-1);
+                		 $.each($('#' + id, el).closest("div.controls").find(".tags").children('li'), function (index, tag){
 
+                             if ($(tag).attr('data') == email_value){
+                            	 email_check = false;
+                                 return;
+                             }
+                         });
+                         if(email_check)
+                         	$('#' + id, el).closest("div.controls").find(".tags").append('<li class="tag"  style="display: inline-block;" data="' + email_value + '"><a style="cursor:pointer;">' + email_value + '</a><a class="close" id="remove_tag">&times</a></li>');
+                         this.select();
+            		  }
+            		  else this.hide();
+            	  }
+            	  break
+            	  
               default:
             	 {
             		// Checks if there is previous request and cancels it
@@ -41950,6 +46452,20 @@ function contacts_typeahead(data)
     
 }
 
+function getContactEmail(contact)
+{
+	var email=getPropertyValue(contact.properties, "email");
+	email = email!=undefined ? email.trim():"";
+	
+	if(email.length)return email;
+	else return "No email";
+
+}
+
+function checkEmailValidation(value)
+{
+	return /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/i.test(value);
+}
 
 function getContactName(contact)
 {
@@ -42331,6 +46847,19 @@ function get_tags(form_id) {
         };
     }).get();
     
+    // Reads input value from input field too.
+    var input_filed = $("#" + form_id + " input.tags-typeahead");
+    if(input_filed != null)
+    {
+    	var tag_input = $(input_filed).val();
+    	
+    	if(tag_input)
+    		{
+    			tag_input = tag_input.trim();
+    			tags_json[0].value.push(tag_input);
+    		//	input_filed.val("");
+    		}
+    }
     return tags_json;
 }
 
@@ -42561,7 +47090,7 @@ $(function()
 		  
 		})
 	
-	$('#show-schedule-url').live('click', function(e)
+	$('#show-schedule-url').die().live('click', function(e)
 	{
 		e.preventDefault();
 		$('#scheduleModal').modal('show');
@@ -42603,7 +47132,7 @@ $(function()
 		var data = $('#schedule_id').text();
 		$("#edit").hide();
 		$("#scheduleurl").removeAttr("href");
-		$('#schedule_id').html("<input class='input-small' type='text' style='position: relative;top: 6px;left: 5px;margin-top:-9px;' name='url' id='url' value='" + data + "'/><buttion class='btn' style='display:inline-block;margin-left:30px;margin-bottom:5px;' id='save-scheduleurl'>Save</button>");
+		$('#schedule_id').html("<input class='input-small' type='text' style='position: relative;top: 6px;left: 5px;margin-top:-9px;' name='url' id='url' value='" + data + "'/><buttion class='btn' style='display:inline-block;margin-left:30px;margin-bottom:5px;position: absolute;top:1px' id='save-scheduleurl'>Save</button>");
 
 
 		$("#scheduleurl").addClass("nounderline");
@@ -42645,11 +47174,17 @@ $(function()
 			$("#scheduleurl").removeClass("nounderline");
 			
 
-		}, error : function(user)
+		}, error : function(error)
 		{
 
-			alert("Error occured while saving please try again");
+            console.log(error);
+			$('#schedule_error_message').html('Something went wrong as your schedule url was not updated. Please try again in few hours. Error: '+error.statusText);
+			 $('#schedule_error_message').fadeIn('slow');
+             setTimeout(function() {
+          	    $('#schedule_error_message').fadeOut('slow');
+          	}, 2000);
 			enable_save_button($(saveBtn));
+			return;
 		} });
 
 	});
@@ -42803,7 +47338,495 @@ function setupHTMLEditor(selector, data) {
 	});
 });	
 
-		$('#revoke-shopify').die().live('click', function(e)
+		var CSRCOLLECTION;
+
+$(function()
+{
+	$("#callscriptruleForm").live('click', function(e)
+	 {
+		 makeWidgetTabActive();
+	 });
+	
+	// Filter Contacts- Clone Multiple
+	$(".callscript-multiple-add").die().live('click', function(e)
+	{
+		e.preventDefault();
+		// To solve chaining issue when cloned
+		var htmlContent = $(getTemplate("callscript-rule", {})).find('tr').clone();
+
+		scramble_input_names($(htmlContent));
+
+		// boolean parameter to avoid contacts/not-contacts fields in form
+		chainFilters(htmlContent, function()
+		{
+
+		}, false);
+
+		// $(this).hide();
+		// var htmlContent = $(this).closest("tr").clone();
+		$(htmlContent).find("i.callscript-multiple-remove").css("display", "inline-block");
+		$(this).siblings("table").find("tbody").append(htmlContent);
+	});
+
+	// Filter Contacts- Remove Multiple
+	$("i.callscript-multiple-remove").die().live('click', function(e)
+	{
+		$(this).closest("tr").remove();
+	});
+
+	// Add rule from modal to widget form, show save btn , hide add rule btn
+	$('.edit-callscriptrule').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		// Shows loading image until data gets ready for displaying
+		$('#prefs-tabs-content').html(LOADING_HTML);
+		
+		var editRuleCount = $(this).attr("data");
+		
+		// Redirect to show call script rules page
+		window.location.href = "#callscript/editrules/" + editRuleCount;
+		
+		// Shows loading image until data gets ready for displaying
+		$('#prefs-tabs-content').html(LOADING_HTML);
+	});
+
+	// Delete event for call script rule
+	$('.delete-callscriptrule').die().live('click', function(e)
+	{
+		e.preventDefault();
+		
+		// If not confirmed to delete, return
+		if (!confirm("Are you sure to delete a rule"))
+			return;
+
+		// Remove element
+		$(this).closest("tr").remove();
+
+		// Delete rule from widget
+		deleteCallScriptRule($(this).attr("data"))
+	});
+
+	// Display rule actions
+	$('.row-callscriptrule').live('mouseenter', function()
+	{
+		$(this).find(".callscriptrule-actions").css("visibility", "visible");
+	});
+
+	// Hide rule actions
+	$('.row-callscriptrule').live('mouseleave', function()
+	{
+		$(this).find(".callscriptrule-actions").css("visibility", "hidden");
+	});
+});
+
+// Get widget and make adjustment of buttons in widget form
+function adjust_form()
+{
+	// Disable add rule btn
+	$("#add_csrule").text("Loading...");
+	$("#add_csrule").attr("disabled", true);
+
+	// if widget is already added so display showrules and hide add rule btn
+	if (isCallScriptAdded())
+	{
+		var ruleCount = getCallScriptRuleCount();
+		if(ruleCount >0)
+		  {
+			$(".rule-count").html(ruleCount);
+			$("#add_csrule").hide();
+			$(".rule-added").show();
+			$("#show_csrules").show();
+		  }		
+		else
+			$(".no-rule-added").show();
+	}
+	else
+		$(".no-rule-added").show();
+
+	// Enable add rule btn
+	$("#add_csrule").text('Add Rule');
+	$("#add_csrule").attr("disabled", false);
+}
+
+//Check call script widget is added or not
+function isCallScriptAdded()
+{
+	// Get call script widget
+	var callscriptWidget = App_Widgets.Catalog_Widgets_View.collection.where({ name : "CallScript" });
+	console.log(callscriptWidget);
+
+	// call script widget not added
+	if (callscriptWidget[0].get("is_added") == false)
+		return false;
+
+	// call script widget added
+	return true;
+}
+
+// Get widget from collection and Convert prefs in json
+function getCallScriptJSON()
+{
+	// If Widgets collection is not defined, navigates to add widget
+	if (!App_Widgets || !App_Widgets.Catalog_Widgets_View || !App_Widgets.Catalog_Widgets_View.collection)
+	{	
+		window.location.href = "#add-widget";
+		return;
+	}	
+	
+	// Get call script widget
+	var callscriptWidget = App_Widgets.Catalog_Widgets_View.collection.where({ name : "CallScript" });
+
+	if (callscriptWidget[0].get("is_added") == false)
+		return null;
+
+	// Convert prefs in json
+	var callscriptPrefsJson = JSON.parse(callscriptWidget[0].get("prefs"));
+
+	return callscriptPrefsJson;
+}
+
+function getCallScriptRuleCount()
+{
+	var prefs = getCallScriptJSON();
+	return prefs.csrules.length;	
+}
+
+function createCSRCollection()
+{
+	var csr = getCallScriptJSON();
+	CSRCOLLECTION = new Base_Collection_View({data: csr.csrules});
+}
+
+// Add rules in rules array to add same array in widget's prefs
+function makeRule()
+{
+	// Get rule from form
+	var json = serializeForm("callscriptruleForm");
+
+	// Get index of edited rule
+	var editRuleCount = json.rulecount;
+	
+	// Get widget from collection and Convert prefs in json
+	var callscriptPrefsJson = getCallScriptJSON();
+
+	/*
+	 * if widget is already added so get rules from widget and add new rules in
+	 * array
+	 */
+	if (callscriptPrefsJson != null)
+	{
+		// Edit rule
+		if (editRuleCount != "")
+		  {
+			// Get rule index from rulecount			
+			callscriptPrefsJson.csrules[getRuleIndex(callscriptPrefsJson,editRuleCount)] = json;
+		  }			
+		else
+		// Add Rule
+		{
+			// Add position to rule
+			json["position"] = callscriptPrefsJson.csrules.length;
+
+			// Increment csr count
+			callscriptPrefsJson["csrcount"]= callscriptPrefsJson.csrcount + 1;
+
+			// Add csr count to rule
+			json["rulecount"] = callscriptPrefsJson.csrcount;
+			
+			// Add rule in rules
+			callscriptPrefsJson.csrules.push(json);			
+		}
+
+		return callscriptPrefsJson;
+	}
+
+	// Add position 0 to first rule
+	json["position"] = 0;
+	
+	// Add csr count to rule
+	json["rulecount"] = 1;
+
+	// Make it define
+	callscriptPrefsJson = {}; 
+	
+	// First rule in widget
+	callscriptPrefsJson["csrules"]= [json];
+	
+	// First csr count
+	callscriptPrefsJson["csrcount"]= 1;
+	
+	return callscriptPrefsJson;
+}
+
+// Delete selected call script rule from widget
+function deleteCallScriptRule(dltRuleIndex)
+{
+	// Get widget from collection and Convert prefs in json
+	var callscriptPrefsJson = getCallScriptJSON();
+
+	/*
+	 * if widget is already added so get rules from widget and delete rules in
+	 * array
+	 */
+	if (callscriptPrefsJson != null)
+	{
+		// Get rule from prefs
+		console.log(callscriptPrefsJson.csrules[dltRuleIndex]);
+
+		// Delete rule from widget
+		callscriptPrefsJson.csrules.splice(dltRuleIndex, 1);
+
+		// Saves the preferences into widget with sip widget name
+		save_widget_prefs("CallScript", JSON.stringify(callscriptPrefsJson), function(data)
+		{
+			console.log('In call script save success after delete');
+			console.log(data);
+		});
+	}
+	
+	makeWidgetTabActive();
+}
+
+// Get widget from collection and convert prefs to json before display in table.
+function showCallScriptRule()
+{
+	makeWidgetTabActive();
+
+	// Shows loading image untill data gets ready for displaying
+	$('#prefs-tabs-content').html(LOADING_HTML);
+
+	// Get widget from collection and Convert prefs in json
+	var callscriptPrefsJson = getCallScriptJSON();
+
+	// if widget is already added so
+	// Add rules to show rules page
+	if (callscriptPrefsJson != null)
+	{
+		$("#prefs-tabs-content").html(getTemplate("callscript-table", callscriptPrefsJson.csrules));
+		
+		// Apply drag drop (sortable)
+		setup_sortable_callscriptrules();
+	}
+}
+
+// show add rule page with chaining
+function addCallScriptRule()
+{
+	// If Widgets collection is not defined, navigates to add widget
+	if (!App_Widgets || !App_Widgets.Catalog_Widgets_View || !App_Widgets.Catalog_Widgets_View.collection)
+	{	
+		window.location.href = "#add-widget";
+		return;
+	}
+	
+	makeWidgetTabActive();
+
+	var add_csr = new Base_Model_View({ template : "callscript-rule", isNew : "true", postRenderCallback : function(el)
+	{
+		head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+		{
+			chainFilters(el, undefined, function()
+			{
+				$('#prefs-tabs-content').html(el);
+
+				// if this is first rule then set add-widget url on cancel btn
+				if (!isCallScriptAdded())
+				{
+					$(".redirect-to-addwidget").show();
+					$(".redirect-to-showrules").hide();
+				}
+			});
+		})
+	} });
+
+	// Shows loading image until data gets ready for displaying
+	$("#prefs-tabs-content").html(LOADING_HTML);
+	add_csr.render();
+}
+
+// Get call script rule from widget and display in edit rule page
+function editCallScriptRule(ruleCount)
+{
+	makeWidgetTabActive();
+
+	// Shows loading image until data gets ready for displaying
+	$('#prefs-tabs-content').html(LOADING_HTML);
+
+	// Get widget from collection and Convert prefs in json
+	var callscriptPrefsJson = getCallScriptJSON();
+
+	// if widget is already added
+	if (callscriptPrefsJson != null)
+	{
+		// get rule from id as in rulecount of rule
+		var csrule = getRule(callscriptPrefsJson,ruleCount);
+
+		$("#prefs-tabs-content").html(LOADING_HTML);
+		head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+		{
+			$("#prefs-tabs-content").html(getTemplate("callscript-rule"));
+			$("#prefs-tabs-content").find('#filter-settings').find("#loading-img-for-table").html(LOADING_HTML).show();
+			$("#prefs-tabs-content").find('#filter-settings').find(".chained-table").hide();
+			
+			chainFilters($("#prefs-tabs-content"), csrule, function()
+			{
+				$("#prefs-tabs-content").find('#filter-settings').find("#loading-img-for-table").hide();
+				$("#prefs-tabs-content").find('#filter-settings').find(".chained-table").show();
+				
+				$(".callscript-multiple-remove").show();
+				$(".callscript-multiple-remove")[0].style.display = "none";
+			});
+			scramble_input_names($("#prefs-tabs-content").find('#filter-settings'));
+
+			// Change heading
+			$(".addLable").html(" Edit Call Script Rule");
+
+			// Fill input tags
+			$("#name").val(csrule.name);
+			$("#displaytext").val(csrule.displaytext);
+			$("#position").val(csrule.position);
+			$("#rulecount").val(csrule.rulecount);			
+		});
+	}
+}
+
+//Get rule from csrules array by rulecount
+function getRule(callscriptPrefsJson,ruleCount)
+{
+	var rules = callscriptPrefsJson.csrules;
+	
+	for(var i=0;i<rules.length;i++)
+		{		
+		 if( rules[i].rulecount == ruleCount)
+			 {
+			   return rules[i];
+			 }
+		}
+}
+
+// Get rule index from csrules array by rulecount 
+function getRuleIndex(callscriptPrefsJson,ruleCount)
+{
+  var rules = callscriptPrefsJson.csrules;
+	
+  for(var i=0;i<rules.length;i++)
+		{
+		 if( rules[i].rulecount == ruleCount)
+			 {
+			   return i;
+			 }
+		}
+}
+/**
+ * Sets call script rules as sortable list.
+ */
+function setup_sortable_callscriptrules()
+{	
+	$(".csr-sortable").append("<tr class='pseduo-row' style='border:none!important;'><td></td><td></td><td></td></tr>");
+
+	// Loads jquery-ui to get sortable functionality on widgets
+	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function()
+	{
+		$(".csr-sortable").sortable(
+				{		
+					axis: "y" ,
+					forcePlaceholderSize: true,
+					placeholder:'<tr><td></td></tr>',
+					handle: ".icon-move",
+					containment: ".csr-sortable",
+					cursor: "move",
+					forceHelperSize: true,
+					scroll: false,
+					items: "> tr",
+					helper: function(e, tr)
+					{
+					    var $originals = tr.children();
+					    var $helper = tr.clone();
+					    $helper.children().each(function(index)
+					    {
+					      // Set helper cell sizes to match the original sizes
+					      $(this).width($originals.eq(index).width());
+					    });
+					    return $helper;
+					}
+				}).disableSelection();
+				
+		/*
+		 * This event is called after sorting stops to save new positions of
+		 * rules
+		 */
+		$('.csr-sortable').on("sortstop", function(event, ui) {
+					
+			// Get new array of rule
+			getRulesNewPosition(function(newRules){
+				
+				// Saves new positions in widget
+				saveCSRAfterDrop(newRules);
+			});			
+		});		
+	});
+}
+
+// Get new positioned array of rule
+function getRulesNewPosition(callback)
+{
+	var newRules = [];
+	
+	// Get widget from collection and Convert prefs in json
+	var callscriptPrefsJson = getCallScriptJSON();
+
+	/*
+	 * Iterate through each all the rules and set each rule
+	 * position and store it in array
+	 */
+	$('.csr-sortable > tr').each(function(index, element)
+	{
+		if(!$(element).hasClass("pseduo-row")){
+
+			var old_rule_index = $(element).attr('data');
+			
+			// Get Model, model is set as data to widget element
+			var rule = callscriptPrefsJson.csrules[old_rule_index];
+			
+			if(old_rule_index != index)
+			  {									
+				rule["position"] = index;				
+				$(element).attr('data',index);					
+			  }
+			
+			newRules.push(rule);			
+		}
+	});
+	
+	if (callback && typeof (callback) === "function")
+		callback(newRules);	
+}
+
+// Save rules after dropped 
+function saveCSRAfterDrop(newRules)
+{
+//Get widget from collection and Convert prefs in json
+var callscriptPrefsJson = getCallScriptJSON();
+ 
+//Add rule to pref
+ callscriptPrefsJson["csrules"] = newRules;
+ 
+ //Saves the preferences into widget with sip widget name
+ save_widget_prefs("CallScript", JSON.stringify(callscriptPrefsJson), function(data)
+	{
+		console.log('In call script save success after drag-drop');
+		console.log(data);
+	}); 
+}
+
+// Make widget tab active
+function makeWidgetTabActive()
+{
+	$('#PrefsTab .active').removeClass('active');
+	$('.add-widget-prefs-tab').addClass('active');	
+}
+$('#revoke-shopify').die().live('click', function(e)
 {
 				if (confirm("Are you sure to delete Shopify?"))
 				{
@@ -43736,7 +48759,13 @@ function agile_crm_add_event_to_timeline(name, title, body, time)
 	add_entity_to_timeline(new BaseModel(model));
 }
 
-
+function agile_crm_get_current_view()
+{
+	if(App_Contacts.contactDetailView)
+		return App_Contacts.contactDetailView.el;
+	
+	return undefined;
+}
 $(function(){
 	
 	
@@ -43904,6 +48933,7 @@ $(function()
 
 function update_collection_with_prefs(data)
 {
+	console.log("In update_collection_with_prefs");
 	console.log(data);
 	if (App_Widgets.Catalog_Widgets_View && App_Widgets.Catalog_Widgets_View.collection)
 	{
@@ -44126,7 +49156,13 @@ function saveZendeskWidgetPrefs()
 	var zendesk_prefs = {};
 	zendesk_prefs["zendesk_username"] = $("#zendesk_username").val();
 	zendesk_prefs["zendesk_password"] = $("#zendesk_password").val();
-	zendesk_prefs["zendesk_url"] = $("#zendesk_url").val();
+//	zendesk_prefs["zendesk_url"] = $("#zendesk_url").val();
+	
+    var zenDeskURL = $("#zendesk_url").val();
+    if(zenDeskURL.indexOf("https") == -1) {//if not found
+    	zenDeskURL = zenDeskURL.replace("http", "https");
+    }
+    zendesk_prefs["zendesk_url"] = zenDeskURL;
 
 	// Saves the preferences into widget with zendesk widget name
 	save_widget_prefs("Zendesk", JSON.stringify(zendesk_prefs), function(data)
@@ -44253,6 +49289,11 @@ function saveTwilioIOWidgetPrefs()
 	twilioio_prefs["twilio_from_number"] = $("#twilio_from_numbers option:selected").val();
 	twilioio_prefs["twilio_number"] = $("#twilio_numbers option:selected").val();
 	twilioio_prefs["twilio_number_sid"] = $("#twilio_number_sid").val();
+	
+	if ($('#twilio_record').is(':checked'))
+		twilioio_prefs["twilio_record"] = "true";
+	else
+		twilioio_prefs["twilio_record"] = "false";
 
 	console.log(twilioio_prefs);
 
@@ -44271,6 +49312,63 @@ function saveTwilioIOWidgetPrefs()
 			console.log(data);
 		});
 	});
+}
+
+/**
+ * Shows setup if user adds call script widget for the first time or clicks on
+ * reset icon on call script panel in the UI
+ * 
+ */
+function callscript_save_widget_prefs()
+{
+	$('#save_prefs').unbind("click");
+
+	// On click of save button, check input and save details
+	$('#save_prefs').die().live('click', function(e)
+	{
+		e.preventDefault();		
+
+		if ($(this).text() == "Saving..." || $(this).text() == "Loading...")
+		{
+			console.log("Do not hit me again " + $(this).text());
+			return;
+		}
+
+		// Checks whether all input fields are given
+		if (!isValidForm($("#callscriptruleForm")))
+		{
+			return;
+		}		
+
+		// Saves call script preferences in callscript widget object
+		saveCallScriptWidgetPrefs();
+	});
+}
+
+/**
+ * Calls method in script API (agile_widget.js) to save CallScript preferences in
+ * CallScript widget object
+ */
+function saveCallScriptWidgetPrefs()
+{
+	$("#save_prefs").text("Saving...");
+	$("#save_prefs").attr("disabled", true);
+	
+	// Retrieve and store the Sip preferences entered by the user as
+	// JSON
+	var callscript_prefs = makeRule();	
+	
+	console.log(callscript_prefs);
+
+	// Saves the preferences into widget with sip widget name
+	save_widget_prefs("CallScript", JSON.stringify(callscript_prefs), function(data)
+	{
+		console.log('In call script save success');
+		console.log(data);		
+		
+		// Redirect to show call script rules page
+		window.location.href = "#callscript/rules";
+	});	
 }
 
 function save_widget_prefs(pluginName, prefs, callback)
@@ -44302,8 +49400,12 @@ function save_widget_prefs(pluginName, prefs, callback)
 
 		data.set('is_added', true);
 		models[0].set(data);
+		
+		// If plugin name is CallScript do not redirect
+		if (pluginName != "CallScript")
 		window.location.href = "#add-widget";
 
+		console.log("data******");
 		console.log(data);
 
 		update_collection_with_prefs(data);
@@ -44328,6 +49430,9 @@ function save_widget_prefs(pluginName, prefs, callback)
 			// Get widget, Create token and set twilio device
 			globalTwilioIOSetup();
 		}
+		
+		if (callback && typeof (callback) === "function")
+			callback(data);
 	} });
 }
 
@@ -44393,8 +49498,8 @@ function show_set_up_widget(widget_name, template_id, url, model)
 	else if (widget_name == "Chargify")
 		chargify_save_widget_prefs();
 
-	else if (widget_name == "Shopify")
-		shopify_save_widget_prefs();
+	else if (widget_name == "CallScript")
+		callscript_save_widget_prefs();
 
 	// Shows available widgets in the content
 	if (url)
@@ -44511,12 +49616,15 @@ function fill_form(id, widget_name, template_id)
 
 	var model = App_Widgets.Catalog_Widgets_View.collection.get(id);
 	console.log(model.get("prefs"));
+	console.log(model.length);
 
 	show_set_up_widget(widget_name, template_id);
 
 	if (model && model.get("prefs"))
 	{
 		var prefsJSON = JSON.parse(model.get("prefs"));
+		console.log("prefsJSON:");
+		console.log(prefsJSON);
 		fill_fields(prefsJSON);
 	}
 }
@@ -44532,7 +49640,7 @@ function fill_fields(fieldsJSON)
 {
 	for (i in fieldsJSON)
 	{
-		if (i == "sip_wsenable")
+		if (i == "sip_wsenable" || i == "twilio_record")
 		{
 			if (fieldsJSON[i] == 'true')
 				$("#" + i).attr('checked', 'checked');
@@ -44708,7 +49816,7 @@ var widget_template_loaded_map = {};
 function loadWidgets(el, contact)
 {
 	// Before loading the widgets, clear the queue of requests.
-//	queueClear("widget_queue");
+	// queueClear("widget_queue");
 	// Create Data JSON
 	var data = { contact : contact };
 
@@ -44925,33 +50033,47 @@ function set_up_widgets(el, widgets_el)
 
 function setup_custom_widget(model, widgets_el)
 {
-	// $('form', this).focus_first();
-	if (model.get('script'))
-		$('#' + model.get('selector'), widgets_el).html(model.get('script'));
-	else
-		getScript(model, function(data)
-		{
-			console.log(data);
-			$('#' + model.get('selector'), widgets_el).html(data);
-		});
+	try
+	{
+		// $('form', this).focus_first();
+		if (model.get('script'))
+			$('#' + model.get('selector'), widgets_el).html(model.get('script'));
+		else
+			getScript(model, function(data)
+			{
+				console.log(data);
+				$('#' + model.get('selector'), widgets_el).html(data);
+			});
+	}
+	catch (err)
+	{
+		console.log(err);
+	}
 }
 
 function getScript(model, callback)
 {
-	// Gets contact id, to save social results of a particular id
-	var contact_id = agile_crm_get_contact()['id'];
-
-	$.post("core/api/widgets/script/" + contact_id + "/" + model.get("name"), function(data)
+	try
 	{
+		// Gets contact id, to save social results of a particular id
+		var contact_id = agile_crm_get_contact()['id'];
 
-		// If defined, execute the callback function
-		if (callback && typeof (callback) === "function")
-			callback(data);
-	}).error(function(data)
+		$.post("core/api/widgets/script/" + contact_id + "/" + model.get("name"), function(data)
+		{
+
+			// If defined, execute the callback function
+			if (callback && typeof (callback) === "function")
+				callback(data);
+		}).error(function(data)
+		{
+			console.log(data);
+			console.log(data.responseText);
+		});
+	}
+	catch (err)
 	{
-		console.log(data);
-		console.log(data.responseText);
-	});
+		console.log(err);
+	}
 }
 
 /**
@@ -45025,33 +50147,45 @@ function enableWidgetSoring(el)
  */
 function queueGetRequest(queueName, url, dataType, successCallback, errorCallback)
 {
+	console.log(queueName + ", " + url);
 	// Loads ajaxq to initialize queue
 	head.js('/js/lib/ajaxm/ajaxq.js', function()
 	{
-		/*
-		 * Initialize a queue, with GET request
-		 */
-		$.ajaxq(queueName, { url : url, cache : false, dataType : dataType,
-
-		// function to be executed on success, if successCallback is defined
-		success : function(data)
-		{console.log("Sucesses",url);
-			if (successCallback && typeof (successCallback) === "function")
-				successCallback(data);
-		},
-
-		// function to be executed on success, if errorCallback is defined
-		error : function(data)
-		{console.log("error",url);
-			if (errorCallback && typeof (errorCallback) === "function")
-				errorCallback(data);
-		},
-
-		// function to be executed on completion of queue
-		complete : function(data)
+		try
 		{
-			console.log('completed get');
-		}, });
+			/*
+			 * Initialize a queue, with GET request
+			 */
+			$.ajaxq(queueName, { url : url, cache : false, dataType : dataType,
+
+			// function to be executed on success, if successCallback is
+			// defined
+			success : function(data)
+			{
+				console.log("Sucesses", url);
+				if (successCallback && typeof (successCallback) === "function")
+					successCallback(data);
+			},
+
+			// function to be executed on success, if errorCallback is
+			// defined
+			error : function(data)
+			{
+				console.log("error", url);
+				if (errorCallback && typeof (errorCallback) === "function")
+					errorCallback(data);
+			},
+
+			// function to be executed on completion of queue
+			complete : function(data)
+			{
+				console.log('completed get');
+			}, });
+		}
+		catch (err)
+		{
+			console.log(err);
+		}
 	});
 }
 
@@ -45080,45 +50214,59 @@ function queuePostRequest(queueName, url, data, successcallback, errorCallback)
 	// Loads ajaxq to initialize queue
 	head.js('/js/lib/ajaxm/ajaxq.js', function()
 	{
-		/*
-		 * Initialize a queue, with POST request
-		 */
-		$.ajaxq(queueName, { type : 'POST', url : url, cache : false, data : data,
-
-		// function to be executed on success, if successCallback is defined
-		success : function(data)
+		try
 		{
-			if (successcallback && typeof (successcallback) === "function")
-				successcallback(data);
-		},
+			/*
+			 * Initialize a queue, with POST request
+			 */
+			$.ajaxq(queueName, { type : 'POST', url : url, cache : false, data : data,
 
-		// function to be executed on success, if errorCallback is defined
-		error : function(data)
-		{
-			if (errorCallback && typeof (errorCallback) === "function")
-				errorCallback(data);
-		},
+			// function to be executed on success, if successCallback is
+			// defined
+			success : function(data)
+			{
+				if (successcallback && typeof (successcallback) === "function")
+					successcallback(data);
+			},
 
-		// function to be executed on completion of queue
-		complete : function(data)
+			// function to be executed on success, if errorCallback is
+			// defined
+			error : function(data)
+			{
+				if (errorCallback && typeof (errorCallback) === "function")
+					errorCallback(data);
+			},
+
+			// function to be executed on completion of queue
+			complete : function(data)
+			{
+				console.log('completed post');
+			} });
+		}
+		catch (err)
 		{
-			console.log('completed post');
-		} });
+			console.log(err);
+		}
 	});
 }
 
 /**
  * Aborts all the requests in the queue.
- * @param queueName the name of the queue.
+ * 
+ * @param queueName
+ *            the name of the queue.
  */
-function queueClear(queueName){
+function queueClear(queueName)
+{
 	console.log('clear queue.');
-	if(document.ajaxq){
+	if (document.ajaxq)
+	{
 		document.ajaxq.q[queueName] = [];
 	}
-	/*head.js('/js/lib/ajaxm/ajaxq.js', function(){
-		$.ajaxq.clear(queueName);
-	});*/
+	/*
+	 * head.js('/js/lib/ajaxm/ajaxq.js', function(){ $.ajaxq.clear(queueName);
+	 * });
+	 */
 }
 
 /**
@@ -45171,6 +50319,9 @@ var globalconnection;
 var Twilio_Setup_Called = false;
 var Twilio_Start = false;
 var Restart_Twilio = false;
+TWILIO_CONTACT_ID = 0;
+TWILIO_CALLTYPE = "";
+TWILIO_DIRECTION = "";
 
 $(function()
 {
@@ -45198,6 +50349,13 @@ $(function()
 		console.log("Twilio call dailpad from noty");
 
 		$('.noty_buttons').find('#dialpad_in_twilio').toggle();
+	});
+	
+	$("#noty_twilio_voicemail").die().live('click', function(e)
+	{
+		e.preventDefault();
+		console.log("Twilio call voicemail from noty");
+		$('.noty_buttons').find('#voicemail_in_twilio').toggle();
 	});
 
 	$(".noty_twilio_answer").die().live('click', function(e)
@@ -45281,6 +50439,14 @@ $(function()
 	$(".contact-make-twilio-call").die().live('click', function(e)
 	{
 		e.preventDefault();
+		TWILIO_CALLTYPE = "Outgoing";
+		TWILIO_DIRECTION = "outbound-dial";
+		
+//		alert("connecting twilio call");
+		
+		var contactDetailsObj = agile_crm_get_contact();
+		TWILIO_CONTACT_ID = contactDetailsObj.id;
+//		alert(TWILIO_CONTACT_ID);
 
 		if (Twilio.Device.status() == "busy")
 		{
@@ -45331,7 +50497,7 @@ function globalTwilioIOSetup()
 				Verfied_Number = twilioio_widget.prefs.twilio_from_number;
 			else
 				Verfied_Number = twilioio_widget.prefs.twilio_number;
-
+			
 			getGlobalToken();
 		}
 	}).error(function(data)
@@ -45411,8 +50577,6 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 {
 	console.log("Twilio twilio number " + twilioNumbers + "  " + verifiedNumbers);
 	console.log("Twilio twilio number " + twilioNumbers.length + "  " + verifiedNumbers.length);
-	// console.log("Twilio twilio number " + twilioNumbers[0].PhoneNumber+" "
-	// +verifiedNumbers[0].PhoneNumber );
 
 	// no twilio # as well as no verified #
 	if (twilioNumbers.length == 0 && verifiedNumbers.length == 0)
@@ -45616,7 +50780,7 @@ function createAppSid(twilioio_prefs, callback)
 	if (twilioio_prefs.twilio_number_sid != "")
 		numberSid = twilioio_prefs.twilio_number_sid;
 
-	$.get("/core/api/widgets/twilio/createappsid/" + twilioio_prefs.twilio_acc_sid + "/" + twilioio_prefs.twilio_auth_token + "/" + numberSid, function(result)
+	$.get("/core/api/widgets/twilio/createappsid/" + twilioio_prefs.twilio_acc_sid + "/" + twilioio_prefs.twilio_auth_token + "/" + numberSid+ "/" + twilioio_prefs.twilio_record, function(result)
 	{
 		console.log("Twilio createAppSid " + result);
 
@@ -45711,7 +50875,7 @@ function getTwilioIOContactName()
 function setUpGlobalTwilio()
 {
 	// Loads twilio min.js to intiliaze twilio call events
-	head.js("https://static.twilio.com/libs/twiliojs/1.1/twilio.min.js", function()
+	head.js("https://static.twilio.com/libs/twiliojs/1.2/twilio.min.js", function()
 	{
 		Twilio.Device.setup(Twilio_Token);
 
@@ -45780,6 +50944,7 @@ function setUpGlobalTwilio()
 			console.log("Twilio call is disconnected");
 			// Called for all disconnections
 			console.log(conn);
+			var messageObj = conn.message;
 
 			if (Twilio.Device.status() != "busy")
 			{
@@ -45790,11 +50955,67 @@ function setUpGlobalTwilio()
 					globalTwilioIOSetup();
 				}
 			}
+			
+			// notes related code			
+			console.log("calSid new  " + conn.parameters.CallSid);
+			
+			var widgetDetails = $.parseJSON(
+			        $.ajax({
+			            url: "/core/api/widgets/TwilioIO", 
+			            async: false,
+			            dataType: 'json'
+			        }).responseText
+			    );
+//			console.log("widget Details");
+//			console.log(widgetDetails);
+			var widgetPrefs = $.parseJSON(widgetDetails.prefs);
+			var acc_sid = widgetPrefs.twilio_acc_sid;
+			var auth_token = widgetPrefs.twilio_auth_token;	
+			var isParent = "true";
+			if(TWILIO_CALLTYPE == "Incoming") {
+				isParent = "false";
+			}
+			var ApiCallUrl = "/core/api/widgets/twilio/getlastcall/" + acc_sid + "/" + auth_token + "/" + conn.parameters.CallSid + "/" + isParent;
+			console.log(ApiCallUrl);
+			if(!widgetDetails)
+				return;
+			
+			var callDetails  = $.parseJSON(
+			        $.ajax({
+			            url: ApiCallUrl, 
+			            async: false,
+			            dataType: 'json'
+			        }).responseText
+			    );
+			
+			console.log("Call Details : isParent " + isParent);
+			console.log(callDetails);
+			
+			if(!callDetails)
+				return;
+			
+			var callDetailsJson = $.parseJSON(callDetails.responseText);
+			if(isParent == "true")
+				var callRespJson = callDetailsJson.calls[0];
+			else
+				var callRespJson = callDetailsJson;
+			
+			if(typeof callRespJson != "undefined") {
+				if(typeof callRespJson.status != "undefined") {
+					console.log(callRespJson.status);
+					showNoteAfterCall(callRespJson,messageObj);
+				}
+			} else {
+				return;
+			}
 		});
 
 		Twilio.Device
 				.incoming(function(conn)
 				{
+					TWILIO_CALLTYPE = "Incoming";
+					TWILIO_DIRECTION = "inbound";
+					TWILIO_CONTACT_ID = 0;
 					console.log("Incoming connection from " + conn.parameters.From);
 
 					if (Twilio.Device.status() == "busy")
@@ -45810,10 +51031,15 @@ function setUpGlobalTwilio()
 					}
 
 					globalconnection = conn;
+					
+					console.log("globalconnection");
+					console.log(globalconnection);
+					console.log("globalconnection status: "+globalconnection.status());
 
 					// accept the incoming connection and start two-way audio
 					// conn.accept();
 					To_Number = globalconnection.parameters.From;
+					To_Name = searchForContact(To_Number);
 
 					showCallNotyPopup("incoming", "Twilio",
 							'<i class="icon icon-phone"></i><b>Incoming call :</b><br> ' + To_Name + "   " + To_Number + "<br>", false);
@@ -45857,7 +51083,7 @@ function setUpGlobalTwilio()
 function twiliocall(phoneNumber, toName)
 {
 	// get the phone number to connect the call to
-	params = { "from" : Verfied_Number, "PhoneNumber" : phoneNumber };
+	params = { "from" : Verfied_Number, "PhoneNumber" : phoneNumber};
 	Twilio.Device.connect(params);
 
 	To_Number = phoneNumber;
@@ -45895,6 +51121,150 @@ function closeTwilioNoty()
 		Twilio_Call_Noty.close();
 		Twilio_Call_Noty = undefined;
 	}
+}
+
+function showNoteAfterCall(callRespJson,messageObj)
+{
+	var	el = $("#noteForm");
+//	TWILIO_CONTACT_ID = 0;
+	if(TWILIO_CONTACT_ID) {
+		var json = $.parseJSON(
+		        $.ajax({
+		            url: "core/api/contacts/"+TWILIO_CONTACT_ID, 
+		            async: false,
+		            dataType: 'json'
+		        }).responseText
+		    );
+
+		console.log(callRespJson);
+		
+		if(json == null) {
+			return showNewContactModal(messageObj);
+		}
+		 
+		var contact_name = getContactName(json);
+		var noteSub = "";
+		var friendlyStatus = "";
+		var callStatus = callRespJson.status;
+		
+		if(callStatus != 404 && typeof callRespJson.duration != "undefined") {
+			
+			var phoneNumber = "";
+			if(TWILIO_DIRECTION == "outbound-dial")
+				phoneNumber = callRespJson.to;
+			else
+				phoneNumber = callRespJson.from;
+			
+			$.post( "/core/api/widgets/twilio/savecallactivity",{
+				direction: TWILIO_DIRECTION, 
+				phone: phoneNumber, 
+				status : callRespJson.status,
+				duration : callRespJson.duration 
+				});
+			
+			switch(callStatus) {
+		    case "canceled":
+		    	noteSub = TWILIO_CALLTYPE + " call - Declined";
+		    	friendlyStatus = "Declined";
+		        break;
+		    case "completed":
+		    	noteSub = TWILIO_CALLTYPE + " call - Done";
+		    	friendlyStatus = "Done";
+		    	break;
+		    case "busy":
+		    	noteSub = TWILIO_CALLTYPE + " call - Busy";
+		    	friendlyStatus = "Received busy tone on number "+ phoneNumber;
+		    	break;
+		    case "failed":
+		    	noteSub = TWILIO_CALLTYPE + " call - Failed";
+		    	friendlyStatus = TWILIO_CALLTYPE + " call made to "+ phoneNumber +" has failed";
+		    	break;
+		    case "no-answer":
+		    	noteSub = TWILIO_CALLTYPE + " call - No Answer";
+		    	friendlyStatus = "No Answer";
+		    	break;
+		    default:
+		        return;
+			}
+		 	// Adds contact name to tags ul as li element
+			if(callStatus == "completed") {
+			 	$('.tags',el).html('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ json.id +'">'+contact_name+'</li>');
+			 	$("#noteForm #subject").val(noteSub);
+		 		$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(callRespJson.duration));
+		 		$("#noteForm").find("#description").focus();
+				$('#noteModal').modal('show');
+				agile_type_ahead("note_related_to", el, contacts_typeahead);
+			} else {
+				//add note automatically
+				$.post( "/core/api/widgets/twilio/autosavenote", {
+					subject: noteSub,
+					message: "Call is "+friendlyStatus,
+					contactid: TWILIO_CONTACT_ID
+					});
+			}
+		}	
+	} else {
+		var phoneNumber = "";
+		if(TWILIO_DIRECTION == "outbound-dial")
+			phoneNumber = callRespJson.to;
+		else
+			phoneNumber = callRespJson.from;
+		
+		$.post( "/core/api/widgets/twilio/savecallactivity",{
+			direction: TWILIO_DIRECTION, 
+			phone: phoneNumber, 
+			status : callRespJson.status,
+			duration : callRespJson.duration 
+			});
+		return showNewContactModal(phoneNumber);
+	}
+	
+}
+
+
+function showNewContactModal(phoneNumber) {
+	$('#personModal').modal('show');
+	$("#personForm").find("#phone").val(phoneNumber);
+	return;
+}
+
+function twilioSecondsToFriendly(time) {
+	var hours = Math.floor(time / 3600);
+	if(hours > 0)
+	time = time - hours*60*60;
+	var minutes = Math.floor(time / 60);
+	var seconds = time - minutes * 60;
+	var friendlyTime = "";
+	if(hours == 1)
+		friendlyTime = hours+ " hr ";
+	if(hours > 1)
+		friendlyTime = hours+ " hrs ";
+	if(minutes > 0)
+		friendlyTime += minutes + " min ";
+	if(seconds > 0)
+		friendlyTime += seconds + " sec";
+	if(friendlyTime != "")
+	return friendlyTime;
+}
+
+
+function searchForContact(from) {
+	console.log("searchForContact : " + from);	
+	var fromName = "";
+	var responseJson = $.parseJSON(
+	        $.ajax({
+	        	url: "core/api/contacts/search/phonenumber/"+from,
+	            async: false,
+	            dataType: 'json'
+	        }).responseText
+	    );
+	console.log(responseJson);
+	if(responseJson != null) {
+		TWILIO_CONTACT_ID = responseJson.id;
+		console.log("TWILIO_CONTACT_ID : "+TWILIO_CONTACT_ID);
+		fromName = getContactName(responseJson);
+	}
+	return fromName;
 }
 $(function(){
 	

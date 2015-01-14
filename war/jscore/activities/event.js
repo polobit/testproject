@@ -10,6 +10,7 @@
 
 $(function()
 {
+
 	/**
 	 * Shows activity modal, and highlights the event form features (Shows event
 	 * form and hides task form, changes color and font-weight)
@@ -32,14 +33,13 @@ $(function()
 
 		$('#activityModal').modal('show');
 		highlight_event();
-		
+
 		/*
 		 * $('#task-date-1').val(new Date().format('mm/dd/yyyy'));
 		 * $("#event-date-1").val(new Date().format('mm/dd/yyyy'));
 		 * $("#event-date-2").val(new Date().format('mm/dd/yyyy'));
 		 */
 
-		
 		return;
 	});
 
@@ -51,7 +51,15 @@ $(function()
 	$('#update_event_validate').die().live('click', function(e)
 	{
 		e.preventDefault();
-		save_event('updateActivityForm', 'updateActivityModal', true, this);
+		var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
+		save_event('updateActivityForm', 'updateActivityModal', true, this, function(data)
+		{
+			console.log(data);
+			var eventModel = eventCollectionView.collection.get(eventId);
+			eventModel.set(data.toJSON(), { merge : true });
+			eventCollectionView.render(true);
+		});
+
 	});
 
 	/**
@@ -61,8 +69,9 @@ $(function()
 	$('#event_delete').die().live('click', function(e)
 	{
 		e.preventDefault();
-		
-		if($(this).attr('disabled')=='disabled')return;
+
+		if ($(this).attr('disabled') == 'disabled')
+			return;
 
 		/**
 		 * Confirmation alert to delete an event
@@ -70,65 +79,80 @@ $(function()
 		if (!confirm("Are you sure you want to delete?"))
 			return;
 
-		var event_id = $('#updateActivityForm input[name=id]').val()
-		var save_button=$(this);
-		
+		var event_id = $('#updateActivityForm input[name=id]').val();
+		var save_button = $(this);
+
 		disable_save_button(save_button);
 		/**
 		 * Shows loading symbol until model get saved
 		 */
-		//$('#updateActivityModal').find('span.save-status').html(getRandomLoadingImg());
+		// $('#updateActivityModal').find('span.save-status').html(getRandomLoadingImg());
 		$.ajax({ url : 'core/api/events/' + event_id, type : 'DELETE', success : function()
 		{
 
-			//$('#updateActivityModal').find('span.save-status img').remove();
+			// $('#updateActivityModal').find('span.save-status img').remove();
 			enable_save_button(save_button);
 			$("#updateActivityModal").modal('hide');
 
-			$('#calendar').fullCalendar('removeEvents', event_id);
+			var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
+			$('#calendar_event').fullCalendar('removeEvents', eventId);
 		} });
+		if (readCookie("agile_calendar_view"))
+		{
+			var eventModel = eventCollectionView.collection.get(event_id);
+			eventModel.set(eventModel, { remove : true });
+			document.location.reload();
+
+		}
+
 	});
 
 	/**
 	 * Activates the date picker to the corresponding fields in activity modal
 	 * and activity-update modal
 	 */
-	var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev) {
-		// If event start date is changed and end date is less than start date, change the value of the end date to start date.
+	var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev)
+	{
+		// If event start date is changed and end date is less than start date,
+		// change the value of the end date to start date.
 		var eventDate2 = new Date($('#event-date-2').val());
-		  if (ev.date.valueOf() > eventDate2.valueOf()) {
-			    $('#event-date-2').val($('#event-date-1').val());
-			  }
-			 
-			});
+		if (ev.date.valueOf() > eventDate2.valueOf())
+		{
+			$('#event-date-2').val($('#event-date-1').val());
+		}
+
+	});
 
 	$('#event-date-2').datepicker({ format : 'mm/dd/yyyy' });
-	$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev) {
-		// If event start date is changed and end date is less than start date, change the value of the end date to start date.
+	$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev)
+	{
+		// If event start date is changed and end date is less than start date,
+		// change the value of the end date to start date.
 		var eventDate2 = new Date($('#update-event-date-2').val());
-		  if (ev.date.valueOf() > eventDate2.valueOf()) {
-			    $('#update-event-date-2').val($('#update-event-date-1').val());
-			  }
-			 
-			});
+		if (ev.date.valueOf() > eventDate2.valueOf())
+		{
+			$('#update-event-date-2').val($('#update-event-date-1').val());
+		}
+
+	});
 	$('#update-event-date-2').datepicker({ format : 'mm/dd/yyyy' });
 
 	/**
 	 * Activates time picker for start time to the fields with class
 	 * start-timepicker
 	 */
-	$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' })
-						.on('hide.timepicker',function(e){
-								
-							if($('#activityModal #allDay').is(':checked'))
-							{
-								$('#event-time-1').closest('.control-group').hide();
-								$('#event-date-2').closest('.row').hide();
-							}	
-							
-								e.stopImmediatePropagation();
-								return false;
-							});
+	$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' }).on('hide.timepicker', function(e)
+	{
+
+		if ($('#activityModal #allDay').is(':checked'))
+		{
+			$('#event-time-1').closest('.control-group').hide();
+			$('#event-date-2').closest('.row').hide();
+		}
+
+		e.stopImmediatePropagation();
+		return false;
+	});
 
 	/**
 	 * Activates time picker for end time to the fields with class
@@ -154,10 +178,10 @@ $(function()
 	 */
 	$('#activityModal').on('shown', function()
 	{
-        // Show related to contacts list
+		// Show related to contacts list
 		var el = $("#activityForm");
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
-		
+
 		/**
 		 * Fills current time only when there is no time in the fields
 		 */
@@ -166,7 +190,9 @@ $(function()
 
 		if ($('.end-timepicker').val() == '')
 			$('.end-timepicker').val(get_hh_mm(true));
-
+		//sets the time in time picker if it is empty
+		if ($('.new-task-timepicker').val() == '')
+			$('.new-task-timepicker').val("12:00");
 		// Update will highlight the date of in date picker
 		$("input.date").datepicker('update');
 
@@ -177,16 +203,16 @@ $(function()
 	 */
 	$('#updateActivityModal').on('show', function()
 	{
-        // Show related to contacts list
+		// Show related to contacts list
 		var el = $("#updateActivityForm");
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
-		
-		if($('#updateActivityModal #allDay').is(':checked'))
+
+		if ($('#updateActivityModal #allDay').is(':checked'))
 		{
 			$('#update-event-time-1').closest('.control-group').hide();
 			$('#update-event-date-2').closest('.row').hide();
-		}	
-		
+		}
+
 		// Removes alert message of error related date and time.
 		$('#' + this.id).find('.alert').css('display', 'none');
 
@@ -208,43 +234,47 @@ $(function()
 
 		// Removes error class of input fields
 		$('#' + this.id).find('.error').removeClass('error');
-		
+
 	});
-	
+
 	/**
 	 * Hide event of update task modal. Removes the relatedTo field elements if
 	 * any, when the modal is hidden in order to not to show them again when the
 	 * modal is shown next
 	 * 
 	 */
-	$('#updateActivityModal').on('hidden', function() {
-		if($(this).hasClass('in'))
+	$('#updateActivityModal').on('hidden', function()
+	{
+		if ($(this).hasClass('in'))
 		{
 			return;
 		}
-		
+
 		$("#updateActivityForm").find("li").remove();
 		$('#update-event-time-1').closest('.control-group').show();
 		$('#update-event-date-2').closest('.row').show();
 	});
-	$('#activityModal').on('hidden', function() {
+	$('#activityModal').on('hidden', function()
+	{
 
-		if($(this).hasClass('in'))
+		if ($(this).hasClass('in'))
 		{
 			return;
 		}
-		
+
 		$("#activityForm").find("li").remove();
 		$('#event-time-1').closest('.control-group').show();
 		$('#event-date-2').closest('.row').show();
+		
 	});
-
-
+	
+	
+	
 	/**
 	 * Highlights the event features (Shows event form and hides task form,
 	 * changing color and font-weight)
 	 */
-	$("#event").click(function(e)
+	$("#event").live('click', function(e)
 	{
 		e.preventDefault();
 		highlight_event();
@@ -263,6 +293,10 @@ function highlight_event()
 	$("#task").css({ "color" : "red" });
 	$("#relatedTask").css("display", "none");
 	$("#relatedEvent").css("display", "block");
+
+	if ($("#taskForm").find("#task_related_to").closest(".controls").find("ul").children())
+		$("#activityForm").find("#event_related_to").closest(".controls").find("ul").html(
+				$("#taskForm").find("#task_related_to").closest(".controls").find("ul").children());
 
 	// Date().format('mm/dd/yyyy'));
 	$('input.date').val(new Date().format('mm/dd/yyyy'));
@@ -338,7 +372,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
  *            or updating the existing one
  * 
  */
-function save_event(formId, modalName, isUpdate, saveBtn)
+function save_event(formId, modalName, isUpdate, saveBtn, callback)
 {
 
 	// Returns, if the save button has disabled attribute
@@ -355,12 +389,18 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 		// Removes disabled attribute of save button
 		enable_save_button($(saveBtn));
 		return false;
+
 	}
 
 	var json = serializeForm(formId);
 
-	if(json.allDay){ json.end=json.start; json.start_time="00:00"; json.end_time="23:45"; }// for all day, assume ending in last of that day.
-	
+	if (json.allDay)
+	{
+		json.end = json.start;
+		json.start_time = "00:00";
+		json.end_time = "23:45";
+	}// for all day, assume ending in last of that day.
+
 	// For validation
 	if (!is_valid_range(json.start * 1000, json.end * 1000, (json.start_time).split(":"), (json.end_time).split(":"), modalName))
 	{
@@ -371,7 +411,7 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 	}
 
 	// Show loading symbol until model get saved
-	//$('#' + modalName).find('span.save-status').html(getRandomLoadingImg());
+	// $('#' + modalName).find('span.save-status').html(getRandomLoadingImg());
 
 	// Appending start time to start date
 	var startarray = (json.start_time).split(":");
@@ -398,45 +438,49 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 	{
 
 		// Removes disabled attribute of save button
-		enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
+		enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
 
 		$('#' + formId).each(function()
 		{
 			this.reset();
 		});
 
-		//$('#' + modalName).find('span.save-status img').remove();
+		// $('#' + modalName).find('span.save-status img').remove();
 		$('#' + modalName).modal('hide');
 
 		// $('#calendar').fullCalendar( 'refetchEvents' );
 		var event = data.toJSON();
-		if (Current_Route == 'calendar') {
-			
+		if (Current_Route == 'calendar' && !readCookie("agile_calendar_view"))
+		{
+
 			// When updating an event remove the old event from fullCalendar
 			if (isUpdate)
-				$('#calendar').fullCalendar('removeEvents', json.id);
 
-			$('#calendar').fullCalendar('renderEvent', data.toJSON());
+				$('#calendar_event').fullCalendar('removeEvents', json.id);
+
+			$('#calendar_event').fullCalendar('renderEvent', data.toJSON());
 		}
 		// Updates data to temeline
-		else if (App_Contacts.contactDetailView
-				&& Current_Route == "contact/"
-						+ App_Contacts.contactDetailView.model.get('id')) {
+		else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+		{
 
 			/*
 			 * Verifies whether the added task is related to the contact in
 			 * contact detail view or not
 			 */
-			$.each(event.contacts, function(index, contact) {
-				if (contact.id == App_Contacts.contactDetailView.model
-						.get('id')) {
+			$.each(event.contacts, function(index, contact)
+			{
+				if (contact.id == App_Contacts.contactDetailView.model.get('id'))
+				{
 
-					// Add model to collection. Disabled sort while adding and called
-					// sort explicitly, as sort is not working when it is called by add
+					// Add model to collection. Disabled sort while adding and
+					// called
+					// sort explicitly, as sort is not working when it is called
+					// by add
 					// function
 					if (eventsView && eventsView.collection)
 					{
-						if(eventsView.collection.get(data.id))
+						if (eventsView.collection.get(data.id))
 						{
 							eventsView.collection.get(data.id).set(new BaseModel(data));
 						}
@@ -446,18 +490,32 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 							eventsView.collection.sort();
 						}
 					}
-					
+
 					// Activates "Timeline" tab and its tab content in
 					// contact detail view
 					// activate_timeline_tab();
-					//add_entity_to_timeline(data);
+					// add_entity_to_timeline(data);
 
 					return false;
 				}
+
 			});
+		}else if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && Current_Route == 'portlets') 
+		{
+			if (isUpdate)
+				App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+			// Updates events list view
+			App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+			App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
+
 		}
 		else
 			App_Calendar.navigate("calendar", { trigger : true });
+
+		if (callback && typeof callback === 'function')
+			callback(data);
 	} });
 }
 
@@ -469,7 +527,7 @@ function save_event(formId, modalName, isUpdate, saveBtn)
  *            end_time to make end time 30 minutes more than start time
  * 
  */
-function get_hh_mm(end_time)
+function get_hh_mm(end_time, editFromContactPage)
 {
 
 	var hours = new Date().getHours();
@@ -505,4 +563,23 @@ function get_hh_mm(end_time)
 	}
 
 	return hours + ':' + minutes;
+}
+
+function fillTimePicker(end_time)
+{
+	if (end_time)
+	{
+		var hours = new Date(end_time * 1000).getHours();
+		var minutes = new Date(end_time * 1000).getMinutes();
+		if (hours < 10)
+		{
+			hours = "0" + hours;
+		}
+		if (minutes < 10)
+		{
+			minutes = "0" + minutes;
+		}
+
+		return hours + ':' + minutes;
+	}
 }

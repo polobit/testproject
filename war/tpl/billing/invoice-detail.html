@@ -1,10 +1,16 @@
 <script id="invoice-detail-template" type="html/text">
 <div class="span8" style="border:2px solid #D4D4D4">
     <div class="row" style="margin: 5% 0% 7% 4%;">
-        <div class="row">
+	 <div class="row">
+		<div class="span4">
+                <img src="img/crm-plugins/formbuilder.png" height="35" width="135">
+				</div>
+		</div>
+     <div class="row">
             <div class="span4">
+				 
                 <address>
-                    <strong>Invox Corp.</strong><br />
+                    <strong>Agile CRM,</strong><br />
                     440 N Wolfe Road,<br />
                     Sunnyvale, CA, 94085<br />
                 </address>
@@ -12,72 +18,76 @@
             <div class="span3 well">
                 <table class="invoice-head" style="background-color:transparent;">
                     <tbody>
-                        <tr>
-                            <td class="pull-right"><strong>Customer #</strong></td>
-                            <td>{{customer}}</td>
-                        </tr>
-                        <tr>
-                            <td class="pull-right"><strong>Invoice #</strong></td>
-                            <td>{{id}}</td>
-                        </tr>
+						{{#if_not_equals company.company_name "My company"}}<tr>
+                            <td class="pull-right"><strong>Company</strong></td>
+                            <td>{{company.company_name}}</td>
+                        {{/if_not_equals}}</tr>
                         <tr>
                             <td class="pull-right"><strong>Date</strong></td>
-                            <td>{{epochToHumanDate "mm-dd-yy" date}}</td>
+                            <td>{{epochToHumanDate "mm-dd-yy" invoice.date}}</td>
                         </tr>
                         <tr>
-                            <td class="pull-right"><strong>Period</strong></td>
-                            {{#each lines.subscriptions}}
-                            <td>{{epochToHumanDate "mm-dd-yy" period.start}} to {{epochToHumanDate "mm-dd-yy" period.end}}</td>
-                            {{/each}}
+                            <td class="pull-right"><strong>Customer#</strong></td>
+                            <td>{{invoice.customer}}</td>
                         </tr>
-                    </tbody>
+                        <tr>
+                            <td class="pull-right"><strong>Invoice#</strong></td>
+                            <td>{{invoice.id}}</td>
+                        </tr>
+						
+                      </tbody>
                 </table>
             </div>
         </div>
         <div class="row">
             <div class="span7">
-                <h1>Invoice<small> AgileCrm</small></h1>
+                <h1>Invoice</h1>
             </div>
         </div>
         <div class="row">
-            <div class="span7 well invoice-body">
+            <div class="span7">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>Description</th>
-                            <th>Date</th>
+                            <th>Quantity</th>
                             <th>Amount</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{#each lines.subscriptions}}
+                        {{#each invoice.lines.data}}
                         <tr>
-                            <td>{{plan.name}}({{plan.amount}}/{{plan.interval}})</td>
-                            <td>{{epochToHumanDate "mm/dd/yyyy" period.start}} - {{epochToHumanDate "mm/dd/yyyy" period.end}}</td>
-                            <td>{{amount}}</td>
+                           {{#if_equals type "subscription"}} 
+								<td>{{plan.name}} (${{numeric_operation plan.amount 100 "/"}}/{{plan.interval}}) <br/> for the period {{epochToHumanDate "mm/dd/yyyy" period.start}} - {{epochToHumanDate "mm/dd/yyyy" period.end}}</td>
+                            {{/if_equals}}
+							{{#if_equals type "invoiceitem"}} 
+								<td>{{description}}</td>
+                            {{/if_equals}}
+							<td>{{quantity}}</td>
+                            <td>${{numeric_operation amount 100 "/"}}</td>
                         </tr>
                         {{/each}}
                     </tbody>
                 </table>
+				
+					<div align="right">
+					<strong>Total: ${{numeric_operation invoice.total 100 "/"}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>
+					</div>
             </div>
         </div>
-        <div class="row">
-            <div class="span5 well offset1 invoice-thank">
-                <h5 style="text-align: center;">Thank You!</h5>
-            </div>
-        </div>
+        <br/><br/><br/>
         <div class="span9" style="margin-left:-5%;">
             <div class="span2">
-                <strong>Phone:</strong> <a href="callto:+18553424453">+1 855-342-4453</a>
+                <strong>Phone:</strong> <a href="callto:+1.800.980.0729">+1.800.980.0729</a>
             </div>
             <div class="span3" style="margin-left:5%;margin-right:-3%">
-                <strong>Email:</strong> <a href="mailto:help@agilecrm.com">help@agilecrm.com</a>
+                <strong>Email:</strong> <a href="mailto:billing@agilecrm.com">billing@agilecrm.com</a>
             </div>
             <div class="span3">
                 <strong>Website:</strong> <a href="https://www.agilecrm.com" TARGET="_blank">https://www.agilecrm.com</a>
             </div>
         </div>
-    </div>-
+    </div>
 </div>
 </div>
 </script>

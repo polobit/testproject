@@ -57,6 +57,9 @@ function canEditCurrentContact()
 		return;
 	var contact = contact_model.toJSON();
 	
+	if(!contact.owner)
+		return true;
+	
 	return canEditContact(contact.owner.id);
 }
 

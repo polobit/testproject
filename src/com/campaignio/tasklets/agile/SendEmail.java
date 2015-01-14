@@ -9,10 +9,12 @@ import java.util.TimeZone;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
+import com.agilecrm.queues.backend.BackendUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
@@ -486,32 +488,27 @@ public class SendEmail extends TaskletAdapter
 	    }
 	}
 
-	// Appends Agile label
-	text = StringUtils.replace(text, EmailUtil.getPoweredByAgileLink("campaign", "Powered by"), "Sent using Agile");
-	text = EmailUtil.appendAgileToText(text, "Sent using");
-
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
 	    html = EmailUtil.appendTrackingImage(html, campaignId, subscriberId);
 
-	    // If no powered by merge field, append Agile label to html
-	    if (!StringUtils.contains(html, EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
-		html = EmailUtil.appendAgileToHTML(html, "campaign", "Powered by");
-
 	    // Send HTML Email
 	    sendEmail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-		    new JSONObject().put(MandrillWebhook.METADATA_CAMPAIGN_ID, campaignId).toString());
+		    new JSONObject().put(MandrillWebhook.METADATA_CAMPAIGN_ID, campaignId).toString(), subscriberId,
+		    campaignId);
 	}
 	else
 	{
 	    // Send Text Email
 	    sendEmail(fromEmail, fromName, to, cc, bcc, subject, replyTo, null, text,
-		    new JSONObject().put(MandrillWebhook.METADATA_CAMPAIGN_ID, campaignId).toString());
+		    new JSONObject().put(MandrillWebhook.METADATA_CAMPAIGN_ID, campaignId).toString(), subscriberId,
+		    campaignId);
 	}
 
 	// Creates log for sending email
-	LogUtil.addLogToSQL(campaignId, subscriberId, "Subject: " + subject, LogType.EMAIL_SENT.toString());
+	// LogUtil.addLogToSQL(campaignId, subscriberId, "Subject: " + subject,
+	// LogType.EMAIL_QUEUED.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -569,7 +566,7 @@ public class SendEmail extends TaskletAdapter
      *            - text body
      */
     private void sendEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
-	    String replyTo, String html, String text, String mandrillMetadata)
+	    String replyTo, String html, String text, String mandrillMetadata, String subscriberId, String campaignId)
     {
 	String domain = NamespaceManager.get();
 
@@ -582,8 +579,10 @@ public class SendEmail extends TaskletAdapter
 	}
 
 	// Send Email using email gateway
-	EmailGatewayUtil.sendBulkEmail(domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-	        mandrillMetadata);
+	EmailGatewayUtil.sendBulkEmail(
+	        "bulk".equals(BackendUtil.getCurrentBackendName()) ? AgileQueues.BULK_EMAIL_PULL_QUEUE
+	                : AgileQueues.NORMAL_EMAIL_PULL_QUEUE, domain, fromEmail, fromName, to, cc, bcc, subject,
+	        replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
 
     }
 }

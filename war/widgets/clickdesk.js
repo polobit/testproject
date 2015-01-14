@@ -4,77 +4,7 @@
  * application based on the function provided on agile_widgets.js (Third party
  * API)
  */
-$(function()
-{
-	// ClickDesk widget name as a global variable
-	CLICKDESK_PLUGIN_NAME = "ClickDesk";
 
-	// ClickDesk loading image declared as global
-	CLICKDESK_UPDATE_LOAD_IMAGE = '<center><img id="chats_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
-
-	// Retrieves widget which is fetched using script API
-	var clickdesk_widget = agile_crm_get_widget(CLICKDESK_PLUGIN_NAME);
-
-	console.log('In ClickDesk');
-	console.log(clickdesk_widget);
-
-	// ID of the ClickDesk widget as global variable
-	ClickDesk_Plugin_Id = clickdesk_widget.id;
-
-	// Stores email of the contact as global variable
-	Email = agile_crm_get_contact_property('email');
-	console.log('Email: ' + Email);
-
-
-	/*
-	 * Gets ClickDesk widget preferences, required to check whether to show
-	 * setup button or to fetch details. If undefined - considering first time
-	 * usage of widget, setupClickDeskAuth is shown and returned
-	 */
-	if (clickdesk_widget.prefs == undefined)
-	{
-		setupClickDeskAuth();
-		return;
-
-	}
-
-	/*
-	 * If ClickDesk widget preferences are defined, shows chats from ClickDesk
-	 * associated with current contact's email
-	 */
-	showClickDeskProfile();
-
-	/*
-	 * On mouse enter of ticket, show tab link which has a link to show detailed
-	 * description of ticket
-	 */
-	$('.clickdesk_ticket_hover').live('mouseenter', function(e)
-	{
-		$(this).find('.clickdesk_ticket_tab_link').show();
-	});
-
-	// On mouse leave of ticket, hides tab link
-	$('.clickdesk_ticket_hover').live('mouseleave', function(e)
-	{
-		$('.clickdesk_ticket_tab_link').hide();
-	});
-
-	/*
-	 * On mouse enter of chat, show tab link which has a link to show detailed
-	 * description of chat
-	 */
-	$('.clickdesk_chat_hover').live('mouseenter', function(e)
-	{
-		$(this).find('.clickdesk_chat_tab_link').show();
-	});
-
-	// On mouse leave of chat, hides tab link
-	$('.clickdesk_chat_hover').live('mouseleave', function(e)
-	{
-		$('.clickdesk_chat_tab_link').hide();
-	});
-
-});
 
 /**
  * Shows setup if user adds ClickDesk widget for the first time or clicks on
@@ -621,3 +551,75 @@ function clickDeskStreamError(id, message)
 	$('#' + id).show();
 	$('#' + id).fadeOut(10000);
 }
+
+$(function()
+		{
+			// ClickDesk widget name as a global variable
+			CLICKDESK_PLUGIN_NAME = "ClickDesk";
+
+			// ClickDesk loading image declared as global
+			CLICKDESK_UPDATE_LOAD_IMAGE = '<center><img id="chats_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+
+			// Retrieves widget which is fetched using script API
+			var clickdesk_widget = agile_crm_get_widget(CLICKDESK_PLUGIN_NAME);
+
+			console.log('In ClickDesk');
+			console.log(clickdesk_widget);
+
+			// ID of the ClickDesk widget as global variable
+			ClickDesk_Plugin_Id = clickdesk_widget.id;
+
+			// Stores email of the contact as global variable
+			Email = agile_crm_get_contact_property('email');
+			console.log('Email: ' + Email);
+
+
+			/*
+			 * Gets ClickDesk widget preferences, required to check whether to show
+			 * setup button or to fetch details. If undefined - considering first time
+			 * usage of widget, setupClickDeskAuth is shown and returned
+			 */
+			if (clickdesk_widget.prefs == undefined)
+			{
+				setupClickDeskAuth();
+				return;
+
+			}
+
+			/*
+			 * If ClickDesk widget preferences are defined, shows chats from ClickDesk
+			 * associated with current contact's email
+			 */
+			showClickDeskProfile();
+
+			/*
+			 * On mouse enter of ticket, show tab link which has a link to show detailed
+			 * description of ticket
+			 */
+			$('.clickdesk_ticket_hover').live('mouseenter', function(e)
+			{
+				$(this).find('.clickdesk_ticket_tab_link').show();
+			});
+
+			// On mouse leave of ticket, hides tab link
+			$('.clickdesk_ticket_hover').live('mouseleave', function(e)
+			{
+				$('.clickdesk_ticket_tab_link').hide();
+			});
+
+			/*
+			 * On mouse enter of chat, show tab link which has a link to show detailed
+			 * description of chat
+			 */
+			$('.clickdesk_chat_hover').live('mouseenter', function(e)
+			{
+				$(this).find('.clickdesk_chat_tab_link').show();
+			});
+
+			// On mouse leave of chat, hides tab link
+			$('.clickdesk_chat_hover').live('mouseleave', function(e)
+			{
+				$('.clickdesk_chat_tab_link').hide();
+			});
+
+		});

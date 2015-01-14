@@ -1,11 +1,14 @@
 package com.campaignio.tasklets.sms;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.account.util.SMSGatewayUtil;
+import com.agilecrm.social.PlivoUtil;
+import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.widgets.Widget;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -15,7 +18,6 @@ import com.campaignio.tasklets.util.TaskletUtil;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
-import com.thirdparty.twilio.TwilioSMSUtil;
 
 /**
  * <code>SendMessage</code> represents Send Message node in workflow. It send
@@ -27,162 +29,139 @@ import com.thirdparty.twilio.TwilioSMSUtil;
 public class SendMessage extends TaskletAdapter
 {
 
-    /**
-     * Twilio Account Subscriber ID
-     */
-    public static String ACCOUNT_SID = "account_sid";
-
-    /**
-     * Twilio Account Authentication Token
-     */
-    public static String AUTH_TOKEN = "auth_token";
-
-    /**
-     * Twilio Account SMS API
-     */
-    public static String SMS_API = "TWILIO";
-
-    /**
-     * Registered From Twilio Number
-     */
-    public static String FROM_NUMBER = "from";
-
-    /**
-     * Number to which user sends SMS
-     */
-    public static String TO_NUMBER = "to";
-
-    /**
-     * Message metadata
-     */
-    public static String METADATA = "metadata";
-
-    /**
-     * Body of the message
-     */
-    public static String MESSAGE = "message";
-
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
-	    throws Exception
-    {
-
-	// Get From, To, Message
-	String from = getStringValue(nodeJSON, subscriberJSON, data, FROM_NUMBER);
-	String to = getStringValue(nodeJSON, subscriberJSON, data, TO_NUMBER);
-	String message = getStringValue(nodeJSON, subscriberJSON, data, MESSAGE);
-
-	if (StringUtils.isEmpty(to) || StringUtils.isEmpty(from))
-	{
-	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-		    "SMS failed", LogType.SMS_FAILED.toString());
-
-	    // Execute Next One in Loop
-	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
-	    return;
-	}
-
-	if (!checkvalidFrom(from))
-	{
-	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-		    "SMS failed as " + from + " is not verified number by twilio", LogType.SMS_FAILED.toString());
-
-	    // Execute Next One in Loop
-	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
-	    return;
-	}
-	if (checkvalidTo(to).equals("Invalid"))
-	{
-	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-		    "SMS could not be sent -  Invalid phone number", LogType.SMS_FAILED.toString());
-
-	    // Execute Next One in Loop
-	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
-	    return;
-	}
-
-	/*
-	 * if (checkvalidTo(to).equals("AlphaNumeric")) {
-	 * LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON),
-	 * AgileTaskletUtil.getId(subscriberJSON), "SMS failed as " + to +
-	 * " is alpha numeric", LogType.SMS_FAILED.toString());
-	 * 
-	 * // Execute Next One in Loop TaskletUtil.executeTasklet(campaignJSON,
-	 * subscriberJSON, data, nodeJSON, null); return; }
+	/**
+	 * SMS Gateway Account Subscriber ID
 	 */
+	public static String ACCOUNT_ID = "account_id";
 
-	TwilioSMSUtil.sendSMS(SMS_API, from, to, message, ACCOUNT_SID, AUTH_TOKEN);
+	/**
+	 * SMS Gateway Account Authentication Token
+	 */
+	public static String AUTH_TOKEN = "auth_token";
 
-	// Creates log for sending sms
-	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "SMS Sent ",
-		LogType.SMS_SENT.toString());
+	/**
+	 * SMS Gateway Account SMS API
+	 */
+	public static String SMS_API = "TWILIO";
 
-	// Execute Next One in Loop
-	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+	/**
+	 * Registered From Number
+	 */
+	public static String FROM_NUMBER = "from";
 
-    }
+	/**
+	 * Number to which user sends SMS
+	 */
+	public static String TO_NUMBER = "to";
 
-    private boolean checkvalidFrom(String from)
-    {
+	/**
+	 * Body of the message
+	 */
+	public static String MESSAGE = "message";
 
-	List<String> verifiedNumbers = getVerifiedTwilioNumbers();
-
-	if (verifiedNumbers.isEmpty())
-	    return false;
-
-	if (verifiedNumbers.contains(from))
-	    return true;
-
-	return false;
-    }
-
-    private List<String> getVerifiedTwilioNumbers()
-    {
-	Widget widget = SMSGatewayUtil.getSMSGatewayWidget();
-	try
-	{
-	    String prefs = widget.prefs;
-	    JSONObject prefsJSON = new JSONObject(prefs);
-	    ACCOUNT_SID = prefsJSON.getString("account_sid");
-	    AUTH_TOKEN = prefsJSON.getString("auth_token");
-	    SMS_API = prefsJSON.getString("sms_api");
-
-	}
-	catch (Exception e)
+	public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+			throws Exception
 	{
 
-	    System.out.println("Inside getVerifiedTwilioNumbers");
-	    System.err.println("Exception was thrown: getVerifiedTwilioNumbers " + e.toString());
-	    e.printStackTrace();
+		// Get From, To, Message
+		String from = getStringValue(nodeJSON, subscriberJSON, data, FROM_NUMBER);
+		String to = getStringValue(nodeJSON, subscriberJSON, data, TO_NUMBER);
+		String message = getStringValue(nodeJSON, subscriberJSON, data, MESSAGE);
+
+		if (StringUtils.isEmpty(to) || StringUtils.isEmpty(from))
+		{
+			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+					"SMS failed", LogType.SMS_FAILED.toString());
+
+			// Execute Next One in Loop
+			TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+			return;
+		}
+
+		if (!checkValidFromNumber(from))
+		{
+			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+					"SMS failed as " + from + " is not verified number", LogType.SMS_FAILED.toString());
+
+			// Execute Next One in Loop
+			TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+			return;
+		}
+
+		if (!checkValidToNumber(to))
+		{
+			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+					"SMS could not be sent -  Invalid phone number", LogType.SMS_FAILED.toString());
+
+			// Execute Next One in Loop
+			TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+			return;
+		}
+
+		SMSGatewayUtil.sendSMS(SMS_API, from, to, message, ACCOUNT_ID, AUTH_TOKEN);
+
+		// Creates log for sending sms
+		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "SMS Sent ",
+				LogType.SMS_SENT.toString());
+
+		// Execute Next One in Loop
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+
 	}
 
-	if (ACCOUNT_SID == null || AUTH_TOKEN == null)
-	    return null;
-
-	return TwilioSMSUtil.verifiedTwilioNumbers(ACCOUNT_SID, AUTH_TOKEN);
-
-    }
-
-    private String checkvalidTo(String to)
-    {
-
-	PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
-	try
+	private boolean checkValidFromNumber(String from)
 	{
-	    PhoneNumber toPhoneNumber = phoneUtil.parse(to, null);
-	    if (phoneUtil.isValidNumber(toPhoneNumber))
-		return "Valid";
+
+		List<String> verifiedNumbers = getVerifiedNumbers();
+
+		if (verifiedNumbers.isEmpty())
+			return false;
+
+		if (verifiedNumbers.contains(from))
+			return true;
+
+		return false;
 	}
-	catch (NumberParseException e)
+
+	private List<String> getVerifiedNumbers()
 	{
-	    System.out.println("Inside Send Message check valid 'to' number");
+		Widget widget = SMSGatewayUtil.getSMSGatewayWidget();
 
-	    /*
-	     * if (phoneUtil.isAlphaNumber(to)) return "AlphaNumeric";
-	     */
-	    System.err.println("NumberParseException was thrown: " + e.toString());
+		if (widget == null)
+			return new ArrayList<String>();
+
+		SMS_API = SMSGatewayUtil.getSMSType(widget);
+
+		if (SMS_API.equals("TWILIO"))
+		{
+			ACCOUNT_ID = TwilioUtil.getAccountSID(widget);
+			AUTH_TOKEN = TwilioUtil.getAuthToken(widget);
+		}
+		else if (SMS_API.equals("PLIVO"))
+		{
+			ACCOUNT_ID = PlivoUtil.getAccountID(widget);
+			AUTH_TOKEN = PlivoUtil.getAuthToken(widget);
+		}
+
+		return SMSGatewayUtil.incomingNumbers(widget);
 	}
 
-	return "Invalid";
-    }
+	private boolean checkValidToNumber(String to)
+	{
+
+		PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+		try
+		{
+			PhoneNumber toPhoneNumber = phoneUtil.parse(to, null);
+			if (phoneUtil.isValidNumber(toPhoneNumber))
+				return true;
+		}
+		catch (NumberParseException e)
+		{
+			System.out.println("Inside Send Message check valid 'to' number");
+			System.err.println("NumberParseException was thrown: " + e.toString());
+		}
+		return false;
+	}
 
 }

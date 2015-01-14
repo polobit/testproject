@@ -29,6 +29,8 @@ import com.stripe.model.StripeObject;
 public class InvoiceWebhookHandler extends StripeWebhookHandler
 {
 
+    String subscribptionIdFromStripe = null;
+
     @Override
     public void process()
     {
@@ -68,10 +70,9 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 
 	    try
 	    {
-	     updateContactInOurDomain(getContactFromOurDomain(), user.email,
-	     subscription, null);
+		updateContactInOurDomain(getContactFromOurDomain(), user.email, subscription, null);
 	    }
-	    catch(Exception e)
+	    catch (Exception e)
 	    {
 		e.printStackTrace();
 	    }
@@ -186,7 +187,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
     public Subscription setSubscriptionFlag(Subscription.BillingStatus status)
     {
 	String domain = getDomain();
-	
+
 	String oldNamespace = NamespaceManager.get();
 	try
 	{
@@ -237,6 +238,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    JSONObject lines = obj.getJSONObject("lines");
 	    JSONObject data = lines.getJSONArray("data").getJSONObject(0);
 
+	    System.out.println(data);
 	    if (data.has("quantity"))
 		plan.put("quantity", data.get("quantity"));
 
@@ -250,20 +252,18 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    else
 	    {
 		System.out.println("plan details not found ");
-		if(obj.has("metadata"))
+		if (obj.has("metadata"))
 		{
 		    JSONObject metadata = obj.getJSONObject("metadata");
-		    
+
 		    System.out.println("meta data : " + metadata);
-		    if(metadata != null)
+		    if (metadata != null)
 		    {
 			plan.put("quantity", metadata.get("quantity"));
 			plan.put("plan", metadata.get("plan"));
 		    }
 		}
 	    }
-	    
-	   
 
 	    if (data.has("period"))
 	    {
@@ -272,10 +272,12 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 		plan.put("end_date", new Date(Long.parseLong(period.getString("end")) * 1000).toString());
 	    }
 
-	    plan.put("amount", Integer.valueOf(obj.getString("total")) / 100);
+	    if (data.has("id"))
+		subscribptionIdFromStripe = data.getString("id");
+	    plan.put("amount", Float.valueOf(obj.getString("total")) / 100);
 
 	    System.out.println(plan);
-	    
+
 	    return plan;
 	}
 	catch (JSONException e1)
@@ -331,10 +333,24 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 		count = 1;
 	    BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(null, null);
 
-	    // Email count and according to plan and extra free pack that is
-	    // provided to all users
-	    restriction.emails_count = (count * 1000);
+	    System.out.println("events : " + getEvent().getData());
+	    System.out.println("previous attributes : " + getEvent().getData().getPreviousAttributes());
+	    if (getEvent().getData().getPreviousAttributes() == null
+		    || getEvent().getData().getPreviousAttributes().isEmpty())
+	    {
+		if (restriction.one_time_emails_count < 0)
+		    restriction.one_time_emails_count = 0;
+
+		restriction.one_time_emails_count += (count * 1000);
+		restriction.max_emails_count = restriction.one_time_emails_count;
+	    }
+	    else
+	    {
+		restriction.one_time_emails_count = (count * 1000);
+		restriction.max_emails_count = restriction.one_time_emails_count;
+	    }
 	    restriction.save();
+
 	}
 	finally
 	{
@@ -342,5 +358,4 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	}
 
     }
-
 }

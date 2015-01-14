@@ -2,6 +2,8 @@ package com.agilecrm.subscription;
 
 import org.codehaus.jettison.json.JSONObject;
 
+import com.agilecrm.account.EmailGateway;
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
@@ -62,8 +64,7 @@ public class SubscriptionUtil
 	// Returns Customer object as JSONObject
 	try
 	{
-	    Customer customer = getCustomer(subscription.billing_data);
-	    subscription.billing_data = StripeUtil.getJSONFromCustomer(customer);
+	    subscription.refreshCustomer();
 	    subscription.cachedData = BillingRestrictionUtil.getBillingRestriction(
 		    subscription.plan.plan_type.toString(), subscription.plan.quantity);
 	    subscription.cachedData.refresh(true);
@@ -128,7 +129,13 @@ public class SubscriptionUtil
     {
 	Integer count = quantity * 1000;
 
-	String plan_id = "";
+	String plan_id = "email-4";
+
+	EmailGateway gateway = EmailGatewayUtil.getEmailGateway();
+
+	if (gateway != null)
+	    plan_id = "email-2";
+
 	if (count <= 100000)
 	    plan_id = "email-4";
 	else if (count <= 1000000)
@@ -196,7 +203,9 @@ public class SubscriptionUtil
 	if (subscription.isFreeEmailPack())
 	    return false;
 
-	if (subscription.emailPlan == null || !subscription_id.equals(subscription.emailPlan))
+	// If subscription is not equal then subscription in changed not
+	// canceled
+	if (!subscription_id.equals(subscription.emailPlan))
 	{
 	    return false;
 	}

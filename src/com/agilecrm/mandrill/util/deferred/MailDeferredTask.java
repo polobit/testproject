@@ -1,6 +1,8 @@
 package com.agilecrm.mandrill.util.deferred;
 
+import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.EmailGateway.EMAIL_API;
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.thirdparty.SendGrid;
 import com.thirdparty.mandrill.Mandrill;
@@ -30,6 +32,9 @@ public class MailDeferredTask implements DeferredTask
     public String text = null;
     public String metadata = null;
 
+    public String subscriberId = null;
+    public String campaignId = null;
+
     /**
      * Constructs a new {@link MailDeferredTask}
      * 
@@ -56,7 +61,7 @@ public class MailDeferredTask implements DeferredTask
      */
     public MailDeferredTask(String emailGatewayType, String apiUser, String apiKey, String domain, String fromEmail,
 	    String fromName, String to, String cc, String bcc, String subject, String replyTo, String html,
-	    String text, String metadata)
+	    String text, String metadata, String subscriberId, String campaignId)
     {
 	this.emailGatewayType = emailGatewayType;
 	this.apiUser = apiUser;
@@ -72,19 +77,32 @@ public class MailDeferredTask implements DeferredTask
 	this.html = html;
 	this.text = text;
 	this.metadata = metadata;
+	this.subscriberId = subscriberId;
+	this.campaignId = campaignId;
     }
 
     public void run()
     {
-	System.out.println("MailDeferredTask run...");
 
-	// If gateway type is null or Mandrill
-	if (emailGatewayType == null || emailGatewayType.equals(EMAIL_API.MANDRILL.toString()))
-	    Mandrill.sendMail(apiKey, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, metadata);
+	EmailGateway emailGateway = null;
 
-	// If gateway type is SendGrid
-	if (emailGatewayType.equals(EMAIL_API.SEND_GRID.toString()))
+	try
+	{
+	    emailGateway = EmailGatewayUtil.getEmailGateway();
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+	// If null or Mandrill
+	if (emailGateway == null || emailGateway.email_api == EmailGateway.EMAIL_API.MANDRILL)
+	    Mandrill.sendMail(apiKey, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, metadata,
+		    null);
+
+	// If SendGrid
+	else if (emailGateway.email_api == EMAIL_API.SEND_GRID)
 	    SendGrid.sendMail(apiUser, apiKey, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null);
-
     }
 }

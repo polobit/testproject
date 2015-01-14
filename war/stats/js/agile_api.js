@@ -97,9 +97,17 @@ var _agile = {
 		{
 			agile_getWorkflows(callback);							// Get all work-flows created by domain user
 		},
+		get_pipelines : function (callback)
+		{
+			agile_getPipelines(callback);							// Get pipelines (Tracks)
+		},
 		get_milestones : function (callback)
 		{
 			agile_getMilestones(callback);							// Get milestones
+		},
+		get_milestones_by_pipeline : function (pipeline_id,callback)
+		{
+			agile_getMilestones_by_pipeline(pipeline_id,callback);	// Get milestones based on pipeline id.
 		},
 		update_contact : function (data, callback, email)
 		{

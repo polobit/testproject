@@ -25,20 +25,20 @@
 	<div class="widget_content">
 		{{#isArray client}}
 			{{#if client.0.username}}
-				<div  style="display:inline-block;">
+				<div  style="display:inline-block;font-size:13px;">
 					<div  class="title_txt" style="display:inline-block;">
-						<a href="{{client.0.links.statement}}" target="_blank"><h4 style="text-transform: capitalize;"><b>
+						<a href="{{client.0.links.statement}}" target="_blank"><h4 style="text-transform: capitalize;">
 							{{#if_equals client.0.first_name ""}}{{#if_equals client.0.last_name ""}}
 								{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}{{/if_equals}}
 							{{else}}
 								{{client.0.first_name}} {{client.0.last_name}}
 							{{/if_equals}}
-						</b></h4></a>
+						</h4></a>
 					</div>
 					{{#if_equals client.0.organization ""}}<div></div>{{else}}, <div style="display:inline-block;"><a href="{{client.0.links.view}}" target="_blank"><h4 style="text-transform: capitalize;">{{client.0.organization}}</h4></a></div>{{/if_equals}}
 				</div>
 			{{/if}}
-			<p style="font-size: 13px;">
+			<p style="font-size:14px;margin-bottom:0px;">
 				{{#if client.0.p_street1}}
 					{{client.0.p_street1}}
 				{{/if}}
@@ -70,7 +70,7 @@
 					{{#if_equals client.organization ""}}<div></div>{{else}}, <div style="display:inline-block;"><a href="{{client.links.view}}" target="_blank"><h4 style="text-transform: capitalize;">{{client.organization}}</h4></a></div>{{/if_equals}}
 				</div>
 			{{/if}}
-			<p style="font-size: 13px;">
+			<p style="font-size:14px;margin-bottom:6px;">
 				{{#if client.p_street1}}
 					{{client.p_street1}},
 				{{/if}}
@@ -88,7 +88,7 @@
 			{{#if client.work_phone}}<i class="icon-phone"></i><a href="tel:{{client.work_phone}}" > {{client.work_phone}} (work)<br> </a>{{/if}}
 			{{#if client.mobile}}<i class="icon-phone"></i><a href="tel:{{client.mobile}}"> {{client.mobile}} (mobile)</a>{{/if}}
 		{{/isArray}}
-		<div style="margin-bottom:10px;"><a class="btn" id="freshbooks_add_invoice" item_name={{name}} rel="tooltip" title="Generate invoice and send an email for this item" style="display:none; cursor:pointer">Add Invoice</a></div>
+		<div><a class="btn" id="freshbooks_add_invoice" item_name={{name}} rel="tooltip" title="Generate invoice and send an email for this item" style="display:none; cursor:pointer">Add Invoice</a></div>
 	</div>
 	<div class="sub_header">
 		{{#isArray client}}
@@ -112,8 +112,8 @@
 		</li>		
 	{{else}}
 		<li class="sub_header row-fluid" style="padding-bottom: 0px;">
-			<div class="span6">Status</div>
-			<div class="span6" style="text-align: right;">Amount</div>
+			<div class="span6" style="font-size:14px;">Status</div>
+			<div class="span6" style="text-align: right;font-size:14px;">Amount</div>
 		</li>
 		{{#isArray invoice}}
 			{{#each invoice}}
@@ -353,11 +353,11 @@
 
 <script id="freshbooks-error-template" type="text/html">
 {{#check_length message "140"}}
-	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:10px">
+	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:0px">
 		{{message}}
 	</div>
 {{else}}
-	<div style="line-height:160%;word-wrap: break-word;padding:10px">
+	<div style="line-height:160%;word-wrap: break-word;padding:0px">
 		{{message}}
 	</div>
 {{/check_length}}

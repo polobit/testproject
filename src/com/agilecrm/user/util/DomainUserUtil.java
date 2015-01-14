@@ -1,6 +1,7 @@
 package com.agilecrm.user.util;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,8 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.QueryResultIterable;
 import com.googlecode.objectify.Key;
 
 /**
@@ -233,6 +236,28 @@ public class DomainUserUtil
 	}
     }
 
+    public static DomainUser getDomainUserByEmailFromParticularDomain(String email, String domain)
+    {
+	String namespace = NamespaceManager.get();
+
+	if (StringUtils.isEmpty(domain))
+	    return null;
+
+	NamespaceManager.set("");
+
+	try
+	{
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    searchMap.put("email", email);
+	    searchMap.put("domain", domain);
+	    return dao.getByProperty(searchMap);
+	}
+	finally
+	{
+	    NamespaceManager.set(namespace);
+	}
+    }
+
     /**
      * Gets domain user based on gadget_id
      * 
@@ -353,11 +378,73 @@ public class DomainUserUtil
     {
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
-
-	DomainUser user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true)
+	DomainUser user = null;
+	try
+	{
+	    user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true)
 		.get();
+	    if(user == null)
+		user = getDomainOwnerHack(domain);
+	}
+	finally
+	{
+		NamespaceManager.set(oldNamespace);
+	}
 
-	NamespaceManager.set(oldNamespace);
+	return user;
+    }
+    
+    /**
+     * Fetches domain user based on id if is_account_owner flag is not found
+     * @param domain
+     * @return
+     */
+    private static final DomainUser getDomainOwnerHack(String domain)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+	DomainUser user = null;
+	try
+	{
+	     com.googlecode.objectify.Query<DomainUser> query = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_admin", true).limit(1).order("id");
+	     QueryResultIterable<DomainUser> users = query.fetch();
+	     Iterator<DomainUser> iterator = users.iterator();
+	     
+	     // We only need one user
+	     if (iterator.hasNext() )
+	     {
+		 user = iterator.next();
+		 if(!user.is_account_owner)
+		 {
+		     user.is_account_owner = true;
+		     user.is_admin = true;
+		     user.save();
+		 }
+	     }
+	     else
+	     {
+		 // If admin is not there in account, first user is made admin and account owner
+		 query = dao.ofy().query(DomainUser.class).filter("domain", domain).limit(1).order("id");
+		 user = query.get();
+		 if(user != null && !user.is_account_owner)
+		 {
+		     user.is_admin = true;
+		     user.is_account_owner = true;
+		     user.save();
+		 }
+	     }
+		 
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+
 	return user;
     }
 
@@ -438,8 +525,7 @@ public class DomainUserUtil
      * Gets domain user based on his scheduleid
      * 
      * @param name
-     *            is nothing but schedule id.and schedule id is nothing but his
-     *            name
+     *            is schedule id.and schedule id is nothing but his name
      * 
      * @return {@link DomainUser} object
      */
@@ -461,6 +547,35 @@ public class DomainUserUtil
 	}
 	finally
 	{
+	    NamespaceManager.set(oldnamespace);
+	}
+
+    }
+
+    /**
+     * Gets domain user based on list of keys
+     * 
+     * @param userKeys
+     *            is list of keys.
+     * 
+     * @return {@link DomainUser} object
+     */
+    public static List<DomainUser> getDomainUsersFromKeys(List<Key<DomainUser>> userKeys)
+    {
+	String oldnamespace = NamespaceManager.get();
+	System.out.println("-----------geting Userslist." + userKeys.size());
+
+	NamespaceManager.set("");
+
+	try
+	{
+	    List<DomainUser> userList = dao.fetchAllByKeys(userKeys);
+	    System.out.println("-------users size - " + userList.size());
+	    return userList;
+	}
+	finally
+	{
+
 	    NamespaceManager.set(oldnamespace);
 	}
     }

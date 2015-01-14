@@ -1,10 +1,15 @@
 package com.agilecrm.core.api.contacts;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -44,12 +49,12 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.util.HTTPUtil;
-import com.agilecrm.util.JSAPIUtil;
 
 /**
  * <code>ContactsAPI</code> includes REST calls to interact with {@link Contact}
@@ -83,15 +88,15 @@ public class ContactsAPI
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Contact> getContacts(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
-	    @QueryParam("reload") boolean force_reload)
+	    @QueryParam("reload") boolean force_reload, @QueryParam("global_sort_key") String sortKey)
     {
 	if (count != null)
 	{
 	    System.out.println("Fetching page by page");
-	    return ContactUtil.getAllContacts(Integer.parseInt(count), cursor);
+	    return ContactUtil.getAllContactsByOrder(Integer.parseInt(count), cursor, sortKey);
 	}
 
-	return ContactUtil.getAllContacts();
+	return ContactUtil.getAllContactsByOrder(sortKey);
     }
 
     /* Fetch all contacts related to a company */
@@ -144,16 +149,17 @@ public class ContactsAPI
     @Path("/companies")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Contact> getCompanies(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
+    public List<Contact> getCompanies(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
+	    @QueryParam("global_sort_key") String sortKey)
     {
 	if (count != null)
 	{
 
 	    System.out.println("Fetching companies page by page");
-	    return ContactUtil.getAllCompanies(Integer.parseInt(count), cursor);
+	    return ContactUtil.getAllCompaniesByOrder(Integer.parseInt(count), cursor, sortKey);
 	}
 
-	return ContactUtil.getAllContacts();
+	return ContactUtil.getAllContactsByOrder(sortKey);
     }
 
     @Path("/")
@@ -450,12 +456,13 @@ public class ContactsAPI
      *            email of contact form parameter
      * @param tagsString
      *            array of tags as string
+     * @return
      * @throws JSONException
      */
     @Path("/email/tags/add")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void addTagsToContactsBasedOnEmail(@FormParam("email") String email, @FormParam("tags") String tagsString,
+    public Tag[] addTagsToContactsBasedOnEmail(@FormParam("email") String email, @FormParam("tags") String tagsString,
 	    @Context HttpServletResponse response) throws JSONException
     {
 
@@ -467,7 +474,7 @@ public class ContactsAPI
 
 	    object.put("error", "No tags to add");
 	    HTTPUtil.writeResonse(response, object.toString());
-	    return;
+	    return null;
 	}
 
 	Contact contact = ContactUtil.searchContactByEmail(email);
@@ -475,7 +482,7 @@ public class ContactsAPI
 	{
 	    object.put("error", "No contact found with email address \'" + email + "\'");
 	    HTTPUtil.writeResonse(response, object.toString());
-	    return;
+	    return null;
 	}
 
 	JSONArray tagsJSONArray = new JSONArray(tagsString);
@@ -490,11 +497,13 @@ public class ContactsAPI
 	    e.printStackTrace();
 	}
 	if (tagsArray == null)
-	    return;
+	    return null;
 
 	System.out.println("Tags to add : " + tagsArray);
 	contact.addTags(tagsArray);
 	System.out.println("Tags after added : " + contact.tagsWithTime);
+
+	return tagsArray;
 
     }
 
@@ -533,7 +542,6 @@ public class ContactsAPI
 	}
 
 	Note noteObj = new Note();
-
 	try
 	{
 	    noteObj = new ObjectMapper().readValue(note.toString(), Note.class);
@@ -798,17 +806,17 @@ public class ContactsAPI
     @Path("/add-score")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces("application/x-javascript")
-    public String addScore(@FormParam("email") String email, @FormParam("score") Integer score)
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Contact addScore(@FormParam("email") String email, @FormParam("score") Integer score)
     {
 	try
 	{
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
-		return JSAPIUtil.generateContactMissingError();
+		return null;
 
 	    contact.addScore(score);
-	    return new ObjectMapper().writeValueAsString(contact);
+	    return contact;
 	}
 	catch (Exception e)
 	{
@@ -929,5 +937,129 @@ public class ContactsAPI
     public boolean isCompanyExist(@PathParam("company-name") String companyName)
     {
 	return ContactUtil.isCompanyExist(companyName);
+    }
+
+    /**
+     * merge duplicated contacts and related items such as
+     * notes,document,events,task,deals and documents
+     * 
+     * @param Contact
+     *            contact and duplication contact ids
+     * @return Single Contact
+     */
+    @Path("/merge/{contactIds}")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Contact mergeContacts(Contact contact, @PathParam("contactIds") String contactIds)
+    {
+	String[] ids = contactIds.split(",");
+	for (String id : ids)
+	{
+	    // update notes
+	    try
+	    {
+		List<Note> notes = NoteUtil.getNotes(Long.valueOf(id));
+
+		for (Note note : notes)
+		{
+		    note.addContactIds(contact.id.toString());
+		    note.save();
+		}
+
+		// update events
+
+		List<Event> events = EventUtil.getContactEvents(Long.valueOf(id));
+
+		for (Event event : events)
+		{
+		    event.addContacts(contact.id.toString());
+		    event.save();
+		}
+
+		// update task
+		List<Task> tasks = TaskUtil.getContactTasks(Long.valueOf(id));
+		for (Task task : tasks)
+		{
+		    task.addContacts(contact.id.toString());
+		    task.save();
+		}
+
+		// update deals
+		List<Opportunity> opportunities = OpportunityUtil.getAllOpportunity(Long.valueOf(id));
+		for (Opportunity opportunity : opportunities)
+		{
+		    opportunity.addContactIds(contact.id.toString());
+		    opportunity.save();
+		}
+
+		// merge document
+
+		List<Document> documents = DocumentUtil.getContactDocuments(Long.valueOf(id));
+		for (Document document : documents)
+		{
+		    document.getContact_ids().add(contact.id.toString());
+		    document.save();
+		}
+
+		// merge Case
+		List<Case> cases = CaseUtil.getCases(Long.valueOf(id));
+		for (Case cas : cases)
+		{
+		    cas.addContactToCase(contact.id.toString());
+		    cas.save();
+		}
+		// delete duplicated record
+		ContactUtil.getContact(Long.valueOf(id)).delete();
+		// save master reccord
+		contact.save();
+
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
+	}
+	// merge notes
+	return contact;
+    }
+
+    /* Fetch current time from contact's time zone */
+    @Path("/gettz/{latitude}/{longitude}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getContactsCurrentTime(@PathParam("latitude") String latitude,
+	    @PathParam("longitude") String longitude) throws JSONException
+    {
+	long epoch = System.currentTimeMillis() / 1000;
+
+	// URL for get request
+	String urlForTZ = "https://maps.googleapis.com/maps/api/timezone/json?location=" + latitude + "," + longitude
+		+ "&timestamp=" + epoch;
+
+	// Send get request and get result
+	String contactTimeZone = HTTPUtil.accessURL(urlForTZ);
+
+	JSONObject contactTimeZoneJson = new JSONObject(contactTimeZone);
+	if (contactTimeZoneJson.toString().isEmpty() || !contactTimeZoneJson.get("status").equals("OK"))
+	    return null;
+
+	// Get time zone
+	TimeZone tz = TimeZone.getTimeZone(contactTimeZoneJson.getString("timeZoneId"));
+
+	// Set calendar
+	Calendar calendar = new GregorianCalendar();
+	calendar.setTimeZone(tz);
+
+	// Set date formatter
+	DateFormat formatter = new SimpleDateFormat("hh:mm a (E, dd-MMM)");
+	formatter.setTimeZone(TimeZone.getTimeZone(contactTimeZoneJson.getString("timeZoneId")));
+
+	// Get current date and time
+	String currentDate = formatter.format(calendar.getTime());
+
+	// Return result
+	return currentDate.toString();
     }
 }

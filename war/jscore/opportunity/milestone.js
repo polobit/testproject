@@ -126,7 +126,7 @@ $(function(){
 					if(readCookie("agile_deal_track") && readCookie("agile_deal_track") == id)
 						eraseCookie("agile_deal_track");
 					if(readCookie("deal-filters")){
-						var json = $.parseJSON(readCookie("agile_deal_view"));
+						var json = $.parseJSON(readCookie("deal-filters"));
 						if(json.pipeline_id = id)
 							eraseCookie("deal-filters");
 					}
@@ -346,6 +346,10 @@ function update_milestone(data, id, newMilestone, oldMilestone){
 	DealJSON.notes = notes;
 	if(DealJSON.note_description)
 		delete DealJSON.note_description;
+	
+	 if(!DealJSON.close_date || DealJSON.close_date==0)
+		 DealJSON.close_date = null;
+	 DealJSON.owner_id = DealJSON.owner.id;
    // Saving that deal object
 	var up_deal = new Backbone.Model();
 	up_deal.url = '/core/api/opportunity';
@@ -376,6 +380,13 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone) {
 	var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : oldMilestone });
 	if(!dealPipelineModel)
 		return;
+	try{
+		$('#'+newMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+newMilestone.replace(/ +/g, '')+'_count').text())+1);
+		$('#'+oldMilestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+oldMilestone.replace(/ +/g, '')+'_count').text())-1);
+	} catch(err){
+		console.log(err);
+	}
+	
 	dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
 
 	// Add the deal in to new milestone collection.

@@ -68,7 +68,10 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback)
 				toolbar2 : toolbar_2, valid_elements : "*[*]",
 				toolbar_items_size: 'small',
 				browser_spellcheck : true,
+				relative_urls : false,
+				convert_urls : false,
 		        gecko_spellcheck: true,
+		        forced_root_block : false,
 				extended_valid_elements : "*[*]", setup : function(editor)
 				{
 					editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : set_up_merge_fields(editor) });
@@ -310,7 +313,8 @@ function get_merge_fields()
 	"State":"{{location.state}}",
 	"Country":"{{location.country}}",
 	"Owner Name":"{{owner.name}}",
-	"Owner Email":"{{owner.email}}"
+	"Owner Email":"{{owner.email}}", 
+	"Calendar URL" : "{{owner.calendar_url}}"
 	}
 
 	// Get Custom Fields in template format
@@ -481,3 +485,20 @@ function get_formatted_date(epoch_time, format)
 	return date + " " + month_names[month] 
 			+ " " + year;
 }
+
+function register_focus_on_tinymce(selector)
+{
+	var document = $("iframe#"+selector+"_ifr").contents()[0];
+	
+	if(!document)
+		return;
+	
+	$(document).die().live('click', function(e){
+		
+		e.preventDefault();
+		
+		$(this).find('body').focus();
+		
+	});
+}
+

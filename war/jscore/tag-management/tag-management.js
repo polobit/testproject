@@ -414,7 +414,19 @@ function addTagsArrayasTypeaheadSource(tagsJSON, element) {
 }
 
 function showModalConfirmation(title, body, yes_callback, no_callback,
-		close_callback) {
+		close_callback, yes_button_text, no_button_text) {
+	if(!yes_button_text && !no_button_text)
+	{
+		yes_button_text = "Yes";
+		no_button_text = "No";
+	}
+	var yes_action = "";
+	var no_action = "";
+	if(yes_button_text)
+		yes_action = '<a href="#" id="confirm" class="action btn btn-primary" action="confirm">'+yes_button_text+'</a>';
+	if(no_button_text)
+		no_action = '<a  href="#" id="deny" class="btn action" data-dismiss="modal" action="deny">'+no_button_text+'</a>';
+		
 	var confirmationModal = $('<div id="confirmation" class="modal fade in">'
 			+ '<div class="modal-header" >'
 			+ '<a href="#" data-dismiss="modal" class="close">&times;</a>'
@@ -426,8 +438,8 @@ function showModalConfirmation(title, body, yes_callback, no_callback,
 			+ '</div>'
 			+ '<div class="modal-footer">'
 			+ '<div>'
-			+ '<a  href="#" id="deny" class="btn action" data-dismiss="modal" action="deny">No</a>' 
-			+ '<a href="#" id="confirm" class="action btn btn-primary" action="confirm">Yes</a>'
+			+ no_action
+			+ yes_action
 			+ '</div>' + '</div>' + '</div>' + '</div>');
 
 	confirmationModal.modal('show');
@@ -453,7 +465,7 @@ function showModalConfirmation(title, body, yes_callback, no_callback,
 				}
 
 				if (no_callback && typeof no_callback == "function")
-					no_callback();
+					no_callback(this);
 
 			})
 

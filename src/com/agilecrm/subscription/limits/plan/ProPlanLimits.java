@@ -24,6 +24,13 @@ public class ProPlanLimits extends PlanLimits
 		reporting = "ALL";
 		whiteLabelEnabled = true;
 		campaignNodesLimit = 50;
+		
+		/**
+		 * New plan limits
+		 */
+		widgetsLimit = 1;
+		reportsLimit = 25;
+		TriggersLimit = 15;
 	}
 
 }

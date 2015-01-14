@@ -2,6 +2,8 @@ package com.agilecrm;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -11,14 +13,23 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.account.APIKey;
+import com.agilecrm.activities.EventReminder;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.Note;
+import com.agilecrm.contact.Tag;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.ReferenceUtil;
 import com.agilecrm.util.RegisterUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>RegisterServlet</code> class registers the user account in agile crm.
@@ -41,6 +52,14 @@ import com.google.appengine.api.utils.SystemProperty;
 @SuppressWarnings("serial")
 public class RegisterServlet extends HttpServlet
 {
+    public static final String COMPANY_TYPE = "Business Type";
+    public static final String PLAN_CHOSEN = "Plan";
+    public static final String USERS_COUNT = "Users";
+    public static final String ROLE = "Role";
+    public static final String DOMAIN = "Domain";
+    private static final String SIGN_UP_TAG = "Signup";
+    private static final String DOMAIN_OWNER_TAG = "Domain Owner";
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
 	doGet(request, response);
@@ -176,6 +195,9 @@ public class RegisterServlet extends HttpServlet
 	// Get Name
 	String name = request.getParameter("name");
 
+	if (name != null)
+	    name = name.trim();
+
 	// Get reference code
 
 	if (email == null || password == null)
@@ -188,8 +210,219 @@ public class RegisterServlet extends HttpServlet
 
 	DomainUser domainUser = createUser(request, response, userInfo, password);
 
+	EventReminder.getEventReminder(domainUser.domain, null);
+	try
+	{
+	    // Creates contact in our domain
+	    createUserInOurDomain(request, domainUser);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+	String redirectionURL = VersioningUtil.getURL(domainUser.domain, request);
+
 	// Redirect to home page
-	response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com/");
+	response.sendRedirect(redirectionURL);
+    }
+
+    private void createUserInOurDomain(HttpServletRequest request, DomainUser user)
+    {
+	// Form 1
+	String userDomain = NamespaceManager.get();
+	String emailValue = request.getParameter("email");
+	String name = request.getParameter("name");
+	String planValue = request.getParameter("plan_type");
+	String userCount = request.getParameter("users_count");
+
+	// Form 2
+	String companyName = request.getParameter("company");
+	String companySize = request.getParameter("company_size");
+	String companyType = request.getParameter("company_type");
+	String role = request.getParameter("role");
+	String phoneNumber = request.getParameter("phone_number");
+
+	List<ContactField> properties = new ArrayList<ContactField>();
+
+	try
+	{
+
+	    // Name
+	    if (!StringUtils.isEmpty(name))
+	    {
+		name = name.trim();
+		if (name.contains(" "))
+		{
+		    String[] names = name.split(" ");
+		    properties.add(createField(Contact.FIRST_NAME, names[0]));
+
+		    if (names.length > 1)
+		    {
+			properties.add(createField(Contact.LAST_NAME, names[1]));
+		    }
+		}
+		else
+		{
+		    properties.add(createField(Contact.FIRST_NAME, name));
+		}
+	    }
+
+	    // Email
+	    if (!StringUtils.isEmpty(emailValue))
+	    {
+		properties.add(createField(Contact.EMAIL, emailValue));
+	    }
+
+	    // Plan
+	    if (!StringUtils.isEmpty(planValue))
+	    {
+		properties.add(createField(PLAN_CHOSEN, planValue));
+	    }
+
+	    // Users count
+	    if (!StringUtils.isEmpty(userCount))
+	    {
+		properties.add(createField(USERS_COUNT, userCount));
+	    }
+
+	    // Company
+	    if (!StringUtils.isEmpty(companyName))
+	    {
+		properties.add(createField(Contact.COMPANY, companyName.trim()));
+	    }
+
+	    // Company type
+	    if (!StringUtils.isEmpty(companyType))
+	    {
+		properties.add(createField(COMPANY_TYPE, companyType));
+	    }
+
+	    if (!StringUtils.isEmpty(phoneNumber))
+	    {
+		properties.add(createField(Contact.PHONE, phoneNumber));
+	    }
+	    if (!StringUtils.isEmpty(role))
+	    {
+		properties.add(createField(Contact.TITLE, role));
+	    }
+
+	    properties.add(createField(DOMAIN, userDomain));
+
+	    NamespaceManager.set(Globals.COMPANY_DOMAIN);
+
+	    Contact contact = new Contact();
+	    contact.properties = properties;
+
+	    Contact oldContact = ContactUtil.searchContactByEmail(contact.getContactFieldValue(Contact.EMAIL));
+
+	    if (oldContact != null)
+	    {
+		contact = ContactUtil.mergeContactFeilds(contact, oldContact);
+	    }
+
+	    Key<DomainUser> key = null;
+	    String version = VersioningUtil.getAppVersion(request);
+	    if (!StringUtils.isEmpty(version))
+	    {
+		key = APIKey.getDomainUserKeyRelatedToAPIKey("td2h2iv4njd4mbalruce18q7n4");
+	    }
+	    else
+	    {
+		key = APIKey.getDomainUserKeyRelatedToAPIKey("ckjpag3g8k9lcakm9mu3ar4gc8");
+	    }
+
+	    Tag signupTag = new Tag(SIGN_UP_TAG);
+	    contact.addTag(signupTag);
+
+	    // Dummy check. If user goes through register servlet he is domain
+	    // owner.
+	    if (user.is_account_owner)
+	    {
+		Tag domainOwnerTag = new Tag(DOMAIN_OWNER_TAG);
+		contact.addTag(domainOwnerTag);
+	    }
+
+	    contact.setContactOwner(key);
+	    System.out.println("contact to be saved : " + contact);
+	    contact.save();
+	    System.out.println("contact after saving : " + contact);
+	    String referrar_note_description = getReferrarParameters(request);
+	    if (StringUtils.isNotEmpty(referrar_note_description))
+	    {
+		Note note = new Note("Referrer", referrar_note_description);
+		note.addContactIds((contact.id).toString());
+		note.save();
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    NamespaceManager.set(userDomain);
+	}
+
+    }
+
+    private ContactField createField(String name, String value)
+    {
+	ContactField property = new ContactField();
+
+	property.name = name;
+	property.value = value;
+	property.type = property.getFieldType();
+	return property;
+    }
+
+    private String getReferrarParameters(HttpServletRequest request)
+    {
+
+	Cookie[] cookies = request.getCookies();
+
+	String utmsource = null;
+	String utmcampaign = null;
+	String utmmedium = null;
+	String utmreferencedomain = null;
+	String referrar_note_description = null;
+
+	if (cookies != null && cookies.length > 0)
+	{
+	    for (int i = 0; i < cookies.length; i++)
+	    {
+		Cookie cookie = cookies[i];
+		System.out.println("cookie " + cookie);
+		if (cookie.getName().equals("_agile_utm_source"))
+		{
+		    utmsource = cookie.getValue();
+		}
+		if (cookie.getName().equals("_agile_utm_campaign"))
+		{
+		    utmcampaign = cookie.getValue();
+		}
+		if (cookie.getName().equals("_agile_utm_medium"))
+		{
+		    utmmedium = cookie.getValue();
+		}
+		if (cookie.getName().equals("agile_reference_domain"))
+		{
+		    utmreferencedomain = cookie.getValue();
+		}
+		System.out.println("in cookies utm source " + utmsource + " utm medium " + utmmedium + " utm campaign "
+		        + utmcampaign + " reference domain " + utmreferencedomain);
+		if (cookie.getName().equals("agile_reference_domain"))
+		    cookie.setMaxAge(0);
+
+	    }
+	    if (StringUtils.isNotEmpty(utmsource) && StringUtils.isNotEmpty(utmcampaign)
+		    && StringUtils.isNotEmpty(utmmedium) && StringUtils.isNotEmpty(utmreferencedomain))
+		referrar_note_description = " Source - " + utmsource + "\n Campaign -  " + utmcampaign + "\n Medium - "
+		        + utmmedium + "\n Reference Domain -" + utmreferencedomain;
+
+	}
+
+	return referrar_note_description;
     }
 
     /**

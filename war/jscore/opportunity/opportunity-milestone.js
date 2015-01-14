@@ -8,7 +8,10 @@ function startGettingDeals(criteria, pending)
 		$('#new-opportunity-list-paging').html(html);
 		return;
 	}
-		
+	if(readCookie('agile_deal_track')){
+		if(readCookie('agile_deal_track') != pipeline_id)
+			createCookie('agile_deal_track',pipeline_id);
+	}
 	var milestones = trackListView.collection.get(pipeline_id).toJSON().milestones.split(',');
 	console.log(milestones);
 	createDealsNestedCollection(pipeline_id,milestones);
@@ -36,11 +39,11 @@ function createDealsNestedCollection(pipeline_id,milestones)
 	initDealListCollection(milestones);
 	
 	// Url to call DB
-	var initialURL = '/core/api/opportunity/based?pipeline_id='+pipeline_id;
+	var initialURL = '/core/api/opportunity/based?pipeline_id='+pipeline_id+'&order_by=close_date';
 	
-	/*if(readCookie('deal-filters')){
+	if(readCookie('deal-filters')){
 		initialURL += '&filters='+encodeURIComponent(getDealFilters());
-	}*/
+	}
 
 	// Creates main collection with deals lists
 	for ( var i in milestones)
@@ -166,6 +169,14 @@ function dealsFetch(index,milestones)
 		$('#'+base_model.get("heading").replace(/ +/g, '')+'-list-container').html(dealCollection.render(true).el)
 		console.log($('#'+base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').length);
 		$('#'+base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').hide();
+		try {
+			var count = data.at(0)?data.at(0).toJSON().count:0;
+			$('#'+base_model.get("heading").replace(/ +/g, '')+'_count').text(data.at(0)?data.at(0).toJSON().count:0);
+		}
+		catch(err) {
+		    console.log(err);
+		}
+		
 		$('a.deal-notes').tooltip();
 		// Counter to fetch next sub collection
 		pipeline_count++;

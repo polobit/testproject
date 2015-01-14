@@ -132,8 +132,8 @@ function getAvailableActiveContacts()
 function get_campaign_subscribers_collection(workflow_id, fetch_url, template_key)
 {
 	/* Set the designer JSON. This will be deserialized */
-	var workflow_model = App_Workflows.workflow_list_view.collection.get(workflow_id);
-	var workflow_name = workflow_model.get("name");
+	//var workflow_model = App_Workflows.workflow_list_view.collection.get(workflow_id);
+	//var workflow_name = workflow_model.get("name");
 
 	var subscribers_collection = new Base_Collection_View({ 
 		url : fetch_url, 
@@ -149,7 +149,7 @@ function get_campaign_subscribers_collection(workflow_id, fetch_url, template_ke
 				$("time.campaign-completed-time", el).timeago();
 			});
 
-			$('#subscribers-campaign-name').text(workflow_name);
+			//$('#subscribers-campaign-name').text(workflow_name);
 
 		},
 		appendItemCallback : function(el)

@@ -1,9 +1,20 @@
 // Before selecting proper type array from map, need to fill map with user's detail.
 function startMakingCollection(criteria, pending)
 {
-	// Shows loading image untill data gets ready for displaying
-	$('#new-task-list-based-condition').html(LOADING_HTML);
-
+	console.log("in startMakingCollection");
+	console.log(criteria+" "+ pending);
+	
+	// Check for list view 
+	if(criteria == "LIST")
+		{	
+		  // Display list view
+		  displayListView();
+		  return;
+		}	
+	
+	// Hide list view and show column view with loading img
+	hideListViewAndShowLoading();
+			
 	// Get user details and add into GROUPING_MAP's owner array.
 	if (criteria == "OWNER" && GROUPING_MAP[criteria].type.length == 0)
 		getUserDetails(function(data)
@@ -87,7 +98,7 @@ function initTaskListCollection()
 			$('.loading', el).remove();
 
 			// Adjust Height Of Task List And Scroll as per window size
-			adjustHeightOfTaskListAndScroll();
+			adjustHeightOfTaskListAndScroll();			
 		} });
 
 	// Over write append function

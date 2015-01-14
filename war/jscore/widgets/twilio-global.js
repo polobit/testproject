@@ -10,6 +10,11 @@ var globalconnection;
 var Twilio_Setup_Called = false;
 var Twilio_Start = false;
 var Restart_Twilio = false;
+TWILIO_CONTACT_ID = 0;
+TWILIO_CALLTYPE = "";
+TWILIO_DIRECTION = "";
+TWILIO_CALLED_NO = "";
+TWILIO_IS_VOICEMAIL = false;
 
 $(function()
 {
@@ -21,7 +26,7 @@ $(function()
 		{
 			globalTwilioIOSetup();
 		}
-	}, 15000); // 15 sec
+	}, 10000); // 15 sec
 
 	$(".noty_twilio_hangup").die().live('click', function(e)
 	{
@@ -38,6 +43,25 @@ $(function()
 
 		$('.noty_buttons').find('#dialpad_in_twilio').toggle();
 	});
+	
+	//START voice mails
+	
+	$("#noty_twilio_voicemail").die().live('click', function(e){
+		e.preventDefault();
+		var voiceMailCount = parseInt($(this).attr('data-length'));
+		if(voiceMailCount === 1) {
+			sendVoiceAndEndCall($(this).attr('data-src'));
+		} else {
+			$("#splitButtonVoicemail").trigger("click");
+		}
+	});
+	
+	$(".voiceMailItem").die().live('click',function(e){
+		e.preventDefault();
+		sendVoiceAndEndCall($(this).attr('data-src'));
+	});
+		
+	//END voice mails related
 
 	$(".noty_twilio_answer").die().live('click', function(e)
 	{
@@ -120,6 +144,15 @@ $(function()
 	$(".contact-make-twilio-call").die().live('click', function(e)
 	{
 		e.preventDefault();
+		TWILIO_CALLTYPE = "Outgoing";
+		TWILIO_DIRECTION = "outbound-dial";
+		TWILIO_IS_VOICEMAIL = false;
+		
+//		alert("connecting twilio call");
+		
+		var contactDetailsObj = agile_crm_get_contact();
+		TWILIO_CONTACT_ID = contactDetailsObj.id;
+//		alert(TWILIO_CONTACT_ID);
 
 		if (Twilio.Device.status() == "busy")
 		{
@@ -137,6 +170,22 @@ $(function()
 		e.preventDefault();
 		$("#note-number-not-available").hide();
 	});
+	
+	$(".twilioio-advance-settings").die().live('click', function(e)
+	 {
+		e.preventDefault();
+		
+		// If twimlet url is none so display nothing
+		if("None" == $("#twilio_twimlet_url").val())
+			$("#twilio_twimlet_url").val(""); 
+		
+		// Toggle advance settings
+		$(".twilioio-advance-settings-hide").toggle();
+	    $(".twilioio-advance-settings-show").toggle();
+	    $("#twilio_recording").toggle();
+	    $("#twilio_twimlet_url_controls").toggle();
+	 });
+	
 });
 
 /*
@@ -170,7 +219,7 @@ function globalTwilioIOSetup()
 				Verfied_Number = twilioio_widget.prefs.twilio_from_number;
 			else
 				Verfied_Number = twilioio_widget.prefs.twilio_number;
-
+			
 			getGlobalToken();
 		}
 	}).error(function(data)
@@ -192,8 +241,10 @@ function getGlobalToken()
 
 		setUpGlobalTwilio();
 
+		// Restart twilio after 24 hrs with new token, because token life is 24hrs
 		setTimeout(function()
 		{
+			// After 24hrs check where call is connected or not 
 			if (Twilio.Device.status() == "busy")
 			{
 				Restart_Twilio = true;
@@ -250,8 +301,6 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 {
 	console.log("Twilio twilio number " + twilioNumbers + "  " + verifiedNumbers);
 	console.log("Twilio twilio number " + twilioNumbers.length + "  " + verifiedNumbers.length);
-	// console.log("Twilio twilio number " + twilioNumbers[0].PhoneNumber+" "
-	// +verifiedNumbers[0].PhoneNumber );
 
 	// no twilio # as well as no verified #
 	if (twilioNumbers.length == 0 && verifiedNumbers.length == 0)
@@ -350,6 +399,12 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 		// Show twilio numbers list
 		$("#twilio_numbers").show();
 	}
+	
+	// Show record call option on form
+	//$("#twilio_recording").show();
+	
+	// Show twimlet url controls
+	//$("#twilio_twimlet_url_controls").show();
 }
 
 function setToValidate(data, showAlert)
@@ -455,7 +510,10 @@ function createAppSid(twilioio_prefs, callback)
 	if (twilioio_prefs.twilio_number_sid != "")
 		numberSid = twilioio_prefs.twilio_number_sid;
 
-	$.get("/core/api/widgets/twilio/createappsid/" + twilioio_prefs.twilio_acc_sid + "/" + twilioio_prefs.twilio_auth_token + "/" + numberSid, function(result)
+	if (twilioio_prefs.twilio_twimlet_url == "")
+		twilioio_prefs.twilio_twimlet_url = "None";
+	
+	$.get("/core/api/widgets/twilio/createappsid/" + twilioio_prefs.twilio_acc_sid + "/" + twilioio_prefs.twilio_auth_token + "/" + numberSid+ "/" + twilioio_prefs.twilio_record+ "/" + encodeURIComponent(twilioio_prefs.twilio_twimlet_url), function(result)
 	{
 		console.log("Twilio createAppSid " + result);
 
@@ -482,6 +540,12 @@ function createAppSid(twilioio_prefs, callback)
 		// Show twilio numbers list
 		$("#twilio_numbers").hide();
 
+		// Hide record call option on form
+		//$("#twilio_recording").hide();
+		
+		// Hide twimlet url controls
+		//$("#twilio_twimlet_url_controls").hide();
+		
 		// Reset form fields after sending email
 		$("#twilioio_login_form").each(function()
 		{
@@ -550,7 +614,7 @@ function getTwilioIOContactName()
 function setUpGlobalTwilio()
 {
 	// Loads twilio min.js to intiliaze twilio call events
-	head.js("https://static.twilio.com/libs/twiliojs/1.1/twilio.min.js", function()
+	head.js("https://static.twilio.com/libs/twiliojs/1.2/twilio.min.js", function()
 	{
 		Twilio.Device.setup(Twilio_Token);
 
@@ -617,23 +681,79 @@ function setUpGlobalTwilio()
 		Twilio.Device.disconnect(function(conn)
 		{
 			console.log("Twilio call is disconnected");
+
 			// Called for all disconnections
 			console.log(conn);
-
+			
+			var phoneNumber = To_Number;
+			var messageObj = conn.message;
+			
 			if (Twilio.Device.status() != "busy")
 			{
 				closeTwilioNoty();
+				
+				// after disconnect check If restart is set so restart twilio with new token.
+				// restart is set after 24hrs
 				if (Restart_Twilio == true)
 				{
 					// Get widget, Create token and set twilio device
 					globalTwilioIOSetup();
 				}
+			}			
+			
+			// Get all call logs for widget only on cotact detail page
+			if(window.location.hash.indexOf("contact/") != -1)
+			   getTwilioIOLogs(phoneNumber);	
+			
+			// notes related code			
+			console.log("calSid new  " + conn.parameters.CallSid);
+			
+			var widgetDetails = twilioGetWidgetDetails();
+//			console.log("widget Details");
+//			console.log(widgetDetails);
+			var widgetPrefs = $.parseJSON(widgetDetails.prefs);
+			var acc_sid = widgetPrefs.twilio_acc_sid;
+			var auth_token = widgetPrefs.twilio_auth_token;	
+			var isParent = "true";
+			if(TWILIO_CALLTYPE == "Incoming") {
+				isParent = "false";
 			}
+			var ApiCallUrl = "/core/api/widgets/twilio/getlastcall/" + acc_sid + "/" + auth_token + "/" + conn.parameters.CallSid + "/" + isParent;
+			console.log(ApiCallUrl);
+			if(!widgetDetails)
+				return;
+			
+			var callDetails  = twilioApiRequest(ApiCallUrl);
+			
+			console.log("Call Details : isParent " + isParent);
+			console.log(callDetails);
+			
+			if(!callDetails)
+				return;
+			
+			var callDetailsJson = $.parseJSON(callDetails.responseText);
+			if(isParent == "true")
+				var callRespJson = callDetailsJson.calls[0];
+			else
+				var callRespJson = callDetailsJson;
+			
+			if(typeof callRespJson != "undefined") {
+				if(typeof callRespJson.status != "undefined") {
+					console.log(callRespJson.status);
+					showNoteAfterCall(callRespJson,messageObj);
+				}
+			} else {
+				return;
+			}											
 		});
 
 		Twilio.Device
 				.incoming(function(conn)
 				{
+					TWILIO_CALLTYPE = "Incoming";
+					TWILIO_DIRECTION = "inbound";
+					TWILIO_IS_VOICEMAIL = false;
+					TWILIO_CONTACT_ID = 0;
 					console.log("Incoming connection from " + conn.parameters.From);
 
 					if (Twilio.Device.status() == "busy")
@@ -649,13 +769,22 @@ function setUpGlobalTwilio()
 					}
 
 					globalconnection = conn;
+					
+					console.log("globalconnection");
+					console.log(globalconnection);
+					console.log("globalconnection status: "+globalconnection.status());
 
 					// accept the incoming connection and start two-way audio
 					// conn.accept();
 					To_Number = globalconnection.parameters.From;
+					To_Name = searchForContact(To_Number);
 
 					showCallNotyPopup("incoming", "Twilio",
 							'<i class="icon icon-phone"></i><b>Incoming call :</b><br> ' + To_Name + "   " + To_Number + "<br>", false);
+					
+					// Show contact detail page
+					if(TWILIO_CONTACT_ID)
+					window.location.href = "#contact/"+TWILIO_CONTACT_ID;
 				});
 
 		// If any network failure, show error
@@ -675,8 +804,40 @@ function setUpGlobalTwilio()
 		{
 			// who canceled the call
 			console.log(conn.parameters.From);
-
 			closeTwilioNoty();
+			
+			console.log("Incoming call calSid new  " + conn.parameters.CallSid);
+			
+			var messageObj = conn.message;			
+			var widgetDetails = twilioGetWidgetDetails();
+			var widgetPrefs = $.parseJSON(widgetDetails.prefs);
+			var acc_sid = widgetPrefs.twilio_acc_sid;
+			var auth_token = widgetPrefs.twilio_auth_token;	
+			var isParent = "true";
+			if(TWILIO_CALLTYPE == "Incoming") {
+				isParent = "false";
+			}
+			var ApiCallUrl = "/core/api/widgets/twilio/getlastcall/" + acc_sid + "/" + auth_token + "/" + conn.parameters.CallSid + "/" + isParent;
+			console.log(ApiCallUrl);
+			if(!widgetDetails)
+				return;
+			
+			var callDetails  = twilioApiRequest(ApiCallUrl);
+			console.log(callDetails);
+			
+			if(!callDetails)
+				return;
+			
+			var callRespJson = $.parseJSON(callDetails.responseText);
+			
+			if(typeof callRespJson != "undefined") {
+				if(typeof callRespJson.status != "undefined") {
+					console.log(callRespJson.status);
+					showNoteAfterCall(callRespJson,messageObj);
+				}
+			} else {
+				return;
+			}
 		});
 
 		/*
@@ -696,11 +857,12 @@ function setUpGlobalTwilio()
 function twiliocall(phoneNumber, toName)
 {
 	// get the phone number to connect the call to
-	params = { "from" : Verfied_Number, "PhoneNumber" : phoneNumber };
+	params = { "from" : Verfied_Number, "PhoneNumber" : phoneNumber};
 	Twilio.Device.connect(params);
 
 	To_Number = phoneNumber;
-	To_Name = toName;
+	To_Name = toName;	
+	TWILIO_CALLED_NO = To_Number;
 
 	showCallNotyPopup("outgoing", "Twilio", '<i class="icon icon-phone"></i><b>Calling :</b><br> ' + To_Name + "   " + To_Number + "<br>", false);
 }
@@ -734,4 +896,268 @@ function closeTwilioNoty()
 		Twilio_Call_Noty.close();
 		Twilio_Call_Noty = undefined;
 	}
+}
+
+function showNoteAfterCall(callRespJson,messageObj)
+{
+	if(TWILIO_IS_VOICEMAIL == false){
+	var	el = $("#noteForm");
+//	TWILIO_CONTACT_ID = 0;
+	if(TWILIO_CONTACT_ID) {
+		var json = $.parseJSON(
+		        $.ajax({
+		            url: "core/api/contacts/"+TWILIO_CONTACT_ID, 
+		            async: false,
+		            dataType: 'json'
+		        }).responseText
+		    );
+
+		console.log(callRespJson);
+		
+		if(json == null) {
+			return showNewContactModal(messageObj);
+		}
+		 
+		var contact_name = getContactName(json);
+		var noteSub = "";
+		var friendlyStatus = "";
+		var callStatus = callRespJson.status;
+		
+		if(callStatus != 404 && typeof callRespJson.duration != "undefined") {
+			
+			var phoneNumber = "";
+			if(TWILIO_DIRECTION == "outbound-dial") {
+//				phoneNumber = callRespJson.to;
+				phoneNumber = TWILIO_CALLED_NO;
+				TWILIO_CALLED_NO = "";
+			}
+			else
+				phoneNumber = callRespJson.from;
+			
+			$.post( "/core/api/widgets/twilio/savecallactivity",{
+				direction: TWILIO_DIRECTION, 
+				phone: phoneNumber, 
+				status : callRespJson.status,
+				duration : callRespJson.duration 
+				});
+			
+			switch(callStatus) {
+		    case "canceled":
+		    	noteSub = TWILIO_CALLTYPE + " call - Declined";
+		    	friendlyStatus = "Declined";
+		        break;
+		    case "completed":
+		    	noteSub = TWILIO_CALLTYPE + " call - Done";
+		    	friendlyStatus = "Done";
+		    	break;
+		    case "busy":
+		    	noteSub = TWILIO_CALLTYPE + " call - Busy";
+		    	friendlyStatus = "Received busy tone on number "+ phoneNumber;
+		    	break;
+		    case "failed":
+		    	noteSub = TWILIO_CALLTYPE + " call - Failed";
+		    	friendlyStatus = TWILIO_CALLTYPE + " call made to "+ phoneNumber +" has failed";
+		    	break;
+		    case "no-answer":
+		    	noteSub = TWILIO_CALLTYPE + " call - No answer";
+		    	friendlyStatus = "No answer";
+		    	break;
+		    default:
+		        return;
+			}
+		 	// Adds contact name to tags ul as li element
+			if(callStatus == "completed") {
+			 	$('.tags',el).html('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ json.id +'">'+contact_name+'</li>');
+			 	$("#noteForm #subject").val(noteSub);
+		 		$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(callRespJson.duration));
+		 		$("#noteForm").find("#description").focus();
+				$('#noteModal').modal('show');
+				agile_type_ahead("note_related_to", el, contacts_typeahead);
+			} else {
+				//add note automatically
+				$.post( "/core/api/widgets/twilio/autosavenote", {
+					subject: noteSub,
+					message: "",
+					contactid: TWILIO_CONTACT_ID
+					});
+			}
+		}	
+	} else {
+		var phoneNumber = "";
+		if(TWILIO_DIRECTION == "outbound-dial")
+			phoneNumber = callRespJson.to;
+		else
+			phoneNumber = callRespJson.from;
+		
+		$.post( "/core/api/widgets/twilio/savecallactivity",{
+			direction: TWILIO_DIRECTION, 
+			phone: phoneNumber, 
+			status : callRespJson.status,
+			duration : callRespJson.duration 
+			});
+		return showNewContactModal(phoneNumber);
+	}
+	}
+	
+}
+
+
+function showNewContactModal(phoneNumber) {
+	$('#personModal').modal('show');
+	$("#personForm").find("#phone").val(phoneNumber);
+	return;
+}
+
+function twilioSecondsToFriendly(time) {
+	var hours = Math.floor(time / 3600);
+	if(hours > 0)
+	time = time - hours*60*60;
+	var minutes = Math.floor(time / 60);
+	var seconds = time - minutes * 60;
+	var friendlyTime = "";
+	if(hours == 1)
+		friendlyTime = hours+ "h ";
+	if(hours > 1)
+		friendlyTime = hours+ "h ";
+	if(minutes > 0)
+		friendlyTime += minutes + "m ";
+	if(seconds > 0)
+		friendlyTime += seconds + "s ";
+	if(friendlyTime != "")
+	return friendlyTime;
+}
+
+function searchForContact(from) {
+	console.log("searchForContact : " + from);	
+	var fromName = "";
+	var responseJson = $.parseJSON(
+	        $.ajax({
+	        	url: "core/api/contacts/search/phonenumber/"+from,
+	            async: false,
+	            dataType: 'json'
+	        }).responseText
+	    );
+	console.log("**** responseJson ****");
+	console.log(responseJson);
+	
+	if(responseJson != null) {
+		TWILIO_CONTACT_ID = responseJson.id;
+		console.log("TWILIO_CONTACT_ID : "+TWILIO_CONTACT_ID);
+		fromName = getContactName(responseJson);
+	}
+	return fromName;
+}
+
+function sendVoiceAndEndCall(fileSelected) {
+	console.log("Sending voice mail...");
+	if(TWILIO_IS_VOICEMAIL == false) {
+		
+		var conn = globalconnection;
+		var widgetDetails = twilioGetWidgetDetails();
+		var widgetPrefs = $.parseJSON(widgetDetails.prefs);
+		var acc_sid = widgetPrefs.twilio_acc_sid;
+		var auth_token = widgetPrefs.twilio_auth_token;	
+		var isParent = "true";
+		var ApiCallUrl = "/core/api/widgets/twilio/getlastcall/" + acc_sid + "/" + auth_token + "/" + conn.parameters.CallSid + "/" + isParent;
+		if(!widgetDetails)
+			return;
+		
+		var callDetails  = twilioApiRequest(ApiCallUrl);
+		
+		if(!callDetails)
+			return;
+		
+		var callDetailsJson = $.parseJSON(callDetails.responseText);
+		if(isParent == "true")
+			var callRespJson = callDetailsJson.calls[0];
+		else
+			var callRespJson = callDetailsJson;
+		
+		if(typeof callRespJson != "undefined") {
+			if(typeof callRespJson.status != "undefined" && callRespJson.status == 'in-progress') {
+//				alert("Voicemail will be sent to user.Current call will be closed.");
+				var messageObj = globalconnection.message;
+				if(twilioVoiceMailRedirect(fileSelected)) {
+					closeTwilioNoty();
+					if(TWILIO_CONTACT_ID) {		
+					//add note automatically
+					$.post( "/core/api/widgets/twilio/autosavenote", {
+						subject: TWILIO_CALLTYPE + " call - Left voicemail",
+						message: "",
+						contactid: TWILIO_CONTACT_ID
+						});
+					
+					if(TWILIO_CALLED_NO != "") {
+						$.post( "/core/api/widgets/twilio/savecallactivity",{
+							direction: TWILIO_DIRECTION, 
+							phone: TWILIO_CALLED_NO, 
+							status : "voicemail",
+							duration : 0 
+							});
+					}
+					TWILIO_IS_VOICEMAIL = true;					
+					}
+				}
+			}
+		} else {
+			return;
+		}
+	}
+}
+
+function twilioVoiceMailRedirect(fileSelected) {
+	var widgetDetails = twilioGetWidgetDetails();	
+	if(!widgetDetails)
+		return false;
+	
+	var widgetPrefs = $.parseJSON(widgetDetails.prefs);
+	var acc_sid = widgetPrefs.twilio_acc_sid;
+	var auth_token = widgetPrefs.twilio_auth_token;	
+	
+	var isParent = "true";
+	if(TWILIO_CALLTYPE == "Incoming") {
+		isParent = "false";
+	}
+	var ApiCallUrl = "/core/api/widgets/twilio/getlastcall/" + acc_sid + "/" + auth_token + "/" + globalconnection.parameters.CallSid + "/" + isParent;
+	console.log(ApiCallUrl);
+	if(!widgetDetails)
+		return;
+	
+	var callDetails  = twilioApiRequest(ApiCallUrl);	
+	console.log("Call Details : isParent " + isParent);
+	console.log(callDetails);	
+	if(!callDetails)
+		return;
+	
+	var callDetailsJson = $.parseJSON(callDetails.responseText);
+	if(isParent == "true")
+		var callRespJson = callDetailsJson.calls[0];
+	else
+		var callRespJson = callDetailsJson;
+
+	ApiCallUrl = "/core/api/widgets/twilio/setvoicemail/" + acc_sid + "/" + auth_token + "/" +callRespJson.sid + "/" + fileSelected
+	console.log("In ajax send voice mail : " + ApiCallUrl);	
+	var resp  = twilioApiRequest(ApiCallUrl);
+	return true;
+}
+
+
+function twilioGetWidgetDetails(){
+	return $.parseJSON(
+	        $.ajax({
+	            url: "/core/api/widgets/TwilioIO", 
+	            async: false,
+	            dataType: 'json'
+	        }).responseText
+	    );
+}
+//this will return an object
+function twilioApiRequest(ApiCallUrl){
+	return $.parseJSON(
+	        $.ajax({
+	            url: ApiCallUrl, 
+	            async: false,
+	            dataType: 'json'
+	        }).responseText
+	    );
 }

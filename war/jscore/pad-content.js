@@ -55,8 +55,8 @@ var CONTENT_JSON = {
 		"image" : "/img/clipboard.png"
 	},
 	"deals" : {
-		"title" : "You do not have any deals currently.",
-		"description" : "Deals are sales opportunities you track continuously throughout its lifecycle.",
+		"title" : "No deals found.",
+		"description" : "You either do not have any deals currently, or there are none matching the filter conditions. <br/>Deals are sales opportunities you track continuously throughout its lifecycle.",
 		//"learn_more" : "click here to learn more",
 		"button_text" : "Add Deal",
 		"route" : "#",
@@ -69,6 +69,14 @@ var CONTENT_JSON = {
 		//"learn_more" : "click here to learn more",
 		"button_text" : "Add Report",
 		"route" : "#report-add",
+		"image" : "/img/clipboard.png"
+	},
+	"activity-reports" : {
+		"title" : "You do not have any activity reports currently.",
+		"description" : "Get a periodic  email digest of various activities by users in Agile.",
+		//"learn_more" : "click here to learn more",
+		"button_text" : "Add Report",
+		"route" : "#activity-report-add",
 		"image" : "/img/clipboard.png"
 	},
 	"contact-filters" : {

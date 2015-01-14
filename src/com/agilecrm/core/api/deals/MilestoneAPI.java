@@ -133,7 +133,7 @@ public class MilestoneAPI
 	    if (oldMilestone.name.equalsIgnoreCase("Default") && !milestone.name.equals("Default")
 		    && MilestoneUtil.countByName(oldMilestone) <= 1)
 		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-			.entity("Sorry, You can't change name for Default Track.").build());
+		        .entity("Sorry, You can't change name for Default Track.").build());
 	}
 	if (MilestoneUtil.countByName(milestone) > count)
 	{
@@ -171,5 +171,17 @@ public class MilestoneAPI
 	}
 	milestone.delete();
 	return milestone;
+    }
+
+    /**
+     * 
+     * @return tracks count
+     */
+    @GET
+    @Path("/tracks/count")
+    @Produces(MediaType.TEXT_PLAIN)
+    public int domainUserCount()
+    {
+	return MilestoneUtil.getCount();
     }
 }

@@ -30,6 +30,7 @@ body {
 	/*font-family: ProximaNova-Regular;*/
 }
 
+
 .minutes.activemin {
 	color: #4A90E2;
 }
@@ -197,10 +198,23 @@ font-size: 15px;
 
 div.datepicker table td {
 	text-align: right;
-	padding: 8px !important;
+	/*padding: 8px !important;*/
 	margin: 0;
 }
-
+.datepickerDays td a,.datepickerMonths td a,.datepickerYears td a
+{
+	width: 40px;
+padding: 8px 0px;
+display: block;
+box-sizing: content-box;
+-webkit-box-sizing:content-box;
+-ms-box-sizing:content-box;
+-o-box-sizing:content-box;
+}
+.datepickerYears td a
+{
+	width:58px;
+}
 .datepickerGoNext a,.datepickerGoPrev a {
 	color: #0198E1 !important;
 }
@@ -340,7 +354,7 @@ div.datepicker table td {
 
 @media screen and (max-width: 991px) {
 	.checkbox-grid li {
-		width: 50% !important;
+		/*width: 50% !important;*/
 	}
 	.segment2 {
 		min-height: 370px;
@@ -348,14 +362,22 @@ div.datepicker table td {
 }
 
 @media screen and (max-width: 767px) {
+	ul,ul li
+{
+	margin:0;
+	padding:0;
+}
 	.datepicker {
 		margin: 0 auto;
+		width:100%!Important;
 	}
 	.segment2 {
 		min-height: 525px;
 	}
 	.checkbox-grid li {
-		width: 33% !important;
+		/*width: 33% !important;*/
+		margin-left:0px;
+		margin-right:10px;
 	}
 	.inputtext {
 		width: 100%;
@@ -363,7 +385,7 @@ div.datepicker table td {
 	.timezone {
 		font-size: 14px;
 		display: block;
-		float: none;
+		float: right;
 	}
 	.timezone1 {
 		font-family: ProximaNova-bold;
@@ -371,15 +393,20 @@ div.datepicker table td {
 	.segment p.choose {
 		margin-bottom: 25px;
 	}
+	
 }
+
+.segment p.choose {
+		margin-bottom: 25px;
+	}
 
 @media screen and (max-width: 435px) {
 	.segment2 {
 		min-height: 640px;
 	}
-	.checkbox-grid li {
+	/*.checkbox-grid li {
 		width: 50% !important;
-	}
+	}*/
 }
 
 .me-disable {
@@ -401,6 +428,10 @@ padding-bottom: 4px;
 font-size: 17px;
 
 color: #8E8F8F;
+}
+#datepick
+{
+	height:300px!Important;
 }
 #datepick table td table
 {

@@ -157,9 +157,9 @@ public class AppengineSearch<T>
      * @return
      */
     @SuppressWarnings("rawtypes")
-    public Collection getAdvacnedSearchResults(List<SearchRule> rules, Integer count, String cursor)
+    public Collection getAdvacnedSearchResults(List<SearchRule> rules, Integer count, String cursor, String orderBy)
     {
-	return query.advancedSearch(rules, count, cursor);
+	return query.advancedSearch(rules, count, cursor, orderBy);
     }
 
     /**

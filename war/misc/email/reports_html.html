@@ -94,7 +94,7 @@
 								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{tags}}</b></td>
 							{{/tags}} {{#updated_time}}
 							<td valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{updated_time.value}}</b></td>
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{updated_time}}</b></td>
 							{{/updated_time}} {{#company}}
 							<td valign="top"
 								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{company.value}}</b></td>
@@ -103,7 +103,14 @@
 								<td valign="top"
 								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{lead_score}}</b></td>
 							{{/lead_score}}
-							
+							{{#lead_owner}}
+								<td valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{.}}</b></td>
+							{{/lead_owner}}
+							{{#custom}}
+									<td valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{value}}</b></td>
+							{{/custom}}
 
 
 							<!-- 							

@@ -12,6 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.AccountPrefs;
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -146,7 +148,7 @@ public class HomeServlet extends HttpServlet
      * Saves logged in time in domain user before request is forwarded to
      * dashboard (home.jsp)
      */
-    private void setLoggedInTime()
+    private void setLoggedInTime(HttpServletRequest req)
     {
 	try
 	{
@@ -157,6 +159,11 @@ public class HomeServlet extends HttpServlet
 	    setLastLoggedInTime(domainUser);
 
 	    domainUser.setInfo(DomainUser.LOGGED_IN_TIME, new Long(System.currentTimeMillis() / 1000));
+
+	    if (StringUtils.isEmpty(domainUser.timezone) || "UTC".equals(domainUser.timezone))
+	    {
+		domainUser.timezone = (String) req.getSession().getAttribute("account_timezone");
+	    }
 
 	    domainUser.save();
 	}
@@ -191,14 +198,34 @@ public class HomeServlet extends HttpServlet
 	if (!isNewUser())
 	{
 	    // Saves logged in time in domain user.
-	    setLoggedInTime();
+	    setLoggedInTime(req);
+	    setAccountTimezone(req);
 	    req.getRequestDispatcher("home.jsp").forward(req, resp);
 	    return;
 	}
 
 	// If user is new user it will create new AgileUser and set cookie for
-	// inital page tour. It also calls to initialize defaults, if user is
+	// initial page tour. It also calls to initialize defaults, if user is
 	// first user in the domain.
 	setUpAgileUser(req, resp);
+    }
+
+    private void setAccountTimezone(HttpServletRequest req)
+    {
+	try
+	{
+	    // Set timezone in account prefs.
+	    AccountPrefs accPrefs = AccountPrefsUtil.getAccountPrefs();
+	    if (StringUtils.isEmpty(accPrefs.timezone) || "UTC".equals(accPrefs.timezone)
+		    || "GMT".equals(accPrefs.timezone))
+	    {
+		accPrefs.timezone = (String) req.getSession().getAttribute("account_timezone");
+		accPrefs.save();
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception in setting timezone in account prefs.");
+	}
     }
 }

@@ -98,30 +98,39 @@ function addAddonTabTemplate(data, url, callback, container)
          // Add handler for add this                        
          catalogTemplate.find('#add').click(function () {
 
+        	 
         	 // Get JSON and JSONSrc
              var json = $(this).data('json');
              
-             //Has to be changed
-             if(json.name == "Send Message"){
-            	 var list = getTwilioIncomingList();
-            	 if(list == null){
-            		window.parent.campaignAlert("UnauthorisedTwilio");
-            		return; 
-            	 }
-       	    	 if($.isEmptyObject(list)){
-       	    		window.parent.campaignAlert("EmptyTwilio");
-	    		 return;
-            	 }
-             } 
+             var url = json.path;
              
-             var jsonsrc = $(this).data('jsonsrc');
+             // Fetch data json on click
+             $.getJSON(url, function(data){
+            	 
+            	//Has to be changed
+                 if(json.name == "Send Message"){
+                	 var list = getTwilioIncomingList();
+                	 if(list == null){
+                		window.parent.campaignAlert("Unauthorised");
+                		return; 
+                	 }
+           	    	 if($.isEmptyObject(list)){
+           	    		window.parent.campaignAlert("Empty");
+    	    		 return;
+                	 }
+                 } 
+                 
+                 var jsonsrc = $(this).data('jsonsrc');
 
-             // Close the dialog
-             $('#catalog').dialog('close');
+                 // Close the dialog
+                 $('#catalog').dialog('close');
 
-             $('#addontabs').dialog('close');
-             // Call the callback with json and jsonsrc                            
-             callback(json, jsonsrc);
+                 $('#addontabs').dialog('close');
+                 
+                 // Call the callback with json and jsonsrc                            
+                 callback(data, jsonsrc);
+             });
+             
          });
 
          // Append this element to catalog
