@@ -509,4 +509,20 @@ $(function(){
     	});
     });
     
+    $("#disable_map_view").die().live('click', function(e){
+		e.preventDefault();
+		localStorage.setItem('MAP_VIEW','disabled');
+		$("#map").css('display', 'none');
+		$("#contacts-local-time").hide();
+		$("#map_view_action").html("<a href=''><i class='icon-plus' title='Show map' id='enable_map_view'></i></a>");
+		
+    });
+	$("#enable_map_view").die().live('click', function(e){
+		e.preventDefault();
+		localStorage.setItem('MAP_VIEW','enabled');
+		show_map();
+		
+		
+	});
+    
 });

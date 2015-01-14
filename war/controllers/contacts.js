@@ -578,7 +578,10 @@ var ContactsRouter = Backbone.Router.extend({
 				$(".contact-make-sip-call").hide();
 				$(".contact-make-twilio-call").show();
 				$(".contact-make-call").hide();
-			}	
+			}
+			
+			  
+			
 			} });
 
 		var el = this.contactDetailView.render(true).el;
@@ -602,6 +605,11 @@ var ContactsRouter = Backbone.Router.extend({
 			$(".contact-make-twilio-call").show();
 			$(".contact-make-call").hide();
 		}
+		
+		 if(localStorage.getItem('MAP_VIEW')=="disabled")
+				$("#map_view_action").html("<a href=''><i class='icon-plus' title='Show map' id='enable_map_view'></i></a>");
+				else
+				$("#map_view_action").html("<a href=''><i class='icon-minus' title='Hide map' id='disable_map_view'></i></a>");
 	},
 
 	/**
