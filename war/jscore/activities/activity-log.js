@@ -58,7 +58,7 @@ function getParameters()
 
 	// Returns milliseconds from start date. For e.g., August 6, 2013 converts
 	// to 1375727400000
-	
+
 	// Get task type and append it to params
 	var user = $('#user-select').data("selected_item");
 
@@ -67,20 +67,22 @@ function getParameters()
 		params += ("user_id=" + user);
 	// Get owner name and append it to params
 
-	var start_time = Date.parse($.trim(range[0])).valueOf();
+	if (range && range != "No date selected")
+	{
+		var start_time = Date.parse($.trim(range[0])).valueOf();
 
-	var end_value = $.trim(range[1]);
+		var end_value = $.trim(range[1]);
 
-	// To make end value as end time of day
-	if (end_value)
-		end_value = end_value + " 23:59:59";
+		// To make end value as end time of day
+		if (end_value)
+			end_value = end_value + " 23:59:59";
 
-	// Returns milliseconds from end date.
-	var end_time = Date.parse(end_value).valueOf();
+		// Returns milliseconds from end date.
+		var end_time = Date.parse(end_value).valueOf();
 
-	// Adds start_time, end_time and timezone offset to params.
-	params += ("&start_time=" + start_time + "&end_time=" + end_time);
-	
+		// Adds start_time, end_time and timezone offset to params.
+		params += ("&start_time=" + start_time + "&end_time=" + end_time);
+	}
 	if (entitytype == 'TASK')
 	{
 		params += ("&entity_type=" + entitytype);
@@ -118,7 +120,6 @@ function getParameters()
 		params += ("&entity_type=ALL");
 		return params;
 	}
-	
 
 	return params;
 }
@@ -139,10 +140,20 @@ function initActivitiesDateRange()
 			Date.today().moveToFirstDayOfMonth().add({ months : -1 }), Date.today().moveToFirstDayOfMonth().add({ days : -1 })
 	] } }, function(start, end)
 	{
-		createCookie("selectedStartTime", start.toString('MMMM d, yyyy'), 90);
-		createCookie("selectedEndTime", end.toString('MMMM d, yyyy'), 90);
-		$('#activities_date_range #range').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
-		
-		updateActivty(getParameters());
+		if (start && end)
+		{
+			createCookie("selectedStartTime", start.toString('MMMM d, yyyy'), 90);
+			createCookie("selectedEndTime", end.toString('MMMM d, yyyy'), 90);
+			$('#activities_date_range #range').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
+
+			updateActivty(getParameters());
+		}
+		else
+		{
+			eraseCookie("selectedStartTime");
+			eraseCookie("selectedEndTime");
+			$('#activities_date_range #range').html('No date selected');
+			updateActivty(getParameters());
+		}
 	});
 }
