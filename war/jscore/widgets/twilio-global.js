@@ -676,7 +676,7 @@ function setUpGlobalTwilio()
 			console.log(conn._status);
 			globalconnection = conn;
 
-			showCallNotyPopup("connected", "Twilio", Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><b>On call  </b>' + To_Number +'<br>' + To_Name + '<br></span><div class="clearfix"></div>', false);
+			showCallNotyPopup("connected", "Twilio", Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><b>On call  </b>' + To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);
 		});
 
 		Twilio.Device.disconnect(function(conn)
@@ -791,7 +791,7 @@ function setUpGlobalTwilio()
 					Twilio_Call_Noty_IMG = addContactImg("Incoming");
 					
 					showCallNotyPopup("incoming", "Twilio",
-							Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Incoming call </b>'+ To_Number + '<br>' + To_Name +'<br></span><div class="clearfix"></div>', false);										
+							Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Incoming call </b>'+ To_Number + '<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);										
 				});
 
 		// If any network failure, show error
@@ -872,7 +872,7 @@ function twiliocall(phoneNumber, toName)
 	TWILIO_CALLED_NO = To_Number;	
 	Twilio_Call_Noty_IMG = addContactImg("Outgoing");	
 	
-	showCallNotyPopup("outgoing", "Twilio", Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Calling </b>'+ To_Number +'<br>' + To_Name + '<br></span><div class="clearfix"></div>', false);
+	showCallNotyPopup("outgoing", "Twilio", Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Calling </b>'+ To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);
 }
 
 // Send DTMF signal to twilio active connection from dialpad.
