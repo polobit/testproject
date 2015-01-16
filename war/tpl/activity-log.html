@@ -356,9 +356,9 @@ Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{
  Created Deal {{#if entityObject}}<a href="#deal/{{entity_id}}">{{label}}</a> {{else}}'{{label}}'{{/if}}<br/>
 <span class="activities_second_line">
 {{#if custom2}}
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}Deal ({{currencySymbol}} {{numberWithCommasForActivities custom2}} - {{custom3}}%) added{{#if entityObject}} to track '{{entityObject.pipeline.name}}'{{/if}}. {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}Deal ({{currencySymbol}}{{numberWithCommasForActivities custom2}} - {{custom3}}%) added{{#if entityObject}} to track '{{entityObject.pipeline.name}}'{{/if}}. {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 {{else}}
- <i class="icon-money icon-white"></i>{{#unless this.entityObject}} Deal deleted later.{{/unless}} Deal {{#if this.entityObject}} ({{currencySymbol}} {{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) added to track '{{entityObject.pipeline.name}}'.{{/if}} {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
+ <i class="icon-money icon-white"></i>{{#unless this.entityObject}} Deal deleted later.{{/unless}} Deal {{#if this.entityObject}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) added to track '{{entityObject.pipeline.name}}'.{{/if}} {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
 {{/if}}	
 </span>	
 </div>	
@@ -383,7 +383,7 @@ Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{
 <div>	
  Won Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
 <span class="activities_second_line">
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later.{{/unless}} {{#if this.entityObject}} Deal ({{currencySymbol}} {{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) Won.{{/if}} {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later.{{/unless}} {{#if this.entityObject}} Deal ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) Won.{{/if}} {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 </span>	
 </div>	
 		<div>
@@ -408,7 +408,7 @@ Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{
 <div>
  Modified Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}  <br/> 
 <span class="activities_second_line">
-<i class="icon-money icon-white"></i>{{#unless this.entityObject}} Deal deleted later.{{/unless}} Deal {{#if this.entityObject}} ({{currencySymbol}} {{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}} {{displayActivityFieldText custom3}} modified. {{#if related_contact_ids}} Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i>{{#unless this.entityObject}} Deal deleted later.{{/unless}} Deal {{#if this.entityObject}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}} {{displayActivityFieldText custom3}} modified. {{#if related_contact_ids}} Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 </span>	
 </div>
 <div>	
@@ -459,19 +459,19 @@ Deleted Deal '{{label}}' <br/>
 {{#if_equals "removed_all_relatedcontacts" custom3}}
 Removed Contact(s) from Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
 <span class="activities_second_line">
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}} {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from  Deal {{#if this.entityObject}}({{currencySymbol}} {{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}.{{/if}} 
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}} {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from  Deal {{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}.{{/if}} 
 </span>
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
 Removed Contact(s) from Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
 <span class="activities_second_line">
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}  {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Deal {{#if this.entityObject}}({{currencySymbol}} {{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}.{{/if}}
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}  {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Deal {{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}.{{/if}}
 </span>
 {{/if_equals}} 
 {{#if_equals "added_relatedcontacts" custom3}}
 Added Contact(s) to Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}{{label}}{{/if}}<br/>
 <span class="activities_second_line">
- <i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Deal {{#if this.entityObject}}({{currencySymbol}} {{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}.{{/if}}
+ <i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Deal {{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}.{{/if}}
 </span>
 {{/if_equals}}
 {{else}}
@@ -533,7 +533,7 @@ Added note to Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{lab
 <div>
 Reassigned Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} to {{custom1}}<br/>
 <span class="activities_second_line">
-<i class="icon-money icon-white"></i> {{#unless entityObject}} Deal deleted later.{{/unless}} Deal{{#if this.entityObject}}({{currencySymbol}} {{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}} assigned to '{{custom1}}'. {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}	
+<i class="icon-money icon-white"></i> {{#unless entityObject}} Deal deleted later.{{/unless}} Deal{{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}} assigned to '{{custom1}}'. {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}	
 </span>
 </div>
 <div>		
@@ -582,7 +582,7 @@ Changed Milestone of Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}"
 <div>
  Lost Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <span class="activities_second_line">
-<i class="icon-money icon-white"></i>{{#unless entityObject}} Deal deleted later.{{/unless}} Deal {{#if this.entityObject}}({{currencySymbol}} {{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) {{/if}} Lost. {{#if related_contact_ids}} Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i>{{#unless entityObject}} Deal deleted later.{{/unless}} Deal {{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) {{/if}} Lost. {{#if related_contact_ids}} Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 </span>	
 </div>
 <div>	
