@@ -607,9 +607,9 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 		
 		 if(localStorage.getItem('MAP_VIEW')=="disabled")
-				$("#map_view_action").html("<a href=''><i class='icon-plus' title='Show map' id='enable_map_view'></i></a>");
+				$("#map_view_action").html("<i class='icon-plus text-xs c-p' title='Show map' id='enable_map_view'></i>");
 				else
-				$("#map_view_action").html("<a href=''><i class='icon-minus' title='Hide map' id='disable_map_view'></i></a>");
+				$("#map_view_action").html("<i class='icon-minus text-xs c-p' title='Hide map' id='disable_map_view'></i>");
 	},
 
 	/**
