@@ -82,7 +82,7 @@ public class DealsAPI
 	    return OpportunityUtil.getOpportunitiesWithMilestones(ownerId, milestone, contactId, fieldName,
 		    (Integer.parseInt(count)), cursor, pipelineId);
 	return OpportunityUtil.getOpportunitiesWithMilestones(ownerId, milestone, contactId, fieldName, 0, cursor,
-	        pipelineId);
+		pipelineId);
     }
 
     /**
@@ -153,7 +153,7 @@ public class DealsAPI
 		    (Integer.parseInt(count)), cursor, pipelineId);
 	}
 	return OpportunityUtil
-	        .getOpportunitiesByFilter(ownerId, milestone, contactId, fieldName, 0, cursor, pipelineId);
+		.getOpportunitiesByFilter(ownerId, milestone, contactId, fieldName, 0, cursor, pipelineId);
     }
 
     /**
@@ -399,7 +399,7 @@ public class DealsAPI
 	// Executes notification when deal is deleted
 	DealNotificationPrefsUtil.executeNotificationForDeleteDeal(opportunitiesJSONArray);
 	ActivitySave.createLogForBulkDeletes(EntityType.DEAL, opportunitiesJSONArray,
-	        String.valueOf(opportunitiesJSONArray.length()), "");
+		String.valueOf(opportunitiesJSONArray.length()), "");
 	Opportunity.dao.deleteBulkByIds(opportunitiesJSONArray);
     }
 
@@ -474,7 +474,7 @@ public class DealsAPI
 	// Append the URL with the current userId to set the session manager in
 	// the backend.
 	OpportunityUtil.postDataToDealBackend("/core/api/opportunity/backend/export/"
-	        + SessionManager.get().getDomainId());
+		+ SessionManager.get().getDomainId());
     }
 
     /**
@@ -735,5 +735,125 @@ public class DealsAPI
 	if (updatedOpportunityid != null)
 	    return OpportunityUtil.getOpportunity(Long.parseLong(updatedOpportunityid));
 	return null;
+    }
+
+    /**
+     * Call backends archive deals.
+     */
+    @Path("/bulk/archive")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void archiveDeals(@FormParam("ids") String ids, @FormParam("filter") String filters)
+    {
+	try
+	{
+	    if (StringUtils.isNotEmpty(ids))
+	    {
+		JSONArray idsArray = new JSONArray(ids);
+		System.out.println("------------" + idsArray.length());
+	    }
+
+	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+	    System.out.println("------------" + filterJSON.toString());
+
+	    String uri = "/core/api/opportunity/backend/archive/" + SessionManager.get().getDomainId();
+
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
+	}
+	catch (Exception je)
+	{
+	    je.printStackTrace();
+	}
+    }
+
+    /**
+     * Call backends for restoring deals.
+     */
+    @Path("/bulk/restore")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void restoreDeals(@FormParam("ids") String ids, @FormParam("filter") String filters)
+    {
+	try
+	{
+	    if (StringUtils.isNotEmpty(ids))
+	    {
+		JSONArray idsArray = new JSONArray(ids);
+		System.out.println("------------" + idsArray.length());
+	    }
+
+	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+	    System.out.println("------------" + filterJSON.toString());
+
+	    String uri = "/core/api/opportunity/backend/restore/" + SessionManager.get().getDomainId();
+
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
+	}
+	catch (Exception je)
+	{
+	    je.printStackTrace();
+	}
+    }
+
+    /**
+     * Call backends for updating deals owner.
+     */
+    @Path("/bulk/change-owner/{owner_id}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void changeOwnerForDeals(@PathParam("owner_id") Long ownerId, @FormParam("ids") String ids,
+	    @FormParam("filter") String filters)
+    {
+	try
+	{
+	    if (StringUtils.isNotEmpty(ids))
+	    {
+		JSONArray idsArray = new JSONArray(ids);
+		System.out.println("------------" + idsArray.length());
+	    }
+
+	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+	    System.out.println("------------" + filterJSON.toString());
+	    System.out.println("Owner_id" + ownerId);
+
+	    String uri = "/core/api/opportunity/backend/change-owner/" + ownerId + "/"
+		    + SessionManager.get().getDomainId();
+
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
+	}
+	catch (Exception je)
+	{
+	    je.printStackTrace();
+	}
+    }
+
+    /**
+     * Call backends for updating deals pipeline and milestone.
+     */
+    @Path("/bulk/change-milestone")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void changeMilestoneForDeals(@FormParam("ids") String ids, @FormParam("filter") String filters,
+	    @FormParam("form") String form)
+    {
+	try
+	{
+	    if (StringUtils.isNotEmpty(ids))
+	    {
+		JSONArray idsArray = new JSONArray(ids);
+		System.out.println("------------" + idsArray.length());
+	    }
+
+	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+	    System.out.println("------------" + filterJSON.toString());
+
+	    String uri = "/core/api/opportunity/backend/change-milestone/" + SessionManager.get().getDomainId();
+
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids, form);
+	}
+	catch (Exception je)
+	{
+	    je.printStackTrace();
+	}
     }
 }

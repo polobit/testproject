@@ -58,7 +58,8 @@
 	<td style="border-top:1px dotted #DDD;" class="data" data="{{id}}"> <input type="checkbox" data='{{id}}' class='tasks-select'> </td>
 	<td style="width:100%!important;">
 		<div>
-  			<p style="word-break: break-word!important;-ms-word-break: break-all;word-break: break-all;">{{#is_link subject}}<b  style="white-space: normal!important;">{{else}}<b style="white-space: normal!important;">{{/is_link}}{{safe_string subject}}</b></p>
+  			<p style="word-break: break-word!important;-ms-word-break: break-all;word-break: break-all;">
+              <a href="javascript:void(0)"><span  class="new-task-subject">{{#is_link subject}}<b  style="white-space: normal!important;">{{else}}<b style="white-space: normal!important;">{{/is_link}}{{safe_string subject}}</b></span></a></p>
   			{{#if this.contacts}}
 				<p  style="white-space: nowrap;">{{#related_to_one contacts}}{{/related_to_one}}</p>
 			{{/if}}

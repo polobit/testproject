@@ -45,6 +45,7 @@ var ContactFiltersRouter = Backbone.Router.extend({
 					chainFiltersForContactAndCompany(el, undefined, function()
 					{
 						$('#content').html(el);
+						scramble_input_names($(el).find('#filter-settings'));
 						$("#contact_type").trigger('change');
 					});
 

@@ -45,6 +45,20 @@
         <br /><br />
         <div class="data-block">
             <div class="data-container" style="overflow-x:auto;">
+				<div class="btn-group pull-left" id="bulk-actions" style="display: none;">
+					<div class="btn">Bulk Actions</div>
+					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu" id="view-actions">
+						<li><a href="#deal_owner_change_modal" data-toggle="modal">Change Owner</a></li>
+						<li><a href="#deal_mile_change_modal" data-toggle="modal">Change Milestone/Track</a></li>
+						<li><a href="#deal_bulk_archive_modal" data-toggle="modal">Archive</a></li>
+						<li><a href="#deal_bulk_restore_modal" data-toggle="modal">Restore</a></li>
+						<li><a href="#deal_bulk_delete_modal" data-toggle="modal">Delete</a></li>
+					</ul>
+			</div>
+			<div class="btn-group pull-left" style="display: none;left: 10px;margin-top: 5px;" id="bulk-select"></div>
                 <table class="table table-striped showCheckboxes agile-ellipsis-dynamic" url="core/api/opportunity/bulk" id="deal-list" style="table-layout:auto;">
                     <col width="30px"><col width="20%"><col width="27%"><col width="14%"><col width="13%"><col width="15%"><col width="10%">
 					<thead>
@@ -93,8 +107,105 @@
         </div>
     </div>
 </div>
-</script>
+<div id="deal_owner_change_modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Change Owner</h3>
+  </div>
+  <div class="modal-body">
+    <div class="control-group span5" style="margin-left: 30px;">
+		<p style="margin-top:5px;">Changing owner for <span class="count"> </span> Deal(s).</p>
+		<label class="control-label"><b>Select Owner </b><span
+			class="field_req">*</span></label>
+			<div class="controls" id="owners">
+				<select id="owners-list-bulk" class="required" name="owner_id"></select>
+			</div>
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" id="deal-bulk-owner" class="btn btn-primary">Done</a>
+  </div>
+</div>
+<div id="deal_mile_change_modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Change Milestone/Track</h3>
+  </div>
+  <div class="modal-body">
+	<form id="bulk_mile_Form" name="opportunityForm" method="post">
+	<p style="margin-left:30px;margin-top:5px;">Changing track/milestone for <span class="count"> </span> Deal(s).</p>
+    <div class="control-group span5" style="margin-left: 30px;">
+		<label class="control-label"><b>Select Track </b><span
+			class="field_req">*</span></label>
+			<div class="controls" id="bulk-pipeline">
+				<select id="pipeline-list-bulk" class="required" name="pipeline"></select>
+			</div>
+	</div>
+	<div class="control-group span5" style="margin-left: 30px;">
+		<label class="control-label"><b>Select Milestone </b><span
+			class="field_req">*</span></label>
+			<div class="controls" id="bulk-pipeline">
+				<select id="milestone-list-bulk" class="required" name="milestone"></select>
+			</div>
+	</div>
+	</form>
+  </div>
+  <div class="modal-footer">
+    <a href="#" id="deal-bulk-mile" class="btn btn-primary">Done</a>
+  </div>
+</div>
 
+<!-- Bulk archive confirmation-->
+<div id="deal_bulk_archive_modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Archive</h3>
+  </div>
+  <div class="modal-body">
+    <div id="deal-bulk-confirm" style="margin-left: 30px;">
+		Archive <span class="count"> </span> Deal(s)?
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" id="deal-bulk-archive" class="btn btn-primary">Yes</a>
+	<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+  </div>
+</div>
+
+<!-- Bulk restore confirmation-->
+<div id="deal_bulk_restore_modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Restore</h3>
+  </div>
+  <div class="modal-body">
+    <div id="deal-bulk-confirm" style="margin-left: 30px;">
+		Restore <span class="count"> </span> Deal(s)?
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" id="deal-bulk-restore" class="btn btn-primary">Yes</a>
+	<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+  </div>
+</div>
+
+<!-- Bulk delete confirmation-->
+<div id="deal_bulk_delete_modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Delete</h3>
+  </div>
+  <div class="modal-body">
+    <div id="deal-bulk-confirm" style="margin-left: 30px;">
+		Delete <span class="count"> </span> Deal(s)?
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" id="deal-bulk-delete" class="btn btn-primary">Yes</a>
+	<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+  </div>
+</div>
+</script>
 <script id="opportunities-model-template" type="text/html">
 <td data="{{id}}" class="data">
 	<div style="width:10em;text-overflow:ellipsis;">

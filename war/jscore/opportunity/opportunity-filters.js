@@ -84,18 +84,23 @@ function setupDealFilters(cel){
 		if(readCookie('deal-filters')){
 			var json = $.parseJSON(readCookie('deal-filters'));
 		}
+		
 		$("#owners-list-filters", $("#dealsFilterForm")).closest('div').find('.loading-img').hide();
+		
+		$("#deal_owner_change_modal").find("#owners-list-bulk").html(data);
+		$("#owners-list-bulk", $("#deal_owner_change_modal")).closest('div').find('.loading').hide();
 	
 	// Populate pipeline in the select box.
 	populateTracks(el, undefined, undefined, function(data){
 		//Select none by default.
 		$('#pipeline').val('');
+		deal_bulk_actions.fillPipelineList(data);
 		$('#owners-list-filters').val('');
 		if(readCookie('deal-filters')){
 			var json = $.parseJSON(readCookie('deal-filters'));
 			$.each(json,function(key,value){
 				
-				// Fill the filters based on previosly selected filters in cookie.
+				// Fill the filters based on previously selected filters in cookie.
 				if(value){
 					if($('[name="'+key+'"]').closest('.controls').height()== 0 && key.indexOf('_filter')<0){
 						$('[name="'+key+'"]').closest('.controls').addClass('in');

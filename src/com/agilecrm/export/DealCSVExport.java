@@ -78,9 +78,12 @@ public class DealCSVExport
 		    + (deal.expected_value != null ? deal.expected_value : 0);
 
 	    str[indexMap.get(OWNER)] = deal.getOwner().email;
-	    Date d = new Date();
-	    d.setTime(deal.close_date * 1000);
-	    str[indexMap.get(CLOSE_DATE)] = date.format(d);
+	    if (deal.close_date != null)
+	    {
+		Date d = new Date();
+		d.setTime(deal.close_date * 1000);
+		str[indexMap.get(CLOSE_DATE)] = date.format(d);
+	    }
 
 	    String relatedTo = "";
 	    List<Contact> relatedContacts = deal.getContacts();
