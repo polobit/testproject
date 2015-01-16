@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.agilecrm.account.util.EmailTemplatesUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -219,6 +220,15 @@ public class EmailTemplates
 	@PrePersist
 	private void PrePersist()
 	{
+		if (id != null)
+		{
+			EmailTemplates et = EmailTemplatesUtil.getEmailTemplate(id);
+			created_time = et.created_time;
+			owner_id = et.owner_id;
+			owner = et.owner;
+			return;
+		}
+
 		// Store Created Time
 		if (created_time == 0L)
 		{

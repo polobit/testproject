@@ -13,13 +13,20 @@
 	<div id="slate"></div>
 	{{#if this.length}}
         <table class="table table-bordered table-striped showCheckboxes" url="core/api/email/templates/bulk">
+            <colgroup>
+                <col width="0%">
+                <col width="0%">
+                <col width="35%">
+                <col width="35%">
+				<col width="15%">
+				<col width="15%">				
+			   </colgroup>
             <thead>
                 <tr>
                     <th class="hide">Id</th>                    
 					<th>Name</th>
                     <th>Subject</th>
-                    <th>Created By</th>
-                    <th>Created Date</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id="settings-email-templates-model-list" route="email-template/">
@@ -56,6 +63,5 @@
     		{{subject}}
     	</div>
     </td>
-    <td>{{emailTemplateOwner.name}}</td>
-    <td><div><time class="created_time" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time></div></td>
+    <td style="color: #b2b0b1;">Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{emailTemplateOwner.name}}</td>
 </script>

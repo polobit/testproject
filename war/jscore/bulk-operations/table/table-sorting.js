@@ -200,8 +200,7 @@ function sort_filters(table)
         headers: {
         	0 : {sorter : false},
         	1 : {sorter : 'text'},
-        	2 : {sorter : 'text'},
-        	3 : {sorter : 'time-ago'}      	
+        	2 : {sorter : false},        	    	
         } 
     }); 
 }

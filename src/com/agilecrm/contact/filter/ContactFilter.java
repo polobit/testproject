@@ -168,7 +168,9 @@ public class ContactFilter implements Serializable, Comparable<ContactFilter>
 	 */
 	public void save()
 	{
+		System.out.println("created_time:" + created_time);
 		dao.put(this);
+		System.out.println("created_time:" + created_time);
 	}
 
 	/**
@@ -290,6 +292,18 @@ public class ContactFilter implements Serializable, Comparable<ContactFilter>
 	@PrePersist
 	private void PrePersist()
 	{
+		System.out.println("created_time:" + this.created_time);
+		System.out.println("id:" + id);
+
+		if (id != null)
+		{
+			ContactFilter cf = getContactFilter(id);
+			created_time = cf.created_time;
+			owner_id = cf.owner_id;
+			owner = cf.owner;
+			return;
+		}
+
 		// Store Created Time
 		if (created_time == 0L)
 		{

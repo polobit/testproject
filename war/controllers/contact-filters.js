@@ -24,7 +24,15 @@ var ContactFiltersRouter = Backbone.Router.extend({
 	contactfilters : function()
 	{
 		this.contactFiltersList = new Base_Collection_View({ url : '/core/api/filters', restKey : "ContactFilter", templateKey : "contact-filter",
-			individual_tag_name : 'tr', sort_collection : false});
+			individual_tag_name : 'tr', sort_collection : false,
+			postRenderCallback : function(el)
+			{
+							head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+							{
+											$(".created_time", el).timeago();
+							});
+
+			}});
 
 		this.contactFiltersList.collection.fetch();
 		$("#content").html(this.contactFiltersList.render().el);

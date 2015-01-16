@@ -13,11 +13,15 @@
          </div>
         {{#if this.length}}
         <table class="table table-bordered showCheckboxes" url="core/api/filters/bulk" id="contact-filter-list">
+               <colgroup>
+                <col width="0%">
+                <col width="60%">
+				<col width="40%">								
+			   </colgroup>
             <thead>
                 <tr>   
                     <th>Name</th>
-                    <th>Created By</th>
-                    <th>Created Date</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id='contact-filter-model-list' route='contact-filter-edit/'>
@@ -38,6 +42,6 @@
 
 <script id="contact-filter-model-template" type="text/html">
 <td data='{{id}}' class='data' style="cursor:pointer"> {{name}} </td>
-<td>{{filterOwner.name}}</td>
-<td><div><time class="created_time" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time></div></td>
+<td style="color: #b2b0b1;"> Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{filterOwner.name}}
+</td>
 </script>

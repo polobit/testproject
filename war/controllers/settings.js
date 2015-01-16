@@ -313,13 +313,23 @@ var SettingsRouter = Backbone.Router.extend({
 	{
 		$("#content").html(getTemplate("settings"), {});
 		this.emailTemplatesListView = new Base_Collection_View({ url : '/core/api/email/templates', restKey : "emailTemplates",
-			templateKey : "settings-email-templates", individual_tag_name : 'tr' });
+			templateKey : "settings-email-templates", individual_tag_name : 'tr' ,
+			postRenderCallback : function(el)
+			{
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				{
+					console.log("In email tmplt postrender");
+					$(".created_time", el).timeago();
+				});
+			}});
 
 		this.emailTemplatesListView.collection.fetch();
 		$('#prefs-tabs-content').html(this.emailTemplatesListView.el);
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-templates-tab').addClass('active');
 		// $('#content').html(this.emailTemplatesListView.el);
+		
+		
 	},
 
 	/**
