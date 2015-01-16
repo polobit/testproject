@@ -39,7 +39,7 @@ function show_map(el) {
 	
 	var map_view=localStorage.getItem('MAP_VIEW');
 	if(map_view=="disabled"){
-		$("#map_view_action").html("<i class='icon-plus text-xs c-p' title='Show map' id='enable_map_view'></i>");
+		$("#map_view_action").html("<i class='icon-plus text-xxs c-p' title='Show map' id='enable_map_view'></i>");
 		return;
 	}
 		

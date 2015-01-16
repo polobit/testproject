@@ -514,7 +514,7 @@ $(function(){
 		localStorage.setItem('MAP_VIEW','disabled');
 		$("#map").css('display', 'none');
 		$("#contacts-local-time").hide();
-		$("#map_view_action").html("<i class='icon-plus text-xs c-p' title='Show map' id='enable_map_view'></i>");
+		$("#map_view_action").html("<i class='icon-plus text-xxs c-p' title='Show map' id='enable_map_view'></i>");
 		
     });
 	$("#enable_map_view").die().live('click', function(e){
