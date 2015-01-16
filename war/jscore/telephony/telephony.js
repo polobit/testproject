@@ -22,6 +22,7 @@ var User_Img;
 var User_Number;
 var User_ID;
 var SIP_Call_Noty_IMG = "";
+var Contact_Link = "";
 
 // Call noty.
 var CALL;

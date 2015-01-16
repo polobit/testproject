@@ -37,7 +37,7 @@ function showIncomingCall()
 	if(notification_prefs && notification_prefs["call"] === false)
 		return;
 	
-	showCallNotyPopup("incoming", "confirm", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Incoming call </b>'+ User_Number + "<br>" + User_Name +'<br></span><div class="clearfix"></div>', false);
+	showCallNotyPopup("incoming", "confirm", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Incoming call </b>'+ User_Number + '<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', false);
 
 	// Incoming call sound play.
 	startRingTone("ringtone");
