@@ -212,6 +212,10 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 	newTask.save(taskJson, { success : function(data)
 	{
 		var due_task_count=getDueTasksCount();
+		if(due_task_count==0)
+			$(".navbar_due_tasks").css("display", "none");
+		else
+			$(".navbar_due_tasks").css("display", "block");
 		$('#due_tasks_count').html(due_task_count);
 		updateTask(true, data, taskJson);
 

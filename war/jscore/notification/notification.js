@@ -15,8 +15,11 @@ function downloadAndRegisterForNotifications()
 
 	// As of now I know that this function is calling only once after loggin. so Updating due task count in this function;
 	var due_task_count=getDueTasksCount();
+	if(due_task_count==0)
+		$(".navbar_due_tasks").css("display", "none");
+	else
+		$(".navbar_due_tasks").css("display", "block");
 	$('#due_tasks_count').html(due_task_count);
-	$(".navbar_due_tasks").css("display", "block");
 	// Download Notification Prefs
 	var notification_model = Backbone.Model.extend({ url : 'core/api/notifications' });
 
