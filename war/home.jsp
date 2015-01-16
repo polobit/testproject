@@ -53,6 +53,10 @@ String width = currentUserPrefs.width;
 boolean is_fluid = !width.isEmpty();
 
 BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(null, null);
+boolean is_free_plan = false;
+
+if(restriction != null && restriction.planDetails != null)
+    is_free_plan = restriction.planDetails.isFreePlan();
 %>
 
 
@@ -168,6 +172,8 @@ var CSS_PATH = "/";
 
 var IS_CONSOLE_ENABLED = <%=debug%>;
 var LOCAL_SERVER = <%=debug%>;
+
+var _IS_FREE_PLAN = <%=is_free_plan%>;
 
 var IS_FLUID = <%=is_fluid%>;
 

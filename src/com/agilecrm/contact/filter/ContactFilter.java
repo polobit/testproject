@@ -78,6 +78,14 @@ public class ContactFilter implements Serializable, Comparable<ContactFilter>
     @NotSaved(IfDefault.class)
     @Embedded
     public List<SearchRule> rules = new ArrayList<SearchRule>();
+    
+    /**
+     * Represents list of {@link SearchRule}, query is built on these list of
+     * conditions
+     */
+    @NotSaved(IfDefault.class)
+    @Embedded
+    public List<SearchRule> or_rules = new ArrayList<SearchRule>();
 
     public static ObjectifyGenericDao<ContactFilter> dao = new ObjectifyGenericDao<ContactFilter>(ContactFilter.class);
 
@@ -95,6 +103,13 @@ public class ContactFilter implements Serializable, Comparable<ContactFilter>
     {
 	this.name = name;
 	this.rules = rules;
+    }
+    
+    public ContactFilter(String name, List<SearchRule> rules, List<SearchRule> or_rules)
+    {
+	this.name = name;
+	this.rules = rules;
+	this.or_rules = or_rules;
     }
 
     /**
@@ -152,7 +167,7 @@ public class ContactFilter implements Serializable, Comparable<ContactFilter>
     public Collection queryContacts(Integer count, String cursor, String orderBy)
     {
 
-	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules, count, cursor, orderBy);
+	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResultsForFilter(this, count, cursor, orderBy);
     }
 
     /**

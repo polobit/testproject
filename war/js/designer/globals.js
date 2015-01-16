@@ -11,7 +11,7 @@ var Translator_Path_Global = "js/translator.js";
 // Changed by yasin (8/12/2011)
 // Default Nodes to be populated
 var First_Nodes_Toolbar_Global = new Array("json/nodes/email/send_email.jsp",
-		"json/nodes/common/wait.js", "json/nodes/email/clicked.js","json/nodes/email/opened.js",
+		"json/nodes/common/wait.jsp", "json/nodes/email/clicked.js","json/nodes/email/opened.js",
 		"json/nodes/crm/tags.js", "json/nodes/common/score.js", "json/nodes/common/url.js"
 		, "json/nodes/social/tweet.js", "json/nodes/email/ab.js");
 var Second_Nodes_Toolbar_Global = new Array("json/nodes/crm/addtask.jsp","json/nodes/crm/adddeal.jsp",

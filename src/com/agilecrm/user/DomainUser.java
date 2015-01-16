@@ -772,41 +772,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    {
 		menu_scopes = new LinkedHashSet<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
 	    }
-	    JSONObject domain_user_info = new JSONObject(info_json_string);
-	    Long created_time = domain_user_info.getLong("created_time");
-	    if(domain_user_info.has("last_logged_in_time"))
-	    {
-        	    Long last_logged_in_time = domain_user_info.getLong("last_logged_in_time");
-        	    
-        	    if(last_logged_in_time <= 1420786800)
-        	    {
-        		
-        		if (!menu_scopes.contains(NavbarConstants.ACTIVITY))
-        		{
-        		    if (menu_scopes.contains(NavbarConstants.REPORT))
-        		    {
-        			menu_scopes.remove(NavbarConstants.REPORT);
-        		        menu_scopes.add(NavbarConstants.ACTIVITY);
-        		        menu_scopes.add(NavbarConstants.REPORT);
-        		    }
-        		    else
-        			 menu_scopes.add(NavbarConstants.ACTIVITY);
-        		}
-        	    }
-	    }else if(created_time <= 1420786800)
-	    {
-		if (!menu_scopes.contains(NavbarConstants.ACTIVITY))
-		{
-		    if (menu_scopes.contains(NavbarConstants.REPORT))
-		    {
-			menu_scopes.remove(NavbarConstants.REPORT);
-		        menu_scopes.add(NavbarConstants.ACTIVITY);
-		        menu_scopes.add(NavbarConstants.REPORT);
-		    }
-		    else
-			 menu_scopes.add(NavbarConstants.ACTIVITY);
-		}
-	    }
 	}
 	catch (Exception e)
 	{
