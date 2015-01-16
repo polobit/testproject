@@ -173,14 +173,15 @@ function Initialize_Chrome_Webstore_events()
 			{
 				console.log(error);
 				Toggle_Extension_Loader("none");
+				OpenInNewTab();
 			});
 		}
 		catch (e)
 		{
 			console.log(e);
 			Toggle_Extension_Loader("none");
+			OpenInNewTab();
 		}
-
 		return false;
 	});
 }
@@ -200,3 +201,10 @@ function Toggle_Extension_Loader(type)
 
 	$("#chrome_extension").find("#loading").css('display', type);
 }
+
+// Open extension installation in new window
+function OpenInNewTab() {
+	  var url ="https://chrome.google.com/webstore/detail/agile-crm/eofoblinhpjfhkjlfckmeidagfogclib?utm_source=chrome-ntp-icon";
+	  var win = window.open(url, '_blank');
+	  win.focus();
+	}
