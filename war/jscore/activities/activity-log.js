@@ -67,7 +67,7 @@ function getParameters()
 		params += ("user_id=" + user);
 	// Get owner name and append it to params
 
-	if (range && range != "No date selected")
+	if (range && range != "Filter by date")
 	{
 		var start_time = Date.parse($.trim(range[0])).valueOf();
 
@@ -152,7 +152,7 @@ function initActivitiesDateRange()
 		{
 			eraseCookie("selectedStartTime");
 			eraseCookie("selectedEndTime");
-			$('#activities_date_range #range').html('No date selected');
+			$('#activities_date_range #range').html('Filter by date');
 			updateActivty(getParameters());
 		}
 	});
