@@ -647,6 +647,22 @@ Added Tag to <a href="#contact/{{entity_id}}">{{label}}</a><br/>
 <i class="icon-tag icon-white"></i> {{removeDoubleCoutes custom1}} added.
 </span>
 {{/if_equals}}
+
+{{#if_equals "CALL" activity_type}}
+{{#if_equals "incoming" custom2}}
+Call from {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+<span class="activities_second_line">
+<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
+</span>
+{{/if_equals}}
+{{#if_equals "outgoing" custom2}}	
+Called {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+<span class="activities_second_line">
+<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
+</span>
+{{/if_equals}}
+{{/if_equals}}
+
 {{/if_equals}}
 
 	</div>
