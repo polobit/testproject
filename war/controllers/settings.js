@@ -62,8 +62,9 @@ var SettingsRouter = Backbone.Router.extend({
 	 */
 	userPrefs : function()
 	{
-		$("#content").html(getTemplate("settings"), {});
 		
+		$("#content").html(getTemplate("settings"), {});
+		$('#prefs-tabs-content').html(getRandomLoadingImg());
 		var view = new Base_Model_View({ 
 						url : '/core/api/user-prefs', 
 						template : "settings-user-prefs", 
