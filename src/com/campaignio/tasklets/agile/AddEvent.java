@@ -163,6 +163,7 @@ public class AddEvent extends TaskletAdapter
 
 	event.addContacts(String.valueOf(contactId));
 	event.allDay = allDay;
+	event.color = priority;
 
 	event.save();
     }
