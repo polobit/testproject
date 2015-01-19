@@ -278,7 +278,15 @@ function set_p_portlets(base_model){
 					temp_data.push(milestonesList[temp],milestoneValuesList[temp]);
 					funnel_data.push(temp_data);
 				}
-				
+				var falg=false;
+				$.each(funnel_data,function(index,json1){
+					if(json1[1]>0)
+						falg = true;
+				});
+				if(falg)
+					funnel_data = funnel_data;
+				else
+					funnel_data = [];
 				dealsFunnelGraph(selector,funnel_data);
 				
 				addWidgetToGridster(base_model);
@@ -336,9 +344,9 @@ function set_p_portlets(base_model){
 				tempData.data=mailsOpenedCountList;
 				series[1]=tempData;
 				text="No. of Emails";
-				colors=['green','red'];
+				colors=['gray','green'];
 				
-				callsPerPersonBarGraph(selector,domainUsersList,series,text,colors);
+				emailsSentBarGraph(selector,domainUsersList,series,mailsCountList,mailsOpenedCountList,text,colors);
 				
 				addWidgetToGridster(base_model);
 			});
@@ -446,27 +454,23 @@ function set_p_portlets(base_model){
 			var selector=$(this).attr('id');
 			var url='/core/api/portlets/portletCallsPerPerson?duration='+base_model.get('settings').duration;
 			
-			var incomingCompletedCallsCountList=[];
-			var incomingFailedCallsCountList=[];
-			var incomingCompletedCallsDurationList=[];
-			var outgoingCompletedCallsCountList=[];
-			var outgoingFailedCallsCountList=[];
-			var outgoingCompletedCallsDurationList=[];
-			var completedCallsCountList=[];
+			var answeredCallsCountList=[];
+			var notAnsweredCallCountList=[];
+			var busyCallsCountList=[];
 			var failedCallsCountList=[];
-			var completedCallsDurationList=[];
+			var voiceMailCallsCountList=[];
+			var callsDurationList=[];
+			var totalCallsCountList=[];
 			var domainUsersList=[];
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
-				incomingCompletedCallsCountList=data["incomingCompletedCallsCountList"];
-				incomingFailedCallsCountList=data["incomingFailedCallsCountList"];
-				incomingCompletedCallsDurationList=data["incomingCompletedCallsDurationList"];
-				outgoingCompletedCallsCountList=data["outgoingCompletedCallsCountList"];
-				outgoingFailedCallsCountList=data["outgoingFailedCallsCountList"];
-				outgoingCompletedCallsDurationList=data["outgoingCompletedCallsDurationList"];
-				completedCallsCountList=data["completedCallsCountList"];
+				answeredCallsCountList=data["answeredCallsCountList"];
+				notAnsweredCallCountList=data["notAnsweredCallCountList"];
+				busyCallsCountList=data["busyCallsCountList"];
 				failedCallsCountList=data["failedCallsCountList"];
-				completedCallsDurationList=data["completedCallsDurationList"];
+				voiceMailCallsCountList=data["voiceMailCallsCountList"];
+				callsDurationList=data["callsDurationList"];
+				totalCallsCountList=data["totalCallsCountList"];
 				domainUsersList=data["domainUsersList"];
 				
 				var series=[];
@@ -475,25 +479,41 @@ function set_p_portlets(base_model){
 				
 				if(base_model.get('settings')["group-by"]=="number-of-calls"){
 					var tempData={};
-					tempData.name="Completed Calls";
-					tempData.data=completedCallsCountList;
+					tempData.name="Answered";
+					tempData.data=answeredCallsCountList;
 					series[0]=tempData;
+					
 					tempData={};
-					tempData.name="Failed Calls";
-					tempData.data=failedCallsCountList;
+					tempData.name="Not Answered";
+					tempData.data=notAnsweredCallCountList;
 					series[1]=tempData;
+					
+					tempData={};
+					tempData.name="Busy";
+					tempData.data=busyCallsCountList;
+					series[2]=tempData;
+					
+					tempData={};
+					tempData.name="Failed";
+					tempData.data=failedCallsCountList;
+					series[3]=tempData;
+					
+					tempData={};
+					tempData.name="Voicemail";
+					tempData.data=voiceMailCallsCountList;
+					series[4]=tempData;
 					text="No. of Calls";
-					colors=['green','red'];
+					colors=['green','orange','blue','red','voilet'];
 				}else{
 					var tempData={};
 					tempData.name="Calls Duration";
-					tempData.data=completedCallsDurationList;
+					tempData.data=callsDurationList;
 					series[0]=tempData;
 					text="Call Duration";
 					colors=['green'];
 				}
 				
-				callsPerPersonBarGraph(selector,domainUsersList,series,text,colors);
+				callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountList,text,colors);
 				
 				addWidgetToGridster(base_model);
 			});
@@ -557,19 +577,19 @@ function dealsByMilestoneBarGraph(selector,milestonesList,milestoneValuesList,mi
 	            min: 0,
 	            title: {
 	                text: 'Deal Value'
-	            }
+	            },
+	            allowDecimals: false
 	        },
 	        legend: {
 	        	enabled: false
 	        },
 	        tooltip: {
 	        	formatter: function(){
-	        		return '<span style="font-size:10px">'+this.points[0].key+'</span>' + 
-	        		        '<table>' + 
+	        		return '<table>' + 
 	        		        '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+'s: </td>' + 
 	        		        '<td style="padding:0"><b>'+milestoneNumbersList[this.points[0].point.x]+'</b></td></tr>' + 
 	        		        '<tr><td style="color:'+this.points[0].series.color+';padding:0">Deal Value: </td>' + 
-	        		        '<td style="padding:0"><b>'+getPortletsCurrencySymbol()+' '+milestoneValuesList[this.points[0].point.x].toLocaleString()+'</b></td></tr>' +
+	        		        '<td style="padding:0"><b>'+getPortletsCurrencySymbol()+''+milestoneValuesList[this.points[0].point.x].toLocaleString()+'</b></td></tr>' +
 	        		        '</table>';
 	        	},
 	            shared: true,
@@ -608,7 +628,8 @@ function closuresPerPersonBarGraph(selector,catges,data,text,name){
 	            min: 0,
 	            title: {
 	                text: text
-	            }
+	            },
+	            allowDecimals: false
 	        },
 	        legend: {
 	        	enabled: false
@@ -641,7 +662,7 @@ function closuresPerPersonBarGraph(selector,catges,data,text,name){
 	});
 }
 function dealsFunnelGraph(selector,funnel_data){
-	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', LIB_PATH + 'lib/flot/funnel.js', function(){
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', LIB_PATH + 'lib/flot/funnel.js','http://code.highcharts.com/modules/no-data-to-display.js', function(){
 		$('#'+selector).highcharts({
 	        chart: {
 	            type: 'funnel',
@@ -655,7 +676,7 @@ function dealsFunnelGraph(selector,funnel_data){
 	        	series: {
 	                dataLabels: {
 	                    enabled: true,
-	                    format: '<b>{point.name}</b> ('+getPortletsCurrencySymbol()+' {point.y:,.0f})',
+	                    format: '<b>{point.name}</b> ('+getPortletsCurrencySymbol()+'{point.y:,.0f})',
 	                    color: 'black',
 	                    softConnector: true
 	                },
@@ -668,7 +689,7 @@ function dealsFunnelGraph(selector,funnel_data){
 	            }
 	        },
 	        tooltip: {
-	        	pointFormat: '<span>{series.name}:<b>'+getPortletsCurrencySymbol()+' {point.y:,.0f}</b></span>',
+	        	pointFormat: '<span>{series.name}:<b>'+getPortletsCurrencySymbol()+'{point.y:,.0f}</b></span>',
 	            shared: true,
 	            useHTML: true
 	        },
@@ -682,7 +703,7 @@ function dealsFunnelGraph(selector,funnel_data){
 	    });
 	});
 }
-function emailsSentBarGraph(selector,catges,mailsCountList){
+function emailsSentBarGraph(selector,domainUsersList,series,mailsCountList,mailsOpenedCountList,text,colors){
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
 		$('#'+selector).highcharts({
 	        chart: {
@@ -693,41 +714,41 @@ function emailsSentBarGraph(selector,catges,mailsCountList){
 	            text: ''
 	        },
 	        xAxis: {
-	            categories: catges
+	            categories: domainUsersList
 	        },
 	        yAxis: {
 	            min: 0,
 	            title: {
-	                text: 'No. of emails sent'
-	            }
-	        },
-	        legend: {
-	        	enabled: false
+	                text: text
+	            },
+	            allowDecimals: false
 	        },
 	        tooltip: {
 	        	formatter: function(){
-	        		return '<span style="font-size:10px">'+this.points[0].key+'</span>' + 
-	        		        '<table>' + 
+	        		return '<table>' + 
 	        		        '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+': </td>' + 
-	        		        '<td style="padding:0"><b>'+mailsCountList[this.points[0].point.x]+'</b></td></tr>' + 
+	        		        '<td style="padding:0"><b>'+(mailsCountList[this.points[0].point.x]+mailsOpenedCountList[this.points[1].point.x])+'</b></td></tr>' +
+	        		        '<tr><td style="color:'+this.points[1].series.color+';padding:0">'+this.points[1].series.name+': </td>' + 
+	        		        '<td style="padding:0"><b>'+mailsOpenedCountList[this.points[1].point.x]+'</b></td></tr>' +
 	        		        '</table>';
 	        	},
 	            shared: true,
 	            useHTML: true
 	        },
 	        plotOptions: {
+	        	series: {
+	                stacking: 'normal'
+	            },
 	            column: {
 	                pointPadding: 0.2,
 	                borderWidth: 0
 	            }
 	        },
-	        series: [{
-	            name: 'Sent Emails',
-	            data: mailsCountList
-	        }],
+	        series: series,
 	        exporting: {
 		        enabled: false
-		    }
+		    },
+		    colors: colors
 	    });
 	});
 }
@@ -819,7 +840,8 @@ function dealsAssignedBarGraph(selector,catges,dealsCountList){
 	            min: 0,
 	            title: {
 	                text: 'No. of deals assigned'
-	            }
+	            },
+	            allowDecimals: false
 	        },
 	        legend: {
 	        	enabled: false
@@ -851,7 +873,7 @@ function dealsAssignedBarGraph(selector,catges,dealsCountList){
 	    });
 	});
 }
-function callsPerPersonBarGraph(selector,domainUsersList,series,text,colors){
+function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountList,text,colors){
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
 		$('#'+selector).highcharts({
 	        chart: {
@@ -868,9 +890,34 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,text,colors){
 	            min: 0,
 	            title: {
 	                text: text
-	            }
+	            },
+	            allowDecimals: false
 	        },
 	        tooltip: {
+	        	formatter: function(){
+	        		var tt = '';
+	        		if(text=="Call Duration")
+	        			tt = '<table>' + 
+        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+': </td>' +
+        		              '<td style="padding:0"><b>'+this.points[0].point.y+' Secs</b></td></tr>' +
+        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Total Calls: </td>' + 
+        		        	  '<td style="padding:0"><b>'+totalCallsCountList[this.points[0].point.x]+'</b></td></tr>' +
+        		        	  '</table>';
+	        		else
+	        			tt = '<table>' + 
+  		                      '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+': </td>' +
+		                      '<td style="padding:0"><b>'+this.points[0].point.y+'</b></td></tr>' +
+		                      '<tr><td style="color:'+this.points[1].series.color+';padding:0">'+this.points[1].series.name+': </td>' +
+		                      '<td style="padding:0"><b>'+this.points[1].point.y+'</b></td></tr>' +
+		                      '<tr><td style="color:'+this.points[2].series.color+';padding:0">'+this.points[2].series.name+': </td>' +
+		                      '<td style="padding:0"><b>'+this.points[2].point.y+'</b></td></tr>' +
+		                      '<tr><td style="color:'+this.points[3].series.color+';padding:0">'+this.points[3].series.name+': </td>' +
+		                      '<td style="padding:0"><b>'+this.points[3].point.y+'</b></td></tr>' +
+		                      '<tr><td style="color:'+this.points[4].series.color+';padding:0">'+this.points[4].series.name+': </td>' +
+		                      '<td style="padding:0"><b>'+this.points[4].point.y+'</b></td></tr>' +
+		                      '</table>';
+	        		return tt;
+	        	},
 	            shared: true,
 	            useHTML: true
 	        },

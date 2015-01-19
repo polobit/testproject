@@ -60,8 +60,8 @@ public class PortletUtil {
 		
 		allPortlets.add(new Portlet("Pending Deals",PortletType.DEALS));
 		allPortlets.add(new Portlet("Deals By Milestone",PortletType.DEALS));
-		allPortlets.add(new Portlet("Closures Per Person",PortletType.DEALS));
-		allPortlets.add(new Portlet("Deals Won",PortletType.DEALS));
+		//allPortlets.add(new Portlet("Closures Per Person",PortletType.DEALS));
+		//allPortlets.add(new Portlet("Deals Won",PortletType.DEALS));
 		allPortlets.add(new Portlet("Deals Funnel",PortletType.DEALS));
 		//allPortlets.add(new Portlet("Deals Assigned",PortletType.DEALS));
 		
@@ -439,8 +439,13 @@ public class PortletUtil {
 			for(DomainUser domainUser : domainUsersList){
 				List<ContactEmail> emailsList=ContactEmailUtil.getEmailsSent(domainUser,minTime,maxTime);
 				List<ContactEmail> emailsOpenedList=ContactEmailUtil.getEmailsOpenedByUser(domainUser,minTime,maxTime);
-				if(emailsList!=null)
-					mailsCountList.add(emailsList.size());
+				if(emailsList!=null){
+					if(emailsOpenedList!=null)
+						mailsCountList.add(emailsList.size()-emailsOpenedList.size());
+					else
+						mailsCountList.add(emailsList.size());
+				}
+					
 				else
 					mailsCountList.add(0);
 				if(emailsOpenedList!=null)
@@ -557,78 +562,60 @@ public class PortletUtil {
 			domainUsersList=DomainUserUtil.getUsers(dUser.domain);
 		List<String> domainUserNamesList=new ArrayList<String>();
 		
-		List<Integer> incomingCompletedCallsCountList=new ArrayList<Integer>();
-		List<Integer> incomingFailedCallsCountList=new ArrayList<Integer>();
-		
-		List<Long> incomingCompletedCallsDurationList=new ArrayList<Long>();
-		
-		List<Integer> outgoingCompletedCallsCountList=new ArrayList<Integer>();
-		List<Integer> outgoingFailedCallsCountList=new ArrayList<Integer>();
-		
-		List<Long> outgoingCompletedCallsDurationList=new ArrayList<Long>();
-		
-		List<Integer> completedCallsCountList=new ArrayList<Integer>();
+		List<Integer> answeredCallsCountList=new ArrayList<Integer>();
+		List<Integer> notAnsweredCallCountList=new ArrayList<Integer>();
+		List<Integer> busyCallsCountList=new ArrayList<Integer>();
 		List<Integer> failedCallsCountList=new ArrayList<Integer>();
+		List<Integer> voiceMailCallsCountList=new ArrayList<Integer>();
+		List<Integer> totalCallsCountList=new ArrayList<Integer>();
 		
-		List<Long> completedCallsDurationList=new ArrayList<Long>();
+		List<Long> callsDurationList=new ArrayList<Long>();
 		
 		for(DomainUser domainUser : domainUsersList){
-			int incomingCompletedCallsCount=0;
-			int incomingFailedCallsCount=0;
+			int answeredCallsCount=0;
+			int notAnsweredCallCount=0;
+			int busyCallsCount=0;
+			int failedCallsCount=0;
+			int voiceMailCallsCount=0;
 			
-			long incomingCompletedCallsDuration=0;
+			int totalCallsCount=0;
 			
-			int outgoingCompletedCallsCount=0;
-			int outgoingFailedCallsCount=0;
-			
-			long outgoingCompletedCallsDuration=0;
+			long callsDuration=0;
 			
 			List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
 			for(Activity activity : callActivitiesList){
-				if(activity.custom2!=null && activity.custom2.equalsIgnoreCase(Call.INBOUND)){
-					if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.ANSWERED)){
-						incomingCompletedCallsCount++;
-						if(activity.custom4!=null)
-							incomingCompletedCallsDuration += Long.valueOf(activity.custom4);
-					}else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED)){
-						incomingFailedCallsCount++;
-					}
-				}else if(activity.custom2!=null && activity.custom2.equalsIgnoreCase(Call.OUTBOUND)){
-					if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.ANSWERED)){
-						outgoingCompletedCallsCount++;
-						if(activity.custom4!=null)
-							outgoingCompletedCallsDuration += Long.valueOf(activity.custom4);
-					}else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED)){
-						outgoingFailedCallsCount++;
-					}
-				}
+				if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.ANSWERED))
+					answeredCallsCount++;
+				else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NO_ANSWER))
+					notAnsweredCallCount++;
+				else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.BUSY))
+					busyCallsCount++;
+				else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
+					failedCallsCount++;
+				else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
+					voiceMailCallsCount++;
+				if(activity.custom4!=null)
+					callsDuration+=Long.valueOf(activity.custom4);
+				totalCallsCount++;
 			}
-			incomingCompletedCallsCountList.add(incomingCompletedCallsCount);
-			incomingFailedCallsCountList.add(incomingFailedCallsCount);
+			answeredCallsCountList.add(answeredCallsCount);
+			notAnsweredCallCountList.add(notAnsweredCallCount);
+			busyCallsCountList.add(busyCallsCount);
+			failedCallsCountList.add(failedCallsCount);
+			voiceMailCallsCountList.add(voiceMailCallsCount);
+			totalCallsCountList.add(totalCallsCount);
 			
-			incomingCompletedCallsDurationList.add(incomingCompletedCallsDuration);
-			
-			outgoingCompletedCallsCountList.add(outgoingCompletedCallsCount);
-			outgoingFailedCallsCountList.add(outgoingFailedCallsCount);
-			
-			outgoingCompletedCallsDurationList.add(outgoingCompletedCallsDuration);
-			
-			completedCallsCountList.add(incomingCompletedCallsCount+outgoingCompletedCallsCount);
-			failedCallsCountList.add(incomingFailedCallsCount+outgoingFailedCallsCount);
-			
-			completedCallsDurationList.add(incomingCompletedCallsDuration+outgoingCompletedCallsDuration);
+			callsDurationList.add(callsDuration);
 			
 			domainUserNamesList.add(domainUser.name);
 		}
-		callsPerPersonJSON.put("incomingCompletedCallsCountList",incomingCompletedCallsCountList);
-		callsPerPersonJSON.put("incomingFailedCallsCountList",incomingFailedCallsCountList);
-		callsPerPersonJSON.put("incomingCompletedCallsDurationList",incomingCompletedCallsDurationList);
-		callsPerPersonJSON.put("outgoingCompletedCallsCountList",outgoingCompletedCallsCountList);
-		callsPerPersonJSON.put("outgoingFailedCallsCountList",outgoingFailedCallsCountList);
-		callsPerPersonJSON.put("outgoingCompletedCallsDurationList",outgoingCompletedCallsDurationList);
-		callsPerPersonJSON.put("completedCallsCountList",completedCallsCountList);
+		callsPerPersonJSON.put("answeredCallsCountList",answeredCallsCountList);
+		callsPerPersonJSON.put("notAnsweredCallCountList",notAnsweredCallCountList);
+		callsPerPersonJSON.put("busyCallsCountList",busyCallsCountList);
 		callsPerPersonJSON.put("failedCallsCountList",failedCallsCountList);
-		callsPerPersonJSON.put("completedCallsDurationList",completedCallsDurationList);
+		callsPerPersonJSON.put("voiceMailCallsCountList",voiceMailCallsCountList);
+		callsPerPersonJSON.put("callsDurationList",callsDurationList);
+		callsPerPersonJSON.put("totalCallsCountList",totalCallsCountList);
 		callsPerPersonJSON.put("domainUsersList",domainUserNamesList);
 		
 		return callsPerPersonJSON;	

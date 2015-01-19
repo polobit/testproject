@@ -345,4 +345,21 @@ public class PortletsAPI {
 		
 		return PortletUtil.getPortletCallsPerPerson(json);
 	}
+	/**
+	 * Gets Task Report portlet data
+	 * 
+	 * @return {@Link JSONObject}
+	 */
+	@Path("/portletTaskReport")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public JSONObject getTaskReportPortletData(@QueryParam("group-by") String groubBy,@QueryParam("split-by") String splitBy,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate)throws Exception {
+		JSONObject json=new JSONObject();
+		json.put("group-by",groubBy);
+		json.put("split-by",splitBy);
+		json.put("start-date",startDate);
+		json.put("end-date",endDate);
+		
+		return PortletUtil.getGrowthGraphData(json);
+	}
 }

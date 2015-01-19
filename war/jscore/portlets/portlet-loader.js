@@ -70,10 +70,9 @@ var gridster;
 function set_up_portlets(el, portlets_el){
 	$(function(){
 		var dimensions;
-		if (IS_FLUID)
-			dimensions = [417, 200];
-		else
-			dimensions = [400, 200];
+		var dim_width = Math.round($('.gridster-portlets').width()/3)-20;
+		var dim_height = 200;
+		dimensions = [dim_width, dim_height];
 		gridster = $('.gridster > div:visible',portlets_el).gridster({
 	    	widget_selector: "div",
 	        widget_margins: [10, 5],
@@ -81,6 +80,7 @@ function set_up_portlets(el, portlets_el){
 	        min_cols: 3,
 	        autogenerate_stylesheet: true,
 	        draggable: {
+	        	limit: true,
 	        	ignore_dragging: [".portlet_body",".portlet_body *"],
 	        	stop: function(event,ui){
 	        		
@@ -362,6 +362,7 @@ function showPortletSettings(el){
 		var url='/core/api/portlets/portletDealsByMilestone?deals='+base_model.get('settings').deals+'&track='+base_model.get('settings').track;
 		fetchPortletsGraphData(url,function(data){
 			var options = '';
+			var track_length=0;
 			$.each(data["milestoneMap"],function(milestoneId,milestoneName){
 				if(base_model.get('settings').track==0 && milestoneName=="Default")
 					options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
@@ -369,7 +370,10 @@ function showPortletSettings(el){
 					options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
 				else
 					options+="<option value="+milestoneId+">"+milestoneName+"</option>";
+				track_length++;
 			});
+			if(track_length>1)
+				$('#portletsDealsByMilestoneTrack',elData).show();
 			$('#track', elData).html(options);
 			$('.loading-img').hide();
 		});
@@ -402,6 +406,7 @@ function showPortletSettings(el){
 		var url='/core/api/portlets/portletDealsFunnel?deals='+base_model.get('settings').deals+'&track='+base_model.get('settings').track;
 		fetchPortletsGraphData(url,function(data){
 			var options = '';
+			var track_length=0;
 			$.each(data["milestoneMap"],function(milestoneId,milestoneName){
 				if(base_model.get('settings').track==0 && milestoneName=="Default")
 					options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
@@ -409,7 +414,10 @@ function showPortletSettings(el){
 					options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
 				else
 					options+="<option value="+milestoneId+">"+milestoneName+"</option>";
+				track_length++;
 			});
+			if(track_length>1)
+				$('#portletsDealsFunnelTrack',elData).show();
 			$('#track', elData).html(options);
 			$('.loading-img').hide();
 		});
@@ -692,7 +700,15 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    					temp_data.push(milestonesList[temp],milestoneValuesList[temp]);
 		    				funnel_data.push(temp_data);
 	    				}
-	    				
+	    				var falg=false;
+	    				$.each(funnel_data,function(index,json1){
+	    					if(json1[1]>0)
+	    						falg = true;
+	    				});
+	    				if(falg)
+	    					funnel_data = funnel_data;
+	    				else
+	    					funnel_data = [];
 	    				
 	    				dealsFunnelGraph(selector,funnel_data);
 	    				
@@ -743,9 +759,9 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    				tempData.data=mailsOpenedCountList;
 	    				series[1]=tempData;
 	    				text="No. of Emails";
-	    				colors=['green','red'];
+	    				colors=['gray','green'];
 	    				
-	    				callsPerPersonBarGraph(selector,domainUsersList,series,text,colors);
+	    				emailsSentBarGraph(selector,domainUsersList,series,mailsCountList,mailsOpenedCountList,text,colors);
 	    			});
 	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Growth Graph"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
@@ -829,27 +845,23 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		var selector=idVal;
 	        		var url='/core/api/portlets/portletCallsPerPerson?duration='+data.get('settings').duration;
 	        		
-	        		var incomingCompletedCallsCountList=[];
-	    			var incomingFailedCallsCountList=[];
-	    			var incomingCompletedCallsDurationList=[];
-	    			var outgoingCompletedCallsCountList=[];
-	    			var outgoingFailedCallsCountList=[];
-	    			var outgoingCompletedCallsDurationList=[];
-	    			var completedCallsCountList=[];
+	        		var answeredCallsCountList=[];
+	    			var notAnsweredCallCountList=[];
+	    			var busyCallsCountList=[];
 	    			var failedCallsCountList=[];
-	    			var completedCallsDurationList=[];
+	    			var voiceMailCallsCountList=[];
+	    			var callsDurationList=[];
+	    			var totalCallsCountList=[];
 	    			var domainUsersList=[];
 	    			
 	    			fetchPortletsGraphData(url,function(data2){
-	    				incomingCompletedCallsCountList=data2["incomingCompletedCallsCountList"];
-	    				incomingFailedCallsCountList=data2["incomingFailedCallsCountList"];
-	    				incomingCompletedCallsDurationList=data2["incomingCompletedCallsDurationList"];
-	    				outgoingCompletedCallsCountList=data2["outgoingCompletedCallsCountList"];
-	    				outgoingFailedCallsCountList=data2["outgoingFailedCallsCountList"];
-	    				outgoingCompletedCallsDurationList=data2["outgoingCompletedCallsDurationList"];
-	    				completedCallsCountList=data2["completedCallsCountList"];
+	    				answeredCallsCountList=data2["answeredCallsCountList"];
+	    				notAnsweredCallCountList=data2["notAnsweredCallCountList"];
+	    				busyCallsCountList=data2["busyCallsCountList"];
 	    				failedCallsCountList=data2["failedCallsCountList"];
-	    				completedCallsDurationList=data2["completedCallsDurationList"];
+	    				voiceMailCallsCountList=data2["voiceMailCallsCountList"];
+	    				callsDurationList=data2["callsDurationList"];
+	    				totalCallsCountList=data2["totalCallsCountList"];
 	    				domainUsersList=data2["domainUsersList"];
 	    				
 	    				var series=[];
@@ -858,25 +870,41 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    				
 	    				if(data.get('settings')["group-by"]=="number-of-calls"){
 	    					var tempData={};
-	    					tempData.name="Completed Calls";
-	    					tempData.data=completedCallsCountList;
+	    					tempData.name="Answered";
+	    					tempData.data=answeredCallsCountList;
 	    					series[0]=tempData;
+	    					
 	    					tempData={};
-	    					tempData.name="Failed Calls";
-	    					tempData.data=failedCallsCountList;
+	    					tempData.name="Not Answered";
+	    					tempData.data=notAnsweredCallCountList;
 	    					series[1]=tempData;
+	    					
+	    					tempData={};
+	    					tempData.name="Busy";
+	    					tempData.data=busyCallsCountList;
+	    					series[2]=tempData;
+	    					
+	    					tempData={};
+	    					tempData.name="Failed";
+	    					tempData.data=failedCallsCountList;
+	    					series[3]=tempData;
+	    					
+	    					tempData={};
+	    					tempData.name="Voicemail";
+	    					tempData.data=voiceMailCallsCountList;
+	    					series[4]=tempData;
 	    					text="No. of Calls";
-	    					colors=['green','red'];
+	    					colors=['green','orange','blue','red','voilet'];
 	    				}else{
 	    					var tempData={};
 	    					tempData.name="Calls Duration";
-	    					tempData.data=completedCallsDurationList;
+	    					tempData.data=callsDurationList;
 	    					series[0]=tempData;
 	    					text="Call Duration";
 	    					colors=['green'];
 	    				}
 	    				
-	    				callsPerPersonBarGraph(selector,domainUsersList,series,text,colors);
+	    				callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountList,text,colors);
 	    			});
 	        	}
 	        	/*if(data.get('portlet_type')=="DEALS" && data.get('name')=="Deals Won" && portletCollectionView.collection.models.length!=0){
@@ -949,4 +977,8 @@ function initBlogPortletSync(el)
 $('.portlet_body').live("mouseover",function(e){
 	if(gridster!=undefined)
 		gridster.disable();
+});*/
+/*$(window).resize(fsunction(){
+	if(gridster!=undefined)
+		set_up_portlets($('#portlets > div'),$('#portlets > div'));
 });*/
