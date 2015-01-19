@@ -60,7 +60,7 @@ public class WorkflowUtil
 	 */
 	public static List<Workflow> getAllWorkflows()
 	{
-		return dao.ofy().query(Workflow.class).order("-created_time").list();
+		return dao.ofy().query(Workflow.class).order("name").list();
 	}
 
 	// returns all workflows count
@@ -83,7 +83,7 @@ public class WorkflowUtil
 	 */
 	public static List<Workflow> getAllWorkflows(int max, String cursor)
 	{
-		return dao.fetchAllByOrder(max, cursor, null, true, false, "-created_time");
+		return dao.fetchAllByOrder(max, cursor, null, true, false, "name");
 	}
 
 	/**

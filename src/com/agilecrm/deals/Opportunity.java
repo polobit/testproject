@@ -1,5 +1,6 @@
 package com.agilecrm.deals;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,8 +10,8 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.datanucleus.util.StringUtils;
 
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
@@ -56,9 +57,10 @@ import com.googlecode.objectify.condition.IfDefault;
  * @author Yaswanth
  * 
  */
+@SuppressWarnings("serial")
 @XmlRootElement
 @Cached
-public class Opportunity extends Cursor
+public class Opportunity extends Cursor implements Serializable
 {
     /**
      * Opportunity Id.
@@ -191,6 +193,11 @@ public class Opportunity extends Cursor
      * To state whenther the deals is archived or not.
      */
     public boolean archived = false;
+
+    /**
+     * Won date for a deal.
+     */
+    public Long won_date = null;
 
     /**
      * ObjectifyDao of Opportunity.
@@ -387,10 +394,15 @@ public class Opportunity extends Cursor
 	this.ownerKey = ownerKey;
     }
 
+    public void save()
+    {
+	save(true);
+    }
+
     /**
      * Saves opportuntiy in dao.
      */
-    public void save()
+    public void save(boolean arg)
     {
 	if (contact_ids != null)
 	{
@@ -401,12 +413,6 @@ public class Opportunity extends Cursor
 
 	}
 
-	// Set Deal Pipeline.
-	if (pipeline_id != null && pipeline_id > 0)
-	{
-	    this.pipeline = new Key<Milestone>(Milestone.class, pipeline_id);
-	}
-
 	Long id = this.id;
 
 	// old opportunity (or deal) having id.
@@ -415,27 +421,38 @@ public class Opportunity extends Cursor
 	// cache old data to compare new and old in triggers
 	if (id != null)
 	    oldOpportunity = OpportunityUtil.getOpportunity(id);
+	if (oldOpportunity != null && StringUtils.isNotEmpty(this.milestone)
+		&& StringUtils.isNotEmpty(oldOpportunity.milestone))
+	{
+	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equals("WON"))
+		this.won_date = System.currentTimeMillis() / 1000;
+	}
+	else if (oldOpportunity == null && this.milestone.equals("WON"))
+	    this.won_date = System.currentTimeMillis() / 1000;
 
 	dao.put(this);
 
 	// Executes trigger
 	DealTriggerUtil.executeTriggerToDeal(oldOpportunity, this);
 
-	// Enables to build "Document" search on current entity
-	AppengineSearch<Opportunity> search = new AppengineSearch<Opportunity>(Opportunity.class);
-
-	// If contact is new then add it to document else edit document
-	if (id == null)
+	if (arg)
 	{
-	    search.add(this);
 
-	    // New Deal Notification
-	    DealNotificationPrefsUtil.executeNotificationForNewDeal(this);
+	    // Enables to build "Document" search on current entity
+	    AppengineSearch<Opportunity> search = new AppengineSearch<Opportunity>(Opportunity.class);
 
-	    return;
+	    // If contact is new then add it to document else edit document
+	    if (id == null)
+	    {
+		search.add(this);
+
+		// New Deal Notification
+		DealNotificationPrefsUtil.executeNotificationForNewDeal(this);
+
+		return;
+	    }
+	    search.edit(this);
 	}
-	search.edit(this);
-
     }
 
     /**
@@ -457,8 +474,14 @@ public class Opportunity extends Cursor
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
 
+	// Set Deal Pipeline.
+	if (pipeline_id != null && pipeline_id > 0)
+	{
+	    this.pipeline = new Key<Milestone>(Milestone.class, pipeline_id);
+	}
+
 	// If owner_id is null
-	if (owner_id == null)
+	if (owner_id == null && ownerKey == null)
 	{
 	    UserInfo userInfo = SessionManager.get();
 	    if (userInfo == null)
@@ -468,7 +491,8 @@ public class Opportunity extends Cursor
 	}
 
 	// Saves domain user key
-	ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
+	if (owner_id != null)
+	    ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
 	System.out.println("OwnerKey" + ownerKey);
 
 	// Session doesn't exist when adding deal from Campaigns.
@@ -555,16 +579,16 @@ public class Opportunity extends Cursor
 
 	StringBuilder builder = new StringBuilder();
 	builder.append("Opportunity [id=").append(id).append(", name=").append(name).append(", contact_ids=")
-	        .append(contact_ids).append(", related_contacts=").append(related_contacts).append(", custom_data=")
-	        .append(custom_data).append(", description=").append(description).append(", expected_value=")
-	        .append(expected_value).append(", milestone=").append(milestone).append(", probability=")
-	        .append(probability).append(", close_date=").append(close_date).append(", owner_id=").append(owner_id)
-	        .append(", ownerKey=").append(ownerKey).append(", agileUser=").append(agileUser)
-	        .append(", created_time=").append(created_time).append(", track=").append(track)
-	        .append(", entity_type=").append(entity_type).append(", notes=").append(notes)
-	        .append(", related_notes=").append(related_notes).append(", note_description=")
-	        .append(note_description).append(", pipeline=").append(pipeline).append(", pipeline_id=")
-	        .append(pipeline_id).append(", archived=").append(archived).append("]");
+		.append(contact_ids).append(", related_contacts=").append(related_contacts).append(", custom_data=")
+		.append(custom_data).append(", description=").append(description).append(", expected_value=")
+		.append(expected_value).append(", milestone=").append(milestone).append(", probability=")
+		.append(probability).append(", close_date=").append(close_date).append(", owner_id=").append(owner_id)
+		.append(", ownerKey=").append(ownerKey).append(", agileUser=").append(agileUser)
+		.append(", created_time=").append(created_time).append(", track=").append(track)
+		.append(", entity_type=").append(entity_type).append(", notes=").append(notes)
+		.append(", related_notes=").append(related_notes).append(", note_description=")
+		.append(note_description).append(", pipeline=").append(pipeline).append(", pipeline_id=")
+		.append(pipeline_id).append(", archived=").append(archived).append("]");
 	return builder.toString();
     }
 }
