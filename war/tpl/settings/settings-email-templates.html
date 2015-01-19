@@ -18,8 +18,7 @@
                 <col width="0%">
                 <col width="35%">
                 <col width="35%">
-				<col width="15%">
-				<col width="15%">				
+				<col width="30%">
 			   </colgroup>
             <thead>
                 <tr>
@@ -63,5 +62,7 @@
     		{{subject}}
     	</div>
     </td>
-    <td style="color: #b2b0b1;">Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{emailTemplateOwner.name}}</td>
+   {{#if created_time}}
+      <td style="color: #b2b0b1;">Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{emailTemplateOwner.name}}</td>
+   {{/if}}
 </script>
