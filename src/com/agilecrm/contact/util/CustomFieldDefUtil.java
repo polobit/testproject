@@ -76,6 +76,14 @@ public class CustomFieldDefUtil
 
     public static List<CustomFieldDef> getSearchableCustomFieldsByScope(SCOPE scope)
     {
+    if(scope!=null && (scope==SCOPE.CONTACT || scope==SCOPE.PERSON)){
+		List<CustomFieldDef> customFieldsList = dao.fetchAll();
+		for(CustomFieldDef cfd : customFieldsList){
+			if(cfd.position==0 && (cfd.scope==SCOPE.CONTACT || cfd.scope==SCOPE.PERSON || cfd.scope==null))
+				customFieldsList.add(cfd);
+		}
+		return customFieldsList;
+    }
 	Map<String, Object> map = new HashMap<String, Object>();
 	map.put("searchable", true);
 	map.put("scope", scope);
