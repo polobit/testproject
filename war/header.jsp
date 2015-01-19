@@ -126,10 +126,10 @@
 							<li class="nav-bar-search">
 								<form id="searchForm" class=" navbar-search"
 									style="margin: 5px;">
-									<input id="searchText" type="text" style="line-height: 17px;"
+									<input id="searchText" type="text" style="line-height: 17px;width:170px;"
 										data-provide="typeahead"
 										class="typeahead typeahead_contacts search-query"
-										placeholder="Search"></input> <input id="search-results" 
+										placeholder="Search"></input> <input id="search-results" style="display:none;
 										type="image" src="img/SearchIcon.png" class="searchbox" />
 								</form>
 							</li>
@@ -145,7 +145,8 @@
 							</a>
 								<ul class="dropdown-menu" style="width: 25em; right: -11px;">
 								</ul></li>
-								
+								<li id="due_tasks" ><a style="position:relative;"href="#tasks"><i class="icon-list" title="Tasks"></i>
+											<span class="navbar_due_tasks" ><span title="Due Tasks" id="due_tasks_count" style="position:relative;top:-2px;"></span></span></a></li>
 								
 
 							<li class="dropdown" id="menu1"><a class="dropdown-toggle"
