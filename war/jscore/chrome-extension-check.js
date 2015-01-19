@@ -18,46 +18,67 @@ var Chrome_Extension_Webstore_Url = "https://chrome.google.com/webstore/detail/"
  */
 $(function()
 {
-
 	console.log("**chrome extension**");
 
-	// Check chrome browser
 	var chrome = window.chrome || {};
 	console.log("chrome: " + chrome);
 
+	// Check chrome browser
 	if (!chrome.app || !chrome.webstore)
 	{
-		console.log("***no chrome***")
-		return;
+		console.log("***Its not chrome***")
+		return false;
 	}
-
-	// After clicking on logout, erase cookie to show notification after
-	// login about chrome extension again if not install.
-	$('a').click(function(event)
+	else
 	{
-		var herfLogout = $(this).attr("href");
-		if (herfLogout == "/login")
+		// Check for incognito mode
+		var fs = window.RequestFileSystem || window.webkitRequestFileSystem;
+		if (!fs)
 		{
-			// erase field to notification about chrome extension
-			eraseCookie("agile_chrome_extension");
+			console.log("check failed?");
+			return false;
 		}
-	});
+		else
+		{			
+		  fs(window.TEMPORARY, 100, function(fs)
+			{
+				console.log("it does not seem like you are in incognito mode");
 
-	console.log("readCookie: " + readCookie("agile_chrome_extension") + " " + readCookie("prevent_extension_request"));
+				// After clicking on logout, erase cookie to show notification after
+				// re-login about chrome extension if not install.
+				$('a').click(function(event)
+				{
+					var herfLogout = $(this).attr("href");
+					if (herfLogout == "/login")
+					{
+						// erase field to notification about chrome extension
+						eraseCookie("agile_chrome_extension");
+					}
+				});
 
-	// Read cookie to notify once per session
-	if (readCookie("agile_chrome_extension") || readCookie("prevent_extension_request"))
-	{
-		console.log("return now");
-		return;
-	}
+				console.log("readCookie: " + readCookie("agile_chrome_extension") + " " + readCookie("prevent_extension_request"));
 
-	// Detect extension
-	Detect_Chrome_Extension(Toggle_Extension_Request_Ui);
+				// Read cookie to notify once per session
+				if (readCookie("agile_chrome_extension") || readCookie("prevent_extension_request"))
+				{
+					console.log("return now");
+					return;
+				}
+
+				// Detect extension
+				Detect_Chrome_Extension(Toggle_Extension_Request_Ui);			
+				
+			}, function(err)
+			{
+				console.log("it seems like you are in incognito mode");
+				return false;
+			});		
+		}
+	}	
 });
 
 /**
- * Detect chrome extension by sending image request
+ * Detect chrome extension by chechking element added in page from extension
  */
 function Detect_Chrome_Extension(callback)
 {
@@ -203,8 +224,9 @@ function Toggle_Extension_Loader(type)
 }
 
 // Open extension installation in new window
-function OpenInNewTab() {
-	  var url ="https://chrome.google.com/webstore/detail/agile-crm/eofoblinhpjfhkjlfckmeidagfogclib?utm_source=chrome-ntp-icon";
-	  var win = window.open(url, '_blank');
-	  win.focus();
-	}
+function OpenInNewTab()
+{
+	var url = "https://chrome.google.com/webstore/detail/agile-crm/eofoblinhpjfhkjlfckmeidagfogclib?utm_source=chrome-ntp-icon";
+	var win = window.open(url, '_blank');
+	win.focus();
+}
