@@ -194,7 +194,12 @@ $(function()
 							var img = DEFAULT_GRAVATAR_url;
 							var backup_image = "&d=404\" ";
 							// backup_image="";
-							var initials = text_gravatar_initials(items);
+							var initials = '';
+							try{
+								initials = text_gravatar_initials(items)
+							} catch(e){
+								console.log(e);
+							}
 
 							if (initials.length == 0)
 								backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";

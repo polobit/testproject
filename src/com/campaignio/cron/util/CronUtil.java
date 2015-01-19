@@ -365,13 +365,13 @@ public class CronUtil
 		// TODO Auto-generated method stub
 		int duration = Integer.parseInt(durationString);
 		// TimeZone timeZone = TimeZone.getTimeZone(timezone);
-		Calendar calendar = null;
+		Calendar calendar = Calendar.getInstance();
 
 		// Set timezone
 		if (!Wait.DEFAULT_TIMEZONE.equals(timezone) && !StringUtils.isEmpty(timezone))
 		{
 			TimeZone timeZone = TimeZone.getTimeZone(timezone.substring(1));
-			calendar = Calendar.getInstance(timeZone);
+			calendar.setTimeZone(timeZone);
 		}
 
 		// Days
