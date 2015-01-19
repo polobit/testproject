@@ -13,6 +13,7 @@ import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.StringUtils2;
 import com.google.appengine.api.search.Document;
+import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.search.Field;
 import com.google.appengine.api.search.Index;
 import com.googlecode.objectify.Key;
@@ -25,6 +26,15 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
     {
 	Opportunity opportunity = (Opportunity) entity;
 
+	Builder doc = buildOpportunityDoc(opportunity);
+
+	// Adds document to Index
+	addToIndex(doc.setId(opportunity.id.toString()).build());
+
+    }
+
+    public Builder buildOpportunityDoc(Opportunity opportunity)
+    {
 	Document.Builder doc = Document.newBuilder();
 
 	Set<String> fields = new HashSet<String>();
@@ -38,7 +48,8 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 	// Add custom fields to index
 	addCustomFieldsToIndex(opportunity.custom_data, SCOPE.DEAL, doc);
 
-	doc.addField(Field.newBuilder().setName("search_tokens").setText(SearchUtil.normalizeSet(StringUtils2.getSearchTokens(fields))));
+	doc.addField(Field.newBuilder().setName("search_tokens")
+		.setText(SearchUtil.normalizeSet(StringUtils2.getSearchTokens(fields))));
 
 	doc.addField(Field.newBuilder().setName("type").setText(Type.OPPORTUNITY.toString()));
 
@@ -57,10 +68,7 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 	// Sets owner of the opportunity
 	if (opportunityOwner != null)
 	    doc.addField(Field.newBuilder().setName("owner_id").setText(opportunity.id.toString()));
-
-	// Adds document to Index
-	addToIndex(doc.setId(opportunity.id.toString()).build());
-
+	return doc;
     }
 
     @Override

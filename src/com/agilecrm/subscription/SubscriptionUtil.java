@@ -134,7 +134,11 @@ public class SubscriptionUtil
 	EmailGateway gateway = EmailGatewayUtil.getEmailGateway();
 
 	if (gateway != null)
+	{
 	    plan_id = "email-2";
+	    return plan_id;
+	}
+	    
 
 	if (count <= 100000)
 	    plan_id = "email-4";

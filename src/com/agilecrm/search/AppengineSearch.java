@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.google.appengine.api.search.Index;
@@ -160,6 +161,19 @@ public class AppengineSearch<T>
     public Collection getAdvacnedSearchResults(List<SearchRule> rules, Integer count, String cursor, String orderBy)
     {
 	return query.advancedSearch(rules, count, cursor, orderBy);
+    }
+    
+    /**Get search results based on conditions given in the filter.
+     * @param filter
+     * @param count
+     * @param cursor
+     * @param orderBy
+     * @return
+     */
+    @SuppressWarnings("rawtypes")
+    public Collection getAdvacnedSearchResultsForFilter(ContactFilter filter, Integer count, String cursor, String orderBy)
+    {
+	return query.advancedSearch(filter, count, cursor, orderBy);
     }
 
     /**
