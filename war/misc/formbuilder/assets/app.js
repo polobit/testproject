@@ -49,7 +49,7 @@ define(
 				});
 
 				$('#form-save').click(function(){
-					formSave.agile_form_save();
+					formSave.agile_form_save(event);
 				});
 			}}
 		});

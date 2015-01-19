@@ -14,6 +14,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,32 +48,44 @@ public class FormsAPI
 	try
 	{
 	    JSONObject formJson = new JSONObject(formString);
-	    Long formId = null;
-	    Form form = null;
+	    String name = formJson.getString("formName");
+	    String json = formJson.getString("formJson");
 
-	    if (formJson.has("id"))
-		formId = formJson.getLong("id");
-
-	    if (formId != null)
-		form = FormUtil.getFormById(formId);
-
-	    if (form == null)
+	    if (StringUtils.isBlank(name))
 	    {
-		if (FormUtil.getFormByName(formJson.getString("formName")) == null)
-		    form = new Form();
-		else
-		{
-		    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-		    return;
-		}
+		response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+		return;
 	    }
 
-	    form.formName = formJson.getString("formName");
-	    form.formJson = formJson.getString("formJson");
-	    form.save();
+	    Form savedForm = FormUtil.getFormByName(name);
+	    Form form = null;
+	    Boolean saveForm = false;
 
-	    response.setStatus(HttpServletResponse.SC_OK);
-	    return;
+	    if (formJson.has("id"))
+	    {
+		form = FormUtil.getFormById(formJson.getLong("id"));
+		if (StringUtils.equals(form.formName, name) || savedForm == null)
+		    saveForm = true;
+	    }
+	    else if (savedForm == null)
+	    {
+		form = new Form();
+		saveForm = true;
+	    }
+
+	    if (saveForm)
+	    {
+		form.formName = name;
+		form.formJson = json;
+		form.save();
+		response.setStatus(HttpServletResponse.SC_OK);
+		return;
+	    }
+	    else
+	    {
+		response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+		return;
+	    }
 	}
 	catch (JSONException e)
 	{

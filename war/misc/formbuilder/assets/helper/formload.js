@@ -10,8 +10,9 @@ define([
 			dataType: 'json',
 			success: function(data){
 				saveform = JSON.parse(data.formJson);
-				var formLabel = saveform[0].fields.name.value;
-				$('#form-label').text('Editing form "'+ formLabel + '"');
+				/*var formLabel = saveform[0].fields.name.value;
+				$('#form-label').text('Editing form "'+ formLabel + '"');*/
+				$('#form-label').text('Editing form');
 				new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(saveform) });
 			}
 		});

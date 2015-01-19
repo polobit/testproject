@@ -2,7 +2,11 @@ define([
 	'jquery', 'underscore', 'backbone', 'helper/pubsub'
 ], function($, _, Backbone, PubSub)
 {
-	return { agile_form_save : function(){
+	return { agile_form_save : function(e){
+
+		var target = $("#"+e.target.id);
+		target.attr("disabled", "disabled");
+
 		var url = window.location.protocol + '//' + window.location.host + '/' + 'core/api/forms';
 		var form = {};
 		form.formName = saveform[0].fields.name.value;
@@ -21,7 +25,8 @@ define([
 				window.location.replace(url);
 			},
 			error: function(){
-				alert("Form with this name is already saved. Please change form name and try again.");
+				alert("Form with this name is already saved, or this is an invalid form name. Please change form name and try again.");
+				target.removeAttr("disabled");
 			}});
 	}}
 });
