@@ -68,7 +68,7 @@
 <script id="deals-by-paging-model-template" type="text/html">
 <div id={{id}} data="{{milestone}}" class="data agile-overflow-ellipsis">
 	<div>
-		<b style="max-width: 78%;overflow: hidden;display: inline-block;text-overflow: ellipsis;line-height: 14px;float:left;">{{name}}</b>
+		<b style="max-width: 78%;overflow: hidden;display: inline-block;text-overflow: ellipsis;line-height: 14px;float:left;"><a href="#deal/{{id}}">{{name}}</a></b>
 		
 		<span class="right dealnotes-view" style="margin-top:-4px;">
 			{{#if notes}}
@@ -93,8 +93,16 @@
 	</div>
 <div class="pull-right">
 <span class="right deal-options" style="visibility:hidden;">
+			{{#if_equals archived false}}
+			<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>
+			{{/if_equals}}
+			{{#if_equals archived true}}
+			<a title="Restore" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>
+			{{/if_equals}}
+			{{#if_equals archived false}}
 			<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>
-            <a title="Delete" class="deal-delete" style="cursor:pointer;text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a>
+            {{/if_equals}}
+			<a title="Delete" class="deal-delete" style="cursor:pointer;text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a>
         </span>
 </div>
 <div class="clearfix"></div>

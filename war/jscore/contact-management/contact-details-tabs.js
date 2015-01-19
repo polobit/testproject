@@ -16,6 +16,8 @@ var NO_WEB_STATS_SETUP = true;
 
 var email_server_type = "agilecrm";
 
+var email_server_type_cookie_name = "email_server_type_" + CURRENT_DOMAIN_USER.id;
+
 function fill_company_related_contacts(companyId, htmlId)
 {
 	$('#' + htmlId).html(LOADING_HTML);
@@ -206,9 +208,7 @@ $(function()
 		e.preventDefault();
 		email_server_type = "agilecrm"
 		save_contact_tab_position_in_cookie("mail");
-		var mail_server_url = 'core/api/emails/agile-emails?e=';
-		contact_details_tab.load_mail_accounts();
-		contact_details_tab.load_mail(mail_server_url);
+		contact_details_tab.load_mail();
 	});
 
 	/**
@@ -242,13 +242,24 @@ $(function()
 		fill_company_related_contacts(App_Contacts.contactDetailView.model.id, 'company-contacts');
 	});
 
+	/**
+	 * Sets cookie when user changes email dropdown under mail tab.
+	 * Cookie contains email server, email name
+	 * from next time application loads from emails from this email server and email 
+	 */
 	$('.agile-emails').die().live('click', function(e)
 	{
 		e.preventDefault();
-		$('#email-type-select').html($(this).html());
+		var email_server = $(this).attr('email-server');
 		var url = $(this).attr('data-url');
+		$('#email-type-select',App_Contacts.contactDetailView.el).html($(this).html());
+		//Here email_server_type means email/username of mail account
 		email_server_type = $(this).attr('email-server-type');
-		contact_details_tab.load_mail(url);
+		if(email_server && url && email_server!='agile')
+			url = url.concat(email_server_type);
+		var cookie_value = email_server_type + '|' + email_server;
+		save_email_server_type_in_cookie(cookie_value);
+		contact_details_tab.load_mail(url,email_server);
 	});
 
 	/**
@@ -354,7 +365,10 @@ $(function()
 
 						if ($(this).attr('disabled'))
 							return;
-						
+						var $form = $('#emailForm');					 
+						// Is valid
+						if(!isValidForm($form))
+						  	return;
 						var network_type = $('#attachment-select').find(":selected").attr('network_type');
 						// checking email attachment type , email doesn't allow
 						// google drive documents as attachments
@@ -369,7 +383,10 @@ $(function()
 
 						// serialize form.
 						var json = serializeForm("emailForm");
-						
+						if(json.from_email != CURRENT_DOMAIN_USER.email && json.from_name == CURRENT_DOMAIN_USER.name)
+						{
+							json.from_name = "";
+						}
 						if ((json.contact_to_ids).join())
 							json.to += ((json.to != "") ? "," : "") + (json.contact_to_ids).join();
 
@@ -458,20 +475,17 @@ $(function()
 				var cc_emails = $parent_element.find('.cc-emails').data('cc');
 				var bcc_emails = $parent_element.find('.bcc-emails').data('bcc');
 
-				var email_sync_configured = contact_details_tab.email_sync_configured;
+				var email_sync_configured = contact_details_tab.configured_sync_email;
+
 				var configured_email;
 
 				if (email_sync_configured)
 				{
-					if (email_sync_configured["type"])
-						configured_email = email_sync_configured["email"];
-					else
-						configured_email = email_sync_configured["user_name"];
+					configured_email = email_sync_configured;
 				}
 
 				if (configured_email && to_emails)
 				{
-
 					// Merge both from and to removing configured email
 					to_emails = get_emails_to_reply(from + ', ' + to_emails, configured_email);
 				}
@@ -774,4 +788,14 @@ function get_emails_to_reply(emails, configured_email)
 	}
 
 	return emails;
+}
+function save_email_server_type_in_cookie(cookie_value)
+{   
+	if(cookie_value)
+	{
+		var previous_cookie_value = readCookie(email_server_type_cookie_name);
+		if (previous_cookie_value === cookie_value)
+			return;
+		createCookie(email_server_type_cookie_name,cookie_value,30);
+	}	
 }

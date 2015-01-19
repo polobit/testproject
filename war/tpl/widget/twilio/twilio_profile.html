@@ -39,7 +39,7 @@
 
 <script id="twilio-logs-template" type="text/html">
 	{{#if this.length}}
-		{{#each this}}
+		{{#each this}}          
 			<li class="row-fluid sub_header_li">
 				<div class="span2 mr_5">
 					{{#if_equals recording.total "0"}}
@@ -52,7 +52,7 @@
 					<div class="pull-left">{{#if_equals call.Status "no-answer"}}Call unaswered{{else}}Call connected{{/if_equals}}</div>
 					<div class="pull-right">{{#is_string call.Duration}}{{call.Duration}} s{{else}}0 s{{/is_string}}</div><br>
 					<small><time class="time-ago pull-left" datetime="{{call.StartTime}}">{{toLocalTimezone call.StartTime}}</time></small>
-				</div>
+				</div>               
 			</li>
 		{{/each}}
 	{{else}}
@@ -60,7 +60,6 @@
 	    	No Calls
 		</li>
 	{{/if}}
-
 </script>
 
  

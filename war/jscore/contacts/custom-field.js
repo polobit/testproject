@@ -651,10 +651,10 @@ function groupingCustomFields(base_model){
 function enableCustomFieldsSorting(el,connClass,connId){
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function(){
 		$('.'+connClass).sortable({
-			connectWith: '.'+connClass,
-			iframeFix: false,
+			axis: "y" ,
+			containment: '.'+connClass,
+			scroll: false,
 			items:'tr',
-			opacity:0.8,
 			helper: function(e, tr){
 			    var $originals = tr.children();
 			    var $helper = tr.clone();
@@ -665,11 +665,11 @@ function enableCustomFieldsSorting(el,connClass,connId){
 			    });
 			    return $helper;
 			},
-			revert:true,
 			forceHelperSize:true,
 			placeholder:'<tr><td></td></tr>',
 			forcePlaceholderSize:true,
-			tolerance:'pointer'
+			handle: ".icon-move",
+			cursor: "move",
 		});
 		
 		/*

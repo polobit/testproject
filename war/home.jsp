@@ -53,6 +53,10 @@ String width = currentUserPrefs.width;
 boolean is_fluid = !width.isEmpty();
 
 BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(null, null);
+boolean is_free_plan = false;
+
+if(restriction != null && restriction.planDetails != null)
+    is_free_plan = restriction.planDetails.isFreePlan();
 %>
 
 
@@ -70,6 +74,7 @@ href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" type="text/css"
 href="/css/agilecrm.css" />
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 <style>
 .clickdesk_bubble {
 	display: none !important;
@@ -168,6 +173,8 @@ var CSS_PATH = "/";
 var IS_CONSOLE_ENABLED = <%=debug%>;
 var LOCAL_SERVER = <%=debug%>;
 
+var _IS_FREE_PLAN = <%=is_free_plan%>;
+
 var IS_FLUID = <%=is_fluid%>;
 
 var CLICKDESK_CODE_LOADED = true;
@@ -210,6 +217,9 @@ head.js(LIB_PATH + 'lib/country-from-code.js');
 
 <!-- Inital.js Text avatars -->
 head.js(LIB_PATH + 'lib/text-avatar/initial.min.js');
+
+<!-- mustache.js -->
+head.js('//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js');
 
 // Fetch/Create contact from our domain
 var Agile_Contact = {};

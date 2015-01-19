@@ -26,99 +26,100 @@ import com.googlecode.objectify.annotation.NotSaved;
 @Cached
 public class Log
 {
-    /**
-     * Uniquely generated Id for each log created.
-     */
-    @Id
-    public Long id;
 
-    /**
-     * Id of a campaign.
-     */
-    public String campaign_id;
+	/**
+	 * Uniquely generated Id for each log created.
+	 */
+	@Id
+	public Long id;
 
-    /**
-     * Campaign Name.
-     */
-    public String campaign_name;
+	/**
+	 * Id of a campaign.
+	 */
+	public String campaign_id;
 
-    /**
-     * Contact id that subscribes to campaign.
-     */
-    public String subscriber_id;
+	/**
+	 * Campaign Name.
+	 */
+	public String campaign_name;
 
-    /**
-     * Log message
-     */
-    public String message;
+	/**
+	 * Contact id that subscribes to campaign.
+	 */
+	public String subscriber_id;
 
-    /**
-     * Domain
-     */
-    public String domain;
+	/**
+	 * Log message
+	 */
+	public String message;
 
-    /**
-     * Log Type
-     */
-    public String log_type;
+	/**
+	 * Domain
+	 */
+	public String domain;
 
-    /**
-     * Log epoch time(log_time converted) is sent along with other fields. Epoch
-     * time is needed for timeline and tables.
-     **/
-    public String time;
+	/**
+	 * Log Type
+	 */
+	public String log_type;
 
-    /**
-     * Log Date time.
-     */
-    public String log_time;
+	/**
+	 * Log epoch time(log_time converted) is sent along with other fields. Epoch
+	 * time is needed for timeline and tables.
+	 **/
+	public String time;
 
-    /**
-     * Log level
-     */
-    public String level;
+	/**
+	 * Log Date time.
+	 */
+	public String log_time;
 
-    /**
-     * To get log in contact-timeline.
-     */
-    @NotSaved
-    public String entity_type = "log";
+	/**
+	 * Log level
+	 */
+	public String level;
 
-    /**
-     * Log Types. These names are also dependent to show images (img/campaigns)
-     * for contact-detail-campaigns.
-     * 
-     */
-    public enum LogType
-    {
-	EMAIL_QUEUED, EMAIL_SENT, EMAIL_OPENED, EMAIL_CLICKED, EMAIL_HARD_BOUNCED, EMAIL_SPAM, EMAIL_SOFT_BOUNCED, WAIT, CLICKED, OPENED, AB, URL_VISITED, TWEET, ADD_NOTE, TAGS, CHECK_TAGS, CONDITION, JSONIO, SCORE, SET_OWNER, ADD_TASK, ADD_DEAL, ADD_CASE, TRANSFER, GENDER, REPLIED, CHANGED_DEAL_MILESTONE, EMAIL_SLEEP, EMAIL_SENDING_FAILED, EMAIL_SENDING_SKIPPED, UNSUBSCRIBED, SET_PROPERTY, CAMPAIGN_STOPPED, WAIT_TILL, SMS_SENT, SMS_FAILED, UNSUBSCRIBE, ADD_EVENT
-    };
+	/**
+	 * To get log in contact-timeline.
+	 */
+	@NotSaved
+	public String entity_type = "log";
 
-    /**
-     * Default Log.
-     */
-    public Log()
-    {
-
-    }
-
-    /**
-     * Returns name of contact that subscribes to campaign as an xml element.
-     * 
-     * @return Contact name.
-     * @throws Exception
-     */
-    @XmlElement
-    public Contact getContact() throws Exception
-    {
-	if (subscriber_id != null)
+	/**
+	 * Log Types. These names are also dependent to show images (img/campaigns)
+	 * for contact-detail-campaigns.
+	 * 
+	 */
+	public enum LogType
 	{
-	    Contact contact = ContactUtil.getContact(Long.parseLong(subscriber_id));
+		EMAIL_QUEUED, EMAIL_SENT, EMAIL_OPENED, EMAIL_CLICKED, EMAIL_HARD_BOUNCED, EMAIL_SPAM, EMAIL_SOFT_BOUNCED, WAIT, CLICKED, OPENED, AB, URL_VISITED, TWEET, ADD_NOTE, TAGS, CHECK_TAGS, CONDITION, JSONIO, SCORE, SET_OWNER, ADD_TASK, ADD_DEAL, ADD_CASE, TRANSFER, GENDER, REPLIED, CHANGED_DEAL_MILESTONE, EMAIL_SLEEP, EMAIL_SENDING_FAILED, EMAIL_SENDING_SKIPPED, UNSUBSCRIBED, SET_PROPERTY, CAMPAIGN_STOPPED, WAIT_TILL, SMS_SENT, SMS_FAILED, UNSUBSCRIBE, CLOSED_TASK, ADD_EVENT
+	};
 
-	    if (contact != null)
-		return contact;
+	/**
+	 * Default Log.
+	 */
+	public Log()
+	{
+	    
 	}
+	
+	/**
+	 * Returns name of contact that subscribes to campaign as an xml element.
+	 * 
+	 * @return Contact name.
+	 * @throws Exception
+	 */
+	@XmlElement
+	public Contact getContact() throws Exception
+	{
+	    if (subscriber_id != null)
+	    {
+		Contact contact = ContactUtil.getContact(Long.parseLong(subscriber_id));
 
-	return null;
-    }
+		if (contact != null)
+		    return contact;
+	    }
+
+	    return null;
+	}
 }

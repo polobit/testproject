@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.search.QueryInterface;
@@ -122,7 +123,7 @@ public class QueryDocument<T> implements QueryInterface
 	System.out.println(rules);
 
 	// Construct query string based on SearchRule object
-	String query = QueryDocumentUtil.constructQuery(rules);
+	String query = QueryDocumentUtil.constructQuery(rules, "AND");
 
 	// If query is empty (It may happen if client side validation failed, or
 	// any de-serialization issue)
@@ -142,8 +143,52 @@ public class QueryDocument<T> implements QueryInterface
     {
 
 	// Construct query based on rules
-	String query = QueryDocumentUtil.constructQuery(rules);
+	String query = QueryDocumentUtil.constructQuery(rules, "AND");
 
+	System.out.println("query build is : " + query);
+
+	if (StringUtils.isEmpty(query))
+	    return new ArrayList<T>();
+
+	// return query results
+	return processQuery(query, count, cursor, orderBy);
+    }
+    
+    /**
+     * Queries document based on {@link SearchRule}, Executes the query and
+     * returns collection of entities. This search is without cursor, it is used
+     * to generate reports as all available entities should be sent
+     * 
+     * @param rules
+     *            {@link List} of {@link SearchRule}
+     * 
+     * @return {@link Collection} query results of type {@link T}
+     */
+    @Override
+    @SuppressWarnings("rawtypes")
+    public Collection<T> advancedSearch(ContactFilter filter)
+    {
+	// Construct query string based on SearchRule object
+	String query = QueryDocumentUtil.constructFilterQuery(filter);
+	System.out.println("query build is : " + query);
+
+	// If query is empty (It may happen if client side validation failed, or
+	// any de-serialization issue)
+	if (StringUtils.isEmpty(query))
+	    return new ArrayList<T>();
+
+	// Return query results
+	return processQuery(query);
+    }
+
+    /**
+     * Advanced search used with cursor, used to show filter results.
+     */
+    @Override
+    @SuppressWarnings("rawtypes")
+    public Collection<T> advancedSearch(ContactFilter filter, Integer count, String cursor, String orderBy)
+    {
+    String query = QueryDocumentUtil.constructFilterQuery(filter);
 	System.out.println("query build is : " + query);
 
 	if (StringUtils.isEmpty(query))
@@ -164,7 +209,7 @@ public class QueryDocument<T> implements QueryInterface
 	    return 0;
 
 	// Construct query based on rules
-	String queryString = QueryDocumentUtil.constructQuery(rules);
+	String queryString = QueryDocumentUtil.constructQuery(rules, "AND");
 	System.out.println("query build is : " + queryString);
 
 	if (StringUtils.isEmpty(queryString))
@@ -479,7 +524,7 @@ public class QueryDocument<T> implements QueryInterface
      */
     public List<Long> getDocumentIds(List<SearchRule> rules, Integer count, String cursor)
     {
-	String query = QueryDocumentUtil.constructQuery(rules);
+	String query = QueryDocumentUtil.constructQuery(rules, "AND");
 
 	if (StringUtils.isEmpty(query))
 	    return new ArrayList();
@@ -702,7 +747,7 @@ public class QueryDocument<T> implements QueryInterface
 
     public Long getCount(List<SearchRule> rules)
     {
-	String query = QueryDocumentUtil.constructQuery(rules);
+	String query = QueryDocumentUtil.constructQuery(rules, "AND");
 
 	return getCount(query);
     }

@@ -25,6 +25,8 @@ public enum NavbarConstants
     WEBRULE("Web Rules", "#web-rules", "icon-globe", "web-rules-menu"),
 
     DOCUMENT("Documents", "#documents", "icon-file", "documentsmenu"),
+    
+   // ACTIVITY("Activities", "#activities", "icon-cogs", "activitiesmenu"),
 
     REPORT("Reports", "#reports", "icon-bar-chart", "reportsmenu");
 

@@ -68,7 +68,39 @@ $(function(){
 					});
 				});
 	});
-	
+	$("#campaign_id").die().live('click', function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		$.ajax({
+			url: '/core/api/workflows?page_size=1', 
+			type : 'GET',
+			dataType:"json",
+			accept: {
+				  json: 'application/json',
+				  xml: 'application/xml'
+				},
+			success : function(data)
+			{
+				if(data[0])
+				{
+					window.document.location = "#email-reports/"+data[0].id;
+					$(window).scrollTop(0);
+				}
+				else
+					window.document.location = "#workflows";
+				
+				return;
+	           
+			},
+			error : function(response)
+			{
+				alert("error occured Please try again");
+				window.document.location = "#reports";
+			} });
+		
+		
+		
+	});
 	$("#report-instant-results").die().live('click', function(e){
 		e.stopPropagation();
 		var id = $(this).attr('data');
@@ -80,7 +112,7 @@ $(function(){
 })
 
 
-function reportsContactTableView(base_model) 
+function reportsContactTableView(base_model,customDatefields,view) 
 {
 /* Old Code :
  * Using this fails on firefox, works on Chrome though
@@ -120,14 +152,13 @@ function reportsContactTableView(base_model)
 			itemView.render().el); // ----------- this line fails on Firefox
 */
 	
-	var modelData = this.options.modelData;	// Reads the modelData (customView object)
+	var modelData = view.options.modelData;	// Reads the modelData (customView object)
 	var fields = modelData['fields_set']; // Reads fields_set from modelData
 	var contact = base_model.toJSON(); // Converts base_model (contact) in to JSON
-	var final_html_content="";
-	var element_tag=this.options.individual_tag_name;
-	var templateKey = this.options.templateKey;
-	$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
-			{
+	var final_html_content = "";
+	var element_tag = view.options.individual_tag_name;
+	var templateKey = view.options.templateKey;
+	
 				// Iterates through, each field name and appends the field according to
 				// order of the fields
 				$.each(fields, function(index, field_name) {
@@ -156,13 +187,12 @@ function reportsContactTableView(base_model)
 				});
 				
 				// Appends model to model-list template in collection template
-				$(("#" + templateKey + '-model-list'), this.el).append(
+				$(("#" + templateKey + '-model-list'), view.el).append(
 						'<'+element_tag+'>'+final_html_content+'</'+element_tag+'>');	
 				
 				// Sets data to tr
-				$(('#' + templateKey + '-model-list'), this.el).find('tr:last').data(
+				$(('#' + templateKey + '-model-list'), view.el).find('tr:last').data(
 						base_model);
-			});
 
 }
 

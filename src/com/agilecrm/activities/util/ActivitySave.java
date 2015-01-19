@@ -18,6 +18,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -258,18 +259,8 @@ public class ActivitySave
 
 	String owner_name = DomainUserUtil.getDomainUser(Long.parseLong(opportunity.owner_id)).name;
 
-	List<Note> notes = opportunity.getNotes();
-
-	if (notes.size() == 1)
-	{
-	    Note note = notes.get(0);
-	    String note_subject = note.subject;
-	    String note_description = note.description;
-	    ActivityUtil.createDealActivity(ActivityType.NOTE_ADD, opportunity, note_subject, note_description,
-		    note.id.toString(), jsn);
-	}
-
-	ActivityUtil.createDealActivity(ActivityType.DEAL_ADD, opportunity, owner_name, "", "Deal_owner_name", jsn);
+	ActivityUtil.createDealActivity(ActivityType.DEAL_ADD, opportunity, owner_name,
+	        opportunity.expected_value.toString(), String.valueOf(opportunity.probability), jsn);
 
     }
 
@@ -291,7 +282,8 @@ public class ActivitySave
 
 	String owner_name = DomainUserUtil.getDomainUser(Long.parseLong(task.owner_id)).name;
 
-	ActivityUtil.createTaskActivity(ActivityType.TASK_ADD, task, owner_name, "", "Task_owner_name", jsn);
+	ActivityUtil.createTaskActivity(ActivityType.TASK_ADD, task, owner_name, task.due.toString(),
+	        "Task_owner_name", jsn);
 
     }
 
@@ -311,7 +303,8 @@ public class ActivitySave
 	    jsn = ActivityUtil.getContactIdsJson(contacts);
 	}
 
-	ActivityUtil.createEventActivity(ActivityType.EVENT_ADD, event, event.title, "", "event title", jsn);
+	ActivityUtil.createEventActivity(ActivityType.EVENT_ADD, event, event.title, event.start.toString(),
+	        "event title", jsn);
 
     }
 
@@ -409,6 +402,11 @@ public class ActivitySave
 	    ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_ADD, document, document.url,
 		    String.valueOf(jsn.length()), "Related contact to this Document", jsn);
 	}
+	else
+	{
+	    ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_ADD, document, document.url, null,
+		    "no related contacts", jsn);
+	}
 
     }
 
@@ -500,7 +498,7 @@ public class ActivitySave
      * @throws JSONException
      */
 
-    public static void createNoteAddActivityToContact(Note note) throws JSONException
+    public static void createNoteAddActivity(Note note) throws JSONException
     {
 
 	JSONObject js = new JSONObject(new Gson().toJson(note));
@@ -520,6 +518,35 @@ public class ActivitySave
 	    }
 
 	}
+	else
+	{
+
+	    JSONArray jsndealids = js.getJSONArray("deal_ids");
+
+	    if (jsndealids != null && jsndealids.length() > 0)
+	    {
+
+		for (int k = 0; k <= jsndealids.length() - 1; k++)
+		{
+
+		    Opportunity opportunity = OpportunityUtil.getOpportunity(jsndealids.getLong(k));
+		    ActivityUtil.createDealActivity(ActivityType.NOTE_ADD, opportunity, note.subject, note.description,
+			    note.id.toString(), null);
+		}
+
+	    }
+	}
+
+    }
+
+    /**
+     * 
+     */
+    public static void createNoteAddForDeal(Note note, Opportunity opportunity)
+    {
+
+	ActivityUtil.createDealActivity(ActivityType.NOTE_ADD, opportunity, note.subject, note.description,
+	        note.id.toString(), null);
 
     }
 
@@ -567,14 +594,13 @@ public class ActivitySave
 	List<String> delete_entity_names = new ArrayList<>();
 
 	String deleteed_names = "";
-
-	if (entitytype == EntityType.DEAL)
+	if (delete_entity_ids.length() > 100)
 	{
-	    ActivityUtil.createBulkDeleteActivity(entitytype, no, String.valueOf(delete_entity_ids.length()),
-		    changed_field);
+	    ActivityUtil.createBulkDeleteActivity(entitytype, no, "", changed_field);
 	}
 	else
 	{
+
 	    if (entitytype == EntityType.TASK)
 	    {
 		delete_entity_names = ActivityUtil.getTaskNames(delete_entity_ids);
@@ -590,10 +616,14 @@ public class ActivitySave
 		delete_entity_names = ActivityUtil.getDocumentNames(delete_entity_ids);
 		deleteed_names = delete_entity_names.toString();
 	    }
+	    else if (entitytype == EntityType.DEAL)
+	    {
+		delete_entity_names = ActivityUtil.getDealNames(delete_entity_ids);
+		deleteed_names = delete_entity_names.toString();
+	    }
 	    ActivityUtil.createBulkDeleteActivity(entitytype, no,
 		    deleteed_names.substring(1, deleteed_names.length() - 1), changed_field);
 	}
-
     }
 
     /**

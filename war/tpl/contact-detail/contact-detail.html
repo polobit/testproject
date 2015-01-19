@@ -102,7 +102,7 @@
 									</a>
 									</span>{{else}} {{#if_equals subtype "FACEBOOK"}} <span
 										style="margin-right: 5px"><a target="_blank"
-										href="https://www.facebook.com/{{getFacebookURL value}}/"
+										href="{{buildFacebookProfileURL value}}"
 										style="text-decoration: none"> <i
 											class="{{get_social_icon "
 											FACEBOOK"}}" style="font-size: 1.4em !important"></i>
@@ -111,7 +111,7 @@
 
 								{{#if_equals subtype "GOOGLE-PLUS"}} <span
 										style="margin-right: 5px"><a target="_blank"
-										href="https://plus.google.com/{{value}}/"
+										href="https://plus.google.com/{{getTwitterHandleByURL value}}/"
 										style="text-decoration: none"> <i
 											class="{{get_social_icon "
 											GOOGLE-PLUS"}}" style="font-size: 1.4em !important"></i>
@@ -328,7 +328,7 @@
 				<div class="tab-pane" id="stats"><img src="img/21-0.gif"></img></div>
 				<div class="tab-pane" id="mail" style="min-height: 20em">
 					<!-- <img src="img/21-0.gif"></img> -->
-					<div id="mail-account-types"></div>
+					<div id="mail-account-types"  style="display:none"></div>
 					<div id="mails"></div>
 			    </div>
 				<div class="tab-pane" id="documents"><img src="img/21-0.gif"></img></div>
