@@ -145,7 +145,7 @@
 							</a>
 								<ul class="dropdown-menu" style="width: 25em; right: -11px;">
 								</ul></li>
-								<li id="due_tasks" ><a style="position:relative;"href="#tasks"><i class="icon-list" title="Tasks"></i>
+								<li id="due_tasks" ><a style="position:relative;"href="#tasks"><i class="icon-tasks" title="Tasks"></i>
 											<span class="navbar_due_tasks" ><span title="Due Tasks" id="due_tasks_count" style="position:relative;top:-2px;"></span></span></a></li>
 								
 
