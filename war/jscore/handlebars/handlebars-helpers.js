@@ -3661,7 +3661,8 @@ $(function()
 		else{
 			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/'+filter_name, async : false, dataType : 'json',
 				success: function(data){
-					header_name = ""+data.name;
+					if(data!=null && data!=undefined)
+						header_name = ""+data.name;
 				} });
 		} 	
 		return header_name;
@@ -3717,7 +3718,7 @@ $(function()
 			else{
 				var milestone = $.ajax({ type : 'GET', url : '/core/api/milestone/'+track_id, async : false, dataType : 'json',
 					success: function(data){
-						if(data!=null)
+						if(data!=null && data!=undefined)
 							header_name = "- "+data.name;
 					} });
 			}
