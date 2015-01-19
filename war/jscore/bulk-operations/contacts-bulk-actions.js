@@ -136,6 +136,51 @@ $(function()
 						return;
 					}, "Upgrade", "Close");
 		}
+		
+		// Selected Contact ids
+		var id_array = get_contacts_bulk_ids();
+		
+		// when SELECT_ALL is true i.e., all contacts are selected.
+		if(id_array.length === 0)
+		   count = getAvailableContacts();
+		else
+			count = id_array.length;
+		
+		if(!canSendEmails(count))
+		{
+			var pendingEmails = getPendingEmails();
+			
+			var yes = "Yes";
+			var no = "No"
+				
+			var message = "";
+			var upgrade_link =  'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>';
+			var title = "Not enough emails left"
+			if(pendingEmails <= 0)
+				{
+					title = "Emails limit in campaigns";
+					yes = "";
+					no = "Ok"
+					message = "You have used up all emails in your quota. " + upgrade_link;
+				}
+			else
+				message = "You have only "+ pendingEmails + " emails remaining as per your quota. " + upgrade_link +
+				" Continuing with this operation may not send the email to some contacts. <br/><br/>" +
+				"Do you want to proceed?";
+			
+			showModalConfirmation(title, 
+					message, 
+					show_bulk_campaign_assign_page
+				, function(element){
+						
+					// No callback
+					if(!element)
+					return;
+					},
+					function(element){
+					}, yes, no);
+			return;
+		}
 	else
 		{
 			show_bulk_campaign_assign_page()
