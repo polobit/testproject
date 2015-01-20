@@ -728,7 +728,7 @@ function emailsSentBarGraph(selector,domainUsersList,series,mailsCountList,mails
 	        	formatter: function(){
 	        		return '<table>' + 
 	        		        '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+': </td>' + 
-	        		        '<td style="padding:0"><b>'+(mailsCountList[this.points[0].point.x]+mailsOpenedCountList[this.points[1].point.x])+'</b></td></tr>' +
+	        		        '<td style="padding:0"><b>'+mailsCountList[this.points[0].point.x]+'</b></td></tr>' +
 	        		        '<tr><td style="color:'+this.points[1].series.color+';padding:0">'+this.points[1].series.name+': </td>' + 
 	        		        '<td style="padding:0"><b>'+mailsOpenedCountList[this.points[1].point.x]+'</b></td></tr>' +
 	        		        '</table>';
