@@ -1127,7 +1127,10 @@ public class JSAPI
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
-	    return contact.getContactFieldValue(name);
+	    if (contact.getContactField(name) == null)
+		return JSAPIUtil.generateJSONErrorResponse(Errors.PROPERTY_MISSING);
+	    else
+		return contact.getContactFieldValue(name);
 	}
 	catch (Exception e)
 	{
