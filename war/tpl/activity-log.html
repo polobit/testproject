@@ -41,7 +41,7 @@
 
 
 <script id="activity-list-log-model-template" type="text/html">
-{{#if_equals "TASK" entity_type}}
+
 	
 	<div >
 	<div style="margin-right:15px;" class="pull-left">
@@ -53,7 +53,7 @@
 	</div>
 <div class="activity-tag">
 <div>
-
+{{#if_equals "TASK" entity_type}}
 {{#if_equals "TASK_ADD" activity_type}}
 
 Created Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}} '{{label}}'{{/if}} <br/>
@@ -187,38 +187,9 @@ Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{
 {{/if_equals}}
 {{/if_equals}}
 
-	</div>
-<div>	
-		<small class="edit-hover pull-right activity_time" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
-
-
-
-
-
-
-
-
-
 <!-- starting of deal condition-->
 
 {{#if_equals "DEAL" entity_type}}
-
-	
-
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>	
-<div class="activity-tag">
-<div>
  {{#if_equals "DEAL_ADD" activity_type}}
 Created Deal {{#if entityObject}}<a href="#deal/{{entity_id}}">{{label}}</a> {{else}}'{{label}}'{{/if}}<br/>
 <span class="activities_second_line">
@@ -339,34 +310,10 @@ Lost Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{
 {{/if_equals}}
 {{/if_equals}}
 
-</div>	
-<div>
-		<small class="edit-hover pull-right activity_time"> 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
-	
-
-
-
-
-	<!-- end of deal condition-->	
+<!-- end of deal condition-->	
 
 <!-- starting event condition-->
 {{#if_equals "EVENT" entity_type}}
-	
-
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="activity-tag">
-<div>	
 {{#if_equals "EVENT_ADD" activity_type}}
  Created Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <span class="activities_second_line">
@@ -475,32 +422,10 @@ Rescheduled Event '{{../label}}'<br/>
 {{/if_equals}}
 
 
-</div>
-<div>		
-<small class="edit-hover pull-right activity_time" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" time}}</time>
-		</small>
-</div></div>
-<div class="clearfix"></div>
-
-
-
-
-
 <!-- end event condition-->
 
 <!-- start of contact condition-->
 {{#if_equals "CONTACT" entity_type}}
-
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="activity-tag">
-<div>
   {{#if_equals "NOTE_ADD" activity_type}}
 Added note to Contact <a href="#contact/{{entity_id}}">{{label}}</a><br/>	
 <span class="activities_second_line">
@@ -664,32 +589,9 @@ Called {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{
 {{/if_equals}}
 
 {{/if_equals}}
-
-	</div>
-<div>	
-		<small class="edit-hover pull-right activity_time" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
-
-
-
 <!-- end of contact-->
 <!-- document added startig-->
 {{#if_equals "DOCUMENT" entity_type}}
-
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="activity-tag">
-<div>
 {{#if_equals "DOCUMENT_ADD" activity_type}}
 {{#if_equals "1" custom2}}
    Added Contact to Document {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
@@ -743,29 +645,8 @@ Deleted  {{custom1}} Documents<br/>
 {{/if_equals}}
 {{/if_equals}}
 
-</div>
-<div>
-		<small class="edit-hover pull-right activity_time" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
-
-
-
-
 {{#if_equals "CALL" activity_type}}
 {{#unless entity_type}}
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="activity-tag">
-<div>
 {{#if_equals "incoming" custom2}}
 Call from {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
 <span class="activities_second_line">
@@ -778,16 +659,54 @@ Called {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{
 <i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
 </span>
 {{/if_equals}}
+{{/unless}}
+{{/if_equals}}
+
+
 	</div>
 <div>	
 		<small class="edit-hover pull-right activity_time" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" time}}</time>
 		</small>
 </div>
 </div>
 <div class="clearfix"></div>
-{{/unless}}
-{{/if_equals}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+	
+
+
+
+
+	
+	
+
+
+
+
+	
+
 
 </script>
 <script id="activity-list-header-template" type="text/html">
