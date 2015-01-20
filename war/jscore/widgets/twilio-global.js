@@ -709,6 +709,9 @@ function setUpGlobalTwilio()
 			// Get all call logs for widget only on cotact detail page
 			if(window.location.hash.indexOf("contact/") != -1)
 			  {
+				if(typeof getTwilioIOLogs == 'undefined')
+					return;
+				
 				getTwilioIOLogs(phoneNumber);
 				
 				// Change selected number if its different than calling number.
@@ -1255,6 +1258,10 @@ function addContactImg(callType)
 	} */
 }
 
+/**
+ * Take contact property and width for img, return gravatar or contact img.
+ * Used for twilio IO as well as SIP call noty.
+ */
 function getGravatar(items, width)
 {
 	if (items == undefined)
