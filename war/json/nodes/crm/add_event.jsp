@@ -2,8 +2,8 @@
     "name": "Add Event",
     "thumbnail": "json/nodes/images/crm/add_event.png",
     "icon": "json/nodes/icons/crm/add_event.png",
-    "info": "Add an Event to Contact in Agile.",
-    "help": "Add an Event to Contact in Agile.",
+    "info": "Add a calendar event related to the contact.",
+    "help": "Add a calendar event related to the contact.",
     "author": "Naresh",
     "company": "Agilecrm",
     "language": "en",
@@ -42,7 +42,7 @@
             "category": "Info",
 			"name": "start_date",
             "id":"start-date",
-			"title": "Choose a date or add a merge field like {{YourCustomDateField}} or add number of days",
+			"title": "You can choose a specific calendar date, or give the number of days from campaign run time like &#39;+2&#39;, or use a merge field like {{YourCustomDateField}}",
 			"fieldType": "input",
             "type": "datePicker",
             "onfocus" : "getDate(this)"
@@ -174,7 +174,7 @@
             "type": "select"
         },
         {
-            "label": "Add an event to a contact in CRM. Events related to a contact can be viewed in the Events tab in Contact details page.",
+            "label": "Add a calendar event related to the contact. Use this to automatically schedule meetings or calls with customers.",
             "category": "Help",
             "fieldType": "label",
             "type": "label"
