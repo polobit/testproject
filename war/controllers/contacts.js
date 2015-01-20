@@ -473,7 +473,7 @@ var ContactsRouter = Backbone.Router.extend({
 			// Set url to core/api/contacts (If filters are loaded
 			// contacts url is changed so set it back)
 
-			this.contactsListView.collection.url = "core/api/contacts";
+			//this.contactsListView.collection.url = "core/api/contacts";
 			contact = this.contactsListView.collection.get(id);
 		}
 		
