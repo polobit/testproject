@@ -39,26 +39,34 @@ public class EmailTrackingTriggerUtil
 
     public static void executeTrigger(String subscriberId, String campaignId, String linkClicked, Type type)
     {
-	List<Trigger> triggers = TriggerUtil.getTriggersByCondition(type);
-
-	Long contactId = null;
-	Long workflowId = null;
- 
-	if (!StringUtils.isBlank(subscriberId))
-	    contactId = Long.parseLong(subscriberId);
-
-	if (!StringUtils.isBlank(campaignId))
-	    workflowId = Long.parseLong(campaignId);
-
-	for (Trigger trigger : triggers)
+	try
 	{
-	    if (type.equals(Type.EMAIL_OPENED))
-		executeEmailOpenTrigger(trigger, contactId, workflowId);
-	    else if(type.equals(Type.EMAIL_LINK_CLICKED))
-		executeLinkClickedTrigger(trigger, contactId, workflowId, linkClicked);
-	    else
-		executeUnsubscribedTrigger(trigger, contactId, workflowId);
+	    List<Trigger> triggers = TriggerUtil.getTriggersByCondition(type);
+
+	    Long contactId = null;
+	    Long workflowId = null;
+ 
+	    if (!StringUtils.isBlank(subscriberId))
+		contactId = Long.parseLong(subscriberId);
+
+	    if (!StringUtils.isBlank(campaignId))
+		workflowId = Long.parseLong(campaignId);
+
+	    for (Trigger trigger : triggers)
+	    {
+		if (type.equals(Type.EMAIL_OPENED))
+		    executeEmailOpenTrigger(trigger, contactId, workflowId);
+		else if(type.equals(Type.EMAIL_LINK_CLICKED))
+		    executeLinkClickedTrigger(trigger, contactId, workflowId, linkClicked);
+		else
+		    executeUnsubscribedTrigger(trigger, contactId, workflowId);
 		
+	    }
+	}
+	catch(Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occurred while executing email tracking trigger..."+ e.getMessage());
 	}
     }
 
@@ -83,7 +91,7 @@ public class EmailTrackingTriggerUtil
 	}
 	
 	// Execute campaign if Any or matches respective campaign
-        if(trigger.email_tracking_campaign_id == 0 || trigger.email_tracking_campaign_id == campaignId)
+        if(trigger.email_tracking_campaign_id == 0 || trigger.email_tracking_campaign_id.equals(campaignId))
             WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
 	
     }
