@@ -565,7 +565,7 @@ function fill_twilioio_numbers()
 
 	$("#save_prefs").text("Loading...");
 	$("#save_prefs").attr("disabled", true);
-
+	
 	// Retrieves widget which is fetched using script API
 	// Get TwilioIO widget
 	$.getJSON("/core/api/widgets/TwilioIO", function(twilioio_widget)
@@ -579,6 +579,10 @@ function fill_twilioio_numbers()
 		if (twilioio_widget.prefs != undefined)
 		{
 			twilioio_widget.prefs = eval("(" + twilioio_widget.prefs + ")");
+			
+			// Show advanced settings if data available
+			if((twilioio_widget.prefs.twilio_record == "true") || (twilioio_widget.prefs.twilio_twimlet_url != "None"))
+				$(".twilioio-advance-settings").click();
 
 			getValidateAndVerfiedCallerId(twilioio_widget.prefs.twilio_acc_sid, twilioio_widget.prefs.twilio_auth_token, function(data)
 			{
@@ -1184,20 +1188,41 @@ function searchForContactImg(from) {
 	console.log("**** responseJson ****");
 	console.log(responseJson);
 	
-	if(responseJson != null) 
+	/*if(responseJson != null) 
 	{
 		contactImg = getPropertyValue(responseJson.properties, "image");
 		contactImg = contactImg != undefined ? contactImg.trim() : "Default";	
 	}
 	
-	 console.log("contactImg: "+contactImg);
-	return contactImg;
+	 console.log("contactImg: "+contactImg);*/
+	return responseJson;
 }
 
 // Add contact img in html for call noty text with contact url
 function addContactImg(callType)
 {
-  // Default img 
+	var notyContactImg = "";
+	if(callType == "Outgoing")
+	  {
+		var currentContact = agile_crm_get_contact();
+		var contactImg = getGravatar(currentContact.properties, 40);
+		notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+contactImg+'" style="display:inline;"></a>';
+		return notyContactImg;
+	  }
+	else
+	{
+		var callingContact = searchForContactImg(To_Number);
+		
+		if(callingContact != null)
+		  {
+			var contactImg = getGravatar(callingContact.properties, 40);
+			notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+contactImg+'" style="display:inline;"></a>';			
+		  }
+		return notyContactImg;
+	}
+	
+	
+  /*// Default img 
   var notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+DEFAULT_GRAVATAR_url+'" style="display:inline;"></a>';
 	
   // For outgoing call
@@ -1227,5 +1252,33 @@ function addContactImg(callType)
 	 
 	 console.log("notyContactImg: "+notyContactImg);
 	 return notyContactImg;
-	} 
+	} */
+}
+
+function getGravatar(items, width)
+{
+	if (items == undefined)
+		return;
+
+	// Checks if properties already has an image, to return it
+	var agent_image = getPropertyValue(items, "image");
+	if (agent_image)
+		return agent_image;
+
+	// Default image
+	var img = DEFAULT_GRAVATAR_url;
+	var backup_image = "&d=404\" ";
+	// backup_image="";
+	var initials = text_gravatar_initials(items);
+
+	if (initials.length == 0)
+		backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
+	var data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\" _data-name=\"" + initials;
+	var email = getPropertyValue(items, "email");
+	if (email)
+	{
+		return ('https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + backup_image + data_name);
+	}
+
+	return ('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);	
 }
