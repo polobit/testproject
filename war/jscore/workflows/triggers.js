@@ -40,12 +40,16 @@ $(function()
 		}
 		
 		if($(this).val() != 'EMAIL_OPENED' || $(this).val() != 'EMAIL_LINK_CLICKED'){
+			
 			$('form#addTriggerForm').find('select#email-tracking-type').closest('div.control-group').css('display', 'none');
 			
-			$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', 'none');
-			
 			$('form#addTriggerForm').find('#custom-link-clicked').closest('div.control-group').css('display', 'none');
+			
+			$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', 'none');
 		}
+		
+		if($(this).val() != 'UNSUBSCRIBED')
+			$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', 'none');
 		
 		if($(this).val() != 'EVENT_IS_ADDED')
 		{
@@ -111,6 +115,9 @@ $(function()
 			
 			populate_owners_in_trigger($('form#addTriggerForm'), 'event-owner-id');
 		}
+		
+		if($(this).val() == 'UNSUBSCRIBED')
+			show_email_tracking_campaigns();
 			
 	});
 	
@@ -134,31 +141,9 @@ $(function()
 			return;
 		}
 		
-		// Show campaign select element
-		$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', '');
-
-		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+		// show email tracking campaigns
+		show_email_tracking_campaigns();
 		
-		/**
-		 * Fills campaign select with existing Campaigns.
-		 * 
-		 * @param campaign-select -
-		 *            Id of select element of Campaign
-		 * @param /core/api/workflows -
-		 *            Url to get workflows
-		 * @param 'workflow' -
-		 *            parse key
-		 * @param no-callback -
-		 *            No callback
-		 * @param optionsTemplate-
-		 *            to fill options with workflows
-		 */
-		fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', function()
-				{
-					
-					$('#email-tracking-campaign-id option:first').after('<option value="0">All</option>');
-					
-				}, optionsTemplate, false);
 	});
 });
 
@@ -338,4 +323,33 @@ function append_triggers_to_workflow(el)
 			$(td).html(getTemplate('workflow-triggers', { "triggers" : trigger_collection.toJSON() }));
 
 	});
+}
+
+function show_email_tracking_campaigns()
+{
+	// Show campaign select element
+	$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', '');
+
+	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+	
+	/**
+	 * Fills campaign select with existing Campaigns.
+	 * 
+	 * @param campaign-select -
+	 *            Id of select element of Campaign
+	 * @param /core/api/workflows -
+	 *            Url to get workflows
+	 * @param 'workflow' -
+	 *            parse key
+	 * @param no-callback -
+	 *            No callback
+	 * @param optionsTemplate-
+	 *            to fill options with workflows
+	 */
+	fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', function()
+			{
+				
+				$('#email-tracking-campaign-id option:first').after('<option value="0">All</option>');
+				
+			}, optionsTemplate, false);
 }
