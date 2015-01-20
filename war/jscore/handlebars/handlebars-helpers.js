@@ -1121,7 +1121,7 @@ $(function()
 
 																																if (properties[i].subtype)
 																																				el = el.concat('<span class="label">' + properties[i].subtype + '</span>');
-																																el = el.concat('</span></div></div>');
+																																el = el.concat('</span>&nbsp;<span id="map_view_action"></span></div></div>');
 																																return new Handlebars.SafeString(el);
 																												}
 																												else if (properties[i].name == "phone" || properties[i].name == "email")
