@@ -1904,13 +1904,15 @@ div.clear {
 }
 
 .navbar_due_tasks{
+	display:none;
 	background: red;
 padding: 0px 2px;
 font-size: 12px;
 border-radius: 2px;
 position: absolute;
-top: 2px;
-left: 22px;
+top: 3px;
+left: 19px;
+height:15px;
 box-shadow: 0 0 2px 0px #000;
 }
 

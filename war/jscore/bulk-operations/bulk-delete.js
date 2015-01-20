@@ -247,6 +247,10 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			
 			if(url=='core/api/tasks/bulk'){
 				var due_task_count=getDueTasksCount();
+				if(due_task_count==0)
+					$(".navbar_due_tasks").css("display", "none");
+				else
+					$(".navbar_due_tasks").css("display", "block");
 				$('#due_tasks_count').html(due_task_count);
 			}
 			
