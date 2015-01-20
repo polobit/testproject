@@ -7,7 +7,10 @@ var _agile_synch_form_v2 = function()
 	var agile_button = document.getElementsByClassName("agile-button")[0];
 	agile_button.setAttribute("disabled", "disabled");
 	var agile_error_msg = document.getElementById("agile-error-msg");
-
+	var spin = document.createElement("img");
+	spin.src = "https://s3.amazonaws.com/PopupTemplates/form/spin.gif";
+	agile_error_msg.appendChild(spin);
+	
 	// Get form data
 	var agile_form = document.getElementById('agile-form');
 	var agile_form_data = document.getElementById('agile-form-data').getAttribute('name').split(" ");
@@ -99,7 +102,7 @@ var _agile_synch_form_v2 = function()
 				}, error : function(data)
 				{
 					agile_formCallback([
-							"There was an error in sending data", agile_error_msg
+							"Error in sending data", agile_error_msg
 					], agile_button, agile_redirect_url, agile_form);
 				} });
 			}
@@ -136,7 +139,7 @@ var _agile_synch_form_v2 = function()
 						}, error : function(data)
 						{
 							agile_formCallback([
-									"There was an error in sending data", agile_error_msg
+									"Error in sending data", agile_error_msg
 							], agile_button, agile_redirect_url, agile_form);
 						} });
 					}
@@ -151,13 +154,13 @@ var _agile_synch_form_v2 = function()
 			}, error : function(data)
 			{
 				agile_formCallback([
-						"There was an error in sending data", agile_error_msg
+						"Error in sending data", agile_error_msg
 				], agile_button, agile_redirect_url, agile_form);
 			} });
 		}
 		else
 			agile_formCallback([
-					"There was an error in sending data", agile_error_msg
+					"Error in sending data", agile_error_msg
 			], agile_button, agile_redirect_url, agile_form);
 	} });
 };
@@ -242,13 +245,13 @@ var _agile_synch_form = function()
 			}, error : function(data)
 			{
 				agile_formCallback([
-						"There was an error in sending data", agile_error_msg
+						"Error in sending data", agile_error_msg
 				], agile_button, agile_redirect_url);
 			} });
 		}
 		else
 			agile_formCallback([
-					"There was an error in sending data", agile_error_msg
+					"Error in sending data", agile_error_msg
 			], agile_button, agile_redirect_url);
 	} });
 };

@@ -78,12 +78,14 @@ function agile_formCallback(error, button, url, agile_form, contact_id)
 			agile_json(trigger_url);
 		}
 	}
+	else
+		error[1].innerHTML = error[0];
 
-	error[1].innerHTML = error[0];
-	button.removeAttribute("disabled");
 	setTimeout(function()
 	{
 		error[1].innerHTML = "";
+		button.removeAttribute("disabled");
+
 		if (agile_form)
 		{
 			if (!agile_form.getAttribute("action") || agile_form.getAttribute("action") == "#")
