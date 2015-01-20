@@ -686,13 +686,14 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    				
 	    				$.each(milestonesList,function(index,milestone){
 	    					var each_data=[];
-	    					
-	    					if(milestone!='Won')
-	    						each_data.push(milestone,milestoneValuesList[index]);
-	    					else
-	    						temp=index;
-	    					if(each_data!="")
-	    						funnel_data.push(each_data);
+	    					if(milestone!='Lost'){
+	    						if(milestone!='Won')
+		    						each_data.push(milestone,milestoneValuesList[index]);
+		    					else
+		    						temp=index;
+		    					if(each_data!="")
+		    						funnel_data.push(each_data);
+	    					}
 	    				});
 	    				
 	    				var temp_data=[];
@@ -751,7 +752,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    				var colors;
 	    				
 	    				var tempData={};
-	    				tempData.name="Emails Sent";
+	    				tempData.name="Emails Not Opened";
 	    				tempData.data=mailsCountList;
 	    				series[0]=tempData;
 	    				tempData={};
@@ -894,7 +895,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    					tempData.data=voiceMailCallsCountList;
 	    					series[4]=tempData;
 	    					text="No. of Calls";
-	    					colors=['green','orange','blue','red','voilet'];
+	    					colors=['green','orange','blue','red','violet'];
 	    				}else{
 	    					var tempData={};
 	    					tempData.name="Calls Duration";

@@ -594,7 +594,7 @@ public class PortletUtil {
 					failedCallsCount++;
 				else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
 					voiceMailCallsCount++;
-				if(activity.custom4!=null)
+				if(activity.custom4!=null && !activity.custom4.equalsIgnoreCase("null"))
 					callsDuration+=Long.valueOf(activity.custom4);
 				totalCallsCount++;
 			}

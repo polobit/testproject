@@ -264,13 +264,14 @@ function set_p_portlets(base_model){
 				
 				$.each(milestonesList,function(index,milestone){
 					var each_data=[];
-					
-					if(milestone!='Won')
-						each_data.push(milestone,milestoneValuesList[index]);
-					else
-						temp=index;
-					if(each_data!="")
-						funnel_data.push(each_data);
+					if(milestone!='Lost'){
+						if(milestone!='Won')
+							each_data.push(milestone,milestoneValuesList[index]);
+						else
+							temp=index;
+						if(each_data!="")
+							funnel_data.push(each_data);
+					}
 				});
 				
 				var temp_data=[];
@@ -336,7 +337,7 @@ function set_p_portlets(base_model){
 				var colors;
 				
 				var tempData={};
-				tempData.name="Emails Sent";
+				tempData.name="Emails Not Opened";
 				tempData.data=mailsCountList;
 				series[0]=tempData;
 				tempData={};
@@ -503,7 +504,7 @@ function set_p_portlets(base_model){
 					tempData.data=voiceMailCallsCountList;
 					series[4]=tempData;
 					text="No. of Calls";
-					colors=['green','orange','blue','red','voilet'];
+					colors=['green','orange','blue','red','violet'];
 				}else{
 					var tempData={};
 					tempData.name="Calls Duration";
@@ -588,7 +589,7 @@ function dealsByMilestoneBarGraph(selector,milestonesList,milestoneValuesList,mi
 	        		return '<table>' + 
 	        		        '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+'s: </td>' + 
 	        		        '<td style="padding:0"><b>'+milestoneNumbersList[this.points[0].point.x]+'</b></td></tr>' + 
-	        		        '<tr><td style="color:'+this.points[0].series.color+';padding:0">Deal Value: </td>' + 
+	        		        '<tr><td style="color:'+this.points[0].series.color+';padding:0">Total Value: </td>' + 
 	        		        '<td style="padding:0"><b>'+getPortletsCurrencySymbol()+''+milestoneValuesList[this.points[0].point.x].toLocaleString()+'</b></td></tr>' +
 	        		        '</table>';
 	        	},
@@ -662,7 +663,7 @@ function closuresPerPersonBarGraph(selector,catges,data,text,name){
 	});
 }
 function dealsFunnelGraph(selector,funnel_data){
-	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', LIB_PATH + 'lib/flot/funnel.js','http://code.highcharts.com/modules/no-data-to-display.js', function(){
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', LIB_PATH + 'lib/flot/funnel.js',LIB_PATH + 'lib/flot/no-data-to-display.js', function(){
 		$('#'+selector).highcharts({
 	        chart: {
 	            type: 'funnel',
@@ -891,7 +892,9 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	            title: {
 	                text: text
 	            },
-	            allowDecimals: false
+	            allowDecimals: false,
+	            startOnTick: false,
+	            endOnTick: false
 	        },
 	        tooltip: {
 	        	formatter: function(){
