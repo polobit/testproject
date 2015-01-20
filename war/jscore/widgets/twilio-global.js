@@ -1191,13 +1191,6 @@ function searchForContactImg(from) {
 	console.log("**** responseJson ****");
 	console.log(responseJson);
 	
-	/*if(responseJson != null) 
-	{
-		contactImg = getPropertyValue(responseJson.properties, "image");
-		contactImg = contactImg != undefined ? contactImg.trim() : "Default";	
-	}
-	
-	 console.log("contactImg: "+contactImg);*/
 	return responseJson;
 }
 
@@ -1222,40 +1215,7 @@ function addContactImg(callType)
 			notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+contactImg+'" style="display:inline;"></a>';			
 		  }
 		return notyContactImg;
-	}
-	
-	
-  /*// Default img 
-  var notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+DEFAULT_GRAVATAR_url+'" style="display:inline;"></a>';
-	
-  // For outgoing call
-  if(callType == "Outgoing")
-    {	 	
-	 // If contact have img 
-	 if(TwilioIOContactImg.length)
-		  notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+TwilioIOContactImg[0].value+'" style="display:inline;"></a>';
-	 
-	 console.log("notyContactImg: "+notyContactImg);
-	 return notyContactImg;
-    }
- else // For incoming call 
-	{	 
-	 // Get contact img
-	 var contactImg = searchForContactImg(To_Number);
-	 
-	 // Suppose contact do not have img
-	 if(contactImg == "Default")
-		 return notyContactImg;
-	 // If img is not empty, make html for call noty
-	 else if(contactImg && contactImg != "")
-	   notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+contactImg+'" style="display:inline;"></a>';
-	 else
-		// Contact not saved
-		 notyContactImg = "";
-	 
-	 console.log("notyContactImg: "+notyContactImg);
-	 return notyContactImg;
-	} */
+	} 
 }
 
 /**
