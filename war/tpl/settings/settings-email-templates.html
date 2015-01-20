@@ -19,7 +19,7 @@
                 <col width="35%">
                 <col width="35%">
 				<col width="30%">
-			   </colgroup>
+			</colgroup>
             <thead>
                 <tr>
                     <th class="hide">Id</th>                    
@@ -64,7 +64,9 @@
     </td>   
     <td style="color: #b2b0b1;">
        {{#if created_time}}
-          Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{emailTemplateOwner.name}}
+          <div style='height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:22em;overflow:hidden;'>
+    	       Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{emailTemplateOwner.name}}
+          </div>
        {{/if}}
     </td>
 </script>
