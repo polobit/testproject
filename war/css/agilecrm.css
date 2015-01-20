@@ -1911,7 +1911,7 @@ font-size: 12px;
 border-radius: 2px;
 position: absolute;
 top: 3px;
-left: 19px;
+right:3px;
 height:15px;
 box-shadow: 0 0 2px 0px #000;
 }
