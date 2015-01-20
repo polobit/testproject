@@ -222,102 +222,105 @@ $(function(){
 		$('#opportunityUpdateModal #opportunity_validate').trigger('click');
 	});
 	
-	
-	
-	/**
-	 * Milestone view deal delete
-	 */
-	$('.deal-archive').live('click', function(e) {
+	$('#deal-quick-archive').live('click', function(e) {
 		e.preventDefault();
-        if(!confirm("Archive Deal?"))
+		
+		// Returns, if the save button has disabled attribute
+		if ($(this).attr('disabled'))
 			return;
 
-        var id = $(this).closest('.data').attr('id');
-        var milestone = ($(this).closest('ul').attr("milestone")).trim();
-        var currentDeal;
-        
-        // Get the current deal model from the collection.
-        var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
-    	if(!dealPipelineModel)
-    		return;
-    	currentDeal = dealPipelineModel[0].get('dealCollection').get(id).toJSON();
-    	currentDeal.archived = true;
-        var that = $(this);
-        
-        var notes = [];
-    	$.each(currentDeal.notes, function(index, note)
-    	{
-    		notes.push(note.id);
-    	});
-    	currentDeal.notes = notes;
-        if(currentDeal.note_description)
-    		delete currentDeal.note_description;
+		// Disables save button to prevent multiple click event issues
+		disable_save_button($(this));
+		
+		 var id = $("#archived-deal-id",$("#deal_archive_confirm_modal")).val();
+	     var milestone = $("#archived-deal-milestone",$("#deal_archive_confirm_modal")).val();
+	     var currentDeal;
+	        
+	     // Get the current deal model from the collection.
+	     var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
+	     if(!dealPipelineModel)
+	    	return;
+	    currentDeal = dealPipelineModel[0].get('dealCollection').get(id).toJSON();
+	    currentDeal.archived = true;
+	    var that = $(this);
+	        
+	    var notes = [];
+	    $.each(currentDeal.notes, function(index, note)
+	    	{
+	    		notes.push(note.id);
+	    	});
+	    currentDeal.notes = notes;
+	    if(currentDeal.note_description)
+	    	delete currentDeal.note_description;
 
-        if(!currentDeal.close_date || currentDeal.close_date==0)
-        	currentDeal.close_date = null;
-        
-        currentDeal.owner_id = currentDeal.owner.id;
-        
-        var arch_deal = new Backbone.Model();
-		arch_deal.url = '/core/api/opportunity';
-		arch_deal.save(currentDeal, {
-			// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
-			success : function(model, response) {
-				// Remove the deal from the collection and remove the UI element.
-				if(removeArchive(response)){
-					dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
-					$('#'+id).parent().remove();
+	    if(!currentDeal.close_date || currentDeal.close_date==0)
+	        currentDeal.close_date = null;
+	        
+	    currentDeal.owner_id = currentDeal.owner.id;
+	        
+	        var arch_deal = new Backbone.Model();
+			arch_deal.url = '/core/api/opportunity';
+			arch_deal.save(currentDeal, {
+				// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
+				success : function(model, response) {
+					// Remove the deal from the collection and remove the UI element.
+					if(removeArchive(response)){
+						dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
+						$('#'+id).parent().remove();
+					}
+					else{
+						$('#'+id+' .deal-options').find('.deal-archive').remove();
+						$('#'+id+' .deal-options').find('.deal-edit').remove();
+						$('#'+id+' .deal-options').prepend('<a title="Restore" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>');
+					}
+					console.log('archived deal----',model);
+					// Shows Milestones Pie
+					pieMilestones();
+					enable_save_button(that);
+					$("#deal_archive_confirm_modal").modal('hide');
+					// Shows deals chart
+					dealsLineChart();
+					update_deal_collection(model.toJSON(), id, milestone, milestone);
+					
 				}
-				else{
-					that.remove();
-					$('#'+id+' .deal-options').find('.deal-edit').remove();
-					$('#'+id+' .deal-options').prepend('<a title="Restore" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>');
-				}
-				console.log('archived deal----',model);
-				// Shows Milestones Pie
-				pieMilestones();
-	
-				// Shows deals chart
-				dealsLineChart();
-				update_deal_collection(model.toJSON(), id, milestone, milestone);
-				
-			}
-		});
+			});
 	});
 	
-	/**
-	 * Milestone view deal delete
-	 */
-	$('.deal-restore').live('click', function(e) {
+	$('#deal-quick-restore').live('click', function(e) {
 		e.preventDefault();
-        if(!confirm("Restore Deal?"))
+		
+		 var id = $("#restored-deal-id",$("#deal_restore_confirm_modal")).val();
+	     var milestone = $("#restored-deal-milestone",$("#deal_restore_confirm_modal")).val();
+	     var currentDeal;
+	     
+	     // Returns, if the save button has disabled attribute
+		if ($(this).attr('disabled'))
 			return;
 
-        var id = $(this).closest('.data').attr('id');
-        var milestone = ($(this).closest('ul').attr("milestone")).trim();
-        var currentDeal;
-        
-        // Get the current deal model from the collection.
-        var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
-    	if(!dealPipelineModel)
-    		return;
-    	currentDeal = dealPipelineModel[0].get('dealCollection').get(id).toJSON();
-    	currentDeal.archived = false;
-        var that = $(this);
-        
-        var notes = [];
-    	$.each(currentDeal.notes, function(index, note)
-    	{
-    		notes.push(note.id);
-    	});
-    	currentDeal.notes = notes;
-        if(currentDeal.note_description)
-    		delete currentDeal.note_description;
-
-        if(!currentDeal.close_date || currentDeal.close_date==0)
-        	currentDeal.close_date = null;
-        currentDeal.owner_id = currentDeal.owner.id;
-        var arch_deal = new Backbone.Model();
+		// Disables save button to prevent multiple click event issues
+		disable_save_button($(this));
+	        
+		// Get the current deal model from the collection.
+		var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
+		if(!dealPipelineModel)
+			return;
+		currentDeal = dealPipelineModel[0].get('dealCollection').get(id).toJSON();
+		currentDeal.archived = false;
+		var that = $(this);
+		
+		var notes = [];
+		$.each(currentDeal.notes, function(index, note)
+		{
+			notes.push(note.id);
+		});
+		currentDeal.notes = notes;
+	    if(currentDeal.note_description)
+			delete currentDeal.note_description;
+	
+	    if(!currentDeal.close_date || currentDeal.close_date==0)
+	    	currentDeal.close_date = null;
+	    currentDeal.owner_id = currentDeal.owner.id;
+	    var arch_deal = new Backbone.Model();
 		arch_deal.url = '/core/api/opportunity';
 		arch_deal.save(currentDeal, {
 			// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
@@ -328,7 +331,7 @@ $(function(){
 					$('#'+id).parent().remove();
 				}
 				else{
-					that.remove();
+					$('#'+id+' .deal-options').find('.deal-restore').remove();
 					var htmllinks ='<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>';
 					htmllinks += '<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>';
 					$('#'+id+' .deal-options').prepend(htmllinks);
@@ -336,13 +339,45 @@ $(function(){
 				console.log('archived deal----',model);
 				// Shows Milestones Pie
 				pieMilestones();
-	
+				enable_save_button(that);
+				$("#deal_restore_confirm_modal").modal('hide');
 				// Shows deals chart
 				dealsLineChart();
 				update_deal_collection(model.toJSON(), id, milestone, milestone);
 				
 			}
 		});
+		
+		
+	});
+	
+	
+	/**
+	 * Milestone view deal delete
+	 */
+	$('.deal-archive').live('click', function(e) {
+		e.preventDefault();
+		
+		var temp = {};
+		temp.id = $(this).closest('.data').attr('id');
+		temp.milestone = ($(this).closest('ul').attr("milestone")).trim();
+		$("#archived-deal-id",$("#deal_archive_confirm_modal")).val(temp.id);
+		$("#archived-deal-milestone",$("#deal_archive_confirm_modal")).val(temp.milestone);
+		$("#deal_archive_confirm_modal").modal('show');
+	});
+	
+	/**
+	 * Milestone view deal delete
+	 */
+	$('.deal-restore').live('click', function(e) {
+		e.preventDefault();
+		
+		var temp = {};
+		temp.id = $(this).closest('.data').attr('id');
+		temp.milestone = ($(this).closest('ul').attr("milestone")).trim();
+		$("#restored-deal-id",$("#deal_restore_confirm_modal")).val(temp.id);
+		$("#restored-deal-milestone",$("#deal_restore_confirm_modal")).val(temp.milestone);
+		$("#deal_restore_confirm_modal").modal('show');
 	});
 	
 });
