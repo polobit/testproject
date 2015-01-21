@@ -985,7 +985,22 @@ $(function()
 
 								return name.replace(/\+/, ' ');
 				});
+				/**
+				 * Replace '-' symbols with empty.Used in invoice.
+				 */
+				Handlebars.registerHelper('replace_minus_symbol', function(name)
+				{
 
+								return name.replace(/\-/, '');
+				});
+				
+				Handlebars.registerHelper('get_amount_with_possitive', function(amount)
+						{
+							if(amount < 0)	
+								return amount / 100 * (-1);
+							else
+								return amount / 100;
+						});
 				/**
 				 * Removes forward slash. Makes A/B to AB. Used in contact-detail-campaigns
 				 */
