@@ -1847,4 +1847,8 @@ text-overflow:ellipsis;
 {
 	margin-left:-4px;
 }
-
+@media print {
+.navbar, #footer, #print_btn {
+    display:none;
+  }
+}
