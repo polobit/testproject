@@ -902,7 +902,7 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	        		if(text=="Call Duration")
 	        			tt = '<table>' + 
         		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+': </td>' +
-        		              '<td style="padding:0"><b>'+this.points[0].point.y+' Secs</b></td></tr>' +
+        		              '<td style="padding:0"><b>'+getPortletsTimeConversion(this.points[0].point.y)+'</b></td></tr>' +
         		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Total Calls: </td>' + 
         		        	  '<td style="padding:0"><b>'+totalCallsCountList[this.points[0].point.x]+'</b></td></tr>' +
         		        	  '</table>';
@@ -983,4 +983,20 @@ function getPortletsCurrencySymbol(){
 	var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
 	var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
 	return symbol;
+}
+function getPortletsTimeConversion(totalSec){
+	var hours = parseInt(totalSec / 3600) % 24;
+	var minutes = parseInt(totalSec / 60) % 60;
+	var seconds = totalSec % 60;
+
+	// show only seconds if hours and mins are zero
+	if (hours == 0 && minutes == 0)
+					return (seconds + "s");
+
+	// show mins and secs if hours are zero.
+	if (hours == 0)
+					return (minutes + "m ") + (seconds + "s");
+
+	var result = (hours + "h ") + (minutes + "m ") + (seconds + "s");
+	return result;
 }
