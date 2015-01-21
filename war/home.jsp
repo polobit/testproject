@@ -53,6 +53,10 @@ String width = currentUserPrefs.width;
 boolean is_fluid = !width.isEmpty();
 
 BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(null, null);
+boolean is_free_plan = false;
+
+if(restriction != null && restriction.planDetails != null)
+    is_free_plan = restriction.planDetails.isFreePlan();
 %>
 
 
@@ -169,6 +173,8 @@ var CSS_PATH = "/";
 var IS_CONSOLE_ENABLED = <%=debug%>;
 var LOCAL_SERVER = <%=debug%>;
 
+var _IS_FREE_PLAN = <%=is_free_plan%>;
+
 var IS_FLUID = <%=is_fluid%>;
 
 var CLICKDESK_CODE_LOADED = true;
@@ -251,7 +257,7 @@ head.ready(["core", "stats"], function(){
 
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
 <link rel="stylesheet" type="text/css" href="css/contacts-new-ui.css">
-
+<link rel="stylesheet" type="text/css" href="css/agile-css-framework.css">
 <!-- Google analytics code -->
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

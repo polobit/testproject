@@ -180,28 +180,39 @@ $(function()
 				 * 
 				 */
 				Handlebars.registerHelper('gravatarurl', function(items, width)
-				{
+						{
 
-								if (items == undefined)
-												return;
+							if (items == undefined)
+								return;
 
-								// Checks if properties already has an image, to return it
-								var agent_image = getPropertyValue(items, "image");
-								if (agent_image)
-												return agent_image;
+							// Checks if properties already has an image, to return it
+							var agent_image = getPropertyValue(items, "image");
+							if (agent_image)
+								return agent_image;
 
-								// Default image
-								var img = DEFAULT_GRAVATAR_url;
+							// Default image
+							var img = DEFAULT_GRAVATAR_url;
+							var backup_image = "&d=404\" ";
+							// backup_image="";
+							var initials = '';
+							try{
+								initials = text_gravatar_initials(items)
+							} catch(e){
+								console.log(e);
+							}
 
-								var email = getPropertyValue(items, "email");
-								if (email)
-								{
-												return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + "&d=" + escape(img);
-								}
+							if (initials.length == 0)
+								backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
+							var data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\" _data-name=\"" + initials;
+							var email = getPropertyValue(items, "email");
+							if (email)
+							{
+								return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + backup_image + data_name);
+							}
 
-								return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
+							return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 
-				});
+						});
 
 				Handlebars.registerHelper('defaultGravatarurl', function(width)
 				{
@@ -254,18 +265,10 @@ $(function()
 				Handlebars.registerHelper('dataNameAvatar', function(items)
 				{
 
-								if (items == undefined)
-												return;
+					if (items == undefined)
+						return;
 
-								var name = "";
-
-								if (getPropertyValue(items, "first_name"))
-												name = name + "" + getPropertyValue(items, "first_name").substr(0, 1);
-
-								if (getPropertyValue(items, "last_name"))
-												name = name + "" + getPropertyValue(items, "last_name").substr(0, 1);
-
-								return name;
+					return text_gravatar_initials(items);
 
 				});
 
@@ -1133,7 +1136,7 @@ $(function()
 
 																																if (properties[i].subtype)
 																																				el = el.concat('<span class="label">' + properties[i].subtype + '</span>');
-																																el = el.concat('</span></div></div>');
+																																el = el.concat('</span>&nbsp;<span id="map_view_action"></span></div></div>');
 																																return new Handlebars.SafeString(el);
 																												}
 																												else if (properties[i].name == "phone" || properties[i].name == "email")

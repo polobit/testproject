@@ -164,6 +164,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			},
 			saveCallback : function(data)
 			{
+				_IS_FREE_PLAN = false;
 				window.navigate("subscribe", { trigger : true });
 				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
 			}
@@ -865,4 +866,9 @@ function canSendEmails(emails_to_send)
 		return true;
 	
 	return false;
+}
+
+function is_free_plan()
+{
+	return _IS_FREE_PLAN;
 }

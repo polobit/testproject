@@ -24,7 +24,15 @@ var ContactFiltersRouter = Backbone.Router.extend({
 	contactfilters : function()
 	{
 		this.contactFiltersList = new Base_Collection_View({ url : '/core/api/filters', restKey : "ContactFilter", templateKey : "contact-filter",
-			individual_tag_name : 'tr', sort_collection : false});
+			individual_tag_name : 'tr', sort_collection : false,
+			postRenderCallback : function(el)
+			{
+							head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+							{
+											$(".created_time", el).timeago();
+							});
+
+			}});
 
 		this.contactFiltersList.collection.fetch();
 		$("#content").html(this.contactFiltersList.render().el);
@@ -39,20 +47,18 @@ var ContactFiltersRouter = Backbone.Router.extend({
 		var contacts_filter = new Base_Model_View({ url : 'core/api/filters', template : "filter-contacts", isNew : "true", window : "contact-filters",
 			postRenderCallback : function(el)
 			{
-
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 				{
 					chainFiltersForContactAndCompany(el, undefined, function()
 					{
 						$('#content').html(el);
+						scramble_input_names($(el).find('#filter-settings'));
 						$("#contact_type").trigger('change');
 					});
-
-				})
+				});				
 			} });
-
 		$("#content").html(LOADING_HTML);
-		contacts_filter.render();
+		contacts_filter.render();		
 	},
 	
 	/**

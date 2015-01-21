@@ -21,11 +21,11 @@
 							</form>
 						</div>
 						<div
-							style='margin-top: 0%; width: 20em; display: inline-block; vertical-align: middle'>
+							style='margin-top: 0%; width: 70%; display: inline-block; vertical-align: middle'>
 							<div
-								style="height: auto; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;padding-top:3px;">
+								style="height: auto; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;padding-top:3px;font-size: 20px;">
 
-								<b> <font size="5">{{getPropertyValue properties "name"}}</font></b>
+								{{getPropertyValue properties "name"}}
 								{{#if_propertyName "url"}}</br>
 									<a href="{{getHyperlinkFromURL value}}" target="_blank">{{value}}</a>
 								{{/if_propertyName}}
@@ -82,7 +82,7 @@
 					</div>
 					<!-- Owner block -->
 					<br />
-					<div style="float: right; margin-top: -15px;">
+					<div style="float: right; margin-top: -15px;width:36%;">
 <div class="change-owner-succes"></div>
      <span title="Owner" class="contact-owner-view">
       	<span class="contact-owner" id="change-owner-element">
@@ -92,7 +92,7 @@
 			{{else}}
 			<span class="contact-owner-pic" style="visibility:hidden;"><img class="user-img"  alt="" src="img/company.png" /></span><span class="contact-owner-add" style="font-size:13px;"><a style="cursor:pointer;">Assign Owner</a></span>
  			{{/if}}
-        	<span id="contact-owner" data={{owner.id}} style="display:inline-block;max-width:100%;" class="contact-owner-name">{{owner.name}}</span>
+        	<span id="contact-owner" data={{owner.id}} style="display:inline-block;max-width:82%;" class="contact-owner-name">{{owner.name}}</span>
         
         	{{#canEditContact owner.id}}
         	<div class="btn-group" id="change-owner-ul" style="vertical-align: middle; display: none">

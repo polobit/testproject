@@ -266,7 +266,21 @@ $(function()
 								saveTaskNote($("#tasknoteUpdateForm"), $("#tasknoteupdatemodal"), this, json);
 				})
 
-				// set height dynomicaly if no related contacts found in task details
+				$('.delete_task').live('click', function(e)
+				{
+								var id = $('.delete_task').attr('data');
+								e.preventDefault();
+								if(!confirm("Are you sure you want to delete?"))
+						    		return false;
+								$.ajax({
+												url:'core/api/tasks/'+id,
+												type:'DELETE',
+												success:function(response){
+																document.location.href = document.location.origin+"#/tasks";
+												}
+								})
+				})
+				
 
 });
 
@@ -446,12 +460,14 @@ function saveTaskNote(form, noteModal, element, note)
 								noteModal.modal('hide');
 
 								var note = data.toJSON();
-
+       
 								console.log(note);
-								console.log(notesView.collection.toJSON());
 								// Add model to collection. Disabled sort while adding and called
 								// sort explicitly, as sort is not working when it is called by add
 								// function
+								if(!notesView){
+												notesView = new Base_Collection_View(data);
+								}
 								if (notesView && notesView.collection)
 								{
 												if (notesView.collection.get(note.id))
@@ -477,12 +493,16 @@ function saveTaskNote(form, noteModal, element, note)
 																});
 
 																notes.push(note.id);
-
+														
 																taskJSON.contacts = contacts;
 																taskJSON.notes = notes;
-
-																taskDetailView.url = 'core/api/tasks';
-																taskDetailView.save(taskJSON, { success : function(data)
+																
+																if (taskJSON.taskOwner)
+																				taskJSON.owner_id = taskJSON.taskOwner.id;
+																var newTaskModel = new Backbone.Model();
+																
+                newTaskModel.url = 'core/api/tasks';
+                newTaskModel.save(taskJSON, { success : function(data)
 																{
 
 																				notesView.collection.add(new BaseModel(note), { sort : false });
