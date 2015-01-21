@@ -1417,8 +1417,8 @@ height: 30px;
 .activity-tag
 {
 	word-wrap:break-word;
-	/* width:95%; */
 	position:relative;
+	z-index: -9999;
 }
 .activity_time{
 position: absolute;
