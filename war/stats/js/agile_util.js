@@ -78,22 +78,20 @@ function agile_formCallback(error, button, url, agile_form, contact_id)
 			agile_json(trigger_url);
 		}
 	}
-	else
+	else if (error[1])
 		error[1].innerHTML = error[0];
 
 	setTimeout(function()
 	{
-		error[1].innerHTML = "";
-		button.removeAttribute("disabled");
+		if (error[1])
+			error[1].innerHTML = "";
 
-		if (agile_form)
-		{
-			if (!agile_form.getAttribute("action") || agile_form.getAttribute("action") == "#")
-				agile_form.setAttribute("action", url);
-			agile_form.submit();
-		}
-		else
-			window.location.replace(url);
+		if (button)
+			button.removeAttribute("disabled");
+
+		if (!agile_form.getAttribute("action") || agile_form.getAttribute("action") == "#")
+			agile_form.setAttribute("action", url);
+		agile_form.submit();
 	}, 1500);
 }
 
