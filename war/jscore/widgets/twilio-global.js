@@ -163,7 +163,7 @@ $(function()
 
 		console.log("phone: " + $(this).attr("phone"));
 
-		twiliocall($(this).attr("phone"), getTwilioIOContactName());
+		twiliocall($(this).attr("phone"), getContactName(contactDetailsObj));
 	});
 
 	$("#twilio_acc_sid", "#twilio_auth_token").die().live('click', function(e)
@@ -599,21 +599,6 @@ function fill_twilioio_numbers()
 		console.log("twilioio_widget error");
 		console.log(data);
 	});
-}
-
-// Get name of contact
-function getTwilioIOContactName()
-{
-	var contactName = "";
-	var firstName = agile_crm_get_contact_property('first_name');
-	var lastName = agile_crm_get_contact_property('last_name');
-
-	if (firstName)
-		contactName = firstName + " ";
-	if (lastName)
-		contactName = contactName + lastName;
-
-	return contactName;
 }
 
 function setUpGlobalTwilio()
