@@ -447,7 +447,10 @@ function disable_text_required_property(selector)
 // Bhasuri 10/25/2014
 function getDate(selector)
 {
-	$('#duration').datepicker({ changeMonth : true, changeYear : true, yearRange : "+0:+100]", constrainInput : false,
+	if(!selector)
+		selector = '#duration';
+	
+	$(selector).datepicker({ changeMonth : true, changeYear : true, yearRange : "+0:+100]", constrainInput : false,
 	// minDate: 0
 	});
 
