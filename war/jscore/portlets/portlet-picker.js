@@ -562,54 +562,79 @@ function fetchPortletsGraphData(url, successCallback){
 	}); 
 }
 function dealsByMilestoneBarGraph(selector,milestonesList,milestoneValuesList,milestoneNumbersList){
-	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
-		$('#'+selector).highcharts({
-	        chart: {
-	            type: 'bar',
-	            marginRight: 20
-	        },
-	        title: {
-	            text: ''
-	        },
-	        xAxis: {
-	            categories: milestonesList
-	        },
-	        yAxis: {
-	            min: 0,
-	            title: {
-	                text: 'Deal Value'
-	            },
-	            allowDecimals: false
-	        },
-	        legend: {
-	        	enabled: false
-	        },
-	        tooltip: {
-	        	formatter: function(){
-	        		return '<table>' + 
-	        		        '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+'s: </td>' + 
-	        		        '<td style="padding:0"><b>'+milestoneNumbersList[this.points[0].point.x]+'</b></td></tr>' + 
-	        		        '<tr><td style="color:'+this.points[0].series.color+';padding:0">Total Value: </td>' + 
-	        		        '<td style="padding:0"><b>'+getPortletsCurrencySymbol()+''+milestoneValuesList[this.points[0].point.x].toLocaleString()+'</b></td></tr>' +
-	        		        '</table>';
-	        	},
-	            shared: true,
-	            useHTML: true
-	        },
-	        plotOptions: {
-	            column: {
-	                pointPadding: 0.2,
-	                borderWidth: 0
-	            }
-	        },
-	        series: [{
-	            name: 'Deal',
-	            data: milestoneValuesList
-	        }],
-	        exporting: {
-		        enabled: false
-		    }
-	    });
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js',LIB_PATH + 'lib/flot/no-data-to-display.js', function(){
+		if(milestonesList.length==0){
+			$('#'+selector).highcharts({
+		        chart: {
+		            type: 'bar',
+		            marginRight: 20
+		        },
+		        title: {
+		            text: ''
+		        },
+		        xAxis: {
+		            categories: []
+		        },
+		        yAxis: {
+		            min: 0,
+		            title: {
+		                text: ''
+		            }
+		        },
+		        series: [],
+		        exporting: {
+			        enabled: false
+			    }
+		    });
+		}else{
+			$('#'+selector).highcharts({
+		        chart: {
+		            type: 'bar',
+		            marginRight: 20
+		        },
+		        title: {
+		            text: ''
+		        },
+		        xAxis: {
+		            categories: milestonesList
+		        },
+		        yAxis: {
+		            min: 0,
+		            title: {
+		                text: 'Deal Value'
+		            },
+		            allowDecimals: false
+		        },
+		        legend: {
+		        	enabled: false
+		        },
+		        tooltip: {
+		        	formatter: function(){
+		        		return '<table>' + 
+		        		        '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+'s: </td>' + 
+		        		        '<td style="padding:0"><b>'+milestoneNumbersList[this.points[0].point.x]+'</b></td></tr>' + 
+		        		        '<tr><td style="color:'+this.points[0].series.color+';padding:0">Total Value: </td>' + 
+		        		        '<td style="padding:0"><b>'+getPortletsCurrencySymbol()+''+milestoneValuesList[this.points[0].point.x].toLocaleString()+'</b></td></tr>' +
+		        		        '</table>';
+		        	},
+		            shared: true,
+		            useHTML: true
+		        },
+		        plotOptions: {
+		            column: {
+		                pointPadding: 0.2,
+		                borderWidth: 0
+		            }
+		        },
+		        series: [{
+		            name: 'Deal',
+		            data: milestoneValuesList
+		        }],
+		        exporting: {
+			        enabled: false
+			    }
+		    });
+		}
 	});
 }
 function closuresPerPersonBarGraph(selector,catges,data,text,name){
@@ -893,8 +918,6 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	                text: text
 	            },
 	            allowDecimals: false,
-	            startOnTick: false,
-	            endOnTick: false
 	        },
 	        tooltip: {
 	        	formatter: function(){
@@ -984,19 +1007,24 @@ function getPortletsCurrencySymbol(){
 	var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
 	return symbol;
 }
-function getPortletsTimeConversion(totalSec){
-	var hours = parseInt(totalSec / 3600) % 24;
-	var minutes = parseInt(totalSec / 60) % 60;
-	var seconds = totalSec % 60;
-
-	// show only seconds if hours and mins are zero
-	if (hours == 0 && minutes == 0)
-					return (seconds + "s");
-
-	// show mins and secs if hours are zero.
-	if (hours == 0)
-					return (minutes + "m ") + (seconds + "s");
-
-	var result = (hours + "h ") + (minutes + "m ") + (seconds + "s");
-	return result;
+function getPortletsTimeConversion(diffInSeconds){
+	if(diffInSeconds==undefined || diffInSeconds==null)
+		return;
+	var duration='';
+	var days=0;
+	var hrs=0;
+	var mins=0;
+	var secs=0;
+	days = Math.floor(diffInSeconds/(24*60*60));
+	hrs = Math.floor((diffInSeconds % (24*60*60))/(60*60));
+	mins = Math.floor(((diffInSeconds % (24*60*60)) % (60*60))/60);
+	secs = Math.floor(((diffInSeconds % (24*60*60)) % (60*60))%60);
+	
+	if(hrs!=0)
+		duration += ''+((days*24)+hrs)+'h';
+	if(mins!=0)
+		duration += ' '+mins+'m';
+	if(secs!=0)
+		duration += ' '+secs+'s';
+	return duration;
 }

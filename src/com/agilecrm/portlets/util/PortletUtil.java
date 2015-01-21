@@ -68,7 +68,7 @@ public class PortletUtil {
 		allPortlets.add(new Portlet("Agenda",PortletType.TASKSANDEVENTS));
 		allPortlets.add(new Portlet("Today Tasks",PortletType.TASKSANDEVENTS));
 		
-		allPortlets.add(new Portlet("Emails Sent",PortletType.USERACTIVITY));
+		//allPortlets.add(new Portlet("Emails Sent",PortletType.USERACTIVITY));
 		allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
 		
 		allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
@@ -333,9 +333,11 @@ public class PortletUtil {
 						else if(json.get("deals").toString().equalsIgnoreCase("my-deals"))
 							map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],true,0,null,milestone.id);
 						for(Map.Entry<Double, Integer> entry : map.entrySet()){
-							milestonesList.add(milestones[i]);
-							milestoneValuesList.add(entry.getKey());
-							milestoneNumbersList.add(entry.getValue());
+							if(!milestones[i].equalsIgnoreCase("") && milestones[i]!=""){
+								milestonesList.add(milestones[i]);
+								milestoneValuesList.add(entry.getKey());
+								milestoneNumbersList.add(entry.getValue());
+							}
 						}
 					}
 				}
