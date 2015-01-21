@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
@@ -13,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.Event;
+import com.agilecrm.activities.Event.EventType;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -371,7 +374,6 @@ public class EventUtil
 	    return domain_events;
 
 	}
-
     }
 
     /**
@@ -433,6 +435,54 @@ public class EventUtil
 	dateFormat.setTimeZone(tz);
 	cal.setTimeZone(tz);
 	return dateFormat.format(cal.getTime());
+    }
+
+    /**
+     * Gets list of all the keys which are in a given start and end date with
+     * the type of event date
+     * 
+     * @param owner
+     *            Event owner
+     * @param status
+     *            Upcoming event or completed. Eg: start >, start <, end > or
+     *            end <. >= won't work
+     * @param eventType
+     *            Web appointment or agile
+     * @return List of AgileUser owner keys
+     * @author Kona
+     * @param contactKey
+     */
+    public static int getEventsKey(Key<AgileUser> owner, String status, EventType eventType, Key<Contact> contactKey)
+    {
+	System.out.println(owner + " ," + status + " ," + eventType + " ," + contactKey);
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	System.out.println("The owner is:" + owner + " ,the status is:" + status + " ,the event type is:" + eventType
+	        + " and thte contact key is:" + contactKey);
+
+	if (owner != null)
+	    searchMap.put("owner", owner);
+
+	if (status != null)
+	{
+	    Long currentEpocTime = System.currentTimeMillis() / 1000;
+	    searchMap.put(status, currentEpocTime);
+	}
+
+	if (eventType != null)
+	    searchMap.put("type", eventType);
+
+	if (contactKey != null)
+	    searchMap.put("related_contacts", contactKey);
+
+	try
+	{
+	    return dao.getCountByProperty(searchMap);
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception in getEventsKey in EventUtil Class" + e.getMessage());
+	    return 0;
+	}
     }
 
     /**

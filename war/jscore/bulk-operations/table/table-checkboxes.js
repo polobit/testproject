@@ -86,7 +86,11 @@ $(function(){
 		if(!$(this).attr('checked'))
 		{
 			$('.tbody_check').removeAttr('checked');
-			toggle_contacts_bulk_actions_dropdown(undefined, true,$(this).parents('table').attr('id'));
+			
+			if (Current_Route == 'deals')
+				deal_bulk_actions.toggle_deals_bulk_actions_dropdown(undefined, true,$(this).parents('table').attr('id'));
+			else
+				toggle_contacts_bulk_actions_dropdown(undefined, true,$(this).parents('table').attr('id'));
 			
 		}
 		else
@@ -95,7 +99,10 @@ $(function(){
 		console.log($(this).attr('checked'));
 		
 		// Show bulk operations only when thead check box is checked
-		toggle_contacts_bulk_actions_dropdown(this, true,$(this).parents('table').attr('id'));
+		if (Current_Route == 'deals')
+			deal_bulk_actions.toggle_deals_bulk_actions_dropdown(this, true,$(this).parents('table').attr('id'));
+		else
+			toggle_contacts_bulk_actions_dropdown(this, true,$(this).parents('table').attr('id'));
 		
 	});
 	
@@ -107,7 +114,10 @@ $(function(){
 	$('.tbody_check').live('click', function(event){
 		event.stopPropagation();
 		
-		toggle_contacts_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));
+		if (Current_Route == 'deals')
+			deal_bulk_actions.toggle_deals_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));
+		else
+			toggle_contacts_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));
 	});
 });
 
@@ -116,15 +126,14 @@ function append_checkboxes(el)
 	var checkbox_element = $('tr:last > td.select_checkbox', el);
 	if(checkbox_element.length != 0)
 	{
-		if(SELECT_ALL == true)
+		if(SELECT_ALL == true || (Current_Route == 'deals' && deal_bulk_actions.SELECT_ALL_DEALS==true))
 		$('.tbody_check', checkbox_element).attr('checked', 'checked');
 		
 		return;
 	}
 
-		
 	// If select all is chosen then all the upcomming models with in table should have checked checkboxes
-	if(SELECT_ALL == true)
+	if(SELECT_ALL == true || (Current_Route == 'deals' && deal_bulk_actions.SELECT_ALL_DEALS==true))
 		$('tr:last', el).prepend('<td><input class="tbody_check" type="checkbox" checked="checked"/></td>');
 	else
 		$('tr:last', el).prepend('<td><input class="tbody_check" type="checkbox"/></td>');	

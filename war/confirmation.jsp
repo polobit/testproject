@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="com.twilio.sdk.resource.instance.Trigger"%>
+<%@page import="com.agilecrm.workflows.triggers.util.EmailTrackingTriggerUtil"%>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
 <%@page import="com.campaignio.tasklets.agile.util.AgileTaskletUtil"%>
 <%@page import="com.agilecrm.util.email.SendMail"%>
@@ -17,6 +19,7 @@
 <%@page import="com.thirdparty.mandrill.Mandrill" %>
 <%@page import="com.agilecrm.user.DomainUser" %>
 <%@page import="com.agilecrm.user.util.DomainUserUtil" %>
+<%@page import="com.agilecrm.workflows.triggers.Trigger.Type" %>
 
 <html>
 <head>
@@ -423,6 +426,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 							
 							// Add unsubscribe log
 							UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, "Unsubscribed from all campaigns");
+							
 						}
 					    
 					    if("current".equals(status))
@@ -432,8 +436,12 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 							
 							// Add unsubscribe log
 							UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, "Unsubscribed from campaign " + campaign_name);
+							
 						}
 					    
+						// Trigger Unsubscribe
+						EmailTrackingTriggerUtil.executeTrigger(contactId, campaignId, null, Type.UNSUBSCRIBED);
+					 
 					    String domain = NamespaceManager.get();
 					    String fromEmail = "noreply@agilecrm.com";
 					    

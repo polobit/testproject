@@ -1552,4 +1552,38 @@ public class ActivityUtil
 	}
     }
 
+    /**
+     * 
+     * @param entitytype
+     *            DEAL or TASK or Contact or etc
+     * @param userid
+     * @param max
+     * @param cursor
+     * @param starttime
+     *            time range
+     * @param endtime
+     * @return
+     */
+    public static List<Activity> getActivititesBasedOnSelectedConditon(String entitytype, Long userid, int max,
+	    String cursor, Long starttime, Long endtime)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL"))
+	    searchMap.put("entity_type", entitytype);
+	if (entitytype.equalsIgnoreCase("CALL"))
+	    searchMap.put("activity_type", entitytype);
+	if (starttime != null)
+	    searchMap.put("time >=", starttime);
+	if (endtime != null)
+	    searchMap.put("time <=", endtime);
+
+	if (userid != null)
+	    searchMap.put("user", new Key<DomainUser>(DomainUser.class, userid));
+
+	if (max != 0)
+	    return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
+
+	return dao.listByProperty(searchMap);
+    }
+
 }

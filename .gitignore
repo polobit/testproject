@@ -7,7 +7,9 @@ war/tpl.js
 war/yui.js
 war/settings.js
 war/admin-settings.js
-util
+*.bak
+*.orig
+util/*
 .externalToolBuilders
 bin
 war/continue.js
