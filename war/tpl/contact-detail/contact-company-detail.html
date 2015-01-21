@@ -169,7 +169,16 @@
 									class="span8">
 									{{#each this}}
 									<div>
-										<a href="tel:{{value}}">{{value}}</a> {{#if subtype}}<span class="label">{{subtype}}</span> {{/if}}
+                                        <a href='#' class="contact-make-sip-call" style="display:none;"                                  
+                                           phone="{{value}}">
+                                           {{value}}
+                                        </a>            
+                                        <a href='#' class="contact-make-twilio-call" style="display:none;"                                           
+                                           phone="{{value}}">
+                                           {{value}}
+                                        </a>
+										<a href="tel:{{value}}" class="contact-make-call">{{value}}</a> 
+                                        {{#if subtype}}<span class="label">{{subtype}}</span> {{/if}}
 									</div>
 									{{/each}}
 								</div>

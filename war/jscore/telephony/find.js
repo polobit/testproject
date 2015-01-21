@@ -20,7 +20,7 @@ function findContact()
 				User_ID = caller.id;
 				User_Name = getContactName(caller);
 				User_Number = removeBracesFromNumber(Sip_Session_Call.getRemoteUri());
-				User_Img = getPropertyValue(caller.properties, "image");
+				User_Img = getGravatar(caller.properties, 40);
 				SIP_Call_Noty_IMG = addSipContactImg();
 
 				// Set details if call is still active.

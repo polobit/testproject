@@ -71,11 +71,13 @@ $(function()
 		// SIP outgoing call.
 		if (makeCall(phone))
 		{
+			var currentContact = App_Contacts.contactDetailView.model.toJSON();
+			
 			// Assign details to set in noty.
-			User_Name = getCurrentContactProperty("first_name")+" "+getCurrentContactProperty("last_name");
+			User_Name = getContactName(currentContact);
 			User_Number = removeBracesFromNumber(phone);
-			User_Img = getCurrentContactProperty("image");
-			User_ID = App_Contacts.contactDetailView.model.id;
+			User_Img = getGravatar(currentContact.properties, 40);
+			User_ID = currentContact.id;
 			SIP_Call_Noty_IMG = addSipContactImg();
 
 			// Display
