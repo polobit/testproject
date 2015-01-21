@@ -1862,17 +1862,24 @@ width:100%;
 }
 .custom-fields-table {
 	border-top: medium none;
+	border-right: medium none;
+	border-radius: 0 0 0 0;
 }
 .custom-fields-table tbody tr:first-child td:first-child {
 	border-top: 1px solid #ddd;
-	border-radius: 4px 0 0;
+	/* border-radius: 4px 0 0; */
+	border-left: medium none;
 }
 .custom-fields-table tbody tr:first-child td:nth-child(2){
 	border-top: 1px solid #ddd;
 }
 .custom-fields-table tbody tr:first-child td:nth-child(3){
 	border-top: 1px solid #ddd;
-	border-radius: 0 4px 0 0;
+	/* border-radius: 0 4px 0 0; */
+	border-right: medium none;
+}
+.custom-fields-table tbody tr td {
+	border-left: medium none;
 }
 .w-95p {
 	width:95px !important;
