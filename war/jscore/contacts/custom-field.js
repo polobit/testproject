@@ -663,6 +663,7 @@ function enableCustomFieldsSorting(el,connClass,connId){
 			      // Set helper cell sizes to match the original sizes
 			      $(this).width($originals.eq(index).width());
 			      $(this).css("background","#f5f5f5");
+			      $(this).css("border-bottom","1px solid #ddd");
 			    });
 			    return $helper;
 			},
