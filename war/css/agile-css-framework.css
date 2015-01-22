@@ -668,7 +668,7 @@
   text-decoration: underline;
 }
 
-.text-l-none
+.text-l-none,.text-l-none-hover:hover
 {
 	text-decoration:none;
 }
