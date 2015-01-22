@@ -485,7 +485,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 		// If contact is of type company , go to company details page
 		if (contact.get('type') == 'COMPANY')
-		{
+		{			
 			this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "company-detail",
 				postRenderCallback : function(el)
 				{
@@ -504,6 +504,21 @@ var ContactsRouter = Backbone.Router.extend({
 					show_map(el);
 					//fill_owners(el, contact.toJSON());
 					// loadWidgets(el, contact.toJSON());
+					
+					// For sip
+					if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
+					{
+						$(".contact-make-sip-call",el).show();
+						$(".contact-make-twilio-call",el).hide();
+						$(".contact-make-call",el).hide();
+					}
+					//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")
+					else if(Twilio_Start == true)
+					{
+						$(".contact-make-sip-call",el).hide();
+						$(".contact-make-twilio-call",el).show();
+						$(".contact-make-call",el).hide();
+					}
 				} });
 
 			var el = this.contactDetailView.render(true).el;
@@ -514,8 +529,6 @@ var ContactsRouter = Backbone.Router.extend({
 
 		this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
-
-			
 			// Clone contact model, to avoid render and post-render fell
 			// in to
 			// loop while changing attributes of contact
@@ -564,20 +577,18 @@ var ContactsRouter = Backbone.Router.extend({
 			// For sip
 			if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
 			{
-				$(".contact-make-sip-call").show();
-				$(".contact-make-twilio-call").hide();
-				$(".contact-make-call").hide();
+				$(".contact-make-sip-call",el).show();
+				$(".contact-make-twilio-call",el).hide();
+				$(".contact-make-call",el).hide();
 			}
 			else if(Twilio_Start == true)
 			//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")			
 			{
-				$(".contact-make-sip-call").hide();
-				$(".contact-make-twilio-call").show();
-				$(".contact-make-call").hide();
-			}
-			
-			  
-			
+				$(".contact-make-sip-call",el).hide();
+				$(".contact-make-twilio-call",el).show();
+				$(".contact-make-call",el).hide();
+			}	
+
 			} });
 
 		var el = this.contactDetailView.render(true).el;
@@ -586,26 +597,12 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		// Check updates in the contact.
 		checkContactUpdated();
-		
-		// For sip
-		if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
-		{
-			$(".contact-make-sip-call").show();
-			$(".contact-make-twilio-call").hide();
-			$(".contact-make-call").hide();
-		}
-		//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")
-		else if(Twilio_Start == true)
-		{
-			$(".contact-make-sip-call").hide();
-			$(".contact-make-twilio-call").show();
-			$(".contact-make-call").hide();
-		}
-		
-		 if(localStorage.getItem('MAP_VIEW')=="disabled")
+
+		if(localStorage.getItem('MAP_VIEW')=="disabled")
 				$("#map_view_action").html("<i class='icon-plus text-xxs c-p' title='Show map' id='enable_map_view'></i>");
-				else
+		else
 				$("#map_view_action").html("<i class='icon-minus text-xxs c-p' title='Hide map' id='disable_map_view'></i>");
+
 	},
 
 	/**
