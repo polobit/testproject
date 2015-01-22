@@ -75,25 +75,25 @@
                     <tbody id="admin-settings-customfields-contact-model-list">
                     </tbody>
                 </table> -->
-			<div id="CONTACT-custom-fields" class="accordion-group m-b-xs">
+			<div id="CONTACT-custom-fields" class="accordion-group m-b-xs overflow-hidden">
 				<div class="accordion-heading" style="background:#f5f5f5;">
 					<h4><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#custom-fields-accordion" href="#customfields-contacts-accordion">Contacts</a></h4>
 				</div>
 				<div class="collapse in" id="customfields-contacts-accordion"></div>
 			</div>
-			<div id="COMPANY-custom-fields" class="accordion-group m-b-xs">
+			<div id="COMPANY-custom-fields" class="accordion-group m-b-xs overflow-hidden">
 				<div class="accordion-heading" style="background:#f5f5f5;">
 					<h4><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#custom-fields-accordion" href="#customfields-companies-accordion">Companies</a></h4>
 				</div>
 				<div class="collapse" id="customfields-companies-accordion"></div>
 			</div>
-			<div id="DEAL-custom-fields" class="accordion-group m-b-xs">
+			<div id="DEAL-custom-fields" class="accordion-group m-b-xs overflow-hidden">
 				<div class="accordion-heading" style="background:#f5f5f5;">
 					<h4><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#custom-fields-accordion" href="#customfields-deals-accordion">Deals</a></h4>
 				</div>
 				<div class="collapse" id="customfields-deals-accordion"></div>
 			</div>
-			<div id="CASE-custom-fields" class="accordion-group m-b-xs">
+			<div id="CASE-custom-fields" class="accordion-group m-b-xs overflow-hidden">
 				<div class="accordion-heading" style="background:#f5f5f5;">
 					<h4><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#custom-fields-accordion" href="#customfields-cases-accordion">Cases</a></h4>
 				</div>
@@ -140,7 +140,7 @@
 <script id="admin-settings-customfields-contact-collection-template" type="text/html">
 		{{#if this.length}}
         <table class="table table-bordered agile-ellipsis-dynamic custom-fields-table" url="core/api/custom-fields/bulk" style="margin-bottom:1px;">
-				<colgroup><col width="40%"><col width="10%"><col width="3%"></colgroup>
+				<colgroup><col width="40%"><col width="12%"><col width="3%"></colgroup>
                     <tbody id="admin-settings-customfields-contact-model-list" class="custom-fields-contact-tbody">
                     </tbody>
                 </table>
@@ -187,7 +187,7 @@
 <script id="admin-settings-customfields-company-collection-template" type="text/html">
 		{{#if this.length}}
         <table class="table table-bordered agile-ellipsis-dynamic custom-fields-table" url="core/api/custom-fields/bulk" style="margin-bottom:1px;">
-			<colgroup><col width="40%"><col width="10%"><col width="3%"></colgroup>
+			<colgroup><col width="40%"><col width="12%"><col width="3%"></colgroup>
                     <tbody id="admin-settings-customfields-company-model-list" class="custom-fields-company-tbody">
                     </tbody>
                 </table>
@@ -234,7 +234,7 @@
 <script id="admin-settings-customfields-deal-collection-template" type="text/html">
     	{{#if this.length}}
         <table class="table table-bordered agile-ellipsis-dynamic custom-fields-table" url="core/api/custom-fields/bulk" style="margin-bottom:1px;">
-			<colgroup><col width="40%"><col width="10%"><col width="3%"></colgroup>
+			<colgroup><col width="40%"><col width="12%"><col width="3%"></colgroup>
                     <tbody id="admin-settings-customfields-deal-model-list" class="custom-fields-deal-tbody">
                     </tbody>
                 </table>
@@ -281,7 +281,7 @@
 <script id="admin-settings-customfields-case-collection-template" type="text/html">
 		{{#if this.length}}
         <table class="table table-bordered agile-ellipsis-dynamic custom-fields-table" url="core/api/custom-fields/bulk" style="margin-bottom:1px;">
-			<colgroup><col width="40%"><col width="10%"><col width="3%"></colgroup>
+			<colgroup><col width="40%"><col width="12%"><col width="3%"></colgroup>
                     <tbody id="admin-settings-customfields-case-model-list" class="custom-fields-case-tbody">
                     </tbody>
                 </table>
@@ -311,7 +311,7 @@
 	</td>
 	<td>
 		<div class="m-b-n-xs" style="display:none;margin-left:16px;">
-			< class="text-l-none-hover c-p"><i title="Drag" class="icon-move"></i></a>
+			<a class="text-l-none-hover c-p"><i title="Drag" class="icon-move"></i></a>
 		</div>
 		<div style="display:none;margin-bottom:-8px;">
 			<a id="edit-custom-field" style="cursor: pointer; text-decoration: none;" data-toggle="modal" role="button" href="#">
