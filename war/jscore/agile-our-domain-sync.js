@@ -582,3 +582,68 @@ $(function(){
 	}
 	
 });
+// add note to owner when subscription is cancelled
+function add_cancel_subscription_info_as_note_to_owner(cus_email, callback)
+{
+	var note = {};
+	note.subject = "Subscription Cancelled";
+	note.description = " Subscription cancelled by "+CURRENT_DOMAIN_USER.email;
+	_agile.add_note(note, function(data)
+	{
+		if (callback && typeof callback == "function")
+			callback(data);
+
+	}, cus_email);
+}
+function add_delete_user_info_as_note_to_owner(cus_email, callback)
+{
+	var note = {};
+	note.subject = "User Deleted ";
+	note.description = " One user deleted by "+CURRENT_DOMAIN_USER.email;
+	_agile.add_note(note, function(data)
+		{
+		if (callback && typeof callback == "function")
+			callback(data);
+
+	}, cus_email);
+
+}
+function add_refunded_info_as_note_to_owner(cus_email, amount, callback)
+{
+	var note = {};
+	note.subject = "Amount Refunded ";
+	note.description = "Amount $"+amount+" refunded by "+CURRENT_DOMAIN_USER.email;
+	_agile.add_note(note, function(data)
+		{
+		if (callback && typeof callback == "function")
+			callback(data);
+
+	}, cus_email);
+
+}
+function add_password_change_info_as_note_to_owner(cus_email, callback)
+{
+	var note = {};
+	note.subject = "Password Changed ";
+	note.description = " Password changed by "+CURRENT_DOMAIN_USER.email;
+	_agile.add_note(note, function(data)
+		{
+		if (callback && typeof callback == "function")
+			callback(data);
+
+	}, cus_email);
+
+}
+function add_plan_change_info_as_note_to_owner(cus_email, callback)
+{
+	var note = {};
+	note.subject = "Plan Changed ";
+	note.description = " Plan changed by "+CURRENT_DOMAIN_USER.email;
+	_agile.add_note(note, function(data)
+		{
+		if (callback && typeof callback == "function")
+			callback(data);
+
+	}, cus_email);
+
+}
