@@ -611,7 +611,7 @@ var WorkflowsRouter = Backbone.Router
 						//Inbound of Outbound call
 						if(type == 'INBOUND_CALL' || type == 'OUTBOUND_CALL')
 						{
-							populate_call_trigger_options($('form#addTriggerForm', el));	
+							populate_call_trigger_options($('form#addTriggerForm', el), currentTrigger.toJSON());	
 						}
 
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";

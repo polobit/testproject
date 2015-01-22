@@ -9,7 +9,7 @@ $(function()
 {
 
 	// Tag suggestions when 'Tag is added' and 'Tag is deleted' options selected
-	$('#trigger-type').live('change', function(e)
+	$('#trigger-type').die('change').live('change', function(e)
 	{
 		e.preventDefault();
 
@@ -275,19 +275,29 @@ function populate_owners_in_trigger(trigger_form, owner_select_id, trigger_owner
 	}, optionsTemplate, false, undefined, "Select Event Owner");
 }
 
-function populate_call_trigger_options(trigger_form)
+function populate_call_trigger_options(trigger_form, triggerJSON)
 {
 	// Loads jquery.chained.min.js
 	head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 	{
-		trigger_form.find('div#CALL').closest('div.control-group').css('display', '');
-	
-		var LHS, RHS;
-
-		LHS = $('#CALL', trigger_form);
-		RHS = $('#LHS', trigger_form);
+		console.log("inside chained...........");
 		
-		$(LHS).chained(RHS);
+		var tform = trigger_form.find('div#CALL').closest('div.control-group').css('display', '');
+	
+		var clone_form = tform.clone();
+		
+		var CALL, CONDITIONS;
+
+		CALL = $('#CALL', clone_form);
+		CONDITIONS = $('#LHS', trigger_form);
+		
+		CALL.chained(CONDITIONS, function($CALL, $self){
+			
+			trigger_form.find('div#CALL').closest('div.control-group').html($self);
+		});
+		
+		if(triggerJSON && triggerJSON["call_disposition"])
+			trigger_form.find('div#CALL select').find('option[value=' + triggerJSON["call_disposition"] + ']').attr('selected', 'selected').trigger('change');
 		
 	});
 }
