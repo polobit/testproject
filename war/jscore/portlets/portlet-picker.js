@@ -497,7 +497,7 @@ function set_p_portlets(base_model){
 					tempData.data=voiceMailCallsCountList;
 					series[3]=tempData;
 					text="No. of Calls";
-					colors=['green','orange','blue','red','violet'];
+					colors=['green','blue','red','violet'];
 				}else{
 					var tempData={};
 					tempData.name="Calls Duration";
