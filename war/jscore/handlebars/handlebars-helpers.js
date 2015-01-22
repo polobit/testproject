@@ -5386,6 +5386,15 @@ $(function()
 		var shopify_webhook = window.location.origin + "/shopifytrigger?api-key=" + agile_api.api_key;
 		return new Handlebars.SafeString(shopify_webhook);
 	});
+	
+	Handlebars.registerHelper('toProperFormat', function(timeInSec)
+			{
+		      if(timeInSec == "0")
+			    return "0 s";
+		      
+			  return twilioSecondsToFriendly(timeInSec);		
+			});
+
 	/**
 				 * getting convenient name of portlet
 				 */
@@ -5698,8 +5707,8 @@ $(function()
 			return convertToHumanDate("ddd mmm dd yyyy h:MM TT",dat);
 		}
 
-	});
-	
+	});	
+
 });
 
 // helper function return created time for event
