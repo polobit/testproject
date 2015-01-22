@@ -3707,12 +3707,13 @@ $(function()
 	 */
 	Handlebars.registerHelper('get_deals_funnel_portlet_header', function(track_id) {
 		var header_name = '';
-		var track_length = 0;
+		App_Portlets.track_length = 0;
 		$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
 			success: function(data){
-				track_length = data.length;
+				App_Portlets.track_length = data.length;
+				App_Portlets.deal_tracks = data;
 			} });
-		if(track_length>1){
+		if(App_Portlets.track_length>1){
 			if(track_id==0)
 				header_name = "- Default";
 			else{

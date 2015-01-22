@@ -565,7 +565,6 @@ public class PortletUtil {
 		List<String> domainUserNamesList=new ArrayList<String>();
 		
 		List<Integer> answeredCallsCountList=new ArrayList<Integer>();
-		List<Integer> notAnsweredCallCountList=new ArrayList<Integer>();
 		List<Integer> busyCallsCountList=new ArrayList<Integer>();
 		List<Integer> failedCallsCountList=new ArrayList<Integer>();
 		List<Integer> voiceMailCallsCountList=new ArrayList<Integer>();
@@ -575,7 +574,6 @@ public class PortletUtil {
 		
 		for(DomainUser domainUser : domainUsersList){
 			int answeredCallsCount=0;
-			int notAnsweredCallCount=0;
 			int busyCallsCount=0;
 			int failedCallsCount=0;
 			int voiceMailCallsCount=0;
@@ -588,9 +586,7 @@ public class PortletUtil {
 			for(Activity activity : callActivitiesList){
 				if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.ANSWERED))
 					answeredCallsCount++;
-				else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NO_ANSWER))
-					notAnsweredCallCount++;
-				else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.BUSY))
+				else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
 					busyCallsCount++;
 				else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
 					failedCallsCount++;
@@ -601,7 +597,6 @@ public class PortletUtil {
 				totalCallsCount++;
 			}
 			answeredCallsCountList.add(answeredCallsCount);
-			notAnsweredCallCountList.add(notAnsweredCallCount);
 			busyCallsCountList.add(busyCallsCount);
 			failedCallsCountList.add(failedCallsCount);
 			voiceMailCallsCountList.add(voiceMailCallsCount);
@@ -612,7 +607,6 @@ public class PortletUtil {
 			domainUserNamesList.add(domainUser.name);
 		}
 		callsPerPersonJSON.put("answeredCallsCountList",answeredCallsCountList);
-		callsPerPersonJSON.put("notAnsweredCallCountList",notAnsweredCallCountList);
 		callsPerPersonJSON.put("busyCallsCountList",busyCallsCountList);
 		callsPerPersonJSON.put("failedCallsCountList",failedCallsCountList);
 		callsPerPersonJSON.put("voiceMailCallsCountList",voiceMailCallsCountList);

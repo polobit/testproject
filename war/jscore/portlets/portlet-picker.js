@@ -177,7 +177,7 @@ function set_p_portlets(base_model){
 				addWidgetToGridster(base_model);
 				
 				//Added track options
-				var options='';
+				/*var options='';
 				$.each(milestoneMap,function(milestoneId,milestoneName){
 					if(base_model.get('settings').track==0 && milestoneName=="Default")
 						options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
@@ -186,7 +186,7 @@ function set_p_portlets(base_model){
 					else
 						options+="<option value="+milestoneId+">"+milestoneName+"</option>";
 				});
-				$('#'+base_model.get("id")+'-track-options').append(options);
+				$('#'+base_model.get("id")+'-track-options').append(options);*/
 			});
 			
 			
@@ -293,7 +293,7 @@ function set_p_portlets(base_model){
 				addWidgetToGridster(base_model);
 				
 				//Added track options
-				var options='';
+				/*var options='';
 				$.each(milestoneMap,function(milestoneId,milestoneName){
 					if(base_model.get('settings').track==0 && milestoneName=="Default")
 						options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
@@ -302,7 +302,7 @@ function set_p_portlets(base_model){
 					else
 						options+="<option value="+milestoneId+">"+milestoneName+"</option>";
 				});
-				$('#'+base_model.get("id")+'-track-options').append(options);
+				$('#'+base_model.get("id")+'-track-options').append(options);*/
 			});
 			
 			if(base_model.get('is_minimized'))
@@ -456,7 +456,6 @@ function set_p_portlets(base_model){
 			var url='/core/api/portlets/portletCallsPerPerson?duration='+base_model.get('settings').duration;
 			
 			var answeredCallsCountList=[];
-			var notAnsweredCallCountList=[];
 			var busyCallsCountList=[];
 			var failedCallsCountList=[];
 			var voiceMailCallsCountList=[];
@@ -466,7 +465,6 @@ function set_p_portlets(base_model){
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				answeredCallsCountList=data["answeredCallsCountList"];
-				notAnsweredCallCountList=data["notAnsweredCallCountList"];
 				busyCallsCountList=data["busyCallsCountList"];
 				failedCallsCountList=data["failedCallsCountList"];
 				voiceMailCallsCountList=data["voiceMailCallsCountList"];
@@ -485,36 +483,35 @@ function set_p_portlets(base_model){
 					series[0]=tempData;
 					
 					tempData={};
-					tempData.name="Not Answered";
-					tempData.data=notAnsweredCallCountList;
-					series[1]=tempData;
-					
-					tempData={};
 					tempData.name="Busy";
 					tempData.data=busyCallsCountList;
-					series[2]=tempData;
+					series[1]=tempData;
 					
 					tempData={};
 					tempData.name="Failed";
 					tempData.data=failedCallsCountList;
-					series[3]=tempData;
+					series[2]=tempData;
 					
 					tempData={};
 					tempData.name="Voicemail";
 					tempData.data=voiceMailCallsCountList;
-					series[4]=tempData;
+					series[3]=tempData;
 					text="No. of Calls";
 					colors=['green','orange','blue','red','violet'];
 				}else{
 					var tempData={};
 					tempData.name="Calls Duration";
-					tempData.data=callsDurationList;
+					var callsDurationInMinsList = [];
+					$.each(callsDurationList,function(index,duration){
+						callsDurationInMinsList[index] = duration/60;
+					});
+					tempData.data=callsDurationInMinsList;
 					series[0]=tempData;
-					text="Call Duration";
+					text="Calls Duration (Mins)";
 					colors=['green'];
 				}
 				
-				callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountList,text,colors);
+				callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountList,callsDurationList,text,colors);
 				
 				addWidgetToGridster(base_model);
 			});
@@ -899,7 +896,7 @@ function dealsAssignedBarGraph(selector,catges,dealsCountList){
 	    });
 	});
 }
-function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountList,text,colors){
+function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountList,callsDurationList,text,colors){
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
 		$('#'+selector).highcharts({
 	        chart: {
@@ -922,10 +919,10 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	        tooltip: {
 	        	formatter: function(){
 	        		var tt = '';
-	        		if(text=="Call Duration")
+	        		if(text=="Calls Duration (Mins)")
 	        			tt = '<table>' + 
         		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+': </td>' +
-        		              '<td style="padding:0"><b>'+getPortletsTimeConversion(this.points[0].point.y)+'</b></td></tr>' +
+        		              '<td style="padding:0"><b>'+getPortletsTimeConversion(callsDurationList[this.points[0].point.x])+'</b></td></tr>' +
         		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Total Calls: </td>' + 
         		        	  '<td style="padding:0"><b>'+totalCallsCountList[this.points[0].point.x]+'</b></td></tr>' +
         		        	  '</table>';
@@ -939,8 +936,6 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 		                      '<td style="padding:0"><b>'+this.points[2].point.y+'</b></td></tr>' +
 		                      '<tr><td style="color:'+this.points[3].series.color+';padding:0">'+this.points[3].series.name+': </td>' +
 		                      '<td style="padding:0"><b>'+this.points[3].point.y+'</b></td></tr>' +
-		                      '<tr><td style="color:'+this.points[4].series.color+';padding:0">'+this.points[4].series.name+': </td>' +
-		                      '<td style="padding:0"><b>'+this.points[4].point.y+'</b></td></tr>' +
 		                      '</table>';
 	        		return tt;
 	        	},

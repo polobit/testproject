@@ -360,23 +360,33 @@ function showPortletSettings(el){
 		
 		elData = $('#portletsDealsByMilestoneSettingsForm');
 		var url='/core/api/portlets/portletDealsByMilestone?deals='+base_model.get('settings').deals+'&track='+base_model.get('settings').track;
-		fetchPortletsGraphData(url,function(data){
-			var options = '';
-			var track_length=0;
-			$.each(data["milestoneMap"],function(milestoneId,milestoneName){
-				if(base_model.get('settings').track==0 && milestoneName=="Default")
-					options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
-				else if(base_model.get('settings').track==milestoneId)
-					options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
-				else
-					options+="<option value="+milestoneId+">"+milestoneName+"</option>";
-				track_length++;
-			});
-			if(track_length>1)
-				$('#portletsDealsByMilestoneTrack',elData).show();
-			$('#track', elData).html(options);
-			$('.loading-img').hide();
+		if(App_Portlets.track_length!=undefined && App_Portlets.track_length>1)
+			$('#portletsDealsByMilestoneTrack',elData).show();
+		
+		var tracks = [];
+		if(App_Portlets.deal_tracks!=undefined && App_Portlets.deal_tracks!=null)
+			tracks = App_Portlets.deal_tracks;
+		else{
+			$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
+				success: function(data){
+					App_Portlets.track_length = data.length;
+					App_Portlets.deal_tracks = data;
+					tracks = App_Portlets.deal_tracks;
+				} });
+		}
+		
+		var options = '';
+		$.each(tracks,function(index,trackObj){
+			if(base_model.get('settings').track==0 && trackObj.name=="Default")
+				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
+			else if(base_model.get('settings').track==trackObj.id)
+				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
+			else
+				options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
 		});
+		
+		$('#track', elData).html(options);
+		$('.loading-img').hide();
 		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
 		//$("#due-date", elData).val(new Date(base_model.get("settings")["due-date"]*1000).format('mm/dd/yyyy'));
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Closures Per Person"){
@@ -404,23 +414,33 @@ function showPortletSettings(el){
 		
 		elData = $('#portletsDealsFunnelSettingsForm');
 		var url='/core/api/portlets/portletDealsFunnel?deals='+base_model.get('settings').deals+'&track='+base_model.get('settings').track;
-		fetchPortletsGraphData(url,function(data){
-			var options = '';
-			var track_length=0;
-			$.each(data["milestoneMap"],function(milestoneId,milestoneName){
-				if(base_model.get('settings').track==0 && milestoneName=="Default")
-					options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
-				else if(base_model.get('settings').track==milestoneId)
-					options+="<option value="+milestoneId+" selected='selected'>"+milestoneName+"</option>";
-				else
-					options+="<option value="+milestoneId+">"+milestoneName+"</option>";
-				track_length++;
-			});
-			if(track_length>1)
-				$('#portletsDealsFunnelTrack',elData).show();
-			$('#track', elData).html(options);
-			$('.loading-img').hide();
+		if(App_Portlets.track_length!=undefined && App_Portlets.track_length>1)
+			$('#portletsDealsFunnelTrack',elData).show();
+		
+		var tracks = [];
+		if(App_Portlets.deal_tracks!=undefined && App_Portlets.deal_tracks!=null)
+			tracks = App_Portlets.deal_tracks;
+		else{
+			$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
+				success: function(data){
+					App_Portlets.track_length = data.length;
+					App_Portlets.deal_tracks = data;
+					tracks = App_Portlets.deal_tracks;
+				} });
+		}
+		
+		var options = '';
+		$.each(tracks,function(index,trackObj){
+			if(base_model.get('settings').track==0 && trackObj.name=="Default")
+				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
+			else if(base_model.get('settings').track==trackObj.id)
+				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
+			else
+				options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
 		});
+		
+		$('#track', elData).html(options);
+		$('.loading-img').hide();
 		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
 		//$("#due-date", elData).val(new Date(base_model.get("settings")["due-date"]*1000).format('mm/dd/yyyy'));
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Assigned"){
@@ -847,7 +867,6 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		var url='/core/api/portlets/portletCallsPerPerson?duration='+data.get('settings').duration;
 	        		
 	        		var answeredCallsCountList=[];
-	    			var notAnsweredCallCountList=[];
 	    			var busyCallsCountList=[];
 	    			var failedCallsCountList=[];
 	    			var voiceMailCallsCountList=[];
@@ -857,7 +876,6 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			
 	    			fetchPortletsGraphData(url,function(data2){
 	    				answeredCallsCountList=data2["answeredCallsCountList"];
-	    				notAnsweredCallCountList=data2["notAnsweredCallCountList"];
 	    				busyCallsCountList=data2["busyCallsCountList"];
 	    				failedCallsCountList=data2["failedCallsCountList"];
 	    				voiceMailCallsCountList=data2["voiceMailCallsCountList"];
@@ -876,36 +894,35 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    					series[0]=tempData;
 	    					
 	    					tempData={};
-	    					tempData.name="Not Answered";
-	    					tempData.data=notAnsweredCallCountList;
-	    					series[1]=tempData;
-	    					
-	    					tempData={};
 	    					tempData.name="Busy";
 	    					tempData.data=busyCallsCountList;
-	    					series[2]=tempData;
+	    					series[1]=tempData;
 	    					
 	    					tempData={};
 	    					tempData.name="Failed";
 	    					tempData.data=failedCallsCountList;
-	    					series[3]=tempData;
+	    					series[2]=tempData;
 	    					
 	    					tempData={};
 	    					tempData.name="Voicemail";
 	    					tempData.data=voiceMailCallsCountList;
-	    					series[4]=tempData;
+	    					series[3]=tempData;
 	    					text="No. of Calls";
 	    					colors=['green','orange','blue','red','violet'];
 	    				}else{
 	    					var tempData={};
 	    					tempData.name="Calls Duration";
-	    					tempData.data=callsDurationList;
+	    					var callsDurationInMinsList = [];
+	    					$.each(callsDurationList,function(index,duration){
+	    						callsDurationInMinsList[index] = duration/60;
+	    					});
+	    					tempData.data=callsDurationInMinsList;
 	    					series[0]=tempData;
-	    					text="Call Duration";
+	    					text="Calls Duration (Mins)";
 	    					colors=['green'];
 	    				}
 	    				
-	    				callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountList,text,colors);
+	    				callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountList,callsDurationList,text,colors);
 	    			});
 	        	}
 	        	/*if(data.get('portlet_type')=="DEALS" && data.get('name')=="Deals Won" && portletCollectionView.collection.models.length!=0){
