@@ -112,7 +112,6 @@ $(function()
 					show_bulk_campaign_assign_page
 					, function(){
 						// No callback
-						return;
 						},
 						function(){
 							return;
@@ -165,7 +164,7 @@ $(function()
 				}
 			else
 				message = "You have only "+ pendingEmails + " emails left as per your quota. " + upgrade_link +
-				" Continuing with this operation may not send the email to some contacts. <br/><br/>" +
+				" Continuing with this operation will stop sending emails once it crosses the quota.<br/><br/>" +
 				"Do you want to proceed?";
 			
 			showModalConfirmation(title, 
@@ -175,6 +174,10 @@ $(function()
 						
 					// No callback
 					if(!element)
+						return;
+		
+					if($(element).attr('subscribe'))
+							Backbone.history.navigate( "subscribe", { trigger : true });
 					return;
 					},
 					function(element){
