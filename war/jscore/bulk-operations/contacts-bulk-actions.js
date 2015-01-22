@@ -154,17 +154,17 @@ $(function()
 			var no = "No"
 				
 			var message = "";
-			var upgrade_link =  'Please <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">upgarde your email subscription.</a>';
-			var title = "Not enough emails left"
+			var upgrade_link =  ' You may <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">purchase more emails </a> if this does not suffice your bulk action.';
+			var title = "Low on emails"
 			if(pendingEmails <= 0)
 				{
-					title = "Emails limit in campaigns";
+					title = "Low on emails";
 					yes = "";
 					no = "Ok"
 					message = "You have used up all emails in your quota. " + upgrade_link;
 				}
 			else
-				message = "You have only "+ pendingEmails + " emails remaining as per your quota. " + upgrade_link +
+				message = "You have only "+ pendingEmails + " emails left as per your quota. " + upgrade_link +
 				" Continuing with this operation may not send the email to some contacts. <br/><br/>" +
 				"Do you want to proceed?";
 			
