@@ -729,6 +729,12 @@ public class TaskUtil
 	return default_task;
     }
 
+    /**
+     * gets the timezone from accountprefs after setting domainname
+     * 
+     * @param namespace
+     * @return
+     */
     public static String getTimezoneFromAccountPrefs(String namespace)
     {
 
