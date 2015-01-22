@@ -13,6 +13,7 @@ import net.sf.json.JSONSerializer;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.activities.Activity;
+import com.agilecrm.activities.Call;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.ActivityUtil;
@@ -54,11 +55,11 @@ public class PortletUtil {
 		List<Portlet> allPortlets = new ArrayList<Portlet>();
 		
 		allPortlets.add(new Portlet("Filter Based",PortletType.CONTACTS));
-		//allPortlets.add(new Portlet("Emails Opened",PortletType.CONTACTS));
+		allPortlets.add(new Portlet("Emails Opened",PortletType.CONTACTS));
 		allPortlets.add(new Portlet("Growth Graph",PortletType.CONTACTS));
 		
 		allPortlets.add(new Portlet("Pending Deals",PortletType.DEALS));
-		//allPortlets.add(new Portlet("Deals By Milestone",PortletType.DEALS));
+		allPortlets.add(new Portlet("Deals By Milestone",PortletType.DEALS));
 		//allPortlets.add(new Portlet("Closures Per Person",PortletType.DEALS));
 		//allPortlets.add(new Portlet("Deals Won",PortletType.DEALS));
 		allPortlets.add(new Portlet("Deals Funnel",PortletType.DEALS));
@@ -68,7 +69,7 @@ public class PortletUtil {
 		allPortlets.add(new Portlet("Today Tasks",PortletType.TASKSANDEVENTS));
 		
 		//allPortlets.add(new Portlet("Emails Sent",PortletType.USERACTIVITY));
-		//allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
+		allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
 		
 		allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
 		
@@ -106,7 +107,6 @@ public class PortletUtil {
 			}
 			if(!portlet.name.equalsIgnoreCase("Dummy Blog"))
 				added_portlets.add(portlet);
-			//setPortletContent(portlet);
 		}
 		
 		return added_portlets;
@@ -197,222 +197,6 @@ public class PortletUtil {
 			return null;
 		}
 	}
-	/**
-	 * Sets contacts list {@link List} of {@link Contact}, deals list
-	 * {@link List} of {@link Opportunity} etc... for a portlet based on its
-	 * {@link String} of {@link portlet_type}
-	 * 
-	 * @param name
-	 *            {@link String}. Name of the portlet
-	 * @param agileUserId
-	 *            {@link Long} agile user id
-	 * @return {@link Portlet}
-	 */
-	public static Portlet setPortletContent(Portlet portlet)throws Exception{
-		JSONObject json=null;
-		if(portlet.prefs!=null){
-			System.out.println("Portlet settings not null");
-			json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
-			portlet.settings=json;
-		}
-		if(portlet.portlet_type==PortletType.CONTACTS && portlet.name.equalsIgnoreCase("Filter Based")){
-			if(json!=null && json.get("filter")!=null){
-				if(json.get("filter").toString().equalsIgnoreCase("contacts"))
-					portlet.contactsList=ContactUtil.getAllContacts(50,null);
-				else if(json.get("filter").toString().equalsIgnoreCase("companies"))
-					portlet.contactsList=ContactUtil.getAllCompanies(50, null);
-				else if(json.get("filter").toString().equalsIgnoreCase("recent"))
-					portlet.contactsList=ContactFilterUtil.getContacts("system-RECENT", 50, null,null);
-				else if(json.get("filter").toString().equalsIgnoreCase("myContacts"))
-					portlet.contactsList=ContactFilterUtil.getContacts("system-CONTACTS", 50, null,null);
-				else if(json.get("filter").toString().equalsIgnoreCase("leads"))
-					portlet.contactsList=ContactFilterUtil.getContacts("system-LEADS", 50, null,null);
-			}
-		}else if(portlet.portlet_type==PortletType.CONTACTS && portlet.name.equalsIgnoreCase("Emails Opened")){
-			long minTime=0L;
-			long maxTime=0L;
-			if(json!=null && json.get("duration")!=null){
-				if(json.get("duration").toString().equalsIgnoreCase("2-days")){
-					DateUtil startDateUtil = new DateUtil();
-		    		minTime = startDateUtil.removeDays(2).toMidnight().getTime().getTime() / 1000;
-		    		
-		    		DateUtil endDateUtil = new DateUtil();
-		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-				}else if(json.get("duration").toString().equalsIgnoreCase("1-week")){
-					DateUtil startDateUtil = new DateUtil();
-		    		minTime = startDateUtil.removeDays(7).toMidnight().getTime().getTime() / 1000;
-		    		
-		    		DateUtil endDateUtil = new DateUtil();
-		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-				}else if(json.get("duration").toString().equalsIgnoreCase("1-month")){
-					DateUtil startDateUtil = new DateUtil();
-		    		minTime = startDateUtil.removeDays(30).toMidnight().getTime().getTime() / 1000;
-		    		
-		    		DateUtil endDateUtil = new DateUtil();
-		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-				}
-				portlet.contactsList=ContactUtil.getEmailsOpened(minTime,maxTime);
-			}
-		}else if(portlet.portlet_type==PortletType.CONTACTS && portlet.name.equalsIgnoreCase("Emails Sent")){
-			long minTime=0L;
-			long maxTime=0L;
-			if(json!=null && json.get("duration")!=null){
-				if(json.get("duration").toString().equalsIgnoreCase("1-day")){
-					DateUtil startDateUtil = new DateUtil();
-		    		minTime = startDateUtil.removeDays(1).toMidnight().getTime().getTime() / 1000;
-		    		
-		    		DateUtil endDateUtil = new DateUtil();
-		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-				}else if(json.get("duration").toString().equalsIgnoreCase("2-days")){
-					DateUtil startDateUtil = new DateUtil();
-		    		minTime = startDateUtil.removeDays(2).toMidnight().getTime().getTime() / 1000;
-		    		
-		    		DateUtil endDateUtil = new DateUtil();
-		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-				}else if(json.get("duration").toString().equalsIgnoreCase("1-week")){
-					DateUtil startDateUtil = new DateUtil();
-		    		minTime = startDateUtil.removeDays(7).toMidnight().getTime().getTime() / 1000;
-		    		
-		    		DateUtil endDateUtil = new DateUtil();
-		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-				}else if(json.get("duration").toString().equalsIgnoreCase("1-month")){
-					DateUtil startDateUtil = new DateUtil();
-		    		minTime = startDateUtil.removeDays(30).toMidnight().getTime().getTime() / 1000;
-		    		
-		    		DateUtil endDateUtil = new DateUtil();
-		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-				}
-				List<Integer> mailsCountList=new ArrayList<Integer>();
-				List<DomainUser> domainUsersList=DomainUserUtil.getAllUsers();
-				for(DomainUser domainUser : domainUsersList){
-					List<ContactEmail> emailsList=ContactEmailUtil.getEmailsSent(domainUser,minTime,maxTime);
-					if(emailsList!=null)
-						mailsCountList.add(emailsList.size());
-					else
-						mailsCountList.add(0);
-				}
-				portlet.mailsCountList=mailsCountList;
-				portlet.domainUsersList=domainUsersList;
-			}
-		}else if(portlet.portlet_type==PortletType.CONTACTS && portlet.name.equalsIgnoreCase("Growth Graph")){
-			String growthGraphString=null;
-			if(json!=null && json.get("tags")!=null && json.get("frequency")!=null && json.get("start-date")!=null && json.get("end-date")!=null){
-				String[] tags = json.getString("tags").split(",");
-				int type = Calendar.DAY_OF_MONTH;
-
-				if (StringUtils.equalsIgnoreCase(json.getString("frequency"), "monthly"))
-				    type = Calendar.MONTH;
-				if (StringUtils.equalsIgnoreCase(json.getString("frequency"), "weekly"))
-				    type = Calendar.WEEK_OF_YEAR;
-				
-				ReportsUtil.check(Long.parseLong(json.getString("start-date")), Long.parseLong(json.getString("end-date")));
-				
-				growthGraphString=TagSearchUtil.getTagCount(null, tags, json.getString("start-date"), json.getString("end-date"), type).toString();
-			}
-			if(growthGraphString!=null)
-				portlet.growthGraphJson=(JSONObject)JSONSerializer.toJSON(growthGraphString);
-		}else if(portlet.portlet_type==PortletType.DEALS && portlet.name.equalsIgnoreCase("Pending Deals")){
-			if(json!=null && json.get("deals")!=null && json.get("due-date")!=null){
-				if(json.get("deals").toString().equalsIgnoreCase("all-deals"))
-					portlet.dealsList=OpportunityUtil.getPendingDealsRelatedToAllUsers(json.getLong("due-date"));
-				else if(json.get("deals").toString().equalsIgnoreCase("my-deals"))
-					portlet.dealsList=OpportunityUtil.getPendingDealsRelatedToCurrentUser(json.getLong("due-date"));
-			}
-		}else if(portlet.portlet_type==PortletType.DEALS && (portlet.name.equalsIgnoreCase("Deals By Milestone") || portlet.name.equalsIgnoreCase("Deals Funnel"))){
-			if(json!=null){
-				if(json.get("deals")!=null && (json.get("deals").toString().equalsIgnoreCase("all-deals") || json.get("deals").toString().equalsIgnoreCase("my-deals")) && json.get("track")!=null && json.get("due-date")!=null){
-					List<String> milestonesList=new ArrayList<String>();
-					List<Double> milestoneValuesList=new ArrayList<Double>();
-					List<Integer> milestoneNumbersList=new ArrayList<Integer>();
-					Milestone milestone = MilestoneUtil.getMilestone(Long.valueOf(json.get("track").toString()));
-					if(milestone!=null && milestone.milestones!=null){
-						String[] milestones=milestone.milestones.split(",");
-						for(int i=0;i<milestones.length;i++){
-							milestonesList.add(milestones[i]);
-							Map<Double,Integer> map=null;
-							if(json.get("deals").toString().equalsIgnoreCase("all-deals"))
-								map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],false,json.getLong("due-date"),null,milestone.id);
-							else if(json.get("deals").toString().equalsIgnoreCase("my-deals"))
-								map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],true,json.getLong("due-date"),null,milestone.id);
-							for(Map.Entry<Double, Integer> entry : map.entrySet()){
-								milestoneValuesList.add(entry.getKey());
-								milestoneNumbersList.add(entry.getValue());
-							}
-						}
-					}
-					portlet.milestonesList=milestonesList;
-					portlet.milestoneValuesList=milestoneValuesList;
-					portlet.milestoneNumbersList=milestoneNumbersList;
-				}
-			}
-			portlet.milestoneList=MilestoneUtil.getMilestonesList();
-		}else if(portlet.portlet_type==PortletType.DEALS && portlet.name.equalsIgnoreCase("Deals Won")){
-			long minTime=0L;
-			long maxTime=0L;
-			if(json!=null && json.get("duration")!=null){
-				if(json.get("duration").toString().equalsIgnoreCase("1-week")){
-					DateUtil startDateUtil = new DateUtil();
-		    		minTime = startDateUtil.removeDays(7).toMidnight().getTime().getTime() / 1000;
-		    		
-		    		DateUtil endDateUtil = new DateUtil();
-		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-		    		portlet.dealsList=OpportunityUtil.getOpportunitiesWon(minTime,maxTime);
-				}else if(json.get("duration").toString().equalsIgnoreCase("1-month")){
-					DateUtil startDateUtil = new DateUtil();
-		    		minTime = startDateUtil.removeDays(30).toMidnight().getTime().getTime() / 1000;
-		    		
-		    		DateUtil endDateUtil = new DateUtil();
-		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-		    		portlet.dealsList=OpportunityUtil.getOpportunitiesWon(minTime,maxTime);
-				}else if(json.get("duration").toString().equalsIgnoreCase("3-months")){
-					DateUtil startDateUtil = new DateUtil();
-		    		minTime = startDateUtil.removeDays(90).toMidnight().getTime().getTime() / 1000;
-		    		
-		    		DateUtil endDateUtil = new DateUtil();
-		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-		    		portlet.dealsList=OpportunityUtil.getOpportunitiesWon(minTime,maxTime);
-				}else if(json.get("duration").toString().equalsIgnoreCase("6-months")){
-					DateUtil startDateUtil = new DateUtil();
-		    		minTime = startDateUtil.removeDays(180).toMidnight().getTime().getTime() / 1000;
-		    		
-		    		DateUtil endDateUtil = new DateUtil();
-		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-		    		portlet.dealsList=OpportunityUtil.getOpportunitiesWon(minTime,maxTime);
-				}else if(json.get("duration").toString().equalsIgnoreCase("12-months")){
-					DateUtil startDateUtil = new DateUtil();
-		    		minTime = startDateUtil.removeDays(365).toMidnight().getTime().getTime() / 1000;
-		    		
-		    		DateUtil endDateUtil = new DateUtil();
-		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-		    		portlet.dealsList=OpportunityUtil.getOpportunitiesWon(minTime,maxTime);
-				}
-			}
-		}else if(portlet.portlet_type==PortletType.DEALS && portlet.name.equalsIgnoreCase("Closures Per Person")){
-			List<Integer> milestoneNumbersList=new ArrayList<Integer>();
-			List<Double> milestoneValuesList=new ArrayList<Double>();
-			List<DomainUser> domainUsersList=null;
-			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
-			if(dUser!=null)
-				domainUsersList=DomainUserUtil.getUsers(dUser.domain);
-			if(json!=null && json.get("due-date")!=null){
-				for(DomainUser domainUser : domainUsersList){
-					Map<Double,Integer> map = OpportunityUtil.getTotalMilestoneValueAndNumber("Won",true,json.getLong("due-date"),domainUser.id,null);
-					for(Map.Entry<Double, Integer> entry : map.entrySet()){
-						milestoneValuesList.add(entry.getKey());
-						milestoneNumbersList.add(entry.getValue());
-					}
-				}
-			}
-			portlet.milestoneNumbersList=milestoneNumbersList;
-			portlet.milestoneValuesList=milestoneValuesList;
-			portlet.domainUsersList=domainUsersList;
-		}else if(portlet.portlet_type==PortletType.TASKSANDEVENTS && portlet.name.equalsIgnoreCase("Agenda")){
-			portlet.eventsList=EventUtil.getTodayPendingEvents();
-		}else if(portlet.portlet_type==PortletType.TASKSANDEVENTS && portlet.name.equalsIgnoreCase("Today Tasks")){
-			portlet.tasksList=TaskUtil.getTodayPendingTasks();
-		}
-		return portlet;
-	}
 	public static List<Contact> getContactsList(JSONObject json, String sortKey)throws Exception{
 		List<Contact> contactsList=null;
 		if(json!=null && json.get("filter")!=null){
@@ -461,18 +245,18 @@ public class PortletUtil {
 	}
 	public static List<Opportunity> getPendingDealsList(JSONObject json)throws Exception{
 		List<Opportunity> dealsList=null;
-		if(json!=null && json.get("deals")!=null && json.get("due-date")!=null){
+		if(json!=null && json.get("deals")!=null){
 			if(json.get("deals").toString().equalsIgnoreCase("all-deals"))
-				dealsList=OpportunityUtil.getPendingDealsRelatedToAllUsers(json.getLong("due-date"));
+				dealsList=OpportunityUtil.getPendingDealsRelatedToAllUsers(0);
 			else if(json.get("deals").toString().equalsIgnoreCase("my-deals"))
-				dealsList=OpportunityUtil.getPendingDealsRelatedToCurrentUser(json.getLong("due-date"));
+				dealsList=OpportunityUtil.getPendingDealsRelatedToCurrentUser(0);
 		}
 		return dealsList;
 	}
 	public static List<Opportunity> getDealsWonList(JSONObject json)throws Exception{
 		long minTime=0L;
 		long maxTime=0L;
-		List<Opportunity> dealsList=null;
+		List<Opportunity> finalDealsList = new ArrayList<Opportunity>();
 		if(json!=null && json.get("duration")!=null){
 			if(json.get("duration").toString().equalsIgnoreCase("1-week")){
 				DateUtil startDateUtil = new DateUtil();
@@ -506,9 +290,25 @@ public class PortletUtil {
 	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
 			}
 
-    		dealsList=OpportunityUtil.getOpportunitiesWon(minTime,maxTime);
+			List<Opportunity> dealsList = OpportunityUtil.getOpportunitiesWon(null);
+    		List<Activity> wonDealsActivityList = ActivityUtil.getWonDealsActivityList(minTime,maxTime);
+    		Map<Long,Opportunity> dealsMap = new LinkedHashMap<Long,Opportunity>();
+    		Map<Long,Opportunity> wonDealsActivityMap = new LinkedHashMap<Long,Opportunity>();
+    		if(dealsList!=null)
+    			for(Opportunity opportunity : dealsList){
+    				dealsMap.put(opportunity.id,opportunity);
+    			}
+    		if(wonDealsActivityList!=null)
+    			for(Activity activity : wonDealsActivityList){
+    				if(dealsMap.containsKey(activity.entity_id))
+    					if(!wonDealsActivityMap.containsKey(activity.entity_id)){
+    						wonDealsActivityMap.put(activity.entity_id,dealsMap.get(activity.entity_id));
+    						finalDealsList.add(dealsMap.get(activity.entity_id));
+    					}
+    			}
+    				
 		}
-		return dealsList;
+		return finalDealsList;
 	}
 	public static List<Event> getAgendaList()throws Exception{
 		return EventUtil.getTodayPendingEvents();
@@ -519,7 +319,7 @@ public class PortletUtil {
 	public static JSONObject getDealsByMilestoneData(JSONObject json)throws Exception{
 		JSONObject dealsByMilestoneJSON=new JSONObject();
 		if(json!=null){
-			if(json.get("deals")!=null && (json.get("deals").toString().equalsIgnoreCase("all-deals") || json.get("deals").toString().equalsIgnoreCase("my-deals")) && json.get("track")!=null && json.get("due-date")!=null){
+			if(json.get("deals")!=null && (json.get("deals").toString().equalsIgnoreCase("all-deals") || json.get("deals").toString().equalsIgnoreCase("my-deals")) && json.get("track")!=null){
 				List<String> milestonesList=new ArrayList<String>();
 				List<Double> milestoneValuesList=new ArrayList<Double>();
 				List<Integer> milestoneNumbersList=new ArrayList<Integer>();
@@ -527,15 +327,17 @@ public class PortletUtil {
 				if(milestone!=null && milestone.milestones!=null){
 					String[] milestones=milestone.milestones.split(",");
 					for(int i=0;i<milestones.length;i++){
-						milestonesList.add(milestones[i]);
 						Map<Double,Integer> map=null;
 						if(json.get("deals").toString().equalsIgnoreCase("all-deals"))
-							map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],false,json.getLong("due-date"),null,milestone.id);
+							map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],false,0,null,milestone.id);
 						else if(json.get("deals").toString().equalsIgnoreCase("my-deals"))
-							map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],true,json.getLong("due-date"),null,milestone.id);
+							map = OpportunityUtil.getTotalMilestoneValueAndNumber(milestones[i],true,0,null,milestone.id);
 						for(Map.Entry<Double, Integer> entry : map.entrySet()){
-							milestoneValuesList.add(entry.getKey());
-							milestoneNumbersList.add(entry.getValue());
+							if(!milestones[i].equalsIgnoreCase("") && milestones[i]!=""){
+								milestonesList.add(milestones[i]);
+								milestoneValuesList.add(entry.getKey());
+								milestoneNumbersList.add(entry.getValue());
+							}
 						}
 					}
 				}
@@ -562,16 +364,37 @@ public class PortletUtil {
 		DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
 		if(dUser!=null)
 			domainUsersList=DomainUserUtil.getUsers(dUser.domain);
+		List<Activity> wonDealsActivityList = null;
 		if(json!=null && json.get("due-date")!=null){
-			for(DomainUser domainUser : domainUsersList){
-				Map<Double,Integer> map = OpportunityUtil.getTotalMilestoneValueAndNumber("Won",true,json.getLong("due-date"),domainUser.id,null);
-				for(Map.Entry<Double, Integer> entry : map.entrySet()){
-					milestoneValuesList.add(entry.getKey());
-					milestoneNumbersList.add(entry.getValue());
-				}
-				domainUserNamesList.add(domainUser.name);
-			}
+			wonDealsActivityList = ActivityUtil.getWonDealsActivityList(0,json.getLong("due-date")+(24*60*60));
 		}
+		for(DomainUser domainUser : domainUsersList){
+			double totalMilestoneValue=0;
+			List<Opportunity> finalDealsList = new ArrayList<Opportunity>();
+			List<Opportunity> dealsList = OpportunityUtil.getOpportunitiesWon(domainUser.id);
+			Map<Long,Opportunity> dealsMap = new LinkedHashMap<Long,Opportunity>();
+			Map<Long,Opportunity> wonDealsActivityMap = new LinkedHashMap<Long,Opportunity>();
+			if(dealsList!=null)
+				for(Opportunity opportunity : dealsList){
+					dealsMap.put(opportunity.id,opportunity);
+				}
+			if(wonDealsActivityList!=null)
+				for(Activity activity : wonDealsActivityList){
+					if(dealsMap.containsKey(activity.entity_id))
+						if(!wonDealsActivityMap.containsKey(activity.entity_id)){
+							wonDealsActivityMap.put(activity.entity_id,dealsMap.get(activity.entity_id));
+							finalDealsList.add(dealsMap.get(activity.entity_id));
+						}
+				}
+			for(Opportunity opportunity1 : finalDealsList){
+				if(opportunity1!=null && opportunity1.expected_value!=null)
+					totalMilestoneValue+=opportunity1.expected_value;
+    		}
+			milestoneValuesList.add(totalMilestoneValue);
+			milestoneNumbersList.add(finalDealsList.size());
+			domainUserNamesList.add(domainUser.name);
+		}
+		
 		closuresPerPersonJSON.put("milestoneNumbersList",milestoneNumbersList);
 		closuresPerPersonJSON.put("milestoneValuesList",milestoneValuesList);
 		closuresPerPersonJSON.put("domainUsersList",domainUserNamesList);
@@ -609,19 +432,34 @@ public class PortletUtil {
 	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
 			}
 			List<Integer> mailsCountList=new ArrayList<Integer>();
-			List<DomainUser> domainUsersList=DomainUserUtil.getAllUsers();
+			List<DomainUser> domainUsersList=null;
+			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
+			if(dUser!=null)
+				domainUsersList=DomainUserUtil.getUsers(dUser.domain);
 			List<String> domainUserNamesList=new ArrayList<String>();
+			List<Integer> mailsOpenedCountList=new ArrayList<Integer>();
 			for(DomainUser domainUser : domainUsersList){
 				List<ContactEmail> emailsList=ContactEmailUtil.getEmailsSent(domainUser,minTime,maxTime);
-				if(emailsList!=null)
-					mailsCountList.add(emailsList.size());
+				List<ContactEmail> emailsOpenedList=ContactEmailUtil.getEmailsOpenedByUser(domainUser,minTime,maxTime);
+				if(emailsList!=null){
+					if(emailsOpenedList!=null)
+						mailsCountList.add(emailsList.size()-emailsOpenedList.size());
+					else
+						mailsCountList.add(emailsList.size());
+				}
+					
 				else
 					mailsCountList.add(0);
+				if(emailsOpenedList!=null)
+					mailsOpenedCountList.add(emailsOpenedList.size());
+				else
+					mailsOpenedCountList.add(0);
 				domainUserNamesList.add(domainUser.name);
 			}
 			
 			emailsSentJSON.put("domainUsersList",domainUserNamesList);
 			emailsSentJSON.put("mailsCountList",mailsCountList);
+			emailsSentJSON.put("mailsOpenedCountList",mailsOpenedCountList);
 		}
 		return emailsSentJSON;
 	}
@@ -669,7 +507,10 @@ public class PortletUtil {
 	    		DateUtil endDateUtil = new DateUtil();
 	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
 			}
-			List<DomainUser> domainUsersList=DomainUserUtil.getAllUsers();
+			List<DomainUser> domainUsersList=null;
+			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
+			if(dUser!=null)
+				domainUsersList=DomainUserUtil.getUsers(dUser.domain);
 			List<String> domainUserNamesList=new ArrayList<String>();
 			List<Integer> assignedOpportunitiesCountList=new ArrayList<Integer>();
 			for(DomainUser domainUser : domainUsersList){
@@ -717,81 +558,60 @@ public class PortletUtil {
 	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
 			}
 		}
-		List<DomainUser> domainUsersList=DomainUserUtil.getAllUsers();
+		List<DomainUser> domainUsersList=null;
+		DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
+		if(dUser!=null)
+			domainUsersList=DomainUserUtil.getUsers(dUser.domain);
 		List<String> domainUserNamesList=new ArrayList<String>();
 		
-		List<Integer> incomingCompletedCallsCountList=new ArrayList<Integer>();
-		List<Integer> incomingFailedCallsCountList=new ArrayList<Integer>();
-		
-		List<Long> incomingCompletedCallsDurationList=new ArrayList<Long>();
-		
-		List<Integer> outgoingCompletedCallsCountList=new ArrayList<Integer>();
-		List<Integer> outgoingFailedCallsCountList=new ArrayList<Integer>();
-		
-		List<Long> outgoingCompletedCallsDurationList=new ArrayList<Long>();
-		
-		List<Integer> completedCallsCountList=new ArrayList<Integer>();
+		List<Integer> answeredCallsCountList=new ArrayList<Integer>();
+		List<Integer> busyCallsCountList=new ArrayList<Integer>();
 		List<Integer> failedCallsCountList=new ArrayList<Integer>();
+		List<Integer> voiceMailCallsCountList=new ArrayList<Integer>();
+		List<Integer> totalCallsCountList=new ArrayList<Integer>();
 		
-		List<Long> completedCallsDurationList=new ArrayList<Long>();
+		List<Long> callsDurationList=new ArrayList<Long>();
 		
 		for(DomainUser domainUser : domainUsersList){
-			int incomingCompletedCallsCount=0;
-			int incomingFailedCallsCount=0;
+			int answeredCallsCount=0;
+			int busyCallsCount=0;
+			int failedCallsCount=0;
+			int voiceMailCallsCount=0;
 			
-			long incomingCompletedCallsDuration=0;
+			int totalCallsCount=0;
 			
-			int outgoingCompletedCallsCount=0;
-			int outgoingFailedCallsCount=0;
-			
-			long outgoingCompletedCallsDuration=0;
+			long callsDuration=0;
 			
 			List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
 			for(Activity activity : callActivitiesList){
-				if(activity.custom2!=null && activity.custom2.equalsIgnoreCase("incoming")){
-					if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("completed")){
-						incomingCompletedCallsCount++;
-						if(activity.custom4!=null)
-							incomingCompletedCallsDuration += Long.valueOf(activity.custom4);
-					}else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("failed")){
-						incomingFailedCallsCount++;
-					}
-				}else if(activity.custom2!=null && activity.custom2.equalsIgnoreCase("outgoing")){
-					if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("completed")){
-						outgoingCompletedCallsCount++;
-						if(activity.custom4!=null)
-							outgoingCompletedCallsDuration += Long.valueOf(activity.custom4);
-					}else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("failed")){
-						outgoingFailedCallsCount++;
-					}
-				}
+				if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.ANSWERED))
+					answeredCallsCount++;
+				else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
+					busyCallsCount++;
+				else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
+					failedCallsCount++;
+				else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
+					voiceMailCallsCount++;
+				if(activity.custom4!=null && !activity.custom3.equalsIgnoreCase(Call.VOICEMAIL) && !activity.custom4.equalsIgnoreCase(null))
+					callsDuration+=Long.valueOf(activity.custom4);
+				totalCallsCount++;
 			}
-			incomingCompletedCallsCountList.add(incomingCompletedCallsCount);
-			incomingFailedCallsCountList.add(incomingFailedCallsCount);
+			answeredCallsCountList.add(answeredCallsCount);
+			busyCallsCountList.add(busyCallsCount);
+			failedCallsCountList.add(failedCallsCount);
+			voiceMailCallsCountList.add(voiceMailCallsCount);
+			totalCallsCountList.add(totalCallsCount);
 			
-			incomingCompletedCallsDurationList.add(incomingCompletedCallsDuration);
-			
-			outgoingCompletedCallsCountList.add(outgoingCompletedCallsCount);
-			outgoingFailedCallsCountList.add(outgoingFailedCallsCount);
-			
-			outgoingCompletedCallsDurationList.add(outgoingCompletedCallsDuration);
-			
-			completedCallsCountList.add(incomingCompletedCallsCount+outgoingCompletedCallsCount);
-			failedCallsCountList.add(incomingFailedCallsCount+outgoingFailedCallsCount);
-			
-			completedCallsDurationList.add(incomingCompletedCallsDuration+outgoingCompletedCallsDuration);
+			callsDurationList.add(callsDuration);
 			
 			domainUserNamesList.add(domainUser.name);
 		}
-		callsPerPersonJSON.put("incomingCompletedCallsCountList",incomingCompletedCallsCountList);
-		callsPerPersonJSON.put("incomingFailedCallsCountList",incomingFailedCallsCountList);
-		callsPerPersonJSON.put("incomingCompletedCallsDurationList",incomingCompletedCallsDurationList);
-		callsPerPersonJSON.put("outgoingCompletedCallsCountList",outgoingCompletedCallsCountList);
-		callsPerPersonJSON.put("outgoingFailedCallsCountList",outgoingFailedCallsCountList);
-		callsPerPersonJSON.put("outgoingCompletedCallsDurationList",outgoingCompletedCallsDurationList);
-		callsPerPersonJSON.put("completedCallsCountList",completedCallsCountList);
+		callsPerPersonJSON.put("answeredCallsCountList",answeredCallsCountList);
+		callsPerPersonJSON.put("busyCallsCountList",busyCallsCountList);
 		callsPerPersonJSON.put("failedCallsCountList",failedCallsCountList);
-		callsPerPersonJSON.put("completedCallsDurationList",completedCallsDurationList);
+		callsPerPersonJSON.put("voiceMailCallsCountList",voiceMailCallsCountList);
+		callsPerPersonJSON.put("callsDurationList",callsDurationList);
+		callsPerPersonJSON.put("totalCallsCountList",totalCallsCountList);
 		callsPerPersonJSON.put("domainUsersList",domainUserNamesList);
 		
 		return callsPerPersonJSON;	

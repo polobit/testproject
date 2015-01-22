@@ -5483,7 +5483,8 @@ $(function()
 		else{
 			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/'+filter_name, async : false, dataType : 'json',
 				success: function(data){
-					header_name = ""+data.name;
+					if(data!=null && data!=undefined)
+						header_name = ""+data.name;
 				} });
 		} 	
 		return header_name;
@@ -5528,13 +5529,22 @@ $(function()
 				 */
 	Handlebars.registerHelper('get_deals_funnel_portlet_header', function(track_id) {
 		var header_name = '';
-		if(track_id==0)
-			header_name = "Default";
-		else{
-			var milestone = $.ajax({ type : 'GET', url : '/core/api/milestone/'+track_id, async : false, dataType : 'json',
-				success: function(data){
-					header_name = data.name;
-				} });
+		App_Portlets.track_length = 0;
+		$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
+			success: function(data){
+				App_Portlets.track_length = data.length;
+				App_Portlets.deal_tracks = data;
+			} });
+		if(App_Portlets.track_length>1){
+			if(track_id==0)
+				header_name = "- Default";
+			else{
+				var milestone = $.ajax({ type : 'GET', url : '/core/api/milestone/'+track_id, async : false, dataType : 'json',
+					success: function(data){
+						if(data!=null && data!=undefined)
+							header_name = "- "+data.name;
+					} });
+			}
 		} 	
 		return header_name;
 	});
