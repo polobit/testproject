@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.agilecrm.activities.CreateTaskDeferredTask;
 import com.agilecrm.activities.TaskReminder;
 import com.agilecrm.util.NamespaceUtil;
 
@@ -36,7 +37,7 @@ public class TaskReminderServlet extends HttpServlet
 	    for (String domain : domains)
 	    {
 
-		TaskReminder.sendDailyTaskReminders(domain, null, true);
+		CreateTaskDeferredTask.createTaskReminderDeferredTask(domain, null, true);
 	    }
 	}
 	catch (IOException e)

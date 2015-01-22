@@ -27,7 +27,7 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  * user.
  * </p>
  * 
- * @author Rammohan
+ * @author Jagadeesh
  * 
  */
 public class TaskReminder
@@ -39,7 +39,7 @@ public class TaskReminder
 
 	if (time == null && executionFromServlet)
 	{
-	    String timezone = TaskUtil.getTimezoneFromAccountPrefs(domain);
+	    String timezone = TaskUtil.getTimezoneFromAccountPrefs();
 	    Calendar calendar = Calendar.getInstance();
 	    calendar.setTimeZone(TimeZone.getTimeZone(timezone));
 	    time = WebCalendarEventUtil.getEppochTime(calendar.get(Calendar.DAY_OF_MONTH),

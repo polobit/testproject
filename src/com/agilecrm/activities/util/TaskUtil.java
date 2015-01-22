@@ -735,11 +735,10 @@ public class TaskUtil
      * @param namespace
      * @return
      */
-    public static String getTimezoneFromAccountPrefs(String namespace)
+    public static String getTimezoneFromAccountPrefs()
     {
 
-	String oldnamespace = NamespaceManager.get();
-	NamespaceManager.set(namespace);
+	System.out.println("domain name in getTimezone in TaskUtil " + NamespaceManager.get());
 	try
 	{
 	    String timezone = AccountPrefsUtil.getAccountPrefs().timezone;
@@ -750,12 +749,8 @@ public class TaskUtil
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-	    System.out.println("exception occured while getting timezone " + namespace);
+	    System.out.println("exception occured while getting timezone " + NamespaceManager.get());
 	    return "UTC";
-	}
-	finally
-	{
-	    NamespaceManager.set(oldnamespace);
 	}
     }
 

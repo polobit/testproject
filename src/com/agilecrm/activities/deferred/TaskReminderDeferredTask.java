@@ -11,8 +11,8 @@ import java.util.Map;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
+import com.agilecrm.activities.CreateTaskDeferredTask;
 import com.agilecrm.activities.Task;
-import com.agilecrm.activities.TaskReminder;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
@@ -22,7 +22,6 @@ import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.SendMail;
-import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -35,7 +34,7 @@ import com.thirdparty.mandrill.Mandrill;
  * DeferredTask interface and overrides it's run method to send daily reminder
  * (an email) about the pending tasks.
  * 
- * @author Rammohan
+ * @author Jagadeesh
  * 
  */
 @SuppressWarnings("serial")
@@ -68,8 +67,6 @@ public class TaskReminderDeferredTask implements DeferredTask
      **/
     public void run()
     {
-	String oldNamespace = NamespaceManager.get();
-	NamespaceManager.set(domain);
 
 	try
 	{
@@ -136,7 +133,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 		    SendMail.sendMail("maildummy800@gmail.com", SendMail.DUE_TASK_REMINDER_SUBJECT + " " + domain,
 			    SendMail.DUE_TASK_REMINDER, map);
 
-		    TaskReminder.sendDailyTaskReminders(domain, time, false);
+		    CreateTaskDeferredTask.createTaskReminderDeferredTask(domain, time, false);
 		    return;
 		}
 
@@ -176,7 +173,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 		        SendMail.DUE_TASK_REMINDER, map);
 	    }
 
-	    TaskReminder.sendDailyTaskReminders(domain, time, false);
+	    CreateTaskDeferredTask.createTaskReminderDeferredTask(domain, time, false);
 
 	}
 	catch (TransientFailureException tfe)
@@ -217,7 +214,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 	    {
 		try
 		{
-		    TaskReminder.sendDailyTaskReminders(domain, time, false);
+		    CreateTaskDeferredTask.createTaskReminderDeferredTask(domain, time, false);
 		    return;
 		}
 		catch (IOException e1)
@@ -228,10 +225,6 @@ public class TaskReminderDeferredTask implements DeferredTask
 
 	    }
 
-	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
 	}
     }
 }
