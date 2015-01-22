@@ -40,10 +40,14 @@ var _agile_synch_form_v2 = function()
 				agile_address[name] = value;
 			else if (name == "tags")
 			{
-				if (agile_tags)
-					agile_tags = agile_tags + ',' + value;
-				else
-					agile_tags = value;
+				var field_type = agile_form[i].getAttribute("type");
+				if (field_type == "text" || agile_form[i].checked || !field_type)
+				{
+					if (agile_tags)
+						agile_tags = agile_tags + ',' + value;
+					else
+						agile_tags = value;
+				}
 			}
 			else if (name == "note")
 			{
@@ -206,10 +210,14 @@ var _agile_synch_form = function()
 				agile_address[name] = value;
 			else if (name == "tags")
 			{
-				if (agile_tags)
-					agile_tags = agile_tags + ',' + value;
-				else
-					agile_tags = value;
+				var field_type = agile_form[i].getAttribute("type");
+				if (field_type == "text" || agile_form[i].checked || !field_type)
+				{
+					if (agile_tags)
+						agile_tags = agile_tags + ',' + value;
+					else
+						agile_tags = value;
+				}
 			}
 			else
 				agile_contact[name] = value;
