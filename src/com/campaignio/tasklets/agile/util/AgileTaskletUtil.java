@@ -279,6 +279,7 @@ public class AgileTaskletUtil
 				owner.put("name", domainUser.name);
 				owner.put("email", domainUser.email);
 				owner.put("calendar_url", MergeFieldsUtil.addCalendarMergeField(domainUser, subscriberJSON));
+				owner.put("signature", MergeFieldsUtil.addSignatureMergeField(domainUser, subscriberJSON));
 			}
 
 			// Inserts contact owner-name and owner-email.
