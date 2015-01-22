@@ -12,6 +12,9 @@ function loadPortlets(el){
 	App_Portlets.tasksCollection = new Array();
 	App_Portlets.pendingDeals = new Array();
 	App_Portlets.dealsWon = new Array();
+	App_Portlets.filteredCompanies = new Array();
+	App_Portlets.filteredContacts = new Array();
+	App_Portlets.emailsOpened = new Array();
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
