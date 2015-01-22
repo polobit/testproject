@@ -56,6 +56,17 @@
 	             	<span class="imap-share-status"></span>
 					</span>
 			   </div>
+			   <div class="control-group" style="margin-top:10px">
+	            <div class="controls">
+	                <a href="#" class="imap-folders-settings-click"><i class='icon-plus-sign'/></i> Email folders</a>
+				    <span class="imap-folders-select" style="display:none;">
+				   	<a href="#" class="imap-folders-settings-cancel" name = "imap" style="margin-bottom:20px"><i class='icon-minus-sign'/></i> Email folders</a>
+				   	<label class="control-label" style="margin-top:10px">Select folders to fetch emails from (max 3)</label>
+					<select name="folders" multiple id="imap-folders-multi-select" class = "multi-select " limit = "3" style="margin-bottom: 5px; overflow: auto">
+					</select>
+	             	<span class="imap-folders-settings-status"></span>
+					</span>
+			   </div>
 			</div>
             <div class="form-actions"> 
                 <button type="submit" class="save btn btn-primary" style="margin-left:-15pt">Save </button>
