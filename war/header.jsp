@@ -146,7 +146,7 @@
 								<ul class="dropdown-menu" style="width: 25em; right: -11px;">
 								</ul></li>
 								<li id="due_tasks" ><a style="position:relative;"href="#tasks"><i class="icon-tasks" title="Tasks"></i>
-											<span class="navbar_due_tasks" ><span title="Tasks due" id="due_tasks_count" style="position:relative;top:-2px;"></span></span></a></li>
+											<span class="block pos-abs pos-r-0 badge badge-important p-t-none p-b-none p-l-xs p-r-xs pos-t-0" ><span title="Tasks due" id="due_tasks_count" class="text-xxs"></span></span></a></li>
 								
 
 							<li class="dropdown" id="menu1"><a class="dropdown-toggle"
