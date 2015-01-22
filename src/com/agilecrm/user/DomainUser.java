@@ -120,7 +120,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     // Scopes to read from form. This field is required to have backward
     // compatibility and allow new scopes in future
     @NotSaved
-    public HashSet<NavbarConstants> newMenuScopes = null;
+    public LinkedHashSet<NavbarConstants> newMenuScopes = null;
 
     // This field is saved for old domains
     @NotSaved
@@ -783,11 +783,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    // If no scopes are set, then all scopes are added
 	    loadScopes();
 
-	    if (menu_scopes == null)
-	    {
-		menu_scopes = new LinkedHashSet<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
-	    }
-
 	    loadMenuScopes();
 
 	}
@@ -799,13 +794,22 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
     private void setPerpersisMenuScopes()
     {
-	if (restricted_menu_scopes != null && newMenuScopes == null)
+	 List<NavbarConstants> defaultScopes = new ArrayList<NavbarConstants>(
+		    Arrays.asList(NavbarConstants.values()));
+	 
+	if (restricted_menu_scopes != null)
 	{
+	   
+	    defaultScopes.removeAll(restricted_menu_scopes);
+	    
+	    menu_scopes = new LinkedHashSet<NavbarConstants>(defaultScopes);
+	    newMenuScopes = menu_scopes;
 	    return;
 	}
-	if (restricted_menu_scopes == null && newMenuScopes == null && menu_scopes == null)
+	else if (restricted_menu_scopes == null && newMenuScopes == null && menu_scopes == null)
 	{
 	    restricted_menu_scopes = new LinkedHashSet<NavbarConstants>();
+	    menu_scopes = newMenuScopes = new LinkedHashSet<NavbarConstants>(defaultScopes);
 	}
 	else
 	{
@@ -814,7 +818,8 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     }
 
     /**
-     * Called when restricted scopes is null to ensure backward compatibility. Called from both post load and prepersit
+     * Called when restricted scopes is null to ensure backward compatibility.
+     * Called from both post load and prepersit
      */
     private void setRestricted_menu_scopes()
     {
@@ -839,6 +844,11 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    restricted_menu_scopes = new LinkedHashSet<NavbarConstants>(defaultScopes);
 	}
 
+	if(menu_scopes == null && newMenuScopes ==null)
+	{
+	    restricted_menu_scopes = new LinkedHashSet<NavbarConstants>();
+	    menu_scopes = newMenuScopes = new LinkedHashSet<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
+	}
     }
 
     /**
@@ -857,7 +867,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     }
 
     /**
-     * Called from post load to set menu scopes 
+     * Called from post load to set menu scopes
      */
     private void setMenuScopesWithRestrictedScopes()
     {
