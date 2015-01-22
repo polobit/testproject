@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -17,6 +18,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
@@ -725,6 +727,30 @@ public class TaskUtil
 	default_task
 	        .add("<a href=\"https://www.facebook.com/crmagile\" target=\"_blank\" rel=\"nofollow\" title=\"Link: https://www.facebook.com/crmagile\">Like Agile on Facebook</a>");
 	return default_task;
+    }
+
+    public static String getTimezoneFromAccountPrefs(String namespace)
+    {
+
+	String oldnamespace = NamespaceManager.get();
+	NamespaceManager.set(namespace);
+	try
+	{
+	    String timezone = AccountPrefsUtil.getAccountPrefs().timezone;
+	    if (StringUtils.isEmpty(timezone))
+		timezone = "UTC";
+	    return timezone;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println("exception occured while getting timezone " + namespace);
+	    return "UTC";
+	}
+	finally
+	{
+	    NamespaceManager.set(oldnamespace);
+	}
     }
 
     /***************************************************************************/

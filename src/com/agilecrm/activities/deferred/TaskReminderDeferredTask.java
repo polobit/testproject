@@ -1,5 +1,6 @@
 package com.agilecrm.activities.deferred;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
 import com.agilecrm.activities.Task;
+import com.agilecrm.activities.TaskReminder;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
@@ -37,6 +39,7 @@ public class TaskReminderDeferredTask implements DeferredTask
      * Stores name of the domain
      */
     String domain = null;
+    Long time = null;
 
     /**
      * Default constructor, assigns domain name
@@ -44,9 +47,10 @@ public class TaskReminderDeferredTask implements DeferredTask
      * @param domain
      *            name as string
      */
-    public TaskReminderDeferredTask(String domain)
+    public TaskReminderDeferredTask(String domain, Long time)
     {
 	this.domain = domain;
+	this.time = time;
     }
 
     /**
@@ -148,6 +152,13 @@ public class TaskReminderDeferredTask implements DeferredTask
 		SendMail.sendMail(domainUser.email, SendMail.DUE_TASK_REMINDER_SUBJECT, SendMail.DUE_TASK_REMINDER, map);
 	    }
 
+	    TaskReminder.sendDailyTaskReminders(domain, time, false);
+
+	}
+	catch (IOException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
 	}
 	finally
 	{

@@ -1,13 +1,15 @@
 package com.agilecrm.activities;
 
 import java.io.IOException;
-import java.util.Set;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 import com.agilecrm.activities.deferred.TaskReminderDeferredTask;
+import com.agilecrm.activities.util.TaskUtil;
+import com.agilecrm.activities.util.WebCalendarEventUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
-import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -30,17 +32,26 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  */
 public class TaskReminder
 {
-    public static void sendDailyTaskReminders() throws IOException
+    public static void sendDailyTaskReminders(String domain, Long time, boolean executionFromServlet)
+	    throws IOException
     {
-	// Get Namespaces / domains
-	Set<String> domains = NamespaceUtil.getAllNamespaces();
+	int sec_per_day = 86400;
+	String timezone = TaskUtil.getTimezoneFromAccountPrefs(domain);
+	Calendar calendar = Calendar.getInstance();
+	calendar.setTimeZone(TimeZone.getTimeZone(timezone));
+
+	if (time == null && executionFromServlet)
+	{
+	    time = WebCalendarEventUtil.getEppochTime(calendar.get(Calendar.DAY_OF_MONTH),
+		    calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR), 07, 30, TimeZone.getTimeZone(timezone));
+	}
 
 	// Start a task queue for each domain
-	for (String domain : domains)
-	{
-	    TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(domain);
-	    Queue queue = QueueFactory.getQueue("due-task-reminder");
-	    queue.addAsync(TaskOptions.Builder.withPayload(taskReminderDeferredTask));
-	}
+	TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(domain, time);
+	Queue queue = QueueFactory.getQueue("due-task-reminder");
+
+	TaskOptions options = TaskOptions.Builder.withPayload(taskReminderDeferredTask);
+	options.etaMillis((time + sec_per_day) * 1000);
+	queue.add(options);
     }
 }

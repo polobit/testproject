@@ -259,13 +259,14 @@ public class TasksAPI
     {
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
 	ActivitySave.createLogForBulkDeletes(EntityType.TASK, tasksJSONArray, String.valueOf(tasksJSONArray.length()),
-		"");
+	        "");
 	Task.dao.deleteBulkByIds(tasksJSONArray);
     }
 
     /**
      * Daily task reminder
      */
+    @Deprecated
     @Path("remainder")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -273,7 +274,7 @@ public class TasksAPI
     {
 	try
 	{
-	    TaskReminder.sendDailyTaskReminders();
+	    TaskReminder.sendDailyTaskReminders(null, null, false);
 	}
 	catch (IOException e)
 	{
@@ -432,7 +433,7 @@ public class TasksAPI
 	}
 
 	return TaskUtil.getTasksRelatedToOwnerOfTypeAndDue(criteria, type, owner, pending, null, null, startTime,
-		endTime);
+	        endTime);
     }
 
     /**
