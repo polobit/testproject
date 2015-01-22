@@ -277,7 +277,12 @@ var ContactsRouter = Backbone.Router.extend({
 					if(collection.models.length > 0) {
 						count = collection.models[0].attributes.count || collection.models.length;
 					}
-					$('#contacts-count').html("<small>(" + count + " Total)</small>");
+					var count_message;
+					if (count > 9999)
+						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+					else
+						count_message = "<small> (" + count + " Total) </small>";
+					$('#contacts-count').html(count_message);
 					setupViews();
 					setupContactFilterList();
 				} else {					
@@ -1005,7 +1010,12 @@ var ContactsRouter = Backbone.Router.extend({
 					if(collection.models.length > 0) {
 						count = collection.models[0].attributes.count || collection.models.length;
 					}
-					$('#contacts-count').html("<small>(" + count + " Total)</small>");
+					var count_message;
+					if (count > 9999)
+						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+					else
+						count_message = "<small> (" + count + " Total) </small>";
+					$('#contacts-count').html(count_message);
 				} else {					
 					setupLhsFilters(el);
 				}
