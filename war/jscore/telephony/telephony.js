@@ -24,6 +24,9 @@ var User_ID;
 var SIP_Call_Noty_IMG = "";
 var Contact_Link = "";
 
+// Call is ignored
+var Is_Ignore = false;
+
 // Call noty.
 var CALL;
 

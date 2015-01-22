@@ -107,9 +107,11 @@ $(function()
 		// Display
 		showCallNotyPopup("ignored", "error", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><b>Ignored call  </b>'+ User_Number + '<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', 5000);
 
-		// SIP rehject call.
+		// SIP reject call.
 		Sip_Session_Call.reject(Config_Call);
 
+		Is_Ignore = true;
+		
 		// Remove html5 notification.
 		if (Notify_Call)
 		{

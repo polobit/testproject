@@ -193,7 +193,7 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 				showCallNotyPopup("userNotFound", "error", "SIP: User not found.", false);
 			else if(e.description == "Call terminating...")
 			    console.log("SIP : Terminated because " + e.description);
-			else
+			else if(!Is_Ignore)
 				showCallNotyPopup("disconnected", 'error', "SIP : Terminated because " + e.description, 5000);
 
 			// call terminated.			
@@ -202,6 +202,7 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			User_Img = null;
 			User_ID = null;
 			SIP_Call_Noty_IMG = "";
+			Is_Ignore = false;
 
 			// Close html5 notification.
 			if (Notify_Call)
