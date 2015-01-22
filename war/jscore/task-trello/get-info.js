@@ -70,6 +70,39 @@ function getNewDueDate(newTaskListId)
 	return (getGMTTimeFromDate(d) / 1000);
 }
 
+
+
+//As per new task list get new due date for task, after task drop
+function getNewDueDateBasedOnTime(newTaskListId,duedate)
+{
+	var d = new Date();
+	var d1 = new Date(duedate*1000);
+	var secs = d1.getSeconds() + (60 * d1.getMinutes()) + (60 * 60 * d1.getHours());
+	console.log(secs);
+
+	// OVERDUE (yesterday)
+	if (newTaskListId == "OVERDUE")
+		d.setDate(d.getDate() - 1);
+
+	// Today
+	if (newTaskListId == "TODAY")
+		console.log(getGMTTimeFromDate(d) / 1000);
+
+	// Tomorrow
+	if (newTaskListId == "TOMORROW")
+		d.setDate(d.getDate() + 1);
+
+	// Later Day after tomorrow
+	if (newTaskListId == "LATER")
+		d.setDate(d.getDate() + 2);
+
+	console.log((getGMTTimeFromDate(d) / 1000));
+
+	return (getGMTTimeFromDate(d) / 1000)+secs;
+}
+
+
+
 // On basis of status return progress value, when criteria is status and task is
 // dragged in task lists.
 function getProgressValue(status)

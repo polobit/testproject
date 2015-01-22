@@ -163,7 +163,12 @@ $(function()
 		 * @param optionsTemplate-
 		 *            to fill options with workflows
 		 */
-		fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', 'no-callback', optionsTemplate, false);
+		fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', function()
+				{
+					
+					$('#email-tracking-campaign-id option:first').after('<option value="0">All</option>');
+					
+				}, optionsTemplate, false);
 	});
 });
 

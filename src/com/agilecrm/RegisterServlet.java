@@ -13,10 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.agilecrm.activities.EventReminder;
 import com.agilecrm.account.APIKey;
+import com.agilecrm.activities.EventReminder;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.Note;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -50,11 +52,13 @@ import com.googlecode.objectify.Key;
 @SuppressWarnings("serial")
 public class RegisterServlet extends HttpServlet
 {
-    public static final String COMPANY_TYPE = "Company Type";
+    public static final String COMPANY_TYPE = "Business Type";
     public static final String PLAN_CHOSEN = "Plan";
     public static final String USERS_COUNT = "Users";
     public static final String ROLE = "Role";
     public static final String DOMAIN = "Domain";
+    private static final String SIGN_UP_TAG = "Signup";
+    private static final String DOMAIN_OWNER_TAG = "Domain Owner";
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
@@ -210,7 +214,7 @@ public class RegisterServlet extends HttpServlet
 	try
 	{
 	    // Creates contact in our domain
-	    createUserInOurDomain(request);
+	    createUserInOurDomain(request, domainUser);
 	}
 	catch (Exception e)
 	{
@@ -223,7 +227,7 @@ public class RegisterServlet extends HttpServlet
 	response.sendRedirect(redirectionURL);
     }
 
-    private void createUserInOurDomain(HttpServletRequest request)
+    private void createUserInOurDomain(HttpServletRequest request, DomainUser user)
     {
 	// Form 1
 	String userDomain = NamespaceManager.get();
@@ -328,10 +332,28 @@ public class RegisterServlet extends HttpServlet
 		key = APIKey.getDomainUserKeyRelatedToAPIKey("ckjpag3g8k9lcakm9mu3ar4gc8");
 	    }
 
+	    Tag signupTag = new Tag(SIGN_UP_TAG);
+	    contact.addTag(signupTag);
+
+	    // Dummy check. If user goes through register servlet he is domain
+	    // owner.
+	    if (user.is_account_owner)
+	    {
+		Tag domainOwnerTag = new Tag(DOMAIN_OWNER_TAG);
+		contact.addTag(domainOwnerTag);
+	    }
+
 	    contact.setContactOwner(key);
 	    System.out.println("contact to be saved : " + contact);
 	    contact.save();
 	    System.out.println("contact after saving : " + contact);
+	    String referrar_note_description = getReferrarParameters(request);
+	    if (StringUtils.isNotEmpty(referrar_note_description))
+	    {
+		Note note = new Note("Referrer", referrar_note_description);
+		note.addContactIds((contact.id).toString());
+		note.save();
+	    }
 	}
 	catch (Exception e)
 	{
@@ -350,8 +372,57 @@ public class RegisterServlet extends HttpServlet
 
 	property.name = name;
 	property.value = value;
-	property.type = property.getType();
+	property.type = property.getFieldType();
 	return property;
+    }
+
+    private String getReferrarParameters(HttpServletRequest request)
+    {
+
+	Cookie[] cookies = request.getCookies();
+
+	String utmsource = null;
+	String utmcampaign = null;
+	String utmmedium = null;
+	String utmreferencedomain = null;
+	String referrar_note_description = null;
+
+	if (cookies != null && cookies.length > 0)
+	{
+	    for (int i = 0; i < cookies.length; i++)
+	    {
+		Cookie cookie = cookies[i];
+		System.out.println("cookie " + cookie);
+		if (cookie.getName().equals("_agile_utm_source"))
+		{
+		    utmsource = cookie.getValue();
+		}
+		if (cookie.getName().equals("_agile_utm_campaign"))
+		{
+		    utmcampaign = cookie.getValue();
+		}
+		if (cookie.getName().equals("_agile_utm_medium"))
+		{
+		    utmmedium = cookie.getValue();
+		}
+		if (cookie.getName().equals("agile_reference_domain"))
+		{
+		    utmreferencedomain = cookie.getValue();
+		}
+		System.out.println("in cookies utm source " + utmsource + " utm medium " + utmmedium + " utm campaign "
+		        + utmcampaign + " reference domain " + utmreferencedomain);
+		if (cookie.getName().equals("agile_reference_domain"))
+		    cookie.setMaxAge(0);
+
+	    }
+	    if (StringUtils.isNotEmpty(utmsource) && StringUtils.isNotEmpty(utmcampaign)
+		    && StringUtils.isNotEmpty(utmmedium) && StringUtils.isNotEmpty(utmreferencedomain))
+		referrar_note_description = " Source - " + utmsource + "\n Campaign -  " + utmcampaign + "\n Medium - "
+		        + utmmedium + "\n Reference Domain -" + utmreferencedomain;
+
+	}
+
+	return referrar_note_description;
     }
 
     /**
@@ -399,7 +470,7 @@ public class RegisterServlet extends HttpServlet
 	System.out.println("reference domain in register servlet " + reference_domain);
 	// Create Domain User, Agile User
 	domainUser = new DomainUser(domain, userInfo.getEmail(), userInfo.getName(), password, true, true,
-		reference_domain);
+	        reference_domain);
 
 	// Set IP Address
 	domainUser.setInfo(DomainUser.IP_ADDRESS, "");

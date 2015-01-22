@@ -314,7 +314,7 @@ function deserializeChainedSelect(form, el, el_self)
 			 * Chains dependencies of input fields with jquery.chained.js based
 			 * on the rule element
 			 */
-			chainFilters(rule_element, el);
+			chainFilters(rule_element);
 
 			$(parent_element).append(rule_element);
 			deserializeChainedElement(data, rule_element);
@@ -329,7 +329,7 @@ function deserializeChainedSelect(form, el, el_self)
 }
 
 function deserializeChainedElement(data, rule_element)
-{
+{	$(rule_element).removeClass('hide');
 	$.each(data, function(i, value)
 	{
 		var input_element = ($(rule_element).find('*[name="' + i + '"]').children())[0];
@@ -444,6 +444,9 @@ function deserializeChainedElementWebrule(data, rule_element)
 			// Selects the option
 			if ($(element).attr('value') == value)
 			{
+				if((value == "UNSUBSCRIBE_CAMPAIGN" || value == "ASSIGN_CAMPAIGN") && data['RHS']) {
+					$(element).attr('data', data['RHS']);
+				}
 				$(element).attr("selected", "selected");
 				$(input_element).trigger("change");
 				return;
@@ -507,4 +510,62 @@ function deserializeChainedSelect1(form, el, element)
 
 		deserializeChainedElementWebrule(data, rule_element);
 	})
+}
+	
+	function deserializeLhsFilters(element, data)
+{
+	var json_object = JSON.parse(data);
+	var tagsConditionsCount =0;
+	$.each(json_object.rules, function(index, filter) {
+		var LHS = filter.LHS;
+		var CONDITION = filter.CONDITION;
+		var RHS_VALUE = filter.RHS;
+		var RHS_NEW_VALUE = filter.RHS_NEW;
+		var fieldName = LHS.replace(/ +/g, '_');
+		var currentElemnt = $(element).find('#'+fieldName+'_div');
+		if(LHS == 'tags') {
+			$('#tags_div').parent().find('a').addClass('bold-text');
+			$('#tags_div').removeClass('hide');
+			if(tagsConditionsCount == 0) {
+				currentElemnt = $('#tags-lhs-filter-table').find("div.lhs-contact-filter-row:last")
+				$('#tags_div').prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
+			} else {
+				var htmlContent = $('#tags-lhs-filter-table').find("div.hide.master-tags-add-div").clone();
+				htmlContent.removeClass('hide').addClass('lhs-contact-filter-row');
+				addTagsDefaultTypeahead(htmlContent);
+				$(htmlContent).find("i.filter-tags-multiple-remove-lhs").css("display", "inline-block");
+				$(htmlContent).appendTo('#tags-lhs-filter-table');
+				//$('#tags-lhs-filter-table').find("div.lhs-contact-filter-row:last").append(htmlContent);
+				currentElemnt = $('#tags-lhs-filter-table').find("div.lhs-contact-filter-row:last");
+			}
+			tagsConditionsCount++;
+		} else {
+			$(currentElemnt).prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
+		}
+		$(currentElemnt).parent().find("a").addClass('bold-text');
+		$(currentElemnt).removeClass('hide');
+		$(currentElemnt).find('[name="CONDITION"]').val(CONDITION);
+		$(currentElemnt).find('[name="CONDITION"]').trigger('change');
+		var RHS_ELEMENT = $(currentElemnt).find('.'+CONDITION).find('#RHS').children();
+		var RHS_NEW_ELEMENT = $(currentElemnt).find('.'+CONDITION).find('#RHS_NEW').children();
+		if ($(RHS_ELEMENT).hasClass("date")) {
+			RHS_VALUE = getLocalTimeFromGMTMilliseconds(RHS_VALUE);
+			$(RHS_ELEMENT).val(new Date(parseInt(RHS_VALUE)).format('mm/dd/yyyy'));
+			$(RHS_ELEMENT).attr('prev-val', new Date(parseInt(RHS_VALUE)).format('mm/dd/yyyy'));
+		} else {
+			$(RHS_ELEMENT).val(RHS_VALUE);
+			$(RHS_ELEMENT).attr('prev-val', RHS_VALUE);
+		}
+		if(RHS_NEW_ELEMENT) {
+			if ($(RHS_NEW_ELEMENT).hasClass("date")) {
+				RHS_NEW_VALUE = getLocalTimeFromGMTMilliseconds(RHS_NEW_VALUE);
+				$(RHS_NEW_ELEMENT).val(new Date(parseInt(RHS_NEW_VALUE)).format('mm/dd/yyyy'));
+				$(RHS_NEW_ELEMENT).attr('prev-val', new Date(parseInt(RHS_NEW_VALUE)).format('mm/dd/yyyy'));
+			} else {
+				$(RHS_NEW_ELEMENT).val(RHS_NEW_VALUE);
+				$(RHS_NEW_ELEMENT).attr('prev-val', RHS_NEW_VALUE);
+			}
+		}
+
+	});
 }

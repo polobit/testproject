@@ -17,6 +17,8 @@
  * 
  */
 
+var _CONTACT_CUSTOM_FIELDS = undefined;
+
 function insertSelectedMergeField(ele, target_id)
 {
 	// current value
@@ -36,13 +38,22 @@ function insertSelectedMergeField(ele, target_id)
 function getMergeFields(type)
 {
 
-	var options = { "Select Merge Field" : "", "First Name" : "{{first_name}}", "Last Name" : "{{last_name}}", "Score" : "{{score}}",
+	var options = { "Select Merge Field" : "", "First Name" : "{{first_name}}", "First Name Fix" : "{{first_name_fix}}", "Last Name" : "{{last_name}}", "Last Name Fix" : "{{last_name_fix}}", "Name Fix" : "{{name_fix}}", "Score" : "{{score}}",
 		"Created Date" : "{{created_date}}", "Modified Date" : "{{modified_date}}", "Email" : "{{email}}", "Company" : "{{company}}", "Title" : "{{title}}",
 		"Website" : "{{website}}", "Phone" : "{{phone}}", "City" : "{{location.city}}", "State" : "{{location.state}}", "Country" : "{{location.country}}",
-		"Twitter Id" : "{{twitter_id}}", "LinkedIn Id" : "{{linkedin_id}}", "Owner Name" : "{{owner.name}}", "Owner Email" : "{{owner.email}}" , "Calendar URL" : "{{owner.calendar_url}}"};
+		"Twitter Id" : "{{twitter_id}}", "LinkedIn Id" : "{{linkedin_id}}", "Owner Name" : "{{owner.name}}", "Owner Email" : "{{owner.email}}" , "Owner calendar URL" : "{{owner.calendar_url}}"};
 
 	// Get Custom Fields in template format
-	var custom_fields = get_custom_fields();
+	var custom_fields;
+	
+	// Cache Contact Custom fields
+	if(_CONTACT_CUSTOM_FIELDS)
+		custom_fields = _CONTACT_CUSTOM_FIELDS
+	else
+	{
+		_CONTACT_CUSTOM_FIELDS = get_custom_fields();
+		custom_fields = _CONTACT_CUSTOM_FIELDS;
+	}
 
 	console.log("Custom Fields are");
 

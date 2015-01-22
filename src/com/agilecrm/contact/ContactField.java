@@ -2,6 +2,9 @@ package com.agilecrm.contact;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+
 /**
  * <code>ContactField</code> class is embedded to {@link Contact} class to store
  * its information like name, email, address and etc.. as ContactField objects
@@ -86,14 +89,15 @@ public class ContactField
 	type = field.type;
     }
     
-    public FieldType getType()
+    @JsonIgnore
+    public FieldType getFieldType()
     {
 	String fieldName = this.name;
 	FieldType type = FieldType.CUSTOM;
-	if (fieldName.equals(Contact.FIRST_NAME) || fieldName.equals(Contact.LAST_NAME) || fieldName.equals(Contact.EMAIL)
+	if (fieldName != null && (fieldName.equals(Contact.FIRST_NAME) || fieldName.equals(Contact.LAST_NAME) || fieldName.equals(Contact.EMAIL)
 	        || fieldName.equals(Contact.TITLE) || fieldName.equals(Contact.WEBSITE) || fieldName.equals(Contact.COMPANY)
 	        || fieldName.equals(Contact.ADDRESS) || fieldName.equals(Contact.URL) || fieldName.equals(Contact.PHONE)
-	        || fieldName.equals(Contact.NAME))
+	        || fieldName.equals(Contact.NAME)))
 	    type = FieldType.SYSTEM;
 	
 	return type;

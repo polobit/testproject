@@ -54,8 +54,12 @@ $(function(){
 					var url = $(table).attr('url');
 					if(SELECT_ALL == true)
 					{
-						if($(table).attr('id') == "contacts" || $(table).attr('id') == "companies" )
-							url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+						if($(table).attr('id') == "contacts" || $(table).attr('id') == "companies" ) {
+							var dynamic_filter = getDynamicFilters();
+							if(dynamic_filter == null) {								
+								url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+							}
+						}
 					}
 					
 					// For Active Subscribers table
@@ -90,8 +94,12 @@ $(function(){
 				var url = $(table).attr('url');
 				if(SELECT_ALL == true)
 				{
-					if($(table).attr('id') == "contacts" || $(table).attr('id') == "companies" )
-						url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+					if($(table).attr('id') == "contacts" || $(table).attr('id') == "companies" ) {
+						var dynamic_filter = getDynamicFilters();
+						if(dynamic_filter == null) {								
+							url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+						}
+					}
 				}
 				
 				// For Active Subscribers table
@@ -223,13 +231,25 @@ function customize_bulk_delete(id_array, data_array){
  */
 function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, data_array){
 	var json = {};
-	json.ids = JSON.stringify(id_array);
+	if(!SELECT_ALL)
+		json.ids = JSON.stringify(id_array);
+	var dynamic_filter = getDynamicFilters();
+	if(dynamic_filter != null) {
+		json.dynamic_filter = dynamic_filter;
+	}
 		
 	$.ajax({
 		url: url,
 		type: 'POST',
 		data: json,
+		contentType : "application/x-www-form-urlencoded",
 		success: function() {
+			
+			if(url=='core/api/tasks/bulk'){
+				var due_task_count=getDueTasksCount();
+				$('#due_tasks_count').html(due_task_count);
+			}
+			
 			$(".bulk-delete-loading").remove();	
 			
 			if($(table).attr('id') == "contacts")
@@ -257,11 +277,6 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			// Show bulk operations only when thead check box is checked
 			toggle_contacts_bulk_actions_dropdown(undefined, true,$('.thead_check').parents('table').attr('id'));
 			
-			// Tags re-fetching
-			if(App_Contacts.contactsListView){
-				setup_tags(App_Contacts.contactsListView.el);
-			}
-			
 			// Removes the entities from timeline, if they are deleted from contact detail view
 			if(App_Contacts.contactDetailView && Current_Route == "contact/"
 				+ App_Contacts.contactDetailView.model.get('id')){
@@ -273,7 +288,8 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 					var $removeItem = $( '#' + data.id );
 					$('#timeline').isotope('remove', $removeItem);
 				});
-			}			
+			}	
+			
 		}
 	});
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.activities.Call;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -39,7 +40,7 @@ public class CallTriggerUtil
 		    + callStatus + " duration: " + duration);
 
 	    // If not Twilio, return
-	    if (!serviceType.equalsIgnoreCase("twilio"))
+	    if (!serviceType.equalsIgnoreCase(Call.SERVICE_TWILIO))
 	    {
 		System.out.println("Service type is not twilio..." + serviceType);
 		return;
@@ -54,7 +55,7 @@ public class CallTriggerUtil
 	    // Default
 	    Type type = Trigger.Type.INBOUND_CALL;
 
-	    if (callType.equalsIgnoreCase("outgoing"))
+	    if (callType.equalsIgnoreCase(Call.OUTBOUND))
 		type = Trigger.Type.OUTBOUND_CALL;
 
 	    // Get call triggers

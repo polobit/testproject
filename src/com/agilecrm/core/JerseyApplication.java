@@ -26,6 +26,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.reports.ReportsAPI.class);
 	s.add(com.agilecrm.core.api.calendar.TasksAPI.class);
 	s.add(com.agilecrm.core.api.prefs.UserPrefsAPI.class);
+	s.add(com.agilecrm.core.api.prefs.ContactViewPrefsAPI.class);
 	s.add(com.agilecrm.core.api.contacts.customview.CustomViewAPI.class);
 	s.add(com.agilecrm.core.api.contacts.ContactsAPI.class);
 	s.add(com.agilecrm.core.api.deals.DealsAPI.class);
@@ -92,8 +93,11 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.ActivityApi.class);
 	s.add(com.agilecrm.core.api.SMSGatewayAPI.class);
 	s.add(com.agilecrm.core.api.shopify.ShopifyAppAPI.class);
+	s.add(com.agilecrm.core.api.portlets.PortletsAPI.class);
 	s.add(com.agilecrm.core.api.reports.ActivityReportsAPI.class);
 	s.add(com.agilecrm.core.api.OnlineSchedulingPrefsApi.class);
+	s.add(com.agilecrm.core.api.voicemail.VoiceMailAPI.class);
+	s.add(com.agilecrm.core.api.deals.DealsBulkActionsAPI.class);
 	return s;
     }
 }

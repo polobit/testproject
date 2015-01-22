@@ -142,7 +142,7 @@ public class Globals
     public static final int TRIAL_USERS_COUNT = 2;
 
     // Cheat Code
-    public static final String MASTER_CODE_INTO_SYSTEM = "agileRocks()";
+    public static final String MASTER_CODE_INTO_SYSTEM = "AgileRock*";
 
     public static final String BULK_ACTION_BACKENDS_URL = "b1";
 
@@ -182,7 +182,7 @@ public class Globals
     // "70a2391cd9e9af0d666657a67885d9ec";
     // public static final String SHOPIFY_SECRET_KEY =
     // "a1f88bc91e5c70c34c215bf224ebd7d3";
-    
+
     public static final String COMPANY_DOMAIN = "our";
 
 }

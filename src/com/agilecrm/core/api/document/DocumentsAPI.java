@@ -171,6 +171,21 @@ public class DocumentsAPI
      *            id of contact
      * @return list of documents related to a contact
      */
+    @Path("/contact/{contact-id}/docs")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Document> getDocumentsByContactID(@PathParam("contact-id") Long id)
+    {
+	try
+	{
+	    return DocumentUtil.getContactDocuments(id);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
     @Path("/{contact-id}/docs")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })

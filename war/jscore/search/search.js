@@ -54,7 +54,10 @@ function navigateToDetailsPage(data, name)
 	if(model.entity_type == "deal")
 	{
 		console.log(model);
-		updateDeal(new BaseModel(model));
+		var currentdeal=model;
+		Backbone.history.navigate("deal/"+currentdeal.id , {
+            trigger: true
+        });
 		return;
 	}
 	if(model.entity_type == "document")

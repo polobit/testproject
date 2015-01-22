@@ -21,9 +21,13 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.activities.Activity;
+import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
@@ -78,7 +82,7 @@ public class DealsAPI
 	    return OpportunityUtil.getOpportunitiesWithMilestones(ownerId, milestone, contactId, fieldName,
 		    (Integer.parseInt(count)), cursor, pipelineId);
 	return OpportunityUtil.getOpportunitiesWithMilestones(ownerId, milestone, contactId, fieldName, 0, cursor,
-	        pipelineId);
+		pipelineId);
     }
 
     /**
@@ -149,7 +153,7 @@ public class DealsAPI
 		    (Integer.parseInt(count)), cursor, pipelineId);
 	}
 	return OpportunityUtil
-	        .getOpportunitiesByFilter(ownerId, milestone, contactId, fieldName, 0, cursor, pipelineId);
+		.getOpportunitiesByFilter(ownerId, milestone, contactId, fieldName, 0, cursor, pipelineId);
     }
 
     /**
@@ -268,11 +272,12 @@ public class DealsAPI
     @Path("{opportunity-id}")
     @DELETE
     public void deleteOpportunity(@PathParam("opportunity-id") Long id)
-	    throws com.google.appengine.labs.repackaged.org.json.JSONException
+	    throws com.google.appengine.labs.repackaged.org.json.JSONException, JSONException
     {
 	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
 	if (opportunity != null)
 	{
+	    ActivitySave.createDealDeleteActivity(opportunity);
 	    if (!opportunity.getNotes().isEmpty())
 		NoteUtil.deleteBulkNotes(opportunity.getNotes());
 	    opportunity.delete();
@@ -394,7 +399,7 @@ public class DealsAPI
 	// Executes notification when deal is deleted
 	DealNotificationPrefsUtil.executeNotificationForDeleteDeal(opportunitiesJSONArray);
 	ActivitySave.createLogForBulkDeletes(EntityType.DEAL, opportunitiesJSONArray,
-	        String.valueOf(opportunitiesJSONArray.length()), "");
+		String.valueOf(opportunitiesJSONArray.length()), "");
 	Opportunity.dao.deleteBulkByIds(opportunitiesJSONArray);
     }
 
@@ -469,7 +474,7 @@ public class DealsAPI
 	// Append the URL with the current userId to set the session manager in
 	// the backend.
 	OpportunityUtil.postDataToDealBackend("/core/api/opportunity/backend/export/"
-	        + SessionManager.get().getDomainId());
+		+ SessionManager.get().getDomainId());
     }
 
     /**
@@ -573,4 +578,282 @@ public class DealsAPI
 
     }
 
+    /**
+     * Notes of a deal, which is in deal detail view
+     * 
+     * @param id
+     *            deal id to get its related entities (notes)
+     * @return list of notes related to a deal
+     * @throws Exception
+     */
+    @Path("/{deal-id}/notes")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Note> getNotes(@PathParam("deal-id") Long id) throws Exception
+    {
+	List<Note> notes = NoteUtil.getDealNotes(id);
+	List<Note> dealNotes = OpportunityUtil.getOpportunity(id).getNotes();
+	if (notes != null && notes.size() > 0)
+	{
+	    for (Note no : notes)
+	    {
+		dealNotes.add(no);
+	    }
+	}
+	return dealNotes;
+    }
+
+    /**
+     * Notes of a deal, which is in deal detail view
+     * 
+     * @param id
+     *            deal id to get its related entities (notes)
+     * @return list of notes related to a deal
+     */
+    @Path("/{deal-id}/related_to")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> getRelatedContacts(@PathParam("deal-id") Long id)
+    {
+	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
+	return opportunity.getContacts();
+    }
+
+    /**
+     * update the owner of deal from deal details page
+     * 
+     * @param new_owner
+     * @param dealid
+     * @return
+     * @throws JSONException
+     */
+    @Path("/change-owner/{new_owner}/{dealid}")
+    @PUT
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Opportunity changeOwnerToDeal(@PathParam("new_owner") String new_owner, @PathParam("dealid") Long dealid)
+	    throws JSONException
+    {
+
+	Opportunity opportunity = OpportunityUtil.getOpportunity(dealid);
+	try
+	{
+
+	    String oldownername = opportunity.getOwner().name;
+
+	    String new_owner_name = DomainUserUtil.getDomainUser(Long.parseLong(new_owner)).name;
+
+	    List<Contact> contacts = opportunity.getContacts();
+	    JSONArray jsn = null;
+	    if (contacts != null && contacts.size() > 0)
+	    {
+		jsn = ActivityUtil.getContactIdsJson(contacts);
+	    }
+
+	    ActivityUtil.createDealActivity(ActivityType.DEAL_OWNER_CHANGE, opportunity, new_owner_name, oldownername,
+		    "owner_name", jsn);
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	opportunity.owner_id = new_owner;
+
+	opportunity.save();
+	return opportunity;
+    }
+
+    /**
+     * fetches activities of a deal in deal details page
+     * 
+     * @param dealid
+     * @param cursor
+     * @param count
+     * @return
+     * @throws JSONException
+     */
+    @Path("/{dealid}/activities")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Activity> getActivitiesOfDeal(@PathParam("dealid") Long dealid, @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count) throws JSONException
+    {
+
+	return ActivityUtil.getActivitiesByEntityId("DEAL", dealid, Integer.parseInt(count), cursor);
+    }
+
+    /**
+     * save note of a deal from deal details page
+     * 
+     * @param note
+     * @return updated deal
+     */
+    @Path("/deals/notes")
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Opportunity saveDealNote(Note note)
+    {
+	String updatedOpportunityid = null;
+	List<String> deal_ids = note.deal_ids;
+	if (deal_ids != null && deal_ids.size() > 0)
+	{
+	    updatedOpportunityid = deal_ids.get(0);
+	    for (int i = 0; i <= deal_ids.size() - 1; i++)
+	    {
+		Opportunity opp = OpportunityUtil.getOpportunity(Long.parseLong(deal_ids.get(i)));
+		opp.note_description = note.description;
+		opp.note_subject = note.subject;
+		opp.save();
+	    }
+	}
+	if (updatedOpportunityid != null)
+	    return OpportunityUtil.getOpportunity(Long.parseLong(updatedOpportunityid));
+	return null;
+    }
+
+    /**
+     * update note from deal details page
+     * 
+     * @param note
+     * @return updated deal
+     */
+    @Path("/deals/notes")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Opportunity saveDealUpdateNote(Note note)
+    {
+	String updatedOpportunityid = null;
+	List<String> deal_ids = note.deal_ids;
+	if (deal_ids != null && deal_ids.size() > 0)
+	{
+	    updatedOpportunityid = deal_ids.get(0);
+	}
+	note.save();
+	if (updatedOpportunityid != null)
+	    return OpportunityUtil.getOpportunity(Long.parseLong(updatedOpportunityid));
+	return null;
+    }
+
+    /**
+     * Call backends archive deals.
+     */
+    @Path("/bulk/archive")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void archiveDeals(@FormParam("ids") String ids, @FormParam("filter") String filters)
+    {
+	try
+	{
+	    if (StringUtils.isNotEmpty(ids))
+	    {
+		JSONArray idsArray = new JSONArray(ids);
+		System.out.println("------------" + idsArray.length());
+	    }
+
+	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+	    System.out.println("------------" + filterJSON.toString());
+
+	    String uri = "/core/api/opportunity/backend/archive/" + SessionManager.get().getDomainId();
+
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
+	}
+	catch (Exception je)
+	{
+	    je.printStackTrace();
+	}
+    }
+
+    /**
+     * Call backends for restoring deals.
+     */
+    @Path("/bulk/restore")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void restoreDeals(@FormParam("ids") String ids, @FormParam("filter") String filters)
+    {
+	try
+	{
+	    if (StringUtils.isNotEmpty(ids))
+	    {
+		JSONArray idsArray = new JSONArray(ids);
+		System.out.println("------------" + idsArray.length());
+	    }
+
+	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+	    System.out.println("------------" + filterJSON.toString());
+
+	    String uri = "/core/api/opportunity/backend/restore/" + SessionManager.get().getDomainId();
+
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
+	}
+	catch (Exception je)
+	{
+	    je.printStackTrace();
+	}
+    }
+
+    /**
+     * Call backends for updating deals owner.
+     */
+    @Path("/bulk/change-owner/{owner_id}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void changeOwnerForDeals(@PathParam("owner_id") Long ownerId, @FormParam("ids") String ids,
+	    @FormParam("filter") String filters)
+    {
+	try
+	{
+	    if (StringUtils.isNotEmpty(ids))
+	    {
+		JSONArray idsArray = new JSONArray(ids);
+		System.out.println("------------" + idsArray.length());
+	    }
+
+	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+	    System.out.println("------------" + filterJSON.toString());
+	    System.out.println("Owner_id" + ownerId);
+
+	    String uri = "/core/api/opportunity/backend/change-owner/" + ownerId + "/"
+		    + SessionManager.get().getDomainId();
+
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
+	}
+	catch (Exception je)
+	{
+	    je.printStackTrace();
+	}
+    }
+
+    /**
+     * Call backends for updating deals pipeline and milestone.
+     */
+    @Path("/bulk/change-milestone")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void changeMilestoneForDeals(@FormParam("ids") String ids, @FormParam("filter") String filters,
+	    @FormParam("form") String form)
+    {
+	try
+	{
+	    if (StringUtils.isNotEmpty(ids))
+	    {
+		JSONArray idsArray = new JSONArray(ids);
+		System.out.println("------------" + idsArray.length());
+	    }
+
+	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+	    System.out.println("------------" + filterJSON.toString());
+
+	    String uri = "/core/api/opportunity/backend/change-milestone/" + SessionManager.get().getDomainId();
+
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids, form);
+	}
+	catch (Exception je)
+	{
+	    je.printStackTrace();
+	}
+    }
 }

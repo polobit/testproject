@@ -19,7 +19,8 @@ import com.google.appengine.api.NamespaceManager;
  * @author Naresh
  * 
  */
-public class AnalyticsSQLUtil {
+public class AnalyticsSQLUtil
+{
 	/**
 	 * Inserts values into page_views table.
 	 * 
@@ -50,10 +51,9 @@ public class AnalyticsSQLUtil {
 	 * @param cityLatLong
 	 *            - appengine header city latitudes and longitudes.
 	 */
-	public static void addToPageViews(String domain, String guid, String email,
-			String sid, String url, String ip, String isNew, String ref,
-			String userAgent, String country, String region, String city,
-			String cityLatLong) {
+	public static void addToPageViews(String domain, String guid, String email, String sid, String url, String ip,
+			String isNew, String ref, String userAgent, String country, String region, String city, String cityLatLong)
+	{
 		String insertToPageViews = "INSERT INTO page_views (domain,guid,email,sid,url,ip,is_new,ref,user_agent,country,region,city,city_lat_long,stats_time) VALUES("
 				+ GoogleSQLUtil.encodeSQLColumnValue(domain)
 				+ ","
@@ -79,15 +79,16 @@ public class AnalyticsSQLUtil {
 				+ ","
 				+ GoogleSQLUtil.encodeSQLColumnValue(city)
 				+ ","
-				+ GoogleSQLUtil.encodeSQLColumnValue(cityLatLong)
-				+ ", NOW()"
-				+ ")";
+				+ GoogleSQLUtil.encodeSQLColumnValue(cityLatLong) + ", NOW()" + ")";
 
 		System.out.println("Insert Query to PageViews: " + insertToPageViews);
 
-		try {
+		try
+		{
 			GoogleSQL.executeNonQuery(insertToPageViews);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 	}
@@ -98,7 +99,8 @@ public class AnalyticsSQLUtil {
 	 * @param email
 	 *            - email-idcheckOriginalRef
 	 */
-	public static JSONArray getPageViews(String email) {
+	public static JSONArray getPageViews(String email)
+	{
 		String domain = NamespaceManager.get();
 
 		String q1 = "SELECT p1.*, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views p1";
@@ -116,9 +118,12 @@ public class AnalyticsSQLUtil {
 
 		System.out.println("Select query: " + pageViews);
 
-		try {
+		try
+		{
 			return GoogleSQL.getJSONQuery(pageViews);
-		} catch (Exception e1) {
+		}
+		catch (Exception e1)
+		{
 			e1.printStackTrace();
 			return null;
 		}
@@ -130,13 +135,16 @@ public class AnalyticsSQLUtil {
 	 * @param namespace
 	 *            - namespace
 	 */
-	public static void deleteStatsBasedOnNamespace(String namespace) {
-		String deleteQuery = "DELETE FROM page_views WHERE"
-				+ GoogleSQLUtil.appendDomainToQuery(namespace);
+	public static void deleteStatsBasedOnNamespace(String namespace)
+	{
+		String deleteQuery = "DELETE FROM page_views WHERE" + GoogleSQLUtil.appendDomainToQuery(namespace);
 
-		try {
+		try
+		{
 			GoogleSQL.executeNonQuery(deleteQuery);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 	}
@@ -156,43 +164,54 @@ public class AnalyticsSQLUtil {
 	 * @param duration
 	 * @return int
 	 */
-	public static int getCountForGivenURL(String url, String domain,
-			String email, String type, String duration, String durationType) {
+	public static int getCountForGivenURL(String url, String domain, String email, String type, String duration,
+			String durationType)
+	{
 
 		// If domain or email empty return
 		if (StringUtils.isBlank(domain) || StringUtils.isBlank(email))
 			return 0;
 
-		String urlCountQuery = "SELECT COUNT(*) FROM page_views WHERE domain = "
-				+ GoogleSQLUtil.encodeSQLColumnValue(domain)
-				+ " AND email = "
-				+ GoogleSQLUtil.encodeSQLColumnValue(email) + " AND url LIKE ";
-
-		if (type.equals(URLVisited.EXACT_MATCH))
-			urlCountQuery += GoogleSQLUtil.encodeSQLColumnValue(url);
-		else
-			urlCountQuery += " \'%" + url + "%\'";
-
-		// User doesn't want date and time or old url visited node
-		if (!duration.equals("0") && !duration.equals(""))
-			urlCountQuery += " AND stats_time BETWEEN DATE_SUB(DATE(NOW()),"
-					+ " INTERVAL " + duration + " " + durationType
-					+ ") AND NOW() ";
-
-		System.out.println("URL count query is: " + urlCountQuery);
-
 		int count = 0;
+		ResultSet rs = null;
+		try
+		{
+			String urlCountQuery = "SELECT COUNT(*) FROM page_views WHERE domain = "
+					+ GoogleSQLUtil.encodeSQLColumnValue(domain) + " AND email = "
+					+ GoogleSQLUtil.encodeSQLColumnValue(email) + " AND url LIKE ";
 
-		ResultSet rs = GoogleSQL.executeQuery(urlCountQuery);
+			if ((URLVisited.EXACT_MATCH).equals(type))
+				urlCountQuery += GoogleSQLUtil.encodeSQLColumnValue(url);
+			else
+				urlCountQuery += " \'%" + url + "%\'";
 
-		try {
-			if (rs.next()) {
+			// User doesn't want date and time or old url visited node
+			if (!("0").equals(duration) && !StringUtils.isEmpty(duration))
+				urlCountQuery += " AND stats_time BETWEEN DATE_SUB(DATE(NOW())," + " INTERVAL " + duration + " "
+						+ durationType + ") AND NOW() ";
+
+			System.out.println("URL count query is: " + urlCountQuery);
+
+			rs = GoogleSQL.executeQuery(urlCountQuery);
+
+			if (rs.next())
+			{
 				// Gets first column
 				count = rs.getInt(1);
 			}
-		} catch (SQLException e) {
+		}
+		catch (SQLException e)
+		{
+			System.out.println("SQLException in AnalyTicsSQLUtil.." + e.getMessage());
 			e.printStackTrace();
-		} finally {
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception in AnalyTicsSQLUtil.." + e.getMessage());
+			e.printStackTrace();
+		}
+		finally
+		{
 			// Closes the Connection and ResultSet Objects
 			GoogleSQL.closeResultSet(rs);
 		}
@@ -207,7 +226,8 @@ public class AnalyticsSQLUtil {
 	 *            - domain name.
 	 * @return int
 	 */
-	public static int getPageViewsCountForGivenDomain(String domain) {
+	public static int getPageViewsCountForGivenDomain(String domain)
+	{
 		String pageViewsCount = "SELECT COUNT(*) FROM page_views WHERE domain = "
 				+ GoogleSQLUtil.encodeSQLColumnValue(domain);
 
@@ -215,14 +235,20 @@ public class AnalyticsSQLUtil {
 
 		ResultSet rs = GoogleSQL.executeQuery(pageViewsCount);
 
-		try {
-			if (rs.next()) {
+		try
+		{
+			if (rs.next())
+			{
 				// Gets first column
 				count = rs.getInt(1);
 			}
-		} catch (SQLException e) {
+		}
+		catch (SQLException e)
+		{
 			e.printStackTrace();
-		} finally {
+		}
+		finally
+		{
 			// Closes the connection and ResultSet Objects
 			GoogleSQL.closeResultSet(rs);
 		}
@@ -230,16 +256,16 @@ public class AnalyticsSQLUtil {
 		return count;
 	}
 
-	public static int isVisitedInTime(String url, String domain, String email,
-			String type, String duration, String durationType) {
+	public static int isVisitedInTime(String url, String domain, String email, String type, String duration,
+			String durationType)
+	{
 		// If domain or email empty return
 
 		if (StringUtils.isBlank(domain) || StringUtils.isBlank(email))
 			return 0;
 
 		String urlCountQuery = "SELECT COUNT(*) FROM page_views WHERE domain = "
-				+ GoogleSQLUtil.encodeSQLColumnValue(domain)
-				+ " AND email = "
+				+ GoogleSQLUtil.encodeSQLColumnValue(domain) + " AND email = "
 				+ GoogleSQLUtil.encodeSQLColumnValue(email) + " AND url LIKE ";
 
 		if (type.equals(URLVisited.EXACT_MATCH))
@@ -247,8 +273,8 @@ public class AnalyticsSQLUtil {
 		else
 			urlCountQuery += " \'%" + url + "%\'";
 
-		urlCountQuery += " AND stats_time BETWEEN DATE_SUB(DATE(NOW()),"
-				+ " INTERVAL " + duration + " " + durationType + ") AND NOW() ";
+		urlCountQuery += " AND stats_time BETWEEN DATE_SUB(DATE(NOW())," + " INTERVAL " + duration + " " + durationType
+				+ ") AND NOW() ";
 
 		System.out.println("URL count query is: " + urlCountQuery);
 
@@ -256,14 +282,20 @@ public class AnalyticsSQLUtil {
 
 		ResultSet rs = GoogleSQL.executeQuery(urlCountQuery);
 
-		try {
-			if (rs.next()) {
+		try
+		{
+			if (rs.next())
+			{
 				// Gets first column
 				count = rs.getInt(1);
 			}
-		} catch (SQLException e) {
+		}
+		catch (SQLException e)
+		{
 			e.printStackTrace();
-		} finally {
+		}
+		finally
+		{
 			// Closes the Connection and ResultSet Objects
 			GoogleSQL.closeResultSet(rs);
 		}

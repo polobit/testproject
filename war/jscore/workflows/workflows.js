@@ -244,26 +244,6 @@ $(function(){
 		
 	});
 	
-	// Clicking on done, save changes and exit
-	$(".workflow-done").live('click', function(e){
-		e.preventDefault();
-		
-		if($('#workflow-edit-msg').is(':visible'))
-		{
-			if(!confirm("You have unsaved changes. Save & Exit?"))
-			return;
-		
-			// Trigger click
-			$('#save-workflow-top').trigger("click", [{"navigate": true}]);
-			return;
-		}
-		
-		Backbone.history.navigate("workflows", {
-            trigger: true
-        });
-		
-	});
-
 });
 
 /**
