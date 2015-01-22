@@ -216,8 +216,4 @@ $(".delete_user").die().live('click', function(e){
 		});
 		
 		
-	
-		
-		
-		
 });
