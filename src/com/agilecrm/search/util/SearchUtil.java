@@ -105,7 +105,7 @@ public class SearchUtil
 		    doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_number")
 			    .setNumber(Double.valueOf(contactField.value)));
 		}
-		catch (NumberFormatException e)
+		catch (Exception e)
 		{
 		    e.printStackTrace();
 		}
