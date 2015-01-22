@@ -1,6 +1,8 @@
 package com.agilecrm.activities.deferred;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +24,11 @@ import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.taskqueue.TransientFailureException;
+import com.thirdparty.mandrill.Mandrill;
 
 /**
  * <code>TaskReminderDeferredTask</code> implements google appengene's
@@ -107,14 +114,30 @@ public class TaskReminderDeferredTask implements DeferredTask
 			    {
 			    });
 		}
+		catch (TransientFailureException tfe)
+		{
+		    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "task-reminder-failure",
+			    "jagadeesh@invox.com", null, null, "transient exception  after taskListMap" + domain, null,
+			    "task reminder deferred task ", null, null, null);
+
+		    TaskReminderDeferredTask taskDeferredTask = new TaskReminderDeferredTask(domain, time);
+		    Queue queue = QueueFactory.getQueue("due-task-reminder");
+		    TaskOptions options = TaskOptions.Builder.withPayload(taskDeferredTask);
+		    options.countdownMillis(40000);
+		    queue.add(options);
+		    return;
+		}
 		catch (Exception e)
 		{
 		    HashMap<String, Object> map = new HashMap<String, Object>();
 		    map.put("tasks", taskList);
 
 		    // Sends mail to the domain user.
-		    SendMail.sendMail(domainUser.email, SendMail.DUE_TASK_REMINDER_SUBJECT, SendMail.DUE_TASK_REMINDER,
-			    map);
+		    SendMail.sendMail("maildummy800@gmail.com", SendMail.DUE_TASK_REMINDER_SUBJECT + " " + domain,
+			    SendMail.DUE_TASK_REMINDER, map);
+
+		    TaskReminder.sendDailyTaskReminders(domain, time, false);
+		    return;
 		}
 
 		for (int i = 0; i < taskList.size(); ++i)
@@ -149,16 +172,62 @@ public class TaskReminderDeferredTask implements DeferredTask
 		map.put("tasks", taskListMap);
 
 		// Sends mail to the domain user.
-		SendMail.sendMail(domainUser.email, SendMail.DUE_TASK_REMINDER_SUBJECT, SendMail.DUE_TASK_REMINDER, map);
+		SendMail.sendMail("maildummy800@gmail.com", SendMail.DUE_TASK_REMINDER_SUBJECT + " " + domain,
+		        SendMail.DUE_TASK_REMINDER, map);
 	    }
 
 	    TaskReminder.sendDailyTaskReminders(domain, time, false);
 
 	}
+	catch (TransientFailureException tfe)
+	{
+	    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "task-reminder-failure",
+		    "jagadeesh@invox.com", null, null, "transient exception at after sending mail" + domain, null,
+		    "task reminder deferred task ", null, null, null);
+
+	    TaskReminderDeferredTask taskDeferredTask = new TaskReminderDeferredTask(domain, time - 86400);
+	    Queue queue = QueueFactory.getQueue("due-task-reminder");
+	    TaskOptions options = TaskOptions.Builder.withPayload(taskDeferredTask);
+	    options.countdownMillis(40000);
+	    queue.add(options);
+	    return;
+	}
 	catch (IOException e)
 	{
 	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+	    try
+	    {
+		StringWriter errors = new StringWriter();
+		e.printStackTrace(new PrintWriter(errors));
+		String errorString = errors.toString();
+
+		Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "event-reminder-failure",
+		        "jagadeesh@invox.com", null, null, "check exception", null, errorString, null, null, null);
+	    }
+	    catch (Exception ex)
+	    {
+		Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "event-reminder-failure",
+		        "jagadeesh@invox.com", null, null, "exception occured while sending mail " + domain, null,
+		        "exception occured in send event reminder deferred task", null, null, null);
+
+		ex.printStackTrace();
+		System.err.println("Exception occured while sending campaign status mail " + e.getMessage());
+	    }
+	    finally
+	    {
+		try
+		{
+		    TaskReminder.sendDailyTaskReminders(domain, time, false);
+		    return;
+		}
+		catch (IOException e1)
+		{
+		    // TODO Auto-generated catch block
+		    e1.printStackTrace();
+		}
+
+	    }
+
 	}
 	finally
 	{

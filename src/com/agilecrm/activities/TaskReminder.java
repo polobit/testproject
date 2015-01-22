@@ -36,14 +36,14 @@ public class TaskReminder
 	    throws IOException
     {
 	int sec_per_day = 86400;
-	String timezone = TaskUtil.getTimezoneFromAccountPrefs(domain);
-	Calendar calendar = Calendar.getInstance();
-	calendar.setTimeZone(TimeZone.getTimeZone(timezone));
 
 	if (time == null && executionFromServlet)
 	{
+	    String timezone = TaskUtil.getTimezoneFromAccountPrefs(domain);
+	    Calendar calendar = Calendar.getInstance();
+	    calendar.setTimeZone(TimeZone.getTimeZone(timezone));
 	    time = WebCalendarEventUtil.getEppochTime(calendar.get(Calendar.DAY_OF_MONTH),
-		    calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR), 07, 30, TimeZone.getTimeZone(timezone));
+		    calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR), 07, 00, TimeZone.getTimeZone(timezone));
 	}
 
 	// Start a task queue for each domain
