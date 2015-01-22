@@ -62,8 +62,9 @@ var SettingsRouter = Backbone.Router.extend({
 	 */
 	userPrefs : function()
 	{
-		$("#content").html(getTemplate("settings"), {});
 		
+		$("#content").html(getTemplate("settings"), {});
+		$('#prefs-tabs-content').html(getRandomLoadingImg());
 		var view = new Base_Model_View({ 
 						url : '/core/api/user-prefs', 
 						template : "settings-user-prefs", 
@@ -445,13 +446,23 @@ var SettingsRouter = Backbone.Router.extend({
 	{
 		$("#content").html(getTemplate("settings"), {});
 		this.emailTemplatesListView = new Base_Collection_View({ url : '/core/api/email/templates', restKey : "emailTemplates",
-			templateKey : "settings-email-templates", individual_tag_name : 'tr' });
+			templateKey : "settings-email-templates", individual_tag_name : 'tr' ,
+			postRenderCallback : function(el)
+			{
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				{
+					console.log("In email tmplt postrender");
+					$(".created_time", el).timeago();
+				});
+			}});
 
 		this.emailTemplatesListView.collection.fetch();
 		$('#prefs-tabs-content').html(this.emailTemplatesListView.el);
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-templates-tab').addClass('active');
 		// $('#content').html(this.emailTemplatesListView.el);
+		
+		
 	},
 
 	/**
@@ -479,7 +490,7 @@ var SettingsRouter = Backbone.Router.extend({
 			// Register focus
 			register_focus_on_tinymce('email-template-html');
 		});
-		
+				
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-templates-tab').addClass('active');
 		// $('#content').html(view.render().el);
@@ -527,7 +538,7 @@ var SettingsRouter = Backbone.Router.extend({
 		});
 		
 		/**End of TinyMCE**/
-		
+				
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-templates-tab').addClass('active');
 		// $("#content").html(view.el);
