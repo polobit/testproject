@@ -10,6 +10,7 @@ import com.agilecrm.activities.util.WebCalendarEventUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -42,12 +43,15 @@ public class TaskReminder
 	    Calendar calendar = Calendar.getInstance();
 	    calendar.setTimeZone(TimeZone.getTimeZone(timezone));
 	    time = WebCalendarEventUtil.getEppochTime(calendar.get(Calendar.DAY_OF_MONTH),
-		    calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR), 12, 00, TimeZone.getTimeZone(timezone));
+		    calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR), 16, 00, TimeZone.getTimeZone(timezone));
 	}
 
 	time = time + sec_per_day;
 
 	System.out.println("------------------" + (time + sec_per_day) * 1000);
+
+	System.out.println("------------------------------ " + domain);
+	System.out.println("Namespace task reminder--- " + NamespaceManager.get());
 
 	// Start a task queue for each domain
 	TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(domain, time);

@@ -22,6 +22,7 @@ import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.SendMail;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -70,8 +71,12 @@ public class TaskReminderDeferredTask implements DeferredTask
 
 	try
 	{
+	    System.out.println("domain name in task reminder deferred task --------------------- " + domain);
 	    // Get all domain users of that domain.
 	    List<DomainUser> domainUsers = DomainUserUtil.getUsers(domain);
+
+	    System.out.println("namespace in task reminder deferred task --------------------- "
+		    + NamespaceManager.get());
 
 	    if (domainUsers == null)
 		return;
