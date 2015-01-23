@@ -190,6 +190,9 @@ public class BulkOperationsAPI
 
 	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids, current_user_id);
 
+	// Sets limit on free user
+	fetcher.setLimits();
+	
 	while (fetcher.hasNextSet())
 	{
 
@@ -538,6 +541,9 @@ public class BulkOperationsAPI
 
 	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids, currentUserId);
 
+	// Sets limit on free user
+	fetcher.setLimits();
+	
 	int noEmailsCount = 0;
 
 	// Gets emailSender
