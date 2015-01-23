@@ -22,4 +22,9 @@ var FormsRouter = Backbone.Router.extend({
 				$("#forms-model-list").append(formView.el);
 			}
 		}
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				{
+					$("time.form-modified-time", $("#forms-model-list")).timeago();
+
+				});
 	} });
