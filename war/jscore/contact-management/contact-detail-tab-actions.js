@@ -27,6 +27,9 @@ $(function(){
 		var value = eventsView.collection.get(id).toJSON();
 		deserializeForm(value, $("#updateActivityForm"));
     	$("#updateActivityModal").modal('show');
+    	
+    	// Fills owner select element
+		populateUsersInUpdateActivityModal(value);
 	});
 	
 	$(".complete-task").die().live('click', function(e){

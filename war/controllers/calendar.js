@@ -462,6 +462,9 @@ function show_model(id)
 
 								$('#updateActivityModal').find("input[name='id']").val(id);
 								$('#updateActivityModal').find("input[name='type']").val(event.type);
+								
+								// Fills owner select element 
+								populateUsersInUpdateActivityModal(event);
 				}
 }
 

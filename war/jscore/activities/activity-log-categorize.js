@@ -122,7 +122,9 @@ function update_event_activity(ele)
 	var value = JSON.parse(ele);
 	deserializeForm(value, $("#updateActivityForm"));
 	$("#updateActivityModal").modal('show');
-
+	
+	// Fills owner select element
+	populateUsersInUpdateActivityModal(value);
 }
 
 function getModal(){

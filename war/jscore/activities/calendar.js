@@ -289,6 +289,9 @@ function showCalendar()
 
 																												// Show edit modal for the event
 																												$("#updateActivityModal").modal('show');
+																												
+																												// Fills owner select element
+																												populateUsersInUpdateActivityModal(event);
 																												return false;
 																								}
 
