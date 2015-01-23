@@ -194,14 +194,14 @@ function Initialize_Chrome_Webstore_events()
 			{
 				console.log(error);
 				Toggle_Extension_Loader("none");
-				OpenInNewTab();
+				//OpenInNewTab();
 			});
 		}
 		catch (e)
 		{
 			console.log(e);
 			Toggle_Extension_Loader("none");
-			OpenInNewTab();
+			//OpenInNewTab();
 		}
 		return false;
 	});
