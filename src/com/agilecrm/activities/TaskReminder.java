@@ -41,7 +41,7 @@ public class TaskReminder
 	{
 	    String timezone = TaskUtil.getTimezoneFromAccountPrefs();
 	    Calendar calendar = com.agilecrm.util.DateUtil.getCalendar(
-		    new SimpleDateFormat("MM/dd/yyyy").format(new Date()), "IST", "19:15");
+		    new SimpleDateFormat("MM/dd/yyyy").format(new Date()), timezone, "19:30");
 	    time = calendar.getTimeInMillis() / 1000;
 	}
 
