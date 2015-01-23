@@ -41,7 +41,7 @@ public class TaskReminder
 	{
 	    String timezone = TaskUtil.getTimezoneFromAccountPrefs();
 	    Calendar calendar = com.agilecrm.util.DateUtil.getCalendar(
-		    new SimpleDateFormat("MM/dd/yyyy").format(new Date()), timezone, "19:30");
+		    new SimpleDateFormat("MM/dd/yyyy").format(new Date()), timezone, "21:30");
 	    time = calendar.getTimeInMillis() / 1000;
 	}
 
@@ -49,7 +49,6 @@ public class TaskReminder
 
 	System.out.println("------------------" + (time + sec_per_day) * 1000);
 
-	System.out.println("------------------------------ " + domain);
 	System.out.println("Namespace task reminder--- " + NamespaceManager.get());
 
 	// Start a task queue for each domain

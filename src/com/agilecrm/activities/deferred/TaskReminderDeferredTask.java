@@ -122,7 +122,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 			    "jagadeesh@invox.com", null, null, "transient exception  after taskListMap" + domain, null,
 			    "task reminder deferred task ", null, null, null);
 
-		    TaskReminderDeferredTask taskDeferredTask = new TaskReminderDeferredTask(domain, time - 86400);
+		    TaskReminderDeferredTask taskDeferredTask = new TaskReminderDeferredTask(domain, time);
 		    Queue queue = QueueFactory.getQueue("due-task-reminder");
 		    TaskOptions options = TaskOptions.Builder.withPayload(taskDeferredTask);
 		    options.countdownMillis(40000);
@@ -187,7 +187,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 		    "jagadeesh@invox.com", null, null, "transient exception at after sending mail" + domain, null,
 		    "task reminder deferred task ", null, null, null);
 
-	    TaskReminderDeferredTask taskDeferredTask = new TaskReminderDeferredTask(domain, time - 86400);
+	    TaskReminderDeferredTask taskDeferredTask = new TaskReminderDeferredTask(domain, time);
 	    Queue queue = QueueFactory.getQueue("due-task-reminder");
 	    TaskOptions options = TaskOptions.Builder.withPayload(taskDeferredTask);
 	    options.countdownMillis(40000);
