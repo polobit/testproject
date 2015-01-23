@@ -1,12 +1,12 @@
 package com.agilecrm.activities;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.TimeZone;
+import java.util.Date;
 
 import com.agilecrm.activities.deferred.TaskReminderDeferredTask;
 import com.agilecrm.activities.util.TaskUtil;
-import com.agilecrm.activities.util.WebCalendarEventUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
@@ -40,10 +40,9 @@ public class TaskReminder
 	if (time == null || executionFromServlet)
 	{
 	    String timezone = TaskUtil.getTimezoneFromAccountPrefs();
-	    Calendar calendar = Calendar.getInstance();
-	    calendar.setTimeZone(TimeZone.getTimeZone(timezone));
-	    time = WebCalendarEventUtil.getEppochTime(calendar.get(Calendar.DAY_OF_MONTH),
-		    calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR), 16, 00, TimeZone.getTimeZone(timezone));
+	    Calendar calendar = com.agilecrm.util.DateUtil.getCalendar(
+		    new SimpleDateFormat("MM/dd/yyyy").format(new Date()), "IST", "19:15");
+	    time = calendar.getTimeInMillis() / 1000;
 	}
 
 	time = time + sec_per_day;
@@ -61,4 +60,5 @@ public class TaskReminder
 	options.etaMillis((time) * 1000);
 	queue.add(options);
     }
+
 }
