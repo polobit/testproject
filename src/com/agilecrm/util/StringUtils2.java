@@ -180,4 +180,16 @@ public class StringUtils2
         // Set<String> tokens = tokenize(input);
         return breakdownFragments(input);
     }
+    
+    /**
+     * extracts all numeric characters from a string and return it.
+     * mainly used for extracting phone number when there are special characters in that.
+     * 
+     * @param number
+     * @return
+     */
+    public static String extractNumber(String number) {
+		number = number.replaceAll("[^0-9]", "");
+		return number;
+	}
 }

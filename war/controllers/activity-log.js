@@ -14,6 +14,13 @@ var ActivitylogRouter = Backbone.Router.extend({
 		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 				{ 
 		$('#content').html(getTemplate("activity-list-header", {}));
+		if(IS_FLUID){
+			$('#activity_header').removeClass('row').addClass('row-fluid');
+		}
+		else{
+			$('#activity_header').removeClass('row-fluid').addClass('row');
+		}
+		
 		initActivitiesDateRange();
 		$(".activity-log-button").hide();
 		var selecteduser = readCookie("selecteduser");
@@ -82,6 +89,13 @@ var ActivitylogRouter = Backbone.Router.extend({
 
 			}
 			$(".activity-log-button").show();
+			
+			if(IS_FLUID){
+				$('#activity_model').removeClass('row').addClass('row-fluid');
+			}
+			else{
+				$('#activity_model').removeClass('row-fluid').addClass('row');
+			}
 
 		}, optionsTemplate, true);
 

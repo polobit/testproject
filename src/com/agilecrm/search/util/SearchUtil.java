@@ -105,11 +105,24 @@ public class SearchUtil
 		    doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_number")
 			    .setNumber(Double.valueOf(contactField.value)));
 		}
-		catch (NumberFormatException e)
+		catch (Exception e)
 		{
 		    e.printStackTrace();
 		}
 		continue;
+	    }
+	    
+	    if(customField == null && field_name.equals(Contact.PHONE)) {
+	    	normalized_value = getPhoneNumberTokens(contactField.value);
+	    	if (fields.containsKey(field_name))
+		    {
+			String value = fields.get(field_name) + " " + normalized_value;
+
+			normalized_value = value;
+		    }
+	    	doc.addField(Field.newBuilder().setName(field_name).setText(normalized_value));
+	    	fields.put(field_name, normalized_value);
+	    	continue;
 	    }
 
 	    /*
@@ -341,5 +354,16 @@ public class SearchUtil
 
 	// Formated to build query
 	return formatter.format(truncatedDate);
+    }
+    
+    public static String getPhoneNumberTokens(String phoneNumber) {
+    	if(StringUtils.isEmpty(phoneNumber)) {
+    		return "";
+    	}
+    	phoneNumber = StringUtils2.extractNumber(phoneNumber);
+    	if(phoneNumber.length() > 8) {
+    		phoneNumber = phoneNumber + " " + phoneNumber.substring(phoneNumber.length() -8);
+    	}
+    	return phoneNumber;
     }
 }

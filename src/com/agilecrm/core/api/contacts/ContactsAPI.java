@@ -51,6 +51,7 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
+import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
@@ -790,7 +791,7 @@ public class ContactsAPI
 
 	System.out.println("In searchContactByPhoneNumber : " + phoneNumber);
 
-	return ContactUtil.searchContactByPhoneNumber(phoneNumber);
+	return QueryDocumentUtil.getContactsByPhoneNumber(phoneNumber);
     }
 
     /**
@@ -1062,4 +1063,5 @@ public class ContactsAPI
 	// Return result
 	return currentDate.toString();
     }
+    
 }

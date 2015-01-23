@@ -624,10 +624,18 @@ public class ContactEmailUtil
 	public static List<ContactEmail> getEmailsSent(DomainUser domainUser,Long minTime,Long maxTime){
 		List<ContactEmail> contactEmailsList=null;
 		try {
+			System.out.println("Start getEmailsSent(-,-,-)-------Name:---"+domainUser.name+"Email:----"+domainUser.email);
+			System.out.println("Start try block");
 			contactEmailsList = dao.ofy().query(ContactEmail.class).filter("from", domainUser.name+" <"+domainUser.email+">").filter("date_secs >= ", minTime*1000).filter("date_secs <= ", maxTime*1000).list();
+			if(contactEmailsList!=null)
+				System.out.println("contactEmailsList Size---"+contactEmailsList.size());
+			else
+				System.out.println("contactEmailsList is null");
+			System.out.println("End try block----"+contactEmailsList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("End getEmailsSent(-,-,-)");
 		return contactEmailsList;
 	}
     /**
@@ -688,5 +696,24 @@ public class ContactEmailUtil
 	}
 	return sharedOfficeUsers;
     }
+    /**
+	 * Returns emails opened by individual user in specific duration
+	 * 
+	 * @param {@Link Long} - minTime, {@Link Long} - maxTime
+	 * @return {@Link List<ContactEmail>}
+	 */
+	public static List<ContactEmail> getEmailsOpenedByUser(DomainUser domainUser,Long minTime,Long maxTime)
+	{
+		List<ContactEmail> contactEmailsList=null;
+		try 
+		{
+			contactEmailsList = dao.ofy().query(ContactEmail.class).filter("from", domainUser.name+" <"+domainUser.email+">")
+					.filter("email_opened_at >= ", minTime).filter("email_opened_at <= ", maxTime).filter("is_email_opened", true).list();
+		} catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return contactEmailsList;
+	}
 
 }

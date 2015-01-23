@@ -51,7 +51,7 @@ public class StripePluginUtil
 	 * Retrieves Stripe customer based on Stripe customer ID and Stripe
 	 * account API key
 	 */
-	Customer customer = Customer.retrieve(customerId.trim(), apiKey);
+	Customer customer = Customer.retrieve(customerId.trim());
 
 	Map<String, Object> invoiceParams = new HashMap<String, Object>();
 	invoiceParams.put("customer", customerId);
@@ -60,7 +60,7 @@ public class StripePluginUtil
 	 * Retrieves list of invoices based on Stripe customer ID and Stripe
 	 * account API key
 	 */
-	List<Invoice> invoiceList = Invoice.all(invoiceParams, apiKey).getData();
+	List<Invoice> invoiceList = Invoice.all(invoiceParams).getData();
 
 	// Converts list to JSON using GSON and returns output in JSON format
 	JSONArray list = new JSONArray(new Gson().toJson(invoiceList));
