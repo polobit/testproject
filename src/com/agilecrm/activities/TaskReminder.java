@@ -35,23 +35,26 @@ public class TaskReminder
     public static void sendDailyTaskReminders(String domain, Long time, boolean executionFromServlet)
 	    throws IOException
     {
-	int sec_per_day = 86400;
-
-	if (time == null && executionFromServlet)
+	int sec_per_day = 1800;
+	if (time == null || executionFromServlet)
 	{
 	    String timezone = TaskUtil.getTimezoneFromAccountPrefs();
 	    Calendar calendar = Calendar.getInstance();
 	    calendar.setTimeZone(TimeZone.getTimeZone(timezone));
 	    time = WebCalendarEventUtil.getEppochTime(calendar.get(Calendar.DAY_OF_MONTH),
-		    calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR), 07, 00, TimeZone.getTimeZone(timezone));
+		    calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR), 12, 00, TimeZone.getTimeZone(timezone));
 	}
+
+	time = time + sec_per_day;
+
+	System.out.println("------------------" + (time + sec_per_day) * 1000);
 
 	// Start a task queue for each domain
 	TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(domain, time);
 	Queue queue = QueueFactory.getQueue("due-task-reminder");
 
 	TaskOptions options = TaskOptions.Builder.withPayload(taskReminderDeferredTask);
-	options.etaMillis((time + sec_per_day) * 1000);
+	options.etaMillis((time) * 1000);
 	queue.add(options);
     }
 }
