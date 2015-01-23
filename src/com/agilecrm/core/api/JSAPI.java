@@ -1034,6 +1034,8 @@ public class JSAPI
 		}
 	    }
 	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
+	    //To set company again, if company updated this is mandatory.
+	    contact.contact_company_id = null;
 	    if (tags.length > 0)
 		contact.addTags(tags);
 	    contact.save();
