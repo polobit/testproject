@@ -51,7 +51,7 @@ public class FormsAPI
 	    String name = formJson.getString("formName");
 	    String json = formJson.getString("formJson");
 
-	    if (StringUtils.isBlank(name))
+	    if (StringUtils.isBlank(name) || !Character.isLetter(name.charAt(0)))
 	    {
 		response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 		return;
