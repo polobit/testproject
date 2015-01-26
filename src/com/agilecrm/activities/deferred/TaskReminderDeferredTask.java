@@ -140,7 +140,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 		    SendMail.sendMail("maildummy800@gmail.com", SendMail.DUE_TASK_REMINDER_SUBJECT + " " + domain
 			    + "after taskListMap", SendMail.DUE_TASK_REMINDER, map);
 
-		    CreateTaskDeferredTask.createTaskReminderDeferredTask(domain, time, false);
+		    CreateTaskDeferredTask.createTaskReminderDeferredTask(domain, null, false);
 		    return;
 		}
 
@@ -180,7 +180,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 		        SendMail.DUE_TASK_REMINDER, map);
 	    }
 
-	    CreateTaskDeferredTask.createTaskReminderDeferredTask(domain, time, false);
+	    CreateTaskDeferredTask.createTaskReminderDeferredTask(domain, null, false);
 
 	}
 	catch (TransientFailureException tfe)
@@ -221,7 +221,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 	    {
 		try
 		{
-		    CreateTaskDeferredTask.createTaskReminderDeferredTask(domain, time, false);
+		    CreateTaskDeferredTask.createTaskReminderDeferredTask(domain, null, false);
 		    return;
 		}
 		catch (IOException e1)

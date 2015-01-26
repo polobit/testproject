@@ -43,12 +43,14 @@ public class TaskReminder
 	{
 	    Calendar calendar = com.agilecrm.util.DateUtil.getCalendar(
 		    new SimpleDateFormat("MM/dd/yyyy").format(new Date()), timezone, "12:00");
-	    time = calendar.getTimeInMillis() / 1000;
+	    time = (calendar.getTimeInMillis() / 1000) + sec_per_day;
+	}
+	else
+	{
+	    time = time + sec_per_day;
 	}
 
-	time = time + sec_per_day;
-
-	System.out.println("------------------" + (time + sec_per_day) * 1000);
+	System.out.println("------------------" + time);
 
 	System.out.println("Namespace task reminder--- " + NamespaceManager.get());
 
