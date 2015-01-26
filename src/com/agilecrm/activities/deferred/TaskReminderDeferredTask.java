@@ -47,6 +47,7 @@ public class TaskReminderDeferredTask implements DeferredTask
      */
     String domain = null;
     Long time = null;
+    String timezone = null;
 
     /**
      * Default constructor, assigns domain name
@@ -54,10 +55,11 @@ public class TaskReminderDeferredTask implements DeferredTask
      * @param domain
      *            name as string
      */
-    public TaskReminderDeferredTask(String domain, Long time)
+    public TaskReminderDeferredTask(String domain, Long time, String timezone)
     {
 	this.domain = domain;
 	this.time = time;
+	this.timezone = timezone;
     }
 
     /**
@@ -100,7 +102,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 
 		// Returns the due tasks of that day.
 
-		List<Task> taskList = TaskUtil.getPendingTasksToRemind(1, domainUser.id);
+		List<Task> taskList = TaskUtil.getPendingTasksToRemind(1, domainUser.id, timezone);
 
 		if (taskList.isEmpty())
 		    continue;
@@ -122,7 +124,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 			    "jagadeesh@invox.com", null, null, "transient exception  after taskListMap" + domain, null,
 			    "task reminder deferred task ", null, null, null);
 
-		    TaskReminderDeferredTask taskDeferredTask = new TaskReminderDeferredTask(domain, time);
+		    TaskReminderDeferredTask taskDeferredTask = new TaskReminderDeferredTask(domain, time, timezone);
 		    Queue queue = QueueFactory.getQueue("due-task-reminder");
 		    TaskOptions options = TaskOptions.Builder.withPayload(taskDeferredTask);
 		    options.countdownMillis(40000);
@@ -187,7 +189,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 		    "jagadeesh@invox.com", null, null, "transient exception at after sending mail" + domain, null,
 		    "task reminder deferred task ", null, null, null);
 
-	    TaskReminderDeferredTask taskDeferredTask = new TaskReminderDeferredTask(domain, time);
+	    TaskReminderDeferredTask taskDeferredTask = new TaskReminderDeferredTask(domain, time, timezone);
 	    Queue queue = QueueFactory.getQueue("due-task-reminder");
 	    TaskOptions options = TaskOptions.Builder.withPayload(taskDeferredTask);
 	    options.countdownMillis(40000);

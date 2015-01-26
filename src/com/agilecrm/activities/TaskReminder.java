@@ -36,12 +36,13 @@ public class TaskReminder
     public static void sendDailyTaskReminders(String domain, Long time, boolean executionFromServlet)
 	    throws IOException
     {
-	int sec_per_day = 1800;
+	int sec_per_day = 86400;
+
+	String timezone = TaskUtil.getTimezoneFromAccountPrefs();
 	if (time == null || executionFromServlet)
 	{
-	    String timezone = TaskUtil.getTimezoneFromAccountPrefs();
 	    Calendar calendar = com.agilecrm.util.DateUtil.getCalendar(
-		    new SimpleDateFormat("MM/dd/yyyy").format(new Date()), timezone, "21:30");
+		    new SimpleDateFormat("MM/dd/yyyy").format(new Date()), timezone, "12:00");
 	    time = calendar.getTimeInMillis() / 1000;
 	}
 
@@ -52,7 +53,7 @@ public class TaskReminder
 	System.out.println("Namespace task reminder--- " + NamespaceManager.get());
 
 	// Start a task queue for each domain
-	TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(domain, time);
+	TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(domain, time, timezone);
 	Queue queue = QueueFactory.getQueue("due-task-reminder");
 
 	TaskOptions options = TaskOptions.Builder.withPayload(taskReminderDeferredTask);
