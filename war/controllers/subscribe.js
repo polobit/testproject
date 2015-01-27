@@ -20,7 +20,7 @@ var SubscribeRouter = Backbone.Router.extend({
 	"purchase-plan-new" : "purchasePlanNew",
 
 	/* Invoices */
-	"invoice" : "invoice", "invoice/:id" : "invoiceDetails",
+	"invoice" : "invoice", "invoice/:id" : "invoiceDetails","getInvoiceDetails/:id" : "getInvoiceDetails",
 	"subscribe_new" : "subscribe_new" ,
 	"subscribe" : "subscribe_new",
 	"email_subscription" : "email_subscription",
@@ -84,7 +84,59 @@ var SubscribeRouter = Backbone.Router.extend({
 		$('#content').html(subscribe_plan.render().el);
 	},
 	
-	
+	getInvoiceDetails : function(invoice_id)
+	{
+		var invoicedata;
+		var companydata;
+		var obj;
+		
+		if (invoice_id)
+		{
+			$.ajax({
+				url: 'core/api/subscription/getinvoice?d=' +invoice_id, 
+				type : 'GET',
+				async : false,
+				success : function(data)
+				{	
+					console.log("Invoice object");
+					console.log(data);
+					invoicedata = data;
+					
+				},
+				error : function(response)
+				{
+					showNotyPopUp("information", "error occured please try again", "top");
+				}
+			}).responseText;
+			
+			$.ajax({
+				url : '/core/api/account-prefs', 
+				type : 'GET',
+				async : false,
+				 dataType: 'json',
+				success : function(data)
+				{	
+					console.log("Account prefs");
+					console.log(data);
+					companydata = data;
+					
+				},
+				error : function(response)
+				{
+					showNotyPopUp("information", "error occured please try again", "top");
+				}
+			}).responseText;
+			
+			obj = {"invoice" : invoicedata,	"company" : companydata}
+			console.log("xxxxxxxxxxxxxxx");
+			console.log(obj);
+			head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
+			{
+				$('#content').html(getTemplate('invoice-detail',obj));
+			});
+		}
+		 	
+	},	
 
 	
 	

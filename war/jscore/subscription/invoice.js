@@ -21,4 +21,15 @@ $(function()
 		}
 		// App_Subscription.invoiceDetails(data);
 	});
+	
+	$("#charge-model-list > tr").live('click', function(e)
+			{
+				e.preventDefault();
+				var invoice_id = $(this).find('.data').attr('data');
+				if (invoice_id)
+				{
+					window.document.location = "#getInvoiceDetails/"+invoice_id;
+				}	
+								
+	});
 });

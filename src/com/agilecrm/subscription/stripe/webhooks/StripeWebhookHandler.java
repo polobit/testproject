@@ -8,7 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.Globals;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
@@ -121,7 +121,7 @@ public abstract class StripeWebhookHandler
 	{
 	    customerId = eventJSON.getJSONObject("data").getJSONObject("object").getString("customer");
 	    System.out.println("customer id : " + customerId);
-	    customer = Customer.retrieve(customerId, Globals.STRIPE_API_KEY);
+	    customer = Customer.retrieve(customerId);
 	}
 	catch (JSONException e)
 	{
