@@ -92,7 +92,7 @@ $(function(){
 				$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
 				
 				var url = $(table).attr('url');
-				if(SELECT_ALL == true)
+				if(SELECT_ALL && SELECT_ALL == true)
 				{
 					if($(table).attr('id') == "contacts" || $(table).attr('id') == "companies" ) {
 						var dynamic_filter = getDynamicFilters();
@@ -103,7 +103,7 @@ $(function(){
 				}
 				
 				// For Active Subscribers table
-				if(SUBSCRIBERS_SELECT_ALL == true){	
+				if(SUBSCRIBERS_SELECT_ALL && SUBSCRIBERS_SELECT_ALL == true){
 					if($(table).attr('id') == "active-campaign")
 						url = url + "&filter=all-active-subscribers";
 				}

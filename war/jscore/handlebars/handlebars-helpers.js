@@ -5727,6 +5727,14 @@ $(function()
 							return options.fn(fields);
 
 			});
+
+	Handlebars.registerHelper('getFormNameFromId', function(id){
+		var url = '/core/api/forms/form?formId=' + id;
+		var form = $.ajax({ type : 'GET', url : url, async : false, dataType : 'json' }).responseText;
+		form = JSON.parse(form);
+		var formName = form.formName;
+		return new Handlebars.SafeString(formName);
+	});
 });
 
 // helper function return created time for event
