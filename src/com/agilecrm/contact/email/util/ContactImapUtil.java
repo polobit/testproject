@@ -182,8 +182,6 @@ public class ContactImapUtil
 	if (StringUtils.equals(applicationId, "agilecrmbeta"))
 	    hostUrl = "https://naresh-dot-imap-dot-agilecrmbeta.appspot.com";
 
-	hostUrl = "http://localhost:8080";
-
 	try
 	{
 	    if (fetch_items.equalsIgnoreCase("mails"))
