@@ -33,10 +33,6 @@ public class TaskReminderServlet extends HttpServlet
 	{
 	    // Set<String> domains = NamespaceUtil.getAllNamespaces();
 	    Set<String> domains = new HashSet<String>();
-	    domains.add("jagadeesh");
-	    domains.add("naresh");
-	    domains.add("test800");
-	    domains.add("our");
 	    // Start a task queue for each domain
 	    for (String domain : domains)
 	    {
