@@ -392,10 +392,15 @@ var WorkflowsRouter = Backbone.Router
 						LHS = $("#LHS", el);
 						RHS = $("#RHS", el);
 
+						CALL = $('#CALL', el);
+						
 						// Chaining dependencies of input
 						// fields
 						// with jquery.chained.js
 						RHS.chained(LHS);
+						
+						// Chain Call trigger options
+						CALL.chained(LHS);
 
 					});
 
@@ -475,10 +480,15 @@ var WorkflowsRouter = Backbone.Router
 							LHS = $("#LHS", el);
 							RHS = $("#RHS", el);
 
+							CALL = $('#CALL', el);
+							
 							// Chaining dependencies of input
 							// fields
 							// with jquery.chained.js
 							RHS.chained(LHS);
+							
+							// Chain Call Trigger options
+							CALL.chained(LHS);
 
 						});
 
