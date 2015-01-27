@@ -26,6 +26,8 @@ import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
+import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.google.gson.Gson;
 
 /**
@@ -159,19 +161,9 @@ public class ContactFilterAPI
     	    @QueryParam("cursor") String cursor, @QueryParam("global_sort_key") String sortKey)
     {
     	ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(data);
-    	/*if(isDatastoreQuery(contact_filter.rules)) {
-    		return ContactUtil.getContactsForTagRules(contact_filter.rules, Integer.parseInt(count), cursor, sortKey);
-    	}*/
+    	// Sets ACL condition
+	    UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(UserAccessControl.AccessControlClasses.Contact.toString(), contact_filter.rules);
     	return new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt(count), cursor, sortKey));
     }
     
-    private Boolean isDatastoreQuery(List<SearchRule> rules) {
-    	boolean retVal = true;
-    	for(SearchRule rule:rules) {
-    		if(!rule.LHS.equals("tags")){
-    			return false;
-    		}
-    	}
-    	return retVal;
-    }
 }

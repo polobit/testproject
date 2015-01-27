@@ -36,6 +36,7 @@ import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
+import com.campaignio.tasklets.agile.CheckCampaign;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -1222,9 +1223,17 @@ public class ContactUtil
 		}
 	}
 
+	/**
+	 * Gets list of active workflows of a given contact id
+	 * 
+	 * @param id
+	 *            contact id
+	 * 
+	 * @return List of workflows which are active for the given contact ID
+	 * @author Kona
+	 */
 	public static List<String> workflowListOfAContact(Long id)
 	{
-
 		List<String> activeWorkflows = null;
 		try
 		{
@@ -1236,7 +1245,7 @@ public class ContactUtil
 				CampaignStatus campaignStatus = statusIterator.next();
 				try
 				{
-					if (campaignStatus.status.contains("ACTIVE"))
+					if (campaignStatus.status.contains(CheckCampaign.STATUS_ACTIVE))
 						activeWorkflows.add(campaignStatus.campaign_id);
 				}
 				catch (EnumConstantNotPresentException e)
@@ -1244,39 +1253,132 @@ public class ContactUtil
 					System.err.println("Inside workflowListOfAContact");
 					e.printStackTrace();
 				}
-
 			}
 
 		}
 		catch (EntityNotFoundException e)
 		{
 			// TODO Auto-generated catch block
+			System.out.println("Inside workflowListOfAContact of ContactUtil.java and message is: " + e.getMessage());
 			e.printStackTrace();
 		}
-		System.out.println("the active workflows are " + activeWorkflows.toString());
 		return activeWorkflows;
-
 	}
-    /**
-	 * Gets contacts who opened personal emails in specific {@Link Long} duration
+
+	/**
+	 * Gets contacts who opened personal emails in specific {@Link Long}
+	 * duration
 	 * 
 	 * @param {@Link Long} - minTime,{@Link Long} - maxTime
 	 * @return {@Link List<Contact>}
 	 */
-	public static List<Contact> getEmailsOpened(Long minTime,Long maxTime){
-		List<Contact> contactsList=null;
-		List<Long> contactIdsList=new ArrayList<Long>();
-		try {
-			List<ContactEmail> openedEmailsList=ContactEmailUtil.getEmailsOpened(minTime,maxTime);
-			for(ContactEmail  contactEmail : openedEmailsList){
+	public static List<Contact> getEmailsOpened(Long minTime, Long maxTime)
+	{
+		List<Contact> contactsList = null;
+		List<Long> contactIdsList = new ArrayList<Long>();
+		try
+		{
+			List<ContactEmail> openedEmailsList = ContactEmailUtil.getEmailsOpened(minTime, maxTime);
+			for (ContactEmail contactEmail : openedEmailsList)
+			{
 				contactIdsList.add(contactEmail.contact_id);
 			}
-			if(contactIdsList.size()!=0)
+			if (contactIdsList.size() != 0)
 				contactsList = dao.ofy().query(Contact.class).filter("id in", contactIdsList).limit(50).list();
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 		return contactsList;
 	}
 
+	/**
+	 * Returns the workflow IDs for the given status of a contact
+	 * 
+	 * @param contactID
+	 *            Contact id
+	 * @param status
+	 *            The status of the workflow for the given contact
+	 * @return List of workflows for the given status. If the status is
+	 *         "any_campaign", return all the workflow ids
+	 * @author Kona
+	 */
+	public static List<CampaignStatus> workflowListOfAContact(Long contactID, Long campaignID, String status)
+	{
+
+		// No contact
+		if (contactID == null)
+			return new ArrayList<CampaignStatus>();
+
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		try
+		{
+			searchMap.put("id", contactID);
+
+			if (campaignID == null)
+			{
+				// return any status - Done, removed or active
+
+				if (CheckCampaign.ANY_STATUS.equals(status))
+					return dao.getByProperty(searchMap).campaignStatus;
+
+				List<CampaignStatus> campaignIDsList = new ArrayList<CampaignStatus>();
+
+				campaignIDsList = dao.getByProperty(searchMap).campaignStatus;
+
+				Iterator<CampaignStatus> statusIterator = campaignIDsList.iterator();
+
+				List<CampaignStatus> givenStatusList = new ArrayList<CampaignStatus>();
+				// any status gets active
+				while (statusIterator.hasNext())
+				{
+					CampaignStatus campaignStatus = statusIterator.next();
+
+					if (StringUtils.containsIgnoreCase(campaignStatus.status, status))
+						givenStatusList.add(campaignStatus);
+				}
+				return givenStatusList;
+			}
+			else
+			{
+
+				searchMap.put("campaignStatus.campaign_id", campaignID + "");
+
+				List<CampaignStatus> campaignIDsList = new ArrayList<CampaignStatus>();
+
+				if (!CheckCampaign.ANY_STATUS.equals(status))
+					searchMap.put("campaignStatus.status", campaignID + "-" + status.toUpperCase());
+
+				campaignIDsList.addAll(dao.getByProperty(searchMap).campaignStatus);
+
+				if (!CheckCampaign.ANY_STATUS.equals(status))
+					return campaignIDsList;
+
+				Iterator<CampaignStatus> statusIterator = campaignIDsList.iterator();
+
+				List<CampaignStatus> givenStatusList = new ArrayList<CampaignStatus>();
+
+				// any status gets active
+				while (statusIterator.hasNext())
+				{
+					CampaignStatus campaignStatus = statusIterator.next();
+
+					if (StringUtils.containsIgnoreCase(campaignStatus.status, CheckCampaign.STATUS_ACTIVE)
+							|| StringUtils.containsIgnoreCase(campaignStatus.status, CheckCampaign.STATUS_DONE))
+					{
+						givenStatusList.add(campaignStatus);
+						return givenStatusList;
+					}
+				}
+			}
+		}
+
+		catch (Exception e)
+		{
+			System.out.println("Exception in workflowListOfAContact and the message is: " + e.getMessage());
+		}
+		return new ArrayList<CampaignStatus>();
+
+	}
 }

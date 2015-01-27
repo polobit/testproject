@@ -317,6 +317,87 @@ function getLocalTimeFromGMTMilliseconds(time_in_milliseconds)
 	return date.getTime() - date.getTimezoneOffset();
 }
 
+function showTextGravatar(selector, element)
+{
+	var el = $(selector, $(element));
+		$(el).closest('img').error(function() {
+			var name = $(this).attr("_data-name");
+			
+			if(!name)
+				return;
+			
+			$(this).attr("data-name", name);
+			$(this).initial({charCount: 2});
+		});
+}
+
+function text_gravatar_initials(items)
+{
+	if (items == undefined)
+		return;
+
+	var name = "";
+
+	var first_name;
+	var last_name;
+	
+	var name = "";
+	
+	if (getPropertyValue(items, "first_name"))
+	{
+		
+		first_name = getPropertyValue(items, "first_name");
+		
+	}
+
+	if (getPropertyValue(items, "last_name"))
+	{
+		last_name = getPropertyValue(items, "last_name");
+	}
+	
+	
+	if(first_name && last_name)
+	{
+		name = first_name.substr(0, 1);
+		name += last_name.substr(0, 1);
+	}
+	else
+	{
+		if(first_name)
+			{
+				var first_name_length = first_name.length;
+				if(first_name_length > 1)	
+					name = first_name.substr(0, 2);
+				else
+					name = first_name.substr(0, 1);
+			}
+		else if(last_name)
+			{
+				var last_name_length = last_name.length;
+				if(last_name_length > 1)	
+					name = last_name.substr(0, 2);
+				else
+					name = last_name.substr(0, 1);
+			}
+	}
+	if(name.length == 0)
+		{
+			var email = getPropertyValue(items, "email");
+			if(email)
+			{
+				if(email.length > 1)
+				name = email.substr(0, 2);
+			}
+		}
+
+	if(name.length == 0)
+		name = "X";
+	
+	console.log(name);
+	return name;
+}
+
+
 
 function buildFacebookProfileURL(URL) {
 	URL = URL.replace('@', '');

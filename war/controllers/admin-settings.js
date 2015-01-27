@@ -261,6 +261,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		{
 			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
 			{
+				$('#content').find('#admin-prefs-tabs-content').html(view.el);
+
+				$('#content').find('#AdminPrefsTab .active').removeClass('active');
+				$('#content').find('.analytics-code-tab').addClass('active');
 				prettyPrint();
 				if (id)
 				{
@@ -274,10 +278,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 			} });
 
-			$('#content').find('#admin-prefs-tabs-content').html(view.el);
-
-			$('#content').find('#AdminPrefsTab .active').removeClass('active');
-			$('#content').find('.analytics-code-tab').addClass('active');
+			
 			// $('#content').html(view.el);
 		});
 	},

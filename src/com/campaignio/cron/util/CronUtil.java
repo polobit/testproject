@@ -5,17 +5,18 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
-import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.queues.cron.CronPullServlet;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.campaignio.cron.Cron;
 import com.campaignio.cron.deferred.CronDeferredTask;
+import com.campaignio.tasklets.agile.Wait;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.appengine.api.taskqueue.Queue;
@@ -205,25 +206,8 @@ public class CronUtil
 	 */
 	public static long getTimer(String durationString, String durationType) throws Exception
 	{
-		int duration = Integer.parseInt(durationString);
-		Calendar calendar = Calendar.getInstance();
 
-		// Days
-		if (durationType.equalsIgnoreCase(Cron.DURATION_TYPE_DAYS))
-			calendar.add(Calendar.DAY_OF_MONTH, duration);
-
-		// Hours
-		if (durationType.equalsIgnoreCase(Cron.DURATION_TYPE_HOURS))
-			calendar.add(Calendar.HOUR_OF_DAY, duration);
-
-		// Mins
-		if (durationType.equalsIgnoreCase(Cron.DURATION_TYPE_MINS))
-			calendar.add(Calendar.MINUTE, duration);
-
-		System.out.print("Current Time: " + Calendar.getInstance().getTimeInMillis());
-		System.out.println(" Will wake up Time: " + calendar.getTimeInMillis());
-
-		return calendar.getTimeInMillis();
+		return getTimer(durationString, durationType, "", "");
 	}
 
 	/**
@@ -357,11 +341,78 @@ public class CronUtil
 		}
 	}
 
-	public static void getActiveWorkflowCrons(Contact a, JSONObject subscriberJSON, JSONObject campaignJSON)
-	{
-		// TODO Auto-generated method stub
-		System.out.println(a);
-		List p = (List) dao.ofy().query(Contact.class).filter("campaign_status", a);
+	/**
+	 * 
+	 * Gets time after adding current time with specified duration and duration
+	 * type.
+	 * 
+	 * @param durationString
+	 *            Duration period.
+	 * @param durationType
+	 *            Duration type such as Days, Hours, Minutes.
+	 * @param timezone
+	 *            Selected timezone.
+	 * @param at
+	 *            At a given time.
+	 * @return resultant time after adding current time with the given
+	 *         parameters.
+	 * @throws Exception
+	 */
 
+	public static long getTimer(String durationString, String durationType, String timezone, String at)
+	{
+
+		// TODO Auto-generated method stub
+		int duration = Integer.parseInt(durationString);
+		// TimeZone timeZone = TimeZone.getTimeZone(timezone);
+		Calendar calendar = Calendar.getInstance();
+
+		// Set timezone
+		if (!Wait.DEFAULT_TIMEZONE.equals(timezone) && !StringUtils.isEmpty(timezone))
+		{
+			TimeZone timeZone = TimeZone.getTimeZone(timezone.substring(1));
+			calendar.setTimeZone(timeZone);
+		}
+
+		// Days
+		if (durationType.equalsIgnoreCase(Cron.DURATION_TYPE_DAYS))
+			calendar.add(Calendar.DAY_OF_MONTH, duration);
+
+		// Hours
+		if (durationType.equalsIgnoreCase(Cron.DURATION_TYPE_HOURS))
+			calendar.add(Calendar.HOUR_OF_DAY, duration);
+
+		// Mins
+		if (durationType.equalsIgnoreCase(Cron.DURATION_TYPE_MINS))
+			calendar.add(Calendar.MINUTE, duration);
+
+		// Business days - Bhasuri
+		if ((Cron.DURATION_TYPE_BUSINESS_DAYS).equalsIgnoreCase(durationType))
+		{
+			int i = 1;
+			while (i <= duration)
+			{
+				calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
+				if (calendar.get(Calendar.DAY_OF_WEEK) == 7 || calendar.get(Calendar.DAY_OF_WEEK) == 1)
+				{
+					calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
+					continue;
+				}
+				i++;
+			}
+			System.out.println(calendar.getTimeZone().getDisplayName());
+		}
+
+		// set wakeup time
+		if (!Wait.DEFAULT_AT.equals(at) && !StringUtils.isEmpty(at))
+		{
+			calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(at.substring(0, 2)));
+			calendar.set(Calendar.MINUTE, Integer.parseInt(at.substring(3)));
+		}
+
+		System.out.print("Current Time: " + Calendar.getInstance().getTimeInMillis());
+		System.out.println(" Will wake up Time: " + calendar.getTimeInMillis());
+
+		return calendar.getTimeInMillis();
 	}
 }

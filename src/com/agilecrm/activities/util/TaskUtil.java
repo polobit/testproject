@@ -1,7 +1,9 @@
 package com.agilecrm.activities.util;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -609,7 +611,7 @@ public class TaskUtil
 	{
 
 	    DateUtil due_date_util = new DateUtil();
-	    Long due_time = (due_date_util.addDays(1).toMidnight().getTime().getTime() / 1000) - 1;
+	    Long due_time = (due_date_util.getTime().getTime() / 1000) - 1;
 	    int count = dao.ofy().query(Task.class)
 		    .filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
 		    .filter("due <", due_time).filter("is_complete", false).count();
@@ -619,6 +621,77 @@ public class TaskUtil
 	{
 	    e.printStackTrace();
 	    return 0;
+	}
+    }
+
+    /**
+     * <<<<<<< HEAD This method returns all the tasks which are incomplete for a
+     * given contact and an owner
+     * 
+     * @param domainUserOwnerKey
+     *            Domain user key which is the owner of the task
+     * @param contactKey
+     *            Contact key which has the incomplete task
+     * @return List of incomplete tasks
+     * 
+     * @author Kona
+     */
+    public static List<Task> getIncompleteTasks(Key<DomainUser> domainUserOwnerKey, Key<Contact> contactKey)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+
+	if (domainUserOwnerKey != null)
+	    searchMap.put("owner", domainUserOwnerKey);
+
+	if (contactKey != null)
+	    searchMap.put("related_contacts", contactKey);
+
+	searchMap.put("is_complete", false);
+	try
+	{
+	    System.out
+		    .println("The domain user key is:" + domainUserOwnerKey + " and the contact key is:" + contactKey);
+	    return dao.listByProperty(searchMap);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Inside getIncompleteTask of TaskUtil and the message is: " + e.getMessage());
+	}
+
+	return new ArrayList<Task>();
+    }
+
+    /**
+     * Returns a list list of tasks as completed.
+     * 
+     * @param tasks
+     *            List of tasks whose status has to be marked as completed
+     * @return List of tasks which are completed
+     * @author Kona
+     */
+    public static List<Task> setStatusAsComplete(List<Task> tasks)
+    {
+	try
+	{
+	    Iterator<Task> taskIterator = tasks.iterator();
+
+	    while (taskIterator.hasNext())
+	    {
+		Task currenttask = taskIterator.next();
+
+		if (!currenttask.is_complete)
+		    currenttask.is_complete = true;
+	    }
+
+	    dao.putAll(tasks);
+
+	    return tasks;
+	}
+	catch (Exception e)
+	{
+	    System.out.println(" Exception in setStatusAsComplete of TaskUtil.java and the message is: "
+		    + e.getMessage());
+	    return tasks;
 	}
     }
 

@@ -1417,7 +1417,13 @@ height: 30px;
 .activity-tag
 {
 	word-wrap:break-word;
-	width:95%;
+	/* width:95%; */
+	position:relative;
+}
+.activity_time{
+position: absolute;
+right: 0;
+top: 0;
 }
 .footer-left a,#refresh-tags,#documents-model-list a,#admin-prefs-tabs-content .tab-content a,#show-schedule-url,#subscribe-ical,span[title='Owner'] i,#contact-documents-model-list i
 {
@@ -1898,13 +1904,15 @@ div.clear {
 }
 
 .navbar_due_tasks{
+	display:none;
 	background: red;
 padding: 0px 2px;
 font-size: 12px;
 border-radius: 2px;
 position: absolute;
-top: 2px;
-left: 22px;
+top: 3px;
+right:3px;
+height:15px;
 box-shadow: 0 0 2px 0px #000;
 }
 
@@ -1922,4 +1930,37 @@ div.lhs-row-filter {
 
 .progress_slider_width_bottom {
 	margin-top:24px;
+}
+
+#activities_date_range{
+		background: white;
+	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0
+		rgba(0, 0, 0, .1);
+	-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0
+		rgba(0, 0, 0, .1);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0
+		rgba(0, 0, 0, .1);
+	color: #333;
+	padding: 5px;
+	line-height: 18px;
+	cursor: pointer;
+	margin-top:-1px;
+}
+	
+.taskDetail-text {
+	font-size: 20px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	width: auto;
+	max-width: 75%;
+	height: auto;
+	padding-bottom: 2px;
+}
+.tasktop-imageview:empty 
+{
+	display:none;
+}
+.activities_second_line{
+	color: #999999;
 }
