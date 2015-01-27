@@ -1,16 +1,11 @@
 package com.agilecrm.activities;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 import com.agilecrm.activities.deferred.TaskReminderDeferredTask;
-import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
-import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -33,27 +28,13 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  */
 public class TaskReminder
 {
-    public static void sendDailyTaskReminders(String domain, Long time, boolean executionFromServlet)
+    public static void sendDailyTaskReminders(String domain, Long time, Long domainuserid, String timezone)
 	    throws IOException
     {
-	int sec_per_day = 86400;
-
-	String timezone = TaskUtil.getTimezoneFromAccountPrefs();
-	if (time == null || executionFromServlet)
-	{
-	    Calendar calendar = com.agilecrm.util.DateUtil.getCalendar(
-		    new SimpleDateFormat("MM/dd/yyyy").format(new Date()), timezone, "12:00");
-	    time = (calendar.getTimeInMillis() / 1000);
-	}
-
-	time = time + sec_per_day;
-
-	System.out.println("------------------" + time);
-
-	System.out.println("Namespace task reminder--- " + NamespaceManager.get());
 
 	// Start a task queue for each domain
-	TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(domain, time, timezone);
+	TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(domain, time, domainuserid,
+	        timezone);
 	Queue queue = QueueFactory.getQueue("due-task-reminder");
 
 	TaskOptions options = TaskOptions.Builder.withPayload(taskReminderDeferredTask);

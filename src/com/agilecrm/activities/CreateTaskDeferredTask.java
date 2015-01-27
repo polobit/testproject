@@ -18,11 +18,10 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  */
 public class CreateTaskDeferredTask
 {
-    public static void createTaskReminderDeferredTask(String domain, Long time, boolean isFromServlet)
-	    throws IOException
+    public static void createTaskReminderDeferredTask(String domain) throws IOException
     {
 
-	ExcecuteTaskDeferredTask task_reminder = new ExcecuteTaskDeferredTask(domain, time, isFromServlet);
+	ExcecuteTaskDeferredTask task_reminder = new ExcecuteTaskDeferredTask(domain);
 	Queue queue = QueueFactory.getQueue("due-task-reminder");
 	TaskOptions options = TaskOptions.Builder.withPayload(task_reminder);
 	queue.add(options);

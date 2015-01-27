@@ -10,7 +10,6 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 
-import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -779,32 +778,5 @@ public class TaskUtil
 	return dueTaskList;
     }
 
-    /**
-     * gets the timezone from accountprefs after setting domainname
-     * 
-     * @param namespace
-     * @return
-     */
-    public static String getTimezoneFromAccountPrefs()
-    {
-
-	try
-	{
-	    String timezone = AccountPrefsUtil.getAccountPrefs().timezone;
-	    if (StringUtils.isEmpty(timezone))
-		timezone = "UTC";
-	    return timezone;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return "UTC";
-	}
-    }
-
-    public static void main(String[] args)
-    {
-	getPendingTasksToRemind(1, 6276149810298880L, "UTC");
-    }
     /***************************************************************************/
 }
