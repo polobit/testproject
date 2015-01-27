@@ -56,6 +56,7 @@
 	             	<span class="imap-share-status"></span>
 					</span>
 			   </div>
+			   {{#if id}}
 			   <div class="control-group" style="margin-top:10px">
 	            <div class="controls">
 	                <a href="#" class="imap-folders-settings-click"><i class='icon-plus-sign'/></i> Email folders</a>
@@ -68,6 +69,7 @@
 					</span>
 			   </div>
 			</div>
+			{{/if}}
             <div class="form-actions"> 
                 <button type="submit" class="save btn btn-primary" style="margin-left:-15pt">Save </button>
                 <a href="#email" class="btn">Cancel</a>

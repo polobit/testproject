@@ -260,42 +260,36 @@ var SettingsRouter = Backbone.Router.extend({
 		var itemView2 = new Base_Model_View({ url : '/core/api/imap', template : "settings-imap-prefs", change:false,
 			postRenderCallback : function(el)
 			{
-				itemView2.model.set("password","");
-				
-				var optionsTemplate1 = "<option value='{{id}}' {{selected}}>{{name}}</option>";
-				var el1 = $('.imap-share-settings-select').closest("div");
-				fillSelect('#imap-share-user-select', 'core/api/imap/shared-to-users', 'users', function fillNew()
-				{
-					$("#imap-share-user-select .default-select").remove();
-				}, optionsTemplate1, false, el1);
-				
+				itemView2.model.set("password","");								
 				var el2 = $('.imap-folders-settings-click').closest("div");
 				var optionsTemplate2 = "<option {{selected}}>{{name}}</option>";
 				fillSelect('#imap-folders-multi-select', 'core/api/imap/imap-folders', 'folders', function fillNew()
 				{
 					$("#imap-folders-multi-select .default-select").remove();
+				    if($("#imap-folders-multi-select").next().is(".loading"))
+				    	$("#imap-folders-multi-select").next().remove();
+					
 				}, optionsTemplate2, false, el2);
+				
+				var optionsTemplate1 = "<option value='{{id}}' {{selected}}>{{name}}</option>";
+				var el1 = $('.imap-share-settings-select').closest("div");
+				fillSelect('#imap-share-user-select', 'core/api/imap/shared-to-users', 'users', function fillNew()
+				{
+					$("#imap-share-user-select .default-select").remove();	
+					
+				}, optionsTemplate1, false, el1);
 			}, 
 			saveCallback : function()
 			{
+				itemView2.render(true);
 				var model = itemView2.model;
 				if(model)
 				{
 					model = model.toJSON();
-//					if(typeof model.isUpdated !== 'undefined' && model['isUpdated'])
-//						App_Settings.navigate("email", { trigger : true });
-//					else
-//					{					
-//						var el = $(".imap-folders-settings-click").closest("div");
-//						$(".imap-folders-settings-click").css("display", "none");
-//						el.find(".imap-folders-settings-txt").css("display","none");
-//						el.find(".imap-folders-select").css("display", "inline");
-//						var optionsTemplate = "<option {{selected}}>{{name}}</option>";
-//						fillSelect('#imap-folders-multi-select', 'core/api/imap/imap-folders', 'folders', function fillNew()
-//						{
-//							$("#imap-folders-multi-select .default-select").remove();
-//						}, optionsTemplate, false, el);
-//					}		
+					if(typeof model.isUpdated !== 'undefined' && model['isUpdated'])
+						App_Settings.navigate("email", { trigger : true });
+					else					
+						load_imap_folders();		
 				}
 				return;
 			}
@@ -339,7 +333,7 @@ var SettingsRouter = Backbone.Router.extend({
 		});
 		
 		/**
-		 * Share imap settings with othe users
+		 * Select imap server folder, will fetch mails from these folders
 		*/
 		$(".imap-folders-settings-click").die().live('click', function(e)
 		{
@@ -350,12 +344,12 @@ var SettingsRouter = Backbone.Router.extend({
 			var optionsTemplate = "<option {{selected}}>{{name}}</option>";
 			fillSelect('#imap-folders-multi-select', 'core/api/imap/imap-folders', 'folders', function fillNew()
 			{
-				$("#imap-folders-multi-select .default-select").remove();
+			    $("#imap-folders-multi-select .default-select").remove();
 			}, optionsTemplate, false, el);
 		});
 		
 		/**
-		 * To cancel the imap share settings event
+		 * To cancel the imap folder settings
 		 */
 		$(".imap-folders-settings-cancel").die().live('click', function(e)
 		{

@@ -144,7 +144,7 @@ public class IMAPAPI
 
     @Path("imap-folders")
     @GET
-    @Produces({ MediaType.APPLICATION_JSON+ " ;charset=utf-8", MediaType.APPLICATION_XML+ " ;charset=utf-8" })
+    @Produces({ MediaType.APPLICATION_JSON + " ;charset=utf-8", MediaType.APPLICATION_XML + " ;charset=utf-8" })
     public String getIMAPFolders()
     {
 	JSONArray newFolders = new JSONArray();
@@ -152,30 +152,33 @@ public class IMAPAPI
 	{
 	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
 	    IMAPEmailPrefs imapEmailPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(agileUser);
-	    String imapURL = ContactImapUtil.getIMAPURLForFetchingFolders(agileUser,"folders");
-	    if (StringUtils.isNotBlank(imapURL))
+	    if (imapEmailPrefs != null)
 	    {
-		// Gets IMAP server folders
-		JSONArray allFolders = ContactImapUtil.getIMAPFoldersFromServer(imapURL);
-		if (allFolders != null)
+		String imapURL = ContactImapUtil.getIMAPURLForFetchingFolders(agileUser, "folders");
+		if (StringUtils.isNotBlank(imapURL))
 		{
-		    List<String> existingFolders = null;
-		    if (imapEmailPrefs != null)
-			existingFolders = imapEmailPrefs.getFoldersList();
-		    for (int i = 0; i < allFolders.length(); i++)
+		    // Gets IMAP server folders
+		    JSONArray allFolders = ContactImapUtil.getIMAPFoldersFromServer(imapURL);
+		    if (allFolders != null)
 		    {
-			JSONObject folder = new JSONObject();
-			folder.put("name", allFolders.get(i));
-			if (existingFolders != null)
+			List<String> existingFolders = null;
+			if (imapEmailPrefs != null)
+			    existingFolders = imapEmailPrefs.getFoldersList();
+			for (int i = 0; i < allFolders.length(); i++)
 			{
-			    for(int j=0;j<existingFolders.size();j++)
+			    JSONObject folder = new JSONObject();
+			    folder.put("name", allFolders.get(i));
+			    if (existingFolders != null)
 			    {
-				if(existingFolders.get(j).equals(allFolders.get(i)))
-				    folder.put("selected", "selected=selected");
+				for (int j = 0; j < existingFolders.size(); j++)
+				{
+				    if (existingFolders.get(j).equals(allFolders.get(i)))
+					folder.put("selected", "selected=selected");
+				}
 			    }
+			    newFolders.put(folder);
 			}
-			newFolders.put(folder);
-		    } 
+		    }
 		}
 	    }
 	}
