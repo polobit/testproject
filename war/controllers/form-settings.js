@@ -5,26 +5,12 @@ var FormsRouter = Backbone.Router.extend({
 		console.log("forms collection template");
 		
 		this.formsListView = new Base_Collection_View({ url : '/core/api/forms', restKey : "forms", templateKey : "forms",
-			individual_tag_name : 'tr' })
+			individual_tag_name : 'tr', postRenderCallback : function(el){
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function(el)
+						{
+							$("time.form-modified-time", el).timeago();
+						});
+			} })
+		this.formsListView.collection.fetch();
 		$("#content").html(this.formsListView.el);
-
-		var forms = this.formsListView.collection.fetch().responseText;
-
-		if (forms)
-		{
-			forms = JSON.parse(forms);
-
-			for ( var j = 0; j < forms.length; j++)
-			{
-				var form = forms[j];
-
-				var formView = new Base_Model_View({ template : "forms" });
-				$("#forms-model-list").append(formView.el);
-			}
-		}
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$("time.form-modified-time", $("#forms-model-list")).timeago();
-
-				});
 	} });
