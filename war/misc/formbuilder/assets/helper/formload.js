@@ -10,7 +10,7 @@ define([
 			dataType: 'json',
 			success: function(data){
 				saveform = JSON.parse(data.formJson);
-				$('#form-label').text('Edit form');
+				$('#form-label').text('Edit Form');
 				new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(saveform) });
 			}
 		});

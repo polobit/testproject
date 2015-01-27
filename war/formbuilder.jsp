@@ -25,7 +25,7 @@ String formId = request.getParameter("form");
             <div class="col-md-6">
                <div class="clearfix">
                   <h2 id="form-label">Your Form</h2>
-                  <input id="form-save" type="button" class="btn btn-info" value="Save form">
+                  <input id="form-save" type="button" class="btn btn-info" value="Save Form">
                   <hr>
                   <div id="build">
                      <form id="target" class="form-horizontal">
