@@ -79,17 +79,13 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 
 		System.out.println("time after date------------ " + dt.getTime());
 		Calendar calendar = com.agilecrm.util.DateUtil.getCalendar(
-		        new SimpleDateFormat("MM/dd/yyyy").format(dt.getTime()), timezone, "17:00");
+		        new SimpleDateFormat("MM/dd/yyyy").format(dt.getTime()), timezone, "18:00");
 		time = (calendar.getTimeInMillis() / 1000);
 		Calendar cal = Calendar.getInstance();
 		if ((calendar.get(Calendar.DAY_OF_MONTH) == cal.get(Calendar.DAY_OF_MONTH))
 		        && ((calendar.getTimeInMillis()) / 1000 < (cal.getTimeInMillis()) / 1000))
 		{
 		    time += sec_per_day;
-		}
-		if (calendar.get(Calendar.DAY_OF_MONTH) < cal.get((Calendar.DAY_OF_MONTH)))
-		{
-		    time += (2 * sec_per_day);
 		}
 
 		TaskReminder.sendDailyTaskReminders(domain, time, domainUser.id, timezone);
