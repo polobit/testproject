@@ -64,7 +64,7 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 	    // Iterates over domain users to fetch due tasks of each user.
 	    for (DomainUser domainUser : domainUsers)
 	    {
-
+		int sec_per_day = 900;
 		String timezone = domainUser.timezone;
 		if (StringUtils.isEmpty(timezone))
 		{
@@ -77,16 +77,17 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 		}
 		DateUtil dt = new DateUtil().toTZ(timezone);
 		Calendar calendar = com.agilecrm.util.DateUtil.getCalendar(
-		        new SimpleDateFormat("MM/dd/yyyy").format(dt.getTime()), timezone, "10:00");
+		        new SimpleDateFormat("MM/dd/yyyy").format(dt.getTime()), timezone, "14:00");
 		time = (calendar.getTimeInMillis() / 1000);
 		Calendar cal = Calendar.getInstance();
-		if (calendar.get(Calendar.DATE) == cal.get((Calendar.DATE)))
+		if ((calendar.get(Calendar.DAY_OF_MONTH) == cal.get(Calendar.DAY_OF_MONTH))
+		        && (calendar.getTime().getTime() < cal.getTime().getTime()))
 		{
-		    time += 86400;
+		    time += sec_per_day;
 		}
-		if (calendar.get(Calendar.DATE) < cal.get((Calendar.DATE)))
+		if (calendar.get(Calendar.DAY_OF_MONTH) < cal.get((Calendar.DAY_OF_MONTH)))
 		{
-		    time += (2 * 86400);
+		    time += (2 * sec_per_day);
 		}
 
 		TaskReminder.sendDailyTaskReminders(domain, time, domainUser.id, timezone);
