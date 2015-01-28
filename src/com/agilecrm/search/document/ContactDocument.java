@@ -133,7 +133,7 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 		if (user != null)
 			doc.addField(Field.newBuilder().setName("owner_id").setText(String.valueOf(user.id)));
 		
-		if(contact.campaignStatus != null && contact.campaignStatus.size() != 0)
+		if(contact.campaignStatus != null && !contact.campaignStatus.isEmpty())
 		    doc.addField(Field.newBuilder().setName("campaign_status").setText(SearchUtil.getCampaignStatus(contact)));
 
 		doc.setId(contact.id.toString()).build();
