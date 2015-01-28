@@ -64,7 +64,7 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 	    for (DomainUser domainUser : domainUsers)
 	    {
 		Long time = null;
-		int sec_per_day = 900;
+		int sec_per_day = 86400;
 		String timezone = domainUser.timezone;
 		if (StringUtils.isEmpty(timezone))
 		{
@@ -79,7 +79,7 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 
 		System.out.println("time after date------------ " + dt.getTime());
 		Calendar calendar = com.agilecrm.util.DateUtil.getCalendar(
-		        new SimpleDateFormat("MM/dd/yyyy").format(dt.getTime()), timezone, "18:00");
+		        new SimpleDateFormat("MM/dd/yyyy").format(dt.getTime()), timezone, "10:00");
 		time = (calendar.getTimeInMillis() / 1000);
 		Calendar cal = Calendar.getInstance();
 		if ((calendar.get(Calendar.DAY_OF_MONTH) == cal.get(Calendar.DAY_OF_MONTH))
