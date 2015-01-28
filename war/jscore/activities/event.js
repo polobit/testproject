@@ -11,6 +11,7 @@
 $(function()
 {
 
+<<<<<<< HEAD
 	/**
 	 * Shows activity modal, and highlights the event form features (Shows event
 	 * form and hides task form, changes color and font-weight)
@@ -234,6 +235,18 @@ $(function()
 
 		// Removes error class of input fields
 		$('#' + this.id).find('.error').removeClass('error');
+		
+		var isOwnerListUploded = $("#event-owners-list", $("#activityForm")).val();
+		if(isOwnerListUploded == null)
+		  {
+			// Fills owner select element
+			populateUsers("event-owners-list", $("#activityForm"), undefined, undefined,
+			function(data){
+							$("#activityForm").find("#event-owners-list").html(data);
+							$("#event-owners-list", $("#activityForm")).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
+							$("#event-owners-list", $("#activityForm")).closest('div').find('.loading-img').hide();
+						  });
+		  }
 
 	});
 
@@ -279,7 +292,6 @@ $(function()
 		e.preventDefault();
 		highlight_event();
 	});
-
 });
 
 /**
@@ -582,4 +594,20 @@ function fillTimePicker(end_time)
 
 		return hours + ':' + minutes;
 	}
+}
+
+//Fills owner select element in update activity modal form
+function populateUsersInUpdateActivityModal(event)
+{
+	// Fills owner select element
+	populateUsers("event-owners-list", $("#updateActivityForm"), event, 'eventOwner',
+	function(data) {
+					$("#updateActivityForm").find("#event-owners-list").html(data);
+					if (event.owner) 
+					   {
+						$("#event-owners-list", $("#updateActivityForm")).find('option[value="' + event['owner'].id + '"]')
+														.attr("selected", "selected");
+					   }
+					$("#event-owners-list", $("#updateActivityForm")).closest('div').find('.loading-img').hide();
+				   });	
 }
