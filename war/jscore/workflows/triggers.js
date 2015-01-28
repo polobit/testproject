@@ -122,16 +122,6 @@ $(function()
 		if($(this).val() == 'UNSUBSCRIBED')
 			show_email_tracking_campaigns();
 
-		if($(this).val() == 'CONTACT_FIELD_CHANGED')
-		{
-			populate_trigger_filters($('form#addTriggerForm'));
-		}
-		
-		if($(this).val() == 'INBOUND_CALL' || $(this).val()=='OUTBOUND_CALL')
-		{
-			populate_call_trigger_options($('form#addTriggerForm'));	
-		}
-
 		if($(this).val() == 'FORM_SUBMIT')
 		{
 			populate_forms_in_trigger($('form#addTriggerForm'), 'trigger-form-event');
