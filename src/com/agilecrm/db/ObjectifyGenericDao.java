@@ -612,9 +612,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 			long startTime = System.currentTimeMillis();
 			agileCursor.count = query.count();
 			long endTime = System.currentTimeMillis();
-			if ((endTime - startTime) > 3 * 1000 && cache)
+			if ((endTime - startTime) > 1.5 * 1000 && cache)
 			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
-				    agileCursor.count, 2 * 60 * 60 * 1000);
+				    agileCursor.count, 1 * 60 * 60 * 1000);
 		    }
 
 		}

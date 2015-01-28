@@ -33,6 +33,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.util.CacheUtil;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
@@ -1380,5 +1381,27 @@ public class ContactUtil
 		}
 		return new ArrayList<CampaignStatus>();
 
+	}
+	
+	public static void eraseContactsCountCache()
+	{
+	    try
+	    {
+		String namespace = null;
+		namespace = NamespaceManager.get();
+		if(StringUtils.isEmpty(namespace))
+		    return;
+		
+		CacheUtil.deleteCache(Contact.class.getSimpleName() + "_" + namespace);
+	    }
+	    catch(Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	    
+	}
+	public static void resetContactsCount()
+	{
+	    eraseContactsCountCache();
 	}
 }
