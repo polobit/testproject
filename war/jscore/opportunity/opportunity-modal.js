@@ -235,13 +235,19 @@ $(function(){
 		 var id = $("#archived-deal-id",$("#deal_archive_confirm_modal")).val();
 	     var milestone = $("#archived-deal-milestone",$("#deal_archive_confirm_modal")).val();
 	     var currentDeal;
+	     var dealPipelineModel;
 	        
 	     // Get the current deal model from the collection.
-	     var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
-	     if(!dealPipelineModel)
-	    	return;
-	    currentDeal = dealPipelineModel[0].get('dealCollection').get(id).toJSON();
-	    currentDeal.archived = true;
+	     if(Current_Route != 'deals'){
+				currentDeal=App_Deal_Details.dealDetailView.model.toJSON();
+			}else {
+				dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
+			     if(!dealPipelineModel)
+			    	return;
+			    currentDeal = dealPipelineModel[0].get('dealCollection').get(id).toJSON();
+			}
+
+	     currentDeal.archived = true;
 	    var that = $(this);
 	        
 	    var notes = [];
@@ -263,6 +269,17 @@ $(function(){
 			arch_deal.save(currentDeal, {
 				// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
 				success : function(model, response) {
+					//For deal details page.
+					if(Current_Route != 'deals'){
+						$("#deal_archive_confirm_modal").modal('hide');
+						App_Deal_Details.dealDetailView.model = model;
+						App_Deal_Details.dealDetailView.render(true)
+						Backbone.history.navigate("deal/"+model.toJSON().id , {
+				            trigger: true
+				        });
+						return;
+					}
+					
 					// Remove the deal from the collection and remove the UI element.
 					if(removeArchive(response)){
 						dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
@@ -292,6 +309,7 @@ $(function(){
 		 var id = $("#restored-deal-id",$("#deal_restore_confirm_modal")).val();
 	     var milestone = $("#restored-deal-milestone",$("#deal_restore_confirm_modal")).val();
 	     var currentDeal;
+	     var dealPipelineModel;
 	     
 	     // Returns, if the save button has disabled attribute
 		if ($(this).attr('disabled'))
@@ -301,10 +319,15 @@ $(function(){
 		disable_save_button($(this));
 	        
 		// Get the current deal model from the collection.
-		var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
-		if(!dealPipelineModel)
-			return;
-		currentDeal = dealPipelineModel[0].get('dealCollection').get(id).toJSON();
+		if(Current_Route != 'deals'){
+			currentDeal=App_Deal_Details.dealDetailView.model.toJSON();
+		}else {
+			dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
+			if(!dealPipelineModel)
+				return;
+			currentDeal = dealPipelineModel[0].get('dealCollection').get(id).toJSON();
+		}
+		
 		currentDeal.archived = false;
 		var that = $(this);
 		
@@ -325,6 +348,16 @@ $(function(){
 		arch_deal.save(currentDeal, {
 			// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
 			success : function(model, response) {
+				if(Current_Route != 'deals'){
+					$("#deal_restore_confirm_modal").modal('hide');
+					App_Deal_Details.dealDetailView.model = model;
+					App_Deal_Details.dealDetailView.render(true)
+					Backbone.history.navigate("deal/"+model.toJSON().id , {
+			            trigger: true
+			        });
+					return;
+				}
+				
 				// Remove the deal from the collection and remove the UI element.
 				if(removeArchive(response)){
 					dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
