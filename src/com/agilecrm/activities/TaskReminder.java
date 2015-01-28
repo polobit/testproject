@@ -31,14 +31,14 @@ public class TaskReminder
     public static void sendDailyTaskReminders(String domain, Long time, Long domainuserid, String timezone)
 	    throws IOException
     {
-
+	System.out.println(time + " time in task reminder deferred task ----------------");
 	// Start a task queue for each domain
 	TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(domain, time, domainuserid,
 	        timezone);
 	Queue queue = QueueFactory.getQueue("due-task-reminder");
 
 	TaskOptions options = TaskOptions.Builder.withPayload(taskReminderDeferredTask);
-	options.etaMillis((time) * 1000);
+	options.etaMillis(time * 1000);
 	queue.add(options);
     }
 

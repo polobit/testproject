@@ -55,7 +55,7 @@ public class TaskReminderDeferredTask implements DeferredTask
     {
 	this.domain = domain;
 	this.time = time;
-	this.domainuserid = this.domainuserid;
+	this.domainuserid = domainuserid;
 	this.timezone = timezone;
     }
 

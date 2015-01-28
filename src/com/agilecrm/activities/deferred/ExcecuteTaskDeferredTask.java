@@ -77,7 +77,7 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 		}
 		DateUtil dt = new DateUtil().toTZ(timezone);
 		Calendar calendar = com.agilecrm.util.DateUtil.getCalendar(
-		        new SimpleDateFormat("MM/dd/yyyy").format(dt.getTime()), timezone, "14:00");
+		        new SimpleDateFormat("MM/dd/yyyy").format(dt.getTime()), timezone, "15:00");
 		time = (calendar.getTimeInMillis() / 1000);
 		Calendar cal = Calendar.getInstance();
 		if ((calendar.get(Calendar.DAY_OF_MONTH) == cal.get(Calendar.DAY_OF_MONTH))
