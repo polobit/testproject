@@ -233,7 +233,7 @@ public class ContactUtil
 		Map<String, Object> searchMap = new HashMap<String, Object>();
 		searchMap.put("type", Type.PERSON);
 		if (max != 0)
-			return dao.fetchAllByOrder(max, cursor, searchMap, false, false, sortKey);
+			return dao.fetchAllByOrder(max, cursor, searchMap, false, true, sortKey);
 
 		return dao.listByPropertyAndOrder(searchMap, sortKey);
 	}
