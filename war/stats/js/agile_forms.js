@@ -5,8 +5,15 @@ var _agile_synch_form_v2 = function()
 {
 	// Disable button
 	var agile_button = document.getElementsByClassName("agile-button")[0];
-	agile_button.setAttribute("disabled", "disabled");
+	if (agile_button)
+		agile_button.setAttribute("disabled", "disabled");
 	var agile_error_msg = document.getElementById("agile-error-msg");
+	if (agile_error_msg)
+	{
+		var spin = document.createElement("img");
+		spin.src = "https://s3.amazonaws.com/PopupTemplates/form/spin.gif";
+		agile_error_msg.appendChild(spin);
+	}
 
 	// Get form data
 	var agile_form = document.getElementById('agile-form');
@@ -20,6 +27,7 @@ var _agile_synch_form_v2 = function()
 
 	var agile_address = {};
 	var agile_tags;
+	var agile_notes = [];
 
 	// Build contact JSON
 	for ( var i = 0; i < agile_form.length; i++)
@@ -32,10 +40,21 @@ var _agile_synch_form_v2 = function()
 				agile_address[name] = value;
 			else if (name == "tags")
 			{
-				if (agile_tags)
-					agile_tags = agile_tags + ',' + value;
-				else
-					agile_tags = value;
+				var field_type = agile_form[i].getAttribute("type");
+				if (field_type == "text" || agile_form[i].checked || !field_type)
+				{
+					if (agile_tags)
+						agile_tags = agile_tags + ',' + value;
+					else
+						agile_tags = value;
+				}
+			}
+			else if (name == "note")
+			{
+				var agile_note = {};
+				agile_note.subject = agile_form[i].parentNode.parentNode.getElementsByTagName("label")[0].innerHTML;
+				agile_note.description = value;
+				agile_notes.push(agile_note);
 			}
 			else
 				agile_contact[name] = value;
@@ -73,9 +92,35 @@ var _agile_synch_form_v2 = function()
 	// Create contact
 	_agile.create_contact(agile_contact, { success : function(data)
 	{
-		agile_formCallback([
-				"", agile_error_msg
-		], agile_button, agile_redirect_url);
+		var contact_id = data.id;
+		var note_counter = 0;
+		if (agile_notes.length > 0)
+		{
+			for ( var h = 0; h < agile_notes.length; h++)
+			{
+				_agile.add_note(agile_notes[h], { success : function(data)
+				{
+					note_counter++;
+					if (note_counter == agile_notes.length)
+					{
+						agile_formCallback([
+								"", agile_error_msg
+						], agile_button, agile_redirect_url, agile_form, contact_id);
+					}
+				}, error : function(data)
+				{
+					agile_formCallback([
+							"Error in sending data", agile_error_msg
+					], agile_button, agile_redirect_url, agile_form);
+				} });
+			}
+		}
+		else
+		{
+			agile_formCallback([
+					"", agile_error_msg
+			], agile_button, agile_redirect_url, agile_form, contact_id);
+		}
 	}, error : function(data)
 	{
 		if (data.error.indexOf('Duplicate') != -1)
@@ -83,20 +128,48 @@ var _agile_synch_form_v2 = function()
 			// Update contact if duplicate
 			_agile.update_contact(agile_contact, { success : function(data)
 			{
-				agile_formCallback([
-						"", agile_error_msg
-				], agile_button, agile_redirect_url);
+				var contact_id = data.id;
+				var note_counter = 0;
+				if (agile_notes.length > 0)
+				{
+					for ( var h = 0; h < agile_notes.length; h++)
+					{
+						_agile.add_note(agile_notes[h], { success : function(data)
+						{
+							note_counter++;
+							if (note_counter == agile_notes.length)
+							{
+								agile_formCallback([
+										"", agile_error_msg
+								], agile_button, agile_redirect_url, agile_form, contact_id);
+
+							}
+						}, error : function(data)
+						{
+							agile_formCallback([
+									"Error in sending data", agile_error_msg
+							], agile_button, agile_redirect_url, agile_form);
+						} });
+					}
+				}
+				else
+				{
+					agile_formCallback([
+							"", agile_error_msg
+					], agile_button, agile_redirect_url, agile_form, contact_id);
+				}
+
 			}, error : function(data)
 			{
 				agile_formCallback([
-						"There was an error in sending data", agile_error_msg
-				], agile_button, agile_redirect_url, data);
+						"Error in sending data", agile_error_msg
+				], agile_button, agile_redirect_url, agile_form);
 			} });
 		}
 		else
 			agile_formCallback([
-					"There was an error in sending data", agile_error_msg
-			], agile_button, agile_redirect_url, data);
+					"Error in sending data", agile_error_msg
+			], agile_button, agile_redirect_url, agile_form);
 	} });
 };
 
@@ -106,8 +179,15 @@ var _agile_synch_form_v2 = function()
 var _agile_synch_form = function()
 {
 	var agile_button = document.getElementsByClassName("agile-button")[0];
-	agile_button.setAttribute("disabled", "disabled");
+	if (agile_button)
+		agile_button.setAttribute("disabled", "disabled");
 	var agile_error_msg = document.getElementById("agile-error-msg");
+	if (agile_error_msg)
+	{
+		var spin = document.createElement("img");
+		spin.src = "https://s3.amazonaws.com/PopupTemplates/form/spin.gif";
+		agile_error_msg.appendChild(spin);
+	}
 
 	// Get form data
 	var agile_form = document.getElementById('agile-form');
@@ -130,10 +210,14 @@ var _agile_synch_form = function()
 				agile_address[name] = value;
 			else if (name == "tags")
 			{
-				if (agile_tags)
-					agile_tags = agile_tags + ',' + value;
-				else
-					agile_tags = value;
+				var field_type = agile_form[i].getAttribute("type");
+				if (field_type == "text" || agile_form[i].checked || !field_type)
+				{
+					if (agile_tags)
+						agile_tags = agile_tags + ',' + value;
+					else
+						agile_tags = value;
+				}
 			}
 			else
 				agile_contact[name] = value;
@@ -164,9 +248,10 @@ var _agile_synch_form = function()
 	// Create contact
 	_agile.create_contact(agile_contact, { success : function(data)
 	{
+		var contact_id = data.id;
 		agile_formCallback([
 				"", agile_error_msg
-		], agile_button, agile_redirect_url);
+		], agile_button, agile_redirect_url, agile_form, contact_id);
 	}, error : function(data)
 	{
 		if (data.error.indexOf('Duplicate') != -1)
@@ -174,19 +259,20 @@ var _agile_synch_form = function()
 			// Update contact if duplicate
 			_agile.update_contact(agile_contact, { success : function(data)
 			{
+				var contact_id = data.id;
 				agile_formCallback([
 						"", agile_error_msg
-				], agile_button, agile_redirect_url);
+				], agile_button, agile_redirect_url, agile_form, contact_id);
 			}, error : function(data)
 			{
 				agile_formCallback([
-						"There was an error in sending data", agile_error_msg
-				], agile_button, agile_redirect_url, data);
+						"Error in sending data", agile_error_msg
+				], agile_button, agile_redirect_url, agile_form);
 			} });
 		}
 		else
 			agile_formCallback([
-					"There was an error in sending data", agile_error_msg
-			], agile_button, agile_redirect_url, data);
+					"Error in sending data", agile_error_msg
+			], agile_button, agile_redirect_url, agile_form);
 	} });
 };

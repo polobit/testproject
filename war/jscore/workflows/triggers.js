@@ -58,6 +58,9 @@ $(function()
 			$('form#addTriggerForm').find('select#event-type').closest('div.control-group').css('display', 'none');
 		}
 			
+		if($(this).val() != 'FORM_SUBMIT'){
+			$('form#addTriggerForm').find('select#trigger-form-event').closest('div.control-group').css('display', 'none');
+		}
 
 		// Initialize tags typeahead
 		if ($(this).val() == 'TAG_IS_ADDED' || $(this).val() == 'TAG_IS_DELETED')
@@ -118,7 +121,11 @@ $(function()
 		
 		if($(this).val() == 'UNSUBSCRIBED')
 			show_email_tracking_campaigns();
-			
+
+		if($(this).val() == 'FORM_SUBMIT')
+		{
+			populate_forms_in_trigger($('form#addTriggerForm'), 'trigger-form-event');
+		}
 	});
 	
 	// When cancel clicked, take to Back page
@@ -263,6 +270,26 @@ function populate_owners_in_trigger(trigger_form, owner_select_id, trigger_owner
 			}
 		
 	}, optionsTemplate, false, undefined, "Select Event Owner");
+}
+
+function populate_forms_in_trigger(trigger_form, trigger_form_select_id, trigger_form_id)
+{
+	trigger_form.find('select#' + trigger_form_select_id).closest('div.control-group').css('display', '');
+	var formOptionsTemplate = "<option value='{{id}}'>{{formName}}</option>";
+	fillSelect(trigger_form_select_id, 'core/api/forms', 'forms', function()
+	{
+		if (trigger_form_id)
+		{
+			$('#' + trigger_form_select_id, trigger_form).find('option[value=' + trigger_form_id + ']').attr('selected', 'selected');
+		}
+	}, formOptionsTemplate, false, undefined, "Select Form");
+}
+
+function populate_call_trigger_options(trigger_form)
+{
+	trigger_form.find('div#CALL').closest('div.control-group').css('display', '');
+	
+	$('#CALL').chained('#LHS');	
 }
 
 /**

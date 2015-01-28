@@ -109,6 +109,8 @@ public class BulkOperationsAPI
 	    message = fetcher.getAvailableCompanies() + " Contacts/Companies deleted";
 	}
 
+	ContactUtil.eraseContactsCountCache();
+	
 	BulkActionNotifications.publishNotification(message);
 
     }
@@ -386,6 +388,8 @@ public class BulkOperationsAPI
 	    {
 		new CSVUtil(restrictions).createCompaniesFromCSV(blobStream, contact, ownerId, type);
 	    }
+	    
+	    ContactUtil.eraseContactsCountCache();
 	}
 	catch (IOException e)
 	{
