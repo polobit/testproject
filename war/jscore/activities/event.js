@@ -10,8 +10,6 @@
 
 $(function()
 {
-
-<<<<<<< HEAD
 	/**
 	 * Shows activity modal, and highlights the event form features (Shows event
 	 * form and hides task form, changes color and font-weight)
