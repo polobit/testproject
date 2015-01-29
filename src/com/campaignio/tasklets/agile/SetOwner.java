@@ -1,10 +1,16 @@
 package com.campaignio.tasklets.agile;
 
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -44,6 +50,18 @@ public class SetOwner extends TaskletAdapter
 
 	try
 	{
+
+	    // If Round Robin Assignment
+	    if (StringUtils.equals(ownerId, "round_robin"))
+		ownerId = getNextOwnerUsingRoundRobin(AgileTaskletUtil.getId(campaignJSON));
+
+	    // Execute Next One in Loop
+	    if(ownerId == null)
+	    {
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+		return;
+	    }
+	    
 	    // Sets contact owner
 	    Contact updatedContact = setOwner(subscriberJSON, ownerId);
 
@@ -78,6 +96,67 @@ public class SetOwner extends TaskletAdapter
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+    }
+
+    /**
+     * Returns next owner from the users list using Round Robin.
+     * 
+     * @param campaignJSON
+     * @return
+     * 
+     */
+    private String getNextOwnerUsingRoundRobin(String campaignId)
+    {
+	// Fetch keys by default in keys order
+	List<Key<DomainUser>> userKeys = DomainUserUtil.getDomainUserKeys();
+
+	// Get previous Owner key assigned
+	Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(campaignId));
+	Key<DomainUser> previousUserKey = workflow.getRoundRobinKey();
+
+	
+	System.out.println("Previous user key saved in workflow is... " + previousUserKey);
+	
+	Key<DomainUser> nextUserKey = null;
+
+	// Campaign executing first time, so assign first User to first Contact
+	if (previousUserKey == null)
+	    nextUserKey = userKeys.get(0);
+	else
+	    nextUserKey = getNextKeyFromList(userKeys, previousUserKey);
+
+	System.out.println("Next user key getting saved into workflow is... " + nextUserKey);
+	
+	// Save next key
+	workflow.setRoundRobinKey(nextUserKey);
+	workflow.save();
+
+	return (nextUserKey == null ? null : String.valueOf(nextUserKey.getId()));
+    }
+
+    /**
+     * Returns next user key from the list in Round Robin way. If previous user
+     * key is last one, it again returns first one
+     * 
+     * @param userKeys
+     *            - List of Domain User keys
+     * @param previousUserKey
+     *            - previous assigned key
+     * @return Key<DomainUser>
+     */
+    private Key<DomainUser> getNextKeyFromList(List<Key<DomainUser>> userKeys, Key<DomainUser> previousUserKey)
+    {
+	// Index of previous user key in the list
+	int index = userKeys.indexOf(previousUserKey);
+
+	System.out.println("Index of previous key is " + index);
+	
+	// Returns 0 if last, otherwise next index
+	int nextIndex = (index == userKeys.size() - 1) ? 0 : index + 1;
+
+	System.out.println("Next index is " + nextIndex);
+	
+	return userKeys.get(nextIndex);
     }
 
     /**
