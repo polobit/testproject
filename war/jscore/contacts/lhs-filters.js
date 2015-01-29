@@ -58,7 +58,7 @@ function loadCustomFiledsFilters(fields, cel, is_company) {
 	{
 		var selected = $(this).val();
 		$(this).parent().find('div.condition_container').addClass('hide');
-		$(this).parent().find('div.condition_container.'+selected).find('input').val("").attr('prev-val', "");;
+		$(this).parent().find('div.condition_container.'+selected).find('input').val("").attr('prev-val', "");
 		$(this).parent().find('div.condition_container.'+selected).find('select').val("").attr('prev-val', "");;
 		$(this).parent().find('div.condition_container.'+selected).removeClass('hide');
 		$(this).parent().find('div.condition_container.'+selected).find('#RHS :not(input.date)').focus();
@@ -119,8 +119,8 @@ $('a.filter-tags-multiple-add-lhs').die().live("click", function(e) {
 	{
 		$(this).addClass('hide');
 		var container = $(this).parents('.lhs-contact-filter-row');
-		$(container).find('#RHS').children().val("");
-		$(container).find('#RHS_NEW:visible').children().val("");
+		$(container).find('#RHS').children().val("").attr('prev-val', "");
+		$(container).find('#RHS_NEW:visible').children().val("").attr('prev-val', "");
 		submitLhsFilter();
 	});
 
