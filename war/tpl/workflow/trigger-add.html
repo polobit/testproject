@@ -54,6 +54,8 @@
 										<option value="OUTBOUND_CALL">Outbound Call</option>
 										<optgroup label="Ecommerce">
 										<option value="SHOPIFY_EVENT" id="shopify-event">Shopify Event</option>
+										<optgroup label="Form">
+										<option value="FORM_SUBMIT" id="form-event">Form Submit</option>
 									</select>
                                 </div>
                             </div>
@@ -181,6 +183,13 @@
 								<small><i class="icon-info-sign"></i> You need to setup Webhooks in your Shopify account for this. In your stores Admin panel, go to Settings, Notifications, Webhooks, and create a webhook for the desired event with the below URL. <br> <a class="inbound-help-text">{{shopifyWebhook}}</a></small>
 							</div>
 							</div>	
+						</div>
+						<div class="control-group" style="display:none;">
+							<div class="controls" style="margin-left:220px!important">
+							<select id="trigger-form-event" name="trigger_form_event" class="required">
+								<option value="">Select...</option>
+							</select>
+							</div>
 						</div>
 						<div id="trigger-inbound-mail-event" style="display:none;">
 						<div class="control-group">

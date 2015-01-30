@@ -1,0 +1,71 @@
+<script id="forms-collection-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Forms</h1>
+			<a href="formbuilder" class="btn right" style="top:-28px;position:relative"><span><i class="icon-plus-sign" /></span> Add Form</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+ <div class="span9">
+	{{#unless this.length}}
+	<div style="height: 245px;">
+	<div class="slate">
+		<div class="slate-content">
+			<div class="box-left">
+				<img alt="Clipboard" src="/img/clipboard.png" />
+			</div>
+			<div class="box-right">
+				<h3>You do not have any Forms saved.</h3>
+				<a href="formbuilder" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i> Add Form</a>
+			</div>
+		</div>
+	</div>
+	</div>
+	{{/unless}}
+	{{#if this.length}}
+	<div class="data-block">
+		<div class="data-container">
+			<table class="table table-bordered table-striped showCheckboxes agile-ellipsis-dynamic" url="core/api/forms/bulk" style="cursor:pointer;">
+				<colgroup><col width="50px"><col width="50%"><col width="50%"></colgroup>
+				<thead>
+					<tr>
+						<th>Form Title</th>
+						<th>Last Modified</th>
+					</tr>
+				</thead>
+				<tbody id="forms-model-list">
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{{/if}}
+ </div>
+
+<div class="span3">
+        <div class="well">
+            <h3>
+                What are Forms?
+            </h3>
+            <br>
+			<p>
+				Forms created using the <a href="formbuilder">Form Builder</a> can be placed on your website or app. These Forms are readily linked to your Agile account. When a visitor fills the form, a Contact is created and subsequent web activity is logged automatically.
+			</p>
+    </div>
+</div>
+</script>
+
+<script id="forms-model-template" type="text/html">
+	<td><a href="formbuilder?form={{id}}"><span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">{{formName}}</span></a></td>
+    <td>
+		<a href="formbuilder?form={{id}}">
+			<span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">
+				<small class="edit-hover">
+					<time class="form-modified-time" datetime="{{epochToHumanDate "" updated_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
+				</small>
+			</span>
+		</a>
+	</td>
+	</br>
+</script>

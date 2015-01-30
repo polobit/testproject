@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.AccountPrefs;
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.activities.EventReminder;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
@@ -209,6 +211,9 @@ public class RegisterServlet extends HttpServlet
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, name);
 
 	DomainUser domainUser = createUser(request, response, userInfo, password);
+	// when domain created we are storing timezone in domain level
+
+	setAccountPrefsTimezone(request);
 
 	EventReminder.getEventReminder(domainUser.domain, null);
 	try
@@ -523,5 +528,29 @@ public class RegisterServlet extends HttpServlet
 	    }
 	}
 	return null;
+    }
+
+    /**
+     * stores timezone in account prefs in domain level
+     * 
+     * @param req
+     */
+    private void setAccountPrefsTimezone(HttpServletRequest req)
+    {
+	try
+	{
+	    // Set timezone in account prefs.
+	    AccountPrefs accPrefs = AccountPrefsUtil.getAccountPrefs();
+	    if (StringUtils.isEmpty(accPrefs.timezone) || "UTC".equals(accPrefs.timezone)
+		    || "GMT".equals(accPrefs.timezone))
+	    {
+		accPrefs.timezone = req.getParameter("account_timezone");
+		accPrefs.save();
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception in setting timezone in account prefs.");
+	}
     }
 }

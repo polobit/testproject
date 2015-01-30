@@ -25,7 +25,8 @@ function makeCall(phoneNumber)
 	}
 	else if (Sip_Stack != null && Sip_Session_Call != null)
 	{
-		showNotyPopUp('information', "You are already in call.", "top", 5000);
+		//showNotyPopUp('information', "You are already in call.", "top", 5000);
+		alert("Already on call.");
 		return false;
 	}
 	else if (!Sip_Stack)

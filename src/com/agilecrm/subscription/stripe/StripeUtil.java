@@ -34,6 +34,9 @@ import com.stripe.model.Customer;
 import com.stripe.model.CustomerCardCollection;
 import com.stripe.model.Event;
 import com.stripe.model.Invoice;
+import com.stripe.model.Refund;
+import com.stripe.net.RequestOptions;
+import com.stripe.net.RequestOptions.RequestOptionsBuilder;
 
 /**
  * <code>StripeUtil</code> is utility class used to process data, to support
@@ -52,6 +55,11 @@ import com.stripe.model.Invoice;
  */
 public class StripeUtil
 {
+    static
+    {
+	Stripe.apiKey = Globals.STRIPE_API_KEY;
+	Stripe.apiVersion = "2012-09-24";
+    }
 
 	/**
 	 * Creates a map of customer card details, plan and other details required
@@ -151,7 +159,7 @@ public class StripeUtil
 		// Converts Customer JSON to customer object
 		Customer customer = new Gson().fromJson(customerJSON.toString(), Customer.class);
 		// Retrieves the customer from stripe based on id
-		return Customer.retrieve(customer.getId(), Stripe.apiKey);
+		return Customer.retrieve(customer.getId());
 	}
 
 	/**
@@ -176,7 +184,7 @@ public class StripeUtil
 			org.json.JSONObject ob = new org.json.JSONObject(event_json_string);
 			System.out.println("event id" + ob.getString("id"));
 			// Converts Customer JSON to1 customer object
-			Event event = Event.retrieve(ob.getString("id"), Globals.STRIPE_API_KEY);
+			Event event = Event.retrieve(ob.getString("id"));
 			// Retrieves the customer from stripe based on id
 			return event;
 		}
@@ -213,7 +221,7 @@ public class StripeUtil
 		/*
 		 * Fetches all charges for given stripe customer id and returns invoices
 		 */
-		return Charge.all(chargeParams, Stripe.apiKey).getData();
+		return Charge.all(chargeParams).getData();
 	}
 
 	// based on charge id, that charge will be refunded
@@ -224,7 +232,21 @@ public class StripeUtil
 
 		Charge ch = Charge.retrieve(chargeid);
 
-		return ch.refund(Stripe.apiKey);
+		return ch.refund();
+	}
+	// based on charge id, that charge will be refunded
+	public static Refund createPartialRefund(String chargeId, Integer amount) throws StripeException
+	{
+	    RequestOptionsBuilder builder = new RequestOptionsBuilder();
+	    builder.setApiKey(Globals.STRIPE_API_KEY);
+	    builder.setStripeVersion("2014-12-08");
+	    RequestOptions options = builder.build();
+	    Map<String, Object> params = new HashMap<String, Object>();
+	    params.put("amount", amount);
+	    Charge ch = Charge.retrieve(chargeId, options);
+	    System.out.println(ch);
+	    Refund refund = ch.getRefunds().create(params);
+	    return refund;
 	}
 
 	/**
@@ -337,10 +359,16 @@ public class StripeUtil
 		Stripe.apiKey = Globals.STRIPE_API_KEY;
 		try
 		{
-			Invoice invoice = Invoice.retrieve(invoice_id);
-			System.out.println("aaaaaaaaaaaaa");
-			System.out.println(invoice);
-			return invoice;
+		    RequestOptionsBuilder builder = new RequestOptionsBuilder();
+		    builder.setApiKey(Globals.STRIPE_API_KEY);
+		    builder.setStripeVersion("2014-12-08");
+		    RequestOptions options = builder.build();
+		    Invoice.retrieve(invoice_id, options);
+		    
+		    Invoice invoice = Invoice.retrieve(invoice_id, options);
+		    System.out.println("aaaaaaaaaaaaa");
+		    System.out.println(invoice);
+		    return invoice;
 		}
 		catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException
 				| APIException e)

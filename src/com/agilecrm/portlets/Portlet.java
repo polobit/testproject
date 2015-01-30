@@ -77,39 +77,6 @@ public class Portlet {
     @Indexed
     private Key<AgileUser> user;
     
-    @NotSaved(IfDefault.class)
-    public List<Contact> contactsList=null;
-    
-    @NotSaved(IfDefault.class)
-    public List<Opportunity> dealsList=null;
-    
-    @NotSaved(IfDefault.class)
-    public List<Task> tasksList=null;
-    
-    @NotSaved(IfDefault.class)
-    public List<Event> eventsList=null;
-    
-    @NotSaved(IfDefault.class)
-    public List<String> milestonesList=null;
-    
-    @NotSaved(IfDefault.class)
-    public List<Double> milestoneValuesList=null;
-    
-    @NotSaved(IfDefault.class)
-    public List<Integer> milestoneNumbersList=null;
-    
-    @NotSaved(IfDefault.class)
-    public List<Milestone> milestoneList=null;
-    
-    @NotSaved(IfDefault.class)
-    public List<DomainUser> domainUsersList=null;
-    
-    @NotSaved(IfDefault.class)
-    public List<Integer> mailsCountList=null;
-    
-    @NotSaved(IfDefault.class)
-    public JSONObject growthGraphJson=null;
-    
     /**
      * Stores {@link Boolean} info whether the portlet is added
      */

@@ -23,6 +23,11 @@ $(function()
 	TwilioIONumbers = agile_crm_get_contact_properties_list("phone");
 	console.log("TwilioIONumbers");
 	console.log(TwilioIONumbers);
+	
+	// Retrieves image of agile contact
+	TwilioIOContactImg = agile_crm_get_contact_properties_list("image");
+	console.log("TwilioIOContactImg");
+	console.log(TwilioIOContactImg);
 
 	showListOfContactNumbers();
 

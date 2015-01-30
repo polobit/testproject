@@ -92,10 +92,10 @@ function display_google_map() {
 	if(!address.zip)address.zip="";
 	
 	geocoder.geocode({
-		'address' : '"'+ getNormalCountryNameFromShortName(address.country) + '"'
+		'address' : '"'+ address.city + ', '
+		+ address.state + ', ' + getNormalCountryNameFromShortName(address.country) + ', ' + address.zip + '"'
 	}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
-			
 			console.log(results);
 			displayTimeZone(results);
 

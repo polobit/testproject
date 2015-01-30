@@ -1550,6 +1550,38 @@ public class ActivityUtil
 	    return null;
 	}
     }
+    /**
+     * Gets list of activities based on entity id and min time and max time.
+     * 
+     * @param entityId
+     *            - Given entity id.
+     * @param minTime
+     *            - Given min time.
+     * @param maxTime
+     *            - Given max time.
+     * @return list of activities based on entity id and min time and max time.
+     */
+    public static List<Activity> getWonDealsActivityList(long minTime, long maxTime)
+    {
+    	List<String> activityTypeList=new ArrayList<String>();
+    	activityTypeList.add("DEAL_CLOSE");
+    	activityTypeList.add("DEAL_ADD");
+    	try 
+    	{
+    		if(minTime!=0)
+    			return dao.ofy().query(Activity.class).filter("entity_type", "DEAL").filter("activity_type in",activityTypeList).filter("time >= ", minTime)
+        		        .filter("time <= ", maxTime).order("-time").list();
+    		else
+    			return dao.ofy().query(Activity.class).filter("entity_type", "DEAL").filter("activity_type in",activityTypeList).filter("time <= ", maxTime)
+    					.order("-time").list();
+    		
+		} 
+    	catch (Exception e) 
+    	{
+			e.printStackTrace();
+			return null;
+		}
+    }
 
     /**
      * 

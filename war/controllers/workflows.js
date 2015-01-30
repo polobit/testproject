@@ -512,6 +512,12 @@ var WorkflowsRouter = Backbone.Router
 
 						}
 
+						if (type == 'FORM_SUBMIT')
+						{
+							var trigger_form_id = currentTrigger.toJSON()['trigger_form_event'];
+							populate_forms_in_trigger($('form#addTriggerForm', el), 'trigger-form-event', trigger_form_id);
+						}
+
 						// Populate contact filters list and make obtained
 						// contact filter
 						// selected

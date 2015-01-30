@@ -1,5 +1,6 @@
 .navbar-slide-down {
-	top: 30px;
+	top: 35px;
+	position:relative;
 }
 
 .chrome-extension-noty {

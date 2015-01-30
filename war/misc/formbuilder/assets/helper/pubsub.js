@@ -41,7 +41,7 @@ var addAgileApi = function(json, api, callback)
 	agiledomain.value = window.location.hostname.split('.')[0];
 
 	var agileredirecturl = {};
-	agileredirecturl.label = "Agile Redirect URL";
+	agileredirecturl.label = "Redirect URL";
 	agileredirecturl.type = "input";
 	agileredirecturl.value = "#";
 
@@ -76,7 +76,8 @@ var addAgileFields = function(json, fields, callback)
 			{ value : "website", label : "Website", selected : false }, { value : "phone", label : "Phone", selected : false },
 			{ value : "city", label : "City", selected : false }, { value : "state", label : "State", selected : false },
 			{ value : "country", label : "Country", selected : false }, { value : "zip", label : "Zip", selected : false },
-			{ value : "address", label : "Address", selected : false }, { value : "tags", label : "Tags", selected : false }
+			{ value : "address", label : "Address", selected : false }, { value : "tags", label : "Tags", selected : false },
+			{ value : "note", label : "Note", selected : false }
 	];
 	for ( var j = 0; j < fields.length; j++)
 	{
@@ -96,3 +97,5 @@ var addAgileFields = function(json, fields, callback)
 	}
 	callback(json);
 }
+
+var saveform = [];
