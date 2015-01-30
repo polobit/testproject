@@ -79,7 +79,7 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 
 		System.out.println("time after date------------ " + dt.getTime());
 		Calendar calendar = com.agilecrm.util.DateUtil.getCalendar(
-		        new SimpleDateFormat("MM/dd/yyyy").format(dt.getTime()), timezone, "10:00");
+		        new SimpleDateFormat("MM/dd/yyyy").format(dt.getTime()), timezone, "07:00");
 		time = (calendar.getTimeInMillis() / 1000);
 		if (calendar.getTimeInMillis() / 1000 < dt.getCalendar().getTimeInMillis() / 1000)
 		{
