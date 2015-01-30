@@ -32,8 +32,6 @@ public class CallTriggerUtil
 	    String duration)
     {
 
-	DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
-
 	try
 	{
 	    System.out.println("Service type: " + serviceType + ", call type: " + callType + " and call status: "
@@ -65,7 +63,7 @@ public class CallTriggerUtil
 		return;
 
 	    for (Trigger trigger : triggers)
-		executeCampaign(trigger, contact, callStatus, duration, domainUser);
+		executeCampaign(trigger, contact, callStatus, duration);
 
 	}
 	catch (Exception e)
@@ -86,8 +84,7 @@ public class CallTriggerUtil
      *            - Twilio status
      * @throws JSONException
      */
-    public static void executeCampaign(Trigger trigger, Contact contact, String callStatus, String duration,
-	    DomainUser currentDomainUser) throws JSONException
+    public static void executeCampaign(Trigger trigger, Contact contact, String callStatus, String duration) throws JSONException
     {
 	if (trigger == null)
 	    return;
@@ -100,11 +97,11 @@ public class CallTriggerUtil
 	        || (callStatus != null && callStatus.equalsIgnoreCase(trigger.call_disposition)))
 	{
 	    WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id,
-		    new JSONObject().put("call", getCallJSON(callStatus, duration, currentDomainUser)));
+		    new JSONObject().put("call", getCallJSON(callStatus, duration)));
 	}
     }
 
-    private static JSONObject getCallJSON(String callStatus, String duration, DomainUser domainUser)
+    private static JSONObject getCallJSON(String callStatus, String duration)
     {
 	JSONObject callJSON = new JSONObject();
 	try
@@ -112,6 +109,8 @@ public class CallTriggerUtil
 	    callJSON.put("disposition", callStatus);
 	    callJSON.put("duration", duration);
 
+	    DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+	    
 	    if (domainUser != null)
 		callJSON.put("agent", new JSONObject().put("name", domainUser.name).put("email", domainUser.email));
 	}
