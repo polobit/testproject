@@ -1,3 +1,4 @@
+email = null;
 /**
  * Creates a backbone router to perform admin activities (account preferences,
  * users management, custom fields, milestones and etc..).
@@ -123,6 +124,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 			
 				
 				domainname = mod_collection[0].get('domain');
+				email = mod_collection[0].get('email');
 				self.get_customerobject_for_domain_from_adminpanel(el, domainname);
 				self.get_account_stats_for_domain_from_adminpanel(el, domainname);
 
@@ -184,6 +186,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 						data : json,
 						success : function()
 						{
+							add_password_change_info_as_note_to_owner(email);
 							Backbone.history.navigate("all-domain-users", { trigger : true });
 							showNotyPopUp("information", "password changed successfully", "top");
 						},
@@ -291,6 +294,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 			}, saveCallback : function(data)
 			{
 				window.navigate("domainSubscribe/" + plan.domain_name, { trigger : true });
+				add_plan_change_info_as_note_to_owner(email,plan.plan_type,plan.plan_id,plan.quantity);
 				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
 			}
 

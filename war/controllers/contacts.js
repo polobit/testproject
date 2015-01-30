@@ -277,7 +277,12 @@ var ContactsRouter = Backbone.Router.extend({
 					if(collection.models.length > 0) {
 						count = collection.models[0].attributes.count || collection.models.length;
 					}
-					$('#contacts-count').html("<small>(" + count + " Total)</small>");
+					var count_message;
+					if (count > 9999)
+						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+					else
+						count_message = "<small> (" + count + " Total) </small>";
+					$('#contacts-count').html(count_message);
 					setupViews();
 					setupContactFilterList();
 				} else {					
@@ -419,6 +424,13 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contactDetails : function(id, contact)
 	{
+		
+		//For getting custom fields
+		if(App_Contacts.customFieldsList == null || App_Contacts.customFieldsList == undefined){
+			App_Contacts.customFieldsList = new Base_Collection_View({ url : '/core/api/custom-fields/position', sort_collection : false, restKey : "customFieldDefs",
+				templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
+			App_Contacts.customFieldsList.collection.fetch();
+		}
 
 		var contact_collection;
 		
@@ -485,7 +497,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 		// If contact is of type company , go to company details page
 		if (contact.get('type') == 'COMPANY')
-		{
+		{			
 			this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "company-detail",
 				postRenderCallback : function(el)
 				{
@@ -504,6 +516,21 @@ var ContactsRouter = Backbone.Router.extend({
 					show_map(el);
 					//fill_owners(el, contact.toJSON());
 					// loadWidgets(el, contact.toJSON());
+					
+					// For sip
+					if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
+					{
+						$(".contact-make-sip-call",el).show();
+						$(".contact-make-twilio-call",el).hide();
+						$(".contact-make-call",el).hide();
+					}
+					//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")
+					else if(Twilio_Start == true)
+					{
+						$(".contact-make-sip-call",el).hide();
+						$(".contact-make-twilio-call",el).show();
+						$(".contact-make-call",el).hide();
+					}
 				} });
 
 			var el = this.contactDetailView.render(true).el;
@@ -514,8 +541,6 @@ var ContactsRouter = Backbone.Router.extend({
 
 		this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
-
-			
 			// Clone contact model, to avoid render and post-render fell
 			// in to
 			// loop while changing attributes of contact
@@ -564,20 +589,18 @@ var ContactsRouter = Backbone.Router.extend({
 			// For sip
 			if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
 			{
-				$(".contact-make-sip-call").show();
-				$(".contact-make-twilio-call").hide();
-				$(".contact-make-call").hide();
+				$(".contact-make-sip-call",el).show();
+				$(".contact-make-twilio-call",el).hide();
+				$(".contact-make-call",el).hide();
 			}
 			else if(Twilio_Start == true)
 			//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")			
 			{
-				$(".contact-make-sip-call").hide();
-				$(".contact-make-twilio-call").show();
-				$(".contact-make-call").hide();
-			}
-			
-			  
-			
+				$(".contact-make-sip-call",el).hide();
+				$(".contact-make-twilio-call",el).show();
+				$(".contact-make-call",el).hide();
+			}	
+
 			} });
 
 		var el = this.contactDetailView.render(true).el;
@@ -586,26 +609,12 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		// Check updates in the contact.
 		checkContactUpdated();
-		
-		// For sip
-		if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
-		{
-			$(".contact-make-sip-call").show();
-			$(".contact-make-twilio-call").hide();
-			$(".contact-make-call").hide();
-		}
-		//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")
-		else if(Twilio_Start == true)
-		{
-			$(".contact-make-sip-call").hide();
-			$(".contact-make-twilio-call").show();
-			$(".contact-make-call").hide();
-		}
-		
-		 if(localStorage.getItem('MAP_VIEW')=="disabled")
+
+		if(localStorage.getItem('MAP_VIEW')=="disabled")
 				$("#map_view_action").html("<i class='icon-plus text-xxs c-p' title='Show map' id='enable_map_view'></i>");
-				else
+		else
 				$("#map_view_action").html("<i class='icon-minus text-xxs c-p' title='Hide map' id='disable_map_view'></i>");
+
 	},
 
 	/**
@@ -1013,7 +1022,12 @@ var ContactsRouter = Backbone.Router.extend({
 					if(collection.models.length > 0) {
 						count = collection.models[0].attributes.count || collection.models.length;
 					}
-					$('#contacts-count').html("<small>(" + count + " Total)</small>");
+					var count_message;
+					if (count > 9999)
+						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+					else
+						count_message = "<small> (" + count + " Total) </small>";
+					$('#contacts-count').html(count_message);
 				} else {					
 					setupLhsFilters(el);
 				}

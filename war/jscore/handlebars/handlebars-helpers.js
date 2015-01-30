@@ -3218,7 +3218,7 @@ $(function()
 																								if (this[0] && this[0].count && (this[0].count != -1))
 																								{
 
-																												if (this[0].count > 9999 && readCookie('contact_filter'))
+																												if (this[0].count > 9999 && (readCookie('contact_filter') || readData('dynamic_contact_filter')))
 																																count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 
 																												else
@@ -5386,6 +5386,15 @@ $(function()
 		var shopify_webhook = window.location.origin + "/shopifytrigger?api-key=" + agile_api.api_key;
 		return new Handlebars.SafeString(shopify_webhook);
 	});
+	
+	Handlebars.registerHelper('toProperFormat', function(timeInSec)
+			{
+		      if(timeInSec == "0")
+			    return "0 s";
+		      
+			  return twilioSecondsToFriendly(timeInSec);		
+			});
+
 	/**
 				 * getting convenient name of portlet
 				 */
@@ -5474,7 +5483,8 @@ $(function()
 		else{
 			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/'+filter_name, async : false, dataType : 'json',
 				success: function(data){
-					header_name = ""+data.name;
+					if(data!=null && data!=undefined)
+						header_name = ""+data.name;
 				} });
 		} 	
 		return header_name;
@@ -5519,13 +5529,22 @@ $(function()
 				 */
 	Handlebars.registerHelper('get_deals_funnel_portlet_header', function(track_id) {
 		var header_name = '';
-		if(track_id==0)
-			header_name = "Default";
-		else{
-			var milestone = $.ajax({ type : 'GET', url : '/core/api/milestone/'+track_id, async : false, dataType : 'json',
-				success: function(data){
-					header_name = data.name;
-				} });
+		App_Portlets.track_length = 0;
+		$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
+			success: function(data){
+				App_Portlets.track_length = data.length;
+				App_Portlets.deal_tracks = data;
+			} });
+		if(App_Portlets.track_length>1){
+			if(track_id==0)
+				header_name = "- Default";
+			else{
+				var milestone = $.ajax({ type : 'GET', url : '/core/api/milestone/'+track_id, async : false, dataType : 'json',
+					success: function(data){
+						if(data!=null && data!=undefined)
+							header_name = "- "+data.name;
+					} });
+			}
 		} 	
 		return header_name;
 	});
@@ -5698,8 +5717,24 @@ $(function()
 			return convertToHumanDate("ddd mmm dd yyyy h:MM TT",dat);
 		}
 
+	});	
+	Handlebars.registerHelper('getDealCustomProperties', function(items, options)
+			{
+							var fields = getDealCustomProperties(items);
+							if (fields.length == 0)
+											return options.inverse(fields);
+
+							return options.fn(fields);
+
+			});
+
+	Handlebars.registerHelper('getFormNameFromId', function(id){
+		var url = '/core/api/forms/form?formId=' + id;
+		var form = $.ajax({ type : 'GET', url : url, async : false, dataType : 'json' }).responseText;
+		form = JSON.parse(form);
+		var formName = form.formName;
+		return new Handlebars.SafeString(formName);
 	});
-	
 });
 
 // helper function return created time for event

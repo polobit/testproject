@@ -364,16 +364,8 @@ public class EventUtil
 		events.add(ts);
 	}
 
-	if (events.isEmpty())
-	    return events;
+	return events;
 
-	else
-	{
-	    Event event = events.get(0);
-	    domain_events = getLatestWithSameStartTime(event.start);
-	    return domain_events;
-
-	}
     }
 
     /**

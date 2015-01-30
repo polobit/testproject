@@ -21,16 +21,15 @@ $(".delete_user").die().live('click', function(e){
 		if (!confirm("Are you sure you want to delete ?" ))
 			return;
 		var id = $(this).closest('a').attr("data");
-		
-
 		$.ajax({
 			url: '/core/api/admin_panel/deleteuser?id='+id, 
 			type : 'DELETE',
 			success : function(data)
 			{
+				add_delete_user_info_as_note_to_owner(email);
 				alert("user deleted" );
 				location.reload(true);
-	           
+					           
 			},
 			error : function(response)
 			{
@@ -161,6 +160,8 @@ $(".delete_user").die().live('click', function(e){
 				type : 'GET',
 				success : function(data)
 				{
+					var amount = data.refunds.data[0].amount/100;
+					add_refunded_info_as_note_to_owner(email,amount);
 					alert("successfully applied for refund");
 					location.reload(true);
 				},
@@ -181,7 +182,7 @@ $(".delete_user").die().live('click', function(e){
 				
 				success: function()
 			{
-				
+				add_cancel_subscription_info_as_note_to_owner(email);
 				location.reload(true);
 			},error : function(response)
 			{
@@ -202,7 +203,7 @@ $(".delete_user").die().live('click', function(e){
 				
 				success: function()
 			{
-				
+					add_cancel_subscription_info_as_note_to_owner(email);
 					location.reload(true);
 			},error : function(response)
 			{
@@ -213,10 +214,6 @@ $(".delete_user").die().live('click', function(e){
 		});
 			
 		});
-		
-		
-	
-		
 		
 		
 });

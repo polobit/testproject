@@ -1,10 +1,12 @@
 package com.agilecrm.user;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
@@ -33,6 +35,7 @@ import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 /**
  * <code>DomainUser</code> class stores the users of agileCRM in database, by
@@ -114,8 +117,19 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     @NotSaved(IfDefault.class)
     public HashSet<UserAccessScopes> restricted_scopes = null;
 
-    @NotSaved(IfDefault.class)
+    // Scopes to read from form. This field is required to have backward
+    // compatibility and allow new scopes in future
+    @NotSaved
+    public LinkedHashSet<NavbarConstants> newMenuScopes = null;
+
+    // This field is saved for old domains
+    @NotSaved
     public LinkedHashSet<NavbarConstants> menu_scopes = null;
+
+    // Only restricted scopes will be saved which gives flexibility to have new
+    // menu scopes in future
+    @NotSaved(IfDefault.class)
+    public HashSet<NavbarConstants> restricted_menu_scopes = null;
 
     /**
      * Name of the domain user
@@ -431,7 +445,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		throw new Exception(user.name + " is the owner of '" + user.domain
 			+ "' domain and should be an <b>admin</b>. You can change the Email and Name instead.");
 	}
-	
+
     }
 
     /**
@@ -516,10 +530,10 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 	    sendPasswordChangedNotification(domainUser.encrypted_password);
 	}
-	else if(id != null && !is_account_owner)
+	else if (id != null && !is_account_owner)
 	{
 	    DomainUser user = DomainUserUtil.getDomainUser(id);
-	    
+
 	    // Checks if super user is disabled, and throws exception if super
 	    // is disabled
 	    checkSuperUserDisabled(user);
@@ -719,6 +733,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 	// Sets user scopes
 	setScopes();
+	setPerpersisMenuScopes();
 
 	info_json_string = info_json.toString();
 
@@ -768,15 +783,100 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    // If no scopes are set, then all scopes are added
 	    loadScopes();
 
-	    if (menu_scopes == null)
-	    {
-		menu_scopes = new LinkedHashSet<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
-	    }
+	    loadMenuScopes();
+
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	}
+    }
+
+    private void setPerpersisMenuScopes()
+    {
+	 List<NavbarConstants> defaultScopes = new ArrayList<NavbarConstants>(
+		    Arrays.asList(NavbarConstants.values()));
+	 
+	if (restricted_menu_scopes != null)
+	{
+	   
+	    defaultScopes.removeAll(restricted_menu_scopes);
+	    
+	    menu_scopes = new LinkedHashSet<NavbarConstants>(defaultScopes);
+	    newMenuScopes = menu_scopes;
+	    return;
+	}
+	else if (restricted_menu_scopes == null && newMenuScopes == null && menu_scopes == null)
+	{
+	    restricted_menu_scopes = new LinkedHashSet<NavbarConstants>();
+	    menu_scopes = newMenuScopes = new LinkedHashSet<NavbarConstants>(defaultScopes);
+	}
+	else
+	{
+	    setRestricted_menu_scopes();
+	}
+    }
+
+    /**
+     * Called when restricted scopes is null to ensure backward compatibility.
+     * Called from both post load and prepersit
+     */
+    private void setRestricted_menu_scopes()
+    {
+	List<NavbarConstants> defaultScopes = new ArrayList<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
+
+	/**
+	 * If menu scopes are not null, assumin it as old domain before acitvity
+	 * is added and activity is added back
+	 */
+	if (menu_scopes != null)
+	{
+	    menu_scopes.add(NavbarConstants.ACTIVITY);
+	    newMenuScopes = menu_scopes;
+	}
+
+	/**
+	 * If newMenuScopes is not null, then restricted menu scopes are set
+	 */
+	if (newMenuScopes != null)
+	{
+	    defaultScopes.removeAll(newMenuScopes);
+	    restricted_menu_scopes = new LinkedHashSet<NavbarConstants>(defaultScopes);
+	}
+
+	if(menu_scopes == null && newMenuScopes ==null)
+	{
+	    restricted_menu_scopes = new LinkedHashSet<NavbarConstants>();
+	    menu_scopes = newMenuScopes = new LinkedHashSet<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
+	}
+    }
+
+    /**
+     * Called from post load
+     */
+    private void loadMenuScopes()
+    {
+	if (restricted_menu_scopes == null)
+	{
+	    setRestricted_menu_scopes();
+	}
+	else
+	{
+	    setMenuScopesWithRestrictedScopes();
+	}
+    }
+
+    /**
+     * Called from post load to set menu scopes
+     */
+    private void setMenuScopesWithRestrictedScopes()
+    {
+	List<NavbarConstants> defaultScopes = new ArrayList<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
+
+	defaultScopes.removeAll(restricted_menu_scopes);
+
+	menu_scopes = new LinkedHashSet<NavbarConstants>(defaultScopes);
+	newMenuScopes = menu_scopes;
     }
 
     public void loadScopes()
