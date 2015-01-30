@@ -20,7 +20,7 @@ $(function() {
 		// Save functionality for task by checking task or not
 		if ($("#hiddentask").val() == "task") {
 
-			save_task('taskForm', 'activityModal', false, this);
+			save_task('taskForm', 'activityTaskModal', false, this);
 		} else {
 
 			// Save functionality for event
@@ -39,7 +39,7 @@ $(function() {
 	 * validation error messages if any.
 	 * when timepicker editing it will be return
 	 */
-	$('#activityModal').on('hidden', function(e) {
+	$('#activityTaskModal').on('hidden', function(e) {
 
 		if ($(this).hasClass('in'))
 		{
@@ -49,15 +49,7 @@ $(function() {
 		$("#taskForm").find("li").remove();
 
 		// Remove validation error messages
-		remove_validation_errors('activityModal');
-		
-		
-		if(e.target.id=='activityModal')
-		{
-			$('#activityForm #allDay').removeAttr('checked');
-			$('#activityForm #event-time-1').closest('.control-group').show();
-			$('#activityForm #event-date-2').closest('.row').show(); // only of modal, no inside modal
-		}
+		remove_validation_errors('activityTaskModal');
 		
 		resetForm($("#taskForm"));
 
