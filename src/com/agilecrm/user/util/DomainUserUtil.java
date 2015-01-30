@@ -143,8 +143,7 @@ public class DomainUserUtil
      */
     public static List<DomainUser> getUsers(String domain)
     {
-	if (StringUtils.isEmpty(domain))
-	    return null;
+
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
 
