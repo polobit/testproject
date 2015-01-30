@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.activities.Call;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -34,6 +35,9 @@ public class CallTriggerUtil
 
 	try
 	{
+	    // Status according to Activity
+	    callStatus = ActivityUtil.getEnumValueOfTwilioStatus(callStatus);
+	    
 	    System.out.println("Service type: " + serviceType + ", call type: " + callType + " and call status: "
 		    + callStatus + " duration: " + duration);
 
