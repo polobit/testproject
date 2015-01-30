@@ -1511,7 +1511,7 @@ public class ActivityUtil
 	}
 	else if (status.equalsIgnoreCase("no-answer"))
 	{
-	    return Call.NO_ANSWER;
+	    return Call.BUSY;
 	}
 	else if (status.equalsIgnoreCase("voicemail"))
 	{
