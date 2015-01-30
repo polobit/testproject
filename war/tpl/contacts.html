@@ -679,12 +679,12 @@ class="c-p text-l-none text-l-none-hover" >
 			<option value="IS_LESS_THAN">less than</option>
 			<option value="BETWEEN">between</option>
 		</select>
-		<div class="IS_GREATER_THAN IS_LESS_THAN">
+		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container">
 			<span id="RHS">
 				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="w-95p required">
 			</span>
 		</div>
-		<div class="BETWEEN hide">
+		<div class="BETWEEN condition_container hide">
 			<div class="clear" />
 			<span id="RHS">
 				<input type="number" min="0" max="5" class="required w-95p" prev-val="" placeholder="Min Value"> 
@@ -710,7 +710,7 @@ class="c-p text-l-none text-l-none-hover" >
 			<option value="NOTEQUALS" >isn't</option>
 		</select>
 		
-		<div class="EQUALS NOTEQUALS">
+		<div class="EQUALS NOTEQUALS condition_container">
 			<span id="RHS">
 				<select id="owner_select" class="required w-105p" prev-val="" name="temp1">
 					<option value="">Select value</option>
@@ -739,17 +739,17 @@ class="c-p text-l-none text-l-none-hover" >
 			<option value="LAST">in last</option>
 			<option value="NEXT">in next</option>
 		</select>
-		<div class="AFTER BEFORE ON">
+		<div class="AFTER BEFORE ON condition_container">
 			<span id="RHS">
 				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="w-95p required date">
 			</span>
 		</div>
-		<div class="LAST NEXT hide">
+		<div class="LAST NEXT hide condition_container">
 			<span id="RHS">
 				<input type="number" placeholder="Number of days" prev-val="" class="w-95p required">
 			</span>
 		</div>
-		<div class="BETWEEN hide">
+		<div class="BETWEEN hide condition_container">
 			<div class="clear" />
 			<span id="RHS">
 				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" class="w-95p date required" placeholder="MM/DD/YYYY">
@@ -774,7 +774,7 @@ class="c-p text-l-none text-l-none-hover" >
 			<option value="EQUALS" >is</option>
 			<option value="NOTEQUALS" >isn't</option>
 		</select>
-		<div class="EQUALS NOTEQUALS">
+		<div class="EQUALS NOTEQUALS condition_container">
 			<span id="RHS">
 				<input type="text" placeholder="Value" prev-val="" class="w-95p required">
 			</span>
