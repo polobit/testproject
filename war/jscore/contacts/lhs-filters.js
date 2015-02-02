@@ -171,6 +171,10 @@ $('#lhs-contact-filter-form #RHS input').die().live("blur keyup", function(e) {
 });
 
 $('#lhs-contact-filter-form #RHS select').die().live("change", function(e) {
+	if($(this).val() == "") {
+		var container = $(this).parents('.lhs-contact-filter-row');
+		$(container).find('i.clear-filter-condition-lhs').addClass('hide');
+	}
 	submitLhsFilter();
 });
 
