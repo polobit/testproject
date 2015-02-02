@@ -124,6 +124,7 @@ padding: 0 8px 0 0;
 	font-size: 16px;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	overflow: hidden;
 }
 .portlet_header_name i{
 	font-size:19px;

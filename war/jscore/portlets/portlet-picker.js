@@ -577,7 +577,7 @@ function set_p_portlets(base_model){
 					colors=['green','blue','red','violet'];
 				}else{
 					var tempData={};
-					tempData.name="Calls Duration";
+					tempData.name="Total Duration";
 					var callsDurationInMinsList = [];
 					$.each(callsDurationList,function(index,duration){
 						callsDurationInMinsList[index] = duration/60;
@@ -1000,7 +1000,7 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	        			tt = '<table>' + 
         		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+': </td>' +
         		              '<td style="padding:0"><b>'+getPortletsTimeConversion(callsDurationList[this.points[0].point.x])+'</b></td></tr>' +
-        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Total Calls: </td>' + 
+        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Calls: </td>' + 
         		        	  '<td style="padding:0"><b>'+totalCallsCountList[this.points[0].point.x]+'</b></td></tr>' +
         		        	  '</table>';
 	        		else

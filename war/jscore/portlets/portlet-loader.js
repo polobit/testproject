@@ -205,7 +205,7 @@ function showPortletIcons(el){
 	$(el).find('div.portlet_header_icons').show();
 
 	// Changes width of portlet name
-	$(el).find('div.portlet_header_name').css({ "width" : "40%" });
+	$(el).find('div.portlet_header_name').css({ "width" : "65%" });
 }
 /**
  * Expand the portlet header name width.
@@ -930,7 +930,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    					colors=['green','blue','red','violet'];
 	    				}else{
 	    					var tempData={};
-	    					tempData.name="Calls Duration";
+	    					tempData.name="Total Duration";
 	    					var callsDurationInMinsList = [];
 	    					$.each(callsDurationList,function(index,duration){
 	    						callsDurationInMinsList[index] = duration/60;
