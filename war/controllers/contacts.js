@@ -213,7 +213,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 			// Else call customView function fetches results from
 			// default url : "core/api/contacts"
-			this.customView(readCookie("contact_view"), undefined);
+			this.customView(readCookie("contact_view"), undefined, undefined, undefined, is_lhs_filter);
 			return;
 		}
 
