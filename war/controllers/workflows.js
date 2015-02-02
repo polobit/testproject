@@ -502,6 +502,12 @@ var WorkflowsRouter = Backbone.Router
 
 						}
 
+						if (type == 'FORM_SUBMIT')
+						{
+							var trigger_form_id = currentTrigger.toJSON()['trigger_form_event'];
+							populate_forms_in_trigger($('form#addTriggerForm', el), 'trigger-form-event', trigger_form_id);
+						}
+
 						// Populate contact filters list and make obtained
 						// contact filter
 						// selected
@@ -545,14 +551,16 @@ var WorkflowsRouter = Backbone.Router
 							populate_inbound_mail_events_in_trigger($('form#addTriggerForm', el), 'trigger-inbound-mail-event');
 						}
 						
-						if(type == 'EMAIL_OPENED' || type == 'EMAIL_LINK_CLICKED')
+						if(type == 'EMAIL_OPENED' || type == 'EMAIL_LINK_CLICKED' || type == 'UNSUBSCRIBED')
 						{
-							// Show custom tags textbox
-							$('#email-tracking-type', el).closest('div.control-group').css('display', '');
+							if(type !== 'UNSUBSCRIBED'){
+								// Show custom tags textbox
+								$('#email-tracking-type', el).closest('div.control-group').css('display', '');
 							
-							$('#email-tracking-type', el).find('option[value=' + currentTrigger.toJSON()["email_tracking_type"] + ']').attr('selected', 'selected').trigger('change');
+								$('#email-tracking-type', el).find('option[value=' + currentTrigger.toJSON()["email_tracking_type"] + ']').attr('selected', 'selected').trigger('change');
+							}
 							
-							if(currentTrigger.toJSON()["email_tracking_type"] == "CAMPAIGNS")
+							if(currentTrigger.toJSON()["email_tracking_type"] == "CAMPAIGNS" || type == 'UNSUBSCRIBED')
 							{
 								$('#email-tracking-campaign-id',el).closest('div.control-group').css('display', '');
 								

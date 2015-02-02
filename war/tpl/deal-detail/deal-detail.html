@@ -26,7 +26,7 @@
 {{#getTracksCount}}<span style="position: relative;top: -2px;cursor: default;" class="deal-task-type label label-default" >{{pipeline.name}}</span>{{/getTracksCount}}
 						
 						{{/if}} </div><br/>
-<div style="margin-bottom:4px;"> <span class="contact-profile-name mg-r-md" style="vertical-align:top;">{{currencySymbol}} {{numberWithCommas expected_value}}</span> <span style="margin-left:-14px;color: grey;">({{probability}}%)</span></div>
+<div style="margin-bottom:4px;"> <span class="contact-profile-name mg-r-md" style="vertical-align:top;">{{currencySymbol}}{{numberWithCommas expected_value}}</span> <span style="margin-left:-14px;color: grey;">({{probability}}%)</span></div>
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}
         		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
@@ -159,6 +159,7 @@
           
           </div>
 	</div>
+{{#if custom_data}}
 <div class="span3 contact-right-widgetsview" style="padding-left:17px;box-sizing:border-box;border-left:1px solid #ddd;min-height: 200px;">
 			
 
@@ -168,7 +169,6 @@
 							<div  style="margin-top:3px;">
 								
 								<div style="padding-right:0px!important;font-size:13px;line-height:20px;">
-                               {{#if custom_data}}
 								<div class="pull-left" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: 18em;margin-top:-15px;font-size: 16px;">
 								<i class="icon icon-info" style="font-size: 13px;margin-left:4px;"></i>Custom Data
 									
@@ -181,7 +181,8 @@
 								<div class="pull-left" style="width:90%;line-height:21px;">
 									
 									{{#if custom_data}}
-									{{#each custom_data}}
+									{{#getDealCustomProperties custom_data}}
+									{{#each_with_index this}}
 
 
                                             <span class="contact-custom-name">
@@ -192,7 +193,8 @@
 											<span class="contact-custom-value">
 											<span class="note-created-time" title="{{value}}">{{value}}</span>
                                              </span><br/> 
-										{{/each}}
+										{{/each_with_index}}
+									{{/getDealCustomProperties}}
                                     {{/if}}
 											
                                <div class="clearfix"></div>

@@ -40,12 +40,16 @@ $(function()
 		}
 		
 		if($(this).val() != 'EMAIL_OPENED' || $(this).val() != 'EMAIL_LINK_CLICKED'){
+			
 			$('form#addTriggerForm').find('select#email-tracking-type').closest('div.control-group').css('display', 'none');
 			
-			$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', 'none');
-			
 			$('form#addTriggerForm').find('#custom-link-clicked').closest('div.control-group').css('display', 'none');
+			
+			$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', 'none');
 		}
+		
+		if($(this).val() != 'UNSUBSCRIBED')
+			$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', 'none');
 		
 		if($(this).val() != 'EVENT_IS_ADDED')
 		{
@@ -54,6 +58,9 @@ $(function()
 			$('form#addTriggerForm').find('select#event-type').closest('div.control-group').css('display', 'none');
 		}
 			
+		if($(this).val() != 'FORM_SUBMIT'){
+			$('form#addTriggerForm').find('select#trigger-form-event').closest('div.control-group').css('display', 'none');
+		}
 
 		// Initialize tags typeahead
 		if ($(this).val() == 'TAG_IS_ADDED' || $(this).val() == 'TAG_IS_DELETED')
@@ -111,7 +118,14 @@ $(function()
 			
 			populate_owners_in_trigger($('form#addTriggerForm'), 'event-owner-id');
 		}
-			
+		
+		if($(this).val() == 'UNSUBSCRIBED')
+			show_email_tracking_campaigns();
+
+		if($(this).val() == 'FORM_SUBMIT')
+		{
+			populate_forms_in_trigger($('form#addTriggerForm'), 'trigger-form-event');
+		}
 	});
 	
 	// When cancel clicked, take to Back page
@@ -134,31 +148,9 @@ $(function()
 			return;
 		}
 		
-		// Show campaign select element
-		$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', '');
-
-		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+		// show email tracking campaigns
+		show_email_tracking_campaigns();
 		
-		/**
-		 * Fills campaign select with existing Campaigns.
-		 * 
-		 * @param campaign-select -
-		 *            Id of select element of Campaign
-		 * @param /core/api/workflows -
-		 *            Url to get workflows
-		 * @param 'workflow' -
-		 *            parse key
-		 * @param no-callback -
-		 *            No callback
-		 * @param optionsTemplate-
-		 *            to fill options with workflows
-		 */
-		fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', function()
-				{
-					
-					$('#email-tracking-campaign-id option:first').after('<option value="0">All</option>');
-					
-				}, optionsTemplate, false);
 	});
 });
 
@@ -280,6 +272,26 @@ function populate_owners_in_trigger(trigger_form, owner_select_id, trigger_owner
 	}, optionsTemplate, false, undefined, "Select Event Owner");
 }
 
+function populate_forms_in_trigger(trigger_form, trigger_form_select_id, trigger_form_id)
+{
+	trigger_form.find('select#' + trigger_form_select_id).closest('div.control-group').css('display', '');
+	var formOptionsTemplate = "<option value='{{id}}'>{{formName}}</option>";
+	fillSelect(trigger_form_select_id, 'core/api/forms', 'forms', function()
+	{
+		if (trigger_form_id)
+		{
+			$('#' + trigger_form_select_id, trigger_form).find('option[value=' + trigger_form_id + ']').attr('selected', 'selected');
+		}
+	}, formOptionsTemplate, false, undefined, "Select Form");
+}
+
+function populate_call_trigger_options(trigger_form)
+{
+	trigger_form.find('div#CALL').closest('div.control-group').css('display', '');
+	
+	$('#CALL').chained('#LHS');	
+}
+
 /**
  * Shows triggers for each td in workflows list
  * 
@@ -338,4 +350,33 @@ function append_triggers_to_workflow(el)
 			$(td).html(getTemplate('workflow-triggers', { "triggers" : trigger_collection.toJSON() }));
 
 	});
+}
+
+function show_email_tracking_campaigns()
+{
+	// Show campaign select element
+	$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', '');
+
+	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+	
+	/**
+	 * Fills campaign select with existing Campaigns.
+	 * 
+	 * @param campaign-select -
+	 *            Id of select element of Campaign
+	 * @param /core/api/workflows -
+	 *            Url to get workflows
+	 * @param 'workflow' -
+	 *            parse key
+	 * @param no-callback -
+	 *            No callback
+	 * @param optionsTemplate-
+	 *            to fill options with workflows
+	 */
+	fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', function()
+			{
+				
+				$('#email-tracking-campaign-id option:first').after('<option value="0">All</option>');
+				
+			}, optionsTemplate, false);
 }

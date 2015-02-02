@@ -237,6 +237,10 @@ public class Contact extends Cursor
     @Embedded
     @Indexed
     public List<EmailBounceStatus> emailBounceStatus = new ArrayList<EmailBounceStatus>();
+    
+    @Indexed
+    @NotSaved(IfDefault.class)
+    public Long formId = 0L;
 
     public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
 

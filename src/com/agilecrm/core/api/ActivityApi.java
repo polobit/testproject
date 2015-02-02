@@ -21,6 +21,7 @@ public class ActivityApi
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Activity> getAllActivities(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
     {
+
 	if (count != null)
 	{
 	    System.out.println("Fetching page by page");
@@ -35,10 +36,17 @@ public class ActivityApi
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Activity> getActivityBesedOnSelection(@QueryParam("entity_type") String entitytype,
 	    @QueryParam("user_id") Long userid, @QueryParam("cursor") String cursor,
-	    @QueryParam("page_size") String count)
+	    @QueryParam("page_size") String count, @QueryParam("start_time") Long starttime,
+	    @QueryParam("end_time") Long endtime)
     {
+	if (starttime != null && endtime != null)
+	{
+	    starttime = starttime / 1000;
+	    endtime = endtime / 1000;
+	}
 
-	return ActivityUtil.getActivitites(entitytype, userid, Integer.parseInt(count), cursor);
+	return ActivityUtil.getActivititesBasedOnSelectedConditon(entitytype, userid, Integer.parseInt(count), cursor,
+	        starttime, endtime);
     }
 
     /**

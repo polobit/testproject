@@ -48,7 +48,6 @@ public class AccountLimitsRemainderDeferredTask implements DeferredTask
 	    // Set it true so tags are updated. It removes previous tags
 	    contactRestriction.hardUpdateTags = true;
 	    contactRestriction.getTag();
-	    DaoBillingRestriction.getInstace("Contact", restriction).getTag();
 	    DaoBillingRestriction.getInstace("WebRule", restriction).getTag();
 	    DaoBillingRestriction.getInstace("Workflow", restriction).getTag();
 	    AccountEmailStatsUtil.checkLimits();
@@ -59,6 +58,7 @@ public class AccountLimitsRemainderDeferredTask implements DeferredTask
 
 	    if (restriction.id == null)
 		restriction.save();
+	    
 	    // Adds tags in out domain
 	    BillingRestrictionReminderUtil.addRestictionTagsInOurDomain(restriction.tagsToAddInOurDomain);
 	}

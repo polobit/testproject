@@ -424,12 +424,11 @@ public class Opportunity extends Cursor implements Serializable
 	if (oldOpportunity != null && StringUtils.isNotEmpty(this.milestone)
 		&& StringUtils.isNotEmpty(oldOpportunity.milestone))
 	{
-	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equals("WON"))
+	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase("Won"))
 		this.won_date = System.currentTimeMillis() / 1000;
 	}
-	else if (oldOpportunity == null && this.milestone.equals("WON"))
+	else if (oldOpportunity == null && this.milestone.equalsIgnoreCase("Won"))
 	    this.won_date = System.currentTimeMillis() / 1000;
-
 	dao.put(this);
 
 	// Executes trigger

@@ -96,7 +96,7 @@ public class StripeImportUtil
 		HashMap<String, Object> options = new HashMap<String, Object>();
 		options.put("limit", 100);
 		options.put("starting_after", null);
-		CustomerCollection collections = Customer.all(options, null);
+		CustomerCollection collections = Customer.all(options);
 		List<Customer> customers = collections.getData();
 		total += customers.size();
 		for (Customer c : customers)

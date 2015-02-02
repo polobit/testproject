@@ -1551,5 +1551,71 @@ public class ActivityUtil
 	    return null;
 	}
     }
+    /**
+     * Gets list of activities based on entity id and min time and max time.
+     * 
+     * @param entityId
+     *            - Given entity id.
+     * @param minTime
+     *            - Given min time.
+     * @param maxTime
+     *            - Given max time.
+     * @return list of activities based on entity id and min time and max time.
+     */
+    public static List<Activity> getWonDealsActivityList(long minTime, long maxTime)
+    {
+    	List<String> activityTypeList=new ArrayList<String>();
+    	activityTypeList.add("DEAL_CLOSE");
+    	activityTypeList.add("DEAL_ADD");
+    	try 
+    	{
+    		if(minTime!=0)
+    			return dao.ofy().query(Activity.class).filter("entity_type", "DEAL").filter("activity_type in",activityTypeList).filter("time >= ", minTime)
+        		        .filter("time <= ", maxTime).order("-time").list();
+    		else
+    			return dao.ofy().query(Activity.class).filter("entity_type", "DEAL").filter("activity_type in",activityTypeList).filter("time <= ", maxTime)
+    					.order("-time").list();
+    		
+		} 
+    	catch (Exception e) 
+    	{
+			e.printStackTrace();
+			return null;
+		}
+    }
+
+    /**
+     * 
+     * @param entitytype
+     *            DEAL or TASK or Contact or etc
+     * @param userid
+     * @param max
+     * @param cursor
+     * @param starttime
+     *            time range
+     * @param endtime
+     * @return
+     */
+    public static List<Activity> getActivititesBasedOnSelectedConditon(String entitytype, Long userid, int max,
+	    String cursor, Long starttime, Long endtime)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL"))
+	    searchMap.put("entity_type", entitytype);
+	if (entitytype.equalsIgnoreCase("CALL"))
+	    searchMap.put("activity_type", entitytype);
+	if (starttime != null)
+	    searchMap.put("time >=", starttime);
+	if (endtime != null)
+	    searchMap.put("time <=", endtime);
+
+	if (userid != null)
+	    searchMap.put("user", new Key<DomainUser>(DomainUser.class, userid));
+
+	if (max != 0)
+	    return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
+
+	return dao.listByProperty(searchMap);
+    }
 
 }

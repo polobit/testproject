@@ -28,6 +28,7 @@ function displayTimeZone(results)
 
 		$(".contacts-time").html("Local time: "+data);
 		$("#contacts-local-time").show();
+		$("#map_view_action").html("<i class='icon-minus text-xxs c-p' title='Hide map' id='disable_map_view'></i>");
 
 	   }, error : function(jqXHR, textStatus, errorThrown)
 	   {

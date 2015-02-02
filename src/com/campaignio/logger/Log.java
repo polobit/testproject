@@ -26,6 +26,7 @@ import com.googlecode.objectify.annotation.NotSaved;
 @Cached
 public class Log
 {
+
 	/**
 	 * Uniquely generated Id for each log created.
 	 */
@@ -91,7 +92,7 @@ public class Log
 	 */
 	public enum LogType
 	{
-		EMAIL_QUEUED, EMAIL_SENT, EMAIL_OPENED, EMAIL_CLICKED, EMAIL_HARD_BOUNCED, EMAIL_SPAM, EMAIL_SOFT_BOUNCED, WAIT, CLICKED, OPENED, AB, URL_VISITED, TWEET, ADD_NOTE, TAGS, CHECK_TAGS, CONDITION, JSONIO, SCORE, SET_OWNER, ADD_TASK, ADD_DEAL, ADD_CASE, TRANSFER, GENDER, REPLIED, CHANGED_DEAL_MILESTONE, EMAIL_SLEEP, EMAIL_SENDING_FAILED, EMAIL_SENDING_SKIPPED, UNSUBSCRIBED, SET_PROPERTY, CAMPAIGN_STOPPED, WAIT_TILL, SMS_SENT, SMS_FAILED, UNSUBSCRIBE, CLOSED_TASK
+		EMAIL_QUEUED, EMAIL_SENT, EMAIL_OPENED, EMAIL_CLICKED, EMAIL_HARD_BOUNCED, EMAIL_SPAM, EMAIL_SOFT_BOUNCED, WAIT, CLICKED, OPENED, AB, URL_VISITED, TWEET, ADD_NOTE, TAGS, CHECK_TAGS, CONDITION, JSONIO, SCORE, SET_OWNER, ADD_TASK, ADD_DEAL, ADD_CASE, TRANSFER, GENDER, REPLIED, CHANGED_DEAL_MILESTONE, EMAIL_SLEEP, EMAIL_SENDING_FAILED, EMAIL_SENDING_SKIPPED, UNSUBSCRIBED, SET_PROPERTY, CAMPAIGN_STOPPED, WAIT_TILL, SMS_SENT, SMS_FAILED, UNSUBSCRIBE, CLOSED_TASK, ADD_EVENT
 	};
 
 	/**
@@ -99,9 +100,9 @@ public class Log
 	 */
 	public Log()
 	{
-
+	    
 	}
-
+	
 	/**
 	 * Returns name of contact that subscribes to campaign as an xml element.
 	 * 
@@ -111,14 +112,14 @@ public class Log
 	@XmlElement
 	public Contact getContact() throws Exception
 	{
-		if (subscriber_id != null)
-		{
-			Contact contact = ContactUtil.getContact(Long.parseLong(subscriber_id));
+	    if (subscriber_id != null)
+	    {
+		Contact contact = ContactUtil.getContact(Long.parseLong(subscriber_id));
 
-			if (contact != null)
-				return contact;
-		}
+		if (contact != null)
+		    return contact;
+	    }
 
-		return null;
+	    return null;
 	}
 }
