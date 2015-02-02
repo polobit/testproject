@@ -112,12 +112,4 @@ public class ContactOfficeUtil
 	return url;
     }
 
-    public static void main(String[] args) throws Exception
-    {
-	String namespace = "";
-	String s = URLEncoder.encode(namespace, "UTF-8");
-	System.out.println(s);
-	System.out.println("Hello");
-    }
-
 }
