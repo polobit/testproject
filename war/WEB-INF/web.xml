@@ -765,4 +765,14 @@
 		<servlet-name>WebEventCalendar</servlet-name>
 		<url-pattern>/calendar/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>NormalInstantiator</servlet-name>
+		<servlet-class>com.agilecrm.test.NormalIntantiator</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>NormalInstantiator</servlet-name>
+		<url-pattern>/normal-instantiator</url-pattern>
+	</servlet-mapping>
 </web-app>
+

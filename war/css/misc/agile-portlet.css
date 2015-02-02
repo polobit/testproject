@@ -466,6 +466,7 @@ width: auto!important;
 }
 #portletStreamModal {
     width: 500px;
+    outline: none;
 }
 #portletStreamModal > .modal-body {
     /*max-height: 1000px;*/
@@ -474,7 +475,7 @@ width: auto!important;
 .portlet_body td
 {
 	border-bottom:1px solid #eee;
-	text-transform:capitalize;
+	/* text-transform:capitalize; */
 	border-top:none;
 }
 .portlet_body tr:last-child td{

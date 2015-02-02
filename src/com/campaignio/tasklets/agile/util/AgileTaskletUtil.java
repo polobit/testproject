@@ -67,6 +67,15 @@ public class AgileTaskletUtil
 			if (owner.length() != 0)
 				ownerId = owner.getString("id");
 
+			// Fetch from server
+			if (ownerId == null)
+			{
+				Long contactOwnerId = ContactUtil.getContactOwnerId(Long.parseLong(AgileTaskletUtil
+						.getId(subscriberJSON)));
+
+				ownerId = contactOwnerId == null ? null : String.valueOf(contactOwnerId);
+			}
+
 		}
 		catch (Exception e)
 		{
@@ -279,6 +288,8 @@ public class AgileTaskletUtil
 				owner.put("name", domainUser.name);
 				owner.put("email", domainUser.email);
 				owner.put("calendar_url", MergeFieldsUtil.addCalendarMergeField(domainUser, subscriberJSON));
+				owner.put("timezone", domainUser.timezone);
+				owner.put("signature", MergeFieldsUtil.addSignatureMergeField(domainUser, subscriberJSON));
 			}
 
 			// Inserts contact owner-name and owner-email.

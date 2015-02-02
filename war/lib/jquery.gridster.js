@@ -2275,17 +2275,17 @@
             this.resize_initial_height + rel_y, max_height), min_height));
 
         //this.$resized_widget.css(css_props);
-        if(Math.max(Math.min(this.resize_initial_width + rel_x, max_width), min_width)==1240)
+        if(Math.max(Math.min(this.resize_initial_width + rel_x, max_width), min_width)==((3*Math.round($('.gridster-portlets').width()/3))+40-20))
         	this.$resized_widget.css({
             	'width': '100%',
             	'height': Math.max(Math.min(this.resize_initial_height + rel_y, max_height), min_height)
             });
-        else if(Math.max(Math.min(this.resize_initial_width + rel_x, max_width), min_width)==820)
+        else if(Math.max(Math.min(this.resize_initial_width + rel_x, max_width), min_width)==((2*Math.round($('.gridster-portlets').width()/3))+20-20))
         	this.$resized_widget.css({
             	'width': '66.4%',
             	'height': Math.max(Math.min(this.resize_initial_height + rel_y, max_height), min_height)
             });
-        else if(Math.max(Math.min(this.resize_initial_width + rel_x, max_width), min_width)==400)
+        else if(Math.max(Math.min(this.resize_initial_width + rel_x, max_width), min_width)==(Math.round($('.gridster-portlets').width()/3)-20))
         	this.$resized_widget.css({
             	'width': '32.9%',
             	'height': Math.max(Math.min(this.resize_initial_height + rel_y, max_height), min_height)

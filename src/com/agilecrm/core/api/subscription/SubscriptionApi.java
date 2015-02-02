@@ -257,6 +257,25 @@ public class SubscriptionApi
 		    .build());
 	}
     }
+    
+    // get perticular invoice
+    @Path("/getinvoice")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Invoice getInvoice(@QueryParam("d") String invoice_id)
+    {
+ 	try
+ 	{
+ 		return StripeUtil.getInvoice(invoice_id);
+ 	}
+ 	catch (Exception e)
+ 	{
+ 		e.printStackTrace();
+ 		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+ 				.build());
+
+ 	}
+    }
 
     /**
      * Fetches invoices of subscription details

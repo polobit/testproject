@@ -177,7 +177,7 @@ var _IS_FREE_PLAN = <%=is_free_plan%>;
 
 var IS_FLUID = <%=is_fluid%>;
 
-var CLICKDESK_CODE_LOADED = true;
+var CLICKDESK_CODE_LOADED = false;
 
 // Get current user prefs json
 var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
@@ -257,7 +257,7 @@ head.ready(["core", "stats"], function(){
 
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
 <link rel="stylesheet" type="text/css" href="css/contacts-new-ui.css">
-
+<link rel="stylesheet" type="text/css" href="css/agile-css-framework.css">
 <!-- Google analytics code -->
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

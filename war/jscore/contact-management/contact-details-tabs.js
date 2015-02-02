@@ -383,10 +383,6 @@ $(function()
 
 						// serialize form.
 						var json = serializeForm("emailForm");
-						if(json.from_email != CURRENT_DOMAIN_USER.email && json.from_name == CURRENT_DOMAIN_USER.name)
-						{
-							json.from_name = "";
-						}
 						if ((json.contact_to_ids).join())
 							json.to += ((json.to != "") ? "," : "") + (json.contact_to_ids).join();
 
@@ -449,6 +445,7 @@ $(function()
 									} });
 
 					});
+
 
 	/**
 	 * Close button click event of send email form. Navigates to contact detail
@@ -610,15 +607,10 @@ $(function()
 		e.preventDefault();
 		$(this).closest('.control-group').hide();
 		$('#from_email').closest('.control-group').show();
-		$('#from_name_link').closest('.control-group').show();
-		return;
-	});
-	$('#from_name_link').die().live('click', function(e){
-		e.preventDefault();
-		$(this).closest('.control-group').hide();
 		$('#from_name').closest('.control-group').show();
 		return;
 	});
+	
 
 });
 

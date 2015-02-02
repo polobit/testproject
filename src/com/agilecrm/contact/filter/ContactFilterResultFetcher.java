@@ -73,7 +73,7 @@ public class ContactFilterResultFetcher
 
     private HashSet<UserAccessScopes> scopes = null;
     
-    private void setLimits()
+    public void setLimits()
     {
 	Subscription subscription = SubscriptionUtil.getSubscription();
 	
@@ -124,9 +124,9 @@ public class ContactFilterResultFetcher
     public ContactFilterResultFetcher(String filter_id, String dynamic_filter, int max_fetch_set_size, String contact_ids,
 	    Long currentDomainUserId)
     {
-	this.max_fetch_set_size = max_fetch_set_size;
+	max_fetch_size = Integer.MAX_VALUE;
 	
-	setLimits();
+	this.max_fetch_set_size = max_fetch_set_size;
 	
 	this.contact_ids = contact_ids;
 	domainUserId = currentDomainUserId;
