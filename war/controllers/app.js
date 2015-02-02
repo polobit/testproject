@@ -85,7 +85,7 @@ function currentRoute(route)
 	}
 	// disposeEvents();
 
-	 load_clickdesk_code();
+	// load_clickdesk_code();
 	 showUpgradeNoty();
 }
 
