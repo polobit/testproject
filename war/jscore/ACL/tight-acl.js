@@ -21,4 +21,8 @@
 			App_ACL.notAllowed();
 		}
 	}
+	
+	tight_acl.checkPermission = function(scope){
+		return CURRENT_DOMAIN_USER.menu_scopes.indexOf(scope) > -1;
+	}
 }(window.tight_acl = window.tight_acl || {}, $));

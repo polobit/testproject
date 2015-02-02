@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import com.agilecrm.contact.Contact;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -66,8 +65,8 @@ public class UserAccessControlUtil
 	// Return true if type is not contact. There is only check on contact
 	// class to avoid delay using reflections class name comparsion is done
 	// directly
-	if (!className.equals(Contact.class.getSimpleName()))
-	    return true;
+	// if (!className.equals(Contact.class.getSimpleName()))
+	// return true;
 
 	UserAccessControl acccessControl = UserAccessControl.getAccessControl(className, object);
 	if (acccessControl == null)

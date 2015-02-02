@@ -28,7 +28,7 @@ public class OpportunityAccessControl extends UserAccessControl
 		opportunity = (Opportunity) entityObject;
 	    else
 		opportunity = new Opportunity();
-	    System.out.println("scopes in contact checking");
+	    System.out.println("scopes in deal checking");
 	    System.out.println(getCurrentUserMenuScopes());
 	}
 	catch (ClassCastException e)
@@ -47,7 +47,7 @@ public class OpportunityAccessControl extends UserAccessControl
     }
 
     /**
-     * Checks if contact is new
+     * Checks if deal is new
      * 
      * @return
      */
@@ -105,11 +105,11 @@ public class OpportunityAccessControl extends UserAccessControl
     @Override
     public boolean canRead()
     {
-	// If contact is defined it checks for update operation if owner in the
-	// contact and current owner is different
+	// If opportunity is defined it checks for update operation if owner in
+	// the
+	// opportunity and current owner is different
 	try
 	{
-	    System.out.println("----------" + hasMenuScope(NavbarConstants.DEALS));
 	    if (!checkOwner() || opportunity.getOwner() == null)
 		return hasMenuScope(NavbarConstants.DEALS);
 	}
@@ -153,7 +153,8 @@ public class OpportunityAccessControl extends UserAccessControl
     }
 
     /**
-     * Checks if current user is owner of the contact he is trying to access.
+     * Checks if current user is owner of the opportunity he is trying to
+     * access.
      * 
      * @return boolean
      */
@@ -164,7 +165,8 @@ public class OpportunityAccessControl extends UserAccessControl
 	{
 	    if (opportunity == null || opportunity.getOwner() == null)
 		return true;
-	    // Gets current user id and contact owner id and checks for equity
+	    // Gets current user id and opportunity owner id and checks for
+	    // equity
 	    Long currentOpportunityOwnerId = opportunity.getOwner().id;
 	    UserInfo info = SessionManager.get();
 

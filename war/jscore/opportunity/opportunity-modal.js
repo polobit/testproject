@@ -784,6 +784,13 @@ if(json.close_date==0)
 					
 					
 			}
+		},
+		error : function(model,err){
+			enable_save_button($(saveBtn));
+			$('#' + modalId).find('span.error-status').html(err.responseText);
+			setTimeout(function(){$('#' + modalId).find('span.error-status').html('');},200);
+			console.log('-----------------',err.responseText);
+			alert(err.responseText);
 		}
 	});
 }
