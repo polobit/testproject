@@ -23,6 +23,18 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.portlets.Portlet;
 import com.agilecrm.portlets.util.PortletUtil;
 
+/**
+ * <code>PortletsAPI</code> includes REST calls to interact with
+ * {@link Portlet} class to initiate Portlets CRUD operations.
+ * <p>
+ * It is called from client side to create, update, fetch and delete the
+ * portlets. It also interacts with {@link PortletUtil} class to fetch
+ * the data of Portlet class from database.
+ * </p>
+ * 
+ * @author Subrahmanyam
+ * 
+ */
 @Path("/api/portlets")
 public class PortletsAPI {
 	/**

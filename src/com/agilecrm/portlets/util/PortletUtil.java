@@ -41,6 +41,16 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
+/**
+ * <code>PortletUtil</code> is the utility class to fetch portlets with
+ * respect to id, position.
+ * <p>
+ * The portlets data is retrieved based on portlet name and portlet type.
+ * </p>
+ * 
+ * @author Subrahmanyam
+ * 
+ */
 public class PortletUtil {
 	// Dao
 	private static ObjectifyGenericDao<Portlet> dao = new ObjectifyGenericDao<Portlet>(Portlet.class);
@@ -103,7 +113,25 @@ public class PortletUtil {
 		for(Portlet portlet : portlets){
 			if(portlet.prefs!=null){
 				JSONObject json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
-				portlet.settings=json;
+				//if portlet is growth graph we can change the start date and end dates based on duration
+				if(portlet.name!=null && portlet.name.equalsIgnoreCase("Growth Graph")){
+					Long minTime = 0L;
+					Long maxTime = 0L;
+					
+					int days = Integer.parseInt(String.valueOf((Long.parseLong(json.getString("end-date"))-Long.parseLong(json.getString("start-date")))/(24*60*60*1000)));
+					
+					DateUtil startDateUtil = new DateUtil();
+		    		minTime = startDateUtil.removeDays(days).toMidnight().getTime().getTime();
+		    		
+		    		DateUtil endDateUtil = new DateUtil();
+		    		maxTime = (endDateUtil.toMidnight().getTime().getTime());
+					
+					json.put("start-date",String.valueOf(minTime));
+					json.put("end-date",String.valueOf(maxTime));
+					
+					portlet.settings=json;
+				}else
+					portlet.settings=json;
 			}
 			if(!portlet.name.equalsIgnoreCase("Dummy Blog"))
 				added_portlets.add(portlet);
@@ -466,6 +494,8 @@ public class PortletUtil {
 	public static JSONObject getGrowthGraphData(JSONObject json)throws Exception{
 		String growthGraphString=null;
 		JSONObject growthGraphJSON=null;
+		long minTime=0L;
+		long maxTime=0L;
 		if(json!=null && json.get("tags")!=null && json.get("frequency")!=null && json.get("start-date")!=null && json.get("end-date")!=null){
 			String[] tags = json.getString("tags").split(",");
 			int type = Calendar.DAY_OF_MONTH;
@@ -475,9 +505,17 @@ public class PortletUtil {
 			if (StringUtils.equalsIgnoreCase(json.getString("frequency"), "weekly"))
 			    type = Calendar.WEEK_OF_YEAR;
 			
-			ReportsUtil.check(Long.parseLong(json.getString("start-date")), Long.parseLong(json.getString("end-date")));
+			int days = Integer.parseInt(String.valueOf((Long.parseLong(json.getString("end-date"))-Long.parseLong(json.getString("start-date")))/(24*60*60*1000)));
 			
-			growthGraphString=TagSearchUtil.getTagCount(null, tags, json.getString("start-date"), json.getString("end-date"), type).toString();
+			DateUtil startDateUtil = new DateUtil();
+    		minTime = startDateUtil.removeDays(days).toMidnight().getTime().getTime();
+    		
+    		DateUtil endDateUtil = new DateUtil();
+    		maxTime = (endDateUtil.toMidnight().getTime().getTime());
+			
+			ReportsUtil.check(minTime, maxTime);
+			
+			growthGraphString=TagSearchUtil.getTagCount(null, tags, String.valueOf(minTime), String.valueOf(maxTime), type).toString();
 		}
 		if(growthGraphString!=null)
 			growthGraphJSON = (JSONObject)JSONSerializer.toJSON(growthGraphString);
@@ -583,19 +621,25 @@ public class PortletUtil {
 			long callsDuration=0;
 			
 			List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
-			for(Activity activity : callActivitiesList){
-				if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.ANSWERED))
-					answeredCallsCount++;
-				else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
-					busyCallsCount++;
-				else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
-					failedCallsCount++;
-				else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
-					voiceMailCallsCount++;
-				if(activity.custom4!=null && !activity.custom3.equalsIgnoreCase(Call.VOICEMAIL) && !activity.custom4.equalsIgnoreCase(null))
-					callsDuration+=Long.valueOf(activity.custom4);
-				totalCallsCount++;
+			try{
+				for(Activity activity : callActivitiesList){
+					if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.ANSWERED))
+						answeredCallsCount++;
+					else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
+						busyCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
+						failedCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
+						voiceMailCallsCount++;
+					if(activity.custom4!=null && !activity.custom3.equalsIgnoreCase(Call.VOICEMAIL) && !activity.custom4.equalsIgnoreCase(null) 
+							&& !activity.custom4.equalsIgnoreCase("null") && !activity.custom4.equalsIgnoreCase(""))
+						callsDuration+=Long.valueOf(activity.custom4);
+					totalCallsCount++;
+				}
+			}catch(Exception e){
+				e.printStackTrace();
 			}
+			
 			answeredCallsCountList.add(answeredCallsCount);
 			busyCallsCountList.add(busyCallsCount);
 			failedCallsCountList.add(failedCallsCount);
