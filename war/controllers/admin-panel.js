@@ -126,6 +126,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 				domainname = mod_collection[0].get('domain');
 				email = mod_collection[0].get('email');
 				self.get_customerobject_for_domain_from_adminpanel(el, domainname);
+				$('#account').html("<img src='img/21-0.gif'>");
 				self.get_account_stats_for_domain_from_adminpanel(el, domainname);
 
 			},
