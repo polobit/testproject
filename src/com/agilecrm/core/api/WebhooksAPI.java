@@ -39,7 +39,7 @@ public class WebhooksAPI
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     public String createContact(@FormParam("dataJson") String json, @FormParam("email") String email, @FormParam("pluginType") String pluginType,
-	    @QueryParam("id") String apiKey)
+	    @FormParam("hookType") String hookType, @QueryParam("id") String apiKey)
     {
 	System.out.println(json);
 	try
@@ -58,7 +58,7 @@ public class WebhooksAPI
 
 	    // Sets owner key to contact before saving
 	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
-	    contact.addTags(pluginType);
+	    //contact.addTags(pluginType);
 
 	    try
 	    {
@@ -76,7 +76,7 @@ public class WebhooksAPI
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-	    return null;
+	    return "{\"error\" : \"Error occured\"}";
 	}
 
     }
@@ -86,7 +86,7 @@ public class WebhooksAPI
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     public String addNoteToContact(@FormParam("dataJson") String json, @FormParam("email") String email, @FormParam("pluginType") String pluginType,
-	    @QueryParam("id") String apiKey)
+	    @FormParam("hookType") String hookType, @QueryParam("id") String apiKey)
     {
 	System.out.println(json);
 	try
@@ -106,7 +106,7 @@ public class WebhooksAPI
 		domainUser = APIKey.getDomainUserRelatedToJSAPIKey(apiKey);
 
 	    if (domainUser == null)
-		return null;
+		return "{\"error\" : \"Error occured\"}";
 	    note.owner_id = domainUser.id.toString();
 	    note.save();
 	    System.out.println("note saved");
@@ -115,7 +115,7 @@ public class WebhooksAPI
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-	    return null;
+	    return "{\"error\" : \"Error occured\"}";
 	}
 
     }

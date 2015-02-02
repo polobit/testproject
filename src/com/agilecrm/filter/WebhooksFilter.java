@@ -1,6 +1,7 @@
 package com.agilecrm.filter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -63,10 +64,18 @@ public class WebhooksFilter implements Filter
 	    }
 	    else
 	    {
-		response.getWriter().print("error");
+		res.setContentType("application/json");
+		PrintWriter out = res.getWriter();
+		out.println("{\"error\" : \"Invalid credentials\"}");
 		return;
 	    }
 
+	}
+	else
+	{
+	    res.setContentType("application/json");
+	    PrintWriter out = res.getWriter();
+	    out.println("{\"error\" : \"Api key is required\"}");
 	}
     }
 
