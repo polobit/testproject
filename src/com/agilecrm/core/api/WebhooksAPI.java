@@ -58,7 +58,7 @@ public class WebhooksAPI
 
 	    // Sets owner key to contact before saving
 	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
-	    //contact.addTags(pluginType);
+	    contact.addTags(pluginType);
 
 	    try
 	    {
