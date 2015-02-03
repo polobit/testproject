@@ -349,7 +349,7 @@ public class ActivityUtil
 			obj.put("contactid", contactids.get(i));
 			obj.put("contactname", contactnames.get(i));
 			System.out.println("ContactIds  " + contactids.get(i) + "contact names   "
-				+ contactnames.get(i));
+			        + contactnames.get(i));
 			arr.put(obj);
 
 			obj = new JSONObject();
@@ -1390,7 +1390,6 @@ public class ActivityUtil
 	// Search contact
 	if (toOrFromNumber != null)
 	{
-
 	    String twilioStatus = getEnumValueOfTwilioStatus(callStatus);
 	    if (twilioStatus != null)
 	    {
