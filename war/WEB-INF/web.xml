@@ -488,6 +488,16 @@
 		<filter-name>PHPAPIFilter</filter-name>
 		<url-pattern>/core/php/*</url-pattern>
 	</filter-mapping>
+	
+	<filter>
+		<filter-name>WebhooksFilter</filter-name>
+		<filter-class>com.agilecrm.filter.WebhooksFilter</filter-class>
+	</filter>
+		
+	<filter-mapping>
+		<filter-name>WebhooksFilter</filter-name>
+		<url-pattern>/core/hook/*</url-pattern>
+	</filter-mapping>
 
 	<filter>
 		<filter-name>trimFilter</filter-name>
