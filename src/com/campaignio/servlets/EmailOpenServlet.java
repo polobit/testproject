@@ -98,6 +98,7 @@ public class EmailOpenServlet extends HttpServlet
 	{
 	    if (!checkIfUserIsAgileUser(request, namespace))
 	    {
+		System.out.println("He is not AgileUser");
 		if (!StringUtils.isBlank(emailId))
 		{
 		    chromeExtensionShowNotification(emailId, fromEmailId, subject, trackerId, false);
@@ -110,6 +111,7 @@ public class EmailOpenServlet extends HttpServlet
 	    }
 	    else
 	    {
+		System.out.println("He is Agile User");
 		// Shows notification, adds log & Trigger campaign
 		chromeExtensionShowNotification(emailId, fromEmailId, subject, trackerId, true);
 	    }
@@ -345,11 +347,13 @@ public class EmailOpenServlet extends HttpServlet
      */
     private boolean checkIfUserIsAgileUser(HttpServletRequest servletRequest, String nameSpace)
     {
+	System.out.println("Namespace value :" + nameSpace);
 	Cookie[] cookies = servletRequest.getCookies();
 	if (cookies != null)
 	{
 	    for (Cookie cookie : cookies)
 	    {
+		System.out.println("Cookie Name " + cookie.getName() + " Value " + cookie.getValue());
 		if (cookie.getName().equalsIgnoreCase("_agile_login_domain"))
 		{
 		    String cookieValue = cookie.getValue();
