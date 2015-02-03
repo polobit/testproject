@@ -233,7 +233,7 @@ function serializeLhsFilters(element)
 			fieldName = fieldName.replace(/#/g, '\\#').replace(/@/g, '\\@');
 			var currentElemnt = $(element).find('#'+fieldName+'_div');
 			$(currentElemnt).parent().find("a#lhs-filters-header").addClass('bold-text');
-			$(currentElemnt).find('i.clear-filter-condition-lhs').removeClass('hide');
+			$(currentElemnt).find('a.clear-filter-condition-lhs').removeClass('hide');
 		}
 		// Pushes each rule built from chained select in to an JSON array
 	});

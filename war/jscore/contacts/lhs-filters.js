@@ -115,12 +115,14 @@ $('a.filter-tags-multiple-add-lhs').die().live("click", function(e) {
 	});
 	
 	// Filter Contacts- Remove Multiple
-	$("i.clear-filter-condition-lhs").die().live('click', function(e)
+	$("a.clear-filter-condition-lhs").die().live('click', function(e)
 	{
 		$(this).addClass('hide');
-		var container = $(this).parents('.lhs-contact-filter-row');
+		var container = $(this).parents('.lhs-row-filter');
 		$(container).find('#RHS').children().val("").attr('prev-val', "");
 		$(container).find('#RHS_NEW:visible').children().val("").attr('prev-val', "");
+		$(container).find('a#lhs-filters-header').find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
+		$(container).find('a#lhs-filters-header').next().addClass('hide');
 		submitLhsFilter();
 	});
 
@@ -162,7 +164,7 @@ $('#lhs-contact-filter-form #RHS input').die().live("blur keyup", function(e) {
 		} else {
 			if(currVal == "") {
 				var container = $(this).parents('.lhs-contact-filter-row');
-				$(container).find('i.clear-filter-condition-lhs').addClass('hide');
+				$(container).find('a.clear-filter-condition-lhs').addClass('hide');
 			}
 			submitLhsFilter();
 			$(this).blur();
@@ -173,7 +175,7 @@ $('#lhs-contact-filter-form #RHS input').die().live("blur keyup", function(e) {
 $('#lhs-contact-filter-form #RHS select').die().live("change", function(e) {
 	if($(this).val() == "") {
 		var container = $(this).parents('.lhs-contact-filter-row');
-		$(container).find('i.clear-filter-condition-lhs').addClass('hide');
+		$(container).find('a.clear-filter-condition-lhs').addClass('hide');
 	}
 	submitLhsFilter();
 });

@@ -544,7 +544,7 @@ function deserializeChainedSelect1(form, el, element)
 			$(currentElemnt).prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 		}
 		$(currentElemnt).parent().find("a#lhs-filters-header").addClass('bold-text');
-		$(currentElemnt).find('i.clear-filter-condition-lhs').removeClass('hide');
+		$(currentElemnt).find('a.clear-filter-condition-lhs').removeClass('hide');
 		$(currentElemnt).removeClass('hide');
 		$(currentElemnt).find('[name="CONDITION"]').val(CONDITION);
 		$(currentElemnt).find('[name="CONDITION"]').trigger('change');
