@@ -104,7 +104,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 		}, optionsTemplate, true);
 		$(".active").removeClass("active");
 		$("#activitiesmenu").addClass("active");
-	}
+	
 
 });
 }
