@@ -113,25 +113,7 @@ public class PortletUtil {
 		for(Portlet portlet : portlets){
 			if(portlet.prefs!=null){
 				JSONObject json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
-				//if portlet is growth graph we can change the start date and end dates based on duration
-				if(portlet.name!=null && portlet.name.equalsIgnoreCase("Growth Graph")){
-					Long minTime = 0L;
-					Long maxTime = 0L;
-					
-					int days = Integer.parseInt(String.valueOf((Long.parseLong(json.getString("end-date"))-Long.parseLong(json.getString("start-date")))/(24*60*60*1000)));
-					
-					DateUtil startDateUtil = new DateUtil();
-		    		minTime = startDateUtil.removeDays(days).toMidnight().getTime().getTime();
-		    		
-		    		DateUtil endDateUtil = new DateUtil();
-		    		maxTime = (endDateUtil.toMidnight().getTime().getTime());
-					
-					json.put("start-date",String.valueOf(minTime));
-					json.put("end-date",String.valueOf(maxTime));
-					
-					portlet.settings=json;
-				}else
-					portlet.settings=json;
+				portlet.settings=json;
 			}
 			if(!portlet.name.equalsIgnoreCase("Dummy Blog"))
 				added_portlets.add(portlet);
@@ -494,8 +476,6 @@ public class PortletUtil {
 	public static JSONObject getGrowthGraphData(JSONObject json)throws Exception{
 		String growthGraphString=null;
 		JSONObject growthGraphJSON=null;
-		long minTime=0L;
-		long maxTime=0L;
 		if(json!=null && json.get("tags")!=null && json.get("frequency")!=null && json.get("start-date")!=null && json.get("end-date")!=null){
 			String[] tags = json.getString("tags").split(",");
 			int type = Calendar.DAY_OF_MONTH;
@@ -505,17 +485,9 @@ public class PortletUtil {
 			if (StringUtils.equalsIgnoreCase(json.getString("frequency"), "weekly"))
 			    type = Calendar.WEEK_OF_YEAR;
 			
-			int days = Integer.parseInt(String.valueOf((Long.parseLong(json.getString("end-date"))-Long.parseLong(json.getString("start-date")))/(24*60*60*1000)));
+			ReportsUtil.check(Long.parseLong(json.getString("start-date")), Long.parseLong(json.getString("end-date")));
 			
-			DateUtil startDateUtil = new DateUtil();
-    		minTime = startDateUtil.removeDays(days).toMidnight().getTime().getTime();
-    		
-    		DateUtil endDateUtil = new DateUtil();
-    		maxTime = (endDateUtil.toMidnight().getTime().getTime());
-			
-			ReportsUtil.check(minTime, maxTime);
-			
-			growthGraphString=TagSearchUtil.getTagCount(null, tags, String.valueOf(minTime), String.valueOf(maxTime), type).toString();
+			growthGraphString=TagSearchUtil.getTagCount(null, tags, json.getString("start-date"), json.getString("end-date"), type).toString();
 		}
 		if(growthGraphString!=null)
 			growthGraphJSON = (JSONObject)JSONSerializer.toJSON(growthGraphString);
