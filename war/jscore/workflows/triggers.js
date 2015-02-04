@@ -9,7 +9,7 @@ $(function()
 {
 
 	// Tag suggestions when 'Tag is added' and 'Tag is deleted' options selected
-	$('#trigger-type').live('change', function(e)
+	$('#trigger-type').die('change').live('change', function(e)
 	{
 		e.preventDefault();
 
@@ -37,6 +37,34 @@ $(function()
 		// Hide trigger inbound mail event div for other trigger conditions.
 		if($(this).val() !== 'INBOUND_MAIL_EVENT'){
 			$('form#addTriggerForm').find('div#trigger-inbound-mail-event').css('display', 'none');
+		}
+		
+		if($(this).val() != 'EMAIL_OPENED' || $(this).val() != 'EMAIL_LINK_CLICKED'){
+			
+			$('form#addTriggerForm').find('select#email-tracking-type').closest('div.control-group').css('display', 'none');
+			
+			$('form#addTriggerForm').find('#custom-link-clicked').closest('div.control-group').css('display', 'none');
+			
+			$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', 'none');
+		}
+		
+		if($(this).val() != 'UNSUBSCRIBED')
+			$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', 'none');
+		
+		if($(this).val() != 'EVENT_IS_ADDED')
+		{
+			$('form#addTriggerForm').find('select#event-owner-id').closest('div.control-group').css('display', 'none');
+			
+			$('form#addTriggerForm').find('select#event-type').closest('div.control-group').css('display', 'none');
+		}
+		
+		// Hide trigger milestones div for other trigger conditions.
+		if ($(this).val() !== 'INBOUND_CALL' || $(this).val() !== 'OUTBOUND_CALL'){
+			$('form#addTriggerForm').find('div#CALL').closest('div.control-group').css('display', 'none');
+		}
+			
+		if($(this).val() != 'FORM_SUBMIT'){
+			$('form#addTriggerForm').find('select#trigger-form-event').closest('div.control-group').css('display', 'none');
 		}
 
 		// Initialize tags typeahead
@@ -81,6 +109,33 @@ $(function()
 		{
 			populate_inbound_mail_events_in_trigger($('form#addTriggerForm'), 'trigger-inbound-mail-event');
 		}
+		
+		if($(this).val() == 'EMAIL_OPENED' || $(this).val() == 'EMAIL_LINK_CLICKED'){
+			$('form#addTriggerForm').find('#email-tracking-type').closest('div.control-group').css('display', '');
+			
+			if($(this).val() == 'EMAIL_LINK_CLICKED')
+				$('form#addTriggerForm').find('#custom-link-clicked').closest('div.control-group').css('display', '');
+		}
+		
+		if($(this).val() == 'EVENT_IS_ADDED')
+		{
+			$('form#addTriggerForm').find('select#event-type').closest('div.control-group').css('display', '');
+			
+			populate_owners_in_trigger($('form#addTriggerForm'), 'event-owner-id');
+		}
+		
+		if($(this).val() == 'INBOUND_CALL' || $(this).val() == 'OUTBOUND_CALL')
+		{
+			populate_call_trigger_options($('form#addTriggerForm'));	
+		}
+		
+		if($(this).val() == 'UNSUBSCRIBED')
+			show_email_tracking_campaigns();
+
+		if($(this).val() == 'FORM_SUBMIT')
+		{
+			populate_forms_in_trigger($('form#addTriggerForm'), 'trigger-form-event');
+		}
 	});
 	
 	// When cancel clicked, take to Back page
@@ -90,6 +145,22 @@ $(function()
 
 		if (history !== undefined)
 			history.back(-1);
+	});
+	
+	$('#email-tracking-type').die().live('change', function(e){
+		
+		e.preventDefault();
+		
+		if($(this).val() == 'ANY' || $(this).val() == 'PERSONAL')
+		{
+			// Show milestones select element
+			$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', 'none');
+			return;
+		}
+		
+		// show email tracking campaigns
+		show_email_tracking_campaigns();
+		
 	});
 });
 
@@ -191,6 +262,49 @@ function populate_inbound_mail_events_in_trigger(trigger_form, inbound_mail_even
 	trigger_form.find('div#' + inbound_mail_event_div_class).css('display','');
 }
 
+function populate_owners_in_trigger(trigger_form, owner_select_id, trigger_owner_id)
+{
+	// Show milestones select element
+	trigger_form.find('select#' + owner_select_id).closest('div.control-group').css('display', '');
+
+	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+	
+	fillSelect(owner_select_id, '/core/api/users', 'users', function()
+			{
+		
+			$("#" + owner_select_id +' option:first').after('<option value="ANY">Any Owner</option>');
+			
+			if (trigger_owner_id)
+			{
+				$('#'+owner_select_id, trigger_form).find('option[value=' + trigger_owner_id + ']').attr('selected', 'selected');
+			}
+		
+	}, optionsTemplate, false, undefined, "Select Event Owner");
+}
+
+function populate_call_trigger_options(trigger_form, triggerJSON)
+{
+	
+	trigger_form.find('div#CALL').closest('div.control-group').css('display', '');
+	
+	if(triggerJSON && triggerJSON["call_disposition"])
+		trigger_form.find('div#CALL select').find('option[value=' + triggerJSON["call_disposition"] + ']').attr('selected', 'selected').trigger('change');
+}
+
+function populate_forms_in_trigger(trigger_form, trigger_form_select_id, trigger_form_id)
+{
+	trigger_form.find('select#' + trigger_form_select_id).closest('div.control-group').css('display', '');
+	var formOptionsTemplate = "<option value='{{id}}'>{{formName}}</option>";
+	fillSelect(trigger_form_select_id, 'core/api/forms', 'forms', function()
+	{
+		if (trigger_form_id)
+		{
+			$('#' + trigger_form_select_id, trigger_form).find('option[value=' + trigger_form_id + ']').attr('selected', 'selected');
+		}
+	}, formOptionsTemplate, false, undefined, "Select Form");
+}
+
+
 /**
  * Shows triggers for each td in workflows list
  * 
@@ -249,4 +363,33 @@ function append_triggers_to_workflow(el)
 			$(td).html(getTemplate('workflow-triggers', { "triggers" : trigger_collection.toJSON() }));
 
 	});
+}
+
+function show_email_tracking_campaigns()
+{
+	// Show campaign select element
+	$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', '');
+
+	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+	
+	/**
+	 * Fills campaign select with existing Campaigns.
+	 * 
+	 * @param campaign-select -
+	 *            Id of select element of Campaign
+	 * @param /core/api/workflows -
+	 *            Url to get workflows
+	 * @param 'workflow' -
+	 *            parse key
+	 * @param no-callback -
+	 *            No callback
+	 * @param optionsTemplate-
+	 *            to fill options with workflows
+	 */
+	fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', function()
+			{
+				
+				$('#email-tracking-campaign-id option:first').after('<option value="0">All</option>');
+				
+			}, optionsTemplate, false);
 }

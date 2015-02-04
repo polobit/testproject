@@ -103,8 +103,9 @@ Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 <p>
 	Users: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{quantity}}
 </p><br/><p>
-	<a href="/#domainSubscribe"><strong><u> Change Plan</strong></u> </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a href="#" id="delete_userplan" sub_id={{id}} cus_id={{../../id}}> <strong><u>Cancel Subscription</u></strong> </a>
+	<span style="width: auto;max-width: 40%;display: inline-block;"><a href="/#domainSubscribe/{{../../description}}"><strong><u> Change Plan</strong></u> </a> </span>
+	<span class="pull-right" style="text-overflow: ellipsis;overflow: hidden;height: auto;white-space: nowrap;max-width: 55%;display: inline-block;">
+	<a href="#" id="delete_userplan" sub_id={{id}} cus_id={{../../id}}> <strong><u>Cancel Subscription</u></strong> </a></span>
 </p><br/><br/>
 </div>
 {{/is_userPlan}}
@@ -144,9 +145,8 @@ Amount: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{get_total_amount plan.
 Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 </p>
 <p>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a href="#" id="delete_emailplan" sub_id={{id}} cus_id={{../../id}}> <strong><u>Cancel Subscription</u></strong> </a>
+	<span class="pull-right">
+	<a href="#" id="delete_emailplan" sub_id={{id}} cus_id={{../../id}}> <strong><u>Cancel Subscription</u></strong> </a></span>
 </p>
 <br/><br/>
 </div>

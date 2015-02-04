@@ -41,6 +41,9 @@ var WidgetsRouter = Backbone.Router
 												"Facebook" : "Facebook", "Facebook/:id" : "Facebook", "Shopify" : "Shopify", "Shopify/:id" : "Shopify",
 
 												"Chargify" : "Chargify", "Chargify/:id" : "Chargify",
+												
+												"callscript/rules" : "CallScriptShow", "callscript/add-rules" : "CallScriptAdd","callscript/editrules/:id" : "CallScriptEdit",
+												"callscript" : "CallScript", "callscript/:id" : "CallScript",												
 
 												"sync" : "contactSync", "sync/contacts" : "google_apps_contacts", "sync/calendar" : "google_apps_calendar", "sync/stripe-import" : "stripe_sync",
 																"sync/shopify" : "shopify", "sync/salesforce" : "salesforce", "sync/zoho-import" : "zoho_sync", "sync/quickbook" : "quickbook_import",
@@ -745,7 +748,7 @@ var WidgetsRouter = Backbone.Router
 																																'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Google <small>import Contacts from Google</small></h2><div class="span11 no-mg-l"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div>' + '<div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>' + '<div class="row-fluid prefs-datasync"><h2 class="widget-head">E-commerce <small>import Contacts from E-commerce</small></h2><div class="span11 no-mg-l"><div id ="shopify"></div></div></div>' +
 																												
 																																'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Payment <small>import Contacts from payment gateway</small></h2><div class="span11 no-mg-l"><div id ="stripe"></div></div></div>'+
-																																'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Accounting <small>import Contacts from Accounting</small></h2><div class="span11 no-mg-l"><div id ="freshbook"></div></div></div>'
+																																'<div class="row-fluid prefs-datasync"><h2 class="widget-head">Accounting <small>import Contacts from Accounting</small></h2><div class="span11 no-mg-l"><div class="span4" id ="freshbook"></div><div class="span4" id ="quickbook"></div></div>'
 
 
 																								);
@@ -1043,31 +1046,43 @@ var WidgetsRouter = Backbone.Router
 								                        }
 												    }
 
-												}//End of Gplus
+												},//End of Gplus
 												
+												/**
+												 * Manages CallScript widget
+												 */
+												CallScript : function(id)
+												{
+																if (!id)
+																				show_set_up_widget("CallScript", 'callscript-login');
+																else
+																				fill_form(id, "CallScript", 'callscript-login');
+																                adjust_form();
+
+												},
 												
+												/**
+												 * Show CallScript rules
+												 */
+												CallScriptShow : function()
+												{	
+													showCallScriptRule();
+												},
 												
+												/**
+												 * Add CallScript rules
+												 */
+												CallScriptAdd : function()
+												{
+													addCallScriptRule();
+												},
 												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
+												/**
+												 * Edit CallScript rules
+												 */
+												CallScriptEdit : function(id)
+												{
+													editCallScriptRule(id);
+												}
 								});
 

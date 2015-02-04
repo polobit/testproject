@@ -232,8 +232,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		this.customFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields', restKey : "customFieldDefs",
+		this.customFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields/allScopes', restKey : "customFieldDefs",
 			templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
+		
+		this.customFieldsListView.appendItem = groupingCustomFields;
 
 		this.customFieldsListView.collection.fetch();
 
@@ -259,6 +261,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		{
 			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
 			{
+				$('#content').find('#admin-prefs-tabs-content').html(view.el);
+
+				$('#content').find('#AdminPrefsTab .active').removeClass('active');
+				$('#content').find('.analytics-code-tab').addClass('active');
 				prettyPrint();
 				if (id)
 				{
@@ -272,10 +278,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 			} });
 
-			$('#content').find('#admin-prefs-tabs-content').html(view.el);
-
-			$('#content').find('#AdminPrefsTab .active').removeClass('active');
-			$('#content').find('.analytics-code-tab').addClass('active');
+			
 			// $('#content').html(view.el);
 		});
 	},

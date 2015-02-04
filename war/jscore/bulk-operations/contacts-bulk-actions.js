@@ -112,11 +112,77 @@ $(function()
 					show_bulk_campaign_assign_page
 					, function(){
 						// No callback
-						return;
 						},
 						function(){
 							return;
 						});
+		}
+		if(is_free_plan() && has_more_than_limit())
+		{
+			showModalConfirmation("Add to Campaign", 
+				"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.", 
+				function()
+					{
+						Backbone.history.navigate("subscribe", {
+								trigger: true
+							});
+					}
+				, function(){
+					// No callback
+					return;
+					},
+					function(){
+						return;
+					}, "Upgrade", "Close");
+		}
+		
+		// Selected Contact ids
+		var id_array = get_contacts_bulk_ids();
+		
+		// when SELECT_ALL is true i.e., all contacts are selected.
+		if(id_array.length === 0)
+		   count = getAvailableContacts();
+		else
+			count = id_array.length;
+		
+		if(!canSendEmails(count))
+		{
+			var pendingEmails = getPendingEmails();
+			
+			var yes = "Yes";
+			var no = "No"
+				
+			var message = "";
+			var upgrade_link =  ' You may <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">purchase more emails </a> if this does not suffice your bulk action.';
+			var title = "Low on emails"
+			if(pendingEmails <= 0)
+				{
+					title = "Low on emails";
+					yes = "";
+					no = "Ok"
+					message = "You have used up all emails in your quota. " + upgrade_link;
+				}
+			else
+				message = "You have only "+ pendingEmails + " emails left as per your quota. " + upgrade_link +
+				" Continuing with this operation will stop sending emails once it crosses the quota.<br/><br/>" +
+				"Do you want to proceed?";
+			
+			showModalConfirmation(title, 
+					message, 
+					show_bulk_campaign_assign_page
+				, function(element){
+						
+					// No callback
+					if(!element)
+						return;
+		
+					if($(element).attr('subscribe'))
+							Backbone.history.navigate( "subscribe", { trigger : true });
+					return;
+					},
+					function(element){
+					}, yes, no);
+			return;
 		}
 	else
 		{
@@ -420,6 +486,24 @@ $(function()
 							return;
 						});
 		}
+		if(is_free_plan() && has_more_than_limit())
+		{
+			showModalConfirmation("Send Email", 
+					"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.", 
+				function()
+					{
+						Backbone.history.navigate("subscribe", {
+								trigger: true
+							});
+					}
+				, function(){
+					// No callback
+					return;
+					},
+					function(){
+						return;
+					}, "Upgrade", "Close");
+		}
 		else
 		{
 			// Selected Contact ids
@@ -539,7 +623,10 @@ $(function()
 			
 			// serialize form.
 			var form_json = serializeForm("emailForm");
-			
+			if(form_json.from_email != CURRENT_DOMAIN_USER.email && form_json.from_name == CURRENT_DOMAIN_USER.name)
+			{
+				form_json.from_name = "";
+			}
 			var url = '/core/api/bulk/update?action_type=SEND_EMAIL';
 			
 			var json = {};
@@ -804,11 +891,17 @@ function getSelectionCriteria()
  */
 function postBulkOperationData(url, data, form, contentType, callback, error_message)
 {
+	var dynamic_filter = getDynamicFilters();
+	if(dynamic_filter != null) {
+		data.dynamic_filter = dynamic_filter;
+	}
 	if (data.contact_ids && data.contact_ids.length == 0)
 	{
 		console.log(data.contact_ids);
 		console.log(getSelectionCriteria());
-		url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+		if(dynamic_filter == null) {			
+			url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+		}
 		console.log(url);
 	}
 	else
@@ -849,4 +942,50 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 			}
 			showNotyPopUp('information', error_message, "top", 5000);
 	} });
+}
+
+function getDynamicFilters() {
+	var dynamic_filter = null;
+	if (readCookie('company_filter'))
+	{
+		dynamic_filter = readData('dynamic_company_filter')
+	} else {
+		dynamic_filter = readData('dynamic_contact_filter')
+	}
+	
+	if(!dynamic_filter || dynamic_filter == null) {
+		return null;
+	} else {
+		if(JSON.parse(dynamic_filter).rules.length >0) {
+			return dynamic_filter;
+		} else {
+			return null;
+		}
+	}
+}
+
+
+function bulkOperationContactsCount()
+{
+	if (SELECT_ALL == true)
+		{
+			return getAvailableContacts();
+		}
+		
+	else
+		{
+			var id_array = get_contacts_bulk_ids();
+			return id_array.length;
+		}
+}
+
+/**
+ * Limit on free user bulk operations
+ */
+function has_more_than_limit()
+{
+	if(bulkOperationContactsCount() > 25)
+		return true;
+	
+	return false;
 }

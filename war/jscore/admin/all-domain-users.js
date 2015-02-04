@@ -21,16 +21,15 @@ $(".delete_user").die().live('click', function(e){
 		if (!confirm("Are you sure you want to delete ?" ))
 			return;
 		var id = $(this).closest('a').attr("data");
-		
-
 		$.ajax({
 			url: '/core/api/admin_panel/deleteuser?id='+id, 
 			type : 'DELETE',
 			success : function(data)
 			{
+				add_delete_user_info_as_note_to_owner(email);
 				alert("user deleted" );
 				location.reload(true);
-	           
+					           
 			},
 			error : function(response)
 			{
@@ -87,7 +86,67 @@ $(".delete_user").die().live('click', function(e){
 					
 				   }
 		});
+		$(".refundpopup").live('click',function(e){
+			e.preventDefault();
+			
+			var chargeid = $(this).attr("chargeid");
+			var totalamount = $(this).attr("totalamount");
+			var refundedAmount = $(this).attr("refundedAmount");
+			$("#errormsg").html("");
+			$("#amount").val(totalamount - refundedAmount);
+			$("#hchargeid").val(chargeid);
+			$("#totamount").val(totalamount);
+			$("#partialrefund").button('reset');
+			$("#refundModal").modal("show");
+	        
+	    });
+
+
+
+		$("#partialrefund").die().live('click', function(e){
+			
+			e.preventDefault();
+			if (!isValidForm($("#CCform")))
+			{
+			    return;
+			}
+			$(this).button('loading');
+			var amount = $("#amount").val();
+			var totalamount = $(".totamount").val();
+			var chargeid=$("#hchargeid").val();
+			if(parseFloat(amount) <= 0)
+			{
+				
+				$("#errormsg").html("Amount should be > 0").show().delay(1500).hide(1);
+				$("#partialrefund").button('reset');
+				return;
+			}
+			
+			if(parseFloat(amount)>parseFloat(totalamount))
+			{
+				$("#errormsg").html("Amount Should not exceed "+totalamount).show().delay(1500).hide(1);
+				$("#partialrefund").button('reset');
+				return;
+			}
+			
+			amount = 100*amount;
+				
+			$.ajax({
+				url: '/core/api/admin_panel/applypartialrefund?chargeid='+chargeid+'&amount='+amount, 
+				type : 'GET',
+				success : function(data)
+				{	
+					alert("successfully applied for refund");
+					location.reload(true);
+				},
+				error : function(response)
+				{
+					$("#partialrefund").button('reset');
+					showNotyPopUp("information", "error occured please try again", "top");
+				}
+			});
 		
+		});
 		
 		$(".refund").die().live('click', function(e){
 	
@@ -101,6 +160,8 @@ $(".delete_user").die().live('click', function(e){
 				type : 'GET',
 				success : function(data)
 				{
+					var amount = data.refunds.data[0].amount/100;
+					add_refunded_info_as_note_to_owner(email,amount);
 					alert("successfully applied for refund");
 					location.reload(true);
 				},
@@ -121,7 +182,7 @@ $(".delete_user").die().live('click', function(e){
 				
 				success: function()
 			{
-				
+				add_cancel_subscription_info_as_note_to_owner(email);
 				location.reload(true);
 			},error : function(response)
 			{
@@ -142,7 +203,7 @@ $(".delete_user").die().live('click', function(e){
 				
 				success: function()
 			{
-				
+					add_cancel_subscription_info_as_note_to_owner(email);
 					location.reload(true);
 			},error : function(response)
 			{
@@ -153,10 +214,6 @@ $(".delete_user").die().live('click', function(e){
 		});
 			
 		});
-		
-		
-	
-		
 		
 		
 });

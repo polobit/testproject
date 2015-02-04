@@ -69,6 +69,11 @@ public abstract class DaoBillingRestriction implements
     protected boolean sendReminder = true;
 
     protected Object entity = null;
+    
+    public int getPendingCount()
+    {
+	return 0;
+    }
 
     /**
      * Initializes respective child class instance based on class name. After

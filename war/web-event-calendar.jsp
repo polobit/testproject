@@ -15,7 +15,7 @@ System.out.println(url);
 String[] ar=url.split("/");
 String scheduleid=ar[ar.length-1];
 URL ur=new URL(url);
-String d_name=NamespaceUtil.getNamespaceFromURL(ur);
+String d_name= NamespaceUtil.getNamespaceFromURL(ur);
 System.out.println(d_name);
 System.out.println("====================================domainname from url");
 
@@ -32,6 +32,9 @@ String user_name = null;
 String domain_name=null;
 Long user_id = 0L;
 Long agile_user_id = 0L;
+String schedule_prefs=null;
+String meeting_durations=null;
+String meeting_types=null;
 
 if (scheduleid != null)
 {    
@@ -42,8 +45,8 @@ if (scheduleid != null)
   System.out.println(scheduleid);
   	
   DomainUser domainUser = DomainUserUtil.getDomainUserFromScheduleId(scheduleid,d_name);
-		  
-    //DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("jagadeesh@invox.com");
+
+	//  DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("jagadeesh@invox.com");
 		  
   System.out.println("Domain user " + domainUser);
 	  
@@ -53,6 +56,10 @@ if (scheduleid != null)
           
 	      AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
 	      System.out.println("agileUser " + agileUser);
+	      if(agileUser==null){
+		  out.print("Sorry, user is not enrolled with Agile CRM.");
+		  return;
+	      }
 	      	
 	      UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
 	      System.out.println("userPrefs " + userPrefs.pic);
@@ -62,6 +69,10 @@ if (scheduleid != null)
 	      user_id = domainUser.id;
 	      agile_user_id = agileUser.id;
 	      domain_name = domainUser.domain;
+	      meeting_durations=domainUser.meeting_durations;
+	      meeting_types=domainUser.meeting_types;
+	      System.out.println(" meetiing types "+meeting_types);
+	      
 	      	
 	      if(StringUtils.isEmpty(userPrefs.pic))
 	          profile_pic  ="/img/gravatar.png";
@@ -122,9 +133,10 @@ ObjectMapper mapper = new ObjectMapper();
 					style="display: table;display:none">
 					<div class="numberlt" id="two">2</div>
 					<div class="event-title" style="margin-bottom:7px;">
-						Select Date and Time <span class="timezone"> <span
+						<span class="pull-left">Select Date and Time</span> <span class="timezone"> <span
 							class="timezone1">Timezone </span>
 						</span>
+						<div class="clearfix"></div>
 					</div>
 					<div class="col-md-4 col-sm-12 col-xs-12">
 						<div id="datepick" style="height:215px;"></div>
@@ -151,18 +163,30 @@ ObjectMapper mapper = new ObjectMapper();
 							placeholder="Name" class="required me-disable"
 							disabled="disabled" /> <input type="text" id="email"
 							name="email" placeholder="Email" class="required me-disable"
-							disabled="disabled" /> <input type="text" id="phoneNumber"
-							name="phoneNumber" placeholder="Phone #"
-							class="me-disable" disabled="disabled" />
+							disabled="disabled" /> 
+							<%if(StringUtils.isNotEmpty(meeting_types)){ %>
+							<select class="form-control meetingtypes" style="border: 1px solid #74B9EF;height:37px" title='Meeting Type' name="phoneNumber" id="phoneNumber">
+							 <option selected disabled>Meeting Type</option>
+	<%String []str=meeting_types.split(",");
+	for(int i=0;i<=str.length-1;i++){%>
+		<option value=<%=mapper.writeValueAsString(str[i])%>><%=str[i]%></option>
+	
+	<%}
+	%>
+	</select><%}
+	%>
+	
+							
+					
 						<div class="clearfix"></div>
-						<input type="checkbox" id="confirmation" name="confirmation"
-							class="me-disable" disabled="disabled" /> <label
-							for="confirmation">Send me a confirmation email</label>
+						<input type="checkbox" id="confirmation" name="confirmation"  checked
+							class="me-disable" disabled="disabled" style="margin-top: 10px;" /> <label
+							style="margin-top: 7px;" for="confirmation" >Send me a confirmation email</label>
 					</div>
 
 					<div class="col-sm-8">
 						<textarea class="inputtext me-disable" rows="7" cols="90"
-							id="notes" name="notes" placeholder="Notes" disabled="disabled"></textarea>
+							id="notes" name="notes" placeholder="Notes (Phone number/Skype details)" disabled="disabled"></textarea>
 					</div>
 					<div class="clearfix"></div>
 				</div>
@@ -174,7 +198,7 @@ ObjectMapper mapper = new ObjectMapper();
 				</div>
 		</form>
 		 <% }else  		   
-		     out.print("Sorry, user is not enrolled with Agile CRM.");  
+		     out.print("Sorry. This is an invalid scheduling URL");  
 		 %> 
 	</div>
 
@@ -185,6 +209,7 @@ ObjectMapper mapper = new ObjectMapper();
  var selecteddate="";
  var current_date_mozilla="";
  var domainname=<%=mapper.writeValueAsString(domain_name)%>;
+ var meeting_duration=<%=mapper.writeValueAsString(meeting_durations)%>;
  </script>
 
 	<script type="text/javascript">
@@ -215,7 +240,7 @@ ObjectMapper mapper = new ObjectMapper();
 					// Initialize date picker
 					$('#datepick').DatePicker({ flat : true, date : [
 							'2014-07-6', '2016-07-28'
-					], current : '' + currentDate, format : 'Y-m-d', calendars : 1, mode : 'single', view : 'days', onRender: function(date) {
+					], current : '' + currentDate, format : 'Y-m-d', calendars : 1,starts: 0, mode : 'single', view : 'days', onRender: function(date) {
 						return {
 							disabled: (date.valueOf() < Date.now()-ms),
 							className: date.valueOf() < Date.now()-ms ? 'datepickerNotInMonth' : false

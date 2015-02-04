@@ -13,6 +13,13 @@ var notification_prefs;
 function downloadAndRegisterForNotifications()
 {
 
+	// As of now I know that this function is calling only once after loggin. so Updating due task count in this function;
+	var due_task_count=getDueTasksCount();
+	if(due_task_count==0)
+		$(".navbar_due_tasks").css("display", "none");
+	else
+		$(".navbar_due_tasks").css("display", "block");
+	$('#due_tasks_count').html(due_task_count);
 	// Download Notification Prefs
 	var notification_model = Backbone.Model.extend({ url : 'core/api/notifications' });
 
@@ -75,11 +82,14 @@ function subscribeToPubNub(domain)
 				return;
 			}
 			
-			if (message.type == "CALENDER_REMINDER")
+			if (message.type == "EVENT_REMINDER")
 			{
+				if(CURRENT_DOMAIN_USER['email']==message.useremail){
 				var html = getTemplate("event-notification", message);
-				showNoty('information', html, "bottomRight", "CALENDER_REMINDER");
+				showNoty('information', html, "bottomRight", "EVENT_REMINDER",undefined,3000000);
 				return;
+				}
+			
 			}
 			
 			
@@ -391,10 +401,13 @@ function showSwitchChanges(el)
  * @param notification_type -
  *            notification type - TAG_CREATED, TAG_DELETED etc.
  */
-function showNoty(type, message, position, notification_type, onCloseCallback)
+function showNoty(type, message, position, notification_type, onCloseCallback,timeout)
 {
+	if(!timeout){
+		timeout=30000;
+	}
 	// Don't show notifications when disabled by user. Neglect campaign ones
-	if(notification_type != "CALENDER_REMINDER" ){
+	if(notification_type != "EVENT_REMINDER" ){
 	
 	if (notification_type != "CAMPAIGN_NOTIFY"&& !notification_prefs.control_notifications)
 		return;
@@ -422,11 +435,17 @@ function showNoty(type, message, position, notification_type, onCloseCallback)
 			return;
 		}
 		
-		if(notification_type!="CALENDER_REMINDER"){
+		if(notification_type=="EVENT_REMINDER"){
+			
+			show_desktop_notification(getImageUrl(message,notification_type), getNotificationType(notification_type), getTextMessage(message), getId(message), getId(message).split(
+			'/')[1] + '-' + notification_type,3000000);
+			return;
+		}
+		
+		
 		show_desktop_notification(getImageUrl(message,notification_type), getNotificationType(notification_type), getTextMessage(message), getId(message), getId(message).split(
 				'/')[1] + '-' + notification_type);
 		return;
-		}
 	}
 
 	// Download the lib
@@ -434,7 +453,7 @@ function showNoty(type, message, position, notification_type, onCloseCallback)
 			LIB_PATH + 'lib/noty/themes/default.js', function()
 			{
 
-			var n = noty({ text : message, layout : position, type : type, timeout : 30000, 
+			var n = noty({ text : message, layout : position, type : type, timeout : timeout, 
 			
 				closeCallback : 
 					(onCloseCallback && typeof onCloseCallback == 'function') ? onCloseCallback : undefined,
@@ -480,6 +499,7 @@ function showNoty(type, message, position, notification_type, onCloseCallback)
 					if (n.options.type == "information")
 					{
 						var link = $(this).find("a").attr("href");
+						if(link)
 						Backbone.history.navigate(link, { trigger : true });
 					}
 
@@ -503,6 +523,12 @@ function getTextMessage(message)
 	{
 		name = $(message).find('#notification-contact-id').text();
 		return name + " " + type;
+	}
+	
+	if ($(message).find('#noty_text').text() != "")
+	{
+		name = $(message).find('#noty_text').text();
+		return name;
 	}
 
 	name = $(message).find('#notification-deal-id').text();
@@ -533,6 +559,10 @@ function getNotificationType(notification_type)
  */
 function getId(message)
 {
+	if(($(message).find('#noty_text').text() != "")){
+		return $(message).find('#noty_text').text();
+	}
+	
 	if ($(message).find('#notification-contact-id').text() != "")
 	{
 		return $(message).find('#notification-contact-id').attr('href');
@@ -551,6 +581,11 @@ function getId(message)
  */
 function getImageUrl(message, notification_type)
 {
+	if(notification_type == "EVENT_REMINDER"){
+		
+		return '/img/eventreminder.png';
+	}
+	
 	if ($(message).find('#notification-contact-id').text() != "")
 		{
 		

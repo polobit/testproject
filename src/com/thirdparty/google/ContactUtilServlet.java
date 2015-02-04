@@ -14,6 +14,7 @@ import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.contact.sync.SyncPrefsBuilder;
 import com.agilecrm.contact.sync.service.SyncService;
 import com.agilecrm.contact.util.BulkActionUtil;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.user.DomainUser;
@@ -282,11 +283,19 @@ public class ContactUtilServlet extends HttpServlet
 		    DaoBillingRestriction.ClassEntities.Contact.toString(), restriction);
 
 	    if (contactRestriction == null)
+	    {
 		return;
+	    }
+		
 
 	    // Returns if contacts limit is reached
 	    if (!contactRestriction.can_create())
+	    {
+		contactPrefs.inProgress = false;
+		contactPrefs.save();
 		return;
+	    }
+		
 	}
 
 	SyncService service = new SyncPrefsBuilder().config(contactPrefs).getService(contactPrefs.type.getClazz());
@@ -301,6 +310,7 @@ public class ContactUtilServlet extends HttpServlet
 	    {
 		contactPrefs.inProgress = false;
 		contactPrefs.save();
+		ContactUtil.eraseContactsCountCache();
 	    }
 	}
     }

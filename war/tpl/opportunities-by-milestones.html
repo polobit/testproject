@@ -42,6 +42,45 @@
         </div>
     </div>
 </div>
+
+<!-- Archive confirmation-->
+<div id="deal_archive_confirm_modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Archive Deal</h3>
+  </div>
+  <div class="modal-body">
+    <div id="deal-bulk-confirm" style="margin-left: 30px;">
+		<input id="archived-deal-id" name="id" type="hidden" value="{{id}}" />
+		<input id="archived-deal-milestone" name="milestone" type="hidden" value="{{milestone}}"/>
+		Deals can be archived and will not be shown. You can view them later by selecting 'All' in the filter.  
+		<br/> Are you sure to archive this deal?
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" id="deal-quick-archive" class="btn btn-primary">Yes</a>
+	<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+  </div>
+</div>
+
+<!-- Restore confirmation-->
+<div id="deal_restore_confirm_modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Restore Deal</h3>
+  </div>
+  <div class="modal-body">
+	<input id="restored-deal-id" name="id" type="hidden"/>
+	<input id="restored-deal-milestone" name="milestone" type="hidden"/>
+    <div id="deal-bulk-confirm" style="margin-left: 30px;">
+		Restoring the Deal will make it active again. <br/> Restore this Deal?
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" id="deal-quick-restore" class="btn btn-primary">Yes</a>
+	<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+  </div>
+</div>
 </script>
 
 <script id="opportunities-by-paging-collection-template" type="text/html">
@@ -68,9 +107,9 @@
 <script id="deals-by-paging-model-template" type="text/html">
 <div id={{id}} data="{{milestone}}" class="data agile-overflow-ellipsis">
 	<div>
-		<b style="max-width: 78%;overflow: hidden;display: inline-block;text-overflow: ellipsis;line-height: 14px;float:left;">{{name}}</b>
+		<b style="max-width: 78%;overflow: hidden;display: inline-block;text-overflow: ellipsis;line-height: 14px;float:left;"><a href="#deal/{{id}}">{{name}}</a></b>
 		
-		<span class="right dealnotes-view" style="margin-top:-4px;">
+		<span class="right dealnotes-view" style="margin-top:-3px;">
 			{{#if notes}}
              <span class="txt-small note-count" title="Notes" >{{notes.length}}</span><a title="Notes" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit" style="cursor:pointer;text-decoration:none;"><i class="deal-action icon icon-comment-alt deal-notes" data="{{id}}"></i></a>
               
@@ -80,7 +119,7 @@
 	</div>
 	<div class="agile-overflow-ellipsis">
 
-		<span>{{currencySymbol}} {{numberWithCommas expected_value}}</span>
+		<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
 		{{#if this.contacts}}
 			<span style="margin:0px 5px;border:1px solid #d5d5d5"></span>
 			{{#related_to_one contacts}}{{/related_to_one}}
@@ -93,8 +132,16 @@
 	</div>
 <div class="pull-right">
 <span class="right deal-options" style="visibility:hidden;">
+			{{#if_equals archived false}}
+			<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>
+			{{/if_equals}}
+			{{#if_equals archived true}}
+			<a title="Restore" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>
+			{{/if_equals}}
+			{{#if_equals archived false}}
 			<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>
-            <a title="Delete" class="deal-delete" style="cursor:pointer;text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a>
+            {{/if_equals}}
+			<a title="Delete" class="deal-delete" style="cursor:pointer;text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a>
         </span>
 </div>
 <div class="clearfix"></div>

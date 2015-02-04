@@ -150,6 +150,9 @@ $(function(){
 		}	
 		else
             $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to complete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+	
+		var due_task_count=getDueTasksCount();
+		$('#due_tasks_count').html(due_task_count);
 		
 	});
 	

@@ -48,7 +48,7 @@ public class NotesAPI
 	note.save();
 	try
 	{
-	    ActivitySave.createNoteAddActivityToContact(note);
+	    ActivitySave.createNoteAddActivity(note);
 	}
 	catch (JSONException e)
 	{

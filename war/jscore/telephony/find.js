@@ -4,26 +4,28 @@
  */
 function findContact()
 {	
-	//console.log("FindContact. " + Sip_Session_Call.getRemoteUri());
+	console.log("FindContact. " + Sip_Session_Call.getRemoteUri());
 
 	// Get contact details on phone number
 	$.getJSON("/core/api/contacts/search/phonenumber/" + Sip_Session_Call.getRemoteUri(), function(caller)
 	{
-		//console.log(caller);
+		console.log(caller);
 
 		// Contact added
 		if (caller != null)
 		{
 			// Get details to update call noty.
-			if (caller.properties[0].name == 'first_name' || caller.properties[1].name == 'last_name')
+			//if (caller.properties[0].name == 'first_name' || caller.properties[1].name == 'last_name')
 			{
-				User_Name = caller.properties[0].value + " " + caller.properties[1].value;
-				User_Number = Sip_Session_Call.getRemoteUri();
-				User_Img = caller.properties[2].value;
+				User_ID = caller.id;
+				User_Name = getContactName(caller);
+				User_Number = removeBracesFromNumber(Sip_Session_Call.getRemoteUri());
+				User_Img = getGravatar(caller.properties, 40);
+				SIP_Call_Noty_IMG = addSipContactImg();
 
 				// Set details if call is still active.
 				if (CALL != undefined)
-					CALL.setText('<i class="icon icon-phone"></i><b>Incoming call : </b><br>' + User_Name + "   " + User_Number);
+					CALL.setText(SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Incoming call  </b>'+ User_Number +'<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>' );
 			}
 		}
 	}).error(function(data)

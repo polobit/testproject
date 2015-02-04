@@ -5,12 +5,17 @@ import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.queues.util.PullQueueUtil;
+import com.agilecrm.workflows.status.CampaignStatus.Status;
+import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.deferred.TaskletWorkflowDeferredTask;
 import com.google.appengine.api.NamespaceManager;
 
 public class TaskCore
 {
+
+    public static final String _ACTIVE_STATUS_SET = "_active_status_set";
+
     /**
      * Executes workflow for single contact starting with Start node.
      * 
@@ -38,15 +43,25 @@ public class TaskCore
     public static void executeCampaign(JSONObject campaignJSON, JSONArray subscriberJSONArray)
     {
 	String namespace = NamespaceManager.get();
+	String campaignId = AgileTaskletUtil.getId(campaignJSON);
+	String campaignName = AgileTaskletUtil.getCampaignNameFromJSON(campaignJSON);
 
 	// Iterate through JSONArray
 	for (int i = 0, len = subscriberJSONArray.length(); i < len; i++)
 	{
 	    JSONObject subscriberJSON;
+
 	    try
 	    {
 		// Get Subscriber
 		subscriberJSON = subscriberJSONArray.getJSONObject(i);
+
+		// Set campaign-status as campaignId-ACTIVE.
+		CampaignStatusUtil.setStatusOfCampaign(AgileTaskletUtil.getId(subscriberJSON), campaignId,
+		        campaignName, Status.ACTIVE);
+
+		// To avoid setting status in Start Node again
+		subscriberJSON.put(_ACTIVE_STATUS_SET, true);
 	    }
 	    catch (Exception e)
 	    {
@@ -94,5 +109,4 @@ public class TaskCore
 
 	System.out.println("Campaign Completed ");
     }
-
 }

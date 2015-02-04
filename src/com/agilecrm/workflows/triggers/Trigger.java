@@ -65,13 +65,22 @@ public class Trigger
      */
     public enum Type
     {
-	TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, DEAL_IS_ADDED, DEAL_IS_DELETED, DEAL_MILESTONE_IS_CHANGED, ADD_SCORE, STRIPE_CHARGE_EVENT, SHOPIFY_EVENT, RUNS_DAILY, RUNS_WEEKLY, RUNS_MONTHLY, SOFT_BOUNCE, HARD_BOUNCE, INBOUND_MAIL_EVENT
+	TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, DEAL_IS_ADDED, DEAL_IS_DELETED, DEAL_MILESTONE_IS_CHANGED, ADD_SCORE, STRIPE_CHARGE_EVENT, SHOPIFY_EVENT, RUNS_DAILY, RUNS_WEEKLY, RUNS_MONTHLY, SOFT_BOUNCE, HARD_BOUNCE, INBOUND_MAIL_EVENT, EMAIL_OPENED, EMAIL_LINK_CLICKED, EVENT_IS_ADDED, UNSUBSCRIBED, FORM_SUBMIT, INBOUND_CALL, OUTBOUND_CALL
     };
 
     /**
      * Trigger type.
      */
     public Type type;
+
+    @NotSaved(IfDefault.class)
+    public String email_tracking_type = "ANY";
+
+    @NotSaved(IfDefault.class)
+    public Long email_tracking_campaign_id = null;
+
+    @NotSaved(IfDefault.class)
+    public String custom_link_clicked = null;
 
     /**
      * Campaign id of a campaign with respect to trigger. Campaign name can be
@@ -117,6 +126,18 @@ public class Trigger
      */
     @NotSaved(IfDefault.class)
     public Long contact_filter_id = null;
+
+    @NotSaved(IfDefault.class)
+    public String event_owner_id = "ANY";
+
+    @NotSaved(IfDefault.class)
+    public String event_type = "ANY";
+
+    @NotSaved(IfDefault.class)
+    public String call_disposition = null;
+    
+    @NotSaved(IfDefault.class)
+    public String trigger_form_event = null;
 
     /**
      * Initialize DataAccessObject.

@@ -129,9 +129,11 @@
 			<h1>
 			Welcome to Agile CRM
 			<div class="pull right">
-            <small style="font-size:0.5em; ">Last login : <span id="last-login-time" title="{{time_sec}}">{{time_format}}</span></small>
+            <small style="font-size:0.5em; ">Last login :  <time id="last-login-time"  value="{{time_format}}" datetime="{{epochToHumanDate "" time_format}}">{{epochToHumanDate "ddd mmm dd yyyy" time_format}}</time></small>
+
         	</div>
 			</h1>
+			<span style="background-color: rgb(249, 237, 190); border: 1px solid rgb(240, 195, 109); border-radius: 2px; display: inline-block; position: absolute; text-align: center; float: right; margin-left: 32%; padding: 3px 16px; margin-top: -69px;">Try the <a href="#portlets" style="color: #222222">new Dashboard</a> (beta).</span>
 		</div>
 	</div>
 </div>
@@ -181,6 +183,7 @@
 							</a>
 						</li>
 						{{/hasMenuScope}}
+						{{#hasMenuScope "ACTIVITY"}}
 						<li>
 							<a href="#activities" title="" data-original-title="">
 								<div style="padding:20px 13px 10px;">
@@ -189,6 +192,7 @@
 									Activities
 							</a>
 						</li>
+						{{/hasMenuScope}}
 						<li>
 							<a href="#user-prefs" title="" data-original-title="">
 								<div style="padding:20px 13px 10px;">

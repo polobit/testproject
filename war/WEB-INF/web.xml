@@ -368,6 +368,14 @@
         <url-pattern>/twilioiostatuscallback</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>TwilioIOTwiml</servlet-name>
+        <servlet-class>com.thirdparty.twilio.TwilioIOTwiml</servlet-class>
+    </servlet> 
+    <servlet-mapping>
+        <servlet-name>TwilioIOTwiml</servlet-name>
+        <url-pattern>/twiml</url-pattern>
+    </servlet-mapping>
     
 	<servlet>
 		<servlet-name>ForgotDomain</servlet-name>
@@ -479,6 +487,16 @@
 	<filter-mapping>
 		<filter-name>PHPAPIFilter</filter-name>
 		<url-pattern>/core/php/*</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>WebhooksFilter</filter-name>
+		<filter-class>com.agilecrm.filter.WebhooksFilter</filter-class>
+	</filter>
+		
+	<filter-mapping>
+		<filter-name>WebhooksFilter</filter-name>
+		<url-pattern>/core/hook/*</url-pattern>
 	</filter-mapping>
 
 	<filter>
@@ -757,4 +775,14 @@
 		<servlet-name>WebEventCalendar</servlet-name>
 		<url-pattern>/calendar/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>NormalInstantiator</servlet-name>
+		<servlet-class>com.agilecrm.test.NormalIntantiator</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>NormalInstantiator</servlet-name>
+		<url-pattern>/normal-instantiator</url-pattern>
+	</servlet-mapping>
 </web-app>
+

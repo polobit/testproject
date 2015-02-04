@@ -102,7 +102,7 @@
 									</a>
 									</span>{{else}} {{#if_equals subtype "FACEBOOK"}} <span
 										style="margin-right: 5px"><a target="_blank"
-										href="https://www.facebook.com/{{getFacebookURL value}}/"
+										href="{{buildFacebookProfileURL value}}"
 										style="text-decoration: none"> <i
 											class="{{get_social_icon "
 											FACEBOOK"}}" style="font-size: 1.4em !important"></i>
@@ -111,7 +111,7 @@
 
 								{{#if_equals subtype "GOOGLE-PLUS"}} <span
 										style="margin-right: 5px"><a target="_blank"
-										href="https://plus.google.com/{{value}}/"
+										href="https://plus.google.com/{{getTwitterHandleByURL value}}/"
 										style="text-decoration: none"> <i
 											class="{{get_social_icon "
 											GOOGLE-PLUS"}}" style="font-size: 1.4em !important"></i>
@@ -326,7 +326,11 @@
 				<div class="tab-pane" id="cases"><img src="img/21-0.gif"></img></div>
 				<div class="tab-pane" id="campaigns"><img src="img/21-0.gif"></img></div>
 				<div class="tab-pane" id="stats"><img src="img/21-0.gif"></img></div>
-				<div class="tab-pane" id="mail"><img src="img/21-0.gif"></img></div>
+				<div class="tab-pane" id="mail" style="min-height: 20em">
+					<!-- <img src="img/21-0.gif"></img> -->
+					<div id="mail-account-types"  style="display:none"></div>
+					<div id="mails"></div>
+			    </div>
 				<div class="tab-pane" id="documents"><img src="img/21-0.gif"></img></div>
 			</div>
 		</div>
@@ -382,11 +386,7 @@
 									<i class="icon icon-phone" style="font-size: 16px;padding-left: 0px;padding-top: 0px;position: relative;top:0px;left:0px;margin-right:7px;"></i>
 									</div>
 									<div class="pull-left contact-rightpanel-ellipsis" style="font-size:13px;margin-bottom:4px;">
-                                        <a href='#' class="contact-make-sip-call" style="display:none;" 
-                                           fname="{{getCurrentContactProperty "first_name"}}" 
-                                           lname="{{getCurrentContactProperty "last_name"}}" 
-                                           image="{{getCurrentContactProperty "image"}}" 
-                                           phone="{{value}}">
+                                        <a href='#' class="contact-make-sip-call" style="display:none;" phone="{{value}}">
                                            {{value}}
                                         </a>            
                                         <a href='#' class="contact-make-twilio-call" style="display:none;"                                           
@@ -426,7 +426,7 @@
 											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label">{{subtype}}</span> {{/if}}
 										</div>
 
-<div class="clearfix aaa"></div>
+<div class="clearfix"></div>
 									{{/each}}
 									</div>
 									</div>
@@ -470,17 +470,17 @@
 									<div class="clearfix"></div>
 
  									{{#property_is_exists "address" properties}}
-										<div >
-											{{#address_Element properties}}{{/address_Element}}</div>
-
-										<div class="pull-left row-fluid" style="margin-left:27px;margin-top:12px;width:245px;margin-bottom:7px;">
+										<div >{{#address_Element properties}}{{/address_Element}}</div>
+                                        <div class="clearfix"></div>
+										
+                                        <div class="pull-left" style="margin-left:27px;margin-top:12px;width:245px;margin-bottom:7px;">
 											<div id="map" style="width:auto; height: 200px; display: none; margin:0px 0px 0px;">
 											</div>
-										</div>
-
-
-
-                            	
+                                            <div id="contacts-local-time" style="display:none;font-size: 11px;">                                             
+                                               <div class="contacts-time" style="width:89%"></div>                                               
+                                            </div>
+										</div> 
+                           	            <div class="clearfix"></div>                                        
 									{{/property_is_exists}}
 
 							

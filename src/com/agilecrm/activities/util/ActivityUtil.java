@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.Call;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
@@ -348,7 +349,7 @@ public class ActivityUtil
 			obj.put("contactid", contactids.get(i));
 			obj.put("contactname", contactnames.get(i));
 			System.out.println("ContactIds  " + contactids.get(i) + "contact names   "
-				+ contactnames.get(i));
+			        + contactnames.get(i));
 			arr.put(obj);
 
 			obj = new JSONObject();
@@ -560,10 +561,21 @@ public class ActivityUtil
 	Map<String, Object> searchMap = new HashMap<String, Object>();
 	if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL"))
 	    searchMap.put("entity_type", entitytype);
-	if(entitytype.equalsIgnoreCase("CALL"))
-		searchMap.put("activity_type", entitytype);
+	if (entitytype.equalsIgnoreCase("CALL"))
+	    searchMap.put("activity_type", entitytype);
 	if (userid != null)
 	    searchMap.put("user", new Key<DomainUser>(DomainUser.class, userid));
+
+	if (max != 0)
+	    return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
+
+	return dao.listByProperty(searchMap);
+    }
+
+    public static List<Activity> getActivitites(Long entityId, int max, String cursor)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("entity_id", entityId);
 
 	if (max != 0)
 	    return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
@@ -657,8 +669,8 @@ public class ActivityUtil
 	    JSONObject js = new JSONObject(new Gson().toJson(obj));
 	    JSONArray jsn = js.getJSONArray("contact_ids");
 	    List<Contact> contacts = oldobj.getContacts();
-
-	    getDealRelatedContacts(contacts, jsn, obj);
+	    if (jsn != null && (jsn.length() != contacts.size()))
+		getDealRelatedContacts(contacts, jsn, obj);
 
 	}
 	catch (Exception e)
@@ -840,8 +852,8 @@ public class ActivityUtil
 		if (!obj.start.equals(oldobj.start))
 		{
 		    Object[] mapvalue = new Object[3];
-		    mapvalue[0] = getTimeFromEppoch(obj.start);
-		    mapvalue[1] = getTimeFromEppoch(oldobj.start);
+		    mapvalue[0] = obj.start;
+		    mapvalue[1] = oldobj.start;
 		    mapvalue[2] = "start_date";
 		    eventmap.put("start_date", mapvalue);
 
@@ -851,8 +863,8 @@ public class ActivityUtil
 		{
 
 		    Object[] mapvalue = new Object[3];
-		    mapvalue[0] = getTimeFromEppoch(obj.end);
-		    mapvalue[1] = getTimeFromEppoch(oldobj.end);
+		    mapvalue[0] = obj.end;
+		    mapvalue[1] = oldobj.end;
 		    mapvalue[2] = "end_date";
 		    eventmap.put("end_date", mapvalue);
 
@@ -886,8 +898,8 @@ public class ActivityUtil
 
 	    List<Contact> contacts = oldobj.getContacts();
 	    List<String> old_cont_ids = getContactIds(contacts);
-
-	    getEventRelatedContacts(contacts, jsn, obj);
+	    if (jsn != null && (jsn.length() != contacts.size()))
+		getEventRelatedContacts(contacts, jsn, obj);
 	}
 	catch (Exception e)
 	{
@@ -920,8 +932,8 @@ public class ActivityUtil
 	    if (!oldobj.due.equals(obj.due))
 	    {
 		Object[] mapvalue = new Object[3];
-		mapvalue[0] = getTimeFromEppoch(obj.due);
-		mapvalue[1] = getTimeFromEppoch(oldobj.due);
+		mapvalue[0] = obj.due;
+		mapvalue[1] = oldobj.due;
 		mapvalue[2] = "due_date";
 		taskmap.put("due", mapvalue);
 
@@ -993,8 +1005,8 @@ public class ActivityUtil
 
 	    List<Contact> contacts = oldobj.getContacts();
 	    List<String> old_cont_ids = getContactIds(contacts);
-
-	    getTaskRelatedContacts(contacts, jsn, obj);
+	    if (jsn != null && (jsn.length() != contacts.size()))
+		getTaskRelatedContacts(contacts, jsn, obj);
 	}
 	catch (Exception e)
 	{
@@ -1277,60 +1289,155 @@ public class ActivityUtil
 	}
 	return list;
     }
-    
-    /**
-     * 
-     * @author Purushotham
-     * @created 28-Nov-2014
-     *
-     */
-    public static void createLogForCalls(String serviceType,String toOrFromNumber, String callType, String callStatus, String callDuration)
+
+    public static void createLogForCalls(String serviceType, String toOrFromNumber, String callType, String callStatus,
+	    String callDuration)
     {
-	
+
 	// Search contact
 	if (toOrFromNumber != null)
 	{
 	    Contact contact = ContactUtil.searchContactByPhoneNumber(toOrFromNumber);
 	    System.out.println("contact: " + contact);
 	    if (contact != null)
-	    {    	
-	    	String calledToName = "";
-	       	List<ContactField> properties = contact.properties;
-	    	for (ContactField f : properties){
-	    		System.out.println("\t" + f.name + " - " + f.value);
-	    		if(f.name.equals(contact.FIRST_NAME)) {
-	    			calledToName += f.value;
-	    		}
-	    		if(f.name.equals(contact.LAST_NAME)) {
-	    			calledToName += " " + f.value;
-	    		}
-	    	}
-	    	
-	    	Activity activity = new Activity();
-			activity.activity_type = ActivityType.CALL;
-			activity.custom1 = serviceType;
-			activity.custom2 = callType;
-			activity.custom3 = callStatus;
-			activity.custom4 = callDuration;
-			activity.label = calledToName;
-			activity.entity_type = EntityType.CONTACT;
-			activity.entity_id = contact.id;
-			activity.save();
-	    } else {
-	    	Activity activity = new Activity();
-			activity.activity_type = ActivityType.CALL;
-			activity.custom1 = serviceType;
-			activity.custom2 = callType;
-			activity.custom3 = callStatus;
-			activity.custom4 = callDuration;
-			activity.label = toOrFromNumber;
-			activity.entity_type = null;
-			activity.entity_id = null;
-			activity.save();
+	    {
+		String calledToName = "";
+		List<ContactField> properties = contact.properties;
+		for (ContactField f : properties)
+		{
+		    System.out.println("\t" + f.name + " - " + f.value);
+		    if (f.name.equals(contact.FIRST_NAME))
+		    {
+			calledToName += f.value;
+		    }
+		    if (f.name.equals(contact.LAST_NAME))
+		    {
+			calledToName += " " + f.value;
+		    }
+		}
+
+		Activity activity = new Activity();
+		activity.activity_type = ActivityType.CALL;
+		activity.custom1 = serviceType;
+		activity.custom2 = callType;
+		activity.custom3 = callStatus;
+		activity.custom4 = callDuration;
+		activity.label = calledToName;
+		activity.entity_type = EntityType.CONTACT;
+		activity.entity_id = contact.id;
+		activity.save();
+	    }
+	    else
+	    {
+		Activity activity = new Activity();
+		activity.activity_type = ActivityType.CALL;
+		activity.custom1 = serviceType;
+		activity.custom2 = callType;
+		activity.custom3 = callStatus;
+		activity.custom4 = callDuration;
+		activity.label = toOrFromNumber;
+		activity.entity_type = null;
+		activity.entity_id = null;
+		activity.save();
 	    }
 	}
     }
-    
+
+    /**
+     * Gets list of activities based on entity id and min time and max time.
+     * 
+     * @param entityId
+     *            - Given entity id.
+     * @param minTime
+     *            - Given min time.
+     * @param maxTime
+     *            - Given max time.
+     * @return list of activities based on entity id and min time and max time.
+     */
+    public static List<Activity> getActivitiesByEntityId(Long entityId, long minTime, long maxTime)
+    {
+	return dao.ofy().query(Activity.class).filter("entity_id", entityId).filter("time >= ", minTime)
+
+	.filter("time <= ", maxTime).order("-time").list();
+    }
+
+    /**
+     * Gets list of activities based on activity type.
+     * 
+     * @param activityType
+     *            - Given activity type.
+     * 
+     * @return list of activities based on activity type.
+     */
+    public static List<Activity> getActivitiesByActivityType(String activityType, Long ownerId, long minTime,
+	    long maxTime)
+    {
+	return dao.ofy().query(Activity.class).filter("activity_type", activityType)
+		.filter("user", new Key<DomainUser>(DomainUser.class, ownerId)).filter("time >= ", minTime)
+		.filter("time <= ", maxTime).list();
+    }
+
+    /**
+     * 
+     * @author Purushotham
+     * @created 28-Nov-2014
+     *
+     */
+    public static void createLogForCalls(String serviceType, String toOrFromNumber, String callType, String callStatus,
+	    String callDuration, Contact contact)
+    {
+
+	// Search contact
+	if (toOrFromNumber != null)
+	{
+	    String twilioStatus = getEnumValueOfTwilioStatus(callStatus);
+	    if (twilioStatus != null)
+	    {
+
+		System.out.println("contact: " + contact);
+		if (contact != null)
+		{
+		    String calledToName = "";
+		    ContactField firstname = contact.getContactFieldByName("first_name");
+		    ContactField lastname = contact.getContactFieldByName("last_name");
+
+		    if (firstname != null)
+			calledToName += firstname.value;
+
+		    if (lastname != null)
+		    {
+			calledToName += " ";
+			calledToName += lastname.value;
+		    }
+
+		    Activity activity = new Activity();
+		    activity.activity_type = ActivityType.CALL;
+		    activity.custom1 = serviceType;
+		    activity.custom2 = callType;
+		    activity.custom3 = twilioStatus;
+		    activity.custom4 = callDuration;
+		    activity.label = calledToName;
+		    activity.entity_type = EntityType.CONTACT;
+		    activity.entity_id = contact.id;
+		    activity.save();
+		}
+		else
+		{
+		    Activity activity = new Activity();
+		    activity.activity_type = ActivityType.CALL;
+		    activity.custom1 = serviceType;
+		    activity.custom2 = callType;
+		    activity.custom3 = twilioStatus;
+		    activity.custom4 = callDuration;
+		    activity.label = toOrFromNumber;
+		    activity.entity_type = null;
+		    activity.entity_id = null;
+		    activity.save();
+		}
+	    }
+	}
+
+    }
 
     /**
      * Fetch list of activities based on the given filters sorted on the time of
@@ -1385,6 +1492,129 @@ public class ActivityUtil
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+
+    public static String getEnumValueOfTwilioStatus(String status)
+    {
+	if (status.equalsIgnoreCase("completed"))
+	{
+	    return Call.ANSWERED;
+	}
+	else if (status.equalsIgnoreCase("busy"))
+	{
+	    return Call.BUSY;
+	}
+	else if (status.equalsIgnoreCase("failed"))
+	{
+	    return Call.FAILED;
+	}
+	else if (status.equalsIgnoreCase("no-answer"))
+	{
+	    return Call.BUSY;
+	}
+	else if (status.equalsIgnoreCase("voicemail"))
+	{
+	    return Call.VOICEMAIL;
+	}
+	else
+	{
+	    return null;
+	}
+    }
+
+    /**
+     * gets list of activities based on entity type and entity id
+     * 
+     * @param entity_type
+     * @param entity_id
+     * @param max
+     * @param cursor
+     * @return
+     */
+    public static List<Activity> getActivitiesByEntityId(String entity_type, Long entity_id, Integer max, String cursor)
+    {
+	try
+	{
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    searchMap.put("entity_type", entity_type);
+	    searchMap.put("entity_id", entity_id);
+
+	    if (max != 0)
+		return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
+
+	    return dao.listByProperty(searchMap);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+    /**
+     * Gets list of activities based on entity id and min time and max time.
+     * 
+     * @param entityId
+     *            - Given entity id.
+     * @param minTime
+     *            - Given min time.
+     * @param maxTime
+     *            - Given max time.
+     * @return list of activities based on entity id and min time and max time.
+     */
+    public static List<Activity> getWonDealsActivityList(long minTime, long maxTime)
+    {
+    	List<String> activityTypeList=new ArrayList<String>();
+    	activityTypeList.add("DEAL_CLOSE");
+    	activityTypeList.add("DEAL_ADD");
+    	try 
+    	{
+    		if(minTime!=0)
+    			return dao.ofy().query(Activity.class).filter("entity_type", "DEAL").filter("activity_type in",activityTypeList).filter("time >= ", minTime)
+        		        .filter("time <= ", maxTime).order("-time").list();
+    		else
+    			return dao.ofy().query(Activity.class).filter("entity_type", "DEAL").filter("activity_type in",activityTypeList).filter("time <= ", maxTime)
+    					.order("-time").list();
+    		
+		} 
+    	catch (Exception e) 
+    	{
+			e.printStackTrace();
+			return null;
+		}
+    }
+
+    /**
+     * 
+     * @param entitytype
+     *            DEAL or TASK or Contact or etc
+     * @param userid
+     * @param max
+     * @param cursor
+     * @param starttime
+     *            time range
+     * @param endtime
+     * @return
+     */
+    public static List<Activity> getActivititesBasedOnSelectedConditon(String entitytype, Long userid, int max,
+	    String cursor, Long starttime, Long endtime)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL"))
+	    searchMap.put("entity_type", entitytype);
+	if (entitytype.equalsIgnoreCase("CALL"))
+	    searchMap.put("activity_type", entitytype);
+	if (starttime != null)
+	    searchMap.put("time >=", starttime);
+	if (endtime != null)
+	    searchMap.put("time <=", endtime);
+
+	if (userid != null)
+	    searchMap.put("user", new Key<DomainUser>(DomainUser.class, userid));
+
+	if (max != 0)
+	    return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
+
+	return dao.listByProperty(searchMap);
     }
 
 }

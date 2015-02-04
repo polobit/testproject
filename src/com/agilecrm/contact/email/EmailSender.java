@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.EmailGateway;
+import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
@@ -91,7 +92,7 @@ public class EmailSender
 	    accountEmailStats.save();
 
 	emailBillingRestriction.setBillingRestriction(billingRestriction);
-	
+
 	// Sets max and checks again. It will help adding tag
 	emailBillingRestriction.setMax();
 	emailBillingRestriction.check();
@@ -147,6 +148,14 @@ public class EmailSender
     {
 	if (billingRestriction != null)
 	    billingRestriction.one_time_emails_count = billingRestriction.one_time_emails_count - count;
+    }
+
+    public String getMandrillAPIKey()
+    {
+	if (emailGateway == null || !(emailGateway.email_api.equals(EMAIL_API.MANDRILL)))
+	    return null;
+
+	return emailGateway.api_key;
     }
 
     public void sendEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,

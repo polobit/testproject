@@ -1,0 +1,375 @@
+<div id="portletsContactsFilterBasedSettingsModal" class="modal hide fade">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3>Portlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsContactsFilterBasedSettingsForm" name="portletsContactsFilterBasedSettingsForm" method="post" >
+			<div class="control-group">
+				<label class="control-label">Filter</label>
+				<div class="controls" id="filterControls">
+					<select id="filter" name="filter" class="required">
+						
+					</select>
+					<img class="loading-img" src="img/21-0.gif"></img>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-primary" href="#portlets">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+
+<div id="portletsContactsEmailsOpenedSettingsModal" class="modal hide fade">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3>Portlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsContactsEmailsOpenedSettingsForm" name="portletsContactsEmailsOpenedSettingsForm" method="post" >
+			<div class="control-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required">
+						<option value="2-days">2 Days</option>
+						<option value="1-week">1 Week</option>
+						<option value="1-month">1 Month</option>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-primary" href="#portlets">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+
+<div id="portletsContactsEmailsSentSettingsModal" class="modal hide fade">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3>Portlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsContactsEmailsSentSettingsForm" name="portletsContactsEmailsSentSettingsForm" method="post" >
+			<div class="control-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required">
+						<option value="1-day">1 Day</option>
+						<option value="2-days">2 Days</option>
+						<option value="1-week">1 Week</option>
+						<option value="1-month">1 Month</option>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-primary" href="#portlets">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+
+<div id="portletsContactsGrowthGraphSettingsModal" class="modal hide fade">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3>Portlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsContactsGrowthGraphSettingsForm" name="portletsContactsGrowthGraphSettingsForm" method="post" >
+			<div class="control-group">
+				<label class="control-label">Tags <span class="field_req">*</span></label>
+				<div class="controls">
+					<div class="pull-left" id="portlet-tags">
+						<ul id="portlet-ul-tags" name="tags" class= "tagsinput tags"></ul>
+					</div>
+					<input name="tags" type="text" id="addPortletBulkTags" class="tags-typeahead multi-tags" placeholder="Enter tags separated by comma" onkeyup="hidePortletErrors(this);" />      
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Frequency</label>
+				<div class="controls">
+					<select name="frequency" id="frequency" class="required" style="width:100px">
+						<option value="daily">Daily</option>
+						<option value="weekly">Weekly</option>
+						<option value="monthly">Monthly</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Duration</label>
+				<div style="padding:4px 8px;box-shadow: 0 0px 2px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1);" class="pull-left" id="portlet-reportrange">
+					<i class="icon-calendar icon-large"></i>
+					<span id="range"></span>
+					<input type="hidden" id="start-date" name="start-date" />
+					<input type="hidden" id="end-date" name="end-date" />
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-primary" href="#portlets">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+
+<div id="portletsPendingDealsSettingsModal" class="modal hide fade">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3>Portlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsPendingDealsSettingsForm" name="portletsPendingDealsSettingsForm" method="post" >
+			<!-- <input type="text" class="hidden pull-right" /> -->
+			<div class="control-group">
+				<label class="control-label">Deals</label>
+				<div class="controls">
+					<select id="deals" name="deals" class="required">
+						<option value="all-deals">All Deals</option>
+						<option value="my-deals">My Deals</option>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-primary" href="#portlets">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+
+<div id="portletsDealsByMilestoneSettingsModal" class="modal hide fade">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3>Portlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsDealsByMilestoneSettingsForm" name="portletsDealsByMilestoneSettingsForm" method="post" >
+			<!-- <input type="text" class="hidden pull-right" /> -->
+			<div class="control-group" id="portletsDealsByMilestoneTrack" style="display:none;">
+				<label class="control-label">Track</label>
+				<div class="controls">
+					<select id="track" name="track" class="required">
+						
+					</select>
+					<img class="loading-img" src="img/21-0.gif"></img>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Deals</label>
+				<div class="controls">
+					<select id="deals" name="deals" class="required">
+						<option value="all-deals">All Deals</option>
+						<option value="my-deals">My Deals</option>
+					</select>
+				</div>
+			</div>
+			<!-- <div class="control-group">
+				<label class="control-label">Due Date</label>
+				<div class="controls">
+                    <span><input id="due-date" type="text" name="due-date" class="required date" placeholder="MM/DD/YYYY" /></span>
+                </div>
+			</div> -->
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-primary" href="#portlets">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+
+<div id="portletsDealsClosuresPerPersonSettingsModal" class="modal hide fade">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3>Portlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsDealsClosuresPerPersonSettingsForm" name="portletsDealsClosuresPerPersonSettingsForm" method="post" >
+			<input type="text" class="hidden pull-right" />
+			<div class="control-group">
+				<label class="control-label">Group by</label>
+				<div class="controls">
+					<select id="group-by" name="group-by" class="required">
+						<option value="number-of-deals">No. of Deals</option>
+						<option value="deal-value">Deal Value</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Due Date</label>
+				<div class="controls">
+                    <span><input id="due-date" type="text" name="due-date" class="required date" placeholder="MM/DD/YYYY" /></span>
+                </div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-primary" href="#portlets">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+
+<div id="portletsDealsWonSettingsModal" class="modal hide fade">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3>Portlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsDealsWonSettingsForm" name="portletsDealsWonSettingsForm" method="post" >
+			<div class="control-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required">
+						<option value="1-week" >1 Week</option>
+						<option value="1-month">1 Month</option>
+						<option value="3-months">3 Months</option>
+						<option value="6-months">6 Months</option>
+						<option value="12-months">12 Months</option>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-primary" href="#portlets">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+
+<div id="portletsDealsFunnelSettingsModal" class="modal hide fade">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3>Portlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsDealsFunnelSettingsForm" name="portletsDealsFunnelSettingsForm" method="post" >
+			<!-- <input type="text" class="hidden pull-right" /> -->
+			<div class="control-group" id="portletsDealsFunnelTrack" style="display:none;">
+				<label class="control-label">Track</label>
+				<div class="controls">
+					<select id="track" name="track" class="required">
+						
+					</select>
+					<img class="loading-img" src="img/21-0.gif"></img>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Deals</label>
+				<div class="controls">
+					<select id="deals" name="deals" class="required">
+						<option value="all-deals">All Deals</option>
+						<option value="my-deals">My Deals</option>
+					</select>
+				</div>
+			</div>
+			<!-- <div class="control-group">
+				<label class="control-label">Due Date</label>
+				<div class="controls">
+                    <span><input id="due-date" type="text" name="due-date" class="required date" placeholder="MM/DD/YYYY" /></span>
+                </div>
+			</div> -->
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-primary" href="#portlets">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+
+<div id="portletsDealsAssignedSettingsModal" class="modal hide fade">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3>Portlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsDealsAssignedSettingsForm" name="portletsDealsAssignedSettingsForm" method="post" >
+			<div class="control-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required">
+						<option value="1-day" >1 Day</option>
+						<option value="1-week">1 Week</option>
+						<option value="1-month">1 Month</option>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-primary" href="#portlets">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+
+<div id="portletsCallsPerPersonSettingsModal" class="modal hide fade">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3>Portlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsCallsPerPersonSettingsForm" name="portletsCallsPerPersonSettingsForm" method="post" >
+			<div class="control-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required">
+						<option value="1-day" >1 Day</option>
+						<option value="1-week">1 Week</option>
+						<option value="1-month">1 Month</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Graph on</label>
+				<div class="controls">
+					<select id="group-by" name="group-by" class="required">
+						<option value="number-of-calls" >No. of calls</option>
+						<option value="call-duration">Call duration</option>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-primary" href="#portlets">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+
+<div id="portletDeleteModal" class="modal hide fade">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3>Delete Portlet</h3>
+	</div>
+	<div class="modal-body">
+		Delete this portlet?
+	</div>
+	<div class="modal-footer">
+		<a id="" class="portlet-delete-modal save-modal btn btn-primary" href="#portlets">Yes</a>
+		<a id="portlet-delete-cancel-modal" href="#portlets" class="btn" data-dismiss="modal">No</a>
+	</div>
+</div>

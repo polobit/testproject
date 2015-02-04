@@ -34,6 +34,8 @@ import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
+import com.agilecrm.forms.Form;
+import com.agilecrm.portlets.Portlet;
 import com.agilecrm.reports.ActivityReports;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.shopify.ShopifyApp;
@@ -42,6 +44,7 @@ import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.ContactViewPrefs;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.OfficeEmailPrefs;
@@ -51,6 +54,7 @@ import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.voicemail.VoiceMail;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
@@ -107,6 +111,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	ObjectifyService.register(Note.class);
 	ObjectifyService.register(UserPrefs.class);
+	ObjectifyService.register(ContactViewPrefs.class);
 	ObjectifyService.register(AgileUser.class);
 	ObjectifyService.register(DomainUser.class);
 	ObjectifyService.register(Tag.class);
@@ -172,6 +177,14 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	// For all Activities
 	ObjectifyService.register(Activity.class);
+	
+	// Voice Mail
+	ObjectifyService.register(VoiceMail.class);
+
+	// For all Activities
+	ObjectifyService.register(Portlet.class);
+
+	ObjectifyService.register(Form.class);
 
     }
 
@@ -599,9 +612,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 			long startTime = System.currentTimeMillis();
 			agileCursor.count = query.count();
 			long endTime = System.currentTimeMillis();
-			if ((endTime - startTime) > 3 * 1000 && cache)
+			if ((endTime - startTime) > 1.5 * 1000 && cache)
 			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
-				    agileCursor.count, 2 * 60 * 60 * 1000);
+				    agileCursor.count, 1 * 60 * 60 * 1000);
 		    }
 
 		}

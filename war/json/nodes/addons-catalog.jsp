@@ -10,14 +10,14 @@
 
 <%
     // Get Catalog
-    String[] EMAIL_CATALOG = {"json/nodes/email/send_email.jsp","json/nodes/email/ab.js", "json/nodes/email/clicked.js","json/nodes/email/opened.js"};
-    String[] UTILITIES_CATALOG = {"json/nodes/common/close_case.js","json/nodes/common/change_deal_milestone.js","json/nodes/crm/has_deal.js","json/nodes/common/wait.js","json/nodes/common/wait_till.jsp","json/nodes/common/check_tags.js","json/nodes/crm/set_owner.jsp","json/nodes/crm/transfer.jsp","json/nodes/common/set_property.js" ,"json/nodes/common/Unsubscribe.js","json/nodes/common/time.js"};
-    String[] MOBILE_CATALOG = { "json/nodes/sms/sendmessage.js"};
+    String[] EMAIL_CATALOG = {"json/nodes/email/addons/send_email.jsp","json/nodes/email/addons/ab.js", "json/nodes/email/addons/clicked.js","json/nodes/email/addons/opened.js"};
+  	String[] UTILITIES_CATALOG = {"json/nodes/common/addons/wait.js","json/nodes/common/addons/wait_till.jsp","json/nodes/crm/addons/has_deal.js","json/nodes/common/addons/check_tags.js", "json/nodes/crm/addons/transfer.jsp","json/nodes/common/addons/time.js","json/nodes/developers/addons/condition.js","json/nodes/crm/addons/notify.js","json/nodes/crm/addons/check_campaign.js", "json/nodes/crm/addons/has_event.js"};
+    String[] MOBILE_CATALOG = { "json/nodes/sms/addons/sendmessage.js"};
 		   /* ,"json/nodes/sms/getmessage.js", "json/nodes/sms/menusms.js" };  */
-    String[] DEVELOPERS_CATALOG = { "json/nodes/developers/jsonio.js", "json/nodes/developers/condition.js"};
-    String[] CRM_CATALOG = {"json/nodes/crm/adddeal.jsp","json/nodes/crm/addnote.js","json/nodes/crm/addtask.jsp","json/nodes/common/add_case.js","json/nodes/crm/tags.js", "json/nodes/common/score.js", "json/nodes/crm/notify.js"};
-    String[] SOCIAL_CATALOG = {"json/nodes/social/tweet.js"};
-    String [] WEB_CATALOG = {"json/nodes/common/url.js"};
+    String[] DEVELOPERS_CATALOG = { "json/nodes/developers/addons/jsonio.js", "json/nodes/developers/addons/condition.js","json/nodes/developers/addons/set_property.js"};
+    String[] CRM_CATALOG = {"json/nodes/crm/addons/tags.js",  "json/nodes/crm/addons/set_owner.jsp","json/nodes/developers/addons/set_property.js", "json/nodes/common/addons/score.js","json/nodes/crm/addons/adddeal.jsp","json/nodes/crm/addons/addtask.jsp","json/nodes/crm/addons/addnote.js","json/nodes/common/addons/add_case.js","json/nodes/common/addons/change_deal_milestone.js","json/nodes/common/addons/close_case.js","json/nodes/common/addons/Unsubscribe.js","json/nodes/crm/addons/close_task.js", "json/nodes/crm/addons/add_event.js"};
+    String[] SOCIAL_CATALOG = {"json/nodes/social/addons/tweet.js"};
+    String[] WEB_CATALOG = {"json/nodes/common/addons/url.js"};
 
     // Download Each Catalog
     JSONArray jsonArray = new JSONArray();
@@ -33,7 +33,7 @@
     
     String domain = NamespaceManager.get();
     
-    try
+    /* try
 	{
         
 		String cachedAddons = (String) CacheUtil.getCache(domain + "_addons_" + type);
@@ -51,7 +51,7 @@
 	{
 	    e.printStackTrace();
 	    System.err.println("Exception occured while getting addon nodes from cache... " + e.getMessage());
-	}
+	} */
     
     
     if (type.equalsIgnoreCase("crm"))
@@ -78,27 +78,18 @@
     
     for (String path : target)
     {
-		// If jsp file, get executed contents
-        if(path.contains(".jsp"))
-        {
-            contents = HTTPUtil.accessURL(URL.replace(URI, "/") + path);
-            //System.out.println(contents);
-        }
-        else
-        {
-            // Read each path locally from context
-            File f = new File(path);
-		    is = new FileInputStream(f);
+        // Read each path locally from context
+        File f = new File(path);
+		is = new FileInputStream(f);
 		    
-		    contents = IOUtils.toString(is, "UTF-8");
-        }
+		contents = IOUtils.toString(is, "UTF-8");
         
 		try
 		{
-		    //JSONObject nodeData = new JSONObject(contents);
+		    JSONObject nodeData = new JSONObject(contents);
 
-		    jsonArray.put(new JSONObject().put("jsonsrc", "/" + path).put(
-			    "json", contents));
+		    jsonArray.put(new JSONObject().put("jsonsrc", "/" + nodeData.getString("path")).put(
+			    "json", nodeData));
 		}
 		catch(Exception e)
 		{
@@ -112,7 +103,7 @@
 		
     }
 
-    try
+   /*  try
    	{
    	    // Add nodes array to cache
    	 	CacheUtil.setCache(domain + "_addons_" + type, jsonArray.toString(), 3600000);
@@ -121,7 +112,7 @@
    	{
    	    e.printStackTrace();
    	    System.err.println("Exception occured while setting addon nodes in cache... " + e.getMessage());
-   	}
+   	} */
       
     out.println(jsonArray);
 %>

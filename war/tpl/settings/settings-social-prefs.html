@@ -16,7 +16,9 @@
 				{{else}} 
 					<i class="media-grid"> <img class="thumbnail" src="{{emailGravatarurl 50 email}}" width="40px" height="40px" /> </i>
 			   	{{/if}}
-			   	<label>{{name}}</label> <a href="#social-prefs" class="btn btn-danger delete" style="margin-top: 5px;">Disable</a>
+			   	<label style="margin:5px 0px 5px 0px">{{name}}</label> 
+			   	<a href="#social-prefs" class="btn btn-danger delete">Disable</a>
+			   	<a class="btn" href="#gmail/{{id}}">Settings</a>
 			</div>
 		{{else}}
 			<img class="data-sync-mailimg thumbnail" src="/img/icons/google-mail-sync.png">

@@ -97,6 +97,11 @@ function sort_tables(table) {
     		sort_schedule_updates(table);
     		return;
     	} 
+	    if(table_id == "contact-filter-list")
+    	{
+	    	sort_filters(table);
+    		return;
+    	}
 	    
     	basic_table_sort(table);
 
@@ -189,4 +194,13 @@ function sort_schedule_updates(table)
     }); 
 }
 
-
+function sort_filters(table)
+{
+	$(table).tablesorter({ 
+        headers: {
+        	0 : {sorter : false},
+        	1 : {sorter : 'text'},
+        	2 : {sorter : false},        	    	
+        } 
+    }); 
+}

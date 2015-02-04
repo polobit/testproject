@@ -127,7 +127,7 @@ public class StripeWebhookServlet extends HttpServlet
 			Stripe.apiVersion = "2012-09-24";
 
 			// Get event from stripe based on stripe event id
-			event = Event.retrieve(eventId, Globals.STRIPE_API_KEY);
+			event = Event.retrieve(eventId);
 			System.out.println("even : " + event);
 			/**
 			 * PAYMENT SUCCEEDED
@@ -311,7 +311,7 @@ public class StripeWebhookServlet extends HttpServlet
 		// description(namespace/domain)
 		String customerId = eventJSON.getJSONObject("data").getJSONObject("object").getString("customer");
 
-		Customer customer = Customer.retrieve(customerId, Globals.STRIPE_API_KEY);
+		Customer customer = Customer.retrieve(customerId);
 
 		// Description is set to namespace while saving
 		String namespace = customer.getDescription();
@@ -479,7 +479,7 @@ public class StripeWebhookServlet extends HttpServlet
 			String customerId = new JSONObject(stripeJSONString).getString("customer");
 
 			// Retrieves Object customer object from stripe, based on customerId
-			customer = Customer.retrieve(customerId, Globals.STRIPE_API_KEY);
+			customer = Customer.retrieve(customerId);
 			com.stripe.model.Subscription subscription = customer.getSubscription();
 
 			if (STRIPE_INVOICE_PAYMENT_SUCCEEDED.equals(event.getType()))
