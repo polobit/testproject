@@ -583,7 +583,7 @@ public class DomainUserUtil
      * Returns list of User Keys
      * @return List
      */
-    public static List<Key<DomainUser>> getDomainUserKeys()
+    public static List<Key<DomainUser>> getDomainUserKeys(String domain)
     {
 	String oldnamespace = NamespaceManager.get();
 
@@ -591,7 +591,10 @@ public class DomainUserUtil
 	
 	try
 	{
-	    return dao.listAllKeys();
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    searchMap.put("domain", domain);
+	    
+	    return dao.listKeysByProperty(searchMap);
 	}
 	finally
 	{

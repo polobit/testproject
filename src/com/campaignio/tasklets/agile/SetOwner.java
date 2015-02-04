@@ -16,6 +16,7 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
 /**
@@ -108,7 +109,7 @@ public class SetOwner extends TaskletAdapter
     private String getNextOwnerUsingRoundRobin(String campaignId)
     {
 	// Fetch keys by default in keys order
-	List<Key<DomainUser>> userKeys = DomainUserUtil.getDomainUserKeys();
+	List<Key<DomainUser>> userKeys = DomainUserUtil.getDomainUserKeys(NamespaceManager.get());
 
 	// Get previous Owner key assigned
 	Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(campaignId));
