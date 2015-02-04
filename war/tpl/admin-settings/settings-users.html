@@ -13,7 +13,7 @@
             <table class="table table-striped showCheckboxes" url="core/api/users/bulk" style="overflow:scroll;">
                 <thead>
                     <tr>
-						<th></th>
+						
                         <th>User Name</th>
                         <th>User Email</th>
                         <th>Created On</th>
@@ -28,14 +28,13 @@
 </script>
 <script id="admin-settings-users-model-template" type="text/html">
     <td class='data' data='{{id}}'>
-	<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:5em;overflow:hidden;">
+	<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:5em;overflow:hidden;" class="pull-left">
 	   {{#if ownerPic}}
         <img class="thumbnail" src="{{ownerPic}}" width="40px" height="40px" title="{{name}}" />
 	   {{else}}
 		<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{name}}" />
        {{/if}}
     </div>
-	</td><td>
 	<div style='text-overflow:ellipsis;width:9em;overflow:hidden;'>{{name}}</div></td>
     <td>
         <div style='height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:10em;overflow:hidden;'>
