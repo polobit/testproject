@@ -30,9 +30,13 @@ $(function(){
 		var value = eventsView.collection.get(id).toJSON();
 		deserializeForm(value, $("#updateActivityForm"));
     	$("#updateActivityModal").modal('show');
+
     	$('.update-start-timepicker').val(fillTimePicker(value.start));
 
 		$('.update-end-timepicker').val(fillTimePicker(value.end));
+    	
+    	// Fills owner select element
+		populateUsersInUpdateActivityModal(value);
 	});
 	
 	$(".complete-task").die().live('click', function(e){

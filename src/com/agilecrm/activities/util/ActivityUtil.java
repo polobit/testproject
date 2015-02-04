@@ -349,7 +349,7 @@ public class ActivityUtil
 			obj.put("contactid", contactids.get(i));
 			obj.put("contactname", contactnames.get(i));
 			System.out.println("ContactIds  " + contactids.get(i) + "contact names   "
-				+ contactnames.get(i));
+			        + contactnames.get(i));
 			arr.put(obj);
 
 			obj = new JSONObject();
@@ -1390,7 +1390,6 @@ public class ActivityUtil
 	// Search contact
 	if (toOrFromNumber != null)
 	{
-
 	    String twilioStatus = getEnumValueOfTwilioStatus(callStatus);
 	    if (twilioStatus != null)
 	    {
@@ -1511,7 +1510,7 @@ public class ActivityUtil
 	}
 	else if (status.equalsIgnoreCase("no-answer"))
 	{
-	    return Call.NO_ANSWER;
+	    return Call.BUSY;
 	}
 	else if (status.equalsIgnoreCase("voicemail"))
 	{
@@ -1550,6 +1549,38 @@ public class ActivityUtil
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+    /**
+     * Gets list of activities based on entity id and min time and max time.
+     * 
+     * @param entityId
+     *            - Given entity id.
+     * @param minTime
+     *            - Given min time.
+     * @param maxTime
+     *            - Given max time.
+     * @return list of activities based on entity id and min time and max time.
+     */
+    public static List<Activity> getWonDealsActivityList(long minTime, long maxTime)
+    {
+    	List<String> activityTypeList=new ArrayList<String>();
+    	activityTypeList.add("DEAL_CLOSE");
+    	activityTypeList.add("DEAL_ADD");
+    	try 
+    	{
+    		if(minTime!=0)
+    			return dao.ofy().query(Activity.class).filter("entity_type", "DEAL").filter("activity_type in",activityTypeList).filter("time >= ", minTime)
+        		        .filter("time <= ", maxTime).order("-time").list();
+    		else
+    			return dao.ofy().query(Activity.class).filter("entity_type", "DEAL").filter("activity_type in",activityTypeList).filter("time <= ", maxTime)
+    					.order("-time").list();
+    		
+		} 
+    	catch (Exception e) 
+    	{
+			e.printStackTrace();
+			return null;
+		}
     }
 
     /**

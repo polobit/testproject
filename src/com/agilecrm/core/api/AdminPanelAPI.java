@@ -47,6 +47,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
+import com.stripe.model.Refund;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 
 @Path("/api/admin_panel")
@@ -450,7 +451,38 @@ public class AdminPanelAPI
 		}
 
 	}
+	// partial refund
+		@Path("/applypartialrefund")
+		@GET
+		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+		public Refund applyPartialRefund(@QueryParam("chargeid") String chargeId, @QueryParam("amount") Integer amount)
+				throws StripeException
+		{
+			String domain = NamespaceManager.get();
+			System.out.println(chargeId);
+			System.out.println(amount);
+			if (StringUtils.isEmpty(chargeId) || !domain.equals("admin"))
+			{
+				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+						.entity("Sorry you don't have privileges to access this page.").build());
+			}
 
+			try
+			{
+
+				Refund refund = StripeUtil.createPartialRefund(chargeId, amount);
+				return refund;
+
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+						.build());
+
+			}
+
+		}
 	// delete Subscription
 	@Path("/deletesubscription")
 	@DELETE
@@ -461,23 +493,6 @@ public class AdminPanelAPI
 
 	}
 
-	// get perticular invoice
-	@Path("/getinvoice")
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Invoice getInvoice(@QueryParam("d") String invoice_id)
-	{
-		try
-		{
-			return StripeUtil.getInvoice(invoice_id);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-
-		}
-	}
+	
 
 }

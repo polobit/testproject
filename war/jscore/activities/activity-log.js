@@ -21,7 +21,7 @@ function includeTimeAgo(element)
  */
 function updateActivty(params)
 {
-
+	console.log("entered into update activity function  "+new Date().getTime()+"  time with milliseconds "+new Date())
 	// Creates backbone collection view
 	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params, sortKey : 'time',
 		descending : true, templateKey : "activity-list-log", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 20,
@@ -40,6 +40,8 @@ function updateActivty(params)
 
 	// Renders data to activity list page.
 	$('#activity-list-based-condition').html(this.activitiesview.render().el);
+	
+	console.log("completed update activity function  "+new Date().getTime()+"  time with milliseconds "+new Date())
 
 }
 

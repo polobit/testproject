@@ -39,7 +39,7 @@ public class TaskReminder
 	for (String domain : domains)
 	{
 	    TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(domain);
-	    Queue queue = QueueFactory.getDefaultQueue();
+	    Queue queue = QueueFactory.getQueue("due-task-reminder");
 	    queue.addAsync(TaskOptions.Builder.withPayload(taskReminderDeferredTask));
 	}
     }

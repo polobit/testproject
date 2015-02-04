@@ -185,6 +185,14 @@ public class Event extends Cursor
 	 */
 	List<Long> search_range = null;
 
+	/******************************** New Field ********************/
+	/**
+	 * AgileUser Id who created Filter.
+	 */
+	@NotSaved
+	public String owner_id = null;
+	/***************************************************************/
+
 	// Dao
 	public static ObjectifyGenericDao<Event> dao = new ObjectifyGenericDao<Event>(Event.class);
 
@@ -276,6 +284,14 @@ public class Event extends Cursor
 			}
 
 			this.contacts = null;
+		}
+
+		// Saves domain user key
+		if (owner_id != null)
+		{
+			AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(Long.parseLong(owner_id));
+			if (agileUser != null)
+				this.owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
 		}
 
 		// Create owner key

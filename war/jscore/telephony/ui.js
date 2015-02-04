@@ -45,7 +45,7 @@ $(function()
 			User_Number = "sip:farah@sip2sip.info";
 
 			// Display
-			showCallNotyPopup("outgoing", "confirm", '<i class="icon icon-phone"></i><b>Calling :</b><br> ' + User_Name + "  " + User_Number + "<br>", false);
+			showCallNotyPopup("outgoing", "confirm", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Calling </b>' + User_Number +'<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', false);
 		}
 	});
 
@@ -58,8 +58,7 @@ $(function()
 		e.preventDefault();
 
 		// Get details from UI
-		var name = $(this).attr('fname') + " " + $(this).attr('lname');
-		var image = $(this).attr('image');
+		var userid = $(this).attr('userid');
 		var phone = $(this).attr('phone');
 
 		// Check number is available.
@@ -72,13 +71,17 @@ $(function()
 		// SIP outgoing call.
 		if (makeCall(phone))
 		{
+			var currentContact = App_Contacts.contactDetailView.model.toJSON();
+			
 			// Assign details to set in noty.
-			User_Name = name;
-			User_Number = phone;
-			User_Img = image;
+			User_Name = getContactName(currentContact);
+			User_Number = removeBracesFromNumber(phone);
+			User_Img = getGravatar(currentContact.properties, 40);
+			User_ID = currentContact.id;
+			SIP_Call_Noty_IMG = addSipContactImg();
 
 			// Display
-			showCallNotyPopup("outgoing", "confirm", '<i class="icon icon-phone"></i><b>Calling : </b><br>' + User_Name + "   " + User_Number + "<br>", false);
+			showCallNotyPopup("outgoing", "confirm", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Calling  </b>' + User_Number +'<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', false);
 		}
 	});
 
@@ -90,7 +93,7 @@ $(function()
 		e.preventDefault();
 
 		// Display
-		showCallNotyPopup("hangup", "information", "<b>Call ended with : </b><br>" + User_Name + "   " + User_Number + "<br>", false);
+		showCallNotyPopup("hangup", "information", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><b>Call ended with  </b>' + User_Number + '<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', false);
 
 		// SIP hangup call.
 		hangupCall();
@@ -102,11 +105,13 @@ $(function()
 	$('.ignore').die().live("click", function(e)
 	{
 		// Display
-		showCallNotyPopup("ignored", "error", "<b>Ignored call : </b><br>" + User_Name + "   " + User_Number + "<br>", 5000);
+		showCallNotyPopup("ignored", "error", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><b>Ignored call  </b>'+ User_Number + '<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', 5000);
 
-		// SIP rehject call.
+		// SIP reject call.
 		Sip_Session_Call.reject(Config_Call);
 
+		Is_Ignore = true;
+		
 		// Remove html5 notification.
 		if (Notify_Call)
 		{
@@ -125,3 +130,35 @@ $(function()
 	});
 
 });
+
+//Add contact img in html for call noty text with contact url
+function addSipContactImg()
+{
+  console.log("User_Img:");
+  console.log(User_Img);
+	
+  Contact_Link = "";
+  
+  if(User_ID)
+	  Contact_Link = Contact_Link+"contact/"+User_ID;
+	  
+  // Default img 
+  var notyContactImg = '<a href="#'+Contact_Link+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+DEFAULT_GRAVATAR_url+'" style="display:inline;"></a>';
+	
+  // If contact have img
+  if(User_Img)
+     notyContactImg = '<a href="#'+Contact_Link+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+User_Img+'" style="display:inline;"></a>';
+	 
+  console.log("notyContactImg: "+notyContactImg);
+  return notyContactImg;     
+}
+
+// Remove <> from sip number
+function removeBracesFromNumber(number)
+{
+	console.log("number: "+number);
+	if(number.match("^<") && number.match(">$"))
+		number = number.substr(1, number.length-2)
+	
+	return number;
+}
