@@ -94,11 +94,12 @@ public class EmailOpenServlet extends HttpServlet
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set(namespace);
 
+	boolean isAgileUser = checkIfUserIsAgileUser(request, namespace);
+
 	try
 	{
-	    if (!checkIfUserIsAgileUser(request, namespace))
+	    if (!isAgileUser)
 	    {
-		System.out.println("He is not AgileUser");
 		if (!StringUtils.isBlank(emailId))
 		{
 		    chromeExtensionShowNotification(emailId, fromEmailId, subject, trackerId, false);
@@ -111,7 +112,6 @@ public class EmailOpenServlet extends HttpServlet
 	    }
 	    else
 	    {
-		System.out.println("He is Agile User");
 		// Shows notification, adds log & Trigger campaign
 		chromeExtensionShowNotification(emailId, fromEmailId, subject, trackerId, true);
 	    }
@@ -126,7 +126,7 @@ public class EmailOpenServlet extends HttpServlet
 	    NamespaceManager.set(oldNamespace);
 	}
 
-	if (!checkIfUserIsAgileUser(request, namespace))
+	if (!isAgileUser)
 	{
 	    // Interrupt Campaign cron tasks.
 	    if (!StringUtils.isBlank(campaignId) && !StringUtils.isBlank(trackerId))
@@ -347,24 +347,30 @@ public class EmailOpenServlet extends HttpServlet
      */
     private boolean checkIfUserIsAgileUser(HttpServletRequest servletRequest, String nameSpace)
     {
-	System.out.println("Namespace value :" + nameSpace);
-	Cookie[] cookies = servletRequest.getCookies();
-	if (cookies != null)
+	try
 	{
-	    for (Cookie cookie : cookies)
+	    Cookie[] cookies = servletRequest.getCookies();
+	    if (cookies != null)
 	    {
-		System.out.println("Cookie Name " + cookie.getName() + " Value " + cookie.getValue());
-		if (cookie.getName().equalsIgnoreCase("_agile_login_domain"))
+		for (Cookie cookie : cookies)
 		{
-		    String cookieValue = cookie.getValue();
-		    if (StringUtils.isNotBlank(cookieValue))
+		    if (cookie.getName().equalsIgnoreCase("_agile_login_domain"))
 		    {
-			cookieValue = cookieValue.trim();
-			if (cookieValue.equalsIgnoreCase(nameSpace))
-			    return true;
+			String cookieValue = cookie.getValue();
+			if (StringUtils.isNotBlank(cookieValue))
+			{
+			    cookieValue = cookieValue.trim();
+			    if (cookieValue.equalsIgnoreCase(nameSpace))
+				return true;
+			}
 		    }
 		}
 	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return false;
 	}
 	return false;
     }
