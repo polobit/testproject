@@ -42,6 +42,8 @@ window.onblur = function()
 	Focused = false;
 };
 
+window.onbeforeunload = unregisterAll();
+
 function initializeSocialSuite()
 {
 	// On close tab/window unregister all streams on server.
