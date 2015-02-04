@@ -11,6 +11,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.sf.json.JSON;
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -1263,16 +1266,37 @@ public class ContactUtil
 	 * @param {@Link Long} - minTime,{@Link Long} - maxTime
 	 * @return {@Link List<Contact>}
 	 */
-	public static List<Contact> getEmailsOpened(Long minTime,Long maxTime){
-		List<Contact> contactsList=null;
-		List<Long> contactIdsList=new ArrayList<Long>();
+	public static List<JSONObject> getEmailsOpened(Long minTime,Long maxTime){
+		//List<Contact> contactsList=null;
+		//List<Long> contactIdsList=new ArrayList<Long>();
+		JSONObject json = new JSONObject();
+		List<JSONObject> contactsList = new ArrayList<JSONObject>();
 		try {
 			List<ContactEmail> openedEmailsList=ContactEmailUtil.getEmailsOpened(minTime,maxTime);
 			for(ContactEmail  contactEmail : openedEmailsList){
-				contactIdsList.add(contactEmail.contact_id);
+				Contact contact = getContact(contactEmail.contact_id);
+				if(contact!=null){
+					json.put("id", contact.id);
+					json.put("type", contact.type);
+					net.sf.json.JSONArray jsonArray = new net.sf.json.JSONArray();
+					for(ContactField contactField : contact.properties){
+						JSONObject json1 = new JSONObject();
+						json1.put("type", contactField.type);
+						json1.put("name", contactField.name);
+						json1.put("subtype", contactField.subtype);
+						json1.put("value", contactField.value);
+						jsonArray.add(json1);
+					}
+					json.element("properties", jsonArray);
+				}
+				json.put("subject", contactEmail.subject);
+				json.put("openedTime", "1422988200");
+				
+				contactsList.add(json);
+				//contactIdsList.add(contactEmail.contact_id);
 			}
-			if(contactIdsList.size()!=0)
-				contactsList = dao.ofy().query(Contact.class).filter("id in", contactIdsList).limit(50).list();
+			/*if(contactIdsList.size()!=0)
+				contactsList = dao.ofy().query(Contact.class).filter("id in", contactIdsList).limit(50).list();*/
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

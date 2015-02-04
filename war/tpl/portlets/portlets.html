@@ -72,6 +72,63 @@
 	{{/if}}
 <!-- </div> -->
 </script>
+
+<script id="portlets-contacts-email-opens-model-template" type="text/html">
+	<td class="data" data="{{id}}">
+	<div class="row-fluid">
+        <div class="inline p-r-xxs h-auto">
+        	{{#if_contact_type "PERSON"}}
+        		<img class="portlet-roundimg img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  width="40px" height="40px" style="display:inline; width:30px; height:30px; " />
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<img class="portlet-roundimg" {{getCompanyImage "30" "display:inline;"}} />
+        	{{/if_contact_type}}
+    	</div>
+    	<div class="h-auto inline-block v-top text-ellipsis" style="width:70%;margin-left:7px;">
+        	{{#if_contact_type "PERSON"}}
+        		<span class="font-14">	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </span>
+        		<br />
+        		{{getPropertyValue properties "email"}}
+        	{{/if_contact_type}}
+  
+            {{#if_contact_type "COMPANY"}}
+        		{{getPropertyValue properties "name"}}</br>
+        		{{getPropertyValue properties "url"}}
+        	{{/if_contact_type}}
+	    </div>
+	</div>
+	</td>
+	<td>
+		<div class="inline-block v-top text-right" style="float:right;">
+			{{subject}}<br/>
+			<time class="time-ago" datetime="{{epochToHumanDate "" openedTime}}" style="border-bottom: dotted 1px #999;">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" openedTime}}</time>
+		</div>
+	</td>
+	<!-- <td>
+		<div class="fieldoverflow-ellipsis text-right">
+			<time class="time-ago" datetime="{{epochToHumanDate "" openedTime}}" style="border-bottom: dotted 1px #999;">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" openedTime}}</time>
+		</div> -->
+	</td>
+</script>
+
+<script id="portlets-contacts-email-opens-collection-template" type="text/html">
+{{#if this.length}}
+	<table id="contacts" class="table agile-ellipsis-dynamic" style="overflow-x: hidden;overflow-y:auto;">
+		<col width="45%">
+		<col width="40%">
+		<!-- <col width="24%"> -->
+		<tbody id="portlets-contacts-email-opens-model-list" class="portlets-contacts-emails-opened-model-list" style="word-break:normal!important;" route="contact/">
+		</tbody>
+	</table>
+{{else}}
+	<div class="portlet-error-message">
+		No Contacts Found
+	</div>
+{{/if}}
+</script>
+
 <script id="portlets-companies-model-template" type="text/html">
 	<td class="data" data="{{id}}">
         <div style="display:inline;padding-right:5px;height:auto;">
@@ -702,6 +759,32 @@
         <div class="portlet_body">
 			<div id="portlet_blog_sync_container" style="padding:10px;"></div>
 		</div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+<script id="portlets-tasksandevents-task-report-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
+				<ul class="portlet_header_control">
+					<!-- {{#if is_minimized}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-maximize icon-plus"></i></a></li>
+					{{else}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
+					{{/if}} -->
+                    <li><a href="#" id="{{id}}-settings" class="portlet-settings icon-wrench" data-toggle="modal"></a></li>
+                    <li><i id="{{id}}-close" class="icon-remove {{remove_spaces name}}-close" style="cursor:pointer;" onclick="deletePortlet(this);"></i></li>
+				</ul>
+			</div>
+			<div class="portlet_header_name">
+                <i class="{{get_portlet_icon name}} icon-1x"></i>
+                <span class="portlet-icon-divider"></span>
+				<span>
+					Task Report
+                </span>
+			</div>
+		</div>
+        <div class="portlet_body"></div>
      <div class="portlets" id="{{id}}">&nbsp;</div>
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>	

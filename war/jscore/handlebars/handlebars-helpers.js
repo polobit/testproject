@@ -3606,6 +3606,8 @@ $(function()
 			portlet_name = "Today's Tasks";
 		else if(p_name=='Agile CRM Blog')
 			portlet_name = "Agile CRM Blog";
+		else if(p_name=='Task Report')
+			portlet_name = "Task Report";
 		return portlet_name;
 	});
 	/**
@@ -3637,7 +3639,7 @@ $(function()
 			icon_name = 'icon-user';
 		else if(p_name=='Agenda')
 			icon_name = "icon-calendar";
-		else if(p_name=='Today Tasks')
+		else if(p_name=='Today Tasks' || p_name=='Task Report')
 			icon_name = "icon-tasks";
 		else if(p_name=='Agile CRM Blog')
 			icon_name = "icon-rss-sign";

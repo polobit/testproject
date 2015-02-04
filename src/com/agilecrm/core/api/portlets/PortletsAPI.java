@@ -202,7 +202,7 @@ public class PortletsAPI {
 	@Path("/portletEmailsOpened")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Contact> getPortletEmailsOpenedList(@QueryParam("duration") String duration)throws Exception {
+	public List<JSONObject> getPortletEmailsOpenedList(@QueryParam("duration") String duration)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("duration",duration);
 		return PortletUtil.getEmailsOpenedList(json);
@@ -241,8 +241,8 @@ public class PortletsAPI {
 	@Path("/portletAgenda")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Event> getPortletAgendaList()throws Exception {
-		return PortletUtil.getAgendaList();
+	public List<Event> getPortletAgendaList(@QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime)throws Exception {
+		return PortletUtil.getAgendaList(startTime,endTime);
 	}
 	/**
 	 * Gets Today Tasks portlet data
@@ -252,8 +252,8 @@ public class PortletsAPI {
 	@Path("/portletTodayTasks")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Task> getPortletTodayTasksList()throws Exception {
-		return PortletUtil.getTodayTasksList();
+	public List<Task> getPortletTodayTasksList(@QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime)throws Exception {
+		return PortletUtil.getTodayTasksList(startTime,endTime);
 	}
 	/**
 	 * Gets Deals By Milestone portlet data
@@ -320,12 +320,11 @@ public class PortletsAPI {
 	@Path("/portletGrowthGraph")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getPortletGrowthGraphData(@QueryParam("tags") String tags,@QueryParam("frequency") String frequency,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate)throws Exception {
+	public JSONObject getPortletGrowthGraphData(@QueryParam("tags") String tags,@QueryParam("frequency") String frequency,@QueryParam("duration") String duration)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("tags",tags);
 		json.put("frequency",frequency);
-		json.put("start-date",startDate);
-		json.put("end-date",endDate);
+		json.put("duration",duration);
 		
 		return PortletUtil.getGrowthGraphData(json);
 	}
@@ -365,13 +364,11 @@ public class PortletsAPI {
 	@Path("/portletTaskReport")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getTaskReportPortletData(@QueryParam("group-by") String groubBy,@QueryParam("split-by") String splitBy,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate)throws Exception {
+	public JSONObject getTaskReportPortletData(@QueryParam("group-by") String groubBy,@QueryParam("split-by") String splitBy)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("group-by",groubBy);
 		json.put("split-by",splitBy);
-		json.put("start-date",startDate);
-		json.put("end-date",endDate);
 		
-		return PortletUtil.getGrowthGraphData(json);
+		return PortletUtil.getTaskReportPortletData(json);
 	}
 }

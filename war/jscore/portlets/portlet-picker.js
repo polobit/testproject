@@ -114,6 +114,12 @@ function set_p_portlets(base_model){
 			$('.gridster > div:visible',this.el).html($(App_Portlets.agileCRMBlogView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
 		else
 			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.agileCRMBlogView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
+	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Task Report"){
+		App_Portlets.taskReportView = new Base_Model_View({ model : base_model, template : "portlets-tasksandevents-task-report-model", tagName : 'div' });
+		if($('.gridster > div:visible > div',this.el).length==0)
+			$('.gridster > div:visible',this.el).html($(App_Portlets.taskReportView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
+		else
+			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.taskReportView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
 	}
 	//var itemView = new Base_Model_View({ model : base_model, template : "portlets-model", tagName : 'div', });
 
@@ -158,8 +164,9 @@ function set_p_portlets(base_model){
 					addWidgetToGridster(base_model);
 				} });
 	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Emails Opened"){
-		App_Portlets.emailsOpened[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+base_model.get('settings').duration, templateKey : 'portlets-contacts', individual_tag_name : 'tr',
+		App_Portlets.emailsOpened[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+base_model.get('settings').duration, templateKey : 'portlets-contacts-email-opens', individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
+				displayTimeAgo(p_el);
 				addWidgetToGridster(base_model);
 			} });
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Pending Deals"){
@@ -177,13 +184,13 @@ function set_p_portlets(base_model){
 			} });
 		App_Portlets.dealsWon[parseInt(pos)].collection.fetch();
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Agenda"){
-		App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda', templateKey : 'portlets-events', individual_tag_name : 'tr',
+		App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda?start_time='+getNewDueDate("TODAY")+'&end_time='+getNewDueDate("TOMORROW"), templateKey : 'portlets-events', individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				addWidgetToGridster(base_model);
 			} });
 		App_Portlets.todayEventsCollection[parseInt(pos)].collection.fetch();
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Today Tasks"){
-		App_Portlets.tasksCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletTodayTasks', templateKey : 'portlets-tasks', individual_tag_name : 'tr',
+		App_Portlets.tasksCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletTodayTasks?start_time='+getNewDueDate("TODAY")+'&end_time='+getNewDueDate("TOMORROW"), templateKey : 'portlets-tasks', individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				addWidgetToGridster(base_model);
 			} });
@@ -197,7 +204,7 @@ function set_p_portlets(base_model){
 				&& base_model.get('name')!="Growth Graph" && base_model.get('name')!="Today Tasks" && base_model.get('name')!="Deals Assigned"
 					&& base_model.get('name')!="Calls Per Person" && base_model.get('name')!="Agile CRM Blog" && base_model.get('name')!="Agenda" 
 						&& base_model.get('name')!="Pending Deals" && base_model.get('name')!="Deals Won" && base_model.get('name')!="Filter Based" 
-							&& base_model.get('name')!="Emails Opened"){
+							&& base_model.get('name')!="Emails Opened" && base_model.get('name')!="Task Report"){
 			$(this).html(getRandomLoadingImg());
 			$(this).html($(itemCollection.render().el));
 			setPortletContentHeight(base_model);
@@ -438,7 +445,7 @@ function set_p_portlets(base_model){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 			
 			var selector=$(this).attr('id');
-			var url='/core/api/portlets/portletGrowthGraph?tags='+base_model.get('settings').tags+'&frequency='+base_model.get('settings').frequency+'&start-date='+base_model.get('settings')["start-date"]+'&end-date='+base_model.get('settings')["end-date"];
+			var url='/core/api/portlets/portletGrowthGraph?tags='+base_model.get('settings').tags+'&frequency='+base_model.get('settings').frequency+'&duration='+base_model.get('settings').duration;
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==406){
@@ -606,9 +613,59 @@ function set_p_portlets(base_model){
 			setPortletContentHeight(base_model);
 			
 			addWidgetToGridster(base_model);
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Task Report"){
+			$(this).attr('id','p-body-'+column_position+'-'+row_position);
+			
+			var selector=$(this).attr('id');
+			var url='/core/api/portlets/portletTaskReport?group-by='+base_model.get('settings')["group-by"]+'&split-by='+base_model.get('settings')["split-by"];
+			
+			var groupByList=[];
+			var splitByList=[];
+			var splitByNamesList=[];
+			
+			$('#'+selector).html(getRandomLoadingImg());
+			fetchPortletsGraphData(url,function(data){
+				groupByList=data["groupByList"];
+				splitByList=data["splitByList"];
+				
+				var series=[];
+				var text='';
+				var colors;
+				
+				$.each(splitByList,function(index,splitByData){
+					if(splitByNamesList.length==0)
+						$.each(splitByData,function(key,value){
+							splitByNamesList.push(key);
+						});
+				});
+				for(var i=0;i<splitByNamesList.length;i++){
+					var tempData={};
+					var splitByDataList=[];
+					$.each(splitByList,function(index,splitByData){
+						$.each(splitByData,function(key,value){
+							if(key==splitByNamesList[i])
+								splitByDataList.push(value);
+						});
+					});
+					tempData.name=splitByNamesList[i];
+					tempData.data=splitByDataList;
+					series[i]=tempData;
+				}
+				
+				text="Task Report";
+				
+				taskReportBarGraph(selector,groupByList,series,text);
+				
+				addWidgetToGridster(base_model);
+			});
+			
+			if(base_model.get('is_minimized'))
+				$(this).hide();
+			
+			setPortletContentHeight(base_model);
 		}
 	});
-	enablePortletTimeAndDates(base_model);
+	//enablePortletTimeAndDates(base_model);
 }
 
 /**
@@ -1099,4 +1156,40 @@ function getPortletsTimeConversion(diffInSeconds){
 	if(secs!=0)
 		duration += ' '+secs+'s';
 	return duration;
+}
+function taskReportBarGraph(selector,gropuByList,series,text){
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
+		$('#'+selector).highcharts({
+	        chart: {
+	            type: 'bar',
+	            marginRight: 20
+	        },
+	        title: {
+	            text: ''
+	        },
+	        xAxis: {
+	            categories: gropuByList
+	        },
+	        yAxis: {
+	            min: 0,
+	            title: {
+	                text: text
+	            },
+	            allowDecimals: false,
+	        },
+	        plotOptions: {
+	        	series: {
+	                stacking: 'normal'
+	            },
+	            column: {
+	                pointPadding: 0.2,
+	                borderWidth: 0
+	            }
+	        },
+	        series: series,
+	        exporting: {
+		        enabled: false
+		    }
+	    });
+	});
 }

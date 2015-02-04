@@ -107,13 +107,24 @@
 					</select>
 				</div>
 			</div>
-			<div class="control-group">
+			<!-- <div class="control-group">
 				<label class="control-label">Duration</label>
 				<div style="padding:4px 8px;box-shadow: 0 0px 2px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1);" class="pull-left" id="portlet-reportrange">
 					<i class="icon-calendar icon-large"></i>
 					<span id="range"></span>
 					<input type="hidden" id="start-date" name="start-date" />
 					<input type="hidden" id="end-date" name="end-date" />
+				</div>
+			</div>  -->
+			<div class="control-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required">
+						<option value="today" >Today</option>
+						<option value="yesterday">Yesterday</option>
+						<option value="1-week">Last 7 Days</option>
+						<option value="1-month">Last 30 Days</option>
+					</select>
 				</div>
 			</div>
 		</form>
@@ -349,6 +360,43 @@
 					<select id="group-by" name="group-by" class="required">
 						<option value="number-of-calls" >No. of calls</option>
 						<option value="call-duration">Call duration</option>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-primary" href="#portlets">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+
+<div id="portletsTaskReportSettingsModal" class="modal hide fade">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3>Portlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsTaskReportSettingsForm" name="portletsTaskReportSettingsForm" method="post" >
+			<div class="control-group">
+				<label class="control-label">Group by</label>
+				<div class="controls">
+					<select id="group-by-task-report" name="group-by" class="required">
+						<option value="user">User</option>
+						<option value="category">Category</option>
+						<option value="status">Status</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Split by</label>
+				<div class="controls">
+					<select id="split-by-task-report" name="split-by" class="required">
+						<option value="user" id="user">User</option>
+						<option value="category" id="category">Category</option>
+						<option value="status" id="status">Status</option>
 					</select>
 				</div>
 			</div>

@@ -342,11 +342,11 @@ function showPortletSettings(el){
 		setup_tags_typeahead();
 		
 		$("#frequency", elData).find('option[value='+ base_model.get("settings").frequency +']').attr("selected", "selected");
-		var range=""+(new Date(parseInt(base_model.get("settings")["start-date"])).format('mmmm d, yyyy'))+" - "+(new Date(parseInt(base_model.get("settings")["end-date"])).format('mmmm d, yyyy'));
-		$('#portlet-reportrange span').html(range);
-		$('#start-date').val(base_model.get("settings")["start-date"]);
-		$('#end-date').val(base_model.get("settings")["end-date"]);
-		
+		//var range=""+(new Date(parseInt(base_model.get("settings")["start-date"])).format('mmmm d, yyyy'))+" - "+(new Date(parseInt(base_model.get("settings")["end-date"])).format('mmmm d, yyyy'));
+		//$('#portlet-reportrange span').html(range);
+		//$('#start-date').val(base_model.get("settings")["start-date"]);
+		//$('#end-date').val(base_model.get("settings")["end-date"]);
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Pending Deals"){
 		$('#portletsPendingDealsSettingsModal').modal('show');
 		$('#portletsPendingDealsSettingsModal > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
@@ -464,6 +464,16 @@ function showPortletSettings(el){
 		elData = $('#portletsCallsPerPersonSettingsForm');
 		$("#group-by", elData).find('option[value='+ base_model.get("settings")["group-by"] +']').attr("selected", "selected");
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Task Report"){
+		$('#portletsTaskReportSettingsModal').modal('show');
+		$('#portletsTaskReportSettingsModal > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
+		$("#portlet-type",$('#portletsTaskReportSettingsModal')).val(base_model.get('portlet_type'));
+		$("#portlet-name",$('#portletsTaskReportSettingsModal')).val(base_model.get('name'));
+		
+		elData = $('#portletsTaskReportSettingsForm');
+		$("#group-by-task-report", elData).find('option[value='+ base_model.get("settings")["group-by"] +']').attr("selected", "selected");
+		$("#split-by-task-report", elData).find('option[value='+ base_model.get("settings")["split-by"] +']').attr("selected", "selected");
+		$('#'+base_model.get("settings")["group-by"]+'', elData).hide();
 	}
 	
 	if(base_model.get('name')=="Pending Deals" || base_model.get('name')=="Deals By Milestone" || base_model.get('name')=="Closures Per Person" || base_model.get('name')=="Deals Funnel"){
@@ -591,7 +601,10 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		else
 	        			App_Portlets.filteredContacts[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter+'&sortKey=-created_time', templateKey : 'portlets-contacts', sort_collection : false, individual_tag_name : 'tr', sortKey : "-created_time" });
 	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Emails Opened"){
-	        		App_Portlets.emailsOpened[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+data.get('settings').duration, templateKey : 'portlets-contacts', individual_tag_name : 'tr' });
+	        		App_Portlets.emailsOpened[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+data.get('settings').duration, templateKey : 'portlets-contacts-email-opens', individual_tag_name : 'tr', 
+	        			postRenderCallback : function(p_el){
+	        				displayTimeAgo(p_el);
+	        			} });
 	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Pending Deals"){
 	        		App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+data.get('settings').deals, templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
 	        			postRenderCallback : function(p_el){
@@ -608,7 +621,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        	if(data.get('name')!="Deals By Milestone" && data.get('name')!="Closures Per Person" && data.get('name')!="Deals Funnel" && data.get('name')!="Emails Sent" 
 	        		&& data.get('name')!="Growth Graph" && data.get('name')!="Deals Assigned" && data.get('name')!="Calls Per Person" 
 	        			&& data.get('name')!="Pending Deals" && data.get('name')!="Deals Won" && data.get('name')!="Filter Based" 
-							&& data.get('name')!="Emails Opened"){
+							&& data.get('name')!="Emails Opened" && data.get('name')!="Task Report"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(portletCollectionView.render().el));
 	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Filter Based"){
@@ -807,8 +820,8 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
 	        		
 	        		var selector=idVal;
-	    			var url='/core/api/portlets/portletGrowthGraph?tags='+data.get('settings').tags+'&frequency='+data.get('settings').frequency+'&start-date='+data.get('settings')["start-date"]+'&end-date='+data.get('settings')["end-date"];
-	    			
+	    			var url='/core/api/portlets/portletGrowthGraph?tags='+data.get('settings').tags+'&frequency='+data.get('settings').frequency+'&duration='+data.get('settings').duration;
+	    			$('#'+selector).html(getRandomLoadingImg());
 	    			fetchPortletsGraphData(url,function(data1){
 	    				if(data1.status==406){
 	    					// Show cause of error in saving
@@ -943,6 +956,50 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    				
 	    				callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountList,callsDurationList,text,colors);
 	    			});
+	        	}else if(data.get('portlet_type')=="TASKSANDEVENTS" && data.get('name')=="Task Report"){
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
+	        		
+	        		var selector=idVal;
+	        		var url='/core/api/portlets/portletTaskReport?group-by='+data.get('settings')["group-by"]+'&split-by='+data.get('settings')["split-by"];
+	        		
+	        		var groupByList=[];
+	    			var splitByList=[];
+	    			var splitByNamesList=[];
+	    			
+	    			$('#'+selector).html(getRandomLoadingImg());
+	    			fetchPortletsGraphData(url,function(data2){
+	    				groupByList=data2["groupByList"];
+	    				splitByList=data2["splitByList"];
+	    				
+	    				var series=[];
+	    				var text='';
+	    				var colors;
+	    				
+	    				$.each(splitByList,function(index,splitByData){
+	    					if(splitByNamesList.length==0)
+	    						$.each(splitByData,function(key,value){
+	    							splitByNamesList.push(key);
+	    						});
+	    				});
+	    				for(var i=0;i<splitByNamesList.length;i++){
+	    					var tempData={};
+	    					var splitByDataList=[];
+	    					$.each(splitByList,function(index,splitByData){
+	    						$.each(splitByData,function(key,value){
+	    							if(key==splitByNamesList[i])
+	    								splitByDataList.push(value);
+	    						});
+	    					});
+	    					tempData.name=splitByNamesList[i];
+	    					tempData.data=splitByDataList;
+	    					series[i]=tempData;
+	    				}
+	    				
+	    				text="Task Report";
+	    				
+	    				taskReportBarGraph(selector,groupByList,series,text);
+	    				
+	    			});
 	        	}
 	        	/*if(data.get('portlet_type')=="DEALS" && data.get('name')=="Deals Won" && portletCollectionView.collection.models.length!=0){
 	        		setTimeout(function(){
@@ -961,7 +1018,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        	if(data.get('is_minimized'))
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').hide();
 	        	
-	        	enablePortletTimeAndDates(data);
+	        	//enablePortletTimeAndDates(data);
 	        	/*head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function(){
 					var el = $(getTemplate('portlets', {}));
 					$("#content").html(el);
@@ -1007,15 +1064,13 @@ function initBlogPortletSync(el)
 					});
 
 }
-/*$('.portlet_header').live("mouseover",function(e){
-	if(gridster!=undefined)
-		gridster.enable();
+$('#group-by-task-report').live('change',function(e){
+	$('#split-by-task-report > option').each(function(e1){
+		if($(this).val()==$('#group-by-task-report').val())
+			$(this).hide();
+		else{
+			$(this).show();
+			$(this).attr("selected",true);
+		}
+	});
 });
-$('.portlet_body').live("mouseover",function(e){
-	if(gridster!=undefined)
-		gridster.disable();
-});*/
-/*$(window).resize(fsunction(){
-	if(gridster!=undefined)
-		set_up_portlets($('#portlets > div'),$('#portlets > div'));
-});*/
