@@ -106,7 +106,11 @@
         </div>
         <!-- Add button -->
         <div style="/*margin: 40px auto;	width: 50%;*/">
-            <a class="btn btn-primary" href="#activity-reports">Go</a>
+			{{hasMenuScopes 'ACTIVITY'}}
+            	<a class="btn btn-primary" href="#activity-reports">Go</a>
+			{{else}}
+				<span class="btn btn-primary disabled" >Go</span>
+			{{/hasMenuScopes}}
         </div>
     </div>
 </div>
