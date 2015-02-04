@@ -89,7 +89,7 @@
 
 
 <!-- Activity reports -->
-
+{{#hasMenuScope 'ACTIVITY'}}
 <div class="span4" style="margin-left:0px;">
     <div class="well" style="width:220px; height:200px; text-align: center;">
         <!-- Icon and Title -->
@@ -106,14 +106,15 @@
         </div>
         <!-- Add button -->
         <div style="/*margin: 40px auto;	width: 50%;*/">
-			{{hasMenuScopes 'ACTIVITY'}}
+			{{#hasMenuScope 'ACTIVITY'}}
             	<a class="btn btn-primary" href="#activity-reports">Go</a>
 			{{else}}
 				<span class="btn btn-primary disabled" >Go</span>
-			{{/hasMenuScopes}}
+			{{/hasMenuScope}}
         </div>
     </div>
 </div>
+{{/hasMenuScope}}
 </div>
 </div>
 
@@ -262,7 +263,7 @@
 </div>
 </div>
 
-
+{{#hasMenuScope 'ACTIVITY'}}
 <div class="row">
     <div class="span12">
         <div class="page-header">
@@ -301,5 +302,5 @@
 </div>
 </div>
 
-
+{{/hasMenuScope}}
 </script>

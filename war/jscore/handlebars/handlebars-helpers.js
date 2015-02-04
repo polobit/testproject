@@ -2508,6 +2508,17 @@ $(function()
 
 								return options.inverse(this);
 				});
+				
+				/**
+				 * Helps to check the permission of the user based on the ACL.
+				 */
+				Handlebars.registerHelper("hasMenuScope", function(scope_constant, options)
+						{
+										if (CURRENT_DOMAIN_USER.menu_scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.menu_scopes) != -1)
+														return options.fn(this);
+
+										return options.inverse(this);
+						});
 
 				Handlebars.registerHelper("canSyncContacts", function(options)
 				{

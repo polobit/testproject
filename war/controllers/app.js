@@ -89,7 +89,9 @@ function currentRoute(route)
 	// load_clickdesk_code();
 	 showUpgradeNoty();
 
-	 tight_acl.init_permissions();
+	 // Check the user permission to view the current route.
+	 if(CURRENT_DOMAIN_USER)
+		 tight_acl.init_permissions();
 }
 
 /**

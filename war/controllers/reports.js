@@ -18,9 +18,12 @@ var ReportsRouter = Backbone.Router.extend({
 	 */
 	reports : function()
 	{
-		$("#content").html(getTemplate('report-categories', {}));
-		$(".active").removeClass("active");
-		$("#reportsmenu").addClass("active");
+		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
+				{
+					$("#content").html(getTemplate('report-categories', {}));
+					$(".active").removeClass("active");
+					$("#reportsmenu").addClass("active");
+				});
 	},
 
 	/**
