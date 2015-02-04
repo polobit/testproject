@@ -392,10 +392,15 @@ var WorkflowsRouter = Backbone.Router
 						LHS = $("#LHS", el);
 						RHS = $("#RHS", el);
 
+						CALL = $('#CALL', el);
+						
 						// Chaining dependencies of input
 						// fields
 						// with jquery.chained.js
 						RHS.chained(LHS);
+						
+						// Chain Call trigger options
+						CALL.chained(LHS);
 
 					});
 
@@ -475,10 +480,15 @@ var WorkflowsRouter = Backbone.Router
 							LHS = $("#LHS", el);
 							RHS = $("#RHS", el);
 
+							CALL = $('#CALL', el);
+							
 							// Chaining dependencies of input
 							// fields
 							// with jquery.chained.js
 							RHS.chained(LHS);
+							
+							// Chain Call Trigger options
+							CALL.chained(LHS);
 
 						});
 
@@ -612,6 +622,12 @@ var WorkflowsRouter = Backbone.Router
 							$('#email-type', el).find('option[value=' + currentTrigger.toJSON()["email_type"] + ']').attr('selected', 'selected').trigger('change');
 							
 							populate_owners_in_trigger($('form#addTriggerForm', el), 'event-owner-id', currentTrigger.toJSON()["event_owner_id"]);
+						}
+						
+						//Inbound of Outbound call
+						if(type == 'INBOUND_CALL' || type == 'OUTBOUND_CALL')
+						{
+							populate_call_trigger_options($('form#addTriggerForm', el), currentTrigger.toJSON());	
 						}
 
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";

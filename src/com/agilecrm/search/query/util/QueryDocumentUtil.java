@@ -189,8 +189,8 @@ public class QueryDocumentUtil
 					if (rhs_new != null)
 					{
 						newQuery = lhs + " >= " + rhs;
-						newQuery = buildNestedCondition("AND", query, lhs + " <= " + rhs_new);
-						newQuery = "(" + newQuery + ")";
+						newQuery = buildNestedCondition("AND", newQuery, lhs + " <= " + rhs_new);
+						newQuery = "("+newQuery+")";
 						query = buildNestedCondition(joinCondition, query, newQuery);
 					}
 				}

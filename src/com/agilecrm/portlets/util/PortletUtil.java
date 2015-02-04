@@ -41,6 +41,16 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
+/**
+ * <code>PortletUtil</code> is the utility class to fetch portlets with
+ * respect to id, position.
+ * <p>
+ * The portlets data is retrieved based on portlet name and portlet type.
+ * </p>
+ * 
+ * @author Subrahmanyam
+ * 
+ */
 public class PortletUtil {
 	// Dao
 	private static ObjectifyGenericDao<Portlet> dao = new ObjectifyGenericDao<Portlet>(Portlet.class);
@@ -583,19 +593,25 @@ public class PortletUtil {
 			long callsDuration=0;
 			
 			List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
-			for(Activity activity : callActivitiesList){
-				if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.ANSWERED))
-					answeredCallsCount++;
-				else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
-					busyCallsCount++;
-				else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
-					failedCallsCount++;
-				else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
-					voiceMailCallsCount++;
-				if(activity.custom4!=null && !activity.custom3.equalsIgnoreCase(Call.VOICEMAIL) && !activity.custom4.equalsIgnoreCase(null))
-					callsDuration+=Long.valueOf(activity.custom4);
-				totalCallsCount++;
+			try{
+				for(Activity activity : callActivitiesList){
+					if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.ANSWERED))
+						answeredCallsCount++;
+					else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
+						busyCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
+						failedCallsCount++;
+					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
+						voiceMailCallsCount++;
+					if(activity.custom4!=null && !activity.custom3.equalsIgnoreCase(Call.VOICEMAIL) && !activity.custom4.equalsIgnoreCase(null) 
+							&& !activity.custom4.equalsIgnoreCase("null") && !activity.custom4.equalsIgnoreCase(""))
+						callsDuration+=Long.valueOf(activity.custom4);
+					totalCallsCount++;
+				}
+			}catch(Exception e){
+				e.printStackTrace();
 			}
+			
 			answeredCallsCountList.add(answeredCallsCount);
 			busyCallsCountList.add(busyCallsCount);
 			failedCallsCountList.add(failedCallsCount);

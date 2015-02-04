@@ -291,9 +291,9 @@ public class Contact extends Cursor
 	String fieldName = field == null ? contactField.name : field.name;
 	FieldType type = FieldType.CUSTOM;
 	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME) || fieldName.equals(EMAIL)
-	        || fieldName.equals(TITLE) || fieldName.equals(WEBSITE) || fieldName.equals(COMPANY)
-	        || fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE)
-	        || fieldName.equals(NAME))
+		|| fieldName.equals(TITLE) || fieldName.equals(WEBSITE) || fieldName.equals(COMPANY)
+		|| fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE)
+		|| fieldName.equals(NAME))
 	    type = FieldType.SYSTEM;
 
 	// If field is null then new contact field is added to properties.
@@ -384,6 +384,10 @@ public class Contact extends Cursor
 	    // Sets tags into tags, so they can be compared in
 	    // notifications/triggers with new tags
 	    oldContact.tags = oldContact.getContactTags();
+
+	    // Set the created time. This will help to restrict the user from
+	    // changing the created time through rest api.
+	    created_time = oldContact.created_time;
 	}
 
 	// Check for already existing email if any,
@@ -417,7 +421,6 @@ public class Contact extends Cursor
 
 	    }
 	}
-	
 
 	convertEmailToLower();
 
@@ -515,7 +518,7 @@ public class Contact extends Cursor
 	// If tags and properties length differ, contact is considered to be
 	// changed
 	if (contact.tags.size() != currentContactTags.size() || contact.properties.size() != properties.size()
-	        || contact.star_value != star_value || contact.lead_score != lead_score)
+		|| contact.star_value != star_value || contact.lead_score != lead_score)
 	    return true;
 
 	// Checks if tags are changed
@@ -932,7 +935,7 @@ public class Contact extends Cursor
     {
 	for (ContactField field : properties)
 	{
-	    if (StringUtils.equals(field.name, EMAIL) && field.value!=null)
+	    if (StringUtils.equals(field.name, EMAIL) && field.value != null)
 		field.value = (field.value).toLowerCase();
 
 	}
@@ -995,10 +998,10 @@ public class Contact extends Cursor
 			newCompany.type = Type.COMPANY;
 
 			/*
-		         * We already have the owner of contact contact, which
-		         * should also be owner of contact. Instead of fetching
-		         * key from session in prepersist we can use the same.
-		         */
+			 * We already have the owner of contact contact, which
+			 * should also be owner of contact. Instead of fetching
+			 * key from session in prepersist we can use the same.
+			 */
 			newCompany.setContactOwner(owner_key);
 			newCompany.save();
 
@@ -1155,7 +1158,7 @@ public class Contact extends Cursor
     public String toString()
     {
 	return "id: " + id + " created_time: " + created_time + " updated_time" + updated_time + " type: " + type
-	        + " tags: " + tags + " properties: " + properties;
+		+ " tags: " + tags + " properties: " + properties;
     }
 }
 

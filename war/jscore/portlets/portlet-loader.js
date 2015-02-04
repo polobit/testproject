@@ -20,12 +20,13 @@ function loadPortlets(el){
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
 	 */
 	if (!Portlets_View){
+		head.load("css/misc/agile-portlet.css");
 		// This flag is used to ensure portlet script are loaded only once in
 		// postrender. It is set to false after portlet setup is initialized
 		is_portlet_view_new = true;
-		Portlets_View = new Base_Collection_View({ url : '/core/api/portlets', sortKey : "row_position", restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
+		Portlets_View = new Base_Collection_View({ url : '/core/api/portlets', sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
 			postRenderCallback : function(portlets_el){
-				head.load("css/misc/agile-portlet.css","css/jquery.gridster.css", function(){
+				head.load("css/jquery.gridster.css", function(){
 					// If scripts aren't loaded earlier, setup is initialized
 					set_up_portlets(el, portlets_el);
 					if(Portlets_View.collection.length==0)
@@ -204,7 +205,7 @@ function showPortletIcons(el){
 	$(el).find('div.portlet_header_icons').show();
 
 	// Changes width of portlet name
-	$(el).find('div.portlet_header_name').css({ "width" : "40%" });
+	$(el).find('div.portlet_header_name').css({ "width" : "65%" });
 }
 /**
  * Expand the portlet header name width.
@@ -929,7 +930,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    					colors=['green','blue','red','violet'];
 	    				}else{
 	    					var tempData={};
-	    					tempData.name="Calls Duration";
+	    					tempData.name="Total Duration";
 	    					var callsDurationInMinsList = [];
 	    					$.each(callsDurationList,function(index,duration){
 	    						callsDurationInMinsList[index] = duration/60;
