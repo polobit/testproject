@@ -42,7 +42,7 @@ window.onblur = function()
 	Focused = false;
 };
 
-window.onbeforeunload = unregisterAll();
+window.onbeforeunload = unregisterAll;
 
 function initializeSocialSuite()
 {
