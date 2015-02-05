@@ -45,9 +45,15 @@ public class CronPullServlet extends HttpServlet
 
 	Queue queue = QueueFactory.getQueue(queueName);
 
+	System.out.println("campaign queue | Queue name :" + queueName);
+
 	// Get statistics
 	QueueStatistics qs = queue.fetchStatistics();
+
 	int tasksCount = qs.getNumTasks();
+
+	System.out.println("Statistics in queue : " + queue.getQueueName() + ", task count : " + tasksCount
+		+ "Fetch limit : " + FETCH_LIMIT);
 
 	if (tasksCount == 0)
 	{
@@ -59,8 +65,17 @@ public class CronPullServlet extends HttpServlet
 	if (tasksCount > FETCH_LIMIT)
 	{
 	    System.out.println("Running " + queueName + " tasks in backend...");
-
-	    PullQueueUtil.processTasksInBackend("/backend-pull", queueName);
+	    
+	    try
+	    {
+		PullQueueUtil.processTasksInBackend("/backend-pull", queueName);
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("exception raised to process task");
+		e.printStackTrace();
+	    }
+	    
 	}
 	else
 	{
