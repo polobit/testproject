@@ -11,11 +11,13 @@ import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
@@ -26,7 +28,9 @@ import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.MD5Util;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
@@ -200,9 +204,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	public String meeting_durations = "{\"15mins\":\"say hi\",\"30mins\":\"let's keep it short\",\"60mins\":\"let's chat\"}";
 
 	/**
-	 * Calendar URL of this Domain User
+	 * Calendar url of this domain User
 	 */
-	@NotSaved(IfDefault.class)
+	@NotSaved
 	public String calendar_url = null;
 
 	/**
@@ -679,7 +683,29 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		DomainUser domainuser = null;
 		// Stores created time in info_json
 		if (!hasInfo(CREATED_TIME))
-			setInfo(CREATED_TIME, new Long(System.currentTimeMillis() / 1000));
+		{
+			if (info_json_string == null)
+				setInfo(CREATED_TIME, new Long(System.currentTimeMillis() / 1000));
+			else
+			{
+				try
+				{
+					JSONObject obj = new JSONObject(info_json_string);
+					setInfo(CREATED_TIME, obj.getLong("created_time"));
+					if (obj.has("logged_in_time"))
+						setInfo(LOGGED_IN_TIME, obj.getLong("logged_in_time"));
+					if (obj.has("last_logged_in_time"))
+						setInfo(LAST_LOGGED_IN_TIME, obj.getLong("last_logged_in_time"));
+
+				}
+				catch (JSONException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		}
 
 		if (this.id != null)
 		{
@@ -688,6 +714,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			if (StringUtils.isEmpty(domainuser.schedule_id))
 			{
 				this.schedule_id = getScheduleid(domainuser.name);
+
 			}
 			else
 			{
@@ -703,8 +730,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			this.schedule_id = getScheduleid(this.name);
 		}
 
-		this.calendar_url = getCalendarURL(domainuser.name, this.schedule_id);
-		System.out.println();
 		// Stores password
 		if (!StringUtils.isEmpty(password) && !password.equals(MASKED_PASSWORD))
 		{
@@ -783,6 +808,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	{
 		try
 		{
+
+			this.calendar_url = getCalendarURL();
+
 			if (info_json != null)
 				info_json = new JSONObject(info_json_string);
 
@@ -937,12 +965,46 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	}
 
 	/**
+	 * Get link of owner image
 	 * 
-	 * @param name
-	 *            domainuser name
-	 * @return online schedule id
+	 * @return url of the image
+	 * @throws Exception
 	 */
-	public String getCalendarURL(String domainName, String schedule_id)
+	@XmlElement
+	public String getOwnerPic() throws Exception
+	{
+		AgileUser agileUser = null;
+		UserPrefs userPrefs = null;
+
+		try
+		{
+			// Get owner pic through agileuser prefs
+			if (id != null)
+				agileUser = AgileUser.getCurrentAgileUserFromDomainUser(id);
+
+			if (agileUser != null)
+				userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+
+			if (userPrefs != null)
+				return userPrefs.pic;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return "";
+	}
+
+	/**
+	 * 
+	 * @param domain
+	 *            Domain of the user
+	 * @param schedule_id
+	 *            Calendar schedule ID
+	 * @return Calendar URL
+	 */
+	public String getCalendarURL()
 	{
 
 		// local http://localhost:8888
@@ -950,10 +1012,10 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		// "https://"+domainUser.domain+"-dot-sandbox-dot-agilecrmbeta.appspot.com"
 		// version "https://"+domainUser.domain+".agilecrm.com"
 
-		String calendar_url = "https://" + domainName + "-dot-sandbox-dot-agilecrmbeta.appspot.com";
+		String calendar_url = VersioningUtil.getHostURLByApp(domain);
 
 		if (!StringUtils.isEmpty(schedule_id))
-			calendar_url += "/calendar/" + schedule_id;
+			calendar_url += "calendar/" + schedule_id;
 
 		return calendar_url;
 

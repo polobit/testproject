@@ -275,7 +275,7 @@ public class UsersAPI
 		// live "https://" + domainUser.domain + ".agilecrm.com";
 
 		user.schedule_id = scheduleid;
-		user.calendar_url = user.getCalendarURL(user.name, user.schedule_id);
+		user.calendar_url = user.getCalendarURL();
 		try
 		{
 			user.save();
