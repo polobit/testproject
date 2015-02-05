@@ -31,7 +31,7 @@ public class MergeFieldsUtil
 		// version "https://"+domainUser.domain+".agilecrm.com"
 
 		String schedule_id = domainUser.schedule_id;
-		String calendar_url = "https://" + domainUser.domain + ".agilecrm.com";
+		String calendar_url = "https://" + domainUser.domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com";
 
 		if (schedule_id == null)
 			schedule_id = domainUser.name;
