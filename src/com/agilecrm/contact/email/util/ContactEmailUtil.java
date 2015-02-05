@@ -609,7 +609,7 @@ public class ContactEmailUtil
 	public static List<ContactEmail> getEmailsOpened(Long minTime,Long maxTime){
 		List<ContactEmail> contactEmailsList=null;
 		try {
-			contactEmailsList = dao.ofy().query(ContactEmail.class).filter("email_opened_at >= ", minTime).filter("email_opened_at <= ", maxTime).filter("is_email_opened", true).list();
+			contactEmailsList = dao.ofy().query(ContactEmail.class).filter("email_opened_at >= ", minTime).filter("email_opened_at <= ", maxTime).filter("is_email_opened", true).order("-email_opened_at").list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
