@@ -314,7 +314,7 @@ function deserializeChainedSelect(form, el, el_self)
 			 * Chains dependencies of input fields with jquery.chained.js based
 			 * on the rule element
 			 */
-			chainFilters(rule_element, el);
+			chainFilters(rule_element);
 
 			$(parent_element).append(rule_element);
 			deserializeChainedElement(data, rule_element);
@@ -329,7 +329,7 @@ function deserializeChainedSelect(form, el, el_self)
 }
 
 function deserializeChainedElement(data, rule_element)
-{
+{	$(rule_element).removeClass('hide');
 	$.each(data, function(i, value)
 	{
 		var input_element = ($(rule_element).find('*[name="' + i + '"]').children())[0];
@@ -444,6 +444,9 @@ function deserializeChainedElementWebrule(data, rule_element)
 			// Selects the option
 			if ($(element).attr('value') == value)
 			{
+				if((value == "UNSUBSCRIBE_CAMPAIGN" || value == "ASSIGN_CAMPAIGN") && data['RHS']) {
+					$(element).attr('data', data['RHS']);
+				}
 				$(element).attr("selected", "selected");
 				$(input_element).trigger("change");
 				return;
@@ -519,6 +522,7 @@ function deserializeChainedSelect1(form, el, element)
 		var RHS_VALUE = filter.RHS;
 		var RHS_NEW_VALUE = filter.RHS_NEW;
 		var fieldName = LHS.replace(/ +/g, '_');
+		fieldName = fieldName.replace(/#/g, '\\#').replace(/@/g, '\\@');
 		var currentElemnt = $(element).find('#'+fieldName+'_div');
 		if(LHS == 'tags') {
 			$('#tags_div').parent().find('a').addClass('bold-text');
@@ -527,7 +531,7 @@ function deserializeChainedSelect1(form, el, element)
 				currentElemnt = $('#tags-lhs-filter-table').find("div.lhs-contact-filter-row:last")
 				$('#tags_div').prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 			} else {
-				var htmlContent = $('#tags-lhs-filter-table').find("div.hide").clone();
+				var htmlContent = $('#tags-lhs-filter-table').find("div.hide.master-tags-add-div").clone();
 				htmlContent.removeClass('hide').addClass('lhs-contact-filter-row');
 				addTagsDefaultTypeahead(htmlContent);
 				$(htmlContent).find("i.filter-tags-multiple-remove-lhs").css("display", "inline-block");
@@ -539,7 +543,8 @@ function deserializeChainedSelect1(form, el, element)
 		} else {
 			$(currentElemnt).prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 		}
-		$(currentElemnt).parent().find("a").addClass('bold-text');
+		$(currentElemnt).parent().find("a#lhs-filters-header").addClass('bold-text');
+		$(currentElemnt).find('a.clear-filter-condition-lhs').removeClass('hide');
 		$(currentElemnt).removeClass('hide');
 		$(currentElemnt).find('[name="CONDITION"]').val(CONDITION);
 		$(currentElemnt).find('[name="CONDITION"]').trigger('change');

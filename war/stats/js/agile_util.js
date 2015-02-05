@@ -67,15 +67,61 @@ function agile_cookieTags(tags, action)
  * @param button
  * @param url
  */
-function agile_formCallback(error, button, url, data)
+function agile_formCallback(error, button, url, agile_form, contact_id)
 {
-	if (data)
-		console.log("AgileCRM form error " + data.error);
-	error[1].innerHTML = error[0];
-	button.removeAttribute("disabled");
+	if (!error[0])
+	{
+		if (contact_id)
+		{
+			var form_name = document.getElementById("agile-form-data").innerHTML;
+			var trigger_url = agile_id.getURL() + "/formsubmit?id=" + agile_id.get() + "&contactid=" + encodeURIComponent(contact_id) + "&formname=" + encodeURIComponent(form_name);
+			agile_json(trigger_url);
+		}
+	}
+	else if (error[1])
+		error[1].innerHTML = error[0];
+
 	setTimeout(function()
 	{
-		error[1].innerHTML = "";
-		window.location.replace(url);
+		if (error[1])
+			error[1].innerHTML = "";
+
+		if (button)
+			button.removeAttribute("disabled");
+
+		if (!agile_form.getAttribute("action") || agile_form.getAttribute("action") == "#")
+			agile_form.setAttribute("action", url);
+		agile_form.submit();
 	}, 1500);
+}
+
+function _agile_load_form_fields()
+{
+	var email = agile_read_cookie("agile-email");
+	if (!email)
+		return;
+
+	_agile.get_contact(email, { success : function(data)
+	{
+		if (data)
+		{
+			var rj = {};
+			var cp = data.properties;
+			for ( var r = 0; r < cp.length; r++)
+			{
+				rj[cp[r].name] = cp[r].value;
+			}
+			var form = document.getElementById("agile-form");
+			for ( var s = 0; s < form.length; s++)
+			{
+				if (rj[form[s].name])
+				{
+					form[s].value = rj[form[s].name];
+				}
+			}
+		}
+	}, error : function(data)
+	{
+		return;
+	} });
 }

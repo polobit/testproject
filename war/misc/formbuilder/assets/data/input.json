@@ -17,11 +17,6 @@
                 "type": "input",
                 "value": "placeholder"
             },
-            "helptext": {
-                "label": "Help Text",
-                "type": "input",
-                "value": "help"
-            },
             "required": {
                 "label": "Required",
                 "type": "checkbox",
@@ -94,11 +89,6 @@
                 "type": "input",
                 "value": "placeholder"
             },
-            "helptext": {
-                "label": "Help Text",
-                "type": "input",
-                "value": "help"
-            },
             "required": {
                 "label": "Required",
                 "type": "checkbox",
@@ -170,11 +160,6 @@
                 "label": "Placeholder",
                 "type": "input",
                 "value": "placeholder"
-            },
-            "helptext": {
-                "label": "Help Text",
-                "type": "input",
-                "value": "help"
             },
             "required": {
                 "label": "Required",
@@ -253,11 +238,6 @@
                 "type": "input",
                 "value": "placeholder"
             },
-            "helptext": {
-                "label": "Help Text",
-                "type": "input",
-                "value": "help"
-            },
             "required": {
                 "label": "Required",
                 "type": "checkbox",
@@ -335,11 +315,6 @@
                 "type": "input",
                 "value": "placeholder"
             },
-            "helptext": {
-                "label": "Help Text",
-                "type": "input",
-                "value": "help"
-            },
             "required": {
                 "label": "Required",
                 "type": "checkbox",
@@ -411,11 +386,6 @@
                 "label": "Placeholder",
                 "type": "input",
                 "value": "placeholder"
-            },
-            "helptext": {
-                "label": "Help Text",
-                "type": "input",
-                "value": "help"
             },
             "checked": {
                 "label": "Checked",
@@ -493,11 +463,6 @@
                 "label": "Placeholder",
                 "type": "input",
                 "value": "placeholder"
-            },
-            "helptext": {
-                "label": "Help Text",
-                "type": "input",
-                "value": "help"
             },
             "checked": {
                 "label": "Checked",

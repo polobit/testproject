@@ -16,6 +16,8 @@ var NO_WEB_STATS_SETUP = true;
 
 var email_server_type = "agilecrm";
 
+var email_server_type_cookie_name = "email_server_type_" + CURRENT_DOMAIN_USER.id;
+
 function fill_company_related_contacts(companyId, htmlId)
 {
 	$('#' + htmlId).html(LOADING_HTML);
@@ -240,15 +242,24 @@ $(function()
 		fill_company_related_contacts(App_Contacts.contactDetailView.model.id, 'company-contacts');
 	});
 
+	/**
+	 * Sets cookie when user changes email dropdown under mail tab.
+	 * Cookie contains email server, email name
+	 * from next time application loads from emails from this email server and email 
+	 */
 	$('.agile-emails').die().live('click', function(e)
 	{
 		e.preventDefault();
-		$('#email-type-select').html($(this).html());
+		var email_server = $(this).attr('email-server');
 		var url = $(this).attr('data-url');
+		$('#email-type-select',App_Contacts.contactDetailView.el).html($(this).html());
+		//Here email_server_type means email/username of mail account
 		email_server_type = $(this).attr('email-server-type');
-		if(url)
+		if(email_server && url && email_server!='agile')
 			url = url.concat(email_server_type);
-		contact_details_tab.load_mail(url);
+		var cookie_value = email_server_type + '|' + email_server;
+		save_email_server_type_in_cookie(cookie_value);
+		contact_details_tab.load_mail(url,email_server);
 	});
 
 	/**
@@ -372,10 +383,6 @@ $(function()
 
 						// serialize form.
 						var json = serializeForm("emailForm");
-						if(json.from_email != CURRENT_DOMAIN_USER.email && json.from_name == CURRENT_DOMAIN_USER.name)
-						{
-							json.from_name = "";
-						}
 						if ((json.contact_to_ids).join())
 							json.to += ((json.to != "") ? "," : "") + (json.contact_to_ids).join();
 
@@ -438,6 +445,7 @@ $(function()
 									} });
 
 					});
+
 
 	/**
 	 * Close button click event of send email form. Navigates to contact detail
@@ -599,15 +607,10 @@ $(function()
 		e.preventDefault();
 		$(this).closest('.control-group').hide();
 		$('#from_email').closest('.control-group').show();
-		$('#from_name_link').closest('.control-group').show();
-		return;
-	});
-	$('#from_name_link').die().live('click', function(e){
-		e.preventDefault();
-		$(this).closest('.control-group').hide();
 		$('#from_name').closest('.control-group').show();
 		return;
 	});
+	
 
 });
 
@@ -777,4 +780,14 @@ function get_emails_to_reply(emails, configured_email)
 	}
 
 	return emails;
+}
+function save_email_server_type_in_cookie(cookie_value)
+{   
+	if(cookie_value)
+	{
+		var previous_cookie_value = readCookie(email_server_type_cookie_name);
+		if (previous_cookie_value === cookie_value)
+			return;
+		createCookie(email_server_type_cookie_name,cookie_value,30);
+	}	
 }

@@ -572,6 +572,17 @@ public class ActivityUtil
 	return dao.listByProperty(searchMap);
     }
 
+    public static List<Activity> getActivitites(Long entityId, int max, String cursor)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("entity_id", entityId);
+
+	if (max != 0)
+	    return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
+
+	return dao.listByProperty(searchMap);
+    }
+
     /**
      * 
      * @param obj
@@ -841,8 +852,8 @@ public class ActivityUtil
 		if (!obj.start.equals(oldobj.start))
 		{
 		    Object[] mapvalue = new Object[3];
-		    mapvalue[0] = getTimeFromEppoch(obj.start);
-		    mapvalue[1] = getTimeFromEppoch(oldobj.start);
+		    mapvalue[0] = obj.start;
+		    mapvalue[1] = oldobj.start;
 		    mapvalue[2] = "start_date";
 		    eventmap.put("start_date", mapvalue);
 
@@ -852,8 +863,8 @@ public class ActivityUtil
 		{
 
 		    Object[] mapvalue = new Object[3];
-		    mapvalue[0] = getTimeFromEppoch(obj.end);
-		    mapvalue[1] = getTimeFromEppoch(oldobj.end);
+		    mapvalue[0] = obj.end;
+		    mapvalue[1] = oldobj.end;
 		    mapvalue[2] = "end_date";
 		    eventmap.put("end_date", mapvalue);
 
@@ -921,8 +932,8 @@ public class ActivityUtil
 	    if (!oldobj.due.equals(obj.due))
 	    {
 		Object[] mapvalue = new Object[3];
-		mapvalue[0] = getTimeFromEppoch(obj.due);
-		mapvalue[1] = getTimeFromEppoch(oldobj.due);
+		mapvalue[0] = obj.due;
+		mapvalue[1] = oldobj.due;
 		mapvalue[2] = "due_date";
 		taskmap.put("due", mapvalue);
 
@@ -1279,6 +1290,59 @@ public class ActivityUtil
 	return list;
     }
 
+    public static void createLogForCalls(String serviceType, String toOrFromNumber, String callType, String callStatus,
+	    String callDuration)
+    {
+
+	// Search contact
+	if (toOrFromNumber != null)
+	{
+	    Contact contact = ContactUtil.searchContactByPhoneNumber(toOrFromNumber);
+	    System.out.println("contact: " + contact);
+	    if (contact != null)
+	    {
+		String calledToName = "";
+		List<ContactField> properties = contact.properties;
+		for (ContactField f : properties)
+		{
+		    System.out.println("\t" + f.name + " - " + f.value);
+		    if (f.name.equals(contact.FIRST_NAME))
+		    {
+			calledToName += f.value;
+		    }
+		    if (f.name.equals(contact.LAST_NAME))
+		    {
+			calledToName += " " + f.value;
+		    }
+		}
+
+		Activity activity = new Activity();
+		activity.activity_type = ActivityType.CALL;
+		activity.custom1 = serviceType;
+		activity.custom2 = callType;
+		activity.custom3 = callStatus;
+		activity.custom4 = callDuration;
+		activity.label = calledToName;
+		activity.entity_type = EntityType.CONTACT;
+		activity.entity_id = contact.id;
+		activity.save();
+	    }
+	    else
+	    {
+		Activity activity = new Activity();
+		activity.activity_type = ActivityType.CALL;
+		activity.custom1 = serviceType;
+		activity.custom2 = callType;
+		activity.custom3 = callStatus;
+		activity.custom4 = callDuration;
+		activity.label = toOrFromNumber;
+		activity.entity_type = null;
+		activity.entity_id = null;
+		activity.save();
+	    }
+	}
+    }
+
     /**
      * Gets list of activities based on entity id and min time and max time.
      * 
@@ -1293,7 +1357,8 @@ public class ActivityUtil
     public static List<Activity> getActivitiesByEntityId(Long entityId, long minTime, long maxTime)
     {
 	return dao.ofy().query(Activity.class).filter("entity_id", entityId).filter("time >= ", minTime)
-	        .filter("time <= ", maxTime).order("-time").list();
+
+	.filter("time <= ", maxTime).order("-time").list();
     }
 
     /**
@@ -1308,8 +1373,8 @@ public class ActivityUtil
 	    long maxTime)
     {
 	return dao.ofy().query(Activity.class).filter("activity_type", activityType)
-	        .filter("user", new Key<DomainUser>(DomainUser.class, ownerId)).filter("time >= ", minTime)
-	        .filter("time <= ", maxTime).list();
+		.filter("user", new Key<DomainUser>(DomainUser.class, ownerId)).filter("time >= ", minTime)
+		.filter("time <= ", maxTime).list();
     }
 
     /**
@@ -1325,7 +1390,6 @@ public class ActivityUtil
 	// Search contact
 	if (toOrFromNumber != null)
 	{
-
 	    String twilioStatus = getEnumValueOfTwilioStatus(callStatus);
 	    if (twilioStatus != null)
 	    {
@@ -1372,6 +1436,7 @@ public class ActivityUtil
 		}
 	    }
 	}
+
     }
 
     /**
@@ -1445,7 +1510,7 @@ public class ActivityUtil
 	}
 	else if (status.equalsIgnoreCase("no-answer"))
 	{
-	    return Call.NO_ANSWER;
+	    return Call.BUSY;
 	}
 	else if (status.equalsIgnoreCase("voicemail"))
 	{
@@ -1516,6 +1581,40 @@ public class ActivityUtil
 			e.printStackTrace();
 			return null;
 		}
+    }
+
+    /**
+     * 
+     * @param entitytype
+     *            DEAL or TASK or Contact or etc
+     * @param userid
+     * @param max
+     * @param cursor
+     * @param starttime
+     *            time range
+     * @param endtime
+     * @return
+     */
+    public static List<Activity> getActivititesBasedOnSelectedConditon(String entitytype, Long userid, int max,
+	    String cursor, Long starttime, Long endtime)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL"))
+	    searchMap.put("entity_type", entitytype);
+	if (entitytype.equalsIgnoreCase("CALL"))
+	    searchMap.put("activity_type", entitytype);
+	if (starttime != null)
+	    searchMap.put("time >=", starttime);
+	if (endtime != null)
+	    searchMap.put("time <=", endtime);
+
+	if (userid != null)
+	    searchMap.put("user", new Key<DomainUser>(DomainUser.class, userid));
+
+	if (max != 0)
+	    return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
+
+	return dao.listByProperty(searchMap);
     }
 
 }

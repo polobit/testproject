@@ -1,15 +1,8 @@
-<!-- Indices written at Mon, 5 Jan 2015 13:57:11 IST -->
+<!-- Indices written at Wed, 21 Jan 2015 13:40:07 UTC -->
 
 <datastore-indexes>
 
-    <!-- Used 4 times in query history -->
-    <datastore-index kind="Activity" ancestor="false" source="auto">
-        <property name="entity_type" direction="asc"/>
-        <property name="user" direction="asc"/>
-        <property name="time" direction="desc"/>
-    </datastore-index>
-
-    <!-- Used 2 times in query history -->
+    <!-- Used 1 time in query history -->
     <datastore-index kind="Task" ancestor="false" source="auto">
         <property name="is_complete" direction="asc"/>
         <property name="owner" direction="asc"/>
@@ -71,3 +64,4 @@
     </datastore-index>
 
 </datastore-indexes>
+

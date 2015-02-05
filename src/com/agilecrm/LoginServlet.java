@@ -3,6 +3,7 @@ package com.agilecrm;
 import java.io.IOException;
 import java.net.URLEncoder;
 
+import javax.jdo.annotations.Queries;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.DomainUser;
@@ -19,6 +21,10 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.RegisterUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.utils.SystemProperty;
 
 /**
@@ -98,10 +104,8 @@ public class LoginServlet extends HttpServlet
 		    loginAgile(request, response);
 		}
 
-		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(true);
-		restriction.refresh(true);
-		restriction.save();
-
+		// Updates account stats
+		updateEntityStats();
 		return;
 	    }
 	}
@@ -244,5 +248,14 @@ public class LoginServlet extends HttpServlet
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+    }
+
+    private void updateEntityStats()
+    {
+	AccountLimitsRemainderDeferredTask stats = new AccountLimitsRemainderDeferredTask(NamespaceManager.get());
+	
+	// Add to queue
+	Queue queue = QueueFactory.getQueue("account-stats-update-queue");
+	queue.addAsync(TaskOptions.Builder.withPayload(stats));
     }
 }

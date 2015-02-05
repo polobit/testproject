@@ -351,28 +351,29 @@
 {{#each this}}
 <div class="control-group lhs-row-filter"> 
 	<a data-toggle="collapse" id="lhs-filters-header" 
-style="text-decoration:none;cursor:pointer;" class="changeIcon">
+class="c-p text-l-none text-l-none-hover" >
 {{field_label}}
 <i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
 {{#if_equals_or "CHECKBOX" field_type "TEXT" field_type "TEXTAREA" field_type}}
 	<div class="controls hide" id="{{replace_spaces field_label}}_div">
-		<div class="lhs-contact-filter-row">
+		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="{{field_label}}" />
 		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="f-left w-105p">
 			<option value="EQUALS" >is</option>
 			<option value="NOTEQUALS" >isn't</option>
 		</select>
-		<div class="EQUALS NOTEQUALS">
+		<div class="EQUALS NOTEQUALS condition_container">
 			<span id="RHS">
 				<input type="text" placeholder="Value" prev-val="" class="required w-95p">
 			</span>
 		</div>
+		<div class="pos-abs pos-r-0 pos-b"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
 		</div>
 	</div>
 	{{/if_equals_or}}
 	{{#if_equals "NUMBER" field_type}}
 	<div class="controls hide" id="{{replace_spaces field_label}}_number_div">
-		<div class="lhs-contact-filter-row">
+		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="{{field_label}}_number" />
 		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
 			<option value="EQUALS">equals</option>
@@ -380,12 +381,12 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 			<option value="IS_GREATER_THAN">greater than</option>
 			<option value="BETWEEN">between</option>
 		</select>
-		<div class="EQUALS IS_GREATER_THAN IS_LESS_THAN">
+		<div class="EQUALS IS_GREATER_THAN IS_LESS_THAN condition_container">
 			<span id="RHS">
 				<input type="number" min="0" placeholder="Value" prev-val="" class="w-95p required">
 			</span>
 		</div>
-		<div class="BETWEEN hide">
+		<div class="BETWEEN condition_container hide">
 			<div class="clear" />
 			<span id="RHS">
 				<input type="number" min="0" class="required w-95p" prev-val="" placeholder="Min Value"> 
@@ -394,12 +395,13 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required w-95p">
 			</span>
 		</div>
+		<div class="pos-abs pos-r-0 pos-b"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
 	</div>
 	</div>
 	{{/if_equals}}
 	{{#if_equals "DATE" field_type}}
 	<div class="controls hide" id="{{replace_spaces field_label}}_time_div">
-		<div class="lhs-contact-filter-row">
+		<div class="lhs-contact-filter-row pos-rlt">
 	<input type="hidden" name="LHS" value="{{field_label}}_time" />
 	<select id="between_filter" name="CONDITION" class="w-105p f-left">
 		<option value="ON">on</option>
@@ -409,17 +411,17 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 		<option value="LAST">in last</option>
 		<option value="NEXT">in next</option>
 	</select>
-	<div class="AFTER BEFORE ON">
+	<div class="AFTER BEFORE ON condition_container">
 		<span id="RHS">
 			<input type="text" placeholder="MM/DD/YYYY" prev-val="" class="date required w-95p" >
 		</span>
 	</div>
-	<div class="LAST NEXT hide">
+	<div class="LAST NEXT condition_container hide">
 		<span id="RHS">
 			<input type="number" placeholder="Number of days" prev-val="" class="w-95p required">
 		</span>
 	</div>
-	<div class="BETWEEN hide">
+	<div class="BETWEEN condition_container hide">
 		<div class="clear" />
 		<span id="RHS">
 			<input type="text" placeholder="MM/DD/YYYY" prev-val="" class="date required w-95p">
@@ -428,18 +430,19 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 			<input type="text" placeholder="MM/DD/YYYY" prev-val="" class="date required w-95p">
 		</span>
 	</div>
+	<div class="pos-abs pos-r-0 pos-b"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
 	</div>
 	</div>
 	{{/if_equals}}
 	{{#if_equals "LIST" field_type}}
 	<div class="controls hide" id="{{replace_spaces field_label}}_div">
-		<div class="lhs-contact-filter-row">
+		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="{{field_label}}" />
 		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="f-left w-105p">
 			<option value="EQUALS" >is</option>
 			<option value="NOTEQUALS" >isn't</option>
 		</select>
-		<div class="EQUALS NOTEQUALS">
+		<div class="EQUALS NOTEQUALS condition_container">
 			<span id="RHS">
 				<select id="{{replace_spaces field_label}}-values" prev-val="" class="required w-105p" name="temp">
 					<option value="">Select value</option>
@@ -447,6 +450,7 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 				</select>
 			</span>
 		</div>
+		<div class="pos-abs pos-r-0 pos-b"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
 		</div>
 	</div>
 	{{/if_equals}}
@@ -473,36 +477,36 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 <fieldset>
 <div class="control-group lhs-row-filter">
 	<a data-toggle="collapse" id="lhs-filters-header" 
-		style="text-decoration:none;cursor:pointer;" class="changeIcon">
+		class="c-p text-l-none text-l-none-hover" >
 		Tags
 		<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
 	<div class="controls hide" id="tags_div">
 		<div id="tags-lhs-filter-table" class="ignore-collection">
-				<div class="hide">
+				<div class="hide master-tags-add-div pos-rlt">
 					<input type="hidden" name="LHS" value="tags" />
-					<select id="tags-filter" class="w-95p f-left" name="CONDITION">
+					<select id="tags-filter" class="w-105p f-left" name="CONDITION">
 						<option value="EQUALS" class="tags">is</option>
 						<option value="NOTEQUALS" class="tags">isn't</option>
 					</select>
-					<div class="EQUALS NOTEQUALS">
+					<div class="EQUALS NOTEQUALS condition_container">
 						<span id="RHS">
 							<input type="text" placeholder="Value" prev-val="" class="required w-95p">
-							<i class="filter-tags-multiple-remove-lhs icon-remove-circle" style="display: none;  cursor:pointer;"></i>
 						</span>
 					</div>
+					<div class="pos-abs pos-r-0 pos-b"><a><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></i></a></div>
 				</div>
-				<div class="lhs-contact-filter-row">
+				<div class="lhs-contact-filter-row pos-rlt">
 					<input type="hidden" name="LHS" value="tags" />
-					<select id="tags-filter" class="w-95p f-left" name="CONDITION">
+					<select id="tags-filter" class="w-105p f-left" name="CONDITION">
 						<option value="EQUALS" class="tags">is</option>
 						<option value="NOTEQUALS" class="tags">isn't</option>
 					</select>
-					<div class="EQUALS NOTEQUALS">
+					<div class="EQUALS NOTEQUALS condition_container">
 						<span id="RHS">
 							<input type="text" placeholder="Value" prev-val="" class="required w-95p">
-							<i class="filter-tags-multiple-remove-lhs icon-remove-circle" style="cursor:pointer;"></i>
 						</span>
 					</div>
+					<div class="pos-abs pos-r-0 pos-b"><a><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></a></i></div>
 				</div>
 		</div>
 		<a href="#" class="filter-tags-multiple-add-lhs" style="text-decoration:none;margin-top:5px"><i class="icon-plus"></i> Add</a>
@@ -511,23 +515,23 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 	
 <div class="control-group lhs-row-filter" id="deal-value-filter">
 	<a data-toggle="collapse" id="lhs-filters-header" 
-		style="text-decoration:none;cursor:pointer;" class="changeIcon">
+		class="c-p text-l-none text-l-none-hover" >
 		Score
 		<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
 	<div class="controls hide" id="lead_score_div">
-		<div class="lhs-contact-filter-row">
+		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="lead_score" />
 		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
 			<option value="IS_GREATER_THAN">greater than</option>
 			<option value="IS_LESS_THAN">less than</option>
 			<option value="BETWEEN">between</option>
 		</select>
-		<div class="IS_GREATER_THAN IS_LESS_THAN">
+		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container">
 			<span id="RHS">
 				<input type="number" min="0" placeholder="Value" prev-val="" class="w-95p required">
 			</span>
 		</div>
-		<div class="BETWEEN hide">
+		<div class="BETWEEN condition_container hide">
 			<div class="clear" />
 			<span id="RHS">
 				<input type="number" min="0" class="required w-95p" prev-val="" placeholder="Min Value"> 
@@ -536,28 +540,29 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required w-95p">
 			</span>
 		</div>
+		<div class="pos-abs pos-r-0 pos-b"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
 		</div>
 	</div>
 </div>
 <div class="control-group lhs-row-filter" id="deal-value-filter">
 	<a data-toggle="collapse" id="lhs-filters-header" 
-		style="text-decoration:none;cursor:pointer;" class="changeIcon">
+		class="c-p text-l-none text-l-none-hover" >
 		Star Value
 		<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
 	<div class="controls hide" id="star_value_div">
-		<div class="lhs-contact-filter-row">
+		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="star_value" />
 		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
 			<option value="IS_GREATER_THAN">greater than</option>
 			<option value="IS_LESS_THAN">less than</option>
 			<option value="BETWEEN">between</option>
 		</select>
-		<div class="IS_GREATER_THAN IS_LESS_THAN">
+		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container">
 			<span id="RHS">
 				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="w-95p required">
 			</span>
 		</div>
-		<div class="BETWEEN hide">
+		<div class="BETWEEN condition_container hide">
 			<div class="clear" />
 			<span id="RHS">
 				<input type="number" min="0" max="5" class="required w-95p" prev-val="" placeholder="Min Value"> 
@@ -566,23 +571,24 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required w-95p">
 			</span>
 		</div>
+		<div class="pos-abs pos-r-0 pos-b"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
 		</div>
 	</div>
 </div>
 <div class="control-group lhs-row-filter" id="deal-value-filter">
 	<a data-toggle="collapse" id="lhs-filters-header" 
-		style="text-decoration:none;cursor:pointer;" class="changeIcon">
+		class="c-p text-l-none text-l-none-hover" >
 		Owner
 		<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
 	<div class="controls hide" id="owner_id_div">
-		<div class="lhs-contact-filter-row">
+		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="owner_id" />
 		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
 			<option value="EQUALS" >is</option>
 			<option value="NOTEQUALS" >isn't</option>
 		</select>
 		
-		<div class="EQUALS NOTEQUALS">
+		<div class="EQUALS NOTEQUALS condition_container">
 			<span id="RHS">
 				<select id="owner_select" class="required w-105p" name="temp1" prev-val="">
 					<option value="">Select value</option>
@@ -590,17 +596,18 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 				</select>
 			</span>
 		</div>
+		<div class="pos-abs pos-r-0 pos-b"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
 		</div>
 	</div>
 </div>
 
 <div class="control-group lhs-row-filter" id="deal-value-filter">
 	<a data-toggle="collapse" id="lhs-filters-header" 
-		style="text-decoration:none;cursor:pointer;" class="changeIcon">
+		class="c-p text-l-none text-l-none-hover" >
 		Created Date
 		<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
 	<div class="controls hide" id="created_time_div">
-		<div class="lhs-contact-filter-row">
+		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="created_time" />
 		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
 			<option value="ON">on</option>
@@ -610,17 +617,17 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 			<option value="LAST">in last</option>
 			<option value="NEXT">in next</option>
 		</select>
-		<div class="AFTER BEFORE ON">
+		<div class="AFTER BEFORE ON condition_container">
 			<span id="RHS">
 				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="w-95p required date">
 			</span>
 		</div>
-		<div class="LAST NEXT hide">
+		<div class="LAST NEXT condition_container hide">
 			<span id="RHS">
 				<input type="number" placeholder="Number of days" prev-val="" class="w-95p required">
 			</span>
 		</div>
-		<div class="BETWEEN hide">
+		<div class="BETWEEN condition_container hide">
 			<div class="clear" />
 			<span id="RHS">
 				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" class="w-95p date required" placeholder="MM/DD/YYYY">
@@ -629,6 +636,7 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="w-95p date required">
 			</span>
 		</div>
+		<div class="pos-abs pos-r-0 pos-b"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
 		</div>
 	</div>
 </div>
@@ -660,23 +668,23 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 <fieldset>
 <div class="control-group lhs-row-filter" id="deal-value-filter">
 	<a data-toggle="collapse" id="lhs-filters-header" 
-		style="text-decoration:none;cursor:pointer;" class="changeIcon">
+		class="c-p text-l-none text-l-none-hover" >
 		Star Value
 		<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
 	<div class="controls hide" id="star_value_div">
-		<div class="lhs-contact-filter-row">
+		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="star_value" />
 		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
 			<option value="IS_GREATER_THAN">greater than</option>
 			<option value="IS_LESS_THAN">less than</option>
 			<option value="BETWEEN">between</option>
 		</select>
-		<div class="IS_GREATER_THAN IS_LESS_THAN">
+		<div class="IS_GREATER_THAN IS_LESS_THAN condition_container">
 			<span id="RHS">
 				<input type="number" min="0" max="5" placeholder="Value" prev-val="" class="w-95p required">
 			</span>
 		</div>
-		<div class="BETWEEN hide">
+		<div class="BETWEEN condition_container hide">
 			<div class="clear" />
 			<span id="RHS">
 				<input type="number" min="0" max="5" class="required w-95p" prev-val="" placeholder="Min Value"> 
@@ -685,23 +693,24 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required w-95p">
 			</span>
 		</div>
+		<div class="pos-abs pos-r-0 pos-b"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
 		</div>
 	</div>
 </div>
 <div class="control-group lhs-row-filter" id="deal-value-filter">
 	<a data-toggle="collapse" id="lhs-filters-header" 
-		style="text-decoration:none;cursor:pointer;" class="changeIcon">
+		class="c-p text-l-none text-l-none-hover" >
 		Owner
 		<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
 	<div class="controls hide" id="owner_id_div">
-		<div class="lhs-contact-filter-row">
+		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="owner_id" />
 		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
 			<option value="EQUALS" >is</option>
 			<option value="NOTEQUALS" >isn't</option>
 		</select>
 		
-		<div class="EQUALS NOTEQUALS">
+		<div class="EQUALS NOTEQUALS condition_container">
 			<span id="RHS">
 				<select id="owner_select" class="required w-105p" prev-val="" name="temp1">
 					<option value="">Select value</option>
@@ -709,17 +718,18 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 				</select>
 			</span>
 		</div>
+		<div class="pos-abs pos-r-0 pos-b"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
 		</div>
 	</div>
 </div>
 
 <div class="control-group lhs-row-filter" id="deal-value-filter">
 	<a data-toggle="collapse" id="lhs-filters-header" 
-		style="text-decoration:none;cursor:pointer;" class="changeIcon">
+		class="c-p text-l-none text-l-none-hover" >
 		Created Date
 		<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
 	<div class="controls hide" id="created_time_div">
-		<div class="lhs-contact-filter-row">
+		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="created_time" />
 		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
 			<option value="ON">on</option>
@@ -729,17 +739,17 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 			<option value="LAST">in last</option>
 			<option value="NEXT">in next</option>
 		</select>
-		<div class="AFTER BEFORE ON">
+		<div class="AFTER BEFORE ON condition_container">
 			<span id="RHS">
 				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="w-95p required date">
 			</span>
 		</div>
-		<div class="LAST NEXT hide">
+		<div class="LAST NEXT hide condition_container">
 			<span id="RHS">
 				<input type="number" placeholder="Number of days" prev-val="" class="w-95p required">
 			</span>
 		</div>
-		<div class="BETWEEN hide">
+		<div class="BETWEEN hide condition_container">
 			<div class="clear" />
 			<span id="RHS">
 				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" class="w-95p date required" placeholder="MM/DD/YYYY">
@@ -748,26 +758,28 @@ style="text-decoration:none;cursor:pointer;" class="changeIcon">
 				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="w-95p date required">
 			</span>
 		</div>
+		<div class="pos-abs pos-r-0 pos-b"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
 		</div>
 	</div>
 </div>
 <div class="control-group lhs-row-filter" id="deal-value-filter">
 	<a data-toggle="collapse" id="lhs-filters-header" 
-		style="text-decoration:none;cursor:pointer;" class="changeIcon">
+		class="c-p text-l-none text-l-none-hover" >
 		Name
 		<i style="display:inline;position:absolute;right:20px;" class="fa fa-plus-square-o"></i></a>
 	<div class="controls hide" id="name_div">
-		<div class="lhs-contact-filter-row">
+		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="name" />
 		<select id="between_filter" name="CONDITION" class="f-left w-105p" >
 			<option value="EQUALS" >is</option>
 			<option value="NOTEQUALS" >isn't</option>
 		</select>
-		<div class="EQUALS NOTEQUALS">
+		<div class="EQUALS NOTEQUALS condition_container">
 			<span id="RHS">
 				<input type="text" placeholder="Value" prev-val="" class="w-95p required">
 			</span>
 		</div>
+		<div class="pos-abs pos-r-0 pos-b"><a class="hide clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
 		</div>
 	</div>
 </div>

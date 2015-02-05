@@ -37,14 +37,13 @@
 
 {{/if}}
 </script>
+
+
+
 <script id="activity-list-log-model-template" type="text/html">
 
-
-
-
-		{{#if_equals "TASK" entity_type}}
-	{{#if_equals "TASK_ADD" activity_type}}{{#if_equals "Task_owner_name" custom3}}
-	<div >
+	
+	<div class="pos-rlt">
 	<div style="margin-right:15px;" class="pull-left">
 			{{#if this.userPic}}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
@@ -52,932 +51,541 @@
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left activity-tag">
-<div>	
- Created a Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> for {{custom1}} {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
-	</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
+<div class="activity-tag">
+<div>
+{{#if_equals "TASK" entity_type}}
+{{#if_equals "TASK_ADD" activity_type}}
+
+Created Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}} '{{label}}'{{/if}} <br/>
+<span class="activities_second_line">
+{{#if custom2}}
+<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}Task assigned to {{custom1}} due <span class="time-ago" datetime="{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" custom2}}</span>. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+{{else}}
+<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}Task assigned to {{entityObject.taskOwner.name}} due <span class="time-ago" datetime="{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}</span>. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+
+{{/if}}
+</span>
 
 
-
-{{/if_equals}}{{/if_equals}}
+{{/if_equals}}
 
 
 {{#if_equals "TASK_COMPLETED" activity_type}}
-
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
- Completed Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
-	</div>
-<div>
-	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
-
+Completed Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+<span class="activities_second_line">
+ <i class="icon-tasks"></i>{{#if this.entityObject}} Task due {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}} was completed.{{else}} Task deleted later.{{/if}} {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
+	</span>
 {{/if_equals}}
+
+
 
 {{#if_equals "TASK_DELETE" activity_type}}
-
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
- Deleted Task {{label}} {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
-</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
-
+ Deleted Task '{{label}}' <br/>
+<span class="activities_second_line">
+{{#if related_contact_ids}}<i class="icon-tasks"></i> Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}. {{/if}} 
+</span>
 {{/if_equals}}
+
 
 {{#if_equals "TASK_EDIT" activity_type}}
-
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
- Modified Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
-</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
-
+{{#if this.entityObject}}	
+{{#get_event_rescheduled custom3}} 
+Changed Due date of Task <a href="#task/{{../entity_id}}" >{{../label}}</a><br/>
+<span class="activities_second_line">
+<i class="icon-tasks icon-white"></i> Task Due time changed to {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" ../entityObject.due}}.
+</span> 
+{{else}}
+ Modified Task <a href="#task/{{../entity_id}}">{{../label}}</a> <br/>
+<span class="activities_second_line">
+<i class="icon-tasks icon-white"></i> Task {{displayActivityFieldText ../custom3}} modified.
+{{/get_event_rescheduled}}
+{{else}}
+{{#get_event_rescheduled custom3}} 
+Changed Due date of Task '{{../label}}'<br/>
+<span class="activities_second_line">
+<i class="icon-tasks icon-white"></i> Task deleted later. Task Due time changed to {{#getDueDateOfTask ../custom3  ../custom1}}{{/getDueDateOfTask}}.
+</span> 
+{{else}}
+ Modified Task '{{../label}}'<br/>
+<span class="activities_second_line">
+<i class="icon-tasks icon-white"></i> Task deleted later. Task {{displayActivityFieldText ../custom3}} modified.
+{{/get_event_rescheduled}}
+{{/if}}
+</span>
+<span class="activities_second_line">
+ {{#if related_contact_ids}} Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}  
+</span>
 {{/if_equals}}
+
+
 {{#if_equals "TASK_OWNER_CHANGE" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
- Reassigned Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> to  {{custom1}} {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
-	</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
+Reassigned Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+<span class="activities_second_line">
+<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later.{{/unless}} Task Owner changed to {{custom1}}. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
+</span>	
 {{/if_equals}}
+
 
 
 {{#if_equals "TASK_RELATED_CONTACTS" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>
 {{#if related_contact_ids}}
 {{#if_equals "removed_all_relatedcontacts" custom3}}
-Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} from Task <a href="" data={{entity_id}} class='activity-task-edit'">{{label}}</a> 
+Removed Contact(s) from Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+<span class="activities_second_line">
+<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Task.
+</span>
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
-Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} from Task <a href="" data={{entity_id}} class='activity-task-edit'">{{label}}</a> 
+Removed Contact(s) from Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+<span class="activities_second_line">
+<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Task.
+</span>
 {{/if_equals}} 
 {{#if_equals "added_relatedcontacts" custom3}}
-Added {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} to Task <a href="" data={{entity_id}} class='activity-task-edit'">{{label}}</a> 
+Added Contact(s) to Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+<span class="activities_second_line">
+<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Task. 
 {{/if_equals}}
 {{else}}
-Modified Task <a href="" data={{entity_id}} class='activity-task-edit'">{{label}}</a>  
-
+Modified Task. <br/>
+<span class="activities_second_line">
+<i class="icon-tasks"></i> <a href="#task/{{entity_id}}">{{label}}</a> Modified  
+</span>
 {{/if}} 
-	</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>	
+</span>
 {{/if_equals}}
 
 
 {{#if_equals "TASK_PROGRESS_CHANGE" activity_type}}
-	<div>
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
- Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> progress changed from {{custom2}}% to {{custom1}}% {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}  
-	</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
-
+Changed Progress of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}  <br/>   
+<span class="activities_second_line">
+ <i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}Task Progress changed from {{custom2}}% to {{custom1}}%. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 	
+</span>
 {{/if_equals}}
 
-{{#if_equals "TASK_STATUS_CHANGE" activity_type}}
-	<div>
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
- Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> status  changed from {{get_normal_name custom2}} to {{get_normal_name custom1}} {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}  
-	</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
 
+
+{{#if_equals "TASK_STATUS_CHANGE" activity_type}}
+Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>  
+<span class="activities_second_line"> 
+<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}Task Status changed from {{get_normal_name custom2}} to {{get_normal_name custom1}}. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}	
+</span>
 {{/if_equals}}
 
 {{#if_equals "BULK_DELETE" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>	
-<div class="pull-left">
-<div>
 {{#if_equals "1" custom1}}
-  Deleted Task {{custom2}}  
+  Deleted {{custom1}} Task <br/>
+<span class="activities_second_line">  
+{{#if custom2}}<i class="icon-tasks"></i> {{custom2}}{{/if}}
+</span> 
 {{else}} 
-	Deleted Tasks {{custom2}}  
-{{/if_equals}}
-</div>	
-<div>
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
-
+	Deleted {{custom1}} Tasks <br/>
+<span class="activities_second_line">    
+{{#if custom2}}<i class="icon-tasks"></i> {{custom2}}. {{/if}} 
+</span>
 {{/if_equals}}
 {{/if_equals}}
-
+{{/if_equals}}
 
 <!-- starting of deal condition-->
 
 {{#if_equals "DEAL" entity_type}}
-
-	{{#if_equals "DEAL_ADD" activity_type}}{{#if_equals "Deal_owner_name" custom3}}
-
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>	
-<div class="pull-left activity-tag">
-<div>
- Created a new Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
-		</div>	
-<div>
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
-	
-{{/if_equals}}{{/if_equals}}
-{{#if_equals "DEAL_CLOSE" activity_type}}
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
- Won Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
-	</div>	
-		<div>
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
+ {{#if_equals "DEAL_ADD" activity_type}}
+Created Deal {{#if entityObject}}<a href="#deal/{{entity_id}}">{{label}}</a> {{else}}'{{label}}'{{/if}}<br/>
+<span class="activities_second_line">
+{{#if custom2}}
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}Deal ({{currencySymbol}}{{numberWithCommasForActivities custom2}} - {{custom3}}%) added {{#if entityObject}}to track '{{entityObject.pipeline.name}}'{{/if}}. {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+{{else}}
+ <i class="icon-money icon-white"></i>{{#unless this.entityObject}} Deal deleted later.{{/unless}} Deal {{#if this.entityObject}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) added to track '{{entityObject.pipeline.name}}'.{{/if}} {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
+{{/if}}	
+</span>	
 {{/if_equals}}
+
+
+
+{{#if_equals "DEAL_CLOSE" activity_type}}
+ Won Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
+<span class="activities_second_line">
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later.{{/unless}} {{#if this.entityObject}} Deal ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) Won.{{/if}} {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+</span>	
+{{/if_equals}}
+
 
 {{#if_equals "DEAL_EDIT" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
- Modified Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
-	</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
+ Modified Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}  <br/> 
+<span class="activities_second_line">
+<i class="icon-money icon-white"></i>{{#unless this.entityObject}} Deal deleted later.{{/unless}} Deal {{#if this.entityObject}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}} {{displayActivityFieldText custom3}} modified. {{#if related_contact_ids}} Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+</span>	
 {{/if_equals}}
+
+
 
 {{#if_equals "DEAL_DELETE" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
- Deleted Deal {{label}} {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
-	</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
+Deleted Deal '{{label}}' <br/> 
+<span class="activities_second_line">
+{{#if related_contact_ids}}<i class="icon-money icon-white"></i> Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
+</span>
 {{/if_equals}}
+
 
 {{#if_equals "DEAL_RELATED_CONTACTS" activity_type}}
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">	
-<div>
+
 {{#if related_contact_ids}}
 {{#if_equals "removed_all_relatedcontacts" custom3}}
-Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} from Deal <a href="" data={{entity_id}} class='activity-deal-edit'">{{label}}</a> 
+Removed Contact(s) from Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
+<span class="activities_second_line">
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}} {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from  Deal {{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}.{{/if}} 
+</span>
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
-Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} from Deal <a href="" data={{entity_id}} class='activity-deal-edit'">{{label}}</a> 
+Removed Contact(s) from Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
+<span class="activities_second_line">
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}  {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Deal {{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}.{{/if}}
+</span>
 {{/if_equals}} 
 {{#if_equals "added_relatedcontacts" custom3}}
-Added {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} to Deal <a href="" data={{entity_id}} class='activity-deal-edit'">{{label}}</a> 
+Added Contact(s) to Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+<span class="activities_second_line">
+ <i class="icon-money icon-white"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Deal {{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}.{{/if}}
+</span>
 {{/if_equals}}
 {{else}}
-Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
+Modified  Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}. <br/>
+<span class="activities_second_line">
+{{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
+</span>
 {{/if}}	
-</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
 {{/if_equals}}
-
-
 
 
 
 {{#if_equals "NOTE_ADD" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>	
-<div class="pull-left activity-tag">
-<div>
-	Added Note {{#if custom2}}({{add_dots_end custom2}}){{/if}} to  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
-</div>
-<div>		
-<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
+Added note to Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+<span class="activities_second_line">
+<i class="icon-pencil"></i> {{#unless this.entityObject}}Deal deleted later. {{/unless}}{{custom1}} {{#if custom2}}- {{custom2}}{{/if}}<br/>
+</span>
 {{/if_equals}}
-
 
 
 {{#if_equals "DEAL_OWNER_CHANGE" activity_type}}
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
- Assigned Deal  <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> to {{custom1}} {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
-
-</div>
-<div>		
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div></div>
-<div class="clearfix"></div>
+Reassigned Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} to {{custom1}}<br/>
+<span class="activities_second_line">
+<i class="icon-money icon-white"></i> {{#unless entityObject}} Deal deleted later.{{/unless}} Deal{{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}} assigned to '{{custom1}}'. {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}	
+</span>
 {{/if_equals}}
+
+
+
 
 {{#if_equals "DEAL_MILESTONE_CHANGE" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
- Changed Milestone of Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a>  to {{custom1}} {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
-	</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
+Changed Milestone of Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+<span class="activities_second_line"> 
+<i class="icon-money icon-white"></i> {{#unless entityObject}} Deal deleted later.{{/unless}}{{#if this.entityObject}}Deal ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}} Milestone changed from '{{custom2}}' to '{{custom1}}'. {{#if related_contact_ids}}Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+</span>	
 {{/if_equals}}
+
+
+
 
 {{#if_equals "DEAL_LOST" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>	
-<div class="pull-left activity-tag">
-<div>
-  Lost Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
-	</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
-
+Lost Deal {{#if this.entityObject}}<a href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+<span class="activities_second_line">
+<i class="icon-money icon-white"></i>{{#unless entityObject}} Deal deleted later.{{/unless}} Deal {{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) {{/if}} Lost. {{#if related_contact_ids}} Deal related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+</span>	
 {{/if_equals}}
+
 
 {{#if_equals "BULK_DELETE" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left">
-<div>	
-    {{#if_equals "1" custom1}}
-  Deleted {{custom2}} Deal  
+  {{#if_equals "1" custom1}}
+  Deleted {{custom1}} Deal<br/>
+<span class="activities_second_line">
+  {{#if custom2}}<i class="icon-money icon-white"></i> {{custom2}}.{{/if}}
+</span>
 {{else}} 
-	Deleted {{custom2}} Deals 
-{{/if_equals}}
-</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
-
+	Deleted {{custom1}} Deals <br/>
+<span class="activities_second_line">
+ {{#if custom2}}<i class="icon-money icon-white"></i> {{custom2}}.{{/if}}
+</span>
 {{/if_equals}}
 {{/if_equals}}
-	<!-- end of deal condition-->	
+{{/if_equals}}
 
+<!-- end of deal condition-->	
 
+<!-- starting event condition-->
 {{#if_equals "EVENT" entity_type}}
-	{{#if_equals "EVENT_ADD" activity_type}}
-
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
- Created new Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}  
-</div>
-<div>		
-<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div></div>
-<div class="clearfix"></div>
-
+{{#if_equals "EVENT_ADD" activity_type}}
+ Created Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+<span class="activities_second_line">
+{{#if custom2}}
+<i class="icon-calendar icon-white"></i> {{#unless this.entityObject}}Event deleted later. {{/unless}}Event starts at {{epochToHumanDate "h:MM TT" custom2}} on {{epochToHumanDate "ddd mmm dd yyyy" custom2}}.{{#if related_contact_ids}} Event related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+{{else}}
+<i class="icon-calendar icon-white"></i> {{#if this.entityObject}} Event starts at {{epochToHumanDate "h:MM TT" entityObject.start}} on {{epochToHumanDate "ddd mmm dd yyyy" entityObject.start}}.{{else}} Event deleted later.{{/if}}{{#if related_contact_ids}} Event related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}   
+{{/if}}
+</span>
 {{/if_equals}}
+
 
 
 {{#if_equals "EVENT_RELATED_CONTACTS" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>
 {{#if related_contact_ids}}
 {{#if_equals "removed_all_relatedcontacts" custom3}}
-Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} from Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> 
+Removed Contact(s) from Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
+<span class="activities_second_line">
+<i class="icon-calendar icon-white"></i> {{#unless this.entityObject}}Event deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Event. 
+</span>
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
-Removed {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} from Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> 
+Removed Contact(s) from Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
+<span class="activities_second_line">
+<i class="icon-calendar icon-white"></i> {{#unless this.entityObject}}Event deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Event.
 {{/if_equals}} 
+</span>
 {{#if_equals "added_relatedcontacts" custom3}}
-Added {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} to Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> 
-{{/if_equals}}
-{{else}}	
- Modified Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}  
+Added Contact(s) to Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
+<span class="activities_second_line">
+<i class="icon-calendar icon-white"></i> {{#unless this.entityObject}}Event deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Event.
+ {{/if_equals}}
+</span>
+{{else}}
+Modified Event {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/> 
+<span class="activities_second_line">
+{{#if related_contact_ids}}
+<i class="icon-calendar icon-white"></i>Event related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
 {{/if}}	
-</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
+</span>
 {{/if_equals}}
-{{#if_equals "BULK_DELETE" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left">
-<div>	
-    {{#if_equals "1" custom1}}
-  Deleted Event {{custom2}}  
-{{else}} 
-	Deleted Events {{custom2}}  
-{{/if_equals}}
-</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
 
+
+
+{{#if_equals "BULK_DELETE" activity_type}}
+ {{#if_equals "1" custom1}}
+  Deleted {{custom1}} Event <br/>
+{{#if custom2}}
+<span class="activities_second_line">
+<i class="icon-calendar icon-white"></i> {{custom2}}.
+</span>
+ {{/if}} 
+{{else}} 
+	Deleted {{custom1}} Events <br/>
+{{#if custom2}}
+<span class="activities_second_line">
+<i class="icon-calendar icon-white"></i> {{custom2}}.
+</span>
+ {{/if}} 
 {{/if_equals}}
+{{/if_equals}}
+
+
+
 
 {{#if_equals "EVENT_DELETE" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
- Deleted Event {{label}} {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
-</div>
-		<div>
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
-	 
+Deleted Event '{{label}}'<br/>
+<span class="activities_second_line">
+ {{#if related_contact_ids}} <i class="icon-calendar icon-white"></i> Event related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+</span>
 {{/if_equals}}
+
+
+
+
 {{#if_equals "EVENT_EDIT" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
- Modified Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
-</div>
-<div>	
-		
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div></div>
-<div class="clearfix"></div>
 
-
+{{#if this.entityObject}}	
+{{#get_event_rescheduled custom3}} 
+Rescheduled Event <a href="" data={{../entity_id}} class='activity-event-edit'">{{../label}}</a><br/>
+<span class="activities_second_line">
+<i class="icon-calendar icon-white"></i> Event Start time changed to {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" ../entityObject.start}}.
+</span> 
+{{else}}
+Modified Event <a href="" data={{../entity_id}} class='activity-event-edit'">{{../label}}</a> <br/>
+<span class="activities_second_line">
+<i class="icon-calendar icon-white"></i> Event {{displayActivityFieldText ../custom3}} modified.
+{{/get_event_rescheduled}}
+{{else}}
+{{#get_event_rescheduled custom3}} 
+Rescheduled Event '{{../label}}'<br/>
+<span class="activities_second_line">
+<i class="icon-calendar icon-white"></i> Event deleted later. Event Start time changed to {{#getDueDateOfTask ../custom3  ../custom1}}{{/getDueDateOfTask}}.
+</span> 
+{{else}}
+ Modified Event '{{../label}}' <br/>
+<span class="activities_second_line">
+<i class="icon-calendar icon-white"></i> Event deleted later. Event {{displayActivityFieldText ../custom3}} modified.
+</span>
+{{/get_event_rescheduled}}
+{{/if}}
+<span class="activities_second_line">
+ {{#if related_contact_ids}} Event related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}  
+</span>
 {{/if_equals}}
 {{/if_equals}}
 
 
+<!-- end event condition-->
+
+<!-- start of contact condition-->
 {{#if_equals "CONTACT" entity_type}}
-{{#if_equals "NOTE_ADD" activity_type}}
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
- Added <a href="" class="activity-edit-note" data={{custom3}} data-toggle="modal" >Note</a> {{#if custom2}}({{add_dots_end custom2}}){{/if}} to  Contact <a href="#contact/{{entity_id}}">{{label}}</a>  
-	</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
+  {{#if_equals "NOTE_ADD" activity_type}}
+Added note to Contact <a href="#contact/{{entity_id}}">{{label}}</a><br/>	
+<span class="activities_second_line">
+ <i class="icon-pencil"></i> {{custom1}} {{#if custom2}}- {{custom2}}{{/if}}
+</span>  
 {{/if_equals}}
+
+
+
 
 {{#if_equals "EMAIL_SENT" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
- Sent <a href="" class="email-details" data="{{id}}">Email</a> {{#if custom3}}({{add_dots_end custom3}}){{/if}} to Contact <a href="#contact/{{entity_id}}">{{label}}</a> 
-</div>
-<div>
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>	
+Sent email to <a href="#contact/{{entity_id}}">{{label}}</a><br/>	
+<span class="activities_second_line"> 
+<i class="icon-envelope-alt"></i> Email subject - <a href="" class="email-details" data="{{id}}">{{custom3}}</a> 
+</span>
 {{/if_equals}}
-
 
 {{#if_equals "BULK_ACTION" activity_type}}
 
 {{#if_equals "ADD_TAG" custom1}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag" >
-<div>	
- Added Tag {{removeDoubleCoutes custom2}} to {{custom3}} Contacts 
-
-	</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>	
+Added  tag to {{custom3}} Contacts<br/>
+<span class="activities_second_line">
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} added.
+</span>
 {{/if_equals}}
+
 
 {{#if_equals "REMOVE_TAG" custom1}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
- Removed Tag  {{removeDoubleCoutes custom2}} on {{custom3}} Contacts 
-
-	</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
+ Removed tag from {{custom3}} Contacts<br/>
+<span class="activities_second_line">
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} removed.
+</span>
 {{/if_equals}}
+
 
 {{#if_equals "ASIGN_WORKFLOW" custom1}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>
-	{{#if_equals "1" custom3}}
-		Added {{custom3}} Contact to Campaign {{custom2}}
+{{#if_equals "1" custom3}}
+		Added {{custom3}} Contact to Campaign<br/>
+<span class="activities_second_line">   
+<i class="icon-sitemap icon-white"></i> {{custom2}}. 
+</span>
 {{else}}
-Added {{custom3}} Contacts to Campaign {{custom2}}
+Added {{custom3}} Contacts to Campaign <br/>
+<span class="activities_second_line">
+<i class="icon-sitemap icon-white"></i> {{custom2}}.
+</span> 
 {{/if_equals}}
-</div>
-<div>
-
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
 {{/if_equals}}
 
 {{#if_equals "SEND_EMAIL" custom1}}
+
 {{#if_equals "contacts" label}}	
-	
-<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div >
+
 {{#if_equals "1" custom3}}	
-Sent <a href="" class="email-details" data={{id}}>Email</a>{{#if custom4}}({{add_dots_end custom4}}){{/if}} to {{custom3}} Contact 
+Sent a email to {{custom3}} Contact<br/>
+<span class="activities_second_line">
+<i class="icon-envelope-alt"></i> Email subject- <a href="" class="email-details" data={{id}}>{{custom4}}</a>
+</span> 
 {{else}}
-Sent <a href="" class="email-details" data={{id}}>Email</a> {{#if custom4}}({{add_dots_end custom4}}){{/if}} to {{custom3}} Contacts 
+Sent a bulk email to {{custom3}} Contacts<br/>
+<span class="activities_second_line">
+<i class="icon-envelope-alt"></i> Email subject- <a href="" class="email-details" data={{id}}>{{custom4}}</a> 
+</span>
 {{/if_equals}}
-
-	</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
 {{else}}
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
 {{#if_equals "1" custom3}}
-Sent <a href="" class="email-details" data="{{id}}">Email</a> {{#if custom4}}({{add_dots_end custom4}}){{/if}} to {{custom3}} Company
+Sent a email to {{custom3}} company<br/>
+<span class="activities_second_line">
+<i class="icon-envelope-alt"></i> Email subject - <a href="" class="email-details" data={{id}}>{{custom4}}</a>
+</span>
 {{else}}
-Sent <a href="" class="email-details" data="{{id}}">Email</a> {{#if custom4}}({{add_dots_end custom4}}){{/if}} to {{custom3}} Companies
+Sent a bulk email to {{custom3}} Companies<br/>
+<span class="activities_second_line">
+<i class="icon-envelope-alt"></i> Email subject - <a href="" class="email-details" data={{id}}>{{custom4}}</a>
+</span>
 {{/if_equals}}
-
-	</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
-
 {{/if_equals}}
 {{/if_equals}}
 
 {{#if_equals "CHANGE_OWNER" custom1}}
-	
+
 {{#if_equals "contacts" label}}	
-<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
+
 {{#if_equals "1" custom3}}
-		Assigned  {{custom3}} Contact to {{custom2}}
+Changed owner for {{custom3}} Contact <br/>
+<span class="activities_second_line">
+<i class="icon-user icon-white"></i> Contact assigned to {{custom2}}.
+</span>
 {{else}}
-		Assigned  {{custom3}} Contacts to {{custom2}}
+	Changed owner for {{custom3}} Contacts <br/>
+<span class="activities_second_line">
+<i class="icon-user icon-white"></i> Contacts assigned to {{custom2}}.
+</span>
 {{/if_equals}}
-</div>
-<div>
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
 {{else}}
-<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
+
 {{#if_equals "1" custom3}}
-		Assigned  {{custom3}} Company to {{custom2}}
+Changed owner for {{custom3}} Company <br/>
+<span class="activities_second_line">
+<i class="icon-user icon-white"></i> Company assigned to {{custom2}}.
+</span>
 {{else}}
-		Assigned  {{custom3}} Companies to {{custom2}}
+	Changed owner for {{custom3}} Companies <br/>
+<span class="activities_second_line">
+<i class="icon-user icon-white"></i> Companies assigned to {{custom2}}.
+</span>
 {{/if_equals}}
-</div>
-<div>
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
+
 {{/if_equals}}
 {{/if_equals}}
 
 {{#if_equals "DELETE" custom1}}
 	
 {{#if_equals "contacts" label}}	
-<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>
+
 {{#if_equals "1" custom3}}
 		Deleted {{custom3}} Contact
 {{else}}	
     Deleted {{custom3}} Contacts
 {{/if_equals}}
-	</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
 {{else}}
-<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>
 {{#if_equals "1" custom3}}
 		Deleted {{custom3}} company
 {{else}}	
     Deleted {{custom3}} Companies
 {{/if_equals}}
-	</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
 {{/if_equals}}
 {{/if_equals}}
 
 
 {{/if_equals}}
-
 
 
 {{#if_equals "CAMPAIGN" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
-	Added <a href="#contact/{{entity_id}}">{{label}}</a> to Campaign {{custom2}}
-	</div>
-<div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
+Added <a href="#contact/{{entity_id}}">{{label}}</a> to Campaign <br/>
+<span class="activities_second_line">  
+<i class="icon-sitemap icon-white"></i> {{custom2}}.
+</span>
 {{/if_equals}}
 
-
-
 {{#if_equals "TAG_ADD" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag" >
-<div>	
-Added Tag {{removeDoubleCoutes custom1}} to <a href="#contact/{{entity_id}}">{{label}}</a>
-	</div>
-<div>
-		
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>	
+Added Tag to <a href="#contact/{{entity_id}}">{{label}}</a><br/>
+<span class="activities_second_line">
+<i class="icon-tag icon-white"></i> {{removeDoubleCoutes custom1}} added.
+</span>
+{{/if_equals}}
+
+{{#if_equals "CALL" activity_type}}
+{{#if_equals "incoming" custom2}}
+Call from {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+<span class="activities_second_line">
+<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
+</span>
+{{/if_equals}}
+{{#if_equals "outgoing" custom2}}	
+Called {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+<span class="activities_second_line">
+<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
+</span>
+{{/if_equals}}
 {{/if_equals}}
 
 {{/if_equals}}
@@ -985,122 +593,92 @@ Added Tag {{removeDoubleCoutes custom1}} to <a href="#contact/{{entity_id}}">{{l
 <!-- document added startig-->
 {{#if_equals "DOCUMENT" entity_type}}
 {{#if_equals "DOCUMENT_ADD" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
 {{#if_equals "1" custom2}}
-   Added Document <a href="{{custom1}}" target="_blank">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
+   Added Contact to Document {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+<span class="activities_second_line">   
+<i class="icon-file icon-white"></i> {{#unless entityObject}}Document deleted later. {{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Document.{{/if}}
+</span>
 {{else}} 
-	 Added Document <a href="{{custom1}}" target="_blank">{{label}}</a> {{#if related_contact_ids}}related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}}
+{{#if_equals "no related contacts" custom3}}
+   Added Document {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+<span class="activities_second_line">   
+<i class="icon-file icon-white"></i> {{#unless entityObject}}Document deleted later. {{/unless}}{{#if entityObject}}Document type - {{network entityObject.network_type}}{{/if}}
+</span>
+{{else}}
+	 Added Contacts to Document {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+<span class="activities_second_line">
+<i class="icon-file icon-white"></i> {{#unless entityObject}}Document deleted later. {{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Document.{{/if}}
+</span>
+{{/if_equals}} 
 {{/if_equals}}	
-</div>
-<div>
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
 {{/if_equals}}
+
 
 {{#if_equals "DOCUMENT_REMOVE" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
+
 {{#if_equals "1" custom2}}
-   Removed {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} from Document <a href="{{custom1}}" target="_blank">{{label}}</a>
+   Removed Contact from Document {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+<span class="activities_second_line"> 
+  <i class="icon-file"></i> {{#unless entityObject}}Document deleted later.{{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Document.{{/if}} 
+</span>
 {{else}} 
-	 Removed {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} from Document <a href="{{custom1}}" target="_blank">{{label}}</a> 
+ Removed Contacts from Document {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+<span class="activities_second_line">
+<i class="icon-file"></i> {{#unless entityObject}}Document deleted later. {{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Document.{{/if}}
+</span>
 {{/if_equals}}	
-</div>
-<div>
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
 {{/if_equals}}
 
-{{#if_equals "BULK_DELETE" activity_type}}
-	
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>	
-    {{#if_equals "1" custom1}}
-  Deleted Document {{custom2}}
-{{else}} 
-Deleted Documents {{custom2}}  
-{{/if_equals}}	
-</div>
-<div>	
-	<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-		</small>
-</div>
-</div>
-<div class="clearfix"></div>
 
+{{#if_equals "BULK_DELETE" activity_type}}
+  {{#if_equals "1" custom1}}
+  Deleted {{custom1}} Document <br/>
+<span class="activities_second_line">
+ <i class="icon-file icon-white"></i> {{custom2}}.
+</span>
+{{else}} 
+Deleted  {{custom1}} Documents<br/>
+<span class="activities_second_line">
+<i class="icon-file icon-white"></i> {{custom2}}.
+ </span>
+{{/if_equals}}	
 {{/if_equals}}
 {{/if_equals}}
 
 {{#if_equals "CALL" activity_type}}
-	<div style="margin-right:15px;" class="pull-left">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
-			{{else}}
-				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
-			{{/if}}
-	</div>
-<div class="pull-left activity-tag">
-<div>
-
-{{#if_equals "incoming" custom2}}	
-Incoming call (<span style="text-transform: capitalize;">{{custom1}}</span>) {{#if user.name}}to {{user.name}}{{/if}} {{#if entity_id}}by <a href="#contact/{{entity_id}}">{{label}}</a>{{else}}by {{label}}{{/if}}. {{callActivityFriendlyStatus custom3 custom2}} {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}
+{{#unless entity_type}}
+{{#if_equals "incoming" custom2}}
+Call from {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+<span class="activities_second_line">
+<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
+</span>
 {{/if_equals}}
-
 {{#if_equals "outgoing" custom2}}	
-Outgoing call (<span style="text-transform: capitalize;">{{custom1}}</span>) {{#if user.name}}by {{user.name}}{{/if}} {{#if entity_id}}to <a href="#contact/{{entity_id}}">{{label}}</a>{{else}}to {{label}}{{/if}}. {{callActivityFriendlyStatus custom3 custom2}} {{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}
+Called {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{label}}{{/if}}<br/>
+<span class="activities_second_line">
+<i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}} (<span style="text-transform: capitalize;">{{custom1}}</span>)
+</span>
 {{/if_equals}}
+{{/unless}}
+{{/if_equals}}
+
 
 	</div>
 <div>	
-		<small class="edit-hover pull-left" > 
-			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		<small class="edit-hover pull-right activity_time" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" time}}</time>
 		</small>
 </div>
 </div>
 <div class="clearfix"></div>
-{{/if_equals}}
-
 
 </script>
-
 <script id="activity-list-header-template" type="text/html">
-<div class="row">
+<div class="row" id="activity_header">
     <div class="span12">
         <div class="page-header">
             <h1 class="activity-heading"><span>Activities</span>&nbsp;<small class="activity-sub-heading" ></small>&nbsp;<small class="activity-user" ></small></h1>
+		
 		<div class="btn-group pull-right type-task-button" style="cursor:pointer;margin-right:15px;top: -28px;">
                 <div class="btn selected_name" id="selectedentity_type">All Activities</div>
                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -1124,6 +702,16 @@ Outgoing call (<span style="text-transform: capitalize;">{{custom1}}</span>) {{#
                 <ul class="dropdown-menu" id="user-select"></ul>
             </div>
 
+            <div id="activities_date_range" class="btn-group pull-right activity-date-filter" style="cursor:pointer;margin-right:15px;top: -28px;">
+               <i class="icon-calendar icon-large"></i>
+                <span id="range">Filter by date</span>
+                <span class="caret" style="margin-top: 6px; margin-left: 4px;"></span>
+              
+            </div>
+            
+            
+          
+
             
         </div>
     </div>
@@ -1131,7 +719,7 @@ Outgoing call (<span style="text-transform: capitalize;">{{custom1}}</span>) {{#
     
 </div>
 
-<div class="row">
+<div class="row" id="activity_model">
 <div class="span12">
 <div id="activity-list-based-condition"></div>
 </div>

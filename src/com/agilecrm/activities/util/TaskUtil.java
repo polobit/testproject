@@ -1,7 +1,9 @@
 package com.agilecrm.activities.util;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -252,12 +254,27 @@ public class TaskUtil
 
 	System.out.println("check for " + startTime + " " + endTime);
 
+	List<String> default_tasks = getDefaultTaskNames();
 	// Gets list of tasks filtered on given conditions
 	List<Task> dueTasks = dao.ofy().query(Task.class)
 	        .filter("owner", new Key<DomainUser>(DomainUser.class, domainUserId)).filter("due >", startTime)
 	        .filter("due <=", endTime).filter("is_complete", false).list();
 
-	return dueTasks;
+	List<Task> dueTaskList = new ArrayList<>();
+
+	if (dueTasks.isEmpty())
+	{
+	    return dueTasks;
+	}
+
+	for (Task ts : dueTasks)
+	{
+	    if (!default_tasks.contains(ts.subject) && !ts.subject.contains("Tweet about Agile")
+		    && !ts.subject.contains("Like Agile on Facebook"))
+		dueTaskList.add(ts);
+	}
+
+	return dueTaskList;
     }
 
     public static List<Task> getTasksRelatedToCurrentUser()
@@ -609,7 +626,7 @@ public class TaskUtil
 	{
 
 	    DateUtil due_date_util = new DateUtil();
-	    Long due_time = (due_date_util.addDays(1).toMidnight().getTime().getTime() / 1000) - 1;
+	    Long due_time = (due_date_util.getTime().getTime() / 1000) - 1;
 	    int count = dao.ofy().query(Task.class)
 		    .filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
 		    .filter("due <", due_time).filter("is_complete", false).count();
@@ -620,6 +637,94 @@ public class TaskUtil
 	    e.printStackTrace();
 	    return 0;
 	}
+    }
+
+    /**
+     * <<<<<<< HEAD This method returns all the tasks which are incomplete for a
+     * given contact and an owner
+     * 
+     * @param domainUserOwnerKey
+     *            Domain user key which is the owner of the task
+     * @param contactKey
+     *            Contact key which has the incomplete task
+     * @return List of incomplete tasks
+     * 
+     * @author Kona
+     */
+    public static List<Task> getIncompleteTasks(Key<DomainUser> domainUserOwnerKey, Key<Contact> contactKey)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+
+	if (domainUserOwnerKey != null)
+	    searchMap.put("owner", domainUserOwnerKey);
+
+	if (contactKey != null)
+	    searchMap.put("related_contacts", contactKey);
+
+	searchMap.put("is_complete", false);
+	try
+	{
+	    System.out
+		    .println("The domain user key is:" + domainUserOwnerKey + " and the contact key is:" + contactKey);
+	    return dao.listByProperty(searchMap);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Inside getIncompleteTask of TaskUtil and the message is: " + e.getMessage());
+	}
+
+	return new ArrayList<Task>();
+    }
+
+    /**
+     * Returns a list list of tasks as completed.
+     * 
+     * @param tasks
+     *            List of tasks whose status has to be marked as completed
+     * @return List of tasks which are completed
+     * @author Kona
+     */
+    public static List<Task> setStatusAsComplete(List<Task> tasks)
+    {
+	try
+	{
+	    Iterator<Task> taskIterator = tasks.iterator();
+
+	    while (taskIterator.hasNext())
+	    {
+		Task currenttask = taskIterator.next();
+
+		if (!currenttask.is_complete)
+		    currenttask.is_complete = true;
+	    }
+
+	    dao.putAll(tasks);
+
+	    return tasks;
+	}
+	catch (Exception e)
+	{
+	    System.out.println(" Exception in setStatusAsComplete of TaskUtil.java and the message is: "
+		    + e.getMessage());
+	    return tasks;
+	}
+    }
+
+    /**
+     * 
+     * @return defaults task names as a list to stop due task mails
+     */
+    public static List<String> getDefaultTaskNames()
+    {
+	List<String> default_task = new ArrayList<>();
+	default_task.add("Give feedback about Agile");
+	default_task.add("Call Grandmother");
+	default_task.add("Meet Homer to finalize the Deal (Bring Donuts!)");
+	default_task
+	        .add("<a href=\"https://twitter.com/share?url=https%3A%2F%2Fwww.agilecrm.com&amp;text=Sell%20like%20Fortune%20500%20with%20%23AgileCRM%20-%20\" target=\"_blank\"rel=\"nofollow\" title=\"Link: https://twitter.com/share?url=https%3A%2F%2Fwww.agilecrm.com&amp;text=Sell%20like%20Fortune%20500%20with%20%23AgileCRM%20-%20\">Tweet about Agile</a>");
+	default_task
+	        .add("<a href=\"https://www.facebook.com/crmagile\" target=\"_blank\" rel=\"nofollow\" title=\"Link: https://www.facebook.com/crmagile\">Like Agile on Facebook</a>");
+	return default_task;
     }
 
     /***************************************************************************/

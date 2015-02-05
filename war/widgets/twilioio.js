@@ -23,6 +23,11 @@ $(function()
 	TwilioIONumbers = agile_crm_get_contact_properties_list("phone");
 	console.log("TwilioIONumbers");
 	console.log(TwilioIONumbers);
+	
+	// Retrieves image of agile contact
+	TwilioIOContactImg = agile_crm_get_contact_properties_list("image");
+	console.log("TwilioIOContactImg");
+	console.log(TwilioIOContactImg);
 
 	showListOfContactNumbers();
 
@@ -70,7 +75,7 @@ function showListOfContactNumbers()
 
 	// Get template and show details in Twilio widget
 	$('#TwilioIO').html(getTemplate('twilioio-profile', numbers));
-
+	
 	// Retreive Twilio call logs and show it in Twilio widget panel
 	getTwilioIOLogs(TwilioIONumbers[0].value);
 
@@ -95,6 +100,14 @@ function getTwilioIOLogs(to)
 {
 	console.log("In getTwilioIOLogs:" + to);
 
+	// When contact added from API, it may have empty number.
+	if(to == "" || !to)
+	  {
+		// Shows information in Twilio widget panel
+		twilioIOError(TwilioIO_PLUGIN_NAME, "There is no phone number associated with this contact. <a href='#contact-edit'>Add phone number</a>");
+		return;
+	  }		
+	
 	// If call logs are not added then only shows loading until logs are fetched
 	var callLogPresent = $("#twilio-logs-panel li")[0];
 	if (!$(callLogPresent).hasClass("row-fluid"))

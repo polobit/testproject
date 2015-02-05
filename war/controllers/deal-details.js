@@ -12,6 +12,13 @@ routes : {
 
 dealdetails : function(id)
 {
+	//For getting custom fields
+	if(App_Deals.customFieldsList == null || App_Deals.customFieldsList == undefined)
+	{
+		App_Deals.customFieldsList = new Base_Collection_View({ url : '/core/api/custom-fields/scope/position?scope=DEAL', sort_collection : false, 
+			restKey : "customFieldDefs", templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
+		App_Deals.customFieldsList.collection.fetch();
+	}
 	
 	this.dealDetailView = new Base_Model_View({ url : '/core/api/opportunity/' + id, template : "deal-detail", postRenderCallback : function(el)
 	{
@@ -123,8 +130,11 @@ $('#deal-owner').live('click', function(e)
 
 $('#opportunity-actions-delete').live('click', function(e)
 {
+	e.preventDefault();
+	
 	  if(!confirm("Are you sure you want to delete?"))
 			return;
+	  
       
       var id = $(this).closest('.deal_detail_delete').attr('data');
 	
@@ -334,81 +344,25 @@ function deserialize_deal(value, template)
 
 $('#dealdetail-archive').live('click', function(e) {
 	e.preventDefault();
-    if(!confirm("Archive Deal?"))
-		return;
-
  
-    var currentDeal=App_Deal_Details.dealDetailView.model.toJSON();;
+    var currentDeal=App_Deal_Details.dealDetailView.model.toJSON();
     
-    // Get the current deal model from the collection.
-	currentDeal.archived = true;
-    var that = $(this);
     
-    var notes = [];
-	$.each(currentDeal.notes, function(index, note)
-	{
-		notes.push(note.id);
-	});
-	currentDeal.notes = notes;
-    if(currentDeal.note_description)
-		delete currentDeal.note_description;
-
-    if(!currentDeal.close_date || currentDeal.close_date==0)
-    	currentDeal.close_date = null;
+	$("#archived-deal-id",$("#deal_archive_confirm_modal")).val(currentDeal.id);
+	$("#archived-deal-milestone",$("#deal_archive_confirm_modal")).val(currentDeal.milestone);
+	$("#deal_archive_confirm_modal").modal('show');
     
-    currentDeal.owner_id = currentDeal.owner.id;
-    
-    var arch_deal = new Backbone.Model();
-	arch_deal.url = '/core/api/opportunity';
-	arch_deal.save(currentDeal, {
-		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
-		success : function(data, response) {
-			App_Deal_Details.dealDetailView.model = data;
-			App_Deal_Details.dealDetailView.render(true)
-			Backbone.history.navigate("deal/"+data.toJSON().id , {
-	            trigger: true
-	        });
-			
-			
-		}
-	});
 });
 
 $('.deal-restore-detail-view').live('click', function(e) {
 	e.preventDefault();
-    if(!confirm("Restore Deal?"))
-		return;
 
-   
 	var currentDeal = App_Deal_Details.dealDetailView.model.toJSON();
-	currentDeal.archived = false;
-    
-    var notes = [];
-	$.each(currentDeal.notes, function(index, note)
-	{
-		notes.push(note.id);
-	});
-	currentDeal.notes = notes;
-    if(currentDeal.note_description)
-		delete currentDeal.note_description;
-
-    if(!currentDeal.close_date || currentDeal.close_date==0)
-    	currentDeal.close_date = null;
-    currentDeal.owner_id = currentDeal.owner.id;
-    var arch_deal = new Backbone.Model();
-	arch_deal.url = '/core/api/opportunity';
-	arch_deal.save(currentDeal, {
-		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
-		success : function(data, response) {
-			// Remove the deal from the collection and remove the UI element.
-			App_Deal_Details.dealDetailView.model = data;
-			App_Deal_Details.dealDetailView.render(true)
-			Backbone.history.navigate("deal/"+data.toJSON().id , {
-	            trigger: true
-	        });
-			
-		}
-	});
+	
+	$("#restored-deal-id",$("#deal_restore_confirm_modal")).val(currentDeal.id);
+	$("#restored-deal-milestone",$("#deal_restore_confirm_modal")).val(currentDeal.milestone);
+	$("#deal_restore_confirm_modal").modal('show');
+	
 });
 
 

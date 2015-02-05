@@ -1,5 +1,6 @@
 package com.thirdparty.google.utl;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -139,7 +140,7 @@ public class ContactPrefsUtil
     {
 	for (GoogleGroupDetails group : prefs.groups)
 	{
-	    if (atomId.equals(group.atomId))
+	    if (URLDecoder.decode(atomId).equals(group.atomIdDecoded))
 	    {
 		return group;
 	    }

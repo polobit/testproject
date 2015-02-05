@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
@@ -13,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.Event;
+import com.agilecrm.activities.Event.EventType;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -348,18 +351,21 @@ public class EventUtil
 	System.out.println(starttime + "----------------------------" + endtime);
 
 	List<Event> domain_events = new ArrayList<>();
+	List<String> default_events = getDefaultEventNames();
 
-	List<Event> events = dao.ofy().query(Event.class).filter("start >=", starttime).filter("start <=", endtime)
-	        .order("start").list();
-	if (events != null && events.size() > 0)
+	List<Event> list_events = dao.ofy().query(Event.class).filter("start >=", starttime)
+	        .filter("start <=", endtime).order("start").list();
+
+	List<Event> events = new ArrayList<>();
+
+	for (Event ts : list_events)
 	{
-	    Event event = events.get(0);
-	    domain_events = getLatestWithSameStartTime(event.start);
-	    return domain_events;
-
+	    if (!default_events.contains(ts.title))
+		events.add(ts);
 	}
 
-	return null;
+	return events;
+
     }
 
     /**
@@ -371,14 +377,16 @@ public class EventUtil
     public static List<Event> getLatestWithSameStartTime(Long starttime)
     {
 
-	System.out.println("in getLatest EventsWithSameStartTime " + NamespaceManager.get());
+	List<String> default_events = getDefaultEventNames();
 
-	List<Event> domain_events = new ArrayList<>();
-
-	domain_events = dao.listByProperty("start", starttime);
-	System.out.println(domain_events.size() + " domainevents size in getlatesteventswithSameStarttime");
-	System.out.println(starttime + " StartTime in getLatestWithStartTime");
-	return domain_events;
+	List<Event> domain_events = dao.listByProperty("start", starttime);
+	List<Event> events = new ArrayList<>();
+	for (Event event : domain_events)
+	{
+	    if (!default_events.contains(event.title))
+		events.add(event);
+	}
+	return events;
 
     }
 
@@ -419,6 +427,66 @@ public class EventUtil
 	dateFormat.setTimeZone(tz);
 	cal.setTimeZone(tz);
 	return dateFormat.format(cal.getTime());
+    }
+
+    /**
+     * Gets list of all the keys which are in a given start and end date with
+     * the type of event date
+     * 
+     * @param owner
+     *            Event owner
+     * @param status
+     *            Upcoming event or completed. Eg: start >, start <, end > or
+     *            end <. >= won't work
+     * @param eventType
+     *            Web appointment or agile
+     * @return List of AgileUser owner keys
+     * @author Kona
+     * @param contactKey
+     */
+    public static int getEventsKey(Key<AgileUser> owner, String status, EventType eventType, Key<Contact> contactKey)
+    {
+	System.out.println(owner + " ," + status + " ," + eventType + " ," + contactKey);
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	System.out.println("The owner is:" + owner + " ,the status is:" + status + " ,the event type is:" + eventType
+	        + " and thte contact key is:" + contactKey);
+
+	if (owner != null)
+	    searchMap.put("owner", owner);
+
+	if (status != null)
+	{
+	    Long currentEpocTime = System.currentTimeMillis() / 1000;
+	    searchMap.put(status, currentEpocTime);
+	}
+
+	if (eventType != null)
+	    searchMap.put("type", eventType);
+
+	if (contactKey != null)
+	    searchMap.put("related_contacts", contactKey);
+
+	try
+	{
+	    return dao.getCountByProperty(searchMap);
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception in getEventsKey in EventUtil Class" + e.getMessage());
+	    return 0;
+	}
+    }
+
+    /**
+     * 
+     * @return defaults task names as a list to stop due task mails
+     */
+    public static List<String> getDefaultEventNames()
+    {
+	List<String> default_event = new ArrayList<>();
+	default_event.add("Gossip at water cooler");
+	default_event.add("Discuss today's Dilbert strip");
+	return default_event;
     }
 
 }

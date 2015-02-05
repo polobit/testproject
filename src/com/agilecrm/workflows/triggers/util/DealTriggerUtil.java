@@ -207,8 +207,11 @@ public class DealTriggerUtil
 	    opportunityJSON.put("created_time",
 		    DateUtil.getGMTDateInGivenFormat(opportunity.created_time * 1000, "MM/dd/yyyy"));
 
-	    opportunityJSON.put("close_date",
+	    if(opportunity.close_date != null)
+	    {
+		opportunityJSON.put("close_date",
 		    DateUtil.getGMTDateInGivenFormat(opportunity.close_date * 1000, "MM/dd/yyyy"));
+	    }
 
 	    opportunityJSON.put("expected_value", getLongFromDouble(opportunity.expected_value));
 
@@ -220,6 +223,7 @@ public class DealTriggerUtil
 	}
 	catch (Exception e)
 	{
+	    System.err.println("Exception occured while getting opportunity json for trigger..."+ e.getMessage());
 	    e.printStackTrace();
 	    return null;
 	}
@@ -233,14 +237,23 @@ public class DealTriggerUtil
      */
     private static JSONObject getDealCustomJSON(Opportunity opportunity) throws JSONException
     {
-	List<CustomFieldData> customFields = opportunity.custom_data;
+	try
+	{
+	    List<CustomFieldData> customFields = opportunity.custom_data;
 
-	JSONObject customJSON = new JSONObject();
+	    JSONObject customJSON = new JSONObject();
 
-	for (CustomFieldData customField : customFields)
-	    customJSON.put(customField.name, customField.value);
+	    for (CustomFieldData customField : customFields)
+		customJSON.put(customField.name, customField.value);
 
-	return customJSON;
+	    return customJSON;
+	}
+	catch(Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while getting deal custom json..."+ e.getMessage());
+	    return null;
+	}
     }
 
     private static Long getLongFromDouble(Double value)
@@ -259,4 +272,5 @@ public class DealTriggerUtil
 	    return null;
 	}
     }
+   
 }

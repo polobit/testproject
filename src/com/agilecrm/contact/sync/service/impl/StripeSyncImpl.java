@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.agilecrm.Globals;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
@@ -96,7 +96,7 @@ public class StripeSyncImpl extends OneWaySyncService
 
 	    while (true)
 	    {
-		CustomerCollection customerCollections = Customer.all(Options(syncTime), prefs.apiKey);
+		CustomerCollection customerCollections = Customer.all(Options(syncTime));
 		List<Customer> customers = customerCollections.getData();
 		if(customers !=null && customers.size()==0)
 			break;
@@ -144,7 +144,7 @@ public class StripeSyncImpl extends OneWaySyncService
 	option.put("limit", 1);
 	try
 	{
-	    CustomerCollection collection = Customer.all(option, prefs.apiKey);
+	    CustomerCollection collection = Customer.all(option);
 	    Customer customers = collection.getData().get(0);
 	    prefs.lastSyncCheckPoint = customers.getId();
 	    prefs.save();
@@ -218,7 +218,7 @@ public class StripeSyncImpl extends OneWaySyncService
 	{
 	    try
 	    {
-		ChargeCollection chargeCollection = Charge.all(chargeOption, prefs.apiKey);
+		ChargeCollection chargeCollection = Charge.all(chargeOption);
 		List<Charge> charges = chargeCollection.getData();
 		if (charges.size() > 0)
 		{

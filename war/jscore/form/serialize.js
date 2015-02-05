@@ -104,7 +104,7 @@ function serializeForm(form_id) {
 	var chained_selects = $('#' + form_id + ' .chained-table:visible');
 	$.each(chained_selects, function(index, element){
 		var json_array = [];
-	arr = arr.concat($(element).find('.chained').map(function() {
+	arr = arr.concat($(element).find('.chained:visible').map(function() {
 		
 		var json_object = serializeChainedElement(this);
 		json_array.push(json_object);
@@ -223,12 +223,17 @@ function serializeLhsFilters(element)
 					return;
 				}
 			}
-			json_object["LHS"] = $(currentElement).find('[name="LHS"]').val();
+			var LHS = $(currentElement).find('[name="LHS"]').val();
+			json_object["LHS"] = LHS;
 			json_object["CONDITION"] = CONDITION;
 			json_object["RHS"] = RHS_VALUE;
 			json_object["RHS_NEW"] = RHS_NEW_VALUE;
 			json_array.push(json_object);
-			$($(element).find('.lhs-row-filter')[index]).find('a#lhs-filters-header').addClass('bold-text');
+			var fieldName = LHS.replace(/ +/g, '_');
+			fieldName = fieldName.replace(/#/g, '\\#').replace(/@/g, '\\@');
+			var currentElemnt = $(element).find('#'+fieldName+'_div');
+			$(currentElemnt).parent().find("a#lhs-filters-header").addClass('bold-text');
+			$(currentElemnt).find('a.clear-filter-condition-lhs').removeClass('hide');
 		}
 		// Pushes each rule built from chained select in to an JSON array
 	});

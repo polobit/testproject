@@ -5,8 +5,10 @@ $(function()
 $("#btnSerialize").die().live('click', function(e){
 	e.preventDefault();
 	
-	
+	var saveBtn = $(this);
+	disable_save_button($(saveBtn));
 	if(!$.trim($("#15mins").val())&&!$.trim($("#30mins").val())&&!$.trim($("#60mins").val())){
+		enable_save_button($(saveBtn));
 		$('#meeting_duration_message').fadeIn('slow');
         setTimeout(function() {
      	    $('#meeting_duration_message').fadeOut('slow');
@@ -15,6 +17,7 @@ $("#btnSerialize").die().live('click', function(e){
 	}
 	
 	if($("#15mins").val().charCodeAt(0)== ' ' && $("#30mins").val().charCodeAt(0)== ' ' && $("#60mins").val().charCodeAt(0)== ' '){
+		enable_save_button($(saveBtn));
 		$('#meeting_duration_message').fadeIn('slow');
         setTimeout(function() {
      	    $('#meeting_duration_message').fadeOut('slow');
@@ -23,8 +26,7 @@ $("#btnSerialize").die().live('click', function(e){
 	}
 	
 	
-	var saveBtn = $(this);
-	disable_save_button($(saveBtn));
+
 	
 	var json = serializeForm("scheduleform");
 	var meeting_durations = formToJSON();
@@ -49,7 +51,6 @@ $("#btnSerialize").die().live('click', function(e){
 				 setTimeout(function() {
 					 enable_save_button($(saveBtn));
 			     	}, 2000);
-			 // 
 			},
 			error : function(error)
 			{

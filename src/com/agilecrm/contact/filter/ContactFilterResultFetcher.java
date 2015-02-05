@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +28,8 @@ import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessScopes;
@@ -68,6 +72,22 @@ public class ContactFilterResultFetcher
     private DomainUser user = null;
 
     private HashSet<UserAccessScopes> scopes = null;
+    
+    public void setLimits()
+    {
+	Subscription subscription = SubscriptionUtil.getSubscription();
+	
+	if(subscription.isFreePlan())
+	{
+	    max_fetch_size = 25;
+	    max_fetch_set_size = 25;
+	}
+	else
+	{
+	    max_fetch_size = Integer.MAX_VALUE;
+	}
+	    
+    }
 
     /**
      * Search map
@@ -104,7 +124,10 @@ public class ContactFilterResultFetcher
     public ContactFilterResultFetcher(String filter_id, String dynamic_filter, int max_fetch_set_size, String contact_ids,
 	    Long currentDomainUserId)
     {
+	max_fetch_size = Integer.MAX_VALUE;
+	
 	this.max_fetch_set_size = max_fetch_set_size;
+	
 	this.contact_ids = contact_ids;
 	domainUserId = currentDomainUserId;
 	try
@@ -364,7 +387,7 @@ public class ContactFilterResultFetcher
 
 	// Fetches first 200 contacts
 	Collection<Contact> contactCollection = new QueryDocument<Contact>(new ContactDocument().getIndex(),
-		Contact.class).advancedSearch(filter.rules, max_fetch_set_size, cursor, null);
+		Contact.class).advancedSearch(filter, max_fetch_set_size, cursor, null);
 
 	if (contactCollection == null || contactCollection.size() == 0)
 	{
@@ -409,6 +432,10 @@ public class ContactFilterResultFetcher
     public boolean hasNextSet()
     {
 
+	if((fetched_count >= max_fetch_size ))
+	{
+	    return false;
+	}
 	if (!init_fetch || cursor != null)
 	// if (max_fetch_size <= fetched_count && (!init_fetch || (size() >=
 	// max_fetch_set_size && cursor != null)))

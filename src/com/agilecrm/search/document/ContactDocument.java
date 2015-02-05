@@ -16,9 +16,9 @@ import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.DomainUser;
 import com.google.appengine.api.search.Document;
+import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.search.Field;
 import com.google.appengine.api.search.Index;
-import com.google.appengine.api.search.Document.*;
 
 /**
  * <code>ContactDocument</code> class represents "Document" created based on app
@@ -132,6 +132,9 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 		// Add owner to document
 		if (user != null)
 			doc.addField(Field.newBuilder().setName("owner_id").setText(String.valueOf(user.id)));
+		
+		if(contact.campaignStatus != null && !contact.campaignStatus.isEmpty())
+		    doc.addField(Field.newBuilder().setName("campaign_status").setText(SearchUtil.getCampaignStatus(contact)));
 
 		doc.setId(contact.id.toString()).build();
 		return doc;

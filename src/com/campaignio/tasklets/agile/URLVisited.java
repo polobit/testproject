@@ -15,7 +15,8 @@ import com.google.appengine.api.NamespaceManager;
  * @author Naresh
  * 
  */
-public class URLVisited extends TaskletAdapter {
+public class URLVisited extends TaskletAdapter
+{
 	/**
 	 * Given URL
 	 */
@@ -56,36 +57,45 @@ public class URLVisited extends TaskletAdapter {
 	 */
 	public static final String DURATION_TYPE = "duration_type";
 
-	public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
-			JSONObject data, JSONObject nodeJSON) throws Exception {
+	public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+			throws Exception
+	{
 
 		// Get URL value and type
 		String url = getStringValue(nodeJSON, subscriberJSON, data, URL_VALUE);
 		String type = getStringValue(nodeJSON, subscriberJSON, data, TYPE);
-		String duration = getStringValue(nodeJSON, subscriberJSON, data,
-				DURATION);
-		String durationType = getStringValue(nodeJSON, subscriberJSON, data,
-				DURATION_TYPE);
+		String duration = getStringValue(nodeJSON, subscriberJSON, data, DURATION);
+		String durationType = getStringValue(nodeJSON, subscriberJSON, data, DURATION_TYPE);
 
 		int count = 0;
 		String email = null;
 
-		// Gets email from subscriberJSON
-		if (subscriberJSON.getJSONObject("data").has("email"))
-			email = subscriberJSON.getJSONObject("data").getString("email");
+		try
+		{
 
-		// Gets URL count from table.
-		count = AnalyticsSQLUtil.getCountForGivenURL(url,
-				NamespaceManager.get(), email, type, duration, durationType);
+			// Gets email from subscriberJSON
+			if (subscriberJSON.getJSONObject("data").has("email"))
+				email = subscriberJSON.getJSONObject("data").getString("email");
 
-		if (count == 0) {
-			TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-					nodeJSON, BRANCH_NO);
-			return;
+			// Gets URL count from table.
+			count = AnalyticsSQLUtil.getCountForGivenURL(url, NamespaceManager.get(), email, type, duration,
+					durationType);
+
+			if (count == 0)
+			{
+				TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_NO);
+				return;
+			}
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("Exception occuredin URL Visited node..." + e.getMessage());
+
 		}
 
-		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-				nodeJSON, BRANCH_YES);
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_YES);
 
 	}
 }

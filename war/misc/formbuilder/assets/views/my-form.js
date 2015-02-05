@@ -16,14 +16,15 @@ define([
       this.collection.on("remove", this.render, this);
       this.collection.on("change", this.render, this);
       PubSub.on("mySnippetDrag", this.handleSnippetDrag, this);
-      PubSub.on("tempMove", this.handleTempMove, this);
       PubSub.on("tempDrop", this.handleTempDrop, this);
+      PubSub.on("tempMove", this.handleTempMove, this);
       this.$build = $("#build");
       this.renderForm = _.template(_renderForm);
       this.render();
     }
 
     , render: function(){
+      saveform[0] = this.collection.models[0].attributes;
       //Render Snippet Views
       this.$el.empty();
       var that = this;
@@ -55,8 +56,10 @@ define([
     }
 
     , handleSnippetDrag: function(mouseEvent, snippetModel) {
+      var index = this.collection.indexOf(snippetModel);
       $("body").append(new TempSnippetView({model: snippetModel}).render());
       this.collection.remove(snippetModel);
+      saveform.splice(index, 1);
       PubSub.trigger("newTempPostRender", mouseEvent);
     }
 
@@ -80,6 +83,7 @@ define([
         var index = $(".target").index();
         $(".target").removeClass("target");
         this.collection.add(model,{at: index+1});
+        saveform.splice((index+1),0,model.attributes);
       } else {
         $(".target").removeClass("target");
       }
