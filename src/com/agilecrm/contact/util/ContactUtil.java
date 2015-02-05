@@ -1288,9 +1288,9 @@ public class ContactUtil
 						jsonArray.add(json1);
 					}
 					json.element("properties", jsonArray);
+					json.put("subject", contactEmail.subject);
+					json.put("openedTime", contactEmail.email_opened_at);
 				}
-				json.put("subject", contactEmail.subject);
-				json.put("openedTime", "1422988200");
 				
 				contactsList.add(json);
 				//contactIdsList.add(contactEmail.contact_id);
