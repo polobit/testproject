@@ -14,7 +14,6 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.QueryResultIterable;
 import com.googlecode.objectify.Key;
 
@@ -578,6 +577,30 @@ public class DomainUserUtil
 
 	    NamespaceManager.set(oldnamespace);
 	}
+    }
+    
+    /**
+     * Returns list of User Keys
+     * @return List
+     */
+    public static List<Key<DomainUser>> getDomainUserKeys(String domain)
+    {
+	String oldnamespace = NamespaceManager.get();
+
+	NamespaceManager.set("");
+	
+	try
+	{
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    searchMap.put("domain", domain);
+	    
+	    return dao.listKeysByProperty(searchMap);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldnamespace);
+	}
+	
     }
 
 }
