@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.activities.Activity;
+import com.agilecrm.activities.Call;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.activities.util.EventUtil;
@@ -833,7 +834,7 @@ public class ActivityReportsUtil
 	    else
 		link = activity.label;
 
-	    if (activity.custom2.equalsIgnoreCase("incoming"))
+	    if (activity.custom2.equalsIgnoreCase(Call.INBOUND))
 		message += "From " + link + " (Incoming";
 	    else
 		message += "To " + link + " (Outgoing";
@@ -846,20 +847,20 @@ public class ActivityReportsUtil
 	    message += ")";
 
 	    activity.custom4 = message;
-	    if (activity.custom3.equalsIgnoreCase("completed"))
+	    if (activity.custom3.equalsIgnoreCase("completed") || activity.custom3.equalsIgnoreCase(Call.ANSWERED))
 	    {
 		doneCallActivities.add(activity);
 		doneDuration += custom4;
-		if (activity.custom2.equalsIgnoreCase("incoming"))
+		if (activity.custom2.equalsIgnoreCase(Call.INBOUND))
 		    inCount++;
 		else
 		    outCount++;
 	    }
-	    else if (activity.custom3.equalsIgnoreCase("no-answer"))
+	    else if (activity.custom3.equalsIgnoreCase(Call.NO_ANSWER) || activity.custom3.equalsIgnoreCase(Call.BUSY))
 	    {
 		noAnsCallActivities.add(activity);
 	    }
-	    else if (activity.custom3.equalsIgnoreCase("failed"))
+	    else if (activity.custom3.equalsIgnoreCase(Call.FAILED))
 	    {
 		failedCallActivities.add(activity);
 	    }

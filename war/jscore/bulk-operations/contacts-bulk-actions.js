@@ -694,8 +694,8 @@ $(function()
 						// Uncheck contacts table and hide bulk actions button.
 						$('body').find('#bulk-actions').css('display', 'none');
 						$('body').find('#bulk-select').css('display', 'none');
-						$('table#contacts').find('.thead_check').removeAttr('checked');
-						$('table#contacts').find('.tbody_check').removeAttr('checked');
+						$('table#contacts-table').find('.thead_check').removeAttr('checked');
+						$('table#contacts-table').find('.tbody_check').removeAttr('checked');
 						
 					}, "no_noty");
 				});

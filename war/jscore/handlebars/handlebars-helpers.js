@@ -762,6 +762,13 @@ $(function()
 								var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
 								return symbol;
 				});
+				Handlebars.registerHelper('mandrill_exist', function(options)
+				{
+								if(IS_HAVING_MANDRILL)
+									return options.fn(this);
+								else
+									return options.inverse(this);
+				});
 
 				/**
 				 * Calculates the "pipeline" for deals based on their value and probability

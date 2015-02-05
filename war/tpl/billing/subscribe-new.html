@@ -352,7 +352,7 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 									<span style="font-size: 30px;margin-left:0px">$<span id="emails_total_cost">0</span></span><span style="margin-left:3px">/ month</span>
 									<br/>
 									<small style="margin-top: 0px;margin-left:-30px">
-										 charged @ <span id="email_rate">$4</span> / 1000 emails
+										 charged @ <span id="email_rate">{{#mandrill_exist}}$2{{else}}$4{{/mandrill_exist}}</span> / 1000 emails
 									</small>
 								</div>
 							</div>
