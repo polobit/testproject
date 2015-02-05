@@ -54,11 +54,16 @@ public class PullQueueUtil
     {
 	try
 	{
+	    System.out.println("leasing tasks info : " + queueName + " : " + leasePeriod + " : " + countLimit);
+	    
 	    // Get tasks
 	    Queue q = QueueFactory.getQueue(queueName);
 
-	    return q.leaseTasks(LeaseOptions.Builder.withLeasePeriod(leasePeriod, TimeUnit.SECONDS)
+	  List<TaskHandle> taskHandles =  q.leaseTasks(LeaseOptions.Builder.withLeasePeriod(leasePeriod, TimeUnit.SECONDS)
 		    .countLimit(countLimit).groupByTag());
+	  
+	  System.out.println("task handles leased: " + taskHandles == null ? null : taskHandles.size());
+	  return taskHandles;
 
 	}
 	catch (TransientFailureException e)
