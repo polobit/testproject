@@ -29,6 +29,29 @@ $(function()
 		}
 	}, 10000); // 15 sec
 
+	$(".noty_twilio_mute").die().live('click', function(e)
+			{
+				e.preventDefault();
+				console.log("Twilio call noty_twilio_mute from noty");
+				
+				globalconnection.mute(true);
+				
+				$('.noty_buttons').find('.noty_twilio_unmute').toggle();
+				$('.noty_buttons').find('.noty_twilio_mute').toggle();
+			});
+	
+	$(".noty_twilio_unmute").die().live('click', function(e)
+			{
+				e.preventDefault();
+				console.log("Twilio call noty_twilio_unmute from noty");
+
+				globalconnection.mute(false);
+				
+				$('.noty_buttons').find('.noty_twilio_unmute').toggle();
+				$('.noty_buttons').find('.noty_twilio_mute').toggle();
+			});
+	
+	
 	$(".noty_twilio_hangup").die().live('click', function(e)
 	{
 		e.preventDefault();
@@ -85,7 +108,7 @@ $(function()
 		e.preventDefault();
 		console.log("Twilio call canceld from noty");
 
-		globalconnection.disconnect();
+		//globalconnection.disconnect();
 
 		Twilio.Device.disconnectAll();
 	});

@@ -104,7 +104,8 @@ function connectedCallNoty(message, type)
 
 		// Set properties
 		Twilio_Call_Noty = noty({ text : message, type : "success", layout : "bottomRight", buttons : [
-				{ addClass : 'btn btn-primary noty_twilio_dialpad', text : 'Dialpad' }, { addClass : 'btn btn-danger noty_twilio_hangup', text : 'Hangup' }
+				{ addClass : 'btn noty_twilio_mute', text : '<i class="icon-microphone"></i>' },{ addClass : 'btn noty_twilio_unmute', text : '<i class="icon-microphone-off"></i>' },
+				{ addClass : 'btn noty_twilio_dialpad', text : '<i class="icon-th"></i>' }, { addClass : 'btn btn-danger noty_twilio_hangup', text : 'Hangup' }
 		] });
 		
 		if(TWILIO_DIRECTION == "outbound-dial") {
@@ -137,7 +138,7 @@ function connectedCallNoty(message, type)
 
 	// Set properties
 	CALL = noty({ text : message, type : "success", layout : "bottomRight", buttons : [
-			{ addClass : 'btn btn-primary dialpad', text : 'Dialpad' }, { addClass : 'btn btn-danger hangup', text : 'Hangup' }
+			{ addClass : 'btn dialpad', text : 'Dialpad' }, { addClass : 'btn btn-danger hangup', text : 'Hangup' }
 	] });
 }
 
