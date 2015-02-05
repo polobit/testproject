@@ -1269,11 +1269,11 @@ public class ContactUtil
 	public static List<JSONObject> getEmailsOpened(Long minTime,Long maxTime){
 		//List<Contact> contactsList=null;
 		//List<Long> contactIdsList=new ArrayList<Long>();
-		JSONObject json = new JSONObject();
 		List<JSONObject> contactsList = new ArrayList<JSONObject>();
 		try {
 			List<ContactEmail> openedEmailsList=ContactEmailUtil.getEmailsOpened(minTime,maxTime);
 			for(ContactEmail  contactEmail : openedEmailsList){
+				JSONObject json = new JSONObject();
 				Contact contact = getContact(contactEmail.contact_id);
 				if(contact!=null){
 					json.put("id", contact.id);
@@ -1290,9 +1290,8 @@ public class ContactUtil
 					json.element("properties", jsonArray);
 					json.put("subject", contactEmail.subject);
 					json.put("openedTime", contactEmail.email_opened_at);
+					contactsList.add(json);
 				}
-				
-				contactsList.add(json);
 				//contactIdsList.add(contactEmail.contact_id);
 			}
 			/*if(contactIdsList.size()!=0)
