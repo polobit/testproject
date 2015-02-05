@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.queues.PullScheduler;
 import com.google.appengine.api.ThreadManager;
+import com.google.appengine.api.backends.BackendServiceFactory;
 
 /**
  * <code>BackendPullServlet</code> is the backend servlet to process pull queue
@@ -21,6 +22,7 @@ public class BackendPullServlet extends HttpServlet
 {
     public void doGet(HttpServletRequest req, HttpServletResponse res)
     {
+	System.out.println("Backend pull servlet running in backends : " + BackendServiceFactory.getBackendService().getCurrentBackend());
 	doPost(req, res);
     }
 
@@ -29,6 +31,9 @@ public class BackendPullServlet extends HttpServlet
 
 	// Pull queue name
 	String queueName = req.getParameter("queue_name");
+	
+	System.out.println("Request forwarded to post request. Start time of backend request : " + System.currentTimeMillis() + " queue name : " + queueName);
+	
 
 	if (StringUtils.isBlank(queueName))
 	    return;
