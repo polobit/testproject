@@ -94,7 +94,9 @@ function enableKeyboardShotcuts()
 				App_Workflows.navigate("workflow-add",{trigger:true});
 			else if(isRoute('report'))
 				App_Reports.navigate("report-add",{trigger:true});
-			else if(isRoute('task') || isRoute('calendar'))
+			else if(isRoute('task'))
+				$('#activityTaskModal').modal('show');
+			else if(isRoute('calendar'))
 				$('#activityModal').modal('show');
 		});
 	});

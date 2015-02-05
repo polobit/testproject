@@ -156,7 +156,8 @@
 											Contact</a></li>
 									<li><a href="#companyModal" data-toggle="modal"
 										id="company"> Company</a></li>
-									<li><a href="#" id="show-activity"> Activity</a></li>
+									<li><a href="#" id="show-activity"> Event</a></li>
+									<li><a href="#" class="add-task"> Task</a></li>
 
 									<li><a href="#" class="deals-add"> Deal</a></li>
 									<li><a href="#" id="show-note"> Note</a></li>
