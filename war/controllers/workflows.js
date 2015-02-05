@@ -238,11 +238,11 @@ var WorkflowsRouter = Backbone.Router
 				// Render tabs
 				$('#campaign-analysis-tabs').html(getTemplate("campaign-analysis-tabs", { "id" : id }));
 
-				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
+//				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+//				{
+//					this.navigate("workflows", { trigger : true });
+//					return;
+//				}
 
 				/* Set the designer JSON. This will be deserialized */
 //				this.workflow_model = this.workflow_list_view.collection.get(id);
@@ -319,11 +319,11 @@ var WorkflowsRouter = Backbone.Router
 				// Render tabs with id
 				$('#campaign-analysis-tabs').html(getTemplate("campaign-analysis-tabs", { "id" : id }));
 
-				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
+//				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+//				{
+//					this.navigate("workflows", { trigger : true });
+//					return;
+//				}
 
 //				/* Set the designer JSON. This will be deserialized */
 //				this.workflow_model = this.workflow_list_view.collection.get(id);
@@ -392,10 +392,15 @@ var WorkflowsRouter = Backbone.Router
 						LHS = $("#LHS", el);
 						RHS = $("#RHS", el);
 
+						CALL = $('#CALL', el);
+						
 						// Chaining dependencies of input
 						// fields
 						// with jquery.chained.js
 						RHS.chained(LHS);
+						
+						// Chain Call trigger options
+						CALL.chained(LHS);
 
 					});
 
@@ -475,10 +480,15 @@ var WorkflowsRouter = Backbone.Router
 							LHS = $("#LHS", el);
 							RHS = $("#RHS", el);
 
+							CALL = $('#CALL', el);
+							
 							// Chaining dependencies of input
 							// fields
 							// with jquery.chained.js
 							RHS.chained(LHS);
+							
+							// Chain Call Trigger options
+							CALL.chained(LHS);
 
 						});
 
@@ -500,6 +510,12 @@ var WorkflowsRouter = Backbone.Router
 							var trigger_deal_milestone_value = currentTrigger.toJSON()['trigger_deal_milestone'];
 							populate_milestones_in_trigger($('form#addTriggerForm', el), 'trigger-deal-milestone', trigger_deal_milestone_value);
 
+						}
+
+						if (type == 'FORM_SUBMIT')
+						{
+							var trigger_form_id = currentTrigger.toJSON()['trigger_form_event'];
+							populate_forms_in_trigger($('form#addTriggerForm', el), 'trigger-form-event', trigger_form_id);
 						}
 
 						// Populate contact filters list and make obtained
@@ -545,14 +561,16 @@ var WorkflowsRouter = Backbone.Router
 							populate_inbound_mail_events_in_trigger($('form#addTriggerForm', el), 'trigger-inbound-mail-event');
 						}
 						
-						if(type == 'EMAIL_OPENED' || type == 'EMAIL_LINK_CLICKED')
+						if(type == 'EMAIL_OPENED' || type == 'EMAIL_LINK_CLICKED' || type == 'UNSUBSCRIBED')
 						{
-							// Show custom tags textbox
-							$('#email-tracking-type', el).closest('div.control-group').css('display', '');
+							if(type !== 'UNSUBSCRIBED'){
+								// Show custom tags textbox
+								$('#email-tracking-type', el).closest('div.control-group').css('display', '');
 							
-							$('#email-tracking-type', el).find('option[value=' + currentTrigger.toJSON()["email_tracking_type"] + ']').attr('selected', 'selected').trigger('change');
+								$('#email-tracking-type', el).find('option[value=' + currentTrigger.toJSON()["email_tracking_type"] + ']').attr('selected', 'selected').trigger('change');
+							}
 							
-							if(currentTrigger.toJSON()["email_tracking_type"] == "CAMPAIGNS")
+							if(currentTrigger.toJSON()["email_tracking_type"] == "CAMPAIGNS" || type == 'UNSUBSCRIBED')
 							{
 								$('#email-tracking-campaign-id',el).closest('div.control-group').css('display', '');
 								
@@ -575,6 +593,8 @@ var WorkflowsRouter = Backbone.Router
 								 */
 								fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', function fillCampaign()
 								{
+									$('#email-tracking-campaign-id option:first').after('<option value="0">All</option>');
+									
 									var value = currentTrigger.toJSON();
 									if (value)
 									{
@@ -602,6 +622,12 @@ var WorkflowsRouter = Backbone.Router
 							$('#email-type', el).find('option[value=' + currentTrigger.toJSON()["email_type"] + ']').attr('selected', 'selected').trigger('change');
 							
 							populate_owners_in_trigger($('form#addTriggerForm', el), 'event-owner-id', currentTrigger.toJSON()["event_owner_id"]);
+						}
+						
+						//Inbound of Outbound call
+						if(type == 'INBOUND_CALL' || type == 'OUTBOUND_CALL')
+						{
+							populate_call_trigger_options($('form#addTriggerForm', el), currentTrigger.toJSON());	
 						}
 
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
@@ -806,11 +832,11 @@ var WorkflowsRouter = Backbone.Router
 				// Render tabs
 				$('#campaign-analysis-tabs').html(getTemplate("campaign-analysis-tabs", { "id" : id }));
 
-				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
+//				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+//				{
+//					this.navigate("workflows", { trigger : true });
+//					return;
+//				}
 
 				var all_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/all-subscribers/' + id,
 						'workflow-other-subscribers');

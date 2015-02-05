@@ -400,10 +400,7 @@ function bindDropdownEvents()
 		
 		// Add selected details of dropdown in cookie
 		addDetailsInCookie(this);
-		
-		// Group view settings
-		addDetailsInGroupView(this);
-		
+				
 		setTimeout(function() { // Do something after 2 seconds
 			// Get details from dropdown and call function to create collection
 			getDetailsForCollection();
@@ -417,48 +414,18 @@ function bindDropdownEvents()
 		changeHeadingOfPage($('#new-owner-tasks').closest(".btn-group").find(".selected_name").html());
 	});	
 }
-// Group view settings
-function addDetailsInGroupView(elmnt)
-{
-	console.log("in addDetailsInGroupView");	
-	
-    var criteria = getCriteria();
-	console.log("criteria: " + criteria);
-	
-	// Check for list view 
-	if(criteria == "LIST")
-	  return;
-	  	
-	var name = $(elmnt).html();
-	var id = $(elmnt).attr("href");
-	
-	console.log(name+"  "+id);
-
-	var taskField = null;
-	var taskFieldValue = null;
-
-	if ($(elmnt).closest("ul").attr('id') == "new-type-tasks")
-		taskField = "taskCriteria";
-	else if ($(elmnt).closest("ul").attr('id') == "new-owner-tasks")
-		taskField = "taskOwner";
-
-	taskFieldValue = name + "_" + id;
-
-	// Changes value of attribute in group view btn
-	$(".group-view").attr(taskField, taskFieldValue);
-}
 
 // Change UI and input field 
 function applyDetailsFromGroupView()
 {
 	console.log("In applyDetailsFromGroupView");
+	
+	var task_criteria_forgroupview = readCookie("task_criteria_forgroupview");
+	var task_owner_forgroupview = readCookie("task_owner_forgroupview");
 
-	var task_criteria = $(".group-view").attr("taskCriteria");
-	var task_owner = $(".group-view").attr("taskOwner");
-
-	console.log(task_criteria + " " + task_owner);
-
-	withoutEventChangeDropDowns(task_criteria, task_owner, true);
+	console.log(task_criteria_forgroupview + " " + task_owner_forgroupview);
+			
+	withoutEventChangeDropDowns(task_criteria_forgroupview, task_owner_forgroupview, true);	
 
 	// Hide group view
 	$(".group-view").hide();

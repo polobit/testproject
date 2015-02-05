@@ -1,16 +1,17 @@
-
-function includeTimeAgo(element){
+function includeTimeAgo(element)
+{
 	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$("time", element).timeago();
-			});
+	{
+		$("time", element).timeago();
+	});
 }
 
 /**
  * To show the dates or time in words of time-ago plugin.
+ * 
  * @param element
- 
-
+ * 
+ * 
  * 
  * updateData() method updates chat sessions on page for different query's from
  * user
@@ -20,14 +21,14 @@ function includeTimeAgo(element){
  */
 function updateActivty(params)
 {
-
+	console.log("entered into update activity function  "+new Date().getTime()+"  time with milliseconds "+new Date())
 	// Creates backbone collection view
-	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params, sortKey : 'time', descending : true, templateKey : "activity-list-log",
-		sort_collection : false,cursor : true,scroll_symbol:'scroll', page_size : 20, individual_tag_name : 'li',
-		postRenderCallback : function(el) {
+	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params, sortKey : 'time',
+		descending : true, templateKey : "activity-list-log", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 20,
+		individual_tag_name : 'li', postRenderCallback : function(el)
+		{
 			includeTimeAgo(el);
-		},
-		appendItemCallback : function(el)
+		}, appendItemCallback : function(el)
 		{
 			includeTimeAgo(el);
 		}
@@ -39,6 +40,8 @@ function updateActivty(params)
 
 	// Renders data to activity list page.
 	$('#activity-list-based-condition').html(this.activitiesview.render().el);
+	
+	console.log("completed update activity function  "+new Date().getTime()+"  time with milliseconds "+new Date())
 
 }
 
@@ -50,8 +53,13 @@ function updateActivty(params)
  */
 function getParameters()
 {
-
 	var params = "?";
+
+	// Get Date Range
+	var range = $('#activities_date_range #range').html().split("-");
+
+	// Returns milliseconds from start date. For e.g., August 6, 2013 converts
+	// to 1375727400000
 
 	// Get task type and append it to params
 	var user = $('#user-select').data("selected_item");
@@ -61,6 +69,22 @@ function getParameters()
 		params += ("user_id=" + user);
 	// Get owner name and append it to params
 
+	if (range && range != "Filter by date")
+	{
+		var start_time = Date.parse($.trim(range[0])).valueOf();
+
+		var end_value = $.trim(range[1]);
+
+		// To make end value as end time of day
+		if (end_value)
+			end_value = end_value + " 23:59:59";
+
+		// Returns milliseconds from end date.
+		var end_time = Date.parse(end_value).valueOf();
+
+		// Adds start_time, end_time and timezone offset to params.
+		params += ("&start_time=" + start_time + "&end_time=" + end_time);
+	}
 	if (entitytype == 'TASK')
 	{
 		params += ("&entity_type=" + entitytype);
@@ -102,3 +126,36 @@ function getParameters()
 	return params;
 }
 
+function initActivitiesDateRange()
+{
+	$('#activities_date_range').daterangepicker({ ranges : { 'Today' : [
+			'today', 'today'
+	], 'Yesterday' : [
+			'yesterday', 'yesterday'
+	], 'Last 7 Days' : [
+			Date.today().add({ days : -6 }), 'today'
+	], 'Last 30 Days' : [
+			Date.today().add({ days : -29 }), 'today'
+	], 'This Month' : [
+			Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()
+	], 'Last Month' : [
+			Date.today().moveToFirstDayOfMonth().add({ months : -1 }), Date.today().moveToFirstDayOfMonth().add({ days : -1 })
+	] } }, function(start, end)
+	{
+		if (start && end)
+		{
+			createCookie("selectedStartTime", start.toString('MMMM d, yyyy'), 90);
+			createCookie("selectedEndTime", end.toString('MMMM d, yyyy'), 90);
+			$('#activities_date_range #range').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
+
+			updateActivty(getParameters());
+		}
+		else
+		{
+			eraseCookie("selectedStartTime");
+			eraseCookie("selectedEndTime");
+			$('#activities_date_range #range').html('Filter by date');
+			updateActivty(getParameters());
+		}
+	});
+}

@@ -3,6 +3,7 @@ package com.agilecrm;
 import java.io.IOException;
 import java.net.URLEncoder;
 
+import javax.jdo.annotations.Queries;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.DomainUser;
@@ -19,6 +21,10 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.RegisterUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.utils.SystemProperty;
 
 /**
@@ -70,17 +76,16 @@ public class LoginServlet extends HttpServlet
 	    response.sendRedirect(Globals.CHOOSE_DOMAIN);
 	    return;
 	}
-	
-	// If request is due to multiple logins, page is redirected to error page
-	String multipleLogin = (String)request.getParameter("ml");
-	
-	if(!StringUtils.isEmpty(multipleLogin))
+
+	// If request is due to multiple logins, page is redirected to error
+	// page
+	String multipleLogin = (String) request.getParameter("ml");
+
+	if (!StringUtils.isEmpty(multipleLogin))
 	{
 	    handleMulipleLogin(response);
 	    return;
 	}
-	
-	
 
 	// Check the type of authentication
 	try
@@ -99,10 +104,8 @@ public class LoginServlet extends HttpServlet
 		    loginAgile(request, response);
 		}
 
-		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(true);
-		restriction.refresh(true);
-		restriction.save();
-
+		// Updates account stats
+		updateEntityStats();
 		return;
 	    }
 	}
@@ -171,6 +174,8 @@ public class LoginServlet extends HttpServlet
 	// Get Password
 	String password = request.getParameter("password");
 
+	String timezone = request.getParameter("account_timezone");
+
 	if (email == null || password == null)
 	    throw new Exception("Invalid Input. Email or password has been left blank.");
 
@@ -216,6 +221,8 @@ public class LoginServlet extends HttpServlet
 	    request.getSession().setMaxInactiveInterval(2 * 60 * 60);
 	}
 
+	request.getSession().setAttribute("account_timezone", timezone);
+
 	// Redirect to page in session is present - eg: user can access #reports
 	// but we store reports in session and then forward to auth. After auth,
 	// we forward back to the old page
@@ -229,7 +236,7 @@ public class LoginServlet extends HttpServlet
 
 	response.sendRedirect("/");
     }
-    
+
     private void handleMulipleLogin(HttpServletResponse response)
     {
 	try
@@ -241,5 +248,14 @@ public class LoginServlet extends HttpServlet
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+    }
+
+    private void updateEntityStats()
+    {
+	AccountLimitsRemainderDeferredTask stats = new AccountLimitsRemainderDeferredTask(NamespaceManager.get());
+	
+	// Add to queue
+	Queue queue = QueueFactory.getQueue("account-stats-update-queue");
+	queue.addAsync(TaskOptions.Builder.withPayload(stats));
     }
 }

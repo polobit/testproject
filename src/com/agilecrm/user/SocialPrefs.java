@@ -1,5 +1,6 @@
 package com.agilecrm.user;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Id;
@@ -60,6 +61,13 @@ public class SocialPrefs
     @Parent
     @JsonIgnore
     private Key<AgileUser> agileUser;
+    
+    @JsonIgnore
+    @NotSaved(IfDefault.class)
+    public List<Key<AgileUser>> sharedWithUsers;
+
+    @NotSaved
+    public List<String> shared_with_users_ids;
 
     /**
      * Social group token.
@@ -147,6 +155,47 @@ public class SocialPrefs
 	if (properties.containsKey("picture"))
 	    this.picture = properties.get("picture");
 	System.out.println(properties);
+    }
+    
+    /**
+     * Sets agileUser.
+     * 
+     * @param agileUser
+     *            - CurrentAgileUser Key.
+     */
+    public void setAgileUser(Key<AgileUser> agileUser)
+    {
+	this.agileUser = agileUser;
+    }
+
+    /**
+     * Returns AgileUser Key.
+     * 
+     * @return AgileUser object
+     */
+    public Key<AgileUser> getAgileUser()
+    {
+	return agileUser;
+    }
+    
+    /**
+     * Returns list of users, to which current user IMAP settings are sharing
+     * 
+     * @return
+     */
+    public List<Key<AgileUser>> getSharedWithUsers()
+    {
+	return sharedWithUsers;
+    }
+
+    /**
+     * Sets list of users, to which current user IMAP settings are sharing
+     * 
+     * @return
+     */
+    public void setSharedWithUsers(List<Key<AgileUser>> sharedUsers)
+    {
+	this.sharedWithUsers = sharedUsers;
     }
 
     /**

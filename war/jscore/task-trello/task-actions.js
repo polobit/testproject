@@ -75,6 +75,13 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 
 		// change task count in header of task list
 		changeTaskCount(modelTaskList[0].toJSON(), false);
+		
+		var due_task_count=getDueTasksCount();
+		if(due_task_count==0)
+			$(".navbar_due_tasks").css("display", "none");
+		else
+			$(".navbar_due_tasks").css("display", "block");
+		$('#due_tasks_count').html(due_task_count);
 	} });
 }
 

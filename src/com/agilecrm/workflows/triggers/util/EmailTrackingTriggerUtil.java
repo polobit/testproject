@@ -39,26 +39,63 @@ public class EmailTrackingTriggerUtil
 
     public static void executeTrigger(String subscriberId, String campaignId, String linkClicked, Type type)
     {
-	List<Trigger> triggers = TriggerUtil.getTriggersByCondition(type);
-
-	Long contactId = null;
-	Long workflowId = null;
-
-	if (!StringUtils.isBlank(subscriberId))
-	    contactId = Long.parseLong(subscriberId);
-
-	if (!StringUtils.isBlank(campaignId))
-	    workflowId = Long.parseLong(campaignId);
-
-	for (Trigger trigger : triggers)
+	try
 	{
-	    if (type.equals(Type.EMAIL_OPENED))
-		executeEmailOpenTrigger(trigger, contactId, workflowId);
-	    else
-		executeLinkClickedTrigger(trigger, contactId, workflowId, linkClicked);
+	    List<Trigger> triggers = TriggerUtil.getTriggersByCondition(type);
+
+	    Long contactId = null;
+	    Long workflowId = null;
+ 
+	    if (!StringUtils.isBlank(subscriberId))
+		contactId = Long.parseLong(subscriberId);
+
+	    if (!StringUtils.isBlank(campaignId))
+		workflowId = Long.parseLong(campaignId);
+
+	    for (Trigger trigger : triggers)
+	    {
+		if (type.equals(Type.EMAIL_OPENED))
+		    executeEmailOpenTrigger(trigger, contactId, workflowId);
+		else if(type.equals(Type.EMAIL_LINK_CLICKED))
+		    executeLinkClickedTrigger(trigger, contactId, workflowId, linkClicked);
+		else
+		    executeUnsubscribedTrigger(trigger, contactId, workflowId);
+		
+	    }
+	}
+	catch(Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occurred while executing email tracking trigger..."+ e.getMessage());
 	}
     }
 
+    public static void executeUnsubscribedTrigger(Trigger trigger, Long subscriberId, Long campaignId)
+    {
+	
+	if(trigger == null)
+	    return;
+	
+	if(!trigger.type.equals(Type.UNSUBSCRIBED))
+	    return;
+	
+	Contact contact = null;
+	
+	if (subscriberId != null)
+	    contact = ContactUtil.getContact(subscriberId);
+
+	if (contact == null)
+	{
+	    System.err.print("Contact doesn't exist that clicked link...");
+	    return;
+	}
+	
+	// Execute campaign if Any or matches respective campaign
+        if(trigger.email_tracking_campaign_id == 0 || trigger.email_tracking_campaign_id.equals(campaignId))
+            WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
+	
+    }
+    
     public static void executeLinkClickedTrigger(Trigger trigger, Long subscriberId, Long campaignId, String linkClicked)
     {
 	if (trigger == null)
@@ -119,7 +156,8 @@ public class EmailTrackingTriggerUtil
 	}
 
 	// Trigger only if email opened belongs to Given Campaign
-	if (trigger.email_tracking_type.equals("CAMPAIGNS") && trigger.email_tracking_campaign_id.equals(workflowId)
+	if (trigger.email_tracking_type.equals("CAMPAIGNS")
+	        && (trigger.email_tracking_campaign_id == 0 || trigger.email_tracking_campaign_id.equals(workflowId))
 	        && !trigger.email_tracking_campaign_id.equals(trigger.campaign_id))
 	    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
     }

@@ -20,6 +20,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.util.StringUtils2;
+import com.agilecrm.workflows.status.CampaignStatus;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
 
@@ -98,6 +99,31 @@ public class SearchUtil
 		    e.printStackTrace();
 		}
 		continue;
+	    } else if (customField != null && customField.field_type == CustomFieldDef.Type.NUMBER)
+	    {
+		try
+		{
+		    doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_number")
+			    .setNumber(Double.valueOf(contactField.value)));
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+		continue;
+	    }
+	    
+	    if(customField == null && field_name.equals(Contact.PHONE)) {
+	    	normalized_value = getPhoneNumberTokens(contactField.value);
+	    	if (fields.containsKey(field_name))
+		    {
+			String value = fields.get(field_name) + " " + normalized_value;
+
+			normalized_value = value;
+		    }
+	    	doc.addField(Field.newBuilder().setName(field_name).setText(normalized_value));
+	    	fields.put(field_name, normalized_value);
+	    	continue;
 	    }
 
 	    /*
@@ -330,4 +356,47 @@ public class SearchUtil
 	// Formated to build query
 	return formatter.format(truncatedDate);
     }
+    
+    public static String getPhoneNumberTokens(String phoneNumber) {
+    	if(StringUtils.isEmpty(phoneNumber)) {
+    		return "";
+    	}
+    	phoneNumber = StringUtils2.extractNumber(phoneNumber);
+    	if(phoneNumber.length() > 8) {
+    		phoneNumber = phoneNumber + " " + phoneNumber.substring(phoneNumber.length() -8);
+    	}
+    	return phoneNumber;
+    }
+    
+    /**
+     * Returns campaign status string with each campaign status separated by space
+     * 
+     * @param contact
+     * @return
+     */
+    public static String getCampaignStatus(Contact contact)
+    {
+
+	String campaignStatus = "";
+	
+	try
+	{
+	    for(CampaignStatus campaignStatusObj : contact.campaignStatus)
+	    {
+		if(campaignStatusObj == null)
+		    continue;
+	    
+		campaignStatus += (campaignStatus == "" ? "": " ") + campaignStatusObj.status.replaceAll("-", "_");
+	    }
+	}
+	catch(Exception e)
+	{
+	    System.err.println("Exception occured while getting campaign status in string..." + e.getMessage());
+	    e.printStackTrace();
+	}
+	
+	return campaignStatus;
+	
+    }
+    
 }

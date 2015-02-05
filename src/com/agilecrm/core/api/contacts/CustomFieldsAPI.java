@@ -355,4 +355,21 @@ public class CustomFieldsAPI
 			e.printStackTrace();
 		}
 	}
+	/**
+     * Gets all custom fields order by position
+     * 
+     * @return List of custom fields
+     */
+    @Path("/position")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<CustomFieldDef> getCustomFieldsByPosition(){
+    	try{
+    		return CustomFieldDefUtil.getCustomFieldsByPosition();
+    	}
+    	catch (Exception e){
+    		e.printStackTrace();
+    		return null;
+    	}
+    }
 }

@@ -621,7 +621,7 @@ function groupingCustomFields(base_model){
 				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
 			}});
 		App_Admin_Settings.contactCustomFieldsListView.collection.fetch();
-		$('#'+base_model.get("scope")+'-custom-fields', this.el).append($(App_Admin_Settings.contactCustomFieldsListView.render().el));
+		$('#customfields-contacts-accordion', this.el).append($(App_Admin_Settings.contactCustomFieldsListView.render().el));
 	}else if(base_model.get("scope")=="COMPANY"){
 		App_Admin_Settings.companyCustomFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields/scope/position?scope='+base_model.get("scope"), sortKey : "position", restKey : "customFieldDefs",
 			templateKey : templateKey, individual_tag_name : 'tr',
@@ -629,7 +629,7 @@ function groupingCustomFields(base_model){
 				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
 			}});
 		App_Admin_Settings.companyCustomFieldsListView.collection.fetch();
-		$('#'+base_model.get("scope")+'-custom-fields', this.el).append($(App_Admin_Settings.companyCustomFieldsListView.render().el));
+		$('#customfields-companies-accordion', this.el).append($(App_Admin_Settings.companyCustomFieldsListView.render().el));
 	}else if(base_model.get("scope")=="DEAL"){
 		App_Admin_Settings.dealCustomFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields/scope/position?scope='+base_model.get("scope"), sortKey : "position", restKey : "customFieldDefs",
 			templateKey : templateKey, individual_tag_name : 'tr',
@@ -637,7 +637,7 @@ function groupingCustomFields(base_model){
 				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
 			}});
 		App_Admin_Settings.dealCustomFieldsListView.collection.fetch();
-		$('#'+base_model.get("scope")+'-custom-fields', this.el).append($(App_Admin_Settings.dealCustomFieldsListView.render().el));
+		$('#customfields-deals-accordion', this.el).append($(App_Admin_Settings.dealCustomFieldsListView.render().el));
 	}else if(base_model.get("scope")=="CASE"){
 		App_Admin_Settings.caseCustomFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields/scope/position?scope='+base_model.get("scope"), sortKey : "position", restKey : "customFieldDefs",
 			templateKey : templateKey, individual_tag_name : 'tr',
@@ -645,16 +645,16 @@ function groupingCustomFields(base_model){
 				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
 			}});
 		App_Admin_Settings.caseCustomFieldsListView.collection.fetch();
-		$('#'+base_model.get("scope")+'-custom-fields', this.el).append($(App_Admin_Settings.caseCustomFieldsListView.render().el));
+		$('#customfields-cases-accordion', this.el).append($(App_Admin_Settings.caseCustomFieldsListView.render().el));
 	}
 }
 function enableCustomFieldsSorting(el,connClass,connId){
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function(){
 		$('.'+connClass).sortable({
-			connectWith: '.'+connClass,
-			iframeFix: false,
+			axis: "y" ,
+			containment: '.'+connClass,
+			scroll: false,
 			items:'tr',
-			opacity:0.8,
 			helper: function(e, tr){
 			    var $originals = tr.children();
 			    var $helper = tr.clone();
@@ -662,14 +662,17 @@ function enableCustomFieldsSorting(el,connClass,connId){
 			    {
 			      // Set helper cell sizes to match the original sizes
 			      $(this).width($originals.eq(index).width());
+			      $(this).css("background","#f5f5f5");
+			      $(this).css("border-bottom","1px solid #ddd");
 			    });
 			    return $helper;
 			},
-			revert:true,
 			forceHelperSize:true,
 			placeholder:'<tr><td></td></tr>',
 			forcePlaceholderSize:true,
-			tolerance:'pointer'
+			handle: ".icon-move",
+			cursor: "move",
+			tolerance: "intersect"
 		});
 		
 		/*

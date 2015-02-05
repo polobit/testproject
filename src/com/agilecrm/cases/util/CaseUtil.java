@@ -133,4 +133,20 @@ public class CaseUtil
 	    return new JSONObject();
 	}
     }
+
+    /**
+     * Returns cases based on contactId conditions
+     * 
+     * @param contactId
+     *            - related contact of a case.
+     */
+    public static List<Case> getCases(Long contactId)
+    {
+	Map<String, Object> conditionsMap = new HashMap<String, Object>();
+
+	if (contactId != null)
+	    conditionsMap.put("related_contacts_key", new Key<Contact>(Contact.class, contactId));
+
+	return dao.listByProperty(conditionsMap);
+    }
 }

@@ -118,11 +118,16 @@ function getActivityObject(id)
 
 function update_event_activity(ele)
 {
-
 	var value = JSON.parse(ele);
 	deserializeForm(value, $("#updateActivityForm"));
 	$("#updateActivityModal").modal('show');
 
+	$('.update-start-timepicker').val(fillTimePicker(value.start));
+
+	$('.update-end-timepicker').val(fillTimePicker(value.end));
+
+	// Fills owner select element
+	populateUsersInUpdateActivityModal(value);
 }
 
 function getModal(){

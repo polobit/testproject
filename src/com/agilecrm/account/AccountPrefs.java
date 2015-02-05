@@ -42,6 +42,8 @@ public class AccountPrefs
     @NotSaved(IfDefault.class)
     public String company_name = "";
 
+    public String timezone = "UTC";
+
     /**
      * AccountPrefs Dao.
      */

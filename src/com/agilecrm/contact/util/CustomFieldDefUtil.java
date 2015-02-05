@@ -76,6 +76,17 @@ public class CustomFieldDefUtil
 
     public static List<CustomFieldDef> getSearchableCustomFieldsByScope(SCOPE scope)
     {
+    List<CustomFieldDef> contactCustomFieldsList = new ArrayList<CustomFieldDef>();
+    if(scope!=null && (scope==SCOPE.CONTACT || scope==SCOPE.PERSON)){
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	map.put("searchable", true);
+		List<CustomFieldDef> customFieldsList = dao.listByProperty(map);;
+		for(CustomFieldDef cfd : customFieldsList){
+			if(cfd.scope==SCOPE.CONTACT || cfd.scope==SCOPE.PERSON || cfd.scope==null)
+				contactCustomFieldsList.add(cfd);
+		}
+		return contactCustomFieldsList;
+    }
 	Map<String, Object> map = new HashMap<String, Object>();
 	map.put("searchable", true);
 	map.put("scope", scope);
@@ -186,13 +197,52 @@ public class CustomFieldDefUtil
     	List<CustomFieldDef> customFieldsListWithoutPosition = new ArrayList<CustomFieldDef>();
     	List<CustomFieldDef> customFieldsListWithPosition = new ArrayList<CustomFieldDef>();
     	try {
-    		if(scope==SCOPE.PERSON)
-    			scope=SCOPE.CONTACT;
+    		if(scope!=null && (scope==SCOPE.CONTACT || scope==SCOPE.PERSON)){
+    			
+    			//For new custom fields position column is existed in DB so get them with position order
+        		customFieldsListWithPosition = dao.ofy().query(CustomFieldDef.class).order("position").list();
+        		
+        		//For old custom fields position column is not existed in DB so get them without position order
+        		customFieldsListWithoutPosition = dao.ofy().query(CustomFieldDef.class).list();
+        		
+        		for(CustomFieldDef cfd : customFieldsListWithoutPosition){
+        			if(cfd.position==0 && (cfd.scope==SCOPE.CONTACT || cfd.scope==SCOPE.PERSON || cfd.scope==null))
+        				customFieldsList.add(cfd);
+        		}
+        		
+        		for(CustomFieldDef cfd : customFieldsListWithPosition){
+        			if(cfd.scope==SCOPE.CONTACT || cfd.scope==SCOPE.PERSON || cfd.scope==null)
+        				customFieldsList.add(cfd);
+        		}
+    		}else{
+    			//For new custom fields position column is existed in DB so get them with position order
+        		customFieldsListWithPosition = dao.ofy().query(CustomFieldDef.class).filter("scope", scope).order("position").list();
+        		
+        		//For old custom fields position column is not existed in DB so get them without position order
+        		customFieldsListWithoutPosition = dao.ofy().query(CustomFieldDef.class).filter("scope", scope).list();
+        		for(CustomFieldDef cfd : customFieldsListWithoutPosition){
+        			if(cfd.position==0)
+        				customFieldsList.add(cfd);
+        		}
+        		for(CustomFieldDef cfd : customFieldsListWithPosition){
+        			customFieldsList.add(cfd);
+        		}
+    		}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return customFieldsList;
+    }
+    public static List<CustomFieldDef> getCustomFieldsByPosition(){
+    	List<CustomFieldDef> customFieldsList = new ArrayList<CustomFieldDef>();
+    	List<CustomFieldDef> customFieldsListWithoutPosition = new ArrayList<CustomFieldDef>();
+    	List<CustomFieldDef> customFieldsListWithPosition = new ArrayList<CustomFieldDef>();
+    	try {
     		//For new custom fields position column is existed in DB so get them with position order
-    		customFieldsListWithPosition = dao.ofy().query(CustomFieldDef.class).filter("scope", scope).order("position").list();
+    		customFieldsListWithPosition = dao.ofy().query(CustomFieldDef.class).order("position").list();
     		
     		//For old custom fields position column is not existed in DB so get them without position order
-    		customFieldsListWithoutPosition = dao.ofy().query(CustomFieldDef.class).filter("scope", scope).list();
+    		customFieldsListWithoutPosition = dao.ofy().query(CustomFieldDef.class).list();
     		for(CustomFieldDef cfd : customFieldsListWithoutPosition){
     			if(cfd.position==0)
     				customFieldsList.add(cfd);

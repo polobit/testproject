@@ -7,10 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONObject;
 
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.EventReminder;
 import com.agilecrm.activities.util.EventUtil;
@@ -21,7 +23,6 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.SendMail;
-import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -68,10 +69,6 @@ public class SendEventReminderDeferredTask implements DeferredTask
     public void run()
     {
 
-	System.out.println("in sendEVentReminderDeferredTask Namespace " + NamespaceManager.get());
-
-	System.out.println("in sendEVentReminderDeferredTask Domain " + domain);
-
 	List<Event> eventList = EventUtil.getLatestWithSameStartTime(starttime);
 	try
 	{
@@ -81,6 +78,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		{
 
 		    DomainUser domainuser = null;
+		    AgileUser agileUser = null;
 		    try
 		    {
 			domainuser = eventList.get(i).getOwner();
@@ -89,16 +87,15 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    catch (TransientFailureException tfe)
 		    {
 			Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com",
-			        "event-reminder-failure", "jagadeesh@invox.com", null, null,
-			        "transient exception occured in send event reminder" + domain, null,
-			        "exception occured transient failure exception send event reminder deferred task",
-			        null, null, null);
+			        "send event reminder deferred task after domainuser " + domain, "jagadeesh@invox.com",
+			        null, null, "transient exception occured in send event reminder" + domain, null,
+			        "transiant exception", null, null, null);
 
-			EventReminderDeferredTask eventReminderDeferredTask = new EventReminderDeferredTask(domain,
-			        starttime);
+			SendEventReminderDeferredTask sendEventReminder = new SendEventReminderDeferredTask(domain,
+			        starttime, nosampleevent);
 			Queue queue = QueueFactory.getQueue("event-notifier");
-			TaskOptions options = TaskOptions.Builder.withPayload(eventReminderDeferredTask);
-			options.countdownMillis(40000);
+			TaskOptions options = TaskOptions.Builder.withPayload(sendEventReminder);
+			options.countdownMillis(20000);
 			queue.add(options);
 			return;
 		    }
@@ -117,8 +114,8 @@ public class SendEventReminderDeferredTask implements DeferredTask
 			    String errorString = errors.toString();
 
 			    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com",
-				    "event-reminder-failure", "jagadeesh@invox.com", null, null, subject, null,
-				    errorString + body, null, null, null);
+				    "event-reminder-failure " + domain, "jagadeesh@invox.com", null, null, subject,
+				    null, errorString + body, null, null, null);
 			}
 			catch (Exception ex)
 			{
@@ -128,8 +125,8 @@ public class SendEventReminderDeferredTask implements DeferredTask
 				    "exception occured in send event reminder deferred task", null, null, null);
 
 			    ex.printStackTrace();
-			    System.err.println("Exception occured while sending campaign status mail "
-				    + e1.getMessage());
+			    System.err
+				    .println("Exception occured while sending event reminder mail " + e1.getMessage());
 			}
 			finally
 			{
@@ -137,15 +134,21 @@ public class SendEventReminderDeferredTask implements DeferredTask
 			    return;
 			}
 		    }
-
-		    AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainuser.id);
+		    if (domainuser != null)
+			agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainuser.id);
 
 		    if (agileUser == null)
 			continue;
 		    List<Event> listobj = new ArrayList<>();
 		    listobj.add(eventList.get(i));
+		    String timezone = domainuser.timezone;
+		    if (StringUtils.isEmpty(timezone))
+			timezone = AccountPrefsUtil.getAccountPrefs().timezone;
 
 		    Event event = eventList.get(i);
+		    event.date = EventUtil.getHumanTimeFromEppoch(event.start, timezone, null);
+		    event.date_with_full_format = EventUtil.getHumanTimeFromEppoch(event.start, timezone,
+			    "EEE, MMMM d yyyy, h:mm a (z)");
 
 		    JSONObject pubnub_notification = new JSONObject();
 		    pubnub_notification.put("title", event.title);
@@ -155,8 +158,6 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    pubnub_notification.put("username", domainuser.name);
 		    pubnub_notification.put("useremail", domainuser.email);
 		    pubnub_notification.put("type", "EVENT_REMINDER");
-		    System.out.println("domain name before pubnubnotification " + domain);
-		    System.out.println("namespace manager name before sending pubnub " + NamespaceManager.get());
 
 		    PubNub.pubNubPush(domain, pubnub_notification);
 
@@ -178,15 +179,15 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    catch (TransientFailureException tfe)
 		    {
 			Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com",
-			        "event-reminder-failure", "jagadeesh@invox.com", null, null, "exception occured "
-			                + domain, null,
+			        "send event reminder deferred task  afetr event list map" + domain,
+			        "jagadeesh@invox.com", null, null, "exception occured " + domain, null,
 			        "exception occured transient failure exception send event reminder deferred task",
 			        null, null, null);
 
-			EventReminderDeferredTask eventReminderDeferredTask = new EventReminderDeferredTask(domain,
-			        starttime);
+			SendEventReminderDeferredTask sendEventReminder = new SendEventReminderDeferredTask(domain,
+			        starttime, nosampleevent);
 			Queue queue = QueueFactory.getQueue("event-notifier");
-			TaskOptions options = TaskOptions.Builder.withPayload(eventReminderDeferredTask);
+			TaskOptions options = TaskOptions.Builder.withPayload(sendEventReminder);
 			options.countdownMillis(20000);
 			queue.add(options);
 			return;
@@ -206,8 +207,8 @@ public class SendEventReminderDeferredTask implements DeferredTask
 			    String errorString = errors.toString();
 
 			    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com",
-				    "event-reminder-failure", "jagadeesh@invox.com", null, null, subject, null,
-				    errorString + body, null, null, null);
+				    "event-reminder-failure" + domain, "jagadeesh@invox.com", null, null, subject,
+				    null, errorString + body, null, null, null);
 			}
 			catch (Exception ex)
 			{
@@ -251,8 +252,8 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    map.put("events", eventListMap);
 
 		    // Sends mail to the domain user.
-		    SendMail.sendMail("maildummy800@gmail.com", "Event Reminder: " + event.title + "@" + event.date
-			    + " domain name " + domain, SendMail.START_EVENT_REMINDER, map);
+		    SendMail.sendMail(domainuser.email, "Event Reminder: " + event.title + " - " + event.date,
+			    SendMail.START_EVENT_REMINDER, map);
 		}
 	    }
 
@@ -261,13 +262,15 @@ public class SendEventReminderDeferredTask implements DeferredTask
 
 	catch (TransientFailureException tfe)
 	{
-	    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "event-reminder-failure",
-		    "jagadeesh@invox.com", null, null, "exception occured " + domain, null,
+	    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com",
+		    "send event reminder deferred task after send mail " + domain, "jagadeesh@invox.com", null, null,
+		    "exception occured " + domain, null,
 		    "exception occured transient failure exception send event reminder deferred task", null, null, null);
 
-	    EventReminderDeferredTask eventReminderDeferredTask = new EventReminderDeferredTask(domain, starttime);
+	    SendEventReminderDeferredTask sendEventReminder = new SendEventReminderDeferredTask(domain, starttime,
+		    nosampleevent);
 	    Queue queue = QueueFactory.getQueue("event-notifier");
-	    TaskOptions options = TaskOptions.Builder.withPayload(eventReminderDeferredTask);
+	    TaskOptions options = TaskOptions.Builder.withPayload(sendEventReminder);
 	    options.countdownMillis(20000);
 	    queue.add(options);
 
