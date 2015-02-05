@@ -1,5 +1,6 @@
 package com.agilecrm.queues;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +72,8 @@ public class PullScheduler
 	countLimit = getCountLimit(queueName);
 
 	startTime = System.currentTimeMillis();
+	
+	System.out.print("queueName" + queueName + ", isCron" + isCron + " lease" + getLeasePeriod(queueName) + " count" + getCountLimit(queueName));
     }
 
     /**
@@ -116,14 +119,25 @@ public class PullScheduler
 
 	try
 	{
+	    System.out.println("Infinite loop started at : " + System.currentTimeMillis());
+	    int i = 0;
 	    while (shouldContinue())
 	    {
+		System.out.println("while loop started at :" + System.currentTimeMillis() + "iteration : " + i);
 		List<TaskHandle> tasks = PullQueueUtil.leaseTasksFromQueue(queueName, leasePeriod, countLimit);
-
+		
 		if (tasks == null || tasks.isEmpty())
+		{
+		    System.out.println("Tasked fetched are null. Time they are null : " + System.currentTimeMillis());
 		    break;
+		}
+		
+		System.out.println("tasks fetched " + tasks.size());
 
 		processTasks(queueName, tasks);
+		
+		System.out.println("while loop ended at :" + System.currentTimeMillis() + "iteration : " + i);
+		i++;
 	    }
 	}
 	catch (Exception e)
@@ -142,9 +156,14 @@ public class PullScheduler
      */
     public boolean shouldContinue()
     {
+	System.out.println("isCron" + isCron);
 	// Verify request deadline - 10mins
 	if (isCron)
 	{
+	    Long time = System.currentTimeMillis() - startTime;
+	    
+	    System.out.println("Time left in cron : " + time);
+	    
 	    if ((System.currentTimeMillis() - startTime) <= (8 * 60 * 1000))
 		return true;
 	    else
@@ -155,8 +174,11 @@ public class PullScheduler
 	}
 	else
 	{
+	    Boolean backendStatus = LifecycleManager.getInstance().isShuttingDown();
+	    
+	    System.out.println("Backend status is" + backendStatus);
 	    // Verify backend instance shut down
-	    if (LifecycleManager.getInstance().isShuttingDown())
+	    if (backendStatus)
 	    {
 		System.err.println("Backend instance is shutting down...");
 		return false;
@@ -181,7 +203,18 @@ public class PullScheduler
 
 	// To delete completed tasks
 	List<TaskHandle> completedTasks = new ArrayList<TaskHandle>();
-
+	
+	try
+	{
+	    System.out.println("Get tag from first tag" + tasks.get(0).getTag());
+	}
+	catch (UnsupportedEncodingException e1)
+	{
+	    System.out.println("unsported tag operation");
+	    // TODO Auto-generated catch block
+	    e1.printStackTrace();
+	}
+	
 	for (TaskHandle taskHandle : tasks)
 	{
 	    // Verifies backend shutdown or cron limit before processing each
@@ -190,7 +223,11 @@ public class PullScheduler
 	    {
 		DeferredTask deferredTask = (DeferredTask) SerializationUtils.deserialize(taskHandle.getPayload());
 
-		if (deferredTask instanceof MailDeferredTask)
+		
+		
+		Boolean isMailDeferredTask = deferredTask instanceof MailDeferredTask;
+		System.out.println("is instance of mail deferred task" + isMailDeferredTask);
+		if (isMailDeferredTask)
 		{
 		    try
 		    {
@@ -219,6 +256,7 @@ public class PullScheduler
 		    }
 		}
 
+		System.out.println("Adding completed tasks");
 		// Add to completed list
 		completedTasks.add(taskHandle);
 	    }
@@ -226,8 +264,11 @@ public class PullScheduler
 		break;
 	}
 
+	System.out.println("deleted tasks");
 	// Delete completed tasks
 	PullQueueUtil.deleteTasks(queueName, completedTasks);
+	
+	System.out.println("deleting tasks " + completedTasks.size());
 
     }
 
