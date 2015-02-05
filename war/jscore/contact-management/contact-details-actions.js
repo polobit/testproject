@@ -17,7 +17,7 @@ $(function(){
     	e.preventDefault();
 
     	var	el = $("#taskForm");
-		$('#activityModal').modal('show');
+		$('#activityTaskModal').modal('show');
 		highlight_task();
 		// Displays contact name, to indicate the task is related to the contact
 		fill_relation(el);
