@@ -25,17 +25,17 @@ public class UserAccessControlUtil
 {
     public enum CRUDOperation
     {
-	CREATE("You do not have permission to create contacts."),
+	CREATE("You do not have permission to create %className%s."),
 
-	READ("You do not have permission to view this contact."),
+	READ("You do not have permission to view this %className%."),
 
-	UPDATE("You do not have permission to update contacts."),
+	UPDATE("You do not have permission to update %className%s."),
 
-	DELETE("You do not have permission to update this contact."),
+	DELETE("You do not have permission to delete this %className%."),
 
-	IMPORT("You do not have permission to import contacts"),
+	IMPORT("You do not have permission to import %className%s"),
 
-	EXPORT("You do not have permission to export contacts");
+	EXPORT("You do not have permission to export %className%s");
 
 	String errorMessage = "Access Denied. Contact account administrator";
 
@@ -49,9 +49,10 @@ public class UserAccessControlUtil
 	    return errorMessage;
 	}
 
-	public void throwException()
+	public void throwException(String className)
 	{
-	    throw new AccessDeniedException(this.errorMessage);
+	    className = className.equals("Opportunity") ? "Deals" : className;
+	    throw new AccessDeniedException(this.errorMessage.replace("%className%", className));
 	}
 
     }
@@ -91,7 +92,7 @@ public class UserAccessControlUtil
 	    isOperationAllowed = acccessControl.canRead();
 
 	if (throwException && !isOperationAllowed)
-	    operation.throwException();
+	    operation.throwException(className);
 
 	return isOperationAllowed;
     }
@@ -108,7 +109,12 @@ public class UserAccessControlUtil
 
 	System.out.println(userAccess.getCurrentUserScopes());
 	if (!userAccess.canRead())
-	    userAccess.modifyQuery(q);
+	{
+	    if (className.equals("Contact"))
+		userAccess.modifyQuery(q);
+	    else
+		CRUDOperation.READ.throwException(className);
+	}
     }
 
     public static void checkReadAccessAndModifyTextSearchQuery(String className, List<SearchRule> rules)
