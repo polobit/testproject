@@ -661,5 +661,10 @@ border-radius: 2px;
 	font-size: 15px;
 	font-style: italic;
  }
+ .portlet-error-privilege-message{
+ 	font-weight: normal!important;
+ 	font-size: 15px;
+	font-style: italic;
+ }
  
  

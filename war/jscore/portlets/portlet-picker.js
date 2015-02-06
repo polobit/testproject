@@ -252,6 +252,10 @@ function set_p_portlets(base_model){
 			var milestoneMap=[];
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
+				if(data.status==403){
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access deals.</div>");
+					return;
+				}
 				milestonesList=data["milestonesList"];
 				milestoneValuesList=data["milestoneValuesList"];
 				milestoneNumbersList=data["milestoneNumbersList"];
@@ -290,6 +294,10 @@ function set_p_portlets(base_model){
 			var domainUsersList=[];
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
+				if(data.status==403){
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access deals.</div>");
+					return;
+				}
 				milestoneNumbersList=data["milestoneNumbersList"];
 				milestoneValuesList=data["milestoneValuesList"];
 				domainUsersList=data["domainUsersList"];
@@ -339,6 +347,10 @@ function set_p_portlets(base_model){
 			var milestoneMap=[];
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
+				if(data.status==403){
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access deals.</div>");
+					return;
+				}
 				milestonesList=data["milestonesList"];
 				milestoneValuesList=data["milestoneValuesList"];
 				milestoneMap=data["milestoneMap"];
@@ -405,6 +417,10 @@ function set_p_portlets(base_model){
 			var mailsOpenedCountList=[];
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
+				if(data.status==403){
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access activities.</div>");
+					return;
+				}
 				domainUsersList=data["domainUsersList"];
 				mailsCountList=data["mailsCountList"];
 				mailsOpenedCountList=data["mailsOpenedCountList"];
@@ -520,6 +536,10 @@ function set_p_portlets(base_model){
 			var dealsAssignedCountList=[];
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
+				if(data.status==403){
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access deals.</div>");
+					return;
+				}
 				domainUsersList=data["domainUsersList"];
 				dealsAssignedCountList=data["assignedOpportunitiesCountList"];
 				
@@ -548,6 +568,10 @@ function set_p_portlets(base_model){
 			var domainUsersList=[];
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
+				if(data.status==403){
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access activities.</div>");
+					return;
+				}
 				answeredCallsCountList=data["answeredCallsCountList"];
 				busyCallsCountList=data["busyCallsCountList"];
 				failedCallsCountList=data["failedCallsCountList"];
@@ -625,6 +649,10 @@ function set_p_portlets(base_model){
 			
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
+				if(data.status==403){
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access tasks.</div>");
+					return;
+				}
 				groupByList=data["groupByList"];
 				splitByList=data["splitByList"];
 				
@@ -683,11 +711,11 @@ function fetchPortletsGraphData(url, successCallback){
 		if(successCallback && typeof (successCallback) === "function")
 			successCallback(data);
 	}).error(function(response){
-		// If error is not billing exception then it is returned
-		if(response.status != 406)
+		// If error is not billing exception and forbidden exception then it is returned
+		if(response.status != 406 && response.status != 403)
 			return;
 				
-		// If it is billing exception, then empty set is sent so page will not be showing loading on error message
+		// If it is billing exception or forbidden exception, then empty set is sent so page will not be showing loading on error message
 		if(successCallback && typeof (successCallback) === "function")
 			successCallback(response);
 	}); 

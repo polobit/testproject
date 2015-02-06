@@ -179,7 +179,12 @@ $('.portlet-delete-modal').live("click", function(e){
 $("#add-portlet").live("click", function(e){
 	this.Catalog_Portlets_View = new Base_Collection_View({ url : '/core/api/portlets/default', restKey : "portlet", templateKey : "portlets-add",
 		sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el){
-			
+			if($('#deals',$('#portletStreamModal')).children().length==0)
+				$('#deals').parent().hide();
+			if($('#taksAndEvents',$('#portletStreamModal')).children().length==0)
+				$('#taksAndEvents').parent().hide();
+			if($('#userActivity',$('#portletStreamModal')).children().length==0)
+				$('#userActivity').parent().hide();
 		} });
 
 	this.Catalog_Portlets_View.appendItem = organize_portlets;
@@ -192,6 +197,7 @@ $("#add-portlet").live("click", function(e){
 
 	// Add social network types template
 	$("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);
+	
 });
 $('#portlets-contacts-model-list > tr, #portlets-companies-model-list > tr, #portlets-contacts-email-opens-model-list').live('click', function(e){
 	var id = $(this).find(".data").attr("data");

@@ -654,8 +654,12 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			var milestoneValuesList=[];
 	    			var milestoneNumbersList=[];
 	    			var milestoneMap=[];
-	    			
+	    			$('#'+selector).html(getRandomLoadingImg());
 	    			fetchPortletsGraphData(url,function(data1){
+	    				if(data1.status==403){
+	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access deals.</div>");
+	    					return;
+	    				}
 	    				milestonesList=data1["milestonesList"];
 	    				milestoneValuesList=data1["milestoneValuesList"];
 	    				milestoneNumbersList=data1["milestoneNumbersList"];
@@ -685,8 +689,12 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			var milestoneNumbersList=[];
 	    			var milestoneValuesList=[];
 	    			var domainUsersList=[];
-	    			
+	    			$('#'+selector).html(getRandomLoadingImg());
 	    			fetchPortletsGraphData(url,function(data1){
+	    				if(data1.status==403){
+	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access deals.</div>");
+	    					return;
+	    				}
 	    				milestoneNumbersList=data1["milestoneNumbersList"];
 	    				milestoneValuesList=data1["milestoneValuesList"];
 	    				domainUsersList=data1["domainUsersList"];
@@ -727,8 +735,12 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			var milestonesList=[];
 	    			var milestoneValuesList=[];
 	    			var milestoneMap=[];
-	    			
+	    			$('#'+selector).html(getRandomLoadingImg());
 	    			fetchPortletsGraphData(url,function(data1){
+	    				if(data1.status==403){
+	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access deals.</div>");
+	    					return;
+	    				}
 	    				milestonesList=data1["milestonesList"];
 	    				milestoneValuesList=data1["milestoneValuesList"];
 	    				milestoneMap=data1["milestoneMap"];
@@ -786,8 +798,12 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			var domainUsersList=[];
 	    			var mailsCountList=[];
 	    			var mailsOpenedCountList=[];
-	    			
+	    			$('#'+selector).html(getRandomLoadingImg());
 	    			fetchPortletsGraphData(url,function(data){
+	    				if(data.status==403){
+	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access activities.</div>");
+	    					return;
+	    				}
 	    				domainUsersList=data["domainUsersList"];
 	    				mailsCountList=data["mailsCountList"];
 	    				mailsOpenedCountList=data["mailsOpenedCountList"];
@@ -885,8 +901,12 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			
 	    			var domainUsersList=[];
 	    			var dealsAssignedCountList=[];
-	    			
+	    			$('#'+selector).html(getRandomLoadingImg());
 	    			fetchPortletsGraphData(url,function(data){
+	    				if(data.status==403){
+	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access deals.</div>");
+	    					return;
+	    				}
 	    				domainUsersList=data["domainUsersList"];
 	    				dealsAssignedCountList=data["assignedOpportunitiesCountList"];
 	    				
@@ -905,8 +925,12 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			var callsDurationList=[];
 	    			var totalCallsCountList=[];
 	    			var domainUsersList=[];
-	    			
+	    			$('#'+selector).html(getRandomLoadingImg());
 	    			fetchPortletsGraphData(url,function(data2){
+	    				if(data2.status==403){
+	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access activities.</div>");
+	    					return;
+	    				}
 	    				answeredCallsCountList=data2["answeredCallsCountList"];
 	    				busyCallsCountList=data2["busyCallsCountList"];
 	    				failedCallsCountList=data2["failedCallsCountList"];
@@ -968,6 +992,10 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			
 	    			$('#'+selector).html(getRandomLoadingImg());
 	    			fetchPortletsGraphData(url,function(data2){
+	    				if(data2.status==403){
+	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access tasks.</div>");
+	    					return;
+	    				}
 	    				groupByList=data2["groupByList"];
 	    				splitByList=data2["splitByList"];
 	    				

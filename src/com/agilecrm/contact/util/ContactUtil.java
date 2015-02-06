@@ -1286,7 +1286,7 @@ public class ContactUtil
 				JSONObject json = new JSONObject();
 				Contact contact = getContact(contactEmail.contact_id);
 				if(contact!=null){
-					json.put("id", contact.id);
+					json.put("contact_id", contact.id);
 					json.put("type", contact.type);
 					net.sf.json.JSONArray jsonArray = new net.sf.json.JSONArray();
 					for(ContactField contactField : contact.properties){

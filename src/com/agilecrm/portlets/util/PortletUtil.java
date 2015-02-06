@@ -12,6 +12,7 @@ import net.sf.json.JSONSerializer;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Call;
 import com.agilecrm.activities.Event;
@@ -35,6 +36,7 @@ import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.util.TagSearchUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.googlecode.objectify.Key;
@@ -63,29 +65,39 @@ public class PortletUtil {
 	public static List<Portlet> getAvailablePortlets()throws Exception{
 		
 		List<Portlet> allPortlets = new ArrayList<Portlet>();
-		
-		allPortlets.add(new Portlet("Filter Based",PortletType.CONTACTS));
-		allPortlets.add(new Portlet("Emails Opened",PortletType.CONTACTS));
-		allPortlets.add(new Portlet("Growth Graph",PortletType.CONTACTS));
-		
-		allPortlets.add(new Portlet("Pending Deals",PortletType.DEALS));
-		allPortlets.add(new Portlet("Deals By Milestone",PortletType.DEALS));
-		//allPortlets.add(new Portlet("Closures Per Person",PortletType.DEALS));
-		//allPortlets.add(new Portlet("Deals Won",PortletType.DEALS));
-		allPortlets.add(new Portlet("Deals Funnel",PortletType.DEALS));
-		//allPortlets.add(new Portlet("Deals Assigned",PortletType.DEALS));
-		
-		allPortlets.add(new Portlet("Agenda",PortletType.TASKSANDEVENTS));
-		allPortlets.add(new Portlet("Today Tasks",PortletType.TASKSANDEVENTS));
-		//allPortlets.add(new Portlet("Task Report",PortletType.TASKSANDEVENTS));
-		
-		//allPortlets.add(new Portlet("Emails Sent",PortletType.USERACTIVITY));
-		allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
-		
-		allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
-		
-		setIsAddedStatus(allPortlets);
-
+		try {
+			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+			
+			allPortlets.add(new Portlet("Filter Based",PortletType.CONTACTS));
+			allPortlets.add(new Portlet("Emails Opened",PortletType.CONTACTS));
+			allPortlets.add(new Portlet("Growth Graph",PortletType.CONTACTS));
+			
+			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.DEALS)){
+				allPortlets.add(new Portlet("Pending Deals",PortletType.DEALS));
+				allPortlets.add(new Portlet("Deals By Milestone",PortletType.DEALS));
+				//allPortlets.add(new Portlet("Closures Per Person",PortletType.DEALS));
+				//allPortlets.add(new Portlet("Deals Won",PortletType.DEALS));
+				allPortlets.add(new Portlet("Deals Funnel",PortletType.DEALS));
+				//allPortlets.add(new Portlet("Deals Assigned",PortletType.DEALS));
+			}
+			
+			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.CALENDAR)){
+				allPortlets.add(new Portlet("Agenda",PortletType.TASKSANDEVENTS));
+				allPortlets.add(new Portlet("Today Tasks",PortletType.TASKSANDEVENTS));
+				//allPortlets.add(new Portlet("Task Report",PortletType.TASKSANDEVENTS));
+			}
+			
+			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.ACTIVITY)){
+				//allPortlets.add(new Portlet("Emails Sent",PortletType.USERACTIVITY));
+				allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
+			}
+			
+			allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
+			
+			setIsAddedStatus(allPortlets);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return allPortlets;
 	}
 	/**
@@ -270,11 +282,15 @@ public class PortletUtil {
 	}
 	public static List<Opportunity> getPendingDealsList(JSONObject json)throws Exception{
 		List<Opportunity> dealsList=null;
-		if(json!=null && json.get("deals")!=null){
-			if(json.get("deals").toString().equalsIgnoreCase("all-deals"))
-				dealsList=OpportunityUtil.getPendingDealsRelatedToAllUsers(0);
-			else if(json.get("deals").toString().equalsIgnoreCase("my-deals"))
-				dealsList=OpportunityUtil.getPendingDealsRelatedToCurrentUser(0);
+		try {
+			if(json!=null && json.get("deals")!=null){
+				if(json.get("deals").toString().equalsIgnoreCase("all-deals"))
+					dealsList=OpportunityUtil.getPendingDealsRelatedToAllUsers(0);
+				else if(json.get("deals").toString().equalsIgnoreCase("my-deals"))
+					dealsList=OpportunityUtil.getPendingDealsRelatedToCurrentUser(0);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return dealsList;
 	}
@@ -872,6 +888,45 @@ public class PortletUtil {
 			e.printStackTrace();
 		}
 		return maxTime;
+	}
+	public static boolean checkPrivilegesForPortlets(String menuscope)throws Exception{
+		DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+		if(menuscope.equalsIgnoreCase("DEALS")){
+			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.DEALS))
+				return true;
+			else{
+				AccessDeniedException ade=new AccessDeniedException("<div class='portlet-error-privilege-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access deals.</div>");
+				throw ade;
+			}
+				
+		}else if(menuscope.equalsIgnoreCase("TASKS")){
+			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.CALENDAR))
+				return true;
+			else{
+				AccessDeniedException ade=new AccessDeniedException("<div class='portlet-error-privilege-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access tasks.</div>");
+				throw ade;
+			}
+				
+		}else if(menuscope.equalsIgnoreCase("EVENTS")){
+			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.CALENDAR))
+				return true;
+			else{
+				AccessDeniedException ade=new AccessDeniedException("<div class='portlet-error-privilege-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access events.</div>");
+				throw ade;
+			}
+				
+		}else if(menuscope.equalsIgnoreCase("ACTIVITY")){
+			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.ACTIVITY))
+				return true;
+			else{
+				AccessDeniedException ade=new AccessDeniedException("<div class='portlet-error-privilege-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access activities.</div>");
+				throw ade;
+			}
+				
+		}else
+			return true;
+			
+		
 	}
 
 }
