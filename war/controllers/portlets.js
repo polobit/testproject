@@ -180,11 +180,11 @@ $("#add-portlet").live("click", function(e){
 	this.Catalog_Portlets_View = new Base_Collection_View({ url : '/core/api/portlets/default', restKey : "portlet", templateKey : "portlets-add",
 		sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el){
 			if($('#deals',$('#portletStreamModal')).children().length==0)
-				$('#deals').parent().hide();
+				$('#deals',$('#portletStreamModal')).parent().hide();
 			if($('#taksAndEvents',$('#portletStreamModal')).children().length==0)
-				$('#taksAndEvents').parent().hide();
+				$('#taksAndEvents',$('#portletStreamModal')).parent().hide();
 			if($('#userActivity',$('#portletStreamModal')).children().length==0)
-				$('#userActivity').parent().hide();
+				$('#userActivity',$('#portletStreamModal')).parent().hide();
 		} });
 
 	this.Catalog_Portlets_View.appendItem = organize_portlets;
