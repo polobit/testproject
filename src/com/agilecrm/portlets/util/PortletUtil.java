@@ -895,7 +895,7 @@ public class PortletUtil {
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.DEALS))
 				return true;
 			else{
-				AccessDeniedException ade=new AccessDeniedException("<div class='portlet-error-privilege-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access deals.</div>");
+				AccessDeniedException ade=new AccessDeniedException("<div class='portlet-error-privilege-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 				throw ade;
 			}
 				
@@ -903,7 +903,7 @@ public class PortletUtil {
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.CALENDAR))
 				return true;
 			else{
-				AccessDeniedException ade=new AccessDeniedException("<div class='portlet-error-privilege-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access tasks.</div>");
+				AccessDeniedException ade=new AccessDeniedException("<div class='portlet-error-privilege-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 				throw ade;
 			}
 				
@@ -911,7 +911,7 @@ public class PortletUtil {
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.CALENDAR))
 				return true;
 			else{
-				AccessDeniedException ade=new AccessDeniedException("<div class='portlet-error-privilege-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access events.</div>");
+				AccessDeniedException ade=new AccessDeniedException("<div class='portlet-error-privilege-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 				throw ade;
 			}
 				
@@ -919,7 +919,7 @@ public class PortletUtil {
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.ACTIVITY))
 				return true;
 			else{
-				AccessDeniedException ade=new AccessDeniedException("<div class='portlet-error-privilege-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access activities.</div>");
+				AccessDeniedException ade=new AccessDeniedException("<div class='portlet-error-privilege-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 				throw ade;
 			}
 				

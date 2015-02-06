@@ -90,19 +90,18 @@
         		<span class="font-14">	{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}} </span>
         		<br />
-        		{{getPropertyValue properties "email"}}
+        		Opened email '{{subject}}'
         	{{/if_contact_type}}
   
             {{#if_contact_type "COMPANY"}}
         		{{getPropertyValue properties "name"}}</br>
-        		{{getPropertyValue properties "url"}}
+        		Opened email '{{subject}}'
         	{{/if_contact_type}}
 	    </div>
 	</div>
 	</td>
 	<td>
 		<div class="inline-block v-top text-right" style="float:right;">
-			{{subject}}<br/>
 			<time class="time-ago" datetime="{{epochToHumanDate "" openedTime}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" openedTime}}</time>
 		</div>
 	</td>
@@ -116,7 +115,7 @@
 <script id="portlets-contacts-email-opens-collection-template" type="text/html">
 {{#if this.length}}
 	<table id="contacts" class="table agile-ellipsis-dynamic" style="overflow-x: hidden;overflow-y:auto;">
-		<col width="45%">
+		<col width="70%">
 		<col width="40%">
 		<!-- <col width="24%"> -->
 		<tbody id="portlets-contacts-email-opens-model-list" class="portlets-contacts-emails-opened-model-list" style="word-break:normal!important;" route="contact/">
@@ -124,7 +123,7 @@
 	</table>
 {{else}}
 	<div class="portlet-error-message">
-		No Contacts Found
+		No Emails Found
 	</div>
 {{/if}}
 </script>
@@ -802,7 +801,7 @@
                	Portlets help you to view different modules data by grouping and manage your portlets by adding them.  
             </div>
           		Get started by adding a portlet.<br>
-                <a id="add-portlet" class="add-portlet add-stream-tab btn">
+                <a id="add-portlet" class="add-portlet add-stream-tab btn" href="#">
  		          <i class="icon icon-plus-sign"></i> Add Portlet
 		        </a> 
 	   </div>
@@ -820,7 +819,7 @@
                	Portlets help you to view different modules data by grouping and manage your portlets by adding them.  
             </div>
           		Get started by adding a portlet.<br>
-                <a id="add-portlet" class="add-portlet add-stream-tab btn">
+                <a id="add-portlet" class="add-portlet add-stream-tab btn" href="#">
  		          <i class="icon icon-plus-sign"></i> Add Portlet
 		        </a> 
 	   </div>

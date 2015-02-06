@@ -546,6 +546,7 @@ $('.portlet-maximize').die().live('click', function(e){
 	$('#'+id).parent().find('.portlet_body').show();
 });
 $('.portlet-settings-save-modal').live('click', function(e){
+	e.preventDefault();
 	$(this).attr('disabled',true);
 	$(this).text('Saving...');
 	var scrollPosition=$(window).scrollTop();
@@ -657,7 +658,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			$('#'+selector).html(getRandomLoadingImg());
 	    			fetchPortletsGraphData(url,function(data1){
 	    				if(data1.status==403){
-	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access deals.</div>");
+	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 	    					return;
 	    				}
 	    				milestonesList=data1["milestonesList"];
@@ -692,7 +693,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			$('#'+selector).html(getRandomLoadingImg());
 	    			fetchPortletsGraphData(url,function(data1){
 	    				if(data1.status==403){
-	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access deals.</div>");
+	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 	    					return;
 	    				}
 	    				milestoneNumbersList=data1["milestoneNumbersList"];
@@ -738,7 +739,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			$('#'+selector).html(getRandomLoadingImg());
 	    			fetchPortletsGraphData(url,function(data1){
 	    				if(data1.status==403){
-	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access deals.</div>");
+	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 	    					return;
 	    				}
 	    				milestonesList=data1["milestonesList"];
@@ -801,7 +802,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			$('#'+selector).html(getRandomLoadingImg());
 	    			fetchPortletsGraphData(url,function(data){
 	    				if(data.status==403){
-	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access activities.</div>");
+	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 	    					return;
 	    				}
 	    				domainUsersList=data["domainUsersList"];
@@ -904,7 +905,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			$('#'+selector).html(getRandomLoadingImg());
 	    			fetchPortletsGraphData(url,function(data){
 	    				if(data.status==403){
-	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access deals.</div>");
+	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 	    					return;
 	    				}
 	    				domainUsersList=data["domainUsersList"];
@@ -928,7 +929,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			$('#'+selector).html(getRandomLoadingImg());
 	    			fetchPortletsGraphData(url,function(data2){
 	    				if(data2.status==403){
-	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access activities.</div>");
+	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 	    					return;
 	    				}
 	    				answeredCallsCountList=data2["answeredCallsCountList"];
@@ -993,7 +994,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			$('#'+selector).html(getRandomLoadingImg());
 	    			fetchPortletsGraphData(url,function(data2){
 	    				if(data2.status==403){
-	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access tasks.</div>");
+	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 	    					return;
 	    				}
 	    				groupByList=data2["groupByList"];

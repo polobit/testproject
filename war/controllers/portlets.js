@@ -5,7 +5,7 @@ var PortletsRouter = Backbone.Router
 								.extend({
 
 												routes : {
-												"portlets" 						: "portlets"
+												//"portlets" 						: "portlets"
 												},
 												
 												portlets : function(){
@@ -153,6 +153,7 @@ function deletePortlet(el){
 	$('#portletDeleteModal > .modal-body').html("Are you sure you want to delete Portlet - "+$('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()+" ?");
 }
 $('.portlet-delete-modal').live("click", function(e){
+	e.preventDefault();
 	var portlet = Portlets_View.collection.get($(this).attr('id'));
 	/*
 	 * Sends Delete request with portlet name as path parameter, and on
@@ -177,6 +178,7 @@ $('.portlet-delete-modal').live("click", function(e){
 	}, dataType : 'json' });
 });
 $("#add-portlet").live("click", function(e){
+	e.preventDefault();
 	this.Catalog_Portlets_View = new Base_Collection_View({ url : '/core/api/portlets/default', restKey : "portlet", templateKey : "portlets-add",
 		sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el){
 			if($('#deals',$('#portletStreamModal')).children().length==0)

@@ -36,6 +36,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.campaignio.cron.util.CronUtil;
@@ -1281,26 +1282,46 @@ public class ContactUtil
 		//List<Long> contactIdsList=new ArrayList<Long>();
 		List<JSONObject> contactsList = new ArrayList<JSONObject>();
 		try {
+			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 			List<ContactEmail> openedEmailsList=ContactEmailUtil.getEmailsOpened(minTime,maxTime);
 			for(ContactEmail  contactEmail : openedEmailsList){
 				JSONObject json = new JSONObject();
 				Contact contact = getContact(contactEmail.contact_id);
 				if(contact!=null){
-					json.put("contact_id", contact.id);
-					json.put("type", contact.type);
-					net.sf.json.JSONArray jsonArray = new net.sf.json.JSONArray();
-					for(ContactField contactField : contact.properties){
-						JSONObject json1 = new JSONObject();
-						json1.put("type", contactField.type);
-						json1.put("name", contactField.name);
-						json1.put("subtype", contactField.subtype);
-						json1.put("value", contactField.value);
-						jsonArray.add(json1);
+					//if view all contacts permission is added for user we consider all contacts otherwise consider only his contacts
+					if(domainUser!=null && domainUser.newscopes!=null && domainUser.newscopes.contains(UserAccessScopes.VIEW_CONTACTS)){
+						json.put("contact_id", contact.id);
+						json.put("type", contact.type);
+						net.sf.json.JSONArray jsonArray = new net.sf.json.JSONArray();
+						for(ContactField contactField : contact.properties){
+							JSONObject json1 = new JSONObject();
+							json1.put("type", contactField.type);
+							json1.put("name", contactField.name);
+							json1.put("subtype", contactField.subtype);
+							json1.put("value", contactField.value);
+							jsonArray.add(json1);
+						}
+						json.element("properties", jsonArray);
+						json.put("subject", contactEmail.subject);
+						json.put("openedTime", contactEmail.email_opened_at);
+						contactsList.add(json);
+					}else if(domainUser!=null && domainUser.newscopes!=null && !domainUser.newscopes.contains(UserAccessScopes.VIEW_CONTACTS) && contact.getOwner()!=null && contact.getOwner().id==domainUser.id){
+						json.put("contact_id", contact.id);
+						json.put("type", contact.type);
+						net.sf.json.JSONArray jsonArray = new net.sf.json.JSONArray();
+						for(ContactField contactField : contact.properties){
+							JSONObject json1 = new JSONObject();
+							json1.put("type", contactField.type);
+							json1.put("name", contactField.name);
+							json1.put("subtype", contactField.subtype);
+							json1.put("value", contactField.value);
+							jsonArray.add(json1);
+						}
+						json.element("properties", jsonArray);
+						json.put("subject", contactEmail.subject);
+						json.put("openedTime", contactEmail.email_opened_at);
+						contactsList.add(json);
 					}
-					json.element("properties", jsonArray);
-					json.put("subject", contactEmail.subject);
-					json.put("openedTime", contactEmail.email_opened_at);
-					contactsList.add(json);
 				}
 				//contactIdsList.add(contactEmail.contact_id);
 			}

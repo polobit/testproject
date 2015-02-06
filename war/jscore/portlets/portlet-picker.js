@@ -253,7 +253,7 @@ function set_p_portlets(base_model){
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
-					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access deals.</div>");
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 					return;
 				}
 				milestonesList=data["milestonesList"];
@@ -295,7 +295,7 @@ function set_p_portlets(base_model){
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
-					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access deals.</div>");
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 					return;
 				}
 				milestoneNumbersList=data["milestoneNumbersList"];
@@ -348,7 +348,7 @@ function set_p_portlets(base_model){
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
-					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access deals.</div>");
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 					return;
 				}
 				milestonesList=data["milestonesList"];
@@ -418,7 +418,7 @@ function set_p_portlets(base_model){
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
-					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access activities.</div>");
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 					return;
 				}
 				domainUsersList=data["domainUsersList"];
@@ -537,7 +537,7 @@ function set_p_portlets(base_model){
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
-					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access deals.</div>");
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 					return;
 				}
 				domainUsersList=data["domainUsersList"];
@@ -569,7 +569,7 @@ function set_p_portlets(base_model){
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
-					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access activities.</div>");
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 					return;
 				}
 				answeredCallsCountList=data["answeredCallsCountList"];
@@ -650,7 +650,7 @@ function set_p_portlets(base_model){
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
-					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;You do not have privileges to access tasks.</div>");
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 					return;
 				}
 				groupByList=data["groupByList"];
