@@ -351,15 +351,18 @@ function qr_load(){
 /**
  * To navigate from one contact detail view to other
  */
-function contact_detail_view_navigation(id, contact_collection, el){
+function contact_detail_view_navigation(id, contact_list_view, el){
 	console.log("collection >>>>>>>>>>>>>>>>");
 	console.log(contact_collection);
-	
+	var contact_collection = contact_list_view.collection;
 	var collection_length = contact_collection.length;
     var current_index = contact_collection.indexOf(contact_collection.get(id));
     var previous_contact_id;
     var next_contact_id;
-
+    //fetch next set so that next link will work further.
+    if(collection_length <= current_index+3) {
+    	contact_list_view.infiniScroll.fetchNext();
+    }
     if (collection_length > 1 && current_index < collection_length && contact_collection.at(current_index + 1) && contact_collection.at(current_index + 1).has("id")) {
      
     	next_contact_id = contact_collection.at(current_index + 1).id

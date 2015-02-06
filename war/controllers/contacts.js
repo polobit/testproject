@@ -581,7 +581,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 			// To navigate between contacts details
 			if (contact_collection != null)
-				contact_detail_view_navigation(id, contact_collection, el);
+				contact_detail_view_navigation(id, App_Contacts.contactsListView, el);
 
 			//fill_owners(el, contact.toJSON());
 			start_tour("contact-details", el);
