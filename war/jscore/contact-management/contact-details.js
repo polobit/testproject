@@ -360,7 +360,7 @@ function contact_detail_view_navigation(id, contact_list_view, el){
     var previous_contact_id;
     var next_contact_id;
     //fetch next set so that next link will work further.
-    if(collection_length <= current_index+3) {
+    if(collection_length <= current_index+5) {
     	contact_list_view.infiniScroll.fetchNext();
     }
     if (collection_length > 1 && current_index < collection_length && contact_collection.at(current_index + 1) && contact_collection.at(current_index + 1).has("id")) {
