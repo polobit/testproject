@@ -130,6 +130,72 @@ function populateUsers(id, el ,value, key, callback) {
  * @param dealDetails - dealDetails value
  * @param value - Deal Object
  **/
+function populateTrackMilestones(el, dealsDetails, value, callback, defaultSelectOption){
+var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
+	
+	tracks.collection.fetch({
+		success: function(data){
+			var jsonModel = data.toJSON();
+			var html = '<option value="">Select..</option>';
+			console.log(jsonModel);
+			
+			// If there is only one pipeline, select the option by default and hide the field.
+			if(jsonModel.length==1){
+				html+='<option value="'+jsonModel[0].id+'" selected="selected">Default</option>';
+			}
+			else {
+				$.each(jsonModel,function(index,mile){
+					console.log(mile.milestones,value);
+					var array = [];
+					$.each(milestones.split(","), function(){
+						array.push($.trim(this));
+						if(!mile.name)
+							mile.name = 'Default';
+						if(value && mile.id == value.pipeline_id)
+							html+='<option value="'+mile.id+'" selected="selected">'+mile.name+'</option>';
+						else
+							html+='<option value="'+mile.id+'">'+mile.name+'</option>';
+					});
+					html+='<optgroup label='+mile.name+'>';
+					
+					if(!mile.name)
+						mile.name = 'Default';
+					if(value && mile.id == value.pipeline_id)
+						html+='<option value="'+mile.id+'" selected="selected">'+mile.name+'</option>';
+					else
+						html+='<option value="'+mile.id+'">'+mile.name+'</option>';
+					html+='</optgroup>'
+					
+				});
+			}
+			$('#pipeline',el).html(html);
+			console.log('adding');
+			$('#pipeline',el).closest('div').find('.loading-img').hide();
+			
+			// Hide the Tracks select box when there is only one pipeline.
+			if(jsonModel.length==1){
+				$('#pipeline',el).closest('div.control-group').hide();
+				$('#milestone',el).closest('div.control-group').css("margin-left","0px");
+				$('#dealsFilterForm #pipeline',el).closest('div.control-group').show();
+			}
+			
+			if (callback && typeof (callback) === "function") {
+				// execute the callback, passing parameters as necessary
+				callback(jsonModel);
+			}
+		}
+	}); 
+}
+
+/**
+ * Populate Pipelines in options of pipeline input field drop-down.
+ * When new deal is created,pipeline select is filled with pipelines list.When
+ * deal is need to edit,the pipeline select field is filled with previous option.
+ * 
+ * @param el - el references the DOM object created in the browser.
+ * @param dealDetails - dealDetails value
+ * @param value - Deal Object
+ **/
 function populateTracks(el, dealsDetails, value, callback, defaultSelectOption){
 var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 	
