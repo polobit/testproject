@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -93,18 +94,27 @@ public class EmailOpenServlet extends HttpServlet
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set(namespace);
 
+	boolean isAgileUser = checkIfUserIsAgileUser(request, namespace);
+
 	try
 	{
-	    if (!StringUtils.isBlank(emailId))
+	    if (!isAgileUser)
 	    {
-		chromeExtensionShowNotification(emailId, fromEmailId, subject, trackerId);
+		if (!StringUtils.isBlank(emailId))
+		{
+		    chromeExtensionShowNotification(emailId, fromEmailId, subject, trackerId, false);
+		}
+		else
+		{
+		    // Shows notification, adds log & Trigger campaign
+		    executePostEmailOpenActions(trackerId, campaignId);
+		}
 	    }
 	    else
 	    {
 		// Shows notification, adds log & Trigger campaign
-		executePostEmailOpenActions(trackerId, campaignId);
+		chromeExtensionShowNotification(emailId, fromEmailId, subject, trackerId, true);
 	    }
-
 	}
 	catch (Exception e)
 	{
@@ -116,13 +126,18 @@ public class EmailOpenServlet extends HttpServlet
 	    NamespaceManager.set(oldNamespace);
 	}
 
-	// Interrupt Campaign cron tasks.
-	if (!StringUtils.isBlank(campaignId) && !StringUtils.isBlank(trackerId))
-	    interruptCronTasksOfOpened(campaignId, trackerId);
+	if (!isAgileUser)
+	{
+	    // Interrupt Campaign cron tasks.
+	    if (!StringUtils.isBlank(campaignId) && !StringUtils.isBlank(trackerId))
+		interruptCronTasksOfOpened(campaignId, trackerId);
+	}
     }
 
     /**
-     * Adds log and show notification of Email Opened.
+     * Adds log and show notification of Email OpConversations
+     * 
+     * ened.
      * 
      * @param toEmailId
      *            - to address of Email.
@@ -133,7 +148,8 @@ public class EmailOpenServlet extends HttpServlet
      * @param trackerId
      *            - Contact Id or Tracker Id
      */
-    private void chromeExtensionShowNotification(String toEmailId, String fromEmailId, String subject, String trackerId)
+    private void chromeExtensionShowNotification(String toEmailId, String fromEmailId, String subject,
+	    String trackerId, boolean isAgileUser)
     {
 	try
 	{
@@ -163,20 +179,23 @@ public class EmailOpenServlet extends HttpServlet
 		// notification. If not, save the contact email.
 		if (contactEmails.size() > 0)
 		{
-		    for (ContactEmail contactEmail : contactEmails)
+		    if (!isAgileUser)
 		    {
-			contactEmail.is_email_opened = true;
-			contactEmail.email_opened_at = System.currentTimeMillis() / 1000;
-			contactEmail.save();
+			for (ContactEmail contactEmail : contactEmails)
+			{
+			    contactEmail.is_email_opened = true;
+			    contactEmail.email_opened_at = System.currentTimeMillis() / 1000;
+			    contactEmail.save();
+			}
+			// Need the sent time and opened time in the payload, to
+			// show in the Chrome Extensions.
+			JSONObject mailInfo = new JSONObject().put("email_subject", subject);
+			mailInfo.put("time_sent", trackerId);
+			mailInfo.put("time_opened", System.currentTimeMillis() / 1000);
+			// Shows notification for simple emails.
+			NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL, contact,
+			        new JSONObject().put("custom_value", mailInfo));
 		    }
-		    // Need the sent time and opened time in the payload, to
-		    // show in the Chrome Extensions.
-		    JSONObject mailInfo = new JSONObject().put("email_subject", subject);
-		    mailInfo.put("time_sent", trackerId);
-		    mailInfo.put("time_opened", System.currentTimeMillis() / 1000);
-		    // Shows notification for simple emails.
-		    NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL, contact,
-			    new JSONObject().put("custom_value", mailInfo));
 		}
 		else
 		{
@@ -243,9 +262,7 @@ public class EmailOpenServlet extends HttpServlet
 
 		// Trigger Email Open for campaign emails
 		EmailTrackingTriggerUtil.executeTrigger(trackerId, campaignId, null, Trigger.Type.EMAIL_OPENED);
-
 	    }
-
 	}
     }
 
@@ -287,7 +304,6 @@ public class EmailOpenServlet extends HttpServlet
 	    }
 	    NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL, contact,
 		    new JSONObject().put("custom_value", new JSONObject().put("email_subject", emailSubject)));
-
 	}
 	catch (Exception e)
 	{
@@ -319,5 +335,43 @@ public class EmailOpenServlet extends HttpServlet
 	{
 	    e.printStackTrace();
 	}
+    }
+
+    /**
+     * Checks if Email opened user is Agile User or not. If user is Agile User
+     * then it checks for is this User is a contact of another Agile User
+     * 
+     * @param servletRequest
+     * @param nameSpace
+     * @return
+     */
+    private boolean checkIfUserIsAgileUser(HttpServletRequest servletRequest, String nameSpace)
+    {
+	try
+	{
+	    Cookie[] cookies = servletRequest.getCookies();
+	    if (cookies != null)
+	    {
+		for (Cookie cookie : cookies)
+		{
+		    if (cookie.getName().equalsIgnoreCase("_agile_login_domain"))
+		    {
+			String cookieValue = cookie.getValue();
+			if (StringUtils.isNotBlank(cookieValue))
+			{
+			    cookieValue = cookieValue.trim();
+			    if (cookieValue.equalsIgnoreCase(nameSpace))
+				return true;
+			}
+		    }
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return false;
+	}
+	return false;
     }
 }
