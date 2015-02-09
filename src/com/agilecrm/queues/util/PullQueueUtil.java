@@ -54,11 +54,16 @@ public class PullQueueUtil
     {
 	try
 	{
+	    System.out.println("leasing tasks info : " + queueName + " : " + leasePeriod + " : " + countLimit);
+	    
 	    // Get tasks
 	    Queue q = QueueFactory.getQueue(queueName);
 
-	    return q.leaseTasks(LeaseOptions.Builder.withLeasePeriod(leasePeriod, TimeUnit.SECONDS)
+	  List<TaskHandle> taskHandles =  q.leaseTasks(LeaseOptions.Builder.withLeasePeriod(leasePeriod, TimeUnit.SECONDS)
 		    .countLimit(countLimit).groupByTag());
+	  
+	  System.out.println("task handles leased: " + taskHandles == null ? null : taskHandles.size());
+	  return taskHandles;
 
 	}
 	catch (TransientFailureException e)
@@ -88,11 +93,22 @@ public class PullQueueUtil
      */
     public static void processTasksInBackend(String backendUrl, String queueName)
     {
-	// Create Task and push it into Task Queue
-	Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_QUEUE);
-	TaskOptions taskOptions = TaskOptions.Builder.withUrl(backendUrl).param("queue_name", queueName)
-	        .header("Host", getCampaignBackendURL(queueName)).method(Method.POST);
-	queue.addAsync(taskOptions);
+	System.out.println("Sending request to backend with URL " + backendUrl + " with queue name : " + queueName + ", Starts at :" + System.currentTimeMillis());
+	
+	try
+	{
+	    // Create Task and push it into Task Queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_QUEUE);
+		TaskOptions taskOptions = TaskOptions.Builder.withUrl(backendUrl).param("queue_name", queueName)
+		        .header("Host", getCampaignBackendURL(queueName)).method(Method.POST);
+		queue.addAsync(taskOptions);   
+	}
+	catch(Exception e)
+	{
+	    System.out.println("exception in sending request to backend ");
+	    e.printStackTrace();
+	}
+	
     }
 
     /**

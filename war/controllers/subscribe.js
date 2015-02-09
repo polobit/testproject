@@ -391,7 +391,12 @@ var SubscribeRouter = Backbone.Router.extend({
 				
 				var emails = quantity * 1000;
 				
-			
+				if(IS_HAVING_MANDRILL)
+				{
+					$("#emails_total_cost").html(quantity * 2);
+					$("#email_rate").html("$2");
+					return;
+				}
 				if(emails < 100000)
 					{
 						$("#emails_total_cost").html(quantity * 4);
@@ -613,7 +618,18 @@ var SubscribeRouter = Backbone.Router.extend({
 	{
 		var counter = 0;
 		var that = this;
+		IS_HAVING_MANDRILL = false;
+		$.ajax({
+			url:"core/api/email-gateway",
+			type:"GET",
+			success: function(data)
+			{
+				if(data.email_api == "MANDRILL")
+					IS_HAVING_MANDRILL = true;
+					
+			}
 		
+		});
 		
 		/*
 		 * Creates new view with a render callback to setup expiry dates

@@ -153,6 +153,14 @@ public class AgileTaskletUtil
 		}
 	}
 
+	public static JSONObject getSubscriberJSON(Contact contact, boolean...noCustomField)
+	{
+	    // Custom date labels to convert epoch to Date format
+	    List<String> dateCustomFieldLabels = getDateCustomLabelsFromCache();
+
+	    return getSubscriberJSON(contact, dateCustomFieldLabels, noCustomField);
+	}
+
 	/**
 	 * Returns name from json
 	 * 
@@ -192,7 +200,7 @@ public class AgileTaskletUtil
 	 *            Contact object that subscribes to workflow.
 	 * @return JsonObject of contact.
 	 */
-	public static JSONObject getSubscriberJSON(Contact contact, List<String> dateCustomFieldLabels)
+	public static JSONObject getSubscriberJSON(Contact contact, List<String> dateCustomFieldLabels, boolean...noCustomField)
 	{
 		if (contact == null)
 			return null;
@@ -204,8 +212,10 @@ public class AgileTaskletUtil
 			return null;
 		}
 
-		try
-		{
+			
+			try
+			{
+			    //System.out.println("Field name is " + field.name);
 
 			JSONObject subscriberJSON = new JSONObject();
 
@@ -231,9 +241,14 @@ public class AgileTaskletUtil
 					// Convert Epoch to date
 					if (ContactField.FieldType.CUSTOM.equals(field.type))
 					{
-						try
+					    
+					    	// Skip appending custom fields to clicked urls
+						if(noCustomField.length != 0 && noCustomField[0])
+						    continue;
+					    
+					    	try
 						{
-							System.out.println("Field name is " + field.name);
+							//System.out.println("Field name is " + field.name);
 
 							// If it is Date field
 							if (dateCustomFieldLabels.contains(field.name))
@@ -248,6 +263,7 @@ public class AgileTaskletUtil
 						catch (Exception e)
 						{
 							e.printStackTrace();
+							System.out.println("Exception occured on field name " + field.name);
 							System.err.println("Exception occured while converting epoch time..." + e.getMessage());
 						}
 					}

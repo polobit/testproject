@@ -581,5 +581,29 @@ public class DomainUserUtil
 	    NamespaceManager.set(oldnamespace);
 	}
     }
+    
+    /**
+     * Returns list of User Keys
+     * @return List
+     */
+    public static List<Key<DomainUser>> getDomainUserKeys(String domain)
+    {
+	String oldnamespace = NamespaceManager.get();
+
+	NamespaceManager.set("");
+	
+	try
+	{
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    searchMap.put("domain", domain);
+	    
+	    return dao.listKeysByProperty(searchMap);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldnamespace);
+	}
+	
+    }
 
 }

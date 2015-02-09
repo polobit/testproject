@@ -22,6 +22,9 @@
             "dynamicName": "email",
             "dynamicValue": "id",
             "appendToDynamicName": "name",
+            "options": {
+            	"Assign Round Robin": "round_robin"
+            },
             "fieldType": "dynamicselect",
             "type": "select"
         },
