@@ -181,7 +181,8 @@
 								<div class="pull-left" style="width:90%;line-height:21px;">
 									
 									{{#if custom_data}}
-									{{#each custom_data}}
+									{{#getDealCustomProperties custom_data}}
+									{{#each_with_index this}}
 
 
                                             <span class="contact-custom-name">
@@ -192,7 +193,8 @@
 											<span class="contact-custom-value">
 											<span class="note-created-time" title="{{value}}">{{value}}</span>
                                              </span><br/> 
-										{{/each}}
+										{{/each_with_index}}
+									{{/getDealCustomProperties}}
                                     {{/if}}
 											
                                <div class="clearfix"></div>
@@ -212,5 +214,46 @@
 <!--  ending mid  right panel view -->
 
 <!--  ending middle view row -->
+
+<!-- Archive confirmation-->
+<div id="deal_archive_confirm_modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Archive Deal</h3>
+  </div>
+  <div class="modal-body">
+    <div id="deal-bulk-confirm" style="margin-left: 30px;">
+		<input id="archived-deal-id" name="id" type="hidden" value="{{id}}" />
+		<input id="archived-deal-milestone" name="milestone" type="hidden" value="{{milestone}}"/>
+		Deals can be archived and will not be shown. You can view them later by selecting 'All' in the filter.  
+		<br/> Are you sure to archive this deal?
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" id="deal-quick-archive" class="btn btn-primary">Yes</a>
+	<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+  </div>
+</div>
+<!-- End of Archive confirmation-->
+
+<!-- Restore confirmation-->
+<div id="deal_restore_confirm_modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Restore Deal</h3>
+  </div>
+  <div class="modal-body">
+	<input id="restored-deal-id" name="id" type="hidden"/>
+	<input id="restored-deal-milestone" name="milestone" type="hidden"/>
+    <div id="deal-bulk-confirm" style="margin-left: 30px;">
+		Restoring the Deal will make it active again. <br/> Restore this Deal?
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" id="deal-quick-restore" class="btn btn-primary">Yes</a>
+	<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+  </div>
+</div>
+<!-- End of Restore confirmation-->
 </script>
 </html>

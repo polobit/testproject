@@ -1,5 +1,6 @@
 // Twilio call noty when user change tab
 var Twilio_Call_Noty;
+var Twilio_Call_Noty_IMG = "";
 
 var To_Number;
 var To_Name = "";
@@ -162,7 +163,7 @@ $(function()
 
 		console.log("phone: " + $(this).attr("phone"));
 
-		twiliocall($(this).attr("phone"), getTwilioIOContactName());
+		twiliocall($(this).attr("phone"), getContactName(contactDetailsObj));
 	});
 
 	$("#twilio_acc_sid", "#twilio_auth_token").die().live('click', function(e)
@@ -179,7 +180,7 @@ $(function()
 		if("None" == $("#twilio_twimlet_url").val())
 			$("#twilio_twimlet_url").val(""); 
 		
-		// Toggle advance settings
+		// Toggle advanced settings
 		$(".twilioio-advance-settings-hide").toggle();
 	    $(".twilioio-advance-settings-show").toggle();
 	    $("#twilio_recording").toggle();
@@ -564,7 +565,7 @@ function fill_twilioio_numbers()
 
 	$("#save_prefs").text("Loading...");
 	$("#save_prefs").attr("disabled", true);
-
+	
 	// Retrieves widget which is fetched using script API
 	// Get TwilioIO widget
 	$.getJSON("/core/api/widgets/TwilioIO", function(twilioio_widget)
@@ -578,6 +579,10 @@ function fill_twilioio_numbers()
 		if (twilioio_widget.prefs != undefined)
 		{
 			twilioio_widget.prefs = eval("(" + twilioio_widget.prefs + ")");
+			
+			// Show advanced settings if data available
+			if((twilioio_widget.prefs.twilio_record == "true") || (twilioio_widget.prefs.twilio_twimlet_url != "None"))
+				$(".twilioio-advance-settings").click();
 
 			getValidateAndVerfiedCallerId(twilioio_widget.prefs.twilio_acc_sid, twilioio_widget.prefs.twilio_auth_token, function(data)
 			{
@@ -594,21 +599,6 @@ function fill_twilioio_numbers()
 		console.log("twilioio_widget error");
 		console.log(data);
 	});
-}
-
-// Get name of contact
-function getTwilioIOContactName()
-{
-	var contactName = "";
-	var firstName = agile_crm_get_contact_property('first_name');
-	var lastName = agile_crm_get_contact_property('last_name');
-
-	if (firstName)
-		contactName = firstName + " ";
-	if (lastName)
-		contactName = contactName + lastName;
-
-	return contactName;
 }
 
 function setUpGlobalTwilio()
@@ -675,7 +665,7 @@ function setUpGlobalTwilio()
 			console.log(conn._status);
 			globalconnection = conn;
 
-			showCallNotyPopup("connected", "Twilio", "<b>On call : </b><br>" + To_Name + "   " + To_Number + "<br>", false);
+			showCallNotyPopup("connected", "Twilio", Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><b>On call  </b>' + To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);
 		});
 
 		Twilio.Device.disconnect(function(conn)
@@ -704,6 +694,9 @@ function setUpGlobalTwilio()
 			// Get all call logs for widget only on cotact detail page
 			if(window.location.hash.indexOf("contact/") != -1)
 			  {
+				if(typeof getTwilioIOLogs == 'undefined')
+					return;
+				
 				getTwilioIOLogs(phoneNumber);
 				
 				// Change selected number if its different than calling number.
@@ -769,7 +762,7 @@ function setUpGlobalTwilio()
 					{
 						console.log("getting one more call.");
 
-						showCallNotyPopup("missedCall", "error", "<b>Missed call : </b><br>" + conn.parameters.From + "<br>", 5000);
+						showCallNotyPopup("missedCall", "error", Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><b>Missed call : </b><br>' + conn.parameters.From + '<br></span><div class="clearfix"></div>', 5000);
 
 						conn.reject();						
 						if (conn)
@@ -787,13 +780,10 @@ function setUpGlobalTwilio()
 					// conn.accept();
 					To_Number = globalconnection.parameters.From;
 					To_Name = searchForContact(To_Number);
-
-					showCallNotyPopup("incoming", "Twilio",
-							'<i class="icon icon-phone"></i><b>Incoming call :</b><br> ' + To_Name + "   " + To_Number + "<br>", false);
+					Twilio_Call_Noty_IMG = addContactImg("Incoming");
 					
-					// Show contact detail page
-					if(TWILIO_CONTACT_ID)
-					window.location.href = "#contact/"+TWILIO_CONTACT_ID;
+					showCallNotyPopup("incoming", "Twilio",
+							Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Incoming call </b>'+ To_Number + '<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);										
 				});
 
 		// If any network failure, show error
@@ -870,10 +860,11 @@ function twiliocall(phoneNumber, toName)
 	Twilio.Device.connect(params);
 
 	To_Number = phoneNumber;
-	To_Name = toName;	
-	TWILIO_CALLED_NO = To_Number;
-
-	showCallNotyPopup("outgoing", "Twilio", '<i class="icon icon-phone"></i><b>Calling :</b><br> ' + To_Name + "   " + To_Number + "<br>", false);
+	To_Name = toName;
+	TWILIO_CALLED_NO = To_Number;	
+	Twilio_Call_Noty_IMG = addContactImg("Outgoing");	
+	
+	showCallNotyPopup("outgoing", "Twilio", Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Calling </b>'+ To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);
 }
 
 // Send DTMF signal to twilio active connection from dialpad.
@@ -1169,4 +1160,77 @@ function twilioApiRequest(ApiCallUrl){
 	            dataType: 'json'
 	        }).responseText
 	    );
+}
+
+// Get contact from DB and then return contact img
+function searchForContactImg(from) {
+	console.log("searchForContactImg : " + from);	
+	var contactImg = "";
+	var responseJson = $.parseJSON(
+	        $.ajax({
+	        	url: "core/api/contacts/search/phonenumber/"+from,
+	            async: false,
+	            dataType: 'json'
+	        }).responseText
+	    );
+	console.log("**** responseJson ****");
+	console.log(responseJson);
+	
+	return responseJson;
+}
+
+// Add contact img in html for call noty text with contact url
+function addContactImg(callType)
+{
+	var notyContactImg = "";
+	if(callType == "Outgoing")
+	  {
+		var currentContact = agile_crm_get_contact();
+		var contactImg = getGravatar(currentContact.properties, 40);
+		notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+contactImg+'" style="display:inline;"></a>';
+		return notyContactImg;
+	  }
+	else
+	{
+		var callingContact = searchForContactImg(To_Number);
+		
+		if(callingContact != null)
+		  {
+			var contactImg = getGravatar(callingContact.properties, 40);
+			notyContactImg = '<a href="#contact/'+TWILIO_CONTACT_ID+'" style="float:left;margin-right:10px;"><img class="thumbnail" width="40" height="40" alt="" src="'+contactImg+'" style="display:inline;"></a>';			
+		  }
+		return notyContactImg;
+	} 
+}
+
+/**
+ * Take contact property and width for img, return gravatar or contact img.
+ * Used for twilio IO as well as SIP call noty.
+ */
+function getGravatar(items, width)
+{
+	if (items == undefined)
+		return;
+
+	// Checks if properties already has an image, to return it
+	var agent_image = getPropertyValue(items, "image");
+	if (agent_image)
+		return agent_image;
+
+	// Default image
+	var img = DEFAULT_GRAVATAR_url;
+	var backup_image = "&d=404\" ";
+	// backup_image="";
+	var initials = text_gravatar_initials(items);
+
+	if (initials.length == 0)
+		backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
+	var data_name = "onLoad=\"image_load(this)\" onError=\"image_error(this)\" _data-name=\"" + initials;
+	var email = getPropertyValue(items, "email");
+	if (email)
+	{
+		return ('https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + backup_image + data_name);
+	}
+
+	return ('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);	
 }

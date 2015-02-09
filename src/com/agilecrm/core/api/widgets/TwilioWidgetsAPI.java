@@ -26,6 +26,7 @@ import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
+import com.agilecrm.workflows.triggers.util.CallTriggerUtil;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
 import com.twilio.sdk.client.TwilioCapability;
 import com.twilio.sdk.client.TwilioCapability.DomainException;
@@ -543,16 +544,28 @@ public class TwilioWidgetsAPI
 	@Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public String saveCallActivity(@FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration) {		
-		
-		if (StringUtils.isBlank(phone))
-			return "";
+	    
+	    	if (StringUtils.isBlank(phone))
+		    return "";
 
 		Contact contact = ContactUtil.searchContactByPhoneNumber(phone);
-		
-		if(direction.equalsIgnoreCase("outbound-dial"))
-			ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.OUTBOUND, status, duration, contact);
-		if(direction.equalsIgnoreCase("inbound"))
-			ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.INBOUND, status, duration, contact);
+
+		if (direction.equalsIgnoreCase("outbound-dial"))
+		{
+		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.OUTBOUND, status, duration, contact);
+
+		    // Trigger for outbound
+		    CallTriggerUtil.executeTriggerForCall(contact, Call.SERVICE_TWILIO, Call.OUTBOUND, status, duration);
+		}
+
+		if (direction.equalsIgnoreCase("inbound"))
+		{
+		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.INBOUND, status, duration, contact);
+
+		    // Trigger for inbound
+		    CallTriggerUtil.executeTriggerForCall(contact,  Call.SERVICE_TWILIO, Call.INBOUND, status, duration);
+		}
+	
 		return "";
 	}
 

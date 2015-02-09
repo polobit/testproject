@@ -124,6 +124,7 @@ padding: 0 8px 0 0;
 	font-size: 16px;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	overflow: hidden;
 }
 .portlet_header_name i{
 	font-size:19px;
@@ -466,6 +467,7 @@ width: auto!important;
 }
 #portletStreamModal {
     width: 500px;
+    outline: none;
 }
 #portletStreamModal > .modal-body {
     /*max-height: 1000px;*/
@@ -474,7 +476,7 @@ width: auto!important;
 .portlet_body td
 {
 	border-bottom:1px solid #eee;
-	text-transform:capitalize;
+	/* text-transform:capitalize; */
 	border-top:none;
 }
 .portlet_body tr:last-child td{

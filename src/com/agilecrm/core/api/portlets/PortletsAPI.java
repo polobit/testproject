@@ -23,6 +23,18 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.portlets.Portlet;
 import com.agilecrm.portlets.util.PortletUtil;
 
+/**
+ * <code>PortletsAPI</code> includes REST calls to interact with
+ * {@link Portlet} class to initiate Portlets CRUD operations.
+ * <p>
+ * It is called from client side to create, update, fetch and delete the
+ * portlets. It also interacts with {@link PortletUtil} class to fetch
+ * the data of Portlet class from database.
+ * </p>
+ * 
+ * @author Subrahmanyam
+ * 
+ */
 @Path("/api/portlets")
 public class PortletsAPI {
 	/**
@@ -203,10 +215,9 @@ public class PortletsAPI {
 	@Path("/portletPendingDeals")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Opportunity> getPortletPendingDealsList(@QueryParam("deals") String deals,@QueryParam("due-date") String dueDate)throws Exception {
+	public List<Opportunity> getPortletPendingDealsList(@QueryParam("deals") String deals)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("deals",deals);
-		json.put("due-date",dueDate);
 		return PortletUtil.getPendingDealsList(json);
 	}
 	/**
@@ -252,11 +263,11 @@ public class PortletsAPI {
 	@Path("/portletDealsByMilestone")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getPortletDealsByMilestoneData(@QueryParam("deals") String deals,@QueryParam("track") String track,@QueryParam("due-date") String dueDate)throws Exception {
+	public JSONObject getPortletDealsByMilestoneData(@QueryParam("deals") String deals,@QueryParam("track") String track)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("deals",deals);
 		json.put("track",track);
-		json.put("due-date",dueDate);
+		//json.put("due-date",dueDate);
 		return PortletUtil.getDealsByMilestoneData(json);
 	}
 	/**
@@ -280,11 +291,11 @@ public class PortletsAPI {
 	@Path("/portletDealsFunnel")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getPortletDealsFunnelData(@QueryParam("deals") String deals,@QueryParam("track") String track,@QueryParam("due-date") String dueDate)throws Exception {
+	public JSONObject getPortletDealsFunnelData(@QueryParam("deals") String deals,@QueryParam("track") String track)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("deals",deals);
 		json.put("track",track);
-		json.put("due-date",dueDate);
+		//json.put("due-date",dueDate);
 		return PortletUtil.getDealsByMilestoneData(json);
 	}
 	/**
@@ -345,5 +356,22 @@ public class PortletsAPI {
 		json.put("duration",duration);
 		
 		return PortletUtil.getPortletCallsPerPerson(json);
+	}
+	/**
+	 * Gets Task Report portlet data
+	 * 
+	 * @return {@Link JSONObject}
+	 */
+	@Path("/portletTaskReport")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public JSONObject getTaskReportPortletData(@QueryParam("group-by") String groubBy,@QueryParam("split-by") String splitBy,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate)throws Exception {
+		JSONObject json=new JSONObject();
+		json.put("group-by",groubBy);
+		json.put("split-by",splitBy);
+		json.put("start-date",startDate);
+		json.put("end-date",endDate);
+		
+		return PortletUtil.getGrowthGraphData(json);
 	}
 }

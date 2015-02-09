@@ -8,7 +8,10 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.OfficeEmailPrefs;
 import com.agilecrm.user.util.OfficeEmailPrefsUtil;
 import com.google.appengine.api.NamespaceManager;
+<<<<<<< HEAD
 import com.google.appengine.api.utils.SystemProperty;
+=======
+>>>>>>> release
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
@@ -86,32 +89,23 @@ public class ContactOfficeUtil
 	String host = OfficePrefs.server_url;
 	String password = OfficePrefs.password;
 
-	String domain = NamespaceManager.get();
-
-	if (domain == null)
-	    domain = "localhost";
-
-	String hostUrl = "http://54.87.153.50:8080/exchange-app";
-
-	String applicationId = SystemProperty.applicationId.get();
-
-	System.out.println("Application id is " + applicationId);
-
 	String protocal = "http://";
 	if (OfficePrefs.is_secure)
 	    protocal = "https://";
 
 	String url = null;
 
-	if (StringUtils.equals(applicationId, "agilecrmbeta"))
-	    hostUrl = "http://54.87.153.50:8080/exchange-app-beta";
+	String namespace = NamespaceManager.get();
+
+	if (StringUtils.isBlank(namespace))
+	    namespace = "localhost";
 
 	try
 	{
-	    url = hostUrl + "/exchange?user_name=" + URLEncoder.encode(userName, "UTF-8") + "&search_email="
-		    + searchEmail + "&host=" + URLEncoder.encode(protocal + host, "UTF-8") + "&offset=" + offset
-		    + "&count=" + count + "&password=" + URLEncoder.encode(password, "UTF-8") + "&domain="
-		    + URLEncoder.encode(domain, "UTF-8");
+	    url = "http://54.87.153.50:8080/exchange-app/exchange?user_name=" + URLEncoder.encode(userName, "UTF-8")
+		    + "&search_email=" + searchEmail + "&host=" + URLEncoder.encode(protocal + host, "UTF-8")
+		    + "&offset=" + offset + "&count=" + count + "&password=" + URLEncoder.encode(password, "UTF-8")
+		    + "&domain=" + URLEncoder.encode(namespace, "UTF-8");
 	}
 	catch (Exception e)
 	{

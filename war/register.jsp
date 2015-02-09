@@ -197,6 +197,7 @@ $.validator.setDefaults({
 								<!--  <h3 class="log-subhead"><small>Or Fill out the form below</small></h3>	 -->
 								<div id="openid_btns" class="regpage-fieldview">
 									<input type='hidden' name='type' value='agile'></input>
+									<input type='hidden' name='account_timezone' id='account_timezone' value=''></input>
 									<div class="form-group login-userid">
 										<span class="regpage-uname"></span> <input
 											class="input-xlarge field required form-control" name='name'
@@ -377,11 +378,11 @@ $.validator.setDefaults({
             </div> -->
 	</div>
 
-
+<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {	
 			
-				
+			$('#account_timezone').val(jstz.determine().name());	
 			// Initializes phone library
 			$("#login_phone_number").intlTelInput({
 				utilsScript: "lib/phonenumber-lib/utils.js",

@@ -109,6 +109,8 @@ public class BulkOperationsAPI
 	    message = fetcher.getAvailableCompanies() + " Contacts/Companies deleted";
 	}
 
+	ContactUtil.eraseContactsCountCache();
+	
 	BulkActionNotifications.publishNotification(message);
 
     }
@@ -190,6 +192,9 @@ public class BulkOperationsAPI
 
 	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids, current_user_id);
 
+	// Sets limit on free user
+	fetcher.setLimits();
+	
 	while (fetcher.hasNextSet())
 	{
 
@@ -383,6 +388,8 @@ public class BulkOperationsAPI
 	    {
 		new CSVUtil(restrictions).createCompaniesFromCSV(blobStream, contact, ownerId, type);
 	    }
+	    
+	    ContactUtil.eraseContactsCountCache();
 	}
 	catch (IOException e)
 	{
@@ -538,6 +545,9 @@ public class BulkOperationsAPI
 
 	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids, currentUserId);
 
+	// Sets limit on free user
+	fetcher.setLimits();
+	
 	int noEmailsCount = 0;
 
 	// Gets emailSender

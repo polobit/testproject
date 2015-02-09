@@ -48,6 +48,14 @@
 		<task-retry-limit>1</task-retry-limit>
 	</retry-parameters>
   </queue>
+     <queue>
+    <name>account-stats-update-queue</name>
+    <rate>2/s</rate>
+    <max-concurrent-requests>5</max-concurrent-requests>
+    <retry-parameters>
+		<task-retry-limit>1</task-retry-limit>
+	</retry-parameters>
+  </queue>
    <queue>
     <name>bulk-actions-queue</name>
     <rate>2/s</rate>
@@ -58,6 +66,14 @@
   </queue>
   <queue>
     <name>event-notifier</name>
+    <rate>20/s</rate>
+    <max-concurrent-requests>20</max-concurrent-requests>
+    <retry-parameters>
+		<task-retry-limit>1</task-retry-limit>
+	</retry-parameters>
+  </queue>
+  <queue>
+    <name>due-task-reminder</name>
     <rate>5/s</rate>
     <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>

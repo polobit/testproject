@@ -1,3 +1,7 @@
+<%
+String formId = request.getParameter("form");
+%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
    <head>
@@ -8,6 +12,11 @@
       <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
       <![endif]-->
+
+	<script>
+		var formNumber = <%=formId%>;
+	</script>
+
    </head>
    <body>
       <div class="container">
@@ -15,7 +24,8 @@
             <!-- Building Form. -->
             <div class="col-md-6">
                <div class="clearfix">
-                  <h2>Your Form</h2>
+                  <h2 id="form-label">Your Form</h2>
+                  <input id="form-save" type="button" class="btn btn-info" value="Save Form">
                   <hr>
                   <div id="build">
                      <form id="target" class="form-horizontal">
