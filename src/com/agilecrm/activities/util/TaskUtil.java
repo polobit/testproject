@@ -734,7 +734,7 @@ public class TaskUtil
      * 
      * @return List of tasks
      */
-    public static List<Task> getTasksRelatesToOwnerOfTypeAndCategory(Long owner, String category, String status){
+    public static List<Task> getTasksRelatesToOwnerOfTypeAndCategory(Long owner, String category, String status,Long startTime,Long endTime){
     	try{
     		Map<String, Object> searchMap = new HashMap<String, Object>();
     		
@@ -746,6 +746,11 @@ public class TaskUtil
     		
     		if(StringUtils.isNotBlank(status))
     			searchMap.put("status", status);
+    		
+    		if(startTime!=null)
+    			searchMap.put("due >=", startTime);
+    		if(endTime!=null)
+    			searchMap.put("due <", endTime);
     		
     		return dao.listByProperty(searchMap);
     	}catch (Exception e){

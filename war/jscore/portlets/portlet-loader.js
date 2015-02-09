@@ -72,122 +72,122 @@ var gridster;
  * @param portlets_el
  */
 function set_up_portlets(el, portlets_el){
-	$(function(){
-		var dimensions;
-		var dim_width = Math.round($('.gridster-portlets').width()/3)-20;
-		var dim_height = 200;
-		dimensions = [dim_width, dim_height];
-		gridster = $('.gridster > div:visible',portlets_el).gridster({
-	    	widget_selector: "div",
-	        widget_margins: [10, 5],
-	        widget_base_dimensions: dimensions,
-	        min_cols: 3,
-	        autogenerate_stylesheet: true,
-	        draggable: {
-	        	limit: true,
-	        	ignore_dragging: [".portlet_body",".portlet_body *"],
-	        	stop: function(event,ui){
-	        		
-	        		//$('#'+this.$player.attr('id')).attr('id','ui-id-'+this.$player.attr('data-col')+'-'+this.$player.attr('data-row'));
-	        		
-					var models = [];
 
-					/*
-					 * Iterate through each all the portlets and set each portlet
-					 * position and store it in array
-					 */
-					$('#portlet-res > div > .gs-w').each(function(){
-						
-						$(this).attr('id','ui-id-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
-						
-						$(this).find('div.portlet_body').attr('id','p-body-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
-						
-						var model_id = $(this).find('.portlets').attr('id');
-						
-						var model = Portlets_View.collection.get(model_id);
-						
-						model.set({ 'column_position' : parseInt($(this).attr("data-col")) }, { silent : true });
-						
-						model.set({ 'row_position' : parseInt($(this).attr("data-row")) }, { silent : true });
+	var dimensions;
+	var dim_width = Math.round($('.gridster-portlets').width()/3)-20;
+	var dim_height = 200;
+	dimensions = [dim_width, dim_height];
+	gridster = $('.gridster > div:visible',portlets_el).gridster({
+    	widget_selector: "div",
+        widget_margins: [10, 5],
+        widget_base_dimensions: dimensions,
+        min_cols: 3,
+        autogenerate_stylesheet: true,
+        draggable: {
+        	limit: true,
+        	ignore_dragging: [".portlet_body",".portlet_body *"],
+        	stop: function(event,ui){
+        		
+        		//$('#'+this.$player.attr('id')).attr('id','ui-id-'+this.$player.attr('data-col')+'-'+this.$player.attr('data-row'));
+        		
+				var models = [];
 
-						models.push({ id : model.get("id"), column_position : parseInt($(this).attr("data-col")), row_position : parseInt($(this).attr("data-row")) });
-					});
-					// Saves new positions in server
-					$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
-						contentType : "application/json; charset=utf-8", dataType : 'json' });
-				}
-	        },
-	        resize: {
-	        	enabled: true,
-	        	max_size: [3,3],
-	        	stop: function(event,ui){
-	        		
-	        		//for resizing portlet body
-	                if($('#'+this.$resized_widget.attr('id')).height()<=200){
-	        			$('#'+this.$resized_widget.attr('id')+' > .portlet_body').css("height","160px");
-	        			$('#'+this.$resized_widget.attr('id')+' > .portlet_body').css("max-height","160px");
-	        		}else{
-	        			$('#'+this.$resized_widget.attr('id')+' > .portlet_body').css("height",this.$resize_preview_holder.height()-40+"px");
-	        			$('#'+this.$resized_widget.attr('id')+' > .portlet_body').css("max-height",this.$resize_preview_holder.height()-40+"px");
-	        		}
-	        		$(window).trigger('resize');
-	        		
-	        		$('#'+this.$resized_widget.attr('id')+' > div.portlet_body').css('overflow-x','hidden').css('overflow-y','auto');
-	        		
-					var models = [];
+				/*
+				 * Iterate through each all the portlets and set each portlet
+				 * position and store it in array
+				 */
+				$('#portlet-res > div > .gs-w').each(function(){
+					
+					$(this).attr('id','ui-id-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
+					
+					$(this).find('div.portlet_body').attr('id','p-body-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
+					
+					var model_id = $(this).find('.portlets').attr('id');
+					
+					var model = Portlets_View.collection.get(model_id);
+					
+					model.set({ 'column_position' : parseInt($(this).attr("data-col")) }, { silent : true });
+					
+					model.set({ 'row_position' : parseInt($(this).attr("data-row")) }, { silent : true });
 
-					/*
-					 * Iterate through each all the portlets and set each portlet
-					 * position and store it in array
-					 */
-					$('#portlet-res > div > .gs-w').each(function(){
-						
-						$(this).attr('id','ui-id-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
-						
-						$(this).find('div.portlet_body').attr('id','p-body-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
-						
-						var model_id = $(this).find('.portlets').attr('id');
-						
-						var model = Portlets_View.collection.get(model_id);
-						
-						model.set({ 'size_x' : parseInt($(this).attr("data-sizex")) }, { silent : true });
-						
-						model.set({ 'size_y' : parseInt($(this).attr("data-sizey")) }, { silent : true });
-						
-						model.set({ 'column_position' : parseInt($(this).attr("data-col")) }, { silent : true });
-						
-						model.set({ 'row_position' : parseInt($(this).attr("data-row")) }, { silent : true });
+					models.push({ id : model.get("id"), column_position : parseInt($(this).attr("data-col")), row_position : parseInt($(this).attr("data-row")) });
+				});
+				// Saves new positions in server
+				$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
+					contentType : "application/json; charset=utf-8", dataType : 'json' });
+			}
+        },
+        resize: {
+        	enabled: true,
+        	max_size: [3,3],
+        	stop: function(event,ui){
+        		
+        		//for resizing portlet body
+                if($('#'+this.$resized_widget.attr('id')).height()<=200){
+        			$('#'+this.$resized_widget.attr('id')+' > .portlet_body').css("height","160px");
+        			$('#'+this.$resized_widget.attr('id')+' > .portlet_body').css("max-height","160px");
+        		}else{
+        			$('#'+this.$resized_widget.attr('id')+' > .portlet_body').css("height",this.$resize_preview_holder.height()-40+"px");
+        			$('#'+this.$resized_widget.attr('id')+' > .portlet_body').css("max-height",this.$resize_preview_holder.height()-40+"px");
+        		}
+        		$(window).trigger('resize');
+        		
+        		$('#'+this.$resized_widget.attr('id')+' > div.portlet_body').css('overflow-x','hidden').css('overflow-y','auto');
+        		
+				var models = [];
 
-						models.push({ id : model.get("id"), size_x : parseInt($(this).attr("data-sizex")), size_y : parseInt($(this).attr("data-sizey")), 
-							column_position : parseInt($(this).attr("data-col")), row_position : parseInt($(this).attr("data-row")) });
-					});
-					// Saves new width and height in server
-					$.ajax({ type : 'POST', url : '/core/api/portlets/widthAndHeight', data : JSON.stringify(models),
-						contentType : "application/json; charset=utf-8", dataType : 'json' });
-				}
-	        }
-	    }).data('gridster');
-	    $(window).resize(function(){
-	    	if(gridster!=undefined)
-	    		$('.gridster-portlets').css("height","auto");
-	    	if($(window).width()<768 && gridster!=undefined){
-	    		gridster.disable();
-	    		gridster.disable_resize();
-	    	}else if(gridster!=undefined){
-	    		gridster.enable();
-	    		gridster.enable_resize();
-	    		gridster.set_dom_grid_height();
-	    	}
-	    });
-	    if($(window).width()<768 && gridster!=undefined){
+				/*
+				 * Iterate through each all the portlets and set each portlet
+				 * position and store it in array
+				 */
+				$('#portlet-res > div > .gs-w').each(function(){
+					
+					$(this).attr('id','ui-id-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
+					
+					$(this).find('div.portlet_body').attr('id','p-body-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
+					
+					var model_id = $(this).find('.portlets').attr('id');
+					
+					var model = Portlets_View.collection.get(model_id);
+					
+					model.set({ 'size_x' : parseInt($(this).attr("data-sizex")) }, { silent : true });
+					
+					model.set({ 'size_y' : parseInt($(this).attr("data-sizey")) }, { silent : true });
+					
+					model.set({ 'column_position' : parseInt($(this).attr("data-col")) }, { silent : true });
+					
+					model.set({ 'row_position' : parseInt($(this).attr("data-row")) }, { silent : true });
+
+					models.push({ id : model.get("id"), size_x : parseInt($(this).attr("data-sizex")), size_y : parseInt($(this).attr("data-sizey")), 
+						column_position : parseInt($(this).attr("data-col")), row_position : parseInt($(this).attr("data-row")) });
+				});
+				// Saves new width and height in server
+				$.ajax({ type : 'POST', url : '/core/api/portlets/widthAndHeight', data : JSON.stringify(models),
+					contentType : "application/json; charset=utf-8", dataType : 'json' });
+			}
+        }
+    }).data('gridster');
+    $(window).resize(function(){
+    	if(gridster!=undefined)
+    		$('.gridster-portlets').css("height","auto");
+    	if($(window).width()<768 && gridster!=undefined){
     		gridster.disable();
     		gridster.disable_resize();
     	}else if(gridster!=undefined){
     		gridster.enable();
     		gridster.enable_resize();
+    		gridster.set_dom_grid_height();
     	}
-	    $(window).trigger('resize');
-	  });
+    });
+    if($(window).width()<768 && gridster!=undefined){
+		gridster.disable();
+		gridster.disable_resize();
+	}else if(gridster!=undefined){
+		gridster.enable();
+		gridster.enable_resize();
+	}
+    $(window).trigger('resize');
+  
 	//enablePortletSorting(portlets_el);
 }
 /**
@@ -473,6 +473,7 @@ function showPortletSettings(el){
 		elData = $('#portletsTaskReportSettingsForm');
 		$("#group-by-task-report", elData).find('option[value='+ base_model.get("settings")["group-by"] +']').attr("selected", "selected");
 		$("#split-by-task-report", elData).find('option[value='+ base_model.get("settings")["split-by"] +']').attr("selected", "selected");
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
 		$('#'+base_model.get("settings")["group-by"]+'', elData).hide();
 	}
 	
@@ -985,7 +986,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
 	        		
 	        		var selector=idVal;
-	        		var url='/core/api/portlets/portletTaskReport?group-by='+data.get('settings')["group-by"]+'&split-by='+data.get('settings')["split-by"];
+	        		var url='/core/api/portlets/portletTaskReport?group-by='+data.get('settings')["group-by"]+'&split-by='+data.get('settings')["split-by"]+'&start-date='+getStartAndEndDatesOnDue(data.get('settings').duration)+'&end-date='+getStartAndEndDatesOnDue("TOMORROW");
 	        		
 	        		var groupByList=[];
 	    			var splitByList=[];

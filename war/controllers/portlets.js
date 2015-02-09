@@ -100,6 +100,7 @@ function addNewPortlet(portlet_type,p_name){
 	}else if(portlet_type=="TASKSANDEVENTS" && p_name=="TaskReport"){
 		json['group-by']="user";
 		json['split-by']="category";
+		json['duration']="1-week";
 	}
 	else if(portlet_type=="RSS" && p_name=="AgileCRMBlog")
 		obj.size_y=2;
@@ -150,7 +151,7 @@ function deletePortlet(el){
 	var p_id = el.id.split("-close")[0];
 	$('#portletDeleteModal').modal('show');
 	$('#portletDeleteModal > .modal-footer > .save-modal').attr('id',p_id);
-	$('#portletDeleteModal > .modal-body').html("Are you sure you want to delete Portlet - "+$('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()+" ?");
+	$('#portletDeleteModal > .modal-body').html("Are you sure you want to delete dashlet - "+$('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()+" ?");
 }
 $('.portlet-delete-modal').live("click", function(e){
 	e.preventDefault();
@@ -251,7 +252,7 @@ $('#portlets-events-model-list > tr').live('click', function(e){
    	return false;
 });
 $('#portlets-tasks-model-list > tr').live('click', function(e) {
-	App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
+	/*App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
 	var value = $(this).data().toJSON();
 	deserializeForm(value, $("#updateTaskForm"));
 	$("#updateTaskModal").modal('show');
@@ -268,7 +269,10 @@ $('#portlets-tasks-model-list > tr').live('click', function(e) {
 			});
 	
 	// Add notes in task modal
-	showNoteOnForm("updateTaskForm", value.notes);
+	showNoteOnForm("updateTaskForm", value.notes);*/
+	
+	var id = $(this).find(".data").attr("data");
+	App_Tasks.navigate("task/" + id, { trigger : true });
 });
 /**
  * Makes the pending task as completed by calling complete_task function
@@ -311,4 +315,27 @@ function addWidgetToGridster(base_model){
 			window.scrollTo(0,((parseInt($('#ui-id-'+base_model.get("column_position")+'-'+base_model.get("row_position")).attr('data-row'))-1)*200)+5);
 		}
 	}
+}
+function getStartAndEndDatesOnDue(duration){
+	var d = new Date();
+
+	// Today
+	if (duration == "1-day")
+		console.log(getGMTTimeFromDate(d) / 1000);
+	
+	// 1 Week ago
+	if (duration == "1-week")
+		d.setDate(d.getDate() - 6);
+	
+	// 1 Week ago
+	if (duration == "1-month")
+		d.setDate(d.getDate() - 29);
+
+	// Tomorrow
+	if (duration == "TOMORROW")
+		d.setDate(d.getDate() + 1);
+
+	console.log((getGMTTimeFromDate(d) / 1000));
+
+	return (getGMTTimeFromDate(d) / 1000);
 }
