@@ -247,6 +247,9 @@ $('#portlets-events-model-list > tr').live('click', function(e){
     	$("#update-event-date-2").closest('.row').show();
     }
    	
+    // Fills owner select element 
+	populateUsersInUpdateActivityModal(model.toJSON());
+	
  // Show edit modal for the event
     $("#updateActivityModal").modal('show');
    	return false;
