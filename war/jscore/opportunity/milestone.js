@@ -149,7 +149,7 @@ $(function(){
 	 */
 	$(".milestone-delete").die().live('click', function(e){
 		e.preventDefault();
-		$(this).closest('li').css("display", "none");
+		$(this).closest('tr').css("display", "none");
 		fill_ordered_milestone($(this).closest('form').attr('id'));
 	});
 	
@@ -160,7 +160,7 @@ $(function(){
     	e.preventDefault();
     	var form = $(this).closest('form');
     	console.log('New Milestone to - ',form.attr('id'));
-    	$(this).css("display","none");
+    	$(this).closest("div").css("display","none");
     	form.find('.show_field').css("display","block");
     	form.find(".add_new_milestone").focus();
     });
@@ -180,7 +180,7 @@ $(function(){
 			return;
 		}
     	form.find('.show_field').css("display","none");
-    	form.find(".show_milestone_field").css("display","inline-block");
+    	form.find(".show_milestone_field").closest("div").css("display","inline-block");
     	
     	if(!new_milestone || new_milestone.length <= 0 || (/^\s*$/).test(new_milestone))
 		{
@@ -195,11 +195,11 @@ $(function(){
     		// Prevents comma (",") as an argument to the input field
     		form.find(".add_new_milestone").val("");
         	
-    		var milestone_list = form.find('ul.milestone-value-list');
+    		var milestone_list = form.find('tbody');
     		var add_milestone = true;
     		
     		// Iterate over already present milestones, to check if this is a new milestone
-    		milestone_list.find('li').each(function(index, elem){
+    		milestone_list.find('tr').each(function(index, elem){
     			if($(elem).is( ":visible") && elem.getAttribute('data').toLowerCase() == new_milestone.toLowerCase())
     			{
     				add_milestone = false; // milestone exists, don't add
@@ -209,7 +209,8 @@ $(function(){
     		
     		if(add_milestone)
     		{
-    			milestone_list.append("<li data='" + new_milestone + "'><div><span>" + new_milestone + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>");
+    			milestone_list.append("<tr data='"+new_milestone+"' style='display: table-row;'><td><div class='p-l-sm' style='display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%'>"+new_milestone+"</div></td><td><div class='m-b-n-xs' style='display:none;'><a class='text-l-none-hover c-p'><i title='Drag' class='icon-move'></i></a><a class='milestone-delete' style='cursor: pointer;margin-left:10px; text-decoration: none;' data-toggle='modal' role='button' href='#'><i title='Delete Milestone' class='task-action icon icon-trash'></i></a></div></td></tr>");
+    	//		milestone_list.append("<li data='" + new_milestone + "'><div><span>" + new_milestone + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>");
     			fill_ordered_milestone(form.attr('id'));
     		}
     	}
@@ -402,10 +403,30 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone) {
  */
 function setup_milestones(el){
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
-		$(el).find('ul.milestone-value-list').each(function(index){
+		$(el).find('tbody').each(function(index){
 			var id = $(this).closest('form').find('input[name="id"]').val();
 			$(this).sortable({
 			      containment : "#milestone-values-"+id,
+			      items:'tr',
+			      helper: function(e, tr){
+			          var $originals = tr.children();
+			          var $helper = tr.clone();
+			          $helper.children().each(function(index)
+			          {
+			            // Set helper cell sizes to match the original sizes
+			            $(this).width($originals.eq(index).width());
+			            $(this).css("background","#f5f5f5");
+			            $(this).css("border-bottom","1px solid #ddd");
+			          });
+			          return $helper;
+			      },
+			      forceHelperSize:true,
+			      placeholder:'<tr><td></td></tr>',
+			      forcePlaceholderSize:true,
+			      handle: ".icon-move",
+			      cursor: "move",
+			      tolerance: "intersect",
+			      
 			      // When milestone is dropped its input value is changed 
 			      update : function(event, ui) {
 			    	  console.log($(ui.item).attr('data'));
@@ -431,7 +452,7 @@ function capitalize_string(str){
  */
 function fill_ordered_milestone(formId){
    	var values;
-   	$('#'+formId).find("ul.milestone-value-list li").each(function(index, data) { 
+   	$('#'+formId).find("tbody").find("tr").each(function(index, data) { 
    		if($(data).is( ":visible"))
    		{
    			// To capitalize the string
