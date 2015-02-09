@@ -201,7 +201,7 @@ $("#add-portlet").live("click", function(e){
 	$("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);
 	
 });
-$('#portlets-contacts-model-list > tr, #portlets-companies-model-list > tr, #portlets-contacts-email-opens-model-list').live('click', function(e){
+$('#portlets-contacts-model-list > tr, #portlets-companies-model-list > tr, #portlets-contacts-email-opens-model-list > tr').live('click', function(e){
 	var id = $(this).find(".data").attr("data");
 	App_Contacts.navigate("contact/" + id, { trigger : true });
 });
