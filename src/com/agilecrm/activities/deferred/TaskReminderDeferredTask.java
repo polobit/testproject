@@ -123,8 +123,8 @@ public class TaskReminderDeferredTask implements DeferredTask
 		map.put("tasks", taskList);
 
 		// Sends mail to the domain user.
-		SendMail.sendMail("maildummy800@gmail.com", SendMail.DUE_TASK_REMINDER_SUBJECT + " " + domain
-		        + "after taskListMap", SendMail.DUE_TASK_REMINDER, map);
+		SendMail.sendMail("maildummy800@gmail.com", SendMail.DUE_TASK_REMINDER_SUBJECT,
+		        SendMail.DUE_TASK_REMINDER, map);
 
 		return;
 	    }
@@ -161,8 +161,8 @@ public class TaskReminderDeferredTask implements DeferredTask
 	    map.put("tasks", taskListMap);
 
 	    // Sends mail to the domain user.
-	    SendMail.sendMail("maildummy800@gmail.com", SendMail.DUE_TASK_REMINDER_SUBJECT + " " + domain,
-		    SendMail.DUE_TASK_REMINDER, map);
+	    SendMail.sendMail("maildummy800@gmail.com", SendMail.DUE_TASK_REMINDER_SUBJECT + " " + domain + " "
+		    + timezone, SendMail.DUE_TASK_REMINDER, map);
 
 	}
 	catch (TransientFailureException tfe)
