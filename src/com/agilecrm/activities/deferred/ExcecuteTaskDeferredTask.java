@@ -77,7 +77,7 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 		}
 		DateUtil dt = new DateUtil().toTZ(timezone);
 
-		System.out.println("time after date------------ " + dt.getTime());
+		System.out.println("current time after setting time------------ " + dt.getCalendar().getTimeInMillis()
 		Calendar calendar = com.agilecrm.util.DateUtil.getCalendar(
 		        new SimpleDateFormat("MM/dd/yyyy").format(dt.getTime()), timezone, "07:00");
 		time = (calendar.getTimeInMillis() / 1000);
