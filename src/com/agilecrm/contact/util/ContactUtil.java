@@ -1305,7 +1305,7 @@ public class ContactUtil
 						json.put("subject", contactEmail.subject);
 						json.put("openedTime", contactEmail.email_opened_at);
 						contactsList.add(json);
-					}else if(domainUser!=null && domainUser.newscopes!=null && !domainUser.newscopes.contains(UserAccessScopes.VIEW_CONTACTS) && contact.getOwner()!=null && contact.getOwner().id==domainUser.id){
+					}else if(domainUser!=null && domainUser.newscopes!=null && !domainUser.newscopes.contains(UserAccessScopes.VIEW_CONTACTS) && contact.getOwner()!=null && contact.getOwner().id!=null && contact.getOwner().id.equals(domainUser.id)){
 						json.put("contact_id", contact.id);
 						json.put("type", contact.type);
 						net.sf.json.JSONArray jsonArray = new net.sf.json.JSONArray();
