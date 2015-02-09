@@ -151,7 +151,7 @@ function deletePortlet(el){
 	var p_id = el.id.split("-close")[0];
 	$('#portletDeleteModal').modal('show');
 	$('#portletDeleteModal > .modal-footer > .save-modal').attr('id',p_id);
-	$('#portletDeleteModal > .modal-body').html("Are you sure you want to delete dashlet - "+$('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()+" ?");
+	$('#portletDeleteModal > .modal-body').html("Are you sure you want to delete Dashlet - "+$('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()+" ?");
 }
 $('.portlet-delete-modal').live("click", function(e){
 	e.preventDefault();
