@@ -39,7 +39,7 @@
                     </label>
                 </div>
             </div>
-             <div class="control-group m-t-md>
+             <div class="control-group m-t-md">
 	            <div class="controls">
 	                <a href="#" class="imap-share-settings-select"><i class='icon-plus-sign'/></i> Sharing settings</a>
 	                <span class ="imap-share-settings-txt" style="vertical-align:text-top;margin-left:-3px">         
@@ -55,14 +55,15 @@
 					</select>
 	             	<span class="imap-share-status"></span>
 					</span>
-			   </div>
+			     </div>
+			  </div>
 			   {{#if id}}
-			   <div class="control-group m-t-sm" style="margin-top:10px">
+			   <div id="imap-folders" class="control-group m-t-sm">
 	            <div class="controls">
 	                <a href="#" class="imap-folders-settings-click"><i class='icon-plus-sign'/></i> Email folders</a>
 				    <span class="imap-folders-select" style="display:none;">
-				   	<a href="#" class="imap-folders-settings-cancel" name = "imap" style="margin-bottom:20px"><i class='icon-minus-sign'/></i> Email folders</a>
-				   	<label class="control-label" style="margin-top:10px">Select folders to fetch emails from (max 3)</label>
+				   	<a href="#" class="imap-folders-settings-cancel m-b-md" name = "imap"><i class='icon-minus-sign'/></i> Email folders</a>
+				   	<label class="control-label m-t-sm">Select a maximum of 3 folders</label>
 					<select name="folders" multiple id="imap-folders-multi-select" class = "multi-select " limit = "3" style="margin-bottom: 5px; overflow: auto">
 					</select>
 	             	<span class="imap-folders-settings-status"></span>
