@@ -302,14 +302,14 @@ function fetch_mails(contact_details_tab_scope,has_email_configured,mail_server_
 	else
 		mail_server_url = mail_server_url + '&search_email='+encodeURIComponent(email);
 	
-	$('#email-type-select-dropdown',App_Contacts.contactDetailView.el).attr('disabled', 'disabled');
+//	$('#email-type-select-dropdown',App_Contacts.contactDetailView.el).attr('disabled', 'disabled');
 
 	// Fetches mails collection
 	var mailsView = new Base_Collection_View({ url : mail_server_url , cursor : cursor, page_size : 10,
 		templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 		postRenderCallback : function(el)
 		{
-			$('#email-type-select-dropdown',App_Contacts.contactDetailView.el).removeAttr('disabled');
+//			$('#email-type-select-dropdown',App_Contacts.contactDetailView.el).removeAttr('disabled');
 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 			{
 				$(".email-sent-time", el).each(function(index, element)
