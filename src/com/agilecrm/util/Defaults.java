@@ -161,7 +161,7 @@ public class Defaults
 	event.allDay = false;
 	DateUtil date = new DateUtil().toMidnight().addDays(0).addMinutes(16 * 60);
 	event.start = date.getTime().getTime() / 1000;
-	event.end = date.getTime().getTime() / 1000 + 3800;
+	event.end = date.getTime().getTime() / 1000 + 900;
 	if (ContactUtil.searchContactByEmail("homer@simpson.com") == null)
 	    return;
 	event.addContacts(String.valueOf(ContactUtil.searchContactByEmail("homer@simpson.com").id));
