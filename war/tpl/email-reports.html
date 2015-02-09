@@ -137,7 +137,9 @@
 						<a href="#" id="activity-type-list-select-none" class="">Select none</a>
 					</span>
 					<select id="activity-type-list" name="activity" class="required" multiple="multiple">
+						{{#hasMenuScope 'DEALS'}}
 						<option value="DEAL">Deals</option>
+						{{/hasMenuScope}}
 						<option value="TASK">Task</option>
 						<option value="EVENT">Event</option>
 						<option value="EMAIL">Email</option>
