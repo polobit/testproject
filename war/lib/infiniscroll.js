@@ -104,6 +104,7 @@
         self.onFetch();
         self.disableFetch();
         self.collection.fetch({
+          async: false,
           success: self.fetchSuccess,
           error: self.fetchError,
           add: self.options.add,
