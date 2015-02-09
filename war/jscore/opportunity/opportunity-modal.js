@@ -751,7 +751,7 @@ if(json.close_date==0)
 				}
 
 			}
-			else if (Current_Route == 'portlets') 
+			else if (Current_Route==undefined || Current_Route=='dashboard') 
 			{
 				if(App_Portlets.currentPosition && App_Portlets.pendingDeals && App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)]){
 					if (isUpdate)

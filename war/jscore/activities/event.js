@@ -510,7 +510,7 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 				}
 
 			});
-		}else if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && Current_Route == 'portlets') 
+		}else if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route==undefined || Current_Route=='dashboard')) 
 		{
 			if (isUpdate)
 				App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);
