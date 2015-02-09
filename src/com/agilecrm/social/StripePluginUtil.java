@@ -13,6 +13,7 @@ import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.util.StringUtils2;
 import com.agilecrm.widgets.Widget;
 import com.google.gson.Gson;
+import com.stripe.Stripe;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
 
@@ -51,6 +52,7 @@ public class StripePluginUtil
 	 * Retrieves Stripe customer based on Stripe customer ID and Stripe
 	 * account API key
 	 */
+	Stripe.apiKey = widget.getProperty("stripe_publishable_key");
 	Customer customer = Customer.retrieve(customerId.trim());
 
 	Map<String, Object> invoiceParams = new HashMap<String, Object>();
