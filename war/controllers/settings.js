@@ -258,19 +258,41 @@ var SettingsRouter = Backbone.Router.extend({
 		$("#content").html(getTemplate("settings"), {});
 
 		// Gets IMAP Prefs
-		var itemView2 = new Base_Model_View({ url : '/core/api/imap', template : "settings-imap-prefs", postRenderCallback : function(el){
-			itemView2.model.set("password","");
-		}, saveCallback : function(){
-/*			$save_info = $('<div style="display:inline-block"><small><p style="color:#2D8130; font-size:14px">Saved Successfully</p></small></div>');
-
-			// Appends error info to form actions block.
-			$("#imap-prefs-form").find(".form-actions").append($save_info);
-
-			// Hides the error message after 3 seconds
-			$save_info.show().delay(3000).hide(1);*/
-			App_Settings.navigate("email", { trigger : true });
-			return;
-		} });
+		var itemView2 = new Base_Model_View({ url : '/core/api/imap', template : "settings-imap-prefs", change:false,
+			postRenderCallback : function(el)
+			{
+				var model = itemView2.model;
+				itemView2.model.set("password","");
+				var optionsTemplate1 = "<option value='{{id}}' {{selected}}>{{name}}</option>";
+				var el1 = $('.imap-share-settings-select',el).closest("div");
+				fillSelect('imap-share-user-select', 'core/api/imap/shared-to-users', 'users', function fillNew()
+				{
+					$("#imap-share-user-select .default-select",el).remove();	
+				    $(".imap-share-select .loading",el).hide();
+				}, optionsTemplate1, false, el1);
+				
+				var el2 = $('.imap-folders-settings-click').closest("div");
+				var optionsTemplate2 = "<option {{selected}}>{{name}}</option>";
+				fillSelect('imap-folders-multi-select', 'core/api/imap/imap-folders', 'folders', function fillNew()
+				{
+					$("#imap-folders-multi-select .default-select").remove();					    	
+					
+				}, optionsTemplate2, false, el2);					
+			}, 
+			saveCallback : function()
+			{			
+				var model = itemView2.model;
+				var json = model.toJSON();
+				if(typeof json.isUpdated !== 'undefined' && json.hasOwnProperty('isUpdated') && json.isUpdated)
+					App_Settings.navigate("email", { trigger : true });
+				else
+				{
+					itemView2.render(true);
+					var el = itemView2.el;
+					load_imap_folders(el);
+				}
+			}
+		});
 		
 		// Appends IMAP
 		$('#prefs-tabs-content').html(itemView2.render().el);
@@ -289,7 +311,7 @@ var SettingsRouter = Backbone.Router.extend({
 			el.find(".imap-share-settings-txt").css("display","none");
 			el.find(".imap-share-select").css("display", "inline");
 			var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
-			fillSelect('#imap-share-user-select', 'core/api/imap/shared-to-users', 'users', function fillNew()
+			fillSelect('imap-share-user-select', 'core/api/imap/shared-to-users', 'users', function fillNew()
 			{
 				$("#imap-share-user-select .default-select").remove();
 			}, optionsTemplate, false, el);
@@ -303,11 +325,39 @@ var SettingsRouter = Backbone.Router.extend({
 			e.preventDefault();
 			var el = $(this).closest("div");
 			var name = $(this).attr('name');
+			el.find("#imap-share-user-select").empty();
 			el.find(".imap-share-select").css("display", "none");
 			el.find(".imap-share-settings-select").css("display", "inline");
 			el.find(".imap-share-settings-txt").css("display","inline");
 		});
 		
+		/**
+		 * Select imap server folder, will fetch mails from these folders
+		*/
+		$(".imap-folders-settings-click").die().live('click', function(e)
+		{
+			e.preventDefault();
+			var el = $(this).closest("div");
+			$(this).css("display", "none");
+			el.find(".imap-folders-select").css("display", "inline");
+			var optionsTemplate = "<option {{selected}}>{{name}}</option>";
+			fillSelect('imap-folders-multi-select', 'core/api/imap/imap-folders', 'folders', function fillNew()
+			{
+			    $("#imap-folders-multi-select .default-select").remove();
+			}, optionsTemplate, false, el);
+		});
+		
+		/**
+		 * To cancel the imap folder settings
+		 */
+		$(".imap-folders-settings-cancel").die().live('click', function(e)
+		{
+			e.preventDefault();
+			var el = $(this).closest("div");
+			el.find('#imap-folders-multi-select').empty();
+			el.find(".imap-folders-select").css("display", "none");
+			el.find(".imap-folders-settings-click").css("display", "inline");
+		});
 	},
 	
 	/**
@@ -322,13 +372,6 @@ var SettingsRouter = Backbone.Router.extend({
 			itemView3.model.set("password","");
 		}, saveCallback : function(){
 			$("#office-prefs-form").find("#office-password").val("");
-/*			$save_info = $('<div style="display:inline-block"><small><p style="color:#2D8130; font-size:14px">Saved Successfully</p></small></div>');
-
-			// Appends error info to form actions block.
-			$("#office-prefs-form").find(".form-actions").append($save_info);
-
-			// Hides the error message after 3 seconds
-			$save_info.show().delay(3000).hide(1);*/
 			App_Settings.navigate("email", { trigger : true });
 			return;
 			

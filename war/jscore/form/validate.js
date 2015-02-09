@@ -108,6 +108,17 @@ function isValidForm(form) {
 		return /^[0-9\-]+$/.test(value);
 	}," Please enter a valid number.");
 	
+	jQuery.validator.addMethod("multi-select", function(value, element){
+		var counter = 0;
+		$(element).find(':selected').each( function( i, selected ) {
+			counter++;
+		});
+		var limit = $(element).attr('limit');
+		if(counter>limit)
+			return false;
+		return true;
+	}," You can select maximum 3 folders only.");
+	
 	$(form).validate({
 		rules : {
 			atleastThreeMonths : true,

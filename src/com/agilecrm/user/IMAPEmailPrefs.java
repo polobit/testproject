@@ -101,8 +101,7 @@ public class IMAPEmailPrefs
     @Parent
     @JsonIgnore
     private Key<AgileUser> agileUser;
-    
-    
+
     /**
      * Sharing this object following list of users
      */
@@ -112,6 +111,15 @@ public class IMAPEmailPrefs
 
     @NotSaved
     public List<String> shared_with_users_ids;
+
+    @NotSaved
+    public boolean isUpdated = true;
+
+    /**
+     * List of folders to fetch mails
+     */
+    @NotSaved(IfDefault.class)
+    public List<String> folders = null;
 
     /**
      * IMAPEmailPrefs Dao.
@@ -180,7 +188,7 @@ public class IMAPEmailPrefs
     {
 	return agileUser;
     }
-    
+
     /**
      * Returns list of users, to which current user IMAP settings are sharing
      * 
@@ -189,6 +197,17 @@ public class IMAPEmailPrefs
     public List<Key<AgileUser>> getSharedWithUsers()
     {
 	return sharedWithUsers;
+    }
+
+    /**
+     * Returns list of selected mail server folders,we fetches mails from these
+     * folders only if list is not empty.
+     * 
+     * @return
+     */
+    public List<String> getFoldersList()
+    {
+	return folders;
     }
 
     /**
@@ -210,7 +229,10 @@ public class IMAPEmailPrefs
 	try
 	{
 	    IMAPEmailPrefsUtil.checkImapPrefs(this);
-	  //Sharing current prefs with specified users
+	    //If user doesn't mention folders, we uses default folders to fetch mails
+	    if (folders == null || folders.size() == 0)
+		folders = IMAPEmailPrefsUtil.getDefaultIMAPFolders(this);
+	    // Sharing current prefs with specified users
 	    if (shared_with_users_ids != null)
 	    {
 		sharedWithUsers = new ArrayList<Key<AgileUser>>();
