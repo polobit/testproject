@@ -8,10 +8,6 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.OfficeEmailPrefs;
 import com.agilecrm.user.util.OfficeEmailPrefsUtil;
 import com.google.appengine.api.NamespaceManager;
-<<<<<<< HEAD
-import com.google.appengine.api.utils.SystemProperty;
-=======
->>>>>>> release
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
