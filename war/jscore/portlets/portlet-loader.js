@@ -291,8 +291,7 @@ function showPortletSettings(el){
 		
 		var options ='<option value="">Select...</option>'
 			+'<option value="contacts">All Contacts</option>'
-			+'<option value="myContacts">My Contacts</option>'
-			+'<option value="leads">Leads</option>';
+			+'<option value="myContacts">My Contacts</option>';
 		$.ajax({ type : 'GET', url : '/core/api/filters', async : false, dataType : 'json',
 			success: function(data){
 				$.each(data,function(index,contactFilter){
