@@ -363,7 +363,6 @@ public class StripeUtil
 		    builder.setApiKey(Globals.STRIPE_API_KEY);
 		    builder.setStripeVersion("2014-12-08");
 		    RequestOptions options = builder.build();
-		    Invoice.retrieve(invoice_id, options);
 		    
 		    Invoice invoice = Invoice.retrieve(invoice_id, options);
 		    System.out.println("aaaaaaaaaaaaa");

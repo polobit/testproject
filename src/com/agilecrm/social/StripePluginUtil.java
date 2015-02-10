@@ -13,9 +13,10 @@ import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.util.StringUtils2;
 import com.agilecrm.widgets.Widget;
 import com.google.gson.Gson;
-import com.stripe.Stripe;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
+import com.stripe.net.RequestOptions;
+import com.stripe.net.RequestOptions.RequestOptionsBuilder;
 
 /**
  * The <code>StripePluginUtil</code> class acts as a Client to Stripe server
@@ -52,8 +53,12 @@ public class StripePluginUtil
 	 * Retrieves Stripe customer based on Stripe customer ID and Stripe
 	 * account API key
 	 */
-	Stripe.apiKey = widget.getProperty("stripe_publishable_key");
-	Customer customer = Customer.retrieve(customerId.trim());
+	
+	RequestOptionsBuilder builder = new RequestOptionsBuilder();
+	builder.setApiKey(apiKey);
+	builder.setStripeVersion("2012-09-24");
+	RequestOptions options = builder.build();
+	Customer customer = Customer.retrieve(customerId.trim(),options);
 
 	Map<String, Object> invoiceParams = new HashMap<String, Object>();
 	invoiceParams.put("customer", customerId);
@@ -62,7 +67,7 @@ public class StripePluginUtil
 	 * Retrieves list of invoices based on Stripe customer ID and Stripe
 	 * account API key
 	 */
-	List<Invoice> invoiceList = Invoice.all(invoiceParams).getData();
+	List<Invoice> invoiceList = Invoice.all(invoiceParams,options).getData();
 
 	// Converts list to JSON using GSON and returns output in JSON format
 	JSONArray list = new JSONArray(new Gson().toJson(invoiceList));
