@@ -11,7 +11,6 @@ function handleMessage(tweet)
 	// We need this messages to reflect actions in all added relevant streams.
 	if (tweet["delete"] != null) // (tweet.delete != null)
 	{
-		console.log("delete tweet");
 		return;
 	}
 
@@ -27,8 +26,6 @@ function handleMessage(tweet)
 
 	if (modelStream != undefined)
 	{
-		console.log("Current_Route: "+Current_Route+" Focused: "+Focused);
-
 		// User on #social as well as window is active.
 		if (Current_Route == "social" && Focused == true)
 		{

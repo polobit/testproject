@@ -142,14 +142,9 @@ function displayModal(modalToDisplay, templt, json, counterVar, focusElmnt, urlF
 		if (Message_Model.model.get("id") || Message_Model.model.get("response") == "Successful")
 			return;
 
-		console.log("Message_Model postrender");
-
 		$('#' + modalToDisplay, el).modal('show');
 	}, saveCallback : function(data)
 	{
-		console.log('Message_Model save callback');
-		console.log(data);
-
 		// Display Noty on top.
 		displayNoty(data);
 
@@ -211,9 +206,6 @@ function showEffectOfRT(data)
 
 	// Get tweet from stream.
 	var modelTweet = modelStream.get('tweetListView').get(Message_Model.model.get("tweetId"));
-
-	console.log(modelStream);
-	console.log(modelTweet);
 
 	if (modelStream == undefined || modelTweet == undefined)
 		return;

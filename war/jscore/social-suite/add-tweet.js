@@ -51,13 +51,13 @@ function rebuildTweet(modelStream, tweet)
 	}
 	else
 	{
-		console.log(tweet);
+		//console.log(tweet);
 		if (tweet.text == null || tweet.user == null)
 			return;
 
 		tweet["msg_type"] = "Tweet";
 
-		console.log(modelStream.get('tweetListView').length);
+		//console.log(modelStream.get('tweetListView').length);
 
 		// Remove no tweet notification.
 		if (modelStream.get('tweetListView').length == 2)

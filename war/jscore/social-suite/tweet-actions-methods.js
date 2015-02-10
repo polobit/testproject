@@ -116,8 +116,6 @@ function reflectActionOnTweet(data, actionType, modelStream, modelTweet, tweetOw
 	if (modelTweet)
 		var tweet = modelTweet.toJSON();
 
-	console.log(tweet);
-
 	switch (actionType) {
 		case "favorite":
 		{

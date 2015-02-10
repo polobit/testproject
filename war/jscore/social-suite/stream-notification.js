@@ -6,9 +6,6 @@
  */
 function showNotification(stream)
 {
-	console.log("showNotification");
-	console.log(stream);
-
 	if (stream)
 		updateNotification(stream);
 	else
@@ -36,16 +33,11 @@ function showNotification(stream)
  */
 function updateNotification(stream)
 {
-	console.log("updateNotification");
-	console.log(stream);
-
 	// Get stream from collection.
 	var modelStream = Streams_List_View.collection.get(stream.id);
 
 	// Get all new unread tweet on basis of isNew field value true.
 	var newAddedTweets = modelStream.get('tweetListView').where({ isNew : "true" });
-
-	console.log(newAddedTweets.length);
 
 	// If no new unread tweets are available but stream has some tweets so clear
 	// no tweet notification from stream.
@@ -80,12 +72,8 @@ function updateNotification(stream)
  */
 function clearNoTweetNotification(modelStream)
 {
-	console.log("In clearNoTweetNotification.");
-
 	// Get tweet from stream.
 	var modelTweet = modelStream.get('tweetListView').get('000');
-
-	console.log(modelTweet);
 
 	if (modelTweet != null || modelTweet != undefined)
 	{
@@ -105,8 +93,6 @@ function clearNoTweetNotification(modelStream)
  */
 function displayErrorInStream(errorMsg)
 {
-	console.log("errorMsg: ");
-	console.log(errorMsg);
 	var streamId = null;
 
 	// Get stream id.
@@ -123,9 +109,6 @@ function displayErrorInStream(errorMsg)
 
 	if (modelStream.get('tweetListView').length == 0)
 	{
-		console.log("There is nothing to display");
-		console.log(modelStream.get('tweetListView'));
-
 		// Add notification of error on stream.
 		document.getElementById('stream_notifications_' + streamId).innerHTML = '<p>Request rate limit exceeded, Retry after some time. <i class="icon icon-refresh" title="Retry again."></i></p>';
 

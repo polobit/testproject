@@ -60,7 +60,10 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 */
 	streams : function(stream)
 	{
-		$('#content').html(getTemplate('socialsuite-show-streams'), {});
+		// If current location is social then only show streams
+		var currentLocation = document.location.href;
+		if(currentLocation.search("social") != -1)
+		  $('#content').html(getTemplate('socialsuite-show-streams'), {});
 
 		// Check scheduled updates.
 		checkScheduledUpdates();
@@ -82,6 +85,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 
 			Streams_List_View.collection.fetch();
 
+			console.log("farah0");
 			$('#socialsuite-tabs-content').append(Streams_List_View.render().el);			
 
 			return;
@@ -94,6 +98,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			if (stream)
 				Streams_List_View.collection.add(stream);
 
+			console.log("farah1");
 			$('#socialsuite-tabs-content').append(Streams_List_View.render(true).el);
 
 			// Creates normal time.
