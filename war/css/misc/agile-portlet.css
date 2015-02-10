@@ -128,6 +128,7 @@ padding: 0 8px 0 0;
 }
 .portlet_header_name i{
 	font-size:19px;
+	padding: 3px 0 0 2px;
 }
 .portlet-roundimg{
 	/* border-radius:50%; */
