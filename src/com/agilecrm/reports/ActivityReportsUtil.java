@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
+import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Call;
 import com.agilecrm.activities.Event;
@@ -153,7 +154,8 @@ public class ActivityReportsUtil
 		int count = 0;
 		// Check for the entities/activities selected by the user for
 		// activity report.
-		if (activities.contains(ActivityReports.ActivityType.DEAL))
+		if (activities.contains(ActivityReports.ActivityType.DEAL)
+			&& user.menu_scopes.contains(NavbarConstants.DEALS))
 		{
 		    activityReport.put("deals",
 			    getDealActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
