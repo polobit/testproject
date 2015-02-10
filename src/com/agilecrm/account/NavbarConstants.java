@@ -1,5 +1,9 @@
 package com.agilecrm.account;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * <code>NavbarConstants</code> contains menu navbars options with heading,
  * anchor link and icon to be shown
@@ -41,5 +45,13 @@ public enum NavbarConstants
 	this.href = href;
 	this.icon = icon;
 	this.id = id;
+    }
+
+    public static List<NavbarConstants> customValues()
+    {
+	List<NavbarConstants> defaultScopes = new ArrayList<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
+	// defaultScopes.remove(NavbarConstants.CONTACT);
+
+	return defaultScopes;
     }
 }

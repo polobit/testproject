@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -26,9 +27,12 @@ public abstract class UserAccessControl
 
     private HashSet<UserAccessScopes> scopes = null;
 
+    private HashSet<NavbarConstants> menuScopes = null;
+
     public static enum AccessControlClasses
     {
-	Contact(ContactAccessControl.class);
+	Contact(ContactAccessControl.class), Opportunity(OpportunityAccessControl.class);
+
 	Class<? extends UserAccessControl> clazz;
 
 	private AccessControlClasses(Class<? extends UserAccessControl> clazz)
@@ -72,6 +76,44 @@ public abstract class UserAccessControl
 	return info.getScopes();
     }
 
+    /**
+     * Returns current user menu scopes.
+     * 
+     * @return current user menu scopes
+     */
+    public HashSet<NavbarConstants> getCurrentUserMenuScopes()
+    {
+	if (menuScopes != null)
+	    return menuScopes;
+
+	// Gets user info from session manager
+	UserInfo info = SessionManager.get();
+
+	// If info is null then menu scopes are returned from domain user. It
+	// barely occurs
+	if (info == null)
+	{
+	    return new LinkedHashSet<NavbarConstants>(NavbarConstants.customValues());
+	}
+
+	// To give all menu scopes as of now.
+
+	// If menu scopes in info is not set, menu scopes are fetched from
+	// current domain user, set in user info, and returned.
+	if (info.getMenuScopes() == null)
+	{
+	    DomainUser user = DomainUserUtil.getCurrentDomainUser();
+	    if (user == null)
+		return new LinkedHashSet<NavbarConstants>(NavbarConstants.customValues());
+
+	    info.setMenuScopes(user.menu_scopes);
+
+	    menuScopes = user.menu_scopes;
+	}
+
+	return info.getMenuScopes();
+    }
+
     // Checks if given scope exists for current user.
     public boolean hasScope(UserAccessScopes scope)
     {
@@ -80,10 +122,19 @@ public abstract class UserAccessControl
 	return scopes.contains(scope);
     }
 
+    // Checks if given scope exists for current user.
+    public boolean hasMenuScope(NavbarConstants menuScope)
+    {
+	HashSet<NavbarConstants> menuScopes = getCurrentUserMenuScopes();
+
+	return menuScopes.contains(menuScope);
+    }
+
     public static UserAccessControl getAccessControl(String className, Object entityObject)
     {
 	try
 	{
+	    System.out.println("-----------" + AccessControlClasses.valueOf(className));
 	    return getAccessControl(AccessControlClasses.valueOf(className), entityObject);
 	}
 	catch (Exception e)
@@ -100,6 +151,7 @@ public abstract class UserAccessControl
 	    UserAccessControl accessControl = access.clazz.newInstance();
 	    accessControl.entityObject = entityObject;
 	    accessControl.init();
+	    System.out.println("---------fd---------" + accessControl.canRead());
 	    return accessControl;
 	}
 	catch (Exception e)
