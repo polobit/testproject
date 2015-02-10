@@ -112,7 +112,6 @@ $(function()
 					show_bulk_campaign_assign_page
 					, function(){
 						// No callback
-						return;
 						},
 						function(){
 							return;
@@ -135,6 +134,55 @@ $(function()
 					function(){
 						return;
 					}, "Upgrade", "Close");
+		}
+		
+		// Selected Contact ids
+		var id_array = get_contacts_bulk_ids();
+		
+		// when SELECT_ALL is true i.e., all contacts are selected.
+		if(id_array.length === 0)
+		   count = getAvailableContacts();
+		else
+			count = id_array.length;
+		
+		if(!canSendEmails(count))
+		{
+			var pendingEmails = getPendingEmails();
+			
+			var yes = "Yes";
+			var no = "No"
+				
+			var message = "";
+			var upgrade_link =  ' You may <a href="#subscribe" class="action" data-dismiss="modal" subscribe="subscribe" action="deny">purchase more emails </a> if this does not suffice your bulk action.';
+			var title = "Low on emails"
+			if(pendingEmails <= 0)
+				{
+					title = "Low on emails";
+					yes = "";
+					no = "Ok"
+					message = "You have used up all emails in your quota. " + upgrade_link;
+				}
+			else
+				message = "You have only "+ pendingEmails + " emails left as per your quota. " + upgrade_link +
+				" Continuing with this operation will stop sending emails once it crosses the quota.<br/><br/>" +
+				"Do you want to proceed?";
+			
+			showModalConfirmation(title, 
+					message, 
+					show_bulk_campaign_assign_page
+				, function(element){
+						
+					// No callback
+					if(!element)
+						return;
+		
+					if($(element).attr('subscribe'))
+							Backbone.history.navigate( "subscribe", { trigger : true });
+					return;
+					},
+					function(element){
+					}, yes, no);
+			return;
 		}
 	else
 		{

@@ -213,7 +213,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 			// Else call customView function fetches results from
 			// default url : "core/api/contacts"
-			this.customView(readCookie("contact_view"), undefined);
+			this.customView(readCookie("contact_view"), undefined, undefined, undefined, is_lhs_filter);
 			return;
 		}
 
@@ -278,7 +278,7 @@ var ContactsRouter = Backbone.Router.extend({
 						count = collection.models[0].attributes.count || collection.models.length;
 					}
 					var count_message;
-					if (count > 9999)
+					if (count > 9999 && (readCookie('contact_filter') || readData('dynamic_contact_filter')))
 						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 					else
 						count_message = "<small> (" + count + " Total) </small>";
@@ -1023,7 +1023,7 @@ var ContactsRouter = Backbone.Router.extend({
 						count = collection.models[0].attributes.count || collection.models.length;
 					}
 					var count_message;
-					if (count > 9999)
+					if (count > 9999 && (readCookie('contact_filter') || readData('dynamic_contact_filter')))
 						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 					else
 						count_message = "<small> (" + count + " Total) </small>";

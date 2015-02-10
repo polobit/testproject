@@ -9,7 +9,7 @@ $(function()
 {
 
 	// Tag suggestions when 'Tag is added' and 'Tag is deleted' options selected
-	$('#trigger-type').live('change', function(e)
+	$('#trigger-type').die('change').live('change', function(e)
 	{
 		e.preventDefault();
 
@@ -56,6 +56,11 @@ $(function()
 			$('form#addTriggerForm').find('select#event-owner-id').closest('div.control-group').css('display', 'none');
 			
 			$('form#addTriggerForm').find('select#event-type').closest('div.control-group').css('display', 'none');
+		}
+		
+		// Hide trigger milestones div for other trigger conditions.
+		if ($(this).val() !== 'INBOUND_CALL' || $(this).val() !== 'OUTBOUND_CALL'){
+			$('form#addTriggerForm').find('div#CALL').closest('div.control-group').css('display', 'none');
 		}
 			
 		if($(this).val() != 'FORM_SUBMIT'){
@@ -117,6 +122,11 @@ $(function()
 			$('form#addTriggerForm').find('select#event-type').closest('div.control-group').css('display', '');
 			
 			populate_owners_in_trigger($('form#addTriggerForm'), 'event-owner-id');
+		}
+		
+		if($(this).val() == 'INBOUND_CALL' || $(this).val() == 'OUTBOUND_CALL')
+		{
+			populate_call_trigger_options($('form#addTriggerForm'));	
 		}
 		
 		if($(this).val() == 'UNSUBSCRIBED')
@@ -272,6 +282,15 @@ function populate_owners_in_trigger(trigger_form, owner_select_id, trigger_owner
 	}, optionsTemplate, false, undefined, "Select Event Owner");
 }
 
+function populate_call_trigger_options(trigger_form, triggerJSON)
+{
+	
+	trigger_form.find('div#CALL').closest('div.control-group').css('display', '');
+	
+	if(triggerJSON && triggerJSON["call_disposition"])
+		trigger_form.find('div#CALL select').find('option[value=' + triggerJSON["call_disposition"] + ']').attr('selected', 'selected').trigger('change');
+}
+
 function populate_forms_in_trigger(trigger_form, trigger_form_select_id, trigger_form_id)
 {
 	trigger_form.find('select#' + trigger_form_select_id).closest('div.control-group').css('display', '');
@@ -285,12 +304,6 @@ function populate_forms_in_trigger(trigger_form, trigger_form_select_id, trigger
 	}, formOptionsTemplate, false, undefined, "Select Form");
 }
 
-function populate_call_trigger_options(trigger_form)
-{
-	trigger_form.find('div#CALL').closest('div.control-group').css('display', '');
-	
-	$('#CALL').chained('#LHS');	
-}
 
 /**
  * Shows triggers for each td in workflows list
