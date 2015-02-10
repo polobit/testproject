@@ -11,6 +11,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.sf.json.JSON;
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -33,6 +36,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.campaignio.cron.util.CronUtil;
@@ -1273,22 +1277,57 @@ public class ContactUtil
 	 * @param {@Link Long} - minTime,{@Link Long} - maxTime
 	 * @return {@Link List<Contact>}
 	 */
-	public static List<Contact> getEmailsOpened(Long minTime, Long maxTime)
-	{
-		List<Contact> contactsList = null;
-		List<Long> contactIdsList = new ArrayList<Long>();
-		try
-		{
-			List<ContactEmail> openedEmailsList = ContactEmailUtil.getEmailsOpened(minTime, maxTime);
-			for (ContactEmail contactEmail : openedEmailsList)
-			{
-				contactIdsList.add(contactEmail.contact_id);
+	public static List<JSONObject> getEmailsOpened(Long minTime,Long maxTime){
+		//List<Contact> contactsList=null;
+		//List<Long> contactIdsList=new ArrayList<Long>();
+		List<JSONObject> contactsList = new ArrayList<JSONObject>();
+		try {
+			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+			List<ContactEmail> openedEmailsList=ContactEmailUtil.getEmailsOpened(minTime,maxTime);
+			for(ContactEmail  contactEmail : openedEmailsList){
+				JSONObject json = new JSONObject();
+				Contact contact = getContact(contactEmail.contact_id);
+				if(contact!=null){
+					//if view all contacts permission is added for user we consider all contacts otherwise consider only his contacts
+					if(domainUser!=null && domainUser.newscopes!=null && domainUser.newscopes.contains(UserAccessScopes.VIEW_CONTACTS)){
+						json.put("contact_id", contact.id);
+						json.put("type", contact.type);
+						net.sf.json.JSONArray jsonArray = new net.sf.json.JSONArray();
+						for(ContactField contactField : contact.properties){
+							JSONObject json1 = new JSONObject();
+							json1.put("type", contactField.type);
+							json1.put("name", contactField.name);
+							json1.put("subtype", contactField.subtype);
+							json1.put("value", contactField.value);
+							jsonArray.add(json1);
+						}
+						json.element("properties", jsonArray);
+						json.put("subject", contactEmail.subject);
+						json.put("openedTime", contactEmail.email_opened_at);
+						contactsList.add(json);
+					}else if(domainUser!=null && domainUser.newscopes!=null && !domainUser.newscopes.contains(UserAccessScopes.VIEW_CONTACTS) && contact.getOwner()!=null && contact.getOwner().id!=null && contact.getOwner().id.equals(domainUser.id)){
+						json.put("contact_id", contact.id);
+						json.put("type", contact.type);
+						net.sf.json.JSONArray jsonArray = new net.sf.json.JSONArray();
+						for(ContactField contactField : contact.properties){
+							JSONObject json1 = new JSONObject();
+							json1.put("type", contactField.type);
+							json1.put("name", contactField.name);
+							json1.put("subtype", contactField.subtype);
+							json1.put("value", contactField.value);
+							jsonArray.add(json1);
+						}
+						json.element("properties", jsonArray);
+						json.put("subject", contactEmail.subject);
+						json.put("openedTime", contactEmail.email_opened_at);
+						contactsList.add(json);
+					}
+				}
+				//contactIdsList.add(contactEmail.contact_id);
 			}
-			if (contactIdsList.size() != 0)
-				contactsList = dao.ofy().query(Contact.class).filter("id in", contactIdsList).limit(50).list();
-		}
-		catch (Exception e)
-		{
+			/*if(contactIdsList.size()!=0)
+				contactsList = dao.ofy().query(Contact.class).filter("id in", contactIdsList).limit(50).list();*/
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return contactsList;

@@ -5435,6 +5435,8 @@ $(function()
 			portlet_name = "Today's Tasks";
 		else if(p_name=='Agile CRM Blog')
 			portlet_name = "Agile CRM Blog";
+		else if(p_name=='Task Report')
+			portlet_name = "Task Report";
 		return portlet_name;
 	});
 	/**
@@ -5466,7 +5468,7 @@ $(function()
 			icon_name = 'icon-user';
 		else if(p_name=='Agenda')
 			icon_name = "icon-calendar";
-		else if(p_name=='Today Tasks')
+		else if(p_name=='Today Tasks' || p_name=='Task Report')
 			icon_name = "icon-tasks";
 		else if(p_name=='Agile CRM Blog')
 			icon_name = "icon-rss-sign";
@@ -5544,12 +5546,12 @@ $(function()
 			} });
 		if(App_Portlets.track_length>1){
 			if(track_id==0)
-				header_name = "- Default";
+				header_name = "(Default)";
 			else{
 				var milestone = $.ajax({ type : 'GET', url : '/core/api/milestone/'+track_id, async : false, dataType : 'json',
 					success: function(data){
 						if(data!=null && data!=undefined)
-							header_name = "- "+data.name;
+							header_name = "("+data.name+")";
 					} });
 			}
 		} 	
