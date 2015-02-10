@@ -85,7 +85,6 @@ var SocialSuiteRouter = Backbone.Router.extend({
 
 			Streams_List_View.collection.fetch();
 
-			console.log("farah0");
 			$('#socialsuite-tabs-content').append(Streams_List_View.render().el);			
 
 			return;
@@ -98,7 +97,6 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			if (stream)
 				Streams_List_View.collection.add(stream);
 
-			console.log("farah1");
 			$('#socialsuite-tabs-content').append(Streams_List_View.render(true).el);
 
 			// Creates normal time.
