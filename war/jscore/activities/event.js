@@ -88,6 +88,14 @@ $(function()
 		// $('#updateActivityModal').find('span.save-status').html(getRandomLoadingImg());
 		$.ajax({ url : 'core/api/events/' + event_id, type : 'DELETE', success : function()
 		{
+			//if event deleted from today events portlet, we removed that event from portlet events collection
+			if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route==undefined || Current_Route=='dashboard')) 
+			{
+				App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.remove(App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.get(event_id));
+				
+				App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
+
+			}
 
 			// $('#updateActivityModal').find('span.save-status img').remove();
 			enable_save_button(save_button);
@@ -513,7 +521,7 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 				}
 
 			});
-		}else if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && Current_Route == 'portlets') 
+		}else if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route==undefined || Current_Route=='dashboard')) 
 		{
 			if (isUpdate)
 				App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);

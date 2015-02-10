@@ -62,7 +62,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 		$(".active").removeClass("active");
 
-		var time_int = parseInt($('meta[name="last-login-time"]').attr('content'));
+		/*var time_int = parseInt($('meta[name="last-login-time"]').attr('content'));
 		var time_date = new Date(time_int * 1000);
 
 		head.js(LIB_PATH + 'lib/jquery.timeago.js', LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
@@ -74,6 +74,15 @@ var ContactsRouter = Backbone.Router.extend({
 			
 			setup_dashboard(el);
 			// loadDynamicTimeline("my-timeline", el);
+		});*/
+		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js',
+				LIB_PATH + 'lib/jquery.gridster.js',function(){
+			var el = $(getTemplate('portlets', {}));
+			$("#content").html(el);
+			if (IS_FLUID){
+				$('#content').find('div.row').removeClass('row').addClass('row-fluid');
+			}
+			loadPortlets(el);
 		});
 	},
 	
@@ -581,7 +590,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 			// To navigate between contacts details
 			if (contact_collection != null)
-				contact_detail_view_navigation(id, contact_collection, el);
+				contact_detail_view_navigation(id, App_Contacts.contactsListView, el);
 
 			//fill_owners(el, contact.toJSON());
 			start_tour("contact-details", el);

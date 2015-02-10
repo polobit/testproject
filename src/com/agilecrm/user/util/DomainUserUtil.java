@@ -143,6 +143,7 @@ public class DomainUserUtil
      */
     public static List<DomainUser> getUsers(String domain)
     {
+
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
 
@@ -380,21 +381,21 @@ public class DomainUserUtil
 	DomainUser user = null;
 	try
 	{
-	    user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true)
-		.get();
-	    if(user == null)
+	    user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true).get();
+	    if (user == null)
 		user = getDomainOwnerHack(domain);
 	}
 	finally
 	{
-		NamespaceManager.set(oldNamespace);
+	    NamespaceManager.set(oldNamespace);
 	}
 
 	return user;
     }
-    
+
     /**
      * Fetches domain user based on id if is_account_owner flag is not found
+     * 
      * @param domain
      * @return
      */
@@ -405,34 +406,36 @@ public class DomainUserUtil
 	DomainUser user = null;
 	try
 	{
-	     com.googlecode.objectify.Query<DomainUser> query = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_admin", true).limit(1).order("id");
-	     QueryResultIterable<DomainUser> users = query.fetch();
-	     Iterator<DomainUser> iterator = users.iterator();
-	     
-	     // We only need one user
-	     if (iterator.hasNext() )
-	     {
-		 user = iterator.next();
-		 if(!user.is_account_owner)
-		 {
-		     user.is_account_owner = true;
-		     user.is_admin = true;
-		     user.save();
-		 }
-	     }
-	     else
-	     {
-		 // If admin is not there in account, first user is made admin and account owner
-		 query = dao.ofy().query(DomainUser.class).filter("domain", domain).limit(1).order("id");
-		 user = query.get();
-		 if(user != null && !user.is_account_owner)
-		 {
-		     user.is_admin = true;
-		     user.is_account_owner = true;
-		     user.save();
-		 }
-	     }
-		 
+	    com.googlecode.objectify.Query<DomainUser> query = dao.ofy().query(DomainUser.class)
+		    .filter("domain", domain).filter("is_admin", true).limit(1).order("id");
+	    QueryResultIterable<DomainUser> users = query.fetch();
+	    Iterator<DomainUser> iterator = users.iterator();
+
+	    // We only need one user
+	    if (iterator.hasNext())
+	    {
+		user = iterator.next();
+		if (!user.is_account_owner)
+		{
+		    user.is_account_owner = true;
+		    user.is_admin = true;
+		    user.save();
+		}
+	    }
+	    else
+	    {
+		// If admin is not there in account, first user is made admin
+		// and account owner
+		query = dao.ofy().query(DomainUser.class).filter("domain", domain).limit(1).order("id");
+		user = query.get();
+		if (user != null && !user.is_account_owner)
+		{
+		    user.is_admin = true;
+		    user.is_account_owner = true;
+		    user.save();
+		}
+	    }
+
 	}
 	catch (Exception e)
 	{

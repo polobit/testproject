@@ -304,6 +304,40 @@ public class ContactEmailUtil
 
 	return emails;
     }
+    
+    /**
+     * Converts obtained folders string to json
+     * @param jsonResult
+     * 	      obtained folders
+     * @return JSONObject
+     */
+    public static JSONObject convertFoldersToJSON(String jsonResult)
+    {
+	JSONObject folders = null;
+	try
+	{
+	    folders = new JSONObject(jsonResult);	    
+	    // If result is {}, convert it to {folders:[]}
+	    if (folders.length() == 0)
+		return folders.put("folders", new JSONArray());
+
+	    // if obtained result has no emails key like {[]}, convert it to
+	    // {folders:[]}
+	    if (!folders.has("folders"))
+	    {
+		folders = new JSONObject().put("folders", new JSONArray());
+
+		if (new JSONObject(jsonResult).length() > 0)
+		    folders.getJSONArray("folders").put(new JSONObject(jsonResult));
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception while converting emails to JSON " + e.getMessage());
+	}
+	return folders;
+    }
 
     /**
      * Returns gmails preferences url if it is not null, otherwise
@@ -531,6 +565,8 @@ public class ContactEmailUtil
 	}
 	return emailsList;
     }
+    
+    
 
     /**
      * Gets the list of synced email account names of this Agile user

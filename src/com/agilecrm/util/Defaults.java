@@ -53,9 +53,9 @@ public class Defaults
 	contactFields.add(new ContactField("website", "http://www.thesimpsons.com/", "URL"));
 	contactFields.add(new ContactField("phone", "+1-214-124-8756", ""));
 	contactFields.add(new ContactField("address",
-		"{\"address\":\"742 Evergreen Terrace\",\"city\":\"Springfield\",\"country\":\"US\"}", "home"));
+	        "{\"address\":\"742 Evergreen Terrace\",\"city\":\"Springfield\",\"country\":\"US\"}", "home"));
 	contactFields.add(new ContactField("image",
-		"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1395904537756?id=contact-container", null));
+	        "https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1395904537756?id=contact-container", null));
 
 	Contact contact = new Contact(Contact.Type.PERSON, tags, contactFields);
 	contact.lead_score = 50;
@@ -71,7 +71,7 @@ public class Defaults
 	contactFields1.add(new ContactField(Contact.COMPANY, "NBA", null));
 	contactFields1.add(new ContactField(Contact.TITLE, "Sports Legend", null));
 	contactFields1.add(new ContactField("image",
-		"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1371205956656?id=contact-container", null));
+	        "https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1371205956656?id=contact-container", null));
 
 	Contact contact1 = new Contact(Contact.Type.PERSON, tags1, contactFields1);
 	contact1.star_value = 3;
@@ -82,9 +82,9 @@ public class Defaults
 	contactFields3.add(new ContactField(Contact.NAME, "Apple", null));
 	contactFields3.add(new ContactField(Contact.URL, "https://www.apple.com", null));
 	contactFields3
-		.add(new ContactField("address",
-			"{\"address\":\"1 Infinite Loop\",\"city\":\"Cupertino\",\"state\":\"CA\",\"zip\":\"95014\"}",
-			"office"));
+	        .add(new ContactField("address",
+	                "{\"address\":\"1 Infinite Loop\",\"city\":\"Cupertino\",\"state\":\"CA\",\"zip\":\"95014\"}",
+	                "office"));
 	Contact contact3 = new Contact();
 	contact3.type = Contact.Type.COMPANY;
 	contact3.properties = contactFields3;
@@ -159,9 +159,9 @@ public class Defaults
 	event.title = "Gossip at water cooler";
 	event.color = "green";
 	event.allDay = false;
-	DateUtil date = new DateUtil().toMidnight().addDays(1).addMinutes(16 * 60);
+	DateUtil date = new DateUtil().toMidnight().addDays(0).addMinutes(16 * 60);
 	event.start = date.getTime().getTime() / 1000;
-	event.end = date.getTime().getTime() / 1000 + 3800;
+	event.end = date.getTime().getTime() / 1000 + 900;
 	if (ContactUtil.searchContactByEmail("homer@simpson.com") == null)
 	    return;
 	event.addContacts(String.valueOf(ContactUtil.searchContactByEmail("homer@simpson.com").id));
@@ -171,7 +171,7 @@ public class Defaults
 	event1.title = "Discuss today's Dilbert strip";
 	event1.color = "blue";
 	event1.allDay = false;
-	DateUtil date1 = new DateUtil().toMidnight().addDays(2).addMinutes(18 * 60);
+	DateUtil date1 = new DateUtil().toMidnight().addDays(1).addMinutes(18 * 60);
 	event1.start = date1.getTime().getTime() / 1000;
 	event1.end = date1.getTime().getTime() / 1000 + 1800;
 	event1.save();

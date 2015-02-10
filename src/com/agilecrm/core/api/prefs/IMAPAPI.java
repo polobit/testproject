@@ -72,6 +72,7 @@ public class IMAPAPI
     {
 	prefs.setAgileUser(new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id));
 	prefs.save();
+	prefs.isUpdated = false;
 	return prefs;
     }
 
@@ -88,8 +89,8 @@ public class IMAPAPI
     public IMAPEmailPrefs updateIMAPEmailPrefs(IMAPEmailPrefs prefs)
     {
 	prefs.setAgileUser(new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id));
-
 	prefs.save();
+	prefs.isUpdated = true;
 	return prefs;
     }
 
@@ -134,11 +135,59 @@ public class IMAPAPI
 	}
 	catch (Exception e)
 	{
-	    System.out.println("Got an exception in IMAPAPI: " + e.getMessage());
+	    System.out.println("Got an exception in IMAPAPI while fetching mails: " + e.getMessage());
 	    e.printStackTrace();
 	    return null;
 	}
 	return emails;
+    }
+
+    @Path("imap-folders")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON + " ;charset=utf-8", MediaType.APPLICATION_XML + " ;charset=utf-8" })
+    public String getIMAPFolders()
+    {
+	JSONArray newFolders = new JSONArray();
+	try
+	{
+	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	    IMAPEmailPrefs imapEmailPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(agileUser);
+	    if (imapEmailPrefs != null)
+	    {
+		String imapURL = ContactImapUtil.getIMAPURLForFetchingFolders(agileUser, "folders");
+		if (StringUtils.isNotBlank(imapURL))
+		{
+		    // Gets IMAP server folders
+		    JSONArray allFolders = ContactImapUtil.getIMAPFoldersFromServer(imapURL);
+		    if (allFolders != null)
+		    {
+			List<String> existingFolders = null;
+			if (imapEmailPrefs != null)
+			    existingFolders = imapEmailPrefs.getFoldersList();
+			for (int i = 0; i < allFolders.length(); i++)
+			{
+			    JSONObject folder = new JSONObject();
+			    folder.put("name", allFolders.get(i));
+			    if (existingFolders != null)
+			    {
+				for (int j = 0; j < existingFolders.size(); j++)
+				{
+				    if (existingFolders.get(j).equals(allFolders.get(i)))
+					folder.put("selected", "selected=selected");
+				}
+			    }
+			    newFolders.put(folder);
+			}
+		    }
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got an exception in IMAPAPI while fetching folders: " + e.getMessage());
+	    e.printStackTrace();
+	}
+	return newFolders.toString();
     }
 
     /**

@@ -482,7 +482,7 @@ public class RegisterServlet extends HttpServlet
 	domainUser.setInfo(DomainUser.COUNTRY, request.getHeader("X-AppEngine-Country"));
 	domainUser.setInfo(DomainUser.CITY, request.getHeader("X-AppEngine-City"));
 	domainUser.setInfo(DomainUser.LAT_LONG, request.getHeader("X-AppEngine-CityLatLong"));
-
+	domainUser.timezone = request.getParameter("account_timezone");
 	domainUser.save();
 
 	if (domainUser != null && reference_domain != null)

@@ -96,6 +96,21 @@
       }
       prevScrollY = scrollY;
     };
+    //used for fetching next set of records.
+    //mostly useful for programmatic triggering.
+    self.fetchNext = function(e) {
+    	var lastModel = self.collection.last();
+        if (!lastModel) { return; }
+        self.onFetch();
+        self.disableFetch();
+        self.collection.fetch({
+          success: self.fetchSuccess,
+          error: self.fetchError,
+          add: self.options.add,
+          data: $.extend(buildQueryParams(lastModel), self.options.extraParams)
+        });
+      };
+
 
     function buildQueryParams(model) {
       var params = { };

@@ -1,12 +1,15 @@
 package com.agilecrm;
 
 import java.io.IOException;
+import java.util.Set;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.agilecrm.activities.CreateTaskDeferredTask;
 import com.agilecrm.activities.TaskReminder;
+import com.agilecrm.util.NamespaceUtil;
 
 /**
  * <code>TaskReminderServlet</code> is the servlet for handling cron requests of
@@ -28,7 +31,13 @@ public class TaskReminderServlet extends HttpServlet
     {
 	try
 	{
-	    TaskReminder.sendDailyTaskReminders();
+	    Set<String> domains = NamespaceUtil.getAllNamespaces();
+	    // Start a task queue for each domain
+	    for (String domain : domains)
+	    {
+
+		CreateTaskDeferredTask.createTaskReminderDeferredTask(domain);
+	    }
 	}
 	catch (IOException e)
 	{
