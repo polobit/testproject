@@ -1275,4 +1275,23 @@ public class OpportunityUtil
 	search.index.putAsync(builderObjects.toArray(new Builder[deals.size()]));
     }
 
+    /**
+     * Delete deals in the search document. Maximum deals size in list should be
+     * below 200 (150 recommended).
+     * 
+     * @param deals
+     */
+    public static void deleteSearchDoc(List<Opportunity> deals)
+    {
+
+	AppengineSearch<Opportunity> search = new AppengineSearch<Opportunity>(Opportunity.class);
+	List<Builder> builderObjects = new ArrayList<Builder>();
+	for (Opportunity deal : deals)
+	{
+	    builderObjects.remove(deal);
+	}
+
+	search.index.putAsync(builderObjects.toArray(new Builder[deals.size()]));
+    }
+
 }

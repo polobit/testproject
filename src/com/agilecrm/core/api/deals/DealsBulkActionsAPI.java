@@ -10,8 +10,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
@@ -19,6 +22,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
 
 /**
  * <code>DealsAPI</code> includes REST calls to interact with
@@ -266,4 +270,68 @@ public class DealsBulkActionsAPI
 	    je.printStackTrace();
 	}
     }
+
+    /**
+     * Call backends to delete deals in bulk.
+     */
+    @Path("/delete/{current_user_id}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteDeals(@PathParam("current_user_id") Long currentUserId, @FormParam("ids") String ids,
+	    @FormParam("filter") String filters)
+    {
+	// Set the session manager to get the user preferences and the other
+	// details required.
+	if (SessionManager.get() != null)
+	{
+	    SessionManager.get().setDomainId(currentUserId);
+	}
+	else
+	{
+	    DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
+	    SessionManager.set(new UserInfo(null, user.email, user.name));
+	    SessionManager.get().setDomainId(user.id);
+	}
+
+	try
+	{
+	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+	    System.out.println("total deals -----" + deals.size());
+	    JSONArray dealIdsArray = new JSONArray();
+	    List<Opportunity> subList = new ArrayList<Opportunity>();
+	    for (Opportunity deal : deals)
+	    {
+		dealIdsArray.put(deal.id);
+		subList.add(deal);
+		if (subList.size() >= 100)
+		{
+		    Opportunity.dao.deleteAll(subList);
+		    System.out.println("total sublist -----" + subList.size());
+		    DealTriggerUtil.executeTriggerForDeleteDeal(dealIdsArray);
+		    OpportunityUtil.deleteSearchDoc(subList);
+		    subList.clear();
+		    ActivitySave.createLogForBulkDeletes(EntityType.DEAL, dealIdsArray,
+			    String.valueOf(dealIdsArray.length()), "");
+		    dealIdsArray = new JSONArray();
+		}
+	    }
+
+	    if (!subList.isEmpty())
+	    {
+		Opportunity.dao.putAll(subList);
+		OpportunityUtil.deleteSearchDoc(subList);
+		System.out.println("total sublist -----" + subList.size());
+		DealTriggerUtil.executeTriggerForDeleteDeal(dealIdsArray);
+		ActivitySave.createLogForBulkDeletes(EntityType.DEAL, dealIdsArray,
+			String.valueOf(dealIdsArray.length()), "");
+	    }
+
+	    BulkActionNotifications.publishNotification(deals.size() + " Deals are archived.");
+	}
+	catch (Exception je)
+	{
+	    je.printStackTrace();
+	}
+    }
+
 }
