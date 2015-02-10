@@ -2,7 +2,7 @@
 
  <backend name="b1">
    <class>B4</class>
-   <instances>2</instances>
+   <instances>4</instances>
    <options>
      <dynamic>true</dynamic>
    </options>
@@ -18,7 +18,7 @@
  
   <backend name="bulk">
    <class>B4</class>
-   <instances>4</instances>
+   <instances>8</instances>
    <options>
      <dynamic>true</dynamic>
    </options>

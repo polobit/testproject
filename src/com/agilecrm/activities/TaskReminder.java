@@ -1,13 +1,11 @@
 package com.agilecrm.activities;
 
 import java.io.IOException;
-import java.util.Set;
 
 import com.agilecrm.activities.deferred.TaskReminderDeferredTask;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
-import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -25,22 +23,23 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  * user.
  * </p>
  * 
- * @author Rammohan
+ * @author Jagadeesh
  * 
  */
 public class TaskReminder
 {
-    public static void sendDailyTaskReminders() throws IOException
+    public static void sendDailyTaskReminders(String domain, Long time, Long domainuserid, String timezone)
+	    throws IOException
     {
-	// Get Namespaces / domains
-	Set<String> domains = NamespaceUtil.getAllNamespaces();
-
+	System.out.println(time + " time in task reminder deferred task ----------------");
 	// Start a task queue for each domain
-	for (String domain : domains)
-	{
-	    TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(domain);
-	    Queue queue = QueueFactory.getQueue("due-task-reminder");
-	    queue.addAsync(TaskOptions.Builder.withPayload(taskReminderDeferredTask));
-	}
+	TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(domain, time, domainuserid,
+	        timezone);
+	Queue queue = QueueFactory.getQueue("due-task-reminder");
+
+	TaskOptions options = TaskOptions.Builder.withPayload(taskReminderDeferredTask);
+	options.etaMillis(time * 1000);
+	queue.add(options);
     }
+
 }

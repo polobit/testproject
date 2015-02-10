@@ -170,7 +170,13 @@ function addClientToFreshBooks(first_name, last_name)
 	 * send GET request to the URL to add client in FreshBooks based on widget
 	 * id, first name, last name and email as path parameters
 	 */
-	$.get("/core/api/widgets/freshbooks/add/client/" + FreshBooks_Plugin_id + "/" + first_name + "/" + last_name + "/" + Email, function(data)
+	
+	var company = agile_crm_get_contact_property("company");
+	
+	var requestURL = "/core/api/widgets/freshbooks/add/client/" + FreshBooks_Plugin_id + "/" + first_name + "/" + last_name + "/" + Email;
+		requestURL += "/" + company;
+	
+	$.get(requestURL, function(data)
 	{
 		console.log('In FreshBooks add client ');
 		console.log(data);

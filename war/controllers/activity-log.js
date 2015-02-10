@@ -11,6 +11,9 @@ var ActivitylogRouter = Backbone.Router.extend({
 
 	activities : function(id)
 	{
+		if(!tight_acl.checkPermission('ACTIVITY'))
+			return;
+		
 		console.log("entered into activites router  "+new Date().getTime()+"  time with milliseconds "+new Date())
 		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 				{ 

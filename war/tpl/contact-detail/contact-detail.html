@@ -191,8 +191,10 @@
 											class="icon-file"></i> Add Note</a></li>
 									<li><a href='#' class="contact-add-task"><i
 											class="icon-tasks"></i> Add Task</a></li>
+									{{#hasMenuScope 'DEALS'}}
 									<li><a href='#' class="contact-add-deal"><i class="icon-money"></i>
 											Add Deal</a></li>
+									{{/hasMenuScope}}
 							{{#canEditContact owner.id}}
 									<li class='divider'></li>
 
@@ -276,7 +278,9 @@
 				<li class=""><a data-toggle="tab" href="#notes">Notes</a></li>
 				<li class=""><a data-toggle="tab" href="#events">Events</a></li>
 				<li class=""><a data-toggle="tab" href="#tasks">Tasks</a></li>
-				<li class=""><a data-toggle="tab" href="#deals">Deals</a></li>
+				{{#hasMenuScope "DEALS"}}
+					<li class=""><a data-toggle="tab" href="#deals">Deals</a></li>
+				{{/hasMenuScope}}
 				<li class=""><a data-toggle="tab" href="#cases">Cases</a></li>
 				<li class=""><a data-toggle="tab" href="#campaigns">Campaigns</a></li>
 				<li class=""><a data-toggle="tab" href="#stats">Web Stats</a></li>
