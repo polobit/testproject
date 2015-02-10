@@ -133,11 +133,12 @@ padding: 0 8px 0 0;
 	/* border-radius:50%; */
 	border: 1px solid #ddd;
     padding: 2px;
+    border-radius: 4px;
 }
 .portlet-icon-divider{
 	border-right: 1px solid #eee;
     padding: 7px 5px 6px 0px;
-    margin: 1px 10px 2px 2px;
+    margin: 1px 5px 2px 2px;
 }
 .portlet_body {
 	background-color: rgb(255, 255, 255);
@@ -637,6 +638,9 @@ border-radius: 2px;
  .gridster-portlets{
  	height:auto;
  }
+ .portlet_header{
+ 	cursor: default;
+ }
  }
  
  
@@ -649,6 +653,9 @@ border-radius: 2px;
  }
  .gridster-portlets{
  	height:auto;
+ }
+ .portlet_header{
+ 	cursor: move;
  }
 	
 }
