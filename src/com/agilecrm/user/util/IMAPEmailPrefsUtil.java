@@ -1,5 +1,10 @@
 package com.agilecrm.user.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.email.util.ContactImapUtil;
@@ -26,7 +31,8 @@ public class IMAPEmailPrefsUtil
     /**
      * IMAPEmailPrefs Dao
      */
-    private static ObjectifyGenericDao<IMAPEmailPrefs> dao = new ObjectifyGenericDao<IMAPEmailPrefs>(IMAPEmailPrefs.class);
+    private static ObjectifyGenericDao<IMAPEmailPrefs> dao = new ObjectifyGenericDao<IMAPEmailPrefs>(
+	    IMAPEmailPrefs.class);
 
     /**
      * Returns IMAPPrefs with respect to agileuser.
@@ -77,7 +83,7 @@ public class IMAPEmailPrefsUtil
      */
     public static void checkImapPrefs(IMAPEmailPrefs prefs) throws Exception
     {
-	String url = ContactImapUtil.getIMAPURLForPrefs(prefs, "info@agilecrm.com", "0", "1");
+	String url = ContactImapUtil.getIMAPURLForPrefs(prefs, "mails", "info@agilecrm.com", "0", "1");
 
 	// Access URL
 	String jsonResult = HTTPUtil.accessURL(url);
@@ -88,5 +94,32 @@ public class IMAPEmailPrefsUtil
 	// Throw Exception if there is any error
 	if (emails.has("errormssg"))
 	    throw new Exception("Error saving: " + emails.getString("errormssg"));
+    }
+
+    /**
+     * Gets default folders from IMAP server, if user doesn't mention any
+     * specific folders, we use these folder to fetch mails
+     * 
+     * @return
+     * @throws Exception
+     */
+    public static List<String> getDefaultIMAPFolders(IMAPEmailPrefs imapPrefs) throws Exception
+    {
+	List<String> defaultFolders = new ArrayList<String>();
+	String imapURL = ContactImapUtil.getIMAPURLForFetchingDefaultFolders(imapPrefs);
+	if (StringUtils.isNotBlank(imapURL))
+	{
+	    // Gets default IMAP server folders
+	    JSONArray defaultFoldersArray = ContactImapUtil.getIMAPFoldersFromServer(imapURL);
+	    if (defaultFoldersArray != null && defaultFoldersArray.length() > 0)
+	    {
+		for (int i = 0; i < defaultFoldersArray.length(); i++)
+		{
+		    String folder = defaultFoldersArray.getString(i);
+		    defaultFolders.add(folder);
+		}
+	    }
+	}
+	return defaultFolders;
     }
 }

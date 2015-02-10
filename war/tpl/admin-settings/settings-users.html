@@ -13,6 +13,7 @@
             <table class="table table-striped showCheckboxes" url="core/api/users/bulk" style="overflow:scroll;">
                 <thead>
                     <tr>
+						
                         <th>User Name</th>
                         <th>User Email</th>
                         <th>Created On</th>
@@ -26,7 +27,15 @@
     </div>
 </script>
 <script id="admin-settings-users-model-template" type="text/html">
-    <td class='data' data='{{id}}'><div style='text-overflow:ellipsis;width:9em;overflow:hidden;'>{{name}}</div></td>
+    <td class='data' data='{{id}}'>
+	<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:5em;overflow:hidden;" class="pull-left">
+	   {{#if ownerPic}}
+        <img class="thumbnail" src="{{ownerPic}}" width="40px" height="40px" title="{{name}}" />
+	   {{else}}
+		<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{name}}" />
+       {{/if}}
+    </div>
+	<div  class="pull-left"style='text-overflow:ellipsis;width:9em;overflow:hidden;'>{{name}}</div></td>
     <td>
         <div style='height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:10em;overflow:hidden;'>
         {{email}}
@@ -34,6 +43,6 @@
     </td>
     <td><div style='text-overflow:ellipsis;width:7em;overflow:hidden;'>{{epochToDate info_json_string "created_time"}}</div></td>
     <td><time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" style="border-bottom:dotted 1px #999">{{epochToDate info_json_string "logged_in_time"}}</time></td>
-    <td><div style='text-overflow:ellipsis;width:7em;overflow:hidden;'>{{#if is_admin}}<span style="margin-right:5px;" class="label">Admin</span>{{/if}}{{#if is_account_owner}}<span class="label">Owner</span>{{/if}}{{#if is_disabled}}<span class="label label-important">Disabled</span>{{/if}}</div></td>
+    <td><div style='text-overflow:ellipsis;width:8em;overflow:hidden;'>{{#if is_admin}}<span style="margin-right:5px;" class="label">Admin</span>{{/if}}{{#if is_account_owner}}<span class="label">Owner</span>{{/if}}{{#if is_disabled}}<span class="label label-important">Disabled</span>{{/if}}</div></td>
     
 </script>

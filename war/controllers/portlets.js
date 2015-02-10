@@ -5,7 +5,7 @@ var PortletsRouter = Backbone.Router
 								.extend({
 
 												routes : {
-												"portlets" 						: "portlets"
+												//"portlets" 						: "portlets"
 												},
 												
 												portlets : function(){
@@ -53,6 +53,8 @@ function addNewPortlet(portlet_type,p_name){
 		obj.name="Calls Per Person";
 	else if(p_name=="AgileCRMBlog")
 		obj.name="Agile CRM Blog";
+	else if(p_name=="TaskReport")
+		obj.name="Task Report";
 	obj.portlet_type=portlet_type;
 	var max_row_position=0;
 	if(gridster!=undefined)
@@ -74,8 +76,9 @@ function addNewPortlet(portlet_type,p_name){
 	else if(portlet_type=="CONTACTS" && p_name=="GrowthGraph"){
 		json['tags']="";
 		json['frequency']='daily';
-		json['start-date']=new Date(curDate.getFullYear(),curDate.getMonth(),curDate.getDate()-6,0,0,0).getTime();
-		json['end-date']=new Date(curDate.getFullYear(),curDate.getMonth(),curDate.getDate(),0,0,0).getTime();
+		//json['start-date']=new Date(curDate.getFullYear(),curDate.getMonth(),curDate.getDate()-6,0,0,0).getTime();
+		//json['end-date']=new Date(curDate.getFullYear(),curDate.getMonth(),curDate.getDate(),0,0,0).getTime();
+		json['duration']="1-week";
 	}
 	else if(portlet_type=="DEALS" && p_name=="PendingDeals"){
 		json['deals']="my-deals";
@@ -94,6 +97,10 @@ function addNewPortlet(portlet_type,p_name){
 	else if(portlet_type=="USERACTIVITY" && p_name=="CallsPerPerson"){
 		json['group-by']="number-of-calls";
 		json['duration']="1-day";
+	}else if(portlet_type=="TASKSANDEVENTS" && p_name=="TaskReport"){
+		json['group-by']="user";
+		json['split-by']="category";
+		json['duration']="1-week";
 	}
 	else if(portlet_type=="RSS" && p_name=="AgileCRMBlog")
 		obj.size_y=2;
@@ -144,9 +151,10 @@ function deletePortlet(el){
 	var p_id = el.id.split("-close")[0];
 	$('#portletDeleteModal').modal('show');
 	$('#portletDeleteModal > .modal-footer > .save-modal').attr('id',p_id);
-	$('#portletDeleteModal > .modal-body').html("Are you sure you want to delete Portlet - "+$('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()+" ?");
+	$('#portletDeleteModal > .modal-body').html("Are you sure you want to delete Dashlet - "+$('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()+"?");
 }
 $('.portlet-delete-modal').live("click", function(e){
+	e.preventDefault();
 	var portlet = Portlets_View.collection.get($(this).attr('id'));
 	/*
 	 * Sends Delete request with portlet name as path parameter, and on
@@ -171,9 +179,15 @@ $('.portlet-delete-modal').live("click", function(e){
 	}, dataType : 'json' });
 });
 $("#add-portlet").live("click", function(e){
+	e.preventDefault();
 	this.Catalog_Portlets_View = new Base_Collection_View({ url : '/core/api/portlets/default', restKey : "portlet", templateKey : "portlets-add",
 		sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el){
-			
+			if($('#deals',$('#portletStreamModal')).children().length==0)
+				$('#deals',$('#portletStreamModal')).parent().hide();
+			if($('#taksAndEvents',$('#portletStreamModal')).children().length==0)
+				$('#taksAndEvents',$('#portletStreamModal')).parent().hide();
+			if($('#userActivity',$('#portletStreamModal')).children().length==0)
+				$('#userActivity',$('#portletStreamModal')).parent().hide();
 		} });
 
 	this.Catalog_Portlets_View.appendItem = organize_portlets;
@@ -186,8 +200,9 @@ $("#add-portlet").live("click", function(e){
 
 	// Add social network types template
 	$("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);
+	
 });
-$('#portlets-contacts-model-list > tr, #portlets-companies-model-list > tr').live('click', function(e){
+$('#portlets-contacts-model-list > tr, #portlets-companies-model-list > tr, #portlets-contacts-email-opens-model-list > tr').live('click', function(e){
 	var id = $(this).find(".data").attr("data");
 	App_Contacts.navigate("contact/" + id, { trigger : true });
 });
@@ -232,12 +247,15 @@ $('#portlets-events-model-list > tr').live('click', function(e){
     	$("#update-event-date-2").closest('.row').show();
     }
    	
+    // Fills owner select element 
+	populateUsersInUpdateActivityModal(model.toJSON());
+	
  // Show edit modal for the event
     $("#updateActivityModal").modal('show');
    	return false;
 });
 $('#portlets-tasks-model-list > tr').live('click', function(e) {
-	App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
+	/*App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
 	var value = $(this).data().toJSON();
 	deserializeForm(value, $("#updateTaskForm"));
 	$("#updateTaskModal").modal('show');
@@ -254,7 +272,10 @@ $('#portlets-tasks-model-list > tr').live('click', function(e) {
 			});
 	
 	// Add notes in task modal
-	showNoteOnForm("updateTaskForm", value.notes);
+	showNoteOnForm("updateTaskForm", value.notes);*/
+	
+	var id = $(this).find(".data").attr("data");
+	App_Tasks.navigate("task/" + id, { trigger : true });
 });
 /**
  * Makes the pending task as completed by calling complete_task function
@@ -266,7 +287,14 @@ $('.portlets-tasks-select').live('click', function(e) {
 				var taskId = $(this).attr('data');
 				//var itemListView = new Base_Collection_View({ data : Portlets_View.collection.get($(this).parents('.portlet_container').find('.portlets').attr('id')).get('tasksList'), templateKey : 'portlets-tasks', individual_tag_name : 'tr' });
 				// complete_task(taskId, $(this));
-				complete_task(taskId,tasksCollection.collection,$(this).closest('tr'));
+				var column_pos = $(this).parentsUntil('.gs-w').last().parent().find('.column_position').text().trim();
+				var row_pos = $(this).parentsUntil('.gs-w').last().parent().find('.row_position').text().trim();
+				var pos = column_pos+''+row_pos;
+				complete_task(taskId,App_Portlets.tasksCollection[parseInt(pos)].collection,$(this).closest('tr'));
+				
+				if($(this).parentsUntil('table').last().find('tr:visible').length==1){
+					$(this).parentsUntil('table').parent().parent().html('<div class="portlet-error-message">No tasks found.</div>');
+				}
 			}
 });
 function hidePortletErrors(ele){
@@ -290,4 +318,27 @@ function addWidgetToGridster(base_model){
 			window.scrollTo(0,((parseInt($('#ui-id-'+base_model.get("column_position")+'-'+base_model.get("row_position")).attr('data-row'))-1)*200)+5);
 		}
 	}
+}
+function getStartAndEndDatesOnDue(duration){
+	var d = new Date();
+
+	// Today
+	if (duration == "1-day")
+		console.log(getGMTTimeFromDate(d) / 1000);
+	
+	// 1 Week ago
+	if (duration == "1-week")
+		d.setDate(d.getDate() - 6);
+	
+	// 1 Week ago
+	if (duration == "1-month")
+		d.setDate(d.getDate() - 29);
+
+	// Tomorrow
+	if (duration == "TOMORROW")
+		d.setDate(d.getDate() + 1);
+
+	console.log((getGMTTimeFromDate(d) / 1000));
+
+	return (getGMTTimeFromDate(d) / 1000);
 }

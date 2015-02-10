@@ -88,6 +88,14 @@ $(function()
 		// $('#updateActivityModal').find('span.save-status').html(getRandomLoadingImg());
 		$.ajax({ url : 'core/api/events/' + event_id, type : 'DELETE', success : function()
 		{
+			//if event deleted from today events portlet, we removed that event from portlet events collection
+			if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route==undefined || Current_Route=='dashboard')) 
+			{
+				App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.remove(App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.get(event_id));
+				
+				App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
+
+			}
 
 			// $('#updateActivityModal').find('span.save-status img').remove();
 			enable_save_button(save_button);
@@ -175,7 +183,7 @@ $(function()
 	 * Sets the start time with current time and end time half an hour more than
 	 * start time, when they have no values by the time the modal is shown.
 	 */
-	$('#activityModal').on('shown', function()
+	$('#activityModal, #activityTaskModal').on('shown', function()
 	{
 		// Show related to contacts list
 		var el = $("#activityForm");
@@ -225,7 +233,7 @@ $(function()
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
-	$('#activityModal').on('show', function(e)
+	$('#activityModal, #activityTaskModal').on('show', function(e)
 	{
 
 		// Removes alert message of error related date and time.
@@ -273,6 +281,9 @@ $(function()
 			return;
 		}
 
+		// Remove validation error messages
+		remove_validation_errors('activityModal');
+		
 		$("#activityForm").find("li").remove();
 		$('#event-time-1').closest('.control-group').show();
 		$('#event-date-2').closest('.row').show();
@@ -510,7 +521,7 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 				}
 
 			});
-		}else if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && Current_Route == 'portlets') 
+		}else if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route==undefined || Current_Route=='dashboard')) 
 		{
 			if (isUpdate)
 				App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);

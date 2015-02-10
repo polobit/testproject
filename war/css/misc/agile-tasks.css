@@ -1,11 +1,11 @@
 /* ************* Task UI (Trello) CSS ***************** */
-#activityModal>.modal-body {
+#activityModal>.modal-body, #activityTaskModal>.modal-body {
 	max-height: 453px;
 	padding-bottom: 0 !important;
 	margin-bottom: 0 !important;
 }
 
-#activityModal>.for-description {
+#activityModal>.for-description, #activityTaskModal>.for-description {
 	padding-bottom: 0 !important;
 	margin-bottom: 0 !important;
 }

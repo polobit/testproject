@@ -11,6 +11,8 @@ import javax.ws.rs.core.Response.Status;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
@@ -95,6 +97,18 @@ public class Workflow extends Cursor
     public Unsubscribe unsubscribe = new Unsubscribe();
 
     /**
+     * Round Robin owner key
+     */
+    @NotSaved(IfDefault.class)
+    private Key<DomainUser> round_robin_owner_key = null;
+
+    /**
+     * Round robin owner id
+     */
+    @NotSaved
+    public Long round_robin_owner_id = null;
+
+    /**
      * Initialize DataAccessObject.
      */
     public static ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(Workflow.class);
@@ -132,6 +146,17 @@ public class Workflow extends Cursor
 	    return null;
 
 	return this.creator_key.getId();
+    }
+
+    public void setRoundRobinKey(Key<DomainUser> roundRobinKey)
+    {
+	this.round_robin_owner_key = roundRobinKey;
+    }
+
+    @JsonIgnore
+    public Key<DomainUser> getRoundRobinKey()
+    {
+	return round_robin_owner_key;
     }
 
     /**
@@ -205,7 +230,7 @@ public class Workflow extends Cursor
 	{
 	    if (WorkflowUtil.getCampaignNameCount(name) > 0)
 		throw new WebApplicationException(Response.status(Status.BAD_REQUEST)
-			.entity("Please change the given name. Same kind of name already exists.").build());
+		        .entity("Please change the given name. Same kind of name already exists.").build());
 	}
 
 	// Old workflow
@@ -246,7 +271,22 @@ public class Workflow extends Cursor
 	}
 
 	else
-	    updated_time = System.currentTimeMillis() / 1000;
+	{
+	    if (round_robin_owner_key == null)
+	    {
+		if(round_robin_owner_id != null)
+		    round_robin_owner_key = new Key<DomainUser>(DomainUser.class, round_robin_owner_id);
+		
+		updated_time = System.currentTimeMillis() / 1000;
+	    }
+	}
+    }
+    
+    @javax.persistence.PostLoad
+    private void PostLoad()
+    {
+	if(round_robin_owner_key != null)
+	   round_robin_owner_id = round_robin_owner_key.getId();
     }
 
     public String toString()

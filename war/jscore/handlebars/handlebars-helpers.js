@@ -762,6 +762,13 @@ $(function()
 								var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
 								return symbol;
 				});
+				Handlebars.registerHelper('mandrill_exist', function(options)
+				{
+								if(IS_HAVING_MANDRILL)
+									return options.fn(this);
+								else
+									return options.inverse(this);
+				});
 
 				/**
 				 * Calculates the "pipeline" for deals based on their value and probability
@@ -2508,6 +2515,17 @@ $(function()
 
 								return options.inverse(this);
 				});
+				
+				/**
+				 * Helps to check the permission of the user based on the ACL.
+				 */
+				Handlebars.registerHelper("hasMenuScope", function(scope_constant, options)
+						{
+										if (CURRENT_DOMAIN_USER.menu_scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.menu_scopes) != -1)
+														return options.fn(this);
+
+										return options.inverse(this);
+						});
 
 				Handlebars.registerHelper("canSyncContacts", function(options)
 				{
@@ -4615,6 +4633,14 @@ $(function()
 
 								return options.inverse(this);
 				});
+				
+				Handlebars.registerHelper("hasMenuScope", function(scope_constant, options)
+						{
+										if (CURRENT_DOMAIN_USER.menu_scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.menu_scopes) != -1)
+														return options.fn(this);
+
+										return options.inverse(this);
+						});
 
 				Handlebars.registerHelper("canSyncContacts", function(options)
 				{
@@ -5428,6 +5454,8 @@ $(function()
 			portlet_name = "Today's Tasks";
 		else if(p_name=='Agile CRM Blog')
 			portlet_name = "Agile CRM Blog";
+		else if(p_name=='Task Report')
+			portlet_name = "Task Report";
 		return portlet_name;
 	});
 	/**
@@ -5459,7 +5487,7 @@ $(function()
 			icon_name = 'icon-user';
 		else if(p_name=='Agenda')
 			icon_name = "icon-calendar";
-		else if(p_name=='Today Tasks')
+		else if(p_name=='Today Tasks' || p_name=='Task Report')
 			icon_name = "icon-tasks";
 		else if(p_name=='Agile CRM Blog')
 			icon_name = "icon-rss-sign";
@@ -5537,12 +5565,12 @@ $(function()
 			} });
 		if(App_Portlets.track_length>1){
 			if(track_id==0)
-				header_name = "- Default";
+				header_name = "(Default)";
 			else{
 				var milestone = $.ajax({ type : 'GET', url : '/core/api/milestone/'+track_id, async : false, dataType : 'json',
 					success: function(data){
 						if(data!=null && data!=undefined)
-							header_name = "- "+data.name;
+							header_name = "("+data.name+")";
 					} });
 			}
 		} 	

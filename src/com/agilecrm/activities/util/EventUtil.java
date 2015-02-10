@@ -301,26 +301,26 @@ public class EventUtil
     /**
      * @return List of events that have been pending for Today
      */
-    public static List<Event> getTodayPendingEvents()
+    public static List<Event> getTodayPendingEvents(Long startTime,Long endTime)
     {
 	try
 
 	{
 	    // Gets Today's date
-	    DateUtil startDateUtil = new DateUtil();
-	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
+	    /*DateUtil startDateUtil = new DateUtil();
+	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;*/
 	    // Date startDate = new Date();
 	    // Long startTime = startDate.getTime() / 1000;
 
 	    // Gets Date after numDays days
-	    DateUtil endDateUtil = new DateUtil();
-	    Long endTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000) - 1;
-
+	    /*DateUtil endDateUtil = new DateUtil();
+	    Long endTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000) - 1;*/
+	    
 	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
 
 	    // Gets list of tasks filtered on given conditions
-	    return dao.ofy().query(Event.class).filter("owner", new Key<AgileUser>(AgileUser.class, agileUser.id))
-		    .filter("start >=", startTime).filter("start <=", endTime).limit(50).order("start").list();
+	    return dao.ofy().query(Event.class).filter("owner", new Key<AgileUser>(AgileUser.class, agileUser.id)).filter("start >=", startTime).filter("start <", endTime).limit(50)
+		    .order("start").list();
 	}
 	catch (Exception e)
 	{

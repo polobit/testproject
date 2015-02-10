@@ -48,7 +48,7 @@ $(function()
 		var el = $("#taskForm");
 
 		agile_type_ahead("task_related_to", el, contacts_typeahead);
-		$('#activityModal').modal('show');
+		$('#activityTaskModal').modal('show');
 		highlight_task();
 
 		// Fills owner select element
@@ -384,7 +384,7 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 								}
 							});
 						}
-						else if (App_Portlets.currentPosition && App_Portlets.tasksCollection && App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)] && Current_Route == 'portlets')
+						else if (App_Portlets.currentPosition && App_Portlets.tasksCollection && App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route==undefined || Current_Route=='dashboard'))
 						{
 							if (isUpdate)
 								App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);

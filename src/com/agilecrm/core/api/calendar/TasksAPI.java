@@ -1,6 +1,5 @@
 package com.agilecrm.core.api.calendar;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,6 @@ import org.json.JSONException;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.Task;
-import com.agilecrm.activities.TaskReminder;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.activities.util.TaskUtil;
@@ -259,26 +257,8 @@ public class TasksAPI
     {
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
 	ActivitySave.createLogForBulkDeletes(EntityType.TASK, tasksJSONArray, String.valueOf(tasksJSONArray.length()),
-		"");
+	        "");
 	Task.dao.deleteBulkByIds(tasksJSONArray);
-    }
-
-    /**
-     * Daily task reminder
-     */
-    @Path("remainder")
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void taskRemaider()
-    {
-	try
-	{
-	    TaskReminder.sendDailyTaskReminders();
-	}
-	catch (IOException e)
-	{
-	    e.printStackTrace();
-	}
     }
 
     /**
@@ -432,7 +412,7 @@ public class TasksAPI
 	}
 
 	return TaskUtil.getTasksRelatedToOwnerOfTypeAndDue(criteria, type, owner, pending, null, null, startTime,
-		endTime);
+	        endTime);
     }
 
     /**
