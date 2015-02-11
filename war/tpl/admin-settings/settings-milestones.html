@@ -4,7 +4,16 @@
 	<div class="well">
 		<div>
 			<h3>Deal Tracks
-			<a href="#pipelineModal" role="button" data-toggle="modal" type="submit" class="add-pipeline btn" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</a></h3></div>
+			{{#isTracksEligible}}
+				<a href="#pipelineModal" role="button" data-toggle="modal" type="submit" class="add-pipeline btn" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</a>
+			{{else}}
+				<div class="pull-right" style="height:25px;">
+				<span class="btn disabled" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</span>
+				<div class="clearfix"></div>
+				<span style="font-size: 13px;">Available only for Regular and above plans.</span>
+				</div>
+			{{/isTracksEligible}}
+			</h3></div>
     	<div id="admin-settings-milestones-model-list"></div>
 		<div class="form-actions">
     		<a href="#" class="save-pipelines btn btn-primary">Save</a>
@@ -105,7 +114,14 @@
 			{{else}}
 			<a href="#pipeline-delete-modal" role="button" data-toggle="modal" class="pipeline-delete" id="{{id}}" data="{{name}}" style="margin-left:10px;float: right;font-size: 18px;cursor: pointer;text-decoration: none;"><i class="task-action icon icon-trash" data="{{id}}" title="Delete Track"></i></a>
 			{{/if_equals}}
+			{{#isTracksEligible}}
 			<a href="#pipelineModal" role="button" data-toggle="modal" class="pipeline-edit" id="{{id}}" data="{{name}}" style="float: right;font-size: 18px;cursor: pointer;text-decoration: none;"><i class="task-action icon icon-edit" data="{{id}}" title="Edit Track"></i></a>
+			{{else}}
+				{{#if_equals name "Default"}}
+				{{else}}
+					<a href="#pipelineModal" role="button" data-toggle="modal" class="pipeline-edit" id="{{id}}" data="{{name}}" style="float: right;font-size: 18px;cursor: pointer;text-decoration: none;"><i class="task-action icon icon-edit" data="{{id}}" title="Edit Track"></i></a>
+				{{/if_equals}}
+			{{/isTracksEligible}}
 			</legend>
 			<fieldset>
     		<div class="control-group">  	 

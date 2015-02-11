@@ -44,6 +44,7 @@ public class MilestoneAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Milestone updateMilestone(Milestone milestone)
     {
+	MilestoneUtil.isTracksEligible(milestone);
 	milestone.save();
 	return null;
     }
@@ -100,6 +101,8 @@ public class MilestoneAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Milestone savePipeline(Milestone milestone)
     {
+	MilestoneUtil.isTracksEligible(milestone);
+
 	if (MilestoneUtil.countByName(milestone) > 0)
 	{
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
@@ -122,6 +125,8 @@ public class MilestoneAPI
     {
 	int count = 0;
 
+	MilestoneUtil.isTracksEligible(milestone);
+
 	if (milestone.id != null)
 	{
 	    Milestone oldMilestone = MilestoneUtil.getMilestone(milestone.id);
@@ -133,7 +138,7 @@ public class MilestoneAPI
 	    if (oldMilestone.name.equalsIgnoreCase("Default") && !milestone.name.equals("Default")
 		    && MilestoneUtil.countByName(oldMilestone) <= 1)
 		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		        .entity("Sorry, You can't change name for Default Track.").build());
+			.entity("Sorry, You can't change name for Default Track.").build());
 	}
 	if (MilestoneUtil.countByName(milestone) > count)
 	{

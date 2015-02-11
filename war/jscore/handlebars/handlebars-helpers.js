@@ -5763,6 +5763,18 @@ $(function()
 		var formName = form.formName;
 		return new Handlebars.SafeString(formName);
 	});
+	
+	/**
+	 * Helps to check the permission of the user based on the ACL.
+	 */
+	Handlebars.registerHelper("isTracksEligible", function(options)
+			{
+				var planName = _billing_restriction.currentLimits.planName;
+							if (planName == 'PRO' || planName == 'REGULAR')
+											return options.fn(this);
+
+							return options.inverse(this);
+			});
 });
 
 // helper function return created time for event
