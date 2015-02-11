@@ -82,7 +82,7 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 		time = (calendar.getTimeInMillis() / 1000);
 		System.out.println("time at 7am " + calendar.getTimeInMillis() / 1000 + " --- timezone " + timezone);
 		System.out.println("current time after setting timezone------------ "
-		        + dt.getCalendar().getTimeInMillis() + " timezone is " + timezone);
+		        + dt.getCalendar().getTimeInMillis() / 1000 + " timezone is " + timezone);
 		if (time < dt.getCalendar().getTimeInMillis() / 1000)
 		{
 		    time += sec_per_day;
