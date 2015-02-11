@@ -25,7 +25,7 @@ function findContact()
 
 				// Set details if call is still active.
 				if (CALL != undefined)
-					CALL.setText(SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Incoming call  </b>'+ User_Number +'<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>' );
+					CALL.setText(SIP_Call_Noty_IMG+'<span class="noty_contact_details"><i class="icon icon-phone"></i><b>Incoming call  </b>'+ User_Number +'<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>' );
 			}
 		}
 	}).error(function(data)

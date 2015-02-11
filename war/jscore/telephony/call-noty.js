@@ -52,7 +52,7 @@ function showCallNoty(type, message, duration)
 		CALL.close();
 
 	// Set properties
-	CALL = noty({ text : message, type : type, layout : "bottomRight", timeout : duration,
+	CALL = noty({ text : message, type : type, layout : "bottomLeft", timeout : duration,
 	// delay for closing event. Set false for sticky notifications
 	});
 }
@@ -71,7 +71,7 @@ function incomingCallNoty(message, type)
 			Twilio_Call_Noty.close();
 
 		// Set properties
-		Twilio_Call_Noty = noty({ text : message, type : "confirm", layout : "bottomRight", buttons : [
+		Twilio_Call_Noty = noty({ text : message, type : "confirm", layout : "bottomLeft", buttons : [
 				{ addClass : 'btn btn-primary noty_twilio_answer', text : 'Answer' }, { addClass : 'btn btn-danger noty_twilio_ignore', text : 'Ignore' }
 		] });
 
@@ -83,7 +83,7 @@ function incomingCallNoty(message, type)
 		CALL.close();
 
 	// Set properties
-	CALL = noty({ text : message, type : "confirm", layout : "bottomRight", buttons : [
+	CALL = noty({ text : message, type : "confirm", layout : "bottomLeft", buttons : [
 			{ addClass : 'btn btn-primary answer', text : 'Answer' }, { addClass : 'btn btn-danger ignore', text : 'Ignore' }
 	] });
 }
@@ -103,7 +103,7 @@ function connectedCallNoty(message, type)
 			Twilio_Call_Noty.close();
 
 		// Set properties
-		Twilio_Call_Noty = noty({ text : message, type : "success", layout : "bottomRight", buttons : [
+		Twilio_Call_Noty = noty({ text : message, type : "success", layout : "bottomLeft", buttons : [
 				{ addClass : 'btn noty_twilio_mute', text : '<i class="icon-microphone"></i>' },{ addClass : 'btn noty_twilio_unmute', text : '<i class="icon-microphone-off"></i>' },
 				{ addClass : 'btn noty_twilio_dialpad', text : '<i class="icon-th"></i>' }, { addClass : 'btn btn-danger noty_twilio_hangup', text : 'Hangup' }
 		] });
@@ -137,8 +137,8 @@ function connectedCallNoty(message, type)
 		CALL.close();
 
 	// Set properties
-	CALL = noty({ text : message, type : "success", layout : "bottomRight", buttons : [
-			{ addClass : 'btn dialpad', text : 'Dialpad' }, { addClass : 'btn btn-danger hangup', text : 'Hangup' }
+	CALL = noty({ text : message, type : "success", layout : "bottomLeft", buttons : [
+			{ addClass : 'btn dialpad noty_sip_dialpad', text : '<i class="icon-th"></i>' }, { addClass : 'btn btn-danger hangup', text : 'Hangup' }
 	] });
 }
 
@@ -156,7 +156,7 @@ function outgoingCallNoty(message, type)
 			Twilio_Call_Noty.close();
 
 		// Set properties
-		Twilio_Call_Noty = noty({ text : message, type : "confirm", layout : "bottomRight", buttons : [
+		Twilio_Call_Noty = noty({ text : message, type : "confirm", layout : "bottomLeft", buttons : [
 			{ addClass : 'btn btn-danger noty_twilio_cancel', text : 'Cancel' }
 		] });
 
@@ -168,7 +168,7 @@ function outgoingCallNoty(message, type)
 		CALL.close();
 
 	// Set properties
-	CALL = noty({ text : message, type : "confirm", layout : "bottomRight", buttons : [
+	CALL = noty({ text : message, type : "confirm", layout : "bottomLeft", buttons : [
 		{ addClass : 'btn btn-danger hangup', text : 'Cancel' }
 	] });
 }

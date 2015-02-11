@@ -1964,4 +1964,8 @@ div.lhs-row-filter {
 
 .noty_twilio_unmute{
 	display:none;
+	font-size:18px;
 }
+
+.noty_twilio_mute,.noty_twilio_dialpad,.noty_sip_dialpad{font-size:18px;}
+.noty_contact_details{margin-top: 10px;display:table-row;}
