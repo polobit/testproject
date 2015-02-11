@@ -141,43 +141,43 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 			
 			// If there is only one pipeline, select the option by default and hide the field.
 			if(jsonModel.length==1){
-				html+='<option value="'+jsonModel[0].id+'" selected="selected">Default</option>';
+				var mile = jsonModel[0];
+				html+='<optgroup label="Default">';
+				$.each(mile.milestones.split(","), function(index,milestone){
+					array.push($.trim(this));
+					if(value && mile.id == value.pipeline_id && milestone == value.milestone)
+						html+='<option value="'+mile.id+'_'+milestone+'" selected="selected">'+milestone+'</option>';
+					else
+						html+='<option value="'+mile.id+'_'+milestone+'">'+milestone+'</option>';
+				});
+				html+='</optgroup>';
 			}
 			else {
 				$.each(jsonModel,function(index,mile){
 					console.log(mile.milestones,value);
 					var array = [];
-					$.each(milestones.split(","), function(){
+					html+='<optgroup label="'+mile.name+'">';
+					$.each(mile.milestones.split(","), function(index,milestone){
 						array.push($.trim(this));
-						if(!mile.name)
-							mile.name = 'Default';
-						if(value && mile.id == value.pipeline_id)
-							html+='<option value="'+mile.id+'" selected="selected">'+mile.name+'</option>';
+						if(value && mile.id == value.pipeline_id && milestone == value.milestone)
+							html+='<option value="'+mile.id+'_'+milestone+'" selected="selected">'+milestone+'</option>';
 						else
-							html+='<option value="'+mile.id+'">'+mile.name+'</option>';
+							html+='<option value="'+mile.id+'_'+milestone+'">'+milestone+'</option>';
 					});
-					html+='<optgroup label='+mile.name+'>';
-					
-					if(!mile.name)
-						mile.name = 'Default';
-					if(value && mile.id == value.pipeline_id)
-						html+='<option value="'+mile.id+'" selected="selected">'+mile.name+'</option>';
-					else
-						html+='<option value="'+mile.id+'">'+mile.name+'</option>';
-					html+='</optgroup>'
+					html+='</optgroup>';
 					
 				});
 			}
-			$('#pipeline',el).html(html);
+			$('#pipeline_milestone',el).html(html);
 			console.log('adding');
-			$('#pipeline',el).closest('div').find('.loading-img').hide();
+			$('#pipeline_milestone',el).closest('div').find('.loading-img').hide();
 			
-			// Hide the Tracks select box when there is only one pipeline.
+			/* Hide the Tracks select box when there is only one pipeline.
 			if(jsonModel.length==1){
 				$('#pipeline',el).closest('div.control-group').hide();
 				$('#milestone',el).closest('div.control-group').css("margin-left","0px");
 				$('#dealsFilterForm #pipeline',el).closest('div.control-group').show();
-			}
+			}*/
 			
 			if (callback && typeof (callback) === "function") {
 				// execute the callback, passing parameters as necessary
