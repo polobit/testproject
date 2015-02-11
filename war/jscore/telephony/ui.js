@@ -79,6 +79,7 @@ $(function()
 			User_Img = getGravatar(currentContact.properties, 40);
 			User_ID = currentContact.id;
 			SIP_Call_Noty_IMG = addSipContactImg();
+			Show_Add_Contact = false;
 
 			// Display
 			showCallNotyPopup("outgoing", "confirm", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Calling  </b>' + User_Number +'<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', false);

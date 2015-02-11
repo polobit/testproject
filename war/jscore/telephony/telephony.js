@@ -23,6 +23,7 @@ var User_Number;
 var User_ID;
 var SIP_Call_Noty_IMG = "";
 var Contact_Link = "";
+var Show_Add_Contact = false;
 
 // Call is ignored
 var Is_Ignore = false;
