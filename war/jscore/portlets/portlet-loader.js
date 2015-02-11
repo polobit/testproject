@@ -602,7 +602,17 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		else
 	        			App_Portlets.filteredContacts[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter+'&sortKey=-created_time', templateKey : 'portlets-contacts', sort_collection : false, individual_tag_name : 'tr', sortKey : "-created_time" });
 	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Emails Opened"){
-	        		App_Portlets.emailsOpened[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+data.get('settings').duration, templateKey : 'portlets-contacts-email-opens', sort_collection : false, individual_tag_name : 'tr', 
+	        		var start_date_str = '';
+	        		var end_date_str = '';
+	        		if(data.get('settings').duration=='yesterday'){
+	        			start_date_str = ''+data.get('settings').duration;
+	        			end_date_str = 'today';
+	        		}else{
+	        			start_date_str = ''+data.get('settings').duration;
+	        			end_date_str = 'TOMORROW';
+	        		}
+	        		
+	        		App_Portlets.emailsOpened[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str), templateKey : 'portlets-contacts-email-opens', sort_collection : false, individual_tag_name : 'tr', 
 	        			postRenderCallback : function(p_el){
 	        				displayTimeAgo(p_el);
 	        			} });
@@ -837,7 +847,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
 	        		
 	        		var selector=idVal;
-	    			var url='/core/api/portlets/portletGrowthGraph?tags='+data.get('settings').tags+'&frequency='+data.get('settings').frequency+'&duration='+data.get('settings').duration;
+	    			var url='/core/api/portlets/portletGrowthGraph?tags='+data.get('settings').tags+'&frequency='+data.get('settings').frequency+'&duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(data.get('settings').duration)+'&end-date='+getStartAndEndDatesOnDue("TOMORROW");
 	    			$('#'+selector).html(getRandomLoadingImg());
 	    			fetchPortletsGraphData(url,function(data1){
 	    				if(data1.status==406){
@@ -846,7 +856,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    							+ data1.responseText
 	    							+ '</i></p></small></div>');
 	    					
-	    					$("#plan-limit-error-"+data.get('id')).html($save_info).show();
+	    					$("#"+selector).html($save_info).show();
 	    					
 	    					return;
 	    				}
@@ -916,8 +926,18 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Calls Per Person"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
 	        		
+	        		var start_date_str = '';
+	        		var end_date_str = '';
+	        		if(data.get('settings').duration=='yesterday'){
+	        			start_date_str = ''+data.get('settings').duration;
+	        			end_date_str = 'today';
+	        		}else{
+	        			start_date_str = ''+data.get('settings').duration;
+	        			end_date_str = 'TOMORROW';
+	        		}
+	        		
 	        		var selector=idVal;
-	        		var url='/core/api/portlets/portletCallsPerPerson?duration='+data.get('settings').duration;
+	        		var url='/core/api/portlets/portletCallsPerPerson?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str);
 	        		
 	        		var answeredCallsCountList=[];
 	    			var busyCallsCountList=[];
@@ -984,8 +1004,18 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        	}else if(data.get('portlet_type')=="TASKSANDEVENTS" && data.get('name')=="Task Report"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
 	        		
+	        		var start_date_str = '';
+	    			var end_date_str = '';
+	    			if(data.get('settings').duration=='yesterday'){
+	    				start_date_str = ''+data.get('settings').duration;
+	    				end_date_str = 'today';
+	    			}else{
+	    				start_date_str = ''+data.get('settings').duration;
+	    				end_date_str = 'TOMORROW';
+	    			}
+	        		
 	        		var selector=idVal;
-	        		var url='/core/api/portlets/portletTaskReport?group-by='+data.get('settings')["group-by"]+'&split-by='+data.get('settings')["split-by"]+'&start-date='+getStartAndEndDatesOnDue(data.get('settings').duration)+'&end-date='+getStartAndEndDatesOnDue("TOMORROW");
+	        		var url='/core/api/portlets/portletTaskReport?group-by='+data.get('settings')["group-by"]+'&split-by='+data.get('settings')["split-by"]+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str);
 	        		
 	        		var groupByList=[];
 	    			var splitByList=[];
