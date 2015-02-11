@@ -142,7 +142,6 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 			// If there is only one pipeline, select the option by default and hide the field.
 			if(jsonModel.length==1){
 				var mile = jsonModel[0];
-				html+='<optgroup label="Default">';
 				$.each(mile.milestones.split(","), function(index,milestone){
 					array.push($.trim(this));
 					if(value && mile.id == value.pipeline_id && milestone == value.milestone)
@@ -150,7 +149,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 					else
 						html+='<option value="'+mile.id+'_'+milestone+'">'+milestone+'</option>';
 				});
-				html+='</optgroup>';
+				$('#pipeline_milestone',el).closest('.control-group').find('label b').text('Milestone');
 			}
 			else {
 				$.each(jsonModel,function(index,mile){
@@ -160,13 +159,14 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 					$.each(mile.milestones.split(","), function(index,milestone){
 						array.push($.trim(this));
 						if(value && mile.id == value.pipeline_id && milestone == value.milestone)
-							html+='<option value="'+mile.id+'_'+milestone+'" selected="selected">'+milestone+'</option>';
+							html+='<option value="'+mile.id+'_'+milestone+'" selected="selected">'+mile.name+'-'+milestone+'</option>';
 						else
-							html+='<option value="'+mile.id+'_'+milestone+'">'+milestone+'</option>';
+							html+='<option value="'+mile.id+'_'+milestone+'">'+mile.name+'-'+milestone+'</option>';
 					});
 					html+='</optgroup>';
 					
 				});
+				$('#pipeline_milestone',el).closest('.control-group').find('label b').text('Track & Milestone');
 			}
 			$('#pipeline_milestone',el).html(html);
 			console.log('adding');
