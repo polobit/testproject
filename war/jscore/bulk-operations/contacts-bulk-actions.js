@@ -105,8 +105,19 @@ $(function()
 	{
 		e.preventDefault();
 		
+		// Selected Contact ids
+		var id_array = get_contacts_bulk_ids();
+		
+		// when SELECT_ALL is true i.e., all contacts are selected.
+		if(id_array.length === 0)
+		   count = getAvailableContacts();
+		else
+			count = id_array.length;
+		
+		var continueAction = true;
 		if(!canRunBulkOperations())
 		{
+			continueAction = false;
 			showModalConfirmation("Bulk Assign Campaign", 
 					"You may not have permission to update some of the contacts selected. Proceeding with this operation will add only your contacts to the campaign.<br/><br/>Do you want to proceed?", 
 					show_bulk_campaign_assign_page
@@ -119,6 +130,7 @@ $(function()
 		}
 		if(is_free_plan() && has_more_than_limit())
 		{
+			continueAction = false;
 			showModalConfirmation("Add to Campaign", 
 				"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.", 
 				function()
@@ -135,18 +147,9 @@ $(function()
 						return;
 					}, "Upgrade", "Close");
 		}
-		
-		// Selected Contact ids
-		var id_array = get_contacts_bulk_ids();
-		
-		// when SELECT_ALL is true i.e., all contacts are selected.
-		if(id_array.length === 0)
-		   count = getAvailableContacts();
-		else
-			count = id_array.length;
-		
 		if(!canSendEmails(count))
 		{
+			continueAction = false;
 			var pendingEmails = getPendingEmails();
 			
 			var yes = "Yes";
@@ -184,7 +187,7 @@ $(function()
 					}, yes, no);
 			return;
 		}
-	else
+	else if(continueAction)
 		{
 			show_bulk_campaign_assign_page()
 		}
