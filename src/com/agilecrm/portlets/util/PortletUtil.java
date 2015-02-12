@@ -85,7 +85,7 @@ public class PortletUtil {
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.CALENDAR)){
 				allPortlets.add(new Portlet("Agenda",PortletType.TASKSANDEVENTS));
 				allPortlets.add(new Portlet("Today Tasks",PortletType.TASKSANDEVENTS));
-				allPortlets.add(new Portlet("Task Report",PortletType.TASKSANDEVENTS));
+				//allPortlets.add(new Portlet("Task Report",PortletType.TASKSANDEVENTS));
 			}
 			
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.ACTIVITY)){
