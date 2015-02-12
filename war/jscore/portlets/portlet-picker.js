@@ -164,7 +164,17 @@ function set_p_portlets(base_model){
 					addWidgetToGridster(base_model);
 				} });
 	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Emails Opened"){
-		App_Portlets.emailsOpened[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+base_model.get('settings').duration, templateKey : 'portlets-contacts-email-opens', sort_collection : false, individual_tag_name : 'tr',
+		var start_date_str = '';
+		var end_date_str = '';
+		if(base_model.get('settings').duration=='yesterday'){
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'today';
+		}else{
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'TOMORROW';
+		}
+		
+		App_Portlets.emailsOpened[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str), templateKey : 'portlets-contacts-email-opens', sort_collection : false, individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				displayTimeAgo(p_el);
 				addWidgetToGridster(base_model);
@@ -461,7 +471,7 @@ function set_p_portlets(base_model){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 			
 			var selector=$(this).attr('id');
-			var url='/core/api/portlets/portletGrowthGraph?tags='+base_model.get('settings').tags+'&frequency='+base_model.get('settings').frequency+'&duration='+base_model.get('settings').duration;
+			var url='/core/api/portlets/portletGrowthGraph?tags='+base_model.get('settings').tags+'&frequency='+base_model.get('settings').frequency+'&duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(base_model.get('settings').duration)+'&end-date='+getStartAndEndDatesOnDue("TOMORROW");
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==406){
@@ -556,8 +566,18 @@ function set_p_portlets(base_model){
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Calls Per Person"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 			
+			var start_date_str = '';
+			var end_date_str = '';
+			if(base_model.get('settings').duration=='yesterday'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'today';
+			}else{
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'TOMORROW';
+			}
+			
 			var selector=$(this).attr('id');
-			var url='/core/api/portlets/portletCallsPerPerson?duration='+base_model.get('settings').duration;
+			var url='/core/api/portlets/portletCallsPerPerson?duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str);
 			
 			var answeredCallsCountList=[];
 			var busyCallsCountList=[];
@@ -640,8 +660,18 @@ function set_p_portlets(base_model){
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Task Report"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 			
+			var start_date_str = '';
+			var end_date_str = '';
+			if(base_model.get('settings').duration=='yesterday'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'today';
+			}else{
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'TOMORROW';
+			}
+			
 			var selector=$(this).attr('id');
-			var url='/core/api/portlets/portletTaskReport?group-by='+base_model.get('settings')["group-by"]+'&split-by='+base_model.get('settings')["split-by"]+'&start-date='+getStartAndEndDatesOnDue(base_model.get('settings').duration)+'&end-date='+getStartAndEndDatesOnDue("TOMORROW");
+			var url='/core/api/portlets/portletTaskReport?group-by='+base_model.get('settings')["group-by"]+'&split-by='+base_model.get('settings')["split-by"]+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str);
 			
 			var groupByList=[];
 			var splitByList=[];
@@ -692,6 +722,7 @@ function set_p_portlets(base_model){
 			
 			setPortletContentHeight(base_model);
 		}
+		addWidgetToGridster(base_model);
 	});
 	//enablePortletTimeAndDates(base_model);
 }
@@ -959,7 +990,7 @@ function portletGrowthGraph(selector,series,base_model){
 		flag=false;
 	}*/
 	if(base_model.get("settings").tags==""){
-		$('#'+selector).html("<div class='portlet-error-message'>Please <a href='#' id='"+base_model.get("id")+"-settings' class='portlet-settings' dada-toggle='modal'>configure</a> the portlet and add the Tags.</div>");
+		$('#'+selector).html("<div class='portlet-error-message'>Please <a href='#' id='"+base_model.get("id")+"-settings' class='portlet-settings' dada-toggle='modal'>configure</a> the dashlet and add the Tags.</div>");
 		flag=false;
 	}
 	if(flag){

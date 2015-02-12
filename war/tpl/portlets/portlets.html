@@ -289,7 +289,7 @@
 	</table>
 {{else}}
 		<div class="portlet-error-message">
-      		No calendar events today
+      		No calendar events for today
 		</div>
 {{/if}}
 </script>
@@ -375,14 +375,26 @@
                 <i class="{{get_portlet_icon name}} icon-1x"></i>
                 <span class="portlet-icon-divider"></span>
 				<span>
+					{{#if_equals settings.duration "1-day"}}
+						Emails Opened for Today
+					{{/if_equals}}
+					{{#if_equals settings.duration "yesterday"}}
+						Emails Opened for Yesterday
+					{{/if_equals}}
 					{{#if_equals settings.duration "2-days"}}
 						Emails Opened in Last 2 Days
 					{{/if_equals}}
+					{{#if_equals settings.duration "this-week"}}
+						Emails Opened in This Week
+					{{/if_equals}}
 					{{#if_equals settings.duration "1-week"}}
-						Emails Opened in Last 1 Week
+						Emails Opened in Last 7 Days
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-month"}}
+						Emails Opened in This Month
 					{{/if_equals}}
 					{{#if_equals settings.duration "1-month"}}
-						Emails Opened in Last 1 Month
+						Emails Opened in Last 30 Days
 					{{/if_equals}}
                 </span>
 			</div>
@@ -410,16 +422,25 @@
                 <span class="portlet-icon-divider"></span>
 				<span>
 					{{#if_equals settings.duration "1-day"}}
-						Emails Sent in Last 1 Day
+						Emails Sent for Today
+					{{/if_equals}}
+					{{#if_equals settings.duration "yesterday"}}
+						Emails Sent for Yesterday
 					{{/if_equals}}
 					{{#if_equals settings.duration "2-days"}}
 						Emails Sent in Last 2 Days
 					{{/if_equals}}
+					{{#if_equals settings.duration "this-week"}}
+						Emails Sent in This Week
+					{{/if_equals}}
 					{{#if_equals settings.duration "1-week"}}
-						Emails Sent in Last 1 Week
+						Emails Sent in Last 7 Days
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-month"}}
+						Emails Sent in This Month
 					{{/if_equals}}
 					{{#if_equals settings.duration "1-month"}}
-						Emails Sent in Last 1 Month
+						Emails Sent in Last 30 Days
 					{{/if_equals}}
                 </span>
 			</div>
@@ -562,20 +583,32 @@
                 <i class="{{get_portlet_icon name}} icon-1x"></i>
                 <span class="portlet-icon-divider"></span>
 				<span>
+					{{#if_equals settings.duration "1-day"}}
+						Deals Won for Today
+					{{/if_equals}}
+					{{#if_equals settings.duration "yesterday"}}
+						Deals Won for Yesterday
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-week"}}
+						Deals Won in This Week
+					{{/if_equals}}
 					{{#if_equals settings.duration "1-week"}}
-						Deals won in last 1 week
+						Deals Won in Last 7 Days
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-month"}}
+						Deals Won in This Month
 					{{/if_equals}}
 					{{#if_equals settings.duration "1-month"}}
-						Deals won in last 1 month
+						Deals Won in Last 30 Days
 					{{/if_equals}}
 					{{#if_equals settings.duration "3-months"}}
-						Deals won in last 3 months
+						Deals Won in Last 3 Months
 					{{/if_equals}}
 					{{#if_equals settings.duration "6-months"}}
-						Deals won in last 6 months
+						Deals Won in Last 6 Months
 					{{/if_equals}}
 					{{#if_equals settings.duration "12-months"}}
-						Deals won in last 12 months
+						Deals Won in Last 12 Months
 					{{/if_equals}}
                 </span>
 			</div>
@@ -635,13 +668,22 @@
                 <span class="portlet-icon-divider"></span>
 				<span>
 					{{#if_equals settings.duration "1-day"}}
-						Deals Assigned in Last 1 Day
+						Deals Assigned for Today
+					{{/if_equals}}
+					{{#if_equals settings.duration "yesterday"}}
+						Deals Assigned for Yesterday
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-week"}}
+						Deals Assigned in This Week
 					{{/if_equals}}
 					{{#if_equals settings.duration "1-week"}}
-						Deals Assigned in Last 1 Week
+						Deals Assigned in Last 7 Days
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-month"}}
+						Deals Assigned in This Month
 					{{/if_equals}}
 					{{#if_equals settings.duration "1-month"}}
-						Deals Assigned in Last 1 Month
+						Deals Assigned in Last 30 Days
 					{{/if_equals}}
                 </span>
 			</div>
@@ -669,13 +711,22 @@
                 <span class="portlet-icon-divider"></span>
 				<span>
 					{{#if_equals settings.duration "1-day"}}
-						Calls in Last 1 Day
+						Today Calls
+					{{/if_equals}}
+					{{#if_equals settings.duration "yesterday"}}
+						Yesterday Calls
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-week"}}
+						Calls in This Week
 					{{/if_equals}}
 					{{#if_equals settings.duration "1-week"}}
-						Calls in Last 1 Week
+						Calls in Last 7 Days
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-month"}}
+						Calls in This Month
 					{{/if_equals}}
 					{{#if_equals settings.duration "1-month"}}
-						Calls in Last 1 Month
+						Calls in Last 30 Days
 					{{/if_equals}}
                 </span>
 			</div>
@@ -779,7 +830,24 @@
                 <i class="{{get_portlet_icon name}} icon-1x"></i>
                 <span class="portlet-icon-divider"></span>
 				<span>
-					Task Report
+					{{#if_equals settings.duration "1-day"}}
+						Task Report for Today
+					{{/if_equals}}
+					{{#if_equals settings.duration "yesterday"}}
+						Task Report for Yesterday
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-week"}}
+						Task Report of This Week
+					{{/if_equals}}
+					{{#if_equals settings.duration "1-week"}}
+						Task Report of Last 7 Days
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-month"}}
+						Task Report of This Month
+					{{/if_equals}}
+					{{#if_equals settings.duration "1-month"}}
+						Task Report of Last 30 Days
+					{{/if_equals}}
                 </span>
 			</div>
 		</div>
