@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
@@ -256,27 +257,35 @@ public class PortletUtil {
 		long minTime=0L;
 		long maxTime=0L;
 		List<JSONObject> contactsList=null;
-		if(json!=null && json.get("duration")!=null){
-			if(json.get("duration").toString().equalsIgnoreCase("2-days")){
-				DateUtil startDateUtil = new DateUtil();
-	    		minTime = startDateUtil.removeDays(2).toMidnight().getTime().getTime() / 1000;
-	    		
-	    		DateUtil endDateUtil = new DateUtil();
-	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}else if(json.get("duration").toString().equalsIgnoreCase("1-week")){
-				DateUtil startDateUtil = new DateUtil();
-	    		minTime = startDateUtil.removeDays(7).toMidnight().getTime().getTime() / 1000;
-	    		
-	    		DateUtil endDateUtil = new DateUtil();
-	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}else if(json.get("duration").toString().equalsIgnoreCase("1-month")){
-				DateUtil startDateUtil = new DateUtil();
-	    		minTime = startDateUtil.removeDays(30).toMidnight().getTime().getTime() / 1000;
-	    		
-	    		DateUtil endDateUtil = new DateUtil();
-	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
+		try {
+			if(json!=null && json.get("duration")!=null){
+				/*if(json.get("duration").toString().equalsIgnoreCase("2-days")){
+					DateUtil startDateUtil = new DateUtil();
+		    		minTime = startDateUtil.removeDays(2).toMidnight().getTime().getTime() / 1000;
+		    		
+		    		DateUtil endDateUtil = new DateUtil();
+		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
+				}else if(json.get("duration").toString().equalsIgnoreCase("1-week")){
+					DateUtil startDateUtil = new DateUtil();
+		    		minTime = startDateUtil.removeDays(7).toMidnight().getTime().getTime() / 1000;
+		    		
+		    		DateUtil endDateUtil = new DateUtil();
+		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
+				}else if(json.get("duration").toString().equalsIgnoreCase("1-month")){
+					DateUtil startDateUtil = new DateUtil();
+		    		minTime = startDateUtil.removeDays(30).toMidnight().getTime().getTime() / 1000;
+		    		
+		    		DateUtil endDateUtil = new DateUtil();
+		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
+				}*/
+				if(json.getString("startDate")!=null)
+					minTime = Long.valueOf(json.getString("startDate"));
+				if(json.getString("endDate")!=null)
+					maxTime = Long.valueOf(json.getString("endDate"))-1;
+				contactsList=ContactUtil.getEmailsOpened(minTime,maxTime);
 			}
-			contactsList=ContactUtil.getEmailsOpened(minTime,maxTime);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return contactsList;
 	}
@@ -299,7 +308,7 @@ public class PortletUtil {
 		long maxTime=0L;
 		List<Opportunity> finalDealsList = new ArrayList<Opportunity>();
 		if(json!=null && json.get("duration")!=null){
-			if(json.get("duration").toString().equalsIgnoreCase("1-week")){
+			/*if(json.get("duration").toString().equalsIgnoreCase("1-week")){
 				DateUtil startDateUtil = new DateUtil();
 	    		minTime = startDateUtil.removeDays(7).toMidnight().getTime().getTime() / 1000;
 	    		
@@ -329,7 +338,9 @@ public class PortletUtil {
 	    		
 	    		DateUtil endDateUtil = new DateUtil();
 	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}
+			}*/
+			minTime = getMinTime(json.get("duration").toString());
+			maxTime = getMaxTime(json.get("duration").toString());
 
 			List<Opportunity> dealsList = OpportunityUtil.getOpportunitiesWon(null);
     		List<Activity> wonDealsActivityList = ActivityUtil.getWonDealsActivityList(minTime,maxTime);
@@ -463,7 +474,7 @@ public class PortletUtil {
 		long minTime=0L;
 		long maxTime=0L;
 		if(json!=null && json.get("duration")!=null){
-			if(json.get("duration").toString().equalsIgnoreCase("1-day")){
+			/*if(json.get("duration").toString().equalsIgnoreCase("1-day")){
 				DateUtil startDateUtil = new DateUtil();
 	    		minTime = startDateUtil.removeDays(1).toMidnight().getTime().getTime() / 1000;
 	    		
@@ -487,7 +498,9 @@ public class PortletUtil {
 	    		
 	    		DateUtil endDateUtil = new DateUtil();
 	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}
+			}*/
+			minTime = getMinTime(json.get("duration").toString());
+			maxTime = getMaxTime(json.get("duration").toString());
 			List<Integer> mailsCountList=new ArrayList<Integer>();
 			List<DomainUser> domainUsersList=null;
 			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
@@ -525,26 +538,24 @@ public class PortletUtil {
 		JSONObject growthGraphJSON=null;
 		long start_date = 0L;
 		long end_date =0L;
-		try {
-			if(json!=null && json.get("tags")!=null && json.get("frequency")!=null && json.get("duration")!=null){
-				String[] tags = json.getString("tags").split(",");
-				int type = Calendar.DAY_OF_MONTH;
+		if(json!=null && json.get("tags")!=null && json.get("frequency")!=null && json.get("duration")!=null){
+			String[] tags = json.getString("tags").split(",");
+			int type = Calendar.DAY_OF_MONTH;
 
-				if (StringUtils.equalsIgnoreCase(json.getString("frequency"), "monthly"))
-				    type = Calendar.MONTH;
-				if (StringUtils.equalsIgnoreCase(json.getString("frequency"), "weekly"))
-				    type = Calendar.WEEK_OF_YEAR;
-				start_date = getMinTime(json.getString("duration"));
-				end_date = getMaxTime(json.getString("duration"));
-				ReportsUtil.check(start_date, end_date);
-				
-				growthGraphString=TagSearchUtil.getTagCount(null, tags, String.valueOf(start_date*1000), String.valueOf(end_date*1000), type).toString();
-			}
-			if(growthGraphString!=null)
-				growthGraphJSON = (JSONObject)JSONSerializer.toJSON(growthGraphString);
-		} catch (Exception e) {
-			e.printStackTrace();
+			if (StringUtils.equalsIgnoreCase(json.getString("frequency"), "monthly"))
+			    type = Calendar.MONTH;
+			if (StringUtils.equalsIgnoreCase(json.getString("frequency"), "weekly"))
+			    type = Calendar.WEEK_OF_YEAR;
+			if(json.getString("startDate")!=null)
+				start_date = Long.valueOf(json.getString("startDate"));
+			if(json.getString("endDate")!=null)
+				end_date = Long.valueOf(json.getString("endDate"))-1;
+			ReportsUtil.check(start_date*1000, end_date*1000);
+			
+			growthGraphString=TagSearchUtil.getTagCount(null, tags, String.valueOf(start_date*1000), String.valueOf(end_date*1000), type).toString();
 		}
+		if(growthGraphString!=null)
+			growthGraphJSON = (JSONObject)JSONSerializer.toJSON(growthGraphString);
 		return growthGraphJSON;
 	}
 	public static JSONObject getPortletDealsAssigned(JSONObject json)throws Exception{
@@ -552,7 +563,7 @@ public class PortletUtil {
 		long maxTime=0L;
 		JSONObject dealsAssignedJSON=new JSONObject();
 		if(json!=null && json.get("duration")!=null){
-			if(json.get("duration").toString().equalsIgnoreCase("1-day")){
+			/*if(json.get("duration").toString().equalsIgnoreCase("1-day")){
 				DateUtil startDateUtil = new DateUtil();
 	    		minTime = startDateUtil.removeDays(1).toMidnight().getTime().getTime() / 1000;
 	    		
@@ -570,7 +581,9 @@ public class PortletUtil {
 	    		
 	    		DateUtil endDateUtil = new DateUtil();
 	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}
+			}*/
+			minTime = getMinTime(json.get("duration").toString());
+			maxTime = getMaxTime(json.get("duration").toString());
 			List<DomainUser> domainUsersList=null;
 			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
 			if(dUser!=null)
@@ -602,7 +615,7 @@ public class PortletUtil {
 		long maxTime=0L;
 		JSONObject callsPerPersonJSON=new JSONObject();
 		if(json!=null && json.get("duration")!=null){
-			if(json.get("duration").toString().equalsIgnoreCase("1-day")){
+			/*if(json.get("duration").toString().equalsIgnoreCase("1-day")){
 				DateUtil startDateUtil = new DateUtil();
 	    		minTime = startDateUtil.removeDays(1).toMidnight().getTime().getTime() / 1000;
 	    		
@@ -620,7 +633,11 @@ public class PortletUtil {
 	    		
 	    		DateUtil endDateUtil = new DateUtil();
 	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}
+			}*/
+			if(json.getString("startDate")!=null)
+				minTime = Long.valueOf(json.getString("startDate"));
+			if(json.getString("endDate")!=null)
+				maxTime = Long.valueOf(json.getString("endDate"))-1;
 		}
 		List<DomainUser> domainUsersList=null;
 		DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
@@ -823,15 +840,22 @@ public class PortletUtil {
 	public static long getMinTime(String duration)throws Exception{
 		long minTime=0L;
 		try {
+			Calendar cl = Calendar.getInstance(TimeZone.getTimeZone(DomainUserUtil.getCurrentDomainUser().timezone));
 			if(duration.equalsIgnoreCase("yesterday")){
 				DateUtil startDateUtil = new DateUtil();
 	    		minTime = startDateUtil.removeDays(1).toMidnight().getTime().getTime() / 1000;
 			}else if(duration.equalsIgnoreCase("today") || duration.equalsIgnoreCase("1-day")){
 				DateUtil startDateUtil = new DateUtil();
 	    		minTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
+			}else if(duration.toString().equalsIgnoreCase("this-week")){
+				DateUtil startDateUtil = new DateUtil();
+				minTime = startDateUtil.removeDays(cl.get(Calendar.DAY_OF_WEEK)-2).toMidnight().getTime().getTime() / 1000;
 			}else if(duration.toString().equalsIgnoreCase("1-week")){
 				DateUtil startDateUtil = new DateUtil();
 	    		minTime = startDateUtil.removeDays(6).toMidnight().getTime().getTime() / 1000;
+			}else if(duration.toString().equalsIgnoreCase("this-month")){
+				DateUtil startDateUtil = new DateUtil();
+	    		minTime = startDateUtil.removeDays(cl.get(Calendar.DAY_OF_MONTH)-1).toMidnight().getTime().getTime() / 1000;
 			}else if(duration.equalsIgnoreCase("1-month")){
 				DateUtil startDateUtil = new DateUtil();
 	    		minTime = startDateUtil.removeDays(29).toMidnight().getTime().getTime() / 1000;
@@ -859,28 +883,7 @@ public class PortletUtil {
 			if(duration.equalsIgnoreCase("yesterday")){
 				DateUtil endDateUtil = new DateUtil();
 	    		maxTime = (endDateUtil.toMidnight().getTime().getTime() / 1000)-1;
-			}else if(duration.equalsIgnoreCase("today")){
-				DateUtil endDateUtil = new DateUtil();
-	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}else if(duration.equalsIgnoreCase("1-day")){
-				DateUtil endDateUtil = new DateUtil();
-	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}else if(duration.toString().equalsIgnoreCase("1-week")){
-				DateUtil endDateUtil = new DateUtil();
-	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}else if(duration.equalsIgnoreCase("1-month")){
-				DateUtil endDateUtil = new DateUtil();
-	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}else if(duration.equalsIgnoreCase("2-days")){
-				DateUtil endDateUtil = new DateUtil();
-	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}else if(duration.equalsIgnoreCase("3-months")){
-				DateUtil endDateUtil = new DateUtil();
-	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}else if(duration.equalsIgnoreCase("6-months")){
-				DateUtil endDateUtil = new DateUtil();
-	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}else if(duration.equalsIgnoreCase("12-months")){
+			}else{
 				DateUtil endDateUtil = new DateUtil();
 	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
 			}

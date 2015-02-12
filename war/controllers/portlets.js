@@ -273,9 +273,10 @@ $('#portlets-tasks-model-list > tr').live('click', function(e) {
 	
 	// Add notes in task modal
 	showNoteOnForm("updateTaskForm", value.notes);*/
-	
-	var id = $(this).find(".data").attr("data");
-	App_Tasks.navigate("task/" + id, { trigger : true });
+	if(e.target.attributes[0].name!="href"){
+		var id = $(this).find(".data").attr("data");
+		App_Tasks.navigate("task/" + id, { trigger : true });
+	}
 });
 /**
  * Makes the pending task as completed by calling complete_task function
@@ -323,8 +324,16 @@ function getStartAndEndDatesOnDue(duration){
 	var d = new Date();
 
 	// Today
-	if (duration == "1-day")
+	if (duration == "1-day" || duration == "today")
 		console.log(getGMTTimeFromDate(d) / 1000);
+	
+	// This week
+	if (duration == "this-week"){
+		if(new Date().getDay()!=0)
+			d.setDate(d.getDate() - (new Date().getDay()-1));
+		else
+			d.setDate(d.getDate() - (new Date().getDay()+6));
+	}
 	
 	// 1 Week ago
 	if (duration == "1-week")
@@ -333,10 +342,22 @@ function getStartAndEndDatesOnDue(duration){
 	// 1 Week ago
 	if (duration == "1-month")
 		d.setDate(d.getDate() - 29);
+	
+	// This month
+	if (duration == "this-month")
+		d.setDate(1);
 
 	// Tomorrow
 	if (duration == "TOMORROW")
 		d.setDate(d.getDate() + 1);
+	
+	// Yesterday
+	if (duration == "yesterday")
+		d.setDate(d.getDate() - 1);
+	
+	// Last 2 days
+	if (duration == "2-days")
+		d.setDate(d.getDate() - 2);
 
 	console.log((getGMTTimeFromDate(d) / 1000));
 
