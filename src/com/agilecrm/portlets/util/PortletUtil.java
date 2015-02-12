@@ -257,31 +257,35 @@ public class PortletUtil {
 		long minTime=0L;
 		long maxTime=0L;
 		List<JSONObject> contactsList=null;
-		if(json!=null && json.get("duration")!=null){
-			/*if(json.get("duration").toString().equalsIgnoreCase("2-days")){
-				DateUtil startDateUtil = new DateUtil();
-	    		minTime = startDateUtil.removeDays(2).toMidnight().getTime().getTime() / 1000;
-	    		
-	    		DateUtil endDateUtil = new DateUtil();
-	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}else if(json.get("duration").toString().equalsIgnoreCase("1-week")){
-				DateUtil startDateUtil = new DateUtil();
-	    		minTime = startDateUtil.removeDays(7).toMidnight().getTime().getTime() / 1000;
-	    		
-	    		DateUtil endDateUtil = new DateUtil();
-	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}else if(json.get("duration").toString().equalsIgnoreCase("1-month")){
-				DateUtil startDateUtil = new DateUtil();
-	    		minTime = startDateUtil.removeDays(30).toMidnight().getTime().getTime() / 1000;
-	    		
-	    		DateUtil endDateUtil = new DateUtil();
-	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}*/
-			if(json.getString("startDate")!=null)
-				minTime = Long.valueOf(json.getString("startDate"));
-			if(json.getString("endDate")!=null)
-				maxTime = Long.valueOf(json.getString("endDate"))-1;
-			contactsList=ContactUtil.getEmailsOpened(minTime,maxTime);
+		try {
+			if(json!=null && json.get("duration")!=null){
+				/*if(json.get("duration").toString().equalsIgnoreCase("2-days")){
+					DateUtil startDateUtil = new DateUtil();
+		    		minTime = startDateUtil.removeDays(2).toMidnight().getTime().getTime() / 1000;
+		    		
+		    		DateUtil endDateUtil = new DateUtil();
+		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
+				}else if(json.get("duration").toString().equalsIgnoreCase("1-week")){
+					DateUtil startDateUtil = new DateUtil();
+		    		minTime = startDateUtil.removeDays(7).toMidnight().getTime().getTime() / 1000;
+		    		
+		    		DateUtil endDateUtil = new DateUtil();
+		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
+				}else if(json.get("duration").toString().equalsIgnoreCase("1-month")){
+					DateUtil startDateUtil = new DateUtil();
+		    		minTime = startDateUtil.removeDays(30).toMidnight().getTime().getTime() / 1000;
+		    		
+		    		DateUtil endDateUtil = new DateUtil();
+		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
+				}*/
+				if(json.getString("startDate")!=null)
+					minTime = Long.valueOf(json.getString("startDate"));
+				if(json.getString("endDate")!=null)
+					maxTime = Long.valueOf(json.getString("endDate"))-1;
+				contactsList=ContactUtil.getEmailsOpened(minTime,maxTime);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return contactsList;
 	}

@@ -273,9 +273,10 @@ $('#portlets-tasks-model-list > tr').live('click', function(e) {
 	
 	// Add notes in task modal
 	showNoteOnForm("updateTaskForm", value.notes);*/
-	
-	var id = $(this).find(".data").attr("data");
-	App_Tasks.navigate("task/" + id, { trigger : true });
+	if(e.target.attributes[0].name!="href"){
+		var id = $(this).find(".data").attr("data");
+		App_Tasks.navigate("task/" + id, { trigger : true });
+	}
 });
 /**
  * Makes the pending task as completed by calling complete_task function
