@@ -164,13 +164,13 @@ public class FreshBooksUtil
 	 * @return {@link String} with the client response
 	 * @throws Exception
 	 *             if the response is an exception
-	 */
-	public static String addClient(Widget widget, String firstName, String lastName, String email) throws Exception
+	 */	
+	public static String addClient(Widget widget, String firstName, String lastName, String email, String organisation) throws Exception
 	{
 		JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
 
 		JSONObject contactPrefsJSON = new JSONObject().put("visitor_email", email).put("first_name", firstName)
-				.put("last_name", lastName);
+				.put("last_name", lastName).put("organisation", organisation);
 
 		JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON", pluginPrefsJSON).put("visitorJSON",
 				contactPrefsJSON);

@@ -727,6 +727,57 @@ public class TaskUtil
 	return default_task;
     }
 
+    /**
+     * Gets the list of tasks which have been pending for particular number of
+     * days to till date (mid night time) and having the same owner, to remind
+     * the owner (user) about the pending tasks.
+     * 
+     * @param numDays
+     *            Number of days that the tasks have been pending
+     * @param owner
+     *            Owner key to get the pending tasks of a particular owner
+     * 
+     *            * @param timezone timezone to initialize dateUtil in that
+     *            particular timezone
+     * 
+     * @return List of tasks that have been pending for particular number of
+     *         days and related to the same owner
+     */
+    public static List<Task> getPendingTasksToRemind(int numDays, Long domainUserId, String timezone)
+    {
+	// Gets Today's date
+	DateUtil startDateUtil = new DateUtil().toTZ(timezone);
+	Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
+
+	// Gets Date after numDays days
+	DateUtil endDateUtil = new DateUtil().toTZ(timezone);
+	Long endTime = endDateUtil.addDays(numDays).toMidnight().getTime().getTime() / 1000;
+
+	System.out.println("check for " + startTime + " " + endTime);
+
+	List<String> default_tasks = getDefaultTaskNames();
+	// Gets list of tasks filtered on given conditions
+	List<Task> dueTasks = dao.ofy().query(Task.class)
+	        .filter("owner", new Key<DomainUser>(DomainUser.class, domainUserId)).filter("due >", startTime)
+	        .filter("due <=", endTime).filter("is_complete", false).list();
+
+	List<Task> dueTaskList = new ArrayList<>();
+
+	if (dueTasks.isEmpty())
+	{
+	    return dueTasks;
+	}
+
+	for (Task ts : dueTasks)
+	{
+	    if (!default_tasks.contains(ts.subject) && !ts.subject.contains("Tweet about Agile")
+		    && !ts.subject.contains("Like Agile on Facebook"))
+		dueTaskList.add(ts);
+	}
+
+	return dueTaskList;
+    }
+
     /***************************************************************************/
     
     /**

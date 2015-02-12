@@ -48,7 +48,7 @@ $(function()
 		var el = $("#taskForm");
 
 		agile_type_ahead("task_related_to", el, contacts_typeahead);
-		$('#activityModal').modal('show');
+		$('#activityTaskModal').modal('show');
 		highlight_task();
 
 		// Fills owner select element

@@ -21,7 +21,7 @@ public class SendEventReminder
 	        nosamplevent);
 	Queue queue = QueueFactory.getQueue("event-notifier");
 	TaskOptions options = TaskOptions.Builder.withPayload(sendEventReminder);
-	options.etaMillis((starttime - 660) * 1000);
+	options.etaMillis((starttime - 600) * 1000);
 	queue.add(options);
 
     }

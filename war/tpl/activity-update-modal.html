@@ -1,19 +1,15 @@
 <div class="modal hide fade" id="updateActivityModal">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3><i class="icon-edit"></i>&nbsp;Update Activity</h3>
+        <h3><i class="icon-edit"></i>&nbsp;Edit Event</h3>
     </div>
     <div class="modal-body">
-        <div id="relatedevent">
-            <p><i><i class="icon-calendar"></i>&nbsp;Events are time based such as
-                meetings. They show up in calendar.</i>
-            </p>
-            <br /> 	 	
+        <div id="relatedevent">	 	
             <!--Event form  -->
             <form id="updateActivityForm" name="updateActivityForm" method="post">
                 <fieldset>
                     <input name="id" type="hidden" value="{{id}}" /> 
-                     <input type="hidden"  name="type" id="type" value="{{type}}"/>
+                    <input type="hidden"  name="type" id="type" value="{{type}}"/>
                     <div class="row">
                         <div id="addEvent" class="control-group span3">
                             <label class="control-label"><b>Event Name: </b><span class="field_req">*</span></label>

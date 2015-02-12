@@ -183,7 +183,7 @@ $(function()
 	 * Sets the start time with current time and end time half an hour more than
 	 * start time, when they have no values by the time the modal is shown.
 	 */
-	$('#activityModal').on('shown', function()
+	$('#activityModal, #activityTaskModal').on('shown', function()
 	{
 		// Show related to contacts list
 		var el = $("#activityForm");
@@ -233,7 +233,7 @@ $(function()
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
-	$('#activityModal').on('show', function(e)
+	$('#activityModal, #activityTaskModal').on('show', function(e)
 	{
 
 		// Removes alert message of error related date and time.
@@ -281,6 +281,9 @@ $(function()
 			return;
 		}
 
+		// Remove validation error messages
+		remove_validation_errors('activityModal');
+		
 		$("#activityForm").find("li").remove();
 		$('#event-time-1').closest('.control-group').show();
 		$('#event-date-2').closest('.row').show();
