@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.user.util.DomainUserUtil;
+import com.analytics.servlets.AnalyticsServlet;
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
@@ -46,9 +47,20 @@ public class RegisterVerificationServlet extends HttpServlet
 	String userAgent = request.getHeader("User-Agent");
 
 	// AppEngine Headers
-	String country = request.getHeader("X-AppEngine-Country");
 
-	System.out.println("user agent : " + userAgent + ", country : " + country);
+	try
+	{
+	    if (StringUtils.equalsIgnoreCase(request.getHeader("X-AppEngine-Country"), "BD")
+		    || "180.211.195.60".equals(AnalyticsServlet.getClientIP(request)))
+	    {
+		writeErrorMessage(response, "Access denied");
+		return;
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
 
 	// If Localhost - just return
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
