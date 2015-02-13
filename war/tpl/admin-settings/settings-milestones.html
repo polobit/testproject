@@ -4,7 +4,7 @@
 	
 		<div>
 			<h3>Deal Tracks
-			<a href="#pipelineModal" role="button" data-toggle="modal" type="submit" class="add-pipeline btn" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</a></h3></div>
+			<a href="#pipelineModal" role="button" data-toggle="modal" type="submit" class="add-pipeline btn pull-right"><i class="icon icon-plus-sign"></i> Add Track</a></h3></div>
     	<br>
 		<div class="accordion" id="deal-tracks-accordion">
 		<div id="admin-settings-milestones-model-list"></div>
@@ -109,9 +109,9 @@
 			<h4><a class="accordion-toggle collapsed pull-left" data-toggle="collapse" data-parent="#deal-tracks-accordion" href="#dealtracks-{{name}}-accordion">{{name}}</a>
 			{{#if_equals name "Default"}}
 			{{else}}
-			<a href="#pipeline-delete-modal" role="button" data-toggle="modal" class="pipeline-delete m-t-xs m-l-sm c-p text-l-none" id="{{id}}" data="{{name}}" style="float: right;font-size: 18px;"><i class="task-action icon icon-trash" data="{{id}}" title="Delete Track"></i></a>
+			<a href="#pipeline-delete-modal" role="button" data-toggle="modal" class="pipeline-delete m-t-xs m-l-sm c-p text-l-none pull-right text-lg" id="{{id}}" data="{{name}}"><i class="task-action icon icon-trash" data="{{id}}" title="Delete Track"></i></a>
 			{{/if_equals}}
-			<a href="#pipelineModal" role="button" data-toggle="modal" class="pipeline-edit m-t-xs c-p text-l-none" id="{{id}}" data="{{name}}" style="float: right;font-size: 18px;{{#if_equals name "Default"}}padding-right:3px;{{/if_equals}}"><i class="task-action icon icon-edit" data="{{id}}" title="Edit Track"></i></a>
+			<a href="#pipelineModal" role="button" data-toggle="modal" class="pipeline-edit m-t-xs c-p text-l-none pull-right text-lg {{#if_equals name "Default"}} p-r-xs{{/if_equals}}" id="{{id}}" data="{{name}}" ><i class="task-action icon icon-edit" data="{{id}}" title="Edit Track"></i></a>
 			</h4>
 			<div class="clearfix"></div>
 			</div>

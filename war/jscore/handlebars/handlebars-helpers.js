@@ -593,8 +593,8 @@ $(function()
 																												var milestones = data.split(",");
 																												for ( var i in milestones)
 																												{				
-																																html += "<tr data='"+milestones[i]+"' style='display: table-row;'><td><div class='p-l-sm' style='display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%'>";
-																																html += milestones[i]+"</div></td><td><div class='m-b-n-xs' style='display:none;'><a class='text-l-none-hover c-p'><i title='Drag' class='icon-move'></i></a><a class='milestone-delete' style='cursor: pointer;margin-left:10px; text-decoration: none;' data-toggle='modal' role='button' href='#'><i title='Delete Milestone' class='task-action icon icon-trash'></i></a></div></td></tr>";
+																																html += "<tr data='"+milestones[i]+"' style='display: table-row;'><td><div class='p-l-sm inline-block v-top text-ellipsis' style='width:80%'>";
+																																html += milestones[i]+"</div></td><td><div class='m-b-n-xs' style='display:none;'><a class='text-l-none-hover c-p'><i title='Drag' class='icon-move'></i></a><a class='milestone-delete c-p m-l-sm text-l-none'  data-toggle='modal' role='button' href='#'><i title='Delete Milestone' class='task-action icon icon-trash'></i></a></div></td></tr>";
 																						//										html += "<li data='" + milestones[i] + "'><div><span>" + milestones[i] + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>";
 																												}
 																								}
