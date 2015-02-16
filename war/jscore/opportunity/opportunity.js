@@ -159,9 +159,9 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 					$.each(mile.milestones.split(","), function(index,milestone){
 						array.push($.trim(this));
 						if(value && mile.id == value.pipeline_id && milestone == value.milestone)
-							html+='<option value="'+mile.id+'_'+milestone+'" selected="selected">'+mile.name+'-'+milestone+'</option>';
+							html+='<option value="'+mile.id+'_'+milestone+'" selected="selected">'+mile.name+' - '+milestone+'</option>';
 						else
-							html+='<option value="'+mile.id+'_'+milestone+'">'+mile.name+'-'+milestone+'</option>';
+							html+='<option value="'+mile.id+'_'+milestone+'">'+mile.name+' - '+milestone+'</option>';
 					});
 					html+='</optgroup>';
 					
