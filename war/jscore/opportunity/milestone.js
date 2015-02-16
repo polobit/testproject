@@ -468,4 +468,12 @@ function fill_ordered_milestone(formId){
    		values = values.slice(0, -1);
 
    	$("#"+formId).find( 'input[name="milestones"]' ).val(values); 
+   	$('#admin-settings-milestones-model-list').find('form').each(function(index){
+		var mile = serializeForm($(this).attr('id'));
+    	console.log('---------',mile);
+    	// Saving that pipeline object
+    	var pipeline = new Backbone.Model();
+    	pipeline.url = '/core/api/milestone';
+    	pipeline.save(mile);
+	});
 }
