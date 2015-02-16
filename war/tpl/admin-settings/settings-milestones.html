@@ -7,13 +7,15 @@
 			{{#isTracksEligible}}
 				<a href="#pipelineModal" role="button" data-toggle="modal" type="submit" class="add-pipeline btn" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</a>
 			{{else}}
-				<div class="pull-right" style="height:25px;">
 				<span class="btn disabled" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</span>
 				<div class="clearfix"></div>
-				<span style="font-size: 13px;"><i>Regular/Pro plans only</i></span>
-				</div>
 			{{/isTracksEligible}}
-			</h3></div>
+			</h3>
+			{{#isTracksEligible}}
+		{{else}}
+		<div class="pull-right" style="margin-top:2px;"><i>Regular/Pro plans only</i></div>
+		{{/isTracksEligible}}
+		</div>
     	<div id="admin-settings-milestones-model-list"></div>
 		<div class="form-actions">
     		<a href="#" class="save-pipelines btn btn-primary">Save</a>
