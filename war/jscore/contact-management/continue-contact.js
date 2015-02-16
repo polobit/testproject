@@ -90,8 +90,11 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 				// Returns, if the save button has disabled attribute, or form is invalid
 				if ($(saveBtn).attr('disabled') || !isValidForm($form)){
 					var ele = $(saveBtn).closest('form').find('.single-error').first();
-					var container = $('body');
-					container.scrollTop(ele.offset().top - container.offset().top + container.scrollTop());
+					console.log(ele.offset().top);
+					var container = $form;
+					console.log(container.offset().top);
+					console.log(ele.offset().top - container.offset().top + container.scrollTop());
+					$('body').scrollTop(ele.offset().top - container.offset().top + container.scrollTop());
 					return;
 				}
 				// Disables save button to prevent multiple click event issues
