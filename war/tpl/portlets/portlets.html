@@ -72,6 +72,62 @@
 	{{/if}}
 <!-- </div> -->
 </script>
+
+<script id="portlets-contacts-email-opens-model-template" type="text/html">
+	<td class="data" data="{{contact_id}}">
+	<div class="row-fluid">
+        <div class="inline p-r-xxs h-auto">
+        	{{#if_contact_type "PERSON"}}
+        		<img class="portlet-roundimg img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  width="40px" height="40px" style="display:inline; width:30px; height:30px; " />
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<img class="portlet-roundimg" {{getCompanyImage "30" "display:inline;"}} />
+        	{{/if_contact_type}}
+    	</div>
+    	<div class="h-auto inline-block v-top text-ellipsis" style="width:70%;margin-left:7px;">
+        	{{#if_contact_type "PERSON"}}
+        		<span class="font-14">	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </span>
+        		<br />
+        		Opened email '{{subject}}'
+        	{{/if_contact_type}}
+  
+            {{#if_contact_type "COMPANY"}}
+        		{{getPropertyValue properties "name"}}</br>
+        		Opened email '{{subject}}'
+        	{{/if_contact_type}}
+	    </div>
+	</div>
+	</td>
+	<td>
+		<div class="inline-block v-top text-right" style="float:right;">
+			<time class="time-ago" datetime="{{epochToHumanDate "" openedTime}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" openedTime}}</time>
+		</div>
+	</td>
+	<!-- <td>
+		<div class="fieldoverflow-ellipsis text-right">
+			<time class="time-ago" datetime="{{epochToHumanDate "" openedTime}}" style="border-bottom: dotted 1px #999;">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" openedTime}}</time>
+		</div> -->
+	</td>
+</script>
+
+<script id="portlets-contacts-email-opens-collection-template" type="text/html">
+{{#if this.length}}
+	<table id="contacts" class="table agile-ellipsis-dynamic" style="overflow-x: hidden;overflow-y:auto;">
+		<col width="70%">
+		<col width="40%">
+		<!-- <col width="24%"> -->
+		<tbody id="portlets-contacts-email-opens-model-list" class="portlets-contacts-emails-opened-model-list" style="word-break:normal!important;" route="contact/">
+		</tbody>
+	</table>
+{{else}}
+	<div class="portlet-error-message">
+		No email activity
+	</div>
+{{/if}}
+</script>
+
 <script id="portlets-companies-model-template" type="text/html">
 	<td class="data" data="{{id}}">
         <div style="display:inline;padding-right:5px;height:auto;">
@@ -115,7 +171,7 @@
 	</div> -->
     {{else}}
 		<div class="portlet-error-message">
-      		No comapnies found.
+      		No comapnies found
 		</div>
 	{{/if}}
 <!-- </div> -->
@@ -145,7 +201,7 @@
 	</table>
 {{else}}
 	<div class="portlet-error-message">
-      No deals found.
+      No deals pending
 	</div>
 {{/if}}
 </script>
@@ -157,7 +213,7 @@
 			<div style="max-width: 100%;float:left;">{{name}}</div> <!-- <span class="label" style="max-width: 10%;">{{milestone}}</span> -->
 		</div>
 		<p class="pull-right" style="text-align: right; max-width: 30%; white-space: nowrap;float:right;font-weight:bold;margin-bottom:3px;">
-			<span>{{currencySymbol}} {{numberWithCommas expected_value}}</span>
+			<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
 		</p>
 		<div class="clearfix"></div>
 	</div>
@@ -188,12 +244,12 @@
 	</table>
 {{else}}
 		<div class="portlet-error-message">
-      		No tasks found.
+      		No tasks for today
 		</div>
 {{/if}}
 </script>
 <script id="portlets-tasks-model-template" type="text/html">
-<td> <input type="checkbox" data='{{id}}' class='portlets-tasks-select' id="tasklist">
+<td data="{{id}}" class="data"> <input type="checkbox" data='{{id}}' class='portlets-tasks-select' id="tasklist">
 <!-- <label for="tasklist" style="overflow:visible;"></label> --> </td>
 	<td style="width:100%!important;">
 		<div>
@@ -233,7 +289,7 @@
 	</table>
 {{else}}
 		<div class="portlet-error-message">
-      		No events found.
+      		No calendar events for today
 		</div>
 {{/if}}
 </script>
@@ -319,14 +375,26 @@
                 <i class="{{get_portlet_icon name}} icon-1x"></i>
                 <span class="portlet-icon-divider"></span>
 				<span>
+					{{#if_equals settings.duration "1-day"}}
+						Emails Opened <small>Today</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "yesterday"}}
+						Emails Opened <small>Yesterday</small>
+					{{/if_equals}}
 					{{#if_equals settings.duration "2-days"}}
-						Emails Opened in Last 2 Days
+						Emails Opened <small>Last 2 Days</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-week"}}
+						Emails Opened <small>This Week</small>
 					{{/if_equals}}
 					{{#if_equals settings.duration "1-week"}}
-						Emails Opened in Last 1 Week
+						Emails Opened <small>Last 7 Days</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-month"}}
+						Emails Opened <small>This Month</small>
 					{{/if_equals}}
 					{{#if_equals settings.duration "1-month"}}
-						Emails Opened in Last 1 Month
+						Emails Opened <small>Last 30 Days</small>
 					{{/if_equals}}
                 </span>
 			</div>
@@ -354,16 +422,25 @@
                 <span class="portlet-icon-divider"></span>
 				<span>
 					{{#if_equals settings.duration "1-day"}}
-						Emails Sent in Last 1 Day
+						Emails Sent <small>Today</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "yesterday"}}
+						Emails Sent <small>Yesterday</small>
 					{{/if_equals}}
 					{{#if_equals settings.duration "2-days"}}
-						Emails Sent in Last 2 Days
+						Emails Sent <small>Last 2 Days</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-week"}}
+						Emails Sent <small>This Week</small>
 					{{/if_equals}}
 					{{#if_equals settings.duration "1-week"}}
-						Emails Sent in Last 1 Week
+						Emails Sent <small>Last 7 Days</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-month"}}
+						Emails Sent <small>This Month</small>
 					{{/if_equals}}
 					{{#if_equals settings.duration "1-month"}}
-						Emails Sent in Last 1 Month
+						Emails Sent <small>Last 30 Days</small>
 					{{/if_equals}}
                 </span>
 			</div>
@@ -450,10 +527,10 @@
                 <span class="portlet-icon-divider"></span>
 				<span>
 					{{#if_equals settings.deals "all-deals"}}
-						All Deals by Milestone {{get_deals_funnel_portlet_header settings.track}}
+						All Deals by Milestone <font color="#b2b0b1">{{get_deals_funnel_portlet_header settings.track}}</font>
 					{{/if_equals}}
 					{{#if_equals settings.deals "my-deals"}}
-						My Deals by Milestone {{get_deals_funnel_portlet_header settings.track}}
+						My Deals by Milestone <font color="#b2b0b1">{{get_deals_funnel_portlet_header settings.track}}</font>
 					{{/if_equals}}
                 </span>
 			</div>
@@ -506,20 +583,32 @@
                 <i class="{{get_portlet_icon name}} icon-1x"></i>
                 <span class="portlet-icon-divider"></span>
 				<span>
+					{{#if_equals settings.duration "1-day"}}
+						Deals Won <small>Today</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "yesterday"}}
+						Deals Won <small>Yesterday</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-week"}}
+						Deals Won <small>This Week</small>
+					{{/if_equals}}
 					{{#if_equals settings.duration "1-week"}}
-						Deals won in last 1 week
+						Deals Won <small>Last 7 Days</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-month"}}
+						Deals Won <small>This Month</small>
 					{{/if_equals}}
 					{{#if_equals settings.duration "1-month"}}
-						Deals won in last 1 month
+						Deals Won <small>Last 30 Days</small>
 					{{/if_equals}}
 					{{#if_equals settings.duration "3-months"}}
-						Deals won in last 3 months
+						Deals Won <small>Last 3 Months</small>
 					{{/if_equals}}
 					{{#if_equals settings.duration "6-months"}}
-						Deals won in last 6 months
+						Deals Won <small>Last 6 Months</small>
 					{{/if_equals}}
 					{{#if_equals settings.duration "12-months"}}
-						Deals won in last 12 months
+						Deals Won <small>Last 12 Months</small>
 					{{/if_equals}}
                 </span>
 			</div>
@@ -547,10 +636,10 @@
                 <span class="portlet-icon-divider"></span>
 				<span>
 					{{#if_equals settings.deals "all-deals"}}
-						All Deals Funnel {{get_deals_funnel_portlet_header settings.track}}
+						All Deals Funnel <font color="#b2b0b1">{{get_deals_funnel_portlet_header settings.track}}</font>
 					{{/if_equals}}
 					{{#if_equals settings.deals "my-deals"}}
-						My Deals Funnel {{get_deals_funnel_portlet_header settings.track}}
+						My Deals Funnel <font color="#b2b0b1">{{get_deals_funnel_portlet_header settings.track}}</font>
 					{{/if_equals}}
                 </span>
 			</div>
@@ -579,13 +668,22 @@
                 <span class="portlet-icon-divider"></span>
 				<span>
 					{{#if_equals settings.duration "1-day"}}
-						Deals Assigned in Last 1 Day
+						Deals Assigned <small>Today</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "yesterday"}}
+						Deals Assigned <small>Yesterday</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-week"}}
+						Deals Assigned <small>This Week</small>
 					{{/if_equals}}
 					{{#if_equals settings.duration "1-week"}}
-						Deals Assigned in Last 1 Week
+						Deals Assigned <small>Last 7 Days</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-month"}}
+						Deals Assigned <small>This Month</small>
 					{{/if_equals}}
 					{{#if_equals settings.duration "1-month"}}
-						Deals Assigned in Last 1 Month
+						Deals Assigned <small>Last 30 Days</small>
 					{{/if_equals}}
                 </span>
 			</div>
@@ -613,13 +711,22 @@
                 <span class="portlet-icon-divider"></span>
 				<span>
 					{{#if_equals settings.duration "1-day"}}
-						Calls in Last 1 Day
+						Calls <small>Today</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "yesterday"}}
+						Calls <small>Yesterday</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-week"}}
+						Calls <small>This Week</small>
 					{{/if_equals}}
 					{{#if_equals settings.duration "1-week"}}
-						Calls in Last 1 Week
+						Calls <small>Last 7 Days</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-month"}}
+						Calls <small>This Month</small>
 					{{/if_equals}}
 					{{#if_equals settings.duration "1-month"}}
-						Calls in Last 1 Month
+						Calls <small>Last 30 Days</small>
 					{{/if_equals}}
                 </span>
 			</div>
@@ -706,6 +813,49 @@
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>	
 </script>
+<script id="portlets-tasksandevents-task-report-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
+				<ul class="portlet_header_control">
+					<!-- {{#if is_minimized}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-maximize icon-plus"></i></a></li>
+					{{else}}
+						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
+					{{/if}} -->
+                    <li><a href="#" id="{{id}}-settings" class="portlet-settings icon-wrench" data-toggle="modal"></a></li>
+                    <li><i id="{{id}}-close" class="icon-remove {{remove_spaces name}}-close" style="cursor:pointer;" onclick="deletePortlet(this);"></i></li>
+				</ul>
+			</div>
+			<div class="portlet_header_name">
+                <i class="{{get_portlet_icon name}} icon-1x"></i>
+                <span class="portlet-icon-divider"></span>
+				<span>
+					{{#if_equals settings.duration "1-day"}}
+						Task Report <small>Today</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "yesterday"}}
+						Task Report <small>Yesterday</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-week"}}
+						Task Report <small>This Week</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "1-week"}}
+						Task Report <small>Last 7 Days</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "this-month"}}
+						Task Report <small>This Month</small>
+					{{/if_equals}}
+					{{#if_equals settings.duration "1-month"}}
+						Task Report <small>Last 30 Days</small>
+					{{/if_equals}}
+                </span>
+			</div>
+		</div>
+        <div class="portlet_body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
 
 <script id="portlets-collection-template" type="text/html">
 <div class="slate" id="no-portlets" style="display:none">
@@ -714,13 +864,13 @@
             <img alt="Clipboard" src="/img/clipboard.png" />
        </div>
        <div class="box-right">
-            <h3>You do not have any portlets currently.</h3>
+            <h3>You do not have any dashlets currently.</h3>
             <div class="text">
-               	Portlets help you to view different modules data by grouping and manage your portlets by adding them.  
+               	Dashlets help you to view different modules data by grouping and manage your dashlets by adding them.  
             </div>
-          		Get started by adding a portlet.<br>
-                <a id="add-portlet" class="add-portlet add-stream-tab btn">
- 		          <i class="icon icon-plus-sign"></i> Add Portlet
+          		Get started by adding a dashlet.<br>
+                <a id="add-portlet" class="add-portlet add-stream-tab btn" href="#">
+ 		          <i class="icon icon-plus-sign"></i> Add Dashlet
 		        </a> 
 	   </div>
     </div>
@@ -732,13 +882,13 @@
             <img alt="Clipboard" src="/img/clipboard.png" />
        </div>
        <div class="box-right">
-            <h3>You do not have any portlets currently.</h3>
+            <h3>You do not have any dashlets currently.</h3>
             <div class="text">
-               	Portlets help you to view different modules data by grouping and manage your portlets by adding them.  
+               	Dashlets help you to view different modules data by grouping and manage your dashlets by adding them.  
             </div>
-          		Get started by adding a portlet.<br>
-                <a id="add-portlet" class="add-portlet add-stream-tab btn">
- 		          <i class="icon icon-plus-sign"></i> Add Portlet
+          		Get started by adding a dashlet.<br>
+                <a id="add-portlet" class="add-portlet add-stream-tab btn" href="#">
+ 		          <i class="icon icon-plus-sign"></i> Add Dashlet
 		        </a> 
 	   </div>
     </div>
@@ -761,7 +911,7 @@
         	<div class="page-header">
             	<h1>Welcome to Agile CRM</h1>
 				<a id="add-portlet" class="add-portlet add-stream-tab btn right" style="cursor:pointer;top:-30px;position: relative;">
-					<i class="icon icon-plus-sign"></i> Add Portlet
+					<i class="icon icon-plus-sign"></i> Add Dashlet
 				</a>      
         	</div>
     	</div>

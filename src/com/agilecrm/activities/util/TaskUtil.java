@@ -587,25 +587,25 @@ public class TaskUtil
      * 
      * @return List of tasks that have been pending for Today
      */
-    public static List<Task> getTodayPendingTasks()
+    public static List<Task> getTodayPendingTasks(Long startTime,Long endTime)
     {
 	try
 	{
 	    // Gets Today's date
-	    DateUtil startDateUtil = new DateUtil();
-	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
+	    /*DateUtil startDateUtil = new DateUtil();
+	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;*/
 	    // Date startDate = new Date();
 	    // Long startTime = startDate.getTime() / 1000;
 
 	    // Gets Date after numDays days
-	    DateUtil endDateUtil = new DateUtil();
-	    Long endTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000) - 1;
+	    /*DateUtil endDateUtil = new DateUtil();
+	    Long endTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000) - 1;*/
 
 	    DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 
 	    // Gets list of tasks filtered on given conditions
 	    return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, domainUser.id))
-		    .filter("due >=", startTime).filter("due <=", endTime).filter("is_complete", false).limit(50)
+		    .filter("due >=", startTime).filter("due <", endTime).filter("is_complete", false).limit(50)
 		    .list();
 	}
 	catch (Exception e)
@@ -779,4 +779,34 @@ public class TaskUtil
     }
 
     /***************************************************************************/
+    
+    /**
+     * Gets all the tasks based on owner and type.
+     * 
+     * @return List of tasks
+     */
+    public static List<Task> getTasksRelatesToOwnerOfTypeAndCategory(Long owner, String category, String status,Long startTime,Long endTime){
+    	try{
+    		Map<String, Object> searchMap = new HashMap<String, Object>();
+    		
+    		if (owner!=null)
+    			searchMap.put("owner", new Key<DomainUser>(DomainUser.class, owner));
+    		
+    		if(StringUtils.isNotBlank(category))
+    			searchMap.put("type", category);
+    		
+    		if(StringUtils.isNotBlank(status))
+    			searchMap.put("status", status);
+    		
+    		if(startTime!=null)
+    			searchMap.put("due >=", startTime);
+    		if(endTime!=null)
+    			searchMap.put("due <", endTime);
+    		
+    		return dao.listByProperty(searchMap);
+    	}catch (Exception e){
+    		e.printStackTrace();
+    		return null;
+    	}
+    }
 }

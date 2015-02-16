@@ -687,7 +687,9 @@ Called {{#if entity_id}}<a href="#contact/{{entity_id}}">{{label}}</a>{{else}}{{
                 <ul class="dropdown-menu" id="entity_type">
 					 <li><a href="">All Activities</a></li>
                      <li><a href="TASK">Tasks</a></li>
+					{{#hasMenuScope 'DEALS'}}
                      <li><a href="DEAL">Deals</a></li>
+					{{/hasMenuScope}}
 					 <li><a href="EVENT">Events</a></li>
 					 <li><a href="CONTACT">Contacts</a></li>
  					<li><a href="DOCUMENT">Documents</a></li>

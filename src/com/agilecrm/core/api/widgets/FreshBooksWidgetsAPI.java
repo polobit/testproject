@@ -216,11 +216,11 @@ public class FreshBooksWidgetsAPI
      *            {@link String} email of the contact
      * @return {@link String} form of {@link JSONObject}
      */
-    @Path("add/client/{widget-id}/{first_name}/{last_name}/{email}")
+    @Path("add/client/{widget-id}/{first_name}/{last_name}/{email}/{organisation}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String addClientToFreshBooks(@PathParam("widget-id") Long widgetId, @PathParam("first_name") String firstName,
-	    @PathParam("last_name") String lastName, @PathParam("email") String email)
+	    @PathParam("last_name") String lastName, @PathParam("email") String email, @PathParam("organisation") String organisation)
     {
 	// Retrieves widget based on its id
 	Widget widget = WidgetUtil.getWidget(widgetId);
@@ -230,11 +230,13 @@ public class FreshBooksWidgetsAPI
 
 	try
 	{
+	    if(organisation.equals("undefined"))
+		organisation = "";
 	    /*
 	     * Calls FreshBooksUtil method to add client items in FreshBooks
 	     * account
 	     */
-	    return FreshBooksUtil.addClient(widget, firstName, lastName, email);
+	    return FreshBooksUtil.addClient(widget, firstName, lastName, email, organisation);
 	}
 	catch (SocketTimeoutException e)
 	{

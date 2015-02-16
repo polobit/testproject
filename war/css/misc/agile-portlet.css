@@ -127,17 +127,18 @@ padding: 0 8px 0 0;
 	overflow: hidden;
 }
 .portlet_header_name i{
-	font-size:19px;
+	font-size:17px;
 }
 .portlet-roundimg{
 	/* border-radius:50%; */
 	border: 1px solid #ddd;
     padding: 2px;
+    border-radius: 4px;
 }
 .portlet-icon-divider{
 	border-right: 1px solid #eee;
     padding: 7px 5px 6px 0px;
-    margin: 1px 10px 2px 2px;
+    margin: 1px 5px 2px 2px;
 }
 .portlet_body {
 	background-color: rgb(255, 255, 255);
@@ -637,6 +638,9 @@ border-radius: 2px;
  .gridster-portlets{
  	height:auto;
  }
+ .portlet_header{
+ 	cursor: default;
+ }
  }
  
  
@@ -650,6 +654,9 @@ border-radius: 2px;
  .gridster-portlets{
  	height:auto;
  }
+ .portlet_header{
+ 	cursor: move;
+ }
 	
 }
  .highcharts-container
@@ -659,6 +666,11 @@ border-radius: 2px;
  .portlet-error-message{
  	padding: 11px 11px;
 	font-size: 15px;
+	font-style: italic;
+ }
+ .portlet-error-privilege-message{
+ 	font-weight: normal!important;
+ 	font-size: 15px;
 	font-style: italic;
  }
  

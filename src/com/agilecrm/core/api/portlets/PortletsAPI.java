@@ -202,9 +202,11 @@ public class PortletsAPI {
 	@Path("/portletEmailsOpened")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Contact> getPortletEmailsOpenedList(@QueryParam("duration") String duration)throws Exception {
+	public List<JSONObject> getPortletEmailsOpenedList(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("duration",duration);
+		json.put("startDate",startDate);
+		json.put("endDate",endDate);
 		return PortletUtil.getEmailsOpenedList(json);
 	}
 	/**
@@ -218,6 +220,7 @@ public class PortletsAPI {
 	public List<Opportunity> getPortletPendingDealsList(@QueryParam("deals") String deals)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("deals",deals);
+		PortletUtil.checkPrivilegesForPortlets("DEALS");
 		return PortletUtil.getPendingDealsList(json);
 	}
 	/**
@@ -231,6 +234,7 @@ public class PortletsAPI {
 	public List<Opportunity> getPortletDealsWonList(@QueryParam("duration") String duration)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("duration",duration);
+		PortletUtil.checkPrivilegesForPortlets("DEALS");
 		return PortletUtil.getDealsWonList(json);
 	}
 	/**
@@ -241,8 +245,9 @@ public class PortletsAPI {
 	@Path("/portletAgenda")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Event> getPortletAgendaList()throws Exception {
-		return PortletUtil.getAgendaList();
+	public List<Event> getPortletAgendaList(@QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime)throws Exception {
+		PortletUtil.checkPrivilegesForPortlets("EVENTS");
+		return PortletUtil.getAgendaList(startTime,endTime);
 	}
 	/**
 	 * Gets Today Tasks portlet data
@@ -252,8 +257,9 @@ public class PortletsAPI {
 	@Path("/portletTodayTasks")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Task> getPortletTodayTasksList()throws Exception {
-		return PortletUtil.getTodayTasksList();
+	public List<Task> getPortletTodayTasksList(@QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime)throws Exception {
+		PortletUtil.checkPrivilegesForPortlets("TASKS");
+		return PortletUtil.getTodayTasksList(startTime,endTime);
 	}
 	/**
 	 * Gets Deals By Milestone portlet data
@@ -268,6 +274,7 @@ public class PortletsAPI {
 		json.put("deals",deals);
 		json.put("track",track);
 		//json.put("due-date",dueDate);
+		PortletUtil.checkPrivilegesForPortlets("DEALS");
 		return PortletUtil.getDealsByMilestoneData(json);
 	}
 	/**
@@ -281,6 +288,7 @@ public class PortletsAPI {
 	public JSONObject getPortletClosuresPerPersonData(@QueryParam("due-date") String dueDate)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("due-date",dueDate);
+		PortletUtil.checkPrivilegesForPortlets("DEALS");
 		return PortletUtil.getClosuresPerPersonData(json);
 	}
 	/**
@@ -296,6 +304,7 @@ public class PortletsAPI {
 		json.put("deals",deals);
 		json.put("track",track);
 		//json.put("due-date",dueDate);
+		PortletUtil.checkPrivilegesForPortlets("DEALS");
 		return PortletUtil.getDealsByMilestoneData(json);
 	}
 	/**
@@ -309,7 +318,7 @@ public class PortletsAPI {
 	public JSONObject getPortletEmailsSentData(@QueryParam("duration") String duration)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("duration",duration);
-		
+		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
 		return PortletUtil.getEmailsSentData(json);
 	}
 	/**
@@ -320,12 +329,13 @@ public class PortletsAPI {
 	@Path("/portletGrowthGraph")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getPortletGrowthGraphData(@QueryParam("tags") String tags,@QueryParam("frequency") String frequency,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate)throws Exception {
+	public JSONObject getPortletGrowthGraphData(@QueryParam("tags") String tags,@QueryParam("frequency") String frequency,@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("tags",tags);
 		json.put("frequency",frequency);
-		json.put("start-date",startDate);
-		json.put("end-date",endDate);
+		json.put("duration",duration);
+		json.put("startDate",startDate);
+		json.put("endDate",endDate);
 		
 		return PortletUtil.getGrowthGraphData(json);
 	}
@@ -340,7 +350,7 @@ public class PortletsAPI {
 	public JSONObject getPortletDealsAssigned(@QueryParam("duration") String duration)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("duration",duration);
-		
+		PortletUtil.checkPrivilegesForPortlets("DEALS");
 		return PortletUtil.getPortletDealsAssigned(json);
 	}
 	/**
@@ -351,10 +361,12 @@ public class PortletsAPI {
 	@Path("/portletCallsPerPerson")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getPortletCallsPerPerson(@QueryParam("duration") String duration)throws Exception {
+	public JSONObject getPortletCallsPerPerson(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("duration",duration);
-		
+		json.put("startDate", startDate);
+		json.put("endDate", endDate);
+		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
 		return PortletUtil.getPortletCallsPerPerson(json);
 	}
 	/**
@@ -369,9 +381,9 @@ public class PortletsAPI {
 		JSONObject json=new JSONObject();
 		json.put("group-by",groubBy);
 		json.put("split-by",splitBy);
-		json.put("start-date",startDate);
-		json.put("end-date",endDate);
-		
-		return PortletUtil.getGrowthGraphData(json);
+		json.put("startDate",startDate);
+		json.put("endDate",endDate);
+		PortletUtil.checkPrivilegesForPortlets("TASKS");
+		return PortletUtil.getTaskReportPortletData(json);
 	}
 }

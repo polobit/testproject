@@ -114,6 +114,12 @@ function set_p_portlets(base_model){
 			$('.gridster > div:visible',this.el).html($(App_Portlets.agileCRMBlogView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
 		else
 			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.agileCRMBlogView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
+	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Task Report"){
+		App_Portlets.taskReportView = new Base_Model_View({ model : base_model, template : "portlets-tasksandevents-task-report-model", tagName : 'div' });
+		if($('.gridster > div:visible > div',this.el).length==0)
+			$('.gridster > div:visible',this.el).html($(App_Portlets.taskReportView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
+		else
+			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.taskReportView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
 	}
 	//var itemView = new Base_Model_View({ model : base_model, template : "portlets-model", tagName : 'div', });
 
@@ -158,8 +164,19 @@ function set_p_portlets(base_model){
 					addWidgetToGridster(base_model);
 				} });
 	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Emails Opened"){
-		App_Portlets.emailsOpened[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+base_model.get('settings').duration, templateKey : 'portlets-contacts', individual_tag_name : 'tr',
+		var start_date_str = '';
+		var end_date_str = '';
+		if(base_model.get('settings').duration=='yesterday'){
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'today';
+		}else{
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'TOMORROW';
+		}
+		
+		App_Portlets.emailsOpened[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletEmailsOpened?duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str), templateKey : 'portlets-contacts-email-opens', sort_collection : false, individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
+				displayTimeAgo(p_el);
 				addWidgetToGridster(base_model);
 			} });
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Pending Deals"){
@@ -177,13 +194,13 @@ function set_p_portlets(base_model){
 			} });
 		App_Portlets.dealsWon[parseInt(pos)].collection.fetch();
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Agenda"){
-		App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda', templateKey : 'portlets-events', individual_tag_name : 'tr',
+		App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda?start_time='+getNewDueDate("TODAY")+'&end_time='+getNewDueDate("TOMORROW"), templateKey : 'portlets-events', individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				addWidgetToGridster(base_model);
 			} });
 		App_Portlets.todayEventsCollection[parseInt(pos)].collection.fetch();
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Today Tasks"){
-		App_Portlets.tasksCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletTodayTasks', templateKey : 'portlets-tasks', individual_tag_name : 'tr',
+		App_Portlets.tasksCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletTodayTasks?start_time='+getNewDueDate("TODAY")+'&end_time='+getNewDueDate("TOMORROW"), templateKey : 'portlets-tasks', individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				addWidgetToGridster(base_model);
 			} });
@@ -197,7 +214,7 @@ function set_p_portlets(base_model){
 				&& base_model.get('name')!="Growth Graph" && base_model.get('name')!="Today Tasks" && base_model.get('name')!="Deals Assigned"
 					&& base_model.get('name')!="Calls Per Person" && base_model.get('name')!="Agile CRM Blog" && base_model.get('name')!="Agenda" 
 						&& base_model.get('name')!="Pending Deals" && base_model.get('name')!="Deals Won" && base_model.get('name')!="Filter Based" 
-							&& base_model.get('name')!="Emails Opened"){
+							&& base_model.get('name')!="Emails Opened" && base_model.get('name')!="Task Report"){
 			$(this).html(getRandomLoadingImg());
 			$(this).html($(itemCollection.render().el));
 			setPortletContentHeight(base_model);
@@ -245,6 +262,10 @@ function set_p_portlets(base_model){
 			var milestoneMap=[];
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
+				if(data.status==403){
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+					return;
+				}
 				milestonesList=data["milestonesList"];
 				milestoneValuesList=data["milestoneValuesList"];
 				milestoneNumbersList=data["milestoneNumbersList"];
@@ -283,6 +304,10 @@ function set_p_portlets(base_model){
 			var domainUsersList=[];
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
+				if(data.status==403){
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+					return;
+				}
 				milestoneNumbersList=data["milestoneNumbersList"];
 				milestoneValuesList=data["milestoneValuesList"];
 				domainUsersList=data["domainUsersList"];
@@ -332,6 +357,10 @@ function set_p_portlets(base_model){
 			var milestoneMap=[];
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
+				if(data.status==403){
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+					return;
+				}
 				milestonesList=data["milestonesList"];
 				milestoneValuesList=data["milestoneValuesList"];
 				milestoneMap=data["milestoneMap"];
@@ -398,6 +427,10 @@ function set_p_portlets(base_model){
 			var mailsOpenedCountList=[];
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
+				if(data.status==403){
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+					return;
+				}
 				domainUsersList=data["domainUsersList"];
 				mailsCountList=data["mailsCountList"];
 				mailsOpenedCountList=data["mailsOpenedCountList"];
@@ -438,7 +471,7 @@ function set_p_portlets(base_model){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 			
 			var selector=$(this).attr('id');
-			var url='/core/api/portlets/portletGrowthGraph?tags='+base_model.get('settings').tags+'&frequency='+base_model.get('settings').frequency+'&start-date='+base_model.get('settings')["start-date"]+'&end-date='+base_model.get('settings')["end-date"];
+			var url='/core/api/portlets/portletGrowthGraph?tags='+base_model.get('settings').tags+'&frequency='+base_model.get('settings').frequency+'&duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(base_model.get('settings').duration)+'&end-date='+getStartAndEndDatesOnDue("TOMORROW");
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==406){
@@ -513,6 +546,10 @@ function set_p_portlets(base_model){
 			var dealsAssignedCountList=[];
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
+				if(data.status==403){
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+					return;
+				}
 				domainUsersList=data["domainUsersList"];
 				dealsAssignedCountList=data["assignedOpportunitiesCountList"];
 				
@@ -529,8 +566,18 @@ function set_p_portlets(base_model){
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Calls Per Person"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 			
+			var start_date_str = '';
+			var end_date_str = '';
+			if(base_model.get('settings').duration=='yesterday'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'today';
+			}else{
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'TOMORROW';
+			}
+			
 			var selector=$(this).attr('id');
-			var url='/core/api/portlets/portletCallsPerPerson?duration='+base_model.get('settings').duration;
+			var url='/core/api/portlets/portletCallsPerPerson?duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str);
 			
 			var answeredCallsCountList=[];
 			var busyCallsCountList=[];
@@ -541,6 +588,10 @@ function set_p_portlets(base_model){
 			var domainUsersList=[];
 			$('#'+selector).html(getRandomLoadingImg());
 			fetchPortletsGraphData(url,function(data){
+				if(data.status==403){
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+					return;
+				}
 				answeredCallsCountList=data["answeredCallsCountList"];
 				busyCallsCountList=data["busyCallsCountList"];
 				failedCallsCountList=data["failedCallsCountList"];
@@ -606,9 +657,74 @@ function set_p_portlets(base_model){
 			setPortletContentHeight(base_model);
 			
 			addWidgetToGridster(base_model);
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Task Report"){
+			$(this).attr('id','p-body-'+column_position+'-'+row_position);
+			
+			var start_date_str = '';
+			var end_date_str = '';
+			if(base_model.get('settings').duration=='yesterday'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'today';
+			}else{
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'TOMORROW';
+			}
+			
+			var selector=$(this).attr('id');
+			var url='/core/api/portlets/portletTaskReport?group-by='+base_model.get('settings')["group-by"]+'&split-by='+base_model.get('settings')["split-by"]+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str);
+			
+			var groupByList=[];
+			var splitByList=[];
+			var splitByNamesList=[];
+			
+			$('#'+selector).html(getRandomLoadingImg());
+			fetchPortletsGraphData(url,function(data){
+				if(data.status==403){
+					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+					return;
+				}
+				groupByList=data["groupByList"];
+				splitByList=data["splitByList"];
+				
+				var series=[];
+				var text='';
+				var colors;
+				
+				$.each(splitByList,function(index,splitByData){
+					if(splitByNamesList.length==0)
+						$.each(splitByData,function(key,value){
+							splitByNamesList.push(key);
+						});
+				});
+				for(var i=0;i<splitByNamesList.length;i++){
+					var tempData={};
+					var splitByDataList=[];
+					$.each(splitByList,function(index,splitByData){
+						$.each(splitByData,function(key,value){
+							if(key==splitByNamesList[i])
+								splitByDataList.push(value);
+						});
+					});
+					tempData.name=splitByNamesList[i];
+					tempData.data=splitByDataList;
+					series[i]=tempData;
+				}
+				
+				text="Task Report";
+				
+				taskReportBarGraph(selector,groupByList,series,text);
+				
+				addWidgetToGridster(base_model);
+			});
+			
+			if(base_model.get('is_minimized'))
+				$(this).hide();
+			
+			setPortletContentHeight(base_model);
 		}
+		addWidgetToGridster(base_model);
 	});
-	enablePortletTimeAndDates(base_model);
+	//enablePortletTimeAndDates(base_model);
 }
 
 /**
@@ -626,11 +742,11 @@ function fetchPortletsGraphData(url, successCallback){
 		if(successCallback && typeof (successCallback) === "function")
 			successCallback(data);
 	}).error(function(response){
-		// If error is not billing exception then it is returned
-		if(response.status != 406)
+		// If error is not billing exception and forbidden exception then it is returned
+		if(response.status != 406 && response.status != 403)
 			return;
 				
-		// If it is billing exception, then empty set is sent so page will not be showing loading on error message
+		// If it is billing exception or forbidden exception, then empty set is sent so page will not be showing loading on error message
 		if(successCallback && typeof (successCallback) === "function")
 			successCallback(response);
 	}); 
@@ -874,7 +990,7 @@ function portletGrowthGraph(selector,series,base_model){
 		flag=false;
 	}*/
 	if(base_model.get("settings").tags==""){
-		$('#'+selector).html("<div class='portlet-error-message'>Please <a href='#' id='"+base_model.get("id")+"-settings' class='portlet-settings' dada-toggle='modal'>configure</a> the portlet and add the Tags.</div>");
+		$('#'+selector).html("<div class='portlet-error-message'>Please <a href='#' id='"+base_model.get("id")+"-settings' class='portlet-settings' dada-toggle='modal'>configure</a> the dashlet and add the Tags.</div>");
 		flag=false;
 	}
 	if(flag){
@@ -1003,17 +1119,26 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
         		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Calls: </td>' + 
         		        	  '<td style="padding:0"><b>'+totalCallsCountList[this.points[0].point.x]+'</b></td></tr>' +
         		        	  '</table>';
-	        		else
-	        			tt = '<table>' + 
-  		                      '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+': </td>' +
-		                      '<td style="padding:0"><b>'+this.points[0].point.y+'</b></td></tr>' +
-		                      '<tr><td style="color:'+this.points[1].series.color+';padding:0">'+this.points[1].series.name+': </td>' +
-		                      '<td style="padding:0"><b>'+this.points[1].point.y+'</b></td></tr>' +
-		                      '<tr><td style="color:'+this.points[2].series.color+';padding:0">'+this.points[2].series.name+': </td>' +
-		                      '<td style="padding:0"><b>'+this.points[2].point.y+'</b></td></tr>' +
-		                      '<tr><td style="color:'+this.points[3].series.color+';padding:0">'+this.points[3].series.name+': </td>' +
-		                      '<td style="padding:0"><b>'+this.points[3].point.y+'</b></td></tr>' +
-		                      '</table>';
+	        		else{
+	        			tt += '<table>';
+	        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
+	        				tt += 	'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+': </td>' +
+		                      		'<td style="padding:0"><b>'+this.points[0].point.y+'</b></td></tr>';
+	        			}
+	        			if(this.points[1]!=undefined && this.points[1].series!=undefined){
+	        				tt += 	'<tr><td style="color:'+this.points[1].series.color+';padding:0">'+this.points[1].series.name+': </td>' +
+		                      		'<td style="padding:0"><b>'+this.points[1].point.y+'</b></td></tr>';
+	        			}
+	        			if(this.points[2]!=undefined && this.points[2].series!=undefined){
+	        				tt += 	'<tr><td style="color:'+this.points[2].series.color+';padding:0">'+this.points[2].series.name+': </td>' +
+		                      		'<td style="padding:0"><b>'+this.points[2].point.y+'</b></td></tr>';
+	        			}
+	        			if(this.points[3]!=undefined && this.points[3].series!=undefined){
+	        				tt += 	'<tr><td style="color:'+this.points[3].series.color+';padding:0">'+this.points[3].series.name+': </td>' +
+		                      		'<td style="padding:0"><b>'+this.points[3].point.y+'</b></td></tr>';
+	        			}
+	        			tt += '</table>';
+	        		}
 	        		return tt;
 	        	},
 	            shared: true,
@@ -1099,4 +1224,40 @@ function getPortletsTimeConversion(diffInSeconds){
 	if(secs!=0)
 		duration += ' '+secs+'s';
 	return duration;
+}
+function taskReportBarGraph(selector,gropuByList,series,text){
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
+		$('#'+selector).highcharts({
+	        chart: {
+	            type: 'bar',
+	            marginRight: 20
+	        },
+	        title: {
+	            text: ''
+	        },
+	        xAxis: {
+	            categories: gropuByList
+	        },
+	        yAxis: {
+	            min: 0,
+	            title: {
+	                text: text
+	            },
+	            allowDecimals: false,
+	        },
+	        plotOptions: {
+	        	series: {
+	                stacking: 'normal'
+	            },
+	            column: {
+	                pointPadding: 0.2,
+	                borderWidth: 0
+	            }
+	        },
+	        series: series,
+	        exporting: {
+		        enabled: false
+		    }
+	    });
+	});
 }

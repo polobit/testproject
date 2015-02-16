@@ -6,12 +6,14 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Call;
 import com.agilecrm.activities.Event;
@@ -35,6 +37,7 @@ import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.util.TagSearchUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.googlecode.objectify.Key;
@@ -63,28 +66,39 @@ public class PortletUtil {
 	public static List<Portlet> getAvailablePortlets()throws Exception{
 		
 		List<Portlet> allPortlets = new ArrayList<Portlet>();
-		
-		allPortlets.add(new Portlet("Filter Based",PortletType.CONTACTS));
-		allPortlets.add(new Portlet("Emails Opened",PortletType.CONTACTS));
-		allPortlets.add(new Portlet("Growth Graph",PortletType.CONTACTS));
-		
-		allPortlets.add(new Portlet("Pending Deals",PortletType.DEALS));
-		allPortlets.add(new Portlet("Deals By Milestone",PortletType.DEALS));
-		//allPortlets.add(new Portlet("Closures Per Person",PortletType.DEALS));
-		//allPortlets.add(new Portlet("Deals Won",PortletType.DEALS));
-		allPortlets.add(new Portlet("Deals Funnel",PortletType.DEALS));
-		//allPortlets.add(new Portlet("Deals Assigned",PortletType.DEALS));
-		
-		allPortlets.add(new Portlet("Agenda",PortletType.TASKSANDEVENTS));
-		allPortlets.add(new Portlet("Today Tasks",PortletType.TASKSANDEVENTS));
-		
-		//allPortlets.add(new Portlet("Emails Sent",PortletType.USERACTIVITY));
-		allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
-		
-		allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
-		
-		setIsAddedStatus(allPortlets);
-
+		try {
+			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+			
+			allPortlets.add(new Portlet("Filter Based",PortletType.CONTACTS));
+			allPortlets.add(new Portlet("Emails Opened",PortletType.CONTACTS));
+			allPortlets.add(new Portlet("Growth Graph",PortletType.CONTACTS));
+			
+			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.DEALS)){
+				allPortlets.add(new Portlet("Pending Deals",PortletType.DEALS));
+				allPortlets.add(new Portlet("Deals By Milestone",PortletType.DEALS));
+				//allPortlets.add(new Portlet("Closures Per Person",PortletType.DEALS));
+				//allPortlets.add(new Portlet("Deals Won",PortletType.DEALS));
+				allPortlets.add(new Portlet("Deals Funnel",PortletType.DEALS));
+				//allPortlets.add(new Portlet("Deals Assigned",PortletType.DEALS));
+			}
+			
+			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.CALENDAR)){
+				allPortlets.add(new Portlet("Agenda",PortletType.TASKSANDEVENTS));
+				allPortlets.add(new Portlet("Today Tasks",PortletType.TASKSANDEVENTS));
+				//allPortlets.add(new Portlet("Task Report",PortletType.TASKSANDEVENTS));
+			}
+			
+			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.ACTIVITY)){
+				//allPortlets.add(new Portlet("Emails Sent",PortletType.USERACTIVITY));
+				allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
+			}
+			
+			allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
+			
+			setIsAddedStatus(allPortlets);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return allPortlets;
 	}
 	/**
@@ -113,7 +127,21 @@ public class PortletUtil {
 		for(Portlet portlet : portlets){
 			if(portlet.prefs!=null){
 				JSONObject json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
-				portlet.settings=json;
+				//if portlet is growth graph we can change the start date and end dates based on duration
+				System.out.println("Portlet Name---"+portlet.name);
+				System.out.println("portlet.name.equalsIgnoreCase(Growth Graph)---"+portlet.name.equalsIgnoreCase("Growth Graph"));
+				System.out.println("contains start-date----"+json.containsKey("start-date"));
+				System.out.println("contains end-date-----"+json.containsKey("end-date"));
+				System.out.println("contains duration-----"+json.containsKey("duration"));
+				System.out.println("is duration value null--"+json.get("duration")==null);
+				System.out.println("duration value--"+json.get("duration"));
+				if(portlet.name!=null && portlet.name.equalsIgnoreCase("Growth Graph") && json.containsKey("start-date") && json.containsKey("end-date")
+						 && !json.containsKey("duration")){
+					json.put("duration","1-week");
+					
+					portlet.settings=json;
+				}else
+					portlet.settings=json;
 			}
 			if(!portlet.name.equalsIgnoreCase("Dummy Blog"))
 				added_portlets.add(portlet);
@@ -225,41 +253,53 @@ public class PortletUtil {
 		}
 		return contactsList;
 	}
-	public static List<Contact> getEmailsOpenedList(JSONObject json)throws Exception{
+	public static List<JSONObject> getEmailsOpenedList(JSONObject json)throws Exception{
 		long minTime=0L;
 		long maxTime=0L;
-		List<Contact> contactsList=null;
-		if(json!=null && json.get("duration")!=null){
-			if(json.get("duration").toString().equalsIgnoreCase("2-days")){
-				DateUtil startDateUtil = new DateUtil();
-	    		minTime = startDateUtil.removeDays(2).toMidnight().getTime().getTime() / 1000;
-	    		
-	    		DateUtil endDateUtil = new DateUtil();
-	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}else if(json.get("duration").toString().equalsIgnoreCase("1-week")){
-				DateUtil startDateUtil = new DateUtil();
-	    		minTime = startDateUtil.removeDays(7).toMidnight().getTime().getTime() / 1000;
-	    		
-	    		DateUtil endDateUtil = new DateUtil();
-	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}else if(json.get("duration").toString().equalsIgnoreCase("1-month")){
-				DateUtil startDateUtil = new DateUtil();
-	    		minTime = startDateUtil.removeDays(30).toMidnight().getTime().getTime() / 1000;
-	    		
-	    		DateUtil endDateUtil = new DateUtil();
-	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
+		List<JSONObject> contactsList=null;
+		try {
+			if(json!=null && json.get("duration")!=null){
+				/*if(json.get("duration").toString().equalsIgnoreCase("2-days")){
+					DateUtil startDateUtil = new DateUtil();
+		    		minTime = startDateUtil.removeDays(2).toMidnight().getTime().getTime() / 1000;
+		    		
+		    		DateUtil endDateUtil = new DateUtil();
+		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
+				}else if(json.get("duration").toString().equalsIgnoreCase("1-week")){
+					DateUtil startDateUtil = new DateUtil();
+		    		minTime = startDateUtil.removeDays(7).toMidnight().getTime().getTime() / 1000;
+		    		
+		    		DateUtil endDateUtil = new DateUtil();
+		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
+				}else if(json.get("duration").toString().equalsIgnoreCase("1-month")){
+					DateUtil startDateUtil = new DateUtil();
+		    		minTime = startDateUtil.removeDays(30).toMidnight().getTime().getTime() / 1000;
+		    		
+		    		DateUtil endDateUtil = new DateUtil();
+		    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
+				}*/
+				if(json.getString("startDate")!=null)
+					minTime = Long.valueOf(json.getString("startDate"));
+				if(json.getString("endDate")!=null)
+					maxTime = Long.valueOf(json.getString("endDate"))-1;
+				contactsList=ContactUtil.getEmailsOpened(minTime,maxTime);
 			}
-			contactsList=ContactUtil.getEmailsOpened(minTime,maxTime);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return contactsList;
 	}
 	public static List<Opportunity> getPendingDealsList(JSONObject json)throws Exception{
 		List<Opportunity> dealsList=null;
-		if(json!=null && json.get("deals")!=null){
-			if(json.get("deals").toString().equalsIgnoreCase("all-deals"))
-				dealsList=OpportunityUtil.getPendingDealsRelatedToAllUsers(0);
-			else if(json.get("deals").toString().equalsIgnoreCase("my-deals"))
-				dealsList=OpportunityUtil.getPendingDealsRelatedToCurrentUser(0);
+		try {
+			if(json!=null && json.get("deals")!=null){
+				if(json.get("deals").toString().equalsIgnoreCase("all-deals"))
+					dealsList=OpportunityUtil.getPendingDealsRelatedToAllUsers(0);
+				else if(json.get("deals").toString().equalsIgnoreCase("my-deals"))
+					dealsList=OpportunityUtil.getPendingDealsRelatedToCurrentUser(0);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return dealsList;
 	}
@@ -268,7 +308,7 @@ public class PortletUtil {
 		long maxTime=0L;
 		List<Opportunity> finalDealsList = new ArrayList<Opportunity>();
 		if(json!=null && json.get("duration")!=null){
-			if(json.get("duration").toString().equalsIgnoreCase("1-week")){
+			/*if(json.get("duration").toString().equalsIgnoreCase("1-week")){
 				DateUtil startDateUtil = new DateUtil();
 	    		minTime = startDateUtil.removeDays(7).toMidnight().getTime().getTime() / 1000;
 	    		
@@ -298,7 +338,9 @@ public class PortletUtil {
 	    		
 	    		DateUtil endDateUtil = new DateUtil();
 	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}
+			}*/
+			minTime = getMinTime(json.get("duration").toString());
+			maxTime = getMaxTime(json.get("duration").toString());
 
 			List<Opportunity> dealsList = OpportunityUtil.getOpportunitiesWon(null);
     		List<Activity> wonDealsActivityList = ActivityUtil.getWonDealsActivityList(minTime,maxTime);
@@ -320,11 +362,27 @@ public class PortletUtil {
 		}
 		return finalDealsList;
 	}
-	public static List<Event> getAgendaList()throws Exception{
-		return EventUtil.getTodayPendingEvents();
+	public static List<Event> getAgendaList(String startTime,String endTime)throws Exception{
+		try {
+			if(startTime!=null && endTime!=null)
+				return EventUtil.getTodayPendingEvents(Long.valueOf(startTime),Long.valueOf(endTime));
+			else
+				return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
-	public static List<Task> getTodayTasksList()throws Exception{
-		return TaskUtil.getTodayPendingTasks();
+	public static List<Task> getTodayTasksList(String startTime,String endTime)throws Exception{
+		try {
+			if(startTime!=null && endTime!=null)
+				return TaskUtil.getTodayPendingTasks(Long.valueOf(startTime),Long.valueOf(endTime));
+			else
+				return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	public static JSONObject getDealsByMilestoneData(JSONObject json)throws Exception{
 		JSONObject dealsByMilestoneJSON=new JSONObject();
@@ -416,7 +474,7 @@ public class PortletUtil {
 		long minTime=0L;
 		long maxTime=0L;
 		if(json!=null && json.get("duration")!=null){
-			if(json.get("duration").toString().equalsIgnoreCase("1-day")){
+			/*if(json.get("duration").toString().equalsIgnoreCase("1-day")){
 				DateUtil startDateUtil = new DateUtil();
 	    		minTime = startDateUtil.removeDays(1).toMidnight().getTime().getTime() / 1000;
 	    		
@@ -440,7 +498,9 @@ public class PortletUtil {
 	    		
 	    		DateUtil endDateUtil = new DateUtil();
 	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}
+			}*/
+			minTime = getMinTime(json.get("duration").toString());
+			maxTime = getMaxTime(json.get("duration").toString());
 			List<Integer> mailsCountList=new ArrayList<Integer>();
 			List<DomainUser> domainUsersList=null;
 			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
@@ -476,7 +536,9 @@ public class PortletUtil {
 	public static JSONObject getGrowthGraphData(JSONObject json)throws Exception{
 		String growthGraphString=null;
 		JSONObject growthGraphJSON=null;
-		if(json!=null && json.get("tags")!=null && json.get("frequency")!=null && json.get("start-date")!=null && json.get("end-date")!=null){
+		long start_date = 0L;
+		long end_date =0L;
+		if(json!=null && json.get("tags")!=null && json.get("frequency")!=null && json.get("duration")!=null){
 			String[] tags = json.getString("tags").split(",");
 			int type = Calendar.DAY_OF_MONTH;
 
@@ -484,10 +546,13 @@ public class PortletUtil {
 			    type = Calendar.MONTH;
 			if (StringUtils.equalsIgnoreCase(json.getString("frequency"), "weekly"))
 			    type = Calendar.WEEK_OF_YEAR;
+			if(json.getString("startDate")!=null)
+				start_date = Long.valueOf(json.getString("startDate"));
+			if(json.getString("endDate")!=null)
+				end_date = Long.valueOf(json.getString("endDate"))-1;
+			ReportsUtil.check(start_date*1000, end_date*1000);
 			
-			ReportsUtil.check(Long.parseLong(json.getString("start-date")), Long.parseLong(json.getString("end-date")));
-			
-			growthGraphString=TagSearchUtil.getTagCount(null, tags, json.getString("start-date"), json.getString("end-date"), type).toString();
+			growthGraphString=TagSearchUtil.getTagCount(null, tags, String.valueOf(start_date*1000), String.valueOf(end_date*1000), type).toString();
 		}
 		if(growthGraphString!=null)
 			growthGraphJSON = (JSONObject)JSONSerializer.toJSON(growthGraphString);
@@ -498,7 +563,7 @@ public class PortletUtil {
 		long maxTime=0L;
 		JSONObject dealsAssignedJSON=new JSONObject();
 		if(json!=null && json.get("duration")!=null){
-			if(json.get("duration").toString().equalsIgnoreCase("1-day")){
+			/*if(json.get("duration").toString().equalsIgnoreCase("1-day")){
 				DateUtil startDateUtil = new DateUtil();
 	    		minTime = startDateUtil.removeDays(1).toMidnight().getTime().getTime() / 1000;
 	    		
@@ -516,7 +581,9 @@ public class PortletUtil {
 	    		
 	    		DateUtil endDateUtil = new DateUtil();
 	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}
+			}*/
+			minTime = getMinTime(json.get("duration").toString());
+			maxTime = getMaxTime(json.get("duration").toString());
 			List<DomainUser> domainUsersList=null;
 			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
 			if(dUser!=null)
@@ -548,7 +615,7 @@ public class PortletUtil {
 		long maxTime=0L;
 		JSONObject callsPerPersonJSON=new JSONObject();
 		if(json!=null && json.get("duration")!=null){
-			if(json.get("duration").toString().equalsIgnoreCase("1-day")){
+			/*if(json.get("duration").toString().equalsIgnoreCase("1-day")){
 				DateUtil startDateUtil = new DateUtil();
 	    		minTime = startDateUtil.removeDays(1).toMidnight().getTime().getTime() / 1000;
 	    		
@@ -566,7 +633,11 @@ public class PortletUtil {
 	    		
 	    		DateUtil endDateUtil = new DateUtil();
 	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
-			}
+			}*/
+			if(json.getString("startDate")!=null)
+				minTime = Long.valueOf(json.getString("startDate"));
+			if(json.getString("endDate")!=null)
+				maxTime = Long.valueOf(json.getString("endDate"))-1;
 		}
 		List<DomainUser> domainUsersList=null;
 		DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
@@ -669,6 +740,196 @@ public class PortletUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static JSONObject getTaskReportPortletData(JSONObject json)throws Exception{
+		List<DomainUser> domainUsersList=null;
+		List<String> groupByList = new ArrayList<String>();
+		List<Map<String,Integer>> splitByList = new ArrayList<Map<String,Integer>>();
+		JSONObject dataJson = new JSONObject();
+		try {
+			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
+			if(dUser!=null)
+				domainUsersList=DomainUserUtil.getUsers(dUser.domain);
+			if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("user") && json.getString("split-by").equalsIgnoreCase("category")){
+				for(DomainUser domainUser : domainUsersList){
+					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
+					for(Task.Type category : Task.Type.values()){
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.name(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")));
+						if(tasksList!=null)
+							splitByMap.put(category.name(),tasksList.size());
+						else
+							splitByMap.put(category.name(),0);
+					}
+					groupByList.add(domainUser.name);
+					splitByList.add(splitByMap);
+				}
+			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("user") && json.getString("split-by").equalsIgnoreCase("status")){
+				for(DomainUser domainUser : domainUsersList){
+					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
+					for(Task.Status status : Task.Status.values()){
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,null,status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")));
+						if(tasksList!=null)
+							splitByMap.put(status.name(),tasksList.size());
+						else
+							splitByMap.put(status.name(),0);
+					}
+					groupByList.add(domainUser.name);
+					splitByList.add(splitByMap);
+				}
+			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("category") && json.getString("split-by").equalsIgnoreCase("user")){
+				for(Task.Type category : Task.Type.values()){
+					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
+					for(DomainUser domainUser : domainUsersList){
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.name(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")));
+						if(tasksList!=null)
+							splitByMap.put(domainUser.name,tasksList.size());
+						else
+							splitByMap.put(domainUser.name,0);
+					}
+					groupByList.add(category.name());
+					splitByList.add(splitByMap);
+				}
+			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("category") && json.getString("split-by").equalsIgnoreCase("status")){
+				for(Task.Type category : Task.Type.values()){
+					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
+					for(Task.Status status : Task.Status.values()){
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.name(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")));
+						if(tasksList!=null)
+							splitByMap.put(status.name(),tasksList.size());
+						else
+							splitByMap.put(status.name(),0);
+					}
+					groupByList.add(category.name());
+					splitByList.add(splitByMap);
+				}
+			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("status") && json.getString("split-by").equalsIgnoreCase("user")){
+				for(Task.Status status : Task.Status.values()){
+					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
+					for(DomainUser domainUser : domainUsersList){
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,null,status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")));
+						if(tasksList!=null)
+							splitByMap.put(domainUser.name,tasksList.size());
+						else
+							splitByMap.put(domainUser.name,0);
+					}
+					groupByList.add(status.name());
+					splitByList.add(splitByMap);
+				}
+			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("status") && json.getString("split-by").equalsIgnoreCase("category")){
+				for(Task.Status status : Task.Status.values()){
+					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
+					for(Task.Type category : Task.Type.values()){
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.name(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")));
+						if(tasksList!=null)
+							splitByMap.put(category.name(),tasksList.size());
+						else
+							splitByMap.put(category.name(),0);
+					}
+					groupByList.add(status.name());
+					splitByList.add(splitByMap);
+				}
+			}
+			dataJson.put("groupByList", groupByList);
+			dataJson.put("splitByList", splitByList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dataJson;
+	}
+	public static long getMinTime(String duration)throws Exception{
+		long minTime=0L;
+		try {
+			Calendar cl = Calendar.getInstance(TimeZone.getTimeZone(DomainUserUtil.getCurrentDomainUser().timezone));
+			if(duration.equalsIgnoreCase("yesterday")){
+				DateUtil startDateUtil = new DateUtil();
+	    		minTime = startDateUtil.removeDays(1).toMidnight().getTime().getTime() / 1000;
+			}else if(duration.equalsIgnoreCase("today") || duration.equalsIgnoreCase("1-day")){
+				DateUtil startDateUtil = new DateUtil();
+	    		minTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
+			}else if(duration.toString().equalsIgnoreCase("this-week")){
+				DateUtil startDateUtil = new DateUtil();
+				minTime = startDateUtil.removeDays(cl.get(Calendar.DAY_OF_WEEK)-2).toMidnight().getTime().getTime() / 1000;
+			}else if(duration.toString().equalsIgnoreCase("1-week")){
+				DateUtil startDateUtil = new DateUtil();
+	    		minTime = startDateUtil.removeDays(6).toMidnight().getTime().getTime() / 1000;
+			}else if(duration.toString().equalsIgnoreCase("this-month")){
+				DateUtil startDateUtil = new DateUtil();
+	    		minTime = startDateUtil.removeDays(cl.get(Calendar.DAY_OF_MONTH)-1).toMidnight().getTime().getTime() / 1000;
+			}else if(duration.equalsIgnoreCase("1-month")){
+				DateUtil startDateUtil = new DateUtil();
+	    		minTime = startDateUtil.removeDays(29).toMidnight().getTime().getTime() / 1000;
+			}else if(duration.equalsIgnoreCase("2-days")){
+				DateUtil startDateUtil = new DateUtil();
+	    		minTime = startDateUtil.removeDays(1).toMidnight().getTime().getTime() / 1000;
+			}else if(duration.equalsIgnoreCase("3-months")){
+				DateUtil startDateUtil = new DateUtil();
+	    		minTime = startDateUtil.removeDays(89).toMidnight().getTime().getTime() / 1000;
+			}else if(duration.equalsIgnoreCase("6-months")){
+				DateUtil startDateUtil = new DateUtil();
+	    		minTime = startDateUtil.removeDays(179).toMidnight().getTime().getTime() / 1000;
+			}else if(duration.equalsIgnoreCase("12-months")){
+				DateUtil startDateUtil = new DateUtil();
+	    		minTime = startDateUtil.removeDays(364).toMidnight().getTime().getTime() / 1000;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return minTime;
+	}
+	public static long getMaxTime(String duration)throws Exception{
+		long maxTime=0L;
+		try {
+			if(duration.equalsIgnoreCase("yesterday")){
+				DateUtil endDateUtil = new DateUtil();
+	    		maxTime = (endDateUtil.toMidnight().getTime().getTime() / 1000)-1;
+			}else{
+				DateUtil endDateUtil = new DateUtil();
+	    		maxTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)-1;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return maxTime;
+	}
+	public static boolean checkPrivilegesForPortlets(String menuscope)throws Exception{
+		DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+		if(menuscope.equalsIgnoreCase("DEALS")){
+			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.DEALS))
+				return true;
+			else{
+				AccessDeniedException ade=new AccessDeniedException("<div class='portlet-error-privilege-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+				throw ade;
+			}
+				
+		}else if(menuscope.equalsIgnoreCase("TASKS")){
+			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.CALENDAR))
+				return true;
+			else{
+				AccessDeniedException ade=new AccessDeniedException("<div class='portlet-error-privilege-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+				throw ade;
+			}
+				
+		}else if(menuscope.equalsIgnoreCase("EVENTS")){
+			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.CALENDAR))
+				return true;
+			else{
+				AccessDeniedException ade=new AccessDeniedException("<div class='portlet-error-privilege-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+				throw ade;
+			}
+				
+		}else if(menuscope.equalsIgnoreCase("ACTIVITY")){
+			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.ACTIVITY))
+				return true;
+			else{
+				AccessDeniedException ade=new AccessDeniedException("<div class='portlet-error-privilege-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+				throw ade;
+			}
+				
+		}else
+			return true;
+			
+		
 	}
 
 }

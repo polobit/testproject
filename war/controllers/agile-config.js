@@ -13,7 +13,7 @@ var AgileConfigRouter = Backbone.Router.extend({
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
-			$('#content').html("You have no Admin Privileges");
+			$('#content').html(getTemplate('others-not-allowed',{}));
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
