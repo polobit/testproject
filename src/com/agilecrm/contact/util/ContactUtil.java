@@ -1296,10 +1296,14 @@ public class ContactUtil
 						for(ContactField contactField : contact.properties){
 							JSONObject json1 = new JSONObject();
 							if(contactField!=null){
-								json1.put("type", contactField.type);
-								json1.put("name", contactField.name);
-								json1.put("subtype", contactField.subtype);
-								json1.put("value", contactField.value);
+								if(contactField.type!=null)
+									json1.put("type", contactField.type);
+								if(contactField.name!=null && !contactField.name.equalsIgnoreCase("null"))
+									json1.put("name", contactField.name);
+								if(contactField.subtype!=null && !contactField.subtype.equalsIgnoreCase("null"))
+									json1.put("subtype", contactField.subtype);
+								if(contactField.value!=null && !contactField.value.equalsIgnoreCase("null"))
+									json1.put("value", contactField.value);
 								jsonArray.add(json1);
 							}
 						}
@@ -1314,10 +1318,14 @@ public class ContactUtil
 						for(ContactField contactField : contact.properties){
 							JSONObject json1 = new JSONObject();
 							if(contactField!=null){
-								json1.put("type", contactField.type);
-								json1.put("name", contactField.name);
-								json1.put("subtype", contactField.subtype);
-								json1.put("value", contactField.value);
+								if(contactField.type!=null)
+									json1.put("type", contactField.type);
+								if(contactField.name!=null && !contactField.name.equalsIgnoreCase("null"))
+									json1.put("name", contactField.name);
+								if(contactField.subtype!=null && !contactField.subtype.equalsIgnoreCase("null"))
+									json1.put("subtype", contactField.subtype);
+								if(contactField.value!=null && !contactField.value.equalsIgnoreCase("null"))
+									json1.put("value", contactField.value);
 								jsonArray.add(json1);
 							}
 						}
