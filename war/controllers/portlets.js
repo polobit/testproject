@@ -357,7 +357,7 @@ function getStartAndEndDatesOnDue(duration){
 	
 	// Last 2 days
 	if (duration == "2-days")
-		d.setDate(d.getDate() - 2);
+		d.setDate(d.getDate() - 1);
 
 	console.log((getGMTTimeFromDate(d) / 1000));
 
