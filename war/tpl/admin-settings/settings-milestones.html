@@ -11,9 +11,10 @@
 				<div class="clearfix"></div>
 			{{/isTracksEligible}}
 			</h3>
-			{{#isTracksEligible}}
+		{{#isTracksEligible}}
 		{{else}}
 		<div class="pull-right" style="margin-top:2px;"><i>Regular or Pro plans only</i></div>
+		<div class="clearfix"></div>
 		{{/isTracksEligible}}
 		</div>
 		<div class="accordion" id="deal-tracks-accordion">
@@ -107,7 +108,7 @@
 
 <script id="admin-settings-milestones-model-template" type="text/html">
     	
-		<form id="milestonesForm_{{id}}" class="form-horizontal m-b-none pipeline" method=post>
+		<form id="milestonesForm_{{id}}" class="form-horizontal m-t-sm m-b-none pipeline" method=post>
 		<div id="{{name}}-deal-track" class="accordion-group overflow-hidden m-b-xs">
 		<div class="accordion-heading" style="background:#f5f5f5;">
     		{{#if id}}
