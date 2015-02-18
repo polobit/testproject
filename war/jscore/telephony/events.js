@@ -35,6 +35,7 @@ function sipStackEventsListener(e /* SIPml.Stack.Event */)
 		User_Img = null;
 		User_ID = null;
 		SIP_Call_Noty_IMG = "";
+		Show_Add_Contact = false;
 
 		// Stop sound.		
 		stopRingTone();
@@ -152,6 +153,7 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			User_Img = null;
 			User_ID = null;
 			SIP_Call_Noty_IMG = "";
+			Show_Add_Contact = false;
 
 			if (Sip_Updated == true && e.description == "Disconnecting...")
 			{
@@ -196,6 +198,13 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			else if(!Is_Ignore)
 				showCallNotyPopup("disconnected", 'error', "SIP : Terminated because " + e.description, 5000);
 
+			// Show add contact modal if contact id not added
+			if(Show_Add_Contact == true)
+				{
+				 $('#personModal').modal('show');
+				 $("#personForm").find("#phone").val(User_Number);
+				}			
+			
 			// call terminated.			
 			User_Name = null;
 			User_Number = null;
@@ -203,6 +212,7 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			User_ID = null;
 			SIP_Call_Noty_IMG = "";
 			Is_Ignore = false;
+			Show_Add_Contact = false;
 
 			// Close html5 notification.
 			if (Notify_Call)

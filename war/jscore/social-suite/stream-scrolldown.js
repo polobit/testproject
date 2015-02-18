@@ -14,8 +14,6 @@ function OnScrollDiv(elementDiv)
 		// Function is alredy called for this stream.
 		$(elementDiv).attr("data", "1");
 
-		console.log("In OnScrollDiv.");
-
 		// Get stream id.
 		var streamId = ($(elementDiv).closest('li').attr('id'));
 
@@ -28,13 +26,11 @@ function OnScrollDiv(elementDiv)
 
 		// model to json.
 		var stream = modelStream.toJSON();
-		console.log(stream);
 
 		// Get tweet from stream.
 		var modelTweet = modelStream.get('tweetListView').at(modelStream.get('tweetListView').length - 2);
 		var tweet = modelTweet.toJSON();
-		console.log(tweet);
-
+	
 		// Store reference to top message
 		var currMsg = $("#" + tweet.id);
 
@@ -55,9 +51,6 @@ function OnScrollDiv(elementDiv)
 						"/core/social/pasttweets/" + stream.id + "/" + tweet.id + "/" + tweet.id_str,
 						function(data)
 						{
-							console.log("data");
-							console.log(data);
-
 							// If no more updates available, show message.
 							if (data == null)
 							{
@@ -104,7 +97,6 @@ function OnScrollDiv(elementDiv)
 							{
 								// String to json.
 								myObject = eval('(' + data[i] + ')');
-								console.log(myObject);
 
 								// Add tweet to stram.
 								handleMessage(myObject);
@@ -148,7 +140,6 @@ function OnScrollDiv(elementDiv)
 						showNotyPopUp('information', "Please, check your internet connection.", "top", 5000);
 					else
 						showNotyPopUp('information', data.responseText, "top", 5000);
-					console.log(data);
 				});
 	}
 
@@ -184,8 +175,6 @@ function addPastTweetsToStream(modelStream)
 	// If no tweets to add in collection.
 	if (Past_Tweets.length == 0)
 		return;
-
-	console.log("In addPastTweetsToStream.");
 
 	// Update collection.
 	addTweetToStream(Past_Tweets, modelStream);

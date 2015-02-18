@@ -8,8 +8,6 @@ function isTimeInPast()
 	var scheduledDate = document.getElementById('scheduled_date').value;
 	var scheduledTime = document.getElementById('scheduled_time').value;
 
-	console.log(scheduledDate + " " + scheduledTime);
-
 	// Current date and time.
 	var today = new Date().format('mm/dd/yyyy');
 	var now = new Date();
@@ -17,8 +15,6 @@ function isTimeInPast()
 	var min = (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
 
 	now = now.getHours() + ':' + min;
-
-	console.log("current date is : " + today + " current time is : " + now);
 
 	// Convert selected schedule in epoch time.
 
@@ -32,8 +28,6 @@ function isTimeInPast()
 	var currentSdate = new Date(today);
 	var currentSchedule = currentSdate.setHours(currentSchedulearray[0], currentSchedulearray[1]) / 1000.0;
 
-	console.log("selectedSchedule : " + selectedSchedule + " currentSchedule : " + currentSchedule);
-
 	if (selectedSchedule > currentSchedule) // Future Time
 	{
 		// Appending schedule.
@@ -43,7 +37,6 @@ function isTimeInPast()
 		document.getElementById('schedule').value = sdate;
 
 		var myDate = new Date(sdate * 1000);
-		console.log(myDate.toGMTString() + "   " + myDate.toLocaleString());
 
 		// Changes in UI.
 		$('#send_tweet').removeAttr("disabled");
@@ -70,9 +63,6 @@ function checkScheduledUpdates()
 	// Get scheduled updates count
 	$.getJSON("/core/scheduledupdate/getscheduledupdatescount", function(data)
 	{
-		console.log("data after fetching scheduled updates from db");
-		console.log(data);
-
 		if (data > 0)
 			$("#show_scheduled_updates").show();
 		
@@ -91,11 +81,8 @@ function scheduledmessagesEdit(id)
 {
 	$('#socialsuite_twitter_messageModal').remove();
 
-	console.log("scheduledmessages Edit: " + id);
-
 	// Gets the update from its collection
 	var selectedUpdate = Scheduled_Updates_View.collection.get(id);
-	console.log(selectedUpdate);
 
 	Scheduled_Edit = true;
 
