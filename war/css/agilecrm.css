@@ -1961,3 +1961,7 @@ div.lhs-row-filter {
     display:none;
   }
 }
+a:hover i
+{
+ text-decoration:none;
+}
