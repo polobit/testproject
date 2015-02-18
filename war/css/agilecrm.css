@@ -524,7 +524,7 @@ html {
 }
 /* To show the loading image in the beginning */
 body {
-	background: #ffffff url("/img/initializing.png") 50% 50% no-repeat;
+	background: #ffffff;
 }
 /* To increase font-size in help modal */
 .help-text h3 {
