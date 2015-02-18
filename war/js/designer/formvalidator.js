@@ -22,6 +22,30 @@ function initValidator(selector, callback) {
         
 	  });
 	
+	  // Tags Validation
+	  $.tools.validator.fn(function(){
+		  
+		  return selector.find('#tag_names').length > 0
+		  
+	  }, "Tag name should start with an alphabet and can not contain special characters other than underscore and space", function(input, value){
+		  
+		  if(value == '')
+				return true;
+			
+	        var tags = value.split(/[,]+/); // split element by , 
+	        valid = true;
+	        
+	     for(var i in tags){
+	    	 var tag = $.trim(tags[i]);
+	    	 
+	    	 if(tag)
+	    		 valid = valid && window.parent.isValidTag(tag);
+	     }
+	     
+	     return valid;
+		  
+	  });
+	
     // Adds wall effect to show the the first error
     $.tools.validator.addEffect("wall", function (errors, event) {
 
