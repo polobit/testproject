@@ -27,7 +27,7 @@ function initValidator(selector, callback) {
 		  
 		  return selector.find('#tag_names').length > 0
 		  
-	  }, "Tag name should start with an alphabet and cannot contain special characters other than underscore and space", function(input, value){
+	  }, "Tag name should start with an alphabet and can not contain special characters other than underscore and space", function(input, value){
 		  
 		  if(value == '')
 				return true;
