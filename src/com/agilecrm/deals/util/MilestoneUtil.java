@@ -3,9 +3,13 @@ package com.agilecrm.deals.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 import com.agilecrm.core.api.deals.MilestoneAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -141,5 +145,14 @@ public class MilestoneUtil
     {
 
 	return Milestone.dao.count();
+    }
+
+    public static void isTracksEligible(Milestone milestone)
+    {
+	String planName = BillingRestrictionUtil.getInstance().getCurrentLimits().getPlanName();
+	if (milestone.id == null && !(planName.equalsIgnoreCase("PRO") || planName.equalsIgnoreCase("REGULAR")))
+	    throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN)
+		    .entity("Sorry, Your current plan does not have this option.").build());
+
     }
 }

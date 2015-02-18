@@ -161,7 +161,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 	    map.put("tasks", taskListMap);
 
 	    // Sends mail to the domain user.
-	    SendMail.sendMail("maildummy800@gmail.com", SendMail.DUE_TASK_REMINDER_SUBJECT + " " + domain + " "
+	    SendMail.sendMail("maildummy800@gmail.com", SendMail.DUE_TASK_REMINDER_SUBJECT + " beta--- " + domain + " "
 		    + timezone, SendMail.DUE_TASK_REMINDER, map);
 
 	}

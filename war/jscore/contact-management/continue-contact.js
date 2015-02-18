@@ -88,9 +88,12 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 				var $form = $('#' + form_id);
 
 				// Returns, if the save button has disabled attribute, or form is invalid
-				if ($(saveBtn).attr('disabled') || !isValidForm($form))
-								return;
-
+				if ($(saveBtn).attr('disabled') || !isValidForm($form)){
+					var ele = $(saveBtn).closest('form').find('.single-error').first();
+					var container = $form;
+					$('body').scrollTop(ele.offset().top - container.offset().top + container.scrollTop());
+					return;
+				}
 				// Disables save button to prevent multiple click event issues
 				disable_save_button($(saveBtn));
 

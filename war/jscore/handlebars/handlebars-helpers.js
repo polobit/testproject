@@ -586,16 +586,19 @@ $(function()
 																				'milestone_ul',
 																				function(data)
 																				{
-																								var html = "<ul class='milestone-value-list tagsinput' style='padding:1px;list-style:none;'>";
+																								var html = "";
+																						//		var html = "<ul class='milestone-value-list tagsinput' style='padding:1px;list-style:none;'>";
 																								if (data)
 																								{
 																												var milestones = data.split(",");
 																												for ( var i in milestones)
-																												{
-																																html += "<li data='" + milestones[i] + "'><div><span>" + milestones[i] + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>";
+																												{				
+																																html += "<tr data='"+milestones[i]+"' style='display: table-row;'><td><div class='p-l-sm inline-block v-top text-ellipsis' style='width:80%'>";
+																																html += milestones[i]+"</div></td><td><div class='m-b-n-xs' style='display:none;'><a class='text-l-none-hover c-p'><i title='Drag' class='icon-move'></i></a><a class='milestone-delete c-p m-l-sm text-l-none'  data-toggle='modal' role='button' href='#'><i title='Delete Milestone' class='task-action icon icon-trash'></i></a></div></td></tr>";
+																						//										html += "<li data='" + milestones[i] + "'><div><span>" + milestones[i] + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>";
 																												}
 																								}
-																								html += "</ul>";
+																						//		html += "</ul>";
 																								return html;
 																				});
 
@@ -5763,6 +5766,18 @@ $(function()
 		var formName = form.formName;
 		return new Handlebars.SafeString(formName);
 	});
+	
+	/**
+	 * Helps to check the permission of the user based on the ACL.
+	 */
+	Handlebars.registerHelper("isTracksEligible", function(options)
+			{
+				var planName = _billing_restriction.currentLimits.planName;
+							if (planName == 'PRO' || planName == 'REGULAR')
+											return options.fn(this);
+
+							return options.inverse(this);
+			});
 });
 
 // helper function return created time for event

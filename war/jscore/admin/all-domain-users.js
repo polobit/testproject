@@ -130,7 +130,7 @@ $(".delete_user").die().live('click', function(e){
 			}
 			
 			amount = 100*amount;
-				
+			amount = parseInt(amount.toPrecision(12));	
 			$.ajax({
 				url: '/core/api/admin_panel/applypartialrefund?chargeid='+chargeid+'&amount='+amount, 
 				type : 'GET',
