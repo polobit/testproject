@@ -32,6 +32,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.search.Document.Builder;
+import com.google.appengine.api.search.Index;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -1285,13 +1286,16 @@ public class OpportunityUtil
     {
 
 	AppengineSearch<Opportunity> search = new AppengineSearch<Opportunity>(Opportunity.class);
-	List<Builder> builderObjects = new ArrayList<Builder>();
-	for (Opportunity deal : deals)
+	String[] docIds = new String[deals.size()];
+	for (int i = 0; i < deals.size(); i++)
 	{
-	    builderObjects.remove(deal);
+	    docIds[i] = String.valueOf(deals.get(i).id);
 	}
 
-	search.index.putAsync(builderObjects.toArray(new Builder[deals.size()]));
+	Index index = search.index;
+
+	if (index != null)
+	    index.delete(docIds);
     }
 
 }
