@@ -38,7 +38,7 @@ cron:
 - description: Weekly triggers
   url: /backend/cron/triggers?period=WEEKLY
   schedule: every monday 01:00
-  
+
 - description: Due Tasks Reminder
   url: /backend/cron/tasks
   schedule: every day 23:00

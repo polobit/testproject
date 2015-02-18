@@ -751,7 +751,7 @@ if(json.close_date==0)
 				}
 
 			}
-			else if (Current_Route == 'portlets') 
+			else if (Current_Route==undefined || Current_Route=='dashboard') 
 			{
 				if(App_Portlets.currentPosition && App_Portlets.pendingDeals && App_Portlets.pendingDeals[parseInt(App_Portlets.currentPosition)]){
 					if (isUpdate)
@@ -784,6 +784,13 @@ if(json.close_date==0)
 					
 					
 			}
+		},
+		error : function(model,err){
+			enable_save_button($(saveBtn));
+			$('#' + modalId).find('span.error-status').html(err.responseText);
+			setTimeout(function(){$('#' + modalId).find('span.error-status').html('');},200);
+			console.log('-----------------',err.responseText);
+			alert(err.responseText);
 		}
 	});
 }

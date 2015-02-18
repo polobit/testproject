@@ -7,6 +7,7 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.UserPrefsUtil;
+import com.agilecrm.util.VersioningUtil;
 
 /**
  * <code>MergeFieldsUitl</code> class is the utility class for merge fields
@@ -31,11 +32,11 @@ public class MergeFieldsUtil
 		// version "https://"+domainUser.domain+".agilecrm.com"
 
 		String schedule_id = domainUser.schedule_id;
-		String calendar_url = "https://" + domainUser.domain + ".agilecrm.com";
+		String calendar_url = VersioningUtil.getHostURLByApp(domainUser.domain);
 
 		if (schedule_id == null)
 			schedule_id = domainUser.name;
-		calendar_url += "/calendar/" + schedule_id;
+		calendar_url += "calendar/" + schedule_id;
 
 		return calendar_url;
 
