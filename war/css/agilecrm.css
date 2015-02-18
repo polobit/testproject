@@ -1961,3 +1961,7 @@ div.lhs-row-filter {
     display:none;
   }
 }
+
+li.error {
+	border-color: #df382c !important;
+}
