@@ -318,7 +318,7 @@ public class DealsBulkActionsAPI
 
 	    if (!subList.isEmpty())
 	    {
-		Opportunity.dao.putAll(subList);
+		Opportunity.dao.deleteAll(subList);
 		OpportunityUtil.deleteSearchDoc(subList);
 		System.out.println("total sublist -----" + subList.size());
 		DealTriggerUtil.executeTriggerForDeleteDeal(dealIdsArray);
@@ -326,7 +326,7 @@ public class DealsBulkActionsAPI
 			String.valueOf(dealIdsArray.length()), "");
 	    }
 
-	    BulkActionNotifications.publishNotification(deals.size() + " Deals are archived.");
+	    BulkActionNotifications.publishNotification(deals.size() + " Deals are deleted.");
 	}
 	catch (Exception je)
 	{
