@@ -29,6 +29,29 @@ $(function()
 		}
 	}, 10000); // 15 sec
 
+	$(".noty_twilio_mute").die().live('click', function(e)
+			{
+				e.preventDefault();
+				console.log("Twilio call noty_twilio_mute from noty");
+				
+				globalconnection.mute(true);
+				
+				$('.noty_buttons').find('.noty_twilio_unmute').toggle();
+				$('.noty_buttons').find('.noty_twilio_mute').toggle();
+			});
+	
+	$(".noty_twilio_unmute").die().live('click', function(e)
+			{
+				e.preventDefault();
+				console.log("Twilio call noty_twilio_unmute from noty");
+
+				globalconnection.mute(false);
+				
+				$('.noty_buttons').find('.noty_twilio_unmute').toggle();
+				$('.noty_buttons').find('.noty_twilio_mute').toggle();
+			});
+	
+	
 	$(".noty_twilio_hangup").die().live('click', function(e)
 	{
 		e.preventDefault();
@@ -85,7 +108,7 @@ $(function()
 		e.preventDefault();
 		console.log("Twilio call canceld from noty");
 
-		globalconnection.disconnect();
+		//globalconnection.disconnect();
 
 		Twilio.Device.disconnectAll();
 	});
@@ -665,7 +688,7 @@ function setUpGlobalTwilio()
 			console.log(conn._status);
 			globalconnection = conn;
 
-			showCallNotyPopup("connected", "Twilio", Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><b>On call  </b>' + To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);
+			showCallNotyPopup("connected", "Twilio", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><b>On call  </b>' + To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);
 		});
 
 		Twilio.Device.disconnect(function(conn)
@@ -762,7 +785,7 @@ function setUpGlobalTwilio()
 					{
 						console.log("getting one more call.");
 
-						showCallNotyPopup("missedCall", "error", Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><b>Missed call : </b><br>' + conn.parameters.From + '<br></span><div class="clearfix"></div>', 5000);
+						showCallNotyPopup("missedCall", "error", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><b>Missed call : </b><br>' + conn.parameters.From + '<br></span><div class="clearfix"></div>', 5000);
 
 						conn.reject();						
 						if (conn)
@@ -783,7 +806,7 @@ function setUpGlobalTwilio()
 					Twilio_Call_Noty_IMG = addContactImg("Incoming");
 					
 					showCallNotyPopup("incoming", "Twilio",
-							Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Incoming call </b>'+ To_Number + '<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);										
+							Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><i class="icon icon-phone"></i><b>Incoming call </b>'+ To_Number + '<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);										
 				});
 
 		// If any network failure, show error
@@ -864,7 +887,7 @@ function twiliocall(phoneNumber, toName)
 	TWILIO_CALLED_NO = To_Number;	
 	Twilio_Call_Noty_IMG = addContactImg("Outgoing");	
 	
-	showCallNotyPopup("outgoing", "Twilio", Twilio_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Calling </b>'+ To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);
+	showCallNotyPopup("outgoing", "Twilio", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><i class="icon icon-phone"></i><b>Calling </b>'+ To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);
 }
 
 // Send DTMF signal to twilio active connection from dialpad.

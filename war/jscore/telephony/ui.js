@@ -45,7 +45,7 @@ $(function()
 			User_Number = "sip:farah@sip2sip.info";
 
 			// Display
-			showCallNotyPopup("outgoing", "confirm", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Calling </b>' + User_Number +'<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', false);
+			showCallNotyPopup("outgoing", "confirm", SIP_Call_Noty_IMG+'<span class="noty_contact_details"><i class="icon icon-phone"></i><b>Calling </b>' + User_Number +'<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', false);
 		}
 	});
 
@@ -79,9 +79,10 @@ $(function()
 			User_Img = getGravatar(currentContact.properties, 40);
 			User_ID = currentContact.id;
 			SIP_Call_Noty_IMG = addSipContactImg();
+			Show_Add_Contact = false;
 
 			// Display
-			showCallNotyPopup("outgoing", "confirm", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><i class="icon icon-phone"></i><b>Calling  </b>' + User_Number +'<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', false);
+			showCallNotyPopup("outgoing", "confirm", SIP_Call_Noty_IMG+'<span class="noty_contact_details"><i class="icon icon-phone"></i><b>Calling  </b>' + User_Number +'<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', false);
 		}
 	});
 
@@ -93,7 +94,7 @@ $(function()
 		e.preventDefault();
 
 		// Display
-		showCallNotyPopup("hangup", "information", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><b>Call ended with  </b>' + User_Number + '<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', false);
+		showCallNotyPopup("hangup", "information", SIP_Call_Noty_IMG+'<span class="noty_contact_details"><b>Call ended with  </b>' + User_Number + '<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', false);
 
 		// SIP hangup call.
 		hangupCall();
@@ -105,7 +106,7 @@ $(function()
 	$('.ignore').die().live("click", function(e)
 	{
 		// Display
-		showCallNotyPopup("ignored", "error", SIP_Call_Noty_IMG+'<span style="margin-top: 10px;display: inline-block;"><b>Ignored call  </b>'+ User_Number + '<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', 5000);
+		showCallNotyPopup("ignored", "error", SIP_Call_Noty_IMG+'<span class="noty_contact_details"><b>Ignored call  </b>'+ User_Number + '<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', 5000);
 
 		// SIP reject call.
 		Sip_Session_Call.reject(Config_Call);

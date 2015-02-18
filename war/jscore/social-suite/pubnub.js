@@ -5,7 +5,7 @@
  */
 function initToPubNub()
 {
-	console.log(Pubnub);
+	//console.log(Pubnub);
 	// Pubnub already defined.
 	if(Pubnub != undefined)
 	 if (Pubnub != null)
@@ -34,7 +34,7 @@ function subscribeClientChannel()
 {
 	Pubnub.subscribe({ channel : CURRENT_DOMAIN_USER.id + "_Channel", restore : true, message : function(message, env, channel)
 	{
-		console.log(message);
+		//console.log(message);
 
 		// Display message in stream.
 		handleMessage(message);

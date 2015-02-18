@@ -60,7 +60,10 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 */
 	streams : function(stream)
 	{
-		$('#content').html(getTemplate('socialsuite-show-streams'), {});
+		// If current location is social then only show streams
+		var currentLocation = document.location.href;
+		if(currentLocation.search("social") != -1)
+		  $('#content').html(getTemplate('socialsuite-show-streams'), {});
 
 		// Check scheduled updates.
 		checkScheduledUpdates();
