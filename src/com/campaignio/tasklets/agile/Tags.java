@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -46,7 +47,8 @@ public class Tags extends TaskletAdapter
      * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
      * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
      */
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+	    throws Exception
     {
 	// Get Tags and Type
 	String type = getStringValue(nodeJSON, subscriberJSON, data, TYPE);
@@ -70,9 +72,9 @@ public class Tags extends TaskletAdapter
 		// Add Tags based on contact
 		if (type.equals(ADD))
 		{
-		    contact.addTags(tagsArray);
-		    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Tags added - " + tags,
-			    LogType.TAGS.toString());
+		    addTags(contact, tagsArray);
+		    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+			    "Tags added - " + tags, LogType.TAGS.toString());
 
 		}
 
@@ -80,8 +82,8 @@ public class Tags extends TaskletAdapter
 		else
 		{
 		    contact.removeTags(tagsArray);
-		    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Tags deleted - " + tags,
-			    LogType.TAGS.toString());
+		    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+			    "Tags deleted - " + tags, LogType.TAGS.toString());
 		}
 
 		// Update subscriberJSON
@@ -96,5 +98,40 @@ public class Tags extends TaskletAdapter
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+    }
+
+    /**
+     * Temporaray method to add tags from campaign without validation
+     * 
+     * @param contact
+     *            - Subscribed contact
+     * @param tags
+     *            added tags
+     */
+    private static void addTags(Contact contact, String[] tags)
+    {
+	int oldTagsCount = contact.tagsWithTime.size();
+
+	// Iterates though each tag and checks if tag with the same name exists,
+	// add if it a new tag
+	for (String tag : tags)
+	{
+	    Tag tagObject = new Tag(tag);
+
+	    // Check whether tag already exists. Equals method is overridden in
+	    // Tag class to use this contains functionality
+	    if (!contact.tagsWithTime.contains(tagObject))
+		contact.tagsWithTime.add(tagObject);
+	}
+
+	// Returns without saving if there is no change in tags list length
+	if (oldTagsCount == contact.tagsWithTime.size())
+	{
+	    System.out.println("Tags size remains same...");
+	    return;
+	}
+
+	contact.save();
+
     }
 }

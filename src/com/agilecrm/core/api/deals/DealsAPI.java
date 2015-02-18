@@ -23,7 +23,6 @@ import org.json.JSONException;
 
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.ActivityType;
-import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
@@ -39,10 +38,8 @@ import com.agilecrm.export.util.DealExportEmailUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.NamespaceUtil;
-import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
 import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -389,18 +386,28 @@ public class DealsAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteOpportunities(@FormParam("ids") String model_ids) throws JSONException
+    public void deleteOpportunities(@FormParam("ids") String ids, @FormParam("filter") String filters)
+	    throws JSONException
     {
-	JSONArray opportunitiesJSONArray = new JSONArray(model_ids);
+	try
+	{
+	    if (StringUtils.isNotEmpty(ids))
+	    {
+		JSONArray idsArray = new JSONArray(ids);
+		System.out.println("------------" + idsArray.length());
+	    }
 
-	// Executes trigger when deal is deleted
-	DealTriggerUtil.executeTriggerForDeleteDeal(opportunitiesJSONArray);
+	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+	    System.out.println("------------" + filterJSON.toString());
 
-	// Executes notification when deal is deleted
-	DealNotificationPrefsUtil.executeNotificationForDeleteDeal(opportunitiesJSONArray);
-	ActivitySave.createLogForBulkDeletes(EntityType.DEAL, opportunitiesJSONArray,
-		String.valueOf(opportunitiesJSONArray.length()), "");
-	Opportunity.dao.deleteBulkByIds(opportunitiesJSONArray);
+	    String uri = "/core/api/opportunity/backend/delete/" + SessionManager.get().getDomainId();
+
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
+	}
+	catch (Exception je)
+	{
+	    je.printStackTrace();
+	}
     }
 
     /**

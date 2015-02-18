@@ -32,6 +32,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.search.Document.Builder;
+import com.google.appengine.api.search.Index;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -1273,6 +1274,28 @@ public class OpportunityUtil
 	}
 
 	search.index.putAsync(builderObjects.toArray(new Builder[deals.size()]));
+    }
+
+    /**
+     * Delete deals in the search document. Maximum deals size in list should be
+     * below 200 (150 recommended).
+     * 
+     * @param deals
+     */
+    public static void deleteSearchDoc(List<Opportunity> deals)
+    {
+
+	AppengineSearch<Opportunity> search = new AppengineSearch<Opportunity>(Opportunity.class);
+	String[] docIds = new String[deals.size()];
+	for (int i = 0; i < deals.size(); i++)
+	{
+	    docIds[i] = String.valueOf(deals.get(i).id);
+	}
+
+	Index index = search.index;
+
+	if (index != null)
+	    index.delete(docIds);
     }
 
 }
