@@ -1965,3 +1965,6 @@ a:hover i
 {
  text-decoration:none;
 }
+li.error {
+	border-color: #df382c !important;
+}
