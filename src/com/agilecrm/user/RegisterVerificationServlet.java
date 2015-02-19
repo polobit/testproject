@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.user.util.DomainUserUtil;
+import com.analytics.servlets.AnalyticsServlet;
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
@@ -19,8 +20,9 @@ import com.google.appengine.labs.repackaged.org.json.JSONObject;
 public class RegisterVerificationServlet extends HttpServlet
 {
     private static final ArrayList<String> invalid_domains = new ArrayList<String>();
-    
-    static {
+
+    static
+    {
 	invalid_domains.add("gmail");
 	invalid_domains.add("zoho");
 	invalid_domains.add("yandex");
@@ -42,36 +44,52 @@ public class RegisterVerificationServlet extends HttpServlet
 	String oauth = request.getParameter("oauth");
 	String email = request.getParameter("email");
 
+	String userAgent = request.getHeader("User-Agent");
+
+	// AppEngine Headers
+
+	try
+	{
+	    if (StringUtils.equalsIgnoreCase(request.getHeader("X-AppEngine-Country"), "BD")
+		    || "180.211.195.60".equals(AnalyticsServlet.getClientIP(request)))
+	    {
+		writeErrorMessage(response, "Access denied");
+		return;
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
 	// If Localhost - just return
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 	{
 	    writeErrorMessage(response, "Not allowed in local server");
 	    return;
 	}
-	
-	if(!StringUtils.isEmpty(email))
+
+	if (!StringUtils.isEmpty(email))
 	{
 	    String emailDomainSubstring = email.split("@")[1];
 	    System.out.println(emailDomainSubstring);
-	    if(StringUtils.isEmpty(emailDomainSubstring))
+	    if (StringUtils.isEmpty(emailDomainSubstring))
 	    {
 		writeErrorMessage(response, "Agile CRM needs your business email to signup");
-		    return;
+		return;
 	    }
-	    
+
 	    String emailDomain = emailDomainSubstring.split("\\.")[0];
-	    
-	    
-	    if(!StringUtils.isEmpty(emailDomain))
+
+	    if (!StringUtils.isEmpty(emailDomain))
 	    {
-		if(invalid_domains.contains(emailDomain.toLowerCase()))
+		if (invalid_domains.contains(emailDomain.toLowerCase()))
 		{
 		    writeErrorMessage(response, "Agile CRM needs your business email to signup");
 		    return;
 		}
 	    }
 	}
-
 
 	System.out.println("domain : " + domain + ", email" + email);
 	if (DomainUserUtil.count(domain) > 0)
@@ -97,10 +115,10 @@ public class RegisterVerificationServlet extends HttpServlet
 		    + domainUser.domain + " domain");
 	    return;
 	}
-	
+
 	writeSussessMessage(response, "success");
     }
-    
+
     private void writeSussessMessage(HttpServletResponse response, String message)
     {
 	PrintWriter writer = null;

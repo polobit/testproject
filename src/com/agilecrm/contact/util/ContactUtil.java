@@ -1277,7 +1277,7 @@ public class ContactUtil
 	 * @param {@Link Long} - minTime,{@Link Long} - maxTime
 	 * @return {@Link List<Contact>}
 	 */
-	public static List<JSONObject> getEmailsOpened(Long minTime,Long maxTime){
+	public static List<JSONObject> getEmailsOpened(Long minTime,Long maxTime)throws Exception{
 		//List<Contact> contactsList=null;
 		//List<Long> contactIdsList=new ArrayList<Long>();
 		List<JSONObject> contactsList = new ArrayList<JSONObject>();
@@ -1295,11 +1295,17 @@ public class ContactUtil
 						net.sf.json.JSONArray jsonArray = new net.sf.json.JSONArray();
 						for(ContactField contactField : contact.properties){
 							JSONObject json1 = new JSONObject();
-							json1.put("type", contactField.type);
-							json1.put("name", contactField.name);
-							json1.put("subtype", contactField.subtype);
-							json1.put("value", contactField.value);
-							jsonArray.add(json1);
+							if(contactField!=null){
+								if(contactField.type!=null)
+									json1.put("type", contactField.type);
+								if(contactField.name!=null && !contactField.name.equalsIgnoreCase("null"))
+									json1.put("name", contactField.name);
+								if(contactField.subtype!=null && !contactField.subtype.equalsIgnoreCase("null"))
+									json1.put("subtype", contactField.subtype);
+								if(contactField.value!=null && !contactField.value.equalsIgnoreCase("null"))
+									json1.put("value", contactField.value);
+								jsonArray.add(json1);
+							}
 						}
 						json.element("properties", jsonArray);
 						json.put("subject", contactEmail.subject);
@@ -1311,11 +1317,17 @@ public class ContactUtil
 						net.sf.json.JSONArray jsonArray = new net.sf.json.JSONArray();
 						for(ContactField contactField : contact.properties){
 							JSONObject json1 = new JSONObject();
-							json1.put("type", contactField.type);
-							json1.put("name", contactField.name);
-							json1.put("subtype", contactField.subtype);
-							json1.put("value", contactField.value);
-							jsonArray.add(json1);
+							if(contactField!=null){
+								if(contactField.type!=null)
+									json1.put("type", contactField.type);
+								if(contactField.name!=null && !contactField.name.equalsIgnoreCase("null"))
+									json1.put("name", contactField.name);
+								if(contactField.subtype!=null && !contactField.subtype.equalsIgnoreCase("null"))
+									json1.put("subtype", contactField.subtype);
+								if(contactField.value!=null && !contactField.value.equalsIgnoreCase("null"))
+									json1.put("value", contactField.value);
+								jsonArray.add(json1);
+							}
 						}
 						json.element("properties", jsonArray);
 						json.put("subject", contactEmail.subject);

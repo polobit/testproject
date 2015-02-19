@@ -50,34 +50,24 @@
 				</div>
 				<div class="row-fluid">
 					<div class="control-group span5">
-						<label class="control-label"><b>Track </b><span
+						<label class="control-label"><b>Milestone  </b><span
 							class="field_req">*</span></label>
 						<div class="controls">
-							<span><select id="pipeline" name="pipeline_id"
+							<span><select id="pipeline_milestone" name="pipeline_milestone"
 								class="required">
 									<option value="">Select..</option>
 							</select></span><img class="loading-img" src="img/21-0.gif"></img>
 						</div>
 					</div>
 					<div class="control-group span5" style="margin-left: 30px;">
-						<label class="control-label"><b>Milestone </b><span
-							class="field_req">*</span></label>
-						<div class="controls">
-							<span><select id="milestone" name="milestone"
-								class="required">
-									<option value="">Select..</option>
-							</select></span><img class="loading-img" src="img/21-0.gif"></img>
-						</div>
-					</div>
-				</div>
-				<div class="row-fluid">
-					<div class="control-group span5">
 						<label class="control-label"><b>Close Date </b></label>
 						<div class="controls">
 							<span><input id="close_date" type="text" name="close_date"
 								class="input date" placeholder="MM/DD/YY" /></span>
 						</div>
 					</div>
+					<input id="pipeline" name="pipeline_id" type="hidden"/>
+					<input id="milestone" name="milestone" type="hidden"/>
 				</div>
 				<div class="control-group">
 					<label class="control-label"><b>Related To </b></label>

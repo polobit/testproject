@@ -202,9 +202,11 @@ public class PortletsAPI {
 	@Path("/portletEmailsOpened")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<JSONObject> getPortletEmailsOpenedList(@QueryParam("duration") String duration)throws Exception {
+	public List<JSONObject> getPortletEmailsOpenedList(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("duration",duration);
+		json.put("startDate",startDate);
+		json.put("endDate",endDate);
 		return PortletUtil.getEmailsOpenedList(json);
 	}
 	/**
@@ -327,11 +329,13 @@ public class PortletsAPI {
 	@Path("/portletGrowthGraph")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getPortletGrowthGraphData(@QueryParam("tags") String tags,@QueryParam("frequency") String frequency,@QueryParam("duration") String duration)throws Exception {
+	public JSONObject getPortletGrowthGraphData(@QueryParam("tags") String tags,@QueryParam("frequency") String frequency,@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("tags",tags);
 		json.put("frequency",frequency);
 		json.put("duration",duration);
+		json.put("startDate",startDate);
+		json.put("endDate",endDate);
 		
 		return PortletUtil.getGrowthGraphData(json);
 	}
@@ -357,9 +361,11 @@ public class PortletsAPI {
 	@Path("/portletCallsPerPerson")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getPortletCallsPerPerson(@QueryParam("duration") String duration)throws Exception {
+	public JSONObject getPortletCallsPerPerson(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("duration",duration);
+		json.put("startDate", startDate);
+		json.put("endDate", endDate);
 		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
 		return PortletUtil.getPortletCallsPerPerson(json);
 	}

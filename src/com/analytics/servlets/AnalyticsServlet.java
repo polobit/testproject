@@ -126,7 +126,7 @@ public class AnalyticsServlet extends HttpServlet
      *            - HttpRequest
      * @return ip address string.
      */
-    private static String getClientIP(HttpServletRequest req)
+    public static String getClientIP(HttpServletRequest req)
     {
 	String ipAddress = null;
 

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 
+import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
@@ -24,6 +25,8 @@ import com.stripe.model.Charge;
 import com.stripe.model.ChargeCollection;
 import com.stripe.model.Customer;
 import com.stripe.model.CustomerCollection;
+import com.stripe.net.RequestOptions;
+import com.stripe.net.RequestOptions.RequestOptionsBuilder;
 
 /**
  * <code>StripeSync</code> implements {@link OneWaySyncService} provides Service
@@ -96,7 +99,7 @@ public class StripeSyncImpl extends OneWaySyncService
 
 	    while (true)
 	    {
-		CustomerCollection customerCollections = Customer.all(Options(syncTime));
+		CustomerCollection customerCollections = Customer.all(Options(syncTime),requestOptions());
 		List<Customer> customers = customerCollections.getData();
 		if(customers !=null && customers.size()==0)
 			break;
@@ -144,7 +147,7 @@ public class StripeSyncImpl extends OneWaySyncService
 	option.put("limit", 1);
 	try
 	{
-	    CustomerCollection collection = Customer.all(option);
+	    CustomerCollection collection = Customer.all(option, requestOptions());
 	    Customer customers = collection.getData().get(0);
 	    prefs.lastSyncCheckPoint = customers.getId();
 	    prefs.save();
@@ -189,6 +192,15 @@ public class StripeSyncImpl extends OneWaySyncService
 
 	return options;
     }
+    
+    /*Creating RequestOptions for Stripe to send api-key and version*/
+    private RequestOptions requestOptions()
+    {
+    	RequestOptionsBuilder builder = new RequestOptionsBuilder();
+	    builder.setApiKey(prefs.apiKey);
+	    builder.setStripeVersion("2012-09-24");
+	    return builder.build();
+    }
 
     /*
      * (non-Javadoc)
@@ -218,7 +230,7 @@ public class StripeSyncImpl extends OneWaySyncService
 	{
 	    try
 	    {
-		ChargeCollection chargeCollection = Charge.all(chargeOption);
+		ChargeCollection chargeCollection = Charge.all(chargeOption, requestOptions());
 		List<Charge> charges = chargeCollection.getData();
 		if (charges.size() > 0)
 		{

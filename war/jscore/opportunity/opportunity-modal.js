@@ -413,6 +413,15 @@ $(function(){
 		$("#deal_restore_confirm_modal").modal('show');
 	});
 	
+	$('#pipeline_milestone').live('change',function(e){
+		var temp = $(this).val();
+		var track = temp.substring(0,temp.indexOf('_'));
+		var milestone = temp.substring(temp.indexOf('_')+1,temp.length+1);
+		$(this).closest('form').find('#pipeline').val(track);
+		$(this).closest('form').find('#milestone').val(milestone);
+		console.log(track,'-----------',milestone);
+	});
+	
 });
 
 /**
@@ -459,17 +468,8 @@ function updateDeal(ele, editFromMilestoneView)
 	});
 	
 	// Fills the pipelines list in the select menu.
-	populateTracks(dealForm, undefined, value, function(pipelinesList){
+	populateTrackMilestones(dealForm, undefined, value, function(pipelinesList){
 
-		// Fills milestone select element
-		populateMilestones(dealForm, undefined, value.pipeline_id, value, function(data){
-			dealForm.find("#milestone").html(data);
-			if (value.milestone) {
-				$("#milestone", dealForm).find('option[value=\"'+value.milestone+'\"]')
-						.attr("selected", "selected");
-			}
-			$("#milestone", dealForm).closest('div').find('.loading-img').hide();
-		});
 	});
 	
 	// Enable the datepicker
@@ -516,17 +516,7 @@ function show_deal(){
 	agile_type_ahead("relates_to", el, contacts_typeahead);
 
 	// Fills the pipelines list in select box.
-	populateTracks(el, undefined, undefined, function(pipelinesList){
-		// Fills milestone select element if there is only one pipeline.
-		if(pipelinesList.length == 1)
-		populateMilestones(el, undefined, 0, undefined, function(data){
-			el.find("#milestone").html(data);
-			if (value.milestone) {
-				$("#milestone", el).find('option[value=\"'+value.milestone+'\"]')
-						.attr("selected", "selected");
-			}
-			$("#milestone", el).closest('div').find('.loading-img').hide();
-		});
+	populateTrackMilestones(el, undefined, undefined, function(pipelinesList){
 	});
 	
 	
@@ -574,6 +564,9 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 	disable_save_button($(saveBtn));//$(saveBtn).attr('disabled', 'disabled');
 	
 	if (!isValidForm('#' + formId)) {
+		var container = $('#' + formId).closest('.modal-body');
+		var ele = $('#' + formId).find('.single-error').first();
+		container.scrollTop(ele.offset().top - container.offset().top + container.scrollTop());
 		// Removes disabled attribute of save button
 		enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
 		return false;
