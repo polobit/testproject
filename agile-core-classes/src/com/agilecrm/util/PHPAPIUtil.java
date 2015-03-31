@@ -29,18 +29,4 @@ public class PHPAPIUtil
 	    return FieldType.CUSTOM;
 	}
     }
-
-    public static String[] getValidTags(String[] tags)
-    {
-	List<String> validTags = new ArrayList<String>();
-	for (int i = 0; i < tags.length; i++)
-	{
-	    String tag = TagUtil.getValidTag(tags[i]);
-	    if (tag == null)
-		continue;
-
-	    validTags.add(tag);
-	}
-	return validTags.toArray(new String[validTags.size()]);
-    }
 }
