@@ -1710,7 +1710,7 @@ sdfsdfsdfsfdf
 					</div>
 
             <div class="control-group">
-                <label class="control-label">Default currency</label>
+                <label class="control-label">Currency</label>
                 <div class="controls">
                     <select id="target_list" name="currency">
                         <option value="USD-$" selected="1">United States Dollar</option>

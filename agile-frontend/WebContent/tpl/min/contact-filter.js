@@ -82,7 +82,9 @@
 														<option value="owner_id">Owner</option>
 														<option value="address">Address</option>
 													</optgroup>
-												
+													<optgroup label="Activities">
+														<option value="campaign_status">Campaign Status</option>
+													</optgroup>
 													 <optgroup label="Custom Fields" id="custom-fields" class="hide">
 													</optgroup>
 												</select>
@@ -118,6 +120,13 @@
 													<option value="ANYOF" class="tag">is any of</option>
 													<option value="CONTAINS" class="address">contains word</option>
 													<option value="NOT_CONTAINS" class="address">not contains word</option>
+													<option value="NOT_ADDED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Never Added</option>
+													<option value="ACTIVE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Active</option>
+													<option value="DONE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Completed</option>
+													<option value="REMOVED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Removed</option>
+													<option value="BOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Bounced</option>
+													<option value="UNSUBSCRIBED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Unsubscribed</option>
+													<option value="SPAM_REPORTED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Reported Spam</option>
 												</select>
 											</div>
 										</td>
@@ -161,6 +170,7 @@
 													<option value="BETWEEN" class="tags_time">is
 														between</option>
 													<option value="LAST" class="tags_time">in last</option>
+												</select>
 											</div>
 										</td>
 										<td class="controls span2" style="vertical-align:top; " >
@@ -221,8 +231,11 @@
 														<option value="phone">Phone Number</option>
 														<option value="lead_score">Score</option>
 														<option value="owner_id">Owner</option>
+														<option value="address">Address</option>
 													</optgroup>
-												
+													<optgroup label="Activities">
+														<option value="campaign_status">Campaign Status</option>
+													</optgroup>
 													 <optgroup label="Custom Fields" id="custom-fields" class="hide">
 													</optgroup>
 												</select>
@@ -239,7 +252,7 @@
 														class="first_name company owner org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 													<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="NOTEQUALS" class="tags">isn't</option>
-
+													<option value="BETWEEN_NUMBER" class="lead_score">between</option>
 													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
 													<option value="IS_LESS_THAN" class="lead_score">less than</option>
 													<option value="ON" class="updated_time created_time">on</option>
@@ -255,6 +268,15 @@
 														</option>
 													<option value="EQUALS" class="tag org_tag">is</option>
 													<option value="ANYOF" class="tag">is any of</option>
+													<option value="CONTAINS" class="address">contains word</option>
+													<option value="NOT_CONTAINS" class="address">not contains word</option>
+													<option value="NOT_ADDED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Never Added</option>
+													<option value="ACTIVE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Active</option>
+													<option value="DONE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Completed</option>
+													<option value="REMOVED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Removed</option>
+													<option value="BOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Bounced</option>
+													<option value="UNSUBSCRIBED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Unsubscribed</option>
+													<option value="SPAM_REPORTED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Reported Spam</option>
 												</select>
 											</div>
 										</td>
@@ -263,10 +285,10 @@
 												<input type="text" name="temp" style="width:92%"
 													class="LAST NEXT required" placeholder="Number of days"/>
 												<input type="text" name="temp" style="width:92%"
-													class="EQUALS NOTEQUALS ANYOF required"/>
+													class="EQUALS NOTEQUALS ANYOF CONTAINS NOT_CONTAINS required"/>
 												 
 												<input type="text" name="temp" 
-													class="MATCHES NOT_CONTAINS  required"/>
+													class="MATCHES required"/>
 												<input type="text" name="temp" style="width:92%"
 													class="IS_GREATER_THAN IS_LESS_THAN number required"/> 
 													
@@ -274,6 +296,8 @@
 													class="tags tags_time required"
 													style="margin: 0px;width:92%" /> 
                                                 <input type="text" name="temp" class="email required" style="width:92%"/>
+												<input type="text" name="temp" style="width:92%"
+													class="BETWEEN_NUMBER number required"/>
 												<input id="updated_date" type="text" name="updated_date" style="width:92%; text-overflow:none; "
 													class="ON AFTER BEFORE BETWEEN input required date"
 													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
@@ -283,6 +307,8 @@
 											<div id="RHS-NEW" name="RHS_NEW">
 												<input id="date_between" type="text" name="temp" data-date-format="mm/dd/yyyy"
 													class="BETWEEN input date required" style="width: 92%" placeholder="MM/DD/YY" />
+												<input type="text" name="temp" style="width:92%"
+													class="BETWEEN_NUMBER number required"/>
 											</div>
 										</td>
 										<td class="nested-condition-block span2" style="vertical-align:top; " >

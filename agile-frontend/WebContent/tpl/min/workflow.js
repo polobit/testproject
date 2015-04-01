@@ -206,8 +206,21 @@
 		<tbody>
 			<tr>
 				<th>Emails Sent</th>
-				<th>Emails Opened</th>
-				<th>Clicks (Unique)</th>
+				<th>Emails Opened<span
+							style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="/img/help.png"
+							style="height: 6px; vertical-align: top" rel="popover"
+							data-placement="right"
+							data-title:" data-content="Total email opens recorded & unique opens."
+							id="element" data-trigger="hover" />
+						</span></th>
+				<th>Clicks<span
+							style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="/img/help.png"
+							style="height: 6px; vertical-align: top" rel="popover"
+							data-placement="right"
+							data-title:" data-content="Total email link clicks recorded & unique clicks"
+							id="element" data-trigger="hover" /></th>
 				<th>Unsubscriptions</th>
 				<th>Hard Bounces <span
 							style="vertical-align: text-top; margin-left: -3px"> <img
@@ -229,8 +242,8 @@
 			</tr>
             <tr>
 				<td>{{#if sent}}{{sent}}{{else}} - {{/if}}</td>
-				<td>{{#if opened}}{{opened}} {{else}} - {{/if}}</td>
-				<td>{{#if unique_clicks}} {{total_clicks}} ({{unique_clicks}}) {{else}} - {{/if}}</td>
+				<td>{{#if opened}}{{opened}} ({{unique_opened}}) {{else}} - {{/if}}</td>
+				<td>{{#if clicks}} {{clicks}} ({{unique_clicks}}) {{else}} - {{/if}}</td>
 				<td>{{#if unsubscribed}}{{unsubscribed}} {{else}} - {{/if}}</td>
 				<td>{{#if hard_bounce}}{{hard_bounce}} {{else}} - {{/if}}</td>
 				<td>{{#if soft_bounce}}{{soft_bounce}} {{else}} - {{/if}}</td>
@@ -752,7 +765,7 @@
                     <div class="control-group">
                         <label class="control-label"><b>Name of campaign:</b> <span class="field_req">*</span></label>
                         <div class="controls">
-							<a data-toggle="modal" id="workflow-designer-help" class="right" style="font-size:10px;margin-top:-20px;cursor:pointer; clear:both;">Need help. Watch our tutorial.</a>
+							<a data-toggle="modal" id="workflow-designer-help" class="right" style="font-size:10px;margin-top:-20px;cursor:pointer; clear:both;">Need help? Watch our tutorial.</a>
                             <input name="workflow-name" type="text" id="workflow-name" class="span3 required" placeholder="Name of campaign" />
                             <span id="workflow-msg" style="margin-left: 130px;"></span>
 							{{#if is_new}}

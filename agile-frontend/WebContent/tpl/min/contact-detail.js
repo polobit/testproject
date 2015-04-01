@@ -455,6 +455,7 @@
               <div class="font-15">Campaign Log</div>
           </div>
 		  <ul id="campaigns-model-list" class="ativity-block-ul"></ul>
+		  <table class="m-t-md"></table>
 		{{/if}}
 </script>
 
@@ -625,7 +626,7 @@
 			{{/if}}
 			{{#hasMenuScope 'DEALS'}}
 			 <a title="Edit"  data="{{id}}" href="#" class="deal-edit-contact-tab" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
-             <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/opportunity/bulk"></span></a>
+             <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/opportunity/delete"></span></a>
       		{{/hasMenuScope}}
 	  	</span>
 	</div>
@@ -727,6 +728,7 @@
            		
            	{{/if}}
        	{{/each}}
+		{{{getDealNames deals}}}
 		</div>
 		 <small class="edit-hover" style="margin-right:10px"> 
 			<time class="document-created-time" datetime="{{epochToHumanDate "" uploaded_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time>

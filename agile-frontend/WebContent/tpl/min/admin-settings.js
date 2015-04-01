@@ -2205,10 +2205,10 @@ margin-left: -3px;">.freshbooks.com</span>
 		<div id="{{id}}-deal-track" class="accordion-group overflow-hidden m-b-xs">
 		<div class="accordion-heading" style="background:#f5f5f5;">
     		{{#if id}}
-    			<input type="text" name="id" class="hide" value={{id}}>
+    			<input type="text" name="id" class="hide" value="{{id}}">
     		{{/if}} 
 			{{#if id}}
-    			<input type="text" name="name" class="hide" value={{name}}>
+    			<input type="text" name="name" class="hide" value="{{name}}">
     		{{/if}}
 
 			<input type="hidden" name="isDefault" value={{isDefault}}>

@@ -33,7 +33,7 @@
                     <thead>
                         <tr>
                             <th>Title</th>
-                            <th>Related To</th>
+                            <th>Related Contacts</th>
                             <th>Uploaded Date</th>
 							<th>Owner</th>
                         </tr>

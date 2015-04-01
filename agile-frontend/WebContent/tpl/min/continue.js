@@ -424,7 +424,7 @@
 				</div>
 				<div class="control-group">
 					<div class="controls" style="margin-top: -10px">	
-                        <input name="lname" type="text" class="required" id="lname" placeholder="Last name"
+                        <input name="lname" type="text" id="lname" placeholder="Last name"
                         value="{{getPropertyValue properties "last_name"}}"/> 
                     </div>
                 </div>
