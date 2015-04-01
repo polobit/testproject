@@ -1,0 +1,43 @@
+info it worked if it ends with ok
+verbose cli [ 'node', '/usr/bin/npm', 'install', 'handlebars@1.3.0' ]
+info using npm@1.1.4
+info using node@v0.6.12
+verbose config file /home/yaswanth/.npmrc
+verbose config file /usr/etc/npmrc
+verbose config file /usr/share/npm/npmrc
+verbose cache add [ 'handlebars@1.3.0', null ]
+silly cache add: name, spec, args [ undefined, 'handlebars@1.3.0', [ 'handlebars@1.3.0', null ] ]
+verbose parsed url { pathname: 'handlebars@1.3.0',
+verbose parsed url   path: 'handlebars@1.3.0',
+verbose parsed url   href: 'handlebars@1.3.0' }
+silly cache add: name, spec, args [ 'handlebars', '1.3.0', [ 'handlebars', '1.3.0' ] ]
+verbose parsed url { pathname: '1.3.0', path: '1.3.0', href: '1.3.0' }
+verbose addNamed [ 'handlebars', '1.3.0' ]
+verbose addNamed [ '1.3.0', '1.3.0' ]
+verbose raw, before any munging handlebars/1.3.0
+verbose url resolving [ 'https://registry.npmjs.org/', './handlebars/1.3.0' ]
+verbose url resolved https://registry.npmjs.org/handlebars/1.3.0
+http GET https://registry.npmjs.org/handlebars/1.3.0
+ERR! Error: failed to fetch from registry: handlebars/1.3.0
+ERR!     at /usr/share/npm/lib/utils/npm-registry-client/get.js:139:12
+ERR!     at cb (/usr/share/npm/lib/utils/npm-registry-client/request.js:31:9)
+ERR!     at Request._callback (/usr/share/npm/lib/utils/npm-registry-client/request.js:136:18)
+ERR!     at Request.callback (/usr/lib/nodejs/request/main.js:119:22)
+ERR!     at Request.<anonymous> (/usr/lib/nodejs/request/main.js:212:58)
+ERR!     at Request.emit (events.js:88:20)
+ERR!     at ClientRequest.<anonymous> (/usr/lib/nodejs/request/main.js:412:12)
+ERR!     at ClientRequest.emit (events.js:67:17)
+ERR!     at HTTPParser.onIncoming (http.js:1261:11)
+ERR!     at HTTPParser.onHeadersComplete (http.js:102:31)
+ERR! You may report this log at:
+ERR!     <http://bugs.debian.org/npm>
+ERR! or use
+ERR!     reportbug --attach /home/yaswanth/Documents/Work/GitHub-Work/HandlebarTemplates/HandlebarTemplates/src/npm-debug.log npm
+ERR! 
+ERR! System Linux 3.13.0-35-generic
+ERR! command "node" "/usr/bin/npm" "install" "handlebars@1.3.0"
+ERR! cwd /home/yaswanth/Documents/Work/GitHub-Work/HandlebarTemplates/HandlebarTemplates/src
+ERR! node -v v0.6.12
+ERR! npm -v 1.1.4
+ERR! message failed to fetch from registry: handlebars/1.3.0
+verbose exit [ 1, true ]

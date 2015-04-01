@@ -1,0 +1,108 @@
+<script id="deal-docs-collection-template" type="text/html">
+{{#unless this.length}}
+        <div class="slate">
+            <div class="slate-content">
+                <div class="box-left">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right">
+                    <h3>You have no documents for this Deal.</h3>
+					{{#hasMenuScope 'DOCUMENT'}}
+                    <div class="text">
+                        You can add a document related to a Deal.
+                    </div>
+					<div><a href="#" class="add-deal-document-select"><i class='icon-plus-sign'/></i> Add Document</a>
+						<span class="deal-document-select" style="display:none;">
+							<select id="document-select" style="margin-bottom: -1px;">
+								<option value="">Select...</option>
+							</select>
+                    		<a href="#" class="btn add-deal-document-confirm">Add</a> 
+                   			<a href="#" class="btn add-deal-document-cancel">Cancel</a>
+							<span class="save-status"></span>
+						</span>
+					</div>
+					{{/hasMenuScope}}
+         			<!--<div class="btn-group" style="margin-top:12px;">
+        				<a href="#" class="btn right deal-add-document"><i class="icon-plus-sign"></i> Add Document</a>
+        				<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+						<ul class="dropdown-menu" style="text-shadow:0px 0px;">
+							<li><a href="#" class="document-exist">Existing Document</a></li>
+						</ul>
+					</div>-->
+                </div>
+            </div>
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+	<div class="page-header" style="margin-top: 0px !important">
+        <!--<div class="btn-group right">
+        	<a href="#" class="btn right deal-add-document"><i class="icon-plus-sign"></i> Add Document</a>
+        	<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+			<ul class="dropdown-menu pull-right">
+				<li><a href="#" class="document-exist">Existing Document</a></li>
+			</ul>
+		</div>-->
+		{{#hasMenuScope 'DOCUMENT'}}
+		<div class="right"><a href="#" class="add-deal-document-select"><i class='icon-plus-sign'/></i> Add Document</a>
+			<span class="deal-document-select" style="display:none;">
+				<select id="document-select" style="margin-bottom: -1px;">
+					<option value="">Select...</option>
+				</select>
+                <a href="#" class="btn add-deal-document-confirm">Add</a> 
+                <a href="#" class="btn add-deal-document-cancel">Cancel</a>
+				<span class="save-status"></span>
+			</span>
+		</div>
+		{{/hasMenuScope}}
+	</div>
+			<ul id="deal-docs-model-list" class="ativity-block-ul"></ul>
+		{{/if}} 
+</script>
+<script id="deal-docs-model-template" type="text/html">
+<div class="activity" style="display:block;">
+	<div class="activity-text-block">
+	<span class="activity-block-owner">
+		{{#if ownerPic}}
+			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{ownerPic}}" >
+		{{else}}
+			<img class="user-img thumbnail" width="40" height="40" src="{{defaultGravatarurl 40}}">
+		{{/if}}
+		<span class="owner-name">{{owner.name}}</span>
+	</span>
+	<div style="margin-bottom: 9px;"><h4 class="document-title" style="display:inline;"><b style="margin:0px 20px 20px 0px;">{{name}}</b></h4></div>
+
+  <div style="">
+
+	<p>
+		{{network network_type}}&nbsp;&nbsp;<a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a>
+	</p>
+	<div class="clear">
+		<div style="margin-bottom: 9px;">
+		{{#each contacts}}
+           	{{#if id}}
+						{{#if_contact_type "PERSON"}}	
+							<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+        				{{/if_contact_type}}
+						{{#if_contact_type "COMPANY"}}
+        					<a href="#contact/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        				{{/if_contact_type}}
+           		
+           	{{/if}}
+       	{{/each}}
+		{{{getDealNames deals}}}
+		</div>
+		 <small class="edit-hover" style="margin-right:10px"> 
+			<time class="document-created-time" datetime="{{epochToHumanDate "" uploaded_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time>
+		</small>
+		{{#hasMenuScope 'DOCUMENT'}}
+		<span class="actions pull-right">
+			<a title="Edit"  data="{{id}}" class="document-edit-deal-tab" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
+			<a title="Detach"  data="{{id}}" class="document-unlink-deal-tab" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-unlink"></i> </a>
+            <!--<a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/documents/bulk"><i></i></span></a>-->
+        </span>
+		{{/hasMenuScope}}
+	</div>
+  </div>
+</div>
+</div>
+</script>

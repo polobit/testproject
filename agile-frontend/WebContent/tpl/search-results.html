@@ -1,0 +1,84 @@
+<script id="search-model-template" type="text/html">	
+	<td></td>
+	<td class="data" data="{{id}}" style="white-space: nowrap;">
+    	<div style="display: inline; padding-right: 10px; height: auto;">
+        	{{#if_contact_type "PERSON"}} <img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display: inline; width:40px; height:40px; " /> {{/if_contact_type}}
+        	{{#if_contact_type "COMPANY"}} <img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} /> {{/if_contact_type}}
+    	</div>
+    	<div style="height: auto; display: inline-block; vertical-align: top; text-overflow: ellipsis; width: 14em; overflow: hidden;">
+        	{{#if_contact_type "PERSON"}} <b> {{getPropertyValue properties
+        	"first_name"}} {{getPropertyValue properties "last_name"}} </b> <br />
+        	{{getPropertyValue properties "email"}} {{/if_contact_type}}
+        	{{#if_contact_type "COMPANY"}} <b>{{getPropertyValue properties
+        	"name"}}</b></br> {{getPropertyValue properties "url"}} {{/if_contact_type}}
+    	</div>
+	</td>
+	<td><div style="display:inline-block;vertical-align:top;">
+		{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}</div>
+	</td>
+	<td>
+		<div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;">
+			{{#each tags}}
+				<span class="label">{{this}}</span>
+			{{/each}}
+		</div>
+	</td>
+	<td style="width:6em;">{{lead_score}}</td>
+</script>
+
+<script id="search-collection-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            
+            <h1 id="search-query-heading">Search results for "{{query}}"</h1>
+            
+            <div class="btn-group right" id="view-list" style="top:-29px;position:relative">
+            </div>
+            <div class="btn-group right" id="filter-list" style="top:-29px;position:relative;margin-right:5px">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span9">
+        {{#if this.length}}
+        <div class="data">
+            <div class="data-container">
+                <div class="btn-group right" id="bulk-actions" style="position: relative; display: none">
+                    <button class="btn">Bulk Actions</button>
+                    <button class="btn dropdown-toggle" data-toggle="dropdown" id="view-actions">
+                    <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" id="view-actions">
+                        <li><a href="#" id="bulk-owner">Change owner</a></li>
+						{{#hasMenuScope 'CAMPAIGN'}}
+                        <li><a href="#" id="bulk-campaigns">Add to campaign</a></li>
+						{{/hasMenuScope}}
+                        <li class="hide"><a href="#" id="bulk-email">Send email</a></li>
+                        <li><a href="#" id="bulk-tags">Add tags</a></li>
+                    </ul>
+                </div>
+                <table id="contacts_search" class="table table-striped agile-ellipsis-dynamic onlySorting" url="core/api/bulk/update?action_type=DELETE" style="overflow: scroll">
+                    <colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup>
+					<thead>
+                        <tr>
+							<th></th>
+                            <th>Name</th>
+                            <th>Work</th>
+                            <th>Tags</th>
+                            <th>Lead Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="search-model-list" class="model-list-cursor" route="contact/" style="overflow: scroll;">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+    <div class="span3">
+    </div>
+</div>
+</script>

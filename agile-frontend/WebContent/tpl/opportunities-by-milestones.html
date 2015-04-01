@@ -1,0 +1,232 @@
+<script id="new-opportunity-header-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Deals <small>Opportunities</small></h1>
+			<div class="btn-group right" id="deals-action" style="display: inline; top: -30px;margin-right:20px;">
+					<a href="#deals-add" class="deals-add btn right"><i class="icon-plus-sign" /> Add Deal
+					</a>
+					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu pull-right">
+						<li><a href="#import-deals" >Import from CSV</a></li>
+						<li><a href="#" class="deals-export-csv">Export as CSV</a></li>
+					</ul>
+			</div>
+			<div class="btn-group right" id="deals-view" style="display: inline; top: -30px;margin-right:20px;">
+					<div class="btn"><i class="icon-list" style="margin-right:3px"></i></div>
+					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu pull-right">
+						<li><a href="#" class="deals-list-view">List View</a></li>
+						<li class="dropdown-submenu do-onclick-nothing"><a href="#" data-toggle="dropdown" class="deals-pipelined-view">Milestone View</a>
+							<ul class="dropdown-menu">
+								<li><a href="#" id="deal-milestone-regular">Relaxed</a></li>
+								<li><a href="#" id="deal-milestone-compact">Compact</a></li>
+								<li><a href="#" id="deal-milestone-fit">Fit</a></li>
+							</ul>
+						</li>
+					</ul>
+			</div>
+			<div id="deal-list-filters" class="btn-group right" style="display: inline; top: -30px;margin-right:20px;">
+				 <img class="loading_img" style="padding-right:5px;" height="32px" width="32px" src= "img/21-0.gif"></img>
+			</div>
+			<div class="btn-group right" id="deals-tracks"
+				style="display: inline; top: -30px;margin-right:20px;">
+			</div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span12">
+        <div id="new-opportunity-list-paging" class="row-fluid">
+			 <img class="loading_img" style="padding-right:5px;" height="32px" width="32px" src= "img/21-0.gif"></img>
+			<div id="opportunities-by-milestones-model-list">
+			</div>
+        </div>
+    </div>
+</div>
+
+<!-- Archive confirmation-->
+<div id="deal_archive_confirm_modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Archive Deal</h3>
+  </div>
+  <div class="modal-body">
+    <div id="deal-bulk-confirm">
+		<input id="archived-deal-id" name="id" type="hidden" value="{{id}}" />
+		<input id="archived-deal-milestone" name="milestone" type="hidden" value="{{milestone}}"/>
+		Deals can be archived and will not be shown. You can view them later by selecting 'All' in the filter.  
+		<br/> Are you sure to archive this deal?
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" id="deal-quick-archive" class="btn btn-primary">Yes</a>
+	<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+  </div>
+</div>
+
+<!-- Restore confirmation-->
+<div id="deal_restore_confirm_modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Restore Deal</h3>
+  </div>
+  <div class="modal-body">
+	<input id="restored-deal-id" name="id" type="hidden"/>
+	<input id="restored-deal-milestone" name="milestone" type="hidden"/>
+    <div id="deal-bulk-confirm">
+		Restoring the Deal will make it active again. <br/> Restore this Deal?
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a href="#" id="deal-quick-restore" class="btn btn-primary">Yes</a>
+	<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+  </div>
+</div>
+</script>
+
+<script id="opportunities-by-paging-collection-template" type="text/html">
+<div id="opportunities-by-paging-model-list">
+<div class="milestone-main">
+				</div>
+</div>
+</script>
+<script id="opportunities-by-paging-model-template" type="text/html">
+	<div class='dealtitle-angular'>
+		<p class='milestone-heading'> <span class="miltstone-title">{{heading}}</span><span id="{{remove_spaces heading}}_count" class="txt-mute" style="margin-left:5px;vertical-align:top;font-size:80%;"></span><span class="pull-right" style="position: absolute;right: 11px;top: -1px;"><img class="loading_img" src="/img/ajax-loader-cursor.gif" width="12px"></span></p>
+		<span></span>
+	</div>
+	<div id="{{remove_spaces heading}}-list-container" class='milestones' milestone='{{heading}}'>
+		
+	</div>
+</script>
+
+<script id="deals-by-paging-collection-template" type="text/html">
+<ul id="deals-by-paging-model-list" class="milestones">
+</ul>
+</script>
+
+<script id="deals-by-paging-model-template" type="text/html">
+<div id={{id}} data="{{milestone}}" class="data agile-overflow-ellipsis">
+	<div>
+		<b style="max-width: 70%;overflow: hidden;display: inline-block;line-height: 14px;float:left;white-space: normal;word-wrap: break-word;"><a href="#deal/{{id}}">{{name}}</a></b>
+		
+		<span class="right dealnotes-view" style="margin-top:-3px;">
+			{{#if notes}}
+             <span class="txt-small note-count" title="Notes" >{{notes.length}}</span><a title="Notes" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit" style="cursor:pointer;text-decoration:none;"><i class="deal-action icon icon-comment-alt deal-notes" data="{{id}}"></i></a>
+              
+			{{/if}}
+		</span>
+		<div class="clearfix"></div>
+	</div>
+	<div class="agile-overflow-ellipsis" style="white-space:initial;">
+
+		<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
+	</div>
+	{{#if this.contacts}}
+	<div class="agile-overflow-ellipsis" style="display:block;margin-top:0px;">
+		{{#related_to_one contacts}}{{/related_to_one}}
+	</div>
+	{{/if}}{{#if_greater this.contacts.length "5"}}<span>,..</span>{{/if_greater}}
+	<div class="pull-left">
+		<small>
+			<time class="deal-close-time" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999;">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>
+		</small>
+	</div>
+<div class="pull-right">
+<span class="right deal-options" style="visibility:hidden;">
+			{{#if_equals archived false}}
+			<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>
+			{{/if_equals}}
+			{{#if_equals archived true}}
+			<a title="Restore" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>
+			{{/if_equals}}
+			{{#if_equals archived false}}
+			<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>
+            {{/if_equals}}
+			<a title="Delete" class="deal-delete" style="cursor:pointer;text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a>
+        </span>
+</div>
+<div class="clearfix"></div>
+</div>
+</script>
+
+<script id="deals-by-paging-relax-collection-template" type="text/html">
+<ul id="deals-by-paging-relax-model-list" class="milestones">
+</ul>
+</script>
+
+<script id="deals-by-paging-relax-model-template" type="text/html">
+<div id={{id}} data="{{milestone}}" class="data agile-overflow-ellipsis">
+	<div>
+		<b style="max-width: 70%;overflow: hidden;display: inline-block;line-height: 14px;float:left;white-space: normal;word-wrap: break-word;"><a href="#deal/{{id}}">{{name}}</a></b>
+		
+		<span class="right dealnotes-view" style="margin-top:-3px;">
+			{{#if notes}}
+             <span class="txt-small note-count" title="Notes" >{{notes.length}}</span><a title="Notes" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit" style="cursor:pointer;text-decoration:none;"><i class="deal-action icon icon-comment-alt deal-notes" data="{{id}}"></i></a>
+              
+			{{/if}}
+		</span>
+		<div class="clearfix"></div>
+	</div>
+	<div class="agile-overflow-ellipsis" style="white-space:initial;">
+
+		<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
+		{{#if this.contacts}}
+			<span style="margin:0px 5px;border:1px solid #d5d5d5"></span>
+			{{#related_to_one contacts}}{{/related_to_one}}
+		{{/if}}{{#if_greater this.contacts.length "5"}}<span>,..</span>{{/if_greater}}
+	</div>
+	<div class="pull-left">
+		<small>
+			<time class="deal-close-time" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999;">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>
+		</small>
+	</div>
+<div class="pull-right">
+<span class="right deal-options" style="visibility:hidden;">
+			{{#if_equals archived false}}
+			<a title="Archive" class="deal-archive" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>
+			{{/if_equals}}
+			{{#if_equals archived true}}
+			<a title="Restore" class="deal-restore" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>
+			{{/if_equals}}
+			{{#if_equals archived false}}
+			<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>
+            {{/if_equals}}
+			<a title="Delete" class="deal-delete" style="cursor:pointer;text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a>
+        </span>
+</div>
+<div class="clearfix"></div>
+</div>
+</script>
+
+<script id="related-to-contacts-template" type="text/html">
+	{{#if_contact_type "PERSON"}}	
+		<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
+    {{/if_contact_type}}
+	{{#if_contact_type "COMPANY"}}
+     	<a href="#contact/{{id}}">{{getPropertyValue properties "name"}}</a>
+    {{/if_contact_type}}
+</script>
+<script id="opportunity-track-list-collection-template" type="text/html">
+<div class="btn-group right" style='position:relative' id="pipeline-tour-step">
+	<button class="btn filter-dropdown "><i class="icon-road" style="margin-right:4px"/></button>
+	<button class="btn dropdown-toggle" data-toggle="dropdown">
+    	<span class="caret"></span>
+  	</button>
+	<ul id = "opportunity-track-list-model-list" class="pull-right dropdown-menu">
+	</ul>
+</div>
+</script>
+
+<script id="opportunity-track-list-model-template" type="text/html">
+{{#if name}}
+<a id='{{id}}' class="pipeline" data="{{name}}" style="cursor: pointer;">{{name}}</a>
+ {{else}}
+<a id='{{id}}' class="pipeline" data="Default" style="cursor: pointer;">Default</a>
+{{/if}}
+</script>

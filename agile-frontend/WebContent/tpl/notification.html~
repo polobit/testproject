@@ -1,0 +1,60 @@
+<script id="notify-html-template" type="text/html">
+<div> 
+<!-- Image urls hidden to show in desktop notifications. First span is for contact image and second span is for company.--> 
+<span type="hidden" id={{gravatarurl properties 50}}></span>
+<span type="hidden" id="https://www.google.com/s2/favicons?domain={{getPropertyValue properties "url"}}"></span>
+
+   {{#if entity_type}}
+       <span><a href="#deals" id="notification-deal-id" style="color:black;font-weight:bold">{{name}}</a></span>
+   {{else}}
+       {{#if_contact_type "PERSON"}}
+           <span style="vertical-align:text-top">
+               <a href="#contact/{{id}}" id="notification-contact-id" style="color:black;font-weight:bold;" title=" {{getPropertyValue properties "first_name"}} {{ getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>   
+       	   </span>
+        {{/if_contact_type}}
+
+        {{#if_contact_type "COMPANY"}}
+           <span style="vertical-align:text-top">
+               <a href="#contact/{{id}}" id="notification-contact-id" style="color:black;font-weight:bold;">{{getPropertyValue properties "name"}}</a>
+           </span>  
+        {{/if_contact_type}}
+   {{/if}} 
+    <span style="margin-left:2px" id= "notification-type">{{#if_notification_type}} {{notification}} {{/if_notification_type}}</span>
+</div>
+</script>
+
+<script id="campaign-notify-template" type="text/html">
+<div>
+<span type="hidden" id={{gravatarurl properties 50}}></span>
+<span style="vertical-align:text-top">
+	<a href="#contact/{{id}}" id = "campaign-contact-id" style="color:black;font-weight:bold;" title=" {{getPropertyValue properties "first_name"}} {{ getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
+</span>
+</br>
+<span style="margin-left:2px" id="campaign-notify-text">{{#stringToJSON this "custom_value"}}{{msg}}{{/stringToJSON}}</span>
+</div>
+</script>
+
+<script id="call-notification-template" type="text/html">
+<div>
+<span type="hidden" id="{{gravatarurl properties 50}}"></span>
+<span style="margin-left:5px" id="call-notification-text">is calling</span>
+<span style="float:left;">
+	<a href="#contact/{{id}}" id="calling-contact-id" style="color:black;font-weight:bold;" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
+</span>
+</div>
+</script>
+
+<script id="unknown-call-notification-template" type="text/html">
+<div>
+<span type="hidden" id="https://dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png"></span>
+<span style="margin-left:5px" id="unknown-call-notification-text">is calling</span>
+<span style="float:left;">
+	<a href="#contacts/call-lead/{{first_name}}/{{last_name}}" id="unknown-contact-name" style="color:black; font-weight:bold;" title="{{first_name}} {{last_name}}">{{first_name}} {{last_name}}</a>
+</span>
+</div>
+</script>
+
+<script id="event-notification-template" type="text/html">
+<div>
+<span class="noty_text" id="noty_text">'{{title}}' coming up at {{epochToHumanDate "h:MM TT" start}}</span></div>
+</script>
