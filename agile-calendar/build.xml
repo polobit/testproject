@@ -6,9 +6,7 @@
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="agile-calendar">
 
     <property environment="env"/>
-    <property name="APPENGINE_DIR" value="/home/mantra/Documents/softwares/appengine-java-sdk-1.9.18/lib"/>
-    <property name="LIB_DIR" value="../agile-java-server/lib"/>
-    <property name="TARGET_DIR" value="../target/agile-java-server"/>
+        <property file="../agile-java-server/build.properties"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <path id="libpath">
         <fileset dir="${LIB_DIR}" includes="*.jar"/>
