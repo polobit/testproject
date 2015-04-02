@@ -1211,7 +1211,7 @@ public class JSAPI
 	    if (contact.getContactField(name) == null)
 		return JSAPIUtil.generateJSONErrorResponse(Errors.PROPERTY_MISSING);
 	    else
-		return contact.getContactFieldValue(name);
+		return new ObjectMapper().writeValueAsString(contact.getContactFieldValue(name));
 	}
 	catch (Exception e)
 	{
