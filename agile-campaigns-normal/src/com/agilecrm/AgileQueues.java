@@ -12,6 +12,8 @@ public class AgileQueues
 
     // Campaign Push Queue
     public static final String CAMPAIGN_QUEUE = "campaign-queue";
+    public static final String BULK_CAMPAIGN_QUEUE = "bulk-campaign-queue";
+    public static final String NORMAL_CAMPAIGN_QUEUE = "normal-campaign-queue";
 
     // Cron Push Queue
     public static final String CRON_QUEUE = "cron-queue";

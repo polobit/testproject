@@ -6,7 +6,7 @@
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="agile-calendar">
 
     <property environment="env"/>
-        <property file="../agile-java-server/build.properties"/>
+<property file="../agile-java-server/build.properties"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <path id="libpath">
         <fileset dir="${LIB_DIR}" includes="*.jar"/>

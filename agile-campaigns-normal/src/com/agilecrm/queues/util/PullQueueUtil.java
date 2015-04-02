@@ -3,6 +3,8 @@ package com.agilecrm.queues.util;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.AgileQueues;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.LeaseOptions;
@@ -93,7 +95,8 @@ public class PullQueueUtil
 	try
 	{
 	    // Create Task and push it into Task Queue
-		Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_QUEUE);
+		String currentQueueName = getCampaignQueueName(queueName);
+		Queue queue = QueueFactory.getQueue(currentQueueName);
 		TaskOptions taskOptions = TaskOptions.Builder.withUrl(backendUrl).param("queue_name", queueName)
 		        .method(Method.POST);
 		queue.addAsync(taskOptions);   
@@ -104,6 +107,32 @@ public class PullQueueUtil
 	    e.printStackTrace();
 	}
 	
+    }
+    
+    /**
+     * Returns campaign backend instance
+     * 
+     * @param queueName
+     * @return
+     */
+    public static String getCampaignQueueName(String queueName)
+    {
+	// Runs BULK_PULL_QUEUE tasks in bulk backend
+	if (StringUtils.equals(queueName, AgileQueues.BULK_CAMPAIGN_PULL_QUEUE)
+		|| StringUtils.equals(queueName, AgileQueues.BULK_EMAIL_PULL_QUEUE)
+		|| StringUtils.equals(queueName, AgileQueues.BULK_SMS_PULL_QUEUE)
+		|| StringUtils.equals(queueName, AgileQueues.BULK_PERSONAL_EMAIL_PULL_QUEUE))
+	    return AgileQueues.BULK_CAMPAIGN_QUEUE;
+
+	// Runs NORMAL_PULL_QUEUE tasks in normal backend
+	if (StringUtils.equals(queueName, AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE)
+		|| StringUtils.equals(queueName, AgileQueues.NORMAL_EMAIL_PULL_QUEUE)
+		|| StringUtils.equals(queueName, AgileQueues.NORMAL_SMS_PULL_QUEUE)
+		|| StringUtils.equals(queueName, AgileQueues.NORMAL_PERSONAL_EMAIL_PULL_QUEUE))
+	    return AgileQueues.NORMAL_CAMPAIGN_QUEUE;
+
+	return AgileQueues.CAMPAIGN_QUEUE;
+
     }
 
     /**
