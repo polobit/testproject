@@ -32,7 +32,6 @@ import com.agilecrm.contact.sync.TimeZoneUtil;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
 import com.agilecrm.contact.sync.wrapper.impl.ShopifyContactWrapperImpl;
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 
 /**
@@ -73,12 +72,13 @@ public class ShopifySyncImpl extends OneWaySyncService
 	lastSyncPoint = prefs.lastSyncCheckPoint;
 	if (shop != null && !shop.isEmpty())
 	{
-	    /*int total_records = getTotalCustomers(shop);
-	    int pages = (int) Math.ceil(total_records / MAX_FETCH_RESULT);
-
-	    if (total_records < MAX_FETCH_RESULT)
-		pages = 1;*/
-		boolean limitExceeded=false;
+	    /*
+	     * int total_records = getTotalCustomers(shop); int pages = (int)
+	     * Math.ceil(total_records / MAX_FETCH_RESULT);
+	     * 
+	     * if (total_records < MAX_FETCH_RESULT) pages = 1;
+	     */
+	    boolean limitExceeded = false;
 
 	    try
 	    {
@@ -86,42 +86,47 @@ public class ShopifySyncImpl extends OneWaySyncService
 		while (true)
 		{
 		    ArrayList<LinkedHashMap<String, Object>> customers = new ArrayList<LinkedHashMap<String, Object>>();
-		    /*String newCustomerURl = materializeURL(shop, "customers", currentPage, "new");
-		    String updateCustomerURl = materializeURL(shop, "customers", currentPage, "edited");
+		    /*
+		     * String newCustomerURl = materializeURL(shop, "customers",
+		     * currentPage, "new"); String updateCustomerURl =
+		     * materializeURL(shop, "customers", currentPage, "edited");
+		     * 
+		     * customers.addAll(getCustomers(newCustomerURl)); if
+		     * (lastSyncPoint != null) {
+		     * customers.addAll(getCustomers(updateCustomerURl)); }
+		     */
+		    ArrayList<LinkedHashMap<String, Object>> newCustomersList = new ArrayList<LinkedHashMap<String, Object>>();
+		    ArrayList<LinkedHashMap<String, Object>> updatedCustomersList = new ArrayList<LinkedHashMap<String, Object>>();
 
-		    customers.addAll(getCustomers(newCustomerURl));
+		    newCustomersList = getCustomers(materializeURL(shop, "customers", currentPage, "new"), currentPage,
+			    materializeURL(shop, "count", 0, "new"));
+		    if (newCustomersList != null)
+			System.out.println("newCustomersList size-----" + newCustomersList.size());
 		    if (lastSyncPoint != null)
 		    {
-			customers.addAll(getCustomers(updateCustomerURl));
-		    }*/
-		    ArrayList<LinkedHashMap<String, Object>> newCustomersList= new ArrayList<LinkedHashMap<String, Object>>();
-		    ArrayList<LinkedHashMap<String, Object>> updatedCustomersList= new ArrayList<LinkedHashMap<String, Object>>();
-		    
-		    newCustomersList=getCustomers(materializeURL(shop, "customers", currentPage, "new"),currentPage,materializeURL(shop, "count", 0, "new"));
-		    if(newCustomersList!=null)
-		    	System.out.println("newCustomersList size-----"+newCustomersList.size());
-		    if(lastSyncPoint!=null){
-		    	updatedCustomersList=getCustomers(materializeURL(shop, "customers", currentPage, "edited"),currentPage,materializeURL(shop, "count", 0, "edited"));
-		    	if(updatedCustomersList!=null)
-		    		System.out.println("updatedCustomersList size-----"+updatedCustomersList.size());
+			updatedCustomersList = getCustomers(materializeURL(shop, "customers", currentPage, "edited"),
+				currentPage, materializeURL(shop, "count", 0, "edited"));
+			if (updatedCustomersList != null)
+			    System.out.println("updatedCustomersList size-----" + updatedCustomersList.size());
 		    }
-		    if(newCustomersList!=null)
-		    	customers.addAll(newCustomersList);
-		    if(updatedCustomersList!=null)
-		    	customers.addAll(updatedCustomersList);
-		    
-		    if(newCustomersList!=null && newCustomersList.size()==0 && updatedCustomersList!=null && updatedCustomersList.size()==0)
-		    	break;
+		    if (newCustomersList != null)
+			customers.addAll(newCustomersList);
+		    if (updatedCustomersList != null)
+			customers.addAll(updatedCustomersList);
+
+		    if (newCustomersList != null && newCustomersList.size() == 0 && updatedCustomersList != null
+			    && updatedCustomersList.size() == 0)
+			break;
 		    limitExceeded = isLimitExceeded();
-		    if (!limitExceeded)
+		    if (!limitExceeded && customers.size() > 0)
 		    {
-		    	if(customers!=null)
-		    		System.out.println("customers size----------"+customers.size());
+			if (customers != null)
+			    System.out.println("customers size----------" + customers.size());
 			for (int i = 0; i < customers.size(); i++)
 			{
 
 			    Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i));
-			    System.out.println("Contact-------"+contact);
+			    System.out.println("Contact-------" + contact);
 
 			    addCustomerRelatedNote(customers.get(i).get("note"), contact);
 			    saveCustomersOrder(customers.get(i), contact);
@@ -130,22 +135,24 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    }
 		    else
 		    {
-		    	System.out.println("Limit exceeded so updating last sync prefs");
+			System.out.println("Limit exceeded so updating last sync prefs");
 			updateLastSyncedInPrefs();
 			break;
 		    }
 		    currentPage += 1;
 		}
-		//If limit exceeded mail notification is called by isLimitExceeded()
-		//otherwise we call mail notification from here
+		// If limit exceeded mail notification is called by
+		// isLimitExceeded()
+		// otherwise we call mail notification from here
 		if (!limitExceeded)
-			sendNotification(prefs.type.getNotificationEmailSubject());
+		    sendNotification(prefs.type.getNotificationEmailSubject());
 		System.out.println("After mail notification, updating last sync prefs");
 		updateLastSyncedInPrefs();
 	    }
 	    catch (Exception e)
 	    {
-	    	System.out.println("After exception raised in initSync(), updating last sync prefs----- "+e.getMessage());
+		System.out.println("After exception raised in initSync(), updating last sync prefs----- "
+			+ e.getMessage());
 		updateLastSyncedInPrefs();
 		e.printStackTrace();
 	    }
@@ -206,9 +213,10 @@ public class ShopifySyncImpl extends OneWaySyncService
 
 	catch (Exception e)
 	{
-	    
+
 	    // retries when any problem happence
-		System.out.println("After exception raised in updateLastSyncedInPrefs(), updating last sync prefs------- "+e.getMessage());
+	    System.out.println("After exception raised in updateLastSyncedInPrefs(), updating last sync prefs------- "
+		    + e.getMessage());
 	    updateLastSyncedInPrefs();
 	    e.printStackTrace();
 	}
@@ -320,7 +328,8 @@ public class ShopifySyncImpl extends OneWaySyncService
 	catch (OAuthException e)
 	{
 
-	    if (e.getCause().equals(new SocketTimeoutException()) || e.getCause().toString().contains((new SocketTimeoutException()).toString()))
+	    if (e.getCause().equals(new SocketTimeoutException())
+		    || e.getCause().toString().contains((new SocketTimeoutException()).toString()))
 		getCustomerCount(url);
 	}
 	catch (Exception e)
@@ -338,7 +347,7 @@ public class ShopifySyncImpl extends OneWaySyncService
      *            the access url
      * @return ArrayList of Customers
      */
-    public ArrayList<LinkedHashMap<String, Object>> getCustomers(String accessURl,int currentPage,String countURL)
+    public ArrayList<LinkedHashMap<String, Object>> getCustomers(String accessURl, int currentPage, String countURL)
     {
 
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, accessURl);
@@ -351,18 +360,21 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    response.getStream(), Map.class);
 	    customers = results.get("customers");
 	    int total_customers = getCustomerCount(countURL);
-	    
-	    //Some times no customers getting due to invalid response so 
-	    //if customers null again calling the getCustomers method
-	    if((customers==null && (currentPage*MAX_FETCH_RESULT)<total_customers) || (customers!=null && customers.size()==0 && (currentPage*MAX_FETCH_RESULT)<total_customers)){
-	    	System.out.println("customers is null");
-	    	getCustomers(accessURl,currentPage,countURL);
+
+	    // Some times no customers getting due to invalid response so
+	    // if customers null again calling the getCustomers method
+	    if ((customers == null && (currentPage * MAX_FETCH_RESULT) < total_customers)
+		    || (customers != null && customers.size() == 0 && (currentPage * MAX_FETCH_RESULT) < total_customers))
+	    {
+		System.out.println("customers is null");
+		getCustomers(accessURl, currentPage, countURL);
 	    }
 	}
 	catch (OAuthException e)
 	{
-	    if (e.getCause().equals(new SocketTimeoutException()) || e.getCause().toString().contains((new SocketTimeoutException()).toString()))
-		getCustomers(accessURl,currentPage,countURL);
+	    if (e.getCause().equals(new SocketTimeoutException())
+		    || e.getCause().toString().contains((new SocketTimeoutException()).toString()))
+		getCustomers(accessURl, currentPage, countURL);
 	}
 	catch (Exception e)
 	{
@@ -386,12 +398,12 @@ public class ShopifySyncImpl extends OneWaySyncService
 	String updatedOrder = getOrderUrl(customerId, "updated");
 	List<LinkedHashMap<String, Object>> newOrderList = Orders(newOrder);
 	List<LinkedHashMap<String, Object>> updatedOrderList = Orders(updatedOrder);
-	if(newOrderList!=null)
-		listOrder.addAll(newOrderList);
+	if (newOrderList != null)
+	    listOrder.addAll(newOrderList);
 	if (lastSyncPoint != null)
 	{
-		if(updatedOrderList!=null)
-			listOrder.addAll(updatedOrderList);
+	    if (updatedOrderList != null)
+		listOrder.addAll(updatedOrderList);
 	}
 	return listOrder;
 
@@ -412,10 +424,11 @@ public class ShopifySyncImpl extends OneWaySyncService
 	}
 	catch (OAuthException e)
 	{
-		// retry
-	    if (e.getCause().equals(new SocketTimeoutException()) || e.getCause().toString().contains((new SocketTimeoutException()).toString()))
-	    	Orders(url);
-	    
+	    // retry
+	    if (e.getCause().equals(new SocketTimeoutException())
+		    || e.getCause().toString().contains((new SocketTimeoutException()).toString()))
+		Orders(url);
+
 	}
 	catch (Exception e)
 	{
@@ -433,7 +446,8 @@ public class ShopifySyncImpl extends OneWaySyncService
      */
     public String getOrderUrl(String custId, String status)
     {
-	StringBuilder sb = new StringBuilder("https://" + shop + "/admin/orders.json?customer_id=" + custId+"&status=any");
+	StringBuilder sb = new StringBuilder("https://" + shop + "/admin/orders.json?customer_id=" + custId
+		+ "&status=any");
 	if (lastSyncPoint != null)
 	{
 	    if (status.equalsIgnoreCase("new"))
@@ -458,115 +472,124 @@ public class ShopifySyncImpl extends OneWaySyncService
      */
     public void saveCustomersOrder(Object customer, Contact contact)
     {
-    	try {
-        	System.out.println("Start------saveCustomersOrder(-,-)");
-        	LinkedHashMap<String, Object> customerProperties = (LinkedHashMap<String, Object>) customer;
-        	ArrayList<LinkedHashMap<String, Object>> orders = getOrder(customerProperties.get("id").toString());
+	try
+	{
+	    System.out.println("Start------saveCustomersOrder(-,-)");
+	    LinkedHashMap<String, Object> customerProperties = (LinkedHashMap<String, Object>) customer;
+	    ArrayList<LinkedHashMap<String, Object>> orders = getOrder(customerProperties.get("id").toString());
 
-        	if (orders != null && orders.size() > 0)
-        	{
+	    if (orders != null && orders.size() > 0)
+	    {
 
-        	    // removeOlderNotes(contact);
-        	    Map<String, Note> notes = new HashMap<String, Note>();
+		// removeOlderNotes(contact);
+		Map<String, Note> notes = new HashMap<String, Note>();
 
-        	    Iterator<LinkedHashMap<String, Object>> it = orders.listIterator();
-        	    while (it.hasNext())
-        	    {
-        		Note note = new Note();
-        		LinkedHashMap<String, Object> order = it.next();
+		Iterator<LinkedHashMap<String, Object>> it = orders.listIterator();
+		while (it.hasNext())
+		{
+		    Note note = new Note();
+		    LinkedHashMap<String, Object> order = it.next();
 
-        		ArrayList<LinkedHashMap<String, Object>> listItems = (ArrayList<LinkedHashMap<String, Object>>) order
-        			.get("line_items");
-        		Iterator<LinkedHashMap<String, Object>> iterator = listItems.listIterator();
-        		while (iterator.hasNext())
-        		{
-        		    LinkedHashMap<String, Object> itemDetails = iterator.next();
-        		    ArrayList<LinkedHashMap<String, String>> taxDetails = (ArrayList<LinkedHashMap<String, String>>) itemDetails
-        			    .get("tax_lines");
-        		    note.subject = "Order-" + order.get("order_number");
+		    ArrayList<LinkedHashMap<String, Object>> listItems = (ArrayList<LinkedHashMap<String, Object>>) order
+			    .get("line_items");
+		    Iterator<LinkedHashMap<String, Object>> iterator = listItems.listIterator();
+		    while (iterator.hasNext())
+		    {
+			LinkedHashMap<String, Object> itemDetails = iterator.next();
+			ArrayList<LinkedHashMap<String, String>> taxDetails = (ArrayList<LinkedHashMap<String, String>>) itemDetails
+				.get("tax_lines");
+			note.subject = "Order-" + order.get("order_number");
 
-        		    if (notes.containsKey(note.subject))
-        		    {
+			if (notes.containsKey(note.subject))
+			{
 
-        			Note n = notes.get(note.subject);
-        			StringBuilder sb = new StringBuilder(n.description);
-        			sb.append("\n").append(itemDetails.get("name") + " : ").append(itemDetails.get("price") + "(")
-        				.append(order.get("currency") + ")");
-        			if (taxDetails.size() > 0)
-        			{
-        			    sb.append("Tax : " + taxDetails.get(0).get("price") + "(" + order.get("currency") + ")");
-        			}
-        			sb.append("\n Total Price : " + order.get("total_price") + "(" + order.get("currency") + ")");
-        			n.description = sb.toString();
+			    Note n = notes.get(note.subject);
+			    StringBuilder sb = new StringBuilder(n.description);
+			    sb.append("\n").append(itemDetails.get("name") + " : ")
+				    .append(itemDetails.get("price") + "(").append(order.get("currency") + ")");
+			    if (taxDetails.size() > 0)
+			    {
+				sb.append("Tax : " + taxDetails.get(0).get("price") + "(" + order.get("currency") + ")");
+			    }
+			    sb.append("\n Total Price : " + order.get("total_price") + "(" + order.get("currency")
+				    + ")");
+			    n.description = sb.toString();
 
-        		    }
-        		    else
-        		    {
-        			StringBuilder sb = new StringBuilder();
-        			sb.append(itemDetails.get("name") + " : ").append(itemDetails.get("price") + "(")
-        				.append(order.get("currency") + ")");
-        			if (taxDetails.size() > 0)
-        			{
-        			    sb.append("Tax : " + taxDetails.get(0).get("price") + "(" + order.get("currency") + ")");
-        			}
-        			note.description = sb.toString();
+			}
+			else
+			{
+			    StringBuilder sb = new StringBuilder();
+			    sb.append(itemDetails.get("name") + " : ").append(itemDetails.get("price") + "(")
+				    .append(order.get("currency") + ")");
+			    if (taxDetails.size() > 0)
+			    {
+				sb.append("Tax : " + taxDetails.get(0).get("price") + "(" + order.get("currency") + ")");
+			    }
+			    note.description = sb.toString();
 
-        		    }
-        		    if (listItems.size() == 1)
-        		    {
-        			note.description += "\n Total Price : " + order.get("total_price") + "("
-        				+ order.get("currency") + ")" + "";
-        		    }
+			}
+			if (listItems.size() == 1)
+			{
+			    note.description += "\n Total Price : " + order.get("total_price") + "("
+				    + order.get("currency") + ")" + "";
+			}
 
-        		    note.addRelatedContacts(contact.id.toString());
+			note.addRelatedContacts(contact.id.toString());
 
-        		    notes.put(note.subject, note);
-        		    
-        		    if(itemDetails.get("title")!=null){
-        		    	//Replacing special characters with underscore except space and underscore
-						String tagName = itemDetails.get("title").toString().replaceAll("[^\\p{L}\\p{N} _]", "_").trim();
-						if(tagName!=null){
-							//if tag name start with _ we removed that _ until tag name starts with alphabet
-							while(tagName.startsWith("_"))
-								tagName = tagName.replaceFirst("_", "").trim();
-							if(!tagName.isEmpty())
-								contact.tags.add(tagName);
-						}
-        		    }
-        		    contact.save();
+			notes.put(note.subject, note);
 
-        		}
-        		// saving note
-        		try
-        		{
-        		    List<Note> listNote = NoteUtil.getNotes(contact.id);
-        		    for (Note n : listNote)
-        		    {
-        			notes.put(n.subject, n);
-        		    }
+			if (itemDetails.get("title") != null)
+			{
+			    // Replacing special characters with underscore
+			    // except space and underscore
+			    String tagName = itemDetails.get("title").toString().replaceAll("[^\\p{L}\\p{N} _]", "_")
+				    .trim();
+			    if (tagName != null)
+			    {
+				// if tag name start with _ we removed that _
+				// until tag name starts with alphabet
+				while (tagName.startsWith("_"))
+				    tagName = tagName.replaceFirst("_", "").trim();
+				if (!tagName.isEmpty())
+				    contact.tags.add(tagName);
+			    }
+			}
+			contact.save();
 
-        		    for (Entry<String, Note> map : notes.entrySet())
-        		    {
-        			Note orderNote = map.getValue();
-        			orderNote.save();
-        		    }
-        		}
-        		catch (Exception e)
-        		{
-        		    e.printStackTrace();
-        		}
+		    }
+		    // saving note
+		    try
+		    {
+			List<Note> listNote = NoteUtil.getNotes(contact.id);
+			for (Note n : listNote)
+			{
+			    notes.put(n.subject, n);
+			}
 
-        		printRefunds(contact, order.get("id").toString(), customerProperties.get("id").toString());
-        		printOrderRelatedEvents(order.get("id").toString(), contact);
+			for (Entry<String, Note> map : notes.entrySet())
+			{
+			    Note orderNote = map.getValue();
+			    orderNote.save();
+			}
+		    }
+		    catch (Exception e)
+		    {
+			e.printStackTrace();
+		    }
 
-        	    }
+		    printRefunds(contact, order.get("id").toString(), customerProperties.get("id").toString());
+		    printOrderRelatedEvents(order.get("id").toString(), contact);
 
-        	}
-        	System.out.println("End------saveCustomersOrder(-,-)");
-
-            } catch (Exception e1) {
-			e1.printStackTrace();
 		}
+
+	    }
+	    System.out.println("End------saveCustomersOrder(-,-)");
+
+	}
+	catch (Exception e1)
+	{
+	    e1.printStackTrace();
+	}
     }
 
     /**
@@ -578,7 +601,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 
     private void addCustomerRelatedNote(Object noteObject, Contact contact)
     {
-    	System.out.println("Start----addCustomerRelatedNote(-,-)");
+	System.out.println("Start----addCustomerRelatedNote(-,-)");
 	Map<String, Note> noteMap = new HashMap<String, Note>();
 	try
 	{
