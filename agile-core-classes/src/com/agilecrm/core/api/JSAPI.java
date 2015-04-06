@@ -41,6 +41,7 @@ import com.agilecrm.forms.Form;
 import com.agilecrm.forms.util.FormUtil;
 import com.agilecrm.gadget.GadgetTemplate;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.JSAPIUtil;
 import com.agilecrm.util.JSAPIUtil.Errors;
 import com.agilecrm.webrules.WebRule;
@@ -54,7 +55,6 @@ import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
-import com.campaignio.logger.Log;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.wrapper.LogWrapper;
 
@@ -913,7 +913,7 @@ public class JSAPI
 	    JSONArray arr = new JSONArray();
 	    ObjectMapper mapper = new ObjectMapper();
 	    List<LogWrapper> logs = new ArrayList<LogWrapper>();
-	    logs = LogUtil.getSQLLogs(null, contact.id.toString(), "0","50", null);
+	    logs = LogUtil.getSQLLogs(null, contact.id.toString(), "0", "50", null);
 	    for (LogWrapper log : logs)
 	    {
 		arr.put(mapper.writeValueAsString(log));
@@ -1379,6 +1379,25 @@ public class JSAPI
 	{
 	    System.out.println("Error is " + e.getMessage());
 	    return;
+	}
+    }
+
+    /**
+     * Get allowed domains
+     */
+    @Path("users")
+    @GET
+    @Produces("application / x-javascript;charset=UTF-8;")
+    public String getAllUsers()
+    {
+	try
+	{
+	    ObjectMapper mapper = new ObjectMapper();
+	    return mapper.writeValueAsString(DomainUserUtil.getAllUsers());
+	}
+	catch (Exception e)
+	{
+	    return null;
 	}
     }
 }

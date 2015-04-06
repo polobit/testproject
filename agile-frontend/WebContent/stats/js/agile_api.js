@@ -148,4 +148,8 @@ var _agile = {
 		allowed_domains : function(callback)
 		{
 			agile_allowedDomains(callback);							// Get string of allowed domains
+		},
+		get_all_users : function(callback)
+		{
+			agile_getAllUsers(callback);							// Get string of allowed domains
 		}};
