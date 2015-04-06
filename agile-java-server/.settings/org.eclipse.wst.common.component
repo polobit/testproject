@@ -21,5 +21,8 @@
             <dependent-object/>
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="agile-core-classes.jar" deploy-path="/lib" handle="module:/resource/agile-core-classes/agile-core-classes">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
     </wb-module>
 </project-modules>

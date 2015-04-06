@@ -60,6 +60,7 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" includeantruntime="false" source="1.7" target="1.7" nowarn="on">
             <src path="src"/>
+        	<src path="../agile-core-classes/src" />
             <classpath refid="project.classpath"/>
         </javac>
     </target>

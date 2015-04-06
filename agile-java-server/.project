@@ -8,6 +8,7 @@
 		<project>agile-campaigns-normal</project>
 		<project>agile-frontend</project>
 		<project>agile-normal-bulk</project>
+		<project>agile-core-classes</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
