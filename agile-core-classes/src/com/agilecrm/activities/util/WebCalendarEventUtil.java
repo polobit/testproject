@@ -134,6 +134,7 @@ public class WebCalendarEventUtil
 	    }
 	}
 
+	listOfLists.remove(listOfLists.get(listOfLists.size()-1));
 	System.out.println(listOfLists.size());
 	// print list of slot
 	// System.out.println("possibleSlots:");

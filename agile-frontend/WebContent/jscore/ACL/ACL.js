@@ -41,6 +41,11 @@ function canImportContacts()
 	return hasScope("IMPORT_CONTACTS");
 }
 
+function canExportContacts()
+{
+	return hasScope("EXPORT_CONTACTS");
+}
+
 function canEditContact(owner_id)
 {
 	if((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
