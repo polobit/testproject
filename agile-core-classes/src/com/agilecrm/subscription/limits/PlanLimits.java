@@ -41,20 +41,108 @@ public class PlanLimits
     protected String reporting;
     protected boolean whiteLabelEnabled;
     protected boolean emailWhiteLabelEnabled;
-    
+
     /**
      * New plan restrictions
      */
     protected Integer reportsLimit;
     protected Integer widgetsLimit;
+    protected boolean defaultWidget = true;
+    protected boolean callingWidget = true;
     protected Integer TriggersLimit;
+    protected Boolean socialSuite = true;
+    protected Boolean emailGateway = true;
+    protected Boolean smsGateway = true;
+
+    protected Boolean ACL = true;
+
+    protected Boolean mobileIntegration = true;
+    protected Boolean googleSync = true;
+    protected Boolean ecommerceSync = true;
+    protected Boolean paymentSync = true;
+    protected Boolean accountingSync = true;
+
+    protected Boolean cohortReports = true;
+    protected Boolean growthReports = true;
+    protected Boolean funnelReports = true;
+    protected Boolean activityReports = true;
+
+    protected Boolean onlineAppointment = true;
+
+    public Boolean getEmailGateway()
+    {
+	return emailGateway;
+    }
+
+    public Boolean getMobileIntegration()
+    {
+	return mobileIntegration;
+    }
+
+    public Boolean getGoogleSync()
+    {
+	return googleSync;
+    }
+
+    public Boolean getEcommerceSync()
+    {
+	return ecommerceSync;
+    }
+
+    public Boolean getPaymentSync()
+    {
+	return paymentSync;
+    }
+
+    public Boolean getAccountingSync()
+    {
+	return accountingSync;
+    }
+
+    public Boolean getCohortReports()
+    {
+	return cohortReports;
+    }
+
+    public Boolean getGrowthReports()
+    {
+	return growthReports;
+    }
+
+    public Boolean getFunnelReports()
+    {
+	return funnelReports;
+    }
+
+    public Boolean getOnlineAppointment()
+    {
+	return onlineAppointment;
+    }
+
+    public Integer getWidgets()
+    {
+	return widgets;
+    }
+
+    public Plan getPlan()
+    {
+	return plan;
+    }
 
     protected Integer campaignNodesLimit;
+    protected Integer widgets;
+
     /**
      * Plan obect which is used to fetch respective plan limits and also number
      * user to calculate per user limit
      */
     Plan plan;
+
+    // Static plan limits
+    private static final FreePlanLimits freePlanLimits = new FreePlanLimits();
+    private static final StarterPlanLimits starterPlanLimits = new StarterPlanLimits();
+    private static final RegularPlanLimits regularPlanLimits = new RegularPlanLimits();
+    private static final ProPlanLimits proPlanLimits = new ProPlanLimits();
 
     /**
      * Child classes of {@link PlanLimits} class used to create instance based
@@ -68,26 +156,34 @@ public class PlanLimits
 	 * Constructor takes respective class, rank (order of plan which is used
 	 * to determine whether plan is being downgraded)
 	 */
-	FREE(FreePlanLimits.class, 0), STARTER(StarterPlanLimits.class, 1), REGULAR(RegularPlanLimits.class, 2), PRO(
-		ProPlanLimits.class, 3),
+	FREE(FreePlanLimits.class, 0, freePlanLimits), STARTER(StarterPlanLimits.class, 1, starterPlanLimits), REGULAR(
+		RegularPlanLimits.class, 2, regularPlanLimits), PRO(ProPlanLimits.class, 3, proPlanLimits),
 
 	// Legacy plans
-	LITE(StarterPlanLimits.class, 0), BASIC(StarterPlanLimits.class, 1), PROFESSIONAL(RegularPlanLimits.class, 2), ENTERPRISE(
-		ProPlanLimits.class, 3);
+	LITE(StarterPlanLimits.class, 0, freePlanLimits), BASIC(StarterPlanLimits.class, 1, starterPlanLimits), PROFESSIONAL(
+		RegularPlanLimits.class, 2, regularPlanLimits), ENTERPRISE(ProPlanLimits.class, 3, proPlanLimits);
 
 	Class<? extends PlanLimits> clazz;
 
 	public int rank = 0;
 
-	private PlanClasses(Class<? extends PlanLimits> clazz, int rank)
+	private PlanLimits instance = null;
+
+	private PlanClasses(Class<? extends PlanLimits> clazz, int rank, PlanLimits instance)
 	{
 	    this.rank = rank;
 	    this.clazz = clazz;
+	    this.instance = instance;
 	}
 
 	public Class<? extends PlanLimits> getClazz()
 	{
 	    return clazz;
+	}
+
+	public PlanLimits getLimitsInstance()
+	{
+	    return instance;
 	}
     }
 
@@ -119,7 +215,7 @@ public class PlanLimits
 	try
 	{
 	    // Gets respective child class according to plan name
-	    PlanLimits planDetails = PlanClasses.valueOf(planName).clazz.newInstance();
+	    PlanLimits planDetails = PlanClasses.valueOf(planName).getLimitsInstance();
 
 	    // Assigns plan to current object, as it can be used for calculate
 	    // limits based on user quantity
@@ -240,16 +336,47 @@ public class PlanLimits
 
     public Integer getReportsLimit()
     {
-        return reportsLimit;
+	return reportsLimit;
     }
 
     public Integer getWidgetsLimit()
     {
-        return widgetsLimit;
+	return widgets;
     }
 
     public Integer getTriggersLimit()
     {
-        return TriggersLimit;
+	return TriggersLimit;
     }
+
+    public Boolean getACL()
+    {
+	return ACL;
+    }
+
+    public Boolean getActivityReports()
+    {
+	return activityReports;
+    }
+
+    public Boolean getSocialSuite()
+    {
+	return socialSuite;
+    }
+
+    public Boolean getCallingWidget()
+    {
+	return callingWidget;
+    }
+
+    public Boolean getSMSGateway()
+    {
+	return smsGateway;
+    }
+
+    public boolean getDefaultWidget()
+    {
+	return defaultWidget;
+    }
+
 }

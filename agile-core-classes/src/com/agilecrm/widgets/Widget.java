@@ -83,7 +83,7 @@ public class Widget
     public static enum WidgetType
     {
 
-	SOCIAL, SUPPORT, EMAIL, CALL, BILLING, CUSTOM,ECOMMERCE, INTEGRATIONS
+	SOCIAL, SUPPORT, EMAIL, CALL, BILLING, CUSTOM, ECOMMERCE, INTEGRATIONS
 
     };
 
@@ -92,6 +92,9 @@ public class Widget
      */
     @Indexed
     public WidgetType widget_type = null;
+
+    @NotSaved
+    public boolean allowedToAdd = true;
 
     /**
      * To merge integrations within Widget Entity
@@ -149,7 +152,7 @@ public class Widget
     public boolean is_added = false;
 
     // Default constructor
-   public  Widget()
+    public Widget()
     {
 
     }
