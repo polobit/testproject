@@ -10,8 +10,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +33,6 @@ import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.googlecode.objectify.Key;
 
@@ -72,12 +69,12 @@ public class ContactFilterResultFetcher
     private DomainUser user = null;
 
     private HashSet<UserAccessScopes> scopes = null;
-    
+
     public void setLimits()
     {
 	Subscription subscription = SubscriptionUtil.getSubscription();
-	
-	if(subscription.isFreePlan())
+
+	if (subscription.isFreePlan())
 	{
 	    max_fetch_size = 25;
 	    max_fetch_set_size = 25;
@@ -86,7 +83,7 @@ public class ContactFilterResultFetcher
 	{
 	    max_fetch_size = Integer.MAX_VALUE;
 	}
-	    
+
     }
 
     /**
@@ -121,13 +118,13 @@ public class ContactFilterResultFetcher
 	this.max_fetch_set_size = max_fetch_set_size;
     }
 
-    public ContactFilterResultFetcher(String filter_id, String dynamic_filter, int max_fetch_set_size, String contact_ids,
-	    Long currentDomainUserId)
+    public ContactFilterResultFetcher(String filter_id, String dynamic_filter, int max_fetch_set_size,
+	    String contact_ids, Long currentDomainUserId)
     {
 	max_fetch_size = Integer.MAX_VALUE;
-	
+
 	this.max_fetch_set_size = max_fetch_set_size;
-	
+
 	this.contact_ids = contact_ids;
 	domainUserId = currentDomainUserId;
 	try
@@ -144,16 +141,17 @@ public class ContactFilterResultFetcher
 	}
 	try
 	{
-	    if(StringUtils.isNotEmpty(dynamic_filter)) {
-	    	ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(dynamic_filter);
-	    	this.filter = contact_filter;
-		    if (this.filter != null)
-		    	modifyFilterCondition();
+	    if (StringUtils.isNotEmpty(dynamic_filter))
+	    {
+		ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(dynamic_filter);
+		this.filter = contact_filter;
+		if (this.filter != null)
+		    modifyFilterCondition();
 	    }
 	}
 	catch (JsonSyntaxException e)
 	{
-	    System.out.println("Exception while parsing dynamic filters for bulk operations : "+e);
+	    System.out.println("Exception while parsing dynamic filters for bulk operations : " + e);
 	}
 
 	BulkActionUtil.setSessionManager(domainUserId);
@@ -385,9 +383,12 @@ public class ContactFilterResultFetcher
 	    return contacts;
 	}
 
+	QueryDocument<Contact> queryInstace = new QueryDocument<Contact>(new ContactDocument().getIndex(),
+		Contact.class);
+	queryInstace.isBackendOperations = true;
+
 	// Fetches first 200 contacts
-	Collection<Contact> contactCollection = new QueryDocument<Contact>(new ContactDocument().getIndex(),
-		Contact.class).advancedSearch(filter, max_fetch_set_size, cursor, null);
+	Collection<Contact> contactCollection = queryInstace.advancedSearch(filter, max_fetch_set_size, cursor, null);
 
 	if (contactCollection == null || contactCollection.size() == 0)
 	{
@@ -432,7 +433,7 @@ public class ContactFilterResultFetcher
     public boolean hasNextSet()
     {
 
-	if((fetched_count >= max_fetch_size ))
+	if ((fetched_count >= max_fetch_size))
 	{
 	    return false;
 	}
