@@ -42,11 +42,10 @@
                         {{/if_equals}}
                 {{/if_equals}}
     		{{else}}
-				{{#check_plan "FREE"}}
+			{{#if allowedToAdd}}
 					{{#if_equals widget_type "SOCIAL"}}
 						<a class="btn btn-primary add-widget" href="#{{name}}" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
 						{{else}}
-							{{#if_equals widget_type "CALL"}}
                                {{#if_equals name "CallScript"}}
 								   <a class="btn btn-primary add-widget" href="#callscript" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
                                {{else}}{{#if_equals name "Twilio"}}
@@ -55,20 +54,18 @@
                                             <a class="btn btn-primary add-widget" href="#{{name}}" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
 							           {{/if_equals}}
 							   {{/if_equals}}
-							{{else}}
-								<a class="btn btn-primary" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Add</a><span style="margin-left:5px"><i>Paid accounts only</i></span>
-							{{/if_equals}}
 					{{/if_equals}}
+				{{else}}
+			<div style="/*margin: 40px auto;	width: 50%;*/ display:inline;float:left">
+							<a class="btn btn-primary _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
+				</div>
+				{{type}}
+				{{#if_equals widget_type "CALL"}}
+					<div style="display:inline;float:right;display:none; max-width:135px;" class="text-right {{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade" ><p><i>Requires Regular or<br/>Pro plan. <a href="#subscribe">Upgrade</a></i><p></div>
 					{{else}}
-                       {{#if_equals name "CallScript"}}
-                          <a class="btn btn-primary add-widget" href="#callscript" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
-                       {{else}}{{#if_equals name "Twilio"}}
-                                   <a></a>
-                               {{else}}
-     				               <a class="btn btn-primary add-widget" href="#{{name}}" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
-                               {{/if_equals}}
-                       {{/if_equals}}    	
-				{{/check_plan}}
+				 <div style="display:inline;float:right;display:none; max-width:135px" class="text-right {{name}}-upgrade" ><p><i>Please <a href="#subscribe">upgrade</a> <br/> to add more widgets</i><p></div>
+				{{/if_equals}}
+			{{/if}}
     		{{/if}}
 		{{/if_equals}}
 	</div>
@@ -135,7 +132,14 @@
     					<h1>Custom widget</h1>
     					<br />
     					<div>
-    						<a class="btn btn-primary" id="add-custom-widget" style="margin-top:20px;"><i class="icon-plus" style="margin-right:5px"></i>Add custom widget</a>
+							{{#isAllowedInCurrentPlan "is_custom_widget"}}
+									<a class="btn btn-primary" id="add-custom-widget" style="margin-top:20px;"><i class="icon-plus" style="margin-right:5px"></i>Add custom widget</a>
+								{{else}}
+									<div style="/*margin: 40px auto;	width: 50%;*/ display:inline;float:left">
+											<a class="btn btn-primary _upgrade" id="custom-widget-upgrade"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
+									</div>
+									<div style="display:inline;float:right;display:none; max-width:135px" class="text-right custom-widget-upgrade" ><p><i>Required Pro plan. <a href="#subscribe">upgrade</a></i><p></div>
+							{{/isAllowedInCurrentPlan}}
 						</div>
 					</div>
 				</div>

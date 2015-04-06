@@ -1,33 +1,5 @@
 var plan_json = [];
 var INTERVALS = ["monthly", "yearly", "biennial"];
-//Plans with costs
-var PLANS_COSTS_JSON = {};
-PLANS_COSTS_JSON.starter = "14.99";
-PLANS_COSTS_JSON.regular = "49.99";
-PLANS_COSTS_JSON.pro = "79.99";
-
-// Plans intervals JSON
-var PLANS_DISCOUNTS_JSON = {};
-PLANS_DISCOUNTS_JSON.monthly = "0";
-PLANS_DISCOUNTS_JSON.yearly = "20";
-PLANS_DISCOUNTS_JSON.biennial = "40";
-
-var PLANS_DISCOUNTS_JSON_NEW = {};
-
-PLANS_DISCOUNTS_JSON_NEW.starter = {};
-PLANS_DISCOUNTS_JSON_NEW.starter.monthly = "0";
-PLANS_DISCOUNTS_JSON_NEW.starter.yearly = "33.355";
-PLANS_DISCOUNTS_JSON_NEW.starter.biennial = "40";
-
-PLANS_DISCOUNTS_JSON_NEW.regular = {};
-PLANS_DISCOUNTS_JSON_NEW.regular.monthly = "0";
-PLANS_DISCOUNTS_JSON_NEW.regular.yearly = "20";
-PLANS_DISCOUNTS_JSON_NEW.regular.biennial = "40";
-
-PLANS_DISCOUNTS_JSON_NEW.pro = {};
-PLANS_DISCOUNTS_JSON_NEW.pro.monthly = "0";
-PLANS_DISCOUNTS_JSON_NEW.pro.yearly = "18.75";
-PLANS_DISCOUNTS_JSON_NEW.pro.biennial = "40";
 
 var PLAN_DETAILS = {
 		getPlanPrice : function(plan_name) {
@@ -252,8 +224,13 @@ $(function()
       	$('#purchase-plan').die().live('click', function(e){
 	          var quantity = $("#users_quantity").text();
 	          var cost = $("#users_total_cost").text();
-	          var plan = $("input[name='pro_vs_lite']:checked").val();
+	          var plan_element = $("input[name='pro_vs_lite']:checked"); 
+	          var plan = $(plan_element).val();
+	          var version = $(plan_element).attr("version");
 	          var discount = "", months = "";
+	          
+	          if(version == undefined)
+	        	  version = "v2";
 	          
 	          if(!plan)
 	         {
@@ -292,8 +269,10 @@ $(function()
 	        plan_json.cost = (cost * months).toFixed(2);
 	        plan_json.months = months;
 	        plan_json.plan = plan;
+	        plan_json.version = version;
 	        plan_json.plan_type = plan.toUpperCase()+"_"+ cycle.toUpperCase();
 	        plan_json.cycle = cycle;
+	        
 	        
 	    	// Set coupon Only for Pro users
 			delete plan_json["coupon_code"];
@@ -356,8 +335,3 @@ $(function()
     			});
     	
 });	   
-
-function is_new_signup_payment()
-{
-	return IS_NEW_USER && _plan_on_signup;
-}
