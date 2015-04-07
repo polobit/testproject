@@ -26,6 +26,7 @@ import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
@@ -707,29 +708,40 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    }
 	}
 
-	if (this.id != null)
+	if (BillingRestrictionUtil.getInstance().getCurrentLimits().getOnlineAppointment())
 	{
-
-	    domainuser = DomainUserUtil.getDomainUser(id);
-	    if (StringUtils.isEmpty(domainuser.schedule_id))
+	    if (this.id != null)
 	    {
-		this.schedule_id = getScheduleid(domainuser.name);
+		domainuser = DomainUserUtil.getDomainUser(id);
+		if (StringUtils.isEmpty(this.schedule_id))
+		{
+		    if (StringUtils.isNotEmpty(domainuser.schedule_id))
+			this.schedule_id = domainuser.schedule_id;
+		    else
+		    {
+			if (StringUtils.isNotEmpty(this.name))
+			    this.schedule_id = getScheduleid(this.name);
+
+			else
+			    this.schedule_id = getScheduleid(domainuser.name);
+		    }
+		}
 
 	    }
 	    else
 	    {
-		if (StringUtils.isNotEmpty(this.schedule_id))
-		    this.schedule_id = getScheduleid(this.schedule_id);
-		else
-		    this.schedule_id = domainuser.schedule_id;
+		this.schedule_id = getScheduleid(this.name);
 	    }
-
 	}
 	else
 	{
-	    this.schedule_id = getScheduleid(this.name);
+	    if (this.id != null)
+	    {
+		domainuser = DomainUserUtil.getDomainUser(id);
+		if (StringUtils.isNotEmpty(domainuser.schedule_id))
+		    this.schedule_id = domainuser.schedule_id;
+	    }
 	}
-
 	// Stores password
 	if (!StringUtils.isEmpty(password) && !password.equals(MASKED_PASSWORD))
 	{
