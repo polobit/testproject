@@ -412,7 +412,7 @@ public class ReportsUtil
 	if (restriction.check())
 	    return;
 
-	BillingRestrictionUtil.throwLimitExceededException(ErrorMessages.REPORT);
+	BillingRestrictionUtil.throwLimitExceededException(ErrorMessages.REPORT, false);
     }
     
     public static Integer count()

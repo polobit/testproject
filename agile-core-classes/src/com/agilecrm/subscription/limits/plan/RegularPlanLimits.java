@@ -36,7 +36,7 @@ public class RegularPlanLimits extends PlanLimits
 	smsGateway = true;
 	ACL = true;
 	mobileIntegration = true;
-	onlineAppointment = false;
+	onlineAppointment = true;
 	callingWidget = true;
 
 	/**
