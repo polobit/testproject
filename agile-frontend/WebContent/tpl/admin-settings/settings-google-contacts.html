@@ -234,8 +234,8 @@
 		{{#isAllowedInCurrentPlan "is_accounting_sync_allowed"}}
     					<div class="btn" id="stripe_import" style="display:inline-block;">Enable</div>
 								{{else}}
-									<a disabled  class="btn"  style="display:inline-block;">Enable</a>
-									<div style="display:inline;float:right; max-width:135px;" class="text-right" >
+									 <a class="btn _upgrade"  id="stripe-sync-upgrade" style="display:inline-block;">Enable</a>
+									<div style="display:inline;float:right; max-width:135px;display: none;" class="text-right stripe-sync-upgrade" >
 										<p><i>{{toSafeString message}}</i><p>
 									</div>
 							{{/isAllowedInCurrentPlan}}
@@ -341,8 +341,8 @@ margin-left: -3px;">.myshopify.com</span>
 							{{#isAllowedInCurrentPlan "is_ecommerce_sync_allowed"}}
     						   <a href="#sync/shopify"  class="btn"  style="display:inline-block;">Enable</a>
 								{{else}}
-									<a disabled  class="btn"  style="display:inline-block;">Enable</a>
-									<div style="display:inline;float:right; max-width:135px;" class="text-right" >
+										 <a class="btn _upgrade"  id="shopify-sync-upgrade" style="display:inline-block;">Enable</a>
+									<div style="display:inline;float:right; max-width:135px;display: none;" class="text-right shopify-sync-upgrade" >
 										<p><i>{{toSafeString message}}</i><p>
 									</div>
 							{{/isAllowedInCurrentPlan}}
@@ -379,8 +379,8 @@ margin-left: -3px;">.myshopify.com</span>
 							{{#isAllowedInCurrentPlan "is_ecommerce_sync_allowed"}}
 							  <button class="btn" id="zoho-import" style="display:inline-block;">Enable</button>
 								{{else}}
-									<a disabled  class="btn"  style="display:inline-block;">Enable</a>
-									<div style="display:inline;float:right; max-width:135px;" class="text-right" >
+										 <a class="btn _upgrade"  id="zoho-sync-upgrade" style="display:inline-block;">Enable</a>
+									<div style="display:inline;float:right; max-width:135px;display: none;" class="text-right zoho-sync-upgrade" >
 										<p><i>{{toSafeString message}}</i><p>
 									</div>
 							{{/isAllowedInCurrentPlan}}
@@ -474,8 +474,8 @@ margin-left: -3px;">.myshopify.com</span>
 						{{#isAllowedInCurrentPlan "is_accounting_sync_allowed"}}
     					 <a href="/OAuthServlet?service=quickbook-import&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks""  class="btn"  style="display:inline-block;">Enable</a>
 								{{else}}
-									<a disabled  class="btn"  style="display:inline-block;">Enable</a>
-									<div style="display:inline;float:right; max-width:135px;" class="text-right" >
+										 <a class="btn _upgrade"  id="quickbook-sync-upgrade" style="display:inline-block;">Enable</a>
+									<div style="display:inline;float:right; max-width:135px;display: none;" class="text-right quickbook-sync-upgrade" >
 										<p><i>{{toSafeString message}}</i><p>
 									</div>
 							{{/isAllowedInCurrentPlan}}
@@ -685,8 +685,8 @@ margin-left: -3px;">.freshbooks.com</span>
 		{{#isAllowedInCurrentPlan "is_accounting_sync_allowed"}}
 	            <a href="#sync/freshbooks" class="btn" style="display:inline-block;">Enable</a>
 								{{else}}
-									<a disabled  class="btn"  style="display:inline-block;">Enable</a>
-									<div style="display:inline;float:right; max-width:135px;" class="text-right" >
+										 <a class="btn _upgrade"  id="freshbooks-sync-upgrade" style="display:inline-block;">Enable</a>
+									<div style="display:inline;float:right; max-width:135px;display: none;" class="text-right freshbooks-sync-upgrade" >
 										<p><i>{{toSafeString message}}</i><p>
 									</div>
 							{{/isAllowedInCurrentPlan}}
