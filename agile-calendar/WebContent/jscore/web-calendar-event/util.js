@@ -14,6 +14,15 @@ function change_availability_date(selected_date)
 function getSlotDurations()
 {
 
+	
+	if(multiple_schedule_ids){
+		fillSlotDetails();	
+		return;
+	}
+	else if(single_user_mapobject[User_Id].length>0){
+		fillSlotDetails(single_user_mapobject[User_Id]);	
+		return;
+	}
 	// Send request to get slot details time n description
 	var initialURL = '/core/api/webevents/getslotdetails?userid=' + User_Id;
 	$
@@ -61,7 +70,7 @@ function getSlotDurations()
 								var json = JSON.parse(data[slotDetail]);
 								$('.segment1')
 										.append(
-												'<div class="col-sm-4"><p title="' + json.title + '" class="choose timeslot-view" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+												'<div class="col-sm-4 show_slots"><p title="' + json.title + '" class="choose timeslot-view" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
 							}
 							$('.segment1')
 						       .append(
@@ -74,7 +83,7 @@ function getSlotDurations()
 								var json = JSON.parse(data[slotDetail]);
 								$('.segment1')
 										.append(
-												'<div class="col-sm-5 col-md-4" style="margin-left: 99px;"><p title="' + json.title + '" class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+												'<div class="col-sm-5 col-md-4 show_slots" style="margin-left: 99px;"><p title="' + json.title + '" class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
 							}
 							 $('.segment1')
 						       .append(
@@ -87,7 +96,7 @@ function getSlotDurations()
 								var json = JSON.parse(data[slotDetail]);
 								$('.segment1')
 										.append(
-												'<div class="col-sm-12" align="center"><p title="' + json.title + '" class="choose" data="' +json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+												'<div class="col-sm-12 show_slots" align="center"><p title="' + json.title + '" class="choose" data="' +json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
 							}
 						}
 					});
@@ -222,6 +231,7 @@ function displaySlots()
 		return;
 	}
 
+	change_availability_date(selecteddate);
 	// Number of row
 	var numRow = Available_Slots.length / 5;
 
@@ -447,3 +457,91 @@ if (title)
 return title;
 }
 
+
+function resetToPrevious()
+{
+	 $("#one").html("2");
+     $("#two").html("3");
+     $("#three").html("4");
+	$('#two').removeClass("green-bg").html('3');
+	$('#one').removeClass("green-bg").html('2');
+	$('#three').removeClass("green-bg").html('4');
+	$("#confirm").hide();
+	 $(".segment3").hide();
+	 $(".segment2").hide();
+	 
+}
+function fillSlotDetails(slot_durations_one_user){
+	var slots_data=data=slot_details;
+	if(slot_durations_one_user){
+		slots_data=data=slot_durations_one_user;
+	}
+	var slot_data_temp=[];
+  if(slot_array &&slot_array.length>0){
+	for(var i =0;i< slot_array.length;i++){
+		if((parseInt(slot_array[i])-1)< data.length && parseInt(slot_array[i])!=0){
+			
+			 slot_data_temp[i]=slot_array[i];
+		}
+	}	
+	if(slot_data_temp.length>0){
+	slot_array=[];
+	slot_array=slot_data_temp;
+	}
+	else{
+		$('.segment1')
+		.append(
+				'<div class="col-sm-12" align="center"><p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal">please enter valid slot number </p> </div>');
+		return;
+		
+	}
+	}
+	if(slot_array && data.length >= slot_array.length && slot_array.length>0){
+		data=[];
+		var j=0;
+		for(var i=0;i <slot_array.length;i++ ){
+			
+			if((parseInt(slot_array[i])-1)<slots_data.length){
+				data[j]=slots_data[parseInt(slot_array[i])-1];
+				j++;
+			}
+			
+		}
+	}
+	if (data.length == 3 )
+	{
+		for ( var slotDetail in data)
+		{
+			var json = JSON.parse(data[slotDetail]);
+			$('.segment1')
+					.append(
+							'<div class="col-sm-4 show_slots"><p title="' + json.title + '" class="choose timeslot-view" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+		}
+		$('.segment1')
+	       .append(
+	         '<div class="clearfix"></div>');
+	}
+	if (data.length == 2)
+	{
+		for ( var slotDetail in data)
+		{
+			var json = JSON.parse(data[slotDetail]);
+			$('.segment1')
+					.append(
+							'<div class="col-sm-5 col-md-4 show_slots" style="margin-left: 144px;"><p title="' + json.title + '" class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+		}
+		 $('.segment1')
+	       .append(
+	         '<div class="clearfix"></div>');
+	}
+	if (data.length == 1)
+	{
+		for ( var slotDetail in data)
+		{
+			var json = JSON.parse(data[slotDetail]);
+			$('.segment1')
+					.append(
+							'<div class="col-sm-12 show_slots" align="center"><p title="' + json.title + '" class="choose" data="' +json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+		}
+	}
+}

@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
@@ -106,7 +108,6 @@ public class WebCalendarEventUtil
 	    // Remove all filled odd timing slots from available/possible slots.
 	    possibleSlots = removeAllOddSlots(possibleSlots, filledGoogleSlots);
 	}
-	System.out.println(possibleSlots.size());
 
 	if (possibleSlots != null && possibleSlots.size() > 0)
 	{
@@ -121,23 +122,6 @@ public class WebCalendarEventUtil
 
 	    }
 	}
-	if (listOfLists != null && listOfLists.size() > 0)
-	{
-
-	    System.out.println("final list of lists ======================");
-	    for (int i = 0; i <= listOfLists.size() - 1; i++)
-	    {
-		List<Long> sl = listOfLists.get(i);
-		{
-		    System.out.println(sl.get(0) + " -----------   " + sl.get(1));
-		}
-	    }
-	}
-
-	System.out.println(listOfLists.size());
-	// print list of slot
-	// System.out.println("possibleSlots:");
-	// printList(possibleSlots);
 
 	// Return available slots
 	return listOfLists;
@@ -182,7 +166,6 @@ public class WebCalendarEventUtil
 	int year = calendar.get(Calendar.YEAR);
 	int month = calendar.get(Calendar.MONTH);
 
-	System.out.println("week day " + week_day + " date " + date + " year " + year + " month " + month);
 
 	// in backend business hours will be stored as
 	// [{"isActive":true,"timeTill":"03:00","timeFrom":"14:00"},{"isActive":false,"timeTill":null,"timeFrom":null},...]
@@ -190,46 +173,30 @@ public class WebCalendarEventUtil
 	// hours plugin
 	JSONObject business = new JSONObject(business_hours_array.get(week_day).toString());
 
-	// fromHour and tillHour will be stored in string form like "9:00"
-	String fromHour = null;
-	String tillHour = null;
-
 	// from time is "9" formTime_mins is "00"
 	String fromTime = null;
 	String fromTime_mins = null;
 	String tillTime = null;
 	String tillTime_mins = null;
-	String[] stTime = null;
-	String[] edTime = null;
 
 	Long night_starttime = 0L;
 	Long night_endtime = 0L;
 
-	String[] night_start_hours = null;
-	String night_from_hour = null; // stores like "9:00"
 	String night_fromtime = null; // stores like "9"
 	String night_fromTimeMins = null; // stores like "00"
-	String night_till_hour = null;
-	String[] night_hours = null; // array after spliting 9:00 into 9 and 00;
+
 	String night_endTime = null;
 	String night_endTimeMins = null;
-
-	String night_from_hours = null;
-	String[] night_hours_array = null;
 
 	// if(isActive) true i.e working day if not return empty list
 	if (business.getString("isActive") == "true")
 	{
-	    fromHour = business.getString("timeFrom");
-	    // we have to pass hour to calendar only 00 format.
-	    // calendar give time in sec according to date and hour
-	    stTime = fromHour.split(":");
-	    fromTime = stTime[0];
-	    fromTime_mins = stTime[1];
-	    tillHour = business.getString("timeTill");
-	    edTime = tillHour.split(":");
-	    tillTime = edTime[0];
-	    tillTime_mins = edTime[1];
+
+	    fromTime = business.getString("timeFrom").split(":")[0];
+	    fromTime_mins = business.getString("timeFrom").split(":")[1];
+
+	    tillTime = business.getString("timeTill").split(":")[0];
+	    tillTime_mins = business.getString("timeTill").split(":")[1];
 
 	}
 	if (StringUtils.isNotEmpty(fromTime) && StringUtils.isNotEmpty(tillTime))
@@ -257,14 +224,11 @@ public class WebCalendarEventUtil
 		    // we have to pass hour to calendar only 00 format.
 		    // calendar give time in sec according to date and hour
 
-		    night_from_hour = night_business_hours.getString("timeFrom");
-		    night_start_hours = night_from_hour.split(":");
-		    night_fromtime = night_start_hours[0];
-		    night_fromTimeMins = night_start_hours[1];
-		    night_till_hour = night_business_hours.getString("timeTill");
-		    night_hours = night_till_hour.split(":");
-		    night_endTime = night_hours[0];
-		    night_endTimeMins = night_hours[1];
+		    night_fromtime = night_business_hours.getString("timeFrom").split(":")[0];
+		    night_fromTimeMins = night_business_hours.getString("timeFrom").split(":")[1];
+
+		    night_endTime = night_business_hours.getString("timeTill").split(":")[0];
+		    night_endTimeMins = night_business_hours.getString("timeTill").split(":")[1];
 		    if (Integer.parseInt(night_fromtime) > Integer.parseInt(night_endTime))
 		    {
 			night_starttime = getEppochTime(date, month, year, Integer.parseInt("00"),
@@ -274,8 +238,6 @@ public class WebCalendarEventUtil
 			        Integer.parseInt(night_endTimeMins), tz);
 			night_endtime=night_endtime-60;
 		    }
-		    System.out.println(night_starttime + "  Night hours if fromtime > endtime start time and end time "
-			    + night_endTime);
 		}
 	    }
 	    else
@@ -293,14 +255,10 @@ public class WebCalendarEventUtil
 		    // we have to pass hour to calendar only 00 format.
 		    // calendar give time in sec according to date and hour
 
-		    night_from_hours = night_business.getString("timeFrom");
-		    night_hours_array = night_from_hours.split(":");
-		    night_fromtime = night_hours_array[0];
-		    night_fromTimeMins = night_hours_array[1];
-		    night_till_hour = night_business.getString("timeTill");
-		    night_hours = night_till_hour.split(":");
-		    night_endTime = night_hours[0];
-		    night_endTimeMins = night_hours[1];
+		    night_fromtime = night_business.getString("timeFrom").split(":")[0];
+		    night_fromTimeMins = night_business.getString("timeFrom").split(":")[1];
+		    night_endTime = night_business.getString("timeTill").split(":")[0];
+		    night_endTimeMins = night_business.getString("timeTill").split(":")[1];
 
 		    if (Integer.parseInt(night_fromtime) > Integer.parseInt(night_endTime))
 		    {
@@ -311,12 +269,10 @@ public class WebCalendarEventUtil
 			        Integer.parseInt(night_endTimeMins), tz);
 			night_endtime=night_endtime-60;
 		    }
-		    System.out.println(night_starttime + "  Night hourse start time and end time " + night_endTime);
 
 		}
 	    }
 
-	    System.out.println("business hour starttime " + starttime + " business hour endtime " + endtime);
 
 	    if ((eppoch > starttime && eppoch < endtime) || (eppoch > night_starttime && eppoch < night_endtime))
 	    {
@@ -432,7 +388,6 @@ public class WebCalendarEventUtil
 	calendar.set(year, month, date, time, minutes);
 	calendar.setTimeZone(timezone);
 	Date d = calendar.getTime();
-	System.out.println("date in get eppoch time  -----------------------" + d);
 	Long epoch = d.getTime() / 1000;
 
 	return epoch;
@@ -452,7 +407,6 @@ public class WebCalendarEventUtil
     public static List<List<Long>> getAllPossibleSlots(int slotTime, String date, Long startTime, int timezone,
 	    String timezoneName)
     {
-	System.out.println("In getAllPossibleSlots");
 
 	// List of list of slots
 	List<List<Long>> listOfLists = new ArrayList<List<Long>>();
@@ -501,7 +455,6 @@ public class WebCalendarEventUtil
 	    listOfLists.add(slots);
 	}
 
-	System.out.println("All available slots:");
 	return listOfLists;
     }
 
@@ -523,7 +476,6 @@ public class WebCalendarEventUtil
      */
     private static List<List<Long>> getFilledAgileSlots(Long userid, int slotTime, Long startTime, Long endTime)
     {
-	System.out.println("In getFilledAgileSlots");
 
 	List<List<Long>> filledSlots = new ArrayList<List<Long>>();
 
@@ -847,7 +799,6 @@ public class WebCalendarEventUtil
 		newEvnt.save();
 
 		agileUseiCal = IcalendarUtil.getICalFromEvent(newEvnt, _user, user.email, user.name);
-		System.out.println("agileUseiCal-- " + agileUseiCal.toString());
 		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
 		String usermail = null;
 
@@ -902,7 +853,6 @@ public class WebCalendarEventUtil
 		newEvnt.save();
 
 		agileUseiCal = IcalendarUtil.getICalFromEvent(newEvnt, _user, user.email, user.name);
-		System.out.println("agileUseiCal-- " + agileUseiCal.toString());
 		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
 		String usermail = null;
 
@@ -934,7 +884,6 @@ public class WebCalendarEventUtil
 
 	    iCal = IcalendarUtil.getICalFromEvent(client_event, user, wce.email, null);
 
-	    System.out.println("icall s string  " + iCal.toString() + " email " + wce.email);
 
 	    String link = "https://www.agilecrm.com/?utm_source=powered-by&medium=email&utm_campaign=" + user.domain;
 
@@ -967,14 +916,23 @@ public class WebCalendarEventUtil
 	return "Done";
     }
 
-    public static List<String> getSlotDetails(Long id)
+    public static List<String> getSlotDetails(Long id, String meeting_types)
     {
 	JSONObject slot = new JSONObject();
 	/* JSONArray slots = new JSONArray(); */
 
 	List<String> slots = new ArrayList<String>();
 
-	DomainUser dm = DomainUserUtil.getDomainUser(id);
+	DomainUser dm = null;
+	if (id != null)
+	{
+	    dm = DomainUserUtil.getDomainUser(id);
+	}
+	else
+	{
+	    dm = new DomainUser();
+	    dm.meeting_durations = meeting_types;
+	}
 
 	try
 	{
@@ -1046,7 +1004,6 @@ public class WebCalendarEventUtil
     public static String getGMTDateInMilliSecFromTimeZoneId(String timeZoneId, long timeInMilliSecs,
 	    DateFormat dateFormat)
     {
-	System.out.println(timeZoneId);
 	if (dateFormat == null)
 	{
 	    dateFormat = new SimpleDateFormat();
@@ -1089,7 +1046,6 @@ public class WebCalendarEventUtil
     // gives the date if timezone is not offset timezone is like Asia/kolkatha
     public static String getGMTDateInMilliSecFromTimeZone(String timeZoneId, long timeInMilliSecs, DateFormat dateFormat)
     {
-	System.out.println(timeZoneId);
 	if (dateFormat == null)
 	{
 	    dateFormat = new SimpleDateFormat();
@@ -1117,6 +1073,28 @@ public class WebCalendarEventUtil
 	}
 
 	return dateFormat.format(new Date());
+    }
+
+    public static String returnTimeInAmPm(String hours)
+    {
+	String str = hours.substring(0, 2);
+	String mins = hours.substring(3);
+	if ("00".equals(str) || "24".equals(str))
+	    return "12:" + mins + "am";
+	Map<String, String> time_map = new HashMap<>();
+	for (int i = 13, k = 1; i <= 23; i++, k++)
+	{
+	    time_map.put(String.valueOf(i), String.valueOf(k));
+	}
+	if (Integer.parseInt(str) < 12)
+	{
+	    return Integer.parseInt(str) + ":" + mins + "am";
+	}
+	else
+	{
+	    return time_map.get(str) + ":" + mins + "pm";
+	}
+
     }
 
 }

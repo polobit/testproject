@@ -19,16 +19,16 @@ function getGMTTimeFromDate(date)
 	console.log(new Date().getHours());
 	console.log(new Date().getMinutes());
 	console.log(new Date().getSeconds());
-	console.log(date.getYear() + "," + date.getMonth() + "," + date.getDate())
+	console.log(date.getYear() + "," + date.getMonth() + "," + date.getDate());
 	date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
 
 	// Adding offset to date returns GMT time
 	return date.getTime();
 }
 
-//Get Timezone Abbreviation from Time
+// Get Timezone Abbreviation from Time
 function GetTimezoneShort(now)
-{ 
+{
 	// now is expected as a Date object
 	if (now == null)
 		return '';
@@ -54,10 +54,11 @@ function GetTimezoneShort(now)
 // Convert epoch time to human time
 function createNormalTime(slotTime)
 {
+
 	var counter = 0;
+
 	var date = new Date(slotTime * 1000);
 
-	// Get hrs
 	var hr = date.getHours();
 	var normHr = date.getHours();
 
@@ -96,22 +97,58 @@ function createNormalTime(slotTime)
 
 	return result.join('');
 }
+
+
 function getSelectedTimeFromDate(date)
 {
 	date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
-	
-	// Adding offset to date returns GMT time
 	return date.getTime();
 }
 
 function getConvertedTimeFromEpoch(epoch)
 {
-//	var dateVal = 1395184260;
+	// var dateVal = 1395184260;
 	var date = moment.unix(epoch);
-    var time= date.tz(SELECTED_TIMEZONE).format('hh:mm a');
+	var time = date.tz(SELECTED_TIMEZONE).format('hh:mm a');
 	return time;
 }
 
+function getNormalBusinessHouts(hr)
+{
+	var hrs=hr;
+	hr = hr.split(":")[0];
+    var	min=hrs.split(":")[1];
+	if(parseInt(hr)==0 ||parseInt(hr)==24 )
+		return "12:"+min+"am";
+	if (parseInt(hr) >= 12 &&parseInt(hr) <= 23)
+		return getNormalTimeAMPM(hr)+":"+min+ "pm";
+	else
+		return parseInt(hr) +":"+min+ "am";
+}
+
+function getNormalTimeAMPM(hr)
+{
+	var name_json = {"12":"12", "13" : "1", "14" : "2", "15" : "3", "16" : "4", "17" : "5", "18" : "6", "19" : "7", "20" : "8", "21" : "9", "22" : "10", "23" : "11"};
+
+	if (name_json[hr])
+		return name_json[hr];
+	else
+		return hr;
+}
+
+
+/**
+ * in backend data stored as 0-6(mon-sun)
+ * in js  0-6(sun-sat)
+ * @param day
+ * @returns {Number}
+ */
+function convertWeekDayToArray(day){
+	if(parseInt(day)>=1 || parseInt(day)<=6)
+		return parseInt(day)-1;
+	if(parseInt(day)==0)
+		return 6;
+}	
 
 function getTimezoneOffset(timezonename){
 	
