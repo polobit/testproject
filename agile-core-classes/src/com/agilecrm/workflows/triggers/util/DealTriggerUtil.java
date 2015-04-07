@@ -65,8 +65,7 @@ public class DealTriggerUtil
 	if (opportunity == null)
 	    return;
 
-	executeTriggerForDealsBasedOnCondition(opportunity.getContacts(), null, null, Trigger.Type.DEAL_IS_ADDED,
-	        opportunity);
+	executeTriggerForDealsBasedOnCondition(opportunity.getContacts(), null, opportunity, Trigger.Type.DEAL_IS_ADDED);
     }
 
     /**
@@ -79,16 +78,16 @@ public class DealTriggerUtil
      */
     public static void checkMilestoneChange(Opportunity oldOpportunity, Opportunity updatedOpportunity)
     {
-	// if no change in milestone return
-	if ((oldOpportunity.milestone.equals(updatedOpportunity.milestone)))
+	// if no change in pipeline and milestone, return
+	if (oldOpportunity.pipeline_id.equals(updatedOpportunity.pipeline_id) && oldOpportunity.milestone.equals(updatedOpportunity.milestone))
 	    return;
 
 	System.out.println("Milestone changed from " + oldOpportunity.milestone + " to " + updatedOpportunity.milestone
 	        + " of deal " + updatedOpportunity.name);
 
 	// execute trigger for deal milestone change.
-	executeTriggerForDealsBasedOnCondition(updatedOpportunity.getContacts(), oldOpportunity.milestone,
-	        updatedOpportunity.milestone, Trigger.Type.DEAL_MILESTONE_IS_CHANGED, updatedOpportunity);
+	executeTriggerForDealsBasedOnCondition(updatedOpportunity.getContacts(), oldOpportunity,
+	        updatedOpportunity, Trigger.Type.DEAL_MILESTONE_IS_CHANGED);
     }
 
     /**
@@ -119,8 +118,8 @@ public class DealTriggerUtil
 
 		// Fetches triggers based on delete deal condition and runs
 		// each trigger campaign
-		executeTriggerForDealsBasedOnCondition(opportunityObject.getContacts(), null, null,
-		        Trigger.Type.DEAL_IS_DELETED, opportunityObject);
+		executeTriggerForDealsBasedOnCondition(opportunityObject.getContacts(), null, opportunityObject,
+		        Trigger.Type.DEAL_IS_DELETED);
 	    }
 	}
 	catch (Exception e)
@@ -139,8 +138,8 @@ public class DealTriggerUtil
      * @param condition
      *            Trigger condition for deals.
      */
-    public static void executeTriggerForDealsBasedOnCondition(List<Contact> contactsList, String oldMilestone,
-	    String updatedMilestone, Type condition, Opportunity opportunity)
+    public static void executeTriggerForDealsBasedOnCondition(List<Contact> contactsList, Opportunity oldOpportunity,
+	    Opportunity updatedOpportunity, Type condition)
     {
 
 	// if deal has no related contacts
@@ -151,8 +150,8 @@ public class DealTriggerUtil
 	List<Trigger> triggersList = new ArrayList<Trigger>();
 
 	// If milestone is not empty, fetch triggers based on changed milestone
-	if (!StringUtils.isBlank(updatedMilestone))
-	    triggersList = TriggerUtil.getTriggersByMilestone(updatedMilestone);
+	if (oldOpportunity != null)
+	    triggersList = getTriggersForMilestoneChange(updatedOpportunity);
 	else
 	    triggersList = TriggerUtil.getTriggersByCondition(condition);
 
@@ -161,7 +160,7 @@ public class DealTriggerUtil
 	    for (Trigger trigger : triggersList)
 	    {
 		WorkflowSubscribeUtil.subscribeDeferred(contactsList, trigger.campaign_id,
-		        new JSONObject().put("deal", getOpportunityJSONForTrigger(opportunity, oldMilestone)));
+		        new JSONObject().put("deal", getOpportunityJSONForTrigger(updatedOpportunity, oldOpportunity)));
 	    }
 	}
 	catch (Exception e)
@@ -170,7 +169,7 @@ public class DealTriggerUtil
 	}
     }
 
-    public static JSONObject getOpportunityJSONForTrigger(Opportunity opportunity, String oldMilestone)
+    public static JSONObject getOpportunityJSONForTrigger(Opportunity opportunity, Opportunity oldOpportunity)
     {
 	try
 	{
@@ -216,8 +215,8 @@ public class DealTriggerUtil
 	    opportunityJSON.put("expected_value", getLongFromDouble(opportunity.expected_value));
 
 	    // If deal milestone is changed, add old one
-	    if (!StringUtils.isBlank(oldMilestone))
-		opportunityJSON.put("old_milestone", oldMilestone);
+	    if (oldOpportunity != null)
+		opportunityJSON.put("old_milestone", oldOpportunity.milestone);
 
 	    return opportunityJSON;
 	}
@@ -271,6 +270,51 @@ public class DealTriggerUtil
 	    System.err.println("Exception occured while converting string to double..." + e.getMessage());
 	    return null;
 	}
+    }
+    
+    private static List<Trigger> getTriggersForMilestoneChange(Opportunity opportunity)
+    {
+	List<Trigger> triggers = TriggerUtil.getTriggersByCondition(Type.DEAL_MILESTONE_IS_CHANGED);
+	List<Trigger> updatedTriggers = new ArrayList<Trigger>();
+	
+	boolean isDefault = false;
+	String trackAndMilestone = null;
+	
+        try
+        {
+	    isDefault = opportunity.getPipeline().isDefault;
+	    trackAndMilestone = opportunity.getPipeline_id() + "_" + opportunity.milestone;
+	
+	for(Trigger trigger : triggers)
+	{
+	    if(StringUtils.isBlank(trigger.trigger_deal_milestone))
+		continue;
+	    
+	    
+	    String[] idAndMilestone = StringUtils.split(trigger.trigger_deal_milestone, "_", 2);
+	    
+	    // For compatibility of Old Triggers
+	    if(idAndMilestone.length == 1 && isDefault)
+	    {
+		if(StringUtils.equals(opportunity.milestone, idAndMilestone[0]))
+		    updatedTriggers.add(trigger);
+	    }
+	    
+	    if(idAndMilestone.length == 2)
+	    {
+		if(StringUtils.equals(trackAndMilestone, trigger.trigger_deal_milestone))
+		    updatedTriggers.add(trigger);
+	    }
+	}
+	
+        }
+        catch (Exception e)
+        {
+	    e.printStackTrace();
+        }
+	
+	
+	return updatedTriggers;
     }
    
 }

@@ -5852,6 +5852,29 @@ $(function()
 		return html;
 		
 	});
+	
+	/**
+	 * Returns milestone name from trigger_deal_milestone; e.g., 1234452_Won, returns Won
+	 **/
+	Handlebars.registerHelper('trigger_milestone', function(value, options){
+		
+		// If undefined
+		if(!value)
+			return value;
+		
+		var milestone = value.split('_');
+		
+		if(milestone.length == 1)
+			return value;
+			
+		// First indexed should be pipeline id
+		if(milestone.length > 1 && milestone[0] != " " && !isNaN(Number(milestone[0])))
+		{
+			milestone.splice(0, 1);
+			return milestone.join('_');
+		}
+		
+	});
 });
 
 // helper function return created time for event
