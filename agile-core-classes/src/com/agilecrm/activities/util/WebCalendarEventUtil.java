@@ -134,7 +134,6 @@ public class WebCalendarEventUtil
 	    }
 	}
 
-	listOfLists.remove(listOfLists.get(listOfLists.size()-1));
 	System.out.println(listOfLists.size());
 	// print list of slot
 	// System.out.println("possibleSlots:");
@@ -246,7 +245,8 @@ public class WebCalendarEventUtil
 	    {
 		endtime = getEppochTime(date, month, year, Integer.parseInt(tillTime), Integer.parseInt(tillTime_mins),
 		        tz);
-
+	
+        endtime=endtime-60;
 		int night_before_wkday = getNightWeekDayAccordingToJS(week_day);
 		JSONObject night_business_hours = new JSONObject(business_hours_array.get(night_before_wkday)
 		        .toString());
@@ -272,6 +272,7 @@ public class WebCalendarEventUtil
 
 			night_endtime = getEppochTime(date, month, year, Integer.parseInt(night_endTime),
 			        Integer.parseInt(night_endTimeMins), tz);
+			night_endtime=night_endtime-60;
 		    }
 		    System.out.println(night_starttime + "  Night hours if fromtime > endtime start time and end time "
 			    + night_endTime);
@@ -308,6 +309,7 @@ public class WebCalendarEventUtil
 
 			night_endtime = getEppochTime(date, month, year, Integer.parseInt(night_endTime),
 			        Integer.parseInt(night_endTimeMins), tz);
+			night_endtime=night_endtime-60;
 		    }
 		    System.out.println(night_starttime + "  Night hourse start time and end time " + night_endTime);
 
