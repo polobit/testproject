@@ -139,14 +139,7 @@
 								
 							</div>
 						</div>
-						<div id="specialchar"
-							style="color: red; display: none; margin-left: 167px; margin-top: 5px;">Special
-							characters are not allowed except underscore.</div>
-						<div id="charlength"
-							style="color: red; display: none; margin-left: 167px; margin-top: -2px;">Please
-							enter at least 4 letters.</div>
-						<div id="schedule_error_message"
-							style="color: red; display: none; margin-left: 167px; margin-top: 5px;"></div>
+						
 						<div class="clearfix"></div>
 						<div class="tip">
 							
@@ -165,15 +158,12 @@
 					<div class="control-group">
 						<label class="control-label" for="cname">Meeting Type </label>
 						<div class="controls">
-							<input class="input-xlarge" disabled="true" type="text" id="meeting_types"
+							<input class="input-xlarge" disabled="true" type="text" style="font-style: normal; color: #999999;" id="meeting_types"
 								name="meeting_types" value="{{meeting_types}}"
 								placeholder="Enter comma separated meeting types"
 								autocapitalize="off" />
 						</div>
 					</div>
-					<div id="meeting_type_error"
-						style="color: red; display: none; margin-left: 159px; margin-top: -9px;">Speacial
-						characters are not allowed except comma</div>
 
 
 
@@ -189,25 +179,21 @@
 					<div class="control-group">
 						<label class="control-label" for="cname">Meeting Duration</label>
 
-						<div class="controls">
+						<div class="controls" style="font-style: normal; color: #999999;">
 							<label class=""> 15 Mins &nbsp;<input type="text" disabled="true"
-								style="width: 220px" id="15mins" name="15mins"
+								style="width: 220px;font-style: normal; color: #999999;" id="15mins" name="15mins"
 								value="{{15mins}}" />
 							</label> <label class=""> 30 Mins &nbsp;<input type="text" disabled="true"
-								style="width: 220px" id="30mins" name="30mins"
+								style="width: 220px;font-style: normal; color: #999999;" id="30mins" name="30mins"
 								value="{{30mins}}" />
 							</label> <label class=""> 60 Mins &nbsp;<input type="text" disabled="true"
-								style="width: 220px" id="60mins" name="60mins"
+								style="width: 220px;font-style: normal; color: #999999;" id="60mins" name="60mins"
 								value="{{60mins}}" />
 							</label>
 						</div>
 					</div>
 					{{/stringToJSON}}
-					<div id="meeting_duration_message"
-						style="color: red; display: none; margin-left: 162px; margin-top: -18px;">
-						Please enable at least one option by mentioning a short text for
-						it.</div>
-
+					
 				</fieldset>
 			</form>
 
