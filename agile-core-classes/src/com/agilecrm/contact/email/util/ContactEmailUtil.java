@@ -118,8 +118,11 @@ public class ContactEmailUtil
 		// When multiple emails separated by comma are given
 		for (String toEmail : toEmailSet)
 		{
+			// Returns email-id e.g., Naresh <naresh@agilecrm.com>
+			String email = EmailUtil.getEmail(toEmail);
+			
 		    // Get contact based on email.
-		    contact = ContactUtil.searchContactByEmail(toEmail);
+		    contact = ContactUtil.searchContactByEmail(email);
 
 		    // Saves email with contact-id
 		    if (contact != null)

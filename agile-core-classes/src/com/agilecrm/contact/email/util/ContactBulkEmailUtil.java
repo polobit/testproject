@@ -71,7 +71,9 @@ public class ContactBulkEmailUtil
 		    String replacedBody = MustacheUtil.compile(body, subscriberJSON.getJSONObject("data"));
 
 		    long openTrackerId = System.currentTimeMillis();
-		    String email = contact.getContactFieldValue(Contact.EMAIL);
+		 
+		    // Appends name
+		    String email = EmailUtil.appendNameToEmail(contact.getContactFieldValue(Contact.EMAIL), subscriberJSON);
 
 		    ContactEmailUtil.saveContactEmail(fromEmail, fromName, email, null, null, replacedSubject,
 			    replacedBody, signature, contact.id, openTrackerId, null);

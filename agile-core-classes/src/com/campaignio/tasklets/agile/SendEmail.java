@@ -522,6 +522,9 @@ public class SendEmail extends TaskletAdapter
 	    }
 	}
 
+	// Appends name in format e.g., Naresh <naresh@agilecrm.com>
+	to = EmailUtil.appendNameToEmail(to, subscriberJSON);
+	
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
