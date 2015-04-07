@@ -166,8 +166,8 @@ function init_acl_restriction()
 					{
 						for(var i = 0; i < call_widget_collection.length ; i++)
 						{
-							var widget_name = call_widget_collection[i].get("name");
-							if(widget_name == "Twilio" || widget_name == "Sip")
+							var widget_type= call_widget_collection[i].get("widget_type");
+							if(widget_type == "CALL")
 								{
 									call_widget_collection[i].set("allowedToAdd", false);
 								}
