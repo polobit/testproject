@@ -116,10 +116,10 @@
 
 			{{/hasMenuScope}}
 			{{else}}
-				<div style="/*margin: 40px auto;	width: 50%;*/ display:inline;float:left">
-					<div class="btn btn-primary disabled" >Go</div>
+				<div style="/*margin: 40px auto;	width: 50%;*/ display:inline;float:left;">
+					<div class="btn btn-primary _upgrade" id="activity-reports-upgrade">Go</div>
 				</div>
-				 <div style="display:inline;float:right; max-width:135px" class="text-right" ><p><i>{{toSafeString message}}</i><p></div>
+				 <div style="display:inline;float:right;display:none; max-width:135px" class="text-right activity-reports-upgrade" ><p><i>{{toSafeString message}}</i><p></div>
 			{{/isAllowedInCurrentPlan}}
         
     </div>
