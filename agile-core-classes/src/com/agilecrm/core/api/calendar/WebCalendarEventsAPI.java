@@ -30,7 +30,7 @@ import com.agilecrm.contact.Contact;
  * </p>
  * 
  */
-@Path("/api/webevents")
+@Path("/api/webevents/calendar")
 public class WebCalendarEventsAPI
 {
 
