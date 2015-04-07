@@ -1,8 +1,6 @@
 package com.agilecrm.search.query;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -57,6 +55,8 @@ public class QueryDocument<T> implements QueryInterface
 
     private Index index;
     public Class<T> clazz;
+
+    public boolean isBackendOperations = false;
 
     public QueryDocument(Index index, Class<T> clazz)
     {
@@ -153,7 +153,7 @@ public class QueryDocument<T> implements QueryInterface
 	// return query results
 	return processQuery(query, count, cursor, orderBy);
     }
-    
+
     /**
      * Queries document based on {@link SearchRule}, Executes the query and
      * returns collection of entities. This search is without cursor, it is used
@@ -188,7 +188,7 @@ public class QueryDocument<T> implements QueryInterface
     @SuppressWarnings("rawtypes")
     public Collection<T> advancedSearch(ContactFilter filter, Integer count, String cursor, String orderBy)
     {
-    String query = QueryDocumentUtil.constructFilterQuery(filter);
+	String query = QueryDocumentUtil.constructFilterQuery(filter);
 	System.out.println("query build is : " + query);
 
 	if (StringUtils.isEmpty(query))
@@ -257,7 +257,7 @@ public class QueryDocument<T> implements QueryInterface
 	// class template
 	return getDatastoreEntities(results, page, cursor);
     }
-    
+
     /**
      * Builds query options and process queries based on the options builds with
      * cursor and limit.
@@ -267,43 +267,80 @@ public class QueryDocument<T> implements QueryInterface
      * @param cursor
      * @return
      */
+    // Use this only if operation is backend operation
+    List<T> entities = new ArrayList<T>();
+    int requests = 0;
+
     public Collection<T> processQuery(String query, Integer page, String cursor, String orderBy)
     {
 	// If page size is not specified, returns results with out any limit
 	// (Returns are entities )
-	if (page == null && orderBy== null)
+	if (page == null && orderBy == null)
 	    return processQuery(query);
 
 	// Builds options based on the query string, page size (limit) and sets
 	// cursor.
 	QueryOptions options = buildOptions(query, page, cursor);
-	
-	if(StringUtils.isNotBlank(orderBy)) {
-		SortOptions sortOptions = null;
-		SortExpression.Builder sortExpressionBuilder = SortExpression.newBuilder();
-		if(orderBy.startsWith("-")) {
-			sortExpressionBuilder = sortExpressionBuilder.setExpression(orderBy.substring(1)).setDirection(SortDirection.DESCENDING);
-		} else {
-			sortExpressionBuilder = sortExpressionBuilder.setExpression(orderBy).setDirection(SortDirection.ASCENDING);
-		}
-		if(orderBy.contains("time")) {
-			sortExpressionBuilder.setDefaultValueDate(SearchApiLimits.MAXIMUM_DATE_VALUE);
-		} else {
-			sortExpressionBuilder.setDefaultValueNumeric(0.0);
-		}
-		sortOptions = SortOptions.newBuilder().addSortExpression(sortExpressionBuilder.build()).build();
-		options = QueryOptions.newBuilder(options).setSortOptions(sortOptions).build();
+
+	if (StringUtils.isNotBlank(orderBy))
+	{
+	    SortOptions sortOptions = null;
+	    SortExpression.Builder sortExpressionBuilder = SortExpression.newBuilder();
+	    if (orderBy.startsWith("-"))
+	    {
+		sortExpressionBuilder = sortExpressionBuilder.setExpression(orderBy.substring(1)).setDirection(
+			SortDirection.DESCENDING);
+	    }
+	    else
+	    {
+		sortExpressionBuilder = sortExpressionBuilder.setExpression(orderBy).setDirection(
+			SortDirection.ASCENDING);
+	    }
+	    if (orderBy.contains("time"))
+	    {
+		sortExpressionBuilder.setDefaultValueDate(SearchApiLimits.MAXIMUM_DATE_VALUE);
+	    }
+	    else
+	    {
+		sortExpressionBuilder.setDefaultValueNumeric(0.0);
+	    }
+	    sortOptions = SortOptions.newBuilder().addSortExpression(sortExpressionBuilder.build()).build();
+	    options = QueryOptions.newBuilder(options).setSortOptions(sortOptions).build();
 	}
 
 	// Calls process the query with the options built. It returns results in
 	// a map with available entities count and document ids limited to count
 	// sent
+
 	Map<String, Object> results = processQueryWithOptions(options, query);
+
+	Collection<ScoredDocument> resultSetDocuments = (Collection<ScoredDocument>) results.get("fetchedDocuments");
+	Collection<T> entites = getDatastoreEntities(results, page, cursor);
+	entities.addAll(entites);
+
+	if (isBackendOperations && resultSetDocuments != null && entities.size() < resultSetDocuments.size()
+		&& requests < 500)
+	{
+	    System.out.println("iterating again");
+
+	    List<ScoredDocument> tempDocuments = new ArrayList<ScoredDocument>(resultSetDocuments);
+	    String newCursor = tempDocuments.get(tempDocuments.size() - 1).getCursor().toWebSafeString();
+	    if (StringUtils.equals(cursor, newCursor))
+		return entites;
+
+	    page = resultSetDocuments.size() - entities.size();
+	    System.out.println("remaianing items = " + page + " cursor" + newCursor + "requests" + requests);
+	    requests++;
+	    processQuery(query, page, newCursor, orderBy);
+	}
+	if (entities.size() > 0)
+	    return entities;
+
+	return entites;
 
 	// Fetches entities from datastore based on the document ids returned.
 	// The type of the it entities are fetched dynamically, based on the
 	// class template
-	return getDatastoreEntities(results, page, cursor);
     }
 
     /**
@@ -368,7 +405,7 @@ public class QueryDocument<T> implements QueryInterface
      */
     private List<ScoredDocument> getDocuments(String query)
     {
-		return getDocuments(query, null);
+	return getDocuments(query, null);
     }
 
     /**
@@ -394,34 +431,40 @@ public class QueryDocument<T> implements QueryInterface
 	// Return datastore entities based on documents.
 	return getDatastoreEntities(contact_documents, Long.valueOf(contact_documents.size()));
     }
-    
-    
+
     /**
      * processes query and return the actual QueryDocuments of contacts.
+     * 
      * @param query
      * @param orderBy
      * @return
      */
     private List<ScoredDocument> getDocuments(String query, String orderBy)
     {
-    	SortOptions sortOptions = null;
-    	if(StringUtils.isNotBlank(orderBy)) {
-    		SortExpression sortExpression = null;
-    		if(orderBy.startsWith("-")) {
-    			sortExpression = SortExpression.newBuilder().setExpression(orderBy.substring(1)).setDirection(SortDirection.DESCENDING).build();
-    		} else {
-    			sortExpression = SortExpression.newBuilder().setExpression(orderBy.substring(1)).setDirection(SortDirection.ASCENDING).build();
-    		}
-    		sortOptions = SortOptions.newBuilder().addSortExpression(sortExpression).build();
-    	}
-	
+	SortOptions sortOptions = null;
+	if (StringUtils.isNotBlank(orderBy))
+	{
+	    SortExpression sortExpression = null;
+	    if (orderBy.startsWith("-"))
+	    {
+		sortExpression = SortExpression.newBuilder().setExpression(orderBy.substring(1))
+			.setDirection(SortDirection.DESCENDING).build();
+	    }
+	    else
+	    {
+		sortExpression = SortExpression.newBuilder().setExpression(orderBy.substring(1))
+			.setDirection(SortDirection.ASCENDING).build();
+	    }
+	    sortOptions = SortOptions.newBuilder().addSortExpression(sortExpression).build();
+	}
+
 	/*
 	 * Sets query options only to get id of document (enough to get get
 	 * respective contacts). Default query returns without page limit it max
 	 * 1000 entities. To all matching results, documents should be fetch in
 	 * sets of 1000 documents at time
 	 */
-	QueryOptions options = QueryOptions.newBuilder().setLimit(1000).setSortOptions(sortOptions )
+	QueryOptions options = QueryOptions.newBuilder().setLimit(1000).setSortOptions(sortOptions)
 		.setCursor(Cursor.newBuilder().setPerResult(true).build()).setFieldsToReturn("type")
 		.setNumberFoundAccuracy(10000).build();
 
@@ -702,7 +745,7 @@ public class QueryDocument<T> implements QueryInterface
 	    e.printStackTrace();
 	}
 
-	return null;
+	return new ArrayList<T>();
 
     }
 
