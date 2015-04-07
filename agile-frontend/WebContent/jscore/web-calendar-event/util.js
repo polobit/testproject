@@ -15,7 +15,7 @@ function getSlotDurations()
 {
 
 	// Send request to get slot details time n description
-	var initialURL = '/core/api/webevents/getslotdetails?userid=' + User_Id;
+	var initialURL = '/core/api/webevents/calendar/getslotdetails?userid=' + User_Id;
 	$
 			.getJSON(
 					initialURL,
@@ -158,7 +158,7 @@ function get_slots(s_date, s_slot)
 	var timezone=getTimezoneOffset();
 	
 	// Send request to get available slot
-	var initialURL = '/core/api/webevents/getslots?&user_id=' + User_Id + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneName + "&epoch_time=" + epochTime + "&selected_time_epoch=" + selected_epoch + "&agile_user_id=" + Agile_User_Id+"&timezone="+timezone;
+	var initialURL = '/core/api/webevents/calendar/getslots?&user_id=' + User_Id + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneName + "&epoch_time=" + epochTime + "&selected_time_epoch=" + selected_epoch + "&agile_user_id=" + Agile_User_Id+"&timezone="+timezone;
 	$.getJSON(initialURL, function(data)
 	{
 
@@ -351,7 +351,7 @@ function save_web_event(formId, confirmBtn)
 	// Send request to save slot, if new then contact, event
 	$
 			.ajax({
-				url : '/core/api/webevents/save',
+				url : '/core/api/webevents/calendar/save',
 				type : 'PUT',
 				contentType : 'application/json; charset=utf-8',
 				data : JSON.stringify(web_calendar_event),
