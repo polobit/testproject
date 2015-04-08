@@ -158,6 +158,7 @@ public class TwilioVoiceServlet extends HttpServlet
 			// save verification status in widget
 			widget.addProperty("verificaton_status", verificationStatus);
 			widget.addProperty("verified_number", fromNumber);
+			
 			widget.setOwner(new Key<AgileUser>(AgileUser.class, agileUser.id));
 			widget.save();
 			System.out.println("widget saved");
