@@ -1,29 +1,14 @@
 package com.agilecrm.contact;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
-
-import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.session.SessionManager;
-import com.agilecrm.session.UserInfo;
-import com.agilecrm.user.AgileUser;
-import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.UserPrefs;
-import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.user.util.UserPrefsUtil;
-import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
-import com.googlecode.objectify.annotation.Cached;
-import com.googlecode.objectify.annotation.NotSaved;
-import com.googlecode.objectify.condition.IfDefault;
+import src.com.agilecrm.cursor.Cursor;
+import src.com.agilecrm.db.ObjectifyGenericDao;
+import src.com.agilecrm.session.SessionManager;
+import src.com.agilecrm.session.UserInfo;
+import src.com.agilecrm.user.AgileUser;
+import src.com.agilecrm.user.DomainUser;
+import src.com.agilecrm.user.UserPrefs;
+import src.com.agilecrm.user.util.DomainUserUtil;
+import src.com.agilecrm.user.util.UserPrefsUtil;
 
 /**
  * <code>Note</code> class stores notes with their related contacts. A contact
@@ -39,7 +24,7 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @XmlRootElement
 @Cached
-public class Note
+public class Note extends Cursor
 {
     // Key
     @Id
