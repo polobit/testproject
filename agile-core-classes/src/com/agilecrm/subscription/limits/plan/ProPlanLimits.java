@@ -28,7 +28,7 @@ public class ProPlanLimits extends PlanLimits
 	/**
 	 * New plan limits
 	 */
-	widgetsLimit = 1;
+	widgetsLimit = Integer.MAX_VALUE;
 	reportsLimit = 25;
 	TriggersLimit = Integer.MAX_VALUE;
 
