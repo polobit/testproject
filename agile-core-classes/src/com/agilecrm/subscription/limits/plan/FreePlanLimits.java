@@ -49,6 +49,7 @@ public class FreePlanLimits extends PlanLimits
 	googleSync = true;
 	ecommerceSync = false;
 	paymentSync = false;
+	accountingSync = false;
 
 	/**
 	 * Reports
