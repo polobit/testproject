@@ -40,10 +40,7 @@ $(function()
 		if (!selecteddate)
 		{
 			selecteddate = new Date();
-			var isFirefox = typeof InstallTrigger !== 'undefined';
-			 if(isFirefox){
-				 selecteddate.setHours(0,0,0,0);
-			 }
+			current_date_mozilla=selecteddate.setHours(0, 0, 0, 0);
 		}
 		if (selecteddate)
 		{

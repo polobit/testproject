@@ -64,15 +64,10 @@ public class WebCalendarEventUtil
     {
 	DomainUser domain_user = DomainUserUtil.getDomainUser(userid);
 
-	System.out.println("------ ---- first call "+date+"  selected time "+selectedTime);
-	DateUtil dtstart = new DateUtil(new Date(selectedTime)).toTZ(timezoneName).toMidnight();
-	DateUtil dtend = new DateUtil(new Date(selectedTime)).toTZ(timezoneName).addDays(1).toMidnight();
-
-	Long startTime = dtstart.getCalendar().getTimeInMillis() / 1000;
-	Long endTime = dtend.getCalendar().getTimeInMillis() / 1000;
+	Long startTime = selectedTime;
+	Long endTime = startTime+86400;
 	
 	System.out.println("------------------  Timezonename "+timezoneName+" start time "+startTime+"  -- end time  "+endTime);
-
 	String domainUser_timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domain_user.id);
 	if (StringUtils.isEmpty(domainUser_timezone))
 	{

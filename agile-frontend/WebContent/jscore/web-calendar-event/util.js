@@ -150,7 +150,9 @@ function get_slots(s_date, s_slot)
 	var d = new Date(s_date);
 	var secs = epochTime+d.getSeconds() + (60 * d.getMinutes()) + (60 * 60 * d.getHours());
 	console.log(secs);
-
+	 //gets the midnight of selected date. selected date will be stored in global variable i.e current_date_mozilla
+	 selected_epoch=getMidnightEpoch();
+	
 	var start_time = getEpochTimeFromDate(d);
 	d.setDate(d.getDate() + 1)
 	var end_time = getEpochTimeFromDate(d);

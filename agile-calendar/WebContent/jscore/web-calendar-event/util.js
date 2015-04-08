@@ -150,12 +150,8 @@ function get_slots(s_date, s_slot)
 	var d = new Date(s_date);
 	var secs = epochTime+d.getSeconds() + (60 * d.getMinutes()) + (60 * 60 * d.getHours());
 	console.log(secs);
-	var isFirefox = typeof InstallTrigger !== 'undefined';
-	 if(isFirefox){
-		 var ds=new Date();
-		 var s_d= ds.getSeconds() + (60 * ds.getMinutes()) + (60 * 60 * ds.getHours());
-		 selected_epoch=selected_epoch+s_d*1000;
-	 }
+	 //gets the midnight of selected date. selected date will be stored in global variable i.e current_date_mozilla
+	 selected_epoch=getMidnightEpoch();
 	
 	var start_time = getEpochTimeFromDate(d);
 	d.setDate(d.getDate() + 1)

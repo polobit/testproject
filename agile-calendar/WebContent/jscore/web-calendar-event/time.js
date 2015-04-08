@@ -117,3 +117,12 @@ function getTimezoneOffset(timezonename){
 	
 	return moment.tz.zone(SELECTED_TIMEZONE).offset(new Date().getTime());
 }
+
+// current date format is 2013-12-4
+function getMidnightEpoch(current_date){
+	if(!current_date){
+		current_date=current_date_mozilla;
+	}
+var d=	moment.tz(current_date, SELECTED_TIMEZONE).unix();
+return d;
+}

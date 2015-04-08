@@ -40,6 +40,7 @@ $(function()
 		if (!selecteddate)
 		{
 			selecteddate = new Date();
+			current_date_mozilla=selecteddate.setHours(0, 0, 0, 0);
 		}
 		if (selecteddate)
 		{
