@@ -10,9 +10,8 @@
 
 	<!--instance and scaling settings-->
   <instance-class>B4</instance-class>
-  <basic-scaling>
-    <max-instances>4</max-instances>
-  </basic-scaling>
+  <manual-scaling>
+    <instances>4</instances>
+  </manual-scaling>
   <use-google-connector-j>true</use-google-connector-j>
-  
 </appengine-web-app>
