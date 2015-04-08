@@ -1064,6 +1064,7 @@ ObjectMapper mapper = new ObjectMapper();
  var domainname=<%=mapper.writeValueAsString(domain_name)%>;
  var meeting_duration=<%=mapper.writeValueAsString(meeting_durations)%>;
  var slot_array=<%=mapper.writeValueAsString(slots_array)%>;
+ var CURRENT_DAY_OPERATION=null;
  </script>
 
 	<script type="text/javascript">
