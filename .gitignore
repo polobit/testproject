@@ -1,6 +1,8 @@
 **/.project
 **/.classpath
 **/.settings
+.gitignore
+util/*
 
 agile-java-server/build.properties
 agile-calendar/.classpath
