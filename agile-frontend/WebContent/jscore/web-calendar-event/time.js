@@ -117,3 +117,28 @@ function getTimezoneOffset(timezonename){
 	
 	return moment.tz.zone(SELECTED_TIMEZONE).offset(new Date().getTime());
 }
+
+// current date format is 2013-12-4
+function getMidnightEpoch(current_date){
+
+	if(CURRENT_DAY_OPERATION==true){
+		current_date_mozilla=getUnixTimeStampInSpecificTimezone();
+	}
+	if(!current_date){
+		current_date=current_date_mozilla;
+	}
+var d=	moment.tz(current_date, SELECTED_TIMEZONE).unix();
+return d;
+}
+
+
+
+function getUnixTimeStampInSpecificTimezone(timezone){
+	var m =moment().tz(SELECTED_TIMEZONE);
+
+	m.set('hour', 00);
+	m.set('minute', 00);
+	m.set('second', 00);
+	m.set('millisecond', 00);
+	return m.valueOf();
+}

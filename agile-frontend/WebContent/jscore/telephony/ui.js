@@ -164,8 +164,11 @@ function removeBracesFromNumber(number)
 	var regExp = /\:([^@]+)\@/;
 	var matches = regExp.exec(number);
 	
-	//matches[1] contains the value between the parentheses
-	console.log(matches[1]);
-	number = matches[1];
+	if(matches)
+    {	
+	  //matches[1] contains the value between the parentheses
+	  console.log(matches[1]);
+	  number = matches[1];
+    }
 	return number;
 }
