@@ -55,7 +55,7 @@ public class StarterPlanLimits extends PlanLimits
 	paymentSync = false;
 	accountingSync = false;
 
-	widgets = 2;
+	widgets = 3;
 	defaultWidget = false;
     }
 }

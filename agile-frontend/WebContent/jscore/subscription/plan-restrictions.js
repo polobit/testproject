@@ -14,7 +14,7 @@ function init_acl_restriction()
 			},
 			function() {
 				return {
-					"message" : "Please <a href='#subscribe'>upgrade</a> to Regular or Pro plan to use this feature."
+					"message" : "Please <a href='#subscribe-plan'>upgrade</a> to Regular or Pro plan to use this feature."
 				}
 			}
 			],
@@ -24,7 +24,7 @@ function init_acl_restriction()
 				return _plan_restrictions.plan.emailGateway;
 			}, function() {
 				return {
-					"message" : "Please <a href='#subscribe'>upgrade</a> to Pro plan to use this feature"
+					"message" : "Please <a href='#subscribe-plan'>upgrade</a> to Pro plan"
 				}
 			} ],
 			
@@ -33,7 +33,7 @@ function init_acl_restriction()
 				return _plan_restrictions.plan.smsgateway;
 			}, function() {
 				return {
-					"message" : "Please <a href='#subscribe'>upgrade</a> to Pro or Regular plan"
+					"message" : "Please <a href='#subscribe-plan'>upgrade</a> to Regular or Pro plan"
 				}
 			} ],
 			is_ecommerce_sync_allowed : [ function() {
@@ -42,7 +42,7 @@ function init_acl_restriction()
 			function()
 			{
 				return {
-					"message" : "Please <a href='#subscribe'>upgrade</a> to Pro or Regular plan"
+					"message" : "Please <a href='#subscribe-plan'>upgrade</a> to Regular or Pro plan"
 				}
 			}
 			],
@@ -52,7 +52,7 @@ function init_acl_restriction()
 			},
 			function() {
 				return {
-					"message" : "Please <a href='#subscribe'>upgrade</a> to Pro or Regular plan"
+					"message" : "Please <a href='#subscribe-plan'>upgrade</a> to Regular or Pro plan"
 				}
 			}
 			],
@@ -62,7 +62,7 @@ function init_acl_restriction()
 				return _plan_restrictions.plan.acl;
 			}, function() {
 				return {
-					"message" : " Please <a href=\"#subscribe\">upgrade</a> to Regular or Pro plan to use this feature. "
+					"message" : " Please <a href=\"#subscribe-plan\">upgrade</a> to Regular or Pro plan to use this feature. "
 				}
 			} ],
 			is_calling_widget : [function(){
@@ -70,7 +70,7 @@ function init_acl_restriction()
 			},
 			function(){
 				return {
-					"message" : "Please <a href=\"#subscribe\">upgrade</a> to Regular or Pro plan to use this feature. "
+					"message" : "Please <a href=\"#subscribe-plan\">upgrade</a> to Regular or Pro plan to use this feature. "
 				}
 			}
 			],
@@ -79,7 +79,7 @@ function init_acl_restriction()
 			},
 			function(){
 				return {
-					"message" : "Please <a href=\"#subscribe\">upgrade</a> to Regular or Pro plan to use this feature. "
+					"message" : "Please <a href=\"#subscribe-plan\">upgrade</a> to Regular or Pro plan to use this feature."
 				}
 			}
 			],
@@ -126,7 +126,7 @@ function init_acl_restriction()
 				return _plan_restrictions.plan.activityReports;
 			}, function() {
 				return {
-					"message" : "Please <a href='#subscribe'>upgrade</a> <br/> to Pro plan"
+					"message" : "Please <a href='#subscribe-plan'>upgrade</a> <br/> to Pro plan"
 				}
 			} ],
 			is_cohort_reports_enabled : [ function() {

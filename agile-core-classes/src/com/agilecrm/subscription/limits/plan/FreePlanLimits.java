@@ -59,6 +59,8 @@ public class FreePlanLimits extends PlanLimits
 	activityReports = false;
 	widgets = 1;
 	defaultWidget = false;
+	
+	onlineAppointment= false;
 
     }
 }
