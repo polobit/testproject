@@ -534,6 +534,7 @@ public class DealsAPI
 	int firstTime = 0;
 	String path = null;
 	List<Opportunity> deals = null;
+	long total = 0;
 	int max = 1000;
 	do
 	{
@@ -544,11 +545,12 @@ public class DealsAPI
 		path = DealExportBlobUtil.writeDealCSVToBlobstore(deals, false);
 	    else
 		DealExportBlobUtil.editExistingBlobFile(path, deals, false);
+	    total += deals.size();
 	} while (deals.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
 	DealExportBlobUtil.editExistingBlobFile(path, null, true);
 	List<String> fileData = DealExportBlobUtil.retrieveBlobFileData(path);
 	if (count == null)
-	    count = String.valueOf(deals.size());
+	    count = String.valueOf(total);
 	// Send every partition as separate email
 	for (String partition : fileData)
 	    DealExportEmailUtil.exportDealCSVAsEmail(DomainUserUtil.getDomainUser(currentUserId), partition,
