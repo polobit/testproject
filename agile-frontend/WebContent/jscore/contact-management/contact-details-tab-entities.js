@@ -26,6 +26,7 @@ var contact_details_tab = {
 	            restKey: "note",
 	            templateKey: "notes",
 	            individual_tag_name: 'li',
+	            cursor : true, page_size : 20,
 	            sortKey:"created_time",
 	            descending: true,
 	            postRenderCallback: function(el) {

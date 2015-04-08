@@ -198,11 +198,11 @@ public class StripeSyncImpl extends OneWaySyncService
     {
 	HashMap<String, Object> options = new HashMap<String, Object>();
 	options.put("limit", pageSize);
-	if (syncTime != null && lastSyncCheckPoint != null)
+	if (syncTime != null && lastSyncCheckPoint != null && syncTime.equalsIgnoreCase("first"))
 	{
 	    options.put("starting_after", lastSyncCheckPoint);
 	}
-	else if(lastSyncCheckPoint != null)
+	else if(lastSyncCheckPoint != null && syncTime.equalsIgnoreCase("second"))
 	{
 	    options.put("ending_before", lastSyncCheckPoint);
 	}
