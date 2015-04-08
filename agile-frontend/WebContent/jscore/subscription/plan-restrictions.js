@@ -79,7 +79,7 @@ function init_acl_restriction()
 			},
 			function(){
 				return {
-					"message" : "Please <a href=\"#subscribe-plan\">upgrade</a> to Regular or Pro plan to use this feature."
+					"message" : "Please <a href=\"#subscribe-plan\">upgrade</a> to Regular or Pro plan."
 				}
 			}
 			],

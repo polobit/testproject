@@ -57,6 +57,7 @@ public class ProPlanLimits extends PlanLimits
 	accountingSync = true;
 
 	widgets = Integer.MAX_VALUE;
+	customWidget = true;
     }
 
 }
