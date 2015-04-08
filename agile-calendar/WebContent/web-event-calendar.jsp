@@ -1102,6 +1102,7 @@ ObjectMapper mapper = new ObjectMapper();
 						}
 					},onChange : function(formated, dates)
 					{
+						CURRENT_DAY_OPERATION=false;
 						console.log("In date picker on change");
 						console.log(formated + "  " + dates);
 						selecteddate=dates;
