@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang.ArrayUtils;
 
 import com.agilecrm.deals.Opportunity;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -48,7 +49,7 @@ public class DealExportBlobUtil
 	    FileService fileService = FileServiceFactory.getFileService();
 
 	    // Create a new Blob file with mime-type "text/csv"
-	    AppEngineFile file = fileService.createNewBlobFile("text/csv", "Deals.csv");
+	    AppEngineFile file = fileService.createNewBlobFile("text/csv", NamespaceManager.get() + "_Deals.csv");
 
 	    // Open a channel to write to it
 	    boolean lock = false;
