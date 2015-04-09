@@ -648,6 +648,15 @@
 		<servlet-name>GravityForm</servlet-name>
 		<url-pattern>/gform</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AgileForm</servlet-name>
+		<servlet-class>com.thirdparty.forms.AgileForm</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AgileForm</servlet-name>
+		<url-pattern>/formsubmit</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>ShopifyWebhookTrigger</servlet-name>

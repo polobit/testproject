@@ -2,7 +2,7 @@ define([
        "jquery", "underscore", "backbone"
       , "views/temp-snippet"
       , "helper/pubsub"
-      , "text!templates/app/renderform.html"
+      , "text!templates/app/renderform.html",
 ], function(
   $, _, Backbone
   , TempSnippetView
@@ -31,7 +31,8 @@ define([
       _.each(this.collection.renderAll(), function(snippet){
         that.$el.append(snippet);
       });
-      $("#render").val(that.renderForm({
+      	$("#render").val(that.renderForm({action : 'https://' + window.location.hostname.split('.')[0] + '.agilecrm.com/formsubmit',
+//		$("#render").val(that.renderForm({action : 'http://localhost:8888/formsubmit',
         text: _.map(this.collection.renderAllClean(), function(e){return e.html()}).join("\n")
       }));
       this.$el.appendTo("#build form");
