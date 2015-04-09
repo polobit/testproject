@@ -23,7 +23,6 @@ public enum UserAccessScopes
 	defaultScopes.remove(UserAccessScopes.RESTRICTED_ACCESS);
 	defaultScopes.remove(UserAccessScopes.RESTRICTED);
 	defaultScopes.remove(UserAccessScopes.DEFAULT);
-	defaultScopes.remove(EXPORT_CONTACTS);
 
 	return defaultScopes;
     }

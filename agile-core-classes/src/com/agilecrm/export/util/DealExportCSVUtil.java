@@ -48,12 +48,19 @@ public class DealExportCSVUtil
 	    System.out.println("Writing deals to CSV file.");
 	    for (Opportunity deal : dealList)
 	    {
-		if (deal == null)
-		    continue;
+		try
+		{
+		    if (deal == null)
+			continue;
 
-		String str[] = DealCSVExport.insertDealFields(deal, indexMap, headers.length);
-		if (str.length > 0)
-		    writer.writeNext(str);
+		    String str[] = DealCSVExport.insertDealFields(deal, indexMap, headers.length);
+		    if (str.length > 0)
+			writer.writeNext(str);
+		}
+		catch (Exception e)
+		{
+		    System.out.println("Exception in deal - " + deal.name);
+		}
 	    }
 
 	    ActivityUtil.createLogForImport(ActivityType.DEAL_EXPORT, EntityType.DEAL, dealList.size(), 0);
@@ -79,8 +86,8 @@ public class DealExportCSVUtil
     {
 	// CSV Header will get initialized in the same order
 	String[] headers = { DealCSVExport.NAME, DealCSVExport.DESCRIPTION, DealCSVExport.PIPELINE,
-	        DealCSVExport.MILESTONE, DealCSVExport.PROBABILITY, DealCSVExport.EXPECTED_VALUE,
-	        DealCSVExport.CLOSE_DATE, DealCSVExport.OWNER, DealCSVExport.RELATED_TO };
+		DealCSVExport.MILESTONE, DealCSVExport.PROBABILITY, DealCSVExport.EXPECTED_VALUE,
+		DealCSVExport.CLOSE_DATE, DealCSVExport.OWNER, DealCSVExport.RELATED_TO };
 
 	return DealExportCSVUtil.appendCustomFieldsToHeaders(headers);
     }

@@ -64,12 +64,10 @@ public class WebCalendarEventUtil
     {
 	DomainUser domain_user = DomainUserUtil.getDomainUser(userid);
 
-	DateUtil dtstart = new DateUtil(new Date(selectedTime)).toTZ(timezoneName).toMidnight();
-	DateUtil dtend = new DateUtil(new Date(selectedTime)).toTZ(timezoneName).addDays(1).toMidnight();
-
-	Long startTime = dtstart.getCalendar().getTimeInMillis() / 1000;
-	Long endTime = dtend.getCalendar().getTimeInMillis() / 1000;
-
+	Long startTime = selectedTime;
+	Long endTime = startTime+86400;
+	
+	System.out.println("------------------  Timezonename "+timezoneName+" start time "+startTime+"  -- end time  "+endTime);
 	String domainUser_timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domain_user.id);
 	if (StringUtils.isEmpty(domainUser_timezone))
 	{
@@ -245,7 +243,8 @@ public class WebCalendarEventUtil
 	    {
 		endtime = getEppochTime(date, month, year, Integer.parseInt(tillTime), Integer.parseInt(tillTime_mins),
 		        tz);
-
+	
+        endtime=endtime-60;
 		int night_before_wkday = getNightWeekDayAccordingToJS(week_day);
 		JSONObject night_business_hours = new JSONObject(business_hours_array.get(night_before_wkday)
 		        .toString());
@@ -271,6 +270,7 @@ public class WebCalendarEventUtil
 
 			night_endtime = getEppochTime(date, month, year, Integer.parseInt(night_endTime),
 			        Integer.parseInt(night_endTimeMins), tz);
+			night_endtime=night_endtime-60;
 		    }
 		    System.out.println(night_starttime + "  Night hours if fromtime > endtime start time and end time "
 			    + night_endTime);
@@ -307,6 +307,7 @@ public class WebCalendarEventUtil
 
 			night_endtime = getEppochTime(date, month, year, Integer.parseInt(night_endTime),
 			        Integer.parseInt(night_endTimeMins), tz);
+			night_endtime=night_endtime-60;
 		    }
 		    System.out.println(night_starttime + "  Night hourse start time and end time " + night_endTime);
 

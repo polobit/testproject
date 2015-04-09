@@ -5,7 +5,7 @@ public class Globals
 
     public static String[] URLS = { "agilecrm.com", "helptor.com", "-dot-sandbox-dot-agile-crm-cloud.appspot.com",
 	    "-dot-sandbox-dot-agilecrmbeta.appspot.com", "-dot-addon-dot-agilecrmbeta.appspot.com",
-	    "-dot-mcsandbox-dot-agile-crm-cloud.appspot.com" };
+	    "-dot-mcsandbox-dot-agile-crm-cloud.appspot.com", "-dot-addon-dot-agilesanbox.appspot.com" };
 
     public static String SUB_VERSION_URL = "-dot-agile-crm-cloud.appspot.com";
 
@@ -85,8 +85,8 @@ public class Globals
     // public static final String STRIPE_LIVE_CLIENT_ID =
     // "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
 
-    public static final String STRIPE_LIVE_API_KEY = "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
-    public static final String STRIPE_LIVE_CLIENT_ID = "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
+    public static final String STRIPE_LIVE_API_KEY = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
+    public static final String STRIPE_LIVE_CLIENT_ID = "ca_33Msd2IrjZ2f4JPH4c2GanFe9uGqnhPX";
 
     // development keys
     public static final String DEV_STRIPE_API_KEY = STRIPE_LIVE_API_KEY;

@@ -552,41 +552,50 @@ function fillCompanyCustomFieldsInFilters(el, callback)
 	}
 }
 
+var _AGILE_CUSTOM_DIVIDER_ = ' _AGILE_CUSTOM_DIVIDER_';
+var custom_chained_filter = "custom_chained_class";
 function fillCustomFields(fields, el, callback, is_webrules)
 {
 	var lhs_element = $("#LHS > select > #custom-fields", el);
 	var rhs_element = $("#RHS", el);
 	var condition = $("#condition > select", el);
 
-	var _AGILE_CUSTOM_DIVIDER_ = ' _AGILE_CUSTOM_DIVIDER_';
+	
 	for(var i = 0; i < fields.length ; i++)
 	{
 		if(i == 0)
 			lhs_element.show();
 		var field = fields[i];
-
-		field.field
 		if(field.field_type == "DATE")
 		{
 			lhs_element.append('<option value="'+field.field_label+'_time" field_type="'+field.field_type+'">'+field.field_label+'</option>');
-			condition.find("option.created_time").addClass(field.field_label+'_time');
+			
+			var element = condition.find("option.created_time"); 
+			add_custom_class_to_filter_elements(element, field.field_label+'_time');
+			$(element).addClass(field.field_label+'_time' + _AGILE_CUSTOM_DIVIDER_);
 		} else if(field.field_type == "NUMBER")
 		{
 			lhs_element.append('<option value="'+field.field_label+'_number" field_type="'+field.field_type+'">'+field.field_label+'</option>');
-			condition.find("option.lead_score").addClass(field.field_label+'_number');
+			
+			
+			var element = condition.find("option.lead_score");
+			add_custom_class_to_filter_elements(element, field.field_label+'_number');
+			$(element).addClass(field.field_label+'_number' + _AGILE_CUSTOM_DIVIDER_);
 		}
 		else
 		{
 			lhs_element.append('<option value="'+field.field_label+'" field_type="'+field.field_type+'" >'+field.field_label+'</option>');
 		}
-		condition.append('<option value="EQUALS" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is</option>');
-		condition.append('<option value="NOTEQUALS" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">isn\'t</option>');
+		
+		condition.append('<option value="EQUALS" custom_chained_class= "'+field.field_label+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is</option>');
+		condition.append('<option value="NOTEQUALS" custom_chained_class= "'+field.field_label+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">isn\'t</option>');
+		
 		
 		// Contacts and not contains should only be in webrules form
 		if(is_webrules)
 		{
-			condition.append('<option value="MATCHES" class="'+field.field_label +' custom_field" field_name="'+field.field_label+'">contains</option>');
-			condition.append('<option value="NOT_CONTAINS" class="'+field.field_label+' custom_field" field_name="'+field.field_label+'">doesn\'t contain</option>');
+			condition.append('<option value="MATCHES" custom_chained_class= "'+field.field_label+ " " + _AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ +' custom_field" field_name="'+field.field_label+'">contains</option>');
+			condition.append('<option value="NOT_CONTAINS"  custom_chained_class= "'+field.field_label+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label+ _AGILE_CUSTOM_DIVIDER_ +' custom_field" field_name="'+field.field_label+'">doesn\'t contain</option>');
 		}
 		
 		if(field.field_type == "LIST")
@@ -609,4 +618,29 @@ function fillCustomFields(fields, el, callback, is_webrules)
 		// execute the callback, passing parameters as necessary
 		callback();
 	}
+}
+
+
+function add_custom_class_to_filter_elements(element, className)
+{
+	var custom_class = $(element).attr(custom_chained_filter);
+	 var attrClass = $(element).attr('class');
+	if(!custom_class)
+		custom_class = "";
+	else
+		{
+		 var classArray = attrClass.split(" ");
+	     if(classArray && classArray.length > 0)
+	      {
+	       for(var i = 0 ; i < classArray.length ; i++)
+	        {
+	         custom_class += (_AGILE_CUSTOM_DIVIDER_ + " " +classArray[i]); 
+	        }
+	      }
+		}
+	
+	custom_class += (_AGILE_CUSTOM_DIVIDER_ + " " +className);
+	console.log(custom_class)
+	
+	$(element).attr('custom_chained_class', custom_class);
 }
