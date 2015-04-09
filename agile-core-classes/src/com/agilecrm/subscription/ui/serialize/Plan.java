@@ -21,11 +21,33 @@ public class Plan implements Serializable
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 7190361539170990536L;
+
+    // New plans
+    private static final String VERSION_1 = "v1";
+    private static final String VERSION_2 = "v2";
 
     public static enum PlanType
     {
-	FREE, BASIC_MONTHLY, PROFESSIONAL_MONTHLY, ENTERPRISE_MONTHLY, ENTERPRISE_YEARLY, BASIC_YEARLY, PROFESSIONAL_YEARLY, LITE_MONTHLY, LITE_YEARLY, PRO_MONTHLY, PRO_YEARLY, PRO_BIENNIAL, STARTER_MONTHLY, STARTER_YEARLY, STARTER_BIENNIAL, REGULAR_MONTHLY, REGULAR_YEARLY, REGULAR_BIENNIAL, STARTER, REGULAR, PRO;
+	FREE,
+
+	// Legacy plans (beta plans)
+	LITE_MONTHLY, LITE_YEARLY,
+
+	BASIC_MONTHLY, BASIC_YEARLY,
+
+	PROFESSIONAL_MONTHLY, PROFESSIONAL_YEARLY,
+
+	ENTERPRISE_MONTHLY, ENTERPRISE_YEARLY,
+
+	// Plans till 2015 feb
+	STARTER_MONTHLY, STARTER_YEARLY, STARTER_BIENNIAL,
+
+	PRO_MONTHLY, PRO_YEARLY, PRO_BIENNIAL,
+
+	REGULAR_MONTHLY, REGULAR_YEARLY, REGULAR_BIENNIAL,
+
+	STARTER, REGULAR, PRO;
 
     }
 
@@ -35,6 +57,7 @@ public class Plan implements Serializable
     public Integer quantity = null;
     public String coupon = null;
     public Integer count = 0;
+    public String version = VERSION_2;
 
     public Plan(String plan_type, Integer quantity)
     {

@@ -60,14 +60,18 @@ var WidgetsRouter = Backbone.Router
 																				sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el)
 																				{
 																								build_custom_widget_form(el);
-
 																				} });
 
 																// Append widgets into view by organizing them
 																this.Catalog_Widgets_View.appendItem = organize_widgets;
 
 																// Fetch the list of widgets
-																this.Catalog_Widgets_View.collection.fetch();
+																this.Catalog_Widgets_View.collection.fetch({
+																	success: function(data) {
+																		console.log(data.where({"is_added" : true}));
+																		_plan_restrictions.process_widgets(data);
+																	}
+																});
 
 																// Shows available widgets in the content
 																$('#prefs-tabs-content').html(this.Catalog_Widgets_View.el);

@@ -350,6 +350,9 @@ public class StripeImpl implements AgileBilling
 	if(subscriptions.getTotalCount() == 0)
 	    return;
 	
+	SubscriptionUtil.deleteEmailSubscription();
+	SubscriptionUtil.deleteUserSubscription();
+	
 	// Fetches all subscriptions and cancels from stripe
 	for(com.stripe.model.Subscription s : subscriptions.getData())
 	{

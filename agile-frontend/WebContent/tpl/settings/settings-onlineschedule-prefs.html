@@ -3,7 +3,9 @@
 
 <script id="settings-business-prefs-template" type="text/html">
 <div class="row">
-	<div class="span9" id="schedule-preferences">
+<div class="span9" id="schedule-preferences">
+{{#isAllowedInCurrentPlan "online_appointment"}} 
+	
 		<div class="well">
 
 			<form id="scheduleid" name="scheduleid" method="post" action=""
@@ -130,6 +132,10 @@
 				just a few clicks.</p>
 			<br />
 		</div>
-	</div>
+	
+{{else}}
+	Online scheduler allowed only in pro plan. Upgrade <a href="#subscribe-plan">here</a>.
+{{/isAllowedInCurrentPlan}}
+</div>
 </div>
 </script>
