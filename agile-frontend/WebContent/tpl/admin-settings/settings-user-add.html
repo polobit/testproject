@@ -63,208 +63,31 @@
     				</div>
 					<div id="collapseOne" class="panel-collapse collapse" >
       					<div class="panel-body" style="margin-top:20px!important;margin-left:20px" >
-					{{#unless id}}
- 					<div class="control-group">
-						
-					<div class="controls">
-						<div class="multiple-checkbox" name="newscopes">
-								<label class="checkbox" >
-                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT" checked> 
-                            		Create Contacts <br/>
-									<small> Add contacts</small>
-								</label>
-								<label class="checkbox" >
-            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" checked> 
-        	                    	Import Contacts  <br/>
-									<small> Import from CSV file, sync from Google Apps and other integrations </small>
-    	                       </label>
-                               <label class="checkbox" >
-            	            	    <input type="checkbox" name="temp"  value="EXPORT_CONTACTS" checked> 
-        	                    	Export Contacts  <br/>
-									<small> Export contacts as a CSV file </small>
-    	                       </label>
-								<label class="checkbox" >
-                        	    	<input type="checkbox" name="temp"  value="VIEW_CONTACTS" checked> 
-                            		View All Contacts  <br/>
-									<small> View contacts owned by other users</small>
-                           		</label>
-								<label class="checkbox" >
-                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" checked> 
-                        	    	Update All Contacts  <br/>
-									<small>  Edit and delete contacts owned by other users</small>
-                    	       </label>
-							</div>
-						</div>
-                    </div>
+					{{#isAllowedInCurrentPlan "is_ACL_allowed"}}
 						{{else}}
-						{{#unless is_admin}}
-						<div class="control-group">
-						<div class="controls">
-						<div class="multiple-checkbox"  name="newscopes">
-								<label class="checkbox" >
-                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT"> 
-                            		Create Contacts <br/>
-									<small> Add contacts</small>
-								</label>
-								<label class="checkbox" >
-            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS"> 
-        	                    	Import Contacts  <br/>
-									<small> Import from CSV file, sync from Google Apps and other integrations</small>
-    	                       </label>
-                               <label class="checkbox" >
-            	            	    <input type="checkbox" name="temp"  value="EXPORT_CONTACTS"> 
-        	                    	Export Contacts  <br/>
-									<small> Export contacts as a CSV file</small>
-    	                       </label>
-								<label class="checkbox" >
-                        	    	<input type="checkbox" name="temp"  value="VIEW_CONTACTS"> 
-                            		View All Contacts  <br/>
-									<small> View contacts owned by other users </small>
-                           		</label>
-								<label class="checkbox" >
-                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS"> 
-                        	    	Update All Contacts  <br/>
-									<small>  Edit and delete contacts owned by other users</small>
-                    	       </label>
+	 					<div class="control-group" style="margin-top:-2%">
+							<div class="controls">
+								<p><i>{{toSafeString message}}</i><p>
 							</div>
 						</div>
-                    </div>
-					{{else}}
-					<div class="control-group">
+					{{/isAllowedInCurrentPlan}}
+
+					<div class="control-group" style="margin-top:-2%">
+					
 						<div class="controls">
-						<div class="multiple-checkbox"  name="newscopes">
-									<label class="checkbox" >
-                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT" disabled> 
-                            		Create Contacts <br/>
-									<small> Add contacts</small>
-								</label>
-								<label class="checkbox" >
-            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" disabled> 
-        	                    	Import Contacts  <br/>
-									<small> Import from CSV file, sync from Google Apps and other integrations </small>
-    	                       </label>
-                                <label class="checkbox" >
-            	            	    <input type="checkbox" name="temp"  value="EXPORT_CONTACTS" disabled> 
-        	                    	Export Contacts  <br/>
-									<small> Export contacts as a CSV file </small>
-    	                       </label>
-								<label class="checkbox" >
-                        	    	<input type="checkbox" name="temp"  value="VIEW_CONTACTS" disabled> 
-                            		View All Contacts  <br/>
-									<small> View contacts owned by other users </small>
-                           		</label>
-								<label class="checkbox" >
-                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" disabled> 
-                        	    	Update All Contacts  <br/>
-									<small>  Edit and delete contacts owned by other users</small>
-                    	       </label>
-							</div>
+							{{#aclsWithPlans this}}
+								{{getTemplate "admin-settings-user-acl" this}}
+							{{/aclsWithPlans}}
 						</div>
-                    </div>
-					{{/unless}}
-					{{/unless}}
+					</div>
 				
 					<div class="control-group" style="margin-top:-20px">
 						<div class="controls">
-						<div class="multiple-checkbox"  name="newMenuScopes" style="padding-top:5px">
-					{{#if id}}
-						<label class="checkbox hide"  >
-                        		    <input type="checkbox" name="scopes-temp" class="required hide" value="CONTACT" checked> 
-                        	    	Contacts<br/><small>Manage contacts</small></label> 
-								<label class="checkbox"  >
-                        		    <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" > 
-                        	    	Calendar<br/><small>Manage your tasks and events</small></label> 
-								<label class="checkbox"  >
-            	            	    <input type="checkbox" name="scopes-temp" class="required" value="DEALS"> 
-        	                    	Deals<br/>
-									<small> Track sales opportunities</small>
-    	                       </label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CAMPAIGN"> 
-                            		Campaigns<br/>
-										<small> Automate marketing</small>
-                           		</label>
 						
-								 </label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CASES"> 
-                            		Cases<br/>
-									<small>Log and address customer issues</small>
-                           		</label>
- 								</label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="SOCIAL" > 
-                            		Social Suite<br/>
-									<small> Monitor your brand on social media</small>
-                           		</label>
-								</label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="scopes-temp" class="required" value="WEBRULE" > 
-                            		Web Rule<br/>
-									<small> Enagage your website visitors with smart popups, or perform automatic actions </small>
-                           		</label>
-								</label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="scopes-temp" class="required" value="DOCUMENT" > 
-                            		Documents<br/>
-								<small> Upload and attach documents to contacts, deals or cases</small>
-                           		</label>
-								</label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="ACTIVITY" > 
-                            		Activities<br/>
-									<small> Know what other users are doing</small>
-                           		</label>
-								</label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="REPORT" > 
-                            		Reports<br/>
-									<small> Stay on top of your data</small>
-                           		</label>
-
-						{{else}}
-								<label class="checkbox hide"  >
-                        		    <input type="checkbox" name="scopes-temp" class="required hide" value="CONTACT" checked> 
-                        	    	Contacts<br/><small>Manage contacts</small></label> 
-								<label class="checkbox"  >
-                        		    <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" checked> 
-                        	    	Calendar<br/><small>Manage your tasks and events</small></label> 
-								<label class="checkbox"  >
-            	            	    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" checked> 
-        	                    	Deals<br/>
-									<small> Track sales opportunities</small>
-    	                       </label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CAMPAIGN" checked> 
-                            		Campaigns<br/>
-										<small> Automate marketing</small>
-                           		</label>
-						
-								 </label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CASES" checked> 
-                            		Cases<br/>
-									<small>Log and address customer issues</small>
-                           		</label>
- 								</label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="SOCIAL" checked> 
-                            		Social Suite<br/>
-									<small> Monitor your brand on social media</small>
-                           		</label>
-								</label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="scopes-temp" class="required" value="WEBRULE" checked> 
-                            		Web Rule<br/>
-									<small> Enagage your website visitors with smart popups, or perform automatic actions </small>
-                           		</label>
-								</label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="scopes-temp" class="required" value="DOCUMENT" checked> 
-                            		Documents<br/>
-								<small> Upload and attach documents to contacts, deals or cases</small>
-                           		</label>
-								</label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="ACTIVITY" checked> 
-                            		Activities<br/>
-									<small> Know what other users are doing</small>
-                           		</label>
-								</label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="REPORT" checked> 
-                            		Reports<br/>
-									<small> Stay on top of your data</small>
-                           		</label>
-
-					{{/if}}
-				</div>
+							{{#aclsWithPlans this}}
+								{{getTemplate "admin-settings-user-menu-scopes" this}}
+							{{/aclsWithPlans}}
+			
 				</div>	
 				</div>
     			</div>
@@ -289,4 +112,116 @@
     	</div>
     </div>
     </div>
+</script>
+
+<script id="admin-settings-user-acl-template" type="text/html">
+<div class="multiple-checkbox"  name="newscopes">
+								<label class="checkbox" >
+                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT" {{#if user_scopes.disabled}}disabled{{/if}} {{#if user_scopes.checked}}checked{{/if}}> 
+                            		Create Contacts <br/>
+									<small> Add contacts</small>
+								</label>
+								<label class="checkbox" >
+            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" {{#if user_scopes.disabled}}disabled{{/if}} {{#if user_scopes.checked}}checked{{/if}}> 
+        	                    	Import Contacts  <br/>
+									<small> Import from CSV file, sync from Google Apps and other integrations</small>
+    	                       </label>
+                               <label class="checkbox" >
+            	            	    <input type="checkbox" name="temp"  value="EXPORT_CONTACTS"> 
+        	                    	Export Contacts  <br/>
+									<small> Export contacts as a CSV file</small>
+    	                       </label>
+								<label class="checkbox" >
+                        	    	<input type="checkbox" name="temp"  value="VIEW_CONTACTS" {{#if user_scopes.disabled}}disabled{{/if}} {{#if user_scopes.checked}}checked{{/if}}> 
+                            		View All Contacts  <br/>
+									<small> View contacts owned by other users </small>
+                           		</label>
+								<label class="checkbox" >
+                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" {{#if user_scopes.disabled}}disabled{{/if}} {{#if user_scopes.checked}}checked{{/if}}> 
+                        	    	Update All Contacts  <br/>
+									<small>  Edit and delete contacts owned by other users</small>
+                    	       </label>
+							</div>
+</script>
+
+<script id="admin-settings-user-acl-disabled-template" type="text/html">
+<div class="multiple-checkbox">
+							<label class="checkbox" >    
+							<input type="checkbox" name="temp"  value="CREATE_CONTACT" checked disabled> 
+                            		Create Contacts <br/>
+									<small> Add contacts</small>
+								</label>
+								<label class="checkbox" >
+            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" checked disabled> 
+        	                    	Import Contacts  <br/>
+									<small> Import from CSV file, sync from Google Apps and other integrations </small>
+    	                       </label>
+                                <label class="checkbox" >
+            	            	    <input type="checkbox" name="temp"  value="EXPORT_CONTACTS" disabled> 
+        	                    	Export Contacts  <br/>
+									<small> Export contacts as a CSV file </small>
+    	                       </label>
+								<label class="checkbox" >
+                        	    	<input type="checkbox" name="temp"  value="VIEW_CONTACTS" checked disabled> 
+                            		View All Contacts  <br/>
+									<small> View contacts owned by other users</small>
+                           		</label>
+								<label class="checkbox" >
+                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" checked disabled> 
+                        	    	Update All Contacts  <br/>
+									<small>  Edit and delete contacts owned by other users</small>
+                    	       </label>
+	</div>
+</script>
+
+
+<script id="admin-settings-user-menu-scopes-template" type="text/html">
+<div class="multiple-checkbox"  name="newMenuScopes"  style="padding-top:5px">
+	<label class="checkbox hide"  >
+                        		    <input type="checkbox" name="scopes-temp" class="required hide" value="CONTACT" {{#if menu_scopes.disabled}}disabled{{/if}} {{#if menu_scopes.checked}}checked{{/if}}> 
+                        	    	Contacts<br/><small>Manage contacts</small></label> 
+								<label class="checkbox"  >
+                        		    <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" {{#if menu_scopes.disabled}}disabled{{/if}} {{#if menu_scopes.checked}}checked{{/if}}> 
+                        	    	Calendar<br/><small>Manage your tasks and events</small></label> 
+								<label class="checkbox"  >
+            	            	    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" {{#if menu_scopes.disabled}}disabled{{/if}} {{#if menu_scopes.checked}}checked{{/if}}> 
+        	                    	Deals<br/>
+									<small> Track sales opportunities</small>
+    	                       </label><label class="checkbox"  >
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CAMPAIGN" {{#if menu_scopes.disabled}}disabled{{/if}} {{#if menu_scopes.checked}}checked{{/if}}> 
+                            		Campaigns<br/>
+										<small> Automate marketing</small>
+                           		</label>
+						
+								 </label><label class="checkbox"  >
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CASES" {{#if menu_scopes.disabled}}disabled{{/if}} {{#if menu_scopes.checked}}checked{{/if}}> 
+                            		Cases<br/>
+									<small>Log and address customer issues</small>
+                           		</label>
+ 								</label><label class="checkbox"  >
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="SOCIAL" {{#if menu_scopes.disabled}}disabled{{/if}} {{#if menu_scopes.checked}}checked{{/if}}> 
+                            		Social Suite<br/>
+									<small> Monitor your brand on social media</small>
+                           		</label>
+								</label><label class="checkbox"  >
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="WEBRULE" {{#if menu_scopes.disabled}}disabled{{/if}} {{#if menu_scopes.checked}}checked{{/if}}> 
+                            		Web Rule<br/>
+									<small> Enagage your website visitors with smart popups, or perform automatic actions </small>
+                           		</label>
+								</label><label class="checkbox"  >
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="DOCUMENT" {{#if menu_scopes.disabled}}disabled{{/if}} {{#if menu_scopes.checked}}checked{{/if}}> 
+                            		Documents<br/>
+								<small> Upload and attach documents to contacts, deals or cases</small>
+                           		</label>
+								</label><label class="checkbox"  >
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="ACTIVITY" {{#if menu_scopes.disabled}}disabled{{/if}} {{#if menu_scopes.checked}}checked{{/if}}> 
+                            		Activities<br/>
+									<small> Know what other users are doing</small>
+                           		</label>
+								</label><label class="checkbox"  >
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="REPORT" {{#if menu_scopes.disabled}}disabled{{/if}} {{#if menu_scopes.checked}}checked{{/if}}> 
+                            		Reports<br/>
+									<small> Stay on top of your data</small>
+                           		</label>
+</div>
 </script>
