@@ -39,7 +39,7 @@ public class FreePlanLimits extends PlanLimits
 	/**
 	 * New limits: 2015 Jan
 	 */
-	socialSuite = false;
+	socialSuite = true;
 	emailGateway = false;
 	smsGateway = false;
 	ACL = false;
