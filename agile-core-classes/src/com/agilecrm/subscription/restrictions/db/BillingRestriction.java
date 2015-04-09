@@ -29,6 +29,8 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.triggers.Trigger;
+import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.analytics.util.AnalyticsSQLUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -213,6 +215,9 @@ public class BillingRestriction
 	if (WebRuleUtil.getCount() > planDetails.getWebRuleLimit())
 	    return false;
 	if (DomainUserUtil.count() > planDetails.getAllowedUsers())
+	    return false;
+	
+	if (TriggerUtil.getCount() > planDetails.getTriggersLimit())
 	    return false;
 
 	return true;

@@ -937,6 +937,46 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	newscopes = scopes;
     }
 
+    public void resetACLScopesAndSave()
+    {
+	boolean shouldReset = false;
+	if(restricted_scopes != null && !restricted_scopes.isEmpty())
+	{
+		restricted_scopes.clear();
+		if(newscopes != null)
+			newscopes.addAll(UserAccessScopes.customValues());
+		
+		shouldReset = true;
+	}
+	
+	if(restricted_menu_scopes != null && !restricted_menu_scopes
+			.isEmpty())
+	{
+		restricted_menu_scopes.clear();
+		if(menu_scopes != null)
+		{
+			menu_scopes.addAll(NavbarConstants.customValues());
+		}
+		if(newMenuScopes != null)
+		{
+			newMenuScopes.addAll(NavbarConstants.customValues());
+		}
+		shouldReset = true;
+	}
+	
+	if(shouldReset == true)
+
+		try
+		{
+		    save();
+		}
+		catch (Exception e)
+		{
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+    }
+
     /**
      * 
      * @param name

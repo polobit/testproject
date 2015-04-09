@@ -34,69 +34,69 @@ import com.agilecrm.contact.Contact;
 public class WebCalendarEventsAPI
 {
 
-    /**
-     * Get slot duration and description for that.
-     */
-    @Path("/getslotdetails")
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<String> getSlotDetails(@QueryParam("userid") Long id)
-    {
-	return WebCalendarEventUtil.getSlotDetails(id);
-    }
-
-    /**
-     * Gets an event based on id
-     * 
-     * @param id
-     *            unique id of event
-     * @return {@link Event}
-     * @throws ParseException
-     */
-    @Path("/getslots")
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<List<Long>> getSlots(@QueryParam("slot_time") int slot_time, @QueryParam("date") String date,
-	    @QueryParam("timezone_name") String timezoneName, @QueryParam("epoch_time") Long epochTime,
-	    @QueryParam("selected_time_epoch") Long startTime, @QueryParam("user_id") Long userid,
-	    @QueryParam("agile_user_id") Long agileuserid, @QueryParam("timezone") int timezone) throws ParseException
-    {
-	try
+	/**
+	 * Get slot duration and description for that.
+	 */
+	@Path("/getslotdetails")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public List<String> getSlotDetails(@QueryParam("userid") Long id)
 	{
-	    return WebCalendarEventUtil.getSlots(userid, slot_time, date, timezoneName, epochTime, startTime,
-		    agileuserid, timezone);
-	}
-	catch (JSONException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-	return null;
-    }
-
-    @Path("/save")
-    @PUT
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public String saveWebEvent(WebCalendarEvent wce)
-    {
-	System.out.println(wce);
-
-	Contact contact = new Contact();
-	String result;
-	try
-	{
-	    result = WebCalendarEventUtil.createEvents(wce, contact);
-	    return result;
-	}
-	catch (JSONException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	    System.out.println(e.getMessage());
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+		return WebCalendarEventUtil.getSlotDetails(id);
 	}
 
-    }
+	/**
+	 * Gets an event based on id
+	 * 
+	 * @param id
+	 *            unique id of event
+	 * @return {@link Event}
+	 * @throws ParseException
+	 */
+	@Path("/getslots")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public List<List<Long>> getSlots(@QueryParam("slot_time") int slot_time, @QueryParam("date") String date,
+			@QueryParam("timezone_name") String timezoneName, @QueryParam("epoch_time") Long epochTime,
+			@QueryParam("selected_time_epoch") Long startTime, @QueryParam("user_id") Long userid,
+			@QueryParam("agile_user_id") Long agileuserid, @QueryParam("timezone") int timezone) throws ParseException
+	{
+		try
+		{
+			return WebCalendarEventUtil.getSlots(userid, slot_time, date, timezoneName, epochTime, startTime,
+					agileuserid, timezone);
+		}
+		catch (JSONException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Path("/save")
+	@PUT
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public String saveWebEvent(WebCalendarEvent wce)
+	{
+		System.out.println(wce);
+
+		Contact contact = new Contact();
+		String result;
+		try
+		{
+			result = WebCalendarEventUtil.createEvents(wce, contact);
+			return result;
+		}
+		catch (JSONException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+	}
 }

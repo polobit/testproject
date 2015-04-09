@@ -108,7 +108,7 @@
 
 				</fieldset>
 			</form>
-			{{#if_equals "free" current_plan}}
+			{{#if billing_data_json_string}}
 			<form id="CCform" class="form-horizontal card_details"
 				name="card_details">
 				<fieldset>
@@ -196,7 +196,7 @@
                     </div> -->
 				</fieldset>
 			</form>
-			{{/if_equals}}
+			{{/if}}
 			<form id="gateway" class="form-horizontal hide">
 				<input type="text" name="gateway" class="hidden" value="Stripe" />
 			</form>

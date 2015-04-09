@@ -1,5 +1,14 @@
 function bindAdminChangeAction(el, data)
 {
+	if(!_plan_restrictions)
+		{
+			init_acl_restriction()
+		}
+	
+	if(!_plan_restrictions.is_ACL_allowed[0]())
+			return;
+	
+	
 	$('input[name="is_admin"]', el).die().live('change', function(e){
 	var is_admin = $(this).is(":checked");
 	if(is_admin == false)

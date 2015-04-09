@@ -48,6 +48,7 @@ $(function()
 	 */
 	Backbone.history.start();
 //	setup_our_domain_sync();
+	checkAndNavigateToSubscription();
 });
 
 // Global variable to store current route
@@ -113,4 +114,12 @@ function load_clickdesk_code()
 	glcspt.src = glcpath + 'livechat-new.js';
 	var s = document.getElementsByTagName('script')[0];
 	s.parentNode.insertBefore(glcspt, s);
+}
+
+function checkAndNavigateToSubscription()
+{
+	if(IS_NEW_USER && _plan_on_signup)
+		{
+			Backbone.history.navigate("#subscribe-plan", {trigger:true});
+		}
 }
