@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -12,19 +13,23 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.PHPAPIUtil;
 
-@Path("rest/api")
+@Path("/rest/api")
 public class RestAPI
 {
     /**
@@ -185,14 +190,65 @@ public class RestAPI
     @Path("/events")
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8;")
-    public List<Event> getEventsList(@PathParam("page_size") String count)
+    public List<Event> getEventsList(@QueryParam("page_size") String count)
 
     {
-	int max = 0;
+	int max = 20;
 	if (count != null)
 	    max = Integer.parseInt(count);
 	List<Event> events = EventUtil.getEvents(max);
 	return events;
+    }
+
+    /**
+     * Add note to a contact based on email address of the contact
+     * 
+     * @param email
+     *            email of contact form parameter
+     * @param note
+     *            note data as string
+     * @throws JSONException
+     */
+    @Path("/email/note/{email}")
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Note addNoteToContactsBasedOnEmail(Note note, @PathParam("email") String email,
+	    @Context HttpServletResponse response) throws JSONException
+    {
+
+	System.out.println("email to search on" + email);
+	System.out.println("Notes " + note);
+	JSONObject object = new JSONObject();
+
+	if (note == null)
+	{
+	    object.put("error", "Note could not be added");
+	    HTTPUtil.writeResonse(response, object.toString());
+	    return null;
+	}
+
+	Contact contact = ContactUtil.searchContactByEmail(email);
+	if (contact == null)
+	{
+	    object.put("error", "No contact found with email address \'" + email + "\'");
+	    HTTPUtil.writeResonse(response, object.toString());
+	    return null;
+	}
+
+	Note noteObj = new Note();
+	try
+	{
+	    note.addRelatedContacts(contact.id.toString());
+	    note.save();
+	    return note;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return null;
+
     }
 
 }
