@@ -931,6 +931,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	if(restricted_scopes != null && !restricted_scopes.isEmpty())
 	{
 		restricted_scopes.clear();
+		if(newscopes != null)
+			newscopes.addAll(UserAccessScopes.customValues());
+		
 		shouldReset = true;
 	}
 	
@@ -938,6 +941,14 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			.isEmpty())
 	{
 		restricted_menu_scopes.clear();
+		if(menu_scopes != null)
+		{
+			menu_scopes.addAll(NavbarConstants.customValues());
+		}
+		if(newMenuScopes != null)
+		{
+			newMenuScopes.addAll(NavbarConstants.customValues());
+		}
 		shouldReset = true;
 	}
 	
