@@ -127,7 +127,7 @@
 									<small> Import from CSV file, sync from Google Apps and other integrations</small>
     	                       </label>
                                <label class="checkbox" >
-            	            	    <input type="checkbox" name="temp"  value="EXPORT_CONTACTS"> 
+            	            	    <input type="checkbox" name="temp"  value="EXPORT_CONTACTS" {{#if user_scopes.disabled}}disabled{{/if}} {{#if user_scopes.checked}}checked{{/if}}> 
         	                    	Export Contacts  <br/>
 									<small> Export contacts as a CSV file</small>
     	                       </label>
