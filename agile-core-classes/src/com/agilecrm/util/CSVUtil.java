@@ -229,6 +229,14 @@ public class CSVUtil
     public void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId)
 	    throws PlanRestrictedException, IOException
     {
+    	
+    	// Creates domain user key, which is set as a contact owner
+    Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
+
+    DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
+
+    BulkActionUtil.setSessionManager(domainUser);
+    	
 	// Refreshes count of contacts
 	billingRestriction.refreshContacts();
 
@@ -253,12 +261,7 @@ public class CSVUtil
 
 	List<ContactField> properties = contact.properties;
 
-	// Creates domain user key, which is set as a contact owner
-	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
 
-	DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
-
-	BulkActionUtil.setSessionManager(domainUser);
 
 	System.out.println(csvData.size());
 
