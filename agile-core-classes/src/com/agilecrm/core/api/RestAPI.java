@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -13,7 +12,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -26,7 +24,6 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.PHPAPIUtil;
 
 @Path("/rest/api")
@@ -213,8 +210,7 @@ public class RestAPI
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Note addNoteToContactsBasedOnEmail(Note note, @PathParam("email") String email,
-	    @Context HttpServletResponse response) throws JSONException
+    public String addNoteToContactsBasedOnEmail(Note note, @PathParam("email") String email) throws JSONException
     {
 
 	System.out.println("email to search on" + email);
@@ -224,16 +220,14 @@ public class RestAPI
 	if (note == null)
 	{
 	    object.put("error", "Note could not be added");
-	    HTTPUtil.writeResonse(response, object.toString());
-	    return null;
+	    return object.toString();
 	}
 
 	Contact contact = ContactUtil.searchContactByEmail(email);
 	if (contact == null)
 	{
 	    object.put("error", "No contact found with email address \'" + email + "\'");
-	    HTTPUtil.writeResonse(response, object.toString());
-	    return null;
+	    return object.toString();
 	}
 
 	Note noteObj = new Note();
@@ -241,7 +235,8 @@ public class RestAPI
 	{
 	    note.addRelatedContacts(contact.id.toString());
 	    note.save();
-	    return note;
+	    ObjectMapper mapper = new ObjectMapper();
+	    return mapper.writeValueAsString(note);
 	}
 	catch (Exception e)
 	{
