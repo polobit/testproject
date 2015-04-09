@@ -583,9 +583,9 @@ $.validator.setDefaults({
 			
 			 $("#confirm_registration").attr("disabled", "disabled");
 			  // Form data is posted to its subdomain 
-			 //$(form).attr('action', "https://" + domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com/register");
+			 $(form).attr('action', "https://" + domain + ".agilecrm.com/register");
 			 //  $(form).attr('action', "http://localhost:8888/register");
-			   $(form).attr('action', "https://" + domain + "-dot-sandbox-dot-agilesanbox.appspot.com/register");
+			 //  $(form).attr('action', "https://" + domain + "-dot-sandbox-dot-agilesanbox.appspot.com/register");
 			  form.submit();
 		}
 			 
@@ -595,7 +595,7 @@ $.validator.setDefaults({
 			 $("#register_account").attr("disabled", "disabled");
 			 
 			  // Form data is posted to its subdomain 
-			  $(form).attr('action', "https://" + domain + "-dot-sandbox-dot-agilesanbox.appspot.com/register");
+			  $(form).attr('action', "https://" + domain + ".agilecrm.com/register");
 			// $(form).attr('action', "https://" + domain + ".agilecrm.com/register");
 			// $(form).attr('action', "http://localhost:8888/register");
 			  form.submit();

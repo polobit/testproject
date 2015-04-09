@@ -17,7 +17,7 @@ public class Globals
 
     public static String REDIRECT_URL = "/redirect";
     public static String LOGIN = "/login";
-    public static String CHOOSE_DOMAIN = "https://my-dot-sandbox-dot-agilesanbox.appspot.com/register";
+    public static String CHOOSE_DOMAIN = "https://my.agilecrm.com/register";
     
 
     // Push data into stats

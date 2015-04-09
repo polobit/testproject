@@ -135,7 +135,7 @@ public class RegisterServlet extends HttpServlet
 	    {
 		DomainUser domainUser = createUser(request, response, userInfo, "");
 
-		response.sendRedirect("https://" + domainUser.domain + "-dot-sandbox-dot-agilesanbox.appspot.com/");
+		response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com/");
 		return;
 	    }
 
