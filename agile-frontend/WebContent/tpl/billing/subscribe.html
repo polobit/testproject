@@ -30,40 +30,9 @@
 	<div class="span9">
 
 		<div class="row-fluid">
-		{{#if plan}}
-			{{#if_equals plan.version "v1"}}
-				{{#if_equals planLimits.planName "FREE"}}
-						{{getTemplate "starter-plan-block"}}
-						{{getTemplate "regular-plan-block"}}
-						{{getTemplate "pro-plan-block"}}
-					{{else}}
-						{{#if_equals planLimits.planName "STARTER"}}
-							{{plan.version}}
-							{{getTemplate "starter-plan-block-legacy"}}
-								{{else}}
-									{{getTemplate "starter-plan-block"}}
-						{{/if_equals}}
-						{{#if_equals planLimits.planName "REGULAR"}}
-									{{getTemplate "regular-plan-block-legacy"}}
-							{{else}}
-									{{getTemplate "regular-plan-block"}}
-						{{/if_equals}}
-						{{#if_equals planLimits.planName "PRO"}}
-									{{getTemplate "pro-plan-block-legacy"}}
-								{{else}}
-									{{getTemplate "pro-plan-block"}}
-						{{/if_equals}}
-				{{/if_equals}}
-				{{else}}
-					{{getTemplate "starter-plan-block"}}
-						{{getTemplate "regular-plan-block"}}
-						{{getTemplate "pro-plan-block"}}
-			{{/if_equals}}
-		{{/if}}
-			
-			
-			
-			
+				{{getTemplate "starter-plan-block-legacy"}}
+				{{getTemplate "regular-plan-block-legacy"}}
+				{{getTemplate "pro-plan-block-legacy"}}
 		</div>
 
 		<div class="row-fluid">

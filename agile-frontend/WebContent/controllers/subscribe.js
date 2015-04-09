@@ -43,7 +43,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			return;
 		}
 		
-		config_version_2_plans();
+		//config_version_2_plans();
 		
 		/*
 		 * Creates new view with a render callback to setup expiry dates
