@@ -60,9 +60,9 @@
 							<a class="btn btn-primary _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
 				</div>
 				{{#if_equals widget_type "CALL"}}
-					<div style="display:inline;float:right;display:none; max-width:135px;" class="text-right {{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade" ><p><i>Requires Regular or<br/>Pro plan. <a href="#subscribe">Upgrade</a></i><p></div>
+					<div style="display:inline;float:right;display:none; max-width:135px;" class="text-right {{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade" ><p><i>Requires Regular or<br/>Pro plan. <a href="#subscribe-plan">Upgrade</a></i><p></div>
 					{{else}}
-				 <div style="display:inline;float:right;display:none; max-width:135px" class="text-right {{name}}-upgrade" ><p><i>Please <a href="#subscribe">upgrade</a> <br/> to add more widgets</i><p></div>
+				 <div style="display:inline;float:right;display:none; max-width:135px" class="text-right {{name}}-upgrade" ><p><i>Please <a href="#subscribe-plan">upgrade</a> <br/> to add more widgets</i><p></div>
 				{{/if_equals}}
 			{{/if}}
     		{{/if}}
