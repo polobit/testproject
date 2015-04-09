@@ -928,19 +928,30 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     public void resetACLScopesAndSave()
     {
 	boolean shouldReset = false;
-
-	restricted_scopes.clear();
-	restricted_menu_scopes.clear();
-
-	try
+	if(restricted_scopes != null && !restricted_scopes.isEmpty())
 	{
-	    save();
+		restricted_scopes.clear();
+		shouldReset = true;
 	}
-	catch (Exception e)
+	
+	if(restricted_menu_scopes != null && !restricted_menu_scopes
+			.isEmpty())
 	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+		restricted_menu_scopes.clear();
+		shouldReset = true;
 	}
+	
+	if(shouldReset == true)
+
+		try
+		{
+		    save();
+		}
+		catch (Exception e)
+		{
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
     }
 
     /**

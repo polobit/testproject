@@ -28,3 +28,8 @@ PLANS_DISCOUNTS_JSON_NEW.pro = {};
 PLANS_DISCOUNTS_JSON_NEW.pro.monthly = "0";
 PLANS_DISCOUNTS_JSON_NEW.pro.yearly = "18.75";
 PLANS_DISCOUNTS_JSON_NEW.pro.biennial = "40";
+
+function is_new_signup_payment()
+{
+	return IS_NEW_USER && _plan_on_signup;
+}
