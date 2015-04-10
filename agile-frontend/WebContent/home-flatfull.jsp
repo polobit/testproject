@@ -578,6 +578,8 @@ var LIB_PATH = "";
 
 var LIB_PATH_FLATFULL = "flatfull/";
 
+var FLAT_FULL_PATH = LIB_PATH_FLATFULL 
+
 var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
 
 
