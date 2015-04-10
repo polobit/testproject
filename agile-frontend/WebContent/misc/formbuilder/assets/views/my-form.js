@@ -31,7 +31,7 @@ define([
       _.each(this.collection.renderAll(), function(snippet){
         that.$el.append(snippet);
       });
-      	$("#render").val(that.renderFormloc({action : window.location.protocol + '//' + window.location.host + '/formsubmit',
+      	$("#render").val(that.renderForm({action : window.location.protocol + '//' + window.location.host + '/formsubmit',
       		text: _.map(this.collection.renderAllClean(), function(e){return e.html()}).join("\n")
       }));
       this.$el.appendTo("#build form");
