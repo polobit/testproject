@@ -4,12 +4,17 @@
 
 #sh tpl.sh
 
-java -jar precompile.jar /home/yaswanth/Documents/Work-Agile/Projects/AgileCRM-Modules/agile-frontend/WebContent/tpl /home/yaswanth/Documents/tmp/handlebars /home/yaswanth/Documents/Work-Agile/Projects/AgileCRM-Modules/agile-frontend/WebContent/tpl/min/precompiled
+java -jar precompile.jar ../WebContent/tpl ../../../tmp/handlebars ../WebContent/tpl/min/precompiled
+
+java -jar precompile.jar ../WebContent/flatfull/tpl ../../../tmp/handlebars ../WebContent/flatfull/tpl/min/precompiled
 
 sh yui.sh
 
+sh yui-flatfull.sh
+
 sh tpl.sh
 
+sh tpl-flatfull.sh
 #sh ../../appengine-java-sdk-1.8.6/appengine-java-sdk-1.8.6/bin/appcfg.sh -A agilecrmbeta -V sandbox --enable_jar_classes update ../war
 
 #sh ../../appengine-java-sdk-1.8.6/appengine-java-sdk-1.8.6/bin/appcfg.sh --oauth2 --enable_jar_classes update ../war
