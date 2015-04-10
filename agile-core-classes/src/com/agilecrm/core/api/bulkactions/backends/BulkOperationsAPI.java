@@ -411,12 +411,15 @@ public class BulkOperationsAPI
     	// Creates domain user key, which is set as a contact owner
 		Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
     
+		System.out.println("setting domain user for key : " + ownerKey);
+		
 		DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
 		
-		System.out.println("settings session for domain user");
 		
 		if(domainUser != null)
 			 BulkActionUtil.setSessionManager(domainUser);
+		
+		System.out.println("settings session for domain user" + domainUser.id);
 	}
 	catch(Exception e)
 	{
