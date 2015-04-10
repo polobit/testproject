@@ -1,21 +1,16 @@
 package com.agilecrm.contact;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-import com.agilecrm.activities.Activity;
-import com.agilecrm.activities.Activity.EntityType;
-import com.agilecrm.activities.Task;
-import com.agilecrm.activities.util.ActivityUtil;
-import com.agilecrm.activities.util.TaskUtil;
-import com.agilecrm.cases.Case;
-import com.agilecrm.cases.util.CaseUtil;
-import com.agilecrm.contact.util.NoteUtil;
-import com.agilecrm.deals.Opportunity;
-import com.agilecrm.deals.util.OpportunityUtil;
+import src.com.agilecrm.activities.Activity;
+import src.com.agilecrm.activities.Activity.EntityType;
+import src.com.agilecrm.activities.Task;
+import src.com.agilecrm.activities.util.ActivityUtil;
+import src.com.agilecrm.activities.util.TaskUtil;
+import src.com.agilecrm.cases.Case;
+import src.com.agilecrm.cases.util.CaseUtil;
+import src.com.agilecrm.contact.Note;
+import src.com.agilecrm.contact.util.NoteUtil;
+import src.com.agilecrm.deals.Opportunity;
+import src.com.agilecrm.deals.util.OpportunityUtil;
 
 /**
  * <ContactFullDetails> loads deals, tasks, notes and cases of a particular
@@ -103,7 +98,7 @@ public class ContactFullDetails
 	 * @return
 	 */
 	@XmlElement
-	public List<Activity> getCallAndOwnerChangeActivites()
+	public List<Activity> getCalls()
 	{
 		try
 		{
