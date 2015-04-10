@@ -596,7 +596,7 @@ var IS_FLUID = <%=is_fluid %>
 
 var CLICKDESK_CODE_LOADED = false;
 
-var FLAT_FULL_UI = "flatfull";
+var FLAT_FULL_UI = "flatfull/";
 
 var _plan_on_signup = <%=mapper.writeValueAsString(plan)%>;
 
@@ -631,7 +631,7 @@ head.js(LIB_PATH + 'lib/underscore-min.js', LIB_PATH + 'lib/backbone-min.js', LI
 <!-- Handle bars -->
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "/tpl/min/precompiled/tpl.js");
+head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "tpl/min/precompiled/tpl.js");
 else
 head.js(HANDLEBARS_LIB);
 
