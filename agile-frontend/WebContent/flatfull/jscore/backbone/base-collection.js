@@ -520,11 +520,13 @@ var Base_Collection_View = Backbone.View
 				 */
 				if (callback && typeof (callback) === "function")
 				{
-					hideTransitionBar();
+					
 					// execute the callback, passing parameters as necessary
 					callback($(this.el), this.collection);
 				}
 
+				hideTransitionBar();
+				
 				// Add checkboxes to specified tables by triggering view event
 				$('body').trigger('agile_collection_loaded', [
 					this.el
