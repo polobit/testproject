@@ -9,7 +9,6 @@
     <div class="panel wrapper">
         <form id="continueform" class="form-horizontal">
             <fieldset>
-               
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Name <span class="field_req">*</span></label>
                     <div class="controls col-sm-9">
@@ -65,7 +64,7 @@
 					<div style="color:red;">Tag name should start with an alphabet and can not contain special characters other than underscore and space.</div>
 				</div>
                 {{show_custom_fields custom_fields properties}}
-                <legend></legend>
+                
                 <p></p>
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Add Email <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
@@ -186,8 +185,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- End of website template -->
-                <legend></legend>
+                <!-- End of website template -->                
                 <p></p>
                 <div class="control-group form-group second">
                     <label class="control-label col-sm-3">Add Address</label>
@@ -462,10 +460,9 @@
                 <input type="text" name="created_time" class="hide form-control" value="{{created_time}}" />
 
                 <input type="text" name="image" id="image" class="hide form-control" value="{{getPropertyValue properties "image"}}" />             
-				<hr class="m-t-none">
                 <div class="row">
 	            <div class="controls col-sm-9 pull-right">
-					<a href="#home" class="btn btn-sm btn-danger" id="close">Close</a>
+					<a href="#home" class="btn btn-sm btn-default" id="close">Close</a>
                     <a href="#" type="submit" class="save btn btn-sm btn-primary" id="update">Update</a>
 					<span class="form-action-error"></span>
                     <span class="save-status"></span>

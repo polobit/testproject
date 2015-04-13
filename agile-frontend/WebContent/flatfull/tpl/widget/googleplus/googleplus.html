@@ -62,34 +62,36 @@
 
 <script id="googleplus-modified-search-template" type="text/html">
 	<div class="inline l-h-xs word-break">
-		<form class="panel-body b-b-none" id="gpsearchform" name="gpsearchform" method="get">
+		<form class="panel-body b-b-none text-base" id="gpsearchform" name="gpsearchform" method="get">
 	    	<fieldset>
 				<p><label>Enter search details</label></p>
 				<div class="control-group form-group"><div class="controls"><input type="text" id="searchkeywords" class="input-medium required widget_input_box form-control"  placeholder="Key Words" value="{{keywords}}" name="keywords" maxlength="40" required></input></div></div>
-				<a href="#" id="gpsearchbtn" class="btn btn-default text-l-none">Search</a>
+				<a href="#" id="gpsearchbtn" class="btn btn-sm btn-primary text-l-none">Search</a>				
+				<a href="#" id="gpsearchclose" class="btn btn-sm m-l-xs btn-default">Close</a>
 				<span><img src="img/ajax-spinner.gif" id="spinner-search" style="display:none;"></img></span>
-				<a href="#" id="gpsearchclose" class="btn btn-sm m-l-xs btn-danger">Close</a>
 			 </fieldset>
 	    </form>
 	</div>
 </script>
 
 <script id="googleplus-error-panel-template" type="text/html">
+<div class="wrapper-sm">
 {{#if disable_check}}
-	<div class="word-break" style="line-height:160%;">
+	<div class="word-break text-base" style="line-height:160%;">
 		{{{message}}}
 	</div>
 {{else}}
 	{{#check_length message "140"}}
-		<div class="ellipsis-multiline word-break" title="{{message}}" style="height: 100px !important;-webkit-line-clamp: 5;line-height:160%;word-break: normal;">
+		<div class="ellipsis-multiline word-break text-base" title="{{message}}" style="height: 100px !important;-webkit-line-clamp: 5;line-height:160%;word-break: normal;">
 			{{{message}}}
 		</div>
 	{{else}}
-		<div class="word-break" style="line-height:160%;">
+		<div class="word-break text-base" style="line-height:160%;">
 			{{{message}}}
 		</div>
 	{{/check_length}}	
 {{/if}}
+</div>
 </script>
 
 
@@ -97,7 +99,7 @@
 <div class="panel-body">
 	<a href="{{url}}" target="_blank" class="thumb pull-left m-r-xs"><img src="{{image.url}}" class="img-circle"></a>
 	<div class="clear">
-		<a href="{{url}}" class="text-cap" target="_blank">{{displayName}}</i></a>
+		<a href="{{url}}" class="text-cap text-base" target="_blank">{{displayName}}</i></a>
 		<small class="block text-muted">{{placesLived.0.value}}</small>
 		<small class="block text-muted">{{occupation}}</small>
 		<small class="block text-muted">{{show_link_in_statement tagline}}</small>
@@ -115,9 +117,9 @@
 <div id="gpposts" class="tab-pane fade active in">
 	<ul class="list-group m-b-none"  id="gplus_social_stream">	
 {{#each items}}
-	<li class="list-group-item" post_id="{{id}}">	
+	<li class="list-group-item r-none b-l-none b-r-none text-base" post_id="{{id}}">	
 		{{#if_equals object.attachments.0.objectType "photo"}}
-			<a href="{{url}}" class="thumb-sm m-r-xs pull-left" target="_blank"><img src="{{object.attachments.0.image.url}}" alt="" class="r r-2x"/></a>
+			<a href="{{url}}" class="thumb-sm m-t-xs m-r-xs pull-left" target="_blank"><img src="{{object.attachments.0.image.url}}" alt="" class="r r-2x"/></a>
 			<div class="clear">							
 				<p class="mb_0">
 					{{title}} <a href="{{url}}" target="_blank">view photo</a>
@@ -127,7 +129,7 @@
 			<small class="text-muted"><i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago" datetime="{{updated}}" title="{{updated}}">{{updated}}</time></small>
 		{{else}}
 		{{#if_equals object.attachments.0.objectType "video"}}
-		    <a href="{{url}}" class="thumb-sm m-r-xs pull-left" target="_blank"><img src="{{object.attachments.0.image.url}}" alt="" class="r r-2x"/></a>
+		    <a href="{{url}}" class="thumb-sm m-r-xs m-t-xs pull-left" target="_blank"><img src="{{object.attachments.0.image.url}}" alt="" class="r r-2x"/></a>
 			<div class="clear">							
 			 <p class="mb_0 word-break" style="word-break:normal;">
 				{{title}} <a href="{{url}}" target="_blank">view video</a>
@@ -163,7 +165,7 @@
 
 <script id="googleplus-posts-template" type="text/html">
 {{#each items}}
-<li class="list-group-item" post_id="{{id}}">	
+<li class="list-group-item r-none b-l-none b-r-none" post_id="{{id}}">	
 				
 {{#if_equals object.attachments.0.objectType "photo"}}
 <a href="{{url}}" class="thumb pull-left m-r-xs" target="_blank"><img src="{{object.attachments.0.image.url}}" alt="" class="r r-2x"></a>

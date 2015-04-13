@@ -1,4 +1,5 @@
 <script id="theme-layout-form-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
 <div class="wrapper-md bg-light lter b-b">
 	<div class="row">
 		<div class="col-md-12">
@@ -23,7 +24,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="control-group form-group">
+          <!--      <div class="control-group form-group">
                         <label class="control-label col-sm-4">Layout</label> 
                         <div class="controls col-sm-8">
                             <select name="layout" id="layout" class="form-control">
@@ -31,7 +32,8 @@
                                 <option value="fixed">Fixed</option>
                             </select>
                         </div>
-                    </div>
+                    </div>	-->
+					<input type="hidden" name="layout" id="layout" value={{layout}}>
 					<div class="control-group form-group">
                         <label class="control-label col-sm-4">Theme</label> 
                         <div class="controls col-sm-8">
@@ -238,5 +240,6 @@
         </fieldset>
     </form>
 
+</div>
 </div>
 </script>

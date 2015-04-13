@@ -1,5 +1,5 @@
 <script id="new-opportunity-header-template" type="text/html">
-<div class="custom-animated fadeInUp">
+<div class="custom-animated custom-fadeInUp">
 <div class="wrapper-md bg-light lter b-b">
 <div class="row">
     <div class="col-md-12">
@@ -119,7 +119,7 @@
 <script id="deals-by-paging-model-template" type="text/html">
 <div id={{id}} data="{{milestone}}" class="data agile-overflow-ellipsis">
 	<div>
-		<b class="pull-left text-flow-ellipsis inline-block l-h-xs font-thin word-break" style="max-width: 70%;"><a href="#deal/{{id}}" class="text-info">{{name}}</a></b>
+		<b class="pull-left text-flow-ellipsis inline-block l-h-xs font-thin word-break" style="max-width: 70%;"><!-- a href="#deal/{{id}}" class="text-info" -->{{name}}</a></b>
 		
 		<span class="pull-right  dealnotes-view">
 			{{#if notes}}
@@ -141,7 +141,9 @@
 	<div class="pull-left">
 		
         <small class="text-muted">
+			{{#if close_date}}
             <i class="fa fa-clock-o m-r-xs"></i>
+			{{/if}}
 			<time class="deal-close-time" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999;">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>
 		</small>
 	</div>
@@ -171,7 +173,7 @@
 <script id="deals-by-paging-relax-model-template" type="text/html">
 <div id={{id}} data="{{milestone}}" class="data agile-overflow-ellipsis">
 	<div>
-		<b style="max-width: 70%;overflow: hidden;display: inline-block;line-height: 14px;float:left;white-space: normal;word-wrap: break-word;"><a class="font-normal" href="#deal/{{id}}">{{name}}</a></b>
+		<b style="max-width: 70%;overflow: hidden;display: inline-block;line-height: 14px;float:left;white-space: normal;word-wrap: break-word;"><!-- a class="font-normal" href="#deal/{{id}}" -->{{name}}</a></b>
 		
 		<span class="right dealnotes-view" style="margin-top:-3px;padding-right:1px;">
 			{{#if notes}}
@@ -191,7 +193,9 @@
 	</div>
 	<div class="pull-left">
 		<small class="text-muted">
+			{{#if close_date}}
             <i class="fa fa-clock-o m-r-xs"></i>
+			{{/if}}
 			<time class="deal-close-time" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>
 		</small>
 	</div>
@@ -215,10 +219,10 @@
 
 <script id="related-to-contacts-template" type="text/html">
 	{{#if_contact_type "PERSON"}}	
-		<a class="text-base" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
+		<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
     {{/if_contact_type}}
 	{{#if_contact_type "COMPANY"}}
-     	<a class="text-base" href="#contact/{{id}}">{{getPropertyValue properties "name"}}</a>
+     	<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "name"}}</a>
     {{/if_contact_type}}
 </script>
 <script id="opportunity-track-list-collection-template" type="text/html">

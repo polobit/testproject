@@ -205,7 +205,7 @@ function showPortletIcons(el){
 	$(el).find('div.portlet_header_icons').show();
 
 	// Changes width of portlet name
-	$(el).find('div.portlet_header_name').css({ "width" : "65%" });
+	$(el).find('div.portlet_header_name').css({ "width" : "75%" });
 }
 /**
  * Expand the portlet header name width.

@@ -1,6 +1,6 @@
 <script id="contact-events-collection-template" type="text/html">
 		{{#unless this.length}}
-        <div class="alert-info alert">
+        <div class="wrapper p-t-none">
             <div class="slate-content">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="/img/clipboard.png" />
@@ -28,7 +28,7 @@
 <script id="contact-events-model-template" type="text/html">
 <div class="activity block pos-rlt">
 	
-	<div class="activity-block-owner thumb thumb-sm pull-left m-r-sm avatar">
+	<div class="activity-block-owner  thumb-xs pull-left m-r-sm avatar">
 			{{#if ownerPic}}
 				<img class="user-img r r-2x"  alt="" src="{{ownerPic}}" >
 			{{else}}
@@ -37,7 +37,7 @@
 			<span class="owner-name hidden">{{owner.name}}</span>
 	</div>
 <div class="pull-left rightThumbView">	
-	<div class="event-title pull-left text-md text-cap" style="width:65%">{{title}} <span class="hidden label label-{{task_label_color color}}">{{event_priority color}}</span></div><div class="pull-right"><span>Time : <time class="event-created-time">{{epochToHumanDate "mmm dd yyyy" start}}</time></span></div>
+	<div class="event-title pull-left text-md text-cap contact-title-dynamic custom-color">{{title}} <span class="hidden label label-{{task_label_color color}}">{{event_priority color}}</span></div><div class="pull-right"><span class="text-muted"><i class="fa fa-clock-o"></i> <time class="event-created-time">{{epochToHumanDate "dd mmm yyyy' - 'hh:MM tt" start}}</time></span></div>
 <div class="clearfix"></div>
 <!-- <div class="m-b-xs">
 	<span>StartTime : <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="event-created-time text-muted" datetime="{{epochToHumanDate "" start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start}}</time></span>

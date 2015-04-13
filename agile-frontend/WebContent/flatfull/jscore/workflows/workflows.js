@@ -176,7 +176,8 @@ $(function(){
     	    url: 'core/api/campaigns/logs/' + campaign_id,
     	    type: 'DELETE',
     	    success: function(){
-    	    	location.reload(true);
+    	    	App_Workflows.logsToCampaign(campaign_id);
+    	    	//location.reload(true);
     	    }
     	});
     });

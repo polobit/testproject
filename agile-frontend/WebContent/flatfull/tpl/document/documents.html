@@ -1,5 +1,5 @@
 <script id="documents-collection-template" type="text/html">
-<div class="custom-animated fadeInUp">
+<div class="custom-animated custom-fadeInUp">
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-md-12">
@@ -55,13 +55,11 @@
         {{/if}}
     <div class="col-md-3">
         <div class="data-block">
-            <div class="wrapper">
+            <div class="wrapper-sm">
                 <h4 class="m-t-none font-thin">
                     How to use Documents?
-                </h4>
-                
-                <p>
-                    You can attach Documents to Contacts or Deals to add more context. Upload documents from your computer or attach them from cloud storage like Google Drive.</p>
+                </h4>                
+                <p>You can attach Documents to Contacts or Deals to add more context. Upload documents from your computer or attach them from cloud storage like Google Drive.</p>
             </div>
         </div>
     </div>
@@ -82,7 +80,7 @@
 		<span class="v-top">{{network network_type}}&nbsp;&nbsp;</span>
 	</div>
 </td>
-<td>
+<td class="overflow-hidden no-wrap">
 	<div>
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}

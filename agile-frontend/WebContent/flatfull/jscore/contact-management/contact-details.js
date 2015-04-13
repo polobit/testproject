@@ -525,7 +525,7 @@ $(function(){
 		}
 		$("#map").css('display', 'none');
 		$("#contacts-local-time").hide();
-		$("#map_view_action").html("<i class='icon-plus text-xxs c-p' title='Show map' id='enable_map_view'></i>");
+		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
 		
     });
 	$("#enable_map_view").die().live('click', function(e){

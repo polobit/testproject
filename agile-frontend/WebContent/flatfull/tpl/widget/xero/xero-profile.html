@@ -3,14 +3,14 @@
 <div class="wrapper-sm">
 	<div style="display:inline-block;">
 		<div  class="title_txt" style="display:inline-block;">
-			<a href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/Contacts/View.aspx?contactID={{Contact.ContactID}}" target="_blank"><h4 class="h4 m-t-none text-cap">
+			<a href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/Contacts/View.aspx?contactID={{Contact.ContactID}}" target="_blank"><h4 class="h4 m-t-none text-cap text-base">
 			{{Contact.Name}}	
 			</h4></a>
 		</div>
 	</div>
 	<div>
 		{{#if Contact.Addresses}}
-		<p style="font-size: 13px;" class="m-b-none text-muted">	
+		<p class="m-b-none text-muted text-sm">	
 				{{#if Contact.Addresses.Address.1.AddressLine1}}
 					{{Contact.Addresses.Address.1.AddressLine1}}
 				{{/if}}	
@@ -36,7 +36,7 @@
 		</p>				
 		{{/if}}
 	</div>
-	<div class="text-muted">
+	<div class="text-muted text-muted text-sm">
 		{{#if Contact.Phones}}
 		{{#each Contact.Phones.Phone}}
 			{{#if PhoneNumber}}<i class="icon icon-phone text-md m-r-xs v-middle"></i> {{#if PhoneCountryCode}}{{PhoneCountryCode}}-{{/if}}{{#if PhoneAreaCode}}{{PhoneAreaCode}}-{{/if}}{{PhoneNumber}}    {{capFirstLetter PhoneType}}<br> {{/if}}
@@ -49,13 +49,13 @@
 </div>
 <div class="wrapper-sm b-t b-light">
 	{{#if invoice.Invoice}}	
-	<a href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/Search.aspx?graphSearch=False" target="_blank"><h4 class="h4 text-md">Invoices</h4></a>
+	<a href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/Search.aspx?graphSearch=False" target="_blank"><h4 class="h4 text-md text-sm">Invoices</h4></a>
 </div>	
 	{{#isArray invoice.Invoice}}
 	
-	<ul class="list-group m-b-none">
+	<ul class="list-group m-b-none text-base">
 		{{#each invoice.Invoice}}
-			<li class="list-group-item">
+			<li class="list-group-item r-none b-l-none b-r-none">
 				<div class="pull-left">
 				<a class="invoices c-p" data-toggle="collapse"  id="getInvoice-lineitems-{{InvoiceID}}"  value="{{InvoiceID}}"><i class="icon icon-plus text-muted text-sm"></i></a>
 				<a data-toggle="tooltip" data-placement="top" title= "{{xeroTypeToolTip Type}}" class="c-p" href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/View.aspx?InvoiceID={{InvoiceID}}" target="_blank">{{InvoiceNumber}} {{xeroType Type}}</a>
@@ -72,8 +72,8 @@
 		{{/each}}
 	</ul>
 {{else}}
-		<ul class="list-group m-b-none">
-			<li class="list-group-item">
+		<ul class="list-group m-b-none text-base">
+			<li class="list-group-item r-none b-l-none b-r-none">
 				<div class="pull-left">
 					<a class="invoices c-p" data-toggle="collapse"  id="getInvoice-lineitems-{{invoice.Invoice.InvoiceID}}"  value="{{invoice.Invoice.InvoiceID}}"  ><i class="icon-plus"></i></a>
 					<a class="c-p" id="xeroinvoicelink" data-toggle="tooltip" data-placement="top" title= "{{xeroTypeToolTip invoice.Invoice.Type}}" href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/View.aspx?InvoiceID={{invoice.Invoice.InvoiceID}}" target="_blank">{{invoice.Invoice.InvoiceNumber}} {{xeroType invoice.Invoice.Type}}</a>
@@ -91,7 +91,7 @@
 		</ul>	
 	{{/isArray}}
 	{{else}}
-		<li class="list-group-item">
+		<li class="list-group-item r-none b-l-none b-r-none">
 	    	No invoices	found		
 		</li>
 	{{/if}}

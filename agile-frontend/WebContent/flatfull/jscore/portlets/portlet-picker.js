@@ -1165,7 +1165,7 @@ function portletGrowthGraph(selector,series,base_model){
 		flag=false;
 	}*/
 	if(base_model.get("settings").tags==""){
-		$('#'+selector).html("<div class='portlet-error-message'>Please <a href='#' id='"+base_model.get("id")+"-settings' class='portlet-settings' dada-toggle='modal'>configure</a> the dashlet and add the Tags.</div>");
+		$('#'+selector).html("<div class='portlet-error-message'>Please <a href='#' id='"+base_model.get("id")+"-settings' class='portlet-settings text-info' dada-toggle='modal'>configure</a> the dashlet and add the Tags.</div>");
 		flag=false;
 	}
 	if(flag){

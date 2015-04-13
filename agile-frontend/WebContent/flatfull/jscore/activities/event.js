@@ -484,9 +484,9 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 		if(event.color=='red' || event.color=='#f05050')
 			event.className = 'b-l b-2x b-danger fc-z-index';
 		else if(event.color=='green' || event.color=='#bbb')
-			event.className = 'b-l b-2x b-primary fc-z-index';
+			event.className = 'b-l b-2x b-light fc-z-index';
 		else if(event.color=='#36C' || event.color=='#23b7e5')
-			event.className = 'b-l b-2x b-info fc-z-index';
+			event.className = 'b-l b-2x b-warning fc-z-index';
 		event.color='';
 		event.backgroundColor = '#fff';
 		if (Current_Route == 'calendar' && !readCookie("agile_calendar_view"))

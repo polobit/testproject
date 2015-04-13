@@ -55,9 +55,9 @@ var contact_details_tab = {
 	            	if($(this).find('.priority_type').text().trim() == "High") {
             			$(this).css("border-left","3px solid #f05050");
             		}else if($(this).find('.priority_type').text().trim() == "Normal"){
-            			$(this).css("border-left","3px solid #23b7e5");
+            			$(this).css("border-left","3px solid #fad733");
             		}else if($(this).find('.priority_type').text().trim() == "Low") {
-            			$(this).css("border-left","3px solid #bbb");
+            			$(this).css("border-left","3px solid #edf1f2");
             		}
 	            	});
 	            }
@@ -103,9 +103,9 @@ var contact_details_tab = {
 		            		if($(this).find('.priority_type').text().trim()== "HIGH") {
 		            			$(this).css("border-left","3px solid #f05050");
 		            		}else if($(this).find('.priority_type').text().trim() == "NORMAL"){
-		            			$(this).css("border-left","3px solid #23b7e5");
+		            			$(this).css("border-left","3px solid #fad733");
 		            		}else if($(this).find('.priority_type').text().trim() == "LOW") {
-		            			$(this).css("border-left","3px solid #bbb");
+		            			$(this).css("border-left","3px solid #edf1f2");
 		            		}
 		            	});
 		            }
@@ -265,6 +265,13 @@ var contact_details_tab = {
 	        				$(element).timeago();
 	        			});
 	    			});
+	            	
+	            	var first_model_element = $('#stats-model-list').find('li')[0];
+	            	
+	            	// Expand first li by default
+	            	if(first_model_element)
+	            		$(first_model_element).find('#show-page-views').trigger('click');
+	            	
 	            }
 	        });
 			

@@ -11,7 +11,7 @@
 <script id="facebook-matching-profiles-template" type="text/html">
 <div class="panel-body text-sm">
 	{{#if profiles}}
-	<div class="wapper-sm"><p class='a-dotted'>Search results for  <a href='#' class="facebook_modify_search">{{searchString}}</a></p></div>
+	<div class="wapper-sm text-base"><p>Search results for  <a href='#' class="facebook_modify_search">{{searchString}}</a></p></div>
 	{{#each profiles}}	
 			<a class="thumb-sm m-r-sm m-b-sm" target="_blank">
 				<img rel='popover' data-original-title='Facebook Profile' class='facebookImage pull-left r r-2x c-p' id='{{userId}}' src ='{{userPicUrl}}' screen_name=""
@@ -31,26 +31,28 @@
 			</a>
 {{/each}}
 {{else}}
-	<div class="p-t-none p-r-none p-b-sn p-l-none"><p class='a-dotted m-b-none'>No matches found for <a href='#' class="facebook_modify_search">{{searchString}}</a></p></div>
+	<div class="p-t-none p-r-none p-b-sn p-l-none text-base"><p class='m-b-none'>No matches found for <a href='#' class="facebook_modify_search">{{searchString}}</a></p></div>
 {{/if}}
 </div><div class="clearfix"></div>
 </script>
 
 <script id="facebook-error-template" type="text/html">
+<div class="wrapper-sm">
 {{#check_length message "140"}}
-	<div class="ellipsis-multi-line collapse-25 overflow-hidden p-n word-break" title="{{message}}" style="height:110px;line-height:160%;">
+	<div class="ellipsis-multi-line collapse-25 overflow-hidden p-n word-break text-base" title="{{message}}" style="height:110px;line-height:160%;">
 		{{{message}}}
 	</div>
 {{else}}
-	<div class="word-break p-n" style="line-height:160%;">
+	<div class="word-break p-n text-base" style="line-height:160%;">
 		{{{message}}}
 	</div>
 {{/check_length}}
+</div>
 </script>
 
 <script id="facebook-modified-search-template" type="text/html">
 	<div class="inline word-break l-h-xs">
-		<form class="panel-body b-b-none" id="facebook-search_form" name="facebook-search_form" method="get">
+		<form class="panel-body b-b-none text-base" id="facebook-search_form" name="facebook-search_form" method="get">
 	    	<fieldset>
 				<p><label>Enter search details</label></p>
 				<div class="control-group form-group">
@@ -58,9 +60,9 @@
 						<input type="text" id="facebook_keywords" class="input-medium required widget_input_box form-control" style="width:90%" placeholder="Key Words" value="{{searchString}}" name="keywords"  maxlength="40"></input>
 					</div>
 				</div>
-				<input type="submit"  id="facebook_search_btn" class="btn btn-sm btn-default text-l-none"></input>
-					<span><img src="img/ajax-spinner.gif" id="spinner-facebook-search" style="display:none;"></img></span>
-				<a href="#" id="facebook_search_close" class="btn btn-sm btn-danger  m-l-xs">Close</a>
+				<input type="submit"  id="facebook_search_btn" class="btn btn-sm btn-primary text-l-none"></input>					
+				<a href="#" id="facebook_search_close" class="btn btn-sm btn-default m-l-xs">Close</a>
+				<span><img src="img/ajax-spinner.gif" id="spinner-facebook-search" style="display:none;"></img></span>
 			 </fieldset>
 	    </form>
 	</div>
@@ -70,7 +72,7 @@
 {{#if user.image}}
 		<a href="{{user.link}}" target="_blank" class="thumb pull-left m-r-xs"><img src="{{user.image}}" class="img-circle"></a>
 		<div class="clear">
-			<a href="{{user.link}}" target="_blank">{{user.name}}</i></a>
+			<a href="{{user.link}}" class="text-base" target="_blank">{{user.name}}</i></a>
 			<div>			
 				<a class="btn btn-xs btn-default m-t-xs" id="send_fb_friend_request_w" href= "#" onClick="window.open('https://www.facebook.com/dialog/friends/?id={{user.id}}&app_id=1472694689634803&redirect_uri=https://my.agilecrm.com/backend/googleservlet?act=facebook','Sample','toolbar=no,width=800,height=500,left=200,top=200, status=no,scrollbars=no,resize=no');return false">Add Friend</a>
 				<a class="btn btn-xs btn-default m-t-xs" id="fb_post_on_wall" href= "#" onClick="window.open('https://www.facebook.com/dialog/send?app_id=1472694689634803&display=popup&to={{user.id}}&link=https://www.agilecrm.com/&redirect_uri=https://my.agilecrm.com/backend/googleservlet?act=facebook','Sample','toolbar=no,width=1000,height=500,left=200,top=200, status=no,scrollbars=no,resize=no');return false">Post</a>

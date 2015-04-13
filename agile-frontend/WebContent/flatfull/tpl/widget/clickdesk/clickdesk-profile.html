@@ -15,16 +15,16 @@
 </script>
 
 <script id="clickdesk-profile-template" type="text/html">
-<p class="wrapper-sm m-n">Conversations and tickets related to {{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}</p>
+<p class="wrapper-sm m-n text-base">Conversations and tickets related to {{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}</p>
 <div class="nav-tabs-alt">
 <ul class="nav nav-tabs clickdeskTab" id="myTab">
-	<li class="active text-center" style="width:48%; margin-left: 2%;" align="center"><a class="p-t-none p-b-none" data-toggle="tab" href="#chats" id="clickdesk_chats"><h4>Chats</h4><small></small></a></li>
-	<li class="text-center" style="width:48%;" align="center"><a class="p-t-none p-b-none" data-toggle="tab" href="#c_tickets" id="clickdesk_tickets"><h4>Tickets</h4><small></small></a></li>
+	<li class="active text-center" style="width:48%; margin-left: 2%;" align="center"><a data-toggle="tab" href="#chats" id="clickdesk_chats"><h4 class="h4 text-base">Chats</h4><small></small></a></li>
+	<li class="text-center" style="width:48%;" align="center"><a data-toggle="tab" href="#c_tickets" id="clickdesk_tickets"><h4 class="h4 text-base">Tickets</h4><small></small></a></li>
 </ul>
 </div>
 <div class="tab-content" id="myTabContent">
 	<div id="chats" class="tab-pane fade active in">
-		<ul class="list-group m-n" id="clickdesk_chats_panel">
+		<ul class="list-group m-n text-base" id="clickdesk_chats_panel">
 						
 		</ul>
 		<div class="clearfix" id="clickdesk-chats-error-panel" style="display:none;">
@@ -36,7 +36,7 @@
 		</div>
 	</div>
 	<div id="c_tickets" class="tab-pane fade">
-		<ul class="list-group m-n" id="clickdesk_tickets_panel">
+		<ul class="list-group m-n text-base" id="clickdesk_tickets_panel">
 						
 		</ul>
 		<div class="clearfix" id="clickdesk-tickets-error-panel" style="display:none;">
@@ -54,7 +54,7 @@
 <script id="clickdesk-chat-stream-template" type="text/html">
 	{{#if this}}
 		{{#each this}}
-			<li class="list-group-item clickdesk_chat_hover" url="{{chat_history_url}}">
+			<li class="list-group-item r-none b-l-none b-r-none clickdesk_chat_hover" url="{{chat_history_url}}">
 			 <div class="clear">
 				<p class="overflow-elipsis"><a class="text-ellipsis" href="{{chat_history_url}}" target="_blank" >{{user_message}}</a></p>				
 				<div class="clickdesk_chat_tab_link m-n" style="float:left;display:none;">
@@ -70,7 +70,7 @@
 
 <script id="clickdesk-ticket-stream-template" type="text/html">
 	{{#each this}}
-		<li class="list-group-item clickdesk_ticket_hover" url="{{ticket_url}}">
+		<li class="list-group-item r-none b-l-none b-r-none clickdesk_ticket_hover" url="{{ticket_url}}">
 			<div class="clear">
 				<p class="overflow-elipsis"><a href="{{ticket_url}}" target="_blank" class="text-ellipsis">{{subject}}</a></p>
 				<div class="clickdesk_ticket_tab_link m-n" style="float:left;display:none;">
@@ -85,11 +85,11 @@
 
 <script id="clickdesk-error-template" type="text/html">
 {{#check_length message "140"}}
-	<div class="ellipsis-multi-line collapse-25" title="{{message}}" class="word-break p-t-none p-r-none p-l-none p-b-sm overflow-hidden" style="height:110px;line-height:160%;">
+	<div class="ellipsis-multi-line collapse-25" title="{{message}}" class="word-break p-t-none p-r-none p-l-none p-b-sm overflow-hidden text-base" style="height:110px;line-height:160%;">
 		{{{message}}}
 	</div>
 {{else}}
-	<div class="word-break p-t-none p-l-none p-r-none p-b-sm" style="line-height:160%;">
+	<div class="word-break p-t-none p-l-none p-r-none p-b-sm text-base" style="line-height:160%;">
 		{{{message}}}
 	</div>
 {{/check_length}}
@@ -101,7 +101,7 @@
 	        <button class="close" data-dismiss="modal">x</button>
 			<h3><i class="icon-info-sign"></i> Chat Transcript</h3>			
 	    </div>
-	    <div class="well m-b-none">
+	    <div class="well m-b-none text-base">
 	        <table class="row-fluid table table-bordered l-h-xs m-b-xs word-break w-full" style="table-layout:fixed;">
 						<tr><th class="p-xs">Visitor Name</th>
 							<td class="p-xs">{{name}}</td>
@@ -168,7 +168,7 @@
 	        <button class="close" data-dismiss="modal">x</button>
 			<h3><i class="icon-info-sign"></i> Ticket</h3>			
 	    </div>
-	    <div class="well m-b-none">
+	    <div class="well m-b-none text-base">
 	        <table class="row-fluid table table-bordered m-b-xs word-break w-full l-h-xs" style="table-layout:fixed;">
 						<tr><th class="p-xs">From</th>
 							<td class="p-xs">{{from}}</td>

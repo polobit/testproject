@@ -1,6 +1,6 @@
 <script id="deals-collection-template" type="text/html">
   {{#unless this.length}}
-        <div class="alert-info alert">
+        <div class="wrapper p-t-none">
             <div class="slate-content">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="/img/clipboard.png" />
@@ -30,10 +30,10 @@
 {{/if}}
 </script>
 
- <script id="deals-model-template" type="text/html">
-<div  class="activity block">
+<script id="deals-model-template" type="text/html">
+<div  class="activity block pos-rlt">
 	<div>
-		<div class="activity-block-owner thumb thumb-sm pull-left m-r-sm avatar">
+		<div class="activity-block-owner  thumb-xs pull-left m-r-sm avatar">
 			{{#if pic}}
 				<img class="user-img r r-2x" alt="" src="{{pic}}" >
 			{{else}}
@@ -43,16 +43,25 @@
 		</div>
 		
 <div class="pull-left rightThumbView">			
-		<h4 class="m-t-none m-b-xs font-thin"><a class="text-l-none" href="#deal/{{id}}">{{name}}</a><span class="m-l-sm">{{milestone}} ({{probability}} %)</span></h4>
-		<p class="m-b-xs"><span class="m-r-xs">Value : </span>
-			{{currencySymbol}}{{numberWithCommas expected_value}}
-		</p>
+		<div class="pull-left contact-title-dynamic"><!-- a class="text-md text-cap custom-color" href="#deal/{{id}}" -->{{name}}<!-- /a --></div>
+		<div class="pull-right">
+		<small class="edit-hover m-r-sm text-muted">
+         <i class="fa fa-clock-o text-muted m-r-xs"></i>
+			<time class="deal-created-time text-base" datetime="{{epochToHumanDate "" created_time}}" >{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+		</small>
+		</div>
+		<div class="clearfix"></div>
+		<div class="contact-desc-dynamic">
+        
+		<div><span class="m-r-xs hide">Value : </span>
+			{{currencySymbol}}{{numberWithCommas expected_value}}  <span class="m-l-sm text-muted">{{milestone}} ({{probability}} %)</span>
+		</div>
          {{#if description}}
-          <p class="m-b-xs">{{description}}</p>
+          <div>{{description}}</div>
           {{/if}}
 <div class="clearfix"></div>
        
-       <div class="m-b-xs">	
+       <div>	
 		{{#each contacts}}
            	{{#if id}}
 				{{#isDuplicateContactProperty properties "email"}}
@@ -70,13 +79,8 @@
        	{{/each}}
 		</div>
       
-		<div class="pull-left">
-		<small class="edit-hover m-r-sm text-muted">
-         <i class="fa fa-clock-o text-muted m-r-xs"></i>
-			<time class="deal-created-time text-base" datetime="{{epochToHumanDate "" created_time}}" >{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
-		</small>
 		</div>
-		<div class="actions pull-right">
+		<div class="actions pull-right pos-abs pos-r-0 pos-b-0">
 			{{#if notes}}
              <a title="Notes" data="{{id}}" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit-contact-tab c-p text-l-none"><i class="deal-action icon icon-comment deal-notes" data="{{id}}" title="Notes"></i></a>
               <span class="txt-small note-count" title="Notes">{{notes.length}}</span>

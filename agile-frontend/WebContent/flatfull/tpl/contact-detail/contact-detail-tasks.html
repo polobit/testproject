@@ -1,6 +1,6 @@
 <script id="contact-tasks-collection-template" type="text/html">
 		{{#unless this.length}}
-        <div class="alert-info alert">
+        <div class="wrapper p-t-none">
             <div class="slate-content">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="/img/clipboard.png" />
@@ -33,7 +33,7 @@
 	{{else}}
 		<div>
 	{{/if}}	
-	<div class="activity-block-owner thumb-sm pull-left m-r-sm avatar">
+	<div class="activity-block-owner thumb-xs pull-right avatar">
 		{{#if ownerPic}}
 			<img class="user-img r r-2x" alt="" src="{{ownerPic}}" >
 		{{else}}
@@ -42,24 +42,20 @@
 	</div>
 <span class="hidden">{{taskOwner.name}}</span>
 <div class="pull-left rightThumbView">
-
+<div class="pull-left  text-md text-cap">
     {{#if is_complete}}
-			<div class="pull-left" style="width:60%;"><span><i class="fa fa-check"></i></span><div class="task-subject inline"><a  class="m-l-xs" href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
+			<div><span><i class="fa fa-check"></i></span><div class="task-subject inline"><!-- a  class="m-l-xs" href="#task/{{id}}" -->{{subject}}<!-- /a --></div>{{#if_equals priority_type "NORMAL"}}{{else}}
 					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
                    <span><label class="label bg-light m-l-xs"><i class="{{icons type}} hide"></i>&nbsp;{{ucfirst type}}</label></span>
 				{{/if_equals}}</div>
 		{{else}}
-			<div><label class="i-checks i-checks-sm"><input data="{{id}}" class="complete-task form-control" type="checkbox"/><i></i></label><div class="task-subject inline"><a class="m-l-xs" href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
+			<div><label class="i-checks i-checks-sm"><input data="{{id}}" class="complete-task form-control" type="checkbox"/><i></i></label><div class="task-subject inline"><!--<a class="m-l-xs custom-color" href="#task/{{id}}">-->{{subject}}<!--</a>--></div>{{#if_equals priority_type "NORMAL"}}{{else}}
 					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
                     <span><label class="label label-primary m-l-xs"><i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}</label></span>
 				{{/if_equals}}</div>
 	{{/if}}
-     <div class="pull-right">
-     <small class="edit-hover text-muted"> 
-          <i class="fa fa-clock-o m-r-xs"></i>
-			<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
-		</small>
-     </div>
+</div>
+    
      <div class="clearfix"></div>
  
 	<div><span class="m-l-md">Due : <i class="fa fa-clock-o m-r-xs hide"></i><time class="task-created-time" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span></div>
@@ -82,8 +78,13 @@
 		</div>
 		</div>
 		<div class="clearfix"></div>
-
-<div class="pull-right pos-abs pos-r-0 pos-b-0">
+ <div class="pull-left">
+     <small class="edit-hover text-muted m-l-md"> 
+          <i class="fa fa-clock-o m-r-xs"></i>
+			<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+		</small>
+     </div>
+<div class="pull-right">
 		<span class="actions">
 			<a title="Edit"  data="{{id}}" class="task-edit-contact-tab c-p text-l-none p-r-sm"> <i class="icon-pencil"></i> </a>
             <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash" id="{{id}}" url="core/api/tasks/bulk"><i></i></span></a>

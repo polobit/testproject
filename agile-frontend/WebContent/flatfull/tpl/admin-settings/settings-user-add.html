@@ -12,7 +12,9 @@
     			{{/if}}
 			</div>
     		<form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
-				<input type="text" name="id" class="hide" value={{id}} >
+				{{#if id}}
+					<input type="text" name="id" class="hide" value={{id}} >
+				{{/if}}
     			<fieldset class="wrapper">					
     				<br/>
                    	<div class="control-group form-group">

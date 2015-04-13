@@ -2,7 +2,7 @@
 <div class="wrapper-sm" >
 	<a href="{{url}}" target="_blank" class="thumb pull-left m-r-sm"><img src="{{picture}}" class="img-circle"></a>	
 	<div class="clear">
-		<a href="{{url}}" target="_blank" class="text-cap">{{name}}</a>
+		<a href="{{url}}" target="_blank" class="text-cap text-base">{{name}}</a>
 		<small class="block text-muted">{{location}}</small>
 		<small class="block text-muted">{{show_link_in_statement summary}}</small>
 		<div>
@@ -21,22 +21,22 @@
 </div>
 <div class="nav-tabs-alt">
 	<ul class="nav nav-tabs twitter-tabs" id="myTab">
-		<li class="text-center m-l-xs active" style="width:32%;" align="center"><a data-toggle="tab" class="p-l-none p-r-none" href="#tweets"><h4 class="m-n">{{tweet_count}}</h4><small>Tweets</small></a></li>
-		<li class="text-center" style="width:32%;" align="center"><a data-toggle="tab" class="p-l-none p-r-none" href="#followers" id="twitter_followers"><h4 class="m-n">{{num_connections}}</h4><small>Followers</small></a></li>
-		<li class="text-center" style="width:32%;" align="center"><a data-toggle="tab" class="p-l-none p-r-none" href="#following" id="twitter_following"><h4 class="m-n">{{friends_count}}</h4><small>Following</small></a></li>
+		<li class="text-center m-l-xs active" style="width:32%;" align="center"><a data-toggle="tab" class="p-l-none p-r-none" href="#tweets"><h4 class="text-base m-n">{{tweet_count}}</h4><small>Tweets</small></a></li>
+		<li class="text-center" style="width:32%;" align="center"><a data-toggle="tab" class="p-l-none p-r-none" href="#followers" id="twitter_followers"><h4 class="text-base m-n">{{num_connections}}</h4><small>Followers</small></a></li>
+		<li class="text-center" style="width:32%;" align="center"><a data-toggle="tab" class="p-l-none p-r-none" href="#following" id="twitter_following"><h4 class="text-base m-n">{{friends_count}}</h4><small>Following</small></a></li>
 	</ul>
 </div>
-<div class="tab-content" id="myTabContent">
+<div class="tab-content text-sm" id="myTabContent">
 	<div id="tweets" class="tab-pane fade active in">
 		{{#if current_update}}
 			<ul class="list-group"  id="twitter_current_activity" style="display:none;">
-				<li class="list-group-item">	
+				<li class="list-group-item r-none b-l-none b-r-none">	
 					{{show_link_in_statement current_update}}
 				</li>
 			</ul>
 		{{else}}
 			<ul class="p-l-sm"  id="twitter_current_activity" style="display:none;">
-				<li class="list-group-item">	
+				<li class="list-group-item r-none b-l-none b-r-none">	
 					{{#if_equals tweet_count "0"}}
 						{{name}} hasn't tweeted yet
 					{{else}}
@@ -124,7 +124,7 @@
 {{#if this.length}}	
 	<div id="twitter_update">
 		{{#each this}}	
-			<li id="twitter_status" status_id="{{id}}" class="list-group-item">		
+			<li id="twitter_status" status_id="{{id}}" class="list-group-item r-none b-l-none b-r-none text-base">		
 				<a class="thumb-sm m-r-xs pull-left"><img src="{{tweeted_person_pic_url}}" width="40px" alt="" class="r r-2x"/></a>
 				<div class="clear">					
 						<p class="mb_0 w-full">{{safe_string message}}</p>						
@@ -146,26 +146,28 @@
 		{{/each}}
 	</div>
 {{else}}
-		<li class="text-light">This person does not share his/her tweets</li>
+		<li class="text-light text-base">This person does not share his/her tweets</li>
 {{/if}}
 </script>
 
 <script id="twitter-error-panel-template" type="text/html">
+<div class="wrapper-sm">
 {{#if disable_check}}
-	<div class="word-break wrapper-sm" style="line-height:160%;">
+	<div class="word-break wrapper-sm text-base" style="line-height:160%;">
 		{{{message}}}
 	</div>
 {{else}}
 	{{#check_length message "140"}}
-		<div class="ellipsis-multiline word-break" title="{{message}}" style="height: 100px !important;-webkit-line-clamp: 5;line-height:160%;word-break: normal;">
+		<div class="ellipsis-multiline word-break text-base" title="{{message}}" style="height: 100px !important;-webkit-line-clamp: 5;line-height:160%;word-break: normal;">
 			{{{message}}}
 		</div>
 	{{else}}
-		<div class="word-break p-t-none p-r-none p-b-sm p-l-none" style="line-height:160%;">
+		<div class="word-break p-t-none p-r-none p-b-sm p-l-none text-base" style="line-height:160%;">
 			{{{message}}}
 		</div>
 	{{/check_length}}	
 {{/if}}
+</div>
 </script>
 
 <script id="twitter-profile-add-template" type="text/html">
@@ -219,13 +221,13 @@
 
 <script id="twitter-modified-search-template" type="text/html">
 	<div class="inline word-break" style="line-height:12px;">
-		<form class="wrapper-sm b-b-none" id="twitter-search_form" name="twitter-search_form" method="get">
+		<form class="wrapper-sm b-b-none text-base" id="twitter-search_form" name="twitter-search_form" method="get">
 	    	<fieldset>
 				<p><label>Enter search details</label></p>
 				<div class="control-group form-group"><div class="controls"><input type="text" id="twitter_keywords" class="input-medium required widget_input_box form-control"  placeholder="Key Words" value="{{keywords}}" name="keywords" onkeydown="if (event.keyCode == 13) { getModifiedTwitterMatchingProfiles({{plugin_id}}); return false; }" maxlength="40"></input></div></div>
-				<a href="#" id="twitter_search_btn" class="btn btn-sm btn-default text-l-none">Search</a>
+				<a href="#" id="twitter_search_btn" class="btn btn-sm btn-primary text-l-none">Search</a>
+				<a href="#" id="twitter_search_close" class="btn btn-sm btn-default m-l-xs">Close</a>
 				<span><img src="img/ajax-spinner.gif" id="spinner-twitter-search" style="display:none;"></img></span>
-				<a href="#" id="twitter_search_close" class="btn btn-sm btn-danger  m-l-sm">Close</a>
 			 </fieldset>
 	    </form>
 	</div>

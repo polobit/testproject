@@ -120,7 +120,7 @@ $("#check-box-layout").die().live('click',function(){
 		var topBarClassName = $(this).attr("target-topbar-class");
 		
 		
-		$(".app-aside,#navbar,.navbar-header").removeClassPrefix("bg-");
+		$(".app-aside,#navbar,.navbar-header").removeClassPrefix("bg-").removeClass("dk").removeClass("dker");
 		$(".app-aside").addClass(asideClassName);
 		$(".navbar-header").addClass(logoClassName);
 		$("#navbar").addClass(topBarClassName);
@@ -129,7 +129,7 @@ $("#check-box-layout").die().live('click',function(){
 $.fn.removeClassPrefix = function(prefix) {
     this.each(function(i, el) {
         var classes = el.className.split(" ").filter(function(c) {
-            return c.lastIndexOf(prefix, 0) !== 0;
+            return c.trim().lastIndexOf(prefix, 0) !== 0;
         });
         el.className = $.trim(classes.join(" "));
     });

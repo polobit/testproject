@@ -1,5 +1,5 @@
 <script id="calendar-template" type="text/html">
-<div class="custom-animated fadeInUp">
+<div class="custom-animated custom-fadeInUp">
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
         <div class="col-md-12">
@@ -62,9 +62,9 @@
 			<div class="pull-right">
 				<button type="button" class="btn btn-sm btn-default" onclick="today()">today</button>
 					<div class="btn-group m-l-xs">
-						<button class="btn btn-sm btn-default" onclick="changeView('agendaDay')">Day</button>
-						<button class="btn btn-sm btn-default" onclick="changeView('agendaWeek')">Week</button>
-						<button class="btn btn-sm btn-default" onclick="changeView('month')">Month</button>
+						<button id="agendaDay" class="btn btn-sm btn-default agendaDayWeekMonth" >Day</button>
+						<button id="agendaWeek" class="btn btn-sm btn-default agendaDayWeekMonth" >Week</button>
+						<button id="month" class="btn btn-sm btn-default agendaDayWeekMonth" >Month</button>
 					</div>
 			</div>
 		</div>

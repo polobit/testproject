@@ -291,8 +291,8 @@ function enableWidgetSoring(el)
 	{
 		$('.widget-sortable', el).sortable();
 
-		// Makes icon-move on widgets panel as handle for sorting
-		$('.widget-sortable', el).sortable("option", "handle", ".icon-move");
+		// Makes icon-cursor-move on widgets panel as handle for sorting
+		$('.widget-sortable', el).sortable("option", "handle", ".icon-cursor-move");
 
 		/*
 		 * This event is called after sorting stops to save new positions of

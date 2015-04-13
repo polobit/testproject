@@ -97,6 +97,7 @@ function showCalendar()
 
 	_init_gcal_options();
 	var calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
+	$('#'+calendarView).addClass('bg-light');
 	fullCal = $('#calendar_event')
 			.fullCalendar(
 					{
@@ -139,9 +140,9 @@ function showCalendar()
 											if(data.color=='red' || data.color=='#f05050')
 												data.className = 'b-l b-2x b-danger fc-z-index';
 											else if(data.color=='green' || data.color=='#bbb')
-												data.className = 'b-l b-2x b-primary fc-z-index';
+												data.className = 'b-l b-2x b-light fc-z-index';
 											else if(data.color=='#36C' || data.color=='#23b7e5')
-												data.className = 'b-l b-2x b-info fc-z-index';
+												data.className = 'b-l b-2x b-warning fc-z-index';
 											data.color='';
 											data.backgroundColor = '#fff';
 										});
@@ -199,12 +200,15 @@ function showCalendar()
 								if(i!=event.contacts.length-1)
 									reletedContacts += ', ';
 							}
-							var popoverElement	=	'<div class="fc-overlay left">'+
+							var leftorright = 'left';
+							if(event.start.getDay()==5 || event.start.getDay()==6)
+								leftorright = 'right';
+							var popoverElement	=	'<div class="fc-overlay '+leftorright+'">'+
 													'<div class="panel bg-white b-a pos-rlt p-sm">'+
-													'<span class="arrow left pull-up"></span>'+
+													'<span class="arrow '+leftorright+' pull-up"></span>'+
 													'<div class="h4 font-thin m-b-sm"><div class="pull-left">'+event.title+'</div><div class="pull-right"><img class="r-2x" src="'+event.ownerPic+'" height="20px" width="20px" title="'+event.owner.name+'"/></div></div>'+
 													'<div class="line b-b b-light"></div>'+
-													'<div><i class="icon-clock text-muted m-r-xs"></i>'+event.start.format('dd-mmm-yyyy HH:mm')+'</div>'+
+													'<div><i class="icon-clock text-muted m-r-xs"></i>'+event.start.format('dd-mmm-yyyy HH:MM')+'</div>'+
 													'<div>'+reletedContacts+'</div>'+
 													'</div>'+
 													'</div>';
@@ -296,11 +300,11 @@ function showCalendar()
 							event.end = new Date(event.end).getTime() / 1000;
 							if (event.end == null || event.end == 0)
 								event.end = event.start;
-							if(event1.className=="b-l,b-2x,b-danger")
+							if(event1.className=="b-l,b-2x,b-danger,fc-z-index")
 								event.color = "red";
-							else if(event1.className=="b-l,b-2x,b-primary")
+							else if(event1.className=="b-l,b-2x,b-light,fc-z-index")
 								event.color = "green";
-							else if(event1.className=="b-l,b-2x,b-info")
+							else if(event1.className=="b-l,b-2x,b-warning,fc-z-index")
 								event.color = "#36C";
 							var jsoncontacts=event.contacts;
 							var _contacts=[];
@@ -325,11 +329,11 @@ function showCalendar()
 						 */
 						eventClick : function(event)
 						{
-							if(event.className=="b-l,b-2x,b-danger")
+							if(event.className=="b-l,b-2x,b-danger,fc-z-index")
 								event.color = "red";
-							else if(event.className=="b-l,b-2x,b-primary")
+							else if(event.className=="b-l,b-2x,b-light,fc-z-index")
 								event.color = "green";
-							else if(event.className=="b-l,b-2x,b-info")
+							else if(event.className=="b-l,b-2x,b-warning,fc-z-index")
 								event.color = "#36C";
 							
 							if (isNaN(event.id))
@@ -583,3 +587,14 @@ function changeView(view) {
 function today(){
 	fullCal.fullCalendar('today');
 }
+$('.agendaDayWeekMonth').die().live('click',function(){
+	currentView = $(this).attr('id');
+	fullCal.fullCalendar('changeView',currentView);
+	$(this).parent().find('button').each(function(){
+		if($(this).attr('id')==currentView)
+			$(this).addClass('bg-light');
+		else
+			$(this).removeClass('bg-light');
+	});
+	
+});

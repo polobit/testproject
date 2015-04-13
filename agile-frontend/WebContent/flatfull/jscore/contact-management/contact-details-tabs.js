@@ -60,7 +60,7 @@ $(function()
 		$(".collapse-" + id).hide();
 		$(href).collapse('toggle');
 
-		$(href).on("hidden", function()
+		$(href).on("hidden.bs.collapse", function()
 		{
 			$(".collapse-" + id).show();
 		})
@@ -68,7 +68,7 @@ $(function()
 	});
 
 	// Hide More link and truncated webstats and show complete web stats.
-	$('#more-page-urls').die().live('click', function(e)
+	/*$('#more-page-urls').die().live('click', function(e)
 	{
 		e.preventDefault();
 
@@ -76,6 +76,12 @@ $(function()
 		$(this).parent().parent().find('#truncated-webstats').css('display', 'none');
 
 		$(this).parent().parent().find('#complete-webstats').removeAttr('style');
+	});*/
+	
+	$('#show-page-views').die().live('click', function(e){
+		e.preventDefault();
+		
+		$(this).closest('.activity-text-block').find('#complete-webstats').toggle();
 	});
 
 	// to remove contact from active campaign.

@@ -1,9 +1,6 @@
 <script id="send-email-template" type="text/html">
 <div class="bg-light lter b-b wrapper-md">
 	<h3 class=" pull-left h3 font-thin m-n">Send Email</h3>
-     <div class="pull-right">
-		<select class="emailSelect form-control" id="sendEmailSelect" title="Fill from Template" name="sendEmailSelect"><option class="default-select" value="">- Fill from Template -</option></select>
-     </div>
 <div class="clearfix"></div>               
 </div>
 <div class="wrapper-md">
@@ -12,7 +9,6 @@
     <div class="panel wrapper">
         <form id='emailForm' name="emailForm" class="form-horizontal" accept-charset="UTF-8">
             <fieldset>
-				
                 <input type="hidden"  name="from_name"/>
                 <input type="hidden"  id="from" name="from_email"/>
 				<a class="right text-info" {{#isSafariBrowser}} style="margin-top: 10px;" {{else}} style="margin-top: -10px;" {{/isSafariBrowser}} href="#email-template-add">Create New Template</a><div class="clearfix"></div>
@@ -23,6 +19,12 @@
                         <input type="text" placeholder="From Email" class="email required form-control" id="from_email" name="from_email" />
                     </div>
                 </div>
+				<div class="control-group form-group">
+					<label class="control-label col-sm-2">Templates</label>
+                	<div class="controls col-sm-8">
+						<select class="emailSelect form-control" id="sendEmailSelect" title="Fill from Template" name="sendEmailSelect"><option class="default-select" value="">- Fill from Template -</option></select>
+					</div>
+				</div>
 				<div class="control-group form-group">
                     <div class="controls col-sm-offset-2 col-sm-8">
                     	<div style="line-height:0px;">

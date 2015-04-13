@@ -257,8 +257,8 @@ function show_custom_fields_helper(custom_fields, properties){
 			div_col9_style = "col-sm-9";
 			div_col3_style = "col-sm-3";
 		}else if(field.scope == "COMPANY" || field.scope == "DEAL" || field.scope == "CASE"){
-			label_style = "font-bold";
-			checkbox_style = "col-sm-2 p-none";
+			label_style = "control-label col-sm-3 word-break";
+			checkbox_style = "col-sm-3 p-none";
 		}
 		
 		// If field type is list create a select dropdown
@@ -280,7 +280,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				if(field.is_required)
 					el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
 									+field.field_label
-									+' <span class="field_req">*</span></label><div class="controls '+div_col9_style+'"><select class="'
+									+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'"><select class="'
 									+field.field_type.toLowerCase()
 									+' custom_field required form-control '+field_style+'" id='
 									+field.id
@@ -292,7 +292,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				else
 					el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
 									+field.field_label
-									+'</label><div class="controls '+div_col9_style+'"><select class="'
+									+'</label><div class="controls col-sm-9 '+div_col9_style+'"><select class="'
 									+field.field_type.toLowerCase()
 									+' custom_field form-control '+field_style+'" id='
 									+field.id
@@ -333,7 +333,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				if(field.is_required)
 					el = el.concat('<div class="control-group form-group">	<label class="control-label '+checkbox_style+" "+label_style+'">'
 								+field.field_label
-								+' <span class="field_req">*</span></label><div class="controls '+div_col3_style+' m-t-xs"><label class="i-checks i-checks-sm"><input type="'
+								+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col3_style+' m-t-xs"><label class="i-checks i-checks-sm"><input type="'
 								+field_type
 								+'" class="'
 								+field.field_type.toLowerCase()
@@ -344,7 +344,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				else
 					el = el.concat('<div class="control-group form-group">	<label class="control-label '+checkbox_style+" "+label_style+'">'
 								+field.field_label
-								+'</label><div class="controls '+div_col3_style+' m-t-xs"><label class="i-checks i-checks-sm"><input type="'
+								+'</label><div class="controls col-sm-9 '+div_col3_style+' m-t-xs"><label class="i-checks i-checks-sm"><input type="'
 								+field_type
 								+'" class="'
 								+field.field_type.toLowerCase()
@@ -365,7 +365,7 @@ function show_custom_fields_helper(custom_fields, properties){
 			if(field.is_required)
 				el = el.concat('<div class="control-group form-group"><label class="control-label '+label_style+'">'
 							+field.field_label
-							+'<span class="field_req">*</span></label><div class="controls '+div_col9_style+'"><textarea rows="'
+							+'<span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field required form-control" id='
@@ -375,7 +375,7 @@ function show_custom_fields_helper(custom_fields, properties){
 			else
 				el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
 							+field.field_label
-							+'</label><div class="controls '+div_col9_style+'"><textarea rows="'
+							+'</label><div class="controls col-sm-9 '+div_col9_style+'"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field form-control" id='
@@ -390,7 +390,7 @@ function show_custom_fields_helper(custom_fields, properties){
 			if(field.is_required)
 				el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
 						+field.field_label
-						+' <span class="field_req">*</span></label><div class="controls '+div_col3_style+' custom-number-controls"><input type="number" class="'
+						+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col3_style+' custom-number-controls"><input type="number" class="'
 						+field.field_type.toLowerCase()
 						+'_input custom_field required form-control" id="'
 						+field.id+'" name="'
@@ -400,7 +400,7 @@ function show_custom_fields_helper(custom_fields, properties){
 			else
 				el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
 						+field.field_label
-						+'</label><div class="controls '+div_col3_style+' custom-number-controls"><input type="number" class="'
+						+'</label><div class="controls col-sm-9 '+div_col3_style+' custom-number-controls"><input type="number" class="'
 						+field.field_type.toLowerCase()
 						+'_input custom_field form-control" id="'
 						+field.id+'" name="'
@@ -421,7 +421,7 @@ function show_custom_fields_helper(custom_fields, properties){
 		if(field.is_required)
 			el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
 							+field.field_label
-							+' <span class="field_req">*</span></label><div class="controls '+div_col9_style+'"><input type="text" class="'
+							+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'"><input type="text" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field required form-control" id='
 							+field.id+' name="'+field.field_label
@@ -429,7 +429,7 @@ function show_custom_fields_helper(custom_fields, properties){
 		else
 			el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
 							+field.field_label
-							+'</label><div class="controls '+div_col9_style+'"><input type="text" class="'
+							+'</label><div class="controls col-sm-9 '+div_col9_style+'"><input type="text" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field form-control" id='
 							+field.id+' name="'

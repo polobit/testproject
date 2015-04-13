@@ -40,7 +40,7 @@
 <script id="twilio-logs-template" type="text/html">
 	{{#if this.length}}
 		{{#each this}}          
-			<li class="list-group-item">
+			<li class="list-group-item r-none b-l-none b-r-none">
 				{{#if_equals recording.total "0"}}
 					<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle"></i>
 				{{else}}
@@ -54,7 +54,7 @@
 			</li>
 		{{/each}}
 	{{else}}
-		<li class="list-group-item">
+		<li class="list-group-item r-none b-l-none b-r-none">
 	    	No Calls
 		</li>
 	{{/if}}

@@ -57,7 +57,7 @@
 </script>
 <script id="email-social-collection-template" type="text/html">
 {{#unless this.length}}
-    <div class="alert-info alert">
+    <div class="wrapper p-t-none">
             <div class="slate-content">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="/img/clipboard.png" />
@@ -94,18 +94,18 @@
 
 <!-- Imap-Email model -->
 <script id="email-social-model-template" type="text/html">
-<div class="block">
+<div class="block pos-rlt">
 	{{#if errormssg}}
     <span class="text-dark">Error: {{errormssg}}</span>
     {{else}}
-    <div class="activity-block-owner thumb thumb-sm m-r-sm avatar pull-left">	
+    <div class="activity-block-owner thumb-xs m-r-sm avatar pull-left">	
 			<img class="user-img r r-2x" src="{{#extractEmail from}}{{emailGravatarurl 40 this}}{{/extractEmail}}">
 	</div>
 	<div id="email-reply-div" class="pull-left rightThumbView">
-        <div class="m-b-xs">
-			<h4 class="m-none font-thin">
+        
+			<div class="pull-left text-cap text-md custom-color contact-title-dynamic">
 	{{#containString owner_email from}}
-			<i class="icon-reply"></i>
+			<i class="icon-reply text-muted"></i>
 		{{else}}
 			<i class="icon-share-alt icon-flip-vertical"></i>
 	{{/containString}}
@@ -117,24 +117,31 @@
     {{/if}}
 				<a class="email-subject" id={{id}}  href="#collapse-{{id}}">{{subject}}</a>
 
-			</h4>
+			</div>
+			<div class="pull-right">
+		<small class="edit-hover text-muted"> 
+<i class="fa fa-clock-o"></i>
+			<time class="email-sent-time" datetime="{{epochToHumanDate "" date_secs}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" date_secs}}</time>
+		</small>
 </div>
-			<div class="m-b-xs" style="height:auto;" class="ellipsis-multi-line collapse-{{id}}">
+		<div class="clearfix"></div>	
+
+			<div class="m-b-xs ellipsis-multi-line collapse-{{id}}" style="height:70px">
 				<div>
 					<div class="email-body">{{{message}}}</div>
 				</div>
       		</div>
 			<div id="collapse-{{id}}" class="collapse activity-email-collapse">
 				<ul class="email-headers p-n">
-                	<li><strong>From:</strong> {{from}}</li> 
+                	<li class="b-n-imp p-n m-t-xs"><strong>From:</strong> {{from}}</li> 
 						
-                	<li>
+                	<li class="b-n-imp p-n m-t-xs">
 						<div class="caption to-emails text-ellipsis" data-to="{{to}}" id="tl-mail-to-popover"  rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
 							<strong>To:</strong> {{to}}
 						</div>
 					</li>
                     {{#if cc}}
-                    <li>
+                    <li class="b-n-imp p-n m-t-xs">
                     <div class="caption cc-emails text-ellipsis" data-cc="{{cc}}" id="tl-mail-to-popover"  rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
                     	<strong>Cc:</strong> {{cc}}
             		</div>
@@ -142,7 +149,7 @@
 					{{/if}}
 
                     {{#if bcc}}
-                    <li>
+                    <li class="b-n-imp p-n m-t-xs">
             		<div class="caption bcc-emails text-ellipsis" data-bcc="{{bcc}}" id="tl-mail-to-popover"  rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
               			<strong>Bcc:</strong> {{bcc}}
             		</div>
@@ -152,13 +159,8 @@
        			<div  class="email-body m-t-sm">{{#if message}}{{{message}}}{{/if}}</div>
     		</div>
 		<div class="m-t-xs">
-<div class="pull-left">
-		<small class="edit-hover text-muted"> 
-<i class="fa fa-clock-o"></i>
-			<time class="email-sent-time" datetime="{{epochToHumanDate "" date_secs}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" date_secs}}</time>
-		</small>
-</div>
-<div class="pull-right">
+
+<div class="pull-right pos-abs pos-r-0 pos-b-0">
 		<a href="#"  data-from ="{{#extractEmail from}}{{this}}{{/extractEmail}}" id='email-reply' style="display:none;"><i class="icon-mail-reply-all"></i> Reply</a>
  </div>
 <div class="clearfix"></div>      

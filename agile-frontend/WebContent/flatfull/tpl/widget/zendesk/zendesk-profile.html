@@ -1,5 +1,5 @@
 <script id="zendesk-profile-template" type="text/html">
-{{#if_json user_info}}
+{{#if user_info}}
 <div class="wrapper-sm">
 <a class="thumb pull-left m-r-sm" href="#">
 	{{#if user_info.photo.content_url}}
@@ -10,9 +10,9 @@
 </a>
 <div class="clear">
 	{{#if user_info.name}}
-		<p class="text-cap">{{user_info.name}}</p>
+		<p class="text-cap text-base m-b-xs">{{user_info.name}}</p>
 	{{else}}
-		<p class="text-cap">{{user_info.email}}</p>
+		<p class="text-cap text-base m-b-xs">{{user_info.email}}</p>
 	{{/if}}
 </div>
 <div class="clearfix"><a  class="btn btn-xs btn-default" id="add_ticket">New Ticket</a></div>						
@@ -20,9 +20,9 @@
 <div class="clearfix" id="add-ticket-error-panel" style="display:none; color:red;">
 </div>
 <div class="wrapper-sm b-t b-light">
-	<h4 class="h4 text-md">Tickets</h4>
+	<h4 class="h4 text-sm">Tickets</h4>
 </div>
-<ul class="list-group m-n" id="all_tickets_panel">
+<ul class="list-group m-n text-base" id="all_tickets_panel">
 	
 </ul>
 <div class="clearfix" id="tickets-error-panel" style="display:none;">
@@ -35,13 +35,13 @@
 <div class="widget_content word-break">
 {{user_info}}
 </div>
-{{/if_json}}
+{{/if}}
 </script>
 
 <script id="zendesk-ticket-stream-template" type="text/html">
 {{#isArray this}}
 	{{#each this}}
-		<li class="list-group-item zendesk_ticket_hover"  id="{{id}}">
+		<li class="list-group-item r-none b-l-none b-r-none zendesk_ticket_hover"  id="{{id}}">
 			<div class="overflow-elipsis" title="{{subject}}"><a href="{{url}}" target="_blank" >{{subject}}</a></div>
 			<div class="m-b-xs">
 				<div class="label text-black bg-light dk right">{{status}}</div>
@@ -56,9 +56,9 @@
 	{{/each}}
 {{else}}
 	{{#if_equals this "There are no tickets for this user"}}
-		<li class="list-group-item" >No tickets</li>
+		<li class="list-group-item r-none b-l-none b-r-none" >No tickets</li>
 	{{else}}
-		<li class="list-group-item word-break">{{this}}</li>
+		<li class="list-group-item r-none b-l-none b-r-none word-break">{{this}}</li>
 	{{/if_equals}}
 {{/isArray}}
 </script>
@@ -82,7 +82,7 @@
 
 <script id="zendesk-message-template" type="text/html">
 	<!-- New (Note) Modal views -->
-	<div class="modal hide fade message-modal" id="zendesk_messageModal" style="width:400px; left:55%">
+	<div class="modal message-modal" id="zendesk_messageModal" style="width:400px; left:55%">
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
 			{{#if_equals headline "Add Ticket"}}
@@ -125,7 +125,7 @@
 
 
 <script id="zendesk-ticket-show-template" type="text/html">
-	<div class="modal hide fade message-modal" id="zendesk_showModal" style="width:400px; left:55%">
+	<div class="modal message-modal" id="zendesk_showModal" style="width:400px; left:55%">
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
 			<h3><i class="icon-info-sign"></i> {{headline}}</h3>			

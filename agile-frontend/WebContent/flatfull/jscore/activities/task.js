@@ -66,10 +66,10 @@ $(function()
 	 * Task list edit
 	 */
 	// TODO:jitendra reenable it
-	/*
-	 * $('#tasks-list-model-list > tr > td:not(":first-child")').live('click',
-	 * function(e) { e.preventDefault(); update_task($(this).closest('tr')); });
-	 */
+	
+	  $('#tasks-list-model-list > tr > td:not(":first-child")').live('click',
+	  function(e) { e.preventDefault(); update_task($(this).closest('tr')); });
+	 
 
 	/**
 	 * Dash board edit
@@ -396,8 +396,8 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 								App_Calendar.tasksListView.render(true);
 							}
 							taskDetailView = data;
-							$("#content").html(getTemplate("task-detail", data.toJSON()));
-							task_details_tab.loadActivitiesView();
+							/*$("#content").html(getTemplate("task-detail", data.toJSON()));
+							task_details_tab.loadActivitiesView();*/
 
 						}
 					} });

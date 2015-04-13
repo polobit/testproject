@@ -1,5 +1,5 @@
 <script id="new-tasks-list-header-template" type="text/html">
-<div class="custom-animated fadeInUp">
+<div class="custom-animated custom-fadeInUp">
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">  
 	<div class="col-md-12">
@@ -91,9 +91,9 @@
  <div class="listed-task red ui-state-default" id="{{id}}">
 {{else}}
   {{#if_equals priority_type "LOW"}}
-    <div class="listed-task yellow ui-state-default" id="{{id}}">
+    <div class="listed-task gray ui-state-default" id="{{id}}">
   {{else}}
-    <div class="listed-task ui-state-default" id="{{id}}">
+    <div class="listed-task yellow ui-state-default" id="{{id}}">
   {{/if_equals}}
 {{/if_equals}}
 
@@ -110,12 +110,12 @@
 <div class="pull-left task-content-view">
 <div class="pull-left" style="width:68%">
       {{#if is_complete}}
-         {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link task-completed">{{else}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis task-completed">{{/is_link}}{{safe_string subject}}</span></a>
+         {{#is_link subject}}<a ><!--href="#task/{{id}}"--><span class="new-task-subject w-full block text-ellipsis activate-link task-completed">{{else}}<a ><!--href="#task/{{id}}"--><span class="new-task-subject w-full block text-ellipsis task-completed">{{/is_link}}{{safe_string subject}}</span></a>
       {{else}}
          {{#if_equals status "COMPLETED"}}
-           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link task-completed">{{else}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis task-completed">{{/is_link}}{{safe_string subject}}</span></a>
+           {{#is_link subject}}<a ><!--href="#task/{{id}}"--><span class="new-task-subject w-full block text-ellipsis activate-link task-completed">{{else}}<a ><!--href="#task/{{id}}"--><span class="new-task-subject w-full block text-ellipsis task-completed">{{/is_link}}{{safe_string subject}}</span></a>
          {{else}}
-           {{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link">{{else}}<a href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis">{{/is_link}}{{safe_string subject}}</span></a>
+           {{#is_link subject}}<a ><!--href="#task/{{id}}"--><span class="new-task-subject w-full block text-ellipsis activate-link">{{else}}<a ><!--href="#task/{{id}}"--><span class="new-task-subject w-full block text-ellipsis">{{/is_link}}{{safe_string subject}}</span></a>
          {{/if_equals}}       
       {{/if}}      
 </div>
@@ -156,12 +156,12 @@
 <div class="clearfix"></div>
  
    <div class="new-task-footer">
-<div class="pull-left w-half text-ellipsis text-muted">
+<div class="pull-left w-half text-ellipsis text-muted" style="margin-left:35px;">
      <i class="fa fa-clock-o text-muted"></i> <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" due}}</time>
 </div>    
 <div class="pull-right"> 
  <div class="task-actions">
-           <i class="task-action icon icon-check is-task-complete" data="{{id}}" title="Mark as Complete"></i>
+           <i class="task-action icon icon-check is-task-complete m-r-xs" data="{{id}}" title="Mark as Complete"></i>
            <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>          
           <i class="task-action icon icon-trash delete-task" data="{{id}}" title="Delete Task"></i>
            {{#if notes}} 

@@ -1,5 +1,5 @@
 <script id="webrule-collection-template" type="text/html">
-<div class="custom-animated fadeInUp">
+<div class="custom-animated custom-fadeInUp">
 <div class="wrapper-md bg-light lter b-b">
 <div class="row">
     <div class="col-sm-12 col-md-12">
@@ -17,18 +17,21 @@
     <div class="col-sm-9 col-md-9 table-responsive">
         {{#if this.length}}
 		{{add_tag "Web Rules"}}
-        <table class="table table-bordered table-striped showCheckboxes no-sorting m-b-none panel agile-table" url="core/api/webrule/bulk">
-			<thead>
-                <tr>
-                    <th style="width:40%">Name</th>
-					<th style="width:40%">Action</th>
-					<th style="width:10%"></th>
-					<th style="width:10%"></th>
-                </tr>
-            </thead>
-            <tbody class="webrule-sortable" id="webrule-model-list" route="webrule-edit/">
-            </tbody>
-        </table>
+		<div class="panel panel-default">
+			<div class="panel-heading">Web Rules List</div>
+        	<table class="table table-bordered table-striped showCheckboxes no-sorting m-b-none panel agile-table" url="core/api/webrule/bulk">
+				<thead>
+             	   <tr>
+               	 	    <th style="width:40%">Name</th>
+						<th style="width:40%">Action</th>
+						<th style="width:10%"></th>
+						<th style="width:10%"></th>
+              	  </tr>
+           		</thead>
+            	<tbody class="webrule-sortable" id="webrule-model-list" route="webrule-edit/">
+            	</tbody>
+       		</table>
+			</div>
 		{{else}}
 			<div class="panel wrapper">
    				<div class="slate-content">

@@ -133,9 +133,12 @@ $(function(){
 					
 					App_Admin_Settings.milestones();
 					$('body').removeClass('modal-open');
+					$save_info.hide();
+					that.removeAttr('disabled');
 				},
 				error : function(jqXHR, status, errorThrown){
 					console.log(jqXHR);
+					$save_info.hide();
 					$('#pipeline-delete-modal').find('.pipeline-delete-message').text(jqXHR.responseText);
 					that.removeAttr('disabled');
 				}
@@ -213,7 +216,7 @@ $(function(){
     		
     		if(add_milestone)
     		{
-    			milestone_list.append("<tr data='"+new_milestone+"' style='display: table-row;'><td><div class='p-l-sm' style='display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%'>"+new_milestone+"</div></td><td><div class='m-b-n-xs' style='display:none;'><a class='text-l-none-hover c-p'><i title='Drag' class='icon-move'></i></a><a class='milestone-delete' style='cursor: pointer;margin-left:10px; text-decoration: none;' data-toggle='modal' role='button' href='#'><i title='Delete Milestone' class='task-action icon icon-trash'></i></a></div></td></tr>");
+    			milestone_list.append("<tr data='"+new_milestone+"' style='display: table-row;'><td><div style='display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%'>"+new_milestone+"</div></td><td><div class='m-b-n-xs' style='display:none;'><a class='text-l-none-hover c-p'><i title='Drag' class='icon-move'></i></a><a class='milestone-delete' style='cursor: pointer;margin-left:10px; text-decoration: none;' data-toggle='modal' role='button' href='#'><i title='Delete Milestone' class='task-action icon icon-trash'></i></a></div></td></tr>");
     	//		milestone_list.append("<li data='" + new_milestone + "'><div><span>" + new_milestone + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>");
     			fill_ordered_milestone(form.attr('id'));
     		}

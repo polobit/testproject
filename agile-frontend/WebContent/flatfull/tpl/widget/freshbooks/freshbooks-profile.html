@@ -57,15 +57,15 @@
 			{{#if client.username}}
 				<div class="inline-block">
 					<div class="title_txt inline-block">
-						<a href="{{client.links.statement}}" target="_blank"><h4 class="h4 m-n text-cap"><b>
+						<a href="{{client.links.statement}}" target="_blank"><span class="m-n text-cap text-base">
 							{{#if_equals client.first_name ""}}{{#if_equals client.last_name ""}}
 								{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}{{/if_equals}}
 							{{else}}
 								{{client.first_name}} {{client.last_name}}
 							{{/if_equals}}
-						</b></h4></a>
+						</span></a>
 					</div>
-					{{#if_equals client.organization ""}}<div></div>{{else}}, <div class="inline-block"><a href="{{client.links.view}}" target="_blank"><h4 class="text-u-c m-t-none">{{client.organization}}</h4></a></div>{{/if_equals}}
+					{{#if_equals client.organization ""}}<div></div>{{else}}, <div class="inline-block text-base"><a href="{{client.links.view}}" target="_blank"><span class="text-u-c m-t-none">{{client.organization}}</span></a></div>{{/if_equals}}
 				</div>
 			{{/if}}
 			<p class="text-muted m-b-xs">
@@ -96,7 +96,7 @@
 		{{/isArray}}
 	</div>
 	<ul class="list-group m-b-none" id="freshbooks_invoice_panel">
-		<li class="list-group-item">
+		<li class="list-group-item r-none b-l-none b-r-none">
 			<center><img id="freshbooks_invoice_load" src="img/ajax-loader-cursor.gif" class="m-t m-b-sm"></img></center>
 		</li>
 	</ul>
@@ -105,11 +105,11 @@
 
 <script id="freshbooks-invoice-template" type="text/html">
 	{{#if_equals total "0"}}
-		<li class="list-group-item text-light">
+		<li class="list-group-item r-none b-l-none b-r-none text-light">
 	    	No invoices			
 		</li>		
 	{{else}}
-		<li class="list-group-item">
+		<li class="list-group-item r-none b-l-none b-r-none">
 			<div class="pull-left text-base">Status</div>
 			<div class="pull-right text-base text-right">Amount</div>
 			<div class="clearfix"></div>
@@ -204,18 +204,18 @@
 
 <script id="freshbooks-items-template" type="text/html">
 	{{#if_equals total "0"}}
-		<li class="list-group-item text-light">
+		<li class="list-group-item r-none b-l-none b-r-none text-light">
 	    	No Items available. Add an item in your account to generate invoice.
 		</li>		
 	{{else}}
-		<li class="list-group-item">
+		<li class="list-group-item r-none b-l-none b-r-none">
 			<div class="pull-left">Item name</div>
 			<div class="pull-right text-right">Unit cost</div>
 			<div class="clearfix"></div>
 		</li>
 		{{#isArray item}}
 			{{#each item}}
-				<li class="list-group-item">
+				<li class="list-group-item r-none b-l-none b-r-none">
 					<div class="pull-left" rel="tooltip" title="{{description}}">{{name}}</div>
 					<div class="pull-right">{{unit_cost}}</div><br>
 					<ul class="widget_tab_link m-n" style="float:left;">
@@ -225,7 +225,7 @@
 				</li>
 			{{/each}}
 		{{else}}
-			<li class="list-group-item">
+			<li class="list-group-item r-none b-l-none b-r-none">
 				<div class="pull-left" rel="tooltip" title="{{item.description}}">{{item.name}}</div>
 				<div class="pull-right">{{item.unit_cost}}</div><br>
 				<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago pull-left" datetime="{{item.updated}}">{{item.updated}}</time></small>

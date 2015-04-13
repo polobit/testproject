@@ -1,33 +1,35 @@
 <script id="continue-company-template" type="text/html">
-<div class="container well span8">
+<div class="bg-light lter b-b wrapper-md">
+	<h3 class="h3 font-thin m-n">Company Continue Editing</h3>
+</div>
+<div class="wrapper-md">
     <div class="row">
+	 <div class="col-md-8">
+      <div class="panel wrapper">
         <form id="continueCompanyForm" class="form-horizontal">
-            <fieldset>
-                <div id="content" style="padding-left:25px">
-                    <legend>Company Continue Editing</legend>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">Organization</label>
-                    <div class="controls">                     
+            <fieldset>                
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Organization</label>
+                    <div class="controls col-sm-9">                     
                         <input name="name" type="text" class="required form-control" id="company_name" value="{{getPropertyValue properties "name"}}"/>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label">Url</label>
-                    <div class="controls">
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Url</label>
+                    <div class="controls col-sm-9">
                         <input class="form-control" name="url" placeholder="http://www." type="text" id="company_url" value="{{getPropertyValue properties "url"}}"/>
                     </div>
                 </div>
 				 {{show_custom_fields custom_fields properties}}
-                <div class="control-group">
-                    <label class="control-label">Add Email <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
-                    <div class="controls hide">
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Add Email <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
+                    <div class="controls col-sm-9 hide">
                         <div class="email multiple-template" data="email">
 							<div style="display:inline-table; width:210px; ">
-								<input type="text" id="email" class="email form-control" name="email" placeholder="Email" />
+								<input type="text" id="email" class="email form-control inline-block" name="email" placeholder="Email" />
 							</div>
 							<div style="display:inline-table; ">
-                            	<select class="email-select form-control" name="email-select" style="width:100px">
+                            	<select class="email-select form-control inline-block m-b-sm" name="email-select" style="width:100px">
                                 	<option></option>
                                 	<option value="primary">Primary</option>
                                 	<option value="alternate">Alternate</option>
@@ -37,13 +39,13 @@
                         	</div>
                         </div>
                     </div>
-                    <div class="controls second">
+                    <div class="controls col-sm-9 second">
                         <div class="email multiple-template" data="email">
                             <div style="display:inline-table; width:210px; ">
-								<input type="text" id="email" class="email form-control" name="email" placeholder="Email" />
+								<input type="text" id="email" class="email form-control inline-block" name="email" placeholder="Email" />
 							</div>
 							<div style="display:inline-table; ">
-                            	<select class="email-select form-control" name="email-select" style="width:100px">
+                            	<select class="email-select form-control inline-block m-b-sm" name="email-select" style="width:100px">
                                 	<option></option>
                                 	<option value="primary">Primary</option>
                                 	<option value="alternate">Alternate</option>
@@ -54,12 +56,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label">Add Phone <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
-                    <div class="controls hide">
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Add Phone <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
+                    <div class="controls col-sm-9 hide">
                         <div class="phone multiple-template" data="phone">
-                            <input class="form-control" type="text" id="phone" name="phone" placeholder="Phone number" />
-                            <select class="phone-select form-control" name="phone-select" style="width:100px">
+						    <div style="display:inline-table;">
+                            	<input class="form-control inline-block" type="text" id="phone" name="phone" placeholder="Phone number" />
+						    </div>
+                            <select class="phone-select form-control inline-block m-b-sm" name="phone-select" style="width:100px">
                                 <option></option>
                                 <option value="primary">Primary</option>
                                 <option value="alternate">Alternate</option>
@@ -69,10 +73,12 @@
                             <a href="#" class="multiple-remove"><i class="icon-remove-circle"></i></a>
                         </div>
                     </div>
-                    <div class="controls second">
+                    <div class="controls col-sm-9 second">
                         <div class="phone multiple-template" data="phone">
-                            <input class="form-control" type="text" id="phone" name="phone" placeholder="Phone number" />
-                            <select class="phone-select" name="phone-select" style="width:100px">
+							<div style="display:inline-table;">
+                            	<input class="form-control inline-block" type="text" id="phone" name="phone" placeholder="Phone number" />
+							</div>
+                            <select class="phone-select form-control inline-block m-b-sm" name="phone-select" style="width:100px">
                                <option></option>
                                 <option value="primary">Primary</option>
                                 <option value="alternate">Alternate</option>
@@ -84,12 +90,12 @@
                     </div>
                 </div>
                 <!-- End of phone template -->
-                <div class="control-group">
-                    <label class="control-label">Website <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
-                    <div class="controls hide">
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">Website <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
+                    <div class="controls col-sm-9 hide">
                         <div class="website multiple-template style=" display:none" data="website">
-                            <input class="form-control" type="text" id="website" name="website" style="width:105px" placeholder="Website" /> 
-                            <select class="website-select form-control" name="website-select" style="width:100px">
+                            <input class="form-control inline-block" type="text" id="website" name="website" style="width:105px" placeholder="Website" /> 
+                            <select class="website-select form-control inline-block m-b-sm" name="website-select" style="width:100px">
                                 <option></option>
                                 <option value="URL">Website</option>
                                 <option value="SKYPE">Skype</option>
@@ -106,10 +112,10 @@
                             &nbsp;<a href="#" class="multiple-remove"><i class="icon-remove-circle"></i></a>
                         </div>
                     </div>
-                    <div class="controls second">
+                    <div class="controls col-sm-9 second">
                         <div class="website multiple-template style=" display:none" data="website">
-                            <input class="form-control" type="text" id="website" style="width:105px" name="website" placeholder="Website" /> 
-                            <select class="website-select form-control" name="website-select" style="width:100px">
+                            <input class="form-control inline-block" type="text" id="website" style="width:105px" name="website" placeholder="Website" /> 
+                            <select class="website-select form-control inline-block m-b-sm" name="website-select" style="width:100px">
                                 <option></option>
                                 <option value="URL">Website</option>
                                 <option value="SKYPE">Skype</option>
@@ -128,12 +134,14 @@
                     </div>
                 </div>
                 <!-- End of website template -->
-                <div class="control-group second">
-                    <label class="control-label">Add Address</label>
-                    <div class="controls">
+                <div class="control-group form-group second">
+                    <label class="control-label col-sm-3">Add Address</label>
+                    <div class="controls col-sm-9">
                         <div class="address multiple-template" data="address">
-                            <input class="form-control" type="text" name="address" id="address" placeholder="address" /> 
-                            <select class="address-type form-control" name="address-type" style="width:100px">
+							<div style="display:inline-table;">
+                            	<input class="form-control inline-block" type="text" name="address" id="address" placeholder="address" />
+							</div> 
+                            <select class="address-type form-control inline-block m-b-sm" name="address-type" style="width:100px">
                                 <option></option>
                                 <option value="home">Home</option>
                                 <option value="postal">Postal</option>
@@ -143,7 +151,7 @@
                             <input class="form-control" type="text" name="city" id="city" placeholder="city" /> <br />
                             <input class="form-control" type="text" name="state" id="state" placeholder="state" /> <br />
                             <input class="form-control" type="text" name="zip" id="zip" placeholder="zip" /><br /> 
-                            <select class="styled form-control" id="country" name="country">
+                            <select class="styled form-control inline-block m-b-sm" id="country" name="country">
                                 <option value=""></option>
                                 <option value="AF">Afghanistan</option>
                                 <option value="AL">Albania</option>
@@ -397,15 +405,21 @@
                 <input type="text" name="id" class="hide form-control" value="{{id}}" />
                 <input type="text" name="type" class="hide form-control" value="COMPANY" />
                 <div class="form-actions">
-					<a onclick="history.back();" class="btn btn-sm btn-default">Close</a>
-                    <a href="#" type="submit" class="save btn-sm btn btn-primary" id="company-update">Update</a>
-					<span class="form-action-error"></span>
-                    <span class="save-status"></span>
+				<div class="row">
+	            	<div class="controls col-sm-9 pull-right">
+						<a onclick="history.back();" class="btn btn-sm btn-default">Close</a>
+                    	<a href="#" type="submit" class="save btn-sm btn btn-primary" id="company-update">Update</a>
+						<span class="form-action-error"></span>
+                    	<span class="save-status"></span>
+					</div>
+				</div>
                 </div>
 				<div class="span6  duplicate-email"></div>
             </fieldset>
         </form>
     </div>
     <!-- End of Modal views -->
+</div>
+</div>
 </div>
 </script>

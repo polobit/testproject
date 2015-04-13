@@ -9,9 +9,9 @@
 	{{/if}}
 	<div class="pull-left ml_5 span8">
 		{{#if user_info.name}}
-			<p class="text-cap">{{user_info.name}}</p>
+			<p class="text-cap text-base m-b-xs">{{user_info.name}}</p>
 		{{else}}
-			<p class="text-cap">{{user_info.email}}</p>
+			<p class="text-cap text-base m-b-xs">{{user_info.email}}</p>
 		{{/if}}
 	</div>
 </div>
@@ -20,9 +20,9 @@
 <div class="clearfix" id="add-ticket-error-panel" style="display:none; color:red;">
 </div>
 <div class="wrapper-sm b-t b-light">
-	<h4 class="h4 text-md">Tickets</h4>
+	<h4 class="h4 text-sm">Tickets</h4>
 </div>
-<ul class="list-group" id="all_tickets_panel">
+<ul class="list-group m-n text-sm" id="all_tickets_panel">
 	
 </ul>
 <div class="clearfix" id="tickets-error-panel" style="display:none;">
@@ -41,7 +41,7 @@
 <script id="zendesk-ticket-stream-template" type="text/html">
 {{#isArray this}}
 	{{#each this}}
-		<li class="list-group-item zendesk_ticket_hover"  id="{{id}}">
+		<li class="list-group-item r-none b-l-none b-r-none zendesk_ticket_hover"  id="{{id}}">
 			<div class="overflow-elipsis" title="{{subject}}"><a href="{{url}}" target="_blank" >{{subject}}</a></div>
 			<div style="margin-bottom:5px;">
 				<div class="label right">{{status}}</div>
@@ -56,9 +56,9 @@
 	{{/each}}
 {{else}}
 	{{#if_equals this "There are no tickets for this user"}}
-		<li class="list-group-item" >No tickets</li>
+		<li class="list-group-item r-none b-l-none b-r-none" >No tickets</li>
 	{{else}}
-		<li class="list-group-item" style="word-wrap:break-word;">{{this}}</li>
+		<li class="list-group-item r-none b-l-none b-r-none" style="word-wrap:break-word;">{{this}}</li>
 	{{/if_equals}}
 {{/isArray}}
 </script>

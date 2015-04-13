@@ -717,9 +717,9 @@ $(function()
 								if (color == 'red' || color == '#f05050')
 												return 'danger';
 								if (color == '#36C' || color == '#23b7e5')
-												return 'info';
+												return 'warning';
 								if (color == 'green' || color == '#bbb')
-												return 'success';
+												return 'light';
 				});
 
 				/**
@@ -1148,10 +1148,10 @@ $(function()
 																																if (properties_count != 0)
 
 																																				el = el
-																																												.concat('<div class="contact-addressview"><div><div class="pull-left" style="width:18px"><i class="icon icon-pointer"></i></div><div class="pull-left custom-color" style="width:calc(100% - 19px)">');
+																																												.concat('<div class="contact-addressview"><div><div class="pull-left hide" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color">');
 																																else
 																																				el = el
-																																												.concat('<div class="contact-addressview"><div><div class="pull-left" style="width:18px"><i class="icon icon-pointer"></i></div><div class="pull-left custom-color" style="width:calc(100% - 19px)">');
+																																												.concat('<div class="contact-addressview"><div><div class="pull-left hide" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color">');
 
 																																$.each(address, function(key, val)
 																																{
@@ -5505,7 +5505,7 @@ $(function()
 		else if(p_name=='Growth Graph')
 			icon_name = 'icon-graph';
 		else if(p_name=='Calls Per Person')
-			icon_name = 'icon-phone';
+			icon_name = 'icon-call-end';
 		else if(p_name=='Pending Deals')
 			icon_name = 'icon-clock';
 		else if(p_name=='Deals By Milestone')

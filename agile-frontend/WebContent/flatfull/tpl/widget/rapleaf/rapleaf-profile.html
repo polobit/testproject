@@ -2,7 +2,7 @@
 <ul class="list-group m-none">
 	{{#if_equals this.result "success"}}
 	{{#if gender}}
-		<li class="list-group-item">	
+		<li class="list-group-item r-none b-l-none b-r-none text-base">	
 		<div class="row">
 			<div class="col-md-5">
 				<div class="pull-right">:</div> Gender
@@ -14,7 +14,7 @@
 		</li>
 	{{/if}}
 	{{#if age}}
-		<li class="list-group-item">	
+		<li class="list-group-item r-none b-l-none b-r-none text-base">	
 		<div class="row">
 			<div class="col-md-5">
 				<div class="pull-right">:</div> Age
@@ -26,7 +26,7 @@
 		</li>
 	{{/if}}
 	{{#if occupation}}
-		<li class="list-group-item">
+		<li class="list-group-item r-none b-l-none b-r-none text-base">
 		<div class="row">	
 			<div class="col-md-5">
 				<div class="pull-right">:</div> Occupation
@@ -39,7 +39,7 @@
 		</li>
 	{{/if}}
 	{{#if education}}
-		<li class="list-group-item">	
+		<li class="list-group-item r-none b-l-none b-r-none text-base">	
 		<div class="row">
 			<div class="col-md-5">
 				<div class="pull-right">:</div> Education
@@ -51,7 +51,7 @@
 		</li>
 	{{/if}}
 	{{#if marital_status}}
-		<li class="list-group-item">		
+		<li class="list-group-item r-none b-l-none b-r-none text-base">		
 		<div class="row">
 			<div class="col-md-5">
 				<div class="pull-right">:</div> Marital status
@@ -63,7 +63,7 @@
 		</li>
 	{{/if}}
 	{{#if household_income}}
-		<li class="list-group-item">		
+		<li class="list-group-item r-none b-l-none b-r-none text-base">		
 		<div class="row">
 			<div class="col-md-5">
 				<div class="pull-right">:</div> Household Income
@@ -75,7 +75,7 @@
 		</li>
 	{{/if}}	
 	{{#if home_owner_status}}
-		<li class="list-group-item">		
+		<li class="list-group-item r-none b-l-none b-r-none text-base">		
 		<div class="row">
 			<div class="col-md-5">
 				<div class="pull-right">:</div> Home Owner Status
@@ -87,7 +87,7 @@
 		</li>
 	{{/if}}	
 	{{#if this.interests}}
-		<li class="list-group-item">		
+		<li class="list-group-item r-none b-l-none b-r-none text-base">		
 		<div class="row">
 			<div class="col-md-5">
 				<div class="pull-right">:</div> Interests
@@ -101,7 +101,7 @@
 		</li>
 	{{/if}}
 	{{else}}
-		<li class="list-group-item text-light">
+		<li class="list-group-item r-none b-l-none b-r-none text-base">
 	    	No Details available
 		</li>
 	{{/if_equals}}
@@ -127,11 +127,11 @@
 <script id="rapleaf-error-template" type="text/html">
 <div class="wrapper-sm">
 {{#check_length message "140"}}
-	<div class="ellipsis-multi-line collapse-25 word-break text-sm overflow-hidden" title="{{message}}" style="height:110px;line-height:160%;">
+	<div class="ellipsis-multi-line collapse-25 word-break text-base overflow-hidden" title="{{message}}" style="height:110px;line-height:160%;">
 		{{message}}
 	</div>
 {{else}}
-	<div class="word-break text-sm" style="line-height:160%;">
+	<div class="word-break text-base" style="line-height:160%;">
 		{{message}}
 	</div>
 {{/check_length}}

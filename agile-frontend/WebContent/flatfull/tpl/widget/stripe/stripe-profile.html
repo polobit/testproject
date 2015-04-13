@@ -84,7 +84,7 @@
 <ul class="list-group m-b-none">
 {{#if invoice.length}}
 	{{#each invoice}}
-		<li class="list-group-item">
+		<li class="list-group-item r-none b-l-none b-r-none">
 					<a class="pull-left" data-toggle="collapse" href="#collapse-{{id}}" >{{#if_equals paid true}}Paid{{else}}Pending{{/if_equals}}</a>
 					<div class="pull-right">$ {{numeric_operation total 100 "/"}}</div>
 					<div clear="clearfix"></div>
@@ -110,7 +110,7 @@
 		</li>
 	{{/each}}
 {{else}}
-	<li class="list-group-item">
+	<li class="list-group-item r-none b-l-none b-r-none">
 	    No payments
 	</li>
 {{/if}}

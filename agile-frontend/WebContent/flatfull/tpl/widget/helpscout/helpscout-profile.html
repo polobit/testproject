@@ -53,7 +53,7 @@
 
 {{#isArray conversations}}
 	{{#each conversations}}
-		<li class="list-group-item helpscout_ticket_hover"  id="{{id}}">
+		<li class="list-group-item r-none b-l-none b-r-none helpscout_ticket_hover"  id="{{id}}">
 			<div class="overflow-elipsis" title="{{subject}}">
 				<div class="text-flow-ellipsis pull-left" >
 					<a href="https://secure.helpscout.net/conversation/{{id}}" target="_blank" >{{subject}}</a>
@@ -162,7 +162,7 @@
 	</div>
 </script>
 <script id="helpscout-error-template" type="text/html">
-	<div class="wrapper-sm text-sm" style="line-height:160%;">
+	<div class="wrapper-sm text-base" style="line-height:160%;">
 		{{message}}
 	</div>
 </script>
