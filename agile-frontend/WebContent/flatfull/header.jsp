@@ -1,4 +1,4 @@
-\<%@page import="java.util.Iterator"%>
+<%@page import="java.util.Iterator"%>
 <%@page import="com.agilecrm.account.NavbarConstants"%>
 <%@page import="com.agilecrm.account.MenuSetting"%>
 <%@page import="com.agilecrm.account.util.MenuSettingUtil"%>
