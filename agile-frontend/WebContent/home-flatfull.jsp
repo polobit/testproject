@@ -77,6 +77,7 @@ if(is_free_plan && is_first_time_user)
 <meta name="last-login-time"
 content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
+
 <%
     String CSS_PATH = "/";
 	String FLAT_FULL_PATH = "flatfull/";
@@ -95,7 +96,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
  <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/bootstrap_submenu.css"></link>
   <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib/timepicker-min.css"></link>
 
-<!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/date-picker.css"></link> -->
+<!-- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/date-picker.css"></link> -->
 
 
 <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib.css"></link>
@@ -112,7 +113,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 	System.out.println(css);
 	System.out.println(cssWrap);
 	
-	System.out.println(FLAT_FULL_PATH + "css/bootstrap.css />");
+	System.out.println(CSS_PATH + "css/bootstrap.css />");
 	
 	String cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + FLAT_FULL_PATH + "css/bootstrap.css\" />";
 	
@@ -389,9 +390,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
 }else if(currentUserPrefs.menuPosition.equals("leftcol")){
 	out.print("app-aside-folded ");
 	}
-if(currentUserPrefs.layout.equals("fixed")){
+/* if(currentUserPrefs.layout.equals("fixed")){
 	out.print("container ");
-	}
+	} */
 
 %>">
 
@@ -566,6 +567,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 <!-- Including Footer page -->
 <jsp:include page="flatfull/footer.jsp" />
 
+
 <!-- <script src='https://dpm72z3r2fvl4.cloudfront.net/js/lib/headjs-min.js'></script> -->
 <!-- <script src='/lib/headjs-min.js'></script> -->
 
@@ -578,9 +580,11 @@ var LIB_PATH = "";
 
 var LIB_PATH_FLATFULL = "flatfull/";
 
-var FLAT_FULL_PATH = LIB_PATH_FLATFULL 
+var FLAT_FULL_PATH = LIB_PATH_FLATFULL;
 
-var HANDLEBARS_PRECOMPILATION = true || <%=production%>;
+var FLAT_FULL_UI = "flatfull/";
+
+var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
 
 
 var CSS_PATH = "/";
@@ -595,8 +599,6 @@ var IS_NEW_USER = <%=is_first_time_user%>;
 var IS_FLUID = <%=is_fluid %>
 
 var CLICKDESK_CODE_LOADED = false;
-
-var FLAT_FULL_UI = "flatfull/";
 
 var _plan_on_signup = <%=mapper.writeValueAsString(plan)%>;
 
@@ -634,6 +636,7 @@ if(HANDLEBARS_PRECOMPILATION)
 head.js(HANDLEBARS_LIB,   "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js");
 else
 head.js(HANDLEBARS_LIB);
+
 
 // head.js("//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js", "tpl/min/tpl.js");
 
