@@ -885,7 +885,7 @@ $(function()
 
 						$('body')
 								.find('#bulk-select')
-								.css('display', 'block')
+								//.css('display', 'block')
 								.html(
 										"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' >Select all " + getAvailableContacts() + " contacts</a>");
 					});
@@ -963,7 +963,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 		if (isBulk && total_available_contacts != App_Contacts.contactsListView.collection.length)
 			$('body')
 					.find('#bulk-select')
-					.css('display', 'block')
+					//.css('display', 'block')
 					.html(
 							"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a id='select-all-available-contacts' href='#'>Select all " + total_available_contacts + " contacts</a>");
 	}
