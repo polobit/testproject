@@ -895,7 +895,7 @@ function dealsByMilestonePieGraph(selector,milestonesList,milestoneValuesList,mi
 				emptyFlag = false;
 		});
 		if(milestonesList.length==0 || emptyFlag){
-			$('#'+selector).highcharts({
+			/*$('#'+selector).highcharts({
 		        chart: {
 		            type: 'pie',
 		            marginRight: 20
@@ -916,7 +916,8 @@ function dealsByMilestonePieGraph(selector,milestonesList,milestoneValuesList,mi
 		        exporting: {
 			        enabled: false
 			    }
-		    });
+		    });*/
+			$('#'+selector).html('<div class="portlet-error-message">No deals found</div>');
 		}else{
 			var data = [];
 			$.each(milestonesList,function(index,value){
@@ -1589,7 +1590,7 @@ function getPortletNormalName(name){
 function emailsOpenedPieChart(selector,data,emailsSentCount,emailsOpenedCount){
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js',LIB_PATH + 'lib/flot/no-data-to-display.js', function(){
 		if(emailsSentCount==0 && emailsOpenedCount==0){
-			$('#'+selector).highcharts({
+			/*$('#'+selector).highcharts({
 		        chart: {
 		            type: 'pie'
 		        },
@@ -1600,7 +1601,8 @@ function emailsOpenedPieChart(selector,data,emailsSentCount,emailsOpenedCount){
 		        exporting: {
 			        enabled: false
 			    }
-		    });
+		    });*/
+			$('#'+selector).html('<div class="portlet-error-message">No email activity</div>');
 			return;
 		}
 		

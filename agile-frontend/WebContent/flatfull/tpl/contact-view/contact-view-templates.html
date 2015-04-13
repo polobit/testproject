@@ -12,8 +12,8 @@
 
 <script id = "contacts-custom-view-basic_info-template" type="text/html">
 	<td class="data" data="{{id}}">
-    	<div class="table-resp">
-    	<div class="thumb agile-img m-r-xs">
+    	<div class="table-resp" style="width:15em">
+    	<div class="thumb agile-img m-r-sm" style="margin-right:10px">
         	{{#if_contact_type "PERSON"}}
         		<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  />
         	{{/if_contact_type}}
@@ -22,7 +22,7 @@
         		<img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} />
         	{{/if_contact_type}}
     	</div>
-    	<div class="agile-thumb agile-thumb-view">
+    	<div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
         	{{#if_contact_type "PERSON"}}
         		<a class="text-md custom-link">{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}} </a>

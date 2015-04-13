@@ -32,7 +32,7 @@
 	<img src="img/ajax-spinner.gif" id="spinner-tickets" style="display:none;"></img>
 </div>
 {{else}}
-<div class="widget_content word-break">
+<div class="wrapper-sm word-break">
 {{user_info}}
 </div>
 {{/if}}
@@ -174,13 +174,15 @@
 </script>
 
 <script id="zendesk-error-template" type="text/html">
+<div class="wrapper-sm">
 {{#check_length message "140"}}
-	<div class="ellipsis-multi-line collapse-25 p-xs word-break overflow-hidden" title="{{message}}" style="height:110px;line-height:160%;">
+	<div class="ellipsis-multi-line collapse-25 p-xs word-break overflow-hidden text-base" title="{{message}}" style="height:110px;line-height:160%;">
 		{{message}}
 	</div>
 {{else}}
-	<div class="word-break p-n" style="line-height:160%;">
+	<div class="word-break p-n text-base" style="line-height:160%;">
 		{{message}}
 	</div>
 {{/check_length}}
+</div>
 </script>

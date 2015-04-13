@@ -25,7 +25,7 @@ function showFacebookMatchingProfile(first_name)
 				Facebook_id = $(this).attr('id');
 
 				// Aligns details to left in the pop over
-				$(this).popover({ placement : 'left', html : true });
+				$(this).popover({ placement : 'left', html: true });
 
 				/*
 				 * Called show to overcome pop over bug (not showing pop over on
@@ -80,9 +80,6 @@ function showFacebookMatchingProfile(first_name)
 					// show twitter profile by id
 					showFacebookProfile(Facebook_id);
 
-				});
-				$('#' + Facebook_id).die().live('mouseout', function(e){
-					$(this).popover('hide');
 				});
 			});
 

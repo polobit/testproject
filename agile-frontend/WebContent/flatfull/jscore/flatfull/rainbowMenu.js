@@ -120,7 +120,7 @@ $("#check-box-layout").die().live('click',function(){
 		var topBarClassName = $(this).attr("target-topbar-class");
 		
 		
-		$(".app-aside,#navbar,.navbar-header").removeClassPrefix("bg-").removeClass("dk").removeClass("dker");
+		$(".app-aside,#navbar,.navbar-header").removeClassPrefix("bg-").removeClass("dk").removeClass("dker").removeClass("b-r");
 		$(".app-aside").addClass(asideClassName);
 		$(".navbar-header").addClass(logoClassName);
 		$("#navbar").addClass(topBarClassName);

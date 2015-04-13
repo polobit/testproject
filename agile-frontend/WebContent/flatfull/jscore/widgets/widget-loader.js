@@ -164,12 +164,10 @@ function loadWidgets(el, contact)
 	});
 }
 
-
-function process_widgets_fornewui(url)
+function process_url(url)
 {
-	return FLAT_FULL_UI + url;
+	url = FLAT_FULL_UI + url;
 }
-
 
 /**
  * Loads the scripts of widgets which are not minimized and enables sorting
@@ -188,8 +186,7 @@ function set_up_widgets(el, widgets_el)
 	{
 		// In case collection is not empty
 		var id = model.get("id");
-		var url = process_widgets_fornewui(model.get("url"));
-		
+		var url = process_url(model.get("url"));
 
 		model.set('selector', model.get('name').replace(/ +/g, ''));
 

@@ -112,12 +112,12 @@
 <div class="wrapper-sm">
 {{#check_length message "140"}}
 	<div class="p-sm">
-		<div class="ellipsis-multiline word-break" title="{{message}}" style="height: 100px !important;-webkit-line-clamp: 5;line-height:160%;word-break: normal;">
+		<div class="ellipsis-multiline word-break text-base" title="{{message}}" style="height: 100px !important;-webkit-line-clamp: 5;line-height:160%;word-break: normal;">
 			{{message}}
 		</div>
 	</div>
 {{else}}
-	<div class="word-break p-n" style="line-height:160%;">
+	<div class="word-break p-n text-base" style="line-height:160%;">
 		{{{message}}}
 	</div>
 {{/check_length}}

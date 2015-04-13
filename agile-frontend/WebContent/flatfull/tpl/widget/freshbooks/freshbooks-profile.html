@@ -116,7 +116,7 @@
 		</li>
 		{{#isArray invoice}}
 			{{#each invoice}}
-				<li class="row-fluid list-group-item">
+				<li class="row-fluid list-group-item r-none b-l-none b-r-none text-base">
 					<a class="pull-left" data-toggle="collapse" href="#collapse-{{invoice_id}}" ><i class="icon icon-plus text-muted text-sm"></i> {{ucfirst status}}</a>
 					<div class="pull-right">$ {{amount}}</div><br>
 					<div id="collapse-{{invoice_id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
@@ -158,7 +158,7 @@
 				</li>
 			{{/each}}
 		{{else}}
-			<li class="row-fluid list-group-item">
+			<li class="row-fluid list-group-item r-none b-l-none b-r-none text-base">
 					<a class="pull-left" data-toggle="collapse" href="#collapse-{{invoice.invoice_id}}" ><i class="icon icon-plus text-muted text-sm"></i> {{ucfirst invoice.status}}</a>
 					<div class="pull-right">{{invoice.amount}}</div><br>
 					<div id="collapse-{{invoice.invoice_id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
@@ -239,7 +239,7 @@
 </script>
 
 <script id="freshbooks-modal-template" type="text/html">
-	<div class="modal hide fade message-modal" id="freshbooks_addModal">
+	<div class="modal fade message-modal" id="freshbooks_addModal">
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
 			<h3><i class="icon-plus-sign"></i> {{headline}}</h3>
@@ -352,13 +352,15 @@
 </script>
 
 <script id="freshbooks-error-template" type="text/html">
+<div class="wrapper-sm">
 {{#check_length message "140"}}
-	<div class="ellipsis-multi-line collapse-25 p-n word-break overflow-hidden" title="{{message}}" style="height:110px;line-height:160%;">
+	<div class="ellipsis-multi-line collapse-25 p-n word-break overflow-hidden text-base" title="{{message}}" style="height:110px;line-height:160%;">
 		{{message}}
 	</div>
 {{else}}
-	<div class="word-break p-n" style="line-height:160%;">
+	<div class="word-break p-n text-base" style="line-height:160%;">
 		{{message}}
 	</div>
 {{/check_length}}
+</div>
 </script>

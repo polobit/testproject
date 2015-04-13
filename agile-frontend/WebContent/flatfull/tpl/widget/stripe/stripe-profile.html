@@ -22,9 +22,9 @@
 <div class="sub_header">
 	<div>Subscription Details</div>
 </div>
-<ul class="m-n p-t-sm p-b-sm p-l-none p-r-none" style="border-bottom:1px solid #eee;">
+<ul class="list-group m-b-none" style="border-bottom:1px solid #eee;">
 	{{#if customer.subscription}}
-		<li class="row">	
+		<li class="list-group-item r-none b-l-none b-r-none text-base">	
 			<div class="col-md-5">Start Date
 				<div class="pull-right">:</div>
 			</div>
@@ -34,7 +34,7 @@
 			</div>
 		</li>
 		{{#if customer.subscription.currentPeriodEnd}}
-		<li class="row">	
+		<li class="list-group-item r-none b-l-none b-r-none text-base">	
 			<div class="col-md-5">End Date
 				<div class="pull-right">:</div>
 			</div>
@@ -44,7 +44,7 @@
 			</div>
 		</li>
 		{{/if}}
-		<li class="row">	
+		<li class="list-group-item r-none b-l-none b-r-none text-base">	
 			<div class="col-md-5">Current Plan
 				<div class="pull-right">:</div>
 			</div>
@@ -53,7 +53,7 @@
 				{{customer.subscription.plan.id}}
 			</div>
 		</li>
-		<li class="row">	
+		<li class="list-group-item r-none b-l-none b-r-none text-base">	
 			<div class="col-md-5">Interval
 				<div class="pull-right">:</div>
 			</div>
@@ -62,7 +62,7 @@
 				{{customer.subscription.plan.interval}}
 			</div>
 		</li>
-		<li class="row">	
+		<li class="list-group-item r-none b-l-none b-r-none text-base">	
 			<div class="col--md-5">Amount
 				<div class="pull-right">:</div>
 			</div>
@@ -72,7 +72,7 @@
 			</div>
 		</li>
 	{{else}}
-		<li class="text-light">
+		<li class="list-group-item r-none b-l-none b-r-none text-base">
 	    	No active subscription
 		</li>
 	{{/if}}
@@ -139,11 +139,11 @@
 <script id="stripe-error-template" type="text/html">
 <div class="wrapper-sm">
 {{#check_length message "140"}}
-	<div class="ellipsis-multi-line collapse-25 h-auto word-break text-sm" title="{{message}}">
+	<div class="ellipsis-multi-line collapse-25 h-auto word-break text-base" title="{{message}}">
 		{{{message}}}
 	</div>
 {{else}}
-	<div class="word-break p-n" style="line-height:160%;">
+	<div class="word-break p-n text-base" style="line-height:160%;">
 		{{{message}}}
 	</div>
 {{/check_length}}

@@ -14,7 +14,7 @@
 	<div class="wapper-sm text-base"><p>Search results for  <a href='#' class="facebook_modify_search">{{searchString}}</a></p></div>
 	{{#each profiles}}	
 			<a class="thumb-sm m-r-sm m-b-sm" target="_blank">
-				<img rel='popover' data-original-title='Facebook Profile' class='facebookImage pull-left r r-2x c-p' id='{{userId}}' src ='{{userPicUrl}}' screen_name=""
+				<img rel='popover' data-trigger="hover" data-original-title='Facebook Profile' class='facebookImage pull-left r r-2x c-p' id='{{userId}}' src ='{{userPicUrl}}' screen_name=""
    				summary="" 
    				data-content="<div class='row'>
            		 				<div class='pull-left p-t-none m-r p-r-sm p-b-none p-l-sm'>
@@ -22,7 +22,7 @@
            		 				</div>
             					<div class='pull-left'>
                						<b class='text-base'>{{userName}}</b>
-									<p class='p-t-xs'`>{{email}}</p>
+									<p class='p-t-xs'>{{email}}</p>
 									<p class='p-t-xs'>{{location}}</p>
 									<p class='p-t-xs'>{{website}}</p>
             					</div>		

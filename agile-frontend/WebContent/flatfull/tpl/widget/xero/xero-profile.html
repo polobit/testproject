@@ -99,19 +99,17 @@
 
 
 <script id="xero-error-template" type="text/html">
+<div class="wrapper-sm">
 {{#check_length message "140"}}
-	<div class="wrapper-sm">
-		<div class="ellipsis-multi-line collapse-25 word-break p-n overflow-hidden" title="{{message}} " style="height:110px;line-height:160%;">
+		<div class="ellipsis-multi-line collapse-25 word-break p-n overflow-hidden text-base" title="{{message}} " style="height:110px;line-height:160%;">
 			{{{message}}}
 		</div>
-	</div>
-{{else}}
-	<div class="wrapper-sm">		
-		<div class="wrapper-sm word-break p-n text-sm" style="line-height:160%;">
+{{else}}	
+		<div class="word-break p-n text-base" style="line-height:160%;">
 			{{{message}}}
-		</div>
-	</div>
+		</div>	
 {{/check_length}}
+</div>
 </script>
 
 <script id="xero-login-template" type="text/html">
