@@ -520,7 +520,7 @@ var Base_Collection_View = Backbone.View
 				 */
 				if (callback && typeof (callback) === "function")
 				{
-					hideTransitionBar();
+					
 					// execute the callback, passing parameters as necessary
 					callback($(this.el), this.collection);
 				}
@@ -533,7 +533,7 @@ var Base_Collection_View = Backbone.View
 				// $(this.el).trigger('agile_collection_loaded', [this.el]);
 
 				// For the first time fetch, disable Scroll bar if results are
-				// lesser
-
+				
+				hideTransitionBar();
 				return this;
 			}, });
