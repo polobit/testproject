@@ -83,7 +83,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 //String CSS_PATH = "//cdnapp.agilecrm.com/";
 %>
 
-<link rel="stylesheet" type="text/css" href="/css/agilecrm.css" />
+<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agilecrm.css" />
 
 <!-- Unified CSS for All Lib -->
 
@@ -559,7 +559,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 %>
 
 
-                <%@ include file="flatfull/tpl/min/precompiled/tpl.html"%>   
+                <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>   
 
 
 </div>
