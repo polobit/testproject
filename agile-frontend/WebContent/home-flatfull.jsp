@@ -580,7 +580,7 @@ var LIB_PATH_FLATFULL = "flatfull/";
 
 var FLAT_FULL_PATH = LIB_PATH_FLATFULL 
 
-var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
+var HANDLEBARS_PRECOMPILATION = true || <%=production%>;
 
 
 var CSS_PATH = "/";
@@ -631,7 +631,7 @@ head.js(LIB_PATH + 'lib/underscore-min.js', LIB_PATH + 'lib/backbone-min.js', LI
 <!-- Handle bars -->
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "tpl/min/precompiled/tpl.js");
+head.js(HANDLEBARS_LIB,   "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js");
 else
 head.js(HANDLEBARS_LIB);
 
@@ -654,12 +654,12 @@ head.ready(function() {
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "/img/ajax-loader-cursor.gif");
-head.js({"core" : LIB_PATH_FLATFULL + '/jscore/min/js-all-min.js'});
+head.js({"core" :   '/jscore/min/' + FLAT_FULL_PATH +'js-all-min.js'});
 head.js({"stats" : 'stats/min/agile-min.js'});
 head.ready(["core", "stats"], function(){
 	
 	if(!HANDLEBARS_PRECOMPILATION)
-		downloadTemplate(FLAT_FULL_PATH + "/tpl.js");
+		downloadTemplate(FLAT_FULL_PATH + "tpl.js");
 
 		// Load User voice then
 		setTimeout(loadMiscScripts, 10000);

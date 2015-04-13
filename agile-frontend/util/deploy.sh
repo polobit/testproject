@@ -6,7 +6,7 @@
 
 java -jar precompile.jar ../WebContent/tpl ../../../tmp/handlebars ../WebContent/tpl/min/precompiled
 
-java -jar precompile.jar ../WebContent/flatfull/tpl ../../../tmp/handlebars ../WebContent/flatfull/tpl/min/precompiled
+java -jar precompile.jar ../WebContent/flatfull/tpl ../../../tmp/handlebars ../WebContent/tpl/min/precompiled/flatfull/
 
 sh yui.sh
 
