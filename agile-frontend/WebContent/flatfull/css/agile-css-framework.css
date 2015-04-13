@@ -932,6 +932,10 @@
 {
 	border:none;
 }
+.b-n-imp
+{
+	border:none!important;
+}
 .b-a {
   border: 1px solid #dee5e7;
 }

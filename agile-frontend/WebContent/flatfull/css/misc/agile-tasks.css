@@ -165,11 +165,15 @@
 }
 
 .listed-task.yellow:after {
-	background: yellow;
+	background: #fad733;
 }
 
 .listed-task.red:after {
-	background: red;
+	background: #f05050;
+}
+
+.listed-task.gray:after {
+	background: #edf1f2;
 }
 
 .listed-task:first-child {
