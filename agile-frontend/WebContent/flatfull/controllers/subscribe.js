@@ -74,6 +74,24 @@ var SubscribeRouter = Backbone.Router.extend({
 				return;
 			}
 			
+			var planType = data.plan.plan_type;			
+			var id = "";
+			var planDetails = "<span class='bg-light'>Current Plan</span></br><span class='bg-light'>"+data.plan.quantity+" Users</span>";
+			if(planType.indexOf('STARTER') == 0){
+				var id = $('#starter_plan');
+			}else if(planType.indexOf('REGULAR') == 0){
+				var id = $('#regular_plan');
+			}else if(planType.indexOf('PRO') == 0){
+				var id = $('#pro_plan');
+			}	
+			
+			id.addClass('m-t-n-md');
+			id.find('.panel-heading').addClass('bg-warning').addClass('dker');
+			id.find('.price-panel').addClass('bg-warning');
+			id.find('.panel-footer').addClass('bg-light');
+			id.find('.user-plan').html(planDetails);
+			id.find('.djc_addtocart_link').text('Add users');
+			
 			element = setPriceTemplete(data.plan.plan_type, el);
 
 			// Show Coupon code input field

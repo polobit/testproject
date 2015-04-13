@@ -205,7 +205,7 @@ function showPortletIcons(el){
 	$(el).find('div.portlet_header_icons').show();
 
 	// Changes width of portlet name
-	$(el).find('div.portlet_header_name').css({ "width" : "75%" });
+	$(el).find('div.portlet_header_name').css({ "width" : "65%" });
 }
 /**
  * Expand the portlet header name width.
@@ -1175,7 +1175,7 @@ function initBlogPortletSync(el)
 											max : 3,
 											entryTemplate : function(entry)
 											{
-												return '<strong>' + '<a href="' + entry.link + '" title = "' + entry.title + '" target="_blank" >' + entry.title + '</a></strong><div style="color:#999;font-size:11px;line-height: 13px;margin-bottom:5px">' 
+												return '' + '<a href="' + entry.link + '" title = "' + entry.title + '" target="_blank" >' + entry.title + '</a><div style="color:#999;font-size:11px;line-height: 13px;margin-bottom:5px">' 
 												+ new Date(entry.publishedDate).format('mmm d, yyyy') + '</div><p style="padding-top:5px;margin-bottom:15px">' 
 												+ entry.contentSnippet.replace('<a', '<a target="_blank"') + '</p>';
 											},

@@ -630,9 +630,9 @@ var ContactsRouter = Backbone.Router.extend({
 		checkContactUpdated();
 
 		if(localStorage.getItem('MAP_VIEW')=="disabled")
-				$("#map_view_action").html("<i class='icon-plus text-xxs c-p' title='Show map' id='enable_map_view'></i>");
+				$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
 		else
-				$("#map_view_action").html("<i class='icon-minus text-xxs c-p' title='Hide map' id='disable_map_view'></i>");
+				$("#map_view_action").html("<i class='icon-minus text-sm c-p' title='Hide map' id='disable_map_view'></i>");
 
 	},
 
@@ -1061,7 +1061,7 @@ var ContactsRouter = Backbone.Router.extend({
 		if(!is_lhs_filter) {
 			$('#content').html(this.contact_custom_view.el);
 		} else {
-			$('#content').find('.col-md-9').html(this.contact_custom_view.el);
+			$('#content').find('.contacts-div').html(this.contact_custom_view.el);
 			$('#bulk-actions').css('display', 'none');
 			CONTACTS_HARD_RELOAD = true;
 		}

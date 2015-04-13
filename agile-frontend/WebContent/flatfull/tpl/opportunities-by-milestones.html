@@ -119,7 +119,7 @@
 <script id="deals-by-paging-model-template" type="text/html">
 <div id={{id}} data="{{milestone}}" class="data agile-overflow-ellipsis">
 	<div>
-		<b class="pull-left text-flow-ellipsis inline-block l-h-xs font-thin word-break" style="max-width: 70%;"><!-- a href="#deal/{{id}}" class="text-info" -->{{name}}</a></b>
+		<span class="pull-left text-flow-ellipsis inline-block l-h-xs font-thin word-break" style="max-width: 70%;"><!-- a href="#deal/{{id}}" class="text-info" -->{{name}}</a></span>
 		
 		<span class="pull-right  dealnotes-view">
 			{{#if notes}}
@@ -173,7 +173,7 @@
 <script id="deals-by-paging-relax-model-template" type="text/html">
 <div id={{id}} data="{{milestone}}" class="data agile-overflow-ellipsis">
 	<div>
-		<b style="max-width: 70%;overflow: hidden;display: inline-block;line-height: 14px;float:left;white-space: normal;word-wrap: break-word;"><!-- a class="font-normal" href="#deal/{{id}}" -->{{name}}</a></b>
+		<span style="max-width: 70%;overflow: hidden;display: inline-block;line-height: 14px;float:left;white-space: normal;word-wrap: break-word;"><!-- a class="font-normal" href="#deal/{{id}}" -->{{name}}</a></span>
 		
 		<span class="right dealnotes-view" style="margin-top:-3px;padding-right:1px;">
 			{{#if notes}}

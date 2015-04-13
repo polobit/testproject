@@ -746,7 +746,11 @@ var SettingsRouter = Backbone.Router.extend({
 	themeandlayout : function()
 	{
 	//	$("#content").html(getTemplate("theme-layout-form"), {});
-		var view = new Base_Model_View({url : '/core/api/user-prefs', template : "theme-layout-form"});
+		var view = new Base_Model_View({
+					url : '/core/api/user-prefs',
+					template : "theme-layout-form",
+					postRenderCallback: function(el){}
+		});
 		$('#content').html(view.render().el);
 	//	$(".active").removeClass("active");
 		

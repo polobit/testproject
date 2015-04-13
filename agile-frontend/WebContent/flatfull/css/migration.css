@@ -872,7 +872,7 @@ left:0;
 
 /* ending css transition for aside menu hover effect*/
 
-.contactView:hover .editArea
+.contactView:hover .editArea,.companyLeftView .editArea
 {
 	visibility:visible;
 }
@@ -1104,8 +1104,42 @@ font-size:16px;
 .r-none{
 	border-radius: 0px;
 }
+#contacts-inner-tabs #prev,#contacts-inner-tabs #next {
+padding:12px 10px 12px 11px;
+border-bottom:1px solid #dee5e7;
+}
+#contacts-inner-tabs #prev:hover,#contacts-inner-tabs #next:hover
+{
+background:#f6f8f8;
+}
 
+
+#contacts-inner-tabs .nav-tabs li {
+  display: inline-block!important;
+  float: none;
+}
+#contacts-inner-tabs #contactDetailsTab {
+  width:calc(100% - 60px);
+  white-space: nowrap;
+  overflow: hidden;
+  }
+.filter-multiple-add-lhs
+{
+	font-size:13px;
+}
+.lhs-row-filter .fa-plus-square-o,.lhs-row-filter .filter-tags-multiple-remove-lhs
+{
+	color:#98a6ad;
+}
+.lhs-row-filter .filter-tags-multiple-remove-lhs
+{
+	font-size:13px;
+}
 .icon-cursor-move {
 	cursor: move;
 }
 
+.header-min-width {
+	min-width:90px;
+}
+ origin/FlatFull

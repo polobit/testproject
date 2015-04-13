@@ -4,7 +4,7 @@
 	<a data-toggle="collapse" id="lhs-filters-header" 
 class="c-p text-l-none text-l-none-hover" >
 {{field_label}}
-<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
 {{#if_equals_or "CHECKBOX" field_type "TEXT" field_type "TEXTAREA" field_type}}
 	<div class="controls m-t-xs hide" id="{{replace_spaces field_label}}_div">
 		<div class="lhs-contact-filter-row pos-rlt">
@@ -115,12 +115,12 @@ class="c-p text-l-none text-l-none-hover" >
 <script id="contacts-lhs-filters-template" type="text/html">
 <header>
 <div>
-	<h4 class="m-l-sm">
+	<h4 class="m-l-sm m-b-md">
 		<span class="pull-left"><span>Filter Contacts</span>
 		</span>
 <span class="pull-right m-r-sm">
 		<a id="clear-lhs-contact-filters" class="text-sm" href="#">
-			 clear all
+			 Clear all
 		</a>
 	</span>
 <div class="clearfix"></div>
@@ -136,7 +136,7 @@ class="c-p text-l-none text-l-none-hover" >
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
 		Tags
-		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
 	<div class="controls m-t-xs hide" id="tags_div">
 		<div id="tags-lhs-filter-table" class="ignore-collection">
 				<div class="hide master-tags-add-div pos-rlt">
@@ -174,11 +174,11 @@ class="c-p text-l-none text-l-none-hover" >
 	</div>
 </div>
 	
-<div class="control-group form-group lhs-row-filter" >
+<div class="control-group form-group lhs-row-filter">
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
 		Score
-		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
 	<div class="controls hide m-t-xs" id="lead_score_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" class="form-control" value="lead_score" />
@@ -211,7 +211,7 @@ class="c-p text-l-none text-l-none-hover" >
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
 		Star Value
-		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
 	<div class="controls hide m-t-xs" id="star_value_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="star_value" />
@@ -243,7 +243,7 @@ class="c-p text-l-none text-l-none-hover" >
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
 		Campaign Status
-		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
 	<div class="controls m-t-xs hide" id="campaign_status_div">
 
 
@@ -300,7 +300,7 @@ class="c-p text-l-none text-l-none-hover" >
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
 		Owner
-		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
 	<div class="controls m-t-xs hide" id="owner_id_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="owner_id" />
@@ -327,7 +327,7 @@ class="c-p text-l-none text-l-none-hover" >
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
 		Created Date
-		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
 	<div class="controls m-t-xs hide" id="created_time_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" value="created_time" class="form-control"/>
@@ -374,15 +374,17 @@ class="c-p text-l-none text-l-none-hover" >
 <script id="companies-lhs-filters-template" type="text/html">
 <header>
 <div>
-	<h3 style="margin-left: 3px">
-		<span><span>Filter Companies</span>
+	<h4 class="m-l-sm m-b-md">
+		<span class="pull-left"><span>Filter Companies</span>
 		</span>
-	</h3>
-	<span class="pull-right" style="margin-top: 8px;">
-		<a id="clear-lhs-company-filters" href="#">
-			 clear all</i>
+<span class="pull-right m-r-sm">
+		<a id="clear-lhs-company-filters" class="text-sm" href="#">
+			 Clear all</i>
 		</a>
 	</span>
+<div class="clearfix"></div>
+	</h4>
+	
 </div>
 </header>
 <form id="lhs-contact-filter-form" name="lhs-contact-filter-form">
@@ -393,7 +395,7 @@ class="c-p text-l-none text-l-none-hover" >
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
 		Star Value
-		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
 	<div class="controls hide m-t-xs" id="star_value_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" class="form-control" value="star_value" />
@@ -425,7 +427,7 @@ class="c-p text-l-none text-l-none-hover" >
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
 		Owner
-		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
 	<div class="controls hide m-t-xs" id="owner_id_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="owner_id" />
@@ -452,7 +454,7 @@ class="c-p text-l-none text-l-none-hover" >
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
 		Created Date
-		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
 	<div class="controls hide m-t-xs" id="created_time_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" name="LHS" class="form-control" value="created_time" />
@@ -492,7 +494,7 @@ class="c-p text-l-none text-l-none-hover" >
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
 		Name
-		<i class="fa fa-plus-square-o inline pos-abs pos-r"></i></a>
+		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
 	<div class="controls hide m-t-xs" id="name_div">
 		<div class="lhs-contact-filter-row pos-rlt">
 		<input type="hidden" class="form-control" name="LHS" value="name" />

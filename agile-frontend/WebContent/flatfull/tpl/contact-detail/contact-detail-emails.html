@@ -104,6 +104,7 @@
 	<div id="email-reply-div" class="pull-left rightThumbView">
         
 			<div class="pull-left text-cap text-md custom-color contact-title-dynamic">
+<a class="email-subject" id={{id}}  href="#collapse-{{id}}">{{subject}}</a>
 	{{#containString owner_email from}}
 			<i class="icon-reply text-muted"></i>
 		{{else}}
@@ -115,7 +116,7 @@
             <i class="icon-folder-open-alt" title="Email Opened"></i>
         {{/if_equals}}
     {{/if}}
-				<a class="email-subject" id={{id}}  href="#collapse-{{id}}">{{subject}}</a>
+				
 
 			</div>
 			<div class="pull-right">

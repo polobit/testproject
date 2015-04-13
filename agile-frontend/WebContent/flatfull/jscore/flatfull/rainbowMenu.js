@@ -138,7 +138,29 @@ $.fn.removeClassPrefix = function(prefix) {
 
 
 
+/*funda for contact details*/
 
-	})();
+
+
+  $("#contacts-inner-tabs #next").die().live('click',function(){
+	  console.log("next clicked");
+    var target = $("#contactDetailsTab");
+    target.animate({ scrollLeft : (target.scrollLeft() + 270)},1000);
+  });
+  
+   $("#contacts-inner-tabs #prev").die().live('click',function(){
+	   console.log("prev clicked");
+    var target = $("#contactDetailsTab");
+    target.animate({ scrollLeft : (target.scrollLeft() - 270)},1000);
+  });
+
+
+var contDynamicWidth = $("#contacts-inner-tabs").width() - 60;
+
+$("#contactDetailsTab").width(contDynamicWidth);
+
+
+
+})();
 
 	

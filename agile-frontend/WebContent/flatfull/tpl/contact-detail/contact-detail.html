@@ -26,7 +26,7 @@
 								<a href="#" class="tooltip_info" data-placement="top"
 									data-toggle="tooltip"
 									title="<i class='icon-edit icon-white icon'></i> Change Picture"> 
-									<img class='upload_pic imgholder submit w-full img-circle' type="submit"
+									<img class='upload_pic imgholder submit w-full img-circle' style="width:96px;height:96px;" type="submit"
 									src="{{gravatarurl properties 80}}" /></a> 
 									<input type="hidden" id="upload_url" name="gravatarurl">
 								<a style="display: none;" class="save_img submit" type="submit">Save</a>
@@ -89,7 +89,7 @@
 								 <!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}} -->
 								</div>
 							<div class="text-md m-b-xs text-cap">	
-						<div class="contact-job-title text-ellipsis text-center font-thin custom-color">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}} ,  {{#if contact_company_id}}
+						<div class="contact-job-title text-ellipsis text-center font-thin custom-color">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}   {{#if contact_company_id}}
 <br> 
 									<a href="#contact/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
 								{{else}}
@@ -268,14 +268,14 @@
 							{{#if tagsWithTime.length}} 
 							 {{#canEditContact owner.id}}
 								{{#each tagsWithTime}}
-										<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="{{this.tag}}"><span><a
-								class="anchor m-r-xs" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+								class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
 								class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> 
 								{{/each}}
 								{{else}}
 									{{#each tagsWithTime}}
-										<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="{{this.tag}}"><span><a
-											class="anchor" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+											class="anchor" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
 									{{/each}}
 							 {{/canEditContact}}
 							{{/if}}
@@ -294,7 +294,7 @@
 						{{#canEditContact owner.id}}
 			<a href="#" id="add-tags" rel="tooltip"
 							data-original-title="addtag" data-placement="top" class="text-xs text-muted"><i
-							class="icon-plus"></i> <span >Add tags</span></a>
+							class="icon-plus"></i> <span >Add</span></a>
 						{{/canEditContact}}
 
 						
@@ -310,13 +310,13 @@
 									<span><strong style="color: gray">Phone</strong><span>
 								</div> -->
 						
-	<div class="m-t-sm"><small class="text-muted text-xs">Contact Info</small></div>							
+				<div class="m-t-sm"><small class="text-muted text-xs">Contact Info</small></div>				
 								<div class="contact-phone">
 									{{#each this}}
 									<div class="pull-left contact-phone-icon hide">
 									<i class="icon icon-call-end text-sm m-r-xs v-middle"></i>
 									</div>
-									<div class="text-sm m-b-xs">
+									<div class="text-sm">
                                         <a href='#' class="contact-make-sip-call" style="display:none;" phone="{{value}}">
                                            {{value}}
                                         </a>            
@@ -346,7 +346,7 @@
 								{{#property_is_exists "phone" ../properties}}
 								
 									{{else}}
-									
+									<div class="m-t-sm"><small class="text-muted text-xs">Contact Info</small></div>
 									
 										{{/property_is_exists}}
 										<div class="contact-email text-sm l-h"> 
@@ -441,8 +441,8 @@
 </div>
 		<!--  ending top header  view -->
 <div class="col bg-white">
- <div class="vbox">
-  <div class="row-row">
+ <div class="vbox" style="display:block">
+  <div class="row-row" style="display:block">
   <div>
   <div>	
 		
@@ -451,7 +451,8 @@
 		<!--  starting time line view -->
 		<div  id="contacts-inner-tabs">
         <div class="tab-container">
-			<ul class="nav nav-tabs bg-light" id="contactDetailsTab">
+<div class="pull-left p-sm bg-light text-xs" id="prev"><i class="fa fa-chevron-left"></i></div>
+			<ul class="nav nav-tabs bg-light pull-left" id="contactDetailsTab">
 				<li class=""><a data-toggle="tab" href="#timeline">Timeline</a></li>
 				<li class=""><a data-toggle="tab" href="#notes">Notes</a></li>
 				<li class=""><a data-toggle="tab" href="#events">Events</a></li>
@@ -474,6 +475,8 @@
          </ul> 
          </li>  -->
 			</ul> 
+<div class="pull-left p-sm bg-light text-xs" id="next"><i class="fa fa-chevron-right"></i></div>
+<div class="clearfix"></div>
            </div>
 			<div class="tab-content no-tab-cell" id="contact-tab-content">
 				<div class="tab-pane" id="time-line">
