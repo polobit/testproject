@@ -10,7 +10,7 @@
 <body style="background: url(&quot;../img/multilogin-bg.png&quot;) repeat scroll 0 0;overflow-x: hidden;">
 <div class="row">
 	<div class="col-md-12">
-		<div style="margin: 120px auto;width: 50%;box-shadow: 0 0 7px 0px #ddd;padding: 16px 35px;background: #fff;">
+		<div style="margin: 120px auto;width: 500px;box-shadow: 0 0 7px 0px #ddd;padding: 16px 35px;background: #fff;">
 			<div>
 				<h2 style="text-align: center;">
 					<b>The new UI is in Beta</b>
