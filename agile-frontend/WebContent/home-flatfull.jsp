@@ -587,7 +587,7 @@ var FLAT_FULL_UI = "flatfull/";
 var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
 
 
-var CSS_PATH = "/";
+var CSS_PATH = FLAT_FULL_UI;
 //var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
 
 var IS_CONSOLE_ENABLED = <%=debug%>;
