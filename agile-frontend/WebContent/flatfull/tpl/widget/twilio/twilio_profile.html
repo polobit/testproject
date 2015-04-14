@@ -30,7 +30,7 @@
 		<h4>Call History</h4>
 	</div> -->
 {{/if_equals}}
-	<ul id="twilio-logs-panel" class="sub_header_ul">
+	<ul id="twilio-logs-panel" class="sub_header_ul text-base">
 		<li>
 			<center><img id="logs_load" src="img/ajax-loader-cursor.gif" class="m-t"></img></center>
 		</li>
@@ -88,11 +88,14 @@
 </script>
 
 <script id="twilio-record-template" type="text/html">
-<div id="twilio-record-modal" class="modal fade in" >
+<div id="twilio-record-modal" class="modal fade in" aria-hidden="false" style="display: block; padding-left: 17px;">
+<div class="modal-backdrop fade" style="height: auto;"></div> 
+ <div class="modal-dialog"> 
+  <div class="modal-content"> 
 	<div class="modal-header" >
     	<a href="#" data-dismiss="modal" class="close">&times;</a>
 		<h3>Call {{name}}?</h3></div>
-        <div class="modal-body" >
+    <div class="modal-body" >
 		<p>Make a call to {{to}}?</p>
         <p>
 		<label class="i-checks i-checks-sm">
@@ -104,6 +107,8 @@
 		<a href="#" class="btn btn-sm btn-default close enable-call" make_call="no">No</a>
 		<a href="#" class="btn btn-sm btn-primary enable-call" make_call="yes">Yes</a>
 	</div>
+</div>
+</div>
 </div>
 </script>
 

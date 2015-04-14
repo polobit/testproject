@@ -37,9 +37,9 @@
 <div class="clearfix" id="add-conv-error-panel" style="display:none;">
 </div>
 <div class="wrapper-sm b-t b-light">
-	<h4 class="h4 text-md m-t-none m-b-none">Conversations</h4>
+	<h4 class="h4 text-sm m-t-none m-b-none">Conversations</h4>
 </div>
-<ul class="list-group m-b-none" id="all_conv_panel">
+<ul class="list-group m-b-none text-base" id="all_conv_panel">
 	
 </ul>
 <div class="clearfix" id="conv-error-panel" style="display:none;">
@@ -79,7 +79,10 @@
 </script>
 
 <script id="helpscout-message-template" type="text/html">
-	<div class="modal fade message-modal" id="helpscout_messageModal" style="width:600px; left:50%">
+<div class="modal fade message-modal" id="helpscout_messageModal" aria-hidden="false" style="display: block; padding-left: 17px;">
+<div class="modal-backdrop fade" style="height: auto;"></div> 
+ <div class="modal-dialog"> 
+  <div class="modal-content"> 
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
 			{{#if_equals headline "Add Conversation to HelpScout"}}
@@ -160,6 +163,8 @@
 	        <span class="save-status"></span>
 	    </div>
 	</div>
+	</div> 
+</div>
 </script>
 <script id="helpscout-error-template" type="text/html">
 	<div class="wrapper-sm text-base" style="line-height:160%;">

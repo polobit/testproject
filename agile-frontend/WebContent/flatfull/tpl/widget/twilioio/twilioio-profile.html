@@ -18,7 +18,7 @@
 			{{/if_equals}}
 	{{/if_equals}}
 	</div>
-	<ul id="twilio-logs-panel" class="list-group m-b-none">
+	<ul id="twilio-logs-panel" class="list-group m-b-none text-base">
 		<li class="list-group-item r-none b-l-none b-r-none">
 			<center><img id="logs_load" src="img/ajax-loader-cursor.gif" class="m-t"></img></center>
 		</li>
@@ -146,7 +146,7 @@
 <button class="btn btn-sm btn-default" id="noty_twilio_voicemail" data-length="{{length}}" data-src="{{this.0.extension}}">Leave Voicemail</button>
 {{#ifCond length "greaterthan" 1}}
 <button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" onclick="voiceMailDropAction()" id="splitButtonVoicemail" ><span class="caret"></span></button>
-<ul class="dropdown-menu text-left">
+<ul class="dropdown-menu text-left text-base">
 {{#each this}}
 <li><a href="#" data-src="{{extension}}" class="voiceMailItem">{{name}}</a></li>
 {{/each}}

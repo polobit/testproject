@@ -22,20 +22,20 @@
 </div>
 <div class="" id="linkedin-error-panel" style="display:none;">
 </div>
-<ul class="nav nav-tabs" id="myTab">
+<ul class="nav nav-tabs text-base" id="myTab">
 	<li class="active" style="width:32%; margin-left: 2%; text-align: center;" align="center"><a data-toggle="tab" href="#experience" id="linkedin_experience"><h4>Work</h4><small></small></a></li>
 	<li style="width:32%; text-align: center;" align="center"><a data-toggle="tab" href="#updates" id="linkedin_update_tab"><h4>Activity</h4><small></small></a></li>
 	<li style="width:32%;text-align: center;" align="center"><a data-toggle="tab" href="#connections" id="linkedin_shared_connections"><h4>Shared</h4><small></small></a></li>
 </ul>
 <div class="tab-content" id="myTabContent">
 	<div id="experience" class="tab-pane fade active in">
-		<ul class="widget_tab_content" id="linkedin_experience_panel">
+		<ul class="widget_tab_content text-base" id="linkedin_experience_panel">
 						
 		</ul>
 	</div>
 	<div id="updates" class="tab-pane fade">
 		{{#if current_update}}
-			<ul class="widget_tab_content linkedin_current_activity" style="display:none">
+			<ul class="widget_tab_content linkedin_current_activity text-base" style="display:none">
 				<li >	
 					{{#is_link current_update}}
 	        			<a href="{{url}}" target="_blank" >{{name}}</a> shared a link {{show_link_in_statement current_update}}
@@ -45,13 +45,13 @@
 				</li>
 			</ul>
 		{{else}}
-			<ul class="widget_tab_content linkedin_current_activity" style="display:none">
+			<ul class="widget_tab_content linkedin_current_activity text-base" style="display:none">
 				<li>	
 					No updates available
 				</li>
 			</ul>
 		{{/if}}
-		<ul class="widget_tab_content collapse in"  id="linkedin_social_stream">
+		<ul class="widget_tab_content collapse in text-base"  id="linkedin_social_stream">
 					
 		</ul>
 		<div class="clearfix" id="status-error-panel" style="display:none;">
@@ -64,7 +64,7 @@
 		</div>
 	</div>
 	<div id="connections" class="tab-pane fade">
-		<ul class="widget_tab_content" id="linkedin_shared_panel">
+		<ul class="widget_tab_content text-base" id="linkedin_shared_panel">
 						
 		</ul>
 	</div>
@@ -97,7 +97,7 @@
 										{{/if}}
 									</p>
 									<small class="text-muted"><i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time></small>
-									<ul class="widget_tab_link">										
+									<ul class="widget_tab_link text-base">										
 										<li><a href="#share" rel="tooltip" title="Share activity in LinkedIn"><i class="linkedin_share icon-share" id="{{id}}"></i></a></li>
 									</ul>
 								</div>

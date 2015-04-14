@@ -10,9 +10,9 @@
 </a>
 <div class="clear">
 	{{#if user_info.name}}
-		<p class="text-cap text-base m-b-xs">{{user_info.name}}</p>
+		<a class="text-cap text-base m-b-xs">{{user_info.name}}</a>
 	{{else}}
-		<p class="text-cap text-base m-b-xs">{{user_info.email}}</p>
+		<a class="text-cap text-base m-b-xs">{{user_info.email}}</a>
 	{{/if}}
 </div>
 <div class="clearfix"><a  class="btn btn-xs btn-default" id="add_ticket">New Ticket</a></div>						
@@ -81,8 +81,10 @@
 </script>
 
 <script id="zendesk-message-template" type="text/html">
-	<!-- New (Note) Modal views -->
-	<div class="modal message-modal" id="zendesk_messageModal" style="width:400px; left:55%">
+<div class="modal fade message-modal" id="zendesk_messageModal" aria-hidden="false" style="display: block; padding-left: 17px;">
+<div class="modal-backdrop fade" style="height: auto;"></div> 
+ <div class="modal-dialog">
+ <div class="modal-content"> 
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
 			{{#if_equals headline "Add Ticket"}}
@@ -110,7 +112,7 @@
 	                <div class="control-group">
 	                    <label class="control-label"><b>Message: </b><span class="field_req">*</span></label>
 	                    <div class="controls">
-							<textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="message" style="max-width:500px;"></textarea>
+							<textarea rows="4" class="required span4 form-control" placeholder="Detailed Message" name="message" id="message" style="max-width:500px;"></textarea>
 	                    </div>
 	                </div>
 	            </fieldset>
@@ -120,17 +122,22 @@
 	        <a href="#" class="btn btn-sm btn-primary" id="send_request">Send</a>
 	        <span class="save-status"></span>
 	    </div>
-	</div>
+</div>
+</div>
+</div>
 </script>
 
 
 <script id="zendesk-ticket-show-template" type="text/html">
-	<div class="modal message-modal" id="zendesk_showModal" style="width:400px; left:55%">
+<div class="modal fade message-modal" aria-hidden="false" id="zendesk_showModal" style="display: block; padding-left: 17px;">
+<div class="modal-backdrop fade" style="height: auto;"></div> 
+ <div class="modal-dialog"> 
+  <div class="modal-content"> 
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
 			<h3><i class="icon-info-sign"></i> {{headline}}</h3>			
 	    </div>
-	    <div class="well m-b-none">
+	    <div class="modal-body"> 
 	        <table class="row-fluid table table-bordered m-b-xs word-break l-h-xs w-full" style="table-layout:fixed;">
 					
 						<tr><th class="p-xs">Ticket ID</th>
@@ -170,7 +177,10 @@
 						</tr>		
 			</table>
 	    </div>
-	</div>
+  <div class="modal-footer"></div> 
+</div>
+</div> 
+</div>
 </script>
 
 <script id="zendesk-error-template" type="text/html">

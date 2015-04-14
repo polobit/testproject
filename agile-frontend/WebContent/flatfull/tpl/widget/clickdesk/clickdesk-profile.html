@@ -17,7 +17,7 @@
 <script id="clickdesk-profile-template" type="text/html">
 <p class="wrapper-sm m-n text-base">Conversations and tickets related to {{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}</p>
 <div class="nav-tabs-alt">
-<ul class="nav nav-tabs clickdeskTab" id="myTab">
+<ul class="nav nav-tabs clickdeskTab text-base" id="myTab">
 	<li class="active text-center" style="width:48%; margin-left: 2%;" align="center"><a data-toggle="tab" href="#chats" id="clickdesk_chats"><h4 class="h4 text-base">Chats</h4><small></small></a></li>
 	<li class="text-center" style="width:48%;" align="center"><a data-toggle="tab" href="#c_tickets" id="clickdesk_tickets"><h4 class="h4 text-base">Tickets</h4><small></small></a></li>
 </ul>
@@ -98,12 +98,15 @@
 </script>
 
 <script id="clickdesk-show-chat-template" type="text/html">
-	<div class="modal fade message-modal" id="clickdesk_chat_showModal" style="width:400px; left:55%">
+<div class="modal fade message-modal" id="clickdesk_chat_showModal" aria-hidden="false" style="display: block; padding-left: 17px;">
+<div class="modal-backdrop fade" style="height: auto;"></div> 
+ <div class="modal-dialog"> 
+  <div class="modal-content"> 
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
 			<h3><i class="icon-info-sign"></i> Chat Transcript</h3>			
 	    </div>
-	    <div class="well m-b-none text-base">
+	    <div class="modal-body">
 	        <table class="row-fluid table table-bordered l-h-xs m-b-xs word-break w-full" style="table-layout:fixed;">
 						<tr><th class="p-xs">Visitor Name</th>
 							<td class="p-xs">{{name}}</td>
@@ -161,16 +164,22 @@
 						</tr>
 			</table>
 	    </div>
+	<div class="modal-footer"></div> 
 	</div>
+</div> 
+</div>
 </script>
 
 <script id="clickdesk-show-ticket-template" type="text/html">
-	<div class="modal fade message-modal" id="clickdesk_ticket_showModal" style="width:400px; left:55%">
+<div class="modal fade message-modal" id="clickdesk_ticket_showModal" aria-hidden="false" style="display: block; padding-left: 17px;">
+<div class="modal-backdrop fade" style="height: auto;"></div> 
+ <div class="modal-dialog"> 
+  <div class="modal-content"> 
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
 			<h3><i class="icon-info-sign"></i> Ticket</h3>			
 	    </div>
-	    <div class="well m-b-none text-base">
+	    <div class="modal-body">
 	        <table class="row-fluid table table-bordered m-b-xs word-break w-full l-h-xs" style="table-layout:fixed;">
 						<tr><th class="p-xs">From</th>
 							<td class="p-xs">{{from}}</td>
@@ -220,5 +229,8 @@
 						</tr>
 			</table>
 	    </div>
+	 <div class="modal-footer"></div> 
 	</div>
+</div> 
+</div>
 </script>

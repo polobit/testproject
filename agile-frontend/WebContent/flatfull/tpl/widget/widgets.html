@@ -22,7 +22,7 @@
                 {{/if_equals}}
         {{/if_equals}}
 			<div class="widget_header_icons pull-right text-base" style="display:none;">
-				<ul class="customWidgets">
+				<ul class="customWidgets text-base">
 					<li class="m-t-xs"><i id="{{remove_spaces name}}-move" class="text-muted c-p icon-cursor-move {{remove_spaces name}}-move"></i></li>
 					{{#if is_minimized}}
 						<li class="m-t-xs"><a href="#"><i widget="{{remove_spaces name}}" class="text-muted c-p widget-maximize fa fa-minus"></i></a></li>
@@ -93,7 +93,7 @@
 		</div>
 	</div>
 {{else}}
- <ul class="widget-sortable p-l-none m-n" id="widgets-model-list"></ul>
+ <ul class="widget-sortable p-l-none m-n text-base" id="widgets-model-list"></ul>
  <a class="btn btn-sm btn-primary pull-right" href='#add-widget'><i class="icon-plus-sign"></i>&nbsp;&nbsp;Manage widgets</a>
 {{/unless}}
 </script>

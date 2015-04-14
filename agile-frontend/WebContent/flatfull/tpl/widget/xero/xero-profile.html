@@ -61,7 +61,7 @@
 				<a data-toggle="tooltip" data-placement="top" title= "{{xeroTypeToolTip Type}}" class="c-p" href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/View.aspx?InvoiceID={{InvoiceID}}" target="_blank">{{InvoiceNumber}} {{xeroType Type}}</a>
 				</div>				
 				<div class="pull-right">{{CurrencyCode}} {{Total}}</div><br>
-				<div id="collapse-{{InvoiceID}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
+				<div id="collapse-{{InvoiceID}}" class="collapse text-sm" style="color: rgba(0, 0, 0, 0.5);">
 				</div>		
 				<div>
 					<div class="pull-left"><small><i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago text-muted" datetime="{{DueDate}}">{{DueDate}}</time></small></div>					
@@ -80,7 +80,7 @@
 				</div>
 				<div class="pull-right">{{invoice.Invoice.CurrencyCode}} {{invoice.Invoice.Total}}</div><br>
 				
-				<div id="collapse-{{invoice.Invoice.InvoiceID}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
+				<div id="collapse-{{invoice.Invoice.InvoiceID}}" class="collapse text-sm" style="color: rgba(0, 0, 0, 0.5);">
 				</div>		
 				<div>
 					<div class="pull-left"><small>Due <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago text-muted" datetime="{{invoice.Invoice.DueDate}}">{{invoice.Invoice.DueDate}}</time></small></div>					

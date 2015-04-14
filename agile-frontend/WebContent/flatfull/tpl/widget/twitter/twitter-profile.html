@@ -20,7 +20,7 @@
 <div id="twitter-error-panel" style="display:none;" >
 </div>
 <div class="nav-tabs-alt">
-	<ul class="nav nav-tabs twitter-tabs" id="myTab">
+	<ul class="nav nav-tabs text-base twitter-tabs" id="myTab">
 		<li class="text-center m-l-xs active" style="width:32%;" align="center"><a data-toggle="tab" class="p-l-none p-r-none" href="#tweets"><h4 class="text-base m-n">{{tweet_count}}</h4><small>Tweets</small></a></li>
 		<li class="text-center" style="width:32%;" align="center"><a data-toggle="tab" class="p-l-none p-r-none" href="#followers" id="twitter_followers"><h4 class="text-base m-n">{{num_connections}}</h4><small>Followers</small></a></li>
 		<li class="text-center" style="width:32%;" align="center"><a data-toggle="tab" class="p-l-none p-r-none" href="#following" id="twitter_following"><h4 class="text-base m-n">{{friends_count}}</h4><small>Following</small></a></li>
@@ -29,13 +29,13 @@
 <div class="tab-content text-sm" id="myTabContent">
 	<div id="tweets" class="tab-pane fade active in">
 		{{#if current_update}}
-			<ul class="list-group"  id="twitter_current_activity" style="display:none;">
+			<ul class="list-group text-base"  id="twitter_current_activity" style="display:none;">
 				<li class="list-group-item r-none b-l-none b-r-none">	
 					{{show_link_in_statement current_update}}
 				</li>
 			</ul>
 		{{else}}
-			<ul class="p-l-sm"  id="twitter_current_activity" style="display:none;">
+			<ul class="p-l-sm text-base"  id="twitter_current_activity" style="display:none;">
 				<li class="list-group-item r-none b-l-none b-r-none">	
 					{{#if_equals tweet_count "0"}}
 						{{name}} hasn't tweeted yet
@@ -45,7 +45,7 @@
 				</li>
 			</ul>
 		{{/if}}
-		<ul class="p-l-none"  id="twitter_social_stream">
+		<ul class="p-l-none text-base"  id="twitter_social_stream">
 					
 		</ul>
 		<div class="clearfix" id="tweet-error-panel" style="display:none;">
@@ -57,7 +57,7 @@
 		</div>
 	</div>
 	<div id="followers" class="tab-pane fade">
-		<ul class="wrapper-sm p-l-md p-b-none" id="twitter_follower_panel">
+		<ul class="wrapper-sm p-l-md p-b-none text-base" id="twitter_follower_panel">
 						
 		</ul>
 		<div id="follower-error-panel" style="display:none;" >
@@ -68,7 +68,7 @@
 		</div>
 	</div>
 	<div id="following" class="tab-pane fade">
-		<ul class="wrapper-sm p-l-md p-b-none" id="twitter_following_panel">
+		<ul class="wrapper-sm p-l-md p-b-none text-base" id="twitter_following_panel">
 			
 		</ul>
 		<div id="following-error-panel" style="display:none;" >
@@ -82,8 +82,10 @@
 </script>
 
 <script id="twitter-message-template" type="text/html">
-	<!-- New (Note) Modal views -->
-	<div class="modal fade message-modal word-break" id="twitter_messageModal" style="width:400px; left:55%;">
+<div class="modal fade message-modal word-break" id="twitter_messageModal" aria-hidden="false" style="display: block; padding-left: 17px;">
+<div class="modal-backdrop fade" style="height: auto;"></div> 
+ <div class="modal-dialog"> 
+  <div class="modal-content"> 
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
 			{{#if_equals headline "Direct Message"}}
@@ -114,12 +116,14 @@
 	            </fieldset>
 	        </form>
 	    </div>
-	    <div class="modal-footer">
+	</div>
+	<div class="modal-footer" style="background-color:#fff;">
 	        <a href="#" class="btn btn-sm btn-primary" id="send_request">Send</a>
 	    </div>
-	</div>
+</div>
+</div>
 </script>
-<!-- End of Modal views -->
+
 <script id="twitter-update-stream-template" type="text/html">
 {{#if this.length}}	
 	<div id="twitter_update">
@@ -171,7 +175,10 @@
 </script>
 
 <script id="twitter-profile-add-template" type="text/html">
-<div id="twitter-image-save-modal" class="modal fade in" >
+<div id="twitter-image-save-modal" class="modal fade" aria-hidden="false" style="display: block; padding-left: 17px;" >
+<div class="modal-backdrop fade" style="height: auto;"></div> 
+ <div class="modal-dialog"> 
+  <div class="modal-content"> 
 	<div class="modal-header" >
     	<a href="#" data-dismiss="modal" class="close">&times;</a>
 		<h3>Add Profile</h3></div>
@@ -187,6 +194,8 @@
 		<a href="#" class="btn btn-sm btn-default close save-twitter-profile" resp="no">No</a>
 		<a href="#" class="btn btn-sm btn-primary save-twitter-profile" resp="yes">Yes</a>
 	</div>
+</div>
+</div>
 </div>
 </script>
 
