@@ -31,7 +31,7 @@ function loadWidgets(el, contact)
 			sortKey : 'position', modelData : data, postRenderCallback : function(widgets_el)
 			{
 
-				head.load("css/misc/agile-widgets.css", function()
+				head.load(FLAT_FULL_UI + "css/misc/agile-widgets.css", function()
 				{
 					// If scripts aren't loaded earlier, setup is initialized
 					if (is_widget_view_new)
