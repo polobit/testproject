@@ -12,7 +12,7 @@
 		$(this).css("display", "none");
 		el.find(".attachment-document-select").css("display", "inline");
 		var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}'>{{name}}</option>";
-	    fillSelect('#attachment-select','core/api/documents/', 'documents', function fillNew()
+	    fillSelect('attachment-select','core/api/documents/', 'documents', function fillNew()
 		{
 	    	
 		}, optionsTemplate, false, el); 
