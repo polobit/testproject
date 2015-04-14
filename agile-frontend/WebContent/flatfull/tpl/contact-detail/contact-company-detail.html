@@ -7,8 +7,8 @@
 <div class="row-row">
 <div class="wrapper">
 				<div class="text-center pos-rlt companyLeftView">
-					<div>
-						<div>
+				
+						
 							<form id="contact-container">
 								<a href="#" class="tooltip_info" data-placement="top"
 									data-toggle="tooltip"
@@ -40,8 +40,8 @@
 								</ul>
 </div>
 </div>
-						</div>
-						<div>
+						
+					
 							<div class="text-ellipsis  w-full  m-t-xs  h3 font-thin custom-color">
 
 								{{getPropertyValue properties "name"}}
@@ -73,13 +73,13 @@
 									{{/property_is_exists}}
 								</div>
 							</div>
-						</div>
-						<div>
-							<div class="btn-group" style='position: relative'>
+					
+		
+							
 								<div id='star' style='padding-bottom: 13px; width: auto !important'></div>
 								
-							</div>
-						</div>
+				
+					
 
 					</div>
 					<!-- Owner block -->
@@ -88,7 +88,7 @@
 
 {{#property_is_exists "phone" properties}}
 			<div class="widget_container" id="{{name}}-container">
-				{{else}} 
+				 {{else}} 
 					{{#property_is_exists "email" properties}}
 						<div class="widget_container" id="{{name}}-container">
 						{{else}} 
@@ -98,7 +98,7 @@
 										{{#getContactCustomProperties properties}}
 											<div class="widget_container" id="{{name}}-container">
 											{{else}}
-												<div class="widget_container hide" id="{{name}}-container">
+												<div class="widget_container hide" id="{{name}}-container"> 
 										{{/getContactCustomProperties }}
 							{{/property_is_exists}} 
 					{{/property_is_exists}}
@@ -112,7 +112,7 @@
 						</div>
 						<!-- <div id="qrcode"><img src="img/1-0.gif"></div> -->
 						<div class="clearfix"></div>
-						<div style='word-wrap: break-word;'>
+						
 
 
 
@@ -120,14 +120,10 @@
 <div class="m-t-sm text-left"><small class="text-xs text-muted">Contact Info</small></div>
 							<div class="text-left">
 								{{#multiple_Property_Element "phone" properties}}
-								<div class="hide"
-									style="display: inline-block; vertical-align: top; text-align: right"
-									class="span4">
-									<span><strong style="color: gray">Phone</strong><span>
-								</div>
+								
 								<div class="custom-color text-sm">
 									{{#each this}}
-									<div>
+									
                                         <a href='#' class="contact-make-sip-call" style="display:none;"
                                            phone="{{value}}">
                                            {{value}}
@@ -138,7 +134,7 @@
                                         </a>
 										<a href="tel:{{value}}" class="contact-make-call">{{value}}</a> 
                                         {{#if subtype}}<span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
-									</div>
+									
 									{{/each}}
 								</div>
 								{{/multiple_Property_Element}}
@@ -147,24 +143,19 @@
  							{{#property_is_exists "email" properties}}
 							<div class="text-left custom-color">
 								{{#multiple_Property_Element "email" properties}}
-								<div class="hide"
-									style="display: inline-block; vertical-align: top; text-align: right"
-									class="span4">
-									<span><strong style="color: gray">Email</strong><span>
-								</div>
+								
 								{{#property_is_exists "phone" ../properties}}
-								<div
-									class="contact-detail-entity-list">
+								
 									{{else}}
 <div class="m-t-sm text-left"><small class="text-xs text-muted">Contact Info</small></div>
-									<div>
+									
 										{{/property_is_exists}} 
 									{{#each this}}
 										<div>
 											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
 										</div>
 									{{/each}}
-									</div>
+									
 									{{/multiple_Property_Element}}
 								</div>
 								{{/property_is_exists}}
@@ -198,7 +189,7 @@
  									{{#property_is_exists "address" properties}}
 <div class="m-t-sm text-left"><small class="text-xs text-muted">Location</small></div>
 										<div class="pull-left">
-											{{#address_Element properties}}{{/address_Element}}</div>
+											{{#address_Element properties}}{{/address_Element}}</div></div>
 
 										<div class="pull-left">
 											<div id="map" style="width: auto; height: 200px; display: none; margin: 10px">
@@ -213,7 +204,7 @@
 
 
 
-					<br />
+				
 					<div class="hide">
 <div class="change-owner-succes"></div>
      <span title="Owner" class="contact-owner-view">
@@ -236,15 +227,10 @@
     </span>
 					</div>
 				</div>
-
-			</div>
-		</div>
-		</div>
-		</div>
-		</div>
-		</div>
-       </div>
-		
+				</div>
+				</div>
+				</div>
+				</div>
 		<div class="col  bg-white">
 <div class="vbox">
 <div class="row-row">
@@ -267,136 +253,14 @@
 	</div>
 	</div>
 	</div>
-	</div>
-	</div>
+	
 	<!-- Contact Details -->
 	<div class="col bg-white hide">
 
-
-		{{#property_is_exists "phone" properties}}
-			<div class="widget_container" id="{{name}}-container">
-				{{else}} 
-					{{#property_is_exists "email" properties}}
-						<div class="widget_container" id="{{name}}-container">
-						{{else}} 
-							{{#property_is_exists "address" properties}}
-									<div class="widget_container" id="{{name}}-container">
-									{{else}}
-										{{#getContactCustomProperties properties}}
-											<div class="widget_container" id="{{name}}-container">
-											{{else}}
-												<div class="widget_container hide" id="{{name}}-container">
-										{{/getContactCustomProperties }}
-							{{/property_is_exists}} 
-					{{/property_is_exists}}
-		{{/property_is_exists}}
-						<div class="widget_header">
-							<div class="pull-left"
-								style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: 18em">
-								<i class="icon-user "></i> <strong>Contact
-									{{getPropertyValue properties "first_name"}}</strong>
-							</div>
-						</div>
-						<!-- <div id="qrcode"><img src="img/1-0.gif"></div> -->
-						<div class="clearfix"></div>
-						<div style='word-wrap: break-word; padding-top: 10px'>
-							{{#property_is_exists "phone" properties}}
-							<div class="pull-left row-fluid" style="padding-bottom: 5px;">
-								{{#multiple_Property_Element "phone" properties}}
-								<div
-									style="display: inline-block; vertical-align: top; text-align: right"
-									class="span4">
-									<span><strong style="color: gray">Phone</strong><span>
-								</div>
-								<div
-									style="padding-right: 10px; display: inline-block; padding-bottom: 2px; line-height: 20px"
-									class="span8">
-									{{#each this}}
-									<div>
-                                        <a href='#' class="contact-make-sip-call" style="display:none;"
-                                           phone="{{value}}">
-                                           {{value}}
-                                        </a>            
-                                        <a href='#' class="contact-make-twilio-call" style="display:none;"                                           
-                                           phone="{{value}}">
-                                           {{value}}
-                                        </a>
-										<a href="tel:{{value}}" class="contact-make-call">{{value}}</a> 
-                                        {{#if subtype}}<span class="label">{{subtype}}</span> {{/if}}
-									</div>
-									{{/each}}
-								</div>
-								{{/multiple_Property_Element}}
-							</div>
-							{{/property_is_exists}}
- 							{{#property_is_exists "email" properties}}
-							<div class="pull-left row-fluid" style="margin-bottom: 5px;">
-								{{#multiple_Property_Element "email" properties}}
-								<div
-									style="display: inline-block; vertical-align: top; text-align: right"
-									class="span4">
-									<span><strong style="color: gray">Email</strong><span>
-								</div>
-								{{#property_is_exists "phone" ../properties}}
-								<div
-									class="span8 contact-detail-entity-list" style="padding-right:0px!important;">
-									{{else}}
-									<div
-										style="padding-right: 10px; display: inline-block; padding-bottom: 2px;"
-										class="span8">
-										{{/property_is_exists}} 
-									{{#each this}}
-										<div>
-											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label">{{subtype}}</span> {{/if}}
-										</div>
-									{{/each}}
-									</div>
-									{{/multiple_Property_Element}}
-								</div>
-								{{/property_is_exists}} <div class="custom-data"> {{#getContactCustomPropertiesExclusively properties}}
-								<div class="pull-left row-fluid">
-									{{#each_with_index this}}
-									<div class="pull-left row-fluid">
-										<div class="span4" style="padding: 4px 0px 5px 2px;text-align:right;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;">
-											<span><strong style="color: gray" title="{{name}}">{{name}}</strong><span>
-										</div>
-										{{#if_equals index ../this.length}}
-											<div class="span8 text-muted"
-												style="padding:4px 10px 5px 2px; display: inline-block;margin-bottom:5px; border-top: 1px solid whitesmoke;">
-											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" datetime="{{epochToHumanDate "" value}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</div>
-										{{else}}
-											<div class="span8text-muted"
-												style="padding:4px 10px 5px 2px; display: inline-block; border-top: 1px solid whitesmoke;">
-											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" datetime="{{epochToHumanDate "" value}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</div>
-										{{/if_equals}}
-										</div>
-										{{/each_with_index}}
-									</div>
-									{{/getContactCustomPropertiesExclusively}}
-									</div>
- 									{{#property_is_exists "address" properties}}
-										<div class="pull-left row-fluid " style="padding-bottom:5px;margin-top:0px">
-											{{#address_Element properties}}{{/address_Element}}</div>
-
-										<div class="pull-left row-fluid">
-											<div id="map" style="width: auto; height: 200px; display: none; margin: 10px">
-											</div>
-										</div>
-									{{/property_is_exists}}
-
-								</div>
-								<div class="clearfix"></div>
-							</div>
-							</div>
-
-
-
-
-
-							<div id="widgets"></div>
+<div id="widgets"></div>
 						</div>
 					</div>
-
+</div>
 					</script>
 					
 <script id="company-contacts-model-template" type="text/html">

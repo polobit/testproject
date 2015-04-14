@@ -24,6 +24,9 @@ $('#app-aside-folded').on('click', function(e) {
 		$("#app-aside-folded i").addClass("fa-dedent");
 		$(".navi > ul > li#documentsmenu > a span").text("Documents");
 	}
+	
+	contactInnerTabsInvoke();
+	
 	});
 	
 	

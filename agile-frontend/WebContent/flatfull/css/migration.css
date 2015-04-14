@@ -1033,7 +1033,7 @@ font-size:16px;
 #contactDetailsTab li a
 {
 	margin-right:0px;
-	padding:10px 11px;
+	padding:10px;
 }
 
 
@@ -1147,4 +1147,3 @@ background:#f6f8f8;
 .header-min-width {
 	min-width:90px;
 }
-

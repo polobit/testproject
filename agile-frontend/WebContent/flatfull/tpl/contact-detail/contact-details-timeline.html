@@ -210,7 +210,7 @@
 
         {{#if_entity "task"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="glyphicon glyphicon-tasks"></i></a></span> Task</h3></div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Task Added</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <!-- <div class="caption" style="margin-top:-8px"><i class="{{icons type}}"></i> ({{type}})</div> -->         
@@ -220,7 +220,7 @@
 
         {{#if_entity "contact_entity"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class=""><span><a class="no-line"><i class="icon-tasks"></i></a></span> Created</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Created</h3></div>
             <div class="date" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}">{{epochToTaskDate created_time}}</div>
             <!-- <div class="body" style="padding:5px">
                 <div class="text" style="color: #333333" >{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}</div>
@@ -230,7 +230,7 @@
 	  {{#if_entity "tag"}}
 			<div id="{{remove_spaces tag}}-tag-timeline-element"></div>
             <div class="timestamp">{{createdTime}}</div>
-            <div class=""><span><a class="no-line"><i class="glyphicon glyphicon-tag"></i></a></span> Tag Added - {{tag}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-tag"></i></a></span> Tag Added</h3> - {{tag}}</div>
             <div class="date" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}">{{epochToTaskDate createdTime}}</div>
             <!-- <div class="body">
                 <div class="text" style="color: #333333" >{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
@@ -250,7 +250,7 @@
 
         {{#if_entity "deal"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-money"></i></a></span> Deal</h3></div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-money"></i></a></span> Deal Added</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <div class="text" style="color: #333333">{{name}}</div>
@@ -261,7 +261,7 @@
 		{{#if_entity "case"}}
 			
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-folder-close"></i></a></span> Case</h3></div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-folder-close"></i></a></span> Case Added</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <div class="text" style="color: #333333">{{title}}</div>

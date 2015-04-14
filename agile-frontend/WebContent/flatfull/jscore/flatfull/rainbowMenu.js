@@ -155,12 +155,26 @@ $.fn.removeClassPrefix = function(prefix) {
   });
 
 
-var contDynamicWidth = $("#contacts-inner-tabs").width() - 60;
-
-$("#contactDetailsTab").width(contDynamicWidth);
-
-
+ 
+	  
+	  contactInnerTabsInvoke();
+  
+       
 
 })();
+
+function contactInnerTabsInvoke() {
+	
+	if ( ($("#contacts-inner-tabs .tab-container").width()) >= 689 ) {
+		    $("#prev,#next").css("display","none");
+			$("#contactDetailsTab").css('width','100%');
+			
+	  }
+	  else 
+	  {
+		  $("#prev,#next").css("display","block");
+		  $("#contactDetailsTab").removeAttr('style');
+	   }
+	 }
 
 	
