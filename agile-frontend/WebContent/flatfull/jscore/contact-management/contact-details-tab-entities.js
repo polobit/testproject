@@ -475,3 +475,4 @@ function fetch_mailserverurl_from_cookie(model)
 	}
 	return cookie_info;
 }
+	
