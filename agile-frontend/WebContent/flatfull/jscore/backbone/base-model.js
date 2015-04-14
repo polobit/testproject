@@ -534,13 +534,14 @@ var Base_Model_View = Backbone.View
 				 * is called by sending el(current view html element) as
 				 * parameters
 				 */
-				hideTransitionBar();
+				
 				if (callback && typeof (callback) === "function") {
 					
 					// execute the callback, passing parameters as necessary
 					callback($(this.el),this.model.toJSON());
 				}
 
+				hideTransitionBar();
 				// If isNew is not true, then serialize the form data
 				if (this.options.isNew != true) {
 					// If el have more than 1 form de serialize all forms
