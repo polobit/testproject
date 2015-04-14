@@ -6,7 +6,7 @@ var timeline_entity_loader = {
 		MONTH_YEARS = [];
 		var _this = this;
 		// Load plugins for timeline
-		head.load("/lib/isotope.pkgd.js", LIB_PATH + "lib/jquery.event.resize.js", "css/misc/agile-timline.css", function()
+		head.load(FLAT_FULL_PATH + "lib/isotope.pkgd.js", FLAT_FULL_PATH + "lib/jquery.event.resize.js", FLAT_FULL_PATH + "css/misc/agile-timline.css", function()
 		{
 			// customize_isotope()
 			configure_timeline();
