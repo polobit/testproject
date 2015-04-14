@@ -166,7 +166,7 @@ function loadWidgets(el, contact)
 
 function process_url(url)
 {
-	url = FLAT_FULL_UI + url;
+	return url = FLAT_FULL_UI + url;
 }
 
 /**
