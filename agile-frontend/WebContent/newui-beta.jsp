@@ -21,7 +21,7 @@
 				<img src="img/new-ui-terms.png" alt="">
 			</div>
 			<div class="pull-left" style="width: calc(100% - 150px);/* text-align: justify; */">
-				<p>You may try out the new user interface while it is&nbsp;undergoing improvements. However, there may be some usability or functionality issues, and you are advised not to use it for any critical operations.&nbsp;Your suggestions are welcome.</p>&nbsp;
+				<p>You may try out the new user interface while it is&nbsp;undergoing improvements. However, there may be some usability or functionality issues, and you are advised not to use it for any critical operations.&nbsp;We appreciate for your time and welcome your feedback/suggestions.</p>&nbsp;
 			</div>
 			<div class="clearfix"></div>
 			<div align="right">
