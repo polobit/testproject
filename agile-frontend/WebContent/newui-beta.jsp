@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Agile CRM</title>
-<link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="/css/bootstrap-blue.min.css">
 </head>
 <body style="background: url(&quot;../img/multilogin-bg.png&quot;) repeat scroll 0 0;overflow-x: hidden;">
 <div class="row">
