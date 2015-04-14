@@ -1,0 +1,413 @@
+<script id="task-detail-template" type="text/html">
+<div class="row">
+       <div class="col-md-12">
+       <div class="b-b m-b-md">
+            <div class="m-t-md">
+			<div class="row">
+			<div class="col-md-12">
+                 <div class="pull-left taskDetail-text"> 
+                    <div class="text-cap m-t-none text-xlg">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div>
+                  </div>
+					<span class="label bg-light dk text-tiny m-t-sm inline-block m-l-sm">{{task_property type}}</span>                  
+                    {{#if_not_equals priority_type "NORMAL" }}
+                   <span class="label label-{{task_label_color priority_type}} inline-block m-l-xs">{{ucfirst priority_type}}</span>
+                         {{/if_not_equals}}
+                 	<!--  starting rating,edit,owner -->
+
+					<div class="btn-group right">
+					   <a class="btn btn-sm btn-default" href="javascript:void(0)" data="{{id}}" id="task_edit" ><i class="icon-edit"></i> Edit</a>
+                        <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                    	
+								<ul class="dropdown-menu pull-right" role="menu">
+									<li><a href="#new-task-modal"  data-toggle="modal"><i class="icon-file"></i>Add Note</a></li>
+                                    
+									<li><a href='javascript:void(0)'  data="{{id}}" class ="delete_task"><i	class="icon-trash"></i> Delete</a></li>
+								</ul>
+					 </div>
+					 </div>
+                 </div>
+             </div>
+            <!---------- end of row ------------>
+
+
+  <!--------- task status ---------------->
+
+<div class="row">
+<div class="col-md-10" >
+{{#if_equals "IN_PROGRESS" status}}
+<div style="width:230px">
+<div class="pull-left text-cap w-half">{{displayTaskStatus status}} ({{progress}}%)</div>
+ <div class="pull-right w-half text-right"><time datetime="{{epochToHumanDate "dd mmm yyyy" due}}">(Due {{epochToHumanDate "dd mmm yyyy" due}})</time></div>
+<div class="clearfix"></div>
+<div   style="height:5px;" class="progress progress-info w-full">
+          <div class="bar" style="width: {{progress}}%;"></div>
+     </div>
+</div>
+{{/if_equals}}
+
+{{#if_equals "COMPLETED" status}}
+<span class="text-cap">{{displayTaskStatus status}}
+{{#if task_completed_time}}<time datetime="{{epochToHumanDate "dd mmm yyyy" task_completed_time}}">({{epochToHumanDate "dd mmm yyyy" task_completed_time}})</time>{{/if}}
+</span>
+
+{{/if_equals}}
+
+{{#if_equals "YET_TO_START" status}}
+<span class="text-cap">{{displayTaskStatus status}}
+<time datetime="{{epochToHumanDate "dd mmm yyyy" due}}">(Due {{epochToHumanDate "dd mmm yyyy" due}})</time>
+</span>
+{{/if_equals}}
+</div>
+<div class="col-md-2">
+<div class="pull-right pos-rlt w-full">
+<div class="contact-owner-position pos-t-0">
+<div class="change-owner-succes"></div>
+  <span title="Owner" class="contact-owner-view">
+      	<span class="contact-owner" id="change-owner-element">
+        	<span class="contact-owner-text">Owner:&nbsp;&nbsp;</span>
+			{{#if taskOwner}}
+        	<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
+			{{else}}
+			<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
+            <span class="task-owner-add text-sm"><a style="cursor:pointer;">Assign Owner</a></span>
+ 			{{/if}}
+        	<span id="task-owner" data={{taskOwner.id}} class="task-owner-name contact-owner-name">{{taskOwner.name}}</span>
+        
+        	{{#canEditContact taskOwner.id}}
+        	<div class="btn-group v-middle" id="change-task-owner-ul" style="display: none">
+        		 <a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
+        		 <ul id='task-detail-owner' class="dropdown-menu pull-right"></ul>
+        	</div> 
+			{{/canEditContact}}
+       </span>
+    </span>
+</div>
+</div>
+</div>
+</div>
+
+<div class="row  p-b m-t-sm">
+<div class="col-md-12" id="task-contact-img">
+        	{{#each contacts}}
+        		{{#if_contact_type "PERSON"}}
+        			<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail img-inital m-b-none thumb-sm inline" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        		{{/if_contact_type}}
+				{{#if_contact_type "COMPANY"}}
+        			<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail m-b-none" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        		{{/if_contact_type}}
+        	{{/each}}
+</div>
+</div> 
+</div>
+  </div>
+</div>
+
+		<div class="row">
+		<!--  starting time line view -->
+       <!-- ending of tabs --->
+		<div class="col-md-9">
+			<ul class="nav nav-tabs m-b-md" id="taskDetailsTab">
+                <li  class="active"><a data-toggle="tab" href="#activity">Activity</a></li>
+				<li><a data-toggle="tab" href="#notes">Notes</a></li>
+				<li><a data-toggle="tab" href="#contacts">Related</a></li>
+			</ul>
+           
+			<div class="tab-content" id="task_tab_detail">
+                <div class="tab-pane active" id="activity"><img src="img/21-0.gif"></img></div>
+				<div class="tab-pane " id="contacts"><img src="img/21-0.gif"></img></div>
+				<div class="tab-pane" id="notes"><img src="img/21-0.gif"></img></div>
+			</div>
+       </div>
+    <!-- ending of tabs --->
+		</div>
+	<!--  ending timeline view -->
+
+	</script>
+
+<script id="task-related-collection-template" type="text/html">
+{{#if this.length}}
+	<div style='height:30px'>
+		<a href="#" class="task-add-contact btn btn-sm btn-default pos-rlt m-b-sm right">
+			<span><i class="icon-plus-sign"></i></span> Add Contact
+		</a>
+	</div>
+	<br/>
+			<table  class="table table-striped agile-ellipsis-dynamic onlySorting r-5x overflow-scroll m-b-none b " style=" border-collapse: separate;">
+				<colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup>
+				<thead>
+					<tr><th></th>
+						<th>Name</th>
+						<th>Work</th>
+						<th>Tags</th>
+						<th>Lead Score</th>
+					</tr>
+				</thead>
+				<tbody id="task-related-model-list" class="task-related-model-list agile-edit-row overflow-scroll"
+					route="contact/" >
+				</tbody>
+			</table>
+
+		{{else}}
+			<div class="alert-info alert">
+            	<div class="slate-content">
+                	<div class="box-left pull-left m-r-md">
+                    	<img alt="Clipboard" src="/img/clipboard.png">
+                	</div>
+                	<div class="box-right pull-left">
+                    	<h4 class="m-t-none">Task is not associated with any person/contact. </h4>
+                    	<div class="text">
+							All Contacts which are related to this task are shown here.
+							<br/>
+							<a href="#" class="task-add-contact btn btn-default btn-sm left m-t-xs">
+								<i class="icon-plus-sign"></i> Add Contact
+							</a>
+                    	</div>
+                	</div>
+					<div class="clear-fix">
+					</div>
+            	</div>
+        	</div>
+		{{/if}}
+</script>
+
+<script id="task-related-model-template" type="text/html">
+	<td></td>
+	<td class="data" data="{{id}} no-wrap">
+    	<div class="inline p-r-sm h-auto">
+          {{#if_contact_type "PERSON"}}
+        	<img class="thumbnail img-inital m-b-none inline thumb-sm" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+        		
+             <div class="h-auto inline-block v-top text-ellipsis" style="width:12em;">
+        		<b>	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </b>
+        		<br />
+        		{{getPropertyValue properties "email"}}
+    	</div>
+          {{/if_contact_type}}
+				{{#if_contact_type "COMPANY"}}
+        	 <img class="thumbnail m-b-none" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/>
+           <div class="h-auto inline-block v-top text-ellipsis" style="width:12em;">
+        		<b>{{getPropertyValue properties "name"}}
+        	
+    	</div>
+           
+        		{{/if_contact_type}}
+    	</div>
+    	
+	</td>
+	<td><div class="h-auto inline-block v-top text-ellipsis" style="width:8em;">{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}</div>
+	</td>
+	<td> 
+<div class="ellipsis-multiline l-h word-break-keep">
+	{{#each tags}}
+    	<span class="label bg-light dk text-tiny">{{this}}</span>
+    {{/each}}
+</div>
+	</td>
+	<td style="width:6em;"><div>{{lead_score}}</div></td>
+</script>
+
+
+
+<script id="task-related-activity-collection-template" type="text/html">
+{{#unless this.length}}
+        <div class="alert-info alert">
+            <div class="slate-content">
+                <div class="box-left pull-left m-r-md">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right pull-left">
+                    <h4 class="m-t-none">No Activity Found.</h4>
+                </div>
+				<div class="clearfix">
+				</div>
+            </div>
+        </div>
+ {{/unless}}
+
+{{#if this.length}}
+<div class="page-header m-t-none p-b-none b-b-none"></div>
+	<ul id="task-related-activity-model-list" class="ativity-block-ul m-none p-n"></ul>
+{{/if}}
+</script>
+
+<script id="task-related-activity-model-template" type="text/html">
+<div class="activity block">
+<div class="well">
+	<span class="activity-block-owner thumb avatar">
+         {{#if user}}
+			{{#if userPic}}
+				<img class="user-img thumbnail m-b-none thumb-sm"  alt="" src="{{userPic}}" >
+			{{else}}
+				<img class="user-img thumbnail m-b-none thumb-sm" alt="" src="{{defaultGravatarurl 40}}" >
+			{{/if}}
+		{{else}}
+			<img class="user-img thumbnail m-b-none thumb-sm"  alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
+		{{/if}}
+
+     <span class="owner-name">{{user.name}}</span>
+
+	</span>
+	<h4 class="m-t-none">{{get_normal_activity_type activity_type}}</h4>
+
+
+   {{#if_equals "TASK_EDIT" activity_type}}
+	<div class="bg-transparent b-n m-t-sm">
+         {{displayActivityFieldText custom3}} updated.
+	</div>	
+     {{/if_equals}}
+
+ {{#if_equals "TASK_ADD" activity_type}}
+	<div class="bg-transparent b-n m-t-sm">
+         Task created for user {{ucfirst custom1}}.
+	</div>	
+     {{/if_equals}}
+
+ {{#if_equals "TASK_PROGRESS_CHANGE" activity_type}}
+	<div class="bg-transparent b-n m-t-sm">
+         Task progress changed from {{custom2}}% to {{custom1}}%.
+	</div>	
+     {{/if_equals}}
+
+ {{#if_equals "TASK_OWNER_CHANGE" activity_type}}
+	<div class="bg-transparent b-n m-t-sm">
+      Task  owner changed to {{custom1}}.
+	</div>	
+     {{/if_equals}}
+
+ {{#if_equals "TASK_STATUS_CHANGE" activity_type}}
+	<div class="bg-transparent b-n m-t-sm">
+        Status changed from {{displayTaskStatus custom2}} to {{displayTaskStatus custom1}}.
+	</div>	
+     {{/if_equals}}
+
+
+ {{#if_equals "TASK_COMPLETED" activity_type}}
+	<div class="bg-transparent b-n m-t-sm">
+        Task status changed to completed.
+	</div>	
+     {{/if_equals}}
+
+ {{#if_equals "TASK_DELETE" activity_type}}
+	<div class="bg-transparent b-n m-t-sm">
+        Task is deleted
+	</div>	
+     {{/if_equals}}
+
+
+ {{#if_equals "TASK_RELATED_CONTACTS" activity_type}}
+	<div class="bg-transparent b-n m-t-sm">
+    {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}{{/if}} 
+    {{#if_equals "added_relatedcontacts" custom3}}
+       attached to
+      {{else}}
+        removed from
+     {{/if_equals}}
+       the task
+    </div>	
+  {{/if_equals}}
+
+	<div class="clear">
+		<small class="edit-hover m-r-sm text-muted"> 
+			<i class="fa fa-clock-o m-r-xs"></i>
+			<time class="border-highlight text-sm"  datetime="{{epochToHumanDate "" time}}" >{{epochToHumanDate "dd mmm yyyy" time}}</time>
+		</small>
+	</div>
+
+</div>
+</script>
+
+<!-- New (Note) Modal views -->
+<div class="modal  fade tasknoteupdatemodal"
+	id="tasknoteupdatemodal">
+	<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">
+			<i class="icon-plus-sign"></i>&nbsp;Edit Note
+		</h3>
+	</div>
+	<div class="modal-body">
+		<form id="tasknoteUpdateForm" name="tasknoteUpdateForm" method="post">
+			<fieldset>
+
+				<input name="id" id="id" type="hidden" value="{{id}}" /> <input
+					name="created_time" id="created_time" type="hidden"
+					value="{{created_time}}" />
+
+				<div class="control-group form-group">
+					<label class="control-label"><b>Subject</b> <span
+						class="field_req">*</span></label>
+					<div class="controls">
+						<input type="text" placeholder="About" name="subject" id="subject"
+							class="required form-control" />
+					</div>
+				</div>
+				
+					<div class="control-group form-group">
+						<label class="control-label"><b>Description</b></label>
+						<div class="controls">
+							<textarea rows="3" class="w-half form-control" placeholder="Detailed Note"
+								name="description" id="description"></textarea>
+						</div>
+					</div>
+				
+
+			</fieldset>
+		</form>
+	</div>
+
+	<div class="modal-footer">
+		<a href="#" class="btn btn-sm btn-primary" id="task_note_update">Save </a> <span
+			class="save-status"></span>
+	</div>
+</div>
+	</div>
+	</div>
+<!-- End of Modal views -->
+
+
+<!-- New (Note) Modal views -->
+<div class="modal  fade task-note-modal" id="new-task-modal">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">
+			<i class="icon-plus-sign"></i>&nbsp;Add Note
+		</h3>
+	</div>
+	<div class="modal-body">
+		<form id="tasknoteForm" name="tasknoteForm" method="post">
+			<fieldset>
+				<div class="control-group form-group">
+					<label class="control-label"><b>Subject</b> <span
+						class="field_req">*</span></label>
+					<div class="controls">
+						<input type="text" placeholder="About" name="subject" id="subject"
+							class="required form-control" />
+					</div>
+				</div>
+				
+					<div class="control-group form-group">
+						<label class="control-label"><b>Description</b></label>
+						<div class="controls">
+							<textarea rows="3" class="w-half form-control" placeholder="Detailed Note"
+								name="description" id="description"></textarea>
+						</div>
+					</div>
+				
+
+			</fieldset>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn btn-sm btn-primary" id="tasknote_validate">Save </a> <span
+			class="save-status"></span>
+	</div>
+</div>
+</div>
+</div>
+<!-- End of Modal views -->
