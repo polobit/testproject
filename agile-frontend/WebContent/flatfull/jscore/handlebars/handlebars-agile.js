@@ -329,7 +329,7 @@ String.prototype.endsWith = function(suffix)
 	return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 
-var TEMPLATE_LIB_PATH = LIB_PATH;
+var TEMPLATE_LIB_PATH = "";
 
 /**
  * Downloads the template synchronously (stops other browsing actions) from the
