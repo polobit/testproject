@@ -1,5 +1,5 @@
 
-<footer id="footer" class="footer container m-t-md hidden">
+<footer id="footer" class="footer container m-t-md hide">
  <hr class="m-n">
   <div class=" col-md-6 col-sm-6 col-xs-12">
 	<div class="footer-left">
