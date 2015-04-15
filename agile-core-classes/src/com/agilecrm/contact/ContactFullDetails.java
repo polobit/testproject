@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.activities.Activity;
+import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.activities.util.TaskUtil;
@@ -15,7 +16,6 @@ import com.agilecrm.cases.util.CaseUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
-import com.agilecrm.activities.Activity.EntityType
 
 /**
  * <ContactFullDetails> loads deals, tasks, notes and cases of a particular
