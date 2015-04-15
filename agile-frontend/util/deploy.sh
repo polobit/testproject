@@ -10,8 +10,7 @@ java -jar precompile.jar ../WebContent/flatfull/tpl ../../../tmp/handlebars ../W
 
 sh yui.sh
 
-sh yui-flatfull.sh
-
+sh yui-flat-full.sh
 sh tpl.sh
 
 sh tpl-flatfull.sh
