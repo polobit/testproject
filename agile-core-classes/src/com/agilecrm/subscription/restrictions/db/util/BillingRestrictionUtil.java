@@ -16,7 +16,6 @@ import com.agilecrm.subscription.limits.PlanLimits.PlanClasses;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
-import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.google.appengine.api.NamespaceManager;
 
 @XmlRootElement
@@ -32,7 +31,8 @@ public class BillingRestrictionUtil
     public static enum ErrorMessages
     {
 	Contact("Contacts limit reached"), WebRule("Web Rules limit reached"), Workflow("Campaigns limit reached"), REPORT(
-		"This query is not allowed in Free plan"), NOT_DOWNGRADABLE("Plan cannot be dowgraded"),  Trigger("Triggers limit reached"), Reports("Email Reports limit reached");
+		"For reports in excess of 7 days, please <a href=\"#subscribe\">upgrade</a> to Regular or Pro plan."), NOT_DOWNGRADABLE(
+		"Plan cannot be dowgraded"), Trigger("Triggers limit reached"), Reports("Email Reports limit reached");
 	private String message;
 
 	ErrorMessages(String message)
@@ -177,8 +177,8 @@ public class BillingRestrictionUtil
 	plan = subscription.plan;
 
 	// Namespace and subscription
-	// System.out.println("" + NamespaceManager.get() +
-	// " domain is having plan - " + plan);
+	 System.out.println("" + NamespaceManager.get() +
+	 " domain is having plan - " + plan);
 
 	// Gets user info and sets plan and sets back in session
 	UserInfo info = SessionManager.get();
@@ -251,6 +251,12 @@ public class BillingRestrictionUtil
     {
 	String reason = errorMessage == null ? "Limit Reached" : errorMessage.getMessage();
 	throw new PlanRestrictedException(reason);
+    }
+
+    public static void throwLimitExceededException(ErrorMessages errorMessage, boolean attachUpgradeButton)
+    {
+	String reason = errorMessage == null ? "Limit Reached" : errorMessage.getMessage();
+	throw new PlanRestrictedException(reason, attachUpgradeButton);
     }
 
     /**

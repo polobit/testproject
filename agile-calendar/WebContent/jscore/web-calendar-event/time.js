@@ -98,7 +98,6 @@ function createNormalTime(slotTime)
 	return result.join('');
 }
 
-
 function getSelectedTimeFromDate(date)
 {
 	date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
@@ -115,20 +114,21 @@ function getConvertedTimeFromEpoch(epoch)
 
 function getNormalBusinessHouts(hr)
 {
-	var hrs=hr;
+	var hrs = hr;
 	hr = hr.split(":")[0];
-    var	min=hrs.split(":")[1];
-	if(parseInt(hr)==0 ||parseInt(hr)==24 )
-		return "12:"+min+"am";
-	if (parseInt(hr) >= 12 &&parseInt(hr) <= 23)
-		return getNormalTimeAMPM(hr)+":"+min+ "pm";
+	var min = hrs.split(":")[1];
+	if (parseInt(hr) == 0 || parseInt(hr) == 24)
+		return "12:" + min + "am";
+	if (parseInt(hr) >= 12 && parseInt(hr) <= 23)
+		return getNormalTimeAMPM(hr) + ":" + min + "pm";
 	else
-		return parseInt(hr) +":"+min+ "am";
+		return parseInt(hr) + ":" + min + "am";
 }
 
 function getNormalTimeAMPM(hr)
 {
-	var name_json = {"12":"12", "13" : "1", "14" : "2", "15" : "3", "16" : "4", "17" : "5", "18" : "6", "19" : "7", "20" : "8", "21" : "9", "22" : "10", "23" : "11"};
+	var name_json = { "12" : "12", "13" : "1", "14" : "2", "15" : "3", "16" : "4", "17" : "5", "18" : "6", "19" : "7", "20" : "8", "21" : "9", "22" : "10",
+		"23" : "11" };
 
 	if (name_json[hr])
 		return name_json[hr];
@@ -136,21 +136,49 @@ function getNormalTimeAMPM(hr)
 		return hr;
 }
 
-
 /**
- * in backend data stored as 0-6(mon-sun)
- * in js  0-6(sun-sat)
+ * in backend data stored as 0-6(mon-sun) in js 0-6(sun-sat)
+ * 
  * @param day
  * @returns {Number}
  */
-function convertWeekDayToArray(day){
-	if(parseInt(day)>=1 || parseInt(day)<=6)
-		return parseInt(day)-1;
-	if(parseInt(day)==0)
+function convertWeekDayToArray(day)
+{
+	if (parseInt(day) >= 1 || parseInt(day) <= 6)
+		return parseInt(day) - 1;
+	if (parseInt(day) == 0)
 		return 6;
-}	
+}
 
-function getTimezoneOffset(timezonename){
-	
+function getTimezoneOffset(timezonename)
+{
+
 	return moment.tz.zone(SELECTED_TIMEZONE).offset(new Date().getTime());
+}
+
+// current date format is 2013-12-4
+function getMidnightEpoch(current_date)
+{
+
+	if (CURRENT_DAY_OPERATION == true)
+	{
+		current_date_mozilla = getUnixTimeStampInSpecificTimezone();
+	}
+	if (!current_date)
+	{
+		current_date = current_date_mozilla;
+	}
+	var d = moment.tz(current_date, SELECTED_TIMEZONE).unix();
+	return d;
+}
+
+function getUnixTimeStampInSpecificTimezone(timezone)
+{
+	var m = moment().tz(SELECTED_TIMEZONE);
+
+	m.set('hour', 00);
+	m.set('minute', 00);
+	m.set('second', 00);
+	m.set('millisecond', 00);
+	return m.valueOf();
 }

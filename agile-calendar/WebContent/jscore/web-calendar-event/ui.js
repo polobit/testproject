@@ -3,6 +3,7 @@ $(function()
 	// Total available slots on selected date with selecetd slot
 	var Available_Slots = null;
 	var selected_user_name = null;
+	var Available_Slots = null;
 
 	// Select slot duration 60/30/15min
 	$(".choose").die().live('click', function(e)
@@ -48,6 +49,8 @@ $(function()
 		if (!selecteddate)
 		{
 			selecteddate = new Date();
+			CURRENT_DAY_OPERATION = true;
+
 		}
 		if (selecteddate)
 		{
@@ -131,7 +134,6 @@ $(function()
 		}
 
 	});
-
 
 	$('#user_timezone').die().change(function()
 	{
