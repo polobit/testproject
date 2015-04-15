@@ -81,7 +81,8 @@ public class AnalyticsSQLUtil
 				+ ","
 				+ GoogleSQLUtil.encodeSQLColumnValue(cityLatLong) + ", NOW()" + ")";
 
-		System.out.println("Insert Query to PageViews: " + insertToPageViews);
+		// System.out.println("Insert Query to PageViews: " +
+		// insertToPageViews);
 
 		try
 		{
@@ -110,13 +111,13 @@ public class AnalyticsSQLUtil
 				+ GoogleSQLUtil.encodeSQLColumnValue(email) + " AND domain = "
 				+ GoogleSQLUtil.encodeSQLColumnValue(domain) + ") p2";
 
-		String joinQuery = q1 + " INNER JOIN " + sessions + " ON p1.sid=p2.sid AND p1.domain = " + GoogleSQLUtil.encodeSQLColumnValue(domain);
+		String joinQuery = q1 + " INNER JOIN " + sessions + " ON p1.sid=p2.sid AND p1.domain = "
+				+ GoogleSQLUtil.encodeSQLColumnValue(domain);
 
 		String pageViews = "SELECT * FROM (" + joinQuery + ") pg";
 
-		System.out.println("sids query is: " + sessions);
-
-		System.out.println("Select query: " + pageViews);
+		// System.out.println("sids query is: " + sessions);
+		// System.out.println("Select query: " + pageViews);
 
 		try
 		{
