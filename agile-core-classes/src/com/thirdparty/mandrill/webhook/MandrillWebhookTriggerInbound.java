@@ -41,7 +41,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	try
 	{
 	    String mandrillEvents = request.getParameter("mandrill_events");
-	    System.out.println("mandrill events parameter is " + mandrillEvents);
+	    // System.out.println("mandrill events parameter is " + mandrillEvents);
 	    if (StringUtils.isBlank(mandrillEvents))
 	    {
 		// response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -57,7 +57,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		if (event.has("event") && StringUtils.equals(event.getString("event"), "inbound"))
 		{
 		    JSONObject message = event.getJSONObject("msg");
-		    System.out.println("email message is " + message);
+		    // System.out.println("email message is " + message);
 		    if (message == null)
 		    {
 			// response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
