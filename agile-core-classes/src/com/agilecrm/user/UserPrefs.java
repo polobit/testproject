@@ -118,7 +118,7 @@ public class UserPrefs
     
     // user theme settings
     @NotSaved(IfDefault.class)
-    public String menuPosition = "left";
+    public String menuPosition = "leftcol";
     
     public String layout = "fluid";
     

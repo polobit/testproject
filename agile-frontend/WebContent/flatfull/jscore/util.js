@@ -16,7 +16,8 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-right:5px" src= "im
 /**
  * Default image shown for contacts if image is not available
  */
-var DEFAULT_GRAVATAR_url = "https://dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png";
+
+var DEFAULT_GRAVATAR_url = window.location.origin + "/" + LIB_PATH_FLATFULL + "images/flatfull/user-default.jpg";
 
 /**
  * Returns random loading images

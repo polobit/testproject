@@ -153,8 +153,9 @@ var contact_details_tab = {
 	        $('#cases', App_Contacts.contactDetailView.el).html(casesView.el);
 		},
 		load_mail : function(mail_server_url,email_server)
-		{				
+		{			
 			$('#mails', App_Contacts.contactDetailView.el).html("");
+			$('#mail', App_Contacts.contactDetailView.el).append('<img class="mails-loading p-r-xs m-b"  src= "img/21-0.gif"></img>');
 			var contact = App_Contacts.contactDetailView.model;
 			var json = contact.toJSON();
 			
@@ -342,6 +343,7 @@ function fetch_mails(contact_details_tab_scope,has_email_configured,mail_server_
 		postRenderCallback : function(el)
 		{
 //			$('#email-type-select-dropdown',App_Contacts.contactDetailView.el).removeAttr('disabled');
+			$('#mail', App_Contacts.contactDetailView.el).find('.mails-loading').remove();
 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 			{
 				$(".email-sent-time", el).each(function(index, element)
@@ -473,4 +475,4 @@ function fetch_mailserverurl_from_cookie(model)
 	}
 	return cookie_info;
 }
-
+	
