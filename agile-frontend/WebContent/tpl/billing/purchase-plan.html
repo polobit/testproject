@@ -4,7 +4,6 @@
 		<div class="well">
 			<legend>Upgrade Plan</legend>
 			<div id="update-plan-details-info"></div>
-
 			<form id="planform" class="form-horizontal update_plan" name="plan">
 				<fieldset>
 					<div class="alert alert-info hide"></div>
@@ -16,6 +15,15 @@
 									value="{{plan_id}}" />
 							</div>
 						</div>
+
+					<div class="control-group">
+							<label class="control-label">Version<span class="field_req">*</span></label>
+							<div class="controls">
+								<input type="text" name="version" class="input required"
+									value="{{version}}" />
+							</div>
+						</div>
+
 						<div class="control-group">
 							<label class="control-label">Plan<span class="field_req">*</span></label>
 							<div class="controls">

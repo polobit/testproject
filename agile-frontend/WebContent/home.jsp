@@ -64,6 +64,11 @@ boolean is_free_plan = false;
 if(restriction != null && restriction.planDetails != null)
     is_free_plan = restriction.planDetails.isFreePlan();
 
+if(!restriction.planDetails.getACL())
+{
+    domainUser.resetACLScopesAndSave();
+}
+
 Boolean is_first_time_user = HomeServlet.isFirstTimeUser(request);;
 
 Plan plan = null;
@@ -178,7 +183,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = "/";
 
-var HANDLEBARS_PRECOMPILATION = true || <%=production%>;
+var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
 
 
 var CSS_PATH = "/";

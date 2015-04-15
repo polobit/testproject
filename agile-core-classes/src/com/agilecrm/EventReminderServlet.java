@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.activities.EventReminder;
-import com.agilecrm.activities.deferred.EventReminderDeferredTask;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
@@ -27,53 +26,55 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 public class EventReminderServlet extends HttpServlet
 {
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
-    {
-	doGet(request, response);
-    }
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+	{
+		doGet(request, response);
+	}
 
-    public void doGet(HttpServletRequest req, HttpServletResponse res)
-    {
-	try
+	public void doGet(HttpServletRequest req, HttpServletResponse res)
 	{
-		EventReminderCreateDeferredTask eventReminderTaskDeferredTask = new EventReminderCreateDeferredTask();
-		Queue queue = QueueFactory.getQueue("automations-queue");
-		TaskOptions options = TaskOptions.Builder.withPayload(eventReminderTaskDeferredTask);
-		queue.add(options);
+		try
+		{
+			EventReminderCreateDeferredTask eventReminderTaskDeferredTask = new EventReminderCreateDeferredTask();
+			Queue queue = QueueFactory.getQueue("automations-queue");
+			TaskOptions options = TaskOptions.Builder.withPayload(eventReminderTaskDeferredTask);
+			queue.add(options);
+			System.out.println("Automations queue is used");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }
 }
 
-
-class EventReminderCreateDeferredTask  implements DeferredTask{
+class EventReminderCreateDeferredTask implements DeferredTask
+{
 
 	@Override
-	public void run() {
-		 Set<String> domains = NamespaceUtil.getAllNamespaces();
+	public void run()
+	{
+		Set<String> domains = NamespaceUtil.getAllNamespaces();
 
-		    System.out.println("number of domains in event reminder servlet " + domains.size());
+		System.out.println("number of domains in event reminder servlet " + domains.size());
 
-		    // Start a task queue for each domain
-		    for (String domain : domains)
-		    {
+		// Start a task queue for each domain
+		for (String domain : domains)
+		{
 
 			System.out.println("Domain Name in EventReminder Servlet " + domain);
 
-			try {
+			try
+			{
 				EventReminder.getEventReminder(domain, null);
-			} catch (IOException e) {
+			}
+			catch (IOException e)
+			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		    }
-		
+		}
+
 	}
 
 }
-
-
-
