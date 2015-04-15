@@ -517,6 +517,44 @@ public class ContactsAPI
     }
 
     /**
+     * Change owner of the contact.
+     * 
+     * @param contact
+     * @param new_owner
+     * @param contact_id
+     * @return
+     * @throws JSONException
+     */
+    @Path("/change-owner")
+    @PUT
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Contact changeContactOwner(@FormParam("new_owner") String new_owner, @FormParam("contact_id") Long contact_id)
+	    throws JSONException
+    {
+	if (StringUtils.isEmpty(new_owner))
+	    return null;
+
+	Contact contact = ContactUtil.getContact(contact_id);
+
+	if (contact == null)
+	    return null;
+	String old_owner_name = contact.getOwner() != null ? contact.getOwner().name : null;
+	List<Contact> contacts = new ArrayList<Contact>();
+	contacts.add(contact);
+	ContactUtil.changeOwnerToContactsBulk(contacts, new_owner);
+	try
+	{
+	    ActivitySave.contactOwnerChangeActivity(contact, old_owner_name);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return contact;
+    }
+
+    /**
      * Gets a contact based on its email
      * 
      * @param email
