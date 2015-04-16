@@ -528,7 +528,7 @@ public class ContactsAPI
     @Path("/change-owner")
     @PUT
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public String changeContactOwner(@FormParam("owner_email") String owner_email,
 	    @FormParam("contact_id") Long contact_id) throws JSONException
     {
