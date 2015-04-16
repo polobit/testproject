@@ -141,7 +141,7 @@ function showCalendar()
 												data.className = 'b-l b-2x b-danger fc-z-index';
 											else if(data.color=='green' || data.color=='#bbb')
 												data.className = 'b-l b-2x b-light fc-z-index';
-											else if(data.color=='#36C' || data.color=='#23b7e5')
+											else if(data.color=='#36C' || data.color=='#23b7e5' || data.color=='blue')
 												data.className = 'b-l b-2x b-warning fc-z-index';
 											data.color='';
 											data.backgroundColor = '#fff';

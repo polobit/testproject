@@ -1309,7 +1309,7 @@ public class ContactUtil
 	try
 	{
 	    DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
-	    List<ContactEmail> openedEmailsList = ContactEmailUtil.getEmailsOpened(minTime, maxTime);
+	    List<ContactEmail> openedEmailsList = ContactEmailUtil.getEmailsOpened(minTime, maxTime,true);
 	    for (ContactEmail contactEmail : openedEmailsList)
 	    {
 		JSONObject json = new JSONObject();
