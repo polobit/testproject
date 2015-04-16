@@ -19,6 +19,7 @@ import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
@@ -1504,5 +1505,56 @@ public class ContactUtil
     public static void resetContactsCount()
     {
 	eraseContactsCountCache();
+    }
+
+    /**
+     * Chnage owner of the using the owner email and the contact id. For API
+     * only.
+     * 
+     * @param ownerEmail
+     *            email of the domain user(owner)
+     * @param contactId
+     *            id of the contact.
+     * @return
+     */
+    public static String changeContactOwner(String ownerEmail, Long contactId)
+    {
+	DomainUser user = null;
+
+	JSONObject result = new JSONObject();
+
+	try
+	{
+	    user = DomainUserUtil.getDomainUserFromEmail(ownerEmail);
+	    if (user == null)
+		return result.put("error", "Owner with this email does not exist.").toString();
+	}
+	catch (Exception e)
+	{
+	    return result.put("error", "Exception in getting user with this email. Please try later.").toString();
+	}
+
+	Contact contact = ContactUtil.getContact(contactId);
+
+	if (contact == null)
+	    return result.put("error", "Contact does not exist.").toString();
+
+	String old_owner_name = contact.getOwner() != null ? contact.getOwner().name : null;
+
+	Key<DomainUser> userKey = new Key<DomainUser>(DomainUser.class, user.id);
+
+	try
+	{
+	    contact.setContactOwner(userKey);
+	    ActivitySave.contactOwnerChangeActivity(contact, old_owner_name);
+	    ObjectMapper mapper = new ObjectMapper();
+	    return mapper.writeValueAsString(contact);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+	return null;
     }
 }
