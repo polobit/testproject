@@ -3,6 +3,7 @@ package com.thirdparty.forms;
 import java.io.IOException;
 import java.security.acl.Owner;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -40,8 +41,6 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.datanucleus.annotations.Owned;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 public class AgileForm extends HttpServlet
 {
