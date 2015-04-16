@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.SetUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -22,8 +24,10 @@ import org.json.JSONArray;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.forms.Form;
 import com.agilecrm.forms.util.FormUtil;
@@ -37,10 +41,14 @@ import com.google.appengine.datanucleus.annotations.Owned;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
+
 public class AgileForm extends HttpServlet
 {
     public static String[] authDetails = { "_agile_form_name", "_agile_domain", "_agile_api", "_agile_redirect_url" };
-
+    
+    public static Set<String> systemContactProperties = new HashSet<String>(Arrays.asList(new String[] {Contact.FIRST_NAME, Contact.LAST_NAME, Contact.EMAIL, Contact.COMPANY, Contact.TITLE, Contact.WEBSITE, Contact.URL, Contact.NAME, Contact.IMAGE, Contact.PHONE}));
+    
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
 	try
@@ -153,7 +161,6 @@ public class AgileForm extends HttpServlet
 		note.save();
 	    }
 	}
-
     }
 
     public List<ContactField> getAgileContactProperties(Contact contact, org.json.JSONObject formJson)
@@ -193,14 +200,32 @@ public class AgileForm extends HttpServlet
 
     public Boolean isNotContactProperty(String key)
     {
-	return (StringUtils.indexOf("tags note", key) != -1);
+	return ((StringUtils.indexOf("tags note", key) != -1) || (isNotSystemContactProperty(key) && !isAddressField(key) && isNotCustomContactProperty(key)));
+      } 
+    
+    public Boolean isNotCustomContactProperty(String key)
+    {
+	List<CustomFieldDef> contactCustomFields = CustomFieldDefUtil.getAllContactCustomField();
+	for (CustomFieldDef customFieldDef : contactCustomFields)
+        {
+	    if(StringUtils.equals(key, customFieldDef.field_label))
+	    {
+		return false;
+	    }
+        }
+	return true;
     }
-
+    
+    public Boolean isNotSystemContactProperty(String key)
+    {
+	return !systemContactProperties.contains(key);
+    }
+    
     public Boolean isAddressField(String key)
     {
 	return (StringUtils.indexOf("address city state country zip", key) != -1);
     }
-
+    
     public List<ContactField> updateContactPropList(List<ContactField> oldProperties, List<ContactField> newProperties)
     {
 	List<ContactField> outDatedProperties = new ArrayList<ContactField>();
@@ -323,5 +348,4 @@ public class AgileForm extends HttpServlet
 	else
 	    return null;
     }
-
 }
