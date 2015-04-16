@@ -61,10 +61,13 @@ public class CaseUtil
 	}
     }
 
-    public static List<Case> getCases(int max, String cursor)
+    public static List<Case> getCases(int max, String cursor, String fieldName)
     {
+
 	if (max != 0)
-	    return dao.fetchAll(max, cursor);
+	{
+	    return dao.fetchAllByOrder(max, cursor, null, true, false, fieldName);
+	}
 	return getCases();
     }
 

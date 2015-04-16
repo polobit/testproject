@@ -348,10 +348,10 @@ function downloadTemplate(url, callback)
 	// pre-compiled flat is set true then template path is sent accordingly
 	if (HANDLEBARS_PRECOMPILATION)
 	{
-		url = "tpl/min/precompiled/" + url;
+		url = "tpl/min/precompiled/" + FLAT_FULL_UI + url;
 	}
 	else
-		url = "tpl/min/" + url;
+		url = "tpl/min/" + FLAT_FULL_UI + url;
 
 	// If JS
 	if (url.endsWith("js") && HANDLEBARS_PRECOMPILATION)

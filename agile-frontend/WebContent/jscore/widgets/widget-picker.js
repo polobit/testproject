@@ -213,7 +213,10 @@ function delete_widget(widget_name)
 
 		App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name })[0].set('is_added', false);
 		update_collection(widget_name);
-		
+		console.log(App_Widgets.Catalog_Widgets_View.collection);
+		_plan_restrictions.process_widgets(App_Widgets.Catalog_Widgets_View.collection);
+		console.log(App_Widgets.Catalog_Widgets_View.collection);
+		App_Widgets.Catalog_Widgets_View.render(true);
 	}, dataType : 'json' });
 
 }

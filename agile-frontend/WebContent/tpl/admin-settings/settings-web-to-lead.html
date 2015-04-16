@@ -168,18 +168,29 @@
 								<a href="#" class="btn btn-danger" id="email-gateway-delete">Disable</a>
 								<a href="#email-gateways/mandrill" class="btn">Settings</a>
 							{{else}}
-								{{#check_plan "FREE"}}
-									<a class="btn" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Enable</a><span style="margin-left:5px"><i>Paid accounts only</i></span>
-								{{else}}
+								{{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
 									<a href="#email-gateways/mandrill" class="btn">Enable</a>
-								{{/check_plan}}	
+								{{else}}
+									<div style="/*margin: 40px auto;	width: 50%;*/ display:inline;float:left">
+											<a class="btn _upgrade" id="mandrill_upgrade">Enable</a>
+									</div>
+									<div style="display:inline;float:right; max-width:152px;margin-left:10px" class="text-right mandrill_upgrade" >
+										<p><i>{{toSafeString message}}</i><p>
+									</div>
+								{{/isAllowedInCurrentPlan}}	
 							{{/gateway_exists}}
 							{{else}}
-								{{#check_plan "FREE"}}
-									<a class="btn" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Enable</a><span style="margin-left:5px"><i>Paid accounts only</i></span>
-										{{else}}
-											<a href="#email-gateways/mandrill" class="btn">Enable</a> 
-								{{/check_plan}}	
+								{{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
+									<a href="#email-gateways/mandrill" class="btn">Enable</a>
+								{{else}}
+									<div style="/*margin: 40px auto;	width: 50%;*/ display:inline;float:left">
+											<a class="btn  _upgrade" id="mandrill_upgrade">Enable</a>
+									</div>
+									<div style="display:inline;display:none;float:right; max-width:152px;margin-left:10px" class="text-right mandrill_upgrade" >
+										<p><i>{{toSafeString message}}</i><p>
+									</div>
+								{{/isAllowedInCurrentPlan}}	
+	
 							{{/if}}
 					</div>
 				</div>
@@ -210,18 +221,28 @@
 							<a href="#integrations" class="btn btn-danger " id="sms-gateway-delete"  data={{id}} >Disable</a>
 								<a href="#sms-gateways/twilio" class="btn">Settings</a>
 						{{else}}
-							{{#check_plan "FREE"}}
-								<a class="btn" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Enable</a><span style="margin-left:5px"><i>Paid accounts only</i></span>
-							{{else}}
+							{{#isAllowedInCurrentPlan "is_sms_gateway_allowed"}}
 								<a href="#sms-gateways/twilio" class="btn">Enable</a>
-							{{/check_plan}}	
+							{{else}}
+									<div style="/*margin: 40px auto;	width: 50%;*/ display:inline;float:left">
+											<a class="btn  _upgrade" id="twilio_upgrade">Enable</a>
+									</div>
+									<div style="display:inline;display:none;float:right; max-width:160px;" class="text-right twilio_upgrade" >
+										<p><i>{{toSafeString message}}</i><p>
+									</div>
+								{{/isAllowedInCurrentPlan}}	
 						{{/gateway_exists}}
 					{{else}}
-						{{#check_plan "FREE"}}
-							<a class="btn" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Enable</a><span style="margin-left:5px"><i>Paid accounts only</i></span>
-						{{else}}
+						{{#isAllowedInCurrentPlan "is_sms_gateway_allowed"}}
 							<a href="#sms-gateways/twilio" class="btn">Enable</a> 
-						{{/check_plan}}	
+						{{else}}
+									<div style="/*margin: 40px auto;	width: 50%;*/ display:inline;float:left">
+											<a class="btn  _upgrade" id="twilio_upgrade" >Enable</a>
+									</div>
+									<div style="display:inline;display:none;float:right; max-width:160px;" class="text-right twilio_upgrade" >
+										<p><i>{{toSafeString message}}</i><p>
+									</div>
+								{{/isAllowedInCurrentPlan}}	
 					{{/if}}
 				</div>
 			</div>
@@ -245,18 +266,28 @@
 							<a href="#integrations" class="btn btn-danger " id="sms-gateway-delete"  data={{id}} >Disable</a>
 								<a href="#sms-gateways/plivo" class="btn">Settings</a>
 						{{else}}
-							{{#check_plan "FREE"}}
-								<a class="btn" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Enable</a><span style="margin-left:5px"><i>Paid accounts only</i></span>
-							{{else}}
+							{{#isAllowedInCurrentPlan "is_sms_gateway_allowed"}}
 								<a href="#sms-gateways/plivo" class="btn">Enable</a>
-							{{/check_plan}}	
+							{{else}}
+									<div style="/*margin: 40px auto;	width: 50%;*/ display:inline;float:left">
+											<a class="btn  _upgrade" id="plivo_upgrade">Enable</a>
+									</div>
+									<div style="display:inline;display:none;float:right; max-width:160px;" class="text-right plivo_upgrade" >
+										<p><i>{{toSafeString message}}</i><p>
+									</div>
+								{{/isAllowedInCurrentPlan}}	
 						{{/gateway_exists}}
 					{{else}}
-						{{#check_plan "FREE"}}
-							<a class="btn" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Enable</a><span style="margin-left:5px"><i>Paid accounts only</i></span>
+						{{#isAllowedInCurrentPlan "is_sms_gateway_allowed"}}
+							<a href="#sms-gateways/plivo" class="btn">Enable</a>
 						{{else}}
-							<a href="#sms-gateways/plivo" class="btn">Enable</a> 
-						{{/check_plan}}	
+									<div style="/*margin: 40px auto;	width: 50%;*/ display:inline;float:left">
+											<a class="btn  _upgrade" id="plivo_upgrade">Enable</a>
+									</div>
+									<div style="display:inline;display:none;float:right; max-width:160px;" class="text-right plivo_upgrade" >
+										<p><i>{{toSafeString message}}</i><p>
+									</div>
+								{{/isAllowedInCurrentPlan}}	
 					{{/if}}
 				</div>
 			</div>

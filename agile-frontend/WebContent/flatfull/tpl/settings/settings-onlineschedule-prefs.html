@@ -1,0 +1,116 @@
+<!-- online scheduling Modal views -->
+<script id="settings-business-prefs-template" type="text/html">
+	<div class="col" id="schedule-preferences">
+<div class="hbox h-auto m-b-lg">
+<div class="panel panel-default">
+<div class="panel-heading"><h4 class="h4">Online Calendar</h4></div>
+    	
+<div class="panel-body">
+<form id="scheduleid" name="scheduleid" method="post" action="" class="form-horizontal">
+    			<fieldset>
+
+    			<div class="row control-group form-group">
+    			<label class="control-label col-sm-3"><b>Scheduling URL </b></label>
+<div class="col-sm-9">
+
+                        <div class="controls schedule_url_online pos-rlt  word-break p-t-xs" id="schedule-url-id">
+                        <a href="" target="_blank" name="scheduleurl" id="scheduleurl" class="text-info"><span id="hrefvalue" class="v-top"></span><span id="schedule_id" class="m-l-xs inline-block word-break">{{this.schedule_id}}</span></a>
+<div class="inline" id="edit"><a href=""  id="edit-schedule-id" class="edit-schedule-id nounderline m-t-xs m-l-sm"><i title="Edit" class="icon-edit"></i></a></div>
+ </div>
+<div id="specialchar" class="m-t-xs text-danger" style="display:none;">Special characters are not allowed except underscore.</div>
+<div id="charlength" class="m-t-xs text-danger" style="display:none;">Please enter at least 4 letters.</div>
+<div id="schedule_error_message" class="m-t-xs text-danger"  style="display:none;"></div>
+<div class="clearfix"></div> 
+<div class="tip"><p class="text-muted"><i class="icon-lightbulb text-md"></i> Put this link in the signature or in your automated emails</p></div>
+</div>
+</div>
+
+    			</fieldset>
+    		</form>
+
+    
+
+    		<form id="scheduleform" name="scheduleform" method="post" action="" class="form-horizontal">
+    			<fieldset>
+<input type="text" name="id" class="hide form-control" value="{{id}}" >
+
+          <div class="control-group form-group">
+          
+    					<label class="control-label col-sm-3" for="cname">Meeting Type </label> 
+                   		<div class="controls col-sm-9">
+    						<input class="input-xlarge form-control" type="text"  id="meeting_types" name="meeting_types"  value="{{meeting_types}}"  placeholder="Enter comma separated meeting types"  autocapitalize="off"/>
+            <div id="meeting_type_error" class="text-danger" style="display:none;">Speacial characters are not allowed except comma</div>
+    					</div>
+    				</div> 
+
+
+
+ 
+    			</fieldset>
+    		</form>
+
+
+<form  id="meeting_durations" name="meeting_durations"  class="form-horizontal">
+    			<fieldset>
+
+{{#stringToJSON this "meeting_durations"}}
+<div class="control-group form-group">
+    					<label class="control-label col-sm-3" for="cname">Meeting Duration</label> 
+                   		  
+							<div class="controls col-sm-9">
+                            <label class="block">
+                            15 Mins &nbsp;<input type="text" class="form-control inline-block" id="15mins" name="15mins"   value="{{15mins}}"/> 
+                            </label>
+                            <label class="block">
+                            30 Mins &nbsp;<input type="text" class="form-control inline-block"  id="30mins" name="30mins" value="{{30mins}}"/> 
+                            </label>
+                           <label class="block">
+                            60 Mins &nbsp;<input type="text" class="form-control inline-block"  id="60mins" name="60mins" value="{{60mins}}"/> 
+                            </label>
+{{/stringToJSON}}
+<div id="meeting_duration_message" class="text-danger" style="display:none;"> Please enable at least one option by mentioning a short text for it.</div>
+                        </div>
+
+    				</div> 
+</fieldset>
+    		</form>
+
+    
+    		
+
+    		<form  class="form-horizontal">
+    			<fieldset>
+<div class="control-group form-group">
+<label class="control-label col-sm-3" for="cname" >Business Hours</label>
+                   		<div class="controls col-sm-9">
+    						<div id="define-business-hours"></div>
+    					</div>
+    				</div> 
+<div class="line line-lg b-b"></div>
+<div class="control-group form-group">
+    				<div class="col-sm-offset-3 col-sm-9">
+               			<button type="submit" class="btnSerialize btn-sm btn btn-primary no-outline" id="btnSerialize">Save</button><span class="m-l-sm text-danger" id="error_message"></span>
+             			</div>
+                      </div>
+
+					
+
+				</fieldset>
+			</form>
+		</div>
+		</div>
+		</div>
+	</div>
+	<div class="col w-md">
+		<div class="data-block">
+		<div class="p-l p-r">
+			<h4 class="m-t-none">What is Online Appointment Scheduling?</h4>
+			
+			<p>Scheduling meetings over email or phone is tedious. Agile
+				allows your customers to schedule a meeting with you directly in
+				just a few clicks.</p>
+		</div>	
+		</div>
+	</div>
+
+</script>

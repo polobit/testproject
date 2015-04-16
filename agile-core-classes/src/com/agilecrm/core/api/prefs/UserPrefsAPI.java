@@ -114,5 +114,26 @@ public class UserPrefsAPI
 	else
 	    throw new Exception("Current Password not matched");
     }
+    
+    @Path("saveTheme")
+    @PUT
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void saveTheme(@FormParam("menuPosition") String menuPosition, @FormParam("layout") String layout, @FormParam("theme") String theme){
+    	UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
+    	try
+	    {
+    	currentUserPrefs.menuPosition = menuPosition;
+    	currentUserPrefs.layout = layout;
+    	currentUserPrefs.theme = theme;
+    	currentUserPrefs.save();
+	    }
+    	catch (Exception e)
+	    {
+		e.printStackTrace();
+		System.out.println(e.getMessage());
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		        .build());
+	    }
+    }
 
 }

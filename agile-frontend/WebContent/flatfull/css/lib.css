@@ -1,0 +1,524 @@
+.notifications{position:fixed}.notifications.top-right{right:10px;top:25px}.notifications.top-left{left:10px;top:25px}.notifications.bottom-left{left:10px;bottom:25px}.notifications.bottom-right{right:10px;bottom:25px}.notifications>div{position:relative;z-index:9999;margin:5px 0}ul.wysihtml5-toolbar{margin:0;padding:0;display:block}ul.wysihtml5-toolbar::after{clear:both;display:table;content:""}ul.wysihtml5-toolbar>li{float:left;display:list-item;list-style:none;margin:0 5px 10px 0}ul.wysihtml5-toolbar a[data-wysihtml5-command=bold]{font-weight:bold}ul.wysihtml5-toolbar a[data-wysihtml5-command=italic]{font-style:italic}ul.wysihtml5-toolbar a[data-wysihtml5-command=underline]{text-decoration:underline}ul.wysihtml5-toolbar a.btn.wysihtml5-command-active{background-image:none;-webkit-box-shadow:inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);-moz-box-shadow:inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);box-shadow:inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);background-color:#e6e6e6;background-color:#d9d9d9 9;outline:0}ul.wysihtml5-commands-disabled .dropdown-menu{display:none!important}
+/*!
+* Datepicker for Bootstrap
+*
+* Copyright 2012 Stefan Petre
+* Licensed under the Apache License v2.0
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+*/.datepicker{top:0;left:0;padding:4px;margin-top:1px;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px}.datepicker:before{content:'';display:inline-block;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:7px solid #ccc;border-bottom-color:rgba(0,0,0,0.2);position:absolute;top:-7px;left:6px}.datepicker:after{content:'';display:inline-block;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:6px solid #fff;position:absolute;top:-6px;left:7px}.datepicker>div{display:none}.datepicker table{width:100%;margin:0}.datepicker td,.datepicker th{text-align:center;width:20px;height:20px;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px}.datepicker td.day:hover{background:#eee;cursor:pointer}.datepicker td.old,.datepicker td.new{color:#999}.datepicker td.active,.datepicker td.active:hover{background-color:#006dcc;background-image:-moz-linear-gradient(top,#08c,#04c);background-image:-ms-linear-gradient(top,#08c,#04c);background-image:-webkit-gradient(linear,0 0,0 100%,from(#08c),to(#04c));background-image:-webkit-linear-gradient(top,#08c,#04c);background-image:-o-linear-gradient(top,#08c,#04c);background-image:linear-gradient(top,#08c,#04c);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc',endColorstr='#0044cc',GradientType=0);border-color:#04c #04c #002a80;border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);filter:progid:DXImageTransform.Microsoft.gradient(enabled = false);color:#fff;text-shadow:0 -1px 0 rgba(0,0,0,0.25)}.datepicker td.active:hover,.datepicker td.active:hover:hover,.datepicker td.active:active,.datepicker td.active:hover:active,.datepicker td.active.active,.datepicker td.active:hover.active,.datepicker td.active.disabled,.datepicker td.active:hover.disabled,.datepicker td.active[disabled],.datepicker td.active:hover[disabled]{background-color:#04c}.datepicker td.active:active,.datepicker td.active:hover:active,.datepicker td.active.active,.datepicker td.active:hover.active{background-color:#039 \9}.datepicker td span{display:block;width:47px;height:54px;line-height:54px;float:left;margin:2px;cursor:pointer;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px}.datepicker td span:hover{background:#eee}.datepicker td span.active{background-color:#006dcc;background-image:-moz-linear-gradient(top,#08c,#04c);background-image:-ms-linear-gradient(top,#08c,#04c);background-image:-webkit-gradient(linear,0 0,0 100%,from(#08c),to(#04c));background-image:-webkit-linear-gradient(top,#08c,#04c);background-image:-o-linear-gradient(top,#08c,#04c);background-image:linear-gradient(top,#08c,#04c);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc',endColorstr='#0044cc',GradientType=0);border-color:#04c #04c #002a80;border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);filter:progid:DXImageTransform.Microsoft.gradient(enabled = false);color:#fff;text-shadow:0 -1px 0 rgba(0,0,0,0.25)}.datepicker td span.active:hover,.datepicker td span.active:active,.datepicker td span.active.active,.datepicker td span.active.disabled,.datepicker td span.active[disabled]{background-color:#04c}.datepicker td span.active:active,.datepicker td span.active.active{background-color:#039 \9}.datepicker td span.old{color:#999}.datepicker th.switch{width:145px}.datepicker thead tr:first-child th{cursor:pointer}.datepicker thead tr:first-child th:hover{background:#eee}.input-append.date .add-on i,.input-prepend.date .add-on i{display:block;cursor:pointer;width:16px;height:16px}
+.qq-uploader{position:relative;width:100%}.qq-upload-button{display:block;width:105px;padding:7px 0;text-align:center;background:#800;border-bottom:1px solid #ddd;color:#fff}.qq-upload-button-hover{background:#c00}.qq-upload-button-focus{outline:1px dotted black}.qq-upload-drop-area{position:absolute;top:0;left:0;width:100%;height:100%;min-height:70px;z-index:2;background:#ff9797;text-align:center}.qq-upload-drop-area span{display:block;position:absolute;top:50%;width:100%;margin-top:-8px;font-size:16px}.qq-upload-drop-area-active{background:#ff7171}.qq-upload-list{margin:15px 35px;padding:0;list-style:disc}.qq-upload-list li{margin:0;padding:0;line-height:15px;font-size:12px}.qq-upload-file,.qq-upload-spinner,.qq-upload-size,.qq-upload-cancel,.qq-upload-failed-text{margin-right:7px}.qq-upload-spinner{display:inline-block;background:url("/img/loading.gif");width:15px;height:15px;vertical-align:text-bottom}.qq-upload-size,.qq-upload-cancel{font-size:11px}.qq-upload-failed-text{display:none}.qq-upload-fail .qq-upload-failed-text{display:inline}
+
+.ms-container:after{
+  content: "."; display: block; height: 0; line-height: 0; font-size: 0; clear: both; min-height: 0; visibility: hidden;
+}
+
+.ms-container .ms-selectable, .ms-container .ms-selection{
+
+  background: #fff;
+  color: #555555;
+  float: left;
+}
+
+.ms-container .ms-list{
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -ms-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -o-transition: border linear 0.2s, box-shadow linear 0.2s;
+  transition: border linear 0.2s, box-shadow linear 0.2s;
+    border: 1px solid #cccccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+
+
+.ms-selected{
+  display:none;
+}
+.ms-container .ms-selectable{
+  margin-right: 40px;
+}
+
+.ms-container .ms-list.ms-focus{
+  border-color: rgba(82, 168, 236, 0.8);
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  outline: 0;
+  outline: thin dotted \9;
+}
+
+.ms-container ul{
+  margin: 0;
+  list-style-type: none;
+}
+
+.ms-container ul.ms-list{
+  width: 160px;
+  height: 200px;
+  padding: 0px 0px;
+  overflow-y: auto;
+}
+
+.ms-container .ms-selectable li.ms-elem-selectable,
+.ms-container .ms-selection li.ms-elem-selected{
+  border-bottom: 1px #eee solid;
+  padding: 2px 10px;
+  color: #555;
+  font-size: 14px;
+}
+
+.ms-container .ms-selectable li.disabled,
+.ms-container .ms-selection li.disabled{
+  background-color: #eee;
+  color: #aaa;
+}
+
+.ms-container .ms-optgroup-label{
+  padding: 5px 0px 0px 5px;
+  cursor: pointer;
+  color: #999;
+}
+
+.ms-container li.ms-elem-selectable:not(.disabled).ms-hover,
+.ms-container .ms-selection li:not(.disabled).ms-hover{
+  cursor: pointer;
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #0088cc;
+}.com{color:#93a1a1}.lit{color:#195f91}.pun,.opn,.clo{color:#93a1a1}.fun{color:#dc322f}.str,.atv{color:#D14}.kwd,.linenums .tag{color:#1e347b}.typ,.atn,.dec,.var{color:teal}.pln{color:#48484c}.prettyprint{padding:8px;background-color:#f7f7f9;border:1px solid #e1e1e8}.prettyprint.linenums{-webkit-box-shadow:inset 40px 0 0 #fbfbfc,inset 41px 0 0 #ececf0;-moz-box-shadow:inset 40px 0 0 #fbfbfc,inset 41px 0 0 #ececf0;box-shadow:inset 40px 0 0 #fbfbfc,inset 41px 0 0 #ececf0}ol.linenums{margin:0 0 0 33px}ol.linenums li{padding-left:12px;color:#bebec5;line-height:18px;text-shadow:0 1px 0 #fff}
+.bootstrap-timepicker.dropdown-menu{border-radius:4px 4px 4px 4px;display:none;left:0;margin-top:1px;padding:4px;top:0}.bootstrap-timepicker.dropdown-menu.open{display:inline-block}.bootstrap-timepicker.dropdown-menu:before{border-bottom:7px solid rgba(0,0,0,0.2);border-left:7px solid transparent;border-right:7px solid transparent;content:"";left:6px;position:absolute;top:-7px}.bootstrap-timepicker.dropdown-menu:after{border-bottom:6px solid #fff;border-left:6px solid transparent;border-right:6px solid transparent;content:"";left:7px;position:absolute;top:-6px}.bootstrap-timepicker.modal{margin-left:-100px;margin-top:0;top:30%;width:200px}.bootstrap-timepicker.modal .modal-content{padding:0}.bootstrap-timepicker table{margin:0;width:100%}.bootstrap-timepicker table td{height:30px;margin:0;padding:2px;text-align:center;width:49%}.bootstrap-timepicker table.show-meridian td,.bootstrap-timepicker table.show-seconds td{width:32%}.bootstrap-timepicker table.show-seconds.show-meridian td{width:23.5%}.bootstrap-timepicker table td.separator{width:2%!important}.bootstrap-timepicker table td span{width:100%}.bootstrap-timepicker table td a{border:1px solid transparent;display:inline-block;margin:0;outline:0 none;padding:8px 0;width:90%}.bootstrap-timepicker table td a:hover{background-color:#eee;border-color:#ddd;border-radius:4px 4px 4px 4px}.bootstrap-timepicker table td a i{margin-top:2px}.bootstrap-timepicker table td input{margin:0;text-align:center;width:25px}.bootstrap-timepicker-component .add-on{cursor:pointer}.bootstrap-timepicker-component .add-on i{display:block;height:16px;width:16px}
+
+
+
+
+
+/* full calender css */
+.fc {
+    direction: ltr;
+    text-align: left
+}
+.fc table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+html .fc,
+.fc table {
+    font-size: 1em
+}
+.fc td,
+.fc th {
+    padding: 0;
+    vertical-align: top
+}
+.fc-header td {
+    white-space: nowrap
+}
+.fc-header-left {
+    width: 25%;
+    text-align: left
+}
+.fc-header-center {
+    text-align: center
+}
+.fc-header-right {
+    width: 25%;
+    text-align: right
+}
+.fc-header-title {
+    display: inline-block;
+    vertical-align: top
+}
+.fc-header-title h2 {
+    margin-top: 0;
+    white-space: nowrap
+}
+.fc .fc-header-space {
+    padding-left: 10px
+}
+.fc-header .fc-button {
+    /* margin-bottom: 1em;
+    vertical-align: top */
+}
+.fc-header .fc-button {
+    margin-right: -1px
+}
+.fc-header .fc-corner-right {
+    margin-right: 1px
+}
+.fc-header .ui-corner-right {
+    margin-right: 0
+}
+.fc-header .fc-state-hover,
+.fc-header .ui-state-hover {
+    z-index: 2
+}
+.fc-header .fc-state-down {
+    z-index: 3
+}
+.fc-header .fc-state-active,
+.fc-header .ui-state-active {
+    z-index: 4
+}
+.fc-content {
+    clear: both
+}
+.fc-view {
+    width: 100%;
+    overflow: hidden
+}
+.fc-widget-header,
+.fc-widget-content {
+    border: 1px solid #e3eaef
+}
+.fc-state-highlight {
+    background: #fcf8e3
+}
+.fc-cell-overlay {
+    background: #9cf;
+    opacity: .2;
+    filter: alpha(opacity=20)
+}
+.fc-button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer
+}
+.fc-state-default {
+    border-style: solid;
+    border-width: 1px 0
+}
+.fc-button-inner {
+    position: relative;
+    float: left;
+    overflow: hidden
+}
+.fc-state-default .fc-button-inner {
+    border-style: solid;
+    border-width: 0 1px
+}
+.fc-button-content {
+    position: relative;
+    float: left;
+    height: 1.9em;
+    line-height: 1.9em;
+    padding: 0 .6em;
+    white-space: nowrap
+}
+.fc-button-content .fc-icon-wrap {
+    position: relative;
+    float: left;
+    top: 50%
+}
+.fc-button-content .ui-icon {
+    position: relative;
+    float: left;
+    margin-top: -50%;
+    *margin-top: 0;
+    *top: -50%
+}
+.fc-state-default .fc-button-effect {
+    /* position: absolute; */
+    top: 50%;
+    left: 0
+}
+.fc-state-default .fc-button-effect span {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    width: 500px;
+    height: 100px;
+    border-width: 100px 0 0 1px;
+    border-style: solid;
+    border-color: #fff;
+    background: #444;
+    opacity: .09;
+    filter: alpha(opacity=9)
+}
+.fc-state-default,
+.fc-state-default .fc-button-inner {
+    border-style: solid;
+  	border-color: #23b7e5;
+  	background: #23b7e5;
+  	/* color: #000; */
+}
+.fc-state-hover,
+.fc-state-hover .fc-button-inner {
+    /* border-color: #999 */
+}
+.fc-state-down,
+.fc-state-down .fc-button-inner {
+    /* border-color: #555;
+    background: #777 */
+}
+.fc-state-active,
+.fc-state-active .fc-button-inner {
+    border-color: #555;
+    background: #777;
+    color: #fff
+}
+.fc-state-disabled,
+.fc-state-disabled .fc-button-inner {
+    color: #999;
+    border-color: #ddd
+}
+.fc-state-disabled {
+    cursor: default
+}
+.fc-state-disabled .fc-button-effect {
+    display: none
+}
+.fc-event {
+    /* border-style: solid; */
+    border-width: 0;
+    font-size: .85em;
+    cursor: default
+}
+a.fc-event,
+.fc-event-draggable {
+    cursor: pointer
+}
+a.fc-event {
+    text-decoration: none
+}
+.fc-rtl .fc-event {
+    text-align: right
+}
+.fc-event-skin {
+    /* border-color: #36c;
+    background-color: #36c; */
+    /* color: #fff */
+    padding: 2px;
+    white-space: nowrap;
+    border-radius: 2px;
+}
+.fc-event-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* border-style: solid; */
+    border-width: 0;
+    overflow: hidden
+}
+.fc-event-time,
+.fc-event-title {
+    padding: 0 1px
+}
+.fc .ui-resizable-handle {
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    overflow: hidden;
+    font-size: 300%;
+    line-height: 50%
+}
+.fc-event-hori {
+    border-width: 1px 0;
+    margin-bottom: 1px
+}
+.fc-event-hori .ui-resizable-e {
+    top: 0!important;
+    right: -3px!important;
+    width: 7px!important;
+    height: 100%!important;
+    cursor: e-resize
+}
+.fc-event-hori .ui-resizable-w {
+    top: 0!important;
+    left: -3px!important;
+    width: 7px!important;
+    height: 100%!important;
+    cursor: w-resize
+}
+.fc-event-hori .ui-resizable-handle {
+    _padding-bottom: 14px
+}
+.fc-corner-left {
+    margin-left: 1px
+}
+.fc-corner-left .fc-button-inner,
+.fc-corner-left .fc-event-inner {
+    margin-left: -1px
+}
+.fc-corner-right {
+    margin-right: 1px
+}
+.fc-corner-right .fc-button-inner,
+.fc-corner-right .fc-event-inner {
+    margin-right: -1px
+}
+.fc-corner-top {
+    margin-top: 1px
+}
+.fc-corner-top .fc-event-inner {
+    margin-top: -1px
+}
+.fc-corner-bottom {
+    margin-bottom: 1px
+}
+.fc-corner-bottom .fc-event-inner {
+    margin-bottom: -1px
+}
+.fc-corner-left .fc-event-inner {
+    border-left-width: 1px
+}
+.fc-corner-right .fc-event-inner {
+    border-right-width: 1px
+}
+.fc-corner-top .fc-event-inner {
+    border-top-width: 1px
+}
+.fc-corner-bottom .fc-event-inner {
+    border-bottom-width: 1px
+}
+table.fc-border-separate {
+    border-collapse: separate
+}
+.fc-border-separate th,
+.fc-border-separate td {
+    border-width: 1px 0 0 1px
+}
+.fc-border-separate th.fc-last,
+.fc-border-separate td.fc-last {
+    border-right-width: 1px
+}
+.fc-border-separate tr.fc-last th,
+.fc-border-separate tr.fc-last td {
+    border-bottom-width: 1px
+}
+.fc-border-separate tbody tr.fc-first td,
+.fc-border-separate tbody tr.fc-first th {
+    border-top-width: 0
+}
+.fc-grid th {
+    text-align: center
+}
+.fc-grid .fc-day-number {
+    float: right;
+    padding: 0 2px
+}
+.fc-grid .fc-other-month .fc-day-number {
+    opacity: .3;
+    filter: alpha(opacity=30)
+}
+.fc-grid .fc-day-content {
+    clear: both;
+    padding: 2px 2px 1px
+}
+.fc-grid .fc-event-time {
+    font-weight: bold
+}
+.fc-rtl .fc-grid .fc-day-number {
+    float: left
+}
+.fc-rtl .fc-grid .fc-event-time {
+    float: right
+}
+.fc-agenda table {
+    border-collapse: separate
+}
+.fc-agenda-days th {
+    text-align: center
+}
+.fc-agenda .fc-agenda-axis {
+    width: 50px;
+    padding: 0 4px;
+    vertical-align: middle;
+    text-align: right;
+    white-space: nowrap;
+    font-weight: normal
+}
+.fc-agenda .fc-day-content {
+    padding: 2px 2px 1px
+}
+.fc-agenda-days .fc-agenda-axis {
+    border-right-width: 1px
+}
+.fc-agenda-days .fc-col0 {
+    border-left-width: 0
+}
+.fc-agenda-allday th {
+    border-width: 0 1px
+}
+.fc-agenda-allday .fc-day-content {
+    min-height: 34px;
+    _height: 34px
+}
+.fc-agenda-divider-inner {
+    height: 2px;
+    overflow: hidden
+}
+.fc-widget-header .fc-agenda-divider-inner {
+    background: #fff
+}
+.fc-agenda-slots th {
+    border-width: 1px 1px 0
+}
+.fc-agenda-slots td {
+    border-width: 1px 0 0;
+    background: 0
+}
+.fc-agenda-slots td div {
+    height: 20px
+}
+.fc-agenda-slots tr.fc-slot0 th,
+.fc-agenda-slots tr.fc-slot0 td {
+    border-top-width: 0
+}
+.fc-agenda-slots tr.fc-minor th,
+.fc-agenda-slots tr.fc-minor td {
+    border-top-style: dotted
+}
+.fc-agenda-slots tr.fc-minor th.ui-widget-header {
+    *border-top-style: solid
+}
+.fc-event-vert {
+    border-width: 0 1px
+}
+.fc-event-vert .fc-event-head,
+.fc-event-vert .fc-event-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    overflow: hidden
+}
+.fc-event-vert .fc-event-time {
+    white-space: nowrap;
+    font-size: 10px
+}
+.fc-event-vert .fc-event-bg {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    opacity: .3;
+    filter: alpha(opacity=30)
+}
+.fc .ui-draggable-dragging .fc-event-bg,
+.fc-select-helper .fc-event-bg {
+    display: none\9
+}
+.fc-event-vert .ui-resizable-s {
+    bottom: 0!important;
+    width: 100%!important;
+    height: 8px!important;
+    overflow: hidden!important;
+    line-height: 8px!important;
+    font-size: 11px!important;
+    font-family: monospace;
+    text-align: center;
+    cursor: s-resize
+}
+.fc-agenda .ui-resizable-resizing {
+    _overflow: hidden
+}
+.ms-container {
+    background: transparent url('../img/switch.png') no-repeat 164px 80px;
+}

@@ -35,12 +35,15 @@ var SubscribeRouter = Backbone.Router.extend({
 	 */
 	subscribe : function(id)
 	{
+		
 		if(IS_NEW_USER && _plan_on_signup && _plan_on_signup.plan_type && _plan_on_signup.plan_type == "FREE")
 		{
 			_plan_on_signup = null;
 			Backbone.history.navigate("dashboard", {trigger : true});
 			return;
 		}
+		
+		//config_version_2_plans();
 		
 		/*
 		 * Creates new view with a render callback to setup expiry dates
@@ -321,6 +324,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			{
 				// Discount
 				showCouponDiscountAmount(plan_json, el);
+				
 				card_expiry(el);
 			},
 			saveCallback : function(data)
