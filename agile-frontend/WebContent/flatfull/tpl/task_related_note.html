@@ -1,0 +1,72 @@
+<script id="task_notes-collection-template" type="text/html">
+{{#unless this.length}}
+        <div class="alert-info alert">
+            <div class="slate-content">
+                <div class="box-left pull-left m-r-md">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right pull-left">
+                    <h4 class="m-t-none">You have no notes for this task.</h4>
+                    <div class="text">
+                        You can save specific information about task as a Note.
+                    </div>
+                    <a href="#new-task-modal" data-toggle="modal" class="btn btn-default btn-sm blue btn-slate-action task-add-note m-t-xs"><i class="icon-plus-sign"></i>  Add Note</a>
+                </div>
+				<div class="clearfix">
+				</div>
+            </div>
+        </div>
+ {{/unless}}
+
+{{#if this.length}}
+<div align="right" class="m-b-md">
+   <a href="#new-task-modal" data-toggle="modal" class="btn btn-sm btn-default tasks-add-note"><span><i class='icon-plus-sign'/></span> Add Note</a> 
+</div>
+<div class="clearfix"></div>
+	<ul id="task_notes-model-list" class="ativity-block-ul p-n"></ul>
+{{/if}}
+</script>
+<script id="task_notes-model-template" type="text/html">
+<div style="display:block;" class="activity">
+
+<div class="well">
+	<span class="activity-block-owner thumb avatar">
+		{{#if domainOwner}}
+			{{#if ownerPic}}
+				<img class="user-img thumbnail thumb m-b-none thumb-sm"  alt="" src="{{ownerPic}}" >
+			{{else}}
+				<img class="user-img thumbnail thumb m-b-none thumb-sm"  alt="" src="{{defaultGravatarurl 40}}" >
+			{{/if}}
+		{{else}}
+			<img class="user-img thumbnail thumb m-b-none thumb-sm"  alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
+		{{/if}}
+		<span class="owner-name">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
+	</span>
+	<h4 class="m-t-none"><a class="text-l-none">{{subject}}</a></h4>
+	<div class="m-t-sm bg-transparent b-n">
+		<pre class="b-n">{{show_link_in_statement description}}</pre>
+	</div>	
+	 	<div class="clear">
+		<div class="m-b">	
+		{{#each contacts}}
+           	{{#if id}}
+				{{#isDuplicateContactProperty properties "email"}}
+					{{else}}	
+						<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+				{{/isDuplicateContactProperty}}
+           		
+           	{{/if}}
+       	{{/each}}
+		</div>
+		<small class="edit-hover m-r-sm text-muted"> 
+			<i class="fa fa-clock-o m-r-xs"></i>
+			<time class="note-created-time border-highlight" datetime="{{epochToHumanDate "" created_time}}" >{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+		</small>
+		<span class="actions pull-right">
+<a title="Edit"  data="{{id}}" data-toggle="modal" class="task-note-edit p-r-sm c-p text-l-none"> <i class="icon-pencil"></i> </a>
+            <a title="Delete" class="c-p text-l-none"><span class="activity-delete icon-trash inline"  id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>
+        </span>
+	</div>
+</div>
+</div>
+</script>

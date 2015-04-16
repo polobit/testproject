@@ -1,0 +1,100 @@
+<script id="deal-detail-activities-collection-template" type="text/html">
+{{#unless this.length}}
+        <div class="alert-info alert">
+            <div class="slate-content">
+                <div class="box-left pull-left m-r-md">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right pull-left">
+                    <h4 class="m-t-none">No activity on this deal yet.</h4>
+                </div>
+				<div class="clearfix">
+				</div>
+            </div>
+        </div>
+ {{/unless}}
+
+{{#if this.length}}
+<div class="m-t-none b-b-none"></div>
+<section class="scroll">
+	<ul id="deal-detail-activities-model-list" class="ativity-block-ul p-n"></ul>
+</section>
+{{/if}}
+</script>
+
+<script id="deal-detail-activities-model-template" type="text/html">
+<div  class="activity block">
+
+<div class="well">
+	<span class="activity-block-owner thumb avatar">
+		{{#if user}}
+			{{#if userPic}}
+				<img class="user-img thumbnail m-b-none thumb"  alt="" src="{{userPic}}" >
+			{{else}}
+				<img class="user-img thumbnail m-b-none thumb"  alt="" src="{{defaultGravatarurl 40}}" >
+			{{/if}}
+		{{else}}
+			<img class="user-img thumbnail m-b-none thumb"  alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
+		{{/if}}
+<span class="owner-name">{{#if user}} {{user.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
+		
+	</span>
+	<h4 class="m-t-none"><a class="text-l-none-hover">{{get_normal_activity_type activity_type}}</a></h4>
+	<div class="bg-transparent b-n">
+{{#if_equals "DEAL_ADD" activity_type}}
+        <pre class=" b-n text-sm">Deal created for {{custom1}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}}, {{entityObject.probability}}%). </pre>
+     {{/if_equals}}
+
+{{#if_equals "DEAL_EDIT" activity_type}}
+        <pre class=" b-n text-sm">{{displayActivityFieldText custom3}} modified. </pre>
+     {{/if_equals}}
+
+{{#if_equals "DEAL_CLOSE" activity_type}}
+        <pre class=" b-n text-sm">Hurray. {{entityObject.owner.name}} has won deal worth {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}. </pre>
+     {{/if_equals}}
+{{#if_equals "DEAL_LOST" activity_type}}
+        <pre class=" b-n text-sm">Alas. {{entityObject.owner.name}} has lost the deal worth {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}.</pre>
+     {{/if_equals}}
+
+{{#if_equals "DEAL_MILESTONE_CHANGE" activity_type}}
+        <pre class="b-n text-sm">Milestone changed from {{custom2}} to {{custom1}}. </pre>
+     {{/if_equals}}
+
+{{#if_equals "DEAL_OWNER_CHANGE" activity_type}}
+        <pre class="b-n text-sm">Owner changed from {{custom2}} to {{custom1}}. </pre>
+     {{/if_equals}}
+
+{{#if_equals "DEAL_RELATED_CONTACTS" activity_type}}
+         {{#if related_contact_ids}}
+{{#if_equals "removed_all_relatedcontacts" custom3}}
+<pre class="b-n text-sm">{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal.</pre>
+{{/if_equals}} 
+{{#if_equals "removed_relatedcontacts" custom3}}
+<pre class="b-n text-sm">{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from deal.</pre>
+{{/if_equals}} 
+{{#if_equals "added_relatedcontacts" custom3}}
+<pre class="b-n text-sm">{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to deal.</pre>  
+{{/if_equals}}
+{{else}}
+Modified deal.   
+
+{{/if}} 
+     {{/if_equals}}
+
+{{#if_equals "NOTE_ADD" activity_type}}
+        <pre class="bg-white b-n text-sm">{{custom1}}<br/>{{custom2}}. </pre>
+     {{/if_equals}}
+		
+	</div>	
+<div class="clearfix"></div>
+	 	<div class="clear">
+		
+		<small class="edit-hover m-r-sm text-muted"> 
+			<i class="fa fa-clock-o m-r-xs"></i>
+			<time class="border-highlight"  datetime="{{epochToHumanDate "" time}}"  title="{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}">{{epochToHumanDate "dd mmm yyyy" time}}</time>
+		</small>
+
+	</div>
+</div>
+</div>
+</script>

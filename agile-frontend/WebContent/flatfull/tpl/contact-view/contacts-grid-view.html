@@ -1,0 +1,195 @@
+<script id="contacts-grid-model-template" type="text/html">
+
+<div class="p-b col-md-4 {{id}}">
+  {{#if_contact_type "PERSON"}}
+    <div class="b r-5x p-sm bg-white" id={{id}} style="height:110px;">
+	<label class="i-checks i-checks-sm right">
+       <input type="checkbox" class="tbody_check" value="">
+       <i></i>                
+     </label>
+	  <div class="pull-left m-r-xs thumb">
+        <img class="img-inital inline r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}" width="50px" height="50px"  />
+      </div>
+	  <div class="pull-left text-ellipsis" style="width:70%;">
+        <a href="#contact/{{id}}" class="text-first-capital">
+			{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}		
+		</a>
+		<br/>
+        	{{getPropertyValue properties "email"}}
+        
+</div>
+<div class="clearfix"></div>
+<div class="w-full text-ellipsis m-t-xs">
+        {{#each tags}}
+        <span class="label bg-light dk text-tiny overflow-visible inline-block font-normal">{{this}}</span>
+        {{/each}}
+	  </div>
+    </div>
+  {{/if_contact_type}}
+
+  {{#if_contact_type "COMPANY"}}
+    <div class="b r-5x p-sm" style="background-color:#f5f5dc;height:100px;" id={{id}}>
+		<label class="i-checks i-checks-sm right">
+           <input type="checkbox" class="tbody_check" value="">
+           <i></i>                
+        </label>
+	  	<div class="pull-left m-r-xs">
+        	<img class="thumbnail m-b-none" {{getCompanyImage "50" "display:inline;"}} />
+      	</div>
+	  	<div class="pull-left text-ellipsis" style="width:70%;">
+        	<a href="#contact/{{id}}" class="text-first-capital">
+        		<b>{{getPropertyValue properties "name"}}</b>
+			</a>
+			<br/>
+        	{{getPropertyValue properties "url"}}
+			
+	  	</div>
+<div class="clearfix"></div>
+    </div>
+  {{/if_contact_type}}
+
+</div>
+
+</script>
+
+<script id="contacts-grid-table-model-template" type="text/html">
+<div class="p-b col-md-4 {{id}}">
+  {{#if_contact_type "PERSON"}}
+    <div class="b r-5x p-sm" style="background-color:#f5f5dc;height:97px;"id={{id}}>
+			<label class="i-checks right">
+                <input type="checkbox" class="tbody_check" value="">
+                <i></i>                
+      		</label>
+	  <div class="pull-left m-r-xs">
+        <img class="thumbnail img-inital inline m-b-none" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}" width="50px" height="50px"  />
+      </div>
+	  <div class="pull-left text-ellipsis" style="width:70%;">
+        <a href="#contact/{{id}}" class="text-first-capital">
+			{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}		
+		</a>
+		<br/>
+        	{{getPropertyValue properties "email"}}
+        
+</div>
+<div class="clearfix"></div>
+<div class="w-full text-ellipsis m-t-xs">
+        {{#each tags}}
+        <span class="label bg-light dk text-tiny overflow-visible inline-block font-normal">{{this}}</span>
+        {{/each}}
+	  </div>
+    </div>
+  {{/if_contact_type}}
+
+  {{#if_contact_type "COMPANY"}}
+    <div class="b r-5x p-sm" style="background-color:#f5f5dc;height:75px;" id={{id}}>
+	<label class="i-checks i-checks-sm">
+		<input class="tbody_check right" type="checkbox"/>
+	<i></i></label>
+	  	<div class="pull-left m-r-xs">
+        	<img class="thumbnail m-b-none" {{getCompanyImage "50" "display:inline;"}} />
+      	</div>
+	  	<div class="pull-left text-ellipsis" style="width:70%;">
+        	<a href="#contact/{{id}}" class="text-first-capital">
+        		<b>{{getPropertyValue properties "name"}}</b>
+			</a>
+			<br/>
+        	{{getPropertyValue properties "url"}}
+			
+	  	</div>
+<div class="clearfix"></div>
+    </div>
+  {{/if_contact_type}}
+
+</div>
+
+</script>
+
+<script id="contacts-grid-collection-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-md-12">
+
+<div class="pull-left">
+			<h3 class="inline-block font-thin h3"><span id="contact-heading">Contacts</span> <span id="contacts-count">{{contacts_count}}</span></h3>
+<div class="inline-block ">
+			<div class="btn-group m-l-md" id="bulk-actions"
+				style="display: none;">
+					<div class="btn btn-sm btn-default">Bulk Actions</div>
+					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+						<span class="caret"></span>
+					</a>
+					{{#collection_contact_type "PERSON"}}
+					<ul class="dropdown-menu" id="view-actions">
+						<li><a href="#" id="bulk-tags">Add Tags</a></li>
+						<li><a href="#" id="bulk-tags-remove">Remove Tags</a></li>
+                        <li class='divider'></li>  
+						{{#hasMenuScope 'CAMPAIGN'}}
+						<li><a href="#" id="bulk-campaigns">Add to Campaign</a></li>
+						{{/hasMenuScope}}
+						<li><a href="#" id="bulk-email">Send Email</a></li>
+                        <li class='divider'></li>
+						<li><a href="#" id="bulk-owner">Change Owner</a></li>
+                        <li><a href="#" id="bulk-contacts-export">Export Contacts as CSV</a></li>
+						<li><a href="#" id="delete-checked-grid">Delete</a></li>
+					</ul>
+					{{/collection_contact_type}}
+					{{#collection_contact_type "COMPANY"}}
+					<ul class="dropdown-menu" id="view-actions">
+						<li><a href="#" id="bulk-email">Send Email</a></li>
+                        <li class='divider'></li>
+						<li><a href="#" id="bulk-owner">Change Owner</a></li>
+						<li><a href="#" id="bulk-companies-export">Export Companies as CSV</a></li>
+						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
+					</ul>
+					{{/collection_contact_type}}
+			</div>
+			<div  class="btn-group" style="display: none;" id="bulk-select"></div>
+		</div>
+</div>
+<div class="pull-right">
+            <div class="btn-group m-r-sm" id="filter-list"></div>
+			<div class="btn-group " id="view-list"></div>
+			
+</div>
+<div class="clearfix"></div>
+   
+    </div>
+    </div>
+    </div>
+<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
+    <div class="col w-md b-r ">
+        <div class="data-block">
+            <div  id="lhs_filters_conatiner">
+				
+			</div>
+        </div>
+    </div>
+    <div class="col wrapper">
+		<div class="filter-criteria"></div>
+        <div id="slate">
+        </div>
+        {{#if this.length}}
+        <div class="data">
+            <div class="data-container">
+                <div id="contacts-grid-model-list" class="contacts-model-list grid-view showCheckboxes" route="contact/"  url="core/api/bulk/update?action_type=DELETE"></div>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+</div>
+</div>
+
+</script>
+<script id="contacts-grid-table-collection-template" type="text/html">
+	<div class="filter-criteria"></div>
+        <div id="slate">
+        </div>
+        {{#if this.length}}
+        <div class="data">
+            <div class="data-container">
+                <div id="contacts-grid-table-model-list" class="contacts-model-list grid-view showCheckboxes" route="contact/"  url="core/api/bulk/update?action_type=DELETE" style="overflow:auto;margin-left:-20px;"></div>
+            </div>
+        </div>
+        {{/if}}
+</script>
