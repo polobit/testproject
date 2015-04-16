@@ -2,6 +2,7 @@
 <%@page import="com.agilecrm.activities.util.WebCalendarEventUtil"%>
 <%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
+<%@page import="com.agilecrm.activities.util.GoogleCalendarUtil"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
 <%@page import="com.agilecrm.activities.util.EventUtil"%>
@@ -20,7 +21,7 @@
 
 <%
 			String event_id = request.getParameter("event_id");
-  String appointment_confirmation_image="/img/appointment_confirmation.png";
+            String appointment_confirmation_image="/img/appointment_confirmation.png";
             String domain_user_name=null;
             String calendar_url=null;
             String event_start_time=null;
@@ -55,6 +56,7 @@
 				    client_name.concat(contacts.get(0).getContactFieldValue("LAST_NAME"));
 				}
 				String client_email=contacts.get(0).getContactFieldValue("EMAIL");
+				GoogleCalendarUtil.deleteGoogleEvent(event);
 				event.delete();
 				appointment_cancelled=true;
 				
