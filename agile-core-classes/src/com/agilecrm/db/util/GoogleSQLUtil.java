@@ -99,6 +99,8 @@ public class GoogleSQLUtil
      * Makes a timezone conversion condition string
      * which is useful in campaign reports sql query 
      * 
+     * From "+00:00" to given timezone like +05:30
+     * 
      * @param timeZoneOffset
      *            - Timezone offset.
      * @return String.
@@ -106,6 +108,21 @@ public class GoogleSQLUtil
     public static String getConvertTZ(String timeZoneOffset)
     {
 	return "'+00:00'," + GoogleSQLUtil.encodeSQLColumnValue(timeZoneOffset);
+    }
+    
+    /**
+     * Makes a timezone conversion condition string
+     * which is useful in campaign reports sql query 
+     * 
+     * From "+05:30" to given timezone like +00:00
+     * 
+     * @param timeZoneOffset
+     *            - Timezone offset.
+     * @return String.
+     */
+    public static String getConvertTZ2(String timeZoneOffset)
+    {
+	return GoogleSQLUtil.encodeSQLColumnValue(timeZoneOffset) + ",'+00:00'";
     }
 
     /**
