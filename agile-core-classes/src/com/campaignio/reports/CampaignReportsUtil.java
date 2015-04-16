@@ -54,7 +54,6 @@ public class CampaignReportsUtil
     {
 	// Types of bars in a bar graph
 	String[] barTypes = { "EMAIL_SENT", "EMAIL_OPENED", "count","EMAIL_CLICKED"};
-	LinkedHashMap<String, Integer> countMap = CampaignReportsUtil.getDefaultCountTable(barTypes);
 
 	// Campaigns Comparison need no initialization as there is no duration.
 	LinkedHashMap<String, LinkedHashMap<String, Integer>> groupByMap = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
@@ -69,6 +68,7 @@ public class CampaignReportsUtil
 	    // Arrange sqlData as required to Graph
 	    for (int index = 0; index < sqlData.length(); index++)
 	    {
+	    LinkedHashMap<String, Integer> countMap = CampaignReportsUtil.getDefaultCountTable(barTypes);
 		JSONObject logJSON = sqlData.getJSONObject(index);
 
 		// Reset countMap values before entering new
@@ -248,6 +248,21 @@ public class CampaignReportsUtil
 	endCal.add(Calendar.SECOND, 59);
 	endTime = endCal.getTimeInMillis() + "";
 
+	// Converts epoch time to "yyyy-MM-dd HH:mm:ss" and set timezone.
+	return DateUtil.getMySQLNowDateFormat(Long.parseLong(endTime), timeZone);
+    }
+    
+    /**
+     * Returns end date with mid-night time in mysql date format.
+     * 
+     * @param endTime
+     *            - Epoch time of end date.
+     * @param timeZone
+     *            - TimeZone Id obtained from client side. E.g. -330
+     * @return String
+     */
+    public static String getEndDateForReports(String endTime, String timeZone)
+    {
 	// Converts epoch time to "yyyy-MM-dd HH:mm:ss" and set timezone.
 	return DateUtil.getMySQLNowDateFormat(Long.parseLong(endTime), timeZone);
     }
