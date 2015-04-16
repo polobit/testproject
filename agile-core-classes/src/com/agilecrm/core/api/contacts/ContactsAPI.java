@@ -517,7 +517,7 @@ public class ContactsAPI
     }
 
     /**
-     * Change owner of the contact.
+     * Change owner of the contact. For API only.
      * 
      * @param contact
      * @param new_owner
@@ -529,29 +529,13 @@ public class ContactsAPI
     @PUT
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Contact changeContactOwner(@FormParam("new_owner") String new_owner, @FormParam("contact_id") Long contact_id)
-	    throws JSONException
+    public String changeContactOwner(@FormParam("owner_email") String owner_email,
+	    @FormParam("contact_id") Long contact_id) throws JSONException
     {
-	if (StringUtils.isEmpty(new_owner))
+	if (StringUtils.isEmpty(owner_email) || contact_id == null)
 	    return null;
 
-	Contact contact = ContactUtil.getContact(contact_id);
-
-	if (contact == null)
-	    return null;
-	String old_owner_name = contact.getOwner() != null ? contact.getOwner().name : null;
-	List<Contact> contacts = new ArrayList<Contact>();
-	contacts.add(contact);
-	ContactUtil.changeOwnerToContactsBulk(contacts, new_owner);
-	try
-	{
-	    ActivitySave.contactOwnerChangeActivity(contact, old_owner_name);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-	return contact;
+	return ContactUtil.changeContactOwner(owner_email, contact_id);
     }
 
     /**
