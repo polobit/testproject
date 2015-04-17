@@ -122,39 +122,78 @@ var ActivitylogRouter = Backbone.Router.extend({
 			
 					$('#content').html(getTemplate("contact-activity-header", {}));
 			
-					if(id==undefined || id=="All Activities")
+					/*if(id==undefined || id=="All Activities")
 						$('#log-filter-title').text("All Activities");
 					else
-						$('#log-filter-title').text(id.replace(/_/g," "));
-			
-				    
-					if(id != undefined){
-						if(id=='Spam_Reports')
-					    	id='Email_Spam';
-						urlPath = urlPath +"?log_type=" + id;
+						$('#log-filter-title').text(id.replace(/_/g," "));*/
+					
+					var keyword="";
+					var uiKeyword="";
+					switch (id) {
+					  case "all":
+						  keyword="?log_type=All_Activities";
+						  uiKeyword="All Activities";
+					    break;
+					  case "page-views":
+						  keyword="?log_type=Page_Views";
+						  uiKeyword="Page Views";
+					    break;
+					  case "email-opens":
+						  keyword="?log_type=Email_Opened";
+						  uiKeyword="Email Opens";
+					    break;
+					  case "email-clicks":
+						  keyword="?log_type=Email_Clicked";
+						  uiKeyword="Email Clicks";
+					    break;
+					  case "unsubscriptions":
+						  keyword="?log_type=Unsubscribed";
+						  uiKeyword="Unsubscriptions";
+						    break;
+					  case "spam-reports":
+						  keyword="?log_type=Email_Spam";
+						  uiKeyword="Spam Reports";
+					    break;
+					  case "hard-bounces":
+						  keyword="?log_type=Email_Hard_Bounced";
+						  uiKeyword="Hard Bounces";
+						    break;
+					  case "soft-bounces":
+						  keyword="?log_type=Email_Soft_Bounced";
+						  uiKeyword="Soft Bounces";
+						    break;
+					  default:
+						  keyword="?log_type=All_Activities";
+					  uiKeyword="All Activities";
 					}
+					
+					urlPath=urlPath+keyword;
+					$('.contact-activity-sub-heading').text(uiKeyword);
+				    $('#log-filter-title').text(uiKeyword);
+				      
+					/*if(IS_FLUID){
+						$('#contact_activity_header').removeClass('row').addClass('row-fluid');
+						$('#contact_activity_model').removeClass('row').addClass('row-fluid');
 						
-			
+					}
+					else{
+						$('#contact_activity_header').removeClass('row-fluid').addClass('row');
+						$('#contact_activity_model').removeClass('row-fluid').addClass('row');
+					}
+			*/
 					var collectionList = new Base_Collection_View({
 						url : urlPath,
 						templateKey: 'contact-activity-list-log',
-						individual_tag_name: 'tr',
-						cursor : true, 
+						individual_tag_name: 'li',
+						cursor : true,
+						scroll_symbol:'scroll',
 						page_size : 20, sort_collection : false, postRenderCallback : function(el){
 							//initDateRangePicker("contact_activities_date_range",el);
 							head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 									{
 										$("time", el).timeago();
 										console.log(id);
-										if(IS_FLUID){
-											$('#contact_activity_header').removeClass('row').addClass('row-fluid');
-											$('#contact_activity_model').removeClass('row').addClass('row-fluid');
-											
-										}
-										else{
-											$('#contact_activity_header').removeClass('row-fluid').addClass('row');
-											$('#contact_activity_model').removeClass('row-fluid').addClass('row');
-										}
+										
 									});
 							
 						},appendItemCallback : function(el)
@@ -162,13 +201,14 @@ var ActivitylogRouter = Backbone.Router.extend({
 							includeTimeAgo(el);
 						}  
 					});
-					
+					collectionList.appendItem = append_contact_activities_log;
 					collectionList.collection.fetch();
 					
-					$('#contact-activity-list-based-condition').html(collectionList.render().el);
+					$('#contact-activity-list-based-condition').html(collectionList.render().el);					
+					
 					
 					console.log("========contact activities ==========");
-					console.log(collectionList.render().el);
+					//console.log(collectionList.render().el);
 					
 				});
 		
