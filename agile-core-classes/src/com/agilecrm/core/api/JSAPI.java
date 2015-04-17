@@ -12,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -41,7 +42,6 @@ import com.agilecrm.forms.Form;
 import com.agilecrm.forms.util.FormUtil;
 import com.agilecrm.gadget.GadgetTemplate;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
-import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.JSAPIUtil;
 import com.agilecrm.util.JSAPIUtil.Errors;
 import com.agilecrm.webrules.WebRule;
@@ -55,6 +55,7 @@ import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
+import com.campaignio.logger.Log;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.wrapper.LogWrapper;
 
@@ -154,24 +155,30 @@ public class JSAPI
 	    // Sets owner key to contact before saving
 	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
 
-	    LinkedHashSet<String> validTags = new LinkedHashSet<String>();
-	    for (String tag : contact.tags)
+	    if (contact.tags.size() > 0)
 	    {
-		tag = TagUtil.getValidTag(tag);
-		if (tag == null)
-		    continue;
-		validTags.add(tag);
+		try
+		{
+		    String[] tags = new String[contact.tags.size()];
+		    contact.tags.toArray(tags);
+		    contact.addTags(tags);
+		}
+		catch (WebApplicationException e)
+		{
+		    return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
+		}
 	    }
-	    contact.tags = validTags;
-
-	    try
+	    else
 	    {
-		// If zero, save it
-		contact.save();
-	    }
-	    catch (PlanRestrictedException e)
-	    {
-		return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_LIMIT_REACHED);
+		try
+		{
+		    // If zero, save it
+		    contact.save();
+		}
+		catch (PlanRestrictedException e)
+		{
+		    return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_LIMIT_REACHED);
+		}
 	    }
 
 	    return mapper.writeValueAsString(contact);
@@ -368,7 +375,14 @@ public class JSAPI
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
 
-	    contact.addTags(JSAPIUtil.getValidTags(tagsArray));
+	    try
+	    {
+		contact.addTags(tagsArray);
+	    }
+	    catch (WebApplicationException e)
+	    {
+		return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
+	    }
 
 	    return new ObjectMapper().writeValueAsString(contact);
 
@@ -1080,9 +1094,19 @@ public class JSAPI
 	    contact.contact_company_id = null;
 
 	    if (tags.length > 0)
-		contact.addTags(JSAPIUtil.getValidTags(tags));
+	    {
+		try
+		{
+		    contact.addTags(tags);
+		}
+		catch (WebApplicationException e)
+		{
+		    return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
+		}
+	    }
 	    else
 		contact.save();
+
 	    return mapper.writeValueAsString(contact);
 	}
 	catch (JsonGenerationException e)
@@ -1187,7 +1211,7 @@ public class JSAPI
 	    if (contact.getContactField(name) == null)
 		return JSAPIUtil.generateJSONErrorResponse(Errors.PROPERTY_MISSING);
 	    else
-		return contact.getContactFieldValue(name);
+		return new ObjectMapper().writeValueAsString(contact.getContactFieldValue(name));
 	}
 	catch (Exception e)
 	{
@@ -1363,14 +1387,14 @@ public class JSAPI
 	    for (Trigger trigger : triggers)
 	    {
 		if (StringUtils.equals(trigger.type.toString(), "FORM_SUBMIT")
-			&& (newContact || !TriggerUtil.getTriggerRunStatus(trigger)))
+		        && (newContact || !TriggerUtil.getTriggerRunStatus(trigger)))
 		{
 		    System.out.println("trigger condition, event match ...");
 		    if (StringUtils.equals(trigger.trigger_form_event, form.id.toString()))
 		    {
 			System.out.println("Assigning campaign to contact ...");
 			WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id,
-				new JSONObject().put("form", formFields));
+			        new JSONObject().put("form", formFields));
 		    }
 		}
 	    }
@@ -1379,25 +1403,6 @@ public class JSAPI
 	{
 	    System.out.println("Error is " + e.getMessage());
 	    return;
-	}
-    }
-
-    /**
-     * Get allowed domains
-     */
-    @Path("users")
-    @GET
-    @Produces("application / x-javascript;charset=UTF-8;")
-    public String getAllUsers()
-    {
-	try
-	{
-	    ObjectMapper mapper = new ObjectMapper();
-	    return mapper.writeValueAsString(DomainUserUtil.getAllUsers());
-	}
-	catch (Exception e)
-	{
-	    return null;
 	}
     }
 }
