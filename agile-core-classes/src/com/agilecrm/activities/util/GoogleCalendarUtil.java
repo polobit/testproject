@@ -224,8 +224,8 @@ public class GoogleCalendarUtil
 
 			// Get primary calendar's email id
 			String pCalId = getPrimaryCaledarId(prefs);
-			DateTime sd = new DateTime(event.start * 1000);
-			DateTime ed = new DateTime(event.end * 1000);
+			DateTime sd = new DateTime(event.start * 1000, 0);
+			DateTime ed = new DateTime(event.end * 1000, 0);
 
 			String postURL = "https://www.googleapis.com/calendar/v3/calendars/" + pCalId + "/events?access_token="
 					+ prefs.access_token + "&timeMax=" + ed + "&timeMin=" + sd;

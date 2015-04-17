@@ -59,7 +59,6 @@
 				GoogleCalendarUtil.deleteGoogleEvent(event);
 				event.delete();
 				appointment_cancelled=true;
-				
 				String subject="<p>"+client_name+" ("+client_email+") has cancelled the appointment</p><span>Title: "+event_title+" ("+duration+" mins)</span><br/><span>Start time: "+event_start_time+"</span>";
 				
 				EmailGatewayUtil.sendEmail(null, client_email, client_name, domain_user.email, null, null,
