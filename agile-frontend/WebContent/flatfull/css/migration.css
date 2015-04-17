@@ -1147,3 +1147,8 @@ background:#f6f8f8;
 .header-min-width {
 	min-width:90px;
 }
+
+/*Reports table checkbox alignment to top*/
+#activity-report-model-list .checkbox, #report-model-list .checkbox{
+	vertical-align: top !important;
+}
