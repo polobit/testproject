@@ -1,0 +1,46 @@
+<script id="portlets-add-model-template" type="text/html">
+<div class="m-t">
+	<div>
+		<div class="pull-left m-r-sm m-b">
+			<div id="portlets_main" class="network-type c-p text-md" style="color: #8a6086;" onclick="javascript:addNewPortlet('{{portlet_type}}','{{remove_spaces name}}');">
+			<a>
+			<i class="portlets-modal-icon icon {{get_portlet_icon name}}"></i>				
+				{{get_portlet_name name}}
+			</a>
+			</div>
+		</div>    
+	</div>	
+</div>
+</script>
+<script id="portlets-add-collection-template" type="text/html">
+<div class="row">
+	<div class="col-md-10 col-md-offset-1">
+		<h4 class="portlet-head m-t-sm">Contacts</h4>
+		<div id="contacts"></div><br/>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-10 col-md-offset-1">
+		<h4 class="portlet-head">Deals</h4>
+		<div id="deals"></div><br/>
+    </div>
+</div>
+<div class="row">
+	<div class="col-md-10 col-md-offset-1">
+		<h4 class="portlet-head">Calendar</h4>
+		<div id="taksAndEvents"></div><br/>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-10 col-md-offset-1">
+		<h4 class="portlet-head">User Activity</h4>
+		<div id="userActivity"></div><br/>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-10 col-md-offset-1">
+		<h4 class="portlet-head">RSS Feed</h4>
+		<div id="rssFeed"></div><br/>
+	</div>
+</div>
+</script>

@@ -1,0 +1,71 @@
+<script id="deal-related-model-template" type="text/html">
+	<td></td>
+	<td class="data no-wrap" data="{{id}}">
+    	<div class="inline p-r-sm h-auto">
+{{#if_equals type "PERSON"}}        		
+<img class="thumbnail img-inital thumb inline m-b-none" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  />
+{{else}}
+<img class="thumbnail thumb m-b-none inline" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/>
+{{/if_equals}}    	
+</div>
+    	<div class="h-auto inline-block v-top text-ellipsis" style="width:12em;">
+        		<b>	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </b>
+        		<b>{{getPropertyValue properties "name"}}</b>
+    	</div>
+	</td>
+	
+<td style="width:6em;"><div>{{#if_equals type "PERSON"}}Contact {{else}} Company{{/if_equals}}</div></td>
+<td style="width:6em;"><div>{{lead_score}}</div></td>
+
+	<td style="width:6em;"><div>{{getPropertyValue properties "phone"}}</div></td>
+	
+</script>
+
+<script id="deal-related-collection-template" type="text/html">
+
+{{#if this.length}}
+	<div style='height:30px' align="right">
+		<a href="#" class="deal-add-contact btn btn-sm btn-primary  pos-rlt m-b-sm">
+			<span><i class="icon-plus-sign"></i></span> Add Contact
+		</a>
+	</div>
+	<br/>
+		
+			<table id="contacts" class="table table-striped agile-ellipsis-dynamic onlySorting overflow-scroll r-5x m-b-none b b-separate">
+				<colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup>
+				<thead>
+					<tr><th></th>
+						<th>Name</th>
+						<th>Type</th>
+						<th>Score</th>
+						<th>Phone</th>
+					</tr>
+				</thead>
+				<tbody id="deal-related-model-list" class="deal-related-model-list agile-edit-row overflow-scroll"
+					route="contact/" >
+				</tbody>
+			</table>
+
+		{{else}}
+			<div class="alert-info alert">
+            	<div class="slate-content">
+                	<div class="box-left pull-left m-r-md">
+                    	<img alt="Clipboard" src="/img/clipboard.png">
+                	</div>
+                	<div class="box-right pull-left">
+                    	<h4 class="m-t-none">Deal is not associated with any person/contact. </h4>
+                    	<div class="text">
+							All Contacts which are related to this deal are shown here.
+							<br/>
+							<a href="#" class="deal-add-contact btn btn-default btn-sm m-t-xs left" style="margin-top:10px; margin-bottom:10px;">
+								<i class="icon-plus-sign"></i> Add Contact
+							</a>
+                    	</div>
+                	</div>
+					<div class="clearfix">
+					</div>
+            	</div>
+        	</div>
+		{{/if}}
+</script>

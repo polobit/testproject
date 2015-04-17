@@ -701,6 +701,10 @@ var SettingsRouter = Backbone.Router.extend({
 			            
 			     
 					 $(".mini-time").keydown(false);
+					 if(_plan_restrictions && _plan_restrictions.plan){
+						 if(!_plan_restrictions.plan.onlineAppointment)
+							 $(".mini-time").attr("disabled","true");
+						 }
 					 
 				});
 				

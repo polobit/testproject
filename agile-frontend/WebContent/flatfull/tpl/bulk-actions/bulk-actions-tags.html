@@ -1,0 +1,41 @@
+<script id="bulk-actions-tags-template" type="text/html">
+<div class="row">
+<div class="col-md-8">
+	<div class="tab-content wrapper-md">
+	<div class="panel panel-default">
+	<div class="panel-heading"><h4 class="h4">Add tags to selected contacts</h4></div>
+	<div class="panel-body">
+        <form id="tagsBulkForm" class="form-horizontal">
+            <fieldset>
+                <div class="control-group form-group">         
+                    <label class="control-label col-sm-2">Add tags <span class="field_req">*</span></label>
+                    <div class="controls col-sm-10">
+                        <div class="pull-left">
+                        <ul name="tags" class= "tagsinput tags p-n"></ul>
+                        </div>              
+                        <input name="tags" type="text" id="addBulkTags" class="tags-typeahead form-control" placeholder="Enter tags separated by comma"/>
+						<span class="error-tags" style="display:none;color:red;">This field is required.</span>
+						<input class="hide"/>      
+              		</div>
+                </div>
+				<div class="invalid-tags" style="display:none;color:red;">Tag name should start with an alphabet and can not contain special characters other than underscore and space.</div>
+              
+<hr class="m-t-none">
+<div class="row">
+<div class="col-sm-offset-2 col-sm-10">
+  <div class="form-actions">       
+					<a href="#contacts" class="btn btn-default btn-sm">Close</a>   
+                    <a href="#" type="submit" id="addTagsToContactsBulk" class="btn btn-primary btn-sm">Add Tag</a> 
+                    <span class="save-status"></span>
+              
+</div>
+</div>
+</div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</script>		
