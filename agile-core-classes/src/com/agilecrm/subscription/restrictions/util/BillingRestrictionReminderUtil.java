@@ -271,18 +271,18 @@ public class BillingRestrictionReminderUtil
 
 	Integer percentage = calculatePercentage(allowedCount, count);
 	if (percentage >= 75 && percentage < 85)
-	    return className + "-75";
+	    return className + "_75";
 	if (percentage >= 85 && percentage < 90)
-	    return className + "-85";
+	    return className + "_85";
 	if (percentage >= 90 && percentage < 100)
-	    return className + "-90";
+	    return className + "_90";
 	if (percentage >= 100)
-	    return className + "-100";
+	    return className + "_100";
 
 	if (!hardLoad)
 	    return null;
 
-	return className + "-" + percentage;
+	return className + "_" + percentage;
     }
 
 }
