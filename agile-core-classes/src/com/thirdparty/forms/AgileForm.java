@@ -37,6 +37,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
+import com.campaignio.servlets.util.TrackClickUtil;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.datanucleus.annotations.Owned;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
@@ -45,9 +46,11 @@ import com.google.appengine.labs.repackaged.org.json.JSONObject;
 public class AgileForm extends HttpServlet
 {
     public static String[] authDetails = { "_agile_form_name", "_agile_domain", "_agile_api", "_agile_redirect_url" };
-    
-    public static Set<String> systemContactProperties = new HashSet<String>(Arrays.asList(new String[] {Contact.FIRST_NAME, Contact.LAST_NAME, Contact.EMAIL, Contact.COMPANY, Contact.TITLE, Contact.WEBSITE, Contact.URL, Contact.NAME, Contact.IMAGE, Contact.PHONE}));
-    
+
+    public static Set<String> systemContactProperties = new HashSet<String>(Arrays.asList(new String[] {
+	    Contact.FIRST_NAME, Contact.LAST_NAME, Contact.EMAIL, Contact.COMPANY, Contact.TITLE, Contact.WEBSITE,
+	    Contact.URL, Contact.NAME, Contact.IMAGE, Contact.PHONE }));
+
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
 	try
@@ -92,8 +95,11 @@ public class AgileForm extends HttpServlet
 
 	    runFormTrigger(contact, newContact, form, formJson);
 
-	    if (!StringUtils.equals(agileRedirectURL, "#"))
-		response.sendRedirect(agileRedirectURL);
+	    if (StringUtils.equals(agileRedirectURL, "#"))
+		response.sendRedirect(getNormalizedRedirectURL(agileRedirectURL, contact, false, agileDomain));
+	    else
+		response.sendRedirect(getNormalizedRedirectURL(agileRedirectURL, contact, true, agileDomain));
+
 	    return;
 	}
 	catch (org.json.JSONException e)
@@ -199,32 +205,33 @@ public class AgileForm extends HttpServlet
 
     public Boolean isNotContactProperty(String key)
     {
-	return ((StringUtils.indexOf("tags note", key) != -1) || (isNotSystemContactProperty(key) && !isAddressField(key) && isNotCustomContactProperty(key)));
-      } 
-    
+	return ((StringUtils.indexOf("tags note", key) != -1) || (isNotSystemContactProperty(key)
+	        && !isAddressField(key) && isNotCustomContactProperty(key)));
+    }
+
     public Boolean isNotCustomContactProperty(String key)
     {
 	List<CustomFieldDef> contactCustomFields = CustomFieldDefUtil.getAllContactCustomField();
 	for (CustomFieldDef customFieldDef : contactCustomFields)
-        {
-	    if(StringUtils.equals(key, customFieldDef.field_label))
+	{
+	    if (StringUtils.equals(key, customFieldDef.field_label))
 	    {
 		return false;
 	    }
-        }
+	}
 	return true;
     }
-    
+
     public Boolean isNotSystemContactProperty(String key)
     {
 	return !systemContactProperties.contains(key);
     }
-    
+
     public Boolean isAddressField(String key)
     {
 	return (StringUtils.indexOf("address city state country zip", key) != -1);
     }
-    
+
     public List<ContactField> updateContactPropList(List<ContactField> oldProperties, List<ContactField> newProperties)
     {
 	List<ContactField> outDatedProperties = new ArrayList<ContactField>();
@@ -346,5 +353,24 @@ public class AgileForm extends HttpServlet
 	    return resultJson;
 	else
 	    return null;
+    }
+
+    public String getNormalizedRedirectURL(String agileRedirectURL, Contact contact, Boolean externalRedirect,
+	    String agileDomain)
+    {
+	String normalizedRedirectURL = agileRedirectURL.trim().replaceAll("\r", "").replaceAll("\n", "");
+	String params = new String();
+
+	if (StringUtils.contains(normalizedRedirectURL, "?"))
+	    params = "&fwd=cd";
+	else
+	    params = "?fwd=cd";
+
+	params = params + TrackClickUtil.appendContactPropertiesToParams(contact);
+
+	if (externalRedirect)
+	    return normalizedRedirectURL + params;
+	else
+	    return new String("https://" + agileDomain + ".agilecrm.com/agileform_thankyou.jsp");
     }
 }
