@@ -100,7 +100,7 @@ $(function(){
 		$('#' + this.id).find('.error').removeClass('error');
 		var taget = $(data.target);
 		add_custom_fields_to_form({}, function(data){
-			var el_custom_fields = show_custom_fields_helper(data["custom_fields"], []);
+			var el_custom_fields = show_custom_fields_helper(data["custom_fields"], ["modal"]);
 			$("#custom-field-case", taget).html($(el_custom_fields));
 		
 			}, "CASE");
@@ -171,7 +171,7 @@ function updatecases(ele)
 	$("#casesUpdateModal").modal("show");
 	
 	add_custom_fields_to_form(value, function(data){
-		var el_custom_fields = show_custom_fields_helper(data["custom_fields"], []);
+		var el_custom_fields = show_custom_fields_helper(data["custom_fields"], ["modal"]);
 		console.log(value);
 		console.log(el_custom_fields);
 		console.log(value["custom_data"]);
