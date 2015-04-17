@@ -1,0 +1,99 @@
+<script id="widgets-model-template" type="text/html">
+{{#if prefs}}
+	{{add_tag "Widgets"}}
+{{/if}}
+     {{#if_equals name "Sip"}}
+	  <div class="panel" id="{{remove_spaces name}}-container" style="display:none;">
+    {{else}}
+      <div class="panel" id="{{remove_spaces name}}-container">       
+    {{/if_equals}}
+	   <h4 class="widget_header_name font-thin padder m-b-none b-b p-b-sm p-r-none b-light" onmouseover="showIcons(this); return false;" onmouseout="hideIcons(this); return false;">
+		{{#if_equals name "Linkedin"}}LinkedIn
+        {{else}}{{#if_equals name "GooglePlus"}}Google+
+                {{else}}{{#if_equals name "HelpScout"}}Help Scout
+                        {{else}}{{#if_equals name "Twilio"}}Twilio Call Log
+                                {{else}}{{#if_equals name "TwilioIO"}}Twilio
+                                       {{else}}{{#if_equals name "CallScript"}}Call Script
+                                               {{else}}{{name}}
+                                               {{/if_equals}}
+                                       {{/if_equals}}
+                               {{/if_equals}}
+                        {{/if_equals}}
+                {{/if_equals}}
+        {{/if_equals}}
+			<div class="widget_header_icons pull-right text-base" style="display:none;">
+				<ul class="customWidgets text-base">
+					<li class="m-t-xs"><i id="{{remove_spaces name}}-move" class="text-muted c-p icon-cursor-move {{remove_spaces name}}-move"></i></li>
+					{{#if is_minimized}}
+						<li class="m-t-xs"><a href="#"><i widget="{{remove_spaces name}}" class="text-muted c-p widget-maximize fa fa-minus"></i></a></li>
+					{{else}}
+						<li class="m-t-xs"><a href="#"><i widget="{{remove_spaces name}}" class="text-muted c-p widget-minimize fa fa-minus"></i></a></li>
+					{{/if}}
+					<li class="m-t-xs">
+					{{#if_equals name "Linkedin"}}
+						<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted icon-wrench c-p"></i></a>
+					{{else}}
+						{{#if_equals name "Twitter"}}
+							<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted icon-wrench c-p"></i></a>
+						{{else}}
+							{{#if_equals name "Facebook"}}
+								<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted icon-wrench c-p"></i></a>
+							{{else}}
+							{{#if_equals name "GooglePlus"}}
+								<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted icon-wrench c-p"></i></a>
+							{{else}}
+								<a href="#add-widget" rel="tooltip" title="Reset settings"><i class="text-muted icon-wrench c-p"></i></a>
+							{{/if_equals}}
+						{{/if_equals}}
+					{{/if_equals}}
+				{{/if_equals}}
+					</li>
+				</ul>
+			</div>
+			<div style="width:12%;float:left;">
+                {{#if_equals name "CallScript"}}
+                   <i class="icon-comment m-l-sm"></i>
+                {{else}}
+                   <img src="{{mini_logo_url}}" class="pull-left" width="24" height="24" alt=""/> 
+                {{/if_equals}} 
+            <!-- //not there <i class="{{icons name}}"></i> -->
+			</div> 
+		</h4>
+<div class="clearfix"></div>
+{{#if_equals widget_type "CUSTOM"}}
+		<div class="widgets widget-custom" id="{{remove_spaces name}}">
+	{{else}}
+		<div id="{{remove_spaces name}}">
+{{/if_equals}}
+
+		
+			{{#unless is_minimized}}
+
+			<center><img id="widget_load_img" src="img/ajax-loader-cursor.gif" class="m-t-sm m-b"></img></center>
+			{{/unless}}
+		</div>
+		<div class="clearfix"></div>
+	</div>
+</script>
+
+<script id="widgets-collection-template" type="text/html">
+{{#unless this.length}}
+	<div class="widget_container">
+		<div class="widget_header">
+			<div class="pull-left">
+				<strong><i class="icon-puzzle-piece"></i>&nbsp;&nbsp;Try some widgets</strong>
+			</div></div>
+		<div class="widgets">
+			<div class="m-sm">
+				<p>See more information about your contacts with widgets. Choose from a range of widgets - social, communications, customer billing, support and more.</p>
+				<div class="clearfix"></div>
+			</div>
+			<a class="btn btn-sm btn-primary m-t-none m-r-sm m-b-sm m-l-sm" href='#add-widget'><i class="icon-plus-sign"></i>&nbsp;&nbsp;Add widgets</a>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+{{else}}
+ <ul class="widget-sortable p-l-none m-n text-base" id="widgets-model-list"></ul>
+ <a class="btn btn-sm btn-primary pull-right" href='#add-widget'><i class="icon-plus-sign"></i>&nbsp;&nbsp;Manage widgets</a>
+{{/unless}}
+</script>

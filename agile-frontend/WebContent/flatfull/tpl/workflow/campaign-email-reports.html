@@ -1,0 +1,66 @@
+<script id="campaign-email-reports-template" type="text/html">
+<div id="campaign-email-report">
+<div id="reportrange" class="pull-right m-r-xs p-t-xs p-b-xs p-l-sm p-r-sm m-b" style="box-shadow: 0 0px 2px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1);">
+     <i class="icon-calendar icon-large"></i>
+     <span id="range">{{date-range "today" "-6"}}</span>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+<div class="col-md-12">		
+	<!-- Email Reports -->
+	<div id="email-reports">
+		<div class="row">
+			<div class="col-md-12">
+			<div class="panel panel-default">
+				<div class="panel-heading font-bold"><h4 class="h4">Email Reports</h4></div>
+			<div class="panel-body">	
+			<div id="email-table-reports" class="p-t-xxl m-l-lg"></div>
+			</div>
+			</div>
+			</div>
+		</div>
+		
+		
+		<div class="row">
+		<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading font-bold"><h4 class="h4">Daily</h4></div>
+			<div class="panel-body">
+				<div id="line-daily-chart" class="p-t-xxl m-l-lg" style="height:300px;"></div>
+			</div>
+		</div>
+		</div>
+		</div>
+		
+		<div class="row">
+		<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading font-bold"><h4 class="h4">Hourly</h4></div>
+			<div class="panel-body">
+				<div id="line-hourly-chart" class="p-t-xxl m-l-lg" style="height:300px;"></div>
+			</div>
+		</div>
+		</div>
+		</div>
+		
+		<div class="row">
+		<div class="col-md-12">
+		<div class="panel panel-default">
+             
+				<div class="panel-heading font-bold"><h4 class="h4">Weekly<small>(From <span id="week-range">{{date-range "today" "-6"}}</span>)</span></small></h4></div>
+				
+			<div class="panel-body">
+			<div id="line-weekly-chart" class="p-t-xxl m-l-lg" style="height:300px;"></div>
+			</div>
+		</div>
+		</div>
+		</div>
+		
+		
+	</div>
+	<!-- End of Email Reports -->  
+	</div>
+   </div>
+</div>
+</div>
+</script>

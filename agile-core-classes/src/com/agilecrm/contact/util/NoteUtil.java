@@ -1,6 +1,8 @@
 package com.agilecrm.contact.util;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
@@ -41,6 +43,36 @@ public class NoteUtil
 	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
 
 	return dao.ofy().query(Note.class).filter("related_contacts = ", contactKey).order("-created_time").list();
+    }
+
+    /**
+     * Gets all the notes related to a contact.
+     * 
+     * @param contactId
+     *            contact id to get its notes
+     * @param count
+     *            maximum number of notes per page.
+     * @param cursor
+     *            cursor for next page.
+     * @return list of notes related to a contact.
+     * @throws Exception
+     */
+    public static List<Note> getNotes(Long contactId, String count, String cursor) throws Exception
+    {
+
+	// If user didn't send the page size, initialize with size 10.
+	if (count == null)
+	    count = "10";
+
+	Integer max = Integer.parseInt(count);
+
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("related_contacts", new Key<Contact>(Contact.class, contactId));
+
+	if (max != 0)
+	    return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-created_time");
+
+	return dao.listByProperty(searchMap);
     }
 
     /**
@@ -134,8 +166,8 @@ public class NoteUtil
     public static List<Note> getNotesRelatedToCurrentUser()
     {
 	return dao.ofy().query(Note.class)
-	        .filter("owner", new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id))
-	        .order("-created_time").limit(10).list();
+		.filter("owner", new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id))
+		.order("-created_time").limit(10).list();
     }
 
     /**
@@ -149,7 +181,7 @@ public class NoteUtil
     public static int getNotesCount(Long contactId) throws Exception
     {
 	Query<Note> query = dao.ofy().query(Note.class)
-	        .filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
+		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
 
 	return query.count();
     }

@@ -45,11 +45,12 @@ public class CasesAPI
      */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Case> getAllCases(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
+    public List<Case> getAllCases(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
+	    @QueryParam("order_by") String fieldName)
     {
 	if (count != null)
 	{
-	    return CaseUtil.getCases((Integer.parseInt(count)), cursor);
+	    return CaseUtil.getCases((Integer.parseInt(count)), cursor, fieldName);
 	}
 	return CaseUtil.getCases();
     }

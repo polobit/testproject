@@ -39,6 +39,15 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		if(!tight_acl.checkPermission('SOCIAL'))
 			return;
 		
+		if(!_plan_restrictions.is_social_suite[0]())
+		{
+			// Makes tab active
+			$(".active").removeClass("active");
+			$("#socialsuitemenu").addClass("active");
+			$('#content').html("<h4>" + _plan_restrictions.is_social_suite[1]().message +"</h4>");
+			return;
+		}
+			
 		initializeSocialSuite();
 
 		// Makes tab active
