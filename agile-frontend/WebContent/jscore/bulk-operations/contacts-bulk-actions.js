@@ -863,7 +863,7 @@ $(function()
 								.find('#bulk-select')
 								.css('display', 'block')
 								.html(
-										'Selected All ' + getContactsCount() + ' contacts. <a hrer="#" id="select-all-revert" style="cursor:pointer">Select chosen contacts only</a>');
+										'Selected All ' + getAvailableContacts() + ' contacts. <a hrer="#" id="select-all-revert" style="cursor:pointer">Select chosen contacts only</a>');
 
 						// On choosing select all option, all the visible
 						// checkboxes in the table should be checked
@@ -887,7 +887,7 @@ $(function()
 								.find('#bulk-select')
 								.css('display', 'block')
 								.html(
-										"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' >Select all " + getContactsCount() + " contacts</a>");
+										"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' >Select all " + getAvailableContacts() + " contacts</a>");
 					});
 
 });
@@ -965,7 +965,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 					.find('#bulk-select')
 					.css('display', 'block')
 					.html(
-							"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a id='select-all-available-contacts' href='#'>Select all " + getContactsCount() + " contacts</a>");
+							"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a id='select-all-available-contacts' href='#'>Select all " + total_available_contacts + " contacts</a>");
 	}
 	else
 	{
@@ -1006,25 +1006,6 @@ function getAvailableContacts()
 	{
 		//
 		current_view_contacts_count = App_Contacts.contactsListView.collection.toJSON()[0].count;
-		return current_view_contacts_count;
-	}
-
-	return App_Contacts.contactsListView.collection.toJSON().length;
-}
-/**
- * Return number of available contacts.
- * If filter is applied and count > 10000 the return 10000+
- * @returns
- */
-function getContactsCount()
-{
-	if (App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
-	{
-		//
-		current_view_contacts_count = App_Contacts.contactsListView.collection.toJSON()[0].count;
-		if(current_view_contacts_count > 9999 && (readCookie('contact_filter') || readData('dynamic_contact_filter'))) {
-			return '10000+';
-		}
 		return current_view_contacts_count;
 	}
 

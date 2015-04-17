@@ -64,6 +64,11 @@ boolean is_free_plan = false;
 if(restriction != null && restriction.planDetails != null)
     is_free_plan = restriction.planDetails.isFreePlan();
 
+if(!restriction.planDetails.getACL())
+{
+    domainUser.resetACLScopesAndSave();
+}
+
 Boolean is_first_time_user = HomeServlet.isFirstTimeUser(request);;
 
 Plan plan = null;
@@ -178,7 +183,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = "/";
 
-var HANDLEBARS_PRECOMPILATION = true || <%=production%>;
+var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
 
 
 var CSS_PATH = "/";
@@ -214,6 +219,8 @@ var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloud
 var _billing_restriction = <%=mapper.writeValueAsString(restriction)%>;
 
 var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
+
+var FLAT_FULL_UI = "";
 //var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 
 <!-- JQUery Core and UI CDN -->	

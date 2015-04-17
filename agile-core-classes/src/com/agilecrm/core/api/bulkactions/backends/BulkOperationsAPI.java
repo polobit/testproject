@@ -60,6 +60,7 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreInputStream;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.googlecode.objectify.Key;
 import com.thirdparty.Mailgun;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.contacts.ContactSyncUtil;
@@ -404,12 +405,36 @@ public class BulkOperationsAPI
 	System.out.println("backend running");
 
 	System.out.println(key);
+	
+	try
+	{
+    	// Creates domain user key, which is set as a contact owner
+		Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
+    
+		System.out.println("setting domain user for key : " + ownerKey);
+		
+		DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
+		
+		
+		if(domainUser != null)
+			 BulkActionUtil.setSessionManager(domainUser);
+		
+		System.out.println("settings session for domain user" + domainUser.id);
+	}
+	catch(Exception e)
+	{
+		e.printStackTrace();
+	}
+	
+	  
 
 	// Creates a blobkey object from blobkey string
 	BlobKey blobKey = new BlobKey(key);
 
 	// Reads the stream from blobstore
 	InputStream blobStream;
+	
+	
 	try
 	{
 	    blobStream = new BlobstoreInputStream(blobKey);

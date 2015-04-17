@@ -253,8 +253,8 @@ public class ContactsAPI
 	contact.save();
 	UserInfo user_info = SessionManager.get();
 	if (user_info != null && !("agilecrm.com/js").equals(user_info.getClaimedId())
-	        && !("agilecrm.com/dev").equals(user_info.getClaimedId())
-	        && !("agilecrm.com/php").equals(user_info.getClaimedId()))
+		&& !("agilecrm.com/dev").equals(user_info.getClaimedId())
+		&& !("agilecrm.com/php").equals(user_info.getClaimedId()))
 	{
 	    try
 	    {
@@ -289,8 +289,8 @@ public class ContactsAPI
     {
 	UserInfo user_info = SessionManager.get();
 	if (contact.id != null && user_info != null && !("agilecrm.com/js").equals(user_info.getClaimedId())
-	        && !("agilecrm.com/dev").equals(user_info.getClaimedId())
-	        && !("agilecrm.com/php").equals(user_info.getClaimedId()))
+		&& !("agilecrm.com/dev").equals(user_info.getClaimedId())
+		&& !("agilecrm.com/php").equals(user_info.getClaimedId()))
 	{
 	    try
 	    {
@@ -456,11 +456,12 @@ public class ContactsAPI
     @Path("/{contact-id}/notes")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Note> getNotes(@PathParam("contact-id") Long id)
+    public List<Note> getNotes(@PathParam("contact-id") Long id, @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count)
     {
 	try
 	{
-	    return NoteUtil.getNotes(id);
+	    return NoteUtil.getNotes(id, count, cursor);
 	}
 	catch (Exception e)
 	{
@@ -513,6 +514,28 @@ public class ContactsAPI
 	    e.printStackTrace();
 	}
 	return contact;
+    }
+
+    /**
+     * Change owner of the contact. For API only.
+     * 
+     * @param contact
+     * @param new_owner
+     * @param contact_id
+     * @return
+     * @throws JSONException
+     */
+    @Path("/change-owner")
+    @POST
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public String changeContactOwner(@FormParam("owner_email") String owner_email,
+	    @FormParam("contact_id") Long contact_id) throws JSONException
+    {
+	if (StringUtils.isEmpty(owner_email) || contact_id == null)
+	    return null;
+
+	return ContactUtil.changeContactOwner(owner_email, contact_id);
     }
 
     /**
@@ -1149,7 +1172,7 @@ public class ContactsAPI
 
 	// URL for get request
 	String urlForTZ = "https://maps.googleapis.com/maps/api/timezone/json?location=" + latitude + "," + longitude
-	        + "&timestamp=" + epoch;
+		+ "&timestamp=" + epoch;
 
 	// Send get request and get result
 	String contactTimeZone = HTTPUtil.accessURL(urlForTZ);

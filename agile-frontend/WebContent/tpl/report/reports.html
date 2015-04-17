@@ -77,11 +77,11 @@
         </div>
         <br />
         <!-- Description -->
-        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;text-align:left"  rel="tooltip" title="{{description}}">
             Get periodic email reports with a list of new leads, conversions, or as per your custom criteria.
         </div>
         <!-- Add button -->
-        <div style="/*margin: 40px auto;	width: 50%;*/">
+        <div class="text-left" style="/*margin: 40px auto;	width: 50%;*/">
             <a class="btn btn-primary" href="#contact-reports">Go</a>
         </div>
     </div>
@@ -89,6 +89,7 @@
 
 
 <!-- Activity reports -->
+
 {{#hasMenuScope 'ACTIVITY'}}
 <div class="span4" style="margin-left:0px;">
     <div class="well" style="width:220px; height:200px; text-align: center;">
@@ -101,17 +102,26 @@
         </div>
         <br />
         <!-- Description -->
-        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;text-align:left"  rel="tooltip" title="{{description}}">
           	Get a periodic  email digest of various activities by users in Agile.
         </div>
         <!-- Add button -->
-        <div style="/*margin: 40px auto;	width: 50%;*/">
+       
+			{{#isAllowedInCurrentPlan "is_activity_reports_enabled"}}		
 			{{#hasMenuScope 'ACTIVITY'}}
+ <div class="text-left" style="/*margin: 40px auto;	width: 50%;*/ display:inline;" class="left">
             	<a class="btn btn-primary" href="#activity-reports">Go</a>
+</div>
 			{{else}}
-				<span class="btn btn-primary disabled" >Go</span>
+
 			{{/hasMenuScope}}
-        </div>
+			{{else}}
+				<div style="/*margin: 40px auto;	width: 50%;*/ display:inline;float:left;">
+					<div class="btn btn-primary _upgrade" id="activity-reports-upgrade">Go</div>
+				</div>
+				 <div style="display:inline;float:right;display:none; max-width:135px" class="text-right activity-reports-upgrade" ><p><i>{{toSafeString message}}</i><p></div>
+			{{/isAllowedInCurrentPlan}}
+        
     </div>
 </div>
 {{/hasMenuScope}}
@@ -141,12 +151,12 @@
         </div>
         <br />
         <!-- Description -->
-        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;text-align:left"  rel="tooltip" title="{{description}}">
           Visually see how your leads are growing over time. Compare various channels and gain insight.
         </div>
         <!-- Add button -->
-        <div style="/*margin: 40px auto;	width: 50%;*/">
-            <a class="btn btn-primary" href="#report-charts/growth">Go</a>
+        <div class="text-left" style="/*margin: 40px auto;	width: 50%;*/">
+            		<a class="btn btn-primary" href="#report-charts/growth">Go</a>
         </div>
     </div>
 </div>
@@ -164,12 +174,12 @@
         </div>
         <br />
         <!-- Description -->
-        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;text-align:left"  rel="tooltip" title="{{description}}">
           See a funnel graph of how leads are passing through various stages in your sales cycle.
         </div>
         <!-- Add button -->
-        <div style="/*margin: 40px auto;	width: 50%;*/">
-            <a class="btn btn-primary"  href="#report-charts/funnel">Go</a>
+        <div class="text-left" style="/*margin: 40px auto;	width: 50%;*/">
+			<a class="btn btn-primary"  href="#report-charts/funnel">Go</a>
         </div>
     </div>
 </div>
@@ -186,12 +196,12 @@
         </div>
         <br />
         <!-- Description -->
-        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;text-align:left"  rel="tooltip" title="{{description}}">
             See what percentage of leads are you converting over time.
         </div>
         <!-- Add button -->
-        <div style="/*margin: 40px auto;	width: 50%;*/">
-            <a class="btn btn-primary"  href="#report-charts/cohorts">Go</a>
+        <div class="text-left" style="/*margin: 40px auto;	width: 50%;*/">
+			<a class="btn btn-primary"  href="#report-charts/cohorts">Go</a>
         </div>
     </div>
 </div>
@@ -224,13 +234,13 @@
         </div>
         <br />
         <!-- Description -->
-        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;text-align:left"  rel="tooltip" title="{{description}}">
           	Find out how a campaign is performing over a time period.
         </div>
 
 		
         <!-- Add button -->
-        <div style="/*margin: 40px auto;	width: 50%;*/">
+        <div class="text-left" style="/*margin: 40px auto;	width: 50%;*/">
 			
            		<a id="campaign_id" class="btn btn-primary" href="#">Go</a>
 			
@@ -250,12 +260,12 @@
         </div>
         <br />
         <!-- Description -->
-        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;text-align:left"  rel="tooltip" title="{{description}}">
             See how your campaigns fare against each other.
         </div>
 		
         <!-- Add button -->
-        <div style="/*margin: 40px auto;	width: 50%;*/">
+        <div class="text-left" style="/*margin: 40px auto;	width: 50%;*/">
             <a class="btn btn-primary" href="#campaign-stats" id="campaign-stats">Go</a>
         </div>
     </div>
@@ -290,38 +300,50 @@
         </div>
         <br />
         <!-- Description -->
-        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;text-align:left"  rel="tooltip" title="{{description}}">
           	See a chronological activity report of your CRM users.
         </div>
         <!-- Add button -->
-        <div style="/*margin: 40px auto;	width: 50%;*/">
-            <a class="btn btn-primary" href="#activities">Go</a>
+        <div class="text-left" style="/*margin: 40px auto;	width: 50%;*/">
+            
+
+<div>
+			{{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
+				<a class="btn btn-primary" href="#activities">Go</a>
+			{{else}}
+				<div style="/*margin: 40px auto;	width: 50%;*/ display:inline;float:left">
+					<a class="btn btn-primary _upgrade" id="activities-upgrade">Go</a> 
+				</div>
+				<div style="float: right; max-width: 135px; display: none;" class="text-right activities-upgrade"><p><i> {{toSafeString message}} </i></p></div>
+	
+			{{/isAllowedInCurrentPlan}}
+</div>
         </div>
     </div>
 </div>
 
 <!-- Contact Activities -->
 
-<!-- <div class="span4" style="margin-left:0px;">
-    <div class="well" style="width:220px; height:200px; text-align: center;"> -->
+<div class="span4" style="margin-left:0px;">
+	<div class="well" style="width:220px; height:200px; text-align: center;">  
         <!-- Icon and Title -->
-       <!-- <div>
+       	<div>
             <div style="padding:20px 70px 10px;">
                 <i class="icon-cogs icon-4x"></i>
             </div>
             <b>Contact Activities</b>
         </div>
-        <br />-->
+        <br /> 
         <!-- Description -->
-       <!-- <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip">
+        <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;text-align:left"  rel="tooltip">
           	See a chronological contact activity report of your CRM contacts.
-        </div>-->
+        </div> 
         <!-- Add button -->
-        <!--<div style="/*margin: 40px auto;	width: 50%;*/">
+        <div style="/*margin: 40px auto;	width: 50%;*/">
             <a class="btn btn-primary" href="#contact-activities">Go</a>
-        </div>-->
-   <!-- </div>
-</div>-->
+        </div> 
+   	</div>
+</div>
 
 
 

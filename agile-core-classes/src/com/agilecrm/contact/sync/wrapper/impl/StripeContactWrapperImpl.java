@@ -122,9 +122,9 @@ public class StripeContactWrapperImpl extends ContactWrapper
 	public ContactField getFirstName()
 	{
 		Card card = StripeUtil.getDefaultCard(customer);
-		if (card != null)
+		if (card != null && card.getName()!=null)
 		{
-			return new ContactField(Contact.FIRST_NAME, card.getName(), null);
+			return new ContactField(Contact.FIRST_NAME, card.getName().split(" ")[0], null);
 		}
 
 		// TODO Auto-generated method stub
@@ -259,6 +259,16 @@ public class StripeContactWrapperImpl extends ContactWrapper
 	@Override
 	public ContactField getLastName()
 	{
+		Card card = StripeUtil.getDefaultCard(customer);
+		if (card != null && card.getName()!=null)
+		{
+			String[] lastNames = card.getName().split(" ");
+			String lastName = "";
+			for(int i=1;i<lastNames.length;i++){
+				lastName += lastNames[i]+" ";
+			}
+			return new ContactField(Contact.LAST_NAME, lastName.trim(), null);
+		}
 		// TODO Auto-generated method stub
 		return null;
 	}

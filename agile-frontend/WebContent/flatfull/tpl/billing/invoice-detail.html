@@ -1,0 +1,95 @@
+<script id="invoice-detail-template" type="html/text">
+<div class="col-md-11">
+<input class="print_btn m-b-md btn btn-sm btn-default pull-right" type="button" type="button" value="Print" onclick="window.print()">
+<br><br>
+<div style="border:2px solid #D4D4D4">
+     <div class="row" style="margin: 1% 0% 7% 4%;">
+	<table width="100%"><colgroup><col width="60%"><col width="40%"></colgroup><tbody><tr><td> <img src="img/crm-plugins/formbuilder.png" height="35" width="135"></td><td><h1>Invoice</h1></td></tr></tbody></table>
+	<br>
+		<table width="90%">
+			<tbody>
+				<tr>
+				 <td>
+                <address>
+					<strong>Agile CRM,</strong><br />
+                    440 N Wolfe Road,<br />
+                    Sunnyvale, CA, 94085<br />
+                </address>
+				</td>
+				<td align="right">
+				
+                <table class="invoice-head" style="background-color:transparent;">
+                    <tbody>
+						<tr>
+                            <td class="pull-right"><strong>Invoice#</strong></td>
+                            <td>{{invoice.id}}</td>
+                        </tr>
+						<tr>
+                            <td class="pull-right"><strong>Date</strong></td>
+                            <td>{{epochToHumanDate "dd-mmm-yyyy" invoice.date}}</td>
+                        </tr>
+						<tr>
+                            <td class="pull-right"><strong>Customer#</strong></td>
+                            <td>{{invoice.customer}}</td>
+                        </tr>
+						{{#if_not_equals company.company_name "My company"}}<tr>
+                            <td class="pull-right"><strong>Company</strong></td>
+                            <td>{{company.company_name}}</td></tr>
+                        {{/if_not_equals}}
+                        
+                      </tbody>
+                </table>
+				</td></tr></tbody>
+			</table>
+       <div class="col-md-11 p-l-none">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+							<th>S No</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each invoice.lines.data}}
+                        <tr><td>{{numeric_operation @index 1 "+"}}</td>
+                           {{#if_equals type "subscription"}} 
+								<td>{{plan.name}} (${{numeric_operation plan.amount 100 "/"}}/{{plan.interval}}) <br/> for the period {{epochToHumanDate "mm/dd/yyyy" period.start}} - {{epochToHumanDate "mm/dd/yyyy" period.end}}</td>
+                            {{/if_equals}}
+							{{#if_equals type "invoiceitem"}} 
+								<td>{{description}}</td>
+                            {{/if_equals}}
+							<td>{{quantity}}</td>
+                            <td>{{#if_less_than amount 0}}-{{/if_less_than}}${{get_amount_with_possitive amount}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+				
+					<div class="pull-right">
+					<strong>Total: </strong>${{numeric_operation invoice.total 100 "/"}}
+					</div>
+        </div>
+        <br/><br/><br/>
+		<table width="100%">
+          <tbody>
+			<tr><td>
+                <i class="icon-phone"></i> +1.800.980.0729
+				</td>
+				<td>
+                <i class="icon-envelope"></i> billing@agilecrm.com
+				</td>
+				<td>
+                <i class="icon-globe"></i> https://www.agilecrm.com
+				</td>
+			</tr>
+		</tbody>
+    </table>
+	</div>
+
+
+</div>
+<input class="print_btn m-t-md btn btn-sm btn-default pull-right"type="button" type="button" value="Print" onclick="window.print()">
+</div>
+</script>

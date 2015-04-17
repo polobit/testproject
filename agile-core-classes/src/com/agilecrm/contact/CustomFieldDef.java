@@ -82,10 +82,10 @@ public class CustomFieldDef
     };
 
     public SCOPE scope = SCOPE.CONTACT;
-    
+
     /**
-     * Since custom fields are sortable at the client position of the custom field is stored
-     * in position variable
+     * Since custom fields are sortable at the client position of the custom
+     * field is stored in position variable
      */
     @NotSaved(IfDefault.class)
     public int position = 0;
@@ -136,6 +136,7 @@ public class CustomFieldDef
      */
     public void save() throws Exception
     {
+	this.field_label = this.field_label.trim();
 
 	if (id == null)
 	    // Fetches all custom fields to check label duplicates

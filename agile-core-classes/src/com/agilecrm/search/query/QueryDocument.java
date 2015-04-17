@@ -325,7 +325,7 @@ public class QueryDocument<T> implements QueryInterface
 
 	    List<ScoredDocument> tempDocuments = new ArrayList<ScoredDocument>(resultSetDocuments);
 	    String newCursor = tempDocuments.get(tempDocuments.size() - 1).getCursor().toWebSafeString();
-	    if (StringUtils.equals(cursor, newCursor))
+	    if (StringUtils.equals(cursor, newCursor) || newCursor == null)
 		return entites;
 
 	    page = resultSetDocuments.size() - entities.size();

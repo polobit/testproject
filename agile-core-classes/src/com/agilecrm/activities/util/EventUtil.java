@@ -22,7 +22,6 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.IcalendarUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
@@ -142,7 +141,7 @@ public class EventUtil
 	{
 	    if (ownerId != null)
 		return dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end)
-		        .filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
+			.filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
 	    return dao.ofy().query(Event.class).filter("search_range >=", start).filter("search_range <=", end).list();
 	}
 	catch (Exception e)
@@ -183,7 +182,7 @@ public class EventUtil
     public static int getContactEventsCount(Long contactId) throws Exception
     {
 	Query<Event> query = dao.ofy().query(Event.class)
-	        .filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
+		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
 
 	return query.count();
     }
@@ -200,7 +199,7 @@ public class EventUtil
 
     {
 	Query<Event> query = dao.ofy().query(Event.class)
-	        .filter("related_contacts =", new Key<Contact>(Contact.class, contactId)).order("start");
+		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId)).order("start");
 
 	return query.list();
     }
@@ -232,22 +231,22 @@ public class EventUtil
 
 		    {
 			net.fortuna.ical4j.model.Calendar iCal = IcalendarUtil.getICalFromEvent(event, user,
-			        toemail.value, null);
+				toemail.value, null);
 			String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 			EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", toemail.value, null,
-			        null, subject, null, null, null, null, null, attachments);
+				null, subject, null, null, null, null, null, attachments);
 		    }
 		}
 	    }
 	    if (user != null)
 	    {
 		net.fortuna.ical4j.model.Calendar agileUseiCal = IcalendarUtil.getICalFromEvent(event, null,
-		        user.email, user.name);
+			user.email, user.name);
 		System.out.println("agileUseiCal-- " + agileUseiCal.toString());
 		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
 
 		EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", user.email, null, null, subject,
-		        null, null, null, null, null, attachments_to_agile_user);
+			null, null, null, null, null, attachments_to_agile_user);
 
 	    }
 	}
@@ -294,33 +293,38 @@ public class EventUtil
 	Date d = new Date();
 	Long startDate = d.getTime();
 	Query<Event> query = dao.ofy().query(Event.class).filter("start >=", startDate / 1000)
-	        .filter("owner", new Key<AgileUser>(AgileUser.class, ownerId));
+		.filter("owner", new Key<AgileUser>(AgileUser.class, ownerId));
 	return dao.fetchAllWithCursor(max, cursor, query, false, false);
     }
 
     /**
      * @return List of events that have been pending for Today
      */
-    public static List<Event> getTodayPendingEvents(Long startTime,Long endTime)
+    public static List<Event> getTodayPendingEvents(Long startTime, Long endTime)
     {
 	try
 
 	{
 	    // Gets Today's date
-	    /*DateUtil startDateUtil = new DateUtil();
-	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;*/
+	    /*
+	     * DateUtil startDateUtil = new DateUtil(); Long startTime =
+	     * startDateUtil.toMidnight().getTime().getTime() / 1000;
+	     */
 	    // Date startDate = new Date();
 	    // Long startTime = startDate.getTime() / 1000;
 
 	    // Gets Date after numDays days
-	    /*DateUtil endDateUtil = new DateUtil();
-	    Long endTime = (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000) - 1;*/
-	    
+	    /*
+	     * DateUtil endDateUtil = new DateUtil(); Long endTime =
+	     * (endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000)
+	     * - 1;
+	     */
+
 	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
 
 	    // Gets list of tasks filtered on given conditions
-	    return dao.ofy().query(Event.class).filter("owner", new Key<AgileUser>(AgileUser.class, agileUser.id)).filter("start >=", startTime).filter("start <", endTime).limit(50)
-		    .order("start").list();
+	    return dao.ofy().query(Event.class).filter("owner", new Key<AgileUser>(AgileUser.class, agileUser.id))
+		    .filter("start >=", startTime).filter("start <", endTime).limit(50).order("start").list();
 	}
 	catch (Exception e)
 	{
@@ -354,7 +358,7 @@ public class EventUtil
 	List<String> default_events = getDefaultEventNames();
 
 	List<Event> list_events = dao.ofy().query(Event.class).filter("start >=", starttime)
-	        .filter("start <=", endtime).order("start").list();
+		.filter("start <=", endtime).order("start").list();
 
 	List<Event> events = new ArrayList<>();
 
@@ -397,7 +401,7 @@ public class EventUtil
     public static List<Event> getEvents(int count, String cursor, Long ownerId)
     {
 	return dao.ofy().query(Event.class).order("start")
-	        .filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
+		.filter("owner", new Key<AgileUser>(AgileUser.class, ownerId)).list();
     }
 
     /**
@@ -449,7 +453,7 @@ public class EventUtil
 	System.out.println(owner + " ," + status + " ," + eventType + " ," + contactKey);
 	Map<String, Object> searchMap = new HashMap<String, Object>();
 	System.out.println("The owner is:" + owner + " ,the status is:" + status + " ,the event type is:" + eventType
-	        + " and thte contact key is:" + contactKey);
+		+ " and thte contact key is:" + contactKey);
 
 	if (owner != null)
 	    searchMap.put("owner", owner);
@@ -487,6 +491,30 @@ public class EventUtil
 	default_event.add("Gossip at water cooler");
 	default_event.add("Discuss today's Dilbert strip");
 	return default_event;
+    }
+
+    /**
+     * Fetches all the events, which are in the given search range
+     * 
+     * @param start
+     *            Start time of the search range
+     * @param end
+     *            End time of the search range
+     * @return List of events matched to the search range
+     */
+    public static List<Event> getEvents(int count)
+    {
+	try
+	{
+	    if (count == 0)
+		count = 10;
+	    return dao.ofy().query(Event.class).order("-created_time").limit(count).list();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
 
 }
