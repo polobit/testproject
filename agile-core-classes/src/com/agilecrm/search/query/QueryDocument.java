@@ -319,7 +319,7 @@ public class QueryDocument<T> implements QueryInterface
 		entities.addAll(entites);
 
 		if (isBackendOperations && resultSetDocuments != null && entities.size() < resultSetDocuments.size()
-				&& requests < 500)
+				&& requests < 10)
 		{
 			System.out.println("iterating again");
 
