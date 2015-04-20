@@ -5,7 +5,7 @@
 <!--  header  row view starting -->
 
 
-<div class="app-content-full  h-full">
+<div class="app-content-full  h-full dock-view-fixing">
 <div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
   
   <div class="col w-xl bg-light lter b-r">
@@ -90,7 +90,7 @@
 								</div>
 							<div class="text-md m-b-xs text-cap">	
 						<div class="contact-job-title text-ellipsis text-center font-thin custom-color">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}   {{#if contact_company_id}}
-<br> 
+
 									<a href="#contact/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
 								{{else}}
 									{{getPropertyValue properties "company"}}
@@ -109,29 +109,7 @@
 	<!-- ending section one -->					
 						
 						
-	<!-- starting section two -->					
-	<div class="pull-right hide" style="width:calc(100% - 112px)">
-    <div class="change-owner-succes"></div>
-     <span title="Owner">
-      	<span class="contact-owner text-base" id="change-owner-element">
-        	<span class="contact-owner-text">Owner:&nbsp;&nbsp;</span>
-			{{#if owner}}
-        	<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
-			{{else}}
-			<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add"><a class="c-p">Assign Owner</a></span>
- 			{{/if}}
-        	<span id="contact-owner" data={{owner.id}}>{{owner.name}}</span>
-        
-        	{{#canEditContact owner.id}}
-        	<div class="btn-group" id="change-owner-ul" style="display: none">
-        		 <a class="btn btn-sm dropdown-toggle" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
-        		 <ul id='contact-detail-owner' class="dropdown-menu pull-right"></ul>
-        	</div> 
-			{{/canEditContact}}
-       </span>
-    </span>
-	</div>
-	<!-- ending section two -->
+	
 	<div class="clearfix"></div>
 	<div class="contact-website   text-base text-center m-b-xs">
 					
@@ -262,7 +240,30 @@
 						</div>
 
 						<div class="clearfix"></div>
-						<div><small class="text-muted text-sm">Tags</small></div>
+						<div><small class="text-muted text-sm">Owner</small></div>
+	<div class="change-owner-succes"></div>
+     <div title="Owner">
+      	<div class="contact-owner text-base" id="change-owner-element">
+        	
+			{{#if owner}}
+        	<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
+			{{else}}
+			<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add"><a class="c-p">Assign Owner</a></span>
+ 			{{/if}}
+        	<span id="contact-owner" class="custom-color" data={{owner.id}}>{{owner.name}}</span>
+        
+        	{{#canEditContact owner.id}}
+        	<div class="btn-group" id="change-owner-ul" style="display: none">
+        		 <a class="btn btn-sm dropdown-toggle" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
+        		 <ul id='contact-detail-owner' class="dropdown-menu pull-right"></ul>
+        	</div> 
+			{{/canEditContact}}
+       </div>
+    </div>
+	
+						
+						
+						<div class="m-t-sm"><small class="text-muted text-sm">Tags</small></div>
 						<div class="contact-tags m-b-xs m-t-xs">
 					<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
 							{{#if tagsWithTime.length}} 
@@ -508,7 +509,7 @@
 						</div>
 					</div>
 
-					<div class="m-auto" style="width: 700px;margin-left:-30%;">
+					<div class="m-auto">
 						<div id="timeline">
 							<div id="line-container">
 								<div id="line"></div>

@@ -1147,3 +1147,29 @@ background:#f6f8f8;
 .header-min-width {
 	min-width:90px;
 }
+
+
+/*hack for tags cross browsing consistency*/
+
+.tagsinput .close
+{
+	float:none;
+	vertical-align:middle;
+}
+
+/*hack for same grid */
+/*.custom-grid-view
+{
+	display:flex;
+}
+.custom-grid
+{
+	margin:0 15px;
+}
+*/
+
+/*hack for contact details top menu position*/
+.app-aside-dock .dock-view-fixing
+{
+top:117px;
+}
