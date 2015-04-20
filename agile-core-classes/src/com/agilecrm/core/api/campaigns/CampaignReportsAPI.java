@@ -95,7 +95,7 @@ public class CampaignReportsAPI
 	    String startDate = CampaignReportsUtil.getStartDate(startTime, endTime, type, timeZone);
 
 	    // end date in mysql date format.
-	    String endDate = CampaignReportsUtil.getEndDate(endTime, timeZone);
+	    String endDate = CampaignReportsUtil.getEndDateForReports(endTime, timeZone);
 
 	    // SQL data for campaign stats for given duration.
 	    JSONArray emailLogs = CampaignReportsSQLUtil.getEachEmailCampaignStats(campaignId, startDate, endDate,
@@ -134,7 +134,7 @@ public class CampaignReportsAPI
 	    String startDate = CampaignReportsUtil.getStartDate(startTime, endTime, null, timeZone);
 
 	    // end date in mysql date format.
-	    String endDate = CampaignReportsUtil.getEndDate(endTime, timeZone);
+	    String endDate = CampaignReportsUtil.getEndDateForReports(endTime, timeZone);
 
 	    JSONArray stats = CampaignReportsSQLUtil.getEachCampaignStatsForTable(campaignId, startDate, endDate,
 		    timeZone, null);

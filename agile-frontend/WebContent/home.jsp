@@ -219,6 +219,8 @@ var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloud
 var _billing_restriction = <%=mapper.writeValueAsString(restriction)%>;
 
 var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
+
+var FLAT_FULL_UI = "";
 //var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 
 <!-- JQUery Core and UI CDN -->	

@@ -16,7 +16,7 @@ public class JSAPIUtil
     public static enum Errors
     {
 	UNAUTHORIZED("Invalid API key"), CONTACT_MISSING("Contact not found"), INVALID_PARAMETERS("Invalid parameter"), API_KEY_MISSING("API key missing"), DUPLICATE_CONTACT(
-		"Duplicate found for \"%s\""), CONTACT_LIMIT_REACHED("Contacts limit reached"), PROPERTY_MISSING("Property not found for contact");
+		"Duplicate found for \"%s\""), CONTACT_LIMIT_REACHED("Contacts limit reached"), PROPERTY_MISSING("Property not found for contact"), INVALID_TAGS("Invalid tags");
 
 	String errorMessage;
 
@@ -76,20 +76,5 @@ public class JSAPIUtil
 	else if (APIKey.isValidJSKey(key))
 	    return APIKey.getDomainUserKeyRelatedToJSAPIKey(key);
 	return null;
-    }
-
-    public static String[] getValidTags(String[] tags)
-    {
-
-	List<String> validTags = new ArrayList<String>();
-
-	for (String tag : tags)
-	{
-	    tag = TagUtil.getValidTag(tag);
-	    if (tag == null)
-		continue;
-	    validTags.add(tag);
-	}
-	return validTags.toArray(new String[validTags.size()]);
     }
 }

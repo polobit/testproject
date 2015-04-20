@@ -1,0 +1,339 @@
+<script id="company-detail-template" type="text/html">
+<div class="row hide"><small class="navigation span9" style="min-height:10px!important;font-size:smaller;line-height:6px;"></small></div>
+<div class="app-content-full  h-full">
+<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
+<div class="col w-xl bg-light lter b-r">
+<div class="vbox">
+<div class="row-row">
+<div class="wrapper">
+				<div class="text-center pos-rlt companyLeftView">
+				
+						
+							<form id="contact-container">
+								<a href="#" class="tooltip_info" data-placement="top"
+									data-toggle="tooltip"
+									title="<i class='icon-edit icon-white icon'></i> Change Picture"
+									style='text-decoration: none;'> 
+								<img class='img-circle upload_pic imgholder submit' style="width:96px;height:96px" type="submit"
+									{{getCompanyImage "80" "display:inline;"}} />
+								</a> <input type="hidden" id="upload_url" name="gravatarurl">
+								<a style="display: none;" class="save_img submit" type="submit">Save</a>
+							</form>
+<div class="pos-abs pos-r-0 pos-t-0 vis-hide  editArea">
+<div class="btn-group">
+<a class="btn btn-xs btn-default" style="border-radius: 4px 0px 0px 4px!important;margin-left: 6px;" href="#contact-edit"><i class="icon-edit"></i> Edit</a> 
+								<a class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+								<ul class="dropdown-menu">
+
+									<li><a href='#' class="contact-add-case"><i
+											class="icon-folder-close"></i> Add Case</a></li>
+									{{#hasMenuScope 'DEALS'}}
+									<li><a href='#' class="contact-add-deal"><i class="icon-money"></i>
+											Add Opportunity</a></li>
+									{{/hasMenuScope}}
+									<li class='divider'></li>
+									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
+											class="icon-envelope-alt"></i> Send Email</a></li>
+									<li class='divider'></li>
+									<li><a href='#' id='contact-actions-delete'><i
+											class="icon-trash"></i> Delete</a></li>
+								</ul>
+</div>
+</div>
+						
+					
+							<div class="text-ellipsis  w-full  m-t-xs  h3 font-thin custom-color">
+
+								{{getPropertyValue properties "name"}}
+								{{#if_propertyName "url"}}</br>
+									<a href="{{getHyperlinkFromURL value}}" target="_blank">{{value}}</a>
+								{{/if_propertyName}}
+								
+								<div class="text-base text-center m-b-xs text-muted m-t-sm">
+									{{#property_is_exists "website" properties}}
+									{{#multiple_Property_Element "website" properties}} {{#each
+									this}} {{#if_equals subtype "TWITTER"}} <span class="m-r-xs"><a target="_blank"
+										href="https://twitter.com/{{getTwitterHandleByURL value}}"
+										style="text-decoration: none" class="text-muted"> <i
+											class="{{get_social_icon "
+											TWITTER"}}" ></i>
+									</a>
+									</span> {{else}}  {{#if_equals subtype "SKYPE"}} <span
+										style="margin-right: 5px"><a target="_blank"
+										href="{{getSkypeURL value}}"
+										style="text-decoration: none" class="text-muted"> <i
+											class="{{get_social_icon "
+											SKYPE"}}"></i>
+									</a>
+									</span>{{else}} <span style="margin-right: 5px"> <a
+										target="_blank" href="{{getHyperlinkFromURL value}}" style="text-decoration: none" class="text-muted">
+											<i class="{{get_social_icon subtype}}"></i>
+									</a>
+									</span>{{/if_equals}} {{/if_equals}} {{/each}} {{/multiple_Property_Element}}
+									{{/property_is_exists}}
+								</div>
+							</div>
+					
+		
+							
+								<div id='star' style='padding-bottom: 13px; width: auto !important'></div>
+								
+				
+					
+
+					</div>
+					<!-- Owner block -->
+
+<!-- funda for contact details edit -->
+
+{{#property_is_exists "phone" properties}}
+			<div class="widget_container" id="{{name}}-container">
+				 {{else}} 
+					{{#property_is_exists "email" properties}}
+						<div class="widget_container" id="{{name}}-container">
+						{{else}} 
+							{{#property_is_exists "address" properties}}
+									<div class="widget_container" id="{{name}}-container">
+									{{else}}
+										{{#getContactCustomProperties properties}}
+											<div class="widget_container" id="{{name}}-container">
+											{{else}}
+												<div class="widget_container hide" id="{{name}}-container"> 
+										{{/getContactCustomProperties }}
+							{{/property_is_exists}} 
+					{{/property_is_exists}}
+		{{/property_is_exists}}
+						<div class="widget_header hide">
+							<div class="pull-left"
+								style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: 18em">
+								<i class="icon-user "></i> <strong>Contact
+									{{getPropertyValue properties "first_name"}}</strong>
+							</div>
+						</div>
+						<!-- <div id="qrcode"><img src="img/1-0.gif"></div> -->
+						<div class="clearfix"></div>
+						
+
+
+
+							{{#property_is_exists "phone" properties}}
+<div class="m-t-sm text-left"><small class="text-xs text-muted">Contact Info</small></div>
+							<div class="text-left">
+								{{#multiple_Property_Element "phone" properties}}
+								
+								<div class="custom-color text-sm">
+									{{#each this}}
+									
+                                        <a href='#' class="contact-make-sip-call" style="display:none;"
+                                           phone="{{value}}">
+                                           {{value}}
+                                        </a>            
+                                        <a href='#' class="contact-make-twilio-call" style="display:none;"                                           
+                                           phone="{{value}}">
+                                           {{value}}
+                                        </a>
+										<a href="tel:{{value}}" class="contact-make-call">{{value}}</a> 
+                                        {{#if subtype}}<span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
+									
+									{{/each}}
+								</div>
+								{{/multiple_Property_Element}}
+							</div>
+							{{/property_is_exists}}
+ 							{{#property_is_exists "email" properties}}
+							<div class="text-left custom-color">
+								{{#multiple_Property_Element "email" properties}}
+								
+								{{#property_is_exists "phone" ../properties}}
+								
+									{{else}}
+<div class="m-t-sm text-left"><small class="text-xs text-muted">Contact Info</small></div>
+									
+										{{/property_is_exists}} 
+									{{#each this}}
+										<div>
+											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
+										</div>
+									{{/each}}
+									
+									{{/multiple_Property_Element}}
+								</div>
+								{{/property_is_exists}}
+
+ <div class="custom-data"> {{#getContactCustomPropertiesExclusively properties}}
+<div class="clearfix"></div>
+<div class="m-t-sm text-left"><small class="text-xs text-muted">Custom Info</small></div>
+
+								<div class="text-left">
+									{{#each_with_index this}}
+									<div class="pull-left">
+										<div class="pull-left">
+											<span class="text-muted" title="{{name}}">{{name}}<span>
+										</div>
+										{{#if_equals index ../this.length}}
+											<div class="pull-left custom-color">
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+										{{else}}
+											<div class="pull-left custom-color">
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+										{{/if_equals}}
+										</div>
+                                        <div class="clearfix"></div>
+										{{/each_with_index}}
+									</div>
+									{{/getContactCustomPropertiesExclusively}}
+									</div>
+
+
+
+ 									{{#property_is_exists "address" properties}}
+<div class="m-t-sm text-left"><small class="text-xs text-muted">Location</small></div>
+										<div class="pull-left">
+											{{#address_Element properties}}{{/address_Element}}</div></div>
+
+										<div class="pull-left">
+											<div id="map" style="width: auto; height: 200px; display: none; margin: 10px">
+											</div>
+										</div>
+									{{/property_is_exists}}
+<div class="clearfix"></div>
+<!-- ending funda for contact detail edit -->
+
+
+
+
+
+
+				
+					<div class="hide">
+<div class="change-owner-succes"></div>
+     <span title="Owner" class="contact-owner-view">
+      	<span class="contact-owner" id="change-owner-element">
+        	<span class="contact-owner-text">Owner:&nbsp;&nbsp;</span>
+			{{#if owner}}
+        	<span class="contact-owner-pic" style="visibility:visible;"><img class="user-img"  alt="" src="img/company.png" /></span>
+			{{else}}
+			<span class="contact-owner-pic" style="visibility:hidden;"><img class="user-img"  alt="" src="img/company.png" /></span><span class="contact-owner-add" style="font-size:13px;"><a style="cursor:pointer;">Assign Owner</a></span>
+ 			{{/if}}
+        	<span id="contact-owner" data={{owner.id}} style="display:inline-block;max-width:82%;" class="contact-owner-name">{{owner.name}}</span>
+        
+        	{{#canEditContact owner.id}}
+        	<div class="btn-group" id="change-owner-ul" style="vertical-align: middle; display: none">
+        		 <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">Change owner <span class="caret"></span></a>
+        		 <ul id='contact-detail-owner' class="dropdown-menu pull-right"></ul>
+        	</div> 
+			{{/canEditContact}}
+       </span>
+    </span>
+					</div>
+				</div>
+				</div>
+				</div>
+				</div>
+				</div>
+		<div class="col  bg-white">
+<div class="vbox">
+<div class="row-row">
+			<ul class="nav nav-tabs  bg-light" id="contactDetailsTab">
+				<li class="active"><a data-toggle="tab" href="#company-contacts">Contacts</a></li>
+				<li class=""><a data-toggle="tab" href="#deals">Deals</a></li>
+				<li class=""><a data-toggle="tab" href="#cases">Cases</a></li>
+                <li class=""><a data-toggle="tab" href="#notes">Notes</a></li>
+                <li class=""><a data-toggle="tab" href="#documents">Documents</a></li>
+				
+			</ul>
+			<div class="tab-content" id="contact-tab-content">
+				<div class="tab-pane active" id="company-contacts">...</div>
+				<div class="tab-pane" id="deals">...</div>
+				<div class="tab-pane" id="cases">...</div>
+                <div class="tab-pane" id="notes"><img src="img/21-0.gif"></img></div>
+               <div class="tab-pane" id="documents"><img src="img/21-0.gif"></img></div>
+			</div>
+		
+	</div>
+	</div>
+	</div>
+	
+	<!-- Contact Details -->
+	<div class="col bg-white hide">
+
+<div id="widgets"></div>
+						</div>
+					</div>
+</div>
+					</script>
+					
+<script id="company-contacts-model-template" type="text/html">
+	<td></td>
+	<td class="data" data="{{id}}" >
+    	<div class="thumb agile-img m-r-xs"> 
+        		<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" />
+    	</div>
+    	<div class="agile-thumb agile-thumb-view">
+        		<b>	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </b>
+        		<br />
+        		{{getPropertyValue properties "email"}}
+    	</div>
+	</td>
+	<td><div class="text-ellipsis">{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}</div>
+	</td>
+	<td> 
+<div class="ellipsis-multiline l-h" style=" word-break:keep-all;">
+	{{#each tags}}
+    	<span class="label bg-light">{{this}}</span>
+    {{/each}}
+</div>
+	</td>
+	<td><div>{{lead_score}}</div></td>
+</script>
+
+<script id="company-contacts-collection-template" type="text/html">
+
+{{#if this.length}}
+	<div align="right" class="m-b-md m-t-md m-r-sm">
+		<a href="#" class="contact-add-contact btn btn-default btn-sm btn-addon">
+			<span><i class="icon-plus-sign"></i></span> Add Contact
+		</a>
+	</div>
+	
+		
+			<table id="contacts" class="table table-striped agile-table onlySorting b-t">
+			
+				<thead>
+					<tr>
+<th></th>
+						<th style="width:40%">Name</th>
+						<th style="width:20%">Work</th>
+						<th style="width:20%">Tags</th>
+						<th style="width:20%">Lead Score</th>
+					</tr>
+				</thead>
+				<tbody id="company-contacts-model-list" class="contacts-model-list"
+					route="contact/" style="overflow: scroll;">
+				</tbody>
+			</table>
+
+		{{else}}
+			<div class="alert-info alert">
+            	<div class="slate-content">
+                	<div class="box-left pull-left m-r-md">
+                    	<img alt="Clipboard" src="/img/clipboard.png">
+                	</div>
+                	<div class="box-right pull-left">
+                    	<h4 class="m-t-none">{{contactShortName}} is not associated with any person/contact. </h4>
+                    	<div class="text">
+							All Contacts that have this company in the 'Organization' or 'Company' field are shown here.
+							<br/>
+							<a href="#" class="contact-add-contact btn btn-default btn-sm left m-t-xs" style="margin-top:10px; margin-bottom:10px;">
+								<i class="icon-plus-sign"></i> Add Contact
+							</a>
+                    	</div>
+                	</div>
+					<div class="clearfix">
+					</div>
+            	</div>
+        	</div>
+		{{/if}}
+</script>

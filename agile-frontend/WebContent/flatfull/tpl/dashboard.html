@@ -1,0 +1,247 @@
+<script id="dashboard-template" type="text/html">
+<h1>Dashboard </h1>
+<div class="btn-group right m-t-n-lg pos-rlt m-r-xs">
+    <button class="btn btn-sm btn-default">
+    	<i class="icon-list m-r-xs"></i>
+    </button>
+    <button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+    	<span class="caret"></span>
+    </button>
+    <ul id="contact-view-model-list" class="pull-right dropdown-menu">
+        <li>
+            <a href="#contacts" url="core/api/timeline/contact" class="dashboard-timeline-filter">Contacts</a>
+		</li>
+		<li>
+			<a href="#task" url="core/api/timeline/tasks" class="dashboard-timeline-filter">Task</a>
+        </li>
+    </ul>
+</div>
+<div id="my-timeline"></div>
+<div class="col-md-12 row m-l-none p-t">
+	<div class="col-md-6 m-t-sm">
+	    <ul class="nav nav-tabs" id="dashboardTabs" style="list-style: none;">
+			<li class="active"><a data-toggle="tab" href="#recentContacts">Recently Viewed</a></li>
+	        <li ><a data-toggle="tab" href="#deals">Deals</a></li>
+	        <li class=""><a data-toggle="tab" href="#notes">Notes</a></li>
+	        <li class=""><a data-toggle="tab" href="#tasks">Tasks</a></li>
+	        <li class=""><a data-toggle="tab" href="#campaigns">Campaigns</a></li>
+	    <!--<li class="active"><a data-toggle="tab" href="#activities">Activity <sup><span class="badge badge-success">3</span></sup> </a></li>-->
+	    </ul>	
+		<div class="tab-content">
+			<div class="tab-pane" id="recentContacts">Recent Contacts</div>
+			<div class="tab-pane" id="notes">Notes</div>
+	              <div class="tab-pane" id="tasks">Tasks</div>
+	              <div class="tab-pane" id="deals">Deals</div>
+	              <div class="tab-pane" id="campaigns">camaigns</div>
+		</div>
+	</div>	
+	<div class="col-md-6 m-t-sm" id="subscription-stats">	
+	</div>
+</div>
+</script>
+
+<script id="user-billing-template" type="text/html">
+<div class="m-b-sm p" style="background-color: #F8F8B9;">
+{{#if_equals users_count "2"}}
+	<h3 class="text-lg">Oops. You are out of users.</h3>
+	<p class="p-t-sm">
+		Plan: Free Plan <br/>
+		Users: {{users_count}} of 2 &nbsp;<a class="text-u-l" href="#subscribe">Add User</a><br/><br/>
+	</p>
+{{else}}
+	<h3 class="text-lg text-u-l">Account Info</h3>
+	<p class="p-t-sm">
+		Plan: Free Plan <br/>
+		Users: {{users_count}} of 2 &nbsp;<a class="text-u-l" href="#users-add">Add User</a><br/>
+	</p>
+{{/if_equals}}
+<p>
+		<a class="text-u-l" href="#subscribe">Please
+			upgrade your account</a> to create more users. It takes only 10 seconds.
+	</p>
+</div>
+</script>
+
+<script id="dashboard-account-info-template" type="text/html">
+<div class="m-b-sm p" style="background-color: #F8F8B9;">
+	<h3 class="text-lg text-u-l">Account Info</h3>
+	<p class="p-t-sm">
+		Plan: {{titleFromEnums plan.plan_type}}<br />
+		Users: {{userCount}} of {{plan.quantity}} 
+		{{#if_equals userCount plan.quantity}}
+			 &nbsp;<a class="text-u-l" href="#subscribe">Add User</a> <br />
+		{{else}}
+		 	&nbsp;<a class="text-u-l" href="#users-add">Add User</a> <br />
+		{{/if_equals}}
+		<br />
+		<a class="text-u-l" href="#subscribe">Please
+			upgrade your account</a> to create more users. It takes only 10 seconds.
+	</p>
+</div>
+</script>
+<script id="profile-meter-template" type="text/html"> 
+<div class="m-b-sm p" style="background-color: #F8F8B9;">
+	<div><h3>Get started<h3></div>
+	<div class="row m-t-sm">
+		<div class="col-md-10">
+			<div class="progress progress-warning m-b-none">
+	  			<div class="bar" style="width: {{this.total}}%;"></div>
+			</div>
+		</div>
+		<span class="m-l-xs"><strong> {{this.total}} %</strong></span>
+	</div>
+	<ul>
+			{{#unless Email}}
+		<li>Sync your email with Agile <a href="#email">here</a></li>
+			{{/unless}}
+			{{#unless User_invited}}
+		<li>Invite New colleagues to Agile <a href="#users">here</a></li>
+			{{/unless}}
+			{{#unless shared}}
+		<li>Spread the love</li>
+			{{/unless}}
+	</ul>
+</div>
+</script>
+<script id="dashboard1-template" type="text/html">
+<div class="row">
+	<div class="col-lg-12 p-none">
+		<div class="row text-center m-t-n-xs">
+			<span class="inline-block pos-abs text-center p-t-xs p-b-xs p-l p-r r" style="background-color: rgb(249, 237, 190); border: 1px solid rgb(240, 195, 109);">Try the <a href="#portlets" style="color: #222222">new Dashboard</a> (beta).</span>
+		</div>
+		<div class=" b-b m-b b-light">
+			<div id="reportrange" class="pull-right p-t-xs p-b-xs p-r-sm p-l-sm"
+				style="box-shadow: 0 0px 2px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1); display: none;">
+				<i class="icon-calendar icon-large"></i> <span id="range"></span>
+			</div>
+			<h1>Welcome to Agile CRM
+				<div class="pull-right">
+            		<small style="font-size:0.5em; ">Last login :  <time id="last-login-time"  value="{{time_format}}" datetime="{{epochToHumanDate "" time_format}}">{{epochToHumanDate "ddd mmm dd yyyy" time_format}}</time></small>
+        		</div>
+			</h1>					
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-9">
+			<div class="p-b-md" style="background-color:#f2f5ff;">
+				<div class="text-sm">
+					<p class="p-md">Agile has all you need - contact management, marketing automation, web analytics, telephony, newsletter management, 2 way emails, real time activity alerts, third-party integrations and lot more.</p>
+				</div>
+				<div align="center">
+					<ul class="dashboard-list">
+						<li>
+							<a href="#contacts" title="" data-original-title="">
+								<div class="p-t-md p-l p-r p-b-sm">
+									<i class="icon-group icon-3x"></i>
+								</div>							
+									Contacts
+							</a>
+						</li>
+						{{#hasMenuScope "CALENDAR"}}
+						<li>
+							<a href="#tasks" title="" data-original-title="">
+								<div class="p-t-md p-r-sm p-b-sm p-l">
+									<i class="icon-edit icon-3x"></i>
+								</div>
+									Tasks
+							</a>
+						</li>
+						{{/hasMenuScope}}
+						{{#hasMenuScope "DEALS"}}
+						<li>
+							<a href="#deals" title="" data-original-title="">
+								<div class="p-t-md p-l p-r p-b-sm">
+									<i class="icon-money icon-3x"></i>
+								</div>
+									Deals
+							</a>
+						</li>
+						{{/hasMenuScope}}
+						{{#hasMenuScope "CAMPAIGN"}}
+						<li>
+							<a href="#workflows" title="" data-original-title="">
+								<div class="p-t-md p-l p-r p-b-sm">
+									<i class="icon-sitemap icon-3x"></i>
+								</div>
+								Campaigns
+							</a>
+						</li>
+						{{/hasMenuScope}}
+						{{#hasMenuScope "ACTIVITY"}}
+						<li>
+							<a href="#activities" title="" data-original-title="">
+								<div class="p-t-md p-l p-r p-b-sm">
+									<i class="icon-cogs icon-3x"></i>
+								</div>							
+									Activities
+							</a>
+						</li>
+						{{/hasMenuScope}}
+						<li>
+							<a href="#user-prefs" title="" data-original-title="">
+								<div class="p-t-md p-l p-r p-b-sm">
+									<i class="icon-wrench icon-3x "></i><br/>
+								</div>
+								<div>
+									Settings
+								</div>
+							</a>
+						</li>
+					</ul>
+</div>
+			</div>
+</br>
+	
+<div id="dashboard-entities">
+	<div id="recent-contacts" class="m-t-xxl"></div>
+	<div id="my-tasks" class="m-t-xxl"></div>
+	{{#hasMenuScope 'DEALS'}}
+	<div id="my-deals" class="m-t-xxl"></div>
+	{{/hasMenuScope}}
+	<div id="my-logs" class="m-t-xxl"></div>
+</div>
+	</div>
+	
+	
+<div class="col-md-3">
+		<div id = "profile-meter">
+		</div>
+        <div id="subscription-stats"></div>
+		</br>
+		<div class="data-block">
+			<div class="well">
+				<header>
+					<h3 class="m-l-xs">
+					 <span>Our expert talk </span>
+					</h3>
+				</header>
+				<div id="blog_sync_container"></div>
+				<span class="pull-right"><a href="https://www.agilecrm.com/blog" target="_blank">Read More...</a></span>
+			</div>
+		</div>
+		</br>
+	</div>	
+</div>
+</div>
+<hr/>
+</script>
+
+<script id="sticky-noty-template" type="text/html">
+  <div id="notify-container"> 
+      <div id="notify-1-7497345" class="text-md font-normal" style="background-color:#ffc;color: black;">
+       <span class="notify-close"><a title="dismiss this notification" class="text-l-none">x</a></span>
+		{{#if route}}
+       		<a href={{this.route}} class="text-l-none"><span class="notify-text">{{{this.message}}}</span></a>
+			{{else}}
+			<span class="notify-text">{{{this.message}}}</span>
+		{{/if}}
+      </div>
+   </div>
+</script>
+
+<script id="" type="text/html">
+	<div>
+		Alpha
+	</div>
+</script>

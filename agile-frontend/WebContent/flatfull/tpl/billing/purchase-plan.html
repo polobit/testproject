@@ -1,0 +1,203 @@
+<script id="purchase-plan-template" type="text/html">
+<div class="row">
+	<div class="col-md-9">
+		<div class="well">
+			<legend>Upgrade Plan</legend>
+			<div id="update-plan-details-info"></div>
+
+			<form id="planform" class="form-horizontal update_plan" name="plan">
+				<fieldset>
+					<div class="alert alert-info hide"></div>
+					<div style="display: none;">
+						<div class="control-group form-group">
+							<label class="control-label col-sm-2">Plan<span class="field_req">*</span></label>
+							<div class="controls col-sm-8">
+								<input type="text" name="plan_id" class="input form-control required"
+									value="{{plan_id}}" />
+							</div>
+						</div>
+						<div class="control-group form-group">
+							<label class="control-label col-sm-2">Plan<span class="field_req">*</span></label>
+							<div class="controls col-sm-8">
+								<input type="text" name="plan_type" class="input required form-control"
+									value="{{plan_type}}" />
+							</div>
+						</div>
+						<div class="control-group form-group">
+							<label class="control-label">Quantity<span
+								class="field_req col-sm-2">*</span></label>
+							<div class="controls col-sm-8">
+								<input type="text" name="quantity"
+									class="input required  digits form-control" value="{{quantity}}" />
+							</div>
+						</div>
+						<div class="control-group form-group">
+							<label class="control-label col-sm-2">Discount<span
+								class="field_req">*</span></label>
+							<div class="controls col-sm-8">
+								<input type="text" name="discount" class="input required form-control"
+									value="{{discount}}" />
+							</div>
+						</div>
+					<div class="control-group form-group">
+							<label class="control-label col-sm-2">coupon<span
+								class="field_req">*</span></label>
+							<div class="controls col-sm-8">
+								<input type="text" name="coupon" class="input required form-control"
+									value="{{coupon_code}}" />
+							</div>
+						</div>
+
+					</div>
+
+					<div class="col-md-12 r-5x p-md" style="background-color: rgb(221, 232, 248);">
+
+						
+                           <div class="row">
+						<div class="col-md-6">
+							<div class="control-group form-group">
+								<label class="control-label col-sm-4 p-t-none">Selected
+									Plan : </label>
+								<div class="controls col-sm-8">{{plan}}</div>
+							</div>
+							<div class="control-group form-group">
+								<label class="control-label col-sm-4 p-t-none">Quantity
+									(Users) : </label>
+								<div class="controls col-sm-8">{{quantity}}</div>
+							</div>
+							<div class="control-group form-group">
+								<label class="control-label col-sm-4 p-t-none">Billing
+									Cycle : </label>
+								<div class="controls col-sm-8">{{cycle}}</div>
+							</div>
+							<div class="control-group form-group">
+								<label class="control-label col-sm-4 p-t-none">Next
+									Billing Date : </label>
+								<div class="controls col-sm-8">
+									{{epochToHumanDate "mm/dd/yy" date}}
+									<p class="help-block">MM/DD/YY</p>
+								</div>
+							</div>
+							<div class="control-group form-group">
+								<label class="control-label col-sm-4 p-t-none">Total
+									Cost : </label>
+								<div class="controls col-sm-8">
+									<span>$</span><b>{{cost}}</b>
+									<p class="help-block">
+										( {{quantity}} * {{months}} * <span>$</span>{{price}} )
+									</p>
+								</div>
+							</div>
+
+ 					  {{#if coupon_code}}
+							<div class="control-group form-group">
+								<label class="control-label col-sm-4 p-t-none">Discount : </label>
+								<div class="controls col-sm-8">
+									<b class="coupon_code_discount_amount"><span id="coupon_code_discount_percent"><img src="img/1-0.gif" height="15px" width="15px" /></span></b>
+								</div>
+							</div>
+  							<div class="control-group form-group">
+								<label class="control-label col-sm-4 p-t-none">Total Payable Cost : </label>
+								<div class="controls">
+									$<b class="coupon_code_discount_amount"><span id="total_cost_with_discount"><img src="img/1-0.gif" height="15px" width="15px" /></span></b>
+								</div>
+							</div>
+ 						{{/if}}
+</div>
+						<div class="col-md-6">
+                         <a class="btn btn-sm btn-success pull-right" id="change_plan" href="#subscribe"><i
+							class="icon-edit"></i> Change Plan</a> 
+<div class="clearfix"></div>
+<br>
+							{{#if_equals "Monthly" cycle}}
+							<div class="info-block">
+								<i class="icon-info-sign"></i><strong>UPGRADE</strong>
+								<p>
+									You can save $<b>{{yearly_discount}}</b> by upgrading to yearly
+									or save $<b>{{bi_yearly_discount}}</b> by upgrading to 2 year
+									plan.<br />Hurry! <b><a href="#subscribe">Change plan</a></b>
+									and claim your savings!!
+								</p>
+							</div>
+							{{/if_equals}} {{#if_equals "Yearly" cycle}}
+							<div class="info-block">
+								<i class="icon-info-sign"></i><strong>UPGRADE</strong>
+								<p>
+									You can save $<b>{{bi_yearly_discount}}</b> by upgrading to 2
+									year plan.<br />Hurry! <b><a href="#subscribe">Change
+											plan</a></b> and claim your savings!!
+								</p>
+							</div>
+							{{/if_equals}}
+						</div>
+						</div>
+					</div>
+
+				</fieldset>
+			</form>
+			<form id="gateway" class="form-horizontal hide">
+				<input type="text" name="gateway" class="hidden form-control" value="Stripe" />
+			</form>
+			{{#if new_signup}}
+			<form id="CCform" class="form-horizontal card_details"
+				name="card_details">
+				<fieldset>
+				<div class="control-group">
+						<label class="control-label">Name<span class="field_req">*</span></label>
+						<div class="controls">
+							<input type="text" name="name" class="input required form-control"
+								placeholder="Cardholder's name" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label">Card Number <span
+							class="field_req">*</span></label>
+						<div class="controls">
+							<input type="text" name="number" class="input required form-control digits"
+								placeholder="Enter Card Number" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label">Expiry<span
+							class="field_req">*</span></label>
+						<div class="controls">
+							<select name="exp_month" id="exp_month"
+								class="input span2 form-control exp_month" placeholder="Expiry Month"
+								style="width: 94px" onChange="$(&quot;#exp_year&quot;).valid();"></select>
+							<span style="margin-left: 10px; margin-right: 10px">/ </span> <select
+								name="exp_year" id="exp_year"
+								class="input required form-control digits span2 exp_year atleastThreeMonths"
+								placeholder="Expiry Year" style="width: 94px"></select>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label">CVC<span class="field_req">*</span></label>
+						<div class="controls">
+							<input type="text" name="cvc" class="input required form-control digits"
+								placeholder="CVC" />
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			{{/if}}
+	<br/>
+<hr>
+			<div class="row">
+            <div class="col-sm-offset-3 col-sm-6">
+				<a href="#subscribe" class="btn btn-sm btn-danger">Close</a>
+				<a href="#" type="submit" id="subscribe" class="save btn btn-sm btn-primary">Upgrade Plan</a>
+             </div>
+			</div>
+
+		</div>
+	</div>
+	<div class="span3">
+
+		<div class="testmonials_box" style=""></div>
+
+	</div>
+</div>
+</script>
+<script id="update-plan-details-info-template" type="text/html">
+
+</script>
