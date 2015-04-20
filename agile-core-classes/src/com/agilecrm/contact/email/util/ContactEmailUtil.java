@@ -19,6 +19,7 @@ import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.email.wrappers.EmailWrapper;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.EmailPrefs;
@@ -255,7 +256,7 @@ public class ContactEmailUtil
 	    {
 		// parse email body
 		contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
-				
+
 		ObjectMapper mapper = new ObjectMapper();
 		String emailString = mapper.writeValueAsString(contactEmail);
 		imapEmails.put(new JSONObject(emailString));
@@ -307,11 +308,12 @@ public class ContactEmailUtil
 
 	return emails;
     }
-    
+
     /**
      * Converts obtained folders string to json
+     * 
      * @param jsonResult
-     * 	      obtained folders
+     *            obtained folders
      * @return JSONObject
      */
     public static JSONObject convertFoldersToJSON(String jsonResult)
@@ -319,7 +321,7 @@ public class ContactEmailUtil
 	JSONObject folders = null;
 	try
 	{
-	    folders = new JSONObject(jsonResult);	    
+	    folders = new JSONObject(jsonResult);
 	    // If result is {}, convert it to {folders:[]}
 	    if (folders.length() == 0)
 		return folders.put("folders", new JSONArray());
@@ -359,7 +361,6 @@ public class ContactEmailUtil
     {
 	String gmailURL = ContactGmailUtil.getGmailURL(agileUser, searchEmail, offset, count);
 
-	// if not null return gmailURL
 	if (gmailURL != null)
 	    return gmailURL;
 
@@ -380,17 +381,15 @@ public class ContactEmailUtil
      *            - Emails Array.
      * @return JSONArray
      */
-    public static JSONArray addOwnerAndParseEmailBody(JSONArray emailsArray)
+    public static JSONArray addOwnerAndParseEmailBody(JSONArray emailsArray, String ownerEmail)
     {
 	try
 	{
-	    // Gets Owner email.
-	    String ownerEmail = getOwnerEmail();
-
 	    // inserts owner email to each and parse each email body
 	    for (int i = 0; i < emailsArray.length(); i++)
 	    {
-		emailsArray.getJSONObject(i).put("owner_email", ownerEmail);
+		if (StringUtils.isNotBlank(""))
+		    emailsArray.getJSONObject(i).put("owner_email", ownerEmail);
 
 		// parse email body.
 		JSONObject email = emailsArray.getJSONObject(i);
@@ -409,89 +408,6 @@ public class ContactEmailUtil
 	    System.err.println("Exception occurred " + e.getMessage());
 	}
 	return emailsArray;
-    }
-
-    /**
-     * Returns owner email which is nothing but username set in email
-     * preferences.
-     * 
-     * @return String
-     */
-    public static String getOwnerEmail()
-    {
-	String userName = null;
-
-	// Gmail Preferences.
-	Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
-	SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(AgileUser.getCurrentAgileUser(), socialPrefsTypeEnum);
-
-	// return gmail prefs email.
-	if (gmailPrefs != null)
-	    return gmailPrefs.email;
-
-	// Imap Prefs
-	IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(AgileUser.getCurrentAgileUser());
-
-	if (imapPrefs != null)
-	    return imapPrefs.user_name;
-
-	// Imap Prefs
-	OfficeEmailPrefs officePrefs = OfficeEmailPrefsUtil.getOfficePrefs(AgileUser.getCurrentAgileUser());
-
-	if (officePrefs != null)
-	    return officePrefs.user_name;
-
-	return userName;
-
-    }
-
-    /**
-     * Returns emails fetched from IMAP server with respective given params
-     * 
-     * @param searchEmail
-     *            - search email to get emails
-     * @param searchEmailSubject
-     *            - search email subject to get emails
-     * @return String
-     */
-    public static JSONArray getIMAPEmails(AgileUser agileUser, String searchEmail, String searchEmailSubject)
-    {
-	try
-	{
-	    // If agileUser null return
-	    if (agileUser == null)
-		return null;
-
-	    String url = ContactEmailUtil.getEmailsFetchURL(agileUser, searchEmail, "0", "5");
-
-	    // When prefs not set
-	    if (StringUtils.isBlank(url))
-		return null;
-
-	    // Append subject to search, if not empty
-	    if (!StringUtils.isBlank(searchEmailSubject))
-		url += "&" + "search_email_subject=" + URLEncoder.encode(searchEmailSubject, "UTF-8");
-
-	    String jsonResult = HTTPUtil.accessURL(url);
-
-	    if (StringUtils.isBlank(jsonResult))
-		return null;
-
-	    JSONObject emailsJSON = new JSONObject(jsonResult);
-
-	    if (emailsJSON.has("emails"))
-	    {
-		JSONArray emails = emailsJSON.getJSONArray("emails");
-		return emails;
-	    }
-	}
-	catch (Exception e)
-	{
-	    System.err.println("Exception occured while fetching imap/officeExchange emails..." + e.getMessage());
-	    e.printStackTrace();
-	}
-
-	return null;
     }
 
     /**
@@ -529,7 +445,7 @@ public class ContactEmailUtil
      *            the offset
      * @return
      */
-    public static List<EmailWrapper> getEmailsfromServer(String url, String pageSize, String cursor)
+    public static List<EmailWrapper> getEmailsfromServer(String url, String pageSize, String cursor, String fromEmail)
     {
 	List<EmailWrapper> emailsList = null;
 	try
@@ -545,7 +461,7 @@ public class ContactEmailUtil
 	    JSONArray emailsArray = emails.getJSONArray("emails");
 
 	    // Add owner email to each email and parse each email body.
-	    emailsArray = ContactEmailUtil.addOwnerAndParseEmailBody(emailsArray);
+	    emailsArray = ContactEmailUtil.addOwnerAndParseEmailBody(emailsArray, fromEmail);
 
 	    if (emailsArray.length() < Integer.parseInt(pageSize))
 		return new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>()
@@ -568,8 +484,6 @@ public class ContactEmailUtil
 	}
 	return emailsList;
     }
-    
-    
 
     /**
      * Gets the list of synced email account names of this Agile user
@@ -582,6 +496,7 @@ public class ContactEmailUtil
 	AgileUser agileUser = AgileUser.getCurrentAgileUser();
 	boolean hasEmailAccountsConfigured = false;
 	boolean hasSharedEmailAccounts = false;
+	int emailAccountsCount = 0;
 	try
 	{
 	    DomainUser domainUser = agileUser.getDomainUser();
@@ -592,25 +507,37 @@ public class ContactEmailUtil
 	    }
 	    // Get Gmail Social Prefs
 	    Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
-	    SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(agileUser, socialPrefsTypeEnum);
-	    if (gmailPrefs != null)
+	    List<SocialPrefs> socialPrefsList = SocialPrefsUtil.getPrefsList(agileUser, socialPrefsTypeEnum);
+	    if (socialPrefsList != null && socialPrefsList.size() > 0)
 	    {
-		emailPrefs.setGmailUserName(gmailPrefs.email);
-		emailPrefs.setHasEmailAccountsConfigured(true);
+		emailAccountsCount = emailAccountsCount + socialPrefsList.size();
+		List<String> socialUserNames = new ArrayList<String>();
+		for (SocialPrefs socialPrefs : socialPrefsList)
+		    socialUserNames.add(socialPrefs.email);
+		emailPrefs.setGmailUserNames(socialUserNames);
+		hasEmailAccountsConfigured = true;
 	    }
 	    // Get Imap prefs
-	    IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(agileUser);
-	    if (imapPrefs != null)
+	    List<IMAPEmailPrefs> imapPrefsList = IMAPEmailPrefsUtil.getIMAPPrefsList(agileUser);
+	    if (imapPrefsList != null && imapPrefsList.size() > 0)
 	    {
-		emailPrefs.setImapUserName(imapPrefs.user_name);
-		emailPrefs.setHasEmailAccountsConfigured(true);
+		emailAccountsCount = emailAccountsCount + imapPrefsList.size();
+		List<String> imapUserNames = new ArrayList<String>();
+		for (IMAPEmailPrefs imapPrefs : imapPrefsList)
+		    imapUserNames.add(imapPrefs.user_name);
+		emailPrefs.setImapUserNames(imapUserNames);
+		hasEmailAccountsConfigured = true;
 	    }
 	    // Get Office365 prefs
-	    OfficeEmailPrefs officePrefs = OfficeEmailPrefsUtil.getOfficePrefs(agileUser);
-	    if (officePrefs != null)
+	    List<OfficeEmailPrefs> officePrefsList = OfficeEmailPrefsUtil.getOfficePrefsList(agileUser);
+	    if (officePrefsList != null && officePrefsList.size() > 0)
 	    {
-		emailPrefs.setExchangeUserName(officePrefs.user_name);
-		emailPrefs.setHasEmailAccountsConfigured(true);
+		emailAccountsCount = emailAccountsCount + officePrefsList.size();
+		List<String> officeUserNames = new ArrayList<String>();
+		for (OfficeEmailPrefs officePrefs : officePrefsList)
+		    officeUserNames.add(officePrefs.user_name);
+		emailPrefs.setExchangeUserNames(officeUserNames);
+		hasEmailAccountsConfigured = true;
 	    }
 	    Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
 	    List<String> sharedGmailPrefs = getSharedGmailPrefs(agileUserKey);
@@ -620,63 +547,105 @@ public class ContactEmailUtil
 	    List<String> sharedOfficePrefs = getSharedToOfficePrefs(agileUserKey);
 	    emailPrefs.setSharedExchangeUserNames(sharedOfficePrefs);
 
-	    if (gmailPrefs != null || imapPrefs != null || officePrefs != null)
-		hasEmailAccountsConfigured = true;
-
 	    if ((sharedGmailPrefs != null && sharedGmailPrefs.size() > 0)
 		    || (sharedImapPrefs != null && sharedImapPrefs.size() > 0)
 		    || (sharedOfficePrefs != null && sharedOfficePrefs.size() > 0))
 		hasSharedEmailAccounts = true;
-
+	    int emailAccountLimitCount = BillingRestrictionUtil.getBillingRestriction(null, null).getCurrentLimits()
+		    .getEmailAccountLimit();
+	    if (emailAccountsCount >= emailAccountLimitCount)
+		emailPrefs.setEmailAccountsLimitReached(true);
+	    else
+		emailPrefs.setEmailAccountsLimitReached(false);
+	    emailPrefs.setEmailAccountsLimit(emailAccountLimitCount);
 	    emailPrefs.setHasEmailAccountsConfigured(hasEmailAccountsConfigured);
 	    emailPrefs.setHasSharedEmailAccounts(hasSharedEmailAccounts);
-
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	}
-
 	return emailPrefs;
     }
+
     /**
-	 * Returns emails opened in specific duration
-	 * 
-	 * @param {@Link Long} - minTime, {@Link Long} - maxTime
-	 * @return {@Link List<ContactEmail>}
-	 */
-	public static List<ContactEmail> getEmailsOpened(Long minTime,Long maxTime){
-		List<ContactEmail> contactEmailsList=null;
-		try {
-			contactEmailsList = dao.ofy().query(ContactEmail.class).filter("email_opened_at >= ", minTime).filter("email_opened_at <= ", maxTime).filter("is_email_opened", true).list();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return contactEmailsList;
+     * Returns the total count of email prefs of the current user
+     * 
+     * @return
+     */
+    public static int getEmailPrefsCount()
+    {
+	int emailPrefsCount = 0;
+	AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	// Get Gmail Social Prefs
+	Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
+	List<SocialPrefs> socialPrefsList = SocialPrefsUtil.getPrefsList(agileUser, socialPrefsTypeEnum);
+	if (socialPrefsList != null)
+	    emailPrefsCount = emailPrefsCount + socialPrefsList.size();
+	// Get IMAP Pref
+	List<IMAPEmailPrefs> imapPrefsList = IMAPEmailPrefsUtil.getIMAPPrefsList(agileUser);
+	if (imapPrefsList != null)
+	    emailPrefsCount = emailPrefsCount + imapPrefsList.size();
+	// Get Office Prefs
+	List<OfficeEmailPrefs> officePrefsList = OfficeEmailPrefsUtil.getOfficePrefsList(agileUser);
+	if (officePrefsList != null)
+	    emailPrefsCount = emailPrefsCount + officePrefsList.size();
+	return emailPrefsCount;
+    }
+
+    /**
+     * Returns emails opened in specific duration
+     * 
+     * @param {@Link Long} - minTime, {@Link Long} - maxTime
+     * @return {@Link List<ContactEmail>}
+     */
+    public static List<ContactEmail> getEmailsOpened(Long minTime, Long maxTime)
+    {
+	List<ContactEmail> contactEmailsList = null;
+	try
+	{
+	    contactEmailsList = dao.ofy().query(ContactEmail.class).filter("email_opened_at >= ", minTime)
+		    .filter("email_opened_at <= ", maxTime).filter("is_email_opened", true).list();
 	}
-	/**
-	 * Gets emails list sent by each user in specific duration
-	 * 
-	 * @param {@Link String} - userEmail,{@Link Long} - minTime, {@Link Long} - maxTime
-	 * @return {@Link List<ContactEmail>}
-	 */
-	public static List<ContactEmail> getEmailsSent(DomainUser domainUser,Long minTime,Long maxTime){
-		List<ContactEmail> contactEmailsList=null;
-		try {
-			System.out.println("Start getEmailsSent(-,-,-)-------Name:---"+domainUser.name+"Email:----"+domainUser.email);
-			System.out.println("Start try block");
-			contactEmailsList = dao.ofy().query(ContactEmail.class).filter("from", domainUser.name+" <"+domainUser.email+">").filter("date_secs >= ", minTime*1000).filter("date_secs <= ", maxTime*1000).list();
-			if(contactEmailsList!=null)
-				System.out.println("contactEmailsList Size---"+contactEmailsList.size());
-			else
-				System.out.println("contactEmailsList is null");
-			System.out.println("End try block----"+contactEmailsList);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println("End getEmailsSent(-,-,-)");
-		return contactEmailsList;
+	catch (Exception e)
+	{
+	    e.printStackTrace();
 	}
+	return contactEmailsList;
+    }
+
+    /**
+     * Gets emails list sent by each user in specific duration
+     * 
+     * @param {@Link String} - userEmail,{@Link Long} - minTime,
+     *        {@Link Long} - maxTime
+     * @return {@Link List<ContactEmail>}
+     */
+    public static List<ContactEmail> getEmailsSent(DomainUser domainUser, Long minTime, Long maxTime)
+    {
+	List<ContactEmail> contactEmailsList = null;
+	try
+	{
+	    System.out.println("Start getEmailsSent(-,-,-)-------Name:---" + domainUser.name + "Email:----"
+		    + domainUser.email);
+	    System.out.println("Start try block");
+	    contactEmailsList = dao.ofy().query(ContactEmail.class)
+		    .filter("from", domainUser.name + " <" + domainUser.email + ">")
+		    .filter("date_secs >= ", minTime * 1000).filter("date_secs <= ", maxTime * 1000).list();
+	    if (contactEmailsList != null)
+		System.out.println("contactEmailsList Size---" + contactEmailsList.size());
+	    else
+		System.out.println("contactEmailsList is null");
+	    System.out.println("End try block----" + contactEmailsList);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	System.out.println("End getEmailsSent(-,-,-)");
+	return contactEmailsList;
+    }
+
     /**
      * Gets list of Shared Gmail prefs with this Current User
      * 
@@ -735,24 +704,28 @@ public class ContactEmailUtil
 	}
 	return sharedOfficeUsers;
     }
+
     /**
-	 * Returns emails opened by individual user in specific duration
-	 * 
-	 * @param {@Link Long} - minTime, {@Link Long} - maxTime
-	 * @return {@Link List<ContactEmail>}
-	 */
-	public static List<ContactEmail> getEmailsOpenedByUser(DomainUser domainUser,Long minTime,Long maxTime)
+     * Returns emails opened by individual user in specific duration
+     * 
+     * @param {@Link Long} - minTime, {@Link Long} - maxTime
+     * @return {@Link List<ContactEmail>}
+     */
+    public static List<ContactEmail> getEmailsOpenedByUser(DomainUser domainUser, Long minTime, Long maxTime)
+    {
+	List<ContactEmail> contactEmailsList = null;
+	try
 	{
-		List<ContactEmail> contactEmailsList=null;
-		try 
-		{
-			contactEmailsList = dao.ofy().query(ContactEmail.class).filter("from", domainUser.name+" <"+domainUser.email+">")
-					.filter("email_opened_at >= ", minTime).filter("email_opened_at <= ", maxTime).filter("is_email_opened", true).list();
-		} catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
-		return contactEmailsList;
+	    contactEmailsList = dao.ofy().query(ContactEmail.class)
+		    .filter("from", domainUser.name + " <" + domainUser.email + ">")
+		    .filter("email_opened_at >= ", minTime).filter("email_opened_at <= ", maxTime)
+		    .filter("is_email_opened", true).list();
 	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return contactEmailsList;
+    }
 
 }

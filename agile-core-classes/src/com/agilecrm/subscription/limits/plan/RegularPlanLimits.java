@@ -20,6 +20,7 @@ public class RegularPlanLimits extends PlanLimits
 	reporting = "ALL";
 	whiteLabelEnabled = true;
 	campaignNodesLimit = 25;
+	emailAccountsLimit = 1;
 
 	/**
 	 * New plan limits

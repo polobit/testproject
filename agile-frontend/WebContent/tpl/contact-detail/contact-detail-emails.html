@@ -7,23 +7,29 @@
 	<ul id = "mail-account-type-select" class="pull-right dropdown-menu">
 	{{#if agileUserName}}
 	<li>
-	<a href="" class="agile-emails" email-server="agile" data-url="core/api/emails/agile-emails?e=" email-server-type={{agileUserName}}><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>Agile</a>
+	<a href="" class="agile-emails" email-server="agile" data-url="core/api/emails/agile-emails?e=" email-server-type={{this}}><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>Agile</a>
 	</li>
 	{{/if}}
-	{{#if gmailUserName}}
+	{{#if gmailUserNames}}
+	{{#each gmailUserNames}}
 	<li>
-	<a href="" class="agile-emails" email-server="google" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{gmailUserName}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{gmailUserName}}</a>
+	<a href="" class="agile-emails" email-server="google" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{this}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
 	</li>
+	{{/each}}
 	{{/if}}
-	{{#if imapUserName}}
+	{{#if imapUserNames}}
+	{{#each imapUserNames}}
 	<li>
-	<a href="" class="agile-emails" email-server="imap" data-url="core/api/imap/imap-emails?from_email=" email-server-type={{imapUserName}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{imapUserName}}</a>
+	<a href="" class="agile-emails" email-server="imap" data-url="core/api/imap/imap-emails?from_email=" email-server-type={{this}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
 	</li>
+	{{/each}}
 	{{/if}}
-	{{#if exchangeUserName}}
+	{{#if exchangeUserNames}}
+	{{#each exchangeUserNames}}
 	<li>
-	<a href="" class="agile-emails" email-server="exchange" data-url="core/api/office/office365-emails?from_email=" email-server-type={{exchangeUserName}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{exchangeUserName}}</a>
+	<a href="" class="agile-emails" email-server="exchange" data-url="core/api/office/office365-emails?from_email=" email-server-type={{this}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
 	</li>
+	{{/each}}
 	{{/if}}
 	{{#if sharedGmailUserNames}}
 	{{#each sharedGmailUserNames}}

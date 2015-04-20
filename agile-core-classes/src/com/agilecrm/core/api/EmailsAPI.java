@@ -39,7 +39,6 @@ import com.agilecrm.util.HTTPUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.mandrill.EmailContentLengthLimitExceededException;
-import com.thirdparty.mandrill.Mandrill;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 
 /**
@@ -70,44 +69,6 @@ public class EmailsAPI
 	    @QueryParam("subject") String subject, @QueryParam("body") String body) throws Exception
     {
 	EmailUtil.sendMail(fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null, null);
-    }
-    
-    /**
-     * Agile Support emails to be sent through Mandrill without any subaccount.
-     * 
-     * @param fromEmail 
-     * 		- from email
-     * @param to 
-     * 		- to email
-     * @param subject
-     * 		- email subject
-     * @param body 
-     * 		- Email body
-     * @throws Exception
-     */
-    @Path("contact-us")
-    @POST
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void sendEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to,
-	    @QueryParam("subject") String subject, @QueryParam("body") String body) throws Exception
-    {
-	String oldNamespace = NamespaceManager.get();
-	
-	try
-	{
-	    // To avoid sending through subaccount
-	    NamespaceManager.set("");
-	    Mandrill.sendMail(false, fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null, null, null);
-	}
-	catch(Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured while sending Agile help email..." + e.getMessage());
-	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
     }
 
     /**
@@ -215,7 +176,7 @@ public class EmailsAPI
 	    JSONArray emailsArray = emails.getJSONArray("emails");
 
 	    // Add owner email to each email and parse each email body.
-	    emailsArray = ContactEmailUtil.addOwnerAndParseEmailBody(emailsArray);
+	    emailsArray = ContactEmailUtil.addOwnerAndParseEmailBody(emailsArray,"");
 
 	    // Merges imap emails and contact emails.
 	    emailsArray = ContactEmailUtil.mergeContactEmails(StringUtils.split(searchEmail, ",")[0], emailsArray);

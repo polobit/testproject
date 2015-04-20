@@ -9,9 +9,12 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -20,6 +23,7 @@ import org.json.JSONObject;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.email.util.ContactImapUtil;
 import com.agilecrm.email.wrappers.EmailWrapper;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
@@ -46,16 +50,16 @@ public class IMAPAPI
      */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public IMAPEmailPrefs getIMAPPrefs()
+    public List<IMAPEmailPrefs> getIMAPPrefs()
     {
-	IMAPEmailPrefs prefs = IMAPEmailPrefsUtil.getIMAPPrefs(AgileUser.getCurrentAgileUser());
+	List<IMAPEmailPrefs> prefsList = IMAPEmailPrefsUtil.getIMAPPrefsList(AgileUser.getCurrentAgileUser());
 
-	if (prefs != null)
+	if (prefsList != null && prefsList.size() > 0)
 	{
-	    prefs.password = IMAPEmailPrefs.MASKED_PASSWORD;
+	    for (IMAPEmailPrefs prefs : prefsList)
+		prefs.password = IMAPEmailPrefs.MASKED_PASSWORD;
 	}
-	System.out.println(prefs);
-	return prefs;
+	return prefsList;
     }
 
     /**
@@ -70,10 +74,18 @@ public class IMAPAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public IMAPEmailPrefs createIMAPEmailPrefs(IMAPEmailPrefs prefs)
     {
-	prefs.setAgileUser(new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id));
-	prefs.save();
-	prefs.isUpdated = false;
-	return prefs;
+	int emailAccountLimitCount = BillingRestrictionUtil.getBillingRestriction(null, null).getCurrentLimits()
+	        .getEmailAccountLimit();
+	int emailPrefsCount = ContactEmailUtil.getEmailPrefsCount();
+	if (emailPrefsCount < emailAccountLimitCount)
+	{
+	    prefs.setAgileUser(new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id));
+	    prefs.save();
+	    prefs.isUpdated = false;
+	    return prefs;
+	}
+	else
+	    return null;
     }
 
     /**
@@ -97,12 +109,30 @@ public class IMAPAPI
     /**
      * Deletes IMAPEmailPrefs with respect to agile user.
      */
+    @Path("/delete/{id}")
     @DELETE
-    public void deleteIMAPEmailPrefs()
+    public void deleteIMAPEmailPrefs(@PathParam("id") String sid)
     {
-	IMAPEmailPrefs prefs = IMAPEmailPrefsUtil.getIMAPPrefs(AgileUser.getCurrentAgileUser());
-	if (prefs != null)
-	    prefs.delete();
+	try
+	{
+	    AgileUser user = AgileUser.getCurrentAgileUser();
+	    Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, user.id);
+	    if (StringUtils.isNotBlank(sid))
+	    {
+		Long id = Long.parseLong(sid);
+		if (id != null)
+		{
+		    IMAPEmailPrefs prefs = IMAPEmailPrefsUtil.getIMAPEmailPrefs(id, agileUserKey);
+		    if (prefs != null)
+			prefs.delete();
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
+		    .entity(e.getMessage()).build());
+	}
     }
 
     @Path("imap-emails")
@@ -124,14 +154,10 @@ public class IMAPAPI
 	    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
 
 	    // Gets IMAPPrefs url
-	    String imapURL = ContactImapUtil.getIMAPURL(AgileUser.getCurrentAgileUser(), normalisedFromEmail,
-		    normalisedSearchEmail, cursor, pageSize);
+	    String imapURL = ContactImapUtil.getIMAPURL(normalisedFromEmail, normalisedSearchEmail, cursor, pageSize);
 
 	    if (StringUtils.isNotBlank(imapURL))
-	    {
-		emails = ContactEmailUtil.getEmailsfromServer(imapURL, pageSize, cursor);
-	    }
-
+		emails = ContactEmailUtil.getEmailsfromServer(imapURL, pageSize, cursor, normalisedFromEmail);
 	}
 	catch (Exception e)
 	{
@@ -142,45 +168,50 @@ public class IMAPAPI
 	return emails;
     }
 
-    @Path("imap-folders")
+    @Path("{id}/imap-folders")
     @GET
     @Produces({ MediaType.APPLICATION_JSON + " ;charset=utf-8", MediaType.APPLICATION_XML + " ;charset=utf-8" })
-    public String getIMAPFolders()
+    public String getIMAPFolders(@PathParam("id") String sid)
     {
 	JSONArray newFolders = new JSONArray();
 	try
 	{
 	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
-	    IMAPEmailPrefs imapEmailPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(agileUser);
-	    if (imapEmailPrefs != null)
+	    Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
+	    Long id = Long.parseLong(sid);
+	    if (id != null)
 	    {
-		String imapURL = ContactImapUtil.getIMAPURLForFetchingFolders(agileUser, "folders");
-		if (StringUtils.isNotBlank(imapURL))
+		IMAPEmailPrefs imapEmailPrefs = IMAPEmailPrefsUtil.getIMAPEmailPrefs(id, agileUserKey);
+		if (imapEmailPrefs != null)
 		{
-		    // Gets IMAP server folders
-		    JSONArray allFolders = ContactImapUtil.getIMAPFoldersFromServer(imapURL);
-		    if (allFolders != null)
+		    String imapURL = ContactImapUtil.getIMAPURLForFetchingFolders(imapEmailPrefs, "folders");
+		    if (StringUtils.isNotBlank(imapURL))
 		    {
-			List<String> existingFolders = null;
-			if (imapEmailPrefs != null)
-			    existingFolders = imapEmailPrefs.getFoldersList();
-			for (int i = 0; i < allFolders.length(); i++)
+			// Gets IMAP server folders
+			JSONArray allFolders = ContactImapUtil.getIMAPFoldersFromServer(imapURL);
+			if (allFolders != null)
 			{
-			    JSONObject folder = new JSONObject();
-			    folder.put("name", allFolders.get(i));
-			    if (existingFolders != null)
+			    List<String> existingFolders = null;
+			    if (imapEmailPrefs != null)
+				existingFolders = imapEmailPrefs.getFoldersList();
+			    for (int i = 0; i < allFolders.length(); i++)
 			    {
-				for (int j = 0; j < existingFolders.size(); j++)
+				JSONObject folder = new JSONObject();
+				folder.put("name", allFolders.get(i));
+				if (existingFolders != null)
 				{
-				    if (existingFolders.get(j).equals(allFolders.get(i)))
-					folder.put("selected", "selected=selected");
+				    for (int j = 0; j < existingFolders.size(); j++)
+				    {
+					if (existingFolders.get(j).equals(allFolders.get(i)))
+					    folder.put("selected", "selected=selected");
+				    }
 				}
+				newFolders.put(folder);
 			    }
-			    newFolders.put(folder);
 			}
 		    }
 		}
-	    }
+	    }// end if id!=null
 	}
 	catch (Exception e)
 	{
@@ -199,7 +230,7 @@ public class IMAPAPI
     @Path("shared-to-users")
     @GET
     @Produces({ MediaType.APPLICATION_JSON + " ;charset=utf-8", MediaType.APPLICATION_XML + " ;charset=utf-8" })
-    public String getSharedToUsersList()
+    public String getSharedToUsersList(@QueryParam("id") String sid)
     {
 	List<AgileUser> agileUsers = null;
 	JSONArray users = new JSONArray();
@@ -211,17 +242,20 @@ public class IMAPAPI
 	    {
 		Iterator<AgileUser> itr = agileUsers.iterator();
 		AgileUser currentAgileUser = AgileUser.getCurrentAgileUser();
+		Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, currentAgileUser.id);
 		while (itr.hasNext())
 		{
 		    AgileUser user = itr.next();
 		    if (user.id.longValue() == currentAgileUser.id.longValue())
 			itr.remove();
 		}
-		IMAPEmailPrefs imapEmailPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(currentAgileUser);
 		List<Key<AgileUser>> sharedUsers = null;
-		if (imapEmailPrefs != null)
+		if (StringUtils.isNotBlank(sid))
 		{
-		    sharedUsers = imapEmailPrefs.getSharedWithUsers();
+		    Long uid = Long.parseLong(sid);
+		    IMAPEmailPrefs imapEmailPrefs = IMAPEmailPrefsUtil.getIMAPEmailPrefs(uid, agileUserKey);
+		    if (imapEmailPrefs != null)
+			sharedUsers = imapEmailPrefs.getSharedWithUsers();
 		}
 		for (AgileUser agileUser : agileUsers)
 		{
