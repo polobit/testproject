@@ -34,7 +34,7 @@ function setImageURLInModal(url)
 	var id = "upload-in-modal";
 	// Set the media stream
 	$('#' + id).find('.imgholder').html('');
-	$('#' + id).find('.imgholder').html('<img class="thumbnail" src="' + url + '" height="70" width="70"/>');
+	$('#' + id).find('.imgholder').html('<img class="m-b-none avatar-thumb" src="' + url + '" style="height:58px;width:58px;"/>');
 	
 	var  modalId = $('#' + id).closest(".modal").attr("id");
 	
