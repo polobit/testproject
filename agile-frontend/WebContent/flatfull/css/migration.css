@@ -1147,3 +1147,11 @@ background:#f6f8f8;
 .header-min-width {
 	min-width:90px;
 }
+
+.deals-by-milestone-portlet-body .highcharts-tooltip span {
+    background-color: #313030;
+    opacity: 1;
+    z-index: 9999!important;
+    padding: 8px;
+    border-radius: 5px
+}
