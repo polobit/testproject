@@ -358,19 +358,15 @@ public class AgileForm extends HttpServlet
     public String getNormalizedRedirectURL(String agileRedirectURL, Contact contact, Boolean externalRedirect,
 	    String agileDomain)
     {
-	String normalizedRedirectURL = agileRedirectURL.trim().replaceAll("\r", "").replaceAll("\n", "");
-	String params = new String();
+	String normalizedRedirectURL = externalRedirect ? agileRedirectURL.trim().replaceAll("\r", "")
+	        .replaceAll("\n", "") : new String("https://" + agileDomain + ".agilecrm.com/agileform_thankyou.jsp");
 
+	String params = "?fwd=cd";
 	if (StringUtils.contains(normalizedRedirectURL, "?"))
 	    params = "&fwd=cd";
-	else
-	    params = "?fwd=cd";
 
 	params = params + TrackClickUtil.appendContactPropertiesToParams(contact);
 
-	if (externalRedirect)
-	    return normalizedRedirectURL + params;
-	else
-	    return new String("https://" + agileDomain + ".agilecrm.com/agileform_thankyou.jsp");
+	return normalizedRedirectURL + params;
     }
 }
