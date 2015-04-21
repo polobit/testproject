@@ -101,7 +101,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		    System.out.println("from name is " + fromName);
 
 		    Boolean newContact = isNewContact(fromEmail);
-		    Contact contact = buildContact(fromName, fromEmail);
+		    Contact contact = buildContact(fromName, fromEmail, newContact);
 
 		    if (contact == null)
 		    {
@@ -169,28 +169,27 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	    return false;
     }
 
-    public Contact buildContact(String fromName, String fromEmail)
+    public Contact buildContact(String fromName, String fromEmail, Boolean isNewContact)
     {
 	if (StringUtils.isBlank(fromEmail) || StringUtils.equals(fromEmail, "null"))
 	    return null;
 
-	Contact contact = ContactUtil.searchContactByEmail(fromEmail);
-	if (contact == null)
-	{
+	Contact contact = null;
+	
+	if(isNewContact)
 	    contact = new Contact();
-	}
-
-	List<ContactField> properties = new ArrayList<ContactField>();
-	properties.add(new ContactField(Contact.EMAIL, fromEmail, null));
+	else
+	    contact = ContactUtil.searchContactByEmail(fromEmail);
+	
+	contact.addpropertyWithoutSaving(new ContactField(Contact.EMAIL, fromEmail, null));
 	try
 	{
 	    JSONObject from = getSenderNames(fromName, fromEmail);
 	    if (from.has(Contact.FIRST_NAME))
-		properties.add(new ContactField(Contact.FIRST_NAME, from.getString(Contact.FIRST_NAME), null));
+		contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, from.getString(Contact.FIRST_NAME), null));
 	    if (from.has(Contact.LAST_NAME))
-		properties.add(new ContactField(Contact.LAST_NAME, from.getString(Contact.LAST_NAME), null));
-
-	    contact.properties = properties;
+		contact.addpropertyWithoutSaving(new ContactField(Contact.LAST_NAME, from.getString(Contact.LAST_NAME), null));
+	    
 	    return contact;
 	}
 	catch (JSONException e)
@@ -250,10 +249,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 
     public Boolean isNewContact(String fromEmail)
     {
-	if (ContactUtil.searchContactByEmail(fromEmail) == null)
-	    return true;
-	else
-	    return false;
+	return (ContactUtil.searchContactByEmail(fromEmail) == null);
     }
 
     public Boolean getTriggerRunResult(Boolean newContact, Trigger trigger)
@@ -281,7 +277,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	}
 	return isConfirmationEmail;
     }
-
+    
     public void sendConfirmationEmail(String apiKey, JSONObject message)
     {
 	try
