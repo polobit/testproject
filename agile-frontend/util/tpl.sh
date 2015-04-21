@@ -16,5 +16,5 @@ cat tpl/contact-view/*.html > tpl/min/contact-view.js
 cat tpl/contact-filter/*.html > tpl/min/contact-filter.js
 cat tpl/case/*.html > tpl/min/case.js
 cat tpl/document/*.html > tpl/min/document.js
-
+cat tpl/portlets/*.html > tpl/min/portlets.js
 cd ../util

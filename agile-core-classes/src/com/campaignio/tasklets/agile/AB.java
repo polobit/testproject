@@ -48,7 +48,7 @@ public class AB extends TaskletAdapter
 	try
 	{
 	    // Generate Random Number
-	    Random random = new Random(System.currentTimeMillis());
+	    Random random = new Random(System.nanoTime());
 	    double r = random.nextDouble();
 
 	    // Go with A or B
