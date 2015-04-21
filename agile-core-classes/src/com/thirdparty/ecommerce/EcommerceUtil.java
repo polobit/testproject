@@ -1,5 +1,8 @@
 package com.thirdparty.ecommerce;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.agilecrm.account.APIKey;
@@ -7,6 +10,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.JSAPIUtil;
@@ -28,6 +32,9 @@ public class EcommerceUtil
     public Order order;
     public String email;
     public String pluginType;
+    //sync settings are separated by underscore, example : products_categories or products or categories
+    public String syncAsTags = "";
+    public List<String> tags = new ArrayList<String>();
 
     public String createContact(String contactJSON)
     {
@@ -66,15 +73,14 @@ public class EcommerceUtil
 	    ObjectMapper mapper = new ObjectMapper();
 	    Contact contact = mapper.readValue(contactJSON, Contact.class);
 
-	    // Sets owner key to contact before saving
-	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
-	    contact.addTags(pluginType);
-
 	    try
 	    {
 		// If zero, save it
 		System.out.println("Contact is saving...");
-		contact.save();
+	    // Sets owner key to contact before saving
+	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
+	    contact.addTags(pluginType);
+		//contact.save();
 	    }
 	    catch (PlanRestrictedException e)
 	    {
@@ -102,6 +108,32 @@ public class EcommerceUtil
 		ObjectMapper mapper = new ObjectMapper();
 		order = mapper.readValue(jsonObj.getString("order"), Order.class);
 	    }
+	    
+		String buildNoteDesc = "";
+	    if (order.products != null && !order.products.isEmpty())
+		{
+	    	boolean addProductsAsTags = syncAsTags.contains("products");
+	    	boolean addCategoriesAsTags = syncAsTags.contains("categories");
+	    	
+	    	buildNoteDesc += "Items(id-qty): ";
+		    for (Product product : order.products)
+		    {
+		    	buildNoteDesc += product.name + '(' + product.id + '-' + product.quantity + "), ";
+		    	
+		    	if(addProductsAsTags) {
+		    		tags.add(product.name);
+		    	}
+		    	
+		    	if(addCategoriesAsTags) {
+			    	int noOfCategories = product.categories.size();
+			    	for(int i = 0; i < noOfCategories; i++) {
+			    		tags.add(product.categories.get(i));
+			    	}
+		    	}
+		    	
+		    }
+		    buildNoteDesc = buildNoteDesc.substring(0, buildNoteDesc.length() - 2);
+		}
 
 	    String noteSub = "";
 	    String noteDesc = "";
@@ -110,17 +142,7 @@ public class EcommerceUtil
 		noteSub = "New order #" + order.id;
 		noteDesc = "Order status: " + order.status + "\n";
 		noteDesc += "Total amount: " + order.grandTotal + "\n";
-
-		if (order.products != null && !order.products.isEmpty())
-		{
-		    noteDesc += "Items(id-qty): ";
-		    for (Product product : order.products)
-		    {
-			noteDesc += product.name + '(' + product.id + '-' + product.quantity + "), ";
-		    }
-		    noteDesc = noteDesc.substring(0, noteDesc.length() - 2);
-		}
-
+		noteDesc += buildNoteDesc;
 		noteDesc += "\nBilling: " + order.billingAddress;
 
 		if (order.note != null && !order.note.isEmpty())
@@ -184,6 +206,29 @@ public class EcommerceUtil
 	    return "{\"error\" : \"" + e.getMessage() + "\"}";
 	}
 
+    }
+    
+    public void updateContactTags() {
+    	Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+	    	return ;
+	    
+	    String[] validTags = getValidTags();
+	    if(validTags.length > 0)
+		    contact.addTags(validTags);
+    }
+    
+    public String[] getValidTags()
+    {
+	List<String> validTags = new ArrayList<String>();
+	for (int i = 0; i < tags.size(); i++)
+	{
+	    String tag = TagUtil.getValidTag(tags.get(i));
+	    if (tag == null)
+		continue;
+	    validTags.add(tag);
+	}
+	return validTags.toArray(new String[validTags.size()]);
     }
 
 }

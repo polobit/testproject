@@ -147,8 +147,7 @@
 			<div id="custom" class="row">
 				<div class="col-md-4" id="custom-widget" >
 					<div class="panel wrapper widget-add">
-    					<center><div class="thumbnail m-b-none img-responsive thumb-xl bg-transparent"><i class="icon-puzzle-piece icon-4x"></i></div></center>
-						<br />
+    					<center><div class="thumbnail m-b-none img-responsive thumb-xl bg-transparent"><i class="icon-puzzle-piece icon-3x"></i></div></center>
     					<h3>Custom widget</h3>
     				
     					<div>
@@ -215,12 +214,12 @@
 <div class="col-md-4 col-sm-6 col-xs-12">
 <div class="panel wrapper" >
 {{#if_equals name "Sip"}}
-    <center><span class="thumbnail m-b-none text-3x text-center  bg-transparent"><span class="block p-t-sm"><i class="icon icon-phone m-r"></i>SIP</span></span></center>
+    <center><span class="thumbnail m-b-none text-2x thumb-xl text-center  bg-transparent"><span class="block"><i class="icon icon-phone m-r"></i>SIP</span></span></center>
 {{else}}
     {{#if_equals name "CallScript"}}
-        <center><span class="thumbnail text-2x text-center  bg-transparent p-t-sm m-b-none"><span class="block p-t-sm"><i class="icon icon-comment m-r-xs"></i>Call Script</span></span></center>
+        <center><span class="thumbnail text-2x text-center  bg-transparent m-b-none thumb-xl" style="font-size:21px;"><span class="block"><i class="icon icon-comment m-r-xs"></i>Call Script</span></span></center>
     {{else}}
-        <center><img class="thumbnail  square-thumb bg-transparent img-responsive" src="{{logo_url}}" /></center>
+        <center><img class="thumbnail bg-transparent thumb-xl img-responsive" src="{{logo_url}}" /></center>
     {{/if_equals}}
 {{/if_equals}}  
 	<div  id="widget-settings" widget-name="{{name}}">

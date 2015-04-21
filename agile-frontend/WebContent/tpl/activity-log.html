@@ -56,7 +56,7 @@
 {{#if_equals "TASK" entity_type}}
 {{#if_equals "TASK_ADD" activity_type}}
 
-Created Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}} '{{label}}'{{/if}} <br/>
+Created Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}} '{{safe_string label}}'{{/if}} <br/>
 <span class="activities_second_line">
 {{#if custom2}}
 <i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}Task assigned to {{custom1}} due <span class="time-ago" datetime="{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" custom2}}</span>. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
@@ -71,7 +71,7 @@ Created Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a
 
 
 {{#if_equals "TASK_COMPLETED" activity_type}}
-Completed Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+Completed Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}<br/>
 <span class="activities_second_line">
  <i class="icon-tasks"></i>{{#if this.entityObject}} Task due {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}} was completed.{{else}} Task deleted later.{{/if}} {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
 	</span>
@@ -80,7 +80,7 @@ Completed Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}<
 
 
 {{#if_equals "TASK_DELETE" activity_type}}
- Deleted Task '{{label}}' <br/>
+ Deleted Task '{{safe_string label}}' <br/>
 <span class="activities_second_line">
 {{#if related_contact_ids}}<i class="icon-tasks"></i> Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}. {{/if}} 
 </span>
@@ -90,23 +90,23 @@ Completed Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}<
 {{#if_equals "TASK_EDIT" activity_type}}
 {{#if this.entityObject}}	
 {{#get_event_rescheduled custom3}} 
-Changed Due date of Task <a href="#task/{{../entity_id}}" >{{../label}}</a><br/>
+Changed Due date of Task <a href="#task/{{../entity_id}}" >{{safe_string ../label}}</a><br/>
 <span class="activities_second_line">
 <i class="icon-tasks icon-white"></i> Task Due time changed to {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" ../entityObject.due}}.
 </span> 
 {{else}}
- Modified Task <a href="#task/{{../entity_id}}">{{../label}}</a> <br/>
+ Modified Task <a href="#task/{{../entity_id}}">{{safe_string ../label}}</a> <br/>
 <span class="activities_second_line">
 <i class="icon-tasks icon-white"></i> Task {{displayActivityFieldText ../custom3}} modified.
 {{/get_event_rescheduled}}
 {{else}}
 {{#get_event_rescheduled custom3}} 
-Changed Due date of Task '{{../label}}'<br/>
+Changed Due date of Task '{{safe_string ../label}}'<br/>
 <span class="activities_second_line">
 <i class="icon-tasks icon-white"></i> Task deleted later. Task Due time changed to {{#getDueDateOfTask ../custom3  ../custom1}}{{/getDueDateOfTask}}.
 </span> 
 {{else}}
- Modified Task '{{../label}}'<br/>
+ Modified Task '{{safe_string ../label}}'<br/>
 <span class="activities_second_line">
 <i class="icon-tasks icon-white"></i> Task deleted later. Task {{displayActivityFieldText ../custom3}} modified.
 {{/get_event_rescheduled}}
@@ -119,7 +119,7 @@ Changed Due date of Task '{{../label}}'<br/>
 
 
 {{#if_equals "TASK_OWNER_CHANGE" activity_type}}
-Reassigned Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+Reassigned Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}} <br/>
 <span class="activities_second_line">
 <i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later.{{/unless}} Task Owner changed to {{custom1}}. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
 </span>	
@@ -130,26 +130,26 @@ Reassigned Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}
 {{#if_equals "TASK_RELATED_CONTACTS" activity_type}}
 {{#if related_contact_ids}}
 {{#if_equals "removed_all_relatedcontacts" custom3}}
-Removed Contact(s) from Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+Removed Contact(s) from Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}<br/>
 <span class="activities_second_line">
 <i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Task.
 </span>
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
-Removed Contact(s) from Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+Removed Contact(s) from Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}<br/>
 <span class="activities_second_line">
 <i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} removed from Task.
 </span>
 {{/if_equals}} 
 {{#if_equals "added_relatedcontacts" custom3}}
-Added Contact(s) to Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+Added Contact(s) to Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}<br/>
 <span class="activities_second_line">
 <i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} added to Task. 
 {{/if_equals}}
 {{else}}
-Modified Task. <br/>
+Modified Task <br/>
 <span class="activities_second_line">
-<i class="icon-tasks"></i> <a href="#task/{{entity_id}}">{{label}}</a> Modified  
+<i class="icon-tasks"></i> <a href="#task/{{entity_id}}">{{safe_string label}}</a> Modified  
 </span>
 {{/if}} 
 </span>
@@ -157,7 +157,7 @@ Modified Task. <br/>
 
 
 {{#if_equals "TASK_PROGRESS_CHANGE" activity_type}}
-Changed Progress of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}  <br/>   
+Changed Progress of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}  <br/>   
 <span class="activities_second_line">
  <i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}Task Progress changed from {{custom2}}% to {{custom1}}%. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 	
 </span>
@@ -166,7 +166,7 @@ Changed Progress of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" 
 
 
 {{#if_equals "TASK_STATUS_CHANGE" activity_type}}
-Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>  
+Changed Status of Task {{#if this.entityObject}}<a href="#task/{{entity_id}}" >{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}} <br/>  
 <span class="activities_second_line"> 
 <i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}Task Status changed from {{get_normal_name custom2}} to {{get_normal_name custom1}}. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}	
 </span>

@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.activities.Event;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.HTTPUtil;
 import com.google.gdata.data.DateTime;
@@ -191,6 +192,91 @@ public class GoogleCalendarUtil
 
 		// Send request and return result
 		return HTTPUtil.accessURLUsingPostForWebCalendar(url, object.toString());
+	}
+
+	/**
+	 * 
+	 * if user cancel the appointment from his mail the same event has to be
+	 * deleted from agile user google calendar,since we are giving cancel
+	 * appointment link in confirmation mail of the person who booked
+	 * appointment
+	 * 
+	 * @param event
+	 *            Agile Event Object
+	 * @return
+	 */
+	private static String deleteGoogleEventBasedOnEvent(Event event)
+	{
+		try
+		{
+
+			Long user_id = event.getOwner().id;
+
+			GoogleCalenderPrefs prefs = GoogleCalenderPrefs.dao.getByProperty("domainUserKey", new Key<DomainUser>(
+					DomainUser.class, user_id));
+			System.out.println(prefs);
+
+			// If google calendar sync with Agile Calendar then Get calendar
+			if (prefs == null)
+				return null;
+
+			prefs.refreshToken();
+
+			// Get primary calendar's email id
+			String pCalId = getPrimaryCaledarId(prefs);
+			DateTime sd = new DateTime(event.start * 1000, 0);
+			DateTime ed = new DateTime(event.end * 1000, 0);
+
+			String postURL = "https://www.googleapis.com/calendar/v3/calendars/" + pCalId + "/events?access_token="
+					+ prefs.access_token + "&timeMax=" + ed + "&timeMin=" + sd;
+
+			String googleEventsInSpecifiedTime = HTTPUtil.accessURL(postURL);
+			System.out.println(googleEventsInSpecifiedTime);
+
+			JSONObject joGoogleEvents = new JSONObject(googleEventsInSpecifiedTime);
+			JSONArray eventArray = new JSONArray(joGoogleEvents.get("items").toString());
+			System.out.println(eventArray);
+
+			String googleEventId = null;
+
+			if (eventArray != null && eventArray.length() > 0)
+			{
+				for (int i = 0; i <= eventArray.length() - 1; i++)
+				{
+					JSONObject jsn = eventArray.getJSONObject(i);
+					if (event.title.equalsIgnoreCase(jsn.getString("summary")))
+					{
+						googleEventId = jsn.getString("id");
+						break;
+					}
+				}
+			}
+
+			if (googleEventId != null)
+			{
+				String deleteUrl = "https://www.googleapis.com/calendar/v3/calendars/" + pCalId + "/events/"
+						+ googleEventId + "?access_token=" + prefs.access_token;
+				return HTTPUtil.accessURLToReadScript(deleteUrl, "DELETE", null);
+			}
+			return null;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("exception occured while fetching google events " + e.getMessage());
+			return null;
+		}
+
+	}
+
+	/**
+	 * deletes event from google calendar
+	 * 
+	 * @param event
+	 */
+	public static void deleteGoogleEvent(Event event)
+	{
+		deleteGoogleEventBasedOnEvent(event);
 	}
 
 }

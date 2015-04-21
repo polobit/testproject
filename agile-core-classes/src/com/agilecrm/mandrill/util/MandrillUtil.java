@@ -92,6 +92,7 @@ public class MandrillUtil
 	// To split json array
 	JSONArray tempArray = new JSONArray();
 	boolean flag = false;
+	String toName = "";
 
 	try
 	{
@@ -140,11 +141,21 @@ public class MandrillUtil
 		}
 
 		// MergeVars
-		mergeVarsArray.put(getEachMergeJSON(mailDeferredTask.to, mailDeferredTask.subject,
+		mergeVarsArray.put(getEachMergeJSON(EmailUtil.getEmail(mailDeferredTask.to), mailDeferredTask.subject,
 		        mailDeferredTask.html, mailDeferredTask.text));
 
+		JSONObject eachToJSON = new JSONObject();
+		eachToJSON.put(Mandrill.MANDRILL_RECIPIENT_EMAIL, EmailUtil.getEmail(mailDeferredTask.to));
+				
+		// To name
+		toName = EmailUtil.getEmailName(mailDeferredTask.to);
+				
+		// Add name if not blank
+		if(StringUtils.isNotBlank(toName))
+			eachToJSON.put(Mandrill.MANDRILL_RECIPIENT_NAME,  toName);
+		
 		// To array
-		toArray.put(new JSONObject().put(Mandrill.MANDRILL_RECIPIENT_EMAIL, mailDeferredTask.to));
+		toArray.put(eachToJSON);
 
 		// If exceeds Content Size limit, split mailJSON
 		if (toArray.length() > MIN_TO_EMAILS && mergeVarsArray.toString().length() >= MAX_CONTENT_SIZE)

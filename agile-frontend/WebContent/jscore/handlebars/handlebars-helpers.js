@@ -5924,7 +5924,7 @@ $(function()
 		if(url)
 			{
 			if(url.indexOf("fwd=cd") == -1)
-				return url;
+				return new Handlebars.SafeString(url);
 			
 			var delimiter;
 			if(url.indexOf("?fwd=cd") != -1)
@@ -5934,13 +5934,13 @@ $(function()
 			
 			try{
 				if(delimiter)
-					return url.split(delimiter)[0];
+					return new Handlebars.SafeString(url.split(delimiter)[0]);
 			} catch(e){
 				console.log("Error in get_limiter:" +e);
-				return url;
+				return new Handlebars.SafeString(url);
 			}
 			}
-		return url;
+		return new Handlebars.SafeString(url);
 			
 	         });
 	
