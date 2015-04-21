@@ -41,7 +41,8 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	try
 	{
 	    String mandrillEvents = request.getParameter("mandrill_events");
-	    // System.out.println("mandrill events parameter is " + mandrillEvents);
+	    // System.out.println("mandrill events parameter is " +
+	    // mandrillEvents);
 	    if (StringUtils.isBlank(mandrillEvents))
 	    {
 		// response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -95,7 +96,10 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		    }
 
 		    String fromEmail = message.getString("from_email");
-		    String fromName = message.getString("from_name");
+
+		    String fromName = null;
+		    if (message.has("from_name"))
+			fromName = message.getString("from_name");
 
 		    System.out.println("from email is " + fromEmail);
 		    System.out.println("from name is " + fromName);
@@ -113,12 +117,12 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		    contact.setContactOwner(owner);
 		    contact.save();
 
-		    List<Trigger> triggers = TriggerUtil.getAllTriggers();
+		    List<Trigger> triggers = TriggerUtil
+			    .getTriggersByCondition(com.agilecrm.workflows.triggers.Trigger.Type.INBOUND_MAIL_EVENT);
 		    for (Trigger trigger : triggers)
 		    {
 			System.out.println("trigger id is " + trigger.id);
-			if (StringUtils.equals(trigger.type.toString(), INBOUND_MAIL_EVENT)
-			        && getTriggerRunResult(newContact, trigger))
+			if (getTriggerRunResult(newContact, trigger))
 			{
 			    System.out.println("assigning campaign to contact");
 
@@ -161,12 +165,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 
     public Boolean isNotAgileEmail(String recepientEmail)
     {
-	if (!StringUtils.contains(recepientEmail, "@agle.cc"))
-	{
-	    return true;
-	}
-	else
-	    return false;
+	return !StringUtils.contains(recepientEmail, "@agle.cc");
     }
 
     public Contact buildContact(String fromName, String fromEmail, Boolean isNewContact)
@@ -175,21 +174,23 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	    return null;
 
 	Contact contact = null;
-	
-	if(isNewContact)
+
+	if (isNewContact)
 	    contact = new Contact();
 	else
 	    contact = ContactUtil.searchContactByEmail(fromEmail);
-	
+
 	contact.addpropertyWithoutSaving(new ContactField(Contact.EMAIL, fromEmail, null));
 	try
 	{
 	    JSONObject from = getSenderNames(fromName, fromEmail);
 	    if (from.has(Contact.FIRST_NAME))
-		contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, from.getString(Contact.FIRST_NAME), null));
+		contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, from
+		        .getString(Contact.FIRST_NAME), null));
 	    if (from.has(Contact.LAST_NAME))
-		contact.addpropertyWithoutSaving(new ContactField(Contact.LAST_NAME, from.getString(Contact.LAST_NAME), null));
-	    
+		contact.addpropertyWithoutSaving(new ContactField(Contact.LAST_NAME, from.getString(Contact.LAST_NAME),
+		        null));
+
 	    return contact;
 	}
 	catch (JSONException e)
@@ -249,7 +250,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 
     public Boolean isNewContact(String fromEmail)
     {
-	return (ContactUtil.searchContactByEmail(fromEmail) == null);
+	return !ContactUtil.isExists(fromEmail);
     }
 
     public Boolean getTriggerRunResult(Boolean newContact, Trigger trigger)
@@ -277,7 +278,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	}
 	return isConfirmationEmail;
     }
-    
+
     public void sendConfirmationEmail(String apiKey, JSONObject message)
     {
 	try
