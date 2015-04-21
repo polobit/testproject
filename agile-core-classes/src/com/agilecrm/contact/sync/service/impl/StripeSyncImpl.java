@@ -10,17 +10,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
-import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
 import com.agilecrm.contact.sync.wrapper.impl.StripeContactWrapperImpl;
+import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.subscription.stripe.StripeUtil;
 import com.stripe.exception.APIConnectionException;
 import com.stripe.exception.APIException;
 import com.stripe.exception.AuthenticationException;
 import com.stripe.exception.CardException;
 import com.stripe.exception.InvalidRequestException;
+import com.stripe.model.Card;
 import com.stripe.model.Charge;
 import com.stripe.model.ChargeCollection;
 import com.stripe.model.Customer;
@@ -107,6 +112,25 @@ public class StripeSyncImpl extends OneWaySyncService
 		{
 		    if (!isLimitExceeded())
 		    {
+		    	//If email or first name not existed and email is not valid, we didn't sync that contact
+		    	String email = null;
+			    String name = null;
+			    if(customer!=null && customer.getEmail()!=null && !customer.getEmail().equalsIgnoreCase(""))
+			    	email = customer.getEmail();
+			    //Checks whether email is valid or not 
+			    boolean isValidEmail = true;
+			    if(email!=null)
+			    	isValidEmail = ContactUtil.isValidEmail(email);
+			    Card card = StripeUtil.getDefaultCard(customer);
+			    if(card!=null && card.getName()!=null && !card.getName().equalsIgnoreCase(""))
+			    	name = card.getName();
+			    if ((email == null && name == null) || !isValidEmail)
+				{
+				syncStatus.put(ImportStatus.EMAIL_REQUIRED, syncStatus.get(ImportStatus.EMAIL_REQUIRED) + 1);
+				syncStatus.put(ImportStatus.TOTAL_FAILED, syncStatus.get(ImportStatus.TOTAL_FAILED) + 1);
+				++total_synced_contact;
+				continue;
+				}
 			Contact contact = wrapContactToAgileSchemaAndSave(customer);
 
 			printCustomerCharges(contact, customer);
