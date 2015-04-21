@@ -37,8 +37,10 @@ import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.util.TagSearchUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -644,6 +646,7 @@ public class PortletUtil {
 		if(dUser!=null)
 			domainUsersList=DomainUserUtil.getUsers(dUser.domain);
 		List<String> domainUserNamesList=new ArrayList<String>();
+		List<String> domainUserImgList=new ArrayList<String>();
 		
 		List<Integer> answeredCallsCountList=new ArrayList<Integer>();
 		List<Integer> busyCallsCountList=new ArrayList<Integer>();
@@ -692,6 +695,15 @@ public class PortletUtil {
 			callsDurationList.add(callsDuration);
 			
 			domainUserNamesList.add(domainUser.name);
+			
+			AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
+			
+			UserPrefs userPrefs = null;
+			
+			if(agileUser!=null)
+				userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+			if(userPrefs!=null)
+				domainUserImgList.add(userPrefs.pic);
 		}
 		callsPerPersonJSON.put("answeredCallsCountList",answeredCallsCountList);
 		callsPerPersonJSON.put("busyCallsCountList",busyCallsCountList);
@@ -700,6 +712,7 @@ public class PortletUtil {
 		callsPerPersonJSON.put("callsDurationList",callsDurationList);
 		callsPerPersonJSON.put("totalCallsCountList",totalCallsCountList);
 		callsPerPersonJSON.put("domainUsersList",domainUserNamesList);
+		callsPerPersonJSON.put("domainUserImgList",domainUserImgList);
 		
 		return callsPerPersonJSON;	
 	}
@@ -930,6 +943,32 @@ public class PortletUtil {
 			return true;
 			
 		
+	}
+	public static JSONObject getEmailsOpenedPieData(JSONObject json)throws Exception{
+		long minTime=0L;
+		long maxTime=0L;
+		JSONObject dataJson = new JSONObject();
+		try {
+			if(json!=null && json.get("duration")!=null){
+				if(json.getString("startDate")!=null)
+					minTime = Long.valueOf(json.getString("startDate"));
+				if(json.getString("endDate")!=null)
+					maxTime = Long.valueOf(json.getString("endDate"))-1;
+				List<ContactEmail> emailsSentList = ContactEmailUtil.getEmailsOpened(minTime, maxTime, false);
+				List<ContactEmail> emailsOpenedList = ContactEmailUtil.getEmailsOpened(minTime,maxTime,true);
+				if(emailsSentList!=null)
+					dataJson.put("emailsSentCount", emailsSentList.size());
+				else
+					dataJson.put("emailsSentCount", 0);
+				if(emailsOpenedList!=null)
+					dataJson.put("emailsOpenedCount", emailsOpenedList.size());
+				else
+					dataJson.put("emailsOpenedCount", 0);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dataJson;
 	}
 
 }

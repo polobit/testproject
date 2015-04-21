@@ -30,35 +30,36 @@ public class ContactExportCSVUtil
      * @param contactList
      * @param isFirstTime
      */
-    public static void writeContactCSV(FileWriteChannel writeChannel, List<Contact> contactList,  String[] headers, Boolean isFirstTime)
+    public static void writeContactCSV(FileWriteChannel writeChannel, List<Contact> contactList, String[] headers,
+	    Boolean isFirstTime)
     {
-        try
-        {
-            CSVWriter writer = new CSVWriter(Channels.newWriter(writeChannel, "UTF8"));
-    
-            if (isFirstTime)
-        	writer.writeNext(headers);
-    
-            Map<String, Integer> indexMap = ContactExportCSVUtil.getIndexMapOfCSVHeaders(headers);
-    
-            for (Contact contact : contactList)
-		    {
-				if (contact == null)
-				    continue;
-		
-				String str[] = ContactCSVExport.insertContactProperties(contact, indexMap, headers.length);
-				List<Note> notes = NoteUtil.getNotes(contact.id);
-				writer.writeNext(addNotes(str, notes));
-		    }
-    
-            // Close without finalizing
-            writer.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            System.err.println("Exception occured in writeContactCSV " + e.getMessage());
-        }
+	try
+	{
+	    CSVWriter writer = new CSVWriter(Channels.newWriter(writeChannel, "UTF8"));
+
+	    if (isFirstTime)
+		writer.writeNext(headers);
+
+	    Map<String, Integer> indexMap = ContactExportCSVUtil.getIndexMapOfCSVHeaders(headers);
+
+	    for (Contact contact : contactList)
+	    {
+		if (contact == null)
+		    continue;
+
+		String str[] = ContactCSVExport.insertContactProperties(contact, indexMap, headers.length);
+		List<Note> notes = NoteUtil.getNotes(contact.id);
+		writer.writeNext(addNotes(str, notes));
+	    }
+
+	    // Close without finalizing
+	    writer.close();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured in writeContactCSV " + e.getMessage());
+	}
     }
 
     /**
@@ -69,14 +70,21 @@ public class ContactExportCSVUtil
      */
     public static String[] getCSVHeadersForContact()
     {
-        // CSV Header will get initialized in the same order
-        String[] headers = { ContactCSVExport.FIRST_NAME, ContactCSVExport.LAST_NAME, ContactCSVExport.TITLE, ContactCSVExport.COMPANY, ContactCSVExport.EMAIL_DEFAULT, ContactCSVExport.EMAIL_HOME, ContactCSVExport.EMAIL_WORK, ContactCSVExport.PHONE_DEFAULT, ContactCSVExport.PHONE_WORK, ContactCSVExport.PHONE_HOME, ContactCSVExport.PHONE_MOBILE,
-        	ContactCSVExport.PHONE_MAIN, ContactCSVExport.PHONE_HOME_FAX, ContactCSVExport.PHONE_WORK_FAX, ContactCSVExport.PHONE_OTHER, ContactCSVExport.ADDRESS, ContactCSVExport.CITY, ContactCSVExport.STATE, ContactCSVExport.COUNTRY, ContactCSVExport.ZIP, ContactCSVExport.WEBSITE_DEFAULT, ContactCSVExport.WEBSITE, ContactCSVExport.SKYPE, ContactCSVExport.TWITTER,
-        	ContactCSVExport.LINKEDIN, ContactCSVExport.FACEBOOK, ContactCSVExport.XING, ContactCSVExport.BLOG, ContactCSVExport.GOOGLE_PLUS, ContactCSVExport.FLICKR, ContactCSVExport.GITHUB, ContactCSVExport.YOUTUBE, ContactCSVExport.TAGS, ContactCSVExport.TAGS_TIME };
-    
-        return getHeaders(ContactExportCSVUtil.appendCustomFieldsToHeaders(headers, SCOPE.PERSON));
+	// CSV Header will get initialized in the same order
+	String[] headers = { ContactCSVExport.FIRST_NAME, ContactCSVExport.LAST_NAME, ContactCSVExport.TITLE,
+		ContactCSVExport.COMPANY, ContactCSVExport.EMAIL_DEFAULT, ContactCSVExport.EMAIL_HOME,
+		ContactCSVExport.EMAIL_WORK, ContactCSVExport.PHONE_DEFAULT, ContactCSVExport.PHONE_WORK,
+		ContactCSVExport.PHONE_HOME, ContactCSVExport.PHONE_MOBILE, ContactCSVExport.PHONE_MAIN,
+		ContactCSVExport.PHONE_HOME_FAX, ContactCSVExport.PHONE_WORK_FAX, ContactCSVExport.PHONE_OTHER,
+		ContactCSVExport.ADDRESS, ContactCSVExport.CITY, ContactCSVExport.STATE, ContactCSVExport.COUNTRY,
+		ContactCSVExport.ZIP, ContactCSVExport.WEBSITE_DEFAULT, ContactCSVExport.WEBSITE,
+		ContactCSVExport.SKYPE, ContactCSVExport.TWITTER, ContactCSVExport.LINKEDIN, ContactCSVExport.FACEBOOK,
+		ContactCSVExport.XING, ContactCSVExport.BLOG, ContactCSVExport.GOOGLE_PLUS, ContactCSVExport.FLICKR,
+		ContactCSVExport.GITHUB, ContactCSVExport.YOUTUBE, ContactCSVExport.TAGS, ContactCSVExport.TAGS_TIME };
+
+	return getHeaders(ContactExportCSVUtil.appendCustomFieldsToHeaders(headers, SCOPE.PERSON));
     }
-    
+
     /**
      * Returns array of CSV Headers. Appends custom fields labels as CSV Headers
      * to array.
@@ -85,12 +93,17 @@ public class ContactExportCSVUtil
      */
     public static String[] getCSVHeadersForCompany()
     {
-        // CSV Header will get initialized in the same order
-        String[] headers = { ContactCSVExport.NAME, ContactCSVExport.URL, ContactCSVExport.EMAIL_DEFAULT, ContactCSVExport.EMAIL_PRIMARY, ContactCSVExport.EMAIL_ALTERNATE, ContactCSVExport.PHONE_DEFAULT, ContactCSVExport.PHONE_PRIMARY, ContactCSVExport.PHONE_ALTERNATE, ContactCSVExport.PHONE_FAX,
-        	ContactCSVExport.PHONE_OTHER, ContactCSVExport.ADDRESS, ContactCSVExport.CITY, ContactCSVExport.STATE, ContactCSVExport.COUNTRY, ContactCSVExport.ZIP, ContactCSVExport.WEBSITE_DEFAULT, ContactCSVExport.WEBSITE, ContactCSVExport.SKYPE, ContactCSVExport.TWITTER,
-        	ContactCSVExport.LINKEDIN, ContactCSVExport.FACEBOOK, ContactCSVExport.XING, ContactCSVExport.BLOG, ContactCSVExport.GOOGLE_PLUS, ContactCSVExport.FLICKR, ContactCSVExport.GITHUB, ContactCSVExport.YOUTUBE };
-    
-        return ContactExportCSVUtil.appendCustomFieldsToHeaders(headers, SCOPE.COMPANY);
+	// CSV Header will get initialized in the same order
+	String[] headers = { ContactCSVExport.NAME, ContactCSVExport.URL, ContactCSVExport.EMAIL_DEFAULT,
+		ContactCSVExport.EMAIL_PRIMARY, ContactCSVExport.EMAIL_ALTERNATE, ContactCSVExport.PHONE_DEFAULT,
+		ContactCSVExport.PHONE_PRIMARY, ContactCSVExport.PHONE_ALTERNATE, ContactCSVExport.PHONE_FAX,
+		ContactCSVExport.PHONE_OTHER, ContactCSVExport.ADDRESS, ContactCSVExport.CITY, ContactCSVExport.STATE,
+		ContactCSVExport.COUNTRY, ContactCSVExport.ZIP, ContactCSVExport.WEBSITE_DEFAULT,
+		ContactCSVExport.WEBSITE, ContactCSVExport.SKYPE, ContactCSVExport.TWITTER, ContactCSVExport.LINKEDIN,
+		ContactCSVExport.FACEBOOK, ContactCSVExport.XING, ContactCSVExport.BLOG, ContactCSVExport.GOOGLE_PLUS,
+		ContactCSVExport.FLICKR, ContactCSVExport.GITHUB, ContactCSVExport.YOUTUBE };
+
+	return ContactExportCSVUtil.appendCustomFieldsToHeaders(headers, SCOPE.COMPANY);
     }
 
     /**
@@ -103,27 +116,27 @@ public class ContactExportCSVUtil
      */
     public static String[] appendCustomFieldsToHeaders(String[] headers, SCOPE scope)
     {
-        // Can't append elements directly in java, so convert to ArrayList
-        List<String> headersList = new ArrayList<String>(Arrays.asList(headers));
-    
-        try
-        {
-            // List of custom fields
-            List<CustomFieldDef> customFields = CustomFieldDefUtil.getAllCustomFields(scope);
-    
-            // Appends custom field labels to list
-            for (CustomFieldDef customField : customFields)
-        	headersList.add(customField.field_label);
-    
-            // Converts ArrayList to String array before return
-            return headersList.toArray(new String[headersList.size()]);
-        }
-        catch (Exception e)
-        {
-            System.err.println("Exception occurend in appendCustomFieldsToHeaders " + e.getMessage());
-            return headers;
-        }
-    
+	// Can't append elements directly in java, so convert to ArrayList
+	List<String> headersList = new ArrayList<String>(Arrays.asList(headers));
+
+	try
+	{
+	    // List of custom fields
+	    List<CustomFieldDef> customFields = CustomFieldDefUtil.getAllCustomFields(scope);
+
+	    // Appends custom field labels to list
+	    for (CustomFieldDef customField : customFields)
+		headersList.add(customField.field_label);
+
+	    // Converts ArrayList to String array before return
+	    return headersList.toArray(new String[headersList.size()]);
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occurend in appendCustomFieldsToHeaders " + e.getMessage());
+	    return headers;
+	}
+
     }
 
     /**
@@ -158,7 +171,10 @@ public class ContactExportCSVUtil
 	for (Note note : notes)
 	{
 	    StringBuilder sb = new StringBuilder();
-	    sb.append(note.subject.trim()).append("\n"+note.description);
+	    if (note.subject != null)
+		sb.append(note.subject.trim());
+	    if (note.description != null)
+		sb.append("\n" + note.description);
 	    data.add(sb.toString());
 	    count++;
 	    if (count == 10)
@@ -198,12 +214,13 @@ public class ContactExportCSVUtil
 	data.add("Note10");
 	return data.toArray(new String[data.size()]);
     }
-    
-    public static String getExportFileName(String prefix) {
-    	Date currentDate = new Date();
-    	SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh:mm");
-    	StringBuilder exportedFileName = new StringBuilder(prefix).append(df.format(currentDate)).append(".csv");
-    	return exportedFileName.toString();
+
+    public static String getExportFileName(String prefix)
+    {
+	Date currentDate = new Date();
+	SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh:mm");
+	StringBuilder exportedFileName = new StringBuilder(prefix).append(df.format(currentDate)).append(".csv");
+	return exportedFileName.toString();
     }
 
 }

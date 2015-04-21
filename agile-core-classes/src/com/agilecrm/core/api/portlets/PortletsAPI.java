@@ -386,4 +386,19 @@ public class PortletsAPI {
 		PortletUtil.checkPrivilegesForPortlets("TASKS");
 		return PortletUtil.getTaskReportPortletData(json);
 	}
+	/**
+	 * Gets Emails opened portlet data
+	 * 
+	 * @return {@Link List} of {@link Contact}
+	 */
+	@Path("/portletEmailsOpenedPie")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public JSONObject getPortletEmailsOpenedPieData(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate)throws Exception {
+		JSONObject json=new JSONObject();
+		json.put("duration",duration);
+		json.put("startDate",startDate);
+		json.put("endDate",endDate);
+		return PortletUtil.getEmailsOpenedPieData(json);
+	}
 }

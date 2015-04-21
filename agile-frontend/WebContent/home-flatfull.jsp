@@ -665,10 +665,6 @@ head.ready(["core", "stats"], function(){
 	
 	if(!HANDLEBARS_PRECOMPILATION)
 		downloadTemplate(FLAT_FULL_PATH + "tpl.js");
-
-		// Load User voice then
-		setTimeout(loadMiscScripts, 10000);
-	
 });
 });
 

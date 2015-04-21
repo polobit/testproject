@@ -213,47 +213,68 @@ $('#portlets-opportunities-model-list > tr').live('click', function(e) {
 		App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
 		updateDeal($(this).data());
 	}*/
-	if(e.target.attributes[0].name!="href"){
-		var id = $(this).find(".data").attr("data");
-		App_Deal_Details.navigate("deal/" + id, { trigger : true });
+	var hrefFlag = false;
+	if(e.target.attributes!=undefined && e.target.attributes!=null && e.target.attributes.length==0)
+		hrefFlag = true;
+	$.each(e.target.attributes,function(){
+		if(this.name=="href")
+			hrefFlag = true;
+	});
+	if(!hrefFlag){
+		//code for navigating deal details page
+		/*var id = $(this).find(".data").attr("data");
+		App_Deal_Details.navigate("deal/" + id, { trigger : true });*/
+		
+		//code for open deal edit popup
+		App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
+		updateDeal($(this).data());
 	}
 });
 $('#portlets-events-model-list > tr').live('click', function(e){
-	App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
-	var id = $(this).find(".data").attr("data");
-	var model = $(this).data().collection.get(id);
-   	if(isNaN(id))
-   		return;
-   	// Deserialize
-   	deserializeForm(model.toJSON(), $("#updateActivityForm"));
-   	
-   	// Set time for update Event
-    $('#update-event-time-1').val((new Date(model.get('start')*1000).getHours() < 10 ? "0" : "") + new Date(model.get('start')*1000).getHours() + ":" + (new Date(model.get('start')*1000).getMinutes() < 10 ? "0" : "") +new Date(model.get('start')*1000).getMinutes());
-    $('#update-event-time-2').val((new Date(model.get('end')*1000).getHours() < 10 ? "0" : "") + new Date(model.get('end')*1000).getHours() + ":" + (new Date(model.get('end')*1000).getMinutes() < 10 ? "0" : "") + new Date(model.get('end')*1000).getMinutes());
-   
- // Set date for update Event
-    var dateFormat = 'mm/dd/yyyy';
-    $("#update-event-date-1").val((new Date(model.get('start')*1000)).format(dateFormat));
-    $("#update-event-date-2").val((new Date(model.get('end')*1000)).format(dateFormat));
-    
-   	// hide end date & time for all day events
-    if(event.allDay)
-    {
-    	$("#update-event-date-2").closest('.row').hide();
-    	$('#update-event-time-1').closest('.control-group').hide();
-    }
-    else 
-    {
-    	$('#update-event-time-1').closest('.control-group').show();
-    	$("#update-event-date-2").closest('.row').show();
-    }
-   	
-    // Fills owner select element 
-	populateUsersInUpdateActivityModal(model.toJSON());
-	
- // Show edit modal for the event
-    $("#updateActivityModal").modal('show');
-   	return false;
+	var hrefFlag = false;
+	if(e.target.attributes!=undefined && e.target.attributes!=null && e.target.attributes.length==0)
+		hrefFlag = true;
+	$.each(e.target.attributes,function(){
+		if(this.name=="href")
+			hrefFlag = true;
+	});
+	if(!hrefFlag){
+		App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
+		var id = $(this).find(".data").attr("data");
+		var model = $(this).data().collection.get(id);
+	   	if(isNaN(id))
+	   		return;
+	   	// Deserialize
+	   	deserializeForm(model.toJSON(), $("#updateActivityForm"));
+	   	
+	   	// Set time for update Event
+	    $('#update-event-time-1').val((new Date(model.get('start')*1000).getHours() < 10 ? "0" : "") + new Date(model.get('start')*1000).getHours() + ":" + (new Date(model.get('start')*1000).getMinutes() < 10 ? "0" : "") +new Date(model.get('start')*1000).getMinutes());
+	    $('#update-event-time-2').val((new Date(model.get('end')*1000).getHours() < 10 ? "0" : "") + new Date(model.get('end')*1000).getHours() + ":" + (new Date(model.get('end')*1000).getMinutes() < 10 ? "0" : "") + new Date(model.get('end')*1000).getMinutes());
+	   
+	 // Set date for update Event
+	    var dateFormat = 'mm/dd/yyyy';
+	    $("#update-event-date-1").val((new Date(model.get('start')*1000)).format(dateFormat));
+	    $("#update-event-date-2").val((new Date(model.get('end')*1000)).format(dateFormat));
+	    
+	   	// hide end date & time for all day events
+	    if(event.allDay)
+	    {
+	    	$("#update-event-date-2").closest('.row').hide();
+	    	$('#update-event-time-1').closest('.control-group').hide();
+	    }
+	    else 
+	    {
+	    	$('#update-event-time-1').closest('.control-group').show();
+	    	$("#update-event-date-2").closest('.row').show();
+	    }
+	   	
+	    // Fills owner select element 
+		populateUsersInUpdateActivityModal(model.toJSON());
+		
+	 // Show edit modal for the event
+	    $("#updateActivityModal").modal('show');
+	   	return false;
+	}
 });
 $('#portlets-tasks-model-list > tr').live('click', function(e) {
 	/*App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();

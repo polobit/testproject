@@ -94,6 +94,7 @@ public class Mandrill
 	 * Mandrill recipient email param
 	 */
 	public static final String MANDRILL_RECIPIENT_EMAIL = "email";
+	public static final String MANDRILL_RECIPIENT_NAME = "name";
 
 	/**
 	 * Type param to differ cc, to and bcc
@@ -400,14 +401,29 @@ public class Mandrill
 			throws Exception
 	{
 		Iterator<String> itr = emails.iterator();
+		
+		String emailString = "";
 
 		// Inserts each to email into JSONObject and then that JSON to
 		// JSONArray
 		while (itr.hasNext())
 		{
 			JSONObject eachToEmail = new JSONObject();
-			recipientArray.put(eachToEmail.put(MANDRILL_RECIPIENT_EMAIL, itr.next()).put(
-					MANDRILL_RECIPIENT_HEADER_TYPE, type));
+						
+			emailString = itr.next();
+						
+			eachToEmail.put(MANDRILL_RECIPIENT_EMAIL, EmailUtil.getEmail(emailString));
+						
+			String toName = EmailUtil.getEmailName(emailString);
+						
+			// Insert to name if not empty
+			if(StringUtils.isNotBlank(toName))
+				eachToEmail.put(MANDRILL_RECIPIENT_NAME, toName);
+					
+			eachToEmail.put(MANDRILL_RECIPIENT_HEADER_TYPE, type);
+						
+						
+			recipientArray.put(eachToEmail);
 		}
 
 		return recipientArray;

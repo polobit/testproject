@@ -443,6 +443,17 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contactDetails : function(id, contact)
 	{
+		//Removed previous contact timeline tags from the isotope, if existed
+		if(App_Contacts.contactDetailView!=undefined && App_Contacts.contactDetailView.model!=undefined && App_Contacts.contactDetailView.model.collection!=undefined){
+			getTemplate("timeline1", App_Contacts.contactDetailView.model.collection.models, undefined, function(result)
+			{
+				$("#timeline", $(App_Contacts.contactDetailView.el)).isotope('remove', $(result), function(ele)
+				{
+					timeline_collection_view.queue.running = false;
+					timeline_collection_view.queue.next();
+				});
+			});
+		}
 		
 		//For getting custom fields
 		if(App_Contacts.customFieldsList == null || App_Contacts.customFieldsList == undefined){
@@ -520,6 +531,7 @@ var ContactsRouter = Backbone.Router.extend({
 			this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "company-detail",
 				postRenderCallback : function(el)
 				{
+					contactInnerTabsInvoke(el); // hiding the prev,next arrows when viewport suits
 					fill_company_related_contacts(id, 'company-contacts');
 					// Clone contact model, to avoid render and
 					// post-render fell in to
@@ -560,6 +572,8 @@ var ContactsRouter = Backbone.Router.extend({
 
 		this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
+			
+			
 			// Clone contact model, to avoid render and post-render fell
 			// in to
 			// loop while changing attributes of contact
@@ -577,6 +591,8 @@ var ContactsRouter = Backbone.Router.extend({
 			load_contact_tab(el, contact.toJSON());
 
 			loadWidgets(el, contact.toJSON());
+			
+			
 			
 			/*
 			 * // To get QR code and download Vcard
@@ -618,7 +634,7 @@ var ContactsRouter = Backbone.Router.extend({
 				$(".contact-make-sip-call",el).hide();
 				$(".contact-make-twilio-call",el).show();
 				$(".contact-make-call",el).hide();
-			}	
+			}
 
 			} });
 
@@ -634,6 +650,9 @@ var ContactsRouter = Backbone.Router.extend({
 		else
 				$("#map_view_action").html("<i class='icon-minus text-sm c-p' title='Hide map' id='disable_map_view'></i>");
 
+	setTimeout(function(){
+		contactInnerTabsInvoke(el);
+	},500);
 	},
 
 	/**
