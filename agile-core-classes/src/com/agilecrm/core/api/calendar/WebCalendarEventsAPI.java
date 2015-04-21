@@ -42,7 +42,7 @@ public class WebCalendarEventsAPI
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<String> getSlotDetails(@QueryParam("userid") Long id)
 	{
-		return WebCalendarEventUtil.getSlotDetails(id);
+		return WebCalendarEventUtil.getSlotDetails(id, null);
 	}
 
 	/**

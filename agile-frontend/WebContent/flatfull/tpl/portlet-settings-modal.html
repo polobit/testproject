@@ -43,9 +43,13 @@
 				<label class="control-label">Duration</label>
 				<div class="controls">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="2-days">2 Days</option>
-						<option value="1-week">1 Week</option>
-						<option value="1-month">1 Month</option>
+						<option value="1-day" >Today</option>
+						<option value="yesterday" >Yesterday</option>
+						<option value="2-days">Last 2 Days</option>
+						<option value="this-week" >This Week</option>
+						<option value="1-week">Last 7 Days</option>
+						<option value="this-month" >This Month</option>
+						<option value="1-month">Last 30 Days</option>
 					</select>
 				</div>
 			</div>
@@ -105,7 +109,7 @@
 			<div class="control-group form-group">
 				<label class="control-label">Tags <span class="field_req">*</span></label>
 				<div class="controls">
-					<div class="pull-left" id="portlet-tags">
+					<div  id="portlet-tags">
 						<ul id="portlet-ul-tags" name="tags" class= "tagsinput tags p-n"></ul>
 					</div>
 					<input name="tags" type="text" id="addPortletBulkTags" class="tags-typeahead multi-tags form-control" placeholder="Enter tags separated by comma" onkeyup="hidePortletErrors(this);" />      
@@ -386,9 +390,12 @@
 				<label class="control-label">Duration</label>
 				<div class="controls">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="1-day" >1 Day</option>
-						<option value="1-week">1 Week</option>
-						<option value="1-month">1 Month</option>
+						<option value="1-day" >Today</option>
+						<option value="yesterday" >Yesterday</option>
+						<option value="this-week" >This Week</option>
+						<option value="1-week">Last 7 Days</option>
+						<option value="this-month" >This Month</option>
+						<option value="1-month">Last 30 Days</option>
 					</select>
 				</div>
 			</div>

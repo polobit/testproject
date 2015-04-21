@@ -9,6 +9,7 @@ $("#menuPosition").die().live("change", function(){
 	{
 		$(".app").addClass("app-aside-dock");
 		$(".fixedicons#planView,.fixedicons#helpView").removeClass('fixedicons').addClass('dockedicons');
+		
 	}
 	else
 	{
@@ -152,29 +153,27 @@ $.fn.removeClassPrefix = function(prefix) {
 	   console.log("prev clicked");
     var target = $("#contactDetailsTab");
     target.animate({ scrollLeft : (target.scrollLeft() - 270)},1000);
-  });
-
-
- 
-	  
-	  contactInnerTabsInvoke();
-  
-       
+  }); 
 
 })();
 
-function contactInnerTabsInvoke() {
+//funda for contact details
+
+function contactInnerTabsInvoke(el) {
 	
-	if ( ($("#contacts-inner-tabs .tab-container").width()) >= 689 ) {
-		    $("#prev,#next").css("display","none");
-			$("#contactDetailsTab").css('width','100%');
+	
+	
+	if ( ($("#contacts-inner-tabs .tab-container",el).width()) >= 689 ) {
+		    $("#prev,#next",el).css("display","none");
+			$("#contactDetailsTab",el).css('width','100%');
 			
 	  }
 	  else 
 	  {
-		  $("#prev,#next").css("display","block");
-		  $("#contactDetailsTab").removeAttr('style');
+		  $("#prev,#next",el).css("display","block");
+		  $("#contactDetailsTab",el).removeAttr('style');
 	   }
 	 }
-
+	 
+	 
 	
