@@ -13,6 +13,8 @@ import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.google.appengine.api.LifecycleManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskHandle;
 
 /**
@@ -203,7 +205,9 @@ public class PullScheduler
 			return;
 
 		// To delete completed tasks
-		List<TaskHandle> completedTasks = new ArrayList<TaskHandle>();
+//		List<TaskHandle> completedTasks = new ArrayList<TaskHandle>();
+		
+		Queue queue = QueueFactory.getQueue(queueName);
 
 		try
 		{
@@ -247,6 +251,9 @@ public class PullScheduler
 					try
 					{
 						deferredTask.run();
+						
+						// Delete task from Queue
+						queue.deleteTask(taskHandle);
 					}
 					catch (Exception e)
 					{
@@ -257,7 +264,7 @@ public class PullScheduler
 
 				System.out.println("Adding completed tasks");
 				// Add to completed list
-				completedTasks.add(taskHandle);
+//				completedTasks.add(taskHandle);
 			}
 			else
 				break;
@@ -265,9 +272,9 @@ public class PullScheduler
 
 		System.out.println("deleted tasks");
 		// Delete completed tasks
-		PullQueueUtil.deleteTasks(queueName, completedTasks);
+//		PullQueueUtil.deleteTasks(queueName, completedTasks);
 
-		System.out.println("deleting tasks " + completedTasks.size());
+//		System.out.println("deleting tasks " + completedTasks.size());
 
 	}
 
