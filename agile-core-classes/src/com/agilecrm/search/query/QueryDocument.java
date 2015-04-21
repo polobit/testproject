@@ -202,6 +202,23 @@ public class QueryDocument<T> implements QueryInterface
 	 * Advanced search used with cursor, used to show filter results.
 	 */
 	@Override
+	@SuppressWarnings("rawtypes")
+	public List<ScoredDocument> advancedSearchOnlyIds(ContactFilter filter, Integer count, String cursor, String orderBy)
+	{
+		String query = QueryDocumentUtil.constructFilterQuery(filter);
+		System.out.println("query build is : " + query);
+
+		if (StringUtils.isEmpty(query))
+			return new ArrayList<ScoredDocument>();
+
+		// return query results
+		return processQueryReturnIds(query, count, cursor, orderBy);
+	}
+
+	/**
+	 * Advanced search used with cursor, used to show filter results.
+	 */
+	@Override
 	public int advancedSearchCount(List<SearchRule> rules)
 	{
 		// If index is null return without querying
@@ -256,6 +273,22 @@ public class QueryDocument<T> implements QueryInterface
 		// The type of the it entities are fetched dynamically, based on the
 		// class template
 		return getDatastoreEntities(results, page, cursor);
+	}
+
+	public List<ScoredDocument> processQueryReturnIds(String query, Integer page, String cursor, String orderBy)
+	{
+		// Builds options based on the query string, page size (limit) and sets
+		// cursor.
+		QueryOptions options = buildOptions(query, page, cursor);
+
+		Map<String, Object> results = processQueryWithOptions(options, query);
+
+		Collection<ScoredDocument> resultSetDocuments = (Collection<ScoredDocument>) results.get("fetchedDocuments");
+
+		if (resultSetDocuments == null)
+			return new ArrayList<ScoredDocument>();
+
+		return new ArrayList<ScoredDocument>(resultSetDocuments);
 	}
 
 	/**
