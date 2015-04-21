@@ -703,7 +703,7 @@ $(function()
 				{
 								if (priority == 'red' || priority == '#f05050')
 												return 'High';
-								if (priority == '#36C' || priority == '#23b7e5')
+								if (priority == '#36C' || priority == '#23b7e5' || priority == 'blue')
 												return 'Normal';
 								if (priority == 'green' || priority == '#bbb')
 												return 'Low';
@@ -716,7 +716,7 @@ $(function()
 				{
 								if (color == 'red' || color == '#f05050')
 												return 'danger';
-								if (color == '#36C' || color == '#23b7e5')
+								if (color == '#36C' || color == '#23b7e5' || color == 'blue')
 												return 'warning';
 								if (color == 'green' || color == '#bbb')
 												return 'light';
