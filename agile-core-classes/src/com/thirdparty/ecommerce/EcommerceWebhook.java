@@ -45,6 +45,8 @@ public class EcommerceWebhook extends HttpServlet
 	    ecommUtil.apiKey = request.getParameter("api-key");
 	    ecommUtil.email = request.getParameter("email").toLowerCase();
 	    ecommUtil.pluginType = request.getParameter("pluginType");
+	    if(request.getParameter("syncAsTags") != null)
+	    	ecommUtil.syncAsTags = request.getParameter("syncAsTags");
 
 	    String json = request.getParameter("payLoad");
 
@@ -67,6 +69,7 @@ public class EcommerceWebhook extends HttpServlet
 		case ORDER_CREATED:
 		case ORDER_UPDATED:
 		    responseText = ecommUtil.addOrderNote(json);
+		    ecommUtil.updateContactTags();
 		    break;
 		case NOTE_CREATED:
 		    responseText = ecommUtil.addNoteToContact(jsonObj.getString("note"));

@@ -1,37 +1,37 @@
 <script id="contact-activity-list-log-collection-template" type="text/html">
 {{#if this.length}}
-	<section class="scroll">
-		<form>
-			<div class="ref-log">  
-				<div id="today-heading" style="display: none" class="ref-head"><b >Today</b>	</div>
-				<div id="today-contact-activity" style="display: inline;"></div>
-				<div id="tomorrow-heading" style="display: none" class="ref-head"><b >Yesterday</b></div>
-				<div id="tomorrow-contact-activity" style="display: inline;"></div>
-				<div id="next-week-heading" style="display: none" class=""></div>
-				<div id="next-week-contact-activity" style="display: inline;"></div>
-				<div class="span12">
-				</div>
-			</div>
-		</form>
+<div >
+<section class="scroll">
+    <form>
+      <div class="ref-log">  
+	
+	 <div id="today-heading" style="display: none" class="ref-head"><b >Today</b>	</div>
+
+	 <div id="contact-activity-today-list-log-model-list" style="display: inline;"></div>
+	<!--<tbody id="contact-activity-today-list-log-model-list"  class="contacts-model-list" route="contact/" style="overflow: scroll;overflow:hidden;">
+	</tbody>
+	-->
+
+	<div id="yesterday-heading" style="display: none"><b >Yesterday</b></div>
+ <div id="contact-activity-yesterday-list-log-model-list" style="display: inline;"></div>
+	<!--
+	<tbody id="contact-activity-yesterday-list-log-model-list"  class="contacts-model-list" route="contact/" style="overflow: scroll;overflow:hidden;">
+	</tbody>
+	-->
+
+	<div id="earlier-heading" style="display: none"><b >Earlier</b></div>
+	<div id="contact-activity-earlier-list-log-model-list" style="display: inline;"></div>
+	<!--
+	<tbody id="contact-activity-earlier-list-log-model-list"  class="contacts-model-list" route="contact/" style="overflow: scroll;overflow:hidden;">
+	</tbody>
+	-->
+
+		</div>
+    </form>
 </section>
 </div>
-<table class="table agile-ellipsis-dynamic onlySorting no-sorting ">
-	<col width="0.2px">
-	<col width="75%">
-	<col width="25%">
-	<!--<thead>
-		<tr>
-			<th></th>
-			<th></th>
-			<th></th>
-		</tr>
-	</thead>-->
-	<tbody id="contact-activity-list-log-model-list"  class="contacts-model-list" route="contact/" style="overflow: scroll;overflow:hidden;">
-	</tbody>
-</table>
 
 {{else}}
-
 <div id="slate">
 <div class="slate">
     <div class="slate-content">
@@ -51,64 +51,59 @@
 </script>
 
 <script id="contact-activity-list-log-model-template" type="text/html">
-
-<td></td>
-<td>
 <div class="pos-rlt data" data= "{{contact.id}}" >
 	<div style="margin-right:15px;" class="pull-left">
-		{{#if contact}}
-			<img class="thumbnail img-inital" data-name="{{dataNameAvatar contact.properties}}" src="{{gravatarurl contact.properties 40}}"  width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
+			{{#if contact}}
+			    <a href="#contact/{{contact.id}}" style="text-decoration:none"><img class="user-img ref-roundedimg" src="{{gravatarurl contact.properties 36}}"   style="display:inline " /></a>
 		{{else}}
-			<img class="thumbnail img-inital" data-name="{{dataNameAvatar contact.properties}}" src="https://dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png"  width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
-		{{/if}}
-	</div>
+	            <a href="#contact/{{contact.id}}" style="text-decoration:none"><img class="user-img ref-roundedimg" src="{{defaultGravatarurl 36}}"   style="display:inline " /></a>
+		{{/if}}	
+    </div>
+
 	<div class="contact-activity-tag" >
-		<div class="display:inline  "  >
+		<div class="display:inline" style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:85%">
 {{#if_equals "null" log_time}}
 	 {{#if contact}} 
-		<b>{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </b>visited your website<br>
+		<a href="#contact/{{contact.id}}" style="text-decoration:none"><b>{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </b></a>visited your website<br>
 	{{else}}
 		Someone visited your website<br>
 	{{/if}}
 	<span class="activities_second_line">  
-		<i class="icon-link"></i> {{url}}
+		<i class="icon-link"></i> <a href={{get_url url}} style="text-decoration:none">{{get_url url}}</a>
 		{{#unless contact}}
-		<br>
-		This contact may have been deleted
+		. This contact may have been deleted
 		{{/unless}}
 
 {{else}}
 	{{#if_equals "EMAIL_OPENED" log_type}}
 		{{#if contact}} 
-			<b>{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </b>opened an email<br>
+			<a href="#contact/{{contact.id}}" style="text-decoration:none"><b>{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </b></a>opened an email
 		{{else}}
-		Someone opened an email<br>
-		{{/if}}
+		Someone opened an email
+		{{/if}}<br>
 		<span class="activities_second_line">  
-		<i class="icon-envelope-alt"></i> {{message}} - {{campaign_name}}
+		<i class="icon-envelope-alt"></i> Email from campaign '{{get_limiter message "Email Opened of campaign "}}'
 		{{#unless contact}}
-		<br>
-		This contact may have been deleted
+		. This contact may have been deleted
 		{{/unless}}
 	{{/if_equals}}
 					
 	{{#if_equals "EMAIL_CLICKED" log_type}}
 		{{#if contact}} 
-			<b>{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</b> clicked an email<br>
+			<a href="#contact/{{contact.id}}" style="text-decoration:none"><b>{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </b></a> clicked an email
 		{{else}}
-			Someone clicked an email<br>
-		{{/if}}
+			Someone clicked an email
+		{{/if}}<br>
 		<span class="activities_second_line">  
-		<i class="icon-hand-up"></i> Link clicked in campaign {{campaign_name}}
-		{{#unless contact}}
-		<br>
-		This contact may have been deleted
+		<i class="icon-hand-up"></i> Link clicked in campaign '{{campaign_name}}'
+	 	{{#unless contact}}
+		. This contact may have been deleted
 		{{/unless}}
 	{{/if_equals}}
 					
 	{{#if_equals "UNSUBSCRIBED" log_type}}
 		{{#if contact}} 
-			<b>{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </b>
+			<a href="#contact/{{contact.id}}" style="text-decoration:none"><b>{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </b></a> </b>
 		{{else}}
 			Someone 
 		{{/if}}
@@ -118,78 +113,75 @@
 			unsubscribed from a campaign
 		{{/if_equals}}<br>
 		<span class="activities_second_line">  
-		<i class="icon-minus-sign"></i> {{message}} - {{campaign_name}}
+		<i class="icon-minus-sign"></i> Unsubscribe link clicked from campaign '{{campaign_name}}'
 		{{#unless contact}}
-		<br>
-		This contact may have been deleted
+		. This contact may have been deleted
 		{{/unless}}
 	{{/if_equals}}
 	
 	{{#if_equals "EMAIL_SPAM" log_type}}
 		{{#if contact}} 
-			<b>{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</b> marked an email as Spam<br>
+			<a href="#contact/{{contact.id}}" style="text-decoration:none"><b>{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </b></a> marked an email as Spam
 		{{else}}
-			Someone marked an email as Spam<br>
-		{{/if}}
+			Someone marked an email as Spam
+		{{/if}}<br>
 		<span class="activities_second_line">  
-		<i class="icon-ban-circle"></i> Email {{get_subject message}}
+		<i class="icon-ban-circle"></i> Email '{{get_limiter message "Email subject: "}}' in '{{campaign_name}}'
 		{{#unless contact}}
-		<br>
-		This contact may have been deleted
+		. This contact may have been deleted
 		{{/unless}}	
 	{{/if_equals}}
 		
 	{{#if_equals "EMAIL_HARD_BOUNCED" log_type}}
 		{{#if contact}} 
-			<b>{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</b> - Email bounced<br>
+			<a href="#contact/{{contact.id}}" style="text-decoration:none"><b>{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </b></a> - Email bounced<br>
 			<span class="activities_second_line">  
 			<i class="icon-undo"></i> There was a hard bounce for email  {{getPropertyValue contact.properties "email"}}
 		{{else}}
-			Someone's Email bounced<br>
+			Someone's Email bounced
 			<span class="activities_second_line">  
-			This contact may have been deleted
+				<br>
+				This contact may have been deleted
 		{{/if}}
 	{{/if_equals}}
 
 	{{#if_equals "EMAIL_SOFT_BOUNCED" log_type}}
 		{{#if contact}} 
-			<b>{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</b> - Email bounced<br>
+			<a href="#contact/{{contact.id}}" style="text-decoration:none"><b>{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </b></a> - Email bounced<br>
 			<span class="activities_second_line">  
 			<i class="icon-undo"></i> There was a soft bounce for email  {{getPropertyValue contact.properties "email"}}
 		{{else}}
-			Someone's Email bounced<br>
+			Someone's Email bounced
 			<span class="activities_second_line">  
-			This contact may have been deleted
+				<br>
+				This contact may have been deleted
 		{{/if}}
 	{{/if_equals}}
 	
 	{{#unless log_time}}
 	{{#if contact}} 
-		<b>{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</b> visited your website<br>
+		<a href="#contact/{{contact.id}}" style="text-decoration:none"><b>{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </b></a> visited your website
 	{{else}}
-		Someone visited your website.<br>
-	{{/if}}
+		Someone visited your website
+	{{/if}}<br>
 	<span class="activities_second_line">  
-		<i class="icon-link"></i> {{url}}
+		<i class="icon-link"></i> <a href={{get_url url}} style="text-decoration:none">{{get_url url}}</a>
 	{{#unless contact}}
-		<br>
-		This contact may have been deleted
+		. This contact may have been deleted
 	{{/unless}}	
 
 	{{/unless}}
 {{/if_equals}}
 
-	</span>
+		</span>
 		</div>
-	</div>
-</div>
-</td>
-<td>
-	<small class="edit-hover"> 
+	
+	
+		<small class=" edit-hover pull-right activity_time"> 
 		<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" time}}</time>
-	</small>
-</td>
-
+</small>
+</div>
+</div>
 </script>
 
 <script id="contact-activity-header-template" type="text/html">
@@ -200,19 +192,19 @@
             <h1 class="contact-activity-heading"><span>Contact Activities</span>&nbsp;<small class="contact-activity-sub-heading" ></small>&nbsp;<small class="contact-activity-user" ></small></h1>
 		
 			<div class="btn-group pull-right type-task-button" style="cursor:pointer;margin-right:15px;top: -28px;">
-                <div class="btn selected_name" id ="log-filter-title">All Contact Activities</div>
+                <div class="btn selected_name" id ="log-filter-title">All Activities</div>
                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" >
-					<li><a href="#contact-activities/All_Activities" >All Activities</a></li> 
-					<li><a href="#contact-activities/Page_Views" >Page Views</a></li>
-					<li><a href="#contact-activities/Email_Opened" >Email Opened</a></li>
-					<li><a href="#contact-activities/Email_Clicked" >Email Clicked</a></li>
-					<li><a href="#contact-activities/Unsubscribed">Unsubscribed</a></li>
-					<li><a href="#contact-activities/Spam_Reports">Spam Reports</a></li>
-					<li><a href="#contact-activities/Email_Hard_Bounced">Email Hard Bounced</a></li>
-					<li><a href="#contact-activities/Email_Soft_Bounced">Email Soft Bounced</a></li>              
+					<li><a href="#contact-activities/all" >All Activities</a></li> 
+					<li><a href="#contact-activities/page-views" >Page Views</a></li>
+					<li><a href="#contact-activities/email-opens" >Email Opens</a></li>
+					<li><a href="#contact-activities/email-clicks" >Email Clicks</a></li>
+					<li><a href="#contact-activities/unsubscriptions">Unsubscriptions</a></li>
+					<li><a href="#contact-activities/spam-reports">Spam Reports</a></li>
+					<li><a href="#contact-activities/hard-bounces">Hard Bounces</a></li>
+					<li><a href="#contact-activities/soft-bounces">Soft Bounces</a></li>              
                 </ul>
             </div>            
 <!--
