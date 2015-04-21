@@ -35,6 +35,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.IcalendarUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.googlecode.objectify.Key;
 
 public class WebCalendarEventUtil
@@ -674,6 +675,7 @@ public class WebCalendarEventUtil
 		JSONObject meeting_duration = new JSONObject(user.meeting_durations);
 		net.fortuna.ical4j.model.Calendar iCal = null;
 		net.fortuna.ical4j.model.Calendar agileUseiCal = null;
+		String domain_url = VersioningUtil.getHostURLByApp(user.domain);
 
 		Long epoch_start_date = null;
 		// Add properties value in contact entity
@@ -883,7 +885,7 @@ public class WebCalendarEventUtil
 
 			String link = "https://www.agilecrm.com/?utm_source=powered-by&medium=email&utm_campaign=" + user.domain;
 
-			String cancel_link = "https://" + user.domain + ".agilecrm.com/appointment/cancel/" + newEvnt.id;
+			String cancel_link = domain_url + "appointment/cancel/" + newEvnt.id;
 			String client_mail = null;
 			if (StringUtils.isNotEmpty(wce.phoneNumber) && !"Meeting Type".equalsIgnoreCase(wce.phoneNumber))
 			{
