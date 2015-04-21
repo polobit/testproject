@@ -2,9 +2,10 @@
 
 /* HTML5 Boilerplate */
 #timeline {
-	width: 700px;
+	 width: 700px;
 	margin-top: 40px;
 	margin-bottom: 30px;
+	
 }
 
 #timeline .post {
@@ -223,9 +224,10 @@
 	display: block;
 	float: left;
 	height: 100%;
-	left: 345px;
+	/*left: 345px;*/
 	width: 4px;
 	position: absolute;
+	margin-left:-30.5%;
 }
 
 
