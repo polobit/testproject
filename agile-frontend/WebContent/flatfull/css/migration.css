@@ -1111,6 +1111,7 @@ padding:12px 10px 12px 11px;
 #contacts-inner-tabs #prev:hover,#contacts-inner-tabs #next:hover
 {
 background:#f6f8f8;
+color:#1f2427!important;
 }
 
 
@@ -1173,3 +1174,11 @@ background:#f6f8f8;
 {
 top:117px;
 }
+
+/*hack for contact list second column spacing*/
+#contacts-table thead tr th:nth-child(2),#contacts-table tbody tr td:nth-child(2)
+{
+	padding-left:0px;
+}
+
+

@@ -2758,6 +2758,7 @@ fieldset[disabled] .i-checks input + i:before {
 
 .item {
   position: relative;
+  margin-left:-30%!important;
 }
 
 .item .top {

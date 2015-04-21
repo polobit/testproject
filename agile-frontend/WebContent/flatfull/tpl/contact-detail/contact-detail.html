@@ -13,7 +13,7 @@
   <div class="row-row">
   <div>
   <div>
-    <div class="wrapper contactView w-xl">
+    <div class="wrapper contactView w-xl p-t-sm">
 	<div class="pos-rlt w-full">
 <div class="contact-navigation-view"><span class="navigation  contact-switching"></span></div>
 <div class="clearfix"></div>
@@ -253,9 +253,9 @@
         	<span id="contact-owner" class="custom-color" data={{owner.id}}>{{owner.name}}</span>
         
         	{{#canEditContact owner.id}}
-        	<div class="btn-group" id="change-owner-ul" style="display: none">
-        		 <a class="btn btn-sm dropdown-toggle" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
-        		 <ul id='contact-detail-owner' class="dropdown-menu pull-right"></ul>
+        	<div class="dropdown" id="change-owner-ul" style="display: none">
+        		 <a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
+        		 <ul id='contact-detail-owner' class="dropdown-menu"></ul>
         	</div> 
 			{{/canEditContact}}
        </div>
