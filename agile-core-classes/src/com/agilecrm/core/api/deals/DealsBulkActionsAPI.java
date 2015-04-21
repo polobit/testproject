@@ -22,7 +22,9 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
+import com.agilecrm.workflows.triggers.util.TriggerUtil;
 
 /**
  * <code>DealsAPI</code> includes REST calls to interact with
@@ -249,9 +251,21 @@ public class DealsBulkActionsAPI
 	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    System.out.println("total deals -----" + deals.size());
 
+	    
+	    boolean canTrigger = TriggerUtil.getTriggersCountByCondition(Trigger.Type.DEAL_MILESTONE_IS_CHANGED) > 0 ? true
+				: false;
+
+		List<Trigger> triggers = new ArrayList<Trigger>();
+
+		if (canTrigger)
+			triggers = TriggerUtil.getTriggersByCondition(Trigger.Type.DEAL_MILESTONE_IS_CHANGED);
+	    
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
 	    for (Opportunity deal : deals)
 	    {
+	    // Before change - Trigger
+		Opportunity oldOpportunity = deal;
+			
 		if (formJSON.has("pipeline"))
 		    deal.pipeline_id = formJSON.getLong("pipeline");
 		if (formJSON.has("pipeline-name"))
@@ -259,6 +273,27 @@ public class DealsBulkActionsAPI
 		if (formJSON.has("milestone"))
 		    milestone_name = deal.milestone = formJSON.getString("milestone");
 
+		// After change - Trigger
+		Opportunity updatedOpportunity = deal;
+		
+		try
+		{
+			if(triggers.size() > 0)
+			{
+				// Trigger only if there is change in pipeline and milestone
+				if(!oldOpportunity.pipeline_id.equals(updatedOpportunity.pipeline_id)
+						|| !oldOpportunity.milestone.equals(updatedOpportunity.milestone))
+				{
+					DealTriggerUtil.triggerCampaign(updatedOpportunity.getContacts(), oldOpportunity, updatedOpportunity, DealTriggerUtil.getTriggersForMilestoneChange(updatedOpportunity, triggers));
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("Exception occured while triggering bulk milestone change..." + e.getMessage());
+		}
+		
 		subList.add(deal);
 		if (subList.size() >= 100)
 		{

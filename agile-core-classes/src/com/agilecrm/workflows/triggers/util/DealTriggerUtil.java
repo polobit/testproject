@@ -29,292 +29,306 @@ import com.campaignio.reports.DateUtil;
  */
 public class DealTriggerUtil
 {
-    /**
-     * Executes trigger for deals based on old opportunity. If old opportunity
-     * is null, it means new deal is created.
-     * 
-     * @param oldOpportunity
-     *            - Opportunity before save.
-     * @param updatedOpportunity
-     *            - Updated opportunity.
-     */
-    public static void executeTriggerToDeal(Opportunity oldOpportunity, Opportunity updatedOpportunity)
-    {
-	// new deal
-	if (oldOpportunity == null)
+	/**
+	 * Executes trigger for deals based on old opportunity. If old opportunity
+	 * is null, it means new deal is created.
+	 * 
+	 * @param oldOpportunity
+	 *            - Opportunity before save.
+	 * @param updatedOpportunity
+	 *            - Updated opportunity.
+	 */
+	public static void executeTriggerToDeal(Opportunity oldOpportunity, Opportunity updatedOpportunity)
 	{
-	    executeTriggerForNewDeal(updatedOpportunity);
-	    return;
+		// new deal
+		if (oldOpportunity == null)
+		{
+			executeTriggerForNewDeal(updatedOpportunity);
+			return;
+		}
+
+		// checks milestone change in a deal.
+		checkMilestoneChange(oldOpportunity, updatedOpportunity);
+
 	}
 
-	// checks milestone change in a deal.
-	checkMilestoneChange(oldOpportunity, updatedOpportunity);
-
-    }
-
-    /**
-     * Executes trigger for Deals when deal is created.
-     * 
-     * @param opportunity
-     *            Opportunity object when deal is created.
-     * 
-     */
-    public static void executeTriggerForNewDeal(Opportunity opportunity)
-    {
-	// Executes trigger when deal is created.
-	if (opportunity == null)
-	    return;
-
-	executeTriggerForDealsBasedOnCondition(opportunity.getContacts(), null, opportunity, Trigger.Type.DEAL_IS_ADDED);
-    }
-
-    /**
-     * Verifies whether milestone is changed for a deal.
-     * 
-     * @param oldOpportunity
-     *            - Opportunity before save.
-     * @param updatedOpportunity
-     *            - Updated opportunity.
-     */
-    public static void checkMilestoneChange(Opportunity oldOpportunity, Opportunity updatedOpportunity)
-    {
-	// if no change in pipeline and milestone, return
-	if (oldOpportunity.pipeline_id.equals(updatedOpportunity.pipeline_id) && oldOpportunity.milestone.equals(updatedOpportunity.milestone))
-	    return;
-
-	System.out.println("Milestone changed from " + oldOpportunity.milestone + " to " + updatedOpportunity.milestone
-	        + " of deal " + updatedOpportunity.name);
-
-	// execute trigger for deal milestone change.
-	executeTriggerForDealsBasedOnCondition(updatedOpportunity.getContacts(), oldOpportunity,
-	        updatedOpportunity, Trigger.Type.DEAL_MILESTONE_IS_CHANGED);
-    }
-
-    /**
-     * Executes trigger when deal is deleted.
-     * 
-     * @param opportunityIds
-     *            Opportunity Ids of deals that are selected for deletion.
-     */
-    public static void executeTriggerForDeleteDeal(JSONArray opportunityIds)
-    {
-	// if null
-	if (opportunityIds == null)
-	    return;
-
-	try
+	/**
+	 * Executes trigger for Deals when deal is created.
+	 * 
+	 * @param opportunity
+	 *            Opportunity object when deal is created.
+	 * 
+	 */
+	public static void executeTriggerForNewDeal(Opportunity opportunity)
 	{
-	    // Iterates over selected deal-ids for deletion
-	    for (int i = 0; i < opportunityIds.length(); i++)
-	    {
-		String id = opportunityIds.get(i).toString();
+		// Executes trigger when deal is created.
+		if (opportunity == null)
+			return;
 
-		// Gets Opportunity based on id
-		Opportunity opportunityObject = OpportunityUtil.getOpportunity(Long.parseLong(id));
-
-		// if opportunity is null skip
-		if (opportunityObject == null)
-		    continue;
-
-		// Fetches triggers based on delete deal condition and runs
-		// each trigger campaign
-		executeTriggerForDealsBasedOnCondition(opportunityObject.getContacts(), null, opportunityObject,
-		        Trigger.Type.DEAL_IS_DELETED);
-	    }
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.out.println("Got Exception in executeTriggerForDeleteDeal " + e.getMessage());
-	}
-    }
-
-    /**
-     * Executes trigger when deal is created or deal is deleted based on the
-     * trigger called.
-     * 
-     * @param contactsList
-     *            Contact related to deals.
-     * @param condition
-     *            Trigger condition for deals.
-     */
-    public static void executeTriggerForDealsBasedOnCondition(List<Contact> contactsList, Opportunity oldOpportunity,
-	    Opportunity updatedOpportunity, Type condition)
-    {
-
-	// if deal has no related contacts
-	if (contactsList.size() == 0)
-	    return;
-
-	// Gets triggers with deal condition.
-	List<Trigger> triggersList = new ArrayList<Trigger>();
-
-	// If milestone is not empty, fetch triggers based on changed milestone
-	if (oldOpportunity != null)
-	    triggersList = getTriggersForMilestoneChange(updatedOpportunity);
-	else
-	    triggersList = TriggerUtil.getTriggersByCondition(condition);
-
-	try
-	{
-	    for (Trigger trigger : triggersList)
-	    {
-		WorkflowSubscribeUtil.subscribeDeferred(contactsList, trigger.campaign_id,
-		        new JSONObject().put("deal", getOpportunityJSONForTrigger(updatedOpportunity, oldOpportunity)));
-	    }
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }
-
-    public static JSONObject getOpportunityJSONForTrigger(Opportunity opportunity, Opportunity oldOpportunity)
-    {
-	try
-	{
-	    JSONObject opportunityJSON = TriggerUtil.getJSONObject(opportunity);
-
-	    // If null
-	    if (opportunityJSON == null)
-		return null;
-
-	    opportunityJSON.remove("contacts");
-	    opportunityJSON.remove("cursor");
-	    opportunityJSON.remove("count");
-	    opportunityJSON.remove("contact_ids");
-	    opportunityJSON.remove("owner_id");
-	    opportunityJSON.remove("notes");
-
-	    JSONObject owner = null;
-
-	    if (opportunityJSON.has("owner"))
-		owner = opportunityJSON.getJSONObject("owner");
-
-	    if (owner != null)
-	    {
-		JSONObject updatedOwner = new JSONObject();
-		updatedOwner.put("id", owner.getString("id"));
-		updatedOwner.put("name", owner.getString("name"));
-		updatedOwner.put("email", owner.getString("email"));
-
-		opportunityJSON.put("owner", updatedOwner);
-	    }
-
-	    opportunityJSON.put("custom_data", getDealCustomJSON(opportunity));
-
-	    opportunityJSON.put("created_time",
-		    DateUtil.getGMTDateInGivenFormat(opportunity.created_time * 1000, "MM/dd/yyyy"));
-
-	    if(opportunity.close_date != null)
-	    {
-		opportunityJSON.put("close_date",
-		    DateUtil.getGMTDateInGivenFormat(opportunity.close_date * 1000, "MM/dd/yyyy"));
-	    }
-
-	    opportunityJSON.put("expected_value", getLongFromDouble(opportunity.expected_value));
-
-	    // If deal milestone is changed, add old one
-	    if (oldOpportunity != null)
-		opportunityJSON.put("old_milestone", oldOpportunity.milestone);
-
-	    return opportunityJSON;
-	}
-	catch (Exception e)
-	{
-	    System.err.println("Exception occured while getting opportunity json for trigger..."+ e.getMessage());
-	    e.printStackTrace();
-	    return null;
+		executeTriggerForDealsBasedOnCondition(opportunity.getContacts(), null, opportunity, Trigger.Type.DEAL_IS_ADDED);
 	}
 
-    }
-
-    /**
-     * @param opportunity
-     * @return
-     * @throws JSONException
-     */
-    private static JSONObject getDealCustomJSON(Opportunity opportunity) throws JSONException
-    {
-	try
+	/**
+	 * Verifies whether milestone is changed for a deal.
+	 * 
+	 * @param oldOpportunity
+	 *            - Opportunity before save.
+	 * @param updatedOpportunity
+	 *            - Updated opportunity.
+	 */
+	public static void checkMilestoneChange(Opportunity oldOpportunity, Opportunity updatedOpportunity)
 	{
-	    List<CustomFieldData> customFields = opportunity.custom_data;
+		// if no change in pipeline and milestone, return
+		if (oldOpportunity.pipeline_id.equals(updatedOpportunity.pipeline_id)
+				&& oldOpportunity.milestone.equals(updatedOpportunity.milestone))
+			return;
 
-	    JSONObject customJSON = new JSONObject();
+		System.out.println("Milestone changed from " + oldOpportunity.milestone + " to " + updatedOpportunity.milestone
+				+ " of deal " + updatedOpportunity.name);
 
-	    for (CustomFieldData customField : customFields)
-		customJSON.put(customField.name, customField.value);
-
-	    return customJSON;
+		// execute trigger for deal milestone change.
+		executeTriggerForDealsBasedOnCondition(updatedOpportunity.getContacts(), oldOpportunity, updatedOpportunity,
+				Trigger.Type.DEAL_MILESTONE_IS_CHANGED);
 	}
-	catch(Exception e)
+
+	/**
+	 * Executes trigger when deal is deleted.
+	 * 
+	 * @param opportunityIds
+	 *            Opportunity Ids of deals that are selected for deletion.
+	 */
+	public static void executeTriggerForDeleteDeal(JSONArray opportunityIds)
 	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured while getting deal custom json..."+ e.getMessage());
-	    return null;
-	}
-    }
+		// if null
+		if (opportunityIds == null)
+			return;
 
-    private static Long getLongFromDouble(Double value)
-    {
-	if (value == null)
-	    return null;
+		try
+		{
+			// Iterates over selected deal-ids for deletion
+			for (int i = 0; i < opportunityIds.length(); i++)
+			{
+				String id = opportunityIds.get(i).toString();
 
-	try
-	{
-	    return value.longValue();
+				// Gets Opportunity based on id
+				Opportunity opportunityObject = OpportunityUtil.getOpportunity(Long.parseLong(id));
+
+				// if opportunity is null skip
+				if (opportunityObject == null)
+					continue;
+
+				// Fetches triggers based on delete deal condition and runs
+				// each trigger campaign
+				executeTriggerForDealsBasedOnCondition(opportunityObject.getContacts(), null, opportunityObject,
+						Trigger.Type.DEAL_IS_DELETED);
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("Got Exception in executeTriggerForDeleteDeal " + e.getMessage());
+		}
 	}
-	catch (Exception e)
+
+	/**
+	 * Executes trigger when deal is created or deal is deleted based on the
+	 * trigger called.
+	 * 
+	 * @param contactsList
+	 *            Contact related to deals.
+	 * @param condition
+	 *            Trigger condition for deals.
+	 */
+	public static void executeTriggerForDealsBasedOnCondition(List<Contact> contactsList, Opportunity oldOpportunity,
+			Opportunity updatedOpportunity, Type condition)
 	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured while converting string to double..." + e.getMessage());
-	    return null;
+
+		// if deal has no related contacts
+		if (contactsList.size() == 0)
+			return;
+
+		// Gets triggers with deal condition.
+		List<Trigger> triggersList = new ArrayList<Trigger>();
+
+		// If milestone is not empty, fetch triggers based on changed milestone
+		if (oldOpportunity != null)
+			triggersList = getTriggersForMilestoneChange(updatedOpportunity, null);
+		else
+			triggersList = TriggerUtil.getTriggersByCondition(condition);
+
+		// Trigger campaign
+		triggerCampaign(contactsList, oldOpportunity, updatedOpportunity, triggersList);
 	}
-    }
-    
-    private static List<Trigger> getTriggersForMilestoneChange(Opportunity opportunity)
-    {
-	List<Trigger> triggers = TriggerUtil.getTriggersByCondition(Type.DEAL_MILESTONE_IS_CHANGED);
-	List<Trigger> updatedTriggers = new ArrayList<Trigger>();
-	
-	boolean isDefault = false;
-	String trackAndMilestone = null;
-	
-        try
-        {
-	    isDefault = opportunity.getPipeline().isDefault;
-	    trackAndMilestone = opportunity.getPipeline_id() + "_" + opportunity.milestone;
-	
-	for(Trigger trigger : triggers)
+
+	public static void triggerCampaign(List<Contact> contactsList, Opportunity oldOpportunity,
+			Opportunity updatedOpportunity, List<Trigger> triggersList)
 	{
-	    if(StringUtils.isBlank(trigger.trigger_deal_milestone))
-		continue;
-	    
-	    
-	    String[] idAndMilestone = StringUtils.split(trigger.trigger_deal_milestone, "_", 2);
-	    
-	    // For compatibility of Old Triggers
-	    if(idAndMilestone.length == 1 && isDefault)
-	    {
-		if(StringUtils.equals(opportunity.milestone, idAndMilestone[0]))
-		    updatedTriggers.add(trigger);
-	    }
-	    
-	    if(idAndMilestone.length == 2)
-	    {
-		if(StringUtils.equals(trackAndMilestone, trigger.trigger_deal_milestone))
-		    updatedTriggers.add(trigger);
-	    }
+		// if deal has no related contacts
+		if (contactsList.size() == 0)
+			return;
+
+		try
+		{
+			for (Trigger trigger : triggersList)
+			{
+				WorkflowSubscribeUtil.subscribeDeferred(contactsList, trigger.campaign_id,
+						new JSONObject().put("deal", getOpportunityJSONForTrigger(updatedOpportunity, oldOpportunity)));
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
-	
-        }
-        catch (Exception e)
-        {
-	    e.printStackTrace();
-        }
-	
-	
-	return updatedTriggers;
-    }
-   
+
+	public static JSONObject getOpportunityJSONForTrigger(Opportunity opportunity, Opportunity oldOpportunity)
+	{
+		try
+		{
+			JSONObject opportunityJSON = TriggerUtil.getJSONObject(opportunity);
+
+			// If null
+			if (opportunityJSON == null)
+				return null;
+
+			opportunityJSON.remove("contacts");
+			opportunityJSON.remove("cursor");
+			opportunityJSON.remove("count");
+			opportunityJSON.remove("contact_ids");
+			opportunityJSON.remove("owner_id");
+			opportunityJSON.remove("notes");
+
+			JSONObject owner = null;
+
+			if (opportunityJSON.has("owner"))
+				owner = opportunityJSON.getJSONObject("owner");
+
+			if (owner != null)
+			{
+				JSONObject updatedOwner = new JSONObject();
+				updatedOwner.put("id", owner.getString("id"));
+				updatedOwner.put("name", owner.getString("name"));
+				updatedOwner.put("email", owner.getString("email"));
+
+				opportunityJSON.put("owner", updatedOwner);
+			}
+
+			opportunityJSON.put("custom_data", getDealCustomJSON(opportunity));
+
+			opportunityJSON.put("created_time",
+					DateUtil.getGMTDateInGivenFormat(opportunity.created_time * 1000, "MM/dd/yyyy"));
+
+			if (opportunity.close_date != null)
+			{
+				opportunityJSON.put("close_date",
+						DateUtil.getGMTDateInGivenFormat(opportunity.close_date * 1000, "MM/dd/yyyy"));
+			}
+
+			opportunityJSON.put("expected_value", getLongFromDouble(opportunity.expected_value));
+
+			// If deal milestone is changed, add old one
+			if (oldOpportunity != null)
+				opportunityJSON.put("old_milestone", oldOpportunity.milestone);
+
+			return opportunityJSON;
+		}
+		catch (Exception e)
+		{
+			System.err.println("Exception occured while getting opportunity json for trigger..." + e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	/**
+	 * @param opportunity
+	 * @return
+	 * @throws JSONException
+	 */
+	private static JSONObject getDealCustomJSON(Opportunity opportunity) throws JSONException
+	{
+		try
+		{
+			List<CustomFieldData> customFields = opportunity.custom_data;
+
+			JSONObject customJSON = new JSONObject();
+
+			for (CustomFieldData customField : customFields)
+				customJSON.put(customField.name, customField.value);
+
+			return customJSON;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("Exception occured while getting deal custom json..." + e.getMessage());
+			return null;
+		}
+	}
+
+	private static Long getLongFromDouble(Double value)
+	{
+		if (value == null)
+			return null;
+
+		try
+		{
+			return value.longValue();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("Exception occured while converting string to double..." + e.getMessage());
+			return null;
+		}
+	}
+
+	public static List<Trigger> getTriggersForMilestoneChange(Opportunity opportunity, List<Trigger> triggers)
+	{
+		
+		// If triggers are not passed
+		if(triggers == null)
+			triggers = TriggerUtil.getTriggersByCondition(Type.DEAL_MILESTONE_IS_CHANGED);
+
+		List<Trigger> updatedTriggers = new ArrayList<Trigger>();
+
+		boolean isDefault = false;
+		String trackAndMilestone = null;
+
+		try
+		{
+			isDefault = opportunity.getPipeline().isDefault;
+			trackAndMilestone = opportunity.getPipeline_id() + "_" + opportunity.milestone;
+
+			for (Trigger trigger : triggers)
+			{
+				if (StringUtils.isBlank(trigger.trigger_deal_milestone))
+					continue;
+
+				String[] idAndMilestone = StringUtils.split(trigger.trigger_deal_milestone, "_", 2);
+
+				// For compatibility of Old Triggers
+				if (idAndMilestone.length == 1 && isDefault)
+				{
+					if (StringUtils.equals(opportunity.milestone, idAndMilestone[0]))
+						updatedTriggers.add(trigger);
+				}
+
+				if (idAndMilestone.length == 2)
+				{
+					if (StringUtils.equals(trackAndMilestone, trigger.trigger_deal_milestone))
+						updatedTriggers.add(trigger);
+				}
+			}
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return updatedTriggers;
+	}
+
 }
