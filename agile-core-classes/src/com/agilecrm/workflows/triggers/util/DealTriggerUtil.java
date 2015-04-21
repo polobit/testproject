@@ -151,7 +151,7 @@ public class DealTriggerUtil
 		List<Trigger> triggersList = new ArrayList<Trigger>();
 
 		String oldMilestone = null;
-		
+
 		// If milestone is not empty, fetch triggers based on changed milestone
 		if (oldOpportunity != null)
 		{
@@ -165,8 +165,8 @@ public class DealTriggerUtil
 		triggerCampaign(contactsList, updatedOpportunity, oldMilestone, triggersList);
 	}
 
-	public static void triggerCampaign(List<Contact> contactsList,
-			Opportunity updatedOpportunity, String oldMilestone, List<Trigger> triggersList)
+	public static void triggerCampaign(List<Contact> contactsList, Opportunity updatedOpportunity, String oldMilestone,
+			List<Trigger> triggersList)
 	{
 		// if deal has no related contacts
 		if (contactsList.size() == 0)
@@ -291,9 +291,9 @@ public class DealTriggerUtil
 
 	public static List<Trigger> getTriggersForMilestoneChange(Opportunity opportunity, List<Trigger> triggers)
 	{
-		
+
 		// If triggers are not passed
-		if(triggers == null)
+		if (triggers == null)
 			triggers = TriggerUtil.getTriggersByCondition(Type.DEAL_MILESTONE_IS_CHANGED);
 
 		List<Trigger> updatedTriggers = new ArrayList<Trigger>();
@@ -335,6 +335,32 @@ public class DealTriggerUtil
 		}
 
 		return updatedTriggers;
+	}
+
+	public static void triggerBulkDealMilestoneChange(List<Opportunity> updatedDeals, List<Trigger> triggers)
+	{
+		for (Opportunity updatedDeal : updatedDeals)
+			triggerDealMilestoneChange(updatedDeal, triggers);
+	}
+
+	private static void triggerDealMilestoneChange(Opportunity updatedDeal, List<Trigger> triggers)
+	{
+		try
+		{
+			if (triggers.size() == 0)
+				return;
+
+			// Verifies trigger milestone with updated milestone
+			List<Trigger> milestoneTriggers = DealTriggerUtil.getTriggersForMilestoneChange(updatedDeal, triggers);
+
+			if (!milestoneTriggers.isEmpty())
+				DealTriggerUtil.triggerCampaign(updatedDeal.getContacts(), updatedDeal, null, milestoneTriggers);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("Exception occured while triggering bulk milestone change..." + e.getMessage());
+		}
 	}
 
 }

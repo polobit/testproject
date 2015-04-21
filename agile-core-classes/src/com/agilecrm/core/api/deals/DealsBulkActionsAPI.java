@@ -252,13 +252,8 @@ public class DealsBulkActionsAPI
 	    System.out.println("total deals -----" + deals.size());
 
 	    
-	    boolean canTrigger = TriggerUtil.getTriggersCountByCondition(Trigger.Type.DEAL_MILESTONE_IS_CHANGED) > 0 ? true
-				: false;
-
-		List<Trigger> triggers = new ArrayList<Trigger>();
-
-		if (canTrigger)
-			triggers = TriggerUtil.getTriggersByCondition(Trigger.Type.DEAL_MILESTONE_IS_CHANGED);
+	    // Get Deal Milestone change triggers
+	    List<Trigger> triggers = TriggerUtil.getTriggersByCondition(Trigger.Type.DEAL_MILESTONE_IS_CHANGED);
 	    
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
 	    for (Opportunity deal : deals)
@@ -275,35 +270,21 @@ public class DealsBulkActionsAPI
 		if (formJSON.has("milestone"))
 		    milestone_name = deal.milestone = formJSON.getString("milestone");
 
-		// After change - Trigger
-		Opportunity updatedOpportunity = deal;
+		// If there is change in pipeline or milestone
+		if(!oldPipelineId.equals(deal.pipeline_id)
+							|| !oldMilestone.equals(deal.milestone))
+			subList.add(deal);
 		
-		try
-		{
-			if(triggers.size() > 0)
-			{
-				// Trigger only if there is change in pipeline and milestone
-				if(!oldPipelineId.equals(updatedOpportunity.pipeline_id)
-						|| !oldMilestone.equals(updatedOpportunity.milestone))
-				{
-					List<Trigger> milestoneTriggers = DealTriggerUtil.getTriggersForMilestoneChange(updatedOpportunity, triggers);
-					
-					if(!milestoneTriggers.isEmpty())
-						DealTriggerUtil.triggerCampaign(updatedOpportunity.getContacts(), updatedOpportunity, oldMilestone, milestoneTriggers);
-				}
-			}
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			System.err.println("Exception occured while triggering bulk milestone change..." + e.getMessage());
-		}
 		
-		subList.add(deal);
 		if (subList.size() >= 100)
 		{
 		    Opportunity.dao.putAll(subList);
 		    OpportunityUtil.updateSearchDoc(subList);
+		    
+			// Trigger Bulk Deal Milestone change
+		    if(!triggers.isEmpty())
+		    	DealTriggerUtil.triggerBulkDealMilestoneChange(subList, triggers);
+
 		    System.out.println("total sublist -----" + subList.size());
 		    subList.clear();
 		}
@@ -313,8 +294,15 @@ public class DealsBulkActionsAPI
 	    {
 		Opportunity.dao.putAll(subList);
 		OpportunityUtil.updateSearchDoc(subList);
+		
+		// Trigger Bulk Deal Milestone change
+		if(!triggers.isEmpty())
+			 DealTriggerUtil.triggerBulkDealMilestoneChange(subList, triggers);
+		
 		System.out.println("total sublist -----" + subList.size());
 	    }
+	    
+	    
 	    ActivitySave.createBulkActionActivityForDeals(deals.size(), "BULK_DEAL_MILESTONE_CHANGE", milestone_name,
 		    "deals", pipeline_name);
 	    BulkActionNotifications.publishNotification("Track/Milestone changed for " + deals.size() + " Deals.");
