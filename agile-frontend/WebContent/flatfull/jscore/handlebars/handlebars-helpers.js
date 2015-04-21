@@ -5866,6 +5866,50 @@ $(function()
 		return html;
 		
 	});
+	
+	/*
+	 * Returns the url without query parameters appended by agile
+	 */
+	Handlebars.registerHelper('get_url', function(url)
+			{
+		if(url)
+		{
+		if(url.indexOf("fwd=cd") == -1)
+			return new Handlebars.SafeString(url);
+		
+		var delimiter;
+		if(url.indexOf("?fwd=cd") != -1)
+			delimiter = "?fwd=cd";
+		else
+			delimiter = "&fwd=cd";
+		
+		try{
+			if(delimiter)
+				return new Handlebars.SafeString(url.split(delimiter)[0]);
+		} catch(e){
+			console.log("Error in get_limiter:" +e);
+			return new Handlebars.SafeString(url);
+		}
+		}
+	return new Handlebars.SafeString(url);
+		
+         });
+	
+	/*
+	 * Returns first occurance of text after the given delimiter in the given message
+	 */
+	
+	Handlebars.registerHelper('get_limiter', function(message,delimiter)
+			{
+		try{
+			if(message && delimiter)
+				return message.slice(message.indexOf(delimiter) + delimiter.length, message.length);
+		} catch(e){
+			console.log("Error in get_limiter:" +e);
+			return message;
+		}
+		return message;
+			});
 });
 
 // helper function return created time for event
