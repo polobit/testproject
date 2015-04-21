@@ -645,10 +645,13 @@ public class ContactEmailUtil
 	 * @param {@Link Long} - minTime, {@Link Long} - maxTime
 	 * @return {@Link List<ContactEmail>}
 	 */
-	public static List<ContactEmail> getEmailsOpened(Long minTime,Long maxTime){
+    public static List<ContactEmail> getEmailsOpened(Long minTime,Long maxTime,boolean opened){
 		List<ContactEmail> contactEmailsList=null;
 		try {
-			contactEmailsList = dao.ofy().query(ContactEmail.class).filter("email_opened_at >= ", minTime).filter("email_opened_at <= ", maxTime).filter("is_email_opened", true).list();
+			if(opened)
+				contactEmailsList = dao.ofy().query(ContactEmail.class).filter("email_opened_at >= ", minTime).filter("email_opened_at <= ", maxTime).filter("is_email_opened", true).list();
+			else
+				contactEmailsList = dao.ofy().query(ContactEmail.class).filter("date_secs >= ", minTime*1000).filter("date_secs <= ", maxTime*1000).list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
