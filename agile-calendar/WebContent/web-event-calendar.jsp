@@ -109,7 +109,10 @@ if(scheduleid.contains(",")){
 	    us_prefs.pic  ="/img/gravatar.png";
 	profile.add(us_prefs.pic);
 	profile.add(_domain_user.name);
+	if(StringUtils.isNotEmpty(from_time) && StringUtils.isNotEmpty(end_time))
 	profile.add(from_time+" - "+end_time);
+	else
+		profile.add("No working hours");
 	profile.add(StringUtils.isNotEmpty(us_prefs.timezone)?us_prefs.timezone:AccountPrefsUtil.getAccountPrefs().timezone);
 	profile.add(String.valueOf(_domain_user.id));
 	profile_list.add(profile);
@@ -214,7 +217,7 @@ ObjectMapper mapper = new ObjectMapper();
 			<div class="col-sm-10 segment segment0">
 			<div class="numberlt" id="users_div">1</div>
 			<div class="event-title">Select a Person</div>
-			<div class="row">
+			<div class="row user_avatars hide">
 		
 			<!-- <div align="center" style="margin: 5px auto;width: 100%;"> -->
 			<% for(int k=0;k<=profile_list.size()-1;k++){
@@ -1202,6 +1205,7 @@ var slot_details=[];
 						else{
 							$(".fluidClass").addClass("col-sm-4");
 						}
+						$(".user_avatars").removeClass("hide");
 				}
 					// Get current date
 					var newDate = new Date();

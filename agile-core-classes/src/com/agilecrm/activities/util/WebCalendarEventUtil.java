@@ -1075,6 +1075,8 @@ public class WebCalendarEventUtil
 
 	public static String returnTimeInAmPm(String hours)
 	{
+		if ("null".equalsIgnoreCase(hours))
+			return null;
 		String str = hours.substring(0, 2);
 		String mins = hours.substring(3);
 		if ("00".equals(str) || "24".equals(str))
@@ -1094,5 +1096,4 @@ public class WebCalendarEventUtil
 		}
 
 	}
-
 }
