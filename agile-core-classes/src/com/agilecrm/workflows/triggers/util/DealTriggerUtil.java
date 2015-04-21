@@ -150,18 +150,23 @@ public class DealTriggerUtil
 		// Gets triggers with deal condition.
 		List<Trigger> triggersList = new ArrayList<Trigger>();
 
+		String oldMilestone = null;
+		
 		// If milestone is not empty, fetch triggers based on changed milestone
 		if (oldOpportunity != null)
+		{
 			triggersList = getTriggersForMilestoneChange(updatedOpportunity, null);
+			oldMilestone = oldOpportunity.milestone;
+		}
 		else
 			triggersList = TriggerUtil.getTriggersByCondition(condition);
 
 		// Trigger campaign
-		triggerCampaign(contactsList, oldOpportunity, updatedOpportunity, triggersList);
+		triggerCampaign(contactsList, updatedOpportunity, oldMilestone, triggersList);
 	}
 
-	public static void triggerCampaign(List<Contact> contactsList, Opportunity oldOpportunity,
-			Opportunity updatedOpportunity, List<Trigger> triggersList)
+	public static void triggerCampaign(List<Contact> contactsList,
+			Opportunity updatedOpportunity, String oldMilestone, List<Trigger> triggersList)
 	{
 		// if deal has no related contacts
 		if (contactsList.size() == 0)
@@ -172,7 +177,7 @@ public class DealTriggerUtil
 			for (Trigger trigger : triggersList)
 			{
 				WorkflowSubscribeUtil.subscribeDeferred(contactsList, trigger.campaign_id,
-						new JSONObject().put("deal", getOpportunityJSONForTrigger(updatedOpportunity, oldOpportunity)));
+						new JSONObject().put("deal", getOpportunityJSONForTrigger(updatedOpportunity, oldMilestone)));
 			}
 		}
 		catch (Exception e)
@@ -181,7 +186,7 @@ public class DealTriggerUtil
 		}
 	}
 
-	public static JSONObject getOpportunityJSONForTrigger(Opportunity opportunity, Opportunity oldOpportunity)
+	public static JSONObject getOpportunityJSONForTrigger(Opportunity opportunity, String oldMilestone)
 	{
 		try
 		{
@@ -227,8 +232,8 @@ public class DealTriggerUtil
 			opportunityJSON.put("expected_value", getLongFromDouble(opportunity.expected_value));
 
 			// If deal milestone is changed, add old one
-			if (oldOpportunity != null)
-				opportunityJSON.put("old_milestone", oldOpportunity.milestone);
+			if (oldMilestone != null)
+				opportunityJSON.put("old_milestone", oldMilestone);
 
 			return opportunityJSON;
 		}
@@ -325,6 +330,7 @@ public class DealTriggerUtil
 		}
 		catch (Exception e)
 		{
+			System.err.println("Exception occured in getting triggers for milestone..." + e.getMessage());
 			e.printStackTrace();
 		}
 

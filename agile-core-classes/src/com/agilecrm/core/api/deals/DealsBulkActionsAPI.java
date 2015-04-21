@@ -263,8 +263,10 @@ public class DealsBulkActionsAPI
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
 	    for (Opportunity deal : deals)
 	    {
-	    // Before change - Trigger
-		Opportunity oldOpportunity = deal;
+		
+		// For triggers
+	    Long oldPipelineId = deal.getPipeline_id();
+		String oldMilestone = deal.milestone;
 			
 		if (formJSON.has("pipeline"))
 		    deal.pipeline_id = formJSON.getLong("pipeline");
@@ -281,10 +283,13 @@ public class DealsBulkActionsAPI
 			if(triggers.size() > 0)
 			{
 				// Trigger only if there is change in pipeline and milestone
-				if(!oldOpportunity.pipeline_id.equals(updatedOpportunity.pipeline_id)
-						|| !oldOpportunity.milestone.equals(updatedOpportunity.milestone))
+				if(!oldPipelineId.equals(updatedOpportunity.pipeline_id)
+						|| !oldMilestone.equals(updatedOpportunity.milestone))
 				{
-					DealTriggerUtil.triggerCampaign(updatedOpportunity.getContacts(), oldOpportunity, updatedOpportunity, DealTriggerUtil.getTriggersForMilestoneChange(updatedOpportunity, triggers));
+					List<Trigger> milestoneTriggers = DealTriggerUtil.getTriggersForMilestoneChange(updatedOpportunity, triggers);
+					
+					if(!milestoneTriggers.isEmpty())
+						DealTriggerUtil.triggerCampaign(updatedOpportunity.getContacts(), updatedOpportunity, oldMilestone, milestoneTriggers);
 				}
 			}
 		}
