@@ -449,11 +449,11 @@ var ContactsRouter = Backbone.Router.extend({
 			{
 				try
 				{
-					$("#timeline", $(App_Contacts.contactDetailView.el)).isotope('remove', $(result), function(ele)
-					{
-						timeline_collection_view.queue.running = false;
-						timeline_collection_view.queue.next();
-					});
+						$("#timeline", $(App_Contacts.contactDetailView.el)).isotope('remove', $(result), function(ele)
+								{
+									timeline_collection_view.queue.running = false;
+									timeline_collection_view.queue.next();
+								});
 				}
 				catch(err)
 				{
