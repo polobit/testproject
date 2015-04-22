@@ -112,7 +112,7 @@ if(scheduleid.contains(",")){
 	if(StringUtils.isNotEmpty(from_time) && StringUtils.isNotEmpty(end_time))
 	profile.add(from_time+" - "+end_time);
 	else
-		profile.add("No working hours");
+		profile.add("Today is holiday");
 	profile.add(StringUtils.isNotEmpty(us_prefs.timezone)?us_prefs.timezone:AccountPrefsUtil.getAccountPrefs().timezone);
 	profile.add(String.valueOf(_domain_user.id));
 	profile_list.add(profile);
