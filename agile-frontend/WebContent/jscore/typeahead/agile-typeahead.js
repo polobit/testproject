@@ -7,6 +7,12 @@ var TYPEHEAD_TAGS = {};
 //Saves map of key: name and value: contact email
 var TYPEHEAD_EMAILS = {};
 
+// Saves Contact objects
+var SELECTED_CONTACT = {};
+
+// Saves map of key: name and value: contact name
+var TYPEHEAD_NAMES = {};
+
 /**
  * This script file defines simple search keywords entered in input fields are 
  * sent to back end as query through bootstrap typeahead. Methods render, matcher 
@@ -33,7 +39,7 @@ var TYPEHEAD_EMAILS = {};
  * @author Yaswanth
  * 
  */
-function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch, isDealSearch) {
+function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url, isEmailSearch, isDealSearch, appendNameToEmail) {
 
     // Turn off browser default auto complete
     $('#' + id, el).attr("autocomplete", "off");
@@ -127,9 +133,15 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         		 * Stores contacts in a map with first_name+last_name as key and id as value
         		 */
         		$.each(data, function (index, item){
-        			tag_name = items_list[index];
+         			tag_name = items_list[index];
+        			// Used for related to contacts for ids
         			TYPEHEAD_TAGS[tag_name] = item.id;
+        			// Used for related to contacts for emails in send-email
         			TYPEHEAD_EMAILS[tag_name] = getContactEmail(item);
+        			// Used for related to contacts for details in popover
+        			SELECTED_CONTACT[tag_name] = item;
+        			
+        			TYPEHEAD_NAMES[tag_name] = getContactName(item);
         		});
 
         		/*
@@ -242,19 +254,41 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 
             // Return if items are not defined and it is not search in nav bar
             if (!items) return;
+            
+            // Filling contact details popover
+            var ele = getTemplate('contact-detail-popover', SELECTED_CONTACT[items]);
 
             if(isEmailSearch)
             {
                 // If email already exists returns
                $.each($('#' + id, el).closest("div.controls").find(".tags").children('li'), function (index, tag){
 
-                    if ($(tag).attr('data') == TYPEHEAD_EMAILS[items]){
+                    if ($(tag).attr('data') == TYPEHEAD_EMAILS[items] || ~($(tag).attr('data').indexOf(TYPEHEAD_EMAILS[items]))){
                     	email_not_exist = false;
                         return;
                     }
                 });
                 if(email_not_exist && (TYPEHEAD_EMAILS[items] != "No email"))
-                	$('#' + id, el).closest("div.controls").find(".tags").append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_EMAILS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
+                {
+                	var data = TYPEHEAD_EMAILS[items];
+                	var name = TYPEHEAD_NAMES[items];
+                	
+                	if(appendNameToEmail && data && name && Object.keys(TYPEHEAD_NAMES).length != 0)
+                	{
+                		// Replace < or > with spaces
+                		if(name.indexOf("<") != -1 || name.indexOf(">") != -1)
+                		{
+                			name = name.replace(/</g, " ");
+                			name = name.replace(/>/g, " ");
+                		}
+                		
+                		// Don't append email
+                		if(name.trim() != data.trim())
+                			data = name.trim() + ' <'+ data.trim()+'>';
+                	}
+                	
+                	$('#' + id, el).closest("div.controls").find(".tags").append('<li class="tag"  style="display: inline-block;" data="' + data + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
+                }
             	
             }
             else if(isDealSearch){
@@ -283,7 +317,9 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 	
 	            // add tag
 	            if (tag_not_exist)
-	            	$('.tags', el).append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
+	            	$('.tags', el).append("<li class='tag' style='display: inline-block;' data='" + TYPEHEAD_TAGS[items] + "'><a class='related_to_popover' href='#contact/" + TYPEHEAD_TAGS[items] + 
+	            			"' data-toggle='popover' data-placement='top' title='' data-content='" + ele + "' data-original-title='" + items_temp + "'>" + items_temp + "</a><a class='close' id='remove_tag'>&times</a></li>");
+            
             }
         },
         // Needs to be overridden to set timedelay on search
@@ -316,7 +352,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
                 		 var email_value = ($('#' + id, el).val()).slice(0,-1);
                 		 $.each($('#' + id, el).closest("div.controls").find(".tags").children('li'), function (index, tag){
 
-                             if ($(tag).attr('data') == email_value){
+                             if ($(tag).attr('data') == email_value || ~($(tag).attr('data').indexOf(email_value))){
                             	 email_check = false;
                                  return;
                              }
@@ -385,6 +421,21 @@ $('#remove_tag').die().live('click', function (event)
 {
     event.preventDefault();
     $(this).parent().remove();
+});
+
+// Shows contact details popover on mouse enter
+$('.contacts > li').live('mouseenter', function () {
+	 $(this).find(".related_to_popover").popover('show');
+});
+
+// Hides popover
+$('.contacts > li').live('mouseleave', function(){
+	$(this).find(".related_to_popover").popover('hide');
+});
+
+// Hides popover on click
+$('.contacts > li').live('click', function(){
+	$(this).find(".related_to_popover").popover('hide');
 });
 
 /* Customization of Type-Ahead data */

@@ -35,7 +35,16 @@ body {
 	color: #4A90E2;
 }
 
+.selected_image{
+	background":"#4A90E2;
+}
+
 #avatar {
+	margin: 15px auto;
+	display: block;
+	height: 95px;
+}
+#multi-user-avatar{
 	margin: 15px auto;
 	display: block;
 	height: 95px;
@@ -156,6 +165,10 @@ vertical-align: middle;
 	float: right;
 	font-size: 14px;
 	color: #8E8F8F;
+}
+
+.blockdiv {
+	display: none;
 }
 
 .timezone1 {
@@ -447,4 +460,3 @@ color: #8E8F8F;
 {
 	box-shadow:none;
 }
-
