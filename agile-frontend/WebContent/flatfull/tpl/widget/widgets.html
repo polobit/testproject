@@ -78,17 +78,14 @@
 
 <script id="widgets-collection-template" type="text/html">
 {{#unless this.length}}
-	<div class="widget_container">
-		<div class="widget_header">
-			<div class="pull-left">
-				<strong><i class="icon-puzzle-piece"></i>&nbsp;&nbsp;Try some widgets</strong>
-			</div></div>
-		<div class="widgets">
-			<div class="m-sm">
-				<p>See more information about your contacts with widgets. Choose from a range of widgets - social, communications, customer billing, support and more.</p>
-				<div class="clearfix"></div>
-			</div>
-			<a class="btn btn-sm btn-primary m-t-none m-r-sm m-b-sm m-l-sm" href='#add-widget'><i class="icon-plus-sign"></i>&nbsp;&nbsp;Add widgets</a>
+	<div class="panel">
+		<h4 class="widget_header_name font-thin padder m-b-none b-b p-b-sm p-r-none b-light">
+			<i class="icon-puzzle-piece"></i>&nbsp;&nbsp;Try some widgets
+		</h4>
+		<div class="wrapper-sm text-base">			
+			<p>See more information about your contacts with widgets. Choose from a range of widgets - social, communications, customer billing, support and more.</p>
+			<div class="clearfix"></div>			
+			<a class="btn btn-sm btn-primary m-t-none" href='#add-widget'>Add widgets</a>
 			<div class="clearfix"></div>
 		</div>
 	</div>
