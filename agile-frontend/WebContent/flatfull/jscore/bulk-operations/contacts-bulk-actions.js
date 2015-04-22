@@ -885,7 +885,7 @@ $(function()
 
 						$('body')
 								.find('#bulk-select')
-								.css('display', 'block')
+								//.css('display', 'block')
 								.html(
 										"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' >Select all " + getAvailableContacts() + " contacts</a>");
 					});
