@@ -11,7 +11,8 @@ function agile_get_emails()
 				{ name_from : "Devika Jakkannagari" },
 				{ email_to : "abhi@gashok.mygbiz.com;rahul@gashok.mygbiz.com;dheeraj@gashok.mygbiz.com;chandan@gashok.mygbiz.com;abhiranjan@gashok.mygbiz.com" },
 				{ name_to : "Abhi;;D j p;;" }, { email_cc : "devikatest1@gmail.com;devikatest@gmail.com;teju@gmail.com" }, { name_cc : "Dev T1;;Teju" },
-				{ email : "devikatest@gmail.com" }, { email : "test1@gmail.com" }, { email : "test1@gmail.com" }, { email : "pbx.kumar@gmail.com" }
+				{ email : "devikatest@gmail.com" }, { email : "test1@gmail.com" }, { email : "test1@gmail.com" }, { email : "pbx.kumar@gmail.com" },
+				{email_body : "Testing local emails body extractor."},{subject : "Testing local subject extractor."}
 		];
 
 		// emails = [{email:"devikatest@gmail.com"}];
@@ -38,6 +39,13 @@ function validateEmails(emails){
 function parse_emails(emails)
 {
 	return $.merge(collate_emails(emails, "from"), collate_emails(emails, "to")).concat(collate_emails(emails, "cc")).concat(agile_grep(emails, "email"));
+}
+
+function getSubBody(){
+	var tempMsg = {};
+	tempMsg.subject = agile_grep(agile_get_emails(),'subject');
+	tempMsg.body = agile_grep(agile_get_emails(),'email_body');
+	return tempMsg;
 }
 
 // Finds email_key and then finds name_key and collates them
