@@ -34,15 +34,17 @@
 		</div>
 		</div>
 		{{/if}}
-    <div class="col-md-3 col-sm-3 pull-right">
-        <div class="wrapper" id="addview">
-            <h4>
+    <div class="col-md-3 col-sm-3 pull-right p-none">
+		<div class="data-block">
+        <div class="wrapper-xs " id="addview">
+            <h4 class="m-t-none h4 m-b-sm">
                 What are Email Reports?
             </h4>
           
             <p>Customize your reports based on a variety of tags and filters and receive them periodically to constantly be in touch with your sales cycle and pipeline. Use the information to improve lead nurturing and customer retention strategies.
 			</p>
         </div>
+		</div>
     </div>
 </div>
 </div>
@@ -50,7 +52,7 @@
 </script>
 
 <script id="report-model-template" type="text/html">
-	<td data="{{id}}" class="data c-p"><div class="table-resp"><a>{{name}}</a></div></td>
+	<td data="{{id}}" class="data c-p"><div class="table-resp"><a class="text-cap">{{name}}</a></div></td>
 	<td>
 		<div class="table-resp">
     		{{ucfirst duration}}

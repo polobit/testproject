@@ -60,7 +60,10 @@
                         <li><a href="#" id="bulk-tags">Add tags</a></li>
                     </ul>
                 </div>
-                <table id="contacts_search" class="table table-striped agile-ellipsis-dynamic onlySorting" url="core/api/contacts/bulk" style="overflow: scroll">
+				<div class="wrapper-md">
+				<div class="row">
+				<div class="col-md-12 col-sm-12 col-xs-12">
+                <table id="contacts_search" class="table table-striped agile-ellipsis-dynamic onlySorting panel" url="core/api/contacts/bulk" style="overflow: scroll">
                     <thead>
                         <tr style="text-transform: capitalize;">
                             {{reportsContactTableHeadings "fields_set"}}
@@ -69,6 +72,9 @@
                     <tbody id="report-search-model-list" class="model-list-cursor" route="contact/" style="overflow: scroll;">
                     </tbody>
                 </table>
+				</div>
+				</div>
+			</div>
             </div>
         </div>
 		{{else}}
