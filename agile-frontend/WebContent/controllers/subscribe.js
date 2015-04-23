@@ -643,7 +643,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			type:"GET",
 			success: function(data)
 			{
-				if(data.email_api == "MANDRILL")
+				if(data && data.email_api == "MANDRILL")
 					IS_HAVING_MANDRILL = true;
 					
 			}
