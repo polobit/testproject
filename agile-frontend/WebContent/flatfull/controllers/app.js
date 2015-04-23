@@ -87,7 +87,7 @@ function currentRoute(route)
 	// disposeEvents();
 
 	// load_clickdesk_code();
-	 showUpgradeNoty();
+	// showUpgradeNoty();
 
 	 // Check the user permission to view the current route.
 	 if(CURRENT_DOMAIN_USER)
