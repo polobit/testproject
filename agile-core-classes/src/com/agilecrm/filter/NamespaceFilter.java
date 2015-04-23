@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.agilecrm.Globals;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
-import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
@@ -32,7 +31,8 @@ import com.google.appengine.api.utils.SystemProperty;
  * </p>
  * 
  */
-public class NamespaceFilter implements Filter {
+public class NamespaceFilter implements Filter
+{
 	/**
 	 * Sets the namespace to the subdomain in the request url, when namespace is
 	 * not aready set or request is to create a new domain, forgot domain.
@@ -42,8 +42,8 @@ public class NamespaceFilter implements Filter {
 	 * @return
 	 * @throws IOException
 	 */
-	private boolean setNamespace(ServletRequest request,
-			ServletResponse response) throws IOException {
+	private boolean setNamespace(ServletRequest request, ServletResponse response) throws IOException
+	{
 		// Reset the thread local, which is again set after user loggedin or
 		// when registered () i.e., AgileAuthFilter redirects to login page if
 		// userInfo is null
@@ -55,32 +55,28 @@ public class NamespaceFilter implements Filter {
 			return true;
 
 		// If Localhost - just return
-		if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development) {
+		if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+		{
 			return true;
 		}
 
 		// If it is choose domain, just return
-		if (((HttpServletRequest) request).getRequestURI().contains(
-				"choose-domain"))
+		if (((HttpServletRequest) request).getRequestURI().contains("choose-domain"))
 			return true;
 
 		// If it is enter domain, just return
-		if (((HttpServletRequest) request).getRequestURI().contains(
-				"enter-domain"))
+		if (((HttpServletRequest) request).getRequestURI().contains("enter-domain"))
 			return true;
 
 		// If it is forgot domain, just return
-		if (((HttpServletRequest) request).getRequestURI().contains(
-				"forgot-domain"))
+		if (((HttpServletRequest) request).getRequestURI().contains("forgot-domain"))
 			return true;
 
-		if (((HttpServletRequest) request).getRequestURI()
-				.contains("/_ah/mail"))
+		if (((HttpServletRequest) request).getRequestURI().contains("/_ah/mail"))
 			return true;
 
 		// Read Subdomain
-		String subdomain = NamespaceUtil.getNamespaceFromURL(request
-				.getServerName());
+		String subdomain = NamespaceUtil.getNamespaceFromURL(request.getServerName());
 		System.out.println(subdomain);
 
 		// Excludes if it is running in backends
@@ -99,26 +95,26 @@ public class NamespaceFilter implements Filter {
 
 		// If not agilecrm.com or helptor.com etc. - show chooseDomain
 		if (!Arrays.asList(Globals.URLS).contains(url.toLowerCase())
-				&& !url.toLowerCase().contains(Globals.SUB_VERSION_URL)) {
+				&& !url.toLowerCase().contains(Globals.SUB_VERSION_URL))
+		{
 			redirectToChooseDomain(request, response);
 			return false;
 		}
 
 		// If request is from register and domain is "my", request is forwarded
 		// to register jsp without setting domain
-		if (((HttpServletRequest) request).getRequestURI()
-				.contains("/register") && "my".equals(subdomain))
+		if (((HttpServletRequest) request).getRequestURI().contains("/register") && "my".equals(subdomain))
 			return true;
 
 		// If my or any special domain - support etc, choose subdomain
-		if (Arrays.asList(Globals.LOGIN_DOMAINS).contains(subdomain)) {
+		if (Arrays.asList(Globals.LOGIN_DOMAINS).contains(subdomain))
+		{
 			redirectToChooseDomain(request, response);
 			return false;
 		}
 
 		// Set the subdomain as name space
-		System.out.println("Setting the domain " + subdomain + " "
-				+ ((HttpServletRequest) request).getRequestURL());
+		System.out.println("Setting the domain " + subdomain + " " + ((HttpServletRequest) request).getRequestURL());
 		NamespaceManager.set(subdomain);
 		return true;
 	}
@@ -130,10 +126,12 @@ public class NamespaceFilter implements Filter {
 	 * @param req
 	 * @return
 	 */
-	private static String getFullUrl(HttpServletRequest req) {
+	private static String getFullUrl(HttpServletRequest req)
+	{
 		String reqUrl = req.getRequestURL().toString();
 		String queryString = req.getQueryString(); // d=789
-		if (queryString != null) {
+		if (queryString != null)
+		{
 			reqUrl += "?" + queryString;
 		}
 		return reqUrl;
@@ -146,8 +144,8 @@ public class NamespaceFilter implements Filter {
 	 * @param response
 	 * @return
 	 */
-	private boolean setupGoogleAppsNameSpace(ServletRequest request,
-			ServletResponse response) {
+	private boolean setupGoogleAppsNameSpace(ServletRequest request, ServletResponse response)
+	{
 		return true;
 	}
 
@@ -157,17 +155,21 @@ public class NamespaceFilter implements Filter {
 	 * @param request
 	 * @param response
 	 */
-	public void redirectToChooseDomain(ServletRequest request,
-			ServletResponse response) {
+	public void redirectToChooseDomain(ServletRequest request, ServletResponse response)
+	{
 		// Redirect to choose domain page if not localhost - on localhost - we
 		// do it on empty namespace
 		if (!request.getServerName().equalsIgnoreCase("localhost")
-				&& !request.getServerName().equalsIgnoreCase("127.0.0.1")) {
-			try {
+				&& !request.getServerName().equalsIgnoreCase("127.0.0.1"))
+		{
+			try
+			{
 				HttpServletResponse httpResponse = (HttpServletResponse) response;
 
 				httpResponse.sendRedirect(Globals.CHOOSE_DOMAIN);
-			} catch (Exception e) {
+			}
+			catch (Exception e)
+			{
 				e.printStackTrace();
 
 			}
@@ -184,23 +186,24 @@ public class NamespaceFilter implements Filter {
 	 * @param chain
 	 */
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response,
-			FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+			ServletException
+	{
 		System.out.println(request.getServerName());
 
-		DomainUser domainUser = new DomainUser(null, "yaswanth@invox.com",
-				"hungry", "password", true, true);
-		try {
-			//domainUser.save();
-		} catch (Exception e) { // TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		/*
+		 * DomainUser domainUser = new DomainUser(null, "yaswanth@invox.com",
+		 * "hungry", "password", true, true); try { //domainUser.save(); } catch
+		 * (Exception e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 */
 
 		// If URL path starts with "/backend", then request is forwarded without
 		// namespace verification i.e., no filter on url which starts with
 		// "/backend" (crons, StripeWebhooks etc..)
 		String path = ((HttpServletRequest) request).getRequestURI();
-		if (path.startsWith("/backend")) {
+		if (path.startsWith("/backend"))
+		{
 			chain.doFilter(request, response);
 			return;
 		}
@@ -217,12 +220,14 @@ public class NamespaceFilter implements Filter {
 	}
 
 	@Override
-	public void init(FilterConfig arg0) throws ServletException {
+	public void init(FilterConfig arg0) throws ServletException
+	{
 		// Nothing to do
 	}
 
 	@Override
-	public void destroy() {
+	public void destroy()
+	{
 		// Nothing to do
 	}
 }
