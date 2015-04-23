@@ -276,6 +276,17 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				// initZeroClipboard("api_key_code_icon", "api_key_code");
 				// initZeroClipboard("api_track_code_icon", "api_track_code");
 
+				try
+				{
+					if(ACCOUNT_PREFS.plan.plan_type.split("_")[0]=="PRO")
+						$("#tracking-webrules, .tracking-webrules-tab").hide();
+					else
+						$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
+				}
+				catch(e)
+				{
+					$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
+				}
 			} });
 
 			

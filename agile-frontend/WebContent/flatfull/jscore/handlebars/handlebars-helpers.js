@@ -1467,6 +1467,11 @@ $(function()
 
 								return " ";
 				});
+				
+				Handlebars.registerHelper("getBase64Domain", function()
+				{
+								return window.btoa(window.location.host.split(".")[0]);
+				});
 
 				// Gets date in given range
 				Handlebars.registerHelper('date-range', function(from_date_string, no_of_days, options)

@@ -30,3 +30,10 @@ function agile_setEmailFromUrl()
 		}
 	}
 }
+
+function _agile_set_whitelist(base64Domain)
+{
+	var oldBase64Domain = agile_read_cookie('agile-domain');
+	if (!oldBase64Domain || (oldBase64Domain != base64Domain))
+		agile_create_cookie("agile-domain", base64Domain, 365 * 5);
+}
