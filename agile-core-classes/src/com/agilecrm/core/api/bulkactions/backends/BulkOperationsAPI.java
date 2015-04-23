@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -21,11 +22,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.BulkActionLog;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.bulkaction.deferred.CampaignSubscriberDeferredTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
@@ -42,6 +45,7 @@ import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
+import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.DomainUser;
@@ -60,8 +64,10 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreInputStream;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
-import com.thirdparty.Mailgun;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
@@ -213,58 +219,77 @@ public class BulkOperationsAPI
 			e.printStackTrace();
 		}
 
+		DomainUser user = DomainUserUtil.getDomainUser(current_user_id);
+		if (user == null)
+			return;
+
 		ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter,
 				contact_ids, 200, current_user_id);
 
+		int count = 0;
 		while (idsFetcher.hasNext())
 		{
-			System.out.println(idsFetcher.next());
+
+			try
+			{
+				Set<Key<Contact>> contactSet = idsFetcher.next();
+				count += contactSet.size();
+				CampaignSubscriberDeferredTask task = new CampaignSubscriberDeferredTask(current_user_id, workflowId,
+						NamespaceManager.get(), contactSet, new UserInfo(user));
+
+				// Add to queue
+				Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_SUBSCRIBE_SUBTASK_QUEUE);
+				queue.add(TaskOptions.Builder.withPayload(task));
+
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+
 		}
 
-		ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids,
-				current_user_id);
+		System.out.println("completed assigning" + NamespaceManager.get() + ", " + workflowId + ", " + filter + ", "
+				+ dynamicFilter + ", " + current_user_id + ", " + contact_ids);
 
-		// Sets limit on free user
-		fetcher.setLimits();
-
-		// while (fetcher.hasNextSet())
-		// {
-		// ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
-		// WorkflowSubscribeUtil.subscribeDeferred(fetcher.nextSet(),
-		// workflowId);
-
-		// }
-
-		int count = fetcher.getTotalFetchedCount();
-		count = (count == 0) ? fetcher.getAvailableContacts() : count;
-
-		System.out.println("contacts : " + fetcher.getAvailableContacts());
-		System.out.println("companies : " + fetcher.getAvailableCompanies());
-
-		System.out.println("Total contacts subscribed to campaign " + workflowId + " is " + String.valueOf(count));
-
-		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ENROLL_CAMPAIGN, String.valueOf(count));
-
-		try
-		{
-			Mailgun.sendMail(
-					"campaigns@agile.com",
-					"Campaign Observer",
-					"naresh@agilecrm.com",
-					null,
-					null,
-					"Campaign Initiated in " + NamespaceManager.get(),
-					null,
-					"Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " + current_user_id
-							+ "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter
-							+ "<br><br>Fetched Count: " + count + "<br><br>Filter count: "
-							+ fetcher.getAvailableContacts(), null);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			System.err.println("Exception occured while sending campaign initiated mail " + e.getMessage());
-		}
+		/*
+		 * ContactFilterResultFetcher fetcher = new
+		 * ContactFilterResultFetcher(id, dynamicFilter, 200, contact_ids,
+		 * current_user_id);
+		 * 
+		 * // Sets limit on free user fetcher.setLimits();
+		 * 
+		 * // while (fetcher.hasNextSet()) // { //
+		 * ContactUtil.deleteContactsbyListSupressNotification
+		 * (fetcher.nextSet()); //
+		 * WorkflowSubscribeUtil.subscribeDeferred(fetcher.nextSet(), //
+		 * workflowId);
+		 * 
+		 * // }
+		 * 
+		 * int count = fetcher.getTotalFetchedCount(); count = (count == 0) ?
+		 * fetcher.getAvailableContacts() : count;
+		 * 
+		 * System.out.println("contacts : " + fetcher.getAvailableContacts());
+		 * System.out.println("companies : " + fetcher.getAvailableCompanies());
+		 * 
+		 * System.out.println("Total contacts subscribed to campaign " +
+		 * workflowId + " is " + String.valueOf(count));
+		 * 
+		 * BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.
+		 * ENROLL_CAMPAIGN, String.valueOf(count));
+		 * 
+		 * try { Mailgun.sendMail( "campaigns@agile.com", "Campaign Observer",
+		 * "naresh@agilecrm.com", null, null, "Campaign Initiated in " +
+		 * NamespaceManager.get(), null,
+		 * "Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " +
+		 * current_user_id + "<br><br>Campaign-id: " + workflowId +
+		 * "<br><br>Filter-id: " + filter + "<br><br>Fetched Count: " + count +
+		 * "<br><br>Filter count: " + fetcher.getAvailableContacts(), null); }
+		 * catch (Exception e) { e.printStackTrace(); System.err.println(
+		 * "Exception occured while sending campaign initiated mail " +
+		 * e.getMessage()); }
+		 */
 
 		Workflow workflow = WorkflowUtil.getWorkflow(workflowId);
 		String workflowname = workflow.name;
