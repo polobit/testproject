@@ -113,22 +113,24 @@ public class SetProperty extends TaskletAdapter
 			{
 			case NUMBER:
 				if (field == null)
-					field = numberSetProperty(true, updated_field, updated_value, field, campaignJSON, subscriberJSON);
+					field = numberSetProperty(true, updated_field, updated_value, new ContactField(updated_field,
+							updated_value, null), campaignJSON, subscriberJSON);
 				else
 					field = numberSetProperty(false, updated_field, updated_value, field, campaignJSON, subscriberJSON);
 				break;
 
 			case DATE:
 				if (field == null)
-					field = dateSetProperty(true, updated_field, updated_value, field, campaignJSON, subscriberJSON);
+					field = dateSetProperty(true, updated_field, updated_value, new ContactField(updated_field,
+							updated_value, null), campaignJSON, subscriberJSON);
 				else
 					field = dateSetProperty(false, updated_field, updated_value, field, campaignJSON, subscriberJSON);
 				break;
 
 			case LIST:
 				if (field == null)
-					field = listSetProperty(true, updated_field, updated_value, field, campaignJSON, subscriberJSON,
-							customFieldDef);
+					field = listSetProperty(true, updated_field, updated_value, new ContactField(updated_field,
+							updated_value, null), campaignJSON, subscriberJSON, customFieldDef);
 				else
 					field = listSetProperty(true, updated_field, updated_value, field, campaignJSON, subscriberJSON,
 							customFieldDef);
