@@ -56,7 +56,7 @@
 		{{#each this}}
 			<li class="list-group-item r-none b-l-none b-r-none clickdesk_chat_hover" url="{{chat_history_url}}">
 			 <div class="clear">
-				<p class="overflow-elipsis"><a class="text-ellipsis" href="{{chat_history_url}}" target="_blank" >{{user_message}}</a></p>				
+				<p class="text-flow-ellipsis"><a href="{{chat_history_url}}" target="_blank" >{{user_message}}</a></p>				
 				<div class="clickdesk_chat_tab_link m-n" style="float:left;display:none;">
 					<a url="{{chat_history_url}}" class="c-p btn btn-xs btn-default" id="clickdesk_chat_show" rel="tooltip" title="Show chat transcript" data-attr="{{bindData this}}">Show</a>
 				</div>
@@ -72,7 +72,7 @@
 	{{#each this}}
 		<li class="list-group-item r-none b-l-none b-r-none clickdesk_ticket_hover" url="{{ticket_url}}">
 			<div class="clear">
-				<p class="overflow-elipsis"><a href="{{ticket_url}}" target="_blank" class="text-ellipsis">{{subject}}</a></p>
+				<p class="text-flow-ellipsis"><a href="{{ticket_url}}" target="_blank">{{subject}}</a></p>
 				<div class="clickdesk_ticket_tab_link m-n" style="float:left;display:none;">
 					<a url="{{ticket_url}}" id="clickdesk_ticket_show" class="c-p btn btn-xs btn-default" rel="tooltip" title="Show more information of ticket" data-attr="{{bindData this}}">Show</a>
 				</div>

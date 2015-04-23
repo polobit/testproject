@@ -447,11 +447,18 @@ var ContactsRouter = Backbone.Router.extend({
 		if(App_Contacts.contactDetailView!=undefined && App_Contacts.contactDetailView.model!=undefined && App_Contacts.contactDetailView.model.collection!=undefined){
 			getTemplate("timeline1", App_Contacts.contactDetailView.model.collection.models, undefined, function(result)
 			{
-				$("#timeline", $(App_Contacts.contactDetailView.el)).isotope('remove', $(result), function(ele)
+				try
 				{
-					timeline_collection_view.queue.running = false;
-					timeline_collection_view.queue.next();
-				});
+						$("#timeline", $(App_Contacts.contactDetailView.el)).isotope('remove', $(result), function(ele)
+								{
+									timeline_collection_view.queue.running = false;
+									timeline_collection_view.queue.next();
+								});
+				}
+				catch(err)
+				{
+					console.log(err);
+				}
 			});
 		}
 		
