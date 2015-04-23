@@ -16,7 +16,7 @@ function agile_get_emails()
 		];
 
 		// emails = [{email:"devikatest@gmail.com"}];
-		//console.log(JSON.stringify(emails));
+		console.log(JSON.stringify(emails));
 
 		return validateEmails(parse_emails(emails));
 	}
@@ -42,9 +42,28 @@ function parse_emails(emails)
 }
 
 function getSubBody(){
+	var emails = [];
+
+	// If Local Host,
+	if (Is_Localhost)
+	{
+		emails = [
+				{email_body : "Testing local emails body extractor."},{subject : "Testing local subject extractor."}
+		];
+
+		// emails = [{email:"devikatest@gmail.com"}];
+		console.log(JSON.stringify(emails));
+	}
+	try{
+		// Google Matches in 2D format
+		emails = google.contentmatch.getContentMatches();
+	} catch(error){
+		console.log(error);
+	}
+	
 	var tempMsg = {};
-	tempMsg.subject = agile_grep(agile_get_emails(),'subject');
-	tempMsg.body = agile_grep(agile_get_emails(),'email_body');
+	tempMsg.subject = agile_grep(emails,'subject');
+	tempMsg.body = agile_grep(emails,'email_body');
 	return tempMsg;
 }
 

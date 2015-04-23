@@ -43,7 +43,7 @@ $(function()
 				agile_build_form_template($(this), "gadget-note", ".gadget-notes-tab-list", function()
 				{
 					$('#subject',el).val(email.subject);
-					$('#subject',el).val(email.body);
+					$('#description',el).val(email.body);
 					// ------ Show notes tab. ------
 					$('.gadget-notes-tab a', el).tab('show');
 					$('.gadget-notes-tab-list', el).show();
