@@ -36,7 +36,7 @@
                 </div>
 			{{else}}
 			    {{#has_email_account_limit_reached}}
-				<a class="btn pull-left" disabled="disabled">Enable</a>
+				<a class="btn pull-left btn-sm btn-default" disabled="disabled">Enable</a>
 				{{#check_plan "FREE"}}
 				<div class="pull-left m-l-sm text-xs" style="line-height:13px;width:149px"> Upgrade to Pro plan to add more accounts</div>
 				{{/check_plan}}
@@ -78,7 +78,7 @@
 			{{else}}
 				<div class="m-t-sm">
 			    {{#has_email_account_limit_reached}}
-				<a class="btn pull-left" disabled="disabled">Enable</a>
+				<a class="btn pull-left btn-sm btn-default" disabled="disabled">Enable</a>
 				{{#check_plan "FREE"}}
 				<div class="pull-left m-l-sm text-xs" style="line-height:13px;width:149px"> Upgrade to Pro plan to add more accounts</div>
 				{{/check_plan}}

@@ -2,6 +2,11 @@
  * Creates backbone router to access preferences of the user (email templates,
  * email (gmail/IMAP), notifications and etc..).
  */
+
+HAS_EMAIL_ACCOUNT_LIMIT_REACHED = false;
+
+EMAIL_PREFS_WIDGET_SIZE = 0;
+
 var SettingsRouter = Backbone.Router.extend({
 
 	routes : {
@@ -212,7 +217,6 @@ var SettingsRouter = Backbone.Router.extend({
 	email : function()
 	{ 
 		$("#content").html(getTemplate("settings"), {});
-
 		$('#prefs-tabs-content').html(getTemplate("settings-email-prefs"), {});
 		
 		this.imapListView = {};
@@ -228,167 +232,15 @@ var SettingsRouter = Backbone.Router.extend({
 				HAS_EMAIL_ACCOUNT_LIMIT_REACHED = false;	
 			
 			var limit = data.emailAccountsLimit; 
-			// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
-			gmailListView1 = new Base_Collection_View({
-				url: 'core/api/social-prefs/GMAIL/list',
-	            templateKey: "settings-social-prefs",
-	            individual_tag_name: 'div',
-	            //className: 'col-md-4 col-sm-6 col-xs-12',
-	            postRenderCallback: function(el) {
-	            	//alert('alert');
-	            	var gmail_count = gmailListView1.collection.length;
-	            	if((gmail_count < limit && !HAS_EMAIL_ACCOUNT_LIMIT_REACHED) || gmail_count===0)
-					{
-	            		var data1 = { "service" : "Gmail", "return_url" : encodeURIComponent(window.location.href) };
-	            		$('#prefs-tabs-content').find("#social-prefs").append($(getTemplate("settings-social-prefs-model", data1)));
-					}
-	            	setTimeout(function(){
-                        var height = 0;
-                        $('#all-email-settings-prefs .col-md-4 .panel').each(function(){
-                        //alert('working..');
-                         if($(this).height() > socialHeight)
-                        	 height = $(this).height();
-                         	 if(height > socialHeight)
-                         		 socialHeight = height;
-                        });
-                        $('#all-email-settings-prefs .col-md-4 .panel').each(function(){
-                         $(this).height(socialHeight);
-                        });
-                       });
-	            }
-	        });
-			gmailListView1.collection.fetch();
-			App_Settings.gmailListView = gmailListView1;
-			$('#prefs-tabs-content').find("#social-prefs").html(App_Settings.gmailListView.el);
 			
-			//Gets imap prefs
-			imapListView1 = new Base_Collection_View({
-				url: 'core/api/imap/',
-	            templateKey: "settings-imap-access",
-	            individual_tag_name: 'div',
-	            //className: 'col-md-4 col-sm-6 col-xs-12',
-	            postRenderCallback: function(el) {
-	            	var imap_count = imapListView1.collection.length;
-	            	if((imap_count < limit && !HAS_EMAIL_ACCOUNT_LIMIT_REACHED) || imap_count===0)
-					{
-	            		var data1 = {};
-	            		$('#prefs-tabs-content').find("#imap-prefs").append($(getTemplate("settings-imap-access-model", data1)));
-					}
-	            	setTimeout(function(){
-                        var height = 0;
-                        $('#all-email-settings-prefs .col-md-4 .panel').each(function(){
-                         if($(this).height() > socialHeight)
-                        	 height = $(this).height();
-                         	 if(height > socialHeight)
-                         		 socialHeight = height;
-                        });
-                        $('#all-email-settings-prefs .col-md-4 .panel').each(function(){
-                         $(this).height(socialHeight);
-                        });
-                       });
-	            }
-	        });
-			imapListView1.collection.fetch();
-			App_Settings.imapListView = imapListView1;
-			$('#prefs-tabs-content').find("#imap-prefs").html(App_Settings.imapListView.el);
-			
-			//Gets office prefs
-			officeListView1 = new Base_Collection_View({
-				url: 'core/api/office/',
-	            templateKey: "settings-office-access",
-	            individual_tag_name: 'div',
-	            //className: 'col-md-4 col-sm-6 col-xs-12',
-	            postRenderCallback: function(el) {
-	            	var office_count = officeListView1.collection.length;
-	            	if((office_count < limit && !HAS_EMAIL_ACCOUNT_LIMIT_REACHED) || office_count===0)
-					{
-	            		var data1 = {};
-	            		$('#prefs-tabs-content').find("#office-prefs").append($(getTemplate("settings-office-access-model", data1)));
-					}
-	            	setTimeout(function(){
-                        var height = 0;
-                        $('#all-email-settings-prefs .col-md-4 .panel').each(function(){
-                         if($(this).height() > socialHeight)
-                        	 height = $(this).height();
-                         	 if(height > socialHeight)
-                         		 socialHeight = height;
-                        });
-                        $('#all-email-settings-prefs .col-md-4 .panel').each(function(){
-                         $(this).height(socialHeight);
-                        });
-                       });
-	            }
-	        });
-			officeListView1.collection.fetch();
-			App_Settings.officeListView = officeListView1;
-			$('#prefs-tabs-content').find("#office-prefs").html(App_Settings.officeListView.el);
+			load_gmail_widgets(limit);
+			load_imap_widgets(limit);
+			load_office365_widgets(limit);
 			
 			$('#PrefsTab .select').removeClass('select');
 			$('.email-tab').addClass('select');
 			$(".active").removeClass("active");
-			
-			$("#gmail-prefs-delete").live("click", function(e) {
-                
-				e.preventDefault();
-				
-				var saveBtn = $(this);
-				
-				var id = $(saveBtn).attr("oid");
-
-				// Returns, if the save button has disabled attribute
-				if ($(saveBtn).attr('disabled'))
-					return;
-				
-				if(!confirm("Are you sure you want to delete this?"))
-		    		return false;
-				
-				// Disables save button to prevent multiple click event issues
-				disable_save_button($(saveBtn));
-
-				$.ajax({
-					url : '/core/api/social-prefs/delete' + "/" + id,
-					type : 'DELETE',
-					success : function()
-					{
-						enable_save_button($(saveBtn));
-						App_Settings.email();
-						return;
-					}
-				});
-			});
-			
-			$("#office-prefs-delete, #imap-prefs-delete").live("click", function(e) {
-
-				e.preventDefault();
-				
-				var saveBtn = $(this);
-				
-				var id = $(saveBtn).attr("oid");
-
-				// Returns, if the save button has disabled attribute
-				if ($(saveBtn).attr('disabled'))
-					return;
-				
-				if(!confirm("Are you sure you want to delete?"))
-		    		return false;
-				
-				// Disables save button to prevent multiple click event issues
-				disable_save_button($(saveBtn));
-
-				var button_id = $(saveBtn).attr("name");
-
-				$.ajax({
-					url : '/core/api/' + button_id + "/delete/" + id,
-					type : 'DELETE',
-					success : function()
-					{
-						enable_save_button($(saveBtn));
-						App_Settings.email();
-						return;
-					}
-				});
-			});
-		});	
+	});
 	},
 
 	/**
@@ -420,8 +272,9 @@ var SettingsRouter = Backbone.Router.extend({
 		});	
 		// Appends IMAP
 		$('#prefs-tabs-content').html(itemView2.render().el);
-		$('#PrefsTab .active').removeClass('select');
+		$('#PrefsTab .select').removeClass('select');
 		$('.email-tab').addClass('select');
+		$(".active").removeClass("active");
 	},
 	
 	/**
@@ -452,8 +305,9 @@ var SettingsRouter = Backbone.Router.extend({
 		});		
 		// Appends IMAP
 		$('#prefs-tabs-content').html(itemView2.render().el);
-		$('#PrefsTab .active').removeClass('select');
+		$('#PrefsTab .select').removeClass('select');
 		$('.email-tab').addClass('select');
+		$(".active").removeClass("active");
 	},
 	
 	/**
@@ -473,8 +327,9 @@ var SettingsRouter = Backbone.Router.extend({
 		}  });
 		// Appends Office
 		$('#prefs-tabs-content').html(itemView3.render().el);
-		$('#PrefsTab .active').removeClass('select');
+		$('#PrefsTab .select').removeClass('select');
 		$('.email-tab').addClass('select');
+		$(".active").removeClass("active");
 	},
 	
 	/**
@@ -504,6 +359,7 @@ var SettingsRouter = Backbone.Router.extend({
 		$('#prefs-tabs-content').html(itemView3.render().el);
 		$('#PrefsTab .active').removeClass('select');
 		$('.email-tab').addClass('select');
+		$(".active").removeClass("active");
 	},
 	
 	/**
@@ -530,8 +386,9 @@ var SettingsRouter = Backbone.Router.extend({
 
 		// Appends Gmail
 		$('#prefs-tabs-content').html(gmailShareView.render().el);
-		$('#PrefsTab .active').removeClass('select');
+		$('#PrefsTab .select').removeClass('select');
 		$('.email-tab').addClass('select');
+		$(".active").removeClass("active");
 	},
 
 
@@ -557,8 +414,6 @@ var SettingsRouter = Backbone.Router.extend({
 		$('#PrefsTab .select').removeClass('select');
 		$('.email-templates-tab').addClass('select');
 		$(".active").removeClass("active");
-		// $('#content').html(this.emailTemplatesListView.el);
-		
 	},
 
 	/**
