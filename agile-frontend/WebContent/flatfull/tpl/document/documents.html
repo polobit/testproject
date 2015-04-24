@@ -3,12 +3,9 @@
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-md-12">
-        
             <h3 class="pull-left font-thin h3">Documents</h3>
             <a href="#documents-add" class="documents-add btn btn-default btn-addon pull-right btn-sm"><i class="fa fa-plus-circle" /> Add Document</a>
 			<div class="clearfix"></div>
-
-        
     </div>
 </div>
 </div>
@@ -70,24 +67,24 @@
 
 <script id="documents-model-template" type="text/html">
 <td data="{{id}}" class="data">
-<div class="pull-left inline-block table-resp" style="max-width:90%;width:auto;"><a class="text-md">{{name}}</a></div>
+<div class="pull-left inline-block table-resp" style="max-width:90%;width:auto;"><a class="text-cap">{{name}}</a></div>
 <div class="pull-left m-l-xs">
 <b class="activate-link" style="display:none;"><a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a></b>
 </div>
 <div class="clearfix"></div>
 </div>
 	<div>
-		<span class="v-top">{{network network_type}}&nbsp;&nbsp;</span>
+		<small class="text-muted">{{network network_type}}&nbsp;&nbsp;</small>
 	</div>
 </td>
 <td class="overflow-hidden no-wrap">
 	<div>
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}
-        		<a href="#contact/{{id}}" class="activate-link thumb"><img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        		<a href="#contact/{{id}}" class="activate-link thumb-sm"><img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
         	{{/if_contact_type}}
 			{{#if_contact_type "COMPANY"}}
-        		<a href="#contact/{{id}}" class="activate-link thumb"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        		<a href="#contact/{{id}}" class="activate-link thumb-sm"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
         	{{/if_contact_type}}
         {{/each}}{{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
 	</div>
@@ -98,7 +95,7 @@
 		<time class="document-created-time b-b-dotted" value="{{uploaded_time}}" datetime="{{epochToHumanDate "" uploaded_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time>
 	</div>
 </td><td>
-    <div class="thumb-xs avatar">
+    <div class="thumb-sm avatar">
        {{#if ownerPic}}
         <img class="r r-2x" src="{{ownerPic}}"  title="{{owner.name}}" />
 	   {{else}}

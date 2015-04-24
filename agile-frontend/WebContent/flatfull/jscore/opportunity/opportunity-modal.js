@@ -481,7 +481,7 @@ function updateDeal(ele, editFromMilestoneView)
 	showNoteOnForm("opportunityUpdateForm", value.notes);
 	
 	add_custom_fields_to_form(value, function(data){
-		var el = show_custom_fields_helper(data["custom_fields"], []);
+		var el = show_custom_fields_helper(data["custom_fields"], ["modal"]);
 	//	if(!value["custom_data"])  value["custom_data"] = [];
 		$("#custom-field-deals", dealForm).html(fill_custom_fields_values_generic($(el), value["custom_data"]));
 		

@@ -8,28 +8,25 @@
 	</td>
 	<td class="data" data="{{id}}">
 	<div class="row">
-    	<div class="inline p-r-xs h-auto">
+    	<div class="inline p-r-xs h-auto thumb-sm">
         	{{#if_contact_type "PERSON"}}
-        		<img class="thumbnail img-inital inline" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  width="40px" height="40px" />
+        		<img class="thumbnail img-inital inline" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties }}" />
         	{{/if_contact_type}}
-        
 			{{#if_contact_type "COMPANY"}}
-        		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
+        		<img class="thumbnail" {{getCompanyImage "" "display:inline;"}} />
         	{{/if_contact_type}}
     	</div>
     	<div class="h-auto inline-block v-top text-ellipsis" style="width:70%">
         	{{#if_contact_type "PERSON"}}
-        		<b>	{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}} </b>
-        		<br />
-        		{{getPropertyValue properties "email"}}
+        		<a class="text-cap">{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </a>        	
+        		<small class="text-muted">{{getPropertyValue properties "email"}}</small>
         	{{/if_contact_type}}
-        
 			{{#if_contact_type "COMPANY"}}
-        		<b>{{getPropertyValue properties "name"}}</b></br>
-        		{{getPropertyValue properties "url"}}
+        		<a class="text-cap">{{getPropertyValue properties "name"}}</a>
+        		<small class="text-muted">{{getPropertyValue properties "url"}}</small>
         	{{/if_contact_type}}
-	</div>
+		</div>
 	</div>
 	</td>
 	<td><div class="inline-block v-top">{{getPropertyValue properties "title"}}<br />
@@ -196,12 +193,12 @@
               </label>
 	</td>
 	<td class="data" data="{{id}}">
-    	<div class="thumb agile-img">
-        		<img class="img-inital r r-2x" {{getCompanyImage "50" "display:inline;"}} />
+    	<div class="thumb-sm agile-img">
+        	<img class="img-inital r r-2x" {{getCompanyImage "50" "display:inline;"}} />
     	</div>
     	<div class="h-auto inline-block v-top text-ellipsis" style="width:14em;">
-        		<b>{{getPropertyValue properties "name"}}</b></br>
-        		{{getPropertyValue properties "url"}}
+        	<a class="text-cap">{{getPropertyValue properties "name"}}</a>
+        	<small class="text-muted">{{getPropertyValue properties "url"}}</small>
     	</div>
 	</td>
 	<td>
@@ -220,12 +217,12 @@
               </label>
 	</td>
 	<td class="data" data="{{id}}">
-    	<div class="inline p-r-sm h-auto">
-        		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
+    	<div class="inline p-r-sm h-auto thumb-sm">
+        		<img class="thumbnail" {{getCompanyImage "" "display:inline;"}} />
     	</div>
     	<div class="h-auto inline-block v-top text-ellipsis" style="width:14em;">
-        		<b>{{getPropertyValue properties "name"}}</b></br>
-        		{{getPropertyValue properties "url"}}
+        		<a class="text-cap">{{getPropertyValue properties "name"}}</a>
+        		<small class="text-muted>"{{getPropertyValue properties "url"}}</small>
     	</div>
 	</td>
 	<td>
@@ -319,7 +316,6 @@
 <script id="contacts-table-collection-template" type="text/html">
 {{#unless this.length}}
 			<div class="filter-criteria">
-					
 			</div>
 			<div id="slate"></div>
 	{{/unless}}

@@ -5,21 +5,20 @@
 	</td>
 	<td class="data" data="{{id}}">
 	<div class="table-resp">
-	<div class="thumb agile-img">
+	<div class="thumb-sm agile-img">
 	{{#if_contact_type "PERSON"}}
-	<img class="img-initial r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+	<img class="img-initial r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties }}"/>
 	{{/if_contact_type}}
 
 	{{#if_contact_type "COMPANY"}}
-	<img class="img-initial r r-2x" {{getCompanyImage "40" "display:inline;"}} />
+	<img class="img-initial r r-2x" {{getCompanyImage "" "display:inline;"}} />
 	{{/if_contact_type}}
 	</div>
 	<div class="agile-thumb agile-thumb-view">
 	{{#if_contact_type "PERSON"}}
-	<b>	{{getPropertyValue properties "first_name"}}
-	{{getPropertyValue properties "last_name"}} </b>
-	<br />
-	{{getPropertyValue properties "email"}}
+	<a class="text-cap">{{getPropertyValue properties "first_name"}}
+	{{getPropertyValue properties "last_name"}} </a> </br>
+	<small class="text-muted">{{getPropertyValue properties "email"}}</small>
 	{{/if_contact_type}}
 
 	{{#if_contact_type "COMPANY"}}
