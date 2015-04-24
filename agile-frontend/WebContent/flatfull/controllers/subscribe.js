@@ -74,24 +74,21 @@ var SubscribeRouter = Backbone.Router.extend({
 				return;
 			}
 			
-			var planType = data.plan.plan_type;			
-			var id = "";
-			var planDetails = "<span class='bg-light'>Current Plan</span></br><span class='bg-light'>"+data.plan.quantity+" Users</span>";
-			if(planType.indexOf('STARTER') == 0){
-				var id = $('#starter_plan');
-			}else if(planType.indexOf('REGULAR') == 0){
-				var id = $('#regular_plan');
-			}else if(planType.indexOf('PRO') == 0){
-				var id = $('#pro_plan');
-			}	
-			
-			id.addClass('m-t-n-md');
-			id.find('.panel-heading').addClass('bg-warning').addClass('dker');
-			id.find('.price-panel').addClass('bg-warning');
-			id.find('.panel-footer').addClass('bg-light');
-			id.find('.user-plan').html(planDetails);
-			id.find('.djc_addtocart_link').text('Add users');
-			
+			var planType = data.plan.plan_type;						
+ 			var id = null;
+ 			var planDetails = "<span class='bg-light'>Current Plan</span></br><span class='bg-light'>"+data.plan.quantity+" Users</span>";
+ 			if(planType.indexOf('STARTER') == 0){
+ 				var id = $('#starter_plan');
+ 			}else if(planType.indexOf('REGULAR') == 0){
+ 				var id = $('#regular_plan');
+			}else if(planType.indexOf('PRO') == 0){			
+ 				var id = $('#pro_plan');			
+ 			}	
+ 			
+ 			if(id){
+ 				addStyleForAPlan(id,planDetails);
+ 			}
+									
 			element = setPriceTemplete(data.plan.plan_type, el);
 
 			// Show Coupon code input field
@@ -666,7 +663,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			type:"GET",
 			success: function(data)
 			{
-				if(data.email_api == "MANDRILL")
+				if(data && data.email_api == "MANDRILL")
 					IS_HAVING_MANDRILL = true;
 					
 			}
@@ -931,4 +928,31 @@ function canSendEmails(emails_to_send)
 function is_free_plan()
 {
 	return _IS_FREE_PLAN;
+}
+
+/**
+ * This function is used to add the style for price panels.
+ * @param id
+ * @param description
+ */
+function addStyleForAPlan(id,planDetails){
+	if(id){
+		id.addClass('m-t-n-md');
+		id.find('.panel-heading').addClass('bg-warning').addClass('dker');
+		id.find('.price-panel').addClass('bg-warning');
+		id.find('.panel-footer').addClass('bg-light');
+		if(planDetails){
+			id.find('.user-plan').html(planDetails);
+			id.find('.djc_addtocart_link').text('Add users');
+		}
+	}	
+}
+
+function removeStyleForAPlan(){
+	var id = $('#plans-panel');
+	id.find('.m-t-n-md').removeClass('m-t-n-md');
+	id.find('.panel-heading').removeClass('bg-warning').removeClass('dker');
+	id.find('.price-panel').removeClass('bg-warning');
+	id.find('.panel-footer').removeClass('bg-light');		
+	
 }

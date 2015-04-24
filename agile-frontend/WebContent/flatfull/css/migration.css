@@ -1149,6 +1149,10 @@ color:#1f2427!important;
 	min-width:90px;
 }
 
+/*Reports table checkbox alignment to top*/
+#activity-report-model-list .checkbox, #report-model-list .checkbox{
+	vertical-align: top !important;
+}
 
 /*hack for tags cross browsing consistency*/
 
@@ -1182,3 +1186,10 @@ top:117px;
 }
 
 
+.deals-by-milestone-portlet-body .highcharts-tooltip span {
+    background-color: #313030;
+    opacity: 1;
+    z-index: 9999!important;
+    padding: 8px;
+    border-radius: 5px
+}

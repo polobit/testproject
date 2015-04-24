@@ -262,10 +262,6 @@ head.ready(["core", "stats"], function(){
 	
 	if(!HANDLEBARS_PRECOMPILATION)
 		downloadTemplate("tpl.js");
-
-		// Load User voice then
-		setTimeout(loadMiscScripts, 10000);
-	
 });
 });
 

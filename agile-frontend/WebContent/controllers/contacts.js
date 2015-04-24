@@ -475,6 +475,29 @@ var ContactsRouter = Backbone.Router
 			 */
 			contactDetails : function(id, contact)
 			{
+				// Removed previous contact timeline tags from the isotope, if
+				// existed
+				if (App_Contacts.contactDetailView != undefined && App_Contacts.contactDetailView.model != undefined && App_Contacts.contactDetailView.model.collection != undefined)
+				{
+					
+					getTemplate("timeline1", App_Contacts.contactDetailView.model.collection.models, undefined, function(result)
+					{
+							
+						try
+						{
+								$("#timeline", $(App_Contacts.contactDetailView.el)).isotope('remove', $(result), function(ele)
+										{
+											timeline_collection_view.queue.running = false;
+											timeline_collection_view.queue.next();
+										});
+						}
+						catch(err)
+						{
+							console.log(err);
+						}
+					
+					})
+				}
 
 				// For getting custom fields
 				if (App_Contacts.customFieldsList == null || App_Contacts.customFieldsList == undefined)

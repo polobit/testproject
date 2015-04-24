@@ -49,7 +49,7 @@ $(function(){
 		$("#companyModal").on('show.bs.modal', function(data) {
 			var target = data.target;
 			add_custom_fields_to_form({}, function(data){
-				var el = show_custom_fields_helper(data["custom_fields"], []);
+				var el = show_custom_fields_helper(data["custom_fields"], ["modal"]);
 			//	if(!value["custom_data"])  value["custom_data"] = [];
 				
 				$("#custom-field-deals", $(target)).html(el);

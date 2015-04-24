@@ -126,6 +126,16 @@ public class StripeContactWrapperImpl extends ContactWrapper
 		{
 			return new ContactField(Contact.FIRST_NAME, card.getName().split(" ")[0], null);
 		}
+		else if(card==null || (card != null && card.getName()==null))
+		{
+			String email = null;
+			if(customer!=null && customer.getEmail()!=null)
+			{
+				email = customer.getEmail();
+				if(email!=null)
+					return new ContactField(Contact.FIRST_NAME, customer.getEmail().split("@")[0].split("\\.")[0], null);
+			}
+		}
 
 		// TODO Auto-generated method stub
 		return null;
@@ -268,6 +278,24 @@ public class StripeContactWrapperImpl extends ContactWrapper
 				lastName += lastNames[i]+" ";
 			}
 			return new ContactField(Contact.LAST_NAME, lastName.trim(), null);
+		}
+		else if(card==null || (card != null && card.getName()==null))
+		{
+			String email = null;
+			if(customer!=null && customer.getEmail()!=null)
+			{
+				email = customer.getEmail();
+				if(email!=null)
+				{
+					String[] lastNames = customer.getEmail().split("@")[0].split("\\.");
+					String lastName = "";
+					for(int i=1;i<lastNames.length;i++)
+					{
+						lastName += lastNames[i]+" ";
+					}
+					return new ContactField(Contact.LAST_NAME, lastName.trim(), null);
+				}
+			}
 		}
 		// TODO Auto-generated method stub
 		return null;

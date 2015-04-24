@@ -99,7 +99,7 @@ function pie(url, selector, name)
 											shadow : false,
 											formatter : function()
 											{
-												var s = '<div class="highcharts-tool-tip"><div class="tooltip-title">' + this.point.name + '</div><div style="text-align:center;margin-top:7px;margin-left:-3px"><b>' + (this.point.percentage)
+												var s = '<div class="highcharts-tool-tip"><div class="tooltip-title" style="color:#333333!important;">' + this.point.name + '</div><div style="text-align:center;margin-top:7px;margin-left:-3px;color:#333333!important;"><b>' + (this.point.percentage)
 														.toFixed(2) + '%<b></div></div>';
 												return s;
 											}, message : "Hover over chart slices<br>for more information.", positioner : function()
