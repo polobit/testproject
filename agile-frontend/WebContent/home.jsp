@@ -70,12 +70,6 @@ if(!restriction.planDetails.getACL())
 }
 
 Boolean is_first_time_user = HomeServlet.isFirstTimeUser(request);;
-
-Plan plan = null;
-if(is_free_plan && is_first_time_user)
-{
-    plan = SubscriptionUtil.getSignupPlanFromSessionAndRemove(request);
-}
 %>
 
 
@@ -199,7 +193,7 @@ var IS_FLUID = <%=is_fluid %>
 
 var CLICKDESK_CODE_LOADED = false;
 
-var _plan_on_signup = <%=mapper.writeValueAsString(plan)%>;
+var _plan_on_signup = "";
 
 // Get current user prefs json
 var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
