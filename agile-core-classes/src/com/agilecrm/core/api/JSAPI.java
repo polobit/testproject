@@ -1416,7 +1416,7 @@ public class JSAPI
 	try
 	{
 	    ObjectMapper mapper = new ObjectMapper();
-	    return mapper.writeValueAsString(DomainUserUtil.getAllUsers());
+	    return mapper.writeValueAsString(DomainUserUtil.getUsers());
 	}
 	catch (Exception e)
 	{
