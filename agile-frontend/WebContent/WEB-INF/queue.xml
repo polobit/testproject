@@ -45,7 +45,6 @@
     <retry-parameters>
 		<task-retry-limit>1</task-retry-limit>
 	</retry-parameters>
-	<target>agile-normal-bulk</target>
   </queue>
   <queue>
     <name>periodic-triggers-queue</name>
@@ -143,6 +142,17 @@
 	</retry-parameters>
 	<target>agile-normal-bulk</target>
   </queue>
+  
+   <queue>
+  	<name>campaign-subscribe-subtask-queue</name>
+    <rate>5/s</rate>
+    <max-concurrent-requests>15</max-concurrent-requests>
+    <retry-parameters>
+		<task-retry-limit>1</task-retry-limit>
+	</retry-parameters>
+	<target>agile-normal-bulk</target>
+  </queue>
+  
    <queue>
   	<name>bulk-tags-queue</name>
     <rate>5/s</rate>

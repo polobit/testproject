@@ -429,7 +429,7 @@ function hideTransitionBar(){
 			$('.butterbar').removeClass('animation-active');
 		if(!$('.butterbar').hasClass('hide'))
 			$('.butterbar').addClass('hide');
-	},1000);
+	},10);
 }
 $('.modal:visible').die().live('shown.bs.modal',function(){
 	setTimeout(function(){

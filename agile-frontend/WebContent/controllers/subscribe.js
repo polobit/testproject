@@ -36,13 +36,6 @@ var SubscribeRouter = Backbone.Router.extend({
 	subscribe : function(id)
 	{
 		
-		if(IS_NEW_USER && _plan_on_signup && _plan_on_signup.plan_type && _plan_on_signup.plan_type == "FREE")
-		{
-			_plan_on_signup = null;
-			Backbone.history.navigate("dashboard", {trigger : true});
-			return;
-		}
-		
 		//config_version_2_plans();
 		
 		/*
@@ -70,8 +63,8 @@ var SubscribeRouter = Backbone.Router.extend({
 			USER_BILLING_PREFS = data;
 			
 			USER_CREDIRCARD_DETAILS = subscribe_plan.model.toJSON().billingData;
-			
-			if(!USER_CREDIRCARD_DETAILS && !(IS_NEW_USER && _plan_on_signup))
+		
+			if(!USER_CREDIRCARD_DETAILS)
 			{
 				Backbone.history.navigate("subscribe", {trigger : true});
 				return;
