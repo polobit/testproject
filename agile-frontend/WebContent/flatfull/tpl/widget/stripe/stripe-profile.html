@@ -1,5 +1,5 @@
 <script id="stripe-profile-template" type="text/html">
-<div class="wrapper-sm">
+<div class="wrapper-xs">
 	{{#if customer.activeCard.name}}
 		<a href="https://manage.stripe.com/customers/{{customer.id}}" target="_blank"><h4 class="text-u-c"><b>{{customer.activeCard.name}}</b></h4></a>
 		{{#if customer.activeCard.addressState}}
@@ -19,10 +19,10 @@
 		<a href="https://manage.stripe.com/customers/{{customer.id}}" target="_blank">{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}</a>
 	{{/if}}
 </div>
-<div class="sub_header">
-	<div>Subscription Details</div>
+<div class="wrapper-xs">
+	<span>Subscription Details</span>
 </div>
-<ul class="list-group m-b-none text-base" style="border-bottom:1px solid #eee;">
+<ul class="list-group m-b-none text-base">
 	{{#if customer.subscription}}
 		<li class="list-group-item r-none b-l-none b-r-none text-base">	
 			<div class="col-md-5">Start Date
@@ -78,16 +78,19 @@
 	{{/if}}
 </ul>
 
-<div class="wrapper-sm">
-		<div>Invoices</div>
+<div class="wrapper-xs">
+		<span>Invoices</span>
 </div>
 <ul class="list-group m-b-none text-base">
 {{#if invoice.length}}
 	{{#each invoice}}
 		<li class="list-group-item r-none b-l-none b-r-none">
-					<a class="pull-left" data-toggle="collapse" href="#collapse-{{id}}" >{{#if_equals paid true}}Paid{{else}}Pending{{/if_equals}}</a>
-					<div class="pull-right">$ {{numeric_operation total 100 "/"}}</div>
-					<div clear="clearfix"></div>
+				<div class="clear">					
+					<a class="pull-left" data-toggle="collapse" href="#collapse-{{id}}" >
+						{{#if_equals paid true}}Paid{{else}}Pending{{/if_equals}}
+					</a>
+					<div class="pull-right">$ {{numeric_operation total 100 "/"}}</div>				
+					<div class="clearfix"></div>					
 					<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
 							{{#each lines.data}}	
 								{{#if_equals type "invoiceitem"}}
@@ -101,12 +104,13 @@
 									<div class="pull-right">{{quantity}}</div><br>
 									<div class="text-ellipsis w-full"><small>
 											{{epochToHumanDate "dd-mmm-yy" period.start}}&nbspto 
-											{{epochToHumanDate "dd-mmm-yy" period.end}}
+											{{epochToHumanDate "dd-mmm-yy" period.end}} 
 									</small></div>
 								{{/if_equals}}	         
 							{{/each}}
 					</div>
-					<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago pull-left" datetime="{{epochToHumanDate "" date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" date}}</time></small>
+				</div>
+					<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" date}}</time></small>
 		</li>
 	{{/each}}
 {{else}}

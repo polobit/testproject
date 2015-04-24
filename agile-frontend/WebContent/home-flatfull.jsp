@@ -627,7 +627,7 @@ var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.j
 
 <!-- JQUery Core and UI CDN -->	
 <!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
-head.load("//code.jquery.com/jquery-1.10.2.js", "//code.jquery.com/jquery-migrate-1.2.1.js", LIB_PATH_FLATFULL + "/lib/agile/agile-jquery-migration.js", LIB_PATH_FLATFULL + "js/responsive-table/responsive-tables.js", LIB_PATH_FLATFULL + "lib/bootstrap.js", LIB_PATH_FLATFULL + 'lib/bootstrap3-typeahead.js', LIB_PATH_FLATFULL + 'lib/jquery.validate.min.js', LIB_PATH_FLATFULL + 'lib/bootstrap-datepicker-min.js',LIB_PATH_FLATFULL + 'lib/date-formatter.js', LIB_PATH_FLATFULL + 'lib/bootstrap-timepicker-min.js');
+head.load("https://code.jquery.com/jquery-1.10.2.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", LIB_PATH_FLATFULL + "/lib/agile/agile-jquery-migration.js", LIB_PATH_FLATFULL + "lib/bootstrap.js", LIB_PATH_FLATFULL + 'lib/bootstrap3-typeahead.js', LIB_PATH_FLATFULL + 'lib/jquery.validate.min.js', LIB_PATH_FLATFULL + 'lib/bootstrap-datepicker-min.js',LIB_PATH_FLATFULL + 'lib/date-formatter.js', LIB_PATH_FLATFULL + 'lib/bootstrap-timepicker-min.js');
 
 <!-- Backbone -->
 head.js(LIB_PATH + 'lib/underscore-min.js', LIB_PATH + 'lib/backbone-min.js', LIB_PATH + 'lib/infiniscroll.js');
@@ -665,10 +665,6 @@ head.ready(["core", "stats"], function(){
 	
 	if(!HANDLEBARS_PRECOMPILATION)
 		downloadTemplate(FLAT_FULL_PATH + "tpl.js");
-
-		// Load User voice then
-		setTimeout(loadMiscScripts, 10000);
-	
 });
 });
 
