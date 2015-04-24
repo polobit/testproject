@@ -12,7 +12,6 @@ import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.queues.cron.CronPullServlet;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.campaignio.cron.Cron;
 import com.campaignio.cron.deferred.CronDeferredTask;
@@ -309,11 +308,7 @@ public class CronUtil
 
 			// If bulk crons wake up from Wait, add to pull queue
 			if (wakeupOrInterrupt.equalsIgnoreCase(Cron.CRON_TYPE_TIME_OUT))
-			{
-				PullQueueUtil.addToPullQueue(
-						totalCronJobsCount >= CronPullServlet.FETCH_LIMIT ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE
-								: AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, cronDeferredTask, cron.namespace);
-			}
+				PullQueueUtil.addToPullQueue(AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, cronDeferredTask, cron.namespace);
 			else
 			{
 				// Interruptted crons like Click, Open
