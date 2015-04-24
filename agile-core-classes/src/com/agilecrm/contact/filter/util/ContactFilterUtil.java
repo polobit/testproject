@@ -1,15 +1,31 @@
 package com.agilecrm.contact.filter.util;
 
-import src.com.agilecrm.contact.Contact;
-import src.com.agilecrm.contact.filter.ContactFilter;
-import src.com.agilecrm.search.document.ContactDocument;
-import src.com.agilecrm.search.query.QueryDocument;
-import src.com.agilecrm.search.ui.serialize.SearchRule;
-import src.com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
-import src.com.agilecrm.session.SessionManager;
-import src.com.agilecrm.user.DomainUser;
-import src.com.agilecrm.user.access.UserAccessControl;
-import src.com.agilecrm.user.access.util.UserAccessControlUtil;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.commons.lang.StringUtils;
+
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.filter.ContactFilter;
+import com.agilecrm.search.document.ContactDocument;
+import com.agilecrm.search.query.QueryDocument;
+import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.util.DateUtil;
+import com.google.appengine.api.datastore.QueryResultIterable;
+import com.google.gson.Gson;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.Query;
 
 public class ContactFilterUtil
 {
