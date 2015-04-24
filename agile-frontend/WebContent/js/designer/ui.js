@@ -199,30 +199,100 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     		options = getMergeFields();
     	
     	 // Populate Options
-        $.each(
-        options, function (key, value) {
-        	var title;
-        	if(key.length>20)
-        		{
-        		title=key;
-            	key=key.substr(0,18)+"..." ;
-        		}
-        	if(key.indexOf("*") == 0)
-        	{
-        		key  = key.substr(1);
-        		if(title != undefined)
-        			selectOptionAttributes += "<option selected value='" + value + "' title = '"+title+"'>" + key + "</option>";
-        		else
-        			selectOptionAttributes += "<option selected value='" + value + "'>" + key + "</option>";
-        	}
-        	else
-        		if(title != undefined)
-        			selectOptionAttributes += "<option value='" + value + "' title = '"+title+"'>" + key + "</option>";
-        		else
-        			selectOptionAttributes += "<option value='" + value + "'>" + key + "</option>";
-        });
+    	var name_group = {"_name":"Name"};
+    	var address_group = {"_name":"Address"};
+    	var owner_group = {"_name":"owner"};
     	
-        return "<select style='position:relative;float:right;cursor:pointer;width: 145px;margin-right: -5px' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes + "</select>";
+    	var json=[];
+    	var json_sub={};
+
+    	//Builds a json with opt groups as sub-json
+    	$.each(
+    	        options, function (key, value) {
+    	        	
+    	        	if(contains(value,"name") || contains(value,"location") || contains(value,"owner")){
+    	        		
+    	        		if(contains(value,"name") && !contains(value,"owner")  ){
+    	        			name_group[key]=value;
+    	        			return true;
+    	        		}
+    	        		
+    	        		if( contains(value,"location") ){
+    	        		address_group[key]=value;
+    	        		return true;
+    	        		}
+    	        		
+    	        		if(contains(value,"owner")  ){
+    	        			owner_group[key]=value;
+    	        			return true;
+    	        		}
+        	        	
+        	        	return true;
+    	        	}
+    	        	
+    	        	//Works for just once. Takes the optgroups and puts them in "json" array
+    	        	if(Object.keys(name_group).length>1){
+    	        		json.push(name_group);
+    	        		name_group={};
+    	        	}
+    	        	if(Object.keys(address_group).length>1){
+    	        		json.push(address_group);
+    	        		address_group={}; 
+    	        	}
+    	        	if(Object.keys(owner_group).length>1){
+    	        		json.push(owner_group);
+    	        		owner_group={};
+    	        	}
+    	        	
+    	        	//puts each - either optgroup or normal option to "json" array
+    	         json_sub[key]=value;
+    	         json.push(json_sub);
+    	         json_sub={};
+    	        });
+
+    	var selectoption="<select style='position:relative;float:right;cursor:pointer;width: 145px;margin-right: -5px' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"></select>";
+    	
+    	var optgroup_options = "";
+    	// create select
+    	$.each(json, function(key, value) {
+    		
+    		$.each(value, function(name, option_value) {
+    			
+    			var title=name;
+            	if(name.length>20)
+            		name=name.substr(0,18)+"..." ;
+            	if(Object.keys(value).length>1){
+            		var optgroup ="<optgroup></optgroup>";
+            		optgroup = $(optgroup).attr("label",value._name);
+            		delete value._name;
+            		
+            		$.each(value, function(option_name, option_value) {
+            			title=option_name;
+            			if(option_name.length>18)
+            				option_name = option_name.substr(0,15)+"..." ;
+            			
+                    	optgroup_options += "<option value='" + option_value + "' title = '"+title+"'>" + option_name + "</option>";
+                	});
+            		optgroup = $(optgroup).append(optgroup_options);
+                	selectoption = $(selectoption).append(optgroup);
+                	return false;
+            	}
+            	else{
+            		if(name.indexOf("*") == 0)
+                	{
+            			name  = name.substr(1);
+            			selectoption = $(selectoption).append("<option selected value='" + option_value + "' title = '"+title+"'>" + name + "</option>");
+                	}
+                	else
+                		selectoption = $(selectoption).append("<option value='" + option_value + "' title = '"+title+"'>" + name + "</option>");
+            	}
+            		
+    		});
+    		
+        	optgroup_options = "";
+    	});
+    	
+    	return selectoption;
     	
     }
     	
