@@ -48,7 +48,7 @@ $(function()
 	 */
 	Backbone.history.start();
 //	setup_our_domain_sync();
-	checkAndNavigateToSubscription();
+//	checkAndNavigateToSubscription();
 });
 
 // Global variable to store current route

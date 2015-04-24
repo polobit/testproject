@@ -1310,7 +1310,7 @@ public class ContactUtil
 	try
 	{
 	    DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
-	    List<ContactEmail> openedEmailsList = ContactEmailUtil.getEmailsOpened(minTime, maxTime,true);
+	    List<ContactEmail> openedEmailsList = ContactEmailUtil.getEmailsOpened(minTime, maxTime, true);
 	    for (ContactEmail contactEmail : openedEmailsList)
 	    {
 		JSONObject json = new JSONObject();
@@ -1546,6 +1546,7 @@ public class ContactUtil
 	try
 	{
 	    contact.setContactOwner(userKey);
+	    contact.save(true);
 	    ActivitySave.contactOwnerChangeActivity(contact, old_owner_name);
 	    ObjectMapper mapper = new ObjectMapper();
 	    return mapper.writeValueAsString(contact);

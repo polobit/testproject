@@ -849,28 +849,47 @@ var ContactsRouter = Backbone.Router.extend({
 		var el = $("#content").html(getTemplate("send-email", model));
 		
 		// Call setupTypeAhead to get contacts
-		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true);
-		
-		agile_type_ahead("email_cc", el, contacts_typeahead, null, null, "email-search", null, true);
-		
-		agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, "email-search", null, true);
-		
+		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+
+		agile_type_ahead("email_cc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+
+		agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+
 		if (id)
 		{
-/*			var name;
-			if(model)
+			var name;
+			if (model)
 			{
-				var first_name = getPropertyValue(model, "first_name");
-				var last_name = getPropertyValue(model, "last_name");
-				if(first_name || last_name)
+				if (model.type == "PERSON")
 				{
-					name = first_name?first_name:"";
-					name = (name + " " + (last_name?last_name:"")).trim();
+
+					var first_name = getPropertyValue(model.properties, "first_name");
+					var last_name = getPropertyValue(model.properties, "last_name");
+
+					if (first_name || last_name)
+					{
+						name = first_name ? first_name : "";
+						name = (name + " " + (last_name ? last_name : "")).trim();
+					}
+				}
+				else
+				{
+					var company_name = getPropertyValue(model.properties, "name");
+					name = (company_name ? company_name : "").trim();
 				}
 			}
-			if(name.length)
-				$('#to', el).closest("div.controls").find(".tags").append('<li class="tag" style="display: inline-block;" data="' + id + '"><a href="#contact/' + model.id +'">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
-			else*/
+
+			if (name && name.length)
+			{
+				var data = name + ' <' + id.trim() + '>';
+
+				$('#to', el)
+						.closest("div.controls")
+						.find(".tags")
+						.append(
+								'<li class="tag" style="display: inline-block;" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
+			}
+			else
 				$("#emailForm", el).find('input[name="to"]').val(id);
 		}
 		else
