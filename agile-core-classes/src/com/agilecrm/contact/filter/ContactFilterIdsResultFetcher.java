@@ -1,40 +1,25 @@
 package com.agilecrm.contact.filter;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.Contact.Type;
-import com.agilecrm.contact.filter.ContactFilter.DefaultFilter;
-import com.agilecrm.contact.filter.util.ContactFilterUtil;
-import com.agilecrm.contact.util.BulkActionUtil;
-import com.agilecrm.search.document.ContactDocument;
-import com.agilecrm.search.query.QueryDocument;
-import com.agilecrm.search.ui.serialize.SearchRule;
-import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
-import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.access.UserAccessControl;
-import com.agilecrm.user.access.UserAccessScopes;
-import com.agilecrm.user.access.util.UserAccessControlUtil;
-import com.agilecrm.user.util.DomainUserUtil;
-import com.google.appengine.api.datastore.QueryResultIterator;
-import com.google.appengine.api.search.ScoredDocument;
-import com.googlecode.objectify.Key;
+import src.com.agilecrm.contact.Contact;
+import src.com.agilecrm.contact.filter.ContactFilter.DefaultFilter;
+import src.com.agilecrm.contact.filter.util.ContactFilterUtil;
+import src.com.agilecrm.contact.util.BulkActionUtil;
+import src.com.agilecrm.search.document.ContactDocument;
+import src.com.agilecrm.search.query.QueryDocument;
+import src.com.agilecrm.search.ui.serialize.SearchRule;
+import src.com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
+import src.com.agilecrm.subscription.Subscription;
+import src.com.agilecrm.subscription.SubscriptionUtil;
+import src.com.agilecrm.user.DomainUser;
+import src.com.agilecrm.user.access.UserAccessControl;
+import src.com.agilecrm.user.access.UserAccessScopes;
+import src.com.agilecrm.user.access.util.UserAccessControlUtil;
+import src.com.agilecrm.user.util.DomainUserUtil;
 
 public class ContactFilterIdsResultFetcher
 {
 	private String cursor = null;
 	private int fetched_count = 0;
-	private int current_index = 0;
 	private int max_fetch_set_size = 200;
 	boolean init_fetch = false;
 
@@ -57,6 +42,22 @@ public class ContactFilterIdsResultFetcher
 	private ContactFilterIdsResultFetcher()
 	{
 		super();
+	}
+
+	public void setLimits()
+	{
+		Subscription subscription = SubscriptionUtil.getSubscription();
+
+		if (subscription.isFreePlan())
+		{
+			max_fetch_size = 25;
+			max_fetch_set_size = 25;
+		}
+		else
+		{
+			max_fetch_size = Integer.MAX_VALUE;
+		}
+
 	}
 
 	public ContactFilterIdsResultFetcher(String filter_id, String dynamic_filter, String contact_ids,
@@ -189,6 +190,7 @@ public class ContactFilterIdsResultFetcher
 			setCursor(null);
 
 		}
+		fetched_count += contactKeys.size();
 		return contactKeys;
 	}
 
@@ -212,6 +214,11 @@ public class ContactFilterIdsResultFetcher
 		return contactSet;
 	}
 
+	public int getTotalCount()
+	{
+		return fetched_count;
+	}
+
 	QueryDocument<Contact> queryInstace = new QueryDocument<Contact>(new ContactDocument().getIndex(), Contact.class);
 
 	/**
@@ -227,7 +234,10 @@ public class ContactFilterIdsResultFetcher
 
 		if (contact_ids_json != null)
 		{
-			return getContactIds();
+			Set<Key<Contact>> contactsSet = getContactIds();
+
+			fetched_count += contactsSet.size();
+			return contactsSet;
 		}
 
 		if (iterator != null)
@@ -258,6 +268,8 @@ public class ContactFilterIdsResultFetcher
 				e.printStackTrace();
 			}
 		}
+
+		fetched_count += contactKeys.size();
 
 		setCursor(scoredDocuments);
 
@@ -350,6 +362,9 @@ public class ContactFilterIdsResultFetcher
 
 	public boolean hasNext()
 	{
+		if (fetched_count > max_fetch_size)
+			return false;
+
 		if (iterator == null && filter == null && contact_ids_json == null)
 		{
 			return false;
