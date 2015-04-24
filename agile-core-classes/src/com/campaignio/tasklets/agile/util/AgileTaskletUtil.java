@@ -801,6 +801,7 @@ public class AgileTaskletUtil
 		if (ContactUtil.isContactUpdated(contactId, updatedTime))
 			return AgileTaskletUtil.getUpdatedSubscriberJSON(ContactUtil.getContact(contactId), currentsubscriberJSON);
 
+		System.out.println("isContactUpdated is false");
 		if (!ContactUtil.isExists(contactId))
 			return null;
 

@@ -1563,9 +1563,7 @@ public class ContactUtil
 		// TODO Auto-generated method stub
 		try
 		{
-
 			return dao.getCountByProperty("id", contactId) > 0 ? true : false;
-
 		}
 		catch (Exception e)
 		{
