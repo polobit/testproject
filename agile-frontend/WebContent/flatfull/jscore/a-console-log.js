@@ -18,5 +18,7 @@ $(function(){
 	{
 		//console.log("disabling");		
 		console.log = function(){};
+		if(console.warn)
+			console.warn = function(){};
 	}
 });   
