@@ -9,9 +9,10 @@
 			</h3>
             <div class="pull-right m-b-sm">
 				<div class="btn-group">
-  					<button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
-    					{{get_subscribers_type_from_hash}} Subscribers <span class="caret"></span>
-  					</button>
+  					<a class="btn btn-sm btn-default m-l-xs">{{get_subscribers_type_from_hash}} Subscribers</a>
+  					<a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">
+    					<span class="caret"></span>
+  					</a>
   					<ul class="dropdown-menu" role="menu">
     					<li><a href="#workflow/all-subscribers/{{get_id_from_hash}}">All</a></li>
 						<li><a href="#workflow/active-subscribers/{{get_id_from_hash}}">Active</a></li>
@@ -68,13 +69,13 @@
 <script id="workflow-active-contacts-model-template" type="text/html">
 <td class="data" data={{id}}>
 	<div class="table-resp">
-	<div class="thumb agile-img">
+	<div class="thumb-sm agile-img">
     	<a href="#contact/{{id}}" class="activate-link">
-			<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" style="height:50px;width:50px;" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+			<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties }}" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
 		</a>
     </div>
     
- 	<span class="inline-block">
+ 	<span>
     	<span><a class="text-cap">	{{contact_name properties type}} </a></span><br>
         <small>
         	{{getPropertyValue properties "email"}}</small>
@@ -84,7 +85,7 @@
 <td>
     <div class="table-resp">
         <small class="edit-hover text-muted"> 
-		    <span><em>Started</em>&nbsp;</span>
+		    <span>Started&nbsp;</span>
                 {{!-- Gets started time of current campaign from campaignStatus array having same campaign-id --}}
 
                 {{#if_same_campaign this "campaignStatus"}}

@@ -252,12 +252,12 @@ function show_custom_fields_helper(custom_fields, properties){
 		var checkbox_style ="";
 
 		if(field.scope == "CONTACT"){
-			label_style = "col-sm-3 word-break";
+			label_style = "word-break";
 			field_style = "col-sm-10";
 			div_col9_style = "col-sm-9";
 			div_col3_style = "col-sm-3";
 		}else if(field.scope == "COMPANY" || field.scope == "DEAL" || field.scope == "CASE"){
-			label_style = "control-label col-sm-3 word-break";
+			label_style = "control-label word-break";
 			checkbox_style = "col-sm-3 p-none";
 		}
 		
@@ -419,17 +419,17 @@ function show_custom_fields_helper(custom_fields, properties){
 		
 		// If the field is not of type list or checkbox, create text field (plain text field or date field)
 		if(field.is_required)
-			el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
+			el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'"><b>'
 							+field.field_label
-							+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'"><input type="text" class="'
+							+' </b><span class="field_req">*</span></label><div class="controls"><input type="text" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field required form-control" id='
 							+field.id+' name="'+field.field_label
 							+'"></div></div>');
 		else
-			el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
+			el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'"><b>'
 							+field.field_label
-							+'</label><div class="controls col-sm-9 '+div_col9_style+'"><input type="text" class="'
+							+'</b></label><div class="controls"><input type="text" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field form-control" id='
 							+field.id+' name="'
