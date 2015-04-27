@@ -359,7 +359,12 @@ function initializeSocialSuite()
 		sendMessage(publishJSON);
 
 		// Delete stream from collection and DB
-		Streams_List_View.collection.get(id).destroy();
+		//Streams_List_View.collection.get(id).destroy();
+		$.ajax({ type : 'DELETE', url : '/core/social/' + id, contentType : "application/json; charset=utf-8",
+			success : function(data){
+				Streams_List_View.collection.remove(id);
+				Streams_List_View.render(true).el;
+			}, dataType : 'json' });
 	});
 
 	/**
