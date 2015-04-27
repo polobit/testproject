@@ -110,12 +110,12 @@
 <div class="pull-left task-content-view">
 <div class="pull-left" style="width:68%">
       {{#if is_complete}}
-         {{#is_link subject}}<a ><!--href="#task/{{id}}"--><span class="new-task-subject w-full block text-ellipsis activate-link task-completed">{{else}}<a ><!--href="#task/{{id}}"--><span class="new-task-subject w-full block text-ellipsis task-completed">{{/is_link}}{{safe_string subject}}</span></a>
+         {{#is_link subject}}<a  href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link task-completed">{{else}}<a  href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis task-completed">{{/is_link}}{{safe_string subject}}</span></a>
       {{else}}
          {{#if_equals status "COMPLETED"}}
-           {{#is_link subject}}<a ><!--href="#task/{{id}}"--><span class="new-task-subject w-full block text-ellipsis activate-link task-completed">{{else}}<a ><!--href="#task/{{id}}"--><span class="new-task-subject w-full block text-ellipsis task-completed">{{/is_link}}{{safe_string subject}}</span></a>
+           {{#is_link subject}}<a  href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link task-completed">{{else}}<a  href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis task-completed">{{/is_link}}{{safe_string subject}}</span></a>
          {{else}}
-           {{#is_link subject}}<a ><!--href="#task/{{id}}"--><span class="new-task-subject w-full block text-ellipsis activate-link">{{else}}<a ><!--href="#task/{{id}}"--><span class="new-task-subject w-full block text-ellipsis">{{/is_link}}{{safe_string subject}}</span></a>
+           {{#is_link subject}}<a  href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis activate-link">{{else}}<a  href="#task/{{id}}"><span class="new-task-subject w-full block text-ellipsis">{{/is_link}}{{safe_string subject}}</span></a>
          {{/if_equals}}       
       {{/if}}      
 </div>
