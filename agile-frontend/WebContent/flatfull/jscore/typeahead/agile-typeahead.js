@@ -109,7 +109,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         			// Not to show "no Results Found" for email search
         			if(txt == "email-search"){that.$menu.hide();return;}
         			
-        			that.$menu.html('<div style="margin-top:10px"><p align="center">'+txt+'<p></div>');
+        			that.$menu.html('<div class="m-t-sm"><p align="center custom-color">'+txt+'<p></div>');
         			that.render();
         			return;
         		}

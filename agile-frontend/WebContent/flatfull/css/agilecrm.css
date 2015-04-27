@@ -1918,13 +1918,13 @@ text-overflow:ellipsis;
 }
 
 
-.deal-owner-position
+/*.deal-owner-position
 {
 position: absolute;
 top: 32px;
 right: 0;
 width:100%;	
-}
+}*/
 
 
 .custom-fields-table tbody tr td:nth-child(n+2) {
@@ -2018,7 +2018,7 @@ div.lhs-row-filter {
 }
 	
 
-.taskDetail-text {
+/*.taskDetail-text {
 	font-size: 20px;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -2027,7 +2027,7 @@ div.lhs-row-filter {
 	max-width: 75%;
 	height: auto;
 	padding-bottom: 2px;
-}
+}*/
 .tasktop-imageview:empty 
 {
 	display:none;

@@ -687,11 +687,11 @@ $(function()
 				Handlebars.registerHelper('task_label_color', function(priority)
 				{
 								if (priority == 'HIGH' || priority == 'red')
-												return 'important';
+												return 'danger';
 								if (priority == 'NORMAL' || priority == '#36C')
 												return 'info';
 								if (priority == 'LOW')
-												return '';
+												return 'label bg-light dk';
 								if (priority == 'green')
 												return 'success';
 				});

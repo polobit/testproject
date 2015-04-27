@@ -908,6 +908,8 @@ left:0;
 }
 
 /*task circle*/
+
+
 .task-circle{
 	float:right;
    
@@ -950,6 +952,24 @@ left:0;
 {
 	cursor:move;
 }
+
+.task-circle-big .active-border
+{
+	width:50px;
+	height:50px;
+	
+}
+
+.task-circle-big .circle
+{
+	
+	top: 5px;
+  left: 5px;
+  text-align: center;
+   width: 40px;
+  height: 40px;
+}
+
 /* ending task circle*/
 
 /*overriding theme styles */
@@ -1143,6 +1163,7 @@ color:#1f2427!important;
 .miltstone-title
 {
 	font-size:18px;
+	color:#888;
 }
 
 .header-min-width {
