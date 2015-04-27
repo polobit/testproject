@@ -248,19 +248,18 @@
 		<a class="text-cap">{{name}}</a>
 	</div>
 </td>
-<td>
-	<div>
-		<div class="table-resp">
-		{{#each contacts}}
-        	{{#if_contact_type "PERSON"}}
-        		<a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties }}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
-        	{{/if_contact_type}}
-			{{#if_contact_type "COMPANY"}}
-        		<a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x" {{getCompanyImage "" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
-        	{{/if_contact_type}}
-       {{/each}}
-		</div>{{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
-	</div>
+<td class="overflow-hidden no-wrap">
+	<div class="inline-block thumb-sm">
+	{{#each contacts}}
+       {{#if_contact_type "PERSON"}}
+        	<a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties }}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+       {{/if_contact_type}}
+	   {{#if_contact_type "COMPANY"}}
+        	<a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x" {{getCompanyImage "" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+       {{/if_contact_type}}
+   {{/each}}
+   </div>
+  {{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
 </td>
 <td value="{{expected_value}}"><div class="table-resp">{{currencySymbol}}{{numberWithCommas expected_value}}</div></td>
 <td><div class="table-resp">{{milestone}} ({{probability}}%) </div></td>
