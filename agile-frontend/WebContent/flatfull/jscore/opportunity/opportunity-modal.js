@@ -388,7 +388,7 @@ $(function(){
 	/**
 	 * Milestone view deal delete
 	 */
-	$('.deal-archive').live('click', function(e) {
+	$('.deal-archive').die().live('click', function(e) {
 		e.preventDefault();
 		
 		var temp = {};
@@ -402,7 +402,7 @@ $(function(){
 	/**
 	 * Milestone view deal delete
 	 */
-	$('.deal-restore').live('click', function(e) {
+	$('.deal-restore').die().live('click', function(e) {
 		e.preventDefault();
 		
 		var temp = {};
