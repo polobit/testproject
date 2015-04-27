@@ -108,12 +108,12 @@ $(function(){
     */
     $('#opportunities-model-list > tr > td:not(":first-child")').live('click', function(e) {
 		e.preventDefault();
-		/*$('.popover').remove();
+		$('.popover').remove();
 		var currentdeal=$(this).closest('tr').data();
 		Backbone.history.navigate("deal/"+currentdeal.id , {
             trigger: true
-        });*/
-		updateDeal($(this).closest('tr').data());
+        });
+		// 	updateDeal($(this).closest('tr').data());
 	});
     
     /**
@@ -121,11 +121,11 @@ $(function(){
      */
 	$('#dashboard-opportunities-model-list > tr').live('click', function(e) {
 		e.preventDefault();
-		/*var currentdeal=$(this).closest('tr').data();
+		var currentdeal=$(this).closest('tr').data();
 		Backbone.history.navigate("deal/"+currentdeal.id , {
             trigger: true
-        });*/
-		updateDeal($(this).closest('tr').data());
+        });
+		// updateDeal($(this).closest('tr').data());
 	});
 	
 	$('.milestones > li').live('mouseenter', function () {
@@ -788,13 +788,13 @@ if(json.close_date==0)
 			}
 			else {
 				App_Deal_Details.dealDetailView.model = data;
-				/*App_Deal_Details.dealDetailView.render(true)
+				App_Deal_Details.dealDetailView.render(true)
 				Backbone.history.navigate("deal/"+data.toJSON().id , {
 		            trigger: true
-		        });*/
-				App_Deals.navigate("deals", {
+		        });
+				/*App_Deals.navigate("deals", {
 					trigger : true
-				});
+				});*/
 					
 					
 			}
