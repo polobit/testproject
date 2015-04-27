@@ -207,7 +207,7 @@ $(function()
 					/**
 					 * Sends cancel request to cancel subscription
 					 */
-					$.ajax({
+					/*$.ajax({
 						type : "DELETE",
 						url : "core/api/subscription/delete/account",
 						success : function()
@@ -219,8 +219,38 @@ $(function()
 						    // Showing Noty
 						    showNotyPopUp("information", "Cancellation request sent. You should hear back from us in one working day.", "top", 3000);
 						}
-					});
+					});*/
+					load_clickdesk_code();
+					$("#send-cancellation .modal-title").html($("#send-delete-request-step2 .modal-title").html());	
+					$("#send-cancellation .modal-body").html($("#send-delete-request-step2 .modal-body").html());
+					$("#send-cancellation .modal-footer").html($("#send-delete-request-step2 .modal-footer").html());
+					try {
+						CLICKDESK_Live_Chat.onStatus(function(status) {
 
+							if(status == "online")
+								$("#call_support").html('<a class="c-p text-info" onclick="CLICKDESK_LIVECHAT.show();">Start chat</a>.');
+							else
+								$("#call_support").html('<a class="text-info" href="#contact-us" id="show_support">leave a message</a>.');
+						});
+					
+					} catch (e) {
+					
+					setTimeout(function(){
+						
+						CLICKDESK_Live_Chat.onStatus(function(status) {
+
+							if(status == "online")
+								$("#call_support").html('<a class="text-info c-p" onclick="CLICKDESK_LIVECHAT.show();">Start chat</a>.');
+							else
+								$("#call_support").html('<a class="text-info" href="#contact-us" id="show_support">leave a message</a>.');
+						});
+						
+					}, 5000);
+					
+					
+				}
+					// Enables Send Email button.
+					enable_send_button($('#send-delete-request'));
 				});
 				
 			});
