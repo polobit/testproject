@@ -88,30 +88,31 @@ Completed Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_str
 {{#if this.entityObject}}	
 {{#get_event_rescheduled custom3}} 
 Changed Due date of Task <a href="#task/{{../entity_id}}" >{{safe_string ../label}}</a><br/>
-<div class="activities_second_line m-t-none">
+<span class="activities_second_line m-t-none">
 <i class="icon-tasks icon-white"></i> Task Due time changed to {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" ../entityObject.due}}.
-</div> 
+</span> 
 {{else}}
  Modified Task <a href="#task/{{../entity_id}}" >{{safe_string ../label}}</a><br/>
-<div class="activities_second_line m-t-none">
+<span class="activities_second_line m-t-none">
 <i class="icon-tasks icon-white"></i> Task {{displayActivityFieldText ../custom3}} modified.
+</span>
 {{/get_event_rescheduled}}
 {{else}}
 {{#get_event_rescheduled custom3}} 
 Changed Due date of Task '{{safe_string ../label}}'<br/>
-<div class="activities_second_line m-t-none">
+<span class="activities_second_line m-t-none">
 <i class="icon-tasks icon-white"></i> Task deleted later. Task Due time changed to {{#getDueDateOfTask ../custom3  ../custom1}}{{/getDueDateOfTask}}.
-</div> 
+</span> 
 {{else}}
  Modified Task '{{safe_string ../label}}'<br/>
-<div class="activities_second_line m-t-none">
+<span class="activities_second_line m-t-none">
 <i class="icon-tasks icon-white"></i> Task deleted later. Task {{displayActivityFieldText ../custom3}} modified.
+</span>
 {{/get_event_rescheduled}}
 {{/if}}
 <span class="activities_second_line m-t-none">
  {{#if related_contact_ids}} Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}  
 </span>
-</div>
 
 {{/if_equals}}
 
