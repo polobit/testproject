@@ -228,9 +228,9 @@ $(function()
 						CLICKDESK_Live_Chat.onStatus(function(status) {
 
 							if(status == "online")
-								$("#call_support").html('<a class="c-p text-info" onclick="CLICKDESK_LIVECHAT.show();">Start chat</a>.');
-							else
-								$("#call_support").html('<a class="text-info" href="#contact-us" id="show_support">leave a message</a>.');
+								$("#call_support").html('<a class="c-p text-info" onclick="CLICKDESK_LIVECHAT.show();"> &nbsp or&nbsp Start chat</a>.');
+							/*else
+								$("#call_support").html('<a class="text-info" href="#contact-us" id="show_support">leave a message</a>.');*/
 						});
 					
 					} catch (e) {
@@ -240,9 +240,9 @@ $(function()
 						CLICKDESK_Live_Chat.onStatus(function(status) {
 
 							if(status == "online")
-								$("#call_support").html('<a class="text-info c-p" onclick="CLICKDESK_LIVECHAT.show();">Start chat</a>.');
-							else
-								$("#call_support").html('<a class="text-info" href="#contact-us" id="show_support">leave a message</a>.');
+								$("#call_support").html('<a class="text-info c-p" onclick="CLICKDESK_LIVECHAT.show();"> &nbsp or&nbsp Start chat</a>.');
+							/*else
+								$("#call_support").html('<a class="text-info" href="#contact-us" id="show_support">leave a message</a>.');*/
 						});
 						
 					}, 5000);
