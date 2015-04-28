@@ -457,3 +457,93 @@ function getDate(selector)
 	});
 
 }
+
+function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
+{
+	var options={
+		"Select Merge Field" : "",
+		"Name" :{
+			"First Name" : "{{first_name}}", 
+			"First Name Fix" : "{{first_name_fix}}", 
+			"Last Name" : "{{last_name}}", 
+			"Last Name Fix" : "{{last_name_fix}}", 
+			"Name Fix" : "{{name_fix}}"
+		},
+		"Properties":{
+			"Score" : "{{score}}",
+			"Created Date" : "{{created_date}}", 
+			"Modified Date" : "{{modified_date}}", 
+			"Email" : "{{email}}", 
+			"Company" : "{{company}}", 
+			"Title" : "{{title}}",
+			"Website" : "{{website}}", 
+			"Phone" : "{{phone}}"
+		},
+		"Address":{
+			"City" : "{{location.city}}", 
+			"State" : "{{location.state}}", 
+			"Country" : "{{location.country}}"
+		},
+		"Web":{
+			"Twitter Id" : "{{twitter_id}}", 
+			"LinkedIn Id" : "{{linkedin_id}}"
+		},
+		"Custom Fields":{
+		},
+		"Owner":{
+			"Owner Name" : "{{owner.name}}", 
+			"Owner Email" : "{{owner.email}}" , 
+			"Owner calendar URL" : "{{owner.calendar_url}}" , 
+			"Owner Signature" : "{{{owner.signature}}}"
+		},
+		"Misc":{
+			"Unsubscribe Link" : "{{{unsubscribe_link}}}",
+			"Online Link" : "{{{online_link}}}",
+			"Powered by" : "{{{powered_by}}}"
+		}
+	};
+
+	//Get Custom Fields in template format
+	var custom_fields;
+
+	// Cache Contact Custom fields
+	if(_CONTACT_CUSTOM_FIELDS)
+		custom_fields = _CONTACT_CUSTOM_FIELDS
+	else
+		{
+			_CONTACT_CUSTOM_FIELDS = get_custom_fields();
+			custom_fields = _CONTACT_CUSTOM_FIELDS;
+		}
+
+	options["Custom Fields"] = custom_fields;
+	
+	var selectoption="<select style='position:relative;float:right;cursor:pointer;width: 145px;margin-right: -5px' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"></select>";
+
+	$.each(options, function(name, option_value) {
+		if(typeof(option_value)== 'object')
+			{
+				var optgroup ="<optgroup></optgroup>";
+				optgroup = $(optgroup).attr("label",name);
+				$.each(option_value, function(subtype_key, subtype_value) {
+					var title=subtype_key;
+					if(subtype_key.length>18)
+						subtype_key = subtype_key.substr(0,15)+"..." ;
+					$(optgroup).append("<option value='" + subtype_value + "' title = '"+title+"'>" + subtype_key + "</option>");
+				});
+				selectoption = $(selectoption).append(optgroup);
+			}
+		else
+			{
+				if(name.indexOf("*") == 0)
+					{
+						name  = name.substr(1);
+						selectoption = $(selectoption).append("<option selected value='" + option_value + "' title = '"+name+"'>" + name + "</option>");
+					}
+				else
+					selectoption = $(selectoption).append("<option value='" + option_value + "' title = '"+name+"'>" + name + "</option>");
+			}
+	});
+	
+	console.log(selectoption);
+	return selectoption;
+}

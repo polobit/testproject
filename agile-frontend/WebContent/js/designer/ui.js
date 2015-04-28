@@ -191,114 +191,10 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
 
     // Gets MergeFields Option object
     if(uiFieldDefinition.fieldType == "merge_fields")
-    {
-    	// To add unsubscribe link to merge fields of only SendEmail node
-    	if(uiFieldDefinition.target_type == "tinyMCEhtml_email" || uiFieldDefinition.target_type == "text_email")
-    		options = getMergeFields("send_email");
-    	else
-    		options = getMergeFields();
-    	
-    	 // Populate Options
-    	var name_group = {"_name":"Name"};
-    	var address_group = {"_name":"Address"};
-    	var owner_group = {"_name":"owner"};
-    	
-    	var json=[];
-    	var json_sub={};
-
-    	//Builds a json with opt groups as sub-json
-    	$.each(
-    	        options, function (key, value) {
-    	        	
-    	        	if(contains(value,"name") || contains(value,"location") || contains(value,"owner")){
-    	        		
-    	        		if(contains(value,"name") && !contains(value,"owner")  ){
-    	        			name_group[key]=value;
-    	        			return true;
-    	        		}
-    	        		
-    	        		if( contains(value,"location") ){
-    	        		address_group[key]=value;
-    	        		return true;
-    	        		}
-    	        		
-    	        		if(contains(value,"owner")  ){
-    	        			owner_group[key]=value;
-    	        			return true;
-    	        		}
-        	        	
-        	        	return true;
-    	        	}
-    	        	
-    	        	//Works for just once. Takes the optgroups and puts them in "json" array
-    	        	if(Object.keys(name_group).length>1){
-    	        		json.push(name_group);
-    	        		name_group={};
-    	        	}
-    	        	if(Object.keys(address_group).length>1){
-    	        		json.push(address_group);
-    	        		address_group={}; 
-    	        	}
-    	        	if(Object.keys(owner_group).length>1){
-    	        		json.push(owner_group);
-    	        		owner_group={};
-    	        	}
-    	        	
-    	        	//puts each - either optgroup or normal option to "json" array
-    	         json_sub[key]=value;
-    	         json.push(json_sub);
-    	         json_sub={};
-    	        });
-
-    	var selectoption="<select style='position:relative;float:right;cursor:pointer;width: 145px;margin-right: -5px' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"></select>";
-    	
-    	var optgroup_options = "";
-    	// create select
-    	$.each(json, function(key, value) {
-    		
-    		$.each(value, function(name, option_value) {
-    			
-    			var title=name;
-            	if(name.length>20)
-            		name=name.substr(0,18)+"..." ;
-            	if(Object.keys(value).length>1){
-            		var optgroup ="<optgroup></optgroup>";
-            		optgroup = $(optgroup).attr("label",value._name);
-            		delete value._name;
-            		
-            		$.each(value, function(option_name, option_value) {
-            			title=option_name;
-            			if(option_name.length>18)
-            				option_name = option_name.substr(0,15)+"..." ;
-            			
-                    	optgroup_options += "<option value='" + option_value + "' title = '"+title+"'>" + option_name + "</option>";
-                	});
-            		optgroup = $(optgroup).append(optgroup_options);
-                	selectoption = $(selectoption).append(optgroup);
-                	return false;
-            	}
-            	else{
-            		if(name.indexOf("*") == 0)
-                	{
-            			name  = name.substr(1);
-            			selectoption = $(selectoption).append("<option selected value='" + option_value + "' title = '"+title+"'>" + name + "</option>");
-                	}
-                	else
-                		selectoption = $(selectoption).append("<option value='" + option_value + "' title = '"+title+"'>" + name + "</option>");
-            	}
-            		
-    		});
-    		
-        	optgroup_options = "";
-    	});
-    	
-    	return selectoption;
-    	
-    }
+    	 return getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler);
     	
     if(uiFieldDefinition.fieldType == "update_field")
     {
-    	
     	options = getUpdateFields("update_field");
     }
     
@@ -306,13 +202,11 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     if(uiFieldDefinition.fieldType == "incoming_list")
     {
     	options = getTwilioIncomingList("incoming_list");
-    	
     }
     
     if(uiFieldDefinition.fieldType == "twilio_incoming_list")
     {
     	options = getTwilioIncomingList("twilio_incoming_list");
-    	
     }
     
     
@@ -972,4 +866,14 @@ function resetUI(selector)
 	selector.find("select").val("");
 	selector.find("textarea").val("");
 	
+}
+
+function contains(string, substring){
+	
+	if(string == undefined || string.length == 0)
+		return false;
+		
+	if(string.indexOf(substring) != -1)
+		return true;
+	return false;
 }
