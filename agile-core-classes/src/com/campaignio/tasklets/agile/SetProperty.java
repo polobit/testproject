@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
@@ -215,11 +216,7 @@ public class SetProperty extends TaskletAdapter
 
 					if (!isNew)
 						if (updatedNumber != 0)
-						{
-							Matcher calendarMatcherOld = calendarPattern.matcher(contact_field.value);
-							if (calendarMatcherOld.matches())
-								sdf = new SimpleDateFormat(DateUtil.WaitTillDateFormat);
-						}
+							sdf = new SimpleDateFormat(DateUtil.WaitTillDateFormat);
 				}
 
 			if (sdf != null)
@@ -234,8 +231,16 @@ public class SetProperty extends TaskletAdapter
 						calendar.setTime(sdf.parse(updated_value));
 					else
 					{
-						calendar.setTime(sdf.parse(contact_field.value));
-						calendar.add(Calendar.DATE, updatedNumber);
+						DateUtil dateUtil = new DateUtil();
+
+						dateUtil.toTZ(timezone);
+						dateUtil.setTime(new Date(Long.parseLong(contact_field.value) * 1000));
+						dateUtil.addDays(updatedNumber);
+
+						System.out.println("date util" + dateUtil.getTime().getTime());
+
+						contact_field.value = dateUtil.getTime().getTime() / 1000L + "";
+						return contact_field;
 					}
 
 					contact_field.value = (calendar.getTimeInMillis() / 1000L) + "";
