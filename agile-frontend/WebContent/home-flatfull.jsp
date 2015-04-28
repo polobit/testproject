@@ -58,7 +58,7 @@ template = "pink";
 String width = currentUserPrefs.width;
 boolean is_fluid = !width.isEmpty();
 
-BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(null, null);
+BillingRestriction restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
 boolean is_free_plan = false;
 
 if(restriction != null && restriction.planDetails != null)
