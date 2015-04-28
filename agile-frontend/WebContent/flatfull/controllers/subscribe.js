@@ -191,7 +191,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			{
 				_IS_FREE_PLAN = false;
 				window.navigate("subscribe", { trigger : true });
-				showNotyPopUp("information", "You have been upgraded successfully", "top");
+				showNotyPopUp("information", "Your plan has been updated successfully", "top");
 			}
 			
 		});
@@ -260,7 +260,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			
 			saveCallback : function(){
 				window.navigate("subscribe", { trigger : true });
-				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
+				showNotyPopUp("information", "Your plan has been updated successfully. Please logout and login again for the new changes to apply.", "top");
 			},
 			postRenderCallback : function(el) {
 				card_expiry(el);
@@ -348,7 +348,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			saveCallback : function(data)
 			{
 				window.navigate("subscribe", { trigger : true });
-				showNotyPopUp("information", "You have been upgraded successfully", "top");
+				showNotyPopUp("information", "Your plan has been updated successfully", "top");
 			},
 			errorCallback : function(data)
 			{
