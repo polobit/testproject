@@ -59,13 +59,13 @@ function navigateToDetailsPage(data, name)
 			$(getTemplate('no-permission',obj)).modal('show');
 			return;
 		}
-		updateDeal(new BaseModel(model));
-		/*console.log(model);
+		// updateDeal(new BaseModel(model));
+		console.log(model);
 		var currentdeal=model;
 		Backbone.history.navigate("deal/"+currentdeal.id , {
             trigger: true
         });
-		return;*/
+		return;
 	}
 	if(model.entity_type == "document")
 	{

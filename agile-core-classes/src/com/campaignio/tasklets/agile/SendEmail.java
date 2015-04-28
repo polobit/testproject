@@ -529,7 +529,7 @@ public class SendEmail extends TaskletAdapter
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
-		html = appendUnsubscribeLink(html, subscriberId, campaignId, subscriberJSON.getJSONObject("data").getString("email"));
+		// html = appendUnsubscribeLink(html, subscriberId, campaignId, subscriberJSON.getJSONObject("data").getString("email"));
 		
 	    html = EmailUtil.appendTrackingImage(html, campaignId, subscriberId);
 
