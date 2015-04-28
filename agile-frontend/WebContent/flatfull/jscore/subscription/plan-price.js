@@ -217,7 +217,11 @@ $(function()
 	
 	  		// Set cost based on the selected plan type
 	  		var selected_plan = $(this).find("[name='pro_vs_lite']").val();
-	  			 
+	  		
+	  		removeStyleForAPlan();
+	  		var id = $(this).parent(); 	
+	  		addStyleForAPlan(id,null);	  
+	  		
 	      	// Cost
 	  		setCost(update_price());
 	  		
