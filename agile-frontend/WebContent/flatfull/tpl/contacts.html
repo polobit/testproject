@@ -10,10 +10,10 @@
 	<div class="row">
     	<div class="inline p-r-xs h-auto thumb-sm">
         	{{#if_contact_type "PERSON"}}
-        		<img class="thumbnail img-inital inline" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties }}" />
+        		<img class="thumbnail img-inital inline" data-name="{{dataNameAvatar properties 40}}" src="{{gravatarurl properties }}" />
         	{{/if_contact_type}}
 			{{#if_contact_type "COMPANY"}}
-        		<img class="thumbnail" {{getCompanyImage "" "display:inline;"}} />
+        		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
         	{{/if_contact_type}}
     	</div>
     	<div class="h-auto inline-block v-top text-ellipsis" style="width:70%">
@@ -220,7 +220,7 @@
 	</td>
 	<td class="data" data="{{id}}">
     	<div class="inline p-r-sm h-auto thumb-sm">
-        		<img class="thumbnail" {{getCompanyImage "" "display:inline;"}} />
+        		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
     	</div>
     	<div class="h-auto inline-block v-top text-ellipsis" style="width:14em;">
         		<a class="text-cap">{{getPropertyValue properties "name"}}</a>
