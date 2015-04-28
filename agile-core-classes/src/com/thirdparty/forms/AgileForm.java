@@ -1,6 +1,8 @@
 package com.thirdparty.forms;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
 import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,7 +70,7 @@ public class AgileForm extends HttpServlet
 	    String agileDomain = formJson.getString("_agile_domain");
 	    String agileRedirectURL = formJson.getString("_agile_redirect_url");
 	    String agileFormName = formJson.getString("_agile_form_name");
-	    com.googlecode.objectify.Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
+	    com.googlecode.objectify.Key<DomainUser> owner = getDomainUserKey(apiKey);
 
 	    org.json.JSONObject reqFormJson = getReqFormJson(formJson);
 
@@ -94,12 +96,7 @@ public class AgileForm extends HttpServlet
 	    }
 
 	    runFormTrigger(contact, newContact, form, formJson);
-
-	    if (StringUtils.equals(agileRedirectURL, "#"))
-		response.sendRedirect(getNormalizedRedirectURL(agileRedirectURL, contact, false, agileDomain));
-	    else
-		response.sendRedirect(getNormalizedRedirectURL(agileRedirectURL, contact, true, agileDomain));
-
+	    response.sendRedirect(getNormalizedRedirectURL(agileRedirectURL, contact, request));
 	    return;
 	}
 	catch (org.json.JSONException e)
@@ -293,8 +290,7 @@ public class AgileForm extends HttpServlet
 	{
 	    try
 	    {
-		com.googlecode.objectify.Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(formJson
-		        .getString("_agile_api"));
+		com.googlecode.objectify.Key<DomainUser> owner = getDomainUserKey(formJson.getString("_agile_api"));
 		if (owner != null)
 		    return result;
 	    }
@@ -302,7 +298,6 @@ public class AgileForm extends HttpServlet
 	    {
 		return !result;
 	    }
-
 	}
 	return result;
     }
@@ -355,11 +350,13 @@ public class AgileForm extends HttpServlet
 	    return null;
     }
 
-    public String getNormalizedRedirectURL(String agileRedirectURL, Contact contact, Boolean externalRedirect,
-	    String agileDomain)
+    public String getNormalizedRedirectURL(String agileRedirectURL, Contact contact, HttpServletRequest request)
     {
+	Boolean externalRedirect = StringUtils.equals(agileRedirectURL, "#") ? false : true;
+
 	String normalizedRedirectURL = externalRedirect ? agileRedirectURL.trim().replaceAll("\r", "")
-	        .replaceAll("\n", "") : new String("https://" + agileDomain + ".agilecrm.com/agileform_thankyou.jsp");
+	        .replaceAll("\n", "") : request.getRequestURL().toString()
+	        .replaceAll("formsubmit", "agileform_thankyou.jsp");
 
 	String params = "?fwd=cd";
 	if (StringUtils.contains(normalizedRedirectURL, "?"))
@@ -368,5 +365,17 @@ public class AgileForm extends HttpServlet
 	params = params + TrackClickUtil.appendContactPropertiesToParams(contact);
 
 	return normalizedRedirectURL + params;
+    }
+
+    public com.googlecode.objectify.Key<DomainUser> getDomainUserKey(String apiKey)
+    {
+	try
+	{
+	    return APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
+	}
+	catch (Exception e)
+	{
+	    return APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey);
+	}
     }
 }
