@@ -170,7 +170,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			{
 				_IS_FREE_PLAN = false;
 				window.navigate("subscribe", { trigger : true });
-				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
+				showNotyPopUp("information", "You have been upgraded successfully", "top");
 			}
 			
 		});
@@ -323,7 +323,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			saveCallback : function(data)
 			{
 				window.navigate("subscribe", { trigger : true });
-				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
+				showNotyPopUp("information", "You have been upgraded successfully", "top");
 			},
 			errorCallback : function(data)
 			{
@@ -551,6 +551,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		 */
 		$.getJSON("core/api/subscription?reload=true", function(data){
 			_billing_restriction = data.cachedData;
+			init_acl_restriction();
 			$("#content").html(getTemplate("subscribe", data))
 		
 			var subscription_model = new BaseModel(data);

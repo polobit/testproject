@@ -2,6 +2,7 @@ package com.agilecrm.core.api.subscription;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -11,19 +12,20 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
-import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -66,8 +68,9 @@ public class SubscriptionApi
 	    subscription = SubscriptionUtil.getSubscription(true);
 	else
 	    subscription = SubscriptionUtil.getSubscription();
-	
-	    subscription.cachedData = BillingRestrictionUtil.getBillingRestriction(subscription.plan.plan_type.toString(), subscription.plan.quantity);
+
+	subscription.cachedData = BillingRestrictionUtil.getBillingRestriction(subscription.plan.plan_type.toString(),
+		subscription.plan.quantity);
 	return subscription;
     }
 
@@ -83,7 +86,8 @@ public class SubscriptionApi
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Subscription subscribe(Subscription subscribe) throws PlanRestrictedException, WebApplicationException
+    public Subscription subscribe(@Context HttpServletRequest request, Subscription subscribe)
+	    throws PlanRestrictedException, WebApplicationException
     {
 	try
 	{
@@ -104,7 +108,7 @@ public class SubscriptionApi
 	    else if (subscribe.card_details == null)
 	    {
 		if (subscribe.plan != null)
-		    subscribe = changePlan(subscribe.plan);
+		    subscribe = changePlan(subscribe.plan, request);
 
 		else if (subscribe.emailPlan != null)
 		{
@@ -119,9 +123,6 @@ public class SubscriptionApi
 
 	    else if (subscribe.card_details != null && subscribe.plan != null)
 		subscribe = subscribe.createNewSubscription();
-
-	    // Sets plan in session
-	    BillingRestrictionUtil.setPlanInSession(subscribe.plan);
 
 	    // Initializes task to clear tags
 	    AccountLimitsRemainderDeferredTask task = new AccountLimitsRemainderDeferredTask(NamespaceManager.get());
@@ -159,12 +160,20 @@ public class SubscriptionApi
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Subscription changePlan(Plan plan)
+    public Subscription changePlan(Plan plan, HttpServletRequest request)
     {
 	try
 	{
+	    BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
+	    Subscription subscribe = Subscription.updatePlan(plan);
+
+	    BillingRestriction restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(subscribe.plan,
+		    request);
+
+	    subscribe.cachedData = restriction;
+
 	    // Return updated subscription object
-	    return Subscription.updatePlan(plan);
+	    return subscribe;
 	}
 	catch (PlanRestrictedException e)
 	{
@@ -257,24 +266,24 @@ public class SubscriptionApi
 		    .build());
 	}
     }
-    
+
     // get perticular invoice
     @Path("/getinvoice")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Invoice getInvoice(@QueryParam("d") String invoice_id)
     {
- 	try
- 	{
- 		return StripeUtil.getInvoice(invoice_id);
- 	}
- 	catch (Exception e)
- 	{
- 		e.printStackTrace();
- 		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
- 				.build());
+	try
+	{
+	    return StripeUtil.getInvoice(invoice_id);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 
- 	}
+	}
     }
 
     /**
@@ -323,20 +332,19 @@ public class SubscriptionApi
 	{
 	    // Get current domain subscription entity
 	    Subscription subscription = SubscriptionUtil.getSubscription();
-	    
-	    if(subscription == null)
+
+	    if (subscription == null)
 		return;
 
 	    subscription.cancelSubscription();
-	    
+
 	    subscription.refreshCustomer();
-	    
+
 	    subscription.plan = null;
 	    subscription.emailPlan = null;
-	    
+
 	    subscription.save();
-	    
-	  
+
 	}
 	catch (Exception e)
 	{
