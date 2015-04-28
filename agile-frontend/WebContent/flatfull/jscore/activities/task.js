@@ -11,7 +11,31 @@ $(function()
 {
 
 	$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
+	$('.update-task-timepicker').timepicker().on('show.timepicker', function(e) 
+	{
+		if($('.update-task-timepicker').attr('value')!="" && $('.update-task-timepicker').attr('value')!=undefined)
+		{
+			if($('.update-task-timepicker').attr('value').split(":")[0]!=undefined)
+				e.time.hours = $('.update-task-timepicker').attr('value').split(":")[0];
+			if($('.update-task-timepicker').attr('value').split(":")[0]!=undefined)
+				e.time.minutes = $('.update-task-timepicker').attr('value').split(":")[1];
+		}
+		$('.bootstrap-timepicker-hour').val(e.time.hours);
+		$('.bootstrap-timepicker-minute').val(e.time.minutes);
+	});
 	$('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false });
+	$('.new-task-timepicker').timepicker().on('show.timepicker', function(e) 
+	{
+		if($('.new-task-timepicker').attr('value')!="" && $('.new-task-timepicker').attr('value')!=undefined)
+		{
+			if($('.new-task-timepicker').attr('value').split(":")[0]!=undefined)
+				e.time.hours = $('.new-task-timepicker').attr('value').split(":")[0];
+			if($('.new-task-timepicker').attr('value').split(":")[0]!=undefined)
+				e.time.minutes = $('.new-task-timepicker').attr('value').split(":")[1];
+		}
+		$('.bootstrap-timepicker-hour').val(e.time.hours);
+		$('.bootstrap-timepicker-minute').val(e.time.minutes);
+	});
 
 	// Loads progress slider in add task / update modal.
 	loadProgressSlider($("#taskForm"));
