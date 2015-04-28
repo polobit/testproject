@@ -512,7 +512,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </div>
   </aside>
 <div class="app-content" id="agilecrm-container">
-<div class="butterbar animation-active"><span class="bar"></span></div>
+<div class="butterbar animation-active" style="z-index:99;"><span class="bar"></span></div>
 <div id="content" class="app-content-body">
 <!-- <img class="init-loading" style="padding-right: 5px"
 src="img/21-0.gif"></img> -->

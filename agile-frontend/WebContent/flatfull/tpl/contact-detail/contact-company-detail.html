@@ -266,14 +266,13 @@
 <script id="company-contacts-model-template" type="text/html">
 	<td></td>
 	<td class="data" data="{{id}}" >
-    	<div class="thumb agile-img m-r-xs"> 
+    	<div class="thumb-sm agile-img m-r-xs"> 
         		<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" />
     	</div>
     	<div class="agile-thumb agile-thumb-view">
-        		<b>	{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}} </b>
-        		<br />
-        		{{getPropertyValue properties "email"}}
+        		<a class="text-cap">	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </a>  </br>      		
+        		<small class="text-muted">{{getPropertyValue properties "email"}}</small>
     	</div>
 	</td>
 	<td><div class="text-ellipsis">{{getPropertyValue properties "title"}}<br />

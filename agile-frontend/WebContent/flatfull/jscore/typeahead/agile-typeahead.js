@@ -347,7 +347,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								if (tag_not_exist)
 									$('.deal_tags', el)
 											.append(
-													'<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><!-- a href="#deal/' + TYPEHEAD_TAGS[items] + '" -->' + items_temp + '<!-- /a --><a class="close" id="remove_tag">&times</a></li>');
+													'<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><a href="#deal/' + TYPEHEAD_TAGS[items] + '" >' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
 							}
 							else
 							{
@@ -542,7 +542,6 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 									that.hide();
 							}, 150)
 						}, minLength : 2, })
-
 }
 
 // Removes tags ("Related to" field contacts)

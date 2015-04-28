@@ -287,7 +287,7 @@ function showTwilioDetails(token, from_number)
 	if (Numbers.length == 0)
 	{
 		// Shows information in Twilio widget panel
-		twilioError(Twilio_PLUGIN_NAME, "There is no phone number associated with this contact. <a href='#contact-edit'>Add phone number</a>");
+		twilioError(Twilio_PLUGIN_NAME, "There is no phone number associated with this contact. <a href='#contact-edit' class='text-info'>Add phone number</a>");
 		return;
 	}
 
