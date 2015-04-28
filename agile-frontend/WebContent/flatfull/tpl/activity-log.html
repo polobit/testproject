@@ -108,10 +108,11 @@ Changed Due date of Task '{{safe_string ../label}}'<br/>
 <i class="icon-tasks icon-white"></i> Task deleted later. Task {{displayActivityFieldText ../custom3}} modified.
 {{/get_event_rescheduled}}
 {{/if}}
-</div>
-<div class="activities_second_line m-t-none">
+<span class="activities_second_line m-t-none">
  {{#if related_contact_ids}} Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}  
+</span>
 </div>
+
 {{/if_equals}}
 
 
