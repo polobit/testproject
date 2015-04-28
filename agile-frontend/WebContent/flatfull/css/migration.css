@@ -1160,12 +1160,12 @@ color:#1f2427!important;
 	cursor: move;
 }
 
-.miltstone-title
+/*.miltstone-title
 {
 	font-size:18px;
 	color:#888;
 }
-
+*/
 .header-min-width {
 	min-width:90px;
 }
@@ -1202,4 +1202,7 @@ top:117px;
 	padding-left:0px;
 }
 
-
+.score-view img
+{
+	opacity:0.5;
+}

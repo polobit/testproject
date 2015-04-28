@@ -39,6 +39,7 @@
 								<a class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-angle-down text-lg"></span></a>
 								<ul class="dropdown-menu pull-right">
                                     <li><a href='#contact-edit'><i class="icon-edit"></i> Edit </a></li>
+<li class="divider"></li>
 									<li><a href='#' class="contact-add-note"><i
 											class="icon-file"></i> Add Note</a></li>
 									<li><a href='#' class="contact-add-task"><i
@@ -255,7 +256,7 @@
 			{{else}}
 			<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add"><a class="c-p">Assign Owner</a></span>
  			{{/if}}
-        	<span id="contact-owner" class="custom-color" data={{owner.id}}>{{owner.name}}</span>
+        	<a id="contact-owner" class="custom-color" data={{owner.id}}>{{owner.name}}</a>
         
         	{{#canEditContact owner.id}}
         	<div class="dropdown" id="change-owner-ul" style="display: none">

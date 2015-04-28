@@ -2,25 +2,26 @@
 
 <div class="app-content-full  h-full dock-view-fixing">
 <div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
-<div class="col w-xl bg-light lter b-r">
+<div class="col  bg-light lter b-r" style="width:299px">
 <div class="vbox">
 <div class="row-row">
 <div class="wrapper pos-rlt">
-<div class="contact-navigation-view"><span class="navigation  contact-switching"></span></div>
+<div class="contact-navigation-view hide"><span class="navigation  contact-switching"></span></div>
 <div class="h3 font-thin custom-color m-b-xs" style="width:85%">{{#if name}}{{name}}{{/if}}</div>
-<div class="m-b-sm    m-t-sm">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
+<div class="m-b-sm h3 font-thin   m-t-sm">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
 <div class="m-b-sm text-muted">
 {{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >Archived</span>{{else}}
+	
+{{#getTracksCount}}<span class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >{{pipeline.name}} , </span>{{/getTracksCount}}					
 						
-						
-						{{#if_equals milestone "Won"}} <span>{{milestone}}</span>
+{{#if_equals milestone "Won"}} <span>{{milestone}}</span>
 {{else}}
 {{#if_equals milestone "Lost"}} <span>{{milestone}}</span>
 {{else}}
 <span>{{milestone}}</span>
 {{/if_equals}}
 {{/if_equals}} 
-{{#getTracksCount}}<span class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >{{pipeline.name}}</span>{{/getTracksCount}}
+
 						
 						{{/if}} 
  <span>- {{probability}}%</span></div>
@@ -43,7 +44,7 @@
       	<div class="contact-owner" id="change-owner-element">
         	<div><small class="text-xs text-muted"> Owner:&nbsp;&nbsp;</small></div>
 		
-        	<div  data={{owner.id}} class="deal-owner-name contact-owner-name c-d">{{owner.name}}</div>
+        	<a href="#"  data={{owner.id}} class="deal-owner-name contact-owner-name c-d">{{owner.name}}</a>
         
         	
        </div>
@@ -62,6 +63,7 @@
 								<a class=" dropdown-toggle" data-toggle="dropdown"><span class="fa fa-angle-down text-lg"></span></a>
 								<ul class="dropdown-menu pull-right">
                                     <li><a href="#" class="deal-detail-edit-deal" id="deal_details"><i class="icon-edit"></i> Edit</a></li>
+                                    <li class="divider"></li>
 									<li><a href='#'  id="dealshow-note" class="deal-note"><i
 											class="icon-file"></i> Add Note</a></li>
                                     <li><a href='#'  id="dealdetail-archive" class="deal-detail-archive"><i class="icon-archive"></i> Archive</a></li>
@@ -89,9 +91,7 @@
 {{/if}}
 
 <div>
-<div class="m-t-sm">
-<small class="text-xs text-muted">Custom Data</small>
-</div>	
+
                            
 
 <div class="deal-custom-data"> 
@@ -100,9 +100,13 @@
 								<div class="l-h">
 									
 									{{#if custom_data}}
+                                      <div class="m-t-sm">
+                                      <small class="text-xs text-muted">Custom Data</small>
+                                       </div>
 									{{#getDealCustomProperties custom_data}}
 									{{#each_with_index this}}
-
+                                       
+                                   	
 
                                             <span class="contact-custom-name">
 												<span class="text-light" title="{{name}}">{{name}}</span>
@@ -122,14 +126,15 @@
 						
 				
 					
+
 					</div>
 
 <div class="m-t-sm">
-
+{{#if contacts}}
 <div class="m-b-xs">
         	<small class="text-xs text-muted">Related to</small>
 </div>
-
+{{/if}}
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}
         		<a href="#contact/{{id}}" class="activate-link thumb"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>

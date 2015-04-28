@@ -2,15 +2,15 @@
 <script id="task-detail-template" type="text/html">
 <div class="app-content-full  h-full dock-view-fixing">
 <div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
-<div class="col w-xl bg-light lter b-r">
+<div class="col  bg-light lter b-r" style="width:299px">
 <div class="vbox">
 <div class="row-row">
 <div class="wrapper pos-rlt">
 
                   <div> 
-                    <div class="text-cap h3 font-thin custom-color" style="width:85%">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span><span class="label bg-light dk inline-block m-l-sm text-xs">{{task_property type}}</span>                  
+                    <div class="text-cap h3 font-thin custom-color" style="width:85%">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span><span class="label bg-light dk inline-block m-l-sm text-xs pos-rlt pos-t-n-xs">{{task_property type}}</span>                  
                     {{#if_not_equals priority_type "NORMAL" }}
-                   <span class="label label-{{task_label_color priority_type}} inline-block m-l-sm text-xs">{{ucfirst priority_type}}</span>
+                   <span class="label label-{{task_label_color priority_type}} inline-block m-l-sm text-xs pos-rlt pos-t-n-xs">{{ucfirst priority_type}}</span>
                          {{/if_not_equals}}</div>
                   </div>
 					
@@ -23,6 +23,7 @@
 								<ul class="dropdown-menu pull-right" role="menu">
 
                                    <li><a  href="javascript:void(0)" data="{{id}}" id="task_edit" ><i class="icon-edit"></i> Edit</a></li>
+                                   <li class="divider"></li>
 									<li><a href="#new-task-modal"  data-toggle="modal"><i class="icon-file"></i>Add Note</a></li>
                                     
 									<li><a href='javascript:void(0)'  data="{{id}}" class ="delete_task"><i	class="icon-trash"></i> Delete</a></li>
@@ -36,11 +37,11 @@
 <div class="m-t-sm">
 {{#if_equals "IN_PROGRESS" status}}
 <div class="w-md">
-<div>{{displayTaskStatus status}} ({{progress}}%)</div>
+<div>{{displayTaskStatus status}}  {{progress}}%</div>
 <div style="height:5px;" class="progress progress-info w-full m-b-none">
-          <div class="bar" style="width: {{progress}}%;"></div>
+          <div class="progress-bar" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;"></div>
      </div> 
- <div><time datetime="{{epochToHumanDate "dd mmm yyyy" due}}">(Due {{epochToHumanDate "dd mmm yyyy" due}})</time></div>
+ <div><time datetime="{{epochToHumanDate "dd mmm yyyy" due}}">Due {{epochToHumanDate "dd mmm yyyy" due}}</time></div>
 <div class="clearfix"></div>
  
 </div>
@@ -76,7 +77,7 @@
 			<!-- <span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span> -->
             <span class="task-owner-add text-sm"><a style="cursor:pointer;">Assign Owner</a></span>
  			{{/if}}
-        	<span id="task-owner" data={{taskOwner.id}} class="task-owner-name contact-owner-name">{{taskOwner.name}}</span>
+        	<a href="#" id="task-owner" data={{taskOwner.id}} class="task-owner-name contact-owner-name">{{taskOwner.name}}</a>
         
         	{{#canEditContact taskOwner.id}}
         	<div class="btn-group v-middle" id="change-task-owner-ul" style="display: none">
