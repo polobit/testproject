@@ -1282,3 +1282,11 @@ border-collapse: separate;
 	height: 34px;
 	width: 34px;
 }
+
+.text-head-black{
+	color:#333;
+}
+
+#myCarousel .item{
+	margin-left: 0px !important;
+}

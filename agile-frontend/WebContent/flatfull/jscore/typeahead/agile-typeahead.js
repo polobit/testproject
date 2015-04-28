@@ -127,7 +127,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 										return;
 									}
 
-									that.$menu.html('<div style="margin-top:10px"><p align="center">' + txt + '<p></div>');
+									that.$menu.html('<div class="m-t-sm"><p align="center" class="custom-color">' + txt + '<p></div>');
 									that.render();
 									return;
 								}
