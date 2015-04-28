@@ -687,6 +687,12 @@ function enableCustomFieldsSorting(el,connClass,connId){
 			    });
 			    return $helper;
 			},
+			start: function(event, ui){
+				$.each(ui.item.children(),function(index,ele){
+					ui.helper.children().eq(index).width(ui.helper.children().eq(index).width()-$(this).width());
+				});
+				ui.helper.width(ui.helper.width());
+			},
 			forceHelperSize:true,
 			placeholder:'<tr><td></td></tr>',
 			forcePlaceholderSize:true,
