@@ -1,7 +1,7 @@
 <script id="company-detail-template" type="text/html">
 <div class="row hide"><small class="navigation span9" style="min-height:10px!important;font-size:smaller;line-height:6px;"></small></div>
-<div class="app-content-full  h-full">
-<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
+<div class="app-content-full  h-full dock-view-fixing">
+<div class="hbox hbox-auto-xs hbox-auto-sm bg-light ">
 <div class="col w-xl bg-light lter b-r">
 <div class="vbox">
 <div class="row-row">
@@ -215,7 +215,7 @@
 			{{else}}
 			<span class="contact-owner-pic" style="visibility:hidden;"><img class="user-img"  alt="" src="img/company.png" /></span><span class="contact-owner-add" style="font-size:13px;"><a style="cursor:pointer;">Assign Owner</a></span>
  			{{/if}}
-        	<span id="contact-owner" data={{owner.id}} style="display:inline-block;max-width:82%;" class="contact-owner-name">{{owner.name}}</span>
+        	<a href="#" id="contact-owner" data={{owner.id}} style="display:inline-block;max-width:82%;" class="contact-owner-name">{{owner.name}}</a>
         
         	{{#canEditContact owner.id}}
         	<div class="btn-group" id="change-owner-ul" style="vertical-align: middle; display: none">
