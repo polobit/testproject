@@ -4504,7 +4504,7 @@ $(function()
 
 																								if (value > 1 && value < 40)
 																								{
-																												type = "label-important";
+																												type = "label-danger text-tiny";
 																												reputation = "Poor";
 																								}
 																								else if (value >= 40 && value < 75)

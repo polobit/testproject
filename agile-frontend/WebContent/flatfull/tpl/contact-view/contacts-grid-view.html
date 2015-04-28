@@ -130,7 +130,9 @@
 						<li><a href="#" id="bulk-email">Send Email</a></li>
                         <li class='divider'></li>
 						<li><a href="#" id="bulk-owner">Change Owner</a></li>
+                         {{#hasScope "EXPORT_CONTACTS"}}
                         <li><a href="#" id="bulk-contacts-export">Export Contacts as CSV</a></li>
+                         {{/hasScope}}
 						<li><a href="#" id="delete-checked-grid">Delete</a></li>
 					</ul>
 					{{/collection_contact_type}}
