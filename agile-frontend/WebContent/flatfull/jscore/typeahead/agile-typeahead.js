@@ -268,7 +268,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 	            });
 	            // add tag
 	            if (tag_not_exist)
-	            	$('.deal_tags', el).append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><!-- a href="#deal/' + TYPEHEAD_TAGS[items] +'" -->' + items_temp + '<!-- /a --><a class="close" id="remove_tag">&times</a></li>');
+	            	$('.deal_tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  data="' + TYPEHEAD_TAGS[items] + '"><!-- a href="#deal/' + TYPEHEAD_TAGS[items] +'" -->' + items_temp + '<!-- /a --><a class="close" id="remove_tag">&times</a></li>');
             }
             else
             {
@@ -322,7 +322,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
                              }
                          });
                          if(email_check)
-                         	$('#' + id, el).closest("div.controls").find(".tags").append('<li class="tag"  style="display: inline-block;" data="' + email_value + '"><a style="cursor:pointer;">' + email_value + '</a><a class="close" id="remove_tag">&times</a></li>');
+                         	$('#' + id, el).closest("div.controls").find(".tags").append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block"   data="' + email_value + '"><a style="cursor:pointer;">' + email_value + '</a><a class="close" id="remove_tag">&times</a></li>');
                          this.select();
             		  }
             		  else this.hide();

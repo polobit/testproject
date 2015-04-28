@@ -247,7 +247,7 @@ $(function()
 						model.type = "PERSON";
 
 						// Shows Updating
-						$waiting.find('#status-message').html(getRandomLoadingImg());
+						/*$waiting.find('#status-message').html(getRandomLoadingImg());*/
 
 						// Represents prototype of contact, which specifies the
 						// order of properties

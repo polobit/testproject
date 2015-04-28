@@ -113,7 +113,7 @@ function isValid(){
 <div class="col-md-3 col-sm-6 col-xs-12">
 <div class="panel panel-default">
 <div class="panel-heading">
-<h4 class="h4" style="color: #777!important;">Upload your image file</h4>
+Upload your image file
 </div>
 <div class="panel-body">
 <p>For best results, we recommend you upload png files. You can also upload jpg or gif files also.</i></p>
