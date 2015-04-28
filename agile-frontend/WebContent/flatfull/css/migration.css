@@ -972,7 +972,7 @@ time,i.fa-clock-o
 {
 	font-size:12px!important;
 }
-.panel .panel-heading,#prefs-tabs-content h4:not(.m-t-none),#admin-prefs-tabs-content h4:not(.m-t-none)
+#prefs-tabs-content h4:not(.m-t-none),#admin-prefs-tabs-content h4:not(.m-t-none)
 {
 	
 	color:#777!important;
