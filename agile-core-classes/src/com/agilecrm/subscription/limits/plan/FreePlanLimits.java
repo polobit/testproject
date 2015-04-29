@@ -28,7 +28,7 @@ public class FreePlanLimits extends PlanLimits
 	reporting = "EMAIL_REPORTING";
 	whiteLabelEnabled = false;
 	campaignNodesLimit = 5;
-	emailAccountsLimit = 10;
+	emailAccountsLimit = 1;
 
 	/**
 	 * New plan limits

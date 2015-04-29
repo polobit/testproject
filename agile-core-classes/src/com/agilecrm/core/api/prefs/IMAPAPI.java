@@ -74,7 +74,7 @@ public class IMAPAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public IMAPEmailPrefs createIMAPEmailPrefs(IMAPEmailPrefs prefs)
     {
-	int emailAccountLimitCount = BillingRestrictionUtil.getBillingRestriction(null, null).getCurrentLimits()
+	int emailAccountLimitCount = BillingRestrictionUtil.getInstance().getCurrentLimits()
 	        .getEmailAccountLimit();
 	int emailPrefsCount = ContactEmailUtil.getEmailPrefsCount();
 	if (emailPrefsCount < emailAccountLimitCount)
