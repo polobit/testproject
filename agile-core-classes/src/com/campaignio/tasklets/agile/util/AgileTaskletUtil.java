@@ -813,7 +813,7 @@ public class AgileTaskletUtil
 	 * used for both old milestone value where the value of milestone is default
 	 * ones like New, Won and also for the one with pipelineID_New or
 	 * pipelineID_Won. If there is default milestone without an ID, default
-	 * pipeline is returned to be compatile with old ones
+	 * pipeline is returned to be compatible with old ones
 	 * 
 	 * @param milestone
 	 * @return a map of milestone and pipelineID

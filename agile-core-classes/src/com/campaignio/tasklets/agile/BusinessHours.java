@@ -14,7 +14,8 @@ import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
  * <code>Time</code> class looks at the current timing rules and looks at the
- * values given out in the grid and gives Yes or No.
+ * values given out in the grid and gives Yes or No. Node name - Check Business
+ * Hours
  * 
  * @author Manohar
  * 
