@@ -20,12 +20,20 @@ var WebreportsRouter = Backbone.Router.extend({
 						$.ajax({ url : 'core/api/api-key', type : 'GET', dataType : 'json', success : function(data)
 						{
 							$('#content').html(getTemplate("webrule-collection", data));
+
+							if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO")
+							{
+								$("#whitelist-enabled").removeClass("hide");
+								$("#whitelist-disabled").addClass("hide");
+							}
 							prettyPrint();
 						} });
 
-						/*if($(el).has("#api_track_webrules_code_icon").length != 0){
-							initZeroClipboard("api_track_webrules_code_icon", "api_track_webrules_code");
-						}*/
+						/*
+						 * if($(el).has("#api_track_webrules_code_icon").length !=
+						 * 0){ initZeroClipboard("api_track_webrules_code_icon",
+						 * "api_track_webrules_code"); }
+						 */
 					});
 				}
 				else
@@ -42,7 +50,7 @@ var WebreportsRouter = Backbone.Router.extend({
 	},
 	web_reports_add : function()
 	{
-		if(!tight_acl.checkPermission('WEBRULE'))
+		if (!tight_acl.checkPermission('WEBRULE'))
 			return;
 		var web_reports_add = new Base_Model_View({ url : 'core/api/webrule', template : "webrules-add", window : "web-rules", isNew : true,
 			postRenderCallback : function(el)
@@ -65,7 +73,7 @@ var WebreportsRouter = Backbone.Router.extend({
 
 	web_reports_edit : function(id)
 	{
-		if(!tight_acl.checkPermission('WEBRULE'))
+		if (!tight_acl.checkPermission('WEBRULE'))
 			return;
 
 		// If reports view is not defined, navigates to reports
@@ -80,7 +88,8 @@ var WebreportsRouter = Backbone.Router.extend({
 		// Gets a report to edit, from reports collection, based on id
 		var webrule = this.webrules.collection.get(id);
 
-		// Default template is webrule-add. If rule is of type shopify template is changed accordingly
+		// Default template is webrule-add. If rule is of type shopify template
+		// is changed accordingly
 		var template = "webrules-add";
 		var web_reports_add = new Base_Model_View({ url : 'core/api/webrule', model : webrule, template : template, window : "web-rules",
 			postRenderCallback : function(el)
