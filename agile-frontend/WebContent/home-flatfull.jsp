@@ -466,7 +466,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="documentsmenu">
     <a  href="#documents">
       <i class="icon icon-doc"></i>
-      <span>Documents</span>
+      <span><%if(currentUserPrefs.menuPosition.equals("leftcol")){%>Docs<%}else{ %>Documents<%} %></span>
     </a>
   </li>
   <li class="line dk"></li>

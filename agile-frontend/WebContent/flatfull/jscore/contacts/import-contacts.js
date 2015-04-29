@@ -5,7 +5,7 @@ $(function()
 	// Cancels import, removes the contacts uploaded in to
 	// table, still calls
 	// fileUploadInit,
-	// so user can upload again if required
+	// so user can uploadimport-comp again if required
 	$('#import-cancel').die().live('click', function(e)
 	{
 
@@ -421,7 +421,7 @@ $('#import-comp')
 					model.type = "COMPANY";
 
 					// Shows Updating
-					$waiting.find('#status-message').html(getRandomLoadingImg());
+					/*$waiting.find('#status-message').html(getRandomLoadingImg());*/
 
 					// Represents prototype of contact, which specifies the
 					// order of properties

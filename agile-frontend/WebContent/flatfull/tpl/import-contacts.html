@@ -97,7 +97,7 @@
 <div class="row">
     <div class="col-sm-9 col-md-9">
 		<div class="panel panel-default">
-			<div class="panel-heading font-bold"><h4 class="h4">CSV Contacts Import List</h4></div>	 
+			<div class="panel-heading">CSV Contacts Import List</div>	 
 				<table class="table table-striped showCheckboxes m-b-none agile-table panel">
 			    <thead id="import-header">
 			       </thead><thead>
@@ -184,22 +184,25 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
      
-            <h3 class="font-thin h3">CSV Companies Import <small> Field mapping </small></h3>
+            <h3 class="font-thin h3">CSV Companies Import<br> <small> Field mapping </small></h3>
        
     </div>
 </div>
 </div>
+<div class="wrapper-md">
 <div class="row">
     <div class="col-sm-9 col-md-9">
+    <div class="panel panel-default">
+    <div class="panel-heading">CSV Companies Import List</div>
 		<div class="col-sm-9 col-md-9">
 			
-				<table class="table table-bordered table-striped" style="border-collapse: collapse;">
+				<table class="table table-striped m-b-none agile-table panel">
 			    <thead id="import-header">
 			       </thead><thead>
-						<tr><th>
+						<tr><th style="width:50%;">
 							CSV headings
 						</th>
-						<th>	
+						<th style="width:50%;">	
 							Fields
 						</th>
 					</tr></thead>
@@ -220,29 +223,35 @@
 				 </tbody>
 			</table>
 		</div>
-		<br>
-		<div class="col-sm-12 col-md-12">
+		<footer class="panel-footer">
+		<div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12">
 		
 			
+			<a class="btn btn-sm btn-primary pull-right" id="import-comp" style="margin-left:2px">Import</a>
+			<a class="btn btn-default btn-sm pull-right" id="import-cancel">Cancel</a>
 			<div id="import-validation-error"></div>
-			<a class="btn btn-default btn-sm" id="import-cancel">Cancel</a>
-			<a class="btn btn-sm btn-primary" id="import-comp" style="margin-left:2px">Import</a>
+			
 		</div>
+		</div>
+		</footer>
 	</div>
-	<div class="col-sm-3 col-md-3">
+	</div>
+	<div class="col-sm-3 col-md-3 p-none">
         <div class="data-block">
-            <div class="well">
-				<h4 class="m-t-none">
+            <div class="wrapper-sm">
+				<h4 class="m-t-none h4">
                     Import Help
                 </h4>
                 <br>
-				<ul>
+				<ul class="p-l-md">
 					<li>Company name is mandatory for import companies</li>
 				</ul>
             </div>
 
         </div>
 	</div>
+</div>
 </div>
 </script>
 
