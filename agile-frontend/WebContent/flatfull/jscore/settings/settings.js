@@ -161,7 +161,7 @@ $(function() {
 								"none");
 						var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
 						fillSelect(
-								'#gmail-share-user-select',
+								'gmail-share-user-select',
 								'core/api/social-prefs/shared-to-users?id='
 										+ id,
 								'users',
@@ -272,7 +272,7 @@ $(function() {
 								.css("display", "inline");
 						var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
 						fillSelect(
-								'#office-share-user-select',
+								'office-share-user-select',
 								'core/api/office/shared-to-users?id=' + id,
 								'users',
 								function fillNew() {
