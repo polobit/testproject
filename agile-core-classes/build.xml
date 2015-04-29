@@ -51,8 +51,8 @@
     </target>
     <target name="clean">
         <delete includeemptydirs="true">
-    		<fileset dir="bin" includes="**/*"/>
-		</delete>
+            <fileset dir="bin" includes="**/*"/>
+        </delete>
     </target>
     <target depends="clean" name="cleanall"/>
     <target depends="build-subprojects,build-project" name="build"/>

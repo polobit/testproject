@@ -12,7 +12,6 @@ import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.queues.cron.CronPullServlet;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.campaignio.cron.Cron;
 import com.campaignio.cron.deferred.CronDeferredTask;
@@ -224,6 +223,7 @@ public class CronUtil
 		System.out.println(milliSeconds + " " + NamespaceManager.get());
 
 		Query<Cron> query = dao.ofy().query(Cron.class).filter("timeout <= ", milliSeconds);
+		int count = query.count();
 
 		QueryResultIterator<Cron> iterator = query.iterator();
 
@@ -237,7 +237,7 @@ public class CronUtil
 			cronList.add(cron);
 
 			// Run cron job
-			executeTasklets(cronList, Cron.CRON_TYPE_TIME_OUT, null);
+			executeTasklets(cronList, Cron.CRON_TYPE_TIME_OUT, null, count);
 		}
 
 		NamespaceManager.set(oldNamespace);
@@ -274,7 +274,7 @@ public class CronUtil
 		List<Cron> cronJobs = dao.listByProperty(searchMap);
 
 		// Execute in another tasklet
-		executeTasklets(cronJobs, Cron.CRON_TYPE_INTERRUPT, interruptData);
+		executeTasklets(cronJobs, Cron.CRON_TYPE_INTERRUPT, interruptData, cronJobs.size());
 
 		dao.deleteAll(cronJobs);
 	}
@@ -288,12 +288,13 @@ public class CronUtil
 	 *            timeout or interrupt.
 	 * @param customData
 	 *            custom data.
+	 * @param totalCronJobsCount
+	 *            - Total matched cron jobs count to direct respective Queue
 	 */
-	public static void executeTasklets(List<Cron> cronJobs, String wakeupOrInterrupt, JSONObject customData)
+	public static void executeTasklets(List<Cron> cronJobs, String wakeupOrInterrupt, JSONObject customData,
+			int totalCronJobsCount)
 	{
 		System.out.println("Jobs dequeued - " + wakeupOrInterrupt + " [" + cronJobs.size() + "]" + cronJobs);
-
-		int size = cronJobs.size();
 
 		// Iterate through all tasks
 		for (Cron cron : cronJobs)
@@ -307,10 +308,7 @@ public class CronUtil
 
 			// If bulk crons wake up from Wait, add to pull queue
 			if (wakeupOrInterrupt.equalsIgnoreCase(Cron.CRON_TYPE_TIME_OUT))
-			{
-				PullQueueUtil.addToPullQueue(size >= CronPullServlet.FETCH_LIMIT ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE
-						: AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, cronDeferredTask, cron.namespace);
-			}
+				PullQueueUtil.addToPullQueue(AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, cronDeferredTask, cron.namespace);
 			else
 			{
 				// Interruptted crons like Click, Open

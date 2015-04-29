@@ -1,0 +1,122 @@
+<script id="admin-tag-management-collection-template" type="text/html">
+<div id='tags'>
+	{{#tagslist this}}
+	{{/tagslist}}
+</div>
+</script>
+
+<script id="tag-management-collection-template" type="text/html">
+
+
+
+<div align="right"> 
+<div><a href="#" id="add-new-tag" class="btn btn-default btn-addon btn-sm"><i class="icon-plus-sign" ></i> Add Tag</a></div>
+<div id="new_tag_field_block" style="display:none;" class="inline pull-right"><input id="new_tag" type="text" class="form-control pull-left m-r-sm w" placeholder="New Tag"/><a class="btn btn-info pull-left v-top  btn-sm" id="add_new_tag" href="#">Add</a></div>
+   		</div>
+<div class="clearfix"></div>
+<div class="alert alert-warning m-t-sm" role="alert">
+  				Important: We have made some changes to Tag management. Tag names can no longer have special characters except space and underscore. Please go through your tags below and rename them accordingly.
+			</div>
+
+<div class="clearfix"></div> 
+
+
+<div class="control-group form-group">  
+{{tagManagementCollectionSetup this}}	 
+                    <div id="milestone-values" class="milestone-ul-list1">
+						<ul class="tags-management tag-cloud p-n" id="tag-management-model-list"></ul>
+                    </div>
+<div class="clearfix"></div>
+					</div>
+
+   
+   
+
+</script>
+
+<script id="tag-management-model-template1" type="text/html">
+<span>
+
+<div id="tag-solid-state">
+	<span class="w-10em inline-block text-ellipsis">
+
+<a class="anchor" href="#tags/{{this.tag}}">{{this.tag}}</a> 
+
+</span>
+<span id="actions" class="agile-custom-hide text-xs">
+	<span><a class="close delete right" href="#">&times</a></span>
+	<span><a class="edit right" href="#"><i class="icon-pencil"></i></a></span>
+<span>
+</div>
+<div class="agile-custom-hide" id="editing">
+	<input type="text" class="edit-input input-medium form-control" value='{{this.tag}}' >  
+	<a class="btn btn-sm btn-default" id="add_milestone" href="#">Add</a>
+</div>
+</span>
+</script>
+
+<script id="tag-management-model-template" type="text/html">
+<span>
+
+<div id="tag-solid-state">
+<a class="anchor text-ellipsis v-middle text-sm p-l-xs text-sm pull-left inline-block"  style="width:140px" href="#tags/{{this.tag}}" >{{this.tag}}</a>  
+<span id="actions" class="agile-custom-hide text-xs">
+<div class="pull-right tag-management-actions">
+	<a class="details" href="#"><i class="icon-file-text"></i></a>
+	<a class="edit" href="#" ><i class="icon-pencil"></i></a>
+	<a class="delete" href="#" ><i class="icon-trash"></i></a>
+</div>
+<div class="clearfix"></div>
+</div>
+<div class="agile-custom-hide pull-left m-b-sm m-l-sm" id="editing">
+	<input type="text" class="edit-input w-200 pull-left form-control m-r-sm" style="height:30px;" value='{{this.tag}}'>  
+	
+</div>
+</span>
+</script>
+
+
+
+<script id="tag-cloud-collection-template" type="text/html">
+<div class="row">
+	<div class='col-md-8'>
+<div class="well">
+
+    		<legend>Tag</legend>
+                    <div id="tag-cloud">
+						<ul id="tag-cloud-model-list"></ul>
+                    </div>
+</div>
+    </div>
+</div>
+</script>
+
+<script id="tag-cloud-model-template" type="text/html">
+
+<!--
+<div id="tag-solid-state" class="w-15em">
+	<a href="#" id="{{tag}}" data-toggle="popover" title="" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title"><span style="white-space: nowrap; text-overflow: ellipsis; ; overflow: hidden; width: 12em; display: inline-block;">{{this.tag}} </span></a>
+<span id="actions" class="agile-custom-hide text-xs">
+	<span><a class="delete right" href="#">&times</a></span>
+	<span><a class="edit right" href="#"><i class="icon-pencil"></i></a></span>
+<span>
+</div>
+<div class="agile-custom-hide" id="editing">
+	<input type="text" class="edit-input input-medium form-control" value='{{this.tag}}' >  
+</div>
+
+-->
+<span>
+<a href="#" class="tag1" data-trigger="click" data-toggle="popover" title="" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title"><span class="text-ellipsis inline-block w-12em"  count="{{availableCount}}">{{tag}}</a>
+<span id="actions" class="agile-custom-hide text-xs">
+	<span><a class="delete right" href="#">&times</a></span>
+	<span><a class="edit right" href="#"><i class="icon-pencil"></i></a></span>
+</span>
+</span>
+<span>
+<div class="agile-custom-hide" id="editing">
+	<input type="text" class="edit-input input-medium form-control" value='{{this.tag}}' >  
+</div>
+</span>  
+
+</script>

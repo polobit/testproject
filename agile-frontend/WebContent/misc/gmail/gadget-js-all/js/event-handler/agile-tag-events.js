@@ -30,6 +30,11 @@ $(function()
 			else
 				Tags[Val.name] = Val.value;
 		});
+		
+		$.each(Tags, function(index,tag){
+			if(!isValidTag(tag))
+				console.warn(tag + '- contains special characters. All special characters will be replaced with "_".');
+		});
 
 		//  ------ Send request if tags are entered. ------ 
 		if (Tags.tags.length != 0) {

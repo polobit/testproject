@@ -36,13 +36,6 @@ var SubscribeRouter = Backbone.Router.extend({
 	subscribe : function(id)
 	{
 		
-		if(IS_NEW_USER && _plan_on_signup && _plan_on_signup.plan_type && _plan_on_signup.plan_type == "FREE")
-		{
-			_plan_on_signup = null;
-			Backbone.history.navigate("dashboard", {trigger : true});
-			return;
-		}
-		
 		//config_version_2_plans();
 		
 		/*
@@ -70,8 +63,8 @@ var SubscribeRouter = Backbone.Router.extend({
 			USER_BILLING_PREFS = data;
 			
 			USER_CREDIRCARD_DETAILS = subscribe_plan.model.toJSON().billingData;
-			
-			if(!USER_CREDIRCARD_DETAILS && !(IS_NEW_USER && _plan_on_signup))
+		
+			if(!USER_CREDIRCARD_DETAILS)
 			{
 				Backbone.history.navigate("subscribe", {trigger : true});
 				return;
@@ -177,7 +170,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			{
 				_IS_FREE_PLAN = false;
 				window.navigate("subscribe", { trigger : true });
-				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
+				showNotyPopUp("information", "Your plan has been updated successfully", "top");
 			}
 			
 		});
@@ -243,7 +236,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			
 			saveCallback : function(){
 				window.navigate("subscribe", { trigger : true });
-				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
+				showNotyPopUp("information", "Your plan has been updated successfully. Please logout and login again for the new changes to apply.", "top");
 			},
 			postRenderCallback : function(el) {
 				card_expiry(el);
@@ -330,7 +323,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			saveCallback : function(data)
 			{
 				window.navigate("subscribe", { trigger : true });
-				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
+				showNotyPopUp("information", "Your plan has been updated successfully", "top");
 			},
 			errorCallback : function(data)
 			{
@@ -558,6 +551,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		 */
 		$.getJSON("core/api/subscription?reload=true", function(data){
 			_billing_restriction = data.cachedData;
+			init_acl_restriction();
 			$("#content").html(getTemplate("subscribe", data))
 		
 			var subscription_model = new BaseModel(data);
@@ -643,7 +637,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			type:"GET",
 			success: function(data)
 			{
-				if(data.email_api == "MANDRILL")
+				if(data && data.email_api == "MANDRILL")
 					IS_HAVING_MANDRILL = true;
 					
 			}

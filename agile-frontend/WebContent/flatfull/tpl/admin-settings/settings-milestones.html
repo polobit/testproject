@@ -1,0 +1,101 @@
+<script id="admin-settings-milestones-collection-template"
+	type="text/html">
+	<div class='col'>
+		<div class="hbox h-auto m-b-sm">
+			<h4><div class="m-t-xs pull-left">Deal Tracks</div>
+			{{#isTracksEligible}}
+				<a href="#pipelineModal" role="button" data-toggle="modal" type="submit" class="add-pipeline btn btn-default btn-addon btn-sm" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</a>
+			{{else}}
+				<span class="btn btn-default disabled" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</span>
+				<div class="clearfix"></div>
+			{{/isTracksEligible}}
+			</h4>
+            <div class="clearfix"></div>
+			{{#isTracksEligible}}
+			{{else}}
+			<div class="pull-right m-t-n-sm m-b-sm"><i>Regular or Pro plan only</i></div>
+			<div class="clearfix"></div>
+			{{/isTracksEligible}}
+		</div>
+		<div class="accordion" id="deal-tracks-accordion">
+			<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    			<div id="admin-settings-milestones-model-list"></div>
+			</div>
+		</div>
+		<!-- <div class="form-actions">
+    		<a href="#" class="save-pipelines btn btn-primary">Save</a>
+    	</div> -->
+	</div>
+<!-- Help Text -->
+<div class="col w-md">
+	<div class="data-block">
+		<div class="p-l p-r">
+			<h4 class="m-t-none">What are Tracks and Milestones?</h4>			
+			<p>Tracks are sales processes. Use tracks to correspond to particular products or services offered by your company, or set up tracks to be used in deals with customers, partners, resellers, etc. When you create a new deal, you choose which track to associate it with.</p>
+			<br/>
+			<p>Milestones define the status of deals in a particular track. You can create any number of custom milestones in a track. Common milestones include 'New', 'In Progress',  'Won' or  'Lost'. When you associate a deal with a track, that deal will typically need to go through all of the track's milestones to be completed or finalized.</p>
+		</div>
+	</div>
+</div>
+</script>
+
+<script id="admin-settings-milestones-model-template" type="text/html">
+    	
+		<div class="panel panel-default">
+		<form id="milestonesForm_{{id}}" class="form-horizontal m-b-none pipeline" method=post>
+		<div id="{{id}}-deal-track" class="accordion-group overflow-hidden">
+		<div class="panel-heading pos-rlt" role="tab" id="headingOne">
+		<div class="accordion-heading">
+    		{{#if id}}
+    			<input type="text" name="id" class="hide form-control" value="{{id}}">
+    		{{/if}} 
+			{{#if id}}
+    			<input type="text" name="name" class="hide form-control" value="{{name}}">
+    		{{/if}}
+			<input type="hidden" name="isDefault" value={{isDefault}}>
+			<div class="panel-title"><a class="accordion-toggle pull-left text-l-none-hover" data-toggle="collapse" aria-controls="collapseOne" aria-expanded="true" data-parent="#deal-tracks-accordion" href="#dealtracks-{{id}}-accordion" style="width:90%;">{{name}}</a></div>
+			<div id="icons" class="pull-right pos-abs pos-r-0 pos-t-0 p-r m-t-xs" style="display:none;">
+			{{#isTracksEligible}}
+			{{#hasSingleTrack}}
+				<a href="#pipeline-delete-modal" role="button" data-toggle="modal" class="pipeline-delete m-t-xs m-l-sm c-p text-l-none pull-right text-sm" id="{{id}}" data="{{name}}"><i class="task-action icon icon-trash" data="{{id}}" title="Delete Track"></i></a>
+			{{/hasSingleTrack}}
+			<a href="#pipelineModal" role="button" data-toggle="modal" class="pipeline-edit m-t-xs c-p text-l-none pull-right text-sm {{#hasSingleTrack}} {{else}}p-r-xs{{/hasSingleTrack}}" id="{{id}}" data="{{name}}" ><i class="task-action icon icon-edit" data="{{id}}" title="Edit Track"></i></a>
+			{{else}}
+			{{#if_equals isDefault 'false'}}
+				{{#hasSingleTrack}}
+					<a href="#pipeline-delete-modal" role="button" data-toggle="modal" class="pipeline-delete m-t-xs m-l-sm c-p text-l-none pull-right text-sm" id="{{id}}" data="{{name}}"><i class="task-action icon icon-trash" data="{{id}}" title="Delete Track"></i></a>
+				{{/hasSingleTrack}}
+				<a href="#pipelineModal" role="button" data-toggle="modal" class="pipeline-edit m-t-xs c-p text-l-none pull-right text-sm" id="{{id}}" data="{{name}}" ><i class="task-action icon icon-edit" data="{{id}}" title="Edit Track"></i></a>
+			{{/if_equals}}
+			{{/isTracksEligible}}
+			</div>
+			<div class="clearfix"></div>
+			</div>
+		</div>
+			<div class="panel-collapse" role="tabpanel" aria-labelledby="headingOne" id="collapseOne">
+			<div class="panel-body p-n  collapse" id="dealtracks-{{id}}-accordion">
+			<fieldset>
+    		<div class="control-group m-b-none">  	 
+                    <div id="milestone-values-{{id}}">
+					<table class="table table-hover  custom-fields-table bg-white table-hover m-b-none" >
+					<colgroup><col width="50%"><col width="4%"></colgroup>
+					<tbody class="deal-tracks-tbody ui-sortable">
+					{{#milestone_ul milestones}}{{/milestone_ul}}
+					</tbody>
+					</table>
+					</div>
+					<div class="p-l p-t p-b"><a href="#" class="show_milestone_field text-info"><i class="icon-plus-sign"></i> Add Milestone</a></div>
+					<div class="show_field p-l p-t p-b" style="display:none;">
+						<input id="add_new_milestone" class="add_new_milestone form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="New Milestone">
+						<a class="btn btn-info btn-addon btn-sm add_milestone" data-toggle="modal" id="add_milestone" href="#">Add</a>
+					</div>
+    				<div class="hidden"><input name="milestones" type="text" class="required form-control" value="{{milestones}}"/></div>
+    		</div> 
+    		</fieldset>
+			</div>
+			</div>
+		</div>
+    	</form>
+		</div>
+		
+</script>

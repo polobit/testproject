@@ -200,7 +200,12 @@ public class HomeServlet extends HttpServlet
 	    // Saves logged in time in domain user.
 	    setLoggedInTime(req);
 	    setAccountTimezone(req);
-	    req.getRequestDispatcher("home.jsp").forward(req, resp);
+	    
+	    String new_ui = req.getParameter("newui");
+	    if(!StringUtils.isEmpty(new_ui))
+	    	req.getRequestDispatcher("home-flatfull.jsp").forward(req, resp);
+	    else
+	    	req.getRequestDispatcher("home.jsp").forward(req, resp);
 	    return;
 	}
 

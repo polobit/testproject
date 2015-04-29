@@ -711,6 +711,10 @@ public class OpportunityUtil
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(opportunityDate);
 				calendar.set(Calendar.DAY_OF_MONTH, 1);
+				calendar.set(Calendar.HOUR_OF_DAY, 0);
+				calendar.set(Calendar.MINUTE, 0);
+				calendar.set(Calendar.SECOND, 0);
+				calendar.set(Calendar.MILLISECOND, 0);
 
 				Date firstDayOfMonth = calendar.getTime();
 				String mmYY = Math.round(firstDayOfMonth.getTime() / 1000) + "";

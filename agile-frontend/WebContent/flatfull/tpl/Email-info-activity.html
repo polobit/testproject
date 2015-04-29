@@ -1,0 +1,20 @@
+<!-- New (Note) Modal views -->
+<script id="infoModal-template" type="text/html">
+<div class="modal fade infoModal" id="infoModal">
+ <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3><i class="icon-info-sign"></i>&nbsp;Email Info</h3>
+    </div>
+    <div class="modal-body">
+
+<div style="margin-bottom:5px;"><b>Subject :&nbsp;&nbsp;</b>{{#if custom4}}{{this.custom4}}{{else}}{{this.custom3}}{{/if}}</div>
+<div ><b>Message :&nbsp;&nbsp;</b>{{this.custom2}}</div>
+       
+       
+    </div>
+    </div>
+</div>
+</div>
+</script>

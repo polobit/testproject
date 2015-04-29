@@ -207,7 +207,7 @@ $(function()
 					/**
 					 * Sends cancel request to cancel subscription
 					 */
-					$.ajax({
+					/*$.ajax({
 						type : "DELETE",
 						url : "core/api/subscription/delete/account",
 						success : function()
@@ -219,8 +219,14 @@ $(function()
 						    // Showing Noty
 						    showNotyPopUp("information", "Cancellation request sent. You should hear back from us in one working day.", "top", 3000);
 						}
-					});
-
+					});*/
+					
+					$("#send-cancellation .modal-header").html($("#send-delete-request-step2 .modal-header").html());	
+					$("#send-cancellation .modal-body").html($("#send-delete-request-step2 .modal-body").html());
+					$("#send-cancellation .modal-footer").html($("#send-delete-request-step2 .modal-footer").html());
+					
+					// Enables Send Email button.
+					enable_send_button($('#send-delete-request'));
 				});
 				
 			});

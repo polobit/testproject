@@ -1,0 +1,28 @@
+<div id="addStreamModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="addStreamModalLabel" aria-hidden="true" style="display: none;"> 
+ <div class="modal-header"> 
+  <button class="close" data-dismiss="modal">x</button> 
+  <h3 id="addStreamModalLabel"><i class="icon-plus-sign"></i> Add Stream</h3> 
+ </div> 
+ <div class="modal-body"> 
+  <form id="streamDetail" name="streamDetail" class="form-horizontal"> 
+   <fieldset> 
+    <input id="domain_user_id" name="domain_user_id" type="hidden" value="" /> 
+    <input id="client_channel" name="client_channel" type="hidden" value="" /> 
+    <input id="twitter_token" name="token" type="hidden" value="" /> 
+    <input id="twitter_token_secret" name="secret" type="hidden" value="" /> 
+    <input id="twitter_account" name="screen_name" type="hidden" value="" /> 
+    <input id="network_type" name="network_type" type="hidden" value="" /> 
+    <input id="stream_type" name="stream_type" type="hidden" value="" /> 
+    <img id="twitter_profile_img_url" name="twitter_profile_img_url" onload="onloadProfileImg()" src="" /> 
+    <div id="streamDetails" class="stream-details"> 
+    </div> 
+    <div id="search_stream_keyword"></div> 
+    <label id="stream_description_label" class="txt-mute"> </label> 
+   </fieldset> 
+  </form> 
+ </div>
+ <!-- modal body --> 
+ <div class="modal-footer"> 
+  <a href="#social" id="add_twitter_stream" type="button" class="save-twitter-stream btn btn-primary"> Save </a> 
+ </div> 
+</div>
