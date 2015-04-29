@@ -578,7 +578,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		 */
 		$.getJSON("core/api/subscription?reload=true", function(data){
 			_billing_restriction = data.cachedData;
-			init_acl_restriction();
+			//init_acl_restriction();
 			$("#content").html(getTemplate("subscribe", data))
 		
 			var subscription_model = new BaseModel(data);
