@@ -449,7 +449,8 @@ box-shadow: 0 1px 1px rgba(0, 0, 0, .05); 03/30/2015 */
 .fc-z-index
 {
 	z-index: auto!important;
-	height: auto!important;
+	/* height: auto!important; */
+	min-height: 20px;
 }
 .fc-event-popover
 {

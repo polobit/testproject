@@ -434,6 +434,15 @@ function setup_milestones(el){
 			          });
 			          return $helper;
 			      },
+			      start: function(event, ui){
+			    	  $.each(ui.item.children(),function(index,ele){
+			    		  ui.helper.children().eq(index).width(ui.helper.children().eq(index).width()-$(this).width());
+			    	  });
+			    	  ui.helper.width(ui.helper.width());
+			      },
+			      sort: function(event, ui){
+			    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top)+"px");
+			      },
 			      forceHelperSize:true,
 			      placeholder:'<tr><td></td></tr>',
 			      forcePlaceholderSize:true,
