@@ -45,7 +45,6 @@
     <retry-parameters>
 		<task-retry-limit>1</task-retry-limit>
 	</retry-parameters>
-	<target>agile-normal-bulk</target>
   </queue>
   <queue>
     <name>periodic-triggers-queue</name>
@@ -143,6 +142,17 @@
 	</retry-parameters>
 	<target>agile-normal-bulk</target>
   </queue>
+  
+   <queue>
+  	<name>campaign-subscribe-subtask-queue</name>
+    <rate>5/s</rate>
+    <max-concurrent-requests>15</max-concurrent-requests>
+    <retry-parameters>
+		<task-retry-limit>1</task-retry-limit>
+	</retry-parameters>
+	<target>agile-normal-bulk</target>
+  </queue>
+  
    <queue>
   	<name>bulk-tags-queue</name>
     <rate>5/s</rate>
@@ -220,7 +230,7 @@
   <name>normal-campaign-pull-queue</name>
   <mode>pull</mode>
   <retry-parameters>
-  		<task-retry-limit>1</task-retry-limit>
+  		<task-retry-limit>2</task-retry-limit>
   </retry-parameters>
   </queue>
   
@@ -228,7 +238,7 @@
   <name>bulk-campaign-pull-queue</name>
   <mode>pull</mode>
   <retry-parameters>
-  		<task-retry-limit>1</task-retry-limit>
+  		<task-retry-limit>2</task-retry-limit>
   </retry-parameters>
   </queue>
   
@@ -236,7 +246,7 @@
   <name>normal-email-pull-queue</name>
   <mode>pull</mode>
   <retry-parameters>
-  		<task-retry-limit>1</task-retry-limit>
+  		<task-retry-limit>2</task-retry-limit>
   </retry-parameters>
   </queue>
   
@@ -244,7 +254,7 @@
   <name>bulk-email-pull-queue</name>
   <mode>pull</mode>
   <retry-parameters>
-  		<task-retry-limit>1</task-retry-limit>
+  		<task-retry-limit>2</task-retry-limit>
   </retry-parameters>
   </queue>
   
@@ -252,7 +262,7 @@
   <name>normal-personal-email-pull-queue</name>
   <mode>pull</mode>
   <retry-parameters>
-      <task-retry-limit>1</task-retry-limit>	  
+      <task-retry-limit>2</task-retry-limit>	  
   </retry-parameters>
   </queue>
   
@@ -260,7 +270,7 @@
   <name>bulk-personal-email-pull-queue</name>
   <mode>pull</mode>
   <retry-parameters>
-  		<task-retry-limit>1</task-retry-limit>
+  		<task-retry-limit>2</task-retry-limit>
   </retry-parameters>
   </queue>
   

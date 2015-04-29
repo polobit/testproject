@@ -908,6 +908,8 @@ left:0;
 }
 
 /*task circle*/
+
+
 .task-circle{
 	float:right;
    
@@ -950,6 +952,24 @@ left:0;
 {
 	cursor:move;
 }
+
+.task-circle-big .active-border
+{
+	width:50px;
+	height:50px;
+	
+}
+
+.task-circle-big .circle
+{
+	
+	top: 5px;
+  left: 5px;
+  text-align: center;
+   width: 40px;
+  height: 40px;
+}
+
 /* ending task circle*/
 
 /*overriding theme styles */
@@ -972,7 +992,7 @@ time,i.fa-clock-o
 {
 	font-size:12px!important;
 }
-.panel .panel-heading,#prefs-tabs-content h4:not(.m-t-none),#admin-prefs-tabs-content h4:not(.m-t-none)
+#prefs-tabs-content h4:not(.m-t-none),#admin-prefs-tabs-content h4:not(.m-t-none)
 {
 	
 	color:#777!important;
@@ -1140,11 +1160,12 @@ color:#1f2427!important;
 	cursor: move;
 }
 
-.miltstone-title
+/*.miltstone-title
 {
 	font-size:18px;
+	color:#888;
 }
-
+*/
 .header-min-width {
 	min-width:90px;
 }
@@ -1185,11 +1206,15 @@ top:117px;
 	padding-left:0px;
 }
 
-
 .deals-by-milestone-portlet-body .highcharts-tooltip span {
     background-color: #313030;
     opacity: 1;
     z-index: 9999!important;
     padding: 8px;
     border-radius: 5px
+}
+.score-view img
+{
+	opacity:0.5;
+
 }

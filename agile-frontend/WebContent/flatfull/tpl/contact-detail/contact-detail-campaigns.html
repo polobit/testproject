@@ -1,5 +1,5 @@
 <script id="campaigns-collection-template" type="text/html">
-<div class="wrapper">
+<div class="wrapper p-t-none">
 {{#contact_model}}
 	<div>
 		 {{#contact_campaigns this "campaignStatus"}}
@@ -67,7 +67,7 @@
 			        	<select id="campaign-select" class="required form-control w inline-block" name="campaign_id">
                         	<option value="">Select...</option>
                       	</select>
-						<span class="m-l-xs"><a class="btn btn-sm btn-danger" id="cancel-to-add-campaign" href="#">Cancel</a></span>
+						<span class="m-l-xs"><a class="btn btn-sm btn-default" id="cancel-to-add-campaign" href="#">Cancel</a></span>
 				  	    <span class="m-l-xs"><a class="btn btn-sm btn-primary" id="add-to-campaign" href="#">Add</a></span>
                     </div> 
 			    </div>
