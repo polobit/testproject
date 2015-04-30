@@ -6,7 +6,9 @@ var LOADING_HTML = '<img class="loading" style="padding-right:5px;" height="32px
 /**
  * Set of loading images
  */
-LOADING_HTML_IMAGES = [LOADING_HTML]
+LOADING_HTML_IMAGES = [
+	LOADING_HTML
+]
 
 /**
  * Loading images shown which contacts are being fetched on page scroll
@@ -19,8 +21,14 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-right:5px" src= "im
 
 var DEFAULT_GRAVATAR_url = window.location.origin + "/" + LIB_PATH_FLATFULL + "images/flatfull/user-default.jpg";
 
+var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Haaris_Farooqi";
+
+var SALES_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Shravi_Sharma";
+
+var SUPPORT_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Raja_Shekar,Vamshi,Natesh,praveen,Abhishek_Pandey";
 /**
  * Returns random loading images
+ * 
  * @returns
  */
 function getRandomLoadingImg()
@@ -34,7 +42,7 @@ function getUrlVars()
 {
 	var vars = [], hash;
 	var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-	for ( var i = 0; i < hashes.length; i++)
+	for (var i = 0; i < hashes.length; i++)
 	{
 		hash = hashes[i].split('=');
 		vars.push(hash[0]);
@@ -77,7 +85,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 	// Prepend Loading
 	$loading = $(getRandomLoadingImg());
 	$("#" + selectId, el).after($loading);
-	
+
 	// Creates a collection and fetches the data from the url set in collection
 	var collection = new collection_def();
 
@@ -101,10 +109,13 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 			$("#" + selectId, el).empty().append('<option class="default-select" value="">' + defaultSelectOption + '</option>');
 		}
 		var data = collection.toJSON();
-		data.sort(function(a, b){
-		    if (a.name < b.name) return -1;
-		    if (b.name < a.name) return 1;
-		    return 0;
+		data.sort(function(a, b)
+		{
+			if (a.name < b.name)
+				return -1;
+			if (b.name < a.name)
+				return 1;
+			return 0;
 		});
 		// Convert template into HTML
 		var modelTemplate = Handlebars.compile(template);
@@ -146,8 +157,8 @@ function fillTokenizedSelect(selectId, array, callback, defaultSelectOption)
 {
 	if (!defaultSelectOption)
 		defaultSelectOption = "Select...";
-	
-	$("#" + selectId).empty().append('<option value="">'+defaultSelectOption+'</option>');
+
+	$("#" + selectId).empty().append('<option value="">' + defaultSelectOption + '</option>');
 
 	// Iterates though each element in array and creates a options to select
 	// field and
@@ -192,7 +203,7 @@ function delete_contact_property(contact, propertyName)
 
 	// Iterates through the properties of the contact, finds the property with
 	// the name specified and removes the property from the contact
-	for ( var index = 0; index < contact.properties.length; index++)
+	for (var index = 0; index < contact.properties.length; index++)
 	{
 		if (contact.properties[index].name == propertyName)
 		{
@@ -233,7 +244,7 @@ function delete_contact_tag(contact, tagName)
  */
 function add_contact_tags(contact, newTags)
 {
-	for ( var index = 0; index < newTags.length; index++)
+	for (var index = 0; index < newTags.length; index++)
 	{
 		contact.tags.push(newTags[index])
 	}
@@ -301,7 +312,7 @@ function getGMTEpochFromDate(date)
 	date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
 
 	// Adding offset to date returns GMT time
-	return date.getTime() + (date.getTimezoneOffset()*60*1000);
+	return date.getTime() + (date.getTimezoneOffset() * 60 * 1000);
 }
 
 /**
@@ -315,21 +326,22 @@ function getLocalTimeFromGMTMilliseconds(time_in_milliseconds)
 	var date = new Date(parseInt(time_in_milliseconds));
 
 	// Subtracting epoch offset from epoch time;
-	return date.getTime() - (date.getTimezoneOffset()*60*1000);
+	return date.getTime() - (date.getTimezoneOffset() * 60 * 1000);
 }
 
 function showTextGravatar(selector, element)
 {
 	var el = $(selector, $(element));
-		$(el).closest('img').error(function() {
-			var name = $(this).attr("_data-name");
-			
-			if(!name)
-				return;
-			
-			$(this).attr("data-name", name);
-			$(this).initial({charCount: 2});
-		});
+	$(el).closest('img').error(function()
+	{
+		var name = $(this).attr("_data-name");
+
+		if (!name)
+			return;
+
+		$(this).attr("data-name", name);
+		$(this).initial({ charCount : 2 });
+	});
 }
 
 function text_gravatar_initials(items)
@@ -341,99 +353,108 @@ function text_gravatar_initials(items)
 
 	var first_name;
 	var last_name;
-	
+
 	var name = "";
-	
+
 	if (getPropertyValue(items, "first_name"))
 	{
-		
+
 		first_name = getPropertyValue(items, "first_name");
-		
+
 	}
 
 	if (getPropertyValue(items, "last_name"))
 	{
 		last_name = getPropertyValue(items, "last_name");
 	}
-	
-	
-	if(first_name && last_name)
+
+	if (first_name && last_name)
 	{
 		name = first_name.substr(0, 1);
 		name += last_name.substr(0, 1);
 	}
 	else
 	{
-		if(first_name)
-			{
-				var first_name_length = first_name.length;
-				if(first_name_length > 1)	
-					name = first_name.substr(0, 2);
-				else
-					name = first_name.substr(0, 1);
-			}
-		else if(last_name)
-			{
-				var last_name_length = last_name.length;
-				if(last_name_length > 1)	
-					name = last_name.substr(0, 2);
-				else
-					name = last_name.substr(0, 1);
-			}
-	}
-	if(name.length == 0)
+		if (first_name)
 		{
-			var email = getPropertyValue(items, "email");
-			if(email)
-			{
-				if(email.length > 1)
-				name = email.substr(0, 2);
-			}
+			var first_name_length = first_name.length;
+			if (first_name_length > 1)
+				name = first_name.substr(0, 2);
+			else
+				name = first_name.substr(0, 1);
 		}
+		else if (last_name)
+		{
+			var last_name_length = last_name.length;
+			if (last_name_length > 1)
+				name = last_name.substr(0, 2);
+			else
+				name = last_name.substr(0, 1);
+		}
+	}
+	if (name.length == 0)
+	{
+		var email = getPropertyValue(items, "email");
+		if (email)
+		{
+			if (email.length > 1)
+				name = email.substr(0, 2);
+		}
+	}
 
-	if(name.length == 0)
+	if (name.length == 0)
 		name = "X";
-	
+
 	console.log(name);
 	return name;
 }
 
-
-
-function buildFacebookProfileURL(URL) {
+function buildFacebookProfileURL(URL)
+{
 	URL = URL.replace('@', '');
-	var hasScheme = ( URL.indexOf( 'http://' ) === 0 || URL.indexOf( 'https://' ) === 0 );
-	var isFBURL   = ( URL.indexOf( 'facebook.com' ) !== -1 );
-	if ( URL && !hasScheme && !isFBURL ) {
-		URL = 'https://www.facebook.com/'+URL;
-	} else if ( URL && isFBURL && URL.indexOf( 'www.facebook.com' ) === -1 ) {
-		URL = URL.replace( 'facebook.com', 'www.facebook.com' );
-	} else if ( URL && !hasScheme ) {
-		URL = 'http://'+URL;
+	var hasScheme = (URL.indexOf('http://') === 0 || URL.indexOf('https://') === 0);
+	var isFBURL = (URL.indexOf('facebook.com') !== -1);
+	if (URL && !hasScheme && !isFBURL)
+	{
+		URL = 'https://www.facebook.com/' + URL;
+	}
+	else if (URL && isFBURL && URL.indexOf('www.facebook.com') === -1)
+	{
+		URL = URL.replace('facebook.com', 'www.facebook.com');
+	}
+	else if (URL && !hasScheme)
+	{
+		URL = 'http://' + URL;
 	}
 	return URL;
 }
 
-function visibleFilter(){
-    return $(this).css('display') != 'none';
+function visibleFilter()
+{
+	return $(this).css('display') != 'none';
 }
-function showTransitionBar(){
-	if($('.butterbar').hasClass('hide'))
+function showTransitionBar()
+{
+	if ($('.butterbar').hasClass('hide'))
 		$('.butterbar').removeClass('hide');
-	if(!$('.butterbar').hasClass('animation-active'))
+	if (!$('.butterbar').hasClass('animation-active'))
 		$('.butterbar').addClass('animation-active');
 }
-function hideTransitionBar(){
-	setTimeout(function(){
-		if($('.butterbar').hasClass('animation-active'))
+function hideTransitionBar()
+{
+	setTimeout(function()
+	{
+		if ($('.butterbar').hasClass('animation-active'))
 			$('.butterbar').removeClass('animation-active');
-		if(!$('.butterbar').hasClass('hide'))
+		if (!$('.butterbar').hasClass('hide'))
 			$('.butterbar').addClass('hide');
-	},10);
+	}, 10);
 }
-$('.modal:visible').die().live('shown.bs.modal',function(){
-	setTimeout(function(){
-		if($('.modal-backdrop',$('.modal:visible')).height()<=$('.modal-dialog',$('.modal:visible')).height())
-			$('.modal-backdrop',$('.modal:visible')).height($('.modal-dialog',$('.modal:visible')).height()+70);
-	},500);
+$('.modal:visible').die().live('shown.bs.modal', function()
+{
+	setTimeout(function()
+	{
+		if ($('.modal-backdrop', $('.modal:visible')).height() <= $('.modal-dialog', $('.modal:visible')).height())
+			$('.modal-backdrop', $('.modal:visible')).height($('.modal-dialog', $('.modal:visible')).height() + 70);
+	}, 500);
 });
