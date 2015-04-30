@@ -693,6 +693,9 @@ function enableCustomFieldsSorting(el,connClass,connId){
 				});
 				ui.helper.width(ui.helper.width());
 			},
+			sort: function(event, ui){
+				ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top)+"px");
+			},
 			forceHelperSize:true,
 			placeholder:'<tr><td></td></tr>',
 			forcePlaceholderSize:true,

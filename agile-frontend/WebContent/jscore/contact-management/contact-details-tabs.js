@@ -731,6 +731,8 @@ function load_contact_tab(el, contactJSON)
 {
 	timeline_collection_view = null;
 	var position = readCookie(contact_tab_position_cookie_name);
+	if(position==null || position==undefined || position=="")
+		position="timeline";
 
 	$('#contactDetailsTab a[href="#' + position + '"]', el).tab('show');
 
