@@ -26,7 +26,7 @@
 	<div class="container">
 			<div class="error-container">
 				<h1>Wait!</h1> 
-				<h2>Agile CRM currently does not support Internet Explorer</h2>
+				<h2>Agile CRM currently does not support Internet Explorer and Safari on Windows OS</h2>
 				<div class="error-details">
 					You may use any recent version of  <a href="https://support.google.com/chrome/answer/95346?hl=en">Chrome</a>, <a href="http://www.mozilla.org/en-US/firefox/features">Firefox</a> or <a href="http://support.apple.com/kb/dl1531">Safari</a> (Mac only).
 				</div>
