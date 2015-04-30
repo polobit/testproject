@@ -95,11 +95,12 @@
 <div class="m-t-sm">
 
 <div id="task-contact-img">
-        	{{#each contacts}}
+{{#if contacts}}        	
 <div class="m-b-xs">
         	<small class="text-xs text-muted">Related to</small>
 </div>
-
+{{/if}}
+{{#each contacts}}
         		{{#if_contact_type "PERSON"}}
         			<a href="#contact/{{id}}" class="activate-link thumb"><img class="r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
         		{{/if_contact_type}}

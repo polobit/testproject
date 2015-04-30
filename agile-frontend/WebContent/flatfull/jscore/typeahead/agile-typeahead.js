@@ -347,7 +347,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								if (tag_not_exist)
 									$('.deal_tags', el)
 											.append(
-													'<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><a href="#deal/' + TYPEHEAD_TAGS[items] + '" >' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
+													'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  data="' + TYPEHEAD_TAGS[items] + '"><a href="#deal/' + TYPEHEAD_TAGS[items] + '" class="text-white v-middle">' + items_temp + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
 							}
 							else
 							{
