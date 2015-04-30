@@ -5,6 +5,7 @@
  */
 // global task details model
 var taskDetailView;
+var task_tab_position_cookie_name = "task_tab_position";
 var TaskDetailsRouter = Backbone.Router.extend({ routes : { 'task/:id' : 'taskDetailView' },
 
 taskDetailView : function(id)
@@ -314,12 +315,15 @@ function activate_timeline_tab()
 function save_task_tab_position_in_cookie(tab_href)
 {
 
-				var position = readCookie(contact_tab_position_cookie_name);
+				var position = '';
+					
+				if(readCookie(task_tab_position_cookie_name))
+					position = readCookie(task_tab_position_cookie_name);
 
 				if (position == tab_href)
 								return;
 
-				createCookie(contact_tab_position_cookie_name, tab_href);
+				createCookie(task_tab_position_cookie_name, tab_href);
 }
 
 $(function()
