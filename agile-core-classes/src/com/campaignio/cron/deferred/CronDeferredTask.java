@@ -2,6 +2,8 @@ package com.campaignio.cron.deferred;
 
 import org.json.JSONObject;
 
+import com.agilecrm.workflows.status.CampaignStatus.Status;
+import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.Cron;
 import com.campaignio.logger.Log.LogType;
@@ -22,7 +24,8 @@ import com.google.appengine.api.taskqueue.DeferredTask;
  * 
  */
 @SuppressWarnings("serial")
-public class CronDeferredTask implements DeferredTask {
+public class CronDeferredTask implements DeferredTask
+{
 	/**
 	 * Timeout or interrupt.
 	 */
@@ -66,10 +69,9 @@ public class CronDeferredTask implements DeferredTask {
 	 * @param customDataString
 	 *            CustomData.
 	 */
-	public CronDeferredTask(String namespace, String campaignId,
-			String dataString, String subscriberJSONString,
-			String nodeJSONString, String wakeupOrInterrupt,
-			String customDataString) {
+	public CronDeferredTask(String namespace, String campaignId, String dataString, String subscriberJSONString,
+			String nodeJSONString, String wakeupOrInterrupt, String customDataString)
+	{
 		this.campaignId = campaignId;
 		this.dataString = dataString;
 		this.subscriberJSONString = subscriberJSONString;
@@ -85,52 +87,57 @@ public class CronDeferredTask implements DeferredTask {
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
-	public void run() {
+	public void run()
+	{
 		String oldNameSpace = NamespaceManager.get();
 
 		NamespaceManager.set(namespace);
 
 		JSONObject campaignJSON = null;
 		JSONObject subscriberJSON = null;
-		try {
+		try
+		{
 			// Gets workflow json from campaignId.
-			campaignJSON = WorkflowUtil.getWorkflowJSON(Long
-					.parseLong(campaignId));
+			campaignJSON = WorkflowUtil.getWorkflowJSON(Long.parseLong(campaignId));
 
 			if (campaignJSON == null)
 				return;
 
 			JSONObject data = new JSONObject(dataString);
 
-	                // Get updated subscriber json
+			// Get updated subscriber json
 			subscriberJSON = AgileTaskletUtil.getUpdatedSubscriberJSON(new JSONObject(subscriberJSONString));
 
 			JSONObject nodeJSON = new JSONObject(nodeJSONString);
 			// Get updated node JSON
-			JSONObject updatedNodeJSON = TaskletUtil.getNodeJSON(campaignJSON,
-					nodeJSON.getString("id"));
+			JSONObject updatedNodeJSON = TaskletUtil.getNodeJSON(campaignJSON, nodeJSON.getString("id"));
 			JSONObject customData = new JSONObject(customDataString);
 
 			// Get Tasklet
 			Tasklet tasklet = TaskletUtil.getTasklet(updatedNodeJSON);
-			if (tasklet != null) {
+			if (tasklet != null)
+			{
 				System.out.println("Executing tasklet from CRON ");
 
 				if (wakeupOrInterrupt.equalsIgnoreCase(Cron.CRON_TYPE_TIME_OUT))
-					tasklet.timeOutComplete(campaignJSON, subscriberJSON, data,
-							updatedNodeJSON);
+					tasklet.timeOutComplete(campaignJSON, subscriberJSON, data, updatedNodeJSON);
 				else
-					tasklet.interrupted(campaignJSON, subscriberJSON, data,
-							updatedNodeJSON, customData);
+					tasklet.interrupted(campaignJSON, subscriberJSON, data, updatedNodeJSON, customData);
 			}
-		} catch (NullPointerException npe) {
+		}
+		catch (NullPointerException npe)
+		{
 			// Creates log current node which is not found
-			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON),
-					AgileTaskletUtil.getId(subscriberJSON),
+			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
 					"Campaign stopped on the contact since the campaign got modified.",
 					LogType.CAMPAIGN_STOPPED.toString());
+			CampaignStatusUtil.setStatusOfCampaignWithName(AgileTaskletUtil.getId(subscriberJSON),
+					AgileTaskletUtil.getId(campaignJSON), "", Status.REMOVED);
+
 			npe.printStackTrace();
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			System.err.println("Exception occured in Cron " + e.getMessage());
 			e.printStackTrace();
 		}
