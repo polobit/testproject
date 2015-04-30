@@ -105,6 +105,11 @@ label {
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
 
 <script type="text/javascript">
+var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
+var isWin = (window.navigator.userAgent.indexOf("Windows") != -1);
+if(isSafari && isWin) 
+	window.location = '/error/not-supported.jsp';
+	
 jQuery.validator.setDefaults({
 	debug: true,
 	success: "valid"
@@ -136,7 +141,7 @@ $.validator.setDefaults({
 
 <%
     if (isMSIE) {
-				response.sendRedirect("/error/ie-upgrade.jsp");
+				response.sendRedirect("/error/not-supported.jsp");
 			}
 %>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->

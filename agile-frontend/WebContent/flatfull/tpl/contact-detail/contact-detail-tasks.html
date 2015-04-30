@@ -59,17 +59,17 @@
      <div class="clearfix"></div>
  
 	<div><span class="m-l-md">Due : <i class="fa fa-clock-o m-r-xs hide"></i><time class="task-created-time" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span></div>
-    <div>	
+    <div class="m-l-md">	
 		{{#each contacts}}
            	{{#if id}}
 				{{#isDuplicateContactProperty properties "email"}}
 
 					{{else}}
 						{{#if_contact_type "PERSON"}}	
-							<a class="m-l-md text-info" href="#contact/{{id}}" >{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+							<a  href="#contact/{{id}}" >{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
-        					<a class="m-l-md text-info" href="#contact/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        					<a  href="#contact/{{id}}">{{getPropertyValue properties "name"}}</a>,
         				{{/if_contact_type}}
 				{{/isDuplicateContactProperty}}
            		

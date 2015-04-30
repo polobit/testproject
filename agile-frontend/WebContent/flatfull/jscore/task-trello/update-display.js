@@ -96,6 +96,8 @@ function showProgressSlider(value, status, parentForm)
 
 	if (status == IN_PROGRESS){
 		$(parentForm).find(".progress-slider").css("display", "block");
+		if($(parentForm).find(".jslider-label-to").is(':visible'))
+			$(parentForm).find(".jslider-label-to").hide();
 	}else{
 		$(parentForm).find(".progress-slider").css("display", "none");
 	}
