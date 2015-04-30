@@ -479,6 +479,8 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
 			"Website" : "{{website}}", 
 			"Phone" : "{{phone}}"
 		},
+		"Custom Fields":{
+		},
 		"Address":{
 			"City" : "{{location.city}}", 
 			"State" : "{{location.state}}", 
@@ -487,8 +489,6 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
 		"Web":{
 			"Twitter Id" : "{{twitter_id}}", 
 			"LinkedIn Id" : "{{linkedin_id}}"
-		},
-		"Custom Fields":{
 		},
 		"Owner":{
 			"Owner Name" : "{{owner.name}}", 
