@@ -7,6 +7,9 @@
 we use setAttribute() to store the username and to autofill if he want to resubmit the form after correcting the error occurred. 
 */
 
+//flatfull path
+String flatfull_path="/flatfull";
+
 // Gets User Name
 String email = request.getParameter("email");
 
@@ -19,11 +22,11 @@ request.setAttribute("agile_email", email);
 }
 	
 // Checks if it is being access directly and not through servlet
-if(request.getAttribute("javax.servlet.forward.request_uri") == null)
+/* if(request.getAttribute("javax.servlet.forward.request_uri") == null)
 {
   response.sendRedirect("/login");
   return;
-}
+} */
 
 String error = request.getParameter("error");
 if(error != null)
@@ -55,13 +58,13 @@ String logo_url = accountPrefs.logo;
 <link type="text/css" rel="stylesheet" href="/css/openid-min.css">
 <link type="text/css" rel="stylesheet" href="/css/signin.css"> -->
 
-<link rel="stylesheet" type="text/css" href="/css/bootstrap.v3.min.css" />
-<link rel="stylesheet" type="text/css" href="/css/font.css" />
-<link rel="stylesheet" type="text/css" href="/css/app.css" />
+<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/bootstrap.v3.min.css" />
+<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/font.css" />
+<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/app.css" />
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 <style>
 body {
-background-image:url('../images/flatfull/buildings.jpg');
+background-image:url('..<%=flatfull_path%>/images/flatfull/buildings.jpg');
 background-repeat:no-repeat;
 background-position:center center;
 background-size:100% 100%;
@@ -129,8 +132,8 @@ margin-bottom:0px;
 <!-- <script type='text/javascript'
 	src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
 	<script type="text/javascript" src="/lib/bootstrap.min.js"></script> -->
-<script type='text/javascript' src='/lib/jquery-new/jquery-2.1.1.min.js'></script>
-<script type="text/javascript" src="/lib/bootstrap.v3.min.js"></script>
+<script type='text/javascript' src='<%=flatfull_path%>/lib/jquery-new/jquery-2.1.1.min.js'></script>
+<script type="text/javascript" src="<%=flatfull_path%>/lib/bootstrap.v3.min.js"></script>
 <!-- <script type="text/javascript" src="/lib/jquery.validate.min.js"></script> -->
 <!-- <script type="text/javascript">
 	jQuery.validator.setDefaults({
@@ -218,9 +221,10 @@ if(isIE || isIENew)
 				<div class="wrapper text-center">
       				<strong>Sign in using your registered account</strong>
    				</div>
-				<form name='agile' id="agile" method='post'onsubmit="return isValid();">
+				<form name='agile' id="agile" method='post' action="/login" onsubmit="return isValid();">
 					
 					<!-- <h3><small>Sign in using your registered account</small></h3> -->
+					<input type='hidden' name='newui' value="true">
 					<input type='hidden' name='type' value='agile'></input>
 					<input type='hidden' name='account_timezone' id='account_timezone' value=''></input>
 					<div class="list-group list-group-sm">
@@ -248,8 +252,8 @@ if(isIE || isIENew)
 				
 		<div class="text-center m-t m-b">
 		<small>Login with</small> 
-		<a title="log in with Google" data='google' href='#' class="openid_large_btn google">Google</a>&nbsp|&nbsp
-		<a title="log in with Yahoo" data='yahoo' href="#" class="openid_large_btn yahoo">Yahoo</a><br/>	
+		<a title="Login with Google" data='google' href='#' class="openid_large_btn google">Google</a>&nbsp|&nbsp
+		<a title="Login with Yahoo" data='yahoo' href="#" class="openid_large_btn yahoo">Yahoo</a><br/>	
 		<small>Do not have an account?</small> <a href="/register">Sign Up</a><br/>
 		<small>Forgot</small> <a href="/forgot-password">Password? </a><a href="/forgot-domain">Domain?</a>
 		</div>
