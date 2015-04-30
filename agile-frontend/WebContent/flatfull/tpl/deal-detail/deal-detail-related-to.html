@@ -1,19 +1,19 @@
 <script id="deal-related-model-template" type="text/html">
-	<td></td>
-	<td class="data no-wrap" data="{{id}}">
-    	<div class="inline p-r-sm h-auto">
-{{#if_equals type "PERSON"}}        		
-<img class="thumbnail img-inital thumb inline m-b-none" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  />
-{{else}}
-<img class="thumbnail thumb m-b-none inline" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/>
-{{/if_equals}}    	
-</div>
-    	<div class="h-auto inline-block v-top text-ellipsis" style="width:12em;">
-        		<b>	{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}} </b>
-        		<b>{{getPropertyValue properties "name"}}</b>
-    	</div>
-	</td>
+<td></td>
+<td class="data no-wrap" data="{{id}}">
+    <div class="thumb-sm agile-img m-r-sm">
+		{{#if_equals type "PERSON"}}        		
+			<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  />
+		{{else}}
+			<img class="img-inital r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/>
+		{{/if_equals}}    	
+	</div>
+    <div class="h-auto inline-block v-top text-ellipsis" style="width:12em;">
+        <a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
+        {{getPropertyValue properties "last_name"}} </a>
+        <div><small class="text-muted">{{getPropertyValue properties "name"}}</small></div>
+    </div>
+</td>
 	
 <td style="width:6em;"><div>{{#if_equals type "PERSON"}}Contact {{else}} Company{{/if_equals}}</div></td>
 <td style="width:6em;"><div>{{lead_score}}</div></td>
