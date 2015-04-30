@@ -112,7 +112,13 @@ margin-bottom:0px;
 var isIE = (window.navigator.userAgent.indexOf("MSIE") != -1); 
 var isIENew = (window.navigator.userAgent.indexOf("rv:11") != -1);  
 if(isIE || isIENew) 
-	window.location = '/error/ie-upgrade.jsp';
+	window.location = '/error/not-supported.jsp';
+
+var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
+var isWin = (window.navigator.userAgent.indexOf("Windows") != -1);
+if(isSafari && isWin) 
+	window.location = '/error/not-supported.jsp';
+
 </script>
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->

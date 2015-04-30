@@ -104,11 +104,11 @@
 					</div>	                
 	                <div class="control-group">
 	                    <label class="control-label"><b>Message: </b><span class="field_req">*</span></label>
-	                    <div class="controls col-md-4 m-l-none">
+	                    <div class="controls">
 							{{#if_equals headline "Tweet"}}
-								<textarea rows="4" class="required col-md-4 twit-tweet-limit" placeholder="Detailed Message" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" maxlength="125" style="max-width:500px;" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }">{{description}}&nbsp</textarea>
+								<textarea rows="4" class="required col-md-4 twit-tweet-limit form-control-F-width form-control" placeholder="Detailed Message" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" maxlength="125" style="max-width:400px;" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }">{{description}}&nbsp</textarea>
 							{{else}}
-	                        	<textarea rows="4" class="required col-md-4 twit-message-limit" placeholder="Detailed Message" name="message" id="twit-message" data-provide="limit" data-counter="#counter" maxlength="125" style="max-width:500px;" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></textarea>
+	                        	<textarea rows="4" class="required col-md-4 twit-message-limit form-control-F-width form-control" placeholder="Detailed Message" name="message" id="twit-message" data-provide="limit" data-counter="#counter" maxlength="125" style="max-width:400px;" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></textarea>
 							{{/if_equals}}  
 							<div class="right"><small style="font-style: italic;">Characters Left <em id="twitter-counter" class="m-r-xs">125</em></small></div>
 	                    </div>
@@ -116,10 +116,10 @@
 	            </fieldset>
 	        </form>
 	    </div>
-	</div>
-	<div class="modal-footer" style="background-color:#fff;">
+		<div class="modal-footer">
 	        <a href="#" class="btn btn-sm btn-primary" id="send_request">Send</a>
 	    </div>
+	</div>
 </div>
 </div>
 </script>

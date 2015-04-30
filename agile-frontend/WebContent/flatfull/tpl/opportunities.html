@@ -60,9 +60,9 @@
 						<li><a href="#deal_bulk_delete_modal" data-toggle="modal">Delete</a></li>
 					</ul>
 				</div>
+				<div class="btn-group pull-left m-t-xs" style="display: none;left: 10px;" id="bulk-select"></div>
 				<br><br>
 			</div>
-			<div class="btn-group pull-left m-t-xs" style="display: none;left: 10px;" id="bulk-select"></div>
 			<div class="panel panel-default">
 			<div class="panel-heading">Deals</div>
 			<div class="table-responsive">
@@ -263,7 +263,7 @@
 </td>
 <td value="{{expected_value}}"><div class="table-resp">{{currencySymbol}}{{numberWithCommas expected_value}}</div></td>
 <td><div class="table-resp">{{milestone}} ({{probability}}%) </div></td>
-<td class="text-muted"><div class="table-resp"><i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time border-highlight " value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></div></td>
+<td class="text-muted"><div class="table-resp">{{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time border-highlight " value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}</div></td>
 <td>
     <div class="thumb-sm avatar">
        {{#if pic}}
