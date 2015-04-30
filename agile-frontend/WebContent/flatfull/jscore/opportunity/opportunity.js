@@ -27,6 +27,7 @@ $(function () {
         	"original-title" : currentDeal.toJSON().name,
         	"content" :  ele,
         	"html" : true,
+        	"container": 'body'
         });
        
         /**
@@ -40,6 +41,7 @@ $(function () {
         	"original-title" : currentDeal.toJSON().name,
         	"content" :  ele,
         	"html" : true,
+        	"container": 'body'
         });
         
         $(this).popover('show');
