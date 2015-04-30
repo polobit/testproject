@@ -263,7 +263,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 
     public Boolean isNewContact(String fromEmail)
     {
-	return !ContactUtil.isExists(fromEmail);
+	return !ContactUtil.isExists(fromEmail.toLowerCase());
     }
 
     public Boolean getTriggerRunResult(Boolean newContact, Trigger trigger)
