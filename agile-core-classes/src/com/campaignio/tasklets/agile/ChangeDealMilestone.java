@@ -59,7 +59,10 @@ public class ChangeDealMilestone extends TaskletAdapter
 					Log.LogType.CHANGED_DEAL_MILESTONE.toString());
 
 			if (fromMilestone.equals(ANY_MILESTONE))
+			{
 				fromMilestoneDetails.put("milestone", null);
+				fromMilestoneDetails.put("pipelineID", null);
+			}
 			// Change milestone with given values
 			changeMilestoneToRelatedDeals(contactId, fromMilestoneDetails, toMilestoneDetails,
 					AgileTaskletUtil.getOwnerId(givenOwnerId, contactOwnerId));
@@ -97,9 +100,15 @@ public class ChangeDealMilestone extends TaskletAdapter
 		// OpportunityUtil.getOpportunitiesByFilter(ownerId == null ? null :
 		// ownerId.toString(),
 		// currentMilestone, contactId, null, 0, null, null);
-		List<Opportunity> deals = OpportunityUtil.getOpportunitiesByFilter(ownerId == null ? null : ownerId.toString(),
-				fromMilestoneDetails.get("milestone"), contactId, null, 0, null,
-				Long.parseLong(fromMilestoneDetails.get("pipelineID")));
+		List<Opportunity> deals = OpportunityUtil.getOpportunitiesByFilterWithoutDefaultPipeLine(
+				ownerId == null ? null : ownerId.toString(),
+				fromMilestoneDetails.get("milestone"),
+				contactId,
+				null,
+				0,
+				null,
+				fromMilestoneDetails.get("pipelineID") == null ? null : Long.parseLong(fromMilestoneDetails
+						.get("pipelineID")));
 
 		System.out.println("Deals size id " + deals.size());
 

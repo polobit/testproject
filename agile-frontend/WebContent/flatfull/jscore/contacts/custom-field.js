@@ -508,7 +508,7 @@ function show_custom_fields_helper(custom_fields, properties){
 						+'_input custom_field required form-control" id="'
 						+field.id+'" name="'
 						+field.field_label
-						+' form-control" value="0"></input>'
+						+'" value="0"></input>'
 						+'</div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
@@ -530,7 +530,7 @@ function show_custom_fields_helper(custom_fields, properties){
 						+'_input custom_field form-control" id="'
 						+field.id+'" name="'
 						+field.field_label
-						+' form-control" value="0"></input>'
+						+'" value="0"></input>'
 						+'</div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
@@ -850,6 +850,9 @@ function enableCustomFieldsSorting(el,connClass,connId){
 					ui.helper.children().eq(index).width(ui.helper.children().eq(index).width()-$(this).width());
 				});
 				ui.helper.width(ui.helper.width());
+			},
+			sort: function(event, ui){
+				ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top)+"px");
 			},
 			forceHelperSize:true,
 			placeholder:'<tr><td></td></tr>',

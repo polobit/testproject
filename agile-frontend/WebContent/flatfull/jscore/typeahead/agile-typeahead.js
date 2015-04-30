@@ -127,7 +127,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 										return;
 									}
 
-									that.$menu.html('<div class="m-t-sm"><p align="center" class="custom-color">' + txt + '<p></div>');
+									that.$menu.html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
 									that.render();
 									return;
 								}
@@ -231,7 +231,9 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							// the drop down
 							this.$menu.html(items).show();
 							this.shown = true;
-							return this
+							//Sets modal backdrop height to sum of modal dialog height and related contacts drop down height after render the related contacts
+							$('.modal-backdrop',$('.modal:visible')).height($('.modal-dialog',$('.modal:visible')).height()+$('ul.dropdown-menu',$('.modal:visible')).height());
+							return this;
 						},
 
 						/**
@@ -347,7 +349,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								if (tag_not_exist)
 									$('.deal_tags', el)
 											.append(
-													'<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><a href="#deal/' + TYPEHEAD_TAGS[items] + '" >' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
+													'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  data="' + TYPEHEAD_TAGS[items] + '"><a href="#deal/' + TYPEHEAD_TAGS[items] + '" class="text-white v-middle">' + items_temp + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
 							}
 							else
 							{
@@ -368,6 +370,8 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 											.append(
 													'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  data="' + TYPEHEAD_TAGS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] + '" class="text-white v-middle">' + items_temp + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
 							}
+							//Sets modal backdrop height to modal dialog height after select the tag
+							$('.modal-backdrop',$('.modal:visible')).height($('.modal-dialog',$('.modal:visible')).height()+70);
 						},
 						// Needs to be overridden to set timedelay on search
 						keyup : function(e)
@@ -722,7 +726,7 @@ function appendItemInResult(item)
 	if (type && type == "deal")
 		fullname = item.toJSON().name + "-" + item.id;
 
-	var itemView = new Base_List_View({ model : item, "view" : "inline", template : this.options.templateKey + "-model", tagName : 'tr', });
+	var itemView = new Base_List_View({ model : item, "view" : "inline", template : this.options.templateKey + "-model", tagName : 'div', });
 
 	// Sets data-value to name
 	i = $(this.options.typeahead_options.item).attr('data-data-value', fullname);

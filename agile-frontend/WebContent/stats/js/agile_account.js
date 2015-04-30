@@ -30,3 +30,8 @@ function agile_setEmailFromUrl()
 		}
 	}
 }
+
+function _agile_set_whitelist(base64Domain)
+{
+	window["agile-domain"] = base64Domain;
+}

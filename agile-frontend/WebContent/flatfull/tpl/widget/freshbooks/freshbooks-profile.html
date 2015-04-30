@@ -86,7 +86,6 @@
 			{{#if client.work_phone}}<i class="icon icon-phone text-muted text-sm"></i><a class="text-muted" href="tel:{{client.work_phone}}" > {{client.work_phone}} (work)<br> </a>{{/if}}
 			{{#if client.mobile}}<i class="icon icon-phone text-muted"></i><a class="text-muted" href="tel:{{client.mobile}}"> {{client.mobile}} (mobile)</a>{{/if}}
 		{{/isArray}}
-		<div><a class="btn btn-xs btn-default c-p m-t-xs" id="freshbooks_add_invoice" item_name={{name}} rel="tooltip" title="Generate invoice and send an email for this item">Add Invoice</a></div>
 	</div>
 	<div class="wrapper-sm b-t b-light">
 		{{#isArray client}}
@@ -219,7 +218,6 @@
 					<div class="pull-left" rel="tooltip" title="{{description}}">{{name}}</div>
 					<div class="pull-right">{{unit_cost}}</div><br>
 					<ul class="widget_tab_link m-n text-base" style="float:left;">
-						<li><a href="#add" id="freshbooks_add_invoice" item_name={{name}} rel="tooltip" title="Generate invoice and send an email for this item">Add Invoice</a></li>
 						<li><small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago pull-left l_border" datetime="{{updated}}">{{updated}}</time></small></li>
 					</ul>
 				</li>
@@ -230,7 +228,6 @@
 				<div class="pull-right">{{item.unit_cost}}</div><br>
 				<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago pull-left" datetime="{{item.updated}}">{{item.updated}}</time></small>
 				<ul class="widget_tab_link m-n text-base" style="float:left;">
-					<li><a href="#add" id="freshbooks_add_invoice" item_name={{item.name}} rel="tooltip" title="Generate invoice and send an email for this item">Add Invoice</a></li>
 					<li><small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xs"></i><time class="time-ago pull-left l_border" datetime="{{item.updated}}">{{item.updated}}</time></small></li>
 				</ul>
 			</li>
