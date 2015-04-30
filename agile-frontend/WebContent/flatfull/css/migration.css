@@ -873,10 +873,10 @@ left:0;
 
 /* ending css transition for aside menu hover effect*/
 
-.contactView:hover .editArea,.companyLeftView:hover .editArea
+/* .contactView:hover .editArea,.companyLeftView:hover .editArea
 {
 	visibility:visible;
-}
+} */
 
 .vbox .row-row .cell::-webkit-scrollbar, #opportunities-by-milestones-model-list ::-webkit-scrollbar, #opportunities-by-paging-model-list ::-webkit-scrollbar {
  width: 5px;
