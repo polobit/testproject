@@ -127,7 +127,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 										return;
 									}
 
-									that.$menu.html('<div class="m-t-sm"><p align="center" class="custom-color">' + txt + '<p></div>');
+									that.$menu.html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
 									that.render();
 									return;
 								}
@@ -722,7 +722,7 @@ function appendItemInResult(item)
 	if (type && type == "deal")
 		fullname = item.toJSON().name + "-" + item.id;
 
-	var itemView = new Base_List_View({ model : item, "view" : "inline", template : this.options.templateKey + "-model", tagName : 'tr', });
+	var itemView = new Base_List_View({ model : item, "view" : "inline", template : this.options.templateKey + "-model", tagName : 'div', });
 
 	// Sets data-value to name
 	i = $(this.options.typeahead_options.item).attr('data-data-value', fullname);

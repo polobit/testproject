@@ -43,7 +43,7 @@
 										</td>
 										<td class="lhs-block v-top p-b-xs">
 											<div id="LHS" name="LHS" class="m-r-xs">
-												<select name="temp" class="lhs form-control w-125" id="LHS">
+												<select name="temp" class="lhs form-control" id="LHS">
 													<optgroup label="Tag">
 														<option value="tags" selected="selected">Tag</option>
 														<option value="tags_time">Tag And Created Date</option>
@@ -70,7 +70,7 @@
 										</td>
 									<td class="codition-block">
 											<div id="condition" name="CONDITION" class="m-r-xs">
-												<select name="temp" class="form-control w-full">
+												<select name="temp" class="form-control">
 													<option value="EQUALS"
 														class="first_name phone company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
@@ -105,36 +105,36 @@
 										<td class="rhs-block controls v-top">
 											<div id="RHS" class="rhs" name="RHS">
 												<input type="text" name="temp"
-													class="EQUALS NOTEQUALS ANYOF CONTAINS NOT_CONTAINS required form-control w-xs"/>
+													class="EQUALS NOTEQUALS ANYOF CONTAINS NOT_CONTAINS required form-control"/>
 												<input type="text" name="temp" 
 													class="MATCHES required form-control"/>
 												<input type="text" name="temp"
-													class="LAST NEXT required form-control w-xs" placeholder="Number of days"/>
+													class="LAST NEXT required form-control" placeholder="Number of days"/>
 
                                                 <input type="text" name="tag"
-													class=" tags tags_time required form-control w-xs m-n"/> 
+													class=" tags tags_time required form-control"/> 
                                                 <input type="text" name="temp" class="email required form-control w-xs"/>
 												<input type="text" name="temp"
-													class="BETWEEN_NUMBER number required form-control w-xs"/>
+													class="BETWEEN_NUMBER number required form-control"/>
 												<input id="updated_date" type="text" name="updated_date"
-													class="ON AFTER BEFORE BETWEEN input required date form-control w-xs"
+													class="ON AFTER BEFORE BETWEEN input required date form-control"
 													placeholder="MM/DD/YY" />
 
 												<input type="text" name="temp"
-													class="IS_GREATER_THAN IS_LESS_THAN number required form-control w-xs"/> 
+													class="IS_GREATER_THAN IS_LESS_THAN number required form-control"/> 
 											</div>
 										</td>
-										<td class="controls v-top" style="max-width:120px;">
+										<td class="controls v-top">
 											<div id="RHS-NEW" name="RHS_NEW">
 												<input type="text" name="temp"
-													class="BETWEEN_NUMBER number form-control required w-xs"/>
+													class="BETWEEN_NUMBER number form-control required"/>
 												<input id="date_between" type="text" name="temp"
-													class="BETWEEN input date form-control required w-xs" placeholder="MM/DD/YY" />
+													class="BETWEEN input date form-control required" placeholder="MM/DD/YY" />
 											</div>
 										</td>
 										<td class="v-top">
 											<div id="nested_condition" name="nested_condition">
-												<select name="temp" class="form-control w-full">
+												<select name="temp" class="form-control">
 													<option value="EQUALS" class="tags_time">on</option>
 													<option value="AFTER" class="tags_time">is
 														after</option>
@@ -148,19 +148,19 @@
 										</td>
 										<td class="controls v-top">
 											<div id="nested_lhs" name="nested_lhs">
-												<input type="text" name="temp" class="LAST required form-control w-xs"
+												<input type="text" name="temp" class="LAST required form-control"
 													placeholder="Number of days" /> 
 												<input
 													id="date_between" type="text"
 													name="temp"
-													class="BETWEEN EQUALS AFTER BEFORE input date required form-control w-xs"
+													class="BETWEEN EQUALS AFTER BEFORE input date required form-control"
 													placeholder="MM/DD/YY" />
 											</div>
 										</td>
 										<td class="controls v-top">
 											<div id="nested_rhs" name="nested_rhs">
 												<input id="date_between" type="text" name="temp"
-													class="BETWEEN input date required form-control w-xs"
+													class="BETWEEN input date required form-control"
 													placeholder="MM/DD/YY" />
 											</div>
 										</td>
