@@ -70,7 +70,8 @@ background-position:center center;
 background-size:100% 100%;
 background-attachment:fixed;
 }
-html *, body *
+
+.text-white
 {
 color:#fff!important;
 }
@@ -183,7 +184,7 @@ if(isIE || isIENew)
 		<div ui-view="" class="fade-in-right-big smooth">
   			<div class="container w-xxl w-auto-xs">
 				
-					<a href="https://www.agilecrm.com/" class="navbar-brand block m-t" style="color: #363f44;">
+					<a href="https://www.agilecrm.com/" class="navbar-brand block m-t text-white">
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
 					</a>
 				
@@ -222,7 +223,7 @@ if(isIE || isIENew)
 					<input type='hidden' name='server' id='oauth-name' value=''></input>
 				</form>
 			<!-- 	<div class="clearfix"></div> -->
-				<div class="wrapper text-center">
+				<div class="wrapper text-center text-white">
       				<strong>Sign in using your registered account</strong>
    				</div>
 				<form name='agile' id="agile" method='post' action="/login" onsubmit="return isValid();">
@@ -254,12 +255,12 @@ if(isIE || isIENew)
 				
 
 				
-		<div class="text-center m-t m-b">
+		<div class="text-center text-white m-t m-b">
 		<small>Login with</small> 
-		<a title="Login with Google" data='google' href='#' class="openid_large_btn google">Google</a>&nbsp|&nbsp
-		<a title="Login with Yahoo" data='yahoo' href="#" class="openid_large_btn yahoo">Yahoo</a><br/>	
-		<small>Do not have an account?</small> <a href="/register">Sign Up</a><br/>
-		<small>Forgot</small> <a href="/forgot-password">Password? </a><a href="/forgot-domain">Domain?</a>
+		<a title="Login with Google" data='google' href='#' class="openid_large_btn google text-white">Google</a>&nbsp|&nbsp
+		<a title="Login with Yahoo" data='yahoo' href="#" class="openid_large_btn yahoo text-white">Yahoo</a><br/>	
+		<small>Do not have an account?</small> <a href="/register" class="text-white">Sign Up</a><br/>
+		<small>Forgot</small> <a href="/forgot-password" class="text-white">Password? </a><a href="/forgot-domain" class="text-white">Domain?</a>
 		</div>
 		
 		</form>

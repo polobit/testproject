@@ -88,7 +88,7 @@ background-size:100% 100%;
 background-attachment:fixed;
 }
 
-html *, body *
+.text-white
 {
 color:#fff!important;
 }
@@ -111,7 +111,9 @@ text-decoration:underline;
 	  color: #000 !important;
 }
 
-
+.alert-success {
+	  color: #3c763d !important;
+}
 
 <!-- 
 @media (min-width: 900px) {
@@ -180,7 +182,7 @@ jQuery.validator.setDefaults({
   			<div class="container w-xxl w-auto-xs">
 		
 			
-				<a href="https://www.agilecrm.com/" class="navbar-brand block m-t" style="color: #363f44;">
+				<a href="https://www.agilecrm.com/" class="navbar-brand block text-white m-t" style="color: #363f44;">
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
 					</a>
 				
@@ -202,7 +204,7 @@ jQuery.validator.setDefaults({
 				</div>
 				 <%}%>
 				
-				<div class="wrapper text-center">
+				<div class="wrapper text-center text-white">
       				<strong>Enter Your Email</strong>
    				</div>
 				<!--  <h3><small>Enter Your Email </small></h3>	 -->
@@ -216,7 +218,7 @@ jQuery.validator.setDefaults({
 					  	<%
 				    if (domainUser != null) {
 				%>
-				<a href="#" id="resend-password">Resend password</a><br>
+				<a href="#" id="resend-password" class="text-white">Resend password</a><br>
 				<%
 				    }
 				%>
@@ -242,9 +244,9 @@ jQuery.validator.setDefaults({
 
 			</form>
 			
-			<div class="text-center m-t m-b">
-	                 <small>Already have an account?</small> <a href="/login">Login</a><br/>
-	                 <small>Forgot</small> <a href="/forgot-domain">Domain?</a>
+			<div class="text-center text-white m-t m-b">
+	                 <small>Already have an account?</small> <a href="/login" class="text-white">Login</a><br/>
+	                 <small>Forgot</small> <a href="/forgot-domain" class="text-white">Domain?</a>
                </div>
              </div>
              </div>  

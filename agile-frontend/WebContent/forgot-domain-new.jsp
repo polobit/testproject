@@ -64,7 +64,7 @@ background-size:100% 100%;
 background-attachment:fixed;
 }
 
-html *, body *
+.text-white
 {
 color:#fff!important;
 }
@@ -105,6 +105,10 @@ body {
 
 .error {
 	color: red;
+}
+
+.alert-success {
+	  color: #3c763d !important;
 }
 -->
 </style> 
@@ -156,7 +160,7 @@ jQuery.validator.setDefaults({
 		<div ui-view="" class="fade-in-right-big smooth">
   			<div class="container w-xxl w-auto-xs">
 			
-				<a href="https://www.agilecrm.com/" class="navbar-brand block m-t" style="color: #363f44;">
+				<a href="https://www.agilecrm.com/" class="navbar-brand block text-white m-t">
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
 					</a>				
 				
@@ -176,7 +180,7 @@ jQuery.validator.setDefaults({
 				</div>
 				 <%}%>
 				
-				<div class="wrapper text-center">
+				<div class="wrapper text-center text-white">
       				<strong>Enter Your Email</strong>
    				</div>
 				
@@ -194,9 +198,9 @@ jQuery.validator.setDefaults({
 				
 					
 			
-			<div class="text-center m-t m-b">
-	                <small> Do not have an account? </small><a href="/register">Register</a><br/>
-	                 <small>Forgot </small><a href="/enter-domain?to=forgot-password">Password?</a>
+			<div class="text-center text-white m-t m-b">
+	                <small> Do not have an account? </small><a href="/register" class="text-white">Register</a><br/>
+	                 <small>Forgot </small><a href="/enter-domain?to=forgot-password" class="text-white">Password?</a>
                </div>
 		</div>
 		</div>
