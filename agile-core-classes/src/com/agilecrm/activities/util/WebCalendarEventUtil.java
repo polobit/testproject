@@ -783,6 +783,7 @@ public class WebCalendarEventUtil
 				client_event.created_time = System.currentTimeMillis() / 1000;
 				newEvnt.color = "#36C";
 				newEvnt.type = EventType.WEB_APPOINTMENT;
+				newEvnt.description = wce.notes;
 
 				epoch_start_date = newEvnt.start;
 				String cid = contact.id.toString(); // related contact
@@ -837,6 +838,7 @@ public class WebCalendarEventUtil
 				client_event.created_time = System.currentTimeMillis() / 1000;
 				newEvnt.color = "#36C";
 				newEvnt.type = EventType.WEB_APPOINTMENT;
+				newEvnt.description = wce.notes;
 
 				epoch_start_date = newEvnt.start;
 				String cid = null; // related contact
@@ -1081,8 +1083,10 @@ public class WebCalendarEventUtil
 		String mins = hours.substring(3);
 		if ("00".equals(str) || "24".equals(str))
 			return "12:" + mins + "am";
+		else if ("12".equals(str))
+			return "12:" + mins + "pm";
 		Map<String, String> time_map = new HashMap<>();
-		for (int i = 12, k = 1; i <= 23; i++, k++)
+		for (int i = 13, k = 1; i <= 23; i++, k++)
 		{
 			time_map.put(String.valueOf(i), String.valueOf(k));
 		}

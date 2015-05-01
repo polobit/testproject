@@ -43,6 +43,17 @@ $(function()
 	});
 
 	/**
+	 * shows description field in new event model
+	 */
+	$("#add_event_desctiption").live('click', function(e)
+	{
+		e.preventDefault();
+		$(".event_discription").removeClass("hide");
+		$(this).hide();
+		return;
+	});
+
+	/**
 	 * When clicked on update button of event-update-modal, the event will get
 	 * updated by calling save_event function
 	 * 
@@ -65,54 +76,66 @@ $(function()
 	 * Deletes an event from calendar by calling ajax DELETE request with an
 	 * appropriate url
 	 */
-	$('#event_delete').die().live('click', function(e)
-	{
-		e.preventDefault();
+	$('#event_delete')
+			.die()
+			.live(
+					'click',
+					function(e)
+					{
+						e.preventDefault();
 
-		if ($(this).attr('disabled') == 'disabled')
-			return;
+						if ($(this).attr('disabled') == 'disabled')
+							return;
 
-		/**
-		 * Confirmation alert to delete an event
-		 */
-		if (!confirm("Are you sure you want to delete?"))
-			return;
+						/**
+						 * Confirmation alert to delete an event
+						 */
+						if (!confirm("Are you sure you want to delete?"))
+							return;
 
-		var event_id = $('#updateActivityForm input[name=id]').val();
-		var save_button = $(this);
+						var event_id = $('#updateActivityForm input[name=id]').val();
+						var save_button = $(this);
 
-		disable_save_button(save_button);
-		/**
-		 * Shows loading symbol until model get saved
-		 */
-		// $('#updateActivityModal').find('span.save-status').html(getRandomLoadingImg());
-		$.ajax({ url : 'core/api/events/' + event_id, type : 'DELETE', success : function()
-		{
-			//if event deleted from today events portlet, we removed that event from portlet events collection
-			if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route==undefined || Current_Route=='dashboard')) 
-			{
-				App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.remove(App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.get(event_id));
-				
-				App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
+						disable_save_button(save_button);
+						/**
+						 * Shows loading symbol until model get saved
+						 */
+						// $('#updateActivityModal').find('span.save-status').html(getRandomLoadingImg());
+						$
+								.ajax({
+									url : 'core/api/events/' + event_id,
+									type : 'DELETE',
+									success : function()
+									{
+										// if event deleted from today events
+										// portlet, we removed that event from
+										// portlet events collection
+										if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route == undefined || Current_Route == 'dashboard'))
+										{
+											App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection
+													.remove(App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.get(event_id));
 
-			}
+											App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
 
-			// $('#updateActivityModal').find('span.save-status img').remove();
-			enable_save_button(save_button);
-			$("#updateActivityModal").modal('hide');
+										}
 
-			var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
-			$('#calendar_event').fullCalendar('removeEvents', eventId);
-		} });
-		if (readCookie("agile_calendar_view"))
-		{
-			var eventModel = eventCollectionView.collection.get(event_id);
-			eventModel.set(eventModel, { remove : true });
-			document.location.reload();
+										// $('#updateActivityModal').find('span.save-status
+										// img').remove();
+										enable_save_button(save_button);
+										$("#updateActivityModal").modal('hide');
 
-		}
+										var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
+										$('#calendar_event').fullCalendar('removeEvents', eventId);
+									} });
+						if (readCookie("agile_calendar_view"))
+						{
+							var eventModel = eventCollectionView.collection.get(event_id);
+							eventModel.set(eventModel, { remove : true });
+							document.location.reload();
 
-	});
+						}
+
+					});
 
 	/**
 	 * Activates the date picker to the corresponding fields in activity modal
@@ -149,27 +172,27 @@ $(function()
 	 * start-timepicker
 	 */
 	$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false }).on('hide.timepicker', function(e)
-	{		
+	{
 		if ($('#activityModal #allDay').is(':checked'))
 		{
 			$('#event-time-1').closest('.control-group').hide();
 			$('#event-date-2').closest('.row').hide();
 		}
-	
+
 		// ChangeTime event is not working, so need to invoke user method.
-		var endTime = changeEndTime($('.start-timepicker').val().split(":"),$('.end-timepicker').val().split(":"));
+		var endTime = changeEndTime($('.start-timepicker').val().split(":"), $('.end-timepicker').val().split(":"));
 		$('.end-timepicker').val(endTime);
-		
+
 		e.stopImmediatePropagation();
 		return false;
 	});
-	$('.start-timepicker').timepicker().on('show.timepicker', function(e) 
+	$('.start-timepicker').timepicker().on('show.timepicker', function(e)
 	{
-		if($('.start-timepicker').attr('value')!="" && $('.start-timepicker').attr('value')!=undefined)
+		if ($('.start-timepicker').attr('value') != "" && $('.start-timepicker').attr('value') != undefined)
 		{
-			if($('.start-timepicker').attr('value').split(":")[0]!=undefined)
+			if ($('.start-timepicker').attr('value').split(":")[0] != undefined)
 				e.time.hours = $('.start-timepicker').attr('value').split(":")[0];
-			if($('.start-timepicker').attr('value').split(":")[0]!=undefined)
+			if ($('.start-timepicker').attr('value').split(":")[0] != undefined)
 				e.time.minutes = $('.start-timepicker').attr('value').split(":")[1];
 		}
 		$('.bootstrap-timepicker-hour').val(e.time.hours);
@@ -182,13 +205,13 @@ $(function()
 	 */
 	$('.end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
 	console.log(get_hh_mm(true));
-	$('.end-timepicker').timepicker().on('show.timepicker', function(e) 
+	$('.end-timepicker').timepicker().on('show.timepicker', function(e)
 	{
-		if($('.end-timepicker').attr('value')!="" && $('.end-timepicker').attr('value')!=undefined)
+		if ($('.end-timepicker').attr('value') != "" && $('.end-timepicker').attr('value') != undefined)
 		{
-			if($('.end-timepicker').attr('value').split(":")[0]!=undefined)
+			if ($('.end-timepicker').attr('value').split(":")[0] != undefined)
 				e.time.hours = $('.end-timepicker').attr('value').split(":")[0];
-			if($('.end-timepicker').attr('value').split(":")[0]!=undefined)
+			if ($('.end-timepicker').attr('value').split(":")[0] != undefined)
 				e.time.minutes = $('.end-timepicker').attr('value').split(":")[1];
 		}
 		$('.bootstrap-timepicker-hour').val(e.time.hours);
@@ -200,18 +223,18 @@ $(function()
 	 * update-start-timepicker
 	 */
 	$('.update-start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false }).on('hide.timepicker', function(e)
-	{		
+	{
 		// ChangeTime event is not working, so need to invoke user method.
-		var endTime = changeEndTime($('.update-start-timepicker').val().split(":"),$('.update-end-timepicker').val().split(":"));
+		var endTime = changeEndTime($('.update-start-timepicker').val().split(":"), $('.update-end-timepicker').val().split(":"));
 		$('.update-end-timepicker').val(endTime);
 	});
-	$('.update-start-timepicker').timepicker().on('show.timepicker', function(e) 
+	$('.update-start-timepicker').timepicker().on('show.timepicker', function(e)
 	{
-		if($('.update-start-timepicker').attr('value')!="" && $('.update-start-timepicker').attr('value')!=undefined)
+		if ($('.update-start-timepicker').attr('value') != "" && $('.update-start-timepicker').attr('value') != undefined)
 		{
-			if($('.update-start-timepicker').attr('value').split(":")[0]!=undefined)
+			if ($('.update-start-timepicker').attr('value').split(":")[0] != undefined)
 				e.time.hours = $('.update-start-timepicker').attr('value').split(":")[0];
-			if($('.update-start-timepicker').attr('value').split(":")[0]!=undefined)
+			if ($('.update-start-timepicker').attr('value').split(":")[0] != undefined)
 				e.time.minutes = $('.update-start-timepicker').attr('value').split(":")[1];
 		}
 		$('.bootstrap-timepicker-hour').val(e.time.hours);
@@ -223,13 +246,13 @@ $(function()
 	 * update-end-timepicker
 	 */
 	$('.update-end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
-	$('.update-end-timepicker').timepicker().on('show.timepicker', function(e) 
+	$('.update-end-timepicker').timepicker().on('show.timepicker', function(e)
 	{
-		if($('.update-end-timepicker').attr('value')!="" && $('.update-end-timepicker').attr('value')!=undefined)
+		if ($('.update-end-timepicker').attr('value') != "" && $('.update-end-timepicker').attr('value') != undefined)
 		{
-			if($('.update-end-timepicker').attr('value').split(":")[0]!=undefined)
+			if ($('.update-end-timepicker').attr('value').split(":")[0] != undefined)
 				e.time.hours = $('.update-end-timepicker').attr('value').split(":")[0];
-			if($('.update-end-timepicker').attr('value').split(":")[0]!=undefined)
+			if ($('.update-end-timepicker').attr('value').split(":")[0] != undefined)
 				e.time.minutes = $('.update-end-timepicker').attr('value').split(":")[1];
 		}
 		$('.bootstrap-timepicker-hour').val(e.time.hours);
@@ -254,7 +277,7 @@ $(function()
 
 		if ($('.end-timepicker').val() == '')
 			$('.end-timepicker').val(get_hh_mm(true));
-		//sets the time in time picker if it is empty
+		// sets the time in time picker if it is empty
 		if ($('.new-task-timepicker').val() == '')
 			$('.new-task-timepicker').val("12:00");
 		// Update will highlight the date of in date picker
@@ -286,7 +309,7 @@ $(function()
 		$("input.date").datepicker('update');
 
 	});
-	
+
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
@@ -298,19 +321,18 @@ $(function()
 
 		// Removes error class of input fields
 		$('#' + this.id).find('.error').removeClass('error');
-				
-		
+
 		var isOwnerListUploded = $("#event-owners-list", $("#activityForm")).val();
-		if(isOwnerListUploded == null)
-		  {
+		if (isOwnerListUploded == null)
+		{
 			// Fills owner select element
-			populateUsers("event-owners-list", $("#activityForm"), undefined, undefined,
-			function(data){
-							$("#activityForm").find("#event-owners-list").html(data);
-							$("#event-owners-list", $("#activityForm")).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
-							$("#event-owners-list", $("#activityForm")).closest('div').find('.loading-img').hide();
-						  });
-		  }
+			populateUsers("event-owners-list", $("#activityForm"), undefined, undefined, function(data)
+			{
+				$("#activityForm").find("#event-owners-list").html(data);
+				$("#event-owners-list", $("#activityForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
+				$("#event-owners-list", $("#activityForm")).closest('div').find('.loading-img').hide();
+			});
+		}
 
 	});
 
@@ -333,6 +355,9 @@ $(function()
 	});
 	$('#activityModal').on('hidden.bs.modal', function()
 	{
+		$("#add_event_desctiption").show();
+
+		$(".event_discription").addClass("hide");
 
 		if ($(this).hasClass('in'))
 		{
@@ -341,15 +366,13 @@ $(function()
 
 		// Remove validation error messages
 		remove_validation_errors('activityModal');
-		
+
 		$("#activityForm").find("li").remove();
 		$('#event-time-1').closest('.control-group').show();
 		$('#event-date-2').closest('.row').show();
-		
+
 	});
-	
-	
-	
+
 	/**
 	 * Highlights the event features (Shows event form and hides task form,
 	 * changing color and font-weight)
@@ -513,97 +536,106 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 
 	var eventModel = new Backbone.Model();
 	eventModel.url = 'core/api/events';
-	eventModel.save(json, { success : function(data)
-	{
-
-		// Removes disabled attribute of save button
-		enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
-
-		$('#' + formId).each(function()
-		{
-			this.reset();
-		});
-
-		// $('#' + modalName).find('span.save-status img').remove();
-		$('#' + modalName).modal('hide');
-
-		// $('#calendar').fullCalendar( 'refetchEvents' );
-		var event = data.toJSON();
-		if(event.color=='red' || event.color=='#f05050')
-			event.className = 'b-l b-2x b-danger fc-z-index';
-		else if(event.color=='green' || event.color=='#bbb')
-			event.className = 'b-l b-2x b-light fc-z-index';
-		else if(event.color=='#36C' || event.color=='#23b7e5')
-			event.className = 'b-l b-2x b-warning fc-z-index';
-		event.color='';
-		event.backgroundColor = '#fff';
-		if (Current_Route == 'calendar' && !readCookie("agile_calendar_view"))
-		{
-
-			// When updating an event remove the old event from fullCalendar
-			if (isUpdate)
-
-				$('#calendar_event').fullCalendar('removeEvents', json.id);
-
-			$('#calendar_event').fullCalendar('renderEvent', event);
-		}
-		// Updates data to temeline
-		else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
-		{
-
-			/*
-			 * Verifies whether the added task is related to the contact in
-			 * contact detail view or not
-			 */
-			$.each(event.contacts, function(index, contact)
-			{
-				if (contact.id == App_Contacts.contactDetailView.model.get('id'))
-				{
-
-					// Add model to collection. Disabled sort while adding and
-					// called
-					// sort explicitly, as sort is not working when it is called
-					// by add
-					// function
-					if (eventsView && eventsView.collection)
+	eventModel
+			.save(
+					json,
+					{ success : function(data)
 					{
-						if (eventsView.collection.get(data.id))
+
+						// Removes disabled attribute of save button
+						enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
+
+						$('#' + formId).each(function()
 						{
-							eventsView.collection.get(data.id).set(new BaseModel(data));
+							this.reset();
+						});
+
+						// $('#' + modalName).find('span.save-status
+						// img').remove();
+						$('#' + modalName).modal('hide');
+
+						// $('#calendar').fullCalendar( 'refetchEvents' );
+						var event = data.toJSON();
+						if (event.color == 'red' || event.color == '#f05050')
+							event.className = 'b-l b-2x b-danger fc-z-index';
+						else if (event.color == 'green' || event.color == '#bbb')
+							event.className = 'b-l b-2x b-light fc-z-index';
+						else if (event.color == '#36C' || event.color == '#23b7e5')
+							event.className = 'b-l b-2x b-warning fc-z-index';
+						event.color = '';
+						event.backgroundColor = '#fff';
+						if (Current_Route == 'calendar' && !readCookie("agile_calendar_view"))
+						{
+
+							// When updating an event remove the old event from
+							// fullCalendar
+							if (isUpdate)
+
+								$('#calendar_event').fullCalendar('removeEvents', json.id);
+
+							$('#calendar_event').fullCalendar('renderEvent', event);
+						}
+						// Updates data to temeline
+						else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+						{
+
+							/*
+							 * Verifies whether the added task is related to the
+							 * contact in contact detail view or not
+							 */
+							$.each(event.contacts, function(index, contact)
+							{
+								if (contact.id == App_Contacts.contactDetailView.model.get('id'))
+								{
+
+									// Add model to collection. Disabled sort
+									// while adding and
+									// called
+									// sort explicitly, as sort is not working
+									// when it is called
+									// by add
+									// function
+									if (eventsView && eventsView.collection)
+									{
+										if (eventsView.collection.get(data.id))
+										{
+											eventsView.collection.get(data.id).set(new BaseModel(data));
+										}
+										else
+										{
+											eventsView.collection.add(new BaseModel(data), { sort : false });
+											eventsView.collection.sort();
+										}
+									}
+
+									// Activates "Timeline" tab and its tab
+									// content in
+									// contact detail view
+									// activate_timeline_tab();
+									// add_entity_to_timeline(data);
+
+									return false;
+								}
+
+							});
+						}
+						else if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route == undefined || Current_Route == 'dashboard'))
+						{
+							if (isUpdate)
+								App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);
+
+							// Updates events list view
+							App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.add(data);
+
+							App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
+
 						}
 						else
-						{
-							eventsView.collection.add(new BaseModel(data), { sort : false });
-							eventsView.collection.sort();
-						}
-					}
+							App_Calendar.navigate("calendar", { trigger : true });
 
-					// Activates "Timeline" tab and its tab content in
-					// contact detail view
-					// activate_timeline_tab();
-					// add_entity_to_timeline(data);
-
-					return false;
-				}
-
-			});
-		}else if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route==undefined || Current_Route=='dashboard')) 
-		{
-			if (isUpdate)
-				App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);
-
-			// Updates events list view
-			App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.add(data);
-
-			App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
-
-		}
-		else
-			App_Calendar.navigate("calendar", { trigger : true });
-
-		if (callback && typeof callback === 'function')
-			callback(data);
-	} });
+						if (callback && typeof callback === 'function')
+							callback(data);
+					} });
 }
 
 /**
@@ -671,70 +703,70 @@ function fillTimePicker(end_time)
 	}
 }
 
-//Fills owner select element in update activity modal form
+// Fills owner select element in update activity modal form
 function populateUsersInUpdateActivityModal(event)
 {
-	
+
 	// Fills owner select element
-	populateUsers("event-owners-list", $("#updateActivityForm"), event, 'eventOwner',
-	function(data) {
-					$("#updateActivityForm").find("#event-owners-list").html(data);
-					if (event.owner) 
-					   {
-						$("#event-owners-list", $("#updateActivityForm")).find('option[value="' + event['owner'].id + '"]')
-														.attr("selected", "selected");
-					   }
-					$("#event-owners-list", $("#updateActivityForm")).closest('div').find('.loading-img').hide();
-				   });	
+	populateUsers("event-owners-list", $("#updateActivityForm"), event, 'eventOwner', function(data)
+	{
+		$("#updateActivityForm").find("#event-owners-list").html(data);
+		if (event.owner)
+		{
+			$("#event-owners-list", $("#updateActivityForm")).find('option[value="' + event['owner'].id + '"]').attr("selected", "selected");
+		}
+		$("#event-owners-list", $("#updateActivityForm")).closest('div').find('.loading-img').hide();
+	});
 }
 
-// Checks start time > end time and will update end time. Adds 30min to end time if its < start time.
-function changeEndTime(startTime,endTime)
+// Checks start time > end time and will update end time. Adds 30min to end time
+// if its < start time.
+function changeEndTime(startTime, endTime)
 {
- console.log("In changeEndTime");
- console.log(startTime);
- console.log(endTime);
- 
- if(startTime[0] > endTime[0] || (startTime[0] == endTime[0] && startTime[1] >= endTime[1]))
-  {
-    var hours = Number(startTime[0]);
-	var minutes = Number(startTime[1]);
+	console.log("In changeEndTime");
+	console.log(startTime);
+	console.log(endTime);
 
-	if (minutes % 15 != 0)
-		minutes = minutes - (minutes % 15);
+	if (startTime[0] > endTime[0] || (startTime[0] == endTime[0] && startTime[1] >= endTime[1]))
+	{
+		var hours = Number(startTime[0]);
+		var minutes = Number(startTime[1]);
 
-	// Make end time 30 minutes more than start time
+		if (minutes % 15 != 0)
+			minutes = minutes - (minutes % 15);
+
+		// Make end time 30 minutes more than start time
 		if (minutes == "30")
 		{
-			if(hours == 23)
-			   hours = 0;
+			if (hours == 23)
+				hours = 0;
 			else
-			   hours = hours + 1;
+				hours = hours + 1;
 			minutes = 0;
 		}
 		else if (minutes == "45")
 		{
-			if(hours == 23)
-			   hours = 0;
+			if (hours == 23)
+				hours = 0;
 			else
-			   hours = hours + 1;
+				hours = hours + 1;
 			minutes = 15;
 		}
 		else
 			minutes = minutes + 30;
-	
-	if (hours < 10)
-	{
-		hours = "0" + hours;
-	}
-	if (minutes < 10)
-	{
-		minutes = "0" + minutes;
-	}
 
-	console.log( hours + ':' + minutes);
-	return hours + ':' + minutes;
-  }
- else
-	 return endTime[0]+ ':' +endTime[1];
+		if (hours < 10)
+		{
+			hours = "0" + hours;
+		}
+		if (minutes < 10)
+		{
+			minutes = "0" + minutes;
+		}
+
+		console.log(hours + ':' + minutes);
+		return hours + ':' + minutes;
+	}
+	else
+		return endTime[0] + ':' + endTime[1];
 }
