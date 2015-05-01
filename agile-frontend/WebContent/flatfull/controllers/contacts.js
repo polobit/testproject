@@ -855,10 +855,13 @@ var ContactsRouter = Backbone.Router.extend({
 
 		agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
 
+		// To append name to email
 		if (id)
 		{
 			var name;
-			if (model)
+
+			// For Reply all, id may contains multiple emails. If contains multiple, skip
+			if (model && id.indexOf(',') == -1)
 			{
 				if (model.type == "PERSON")
 				{
@@ -881,7 +884,11 @@ var ContactsRouter = Backbone.Router.extend({
 
 			if (name && name.length)
 			{
-				var data = name + ' <' + id.trim() + '>';
+				var data = id;
+
+				// If already appended with name, skip
+				if(id.indexOf('<') == -1 && id.indexOf('>') == -1)
+					data = name + ' <' + id.trim() + '>';
 
 				$('#to', el)
 						.closest("div.controls")
