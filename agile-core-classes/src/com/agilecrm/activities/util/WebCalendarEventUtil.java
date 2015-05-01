@@ -783,7 +783,8 @@ public class WebCalendarEventUtil
 				client_event.created_time = System.currentTimeMillis() / 1000;
 				newEvnt.color = "#36C";
 				newEvnt.type = EventType.WEB_APPOINTMENT;
-				newEvnt.description = StringUtils.isNotEmpty(wce.phoneNumber) ? wce.phoneNumber + " - " + wce.notes
+				newEvnt.description = StringUtils.isNotEmpty(wce.phoneNumber) || wce.phoneNumber != "" ? wce.phoneNumber
+						+ " - " + wce.notes
 						: wce.notes;
 
 				epoch_start_date = newEvnt.start;
@@ -839,7 +840,8 @@ public class WebCalendarEventUtil
 				client_event.created_time = System.currentTimeMillis() / 1000;
 				newEvnt.color = "#36C";
 				newEvnt.type = EventType.WEB_APPOINTMENT;
-				newEvnt.description = StringUtils.isNotEmpty(wce.phoneNumber) ? wce.phoneNumber + " - " + wce.notes
+				newEvnt.description = StringUtils.isNotEmpty(wce.phoneNumber) || wce.phoneNumber != "" ? wce.phoneNumber
+						+ " - " + wce.notes
 						: wce.notes;
 
 				epoch_start_date = newEvnt.start;
