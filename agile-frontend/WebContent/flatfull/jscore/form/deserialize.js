@@ -225,7 +225,7 @@ function deserializeForm(data, form)
 													 * contact full name
 													 */
 													fel.append(
-																	'<li class="tag" data="' + tag_id + '" class="tag"  style="display: inline-block; "><a href="#deal/' + deal.id + '">' + tag_name + '</a><a class="close" id="remove_tag">&times</a></li>');
+																	'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + tag_id + '"><a href="#deal/' + deal.id + '" class="text-white v-middle">' + tag_name + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
 												});
 							}
 

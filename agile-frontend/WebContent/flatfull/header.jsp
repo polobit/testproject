@@ -108,7 +108,7 @@
 				  		
 				 %>">
 					<div class="nav navbar-nav hidden-xs">
-<a href="#" id="app-aside-folded" class="btn no-shadow navbar-btn" ui-toggle="app-aside-folded" target=".app">
+<a href="#" id="app-aside-folded" class="p-b-sm p-l-sm p-r-sm inline-block pos-rlt pos-t-xs  no-shadow navbar-btn" ui-toggle="app-aside-folded" target=".app">
             <i class="fa fa-dedent fa-fw text"></i>
           <!--   <i class="fa fa-indent fa-fw text-active"></i> -->
           </a>

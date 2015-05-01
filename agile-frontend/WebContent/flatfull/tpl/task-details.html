@@ -8,9 +8,9 @@
 <div class="wrapper pos-rlt">
 
                   <div> 
-                    <div class="text-cap h3 font-thin custom-color" style="width:85%">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span><span class="label bg-light dk inline-block m-l-sm text-xs pos-rlt pos-t-n-xs">{{task_property type}}</span>                  
+                    <div class="text-cap h3 font-thin custom-color" style="width:85%">{{#is_link subject}}<span class="activate-link">{{else}}<span class="m-r-sm">{{/is_link}}{{safe_string subject}}</span><span class="label bg-light dk inline-block m-r-sm text-xs pos-rlt pos-t-n-xs">{{task_property type}}</span>                  
                     {{#if_not_equals priority_type "NORMAL" }}
-                   <span class="label label-{{task_label_color priority_type}} inline-block m-l-sm text-xs pos-rlt pos-t-n-xs">{{ucfirst priority_type}}</span>
+                   <span class="label label-{{task_label_color priority_type}} inline-block  text-xs pos-rlt pos-t-n-xs">{{ucfirst priority_type}}</span>
                          {{/if_not_equals}}</div>
                   </div>
 					
@@ -100,12 +100,13 @@
         	<small class="text-xs text-muted">Related to</small>
 </div>
 {{/if}}
+
 {{#each contacts}}
         		{{#if_contact_type "PERSON"}}
-        			<a href="#contact/{{id}}" class="activate-link thumb"><img class="r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        			<a href="#contact/{{id}}" class="activate-link thumb m-b-xs"><img class="r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
         		{{/if_contact_type}}
 				{{#if_contact_type "COMPANY"}}
-        			<a href="#contact/{{id}}" class="activate-link thumb"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        			<a href="#contact/{{id}}" class="activate-link thumb m-b-xs"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
         		{{/if_contact_type}}
         	{{/each}}
 </div>
