@@ -1219,3 +1219,19 @@ top:117px;
 	opacity:0.5;
 
 }
+
+#myCarousel .item{
+	margin-left: 0px !important;
+}
+
+.jslider-label span {
+	font-size: 13px !important;
+}
+	
+.jslider-value span{
+	font-size: 13px !important;
+}
+
+.resize-vertical{
+	resize: vertical;
+}
