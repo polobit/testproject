@@ -92,7 +92,7 @@ $(function()
 		if (!confirm("Are you sure to remove " + $(this).attr("contact_name") + " from " + $(this).attr("campaign_name") + " campaign?"))
 			return;
 
-		var campaign_id = $(this).closest('li').attr('data');
+		var campaign_id = $(this).closest('span#active-campaign').attr('data');
 		var contact_id;
 
 		// Fetch contact id from model

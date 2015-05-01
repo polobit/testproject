@@ -27,7 +27,7 @@
          <div>
            <div class="text-md inline-block m-r-sm pull-left" id="contact-active-campaigns">Active Campaigns: </div> <div class="tagsinput active-campaigns">
                    {{#each this.active}}
-						<span class="tag inline-block label bg-light"  data="{{campaign_id}}"><span>
+						<span class="tag inline-block label bg-light" id='active-campaign' data="{{campaign_id}}"><span>
 							{{#hasMenuScope 'CAMPAIGN'}}
 								<a class="anchor pull-left m-t-xs m-r-xs" href="#workflow/{{campaign_id}}">{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Active Campaign{{/if}}</a>
 								<a class="close remove-active-campaign" contact_name = "{{contactShortName}}" campaign_name="{{campaign_name}}" title="Remove from Campaign">&times</a>
