@@ -87,6 +87,10 @@ text-decoration:underline;
 	color: red !important;
 }
 
+.close {
+	  color: #000 !important;
+}
+
 </style>
 
 <!-- 
@@ -180,7 +184,7 @@ if(isIE || isIENew)
   			<div class="container w-xxl w-auto-xs">
 				
 					<a href="https://www.agilecrm.com/" class="navbar-brand block m-t" style="color: #363f44;">
-						<i class="fa fa-cloud" style="padding-right:5px;"></i>Agile CRM
+						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
 					</a>
 				
 				<div class="m-b-lg">
@@ -200,8 +204,8 @@ if(isIE || isIENew)
 						
 					<div id="openid_btns">
 					   <% if(!StringUtils.isEmpty(error)){%>
-				        <div class="alert error login-error text-center m-b-none">
-							<a class="close" data-dismiss="alert" href="#">&times</a><%=error%> 
+				        <div class="alert error alert-danger login-error text-center m-b-none">
+							<a class="close m-t-n-sm" data-dismiss="alert" href="#">&times</a><%=error%> 
 						</div>
 						<%}%>
 							

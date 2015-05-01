@@ -6,6 +6,8 @@
 It checks first if user exists then if user exists,
 he is redirected to his own domain else error is shown in the same page.
 */
+//flatfull path
+String flatfull_path="/flatfull";
 
 String error = "", success = "";
 //If Email is present
@@ -47,11 +49,44 @@ if(!StringUtils.isEmpty(email))
 <link type="text/css" rel="stylesheet" href="/css/openid-min.css">
 <link type="text/css" rel="stylesheet" href="/css/signin.css"> -->
 
-<link rel="stylesheet" type="text/css" href="/css/bootstrap.v3.min.css" />
-<link rel="stylesheet" type="text/css" href="/css/font.css" />
-<link rel="stylesheet" type="text/css" href="/css/app.css" />
+<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/bootstrap.v3.min.css" />
+<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/font.css" />
+<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/app.css" />
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
-<!-- <style>
+<style>
+
+body {
+background-image:url('..<%=flatfull_path%>/images/flatfull/buildings.jpg');
+background-repeat:no-repeat;
+background-position:center center;
+background-size:100% 100%;
+background-attachment:fixed;
+}
+
+html *, body *
+{
+color:#fff!important;
+}
+
+input
+{
+color:#000!Important;
+}
+
+a:hover
+{
+text-decoration:underline;
+}
+
+.error {
+	color: red !important;
+}
+
+.close {
+	  color: #000 !important;
+}
+<!-- 
 @media (min-width: 900px) {
 body {
 	padding-top: 30px;
@@ -71,8 +106,8 @@ body {
 .error {
 	color: red;
 }
-
-</style> -->
+-->
+</style> 
 
  <!-- JQUery Core and UI CDN -->
 <!-- <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
@@ -80,8 +115,8 @@ body {
 
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script> -->
 
-<script type='text/javascript' src='/lib/jquery-new/jquery-2.1.1.min.js'></script>
-<script type="text/javascript" src="/lib/bootstrap.v3.min.js"></script>
+<script type='text/javascript' src='<%=flatfull_path%>/lib/jquery-new/jquery-2.1.1.min.js'></script>
+<script type="text/javascript" src="<%=flatfull_path%>/lib/bootstrap.v3.min.js"></script>
 
 <!-- <script type="text/javascript">
 jQuery.validator.setDefaults({
@@ -122,7 +157,7 @@ jQuery.validator.setDefaults({
   			<div class="container w-xxl w-auto-xs">
 			
 				<a href="https://www.agilecrm.com/" class="navbar-brand block m-t" style="color: #363f44;">
-						<img src="img/signin/cloud-logo.png" style="padding-right:10px;">Agile CRM
+						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
 					</a>				
 				
 			<!-- 	<h1>Forgot Domain</h1> -->
@@ -130,14 +165,14 @@ jQuery.validator.setDefaults({
 				<form name='forgot_domain' id="forgot_domain" method='post' onsubmit="return isValid();"> 
 				
 				 <% if(!StringUtils.isEmpty(error)){%>
-				 <div class="alert alert-danger login-error m-b-none">
-					<a class="close" data-dismiss="alert" href="#">&times</a><%=error%> 
+				 <div class="alert error alert-danger login-error m-b-none">
+					<a class="close m-t-n-sm" data-dismiss="alert" href="#">&times</a><%=error%> 
 				</div>
 				<%}%>
 				
 				 <% if(!StringUtils.isEmpty(success)){%>
 				<div class="alert alert-success login-success m-b-none">
-					<a class="close" data-dismiss="alert" href="#">&times</a><%=success%> 
+					<a class="close m-t-n-sm" data-dismiss="alert" href="#">&times</a><%=success%> 
 				</div>
 				 <%}%>
 				
