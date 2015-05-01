@@ -234,8 +234,8 @@
 <td data="{{id}}" class="data">
 	<div class="portlet-time-view no-inherit">
 		<div style="width: 73%;" class="pull-left m-b-xs">
-			<span class="label p-l-xs p-r-xxs text-base pos-rlt m-r event-start-time bg-{{event_label_color color}}" datetime="{{get_AM_PM_format start}}">
-				<i class="arrow right arrow-{{event_label_color color}}"></i>
+			<span class="label p-l-xs p-r-xxs text-base pos-rlt m-r event-start-time font-bold bg-{{event_label_color color}}" datetime="{{get_AM_PM_format start}}">
+				<i class="arrow right arrow-{{event_label_color color}}" style="right:-8px;"></i>
 				{{get_AM_PM_format start}}
 			</span>
 			<a href class="text-ellipsis" style="width:60%;">{{title}}</a>
@@ -266,10 +266,10 @@
 				</ul>
 			</div>
 			<div class="portlet_header_name">
-                <i class="{{get_portlet_icon name}} icon-1x"></i>
-                <span class="portlet-icon-divider"></span>
+                <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
+                <span class="portlet-icon-divider"></span> -->
 				<span class="inline-block">
-					<h4 class="h4">
+					<h4 class="font-thin m-t-none text-muted h4">
 						{{get_flitered_contact_portlet_header settings.filter}}
 					</h4>
                 </span>
@@ -282,7 +282,7 @@
 </script>
 
 <script id="portlets-contacts-emails-opened-model-template" type="text/html">
-		<div class="portlet_header portlet_edit_icons panel-heading" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+		<div class="portlet_header portlet_edit_icons panel-heading b-b-none" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
 			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
 				<ul class="portlet_header_control">
 					<!-- {{#if is_minimized}}
@@ -295,9 +295,9 @@
 				</ul>
 			</div>
 			<div class="portlet_header_name">
-                <i class="{{get_portlet_icon name}} icon-1x"></i>
-                <span class="portlet-icon-divider"></span>
-				<span class="inline-block"><h4 class="h4">
+                <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
+                <span class="portlet-icon-divider"></span> -->
+				<span class="inline-block"><h4 class="font-thin m-t-none text-muted h4">
 					{{#if_equals settings.duration "1-day"}}
 						Emails Opened <small>Today</small>
 					{{/if_equals}}
@@ -344,9 +344,9 @@
 				</ul>
 			</div>
 			<div class="portlet_header_name">
-                <i class="{{get_portlet_icon name}} icon-1x"></i>
-                <span class="portlet-icon-divider"></span>
-				<span class="inline-block"><h4 class="h4">
+                <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
+                <span class="portlet-icon-divider"></span> -->
+				<span class="inline-block"><h4 class="font-thin m-t-none text-muted h4">
 					{{#if_equals settings.duration "1-day"}}
 						Emails Sent <small>Today</small>
 					{{/if_equals}}
@@ -377,7 +377,7 @@
      <div class="row_position" style="display:none">{{row_position}}</div>
 </script>
 <script id="portlets-contacts-growth-graph-model-template" type="text/html">
-		<div class="portlet_header portlet_edit_icons panel-heading" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+		<div class="portlet_header portlet_edit_icons panel-heading b-b-none" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
 			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
 				<ul class="portlet_header_control">
 					<!-- {{#if is_minimized}}
@@ -390,9 +390,9 @@
 				</ul>
 			</div>
 			<div class="portlet_header_name">
-                <i class="{{get_portlet_icon name}} icon-1x"></i>
-                <span class="portlet-icon-divider"></span>
-				<span class="inline-block"><h4 class="h4">
+                <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
+                <span class="portlet-icon-divider"></span> -->
+				<span class="inline-block"><h4 class="font-thin m-t-none text-muted h4">
                    Tag Graph</h4>
                 </span>
 			</div>
@@ -418,9 +418,9 @@
 				</ul>
 			</div>
 			<div class="portlet_header_name">
-                <i class="{{get_portlet_icon name}} icon-1x"></i>
-                <span class="portlet-icon-divider"></span>
-				<span class="inline-block"><h4 class="h4">
+                <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
+                <span class="portlet-icon-divider"></span> -->
+				<span class="inline-block"><h4 class="font-thin m-t-none text-muted h4">
 					{{#if_equals settings.deals "all-deals"}}
 						All Pending Deals
 					{{/if_equals}}
@@ -436,7 +436,7 @@
      <div class="row_position" style="display:none">{{row_position}}</div>
 </script>
 <script id="portlets-deals-deals-by-milestone-model-template" type="text/html">
-		<div class="portlet_header portlet_edit_icons panel-heading" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+		<div class="portlet_header portlet_edit_icons panel-heading b-b-none" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
 			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
 				<ul class="portlet_header_control">
 					<!-- {{#if is_minimized}}
@@ -449,9 +449,9 @@
 				</ul>
 			</div>
 			<div class="portlet_header_name">
-                <i class="{{get_portlet_icon name}} icon-1x"></i>
-                <span class="portlet-icon-divider"></span>
-				<span class="inline-block"><h4 class="h4">
+                <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
+                <span class="portlet-icon-divider"></span> -->
+				<span class="inline-block"><h4 class="font-thin m-t-none text-muted h4">
 					{{#if_equals settings.deals "all-deals"}}
 						All Deals by Milestone <small>{{get_deals_funnel_portlet_header settings.track}}</small>
 					{{/if_equals}}
@@ -480,9 +480,9 @@
 				</ul>
 			</div>
 			<div class="portlet_header_name">
-                <i class="{{get_portlet_icon name}} icon-1x"></i>
-                <span class="portlet-icon-divider"></span>
-				<span class="inline-block"><h4 class="h4">
+                <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
+                <span class="portlet-icon-divider"></span> -->
+				<span class="inline-block"><h4 class="font-thin m-t-none text-muted h4">
                    Closures per Person</h4>
                 </span>
 			</div>
@@ -506,9 +506,9 @@
 				</ul>
 			</div>
 			<div class="portlet_header_name">
-                <i class="{{get_portlet_icon name}} icon-1x"></i>
-                <span class="portlet-icon-divider"></span>
-				<span class="inline-block"><h4 class="h4">
+                <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
+                <span class="portlet-icon-divider"></span> -->
+				<span class="inline-block"><h4 class="font-thin m-t-none text-muted h4">
 					{{#if_equals settings.duration "1-day"}}
 						Deals Won <small>Today</small>
 					{{/if_equals}}
@@ -545,7 +545,7 @@
      <div class="row_position" style="display:none">{{row_position}}</div>	
 </script>
 <script id="portlets-deals-deals-funnel-model-template" type="text/html">
-		<div class="portlet_header portlet_edit_icons panel-heading" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+		<div class="portlet_header portlet_edit_icons panel-heading b-b-none" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
 			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
 				<ul class="portlet_header_control">
 					<!-- {{#if is_minimized}}
@@ -558,9 +558,9 @@
 				</ul>
 			</div>
 			<div class="portlet_header_name">
-                <i class="{{get_portlet_icon name}} icon-1x"></i>
-                <span class="portlet-icon-divider"></span>
-				<span class="inline-block"><h4 class="h4">
+                <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
+                <span class="portlet-icon-divider"></span> -->
+				<span class="inline-block"><h4 class="font-thin m-t-none text-muted h4">
 					{{#if_equals settings.deals "all-deals"}}
 						All Deals Funnel <small>{{get_deals_funnel_portlet_header settings.track}}</small>
 					{{/if_equals}}
@@ -590,9 +590,9 @@
 				</ul>
 			</div>
 			<div class="portlet_header_name">
-                <i class="{{get_portlet_icon name}} icon-1x"></i>
-                <span class="portlet-icon-divider"></span>
-				<span class="inline-block"><h4 class="h4">
+                <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
+                <span class="portlet-icon-divider"></span> -->
+				<span class="inline-block"><h4 class="font-thin m-t-none text-muted h4">
 					{{#if_equals settings.duration "1-day"}}
 						Deals Assigned <small>Today</small>
 					{{/if_equals}}
@@ -620,7 +620,7 @@
      <div class="row_position" style="display:none">{{row_position}}</div>	
 </script>
 <script id="portlets-contacts-calls-per-person-model-template" type="text/html">
-		<div class="portlet_header portlet_edit_icons panel-heading" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+		<div class="portlet_header portlet_edit_icons panel-heading b-b-none" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
 			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
 				<ul class="portlet_header_control">
 					<!-- {{#if is_minimized}}
@@ -633,9 +633,9 @@
 				</ul>
 			</div>
 			<div class="portlet_header_name">
-                <i class="{{get_portlet_icon name}} icon-1x"></i>
-                <span class="portlet-icon-divider"></span>
-				<span class="inline-block"><h4 class="h4">
+                <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
+                <span class="portlet-icon-divider"></span> -->
+				<span class="inline-block"><h4 class="font-thin m-t-none text-muted h4">
 					{{#if_equals settings.duration "1-day"}}
 						Calls <small>Today</small>
 					{{/if_equals}}
@@ -675,9 +675,9 @@
 				</ul>
 			</div>
 			<div class="portlet_header_name">
-                <i class="{{get_portlet_icon name}} icon-1x"></i>
-                <span class="portlet-icon-divider"></span>
-				<span class="inline-block"><h4 class="h4">
+                <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
+                <span class="portlet-icon-divider"></span> -->
+				<span class="inline-block"><h4 class="font-thin m-t-none text-muted h4">
                    Today's Events</h4>
                 </span>
 			</div>
@@ -700,9 +700,9 @@
 				</ul>
 			</div>
 			<div class="portlet_header_name">
-                <i class="{{get_portlet_icon name}} icon-1x"></i>
-                <span class="portlet-icon-divider"></span>
-				<span class="inline-block"><h4 class="h4">
+                <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
+                <span class="portlet-icon-divider"></span> -->
+				<span class="inline-block"><h4 class="font-thin m-t-none text-muted h4">
                    Today's Tasks</h4>
                 </span>
 			</div>
@@ -725,9 +725,9 @@
 				</ul>
 			</div>
 			<div class="portlet_header_name">
-                <i class="{{get_portlet_icon name}} icon-1x"></i>
-                <span class="portlet-icon-divider"></span>
-				<span class="inline-block"><h4 class="h4">
+                <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
+                <span class="portlet-icon-divider"></span> -->
+				<span class="inline-block"><h4 class="font-thin m-t-none text-muted h4">
                    Agile CRM Blog</h4>
                 </span>
 			</div>
@@ -740,7 +740,7 @@
      <div class="row_position" style="display:none">{{row_position}}</div>	
 </script>
 <script id="portlets-tasksandevents-task-report-model-template" type="text/html">
-		<div class="portlet_header portlet_edit_icons panel-heading" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+		<div class="portlet_header portlet_edit_icons panel-heading b-b-none" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
 			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
 				<ul class="portlet_header_control">
 					<!-- {{#if is_minimized}}
@@ -753,9 +753,9 @@
 				</ul>
 			</div>
 			<div class="portlet_header_name">
-                <i class="{{get_portlet_icon name}} icon-1x"></i>
-                <span class="portlet-icon-divider"></span>
-				<span class="inline-block"><h4 class="h4">
+                <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
+                <span class="portlet-icon-divider"></span> -->
+				<span class="inline-block"><h4 class="font-thin m-t-none text-muted h4">
 					{{#if_equals settings.duration "1-day"}}
 						Task Report <small>Today</small>
 					{{/if_equals}}

@@ -124,6 +124,7 @@ function addNewPortlet(portlet_type,p_name){
         	scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
         	//move the scroll bar for showing the newly added portlet
         	window.scrollTo(0,scrollPosition);
+        	scrollPosition = 0;
         },
         error: function (model, response) {
         	hidePortletsPopup();
@@ -137,6 +138,7 @@ function addNewPortlet(portlet_type,p_name){
         	scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
         	//move the scroll bar for showing the newly added portlet
         	window.scrollTo(0,scrollPosition);
+        	scrollPosition = 0;
         }});
 	/*setTimeout(function(){
 		gridster.add_widget($('#ui-id-'+model.column_position+'-'+model.row_position),model.size_x,model.size_y,model.column_position,model.row_position);

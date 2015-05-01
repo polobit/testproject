@@ -79,7 +79,7 @@ function set_up_portlets(el, portlets_el){
 	dimensions = [dim_width, dim_height];
 	gridster = $('.gridster > div:visible',portlets_el).gridster({
     	widget_selector: "div",
-        widget_margins: [10, 5],
+        widget_margins: [10, 12],
         widget_base_dimensions: dimensions,
         min_cols: 3,
         autogenerate_stylesheet: true,
@@ -599,6 +599,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        success: function (data) {
 	        	hidePortletSettingsAfterSave(modal_id);
 	        	$(window).scrollTop(scrollPosition);
+	        	scrollPosition = 0;
 	        	var model = data.toJSON();
 	        	Portlets_View.collection.get(model).set(new BaseModel(model));
 	        	var pos = ''+data.get("column_position")+''+data.get("row_position");

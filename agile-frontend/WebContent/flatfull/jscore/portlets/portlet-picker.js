@@ -962,13 +962,16 @@ function dealsByMilestonePieGraph(selector,milestonesList,milestoneValuesList,mi
 		            	dataLabels: {
 		            		enabled: true,
 		            		useHTML: true,
-		            		connectorWidth: 0,
+		            		/*connectorWidth: 0,*/
+		            		softConnector: true,
 		    	            formatter: function () {
 		    	            	return 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+this.point.name+'</b></span><br/>' +
 		    	            			'<span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage)+'%</b></span></div>';
 		    	            },
 		            		/*format: '<b>{point.name}</b>: {point.percentage:.1f}',*/
-		                    distance: 15
+		                    distance: 30,
+		                    x: 2,
+		                    y: -10
 		                },
 		                showInLegend: false
 		            }
