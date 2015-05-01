@@ -92,7 +92,8 @@ $(function()
 		if (!confirm("Are you sure to remove " + $(this).attr("contact_name") + " from " + $(this).attr("campaign_name") + " campaign?"))
 			return;
 
-		var campaign_id = $(this).closest('span#active-campaign').attr('data');
+		var $active_campaign = $(this).closest('span#active-campaign');
+		var campaign_id = $active_campaign.attr('data');
 		var contact_id;
 
 		// Fetch contact id from model
@@ -101,8 +102,6 @@ $(function()
 
 		// Url to delete
 		var deleteUrl = 'core/api/workflows/remove-active-subscriber/' + campaign_id + '/' + contact_id;
-
-		var $removeActiveCampaign = $(this);
 
 		$.ajax({ url : deleteUrl, type : 'DELETE', success : function(data)
 		{
@@ -126,7 +125,7 @@ $(function()
 			}
 
 			// Remove li
-			$removeActiveCampaign.closest('li').remove();
+			$active_campaign.remove();
 
 		} });
 
