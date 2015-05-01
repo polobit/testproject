@@ -107,7 +107,7 @@ function setup_tags_typeahead() {
 	       			
 	       			// Append to the list, when no match is found 
 	       			if ($.inArray(tag, old_tags) == -1) 
-	       				$('#added-tags-ul').append('<li style="display:inline-block;" class="tag btn btn-xs btn-primary" data="' + tag + '"><span><a class="anchor m-r-xs" href="#tags/'+ tag + '" >'+ tag + '</a><a class="close remove-tags" id="' + tag + '" tag="'+tag+'">&times</a></span></li>');
+	       				$('#added-tags-ul').append('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="' + tag + '"><span><a class="anchor m-r-xs" href="#tags/'+ tag + '" >'+ tag + '</a><a class="close remove-tags" id="' + tag + '" tag="'+tag+'">&times</a></span></li>');
     				
     			});
     	        return;

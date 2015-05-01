@@ -37,11 +37,11 @@
 <div class="m-t-sm">
 {{#if_equals "IN_PROGRESS" status}}
 <div class="w-md">
-<div>{{displayTaskStatus status}}  {{progress}}%</div>
+<div class="m-b-xs">{{displayTaskStatus status}} - {{progress}}%</div>
 <div style="height:5px;" class="progress progress-info w-full m-b-none">
-          <div class="progress-bar" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;"></div>
+          <div class="progress-bar-info" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;"></div>
      </div> 
- <div><time datetime="{{epochToHumanDate "dd mmm yyyy" due}}">Due {{epochToHumanDate "dd mmm yyyy" due}}</time></div>
+ <div class="m-t-xs"><time style="font-size:14px!important;" datetime="{{epochToHumanDate "dd mmm yyyy" due}}">Due {{epochToHumanDate "dd mmm yyyy" due}}</time></div>
 <div class="clearfix"></div>
  
 </div>

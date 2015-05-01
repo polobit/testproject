@@ -1195,7 +1195,7 @@ color:#1f2427!important;
 */
 
 /*hack for contact details top menu position*/
-.app-aside-dock .dock-view-fixing
+.app-aside-dock .dock-view-fixing,.enable-full-height
 {
 top:117px;
 }
