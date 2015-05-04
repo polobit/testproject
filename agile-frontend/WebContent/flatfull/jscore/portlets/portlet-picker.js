@@ -1069,10 +1069,7 @@ function dealsFunnelGraph(selector,funnel_data){
 	                height: '100%',
 	                width: '50%',
 	                borderWidth : 1,
-	                borderColor: 'white',
-	                marker: {
-	                	enabled: false
-	                }
+	                borderColor: 'white'
 	            }
 	        },
 	        tooltip: {
@@ -1177,7 +1174,9 @@ function portletGrowthGraph(selector,series,base_model){
 			$('#'+selector).highcharts({
 		        chart: {
 		            type: 'areaspline',
-		            marginRight: 20
+		            marginRight: 20,
+		            plotBorderWidth: 1,
+		            plotBorderColor: '#F4F4F5'
 		        },
 		        title: {
 		            text: ''
@@ -1315,7 +1314,9 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 		$('#'+selector).highcharts({
 			chart: {
 	            type: 'bar',
-	            marginRight: 20
+	            marginRight: 20,
+	            plotBorderWidth: 1,
+	            plotBorderColor: '#F4F4F5'
 	        },
 	        title: {
 	            text: ''
@@ -1348,7 +1349,7 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	                text: text
 	            },
 	            allowDecimals: false,
-	            gridLineWidth : 1,
+	            gridLineWidth : 0,
 	    		gridLineColor : '#F4F4F5',
 	    		labels : {
 	    			style : {
@@ -1632,21 +1633,28 @@ function emailsOpenedPieChart(selector,data,emailsSentCount,emailsOpenedCount){
                 y: 40,
 	    		labelFormatter: function () {
 	    			if(this.name=="Emails Opened")
-	    				return 	'<div><span>'+this.name+':'+emailsOpenedCount+'</span></div>';
+	    				return 	'<div><span>Opened:'+emailsOpenedCount+'</span></div>';
 	    			else if(this.name=="Emails Sent")
-	    				return 	'<div><span>'+this.name+':'+emailsSentCount+'</span></div>';
+	    				return 	'<div><span>Sent:'+emailsSentCount+'</span></div>';
 	            	
 	            },
 	            itemStyle: {
 	            	color: "#ccc",
-	            	cursor: "none",
+	            	cursor: '',
 	            	fontSize: "12px", 
 	            	fontWeight: "bold"
-	            }
+	            },
+	            borderWidth : 0,
+				floating : true,
 	        },
 	        plotOptions: {
 	        	series: {
-	                borderWidth : 0
+	                borderWidth : 0,
+	                states: {
+	                	hover: {
+	                		enabled: false
+	                	}
+	                }
 	            },
 	            pie: {
 	            	borderWidth: 0,
@@ -1665,7 +1673,14 @@ function emailsOpenedPieChart(selector,data,emailsSentCount,emailsOpenedCount){
 	                    distance: -55
 	                },
 	                showInLegend: true,
-	                enableMouseTracking: false
+	                enableMouseTracking: false,
+	                point: {
+	                	events: {
+		                	legendItemClick: function () {
+		                        return false;
+		                    }
+		                }
+	                }
 	            }
 	        },
 	        series: [{
@@ -1674,7 +1689,7 @@ function emailsOpenedPieChart(selector,data,emailsSentCount,emailsOpenedCount){
 	        }],
 	        exporting: {
 		        enabled: false
-		    },
+		    }/*,
 		    legend : {
 				itemStyle : {
 					fontSize : '10px',
@@ -1685,7 +1700,7 @@ function emailsOpenedPieChart(selector,data,emailsSentCount,emailsOpenedCount){
 				floating : true,
 				align : 'right',
 				verticalAlign : 'top'
-			}
+			}*/
 	    });
 	});
 }

@@ -1,34 +1,29 @@
 <script id="portlets-contacts-model-template" type="text/html">
 <td class="data v-middle" data="{{id}}" style="width:70px;" class="p-r-xs">
 	<div class="table-resp">
-		<div class="thumb-xs agile-img">
+		<div class="thumb-sm agile-img m-r-sm">
 			<img class="img-inital r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
 		</div>
 	</div>
 </td>
-<td style="width:calc(75%-70px);" class="p-l-none">
-	<div class="table-resp">
+<td style="width:calc(65%-70px);" class="p-l-none">
+	<div class="table-resp m-l-n-xs">
 		{{#if_contact_type "PERSON"}}
-        	<a class="text-md">	{{getPropertyValue properties "first_name"}}
+        	<a class="text-cap custom-link">	{{getPropertyValue properties "first_name"}}
         	{{getPropertyValue properties "last_name"}} </a>
-        	<div class="m-t-xs">{{#if_propertyName "title"}}{{value}}, {{/if_propertyName}}{{getPropertyValue properties "company"}}</div>
+        	<div>
+				<small class="text-muted m-t-xs">{{#if_propertyName "title"}}{{value}}, {{/if_propertyName}}{{getPropertyValue properties "company"}}</small>
+			</div>
         {{/if_contact_type}}
 		{{#if_contact_type "COMPANY"}}
-			{{getPropertyValue properties "name"}}
+			<a class="text-cap custom-link">{{getPropertyValue properties "name"}}</a>
 		{{/if_contact_type}}
 	</div>
 </td>
-<!-- <td style="width:25%">
-	<div class="table-resp">
-		{{getPropertyValue properties "title"}}
-		<br/>
-		{{getPropertyValue properties "company"}}
-	</div>
-</td> -->
-<td style="width:25%">
+<td style="width:35%">
 	<div class="table-resp text-right p-b-xs">
 		{{#each tags}}
-    		<span class="label bg-light">{{this}}</span>	
+    		<span class="label bg-light dk text-tiny">{{this}}</span>	
 		{{/each}}
 	</div>
 </td>
@@ -155,22 +150,26 @@
 <td data="{{id}}" class="data">
 	<div class="portlet-time-view no-inherit">
 		<div class="pull-left" style="width: 70%;">
-			<div class="w-full pull-left text-ellipsis">{{name}}</div> <!-- <span class="label" style="max-width: 10%;">{{milestone}}</span> -->
+			<div class="w-full pull-left text-ellipsis text-cap">{{name}}</div> <!-- <span class="label" style="max-width: 10%;">{{milestone}}</span> -->
 		</div>
 		<div class="pull-right text-right font-bold m-b-xs text-ellipsis" style="width: 30%; white-space: nowrap;">
 			<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
 		</div>
-		<div class="clearfix"></div>
+		<!-- <div class="clearfix"></div> -->
 	</div>
 	<div class="no-inherit">
-		<div style="width: 30%;" class="pull-left m-b-xs">
+		<div style="width: 30%;" class="pull-left">
 			<div class="text-ellipsis text-muted">
-				<i class="fa fa-clock-o m-r-xs"></i>
-				<time class="time-ago" datetime="{{epochToHumanDate "" close_date}}" >{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>
+				{{#if close_date}}
+					<i class="fa fa-clock-o m-r-xs"></i>
+					<time class="time-ago" datetime="{{epochToHumanDate "" close_date}}" >{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>
+				{{else}}
+					&nbsp;
+				{{/if}}
 			</div>
 		</div>
 		{{#if this.contacts}}
-			<div class="activate-link text-right m-b-xs text-ellipsis" style="width: 70%;">
+			<div class="activate-link text-right text-ellipsis" style="width: 70%;">
 				{{#related_to_one contacts}}{{/related_to_one}}
 			</div>
 		{{/if}}
