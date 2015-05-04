@@ -44,7 +44,7 @@
 
 			// On save back to deals list
 			// Backbone.history.navigate("deals", { trigger : true });  
-			//App_Deals.deals();
+			settimeout(App_Deals.deals(),100);
 			
 			// If no_noty is given as error message, neglect noty
 			if(error_message === "no_noty")
@@ -170,10 +170,10 @@
 		});
 		
 		$("#deal_bulk_delete_modal,#deal_owner_change_modal,#deal_mile_change_modal,#deal_bulk_archive_modal,#deal_bulk_restore_modal").on('show.bs.modal',function(){
-			if(deal_bulk_actions.SELECT_ALL_DEALS)
+			/*if(deal_bulk_actions.SELECT_ALL_DEALS)
 				$(this).find('span.count').text(numberWithCommas(getAvailableDeals()));
 			else
-				$(this).find('span.count').text(numberWithCommas(getDealsBulkIds().length));
+				$(this).find('span.count').text(numberWithCommas(getDealsBulkIds().length));*/
 		})
 		
 		$("#pipeline-list-bulk").die().live('change',function(e){
