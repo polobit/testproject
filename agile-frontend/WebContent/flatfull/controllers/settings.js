@@ -681,6 +681,8 @@ var SettingsRouter = Backbone.Router.extend({
 			
 			
 		}
+
+		hideTransitionBar();
 	//	$("#clickdesk_status").html('No chat support representative is available at the moment. Please<br/> <a href="#contact-us" id="show_support">leave a message</a>.');
 	},
 	
