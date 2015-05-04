@@ -1,7 +1,7 @@
 /**
  * Loading spinner shown while loading
  */
-var LOADING_HTML = '<img class="loading" style="padding-right:5px;" height="32px" width="32px" src= "img/21-0.gif"></img>';
+var LOADING_HTML = '<img class="loading" style="padding-right:5px;" height="1px" width="1px" src= "/flatfull/img/21-0.gif"></img>';
 
 /**
  * Set of loading images

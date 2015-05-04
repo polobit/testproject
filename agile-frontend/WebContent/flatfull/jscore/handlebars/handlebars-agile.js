@@ -362,6 +362,8 @@ function downloadTemplate(url, callback)
 
 	console.log(url + " " + dataType);
 
+	url = url + "?_=" + _AGILE_VERSION;
+
 	// If callback is sent to this method then template is fetched synchronously
 	var is_async = false;
 	if (callback && typeof (callback) === "function")
