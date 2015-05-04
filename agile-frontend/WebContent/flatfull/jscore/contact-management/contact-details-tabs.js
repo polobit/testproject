@@ -779,7 +779,7 @@ function get_emails_to_reply(emails, configured_email)
 		if (email == CURRENT_DOMAIN_USER.email)
 			continue;
 
-		emails += emails_array[i];
+		emails += email;
 
 		// Append comma without trailing
 		if (i < len - 1)
