@@ -25,7 +25,14 @@ function customize_isotope()
 			props = this.spineAlign,
 			gutterWidth = Math.round( this.options.spineAlign && this.options.spineAlign.gutterWidth ) || 0,
 			centerX = Math.round(this.element.width() / 2);
+		
+		Date.prototype.monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
 
+		Date.prototype.getMonthName = function() {
+            return this.monthNames[this.getMonth()];
+        };
+        var currentDate = new Date();
+        
 		$elems.each(function(i, val){
 			var $this = $(this);
 			$this.removeClass('last').removeClass('top');
@@ -39,9 +46,11 @@ function customize_isotope()
 					y = props.colA;
 					if (y == 0){
 						$this.addClass('top');
-						$this.find('.inner2').addClass('inner2-top');
-						$this.find('.inner2').removeClass('inner2');
-						$this.find('.year').text('Now');
+						if($this.find('.year').text()==currentDate.getMonthName()){
+							$this.find('.inner2').addClass('inner2-top');
+							$this.find('.inner2').removeClass('inner2');
+							$this.find('.year').text('Now');
+						}
 					}
 					props.colA += $this.outerHeight(true);
 					props.colB = props.colA;
@@ -50,9 +59,11 @@ function customize_isotope()
 					y = props.colB;
 					if (y == 0){
 						$this.addClass('top');
-						$this.find('.inner2').addClass('inner2-top');
-						$this.find('.inner2').removeClass('inner2');
-						$this.find('.year').text('Now');
+						if($this.find('.year').text()==currentDate.getMonthName()){
+							$this.find('.inner2').addClass('inner2-top');
+							$this.find('.inner2').removeClass('inner2');
+							$this.find('.year').text('Now');
+						}
 					}
 					props.colB += $this.outerHeight(true);
 					props.colA = props.colB;
