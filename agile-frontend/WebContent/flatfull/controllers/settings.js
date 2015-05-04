@@ -660,7 +660,7 @@ var SettingsRouter = Backbone.Router.extend({
 				CLICKDESK_Live_Chat.onStatus(function(status) {
 
 					if(status == "online")
-						$("#clickdesk_status").html('Chat with our support representative.<br/> <a style="cursor:pointer" onclick="CLICKDESK_LIVECHAT.show();">Start chat</a>.');
+						$("#clickdesk_status").html('Chat with our support representative.<br/> <a class="text-info c-p" onclick="CLICKDESK_LIVECHAT.show();">Start chat</a>.');
 					else
 						$("#clickdesk_status").html('No chat support representative is available at the moment. Please<br/> <a href="#contact-us" id="show_support">leave a message</a>.');
 				});
@@ -672,7 +672,7 @@ var SettingsRouter = Backbone.Router.extend({
 				CLICKDESK_Live_Chat.onStatus(function(status) {
 
 					if(status == "online")
-						$("#clickdesk_status").html('Chat with our support representative.<br/> <a style="cursor:pointer" onclick="CLICKDESK_LIVECHAT.show();">Start chat</a>.');
+						$("#clickdesk_status").html('Chat with our support representative.<br/> <a class="text-info c-p" onclick="CLICKDESK_LIVECHAT.show();">Start chat</a>.');
 					else
 						$("#clickdesk_status").html('No chat support representative is available at the moment. Please<br/> <a href="#contact-us" id="show_support">leave a message</a>.');
 				});
