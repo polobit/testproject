@@ -471,7 +471,7 @@ $(function()
 
 				var from = $(this).data('from');
 
-				var $parent_element = $(this).parent().parent();
+				var $parent_element = $(this).closest('#email-reply-div');
 
 				var to_emails = $parent_element.find('.to-emails').data('to');
 				var cc_emails = $parent_element.find('.cc-emails').data('cc');
