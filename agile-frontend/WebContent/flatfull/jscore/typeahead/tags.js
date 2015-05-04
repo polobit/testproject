@@ -171,7 +171,7 @@ function setup_tags_typeahead() {
     			$("#addTagsForm").css("display", "none");
     		    $("#add-tags").css("display", "block");
 
-       				$('#added-tags-ul').append('<li class="inline-block tag btn btn-xs btn-primary m-r-xs" data="' + tag + '" ><span><a class="anchor" href="#tags/'+ tag + '">'+ tag + '</a><a class="close remove-tags" id="' + tag + '" tag="'+tag+'">&times</a></span></li>');
+       				$('#added-tags-ul').append('<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="' + tag + '" ><span><a class="anchor m-r-xs" href="#tags/'+ tag + '">'+ tag + '</a><a class="close remove-tags" id="' + tag + '" tag="'+tag+'">&times</a></span></li>');
     			});
     		}
     });

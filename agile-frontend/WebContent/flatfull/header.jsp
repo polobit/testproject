@@ -263,9 +263,9 @@
 				<%	if (!StringUtils.isEmpty(currentUserPrefs.pic))
 							out.println("<img src='"
 							+ currentUserPrefs.pic
-							+ "' alt='...' class='b b-light' style='width:38px;height:38px;'></img>");
+							+ "' alt='...'  style='width:40px;height:40px;'></img>");
 					else
-							out.println("<img src='img/gravatar.png' class='b b-light' alt='...'></img>");
+							out.println("<img src='img/gravatar.png'  alt='...'></img>");
 				%>
                
                

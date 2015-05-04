@@ -102,7 +102,7 @@ table {
 }
 ul.tagsinput li.tag > span > a:first-child {
 	display: inline-block !important;
-	color:#fff;
+	/* color:#fff; */
 	vertical-align:middle;
 }
  ul.tagsinput li.tag > span > a:second-child {

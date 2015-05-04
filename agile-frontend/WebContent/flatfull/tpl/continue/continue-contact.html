@@ -27,9 +27,9 @@
 	                    <label class="control-label col-sm-3">Company</label>
 	                    <div class="controls col-sm-9">
 							<div class="pull-left inline-block">
-								<ul name="contact_company_id" class="contacts tagsinput tags p-n">
+								<ul name="contact_company_id" class="contacts tagsinput tags p-n m-n">
 								{{#if contact_company_id}}
-									<li class="tag inline-block btn btn-xs btn-primary m-r-xs"  data="{{contact_company_id}}">
+									<li class="tag inline-block btn btn-xs btn-primary m-r-xs m-b-xs"  data="{{contact_company_id}}">
 										<a href="#contact/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a><a class="close p-l-xs" id="remove_tag">&times</a>
 									</li>
 								{{/if}}
@@ -52,7 +52,7 @@
                         <div class="pull-left">
                             <ul name="tags" class="tagsinput tags p-n">
                                 {{#each tags}}
-                                <li class="tag inline-block btn btn-xs btn-primary m-r-xs" data="{{this}}">{{this}}<a class="close" id="remove_tag">&times</a></li>
+                                <li class="tag inline-block btn btn-xs btn-primary m-r-xs m-b-xs" data="{{this}}">{{this}}<a class="close m-l-xs" id="remove_tag">&times</a></li>
                                 {{/each}}
                             </ul>
                         </div>

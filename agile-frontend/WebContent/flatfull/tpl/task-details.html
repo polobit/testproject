@@ -38,8 +38,8 @@
 {{#if_equals "IN_PROGRESS" status}}
 <div class="w-md">
 <div class="m-b-xs">{{displayTaskStatus status}} - {{progress}}%</div>
-<div style="height:5px;" class="progress progress-info w-full m-b-none">
-          <div class="progress-bar-info" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;"></div>
+<div style="height:5px;" class="progress  w-full m-b-none">
+          <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;"></div>
      </div> 
  <div class="m-t-xs"><time style="font-size:14px!important;" datetime="{{epochToHumanDate "dd mmm yyyy" due}}">Due {{epochToHumanDate "dd mmm yyyy" due}}</time></div>
 <div class="clearfix"></div>
@@ -189,7 +189,7 @@
 
 <script id="task-related-model-template" type="text/html">
 	<td></td>
-	<td class="data" data="{{id}} no-wrap">
+	<td class="data no-wrap" data="{{id}}">
     	<div class="inline p-r-sm h-auto">
           {{#if_contact_type "PERSON"}}
         	<img class="thumbnail img-inital m-b-none inline thumb-sm" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
