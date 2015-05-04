@@ -47,8 +47,11 @@ public class ChangeDealMilestone extends TaskletAdapter
 		{
 			String contactId = AgileTaskletUtil.getId(subscriberJSON);
 
+			// Get milestone and pipeline IDs of the given milestone
+			// (default_LongID)
 			Map<String, String> toMilestoneDetails = AgileTaskletUtil.getTrackDetails(toMilestone);
 			Map<String, String> fromMilestoneDetails = AgileTaskletUtil.getTrackDetails(fromMilestone);
+
 			// Get Contact Owner Id.
 			Long contactOwnerId = ContactUtil.getContactOwnerId(Long.parseLong(contactId));
 
@@ -60,6 +63,7 @@ public class ChangeDealMilestone extends TaskletAdapter
 
 			if (fromMilestone.equals(ANY_MILESTONE))
 				fromMilestoneDetails.put("milestone", null);
+
 			// Change milestone with given values
 			changeMilestoneToRelatedDeals(contactId, fromMilestoneDetails, toMilestoneDetails,
 					AgileTaskletUtil.getOwnerId(givenOwnerId, contactOwnerId));
@@ -89,14 +93,7 @@ public class ChangeDealMilestone extends TaskletAdapter
 	private void changeMilestoneToRelatedDeals(String contactId, Map<String, String> fromMilestoneDetails,
 			Map<String, String> toMilestoneDetails, Long ownerId)
 	{
-
-		// If any milestone return null
-		// if (StringUtils.equals(fromMilestoneDetails, ANY_MILESTONE))
-		// fromMilestoneDetails = null;
-		// List<Opportunity> deals =
-		// OpportunityUtil.getOpportunitiesByFilter(ownerId == null ? null :
-		// ownerId.toString(),
-		// currentMilestone, contactId, null, 0, null, null);
+		// Get list of opportunities
 		List<Opportunity> deals = OpportunityUtil.getOpportunitiesByFilter(ownerId == null ? null : ownerId.toString(),
 				fromMilestoneDetails.get("milestone"), contactId, null, 0, null,
 				Long.parseLong(fromMilestoneDetails.get("pipelineID")));

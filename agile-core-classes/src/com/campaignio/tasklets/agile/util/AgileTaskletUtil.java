@@ -858,4 +858,25 @@ public class AgileTaskletUtil
 		trackDetails.put("pipelineID", pipelineID + "");
 		return trackDetails;
 	}
+
+	/**
+	 * @param subscriberJSON
+	 *            - Subscriber json
+	 * @return Key of the contact associated with ID inside subscriberJSON
+	 */
+	public static Key<Contact> getContactKey(JSONObject subscriberJSON)
+	{
+		String contactId = AgileTaskletUtil.getId(subscriberJSON);
+		try
+		{
+			if (!StringUtils.isEmpty(contactId))
+				return new Key<Contact>(Contact.class, Long.parseLong(contactId));
+		}
+		catch (Exception e)
+		{
+			System.out.println("Inside getContactOwnerKey in CloseTask.java :" + e.getMessage());
+			return null;
+		}
+		return null;
+	}
 }

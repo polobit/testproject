@@ -17,7 +17,7 @@ import com.googlecode.objectify.Key;
  * <code>CheckEvent</code> repesent check_event node in campaigns. It checks
  * whether an event for the given conditions exists or not.
  * 
- * @author Bhasuri
+ * @author kona
  * 
  */
 public class HasEvent extends TaskletAdapter
@@ -94,20 +94,11 @@ public class HasEvent extends TaskletAdapter
 
 			Key<AgileUser> contactOwnerKey = getContactOwnerKey(subscriberJSON, givenOwnerID);
 
-			Key<Contact> contactKey = getContactKey(subscriberJSON);
+			Key<Contact> contactKey = AgileTaskletUtil.getContactKey(subscriberJSON);
 
 			eventStatus = getEventStatus(eventStatus);
 
 			EventType eventtype = getEventType(eventType);
-
-			// List<Key<Event>> listofKeys = new ArrayList<Key<Event>>();
-
-			System.out.println("The contact key is:" + contactKey);
-
-			// Get list of AgileUsers for the given event conditions
-			// if (contactKey != null)
-			// listofKeys = EventUtil.getEventsKey(contactOwnerKey, eventStatus,
-			// eventtype, contactKey);
 
 			if (EventUtil.getEventsKey(contactOwnerKey, eventStatus, eventtype, contactKey) > 0)
 			{
@@ -142,15 +133,6 @@ public class HasEvent extends TaskletAdapter
 		if (COMPLETED_EVENT.equals(eventStatus))
 			eventStatus = "end <";
 		return eventStatus;
-	}
-
-	private Key<Contact> getContactKey(JSONObject subscriberJSON)
-	{
-		String contactID = AgileTaskletUtil.getId(subscriberJSON);
-		// Get contact's key
-		if (!StringUtils.isEmpty(contactID))
-			return new Key<Contact>(Contact.class, Long.parseLong(contactID));
-		return null;
 	}
 
 	private Key<AgileUser> getContactOwnerKey(JSONObject subscriberJSON, String givenOwnerID)

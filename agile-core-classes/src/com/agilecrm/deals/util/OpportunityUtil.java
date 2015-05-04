@@ -470,7 +470,7 @@ public class OpportunityUtil
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			System.out.println(e.getMessage());
+			System.out.println("Exception in getOpportunitiesByFilter: " + e.getMessage());
 			return null;
 		}
 	}
@@ -495,8 +495,7 @@ public class OpportunityUtil
 		if (data.length > 1 && !StringUtils.isEmpty(data[1]))
 		{
 			taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0]).param("ids", data[1])
-					.header("Content-Type", "application/x-www-form-urlencoded")
-					.method(Method.POST);
+					.header("Content-Type", "application/x-www-form-urlencoded").method(Method.POST);
 
 			if (data.length > 2 && !StringUtils.isEmpty(data[2]))
 				taskOptions.param("form", data[2]);
@@ -508,8 +507,7 @@ public class OpportunityUtil
 		if (data.length > 0)
 		{
 			taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0])
-					.header("Content-Type", "application/x-www-form-urlencoded")
-					.method(Method.POST);
+					.header("Content-Type", "application/x-www-form-urlencoded").method(Method.POST);
 			if (data.length > 2 && !StringUtils.isEmpty(data[2]))
 				taskOptions.param("form", data[2]);
 			queue.addAsync(taskOptions);
