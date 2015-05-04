@@ -3,7 +3,6 @@
 
   {{#if id}}
                        <h3 class="h3 font-thin">Edit Trigger</h3>
-                        <input name="id" type="hidden" value="{{id}}" />
                     {{else}}
                         <h3 class="h3 font-thin"><i class="icon-plus-sign"></i> Add Trigger</h3>
                     {{/if}} 
@@ -14,7 +13,9 @@
         <div class="col-md-9">
             <div class="panel wrapper">
                 <form id="addTriggerForm" name="addTriggerForm" class="form-horizontal">
-                  
+                    {{#if id}}
+					   <input name="id" type="hidden" value="{{id}}" />
+					{{/if}}
                     <fieldset>
                         <div class="control-group form-group">
                             <label class="control-label col-sm-4">Name 
