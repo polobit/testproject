@@ -542,7 +542,7 @@ function deserialize_contact(contact, template)
 				{
 								$("#content [name='contact_company_id']")
 																.html(
-																								'<li class="inline-block tag btn btn-xs btn-primary" data="' + data + '"><span><a href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+																								'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
 								$("#content #contact_company").hide();
 				}
 				agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
@@ -556,7 +556,7 @@ function deserialize_contact(contact, template)
 																$("#content #contact_company").hide();
 																$("#content [name='contact_company_id']")
 																								.html(
-																																'<li class="inline-block tag btn btn-xs btn-primary" data="' + contact.contact_company_id + '"><span><a href="#contact/' + contact.contact_company_id + '">' + contact.properties[i].value + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+																																'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + contact.contact_company_id + '"><span><a class="text-white m-r-xs" href="#contact/' + contact.contact_company_id + '">' + contact.properties[i].value + '</a><a class="close" id="remove_tag">&times</a></span></li>');
 												}
 								}
 				}
