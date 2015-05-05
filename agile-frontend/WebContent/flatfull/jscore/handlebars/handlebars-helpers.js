@@ -1713,7 +1713,7 @@ $(function()
 												// Avoid comma appending to last element
 												if (i < j - 1)
 												{
-																ret = ret + ", ";
+																ret = ret + ",- ";
 												}
 												;
 								}
@@ -3802,26 +3802,6 @@ $(function()
 								var strings = value.replace(/[\[\]]+/g, '');
 								var charwithsinglequote = strings.replace(/"/g, "'");
 								return charwithsinglequote;
-				});
-
-				/**
-				 * Shows list of triggers separated by comma
-				 */
-				Handlebars.registerHelper('toLinkTrigger', function(context, options)
-				{
-								var ret = "";
-								for (var i = 0, j = context.length; i < j; i++)
-								{
-												ret = ret + options.fn(context[i]);
-
-												// Avoid comma appending to last element
-												if (i < j - 1)
-												{
-																ret = ret + ",";
-												}
-												;
-								}
-								return ret;
 				});
 
 				// Gets minutes from milli seconds
