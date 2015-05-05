@@ -459,7 +459,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'_input custom_field required form-control resize-vertical" id='
 							+field.id+' name="'
 							+field.field_label
-							+' form-control"></textarea></div></div>');
+							+'"></textarea></div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group"><label class="control-label '+label_style+'">'
 							+field.field_label
@@ -469,7 +469,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'_input custom_field required form-control resize-vertical" id='
 							+field.id+' name="'
 							+field.field_label
-							+' form-control" ></textarea></div></div>');
+							+'" ></textarea></div></div>');
 				}
 			}else{
 				if(isModal){
@@ -481,7 +481,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'_input custom_field form-control resize-vertical" id='
 							+field.id+' name="'
 							+field.field_label
-							+' form-control" ></textarea></div></div>');
+							+'" ></textarea></div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group"><label class="control-label '+label_style+'">'
 							+field.field_label
@@ -491,7 +491,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'_input custom_field form-control resize-vertical" id='
 							+field.id+' name="'
 							+field.field_label
-							+' form-control" ></textarea></div></div>');
+							+'" ></textarea></div></div>');
 				}
 			}
 			return;
@@ -518,7 +518,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'_input custom_field required form-control" id="'
 							+field.id+'" name="'
 							+field.field_label
-							+' form-control" value="0"></input>'
+							+'" value="0"></input>'
 							+'</div></div>');
 				}
 			}else{
@@ -540,7 +540,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'_input custom_field form-control" id="'
 							+field.id+'" name="'
 							+field.field_label
-							+' form-control" value="0"></input>'
+							+'" value="0"></input>'
 							+'</div></div>');
 				}
 			}

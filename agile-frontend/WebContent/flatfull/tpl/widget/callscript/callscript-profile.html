@@ -74,12 +74,11 @@
     {{/if}}
     </div> 
 
- <div class="span3">
-        <div class="well">
-            <h3>
+ <div class="col-md-3">
+        <div class="wrapper-xs">
+            <h4 class="m-t-none m-b-sm h4">
                 What are Call Script Rules?
-            </h3>
-            <br />
+            </h4>           
             <p>
                   The Call Script widget shows you a script when calling customers. 
                   You can have multiple call scripts for various types of customers. 
@@ -141,7 +140,7 @@
 										</td>
 										<td class="lhs-block span2">
 											<div id="LHS" name="LHS">
-												<select name="temp" class="lhs form-control" id="LHS" style="width: 125px;">
+												<select name="temp" class="lhs form-control" id="LHS">
 													<optgroup label="Tag">
 														<option value="tags" selected="selected">Tag</option>
 														<option value="tags_time">Tag And Created Date</option>
@@ -195,21 +194,21 @@
 										</td>
 										<td class="rhs-block span2 controls v-top">
 											<div id="RHS" class="rhs" name="RHS">
-												<input type="text" name="temp" style="width:92%"
+												<input type="text" name="temp"
 													class="LAST required form-control" placeholder="Number of days"/>
-												<input type="text" name="temp" style="width:92%"
+												<input type="text" name="temp"
 													class="EQUALS NOTEQUALS ANYOF required form-control"/>
 												 
 												<input type="text" name="temp" 
 													class="MATCHES NOT_CONTAINS  required form-control"/>
-												<input type="text" name="temp" style="width:92%"
+												<input type="text" name="temp" 
 													class="IS_GREATER_THAN IS_LESS_THAN number required form-control"/> 
 													
                                                 <input type="text" name="tag" 
 													class="tags tags_time required m-n form-control"
-													style="width:92%" /> 
-                                                <input type="text" name="temp" class="email required form-control" style="width:92%"/>
-												<input id="updated_date" type="text" name="updated_date" style="width:92%; text-overflow:none; "
+													 /> 
+                                                <input type="text" name="temp" class="email required form-control" />
+												<input id="updated_date" type="text" name="updated_date" style="text-overflow:none; "
 													class="ON AFTER BEFORE BETWEEN input required date form-control"
 													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
 											</div>
@@ -217,7 +216,7 @@
 										<td class="rhs-new-block controls span2 v-top">
 											<div id="RHS-NEW" name="RHS_NEW">
 												<input id="date_between" type="text" name="temp" data-date-format="mm/dd/yyyy"
-													class="BETWEEN input date required form-control" style="width: 92%" placeholder="MM/DD/YY" />
+													class="BETWEEN input date required form-control"  placeholder="MM/DD/YY" />
 											</div>
 										</td>
 										<td class="nested-condition-block span2 v-top">
@@ -234,9 +233,9 @@
 										<td class="controls span2 v-top">
 											<div id="nested_lhs" name="nested_lhs">
 												<input type="text" name="temp" class="LAST required form-control"
-													style="width: 92%;" placeholder="Number of days" /> 
+													 placeholder="Number of days" /> 
 												<input
-													id="date_between" type="text" style="width: 92%"
+													id="date_between" type="text" 
 													name="temp"
 													class="BETWEEN EQUALS AFTER BEFORE input date required form-control"
 													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
@@ -245,7 +244,7 @@
 										<td class="controls span2 v-top">
 											<div id="nested_rhs" name="nested_rhs">
 												<input id="date_between" type="text" name="temp"
-													style="width: 92%;" class="BETWEEN input date required form-control"
+													 class="BETWEEN input date required form-control"
 													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy" />
 											</div>
 										</td>

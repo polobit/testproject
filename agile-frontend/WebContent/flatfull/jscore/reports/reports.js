@@ -151,6 +151,8 @@ $(function()
 	$("#report_advanced").die().live('click', function(e)
 			{
 				e.preventDefault();
+				$("#report_advanced span i").toggleClass("fa-minus");
+				$("#report_advanced span i").toggleClass("fa-plus");
 
 			});
 

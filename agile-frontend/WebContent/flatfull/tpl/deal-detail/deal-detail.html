@@ -12,7 +12,7 @@
 <div class="m-b-sm text-muted">
 {{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >Archived</span>{{else}}
 	
-{{#getTracksCount}}<span class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >{{pipeline.name}} , </span>{{/getTracksCount}}					
+{{#getTracksCount}}<span>{{pipeline.name}} , </span>{{/getTracksCount}}					
 						
 {{#if_equals milestone "Won"}} <span>{{milestone}}</span>
 {{else}}

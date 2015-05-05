@@ -1,6 +1,21 @@
 <script id="referrals-model-template" type="text/html">
-<td style="width:13%"><img class="thumbnail" src="https://secure.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e.jpg?s=50&amp;d=https%3A//dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png" width="40px" height="40px" title="{{name}}"></td>
-<td><span><b>{{name}}</b></span><br><span>{{email}}</span><br></td>
+<td  class="select_checkbox c-p">
+	<label class="i-checks i-checks-sm">
+    	<input type="checkbox" class="tbody_check" value="">
+        <i></i>                
+    </label>
+</td>
+<td>
+	<div class="table-resp" style="width:15em;">
+		<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px">
+			<img class="thumbnail" src="https://secure.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e.jpg?s=50&amp;d=https%3A//dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png" width="40px" height="40px" title="{{name}}">
+		</div>
+		<div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
+			<a class="text-cap custom-link">{{name}}</a></br>		
+			<div><small class="text-muted m-t-xs">{{email}}</small></div>
+		</div>		
+	</div>
+</td>
 </script>
 <script id="referrals-collection-template" type="text/html">
 {{#unless this.length}}
@@ -64,31 +79,24 @@
 							<i class="icon-copy copy_email_clipboard_icon text-xlg font-bold" title=""></i> Copy</a>	
 				</div>
             </div>
+		</div>		
+        </div>        
+		<div id="your_referrals" class="col-md-4" >						
+			<div class="panel-heading">Your Referrals till date {{count}}</div>
+			<table id="referrals" class="table" style="table-layout:auto">
+				<thead>
+                	<tr style="text-transform: capitalize;">
+						<th style="width:5%;">
+							<label class="i-checks i-checks-sm m-b-none">
+								<input type="checkbox" class="thead_check" value=""><i></i>
+							</label>
+						</th>
+                        <th>Basic info</th>
+                   	</tr>
+                </thead>
+				<tbody id="referrals-model-list" class="referrals-model-list c-p overflow-scroll"></tbody>
+			</table>										
 		</div>
-			
-			
-				
-           </div>
-    
-    
-
-				<div id="your_referrals" class="col-md-4" >
-						
-							<div class="page-header">
-								<h2>Your Referrals till date {{count}}</h2>
-							</div>
-							<div class="data">
-								<div class="data-container">
-									<table id="referrals" class="table">
-										<tbody id="referrals-model-list" class="referrals-model-list c-p overflow-scroll">
-										</tbody>
-									</table>
-								</div>
-							</div>
-					
-					
-					
-				</div>
-			</div>
+	</div>
 {{/if}}	
 </script>
