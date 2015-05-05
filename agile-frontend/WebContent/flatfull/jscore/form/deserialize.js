@@ -596,7 +596,7 @@ function deserializeChainedSelect1(form, el, element)
 				campaignConditionsCount++;
 			}
 		} else {
-			$(currentElemnt).prev().find('i').toggleClass('fa-plus').toggleClass('fa-minus');
+			$(currentElemnt).prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 		}
 		$(currentElemnt).parent().find("a#lhs-filters-header").addClass('bold-text');
 		$(currentElemnt).find('a.clear-filter-condition-lhs').removeClass('hide');

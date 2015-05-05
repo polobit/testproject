@@ -17,34 +17,33 @@
     </form>
 </div>
 </script>
-
 <script id="callscript-table-template" type="text/html">
 <div class="row">
-    <div class="col-md-12">      
-        <legend>Call Script Rules</legend>
-        <a href="#callscript/add-rules" class="btn btn-sm btn-default right m-t-n-xxl" id="add_rule"><span><i class='icon-plus-sign'/></span>  Add Rule</a>
+    <div class="col-md-9 col-sm-9 col-xs-12">
+<div class="panel panel-default">
+    <div class="panel-heading">      
+        <div class="pull-left m-t-xs">Call Script Rules</div>
+        <div class="pull-right">
+        <a href="#callscript/add-rules" class="btn btn-sm btn-default btn-addon" id="add_rule"><span><i class='icon-plus-sign'/></span>  Add Rule</a>
+        </div>
+        <div class="clearfix"></div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-9">		
+		
         {{#if this.length}}
-         <table class="table table-striped agile-ellipsis-dynamic">
-               <colgroup>
-                <col width="20%">
-				<col width="20%">
-				<col width="10%">				
-			   </colgroup>
+        <div class="table-responsive">
+         <table class="table table-striped agile-table">
+            
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Script</th>
+                    <th style="width:42%">Name</th>
+                    <th style="width:42%">Script</th>
                 </tr>
             </thead>
             <tbody class="csr-sortable">
              {{#each this}}
                <tr data='{{@index}}' class='row-callscriptrule ui-state-default'>
-                   <td class='data'><div class="text-ellipsis inline-block">{{name}}</div></td>
-                   <td class='data'><div class="text-ellipsis inline-block">{{displaytext}}</div></td>
+                   <td class='data'><div class="table-resp">{{name}}</div></td>
+                   <td class='data'><div class="teble-resp">{{displaytext}}</div></td>
                    <td class='data'>
                        <div class="callscriptrule-actions pull-right" style="visibility: hidden;">                           
                           <i class="c-p icon icon-edit edit-callscriptrule" data="{{rulecount}}" title="Edit Call Script Rule"></i>     
@@ -56,6 +55,7 @@
              {{/each}}
             </tbody>
         </table>
+        </div>
     {{else}}
      <div id="slate">
 			<div class="alert-info alert">
@@ -73,23 +73,25 @@
         </div>
     {{/if}}
     </div> 
+</div>
 
- <div class="span3">
-        <div class="well">
-            <h3>
+ <div class="col-md-3 col-sm-3 col-xs-12">
+        
+            <h4 class="m-t-none m-b-sm h4">
                 What are Call Script Rules?
-            </h3>
-            <br />
+            </h4>
+            
             <p>
                   The Call Script widget shows you a script when calling customers. 
                   You can have multiple call scripts for various types of customers. 
                   The script is shown when the Rule defined for it matches the contact currently opened. 
                   The rules are evaluated from top to bottom.
             </p>
-        </div>
+       
  </div>   
 
 </div>
+
 </script>
 
 <script id="callscript-rule-template" type="text/html">
