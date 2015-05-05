@@ -688,8 +688,9 @@ padding: 6px 0 6px 0;
 }
 .socialicons-widget-top
 {
-	position:relative;
-	top:19px;
+	position:absolute;
+	top:25px;
+	right:15px;
 }
 .socialicons-widget-top i
 {

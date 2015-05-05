@@ -66,15 +66,15 @@
 			<div class="panel panel-default">
 			<div class="panel-heading">Deals</div>
 			<div class="table-responsive">
-                <table class="table table-striped showCheckboxes m-b-none agile-table panel no-wrap" url="core/api/opportunity/delete" id="deal-list" style="table-layout: auto;">
+                <table class="table table-striped showCheckboxes m-b-none agile-table panel" url="core/api/opportunity/delete" id="deal-list" style="table-layout: auto;">
 					<thead>
                         <tr>
-                            <th style="width:20%;">Opportunity</th>
-                            <th style="width:15%;">Related To</th>
-                            <th style="width:10%">Value</th>
-                            <th style="width:15%;">Milestone</th>
-                            <th style="width:20%;">Close Date</th>
-                            <th style="width:10%;">Owner</th>
+                            <th>Opportunity</th>
+                            <th>Related To</th>
+                            <th>Value</th>
+                            <th>Milestone</th>
+                            <th>Close Date</th>
+                            <th>Owner</th>
                         </tr>
                     </thead>
                     <tbody id="opportunities-model-list" class="c-p"><!--route="deals/"-->
@@ -245,11 +245,12 @@
 </script>
 <script id="opportunities-model-template" type="text/html">
 <td data="{{id}}" class="data">
-	<div class="header-min-width"> 
+	<div class="text-ellipsis" style="width:10em"> 
 		<a class="text-cap">{{name}}</a>
 	</div>
 </td>
-<td class="overflow-hidden no-wrap">
+<td>
+<div class="text-ellipsis" style="width:10em">
 	<div class="inline-block thumb-sm">
 	{{#each contacts}}
        {{#if_contact_type "PERSON"}}
@@ -261,11 +262,13 @@
    {{/each}}
    </div>
   {{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
+</div>
 </td>
-<td value="{{expected_value}}"><div class="table-resp">{{currencySymbol}}{{numberWithCommas expected_value}}</div></td>
-<td><div class="table-resp">{{milestone}} ({{probability}}%) </div></td>
-<td class="text-muted"><div class="table-resp">{{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time border-highlight " value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}</div></td>
+<td value="{{expected_value}}"><div class="text-ellipsis" style="width:10em">{{currencySymbol}}{{numberWithCommas expected_value}}</div></td>
+<td><div class="text-ellipsis" style="width:5em">{{milestone}} ({{probability}}%) </div></td>
+<td class="text-muted"><div class="text-ellipsis" style="width:10em"><i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></div></td>
 <td>
+<div class="text-ellipsis" style="width:5em">
     <div class="thumb-sm avatar">
        {{#if pic}}
         <img class="r r-2x" src="{{pic}}"  title="{{owner.name}}" />
@@ -273,6 +276,7 @@
 		<img class="r r-2x" src="{{defaultGravatarurl 50}}"  title="{{owner.name}}" />
        {{/if}}
     </div>
+</div>
 </td>
 </script>
 
