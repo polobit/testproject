@@ -216,7 +216,7 @@
 										 <!-- <input id="search-results" 
 										type="image" src="img/SearchIcon.png" class="searchbox hidden" /> -->
 						<span class="input-group-btn">
-                <button type="submit" class="btn btn-sm bg-light rounded"><i class="fa fa-search"></i></button>
+                <button type="submit" class="btn btn-sm bg-light rounded" style="height:30px;"><i class="fa fa-search"></i></button>
               </span>
               </div>				
 								</form>
