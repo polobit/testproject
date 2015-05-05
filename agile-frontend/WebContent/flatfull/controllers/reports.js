@@ -24,8 +24,10 @@ var ReportsRouter = Backbone.Router.extend({
 		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
 				{
 					$("#content").html(getTemplate('report-categories', {}));
+					hideTransitionBar();
 					$(".active").removeClass("active");
 					$("#reportsmenu").addClass("active");
+
 				});
 	},
 
