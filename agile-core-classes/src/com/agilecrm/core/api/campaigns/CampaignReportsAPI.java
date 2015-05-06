@@ -203,4 +203,26 @@ public class CampaignReportsAPI
 	    return null;
 	}
     }
+    
+    @Path("/log-type/count")
+    @GET
+    public String getCountByLogType(@QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime,
+	    @QueryParam("time_zone") String timeZone)
+    {
+    	 // start date in mysql date format.
+	    String startDate = CampaignReportsUtil.getStartDate(startTime, endTime, null, timeZone);
+
+	    // end date in mysql date format.
+	    String endDate = CampaignReportsUtil.getEndDateForReports(endTime, timeZone);
+
+	    String [] array = {"EMAIL_SENT", "EMAIL_OPENED", "EMAIL_CLICKED"};
+	    
+	    JSONArray countJSON = CampaignReportsSQLUtil.getCountByLogTypes(startDate, endDate, timeZone, array);
+	    
+	    if(countJSON == null)
+	    	return null;
+	    
+	    return countJSON.toString();
+	    			
+    }
 }
