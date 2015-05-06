@@ -1305,5 +1305,26 @@ public class OpportunityUtil
 		if (index != null)
 			index.delete(docIds);
 	}
+	/**
+	 * Get the won deals list which are won in the specified duration.
+	 * 
+	 * @param minTime
+	 *            Long object
+	 * @param maxTime
+	 *            Long object
+	 */
+	public static List<Opportunity> getWonDealsList(Long minTime, Long maxTime)
+	{
+		List<Opportunity> ownDealsList=new ArrayList<Opportunity>();
+		try 
+		{
+			ownDealsList = dao.ofy().query(Opportunity.class).filter("won_date >= ", minTime).filter("won_date <= ", maxTime).list();
+		} catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return ownDealsList;
+
+	}
 
 }

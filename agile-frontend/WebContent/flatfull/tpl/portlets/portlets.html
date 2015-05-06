@@ -251,6 +251,48 @@
 	</div>
 </td>
 </script>
+
+<script id="portlets-status-count-report-model-template" type="text/html">
+<div class="row row-sm text-center">
+	<div class="col-xs-6">
+		<div class="panel padder-v item m-l-none c-p">
+			<div class="h1 text-info font-thin h1">{{newContactsCount}}</div>
+			<span class="text-muted text-xs">New contacts</span>
+			<div class="top text-right w-full">
+				<!-- <i class="fa fa-caret-down text-warning m-r-sm"></i> -->
+			</div>
+		</div>
+	</div>     
+	<div class="col-xs-6">
+		<div class="block panel padder-v bg-primary item m-l-none p-t-none c-p stats-report-settings">
+			<span class="text-white font-thin h1 block p-t">{{currencySymbol}}{{numberWithCommas wonDealValue}}</span>
+			<span class="text-muted text-xs">Won from {{wonDealsCount}} deals</span>
+			<span class="bottom text-right w-full">
+				<!-- <i class="fa fa-cloud-upload text-muted m-r-sm"></i> -->
+			</span>
+		</div>
+	</div>
+	<div class="col-xs-6">
+		<div class="block panel padder-v bg-info item m-l-none c-p">
+			<span class="text-white font-thin h1 block">{{emailsSentCount}}</span>
+			<span class="text-muted text-xs">Campaign emails sent</span>
+			<span class="top text-left">
+				<!-- <i class="fa fa-caret-up text-warning m-l-sm m-l-none"></i> -->
+			</span>
+		</div>
+	</div>
+	<div class="col-xs-6">
+		<div class="panel padder-v item m-l-none c-p">
+			<div class="font-thin h1">{{webVisitsCount}}</div>
+			<span class="text-muted text-xs">Web visits</span>
+			<div class="bottom text-left">
+				<!-- <i class="fa fa-caret-up text-warning m-l-sm"></i> -->
+			</div>
+		</div>
+	</div>
+</div>
+</script>
+
 <script id="portlets-contacts-filterbased-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
 			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
@@ -777,6 +819,13 @@
 			</div>
 		</div>
         <div class="portlet_body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+
+<script id="portlets-status-report-model-template" type="text/html">	
+     <div class="stats_report_portlet_body panel-body p-n b-n" style="cursor:move"></div>
      <div class="portlets" id="{{id}}">&nbsp;</div>
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>	

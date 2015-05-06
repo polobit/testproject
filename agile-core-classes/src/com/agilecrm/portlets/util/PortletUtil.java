@@ -12,6 +12,7 @@ import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 
 import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.activities.Activity;
@@ -42,6 +43,8 @@ import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
+import com.analytics.util.AnalyticsSQLUtil;
+import com.campaignio.reports.CampaignReportsSQLUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -92,6 +95,7 @@ public class PortletUtil {
 			
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.ACTIVITY)){
 				//allPortlets.add(new Portlet("Emails Sent",PortletType.USERACTIVITY));
+				allPortlets.add(new Portlet("Stats Report",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
 			}
 			
@@ -964,6 +968,54 @@ public class PortletUtil {
 					dataJson.put("emailsOpenedCount", emailsOpenedList.size());
 				else
 					dataJson.put("emailsOpenedCount", 0);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dataJson;
+	}
+	
+	public static JSONObject getPortletStatsReportData(JSONObject json)throws Exception{
+		long minTime=0L;
+		long maxTime=0L;
+		JSONObject dataJson = new JSONObject();
+		int newContactsCount = 0;
+		int wonDealsCount = 0;
+		Double wonDealValue = 0d;
+		int emailsSentCount = 0;
+		int webVisitsCount = 0;
+		List<Opportunity> wonDealsList = new ArrayList<Opportunity>();
+		try {
+			if(json!=null && json.get("duration")!=null){
+				if(json.getString("startDate")!=null)
+					minTime = Long.valueOf(json.getString("startDate"));
+				if(json.getString("endDate")!=null)
+					maxTime = Long.valueOf(json.getString("endDate"))-1;
+				
+				newContactsCount = ContactUtil.getContactsCount(minTime, maxTime);
+				
+				wonDealsList = OpportunityUtil.getWonDealsList(minTime, maxTime);
+				for(Opportunity opportunity : wonDealsList){
+					if(opportunity!=null && opportunity.expected_value!=null)
+						wonDealValue += opportunity.expected_value;
+					wonDealsCount++;
+				}
+				if(json.getString("duration")!=null && json.getString("duration").equalsIgnoreCase("24-hours")){
+					minTime = (new Date().getTime()/1000)-(24*60*60);
+					maxTime = new Date().getTime()/1000;
+				}
+				String [] array = {"EMAIL_SENT", "EMAIL_OPENED", "EMAIL_CLICKED"};
+				JSONArray campaignEmailsJSONArray = CampaignReportsSQLUtil.getCountByLogTypes(String.valueOf(minTime*1000),String.valueOf(maxTime*1000),json.getString("timeZone"),array);
+				if(campaignEmailsJSONArray!=null && campaignEmailsJSONArray.length()>0 && campaignEmailsJSONArray.get(0)!=null)
+					emailsSentCount = (int)campaignEmailsJSONArray.get(0);
+				JSONArray webVisitsJSONArray = AnalyticsSQLUtil.getPageSessionsCountForDomain(String.valueOf(minTime*1000),String.valueOf(maxTime*1000),json.getString("timeZone"));
+				if(webVisitsJSONArray!=null && webVisitsJSONArray.length()>0 && webVisitsJSONArray.get(0)!=null)
+					emailsSentCount = (int)webVisitsJSONArray.get(0);
+				dataJson.put("newContactsCount", newContactsCount);
+				dataJson.put("wonDealsCount", wonDealsCount);
+				dataJson.put("wonDealValue", wonDealValue);
+				dataJson.put("emailsSentCount", emailsSentCount);
+				dataJson.put("webVisitsCount", webVisitsCount);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
