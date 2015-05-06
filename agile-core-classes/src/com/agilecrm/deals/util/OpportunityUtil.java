@@ -1326,5 +1326,26 @@ public class OpportunityUtil
 		return ownDealsList;
 
 	}
+	/**
+	 * Get the new deals list in the specified duration.
+	 * 
+	 * @param minTime
+	 *            Long object
+	 * @param maxTime
+	 *            Long object
+	 */
+	public static List<Opportunity> getNewDealsList(Long minTime, Long maxTime)
+	{
+		List<Opportunity> newDealsList=new ArrayList<Opportunity>();
+		try 
+		{
+			newDealsList = dao.ofy().query(Opportunity.class).filter("created_time >= ", minTime).filter("created_time <= ", maxTime).list();
+		} catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return newDealsList;
+
+	}
 
 }

@@ -984,7 +984,10 @@ public class PortletUtil {
 		Double wonDealValue = 0d;
 		int emailsSentCount = 0;
 		int webVisitsCount = 0;
+		int newDealsCount = 0;
+		Double newDealValue = 0d;
 		List<Opportunity> wonDealsList = new ArrayList<Opportunity>();
+		List<Opportunity> newDealsList = new ArrayList<Opportunity>();
 		try {
 			if(json!=null && json.get("duration")!=null){
 				if(json.getString("startDate")!=null)
@@ -1000,6 +1003,14 @@ public class PortletUtil {
 						wonDealValue += opportunity.expected_value;
 					wonDealsCount++;
 				}
+				
+				newDealsList = OpportunityUtil.getNewDealsList(minTime, maxTime);
+				for(Opportunity opportunity : newDealsList){
+					if(opportunity!=null && opportunity.expected_value!=null)
+						newDealValue += opportunity.expected_value;
+					newDealsCount++;
+				}
+				
 				if(json.getString("duration")!=null && json.getString("duration").equalsIgnoreCase("24-hours")){
 					minTime = (new Date().getTime()/1000)-(24*60*60);
 					maxTime = new Date().getTime()/1000;
@@ -1008,14 +1019,17 @@ public class PortletUtil {
 				JSONArray campaignEmailsJSONArray = CampaignReportsSQLUtil.getCountByLogTypes(String.valueOf(minTime*1000),String.valueOf(maxTime*1000),json.getString("timeZone"),array);
 				if(campaignEmailsJSONArray!=null && campaignEmailsJSONArray.length()>0 && campaignEmailsJSONArray.get(0)!=null)
 					emailsSentCount = (int)campaignEmailsJSONArray.get(0);
-				JSONArray webVisitsJSONArray = AnalyticsSQLUtil.getPageSessionsCountForDomain(String.valueOf(minTime*1000),String.valueOf(maxTime*1000),json.getString("timeZone"));
+				/*JSONArray webVisitsJSONArray = AnalyticsSQLUtil.getPageSessionsCountForDomain(String.valueOf(minTime*1000),String.valueOf(maxTime*1000),json.getString("timeZone"));
 				if(webVisitsJSONArray!=null && webVisitsJSONArray.length()>0 && webVisitsJSONArray.get(0)!=null)
-					emailsSentCount = (int)webVisitsJSONArray.get(0);
+					emailsSentCount = (int)webVisitsJSONArray.get(0);*/
+				
 				dataJson.put("newContactsCount", newContactsCount);
 				dataJson.put("wonDealsCount", wonDealsCount);
 				dataJson.put("wonDealValue", wonDealValue);
 				dataJson.put("emailsSentCount", emailsSentCount);
 				dataJson.put("webVisitsCount", webVisitsCount);
+				dataJson.put("newDealsCount", newDealsCount);
+				dataJson.put("newDealValue", newDealValue);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
