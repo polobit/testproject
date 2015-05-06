@@ -1017,10 +1017,10 @@ public class PortletUtil {
 				}
 				
 				// start date in mysql date format.
-				String startDate = CampaignReportsUtil.getStartDate(minTime*1000, maxTime*1000, null, json.getString("timeZone"));
+				String startDate = CampaignReportsUtil.getStartDate(String.valueOf(minTime*1000), String.valueOf(maxTime*1000), null, json.getString("timeZone"));
 				
 				// end date in mysql date format.
-				String endDate = CampaignReportsUtil.getEndDateForReports(maxTime*1000, json.getString("timeZone"));
+				String endDate = CampaignReportsUtil.getEndDateForReports(String.valueOf(maxTime*1000), json.getString("timeZone"));
 				
 				String [] array = {"EMAIL_SENT", "EMAIL_OPENED", "EMAIL_CLICKED"};
 				JSONArray campaignEmailsJSONArray = CampaignReportsSQLUtil.getCountByLogTypes(startDate,endDate,json.getString("timeZone"),array);
