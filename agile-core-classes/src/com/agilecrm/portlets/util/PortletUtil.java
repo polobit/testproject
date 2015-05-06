@@ -1015,8 +1015,16 @@ public class PortletUtil {
 					minTime = (new Date().getTime()/1000)-(24*60*60);
 					maxTime = new Date().getTime()/1000;
 				}
+				
+				// start date in mysql date format.
+				String startDate = CampaignReportsUtil.getStartDate(minTime*1000, maxTime*1000, null, json.getString("timeZone"));
+				
+				// end date in mysql date format.
+				String endDate = CampaignReportsUtil.getEndDateForReports(maxTime*1000, json.getString("timeZone"));
+				
 				String [] array = {"EMAIL_SENT", "EMAIL_OPENED", "EMAIL_CLICKED"};
-				JSONArray campaignEmailsJSONArray = CampaignReportsSQLUtil.getCountByLogTypes(String.valueOf(minTime*1000),String.valueOf(maxTime*1000),json.getString("timeZone"),array);
+				JSONArray campaignEmailsJSONArray = CampaignReportsSQLUtil.getCountByLogTypes(startDate,endDate,json.getString("timeZone"),array);
+				
 				if(campaignEmailsJSONArray!=null && campaignEmailsJSONArray.length()>0 && campaignEmailsJSONArray.get(0)!=null)
 					emailsSentCount = (int)campaignEmailsJSONArray.get(0);
 				/*JSONArray webVisitsJSONArray = AnalyticsSQLUtil.getPageSessionsCountForDomain(String.valueOf(minTime*1000),String.valueOf(maxTime*1000),json.getString("timeZone"));
