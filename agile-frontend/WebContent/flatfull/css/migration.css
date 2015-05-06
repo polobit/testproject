@@ -1258,4 +1258,6 @@ margin-top:-5px!important;
 {
 border-left:none;
 }
-
+.noty_twilio_unmute {
+  display: none;
+}
