@@ -80,7 +80,7 @@ public class LoginServlet extends HttpServlet
 	// If request is due to multiple logins, page is redirected to error
 	// page
 	String multipleLogin = (String) request.getParameter("ml");
-	String newui = (String) request.getParameter("newui");
+	//String newui = (String) request.getParameter("newui");
 	if (!StringUtils.isEmpty(multipleLogin))
 	{
 	    handleMulipleLogin(response);
@@ -112,24 +112,17 @@ public class LoginServlet extends HttpServlet
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-	    if(StringUtils.isEmpty(newui)){
+	    
 	    	// Send to Login Page
 	    	request.getRequestDispatcher("login.jsp?error=" + URLEncoder.encode(e.getMessage())).forward(request,
 		    response);
-	    }else{
-	    	// Send to New Login Page
-	    	request.getRequestDispatcher("login-new.jsp?error=" + URLEncoder.encode(e.getMessage())).forward(request,
-		    response);
-	    }
+	    
 	    return;
 	}
-	if(StringUtils.isEmpty(newui)){
+	
 		// Return to Login Page
 		request.getRequestDispatcher("login.jsp").forward(request, response);
-	}else{
-		// Return to New Login Page
-		request.getRequestDispatcher("login-new.jsp").forward(request, response);
-	}
+	
     }
 
     /**

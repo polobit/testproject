@@ -8,7 +8,6 @@ if user exists,it is redirected to login page in the same domain otherwise it is
 
 //If Email is present
 
-String flatfull_path="/flatfull";
 String domain = request.getParameter("subdomain");
 String redirectTo = request.getParameter("to");
 if(redirectTo  != null)
@@ -35,45 +34,13 @@ if(redirectTo  != null)
 
 <!-- Le styles -->
 
-<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/bootstrap.v3.min.css" />
-<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/font.css" />
-<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/app.css" />
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link href="/css/bootstrap-pink.min.css" rel="stylesheet">
+<link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="/css/openid-min.css">
+<link type="text/css" rel="stylesheet" href="/css/signin.css">
 
 <style>
-
-body {
-background-image:url('..<%=flatfull_path%>/images/flatfull/buildings.jpg');
-background-repeat:no-repeat;
-background-position:center center;
-background-size:100% 100%;
-background-attachment:fixed;
-}
-
-.text-white
-{
-color:#fff!important;
-}
-
-input
-{
-color:#000!Important;
-}
-
-a:hover
-{
-text-decoration:underline;
-}
-
-.error {
-	color: red !important;
-}
-
-.close {
-	  color: #000 !important;
-}
-
-/* @media (min-width: 900px) {
+@media (min-width: 900px) {
 body {
 	padding-top: 30px;
 	}
@@ -87,7 +54,7 @@ body {
 height:30px!important;
 margin:8px 0px!important;
 padding-left:10px!important;
-} */
+}
 </style>
 
 <!-- Le fav and touch icons -->
@@ -110,41 +77,57 @@ padding-left:10px!important;
 </head>
 	
 <body>
-	
-<div class="app app-header-fixed app-aside-fixed" id="app">
-  <div ui-view="" class="fade-in-right-big smooth">
-  	<div class="container w-xxl w-auto-xs">
-  		<a href="https://www.agilecrm.com/" class="navbar-brand block text-white m-t" style="color: #363f44;">
-			<i class="fa fa-cloud m-r-xs"></i>Agile CRM
-		</a>
-  		<div class="wrapper text-center text-white">
-			<strong>Enter your domain at Agile CRM</strong>
-		</div>	
-		<form name='choose_domain' id="choose_domain" method='post'>
-			<div id="domain-error"></div>
-			<div class="list-group list-group-sm">
-				<div class="list-group-item">
-          			<input id='subdomain' type="text" placeholder="Company"
-						   	   name="subdomain" class="input-xlarge field required form-control no-border w-md" autocapitalize="off"><div class="inline-block m-t-xs">.agilecrm.com</div><div class="clearfix"></div>
-				</div>
-			</div>
-			<input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">
-		</form>
-	 	<div class="text-center text-white m-t m-b">
-	  		<small>New User? </small> <a href="/register" class="text-white">Click here</a><br/>
-	  	 <small>Forgot </small><a href="/forgot-domain" class="text-white">Domain?</a>
-		 </div>
 
+<div class='navbar navbar-fixed-top'> 
+   	<div class='navbar-inner'> 
+   		<div class='container'> 
+   			<a class='brand' href='http://www.agilecrm.com'>Agile CRM</a>
+ 				<div class="nav-collapse">
+				<ul class="nav pull-right">
+					<li class="">						
+					<a href="http://www.agilecrm.com" class="">
+						<i class="icon-chevron-left"></i>
+						Back to home-page
+					</a>
+					</li>
+				</ul>
+ 	    		</div>
+		</div>
 	</div>
-  </div>
 </div>
+
+<div class="row">
+
+	<div class="account-container">
+		<div class="content clearfix">
+				 <h1>Enter Your Domain</h1>
+				 <form name='choose_domain' id="choose_domain" method='post' style="padding:10px 0px 0px;border-top: 1px dotted #CCC;">
+						<div id="domain-error"></div>
+					 <h3><small>Enter your domain at Agile CRM</small></h3>
+					 <div style="padding-top:10px;">
+          				<input id='subdomain' type="text" placeholder="Company"
+						   	   name="subdomain" class="input-medium field required" autocapitalize="off"><b> .agilecrm.com</b>
+				     </div>
+				</form>
+				<div><input class="btn btn-large btn-primary" type="submit" value="Submit"></div>
+				
+					<div class="clearfix"></div>
+		
+		</div>
+	</div>
+	 <div style="text-align: center; line-height: 19px;">
+	   New User? <a href="/register">Click here</a><br/>
+	   <a href="/forgot-domain"> Forgot Domain?</a>
+	 </div>
+</div>
+
 
 	<!-- Le javascript
     ================================================== -->
      <!-- JQUery Core and UI CDN -->
 	<!-- Placed at the end of the document so the pages load faster -->
-	<script type='text/javascript' src='<%=flatfull_path%>/lib/jquery-new/jquery-2.1.1.min.js'></script>
-	<script type="text/javascript" src="<%=flatfull_path%>/lib/bootstrap.v3.min.js"></script>
+	<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+	<script type="text/javascript" src="/lib/bootstrap.min.js"></script>
 	<script>
 		//Init
 		var error = "";
@@ -159,8 +142,8 @@ padding-left:10px!important;
 				{
 					//shows error message
 					if(!error)error = "Domain should be 4 to 20 characters."
-					$("#domain-error").html('<div class="alert error alert-danger login-error m-b-none">'
-							+ '<a class="close m-t-n-sm" data-dismiss="alert" href="#">&times</a>'+ error +'</div>');
+					$("#domain-error").html('<div class="alert alert-error domain-error">'
+							+ '<a class="close" data-dismiss="alert" href="#">&times</a>'+ error +'</div>');
 					error = "";
 					return false;
 				}
