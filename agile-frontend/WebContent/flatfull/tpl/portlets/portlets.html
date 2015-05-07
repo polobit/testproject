@@ -264,8 +264,9 @@
 		</div>
 	</div>     
 	<div class="col-xs-6">
-		<div class="block panel padder-v bg-primary item m-l-none p-t-none c-p stats-report-settings">
-			<span class="text-white font-thin h1 block p-t">{{currencySymbol}}{{numberWithCommas wonDealValue}}</span>
+		<div class="block panel padder-v bg-primary item m-l-none p-t-none c-p stats-report-settings pos-rlt">
+			<div class="clearfix"></div>
+			<span class="text-white font-thin h1 block p-t">{{currencySymbol}}{{numberWithCommasForActivities wonDealValue}}</span>
 			<span class="text-muted text-xs">Won from {{wonDealsCount}} deals</span>
 			<span class="bottom text-right w-full">
 				<!-- <i class="fa fa-cloud-upload text-muted m-r-sm"></i> -->
@@ -284,7 +285,7 @@
 	<div class="col-xs-6">
 		<div class="panel padder-v item m-l-none c-p">
 			<div class="font-thin h1">{{newDealsCount}}</div>
-			<span class="text-muted text-xs">New deals worth {{currencySymbol}}{{numberWithCommas wonDealValue}}</span>
+			<span class="text-muted text-xs">New deals worth {{currencySymbol}}{{numberWithCommasForActivities wonDealValue}}</span>
 			<div class="bottom text-left">
 				<!-- <i class="fa fa-caret-up text-warning m-l-sm"></i> -->
 			</div>

@@ -725,12 +725,13 @@ public class PortletUtil {
 			//Added dummy portlet for recognizing whether Agile CRM Blog 
 			//portlet is deleted by user or not
 			Portlet dummyPortlet = new Portlet("Dummy Blog",PortletType.RSS,1,1,1,1);
-			Portlet eventsPortlet = new Portlet("Agenda",PortletType.TASKSANDEVENTS,1,1,1,1);
-			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,1,1,1);
+			Portlet statsReportPortlet = new Portlet("Stats Report",PortletType.USERACTIVITY,1,1,1,1);
+			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,2,1,1,1);
 			Portlet blogPortlet = new Portlet("Agile CRM Blog",PortletType.RSS,3,1,1,2);
-			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,1,2,2,1);
-			Portlet pendingDealsPortlet = new Portlet("Pending Deals",PortletType.DEALS,1,3,2,1);
-			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,3,3,1,1);
+			Portlet eventsPortlet = new Portlet("Agenda",PortletType.TASKSANDEVENTS,1,2,1,1);
+			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,2,1,1);
+			Portlet pendingDealsPortlet = new Portlet("Pending Deals",PortletType.DEALS,1,3,1,1);
+			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,2,3,2,1);
 			
 			JSONObject filterBasedContactsPortletJSON = new JSONObject();
 			filterBasedContactsPortletJSON.put("filter","myContacts");
@@ -747,6 +748,10 @@ public class PortletUtil {
 			dealsFunnelPortletJSON.put("due-date",(new Date().getTime())/1000);
 			dealsFunnelPortlet.prefs = dealsFunnelPortletJSON.toString();
 			
+			JSONObject statsReportPortletJSON = new JSONObject();
+			statsReportPortletJSON.put("duration","1-day");
+			statsReportPortlet.prefs = statsReportPortletJSON.toString();
+			
 			dummyPortlet.save();
 			eventsPortlet.save();
 			tasksPortlet.save();
@@ -754,6 +759,7 @@ public class PortletUtil {
 			filterBasedContactsPortlet.save();
 			pendingDealsPortlet.save();
 			dealsFunnelPortlet.save();
+			statsReportPortlet.save();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -982,7 +988,7 @@ public class PortletUtil {
 		int newContactsCount = 0;
 		int wonDealsCount = 0;
 		Double wonDealValue = 0d;
-		int emailsSentCount = 0;
+		String emailsSentCount = "0";
 		int webVisitsCount = 0;
 		int newDealsCount = 0;
 		Double newDealValue = 0d;
@@ -1022,11 +1028,11 @@ public class PortletUtil {
 				// end date in mysql date format.
 				String endDate = CampaignReportsUtil.getEndDateForReports(String.valueOf(maxTime*1000), json.getString("timeZone"));
 				
-				String [] array = {"EMAIL_SENT", "EMAIL_OPENED", "EMAIL_CLICKED"};
+				/*String [] array = {"EMAIL_SENT"};
 				JSONArray campaignEmailsJSONArray = CampaignReportsSQLUtil.getCountByLogTypes(startDate,endDate,json.getString("timeZone"),array);
 				
-				if(campaignEmailsJSONArray!=null && campaignEmailsJSONArray.length()>0 && campaignEmailsJSONArray.get(0)!=null)
-					emailsSentCount = (int)campaignEmailsJSONArray.get(0);
+				if(campaignEmailsJSONArray!=null && campaignEmailsJSONArray.length()>0 && campaignEmailsJSONArray.getJSONObject(0)!=null && campaignEmailsJSONArray.getJSONObject(0).getString("count")!=null)
+					emailsSentCount = campaignEmailsJSONArray.getJSONObject(0).getString("count");*/
 				/*JSONArray webVisitsJSONArray = AnalyticsSQLUtil.getPageSessionsCountForDomain(String.valueOf(minTime*1000),String.valueOf(maxTime*1000),json.getString("timeZone"));
 				if(webVisitsJSONArray!=null && webVisitsJSONArray.length()>0 && webVisitsJSONArray.get(0)!=null)
 					emailsSentCount = (int)webVisitsJSONArray.get(0);*/

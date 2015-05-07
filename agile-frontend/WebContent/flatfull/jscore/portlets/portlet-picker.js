@@ -236,9 +236,9 @@ function set_p_portlets(base_model){
 		App_Portlets.statsReport[parseInt(pos)] = new Base_Model_View({ url : '/core/api/portlets/portletStatsReport?duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset()), template : "portlets-status-count-report-model", tagName : 'div', 
 			postRenderCallback : function(p_el){
 				addWidgetToGridster(base_model);
-				var settingsEl = 	"<div class='portlet_header_icons pull-right clear-fix' style='display:none;padding-top:2px;'>"+
-									"<i id='"+base_model.get('id')+"-settings' class='portlet-settings icon-wrench' style='padding-right:2px;'></i>"+
-									"<i id='"+base_model.get('id')+"-close' class='c-p icon-close StatsReport-close' onclick='deletePortlet(this);'></i>"+
+				var settingsEl = 	"<div class='portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-0' style='visibility:hidden;'>"+
+									"<i id='"+base_model.get('id')+"-settings' class='portlet-settings icon-wrench p-r-xs'></i>"+
+									"<i id='"+base_model.get('id')+"-close' class='c-p icon-close StatsReport-close p-r-sm' onclick='deletePortlet(this);'></i>"+
 									"</div>";
 				$('.stats-report-settings',p_el).find('span').eq(0).before(settingsEl);
 			} });
