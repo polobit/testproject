@@ -887,7 +887,7 @@ $(function()
 								.find('#bulk-select')
 								//.css('display', 'block')
 								.html(
-										"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' >Select all " + getAvailableContacts() + " contacts</a>");
+										"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " contacts</a>");
 					});
 
 });
@@ -966,7 +966,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 					.find('#bulk-select')
 					.css('display', 'block')
 					.html(
-							"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a id='select-all-available-contacts' href='#'>Select all " + total_available_contacts + " contacts</a>");
+							"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + total_available_contacts + " contacts</a>");
 			$('#bulk-select').css("display","inline");
 			}
 	}
