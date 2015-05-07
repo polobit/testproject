@@ -1587,7 +1587,7 @@ public class ContactUtil
 		List<Contact> contactsList=null;
 		try 
 		{
-			contactsList = dao.ofy().query(Contact.class).filter("created_time >= ", minTime).filter("created_time <= ", maxTime).list();
+			contactsList = dao.ofy().query(Contact.class).filter("type", Contact.Type.PERSON).filter("created_time >= ", minTime).filter("created_time <= ", maxTime).list();
 			if(contactsList!=null)
 				return contactsList.size();
 		} catch (Exception e) 
