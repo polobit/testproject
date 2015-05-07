@@ -100,7 +100,8 @@
 </td>
 
 <td class="overflow-hidden no-wrap">
-	
+	<div class="text-ellipsis inline-block" style="width:130px">
+<div class="text-ellipsis" style="width:128px">
         	{{#each contacts}}
 			<div class="inline-block thumb-sm">
 				{{#if_equals type "PERSON"}}
@@ -114,7 +115,8 @@
 				{{/if_equals}}
 			</div>
 			{{/each}}
-
+</div>
+</div>
        {{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
 </td>
 <td class="v-middle">
