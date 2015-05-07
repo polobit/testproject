@@ -209,9 +209,8 @@ public class MandrillWebhook extends HttpServlet
 
 	    contact.save();
 
-	    // Executes Trigger for only Bounce
-	    if (!EmailBounceType.SPAM.equals(emailBounceType))
-		executeTriggerForBounce(contact, emailBounceType);
+		// Execute trigger
+	    executeTriggerForBounce(contact, emailBounceType);
 	}
 	catch (Exception e)
 	{
@@ -287,6 +286,10 @@ public class MandrillWebhook extends HttpServlet
 	// Trigger for Hard Bounce
 	if (emailBounceType.equals(EmailBounceType.HARD_BOUNCE))
 	    EmailBounceTriggerUtil.executeTriggerForBounce(contact, Trigger.Type.HARD_BOUNCE);
+	
+	// Trigger for SPAM
+	if (emailBounceType.equals(EmailBounceType.SPAM))
+	    EmailBounceTriggerUtil.executeTriggerForBounce(contact, Trigger.Type.SPAM);
 
     }
 }
