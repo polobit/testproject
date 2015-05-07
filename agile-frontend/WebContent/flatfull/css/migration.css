@@ -1219,3 +1219,11 @@ top:117px;
 	opacity:0.5;
 
 }
+
+/*remove border and background color for prefs pad content*/
+
+#prefs-tabs-content #slate .alert {
+  background-color: rgb(255, 255, 255);
+  border-color: rgb(255, 255, 255);
+}
+
