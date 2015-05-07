@@ -93,8 +93,8 @@
                 </header>
                 <div id="pie-deals-chart" class="w-full" style="height:400px"></div>
 			</div>
-			<div class="wrapper">
-                <h4 class="m-t-md font-thin">
+			<div class="m-t-md">
+                <h4 class="m-t-none m-b-sm h4">
                     What are Milestones?
                 </h4>
                 
@@ -105,7 +105,7 @@
                     e.g. Use 'Won' in case of a successfully completed deal or 'New' for a newly added deal. You can define custom milestones.
                 </p>
                 
-                <h4 class="m-t-md font-thin">
+                <h4 class="m-t-none m-b-sm h4">
                     What are Deals?
                 </h4>
                 
@@ -251,7 +251,7 @@
 </td>
 <td>
 <div class="text-ellipsis" style="width:10em">
-	<div class="inline-block thumb-sm">
+	<div class="inline-block text-ellipsis" style="width:9em">
 	{{#each contacts}}
        {{#if_contact_type "PERSON"}}
         	<a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties }}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
@@ -266,7 +266,7 @@
 </td>
 <td value="{{expected_value}}"><div class="text-ellipsis" style="width:10em">{{currencySymbol}}{{numberWithCommas expected_value}}</div></td>
 <td><div class="text-ellipsis" style="width:5em">{{milestone}} ({{probability}}%) </div></td>
-<td class="text-muted"><div class="text-ellipsis" style="width:10em"><i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></div></td>
+<td class="text-muted"><div class="text-ellipsis" style="width:10em">{{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}</div></td>
 <td>
 <div class="text-ellipsis" style="width:5em">
     <div class="thumb-sm avatar">

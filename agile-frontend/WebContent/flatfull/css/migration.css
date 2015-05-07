@@ -1150,7 +1150,7 @@ color:#1f2427!important;
 {
 	font-size:13px;
 }
-.lhs-row-filter .fa-plus-square-o,.lhs-row-filter .filter-tags-multiple-remove-lhs
+.lhs-row-filter .fa-plus-square-o,.lhs-row-filter .fa-minus-square-o,.lhs-row-filter .filter-tags-multiple-remove-lhs
 {
 	color:#98a6ad;
 }
@@ -1245,5 +1245,17 @@ padding-right:5px;
 #prefs-tabs-content #slate .alert {
   background-color: rgb(255, 255, 255);
   border-color: rgb(255, 255, 255);
+}
+.contacts-div #slate
+{
+padding:10px;
+}
+.imp-rule-safari
+{
+margin-top:-5px!important;
+}
+.contacts-div .panel
+{
+border-left:none;
 }
 
