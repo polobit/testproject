@@ -108,7 +108,7 @@
 				  		
 				 %>">
 					<div class="nav navbar-nav hidden-xs">
-<a href="#" id="app-aside-folded" class="btn no-shadow navbar-btn" ui-toggle="app-aside-folded" target=".app">
+<a href="#" id="app-aside-folded" style="top:8px;" class="p-b-sm p-l-sm p-r-sm inline-block pos-rlt pos-t-xs  no-shadow navbar-btn" ui-toggle="app-aside-folded" target=".app">
             <i class="fa fa-dedent fa-fw text"></i>
           <!--   <i class="fa fa-indent fa-fw text-active"></i> -->
           </a>
@@ -216,7 +216,7 @@
 										 <!-- <input id="search-results" 
 										type="image" src="img/SearchIcon.png" class="searchbox hidden" /> -->
 						<span class="input-group-btn">
-                <button type="submit" class="btn btn-sm bg-light rounded"><i class="fa fa-search"></i></button>
+                <button type="submit" class="btn btn-sm bg-light rounded" style="height:30px;"><i class="fa fa-search"></i></button>
               </span>
               </div>				
 								</form>
@@ -263,9 +263,9 @@
 				<%	if (!StringUtils.isEmpty(currentUserPrefs.pic))
 							out.println("<img src='"
 							+ currentUserPrefs.pic
-							+ "' alt='...' class='b b-light' style='width:38px;height:38px;'></img>");
+							+ "' alt='...'  style='width:40px;height:40px;'></img>");
 					else
-							out.println("<img src='img/gravatar.png' class='b b-light' alt='...'></img>");
+							out.println("<img src='img/gravatar.png'  alt='...'></img>");
 				%>
                
                

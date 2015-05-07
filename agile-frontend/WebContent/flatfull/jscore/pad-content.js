@@ -29,6 +29,14 @@ var CONTENT_JSON = {
 		//"modal_id" : "personModal",
 		"image" : "/img/clipboard.png"
 	},
+	"filter_results_companies" : {
+		"title" : "No companies matching this criteria.",
+		//"learn_more" : "click here to learn more",
+		//"button_text" : "Add Contacts",
+		"route" : "#",
+		//"modal_id" : "personModal",
+		"image" : "/img/clipboard.png"
+	},
 	"tag_results" : {
 		"title" : "No contacts available with this tag.",
 		//"learn_more" : "click here to learn more",
@@ -190,6 +198,10 @@ function fill_slate(id, el, key) {
 			$("#" + id, el).html(
 					getTemplate("empty-collection-model",
 							CONTENT_JSON["companies"]));
+		else if((route_path == "filter_results") && readCookie('company_filter'))
+			$("#" + id, el).html(
+					getTemplate("empty-collection-model",
+							CONTENT_JSON["filter_results_companies"]));
 		else
 			$("#" + id, el).html(
 				getTemplate("empty-collection-model",
