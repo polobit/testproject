@@ -45,10 +45,11 @@
 
 <div id="schedule-edit-modal"></div>
 <div class="wrapper-md">
-<div class="panel">
 <div class="data-block">
-         <div class="data-container">          	
-			<table id="schedule-updates" class="table table-striped showCheckboxes m-b-none"
+         <div class="data-container"> 
+         <div class="panel panel-default">
+         <div class="panel-heading">Scheduled Messages List</div>         	
+			<table id="schedule-updates" class="table table-striped showCheckboxes m-b-none agile-table panel"
 				url="core/scheduledupdate/bulk">
              
 				<thead>
@@ -64,9 +65,9 @@
 				<tbody id="socialsuite-scheduled-updates-model-list" class="socialsuite-scheduled-updates-model-list">
 				</tbody>
 			</table>
+			</div>
          </div>
 </div>	
-</div>
 </div>	
 </script>
 
@@ -76,32 +77,37 @@
 {{/if}}	
 <td class='data hide' data='{{id}}'>{{id}}</td>
 <td>
-   <div>
+   <div class="table-resp">
       <a class="account-link link-complex block" href="https://twitter.com/{{screen_name}}" rel="user" target="_blank">    
-    	<div class="pull-left thumb-sm m-r-sm">   
-           <img class="r r-2x tweet-avatar" src="{{profileImg}}" width="40" height="40"  alt="{{screen_name}}'s avatar" title="{{screen_name}}'s avatar">     	
+    	<div class="thumb-sm agile-img m-r-sm">   
+           <img class="img-inital r r-2x" src="{{profileImg}}"  alt="{{screen_name}}'s avatar" title="{{screen_name}}'s avatar">     	
     	</div>
-    	<div class="inline-block">
-        		<span class="account-inline txt-ellipsis"> 	
-                        <span class="link-complex-target text-info"><span class="at">@</span>{{screen_name}}</span>
- 		        </span> 
+    	<div class="agile-thumb agile-thumb-view">
+        		 	
+                    <a class="text-cap custom-link">@{{screen_name}}</a>
+ 		         
         		<br/>
-        		{{network_type}}        	
+        		<small class="text-muted m-t-xs">
+        		{{network_type}}        	</small>
 	    </div>
       </a>
    </div>
 </td>
-<td class="is-actionable edit-scheduled-update">{{message}}</td>
+<td class="is-actionable edit-scheduled-update"><div class="table-resp">{{message}}</div></td>
 <td class="is-actionable edit-scheduled-update text-muted">
+	<div class="table-resp">
 	<i class="fa fa-clock-o m-r-xs"></i>
     <time class="time-ago b-b b-light" value="{{schedule}}" datetime="{{epochToHumanDate "" schedule}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" schedule}}</time>
+	</div>
 </td>
-<td class="is-actionable edit-scheduled-update">{{headline}}</td>
+<td class="is-actionable edit-scheduled-update"><div class="table-resp">{{headline}}</div></td>
 <td class="is-actionable edit-scheduled-update">
+	<div class="table-resp">
     {{#if_equals tweetOwner "/"}}
          <span style="display:none;"></span>
     {{else}}
          <span>{{tweetOwner}}</span>
     {{/if_equals}}
+    </div>
 </td>
 </script>

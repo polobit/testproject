@@ -43,7 +43,7 @@ function populate_recent_menu()
 		});
 		
 	if(recent_view.collection.length==0)	// default text, when list is empty.
-		$('#recent-menu>ul').html('<li style="text-align:center;"><a class="disabled">No Recent Activity</a></li>');
+		$('#recent-menu>ul').html('<li><a class="disabled" style="color:black;"><b>No Recent Activity</b></a></li>');
 	else {recent_view.render(true);
 	}			// populate elements if filled from localStorage
 }
