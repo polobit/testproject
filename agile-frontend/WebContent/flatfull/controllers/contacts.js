@@ -894,7 +894,7 @@ var ContactsRouter = Backbone.Router.extend({
 						.closest("div.controls")
 						.find(".tags")
 						.append(
-								'<li class="tag" style="display: inline-block;" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
+								'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
 			}
 			else
 				$("#emailForm", el).find('input[name="to"]').val(id);
