@@ -5474,6 +5474,10 @@ $(function()
 			portlet_name = "Agile CRM Blog";
 		else if(p_name=='Task Report')
 			portlet_name = "Task Report";
+		else if(p_name=='Stats Report')
+			portlet_name = "Activity Overview";
+		else
+			portlet_name = p_name;
 		return portlet_name;
 	});
 	/**
@@ -5509,6 +5513,8 @@ $(function()
 			icon_name = "icon-tasks";
 		else if(p_name=='Agile CRM Blog')
 			icon_name = "icon-feed";
+		else if(p_name=='Stats Report')
+			icon_name = "icon-speedometer";
 		return icon_name;
 	});
 	/**

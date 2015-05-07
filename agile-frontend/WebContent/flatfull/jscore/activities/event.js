@@ -413,7 +413,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 
 		return false;
 	}
-	else if (startTime[0] > endTime[0])
+	else if (parseInt(startTime[0]) > parseInt(endTime[0]))
 	{
 		$('#' + modalName)
 				.find(".invalid-range")
@@ -422,7 +422,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 
 		return false;
 	}
-	else if (startTime[0] == endTime[0] && startTime[1] >= endTime[1])
+	else if (parseInt(startTime[0]) == parseInt(endTime[0]) && parseInt(startTime[1]) >= parseInt(endTime[1]))
 	{
 		$('#' + modalName)
 				.find(".invalid-range")
