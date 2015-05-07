@@ -328,8 +328,8 @@ padding: 0 8px 0 0;
 }
 
 small {
-	color: #98a6ad!important;
- 	font-weight: 300!important;
+	/* color: #98a6ad!important;
+ 	font-weight: 300!important; */
 }
 
 .portlet_tab_content {
