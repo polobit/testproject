@@ -143,13 +143,13 @@
 
 <script id="task-related-collection-template" type="text/html">
 {{#if this.length}}
-	<div style='height:30px'>
-		<a href="#" class="task-add-contact btn btn-sm btn-default pos-rlt m-b-sm right">
+	<div class="m-b-md m-t-md m-r-sm" align="right">
+		<a href="#" class="task-add-contact btn btn-sm btn-default">
 			<span><i class="icon-plus-sign"></i></span> Add Contact
 		</a>
 	</div>
 	<br/>
-			<table  class="table table-striped agile-ellipsis-dynamic onlySorting r-5x overflow-scroll m-b-none b " style=" border-collapse: separate;">
+			<table  class="table table-striped agile-table onlySorting r-5x overflow-scroll m-b-none b " style=" border-collapse: separate;">
 				<colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup>
 				<thead>
 					<tr><th></th>
@@ -217,7 +217,7 @@
 	<td> 
 <div class="ellipsis-multiline l-h word-break-keep">
 	{{#each tags}}
-    	<span class="label bg-light dk text-tiny">{{this}}</span>
+    	<span class="label  bg-light  text-tiny">{{this}}</span>
     {{/each}}
 </div>
 	</td>
