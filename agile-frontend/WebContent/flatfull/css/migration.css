@@ -1150,7 +1150,7 @@ color:#1f2427!important;
 {
 	font-size:13px;
 }
-.lhs-row-filter .fa-plus-square-o,.lhs-row-filter .filter-tags-multiple-remove-lhs
+.lhs-row-filter .fa-plus-square-o,.lhs-row-filter .fa-minus-square-o,.lhs-row-filter .filter-tags-multiple-remove-lhs
 {
 	color:#98a6ad;
 }
@@ -1240,3 +1240,17 @@ top:117px;
 {
 padding-right:5px;
 }
+
+.contacts-div #slate
+{
+padding:10px;
+}
+.imp-rule-safari
+{
+margin-top:-5px!important;
+}
+.contacts-div .panel
+{
+border-left:none;
+}
+

@@ -172,4 +172,54 @@ public class CampaignReportsSQLUtil
 	}
 
     }
+    
+    
+    public static JSONArray getCountByLogTypes(String startDate, String endDate, String timeZone, String[] logType)
+    {
+    	String domain = NamespaceManager.get();
+
+    	// For development
+    	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+    	    domain = "localhost";
+
+    	if (StringUtils.isEmpty(domain) ||  logType == null || logType.length == 0)
+    	    return null;
+
+    	// Returns (sign)HH:mm from total minutes.
+    	String timeZoneOffset = GoogleSQLUtil.convertMinutesToTime(timeZone);
+    	
+    	String query = "SELECT log_type,count(subscriber_id) AS count "+  
+    			"FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
+    	                "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain) +" AND log_type = " + GoogleSQLUtil.encodeSQLColumnValue(logType[0]) + 
+    	                " AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
+    	                "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
+    	
+    	         for(int i = 0; i < logType.length; i++)
+    	         {
+    	        	 if(i == 0)
+    	        		 continue;
+    	        	 
+    	        	query += " UNION ALL ";
+    	        	 
+    	        	query +=  "SELECT log_type,count(subscriber_id) AS count "+  
+    	    			"FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
+    	    	                "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+ " AND log_type = " + GoogleSQLUtil.encodeSQLColumnValue(logType[i]) + 
+    	    	                " AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
+    	    	                "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
+    	        	 
+    	         }
+    	         
+//    	         System.out.println("Query is " + query);
+    	
+    	try
+    	{
+    	    return GoogleSQL.getJSONQuery(query);
+    	}
+    	catch (Exception e)
+    	{
+    	    e.printStackTrace();
+    	    return new JSONArray();
+    	}
+
+    }
 }

@@ -863,7 +863,7 @@ $(function()
 								.find('#bulk-select')
 								.css('display', 'inline-block')
 								.html(
-										'Selected All ' + getAvailableContacts() + ' contacts. <a hrer="#" id="select-all-revert" style="cursor:pointer">Select chosen contacts only</a>');
+										' Selected All ' + getAvailableContacts() + ' contacts. <a hrer="#" id="select-all-revert" class="c-p text-info">Select chosen contacts only</a>');
 
 						// On choosing select all option, all the visible
 						// checkboxes in the table should be checked

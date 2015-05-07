@@ -1081,8 +1081,10 @@ public class WebCalendarEventUtil
 		String mins = hours.substring(3);
 		if ("00".equals(str) || "24".equals(str))
 			return "12:" + mins + "am";
+		else if ("12".equals(str))
+			return "12:" + mins + "pm";
 		Map<String, String> time_map = new HashMap<>();
-		for (int i = 12, k = 1; i <= 23; i++, k++)
+		for (int i = 13, k = 1; i <= 23; i++, k++)
 		{
 			time_map.put(String.valueOf(i), String.valueOf(k));
 		}
