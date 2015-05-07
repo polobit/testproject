@@ -188,7 +188,7 @@ public class CampaignReportsSQLUtil
     	// Returns (sign)HH:mm from total minutes.
     	String timeZoneOffset = GoogleSQLUtil.convertMinutesToTime(timeZone);
     	
-    	String query = "SELECT log_type,count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
+    	String query = "SELECT log_type,count(subscriber_id) AS count "+  
     			"FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
     	                "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain) +" AND log_type = " + GoogleSQLUtil.encodeSQLColumnValue(logType[0]) + 
     	                " AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
@@ -201,7 +201,7 @@ public class CampaignReportsSQLUtil
     	        	 
     	        	query += " UNION ALL ";
     	        	 
-    	        	query +=  "SELECT log_type,count(DISTINCT subscriber_id) AS count, count(subscriber_id) AS total "+  
+    	        	query +=  "SELECT log_type,count(subscriber_id) AS count "+  
     	    			"FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
     	    	                "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+ " AND log_type = " + GoogleSQLUtil.encodeSQLColumnValue(logType[i]) + 
     	    	                " AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
@@ -209,7 +209,7 @@ public class CampaignReportsSQLUtil
     	        	 
     	         }
     	         
-    	         System.out.println("Query is " + query);
+//    	         System.out.println("Query is " + query);
     	
     	try
     	{
