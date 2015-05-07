@@ -150,7 +150,7 @@
 <td data="{{id}}" class="data">
 	<div class="portlet-time-view no-inherit">
 		<div class="pull-left" style="width: 70%;">
-			<div class="w-full pull-left text-ellipsis text-cap">{{name}}</div> <!-- <span class="label" style="max-width: 10%;">{{milestone}}</span> -->
+			<div class="w-full pull-left text-ellipsis text-cap custom-link">{{name}}</div> <!-- <span class="label" style="max-width: 10%;">{{milestone}}</span> -->
 		</div>
 		<div class="pull-right text-right font-bold m-b-xs text-ellipsis" style="width: 30%; white-space: nowrap;">
 			<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
@@ -244,7 +244,7 @@
 		<time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" end}}" >{{get_duration start end}}</time>
 		</div>
 		{{#if this.contacts}}
-			<div class="w-full m-b-xxs text-ellipsis">
+			<div class="w-full m-b-xxs text-ellipsis" style="padding-left:70px;">
 				{{#related_to_one contacts}}{{/related_to_one}}
 			</div>
 		{{/if}}
@@ -255,8 +255,8 @@
 <script id="portlets-status-count-report-model-template" type="text/html">
 <div class="row row-sm text-center">
 	<div class="col-xs-6">
-		<div class="panel padder-v item m-l-none c-p">
-			<div class="h1 text-info font-thin h1">{{newContactsCount}}</div>
+		<div class="panel padder-v item m-l-none c-p overflow-hidden">
+			<div class="h1 text-info font-thin h1">{{numberWithCommasForActivities newContactsCount}}</div>
 			<span class="text-muted text-xs">New contacts</span>
 			<div class="top text-right w-full">
 				<!-- <i class="fa fa-caret-down text-warning m-r-sm"></i> -->
@@ -264,18 +264,18 @@
 		</div>
 	</div>     
 	<div class="col-xs-6">
-		<div class="block panel padder-v bg-primary item m-l-none p-t-none c-p stats-report-settings pos-rlt">
+		<div class="block panel padder-v bg-primary item m-l-none p-t-none c-p stats-report-settings pos-rlt overflow-hidden">
 			<div class="clearfix"></div>
 			<span class="text-white font-thin h1 block p-t">{{currencySymbol}}{{numberWithCommasForActivities wonDealValue}}</span>
-			<span class="text-muted text-xs">Won from {{wonDealsCount}} deals</span>
+			<span class="text-muted text-xs">Won from {{numberWithCommasForActivities wonDealsCount}} deals</span>
 			<span class="bottom text-right w-full">
 				<!-- <i class="fa fa-cloud-upload text-muted m-r-sm"></i> -->
 			</span>
 		</div>
 	</div>
 	<div class="col-xs-6">
-		<div class="block panel padder-v bg-info item m-l-none c-p">
-			<span class="text-white font-thin h1 block">{{emailsSentCount}}</span>
+		<div class="block panel padder-v bg-info item m-l-none c-p overflow-hidden">
+			<span class="text-white font-thin h1 block">{{numberWithCommasForActivities emailsSentCount}}</span>
 			<span class="text-muted text-xs">Campaign emails sent</span>
 			<span class="top text-left">
 				<!-- <i class="fa fa-caret-up text-warning m-l-sm m-l-none"></i> -->
@@ -283,8 +283,8 @@
 		</div>
 	</div>
 	<div class="col-xs-6">
-		<div class="panel padder-v item m-l-none c-p">
-			<div class="font-thin h1">{{newDealsCount}}</div>
+		<div class="panel padder-v item m-l-none c-p overflow-hidden">
+			<div class="font-thin h1">{{numberWithCommasForActivities newDealsCount}}</div>
 			<span class="text-muted text-xs">New deals worth {{currencySymbol}}{{numberWithCommasForActivities wonDealValue}}</span>
 			<div class="bottom text-left">
 				<!-- <i class="fa fa-caret-up text-warning m-l-sm"></i> -->
