@@ -608,7 +608,7 @@ $.validator.setDefaults({
 				return  "https://" + domain + ".agilecrm.com/register";
 			}
 			
-			return "https://" + domain + "-dot-" + version + "-dot-"+applicationId + ".appspot.com";
+			return "https://" + domain + "-dot-" + version + "-dot-"+applicationId + ".appspot.com/register";
 		}
 			 
 		
