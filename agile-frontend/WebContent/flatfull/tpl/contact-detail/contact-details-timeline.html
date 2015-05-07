@@ -1,4 +1,4 @@
-  <script id="year-marker-template" type="text/x-handlebars-template">
+<script id="year-marker-template" type="text/x-handlebars-template">
     <div class="item year-marker">
       <div class="inner">
         <div class="inner2">
@@ -7,8 +7,7 @@
         </div>
       </div>
     </div>
-  </script>
-
+</script>
 <script id="timeline-template" type="text/x-handlebars-template">
 <div class="item post" id={{id}}>
     <div class="inner">
@@ -17,7 +16,7 @@
             <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> {{subject}}</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <pre class="text" style="color: #999999;background:none;border:none;">{{description}}</pre>
+                <span class="text-xs">{{description}}</span>
             </div>
         {{/if_entity}}
 
@@ -26,8 +25,8 @@
             <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Task</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <div class="caption" style="margin-top:-8px"><i class="{{icons type}}"></i> ({{type}})</div>         
-                <div class="text" style="color: #333333">{{{subject}}}</div>
+                <div class="text-xs text-ellipsis" style="margin-top:-8px"><i class="{{icons type}}"></i> ({{type}})</div>         
+                <div class="text-xs text-ellipsis">{{{subject}}}</div>
             </div>
         {{/if_entity}}
 
@@ -36,7 +35,7 @@
             <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Created</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body" style="padding:5px">
-                <div class="text" style="color: #333333" >{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}</div>
+                <div class="text-base ">{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}</div>
             </div>
         {{/if_entity}}
 	
@@ -46,7 +45,7 @@
             <div class="title"><h3><span><a class="no-line"><i class="icon-tag"></i></a></span> Tag Added - {{tag}}</h3></div>
             <div class="date">{{epochToTaskDate createdTime}}</div>
             <div class="body" style="padding:5px">
-                <div class="text" style="color: #333333" >{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
+                <div class="text-base ">{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
             </div>
         {{/if_entity}}
 
@@ -66,8 +65,8 @@
             <div class="title"><h3><span><a class="no-line"><i class="icon-money"></i></a></span> Deal</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <div class="text" style="color: #333333">{{name}}</div>
-                <div class="text" style="color: #999999">{{description}}</div>
+                <div class="text-xs ">{{name}}</div>
+                <div class="text-xs ">{{description}}</div>
             </div>
         {{/if_entity}}
 
@@ -77,8 +76,8 @@
             <div class="title"><h3><span><a class="no-line"><i class="icon-folder-close"></i></a></span> Case</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <div class="text" style="color: #333333">{{title}}</div>
-                <div class="text" style="color: #999999">{{description}}</div>
+                <div class="text-xs ">{{title}}</div>
+                <div class="text-xs ">{{description}}</div>
             </div>
         {{/if_entity}}
 
@@ -109,10 +108,9 @@
             </span> {{subject}}</h3></div>
             <div class="date">{{epochToTaskDate date_secs}}</div>
             <div class="body">
-                <div class="caption" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>From:</b> {{from}}</div>
-                <div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover"><b>To:</b> {{to}}
-                </div>
-            
+                <div class="text-xs text-ellipsis"><b>From:</b> {{from}}</div>
+                <div class="text-xs text-ellipsis" id="tl-mail-to-popover" rel="popover" data-placement="right" data-content="message:" data-trigger="hover"><b>To:</b> {{to}}
+                </div>            
             {{#if message}}
                 <div class="text"><div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;"><div> <p>{{{message}}}</p></div></div>
                     <div class="right" data="{{message}}"><a href="#" id="tl-mail-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
@@ -128,7 +126,7 @@
             <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> Web</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <div class="text" style="color: #333333">
+                <div class="text-base ">
                     <div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;">
                         <div>
 							<b>Pages Visited {{#stringToJSON this "urls_with_time_spent"}} ({{this.length}}){{/stringToJSON}}
@@ -154,11 +152,11 @@
                     </div>
                 </div>
                 {{#if ref}}
-                     <div class="text" style="color: #333333"><b>Referred:</b></br> {{ref}}</div>
+                     <div class="text-base "><b>Referred:</b></br> {{ref}}</div>
                 {{/if}}
 
                 {{#if city}}
-                   <div class="text" style="color: #333333"><b>ADDRESS:</b></br> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
+                   <div class="text-base "><b>ADDRESS:</b></br> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
                 {{/if}}
 
                 <div class="right" style="margin-top:-10px;"><a href="#" id="tl-analytics-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
@@ -170,8 +168,8 @@
             <div class="title"><h3><span><a class="no-line"><i class="icon-phone" title="You Called"></i></a></span>{{title}}</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                 <div class="text" style="color: #333333">{{name}}</div>
-                <div class="text" style="color: #333333">{{body}}</div>
+                 <div class="text-xs ">{{name}}</div>
+                <div class="text-xs ">{{body}}</div>
             </div>
         {{/if_entity}}
 
@@ -180,8 +178,8 @@
             <div class="title"><h3><span><a class="no-line"><i class="icon-folder-open-alt" title="Email Opened"></i></a></span>{{title}}</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                 <div class="text" style="color: #333333">{{name}}</div>
-                <div class="text" style="color: #999999">{{body}}</div>
+                 <div class="text-xs ">{{name}}</div>
+                <div class="text-xs ">{{body}}</div>
             </div>
         {{/if_entity}}
 	<a href="#" class="open-close"></a>
@@ -203,13 +201,13 @@
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> {{subject}}</h3></div> -->
 			<div class="text-md text-cap">	
-				<div class="contact-job-title font-thin custom-color">
+				<div class="contact-job-title text-base custom-color">
 					<i class="icon-list-alt text-muted p-r-xs"></i>{{subject}}
 				</div>
 			</div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <pre class="text" style="color: #999999;background:none;border:none;">{{description}}</pre>
+                <span class="text-xs">{{description}}</span>
             </div>
         {{/if_entity}}
 
@@ -217,14 +215,14 @@
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Task Added</h3></div> -->
 			<div class="text-md text-cap">	
-				<div class="contact-job-title font-thin custom-color">
+				<div class="contact-job-title text-base custom-color">
 					<i class="icon-tasks text-muted p-r-xs"></i>Task Added
 				</div>
 			</div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <!-- <div class="caption" style="margin-top:-8px"><i class="{{icons type}}"></i> ({{type}})</div> -->         
-                <div class="text" style="color: #333333">{{{subject}}}  <small>({{task_property type}})</small></div>
+                <div class="text-xs ">{{{subject}}} <span>({{task_property type}})</span></div>
             </div>
         {{/if_entity}}
 
@@ -232,13 +230,13 @@
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Created</h3></div> -->
 			<div class="text-md text-cap">	
-				<div class="contact-job-title font-thin custom-color">
+				<div class="contact-job-title text-base custom-color">
 					<i class="icon-tasks text-muted p-r-xs"></i>Created
 				</div>
 			</div>
             <div class="date" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}">{{epochToTaskDate created_time}}</div>
             <!-- <div class="body" style="padding:5px">
-                <div class="text" style="color: #333333" >{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}</div>
+                <div class="text-base ">{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}</div>
             </div> -->
         {{/if_entity}}
 	
@@ -247,13 +245,13 @@
             <div class="timestamp">{{createdTime}}</div>
             <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-tag"></i></a></span> Tag Added</h3> - {{tag}}</div> -->
 			<div class="text-md text-cap">	
-				<div class="contact-job-title font-thin custom-color">
-					<i class="icon-tag text-muted p-r-xs"></i>Tag Added - <small>{{tag}}</small>
+				<div class="contact-job-title text-base custom-color">
+					<i class="icon-tag text-muted p-r-xs"></i>Tag Added - {{tag}}
 				</div>
 			</div>
             <div class="date" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}">{{epochToTaskDate createdTime}}</div>
             <!-- <div class="body">
-                <div class="text" style="color: #333333" >{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
+                <div class="text-base ">{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
             </div> -->
         {{/if_entity}}
 
@@ -261,7 +259,7 @@
             <div class="timestamp">{{createdTime}}</div>
             <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-folder-open-alt" title="Email Opened"></i></a></span> Email Opened</h3></div> -->
 			<div class="text-md text-cap">	
-				<div class="contact-job-title font-thin custom-color">
+				<div class="contact-job-title text-base custom-color">
 					<i class="icon-folder-open-alt text-muted p-r-xs"></i>Email Opened
 				</div>
 			</div>
@@ -277,14 +275,14 @@
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-money"></i></a></span> Deal Added</h3></div> -->
 			<div class="text-md text-cap">	
-				<div class="contact-job-title font-thin custom-color">
+				<div class="contact-job-title text-base custom-color">
 					<i class="icon-money text-muted p-r-xs"></i>Deal Added
 				</div>
 			</div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <div class="text" style="color: #333333">{{name}}</div>
-                <div class="text" style="color: #999999">{{description}}</div>
+                <div class="text-xs ">{{name}}</div>
+                <div class="text-xs ">{{description}}</div>
             </div>
         {{/if_entity}}
 
@@ -293,14 +291,14 @@
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-folder-close"></i></a></span> Case Added</h3></div> -->
 			<div class="text-md text-cap">	
-				<div class="contact-job-title font-thin custom-color">
+				<div class="contact-job-title text-base custom-color">
 					<i class="icon-folder-close text-muted p-r-xs"></i>Case Added
 				</div>
 			</div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <div class="text" style="color: #333333">{{title}}</div>
-                <div class="text" style="color: #999999">{{description}}</div>
+                <div class="text-xs ">{{title}}</div>
+                <div class="text-xs ">{{description}}</div>
             </div>
         {{/if_entity}}
 
@@ -308,13 +306,13 @@
             <div class="timestamp">{{time}}</div>
             <!-- <div class="title"><h3><span><a class="no-line"><i class={{#if_log_type_equals this "log_type" "EMAIL_SENT"}}"icon-envelope"{{else}} {{#if_log_type_equals this "log_type" "EMAIL_OPENED"}}"icon-folder-open-alt"{{else}}"icon-inbox"{{/if_log_type_equals}}{{/if_log_type_equals}}></i></a></span> {{titleFromEnums log_type}}</h3></div> -->
 			<div class="text-md text-cap">	
-				<div class="contact-job-title font-thin custom-color">
+				<div class="contact-job-title text-base custom-color">
 					<i class={{#if_log_type_equals this "log_type" "EMAIL_SENT"}}"icon-envelope text-muted p-r-xs"{{else}} {{#if_log_type_equals this "log_type" "EMAIL_OPENED"}}"icon-folder-open-alt text-muted p-r-xs"{{else}}"icon-inbox text-muted p-r-xs"{{/if_log_type_equals}}{{/if_log_type_equals}}></i>{{titleFromEnums log_type}}
 				</div>
 			</div>
             <div class="date">{{epochToTaskDate time}}</div>
             <div class="body">
-                <div class="caption" style="margin-top:-8px">Campaign - {{campaign_name}}</div>
+                <div class="text-xs text-ellipsis" style="margin-top:-8px">Campaign - {{campaign_name}}</div>
 
             {{#if message}}
                     <div class="text" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}
@@ -335,7 +333,7 @@
             </a>
             </span> {{subject}}</h3></div> -->
 			<div class="text-md text-cap">	
-				<div class="contact-job-title font-thin custom-color">
+				<div class="contact-job-title text-base custom-color">
 					<i class="icon-envelope text-muted p-r-xs"></i>
 					{{#if trackerId}}
         				{{#if_equals "true" is_email_opened}}
@@ -347,8 +345,8 @@
 			</div>
             <div class="date">{{epochToTaskDate date_secs}}</div>
             <div class="body">
-                <div class="caption" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>From:</b> {{from}}</div>
-                <div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover"><b>To:</b> {{to}}
+                <div class="text-xs text-ellipsis" ><b>From:</b> {{from}}</div>
+                <div class="text-xs text-ellipsis" id="tl-mail-to-popover" rel="popover" data-placement="right" data-content="message:" data-trigger="hover"><b>To:</b> {{to}}
                 </div>
             
             {{#if message}}
@@ -365,13 +363,13 @@
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> Web</h3></div> -->
 			<div class="text-md text-cap">	
-				<div class="contact-job-title font-thin custom-color">
+				<div class="contact-job-title text-base custom-color">
 					<i class="icon-list-alt text-muted p-r-xs"></i>Web
 				</div>
 			</div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <div class="text" style="color: #333333">
+                <div class="text-base ">
                     <div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;">
                         <div>
 							<b>Pages Visited {{#stringToJSON this "urls_with_time_spent"}} ({{this.length}}){{/stringToJSON}}
@@ -397,11 +395,11 @@
                     </div>
                 </div>
                 {{#if ref}}
-                     <div class="text" style="color: #333333"><b>Referred:</b></br> {{ref}}</div>
+                     <div class="text-base "><b>Referred:</b></br> {{ref}}</div>
                 {{/if}}
 
                 {{#if city}}
-                   <div class="text" style="color: #333333"><b>ADDRESS:</b></br> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
+                   <div class="text-base "><b>ADDRESS:</b></br> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
                 {{/if}}
 
                 <div class="right" style="margin-top:-10px;"><a href="#" id="tl-analytics-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
@@ -412,14 +410,14 @@
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-phone" title="You Called"></i></a></span>{{title}}</h3></div> -->
 			<div class="text-md text-cap">	
-				<div class="contact-job-title font-thin custom-color">
+				<div class="contact-job-title text-base custom-color">
 					<i class="icon-phone text-muted p-r-xs" title="You Called"></i>{{title}}
 				</div>
 			</div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                 <div class="text" style="color: #333333">{{name}}</div>
-                <div class="text" style="color: #333333">{{body}}</div>
+                 <div class="text-xs ">{{name}}</div>
+                <div class="text-xs ">{{body}}</div>
             </div>
         {{/if_entity}}
 
@@ -427,14 +425,14 @@
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-folder-open-alt" title="Email Opened"></i></a></span>{{title}}</h3></div> -->
 			<div class="text-md text-cap">	
-				<div class="contact-job-title font-thin custom-color">
+				<div class="contact-job-title text-base custom-color">
 					<i class="icon-folder-open-alt text-muted p-r-xs" title="Email Opened"></i>{{title}}
 				</div>
 			</div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                 <div class="text" style="color: #333333">{{name}}</div>
-                <div class="text" style="color: #999999">{{body}}</div>
+                 <div class="text-xs ">{{name}}</div>
+                <div class="text-xs ">{{body}}</div>
             </div>
         {{/if_entity}}
 	<!-- <a href="#" class="open-close"></a> -->
