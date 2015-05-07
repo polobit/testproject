@@ -173,7 +173,7 @@ $(function()
 						 * shown
 						 */
 						$waiting = $('<div style="display:inline-block;padding-left:5px"><small><p class="text-success"><i><span id="status-message">Please wait</span></i></p></small></div>');
-						$waiting.insertBefore($('#import-cancel'));
+						$waiting.insertAfter($('#import-cancel'));
 
 						$('td.import-contact-fields').each(function(index, element)
 						{
