@@ -13,16 +13,15 @@
     <div class="inner">
         {{#if_entity "note"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> {{subject}}</h3></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-list-alt text-muted"></i></a></span> {{subject}}</div></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <span class="text-xs">{{description}}</span>
             </div>
         {{/if_entity}}
-
         {{#if_entity "task"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Task</h3></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks text-muted"></i></a></span> Task</div></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <div class="text-xs text-ellipsis" style="margin-top:-8px"><i class="{{icons type}}"></i> ({{type}})</div>         
@@ -32,7 +31,7 @@
 
         {{#if_entity "contact_entity"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Created</h3></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks text-muted"></i></a></span> Created</div></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body" style="padding:5px">
                 <div class="text-base ">{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}</div>
@@ -42,7 +41,7 @@
 	  {{#if_entity "tag"}}
 			<div id="{{remove_spaces tag}}-tag-timeline-element"></div>
             <div class="timestamp">{{createdTime}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-tag"></i></a></span> Tag Added - {{tag}}</h3></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tag text-muted"></i></a></span> Tag Added - {{tag}}</div></div>
             <div class="date">{{epochToTaskDate createdTime}}</div>
             <div class="body" style="padding:5px">
                 <div class="text-base ">{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
@@ -51,18 +50,18 @@
 
         {{#if_entity "agile_email"}}
             <div class="timestamp">{{createdTime}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-folder-open-alt" title="Email Opened"></i></a></span> Email Opened</h3></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-open-alt text-muted" title="Email Opened"></i></a></span> Email Opened</div></div>
             <div class="date">{{epochToTaskDate createdTime}}</div>
             <div class="body">
                 <div style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>Subject:</b> {{subject}}</div>
-                <div class="text" style="color: #999999" ><span><em>Sent on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" trackerId}}</div>
-                <div class="text" style="color: #999999" ><span><em>Opened on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
+                <div class="text-xs"><span><em>Sent on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" trackerId}}</div>
+                <div class="text-xs"><span><em>Opened on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
             </div>
         {{/if_entity}}
 
         {{#if_entity "deal"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-money"></i></a></span> Deal</h3></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-money text-muted"></i></a></span> Deal</div></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <div class="text-xs ">{{name}}</div>
@@ -73,7 +72,7 @@
 		{{#if_entity "case"}}
 			
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-folder-close"></i></a></span> Case</h3></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-close text-muted"></i></a></span> Case</div></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <div class="text-xs ">{{title}}</div>
@@ -83,13 +82,13 @@
 
         {{#if_entity "log"}}
             <div class="timestamp">{{time}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-inbox"></i></a></span> {{titleFromEnums log_type}}</h3></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-inbox text-muted"></i></a></span> {{titleFromEnums log_type}}</div></div>
             <div class="date">{{epochToTaskDate time}}</div>
             <div class="body">
                 <div class="caption" style="margin-top:-8px">Campaign - {{campaign_name}}</div>
 
             {{#if message}}
-                    <div class="text" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}
+                    <div class="text-xs text-ellipsis">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}
                         <div class="right" data="{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}"><a href="#" id="tl-log-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
                     </div>   
             {{/if}}        
@@ -98,21 +97,21 @@
 
         {{#if_entity "date"}}
             <div class="timestamp">{{date_secs}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-envelope"></i>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-envelope text-muted"></i>
 			{{#if trackerId}}
-        		{{#if_equals "true" is_email_opened}}
+        		{{#if_equals "true" is_email_opened}}r
         	    		<i class="icon-folder-open-alt" title="Email Opened"></i>
         		{{/if_equals}}
     		{{/if}}
             </a>
-            </span> {{subject}}</h3></div>
+            </span> {{subject}}</div></div>
             <div class="date">{{epochToTaskDate date_secs}}</div>
             <div class="body">
                 <div class="text-xs text-ellipsis"><b>From:</b> {{from}}</div>
                 <div class="text-xs text-ellipsis" id="tl-mail-to-popover" rel="popover" data-placement="right" data-content="message:" data-trigger="hover"><b>To:</b> {{to}}
                 </div>            
             {{#if message}}
-                <div class="text"><div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;"><div> <p>{{{message}}}</p></div></div>
+                <div class="text-xs"><div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;"><div> <p>{{{message}}}</p></div></div>
                     <div class="right" data="{{message}}"><a href="#" id="tl-mail-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
                 </div> 
             {{/if}}       
@@ -123,7 +122,7 @@
 
      {{#if_entity "guid"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> Web</h3></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-list-alt text-muted"></i></a></span> Web</div></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <div class="text-base ">
@@ -165,7 +164,7 @@
 
 {{#if_entity "twilio"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-phone" title="You Called"></i></a></span>{{title}}</h3></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-phone text-muted" title="You Called"></i></a></span>{{title}}</div></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                  <div class="text-xs ">{{name}}</div>
@@ -175,7 +174,7 @@
 
 {{#if_entity "custom"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-folder-open-alt" title="Email Opened"></i></a></span>{{title}}</h3></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-open-alt text-muted" title="Email Opened"></i></a></span>{{title}}</div></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                  <div class="text-xs ">{{name}}</div>
@@ -199,7 +198,7 @@
     <div class="inner">
         {{#if_entity "note"}}
             <div class="timestamp">{{created_time}}</div>
-            <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> {{subject}}</h3></div> -->
+            <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-list-alt"></i></a></span> {{subject}}</div></div> -->
 			<div class="text-md text-cap">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-list-alt text-muted p-r-xs"></i>{{subject}}
@@ -213,7 +212,7 @@
 
         {{#if_entity "task"}}
             <div class="timestamp">{{created_time}}</div>
-            <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Task Added</h3></div> -->
+            <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks"></i></a></span> Task Added</div></div> -->
 			<div class="text-md text-cap">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-tasks text-muted p-r-xs"></i>Task Added
@@ -228,7 +227,7 @@
 
         {{#if_entity "contact_entity"}}
             <div class="timestamp">{{created_time}}</div>
-            <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Created</h3></div> -->
+            <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks"></i></a></span> Created</div></div> -->
 			<div class="text-md text-cap">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-tasks text-muted p-r-xs"></i>Created
@@ -243,7 +242,7 @@
 	  {{#if_entity "tag"}}
 			<div id="{{remove_spaces tag}}-tag-timeline-element"></div>
             <div class="timestamp">{{createdTime}}</div>
-            <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-tag"></i></a></span> Tag Added</h3> - {{tag}}</div> -->
+            <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tag"></i></a></span> Tag Added</div> - {{tag}}</div> -->
 			<div class="text-md text-cap">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-tag text-muted p-r-xs"></i>Tag Added - {{tag}}
@@ -257,7 +256,7 @@
 
         {{#if_entity "agile_email"}}
             <div class="timestamp">{{createdTime}}</div>
-            <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-folder-open-alt" title="Email Opened"></i></a></span> Email Opened</h3></div> -->
+            <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-open-alt" title="Email Opened"></i></a></span> Email Opened</div></div> -->
 			<div class="text-md text-cap">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-folder-open-alt text-muted p-r-xs"></i>Email Opened
@@ -266,14 +265,14 @@
             <div class="date">{{epochToTaskDate createdTime}}</div>
             <div class="body">
                 <div style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>Subject:</b> {{subject}}</div>
-                <div class="text" style="color: #999999" ><span><em>Sent on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" trackerId}}</div>
-                <div class="text" style="color: #999999" ><span><em>Opened on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
+                <div class="text-xs"><span><em>Sent on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" trackerId}}</div>
+                <div class="text-xs"><span><em>Opened on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
             </div>
         {{/if_entity}}
 
         {{#if_entity "deal"}}
             <div class="timestamp">{{created_time}}</div>
-            <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-money"></i></a></span> Deal Added</h3></div> -->
+            <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-money"></i></a></span> Deal Added</div></div> -->
 			<div class="text-md text-cap">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-money text-muted p-r-xs"></i>Deal Added
@@ -289,7 +288,7 @@
 		{{#if_entity "case"}}
 			
             <div class="timestamp">{{created_time}}</div>
-            <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-folder-close"></i></a></span> Case Added</h3></div> -->
+            <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-close"></i></a></span> Case Added</div></div> -->
 			<div class="text-md text-cap">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-folder-close text-muted p-r-xs"></i>Case Added
@@ -315,7 +314,7 @@
                 <div class="text-xs text-ellipsis" style="margin-top:-8px">Campaign - {{campaign_name}}</div>
 
             {{#if message}}
-                    <div class="text" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}
+                    <div class="text-xs text-ellipsis">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}
                         <div class="right" data="{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}"><a href="#" id="tl-log-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
                     </div>   
             {{/if}}        
@@ -350,7 +349,7 @@
                 </div>
             
             {{#if message}}
-                <div class="text"><div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;"><div> <p>{{{message}}}</p></div></div>
+                <div class="text-xs"><div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;"><div> <p>{{{message}}}</p></div></div>
                     <div class="right m-t-n" data="{{message}}"><a href="#" id="tl-mail-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
                 </div> 
             {{/if}}       
