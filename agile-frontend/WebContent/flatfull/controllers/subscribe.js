@@ -76,7 +76,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			
 			var planType = data.plan.plan_type;						
  			var id = null;
- 			var planDetails = "<span class='bg-light'>Current Plan</span></br><span class='bg-light'>"+data.plan.quantity+" Users</span>";
+ 			var planDetails = "<span class='text-head-black'>Current Plan</span></br><span class='text-head-black'>"+data.plan.quantity+" Users</span>";
  			if(planType.indexOf('STARTER') == 0){
  				var id = $('#starter_plan');
  			}else if(planType.indexOf('REGULAR') == 0){

@@ -84,7 +84,7 @@ function incomingCallNoty(message, type)
 
 	// Set properties
 	CALL = noty({ text : message, type : "confirm", layout : "bottomLeft", buttons : [
-			{ addClass : 'btn btn-primary answer', text : 'Answer' }, { addClass : 'btn btn-danger ignore', text : 'Ignore' }
+			{ addClass : 'btn btn-sm btn-primary answer', text : 'Answer' }, { addClass : 'btn btn-danger ignore', text : 'Ignore' }
 	] });
 }
 
@@ -104,8 +104,10 @@ function connectedCallNoty(message, type)
 
 		// Set properties
 		Twilio_Call_Noty = noty({ text : message, type : "success", layout : "bottomLeft", buttons : [
-				{ addClass : 'btn noty_twilio_mute', text : '<i class="icon-microphone"></i>' },{ addClass : 'btn noty_twilio_unmute', text : '<i class="icon-microphone-off"></i>' },
-				{ addClass : 'btn noty_twilio_dialpad', text : '<i class="icon-th"></i>' }, { addClass : 'btn btn-danger noty_twilio_hangup', text : 'Hangup' }
+				{ addClass : 'btn btn-sm btn-default noty_twilio_mute', text : '<i class="icon-microphone"></i>' },
+				{ addClass : 'btn btn-sm btn-default noty_twilio_unmute hide', text : '<i class="icon-microphone-off"></i>' },
+				{ addClass : 'btn btn-sm btn-default noty_twilio_dialpad', text : '<i class="icon-th"></i>' }, 
+				{ addClass : 'btn btn-sm btn-danger noty_twilio_hangup', text : 'Hangup' }
 		] });
 		
 		if(TWILIO_DIRECTION == "outbound-dial") {

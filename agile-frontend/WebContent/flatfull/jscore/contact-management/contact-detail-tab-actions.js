@@ -231,9 +231,9 @@ $(function(){
 	 */
 	$(".add-document-cancel").die().live('click', function(e){
 		e.preventDefault();
-		var el = $(this).closest("div");
+		var el = $("#documents");
 		el.find(".contact-document-select").css("display", "none");
-		el.find(".add-document-select").css("display", "inline");
+		el.find(".add-document-select").css("display", "inline-block");
 	});
 	
 	/**

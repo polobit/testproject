@@ -360,6 +360,8 @@ function downloadTemplate(url, callback)
 		url = TEMPLATE_LIB_PATH + url;
 	}
 
+	url += "?_=" + _AGILE_VERSION;
+
 	console.log(url + " " + dataType);
 
 	// If callback is sent to this method then template is fetched synchronously
