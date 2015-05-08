@@ -686,4 +686,8 @@ border-radius: 2px;
  	border: none;
  }
  
+ .portlet_header_name small {
+	color: #98a6ad!important;
+ 	font-weight: 300!important;
+}
  
