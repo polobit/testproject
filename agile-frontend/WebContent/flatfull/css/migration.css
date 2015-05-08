@@ -1233,7 +1233,7 @@ top:117px;
 	font-size: 13px !important;
 }
 
-.resize-vertical{
+textarea{
 	resize: vertical;
 }
 .activities_second_line i

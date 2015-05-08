@@ -320,7 +320,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 								{
 												var addressJSON = {};
 												var subtype;
-												$.each($(element).children(":not(br)"), function(index, subelement)
+												$.each($(element).find(":input,select"), function(index, subelement)
 												{
 
 																if ($(subelement).val() == undefined || $(subelement).val().length == 0)
@@ -587,7 +587,7 @@ function fill_multi_options(field_element, element)
 				{
 								var json = JSON.parse(element.value);
 
-								$.each($(field_element).children(":not(br)"), function(index, sub_field_element)
+								$.each($(field_element).find(":input,select"), function(index, sub_field_element)
 								{
 												var name = $(sub_field_element).attr('name');
 												if (name == 'address-type')

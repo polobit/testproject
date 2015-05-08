@@ -188,7 +188,7 @@ function set_p_portlets(base_model){
 				addWidgetToGridster(base_model);
 			} });
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Pending Deals"){
-		App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+base_model.get('settings').deals, templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
+		App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+base_model.get('settings').deals, templateKey : 'portlets-opportunities', sort_collection : false, individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				displayTimeAgo(p_el);
 				addWidgetToGridster(base_model);
@@ -237,7 +237,7 @@ function set_p_portlets(base_model){
 			postRenderCallback : function(p_el){
 				addWidgetToGridster(base_model);
 				var settingsEl = 	"<div class='portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-0' style='visibility:hidden;'>"+
-									"<i id='"+base_model.get('id')+"-settings' class='portlet-settings icon-wrench p-r-xs'></i>"+
+									"<i id='"+base_model.get('id')+"-settings' class='portlet-settings icon-wrench p-r-xs c-p'></i>"+
 									"<i id='"+base_model.get('id')+"-close' class='c-p icon-close StatsReport-close p-r-sm' onclick='deletePortlet(this);'></i>"+
 									"</div>";
 				$('.stats-report-settings',p_el).find('span').eq(0).before(settingsEl);
@@ -1083,6 +1083,10 @@ function closuresPerPersonBarGraph(selector,catges,data,text,name){
 }
 function dealsFunnelGraph(selector,funnel_data){
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', LIB_PATH + 'lib/flot/funnel.js',LIB_PATH + 'lib/flot/no-data-to-display.js', function(){
+		if(funnel_data==undefined || (funnel_data!=undefined && funnel_data.length==0)){
+			$('#'+selector).html('<div class="portlet-error-message">No deals found</div>');
+			return;
+		}
 		$('#'+selector).highcharts({
 	        chart: {
 	            type: 'funnel',
@@ -1382,7 +1386,7 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	    			},
 	                useHTML: true
 	            },
-	            gridLineWidth : 1,
+	            gridLineWidth : 0,
 	    		gridLineColor : '#F4F4F5',
 	    		lineWidth : 0,
 	    		tickWidth : 0
@@ -1393,7 +1397,7 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	                text: text
 	            },
 	            allowDecimals: false,
-	            gridLineWidth : 0,
+	            gridLineWidth : 1,
 	    		gridLineColor : '#F4F4F5',
 	    		labels : {
 	    			style : {
