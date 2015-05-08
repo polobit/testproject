@@ -169,7 +169,7 @@
 			</div>
 		</div>
 		{{#if this.contacts}}
-			<div class="activate-link text-right text-ellipsis" style="width: 70%;">
+			<div class="activate-link text-right text-ellipsis pull-right inline-block" style="width: 70%;">
 				{{#related_to_one contacts}}{{/related_to_one}}
 			</div>
 		{{/if}}
@@ -255,7 +255,7 @@
 <script id="portlets-status-count-report-model-template" type="text/html">
 <div class="row row-sm text-center">
 	<div class="col-xs-6">
-		<div class="panel padder-v item m-l-none c-p overflow-hidden">
+		<div class="panel padder-v item m-l-none overflow-hidden">
 			<div class="h1 text-info font-thin h1">{{numberWithCommasForActivities newContactsCount}}</div>
 			<span class="text-muted text-xs">New contacts</span>
 			<div class="top text-right w-full">
@@ -264,7 +264,7 @@
 		</div>
 	</div>     
 	<div class="col-xs-6">
-		<div class="block panel padder-v bg-primary item m-l-none p-t-none c-p stats-report-settings pos-rlt overflow-hidden">
+		<div class="block panel padder-v bg-primary item m-l-none p-t-none stats-report-settings pos-rlt overflow-hidden">
 			<div class="clearfix"></div>
 			<span class="text-white font-thin h1 block p-t">{{currencySymbol}}{{numberWithCommasForActivities wonDealValue}}</span>
 			<span class="text-muted text-xs">Won from {{numberWithCommasForActivities wonDealsCount}} deals</span>
@@ -274,7 +274,7 @@
 		</div>
 	</div>
 	<div class="col-xs-6">
-		<div class="block panel padder-v bg-info item m-l-none c-p overflow-hidden">
+		<div class="block panel padder-v bg-info item m-l-none overflow-hidden">
 			<span class="text-white font-thin h1 block">{{numberWithCommasForActivities emailsSentCount}}</span>
 			<span class="text-muted text-xs">Campaign emails sent</span>
 			<span class="top text-left">
@@ -283,7 +283,7 @@
 		</div>
 	</div>
 	<div class="col-xs-6">
-		<div class="panel padder-v item m-l-none c-p overflow-hidden">
+		<div class="panel padder-v item m-l-none overflow-hidden">
 			<div class="font-thin h1">{{numberWithCommasForActivities newDealsCount}}</div>
 			<span class="text-muted text-xs">New deals worth {{currencySymbol}}{{numberWithCommasForActivities newDealValue}}</span>
 			<div class="bottom text-left">
