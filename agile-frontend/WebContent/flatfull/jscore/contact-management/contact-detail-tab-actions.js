@@ -48,7 +48,7 @@ $(function(){
 				$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
 				console.log($(that).parents('.activity-text-block').css("background-color", "#FFFAFA"));
 				$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
-				tasksView.add(data, { sort : false });
+				tasksView.collection.add(data, { sort : false });
 			});
 		}
 	});
