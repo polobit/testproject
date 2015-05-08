@@ -23,7 +23,7 @@
         		<small class="text-muted">{{getPropertyValue properties "email"}}</small>
         	{{/if_contact_type}}
 			{{#if_contact_type "COMPANY"}}
-        		<a class="text-cap">{{getPropertyValue properties "name"}}</a><br>
+        		<a class="text-cap">{{getPropertyValue properties "name"}}</a>
         		<small class="text-muted">{{getPropertyValue properties "url"}}</small>
         	{{/if_contact_type}}
 		</div>
@@ -199,7 +199,7 @@
         	<img class="img-inital r r-2x" {{getCompanyImage "50" "display:inline;"}} />
     	</div>
     	<div class="h-auto inline-block v-top text-ellipsis" style="width:14em;">
-        	<a class="text-cap">{{getPropertyValue properties "name"}}</a>
+        	<a class="text-cap">{{getPropertyValue properties "name"}}</a> 
         	<small class="text-muted">{{getPropertyValue properties "url"}}</small>
     	</div>
 	</td>
@@ -223,7 +223,7 @@
         		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
     	</div>
     	<div class="h-auto inline-block v-top text-ellipsis" style="width:14em;">
-        		<a class="text-cap">{{getPropertyValue properties "name"}}</a>
+        		<a class="text-cap">{{getPropertyValue properties "name"}}</a> <br>
         		<small class="text-muted>"{{getPropertyValue properties "url"}}</small>
     	</div>
 	</td>
