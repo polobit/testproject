@@ -297,7 +297,6 @@
 		<servlet-name>ContactSchemaChange</servlet-name>
 		<url-pattern> /backend/cron/contact-schema-change</url-pattern>
 	</servlet-mapping>
-  	<servlet>
 	
 	<servlet>
 		<servlet-name>FailedDomainEventReminder</servlet-name>
