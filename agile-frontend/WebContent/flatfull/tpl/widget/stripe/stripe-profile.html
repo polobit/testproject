@@ -25,48 +25,48 @@
 <div class="b-t b-b wrapper-sm">
 	{{#if customer.subscription}}
 		<div class="row">	
-			<span class="col-md-5">Start Date
-				<span class=""> :</span>
-			</span>
-			<span class="col-md-7 text-muted">
+			<div class="col-md-5">Start Date
+				<div class="pull-right"> :</div>
+			</div>
+			<div class="col-md-7 text-muted">
 				<i class="fa fa-clock-o m-r-xs"></i>
 				<time class="time-ago" datetime="{{epochToHumanDate "" customer.subscription.start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" customer.subscription.start}}</time>
-			</span>
+			</div>
 		</div>
 		{{#if customer.subscription.currentPeriodEnd}}
 		<div class="row">	
-			<span class="col-md-5">End Date
-				<span class="">:</span>
-			</span>
-			<span class="col-md-7 text-muted">
+			<div class="col-md-5">End Date
+				<div class="pull-right">:</div>
+			</div>
+			<div class="col-md-7 text-muted">
 				<i class="fa fa-clock-o m-r-xs"></i>
 				<time class="time-ago" datetime="{{epochToHumanDate "" customer.subscription.currentPeriodEnd}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" customer.subscription.currentPeriodEnd}}</time>
-			</span>
+			</div>
 		</div>
 		{{/if}}
 		<div class="row">	
-			<span class="col-md-5">Current Plan
-				<span class="">:</span>
-			</span>							
-			<span class="col-md-7">
+			<div class="col-md-5">Current Plan
+				<div class="pull-right">:</div>
+			</div>							
+			<div class="col-md-7">
 				{{customer.subscription.plan.id}}
-			</span>
+			</div>
 		</div>
 		<div class="row">	
-			<span class="col-md-5">Interval
-				<span class="">:</span>
-			</span>							
-			<span class="col-md-7">
+			<div class="col-md-5">Interval
+				<div class="pull-right">:</div>
+			</div>							
+			<div class="col-md-7">
 				{{customer.subscription.plan.interval}}
-			</span>
+			</div>
 		</div>
 		<div class="row">	
-			<span class="col-md-5">Amount
-				<span class="">:</span>
-			</span>							
-			<span class="col-md-7">
+			<div class="col-md-5">Amount
+				<div class="pull-right">:</div>
+			</div>							
+			<div class="col-md-7">
 				{{numeric_operation customer.subscription.plan.amount 100 "/"}} {{toUpperCase customer.subscription.plan.currency}}
-			</span>
+			</div>
 		</div>
 	{{else}}
 		<div class="row">
