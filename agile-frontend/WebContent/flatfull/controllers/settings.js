@@ -402,7 +402,7 @@ var SettingsRouter = Backbone.Router.extend({
 			el.find(".office-share-settings-txt").css("display","none");
 			el.find(".office-share-select").css("display", "inline");
 			var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
-			fillSelect('#office-share-user-select', 'core/api/office/shared-to-users', 'users', function fillNew()
+			fillSelect('office-share-user-select', 'core/api/office/shared-to-users', 'users', function fillNew()
 			{
 				$("#office-share-user-select .default-select").remove();
 			}, optionsTemplate, false, el);
@@ -457,7 +457,7 @@ var SettingsRouter = Backbone.Router.extend({
 			el.find(".gmail-share-select").css("display", "inline");
 			el.find(".gmail-share-settings-txt").css("display","none");
 			var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
-			fillSelect('#gmail-share-user-select', 'core/api/social-prefs/GMAIL/shared-to-users', 'users', function fillNew()
+			fillSelect('gmail-share-user-select', 'core/api/social-prefs/GMAIL/shared-to-users', 'users', function fillNew()
 			{
 				$("#gmail-share-user-select .default-select").remove();
 			}, optionsTemplate, false, el);
