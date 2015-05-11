@@ -5,7 +5,7 @@
 		</div>
 	</td>        
 	<td><div class="table-resp">{{triggerType type}}</div></td>
-	<td><div class="table-resp">{{#if custom_score}}{{custom_score}} {{/if}} {{#if custom_tags}}{{custom_tags}}{{/if}} {{#if trigger_deal_milestone}}{{trigger_deal_milestone}}{{/if}} {{#if trigger_stripe_event}}{{trigger_stripe_event}}{{/if}}{{#if trigger_shopify_event}}{{trigger_shopify_event}}{{/if}} {{#if contactFilter}}{{contactFilter}}{{/if}}{{#if trigger_form_event}}{{getFormNameFromId trigger_form_event}}{{/if}}</div></td>
+	<td><div class="table-resp">{{#if custom_score}}{{custom_score}} {{/if}} {{#if custom_tags}}{{custom_tags}}{{/if}} {{#if trigger_deal_milestone}}{{trigger_milestone trigger_deal_milestone}}{{/if}} {{#if trigger_stripe_event}}{{trigger_stripe_event}}{{/if}}{{#if trigger_shopify_event}}{{trigger_shopify_event}}{{/if}} {{#if contactFilter}}{{contactFilter}}{{/if}}{{#if trigger_form_event}}{{getFormNameFromId trigger_form_event}}{{/if}}</div></td>
 	<td><div class="table-resp">{{campaign}}</div></td>
 	<br />
 </script>
