@@ -116,7 +116,7 @@ function google2fcEvent(google) {
       allDay: google.start.date ? true : false,
       google: google, // keep a reference to the original,
       //color: 'orange',
-      className: 'b-l b-2x b-warning b-b-l-r-2x b-t-l-r-2x',
+      className: 'b-l b-2x b-success b-b-l-r-2x b-t-l-r-2x',
       backgroundColor: '#fff',
       editable: false // To make the google cal events uneditable.
     };

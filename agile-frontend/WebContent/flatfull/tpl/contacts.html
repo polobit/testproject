@@ -8,28 +8,25 @@
 	</td>
 	<td class="data" data="{{id}}">
 	<div class="row">
-    	<div class="inline p-r-xs h-auto">
+    	<div class="inline p-r-xs h-auto thumb-sm">
         	{{#if_contact_type "PERSON"}}
-        		<img class="thumbnail img-inital inline" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  width="40px" height="40px" />
+        		<img class="thumbnail img-inital inline" data-name="{{dataNameAvatar properties 40}}" src="{{gravatarurl properties }}" />
         	{{/if_contact_type}}
-        
 			{{#if_contact_type "COMPANY"}}
         		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
         	{{/if_contact_type}}
     	</div>
     	<div class="h-auto inline-block v-top text-ellipsis" style="width:70%">
         	{{#if_contact_type "PERSON"}}
-        		<b>	{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}} </b>
-        		<br />
-        		{{getPropertyValue properties "email"}}
+        		<a class="text-cap">{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </a>        	
+        		<small class="text-muted">{{getPropertyValue properties "email"}}</small>
         	{{/if_contact_type}}
-        
 			{{#if_contact_type "COMPANY"}}
-        		<b>{{getPropertyValue properties "name"}}</b></br>
-        		{{getPropertyValue properties "url"}}
+        		<a class="text-cap">{{getPropertyValue properties "name"}}</a>
+        		<small class="text-muted">{{getPropertyValue properties "url"}}</small>
         	{{/if_contact_type}}
-	</div>
+		</div>
 	</div>
 	</td>
 	<td><div class="inline-block v-top">{{getPropertyValue properties "title"}}<br />
@@ -102,7 +99,7 @@
 	<div>
 		
 		<div class="pull-left">
-			<h3 class="m-n font-thin h3"><span id="contact-heading">Contacts</span> <span id="contacts-count">{{contacts_count}}</span> </h3>
+			<h3 class="m-n font-thin h3"><span id="contact-heading">Contacts</span><span id="contacts-count" class="m-l-xs">{{contacts_count}}</span></h3>
 			<div class="btn-group m-l-md inline-block" id="bulk-actions"
 				style="display: none;">
 					<div class="btn btn-sm btn-default">Bulk Actions</div>
@@ -117,7 +114,9 @@
 						<li><a href="#" id="bulk-email">Send Email</a></li>
                         <li class='divider'></li>
 						<li><a href="#" id="bulk-owner">Change Owner</a></li>
+                        {{#hasScope "EXPORT_CONTACTS"}}
                         <li><a href="#" id="bulk-contacts-export">Export Contacts as CSV</a></li>
+                        {{/hasScope}}
 						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
 					</ul>
 					<div  class="btn-group p-l p-t-xs inline-block" style="display: none;" id="bulk-select"></div>
@@ -145,7 +144,7 @@
 						</div>
 		</div>
 	</div>
-	<div class="col">
+	<div class="col contacts-div">
 		{{#unless this.length}}
 			<div class="filter-criteria">
 					
@@ -196,12 +195,12 @@
               </label>
 	</td>
 	<td class="data" data="{{id}}">
-    	<div class="thumb agile-img">
-        		<img class="img-inital r r-2x" {{getCompanyImage "50" "display:inline;"}} />
+    	<div class="thumb-sm agile-img">
+        	<img class="img-inital r r-2x" {{getCompanyImage "50" "display:inline;"}} />
     	</div>
     	<div class="h-auto inline-block v-top text-ellipsis" style="width:14em;">
-        		<b>{{getPropertyValue properties "name"}}</b></br>
-        		{{getPropertyValue properties "url"}}
+        	<a class="text-cap">{{getPropertyValue properties "name"}}</a> <br>
+        	<small class="text-muted">{{getPropertyValue properties "url"}}</small>
     	</div>
 	</td>
 	<td>
@@ -220,12 +219,12 @@
               </label>
 	</td>
 	<td class="data" data="{{id}}">
-    	<div class="inline p-r-sm h-auto">
+    	<div class="inline p-r-sm h-auto thumb-sm">
         		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
     	</div>
     	<div class="h-auto inline-block v-top text-ellipsis" style="width:14em;">
-        		<b>{{getPropertyValue properties "name"}}</b></br>
-        		{{getPropertyValue properties "url"}}
+        		<a class="text-cap">{{getPropertyValue properties "name"}}</a> 
+        		<small class="text-muted>"{{getPropertyValue properties "url"}}</small>
     	</div>
 	</td>
 	<td>
@@ -243,7 +242,7 @@
 	<div class="col-md-12">
 		
 		<div class="pull-left">
-			<h3 class="inline-block font-thin h3"><span id="contact-heading">Companies</span><span id="contacts-count"><small>{{count}}</small></span></h3>
+			<h3 class="inline-block font-thin h3"><span id="contact-heading">Companies</span><span id="contacts-count" class="m-l-xs"><small>{{count}}</small></span></h3>
 			<div class="inline-block">
 			<div class="btn-group m-l-md inline-block" id="bulk-actions" style="display: none;">
 					<div class="btn btn-default btn-sm">Bulk Actions</div>
@@ -279,7 +278,7 @@
 						</div>
 		</div>
 	</div>
-	<div class="col">
+	<div class="col contacts-div">
 		{{#unless this.length}}
 			<div class="filter-criteria">
 					
@@ -319,7 +318,6 @@
 <script id="contacts-table-collection-template" type="text/html">
 {{#unless this.length}}
 			<div class="filter-criteria">
-					
 			</div>
 			<div id="slate"></div>
 	{{/unless}}

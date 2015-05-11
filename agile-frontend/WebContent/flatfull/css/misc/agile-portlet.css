@@ -118,6 +118,8 @@ padding: 0 8px 0 0;
 	border-top: 1px solid #ddd;
 	border-left: 1px solid #ddd;
 	border-right: 1px solid #ddd;*/
+	color: #58666e!important;
+	background-color: #fff!important;
 }
 .portlet_header_name{
 	width: 80%;
@@ -326,7 +328,8 @@ padding: 0 8px 0 0;
 }
 
 small {
-	color: #b2b0b1;
+	/* color: #98a6ad!important;
+ 	font-weight: 300!important; */
 }
 
 .portlet_tab_content {
@@ -599,8 +602,8 @@ border-radius: 2px;
 	top: 9px;
 }
 
- [data-col="3"] { left:67.2%; }
- [data-col="2"] { left:33.6%; }
+ [data-col="3"] { left:68%; }
+ [data-col="2"] { left:34%; }
  [data-col="1"] { left:0.1%; }
  
  [data-row="16"] { top:2410px; }
@@ -626,8 +629,8 @@ border-radius: 2px;
  [data-sizey="4"] { height:800px; }
  [data-sizey="5"] { height:1000px; }
  
- [data-sizex="1"] { width:32.9%; }
- [data-sizex="2"] { width:66.4%; }
+ [data-sizex="1"] { width:32%; }
+ [data-sizex="2"] { width:66%; }
  [data-sizex="3"] { width:100%; }
  
  
@@ -669,14 +672,22 @@ border-radius: 2px;
  	overflow:hidden!important;
  }
  .portlet-error-message{
- 	padding: 11px 11px;
+ 	padding: 11px 15px;
 	font-size: 15px;
 	font-style: italic;
+	color: #98a6ad;
  }
  .portlet-error-privilege-message{
  	font-weight: normal!important;
  	font-size: 15px;
 	font-style: italic;
  }
+ .gridster-portlets .gs-w{
+ 	border: none;
+ }
  
+ .portlet_header_name small {
+	color: #98a6ad!important;
+ 	font-weight: 300!important;
+}
  

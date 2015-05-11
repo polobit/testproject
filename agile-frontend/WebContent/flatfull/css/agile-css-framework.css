@@ -713,6 +713,10 @@
 {
 	display:inline;
 }
+.flex
+{
+display:flex;
+}
 
 .opa-half
 {
@@ -1272,3 +1276,17 @@ border-collapse: separate;
 }
 
 /*ending table framework*/
+
+.thumb-sm img{
+	height: 40px;
+	width: 40px;
+}
+
+.thumb-xs img{
+	height: 34px;
+	width: 34px;
+}
+
+.text-head-black{
+	color:#333;
+}

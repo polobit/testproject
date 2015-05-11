@@ -505,12 +505,12 @@ public class AgileTaskletUtil
 		String currentWorkflowId = workflowId.toString();
 		String activeStatus = currentWorkflowId + "-" + Status.ACTIVE;
 		CampaignStatus currentcampaignStatus = new CampaignStatus(0l, 0l, currentWorkflowId, "", activeStatus);
-		    
+
 		for (Contact contact : contacts)
 		{
-		    // Skip if active already in current campaign
-		    if (contact != null && workflowId != null && !CampaignStatusUtil.isActive(contact, currentcampaignStatus))
-			    subscriberJSONArray.put(getSubscriberJSON(contact, dateCustomFieldLabels));
+			// Skip if active already in current campaign
+			if (contact != null && workflowId != null && !CampaignStatusUtil.isActive(contact, currentcampaignStatus))
+				subscriberJSONArray.put(getSubscriberJSON(contact, dateCustomFieldLabels));
 		}
 
 		return subscriberJSONArray;
@@ -529,7 +529,7 @@ public class AgileTaskletUtil
 
 		// Custom date labels to convert epoch to Date format
 		List<String> dateCustomFieldLabels = getDateCustomLabelsFromCache();
-		
+
 		String currentWorkflowId = workflowId.toString();
 		String activeStatus = currentWorkflowId + "-" + Status.ACTIVE;
 		CampaignStatus currentcampaignStatus = new CampaignStatus(0l, 0l, currentWorkflowId, "", activeStatus);
@@ -537,7 +537,7 @@ public class AgileTaskletUtil
 		for (Contact contact : contacts)
 		{
 			// Skip if active already in current campaign
-		    	if (contact != null && workflowId != null && !CampaignStatusUtil.isActive(contact, currentcampaignStatus))
+			if (contact != null && workflowId != null && !CampaignStatusUtil.isActive(contact, currentcampaignStatus))
 			{
 				JSONObject subscriberJSON = getSubscriberJSON(contact, dateCustomFieldLabels);
 
@@ -800,6 +800,10 @@ public class AgileTaskletUtil
 		// If updated
 		if (ContactUtil.isContactUpdated(contactId, updatedTime))
 			return AgileTaskletUtil.getUpdatedSubscriberJSON(ContactUtil.getContact(contactId), currentsubscriberJSON);
+
+		System.out.println("isContactUpdated is false");
+		if (!ContactUtil.isExists(contactId))
+			return null;
 
 		return currentsubscriberJSON;
 	}

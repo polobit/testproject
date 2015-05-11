@@ -35,7 +35,16 @@ body {
 	color: #4A90E2;
 }
 
+.selected_image{
+	background":"#4A90E2;
+}
+
 #avatar {
+	margin: 15px auto;
+	display: block;
+	height: 95px;
+}
+#multi-user-avatar{
 	margin: 15px auto;
 	display: block;
 	height: 95px;
@@ -155,13 +164,18 @@ vertical-align: middle;
 .timezone {
 	float: right;
 	font-size: 14px;
-	color: #333;
+	color: #8E8F8F;
+}
+
+.blockdiv {
+	display: none;
 }
 
 .timezone1 {
 	
-	color: #000;
+	color: #8E8F8F;
 font-size: 15px;
+cursor: pointer;
 }
 
 .availability {

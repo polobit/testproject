@@ -3,7 +3,6 @@
 
   {{#if id}}
                        <h3 class="h3 font-thin">Edit Trigger</h3>
-                        <input name="id" type="hidden" value="{{id}}" />
                     {{else}}
                         <h3 class="h3 font-thin"><i class="icon-plus-sign"></i> Add Trigger</h3>
                     {{/if}} 
@@ -14,7 +13,9 @@
         <div class="col-md-9">
             <div class="panel wrapper">
                 <form id="addTriggerForm" name="addTriggerForm" class="form-horizontal">
-                  
+                    {{#if id}}
+					   <input name="id" type="hidden" value="{{id}}" />
+					{{/if}}
                     <fieldset>
                         <div class="control-group form-group">
                             <label class="control-label col-sm-4">Name 
@@ -217,7 +218,7 @@
 							</div>
 						</div>
 						<div id="new-mail-trigger-run-on-new-contacts" style="display:none;">
-							<div class="control-group form-grop">
+							<div class="control-group form-group">
 								<div class="controls col-sm-offset-4 col-sm-8">
                                 <div class="checkbox">
                                  <label class="i-checks i-checks-sm">
@@ -237,9 +238,9 @@
                             </div>
                         </div>
 						<div class="line line-bg b-b"></div>
-                        <div class="form-actions col-sm-offset-4 col-sm-8">          
-							 <a href="#" id="trigger-cancel" class="btn btn-default btn-sm">Cancel</a> 
+                        <div class="form-actions col-sm-offset-4 col-sm-8">          							
                             <a href="#triggers" id="trigger-save" class="save btn btn-sm btn-primary">Save</a>
+							<a href="#" id="trigger-cancel" class="btn btn-default btn-sm">Cancel</a>
                         </div>
                     </fieldset>
                 </form>

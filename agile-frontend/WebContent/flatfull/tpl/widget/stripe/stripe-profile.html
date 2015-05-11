@@ -1,5 +1,5 @@
 <script id="stripe-profile-template" type="text/html">
-<div class="wrapper-sm">
+<div class="wrapper-xs">
 	{{#if customer.activeCard.name}}
 		<a href="https://manage.stripe.com/customers/{{customer.id}}" target="_blank"><h4 class="text-u-c"><b>{{customer.activeCard.name}}</b></h4></a>
 		{{#if customer.activeCard.addressState}}
@@ -19,75 +19,75 @@
 		<a href="https://manage.stripe.com/customers/{{customer.id}}" target="_blank">{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}</a>
 	{{/if}}
 </div>
-<div class="sub_header">
-	<div>Subscription Details</div>
+<div class="wrapper-xs">
+	<span>Subscription Details</span>
 </div>
-<ul class="list-group m-b-none text-base" style="border-bottom:1px solid #eee;">
+<div class="b-t b-b wrapper-sm">
 	{{#if customer.subscription}}
-		<li class="list-group-item r-none b-l-none b-r-none text-base">	
+		<div class="row">	
 			<div class="col-md-5">Start Date
-				<div class="pull-right">:</div>
+				<div class="pull-right"> :</div>
 			</div>
-			<div class="col-md-6 m-l-sm text-muted">
+			<div class="col-md-7 text-muted">
 				<i class="fa fa-clock-o m-r-xs"></i>
 				<time class="time-ago" datetime="{{epochToHumanDate "" customer.subscription.start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" customer.subscription.start}}</time>
 			</div>
-		</li>
+		</div>
 		{{#if customer.subscription.currentPeriodEnd}}
-		<li class="list-group-item r-none b-l-none b-r-none text-base">	
+		<div class="row">	
 			<div class="col-md-5">End Date
 				<div class="pull-right">:</div>
 			</div>
-			<div class="col-md-6 m-l-sm text-muted">
+			<div class="col-md-7 text-muted">
 				<i class="fa fa-clock-o m-r-xs"></i>
 				<time class="time-ago" datetime="{{epochToHumanDate "" customer.subscription.currentPeriodEnd}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" customer.subscription.currentPeriodEnd}}</time>
 			</div>
-		</li>
+		</div>
 		{{/if}}
-		<li class="list-group-item r-none b-l-none b-r-none text-base">	
+		<div class="row">	
 			<div class="col-md-5">Current Plan
 				<div class="pull-right">:</div>
-			</div>
-							
-			<div class="col-md-6 m-l-sm">
+			</div>							
+			<div class="col-md-7">
 				{{customer.subscription.plan.id}}
 			</div>
-		</li>
-		<li class="list-group-item r-none b-l-none b-r-none text-base">	
+		</div>
+		<div class="row">	
 			<div class="col-md-5">Interval
 				<div class="pull-right">:</div>
-			</div>
-							
-			<div class="col-md-6 m-l-sm">
+			</div>							
+			<div class="col-md-7">
 				{{customer.subscription.plan.interval}}
 			</div>
-		</li>
-		<li class="list-group-item r-none b-l-none b-r-none text-base">	
-			<div class="col--md-5">Amount
+		</div>
+		<div class="row">	
+			<div class="col-md-5">Amount
 				<div class="pull-right">:</div>
-			</div>
-							
-			<div class="col-md-6 m-l-sm">
+			</div>							
+			<div class="col-md-7">
 				{{numeric_operation customer.subscription.plan.amount 100 "/"}} {{toUpperCase customer.subscription.plan.currency}}
 			</div>
-		</li>
+		</div>
 	{{else}}
-		<li class="list-group-item r-none b-l-none b-r-none text-base">
+		<div class="row">
 	    	No active subscription
-		</li>
+		</div>
 	{{/if}}
-</ul>
+</div>
 
-<div class="wrapper-sm">
-		<div>Invoices</div>
+<div class="wrapper-xs">
+		<span>Invoices</span>
 </div>
 <ul class="list-group m-b-none text-base">
 {{#if invoice.length}}
 	{{#each invoice}}
 		<li class="list-group-item r-none b-l-none b-r-none">
-					<a class="pull-left" data-toggle="collapse" href="#collapse-{{id}}" >{{#if_equals paid true}}Paid{{else}}Pending{{/if_equals}}</a>
-					<div class="pull-right">$ {{numeric_operation total 100 "/"}}</div>
-					<div clear="clearfix"></div>
+				<div class="clear">					
+					<a class="pull-left" data-toggle="collapse" href="#collapse-{{id}}" >
+						{{#if_equals paid true}}Paid{{else}}Pending{{/if_equals}}
+					</a>
+					<div class="pull-right">$ {{numeric_operation total 100 "/"}}</div>				
+					<div class="clearfix"></div>					
 					<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
 							{{#each lines.data}}	
 								{{#if_equals type "invoiceitem"}}
@@ -101,12 +101,13 @@
 									<div class="pull-right">{{quantity}}</div><br>
 									<div class="text-ellipsis w-full"><small>
 											{{epochToHumanDate "dd-mmm-yy" period.start}}&nbspto 
-											{{epochToHumanDate "dd-mmm-yy" period.end}}
+											{{epochToHumanDate "dd-mmm-yy" period.end}} 
 									</small></div>
 								{{/if_equals}}	         
 							{{/each}}
 					</div>
-					<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago pull-left" datetime="{{epochToHumanDate "" date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" date}}</time></small>
+				</div>
+					<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" date}}</time></small>
 		</li>
 	{{/each}}
 {{else}}
@@ -187,8 +188,8 @@
 			</div>
 		</fieldset>
 				<div class="m-t-sm m-r-none m-b-xs m-l-none">
-					<a class='btn btn-primary btn-sm  p-t-xs p-b-xs p-l-xs p-r-xs m-l-xs' widget-name="Stripe" id="widget-prefs-save">Save</a>
-					<a class='btn btn-primary btn-sm revoke-widget m-l-xs' widget-name="Stripe">Revoke Access</a>
+					<a class='btn btn-default btn-sm  p-t-xs p-b-xs p-l-xs p-r-xs m-l-xs' widget-name="Stripe" id="widget-prefs-save">Save</a>
+					<a class='btn btn-danger btn-sm revoke-widget m-l-xs' widget-name="Stripe">Revoke Access</a>
 
 					
 					<a href="#add-widget" class='btn btn-default btn-sm' widget-name="Stripe">Cancel</a>

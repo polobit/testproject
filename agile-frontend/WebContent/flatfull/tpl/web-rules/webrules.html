@@ -43,11 +43,24 @@
             			<div class="text">Define web rules and enagage your website visitors with smart popups, or perform automatic actions when contacts do (or don't do) something in your application or website. Checkout the <a href="https://github.com/agilecrm/agile-popups">documentation</a></div>
             			<a href="#webrules-add" class="m-t-xs btn blue btn-slate-action btn-info btn-addon btn-sm"><i class="fa fa-plus-circle"></i>  Add Web Rule</a><br><br>
 						<p>For Web Rules to work, please copy and paste the code below on your web pages before the <code class="text-black">&lt;/body&gt;</code> tag.</p>
-						<div><!--<a class="right btn" id="api_track_webrules_code_icon" style="margin:5px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
-<pre id="api_track_webrules_code">&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
+						<div id="whitelist-disabled"><!--<a class="right btn" id="api_track_webrules_code_icon" style="margin:5px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
+<pre class="prettyprint" id="api_track_webrules_code">
+&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt;
 &lt;/script&gt;
 &lt;script type="text/javascript" &gt;
  _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
+ _agile.track_page_view();
+ _agile_execute_web_rules();
+&lt;/script&gt;
+</pre>
+						</div>
+						<div id="whitelist-enabled" class="hide"><!--<a class="right btn" id="api_track_webrules_code_icon" style="margin:5px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
+<pre class="prettyprint" id="api_track_webrules_code">
+&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt;
+&lt;/script&gt;
+&lt;script type="text/javascript" &gt;
+ _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
+ _agile_set_whitelist('{{getBase64Domain}}');
  _agile.track_page_view();
  _agile_execute_web_rules();
 &lt;/script&gt;
@@ -60,9 +73,9 @@
 			</div>
 		{{/if}}
     </div>
-    <div class="col-sm-3 col-md-3 p-none">
-        <div class="wrapper-xs">
-            <h4 class="m-t-none h4 m-b-xs">
+    <div class="col-sm-3 col-md-3">
+        
+            <h4 class="m-t-none h4 m-b-sm">
                 Setup Tracking Code
             </h4>
 			<div>To start using Web Rules, please setup our <a href="#analytics-code/analytics">tracking code</a>.</div>
@@ -71,12 +84,12 @@
 			<p>
 
 <a href="https://www.youtube.com/watch?v=XGouq0B_7G8" target="_blank">
-<img src="../../img/web-rule-info.png" class="img-responsive">
+<img src="../../img/web-rule-info.png" class="img-responsive w-full">
 </a>
 </p>
 
 		<br>
-            <h4 class="m-t-none font-thin">
+            <h4 class="m-t-none h4 m-b-sm">
                 What are Web Rules?
             </h4>
            
@@ -89,7 +102,7 @@ For example, when visitors are about to leave your website, show them a sign-up 
         </div>
     </div>
 </div>
-</div>
+
 </div>
 </script>
 <script id="webrule-model-template" type="text/html">

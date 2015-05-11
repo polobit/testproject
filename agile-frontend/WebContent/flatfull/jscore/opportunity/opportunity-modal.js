@@ -108,12 +108,12 @@ $(function(){
     */
     $('#opportunities-model-list > tr > td:not(":first-child")').live('click', function(e) {
 		e.preventDefault();
-		/*$('.popover').remove();
+		$('.popover').remove();
 		var currentdeal=$(this).closest('tr').data();
 		Backbone.history.navigate("deal/"+currentdeal.id , {
             trigger: true
-        });*/
-		updateDeal($(this).closest('tr').data());
+        });
+		// 	updateDeal($(this).closest('tr').data());
 	});
     
     /**
@@ -121,11 +121,11 @@ $(function(){
      */
 	$('#dashboard-opportunities-model-list > tr').live('click', function(e) {
 		e.preventDefault();
-		/*var currentdeal=$(this).closest('tr').data();
+		var currentdeal=$(this).closest('tr').data();
 		Backbone.history.navigate("deal/"+currentdeal.id , {
             trigger: true
-        });*/
-		updateDeal($(this).closest('tr').data());
+        });
+		// updateDeal($(this).closest('tr').data());
 	});
 	
 	$('.milestones > li').live('mouseenter', function () {
@@ -388,7 +388,7 @@ $(function(){
 	/**
 	 * Milestone view deal delete
 	 */
-	$('.deal-archive').live('click', function(e) {
+	$('.deal-archive').die().live('click', function(e) {
 		e.preventDefault();
 		
 		var temp = {};
@@ -402,7 +402,7 @@ $(function(){
 	/**
 	 * Milestone view deal delete
 	 */
-	$('.deal-restore').live('click', function(e) {
+	$('.deal-restore').die().live('click', function(e) {
 		e.preventDefault();
 		
 		var temp = {};
@@ -481,7 +481,7 @@ function updateDeal(ele, editFromMilestoneView)
 	showNoteOnForm("opportunityUpdateForm", value.notes);
 	
 	add_custom_fields_to_form(value, function(data){
-		var el = show_custom_fields_helper(data["custom_fields"], []);
+		var el = show_custom_fields_helper(data["custom_fields"], ["modal"]);
 	//	if(!value["custom_data"])  value["custom_data"] = [];
 		$("#custom-field-deals", dealForm).html(fill_custom_fields_values_generic($(el), value["custom_data"]));
 		
@@ -498,7 +498,7 @@ function show_deal(){
 	$("#opportunityModal").modal('show');
 	
 	add_custom_fields_to_form({}, function(data){
-		var el_custom_fields = show_custom_fields_helper(data["custom_fields"], []);
+		var el_custom_fields = show_custom_fields_helper(data["custom_fields"], ["modal"]);
 		$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
 		
 	}, "DEAL");
@@ -578,7 +578,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 	disable_save_button($(saveBtn));//$(saveBtn).attr('disabled', 'disabled');
 	
 	if (!isValidForm('#' + formId)) {
-		var container = $('#' + formId).closest('.modal-body');
+		var container = $('#' + formId).closest('.modal-dialog');
 		var ele = $('#' + formId).find('.single-error').first();
 		container.scrollTop(ele.offset().top - container.offset().top + container.scrollTop());
 		// Removes disabled attribute of save button
@@ -788,13 +788,13 @@ if(json.close_date==0)
 			}
 			else {
 				App_Deal_Details.dealDetailView.model = data;
-				/*App_Deal_Details.dealDetailView.render(true)
+				App_Deal_Details.dealDetailView.render(true)
 				Backbone.history.navigate("deal/"+data.toJSON().id , {
 		            trigger: true
-		        });*/
-				App_Deals.navigate("deals", {
+		        });
+				/*App_Deals.navigate("deals", {
 					trigger : true
-				});
+				});*/
 					
 					
 			}

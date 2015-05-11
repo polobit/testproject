@@ -277,7 +277,7 @@ var ContactsRouter = Backbone.Router.extend({
 				template_key = "companies-table";
 			}
 		}
-		
+
 		/*
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
@@ -319,7 +319,7 @@ var ContactsRouter = Backbone.Router.extend({
 		if(!is_lhs_filter) {
 			$('#content').html(this.contactsListView.render().el);
 		} else {
-			$('#content').find('.col-md-9').html(this.contactsListView.render().el);
+			$('#content').find('.contacts-div').html(this.contactsListView.render().el);
 			$('#bulk-actions').css('display', 'none');
 			CONTACTS_HARD_RELOAD = true;
 		}
@@ -443,6 +443,24 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contactDetails : function(id, contact)
 	{
+		//Removed previous contact timeline tags from the isotope, if existed
+		if(App_Contacts.contactDetailView!=undefined && App_Contacts.contactDetailView.model!=undefined && App_Contacts.contactDetailView.model.collection!=undefined){
+			getTemplate("timeline1", App_Contacts.contactDetailView.model.collection.models, undefined, function(result)
+			{
+				try
+				{
+						$("#timeline", $(App_Contacts.contactDetailView.el)).isotope('remove', $(result), function(ele)
+								{
+									timeline_collection_view.queue.running = false;
+									timeline_collection_view.queue.next();
+								});
+				}
+				catch(err)
+				{
+					console.log(err);
+				}
+			});
+		}
 		
 		//For getting custom fields
 		if(App_Contacts.customFieldsList == null || App_Contacts.customFieldsList == undefined){
@@ -520,6 +538,7 @@ var ContactsRouter = Backbone.Router.extend({
 			this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "company-detail",
 				postRenderCallback : function(el)
 				{
+					contactInnerTabsInvoke(el); // hiding the prev,next arrows when viewport suits
 					fill_company_related_contacts(id, 'company-contacts');
 					// Clone contact model, to avoid render and
 					// post-render fell in to
@@ -560,6 +579,8 @@ var ContactsRouter = Backbone.Router.extend({
 
 		this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
+			
+			
 			// Clone contact model, to avoid render and post-render fell
 			// in to
 			// loop while changing attributes of contact
@@ -577,6 +598,8 @@ var ContactsRouter = Backbone.Router.extend({
 			load_contact_tab(el, contact.toJSON());
 
 			loadWidgets(el, contact.toJSON());
+			
+			
 			
 			/*
 			 * // To get QR code and download Vcard
@@ -618,7 +641,7 @@ var ContactsRouter = Backbone.Router.extend({
 				$(".contact-make-sip-call",el).hide();
 				$(".contact-make-twilio-call",el).show();
 				$(".contact-make-call",el).hide();
-			}	
+			}
 
 			} });
 
@@ -634,6 +657,9 @@ var ContactsRouter = Backbone.Router.extend({
 		else
 				$("#map_view_action").html("<i class='icon-minus text-sm c-p' title='Hide map' id='disable_map_view'></i>");
 
+	setTimeout(function(){
+		contactInnerTabsInvoke(el);
+	},500);
 	},
 
 	/**
@@ -823,28 +849,54 @@ var ContactsRouter = Backbone.Router.extend({
 		var el = $("#content").html(getTemplate("send-email", model));
 		
 		// Call setupTypeAhead to get contacts
-		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true);
-		
-		agile_type_ahead("email_cc", el, contacts_typeahead, null, null, "email-search", null, true);
-		
-		agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, "email-search", null, true);
-		
+		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+
+		agile_type_ahead("email_cc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+
+		agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+
+		// To append name to email
 		if (id)
 		{
-/*			var name;
-			if(model)
+			var name;
+
+			// For Reply all, id may contains multiple emails. If contains multiple, skip
+			if (model && id.indexOf(',') == -1)
 			{
-				var first_name = getPropertyValue(model, "first_name");
-				var last_name = getPropertyValue(model, "last_name");
-				if(first_name || last_name)
+				if (model.type == "PERSON")
 				{
-					name = first_name?first_name:"";
-					name = (name + " " + (last_name?last_name:"")).trim();
+
+					var first_name = getPropertyValue(model.properties, "first_name");
+					var last_name = getPropertyValue(model.properties, "last_name");
+
+					if (first_name || last_name)
+					{
+						name = first_name ? first_name : "";
+						name = (name + " " + (last_name ? last_name : "")).trim();
+					}
+				}
+				else
+				{
+					var company_name = getPropertyValue(model.properties, "name");
+					name = (company_name ? company_name : "").trim();
 				}
 			}
-			if(name.length)
-				$('#to', el).closest("div.controls").find(".tags").append('<li class="tag" style="display: inline-block;" data="' + id + '"><a href="#contact/' + model.id +'">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
-			else*/
+
+			if (name && name.length)
+			{
+				var data = id;
+
+				// If already appended with name, skip
+				if(id.indexOf('<') == -1 && id.indexOf('>') == -1)
+					data = name + ' <' + id.trim() + '>';
+
+				$('#to', el)
+						.closest("div.controls")
+						.find(".tags")
+						.append(
+								'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
+			}
+			else
 				$("#emailForm", el).find('input[name="to"]').val(id);
 		}
 		else

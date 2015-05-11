@@ -43,8 +43,8 @@
 				callback(data);
 
 			// On save back to deals list
-			//Backbone.history.navigate("deals", { trigger : true });  
-			App_Deals.deals();
+			// Backbone.history.navigate("deals", { trigger : true });  
+			settimeout(App_Deals.deals(),100);
 			
 			// If no_noty is given as error message, neglect noty
 			if(error_message === "no_noty")
@@ -169,11 +169,11 @@
 			bulkDeleteDeals();
 		});
 		
-		$("#deal_bulk_delete_modal,#deal_owner_change_modal,#deal_mile_change_modal,#deal_bulk_archive_modal,#deal_bulk_restore_modal").on('show',function(){
-			if(deal_bulk_actions.SELECT_ALL_DEALS)
+		$("#deal_bulk_delete_modal,#deal_owner_change_modal,#deal_mile_change_modal,#deal_bulk_archive_modal,#deal_bulk_restore_modal").on('show.bs.modal',function(){
+			/*if(deal_bulk_actions.SELECT_ALL_DEALS)
 				$(this).find('span.count').text(numberWithCommas(getAvailableDeals()));
 			else
-				$(this).find('span.count').text(numberWithCommas(getDealsBulkIds().length));
+				$(this).find('span.count').text(numberWithCommas(getDealsBulkIds().length));*/
 		})
 		
 		$("#pipeline-list-bulk").die().live('change',function(e){
@@ -199,6 +199,11 @@
 			e.preventDefault();
 			deal_bulk_actions.SELECT_ALL_DEALS = false;
 			$('body').find('#bulk-select').html("Selected " + numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " deals. <a id='select-all-available-deals' href='#'>Select all " + numberWithCommas(getAvailableDeals()) + " deals</a>");
+		});
+		
+		$("#deal_bulk_delete_modal,#deal_owner_change_modal,#deal_mile_change_modal,#deal_bulk_archive_modal,#deal_bulk_restore_modal").on('hidden.bs.modal', function (e) {
+			  // do something...
+			App_Deals.deals();
 		});
 		
 		

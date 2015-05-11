@@ -12,6 +12,7 @@ import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 
 import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.activities.Activity;
@@ -37,9 +38,13 @@ import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.util.TagSearchUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
+import com.campaignio.reports.CampaignReportsSQLUtil;
+import com.campaignio.reports.CampaignReportsUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -90,6 +95,7 @@ public class PortletUtil {
 			
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.ACTIVITY)){
 				//allPortlets.add(new Portlet("Emails Sent",PortletType.USERACTIVITY));
+				allPortlets.add(new Portlet("Stats Report",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
 			}
 			
@@ -128,13 +134,13 @@ public class PortletUtil {
 			if(portlet.prefs!=null){
 				JSONObject json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
 				//if portlet is growth graph we can change the start date and end dates based on duration
-				System.out.println("Portlet Name---"+portlet.name);
+				/*System.out.println("Portlet Name---"+portlet.name);
 				System.out.println("portlet.name.equalsIgnoreCase(Growth Graph)---"+portlet.name.equalsIgnoreCase("Growth Graph"));
 				System.out.println("contains start-date----"+json.containsKey("start-date"));
 				System.out.println("contains end-date-----"+json.containsKey("end-date"));
 				System.out.println("contains duration-----"+json.containsKey("duration"));
 				System.out.println("is duration value null--"+json.get("duration")==null);
-				System.out.println("duration value--"+json.get("duration"));
+				System.out.println("duration value--"+json.get("duration"));*/
 				if(portlet.name!=null && portlet.name.equalsIgnoreCase("Growth Graph") && json.containsKey("start-date") && json.containsKey("end-date")
 						 && !json.containsKey("duration")){
 					json.put("duration","1-week");
@@ -644,6 +650,7 @@ public class PortletUtil {
 		if(dUser!=null)
 			domainUsersList=DomainUserUtil.getUsers(dUser.domain);
 		List<String> domainUserNamesList=new ArrayList<String>();
+		List<String> domainUserImgList=new ArrayList<String>();
 		
 		List<Integer> answeredCallsCountList=new ArrayList<Integer>();
 		List<Integer> busyCallsCountList=new ArrayList<Integer>();
@@ -692,6 +699,15 @@ public class PortletUtil {
 			callsDurationList.add(callsDuration);
 			
 			domainUserNamesList.add(domainUser.name);
+			
+			AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
+			
+			UserPrefs userPrefs = null;
+			
+			if(agileUser!=null)
+				userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+			if(userPrefs!=null)
+				domainUserImgList.add(userPrefs.pic);
 		}
 		callsPerPersonJSON.put("answeredCallsCountList",answeredCallsCountList);
 		callsPerPersonJSON.put("busyCallsCountList",busyCallsCountList);
@@ -700,6 +716,7 @@ public class PortletUtil {
 		callsPerPersonJSON.put("callsDurationList",callsDurationList);
 		callsPerPersonJSON.put("totalCallsCountList",totalCallsCountList);
 		callsPerPersonJSON.put("domainUsersList",domainUserNamesList);
+		callsPerPersonJSON.put("domainUserImgList",domainUserImgList);
 		
 		return callsPerPersonJSON;	
 	}
@@ -708,12 +725,13 @@ public class PortletUtil {
 			//Added dummy portlet for recognizing whether Agile CRM Blog 
 			//portlet is deleted by user or not
 			Portlet dummyPortlet = new Portlet("Dummy Blog",PortletType.RSS,1,1,1,1);
-			Portlet eventsPortlet = new Portlet("Agenda",PortletType.TASKSANDEVENTS,1,1,1,1);
-			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,1,1,1);
+			Portlet statsReportPortlet = new Portlet("Stats Report",PortletType.USERACTIVITY,1,1,1,1);
+			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,2,1,1,1);
 			Portlet blogPortlet = new Portlet("Agile CRM Blog",PortletType.RSS,3,1,1,2);
-			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,1,2,2,1);
-			Portlet pendingDealsPortlet = new Portlet("Pending Deals",PortletType.DEALS,1,3,2,1);
-			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,3,3,1,1);
+			Portlet eventsPortlet = new Portlet("Agenda",PortletType.TASKSANDEVENTS,1,2,1,1);
+			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,2,1,1);
+			Portlet pendingDealsPortlet = new Portlet("Pending Deals",PortletType.DEALS,1,3,1,1);
+			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,2,3,2,1);
 			
 			JSONObject filterBasedContactsPortletJSON = new JSONObject();
 			filterBasedContactsPortletJSON.put("filter","myContacts");
@@ -730,6 +748,10 @@ public class PortletUtil {
 			dealsFunnelPortletJSON.put("due-date",(new Date().getTime())/1000);
 			dealsFunnelPortlet.prefs = dealsFunnelPortletJSON.toString();
 			
+			JSONObject statsReportPortletJSON = new JSONObject();
+			statsReportPortletJSON.put("duration","1-day");
+			statsReportPortlet.prefs = statsReportPortletJSON.toString();
+			
 			dummyPortlet.save();
 			eventsPortlet.save();
 			tasksPortlet.save();
@@ -737,6 +759,7 @@ public class PortletUtil {
 			filterBasedContactsPortlet.save();
 			pendingDealsPortlet.save();
 			dealsFunnelPortlet.save();
+			statsReportPortlet.save();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -930,6 +953,102 @@ public class PortletUtil {
 			return true;
 			
 		
+	}
+	public static JSONObject getEmailsOpenedPieData(JSONObject json)throws Exception{
+		long minTime=0L;
+		long maxTime=0L;
+		JSONObject dataJson = new JSONObject();
+		try {
+			if(json!=null && json.get("duration")!=null){
+				if(json.getString("startDate")!=null)
+					minTime = Long.valueOf(json.getString("startDate"));
+				if(json.getString("endDate")!=null)
+					maxTime = Long.valueOf(json.getString("endDate"))-1;
+				List<ContactEmail> emailsSentList = ContactEmailUtil.getEmailsOpened(minTime, maxTime, false);
+				List<ContactEmail> emailsOpenedList = ContactEmailUtil.getEmailsOpened(minTime,maxTime,true);
+				if(emailsSentList!=null)
+					dataJson.put("emailsSentCount", emailsSentList.size());
+				else
+					dataJson.put("emailsSentCount", 0);
+				if(emailsOpenedList!=null)
+					dataJson.put("emailsOpenedCount", emailsOpenedList.size());
+				else
+					dataJson.put("emailsOpenedCount", 0);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dataJson;
+	}
+	
+	public static JSONObject getPortletStatsReportData(JSONObject json)throws Exception{
+		long minTime=0L;
+		long maxTime=0L;
+		JSONObject dataJson = new JSONObject();
+		int newContactsCount = 0;
+		int wonDealsCount = 0;
+		Double wonDealValue = 0d;
+		String emailsSentCount = "0";
+		int webVisitsCount = 0;
+		int newDealsCount = 0;
+		Double newDealValue = 0d;
+		List<Opportunity> wonDealsList = new ArrayList<Opportunity>();
+		List<Opportunity> newDealsList = new ArrayList<Opportunity>();
+		try {
+			if(json!=null && json.get("duration")!=null){
+				if(json.getString("startDate")!=null)
+					minTime = Long.valueOf(json.getString("startDate"));
+				if(json.getString("endDate")!=null)
+					maxTime = Long.valueOf(json.getString("endDate"))-1;
+				
+				newContactsCount = ContactUtil.getContactsCount(minTime, maxTime);
+				
+				wonDealsList = OpportunityUtil.getWonDealsList(minTime, maxTime);
+				for(Opportunity opportunity : wonDealsList){
+					if(opportunity!=null && opportunity.expected_value!=null)
+						wonDealValue += opportunity.expected_value;
+					wonDealsCount++;
+				}
+				
+				newDealsList = OpportunityUtil.getNewDealsList(minTime, maxTime);
+				for(Opportunity opportunity : newDealsList){
+					if(opportunity!=null && opportunity.expected_value!=null)
+						newDealValue += opportunity.expected_value;
+					newDealsCount++;
+				}
+				
+				if(json.getString("duration")!=null && json.getString("duration").equalsIgnoreCase("24-hours")){
+					minTime = (new Date().getTime()/1000)-(24*60*60);
+					maxTime = new Date().getTime()/1000;
+				}
+				
+				// start date in mysql date format.
+				String startDate = CampaignReportsUtil.getStartDate(String.valueOf(minTime*1000), String.valueOf(maxTime*1000), null, json.getString("timeZone"));
+				
+				// end date in mysql date format.
+				String endDate = CampaignReportsUtil.getEndDateForReports(String.valueOf(maxTime*1000), json.getString("timeZone"));
+				
+				String [] array = {"EMAIL_SENT"};
+				JSONArray campaignEmailsJSONArray = CampaignReportsSQLUtil.getCountByLogTypes(startDate,endDate,json.getString("timeZone"),array);
+				
+				if(campaignEmailsJSONArray!=null && campaignEmailsJSONArray.length()>0 && campaignEmailsJSONArray.getJSONObject(0)!=null && campaignEmailsJSONArray.getJSONObject(0).getString("count")!=null)
+					emailsSentCount = campaignEmailsJSONArray.getJSONObject(0).getString("count");
+				/*JSONArray webVisitsJSONArray = AnalyticsSQLUtil.getPageSessionsCountForDomain(String.valueOf(minTime*1000),String.valueOf(maxTime*1000),json.getString("timeZone"));
+				if(webVisitsJSONArray!=null && webVisitsJSONArray.length()>0 && webVisitsJSONArray.get(0)!=null)
+					emailsSentCount = (int)webVisitsJSONArray.get(0);*/
+				
+				dataJson.put("newContactsCount", newContactsCount);
+				dataJson.put("wonDealsCount", wonDealsCount);
+				dataJson.put("wonDealValue", wonDealValue);
+				dataJson.put("emailsSentCount", emailsSentCount);
+				dataJson.put("webVisitsCount", webVisitsCount);
+				dataJson.put("newDealsCount", newDealsCount);
+				dataJson.put("newDealValue", newDealValue);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dataJson;
 	}
 
 }

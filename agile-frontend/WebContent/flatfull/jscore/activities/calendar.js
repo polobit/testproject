@@ -141,7 +141,7 @@ function showCalendar()
 												data.className = 'b-l b-2x b-danger fc-z-index';
 											else if(data.color=='green' || data.color=='#bbb')
 												data.className = 'b-l b-2x b-light fc-z-index';
-											else if(data.color=='#36C' || data.color=='#23b7e5')
+											else if(data.color=='#36C' || data.color=='#23b7e5' || data.color=='blue')
 												data.className = 'b-l b-2x b-warning fc-z-index';
 											data.color='';
 											data.backgroundColor = '#fff';
@@ -189,23 +189,34 @@ function showCalendar()
 						    next: 'fc-icon-right-single-arrow'
 						},
 						eventMouseover: function(event, jsEvent, view){
+							calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 							var reletedContacts = '';
 							if(event.contacts.length>0)
 								reletedContacts += '<i class="icon-user text-muted m-r-xs"></i>'
 							for(var i=0;i<event.contacts.length;i++){
-								if(event.contacts[i].entity_type=="contact_entity")
-									reletedContacts += '<a class="text-info" href="#contact/'+event.contacts[i].id+'">'+getPropertyValue(event.contacts[i].properties, "first_name")+' '+getPropertyValue(event.contacts[i].properties, "last_name")+'</a>';
-								else
+								if(event.contacts[i].entity_type=="contact_entity"){
+									var last_name = getPropertyValue(event.contacts[i].properties, "last_name");
+									if (last_name == undefined)
+										last_name = "";
+									reletedContacts += '<a class="text-info" href="#contact/'+event.contacts[i].id+'">'+getPropertyValue(event.contacts[i].properties, "first_name")+' '+last_name+'</a>';
+								}
+									else
 									reletedContacts += '<a class="text-info" href="#contact/'+event.contacts[i].id+'">'+getPropertyValue(event.contacts[i].properties, "name")+'</a>';
 								if(i!=event.contacts.length-1)
 									reletedContacts += ', ';
 							}
 							var leftorright = 'left';
-							if(event.start.getDay()==5 || event.start.getDay()==6)
-								leftorright = 'right';
+							var pullupornot = '';
+							if(calendarView=="agendaDay")
+								leftorright = 'top';
+							else{
+								if(event.start.getDay()==5 || event.start.getDay()==6)
+									leftorright = 'right';
+								pullupornot = 'pull-up';
+							}
 							var popoverElement	=	'<div class="fc-overlay '+leftorright+'">'+
 													'<div class="panel bg-white b-a pos-rlt p-sm">'+
-													'<span class="arrow '+leftorright+' pull-up"></span>'+
+													'<span class="arrow '+leftorright+' '+pullupornot+'"></span>'+
 													'<div class="h4 font-thin m-b-sm"><div class="pull-left">'+event.title+'</div><div class="pull-right"><img class="r-2x" src="'+event.ownerPic+'" height="20px" width="20px" title="'+event.owner.name+'"/></div></div>'+
 													'<div class="line b-b b-light"></div>'+
 													'<div><i class="icon-clock text-muted m-r-xs"></i>'+event.start.format('dd-mmm-yyyy HH:MM')+'</div>'+

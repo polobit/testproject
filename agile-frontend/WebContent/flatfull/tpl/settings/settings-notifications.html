@@ -1,4 +1,3 @@
-
 <script id="settings-notification-prefs-template" type="text/html">
     <div class="col">
 	<div class="hbox h-auto m-b-lg">
@@ -7,24 +6,22 @@
             <form id="notificationsForm" name="notificationsForm" class="form-horizontal">
                 <fieldset>
                 <div class="panel-heading">
-<div class="pull-left m-t-xs">
-                    <div class="pull-left m-r-sm"><h4 class="h4">Notifications</h4></div>
-                    <div class="pull-left m-t-n-xs">                       
+					<span class="pull-left m-r-sm m-t-xs text-head-black">Notifications</span>
+					<div class="pull-left">                                          
                         <div id="notification-switch">
-						<label class="i-switch m-t-xs m-r">
-                          {{#if control_notifications}}
-                          <input type="checkbox" id="control_notifications" class="left"  name="control_notifications" checked="checked">
-                          {{else}}
-                          <input type="checkbox" id="control_notifications" class="left"  name="control_notifications">
-                          {{/if}}
-						  <i></i>
-						</label>
-                        </div>                       
-                    </div>
+							<label class="i-switch m-t-xs m-r">
+                          		{{#if control_notifications}}
+                          			<input type="checkbox" id="control_notifications" class="left"  name="control_notifications" checked="checked">
+                         	 	{{else}}
+                          				<input type="checkbox" id="control_notifications" class="left"  name="control_notifications">
+                         		 {{/if}}
+						  		 <i></i>
+							</label>
+                        </div>                                           
                     {{#if control_notifications}}
                     </div>
                     <div class="pull-right">
-                    <span id="desktop-notification-content" class="right"></span>
+                    <span id="desktop-notification-content" class="right text-base"></span>
                     <a href="#notification-prefs" class="btn pull-right btn-sm btn-default btn-addon" id="set-desktop-notification"><i class="icon-bullhorn"></i> Set Desktop Notifications</a>
                     {{/if}}
                     <input name="id" type="hidden" value="{{id}}" /> 

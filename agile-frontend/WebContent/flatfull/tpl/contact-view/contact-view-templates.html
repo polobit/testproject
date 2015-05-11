@@ -1,10 +1,10 @@
 <script id = "contacts-custom-view-image-template" type="text/html">
 	<td class="data" data="{{id}}">
-    	<div class="overflow-hidden">
+    	<div class="overflow-hidden thumb-sm" style="width:15em;">
 			{{#if_equals type "COMPANY"}}
-					<img class="thumbnail pull-left" {{getCompanyImage "40"}}/></img>
+					<img class="img-inital r r-2x pull-left" {{getCompanyImage "40"}}/></img>
 				{{else}}
-					<img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="width:40px; height:40px; "/>	
+					<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties 40}}" src="{{gravatarurl properties }}" />	
 			{{/if_equals}}
     	</div>
 	</td>
@@ -12,26 +12,26 @@
 
 <script id = "contacts-custom-view-basic_info-template" type="text/html">
 	<td class="data" data="{{id}}">
-    	<div class="table-resp" style="width:15em">
-    	<div class="thumb agile-img m-r-sm" style="margin-right:10px">
+    	<div class="table-resp" style="width:15em;">
+    	<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px">
         	{{#if_contact_type "PERSON"}}
-        		<img class="img-inital r r-2x"  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  style="width:50px;height:50px"/>
+        		<img class="img-inital r r-2x"  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
-        		<img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} style="width:50px;height:50px"/>
+        		<img class="r r-2x" {{getCompanyImage "40" "display:inline;"}}/>
         	{{/if_contact_type}}
     	</div>
     	<div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
         	{{#if_contact_type "PERSON"}}
-        		<a class="text-md custom-link">{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}} </a>
-        		<div class="m-t-xs">{{getPropertyValue properties "email"}}</div>
+        		<a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </a></br>
+        		<div><small class="text-muted m-t-xs">{{getPropertyValue properties "email"}}</small></div>
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
-        		<a class="text-md">{{getPropertyValue properties "name"}}</a>
-        		<div class="m-t-xs">{{getPropertyValue properties "url"}}</div>
+        		<a class="text-cap">{{getPropertyValue properties "name"}}</a>
+        		<small class="text-muted m-t-xs">{{getPropertyValue properties "url"}}</small>
         	{{/if_contact_type}}
 	</div>
 	</div>
@@ -41,7 +41,7 @@
 <script id = "contacts-custom-view-first_name-template" type="text/html">
 	<td class="data" data="{{id}}">
     	<div class="text-ellipsis" style="width:15em;">
-    	<b>{{getPropertyValue properties "first_name"}}</b>
+    		<a class="text-cap">{{getPropertyValue properties "first_name"}}</>
     	</div>
 	</td>
 </script>
@@ -49,7 +49,7 @@
 <script id = "contacts-custom-view-last_name-template" type="text/html">
 	<td class="data" data="{{id}}">
     	<div class="text-ellipsis" style="width:15em;">
-        <b>{{getPropertyValue properties "last_name"}}</b>
+        	<a class="text-cap">{{getPropertyValue properties "last_name"}}</a>
         </div>
 	</td>
 </script>
@@ -57,7 +57,7 @@
 <script id = "contacts-custom-view-phone-template" type="text/html">
 	<td class="data" data="{{id}}">
         <div class="text-ellipsis" style="width:15em;">
-    	{{getPropertyValue properties "phone"}}
+    		<a class="text-cap">{{getPropertyValue properties "phone"}}</a>
         </div>
 	</td>
 </script>
@@ -65,7 +65,7 @@
 <script id = "contacts-custom-view-address-template" type="text/html">
 	<td class="data" data="{{id}}">
         <div class="text-ellipsis" style="width:15em;">
-    	{{#address_Template properties}}{{/address_Template}}
+    		<a class="text-cap">{{#address_Template properties}}{{/address_Template}}</a>
         </div>
 	</td>
 </script>
@@ -73,7 +73,7 @@
 <script id = "contacts-custom-view-website-template" type="text/html">
 	<td class="data" data="{{id}}">
         <div class="text-ellipsis" style="width:15em;">
-    	{{getPropertyValue properties "website"}}
+    		<a class="text-cap">{{getPropertyValue properties "website"}}</a>
         </div>
 	</td>
 </script>
@@ -81,7 +81,7 @@
 <script id = "contacts-custom-view-email-template" type="text/html">
 	<td class="data" data="{{id}}">
         <div class="text-ellipsis" style="width:15em;">
-    	{{getPropertyValue properties "email"}}
+    		<a class="text-cap">{{getPropertyValue properties "email"}}</a>
         </div>
 	</td>
 </script>
@@ -89,14 +89,14 @@
 <script id = "contacts-custom-view-company-template" type="text/html">
 	<td class="data" data="{{id}}">
       <div class="text-ellipsis" style="width:15em;">
-    	{{getPropertyValue properties "company"}}
+      	<a class="text-cap">{{getPropertyValue properties "company"}}</a>
       </div>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-tags-template" type="text/html">
 	<td class="data" data="{{id}}">
-	 <div class="text-ellipsis" style="width:15em;"> 	
+	 <div class="overflow-hidden line-clamp line-clamp-2" style="width:15em;"> 	
 		{{#each tags}}
 	    	<span class="label bg-light dk text-tiny">{{this}}</span>	
 		{{/each}}
@@ -107,7 +107,7 @@
 <script id = "contacts-custom-view-created_time-template" type="text/html">
 	<td class='data' data='{{id}}'>
     <div class="text-ellipsis" style="width:15em;">
-		{{epochToHumanDate "dd mmm yyyy" created_time}}
+		<a class="text-cap">{{epochToHumanDate "dd mmm yyyy" created_time}}</a>
     </div>
 	</td>
 </script>
@@ -125,7 +125,7 @@
 <script id = "contacts-custom-view-title-template" type="text/html">
 	<td class='data' data='{{id}}'>
     <div class="text-ellipsis" style="width:15em;">
-		{{getPropertyValue properties "title"}}
+		<a class="text-cap">{{getPropertyValue properties "title"}}</a>
     </div>
 	</td>
 </script>
@@ -133,7 +133,7 @@
 <script id = "contacts-custom-view-lead_owner-template" type="text/html">
 	<td class='data' data='{{id}}'>
        <div class="text-ellipsis" style="width:15em;">
-		  <b>{{owner.name}}</b>
+	   	<a class="text-cap">{{owner.name}}</a>
        </div>
 	</td>
 </script>
@@ -148,7 +148,7 @@
 
 <script id = "contacts-custom-view-lead_score-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div>
+       <div style="width:15em;">
 		  {{lead_score}}
        </div>
 	</td>
@@ -158,7 +158,7 @@
 <script id ="contacts-custom-view-custom-template" type="text/html">
 	<td class='data' data=''>
        <div class="text-ellipsis" style="width:15em;">
-		  <b>{{value}}</b>
+		  <span>{{value}}</span>
        </div>
 	</td>
 </script>
@@ -166,7 +166,7 @@
 <script id = "contacts-custom-view-custom-date-template" type="text/html">
 	<td class='data' data=''>
        <div class="text-ellipsis" style="width:15em;">
-		{{epochToHumanDate "dd mmm yyyy" value}}
-    	</div>
+	   	  <span>{{epochToHumanDate "dd mmm yyyy" value}}</span>
+       </div>
 	</td>
 </script>

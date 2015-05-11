@@ -45,9 +45,10 @@ $(function(){
 		var id = $(this).attr('data');
 		var that = this;
 			complete_task(id, tasksView.collection, undefined, function(data) {
-				$(that).fadeOut();
-				$(that).siblings(".task-subject").css("text-decoration", "line-through");
+				$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
 				console.log($(that).parents('.activity-text-block').css("background-color", "#FFFAFA"));
+				$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
+				tasksView.collection.add(data, { silent : true });
 			});
 		}
 	});
@@ -59,7 +60,7 @@ $(function(){
 		$("#opportunityModal").modal('show');
 		
 		add_custom_fields_to_form({}, function(data){
-			var el_custom_fields = show_custom_fields_helper(data["custom_fields"], []);
+			var el_custom_fields = show_custom_fields_helper(data["custom_fields"], ["modal"]);
 			$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
 			
 		}, "DEAL");
@@ -231,9 +232,9 @@ $(function(){
 	 */
 	$(".add-document-cancel").die().live('click', function(e){
 		e.preventDefault();
-		var el = $(this).closest("div");
+		var el = $("#documents");
 		el.find(".contact-document-select").css("display", "none");
-		el.find(".add-document-select").css("display", "inline");
+		el.find(".add-document-select").css("display", "inline-block");
 	});
 	
 	/**

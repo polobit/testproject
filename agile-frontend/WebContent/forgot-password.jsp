@@ -9,6 +9,9 @@
 It checks first if user exists then a mail is sent to that id along with newly generated password 
 and success message is shown. Else error is shown in the same page.
 */
+//flatfull path
+String flatfull_path="/flatfull";
+
 String error = "", success = "";
 System.out.println(success);
 //If Email is present
@@ -65,12 +68,54 @@ else if(!StringUtils.isEmpty(email) && StringUtils.isEmpty(password))
 
 <!-- Le styles -->
 
-<link href="/css/bootstrap-pink.min.css" rel="stylesheet">
+<!-- <link href="/css/bootstrap-pink.min.css" rel="stylesheet">
 <link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="/css/openid-min.css">
-<link type="text/css" rel="stylesheet" href="/css/signin.css">
+<link type="text/css" rel="stylesheet" href="/css/signin.css"> -->
+
+<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/bootstrap.v3.min.css" />
+<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/font.css" />
+<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/app.css" />
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
 <style>
+
+body {
+background-image:url('..<%=flatfull_path%>/images/flatfull/buildings.jpg');
+background-repeat:no-repeat;
+background-position:center center;
+background-size:100% 100%;
+background-attachment:fixed;
+}
+
+.text-white
+{
+color:#fff!important;
+}
+
+input
+{
+color:#000!Important;
+}
+
+a:hover
+{
+text-decoration:underline;
+}
+
+.error {
+	color: red !important;
+}
+
+.close {
+	  color: #000 !important;
+}
+
+.alert-success {
+	  color: #3c763d !important;
+}
+
+<!-- 
 @media (min-width: 900px) {
 body {
 	padding-top: 30px;
@@ -86,25 +131,25 @@ body {
 	margin: 8px 0px !important;
 	padding-left: 10px !important;
 }
+	-->
 
-.error {
-	color: red;
-}
 
-</style>
+</style> 
 
 
  <!-- JQUery Core and UI CDN -->
-<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+<!-- <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
 <script type="text/javascript" src="/lib/bootstrap.min.js"></script>
 
-<script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
-<script type="text/javascript">
+<script type="text/javascript" src="/lib/jquery.validate.min.js"></script> -->
+<script type='text/javascript' src='<%=flatfull_path%>/lib/jquery-new/jquery-2.1.1.min.js'></script>
+<script type="text/javascript" src="<%=flatfull_path%>/lib/bootstrap.v3.min.js"></script>
+<!-- <script type="text/javascript">
 jQuery.validator.setDefaults({
 	debug: true,
 	success: "valid"
 });;
-</script>
+</script> -->
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -115,7 +160,7 @@ jQuery.validator.setDefaults({
 
 <body>
 
-	<div class='navbar navbar-fixed-top'> 
+	<!-- <div class='navbar navbar-fixed-top'> 
     	<div class='navbar-inner'> 
     		<div class='container'> 
     			<a class='brand' href='#dashboard'>Agile CRM</a>
@@ -131,50 +176,60 @@ jQuery.validator.setDefaults({
   	    		</div>
 			</div>
 		</div>
-	</div>
-	<div class="row login-page">
-
-		<div class='account-container'>
-			<div class="content clearfix">
-								
-				<div class="clearfix"></div>
-				<h1>Forgot Password</h1>
+	</div> -->
+	<div class="app app-header-fixed app-aside-fixed" id="app">
+		<div ui-view="" class="fade-in-right-big smooth">
+  			<div class="container w-xxl w-auto-xs">
+		
+			
+				<a href="https://www.agilecrm.com/" class="navbar-brand block text-white m-t" style="color: #363f44;">
+						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
+					</a>
 				
-				<form name='forgot_password' id="forgot_password" method='post' onsubmit="return isValid();" style="padding:10px 0 15px;border-top: 1px dotted #CCC;"> 
+							
+				
+				<!-- <h1>Forgot Password</h1> -->
+				
+				<form name='forgot_password' id="forgot_password" method='post' onsubmit="return isValid();"> 
 				
 				 <% if(!StringUtils.isEmpty(error)){%>
-				 <div class="alert alert-error login-error">
-					<a class="close" data-dismiss="alert" href="#">&times</a><%=error%> 
+				 <div class="alert alert-danger error login-error m-b-none">
+					<a class="close m-t-n-sm" data-dismiss="alert" href="#">&times</a><%=error%> 
 				</div>
 				<%}%>
 				
 				 <% if(!StringUtils.isEmpty(success)){%>
-				<div class="alert alert-success login-success">
-					<a class="close" data-dismiss="alert" href="#">&times</a><%=success%> 
+				<div class="alert alert-success login-success m-b-none">
+					<a class="close m-t-n-sm" data-dismiss="alert" href="#">&times</a><%=success%> 
 				</div>
 				 <%}%>
 				
-				
-				 <h3><small>Enter Your Email </small></h3>	
-				<div id="openid_btns" style="float: left;padding:5px 0 15px;">
-					
-                    <input class="input-xlarge field required email" name='email' maxlength="50" minlength="6" type="text" placeholder="Email" autocapitalize="off">
-					<div style="margin-top:15px;">
-					  <input type='submit' style="float:right;height:39px;" value="Submit" class='btn btn-large btn-primary forgot_password_btn'>
+				<div class="wrapper text-center text-white">
+      				<strong>Enter Your Email</strong>
+   				</div>
+				<!--  <h3><small>Enter Your Email </small></h3>	 -->
+				<div class="list-group list-group-sm">
+					<div class="list-group-item">
+                   	 <input class="input-xlarge field required email form-control no-border" name='email' maxlength="50" minlength="6" type="email" required placeholder="Email" autocapitalize="off">
+					</div>
+				</div>	
+					  <input type='submit' value="Submit" class='btn btn-lg btn-primary btn-block forgot_password_btn'>
+					  <div class="text-center m-t">
 					  	<%
 				    if (domainUser != null) {
 				%>
-				<a href="#" id="resend-password">Resend password</a>
+				<a href="#" id="resend-password" class="text-white">Resend password</a><br>
 				<%
 				    }
 				%>
-				  </div>
 				</div>
+				  
+				
 				</form>
 				
-				<div class="clearfix"></div>
 				
-				</div>
+				
+				
 								<form name='resend_password_form' id="resend_password_form"
 				class="hide" method='post'">
 
@@ -188,11 +243,13 @@ jQuery.validator.setDefaults({
 				%>
 
 			</form>
-			</div>
-			<div style="text-align: center;line-height: 19px;">
-	                 Already have an account? <a href="/login">Login</a><br/>
-	                 Forgot <a href="/forgot-domain">Domain?</a>
+			
+			<div class="text-center text-white m-t m-b">
+	                 <small>Already have an account?</small> <a href="/login" class="text-white">Login</a><br/>
+	                 <small>Forgot</small> <a href="/forgot-domain" class="text-white">Domain?</a>
                </div>
+             </div>
+             </div>  
 		</div>
 		
 		<script type="text/javascript">

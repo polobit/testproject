@@ -4,7 +4,6 @@
 <script id="settings-business-prefs-template" type="text/html">
 <div class="row">
 <div class="span9" id="schedule-preferences">
-{{#isAllowedInCurrentPlan "online_appointment"}} 
 	
 		<div class="well">
 
@@ -122,111 +121,7 @@
 
 
 		</div>
-{{else}}
-	
-<div class="well" style="pointer-events: none;">
 
-			<form id="scheduleid" name="scheduleid" method="post" action=""
-				class="form-horizontal">
-				<fieldset>
-					<div class="control-group" style="margin-bottom: 0px;">
-						<label class="control-label"><b>Scheduling URL </b></label>
-						<div class="controls schedule_url_online1" id="schedule-url-id1"
-							style="width: 540px; word-wrap: break-word; display: inline-block; position: relative; margin-left: 23px; padding-top: 5px">
-							<span href="" target="_blank" name="scheduleurl" id="scheduleurl1" style="font-style: normal; color: #999999;">Disabled<span
-								id="hrefvalue1"></span><span id="schedule_id1"></span></span>
-							<div class="" id="edit" style="display: inline;">
-								
-							</div>
-						</div>
-						
-						<div class="clearfix"></div>
-						<div class="tip">
-							
-						</div>
-				</fieldset>
-			</form>
-
-
-
-			<form id="scheduleform" name="scheduleform" method="post" action=""
-				class="form-horizontal">
-				<fieldset>
-					<input type="text" name="id" class="hide" value="{{id}}">
-
-
-					<div class="control-group">
-						<label class="control-label" for="cname">Meeting Type </label>
-						<div class="controls">
-							<input class="input-xlarge" disabled="true" type="text" style="font-style: normal; color: #999999;" id="meeting_types"
-								name="meeting_types" value="{{meeting_types}}"
-								placeholder="Enter comma separated meeting types"
-								autocapitalize="off" />
-						</div>
-					</div>
-
-
-
-				</fieldset>
-			</form>
-
-
-			<form id="meeting_durations" name="meeting_durations"
-				class="form-horizontal">
-				<fieldset>
-
-					{{#stringToJSON ../this "meeting_durations"}}
-					<div class="control-group">
-						<label class="control-label" for="cname">Meeting Duration</label>
-
-						<div class="controls" style="font-style: normal; color: #999999;">
-							<label class=""> 15 Mins &nbsp;<input type="text" disabled="true"
-								style="width: 220px;font-style: normal; color: #999999;" id="15mins" name="15mins"
-								value="{{15mins}}" />
-							</label> <label class=""> 30 Mins &nbsp;<input type="text" disabled="true"
-								style="width: 220px;font-style: normal; color: #999999;" id="30mins" name="30mins"
-								value="{{30mins}}" />
-							</label> <label class=""> 60 Mins &nbsp;<input type="text" disabled="true"
-								style="width: 220px;font-style: normal; color: #999999;" id="60mins" name="60mins"
-								value="{{60mins}}" />
-							</label>
-						</div>
-					</div>
-					{{/stringToJSON}}
-					
-				</fieldset>
-			</form>
-
-
-		
-
-			<form class="form-horizontal">
-				<fieldset>
-					<div class="control-group">
-						<label class="control-label" for="cname"
-							style="margin-bottom: -20px;">Business Hours</label>
-						<div class="controls">
-							<div id="define-business-hours"></div>
-						</div>
-					</div>
-					<div class="control-group">
-						<div class="form-actions">
-							<button type="submit" class="btnSerialize btn btn-primary disabled"
-								style="outline: none;" id="btnSerialize">Save</button>
-							<span style="margin-left: 23px;font-style: italic;"
-								id="error_message">Please <a style="pointer-events: auto;" href="#subscribe-plan">upgrade</a> to Regular or Pro plan to use this feature.</span>
-						</div>
-
-					</div>
-
-				</fieldset>
-			</form>
-
-
-		</div>	
-
-
-{{/isAllowedInCurrentPlan}}
 	</div>
 	<div class="span3">
 		<div class="well">

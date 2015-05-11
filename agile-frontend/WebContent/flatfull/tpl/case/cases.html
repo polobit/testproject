@@ -16,7 +16,7 @@
 		{{#unless this.length}}
 		<div class="alert-info alert">
             <div class="slate-content">
-                <div class="box-left pull-left">
+                <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="/img/clipboard.png">
                 </div>
                 <div class="box-right pull-left">
@@ -52,16 +52,16 @@
         </div>
         {{/if}}
 	</div>
-    <div class="col-md-3 p-none">
+    <div class="col-md-3">
         <div class="data-block">
-            <div class="wrapper-xs">
+            
                 <h4 class="m-t-none m-b-sm h4">
                     What are Cases?
                 </h4>
      
                 <p>
                     Track and resolve customer issues effectively with cases. Log a case when customers ask questions, report bugs, or have complaints. Keep track of the progress till resolution.</p>
-            </div>
+            
         </div>
     </div>
 </div>
@@ -72,7 +72,7 @@
 <script id="cases-model-template" type="text/html">
 <td>
 
-    <div class="thumb-xs avatar">
+    <div class="thumb-sm avatar">
 	   {{#if ownerPic}}
         <img class="r r-2x" src="{{ownerPic}}" title="{{owner.name}}" />
 	   {{else}}
@@ -82,10 +82,14 @@
 
 </td>
 <td data="{{id}}" class="data">
-<div class="table-resp"><a class="text-md">{{title}}</a></div>
-	<div class="table-resp">
+<div class="table-resp">
+	<a class="text-cap">{{title}}</a>
+</div>
+<div class="table-resp">
+	<small class="text-muted">
 		{{description}}
-	</div>
+	</small>
+</div>
 </td>
 <td class="text-muted">
 <div class="table-resp">
@@ -96,9 +100,10 @@
 </td>
 
 <td class="overflow-hidden no-wrap">
-	
+	<div class="text-ellipsis inline-block" style="width:128px">
+<div  style="width:128px">
         	{{#each contacts}}
-			<div class="inline-block thumb">
+			<div class="inline-block thumb-sm">
 				{{#if_equals type "PERSON"}}
           	 	<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}"  title="{{contact_name_necessary this}}" />
 				{{/if_equals}}
@@ -110,7 +115,8 @@
 				{{/if_equals}}
 			</div>
 			{{/each}}
-
+</div>
+</div>
        {{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
 </td>
 <td class="v-middle">
@@ -120,7 +126,7 @@
 		Open
 	</div>
 	{{else}}
-	<div class="text-center  label label-danger text-xs">
+	<div class="text-center  label label-default text-xs">
 		Close
 	</div>
 	{{/if_equals}}

@@ -18,6 +18,7 @@ import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -522,9 +523,14 @@ public class SendEmail extends TaskletAdapter
 	    }
 	}
 
+	// Appends name in format e.g., Naresh <naresh@agilecrm.com>
+	to = EmailUtil.appendNameToEmail(to, subscriberJSON);
+	
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
+		// html = appendUnsubscribeLink(html, subscriberId, campaignId, subscriberJSON.getJSONObject("data").getString("email"));
+		
 	    html = EmailUtil.appendTrackingImage(html, campaignId, subscriberId);
 
 	    // Send HTML Email
@@ -565,11 +571,8 @@ public class SendEmail extends TaskletAdapter
 	    // Get Data
 	    if (subscriberJSON.has("data"))
 		subscriberJSON.getJSONObject("data").put(
-		        "unsubscribe_link",
-		        "https://" + NamespaceManager.get() + ".agilecrm.com/unsubscribe?sid="
-		                + URLEncoder.encode(AgileTaskletUtil.getId(subscriberJSON), "UTF-8") + "&cid="
-		                + URLEncoder.encode(AgileTaskletUtil.getId(campaignJSON), "UTF-8") + "&e="
-		                + URLEncoder.encode(subscriberJSON.getJSONObject("data").getString("email"), "UTF-8"));
+		        "unsubscribe_link", getUnsubscribeLink(AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON), 
+		        			        	subscriberJSON.getJSONObject("data").getString("email")));
 	}
 	catch (Exception e)
 	{
@@ -648,5 +651,33 @@ public class SendEmail extends TaskletAdapter
 	    System.out.println("Error occured while constructing online link for email");
 	}
 	return url;
+    }
+    
+    
+    private String getUnsubscribeLink(String subscriberId, String campaignId, String email)
+    {
+    	try
+    	{
+    	    return VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "unsubscribe?sid="
+                    + URLEncoder.encode(subscriberId, "UTF-8") + "&cid="
+                    + URLEncoder.encode(campaignId, "UTF-8") + "&e="
+                    + URLEncoder.encode(email, "UTF-8");
+    	}
+    	catch(Exception e)
+    	{
+    	   System.err.println("Exception occured while returning unsubscribe link..." + e.getMessage());
+    	   e.printStackTrace();
+    	   return null;
+    	}
+    }
+        
+        
+    private String appendUnsubscribeLink(String html, String subscriberId, String campaignId, String email)
+    {
+    	if(StringUtils.isBlank(html) || StringUtils.contains(html, VersioningUtil.getHostURLByApp(NamespaceManager.get())+"unsubscribe"))
+    	    return html;
+    	
+    	return html + "<br><br><div style=\"float:right;\"><a href=\"" + getUnsubscribeLink(subscriberId, campaignId, email) + "\" target=\"_blank\" style=\"text-decoration:none;\" rel=\"nofollow\"> Unsubscribe</a></div>";
+    	
     }
 }

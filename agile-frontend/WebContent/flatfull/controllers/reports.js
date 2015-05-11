@@ -24,8 +24,10 @@ var ReportsRouter = Backbone.Router.extend({
 		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
 				{
 					$("#content").html(getTemplate('report-categories', {}));
+					hideTransitionBar();
 					$(".active").removeClass("active");
 					$("#reportsmenu").addClass("active");
+
 				});
 	},
 
@@ -528,7 +530,7 @@ var ReportsRouter = Backbone.Router.extend({
 			setup_tags_typeahead();
 			return;
 		}
-		$.each($("#tags-reports", el), function(i, element)
+		$.each($("[id=tags-reports]", el), function(i, element)
 		{
 			console.log(element);
 			addTagsDefaultTypeahead(element);

@@ -25,8 +25,6 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
-import com.agilecrm.subscription.SubscriptionUtil;
-import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.ReferenceUtil;
@@ -135,7 +133,7 @@ public class RegisterServlet extends HttpServlet
 	    {
 		DomainUser domainUser = createUser(request, response, userInfo, "");
 
-		response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com/");
+		response.sendRedirect(VersioningUtil.getLoginUrl(domainUser.domain, request));
 		return;
 	    }
 
@@ -227,7 +225,7 @@ public class RegisterServlet extends HttpServlet
 	String redirectionURL = VersioningUtil.getURL(domainUser.domain, request);
 
 	// Redirect to home page
-	response.sendRedirect(redirectionURL + "#subscribe-plan");
+	response.sendRedirect(redirectionURL);
     }
 
     private void createUserInOurDomain(HttpServletRequest request, DomainUser user)
@@ -469,17 +467,13 @@ public class RegisterServlet extends HttpServlet
 	HttpSession session = request.getSession();
 	session.setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
 
-	try
-	{
-	    // Sets session
-	    Plan plan = SubscriptionUtil.signUpPlanFromRequest(request);
-	    if (plan != null)
-		session.setAttribute(RegistrationGlobals.REGISTRATION_PLAN_IN_SESSION, plan);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
+	/*
+	 * try { // Sets session Plan plan =
+	 * SubscriptionUtil.signUpPlanFromRequest(request); if (plan != null)
+	 * session
+	 * .setAttribute(RegistrationGlobals.REGISTRATION_PLAN_IN_SESSION,
+	 * plan); } catch (Exception e) { e.printStackTrace(); }
+	 */
 
 	String reference_domain = getReferenceDomainFromCookie(request);
 

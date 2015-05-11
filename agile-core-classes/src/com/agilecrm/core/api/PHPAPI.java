@@ -15,6 +15,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -103,8 +104,17 @@ public class PHPAPI
 
 	    // Add properties list to contact properties
 	    contact.properties = properties;
-	    if (tags.length > 0)
-		contact.addTags(PHPAPIUtil.getValidTags(tags));
+	    if(tags.length > 0)
+	    {
+		try
+		{
+		    contact.addTags(tags);
+		}
+		catch(WebApplicationException e)
+		{
+		    return null;
+		}
+	    }
 	    else
 		contact.save();
 
@@ -358,7 +368,14 @@ public class PHPAPI
 		}
 	    }
 	    // Add tags to contact, return contact as String
-	    contact.addTags(PHPAPIUtil.getValidTags(tagsArray));
+	    try
+	    {
+		contact.addTags(tagsArray);
+	    }
+	    catch(WebApplicationException e)
+	    {
+		return null;
+	    }
 	    ObjectMapper mapper = new ObjectMapper();
 	    return mapper.writeValueAsString(contact);
 	}
@@ -740,8 +757,17 @@ public class PHPAPI
 		    contact.addProperty(field);
 		}
 	    }
-	    if (tags.length > 0)
-		contact.addTags(PHPAPIUtil.getValidTags(tags));
+	    if(tags.length > 0)
+	    {
+		try
+	    	{
+		    contact.addTags(tags);
+		}
+	    	catch(WebApplicationException e)
+	    	{
+	    	    return null;
+	    	}
+	    }
 	    else
 		contact.save();
 

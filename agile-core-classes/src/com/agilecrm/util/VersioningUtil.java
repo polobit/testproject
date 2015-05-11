@@ -38,7 +38,9 @@ public class VersioningUtil
     public static String getLoginURL(String domain, String version)
     {
 	System.out.println("version : " + version);
-	return "https://" + domain + "-dot-" + version + "-dot-agile-crm-cloud.appspot.com";
+	String applicationId = SystemProperty.applicationId.get();
+
+	return "https://" + domain + "-dot-" + version + "-dot-" + applicationId + ".appspot.com/";
     }
 
     /**
@@ -77,8 +79,10 @@ public class VersioningUtil
 
 	if (StringUtils.isEmpty(version))
 	    return "https://" + domain + ".agilecrm.com/";
-	
-	return "https://" + domain + "-dot-" + version + "-dot-agile-crm-cloud.appspot.com/";
+
+	String applicationId = SystemProperty.applicationId.get();
+
+	return "https://" + domain + "-dot-" + version + "-dot-" + applicationId + ".appspot.com/";
     }
 
     /**

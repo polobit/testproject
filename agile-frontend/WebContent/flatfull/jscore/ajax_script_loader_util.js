@@ -25,6 +25,27 @@ function load_urls_on_ajax_stop(url, callback)
 
 }
 
+function loadMiscScriptsWithTimeOut()
+{
+	if(loadMiscScripts)
+	{
+		// Load User voice then
+		setTimeout(loadMiscScripts, 10000);
+		return;
+	}
+	
+	try
+	{
+		setTimeout(loadMiscScriptsWithTimeOut, 3000);
+	}
+	catch (err)
+	{
+		console.log(err);
+	}
+	
+		
+}
+
 function loadMiscScripts()
 {
 
@@ -75,7 +96,9 @@ function load_clickdesk_code()
 
 }*/
 
-
+$(function(){
+	loadMiscScriptsWithTimeOut();
+})
 
 /**
  * Checks if there are any active ajax requests

@@ -287,29 +287,29 @@ $(function()
 								item = item.toLowerCase().trim();
 								console.log(item);
 								if (item == "email")
-												return "icon-envelope-alt";
+												return "fa-envelope-o";
 								if (item == "phone")
-												return "icon-headphones";
+												return "fa-headphones";
 								if (item == "url")
-												return "icon-home";
+												return "fa-home";
 								if (item == "call")
-												return "icon-phone-sign";
+												return "fa-phone";
 								if (item == "follow_up")
-												return "icon-signout";
+												return "fa-sign-out";
 								if (item == "meeting")
-												return "icon-group";
+												return "fa-group";
 								if (item == "milestone")
-												return "icon-cog";
+												return "fa-cog";
 								if (item == "send")
-												return "icon-reply";
+												return "fa-reply";
 								if (item == "tweet")
-												return "icon-share-alt";
+												return "fa-share-square-o";
 								if (item == "other")
-												return "icon-tasks";
+												return "fa-tasks";
 								if (item == "twitter")
-												return "icon-twitter";
+												return "fa-twitter";
 								if (item == "facebook")
-												return "icon-facebook";
+												return "fa-facebook";
 
 				});
 
@@ -687,11 +687,11 @@ $(function()
 				Handlebars.registerHelper('task_label_color', function(priority)
 				{
 								if (priority == 'HIGH' || priority == 'red')
-												return 'important';
+												return 'danger';
 								if (priority == 'NORMAL' || priority == '#36C')
 												return 'info';
 								if (priority == 'LOW')
-												return '';
+												return 'label bg-light dk';
 								if (priority == 'green')
 												return 'success';
 				});
@@ -703,7 +703,7 @@ $(function()
 				{
 								if (priority == 'red' || priority == '#f05050')
 												return 'High';
-								if (priority == '#36C' || priority == '#23b7e5')
+								if (priority == '#36C' || priority == '#23b7e5' || priority == 'blue')
 												return 'Normal';
 								if (priority == 'green' || priority == '#bbb')
 												return 'Low';
@@ -716,7 +716,7 @@ $(function()
 				{
 								if (color == 'red' || color == '#f05050')
 												return 'danger';
-								if (color == '#36C' || color == '#23b7e5')
+								if (color == '#36C' || color == '#23b7e5' || color == 'blue')
 												return 'warning';
 								if (color == 'green' || color == '#bbb')
 												return 'light';
@@ -1467,6 +1467,11 @@ $(function()
 
 								return " ";
 				});
+				
+				Handlebars.registerHelper("getBase64Domain", function()
+				{
+								return window.btoa(window.location.host.split(".")[0]);
+				});
 
 				// Gets date in given range
 				Handlebars.registerHelper('date-range', function(from_date_string, no_of_days, options)
@@ -1708,7 +1713,7 @@ $(function()
 												// Avoid comma appending to last element
 												if (i < j - 1)
 												{
-																ret = ret + ", ";
+																ret = ret + ",- ";
 												}
 												;
 								}
@@ -3799,26 +3804,6 @@ $(function()
 								return charwithsinglequote;
 				});
 
-				/**
-				 * Shows list of triggers separated by comma
-				 */
-				Handlebars.registerHelper('toLinkTrigger', function(context, options)
-				{
-								var ret = "";
-								for (var i = 0, j = context.length; i < j; i++)
-								{
-												ret = ret + options.fn(context[i]);
-
-												// Avoid comma appending to last element
-												if (i < j - 1)
-												{
-																ret = ret + ",";
-												}
-												;
-								}
-								return ret;
-				});
-
 				// Gets minutes from milli seconds
 				Handlebars.registerHelper('millSecondsToMinutes', function(timeInMill)
 				{
@@ -4504,7 +4489,7 @@ $(function()
 
 																								if (value > 1 && value < 40)
 																								{
-																												type = "label-important";
+																												type = "label-danger text-tiny";
 																												reputation = "Poor";
 																								}
 																								else if (value >= 40 && value < 75)
@@ -5489,6 +5474,10 @@ $(function()
 			portlet_name = "Agile CRM Blog";
 		else if(p_name=='Task Report')
 			portlet_name = "Task Report";
+		else if(p_name=='Stats Report')
+			portlet_name = "Activity Overview";
+		else
+			portlet_name = p_name;
 		return portlet_name;
 	});
 	/**
@@ -5524,6 +5513,8 @@ $(function()
 			icon_name = "icon-tasks";
 		else if(p_name=='Agile CRM Blog')
 			icon_name = "icon-feed";
+		else if(p_name=='Stats Report')
+			icon_name = "icon-speedometer";
 		return icon_name;
 	});
 	/**
@@ -5873,27 +5864,27 @@ $(function()
 	Handlebars.registerHelper('get_url', function(url)
 			{
 		if(url)
-			{
-			if(url.indexOf("fwd=cd") == -1)
-				return url;
-			
-			var delimiter;
-			if(url.indexOf("?fwd=cd") != -1)
-				delimiter = "?fwd=cd";
-			else
-				delimiter = "&fwd=cd";
-			
-			try{
-				if(delimiter)
-					return url.split(delimiter)[0];
-			} catch(e){
-				console.log("Error in get_limiter:" +e);
-				return url;
-			}
-			}
-		return url;
-			
-	         });
+		{
+		if(url.indexOf("fwd=cd") == -1)
+			return new Handlebars.SafeString(url);
+		
+		var delimiter;
+		if(url.indexOf("?fwd=cd") != -1)
+			delimiter = "?fwd=cd";
+		else
+			delimiter = "&fwd=cd";
+		
+		try{
+			if(delimiter)
+				return new Handlebars.SafeString(url.split(delimiter)[0]);
+		} catch(e){
+			console.log("Error in get_limiter:" +e);
+			return new Handlebars.SafeString(url);
+		}
+		}
+	return new Handlebars.SafeString(url);
+		
+         });
 	
 	/*
 	 * Returns first occurance of text after the given delimiter in the given message

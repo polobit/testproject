@@ -58,7 +58,8 @@ template = "pink";
 String width = currentUserPrefs.width;
 boolean is_fluid = !width.isEmpty();
 
-BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(null, null);
+BillingRestriction restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
+
 boolean is_free_plan = false;
 
 if(restriction != null && restriction.planDetails != null)
@@ -69,13 +70,10 @@ if(!restriction.planDetails.getACL())
     domainUser.resetACLScopesAndSave();
 }
 
-Boolean is_first_time_user = HomeServlet.isFirstTimeUser(request);;
+Boolean is_first_time_user = HomeServlet.isFirstTimeUser(request);
 
-Plan plan = null;
-if(is_free_plan && is_first_time_user)
-{
-    plan = SubscriptionUtil.getSignupPlanFromSessionAndRemove(request);
-}
+String _AGILE_VERSION = SystemProperty.applicationVersion.get();
+
 %>
 
 
@@ -92,7 +90,7 @@ href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css"
 href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" type="text/css"
-href="/css/agilecrm.css" />
+href="/css/agilecrm.css?_=<%=_AGILE_VERSION%>" />
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 <style>
 .clickdesk_bubble {
@@ -185,6 +183,7 @@ var LIB_PATH = "/";
 
 var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
 
+var _AGILE_VERSION = <%="\"" + _AGILE_VERSION + "\""%>;
 
 var CSS_PATH = "/";
 //var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
@@ -199,7 +198,7 @@ var IS_FLUID = <%=is_fluid %>
 
 var CLICKDESK_CODE_LOADED = false;
 
-var _plan_on_signup = <%=mapper.writeValueAsString(plan)%>;
+var _plan_on_signup = "";
 
 // Get current user prefs json
 var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
@@ -256,16 +255,12 @@ head.ready(function() {
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "/img/ajax-loader-cursor.gif");
-head.js({"core" : 'jscore/min/js-all-min.js'});
-head.js({"stats" : 'stats/min/agile-min.js'});
+head.js({"core" : 'jscore/min/js-all-min.js' + "?_=" + _AGILE_VERSION});
+head.js({"stats" : 'stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core", "stats"], function(){
 	
 	if(!HANDLEBARS_PRECOMPILATION)
 		downloadTemplate("tpl.js");
-
-		// Load User voice then
-		setTimeout(loadMiscScripts, 10000);
-	
 });
 });
 

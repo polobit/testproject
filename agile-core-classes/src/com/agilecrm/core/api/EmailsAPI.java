@@ -249,14 +249,45 @@ public class EmailsAPI
 	if (emailGateway != null)
 	    apiKey = emailGateway.api_key;
 
+	String domain = NamespaceManager.get();
+	
 	// Returns mandrill subaccount info if created, otherwise error json.
-	String info = MandrillSubAccounts.getSubAccountInfo(NamespaceManager.get(), apiKey);
+	String info = MandrillSubAccounts.getSubAccountInfo(domain, apiKey);
 
 	// If subaccount did not exist, return null
 	if (StringUtils.contains(info, "Unknown_Subaccount"))
 	{
 	    System.out.println("Mandrill sub-account is not yet created or can't get info. So return null");
-	    return null;
+	    
+	    JSONObject subAccountJSON = new JSONObject();
+	    
+	    JSONObject last30Days = new JSONObject();
+	    last30Days.put("rejects", 0);
+	    last30Days.put("soft_bounces", 0);
+	    last30Days.put("unique_clicks", 0);
+	    last30Days.put("sent", 0);
+	    last30Days.put("unique_opens", 0);
+	    last30Days.put("hard_bounces", 0);
+	    last30Days.put("clicks", 0);
+	    last30Days.put("opens", 0);
+	    last30Days.put("complaints", 0);
+	    last30Days.put("unsubs", 0);
+	    
+	    subAccountJSON.put("id", domain);
+	    subAccountJSON.put("hourly_quota", 250);
+	    subAccountJSON.put("sent_monthly", 0);
+	    subAccountJSON.put("sent_hourly", 0);
+	    subAccountJSON.put("sent_weekly", 0);
+	    subAccountJSON.put("last_30_days", last30Days);
+	    subAccountJSON.put("status", "active");
+	    subAccountJSON.put("reputation", 60);
+	    subAccountJSON.put("name", domain);
+	    subAccountJSON.put("sent_total", 0);
+	    subAccountJSON.put("created_at", "");
+	    subAccountJSON.put("notes", "");
+	    subAccountJSON.put("first_sent_at", "");
+
+	    return subAccountJSON.toString();
 	}
 
 	// Add email gateway to check on client side

@@ -1,7 +1,6 @@
 package com.thirdparty.mandrill.webhook;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
@@ -17,6 +16,8 @@ import com.agilecrm.account.APIKey;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.subscription.limits.PlanLimits;
+import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.workflows.triggers.Trigger;
@@ -41,7 +42,8 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	try
 	{
 	    String mandrillEvents = request.getParameter("mandrill_events");
-	    System.out.println("mandrill events parameter is " + mandrillEvents);
+	    // System.out.println("mandrill events parameter is " +
+	    // mandrillEvents);
 	    if (StringUtils.isBlank(mandrillEvents))
 	    {
 		// response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -57,7 +59,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		if (event.has("event") && StringUtils.equals(event.getString("event"), "inbound"))
 		{
 		    JSONObject message = event.getJSONObject("msg");
-		    System.out.println("email message is " + message);
+		    // System.out.println("email message is " + message);
 		    if (message == null)
 		    {
 			// response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -95,13 +97,16 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		    }
 
 		    String fromEmail = message.getString("from_email");
-		    String fromName = message.getString("from_name");
+
+		    String fromName = null;
+		    if (message.has("from_name"))
+			fromName = message.getString("from_name");
 
 		    System.out.println("from email is " + fromEmail);
 		    System.out.println("from name is " + fromName);
 
 		    Boolean newContact = isNewContact(fromEmail);
-		    Contact contact = buildContact(fromName, fromEmail);
+		    Contact contact = buildContact(fromName, fromEmail, newContact);
 
 		    if (contact == null)
 		    {
@@ -111,14 +116,26 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 
 		    System.out.println("saving contact");
 		    contact.setContactOwner(owner);
-		    contact.save();
 
-		    List<Trigger> triggers = TriggerUtil.getAllTriggers();
+		    try
+		    {
+			contact.save();
+		    }
+		    catch (PlanRestrictedException e)
+		    {
+			continue;
+		    }
+		    catch (Exception e)
+		    {
+			continue;
+		    }
+
+		    List<Trigger> triggers = TriggerUtil
+			    .getTriggersByCondition(com.agilecrm.workflows.triggers.Trigger.Type.INBOUND_MAIL_EVENT);
 		    for (Trigger trigger : triggers)
 		    {
 			System.out.println("trigger id is " + trigger.id);
-			if (StringUtils.equals(trigger.type.toString(), INBOUND_MAIL_EVENT)
-			        && getTriggerRunResult(newContact, trigger))
+			if (getTriggerRunResult(newContact, trigger))
 			{
 			    System.out.println("assigning campaign to contact");
 
@@ -161,36 +178,32 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 
     public Boolean isNotAgileEmail(String recepientEmail)
     {
-	if (!StringUtils.contains(recepientEmail, "@agle.cc"))
-	{
-	    return true;
-	}
-	else
-	    return false;
+	return !StringUtils.contains(recepientEmail, "@agle.cc");
     }
 
-    public Contact buildContact(String fromName, String fromEmail)
+    public Contact buildContact(String fromName, String fromEmail, Boolean isNewContact)
     {
 	if (StringUtils.isBlank(fromEmail) || StringUtils.equals(fromEmail, "null"))
 	    return null;
 
-	Contact contact = ContactUtil.searchContactByEmail(fromEmail);
-	if (contact == null)
-	{
-	    contact = new Contact();
-	}
+	Contact contact = null;
 
-	List<ContactField> properties = new ArrayList<ContactField>();
-	properties.add(new ContactField(Contact.EMAIL, fromEmail, null));
+	if (isNewContact)
+	    contact = new Contact();
+	else
+	    contact = ContactUtil.searchContactByEmail(fromEmail);
+
+	contact.addpropertyWithoutSaving(new ContactField(Contact.EMAIL, fromEmail, null));
 	try
 	{
 	    JSONObject from = getSenderNames(fromName, fromEmail);
 	    if (from.has(Contact.FIRST_NAME))
-		properties.add(new ContactField(Contact.FIRST_NAME, from.getString(Contact.FIRST_NAME), null));
+		contact.addpropertyWithoutSaving(new ContactField(Contact.FIRST_NAME, from
+		        .getString(Contact.FIRST_NAME), null));
 	    if (from.has(Contact.LAST_NAME))
-		properties.add(new ContactField(Contact.LAST_NAME, from.getString(Contact.LAST_NAME), null));
+		contact.addpropertyWithoutSaving(new ContactField(Contact.LAST_NAME, from.getString(Contact.LAST_NAME),
+		        null));
 
-	    contact.properties = properties;
 	    return contact;
 	}
 	catch (JSONException e)
@@ -250,10 +263,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 
     public Boolean isNewContact(String fromEmail)
     {
-	if (ContactUtil.searchContactByEmail(fromEmail) == null)
-	    return true;
-	else
-	    return false;
+	return !ContactUtil.isExists(fromEmail.toLowerCase());
     }
 
     public Boolean getTriggerRunResult(Boolean newContact, Trigger trigger)

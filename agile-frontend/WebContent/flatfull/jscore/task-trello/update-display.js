@@ -37,10 +37,15 @@ function loadProgressSlider(el)
 {
 	head.load(CSS_PATH + 'css/jslider.css', LIB_PATH + 'lib/jquery.slider.min.js', function()
 	{
-		$(".progress_slider", el).slider({ from : 0, to : 100, step : 1, skin : "round", onstatechange : function(value)
-		{
-			changeProgress(value, $(".status", el).attr("value"), el);
-		} });
+		$(".progress_slider", el).slider({ 
+			from : 0, 
+			to : 100, 
+			step : 1, 
+			skin : "round", 
+			onstatechange : function(value){
+				changeProgress(value, $(".status", el).attr("value"), el);
+			}
+		});
 	});
 }
 
@@ -81,19 +86,21 @@ function changeProgress(value, status, parentForm)
  */
 function showProgressSlider(value, status, parentForm)
 {	
-	if (value == 100 || status == COMPLETED)
-	{
+	if (value == 100 || status == COMPLETED){
 		$(".status", parentForm).val(COMPLETED);
 		$("#progress", parentForm).val(100);
 		$("#is_complete", parentForm).val(true);
-	}
-	else
+	}else{
 		$("#is_complete", parentForm).val(false);
+	}
 
-	if (status == IN_PROGRESS)
+	if (status == IN_PROGRESS){
 		$(parentForm).find(".progress-slider").css("display", "block");
-	else
+		if($(parentForm).find(".jslider-label-to").is(':visible'))
+			$(parentForm).find(".jslider-label-to").hide();
+	}else{
 		$(parentForm).find(".progress-slider").css("display", "none");
+	}
 }
 
 function resetForm(formToReset)

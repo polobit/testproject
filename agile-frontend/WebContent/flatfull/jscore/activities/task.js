@@ -11,7 +11,31 @@ $(function()
 {
 
 	$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
+	$('.update-task-timepicker').timepicker().on('show.timepicker', function(e) 
+	{
+		if($('.update-task-timepicker').attr('value')!="" && $('.update-task-timepicker').attr('value')!=undefined)
+		{
+			if($('.update-task-timepicker').attr('value').split(":")[0]!=undefined)
+				e.time.hours = $('.update-task-timepicker').attr('value').split(":")[0];
+			if($('.update-task-timepicker').attr('value').split(":")[0]!=undefined)
+				e.time.minutes = $('.update-task-timepicker').attr('value').split(":")[1];
+		}
+		$('.bootstrap-timepicker-hour').val(e.time.hours);
+		$('.bootstrap-timepicker-minute').val(e.time.minutes);
+	});
 	$('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false });
+	$('.new-task-timepicker').timepicker().on('show.timepicker', function(e) 
+	{
+		if($('.new-task-timepicker').attr('value')!="" && $('.new-task-timepicker').attr('value')!=undefined)
+		{
+			if($('.new-task-timepicker').attr('value').split(":")[0]!=undefined)
+				e.time.hours = $('.new-task-timepicker').attr('value').split(":")[0];
+			if($('.new-task-timepicker').attr('value').split(":")[0]!=undefined)
+				e.time.minutes = $('.new-task-timepicker').attr('value').split(":")[1];
+		}
+		$('.bootstrap-timepicker-hour').val(e.time.hours);
+		$('.bootstrap-timepicker-minute').val(e.time.minutes);
+	});
 
 	// Loads progress slider in add task / update modal.
 	loadProgressSlider($("#taskForm"));
@@ -43,8 +67,8 @@ $(function()
 	$(".add-task").live('click', function(e)
 	{
 		e.preventDefault();
-		
-		//Show task modal with owners list.
+
+		// Show task modal with owners list.
 		showTaskModal(this);
 	});
 
@@ -65,11 +89,11 @@ $(function()
 	/**
 	 * Task list edit
 	 */
-	// TODO:jitendra reenable it
-	
-	  $('#tasks-list-model-list > tr > td:not(":first-child")').live('click',
-	  function(e) { e.preventDefault(); update_task($(this).closest('tr')); });
-	 
+	/*
+	 * // TODO:jitendra reenable it $('#tasks-list-model-list > tr >
+	 * td:not(":first-child")').live('click', function(e) { e.preventDefault();
+	 * update_task($(this).closest('tr')); });
+	 */
 
 	/**
 	 * Dash board edit
@@ -273,14 +297,14 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 						$('#' + modalId).modal('hide');
 
 						var task = data.toJSON();
-						
+
 						var due_task_count = getDueTasksCount();
 						if (due_task_count == 0)
 							$(".navbar_due_tasks").css("display", "none");
 						else
 							$(".navbar_due_tasks").css("display", "inline-block");
 						$('#due_tasks_count').html(due_task_count);
-						
+
 						if (Current_Route == 'calendar')
 						{
 							if (isUpdate)
@@ -369,7 +393,7 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 								}
 							});
 						}
-						else if (App_Portlets.currentPosition && App_Portlets.tasksCollection && App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route==undefined || Current_Route=='dashboard'))
+						else if (App_Portlets.currentPosition && App_Portlets.tasksCollection && App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route == undefined || Current_Route == 'dashboard'))
 						{
 							if (isUpdate)
 								App_Portlets.tasksCollection[parseInt(App_Portlets.currentPosition)].collection.remove(json);
@@ -395,9 +419,11 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 								App_Calendar.tasksListView.collection.add(data.toJSON());
 								App_Calendar.tasksListView.render(true);
 							}
+							else
+								App_Tasks.navigate("task/"+task.id, { trigger : true });
 							taskDetailView = data;
-							/*$("#content").html(getTemplate("task-detail", data.toJSON()));
-							task_details_tab.loadActivitiesView();*/
+							$("#content").html(getTemplate("task-detail", data.toJSON()));
+							task_details_tab.loadActivitiesView();
 
 						}
 					} });
@@ -638,7 +664,7 @@ function getDueTasksCount()
 }
 
 /**
- * Show task modal with owners list and typeahead event. 
+ * Show task modal with owners list and typeahead event.
  */
 function showTaskModal(forAddTask)
 {
@@ -657,5 +683,5 @@ function showTaskModal(forAddTask)
 
 		// Add selected task list details in add task modal
 		addTasklListDetails(forAddTask);
-	});	
+	});
 }
