@@ -24,6 +24,7 @@ import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.EventUtil;
+import com.agilecrm.activities.util.GoogleCalendarUtil;
 
 /**
  * <code>EventsAPI</code> includes REST calls to interact with {@link Event}
@@ -268,6 +269,7 @@ public class EventsAPI
 				if ("donotupdate".equalsIgnoreCase(action_parameter))
 				{
 					ActivitySave.createEventDeleteActivity(event);
+					GoogleCalendarUtil.deleteGoogleEvent(event);
 					event.delete();
 				}
 				else if ("updateattendee".equalsIgnoreCase(action_parameter))
@@ -275,6 +277,7 @@ public class EventsAPI
 					// send mail to contact with cancel reason
 					EventUtil.sendMailToWebEventAttendee(event, cancel_subject);
 					ActivitySave.createEventDeleteActivity(event);
+					GoogleCalendarUtil.deleteGoogleEvent(event);
 					event.delete();
 				}
 

@@ -455,12 +455,6 @@ $(function()
 	{
 		e.preventDefault();
 
-		/**
-		 * Confirmation alert to delete an event
-		 */
-		if (!confirm("Are you sure you want to delete?"))
-			return;
-
 		var event_id = $('#updateActivityForm input[name=id]').val();
 		$("#updateActivityModal").modal('hide');
 		$("#webEventCancelModel").modal('show');

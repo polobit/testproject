@@ -542,13 +542,13 @@ $(function()
 	{
 		e.preventDefault();
 
-		/**
-		 * Confirmation alert to delete an event
-		 */
-		if (!confirm("Are you sure you want to delete?"))
-			return;
-
 		var model = $(this).parents('li').data();
+
+		if (model && model.toJSON().type != "WEB_APPOINTMENT")
+		{
+			if (!confirm("Are you sure you want to delete?"))
+				return;
+		}
 
 		if (model && model.collection)
 		{

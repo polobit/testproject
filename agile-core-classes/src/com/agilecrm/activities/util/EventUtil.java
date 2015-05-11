@@ -522,12 +522,17 @@ public class EventUtil
 
 		Contact contact = event.getContacts().get(0);
 		String contactEmail = contact.getContactFieldValue("EMAIL");
+		String first_name = contact.getContactFieldValue("FIRST_NAME");
+		String last_name = contact.getContactFieldValue("LAST_NAME");
+		if (StringUtils.isNotEmpty(last_name))
+			first_name = first_name + " " + last_name;
 		DomainUser domain_user = DomainUserUtil.getCurrentDomainUser();
 		String user_name = domain_user != null ? domain_user.name : "";
-		String cancel_mail = "<p>" + user_name + " has cancelled " + event.title + "</p>";
+		String cancel_mail = "<p> Dear " + first_name + ",</p><p><b>" + user_name
+				+ "</b> has cancelled your appointment - &#39;" + event.title + "&#39;</p>";
 		if (StringUtils.isNotEmpty(cancel_reason))
 		{
-			cancel_mail += "<p> Notes: " + cancel_reason + "</p>";
+			cancel_mail += "<p> Note from " + user_name + ": " + cancel_reason + "</p>";
 		}
 		EmailGatewayUtil.sendEmail(null, "noreplay@agilecrm.com", "Agile CRM", contactEmail, null, null,
 				"Appointment Cancelled", null, cancel_mail, null, null, null);
