@@ -68,6 +68,19 @@ function showError(message)
 	$('#error').slideDown();
 }
 
+function showwarning(content)
+{
+	$.each($(content),function(index,attribute){
+		var attributeType=$(attribute);
+		
+		if(attributeType["context"].nodeName == "STYLE" && attributeType[0].nodeName == "STYLE"){
+			alert("show_warning");
+			return false;
+		}
+			
+		});	
+}
+
 // Gets MergeFields
 function getMergeFields()
 {
@@ -174,6 +187,7 @@ try{
 			return;
 		}
 		
+		showwarning(html);
 		// Return Back here
 		window.opener.tinyMCECallBack(getUrlVars()["id"], html);
 		window.close();
@@ -278,6 +292,8 @@ function init_tinymce()
         
     });
 }
+
+
 
 </script>
 
