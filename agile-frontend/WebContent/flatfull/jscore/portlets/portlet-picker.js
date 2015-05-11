@@ -847,28 +847,40 @@ function set_p_portlets(base_model){
 			}
 			var that = $(this);
 			var newContactsurl='/core/api/portlets/portletStatsReport?reportType=newContacts&duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset());
-			
+			setTimeout(function(){
+				if(that.find('#new-contacts-count').text().trim()=="")
+					that.find('#new-contacts-count').html("<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+			},1000);
 			fetchPortletsGraphData(newContactsurl,function(data){
 				that.find('#new-contacts-count').text(getNumberWithCommasForPortlets(data["newContactsCount"]));
 				that.find('#new-contacts-label').text("New contacts");
 			});
 			
 			var wonDealsurl='/core/api/portlets/portletStatsReport?reportType=wonDeals&duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset());
-			
+			setTimeout(function(){
+				if(that.find('#won-deal-value').text().trim()=="")
+					that.find('#won-deal-value').html("<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+			},1000);
 			fetchPortletsGraphData(wonDealsurl,function(data){
 				that.find('#won-deal-value').text(getPortletsCurrencySymbol()+''+getNumberWithCommasForPortlets(data["wonDealValue"]));
 				that.find('#won-deal-count').text("Won from "+getNumberWithCommasForPortlets(data['wonDealsCount'])+" deals");
 			});
 			
 			var newDealsurl='/core/api/portlets/portletStatsReport?reportType=newDeals&duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset());
-			
+			setTimeout(function(){
+				if(that.find('#new-deal-value').text().trim()=="")
+					that.find('#new-deal-value').html("<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+			},1000);
 			fetchPortletsGraphData(newDealsurl,function(data){
 				that.find('#new-deal-value').text(getNumberWithCommasForPortlets(data["newDealsCount"]));
 				that.find('#new-deal-count').text("New deals worth "+getPortletsCurrencySymbol()+''+getNumberWithCommasForPortlets(data['newDealValue'])+"");
 			});
 			
 			var campaignEmailsSentsurl='/core/api/portlets/portletStatsReport?reportType=campaignEmailsSent&duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset());
-			
+			setTimeout(function(){
+				if(that.find('#emails-sent-count').text().trim()=="")
+					that.find('#emails-sent-count').html("<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+			},1000);
 			fetchPortletsGraphData(campaignEmailsSentsurl,function(data){
 				that.find('#emails-sent-count').text(getNumberWithCommasForPortlets(data["emailsSentCount"]));
 				that.find('#emails-sent-label').text("Campaign emails sent");
