@@ -289,7 +289,7 @@ public class MandrillWebhook extends HttpServlet
 	
 	// Trigger for SPAM
 	if (emailBounceType.equals(EmailBounceType.SPAM))
-	    EmailBounceTriggerUtil.executeTriggerForBounce(contact, Trigger.Type.SPAM);
+	    EmailBounceTriggerUtil.executeTriggerForBounce(contact, Trigger.Type.SPAM_REPORT);
 
     }
 }
