@@ -102,7 +102,9 @@ public class SetProperty extends TaskletAdapter
 			if (customFieldDef == null)
 			{
 				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-						"There is no custom field -" + updated_field, LogType.SET_PROPERTY.toString());
+						"Unable to set property '" + updated_field
+								+ "' since there is no such Contact custom field defined.",
+						LogType.SET_PROPERTY_FAILED.toString());
 
 				return;
 			}
@@ -151,8 +153,7 @@ public class SetProperty extends TaskletAdapter
 		}
 		catch (Exception e)
 		{
-			System.err.println("Exception occured in SetProperty tasklet..." + e.getMessage());
-			e.printStackTrace();
+			System.out.println("Exception occured in SetProperty tasklet..." + e.getMessage());
 		}
 
 	}
@@ -169,9 +170,7 @@ public class SetProperty extends TaskletAdapter
 
 			if (!list.contains(updated_value))
 			{
-				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-						"The value entered is not a value in  " + customFieldDef.field_label + updated_field,
-						LogType.SET_PROPERTY.toString());
+				System.out.println("Inside set property. The list doesn't have the given option");
 				return null;
 			}
 
@@ -251,9 +250,7 @@ public class SetProperty extends TaskletAdapter
 				}
 			}
 			else
-			{
-				contact_field.value = updated_value;
-			}
+				return null;
 		}
 		catch (Exception e)
 		{
@@ -288,8 +285,6 @@ public class SetProperty extends TaskletAdapter
 			String updated_field)
 	{
 		System.out.println("Inside set property. Exception caught in initilising number type: " + exception_message);
-		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-				"The value entered is not a number for custom field " + updated_field, LogType.SET_PROPERTY.toString());
 	}
 
 	private boolean isIncOrDesc(String updatedValue)
