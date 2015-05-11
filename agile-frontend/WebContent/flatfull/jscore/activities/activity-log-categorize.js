@@ -43,7 +43,7 @@ $(".activity-edit-note").die().live('click', function(e)
 	deserializeForm(JSON.parse(note), $("#noteUpdateForm", noteModal));
 
 	noteModal.modal('show');
-	
+
 });
 
 /*
@@ -70,16 +70,16 @@ $('.activity-task-edit').live('click', function(e)
 });
 
 $('.email-details').live('click', function(e)
-		{
-			e.preventDefault();
-			var data = $(this).closest('a').attr("data");
-			
-			var obj=getActivityObject(data);
-			console.log(obj);
-			var emailinfo = $(getTemplate("infoModal", JSON.parse(obj)));
-			emailinfo.modal('show');
-		
-		});
+{
+	e.preventDefault();
+	var data = $(this).closest('a').attr("data");
+
+	var obj = getActivityObject(data);
+	console.log(obj);
+	var emailinfo = $(getTemplate("infoModal", JSON.parse(obj)));
+	emailinfo.modal('show');
+
+});
 
 function getDealObject(id)
 {
@@ -126,14 +126,34 @@ function update_event_activity(ele)
 
 	$('.update-end-timepicker').val(fillTimePicker(value.end));
 
+	if (event.type == "WEB_APPOINTMENT")
+	{
+		$("[id='event_delete']").attr("id", "delete_web_event");
+		web_event_title = event.title;
+		if (event.contacts.length > 0)
+		{
+			var firstname = getPropertyValue(event.contacts[0].properties, "first_name");
+			if (firstname == undefined)
+				firstname = "";
+			var lastname = getPropertyValue(event.contacts[0].properties, "last_name");
+			if (lastname == undefined)
+				lastname = "";
+			web_event_contact_name = firstname + " " + lastname;
+		}
+	}
+	else
+	{
+		$("[id='delete_web_event']").attr("id", "event_delete");
+	}
 	// Fills owner select element
 	populateUsersInUpdateActivityModal(value);
 }
 
-function getModal(){
-	 var activity_object = App_Activity_log.activitiesview.collection.models[this];
-	 alert(activity_object);
-	 console.log(activity_object);
+function getModal()
+{
+	var activity_object = App_Activity_log.activitiesview.collection.models[this];
+	alert(activity_object);
+	console.log(activity_object);
 }
 
 function updateactivity__task(ele)
@@ -186,15 +206,17 @@ function updatedeals(ele)
 		}
 	});
 
-// Fills the pipelines list in the select menu.
-	populateTracks(dealForm, undefined, value, function(pipelinesList){
+	// Fills the pipelines list in the select menu.
+	populateTracks(dealForm, undefined, value, function(pipelinesList)
+	{
 
 		// Fills milestone select element
-		populateMilestones(dealForm, undefined, value.pipeline_id, value, function(data){
+		populateMilestones(dealForm, undefined, value.pipeline_id, value, function(data)
+		{
 			dealForm.find("#milestone").html(data);
-			if (value.milestone) {
-				$("#milestone", dealForm).find('option[value=\"'+value.milestone+'\"]')
-						.attr("selected", "selected");
+			if (value.milestone)
+			{
+				$("#milestone", dealForm).find('option[value=\"' + value.milestone + '\"]').attr("selected", "selected");
 			}
 			$("#milestone", dealForm).closest('div').find('.loading-img').hide();
 		});
@@ -255,7 +277,7 @@ function append_activity_log(base_model)
 	}
 
 	if (createdtime == -1)
-	{ 
+	{
 		$('#earllier').show();
 		$('#next-week-heading').addClass("ref-head");
 

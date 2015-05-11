@@ -68,19 +68,22 @@ $(function()
 	});
 
 	// Hide More link and truncated webstats and show complete web stats.
-	/*$('#more-page-urls').die().live('click', function(e)
+	/*
+	 * $('#more-page-urls').die().live('click', function(e) {
+	 * e.preventDefault();
+	 * 
+	 * $(this).css('display', 'none');
+	 * $(this).parent().parent().find('#truncated-webstats').css('display',
+	 * 'none');
+	 * 
+	 * $(this).parent().parent().find('#complete-webstats').removeAttr('style');
+	 * });
+	 */
+
+	$('#show-page-views').die().live('click', function(e)
 	{
 		e.preventDefault();
 
-		$(this).css('display', 'none');
-		$(this).parent().parent().find('#truncated-webstats').css('display', 'none');
-
-		$(this).parent().parent().find('#complete-webstats').removeAttr('style');
-	});*/
-	
-	$('#show-page-views').die().live('click', function(e){
-		e.preventDefault();
-		
 		$(this).closest('.activity-text-block').find('#complete-webstats').toggle();
 	});
 
@@ -248,23 +251,23 @@ $(function()
 	});
 
 	/**
-	 * Sets cookie when user changes email dropdown under mail tab.
-	 * Cookie contains email server, email name
-	 * from next time application loads from emails from this email server and email 
+	 * Sets cookie when user changes email dropdown under mail tab. Cookie
+	 * contains email server, email name from next time application loads from
+	 * emails from this email server and email
 	 */
 	$('.agile-emails').die().live('click', function(e)
 	{
 		e.preventDefault();
 		var email_server = $(this).attr('email-server');
 		var url = $(this).attr('data-url');
-		$('#email-type-select',App_Contacts.contactDetailView.el).html($(this).html());
-		//Here email_server_type means email/username of mail account
+		$('#email-type-select', App_Contacts.contactDetailView.el).html($(this).html());
+		// Here email_server_type means email/username of mail account
 		email_server_type = $(this).attr('email-server-type');
-		if(email_server && url && email_server!='agile')
+		if (email_server && url && email_server != 'agile')
 			url = url.concat(email_server_type);
 		var cookie_value = email_server_type + '|' + email_server;
 		save_email_server_type_in_cookie(cookie_value);
-		contact_details_tab.load_mail(url,email_server);
+		contact_details_tab.load_mail(url, email_server);
 	});
 
 	/**
@@ -370,10 +373,10 @@ $(function()
 
 						if ($(this).attr('disabled'))
 							return;
-						var $form = $('#emailForm');					 
+						var $form = $('#emailForm');
 						// Is valid
-						if(!isValidForm($form))
-						  	return;
+						if (!isValidForm($form))
+							return;
 						var network_type = $('#attachment-select').find(":selected").attr('network_type');
 						// checking email attachment type , email doesn't allow
 						// google drive documents as attachments
@@ -450,7 +453,6 @@ $(function()
 									} });
 
 					});
-
 
 	/**
 	 * Close button click event of send email form. Navigates to contact detail
@@ -540,6 +542,12 @@ $(function()
 	{
 		e.preventDefault();
 
+		/**
+		 * Confirmation alert to delete an event
+		 */
+		if (!confirm("Are you sure you want to delete?"))
+			return;
+
 		var model = $(this).parents('li').data();
 
 		if (model && model.collection)
@@ -549,6 +557,25 @@ $(function()
 
 		// Gets the id of the entity
 		var entity_id = $(this).attr('id');
+
+		if (model && model.toJSON().type == "WEB_APPOINTMENT")
+		{
+			web_event_title = model.toJSON().title;
+			if (model.toJSON().contacts.length > 0)
+			{
+				var firstname = getPropertyValue(model.toJSON().contacts[0].properties, "first_name");
+				if (firstname == undefined)
+					firstname = "";
+				var lastname = getPropertyValue(model.toJSON().contacts[0].properties, "last_name");
+				if (lastname == undefined)
+					lastname = "";
+				web_event_contact_name = firstname + " " + lastname;
+			}
+			$("#webEventCancelModel").modal('show');
+			$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
+			$("#event_text").html("Do you want to update &#39" + web_event_contact_name + "&#39 that you are  cancelling &#39" + web_event_title + "&#39?");
+			return;
+		}
 
 		// Gets the url to which delete request is to be sent
 		var entity_url = $(this).attr('url');
@@ -608,14 +635,14 @@ $(function()
 		$('#email_bcc').closest('.control-group').show();
 	});
 
-	$('#from_email_link').die().live('click', function(e){
+	$('#from_email_link').die().live('click', function(e)
+	{
 		e.preventDefault();
 		$(this).closest('.control-group').hide();
 		$('#from_email').closest('.control-group').show();
 		$('#from_name').closest('.control-group').show();
 		return;
 	});
-	
 
 });
 
@@ -736,8 +763,8 @@ function load_contact_tab(el, contactJSON)
 {
 	timeline_collection_view = null;
 	var position = readCookie(contact_tab_position_cookie_name);
-	if(position==null || position==undefined || position=="")
-		position="timeline";
+	if (position == null || position == undefined || position == "")
+		position = "timeline";
 
 	$('#contactDetailsTab a[href="#' + position + '"]', el).tab('show');
 
@@ -789,12 +816,12 @@ function get_emails_to_reply(emails, configured_email)
 	return emails;
 }
 function save_email_server_type_in_cookie(cookie_value)
-{   
-	if(cookie_value)
+{
+	if (cookie_value)
 	{
 		var previous_cookie_value = readCookie(email_server_type_cookie_name);
 		if (previous_cookie_value === cookie_value)
 			return;
-		createCookie(email_server_type_cookie_name,cookie_value,30);
-	}	
+		createCookie(email_server_type_cookie_name, cookie_value, 30);
+	}
 }
