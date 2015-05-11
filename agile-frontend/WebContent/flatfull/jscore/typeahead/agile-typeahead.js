@@ -170,9 +170,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 						{
 							self.$menu.empty();
 							/* Sets css to html data to be displayed */
-							self.$menu.css("width", 300);
-							self.$menu.css("max-height", 600);
-							self.$menu.css("overflow", "scroll");
+							self.$menu.css("width", 300);							
 
 							/*
 							 * Calls render because menu needs to be initialized

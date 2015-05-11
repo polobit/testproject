@@ -108,7 +108,7 @@
 				  		
 				 %>">
 					<div class="nav navbar-nav hidden-xs">
-<a href="#" id="app-aside-folded" class="p-b-sm p-l-sm p-r-sm inline-block pos-rlt pos-t-xs  no-shadow navbar-btn" ui-toggle="app-aside-folded" target=".app">
+<a href="#" id="app-aside-folded" style="top:8px;" class="p-b-sm p-l-sm p-r-sm inline-block pos-rlt pos-t-xs  no-shadow navbar-btn" ui-toggle="app-aside-folded" target=".app">
             <i class="fa fa-dedent fa-fw text"></i>
           <!--   <i class="fa fa-indent fa-fw text-active"></i> -->
           </a>
@@ -216,7 +216,7 @@
 										 <!-- <input id="search-results" 
 										type="image" src="img/SearchIcon.png" class="searchbox hidden" /> -->
 						<span class="input-group-btn">
-                <button type="submit" class="btn btn-sm bg-light rounded" style="height:30px;"><i class="fa fa-search"></i></button>
+                <button type="submit" class="btn btn-sm bg-light rounded" id="search-results" style="height:30px;"><i class="fa fa-search"></i></button>
               </span>
               </div>				
 								</form>
@@ -228,7 +228,7 @@
 
 							<li id="recent-menu" class="dropdown"><a
 								class="dropdown-toggle" data-toggle="dropdown" href=""> <i class='fa fa-history text-muted text-md'></i>
-							</a>
+							</a><ul class="dropdown-menu animated custom-fadeInUp" style="width:25em; right:-11px;"></ul>
 							</li>
 								
 

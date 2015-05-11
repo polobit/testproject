@@ -43,11 +43,11 @@
 </div>
 						
 					
-							<div class="text-ellipsis  w-full  m-t-xs  h3 font-thin custom-color">
+							<div class="text-ellipsis  m-t-xs  h3 font-thin custom-color" style="width:289px">
 
 								{{getPropertyValue properties "name"}}
 								{{#if_propertyName "url"}}</br>
-									<a href="{{getHyperlinkFromURL value}}" target="_blank">{{value}}</a>
+									<a class="text-lg" href="{{getHyperlinkFromURL value}}" target="_blank"><i class="fa fa-globe"></i> <!-- {{value}} --></a>
 								{{/if_propertyName}}
 								
 								<div class="text-base text-center m-b-xs text-muted m-t-sm">
@@ -312,6 +312,7 @@
 			</table>
 
 		{{else}}
+            <div class="p-sm">
 			<div class="alert-info alert">
             	<div class="slate-content">
                 	<div class="box-left pull-left m-r-md">
@@ -331,5 +332,6 @@
 					</div>
             	</div>
         	</div>
+           </div>
 		{{/if}}
 </script>

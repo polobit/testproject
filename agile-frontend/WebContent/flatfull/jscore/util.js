@@ -76,7 +76,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 
 	// Prepend Loading
 	$loading = $(getRandomLoadingImg());
-	/*$("#" + selectId, el).after($loading);*/
+	$("#" + selectId, el).after($loading);
 	
 	// Creates a collection and fetches the data from the url set in collection
 	var collection = new collection_def();
@@ -87,7 +87,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 	{
 
 		// Remove loading
-		/*$loading.remove();*/
+		$loading.remove();
 
 		// Delete prev options if any by verifying whether ul drop down or
 		// select drop down

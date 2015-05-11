@@ -228,6 +228,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 	
 	tracks.collection.fetch({
 		success: function(data){
+			hideTransitionBar();
 			var jsonModel = data.toJSON();
 			var html = '<option value="">Select..</option>';
 			console.log(jsonModel);

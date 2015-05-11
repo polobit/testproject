@@ -106,6 +106,8 @@ public class BillingRestrictionUtil
 	    return restriction;
 	}
 
+	System.out.println("Info is not null in getBillingRestriction. Plan is " + info.getPlan()+ " and users count " + info.getUsersCount());
+	
 	// Fetches billing instance
 	BillingRestriction restriction = getBillingRestriction(info.getPlan(), info.getUsersCount());
 	restriction.sendReminder = sendReminder;

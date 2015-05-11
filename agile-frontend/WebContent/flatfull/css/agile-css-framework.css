@@ -713,6 +713,10 @@
 {
 	display:inline;
 }
+.flex
+{
+display:flex;
+}
 
 .opa-half
 {

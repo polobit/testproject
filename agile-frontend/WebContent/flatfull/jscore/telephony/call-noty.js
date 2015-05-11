@@ -105,7 +105,7 @@ function connectedCallNoty(message, type)
 		// Set properties
 		Twilio_Call_Noty = noty({ text : message, type : "success", layout : "bottomLeft", buttons : [
 				{ addClass : 'btn btn-sm btn-default noty_twilio_mute', text : '<i class="icon-microphone"></i>' },
-				{ addClass : 'btn btn-sm btn-default noty_twilio_unmute hide', text : '<i class="icon-microphone-off"></i>' },
+				{ addClass : 'btn btn-sm btn-default noty_twilio_unmute', text : '<i class="icon-microphone-off"></i>' },
 				{ addClass : 'btn btn-sm btn-default noty_twilio_dialpad', text : '<i class="icon-th"></i>' }, 
 				{ addClass : 'btn btn-sm btn-danger noty_twilio_hangup', text : 'Hangup' }
 		] });

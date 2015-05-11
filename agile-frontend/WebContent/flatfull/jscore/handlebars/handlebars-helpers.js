@@ -287,29 +287,29 @@ $(function()
 								item = item.toLowerCase().trim();
 								console.log(item);
 								if (item == "email")
-												return "icon-envelope-alt";
+												return "fa-envelope-o";
 								if (item == "phone")
-												return "icon-headphones";
+												return "fa-headphones";
 								if (item == "url")
-												return "icon-home";
+												return "fa-home";
 								if (item == "call")
-												return "icon-phone-sign";
+												return "fa-phone";
 								if (item == "follow_up")
-												return "icon-signout";
+												return "fa-sign-out";
 								if (item == "meeting")
-												return "icon-group";
+												return "fa-group";
 								if (item == "milestone")
-												return "icon-cog";
+												return "fa-cog";
 								if (item == "send")
-												return "icon-reply";
+												return "fa-reply";
 								if (item == "tweet")
-												return "icon-share-alt";
+												return "fa-share-square-o";
 								if (item == "other")
-												return "icon-tasks";
+												return "fa-tasks";
 								if (item == "twitter")
-												return "icon-twitter";
+												return "fa-twitter";
 								if (item == "facebook")
-												return "icon-facebook";
+												return "fa-facebook";
 
 				});
 
@@ -5474,6 +5474,10 @@ $(function()
 			portlet_name = "Agile CRM Blog";
 		else if(p_name=='Task Report')
 			portlet_name = "Task Report";
+		else if(p_name=='Stats Report')
+			portlet_name = "Activity Overview";
+		else
+			portlet_name = p_name;
 		return portlet_name;
 	});
 	/**
@@ -5509,6 +5513,8 @@ $(function()
 			icon_name = "icon-tasks";
 		else if(p_name=='Agile CRM Blog')
 			icon_name = "icon-feed";
+		else if(p_name=='Stats Report')
+			icon_name = "icon-speedometer";
 		return icon_name;
 	});
 	/**
