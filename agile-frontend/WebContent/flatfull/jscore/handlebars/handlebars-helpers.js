@@ -5946,6 +5946,37 @@ $(function()
 		}
 		return message;
 	});
+
+	/**
+	 * return onboarding scheduling url by reading fron globals.js file
+	 */
+	Handlebars.registerHelper('ONBOARDING_CALENDAR_URL', function()
+	{
+
+		return ONBOARDING_SCHEDULE_URL;
+
+	});
+
+	/**
+	 * return support scheduling url by reading fron util.js file
+	 */
+	Handlebars.registerHelper('SUPPORT_CALENDAR_URL', function()
+	{
+
+		return SUPPORT_SCHEDULE_URL;
+
+	});
+
+	/**
+	 * return sales scheduling url by reading fron util.js file
+	 */
+	Handlebars.registerHelper('SALES_CALENDAR_URL', function()
+	{
+
+		return SALES_SCHEDULE_URL;
+
+	});
+
 });
 
 // helper function return created time for event
