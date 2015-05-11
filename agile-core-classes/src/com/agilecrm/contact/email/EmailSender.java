@@ -39,6 +39,8 @@ public class EmailSender
 	EmailSender emailSender = new EmailSender();
 
 	emailSender.billingRestriction = BillingRestrictionUtil.getBillingRestriction(true);
+	
+	emailSender.limits = emailSender.billingRestriction == null ? null : emailSender.billingRestriction.getCurrentLimits();
 
 	emailSender.emailBillingRestriction = (EmailBillingRestriction) DaoBillingRestriction.getInstace(
 	        DaoBillingRestriction.ClassEntities.Email.toString(), emailSender.billingRestriction);
@@ -52,12 +54,19 @@ public class EmailSender
 
     public boolean isEmailWhiteLabelEnabled()
     {
+    	
 	if (limits != null)
 	{
+		System.out.println("Limits is not null. Plan name: " + limits.getPlanName() + " White label: " + limits.isEmailWhiteLabelEnabled());
 	    return limits.isEmailWhiteLabelEnabled();
 	}
 
+    System.out.println("Domain is " + NamespaceManager.get());
+    
 	limits = billingRestriction.getCurrentLimits();
+	
+	System.out.println("Limits is null. Plan Name: " + limits.getPlanName() + " White label: " + limits.isEmailWhiteLabelEnabled());
+	
 	return limits.isEmailWhiteLabelEnabled();
     }
 

@@ -635,7 +635,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        				displayTimeAgo(p_el);
 	        			} });
 	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Pending Deals"){
-	        		App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+data.get('settings').deals, templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
+	        		App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+data.get('settings').deals, templateKey : 'portlets-opportunities', sort_collection : false, individual_tag_name : 'tr',
 	        			postRenderCallback : function(p_el){
 	        				displayTimeAgo(p_el);
 	        			} });
@@ -667,7 +667,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		App_Portlets.statsReport[parseInt(pos)] = new Base_Model_View({ url : '/core/api/portlets/portletStatsReport?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset()), template : "portlets-status-count-report-model", tagName : 'div', 
 	        			postRenderCallback : function(p_el){
 	        				var settingsEl = 	"<div class='portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-0' style='visibility:hidden;'>"+
-												"<i id='"+data.get('id')+"-settings' class='portlet-settings icon-wrench p-r-xs'></i>"+
+												"<i id='"+data.get('id')+"-settings' class='portlet-settings icon-wrench p-r-xs c-p'></i>"+
 												"<i id='"+data.get('id')+"-close' class='c-p icon-close StatsReport-close p-r-sm' onclick='deletePortlet(this);'></i>"+
 												"</div>";
 	        				$('.stats-report-settings',p_el).find('span').eq(0).before(settingsEl);
