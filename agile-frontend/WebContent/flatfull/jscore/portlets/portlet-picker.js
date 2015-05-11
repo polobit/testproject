@@ -214,7 +214,7 @@ function set_p_portlets(base_model){
 			} });
 		App_Portlets.tasksCollection[parseInt(pos)].collection.fetch();
 	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Stats Report"){
-		var start_date_str = '';
+		/*var start_date_str = '';
 		var end_date_str = '';
 		if(base_model.get('settings').duration=='yesterday'){
 			start_date_str = ''+base_model.get('settings').duration;
@@ -241,7 +241,7 @@ function set_p_portlets(base_model){
 									"<i id='"+base_model.get('id')+"-close' class='c-p icon-close StatsReport-close p-r-sm' onclick='deletePortlet(this);'></i>"+
 									"</div>";
 				$('.stats-report-settings',p_el).find('span').eq(0).before(settingsEl);
-			} });
+			} });*/
 	}
 	if(itemCollection!=undefined)
 		itemCollection.collection.fetch();
@@ -821,10 +821,58 @@ function set_p_portlets(base_model){
 		addWidgetToGridster(base_model);
 	});
 	$('.stats_report_portlet_body', this.el).each(function(){
-		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Stats Report"){
+		/*if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Stats Report"){
 			$(this).html(getRandomLoadingImg());
 			$(this).html($(App_Portlets.statsReport[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
+		}*/
+		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Stats Report"){
+			var start_date_str = '';
+			var end_date_str = '';
+			if(base_model.get('settings').duration=='yesterday'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'today';
+			}else if(base_model.get('settings').duration=='last-week'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'last-week-end';
+			}else if(base_model.get('settings').duration=='last-month'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'last-month-end';
+			}else if(base_model.get('settings').duration=='24-hours'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'now';
+			}else{
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'TOMORROW';
+			}
+			var that = $(this);
+			var newContactsurl='/core/api/portlets/portletStatsReport?reportType=newContacts&duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset());
+			
+			fetchPortletsGraphData(newContactsurl,function(data){
+				that.find('#new-contacts-count').text(getNumberWithCommasForPortlets(data["newContactsCount"]));
+				that.find('#new-contacts-label').text("New contacts");
+			});
+			
+			var wonDealsurl='/core/api/portlets/portletStatsReport?reportType=wonDeals&duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset());
+			
+			fetchPortletsGraphData(wonDealsurl,function(data){
+				that.find('#won-deal-value').text(getPortletsCurrencySymbol()+''+getNumberWithCommasForPortlets(data["wonDealValue"]));
+				that.find('#won-deal-count').text("Won from "+getNumberWithCommasForPortlets(data['wonDealsCount'])+" deals");
+			});
+			
+			var newDealsurl='/core/api/portlets/portletStatsReport?reportType=newDeals&duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset());
+			
+			fetchPortletsGraphData(newDealsurl,function(data){
+				that.find('#new-deal-value').text(getNumberWithCommasForPortlets(data["newDealsCount"]));
+				that.find('#new-deal-count').text("New deals worth "+getPortletsCurrencySymbol()+''+getNumberWithCommasForPortlets(data['newDealValue'])+"");
+			});
+			
+			var campaignEmailsSentsurl='/core/api/portlets/portletStatsReport?reportType=campaignEmailsSent&duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset());
+			
+			fetchPortletsGraphData(campaignEmailsSentsurl,function(data){
+				that.find('#emails-sent-count').text(getNumberWithCommasForPortlets(data["emailsSentCount"]));
+				that.find('#emails-sent-label').text("Campaign emails sent");
+			});
 		}
 	});
 	//enablePortletTimeAndDates(base_model);
@@ -1540,6 +1588,14 @@ function getPortletsCurrencySymbol(){
 	var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
 	var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
 	return symbol;
+}
+function getNumberWithCommasForPortlets(value){
+	value = parseFloat(value);
+	if(value==0)
+		return value;
+
+	if (value)
+		return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
 }
 function getPortletsTimeConversion(diffInSeconds){
 	if(diffInSeconds==undefined || diffInSeconds==null)

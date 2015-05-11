@@ -105,7 +105,7 @@ function addNewPortlet(portlet_type,p_name){
 		json['duration']="1-week";
 		json['tasks']="all-tasks";
 	}else if(portlet_type=="USERACTIVITY" && p_name=="StatsReport"){
-		json['duration']="1-day";
+		json['duration']="yesterday";
 	}
 	else if(portlet_type=="RSS" && p_name=="AgileCRMBlog")
 		obj.size_y=2;
