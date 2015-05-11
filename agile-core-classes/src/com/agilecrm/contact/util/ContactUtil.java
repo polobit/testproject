@@ -1574,4 +1574,27 @@ public class ContactUtil
 		}
 		return false;
 	}
+	/**
+	 * Get the contacts count created in the specified duration.
+	 * 
+	 * @param minTime
+	 *            Long object
+	 * @param maxTime
+	 *            Long object
+	 */
+	public static int getContactsCount(Long minTime, Long maxTime)
+	{
+		List<Contact> contactsList=null;
+		try 
+		{
+			contactsList = dao.ofy().query(Contact.class).filter("type", Contact.Type.PERSON).filter("created_time >= ", minTime).filter("created_time <= ", maxTime).list();
+			if(contactsList!=null)
+				return contactsList.size();
+		} catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return 0;
+
+	}
 }

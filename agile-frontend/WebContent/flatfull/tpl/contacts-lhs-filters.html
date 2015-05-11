@@ -2,7 +2,7 @@
 {{#each this}}
 <div class="control-group form-group lhs-row-filter pos-rlt wrapper p-t-none"> 
 	<a data-toggle="collapse" id="lhs-filters-header" 
-class="c-p text-l-none text-l-none-hover" >
+class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 {{field_label}}
 <i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
 {{#if_equals_or "CHECKBOX" field_type "TEXT" field_type "TEXTAREA" field_type}}
@@ -18,7 +18,7 @@ class="c-p text-l-none text-l-none-hover" >
 				<input type="text" placeholder="Value" prev-val="" class="required form-control">
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>		
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>		
 		<div class="clearfix"></div>
 		</div>
 	</div>
@@ -47,7 +47,7 @@ class="c-p text-l-none text-l-none-hover" >
 				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required form-control">
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide clear-filter-condition-lhs pull-right"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		<div class="m-t-xs"><a class="hide clear-filter-condition-lhs pull-right"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
 		<div class="clearfix"></div>
 	</div>
 	</div>
@@ -83,7 +83,7 @@ class="c-p text-l-none text-l-none-hover" >
 			<input type="text" placeholder="MM/DD/YYYY" prev-val="" class="date required form-control">
 		</span>
 	</div>
-	<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+	<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
 	<div class="clearfix"></div>
 	</div>
 	</div>
@@ -104,7 +104,7 @@ class="c-p text-l-none text-l-none-hover" >
 				</select>
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
@@ -121,7 +121,6 @@ class="c-p text-l-none text-l-none-hover" >
 <span class="pull-right m-r-sm">
 		<a id="clear-lhs-contact-filters" class="text-sm text-muted" href="#">
 			 Clear all
-		</a>
 	</span>
 <div class="clearfix"></div>
 	</h4>
@@ -170,8 +169,8 @@ class="c-p text-l-none text-l-none-hover" >
 					<div class="clearfix"></div>
 				</div>
 		</div>	
-		<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-left text-muted" data-name="tags"><i class="icon-plus"></i> Add</a>
-		<div class="clearfix"></div>	
+		<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-left text-muted pos-rlt" style="top:-10px" data-name="tags"><i class="icon-plus"></i> Add</a>
+		<div class="clearfix" style="height:10px"></div>	
 	</div>
 </div>
 	
@@ -202,7 +201,7 @@ class="c-p text-l-none text-l-none-hover" >
 				<input type="number" min="0" placeholder="Max Value" prev-val="" class="required form-control">
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
@@ -235,7 +234,7 @@ class="c-p text-l-none text-l-none-hover" >
 				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required form-control">
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
@@ -294,7 +293,7 @@ class="c-p text-l-none text-l-none-hover" >
 				<div class="clearfix"></div>
 			</div>
 		</div>
-		<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none" data-name="campaign_status"><i class="icon-plus"></i> Add</a>
+		<a href="#" class="filter-multiple-add-lhs m-t-xs text-l-none pos-rlt" style="top:-25px" data-name="campaign_status"><i class="icon-plus"></i> Add</a>
 	</div>
 </div-->
 <div class="control-group form-group lhs-row-filter" >
@@ -318,7 +317,7 @@ class="c-p text-l-none text-l-none-hover" >
 				</select>
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
@@ -359,7 +358,7 @@ class="c-p text-l-none text-l-none-hover" >
 				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="form-control date required">
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
@@ -379,7 +378,7 @@ class="c-p text-l-none text-l-none-hover" >
 		<span class="pull-left"><span>Filter Companies</span>
 		</span>
 <span class="pull-right m-r-sm">
-		<a id="clear-lhs-company-filters" class="text-sm" href="#">
+		<a id="clear-lhs-company-filters" class="text-sm text-muted" href="#">
 			 Clear all</i>
 		</a>
 	</span>
@@ -419,7 +418,7 @@ class="c-p text-l-none text-l-none-hover" >
 				<input type="number" min="0" max="5" placeholder="Max Value" prev-val="" class="required form-control">
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
@@ -445,7 +444,7 @@ class="c-p text-l-none text-l-none-hover" >
 				</select>
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
@@ -486,7 +485,7 @@ class="c-p text-l-none text-l-none-hover" >
 				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="form-control date required">
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>
@@ -508,7 +507,7 @@ class="c-p text-l-none text-l-none-hover" >
 				<input type="text" placeholder="Value" prev-val="" class="form-control required">
 			</span>
 		</div>
-		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p"></i></a></div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
 		<div class="clearfix"></div>
 		</div>
 	</div>

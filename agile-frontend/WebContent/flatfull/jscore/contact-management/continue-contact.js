@@ -19,12 +19,12 @@ function show_error(modalId, formId, errorClass, htmlText)
 				if (modal_elem.css('display') !== 'none')
 				{
 								modal_elem.find('.' + errorClass).html(
-																'<div class="alert alert-danger" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
+																'<div class="alert alert-danger m-b-none" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
 				}
 				else if (form_elem.css('display') !== 'none')
 				{
 								form_elem.find('.' + errorClass)
-																.html('<div class="alert alert-danger" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
+																.html('<div class="alert alert-danger m-b-none" ><a class="close" data-dismiss="alert" href="#">&times</a>' + htmlText + '</div>').show();
 				}
 }
 
@@ -320,7 +320,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 								{
 												var addressJSON = {};
 												var subtype;
-												$.each($(element).children(":not(br)"), function(index, subelement)
+												$.each($(element).find(":input,select"), function(index, subelement)
 												{
 
 																if ($(subelement).val() == undefined || $(subelement).val().length == 0)
@@ -542,7 +542,7 @@ function deserialize_contact(contact, template)
 				{
 								$("#content [name='contact_company_id']")
 																.html(
-																								'<li class="inline-block tag btn btn-xs btn-primary" data="' + data + '"><span><a href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+																								'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
 								$("#content #contact_company").hide();
 				}
 				agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
@@ -556,7 +556,7 @@ function deserialize_contact(contact, template)
 																$("#content #contact_company").hide();
 																$("#content [name='contact_company_id']")
 																								.html(
-																																'<li class="inline-block tag btn btn-xs btn-primary" data="' + contact.contact_company_id + '"><span><a href="#contact/' + contact.contact_company_id + '">' + contact.properties[i].value + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+																																'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + contact.contact_company_id + '"><span><a class="text-white m-r-xs" href="#contact/' + contact.contact_company_id + '">' + contact.properties[i].value + '</a><a class="close" id="remove_tag">&times</a></span></li>');
 												}
 								}
 				}
@@ -587,7 +587,7 @@ function fill_multi_options(field_element, element)
 				{
 								var json = JSON.parse(element.value);
 
-								$.each($(field_element).children(":not(br)"), function(index, sub_field_element)
+								$.each($(field_element).find(":input,select"), function(index, sub_field_element)
 								{
 												var name = $(sub_field_element).attr('name');
 												if (name == 'address-type')

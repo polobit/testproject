@@ -20,6 +20,11 @@ var WebreportsRouter = Backbone.Router.extend({
 						$.ajax({ url : 'core/api/api-key', type : 'GET', dataType : 'json', success : function(data)
 						{
 							$('#content').html(getTemplate("webrule-collection", data));
+							if(ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO")
+							{
+								$("#whitelist-disabled").addClass("hide");
+								$("#whitelist-enabled").removeClass("hide");
+							}
 							prettyPrint();
 						} });
 

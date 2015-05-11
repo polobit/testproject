@@ -291,29 +291,29 @@ $(function()
 		item = item.toLowerCase().trim();
 		console.log(item);
 		if (item == "email")
-			return "icon-envelope-alt";
+			return "fa-envelope-o";
 		if (item == "phone")
-			return "icon-headphones";
+			return "fa-headphones";
 		if (item == "url")
-			return "icon-home";
+			return "fa-home";
 		if (item == "call")
-			return "icon-phone-sign";
+			return "fa-phone";
 		if (item == "follow_up")
-			return "icon-signout";
+			return "fa-sign-out";
 		if (item == "meeting")
-			return "icon-group";
+			return "fa-group";
 		if (item == "milestone")
-			return "icon-cog";
+			return "fa-cog";
 		if (item == "send")
-			return "icon-reply";
+			return "fa-reply";
 		if (item == "tweet")
-			return "icon-share-alt";
+			return "fa-share-square-o";
 		if (item == "other")
-			return "icon-tasks";
+			return "fa-tasks";
 		if (item == "twitter")
-			return "icon-twitter";
+			return "fa-twitter";
 		if (item == "facebook")
-			return "icon-facebook";
+			return "fa-facebook";
 
 	});
 
@@ -1477,6 +1477,11 @@ $(function()
 		return " ";
 	});
 
+	Handlebars.registerHelper("getBase64Domain", function()
+	{
+		return window.btoa(window.location.host.split(".")[0]);
+	});
+
 	// Gets date in given range
 	Handlebars.registerHelper('date-range', function(from_date_string, no_of_days, options)
 	{
@@ -1717,7 +1722,7 @@ $(function()
 			// Avoid comma appending to last element
 			if (i < j - 1)
 			{
-				ret = ret + ", ";
+				ret = ret + ",- ";
 			}
 			;
 		}
@@ -3808,26 +3813,6 @@ $(function()
 		return charwithsinglequote;
 	});
 
-	/**
-	 * Shows list of triggers separated by comma
-	 */
-	Handlebars.registerHelper('toLinkTrigger', function(context, options)
-	{
-		var ret = "";
-		for (var i = 0, j = context.length; i < j; i++)
-		{
-			ret = ret + options.fn(context[i]);
-
-			// Avoid comma appending to last element
-			if (i < j - 1)
-			{
-				ret = ret + ",";
-			}
-			;
-		}
-		return ret;
-	});
-
 	// Gets minutes from milli seconds
 	Handlebars.registerHelper('millSecondsToMinutes', function(timeInMill)
 	{
@@ -5507,6 +5492,10 @@ $(function()
 			portlet_name = "Agile CRM Blog";
 		else if (p_name == 'Task Report')
 			portlet_name = "Task Report";
+		else if (p_name == 'Stats Report')
+			portlet_name = "Activity Overview";
+		else
+			portlet_name = p_name;
 		return portlet_name;
 	});
 	/**
@@ -5543,6 +5532,8 @@ $(function()
 			icon_name = "icon-tasks";
 		else if (p_name == 'Agile CRM Blog')
 			icon_name = "icon-feed";
+		else if (p_name == 'Stats Report')
+			icon_name = "icon-speedometer";
 		return icon_name;
 	});
 	/**
@@ -5983,34 +5974,4 @@ Handlebars.registerHelper('getcircle', function(percentage)
 	{
 		return 'background-image :linear-gradient(' + (prec - 90) + 'deg, transparent 50%, #39B4CC 50%), linear-gradient(90deg, #e8eff0 50%, transparent 50%)';
 	}
-});
-
-/**
- * return onboarding scheduling url by reading fron globals.js file
- */
-Handlebars.registerHelper('ONBOARDING_CALENDAR_URL', function()
-{
-
-	return ONBOARDING_SCHEDULE_URL;
-
-});
-
-/**
- * return support scheduling url by reading fron util.js file
- */
-Handlebars.registerHelper('SUPPORT_CALENDAR_URL', function()
-{
-
-	return SUPPORT_SCHEDULE_URL;
-
-});
-
-/**
- * return sales scheduling url by reading fron util.js file
- */
-Handlebars.registerHelper('SALES_CALENDAR_URL', function()
-{
-
-	return SALES_SCHEDULE_URL;
-
 });

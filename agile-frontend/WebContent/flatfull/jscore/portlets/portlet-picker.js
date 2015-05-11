@@ -120,6 +120,14 @@ function set_p_portlets(base_model){
 			$('.gridster > div:visible',this.el).html($(App_Portlets.taskReportView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 		else
 			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.taskReportView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Stats Report"){
+		App_Portlets.statusReportView = new Base_Model_View({ model : base_model, template : "portlets-status-report-model", tagName : 'div' });
+		
+		if($('.gridster > div:visible > div',this.el).length==0)
+			$('.gridster > div:visible',this.el).html($(App_Portlets.statusReportView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w').css('background','#f0f3f4'));
+		else
+			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.statusReportView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w').css('background','#f0f3f4'));
+		
 	}
 	//var itemView = new Base_Model_View({ model : base_model, template : "portlets-model", tagName : 'div', });
 
@@ -180,7 +188,7 @@ function set_p_portlets(base_model){
 				addWidgetToGridster(base_model);
 			} });
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Pending Deals"){
-		App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+base_model.get('settings').deals, templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
+		App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+base_model.get('settings').deals, templateKey : 'portlets-opportunities', sort_collection : false, individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				displayTimeAgo(p_el);
 				addWidgetToGridster(base_model);
@@ -205,6 +213,35 @@ function set_p_portlets(base_model){
 				addWidgetToGridster(base_model);
 			} });
 		App_Portlets.tasksCollection[parseInt(pos)].collection.fetch();
+	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Stats Report"){
+		var start_date_str = '';
+		var end_date_str = '';
+		if(base_model.get('settings').duration=='yesterday'){
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'today';
+		}else if(base_model.get('settings').duration=='last-week'){
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'last-week-end';
+		}else if(base_model.get('settings').duration=='last-month'){
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'last-month-end';
+		}else if(base_model.get('settings').duration=='24-hours'){
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'now';
+		}else{
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'TOMORROW';
+		}
+		
+		App_Portlets.statsReport[parseInt(pos)] = new Base_Model_View({ url : '/core/api/portlets/portletStatsReport?duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset()), template : "portlets-status-count-report-model", tagName : 'div', 
+			postRenderCallback : function(p_el){
+				addWidgetToGridster(base_model);
+				var settingsEl = 	"<div class='portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-0' style='visibility:hidden;'>"+
+									"<i id='"+base_model.get('id')+"-settings' class='portlet-settings icon-wrench p-r-xs c-p'></i>"+
+									"<i id='"+base_model.get('id')+"-close' class='c-p icon-close StatsReport-close p-r-sm' onclick='deletePortlet(this);'></i>"+
+									"</div>";
+				$('.stats-report-settings',p_el).find('span').eq(0).before(settingsEl);
+			} });
 	}
 	if(itemCollection!=undefined)
 		itemCollection.collection.fetch();
@@ -783,6 +820,13 @@ function set_p_portlets(base_model){
 		}
 		addWidgetToGridster(base_model);
 	});
+	$('.stats_report_portlet_body', this.el).each(function(){
+		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Stats Report"){
+			$(this).html(getRandomLoadingImg());
+			$(this).html($(App_Portlets.statsReport[parseInt(pos)].render().el));
+			setPortletContentHeight(base_model);
+		}
+	});
 	//enablePortletTimeAndDates(base_model);
 }
 
@@ -962,13 +1006,16 @@ function dealsByMilestonePieGraph(selector,milestonesList,milestoneValuesList,mi
 		            	dataLabels: {
 		            		enabled: true,
 		            		useHTML: true,
-		            		connectorWidth: 0,
+		            		/*connectorWidth: 0,*/
+		            		softConnector: true,
 		    	            formatter: function () {
 		    	            	return 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+this.point.name+'</b></span><br/>' +
 		    	            			'<span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage)+'%</b></span></div>';
 		    	            },
 		            		/*format: '<b>{point.name}</b>: {point.percentage:.1f}',*/
-		                    distance: 15
+		                    distance: 30,
+		                    x: 2,
+		                    y: -10
 		                },
 		                showInLegend: false
 		            }
@@ -1036,6 +1083,10 @@ function closuresPerPersonBarGraph(selector,catges,data,text,name){
 }
 function dealsFunnelGraph(selector,funnel_data){
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', LIB_PATH + 'lib/flot/funnel.js',LIB_PATH + 'lib/flot/no-data-to-display.js', function(){
+		if(funnel_data==undefined || (funnel_data!=undefined && funnel_data.length==0)){
+			$('#'+selector).html('<div class="portlet-error-message">No deals found</div>');
+			return;
+		}
 		$('#'+selector).highcharts({
 	        chart: {
 	            type: 'funnel',
@@ -1066,10 +1117,7 @@ function dealsFunnelGraph(selector,funnel_data){
 	                height: '100%',
 	                width: '50%',
 	                borderWidth : 1,
-	                borderColor: 'white',
-	                marker: {
-	                	enabled: false
-	                }
+	                borderColor: 'white'
 	            }
 	        },
 	        tooltip: {
@@ -1174,7 +1222,9 @@ function portletGrowthGraph(selector,series,base_model){
 			$('#'+selector).highcharts({
 		        chart: {
 		            type: 'areaspline',
-		            marginRight: 20
+		            marginRight: 20,
+		            plotBorderWidth: 1,
+		            plotBorderColor: '#F4F4F5'
 		        },
 		        title: {
 		            text: ''
@@ -1312,7 +1362,9 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 		$('#'+selector).highcharts({
 			chart: {
 	            type: 'bar',
-	            marginRight: 20
+	            marginRight: 20,
+	            plotBorderWidth: 1,
+	            plotBorderColor: '#F4F4F5'
 	        },
 	        title: {
 	            text: ''
@@ -1334,7 +1386,7 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	    			},
 	                useHTML: true
 	            },
-	            gridLineWidth : 1,
+	            gridLineWidth : 0,
 	    		gridLineColor : '#F4F4F5',
 	    		lineWidth : 0,
 	    		tickWidth : 0
@@ -1454,18 +1506,35 @@ function enablePortletTimeAndDates(base_model){
 	}
 }
 function setPortletContentHeight(base_model){
-	if(base_model.get("size_y")==1){
-		$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)-45+"px");
-		$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)-45+"px");
-	}else if(base_model.get("size_y")==2){
-		$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+10-45+"px");
-		$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+10-45+"px");
-	}else if(base_model.get("size_y")==3){
-		$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+20-45+"px");
-		$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+20-45+"px");
+	if(base_model.get("name")=="Stats Report"){
+		if(base_model.get("size_y")==1){
+			$('#'+base_model.get("id")).parent().find('.stats_report_portlet').css("height",(base_model.get("size_y")*200)+"px");
+			$('#'+base_model.get("id")).parent().find('.stats_report_portlet').css("max-height",(base_model.get("size_y")*200)+"px");
+		}else if(base_model.get("size_y")==2){
+			$('#'+base_model.get("id")).parent().find('.stats_report_portlet').css("height",(base_model.get("size_y")*200)+10+"px");
+			$('#'+base_model.get("id")).parent().find('.stats_report_portlet').css("max-height",(base_model.get("size_y")*200)+10+"px");
+		}else if(base_model.get("size_y")==3){
+			$('#'+base_model.get("id")).parent().find('.stats_report_portlet').css("height",(base_model.get("size_y")*200)+20+"px");
+			$('#'+base_model.get("id")).parent().find('.stats_report_portlet').css("max-height",(base_model.get("size_y")*200)+20+"px");
+		}
+		
+		$('#'+base_model.get("id")).parent().find('.stats_report_portlet').css("overflow-x","hidden");
+		$('#'+base_model.get("id")).parent().find('.stats_report_portlet').css("overflow-y","hidden");
+	}else{
+		if(base_model.get("size_y")==1){
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)-45+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)-45+"px");
+		}else if(base_model.get("size_y")==2){
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+10-45+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+10-45+"px");
+		}else if(base_model.get("size_y")==3){
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+20-45+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+20-45+"px");
+		}
+		
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-x","hidden");
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-y","auto");
 	}
-	$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-x","hidden");
-	$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-y","auto");
 }
 function getPortletsCurrencySymbol(){
 	var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
@@ -1629,21 +1698,28 @@ function emailsOpenedPieChart(selector,data,emailsSentCount,emailsOpenedCount){
                 y: 40,
 	    		labelFormatter: function () {
 	    			if(this.name=="Emails Opened")
-	    				return 	'<div><span>'+this.name+':'+emailsOpenedCount+'</span></div>';
+	    				return 	'<div><span>Opened:'+emailsOpenedCount+'</span></div>';
 	    			else if(this.name=="Emails Sent")
-	    				return 	'<div><span>'+this.name+':'+emailsSentCount+'</span></div>';
+	    				return 	'<div><span>Sent:'+emailsSentCount+'</span></div>';
 	            	
 	            },
 	            itemStyle: {
 	            	color: "#ccc",
-	            	cursor: "none",
+	            	cursor: '',
 	            	fontSize: "12px", 
 	            	fontWeight: "bold"
-	            }
+	            },
+	            borderWidth : 0,
+				floating : true,
 	        },
 	        plotOptions: {
 	        	series: {
-	                borderWidth : 0
+	                borderWidth : 0,
+	                states: {
+	                	hover: {
+	                		enabled: false
+	                	}
+	                }
 	            },
 	            pie: {
 	            	borderWidth: 0,
@@ -1662,7 +1738,14 @@ function emailsOpenedPieChart(selector,data,emailsSentCount,emailsOpenedCount){
 	                    distance: -55
 	                },
 	                showInLegend: true,
-	                enableMouseTracking: false
+	                enableMouseTracking: false,
+	                point: {
+	                	events: {
+		                	legendItemClick: function () {
+		                        return false;
+		                    }
+		                }
+	                }
 	            }
 	        },
 	        series: [{
@@ -1671,7 +1754,7 @@ function emailsOpenedPieChart(selector,data,emailsSentCount,emailsOpenedCount){
 	        }],
 	        exporting: {
 		        enabled: false
-		    },
+		    }/*,
 		    legend : {
 				itemStyle : {
 					fontSize : '10px',
@@ -1682,7 +1765,7 @@ function emailsOpenedPieChart(selector,data,emailsSentCount,emailsOpenedCount){
 				floating : true,
 				align : 'right',
 				verticalAlign : 'top'
-			}
+			}*/
 	    });
 	});
 }

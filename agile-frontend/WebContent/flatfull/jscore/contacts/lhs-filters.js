@@ -32,10 +32,8 @@ function setupLhsFilters(cel, is_company) {
 	} else {
 		$('#lhs_filters_conatiner', cel).html(getTemplate("contacts-lhs-filters"));
 		fillSelect('owner_select','/core/api/users', undefined, function() {
-			fillSelect('campaign_select','/core/api/workflows', undefined, function() {
 				//loading image is added to hidden select by fillselect
 				//remove it manually.
-				$('#campaign_select').next('.loading').remove();
 				if(!SEARCHABLE_CONTACT_CUSTOM_FIELDS)
 				{
 					$.getJSON("core/api/custom-fields/searchable/scope?scope=CONTACT", function(fields){
@@ -46,7 +44,6 @@ function setupLhsFilters(cel, is_company) {
 				} else {		
 					loadCustomFiledsFilters(SEARCHABLE_CONTACT_CUSTOM_FIELDS, cel, is_company);
 				}
-			}, optionsTemplate, false, $('#lhs_filters_conatiner', cel)); 
 		}, optionsTemplate, false, $('#lhs_filters_conatiner', cel)); 
 
 	}
@@ -128,7 +125,7 @@ $('a.filter-multiple-add-lhs').die().live("click", function(e) {
 		var container = $(this).parents('.lhs-row-filter');
 		$(container).find('#RHS').children().val("").attr('prev-val', "");
 		$(container).find('#RHS_NEW').filter(visibleFilter).children().val("").attr('prev-val', "");
-		$(container).find('a#lhs-filters-header').find('i').toggleClass('fa-plus').toggleClass('fa-minus');
+		$(container).find('a#lhs-filters-header').find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 		$(container).find('a#lhs-filters-header').next().addClass('hide');
 		submitLhsFilter();
 	});
@@ -149,7 +146,7 @@ $('#clear-lhs-company-filters').die().live("click", function(e) {
 
 $('#lhs-filters-header').die().live("click", function(e) {
 	e.preventDefault();
-	$(this).find('i').toggleClass('fa-plus').toggleClass('fa-minus');
+	$(this).find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 	$(this).next().toggleClass('hide');
 	$(this).next().find('.lhs-contact-filter-row:visible').find('#RHS').filter(visibleFilter).find(':not(input.date)').focus();
 });

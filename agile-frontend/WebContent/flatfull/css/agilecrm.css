@@ -102,7 +102,7 @@ table {
 }
 ul.tagsinput li.tag > span > a:first-child {
 	display: inline-block !important;
-	color:#fff;
+	/* color:#fff; */
 	vertical-align:middle;
 }
  ul.tagsinput li.tag > span > a:second-child {
@@ -307,13 +307,18 @@ table .header:hover::after {
 }
 table .header::after {
 	content: "";
-	float: right;
+	
 	margin-top: 5px;
-	/* margin-right:50%; */
+	/* margin-right:50%; 
+	float: right;
+	*/
 	border-width: 0 4px 4px;
 	border-style: solid;
 	border-color: black transparent;
 	visibility: hidden;
+	position:relative;
+	top:-10px;
+	left:10px;
 }
 table .headerSortUp::after {
 	border-bottom: none;

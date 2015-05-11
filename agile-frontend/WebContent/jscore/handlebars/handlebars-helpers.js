@@ -1462,6 +1462,11 @@ $(function()
 		return " ";
 	});
 
+	Handlebars.registerHelper("getBase64Domain", function()
+	{
+		return window.btoa(window.location.host.split(".")[0]);
+	});
+
 	// Gets date in given range
 	Handlebars.registerHelper('date-range', function(from_date_string, no_of_days, options)
 	{
@@ -3806,7 +3811,7 @@ $(function()
 			// Avoid comma appending to last element
 			if (i < j - 1)
 			{
-				ret = ret + ",";
+				ret = ret + ", ";
 			}
 			;
 		}
@@ -5991,36 +5996,6 @@ $(function()
 			}
 		}
 		return new Handlebars.SafeString(url);
-
-	});
-
-	/**
-	 * return onboarding scheduling url by reading fron globals.js file
-	 */
-	Handlebars.registerHelper('ONBOARDING_CALENDAR_URL', function()
-	{
-
-		return ONBOARDING_SCHEDULE_URL;
-
-	});
-
-	/**
-	 * return support scheduling url by reading fron util.js file
-	 */
-	Handlebars.registerHelper('SUPPORT_CALENDAR_URL', function()
-	{
-
-		return SUPPORT_SCHEDULE_URL;
-
-	});
-
-	/**
-	 * return sales scheduling url by reading fron util.js file
-	 */
-	Handlebars.registerHelper('SALES_CALENDAR_URL', function()
-	{
-
-		return SALES_SCHEDULE_URL;
 
 	});
 

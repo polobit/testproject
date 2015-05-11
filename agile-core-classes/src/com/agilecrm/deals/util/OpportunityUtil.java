@@ -435,44 +435,10 @@ public class OpportunityUtil
 	{
 		if (pipelineId == null || pipelineId == 0L)
 			pipelineId = MilestoneUtil.getMilestones().id;
-		try
-		{
-			Map<String, Object> searchMap = new HashMap<String, Object>();
 
-			if (pipelineId != null && pipelineId != 1L)
-			{
-				// If the track is deleted by the user, get the deals from the
-				// default track.
-				if (MilestoneUtil.getMilestone(pipelineId) == null)
-					pipelineId = MilestoneUtil.getMilestones().id;
+		return getOpportunitiesByFilterWithoutDefaultPipeLine(ownerId, milestone, contactId, fieldName, max, cursor,
+				pipelineId);
 
-				searchMap.put("pipeline", new Key<Milestone>(Milestone.class, pipelineId));
-			}
-
-			if (StringUtils.isNotBlank(ownerId))
-				searchMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId)));
-
-			if (StringUtils.isNotBlank(milestone))
-				searchMap.put("milestone", milestone);
-
-			if (StringUtils.isNotBlank(contactId))
-				searchMap.put("related_contacts", new Key<Contact>(Contact.class, Long.parseLong(contactId)));
-
-			if (!StringUtils.isNotBlank(fieldName))
-				fieldName = "-created_time";
-
-			if (max != 0)
-				return dao.fetchAllByOrder(max, cursor, searchMap, true, false, fieldName);
-
-			return dao.listByProperty(searchMap);
-
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			return null;
-		}
 	}
 
 	/**
@@ -495,8 +461,7 @@ public class OpportunityUtil
 		if (data.length > 1 && !StringUtils.isEmpty(data[1]))
 		{
 			taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0]).param("ids", data[1])
-					.header("Content-Type", "application/x-www-form-urlencoded")
-					.method(Method.POST);
+					.header("Content-Type", "application/x-www-form-urlencoded").method(Method.POST);
 
 			if (data.length > 2 && !StringUtils.isEmpty(data[2]))
 				taskOptions.param("form", data[2]);
@@ -508,8 +473,7 @@ public class OpportunityUtil
 		if (data.length > 0)
 		{
 			taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0])
-					.header("Content-Type", "application/x-www-form-urlencoded")
-					.method(Method.POST);
+					.header("Content-Type", "application/x-www-form-urlencoded").method(Method.POST);
 			if (data.length > 2 && !StringUtils.isEmpty(data[2]))
 				taskOptions.param("form", data[2]);
 			queue.addAsync(taskOptions);
@@ -1304,6 +1268,92 @@ public class OpportunityUtil
 
 		if (index != null)
 			index.delete(docIds);
+	}
+	/**
+	 * Get the won deals list which are won in the specified duration.
+	 * 
+	 * @param minTime
+	 *            Long object
+	 * @param maxTime
+	 *            Long object
+	 */
+	public static List<Opportunity> getWonDealsList(Long minTime, Long maxTime)
+	{
+		List<Opportunity> ownDealsList=new ArrayList<Opportunity>();
+		try 
+		{
+			ownDealsList = dao.ofy().query(Opportunity.class).filter("won_date >= ", minTime).filter("won_date <= ", maxTime).list();
+		} catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return ownDealsList;
+
+	}
+	/**
+	 * Get the new deals list in the specified duration.
+	 * 
+	 * @param minTime
+	 *            Long object
+	 * @param maxTime
+	 *            Long object
+	 */
+	public static List<Opportunity> getNewDealsList(Long minTime, Long maxTime)
+	{
+		List<Opportunity> newDealsList=new ArrayList<Opportunity>();
+		try 
+		{
+			newDealsList = dao.ofy().query(Opportunity.class).filter("created_time >= ", minTime).filter("created_time <= ", maxTime).list();
+		} catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return newDealsList;
+
+	}
+
+	public static List<Opportunity> getOpportunitiesByFilterWithoutDefaultPipeLine(String ownerId, String milestone,
+			String contactId, String fieldName, int max, String cursor, Long pipelineId)
+	{
+		try
+		{
+			Map<String, Object> searchMap = new HashMap<String, Object>();
+
+			if (pipelineId != null && pipelineId != 1L)
+			{
+				// If the track is deleted by the user, get the deals from the
+				// default track.
+				if (MilestoneUtil.getMilestone(pipelineId) == null)
+					pipelineId = MilestoneUtil.getMilestones().id;
+
+				searchMap.put("pipeline", new Key<Milestone>(Milestone.class, pipelineId));
+			}
+
+			if (StringUtils.isNotBlank(ownerId))
+				searchMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId)));
+
+			if (StringUtils.isNotBlank(milestone))
+				searchMap.put("milestone", milestone);
+
+			if (StringUtils.isNotBlank(contactId))
+				searchMap.put("related_contacts", new Key<Contact>(Contact.class, Long.parseLong(contactId)));
+
+			if (!StringUtils.isNotBlank(fieldName))
+				fieldName = "-created_time";
+
+			if (max != 0)
+				return dao.fetchAllByOrder(max, cursor, searchMap, true, false, fieldName);
+
+			return dao.listByProperty(searchMap);
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			return null;
+		}
+
 	}
 
 }

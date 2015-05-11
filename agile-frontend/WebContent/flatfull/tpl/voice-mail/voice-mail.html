@@ -1,15 +1,17 @@
 <script id="voice-mail-collection-template" type="text/html">
-<div class="row">
-    <div class="span12">
-        <div class="page-header">
-            <h2>&nbsp;Voicemail</h2>
-            <a href="#voice-mail-add" class="voice-mail-add btn btn-sm btn-default right" style="top:-30px;position:relative"><i class="icon-plus-sign" /> Add Voicemail</a>
+<div class="col">
+    <div class="hbox h-auto m-b-lg">
+	  <div class="panel panel-default">
+		<div class="panel-heading">
+            <div class="pull-left m-t-xs">Voicemail List</div>
+			<div class="pull-right">
+            	<a href="#voice-mail-add" class="voice-mail-add btn btn-default btn-sm btn-addon" id="addEmailTemplate">
+           		 <span><i class="icon-plus-sign"></i></span> Add Voicemail</a>
+			</div>
+			<div class="clearfix"></div>
         </div>
-    </div>
-</div>
-<div class="row">
-    <div class="span9">
-		{{#unless this.length}}
+		<div>
+			{{#unless this.length}}
 		<div class="alert-info alert">
             <div class="slate-content">
                 <div class="box-left pull-left m-r-md">
@@ -31,8 +33,7 @@
         <div class="data-block">
             <div class="data-container">
 				<div class="panel panel-default">
-			    <div class="panel-heading">Voice Mails List</div>
-                <table class="table table-striped showCheckboxes agile-ellipsis-dynamic" url="core/api/voicemails/bulk" id="voicemail-list">
+                <table class="table table-striped showCheckboxes agile-table" url="core/api/voicemails/bulk" id="voicemail-list">
 				 <col width="30px"><col width="35%"><col width="35%"><col width="20%"><col width="10%">
                     <thead>
                         <tr>
@@ -49,18 +50,17 @@
             </div>
         </div>
         {{/if}}
+		</div>
+	   </div>	   
     </div>
-    <div class="span3">
-        <div class="data-block">
-            <div class="well">
-                <h3>
-                    How to use Voicemails?
-                </h3>
-                <br />
-                <p>When you call customers from Agile's telephony widgets, you have the option to leave a pre-recorded voicemail. You can manage your pre-recorded voicemail messages (WAV files) here and choose one of them when leaving a voicemails.</p>
-            </div>
-        </div>
-    </div>
+</div>
+<div class="col w-md">
+	<div class="data-block">
+        <div class="p-l p-r">
+            <h4 class="m-t-none">How to use Voicemails?</h4>
+			<p>When you call customers from Agile's telephony widgets, you have the option to leave a pre-recorded voicemail. You can manage your pre-recorded voicemail messages (WAV files) here and choose one of them when leaving a voicemails.</p>
+		</div>
+	</div>	
 </div>
 </script>
 

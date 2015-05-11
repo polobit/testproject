@@ -1,7 +1,6 @@
 package com.thirdparty.mandrill.webhook;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
@@ -17,6 +16,8 @@ import com.agilecrm.account.APIKey;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.subscription.limits.PlanLimits;
+import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.workflows.triggers.Trigger;
@@ -115,7 +116,19 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 
 		    System.out.println("saving contact");
 		    contact.setContactOwner(owner);
-		    contact.save();
+
+		    try
+		    {
+			contact.save();
+		    }
+		    catch (PlanRestrictedException e)
+		    {
+			continue;
+		    }
+		    catch (Exception e)
+		    {
+			continue;
+		    }
 
 		    List<Trigger> triggers = TriggerUtil
 			    .getTriggersByCondition(com.agilecrm.workflows.triggers.Trigger.Type.INBOUND_MAIL_EVENT);
@@ -250,7 +263,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 
     public Boolean isNewContact(String fromEmail)
     {
-	return !ContactUtil.isExists(fromEmail);
+	return !ContactUtil.isExists(fromEmail.toLowerCase());
     }
 
     public Boolean getTriggerRunResult(Boolean newContact, Trigger trigger)

@@ -242,7 +242,7 @@ function setupContactFilterList(cel, tag_id)
 	if (tag_id)
 		$('.filter-criteria', cel)
 				.html(
-						'<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n"><li  class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="m-l-xs pull-left">' + decodeURI(tag_id) + '</span><a class="close default_contact_remove_tag m-l-xs pull-left">&times</a></li></ul>').attr("_filter", tag_id);
+						'<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li  class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="m-l-xs pull-left">' + decodeURI(tag_id) + '</span><a class="close default_contact_remove_tag m-l-xs pull-left">&times</a></li></ul>').attr("_filter", tag_id);
 						
 
 	var filter_id = null;

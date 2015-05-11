@@ -27,6 +27,7 @@ $(function () {
         	"original-title" : currentDeal.toJSON().name,
         	"content" :  ele,
         	"html" : true,
+        	"container": 'body'
         });
        
         /**
@@ -40,6 +41,7 @@ $(function () {
         	"original-title" : currentDeal.toJSON().name,
         	"content" :  ele,
         	"html" : true,
+        	"container": 'body'
         });
         
         $(this).popover('show');
@@ -226,6 +228,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 	
 	tracks.collection.fetch({
 		success: function(data){
+			hideTransitionBar();
 			var jsonModel = data.toJSON();
 			var html = '<option value="">Select..</option>';
 			console.log(jsonModel);
@@ -409,7 +412,7 @@ function appendCustomfields(el){
 			 $(el).find('#opportunities-model-list tr').each(function(index,element){
 				 var row = '';
 				 $.each(customfields, function(i,customfield){
-						 row += '<td class="deal_custom_replace"><div class="text-ellipsis">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
+						 row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
 					});
 				 $(this).append(row);
 			 });

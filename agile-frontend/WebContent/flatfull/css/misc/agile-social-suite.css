@@ -188,9 +188,9 @@ padding-left:57px;
 	position: relative;
 	/*bottom: 14px;*/
 	margin-right: 3px;
-	top:8px;
+	top:5px;
 	margin-right:3px;
-	right:10px;
+	right:50px;
 }
 
 .mentions-small-title {
@@ -688,8 +688,9 @@ padding: 6px 0 6px 0;
 }
 .socialicons-widget-top
 {
-	position:relative;
-	top:19px;
+	position:absolute;
+	top:25px;
+	right:15px;
 }
 .socialicons-widget-top i
 {

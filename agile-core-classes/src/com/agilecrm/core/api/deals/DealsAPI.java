@@ -420,6 +420,9 @@ public class DealsAPI
 		System.out.println("------------" + idsArray.length());
 	    }
 
+	    if (StringUtils.isEmpty(filters))
+		filters = "{}";
+
 	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
 	    System.out.println("------------" + filterJSON.toString());
 

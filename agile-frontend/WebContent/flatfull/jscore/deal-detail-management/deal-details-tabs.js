@@ -93,7 +93,7 @@ $(function(){
 		// Add loading. Adds loading only if there is no loaded image added already i.e., 
 		// to avoid multiple loading images on hitting delete multiple times
 		if($(this).find('.loading').length == 0)
-			$(this).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
+			$(this).parent().append($(LOADING_HTML));
 		
 		$.ajax({
 			url: entity_url,
