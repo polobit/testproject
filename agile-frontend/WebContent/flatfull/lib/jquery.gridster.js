@@ -1922,9 +1922,9 @@
         var cssWidth;
         var cssHeight;
         if($('#'+this.$player.attr('id')).attr("data-sizex")=='1')
-        	cssWidth = 32.9;
+        	cssWidth = 32;
         else if($('#'+this.$player.attr('id')).attr("data-sizex")=='2')
-        	cssWidth = 66.4;
+        	cssWidth = 66;
         else if($('#'+this.$player.attr('id')).attr("data-sizex")=='3')
         	cssWidth = 100;
         if($('#'+this.$player.attr('id')).attr("data-sizey")=='1')
@@ -2116,9 +2116,9 @@
         var cssWidth;
         var cssHeight;
         if($('#'+this.$resized_widget.attr('id')).attr("data-sizex")=='1')
-        	cssWidth = 32.9;
+        	cssWidth = 32;
         else if($('#'+this.$resized_widget.attr('id')).attr("data-sizex")=='2')
-        	cssWidth = 66.4;
+        	cssWidth = 66;
         else if($('#'+this.$resized_widget.attr('id')).attr("data-sizex")=='3')
         	cssWidth = 100;
         if($('#'+this.$resized_widget.attr('id')).attr("data-sizey")=='1')
@@ -2130,7 +2130,7 @@
         this.$resized_widget.css({
             /*'min-width': this.options.widget_base_dimensions[0],
             'min-height': this.options.widget_base_dimensions[1]*/
-        	'min-width': '32.9%',
+        	'min-width': '32%',
             'min-height': this.options.widget_base_dimensions[1]
         });
 
@@ -2282,12 +2282,12 @@
             });
         else if(Math.max(Math.min(this.resize_initial_width + rel_x, max_width), min_width)==((2*Math.round($('.gridster-portlets').width()/3))+20-20))
         	this.$resized_widget.css({
-            	'width': '66.4%',
+            	'width': '66%',
             	'height': Math.max(Math.min(this.resize_initial_height + rel_y, max_height), min_height)
             });
         else if(Math.max(Math.min(this.resize_initial_width + rel_x, max_width), min_width)==(Math.round($('.gridster-portlets').width()/3)-20))
         	this.$resized_widget.css({
-            	'width': '32.9%',
+            	'width': '32%',
             	'height': Math.max(Math.min(this.resize_initial_height + rel_y, max_height), min_height)
             });
         else

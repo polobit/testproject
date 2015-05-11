@@ -27,6 +27,7 @@ $(function () {
         	"original-title" : currentDeal.toJSON().name,
         	"content" :  ele,
         	"html" : true,
+        	"container": 'body'
         });
        
         /**
@@ -40,6 +41,7 @@ $(function () {
         	"original-title" : currentDeal.toJSON().name,
         	"content" :  ele,
         	"html" : true,
+        	"container": 'body'
         });
         
         $(this).popover('show');
@@ -226,6 +228,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 	
 	tracks.collection.fetch({
 		success: function(data){
+			hideTransitionBar();
 			var jsonModel = data.toJSON();
 			var html = '<option value="">Select..</option>';
 			console.log(jsonModel);

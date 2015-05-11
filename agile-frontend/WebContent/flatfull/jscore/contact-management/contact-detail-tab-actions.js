@@ -45,9 +45,10 @@ $(function(){
 		var id = $(this).attr('data');
 		var that = this;
 			complete_task(id, tasksView.collection, undefined, function(data) {
-				$(that).fadeOut();
-				$(that).siblings(".task-subject").css("text-decoration", "line-through");
+				$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
 				console.log($(that).parents('.activity-text-block').css("background-color", "#FFFAFA"));
+				$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
+				tasksView.collection.add(data, { silent : true });
 			});
 		}
 	});
@@ -231,9 +232,9 @@ $(function(){
 	 */
 	$(".add-document-cancel").die().live('click', function(e){
 		e.preventDefault();
-		var el = $(this).closest("div");
+		var el = $("#documents");
 		el.find(".contact-document-select").css("display", "none");
-		el.find(".add-document-select").css("display", "inline");
+		el.find(".add-document-select").css("display", "inline-block");
 	});
 	
 	/**

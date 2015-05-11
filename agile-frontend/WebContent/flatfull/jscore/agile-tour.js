@@ -88,6 +88,9 @@ var tour;
  */
 function start_tour(key, el)
 {
+	if((1 + 1) == 2)
+		return;
+	
 	if (!key)
 		key = Current_Route;
 

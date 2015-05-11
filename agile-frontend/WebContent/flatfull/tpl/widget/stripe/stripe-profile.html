@@ -22,61 +22,58 @@
 <div class="wrapper-xs">
 	<span>Subscription Details</span>
 </div>
-<ul class="list-group m-b-none text-base">
+<div class="b-t b-b wrapper-sm">
 	{{#if customer.subscription}}
-		<li class="list-group-item r-none b-l-none b-r-none text-base">	
+		<div class="row">	
 			<div class="col-md-5">Start Date
-				<div class="pull-right">:</div>
+				<div class="pull-right"> :</div>
 			</div>
-			<div class="col-md-6 m-l-sm text-muted">
+			<div class="col-md-7 text-muted">
 				<i class="fa fa-clock-o m-r-xs"></i>
 				<time class="time-ago" datetime="{{epochToHumanDate "" customer.subscription.start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" customer.subscription.start}}</time>
 			</div>
-		</li>
+		</div>
 		{{#if customer.subscription.currentPeriodEnd}}
-		<li class="list-group-item r-none b-l-none b-r-none text-base">	
+		<div class="row">	
 			<div class="col-md-5">End Date
 				<div class="pull-right">:</div>
 			</div>
-			<div class="col-md-6 m-l-sm text-muted">
+			<div class="col-md-7 text-muted">
 				<i class="fa fa-clock-o m-r-xs"></i>
 				<time class="time-ago" datetime="{{epochToHumanDate "" customer.subscription.currentPeriodEnd}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" customer.subscription.currentPeriodEnd}}</time>
 			</div>
-		</li>
+		</div>
 		{{/if}}
-		<li class="list-group-item r-none b-l-none b-r-none text-base">	
+		<div class="row">	
 			<div class="col-md-5">Current Plan
 				<div class="pull-right">:</div>
-			</div>
-							
-			<div class="col-md-6 m-l-sm">
+			</div>							
+			<div class="col-md-7">
 				{{customer.subscription.plan.id}}
 			</div>
-		</li>
-		<li class="list-group-item r-none b-l-none b-r-none text-base">	
+		</div>
+		<div class="row">	
 			<div class="col-md-5">Interval
 				<div class="pull-right">:</div>
-			</div>
-							
-			<div class="col-md-6 m-l-sm">
+			</div>							
+			<div class="col-md-7">
 				{{customer.subscription.plan.interval}}
 			</div>
-		</li>
-		<li class="list-group-item r-none b-l-none b-r-none text-base">	
-			<div class="col--md-5">Amount
+		</div>
+		<div class="row">	
+			<div class="col-md-5">Amount
 				<div class="pull-right">:</div>
-			</div>
-							
-			<div class="col-md-6 m-l-sm">
+			</div>							
+			<div class="col-md-7">
 				{{numeric_operation customer.subscription.plan.amount 100 "/"}} {{toUpperCase customer.subscription.plan.currency}}
 			</div>
-		</li>
+		</div>
 	{{else}}
-		<li class="list-group-item r-none b-l-none b-r-none text-base">
+		<div class="row">
 	    	No active subscription
-		</li>
+		</div>
 	{{/if}}
-</ul>
+</div>
 
 <div class="wrapper-xs">
 		<span>Invoices</span>
