@@ -1,6 +1,7 @@
 package com.agilecrm.contact.email.util;
 
 import java.net.URLEncoder;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -28,16 +29,16 @@ public class ContactOfficeUtil
     public static String getOfficeURL(AgileUser agileUser, String searchEmail, String offset, String count)
     {
 	// Get Office Exchange Prefs
-	OfficeEmailPrefs officePrefs = OfficeEmailPrefsUtil.getOfficePrefs(agileUser);
+	List<OfficeEmailPrefs> officePrefs = OfficeEmailPrefsUtil.getOfficePrefsList(agileUser);
 
-	if (officePrefs == null)
+	if (officePrefs == null || officePrefs.size() <= 0)
 	    return null;
 
-	return ContactOfficeUtil.getOfficeURLForPrefs(officePrefs, searchEmail, offset, count);
+	return ContactOfficeUtil.getOfficeURLForPrefs(officePrefs.get(0), searchEmail, offset, count);
     }
 
     /**
-     * Returns url to fetch emails from given "fromemail" office account.
+     * Returns url to fetch emails with respect to "fromemail" office account.
      * 
      * @param searchEmail
      *            - search email-id.
@@ -50,8 +51,7 @@ public class ContactOfficeUtil
      *            - count or limit to number of emails.
      * @return String
      */
-    public static String getOfficeURL(AgileUser agileUser, String fromEmail, String searchEmail, String offset,
-	    String count)
+    public static String getOfficeURL(String fromEmail, String searchEmail, String offset, String count)
     {
 	// Get Office Exchange Prefs
 	Objectify ofy = ObjectifyService.begin();

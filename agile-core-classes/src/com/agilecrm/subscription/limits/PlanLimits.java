@@ -41,6 +41,7 @@ public class PlanLimits
     protected String reporting;
     protected boolean whiteLabelEnabled;
     protected boolean emailWhiteLabelEnabled;
+    protected Integer emailAccountsLimit;
 
     /**
      * New plan restrictions
@@ -385,6 +386,11 @@ public class PlanLimits
     public boolean getCustomWidget()
     {
 	return customWidget;
+    }
+    
+    public Integer getEmailAccountLimit()
+    {
+    	return emailAccountsLimit;
     }
 
 }

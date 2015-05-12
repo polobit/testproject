@@ -9,9 +9,12 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -20,6 +23,7 @@ import org.json.JSONObject;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.email.util.ContactOfficeUtil;
 import com.agilecrm.email.wrappers.EmailWrapper;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.OfficeEmailPrefs;
@@ -46,16 +50,16 @@ public class OfficePrefsAPI
      */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public OfficeEmailPrefs getOfficePrefs()
+    public List<OfficeEmailPrefs> getOfficePrefs()
     {
-	OfficeEmailPrefs prefs = OfficeEmailPrefsUtil.getOfficePrefs(AgileUser.getCurrentAgileUser());
+	List<OfficeEmailPrefs> prefsList = OfficeEmailPrefsUtil.getOfficePrefsList(AgileUser.getCurrentAgileUser());
 
-	if (prefs != null)
+	for (OfficeEmailPrefs prefs : prefsList)
 	{
-	    prefs.password = OfficeEmailPrefs.MASKED_PASSWORD;
+	    if (prefs != null)
+		prefs.password = OfficeEmailPrefs.MASKED_PASSWORD;
 	}
-	System.out.println(prefs);
-	return prefs;
+	return prefsList;
     }
 
     /**
@@ -70,9 +74,17 @@ public class OfficePrefsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public OfficeEmailPrefs createOfficeEmailPrefs(OfficeEmailPrefs prefs)
     {
-	prefs.setAgileUser(new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id));
-	prefs.save();
-	return prefs;
+	int emailAccountLimitCount = BillingRestrictionUtil.getBillingRestriction(null, null).getCurrentLimits()
+	        .getEmailAccountLimit();
+	int emailPrefsCount = ContactEmailUtil.getEmailPrefsCount();
+	if (emailPrefsCount < emailAccountLimitCount)
+	{
+	    prefs.setAgileUser(new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id));
+	    prefs.save();
+	    return prefs;
+	}
+	else
+	    return null;
     }
 
     /**
@@ -88,7 +100,6 @@ public class OfficePrefsAPI
     public OfficeEmailPrefs updateOfficeEmailPrefs(OfficeEmailPrefs prefs)
     {
 	prefs.setAgileUser(new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id));
-
 	prefs.save();
 	return prefs;
     }
@@ -96,12 +107,30 @@ public class OfficePrefsAPI
     /**
      * Deletes OfficeEmailPrefs with respect to agile user.
      */
+    @Path("/delete/{id}")
     @DELETE
-    public void deleteOfficeEmailPrefs()
+    public void deleteOfficeEmailPrefs(@PathParam("id") String sid)
     {
-	OfficeEmailPrefs prefs = OfficeEmailPrefsUtil.getOfficePrefs(AgileUser.getCurrentAgileUser());
-	if (prefs != null)
-	    prefs.delete();
+	try
+	{
+	    AgileUser user = AgileUser.getCurrentAgileUser();
+	    Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, user.id);
+	    if (StringUtils.isNotBlank(sid))
+	    {
+		Long id = Long.parseLong(sid);
+		if (id != null)
+		{
+		    OfficeEmailPrefs prefs = OfficeEmailPrefsUtil.getOfficeEmailPrefs(id, agileUserKey);
+		    if (prefs != null)
+			prefs.delete();
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
+		    .entity(e.getMessage()).build());
+	}
     }
 
     /**
@@ -135,14 +164,11 @@ public class OfficePrefsAPI
 	    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
 
 	    // Gets office365Prefs url if not null, otherwise imap url.
-	    String url = ContactOfficeUtil.getOfficeURL(AgileUser.getCurrentAgileUser(), normalisedFromEmail,
-		    normalisedSearchEmail, cursor, pageSize);
+	    String url = ContactOfficeUtil.getOfficeURL(normalisedFromEmail, normalisedSearchEmail, cursor, pageSize);
 
 	    // If both are not set, return Contact emails.
 	    if (StringUtils.isNotBlank(url))
-	    {
-		emails = ContactEmailUtil.getEmailsfromServer(url, pageSize, cursor);
-	    }
+		emails = ContactEmailUtil.getEmailsfromServer(url, pageSize, cursor, normalisedFromEmail);
 	}
 	catch (Exception e)
 	{
@@ -162,7 +188,7 @@ public class OfficePrefsAPI
     @Path("shared-to-users")
     @GET
     @Produces({ MediaType.APPLICATION_JSON + " ;charset=utf-8", MediaType.APPLICATION_XML + " ;charset=utf-8" })
-    public String getSharedToUsersList()
+    public String getSharedToUsersList(@QueryParam("id") String sid)
     {
 
 	List<AgileUser> agileUsers = null;
@@ -175,17 +201,22 @@ public class OfficePrefsAPI
 	    {
 		Iterator<AgileUser> itr = agileUsers.iterator();
 		AgileUser currentAgileUser = AgileUser.getCurrentAgileUser();
+		Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, currentAgileUser.id);
 		while (itr.hasNext())
 		{
 		    AgileUser user = itr.next();
 		    if (user.id.longValue() == currentAgileUser.id.longValue())
 			itr.remove();
 		}
-		OfficeEmailPrefs imapEmailPrefs = OfficeEmailPrefsUtil.getOfficePrefs(currentAgileUser);
 		List<Key<AgileUser>> sharedUsers = null;
-		if (imapEmailPrefs != null)
+		if (StringUtils.isNotBlank(sid))
 		{
-		    sharedUsers = imapEmailPrefs.getSharedWithUsers();
+		    Long uid = Long.parseLong(sid);
+		    OfficeEmailPrefs imapEmailPrefs = OfficeEmailPrefsUtil.getOfficeEmailPrefs(uid, agileUserKey);
+		    if (imapEmailPrefs != null)
+		    {
+			sharedUsers = imapEmailPrefs.getSharedWithUsers();
+		    }
 		}
 		for (AgileUser agileUser : agileUsers)
 		{
