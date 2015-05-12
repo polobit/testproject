@@ -298,7 +298,7 @@ $('#portlets-tasks-model-list > tr').live('click', function(e) {
 	// Add notes in task modal
 	showNoteOnForm("updateTaskForm", value.notes);*/
 	var hrefFlag = false;
-	if(e.target.attributes!=undefined && e.target.attributes!=null && e.target.attributes.length==0 && e.srcElement.tagName=="A")
+	if(e.target.attributes!=undefined && e.target.attributes!=null && e.target.attributes.length==0 && e.target.tagName.toLowerCase()=="a")
 		hrefFlag = true;
 	$.each(e.target.attributes,function(){
 		if(this.name=="href")
