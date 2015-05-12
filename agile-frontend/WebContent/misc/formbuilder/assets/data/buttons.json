@@ -2,11 +2,6 @@
   {
     "title": "Single Button",
     "fields": {
-      "id": {
-        "label": "ID / Name",
-        "type": "input",
-        "value": "singlebutton"
-      },
       "label": {
         "label": "Label Text",
         "type": "input",
@@ -22,11 +17,6 @@
   {
     "title": "Double Button",
     "fields": {
-      "id": {
-        "label": "Button 1 ID / Name",
-        "type": "input",
-        "value": "button1id"
-      },
       "label": {
         "label": "Label Text",
         "type": "input",
@@ -36,11 +26,6 @@
         "label": "Button Label",
         "type": "input",
         "value": "Submit"
-      },
-      "id2": {
-        "label": "Button 2 ID / Name",
-        "type": "input",
-        "value": "button2id"
       },
       "button2label": {
         "label": "Button Label",
