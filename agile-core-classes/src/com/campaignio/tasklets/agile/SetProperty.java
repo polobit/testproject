@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.util.ContactUtil;
@@ -63,10 +64,10 @@ public class SetProperty extends TaskletAdapter
 		String updated_value = getStringValue(nodeJSON, subscriberJSON, data, UPDATED_VALUE);
 
 		// updates property
-		update(updated_field, updated_value, campaignJSON, subscriberJSON);
+		JSONObject new_subscriber_json = update(updated_field, updated_value, campaignJSON, subscriberJSON);
 
 		// Execute Next One in Loop
-		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+		TaskletUtil.executeTasklet(campaignJSON, new_subscriber_json, data, nodeJSON, null);
 
 	}
 
@@ -83,7 +84,8 @@ public class SetProperty extends TaskletAdapter
 	 * @param subscriberJSON
 	 *            - contact json
 	 */
-	private void update(String updated_field, String updated_value, JSONObject campaignJSON, JSONObject subscriberJSON)
+	private JSONObject update(String updated_field, String updated_value, JSONObject campaignJSON,
+			JSONObject subscriberJSON)
 	{
 
 		try
@@ -94,7 +96,10 @@ public class SetProperty extends TaskletAdapter
 			Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
 
 			if (contact == null)
-				return;
+				return subscriberJSON;
+
+			if (FieldType.SYSTEM == new ContactField(updated_field, updated_value, null).getFieldType())
+				return update_system_property(contact, updated_field, updated_value, campaignJSON, subscriberJSON);
 
 			// Get Custom field definition
 			CustomFieldDef customFieldDef = CustomFieldDefUtil.getFieldByName(updated_field, SCOPE.CONTACT);
@@ -106,7 +111,7 @@ public class SetProperty extends TaskletAdapter
 								+ "' since there is no such Contact custom field defined.",
 						LogType.SET_PROPERTY_FAILED.toString());
 
-				return;
+				return subscriberJSON;
 			}
 
 			// Get contact field
@@ -150,10 +155,58 @@ public class SetProperty extends TaskletAdapter
 			if (field != null)
 				contact.save();
 
+			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+					"Property " + updated_field + " is updated to " + updated_value, LogType.SET_PROPERTY.toString());
+
+			// Update subscriberJSON
+			subscriberJSON = AgileTaskletUtil.getUpdatedSubscriberJSON(contact, subscriberJSON);
+
+			return subscriberJSON;
+
 		}
 		catch (Exception e)
 		{
 			System.out.println("Exception occured in SetProperty tasklet..." + e.getMessage());
+			return subscriberJSON;
+		}
+
+	}
+
+	private JSONObject update_system_property(Contact contact, String updated_field, String updated_value,
+			JSONObject campaignJSON, JSONObject subscriberJSON)
+	{
+		try
+		{
+			ContactField field = contact.getContactField(updated_field);
+
+			if (field == null)
+			{
+				// create a new field
+				ContactField newField = new ContactField(updated_field, updated_value, "");
+				contact.addProperty(newField);
+			}
+			else
+			{
+				// update existing field
+				field.value = updated_value;
+
+				// Company gets removed in postload if not set to null
+				contact.contact_company_id = null;
+				contact.save();
+			}
+
+			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+					"Property " + updated_field + " is updated to " + updated_value, LogType.SET_PROPERTY.toString());
+
+			// Update subscriberJSON
+			subscriberJSON = AgileTaskletUtil.getUpdatedSubscriberJSON(contact, subscriberJSON);
+
+			return subscriberJSON;
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception while updating system property" + e.getMessage());
+			return subscriberJSON;
 		}
 
 	}
