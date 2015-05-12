@@ -2,6 +2,11 @@
  * Creates backbone router to access preferences of the user (email templates,
  * email (gmail/IMAP), notifications and etc..).
  */
+
+var HAS_EMAIL_ACCOUNT_LIMIT_REACHED = false;
+
+var EMAIL_PREFS_WIDGET_SIZE = 0;
+
 var SettingsRouter = Backbone.Router.extend({
 
 	routes : {
