@@ -117,6 +117,7 @@ public class SetProperty extends TaskletAdapter
 			// Get contact field
 			ContactField field = contact.getContactField(updated_field);
 
+			String isDate = "";
 			switch (customFieldDef.field_type)
 			{
 			case NUMBER:
@@ -133,6 +134,9 @@ public class SetProperty extends TaskletAdapter
 							updated_value, null), campaignJSON, subscriberJSON);
 				else
 					field = dateSetProperty(false, updated_field, updated_value, field, campaignJSON, subscriberJSON);
+				if (isIncOrDesc(updated_value))
+					isDate = " days";
+
 				break;
 
 			case LIST:
@@ -156,7 +160,8 @@ public class SetProperty extends TaskletAdapter
 				contact.save();
 
 			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-					"Property " + updated_field + " is updated to " + updated_value, LogType.SET_PROPERTY.toString());
+					"Property " + updated_field + " is updated to " + updated_value + isDate,
+					LogType.SET_PROPERTY.toString());
 
 			// Update subscriberJSON
 			subscriberJSON = AgileTaskletUtil.getUpdatedSubscriberJSON(contact, subscriberJSON);
@@ -321,10 +326,10 @@ public class SetProperty extends TaskletAdapter
 		try
 		{
 			if (isIncOrDesc(updated_value))
-				contact_field.value = isNew ? Long.parseLong(updated_value.substring(1)) + "" : Long
-						.parseLong(contact_field.value) + Long.parseLong(updated_value) + "";
+				contact_field.value = isNew ? Long.parseLong(updated_value) + "" : Long.parseLong(contact_field.value)
+						+ Long.parseLong(updated_value) + "";
 			else
-				contact_field.value = updated_value;
+				contact_field = null;
 		}
 		catch (Exception e)
 		{

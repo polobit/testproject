@@ -17,7 +17,7 @@
             "category": "Settings", 
             "name": "updated_field",
             "id": "updated_field",
-            "title": "Select the field.",
+            "title": "Enter the field value. <br/>Dates as mm/dd/yyyy <br/>+1 to increment dates or numbers <br/> Check help tab for details.",
             "fieldType": "update_field",
             "type": "select"
         },
@@ -32,7 +32,7 @@
             "type": "text"
         },
         {
-        	"label": "Change the value of a specific property for the Contact",
+        	"label": "For date fields use the format mm/dd/yyyy.<br/>It also supports incrementing number & date properties. To increment a date or number by 2, you may specify &quot;+2&quot; (without quotes). Date will be incremented by 2 days in this case.<br/>For fields of type List, the value should match one of the List values (case sensitive)",
             "category": "Help",
             "componet": "label",
             "type": "label" 
