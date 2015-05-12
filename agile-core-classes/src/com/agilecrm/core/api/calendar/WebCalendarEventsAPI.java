@@ -17,6 +17,7 @@ import org.json.JSONException;
 
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.WebCalendarEvent;
+import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.WebCalendarEventUtil;
 import com.agilecrm.contact.Contact;
 
@@ -96,6 +97,20 @@ public class WebCalendarEventsAPI
 			System.out.println(e.getMessage());
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
+		}
+
+	}
+
+	@Path("/deletewebevent")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public void deleteWebEvent(@QueryParam("event_id") Long eventid, @QueryParam("cancel_reason") String cancel_reason)
+	{
+		System.out.println(eventid + " ---------------" + cancel_reason);
+		Event event = EventUtil.getEvent(eventid);
+		if (event != null)
+		{
+			EventUtil.deleteWebEventFromClinetEnd(event, cancel_reason);
 		}
 
 	}
