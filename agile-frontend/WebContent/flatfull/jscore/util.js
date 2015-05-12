@@ -92,7 +92,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 		if($("#" + selectId, el).next().hasClass("select-loading"))
 			$("#" + selectId, el).next().html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 		else
-			$loading.remove();
+			$("#" + selectId, el).next().html("");
 
 		// Delete prev options if any by verifying whether ul drop down or
 		// select drop down
