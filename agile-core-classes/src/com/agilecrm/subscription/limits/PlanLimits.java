@@ -49,10 +49,9 @@ public class PlanLimits
     protected Integer widgetsLimit;
     protected boolean defaultWidget = true;
     protected boolean callingWidget = true;
-    
+
     protected boolean customWidget = false;
-    
-    
+
     protected Integer TriggersLimit;
     protected Boolean socialSuite = true;
     protected Boolean emailGateway = true;
@@ -382,10 +381,10 @@ public class PlanLimits
     {
 	return defaultWidget;
     }
-    
+
     public boolean getCustomWidget()
     {
-    	return customWidget;
+	return customWidget;
     }
 
 }

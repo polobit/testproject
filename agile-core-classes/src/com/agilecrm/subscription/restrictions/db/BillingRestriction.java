@@ -29,7 +29,6 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.workflows.Workflow;
-import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.analytics.util.AnalyticsSQLUtil;
@@ -192,10 +191,17 @@ public class BillingRestriction
      */
     public PlanLimits getCurrentLimits()
     {
-	if (one_time_emails_count != null && one_time_emails_count > 0)
-	    planDetails.setEmailWhiteLabelEnabled(true);
+	planDetails.setEmailWhiteLabelEnabled(true);
 
 	return planDetails;
+    }
+
+    public boolean isEmailWhiteLabelEnabled()
+    {
+	if (one_time_emails_count != null && one_time_emails_count > 0)
+	    return true;
+
+	return false;
     }
 
     /**
@@ -216,7 +222,7 @@ public class BillingRestriction
 	    return false;
 	if (DomainUserUtil.count() > planDetails.getAllowedUsers())
 	    return false;
-	
+
 	if (TriggerUtil.getCount() > planDetails.getTriggersLimit())
 	    return false;
 
