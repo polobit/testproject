@@ -157,11 +157,13 @@ public class SetProperty extends TaskletAdapter
 			contact.contact_company_id = null;
 			System.out.println("Field is: " + field);
 			if (field != null)
+			{
 				contact.save();
 
-			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-					"Property " + updated_field + " is updated to " + updated_value + isDate,
-					LogType.SET_PROPERTY.toString());
+				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+						"Property " + updated_field + " is updated to " + updated_value + isDate,
+						LogType.SET_PROPERTY.toString());
+			}
 
 			// Update subscriberJSON
 			subscriberJSON = AgileTaskletUtil.getUpdatedSubscriberJSON(contact, subscriberJSON);
@@ -325,11 +327,16 @@ public class SetProperty extends TaskletAdapter
 	{
 		try
 		{
-			if (isIncOrDesc(updated_value))
+			try
+			{
 				contact_field.value = isNew ? Long.parseLong(updated_value) + "" : Long.parseLong(contact_field.value)
 						+ Long.parseLong(updated_value) + "";
-			else
+			}
+			catch (Exception e)
+			{
+				System.out.println("Not a number");
 				contact_field = null;
+			}
 		}
 		catch (Exception e)
 		{

@@ -17,7 +17,7 @@
             "category": "Settings", 
             "name": "updated_field",
             "id": "updated_field",
-            "title": "Enter the field value. <br/>Dates as mm/dd/yyyy <br/>+1 to increment dates or numbers <br/> Check help tab for details.",
+            "title": "Enter the field value. <br/>Dates as mm/dd/yyyy <br/>+1 to increment dates or numbers <br/> Check the help tab for details.",
             "fieldType": "update_field",
             "type": "select"
         },
