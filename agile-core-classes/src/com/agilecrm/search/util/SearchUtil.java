@@ -409,11 +409,15 @@ public class SearchUtil
 		if (emailBounceStatus == null || emailBounceStatus.campaign_id == null)
 		    continue;
 
-		emailStatus = emailBounceStatus.campaign_id + "_" + "BOUNCED";
+		if (emailBounceStatus.emailBounceType.equals(EmailBounceType.HARD_BOUNCE))
+			emailStatus = emailBounceStatus.campaign_id + "_" + "HARDBOUNCED";
 
+		if (emailBounceStatus.emailBounceType.equals(EmailBounceType.SOFT_BOUNCE))
+			emailStatus = emailBounceStatus.campaign_id + "_" + "SOFTBOUNCED";
+			
 		// If SPAM, replace with SPAM
 		if (emailBounceStatus.emailBounceType.equals(EmailBounceType.SPAM))
-		    emailStatus = emailStatus.replace("BOUNCED", "SPAM");
+			emailStatus = emailBounceStatus.campaign_id + "_" + "SPAM";
 
 		campaignSearchStatus.add(emailBounceStatus.campaign_id.toString());
 		campaignSearchStatus.add(emailStatus);
