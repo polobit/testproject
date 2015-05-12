@@ -189,20 +189,49 @@ function populate_milestones_in_trigger(trigger_form, milestones_select_id, trig
 	// Show loading image.
 	$('select#' + milestones_select_id).after(getRandomLoadingImg());
 
-	// Fills milestone select element
-	populateMilestones(trigger_form, undefined, 0, undefined, function(data)
+	populateTrackMilestones(trigger_form, undefined, undefined, function(tracks)
 	{
+//		console.log(tracks);
 		$('.loading').remove();
 
+		// Make obtained milestone value selected
+		if (trigger_deal_milestone_value !== undefined)
+		{
+//			"Won" - > "defaultId_Won";
+			
+			var pipeline_id = trigger_deal_milestone_value.split('_')[0];
+			
+			// If pipeline_id is not NUMBER
+			if(pipeline_id != " " && isNaN(Number(pipeline_id)))
+			{
+				$.each(tracks, function(index, track){
+					
+					// For Old code compatibility - Appending Default track id to default milestones
+					if(track.isDefault && ~track.milestones.indexOf(trigger_deal_milestone_value))
+					{
+						trigger_deal_milestone_value = track.id + "_" + trigger_deal_milestone_value;
+						return true;
+					}
+				});
+				
+			}
+			
+			trigger_form.find('select#' + milestones_select_id).val(trigger_deal_milestone_value).attr('selected', 'selected').trigger('change');
+		}
+	}, "Select new milestone...", 'trigger-deal-milestone');
+
+	// Fills milestone select element
+/*	populateMilestones(trigger_form, undefined, 0, undefined, function(data)
+	{
+		$('.loading').remove();
 		// Append obtained option values to select
 		trigger_form.find('select#' + milestones_select_id).html(data);
-
 		// Make obtained milestone value selected
 		if (trigger_deal_milestone_value !== undefined)
 		{
 			trigger_form.find('select#' + milestones_select_id).val(trigger_deal_milestone_value).attr('selected', 'selected').trigger('change');
 		}
-	}, "Select new milestone...");
+	}, "Select new milestone...");*/
 }
 
 /**
