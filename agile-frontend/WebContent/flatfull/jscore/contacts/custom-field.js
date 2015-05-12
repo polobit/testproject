@@ -839,18 +839,20 @@ function enableCustomFieldsSorting(el,connClass,connId){
 			    $helper.children().each(function(index)
 			    {
 			      // Set helper cell sizes to match the original sizes
-			      $(this).width($originals.eq(index).width());
+			      $(this).width($originals.eq(index).width()+50);
 			      $(this).css("background","#f5f5f5");
 			      $(this).css("border-bottom","1px solid #ddd");
+			      $(this).css("max-width",($originals.eq(index).width()+50)+"px");
 			    });
 			    return $helper;
 			},
-			start: function(event, ui){
+			/*start: function(event, ui){
+				//alert(ui.width());
 				$.each(ui.item.children(),function(index,ele){
 					ui.helper.children().eq(index).width(ui.helper.children().eq(index).width()-$(this).width());
 				});
 				ui.helper.width(ui.helper.width());
-			},
+			},*/
 			sort: function(event, ui){
 				ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top)+"px");
 			},

@@ -304,6 +304,7 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			emailReports : function(id)
 			{
+				showTransitionBar();
 
 				// Fetches workflows if not filled
 				if ($('#campaign-reports-select').html() === null || $('#campaign-reports-select').html() === undefined)
@@ -350,6 +351,8 @@ var WorkflowsRouter = Backbone.Router
 
 				$('#campaign-tabs .select').removeClass('select');
 				$('.campaign-stats-tab').addClass('select');
+				
+				hideTransitionBar();
 			},
 
 			/** Gets list of triggers */

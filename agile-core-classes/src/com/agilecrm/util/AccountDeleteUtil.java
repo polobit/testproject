@@ -283,9 +283,11 @@ public class AccountDeleteUtil
 			}
 
 			// Delete IMAP PRefs
-			IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(agileUser);
-			if (imapPrefs != null)
-				imapPrefs.delete();
+			List<IMAPEmailPrefs> imapPrefsList = IMAPEmailPrefsUtil.getIMAPPrefsList(agileUser);
+			for(IMAPEmailPrefs imapPrefs : imapPrefsList){
+    			if (imapPrefs != null)
+    				imapPrefs.delete();
+			}
 
 			// Delete Notification Prefs
 			NotificationPrefs notificationPrefs = NotificationPrefsUtil.getNotificationPrefs(agileUser);
