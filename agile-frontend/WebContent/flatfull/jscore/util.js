@@ -75,7 +75,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 	});
 
 	// Prepend Loading
-	$loading = $(getRandomLoadingImg());
+	$loading = '<img class="loading" style="padding-right:5px;opacity:0.5;" src= "../flatfull/img/ajax-loader-cursor.gif"></img>';
 	if($("#" + selectId, el).next().hasClass("select-loading"))
 		$("#" + selectId, el).next().html($loading);
 	else
