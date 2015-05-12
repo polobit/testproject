@@ -157,7 +157,8 @@ $(function()
 			startChar = "&";
 
 		var encodedUrl = url + startChar + key + "=" + escape(JSON.stringify(data));
-		// console.log(encodedUrl.length + " " + encodedUrl);
+		// console.log(encodedUrl.length + " " +
+		// encodedUrl);
 		return encodedUrl;
 	});
 
@@ -185,7 +186,8 @@ $(function()
 		if (items == undefined)
 			return;
 
-		// Checks if properties already has an image, to return it
+		// Checks if properties already has an image, to
+		// return it
 		var agent_image = getPropertyValue(items, "image");
 		if (agent_image)
 			return agent_image;
@@ -247,7 +249,8 @@ $(function()
 		if (items == undefined)
 			return;
 
-		// Checks if properties already has an image, to return it
+		// Checks if properties already has an image, to
+		// return it
 		var agent_image = getPropertyValue(items, "image");
 		if (agent_image)
 			return agent_image;
@@ -494,11 +497,13 @@ $(function()
 
 		}
 
-		// To sort tags in case-insensitive order i.e. keys in json object
+		// To sort tags in case-insensitive order i.e.
+		// keys in json object
 		var keys = Object.keys(json);
 		keys.sort();
 
-		// Sorts it based on characters and then draws it
+		// Sorts it based on characters and then draws
+		// it
 		var html = "";
 
 		for ( var i in keys)
@@ -535,7 +540,14 @@ $(function()
 						var json = {};
 
 						var keys = [];
-						// Store tags in a json, starting letter as key
+						// Store
+						// tags
+						// in a
+						// json,
+						// starting
+						// letter
+						// as
+						// key
 						for (var i = 0; i < tags.length; i++)
 						{
 							var tag = tags[i].tag;
@@ -545,8 +557,17 @@ $(function()
 								keys.push(key);
 						}
 
-						// To sort tags in case-insensitive order i.e. keys in
-						// json object
+						// To
+						// sort
+						// tags
+						// in
+						// case-insensitive
+						// order
+						// i.e.
+						// keys
+						// in
+						// json
+						// object
 						keys.sort();
 						console.log(keys);
 						var html = "";
@@ -595,8 +616,13 @@ $(function()
 					function(data)
 					{
 						var html = "";
-						// var html = "<ul class='milestone-value-list
-						// tagsinput' style='padding:1px;list-style:none;'>";
+						// var
+						// html
+						// =
+						// "<ul
+						// class='milestone-value-list
+						// tagsinput'
+						// style='padding:1px;list-style:none;'>";
 						if (data)
 						{
 							var milestones = data.split(",");
@@ -604,13 +630,26 @@ $(function()
 							{
 								html += "<tr data='" + milestones[i] + "' style='display: table-row;'><td><div class='p-l-sm inline-block v-top text-ellipsis' style='width:80%'>";
 								html += milestones[i] + "</div></td><td class='p-r-none'><div class='m-b-n-xs' style='display:none;'><a class='text-l-none-hover c-p'><i title='Drag' class='icon-move'></i></a><a class='milestone-delete c-p m-l-sm text-l-none'  data-toggle='modal' role='button' href='#'><i title='Delete Milestone' class='task-action icon icon-trash'></i></a></div></td></tr>";
-								// html += "<li data='" + milestones[i] +
-								// "'><div><span>" + milestones[i] + "</span><a
-								// class='milestone-delete right'
+								// html
+								// +=
+								// "<li
+								// data='"
+								// +
+								// milestones[i]
+								// +
+								// "'><div><span>"
+								// +
+								// milestones[i]
+								// +
+								// "</span><a
+								// class='milestone-delete
+								// right'
 								// href='#'>&times</a></div></li>";
 							}
 						}
-						// html += "</ul>";
+						// html
+						// +=
+						// "</ul>";
 						return html;
 					});
 
@@ -636,7 +675,8 @@ $(function()
 
 		return d
 
-		// return $.datepicker.formatDate(format , new Date( parseInt(date) *
+		// return $.datepicker.formatDate(format , new
+		// Date( parseInt(date) *
 		// 1000));
 	});
 
@@ -669,7 +709,8 @@ $(function()
 
 		var intMonth, intDay;
 
-		// Verifies whether date is in milliseconds, then
+		// Verifies whether date is in milliseconds,
+		// then
 		// no need to multiply with 1000
 		if ((date / 100000000000) > 1)
 		{
@@ -999,7 +1040,8 @@ $(function()
 	 */
 	Handlebars.registerHelper('getCountryName', function(countrycode)
 	{
-		// retrieves country name from code using country-from-code.js
+		// retrieves country name from code using
+		// country-from-code.js
 		return getCode(countrycode);
 	});
 
@@ -1135,7 +1177,13 @@ $(function()
 									address['address'] = properties[i].value;
 								}
 
-								// Gets properties (keys) count of given json
+								// Gets
+								// properties
+								// (keys)
+								// count
+								// of
+								// given
+								// json
 								// object
 								var count = countJsonProperties(address);
 
@@ -1189,7 +1237,10 @@ $(function()
 					address['address'] = properties[i].value;
 				}
 
-				// Gets properties (keys) count of given json
+				// Gets
+				// properties
+				// (keys) count
+				// of given json
 				// object
 				var count = countJsonProperties(address);
 
@@ -1233,7 +1284,8 @@ $(function()
 	// To show only one related to contacts or companies in deals
 	Handlebars.registerHelper('related_to_one', function(data, options)
 	{
-		// return "<span>" + getTemplate("related-to-contacts", data[0]) +
+		// return "<span>" +
+		// getTemplate("related-to-contacts", data[0]) +
 		// "</span>";
 		var el = "";
 		var count = data.length;
@@ -1635,7 +1687,9 @@ $(function()
 		{
 			var item = array[i];
 
-			// stick an index property onto the item, starting with 1, may make
+			// stick an index property onto
+			// the item, starting with 1,
+			// may make
 			// configurable later
 			item.index = i + 1;
 
@@ -1704,7 +1758,8 @@ $(function()
 		{
 			ret = ret + options.fn(context[i]);
 
-			// Avoid comma appending to last element
+			// Avoid comma appending to last
+			// element
 			if (i < j - 1)
 			{
 				ret = ret + ", ";
@@ -1898,23 +1953,34 @@ $(function()
 		// Check if original referrer exists
 		if (getCurrentContactProperty(original_ref))
 		{
-			// Get input url from contact properties and initialize reference
+			// Get input url from contact
+			// properties and initialize
+			// reference
 			// url
 			var inputUrl = getCurrentContactProperty(original_ref);
 			var referenceUrl = 'www.google.';
 
-			// Get host from input url and compare with reference url if equal
+			// Get host from input url and
+			// compare with reference url if
+			// equal
 			var tempUrl = inputUrl.split('/');
 			tempUrl = tempUrl[2].slice(0, 11);
 			if (tempUrl === referenceUrl)
 			{
-				// Get search term from input url
+				// Get search
+				// term from
+				// input url
 				var parser = document.createElement('a');
 				parser.href = inputUrl;
 				var search = parser.search;
 
-				// If search term exists, check if 'q' parameter exists, and
-				// return its value
+				// If search
+				// term exists,
+				// check if 'q'
+				// parameter
+				// exists, and
+				// return its
+				// value
 				if (search.length > 1)
 				{
 					search = search.split('&');
@@ -1947,7 +2013,10 @@ $(function()
 			for (var i = 0; i < properties.length; i++)
 			{
 
-				// if last-name exists, return full name.
+				// if last-name
+				// exists,
+				// return full
+				// name.
 				if (properties[i].name === "last_name")
 					return (getPropertyValue(properties, "first_name") + " " + properties[i].value);
 
@@ -2005,7 +2074,9 @@ $(function()
 			item["value"] = array[i];
 
 			console.log(item);
-			// stick an index property onto the item, starting with 1, may make
+			// stick an index property onto
+			// the item, starting with 1,
+			// may make
 			// configurable later
 			item["index"] = i + 1;
 
@@ -2049,30 +2120,51 @@ $(function()
 			// Splits logs message
 			var email_fields = object["message"].split(_AGILE_CRM_DELIMITER, 4);
 
-			// Json to apply for handlebar template
+			// Json to apply for handlebar
+			// template
 			var json = {};
 
 			if (email_fields === undefined)
 				return options.inverse(object);
 
-			// Iterates inorder to insert each field into json
+			// Iterates inorder to insert
+			// each field into json
 			for (var i = 0; i < email_fields.length; i++)
 			{
-				// Splits based on colon. E.g "To: naresh@agilecrm.com "
+				// Splits based
+				// on colon. E.g
+				// "To:
+				// naresh@agilecrm.com
+				// "
 				var arrcolon = email_fields[i].split(":");
 
-				// Inserts LHS of colon as key. E.g., To
+				// Inserts LHS
+				// of colon as
+				// key. E.g., To
 				var key = arrcolon[0];
-				key = key.trim(); // if key starts with space, it
+				key = key.trim(); // if
+				// key
+				// starts
+				// with
+				// space,
+				// it
 				// can't
 				// accessible
 
-				// Inserts RHS of colon as value. E.g.,
+				// Inserts RHS
+				// of colon as
+				// value. E.g.,
 				// naresh@agilecrm.com
-				var value = arrcolon.slice(1).join(":"); // join the
-				// remaining string
-				// based on colon,
-				// only first occurence of colon is needed
+				var value = arrcolon.slice(1).join(":"); // join
+				// the
+				// remaining
+				// string
+				// based on
+				// colon,
+				// only first
+				// occurence of
+				// colon is
+				// needed
 				value = value.trim();
 
 				json[key] = value;
@@ -2081,11 +2173,13 @@ $(function()
 			// inserts time into json
 			json.time = object["time"];
 
-			// apply customized json to template.
+			// apply customized json to
+			// template.
 			return options.fn(json);
 		}
 
-		// if not EMAIL_SENT log, goto else in the template
+		// if not EMAIL_SENT log, goto else in the
+		// template
 		return options.inverse(object);
 
 	});
@@ -2121,11 +2215,15 @@ $(function()
 		for (var i = 0, len = campaignStatusArray.length; i < len; i++)
 		{
 
-			// compares campaign-id of each element of array with
+			// compares campaign-id of each
+			// element of array with
 			// current campaign-id
 			if (campaignStatusArray[i].campaign_id === current_campaign_id)
 			{
-				// if equal, execute template current json
+				// if equal,
+				// execute
+				// template
+				// current json
 				return options.fn(campaignStatusArray[i]);
 			}
 		}
@@ -2154,11 +2252,13 @@ $(function()
 			if (current_campaign_id === campaignStatusArray[i].campaign_id)
 				continue;
 
-			// push all other active campaigns
+			// push all other active
+			// campaigns
 			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
 				other_active_campaigns.push(campaignStatusArray[i])
 
-				// push all done campaigns
+				// push all done
+				// campaigns
 			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
 				other_completed_campaigns.push(campaignStatusArray[i]);
 		}
@@ -2180,23 +2280,30 @@ $(function()
 		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
 		{
 
-			// To show Active Campaigns list immediately after campaign
+			// To show Active Campaigns list
+			// immediately after campaign
 			// assigned.
 			if (CONTACT_ASSIGNED_TO_CAMPAIGN)
 			{
 				CONTACT_ASSIGNED_TO_CAMPAIGN = false;
 
-				// fetches updated contact json
+				// fetches
+				// updated
+				// contact json
 				var contact_json = $.ajax({ type : 'GET', url : '/core/api/contacts/' + App_Contacts.contactDetailView.model.get('id'), async : false,
 					dataType : 'json' }).responseText;
 
-				// Updates Contact Detail model
+				// Updates
+				// Contact
+				// Detail model
 				App_Contacts.contactDetailView.model.set(JSON.parse(contact_json));
 
 				return options.fn(JSON.parse(contact_json));
 			}
 
-			// if simply Campaigns tab clicked, use current collection
+			// if simply Campaigns tab
+			// clicked, use current
+			// collection
 			return options.fn(App_Contacts.contactDetailView.model.toJSON());
 		}
 	});
@@ -2212,7 +2319,8 @@ $(function()
 		if (object === undefined || object[data] === undefined)
 			return;
 
-		// Temporary json to insert active and completed campaigns
+		// Temporary json to insert active and completed
+		// campaigns
 		var campaigns = {};
 
 		var active_campaigns = [];
@@ -2227,7 +2335,8 @@ $(function()
 			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
 				active_campaigns.push(campaignStatusArray[i])
 
-				// push all done campaigns
+				// push all done
+				// campaigns
 			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
 				completed_campaigns.push(campaignStatusArray[i]);
 		}
@@ -2518,7 +2627,8 @@ $(function()
 	{
 
 		return Number(data).toLocaleString('en');
-		// data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+		// data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g,
+		// "$1,");
 	});
 
 	Handlebars.registerHelper('QbDateFormat', function(data)
@@ -2588,7 +2698,14 @@ $(function()
 						var json = {};
 
 						var keys = [];
-						// Store tags in a json, starting letter as key
+						// Store
+						// tags
+						// in a
+						// json,
+						// starting
+						// letter
+						// as
+						// key
 						for (var i = 0; i < tags.length; i++)
 						{
 							var tag = tags[i].tag;
@@ -2675,7 +2792,9 @@ $(function()
 		{
 			var item = array[i];
 
-			// stick an index property onto the item, starting with 1, may make
+			// stick an index property onto
+			// the item, starting with 1,
+			// may make
 			// configurable later
 			// item.index = i + 1;
 
@@ -2774,7 +2893,8 @@ $(function()
 			return;
 		var arr = dateString.split("T");
 		console.log("normalize date " + arr[0]);
-		// var d = new Date(arr[0]).format("dd-MM-yyyy");
+		// var d = new
+		// Date(arr[0]).format("dd-MM-yyyy");
 		return arr[0];
 
 	});
@@ -2988,7 +3108,10 @@ $(function()
 					address['address'] = properties[i].value;
 				}
 
-				// Gets properties (keys) count of given json
+				// Gets
+				// properties
+				// (keys) count
+				// of given json
 				// object
 				var count = countJsonProperties(address);
 
@@ -3032,7 +3155,8 @@ $(function()
 	// To show only one related to contacts or companies in deals
 	Handlebars.registerHelper('related_to_one', function(data, options)
 	{
-		// return "<span>" + getTemplate("related-to-contacts", data[0]) +
+		// return "<span>" +
+		// getTemplate("related-to-contacts", data[0]) +
 		// "</span>";
 		var el = "";
 		var count = data.length;
@@ -3175,19 +3299,54 @@ $(function()
 						// frame
 						var size_diff = 4 + ((full_size - 32) / 2); // calculating
 						// padding,
-						// for small
+						// for
+						// small
 						// favicon
-						// 16x16 as
+						// 16x16
+						// as
 						// 32x32,
-						// fill rest frame with padding
+						// fill
+						// rest
+						// frame
+						// with
+						// padding
 
-						// default when we can't find image uploaded or url to
-						// fetch from
+						// default
+						// when
+						// we
+						// can't
+						// find
+						// image
+						// uploaded
+						// or
+						// url
+						// to
+						// fetch
+						// from
 						var default_return = "src='img/company.png' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
 
-						// when the image from uploaded one or favicon can't be
-						// fetched, then show company.png, adjust CSS ( if style
-						// broken by favicon ).
+						// when
+						// the
+						// image
+						// from
+						// uploaded
+						// one
+						// or
+						// favicon
+						// can't
+						// be
+						// fetched,
+						// then
+						// show
+						// company.png,
+						// adjust
+						// CSS
+						// ( if
+						// style
+						// broken
+						// by
+						// favicon
+						// ).
 						var error_fxn = "";
 
 						for (var i = 0; i < this.properties.length; i++)
@@ -3195,27 +3354,79 @@ $(function()
 							if (this.properties[i].name == "image")
 							{
 								default_return = "src='" + this.properties[i].value + "' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + ";'";
-								// found uploaded image, break, no need to
-								// lookup url
+								// found
+								// uploaded
+								// image,
+								// break,
+								// no
+								// need
+								// to
+								// lookup
+								// url
 
 								error_fxn = "this.src='img/company.png'; this.onerror=null;";
-								// no need to resize, company.png is of good
-								// quality & can be scaled to this size
+								// no
+								// need
+								// to
+								// resize,
+								// company.png
+								// is
+								// of
+								// good
+								// quality
+								// &
+								// can
+								// be
+								// scaled
+								// to
+								// this
+								// size
 
 								break;
 							}
 							if (this.properties[i].name == "url")
 							{
 								default_return = "src='https://www.google.com/s2/favicons?domain=" + this.properties[i].value + "' " + "style='width:32px; height:32px; padding:" + size_diff + "px; " + additional_style + " ;'";
-								// favicon fetch -- Google S2 Service, 32x32,
-								// rest padding added
+								// favicon
+								// fetch
+								// --
+								// Google
+								// S2
+								// Service,
+								// 32x32,
+								// rest
+								// padding
+								// added
 
 								error_fxn = "this.src='img/company.png'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
-								// resize needed as favicon is 16x16 & scaled to
-								// just 32x32, company.png is adjusted on error
+								// resize
+								// needed
+								// as
+								// favicon
+								// is
+								// 16x16
+								// &
+								// scaled
+								// to
+								// just
+								// 32x32,
+								// company.png
+								// is
+								// adjusted
+								// on
+								// error
 							}
 						}
-						// return safe string so that our html is not escaped
+						// return
+						// safe
+						// string
+						// so
+						// that
+						// our
+						// html
+						// is
+						// not
+						// escaped
 						return new Handlebars.SafeString(default_return + " onError=\"" + error_fxn + "\"");
 					});
 
@@ -3376,7 +3587,8 @@ $(function()
 		if (status)
 			return true;
 
-		// Return false as string as the template can not print boolean false
+		// Return false as string as the template can
+		// not print boolean false
 		return "false";
 
 	});
@@ -3739,7 +3951,9 @@ $(function()
 		{
 			var item = array[i];
 
-			// stick an index property onto the item, starting with 1, may make
+			// stick an index property onto
+			// the item, starting with 1,
+			// may make
 			// configurable later
 			item.index = i + 1;
 
@@ -3808,7 +4022,8 @@ $(function()
 		{
 			ret = ret + options.fn(context[i]);
 
-			// Avoid comma appending to last element
+			// Avoid comma appending to last
+			// element
 			if (i < j - 1)
 			{
 				ret = ret + ", ";
@@ -4002,23 +4217,34 @@ $(function()
 		// Check if original referrer exists
 		if (getCurrentContactProperty(original_ref))
 		{
-			// Get input url from contact properties and initialize reference
+			// Get input url from contact
+			// properties and initialize
+			// reference
 			// url
 			var inputUrl = getCurrentContactProperty(original_ref);
 			var referenceUrl = 'www.google.';
 
-			// Get host from input url and compare with reference url if equal
+			// Get host from input url and
+			// compare with reference url if
+			// equal
 			var tempUrl = inputUrl.split('/');
 			tempUrl = tempUrl[2].slice(0, 11);
 			if (tempUrl === referenceUrl)
 			{
-				// Get search term from input url
+				// Get search
+				// term from
+				// input url
 				var parser = document.createElement('a');
 				parser.href = inputUrl;
 				var search = parser.search;
 
-				// If search term exists, check if 'q' parameter exists, and
-				// return its value
+				// If search
+				// term exists,
+				// check if 'q'
+				// parameter
+				// exists, and
+				// return its
+				// value
 				if (search.length > 1)
 				{
 					search = search.split('&');
@@ -4051,7 +4277,10 @@ $(function()
 			for (var i = 0; i < properties.length; i++)
 			{
 
-				// if last-name exists, return full name.
+				// if last-name
+				// exists,
+				// return full
+				// name.
 				if (properties[i].name === "last_name")
 					return (getPropertyValue(properties, "first_name") + " " + properties[i].value);
 
@@ -4109,7 +4338,9 @@ $(function()
 			item["value"] = array[i];
 
 			console.log(item);
-			// stick an index property onto the item, starting with 1, may make
+			// stick an index property onto
+			// the item, starting with 1,
+			// may make
 			// configurable later
 			item["index"] = i + 1;
 
@@ -4153,28 +4384,51 @@ $(function()
 			// Splits logs message
 			var email_fields = object["message"].split(_AGILE_CRM_DELIMITER, 4);
 
-			// Json to apply for handlebar template
+			// Json to apply for handlebar
+			// template
 			var json = {};
 
 			if (email_fields === undefined)
 				return options.inverse(object);
 
-			// Iterates inorder to insert each field into json
+			// Iterates inorder to insert
+			// each field into json
 			for (var i = 0; i < email_fields.length; i++)
 			{
-				// Splits based on colon. E.g "To: naresh@agilecrm.com "
+				// Splits based
+				// on colon. E.g
+				// "To:
+				// naresh@agilecrm.com
+				// "
 				var arrcolon = email_fields[i].split(":");
 
-				// Inserts LHS of colon as key. E.g., To
+				// Inserts LHS
+				// of colon as
+				// key. E.g., To
 				var key = arrcolon[0];
-				key = key.trim(); // if key starts with space, it can't
+				key = key.trim(); // if
+				// key
+				// starts
+				// with
+				// space,
+				// it
+				// can't
 				// accessible
 
-				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com
-				var value = arrcolon.slice(1).join(":"); // join the
-				// remaining string
-				// based on colon,
-				// only first occurence of colon is needed
+				// Inserts RHS
+				// of colon as
+				// value. E.g.,
+				// naresh@agilecrm.com
+				var value = arrcolon.slice(1).join(":"); // join
+				// the
+				// remaining
+				// string
+				// based on
+				// colon,
+				// only first
+				// occurence of
+				// colon is
+				// needed
 				value = value.trim();
 
 				json[key] = value;
@@ -4183,11 +4437,13 @@ $(function()
 			// inserts time into json
 			json.time = object["time"];
 
-			// apply customized json to template.
+			// apply customized json to
+			// template.
 			return options.fn(json);
 		}
 
-		// if not EMAIL_SENT log, goto else in the template
+		// if not EMAIL_SENT log, goto else in the
+		// template
 		return options.inverse(object);
 
 	});
@@ -4223,11 +4479,15 @@ $(function()
 		for (var i = 0, len = campaignStatusArray.length; i < len; i++)
 		{
 
-			// compares campaign-id of each element of array with
+			// compares campaign-id of each
+			// element of array with
 			// current campaign-id
 			if (campaignStatusArray[i].campaign_id === current_campaign_id)
 			{
-				// if equal, execute template current json
+				// if equal,
+				// execute
+				// template
+				// current json
 				return options.fn(campaignStatusArray[i]);
 			}
 		}
@@ -4256,11 +4516,13 @@ $(function()
 			if (current_campaign_id === campaignStatusArray[i].campaign_id)
 				continue;
 
-			// push all other active campaigns
+			// push all other active
+			// campaigns
 			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
 				other_active_campaigns.push(campaignStatusArray[i])
 
-				// push all done campaigns
+				// push all done
+				// campaigns
 			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
 				other_completed_campaigns.push(campaignStatusArray[i]);
 		}
@@ -4282,23 +4544,30 @@ $(function()
 		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
 		{
 
-			// To show Active Campaigns list immediately after campaign
+			// To show Active Campaigns list
+			// immediately after campaign
 			// assigned.
 			if (CONTACT_ASSIGNED_TO_CAMPAIGN)
 			{
 				CONTACT_ASSIGNED_TO_CAMPAIGN = false;
 
-				// fetches updated contact json
+				// fetches
+				// updated
+				// contact json
 				var contact_json = $.ajax({ type : 'GET', url : '/core/api/contacts/' + App_Contacts.contactDetailView.model.get('id'), async : false,
 					dataType : 'json' }).responseText;
 
-				// Updates Contact Detail model
+				// Updates
+				// Contact
+				// Detail model
 				App_Contacts.contactDetailView.model.set(JSON.parse(contact_json));
 
 				return options.fn(JSON.parse(contact_json));
 			}
 
-			// if simply Campaigns tab clicked, use current collection
+			// if simply Campaigns tab
+			// clicked, use current
+			// collection
 			return options.fn(App_Contacts.contactDetailView.model.toJSON());
 		}
 	});
@@ -4314,7 +4583,8 @@ $(function()
 		if (object === undefined || object[data] === undefined)
 			return;
 
-		// Temporary json to insert active and completed campaigns
+		// Temporary json to insert active and completed
+		// campaigns
 		var campaigns = {};
 
 		var active_campaigns = [];
@@ -4329,7 +4599,8 @@ $(function()
 			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
 				active_campaigns.push(campaignStatusArray[i])
 
-				// push all done campaigns
+				// push all done
+				// campaigns
 			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
 				completed_campaigns.push(campaignStatusArray[i]);
 		}
@@ -4646,7 +4917,8 @@ $(function()
 	{
 
 		return Number(data).toLocaleString('en');
-		// data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+		// data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g,
+		// "$1,");
 	});
 
 	Handlebars.registerHelper('QbDateFormat', function(data)
@@ -4725,7 +4997,14 @@ $(function()
 						var json = {};
 
 						var keys = [];
-						// Store tags in a json, starting letter as key
+						// Store
+						// tags
+						// in a
+						// json,
+						// starting
+						// letter
+						// as
+						// key
 						for (var i = 0; i < tags.length; i++)
 						{
 							var tag = tags[i].tag;
@@ -4812,7 +5091,9 @@ $(function()
 		{
 			var item = array[i];
 
-			// stick an index property onto the item, starting with 1, may make
+			// stick an index property onto
+			// the item, starting with 1,
+			// may make
 			// configurable later
 			// item.index = i + 1;
 
@@ -4911,7 +5192,8 @@ $(function()
 			return;
 		var arr = dateString.split("T");
 		console.log("normalize date " + arr[0]);
-		// var d = new Date(arr[0]).format("dd-MM-yyyy");
+		// var d = new
+		// Date(arr[0]).format("dd-MM-yyyy");
 		return arr[0];
 
 	});
@@ -5003,7 +5285,8 @@ $(function()
 		return getPendingEmails();
 	});
 
-	// helper function to return agile bcc special email for inbound mail event
+	// helper function to return agile bcc special email for inbound
+	// mail event
 	// trigger
 	Handlebars.registerHelper('inboundMail', function()
 	{
@@ -5939,6 +6222,32 @@ $(function()
 		return html;
 
 	});
+
+	/**
+	 * Returns milestone name from trigger_deal_milestone; e.g., 1234452_Won,
+	 * returns Won
+	 */
+	Handlebars.registerHelper('trigger_milestone', function(value, options)
+	{
+
+		// If undefined
+		if (!value)
+			return value;
+
+		var milestone = value.split('_');
+
+		if (milestone.length == 1)
+			return value;
+
+		// First indexed should be pipeline id
+		if (milestone.length > 1 && milestone[0] != " " && !isNaN(Number(milestone[0])))
+		{
+			milestone.splice(0, 1);
+			return milestone.join('_');
+		}
+
+	});
+
 	Handlebars.registerHelper("toSafeString", function(content)
 	{
 		return new Handlebars.SafeString(content);
