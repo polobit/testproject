@@ -202,6 +202,9 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 			$('#' + id, el).html(html);
 			console.log('adding');
 			$('#' + id, el).closest('div').find('.loading-img').hide();
+
+			// Hide loading bar
+			hideTransitionBar();
 			
 			/* Hide the Tracks select box when there is only one pipeline.
 			if(jsonModel.length==1){
