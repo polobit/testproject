@@ -90,7 +90,7 @@ function updateTimeOut(widget_height) {
 		$('#all-email-settings-prefs .col-md-4 .panel').each(function() {
 			$(this).height(EMAIL_PREFS_WIDGET_SIZE);
 		});
-	},300);
+	},1000);
 }
 
 function load_imap_properties(model, el) {
