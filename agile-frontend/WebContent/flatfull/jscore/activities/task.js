@@ -615,7 +615,11 @@ function complete_task(taskId, collection, ui, callback)
 	new_task.url = '/core/api/tasks';
 	new_task.save(taskJSON, { success : function(model, response)
 	{
-		collection.remove(model);
+		if(Current_Route.indexOf("contact/")>-1){
+			collection.get(taskId).set(model);
+		}else{
+			collection.remove(model);			
+		}
 
 		var due_task_count = getDueTasksCount();
 		if (due_task_count == 0)
