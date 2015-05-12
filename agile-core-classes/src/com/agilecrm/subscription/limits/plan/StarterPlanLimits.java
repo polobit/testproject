@@ -23,6 +23,7 @@ public class StarterPlanLimits extends PlanLimits
 		reporting = "EMAIL_REPORTING";
 		whiteLabelEnabled = true;
 		campaignNodesLimit = 10;
+		emailAccountsLimit = 1;
 
 		/**
 		 * New plan limits
