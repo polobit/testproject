@@ -452,8 +452,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <i class="icon icon-user"></i>
       <span>Contacts</span>
     </a>
-  </li id="dealsmenu">
-   <li>
+  </li>
+   <li  id="dealsmenu">
     <a  href="#deals">
       <i class="fa fa-money"></i>
       <span>Deals</span>

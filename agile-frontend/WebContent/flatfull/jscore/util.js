@@ -1,7 +1,7 @@
 /**
  * Loading spinner shown while loading
  */
-var LOADING_HTML = '<img class="loading" style="padding-right:5px;" height="1px" width="1px" src= "/flatfull/img/21-0.gif"></img>';
+var LOADING_HTML = '<img class="loading" style="padding-right:5px;opacity:0.5;" src= "/flatfull/img/ajax-loader-cursor.gif"></img>';
 
 /**
  * Set of loading images
@@ -76,8 +76,10 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 
 	// Prepend Loading
 	$loading = $(getRandomLoadingImg());
-	$("#" + selectId, el).after($loading);
-	
+	if($("#" + selectId, el).next().hasClass("select-loading"))
+		$("#" + selectId, el).next().html($loading);
+	else
+		$("#" + selectId, el).after($loading);
 	// Creates a collection and fetches the data from the url set in collection
 	var collection = new collection_def();
 
@@ -87,7 +89,10 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 	{
 
 		// Remove loading
-		$loading.remove();
+		if($("#" + selectId, el).next().hasClass("select-loading"))
+			$("#" + selectId, el).next().html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+		else
+			$loading.remove();
 
 		// Delete prev options if any by verifying whether ul drop down or
 		// select drop down
