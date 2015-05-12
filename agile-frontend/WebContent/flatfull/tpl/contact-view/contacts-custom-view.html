@@ -26,7 +26,7 @@
     <div>
       <div>
  <h1 class="m-n font-thin h3 pull-left"><span id="contact-heading">Contacts</span><span id="contacts-count" class="m-l-xs">{{contacts_count}}</span></h1>
-            <div class="pull-left"> <div class="btn-group m-l-lg" id="bulk-actions"
+            <div class="pull-left"> <div class="btn-group m-l-lg m-r-sm" id="bulk-actions"
 				style="display: none;">
 
 					<div class="btn btn-sm btn-default">Bulk Actions</div>
@@ -61,7 +61,7 @@
 </div>
 </div>
 
-    <div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
+    <div class="hbox hbox-auto-xs hbox-auto-sm">
     <div class="col w-md b-r ">
 		<div class="data-block">
 			<div  id="lhs_filters_conatiner">
@@ -77,9 +77,10 @@
 			<div id="slate"></div>
 		{{else}}
         <div class="data">
+         <div class="panel-heading" style="background:#f6f8f8;">Contacts List</div>
             <div class="dta-contatiner table-responsive">
-				<div class="panel panel-default">
-			    <div class="panel-heading">Contacts List</div>
+				<div class="panel panel-default" style="overflow-x:auto;border-left:none;">
+			    
                 <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
@@ -105,12 +106,12 @@
 			<div id="slate"></div>
 		{{else}}
         <div class="data">
-            <div class="dta-contatiner">
-				<div class="panel panel-default">
-			    <div class="panel-heading">Contacts List</div>
-                <table id="contacts-table" class="table table-striped showCheckboxes no-sorting"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
-					<div class="filter-criteria">
-					
+ <div class="panel-heading" style="background:#f6f8f8;">Contacts List</div>
+            <div class="dta-contatiner table-responsive">
+				<div class="panel panel-default" style="overflow-x:auto;border-left:none;">
+			    
+                <table id="contacts-table" class="table table-striped showCheckboxes no-sorting panel agile-table"  url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto">                
+					<div class="filter-criteria">					
 					</div>
 					<thead>
                         <tr class="text-cap">

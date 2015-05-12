@@ -287,29 +287,29 @@ $(function()
 								item = item.toLowerCase().trim();
 								console.log(item);
 								if (item == "email")
-												return "icon-envelope-alt";
+												return "fa-envelope-o";
 								if (item == "phone")
-												return "icon-headphones";
+												return "fa-headphones";
 								if (item == "url")
-												return "icon-home";
+												return "fa-home";
 								if (item == "call")
-												return "icon-phone-sign";
+												return "fa-phone";
 								if (item == "follow_up")
-												return "icon-signout";
+												return "fa-sign-out";
 								if (item == "meeting")
-												return "icon-group";
+												return "fa-group";
 								if (item == "milestone")
-												return "icon-cog";
+												return "fa-cog";
 								if (item == "send")
-												return "icon-reply";
+												return "fa-reply";
 								if (item == "tweet")
-												return "icon-share-alt";
+												return "fa-share-square-o";
 								if (item == "other")
-												return "icon-tasks";
+												return "fa-tasks";
 								if (item == "twitter")
-												return "icon-twitter";
+												return "fa-twitter";
 								if (item == "facebook")
-												return "icon-facebook";
+												return "fa-facebook";
 
 				});
 
@@ -1713,7 +1713,7 @@ $(function()
 												// Avoid comma appending to last element
 												if (i < j - 1)
 												{
-																ret = ret + ", ";
+																ret = ret + ",- ";
 												}
 												;
 								}
@@ -3804,26 +3804,6 @@ $(function()
 								return charwithsinglequote;
 				});
 
-				/**
-				 * Shows list of triggers separated by comma
-				 */
-				Handlebars.registerHelper('toLinkTrigger', function(context, options)
-				{
-								var ret = "";
-								for (var i = 0, j = context.length; i < j; i++)
-								{
-												ret = ret + options.fn(context[i]);
-
-												// Avoid comma appending to last element
-												if (i < j - 1)
-												{
-																ret = ret + ",";
-												}
-												;
-								}
-								return ret;
-				});
-
 				// Gets minutes from milli seconds
 				Handlebars.registerHelper('millSecondsToMinutes', function(timeInMill)
 				{
@@ -5494,6 +5474,10 @@ $(function()
 			portlet_name = "Agile CRM Blog";
 		else if(p_name=='Task Report')
 			portlet_name = "Task Report";
+		else if(p_name=='Stats Report')
+			portlet_name = "Activity Overview";
+		else
+			portlet_name = p_name;
 		return portlet_name;
 	});
 	/**
@@ -5529,6 +5513,8 @@ $(function()
 			icon_name = "icon-tasks";
 		else if(p_name=='Agile CRM Blog')
 			icon_name = "icon-feed";
+		else if(p_name=='Stats Report')
+			icon_name = "icon-speedometer";
 		return icon_name;
 	});
 	/**
@@ -5870,6 +5856,31 @@ $(function()
 		});
 		return html;
 		
+	});
+
+	/**
+	 * Returns milestone name from trigger_deal_milestone; e.g., 1234452_Won,
+	 * returns Won
+	 */
+	Handlebars.registerHelper('trigger_milestone', function(value, options)
+	{
+
+		// If undefined
+		if (!value)
+			return value;
+
+		var milestone = value.split('_');
+
+		if (milestone.length == 1)
+			return value;
+
+		// First indexed should be pipeline id
+		if (milestone.length > 1 && milestone[0] != " " && !isNaN(Number(milestone[0])))
+		{
+			milestone.splice(0, 1);
+			return milestone.join('_');
+		}
+
 	});
 	
 	/*

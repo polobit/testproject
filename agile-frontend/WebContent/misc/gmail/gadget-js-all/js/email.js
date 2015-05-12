@@ -16,7 +16,7 @@ function agile_get_emails()
 		];
 
 		// emails = [{email:"devikatest@gmail.com"}];
-		console.log(JSON.stringify(emails));
+		//console.log(JSON.stringify(emails));
 
 		return validateEmails(parse_emails(emails));
 	}

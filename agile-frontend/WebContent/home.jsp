@@ -70,7 +70,10 @@ if(!restriction.planDetails.getACL())
     domainUser.resetACLScopesAndSave();
 }
 
-Boolean is_first_time_user = HomeServlet.isFirstTimeUser(request);;
+Boolean is_first_time_user = HomeServlet.isFirstTimeUser(request);
+
+String _AGILE_VERSION = SystemProperty.applicationVersion.get();
+
 %>
 
 
@@ -180,6 +183,7 @@ var LIB_PATH = "/";
 
 var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
 
+var _AGILE_VERSION = <%="\"" + _AGILE_VERSION + "\""%>;
 
 var CSS_PATH = "/";
 //var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";

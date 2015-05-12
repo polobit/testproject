@@ -996,13 +996,14 @@ time,i.fa-clock-o
 #prefs-tabs-content h4:not(.m-t-none),#admin-prefs-tabs-content h4:not(.m-t-none)
 {
 	
-	color:#777!important;
+/*	color:#777!important;
 	font-size:18px;
 }
-/*.app-content-body *:not(.text) i 
+.app-content-body *:not(.text) i 
 {
 	color:#98a6ad!important;
 }*/
+}
 .navbar_due_tasks
 {
 	display:inline-block!important;
@@ -1149,7 +1150,7 @@ color:#1f2427!important;
 {
 	font-size:13px;
 }
-.lhs-row-filter .fa-plus-square-o,.lhs-row-filter .filter-tags-multiple-remove-lhs
+.lhs-row-filter .fa-plus-square-o,.lhs-row-filter .fa-minus-square-o,.lhs-row-filter .filter-tags-multiple-remove-lhs
 {
 	color:#98a6ad;
 }
@@ -1196,7 +1197,7 @@ color:#1f2427!important;
 */
 
 /*hack for contact details top menu position*/
-.app-aside-dock .dock-view-fixing
+.app-aside-dock .dock-view-fixing,.enable-full-height
 {
 top:117px;
 }
@@ -1218,4 +1219,45 @@ top:117px;
 {
 	opacity:0.5;
 
+}
+
+#myCarousel .item{
+	margin-left: 0px !important;
+}
+
+.jslider-label span {
+	font-size: 13px !important;
+}
+	
+.jslider-value span{
+	font-size: 13px !important;
+}
+
+textarea{
+	resize: vertical;
+}
+.activities_second_line i
+{
+padding-right:5px;
+}
+/*remove border and background color for prefs pad content*/
+
+#prefs-tabs-content #slate .alert {
+  background-color: rgb(255, 255, 255);
+  border-color: rgb(255, 255, 255);
+}
+.contacts-div #slate
+{
+padding:10px;
+}
+.imp-rule-safari
+{
+margin-top:-5px!important;
+}
+.contacts-div .panel
+{
+border-left:none;
+}
+.noty_twilio_unmute {
+  display: none;
 }
