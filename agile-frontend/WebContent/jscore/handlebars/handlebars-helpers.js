@@ -4984,6 +4984,16 @@ $(function()
 						return "agilecrm";
 					}
 				});
+				
+				// Checks whether user reached email accounts(GMAIL/IMAP/OFFICE) limit reached or not
+				Handlebars.registerHelper('has_email_account_limit_reached', function(options)
+				{
+					var type = HAS_EMAIL_ACCOUNT_LIMIT_REACHED;
+					if (type)
+						return options.fn(this);
+					else
+						return options.inverse(this);
+				});
 
 				// To pick randomly selected avatar url
 				Handlebars.registerHelper('pick_random_avatar_url', function(options)

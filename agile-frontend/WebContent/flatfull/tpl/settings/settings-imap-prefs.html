@@ -38,16 +38,16 @@
             <div class="control-group form-group">
                 <div class="controls">
                     <div class="checkbox">
-<label class="i-checks i-checks-sm">
+					<label class="i-checks i-checks-sm">
                     <input name="is_secure" type="checkbox" value="{{is_secure}}" checked/><i></i>
                     Use SSL (Secure communication)
                     </label>
-</div>
-                </div>
+				</div>
+            </div>
             </div>
              <div class="control-group form-group m-t-md">
 	            <div class="controls">
-	                <a href="#" class="imap-share-settings-select"><i class='icon-plus-sign'/></i> Sharing settings</a>
+	                <a href="#" class="imap-share-settings-select" oid={{id}}><i class='icon-plus-sign'/></i> Sharing settings</a>
 	                <span class ="imap-share-settings-txt" style="vertical-align:text-top;margin-left:-3px">         
        				 <img border="0" src="/img/help.png" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="You can share this email integration with other users. This allows them to see emails you have exchanged with a Contact. The shared users will see your email account in the Mail tab when they open a Contact." id="element-title" data-trigger="hover" data-original-title="Email Account Sharing">
         			</span>
@@ -67,7 +67,7 @@
 			   {{#if id}}
 			   <div id="imap-folders" class="control-group form-group m-t-sm">
 	            <div class="controls">
-	                <a href="#" class="imap-folders-settings-click"><i class='icon-plus-sign'/></i> Email folders</a>
+	                <a href="#" class="imap-folders-settings-click" oid={{id}}><i class='icon-plus-sign'/></i> Email folders</a>
 				    <span class="imap-folders-select" style="display:none;">
 				   	<a href="#" class="imap-folders-settings-cancel m-b-md" name = "imap"><i class='icon-minus-sign'/></i> Email folders</a>
                     <br>
