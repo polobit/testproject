@@ -24,7 +24,7 @@ public abstract class TwoWaySyncService extends ContactSyncService
 {
     private Long last_synced_to_client = 0l;
 
-    private static final Integer MAX_UPLOAD_LIMIT = 1000;
+    private static final Integer MAX_UPLOAD_LIMIT = 5000;
 
     // Insert contact and updated contact are recorded as batch request to
     // create/update is limited to 100 per request.

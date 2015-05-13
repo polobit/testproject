@@ -71,44 +71,6 @@ public class EmailsAPI
     {
 	EmailUtil.sendMail(fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null, null);
     }
-    
-    /**
-     * Agile Support emails to be sent through Mandrill without any subaccount.
-     * 
-     * @param fromEmail 
-     * 		- from email
-     * @param to 
-     * 		- to email
-     * @param subject
-     * 		- email subject
-     * @param body 
-     * 		- Email body
-     * @throws Exception
-     */
-    @Path("contact-us")
-    @POST
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void sendEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to,
-	    @QueryParam("subject") String subject, @QueryParam("body") String body) throws Exception
-    {
-	String oldNamespace = NamespaceManager.get();
-	
-	try
-	{
-	    // To avoid sending through subaccount
-	    NamespaceManager.set("");
-	    Mandrill.sendMail(false, fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null, null, null);
-	}
-	catch(Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured while sending Agile help email..." + e.getMessage());
-	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
-    }
 
     /**
      * Sends Email and saves the email sent from contact.
@@ -166,6 +128,44 @@ public class EmailsAPI
     }
 
     /**
+     * Agile Support emails to be sent through Mandrill without any subaccount.
+     * 
+     * @param fromEmail
+     *            - from email
+     * @param to
+     *            - to email
+     * @param subject
+     *            - email subject
+     * @param body
+     *            - Email body
+     * @throws Exception
+     */
+    @Path("contact-us")
+    @POST
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public void sendEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to,
+	    @QueryParam("subject") String subject, @QueryParam("body") String body) throws Exception
+    {
+	String oldNamespace = NamespaceManager.get();
+
+	try
+	{
+	    // To avoid sending through subaccount
+	    NamespaceManager.set("");
+	    Mandrill.sendMail(false, fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null, null, null);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while sending Agile help email..." + e.getMessage());
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+
+    /**
      * Returns imap emails merging with contact emails, when imap preferences
      * are set. Otherwise simply returns contact emails. Emails json string are
      * returned in the format {emails:[]}.
@@ -215,7 +215,7 @@ public class EmailsAPI
 	    JSONArray emailsArray = emails.getJSONArray("emails");
 
 	    // Add owner email to each email and parse each email body.
-	    emailsArray = ContactEmailUtil.addOwnerAndParseEmailBody(emailsArray);
+	    emailsArray = ContactEmailUtil.addOwnerAndParseEmailBody(emailsArray, "");
 
 	    // Merges imap emails and contact emails.
 	    emailsArray = ContactEmailUtil.mergeContactEmails(StringUtils.split(searchEmail, ",")[0], emailsArray);
@@ -249,23 +249,53 @@ public class EmailsAPI
 	if (emailGateway != null)
 	    apiKey = emailGateway.api_key;
 
+	String domain = NamespaceManager.get();
+
 	// Returns mandrill subaccount info if created, otherwise error json.
-	String info = MandrillSubAccounts.getSubAccountInfo(NamespaceManager.get(), apiKey);
+	String info = MandrillSubAccounts.getSubAccountInfo(domain, apiKey);
 
 	// If subaccount did not exist, return null
 	if (StringUtils.contains(info, "Unknown_Subaccount"))
 	{
 	    System.out.println("Mandrill sub-account is not yet created or can't get info. So return null");
-	    return null;
+
+	    JSONObject subAccountJSON = new JSONObject();
+
+	    JSONObject last30Days = new JSONObject();
+	    last30Days.put("rejects", 0);
+	    last30Days.put("soft_bounces", 0);
+	    last30Days.put("unique_clicks", 0);
+	    last30Days.put("sent", 0);
+	    last30Days.put("unique_opens", 0);
+	    last30Days.put("hard_bounces", 0);
+	    last30Days.put("clicks", 0);
+	    last30Days.put("opens", 0);
+	    last30Days.put("complaints", 0);
+	    last30Days.put("unsubs", 0);
+
+	    subAccountJSON.put("id", domain);
+	    subAccountJSON.put("hourly_quota", 250);
+	    subAccountJSON.put("sent_monthly", 0);
+	    subAccountJSON.put("sent_hourly", 0);
+	    subAccountJSON.put("sent_weekly", 0);
+	    subAccountJSON.put("last_30_days", last30Days);
+	    subAccountJSON.put("status", "active");
+	    subAccountJSON.put("reputation", 60);
+	    subAccountJSON.put("name", domain);
+	    subAccountJSON.put("sent_total", 0);
+	    subAccountJSON.put("created_at", "");
+	    subAccountJSON.put("notes", "");
+	    subAccountJSON.put("first_sent_at", "");
+
+	    return subAccountJSON.toString();
 	}
 
 	// Add email gateway to check on client side
 	JSONObject infoJSON = new JSONObject(info);
-	
-	if(emailGateway != null)
+
+	if (emailGateway != null)
 	    infoJSON.put("_agile_email_gateway", emailGateway.email_api);
-	
-	
+
 	return infoJSON.toString();
     }
 
@@ -317,7 +347,7 @@ public class EmailsAPI
 
 	return fromEmail;
     }
-    
+
     /**
      * Gets the list of synced email account names of this Agile user
      * 
@@ -378,7 +408,7 @@ public class EmailsAPI
 	    {
 		// parse email body
 		contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
-		
+
 		ObjectMapper mapper = new ObjectMapper();
 		String emailString = mapper.writeValueAsString(contactEmail);
 		agileEmails.put(new JSONObject(emailString));

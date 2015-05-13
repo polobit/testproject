@@ -10,6 +10,7 @@ import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.db.util.GoogleSQLUtil;
 import com.campaignio.tasklets.agile.URLVisited;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 
 /**
  * <code>AnalyticsUtil</code> is the base class for handling SQL queries to
@@ -302,6 +303,40 @@ public class AnalyticsSQLUtil
 		}
 		System.out.println("count is " + count);
 		return count;
+
+	}
+	
+	public static JSONArray getPageSessionsCountForDomain(String startDate, String endDate, String timeZone)
+	{
+		String domain = NamespaceManager.get();
+
+    	// For development
+    	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+    	    domain = "localhost";
+    	
+		if (StringUtils.isBlank(domain))
+			return null;
+		
+		// Returns (sign)HH:mm from total minutes.
+    	String timeZoneOffset = GoogleSQLUtil.convertMinutesToTime(timeZone);
+    	
+		String urlCountQuery = "SELECT count(DISTINCT sid) AS count,count(sid) AS total FROM page_views WHERE domain = "
+				+ GoogleSQLUtil.encodeSQLColumnValue(domain);
+
+	    urlCountQuery += " AND stats_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
+    	                "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+")";
+
+		System.out.println("URL count query is: " + urlCountQuery);
+
+		try
+    	{
+    	    return GoogleSQL.getJSONQuery(urlCountQuery);
+    	}
+    	catch (Exception e)
+    	{
+    	    e.printStackTrace();
+    	    return new JSONArray();
+    	}
 
 	}
 }

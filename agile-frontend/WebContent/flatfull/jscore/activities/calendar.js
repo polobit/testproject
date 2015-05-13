@@ -195,9 +195,13 @@ function showCalendar()
 							if(event.contacts.length>0)
 								reletedContacts += '<i class="icon-user text-muted m-r-xs"></i>'
 							for(var i=0;i<event.contacts.length;i++){
-								if(event.contacts[i].entity_type=="contact_entity")
-									reletedContacts += '<a class="text-info" href="#contact/'+event.contacts[i].id+'">'+getPropertyValue(event.contacts[i].properties, "first_name")+' '+getPropertyValue(event.contacts[i].properties, "last_name")+'</a>';
-								else
+								if(event.contacts[i].entity_type=="contact_entity"){
+									var last_name = getPropertyValue(event.contacts[i].properties, "last_name");
+									if (last_name == undefined)
+										last_name = "";
+									reletedContacts += '<a class="text-info" href="#contact/'+event.contacts[i].id+'">'+getPropertyValue(event.contacts[i].properties, "first_name")+' '+last_name+'</a>';
+								}
+									else
 									reletedContacts += '<a class="text-info" href="#contact/'+event.contacts[i].id+'">'+getPropertyValue(event.contacts[i].properties, "name")+'</a>';
 								if(i!=event.contacts.length-1)
 									reletedContacts += ', ';

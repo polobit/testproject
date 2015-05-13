@@ -1269,6 +1269,48 @@ public class OpportunityUtil
 		if (index != null)
 			index.delete(docIds);
 	}
+	/**
+	 * Get the won deals list which are won in the specified duration.
+	 * 
+	 * @param minTime
+	 *            Long object
+	 * @param maxTime
+	 *            Long object
+	 */
+	public static List<Opportunity> getWonDealsList(Long minTime, Long maxTime)
+	{
+		List<Opportunity> ownDealsList=new ArrayList<Opportunity>();
+		try 
+		{
+			ownDealsList = dao.ofy().query(Opportunity.class).filter("won_date >= ", minTime).filter("won_date <= ", maxTime).list();
+		} catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return ownDealsList;
+
+	}
+	/**
+	 * Get the new deals list in the specified duration.
+	 * 
+	 * @param minTime
+	 *            Long object
+	 * @param maxTime
+	 *            Long object
+	 */
+	public static List<Opportunity> getNewDealsList(Long minTime, Long maxTime)
+	{
+		List<Opportunity> newDealsList=new ArrayList<Opportunity>();
+		try 
+		{
+			newDealsList = dao.ofy().query(Opportunity.class).filter("created_time >= ", minTime).filter("created_time <= ", maxTime).list();
+		} catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return newDealsList;
+
+	}
 
 	public static List<Opportunity> getOpportunitiesByFilterWithoutDefaultPipeLine(String ownerId, String milestone,
 			String contactId, String fieldName, int max, String cursor, Long pipelineId)

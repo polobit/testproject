@@ -191,44 +191,10 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
 
     // Gets MergeFields Option object
     if(uiFieldDefinition.fieldType == "merge_fields")
-    {
-    	// To add unsubscribe link to merge fields of only SendEmail node
-    	if(uiFieldDefinition.target_type == "tinyMCEhtml_email" || uiFieldDefinition.target_type == "text_email")
-    		options = getMergeFields("send_email");
-    	else
-    		options = getMergeFields();
-    	
-    	 // Populate Options
-        $.each(
-        options, function (key, value) {
-        	var title;
-        	if(key.length>20)
-        		{
-        		title=key;
-            	key=key.substr(0,18)+"..." ;
-        		}
-        	if(key.indexOf("*") == 0)
-        	{
-        		key  = key.substr(1);
-        		if(title != undefined)
-        			selectOptionAttributes += "<option selected value='" + value + "' title = '"+title+"'>" + key + "</option>";
-        		else
-        			selectOptionAttributes += "<option selected value='" + value + "'>" + key + "</option>";
-        	}
-        	else
-        		if(title != undefined)
-        			selectOptionAttributes += "<option value='" + value + "' title = '"+title+"'>" + key + "</option>";
-        		else
-        			selectOptionAttributes += "<option value='" + value + "'>" + key + "</option>";
-        });
-    	
-        return "<select style='position:relative;float:right;cursor:pointer;width: 145px;margin-right: -5px' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes + "</select>";
-    	
-    }
+    	 return getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler);
     	
     if(uiFieldDefinition.fieldType == "update_field")
     {
-    	
     	options = getUpdateFields("update_field");
     }
     
@@ -236,13 +202,11 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     if(uiFieldDefinition.fieldType == "incoming_list")
     {
     	options = getTwilioIncomingList("incoming_list");
-    	
     }
     
     if(uiFieldDefinition.fieldType == "twilio_incoming_list")
     {
     	options = getTwilioIncomingList("twilio_incoming_list");
-    	
     }
     
     
@@ -902,4 +866,14 @@ function resetUI(selector)
 	selector.find("select").val("");
 	selector.find("textarea").val("");
 	
+}
+
+function contains(string, substring){
+	
+	if(string == undefined || string.length == 0)
+		return false;
+		
+	if(string.indexOf(substring) != -1)
+		return true;
+	return false;
 }

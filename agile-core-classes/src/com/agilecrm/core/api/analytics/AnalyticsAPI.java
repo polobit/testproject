@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -17,6 +16,7 @@ import org.json.JSONArray;
 import com.analytics.Analytics;
 import com.analytics.util.AnalyticsSQLUtil;
 import com.analytics.util.AnalyticsUtil;
+import com.campaignio.reports.CampaignReportsUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
@@ -76,5 +76,25 @@ public class AnalyticsAPI {
 		return AnalyticsSQLUtil.getPageViewsCountForGivenDomain(domain);
 	}
 
+	@Path("sessions-count")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON })
+	public String getSessionsCount(@QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime,
+		    @QueryParam("time_zone") String timeZone)
+	{
+		 // start date in mysql date format.
+	    String startDate = CampaignReportsUtil.getStartDate(startTime, endTime, null, timeZone);
+
+	    // end date in mysql date format.
+	    String endDate = CampaignReportsUtil.getEndDateForReports(endTime, timeZone);
+	    
+	    JSONArray sessionsCount =  AnalyticsSQLUtil.getPageSessionsCountForDomain(startDate, endDate, timeZone);
+	    
+	    if(sessionsCount == null)
+	    	return null;
+	    
+	    return sessionsCount.toString();
+	    			
+	}
 	
 }

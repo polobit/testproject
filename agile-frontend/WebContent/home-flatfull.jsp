@@ -71,6 +71,8 @@ if(is_free_plan && is_first_time_user)
 {
     plan = SubscriptionUtil.getSignupPlanFromSessionAndRemove(request);
 }
+
+String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 %>
 
 
@@ -84,16 +86,16 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 //String CSS_PATH = "//cdnapp.agilecrm.com/";
 %>
 
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agilecrm.css" />
+<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agilecrm.css?_=<%=_AGILE_VERSION%>" />
 
 <!-- Unified CSS for All Lib -->
 
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-tasks.css"></link>
+<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-tasks.css?_=<%=_AGILE_VERSION%>"></link>
 <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-social-suite.css"></link>
  <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-timline.css"></link>
- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-widgets.css"></link>
+ <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-widgets.css?_=<%=_AGILE_VERSION%>"></link>
  <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/chrome-extension-check.css"></link>
- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/bootstrap_submenu.css"></link>
+ <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/bootstrap_submenu.css?_=<%=_AGILE_VERSION%>"></link>
   <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib/timepicker-min.css"></link>
 
 <!-- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/date-picker.css"></link> -->
@@ -450,8 +452,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <i class="icon icon-user"></i>
       <span>Contacts</span>
     </a>
-  </li id="dealsmenu">
-   <li>
+  </li>
+   <li  id="dealsmenu">
     <a  href="#deals">
       <i class="fa fa-money"></i>
       <span>Deals</span>
@@ -586,6 +588,8 @@ LIB_PATH = LIB_PATH_FLATFULL;
 
 var FLAT_FULL_UI = "flatfull/";
 
+var _AGILE_VERSION = <%="\"" + _AGILE_VERSION + "\""%>;
+
 var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
 
 
@@ -659,12 +663,12 @@ head.ready(function() {
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "/img/ajax-loader-cursor.gif");
-head.js({"core" :   '/jscore/min/' + FLAT_FULL_PATH +'js-all-min.js'});
-head.js({"stats" : 'stats/min/agile-min.js'});
+head.js({"core" :   '/jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _AGILE_VERSION});
+head.js({"stats" : 'stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core", "stats"], function(){
 	
 	if(!HANDLEBARS_PRECOMPILATION)
-		downloadTemplate(FLAT_FULL_PATH + "tpl.js");
+		downloadTemplate("tpl.js");
 });
 });
 

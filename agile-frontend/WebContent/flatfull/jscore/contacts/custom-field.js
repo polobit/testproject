@@ -459,7 +459,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'_input custom_field required form-control resize-vertical" id='
 							+field.id+' name="'
 							+field.field_label
-							+' form-control"></textarea></div></div>');
+							+'"></textarea></div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group"><label class="control-label '+label_style+'">'
 							+field.field_label
@@ -469,7 +469,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'_input custom_field required form-control resize-vertical" id='
 							+field.id+' name="'
 							+field.field_label
-							+' form-control" ></textarea></div></div>');
+							+'" ></textarea></div></div>');
 				}
 			}else{
 				if(isModal){
@@ -481,7 +481,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'_input custom_field form-control resize-vertical" id='
 							+field.id+' name="'
 							+field.field_label
-							+' form-control" ></textarea></div></div>');
+							+'" ></textarea></div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group"><label class="control-label '+label_style+'">'
 							+field.field_label
@@ -491,7 +491,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'_input custom_field form-control resize-vertical" id='
 							+field.id+' name="'
 							+field.field_label
-							+' form-control" ></textarea></div></div>');
+							+'" ></textarea></div></div>');
 				}
 			}
 			return;
@@ -518,7 +518,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'_input custom_field required form-control" id="'
 							+field.id+'" name="'
 							+field.field_label
-							+' form-control" value="0"></input>'
+							+'" value="0"></input>'
 							+'</div></div>');
 				}
 			}else{
@@ -540,7 +540,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'_input custom_field form-control" id="'
 							+field.id+'" name="'
 							+field.field_label
-							+' form-control" value="0"></input>'
+							+'" value="0"></input>'
 							+'</div></div>');
 				}
 			}
@@ -839,18 +839,20 @@ function enableCustomFieldsSorting(el,connClass,connId){
 			    $helper.children().each(function(index)
 			    {
 			      // Set helper cell sizes to match the original sizes
-			      $(this).width($originals.eq(index).width());
+			      $(this).width($originals.eq(index).width()+50);
 			      $(this).css("background","#f5f5f5");
 			      $(this).css("border-bottom","1px solid #ddd");
+			      $(this).css("max-width",($originals.eq(index).width()+50)+"px");
 			    });
 			    return $helper;
 			},
-			start: function(event, ui){
+			/*start: function(event, ui){
+				//alert(ui.width());
 				$.each(ui.item.children(),function(index,ele){
 					ui.helper.children().eq(index).width(ui.helper.children().eq(index).width()-$(this).width());
 				});
 				ui.helper.width(ui.helper.width());
-			},
+			},*/
 			sort: function(event, ui){
 				ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top)+"px");
 			},

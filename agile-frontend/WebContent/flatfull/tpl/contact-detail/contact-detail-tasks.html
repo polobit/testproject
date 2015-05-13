@@ -44,22 +44,22 @@
 <div class="pull-left rightThumbView">
 <div class="pull-left  text-md text-cap">
     {{#if is_complete}}
-			<div><span><i class="fa fa-check"></i></span><div class="task-subject inline"><a  class="m-l-xs" href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
-					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
-                   <span><label class="label bg-light m-l-xs"><i class="{{icons type}} hide"></i>&nbsp;{{ucfirst type}}</label></span>
-				{{/if_equals}}</div>
+			<div><span><i class="fa fa-check"></i></span><div class="task-subject inline text-l-t" style="margin-left:9px"><a  href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
+					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>{{/if_equals}}
+                   <span><label class="label bg-light text-tiny"><!-- <i class="fa {{icons type}} hide"></i>&nbsp; -->{{ucfirst type}}</label></span>
+				</div>
 		{{else}}
-			<div><label class="i-checks i-checks-sm"><input data="{{id}}" class="complete-task form-control" type="checkbox"/><i></i></label><div class="task-subject inline"><a class="m-l-xs custom-color" href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
-					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
-                    <span><label class="label label-primary m-l-xs"><i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}</label></span>
-				{{/if_equals}}</div>
+			<div><label class="i-checks i-checks-sm"><input data="{{id}}" class="complete-task form-control" type="checkbox"/><i></i></label><div class="task-subject inline"><a  href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
+					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>{{/if_equals}}
+                    <span><label class="label bg-light text-tiny"><!-- <i class="fa {{icons type}}"></i>&nbsp; -->{{ucfirst type}}</label></span>
+				</div>
 	{{/if}}
 </div>
     
      <div class="clearfix"></div>
  
-	<div><span class="m-l-md">Due : <i class="fa fa-clock-o m-r-xs hide"></i><time class="task-created-time" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span></div>
-    <div class="m-l-md">	
+	<div><span class="m-l-md p-l-xs">Due : <i class="fa fa-clock-o m-r-xs hide"></i><time class="task-created-time" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span></div>
+    <div class="m-l-md p-l-xs">	
 		{{#each contacts}}
            	{{#if id}}
 				{{#isDuplicateContactProperty properties "email"}}
@@ -79,7 +79,7 @@
 		</div>
 		<div class="clearfix"></div>
  <div class="pull-left">
-     <small class="edit-hover text-muted m-l-md"> 
+     <small class="edit-hover text-muted m-l-md p-l-xs"> 
           <i class="fa fa-clock-o m-r-xs"></i>
 			<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
 		</small>

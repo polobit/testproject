@@ -277,7 +277,7 @@ var ContactsRouter = Backbone.Router.extend({
 				template_key = "companies-table";
 			}
 		}
-		
+
 		/*
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
@@ -319,7 +319,7 @@ var ContactsRouter = Backbone.Router.extend({
 		if(!is_lhs_filter) {
 			$('#content').html(this.contactsListView.render().el);
 		} else {
-			$('#content').find('.col-md-9').html(this.contactsListView.render().el);
+			$('#content').find('.contacts-div').html(this.contactsListView.render().el);
 			$('#bulk-actions').css('display', 'none');
 			CONTACTS_HARD_RELOAD = true;
 		}
@@ -855,10 +855,13 @@ var ContactsRouter = Backbone.Router.extend({
 
 		agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
 
+		// To append name to email
 		if (id)
 		{
 			var name;
-			if (model)
+
+			// For Reply all, id may contains multiple emails. If contains multiple, skip
+			if (model && id.indexOf(',') == -1)
 			{
 				if (model.type == "PERSON")
 				{
@@ -881,13 +884,17 @@ var ContactsRouter = Backbone.Router.extend({
 
 			if (name && name.length)
 			{
-				var data = name + ' <' + id.trim() + '>';
+				var data = id;
+
+				// If already appended with name, skip
+				if(id.indexOf('<') == -1 && id.indexOf('>') == -1)
+					data = name + ' <' + id.trim() + '>';
 
 				$('#to', el)
 						.closest("div.controls")
 						.find(".tags")
 						.append(
-								'<li class="tag" style="display: inline-block;" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
+								'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
 			}
 			else
 				$("#emailForm", el).find('input[name="to"]').val(id);

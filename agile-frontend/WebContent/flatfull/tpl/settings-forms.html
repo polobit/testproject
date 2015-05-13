@@ -8,7 +8,7 @@
     </div>
 </div>
 </div>
-<div class="wrapper-md lter bg-light b-b">
+<div class="wrapper-md">
 <div class="row">
  <div class="col-md-9">
 	{{#unless this.length}}
@@ -32,13 +32,13 @@
 	<div class="data-block">
 		<div class="data-container">
 			<div class="panel panel-default">
-			<div class="panel-heading font-bold">Forms List</div>
-			<table class="table table-bordered table-striped showCheckboxes agile-ellipsis-dynamic" url="core/api/forms/bulk" style="cursor:pointer;">
-				<colgroup><col width="50px"><col width="50%"><col width="50%"></colgroup>
+			<div class="panel-heading">Forms List</div>
+			<table class="table table-bordered table-striped showCheckboxes c-p agile-table" url="core/api/forms/bulk">
+				
 				<thead>
 					<tr>
-						<th>Form Title</th>
-						<th>Last Modified</th>
+						<th style="width:50%">Form Title</th>
+						<th style="width:50%">Last Modified</th>
 					</tr>
 				</thead>
 				<tbody id="forms-model-list">
@@ -51,29 +51,30 @@
  </div>
 
 <div class="col-md-3">
-        <div class="data-block b-l">
-			<div class="wrapper-md">
-            	<h4 class="h4 m-t-none">
+        <div class="data-block">
+			
+            	<h4 class="h4 m-t-none m-b-sm">
                 	What are Forms?
             	</h4>
-            	<br>
+            	
 				<p>
 					Forms created using the <a href="formbuilder">Form Builder</a> can be placed on your website or app. These Forms are readily linked to your Agile account. When a visitor fills the form, a Contact is created and subsequent web activity is logged automatically.
 				</p>
-			</div>
+			
     </div>
+</div>
 </div>
 </div>
 </script>
 
 <script id="forms-model-template" type="text/html">
-	<td><a href="formbuilder?form={{id}}"><span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">{{formName}}</span></a></td>
+	<td><a href="formbuilder?form={{id}}"><span  style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">{{formName}}</span></a></td>
     <td>
 		<a href="formbuilder?form={{id}}">
 			<span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">
 				<small class="edit-hover text-muted">
 					<i class="fa fa-clock-o m-r-xs"></i>
-					<time class="form-modified-time" datetime="{{epochToHumanDate "" updated_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
+					<time class="form-modified-time" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
 				</small>
 			</span>
 		</a>

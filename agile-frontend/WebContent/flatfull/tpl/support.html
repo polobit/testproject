@@ -20,8 +20,8 @@
 			<div class="panel-heading"><i class="icon-youtube-play"></i> Video Tutorial</div>
 <div class="panel-body">
 			<p>Watch tutorial videos on various features of Agile.</p>
-			<div class="embed-responsive embed-responsive-16by9">
-				<iframe class="embed-responsive-item" src="//www.youtube.com/embed/Tr-iCAZKJVw?list=PLX-eE1qngt6GBdCEwZjxnfEIVbXPNqhWZ" frameborder="0" allowfullscreen></iframe>
+			<div>
+				<iframe style="width:650px;height:360px;" src="//www.youtube.com/embed/Tr-iCAZKJVw?list=PLX-eE1qngt6GBdCEwZjxnfEIVbXPNqhWZ" frameborder="0" allowfullscreen></iframe>
 			</div>
     	</div>
 	</div>
@@ -42,9 +42,20 @@
             </div>
             <div class="wrapper-xs">
 				<h4 class="h4 m-b-sm p-b-xs b-b"><i class="icon-comments-alt"></i> Live Chat</h4>
-				<!--<p>Chat with our support representative. <a style="cursor:pointer" onclick="clickdesk_show_livechat_popup();">Start chat</a>.</p>
+				<!--<p>Chat with our support representative. <a class="text-info c-p" onclick="clickdesk_show_livechat_popup();">Start chat</a>.</p>
 				<p>Chat with our support representative. <a href="javascript: void(0);" id="livilyChatLink" class="livilyChatButton ClickdeskChatLink" onclick="clickdesk_show_livechat_popup();">Start chat</a></p>-->
 				<p id="clickdesk_status"><img src="img/21-0.gif" height="25px" width="25px"></img></P>
+            </div>
+
+             <div class="wrapper-xs">
+				<h4 class="h4 m-b-sm p-b-xs b-b">
+                    Schedule a Call
+                </h4>
+				<ul class="p-l-none" style="list-style-type:none;">
+					<li><a class="text-info" href="{{ONBOARDING_CALENDAR_URL}}" target="_blank">Onboarding</a></li>
+					<li><a class="text-info" href="{{SALES_CALENDAR_URL}}" target="_blank">Sales</a></li>
+					<li><a class="text-info" href="{{SUPPORT_CALENDAR_URL}}" target="_blank">Support</a></li>
+				</ul>
             </div>
     </div>
 </div>

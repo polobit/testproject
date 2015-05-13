@@ -401,4 +401,22 @@ public class PortletsAPI {
 		json.put("endDate",endDate);
 		return PortletUtil.getEmailsOpenedPieData(json);
 	}
+	/**
+	 * Gets Status Report portlet data
+	 * 
+	 * @return {@Link List} of {@link Contact}
+	 */
+	@Path("/portletStatsReport")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public JSONObject getPortletStatsReportData(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate,@QueryParam("time_zone") String timeZone,@QueryParam("reportType") String reportType)throws Exception {
+		JSONObject json=new JSONObject();
+		json.put("duration",duration);
+		json.put("startDate",startDate);
+		json.put("endDate",endDate);
+		json.put("timeZone",timeZone);
+		json.put("reportType",reportType);
+		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
+		return PortletUtil.getPortletStatsReportData(json);
+	}
 }
