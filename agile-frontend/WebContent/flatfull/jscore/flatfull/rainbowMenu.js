@@ -175,5 +175,16 @@ function contactInnerTabsInvoke(el) {
 	   }
 	 }
 	 
+
+
+$("#mobile-menu").on("click",function(){
+	$("#aside").toggleClass("off-screen");
+});
+
+$("#mobile-menu-settings").on("click",function(){
+	$("#navbar").toggleClass("show");
+});
+	
+
 	 
 	

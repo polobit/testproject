@@ -837,7 +837,7 @@ left:0;
     width:180px;		
 }
 
-/*starting css transition for aside menu hover effect*/
+/*starting css transition for aside menu hover effect 
 .app-aside-folded:not(.app-aside-dock) .navi > ul > li > a
 {
 	width:60px;
