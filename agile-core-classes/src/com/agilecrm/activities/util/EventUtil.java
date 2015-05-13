@@ -550,8 +550,8 @@ public class EventUtil
 				client_name.concat(contacts.get(0).getContactFieldValue("LAST_NAME"));
 			}
 			String client_email = contacts.get(0).getContactFieldValue("EMAIL");
-			// GoogleCalendarUtil.deleteGoogleEvent(event);
-			// event.delete();
+			GoogleCalendarUtil.deleteGoogleEvent(event);
+			event.delete();
 			String subject = "<p>" + client_name + " (" + client_email
 					+ ") has cancelled the appointment</p><span>Title: " + event_title + " (" + duration
 					+ " mins)</span><br/><span>Start time: " + event_start_time + "</span>";
