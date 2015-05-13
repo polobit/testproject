@@ -4990,6 +4990,18 @@ $(function()
 						return options.inverse(this);
 				});
 				
+				//checks whether current user plan is pro or not.
+				Handlebars.registerHelper("if_non_pro_plan", function(options)
+			    {
+					if (!_billing_restriction)
+						return options.inverse(this);
+
+				    if (_billing_restriction.currentLimits.planName !== "PRO")
+						return options.fn(this);
+
+					return options.inverse(this);
+				});
+				
 				// Checks whether user reached email accounts(GMAIL/IMAP/OFFICE) limit reached or not
 				Handlebars.registerHelper('has_email_account_limit_reached', function(options)
 				{

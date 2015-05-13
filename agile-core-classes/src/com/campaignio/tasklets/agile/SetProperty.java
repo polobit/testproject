@@ -329,8 +329,21 @@ public class SetProperty extends TaskletAdapter
 		{
 			try
 			{
-				contact_field.value = isNew ? Long.parseLong(updated_value) + "" : Long.parseLong(contact_field.value)
-						+ Long.parseLong(updated_value) + "";
+				if (isIncOrDesc(updated_value))
+					contact_field.value = isNew ? Long.parseLong(updated_value) + "" : Long
+							.parseLong(contact_field.value) + Long.parseLong(updated_value) + "";
+				else
+				{
+					try
+					{
+						contact_field.value = Long.parseLong(updated_value) + "";
+					}
+					catch (Exception e)
+					{
+						System.out.println("Not a number");
+						contact_field = null;
+					}
+				}
 			}
 			catch (Exception e)
 			{
