@@ -2,28 +2,28 @@
 <a data-id="{{id}}" style="cursor: pointer; ">
 
 {{#if_equals entity_type "contact_entity"}}
-    	<div style="display:inline;padding-right:5px;height:auto;">
+    	<div class="thumb-sm agile-img m-r-sm">
         	{{#if_contact_type "PERSON"}}
-        		<img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
+        		<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
-        		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
+        		<img class="img-inital r r-2x" {{getCompanyImage "40" "display:inline;"}} />
         	{{/if_contact_type}}
     	</div>
     	<div style="height:4em;display:inline-block;vertical-align:middle;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%;margin-left:5px">
         	{{#if_contact_type "PERSON"}}
-        		<b>	{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}} </b>
+        		<a class="text-cap">	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </a>
         		<br />
-        		{{getPropertyValue properties "email"}}
+        		<small>{{getPropertyValue properties "email"}}</small>
 				<br/>
-				{{getPropertyValue properties "company"}}
+				<small>{{getPropertyValue properties "company"}}</small>
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
-        		<b>{{getPropertyValue properties "name"}}</b></br>
-        		{{getPropertyValue properties "url"}}
+        		<a class="text-cap">{{getPropertyValue properties "name"}}</a></br>
+        		<small>{{getPropertyValue properties "url"}}</small>
         	{{/if_contact_type}}
 		</div>
 {{/if_equals}}
@@ -54,7 +54,7 @@
 		<i class="icon-file-text thumbnail" id="minus" style="cursor: pointer; width:40px; height:38px; padding-top:6px; font-size:2.75em;"></i>
 	</div>
 	<div style="height:4em;display:inline-block;vertical-align:middle;text-transform:capitalize;;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%;margin-left:5px">
-		 <b>{{name}}</b><br /> {{description}}
+		 <b> {{name}}</b><br /> {{description}}
 	</div>
 {{else}}
 {{#if network_type}}
@@ -72,7 +72,7 @@
 </script>
 
 <script id="recent-menu-collection-template" type="text/html">
-	<ul class="dropdown-menu animated custom-fadeInUp" style="width:25em; right:-11px;" id="recent-menu-model-list">
-		<li><a class="disabled" style="color:black;"><b>Recently Viewed ({{this.length}})</b></a></li><li class="divider"></li>
+	<ul class="dropdown-menu animated custom-fadeInUp list-group" style="width:25em; right:-11px;" id="recent-menu-model-list">
+		<li class="list-group-item b-n"><a class="disabled" style="color:black;"><b>Recently Viewed ({{this.length}})</b></a></li>
 	</ul>
 </script>

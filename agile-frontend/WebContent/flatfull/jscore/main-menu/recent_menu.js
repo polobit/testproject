@@ -21,7 +21,7 @@ function populate_recent_menu()
 {
 	if(!recent_view)
 	{	
-		var arr = [];
+		var arr = ["class='list-group-item'"];
 		try{
 			arr = JSON.parse(localStorage.recentItems);
 		}
@@ -43,7 +43,7 @@ function populate_recent_menu()
 		});
 		
 	if(recent_view.collection.length==0)	// default text, when list is empty.
-		$('#recent-menu>ul').html('<li><a class="disabled" style="color:black;">No Recent Activity</a></li>');
+		$('#recent-menu>ul').html('<li class="list-group-item"><a class="disabled" style="color:black;">No Recent Activity</a></li>');
 	else {recent_view.render(true);
 	}			// populate elements if filled from localStorage
 }
