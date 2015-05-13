@@ -149,6 +149,10 @@ public class SetProperty extends TaskletAdapter
 				break;
 
 			default:
+				if (field == null)
+					field = new ContactField(updated_field, updated_value, null);
+				else
+					field.value = updated_value;
 				break;
 			}
 
