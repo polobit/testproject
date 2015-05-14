@@ -1266,7 +1266,7 @@ border-left:none;
   display: none;
 }
 .web-rule-contact-condition-table td:last-child {
-	width:50px;
+	width:78px;
 }
 
 /* media queries for contact details left , right icons auto hide show */
@@ -1290,5 +1290,7 @@ display:none;
 }
 
 
-var arra = [but,seel]
-var statyusarra = [0,1]
+.web-rule-contact-condition-table tr[class~="chained"]{
+	display:flex;
+	margin-bottom:10px;
+}
