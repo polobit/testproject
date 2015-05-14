@@ -21,12 +21,10 @@ function populate_recent_menu()
 {
 	if(!recent_view)
 	{	
-		var arr = ["class='list-group-item'"];
+		var arr = [];
 		try{
 			arr = JSON.parse(localStorage.recentItems);
-		}
-		catch(err)
-		{
+		}catch(err){
 			
 		}
 		recent_view = new Base_Collection_View({
@@ -34,11 +32,11 @@ function populate_recent_menu()
 			restKey: "contacts",
 			templateKey: "recent-menu",
 			data : arr,
-			individual_tag_name: 'li',
+			individual_tag_name: 'li',			
 			sort_collection: false,
 			postRenderCallback : function(el)
-			{
-				$('#recent-menu').append($(el).html())
+			{								
+				$('#recent-menu').append($(el).html());
 			}
 		});
 		
