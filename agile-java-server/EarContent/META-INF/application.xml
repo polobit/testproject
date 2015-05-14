@@ -33,4 +33,10 @@
       <context-root>agile-campaigns-normal</context-root>
     </web>
   </module>
+  <module>
+    <web>
+      <web-uri>agile-temp-bulk.war</web-uri>
+      <context-root>agile-temp-bulk</context-root>
+    </web>
+  </module>
 </application>

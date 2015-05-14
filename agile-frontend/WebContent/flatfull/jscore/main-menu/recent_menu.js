@@ -24,9 +24,7 @@ function populate_recent_menu()
 		var arr = [];
 		try{
 			arr = JSON.parse(localStorage.recentItems);
-		}
-		catch(err)
-		{
+		}catch(err){
 			
 		}
 		recent_view = new Base_Collection_View({
@@ -34,16 +32,16 @@ function populate_recent_menu()
 			restKey: "contacts",
 			templateKey: "recent-menu",
 			data : arr,
-			individual_tag_name: 'li',
+			individual_tag_name: 'li',			
 			sort_collection: false,
 			postRenderCallback : function(el)
-			{
-				$('#recent-menu').append($(el).html())
+			{								
+				$('#recent-menu').append($(el).html());
 			}
 		});
 		
 	if(recent_view.collection.length==0)	// default text, when list is empty.
-		$('#recent-menu>ul').html('<li><a class="disabled" style="color:black;">No Recent Activity</a></li>');
+		$('#recent-menu>ul').html('<li class="list-group-item"><a class="disabled" style="color:black;">No Recent Activity</a></li>');
 	else {recent_view.render(true);
 	}			// populate elements if filled from localStorage
 }
