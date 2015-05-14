@@ -1,10 +1,8 @@
 <html>
 <head>
-<title>
-Thank you!
-</title>
+<title>Thanks for filling out my form | AgileCRM</title>
 </head>
 <body>
-	<h1>Thank You !</h1>
+	<h1>Great! Thanks for filling out my form!</h1>
 </body>
 </html>
