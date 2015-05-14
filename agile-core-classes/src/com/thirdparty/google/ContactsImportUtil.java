@@ -60,9 +60,9 @@ public class ContactsImportUtil
 
 	Queue queue = null;
 	if (isSyncImmediately)
-	    queue = QueueFactory.getQueue("contact-sync-queue");
+        queue = QueueFactory.getQueue("contact-sync-now-queue");
 	else
-	    queue = QueueFactory.getQueue("contact-sync-now-queue");
+	   queue = QueueFactory.getQueue("contact-sync-queue");
 
 	TaskOptions taskOptions;
 	try
