@@ -67,11 +67,20 @@
     <queue>
     <name>contact-sync-queue</name>
     <rate>2/s</rate>
-    <max-concurrent-requests>5</max-concurrent-requests>
+    <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
 		<task-retry-limit>1</task-retry-limit>
 	</retry-parameters>
-	<target>agile-normal-bulk</target>
+	<target>agile-sync</target>
+  </queue>
+     <queue>
+    <name>contact-sync-now-queue</name>
+    <rate>2/s</rate>
+    <max-concurrent-requests>10</max-concurrent-requests>
+    <retry-parameters>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  <target>agile-sync</target>
   </queue>
      <queue>
     <name>account-stats-update-queue</name>
@@ -158,7 +167,6 @@
     <retry-parameters>
 		<task-retry-limit>1</task-retry-limit>
 	</retry-parameters>
-	<target>agile-normal-bulk</target>
   </queue>
    <queue>
   	<name>contacts-upload-queue</name>

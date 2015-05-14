@@ -24,6 +24,7 @@
         <ant antfile="build.xml" target="create-target" dir="../agile-normal-bulk"/>
         <ant antfile="build.xml" target="create-target" dir="../agile-campaigns-bulk"/>
         <ant antfile="build.xml" target="create-target" dir="../agile-campaigns-normal"/>
+        <ant antfile="build.xml" target="create-target" dir="../agile-sync"/>
     </target>
                                                                                                         
 </project>

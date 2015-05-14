@@ -1,0 +1,10 @@
+<!-- Multiple Checkboxes (inline) -->
+<div class="agile-group">
+  <label class="agile-label" for="<%= name %>"><%= label %></label>
+  <div class="agile-field agile-field-xlarge agile-height-default"><% _.each(checkboxes, function(checkbox, i){ %>
+    <label for="<%= name+'-'+i %>">
+      <input type="checkbox" name="<%= agilefield %>" id="<%= name+'-'+i %>" value="<%= checkbox %>">
+      <%= checkbox %>
+    </label><% }); %>
+  </div>
+</div>
