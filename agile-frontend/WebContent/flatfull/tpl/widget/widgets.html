@@ -25,9 +25,9 @@
 				<ul class="customWidgets text-base">
 					<li class="m-t-xs"><i id="{{remove_spaces name}}-move" class="text-muted c-p icon-cursor-move {{remove_spaces name}}-move"></i></li>
 					{{#if is_minimized}}
-						<li class="m-t-xs"><a href="#"><i widget="{{remove_spaces name}}" class="text-muted c-p widget-maximize fa fa-minus"></i></a></li>
+						<li class="m-t-xs"><a href="#"><i widget="{{remove_spaces name}}" class="widget-maximize fa fa-minus text-muted c-p"></i></a></li>
 					{{else}}
-						<li class="m-t-xs"><a href="#"><i widget="{{remove_spaces name}}" class="text-muted c-p widget-minimize fa fa-minus"></i></a></li>
+						<li class="m-t-xs"><a href="#"><i widget="{{remove_spaces name}}" class="widget-minimize text-muted fa fa-minus c-p"></i></a></li>
 					{{/if}}
 					<li class="m-t-xs">
 					{{#if_equals name "Linkedin"}}
@@ -52,7 +52,7 @@
 			</div>
 			<div style="width:12%;float:left;">
                 {{#if_equals name "CallScript"}}
-                   <i class="icon-comment m-l-sm"></i>
+                   <i class="icon-comment m-l-xs"></i>
                 {{else}}
                    <img src="{{mini_logo_url}}" class="pull-left" width="24" height="24" alt=""/> 
                 {{/if_equals}} 
@@ -61,9 +61,17 @@
 		</h4>
 <div class="clearfix"></div>
 {{#if_equals widget_type "CUSTOM"}}
-		<div class="widgets widget-custom" id="{{remove_spaces name}}">
+	{{#if is_minimized}}
+		<div class="widgets widget-custom" id="{{remove_spaces name}}" aria-expanded="flase" class="collapse" style="height: 0px;">
 	{{else}}
-		<div id="{{remove_spaces name}}">
+		<div class="widgets widget-custom" id="{{remove_spaces name}}" aria-expanded="true" class="collapse in">
+	{{/if}}
+{{else}}
+	{{#if is_minimized}}
+		<div id="{{remove_spaces name}}" aria-expanded="flase" class="collapse" style="height: 0px;">
+	{{else}}
+		<div id="{{remove_spaces name}}" aria-expanded="true" class="collapse in">		
+	{{/if}}
 {{/if_equals}}
 
 		

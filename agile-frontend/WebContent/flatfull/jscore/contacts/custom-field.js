@@ -456,7 +456,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'</b><span class="field_req">*</span></label><div class="controls"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field required form-control" id='
+							+'_input custom_field required form-control resize-vertical" id='
 							+field.id+' name="'
 							+field.field_label
 							+' form-control"></textarea></div></div>');
@@ -466,7 +466,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'<span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field required form-control" id='
+							+'_input custom_field required form-control resize-vertical" id='
 							+field.id+' name="'
 							+field.field_label
 							+' form-control" ></textarea></div></div>');
@@ -478,7 +478,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'</b></label><div class="controls"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field form-control" id='
+							+'_input custom_field form-control resize-vertical" id='
 							+field.id+' name="'
 							+field.field_label
 							+' form-control" ></textarea></div></div>');
@@ -488,7 +488,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'</label><div class="controls col-sm-9 '+div_col9_style+'"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field form-control" id='
+							+'_input custom_field form-control resize-vertical" id='
 							+field.id+' name="'
 							+field.field_label
 							+' form-control" ></textarea></div></div>');
@@ -508,7 +508,7 @@ function show_custom_fields_helper(custom_fields, properties){
 						+'_input custom_field required form-control" id="'
 						+field.id+'" name="'
 						+field.field_label
-						+' form-control" value="0"></input>'
+						+'" value="0"></input>'
 						+'</div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
@@ -530,7 +530,7 @@ function show_custom_fields_helper(custom_fields, properties){
 						+'_input custom_field form-control" id="'
 						+field.id+'" name="'
 						+field.field_label
-						+' form-control" value="0"></input>'
+						+'" value="0"></input>'
 						+'</div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
@@ -666,7 +666,8 @@ function show_custom_fields_helper_for_merge(custom_fields, contacts) {
 							break;
 						}
 					}// end of if loop checking value is null or not
-				}else if (j === contact_field.properties.length - 1) {
+				}
+				else if (j === contact_field.properties.length - 1) {
 					var ele = '<td></td>';
 					elements.push(ele);
 				}
@@ -843,6 +844,15 @@ function enableCustomFieldsSorting(el,connClass,connId){
 			      $(this).css("border-bottom","1px solid #ddd");
 			    });
 			    return $helper;
+			},
+			start: function(event, ui){
+				$.each(ui.item.children(),function(index,ele){
+					ui.helper.children().eq(index).width(ui.helper.children().eq(index).width()-$(this).width());
+				});
+				ui.helper.width(ui.helper.width());
+			},
+			sort: function(event, ui){
+				ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top)+"px");
 			},
 			forceHelperSize:true,
 			placeholder:'<tr><td></td></tr>',

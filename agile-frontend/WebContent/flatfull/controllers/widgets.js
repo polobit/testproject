@@ -60,6 +60,16 @@ var WidgetsRouter = Backbone.Router
 																				sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el)
 																				{
 																								build_custom_widget_form(el);
+																								setTimeout(function(){
+																									var socialHeight=0;
+																									$('#social > div',el).each(function(){
+																										if($(this).height() > socialHeight)
+																											socialHeight = $(this).height();
+																									});
+																									$('#social > div',el).each(function(){
+																										$(this).height(socialHeight);
+																									});
+																								},1000);
 
 																				} });
 

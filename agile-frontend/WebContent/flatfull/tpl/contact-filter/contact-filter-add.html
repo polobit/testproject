@@ -80,6 +80,7 @@
 													</optgroup>
  													<optgroup label="Properties">
 														<option value="first_name">First Name</option>
+														<option value="last_name">Last Name</option>
 														<option value="email">Email Address</option>
 														<option value="company">Company</option>
 														<option value="title">Job Title</option>
@@ -100,11 +101,11 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" class="form-control">
 													<option value="EQUALS"
-														class="first_name phone company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="first_name last_name phone company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="first_name company owner org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+														class="first_name last_name company owner org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 													<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="NOTEQUALS" class="tags">isn't</option>
 													<option value="EQUALS" class="lead_score">equals</option>
@@ -202,7 +203,7 @@
 								
 								</tbody>
 							</table>
-								<a href="#" class="filter-contacts-multiple-add text-l-none m-t-xs"><i class="icon-plus"></i> Add condition</a>
+								<a href="#" class="filter-contacts-multiple-add text-l-none m-t-xs text-info"><i class="icon-plus"></i> Add condition</a>
 							<br/><br/><small>and</small><br/>
 							<div>Meet  <i> Any </i> of the following conditions</div>
 							<table class="bg-transparent m-b-xs chained-table contact or_rules">
@@ -227,6 +228,7 @@
 													</optgroup>
  													<optgroup label="Properties">
 														<option value="first_name">First Name</option>
+														<option value="last_name">Last Name</option>
 														<option value="email">Email Address</option>
 														<option value="company">Company</option>
 														<option value="title">Job Title</option>
@@ -247,11 +249,11 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" class="w-full form-control">
 													<option value="EQUALS"
-														class="first_name phone company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="first_name last_name phone company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="first_name company owner org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+														class="first_name last_name company owner org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 													<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="NOTEQUALS" class="tags">isn't</option>
 													<option value="BETWEEN_NUMBER" class="lead_score">between</option>
@@ -349,7 +351,7 @@
 								
 								</tbody>
 							</table>
-								<a href="#" class="filter-contacts-multiple-add-or-rules text-l-none m-t-xs"><i class="icon-plus"></i> Add condition</a>
+								<a href="#" class="filter-contacts-multiple-add-or-rules text-l-none m-t-xs text-info"><i class="icon-plus"></i> Add condition</a>
 							</div>
 
 							<div id="companies-filter-wrapper" style='{{#isContactType contact_type "PERSON"}}
@@ -475,7 +477,7 @@
 								
 								</tbody>
 							</table>
-						<a href="#" class="filter-companies-multiple-add text-l-none m-t-xs"><i class="icon-plus"></i> Add condition</a>
+						<a href="#" class="filter-companies-multiple-add text-l-none m-t-xs text-info"><i class="icon-plus"></i> Add condition</a>
 							<br/><br/><small>and</small><br/>
 							<div>Meet  <i> Any </i> of the following conditions</div>
 							<table class="bg-transparent m-b-xs chained-table company or_rules">
@@ -597,7 +599,7 @@
 								
 								</tbody>
 							</table>
-						<a href="#" class="filter-companies-multiple-add-or-rules text-l-none m-t-xs"><i class="icon-plus"></i> Add condition</a>
+						<a href="#" class="filter-companies-multiple-add-or-rules text-l-none m-t-xs text-info"><i class="icon-plus"></i> Add condition</a>
 						</div>
 						</div>
 					</div>

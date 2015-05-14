@@ -1,95 +1,69 @@
 <script id="deal-detail-template" type="text/html">
-<!-- previous next actions -->
 
-<!-- ending previous next actions -->
-<!--  header col-md-12 row view starting -->
-<div class="wrapper-md">
-<div class="row">
-	<div class="col-md-12">
-		<div class="m-b-md m-t-md">
-			<div class="row b-b p-b-md">
-				<div>
-					<div>
-						<div class="col-md-10">
-
-						<div class="contact-profile-name mg-r-md">{{#if name}}{{name}}{{/if}}{{#if this.archived}}&nbsp;&nbsp;<span style="top: -2px;" class="deal-task-type bg-light dk text-tiny c-d pos-rlt" >Archived</span>{{else}}
+<div class="app-content-full  h-full dock-view-fixing">
+<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
+<div class="col  bg-light lter b-r" style="width:299px">
+<div class="vbox">
+<div class="row-row">
+<div class="wrapper pos-rlt">
+<div class="contact-navigation-view hide"><span class="navigation  contact-switching"></span></div>
+<div class="h3 font-thin custom-color m-b-xs" style="width:85%">{{#if name}}{{name}}{{/if}}</div>
+<div class="m-b-sm h3 font-thin   m-t-sm">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
+<div class="m-b-sm text-muted">
+{{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >Archived</span>{{else}}
+	
+{{#getTracksCount}}<span class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >{{pipeline.name}} , </span>{{/getTracksCount}}					
 						
-						
-						{{#if_equals milestone "Won"}} <span style="top: -2px;" class="pos-rlt c-d deal-task-type label label-success">{{milestone}}</span>
+{{#if_equals milestone "Won"}} <span>{{milestone}}</span>
 {{else}}
-{{#if_equals milestone "Lost"}} <span style="top: -2px;" class="pos-rlt c-d deal-task-type label label-danger text-sm">{{milestone}}</span>
+{{#if_equals milestone "Lost"}} <span>{{milestone}}</span>
 {{else}}
-<span style="top: -2px;" class="pos-rlt c-d deal-task-type bg-light dk text-tiny btn btn-xs btn-primary m-r-xs">{{milestone}}</span>
+<span>{{milestone}}</span>
 {{/if_equals}}
 {{/if_equals}} 
-{{#getTracksCount}}<span style="top: -2px;" class="pos-rlt c-d deal-task-type bg-light dk text-tiny btn btn-xs btn-primary m-r-xs" >{{pipeline.name}}</span>{{/getTracksCount}}
+
 						
-						{{/if}} </div><br/>
-<div class="m-b-xs"> <span class="contact-profile-name mg-r-md v-top">{{currencySymbol}} {{numberWithCommas expected_value}}</span> <span class="text-light m-l-n">({{probability}}%)</span></div>
-		{{#each contacts}}
-        	{{#if_contact_type "PERSON"}}
-        		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail img-inital m-b-none inline thumb" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
-        	{{/if_contact_type}}
-			{{#if_contact_type "COMPANY"}}
-        		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail m-b-none thumb" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
-        	{{/if_contact_type}}
-        {{/each}}
-       
-						 
+						{{/if}} 
+ <span>- {{probability}}%</span></div>
+
+
+{{#if this.archived}}
+
+
+
+
+
+<div class="btn-group pos-abs pos-r pos-t">
+<a href="#" class="deal-restore-detail-view btn btn-sm btn-default"><i class="icon-mail-reply"></i> Restore</a>
 </div>
 
-
-
-</div>
- {{#if this.archived}}
-<div class="col-md-2">
-<div class="w-full pos-rlt">
-<div class="contact-navigation-view"><span class="navigation  contact-switching"></span></div></div>
-<div class="clearfix"></div>
 							
-
-<div class="btn-group right">
-								
-								<a href="#" class="deal-restore-detail-view btn btn-sm btn-default m-l-xs"><i class="icon-mail-reply"></i> Restore</a>
-								
-							</div>
-
-						<div class="pos-rlt">	
-							<div  class="deal-owner-position deal-owner-block">
+							<div  class="deal-owner-block">
 						<div class="change-owner-succes"></div>
-     <span title="Owner" class="contact-owner-view">
-      	<span class="contact-owner" id="change-owner-element">
-        	<span class="contact-owner-text">Owner:&nbsp;&nbsp;</span>
-			{{#if owner}}
-        	<span class="contact-owner-pic m-t-sm"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
-			{{else}}
-			<span class="contact-owner-pic m-t-md"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
- 			{{/if}}
-        	<span  data={{owner.id}} class="deal-owner-name contact-owner-name c-d">{{owner.name}}</span>
+     <div title="Owner">
+      	<div class="contact-owner" id="change-owner-element">
+        	<div><small class="text-xs text-muted"> Owner:&nbsp;&nbsp;</small></div>
+		
+        	<a href="#"  data={{owner.id}} class="deal-owner-name contact-owner-name c-d">{{owner.name}}</a>
         
         	
-       </span>
-    </span>
+       </div>
+    </div>
 					</div>
 
-</div><!-- position relative if condition -->
-                        </div>
+
+                        
 
 
 
 {{else}}                       
-<div class="col-md-2">
-<div class="pos-rlt w-full">
-<div class="contact-navigation-view"><span class="navigation  contact-switching"></span></div></div>
-<div class="clearfix"></div>
-							
-
-<div class="btn-group right">
+<div class="pos-abs pos-r pos-t">
 								
-								<a href="#" class="deal-detail-edit-deal btn btn-sm btn-default m-l-xs" id="deal_details"><i class="icon-edit"></i> Edit</a>
-								<a class="btn dropdown-toggle btn-default btn-sm" data-toggle="dropdown"><span class="caret"></span></a>
-								<ul class="dropdown-menu pull-right">
-
+								
+								<a class=" dropdown-toggle" data-toggle="dropdown"><span class="fa fa-angle-down text-lg"></span></a>
+								<ul class="dropdown-menu">
+                                    <li><a href="#" class="deal-detail-edit-deal" id="deal_details"><i class="icon-edit"></i> Edit</a></li>
+                                    <li class="divider"></li>
 									<li><a href='#'  id="dealshow-note" class="deal-note"><i
 											class="icon-file"></i> Add Note</a></li>
                                     <li><a href='#'  id="dealdetail-archive" class="deal-detail-archive"><i class="icon-archive"></i> Archive</a></li>
@@ -97,92 +71,42 @@
 									<li><a href='#'  data="{{id}}" class="deal_detail_delete" id='opportunity-actions-delete'><i
 											class="icon-trash"></i> Delete</a></li>
 								</ul>
-							</div>
-
-						<div class="pos-rlt">	
-							<div  class="deal-owner-position deal-owner-block">
+</div>
+<div  class="deal-owner-position deal-owner-block">
 						<div class="change-owner-succes"></div>
-     <span title="Owner" class="contact-owner-view">
-      	<span class="contact-owner" id="change-owner-element">
-        	<span class="contact-owner-text">Owner:&nbsp;&nbsp;</span>
-			{{#if owner}}
-        	<span class="contact-owner-pic m-t-sm"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
-			{{else}}
-			<span class="contact-owner-pic m-t-md"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
- 			{{/if}}
-        	<span id="deal-owner" data={{owner.id}} class="deal-owner-name contact-owner-name">{{owner.name}}</span>
+     <div title="Owner" class="contact-owner-view">
+      	<div class="contact-owner" id="change-owner-element">
+        	<div><small class="text-xs text-muted">Owner:&nbsp;&nbsp;</small></div>
+		
+        	<div id="deal-owner" data={{owner.id}} class="deal-owner-name contact-owner-name">{{owner.name}}</div>
         
         	<div class="btn-group v-middle" id="change-deal-owner-ul" style="display: none">
         		 <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
         		 <ul id='deal-detail-owner' class="dropdown-menu pull-right"></ul>
         	</div> 
-       </span>
-    </span>
-					</div>
-
-</div><!-- position relative -->
-                        </div>
+       </div>
+    </div>
+	</div>
+					
 {{/if}}
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-</div>
-<div class="clearfix"></div>
-	</div>
 
-	
+<div>
 
-
-
-<!--  ending top header span12 view -->
-
-<!--  starting middle view row -->
-<div class="row">
-	<!--  starting time line view -->
-	  <div class="col-md-9">
-        <div id="deal-details">
-           <ul class="nav nav-tabs" id="deal-details-tab">
-             <li><a href="#dealactivities" data-toggle="tab" >Activity</a></li>
-             <li><a href="#dealnotes" data-toggle="tab" >Notes</a></li>
-			<li><a href="#dealdocs" data-toggle="tab">Documents</a></li>
-            <li><a href="#dealrelated" data-toggle="tab">Related</a></li>
-           
-            
-            </ul>
-        </div>
-           <div class="tab-content wrapper panel" id="deal-tab-content">
-           <div class="tab-pane " id="dealactivities"></div>
-           <div class="tab-pane " id="dealnotes"></div>
-			<div class="tab-pane " id="dealdocs"></div>
-           <div class="tab-pane " id="dealrelated"></div>
-          
-          </div>
-	</div>
-<div class="col-md-3 contact-right-widgetsview b-l box-border" style="min-height: 200px;">
-
-						<div class="p-t-sm">
-						
-							
-							<div class="m-t-xs">
-								
-								<div class="p-r-none text-sm l-h">
-								<div class="pull-left text-ellipsis m-t-n text-md" style="width:18em;">
-								<i class="icon icon-info text-sm m-l-xs"></i>Custom Data
-									
-							</div>	
                            
 
 <div class="deal-custom-data"> 
 								
-					<div class="contact-custom-icon pull-left" style="width:25px;"></div>			
-								<div class="pull-left l-h" style="width:90%;">
+					
+								<div class="l-h">
 									
 									{{#if custom_data}}
+                                      <div class="m-t-sm">
+                                      <small class="text-xs text-muted">Custom Data</small>
+                                       </div>
 									{{#getDealCustomProperties custom_data}}
 									{{#each_with_index this}}
-
+                                       
+                                   	
 
                                             <span class="contact-custom-name">
 												<span class="text-light" title="{{name}}">{{name}}</span>
@@ -200,19 +124,63 @@
                             </div>	
 
 						
-					</div>
-					</div>
-					</div>
-					</div>
-					</div>
-					</div>
+				
 					
 
+					</div>
+
+<div class="m-t-sm">
+{{#if contacts}}
+<div class="m-b-xs">
+        	<small class="text-xs text-muted">Related to</small>
+</div>
+{{/if}}
+		{{#each contacts}}
+        	{{#if_contact_type "PERSON"}}
+        		<a href="#contact/{{id}}" class="activate-link thumb"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        	{{/if_contact_type}}
+			{{#if_contact_type "COMPANY"}}
+        		<a href="#contact/{{id}}" class="activate-link thumb"><img  {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        	{{/if_contact_type}}
+        {{/each}}
+      </div> 
+					</div>
 
 
-<!--  ending mid  right panel view -->
 
-<!--  ending middle view row -->
+
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+			
+<div class="col bg-white">
+<div class="vbox">
+<div class="row-row">			
+<div id="deal-details">
+	<div class="tab-container">
+           <ul class="nav nav-tabs" id="deal-details-tab">
+             <li><a href="#dealactivities" data-toggle="tab" >Activity</a></li>
+             <li><a href="#dealnotes" data-toggle="tab" >Notes</a></li>
+			 <li><a href="#dealdocs" data-toggle="tab">Documents</a></li>
+             <li><a href="#dealrelated" data-toggle="tab">Related</a></li>
+           </ul>
+	</div>
+ 	<div class="tab-content panel" id="deal-tab-content">
+ 		<div class="tab-pane" id="dealactivities"></div>
+ 		<div class="tab-pane" id="dealnotes"></div>
+ 		<div class="tab-pane" id="dealdocs"></div>
+ 		<div class="tab-pane" id="dealrelated"></div>     
+ 	</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
 
 <!-- Archive confirmation-->
 <div id="deal_archive_confirm_modal" class="modal  fade">

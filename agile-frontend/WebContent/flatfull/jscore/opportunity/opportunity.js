@@ -409,7 +409,7 @@ function appendCustomfields(el){
 			 $(el).find('#opportunities-model-list tr').each(function(index,element){
 				 var row = '';
 				 $.each(customfields, function(i,customfield){
-						 row += '<td class="deal_custom_replace"><div style="width:6em;text-overflow:ellipsis;">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
+						 row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
 					});
 				 $(this).append(row);
 			 });

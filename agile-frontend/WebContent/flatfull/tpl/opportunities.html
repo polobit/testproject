@@ -45,7 +45,7 @@
         </div>
         {{#if this.length}}
         <div id="total-pipeline-chart" class="w-full bg-white" style="height:300px"></div>
-        <br /><br />
+        <br />
 			<div>
 				<div class="btn-group pull-left" id="bulk-actions" style="display: none;">
 					<div class="btn btn-sm btn-default">Bulk Actions</div>
@@ -60,11 +60,11 @@
 						<li><a href="#deal_bulk_delete_modal" data-toggle="modal">Delete</a></li>
 					</ul>
 				</div>
+				<div class="btn-group pull-left m-t-xs" style="display: none;left: 10px;" id="bulk-select"></div>
 				<br><br>
 			</div>
-			<div class="btn-group pull-left m-t-xs" style="display: none;left: 10px;" id="bulk-select"></div>
 			<div class="panel panel-default">
-			<div class="panel-heading font-bold">Deals</div>
+			<div class="panel-heading">Deals</div>
 			<div class="table-responsive">
                 <table class="table table-striped showCheckboxes m-b-none agile-table panel no-wrap" url="core/api/opportunity/bulk" id="deal-list" style="table-layout: auto;">
 					<thead>
@@ -82,8 +82,9 @@
                 </table>
             </div>
             </div>
-        </div>
+        
         {{/if}}
+        </div>
     <div class="col-md-3">
         <div class="data-block">
             <div class="panel wrapper m-b-none">
@@ -245,32 +246,31 @@
 <script id="opportunities-model-template" type="text/html">
 <td data="{{id}}" class="data">
 	<div class="header-min-width"> 
-		<a class="text-md">{{name}}</a>
+		<a class="text-cap">{{name}}</a>
 	</div>
 </td>
-<td>
-	<div>
-		<div class="table-resp">
-		{{#each contacts}}
-        	{{#if_contact_type "PERSON"}}
-        		<a href="#contact/{{id}}" class="activate-link hide-popover thumb"><img class="r r-2x img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
-        	{{/if_contact_type}}
-			{{#if_contact_type "COMPANY"}}
-        		<a href="#contact/{{id}}" class="activate-link hide-popover thumb"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
-        	{{/if_contact_type}}
-       {{/each}}
-		</div>{{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
-	</div>
+<td class="overflow-hidden no-wrap">
+	<div class="inline-block thumb-sm">
+	{{#each contacts}}
+       {{#if_contact_type "PERSON"}}
+        	<a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties }}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+       {{/if_contact_type}}
+	   {{#if_contact_type "COMPANY"}}
+        	<a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+       {{/if_contact_type}}
+   {{/each}}
+   </div>
+  {{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
 </td>
 <td value="{{expected_value}}"><div class="table-resp">{{currencySymbol}}{{numberWithCommas expected_value}}</div></td>
 <td><div class="table-resp">{{milestone}} ({{probability}}%) </div></td>
-<td class="text-muted"><div class="table-resp"><i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time border-highlight " value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></div></td>
+<td class="text-muted"><div class="table-resp">{{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time border-highlight " value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}</div></td>
 <td>
-    <div class="thumb-xs avatar">
+    <div class="thumb-sm avatar">
        {{#if pic}}
-        <img class="r r-2x" height="50px" width="50px" src="{{pic}}"  title="{{owner.name}}" />
+        <img class="r r-2x" src="{{pic}}"  title="{{owner.name}}" />
 	   {{else}}
-		<img class="r r-2x" height="50px" width="50px" src="{{defaultGravatarurl 50}}"  title="{{owner.name}}" />
+		<img class="r r-2x" src="{{defaultGravatarurl 50}}"  title="{{owner.name}}" />
        {{/if}}
     </div>
 </td>

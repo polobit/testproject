@@ -66,7 +66,7 @@ function showListOfContactNumbers()
 	if (TwilioIONumbers.length == 0)
 	{
 		// Shows information in Twilio widget panel
-		twilioIOError(TwilioIO_PLUGIN_NAME, "There is no phone number associated with this contact. <a href='#contact-edit'>Add phone number</a>");
+		twilioIOError(TwilioIO_PLUGIN_NAME, "There is no phone number associated with this contact. <a href='#contact-edit' class='text-info'>Add phone number</a>");
 		return;
 	}
 
@@ -104,7 +104,7 @@ function getTwilioIOLogs(to)
 	if(to == "" || !to)
 	  {
 		// Shows information in Twilio widget panel
-		twilioIOError(TwilioIO_PLUGIN_NAME, "There is no phone number associated with this contact. <a href='#contact-edit'>Add phone number</a>");
+		twilioIOError(TwilioIO_PLUGIN_NAME, "There is no phone number associated with this contact. <a href='#contact-edit' class='text-info'>Add phone number</a>");
 		return;
 	  }		
 	

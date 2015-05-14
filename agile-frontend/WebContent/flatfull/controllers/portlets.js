@@ -222,12 +222,8 @@ $('#portlets-opportunities-model-list > tr').live('click', function(e) {
 	});
 	if(!hrefFlag){
 		//code for navigating deal details page
-		/*var id = $(this).find(".data").attr("data");
-		App_Deal_Details.navigate("deal/" + id, { trigger : true });*/
-		
-		//code for open deal edit popup
-		App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
-		updateDeal($(this).data());
+		var id = $(this).find(".data").attr("data");
+		App_Deal_Details.navigate("deal/" + id, { trigger : true });
 	}
 });
 $('#portlets-events-model-list > tr').live('click', function(e){

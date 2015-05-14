@@ -61,6 +61,7 @@
 		<ul class="nav nav-pills" id="TrackingTab">
 			<li class="tracking-tab"><a data-toggle="tab" href="#tracking"><span>Tracking code</span></a></li>
 			<li class="tracking-webrules-tab active"><a data-toggle="tab" href="#tracking-webrules"><span>Tracking code with Web Rules enabled</span></a></li>
+			<li class="tracking-webrules-whitelist-tab active"><a data-toggle="tab" href="#tracking-webrules-whitelist"><span>Tracking code with Web Rules Whitelist enabled</span></a></li>
 		</ul>
 		<div class="tab-content">
 
@@ -94,6 +95,23 @@
 </pre></div>
 			</div>
 			<!-- Tracking code with Web Rules templete -->
+
+			<!--  Tracking code with Web Rules whitelist enabled -->
+			<div class="tab-pane active" id="tracking-webrules-whitelist">
+<div class="clearfix"></div>
+<div><!--<a class="right btn" id="api_track_webrules_code_icon" style="margin:5px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
+<pre class="prettyprint" id="api_track_webrules_code">
+&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt;
+&lt;/script&gt;
+&lt;script type="text/javascript" &gt;
+ _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
+ _agile_set_whitelist('{{getBase64Domain}}');
+ _agile.track_page_view();
+ _agile_execute_web_rules();
+&lt;/script&gt;
+</pre></div>
+			</div>
+			<!-- / Tracking code with Web Rules whitelist enabled -->
 
 		</div>
 	</div>

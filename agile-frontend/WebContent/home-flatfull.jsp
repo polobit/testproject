@@ -58,7 +58,7 @@ template = "pink";
 String width = currentUserPrefs.width;
 boolean is_fluid = !width.isEmpty();
 
-BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(null, null);
+BillingRestriction restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
 boolean is_free_plan = false;
 
 if(restriction != null && restriction.planDetails != null)
@@ -466,7 +466,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="documentsmenu">
     <a  href="#documents">
       <i class="icon icon-doc"></i>
-      <span>Documents</span>
+      <span><%if(currentUserPrefs.menuPosition.equals("leftcol")){%>Docs<%}else{ %>Documents<%} %></span>
     </a>
   </li>
   <li class="line dk"></li>
@@ -512,7 +512,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </div>
   </aside>
 <div class="app-content" id="agilecrm-container">
-<div class="butterbar animation-active"><span class="bar"></span></div>
+<div class="butterbar animation-active" style="z-index:99;"><span class="bar"></span></div>
 <div id="content" class="app-content-body">
 <!-- <img class="init-loading" style="padding-right: 5px"
 src="img/21-0.gif"></img> -->

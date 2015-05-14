@@ -72,7 +72,7 @@
 <script id="cases-model-template" type="text/html">
 <td>
 
-    <div class="thumb-xs avatar">
+    <div class="thumb-sm avatar">
 	   {{#if ownerPic}}
         <img class="r r-2x" src="{{ownerPic}}" title="{{owner.name}}" />
 	   {{else}}
@@ -82,10 +82,12 @@
 
 </td>
 <td data="{{id}}" class="data">
-<div class="table-resp"><a class="text-md">{{title}}</a></div>
-	<div class="table-resp">
+<div class="table-resp">
+	<a class="text-cap">{{title}}</a>
+</div>
+	<small class="text-muted">
 		{{description}}
-	</div>
+	</small>
 </td>
 <td class="text-muted">
 <div class="table-resp">
@@ -98,7 +100,7 @@
 <td class="overflow-hidden no-wrap">
 	
         	{{#each contacts}}
-			<div class="inline-block thumb">
+			<div class="inline-block thumb-sm">
 				{{#if_equals type "PERSON"}}
           	 	<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}"  title="{{contact_name_necessary this}}" />
 				{{/if_equals}}
@@ -120,7 +122,7 @@
 		Open
 	</div>
 	{{else}}
-	<div class="text-center  label label-danger text-xs">
+	<div class="text-center  label label-default text-xs">
 		Close
 	</div>
 	{{/if_equals}}

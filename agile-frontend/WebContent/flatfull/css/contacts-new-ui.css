@@ -70,6 +70,7 @@
 .contact-switching a i
 {
 	font-size:11px;
+	color:#98a6ad;
 }
 
 .contact-navigation-view
@@ -92,7 +93,7 @@ width:83px;*/
 text-overflow: ellipsis;
 overflow: hidden;
 width: auto;*/
-max-width:75%;
+/*max-width:75%;*/
 /*height: auto;
 padding-bottom: 2px;*/
 	
@@ -237,14 +238,14 @@ top: 5px;
 font-size: 11px;
 left: -10px;
 }
-.contact-owner-view
+/*.contact-owner-view
 {
 	
 display: block;
 float: right;
 width: auto;
 max-width: 100%;	
-}
+}*/
 
 /*.contact-owner
 {
@@ -339,14 +340,14 @@ border: 1px solid #ddd;
 text-transform: capitalize;	
 }*/
 
-.contact-right-widgetsview
+/*.contact-right-widgetsview
 {
 	position:relative;
 	font-size:15px;
 	border:none;
 	margin-bottom:0px;
 	border-radius:0px
-}
+}*/
 .contact-right-widgetsview i
 {
 	margin-right:5px;

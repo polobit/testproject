@@ -3,6 +3,7 @@ package com.agilecrm.subscription.restrictions.db.util;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
@@ -177,8 +178,7 @@ public class BillingRestrictionUtil
 	plan = subscription.plan;
 
 	// Namespace and subscription
-	 System.out.println("" + NamespaceManager.get() +
-	 " domain is having plan - " + plan);
+	System.out.println("" + NamespaceManager.get() + " domain is having plan - " + plan);
 
 	// Gets user info and sets plan and sets back in session
 	UserInfo info = SessionManager.get();
@@ -294,7 +294,7 @@ public class BillingRestrictionUtil
 	if (info == null)
 	    return;
 
-	info.setPlan(plan.getPlanName());
+	info.setPlan(plan.plan_type.toString());
 	info.setUsersCount(plan.quantity);
 
     }
@@ -309,5 +309,39 @@ public class BillingRestrictionUtil
 	cachedData.email_pack_start_time = System.currentTimeMillis() / 1000;
 
 	cachedData.save();
+    }
+
+    public static BillingRestriction getBillingRestritionAndSetInCookie(HttpServletRequest request)
+    {
+
+	Subscription subscription = SubscriptionUtil.getSubscription();
+
+	Plan plan = subscription.plan;
+
+	return getBillingRestritionAndSetInCookie(plan, request);
+
+    }
+
+    public static BillingRestriction getBillingRestritionAndSetInCookie(Plan plan, HttpServletRequest request)
+    {
+	BillingRestriction billingRestriction = BillingRestriction
+		.getInstance(plan.plan_type.toString(), plan.quantity);
+
+	UserInfo info = (UserInfo) request.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
+
+	info.setPlan(plan.plan_type.toString());
+	info.setUsersCount(plan.quantity);
+	System.out.println(info.getPlan());
+	System.out.println(info.getUsersCount());
+
+	// Check if UserInfo is already there
+	request.getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, info);
+
+	// Sets new Session
+	SessionManager.set(info);
+
+	System.out.println(SessionManager.get());
+
+	return billingRestriction;
     }
 }
