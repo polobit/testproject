@@ -10,19 +10,17 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 public class SendEventReminder
 {
 
-    public static void sendEventReminders(String domain, Long starttime, boolean nosamplevent) throws IOException
-    {
+	public static void sendEventReminders(String domain, Long starttime, boolean nosamplevent) throws IOException
+	{
 
-	System.out.println(starttime);
-	System.out.println("start time of event----------------- " + ((starttime - 600) * 1000));
-	// Get Namespaces / domains
+		// Get Namespaces / domains
 
-	SendEventReminderDeferredTask sendEventReminder = new SendEventReminderDeferredTask(domain, starttime,
-	        nosamplevent);
-	Queue queue = QueueFactory.getQueue("event-notifier");
-	TaskOptions options = TaskOptions.Builder.withPayload(sendEventReminder);
-	options.etaMillis((starttime - 600) * 1000);
-	queue.add(options);
+		SendEventReminderDeferredTask sendEventReminder = new SendEventReminderDeferredTask(domain, starttime,
+				nosamplevent);
+		Queue queue = QueueFactory.getQueue("event-notifier");
+		TaskOptions options = TaskOptions.Builder.withPayload(sendEventReminder);
+		options.etaMillis((starttime - 600) * 1000);
+		queue.add(options);
 
-    }
+	}
 }

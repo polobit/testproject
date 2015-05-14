@@ -23,7 +23,6 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.IcalendarUtil;
-import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -341,7 +340,6 @@ public class EventUtil
 	 */
 	public static List<Event> getLatestEvents(Long starttime)
 	{
-		System.out.println("in getLatest Events Domain name " + NamespaceManager.get());
 
 		int duration = 3600;
 		Long currenttime = System.currentTimeMillis() / 1000;
@@ -351,8 +349,6 @@ public class EventUtil
 			starttime = starttime + 120;
 
 		Long endtime = starttime + duration;
-
-		System.out.println(starttime + "----------------------------" + endtime);
 
 		List<Event> domain_events = new ArrayList<>();
 		List<String> default_events = getDefaultEventNames();
