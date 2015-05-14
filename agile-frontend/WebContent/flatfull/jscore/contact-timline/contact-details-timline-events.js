@@ -52,15 +52,15 @@ $(function () {
 	 * Shows the list of mails(mail sent to) as popover, when mouse is entered on
 	 * to address of the email
 	 */  
-	$("#tl-mail-to-popover").live('mouseenter',function(e){
+	$("#tl-mail-to-popover").die().live('mouseenter',function(e){
 		
 		$(this).popover({
         	template:'<div class="popover"><div class="arrow"></div><div class="popover-inner" style="padding:1px;width:340px;border-radius:2px"><div class="popover-content"><p></p></div></div></div>'
         });
 		
 		var string = $(this).text();
-		var html = new Handlebars.SafeString(string.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/,/g, ",</br>").replace("To:","To:</br>").replace("read more", ""));
-		$(this).attr("data-content", html);
+		//var html = new Handlebars.SafeString(string.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/,/g, ",</br>").replace("To:","To:</br>").replace("read more", ""));
+		$(this).attr("data-content", string);
         $(this).popover('show');
     });
 	
