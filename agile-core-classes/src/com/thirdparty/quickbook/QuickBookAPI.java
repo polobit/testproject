@@ -57,7 +57,7 @@ public class QuickBookAPI
 
     private void doImport(ContactPrefs contactPrefs)
     {
-	ContactsImportUtil.initilaizeImportBackend(contactPrefs);
+	ContactsImportUtil.initilaizeImportBackend(contactPrefs, true);
     }
 
 }

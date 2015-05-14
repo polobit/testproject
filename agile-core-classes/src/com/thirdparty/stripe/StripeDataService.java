@@ -82,7 +82,7 @@ public class StripeDataService
 	ArrayList<String> options = new ArrayList<String>();
 	options.add("customer");
 	prefs.importOptions = options;
-	ContactsImportUtil.initilaizeImportBackend(prefs);
+	ContactsImportUtil.initilaizeImportBackend(prefs, true);
 
     }
 
