@@ -371,11 +371,6 @@ public class AdminPanelAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Subscription changePlan(Plan plan)
     {
-	if (StringUtils.isEmpty(NamespaceManager.get()) || !NamespaceManager.get().equals("admin"))
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Sorry you don't have privileges to access this page.").build());
-	}
 	try
 	{
 	    // Return updated subscription object
