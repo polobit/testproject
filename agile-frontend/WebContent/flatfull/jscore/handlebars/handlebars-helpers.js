@@ -6004,7 +6004,6 @@ $(function()
 			return message;
 		}
 		return message;
-<<<<<<< HEAD
 	});
 
 	/**
