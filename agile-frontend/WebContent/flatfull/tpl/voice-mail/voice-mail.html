@@ -31,9 +31,8 @@
 		{{/unless}}
         {{#if this.length}}
         <div class="data-block">
-            <div class="data-container">
-				<div class="panel panel-default">
-                <table class="table table-striped showCheckboxes agile-table" url="core/api/voicemails/bulk" id="voicemail-list">
+            <div class="data-container">				
+                <table class="table table-striped showCheckboxes m-b-none agile-table panel" url="core/api/voicemails/bulk" id="voicemail-list">
 				 <col width="30px"><col width="35%"><col width="35%"><col width="20%"><col width="10%">
                     <thead>
                         <tr>
@@ -45,8 +44,7 @@
                     </thead>
                     <tbody id="voice-mail-model-list" style="cursor:pointer;">
                     </tbody>
-                </table>
-				</div>
+                </table>				
             </div>
         </div>
         {{/if}}
@@ -66,7 +64,7 @@
 
 <script id="voice-mail-model-template" type="text/html">
 <td data="{{id}}" class="data">
-<div style="height:30px;">{{name}}</div>
+<div>{{name}}</div>
 </td>
 <td>{{extension}}</td>
 <td class="text-muted"><div style="width:10em;"><i class="fa fa-clock-o m-r-xs"></i><time class="document-created-time" value="{{uploaded_time}}" datetime="{{epochToHumanDate "" uploaded_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time></div></td>

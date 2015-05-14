@@ -239,7 +239,7 @@
 
 							<li id="recent-menu" class="dropdown"><a
 								class="dropdown-toggle" data-toggle="dropdown" href=""> <i class='fa fa-history text-muted text-md'></i>
-							</a><ul class="dropdown-menu animated custom-fadeInUp" style="width:25em; right:-11px;"></ul>
+							</a><ul class="dropdown-menu animated custom-fadeInUp" style="width:23em; right:-11px;"></ul>
 							</li>
 								
 
