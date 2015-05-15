@@ -399,12 +399,7 @@ public class Contact extends Cursor
 	    // otherwise if countEmails==1, make sure its not due to
 	    // previous
 	    // value of this(current) Contact
-	    if (ContactUtil.isDuplicateContact(this, oldContact, true))
-	    {
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-			.entity("Sorry, a contact with this email already exists " + myMail).build());
-	    }
-
+	    ContactUtil.isDuplicateContact(this, oldContact, true);
 	}
 
 	// To skip validation for Campaign Tags

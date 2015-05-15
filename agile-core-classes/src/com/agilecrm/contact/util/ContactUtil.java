@@ -409,6 +409,32 @@ public class ContactUtil
 	return false;
     }
 
+    public static boolean isDuplicateContact(Contact contact, boolean throwError)
+    {
+	// Lists out all email fields from updated contact
+	List<ContactField> newEmailFields = contact.getContactPropertiesList(Contact.EMAIL);
+
+	for (ContactField field : newEmailFields)
+	{
+	    int i = searchContactCountByEmail(field.value.toLowerCase());
+
+	    if (i > 0)
+	    {
+		if (throwError)
+		{
+		    if (throwError)
+			throw new DuplicatContactException("Sorry, a contact with this email already exists "
+				+ field.value);
+		    else
+			return true;
+		}
+	    }
+	}
+
+	return false;
+
+    }
+
     /**
      * Checks duplicate contact. Before checking in datastore, this method
      * compare emails with that of existing data of that particular contact
@@ -420,7 +446,9 @@ public class ContactUtil
     public static boolean isDuplicateContact(Contact contact, Contact oldContact, boolean throwError)
     {
 	if (oldContact == null)
-	    return isDuplicateContact(contact);
+	{
+	    isDuplicateContact(contact, throwError);
+	}
 
 	// Lists out all emails from old contact
 	List<ContactField> emailFields = oldContact.getContactPropertiesList(Contact.EMAIL);
