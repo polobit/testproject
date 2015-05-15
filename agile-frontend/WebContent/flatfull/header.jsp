@@ -67,9 +67,20 @@
 				 	}
 				  		
 				 %>">
+				 
+				 	 <button class="pull-right visible-xs" id="mobile-menu-settings"  ui-toggle-class="show" data-target=".navbar-collapse">
+          <i class="glyphicon glyphicon-cog"></i>
+        </button>
+				  <button class="pull-right visible-xs" id="mobile-menu" ui-toggle-class="off-screen" data-target=".app-aside" ui-scroll-to="app">
+          <i class="glyphicon glyphicon-align-justify"></i>
+        </button>
+			
+        
+       
+				 
 				    <a class="navbar-brand font-bold text-lt" href="#dashboard"><i class="fa fa-cloud"></i> <span class="hidden-folded m-l-xs"> Agile CRM </span></a>
 </div>
-					<div id="navbar" class="collapse pos-rlt navbar-collapse box-shadow 
+					<div id="navbar" class="collapse pos-rlt navbar-collapse box-shadow   
 					
 					<%
 				 	switch (Integer.parseInt(currentUserPrefs.theme)) {
@@ -228,7 +239,7 @@
 
 							<li id="recent-menu" class="dropdown"><a
 								class="dropdown-toggle" data-toggle="dropdown" href=""> <i class='fa fa-history text-muted text-md'></i>
-							</a><ul class="dropdown-menu animated custom-fadeInUp" style="width:25em; right:-11px;"></ul>
+							</a><ul class="dropdown-menu animated custom-fadeInUp" style="width:23em; right:-11px;"></ul>
 							</li>
 								
 

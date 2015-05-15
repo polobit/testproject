@@ -8,7 +8,7 @@ public class TagValidator
     private Pattern pattern;
     private Matcher matcher;
 
-    private static final String TAG_PATTERN = "^(?U)[\\p{Alpha}][\\p{Alpha}\\_ \\d]*";
+    private static final String TAG_PATTERN = "^(?U)[\\p{Alpha}][\\p{Alpha}\\_\\- \\d]*";
 
     private static TagValidator tagValidator = new TagValidator();
 

@@ -15,11 +15,11 @@
     	<div class="table-resp" style="width:15em;">
     	<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px">
         	{{#if_contact_type "PERSON"}}
-        		<img class="img-inital r r-2x"  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+        		<img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
-        		<img class="r r-2x" {{getCompanyImage "40" "display:inline;"}}/>
+        		<img class="r r-2x" title="{{getPropertyValue properties 'name'}}" {{getCompanyImage "40" "display:inline;"}}/>
         	{{/if_contact_type}}
     	</div>
     	<div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">

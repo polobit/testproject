@@ -53,7 +53,7 @@ public class RegularPlanLimits extends PlanLimits
 		paymentSync = true;
 		accountingSync = true;
 
-		widgets = 10;
+		widgets = Integer.MAX_VALUE;
 		customWidget = true;
 	}
 }
