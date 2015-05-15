@@ -1,5 +1,4 @@
- var _gaq = _gaq || [];
- _gaq.push(['_setAccount', 'UA-44894190-1']);
+
 
  function push_signup_plan(plan)
  {
