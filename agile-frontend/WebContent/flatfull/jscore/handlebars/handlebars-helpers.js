@@ -6034,6 +6034,25 @@ $(function()
 
 		return SALES_SCHEDULE_URL;
 
+			});
+
+		Handlebars.registerHelper('isAllowedInCurrentPlan', function(functionName, options) {
+	
+		if(_plan_restrictions[functionName] && _plan_restrictions[functionName][0] && _plan_restrictions[functionName][0]())
+		{
+			return options.fn(this);
+		}
+		else if(_plan_restrictions[functionName] && _plan_restrictions[functionName][1])
+		{
+			return options.inverse(_plan_restrictions[functionName][1]());
+		}
+		else
+			return options.inverse(this);
+		
+	});
+
+	Handlebars.registerHelper("toSafeString", function(content){
+		return new Handlebars.SafeString(content);
 	});
 });
 

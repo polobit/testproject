@@ -76,7 +76,7 @@ public class FreshbooksDataAPI
      */
     private void doImport(ContactPrefs prefs)
     {
-	ContactsImportUtil.initilaizeImportBackend(prefs);
+	ContactsImportUtil.initilaizeImportBackend(prefs, true);
 
     }
 

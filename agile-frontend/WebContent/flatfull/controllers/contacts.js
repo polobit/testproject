@@ -538,7 +538,7 @@ var ContactsRouter = Backbone.Router.extend({
 			this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "company-detail",
 				postRenderCallback : function(el)
 				{
-					contactInnerTabsInvoke(el); // hiding the prev,next arrows when viewport suits
+				//	contactInnerTabsInvoke(el);  hiding the prev,next arrows when viewport suits
 					fill_company_related_contacts(id, 'company-contacts');
 					// Clone contact model, to avoid render and
 					// post-render fell in to
@@ -657,9 +657,9 @@ var ContactsRouter = Backbone.Router.extend({
 		else
 				$("#map_view_action").html("<i class='icon-minus text-sm c-p' title='Hide map' id='disable_map_view'></i>");
 
-	setTimeout(function(){
-		contactInnerTabsInvoke(el);
-	},500);
+
+		//contactInnerTabsInvoke(el);
+
 	},
 
 	/**

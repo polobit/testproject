@@ -59,7 +59,7 @@ public class QuickBookController
 
     private void doImport(ContactPrefs contactPrefs)
     {
-	ContactsImportUtil.initilaizeImportBackend(contactPrefs);
+	ContactsImportUtil.initilaizeImportBackend(contactPrefs, true);
     }
 
 }
