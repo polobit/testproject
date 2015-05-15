@@ -349,6 +349,16 @@ var SubscribeRouter = Backbone.Router.extend({
 			{
 				window.navigate("subscribe", { trigger : true });
 				showNotyPopUp("information", "Your plan has been updated successfully", "top");
+
+				try
+				{
+					push_actual_plan(data.plan)
+				}
+				catch(err)
+				{
+					console.log(err);
+				}
+
 			},
 			errorCallback : function(data)
 			{
