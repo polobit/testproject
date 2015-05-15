@@ -395,32 +395,16 @@ public class Contact extends Cursor
 	// loop through for checking multiple emails
 	if (Type.PERSON == type)
 	{
-	    for (ContactField contactField : this.properties)
+	    // Throw BAD_REQUEST if countEmails>=2 (sure duplicate contact)
+	    // otherwise if countEmails==1, make sure its not due to
+	    // previous
+	    // value of this(current) Contact
+	    if (ContactUtil.isDuplicateContact(this, oldContact, true))
 	    {
-		if (!StringUtils.equalsIgnoreCase(contactField.name, "EMAIL"))
-		    continue;
-
-		String myMail = contactField.value;
-		int countEmails = 0; // to allow if this new entry doesn't have
-		// email-id
-
-		if (myMail != null && !myMail.isEmpty())
-		{
-		    countEmails = ContactUtil.searchContactCountByEmailAndType(myMail, type);
-		    // countEmails =
-		    // ContactUtil.searchContactCountByEmail(myMail);
-		}
-		// Throw BAD_REQUEST if countEmails>=2 (sure duplicate contact)
-		// otherwise if countEmails==1, make sure its not due to
-		// previous
-		// value of this(current) Contact
-		if (countEmails >= 2 || (countEmails == 1 && (id == null || !oldContact.isEmailExists(myMail))))
-		{
-		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-			    .entity("Sorry, a contact with this email already exists " + myMail).build());
-		}
-
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			.entity("Sorry, a contact with this email already exists " + myMail).build());
 	    }
+
 	}
 
 	// To skip validation for Campaign Tags
@@ -534,7 +518,8 @@ public class Contact extends Cursor
 	// If tags and properties length differ, contact is considered to be
 	// changed
 	if (contact.tags.size() != currentContactTags.size() || contact.properties.size() != properties.size()
-		|| contact.star_value != star_value || contact.lead_score != lead_score || contact.campaignStatus.size() != campaignStatus.size())
+		|| contact.star_value != star_value || contact.lead_score != lead_score
+		|| contact.campaignStatus.size() != campaignStatus.size())
 	    return true;
 
 	// Checks if tags are changed
@@ -556,14 +541,14 @@ public class Contact extends Cursor
 	    if (!properties.contains(property))
 		return true;
 	}
-	
-	//Checks campaign status has any change
-	for(CampaignStatus status : contact.campaignStatus)
+
+	// Checks campaign status has any change
+	for (CampaignStatus status : contact.campaignStatus)
 	{
-	    if(campaignStatus == null || status == null)
+	    if (campaignStatus == null || status == null)
 		continue;
-	    
-	    if(!campaignStatus.contains(status))
+
+	    if (!campaignStatus.contains(status))
 		return true;
 	}
 

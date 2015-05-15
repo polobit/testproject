@@ -26,6 +26,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
+import com.agilecrm.contact.exception.DuplicatContactException;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
@@ -408,8 +409,60 @@ public class ContactUtil
 	return false;
     }
 
-    public boolean isDuplicateContact(Contact contact, Contact oldContact)
+    /**
+     * Checks duplicate contact. Before checking in datastore, this method
+     * compare emails with that of existing data of that particular contact
+     * 
+     * @param contact
+     * @param oldContact
+     * @return
+     */
+    public static boolean isDuplicateContact(Contact contact, Contact oldContact, boolean throwError)
     {
+	if (oldContact == null)
+	    return isDuplicateContact(contact);
+
+	// Lists out all emails from old contact
+	List<ContactField> emailFields = oldContact.getContactPropertiesList(Contact.EMAIL);
+
+	// Lists out all email fields from updated contact
+	List<ContactField> newEmailFields = contact.getContactPropertiesList(Contact.EMAIL);
+
+	// Store extra emails
+	List<ContactField> newAddedEmails = new ArrayList<ContactField>();
+	for (ContactField field : emailFields)
+	{
+	    boolean isFound = false;
+	    for (ContactField newField : newEmailFields)
+	    {
+		if (StringUtils.equalsIgnoreCase(newField.value, field.value))
+		{
+		    isFound = true;
+		}
+
+		break;
+	    }
+
+	    if (!isFound)
+		newAddedEmails.add(field);
+	}
+
+	if (newAddedEmails.isEmpty())
+	    return false;
+
+	for (ContactField field : newEmailFields)
+	{
+	    if (searchContactCountByEmailAndType(field.value.toLowerCase(), Type.PERSON) > 0)
+	    {
+		if (throwError)
+		    throw new DuplicatContactException("Sorry, a contact with this email already exists " + field.value);
+		else
+		    return true;
+	    }
+
+	}
+
+	return false;
 
     }
 
@@ -427,6 +480,25 @@ public class ContactUtil
 
 	if (emailFields.size() < newEmailFields.size())
 	    return true;
+
+	for (ContactField field : emailFields)
+	{
+	    boolean isFound = false;
+	    for (ContactField newField : newEmailFields)
+	    {
+		if (StringUtils.equalsIgnoreCase(newField.value, field.value))
+		{
+		    isFound = true;
+		}
+
+		break;
+	    }
+
+	    if (!isFound)
+		return true;
+	}
+
+	return false;
 
     }
 
