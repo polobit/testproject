@@ -305,14 +305,20 @@ var contact_details_tab = {
 	              // var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	             // fillSelect('campaignSelect','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
 	            	
-	            	checkContactUpdated();
 	            },
 	            appendItemCallback : function(el)
 				{
 					includeTimeAgo(el);
 				}  
 	        });
-			campaignsView.collection.fetch();	
+			campaignsView.collection.fetch({
+				success: function(){
+
+					// Verify whether contact updated or not
+					checkContactUpdated();
+				}
+
+			});	
 	        $('#campaigns', App_Contacts.contactDetailView.el).html(campaignsView.el);
 		}
 };

@@ -82,12 +82,12 @@ function checkContactUpdated(){
 							return '/core/api/contacts/' + contact_id;
 					}
 				});
-                var old_model = App_Contacts.contactDetailView.model;
+                
 				var model = new contact_details_model();
 				model.id = id;
 				model.fetch({ success : function(data){
 					
-					var old_updated_time = old_model.attributes.updated_time;
+					var old_updated_time = contact_model.attributes.updated_time;
 					
 					var new_updated_time = model.attributes.updated_time;
 					
