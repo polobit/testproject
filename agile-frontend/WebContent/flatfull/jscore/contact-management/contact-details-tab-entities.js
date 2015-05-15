@@ -304,6 +304,8 @@ var contact_details_tab = {
 	              	});
 	              // var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	             // fillSelect('campaignSelect','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
+	            	
+	            	checkContactUpdated();
 	            },
 	            appendItemCallback : function(el)
 				{

@@ -1,5 +1,6 @@
 package com.agilecrm.workflows.status.util;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -137,7 +138,7 @@ public class CampaignStatusUtil
 			contact.campaignStatus.add(campaignStatus);
 		}
 
-		contact.save();
+		contact.update();
 	}
 
 	/**
@@ -172,7 +173,7 @@ public class CampaignStatusUtil
 			}
 		}
 
-		contact.save();
+		contact.update();
 	}
 	
 	public static boolean isActive(Contact contact, Long workflowId)
@@ -191,6 +192,55 @@ public class CampaignStatusUtil
 	public static boolean isActive(Contact contact, CampaignStatus currentcampaignStatus)
 	{
 	    return contact.campaignStatus.contains(currentcampaignStatus);
+	}
+
+	/**
+	 * Removes campaignStatus from Contact when corresponding workflow is
+	 * deleted.
+	 * 
+	 * @param campaignId
+	 *            - CampaignId of campaign that gets deleted.
+	 */
+	public static void removeCampaignStatus(String campaignId)
+	{
+	
+	// Gets list of contacts whose campaignId matches in campaignStatus
+	List<Contact> contactList = CampaignSubscribersUtil.getContactsByCampaignId(campaignId);
+	
+	if (contactList == null)
+	    return;
+	
+	// Iterate over contacts and removes campaignStatus
+	for (Contact contact : contactList)
+	    CampaignStatusUtil.removeCampaignStatus(contact, campaignId);
+	
+	}
+
+	/**
+	 * Removes campaignStatus from campaignStatus list of given contact having
+	 * campaign-id.
+	 * 
+	 * @param contact
+	 *            - Contact that subscribed to campaign
+	 * @param campaignId
+	 *            - Campaign Id.
+	 */
+	public static void removeCampaignStatus(Contact contact, String campaignId)
+	{
+	Iterator<CampaignStatus> campaignStatusIterator = contact.campaignStatus.listIterator();
+	
+	// Iterates over campaignStatus list.
+	while (campaignStatusIterator.hasNext())
+	{
+	    if (!StringUtils.isEmpty(campaignId) && campaignId.equals(campaignStatusIterator.next().campaign_id))
+	    {
+		campaignStatusIterator.remove();
+		break;
+	    }
+	}
+	
+	// save changes
+	contact.update();
 	}
 
 }
