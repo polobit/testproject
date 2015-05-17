@@ -409,8 +409,21 @@ public class ContactUtil
 	return false;
     }
 
+    /**
+     * Use this method only if contact is new contact
+     * 
+     * @param contact
+     * @param throwError
+     * @return
+     */
     public static boolean isDuplicateContact(Contact contact, boolean throwError)
     {
+	if (contact.id != null)
+	{
+	    Contact oldContact = ContactUtil.getContact(contact.id);
+	    return isDuplicateContact(contact, oldContact, throwError);
+	}
+
 	// Lists out all email fields from updated contact
 	List<ContactField> newEmailFields = contact.getContactPropertiesList(Contact.EMAIL);
 
