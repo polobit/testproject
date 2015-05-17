@@ -507,42 +507,6 @@ public class ContactUtil
 
     }
 
-    public boolean isExtraEmailAdded(Contact contact, Contact oldContact)
-    {
-	if (oldContact == null)
-	    return false;
-
-	List<ContactField> emailFields = oldContact.getContactPropertiesList(Contact.EMAIL);
-
-	List<ContactField> newEmailFields = contact.getContactPropertiesList(Contact.EMAIL);
-
-	if (emailFields.isEmpty() && !newEmailFields.isEmpty())
-	    return true;
-
-	if (emailFields.size() < newEmailFields.size())
-	    return true;
-
-	for (ContactField field : emailFields)
-	{
-	    boolean isFound = false;
-	    for (ContactField newField : newEmailFields)
-	    {
-		if (StringUtils.equalsIgnoreCase(newField.value, field.value))
-		{
-		    isFound = true;
-		}
-
-		break;
-	    }
-
-	    if (!isFound)
-		return true;
-	}
-
-	return false;
-
-    }
-
     /**
      * Get Count of Contacts by Email - should be used in most of the cases
      * unless the real entity is required
@@ -1021,9 +985,17 @@ public class ContactUtil
 	Builder[] docs = new Builder[contacts_list.size()];
 	List<Builder> builderObjects = new ArrayList<Builder>();
 	int i = 0;
+
+	List<Contact> updatedContactList = new ArrayList<Contact>();
+
 	for (Contact contact : contacts_list)
 	{
-	    contact.setContactOwner(newOwnerKey);
+	    if (newOwnerKey != null && !newOwnerKey.equals(contact.getContactOwnerKey()))
+	    {
+		contact.setContactOwner(newOwnerKey);
+		updatedContactList.add(contact);
+	    }
+
 	    Key<DomainUser> userKey = contact.getContactOwnerKey();
 
 	    if (!new_owner.equals(userKey))
@@ -1045,6 +1017,10 @@ public class ContactUtil
 	    search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
 
 	Contact.dao.putAll(contacts_list);
+
+	// Trigger owner changes
+	ContactFieldTriggerUtil.checkContactOwnerChanges(updatedContactList);
+
     }
 
     /**
@@ -1402,7 +1378,10 @@ public class ContactUtil
 	List<String> activeWorkflows = null;
 	try
 	{
+	    // Gets the list of all workflows
 	    List<CampaignStatus> campaignStatusList = dao.get(id).campaignStatus;
+
+	    // Sort the list by ACTIVE status
 	    Iterator<CampaignStatus> statusIterator = campaignStatusList.iterator();
 	    activeWorkflows = new ArrayList<String>();
 	    while (statusIterator.hasNext())
@@ -1416,16 +1395,13 @@ public class ContactUtil
 		catch (EnumConstantNotPresentException e)
 		{
 		    System.err.println("Inside workflowListOfAContact");
-		    e.printStackTrace();
 		}
 	    }
 
 	}
 	catch (EntityNotFoundException e)
 	{
-	    // TODO Auto-generated catch block
 	    System.out.println("Inside workflowListOfAContact of ContactUtil.java and message is: " + e.getMessage());
-	    e.printStackTrace();
 	}
 	return activeWorkflows;
     }
@@ -1439,7 +1415,6 @@ public class ContactUtil
      */
     public static List<JSONObject> getEmailsOpened(Long minTime, Long maxTime) throws Exception
     {
-
 	// List<Contact> contactsList=null;
 	// List<Long> contactIdsList=new ArrayList<Long>();
 	List<JSONObject> contactsList = new ArrayList<JSONObject>();
@@ -1526,7 +1501,6 @@ public class ContactUtil
 	    e.printStackTrace();
 	}
 	return contactsList;
-
     }
 
     /**
@@ -1554,13 +1528,15 @@ public class ContactUtil
 
 	    if (campaignID == null)
 	    {
-		// return any status - Done, removed or active
+		// Any campaign with given status
 
+		// return any status - Done, removed or active
 		if (CheckCampaign.ANY_STATUS.equals(status))
 		    return dao.getByProperty(searchMap).campaignStatus;
 
 		List<CampaignStatus> campaignIDsList = new ArrayList<CampaignStatus>();
 
+		// Gets list of campaigns ids
 		campaignIDsList = dao.getByProperty(searchMap).campaignStatus;
 
 		Iterator<CampaignStatus> statusIterator = campaignIDsList.iterator();
@@ -1583,11 +1559,14 @@ public class ContactUtil
 
 		List<CampaignStatus> campaignIDsList = new ArrayList<CampaignStatus>();
 
+		// appending status for query
 		if (!CheckCampaign.ANY_STATUS.equals(status))
 		    searchMap.put("campaignStatus.status", campaignID + "-" + status.toUpperCase());
 
+		// Adds list of campaign IDs for the given campaign ID
 		campaignIDsList.addAll(dao.getByProperty(searchMap).campaignStatus);
 
+		// return if the status is any
 		if (!CheckCampaign.ANY_STATUS.equals(status))
 		    return campaignIDsList;
 
@@ -1595,7 +1574,6 @@ public class ContactUtil
 
 		List<CampaignStatus> givenStatusList = new ArrayList<CampaignStatus>();
 
-		// any status gets active
 		while (statusIterator.hasNext())
 		{
 		    CampaignStatus campaignStatus = statusIterator.next();
@@ -1605,11 +1583,9 @@ public class ContactUtil
 
 		    if (StringUtils.containsIgnoreCase(campaignStatus.status, CheckCampaign.STATUS_ACTIVE)
 			    || StringUtils.containsIgnoreCase(campaignStatus.status, CheckCampaign.STATUS_DONE))
-		    {
 			givenStatusList.add(campaignStatus);
-			return givenStatusList;
-		    }
 		}
+		return givenStatusList;
 	    }
 	}
 
@@ -1642,6 +1618,32 @@ public class ContactUtil
     public static void resetContactsCount()
     {
 	eraseContactsCountCache();
+    }
+
+    /**
+     * Compare two contact field objects using ContactField overridden equals
+     * 
+     * @param value1
+     *            - ContactField object
+     * @param value2
+     *            - ContactField object
+     * @return
+     */
+    public static boolean areEqualContactFieldValues(ContactField value1, ContactField value2)
+    {
+	if (value1 == null && value2 != null)
+	    return false;
+
+	if (value1 != null && value2 == null)
+	    return false;
+
+	if (value1 != null)
+	    return value1.equals(value2);
+
+	if (value2 != null)
+	    return value2.equals(value1);
+
+	return false;
     }
 
     /**
@@ -1696,12 +1698,22 @@ public class ContactUtil
 	return null;
     }
 
+    /**
+     * Checks whether the contact exists or not
+     * 
+     * @param contactId
+     *            Id of a contact
+     * @return true or false
+     * @author bhasuri
+     */
     public static boolean isExists(Long contactId)
     {
 	// TODO Auto-generated method stub
 	try
 	{
+
 	    return dao.getCountByProperty("id", contactId) > 0 ? true : false;
+
 	}
 	catch (Exception e)
 	{
