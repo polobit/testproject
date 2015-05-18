@@ -27,9 +27,10 @@ var WorkflowsRouter = Backbone.Router
 			// Appends campaign-id to show selected campaign-name in add trigger
 			// form.
 			"trigger-add/:id" : "triggerAdd",
+			"trigger-add-new/:id" : "triggerAddNew",
 
 			"trigger-add" : "triggerAdd", "trigger/:id" : "triggerEdit",
-
+			"trigger-add-new" : "triggerAddNew",
 			/* Subscribers */
 			"workflow/all-subscribers/:id" : "allSubscribers", "workflow/active-subscribers/:id" : "activeSubscribers",
 				"workflow/completed-subscribers/:id" : "completedSubscribers", "workflow/removed-subscribers/:id" : "removedSubscribers",
@@ -454,6 +455,28 @@ var WorkflowsRouter = Backbone.Router
 				var view = this.triggerModelview.render();
 
 				$('#content').html(view.el);
+			},
+			
+			triggerAddNew : function(campaign_id)
+			{
+				this.triggerModelview = new Base_Model_View({template : "trigger-categories", isNew : true, window : 'triggers',
+					/**
+					 * Callback after page rendered.
+					 * 
+					 * @param el
+					 *            el property of Backbone.js
+					 */
+					postRenderCallback : function(el)
+					{}
+				
+				});
+				
+				var view = this.triggerModelview.render();
+
+				$('#content').html(view.el);
+				
+				
+				
 			},
 
 			/**
