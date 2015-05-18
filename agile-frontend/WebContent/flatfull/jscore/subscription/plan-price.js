@@ -271,6 +271,7 @@ $(function()
 			e.preventDefault();
 			var value = $(this).val();
 			price = update_price();
+			$( "#users_quantity").text(value);
  	     	$("#users_total_cost").text((value * price).toFixed(2));
 		});
 		

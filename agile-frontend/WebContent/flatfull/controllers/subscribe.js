@@ -105,6 +105,7 @@ var SubscribeRouter = Backbone.Router.extend({
 					setPlan(data);
 				$("#user_quantity").attr("value", data.plan.quantity);
 				price = update_price();
+				$( "#users_quantity").text(data.plan.quantity);
      	     	$("#users_total_cost").text((data.plan.quantity * price).toFixed(2));
 			//	load_slider(el);
 			});
@@ -943,10 +944,10 @@ function is_free_plan()
  */
 function addStyleForAPlan(id,planDetails){
 	if(id){
-		id.addClass('m-t-n-md');
-		id.find('.panel-heading').addClass('bg-warning').addClass('dker');
-		id.find('.price-panel').addClass('bg-warning');
-		id.find('.panel-footer').addClass('bg-light');
+		id.find("#plan-collection-bot").css("opacity","1");
+		
+		
+	
 		if(planDetails){
 			id.find('.user-plan').html(planDetails);
 			id.find('.djc_addtocart_link').text('Add users');
@@ -956,9 +957,9 @@ function addStyleForAPlan(id,planDetails){
 
 function removeStyleForAPlan(){
 	var id = $('#plans-panel');
-	id.find('.m-t-n-md').removeClass('m-t-n-md');
-	id.find('.panel-heading').removeClass('bg-warning').removeClass('dker');
-	id.find('.price-panel').removeClass('bg-warning');
-	id.find('.panel-footer').removeClass('bg-light');		
+	id.find("#plan-collection-bot").css("opacity","0.5");
+	
+	
+			
 	
 }

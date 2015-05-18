@@ -1261,3 +1261,8 @@ border-left:none;
 .noty_twilio_unmute {
   display: none;
 }
+#plans-panel .row-sm > div {
+	opacity:0.5;
+}
+
+
