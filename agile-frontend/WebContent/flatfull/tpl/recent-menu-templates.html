@@ -1,5 +1,6 @@
 <script id="recent-menu-model-template" type="text/html">
-<div class="list-group-item b-l-none b-r-none r-n">
+<div class="typeahead-border b-b">
+<div class="custom-color wrapper-sm">
 <a data-id="{{id}}" style="cursor: pointer; ">
 
 {{#if_equals entity_type "contact_entity"}}
@@ -71,10 +72,11 @@
 
 </a>
 </div>
+</div>
 </script>
 
 <script id="recent-menu-collection-template" type="text/html">
-	<ul class="dropdown-menu animated custom-fadeInUp list-group p-n" style="width:23em; right:-11px;" id="recent-menu-model-list">
-		<li class="list-group-item b-n"><a class="disabled" style="color:black;"><b>Recently Viewed ({{this.length}})</b></a></li>
+	<ul class="dropdown-menu animated custom-fadeInUp p-n" style="width:23em; right:-11px;" id="recent-menu-model-list">
+		<li class="b-n"><a class="disabled" style="color:black;"><b>Recently Viewed ({{this.length}})</b></a></li>
 	</ul>
 </script>
