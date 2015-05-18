@@ -53,12 +53,17 @@ public class ContactsImportUtil
      * @param contactPrefs
      *            {@link ContactPrefs}
      */
-    public static void initilaizeImportBackend(ContactPrefs contactPrefs)
+    public static void initilaizeImportBackend(ContactPrefs contactPrefs, boolean isSyncImmediately)
     {
 	// notifies user after adding contacts
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE, "Import scheduled");
 
-	Queue queue = QueueFactory.getQueue("contact-sync-queue");
+	Queue queue = null;
+	if (isSyncImmediately)
+        queue = QueueFactory.getQueue("contact-sync-now-queue");
+	else
+	   queue = QueueFactory.getQueue("contact-sync-queue");
+
 	TaskOptions taskOptions;
 	try
 	{
@@ -67,11 +72,9 @@ public class ContactsImportUtil
 	    ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayStream);
 	    objectOutputStream.writeObject(contactPrefs);
 
-		// Create Task and push it into Task Queue
-		taskOptions = TaskOptions.Builder.withUrl("/backend/contactsutilservlet").payload(byteArrayStream.toByteArray())
-			.method(Method.POST);
-
-
+	    // Create Task and push it into Task Queue
+	    taskOptions = TaskOptions.Builder.withUrl("/backend/contactsutilservlet")
+		    .payload(byteArrayStream.toByteArray()).method(Method.POST);
 
 	    // submitting jobs in push queue
 	    queue.addAsync(taskOptions);

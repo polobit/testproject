@@ -22,7 +22,9 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
+import com.agilecrm.workflows.triggers.util.TriggerUtil;
 
 /**
  * <code>DealsAPI</code> includes REST calls to interact with
@@ -249,9 +251,18 @@ public class DealsBulkActionsAPI
 	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    System.out.println("total deals -----" + deals.size());
 
+	    
+	    // Get Deal Milestone change triggers
+	    List<Trigger> triggers = TriggerUtil.getTriggersByCondition(Trigger.Type.DEAL_MILESTONE_IS_CHANGED);
+	    
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
 	    for (Opportunity deal : deals)
 	    {
+		
+		// For triggers
+	    Long oldPipelineId = deal.getPipeline_id();
+		String oldMilestone = deal.milestone;
+			
 		if (formJSON.has("pipeline"))
 		    deal.pipeline_id = formJSON.getLong("pipeline");
 		if (formJSON.has("pipeline-name"))
@@ -259,11 +270,21 @@ public class DealsBulkActionsAPI
 		if (formJSON.has("milestone"))
 		    milestone_name = deal.milestone = formJSON.getString("milestone");
 
-		subList.add(deal);
+		// If there is change in pipeline or milestone
+		if(!oldPipelineId.equals(deal.pipeline_id)
+							|| !oldMilestone.equals(deal.milestone))
+			subList.add(deal);
+		
+		
 		if (subList.size() >= 100)
 		{
 		    Opportunity.dao.putAll(subList);
 		    OpportunityUtil.updateSearchDoc(subList);
+		    
+			// Trigger Bulk Deal Milestone change
+		    if(!triggers.isEmpty())
+		    	DealTriggerUtil.triggerBulkDealMilestoneChange(subList, triggers);
+
 		    System.out.println("total sublist -----" + subList.size());
 		    subList.clear();
 		}
@@ -273,8 +294,15 @@ public class DealsBulkActionsAPI
 	    {
 		Opportunity.dao.putAll(subList);
 		OpportunityUtil.updateSearchDoc(subList);
+		
+		// Trigger Bulk Deal Milestone change
+		if(!triggers.isEmpty())
+			 DealTriggerUtil.triggerBulkDealMilestoneChange(subList, triggers);
+		
 		System.out.println("total sublist -----" + subList.size());
 	    }
+	    
+	    
 	    ActivitySave.createBulkActionActivityForDeals(deals.size(), "BULK_DEAL_MILESTONE_CHANGE", milestone_name,
 		    "deals", pipeline_name);
 	    BulkActionNotifications.publishNotification("Track/Milestone changed for " + deals.size() + " Deals.");

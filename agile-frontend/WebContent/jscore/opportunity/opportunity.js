@@ -148,8 +148,12 @@ function populateUsers(id, el ,value, key, callback) {
  * @param dealDetails - dealDetails value
  * @param value - Deal Object
  **/
-function populateTrackMilestones(el, dealsDetails, value, callback, defaultSelectOption){
+function populateTrackMilestones(el, dealsDetails, value, callback, defaultSelectOption, id){
 var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
+	
+	// If id undefined
+	if(!id)
+		id = 'pipeline_milestone';
 	
 	tracks.collection.fetch({
 		success: function(data){
@@ -166,7 +170,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 					else
 						html+='<option value="'+mile.id+'_'+milestone+'">'+milestone+'</option>';
 				});
-				$('#pipeline_milestone',el).closest('.control-group').find('label b').text('Milestone');
+				$('#'+id,el).closest('.control-group').find('label b').text('Milestone');
 			}
 			else {
 				$.each(jsonModel,function(index,mile){
@@ -183,11 +187,11 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 					html+='</optgroup>';
 					
 				});
-				$('#pipeline_milestone',el).closest('.control-group').find('label b').text('Track & Milestone');
+				$('#'+id,el).closest('.control-group').find('label b').text('Track & Milestone');
 			}
-			$('#pipeline_milestone',el).html(html);
+			$('#'+id,el).html(html);
 			console.log('adding');
-			$('#pipeline_milestone',el).closest('div').find('.loading-img').hide();
+			$('#'+id,el).closest('div').find('.loading-img').hide();
 			
 			/* Hide the Tracks select box when there is only one pipeline.
 			if(jsonModel.length==1){

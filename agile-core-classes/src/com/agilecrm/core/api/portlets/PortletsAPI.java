@@ -409,12 +409,13 @@ public class PortletsAPI {
 	@Path("/portletStatsReport")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getPortletStatsReportData(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate,@QueryParam("time_zone") String timeZone)throws Exception {
+	public JSONObject getPortletStatsReportData(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate,@QueryParam("time_zone") String timeZone,@QueryParam("reportType") String reportType)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("duration",duration);
 		json.put("startDate",startDate);
 		json.put("endDate",endDate);
 		json.put("timeZone",timeZone);
+		json.put("reportType",reportType);
 		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
 		return PortletUtil.getPortletStatsReportData(json);
 	}

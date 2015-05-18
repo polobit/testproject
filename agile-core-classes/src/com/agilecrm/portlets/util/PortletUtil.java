@@ -749,7 +749,7 @@ public class PortletUtil {
 			dealsFunnelPortlet.prefs = dealsFunnelPortletJSON.toString();
 			
 			JSONObject statsReportPortletJSON = new JSONObject();
-			statsReportPortletJSON.put("duration","1-day");
+			statsReportPortletJSON.put("duration","yesterday");
 			statsReportPortlet.prefs = statsReportPortletJSON.toString();
 			
 			dummyPortlet.save();
@@ -989,7 +989,6 @@ public class PortletUtil {
 		int wonDealsCount = 0;
 		Double wonDealValue = 0d;
 		String emailsSentCount = "0";
-		int webVisitsCount = 0;
 		int newDealsCount = 0;
 		Double newDealValue = 0d;
 		List<Opportunity> wonDealsList = new ArrayList<Opportunity>();
@@ -1001,49 +1000,52 @@ public class PortletUtil {
 				if(json.getString("endDate")!=null)
 					maxTime = Long.valueOf(json.getString("endDate"))-1;
 				
-				newContactsCount = ContactUtil.getContactsCount(minTime, maxTime);
-				
-				wonDealsList = OpportunityUtil.getWonDealsList(minTime, maxTime);
-				for(Opportunity opportunity : wonDealsList){
-					if(opportunity!=null && opportunity.expected_value!=null)
-						wonDealValue += opportunity.expected_value;
-					wonDealsCount++;
+				if(json.getString("reportType")!=null && json.getString("reportType").equalsIgnoreCase("newContacts")){
+					newContactsCount = ContactUtil.getContactsCount(minTime, maxTime);
+					dataJson.put("newContactsCount", newContactsCount);
+					return dataJson;
 				}
-				
-				newDealsList = OpportunityUtil.getNewDealsList(minTime, maxTime);
-				for(Opportunity opportunity : newDealsList){
-					if(opportunity!=null && opportunity.expected_value!=null)
-						newDealValue += opportunity.expected_value;
-					newDealsCount++;
+				if(json.getString("reportType")!=null && json.getString("reportType").equalsIgnoreCase("wonDeals")){
+					wonDealsList = OpportunityUtil.getWonDealsList(minTime, maxTime);
+					for(Opportunity opportunity : wonDealsList){
+						if(opportunity!=null && opportunity.expected_value!=null)
+							wonDealValue += opportunity.expected_value;
+						wonDealsCount++;
+					}
+					dataJson.put("wonDealsCount", wonDealsCount);
+					dataJson.put("wonDealValue", wonDealValue);
+					return dataJson;
 				}
-				
-				if(json.getString("duration")!=null && json.getString("duration").equalsIgnoreCase("24-hours")){
-					minTime = (new Date().getTime()/1000)-(24*60*60);
-					maxTime = new Date().getTime()/1000;
+				if(json.getString("reportType")!=null && json.getString("reportType").equalsIgnoreCase("newDeals")){
+					newDealsList = OpportunityUtil.getNewDealsList(minTime, maxTime);
+					for(Opportunity opportunity : newDealsList){
+						if(opportunity!=null && opportunity.expected_value!=null)
+							newDealValue += opportunity.expected_value;
+						newDealsCount++;
+					}
+					dataJson.put("newDealsCount", newDealsCount);
+					dataJson.put("newDealValue", newDealValue);
+					return dataJson;
 				}
-				
-				// start date in mysql date format.
-				String startDate = CampaignReportsUtil.getStartDate(String.valueOf(minTime*1000), String.valueOf(maxTime*1000), null, json.getString("timeZone"));
-				
-				// end date in mysql date format.
-				String endDate = CampaignReportsUtil.getEndDateForReports(String.valueOf(maxTime*1000), json.getString("timeZone"));
-				
-				String [] array = {"EMAIL_SENT"};
-				JSONArray campaignEmailsJSONArray = CampaignReportsSQLUtil.getCountByLogTypes(startDate,endDate,json.getString("timeZone"),array);
-				
-				if(campaignEmailsJSONArray!=null && campaignEmailsJSONArray.length()>0 && campaignEmailsJSONArray.getJSONObject(0)!=null && campaignEmailsJSONArray.getJSONObject(0).getString("count")!=null)
-					emailsSentCount = campaignEmailsJSONArray.getJSONObject(0).getString("count");
-				/*JSONArray webVisitsJSONArray = AnalyticsSQLUtil.getPageSessionsCountForDomain(String.valueOf(minTime*1000),String.valueOf(maxTime*1000),json.getString("timeZone"));
-				if(webVisitsJSONArray!=null && webVisitsJSONArray.length()>0 && webVisitsJSONArray.get(0)!=null)
-					emailsSentCount = (int)webVisitsJSONArray.get(0);*/
-				
-				dataJson.put("newContactsCount", newContactsCount);
-				dataJson.put("wonDealsCount", wonDealsCount);
-				dataJson.put("wonDealValue", wonDealValue);
-				dataJson.put("emailsSentCount", emailsSentCount);
-				dataJson.put("webVisitsCount", webVisitsCount);
-				dataJson.put("newDealsCount", newDealsCount);
-				dataJson.put("newDealValue", newDealValue);
+				if(json.getString("reportType")!=null && json.getString("reportType").equalsIgnoreCase("campaignEmailsSent")){
+					if(json.getString("duration")!=null && json.getString("duration").equalsIgnoreCase("24-hours")){
+						minTime = (new Date().getTime()/1000)-(24*60*60);
+						maxTime = new Date().getTime()/1000;
+					}
+					// start date in mysql date format.
+					String startDate = CampaignReportsUtil.getStartDate(String.valueOf(minTime*1000), String.valueOf(maxTime*1000), null, json.getString("timeZone"));
+					
+					// end date in mysql date format.
+					String endDate = CampaignReportsUtil.getEndDateForReports(String.valueOf(maxTime*1000), json.getString("timeZone"));
+					
+					String [] array = {"EMAIL_SENT"};
+					JSONArray campaignEmailsJSONArray = CampaignReportsSQLUtil.getCountByLogTypes(startDate,endDate,json.getString("timeZone"),array);
+					
+					if(campaignEmailsJSONArray!=null && campaignEmailsJSONArray.length()>0 && campaignEmailsJSONArray.getJSONObject(0)!=null && campaignEmailsJSONArray.getJSONObject(0).getString("count")!=null)
+						emailsSentCount = campaignEmailsJSONArray.getJSONObject(0).getString("count");
+					dataJson.put("emailsSentCount", emailsSentCount);
+					return dataJson;
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

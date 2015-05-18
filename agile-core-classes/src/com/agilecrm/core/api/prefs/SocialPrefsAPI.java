@@ -69,6 +69,31 @@ public class SocialPrefsAPI
     }
 
     /**
+     * Returns SocialPrefs associated with current AgileUser and given type.
+     * 
+     * @param type
+     *            - SocialPrefs type.
+     * @return SocialPrefs.
+     */
+    @Path("{type}/list")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<SocialPrefs> getSocialPrefsList(@PathParam("type") String type)
+    {
+	try
+	{
+	    Type socialPrefsTypeEnum = Type.valueOf(type);
+	    if (socialPrefsTypeEnum == null)
+		return null;
+	    return SocialPrefsUtil.getPrefsList(AgileUser.getCurrentAgileUser(), socialPrefsTypeEnum);
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+    }
+
+    /**
      * Deletes SocialPrefs associated with current AgileUser and given type.
      * 
      * @param type
@@ -84,9 +109,40 @@ public class SocialPrefsAPI
 	    Type socialPrefsTypeEnum = Type.valueOf(type);
 	    if (socialPrefsTypeEnum == null)
 		return;
-
 	    SocialPrefs prefs = SocialPrefsUtil.getPrefs(AgileUser.getCurrentAgileUser(), socialPrefsTypeEnum);
-	    prefs.delete();
+	    if (prefs != null)
+		prefs.delete();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Deletes SocialPrefs associated with current AgileUser and given type.
+     * 
+     * @param type
+     *            - SocialPrefs type.
+     */
+    @Path("/delete/{id}")
+    @DELETE
+    public void deleteSocialPrefsById(@PathParam("id") String sid)
+    {
+	try
+	{
+	    AgileUser user = AgileUser.getCurrentAgileUser();
+	    Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, user.id);
+	    if (StringUtils.isNotBlank(sid))
+	    {
+		Long id = Long.parseLong(sid);
+		if (id != null)
+		{
+		    SocialPrefs prefs = SocialPrefsUtil.getPrefs(id, agileUserKey);
+		    if (prefs != null)
+			prefs.delete();
+		}
+	    }
 	}
 	catch (Exception e)
 	{
@@ -121,20 +177,14 @@ public class SocialPrefsAPI
 		cursor = "0";
 	    // Removes unwanted spaces in between commas
 	    String normalisedSearchEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', searchEmail);
-
 	    // Removes unwanted spaces in between commas
 	    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
-
 	    // Gets GmailPrefs url
-	    String gmailURL = ContactGmailUtil.getGmailURL(AgileUser.getCurrentAgileUser(), normalisedFromEmail,
-		    normalisedSearchEmail, cursor, pageSize);
-
+	    String gmailURL = ContactGmailUtil
+		    .getGmailURL(normalisedFromEmail, normalisedSearchEmail, cursor, pageSize);
 	    // If both are not set, return Contact emails.
 	    if (StringUtils.isNotBlank(gmailURL))
-	    {
-		emails = ContactEmailUtil.getEmailsfromServer(gmailURL, pageSize, cursor);
-	    }
-
+		emails = ContactEmailUtil.getEmailsfromServer(gmailURL, pageSize, cursor, normalisedFromEmail);
 	}
 	catch (Exception e)
 	{
@@ -145,40 +195,42 @@ public class SocialPrefsAPI
 	return emails;
     }
 
-    @Path("{type}")
+    @Path("share/{id}")
     @POST
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void shareSocialPrefs(@PathParam("type") String type, String shared_with_users_ids)
+    public void shareSocialPrefs(@PathParam("id") String sid, String shared_with_users_ids)
     {
 	try
 	{
-	    System.out.println(shared_with_users_ids);
 	    JSONObject jsonIds = new JSONObject(shared_with_users_ids);
 	    AgileUser currentAgileUser = AgileUser.getCurrentAgileUser();
-	    SocialPrefs.Type socialType = null;
-	    if (type.equalsIgnoreCase("GMAIL"))
-		socialType = SocialPrefs.Type.GMAIL;
-	    else if (type.equalsIgnoreCase("LINKEDIN"))
-		socialType = SocialPrefs.Type.LINKEDIN;
-	    else if (type.equalsIgnoreCase("TWITTER"))
-		socialType = SocialPrefs.Type.TWITTER;
-	    else if (type.equalsIgnoreCase("FACEBOOK"))
-		socialType = SocialPrefs.Type.FACEBOOK;
-	    SocialPrefs socialPrefs = SocialPrefsUtil.getPrefs(currentAgileUser, socialType);
-	    List<Key<AgileUser>> sharedWithUsers = new ArrayList<Key<AgileUser>>();
-	    if (!(jsonIds.isNull("shared_with_users_ids")))
+	    Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, currentAgileUser.id);
+	    if (StringUtils.isNotBlank(sid))
 	    {
-		JSONArray usersJSONArray = jsonIds.getJSONArray("shared_with_users_ids");
-		for (int i = 0; i < usersJSONArray.length(); i++)
+		Long uid = Long.parseLong(sid);
+		if (uid != null)
 		{
-		    Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, Long.parseLong(usersJSONArray
-			    .getString(i)));
-		    sharedWithUsers.add(userKey);
+		    SocialPrefs socialPrefs = SocialPrefsUtil.getPrefs(uid, agileUserKey);
+		    if (socialPrefs != null)
+		    {
+			List<Key<AgileUser>> sharedWithUsers = new ArrayList<Key<AgileUser>>();
+			if (!(jsonIds.isNull("shared_with_users_ids")))
+			{
+			    JSONArray usersJSONArray = jsonIds.getJSONArray("shared_with_users_ids");
+			    for (int i = 0; i < usersJSONArray.length(); i++)
+			    {
+				Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
+				        Long.parseLong(usersJSONArray.getString(i)));
+				sharedWithUsers.add(userKey);
+			    }
+			}
+			socialPrefs.setSharedWithUsers(sharedWithUsers);
+			socialPrefs
+			        .setAgileUser(new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id));
+			socialPrefs.update();
+		    }
 		}
 	    }
-	    socialPrefs.setSharedWithUsers(sharedWithUsers);
-	    socialPrefs.setAgileUser(new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id));
-	    socialPrefs.save();
 	}
 	catch (Exception e)
 	{
@@ -193,10 +245,10 @@ public class SocialPrefsAPI
      * 
      * @return
      */
-    @Path("{type}/shared-to-users")
+    @Path("shared-to-users")
     @GET
     @Produces({ MediaType.APPLICATION_JSON + " ;charset=utf-8", MediaType.APPLICATION_XML + " ;charset=utf-8" })
-    public String getSharedToUsersList()
+    public String getSharedToUsersList(@QueryParam("id") String sid)
     {
 	List<AgileUser> agileUsers = null;
 	JSONArray users = new JSONArray();
@@ -208,17 +260,22 @@ public class SocialPrefsAPI
 	    {
 		Iterator<AgileUser> itr = agileUsers.iterator();
 		AgileUser currentAgileUser = AgileUser.getCurrentAgileUser();
+		Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, currentAgileUser.id);
 		while (itr.hasNext())
 		{
 		    AgileUser user = itr.next();
 		    if (user.id.longValue() == currentAgileUser.id.longValue())
 			itr.remove();
 		}
-		SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(currentAgileUser, Type.GMAIL);
 		List<Key<AgileUser>> sharedUsers = null;
-		if (gmailPrefs != null)
+		if (StringUtils.isNotBlank(sid))
 		{
-		    sharedUsers = gmailPrefs.getSharedWithUsers();
+		    Long uid = Long.parseLong(sid);
+		    SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(uid, agileUserKey);
+		    if (gmailPrefs != null)
+		    {
+			sharedUsers = gmailPrefs.getSharedWithUsers();
+		    }
 		}
 		for (AgileUser agileUser : agileUsers)
 		{

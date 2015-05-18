@@ -3,6 +3,7 @@ package com.agilecrm.contact.email.util;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -35,25 +36,24 @@ public class ContactGmailUtil
     {
 	// Get Gmail Social Prefs
 	Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
-	SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(agileUser, socialPrefsTypeEnum);
-
-	if (gmailPrefs == null)
+	List<SocialPrefs> gmailPrefsList = SocialPrefsUtil.getPrefsList(agileUser, socialPrefsTypeEnum);
+	if (gmailPrefsList == null || gmailPrefsList.size() <= 0)
 	    return null;
-
+	SocialPrefs gmailPrefs = gmailPrefsList.get(0);
 	if (gmailPrefs.expires_at > 0l && gmailPrefs.expires_at <= System.currentTimeMillis())
 	{
 	    resetAccessToken(gmailPrefs);
 	}
-
-	return ContactGmailUtil.getGmailURLForPrefs(gmailPrefs, searchEmail, offset, count);
-
+	
+	return ContactGmailUtil.getGmailURLForPrefs(gmailPrefs,searchEmail, offset, count);
     }
-    
+
     /**
-     * Returns GmailURL to fetch emails from given "from-email" gmail user-account.
+     * Returns GmailURL to fetch emails from given "from-email" gmail
+     * user-account.
      * 
      * @param fromEmail
-     *        -gmail username
+     *            -gmail username
      * 
      * @param searchEmail
      *            - search email-id.
@@ -64,13 +64,13 @@ public class ContactGmailUtil
      * @return String
      */
     @SuppressWarnings("deprecation")
-    public static String getGmailURL(AgileUser agileUser, String fromEmail, String searchEmail, String offset,
-	    String count)
+    public static String getGmailURL(String fromEmail, String searchEmail, String offset, String count)
     {
 	// Get Gmail Social Prefs
 	Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
 	Objectify ofy = ObjectifyService.begin();
-	SocialPrefs gmailPrefs = ofy.query(SocialPrefs.class).filter("email", fromEmail).filter("type", socialPrefsTypeEnum).get();
+	SocialPrefs gmailPrefs = ofy.query(SocialPrefs.class).filter("email", fromEmail)
+	        .filter("type", socialPrefsTypeEnum).get();
 
 	if (gmailPrefs == null)
 	    return null;
@@ -80,7 +80,7 @@ public class ContactGmailUtil
 	    resetAccessToken(gmailPrefs);
 	}
 
-	return ContactGmailUtil.getGmailURLForPrefs(gmailPrefs, searchEmail, offset, count);
+	return ContactGmailUtil.getGmailURLForPrefs(gmailPrefs,searchEmail, offset, count);
 
     }
 
@@ -127,7 +127,7 @@ public class ContactGmailUtil
      *            - emails count
      * @return String
      */
-    public static String getGmailURLForPrefs(SocialPrefs gmailPrefs, String searchEmail, String offset, String count)
+    public static String getGmailURLForPrefs(SocialPrefs gmailPrefs,String searchEmail, String offset, String count)
     {
 	String userName = gmailPrefs.email;
 	String host = "imap.gmail.com";
@@ -145,15 +145,15 @@ public class ContactGmailUtil
 	if (StringUtils.equalsIgnoreCase(gmailPrefs.secret, "v2"))
 	{
 	    return "https://agile-imap.appspot.com/imap?command=oauth_email2&user_name=" + URLEncoder.encode(userName)
-		    + "&search_email=" + searchEmail + "&host=" + URLEncoder.encode(host) + "&port="
+		    + "&search_email=" + searchEmail + "&fetch_items=mails&host=" + URLEncoder.encode(host) + "&port="
 		    + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&oauth_key="
 		    + URLEncoder.encode(oauth_key);
 	}
 
 	return "https://agile-imap.appspot.com/imap?command=oauth_email&user_name=" + URLEncoder.encode(userName)
-		+ "&search_email=" + searchEmail + "&host=" + URLEncoder.encode(host) + "&port="
-		+ URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&consumer_key="
-		+ URLEncoder.encode(consumerKey) + "&consumer_secret=" + URLEncoder.encode(consumerSecret)
-		+ "&oauth_key=" + URLEncoder.encode(oauth_key) + "&oauth_secret=" + URLEncoder.encode(oauth_secret);
+	        + "&search_email=" + searchEmail + "&fetch_items=mails&host=" + URLEncoder.encode(host) + "&port="
+	        + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&consumer_key="
+	        + URLEncoder.encode(consumerKey) + "&consumer_secret=" + URLEncoder.encode(consumerSecret)
+	        + "&oauth_key=" + URLEncoder.encode(oauth_key) + "&oauth_secret=" + URLEncoder.encode(oauth_secret);
     }
 }

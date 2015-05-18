@@ -2,8 +2,6 @@ package com.agilecrm.user;
 
 import java.util.List;
 
-import org.json.JSONObject;
-
 public class EmailPrefs
 {
     private String agileUserName;
@@ -11,6 +9,72 @@ public class EmailPrefs
     private boolean hasEmailAccountsConfigured;
 
     private boolean hasSharedEmailAccounts;
+
+    private boolean emailAccountsLimitReached;
+    
+    private int emailAccountsCount;
+    
+    public int getEmailAccountsLimit()
+    {
+        return emailAccountsLimit;
+    }
+
+    public void setEmailAccountsLimit(int emailAccountsLimit)
+    {
+        this.emailAccountsLimit = emailAccountsLimit;
+    }
+
+    private int emailAccountsLimit;
+
+    public int getEmailAccountsCount()
+    {
+        return emailAccountsCount;
+    }
+
+    public void setEmailAccountsCount(int emailAccountsCount)
+    {
+        this.emailAccountsCount = emailAccountsCount;
+    }
+
+    public List<String> getImapUserNames()
+    {
+	return imapUserNames;
+    }
+
+    public boolean isEmailAccountsLimitReached()
+    {
+	return emailAccountsLimitReached;
+    }
+
+    public void setEmailAccountsLimitReached(boolean emailAccountsLimitReached)
+    {
+	this.emailAccountsLimitReached = emailAccountsLimitReached;
+    }
+
+    public void setImapUserNames(List<String> imapUserNames)
+    {
+	this.imapUserNames = imapUserNames;
+    }
+
+    public List<String> getExchangeUserNames()
+    {
+	return exchangeUserNames;
+    }
+
+    public void setExchangeUserNames(List<String> exchangeUserNames)
+    {
+	this.exchangeUserNames = exchangeUserNames;
+    }
+
+    public List<String> getGmailUserNames()
+    {
+	return gmailUserNames;
+    }
+
+    public void setGmailUserNames(List<String> gmailUserNames)
+    {
+	this.gmailUserNames = gmailUserNames;
+    }
 
     public boolean isHasEmailAccountsConfigured()
     {
@@ -42,9 +106,9 @@ public class EmailPrefs
 	this.agileUserName = agileUserName;
     }
 
-    private String imapUserName;
-    private String exchangeUserName;
-    private String gmailUserName;
+    private List<String> imapUserNames;
+    private List<String> exchangeUserNames;
+    private List<String> gmailUserNames;
     private List<String> sharedImapUserNames;
     private List<String> sharedGmailUserNames;
     private List<String> sharedExchangeUserNames;
@@ -52,53 +116,6 @@ public class EmailPrefs
     public EmailPrefs()
     {
 
-    }
-
-    public String getEmailPrefs()
-    {
-	JSONObject emailPrefs = new JSONObject();
-	try
-	{
-	    emailPrefs.put("imapUserName", imapUserName);
-	    emailPrefs.put("gmailUserName", gmailUserName);
-	    emailPrefs.put("exchangeUserName", exchangeUserName);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-	return emailPrefs.toString();
-
-    }
-
-    public String getImapUserName()
-    {
-	return imapUserName;
-    }
-
-    public void setImapUserName(String imapUserName)
-    {
-	this.imapUserName = imapUserName;
-    }
-
-    public String getExchangeUserName()
-    {
-	return exchangeUserName;
-    }
-
-    public void setExchangeUserName(String exchangeUserName)
-    {
-	this.exchangeUserName = exchangeUserName;
-    }
-
-    public String getGmailUserName()
-    {
-	return gmailUserName;
-    }
-
-    public void setGmailUserName(String gmailUserName)
-    {
-	this.gmailUserName = gmailUserName;
     }
 
     public List<String> getSharedImapUserNames()

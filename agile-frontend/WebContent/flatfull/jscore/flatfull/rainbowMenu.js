@@ -159,7 +159,7 @@ $.fn.removeClassPrefix = function(prefix) {
 
 //funda for contact details
 
-function contactInnerTabsInvoke(el) {
+/*function contactInnerTabsInvoke(el) {
 	
 	
 	
@@ -173,7 +173,18 @@ function contactInnerTabsInvoke(el) {
 		  $("#prev,#next",el).css("display","block");
 		  $("#contactDetailsTab",el).removeAttr('style');
 	   }
-	 }
+	 }*/
 	 
+
+
+$("#mobile-menu").on("click",function(){
+	$("#aside").toggleClass("off-screen");
+});
+
+$("#mobile-menu-settings").on("click",function(){
+	$("#navbar").toggleClass("show");
+});
+	
+
 	 
 	

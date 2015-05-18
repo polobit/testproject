@@ -1,0 +1,9 @@
+<!-- Select Basic -->
+<div class="agile-group">
+  <label  class="agile-label" for="<%= id %>"><%= label %></label>
+  <div class="<%= inputsize %> agile-field">
+    <select id="<%= id %>" name="<%= agilefield %>" class="<%= inputheight %>"><% _.each(options, function(option) { %>
+      <option><%= option %></option><% }); %>
+    </select>
+  </div>
+</div>
