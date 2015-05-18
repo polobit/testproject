@@ -459,7 +459,7 @@ $(function()
 		$("#updateActivityModal").modal('hide');
 		$("#webEventCancelModel").modal('show');
 		$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + event_id + "'/>");
-		$("#event_text").html("Do you want to update &#39" + web_event_contact_name + "&#39 that you are  cancelling &#39" + web_event_title + "&#39?");
+		$("#event_text").html("Please mention a reason for cancelling &#39" + web_event_title + "&#39");
 
 	});
 
