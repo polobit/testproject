@@ -322,6 +322,10 @@ public class SearchUtil
 	    // special character is replaced with _<special char name>_
 	    if (value.startsWith("_"))
 		value = value.substring(1);
+	    //replace first numeric character with NUM_
+	    if (value.length() >0 && value.substring(0, 1).matches("[0-9]")) {
+	    	value = value.replaceFirst(value.substring(0, 1), "NUM_");
+	    }
 
 	    System.out.println("value to map : " + value);
 	}
