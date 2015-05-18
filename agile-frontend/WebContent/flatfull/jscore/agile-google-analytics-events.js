@@ -11,7 +11,7 @@
 
  	try
  	{
- 		ga('send', 'event', 'Dashboard', 'Signup', _plan_on_signup["plan_type"], _plan_on_signup["quantity"]]);	
+ 		ga('send', 'event', 'Dashboard', 'Signup', _plan_on_signup["plan_type"], _plan_on_signup["quantity"]);	
  	}
  	catch(err)
  	{
@@ -32,7 +32,7 @@
 	
 	try
 	{
-		ga('send', 'event', 'Dashboard', 'Paid', plan["plan_type"], plan["quantity"]]);
+		ga('send', 'event', 'Dashboard', 'Paid', plan["plan_type"], plan["quantity"]);
 	}
  	catch(err)
  	{
