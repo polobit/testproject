@@ -98,7 +98,7 @@ function setCost(price)
 function update_price()
 {	
 	// Get the selected plan cost
-	var plan_name = $("[name='pro_vs_lite']:checked").val();
+	var plan_name = $("#plan_type").val();
 	return $("#" + plan_name + "_plan_price").text();	
 }
 
@@ -236,6 +236,10 @@ $(function()
 				var discount_amount = amount - ((discount/100) * amount);
 				$('#'+ key +'_plan_price').html(discount_amount.toFixed(2));
 			}
+			var price = update_price();
+			var value = $("#user_quantity").val();
+			$( "#users_quantity").text(value);
+ 	     	$("#users_total_cost").text((value * price).toFixed(2));
 			
 		});
 		$("#user_quantity").die().live("change",function(e){
