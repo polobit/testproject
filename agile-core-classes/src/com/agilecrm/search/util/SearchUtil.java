@@ -379,17 +379,17 @@ public class SearchUtil
 	 */
 	for (ContactField contactField : properties)
 	{
-	    if (contactField.name.equals("first_name"))
+	    if ("first_name".equals(contactField.name))
 	    {
 		firstName = contactField.value;
 	    }
 
-	    else if (contactField.name.equals("last_name"))
+	    else if ("last_name".equals(contactField.name))
 	    {
 		lastName = contactField.value;
 	    }
 
-	    else if (contactField.name.equals("address"))
+	    else if ("address".equals(contactField.name))
 	    {
 		// Creates HashMap from Address JSON string
 		try
