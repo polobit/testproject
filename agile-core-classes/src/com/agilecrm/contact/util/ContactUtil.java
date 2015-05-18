@@ -26,7 +26,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
-import com.agilecrm.contact.exception.DuplicatContactException;
+import com.agilecrm.contact.exception.DuplicateContactException;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
@@ -436,7 +436,7 @@ public class ContactUtil
 		if (throwError)
 		{
 		    if (throwError)
-			throw new DuplicatContactException("Sorry, a contact with this email already exists "
+			throw new DuplicateContactException("Sorry, a contact with this email already exists "
 				+ field.value);
 		    else
 			return true;
@@ -496,7 +496,8 @@ public class ContactUtil
 	    if (searchContactCountByEmailAndType(field.value.toLowerCase(), Type.PERSON) > 0)
 	    {
 		if (throwError)
-		    throw new DuplicatContactException("Sorry, a contact with this email already exists " + field.value);
+		    throw new DuplicateContactException("Sorry, a contact with this email already exists "
+			    + field.value);
 		else
 		    return true;
 	    }
