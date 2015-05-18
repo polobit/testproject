@@ -266,13 +266,7 @@ public class EventsAPI
 
 			if (event != null)
 			{
-				if ("donotupdate".equalsIgnoreCase(action_parameter))
-				{
-					ActivitySave.createEventDeleteActivity(event);
-					GoogleCalendarUtil.deleteGoogleEvent(event);
-					event.delete();
-				}
-				else if ("updateattendee".equalsIgnoreCase(action_parameter))
+				if ("updateattendee".equalsIgnoreCase(action_parameter))
 				{
 					// send mail to contact with cancel reason
 					EventUtil.sendMailToWebEventAttendee(event, cancel_subject);

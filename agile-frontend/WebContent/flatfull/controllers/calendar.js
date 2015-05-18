@@ -469,7 +469,8 @@ function show_model(id)
 
 		$('#updateActivityModal').find("input[name='id']").val(id);
 		$('#updateActivityModal').find("input[name='type']").val(event.type);
-		if (event.type == "WEB_APPOINTMENT")
+
+		if (event.type == "WEB_APPOINTMENT" && parseInt(event.start) > parseInt(new Date().getTime() / 1000))
 		{
 			$("[id='event_delete']").attr("id", "delete_web_event");
 			web_event_title = event.title;

@@ -38,7 +38,8 @@ $(function()
 		$('.update-start-timepicker').val(fillTimePicker(value.start));
 
 		$('.update-end-timepicker').val(fillTimePicker(value.end));
-		if (value.type == "WEB_APPOINTMENT")
+
+		if (value.type == "WEB_APPOINTMENT" && parseInt(value.start) > parseInt(new Date().getTime() / 1000))
 		{
 			$("[id='event_delete']").attr("id", "delete_web_event");
 			web_event_title = value.title;
@@ -197,7 +198,7 @@ $(function()
 		forceCompany.name = getContactName(json); // name of Company
 		forceCompany.id = json.id; // id of Company
 		forceCompany.doit = true; // yes force it. If this is false the
-									// Company won't be forced.
+		// Company won't be forced.
 		// Also after showing modal, it is set to false internally, so
 		// Company is not forced otherwise.
 		$('#personModal').modal('show');

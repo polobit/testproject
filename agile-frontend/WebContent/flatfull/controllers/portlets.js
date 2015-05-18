@@ -272,7 +272,25 @@ $('#portlets-events-model-list > tr').live('click', function(e){
 	    	$('#update-event-time-1').closest('.control-group').show();
 	    	$("#update-event-date-2").closest('.row').show();
 	    }
-	   	
+	    if (model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
+		{
+			$("[id='event_delete']").attr("id", "delete_web_event");
+			web_event_title = model.toJSON().title;
+			if (model.toJSON().contacts.length > 0)
+			{
+				var firstname = getPropertyValue(model.toJSON().contacts[0].properties, "first_name");
+				if (firstname == undefined)
+					firstname = "";
+				var lastname = getPropertyValue(model.toJSON().contacts[0].properties, "last_name");
+				if (lastname == undefined)
+					lastname = "";
+				web_event_contact_name = firstname + " " + lastname;
+			}
+		}
+		else
+		{
+			$("[id='delete_web_event']").attr("id", "event_delete");
+		}
 	    // Fills owner select element 
 		populateUsersInUpdateActivityModal(model.toJSON());
 		

@@ -126,16 +126,16 @@ function update_event_activity(ele)
 
 	$('.update-end-timepicker').val(fillTimePicker(value.end));
 
-	if (event.type == "WEB_APPOINTMENT")
+	if (value.type == "WEB_APPOINTMENT" && parseInt(value.start) > parseInt(new Date().getTime() / 1000))
 	{
 		$("[id='event_delete']").attr("id", "delete_web_event");
-		web_event_title = event.title;
+		web_event_title = value.title;
 		if (event.contacts.length > 0)
 		{
-			var firstname = getPropertyValue(event.contacts[0].properties, "first_name");
+			var firstname = getPropertyValue(value.contacts[0].properties, "first_name");
 			if (firstname == undefined)
 				firstname = "";
-			var lastname = getPropertyValue(event.contacts[0].properties, "last_name");
+			var lastname = getPropertyValue(value.contacts[0].properties, "last_name");
 			if (lastname == undefined)
 				lastname = "";
 			web_event_contact_name = firstname + " " + lastname;

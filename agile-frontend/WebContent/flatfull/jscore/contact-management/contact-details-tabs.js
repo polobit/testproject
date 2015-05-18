@@ -549,6 +549,11 @@ $(function()
 			if (!confirm("Are you sure you want to delete?"))
 				return;
 		}
+		else if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000))
+		{
+			if (!confirm("Are you sure you want to delete?"))
+				return;
+		}
 
 		if (model && model.collection)
 		{
@@ -558,7 +563,7 @@ $(function()
 		// Gets the id of the entity
 		var entity_id = $(this).attr('id');
 
-		if (model && model.toJSON().type == "WEB_APPOINTMENT")
+		if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
 		{
 			web_event_title = model.toJSON().title;
 			if (model.toJSON().contacts.length > 0)
@@ -572,8 +577,9 @@ $(function()
 				web_event_contact_name = firstname + " " + lastname;
 			}
 			$("#webEventCancelModel").modal('show');
+			$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39");
 			$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
-			$("#event_text").html("Please mention a reason for cancelling &#39" + web_event_title + "&#39");
+			$("#event_text").html("Please mention reason for cancellation of &#39" + web_event_title + "&#39");
 			return;
 		}
 

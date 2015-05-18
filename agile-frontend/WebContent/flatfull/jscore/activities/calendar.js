@@ -378,7 +378,7 @@ function showCalendar()
 								$("#update-event-date-2").closest('.row').show();
 							}
 
-							if (event.type == "WEB_APPOINTMENT")
+							if (event.type == "WEB_APPOINTMENT" && parseInt(new Date(event.start).getTime() / 1000) > parseInt(new Date().getTime() / 1000))
 							{
 								$("[id='event_delete']").attr("id", "delete_web_event");
 								web_event_title = event.title;
