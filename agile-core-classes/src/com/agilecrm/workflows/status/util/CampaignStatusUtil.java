@@ -138,7 +138,7 @@ public class CampaignStatusUtil
 			contact.campaignStatus.add(campaignStatus);
 		}
 
-		contact.update();
+		saveContact(contact);
 	}
 
 	/**
@@ -173,7 +173,7 @@ public class CampaignStatusUtil
 			}
 		}
 
-		contact.update();
+		saveContact(contact);
 	}
 	
 	public static boolean isActive(Contact contact, Long workflowId)
@@ -240,7 +240,18 @@ public class CampaignStatusUtil
 	}
 	
 	// save changes
-	contact.update();
+	saveContact(contact);
+	}
+	
+	/**
+	 * Updates updated time and saves contact
+	 * 
+	 * @param contact - Contact object with updated campaign statuses
+	 */
+	private static void saveContact(Contact contact)
+	{
+		contact.updated_time = System.currentTimeMillis()/1000;
+		contact.update();
 	}
 
 }
