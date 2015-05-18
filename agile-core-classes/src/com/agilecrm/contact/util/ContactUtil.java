@@ -460,7 +460,7 @@ public class ContactUtil
     {
 	if (oldContact == null)
 	{
-	    isDuplicateContact(contact, throwError);
+	    return isDuplicateContact(contact, throwError);
 	}
 
 	// Lists out all emails from old contact
