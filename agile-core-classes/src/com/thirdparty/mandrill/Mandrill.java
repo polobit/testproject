@@ -157,6 +157,21 @@ public class Mandrill
 	 * Mandrill metadata
 	 */
 	public static final String MANDRILL_METADATA = "metadata";
+	
+	/**
+	 * Mandrill merge language
+	 */
+	public static final String MANDRILL_MERGE_LANGUAGE = "merge_language";
+	
+	/**
+	 * Mandrill IP pool 
+	 */
+	public static final String MANDRILL_IP_POOL = "ip_pool";
+	
+	/**
+	 * Default Pool Name 
+	 */
+	public static final String MANDRILL_MAIN_POOL = "Main Pool";
 
 	/**
 	 * Sends email using Mandrill API with the given parameters.
@@ -200,6 +215,13 @@ public class Mandrill
 			// Set mandrill async
 			if (async)
 				mailJSON.put(MANDRILL_ASYNC, true);
+			
+			// By Default Main pool
+			mailJSON.put(MANDRILL_IP_POOL, MANDRILL_MAIN_POOL);
+			
+			// For paid plans, Paid Pool
+			if(isPaid(text, html))
+				mailJSON.put(MANDRILL_IP_POOL, Globals.MANDRILL_PAID_POOL);
 
 			// All email params are inserted into Message json
 			JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, to, cc, bcc, replyTo, subject,
@@ -334,6 +356,7 @@ public class Mandrill
 			// Domain as subaccount
 			if (!StringUtils.isBlank(subaccount))
 				messageJSON.put(MandrillSubAccounts.MANDRILL_SUBACCOUNT, subaccount);
+			
 		}
 		catch (Exception e)
 		{
@@ -546,5 +569,25 @@ public class Mandrill
 		}
 
 		return mailJSON;
+	}
+	
+	/**
+	 * Returns false if text or html contains Agile's label
+	 * 
+	 * @param text - Email text content
+	 * @param html - Email html content
+	 * @return boolean
+	 */
+	private static boolean isPaid(String text, String html)
+	{
+		
+		if(StringUtils.isNotBlank(text))
+			return !StringUtils.contains(text, "Sent using Agile");
+			
+		if(StringUtils.isNotBlank(html))
+			return  !StringUtils.contains(html, "https://www.agilecrm.com?utm_source=powered-by");
+		
+		return true;
+		
 	}
 }
