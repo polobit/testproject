@@ -416,10 +416,10 @@
 			</div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <div class="text-base ">
+                <div class="text-xs">
                     <div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;">
                         <div>
-							<b>Pages Visited {{#stringToJSON this "urls_with_time_spent"}} ({{this.length}}){{/stringToJSON}}
+							Pages Visited {{#stringToJSON this "urls_with_time_spent"}} ({{this.length}}){{/stringToJSON}}
 								<span style="float: right;">
 									{{#if user_agent}}
 										{{#stringToJSON this "parsedUserAgent"}}
@@ -435,18 +435,18 @@
                                         {{/stringToJSON}}
 									{{/if}}
 								</span>
-							</b><br> 
+							<br> 
                         {{#stringToJSON this "urls_with_time_spent"}}{{/stringToJSON}}
 					    {{#each urls_with_time_spent}}{{url}} - {{convertSecondsToHour time_spent}}<br />{{/each}}
                         </div>
                     </div>
                 </div>
                 {{#if ref}}
-                     <div class="text-base "><b>Referred:</b></br> {{ref}}</div>
+                     <div class="text-xs">Referred: </br> {{ref}}</div>
                 {{/if}}
 
                 {{#if city}}
-                   <div class="text-base "><b>ADDRESS:</b></br> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
+                   <div class="text-xs">Address: </br> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
                 {{/if}}
 
                 <div class="right" style="margin-top:-10px;"><a href="#" id="tl-analytics-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
