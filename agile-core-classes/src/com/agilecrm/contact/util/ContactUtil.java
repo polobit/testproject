@@ -421,7 +421,10 @@ public class ContactUtil
 	if (contact.id != null)
 	{
 	    Contact oldContact = ContactUtil.getContact(contact.id);
-	    return isDuplicateContact(contact, oldContact, throwError);
+	    if (oldContact == null)
+		contact.id = null;
+	    else
+		return isDuplicateContact(contact, oldContact, throwError);
 	}
 
 	// Lists out all email fields from updated contact
@@ -471,21 +474,20 @@ public class ContactUtil
 
 	// Store extra emails
 	List<ContactField> newAddedEmails = new ArrayList<ContactField>();
-	for (ContactField field : emailFields)
+
+	for (ContactField newField : newEmailFields)
 	{
 	    boolean isFound = false;
-	    for (ContactField newField : newEmailFields)
+	    for (ContactField field : emailFields)
 	    {
 		if (StringUtils.equalsIgnoreCase(newField.value, field.value))
 		{
 		    isFound = true;
+		    break;
 		}
-
-		break;
 	    }
-
 	    if (!isFound)
-		newAddedEmails.add(field);
+		newAddedEmails.add(newField);
 	}
 
 	if (newAddedEmails.isEmpty())
