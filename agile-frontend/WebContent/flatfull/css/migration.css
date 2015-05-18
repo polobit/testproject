@@ -1265,6 +1265,8 @@ border-left:none;
 .noty_twilio_unmute {
   display: none;
 }
+
+
 .web-rule-contact-condition-table td:last-child {
 	width:78px;
 }
@@ -1294,3 +1296,8 @@ display:none;
 	display:flex;
 	margin-bottom:10px;
 }
+
+#plans-panel .row-sm > div {
+	opacity:0.5;
+}
+
