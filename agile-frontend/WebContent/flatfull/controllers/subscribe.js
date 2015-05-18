@@ -944,20 +944,18 @@ function is_free_plan()
  */
 function addStyleForAPlan(id,planDetails){
 	if(id){
-		id.find("#plan-collection-bot").css("opacity","1");
+		id.css("opacity","1");
 		
-		
-	
 		if(planDetails){
 			id.find('.user-plan').html(planDetails);
-			id.find('.djc_addtocart_link').text('Add users');
+			// id.find('.djc_addtocart_link').text('Add users');
 		}
 	}	
 }
 
 function removeStyleForAPlan(){
 	var id = $('#plans-panel');
-	id.find("#plan-collection-bot").css("opacity","0.5");
+	id.find(".plan-collection-bot").css("opacity","0.5");
 	
 	
 			
