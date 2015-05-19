@@ -127,6 +127,8 @@ public class EventsAPI
 			if (event != null)
 			{
 				ActivitySave.createEventDeleteActivity(event);
+				if (event.type.toString().equalsIgnoreCase("WEB_APPOINTMENT"))
+					GoogleCalendarUtil.deleteGoogleEvent(event);
 				event.delete();
 			}
 		}
