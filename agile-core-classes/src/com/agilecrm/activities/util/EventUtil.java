@@ -24,7 +24,6 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.IcalendarUtil;
-import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -342,7 +341,6 @@ public class EventUtil
 	 */
 	public static List<Event> getLatestEvents(Long starttime)
 	{
-		System.out.println("in getLatest Events Domain name " + NamespaceManager.get());
 
 		int duration = 3600;
 		Long currenttime = System.currentTimeMillis() / 1000;
@@ -352,8 +350,6 @@ public class EventUtil
 			starttime = starttime + 120;
 
 		Long endtime = starttime + duration;
-
-		System.out.println(starttime + "----------------------------" + endtime);
 
 		List<Event> domain_events = new ArrayList<>();
 		List<String> default_events = getDefaultEventNames();
@@ -519,6 +515,33 @@ public class EventUtil
 	}
 
 	/**
+	 * sends a mail to contact when deleting web event
+	 * 
+	 * @param event
+	 * @param cancel_reason
+	 */
+	public static void sendMailToWebEventAttendee(Event event, String cancel_reason)
+	{
+
+		Contact contact = event.getContacts().get(0);
+		String contactEmail = contact.getContactFieldValue("EMAIL");
+		String first_name = contact.getContactFieldValue("FIRST_NAME");
+		String last_name = contact.getContactFieldValue("LAST_NAME");
+		if (StringUtils.isNotEmpty(last_name))
+			first_name = first_name + " " + last_name;
+		DomainUser domain_user = DomainUserUtil.getCurrentDomainUser();
+		String user_name = domain_user != null ? domain_user.name : "";
+		String cancel_mail = "<p> Dear " + first_name + ",</p><p><b>" + user_name
+				+ "</b> has cancelled your appointment - &#39;" + event.title + "&#39;</p>";
+		if (StringUtils.isNotEmpty(cancel_reason))
+		{
+			cancel_mail += "<p> Note from " + user_name + ": " + cancel_reason + "</p>";
+		}
+		EmailGatewayUtil.sendEmail(null, "noreplay@agilecrm.com", "Agile CRM", contactEmail, null, null,
+				"Appointment Cancelled", null, cancel_mail, null, null, null);
+	}
+
+	/**
 	 * calls this method when end user want to cancel webevent from his mail
 	 * 
 	 * @param event
@@ -566,6 +589,5 @@ public class EventUtil
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 }
