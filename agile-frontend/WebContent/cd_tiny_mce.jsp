@@ -188,29 +188,8 @@ try{
 			return;
 		}
 		
-		
-		
-		tinyMCE.activeEditor.windowManager.open({
-			title: 'CSS Inline Alert',width: 500,
-		    height: 200,text:"bhasuri kona",
-										body: [
-											{type: 'label', name: 'title', text: "Your email's html code contains a  <style> tag. It is likely that it is using embedded CSS. Your email may not render properly in a few browsers. We recommend you to convert the CSS styling to inline using an <a href='http://templates.mailchimp.com/resources/inline-css/' class='block'>online converter</a>"}
-										],
-										onsubmit: function(e) {
-											// Insert content when the window form is submitted
-											console.log("success");
-											if(showwarning(html))
-											{
-											// Return Back here
-											window.opener.tinyMCECallBack(getUrlVars()["id"], html);
-											window.close();
-											}
-											else{
-												alert('in else');
-											}
-										}
-			});
-		
+		window.opener.tinyMCECallBack(getUrlVars()["id"], html);
+		window.close();
 		
 	});
 	
@@ -378,7 +357,7 @@ function showwarning(content)
 							<strong>TBD Inline Styles. 
 							<!--<a href="#trigger-add" style="float: right;cursor: pointer;font-weight: normal;">How to add trigger?</a>-->
 							</strong>
-                			<p>Your email's html code contains a  &lt;style&gt; tag. It is likely that it is using embedded CSS. Your email may not render properly in a few browsers. We recommend you to convert the CSS styling to inline using an <a href="http://templates.mailchimp.com/resources/inline-css/" class="block">online converter</a></p>
+                			<p>Your email appears to be using embedded CSS (as it has a &lt;style&gt;tag defined). Such emails may not render properly in some email clients. We recommend you to convert the CSS styling to Inline styling for better compatibility. Try an  <a onclick="parent.window.open('http://templates.mailchimp.com/resources/inline-css/')" class="block">online converter</a></p>
                 		</div>
             		</div>
         		</div>
