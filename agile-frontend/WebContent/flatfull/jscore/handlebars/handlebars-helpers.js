@@ -6054,6 +6054,10 @@ $(function()
 	Handlebars.registerHelper("toSafeString", function(content){
 		return new Handlebars.SafeString(content);
 	});
+	
+	Handlebars.registerHelper("getPlanLimits", function(key){
+		return _billing_restriction.currentLimits[key];
+	});
 });
 
 // helper function return created time for event

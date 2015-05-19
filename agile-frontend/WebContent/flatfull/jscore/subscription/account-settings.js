@@ -45,41 +45,6 @@ function set_up_account_stats(el, callback)
 }
 
 /**
- * Fetches account statistics for the current Namespace from
- * "core/api/namespace-stats", called when manage subscription details is loaded
- * 
- * @method setUpAccountStats
- * @param html
- *            element to show stats
- * @author Yaswanth
- */
-function set_up_admin_account_stats(el, callback)
-{
-
-	/**
-	 * Creates base model for namespace stats, template is
-	 * account-stats-template
-	 */
-	var admin_account_stats = new Base_Model_View({
-		url : "core/api/namespace-stats/getdomainstats",
-		template : "admin-account-stats",
-		postRenderCallback: function(el) {
-			
-			ADMIN_ACCOUNT_STATS = admin_account_stats.model.toJSON();
-			
-			if (callback && typeof (callback) === "function")
-			{
-				callback(ADMIN_ACCOUNT_STATS);
-			}
-		}
-	});
-
-	// Shows account statistics in subscription page
-	$('#account-stats', el).html(admin_account_stats.render(true).el);
-
-}
-
-/**
  * Handles events on delete account at stats and confirmation, sends delete
  * request on confirmation
  */

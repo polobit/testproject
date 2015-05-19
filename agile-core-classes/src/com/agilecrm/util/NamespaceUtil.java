@@ -15,8 +15,6 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
-import com.analytics.util.AnalyticsSQLUtil;
-import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -167,7 +165,8 @@ public class NamespaceUtil
 	// int docs = DocumentUtil.getCount();
 	int compaigncount = WorkflowUtil.getCount();
 	int triggerscount = TriggerUtil.getCount();
-	int webstats = AnalyticsSQLUtil.getPageViewsCountForGivenDomain(NamespaceManager.get());
+	// int webstats =
+	// AnalyticsSQLUtil.getPageViewsCountForGivenDomain(NamespaceManager.get());
 
 	try
 	{
@@ -177,7 +176,7 @@ public class NamespaceUtil
 	    // json.put("docs_count", docs);
 	    json.put("compaign_count", compaigncount);
 	    json.put("triggers_count", triggerscount);
-	    json.put("webstats_count", webstats);
+	    // json.put("webstats_count", webstats);
 
 	}
 	catch (JSONException e)
