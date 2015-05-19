@@ -1584,12 +1584,11 @@ public class ContactUtil
 	 */
 	public static int getContactsCount(Long minTime, Long maxTime)
 	{
-		List<Contact> contactsList=null;
+		int contactsCount=0;
 		try 
 		{
-			contactsList = dao.ofy().query(Contact.class).filter("type", Contact.Type.PERSON).filter("created_time >= ", minTime).filter("created_time <= ", maxTime).list();
-			if(contactsList!=null)
-				return contactsList.size();
+			contactsCount = dao.ofy().query(Contact.class).filter("type", Contact.Type.PERSON).filter("created_time >= ", minTime).filter("created_time <= ", maxTime).count();
+			return contactsCount;
 		} catch (Exception e) 
 		{
 			e.printStackTrace();

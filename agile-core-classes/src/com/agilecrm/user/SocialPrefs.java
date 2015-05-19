@@ -8,8 +8,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.scribe.ScribeServlet;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -61,7 +63,7 @@ public class SocialPrefs
     @Parent
     @JsonIgnore
     private Key<AgileUser> agileUser;
-    
+
     @JsonIgnore
     @NotSaved(IfDefault.class)
     public List<Key<AgileUser>> sharedWithUsers;
@@ -156,7 +158,7 @@ public class SocialPrefs
 	    this.picture = properties.get("picture");
 	System.out.println(properties);
     }
-    
+
     /**
      * Sets agileUser.
      * 
@@ -177,7 +179,7 @@ public class SocialPrefs
     {
 	return agileUser;
     }
-    
+
     /**
      * Returns list of users, to which current user IMAP settings are sharing
      * 
@@ -203,7 +205,23 @@ public class SocialPrefs
      */
     public void save()
     {
-	dao.put(this);
+	if (this.type == Type.GMAIL)
+	{
+	    int emailAccountLimitCount = BillingRestrictionUtil.getBillingRestriction(null, null).getCurrentLimits()
+		    .getEmailAccountLimit();
+	    int emailPrefsCount = ContactEmailUtil.getEmailPrefsCount();
+	    if (emailPrefsCount < emailAccountLimitCount)
+	    {
+		dao.put(this);
+	    }
+	}
+	else
+	    dao.put(this);
+    }
+    
+    public void update()
+    {
+    	dao.put(this);
     }
 
     /**

@@ -47,5 +47,7 @@ public class AgileQueues
 	// SMS pull queues
 	public static final String BULK_SMS_PULL_QUEUE = "bulk-sms-pull-queue";
 	public static final String NORMAL_SMS_PULL_QUEUE = "normal-sms-pull-queue";
+	
+	public static final String CONTACTS_SCHEMA_CHANGE_QUEUE = "contacts-schema-change-queue";
 
 }

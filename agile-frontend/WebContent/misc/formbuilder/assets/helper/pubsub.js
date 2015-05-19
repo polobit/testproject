@@ -33,7 +33,7 @@ var addAgileApi = function(json, api, callback)
 	var agileapi = {};
 	agileapi.label = "Agile API";
 	agileapi.type = "input";
-	agileapi.value = api.js_api_key;
+	agileapi.value = api.api_key;
 
 	var agiledomain = {};
 	agiledomain.label = "Agile Domain";

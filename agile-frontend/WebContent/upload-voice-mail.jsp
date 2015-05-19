@@ -7,10 +7,13 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Upload WAV File</title>
-<link rel="stylesheet" type="text/css" href="css/bootstrap-<%=request.getParameter("t")%>.min.css" />
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.v3.min.css" />
+<link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
+
+<script type='text/javascript' src='/lib/jquery-new/jquery-2.1.1.min.js'></script>
+<script type="text/javascript" src="/lib/bootstrap.v3.min.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
-<script type="text/javascript" src="/lib/bootstrap.min.js"></script>
 
 <script type="text/javascript">
 jQuery.validator.setDefaults({
@@ -116,17 +119,13 @@ function isValid(){
 </head>
 
 
-<body class='center' style="height:90%;width:90%;padding:5px">
-
-<br/>
-
-<div class="well" style="height:215px; width:390px ">
-
-<legend>Upload WAV File</legend>
-
+<body class="wrapper-md">
+<div class="row">
+<div class="col-md-3 col-sm-6 col-xs-12">
+<div class="panel panel-default" style="height:215px;">
+<div class="panel-heading">Upload WAV File</div>
+<div class="panel-body">
 <p>You may upload a recorded voice (.wav) file here.</p>
-<br>
-
 <form id="form" action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" onsubmit="return isValid();"> 
 
 <input type="hidden" id="key" name="key" value="audiofiles/<%=request.getParameter("d")%>" /> 
@@ -146,6 +145,9 @@ function isValid(){
 <input name="upload" value="Upload" class='submit btn btn-primary' type="submit"/> 
 </form> 
 </div>
-
+</div>
+</div>
+</div>
+</div>
 </body>
 </html>

@@ -41,7 +41,7 @@ public class IMAPEmailPrefsUtil
      *            - AgileUser object.
      * @return IMAPPrefs of respective agileuser.
      */
-    public static IMAPEmailPrefs getIMAPPrefs(AgileUser user)
+    public static List<IMAPEmailPrefs> getIMAPPrefsList(AgileUser user)
     {
 	System.out.println("Retrieving Userid " + user.id);
 
@@ -49,7 +49,7 @@ public class IMAPEmailPrefsUtil
 	Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, user.id);
 
 	System.out.println("Count " + ofy.query(IMAPEmailPrefs.class).ancestor(agileUserKey).count());
-	return ofy.query(IMAPEmailPrefs.class).ancestor(agileUserKey).get();
+	return ofy.query(IMAPEmailPrefs.class).ancestor(agileUserKey).list();
     }
 
     /**
