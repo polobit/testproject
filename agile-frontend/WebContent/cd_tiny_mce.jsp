@@ -29,6 +29,10 @@
 <!-- Bootstrap  -->
 <link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-responsive.min.css" />
+
+<!-- New UI -->
+<link rel="stylesheet" type="text/css" href="flatfull/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="flatfull/css/app.css">
 	
 <script type="text/javascript" src="lib/jquery.min.js"></script>
 <script type="text/javascript" src="js/designer/tinymce/tinymce.min.js"></script>
@@ -66,19 +70,6 @@ function showError(message)
 {
 	$('#error p').text(message);
 	$('#error').slideDown();
-}
-
-function showwarning(content)
-{
-	$.each($(content),function(index,attribute){
-		var attributeType=$(attribute);
-		
-		if(attributeType["context"].nodeName == "STYLE" && attributeType[0].nodeName == "STYLE"){
-			alert("show_warning");
-			return false;
-		}
-			
-		});	
 }
 
 // Gets MergeFields
@@ -128,6 +119,11 @@ try{
 		{
 		var initHTML = window.opener.$('#' + textarea_id).val();
 		$('#content').val(initHTML);
+		if(showwarning(initHTML))
+    		$('#inline-css-verification').css('display','inline-block');
+		else
+			$('#inline-css-verification').css('display','none');
+			
 		
 		 // Initialize tinymce editor with content
         init_tinymce();
@@ -144,6 +140,11 @@ try{
 	    		$.get(location.origin+url, function(value){
 	    			
 	    			$('#content').val(value);
+	    			
+	    			if(showwarning(value))
+	    	    		$('#inline-css-verification').css('display','inline-block');
+	    			else
+	    				$('#inline-css-verification').css('display','none');
 	    			
 	    			// Initialize tinymce editor after content obtained
                     init_tinymce();
@@ -187,10 +188,29 @@ try{
 			return;
 		}
 		
-		showwarning(html);
-		// Return Back here
-		window.opener.tinyMCECallBack(getUrlVars()["id"], html);
-		window.close();
+		
+		
+		tinyMCE.activeEditor.windowManager.open({
+			title: 'CSS Inline Alert',width: 500,
+		    height: 200,text:"bhasuri kona",
+										body: [
+											{type: 'label', name: 'title', text: "Your email's html code contains a  <style> tag. It is likely that it is using embedded CSS. Your email may not render properly in a few browsers. We recommend you to convert the CSS styling to inline using an <a href='http://templates.mailchimp.com/resources/inline-css/' class='block'>online converter</a>"}
+										],
+										onsubmit: function(e) {
+											// Insert content when the window form is submitted
+											console.log("success");
+											if(showwarning(html))
+											{
+											// Return Back here
+											window.opener.tinyMCECallBack(getUrlVars()["id"], html);
+											window.close();
+											}
+											else{
+												alert('in else');
+											}
+										}
+			});
+		
 		
 	});
 	
@@ -288,12 +308,47 @@ function init_tinymce()
                 }
             });
             
+            editor.on('change', function(e) {
+                if(showwarning(tinyMCE.activeEditor.getContent()))
+    	    		$('#inline-css-verification').css('display','inline-block');
+    			else
+    				$('#inline-css-verification').css('display','none');
+            });
+            
         }
         
     });
 }
 
-
+function showwarning(content)
+{
+	try{
+		if(content.indexOf('https://s3.amazonaws.com/AgileEmailTemplates') >= 0)
+			return false;
+		if(content.indexOf('http://www.stampready.net') >= 0)
+			return false;
+		
+		var isTrue = false;
+		$.each($(content),function(index,attribute){
+			var attributeType=$(attribute);
+			
+			if(attributeType["context"].nodeName == "STYLE" && attributeType[0].nodeName == "STYLE"){
+				{
+				isTrue= true;
+				return false;
+				}
+			}
+				
+			});	
+		return isTrue;
+	}catch (e)
+	{
+		console.log("Error while warning for inline css");
+		console.log(e);
+		return true;
+	}
+	
+}
 
 </script>
 
@@ -309,13 +364,24 @@ function init_tinymce()
                 <div style="margin: 0 0 10px 0">
                     <div style="display:none; float: left;" id="navigate-back">
                         <!-- Back link to navigate to history back  -->
-                        <a href="#" class="btn btn-large"> &lt; Back </a>
+                        <a href="#" class="btn btn-default btn-large"> &lt; Back </a>
                     </div>
                     <div style="display: block; float:right;">
-                        <a href="#" id="top_save_html" class="btn btn-large" style="cursor:pointer; font-weight: bold;">Save</a>
+                        <a href="#" id="top_save_html" class="btn btn-default btn-large" style="cursor:pointer; font-weight: bold;">Save</a>
                     </div>
                     <div style="clear: both;"></div>
                 </div>
+                <div id="inline-css-verification" style="display: none;">
+           			<div class="alert danger info-block alert-warning text-black">
+                		<div>
+                			<i class="icon-warning-sign"></i>
+							<strong>TBD Inline Styles. 
+							<!--<a href="#trigger-add" style="float: right;cursor: pointer;font-weight: normal;">How to add trigger?</a>-->
+							</strong>
+                			<p>Your email's html code contains a  &lt;style&gt; tag. It is likely that it is using embedded CSS. Your email may not render properly in a few browsers. We recommend you to convert the CSS styling to inline using an <a href="http://templates.mailchimp.com/resources/inline-css/" class="block">online converter</a></p>
+                		</div>
+            		</div>
+        		</div>
             </div>
             <!-- .block_head ends -->
             <div class="block_content center">
