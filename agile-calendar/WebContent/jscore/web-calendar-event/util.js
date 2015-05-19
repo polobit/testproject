@@ -256,7 +256,6 @@ function displaySlots()
 
 			k++;
 		}
-
 		return listSlot;
 	}
 
@@ -266,6 +265,7 @@ function displaySlots()
 		// Add number of rows, slots with time conversion
 		$('.checkbox-main-grid').append('<li><ul class="checkbox-grid">' + addList() + '<ul><li>');
 	}
+	Available_Slots = null;
 }
 
 // Validates the form fields
