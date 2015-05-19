@@ -382,10 +382,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$('#content').find('.stats-tab').addClass('select');
 		$(".active").removeClass("active");
 		$('#content').find('#admin-prefs-tabs-content').html(getRandomLoadingImg());
-
 		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
 		{
-
 			var email_stats = {};
 			var sms_stats = {};
 			$.ajax({ url : 'core/api/emails/email-stats', type : "GET", dataType : 'json', success : function(stats)
@@ -400,6 +398,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					var emailStatsModelView = new Base_Model_View({ template : 'admin-settings-integrations-stats', data : totalLogs });
 
 					$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render(true).el);
+					set_up_admin_account_stats($('#content').find('#admin-prefs-tabs-content'));
+					
 				} });
 				hideTransitionBar();
 

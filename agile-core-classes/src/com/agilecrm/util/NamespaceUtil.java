@@ -5,10 +5,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.webrules.util.WebRuleUtil;
+import com.agilecrm.workflows.triggers.util.TriggerUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
+import com.analytics.util.AnalyticsSQLUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -141,6 +149,44 @@ public class NamespaceUtil
 	System.out.println(host.contains("-dot-"));
 	// Eg., return 'admin' from 'admin.agilecrm.com'
 	return host.contains("-dot-") ? host.split("\\-dot-")[0] : host.split("\\.")[0];
+    }
+
+    /**
+     * Returns the JSON object having the count of contacts, deals, campaigns
+     * etc of the current domain.
+     * 
+     * @return JSON object.
+     */
+    public static String getDomainStats()
+    {
+	JSONObject json = new JSONObject();
+
+	int webrulecount = WebRuleUtil.getCount();
+	int contactcount = ContactUtil.getCount();
+	int dealscount = OpportunityUtil.getCount();
+	// int docs = DocumentUtil.getCount();
+	int compaigncount = WorkflowUtil.getCount();
+	int triggerscount = TriggerUtil.getCount();
+	int webstats = AnalyticsSQLUtil.getPageViewsCountForGivenDomain(NamespaceManager.get());
+
+	try
+	{
+	    json.put("webrule_count", webrulecount);
+	    json.put("contact_count", contactcount);
+	    json.put("deals_count", dealscount);
+	    // json.put("docs_count", docs);
+	    json.put("compaign_count", compaigncount);
+	    json.put("triggers_count", triggerscount);
+	    json.put("webstats_count", webstats);
+
+	}
+	catch (JSONException e)
+	{
+	    e.printStackTrace();
+	}
+	System.out.println("status account " + json);
+
+	return json.toString();
     }
 
 }

@@ -25,3 +25,48 @@
 	<a href="#" id="cancel-account-request" align="center" class="btn btn-default btn-sm">Cancel My Account</a>
 {{/check_plan}}
 </script>
+
+<script id="admin-account-stats-template" type="text/html">
+<h4>Account Stats</h4>
+<div class="row">
+<div class="col-md-6 b-r b-light">
+<div class="panel panel-default">
+<table class="table table-bordered table-hover">
+   
+    <thead>
+        <tr>
+            <th style="font-weight:normal;background-color:#f6f8f8;">Name</th>
+            <th style="font-weight:normal;background-color:#f6f8f8;">Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Total Contacts and Companies</td>
+            <td>{{contact_count}}</td>
+        </tr>
+        <tr>
+            <td>Deals</td>
+            <td>{{deals_count}}</td>
+        </tr>
+		<tr>
+            <td>Campaigns</td>
+            <td>{{compaign_count}}</td>
+        </tr>
+        <tr>
+            <td>Triggers</td>
+            <td>{{triggers_count}}</td>
+        </tr>
+		<tr>
+            <td>Web rules</td>
+            <td>{{webrule_count}}</td>
+        </tr>
+        <tr>
+            <td>Webstats</td>
+            <td>{{webstats_count}}</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+</div>
+</div>
+</script>
