@@ -87,6 +87,7 @@ var SubscribeRouter = Backbone.Router.extend({
  			
  			if(id){
  				addStyleForAPlan(id,planDetails);
+ 				$("#plan_type").attr("value", id.attr("id").split("_")[0]);
  			}
 									
 			element = setPriceTemplete(data.plan.plan_type, el);
@@ -94,6 +95,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			// Show Coupon code input field
 			id = (id && id == "coupon") ? id : "";
 			showCouponCodeContainer(id);
+			
 
 			head.load(CSS_PATH + 'css/jslider.css', CSS_PATH + "css/misc/agile-plan-upgrade.css", LIB_PATH + 'lib/jquery.slider.min.js', function()
 			{
@@ -101,7 +103,11 @@ var SubscribeRouter = Backbone.Router.extend({
 					setPlan("free");
 				else
 					setPlan(data);
-				load_slider(el);
+				$("#user_quantity").attr("value", data.plan.quantity);
+				price = update_price();
+				$( "#users_quantity").text(data.plan.quantity);
+     	     	$("#users_total_cost").text((data.plan.quantity * price).toFixed(2));
+			//	load_slider(el);
 			});
 		} });
 		$('#content').html(subscribe_plan.render().el);
@@ -349,6 +355,16 @@ var SubscribeRouter = Backbone.Router.extend({
 			{
 				window.navigate("subscribe", { trigger : true });
 				showNotyPopUp("information", "Your plan has been updated successfully", "top");
+
+				try
+				{
+					push_actual_plan(data.plan)
+				}
+				catch(err)
+				{
+					console.log(err);
+				}
+
 			},
 			errorCallback : function(data)
 			{
@@ -938,22 +954,20 @@ function is_free_plan()
  */
 function addStyleForAPlan(id,planDetails){
 	if(id){
-		id.addClass('m-t-n-md');
-		id.find('.panel-heading').addClass('bg-warning').addClass('dker');
-		id.find('.price-panel').addClass('bg-warning');
-		id.find('.panel-footer').addClass('bg-light');
+		id.css("opacity","1");
+		
 		if(planDetails){
 			id.find('.user-plan').html(planDetails);
-			id.find('.djc_addtocart_link').text('Add users');
+			// id.find('.djc_addtocart_link').text('Add users');
 		}
 	}	
 }
 
 function removeStyleForAPlan(){
 	var id = $('#plans-panel');
-	id.find('.m-t-n-md').removeClass('m-t-n-md');
-	id.find('.panel-heading').removeClass('bg-warning').removeClass('dker');
-	id.find('.price-panel').removeClass('bg-warning');
-	id.find('.panel-footer').removeClass('bg-light');		
+	id.find(".plan-collection-bot").css("opacity","0.5");
+	
+	
+			
 	
 }

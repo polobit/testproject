@@ -71,6 +71,10 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 				System.err.println("Exception while creating stats for domain: "+ domain);
 				e.printStackTrace();
 			}
+			if(contacts_list == null || contacts_list.isEmpty()) {
+				updateStats(null, "COMPLETED");
+				return;
+			}
 			AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
 			do
 			{
