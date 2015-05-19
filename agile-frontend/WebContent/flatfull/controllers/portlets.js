@@ -262,7 +262,7 @@ $('#portlets-events-model-list > tr').live('click', function(e){
 	    $("#update-event-date-2").val((new Date(model.get('end')*1000)).format(dateFormat));
 	    
 	   	// hide end date & time for all day events
-	    if(event.allDay)
+	    if(model.toJSON().allDay)
 	    {
 	    	$("#update-event-date-2").closest('.row').hide();
 	    	$('#update-event-time-1').closest('.control-group').hide();
