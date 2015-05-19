@@ -4,6 +4,8 @@ var eventsView;
 var tasksView;
 var casesView;
 var documentsView;
+var campaignsView;
+var mailsView;
 
 var contact_details_tab = {
 		load_timeline : function()
@@ -290,7 +292,11 @@ var contact_details_tab = {
 		},
 		load_campaigns : function()
 		{
-			var campaignsView = new Base_Collection_View({
+			if(typeof campaignsView !== 'undefined' && typeof campaignsView.infiniScroll!== 'undefined')
+			{
+				campaignsView.infiniScroll.destroy();
+			}
+			campaignsView = new Base_Collection_View({
 				url: '/core/api/campaigns/logs/contact/' + App_Contacts.contactDetailView.model.id,
 	            restKey: "logs",
 	            templateKey: "campaigns",
@@ -302,13 +308,12 @@ var contact_details_tab = {
 	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
 	              		 $("time.log-created-time", el).timeago();
 	              	});
-	              // var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-	             // fillSelect('campaignSelect','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
+	            	contact_detail_page_infi_scroll($('#campaigns', App_Contacts.contactDetailView.el), campaignsView);
 	            },
 	            appendItemCallback : function(el)
 				{
 					includeTimeAgo(el);
-				}  
+				} 
 	        });
 			campaignsView.collection.fetch();	
 	        $('#campaigns', App_Contacts.contactDetailView.el).html(campaignsView.el);
@@ -335,29 +340,32 @@ function fetch_mails(contact_details_tab_scope,has_email_configured,mail_server_
 	else
 		mail_server_url = mail_server_url + '&search_email='+encodeURIComponent(email);
 	
-//	$('#email-type-select-dropdown',App_Contacts.contactDetailView.el).attr('disabled', 'disabled');
+	if(typeof mailsView !== 'undefined' && typeof mailsView.infiniScroll !== 'undefined')
+	{
+		mailsView.infiniScroll.destroy();
+	}
 
 	// Fetches mails collection
-	var mailsView = new Base_Collection_View({ url : mail_server_url , cursor : cursor, page_size : 10,
-		templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
-		postRenderCallback : function(el)
+	mailsView = new Base_Collection_View({ url : mail_server_url , cursor : cursor, page_size : 10,
+	templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
+	postRenderCallback : function(el)
+	{
+		$('#mail', App_Contacts.contactDetailView.el).find('.mails-loading').remove();
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 		{
-//			$('#email-type-select-dropdown',App_Contacts.contactDetailView.el).removeAttr('disabled');
-			$('#mail', App_Contacts.contactDetailView.el).find('.mails-loading').remove();
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+			$(".email-sent-time", el).each(function(index, element)
 			{
-				$(".email-sent-time", el).each(function(index, element)
-				{
-					$(element).timeago();
-				});
+				$(element).timeago();
 			});
-			
-			if(email_server_type!="agilecrm")
-				contact_details_tab_scope.configured_sync_email = email_server_type;
-			
-			if(!has_email_configured)
-				$('#email-prefs-verification',App_Contacts.contactDetailView.el).css('display', 'block');		
-		}});
+		});
+		
+		if(email_server_type!="agilecrm")
+			contact_details_tab_scope.configured_sync_email = email_server_type;
+	
+		if(!has_email_configured)
+			$('#email-prefs-verification',App_Contacts.contactDetailView.el).css('display', 'block');
+		contact_detail_page_infi_scroll($('#mails', App_Contacts.contactDetailView.el), mailsView);
+	}});
 	mailsView.collection.fetch();
 	$('#mails', App_Contacts.contactDetailView.el).html(mailsView.render().el);
 }
@@ -390,8 +398,17 @@ function fetch_mailserverurl_from_cookie(model)
 					if(email_server.toLowerCase()==='google')
 					{
 						var hasGmail = false;
-						if(model.hasOwnProperty('gmailUserName') && (model.gmailUserName === email))					
-							hasGmail = true;
+						if(typeof model.gmailUserNames !== 'undefined' && model.hasOwnProperty('gmailUserNames'))
+						{
+							for(var i=0;i<model.gmailUserNames.length;i++)
+							{
+								if(model.gmailUserNames[i] === email)
+								{
+									hasGmail = true;
+									break;
+								}
+							}
+						}
 						else if(typeof model.sharedGmailUserNames !== 'undefined' && model.hasOwnProperty('sharedGmailUserNames'))
 						{
 							for(var i=0;i<model.sharedGmailUserNames.length;i++)
@@ -415,9 +432,18 @@ function fetch_mailserverurl_from_cookie(model)
 					else if(email_server.toLowerCase()==='imap')
 					{
 						var hasImap = false;
-						if(model.hasOwnProperty('imapUserName') && (model.imapUserName === email))
-							hasImap = true;	
-						else if(typeof model.sharedImapUserNames !== 'undefined' && model.sharedImapUserNames.length > 0)
+						if(typeof model.imapUserNames !== 'undefined' && model.hasOwnProperty('imapUserNames'))
+						{
+							for(var i=0;i<model.imapUserNames.length;i++)
+							{
+								if(model.imapUserNames[i] === email)
+								{
+									hasImap = true;
+									break;
+								}
+							}
+						}
+						else if(typeof model.sharedImapUserNames !== 'undefined' && model.hasOwnProperty('sharedImapUserNames'))
 						{
 							for(var i=0;i<model.sharedImapUserNames.length;i++)
 							{
@@ -440,9 +466,18 @@ function fetch_mailserverurl_from_cookie(model)
 					else if(email_server.toLowerCase()==='exchange')
 					{
 						var hasExchange = false;
-						if(model.hasOwnProperty('exchangeUserName') && (model.exchangeUserName === email))
-							hasExchange = true;
-						else if(model.sharedExchangeUserNames !== 'undefined' && model.hasOwnProperty('sharedExchangeUserNames'))
+						if(typeof model.exchangeUserNames !== 'undefined' && model.hasOwnProperty('exchangeUserNames'))
+						{
+							for(var i=0;i<model.exchangeUserNames.length;i++)
+							{
+								if(model.exchangeUserNames[i] === email)
+								{
+									hasExchange = true;
+									break;
+								}
+							}
+						}
+						else if(typeof model.sharedExchangeUserNames !== 'undefined' && model.hasOwnProperty('sharedExchangeUserNames'))
 						{
 							for(var i=0;i<model.sharedExchangeUserNames.length;i++)
 							{
@@ -474,5 +509,41 @@ function fetch_mailserverurl_from_cookie(model)
 		}
 	}
 	return cookie_info;
+}
+function contact_detail_page_infi_scroll(element_id, targetCollection)
+{
+	console.log("initialize_infinite_scrollbar",element_id);
+
+	if (element_id == undefined || element_id == null)
+	{
+		console.log("no elmnt");
+		return;
+	}
+	console.log(targetCollection);
+	targetCollection.infiniScroll = new Backbone.InfiniScroll(targetCollection.collection, {
+		target : element_id,
+		untilAttr : 'cursor',
+		param : 'cursor',
+		strict : false,
+		pageSize : targetCollection.page_size,
+		success : function(colleciton, response)
+		{
+			console.log('in success');
+			if (!colleciton.last().get("cursor"))
+			{
+				this.strict = true;
+				targetCollection.infiniScroll.disableFetch();
+			}
+			// Remove loading icon
+			$(targetCollection.infiniScroll.options.target).find('.scroll-loading').remove();
+		},
+		onFetch : function()
+		{
+			console.log('in fetch');
+			// Add loading icon
+			$(targetCollection.infiniScroll.options.target).append(
+					'<div class="scroll-loading"> <img src="/img/ajax-loader-cursor.gif" style="margin-left: 44%;"> </div>');
+		}
+		});
 }
 	
