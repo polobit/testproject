@@ -626,7 +626,7 @@ public class Contact extends Cursor
 	// Iterates through all the properties and returns matching property
 	for (ContactField field : properties)
 	{
-	    if (field.name.equals(fieldName))
+	    if (fieldName.equals(field.name))
 		return field;
 	}
 	return null;
