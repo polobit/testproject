@@ -467,7 +467,10 @@ var WorkflowsRouter = Backbone.Router
 					 *            el property of Backbone.js
 					 */
 					postRenderCallback : function(el)
-					{}
+					{
+						addTagsDefaultTypeahead($("#trigger-custom-tags-add"),true);
+						addTagsDefaultTypeahead($("#trigger-custom-tags-delete"),true);
+					}
 				
 				});
 				
