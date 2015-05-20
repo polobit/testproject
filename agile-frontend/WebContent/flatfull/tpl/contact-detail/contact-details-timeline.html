@@ -125,9 +125,9 @@
             <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-list-alt text-muted"></i></a></span> Web</div></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <div class="text-xs">
+                <div>
                     <div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;">
-                        <div class="text-xs">
+                        <div>
 							Pages Visited {{#stringToJSON this "urls_with_time_spent"}} ({{this.length}}){{/stringToJSON}}
 								<span style="float: right;">
 									{{#if user_agent}}
@@ -144,18 +144,23 @@
                                         {{/stringToJSON}}
 									{{/if}}
 								</span>
-							<br> 
-                        {{#stringToJSON this "urls_with_time_spent"}}{{/stringToJSON}}
-					    {{#each urls_with_time_spent}}{{url}} - {{convertSecondsToHour time_spent}}<br />{{/each}}
+								<div class="text-xs"> 
+                        	 		{{#stringToJSON this "urls_with_time_spent"}}{{/stringToJSON}}
+								</div>
+					    		{{#each urls_with_time_spent}}
+									<div class="text-xs">{{url}} - {{convertSecondsToHour time_spent}}</div>
+								{{/each}}
                         </div>
                     </div>
                 </div>
                 {{#if ref}}
-                     <div class="text-xs">Referred: </br> {{ref}}</div>
+                     <div>Referred: </div>
+					 <div class="text-xs">{{ref}}</div>
                 {{/if}}
 
                 {{#if city}}
-                   <div class="text-xs">Address: </br> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
+                   <div>Address: </div>
+				   <div class="text-xs">{{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
                 {{/if}}
 
                 <div class="right" style="margin-top:-10px;"><a href="#" id="tl-analytics-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
@@ -397,8 +402,13 @@
                 </div>
             
             {{#if message}}
-                <div class="text-xs"><div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;"><div> <p>{{{message}}}</p></div></div>
-                    <div class="right m-t-n" data="{{message}}"><a href="#" id="tl-mail-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
+                <div>
+					<div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;">
+						<div><p>{{{message}}}</p></div>
+					</div>
+                    <div class="right m-t-n" data="{{message}}">
+						<a href="#" id="tl-mail-popover"><i class="glyphicon glyphicon-plus-sign"></i></a>
+					</div>
                 </div> 
             {{/if}}       
             
@@ -416,7 +426,7 @@
 			</div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <div class="text-xs">
+                <div>
                     <div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;">
                         <div>
 							Pages Visited {{#stringToJSON this "urls_with_time_spent"}} ({{this.length}}){{/stringToJSON}}
@@ -435,18 +445,23 @@
                                         {{/stringToJSON}}
 									{{/if}}
 								</span>
-							<br> 
-                        {{#stringToJSON this "urls_with_time_spent"}}{{/stringToJSON}}
-					    {{#each urls_with_time_spent}}{{url}} - {{convertSecondsToHour time_spent}}<br />{{/each}}
+							<div class="text-xs"> 
+                        		{{#stringToJSON this "urls_with_time_spent"}}{{/stringToJSON}}
+							</div>						
+					    	{{#each urls_with_time_spent}}
+								<div class="text-xs">{{url}} - {{convertSecondsToHour time_spent}}</div>
+							{{/each}}
                         </div>
                     </div>
                 </div>
                 {{#if ref}}
-                     <div class="text-xs">Referred: </br> {{ref}}</div>
+                     <div>Referred: </div>
+					 <div class="text-xs">{{ref}}</div>
                 {{/if}}
 
                 {{#if city}}
-                   <div class="text-xs">Address: </br> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
+                   <div>Address: </div>
+				   <div class="text-xs"> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
                 {{/if}}
 
                 <div class="right" style="margin-top:-10px;"><a href="#" id="tl-analytics-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
