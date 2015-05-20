@@ -114,16 +114,6 @@ public class ReportsUtil
 		    continue;
 
 		Long count = getAvailableEntitiesCountInReport(report.id);
-		try
-		{
-		    Contact con = (Contact) resultsCollection.toArray()[0];
-		    count = con.count.longValue();
-
-		}
-		catch (Exception e)
-		{
-
-		}
 		if (count > 100)
 		    results.put("limit_message", "We are showing only 100 contacts in this email.");
 		results.put("count", count);
