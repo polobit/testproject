@@ -330,7 +330,7 @@ a:link, a:active, a:visited, a {
 					Event starts <%=event_start%>&nbsp;(<%=duration %>&nbsp;mins)
 				</div>
 				<div class="cancel_reason">
-					<textarea placeholder="Reason for cancellation (optional)" rows="7" cols="75" id="cancel_web_appointment_reason" name="cancel_web_appointment_reason"></textarea>
+					<textarea placeholder="Reason for cancellation" rows="7" cols="75" id="cancel_web_appointment_reason" name="cancel_web_appointment_reason"></textarea>
 				</div>
           
 				<br /> <a  class="button" id="cancel_appointment_confirmation" href='#'> Cancel Appointment</a>
