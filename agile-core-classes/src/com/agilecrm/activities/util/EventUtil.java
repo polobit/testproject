@@ -22,6 +22,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.IcalendarUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
@@ -513,6 +514,12 @@ public class EventUtil
 		}
 	}
 
+	/**
+	 * sends a mail to contact when deleting web event
+	 * 
+	 * @param event
+	 * @param cancel_reason
+	 */
 	public static void sendMailToWebEventAttendee(Event event, String cancel_reason)
 	{
 
@@ -532,5 +539,55 @@ public class EventUtil
 		}
 		EmailGatewayUtil.sendEmail(null, "noreplay@agilecrm.com", "Agile CRM", contactEmail, null, null,
 				"Appointment Cancelled", null, cancel_mail, null, null, null);
+	}
+
+	/**
+	 * calls this method when end user want to cancel webevent from his mail
+	 * 
+	 * @param event
+	 * @param cancel_reason
+	 */
+	public static void deleteWebEventFromClinetEnd(Event event, String cancel_reason)
+	{
+
+		try
+		{
+			DomainUser domain_user = event.getOwner();
+
+			String domain_user_name = domain_user.name;
+			String calendar_url = domain_user.getCalendarURL();
+			String timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domain_user.id);
+			if (StringUtils.isEmpty(timezone))
+			{
+				timezone = domain_user.timezone;
+
+			}
+			String event_start_time = WebCalendarEventUtil.getGMTDateInMilliSecFromTimeZone(timezone,
+					event.start * 1000, new SimpleDateFormat("EEE, MMMM d yyyy, h:mm a (z)"));
+			String event_title = event.title;
+			Long duration = (event.end - event.start) / 60;
+			List<Contact> contacts = event.getContacts();
+			String client_name = contacts.get(0).getContactFieldValue("FIRST_NAME");
+			if (StringUtils.isNotEmpty(contacts.get(0).getContactFieldValue("LAST_NAME")))
+			{
+				client_name.concat(contacts.get(0).getContactFieldValue("LAST_NAME"));
+			}
+			String client_email = contacts.get(0).getContactFieldValue("EMAIL");
+			GoogleCalendarUtil.deleteGoogleEvent(event);
+			event.delete();
+			String subject = "<p>" + client_name + " (" + client_email
+					+ ") has cancelled the appointment</p><span>Title: " + event_title + " (" + duration
+					+ " mins)</span><br/><span>Start time: " + event_start_time + "</span>";
+			if (StringUtils.isNotEmpty(cancel_reason))
+				subject += "<br/><span>Reason: " + cancel_reason + "</span>";
+
+			EmailGatewayUtil.sendEmail(null, client_email, client_name, domain_user.email, null, null,
+					"Appointment Cancelled", null, subject, null, null, null);
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
