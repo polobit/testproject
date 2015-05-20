@@ -113,7 +113,21 @@ public class ReportsUtil
 		if (resultsCollection.size() == 0)
 		    continue;
 
-		results.put("count", getAvailableEntitiesCountInReport(report.id));
+		Long count = getAvailableEntitiesCountInReport(report.id);
+		try
+		{
+		    Contact con = (Contact) resultsCollection.toArray()[0];
+		    count = con.count.longValue();
+
+		}
+		catch (Exception e)
+		{
+
+		}
+		if (count > 100)
+		    results.put("limit_message", "We are showing only 100 contacts in this email.");
+		results.put("count", count);
+
 	    }
 
 	    results.put("duration", WordUtils.capitalizeFully((report.duration.toString())));
