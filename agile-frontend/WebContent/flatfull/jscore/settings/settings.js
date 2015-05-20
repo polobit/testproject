@@ -115,6 +115,7 @@ function load_imap_properties(model, el) {
 $(function() {
 	$("#saveTheme").die().live("click", function(e) {
 		e.preventDefault();
+		$(".theme-save-status").css("display","none");
 		var saveBtn = $(this);
 
 		// Returns, if the save button has disabled
