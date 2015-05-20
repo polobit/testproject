@@ -113,7 +113,7 @@ public class ReportsUtil
 		if (resultsCollection.size() == 0)
 		    continue;
 
-		results.put("count", resultsCollection.size());
+		results.put("count", getAvailableEntitiesCountInReport(report.id));
 	    }
 
 	    results.put("duration", WordUtils.capitalizeFully((report.duration.toString())));
@@ -414,10 +414,10 @@ public class ReportsUtil
 
 	BillingRestrictionUtil.throwLimitExceededException(ErrorMessages.REPORT, false);
     }
-    
+
     public static Integer count()
     {
 	return Reports.dao.count();
     }
-    
+
 }
