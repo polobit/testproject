@@ -155,9 +155,9 @@ var contact_details_tab = {
 	        $('#cases', App_Contacts.contactDetailView.el).html(casesView.el);
 		},
 		load_mail : function(mail_server_url,email_server)
-		{			
+		{						
 			$('#mails', App_Contacts.contactDetailView.el).html("");
-			$('#mail', App_Contacts.contactDetailView.el).append('<img class="mails-loading p-r-xs m-b"  src= "img/21-0.gif"></img>');
+			$('#mail', App_Contacts.contactDetailView.el).append('<span id="mails-span"> <img class="mails-loading p-r-xs m-b"  src= "img/21-0.gif"></img></span>');
 			var contact = App_Contacts.contactDetailView.model;
 			var json = contact.toJSON();
 			
@@ -292,10 +292,6 @@ var contact_details_tab = {
 		},
 		load_campaigns : function()
 		{
-			if(typeof campaignsView !== 'undefined' && typeof campaignsView.infiniScroll!== 'undefined')
-			{
-				campaignsView.infiniScroll.destroy();
-			}
 			campaignsView = new Base_Collection_View({
 				url: '/core/api/campaigns/logs/contact/' + App_Contacts.contactDetailView.model.id,
 	            restKey: "logs",
@@ -339,18 +335,12 @@ function fetch_mails(contact_details_tab_scope,has_email_configured,mail_server_
 	}
 	else
 		mail_server_url = mail_server_url + '&search_email='+encodeURIComponent(email);
-	
-	if(typeof mailsView !== 'undefined' && typeof mailsView.infiniScroll !== 'undefined')
-	{
-		mailsView.infiniScroll.destroy();
-	}
 
 	// Fetches mails collection
 	mailsView = new Base_Collection_View({ url : mail_server_url , cursor : cursor, page_size : 10,
 	templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{
-		$('#mail', App_Contacts.contactDetailView.el).find('.mails-loading').remove();
 		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 		{
 			$(".email-sent-time", el).each(function(index, element)
@@ -365,6 +355,7 @@ function fetch_mails(contact_details_tab_scope,has_email_configured,mail_server_
 		if(!has_email_configured)
 			$('#email-prefs-verification',App_Contacts.contactDetailView.el).css('display', 'block');
 		contact_detail_page_infi_scroll($('#mails', App_Contacts.contactDetailView.el), mailsView);
+		$('#mail #mails-span', App_Contacts.contactDetailView.el).remove();
 	}});
 	mailsView.collection.fetch();
 	$('#mails', App_Contacts.contactDetailView.el).html(mailsView.render().el);
@@ -513,6 +504,8 @@ function fetch_mailserverurl_from_cookie(model)
 function contact_detail_page_infi_scroll(element_id, targetCollection)
 {
 	console.log("initialize_infinite_scrollbar",element_id);
+	
+	element_id.unbind("scroll");
 
 	if (element_id == undefined || element_id == null)
 	{
