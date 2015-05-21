@@ -113,7 +113,7 @@ public class ReportsUtil
 		if (resultsCollection.size() == 0)
 		    continue;
 
-		Long count = getAvailableEntitiesCountInReport(report.id);
+		Integer count = (Integer) results.get("contacts_count");
 		if (count > 100)
 		    results.put("limit_message", "We are showing only 100 contacts in this email.");
 		results.put("count", count);
@@ -150,6 +150,15 @@ public class ReportsUtil
 
 	domain_details.put("report", report);
 	domain_details.put("domain", NamespaceManager.get());
+	try
+	{
+	    Contact con = (Contact) reportList.toArray()[0];
+	    domain_details.put("contacts_count", con.count);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Error in getting contacts count in reports.");
+	}
 
 	// If report_type if of contacts customize object to show properties
 	if (report.report_type.equals(Reports.ReportType.Contact))
