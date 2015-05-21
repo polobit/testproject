@@ -1513,7 +1513,7 @@ $(function()
 	{
 		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
 		{
-			var contact_properties = App_Contacts.contactDetailView.model.get('properties')
+			var contact_properties = App_Contacts.contactDetailView.model.get('properties');
 			var currentContactEntity = getPropertyValue(contact_properties, key);
 			var contactEntity = getPropertyValue(properties, key);
 
@@ -1521,6 +1521,12 @@ $(function()
 			{
 				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
 				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
+			}
+			
+			if(App_Contacts.contactDetailView.model.get('type') == 'COMPANY')
+			{
+				currentContactEntity = getPropertyValue(contact_properties, "name") ;
+				contactEntity = getPropertyValue(properties, "name");
 			}
 
 			if (currentContactEntity == contactEntity)
@@ -3630,6 +3636,12 @@ $(function()
 			{
 				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
 				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
+			}
+			
+			if(App_Contacts.contactDetailView.model.get('type') == 'COMPANY')
+			{
+				currentContactEntity = getPropertyValue(contact_properties, "name") ;
+				contactEntity = getPropertyValue(properties, "name");
 			}
 
 			if (currentContactEntity == contactEntity)
