@@ -155,7 +155,12 @@ var contact_details_tab = {
 	        $('#cases', App_Contacts.contactDetailView.el).html(casesView.el);
 		},
 		load_mail : function(mail_server_url,email_server)
-		{						
+		{	
+			if(typeof mailsView !== 'undefined')
+			{
+				mailsView.render = null;
+			}
+			$('#mail #mails-span', App_Contacts.contactDetailView.el).remove();
 			$('#mails', App_Contacts.contactDetailView.el).html("");
 			$('#mail', App_Contacts.contactDetailView.el).append('<span id="mails-span"> <img class="mails-loading p-r-xs m-b"  src= "img/21-0.gif"></img></span>');
 			var contact = App_Contacts.contactDetailView.model;
@@ -304,7 +309,7 @@ var contact_details_tab = {
 	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
 	              		 $("time.log-created-time", el).timeago();
 	              	});
-	            	contact_detail_page_infi_scroll($('#campaigns', App_Contacts.contactDetailView.el), campaignsView);
+	            	contact_detail_page_infi_scroll($('#contact-dtl', App_Contacts.contactDetailView.el), campaignsView);
 	            },
 	            appendItemCallback : function(el)
 				{
@@ -354,7 +359,7 @@ function fetch_mails(contact_details_tab_scope,has_email_configured,mail_server_
 	
 		if(!has_email_configured)
 			$('#email-prefs-verification',App_Contacts.contactDetailView.el).css('display', 'block');
-		contact_detail_page_infi_scroll($('#mails', App_Contacts.contactDetailView.el), mailsView);
+		contact_detail_page_infi_scroll($('#contact-dtl', App_Contacts.contactDetailView.el), mailsView);
 		$('#mail #mails-span', App_Contacts.contactDetailView.el).remove();
 	}});
 	mailsView.collection.fetch();
