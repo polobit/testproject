@@ -112,12 +112,6 @@ public class ReportsUtil
 		System.out.println("available = " + resultsCollection.size());
 		if (resultsCollection.size() == 0)
 		    continue;
-
-		Integer count = (Integer) results.get("contacts_count");
-		if (count > 100)
-		    results.put("limit_message", "We are showing only 100 contacts in this email.");
-		results.put("count", count);
-
 	    }
 
 	    results.put("duration", WordUtils.capitalizeFully((report.duration.toString())));
@@ -153,7 +147,9 @@ public class ReportsUtil
 	try
 	{
 	    Contact con = (Contact) reportList.toArray()[0];
-	    domain_details.put("contacts_count", con.count);
+	    domain_details.put("count", con.count);
+	    if (con.count > 100)
+		domain_details.put("limit_message", "We are showing only 100 contacts in this email.");
 	}
 	catch (Exception e)
 	{
