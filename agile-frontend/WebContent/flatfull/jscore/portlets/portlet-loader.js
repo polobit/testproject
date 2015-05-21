@@ -1328,3 +1328,58 @@ $('.stats_report_portlet_body').live('mouseout',function(e){
 	$('.stats_report_portlet_body').find('.portlet_header_icons').css("visibility","hidden");
 	//$('.stats_report_portlet_body').find('.stats-report-settings').find('span').eq(0).removeClass('p-l-lg');
 });
+$('.onboarding-skip').live('click',function(e){
+	$(this).parent().find('span').css("text-decoration","line-through");
+	if(!$(this).parent().find('small').hasClass('onboarding-undo'))
+		$(this).parent().find('span').after("<small class='p-l-sm onboarding-undo c-p'>(undo)</small>");
+	$(this).remove();
+});
+$('.onboarding-undo').live('click',function(e){
+	$(this).parent().find('span').css("text-decoration","none");
+	$(this).parent().find('label').remove();
+	$(this).parent().find('span').before("<label class='i-checks i-checks-sm onboarding-check' style='padding-right:4px;'><input type='checkbox'><i></i></label>");
+	if(!$(this).parent().find('small').hasClass('onboarding-skip'))
+		$(this).parent().find('span').after("<small class='p-l-sm onboarding-skip c-p'>(skip)</small>");
+	$(this).remove();
+});
+$('.onboarding-check').live('change',function(e){
+	/*$(this).parent().find('span').before("<label class='fa fa-check p-r-sm'><i></i></label>");
+	if(!$(this).parent().find('small').hasClass('onboarding-undo'))
+		$(this).parent().find('span').after("<small class='p-l-sm onboarding-undo c-p'>(undo)</small>");
+	$(this).remove();*/
+	var that = $(this);
+	var model_id = $(this).parent().parent().parent().find('.portlets').attr('id');
+	var model = Portlets_View.collection.get(model_id);
+	var json1 = {};
+	$(this).parent().parent().find('label').each(function(){
+		var json2 = {};
+		if($(this).find('input:checkbox').is(':checked')){
+			json2["done"] = true;
+			json2["skip"] = false;
+		}else{
+			json2["done"] = false;
+			json2["skip"] = false;
+		}
+		json1[""+$(this).attr('value')] = json2;
+	});
+	model.set({ 'prefs' : JSON.stringify(json1) }, { silent : true });
+	// Saves new width and height in server
+	$.ajax({ type : 'POST', url : '/core/api/portlets/saveOnboardingPrefs', data : JSON.stringify(model.toJSON()),
+		contentType : "application/json; charset=utf-8", dataType : 'json', success: function(){
+			if(that.find('input:checkbox').is(':checked')){
+				that.parent().find('span').css("text-decoration","line-through");
+				that.parent().find('span > a').addClass("text-muted");
+				that.parent().find('label').removeClass('fa fa-square-o ob-portlet-font-check onboarding-check c-p');
+				that.parent().find('label').addClass('fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted');
+				that.find('input:checkbox').removeClass('ob-portlet-no-check');
+				that.find('input:checkbox').addClass('ob-portlet-check');
+			}else{
+				that.parent().find('span').css("text-decoration","none");
+				that.parent().find('span > a').removeClass("text-muted");
+				that.parent().find('label').removeClass('fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted');
+				that.parent().find('label').addClass('fa fa-square-o ob-portlet-font-check onboarding-check c-p');
+				that.find('input:checkbox').removeClass('ob-portlet-check');
+				that.find('input:checkbox').addClass('ob-portlet-no-check');
+			}} });
+		
+});

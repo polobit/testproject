@@ -128,6 +128,17 @@ function set_p_portlets(base_model){
 		else
 			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.statusReportView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w').css('background','#f0f3f4'));
 		
+	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Onboarding"){
+		if(CURRENT_DOMAIN_USER.is_admin)
+			App_Portlets.onboardingView = new Base_Model_View({ model : base_model, template : "portlets-admin-onboarding-model", tagName : 'div' });
+		else
+			App_Portlets.onboardingView = new Base_Model_View({ model : base_model, template : "portlets-user-onboarding-model", tagName : 'div' });
+		
+		if($('.gridster > div:visible > div',this.el).length==0)
+			$('.gridster > div:visible',this.el).html($(App_Portlets.onboardingView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w').css('background','#F9EDBE'));
+		else
+			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.onboardingView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w').css('background','#F9EDBE'));
+		setPortletContentHeight(base_model);
 	}
 	//var itemView = new Base_Model_View({ model : base_model, template : "portlets-model", tagName : 'div', });
 
@@ -251,7 +262,7 @@ function set_p_portlets(base_model){
 				&& base_model.get('name')!="Growth Graph" && base_model.get('name')!="Today Tasks" && base_model.get('name')!="Deals Assigned"
 					&& base_model.get('name')!="Calls Per Person" && base_model.get('name')!="Agile CRM Blog" && base_model.get('name')!="Agenda" 
 						&& base_model.get('name')!="Pending Deals" && base_model.get('name')!="Deals Won" && base_model.get('name')!="Filter Based" 
-							&& base_model.get('name')!="Emails Opened" && base_model.get('name')!="Task Report"){
+							&& base_model.get('name')!="Emails Opened" && base_model.get('name')!="Task Report" && base_model.get('name')!="Onboarding"){
 			$(this).html(getRandomLoadingImg());
 			$(this).html($(itemCollection.render().el));
 			setPortletContentHeight(base_model);
@@ -1585,11 +1596,11 @@ function setPortletContentHeight(base_model){
 			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)-45+"px");
 			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)-45+"px");
 		}else if(base_model.get("size_y")==2){
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+10-45+"px");
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+10-45+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+25-45+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+25-45+"px");
 		}else if(base_model.get("size_y")==3){
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+20-45+"px");
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+20-45+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+50-45+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+50-45+"px");
 		}
 		
 		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-x","hidden");

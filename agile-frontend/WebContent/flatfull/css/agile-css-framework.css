@@ -758,6 +758,10 @@ display:flex;
 {
 	vertical-align:text-top;
 }
+.v-text-bottom
+{
+	vertical-align:text-bottom;
+}
 
 /*ending vertical align related properties*/
 
