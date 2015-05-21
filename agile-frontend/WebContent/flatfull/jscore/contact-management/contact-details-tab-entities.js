@@ -162,7 +162,7 @@ var contact_details_tab = {
 			}
 			$('#mail #mails-span', App_Contacts.contactDetailView.el).remove();
 			$('#mails', App_Contacts.contactDetailView.el).html("");
-			$('#mail', App_Contacts.contactDetailView.el).append('<span id="mails-span"> <img class="mails-loading p-r-xs m-b"  src= "/img/ajax-loader-cursor.gif"></img></span>');
+			$('#mail', App_Contacts.contactDetailView.el).append('<span id="mails-span"> <img class="mails-loading p-r-xs m-b m-l-sm"  src= "/img/ajax-loader-cursor.gif"></img></span>');
 			var contact = App_Contacts.contactDetailView.model;
 			var json = contact.toJSON();
 			
@@ -316,7 +316,16 @@ var contact_details_tab = {
 					includeTimeAgo(el);
 				} 
 	        });
-			campaignsView.collection.fetch();	
+
+			campaignsView.collection.fetch({
+				success: function(){
+
+					// Verify whether contact updated or not
+					checkContactUpdated();
+				}
+
+			});	
+
 	        $('#campaigns', App_Contacts.contactDetailView.el).html(campaignsView.el);
 		}
 };
@@ -343,7 +352,7 @@ function fetch_mails(contact_details_tab_scope,has_email_configured,mail_server_
 
 	// Fetches mails collection
 	mailsView = new Base_Collection_View({ url : mail_server_url , cursor : cursor, page_size : 10,
-	templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
+	templateKey : "email-social", sort_collection : false, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{
 		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
