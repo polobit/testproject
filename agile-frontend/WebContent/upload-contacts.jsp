@@ -12,10 +12,17 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Upload CSV</title>
-<link rel="stylesheet" type="text/css" href="css/bootstrap-<%= UserPrefsUtil.getCurrentUserPrefs().template%>.min.css" />
+<%-- <link rel="stylesheet" type="text/css" href="css/bootstrap-<%= UserPrefsUtil.getCurrentUserPrefs().template%>.min.css" />
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
-<script type="text/javascript" src="/lib/bootstrap.min.js"></script>
+<script type="text/javascript" src="/lib/bootstrap.min.js"></script> --%>
+
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.v3.min.css" />
+<link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
+
+<script type='text/javascript' src='/lib/jquery-new/jquery-2.1.1.min.js'></script>
+<script type="text/javascript" src="/lib/bootstrap.v3.min.js"></script>
+<script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
 
 <script type="text/javascript">
 jQuery.validator.setDefaults({
@@ -122,14 +129,15 @@ function isValid(){
 </head>
 
 
-<body class='center' style="height:90%;width:90%;padding:5px">
+<body class='wrapper-md'>
 
 <br/>
 
-<div class="well" style="height:215px; width:390px ">
-
-<legend>Upload CSV file</legend>
-
+<div class="row">
+<div class="col-md-3 col-sm-6 col-xs-12">
+<div class="panel panel-default">
+<div class="panel-heading">Upload CSV file</div>
+<div class="panel-body">
 <br/>
  <form action="<%= BlobstoreServiceFactory.getBlobstoreService().createUploadUrl("/upload")  %>" method="post" enctype="multipart/form-data" onsubmit="return isValid();" id="form">
   
@@ -144,6 +152,9 @@ if(!filetype.equalsIgnoreCase("undefind")){
 }
 %>
 </form> 
+</div>
+</div>
+</div>
 </div>
 
 </body>

@@ -105,7 +105,7 @@ function addNewPortlet(portlet_type,p_name){
 		json['duration']="1-week";
 		json['tasks']="all-tasks";
 	}else if(portlet_type=="USERACTIVITY" && p_name=="StatsReport"){
-		json['duration']="1-day";
+		json['duration']="yesterday";
 	}
 	else if(portlet_type=="RSS" && p_name=="AgileCRMBlog")
 		obj.size_y=2;
@@ -158,7 +158,10 @@ function deletePortlet(el){
 	var p_id = el.id.split("-close")[0];
 	$('#portletDeleteModal').modal('show');
 	$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',p_id);
-	$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - "+$('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()+"?");
+	if($('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text()!=undefined && $('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text()!="")
+		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - "+$('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()+"?");
+	else
+		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - Activity Overview?");
 }
 $('.portlet-delete-modal').live("click", function(e){
 	e.preventDefault();
@@ -259,7 +262,7 @@ $('#portlets-events-model-list > tr').live('click', function(e){
 	    $("#update-event-date-2").val((new Date(model.get('end')*1000)).format(dateFormat));
 	    
 	   	// hide end date & time for all day events
-	    if(event.allDay)
+	    if(model.toJSON().allDay)
 	    {
 	    	$("#update-event-date-2").closest('.row').hide();
 	    	$('#update-event-time-1').closest('.control-group').hide();
@@ -269,7 +272,25 @@ $('#portlets-events-model-list > tr').live('click', function(e){
 	    	$('#update-event-time-1').closest('.control-group').show();
 	    	$("#update-event-date-2").closest('.row').show();
 	    }
-	   	
+	    if (model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
+		{
+			$("[id='event_delete']").attr("id", "delete_web_event");
+			web_event_title = model.toJSON().title;
+			if (model.toJSON().contacts.length > 0)
+			{
+				var firstname = getPropertyValue(model.toJSON().contacts[0].properties, "first_name");
+				if (firstname == undefined)
+					firstname = "";
+				var lastname = getPropertyValue(model.toJSON().contacts[0].properties, "last_name");
+				if (lastname == undefined)
+					lastname = "";
+				web_event_contact_name = firstname + " " + lastname;
+			}
+		}
+		else
+		{
+			$("[id='delete_web_event']").attr("id", "event_delete");
+		}
 	    // Fills owner select element 
 		populateUsersInUpdateActivityModal(model.toJSON());
 		
@@ -298,8 +319,10 @@ $('#portlets-tasks-model-list > tr').live('click', function(e) {
 	// Add notes in task modal
 	showNoteOnForm("updateTaskForm", value.notes);*/
 	var hrefFlag = false;
-	if(e.target.attributes!=undefined && e.target.attributes!=null && e.target.attributes.length==0)
+	if(e.target.tagName.toLowerCase()=="a" || e.target.tagName.toLowerCase()=="i")
 		hrefFlag = true;
+	/*if(e.target.tagName.toLowerCase()=="a")
+		hrefFlag = true;*/
 	$.each(e.target.attributes,function(){
 		if(this.name=="href")
 			hrefFlag = true;

@@ -52,7 +52,7 @@ public class ContactSyncDeferredTask implements DeferredTask
 		if (pref.inProgress)
 		    continue;
 
-		ContactsImportUtil.initilaizeImportBackend(pref);
+		ContactsImportUtil.initilaizeImportBackend(pref, false);
 	    }
 	}
 	finally

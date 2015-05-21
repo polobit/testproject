@@ -8,7 +8,9 @@
 <div class="wrapper pos-rlt">
 <div class="contact-navigation-view hide"><span class="navigation  contact-switching"></span></div>
 <div class="h3 font-thin custom-color m-b-xs" style="width:85%">{{#if name}}{{name}}{{/if}}</div>
+{{#if expected_value}}
 <div class="m-b-sm h3 font-thin   m-t-sm">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
+{{/if}}
 <div class="m-b-sm text-muted">
 {{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >Archived</span>{{else}}
 	
@@ -147,7 +149,14 @@
 					</div>
 
 
-
+<div class="m-t-sm">
+{{#if description}}
+<div>
+        	<small class="text-xs text-muted">Description</small>
+</div>
+<div>{{{description}}}</div>
+{{/if}}
+</div>
 
 
 

@@ -46,7 +46,7 @@ public class EmailUtil
 
 	// Comment script tags.
 	emailBody = emailBody.replaceAll("(<script|<SCRIPT)", "<!--<script").replaceAll("(</script>|</SCRIPT>)",
-	        "<script>-->");
+		"<script>-->");
 
 	// If emailBody is text, replace '\n' with <br> is enough
 	if (!(emailBody.contains("</")))
@@ -165,8 +165,8 @@ public class EmailUtil
 	    queryParams += "s=" + trackerId;
 
 	String trackingImage = "<div class=\"ag-img\"><img src="
-	        + VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "open?" + queryParams
-	        + " nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
+		+ VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "open?" + queryParams
+		+ " nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
 
 	return html + trackingImage;
     }
@@ -181,7 +181,7 @@ public class EmailUtil
     public static String getPoweredByAgileURL(String medium)
     {
 	return "https://www.agilecrm.com?utm_source=powered-by&utm_medium=" + medium + "&utm_campaign="
-	        + NamespaceManager.get();
+		+ NamespaceManager.get();
     }
 
     /**
@@ -192,7 +192,7 @@ public class EmailUtil
     public static String getPoweredByAgileLink(String medium, String labelText)
     {
 	return labelText + " <a href=\"" + getPoweredByAgileURL(medium)
-	        + "\" target=\"_blank\" style=\"text-decoration:none;\" rel=\"nofollow\"> Agile</a>";
+		+ "\" target=\"_blank\" style=\"text-decoration:none;\" rel=\"nofollow\"> Agile</a>";
     }
 
     /**
@@ -209,7 +209,7 @@ public class EmailUtil
 
 	// Returns only html if Agile label exits
 	if (StringUtils.isBlank(html) || StringUtils.contains(html, "https://www.agilecrm.com?utm_source=powered-by")
-	        || StringUtils.contains(html, "Sent using <a href=\"https://www.agilecrm.com") || isWhiteLableEnabled)
+		|| StringUtils.contains(html, "Sent using <a href=\"https://www.agilecrm.com") || isWhiteLableEnabled)
 	    return html;
 
 	// For Campaign HTML emails, Powered by should be right aligned
@@ -286,7 +286,7 @@ public class EmailUtil
 
 	// Send email
 	EmailGatewayUtil.sendEmail(domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null,
-	        documentIds);
+		documentIds);
     }
 
     /**
@@ -296,39 +296,41 @@ public class EmailUtil
      */
     public static boolean isWhiteLabelEnabled()
     {
-	return BillingRestrictionUtil.getBillingRestriction(null, null).getCurrentLimits().isEmailWhiteLabelEnabled();
+	return BillingRestrictionUtil.getBillingRestriction(null, null).isEmailWhiteLabelEnabled();
     }
-    
+
     /**
-     * Returns email from String e.g., Naresh <naresh@agilecrm.com>, returns email-id
+     * Returns email from String e.g., Naresh <naresh@agilecrm.com>, returns
+     * email-id
      * 
-     * @param emailString - email
+     * @param emailString
+     *            - email
      * @return String
      */
     public static String getEmail(String emailString)
     {
 	try
 	{
-	    if(StringUtils.isBlank(emailString))
+	    if (StringUtils.isBlank(emailString))
 		return emailString;
-	    
-	    if(!emailString.contains("<") || !emailString.contains(">"))
+
+	    if (!emailString.contains("<") || !emailString.contains(">"))
 		return emailString;
-		
-	  String email = (String) emailString.subSequence(emailString.indexOf("<") + 1, emailString.indexOf(">"));
-	  
-	  return email == null ? null : email.trim();
+
+	    String email = (String) emailString.subSequence(emailString.indexOf("<") + 1, emailString.indexOf(">"));
+
+	    return email == null ? null : email.trim();
 	}
-	catch(Exception e)
+	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    System.err.println("Exception occured while getting email from email String..." + e.getMessage());
-	    
+
 	    return emailString;
 	}
-	
+
     }
-	
+
     /**
      * Returns name from String e.g., Naresh <naresh@agilecrm.com>, returns name
      * 
@@ -339,36 +341,37 @@ public class EmailUtil
     {
 	try
 	{
-	    if(StringUtils.isBlank(emailString))
+	    if (StringUtils.isBlank(emailString))
 		return emailString;
-	    
+
 	    // Returns empty if no name
-	    if(!emailString.contains("<") || !emailString.contains(">"))
+	    if (!emailString.contains("<") || !emailString.contains(">"))
 		return "";
-		
+
 	    String name = emailString.substring(0, emailString.indexOf("<") - 1);
-	    
+
 	    // If name and email equals, return empty
-	    if(StringUtils.equals(name, getEmail(emailString)))
+	    if (StringUtils.equals(name, getEmail(emailString)))
 		return "";
-	
+
 	    return name == null ? null : MergeFieldsUtil.getFirstUpperCaseChar(name);
-	
+
 	}
-	catch(Exception e)
+	catch (Exception e)
 	{
 	    e.printStackTrace();
-	    System.err.println("Exception occured while getting name from email string..."+ e.getMessage());
-	    
+	    System.err.println("Exception occured while getting name from email string..." + e.getMessage());
+
 	    return emailString;
-	    
+
 	}
     }
-    
+
     /**
      * Appends name to email
      * 
-     * @param to - single email-id or multiple emails separated by comma
+     * @param to
+     *            - single email-id or multiple emails separated by comma
      * @param subscriberJSON
      * 
      * @return String
@@ -378,40 +381,41 @@ public class EmailUtil
 	try
 	{
 	    JSONObject data = subscriberJSON.getJSONObject("data");
-	    
+
 	    String toEmail = data.getString("email");
-	    
+
 	    String toName = "";
-	    
-	    // Company has name but not firstName and lastName. Returns name with first letter capital
-	   	if(data.has("name") && !data.has(Contact.FIRST_NAME) && !data.has(Contact.LAST_NAME))
-	   		toName = data.getString("name");
-	   	else
-	   	{
-	   		if(data.has(Contact.FIRST_NAME))
-	   			toName = data.getString(Contact.FIRST_NAME);
-	   					    
-	   		if(data.has(Contact.LAST_NAME))
-	   		{
-	   			// If first name exists
-	   			if(StringUtils.isNotBlank(toName))
-	   				toName = toName + " ";
-	   					    
-	   			toName = toName + data.getString(Contact.LAST_NAME);
-	   		}
-	   	}
-	   	
-	   	// If name not blank
-	   	if(StringUtils.isNotBlank(toName) && StringUtils.isNotBlank(toEmail))
-	   		to = to.replace(toEmail, toName + " <"+toEmail+">");
-	}	
-	catch(Exception e)
+
+	    // Company has name but not firstName and lastName. Returns name
+	    // with first letter capital
+	    if (data.has("name") && !data.has(Contact.FIRST_NAME) && !data.has(Contact.LAST_NAME))
+		toName = data.getString("name");
+	    else
+	    {
+		if (data.has(Contact.FIRST_NAME))
+		    toName = data.getString(Contact.FIRST_NAME);
+
+		if (data.has(Contact.LAST_NAME))
+		{
+		    // If first name exists
+		    if (StringUtils.isNotBlank(toName))
+			toName = toName + " ";
+
+		    toName = toName + data.getString(Contact.LAST_NAME);
+		}
+	    }
+
+	    // If name not blank
+	    if (StringUtils.isNotBlank(toName) && StringUtils.isNotBlank(toEmail))
+		to = to.replace(toEmail, toName + " <" + toEmail + ">");
+	}
+	catch (Exception e)
 	{
-	    System.err.println("Exception occured while appending name to email..."+ e.getMessage());
+	    System.err.println("Exception occured while appending name to email..." + e.getMessage());
 	    e.printStackTrace();
 	}
-	
+
 	return to;
     }
-    
+
 }

@@ -62,8 +62,6 @@ class EventReminderCreateDeferredTask implements DeferredTask
 		for (String domain : domains)
 		{
 
-			System.out.println("Domain Name in EventReminder Servlet " + domain);
-
 			try
 			{
 				EventReminder.getEventReminder(domain, null);

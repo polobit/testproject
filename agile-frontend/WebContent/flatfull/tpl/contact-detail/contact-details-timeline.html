@@ -125,10 +125,10 @@
             <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-list-alt text-muted"></i></a></span> Web</div></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <div class="text-base ">
+                <div class="text-xs">
                     <div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;">
-                        <div>
-							<b>Pages Visited {{#stringToJSON this "urls_with_time_spent"}} ({{this.length}}){{/stringToJSON}}
+                        <div class="text-xs">
+							Pages Visited {{#stringToJSON this "urls_with_time_spent"}} ({{this.length}}){{/stringToJSON}}
 								<span style="float: right;">
 									{{#if user_agent}}
 										{{#stringToJSON this "parsedUserAgent"}}
@@ -144,18 +144,18 @@
                                         {{/stringToJSON}}
 									{{/if}}
 								</span>
-							</b><br> 
+							<br> 
                         {{#stringToJSON this "urls_with_time_spent"}}{{/stringToJSON}}
 					    {{#each urls_with_time_spent}}{{url}} - {{convertSecondsToHour time_spent}}<br />{{/each}}
                         </div>
                     </div>
                 </div>
                 {{#if ref}}
-                     <div class="text-base "><b>Referred:</b></br> {{ref}}</div>
+                     <div class="text-xs">Referred: </br> {{ref}}</div>
                 {{/if}}
 
                 {{#if city}}
-                   <div class="text-base "><b>ADDRESS:</b></br> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
+                   <div class="text-xs">Address: </br> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
                 {{/if}}
 
                 <div class="right" style="margin-top:-10px;"><a href="#" id="tl-analytics-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
@@ -167,8 +167,8 @@
             <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-phone text-muted" title="You Called"></i></a></span>{{title}}</div></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                 <div class="text-xs ">{{name}}</div>
-                <div class="text-xs ">{{body}}</div>
+                 <div class="text-xs">{{name}}</div>
+                <div class="text-xs">{{body}}</div>
             </div>
         {{/if_entity}}
 
@@ -177,8 +177,8 @@
             <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-open-alt text-muted" title="Email Opened"></i></a></span>{{title}}</div></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                 <div class="text-xs ">{{name}}</div>
-                <div class="text-xs ">{{body}}</div>
+                 <div class="text-xs">{{name}}</div>
+                <div class="text-xs">{{body}}</div>
             </div>
         {{/if_entity}}
 	<a href="#" class="open-close"></a>
@@ -285,6 +285,54 @@
             </div>
         {{/if_entity}}
 
+         {{#if_entity "CONTACT"}}
+			{{#if_equals "CALL" activity_type}}
+            {{#if_equals "incoming" custom2}}
+         <div class="timestamp">{{time}}</div>
+       <!--  <div class="title"><h3><span><a class="no-line"><i class="icon-phone"></i></a></span> Incoming Call</h3></div>-->
+          <div class="text-md text-cap">	
+				<div class="contact-job-title text-base custom-color">
+					<i class="icon-phone text-muted p-r-xs"></i>Incoming Call
+				</div>
+			</div>
+            <div class="date">{{epochToTaskDate time}}</div>
+            <div class="body">
+                <div class="text-xs " >{{user.name}}</div>
+                <div class="text-xs " >{{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}</div>
+            </div>
+         {{/if_equals}}
+        {{#if_equals "outgoing" custom2}}
+
+        <div class="timestamp">{{time}}</div>
+       <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-phone"></i></a></span> Outgoing Call</h3></div>-->
+            <div class="text-md text-cap">	
+				<div class="contact-job-title text-base custom-color">
+					<i class="icon-phone text-muted p-r-xs"></i>Outgoing Call
+				</div>
+			</div>
+            <div class="date">{{epochToTaskDate time}}</div>
+            <div class="body">
+                <div class="text-xs">{{user.name}}</div>
+                <div class="text-xs">{{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}</div>
+            </div>	
+        {{/if_equals}}
+        {{/if_equals}}
+
+         {{#if_equals "CONTACT_OWNER_CHANGE" activity_type}}
+         <div class="timestamp">{{time}}</div>
+        <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-user"></i></a></span> Owner Changed</h3></div>-->
+           <div class="text-md text-cap">	
+				<div class="contact-job-title text-base custom-color">
+					<i class="icon-user text-muted p-r-xs"></i>Owner Changed
+				</div>
+			</div>
+            <div class="date">{{epochToTaskDate time}}</div>
+            <div class="body" style="padding:5px">
+                <div class="text-xs">Owner changed to {{custom1}}</div>
+            </div>
+         {{/if_equals}}
+        {{/if_entity}}
+
 		{{#if_entity "case"}}
 			
             <div class="timestamp">{{created_time}}</div>
@@ -326,7 +374,7 @@
             <!-- <div class="title"><h3><span><a class="no-line"><i class="icon-envelope"></i>
 			{{#if trackerId}}
         		{{#if_equals "true" is_email_opened}}
-        	    		<i class="icon-folder-open-alt" title="Email Opened"></i>
+        	    		<i class="icon-folder-open-alt text-muted" title="Email Opened"></i>
         		{{/if_equals}}
     		{{/if}}
             </a>
@@ -368,10 +416,10 @@
 			</div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <div class="text-base ">
+                <div class="text-xs">
                     <div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;">
                         <div>
-							<b>Pages Visited {{#stringToJSON this "urls_with_time_spent"}} ({{this.length}}){{/stringToJSON}}
+							Pages Visited {{#stringToJSON this "urls_with_time_spent"}} ({{this.length}}){{/stringToJSON}}
 								<span style="float: right;">
 									{{#if user_agent}}
 										{{#stringToJSON this "parsedUserAgent"}}
@@ -387,18 +435,18 @@
                                         {{/stringToJSON}}
 									{{/if}}
 								</span>
-							</b><br> 
+							<br> 
                         {{#stringToJSON this "urls_with_time_spent"}}{{/stringToJSON}}
 					    {{#each urls_with_time_spent}}{{url}} - {{convertSecondsToHour time_spent}}<br />{{/each}}
                         </div>
                     </div>
                 </div>
                 {{#if ref}}
-                     <div class="text-base "><b>Referred:</b></br> {{ref}}</div>
+                     <div class="text-xs">Referred: </br> {{ref}}</div>
                 {{/if}}
 
                 {{#if city}}
-                   <div class="text-base "><b>ADDRESS:</b></br> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
+                   <div class="text-xs">Address: </br> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
                 {{/if}}
 
                 <div class="right" style="margin-top:-10px;"><a href="#" id="tl-analytics-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>

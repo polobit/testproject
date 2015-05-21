@@ -73,7 +73,7 @@ public class ZohoImportAPI
 	contactPrefs.save();
 
 	if (!contactPrefs.token.isEmpty() && contactPrefs != null)
-	    ContactsImportUtil.initilaizeImportBackend(contactPrefs);
+	    ContactsImportUtil.initilaizeImportBackend(contactPrefs, true);
 
     }
 

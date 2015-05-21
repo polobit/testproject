@@ -2,7 +2,7 @@
 <td class="data v-middle" data="{{id}}" style="width:70px;" class="p-r-xs">
 	<div class="table-resp">
 		<div class="thumb-sm agile-img m-r-sm">
-			<img class="img-inital r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+			<img class="img-inital r-2x" title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
 		</div>
 	</div>
 </td>
@@ -826,7 +826,51 @@
 </script>
 
 <script id="portlets-status-report-model-template" type="text/html">	
-     <div class="stats_report_portlet_body panel-body p-n b-n" style="cursor:move"></div>
+     <div class="stats_report_portlet_body panel-body p-n b-n" style="cursor:move">
+	 <div class="row row-sm text-center">
+	<div class="col-xs-6">
+		<div class="panel padder-v item m-l-none overflow-hidden portlet-panel" style="cursor:auto;">
+			<div class="h1 text-info font-thin h1" id="new-contacts-count">&nbsp;</div>
+			<span class="text-muted text-xs" id="new-contacts-label">&nbsp;</span>
+			<div class="top text-right w-full">
+				<!-- <i class="fa fa-caret-down text-warning m-r-sm"></i> -->
+			</div>
+		</div>
+	</div>     
+	<div class="col-xs-6">
+		<div class="block panel padder-v bg-primary item m-l-none p-t-none stats-report-settings pos-rlt overflow-hidden portlet-panel" style="cursor:auto;">
+			<div class="clearfix"></div>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-0" style="visibility: hidden;">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+			<span class="text-white font-thin h1 block p-t" id="won-deal-value">&nbsp;</span>
+			<span class="text-muted text-xs text-ellipsis" id="won-deal-count">&nbsp;</span>
+			<span class="bottom text-right w-full">
+				<!-- <i class="fa fa-cloud-upload text-muted m-r-sm"></i> -->
+			</span>
+		</div>
+	</div>
+	<div class="col-xs-6">
+		<div class="block panel padder-v bg-info item m-l-none overflow-hidden portlet-panel" style="cursor:auto;">
+			<span class="text-white font-thin h1 block" id="emails-sent-count">&nbsp;</span>
+			<span class="text-muted text-xs" id="emails-sent-label">&nbsp;</span>
+			<span class="top text-left">
+				<!-- <i class="fa fa-caret-up text-warning m-l-sm m-l-none"></i> -->
+			</span>
+		</div>
+	</div>
+	<div class="col-xs-6">
+		<div class="panel padder-v item m-l-none overflow-hidden portlet-panel" style="cursor:auto;">
+			<div class="font-thin h1" id="new-deal-value">&nbsp;</div>
+			<span class="text-muted text-xs text-ellipsis" id="new-deal-count">&nbsp;</span>
+			<div class="bottom text-left">
+				<!-- <i class="fa fa-caret-up text-warning m-l-sm"></i> -->
+			</div>
+		</div>
+	</div>
+</div>
+	 </div>
      <div class="portlets" id="{{id}}">&nbsp;</div>
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>	

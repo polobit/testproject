@@ -32,7 +32,7 @@ var timeline_entity_loader = {
 	load_related_entites : function(contactId)
 	{
 		var entity_types = [
-				"deals", "notes", "cases", "tasks"
+				"deals", "notes", "cases", "tasks","calls"
 		];
 
 		var url = 'core/api/contacts/related-entities/' + contactId;
@@ -73,7 +73,8 @@ var timeline_entity_loader = {
 				{
 					var array = [];
 					$.each(stats["emails"], function(index,data){
-						// if error occurs in imap (model is obtained with the error msg along with contact-email models),
+						// if error occurs in imap (model is obtained with the
+						// error msg along with contact-email models),
 						// ignore that model
 						if(('errormssg' in data) || data.status === "error")
 						return;
@@ -121,7 +122,7 @@ var timeline_entity_loader = {
 		$("#timeline-loading-img", App_Contacts.contactDetailView.el).show();
 
 		console.log(this.active_connections);
-		//this.active_connections = true;
+		// this.active_connections = true;
 		++this.active_connections;
 		var _this = this;
 		$.getJSON(url, function(data)
