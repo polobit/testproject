@@ -182,7 +182,10 @@ function setPlan(user_plan)
 				interval = interval.toLowerCase();
 			}
 			else
+			{
 				interval = "monthly";
+				plan_type = "free"
+			}
 		}
 	
 		
@@ -226,7 +229,7 @@ $(function()
 	  		
 	  		removeStyleForAPlan();
 	  		var id = $(this).parent(); 	
-	  		addStyleForAPlan(id,null);
+	  		addStyleForAPlan(id,null); 
 	  		$("#plan_type").attr("value", id.attr("id").split("_")[0]);
 	  		
 	      	// Cost
@@ -287,6 +290,11 @@ $(function()
 		$("#plan_type").die().live("change",function(){
 			var plan_type = $(this).val();
 			$("#"+ plan_type +"_plan > .plan-collection-in").click();
+			if($(this).val() == "free")
+			{
+				$("#plans-panel .plan-collection-bot").css("opacity","0.5");
+				setCost(update_price());
+			}
 		});
 	    
       	$('#purchase-plan').die().live('click', function(e){
@@ -299,7 +307,7 @@ $(function()
 	          var plan = $("#plan_type").val();
 	          var discount = "", months = "";
 	          var billing_cycle = $("#billing_cycle").val();
-	          if(!plan)
+	          if(!plan || plan == "free")
 	         {
 	        	  alert("Please select a plan to proceed");
 	        	  return false;

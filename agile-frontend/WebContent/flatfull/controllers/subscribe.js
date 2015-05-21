@@ -82,7 +82,7 @@ var SubscribeRouter = Backbone.Router.extend({
  			if(stripe_subscription == null)
  			{
  				quantity = "2";
- 				planType = "STARTER_MONTHLY";
+ 				planType = "FREE";
  			}
  			else
  			{
