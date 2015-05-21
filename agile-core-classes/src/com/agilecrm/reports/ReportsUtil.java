@@ -149,7 +149,7 @@ public class ReportsUtil
 	{
 	    Contact con = (Contact) reportList.toArray()[0];
 	    domain_details.put("count", con.count);
-	    if (con.count > 1000)
+	    if (con.count > 10000)
 		domain_details.put("count", "10000+");
 	    if (con.count > 100)
 		domain_details.put("limit_message", "We are showing only 100 contacts in this email.");
