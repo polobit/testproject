@@ -1,9 +1,7 @@
 // Convert human date to epoch time
 function getEpochTimeFromDate(selectedDate)
 {
-	console.log("in getEpochTimeFromDate");
 	var d = new Date(selectedDate);
-	console.log(d);
 	return getGMTTimeFromDate(d) / 1000;
 }
 

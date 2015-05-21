@@ -63,15 +63,11 @@ public class WebCalendarEventUtil
 	 * @throws JSONException
 	 */
 	public static List<List<Long>> getSlots(Long userid, int slotTime, String date, String timezoneName,
-			Long epochTime, Long selectedTime, Long agileuserid, int timezone) throws ParseException, JSONException
+			Long epochTime, Long startTime, Long endTime, Long agileuserid, int timezone) throws ParseException,
+			JSONException
 	{
 		DomainUser domain_user = DomainUserUtil.getDomainUser(userid);
 
-		Long startTime = selectedTime;
-		Long endTime = startTime + 86400;
-
-		System.out.println("------------------  Timezonename " + timezoneName + " start time " + startTime
-				+ "  -- end time  " + endTime);
 		String domainUser_timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domain_user.id);
 		if (StringUtils.isEmpty(domainUser_timezone))
 		{
@@ -662,7 +658,7 @@ public class WebCalendarEventUtil
 		String selectedDateSlot = wce.date;
 
 		String timezone = wce.timezone;
-
+		List<Long> selected_slot = new ArrayList<Long>();
 		DomainUser _user = new DomainUser();
 		_user.name = wce.userName;
 		_user.email = wce.email;
@@ -704,10 +700,17 @@ public class WebCalendarEventUtil
 			List<Long> slot = new ArrayList<Long>();
 			slot.add(explrObject.getLong("start"));
 			slot.add(explrObject.getLong("end"));
-
+			// slot is assigned to selected slot to check availabity out side
+			selected_slot = slot;
 			// Add slot in WebCalendarEvent entity field
 			wce.selectedSlots.add(slot);
 		}
+
+		// checks for the availability of slot
+
+		boolean isAvailable = checkSlotAvailability(wce, selected_slot);
+		if (!isAvailable)
+			return "slot booked";
 
 		// Looping on list, Each selected slot will create new agile event.
 		for (List<Long> slot : wce.selectedSlots)
@@ -733,7 +736,7 @@ public class WebCalendarEventUtil
 			wce.name = saveMe.name;
 
 			// WCE save
-			saveMe.save();
+			// saveMe.save();
 
 			// Check if the email exists with the current email address
 			boolean isDuplicate = ContactUtil.isExists(contact.getContactFieldValue("EMAIL").toLowerCase());
@@ -821,60 +824,11 @@ public class WebCalendarEventUtil
 				EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
 						"Appointment Scheduled", null, usermail, null, null, null, attachments_to_agile_user);
 			}
-
 			else
 			{
-				// Create agile event
-				// String title, Long start, Long end, boolean isEventStarred,
-				// Long contactId, Long agileUserId
-				newEvnt = new Event("", null, null, false, null, agileUserId);
-
-				// Set property values
-				newEvnt.title = wce.name.concat(" with ".concat(wce.userName)); // name
-				client_event.title = wce.name.concat(" with ".concat(user.name));
-				client_event.start = newEvnt.start = slot.get(0); // start time
-				client_event.end = newEvnt.end = slot.get(1); // end time
-				client_event.created_time = System.currentTimeMillis() / 1000;
-				newEvnt.color = "#36C";
-				newEvnt.type = EventType.WEB_APPOINTMENT;
-
-				epoch_start_date = newEvnt.start;
-				String cid = null; // related contact
-
-				// Add contact in event
-				if (cid != null)
-				{
-					newEvnt.contacts = new ArrayList<String>();
-					boolean add = newEvnt.contacts.add(cid);
-				}
-
-				// save agile event
-				newEvnt.save();
-
-				agileUseiCal = IcalendarUtil.getICalFromEvent(newEvnt, _user, user.email, user.name);
-				String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
-				String usermail = null;
-
-				if (StringUtils.isNotEmpty(wce.phoneNumber) && !"Meeting Type".equalsIgnoreCase(wce.phoneNumber))
-				{
-
-					usermail = "<p>" + wce.userName + " (" + wce.email
-							+ ") has scheduled an appointment </p><span>Duration: " + wce.slot_time
-							+ "mins</span><br/><span>Meeting Type: " + wce.phoneNumber + "</span><br/><span>Note: "
-							+ wce.notes + "</span><br/><p><a href=https://" + user.domain
-							+ ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
-				}
-				else
-				{
-					usermail = "<p>" + wce.userName + " (" + wce.email
-							+ ") has scheduled an appointment </p><span>Duration: " + wce.slot_time
-							+ "mins</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href=https://"
-							+ user.domain + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
-				}
-
-				EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
-						"Appointment Scheduled", null, usermail, null, null, null, attachments_to_agile_user);
+				return "contacts limit reached";
 			}
+
 		}
 
 		// If user want confirmation, send confirmation email.
@@ -1096,5 +1050,42 @@ public class WebCalendarEventUtil
 			return time_map.get(str) + ":" + mins + "pm";
 		}
 
+	}
+
+	/**
+	 * checks the selcted slot availabilty
+	 * 
+	 * @param wce
+	 * @return
+	 */
+
+	public static boolean checkSlotAvailability(WebCalendarEvent wce, List<Long> slot)
+	{
+		List<List<Long>> filledGoogleSlots = GoogleCalendarUtil.getFilledGoogleSlots(wce.domainUserId,
+				(int) (long) wce.slot_time, wce.timezone_offset, wce.timezone, wce.midnight_start_time,
+				wce.midnight_end_time);
+		List<List<Long>> filledAgileSlots = getFilledAgileSlots(wce.agileUserId, (int) (long) wce.slot_time,
+				wce.midnight_start_time, wce.midnight_end_time);
+		boolean googleAvailability = checkSlotInListOfLists(filledGoogleSlots, slot);
+		boolean agileAvailability = checkSlotInListOfLists(filledAgileSlots, slot);
+		if (googleAvailability && agileAvailability)
+			return true;
+		return false;
+	}
+
+	public static boolean checkSlotInListOfLists(List<List<Long>> filledslots, List<Long> selectedslot)
+	{
+		for (List<Long> slot : filledslots)
+		{
+			System.out.println(slot.get(0) + " <=" + selectedslot.get(0) + "&&" + slot.get(1) + " >"
+					+ selectedslot.get(0) + ")||"
+					+ (slot.get(0) + " <=" + selectedslot.get(1) + " &&" + slot.get(1) + ">" + selectedslot.get(1)));
+			if ((slot.get(0) <= selectedslot.get(0) && slot.get(1) > selectedslot.get(0))
+					|| (slot.get(0) <= selectedslot.get(1) && slot.get(1) > selectedslot.get(1)))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 }

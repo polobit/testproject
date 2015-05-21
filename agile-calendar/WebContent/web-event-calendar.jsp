@@ -1213,8 +1213,6 @@ var slot_details=[];
 					if (currMonth < 10)
 						currMonth = "0" + currMonth;
 					var currentDate = newDate.getFullYear() + '-' + currMonth + '-' + newDate.getDate();
-					console.log("in doc ready");
-					console.log(currentDate);
                  current_date_mozilla=currentDate;
 					// Set current date as selected date
 					Selected_Date = newDate;
@@ -1230,8 +1228,6 @@ var slot_details=[];
 					},onChange : function(formated, dates)
 					{
 						CURRENT_DAY_OPERATION=false;
-						console.log("In date picker on change");
-						console.log(formated + "  " + dates);
 						selecteddate=dates;
 						// On date change change selected date
 						Selected_Date = formated;
@@ -1260,7 +1256,6 @@ var slot_details=[];
 						// Add loading img
 						$('.checkbox-main-grid').html('<img class="loading-img" src="../../img/21-0.gif" style="width: 40px;margin-left: 216px;"></img>');
 
-						console.log(dates+"      "+Selected_Time);
 					
 						// Get available slots With new date
 						get_slots(dates, Selected_Time);
@@ -1296,7 +1291,6 @@ var slot_details=[];
 			$(".timezone1").text(SELECTED_TIMEZONE);
 			$('#user_timezone').val(SELECTED_TIMEZONE);
 			$("#current_local_time").html("Current Time: "+getConvertedTimeFromEpoch(new Date().getTime()/1000) );
-			console.log("bodyonlod  : " + Selected_Date);
 		
 			// Set current date in calendar
 			$('#datepick').DatePickerSetDate(Selected_Date, true);
