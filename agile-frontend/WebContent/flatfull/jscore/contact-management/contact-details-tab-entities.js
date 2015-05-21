@@ -309,23 +309,14 @@ var contact_details_tab = {
 	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
 	              		 $("time.log-created-time", el).timeago();
 	              	});
-<<<<<<< HEAD
-	              // var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-	             // fillSelect('campaignSelect','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
-	            	
-=======
 	            	contact_detail_page_infi_scroll($('#contact-dtl', App_Contacts.contactDetailView.el), campaignsView);
->>>>>>> infi_scroll
 	            },
 	            appendItemCallback : function(el)
 				{
 					includeTimeAgo(el);
 				} 
 	        });
-<<<<<<< HEAD
-=======
 
->>>>>>> infi_scroll
 			campaignsView.collection.fetch({
 				success: function(){
 
@@ -334,10 +325,7 @@ var contact_details_tab = {
 				}
 
 			});	
-<<<<<<< HEAD
-=======
 
->>>>>>> infi_scroll
 	        $('#campaigns', App_Contacts.contactDetailView.el).html(campaignsView.el);
 		}
 };
