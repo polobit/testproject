@@ -162,7 +162,7 @@ var contact_details_tab = {
 			}
 			$('#mail #mails-span', App_Contacts.contactDetailView.el).remove();
 			$('#mails', App_Contacts.contactDetailView.el).html("");
-			$('#mail', App_Contacts.contactDetailView.el).append('<span id="mails-span"> <img class="mails-loading p-r-xs m-b"  src= "img/21-0.gif"></img></span>');
+			$('#mail', App_Contacts.contactDetailView.el).append('<span id="mails-span"> <img class="mails-loading p-r-xs m-b"  src= "/img/ajax-loader-cursor.gif"></img></span>');
 			var contact = App_Contacts.contactDetailView.model;
 			var json = contact.toJSON();
 			
