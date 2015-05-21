@@ -178,29 +178,29 @@ ObjectMapper mapper = new ObjectMapper();
 <head>
 
 <title>Online Appointment Scheduling - <%=user_name %></title>
-<link rel="stylesheet" href="../../css/web-calendar-event/bootstrap.min.css">
-<link rel="stylesheet" href="../../css/web-calendar-event/style.css">
-<!-- <link rel="stylesheet" href="../../css/web-calendar-event/font-awesome.min.css"> -->
+<link rel="stylesheet" href="../../flatfull/css/web-calendar-event/bootstrap.min.css">
+<link rel="stylesheet" href="../../flatfull/css/web-calendar-event/style.css">
+<!-- <link rel="stylesheet" href="../../flatfull/css/web-calendar-event/font-awesome.min.css"> -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" ></script>
-<script type="text/javascript" src="../../lib/web-calendar-event/jquery.js"></script>
-<script type="text/javascript" src="../../lib/jquery.validate.min.js"></script>
-<script type="text/javascript" src="../../lib/date-formatter.js"></script>
-<script type="text/javascript" src="../../lib/web-calendar-event/moment.min.js"></script>
-<script type="text/javascript" src="../../lib/web-calendar-event/moment.timezone.min.js"></script>
+<script type="text/javascript" src="../../flatfull/lib/web-calendar-event/jquery.js"></script>
+<script type="text/javascript" src="../../flatfull/lib/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../../flatfull/lib/date-formatter.js"></script>
+<script type="text/javascript" src="../../flatfull/lib/web-calendar-event/moment.min.js"></script>
+<script type="text/javascript" src="../../flatfull/lib/web-calendar-event/moment.timezone.min.js"></script>
 
-<link rel="stylesheet" href="../../css/web-calendar-event/datepicker.css"
+<link rel="stylesheet" href="../..//flatfull/css/web-calendar-event/datepicker.css"
 	type="text/css" />
 <script type="text/javascript"
 	src="../../lib/web-calendar-event/datepicker.js"></script>
-<script type="text/javascript" src="../../lib/web-calendar-event/eye.js"></script>
-<script type="text/javascript" src="../../lib/web-calendar-event/utils.js"></script>
+<script type="text/javascript" src="../../flatfull/lib/web-calendar-event/eye.js"></script>
+<script type="text/javascript" src="../../flatfull/lib/web-calendar-event/utils.js"></script>
 <script type="text/javascript"
-	src="../../lib/web-calendar-event/layout.js?ver=1.0.2"></script>
-<script type="text/javascript" src="../../jscore/web-calendar-event/time.js"></script>
-<script type="text/javascript" src="../../jscore/web-calendar-event/util.js"></script>
-<script type="text/javascript" src="../../jscore/web-calendar-event/ui.js"></script>
+	src="../../flatfull/lib/web-calendar-event/layout.js?ver=1.0.2"></script>
+<script type="text/javascript" src="../../flatfull/jscore/web-calendar-event/time.js"></script>
+<script type="text/javascript" src="../../flatfull/jscore/web-calendar-event/util.js"></script>
+<script type="text/javascript" src="../../flatfull/jscore/web-calendar-event/ui.js"></script>
 </head>
 
 <body onload="bodyLoad();">
