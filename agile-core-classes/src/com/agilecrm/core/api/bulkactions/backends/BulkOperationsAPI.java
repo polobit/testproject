@@ -1123,7 +1123,7 @@ public class BulkOperationsAPI
 		try
 		{
 			// Deletes CampaignStatus from contact
-			CampaignSubscribersUtil.removeCampaignStatus(campaignId);
+			CampaignStatusUtil.removeCampaignStatus(campaignId);
 
 			// Deletes Related Crons.
 			CronUtil.removeTask(campaignId, null);

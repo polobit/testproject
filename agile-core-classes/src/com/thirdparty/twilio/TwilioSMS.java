@@ -113,13 +113,26 @@ public class TwilioSMS
 		catch (Exception e)
 		{
 			System.out.println("Exception in TwilioSMS");
-			e.printStackTrace();
 		}
 
 		return verifiredTwilioNumbers;
 
 	}
 
+	/**
+	 * Adds sms to the queue with the body parameters
+	 * 
+	 * @param account_sid
+	 * @param auth_token
+	 * @param smsEndpoint
+	 * @param version
+	 * @param fromNumber
+	 * @param toNumber
+	 * @param message
+	 * @param metadata
+	 * @return
+	 * @throws TwilioRestException
+	 */
 	public static String sendSMS(String account_sid, String auth_token, String smsEndpoint, String version,
 			String fromNumber, String toNumber, String message, String metadata) throws TwilioRestException
 	{
@@ -144,6 +157,16 @@ public class TwilioSMS
 
 	}
 
+	/**
+	 * Sets gateway to the request
+	 * 
+	 * @param SMSGatewayType
+	 * @param from
+	 * @param to
+	 * @param message
+	 * @param account_sid
+	 * @param auth_token
+	 */
 	public static void sendSMS(String SMSGatewayType, String from, String to, String message, String account_sid,
 			String auth_token)
 	{
