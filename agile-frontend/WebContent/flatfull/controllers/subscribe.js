@@ -48,7 +48,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		 * states list using countries.js plugin account stats in subscription
 		 * page
 		 */
-		var subscribe_plan = new Base_Model_View({ url : "core/api/subscription", template : "subscribe-new", window : 'subscribe',
+		var subscribe_plan = new Base_Model_View({ url : "core/api/subscription?reload=true", template : "subscribe-new", window : 'subscribe',
 		/*
 		 * postRenderCallback : function(el) { // Setup account statistics
 		 * set_up_account_stats(el); // Load date and year for card expiry
@@ -65,6 +65,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			set_up_account_stats(el);
 
 			USER_BILLING_PREFS = data;
+
 			
 			USER_CREDIRCARD_DETAILS = subscribe_plan.model.toJSON().billingData;
 			
@@ -73,10 +74,22 @@ var SubscribeRouter = Backbone.Router.extend({
 				Backbone.history.navigate("subscribe", {trigger : true});
 				return;
 			}
-			
-			var planType = data.plan.plan_type;						
+			var billing_data = JSON.parse(data.billingData);
+			var stripe_subscription = getSubscription(data.billingData, data.plan);
+			var planType = "";						
  			var id = null;
- 			var planDetails = "<span class='text-head-black'>Current Plan</span></br><span class='text-head-black'>"+data.plan.quantity+" Users</span>";
+ 			var quantity;
+ 			if(stripe_subscription == null)
+ 			{
+ 				quantity = "2";
+ 				planType = "STARTER_MONTHLY";
+ 			}
+ 			else
+ 			{
+ 				quantity = billing_data.subscription.quantity;
+ 				planType = billing_data.subscription.plan.name.toUpperCase();
+ 			}
+ 			var planDetails = "<span class='text-head-black'>Current Plan</span></br><span class='text-head-black'>"+quantity+" Users</span>";
  			if(planType.indexOf('STARTER') == 0){
  				var id = $('#starter_plan');
  			}else if(planType.indexOf('REGULAR') == 0){
@@ -95,7 +108,10 @@ var SubscribeRouter = Backbone.Router.extend({
 			// Show Coupon code input field
 			id = (id && id == "coupon") ? id : "";
 			showCouponCodeContainer(id);
-			
+			$("#user_quantity").attr("value", quantity);
+			price = update_price();
+			$( "#users_quantity").text(quantity);
+     	    $("#users_total_cost").text((quantity * price).toFixed(2));
 
 			head.load(CSS_PATH + 'css/jslider.css', CSS_PATH + "css/misc/agile-plan-upgrade.css", LIB_PATH + 'lib/jquery.slider.min.js', function()
 			{
@@ -103,10 +119,7 @@ var SubscribeRouter = Backbone.Router.extend({
 					setPlan("free");
 				else
 					setPlan(data);
-				$("#user_quantity").attr("value", data.plan.quantity);
-				price = update_price();
-				$( "#users_quantity").text(data.plan.quantity);
-     	     	$("#users_total_cost").text((data.plan.quantity * price).toFixed(2));
+				
 			//	load_slider(el);
 			});
 		} });
