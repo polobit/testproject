@@ -403,10 +403,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 							var emailStatsModelView = new Base_Model_View({ template : 'admin-settings-integrations-stats', data : totalLogs });
 		
 							$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render(true).el);
+							hideTransitionBar();
 						}});
 					
 				} });
-				hideTransitionBar();
 
 			} });
 		});

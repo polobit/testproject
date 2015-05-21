@@ -6070,7 +6070,8 @@ $(function()
 	Handlebars.registerHelper("getPlanLimits", function(key){
 		if(_billing_restriction.currentLimits.planName == "PRO")
 			return "Unlimited";
-		return _billing_restriction.currentLimits[key] + " allowed";
+		else
+			return _billing_restriction.currentLimits[key] + " allowed";
 	});
 });
 
