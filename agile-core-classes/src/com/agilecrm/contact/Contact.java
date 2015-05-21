@@ -18,9 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.ContactField.FieldType;
-import com.agilecrm.contact.deferred.TagsDeferredTask;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
 import com.agilecrm.contact.email.bounce.util.EmailBounceStatusUtil;
 import com.agilecrm.contact.util.ContactUtil;
@@ -43,9 +41,6 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.NotFoundException;
 import com.googlecode.objectify.annotation.AlsoLoad;
@@ -1206,12 +1201,15 @@ public class Contact extends Cursor
 		}
 	    }
 
+	    List<Tag> newTags = new ArrayList<Tag>();
 	    for (Tag tag : tagsWithTime)
 	    {
 		// Check if it is null, it can be null tag is created using
 		// developers api
 		if (tag.createdTime == null || tag.createdTime == 0L)
 		    tag.createdTime = System.currentTimeMillis();
+		else
+		    newTags.add(tag);
 	    }
 
 	    LinkedHashSet<String> oldTags = null;
@@ -1226,10 +1224,7 @@ public class Contact extends Cursor
 
 	    // System.out.println("Tag entity need to update....");
 
-	    // Update Tags - Create a deferred task
-	    TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tags);
-	    Queue queue = QueueFactory.getQueue(AgileQueues.TAG_ENTITY_QUEUE);
-	    queue.addAsync(TaskOptions.Builder.withPayload(tagsDeferredTask));
+	    TagUtil.runUpdateDeferedTask(newTags, bulkActionTracker);
 	}
 	catch (WebApplicationException e)
 	{
