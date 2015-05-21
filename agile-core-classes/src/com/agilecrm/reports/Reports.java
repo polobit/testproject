@@ -144,7 +144,6 @@ public class Reports implements Serializable
 	rule.CONDITION = RuleCondition.EQUALS;
 	rule.RHS = "PERSON";
 	rules.add(rule);
-	System.out.println("Rules used in count : " + rules.toString());
 	return new AppengineSearch<Contact>(Contact.class).query.getCount(rules);
     }
 }
