@@ -405,7 +405,7 @@ function fetch_mailserverurl_from_cookie(model)
 								}
 							}
 						}
-						else if(typeof model.sharedGmailUserNames !== 'undefined' && model.hasOwnProperty('sharedGmailUserNames'))
+						if(typeof model.sharedGmailUserNames !== 'undefined' && model.hasOwnProperty('sharedGmailUserNames'))
 						{
 							for(var i=0;i<model.sharedGmailUserNames.length;i++)
 							{
@@ -439,7 +439,7 @@ function fetch_mailserverurl_from_cookie(model)
 								}
 							}
 						}
-						else if(typeof model.sharedImapUserNames !== 'undefined' && model.hasOwnProperty('sharedImapUserNames'))
+						if(typeof model.sharedImapUserNames !== 'undefined' && model.hasOwnProperty('sharedImapUserNames'))
 						{
 							for(var i=0;i<model.sharedImapUserNames.length;i++)
 							{
@@ -473,7 +473,7 @@ function fetch_mailserverurl_from_cookie(model)
 								}
 							}
 						}
-						else if(typeof model.sharedExchangeUserNames !== 'undefined' && model.hasOwnProperty('sharedExchangeUserNames'))
+						if(typeof model.sharedExchangeUserNames !== 'undefined' && model.hasOwnProperty('sharedExchangeUserNames'))
 						{
 							for(var i=0;i<model.sharedExchangeUserNames.length;i++)
 							{
