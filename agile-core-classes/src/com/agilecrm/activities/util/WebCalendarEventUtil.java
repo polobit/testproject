@@ -1075,6 +1075,8 @@ public class WebCalendarEventUtil
 
 	public static boolean checkSlotInListOfLists(List<List<Long>> filledslots, List<Long> selectedslot)
 	{
+		if (filledslots == null || filledslots.isEmpty())
+			return true;
 		for (List<Long> slot : filledslots)
 		{
 			System.out.println(slot.get(0) + " <=" + selectedslot.get(0) + "&&" + slot.get(1) + " >"
