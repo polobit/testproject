@@ -650,6 +650,7 @@ var SettingsRouter = Backbone.Router.extend({
 		$.ajax({
 			url : '/core/api/user-prefs',
 			type: 'GET',
+			dataType: "json",
 			success : function(data){
 				$("#content").html(getTemplate("theme-layout-form"), {});
 				$("#menuPosition").val(CURRENT_USER_PREFS.menuPosition);
