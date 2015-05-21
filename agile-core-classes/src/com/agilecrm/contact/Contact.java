@@ -101,18 +101,18 @@ public class Contact extends Cursor
      */
     @Indexed
     public Type type = Type.PERSON;
-    
-	@JsonIgnore
-	@Indexed
-	public String first_name = "";
 
-	@JsonIgnore
-	@Indexed
-	public String last_name = "";
+    @JsonIgnore
+    @Indexed
+    public String first_name = "";
 
-	@JsonIgnore
-	@Indexed
-	public String name = "";
+    @JsonIgnore
+    @Indexed
+    public String last_name = "";
+
+    @JsonIgnore
+    @Indexed
+    public String name = "";
 
     /**
      * Created time of the contact
@@ -125,7 +125,7 @@ public class Contact extends Cursor
      */
     @Indexed
     public Long updated_time = 0L;
-    
+
     @Indexed
     public Long last_contacted = 0L;
 
@@ -159,13 +159,13 @@ public class Contact extends Cursor
      */
     @Indexed
     public Integer lead_score = 0;
-    
-	/**
-	 * Schema version of the contact used for updating schema
-	 */
-	@Indexed
-	@JsonIgnore
-	public Integer schema_version = 1;
+
+    /**
+     * Schema version of the contact used for updating schema
+     */
+    @Indexed
+    @JsonIgnore
+    public Integer schema_version = 1;
 
     /**
      * Set of tags. Not saved in it, it is used to map tags from client
@@ -265,6 +265,10 @@ public class Contact extends Cursor
     public Long formId = 0L;
 
     public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
+
+    @JsonIgnore
+    @NotSaved
+    public String bulkActionTracker = "";
 
     /**
      * Default constructor
@@ -555,7 +559,8 @@ public class Contact extends Cursor
 	// If tags and properties length differ, contact is considered to be
 	// changed
 	if (contact.tags.size() != currentContactTags.size() || contact.properties.size() != properties.size()
-		|| contact.star_value != star_value || contact.lead_score != lead_score || contact.campaignStatus.size() != campaignStatus.size())
+		|| contact.star_value != star_value || contact.lead_score != lead_score
+		|| contact.campaignStatus.size() != campaignStatus.size())
 	    return true;
 
 	// Checks if tags are changed
@@ -577,14 +582,14 @@ public class Contact extends Cursor
 	    if (!properties.contains(property))
 		return true;
 	}
-	
-	//Checks campaign status has any change
-	for(CampaignStatus status : contact.campaignStatus)
+
+	// Checks campaign status has any change
+	for (CampaignStatus status : contact.campaignStatus)
 	{
-	    if(campaignStatus == null || status == null)
+	    if (campaignStatus == null || status == null)
 		continue;
-	    
-	    if(!campaignStatus.contains(status))
+
+	    if (!campaignStatus.contains(status))
 		return true;
 	}
 
@@ -1026,16 +1031,13 @@ public class Contact extends Cursor
 
 	if (this.type == Type.PERSON)
 	{
-			if (this.properties.size() > 0) {
-				ContactField firstNameField = this
-						.getContactFieldByName(Contact.FIRST_NAME);
-				ContactField lastNameField = this
-						.getContactFieldByName(Contact.LAST_NAME);
-				this.first_name = firstNameField != null ? firstNameField.value
-						: "";
-				this.last_name = lastNameField != null ? lastNameField.value
-						: "";
-			}
+	    if (this.properties.size() > 0)
+	    {
+		ContactField firstNameField = this.getContactFieldByName(Contact.FIRST_NAME);
+		ContactField lastNameField = this.getContactFieldByName(Contact.LAST_NAME);
+		this.first_name = firstNameField != null ? firstNameField.value : "";
+		this.last_name = lastNameField != null ? lastNameField.value : "";
+	    }
 	    if (StringUtils.isNotEmpty(contact_company_id))
 	    {
 		// update id, for existing company
@@ -1083,13 +1085,14 @@ public class Contact extends Cursor
 		}
 	    }
 	}
-		if (this.type == Type.COMPANY) {
-			if (this.properties.size() > 0) {
-				ContactField nameField = this
-						.getContactFieldByName(Contact.NAME);
-				this.name = nameField != null ? nameField.value : "";
-			}
-		}
+	if (this.type == Type.COMPANY)
+	{
+	    if (this.properties.size() > 0)
+	    {
+		ContactField nameField = this.getContactFieldByName(Contact.NAME);
+		this.name = nameField != null ? nameField.value : "";
+	    }
+	}
 
 	// Store Created and Last Updated Time Check for id even if created
 	// time is 0(To check whether it is update request)
