@@ -313,7 +313,7 @@ function set_p_portlets(base_model){
 			var topPos = 50*sizey;
 			if(sizey==2 || sizey==3)
 				topPos += 50;
-			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'>"+getRandomLoadingImg()+"</div>");
+			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
 					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -412,7 +412,7 @@ function set_p_portlets(base_model){
 			var topPos = 50*sizey;
 			if(sizey==2 || sizey==3)
 				topPos += 50;
-			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'>"+getRandomLoadingImg()+"</div>");
+			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
 					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -533,7 +533,7 @@ function set_p_portlets(base_model){
 			var topPos = 50*sizey;
 			if(sizey==2 || sizey==3)
 				topPos += 50;
-			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'>"+getRandomLoadingImg()+"</div>");
+			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==406){
 					// Show cause of error in saving
@@ -660,7 +660,7 @@ function set_p_portlets(base_model){
 			var topPos = 50*sizey;
 			if(sizey==2 || sizey==3)
 				topPos += 50;
-			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'>"+getRandomLoadingImg()+"</div>");
+			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
 					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -824,7 +824,7 @@ function set_p_portlets(base_model){
 			
 			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
 			var topPos = 50*sizey;
-			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'>"+getRandomLoadingImg()+"</div>");
+			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
 					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
