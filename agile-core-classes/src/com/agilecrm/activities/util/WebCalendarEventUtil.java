@@ -826,7 +826,49 @@ public class WebCalendarEventUtil
 			}
 			else
 			{
-				return "contacts limit reached";
+				// Create agile event
+				// String title, Long start, Long end, boolean isEventStarred,
+				// Long contactId, Long agileUserId
+				newEvnt = new Event("", null, null, false, null, agileUserId);
+
+				// Set property values
+				newEvnt.title = wce.name.concat(" with ".concat(wce.userName)); // name
+				client_event.title = wce.name.concat(" with ".concat(user.name));
+				client_event.start = newEvnt.start = slot.get(0); // start time
+				client_event.end = newEvnt.end = slot.get(1); // end time
+				client_event.created_time = System.currentTimeMillis() / 1000;
+				newEvnt.color = "#36C";
+				newEvnt.type = EventType.WEB_APPOINTMENT;
+
+				epoch_start_date = newEvnt.start;
+
+				// save agile event
+				newEvnt.save();
+
+				agileUseiCal = IcalendarUtil.getICalFromEvent(newEvnt, _user, user.email, user.name);
+				String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
+				String usermail = null;
+
+				if (StringUtils.isNotEmpty(wce.phoneNumber) && !"Meeting Type".equalsIgnoreCase(wce.phoneNumber))
+				{
+
+					usermail = "<p>" + wce.userName + " (" + wce.email
+							+ ") has scheduled an appointment </p><span>Duration: " + wce.slot_time
+							+ "mins</span><br/><span>Meeting Type: " + wce.phoneNumber + "</span><br/><span>Note: "
+							+ wce.notes + "</span><br/><p><a href=https://" + user.domain
+							+ ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
+				}
+				else
+				{
+					usermail = "<p>" + wce.userName + " (" + wce.email
+							+ ") has scheduled an appointment </p><span>Duration: " + wce.slot_time
+							+ "mins</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href=https://"
+							+ user.domain + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
+				}
+
+				EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
+						"Appointment Scheduled", null, usermail, null, null, null, attachments_to_agile_user);
+
 			}
 
 		}
@@ -1077,13 +1119,12 @@ public class WebCalendarEventUtil
 	{
 		if (filledslots == null || filledslots.isEmpty())
 			return true;
+		Long start_time = selectedslot.get(0);
+		Long end_time = selectedslot.get(1);
 		for (List<Long> slot : filledslots)
 		{
-			System.out.println(slot.get(0) + " <=" + selectedslot.get(0) + "&&" + slot.get(1) + " >"
-					+ selectedslot.get(0) + ")||"
-					+ (slot.get(0) + " <=" + selectedslot.get(1) + " &&" + slot.get(1) + ">" + selectedslot.get(1)));
-			if ((slot.get(0) <= selectedslot.get(0) && slot.get(1) > selectedslot.get(0))
-					|| (slot.get(0) <= selectedslot.get(1) && slot.get(1) > selectedslot.get(1)))
+			if ((slot.get(0) <= start_time && slot.get(1) > start_time)
+					|| (slot.get(0) < end_time && slot.get(1) >= end_time))
 			{
 				return false;
 			}
