@@ -309,7 +309,11 @@ function set_p_portlets(base_model){
 			var milestoneNumbersList=[];
 			
 			var milestoneMap=[];
-			$('#'+selector).html(getRandomLoadingImg());
+			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+			var topPos = 50*sizey;
+			if(sizey==2 || sizey==3)
+				topPos += 50;
+			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'>"+getRandomLoadingImg()+"</div>");
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
 					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -404,7 +408,11 @@ function set_p_portlets(base_model){
 			var milestonesList=[];
 			var milestoneValuesList=[];
 			var milestoneMap=[];
-			$('#'+selector).html(getRandomLoadingImg());
+			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+			var topPos = 50*sizey;
+			if(sizey==2 || sizey==3)
+				topPos += 50;
+			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'>"+getRandomLoadingImg()+"</div>");
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
 					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -521,7 +529,11 @@ function set_p_portlets(base_model){
 			
 			var selector=$(this).attr('id');
 			var url='/core/api/portlets/portletGrowthGraph?tags='+base_model.get('settings').tags+'&frequency='+base_model.get('settings').frequency+'&duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(base_model.get('settings').duration)+'&end-date='+getStartAndEndDatesOnDue("TOMORROW");
-			$('#'+selector).html(getRandomLoadingImg());
+			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+			var topPos = 50*sizey;
+			if(sizey==2 || sizey==3)
+				topPos += 50;
+			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'>"+getRandomLoadingImg()+"</div>");
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==406){
 					// Show cause of error in saving
@@ -644,7 +656,11 @@ function set_p_portlets(base_model){
 			var totalCallsCountList=[];
 			var domainUsersList=[];
 			var domainUserImgList=[];
-			$('#'+selector).html(getRandomLoadingImg());
+			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+			var topPos = 50*sizey;
+			if(sizey==2 || sizey==3)
+				topPos += 50;
+			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'>"+getRandomLoadingImg()+"</div>");
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
 					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -806,7 +822,9 @@ function set_p_portlets(base_model){
 			var emailsOpenedCount=0;
 			
 			
-			$('#'+selector).html(getRandomLoadingImg());
+			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+			var topPos = 50*sizey;
+			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'>"+getRandomLoadingImg()+"</div>");
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
 					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -1449,7 +1467,10 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	                		if(this.value==domainUserImgList[i])
 	                			userIndex=i;
 	                	}
-	                    return '<img src="'+this.value+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUsersList[userIndex]+'"/>';
+	                	if(this.value!=undefined && this.value!="")
+	                		return '<img src="'+this.value+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUsersList[userIndex]+'"/>';
+	                	else
+	                		return '<img src="'+gravatarImgForPortlets(25)+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUsersList[userIndex]+'"/>';
 	                },
 	                style : {
 	    				color : '#98a6ad',
@@ -1614,6 +1635,7 @@ function getPortletsCurrencySymbol(){
 }
 function getNumberWithCommasForPortlets(value){
 	value = parseFloat(value);
+	value = Math.round(value);
 	if(value==0)
 		return value;
 

@@ -774,7 +774,11 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			var milestoneValuesList=[];
 	    			var milestoneNumbersList=[];
 	    			var milestoneMap=[];
-	    			$('#'+selector).html(getRandomLoadingImg());
+	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			if(sizey==2 || sizey==3)
+	    				topPos += 50;
+	    			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'>"+getRandomLoadingImg()+"</div>");
 	    			fetchPortletsGraphData(url,function(data1){
 	    				if(data1.status==403){
 	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -855,7 +859,11 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			var milestonesList=[];
 	    			var milestoneValuesList=[];
 	    			var milestoneMap=[];
-	    			$('#'+selector).html(getRandomLoadingImg());
+	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			if(sizey==2 || sizey==3)
+	    				topPos += 50;
+	    			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'>"+getRandomLoadingImg()+"</div>");
 	    			fetchPortletsGraphData(url,function(data1){
 	    				if(data1.status==403){
 	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -957,7 +965,11 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		
 	        		var selector=idVal;
 	    			var url='/core/api/portlets/portletGrowthGraph?tags='+data.get('settings').tags+'&frequency='+data.get('settings').frequency+'&duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(data.get('settings').duration)+'&end-date='+getStartAndEndDatesOnDue("TOMORROW");
-	    			$('#'+selector).html(getRandomLoadingImg());
+	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			if(sizey==2 || sizey==3)
+	    				topPos += 50;
+	    			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'>"+getRandomLoadingImg()+"</div>");
 	    			fetchPortletsGraphData(url,function(data1){
 	    				if(data1.status==406){
 	    					// Show cause of error in saving
@@ -1065,7 +1077,11 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			var totalCallsCountList=[];
 	    			var domainUsersList=[];
 	    			var domainUserImgList=[];
-	    			$('#'+selector).html(getRandomLoadingImg());
+	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			if(sizey==2 || sizey==3)
+	    				topPos += 50;
+	    			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'>"+getRandomLoadingImg()+"</div>");
 	    			fetchPortletsGraphData(url,function(data2){
 	    				if(data2.status==403){
 	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -1206,7 +1222,9 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			var emailsOpenedCount=0;
 	    			
 	    			
-	    			$('#'+selector).html(getRandomLoadingImg());
+	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'>"+getRandomLoadingImg()+"</div>");
 	    			fetchPortletsGraphData(url,function(data1){
 	    				if(data1.status==403){
 	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -1383,3 +1401,15 @@ $('.onboarding-check').live('change',function(e){
 			}} });
 		
 });
+function gravatarImgForPortlets(width){
+	// Default image
+	var img = DEFAULT_GRAVATAR_url;
+	var backup_image = "&d=404\" ";
+	// backup_image="";
+	var initials = '';
+	
+	if (initials.length == 0)
+		backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
+	var data_name = '';
+	return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
+}

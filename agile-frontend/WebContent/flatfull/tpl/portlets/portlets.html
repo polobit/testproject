@@ -232,7 +232,7 @@
 <script id="portlets-events-model-template" type="text/html">
 <td data="{{id}}" class="data">
 	<div class="portlet-time-view no-inherit">
-		<div style="width: 73%;" class="pull-left m-b-xs">
+		<div style="width: 73%;" class="pull-left m-b-xs text-ellipsis">
 			<span class="label p-l-xs p-r-xxs text-base pos-rlt m-r event-start-time font-bold bg-{{event_label_color color}}" datetime="{{get_AM_PM_format start}}">
 				<i class="arrow right arrow-{{event_label_color color}}" style="right:-8px;"></i>
 				{{get_AM_PM_format start}}
@@ -889,7 +889,7 @@
 			</span>
 		</div>
 	</div>
-	<div class="portlet_body text-dark m-l text-lg">
+	<div class="portlet_body m-l text-lg">
 		<div>
 			{{#if settings.addUsers.done}}
 				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="addUsers">
