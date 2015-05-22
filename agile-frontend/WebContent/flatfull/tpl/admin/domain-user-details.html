@@ -10,15 +10,15 @@
  
 
 </script>
-
 <script id="all-domain-collection-template" type="text/html">
+<div class="wrapper-md">
  <div class="page-header">
         <h2 >DomainDetails </h2><br/>
 <h3 >Domain Name:&nbsp;&nbsp;&nbsp;{{this.0.domain}}</h3>
     </div>
 
 <div class="row">
-<div class="span9">
+<div class="col-md-9">
    
 
     {{#unless this.length}}
@@ -35,7 +35,7 @@
 <div ><h3  style="color:#069">Users <small>{{count}}</small></h3> 
 
     <div class="">
-        <div class="">
+        <div class="panel">
             <table class="table table-striped onlySorting">
                 <thead>
                     <tr>
@@ -56,13 +56,13 @@
 <div  class=" past-invoicecollection"></div>
 <div  class=" past-chargecollection"></div>
 </div>
-<div class="span3">
+<div class="col-md-3">
 <div  id="planinfo"></div>
 <div id="account" class="pull-left" style="float:left" > </div>
 </div>
 </div>
+</div>
 
-<div class="row">
 
 </script>
 
@@ -76,7 +76,7 @@
 {{#each subscriptions.data}}
 
 {{#is_userPlan plan.id}}
-<div id="user_sub">
+<div id="user_sub" class="panel wrapper">
 <p><strong><u>User Plan</u></strong></p>
 <p>
      Start Date: <i class="text-muted fa fa-clock-o m-r-xs"></i><time class="time-ago text-muted" datetime="{{epochToHumanDate "" start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start}}</time>     
@@ -116,7 +116,7 @@ Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 {{#each subscriptions.data}}
 {{#is_emailPlan plan.id}}
 
-<div id="email_sub">
+<div id="email_sub" class="panel wrapper">
 <p><strong><u>Email Plan</u></strong></p>
 
 
@@ -174,7 +174,7 @@ Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 <script id="domain-info-template" type="text/html">
 <div style=" float:right;" >
 <legend>Account Stats</legend>
-<div class="stats-content" style="width:280px">
+<div class="stats-content" class="panel" style="width:280px">
 <table class="table table-bordered">    
     <thead>
         <tr>
@@ -226,14 +226,12 @@ Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
     </tbody>
 </table>
 </div>
-<<<<<<< HEAD
-<a  align="center" data="" class="delete-namespace data btn  btn-danger">Delete  Account</a>
-=======
+
 {{#if emailcount}}
 	{{#if_equals emailcount.status "paused"}}<div class="text-danger">Email sending on this domain is paused.<a href="#" class="btn" id="unpause_mandrill" domain={{emailcount.name}}>Resume</a></div><br/>{{/if_equals}}
 {{/if}}
 <a  align="center" data="" class="delete-namespace data btn btn-danger">Delete  Account</a>
->>>>>>> a8176390dcabb88fb9bb488b1aef5d1a8ce57509
+
 </div>
 </div>
 </script>
