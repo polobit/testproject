@@ -239,7 +239,7 @@ class="c-p text-l-none text-l-none-hover" >
 		</div>
 	</div>
 </div>
-<!--div class="control-group form-group lhs-row-filter" >
+<div class="control-group form-group lhs-row-filter" >
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
 		Campaign Status
@@ -277,12 +277,13 @@ class="c-p text-l-none text-l-none-hover" >
 					<option value="ACTIVE">Active</option>
 					<option value="DONE">Completed</option>
 					<option value="REMOVED">Removed</option>
-					<option value="BOUNCED">Bounced</option>
+					<option value="HARD_BOUNCED">Hard Bounced</option>
+					<option value="SOFT_BOUNCED">Soft Bounced</option>
 					<option value="UNSUBSCRIBED">Unsubscribed</option>
 					<option value="SPAM_REPORTED">Reported Spam</option>
 				</select>
 		
-				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED BOUNCED SPAM_REPORTED condition_container m-t-xs">
+				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED HARD_BOUNCED SOFT_BOUNCED SPAM_REPORTED condition_container m-t-xs">
 					<span id="RHS">
 						<select id="campaign_select" class="required form-control" name="temp1" prev-val="">
 							<option value="">Select value</option>
@@ -293,9 +294,9 @@ class="c-p text-l-none text-l-none-hover" >
 				<div class="clearfix"></div>
 			</div>
 		</div>
-		<a href="#" class="filter-multiple-add-lhs m-t-xs text-l-none pos-rlt" style="top:-25px" data-name="campaign_status"><i class="icon-plus"></i> Add</a>
+		<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-left text-muted pos-rlt" style="top:-25px" data-name="campaign_status"><i class="icon-plus"></i> Add</a>
 	</div>
-</div-->
+</div>
 <div class="control-group form-group lhs-row-filter" >
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >

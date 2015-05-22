@@ -45,7 +45,7 @@ $(function()
 		// var htmlContent = $(this).closest("tr").clone();
 		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
 		//hide camapign status
-		$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove();
+		//$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove();
 		$(this).prev('table').find("tbody").append(htmlContent);
 	});
 	
@@ -66,7 +66,7 @@ $(function()
 		// var htmlContent = $(this).closest("tr").clone();
 		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
 		//hide camapign status
-		$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove()
+		//$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove()
 		$(this).prev('table').find("tbody").append(htmlContent);
 	});
 	

@@ -378,9 +378,9 @@ function deserializeChainedSelect(form, el, el_self)
 function deserializeChainedElement(data, rule_element)
 {	$(rule_element).removeClass('hide');
 	//hide campaign status filter.
-	if(data && data.LHS && data.LHS != 'campaign_status') {
+	/*if(data && data.LHS && data.LHS != 'campaign_status') {
 		$(rule_element).find('#LHS select').find("optgroup[label='Activities']").remove();
-	}
+	}*/
 	$.each(data, function(i, value)
 	{
 		var input_element = ($(rule_element).find('*[name="' + i + '"]').children())[0];
