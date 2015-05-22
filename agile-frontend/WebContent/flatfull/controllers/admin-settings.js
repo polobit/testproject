@@ -382,7 +382,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$('#content').find('.stats-tab').addClass('select');
 		$(".active").removeClass("active");
 		$('#content').find('#admin-prefs-tabs-content').html(getRandomLoadingImg());
-		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
+		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js'+ '?_=' + _AGILE_VERSION, function()
 		{
 			var email_stats = {};
 			var sms_stats = {};
