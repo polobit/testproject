@@ -9,6 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.util.Base64Encoder;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
@@ -220,7 +222,7 @@ public class Mandrill
 			mailJSON.put(MANDRILL_IP_POOL, MANDRILL_MAIN_POOL);
 			
 			// For paid plans, Paid Pool
-			if(isPaid(text, html))
+			if(isPaid())
 				mailJSON.put(MANDRILL_IP_POOL, Globals.MANDRILL_PAID_POOL);
 
 			// All email params are inserted into Message json
@@ -572,22 +574,24 @@ public class Mandrill
 	}
 	
 	/**
-	 * Returns false if text or html contains Agile's label
+	 * Returns false if Emails Plan is Free
 	 * 
-	 * @param text - Email text content
-	 * @param html - Email html content
 	 * @return boolean
 	 */
-	private static boolean isPaid(String text, String html)
+	private static boolean isPaid()
 	{
+		try
+		{
+			BillingRestriction billingRestriction = BillingRestrictionUtil.getBillingRestriction(true);
 		
-		if(StringUtils.isNotBlank(text))
-			return !StringUtils.contains(text, "Sent using Agile");
-			
-		if(StringUtils.isNotBlank(html))
-			return  !StringUtils.contains(html, "https://www.agilecrm.com?utm_source=powered-by");
+			if(billingRestriction != null)
+				billingRestriction.isEmailWhiteLabelEnabled();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.err.println("Exception occured while getting plan..." + e.getMessage());
+		}
 		
-		return true;
-		
+		return false;
 	}
 }
