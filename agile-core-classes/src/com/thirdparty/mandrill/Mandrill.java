@@ -585,7 +585,7 @@ public class Mandrill
 			BillingRestriction billingRestriction = BillingRestrictionUtil.getBillingRestriction(true);
 		
 			if(billingRestriction != null)
-				billingRestriction.isEmailWhiteLabelEnabled();
+				return	billingRestriction.isEmailWhiteLabelEnabled();
 		}
 		catch(Exception e){
 			e.printStackTrace();
