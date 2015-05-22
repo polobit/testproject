@@ -135,6 +135,26 @@ public class PortletsAPI {
 		}
 	}
 	/**
+	 * Saves position of portlet, used to show portlets in ascending order 
+	 * according to position
+	 * 
+	 * @param portlets
+	 *             {@link List} of {@link Portlet}
+	 */
+	@Path("saveOnboardingPrefs")
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Portlet saveOnboardingPortletPrefs(Portlet portlet)throws Exception{
+		if (portlet == null)
+			return null;
+
+		Portlet portlt = PortletUtil.getPortlet(portlet.id);
+		portlt.prefs=portlet.prefs;
+		portlt.save();
+		return portlt;
+	}
+	/**
 	 * Updates a portlet
 	 * 
 	 * @param portlet
