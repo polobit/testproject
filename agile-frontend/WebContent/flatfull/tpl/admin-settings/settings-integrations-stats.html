@@ -9,30 +9,30 @@
    
     <thead>
         <tr>
-            <th style="font-weight:normal;background-color:#f6f8f8;">Name</th>
-            <th style="font-weight:normal;background-color:#f6f8f8;">Count <span class="pull-right">(Plan Limit)</span></th>
+            <th style="font-weight:normal;background-color:#f6f8f8;width:70%">Name</th>
+            <th style="font-weight:normal;background-color:#f6f8f8;width:30%">Count <span class="text-right block m-t-n-md text-muted">Your Plan Limits</span></th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>Contacts and Companies</td>
-            <td>{{contact_count}} <span class="pull-right">({{getPlanLimits 'contactLimit'}})</span></td>
+            <td>{{contact_count}} <span class="text-right block m-t-n-md text-muted">{{getPlanLimits 'contactLimit'}}</span></td>
         </tr>
         <tr>
             <td>Deals</td>
-            <td>{{deals_count}}</td>
+            <td>{{deals_count}} <span class="text-right block m-t-n-md text-muted">Unlimited</span></td>
         </tr>
 		<tr>
             <td>Campaigns</td>
-            <td>{{compaign_count}} <span class="pull-right">({{getPlanLimits 'workflowLimit'}})</span></td>
+            <td>{{compaign_count}} <span class="text-right block m-t-n-md text-muted">{{getPlanLimits 'workflowLimit'}}</span></td>
         </tr>
         <tr>
             <td>Triggers</td>
-            <td>{{triggers_count}} <span class="pull-right">({{getPlanLimits 'triggersLimit'}})</span></td>
+            <td>{{triggers_count}} <span class="text-right block m-t-n-md text-muted">{{getPlanLimits 'triggersLimit'}}</span></td>
         </tr>
 		<tr>
             <td>Web rules</td>
-            <td>{{webrule_count}} <span class="pull-right">({{getPlanLimits 'webRuleLimit'}})</span></td>
+            <td>{{webrule_count}} <span class="text-right block m-t-n-md text-muted">{{getPlanLimits 'webRuleLimit'}}</span></td>
         </tr>
     </tbody>
 </table>

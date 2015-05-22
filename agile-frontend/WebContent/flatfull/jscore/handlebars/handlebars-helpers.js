@@ -6071,7 +6071,7 @@ $(function()
 		if(_billing_restriction.currentLimits.planName == "PRO")
 			return "Unlimited";
 		else
-			return _billing_restriction.currentLimits[key] + " allowed";
+			return _billing_restriction.currentLimits[key];
 	});
 });
 
