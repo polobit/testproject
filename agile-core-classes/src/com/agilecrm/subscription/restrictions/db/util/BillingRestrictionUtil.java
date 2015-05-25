@@ -358,6 +358,7 @@ public class BillingRestrictionUtil
 	try
 	{
 	    billingRestriction = getBillingRestrictionFromDbWithoutSubscription();
+	    billingRestriction.planDetails = plan.getPlanDetails();
 	}
 	catch (Exception e)
 	{
