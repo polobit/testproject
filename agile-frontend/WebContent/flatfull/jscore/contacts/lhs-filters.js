@@ -32,10 +32,11 @@ function setupLhsFilters(cel, is_company) {
 	} else {
 		$('#lhs_filters_conatiner', cel).html(getTemplate("contacts-lhs-filters"));
 		fillSelect('owner_select','/core/api/users', undefined, function() {
-			fillSelect('campaign_select','/core/api/workflows', undefined, function() {
+			fillSelect('campaign_select_master','/core/api/workflows', undefined, function() {
 				//loading image is added to hidden select by fillselect
 				//remove it manually.
-				$('#campaign_select').next('.loading').remove();
+				$('#campaign_select_master').next('.loading').remove();
+				$('#campaign_select').html($('#campaign_select_master').html());
 				if(!SEARCHABLE_CONTACT_CUSTOM_FIELDS)
 				{
 					$.getJSON("core/api/custom-fields/searchable/scope?scope=CONTACT", function(fields){
