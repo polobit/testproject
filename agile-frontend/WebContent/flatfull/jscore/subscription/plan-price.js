@@ -70,7 +70,35 @@ var USER_DETAILS = {
 				return 2;
 			
 			return userJSON.plan.quantity;
+		},
+		getPlanTypeByStripe : function(userJSON){
+			var billing_data = JSON.parse(userJSON.billingData);
+			if(!billing_data.subscription)
+				return "free";
+		
+			if(billing_data.subscription.plan.name)
+			{			
+				if(billing_data.subscription.plan.name.toUpperCase().replace(/\s/g, '').split("-").length == 1) return billing_data.subscription.plan.name.toUpperCase().replace(/\s/g, '').replace("-", '_');
+	
+				// Returns lite-yearly....
+				return billing_data.subscription.plan.name.toUpperCase().replace(/\s/g, '').split("-")[0];
+			}
+			return "LITE"
+		},
+		getPlanIntervalByStripe : function(userJSON){
+			if(!userJSON)
+				return "MONTHLY";
+			var billing_data = JSON.parse(userJSON.billingData);
+			if(!billing_data.subscription || !billing_data.subscription.plan.name)
+				return "MONTHLY";
+			
+			var plan = billing_data.subscription.plan.name;
+			
+			if(plan)
+			  return billing_data.subscription.plan.name.toUpperCase().replace(/\s/g, '').split("-")[1];
+			
 		}
+
 }
 
 
@@ -140,15 +168,24 @@ function setPlan(user_plan)
 		if(IS_NEW_USER && _plan_on_signup)
 		{
 			plan_type = _plan_on_signup.plan_type.toLowerCase();
-			interval = "MONTHLY";
+			interval = "monthly";
 		}
 		else if(user_plan != "free" && user_plan != "super")
 		{
-			plan_type = USER_DETAILS.getPlanType(USER_BILLING_PREFS);
-			interval = USER_DETAILS.getPlanInterval(USER_BILLING_PREFS);
-			
-			plan_type = plan_type.toLowerCase();
-			interval = interval.toLowerCase();
+			var stripe_subscription = getSubscription(user_plan.billingData, user_plan.plan);
+			if(stripe_subscription)
+			{
+				plan_type = USER_DETAILS.getPlanTypeByStripe(USER_BILLING_PREFS);
+				interval = USER_DETAILS.getPlanIntervalByStripe(USER_BILLING_PREFS);
+				
+				plan_type = plan_type.toLowerCase();
+				interval = interval.toLowerCase();
+			}
+			else
+			{
+				interval = "monthly";
+				plan_type = "free"
+			}
 		}
 	
 		
@@ -192,7 +229,7 @@ $(function()
 	  		
 	  		removeStyleForAPlan();
 	  		var id = $(this).parent(); 	
-	  		addStyleForAPlan(id,null);
+	  		addStyleForAPlan(id,null); 
 	  		$("#plan_type").attr("value", id.attr("id").split("_")[0]);
 	  		
 	      	// Cost
@@ -253,6 +290,11 @@ $(function()
 		$("#plan_type").die().live("change",function(){
 			var plan_type = $(this).val();
 			$("#"+ plan_type +"_plan > .plan-collection-in").click();
+			if($(this).val() == "free")
+			{
+				$("#plans-panel .plan-collection-bot").css("opacity","0.5");
+				setCost(update_price());
+			}
 		});
 	    
       	$('#purchase-plan').die().live('click', function(e){
@@ -265,7 +307,7 @@ $(function()
 	          var plan = $("#plan_type").val();
 	          var discount = "", months = "";
 	          var billing_cycle = $("#billing_cycle").val();
-	          if(!plan)
+	          if(!plan || plan == "free")
 	         {
 	        	  alert("Please select a plan to proceed");
 	        	  return false;

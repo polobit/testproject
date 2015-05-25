@@ -149,16 +149,6 @@ public class AddDeal extends TaskletAdapter
 	 * @param ownerId
 	 *            - Selected owner id
 	 */
-	/*
-	 * private void addDeal(String name, String value, String probability,
-	 * String description, String milestone, Long closedEpochTime, String
-	 * contactId, Long ownerId) { Opportunity opportunity = new
-	 * Opportunity(name, description, Double.parseDouble(value), milestone,
-	 * Integer.parseInt(probability), null, ownerId == null ? null :
-	 * ownerId.toString()); opportunity.addContactIds(contactId);
-	 * opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
-	 * opportunity.close_date = closedEpochTime; opportunity.save(); }
-	 */
 
 	private void addDeal(String name, String value, String probability, String description, String milestone,
 			Long pipelineID, Long closedEpochTime, String contactId, Long ownerId)

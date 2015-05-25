@@ -34,6 +34,12 @@ public class PlivoSMSUtil
 	 */
 	public static String PLIVO_VERSION = "v1";
 
+	/**
+	 * Returns list of incoming numbers
+	 * 
+	 * @param widget
+	 * @return
+	 */
 	public static List<String> incomingNumbers(Widget widget)
 	{
 		if (widget == null)
@@ -54,17 +60,22 @@ public class PlivoSMSUtil
 		catch (PlivoException e)
 		{
 			System.out.println("Inside getVerifiedPLIVONumbers");
-			e.printStackTrace();
 		}
 		catch (Exception e)
 		{
 
 			System.out.println("Inside getVerifiedPLIVONumbers");
-			e.printStackTrace();
 		}
 		return new ArrayList<String>();
 	}
 
+	/**
+	 * 
+	 * @param authId
+	 * @param auth_token
+	 * @return
+	 * @throws PlivoException
+	 */
 	public static List<String> verifiedPlivoNumbers(String authId, String auth_token) throws PlivoException
 	{
 
@@ -84,12 +95,13 @@ public class PlivoSMSUtil
 		}
 		catch (PlivoException plivoException)
 		{
-			plivoException.printStackTrace();
+			System.out.println("Exception in plivo while getting verified numbers.." + plivoException.getMessage());
+
 			return new ArrayList<String>();
 		}
 		catch (Exception e)
 		{
-			System.out.println();
+			System.out.println("Exception in plivo while getting verified numbers.." + e.getMessage());
 			return new ArrayList<String>();
 		}
 
@@ -124,21 +136,25 @@ public class PlivoSMSUtil
 		}
 		catch (PlivoException e)
 		{
-			System.err.println("The message has failed which is sent to " + toNumber + " from " + fromNumber
+			System.out.println("The message has failed which is sent to " + toNumber + " from " + fromNumber
 					+ "account details: " + account_sid + " and account token: " + auth_token);
-			System.err.println(e.getLocalizedMessage());
-			System.out.println(e.getLocalizedMessage());
+			System.out.println(e.getMessage());
 		}
 		catch (Exception e)
 		{
-			System.err.println("The message has failed which is sent to(unknown exception) " + toNumber + " from "
+			System.out.println("The message has failed which is sent to(unknown exception) " + toNumber + " from "
 					+ fromNumber + "account details: " + account_sid + " and account token: " + auth_token);
-			e.printStackTrace();
 		}
 		return msgResponse.toString();
 
 	}
 
+	/**
+	 * Returns SMS logs for plivo
+	 * 
+	 * @param widget
+	 * @return
+	 */
 	public static JSONObject currentSMSLogs(Widget widget)
 	{
 

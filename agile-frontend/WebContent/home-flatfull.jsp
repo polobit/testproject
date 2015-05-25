@@ -561,8 +561,9 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 %>
 
-
-                <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>   
+ <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>  
+ 
+                   
 
 
 </div>
@@ -639,7 +640,7 @@ head.js(LIB_PATH + 'lib/underscore-min.js', LIB_PATH + 'lib/backbone-min.js', LI
 <!-- Handle bars -->
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(HANDLEBARS_LIB,   "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js");
+head.js(HANDLEBARS_LIB,   "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);
 else
 head.js(HANDLEBARS_LIB);
 

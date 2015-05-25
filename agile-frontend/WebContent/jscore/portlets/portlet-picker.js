@@ -8,6 +8,7 @@ function organize_portlets(base_model){
 	// Get portlet type from model (portlet object)
 	var portlet_type = base_model.get('portlet_type');
 	var is_added = base_model.get('is_added');
+	var portlet_name = base_model.get('name');
 
 	/*
 	 * Appends the model (portlet) to its specific div, based on the portlet_type
@@ -19,7 +20,7 @@ function organize_portlets(base_model){
 		$('#deals', this.el).append($(itemView.render().el));
 	else if (portlet_type == "TASKSANDEVENTS")
 		$('#taksAndEvents', this.el).append($(itemView.render().el));
-	else if (portlet_type == "USERACTIVITY")
+	else if (portlet_type == "USERACTIVITY" && portlet_name!="Stats Report")
 		$('#userActivity', this.el).append($(itemView.render().el));
 	else if (portlet_type == "RSS")
 		$('#rssFeed', this.el).append($(itemView.render().el));

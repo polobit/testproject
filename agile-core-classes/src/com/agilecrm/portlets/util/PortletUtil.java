@@ -727,11 +727,13 @@ public class PortletUtil {
 			Portlet dummyPortlet = new Portlet("Dummy Blog",PortletType.RSS,1,1,1,1);
 			Portlet statsReportPortlet = new Portlet("Stats Report",PortletType.USERACTIVITY,1,1,1,1);
 			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,2,1,1,1);
-			Portlet blogPortlet = new Portlet("Agile CRM Blog",PortletType.RSS,3,1,1,2);
+			Portlet blogPortlet = new Portlet("Agile CRM Blog",PortletType.RSS,3,3,1,2);
 			Portlet eventsPortlet = new Portlet("Agenda",PortletType.TASKSANDEVENTS,1,2,1,1);
 			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,2,1,1);
-			Portlet pendingDealsPortlet = new Portlet("Pending Deals",PortletType.DEALS,1,3,1,1);
-			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,2,3,2,1);
+			Portlet pendingDealsPortlet = new Portlet("Pending Deals",PortletType.DEALS,1,4,2,1);
+			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,1,3,2,1);
+			
+			Portlet onboardingPortlet = new Portlet("Onboarding",PortletType.CONTACTS,3,1,1,2);
 			
 			JSONObject filterBasedContactsPortletJSON = new JSONObject();
 			filterBasedContactsPortletJSON.put("filter","myContacts");
@@ -752,6 +754,32 @@ public class PortletUtil {
 			statsReportPortletJSON.put("duration","yesterday");
 			statsReportPortlet.prefs = statsReportPortletJSON.toString();
 			
+			JSONObject onboardingPortletJSON = new JSONObject();
+			List<String> onboardingSteps = new ArrayList<>();
+			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+			if(domainUser.is_admin){
+				onboardingSteps.add("addUsers");
+				onboardingSteps.add("importContacts");
+				onboardingSteps.add("setupIntegrations");
+				onboardingSteps.add("createCampaign");
+				onboardingSteps.add("setupTrackingCode");
+				onboardingSteps.add("addWebrule");
+				onboardingSteps.add("upgradePlan");
+			}else{
+				onboardingSteps.add("setupProfile");
+				onboardingSteps.add("linkEmailAccount");
+				onboardingSteps.add("addWidgets");
+				onboardingSteps.add("importContacts");
+				onboardingSteps.add("createCampaign");
+			}
+			Map<String,Boolean> processMap = new LinkedHashMap<String,Boolean>();
+			processMap.put("done", false);
+			processMap.put("skip", false);
+			for (String string : onboardingSteps) {
+				onboardingPortletJSON.put(string,processMap);
+			}
+			onboardingPortlet.prefs = onboardingPortletJSON.toString();
+			
 			dummyPortlet.save();
 			eventsPortlet.save();
 			tasksPortlet.save();
@@ -760,6 +788,9 @@ public class PortletUtil {
 			pendingDealsPortlet.save();
 			dealsFunnelPortlet.save();
 			statsReportPortlet.save();
+			
+			onboardingPortlet.save();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

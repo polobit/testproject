@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.examples.HtmlToPlainText;
 
+import com.agilecrm.Globals;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.util.EmailUtil;
@@ -84,7 +85,7 @@ public class MandrillUtil
 		// Initialize mailJSON with common fields
 		JSONObject mailJSON = getMandrillMailJSON(emailSender.getMandrillAPIKey(), firstMailDefferedTask.domain,
 				firstMailDefferedTask.fromEmail, firstMailDefferedTask.fromName, firstMailDefferedTask.replyTo,
-				firstMailDefferedTask.metadata);
+				firstMailDefferedTask.metadata, emailSender.isEmailWhiteLabelEnabled());
 
 		JSONArray mergeVarsArray = new JSONArray();
 		JSONArray toArray = new JSONArray();
@@ -207,10 +208,13 @@ public class MandrillUtil
 	 *            - from email
 	 * @param fromName
 	 *            - from name
+	 * @param isPaid 
+	 * 			  - whether paid or not           
+	 *            
 	 * @return JSONObject
 	 */
 	public static JSONObject getMandrillMailJSON(String apiKey, String subaccount, String fromEmail, String fromName,
-			String replyTo, String metadata)
+			String replyTo, String metadata, boolean isPaid)
 	{
 		try
 		{
@@ -224,6 +228,13 @@ public class MandrillUtil
 			mailJSON.put(Mandrill.MANDRILL_MESSAGE, messageJSON);
 			mailJSON.put(Mandrill.MANDRILL_ASYNC, true);
 
+			// By Default Main pool
+			mailJSON.put(Mandrill.MANDRILL_IP_POOL, Mandrill.MANDRILL_MAIN_POOL);
+						
+			// For paid plans, Paid Pool
+			if(isPaid)
+				mailJSON.put(Mandrill.MANDRILL_IP_POOL, Globals.MANDRILL_PAID_POOL);
+				
 			return mailJSON;
 		}
 		catch (Exception e)
@@ -272,6 +283,8 @@ public class MandrillUtil
 
 			if (!StringUtils.isBlank(metadata))
 				messageJSON.put(Mandrill.MANDRILL_METADATA, new JSONObject(metadata));
+			
+			messageJSON.put(Mandrill.MANDRILL_MERGE_LANGUAGE, "mailchimp");
 
 		}
 		catch (JSONException e)
