@@ -13,7 +13,7 @@ $(function()
 								.find('#subscribers-bulk-select')
 								.css('display', 'block')
 								.html(
-										'Selected All ' + getAvailableActiveContacts() + ' contacts. <a hrer="#" id="select-all-active-contacts-revert" style="cursor:pointer">Select chosen contacts only</a>');
+										'Selected All ' + getAvailableActiveContacts() + ' contacts. <a hrer="#" id="select-all-active-contacts-revert" class="text-info">Select chosen contacts only</a>');
 
 						// On choosing select all option, all the visible
 						// checkboxes in the table should be checked
@@ -35,7 +35,7 @@ $(function()
 								.find('#subscribers-bulk-select')
 								.css('display', 'block')
 								.html(
-										"Selected " + App_Workflows.active_subscribers_collection.collection.length + " contacts. <a href='#'  id='select-all-active-contacts' >Select all " + getAvailableActiveContacts() + " contacts</a>");
+										"Selected " + App_Workflows.active_subscribers_collection.collection.length + " contacts. <a href='#' id='select-all-active-contacts' class='text-info'>Select all " + getAvailableActiveContacts() + " contacts</a>");
 					});
 });
 
@@ -70,7 +70,7 @@ function toggle_active_contacts_bulk_actions_dropdown(clicked_ele, isBulk)
 					.find('#subscribers-bulk-select')
 					.css('display', 'block')
 					.html(
-							"Selected " + App_Workflows.active_subscribers_collection.collection.length + " contacts. <a id='select-all-active-contacts' href='#'>Select all " + total_available_contacts + " contacts</a>");
+							"Selected " + App_Workflows.active_subscribers_collection.collection.length + " contacts. <a id='select-all-active-contacts' class='text-info' href='#'>Select all " + total_available_contacts + " contacts</a>");
 
 	}
 	// When unchecked hide Delete button
