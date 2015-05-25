@@ -94,6 +94,19 @@ public class BillingRestrictionUtil
 	return restriction;
     }
 
+    public static BillingRestriction getBillingRestrictionFromDbWithoutSubscription()
+    {
+	BillingRestriction restriction = BillingRestriction.dao.ofy().query(BillingRestriction.class).get();
+
+	if (restriction == null)
+	{
+	    restriction = BillingRestriction.getInstance(null, null);
+	    restriction.refresh(true);
+	}
+
+	return restriction;
+    }
+
     /**
      * Creates/fetches billing restriction by setting plan and users. Reads plan
      * and users count from user info, it if is not defined then subscription
@@ -340,8 +353,16 @@ public class BillingRestrictionUtil
 
     public static BillingRestriction getBillingRestritionAndSetInCookie(Plan plan, HttpServletRequest request)
     {
-	BillingRestriction billingRestriction = BillingRestriction
-		.getInstance(plan.plan_type.toString(), plan.quantity);
+	BillingRestriction billingRestriction = null;
+
+	try
+	{
+	    billingRestriction = getBillingRestrictionFromDbWithoutSubscription();
+	}
+	catch (Exception e)
+	{
+	    billingRestriction = BillingRestriction.getInstance(plan.plan_type.toString(), plan.quantity);
+	}
 
 	UserInfo info = (UserInfo) request.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
 
