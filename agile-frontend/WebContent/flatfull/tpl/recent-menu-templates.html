@@ -15,7 +15,7 @@
     	</div>
     	<div class="agile-thumb text-ellipsis">
         	{{#if_contact_type "PERSON"}}
-        		<a class="text-cap">	{{getPropertyValue properties "first_name"}}
+        		<div class="text-cap">	{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}} 
         		<div class="text-ellipsis">
         		<small>{{getPropertyValue properties "email"}}</small>
@@ -23,15 +23,15 @@
                 <div class="text-ellipsis">
 				<small>{{getPropertyValue properties "company"}}</small>
                 </div>
-                </a>
+                </div>
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
-        		<a class="text-cap">{{getPropertyValue properties "name"}}
+        		<div class="text-cap">{{getPropertyValue properties "name"}}
         		<div class="text-ellipsis">
                 <small>{{getPropertyValue properties "url"}}</small>
                  </div>
-                </a>
+                </div>
         	{{/if_contact_type}}
 		</div>
 		<div class="clearfix"></div>
@@ -43,11 +43,11 @@
 		<i class="icon-folder-close icon-3x img-inital r r-2x" id="minus"></i>
 	</div>
 	<div class="agile-thumb text-ellipsis">
-		<a class="text-cap">{{title}}
+		<div class="text-cap">{{title}}
        <div class="text-ellipsis">
         <small> {{description}}</small>
        </div>
-        </a>
+        </div>
 	</div>
 	<div class="clearfix"></div>
 {{/if_equals}}
@@ -58,11 +58,11 @@
 		<i class="icon-money img-inital r r-2x" id="minus"  style="font-size:2.75em;"></i>
 	</div>
 	<div class="agile-thumb text-ellipsis">
-		 <a class="text-cap">{{name}}
+		 <div class="text-cap">{{name}}
         <div class="text-ellipsis">
          <small> {{description}} </small>
          </div>
-         </a>
+         </div>
 	</div>
 	<div class="clearfix"></div>
 {{/if_equals}}
@@ -73,11 +73,11 @@
 		<i class="icon-file-text img-inital r r-2x" id="minus"  style="font-size:2.75em;"></i>
 	</div>
 	<div class="agile-thumb text-ellipsis">
-		 <a class="text-cap"> {{name}}
+		 <div class="text-cap"> {{name}}
        <div class="text-ellipsis">
         <small> {{description}}</small> 
         </div>
-       </a>
+       </div>
 	</div>
 	<div class="clearfix"></div>
 {{else}}
@@ -87,7 +87,7 @@
 		<i class="icon-file-text img-inital r r-2x" id="minus" style="font-size:2.75em;"></i>
 	</div>
 	<div class="agile-thumb text-ellipsis">
-		 <a class="text-cap">{{name}}</a>
+		 <div class="text-cap">{{name}}</div>
 	</div>
 	<div class="clearfix"></div>
 {{/if}}
