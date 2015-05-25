@@ -1,5 +1,5 @@
 <script id="opportunity-detail-popover-template" type="text/html">
-<div style="width:490px;">
+<div style="word-break:break-all;" class="word-break">
     <div>
         <div>
             <div class="l-h font-italic m-b-xs">
@@ -7,20 +7,20 @@
             </div>
             
             <div class="m-xs">
-                <p><b>Owner : </b>{{owner.name}}</p>
+                <div><b>Owner : </b>{{owner.name}}</div>
                 {{#if contacts}}<p><b>Related To : </b></p>{{/if}}
                 <div>
 				{{#each contacts}}
                 	<div class="inline-block m-xs">
         			{{#if_contact_type "PERSON"}}
         				<img class="thumbnail m-b-none thumb" src="{{gravatarurl properties 50}}"  />
-                    	<div class="inline-block text-ellipsis"  style="width:490px;">
+                    	<div class="inline-block text-ellipsis agile-thumb">
                         	{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}
                     	</div>
         			{{/if_contact_type}}
 					{{#if_contact_type "COMPANY"}}
         				<img class="thumbnail m-b-none thumb" {{getCompanyImage "40"}}/>
-                    	<div class="inline-block text-ellipsis" style="width:490px;">
+                    	<div class="inline-block text-ellipsis agile-thumb">
                         	{{getPropertyValue properties "name"}}
                     	</div>
         			{{/if_contact_type}}

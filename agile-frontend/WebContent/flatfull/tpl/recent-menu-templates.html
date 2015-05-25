@@ -1,5 +1,5 @@
-<script id="recent-menu-model-template" type="text/html">
 
+<script id="recent-menu-model-template" type="text/html">
 <div class="wrapper-sm custom-color-star">
 <a data-id="{{id}}"  class="c-p custom-color">
 
@@ -16,18 +16,25 @@
     	<div class="agile-thumb text-ellipsis">
         	{{#if_contact_type "PERSON"}}
         		<a class="text-cap">	{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}} </a>
-        		<br />
+        		{{getPropertyValue properties "last_name"}} 
+        		<div class="text-ellipsis">
         		<small>{{getPropertyValue properties "email"}}</small>
-				<br/>
+				</div>
+                <div class="text-ellipsis">
 				<small>{{getPropertyValue properties "company"}}</small>
+                </div>
+                </a>
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
-        		<a class="text-cap">{{getPropertyValue properties "name"}}</a></br>
-        		<small>{{getPropertyValue properties "url"}}</small>
+        		<a class="text-cap">{{getPropertyValue properties "name"}}
+        		<div class="text-ellipsis">
+                <small>{{getPropertyValue properties "url"}}</small>
+                 </div>
+                </a>
         	{{/if_contact_type}}
 		</div>
+		<div class="clearfix"></div>
 {{/if_equals}}
 
 {{#if_equals entity_type "case"}}
@@ -36,8 +43,13 @@
 		<i class="icon-folder-close icon-3x img-inital r r-2x" id="minus"></i>
 	</div>
 	<div class="agile-thumb text-ellipsis">
-		<a class="text-cap">{{title}}</a><br /><small> {{description}}</small>
+		<a class="text-cap">{{title}}
+       <div class="text-ellipsis">
+        <small> {{description}}</small>
+       </div>
+        </a>
 	</div>
+	<div class="clearfix"></div>
 {{/if_equals}}
 
 {{#if_equals entity_type "deal"}}
@@ -46,8 +58,13 @@
 		<i class="icon-money img-inital r r-2x" id="minus"  style="font-size:2.75em;"></i>
 	</div>
 	<div class="agile-thumb text-ellipsis">
-		 <a class="text-cap">{{name}}</a><br /><small> {{description}} </small>
+		 <a class="text-cap">{{name}}
+        <div class="text-ellipsis">
+         <small> {{description}} </small>
+         </div>
+         </a>
 	</div>
+	<div class="clearfix"></div>
 {{/if_equals}}
 
 {{#if_equals entity_type "document"}}
@@ -56,8 +73,13 @@
 		<i class="icon-file-text img-inital r r-2x" id="minus"  style="font-size:2.75em;"></i>
 	</div>
 	<div class="agile-thumb text-ellipsis">
-		 <a class="text-cap"> {{name}}</a><br /><small> {{description}}</small>
+		 <a class="text-cap"> {{name}}
+       <div class="text-ellipsis">
+        <small> {{description}}</small> 
+        </div>
+       </a>
 	</div>
+	<div class="clearfix"></div>
 {{else}}
 {{#if network_type}}
 	<div class="thumb-sm agile-img  m-r-xs">
@@ -65,8 +87,9 @@
 		<i class="icon-file-text img-inital r r-2x" id="minus" style="font-size:2.75em;"></i>
 	</div>
 	<div class="agile-thumb text-ellipsis">
-		 <a class="text-cap">{{name}}</a><br /> 
+		 <a class="text-cap">{{name}}</a>
 	</div>
+	<div class="clearfix"></div>
 {{/if}}
 {{/if_equals}}
 
