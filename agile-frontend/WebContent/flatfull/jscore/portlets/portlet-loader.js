@@ -1156,8 +1156,12 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		var groupByList=[];
 	    			var splitByList=[];
 	    			var splitByNamesList=[];
-	    			
-	    			$('#'+selector).html(getRandomLoadingImg());
+	    			var domainUserNamesList=[];
+	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			if(sizey==2 || sizey==3)
+	    				topPos += 50;
+	    			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	    			fetchPortletsGraphData(url,function(data2){
 	    				if(data2.status==403){
 	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -1165,7 +1169,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    				}
 	    				groupByList=data2["groupByList"];
 	    				splitByList=data2["splitByList"];
-	    				
+	    				domainUserNamesList=data2["domainUserNamesList"];
 	    				var series=[];
 	    				var text='';
 	    				var colors;
@@ -1198,7 +1202,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    					groupByNamesList[index] = getPortletNormalName(name);
 	    				});
 	    				
-	    				taskReportBarGraph(selector,groupByNamesList,series,text);
+	    				taskReportBarGraph(selector,groupByNamesList,series,text,data,domainUserNamesList);
 	    				
 	    			});
 	        	}

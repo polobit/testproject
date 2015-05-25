@@ -232,7 +232,7 @@
 <script id="portlets-events-model-template" type="text/html">
 <td data="{{id}}" class="data">
 	<div class="portlet-time-view no-inherit">
-		<div style="width: 73%;" class="pull-left m-b-xs text-ellipsis">
+		<div style="width: 73%;padding-top:2px;padding-bottom:3px;" class="pull-left m-b-xs text-ellipsis">
 			<span class="label p-l-xs p-r-xxs text-base pos-rlt m-r event-start-time font-bold bg-{{event_label_color color}}" datetime="{{get_AM_PM_format start}}">
 				<i class="arrow right arrow-{{event_label_color color}}" style="right:-8px;"></i>
 				{{get_AM_PM_format start}}
@@ -244,7 +244,7 @@
 		<time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" end}}" >{{get_duration start end}}</time>
 		</div>
 		{{#if this.contacts}}
-			<div class="w-full m-b-xxs text-ellipsis" style="padding-left:70px;">
+			<div class="w-full m-b-xxs text-ellipsis" style="padding-left:79px;">
 				{{#related_to_one contacts}}{{/related_to_one}}
 			</div>
 		{{/if}}
