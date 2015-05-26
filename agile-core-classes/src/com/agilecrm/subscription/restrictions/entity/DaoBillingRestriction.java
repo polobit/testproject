@@ -255,8 +255,12 @@ public abstract class DaoBillingRestriction implements
 
 	if (tag != null)
 	{
-	    int percentage = BillingRestrictionReminderUtil
-		    .calculatePercentage(max_allowed, restriction.contacts_count);
+	    int percentage = BillingRestrictionReminderUtil.calculatePercentage(max_allowed, currentCount);
+
+	    if (restriction == null || restriction.id == null)
+	    {
+		restriction = BillingRestrictionUtil.getBillingRestrictionAndSubscriptionFromDB();
+	    }
 
 	    // If tags are not there then new tag is saved in tags in our domain
 	    // class

@@ -75,7 +75,13 @@ public class WebRuleBillingRestriction extends DaoBillingRestriction
 	if (restriction == null || restriction.webrules_count == null)
 	    return null;
 
-	return setTagsToUpdate(max_allowed, restriction.webrules_count);
+	int count = restriction.webrules_count;
+
+	String tag = setTagsToUpdate(max_allowed, restriction.webrules_count);
+
+	restriction.webrules_count = count;
+
+	return tag;
     }
 
     @Override

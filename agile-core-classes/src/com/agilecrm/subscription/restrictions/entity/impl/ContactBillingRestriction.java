@@ -67,7 +67,14 @@ public class ContactBillingRestriction extends DaoBillingRestriction
 	if (restriction == null || restriction.contacts_count == null)
 	    return null;
 
-	return setTagsToUpdate(max_allowed, restriction.contacts_count);
+	int count = restriction.contacts_count;
+
+	String tag = setTagsToUpdate(max_allowed, restriction.contacts_count);
+
+	restriction.contacts_count = count;
+
+	return tag;
+
     }
 
     @Override

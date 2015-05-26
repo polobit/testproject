@@ -64,7 +64,13 @@ public class WorkflowBillingRestriction extends DaoBillingRestriction
 	if (restriction == null || restriction.campaigns_count == null)
 	    return null;
 
-	return setTagsToUpdate(max_allowed, restriction.campaigns_count);
+	int count = restriction.campaigns_count;
+
+	String tag = setTagsToUpdate(max_allowed, restriction.campaigns_count);
+
+	restriction.campaigns_count = count;
+
+	return tag;
     }
 
     @Override

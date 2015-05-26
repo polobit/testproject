@@ -59,7 +59,13 @@ public class TriggerBillingRestriction extends DaoBillingRestriction
 	if (restriction == null || restriction.triggers_count == null)
 	    return null;
 
-	return setTagsToUpdate(max_allowed, restriction.triggers_count);
+	int count = restriction.triggers_count;
+
+	String tag = setTagsToUpdate(max_allowed, restriction.triggers_count);
+
+	restriction.triggers_count = count;
+
+	return tag;
     }
 
 }
