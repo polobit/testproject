@@ -14,13 +14,13 @@
                 	<div class="inline-block m-xs">
         			{{#if_contact_type "PERSON"}}
         				<img class="thumbnail m-b-none thumb" src="{{gravatarurl properties 50}}"  />
-                    	<div class="inline-block text-ellipsis agile-thumb">
+                    	<div class="inline-block text-ellipsis" style="width:170px">
                         	{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}
                     	</div>
         			{{/if_contact_type}}
 					{{#if_contact_type "COMPANY"}}
         				<img class="thumbnail m-b-none thumb" {{getCompanyImage "40"}}/>
-                    	<div class="inline-block text-ellipsis agile-thumb">
+                    	<div class="inline-block text-ellipsis" style="width:170px">
                         	{{getPropertyValue properties "name"}}
                     	</div>
         			{{/if_contact_type}}
