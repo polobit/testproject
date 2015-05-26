@@ -9,7 +9,7 @@ $(function()
 					{
 						e.preventDefault();
 						SUBSCRIBERS_SELECT_ALL = true;
-						$('body')
+						$('#content')
 								.find('#subscribers-bulk-select')
 								.css('display', 'block')
 								.html(
@@ -31,7 +31,7 @@ $(function()
 					{
 						e.preventDefault();
 						SUBSCRIBERS_SELECT_ALL = false;
-						$('body')
+						$('#content')
 								.find('#subscribers-bulk-select')
 								.css('display', 'block')
 								.html(
@@ -57,16 +57,18 @@ function toggle_active_contacts_bulk_actions_dropdown(clicked_ele, isBulk)
 	if (clicked_ele)
 			total_available_contacts = getAvailableActiveContacts();
 
-	$('body').find('#subscribers-bulk-select').css('display', 'none');
+	$('#content').find('#subscribers-bulk-select').css('display', 'none');
 
 	// When checked show Delete button
 	if ($(clicked_ele).attr('checked') == 'checked')
 	{
-		$('body').find('#remove-active-from-campaign').css('display', 'inline-block');
+		$('#content').find('#subscribers-block').css('display', 'block');
+		
+		$('#subscribers-block').find('#remove-active-from-campaign').css('display', 'inline-block');
 
 		// To show subscribers-bulk-select only thead is checked i.e., isBulk is true.
 		if (isBulk && total_available_contacts != App_Workflows.active_subscribers_collection.collection.length)
-			$('body')
+		$('#subscribers-block')
 					.find('#subscribers-bulk-select')
 					.css('display', 'block')
 					.html(
