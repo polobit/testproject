@@ -64,19 +64,18 @@ public class ContactPrefsAPI
 
 	System.out.println("Sync" + sync);
 
-	 
 	updatedPrefs.save();
-	
+
 	if (!StringUtils.isEmpty(sync) && !updatedPrefs.inProgress)
 	{
 	    updatedPrefs.inProgress = true;
 	    updatedPrefs.save();
-	    
-	    ContactsImportUtil.initilaizeImportBackend(updatedPrefs);
-	    
+
+	    ContactsImportUtil.initilaizeImportBackend(updatedPrefs, true);
+
 	    return;
 	}
-	
+
 	updatedPrefs.save();
     }
 

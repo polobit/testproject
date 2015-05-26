@@ -20,9 +20,10 @@ public class StarterPlanLimits extends PlanLimits
 		googleContactsLimit = 1000;
 		webRuleLimit = 5;
 		pageViewsLimit = 1000;
-		reporting = "EMAIL_REPORTING";
+		reporting = "ALL";
 		whiteLabelEnabled = true;
 		campaignNodesLimit = 10;
+		emailAccountsLimit = 1;
 
 		/**
 		 * New plan limits

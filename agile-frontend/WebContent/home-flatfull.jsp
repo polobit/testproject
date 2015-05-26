@@ -71,6 +71,8 @@ if(is_free_plan && is_first_time_user)
 {
     plan = SubscriptionUtil.getSignupPlanFromSessionAndRemove(request);
 }
+
+String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 %>
 
 
@@ -84,16 +86,16 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 //String CSS_PATH = "//cdnapp.agilecrm.com/";
 %>
 
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agilecrm.css" />
+<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agilecrm.css?_=<%=_AGILE_VERSION%>" />
 
 <!-- Unified CSS for All Lib -->
 
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-tasks.css"></link>
+<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-tasks.css?_=<%=_AGILE_VERSION%>"></link>
 <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-social-suite.css"></link>
  <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-timline.css"></link>
- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-widgets.css"></link>
+ <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-widgets.css?_=<%=_AGILE_VERSION%>"></link>
  <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/chrome-extension-check.css"></link>
- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/bootstrap_submenu.css"></link>
+ <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/bootstrap_submenu.css?_=<%=_AGILE_VERSION%>"></link>
   <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib/timepicker-min.css"></link>
 
 <!-- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/date-picker.css"></link> -->
@@ -397,7 +399,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
 %>">
 
 <!-- Including header(Navigation Bar) page -->
-<jsp:include page="flatfull/header.jsp" />
+	<%@ include file="flatfull/header.html"%>
 
  <aside id="aside" class="app-aside hidden-xs 
  <%
@@ -450,8 +452,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <i class="icon icon-user"></i>
       <span>Contacts</span>
     </a>
-  </li id="dealsmenu">
-   <li>
+  </li>
+   <li  id="dealsmenu">
     <a  href="#deals">
       <i class="fa fa-money"></i>
       <span>Deals</span>
@@ -559,8 +561,9 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 %>
 
-
-                <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>   
+ <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>  
+ 
+                   
 
 
 </div>
@@ -585,6 +588,8 @@ var FLAT_FULL_PATH = LIB_PATH_FLATFULL;
 LIB_PATH = LIB_PATH_FLATFULL;
 
 var FLAT_FULL_UI = "flatfull/";
+
+var _AGILE_VERSION = <%="\"" + _AGILE_VERSION + "\""%>;
 
 var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
 
@@ -635,7 +640,7 @@ head.js(LIB_PATH + 'lib/underscore-min.js', LIB_PATH + 'lib/backbone-min.js', LI
 <!-- Handle bars -->
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(HANDLEBARS_LIB,   "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js");
+head.js(HANDLEBARS_LIB,   "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);
 else
 head.js(HANDLEBARS_LIB);
 
@@ -659,12 +664,12 @@ head.ready(function() {
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "/img/ajax-loader-cursor.gif");
-head.js({"core" :   '/jscore/min/' + FLAT_FULL_PATH +'js-all-min.js'});
-head.js({"stats" : 'stats/min/agile-min.js'});
+head.js({"core" :   '/jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _AGILE_VERSION});
+head.js({"stats" : 'stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core", "stats"], function(){
 	
 	if(!HANDLEBARS_PRECOMPILATION)
-		downloadTemplate(FLAT_FULL_PATH + "tpl.js");
+		downloadTemplate("tpl.js");
 });
 });
 
@@ -683,12 +688,14 @@ head.ready(["core", "stats"], function(){
 
 
 <!-- Google analytics code -->
+
+
+<!-- Google analytics code -->
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
   ga('create', 'UA-44894190-1', 'auto');
   ga('send', 'pageview');
  

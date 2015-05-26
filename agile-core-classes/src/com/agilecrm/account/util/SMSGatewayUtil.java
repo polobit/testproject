@@ -89,7 +89,6 @@ public class SMSGatewayUtil
 		catch (Exception e)
 		{
 			System.err.println("Exception occured while adding to queue..." + e.getMessage());
-			e.printStackTrace();
 		}
 
 	}
@@ -176,6 +175,12 @@ public class SMSGatewayUtil
 
 	}
 
+	/**
+	 * Returns list of numbers which are verified in the current sms gateway for
+	 * the node dropdown
+	 * 
+	 * @return list of numbers
+	 */
 	public static List<String> currentGatewayNumbers()
 	{
 		Widget smsGatewayWidget = getSMSGatewayWidget();
@@ -186,6 +191,16 @@ public class SMSGatewayUtil
 		return incomingNumbers(smsGatewayWidget);
 	}
 
+	/**
+	 * Send sms and add them to queue
+	 * 
+	 * @param SMSGatewayType
+	 * @param from
+	 * @param to
+	 * @param message
+	 * @param account_id
+	 * @param auth_token
+	 */
 	public static void sendSMS(String SMSGatewayType, String from, String to, String message, String account_id,
 			String auth_token)
 	{
@@ -201,6 +216,12 @@ public class SMSGatewayUtil
 
 	}
 
+	/**
+	 * Returns a link where he can configure the SMS api
+	 * 
+	 * @param smsGatewayWidget
+	 * @return url
+	 */
 	public static String getLink(Widget smsGatewayWidget)
 	{
 
@@ -216,13 +237,18 @@ public class SMSGatewayUtil
 		}
 		catch (Exception e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Exception while sending out configured url in SMSGateway" + e.getMessage());
 		}
 		return "";
 
 	}
 
+	/**
+	 * Returns the type of widget which is configured either twilio or plivo
+	 * 
+	 * @param smsGatewayWidget
+	 * @return sms gateway type
+	 */
 	public static String getSMSType(Widget smsGatewayWidget)
 	{
 		JSONObject prefsJSON;
@@ -240,6 +266,11 @@ public class SMSGatewayUtil
 
 	}
 
+	/**
+	 * SMS logs of the gateway
+	 * 
+	 * @return JSON object of the gateway
+	 */
 	public static JSONObject getSMSLogs()
 	{
 

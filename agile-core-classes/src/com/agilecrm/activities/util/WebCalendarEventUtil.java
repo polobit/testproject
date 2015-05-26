@@ -859,16 +859,16 @@ public class WebCalendarEventUtil
 				{
 
 					usermail = "<p>" + wce.userName + " (" + wce.email
-							+ ") has scheduled an appointment </p><span>Type: '" + wce.name + "' (" + wce.slot_time
-							+ "mins)</span><br/><span>Meeting Type: " + wce.phoneNumber + "</span><br/><span>Note: "
+							+ ") has scheduled an appointment </p><span>Duration: " + wce.slot_time
+							+ "mins</span><br/><span>Meeting Type: " + wce.phoneNumber + "</span><br/><span>Note: "
 							+ wce.notes + "</span><br/><p><a href=https://" + user.domain
 							+ ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
 				}
 				else
 				{
 					usermail = "<p>" + wce.userName + " (" + wce.email
-							+ ") has scheduled an appointment </p><span>Type: '" + wce.name + "' (" + wce.slot_time
-							+ "mins)</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href=https://"
+							+ ") has scheduled an appointment </p><span>Duration: " + wce.slot_time
+							+ "mins</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href=https://"
 							+ user.domain + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
 				}
 
@@ -890,17 +890,16 @@ public class WebCalendarEventUtil
 			if (StringUtils.isNotEmpty(wce.phoneNumber) && !"Meeting Type".equalsIgnoreCase(wce.phoneNumber))
 			{
 				client_mail = "<p>You have a new appointment with <b>" + user.name + "</b> (" + user.email
-						+ ")</p><span>Type: '" + wce.name + "' (" + wce.slot_time + "mins)</span><br/><span>Phone: "
-						+ wce.phoneNumber + "</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href="
-						+ cancel_link
+						+ ")</p><span>Duration: " + wce.slot_time + "mins</span><br/><span>Phone: " + wce.phoneNumber
+						+ "</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href=" + cancel_link
 						+ ">Cancel this appointment</a></p><p>This event has been scheduled using <a href=" + link
 						+ ">Agile CRM</a></p>";
 			}
 			else
 			{
 				client_mail = "<p>You have a new appointment with <b>" + user.name + "</b> (" + user.email
-						+ ")</p><span>Type: '" + wce.name + "' (" + wce.slot_time + "mins)</span><br/><span>Note: "
-						+ wce.notes + "</span><br/><p><a href=" + cancel_link
+						+ ")</p><span>Duration: " + wce.slot_time + "mins</span><br/><span>Note: " + wce.notes
+						+ "</span><br/><p><a href=" + cancel_link
 						+ ">Cancel this appointment</a></p><p>This event has been scheduled using <a href=" + link
 						+ ">Agile CRM</a></p>";
 			}
@@ -1081,8 +1080,10 @@ public class WebCalendarEventUtil
 		String mins = hours.substring(3);
 		if ("00".equals(str) || "24".equals(str))
 			return "12:" + mins + "am";
+		else if ("12".equals(str))
+			return "12:" + mins + "pm";
 		Map<String, String> time_map = new HashMap<>();
-		for (int i = 12, k = 1; i <= 23; i++, k++)
+		for (int i = 13, k = 1; i <= 23; i++, k++)
 		{
 			time_map.put(String.valueOf(i), String.valueOf(k));
 		}

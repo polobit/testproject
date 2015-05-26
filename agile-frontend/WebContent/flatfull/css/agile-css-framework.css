@@ -713,6 +713,10 @@
 {
 	display:inline;
 }
+.flex
+{
+display:flex;
+}
 
 .opa-half
 {
@@ -753,6 +757,10 @@
 .v-text-top
 {
 	vertical-align:text-top;
+}
+.v-text-bottom
+{
+	vertical-align:text-bottom;
 }
 
 /*ending vertical align related properties*/
@@ -1285,8 +1293,4 @@ border-collapse: separate;
 
 .text-head-black{
 	color:#333;
-}
-
-#myCarousel .item{
-	margin-left: 0px !important;
 }

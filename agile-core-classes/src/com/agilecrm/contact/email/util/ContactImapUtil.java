@@ -32,14 +32,14 @@ public class ContactImapUtil
     public static String getIMAPURL(AgileUser agileUser, String searchEmail, String offset, String count)
     {
 	// Get Imap Prefs
-	IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(agileUser);
+	List<IMAPEmailPrefs> imapPrefsList = IMAPEmailPrefsUtil.getIMAPPrefsList(agileUser);
 
-	if (imapPrefs == null)
+	if (imapPrefsList == null || imapPrefsList.size() <= 0)
 	    return null;
 
 	String fetchItems = "mails";
 
-	return ContactImapUtil.getIMAPURLForPrefs(imapPrefs, fetchItems, searchEmail, offset, count);
+	return ContactImapUtil.getIMAPURLForPrefs(imapPrefsList.get(0), fetchItems, searchEmail, offset, count);
     }
 
     /**
@@ -56,8 +56,7 @@ public class ContactImapUtil
      *            - count or limit to number of emails.
      * @return String
      */
-    public static String getIMAPURL(AgileUser agileUser, String fromEmail, String searchEmail, String offset,
-	    String count)
+    public static String getIMAPURL(String fromEmail, String searchEmail, String offset, String count)
     {
 	// Fetching ImapPrefs
 	Objectify ofy = ObjectifyService.begin();
@@ -78,11 +77,8 @@ public class ContactImapUtil
      * @param fetchItems
      * @return
      */
-    public static String getIMAPURLForFetchingFolders(AgileUser agileUser, String fetchItems)
+    public static String getIMAPURLForFetchingFolders(IMAPEmailPrefs imapPrefs, String fetchItems)
     {
-	// Fetching ImapPrefs
-	IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(agileUser);
-
 	if (imapPrefs == null)
 	    return null;
 
@@ -100,7 +96,6 @@ public class ContactImapUtil
     {
 	if (imapPrefs == null)
 	    return null;
-
 	return ContactImapUtil.getIMAPURLForPrefs(imapPrefs, "default_folders", null, null, null);
     }
 
@@ -171,7 +166,7 @@ public class ContactImapUtil
 	{
 	    StringBuffer buffer = new StringBuffer();
 	    for (int i = 0; i < folderList.size(); i++)
-	    { 
+	    {
 		buffer.append(folderList.get(i));
 		if (i < folderList.size() - 1)
 		    buffer.append(",");
@@ -189,8 +184,8 @@ public class ContactImapUtil
 		url = hostUrl + "/imap?user_name=" + URLEncoder.encode(userName, "UTF-8") + "&search_email="
 		        + searchEmail + "&host=" + URLEncoder.encode(host, "UTF-8") + "&port="
 		        + URLEncoder.encode(port, "UTF-8") + "&offset=" + offset + "&count=" + count
-		        + "&command=imap_email&&fetch_items=mails&password=" + URLEncoder.encode(password, "UTF-8")
-		        + "&folder_names=" + URLEncoder.encode(foldersString,"UTF-8");
+		        + "&command=imap_email&fetch_items=mails&password=" + URLEncoder.encode(password, "UTF-8")
+		        + "&folder_names=" + URLEncoder.encode(foldersString, "UTF-8");
 	    }
 	    else if (fetch_items.equalsIgnoreCase("folders"))
 	    {

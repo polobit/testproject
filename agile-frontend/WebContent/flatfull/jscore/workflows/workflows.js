@@ -203,8 +203,8 @@ $(function(){
 		});
 
 		// Stops video on modal hide
-		$(workflow_help_modal).on("hide", function(){
-			$(this).children('div.modal-body').find("iframe").removeAttr("src");
+		$(workflow_help_modal).on("hide.bs.modal", function(){
+			$(this).find("iframe").removeAttr("src");
 		});
 	});
 	

@@ -256,7 +256,6 @@ function displaySlots()
 
 			k++;
 		}
-
 		return listSlot;
 	}
 

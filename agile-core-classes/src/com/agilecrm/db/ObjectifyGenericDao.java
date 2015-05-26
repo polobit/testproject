@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
+import com.agilecrm.ContactSchemaUpdateStats;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.AccountPrefs;
@@ -188,6 +189,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(Form.class);
 
 	ObjectifyService.register(BulkActionLog.class);
+	
+	ObjectifyService.register(ContactSchemaUpdateStats.class);
 
     }
 

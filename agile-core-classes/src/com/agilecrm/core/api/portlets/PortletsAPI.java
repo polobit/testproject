@@ -135,6 +135,26 @@ public class PortletsAPI {
 		}
 	}
 	/**
+	 * Saves position of portlet, used to show portlets in ascending order 
+	 * according to position
+	 * 
+	 * @param portlets
+	 *             {@link List} of {@link Portlet}
+	 */
+	@Path("saveOnboardingPrefs")
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Portlet saveOnboardingPortletPrefs(Portlet portlet)throws Exception{
+		if (portlet == null)
+			return null;
+
+		Portlet portlt = PortletUtil.getPortlet(portlet.id);
+		portlt.prefs=portlet.prefs;
+		portlt.save();
+		return portlt;
+	}
+	/**
 	 * Updates a portlet
 	 * 
 	 * @param portlet
@@ -400,5 +420,23 @@ public class PortletsAPI {
 		json.put("startDate",startDate);
 		json.put("endDate",endDate);
 		return PortletUtil.getEmailsOpenedPieData(json);
+	}
+	/**
+	 * Gets Status Report portlet data
+	 * 
+	 * @return {@Link List} of {@link Contact}
+	 */
+	@Path("/portletStatsReport")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public JSONObject getPortletStatsReportData(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate,@QueryParam("time_zone") String timeZone,@QueryParam("reportType") String reportType)throws Exception {
+		JSONObject json=new JSONObject();
+		json.put("duration",duration);
+		json.put("startDate",startDate);
+		json.put("endDate",endDate);
+		json.put("timeZone",timeZone);
+		json.put("reportType",reportType);
+		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
+		return PortletUtil.getPortletStatsReportData(json);
 	}
 }

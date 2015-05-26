@@ -20,6 +20,7 @@ public class RegularPlanLimits extends PlanLimits
 		reporting = "ALL";
 		whiteLabelEnabled = true;
 		campaignNodesLimit = 25;
+		emailAccountsLimit = 1;
 
 		/**
 		 * New plan limits
@@ -52,7 +53,7 @@ public class RegularPlanLimits extends PlanLimits
 		paymentSync = true;
 		accountingSync = true;
 
-		widgets = 10;
+		widgets = Integer.MAX_VALUE;
 		customWidget = true;
 	}
 }
