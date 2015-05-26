@@ -69,7 +69,7 @@ public class ContactBillingRestriction extends DaoBillingRestriction
 
 	int count = restriction.contacts_count;
 
-	String tag = setTagsToUpdate(max_allowed, restriction.contacts_count);
+	String tag = setTagsToUpdate(max_allowed, restriction.contacts_count + 1);
 
 	restriction.contacts_count = count;
 
