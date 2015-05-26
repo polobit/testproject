@@ -347,25 +347,18 @@ public class BillingRestrictionUtil
 
 	Plan plan = subscription.plan;
 
-	return getBillingRestritionAndSetInCookie(plan, request);
+	BillingRestriction billingRestriction = getBillingRestrictionAndSubscriptionFromDB();
+
+	return getBillingRestritionAndSetInCookie(billingRestriction, request);
 
     }
 
-    public static BillingRestriction getBillingRestritionAndSetInCookie(Plan plan, HttpServletRequest request)
+    private static BillingRestriction getBillingRestritionAndSetInCookie(BillingRestriction restriction,
+	    HttpServletRequest request)
     {
-	BillingRestriction billingRestriction = null;
-
-	try
-	{
-	    billingRestriction = getBillingRestrictionFromDbWithoutSubscription();
-	    billingRestriction.planDetails = plan.getPlanDetails();
-	}
-	catch (Exception e)
-	{
-	    billingRestriction = BillingRestriction.getInstance(plan.plan_type.toString(), plan.quantity);
-	}
-
 	UserInfo info = (UserInfo) request.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
+
+	Plan plan = restriction.getCurrentLimits().getPlan();
 
 	info.setPlan(plan.plan_type.toString());
 	info.setUsersCount(plan.quantity);
@@ -380,6 +373,26 @@ public class BillingRestrictionUtil
 
 	System.out.println(SessionManager.get());
 
-	return billingRestriction;
+	return restriction;
+    }
+
+    public static BillingRestriction getBillingRestrictionAndSubscriptionFromDB()
+    {
+	BillingRestriction billingRestriction = null;
+
+	try
+	{
+	    billingRestriction = getBillingRestrictionFromDbWithoutSubscription();
+	    Subscription subscription = SubscriptionUtil.getSubscription();
+
+	    Plan plan = subscription.plan;
+	    billingRestriction.planDetails = plan.getPlanDetails();
+
+	    return billingRestriction;
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
     }
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.impl.ContactBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.DomainUserBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.EmailBillingRestriction;
@@ -14,6 +15,7 @@ import com.agilecrm.subscription.restrictions.entity.impl.TriggerBillingRestrict
 import com.agilecrm.subscription.restrictions.entity.impl.WebRuleBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.WildCardBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.WorkflowBillingRestriction;
+import com.agilecrm.subscription.restrictions.util.BillingRestrictionReminderUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
@@ -33,36 +35,46 @@ public abstract class DaoBillingRestriction implements
      */
     public static enum ClassEntities
     {
-	Contact(ContactBillingRestriction.class),
+	Contact(ContactBillingRestriction.class, "Contact"),
 
-	WebRule(WebRuleBillingRestriction.class),
+	WebRule(WebRuleBillingRestriction.class, "WebRule"),
 
-	Workflow(WorkflowBillingRestriction.class),
+	Workflow(WorkflowBillingRestriction.class, "Workflow"),
 
-	Report(ReportGraphBillingRestriction.class),
+	Report(ReportGraphBillingRestriction.class, ""),
 
-	DomainUser(DomainUserBillingRestriction.class),
+	DomainUser(DomainUserBillingRestriction.class, ""),
 
-	Email(EmailBillingRestriction.class),
+	Email(EmailBillingRestriction.class, "Email"),
 
-	Reports(ReportBillingRestriction.class),
+	Reports(ReportBillingRestriction.class, ""),
 
-	Trigger(TriggerBillingRestriction.class),
+	Trigger(TriggerBillingRestriction.class, "Trigger"),
 
-	WildCard(WildCardBillingRestriction.class);
+	WildCard(WildCardBillingRestriction.class, "");
 
 	Class<? extends DaoBillingRestriction> clazz;
 
-	private ClassEntities(Class<? extends DaoBillingRestriction> clazz)
+	String tagPrefix;
+
+	private ClassEntities(Class<? extends DaoBillingRestriction> clazz, String tagPrefix)
 	{
 	    this.clazz = clazz;
+	    this.tagPrefix = tagPrefix;
 	}
 
 	public Class<? extends DaoBillingRestriction> getClazz()
 	{
 	    return clazz;
 	}
+
+	public String getTagPrefix()
+	{
+	    return tagPrefix;
+	}
     }
+
+    private ClassEntities entityClass = null;
 
     public static final WildCardBillingRestriction wildCardRestriction = new WildCardBillingRestriction();
 
@@ -147,6 +159,7 @@ public abstract class DaoBillingRestriction implements
     private static DaoBillingRestriction getPlanInstance(String className)
     {
 	ClassEntities entity = ClassEntities.valueOf(className);
+
 	if (entity == null)
 	    return null;
 
@@ -166,6 +179,9 @@ public abstract class DaoBillingRestriction implements
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+
+	if (dao != null)
+	    dao.entityClass = entity;
 
 	return dao;
     }
@@ -203,6 +219,7 @@ public abstract class DaoBillingRestriction implements
 	try
 	{
 	    getTag();
+
 	}
 	catch (Exception e)
 	{
@@ -228,6 +245,44 @@ public abstract class DaoBillingRestriction implements
     public String getTag()
     {
 	return null;
+    }
+
+    protected String setTagsToUpdate(int max_allowed, int currentCount)
+    {
+
+	String tag = BillingRestrictionReminderUtil.getTag(currentCount, max_allowed, entityClass.getTagPrefix(),
+		hardUpdateTags);
+
+	if (tag != null)
+	{
+	    int percentage = BillingRestrictionReminderUtil
+		    .calculatePercentage(max_allowed, restriction.contacts_count);
+
+	    // If tags are not there then new tag is saved in tags in our domain
+	    // class
+	    if ((restriction.tags_in_our_domain.isEmpty() || !restriction.tags_in_our_domain.contains(tag))
+		    && percentage >= 75)
+	    {
+
+		// Removes previous tags
+		for (String percentageString : BillingRestrictionUtil.percentages)
+		{
+		    restriction.tags_in_our_domain.remove(entityClass.getTagPrefix() + "_" + percentageString);
+		}
+
+		restriction.tags_in_our_domain.add(tag);
+
+		restriction.save();
+		restriction.tagsToAddInOurDomain.add(tag);
+
+		return tag;
+	    }
+
+	    // Updates tag even if percentage is less than 75%
+	    if (hardUpdateTags && percentage < 75)
+		restriction.tagsToAddInOurDomain.add(tag);
+	}
+	return tag;
     }
 
     public void setBillingRestriction(BillingRestriction restriction)

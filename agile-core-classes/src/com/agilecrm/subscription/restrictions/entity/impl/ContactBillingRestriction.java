@@ -4,7 +4,6 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
-import com.agilecrm.subscription.restrictions.util.BillingRestrictionReminderUtil;
 
 /**
  * Contacts billing restriction class to check whether new contacts can be
@@ -68,39 +67,7 @@ public class ContactBillingRestriction extends DaoBillingRestriction
 	if (restriction == null || restriction.contacts_count == null)
 	    return null;
 
-	String tag = BillingRestrictionReminderUtil.getTag(restriction.contacts_count, max_allowed, "Contact",
-		hardUpdateTags);
-
-	if (tag != null)
-	{
-	    int percentage = BillingRestrictionReminderUtil
-		    .calculatePercentage(max_allowed, restriction.contacts_count);
-	    // If tags are not there then new tag is saved in tags in our domain
-	    // class
-	    if ((restriction.tags_in_our_domain.isEmpty() || !restriction.tags_in_our_domain.contains(tag))
-		    && percentage >= 75)
-	    {
-
-		// Removes previous tags
-		for (String percentageString : BillingRestrictionUtil.percentages)
-		{
-		    restriction.tags_in_our_domain.remove(Contact.class.getSimpleName() + "-" + percentageString);
-		}
-
-		restriction.tags_in_our_domain.add(tag);
-
-		restriction.save();
-		restriction.tagsToAddInOurDomain.add(tag);
-		return tag;
-	    }
-
-	    // Updates tag even if percentage is less than 75%
-	    if (hardUpdateTags && percentage < 75)
-		restriction.tagsToAddInOurDomain.add(tag);
-	}
-
-	return tag;
-
+	return setTagsToUpdate(max_allowed, restriction.contacts_count);
     }
 
     @Override
@@ -112,14 +79,14 @@ public class ContactBillingRestriction extends DaoBillingRestriction
 
 	return can_update();
     }
-    
+
     @Override
     public int getPendingCount()
     {
-	if(restriction.contacts_count == null || restriction.contacts_count == 0)
+	if (restriction.contacts_count == null || restriction.contacts_count == 0)
 	    return max_allowed;
-	
-        // TODO Auto-generated method stub
-        return max_allowed - restriction.contacts_count;
+
+	// TODO Auto-generated method stub
+	return max_allowed - restriction.contacts_count;
     }
 }

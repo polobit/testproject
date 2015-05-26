@@ -164,11 +164,10 @@ public class SubscriptionApi
     {
 	try
 	{
-	    BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
+
 	    Subscription subscribe = Subscription.updatePlan(plan);
 
-	    BillingRestriction restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(subscribe.plan,
-		    request);
+	    BillingRestriction restriction = BillingRestrictionUtil.getBillingRestritionAndSetInCookie(request);
 
 	    subscribe.cachedData = restriction;
 

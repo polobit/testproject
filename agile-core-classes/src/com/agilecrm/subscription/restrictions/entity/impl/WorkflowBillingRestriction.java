@@ -2,7 +2,6 @@ package com.agilecrm.subscription.restrictions.entity.impl;
 
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
-import com.agilecrm.subscription.restrictions.util.BillingRestrictionReminderUtil;
 import com.agilecrm.workflows.Workflow;
 
 public class WorkflowBillingRestriction extends DaoBillingRestriction
@@ -61,18 +60,11 @@ public class WorkflowBillingRestriction extends DaoBillingRestriction
     @Override
     public String getTag()
     {
-	System.out.println(max_allowed);
-	System.out.println(restriction.campaigns_count);
-	String tag = BillingRestrictionReminderUtil.getTag(restriction.campaigns_count, max_allowed, "Workflow",
-		hardUpdateTags);
 
-	System.out.println(restriction.campaigns_count + ", " + max_allowed);
-	System.out.println("system tag");
-	System.out.println(tag);
-	if (tag != null)
-	    restriction.tagsToAddInOurDomain.add(tag);
+	if (restriction == null || restriction.campaigns_count == null)
+	    return null;
 
-	return tag;
+	return setTagsToUpdate(max_allowed, restriction.campaigns_count);
     }
 
     @Override
