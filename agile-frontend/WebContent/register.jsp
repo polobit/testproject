@@ -139,6 +139,14 @@ $.validator.setDefaults({
 <%
     String ua = request.getHeader("User-Agent");
 			boolean isMSIE = (ua != null && ua.indexOf("MSIE") != -1);
+	Cookie[] cookies = request.getCookies();
+	String email ="";
+	if(cookies != null && cookies.length > 0)
+	{
+		for(Cookie cookie : cookies)
+			if(cookie.getName().equals("td2h2iv4njd4mbalruce18q7n4-agile-email"))
+				email = cookie.getValue();
+	}
 %>
 
 <%
@@ -190,7 +198,7 @@ $.validator.setDefaults({
 				<div class="clearfix"></div>
 
 				<form name='agile' id="agile" method='post'
-					onsubmit="return isValid();" style="min-height:572px">
+					onsubmit="return isValid();">
 					<div id="cor" class="carousel slide" data-ride="carousel">
 					<div class="carousel-inner" >
 						<div class="item active">
@@ -201,22 +209,16 @@ $.validator.setDefaults({
 								</h1>
 								<div class="reg-info">No credit card required</div>
 							</div>
-							<fieldset id="agile-fieldset">
+							<fieldset id="agile-fieldset1">
 								<!--  <h3 class="log-subhead"><small>Or Fill out the form below</small></h3>	 -->
 								<div id="openid_btns" class="regpage-fieldview">
 									<input type='hidden' name='type' value='agile'></input>
 									<input type='hidden' name='account_timezone' id='account_timezone' value=''></input>
-									<div class="form-group login-userid">
-										<span class="regpage-uname"></span> <input
-											class="input-xlarge field required form-control" name='name'
-											type="text" maxlength="50" minlength="3"
-											placeholder="Full Name" autocapitalize="off" autofocus>
-									</div>
 									<div class="form-group login-email">
 										<span class="regpage-mail"></span> <input
 											class="input-xlarge field required email form-control"
 											id="login_email" name='email' type="text" maxlength="50"
-											minlength="6" placeholder="Email Address (User ID)"
+											minlength="6" value="<%=email%>" placeholder="Email Address (User ID)"
 											autocapitalize="off">
 									</div>
 									<div class="form-group ">
@@ -224,18 +226,6 @@ $.validator.setDefaults({
 											class="input-xlarge field required form-control"
 											maxlength="20" minlength="4" name='password' type="password"
 											placeholder="Password" autocapitalize="off">
-									</div>
-									<div class="form-group">
-										<div class="input-prepend input-append input-group">
-											<input id='subdomain' type="text" placeholder="Company"
-												name="subdomain"
-												class="required  domainLength commonDomain domainCharacters domain_input_field input-medium form-control"
-												autocapitalize="off"> <span
-												class="add-on field_domain_add_on input-group-addon regpage-domain"
-												id="app_address">.agilecrm.com</span>
-											<!--  <span style="color:#999"></span>
-							   	   -->
-										</div>
 									</div>
 									<div align="center" class="regpage-signup">
 										<input type='submit' id="register_account" value="Sign up"
@@ -258,11 +248,11 @@ $.validator.setDefaults({
 						<div class="item">
 							<div align="center">
 								<h1 class="regpage-logHead">
-									<img src="img/signin/cloud-logo.png">One last step
+									<img src="img/signin/cloud-logo.png">Choose your domain
 								</h1>
-								<div class="reg-info"> Tell us a little more</div>
+								<div class="reg-info"></div>
 							</div>
-							<fieldset class="step2">
+							<fieldset id="agile-fieldset2" class="step2">
 								<div class='regpage-fieldview'>
 								<!--  	<h4>About your Company</h4>-->
 								<!--  	<div class="form-group login-company">
@@ -272,7 +262,19 @@ $.validator.setDefaults({
 											id="login_company" name='company' type="text" maxlength="50"
 											placeholder="Company Name" autocapitalize="off">
 									</div> -->
-									 <div class="form-group login-plan_type">
+									<div class="form-group">
+										<div class="input-prepend input-append input-group">
+											<input id='subdomain' type="text" placeholder="Company"
+												name="subdomain"
+												class="required  domainLength commonDomain domainCharacters domain_input_field input-medium form-control"
+												autocapitalize="off"> <span
+												class="add-on field_domain_add_on input-group-addon regpage-domain"
+												id="app_address">.agilecrm.com</span>
+											<!--  <span style="color:#999"></span>
+							   	   -->
+										</div>
+									</div>
+									<div class="form-group login-plan_type">
 									<div style="display:inline-block;float:left;margin-right:5px">
 									<select class="form-control required"  name="plan_type" data-width="100%" style="min-width:175px">
 											<option value="" selected disabled>Choose Plan</option>
@@ -289,6 +291,43 @@ $.validator.setDefaults({
 								 	 </div>
 									</div>
 									<div class="clearfix"></div>
+									
+								 
+									
+								  </div>
+								  <div align="center" class="regpage-signup">
+										<input type='submit' id="register_domain" value="Continue"
+											class='btn btn-large btn-primary  regpage-btn'>
+									</div>
+										<div class="form-group regpage-options log-terms"
+										style="margin-bottom: 0px;"></div>
+										
+							</fieldset>
+						</div>
+						
+						<div class="item">
+							<div align="center">
+								<h1 class="regpage-logHead">
+									<img src="img/signin/cloud-logo.png">One last step
+								</h1>
+								<div class="reg-info"> A little bit about yourself</div>
+							</div>
+							<fieldset class="step3">
+								<div class='regpage-fieldview'>
+								<!--  	<h4>About your Company</h4>-->
+								<!--  	<div class="form-group login-company">
+							<!-- 	<div style="display:inline-block;width:50%">  	
+										<span class="regpage-company"></span> <input
+											class="input-xlarge field required form-control"
+											id="login_company" name='company' type="text" maxlength="50"
+											placeholder="Company Name" autocapitalize="off">
+									</div> -->
+									<div class="form-group login-userid">
+										<span class="regpage-uname"></span> <input
+											class="input-xlarge field required form-control" name='name'
+											type="text" maxlength="50" minlength="3"
+											placeholder="Full Name" autocapitalize="off" autofocus>
+									</div> 
 									<div class="form-group login-company">
 								<!--	<div style="display:inline-block;width:49%"> -->
 									<select class="form-control required"  name="company_type" data-width="100%">
@@ -339,7 +378,7 @@ $.validator.setDefaults({
 									</div>
 
 									<div align="center" class="regpage-signup">
-										<input type='submit' id="confirm_registration" value="Confirm"
+										<input type='submit' id="confirm_registration" value="Done"
 											class='btn btn-large btn-primary  regpage-btn'>
 									</div>
 										<div class="form-group regpage-options log-terms"
@@ -466,8 +505,6 @@ $.validator.setDefaults({
 					 if(isValid())
 						{
 						 $(".regpage-container").addClass('regpage-container-fixed-height');
-						 var domain = $("#subdomain").val();
-						 var email = $("#login_email").val();
 						
 						 
 						 // Pauses the carousel
@@ -477,9 +514,25 @@ $.validator.setDefaults({
 						 
 						 if(step == 0)
 						{
-							var url =  "/backend/register-check?domain="+domain+"&email=" + email;
+							// removes error message if any
+							 $("#email-error").hide();
+							 var email = $("#login_email").val(); 
+							var url =  "/backend/register-check?email=" + email;
 							 isDuplicateAccount(url, form, function(data){
 								 $("#register_account").removeAttr("disabled");
+								// $('.carousel').find('.active').hide();
+								 $('#cor').carousel("next");
+								 $('#cor').carousel('pause');
+							 })
+							 return;
+						}else if(step == 1)
+						{
+							// removes error message if any
+							 $("#email-error").hide();
+							var domain = $("#subdomain").val();
+							var url =  "/backend/register-check?domain="+domain;
+							 isDuplicateAccount(url, form, function(data){
+								 $("#register_domain").removeAttr("disabled");
 								// $('.carousel').find('.active').hide();
 								 $('#cor').carousel("next");
 								 $('#cor').carousel('pause');
@@ -529,7 +582,7 @@ $.validator.setDefaults({
 		function isValid(){
 			
 			// Return if action is already in process 
-			if($("#register_account").attr("disabled"))
+			if($("#register_account").attr("disabled") || $("#register_domain").attr("disabled"))
 				return;
 			 $(".regpage-container").removeClass('regpage-container-fixed-height');
 			 
@@ -540,7 +593,11 @@ $.validator.setDefaults({
 		
 		function isDuplicateAccount(url, form, successCallback, errorCallback)
 		{
+			var step = $('.carousel').find('.active').index();
+			if(step == 0)
 			 $("#register_account").attr("disabled", "disabled");
+			else if(step == 1)
+			 $("#register_domain").attr("disabled", "disabled");
 			 
 			 $.post(url, {}, function(data){
 				 console.log(data);
@@ -554,17 +611,23 @@ $.validator.setDefaults({
 					 console.log(data.error);
 					
 					// If error block is removed, it is added again into DOM 
-					  var error_block = $("#domain-error");
-					
-					  if(error_block.length)
-						  $("#domain-error").html("<a class='close' data-dismiss='alert' href='#'>&times</a> " + data.error).show();
-					  else
-						  $("#agile-fieldset").prepend('<div id="domain-error" class="alert alert-error login-error" ><a class="close" data-dismiss="alert" href="#">&times</a>'+ data.error+'</div');
-
-				
-					  
-					  $("#register_account").removeAttr("disabled");
-					  
+					  var email_error_block = $("#email-error");
+					  var domain_error_block = $("#domain-error");
+					  if(step == 0)
+					  {
+						  if(email_error_block.length)
+							  $("#email-error").html("<a class='close' data-dismiss='alert' href='#'>&times</a> " + data.error).show();
+						  else
+							  $("#agile-fieldset1").prepend('<div id="email-error" class="alert alert-error login-error" ><a class="close" data-dismiss="alert" href="#">&times</a>'+ data.error+'</div');
+						  $("#register_account").removeAttr("disabled");
+					  }else if(step == 1)
+					  {
+						  if(domain_error_block.length)
+							  $("#domain-error").html("<a class='close' data-dismiss='alert' href='#'>&times</a> " + data.error).show();
+						  else
+							  $("#agile-fieldset2").prepend('<div id="domain-error" class="alert alert-error login-error" ><a class="close" data-dismiss="alert" href="#">&times</a>'+ data.error+'</div');
+						  $("#register_domain").removeAttr("disabled");
+					  }
 					  if(errorCallback && typeof errorCallback === 'function')
 						  errorCallback(data);
 					  return;
@@ -572,6 +635,7 @@ $.validator.setDefaults({
 					}
 				  
 				  // Hides error message if any 
+				  $("#email-error").hide();
 				  $("#domain-error").hide();
 				  
 				  if(successCallback && typeof successCallback === 'function')

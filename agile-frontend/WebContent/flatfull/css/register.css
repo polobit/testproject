@@ -18,7 +18,7 @@ html,body
 	font-family:"Open Sans",Arial,sans-serif;
 }
 
-#domain-error
+#domain-error, #email-error
 {
 	background: #e87251;
 color: #fff;

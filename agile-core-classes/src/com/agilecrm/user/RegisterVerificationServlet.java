@@ -89,10 +89,18 @@ public class RegisterVerificationServlet extends HttpServlet
 		    return;
 		}
 	    }
+	    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
+		if (domainUser != null)
+		{
+
+		    writeErrorMessage(response, "User with same email address already exists in our system for "
+			    + domainUser.domain + " domain");
+		    return;
+		}
 	}
 
 	System.out.println("domain : " + domain + ", email" + email);
-	if (DomainUserUtil.count(domain) > 0)
+	if (!StringUtils.isEmpty(domain) && DomainUserUtil.count(domain) > 0)
 	{
 	    System.out.println("duplicate domain");
 
@@ -107,14 +115,6 @@ public class RegisterVerificationServlet extends HttpServlet
 	if (!StringUtils.isEmpty(oauth))
 	    return;
 
-	DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
-	if (domainUser != null)
-	{
-
-	    writeErrorMessage(response, "User with same email address already exists in our system for "
-		    + domainUser.domain + " domain");
-	    return;
-	}
 
 	writeSussessMessage(response, "success");
     }
