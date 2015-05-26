@@ -1305,4 +1305,9 @@ display:none;
 #plans-panel .row-sm > div {
 	opacity:0.5;
 }
-
+.billingBtnAlign {
+	position:absolute;
+	bottom:30px;
+}
+	
+}
