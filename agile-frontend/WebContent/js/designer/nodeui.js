@@ -88,7 +88,7 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     	init_tags_typeahead();
     }
     
-    if(nodeJSONDefinition["name"] == "Send Message" )
+    if(nodeJSONDefinition["name"] == "Send Message" && (jsonData == undefined || jsonData == "json/nodes/sms/sendmessage.js"))
         $("#nodeui").find("[name=to]").val("{{phone}}");
     
     // Clear Global Operations Queues (for dynamic edit)
