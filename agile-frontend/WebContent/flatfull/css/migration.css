@@ -837,7 +837,10 @@ left:0;
     width:180px;		
 }
 
-/*starting css transition for aside menu hover effect*/
+
+@media (min-width:768px) {
+
+/*starting css transition for aside menu hover effect  */
 .app-aside-folded:not(.app-aside-dock) .navi > ul > li > a
 {
 	width:60px;
@@ -872,6 +875,7 @@ left:0;
 }
 
 /* ending css transition for aside menu hover effect*/
+}
 
 /* .contactView:hover .editArea,.companyLeftView:hover .editArea
 {
@@ -996,13 +1000,14 @@ time,i.fa-clock-o
 #prefs-tabs-content h4:not(.m-t-none),#admin-prefs-tabs-content h4:not(.m-t-none)
 {
 	
-	color:#777!important;
+/*	color:#777!important;
 	font-size:18px;
 }
-/*.app-content-body *:not(.text) i 
+.app-content-body *:not(.text) i 
 {
 	color:#98a6ad!important;
 }*/
+}
 .navbar_due_tasks
 {
 	display:inline-block!important;
@@ -1034,6 +1039,11 @@ time,i.fa-clock-o
 .custom-link,.custom-color{
 	color: #363f44;
 }
+
+.custom-color-star * {
+	color:#363f44!important;
+}
+
 .contact-website a {
 color:#98a6ad;
 font-size:16px;	
@@ -1045,7 +1055,7 @@ font-size:16px;
 }
 .contact-title-dynamic
 {
-	width:calc(100% - 141px);
+	width:calc(100% - 150px);
 }
 .contact-desc-dynamic
 {
@@ -1149,7 +1159,7 @@ color:#1f2427!important;
 {
 	font-size:13px;
 }
-.lhs-row-filter .fa-plus-square-o,.lhs-row-filter .filter-tags-multiple-remove-lhs
+.lhs-row-filter .fa-plus-square-o,.lhs-row-filter .fa-minus-square-o,.lhs-row-filter .filter-tags-multiple-remove-lhs
 {
 	color:#98a6ad;
 }
@@ -1196,7 +1206,7 @@ color:#1f2427!important;
 */
 
 /*hack for contact details top menu position*/
-.app-aside-dock .dock-view-fixing
+.app-aside-dock .dock-view-fixing,.enable-full-height
 {
 top:117px;
 }
@@ -1219,3 +1229,80 @@ top:117px;
 	opacity:0.5;
 
 }
+
+#myCarousel .item{
+	margin-left: 0px !important;
+}
+
+.jslider-label span {
+	font-size: 13px !important;
+}
+	
+.jslider-value span{
+	font-size: 13px !important;
+}
+
+textarea{
+	resize: vertical;
+}
+.activities_second_line i
+{
+padding-right:5px;
+}
+/*remove border and background color for prefs pad content*/
+
+#prefs-tabs-content #slate .alert {
+  background-color: rgb(255, 255, 255);
+  border-color: rgb(255, 255, 255);
+}
+.contacts-div #slate
+{
+padding:10px;
+}
+.imp-rule-safari
+{
+margin-top:-5px!important;
+}
+.contacts-div .panel
+{
+border-left:none;
+}
+.noty_twilio_unmute {
+  display: none;
+}
+
+
+.web-rule-contact-condition-table td:last-child {
+	width:78px;
+}
+
+/* media queries for contact details left , right icons auto hide show */
+
+@media (min-width:1340px){
+.app-aside-dock #contacts-inner-tabs #prev,.app-aside-dock #contacts-inner-tabs #next {
+display:none;
+}
+}
+
+@media (min-width:1400px) {
+.app-aside-folded #contacts-inner-tabs #prev,.app-aside-folded #contacts-inner-tabs #next {
+display:none;
+}
+}
+
+@media (min-width:1545px) {
+.app-aside-fixed #contacts-inner-tabs #prev,.app-aside-fixed #contacts-inner-tabs #next {
+display:none;
+}
+}
+
+
+.web-rule-contact-condition-table tr[class~="chained"]{
+	display:flex;
+	margin-bottom:10px;
+}
+
+#plans-panel .row-sm > div {
+	opacity:0.5;
+}
+

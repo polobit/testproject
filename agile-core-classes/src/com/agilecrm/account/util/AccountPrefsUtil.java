@@ -15,40 +15,54 @@ import com.googlecode.objectify.ObjectifyService;
  */
 public class AccountPrefsUtil
 {
-    /**
-     * AccountPrefs Dao.
-     */
-    private static ObjectifyGenericDao<AccountPrefs> dao = new ObjectifyGenericDao<AccountPrefs>(
-	    AccountPrefs.class);
+	/**
+	 * AccountPrefs Dao.
+	 */
+	private static ObjectifyGenericDao<AccountPrefs> dao = new ObjectifyGenericDao<AccountPrefs>(AccountPrefs.class);
 
-    /**
-     * Returns AccountPrefs if exists, otherwise returns default accountprefs.
-     * 
-     * @return AccountPrefs.
-     */
-    public static AccountPrefs getAccountPrefs()
-    {
-	Objectify ofy = ObjectifyService.begin();
-	AccountPrefs prefs = ofy.query(AccountPrefs.class).get();
-
-	if (prefs == null)
+	/**
+	 * Returns AccountPrefs if exists, otherwise returns default accountprefs.
+	 * 
+	 * @return AccountPrefs.
+	 */
+	public static AccountPrefs getAccountPrefs()
 	{
-	    return getDefaultPrefs();
+		Objectify ofy = ObjectifyService.begin();
+		AccountPrefs prefs = ofy.query(AccountPrefs.class).get();
+
+		if (prefs == null)
+		{
+			return getDefaultPrefs();
+		}
+
+		return prefs;
 	}
 
-	return prefs;
-    }
+	/**
+	 * Returns Default AccountPrefs.
+	 * 
+	 * @return Default AccountPrefs.
+	 */
+	private static AccountPrefs getDefaultPrefs()
+	{
+		AccountPrefs prefs = new AccountPrefs("My company");
 
-    /**
-     * Returns Default AccountPrefs.
-     * 
-     * @return Default AccountPrefs.
-     */
-    private static AccountPrefs getDefaultPrefs()
-    {
-	AccountPrefs prefs = new AccountPrefs("My company");
+		dao.put(prefs);
+		return prefs;
+	}
 
-	dao.put(prefs);
-	return prefs;
-    }
+	/**
+	 * Returns account prefs timezone.
+	 * 
+	 * @return String
+	 */
+	public static String getTimeZone()
+	{
+		AccountPrefs prefs = getAccountPrefs();
+
+		if (prefs == null)
+			return "UTC";
+
+		return prefs.timezone;
+	}
 }

@@ -158,6 +158,8 @@ public class Globals
 	public static final String MANDRIL_API_KEY_VALUE = "iQ_811cc9NxpLG11Ue4ftA";
 	public static final String MANDRILL_TEST_API_KEY_VALUE = "MRiwkducZGEbXrLW1LC5oQ";
 
+	public static final String MANDRILL_PAID_POOL = "paid-pool";
+	
 	// Mailgun API key
 	public static final String MAILGUN_API_KEY_VALUE = "key-6rj8jh4d-ftsq2er2oqneoa7zi3e2-j3";
 

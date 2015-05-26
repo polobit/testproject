@@ -52,12 +52,12 @@
         {{/if}}
     <div class="col-md-3">
         <div class="data-block">
-            <div class="wrapper-sm">
-                <h4 class="m-t-none font-thin">
+            
+                <h4 class="m-t-none m-b-sm h4">
                     How to use Documents?
                 </h4>                
-                <p>You can attach Documents to Contacts or Deals to add more context. Upload documents from your computer or attach them from cloud storage like Google Drive.</p>
-            </div>
+                <p>Documents add more context to Contacts or Deals. To add documents, upload them from your computer or append them from a cloud storage like Google Drive.</p>
+            
         </div>
     </div>
 </div>
@@ -78,7 +78,8 @@
 	</div>
 </td>
 <td class="overflow-hidden no-wrap">
-	<div>
+	<div class="text-ellipsis inline-block" style="width:128px">
+<div  style="width:128px">
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}
         		<a href="#contact/{{id}}" class="activate-link thumb-sm"><img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
@@ -86,8 +87,10 @@
 			{{#if_contact_type "COMPANY"}}
         		<a href="#contact/{{id}}" class="activate-link thumb-sm"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
         	{{/if_contact_type}}
-        {{/each}}{{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
+        {{/each}}
 	</div>
+</div>
+{{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
 </td>
 <td class="text-muted">
 	<div class="table-resp">

@@ -26,97 +26,107 @@ import com.campaignio.tasklets.util.TaskletUtil;
  */
 public class Opened extends TaskletAdapter
 {
-    /**
-     * Duration period
-     */
-    public static String DURATION = "duration";
+	/**
+	 * Duration period
+	 */
+	public static String DURATION = "duration";
 
-    /**
-     * Duration type
-     */
-    public static String DURATION_TYPE = "duration_type";
+	/**
+	 * Duration type
+	 */
+	public static String DURATION_TYPE = "duration_type";
 
-    /**
-     * If opened then Yes
-     */
-    public static String BRANCH_YES = "Yes";
+	/**
+	 * If opened then Yes
+	 */
+	public static String BRANCH_YES = "Yes";
 
-    /**
-     * If not opened then No
-     */
-    public static String BRANCH_NO = "No";
+	/**
+	 * If not opened then No
+	 */
+	public static String BRANCH_NO = "No";
 
-    /**
-     * Executes opened node based on given duration.
-     * 
-     * @param campaignJSON
-     *            - complete campaign json.
-     * @param subscriberJSON
-     *            - contact json
-     * @param data
-     *            - workflow data
-     * @param nodeJSON
-     *            - current node json
-     **/
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
-    {
-	// Get Duration, Type
-	String duration = getStringValue(nodeJSON, subscriberJSON, data, DURATION);
-	String durationType = getStringValue(nodeJSON, subscriberJSON, data, DURATION_TYPE);
+	/**
+	 * Executes opened node based on given duration.
+	 * 
+	 * @param campaignJSON
+	 *            - complete campaign json.
+	 * @param subscriberJSON
+	 *            - contact json
+	 * @param data
+	 *            - workflow data
+	 * @param nodeJSON
+	 *            - current node json
+	 **/
+	public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+			throws Exception
+	{
+		// Get Duration, Type
+		String duration = getStringValue(nodeJSON, subscriberJSON, data, DURATION);
+		String durationType = getStringValue(nodeJSON, subscriberJSON, data, DURATION_TYPE);
 
-	// Add ourselves to Cron Queue
-	long timeout = CronUtil.getTimer(duration, durationType);
+		try
+		{
+			// Add ourselves to Cron Queue
+			long timeout = CronUtil.getTimer(duration, durationType);
 
-	// Enqueue into Cron
-	CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, AgileTaskletUtil.getId(campaignJSON),
-		AgileTaskletUtil.getId(subscriberJSON), null);
+			// Enqueue into Cron
+			CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout,
+					AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), null);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception raised in Opened node" + e.getMessage());
+		}
 
-    }
+	}
 
-    /**
-     * Executes when email opened within the given period.
-     * 
-     * @param campaignJSON
-     *            - CampaignJSON.
-     * @param subscriberJSON
-     *            - SubscriberJSON.
-     * @param data
-     *            - data json used within workflow.
-     * @param nodeJSON
-     *            - Node JSON.
-     * @param customData
-     *            - custom data like open tracking id.
-     * 
-     **/
-    public void interrupted(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON, JSONObject customData) throws Exception
-    {
+	/**
+	 * Executes when email opened within the given period.
+	 * 
+	 * @param campaignJSON
+	 *            - CampaignJSON.
+	 * @param subscriberJSON
+	 *            - SubscriberJSON.
+	 * @param data
+	 *            - data json used within workflow.
+	 * @param nodeJSON
+	 *            - Node JSON.
+	 * @param customData
+	 *            - custom data like open tracking id.
+	 * 
+	 **/
+	public void interrupted(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON,
+			JSONObject customData) throws Exception
+	{
 
-	// Merge customData json with data json.
-	data = JSONUtil.mergeJSONs(new JSONObject[] { data, customData });
+		// Merge customData json with data json.
+		data = JSONUtil.mergeJSONs(new JSONObject[] { data, customData });
 
-	// Execute Next One in Loop (Yes)
-	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_YES);
-    }
+		// Execute Next One in Loop (Yes)
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_YES);
+	}
 
-    /**
-     * Executes after given time-period in the email opened node completes.
-     * 
-     * @param campaignJSON
-     *            - CampaignJSON.
-     * @param subscriberJSON
-     *            - SubscriberJSON.
-     * @param data
-     *            - data json used within workflow.
-     * @param nodeJSON
-     *            - Node JSON.
-     **/
-    public void timeOutComplete(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
-    {
-	// Creates log for clicked when there are no clicks
-	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Email not opened within given duration.",
-		LogType.OPENED.toString());
+	/**
+	 * Executes after given time-period in the email opened node completes.
+	 * 
+	 * @param campaignJSON
+	 *            - CampaignJSON.
+	 * @param subscriberJSON
+	 *            - SubscriberJSON.
+	 * @param data
+	 *            - data json used within workflow.
+	 * @param nodeJSON
+	 *            - Node JSON.
+	 **/
+	public void timeOutComplete(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+			throws Exception
+	{
+		// Creates log for clicked when there are no clicks
+		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+				"Email not opened within given duration.", LogType.OPENED.toString());
 
-	// Execute Next One in Loop
-	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_NO);
-    }
+		// Execute Next One in Loop
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_NO);
+	}
 }

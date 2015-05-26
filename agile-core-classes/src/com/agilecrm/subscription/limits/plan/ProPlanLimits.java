@@ -24,6 +24,7 @@ public class ProPlanLimits extends PlanLimits
 		reporting = "ALL";
 		whiteLabelEnabled = true;
 		campaignNodesLimit = 50;
+		emailAccountsLimit = 3;
 
 		/**
 		 * New plan limits

@@ -65,19 +65,23 @@ public class Transfer extends TaskletAdapter
 
 	    toWorkflowName = toWorkflow.name;
 
-	    System.out.println(subscriberJSON.getJSONObject("data").getString("first_name") + " is transferred from " + fromWorkflowName + " to "
+	    JSONObject dataJSON = subscriberJSON.getJSONObject("data");
+	    
+	    String name = dataJSON.has("first_name") ? dataJSON.getString("first_name") : "Contact";
+	    
+	    System.out.println(name + " is transferred from " + fromWorkflowName + " to "
 		    + toWorkflowName);
+	    
+	    // Creates log for Transfer
+		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+			name + " transferred from " + fromWorkflowName + " to " + toWorkflowName,
+			LogType.TRANSFER.toString());
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    System.out.println("Got exception in Transfer tasklet " + e);
 	}
-
-	// Creates log for Transfer
-	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-		subscriberJSON.getJSONObject("data").getString("first_name") + " transferred from " + fromWorkflowName + " to " + toWorkflowName,
-		LogType.TRANSFER.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);

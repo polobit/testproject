@@ -1267,7 +1267,10 @@ public class ContactUtil
 		List<String> activeWorkflows = null;
 		try
 		{
+			// Gets the list of all workflows
 			List<CampaignStatus> campaignStatusList = dao.get(id).campaignStatus;
+
+			// Sort the list by ACTIVE status
 			Iterator<CampaignStatus> statusIterator = campaignStatusList.iterator();
 			activeWorkflows = new ArrayList<String>();
 			while (statusIterator.hasNext())
@@ -1281,16 +1284,13 @@ public class ContactUtil
 				catch (EnumConstantNotPresentException e)
 				{
 					System.err.println("Inside workflowListOfAContact");
-					e.printStackTrace();
 				}
 			}
 
 		}
 		catch (EntityNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			System.out.println("Inside workflowListOfAContact of ContactUtil.java and message is: " + e.getMessage());
-			e.printStackTrace();
 		}
 		return activeWorkflows;
 	}
@@ -1419,13 +1419,15 @@ public class ContactUtil
 
 			if (campaignID == null)
 			{
-				// return any status - Done, removed or active
+				// Any campaign with given status
 
+				// return any status - Done, removed or active
 				if (CheckCampaign.ANY_STATUS.equals(status))
 					return dao.getByProperty(searchMap).campaignStatus;
 
 				List<CampaignStatus> campaignIDsList = new ArrayList<CampaignStatus>();
 
+				// Gets list of campaigns ids
 				campaignIDsList = dao.getByProperty(searchMap).campaignStatus;
 
 				Iterator<CampaignStatus> statusIterator = campaignIDsList.iterator();
@@ -1448,11 +1450,14 @@ public class ContactUtil
 
 				List<CampaignStatus> campaignIDsList = new ArrayList<CampaignStatus>();
 
+				// appending status for query
 				if (!CheckCampaign.ANY_STATUS.equals(status))
 					searchMap.put("campaignStatus.status", campaignID + "-" + status.toUpperCase());
 
+				// Adds list of campaign IDs for the given campaign ID
 				campaignIDsList.addAll(dao.getByProperty(searchMap).campaignStatus);
 
+				// return if the status is any
 				if (!CheckCampaign.ANY_STATUS.equals(status))
 					return campaignIDsList;
 
@@ -1460,7 +1465,6 @@ public class ContactUtil
 
 				List<CampaignStatus> givenStatusList = new ArrayList<CampaignStatus>();
 
-				// any status gets active
 				while (statusIterator.hasNext())
 				{
 					CampaignStatus campaignStatus = statusIterator.next();
@@ -1470,11 +1474,9 @@ public class ContactUtil
 
 					if (StringUtils.containsIgnoreCase(campaignStatus.status, CheckCampaign.STATUS_ACTIVE)
 							|| StringUtils.containsIgnoreCase(campaignStatus.status, CheckCampaign.STATUS_DONE))
-					{
 						givenStatusList.add(campaignStatus);
-						return givenStatusList;
-					}
 				}
+				return givenStatusList;
 			}
 		}
 
@@ -1573,5 +1575,27 @@ public class ContactUtil
 			System.out.println("Exception in getCountByID: " + e.getMessage());
 		}
 		return false;
+	}
+	/**
+	 * Get the contacts count created in the specified duration.
+	 * 
+	 * @param minTime
+	 *            Long object
+	 * @param maxTime
+	 *            Long object
+	 */
+	public static int getContactsCount(Long minTime, Long maxTime)
+	{
+		int contactsCount=0;
+		try 
+		{
+			contactsCount = dao.ofy().query(Contact.class).filter("type", Contact.Type.PERSON).filter("created_time >= ", minTime).filter("created_time <= ", maxTime).count();
+			return contactsCount;
+		} catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return 0;
+
 	}
 }

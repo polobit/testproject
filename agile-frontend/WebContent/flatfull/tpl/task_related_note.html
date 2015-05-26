@@ -50,18 +50,20 @@
 			<time class="note-created-time" datetime="{{epochToHumanDate "" created_time}}" >{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
 		</small>	
 	</div>
-	<div class="clearfix"></div>
-	
-	<div>
-		{{show_link_in_statement description}}
-	</div>	
+	<div class="clearfix"></div>	
+	<pre>{{show_link_in_statement description}}</pre>	
 	 
      <div>	
 		{{#each contacts}}
            	{{#if id}}
 				{{#isDuplicateContactProperty properties "email"}}
 					{{else}}	
-						<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+						{{#if_contact_type "PERSON"}}
+						<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+					{{/if_contact_type}}
+					{{#if_contact_type "COMPANY"}}
+        				<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        			{{/if_contact_type}}
 				{{/isDuplicateContactProperty}}
            		
            	{{/if}}

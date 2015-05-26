@@ -9,7 +9,6 @@ import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.queues.util.PullQueueUtil;
-import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
@@ -23,8 +22,6 @@ public class EmailSender
     public EmailBillingRestriction emailBillingRestriction = null;
     public EmailGateway emailGateway = null;
     public AccountEmailStats accountEmailStats = null;
-
-    public PlanLimits limits = null;
 
     private int totalEmailsSent = 0;
 
@@ -41,7 +38,7 @@ public class EmailSender
 	emailSender.billingRestriction = BillingRestrictionUtil.getBillingRestriction(true);
 
 	emailSender.emailBillingRestriction = (EmailBillingRestriction) DaoBillingRestriction.getInstace(
-	        DaoBillingRestriction.ClassEntities.Email.toString(), emailSender.billingRestriction);
+		DaoBillingRestriction.ClassEntities.Email.toString(), emailSender.billingRestriction);
 
 	emailSender.emailGateway = EmailGatewayUtil.getEmailGateway();
 
@@ -52,13 +49,12 @@ public class EmailSender
 
     public boolean isEmailWhiteLabelEnabled()
     {
-	if (limits != null)
-	{
-	    return limits.isEmailWhiteLabelEnabled();
-	}
 
-	limits = billingRestriction.getCurrentLimits();
-	return limits.isEmailWhiteLabelEnabled();
+	isWhiteLabled = billingRestriction.isEmailWhiteLabelEnabled();
+	System.out.println("Email limit for domain " + NamespaceManager.get() + " whitelabel : " + isWhiteLabled
+		+ "pending emails : " + billingRestriction.one_time_emails_count);
+
+	return isWhiteLabled;
     }
 
     public boolean canSend()
@@ -76,12 +72,12 @@ public class EmailSender
 	System.out.println("Updated Stats time is..." + System.currentTimeMillis());
 
 	billingRestriction.one_time_emails_count = billingRestriction.one_time_emails_count == null ? 0
-	        : billingRestriction.one_time_emails_count;
+		: billingRestriction.one_time_emails_count;
 
 	billingRestriction.one_time_emails_count -= totalEmailsSent;
 
 	System.out.println("Updated count : " + billingRestriction.one_time_emails_count + ", emails sent"
-	        + totalEmailsSent);
+		+ totalEmailsSent);
 
 	totalEmailsSent = 0;
 
@@ -169,7 +165,7 @@ public class EmailSender
 	    if (canSend())
 	    {
 		EmailGatewayUtil.sendEmail(emailGateway, domain, fromEmail, fromName, to, cc, bcc, subject, replyTo,
-		        html, text, mandrillMetadata, documentIds, attachments);
+			html, text, mandrillMetadata, documentIds, attachments);
 
 		// Sets Billing restriction limit and account email stats
 		if (!EmailUtil.isToAgileEmail(to))
@@ -190,7 +186,7 @@ public class EmailSender
 
 	// If plan exceeded, throw exception
 	throw new Exception(
-	        "Your email quota has expired. Please <a href=\"#subscribe\">upgrade</a> your email subscription.");
+		"Your email quota has expired. Please <a href=\"#subscribe\">upgrade</a> your email subscription.");
 
     }
 
@@ -199,10 +195,19 @@ public class EmailSender
 	    String html, String text, String mandrillMetadata, String subscriberId, String campaignId)
     {
 	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
-	        fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+		fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
 
 	// Add to pull queue with from email as Tag
 	PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);
+    }
+
+    public static void main(String[] args)
+    {
+	for (int i = 0; i < 100; i++)
+	{
+	    System.out.println(getEmailSender());
+	}
+
     }
 
 }

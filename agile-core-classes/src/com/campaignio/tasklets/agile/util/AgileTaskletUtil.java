@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
@@ -164,7 +165,8 @@ public class AgileTaskletUtil
 		// Custom date labels to convert epoch to Date format
 		List<String> dateCustomFieldLabels = getDateCustomLabelsFromCache();
 
-		return getSubscriberJSON(contact, dateCustomFieldLabels, noCustomField);
+		return getSubscriberJSON(contact, dateCustomFieldLabels, AccountPrefsUtil.getTimeZone(), noCustomField);
+
 	}
 
 	/**
@@ -191,13 +193,13 @@ public class AgileTaskletUtil
 		}
 	}
 
-	public static JSONObject getSubscriberJSON(Contact contact)
-	{
-		// Custom date labels to convert epoch to Date format
-		List<String> dateCustomFieldLabels = getDateCustomLabelsFromCache();
-
-		return getSubscriberJSON(contact, dateCustomFieldLabels);
-	}
+	/*
+	 * public static JSONObject getSubscriberJSON(Contact contact) { // Custom
+	 * date labels to convert epoch to Date format List<String>
+	 * dateCustomFieldLabels = getDateCustomLabelsFromCache();
+	 * 
+	 * return getSubscriberJSON(contact, dateCustomFieldLabels); }
+	 */
 
 	/**
 	 * Converts contact object into json object.
@@ -206,7 +208,7 @@ public class AgileTaskletUtil
 	 *            Contact object that subscribes to workflow.
 	 * @return JsonObject of contact.
 	 */
-	public static JSONObject getSubscriberJSON(Contact contact, List<String> dateCustomFieldLabels,
+	public static JSONObject getSubscriberJSON(Contact contact, List<String> dateCustomFieldLabels, String timezone,
 			boolean... noCustomField)
 	{
 		if (contact == null)
@@ -226,6 +228,10 @@ public class AgileTaskletUtil
 			JSONObject subscriberJSON = new JSONObject();
 
 			List<ContactField> properties = contact.getProperties();
+
+			// if empty, fetch from AccountPrefs
+			if (StringUtils.isBlank(timezone))
+				timezone = AccountPrefsUtil.getTimeZone();
 
 			// Contact Properties
 			for (ContactField field : properties)
@@ -260,11 +266,15 @@ public class AgileTaskletUtil
 							// If it is Date field
 							if (dateCustomFieldLabels.contains(field.name))
 							{
-								long fieldValue = Long.parseLong(field.value);
+								// Converts only epoch times
+								if (!(field.value.contains("/") || field.value.contains(" ")))
+								{
+									long fieldValue = Long.parseLong(field.value);
 
-								fieldValue = (fieldValue / 100000000000L > 1) ? fieldValue : fieldValue * 1000;
+									fieldValue = (fieldValue / 100000000000L > 1) ? fieldValue : fieldValue * 1000;
 
-								field.value = DateUtil.getGMTDateInGivenFormat(fieldValue, "dd MMM yyyy");
+									field.value = DateUtil.getDateInGivenFormat(fieldValue, "dd MMM yyyy", timezone);
+								}
 							}
 						}
 						catch (Exception e)
@@ -372,6 +382,8 @@ public class AgileTaskletUtil
 
 			if (!StringUtils.isEmpty(fullNameFix))
 				subscriberJSON.put("name_fix", fullNameFix);
+
+			subscriberJSON.put("timezone", timezone);
 
 			return subscriberJSONWithAddedParams;
 		}
@@ -502,6 +514,9 @@ public class AgileTaskletUtil
 		// Custom date labels to convert epoch to Date format
 		List<String> dateCustomFieldLabels = getDateCustomLabelsFromCache();
 
+		// AccountPrefs timezone
+		String timezone = AccountPrefsUtil.getTimeZone();
+
 		String currentWorkflowId = workflowId.toString();
 		String activeStatus = currentWorkflowId + "-" + Status.ACTIVE;
 		CampaignStatus currentcampaignStatus = new CampaignStatus(0l, 0l, currentWorkflowId, "", activeStatus);
@@ -510,7 +525,7 @@ public class AgileTaskletUtil
 		{
 			// Skip if active already in current campaign
 			if (contact != null && workflowId != null && !CampaignStatusUtil.isActive(contact, currentcampaignStatus))
-				subscriberJSONArray.put(getSubscriberJSON(contact, dateCustomFieldLabels));
+				subscriberJSONArray.put(getSubscriberJSON(contact, dateCustomFieldLabels, timezone));
 		}
 
 		return subscriberJSONArray;
@@ -534,12 +549,15 @@ public class AgileTaskletUtil
 		String activeStatus = currentWorkflowId + "-" + Status.ACTIVE;
 		CampaignStatus currentcampaignStatus = new CampaignStatus(0l, 0l, currentWorkflowId, "", activeStatus);
 
+		// Account Prefs timezone to convert customfield epochtimes
+		String timezone = AccountPrefsUtil.getTimeZone();
+
 		for (Contact contact : contacts)
 		{
 			// Skip if active already in current campaign
 			if (contact != null && workflowId != null && !CampaignStatusUtil.isActive(contact, currentcampaignStatus))
 			{
-				JSONObject subscriberJSON = getSubscriberJSON(contact, dateCustomFieldLabels);
+				JSONObject subscriberJSON = getSubscriberJSON(contact, dateCustomFieldLabels, timezone);
 
 				try
 				{
@@ -813,7 +831,7 @@ public class AgileTaskletUtil
 	 * used for both old milestone value where the value of milestone is default
 	 * ones like New, Won and also for the one with pipelineID_New or
 	 * pipelineID_Won. If there is default milestone without an ID, default
-	 * pipeline is returned to be compatile with old ones
+	 * pipeline is returned to be compatible with old ones
 	 * 
 	 * @param milestone
 	 * @return a map of milestone and pipelineID
@@ -857,5 +875,26 @@ public class AgileTaskletUtil
 		trackDetails.put("milestone", milestone);
 		trackDetails.put("pipelineID", pipelineID + "");
 		return trackDetails;
+	}
+
+	/**
+	 * @param subscriberJSON
+	 *            - Subscriber json
+	 * @return Key of the contact associated with ID inside subscriberJSON
+	 */
+	public static Key<Contact> getContactKey(JSONObject subscriberJSON)
+	{
+		String contactId = AgileTaskletUtil.getId(subscriberJSON);
+		try
+		{
+			if (!StringUtils.isEmpty(contactId))
+				return new Key<Contact>(Contact.class, Long.parseLong(contactId));
+		}
+		catch (Exception e)
+		{
+			System.out.println("Inside getContactOwnerKey in CloseTask.java :" + e.getMessage());
+			return null;
+		}
+		return null;
 	}
 }

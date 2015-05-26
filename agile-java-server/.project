@@ -9,6 +9,7 @@
 		<project>agile-frontend</project>
 		<project>agile-normal-bulk</project>
 		<project>agile-core-classes</project>
+		<project>agile-temp-bulk</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

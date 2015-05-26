@@ -3,14 +3,14 @@
 <div class="app-content-full  h-full dock-view-fixing">
 <div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
 <div class="col  bg-light lter b-r" style="width:299px">
-<div class="vbox">
-<div class="row-row">
+<div class="vbox" style="display:block">
+<div class="row-row" style="display:block">
 <div class="wrapper pos-rlt">
 
                   <div> 
-                    <div class="text-cap h3 font-thin custom-color" style="width:85%">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span><span class="label bg-light dk inline-block m-l-sm text-xs pos-rlt pos-t-n-xs">{{task_property type}}</span>                  
+                    <div class="text-cap h3 font-thin custom-color" style="width:85%">{{#is_link subject}}<span class="activate-link">{{else}}<span class="m-r-sm">{{/is_link}}{{safe_string subject}}</span><span class="label bg-light dk inline-block m-r-sm text-xs pos-rlt pos-t-n-xs">{{task_property type}}</span>                  
                     {{#if_not_equals priority_type "NORMAL" }}
-                   <span class="label label-{{task_label_color priority_type}} inline-block m-l-sm text-xs pos-rlt pos-t-n-xs">{{ucfirst priority_type}}</span>
+                   <span class="label label-{{task_label_color priority_type}} inline-block  text-xs pos-rlt pos-t-n-xs">{{ucfirst priority_type}}</span>
                          {{/if_not_equals}}</div>
                   </div>
 					
@@ -37,11 +37,11 @@
 <div class="m-t-sm">
 {{#if_equals "IN_PROGRESS" status}}
 <div class="w-md">
-<div>{{displayTaskStatus status}}  {{progress}}%</div>
-<div style="height:5px;" class="progress progress-info w-full m-b-none">
-          <div class="progress-bar" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;"></div>
+<div class="m-b-xs">{{displayTaskStatus status}} - {{progress}}%</div>
+<div style="height:5px;" class="progress  w-full m-b-none">
+          <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;"></div>
      </div> 
- <div><time datetime="{{epochToHumanDate "dd mmm yyyy" due}}">Due {{epochToHumanDate "dd mmm yyyy" due}}</time></div>
+ <div class="m-t-xs"><time style="font-size:14px!important;" datetime="{{epochToHumanDate "dd mmm yyyy" due}}">Due {{epochToHumanDate "dd mmm yyyy" due}}</time></div>
 <div class="clearfix"></div>
  
 </div>
@@ -100,12 +100,13 @@
         	<small class="text-xs text-muted">Related to</small>
 </div>
 {{/if}}
+
 {{#each contacts}}
         		{{#if_contact_type "PERSON"}}
-        			<a href="#contact/{{id}}" class="activate-link thumb"><img class="r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        			<a href="#contact/{{id}}" class="activate-link thumb m-b-xs"><img class="r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
         		{{/if_contact_type}}
 				{{#if_contact_type "COMPANY"}}
-        			<a href="#contact/{{id}}" class="activate-link thumb"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        			<a href="#contact/{{id}}" class="activate-link thumb m-b-xs"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
         		{{/if_contact_type}}
         	{{/each}}
 </div>
@@ -116,8 +117,8 @@
 </div>
 
 <div class="col bg-white">
-<div class="vbox">
-<div class="row-row">
+<div class="vbox" style="display:block">
+<div class="row-row" style="display:block">
 		<div class="tab-container">
 			<ul class="nav nav-tabs bg-light" id="taskDetailsTab">
                 <li  class="active"><a data-toggle="tab" href="#activity">Activity</a></li>
@@ -142,13 +143,13 @@
 
 <script id="task-related-collection-template" type="text/html">
 {{#if this.length}}
-	<div style='height:30px'>
-		<a href="#" class="task-add-contact btn btn-sm btn-default pos-rlt m-b-sm right">
+	<div class="m-b-md m-t-md m-r-sm" align="right">
+		<a href="#" class="task-add-contact btn btn-sm btn-default">
 			<span><i class="icon-plus-sign"></i></span> Add Contact
 		</a>
 	</div>
 	<br/>
-			<table  class="table table-striped agile-ellipsis-dynamic onlySorting r-5x overflow-scroll m-b-none b " style=" border-collapse: separate;">
+			<table  class="table table-striped agile-table onlySorting r-5x overflow-scroll m-b-none b " style=" border-collapse: separate;">
 				<colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup>
 				<thead>
 					<tr><th></th>
@@ -188,7 +189,8 @@
 
 <script id="task-related-model-template" type="text/html">
 	<td></td>
-	<td class="data" data="{{id}} no-wrap">
+
+	<td class="data no-wrap" data="{{id}}">
           {{#if_contact_type "PERSON"}}
 			<div class="thumb-sm agile-img m-r-sm">
         		<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
@@ -215,7 +217,7 @@
 	<td> 
 <div class="ellipsis-multiline l-h word-break-keep">
 	{{#each tags}}
-    	<span class="label bg-light dk text-tiny">{{this}}</span>
+    	<span class="label  bg-light  text-tiny">{{this}}</span>
     {{/each}}
 </div>
 	</td>

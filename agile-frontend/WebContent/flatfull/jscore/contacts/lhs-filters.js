@@ -129,7 +129,7 @@ $('a.filter-multiple-add-lhs').die().live("click", function(e) {
 		var container = $(this).parents('.lhs-row-filter');
 		$(container).find('#RHS').children().val("").attr('prev-val', "");
 		$(container).find('#RHS_NEW').filter(visibleFilter).children().val("").attr('prev-val', "");
-		$(container).find('a#lhs-filters-header').find('i').toggleClass('fa-plus').toggleClass('fa-minus');
+		$(container).find('a#lhs-filters-header').find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 		$(container).find('a#lhs-filters-header').next().addClass('hide');
 		submitLhsFilter();
 	});
@@ -150,7 +150,7 @@ $('#clear-lhs-company-filters').die().live("click", function(e) {
 
 $('#lhs-filters-header').die().live("click", function(e) {
 	e.preventDefault();
-	$(this).find('i').toggleClass('fa-plus').toggleClass('fa-minus');
+	$(this).find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 	$(this).next().toggleClass('hide');
 	$(this).next().find('.lhs-contact-filter-row:visible').find('#RHS').filter(visibleFilter).find(':not(input.date)').focus();
 });

@@ -386,6 +386,7 @@
 										<optgroup label="Email Bounces">
 										<option value="SOFT_BOUNCE">Soft Bounce</option>
 										<option value="HARD_BOUNCE">Hard Bounce</option>
+										<option value="SPAM">Spam</option>
 										<optgroup label="Email Event">
 										<option value="INBOUND_MAIL_EVENT" id="inbound-mail-event">New Email</option>
 										<option value="EMAIL_OPENED">Email Opened</option>
@@ -590,7 +591,7 @@
 			
 	<td class="data" data="{{id}}"><a href="#trigger/{{id}}" class="stop-propagation">{{name}}</a></td>        
 	<td>{{triggerType type}}</td>
-	<td>{{#if custom_score}}{{custom_score}} {{/if}} {{#if custom_tags}}{{custom_tags}}{{/if}} {{#if trigger_deal_milestone}}{{trigger_deal_milestone}}{{/if}} {{#if trigger_stripe_event}}{{trigger_stripe_event}}{{/if}}{{#if trigger_shopify_event}}{{trigger_shopify_event}}{{/if}} {{#if contactFilter}}{{contactFilter}}{{/if}}{{#if trigger_form_event}}{{getFormNameFromId trigger_form_event}}{{/if}}</td>
+	<td>{{#if custom_score}}{{custom_score}} {{/if}} {{#if custom_tags}}{{custom_tags}}{{/if}} {{#if trigger_deal_milestone}}{{trigger_milestone trigger_deal_milestone}}{{/if}} {{#if trigger_stripe_event}}{{trigger_stripe_event}}{{/if}}{{#if trigger_shopify_event}}{{trigger_shopify_event}}{{/if}} {{#if contactFilter}}{{contactFilter}}{{/if}}{{#if trigger_form_event}}{{getFormNameFromId trigger_form_event}}{{/if}}</td>
 	<td>{{campaign}}</td>
 	<br />
 </script>

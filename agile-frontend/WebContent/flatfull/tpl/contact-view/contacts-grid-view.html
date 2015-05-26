@@ -8,7 +8,7 @@
        <i></i>                
      </label>
 	  <div class="pull-left m-r-xs thumb">
-        <img class="img-inital inline r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}" width="50px" height="50px"  />
+        <img class="img-inital inline r r-2x" title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}" width="50px" height="50px"  />
       </div>
 	  <div class="pull-left text-ellipsis" style="width:70%;">
         <a href="#contact/{{id}}" class="text-first-capital">
@@ -34,7 +34,7 @@
            <i></i>                
         </label>
 	  	<div class="pull-left m-r-xs">
-        	<img class="thumbnail m-b-none" {{getCompanyImage "50" "display:inline;"}} />
+        	<img class="thumbnail m-b-none" title="{{getPropertyValue properties 'name'}}" {{getCompanyImage "50" "display:inline;"}} />
       	</div>
 	  	<div class="pull-left text-ellipsis" style="width:70%;">
         	<a href="#contact/{{id}}" class="text-first-capital">
@@ -61,7 +61,7 @@
                 <i></i>                
       		</label>
 	  <div class="pull-left m-r-xs">
-        <img class="thumbnail img-inital inline m-b-none" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}" width="50px" height="50px"  />
+        <img title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" class="thumbnail img-inital inline m-b-none" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}" width="50px" height="50px"  />
       </div>
 	  <div class="pull-left text-ellipsis" style="width:70%;">
         <a href="#contact/{{id}}" class="text-first-capital">
@@ -86,7 +86,7 @@
 		<input class="tbody_check right" type="checkbox"/>
 	<i></i></label>
 	  	<div class="pull-left m-r-xs">
-        	<img class="thumbnail m-b-none" {{getCompanyImage "50" "display:inline;"}} />
+        	<img class="thumbnail m-b-none" title="{{getPropertyValue properties 'name'}}" {{getCompanyImage "50" "display:inline;"}} />
       	</div>
 	  	<div class="pull-left text-ellipsis" style="width:70%;">
         	<a href="#contact/{{id}}" class="text-first-capital">

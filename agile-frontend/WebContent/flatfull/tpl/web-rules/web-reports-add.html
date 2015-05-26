@@ -17,20 +17,20 @@
 <div class="row">
 <div class="col-md-9">
 	<div class="panel wrapper">
-		<form id="reportsForm1" class="form-horizontal">
+		<form id="reportsForm1" class="form-horizontal m-l-n-md">
 			<div name="rules" class="formsection chainedSelect">
 				
 				<fieldset>
 					<div class="control-group form-group">
 						<label class="control-label col-sm-2">Name<span class="field_req">*</span></label>
-						<div class="controls col-sm-8">
+						<div class="controls col-sm-9">
 							<input type="text" name="name" class="required form-control" />
 						</div>
 					</div>
 					{{#if id}}<input type="hidden" name="position" class="required" />{{/if}}
 					<div class="control-group form-group" id="report-settings">
 						<label class="control-label col-sm-2">Condition</label>
-						<div class="controls col-sm-8  table-responsive" >
+						<div class="controls col-sm-9  table-responsive" >
 							<table
 								class="bg-transparent web-rule-contact-condition-table chained-table">
 								<tbody>
@@ -449,9 +449,9 @@
 											</div>
 										</td>
 
-										<td class="v-top" style="width:45px">
+										<td class="v-top">
 											<i
-											class="filter-contacts-multiple-remove icon-remove-circle c-p"
+											class="filter-contacts-multiple-remove icon-remove-circle c-p text-md"
 											style="display: none;"></i>
 											<i
 											class="filter-contacts-web-rule-multiple-add icon-plus inline-block m-r-sm m-l-xs c-p"></i></td>
@@ -509,7 +509,7 @@
 									</tr>
 									<tr>	
 										<td class="controls v-top">
-											<div name="RHS" id="WEB_RULE_RHS" class="exclude-dynamic-option-css m-r-xs" style="margin-top:3px;max-width:45% !important">
+											<div name="RHS" id="WEB_RULE_RHS" class="exclude-dynamic-option-css m-r-xs" style="margin-top:3px;">
 												</select>
 												<input type="number" name="temp" class="ADD_SCORE required number form-control" placeholder="Enter score to add"></input>
 												<input type="number" name="temp" class="SUBTRACT_SCORE required number form-control" placeholder="Enter score to substract"></input>
@@ -539,7 +539,7 @@
  													<a href='#' id="tiny_mce_webrules_link" class="pull-right text-info" style="display:none">(Select a template / Edit in HTML editor)</a>
 													<textarea  cols="" name="webrule-information-field" class="information confirmation CORNER_NOTY span5 required w-full" rows="10" placeholder="Paste HTML context"></textarea>
 													<textarea  cols="" name="webrule-custom-html" id="tinyMCEhtml_email" class="custom_html required MODAL_POPUP w-full form-control" rows="10" placeholder="Paste HTML context"></textarea>
-<textarea  cols="60" name="webrule-javascript" class="code  JAVA_SCRIPT span5 required" rows="10" placeholder="">function agile_js_code_exec() {
+<textarea  cols="" name="webrule-javascript" class="code  JAVA_SCRIPT form-control w-full required" rows="10" placeholder="">function agile_js_code_exec() {
     // Copy your code here
 
 
@@ -630,7 +630,7 @@
 
 				<p>3. Define one or more actions to be performed - show a popup, run campaign etc</p>
 
-				<p>Need more help? Please check the <a href="https://github.com/agilecrm/agile-popups#usage" target="_blank"> detailed documentation.</a></p> 
+				<p>Need more help? Please check the <a class="text-info" href="https://github.com/agilecrm/agile-popups#usage" target="_blank"> detailed documentation.</a></p> 
         </div>
     </div>
 </div>

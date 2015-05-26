@@ -3,52 +3,52 @@
 <td class="data no-wrap" data="{{id}}">
     <div class="thumb-sm agile-img m-r-sm">
 		{{#if_equals type "PERSON"}}        		
-			<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  />
+			<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties "40"}}"  />
 		{{else}}
 			<img class="img-inital r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/>
 		{{/if_equals}}    	
 	</div>
-    <div class="h-auto inline-block v-top text-ellipsis" style="width:12em;">
+    <div class="agile-thumb agile-thumb-view">
         <a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
         {{getPropertyValue properties "last_name"}} </a>
         <div><small class="text-muted">{{getPropertyValue properties "name"}}</small></div>
     </div>
 </td>
 	
-<td style="width:6em;"><div>{{#if_equals type "PERSON"}}Contact {{else}} Company{{/if_equals}}</div></td>
-<td style="width:6em;"><div>{{lead_score}}</div></td>
+<td><div class="table-resp">{{#if_equals type "PERSON"}}Contact {{else}} Company{{/if_equals}}</div></td>
+<td><div class="table-resp">{{lead_score}}</div></td>
 
-	<td style="width:6em;"><div>{{getPropertyValue properties "phone"}}</div></td>
+	<td><div>{{getPropertyValue properties "phone"}}</div></td>
 	
 </script>
 
 <script id="deal-related-collection-template" type="text/html">
 
 {{#if this.length}}
-	<div style='height:30px' align="right">
-		<a href="#" class="deal-add-contact btn btn-sm btn-primary  pos-rlt m-b-sm">
+	<div  align="right">
+		<a href="#" class="deal-add-contact btn btn-sm btn-primary  pos-rlt m-b-md m-r-md">
 			<span><i class="icon-plus-sign"></i></span> Add Contact
 		</a>
 	</div>
-	<br/>
+	
 		
-			<table id="contacts" class="table table-striped agile-ellipsis-dynamic onlySorting overflow-scroll r-5x m-b-none b b-separate">
-				<colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup>
+			<table id="contacts" class="onlySorting  table table-striped  agile-table  b-t b-light m-b-none">
+				
 				<thead>
 					<tr><th></th>
-						<th>Name</th>
-						<th>Type</th>
-						<th>Score</th>
-						<th>Phone</th>
+						<th style="width:40%;">Name</th>
+						<th style="width:20%;">Type</th>
+						<th style="width:20%;">Score</th>
+						<th style="width:20%;">Phone</th>
 					</tr>
 				</thead>
-				<tbody id="deal-related-model-list" class="deal-related-model-list agile-edit-row overflow-scroll"
+				<tbody id="deal-related-model-list" class="deal-related-model-list agile-edit-row "
 					route="contact/" >
 				</tbody>
 			</table>
 
 		{{else}}
-			<div class="alert-info alert">
+			<div class="wrapper p-t-none">
             	<div class="slate-content">
                 	<div class="box-left pull-left m-r-md">
                     	<img alt="Clipboard" src="/img/clipboard.png">

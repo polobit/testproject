@@ -15,6 +15,7 @@ function loadPortlets(el){
 	App_Portlets.filteredCompanies = new Array();
 	App_Portlets.filteredContacts = new Array();
 	App_Portlets.emailsOpened = new Array();
+	App_Portlets.statsReport = new Array();
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
@@ -79,13 +80,13 @@ function set_up_portlets(el, portlets_el){
 	dimensions = [dim_width, dim_height];
 	gridster = $('.gridster > div:visible',portlets_el).gridster({
     	widget_selector: "div",
-        widget_margins: [10, 5],
+        widget_margins: [10, 12],
         widget_base_dimensions: dimensions,
         min_cols: 3,
         autogenerate_stylesheet: true,
         draggable: {
         	limit: true,
-        	ignore_dragging: [".portlet_body",".portlet_body *"],
+        	ignore_dragging: [".portlet_body",".portlet_body *",".portlet-panel",".portlet-panel *"],
         	stop: function(event,ui){
         		
         		//$('#'+this.$player.attr('id')).attr('id','ui-id-'+this.$player.attr('data-col')+'-'+this.$player.attr('data-row'));
@@ -480,6 +481,14 @@ function showPortletSettings(el){
 			$('#tasks-control-group').hide();
 		if(base_model.get("settings").tasks=="completed-tasks")
 			$('#split-by-task-report > option#status').hide();
+	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Stats Report"){
+		$('#portletsStatsReportSettingsModal').modal('show');
+		$('#portletsStatsReportSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
+		$("#portlet-type",$('#portletsStatsReportSettingsModal')).val(base_model.get('portlet_type'));
+		$("#portlet-name",$('#portletsStatsReportSettingsModal')).val(base_model.get('name'));
+		
+		elData = $('#portletsStatsReportSettingsForm');
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
 	}
 	
 	if(base_model.get('name')=="Pending Deals" || base_model.get('name')=="Deals By Milestone" || base_model.get('name')=="Closures Per Person" || base_model.get('name')=="Deals Funnel"){
@@ -599,6 +608,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        success: function (data) {
 	        	hidePortletSettingsAfterSave(modal_id);
 	        	$(window).scrollTop(scrollPosition);
+	        	scrollPosition = 0;
 	        	var model = data.toJSON();
 	        	Portlets_View.collection.get(model).set(new BaseModel(model));
 	        	var pos = ''+data.get("column_position")+''+data.get("row_position");
@@ -625,7 +635,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        				displayTimeAgo(p_el);
 	        			} });
 	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Pending Deals"){
-	        		App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+data.get('settings').deals, templateKey : 'portlets-opportunities', individual_tag_name : 'tr',
+	        		App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletPendingDeals?deals='+data.get('settings').deals, templateKey : 'portlets-opportunities', sort_collection : false, individual_tag_name : 'tr',
 	        			postRenderCallback : function(p_el){
 	        				displayTimeAgo(p_el);
 	        			} });
@@ -634,13 +644,41 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        			postRenderCallback : function(p_el){
 	        				displayTimeAgo(p_el);
 	        			} });
+	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Stats Report"){
+	        		/*var start_date_str = '';
+	        		var end_date_str = '';
+	        		if(data.get('settings').duration=='yesterday'){
+	        			start_date_str = ''+data.get('settings').duration;
+	        			end_date_str = 'today';
+	        		}else if(data.get('settings').duration=='last-week'){
+	        			start_date_str = ''+data.get('settings').duration;
+	        			end_date_str = 'last-week-end';
+	        		}else if(data.get('settings').duration=='last-month'){
+	        			start_date_str = ''+data.get('settings').duration;
+	        			end_date_str = 'last-month-end';
+	        		}else if(data.get('settings').duration=='24-hours'){
+	        			start_date_str = ''+data.get('settings').duration;
+	        			end_date_str = 'now';
+	        		}else{
+	        			start_date_str = ''+data.get('settings').duration;
+	        			end_date_str = 'TOMORROW';
+	        		}
+	        		
+	        		App_Portlets.statsReport[parseInt(pos)] = new Base_Model_View({ url : '/core/api/portlets/portletStatsReport?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset()), template : "portlets-status-count-report-model", tagName : 'div', 
+	        			postRenderCallback : function(p_el){
+	        				var settingsEl = 	"<div class='portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-0' style='visibility:hidden;'>"+
+												"<i id='"+data.get('id')+"-settings' class='portlet-settings icon-wrench p-r-xs c-p'></i>"+
+												"<i id='"+data.get('id')+"-close' class='c-p icon-close StatsReport-close p-r-sm' onclick='deletePortlet(this);'></i>"+
+												"</div>";
+	        				$('.stats-report-settings',p_el).find('span').eq(0).before(settingsEl);
+	        			} });*/
 	        	}
 	        	if(portletCollectionView!=undefined)
 	        		portletCollectionView.collection.fetch();
 	        	if(data.get('name')!="Deals By Milestone" && data.get('name')!="Closures Per Person" && data.get('name')!="Deals Funnel" && data.get('name')!="Emails Sent" 
 	        		&& data.get('name')!="Growth Graph" && data.get('name')!="Deals Assigned" && data.get('name')!="Calls Per Person" 
 	        			&& data.get('name')!="Pending Deals" && data.get('name')!="Deals Won" && data.get('name')!="Filter Based" 
-							&& data.get('name')!="Emails Opened" && data.get('name')!="Task Report"){
+							&& data.get('name')!="Emails Opened" && data.get('name')!="Task Report" && data.get('name')!="Stats Report"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(portletCollectionView.render().el));
 	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Filter Based"){
@@ -666,6 +704,68 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		App_Portlets.dealsWon[parseInt(pos)].collection.fetch();
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.dealsWon[parseInt(pos)].render().el));
+	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Stats Report"){
+	        		/*$('#'+el.split("-save-modal")[0]).parent().find('.stats_report_portlet_body').html(getRandomLoadingImg());
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.stats_report_portlet_body').html($(App_Portlets.statsReport[parseInt(pos)].render().el));*/
+	        		
+	        		var start_date_str = '';
+	    			var end_date_str = '';
+	    			if(data.get('settings').duration=='yesterday'){
+	    				start_date_str = ''+data.get('settings').duration;
+	    				end_date_str = 'today';
+	    			}else if(data.get('settings').duration=='last-week'){
+	    				start_date_str = ''+data.get('settings').duration;
+	    				end_date_str = 'last-week-end';
+	    			}else if(data.get('settings').duration=='last-month'){
+	    				start_date_str = ''+data.get('settings').duration;
+	    				end_date_str = 'last-month-end';
+	    			}else if(data.get('settings').duration=='24-hours'){
+	    				start_date_str = ''+data.get('settings').duration;
+	    				end_date_str = 'now';
+	    			}else{
+	    				start_date_str = ''+data.get('settings').duration;
+	    				end_date_str = 'TOMORROW';
+	    			}
+	    			var that = $('#'+el.split("-save-modal")[0]).parent().find('.stats_report_portlet_body');
+	    			var newContactsurl='/core/api/portlets/portletStatsReport?reportType=newContacts&duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset());
+	    			setTimeout(function(){
+	    				if(that.find('#new-contacts-count').text().trim()=="")
+	    					that.find('#new-contacts-count').html("<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+	    			},1000);
+	    			fetchPortletsGraphData(newContactsurl,function(data){
+	    				that.find('#new-contacts-count').text(getNumberWithCommasForPortlets(data["newContactsCount"]));
+	    				that.find('#new-contacts-label').text("New contacts");
+	    			});
+	    			
+	    			var wonDealsurl='/core/api/portlets/portletStatsReport?reportType=wonDeals&duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset());
+	    			setTimeout(function(){
+	    				if(that.find('#won-deal-value').text().trim()=="")
+	    					that.find('#won-deal-value').html("<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+	    			},1000);
+	    			fetchPortletsGraphData(wonDealsurl,function(data){
+	    				that.find('#won-deal-value').text(getPortletsCurrencySymbol()+''+getNumberWithCommasForPortlets(data["wonDealValue"]));
+	    				that.find('#won-deal-count').text("Won from "+getNumberWithCommasForPortlets(data['wonDealsCount'])+" deals");
+	    			});
+	    			
+	    			var newDealsurl='/core/api/portlets/portletStatsReport?reportType=newDeals&duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset());
+	    			setTimeout(function(){
+	    				if(that.find('#new-deal-value').text().trim()=="")
+	    					that.find('#new-deal-value').html("<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+	    			},1000);
+	    			fetchPortletsGraphData(newDealsurl,function(data){
+	    				that.find('#new-deal-value').text(getNumberWithCommasForPortlets(data["newDealsCount"]));
+	    				that.find('#new-deal-count').text("New deals worth "+getPortletsCurrencySymbol()+''+getNumberWithCommasForPortlets(data['newDealValue'])+"");
+	    			});
+	    			
+	    			var campaignEmailsSentsurl='/core/api/portlets/portletStatsReport?reportType=campaignEmailsSent&duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset());
+	    			setTimeout(function(){
+	    				if(that.find('#emails-sent-count').text().trim()=="")
+	    					that.find('#emails-sent-count').html("<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+	    			},1000);
+	    			fetchPortletsGraphData(campaignEmailsSentsurl,function(data){
+	    				that.find('#emails-sent-count').text(getNumberWithCommasForPortlets(data["emailsSentCount"]));
+	    				that.find('#emails-sent-label').text("Campaign emails sent");
+	    			});
 	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Deals By Milestone"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
 	        		var selector=idVal;
@@ -674,7 +774,11 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			var milestoneValuesList=[];
 	    			var milestoneNumbersList=[];
 	    			var milestoneMap=[];
-	    			$('#'+selector).html(getRandomLoadingImg());
+	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			if(sizey==2 || sizey==3)
+	    				topPos += 50;
+	    			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	    			fetchPortletsGraphData(url,function(data1){
 	    				if(data1.status==403){
 	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -755,7 +859,11 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			var milestonesList=[];
 	    			var milestoneValuesList=[];
 	    			var milestoneMap=[];
-	    			$('#'+selector).html(getRandomLoadingImg());
+	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			if(sizey==2 || sizey==3)
+	    				topPos += 50;
+	    			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	    			fetchPortletsGraphData(url,function(data1){
 	    				if(data1.status==403){
 	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -857,7 +965,11 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		
 	        		var selector=idVal;
 	    			var url='/core/api/portlets/portletGrowthGraph?tags='+data.get('settings').tags+'&frequency='+data.get('settings').frequency+'&duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(data.get('settings').duration)+'&end-date='+getStartAndEndDatesOnDue("TOMORROW");
-	    			$('#'+selector).html(getRandomLoadingImg());
+	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			if(sizey==2 || sizey==3)
+	    				topPos += 50;
+	    			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	    			fetchPortletsGraphData(url,function(data1){
 	    				if(data1.status==406){
 	    					// Show cause of error in saving
@@ -965,7 +1077,11 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			var totalCallsCountList=[];
 	    			var domainUsersList=[];
 	    			var domainUserImgList=[];
-	    			$('#'+selector).html(getRandomLoadingImg());
+	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			if(sizey==2 || sizey==3)
+	    				topPos += 50;
+	    			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	    			fetchPortletsGraphData(url,function(data2){
 	    				if(data2.status==403){
 	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -1106,7 +1222,9 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			var emailsOpenedCount=0;
 	    			
 	    			
-	    			$('#'+selector).html(getRandomLoadingImg());
+	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	    			fetchPortletsGraphData(url,function(data1){
 	    				if(data1.status==403){
 	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -1218,3 +1336,80 @@ $('#tasks-task-report').live('change',function(e){
 	else
 		$('#split-by-task-report > option#status').show();
 });
+$('.stats_report_portlet_body').live('mouseover',function(e){
+	if($('.stats_report_portlet_body').parent().find('.gs-resize-handle'))
+		$('.stats_report_portlet_body').parent().find('.gs-resize-handle').remove();
+	$('.stats_report_portlet_body').find('.portlet_header_icons').css("visibility","visible");
+	//$('.stats_report_portlet_body').find('.stats-report-settings').find('span').eq(0).addClass('p-l-lg');
+});
+$('.stats_report_portlet_body').live('mouseout',function(e){
+	$('.stats_report_portlet_body').find('.portlet_header_icons').css("visibility","hidden");
+	//$('.stats_report_portlet_body').find('.stats-report-settings').find('span').eq(0).removeClass('p-l-lg');
+});
+$('.onboarding-skip').live('click',function(e){
+	$(this).parent().find('span').css("text-decoration","line-through");
+	if(!$(this).parent().find('small').hasClass('onboarding-undo'))
+		$(this).parent().find('span').after("<small class='p-l-sm onboarding-undo c-p'>(undo)</small>");
+	$(this).remove();
+});
+$('.onboarding-undo').live('click',function(e){
+	$(this).parent().find('span').css("text-decoration","none");
+	$(this).parent().find('label').remove();
+	$(this).parent().find('span').before("<label class='i-checks i-checks-sm onboarding-check' style='padding-right:4px;'><input type='checkbox'><i></i></label>");
+	if(!$(this).parent().find('small').hasClass('onboarding-skip'))
+		$(this).parent().find('span').after("<small class='p-l-sm onboarding-skip c-p'>(skip)</small>");
+	$(this).remove();
+});
+$('.onboarding-check').live('change',function(e){
+	/*$(this).parent().find('span').before("<label class='fa fa-check p-r-sm'><i></i></label>");
+	if(!$(this).parent().find('small').hasClass('onboarding-undo'))
+		$(this).parent().find('span').after("<small class='p-l-sm onboarding-undo c-p'>(undo)</small>");
+	$(this).remove();*/
+	var that = $(this);
+	var model_id = $(this).parent().parent().parent().find('.portlets').attr('id');
+	var model = Portlets_View.collection.get(model_id);
+	var json1 = {};
+	$(this).parent().parent().find('label').each(function(){
+		var json2 = {};
+		if($(this).find('input:checkbox').is(':checked')){
+			json2["done"] = true;
+			json2["skip"] = false;
+		}else{
+			json2["done"] = false;
+			json2["skip"] = false;
+		}
+		json1[""+$(this).attr('value')] = json2;
+	});
+	model.set({ 'prefs' : JSON.stringify(json1) }, { silent : true });
+	// Saves new width and height in server
+	$.ajax({ type : 'POST', url : '/core/api/portlets/saveOnboardingPrefs', data : JSON.stringify(model.toJSON()),
+		contentType : "application/json; charset=utf-8", dataType : 'json', success: function(){
+			if(that.find('input:checkbox').is(':checked')){
+				that.parent().find('span').css("text-decoration","line-through");
+				that.parent().find('span > a').addClass("text-muted");
+				that.parent().find('label').removeClass('fa fa-square-o ob-portlet-font-check onboarding-check c-p');
+				that.parent().find('label').addClass('fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted');
+				that.find('input:checkbox').removeClass('ob-portlet-no-check');
+				that.find('input:checkbox').addClass('ob-portlet-check');
+			}else{
+				that.parent().find('span').css("text-decoration","none");
+				that.parent().find('span > a').removeClass("text-muted");
+				that.parent().find('label').removeClass('fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted');
+				that.parent().find('label').addClass('fa fa-square-o ob-portlet-font-check onboarding-check c-p');
+				that.find('input:checkbox').removeClass('ob-portlet-check');
+				that.find('input:checkbox').addClass('ob-portlet-no-check');
+			}} });
+		
+});
+function gravatarImgForPortlets(width){
+	// Default image
+	var img = DEFAULT_GRAVATAR_url;
+	var backup_image = "&d=404\" ";
+	// backup_image="";
+	var initials = '';
+	
+	if (initials.length == 0)
+		backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
+	var data_name = '';
+	return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
+}

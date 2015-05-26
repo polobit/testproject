@@ -101,6 +101,18 @@ public class Contact extends Cursor
      */
     @Indexed
     public Type type = Type.PERSON;
+    
+	@JsonIgnore
+	@Indexed
+	public String first_name = "";
+
+	@JsonIgnore
+	@Indexed
+	public String last_name = "";
+
+	@JsonIgnore
+	@Indexed
+	public String name = "";
 
     /**
      * Created time of the contact
@@ -112,8 +124,10 @@ public class Contact extends Cursor
      * Updated time of the contact
      */
     @Indexed
-    @NotSaved(IfDefault.class)
     public Long updated_time = 0L;
+    
+    @Indexed
+    public Long last_contacted = 0L;
 
     /**
      * Viewed time of the contact, in milliseconds
@@ -137,7 +151,7 @@ public class Contact extends Cursor
     /**
      * Stores the star value of a contact
      */
-    @NotSaved(IfDefault.class)
+    @Indexed
     public Short star_value = 0;
 
     /**
@@ -145,6 +159,13 @@ public class Contact extends Cursor
      */
     @Indexed
     public Integer lead_score = 0;
+    
+	/**
+	 * Schema version of the contact used for updating schema
+	 */
+	@Indexed
+	@JsonIgnore
+	public Integer schema_version = 1;
 
     /**
      * Set of tags. Not saved in it, it is used to map tags from client
@@ -454,6 +475,9 @@ public class Contact extends Cursor
 	// Updates Tag entity, if any new tag is added
 	updateTagsEntity(oldContact, this);
 
+	// Verifies CampaignStatuses
+	checkCampaignStatus(oldContact, this);
+	
 	dao.put(this);
 
 	// Execute trigger for contacts
@@ -534,7 +558,7 @@ public class Contact extends Cursor
 	// If tags and properties length differ, contact is considered to be
 	// changed
 	if (contact.tags.size() != currentContactTags.size() || contact.properties.size() != properties.size()
-		|| contact.star_value != star_value || contact.lead_score != lead_score || contact.campaignStatus.size() != campaignStatus.size())
+		|| contact.star_value != star_value || (contact.lead_score != null ? !contact.lead_score.equals(lead_score) : false) || contact.campaignStatus.size() != campaignStatus.size())
 	    return true;
 
 	// Checks if tags are changed
@@ -605,7 +629,7 @@ public class Contact extends Cursor
 	// Iterates through all the properties and returns matching property
 	for (ContactField field : properties)
 	{
-	    if (field.name.equals(fieldName))
+	    if (fieldName.equals(field.name))
 		return field;
 	}
 	return null;
@@ -1005,6 +1029,16 @@ public class Contact extends Cursor
 
 	if (this.type == Type.PERSON)
 	{
+			if (this.properties.size() > 0) {
+				ContactField firstNameField = this
+						.getContactFieldByName(Contact.FIRST_NAME);
+				ContactField lastNameField = this
+						.getContactFieldByName(Contact.LAST_NAME);
+				this.first_name = firstNameField != null ? firstNameField.value
+						: "";
+				this.last_name = lastNameField != null ? lastNameField.value
+						: "";
+			}
 	    if (StringUtils.isNotEmpty(contact_company_id))
 	    {
 		// update id, for existing company
@@ -1052,6 +1086,13 @@ public class Contact extends Cursor
 		}
 	    }
 	}
+		if (this.type == Type.COMPANY) {
+			if (this.properties.size() > 0) {
+				ContactField nameField = this
+						.getContactFieldByName(Contact.NAME);
+				this.name = nameField != null ? nameField.value : "";
+			}
+		}
 
 	// Store Created and Last Updated Time Check for id even if created
 	// time is 0(To check whether it is update request)
@@ -1201,6 +1242,40 @@ public class Contact extends Cursor
 	    e.printStackTrace();
 	    System.err.println("Exception occured in updateTagsEntity..." + e.getMessage());
 	}
+    }
+    
+    /**
+     * Verifies CampaignStatus in both old and new contact objects. To update campaign statuses 
+     * if not exists in updated contact
+     * 
+     * @param oldContact - oldContact from datastore
+     * @param updatedContact - updated contact object ready to save
+     */
+    private void checkCampaignStatus(Contact oldContact, Contact updatedContact)
+    {
+    	try
+    	{
+    		
+    		// For New contact
+    		if(oldContact == null || oldContact.campaignStatus == null)
+    			return;
+    	
+    		System.out.println("Old CampaignStatus: " + oldContact.campaignStatus + " New campaignStatus: " + updatedContact.campaignStatus);
+    		
+    		// If no change return
+    		if(updatedContact.campaignStatus != null && oldContact.campaignStatus.size() == updatedContact.campaignStatus.size())
+    			return;
+    	
+    		// Updated Campaign Status in new contact
+    		if(updatedContact.campaignStatus == null || updatedContact.campaignStatus.size() == 0 || updatedContact.campaignStatus.size() < oldContact.campaignStatus.size())
+    			updatedContact.campaignStatus = oldContact.campaignStatus;
+    			
+    	}
+    	catch(Exception e)
+    	{
+    		System.err.println("Exception occured while checking CampaignStatus in Contact..." + e.getMessage());
+    		e.printStackTrace();
+    	}
     }
 
     @Override

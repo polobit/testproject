@@ -1,4 +1,6 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
+<%@page import="com.agilecrm.util.VersioningUtil"%>
+<%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page contentType="text/html; charset=UTF-8" %>
 <%
     //Check if it is being access directly and not through servlet
@@ -590,8 +592,23 @@ $.validator.setDefaults({
 			  // Form data is posted to its subdomain 
 			 $(form).attr('action', "https://" + domain + ".agilecrm.com/register");
 			 //  $(form).attr('action', "http://localhost:8888/register");
-			 //  $(form).attr('action', "https://" + domain + "-dot-sandbox-dot-agilesanbox.appspot.com/register");
+
+			   $(form).attr('action', getRegisterURL(domain));
 			  form.submit();
+		}
+		
+		function getRegisterURL(domain)
+		{
+
+			var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
+			var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
+
+			if(version == null || version === "null")
+			{
+				return  "https://" + domain + ".agilecrm.com/register";
+			}
+			
+			return "https://" + domain + "-dot-" + version + "-dot-"+applicationId + ".appspot.com/register";
 		}
 			 
 		
@@ -600,7 +617,7 @@ $.validator.setDefaults({
 			 $("#register_account").attr("disabled", "disabled");
 			 
 			  // Form data is posted to its subdomain 
-			  $(form).attr('action', "https://" + domain + ".agilecrm.com/register");
+			  $(form).attr('action', getRegisterURL(domain));
 			// $(form).attr('action', "https://" + domain + ".agilecrm.com/register");
 			// $(form).attr('action', "http://localhost:8888/register");
 			  form.submit();

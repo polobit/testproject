@@ -49,7 +49,9 @@
 		<div class="clearfix"></div>
 		<div class="contact-desc-dynamic">
 	<div>
+<pre>
 {{show_link_in_statement description}}
+</pre>
 	</div>	
 	 	
 			
@@ -59,7 +61,12 @@
 				{{#isDuplicateContactProperty properties "email"}}
 					{{else}}	
 <div class="inline-block">
+					{{#if_contact_type "PERSON"}}
 						<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+					{{/if_contact_type}}
+					{{#if_contact_type "COMPANY"}}
+        				<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        			{{/if_contact_type}}
 </div>
 				{{/isDuplicateContactProperty}}
            		

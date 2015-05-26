@@ -45,6 +45,10 @@ a:focus {
   text-decoration: none;
 }
 
+.show {
+	visibility:visible;
+}
+
 label {
   font-weight: normal;
 }
@@ -2631,8 +2635,8 @@ fieldset[disabled] .i-checks input + i:before {
   height: 0;
   background-color: transparent;
   content: "";
-  -webkit-transition: all 0.2s;
-          transition: all 0.2s;
+ /* -webkit-transition: all 0s;
+          transition: all 0s; */
 }
 
 .i-checks > span {

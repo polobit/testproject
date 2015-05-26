@@ -7,6 +7,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.SocialPrefs.Type;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -24,8 +25,24 @@ public class SocialPrefsUtil
     /**
      * SocialPrefs Dao.
      */
-    private static ObjectifyGenericDao<SocialPrefs> dao = new ObjectifyGenericDao<SocialPrefs>(
-	    SocialPrefs.class);
+    private static ObjectifyGenericDao<SocialPrefs> dao = new ObjectifyGenericDao<SocialPrefs>(SocialPrefs.class);
+
+    /**
+     * Returns SocialPrefs with respect to agileuser and SocialPrefs Type.
+     * 
+     * @param user
+     *            - AgileUser object.
+     * @param type
+     *            - SocialPrefs Type.
+     * @return SocialPrefs.
+     */
+    public static List<SocialPrefs> getPrefsList(AgileUser user, Type type)
+    {
+	Objectify ofy = ObjectifyService.begin();
+	Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, user.id);
+
+	return ofy.query(SocialPrefs.class).ancestor(agileUserKey).filter("type", type).list();
+    }
 
     /**
      * Returns SocialPrefs with respect to agileuser and SocialPrefs Type.
@@ -39,11 +56,27 @@ public class SocialPrefsUtil
     public static SocialPrefs getPrefs(AgileUser user, Type type)
     {
 	Objectify ofy = ObjectifyService.begin();
-	Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class,
-		user.id);
+	Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, user.id);
 
-	return ofy.query(SocialPrefs.class).ancestor(agileUserKey)
-		.filter("type", type).get();
+	return ofy.query(SocialPrefs.class).ancestor(agileUserKey).filter("type", type).get();
+    }
+
+    /**
+     * Returns SocialPrefs with respect to agileuser and SocialPrefs Type.
+     * 
+     * @param user
+     *            - AgileUser object.
+     * @param type
+     *            - SocialPrefs Type.
+     * @return SocialPrefs.
+     */
+    public static SocialPrefs getPrefs(AgileUser user, Type type, String fromEmail)
+    {
+	Objectify ofy = ObjectifyService.begin();
+	Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, user.id);
+
+	return ofy.query(SocialPrefs.class).ancestor(agileUserKey).filter("type", type).filter("email", fromEmail)
+	        .get();
     }
 
     /**
@@ -56,8 +89,7 @@ public class SocialPrefsUtil
     public static List<SocialPrefs> getPrefs(AgileUser user)
     {
 	Objectify ofy = ObjectifyService.begin();
-	Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class,
-		user.id);
+	Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, user.id);
 
 	return ofy.query(SocialPrefs.class).ancestor(agileUserKey).list();
     }
@@ -70,13 +102,13 @@ public class SocialPrefsUtil
      *            - SocialPrefs Id.
      * @return SocialPrefs.
      */
-    public static SocialPrefs getSocialPrefs(Long id)
+    public static SocialPrefs getPrefs(Long id, Key<AgileUser> user)
     {
 	try
 	{
-	    return dao.get(id);
+	    return dao.get(new Key<SocialPrefs>(user, SocialPrefs.class, id));
 	}
-	catch (Exception e)
+	catch (EntityNotFoundException e)
 	{
 	    e.printStackTrace();
 	    return null;

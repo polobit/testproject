@@ -29,6 +29,10 @@
 <!-- Bootstrap  -->
 <link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-responsive.min.css" />
+
+<!-- New UI -->
+<link rel="stylesheet" type="text/css" href="flatfull/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="flatfull/css/app.css">
 	
 <script type="text/javascript" src="lib/jquery.min.js"></script>
 <script type="text/javascript" src="js/designer/tinymce/tinymce.min.js"></script>
@@ -115,7 +119,8 @@ try{
 		{
 		var initHTML = window.opener.$('#' + textarea_id).val();
 		$('#content').val(initHTML);
-		
+		var isWarning = should_warn(initHTML);
+		showWarning(isWarning);
 		 // Initialize tinymce editor with content
         init_tinymce();
 		
@@ -132,6 +137,8 @@ try{
 	    			
 	    			$('#content').val(value);
 	    			
+	    			var isWarning = should_warn(value);
+	    			showWarning(isWarning);
 	    			// Initialize tinymce editor after content obtained
                     init_tinymce();
 	    			});
@@ -174,7 +181,6 @@ try{
 			return;
 		}
 		
-		// Return Back here
 		window.opener.tinyMCECallBack(getUrlVars()["id"], html);
 		window.close();
 		
@@ -274,9 +280,78 @@ function init_tinymce()
                 }
             });
             
+            editor.on('change', function(e) {
+                var isWarning = should_warn(tinyMCE.activeEditor.getContent());
+                showWarning(isWarning);
+            });
+            
         }
         
     });
+}
+
+function should_warn(content)
+{
+	try{
+		if(content.indexOf('https://s3.amazonaws.com/AgileEmailTemplates') >= 0)
+			return false;
+		if(content.indexOf('http://www.stampready.net') >= 0)
+			return false;
+		
+		var isStyle = false;
+		var isTrue = false;
+		$.each($(content),function(index,attribute){
+			var attributeType=$(attribute);
+			var node_name = attributeType["context"].nodeName;
+			var node_name_type = attributeType[0].nodeName;
+			if(node_name == "STYLE" && node_name == "STYLE"){
+				{
+				isTrue= "style";
+				isStyle = true;
+				return false;
+				}
+			}
+			});	
+		if(!isStyle)
+		$.each($(content),function(index,attribute){
+			var attributeType=$(attribute);
+			var node_name = attributeType["context"].nodeName;
+			var node_name_type = attributeType[0].nodeName;
+			if(node_name == "LINK" && node_name == "LINK"){
+				{
+				isTrue= "link";
+				return false;
+				}
+			}
+			});
+		return isTrue;
+	}catch (e)
+	{
+		console.log("Error while warning for inline css");
+		console.log(e);
+		return true;
+	}
+	
+}
+
+function showWarning(isWarning)
+{
+	if(isWarning){
+		if(isWarning == 'style'){
+			$('#inline-css-verification-link').css('display','none');
+			$('#inline-css-verification-css').css('display','inline-block');
+		}
+		if(isWarning == 'link'){
+			$('#inline-css-verification-css').css('display','none');
+			$('#inline-css-verification-link').css('display','inline-block');
+		}
+	}
+	else{
+		$('#inline-css-verification-link').css('display','none');
+		$('#inline-css-verification-css').css('display','none');
+	}
+		
+	
 }
 
 </script>
@@ -293,13 +368,35 @@ function init_tinymce()
                 <div style="margin: 0 0 10px 0">
                     <div style="display:none; float: left;" id="navigate-back">
                         <!-- Back link to navigate to history back  -->
-                        <a href="#" class="btn btn-large"> &lt; Back </a>
+                        <a href="#" class="btn btn-default btn-large"> &lt; Back </a>
                     </div>
                     <div style="display: block; float:right;">
-                        <a href="#" id="top_save_html" class="btn btn-large" style="cursor:pointer; font-weight: bold;">Save</a>
+                        <a href="#" id="top_save_html" class="btn btn-default btn-large" style="cursor:pointer; font-weight: bold;">Save</a>
                     </div>
                     <div style="clear: both;"></div>
                 </div>
+                <div id="inline-css-verification-css" style="display: none;">
+           			<div class="alert danger info-block alert-warning text-black">
+                		<div>
+                			<i class="icon-warning-sign"></i>
+							<strong>Using embedded CSS?
+							<!--<a href="#trigger-add" style="float: right;cursor: pointer;font-weight: normal;">How to add trigger?</a>-->
+							</strong>
+                			<p>Your email appears to be using embedded CSS (as it has a &lt;style&gt;tag defined). Such emails may not render properly in some email clients. We recommend you to convert the CSS styling to Inline styling for better compatibility. Try an  <a style="display:inline" onclick="parent.window.open('http://templates.mailchimp.com/resources/inline-css/')" class="block">online converter</a></p>
+                		</div>
+            		</div>
+        		</div>
+        		<div id="inline-css-verification-link" style="display: none;">
+           			<div class="alert danger info-block alert-warning text-black">
+                		<div>
+                			<i class="icon-warning-sign"></i>
+							<strong>Using external resources?
+							<!--<a href="#trigger-add" style="float: right;cursor: pointer;font-weight: normal;">How to add trigger?</a>-->
+							</strong>
+                			<p>Your email appears to be using some external resources (as it has a &lt;link&gt; tag in it). Such emails may not render properly in some email clients. We recommend removing all external links for CSS or Fonts, for better compatibility.</p>
+                		</div>
+            		</div>
+        		</div>
             </div>
             <!-- .block_head ends -->
             <div class="block_content center">

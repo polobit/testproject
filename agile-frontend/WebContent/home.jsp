@@ -70,7 +70,10 @@ if(!restriction.planDetails.getACL())
     domainUser.resetACLScopesAndSave();
 }
 
-Boolean is_first_time_user = HomeServlet.isFirstTimeUser(request);;
+Boolean is_first_time_user = HomeServlet.isFirstTimeUser(request);
+
+String _AGILE_VERSION = SystemProperty.applicationVersion.get();
+
 %>
 
 
@@ -87,7 +90,7 @@ href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css"
 href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" type="text/css"
-href="/css/agilecrm.css" />
+href="/css/agilecrm.css?_=<%=_AGILE_VERSION%>" />
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 <style>
 .clickdesk_bubble {
@@ -180,6 +183,7 @@ var LIB_PATH = "/";
 
 var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
 
+var _AGILE_VERSION = <%="\"" + _AGILE_VERSION + "\""%>;
 
 var CSS_PATH = "/";
 //var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
@@ -251,8 +255,8 @@ head.ready(function() {
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "/img/ajax-loader-cursor.gif");
-head.js({"core" : 'jscore/min/js-all-min.js'});
-head.js({"stats" : 'stats/min/agile-min.js'});
+head.js({"core" : 'jscore/min/js-all-min.js' + "?_=" + _AGILE_VERSION});
+head.js({"stats" : 'stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core", "stats"], function(){
 	
 	if(!HANDLEBARS_PRECOMPILATION)
