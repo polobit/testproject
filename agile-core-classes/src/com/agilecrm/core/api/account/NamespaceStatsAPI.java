@@ -20,20 +20,34 @@ import com.agilecrm.util.NamespaceUtil;
 public class NamespaceStatsAPI
 {
 
-	// Get Stats
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String getNamespaceStats()
-	{
-		return NamespaceUtil.getNamespaceStats().toString();
-	}
+    // Get Stats
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getNamespaceStats()
+    {
+	return NamespaceUtil.getNamespaceStats().toString();
+    }
 
-	// Get Stats
-	@Path("stats2")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getStats()
-	{
-		return NamespaceUtil.getNamespaceCount();
-	}
+    // Get Stats
+    @Path("stats2")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public JSONObject getStats()
+    {
+	return NamespaceUtil.getNamespaceCount();
+    }
+
+    /**
+     * Returns the JSON object having the count of contacts, deals, campaigns
+     * etc of the current domain.
+     * 
+     * @return JSON object.
+     */
+    @Path("/getdomainstats")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON })
+    public String getAccountStats()
+    {
+	return NamespaceUtil.getDomainStats();
+    }
 }
