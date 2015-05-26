@@ -302,6 +302,8 @@ public class CampaignStatusUtil
 
 			Query<Contact> query = Contact.dao.ofy().query(Contact.class)
 					.filter("campaignStatus.status", campaignId + "-" + CampaignStatus.Status.ACTIVE);
+			
+			int count = query.count();
 
 			QueryResultIterator<Contact> iterator = query.iterator();
 
@@ -314,7 +316,7 @@ public class CampaignStatusUtil
 
 			}
 
-			return query.count();
+			return count;
 		}
 		catch (Exception e)
 		{
