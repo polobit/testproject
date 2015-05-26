@@ -8,9 +8,13 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.activities.Activity.EntityType;
@@ -18,6 +22,8 @@ import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.export.util.DealExportBlobUtil;
+import com.agilecrm.export.util.DealExportEmailUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -251,18 +257,17 @@ public class DealsBulkActionsAPI
 	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    System.out.println("total deals -----" + deals.size());
 
-	    
 	    // Get Deal Milestone change triggers
 	    List<Trigger> triggers = TriggerUtil.getTriggersByCondition(Trigger.Type.DEAL_MILESTONE_IS_CHANGED);
-	    
+
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
 	    for (Opportunity deal : deals)
 	    {
-		
+
 		// For triggers
-	    Long oldPipelineId = deal.getPipeline_id();
+		Long oldPipelineId = deal.getPipeline_id();
 		String oldMilestone = deal.milestone;
-			
+
 		if (formJSON.has("pipeline"))
 		    deal.pipeline_id = formJSON.getLong("pipeline");
 		if (formJSON.has("pipeline-name"))
@@ -271,19 +276,17 @@ public class DealsBulkActionsAPI
 		    milestone_name = deal.milestone = formJSON.getString("milestone");
 
 		// If there is change in pipeline or milestone
-		if(!oldPipelineId.equals(deal.pipeline_id)
-							|| !oldMilestone.equals(deal.milestone))
-			subList.add(deal);
-		
-		
+		if (!oldPipelineId.equals(deal.pipeline_id) || !oldMilestone.equals(deal.milestone))
+		    subList.add(deal);
+
 		if (subList.size() >= 100)
 		{
 		    Opportunity.dao.putAll(subList);
 		    OpportunityUtil.updateSearchDoc(subList);
-		    
-			// Trigger Bulk Deal Milestone change
-		    if(!triggers.isEmpty())
-		    	DealTriggerUtil.triggerBulkDealMilestoneChange(subList, triggers);
+
+		    // Trigger Bulk Deal Milestone change
+		    if (!triggers.isEmpty())
+			DealTriggerUtil.triggerBulkDealMilestoneChange(subList, triggers);
 
 		    System.out.println("total sublist -----" + subList.size());
 		    subList.clear();
@@ -294,15 +297,14 @@ public class DealsBulkActionsAPI
 	    {
 		Opportunity.dao.putAll(subList);
 		OpportunityUtil.updateSearchDoc(subList);
-		
+
 		// Trigger Bulk Deal Milestone change
-		if(!triggers.isEmpty())
-			 DealTriggerUtil.triggerBulkDealMilestoneChange(subList, triggers);
-		
+		if (!triggers.isEmpty())
+		    DealTriggerUtil.triggerBulkDealMilestoneChange(subList, triggers);
+
 		System.out.println("total sublist -----" + subList.size());
 	    }
-	    
-	    
+
 	    ActivitySave.createBulkActionActivityForDeals(deals.size(), "BULK_DEAL_MILESTONE_CHANGE", milestone_name,
 		    "deals", pipeline_name);
 	    BulkActionNotifications.publishNotification("Track/Milestone changed for " + deals.size() + " Deals.");
@@ -365,7 +367,7 @@ public class DealsBulkActionsAPI
 		System.out.println("total sublist -----" + subList.size());
 		DealTriggerUtil.executeTriggerForDeleteDeal(dealIdsArray);
 		ActivitySave.createLogForBulkDeletes(EntityType.DEAL, dealIdsArray,
-		        String.valueOf(dealIdsArray.length()), "");
+			String.valueOf(dealIdsArray.length()), "");
 	    }
 
 	    BulkActionNotifications.publishNotification(deals.size() + " Deals are deleted.");
@@ -373,6 +375,68 @@ public class DealsBulkActionsAPI
 	catch (Exception je)
 	{
 	    je.printStackTrace();
+	}
+    }
+
+    /**
+     * Export list of opportunities. Create a CSV file with list of deals and
+     * add it as a attachment and send the email.
+     */
+    @Path("/export/{current_user_id}")
+    @POST
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void exportOpportunitiesBackend(@PathParam("current_user_id") Long currentUserId,
+	    @QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
+	    @FormParam("filter") String filters)
+    {
+	// Set the session manager to get the user preferences and the other
+	// details required.
+	if (SessionManager.get() != null)
+	{
+	    SessionManager.get().setDomainId(currentUserId);
+	}
+	else
+	{
+	    DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
+	    SessionManager.set(new UserInfo(null, user.email, user.name));
+	    SessionManager.get().setDomainId(user.id);
+	}
+	String currentCursor = null;
+	String previousCursor = null;
+	int firstTime = 0;
+	String path = null;
+	List<Opportunity> deals = null;
+	long total = 0;
+	int max = 1000;
+	try
+	{
+	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+	    System.out.println("------------" + filterJSON.toString());
+
+	    do
+	    {
+		deals = OpportunityUtil.getOpportunitiesByFilter(filterJSON, max, currentCursor);
+		currentCursor = deals.get(deals.size() - 1).cursor;
+		firstTime++;
+		if (firstTime == 1)
+		    path = DealExportBlobUtil.writeDealCSVToBlobstore(deals, false);
+		else
+		    DealExportBlobUtil.editExistingBlobFile(path, deals, false);
+		total += deals.size();
+	    } while (deals.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
+	    DealExportBlobUtil.editExistingBlobFile(path, null, true);
+	    List<String> fileData = DealExportBlobUtil.retrieveBlobFileData(path);
+	    if (count == null)
+		count = String.valueOf(total);
+	    // Send every partition as separate email
+	    for (String partition : fileData)
+		DealExportEmailUtil.exportDealCSVAsEmail(DomainUserUtil.getDomainUser(currentUserId), partition,
+			String.valueOf(count));
+	}
+	catch (JSONException e)
+	{
+	    System.out.println("Exception in export deal in backend code. - " + e.getMessage());
+	    e.printStackTrace();
 	}
     }
 
