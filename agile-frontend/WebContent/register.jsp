@@ -144,7 +144,7 @@ $.validator.setDefaults({
 	if(cookies != null && cookies.length > 0)
 	{
 		for(Cookie cookie : cookies)
-			if(cookie.getName().equals("td2h2iv4njd4mbalruce18q7n4-agile-email"))
+			if(cookie.getName().equals("registration_email"))
 				email = cookie.getValue();
 	}
 %>
