@@ -468,8 +468,44 @@ var WorkflowsRouter = Backbone.Router
 					 */
 					postRenderCallback : function(el)
 					{
-						addTagsDefaultTypeahead($("#trigger-custom-tags-add"),true);
-						addTagsDefaultTypeahead($("#trigger-custom-tags-delete"),true);
+						//typeahead for input fields
+						$('.trigger-tags', el).live("focus", function(e)
+								{
+									e.preventDefault();
+									addTagsDefaultTypeahead(this.parentElement,true);
+								});
+						
+						populate_milestones_in_trigger($('form#addTriggerNewForm', el), 'trigger-deal-milestone');
+						
+						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+
+						// fill the selected campaign-id
+						if (campaign_id)
+						{
+							fillSelect('campaign-trigger-select', '/core/api/workflows', 'workflow', function(id)
+							{
+								$('#campaign-trigger-select', el).find('option[value=' + campaign_id + ']').attr('selected', 'selected');
+							}, optionsTemplate, false, el);
+
+						}
+						else
+						{
+							/**
+							 * Fills campaign select with existing Campaigns.
+							 * 
+							 * @param campaign-select -
+							 *            Id of select element of Campaign
+							 * @param /core/api/workflows -
+							 *            Url to get workflows
+							 * @param 'workflow' -
+							 *            parse key
+							 * @param no-callback -
+							 *            No callback
+							 * @param optionsTemplate-
+							 *            to fill options with workflows
+							 */
+							fillSelect('campaign-trigger-select', '/core/api/workflows', 'workflow', 'no-callback', optionsTemplate, false, el);
+						}
 					}
 				
 				});
