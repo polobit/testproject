@@ -39,6 +39,8 @@ public class AccountLimitsRemainderDeferredTask implements DeferredTask
 
 	    restriction.refresh(true);
 
+	    restriction.tags_in_our_domain.clear();
+
 	    // Get tag for each type. If usage exceeds 75 of allowed limit then
 	    // tag is added
 	    // This is required for contacts as we have to hard update even if
