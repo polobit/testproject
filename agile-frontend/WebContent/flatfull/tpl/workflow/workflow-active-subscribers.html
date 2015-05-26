@@ -40,11 +40,7 @@
 	<div class="col-md-12">
  		<div class="data">
         	<div class="data-container">
-		    	<div class="btn btn-sm btn-default delete-checked-contacts" id="remove-active-from-campaign m-t-n-sm" style="display: none;"> Delete</div>
-            	
-            	<!-- Shows selected contacts list and offer to select all if current list is more than the page-size -->
-                <div class="pos-rlt m-t-md block"  style="left: 70px;" id="subscribers-bulk-select"></div>
-            	<div class="table-responsive">
+            	<div class="table-responsive m-t-sm">
             	<div class="panel panel-default">
             	<div class="panel-heading">Active Subscribers List</div>
             	<table class="table table-striped  panel agile-table showCheckboxes" url="core/api/bulk/update?workflow_id={{get_id_from_hash}}&action_type=REMOVE_ACTIVE_SUBSCRIBERS" id="active-campaign">

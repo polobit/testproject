@@ -43,7 +43,7 @@
  	try
  	{
  		if(IS_NEW_USER && _plan_on_signup)
- 		push_signup_plan(plan)(_plan_on_signup)	
+ 		push_signup_plan(_plan_on_signup)	
  	
  	}catch(err)
  	{

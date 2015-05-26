@@ -399,7 +399,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
 %>">
 
 <!-- Including header(Navigation Bar) page -->
-<jsp:include page="flatfull/header.jsp" />
+	<%@ include file="flatfull/header.html"%>
 
  <aside id="aside" class="app-aside hidden-xs 
  <%

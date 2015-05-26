@@ -10,7 +10,10 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.campaignio.cron.util.CronUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.google.appengine.api.datastore.QueryResultIterator;
+import com.googlecode.objectify.Query;
 
 /**
  * <code>CampaignStatusUtil</code> is the utility class for CampaignStatus. It
@@ -167,6 +170,7 @@ public class CampaignStatusUtil
 
 			if (campaignId.equals(campaignStatus.campaign_id))
 			{
+				campaignStatus.campaign_name = campaignName;
 				campaignStatus.end_time = statusTime;
 				campaignStatus.status = (campaignStatus.campaign_id) + "-" + status;
 				break;
@@ -175,23 +179,23 @@ public class CampaignStatusUtil
 
 		saveContact(contact);
 	}
-	
+
 	public static boolean isActive(Contact contact, Long workflowId)
 	{
-	    if(workflowId == null)
-		return false;
-	    
-	    String currentWorkflowId = workflowId.toString();
-	    
-	    String activeStatus = currentWorkflowId + "-" + Status.ACTIVE;
-	    CampaignStatus currentcampaignStatus = new CampaignStatus(0l, 0l, currentWorkflowId, "", activeStatus);
-	    
-	    return isActive(contact, currentcampaignStatus);
+		if (workflowId == null)
+			return false;
+
+		String currentWorkflowId = workflowId.toString();
+
+		String activeStatus = currentWorkflowId + "-" + Status.ACTIVE;
+		CampaignStatus currentcampaignStatus = new CampaignStatus(0l, 0l, currentWorkflowId, "", activeStatus);
+
+		return isActive(contact, currentcampaignStatus);
 	}
-	
+
 	public static boolean isActive(Contact contact, CampaignStatus currentcampaignStatus)
 	{
-	    return contact.campaignStatus.contains(currentcampaignStatus);
+		return contact.campaignStatus.contains(currentcampaignStatus);
 	}
 
 	/**
@@ -203,17 +207,19 @@ public class CampaignStatusUtil
 	 */
 	public static void removeCampaignStatus(String campaignId)
 	{
-	
-	// Gets list of contacts whose campaignId matches in campaignStatus
-	List<Contact> contactList = CampaignSubscribersUtil.getContactsByCampaignId(campaignId);
-	
-	if (contactList == null)
-	    return;
-	
-	// Iterate over contacts and removes campaignStatus
-	for (Contact contact : contactList)
-	    CampaignStatusUtil.removeCampaignStatus(contact, campaignId);
-	
+
+		Query<Contact> query = Contact.dao.ofy().query(Contact.class)
+				.filter("campaignStatus.campaign_id", campaignId);
+
+		QueryResultIterator<Contact> iterator = query.iterator();
+
+		while (iterator.hasNext())
+		{
+			Contact contact = iterator.next();
+
+			removeCampaignStatus(contact, campaignId);
+		}
+			
 	}
 
 	/**
@@ -227,31 +233,97 @@ public class CampaignStatusUtil
 	 */
 	public static void removeCampaignStatus(Contact contact, String campaignId)
 	{
-	Iterator<CampaignStatus> campaignStatusIterator = contact.campaignStatus.listIterator();
-	
-	// Iterates over campaignStatus list.
-	while (campaignStatusIterator.hasNext())
-	{
-	    if (!StringUtils.isEmpty(campaignId) && campaignId.equals(campaignStatusIterator.next().campaign_id))
-	    {
-		campaignStatusIterator.remove();
-		break;
-	    }
+		Iterator<CampaignStatus> campaignStatusIterator = contact.campaignStatus.listIterator();
+
+		// Iterates over campaignStatus list.
+		while (campaignStatusIterator.hasNext())
+		{
+			if (!StringUtils.isEmpty(campaignId) && campaignId.equals(campaignStatusIterator.next().campaign_id))
+			{
+				campaignStatusIterator.remove();
+				break;
+			}
+		}
+
+		// save changes
+		saveContact(contact);
 	}
-	
-	// save changes
-	saveContact(contact);
-	}
-	
+
 	/**
 	 * Updates updated time and saves contact
 	 * 
-	 * @param contact - Contact object with updated campaign statuses
+	 * @param contact
+	 *            - Contact object with updated campaign statuses
 	 */
 	private static void saveContact(Contact contact)
 	{
-		contact.updated_time = System.currentTimeMillis()/1000;
-		contact.update();
+		try
+		{
+			contact.updated_time = System.currentTimeMillis() / 1000;
+			contact.update();
+		}
+		catch(Exception e)
+		{
+			System.err.println("Exception occured while updating campaign Status of contact..." + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Removes all scheduled subscribers from Cron and change status from Active
+	 * to Removed
+	 * 
+	 * @param campaignId
+	 *            - given workflow id
+	 * 
+	 * @return Active Subscribers count to be converted
+	 */
+	public static int removeBulkSubscribersFromCampaign(String campaignId)
+	{
+		// Removes Cron entities
+		CronUtil.removeTask(campaignId, null);
+
+		return setRemoveCampaignStatus(campaignId);
+	}
+
+	/**
+	 * Changes campaign status of Active subscribers from Active to Remove
+	 * 
+	 * @param campaignId
+	 *            - Workflow id
+	 * 
+	 * @return subscribers count
+	 */
+	private static int setRemoveCampaignStatus(String campaignId)
+	{
+		try
+		{
+			String campaignName = WorkflowUtil.getCampaignName(campaignId);
+
+			Query<Contact> query = Contact.dao.ofy().query(Contact.class)
+					.filter("campaignStatus.status", campaignId + "-" + CampaignStatus.Status.ACTIVE);
+			
+			int count = query.count();
+
+			QueryResultIterator<Contact> iterator = query.iterator();
+
+			while (iterator.hasNext())
+			{
+				Contact contact = iterator.next();
+
+				CampaignStatusUtil.setEndCampaignStatus(contact, campaignId, campaignName,
+						CampaignStatus.Status.REMOVED);
+
+			}
+
+			return count;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("Exception occured while converting campaign status from Active..." + e.getMessage());
+			return 0;
+		}
 	}
 
 }
