@@ -1307,7 +1307,6 @@ display:none;
 }
 .billingBtnAlign {
 	position:absolute;
-	bottom:30px;
+	bottom:15px;
 }
 	
-}
