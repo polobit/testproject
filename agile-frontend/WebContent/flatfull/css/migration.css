@@ -1297,7 +1297,7 @@ display:none;
 }
 
 
-.web-rule-contact-condition-table tr[class~="chained"]{
+.web-rule-contact-condition-table tr[class~="chained"], .reports-condition-table tr[class~="chained"]{
 	display:flex;
 	margin-bottom:10px;
 }
