@@ -139,6 +139,8 @@ $.validator.setDefaults({
 <%
     String ua = request.getHeader("User-Agent");
 			boolean isMSIE = (ua != null && ua.indexOf("MSIE") != -1);
+
+	// Get the cookie array and find a cross domain cookie from agilecrm site and autofill email in register page
 	Cookie[] cookies = request.getCookies();
 	String email ="";
 	if(cookies != null && cookies.length > 0)
