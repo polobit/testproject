@@ -819,7 +819,7 @@ public class TaskUtil
     			if(tasks.equalsIgnoreCase("all-tasks"))
     			{
     				searchMap1.put("due >=", startTime);
-    				searchMap2.put("created_time >=", startTime);
+    				searchMap2.put("task_completed_time >=", startTime);
     			}
     			else
     				searchMap1.put("task_completed_time >=", startTime);
@@ -829,7 +829,7 @@ public class TaskUtil
     			if(tasks.equalsIgnoreCase("all-tasks"))
     			{
     				searchMap1.put("due <", endTime);
-    				searchMap2.put("created_time <", endTime);
+    				searchMap2.put("task_completed_time <", endTime);
     			}
     			else
     				searchMap1.put("task_completed_time <", endTime);
