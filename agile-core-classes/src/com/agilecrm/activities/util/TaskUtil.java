@@ -786,37 +786,40 @@ public class TaskUtil
 	/***************************************************************************/
 
 	/**
-	 * Gets all the tasks based on owner and type.
-	 * 
-	 * @return List of tasks
-	 */
-	public static List<Task> getTasksRelatesToOwnerOfTypeAndCategory(Long owner, String category, String status,
-			Long startTime, Long endTime)
-	{
-		try
-		{
-			Map<String, Object> searchMap = new HashMap<String, Object>();
-
-			if (owner != null)
-				searchMap.put("owner", new Key<DomainUser>(DomainUser.class, owner));
-
-			if (StringUtils.isNotBlank(category))
-				searchMap.put("type", category);
-
-			if (StringUtils.isNotBlank(status))
-				searchMap.put("status", status);
-
-			if (startTime != null)
-				searchMap.put("due >=", startTime);
-			if (endTime != null)
-				searchMap.put("due <", endTime);
-
-			return dao.listByProperty(searchMap);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-	}
+     * Gets all the tasks based on owner and type.
+     * 
+     * @return List of tasks
+     */
+    public static List<Task> getTasksRelatesToOwnerOfTypeAndCategory(Long owner, String category, String status,Long startTime,Long endTime,String tasks){
+    	try{
+    		Map<String, Object> searchMap = new HashMap<String, Object>();
+    		
+    		if (owner!=null)
+    			searchMap.put("owner", new Key<DomainUser>(DomainUser.class, owner));
+    		
+    		if(StringUtils.isNotBlank(category))
+    			searchMap.put("type", category);
+    		
+    		if(StringUtils.isNotBlank(status))
+    			searchMap.put("status", status);
+    		
+    		if(startTime!=null){
+    			if(tasks.equalsIgnoreCase("all-tasks"))
+    				searchMap.put("due >=", startTime);
+    			else
+    				searchMap.put("task_completed_time >=", startTime);
+    		}
+    		if(endTime!=null){
+    			if(tasks.equalsIgnoreCase("all-tasks"))
+    				searchMap.put("due <", endTime);
+    			else
+    				searchMap.put("task_completed_time <", endTime);
+    		}
+    		
+    		return dao.listByProperty(searchMap);
+    	}catch (Exception e){
+    		e.printStackTrace();
+    		return null;
+    	}
+    }
 }

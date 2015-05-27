@@ -1297,7 +1297,7 @@ display:none;
 }
 
 
-.web-rule-contact-condition-table tr[class~="chained"]{
+.web-rule-contact-condition-table tr[class~="chained"], .reports-condition-table tr[class~="chained"]{
 	display:flex;
 	margin-bottom:10px;
 }
@@ -1305,4 +1305,8 @@ display:none;
 #plans-panel .row-sm > div {
 	opacity:0.5;
 }
-
+.billingBtnAlign {
+	position:absolute;
+	bottom:15px;
+}
+	

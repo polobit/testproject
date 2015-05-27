@@ -751,8 +751,12 @@ function set_p_portlets(base_model){
 			var groupByList=[];
 			var splitByList=[];
 			var splitByNamesList=[];
-			
-			$('#'+selector).html(getRandomLoadingImg());
+			var domainUserNamesList=[];
+			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+			var topPos = 50*sizey;
+			if(sizey==2 || sizey==3)
+				topPos += 50;
+			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
 					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -760,7 +764,7 @@ function set_p_portlets(base_model){
 				}
 				groupByList=data["groupByList"];
 				splitByList=data["splitByList"];
-				
+				domainUserNamesList=data["domainUserNamesList"];
 				var series=[];
 				var text='';
 				var colors;
@@ -792,7 +796,7 @@ function set_p_portlets(base_model){
 					groupByNamesList[index] = getPortletNormalName(name);
 				});
 				
-				taskReportBarGraph(selector,groupByNamesList,series,text);
+				taskReportBarGraph(selector,groupByNamesList,series,text,base_model,domainUserNamesList);
 				
 				addWidgetToGridster(base_model);
 			});
@@ -1663,7 +1667,7 @@ function getPortletsTimeConversion(diffInSeconds){
 		duration += ' '+secs+'s';
 	return duration;
 }
-function taskReportBarGraph(selector,gropuByList,series,text){
+function taskReportBarGraph(selector,groupByList,series,text,base_model,domainUserNamesList){
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
 		$('#'+selector).highcharts({
 			colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050" ],
@@ -1675,15 +1679,30 @@ function taskReportBarGraph(selector,gropuByList,series,text){
 	            text: ''
 	        },
 	        xAxis: {
-	            categories: gropuByList,
-	            gridLineWidth : 1,
-	    		gridLineColor : '#F4F4F5',
-	    		labels : {
-	    			style : {
+	            categories: groupByList,
+	            labels: {
+	                formatter: function() {
+	                	if(base_model.get('settings')["group-by"]=="user"){
+	                		var userIndex=0;
+		                	for(var i=0;i<groupByList.length;i++){
+		                		if(this.value==groupByList[i])
+		                			userIndex=i;
+		                	}
+	                		if(this.value!=undefined && this.value!="")
+		                		return '<img src="'+this.value+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUserNamesList[userIndex]+'"/>';
+		                	else
+		                		return '<img src="'+gravatarImgForPortlets(25)+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUserNamesList[userIndex]+'"/>';
+	                	}else
+	                		return this.value;
+	                },
+	                style : {
 	    				color : '#98a6ad',
 	    				fontSize : '11px'
-	    			}
-	    		},
+	    			},
+	                useHTML: true
+	            },
+	            gridLineWidth : 1,
+	    		gridLineColor : '#F4F4F5',
 	    		lineWidth : 0,
 	    		tickWidth : 0
 	        },

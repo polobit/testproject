@@ -9,21 +9,16 @@
 <%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
+<%@page import="com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil"%>
+<%@page import="com.agilecrm.subscription.restrictions.db.BillingRestriction"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%
 
-			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 			System.out.println("Domain user " + domainUser);
-
-			ObjectMapper mapper = new ObjectMapper();
-
-			// Get current user prefs
-			UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
-
-			String width = currentUserPrefs.width;
 			
 			String logoutURL = "/login";
-				UserInfo user = SessionManager.get();
+			UserInfo user = SessionManager.get();
+		
 %>
 
 <header id="header" class="app-header navbar" role="menu">
@@ -236,7 +231,10 @@
 						</ul>
 
 						<ul class="nav  navbar-nav  navbar-right">
-
+						<%if(is_free_plan) 
+							out.println("<li><a href=\"#subscribe\">Upgrade</a></li>");
+						%>
+							
 							<li id="recent-menu" class="dropdown"><a
 								class="dropdown-toggle" data-toggle="dropdown" href=""> <i class='fa fa-history text-muted text-md'></i>
 							</a><ul class="dropdown-menu animated custom-fadeInUp" style="width:23em; right:-11px;"></ul>

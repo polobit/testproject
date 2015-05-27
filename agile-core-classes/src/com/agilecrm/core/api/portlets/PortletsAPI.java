@@ -397,12 +397,13 @@ public class PortletsAPI {
 	@Path("/portletTaskReport")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getTaskReportPortletData(@QueryParam("group-by") String groubBy,@QueryParam("split-by") String splitBy,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate)throws Exception {
+	public JSONObject getTaskReportPortletData(@QueryParam("group-by") String groubBy,@QueryParam("split-by") String splitBy,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate,@QueryParam("tasks") String tasks)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("group-by",groubBy);
 		json.put("split-by",splitBy);
 		json.put("startDate",startDate);
 		json.put("endDate",endDate);
+		json.put("tasks",tasks);
 		PortletUtil.checkPrivilegesForPortlets("TASKS");
 		return PortletUtil.getTaskReportPortletData(json);
 	}

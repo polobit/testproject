@@ -53,10 +53,8 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CSVUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.workflows.Workflow;
-import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
-import com.agilecrm.workflows.status.util.CampaignSubscribersUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
@@ -594,29 +592,13 @@ public class BulkOperationsAPI
 		// to show in notification
 		int contactSize = 0;
 
-		String campaignName = null;
-
-		if (!StringUtils.isBlank(campaign_id))
-			campaignName = WorkflowUtil.getCampaignName(campaign_id);
 
 		// if all active subscribers are selected
 		if (!StringUtils.isEmpty(allActiveSubscribers) && allActiveSubscribers.equals("all-active-subscribers"))
 		{
-			List<Contact> activeContacts = CampaignSubscribersUtil.getAllCampaignSubscribers(campaign_id + "-"
-					+ CampaignStatus.Status.ACTIVE);
 
-			contactSize = activeContacts.size();
-
-			for (Contact contact : activeContacts)
-			{
-				// Remove from Cron.
-				CronUtil.removeTask(campaign_id, contact.id.toString());
-
-				// Updates CampaignStatus to REMOVE
-				CampaignStatusUtil
-						.setStatusOfCampaign(contact.id.toString(), campaign_id, campaignName, Status.REMOVED);
-			}
-
+			contactSize = CampaignStatusUtil.removeBulkSubscribersFromCampaign(campaign_id);
+			
 			BulkActionNotifications.publishconfirmation(BulkAction.REMOVE_ACTIVE_SUBSCRIBERS,
 					String.valueOf(contactSize));
 			return;
@@ -626,6 +608,11 @@ public class BulkOperationsAPI
 		JSONArray activeContactsJSONArray = new JSONArray(contactIds);
 		contactSize = activeContactsJSONArray.length();
 
+		String campaignName = null;
+
+		if (!StringUtils.isBlank(campaign_id))
+			campaignName = WorkflowUtil.getCampaignName(campaign_id);
+		
 		for (int i = 0; i < contactSize; i++)
 		{
 			// Remove from Cron
