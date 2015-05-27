@@ -837,15 +837,18 @@ public class TaskUtil
     		tasksList1 = dao.listByProperty(searchMap1);
     		if(tasks.equalsIgnoreCase("all-tasks"))
     		{
-    			HashSet<Task> hashSet = new HashSet<Task>();
+    			HashSet<Long> hashSet = new HashSet<Long>();
     			tasksList2 = dao.listByProperty(searchMap2);
-        		hashSet.addAll(tasksList1);
+    			for(Task task: tasksList1)
+    			{
+    				hashSet.add(task.id);
+    			}
         		for (Task task : tasksList2) 
         		{
-					if(!hashSet.contains(task))
+					if(!hashSet.contains(task.id))
 					{
 						tasksList1.add(task);
-						hashSet.add(task);
+						hashSet.add(task.id);
 					}
 				}
     		}

@@ -1,0 +1,9 @@
+<datastore-indexes>
+    
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="type" direction="asc"/>
+        <property name="created_time" direction="asc"/>
+    </datastore-index>
+    
+</datastore-indexes>
