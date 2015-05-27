@@ -24,13 +24,13 @@ html,body
 color: #fff;
 }
 
-#domain-error a
+#domain-error a,#email-error a
  {
  	color:#fff;
  	text-decoration:underline;
  	font-weight:bold;
  }
- #domain-error a:hover
+ #domain-error a:hover, #email-error a:hover
  {
  	text-decoration:none;
  }
