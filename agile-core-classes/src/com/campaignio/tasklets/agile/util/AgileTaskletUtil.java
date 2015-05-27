@@ -303,14 +303,35 @@ public class AgileTaskletUtil {
 					}
 
 					if (field.name.equals(Contact.EMAIL)) {
-						email.put(field.subtype, field.value);
-						// Already inserted address as location, so continue
+						subscriberJSON.put(Contact.EMAIL, field.value);
+						if (!StringUtils.isEmpty(field.subtype))
+							email.put(field.subtype, field.value);
+						if ("work".equals(field.subtype))
+							subscriberJSON.put("email_work", field.value);
+						if ("home".equals(field.subtype))
+							subscriberJSON.put("email_home", field.value);
+						if ("personal".equals(field.subtype))
+							subscriberJSON.put("email_personal", field.value);
 						continue;
-
 					}
 					if (field.name.equals(Contact.PHONE)) {
-						phone.put(field.subtype, field.value);
-						// Already inserted address as location, so continue
+						subscriberJSON.put(Contact.PHONE, field.value);
+						if (!StringUtils.isEmpty(field.subtype))
+							phone.put(field.subtype, field.value);
+						if ("work".equals(field.subtype))
+							subscriberJSON.put("phone_work", field.value);
+						if ("home".equals(field.subtype))
+							subscriberJSON.put("phone_home", field.value);
+						if ("mobile".equals(field.subtype))
+							subscriberJSON.put("phone_mobile", field.value);
+						if ("main".equals(field.subtype))
+							subscriberJSON.put("phone_main", field.value);
+						if ("home fax".equals(field.subtype))
+							subscriberJSON.put("phone_home_fax", field.value);
+						if ("work fax".equals(field.subtype))
+							subscriberJSON.put("phone_work_fax", field.value);
+						if ("other".equals(field.subtype))
+							subscriberJSON.put("phone_other", field.value);
 						continue;
 
 					}
