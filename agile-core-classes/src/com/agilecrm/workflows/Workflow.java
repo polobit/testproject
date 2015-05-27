@@ -24,7 +24,6 @@ import com.agilecrm.workflows.unsubscribe.Unsubscribe;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.apphosting.api.ApiProxy;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
@@ -51,7 +50,6 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @XmlRootElement
 @Unindexed
-@Cached
 public class Workflow extends Cursor {
 	/**
 	 * Id of a workflow. Each workflow has its own and unique id.Id is system
@@ -202,8 +200,10 @@ public class Workflow extends Cursor {
 				obj.put("title", "Campaign Alert");
 				obj.put("message", "TBD - too large exception");
 
-				throw new WebApplicationException(Response
-						.status(Status.BAD_REQUEST).entity(obj + "").build());
+				throw new WebApplicationException(
+						Response.status(Status.BAD_REQUEST)
+								.entity("Your campaign has become too large (more than 1MB of data).  Please consider splitting it into multiple campaigns using the 'Transfer' option.")
+								.build());
 			} catch (JSONException e1) {
 				System.out.println("Exception while saving a Workflow"
 						+ e.getMessage());

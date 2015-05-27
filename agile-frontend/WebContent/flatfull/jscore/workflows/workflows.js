@@ -140,7 +140,7 @@ $(function(){
             error: function(jqXHR, status, errorThrown){ 
               enable_save_button($clicked_button);
               var json = JSON.parse(status.responseText);
-              workflow_alerts(json["title"], json["message"],"workflow-alert-modal");
+              //workflow_alerts(json["title"], json["message"],"workflow-alert-modal");
               // shows Exception message
               alert(status.responseText);
                 }
