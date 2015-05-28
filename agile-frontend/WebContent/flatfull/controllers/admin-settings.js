@@ -23,6 +23,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	/* Milestones */
 	"milestones" : "milestones",
+	
+	/* Categories */
+	"categories" : "categories",
 
 	/* Menu settings - select modules on menu bar */
 	"menu-settings" : "menu_settings",
@@ -350,6 +353,30 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$('#content').find('#admin-prefs-tabs-content').html(this.pipelineGridView.render().el);
 		$('#content').find('#AdminPrefsTab .select').removeClass('select');
 		$('#content').find('.milestones-tab').addClass('select');
+		$(".active").removeClass("active");
+	},
+	
+	/**
+	 * Creates a Model to show and edit milestones, reloads the page on save
+	 * success
+	 */
+	categories : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		$("#content").html(getTemplate("admin-settings"), {});
+		this.categoryGridView = new Base_Collection_View({ url : '/core/api/categories', templateKey : "admin-settings-categories",
+			individual_tag_name : 'tr', sortKey : "order", postRenderCallback : function(el)
+			{
+				console.log("loaded categories : ", el);
+			} });
+		this.categoryGridView.collection.fetch();
+		$('#content').find('#admin-prefs-tabs-content').html(this.categoryGridView.render().el);
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.categories-tab').addClass('select');
 		$(".active").removeClass("active");
 	},
 

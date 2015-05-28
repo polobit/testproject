@@ -22,6 +22,7 @@ import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.account.MenuSetting;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.BulkActionLog;
+import com.agilecrm.activities.Category;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.WebCalendarEvent;
@@ -189,8 +190,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(Form.class);
 
 	ObjectifyService.register(BulkActionLog.class);
-	
+
 	ObjectifyService.register(ContactSchemaUpdateStats.class);
+	ObjectifyService.register(Category.class);
 
     }
 
@@ -482,7 +484,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	    q.order(orderBy);
 	return fetchAll(q);
     }
-    
+
     /**
      * Fetches all the entities of type T
      * 
@@ -490,18 +492,18 @@ public class ObjectifyGenericDao<T> extends DAOBase
      */
     public List<T> fetchAllByOrder(String orderBy, Map<String, Object> map)
     {
-    	Query<T> query = ofy().query(clazz);
-    	if (map != null)
-    	    for (String propName : map.keySet())
-    	    {
-    		System.out.println(propName);
-    		query.filter(propName, map.get(propName));
-    	    }
+	Query<T> query = ofy().query(clazz);
+	if (map != null)
+	    for (String propName : map.keySet())
+	    {
+		System.out.println(propName);
+		query.filter(propName, map.get(propName));
+	    }
 
-    	if (!StringUtils.isEmpty(orderBy))
-    	    query.order(orderBy);
+	if (!StringUtils.isEmpty(orderBy))
+	    query.order(orderBy);
 
-    	return fetchAll(query);
+	return fetchAll(query);
     }
 
     /**
