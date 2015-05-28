@@ -176,7 +176,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 
 
-<body>
+<body class='<%if(!currentUserPrefs.animations) out.print("disable-anim");%>'>
 
  <!-- <div  class="settings panel panel-default ">
   <button class="btn btn-default no-shadow pos-abt ng-scope toggle-inactive" ui-toggle-class="active" target=".settings">

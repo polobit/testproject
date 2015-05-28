@@ -647,6 +647,7 @@ var SettingsRouter = Backbone.Router.extend({
 	themeandlayout : function()
 	{
 	//	$("#content").html(getTemplate("theme-layout-form"), {});
+		showTransitionBar();
 		$.ajax({
 			url : '/core/api/user-prefs',
 			type: 'GET',
@@ -655,12 +656,16 @@ var SettingsRouter = Backbone.Router.extend({
 				$("#content").html(getTemplate("theme-layout-form"), {});
 				$("#menuPosition").val(CURRENT_USER_PREFS.menuPosition);
 				$("#layout").val(CURRENT_USER_PREFS.layout);
+				if(CURRENT_USER_PREFS.animations == true)
+					$("#animations").attr('checked', true);
 				$('.magicMenu  input:radio[name="theme"]').filter('[value='+CURRENT_USER_PREFS.theme+']').attr('checked', true);
-				if(data.menuPosition != CURRENT_USER_PREFS.menuPosition || data.layout != CURRENT_USER_PREFS.layout || data.theme != CURRENT_USER_PREFS.theme)
+				if(data.menuPosition != CURRENT_USER_PREFS.menuPosition || data.layout != CURRENT_USER_PREFS.layout || data.theme != CURRENT_USER_PREFS.theme || data.animations != CURRENT_USER_PREFS.animations)
 					$(".theme-save-status").css("display","inline");
+				hideTransitionBar();
 			},
 			error : function(){
-				alert("Error occured, Please try again.");
+				hideTransitionBar();
+				showNotyPopUp("information", "error occured please try again", "top");
 			}
 		});
 		/*var view = new Base_Model_View({

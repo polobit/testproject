@@ -41,6 +41,21 @@ $("#layout").die().live("change", function(){
 		$(".fixedicons#planView,.fixedicons#helpView").css("left",pos.left);
 	}
 });
+
+$("#animations").die().live("change",function(){
+	CURRENT_USER_PREFS.animations = $(this).is(':checked');
+	$(".theme-save-status").css("display","inline");
+	if($(this).is(':checked'))
+	{
+		$("body").removeClass("disable-anim");
+		$("#theme-and-layout").removeClass("custom-animated");
+	}
+	else
+	{
+		$("body").addClass("disable-anim");
+
+	}
+});
 	
 /*	
 $("#check-fix-head").on('click',function(){
