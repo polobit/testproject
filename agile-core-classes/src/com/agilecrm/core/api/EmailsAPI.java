@@ -148,8 +148,9 @@ public class EmailsAPI
 	@Path("contact-us")
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public void sendEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to,
-			@QueryParam("subject") String subject, @QueryParam("body") String body) throws Exception
+	@Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
+	public void sendEmail(@FormParam("from") String fromEmail, @FormParam("to") String to,
+			@FormParam("subject") String subject, @FormParam("body") String body) throws Exception
 	{
 		String oldNamespace = NamespaceManager.get();
 
