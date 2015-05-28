@@ -493,7 +493,7 @@ public class ContactUtil
 	if (newAddedEmails.isEmpty())
 	    return false;
 
-	for (ContactField field : newEmailFields)
+	for (ContactField field : newAddedEmails)
 	{
 	    if (searchContactCountByEmailAndType(field.value.toLowerCase(), Type.PERSON) > 0)
 	    {
