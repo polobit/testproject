@@ -101,18 +101,18 @@ public class Contact extends Cursor
      */
     @Indexed
     public Type type = Type.PERSON;
-    
-	@JsonIgnore
-	@Indexed
-	public String first_name = "";
 
-	@JsonIgnore
-	@Indexed
-	public String last_name = "";
+    @JsonIgnore
+    @Indexed
+    public String first_name = "";
 
-	@JsonIgnore
-	@Indexed
-	public String name = "";
+    @JsonIgnore
+    @Indexed
+    public String last_name = "";
+
+    @JsonIgnore
+    @Indexed
+    public String name = "";
 
     /**
      * Created time of the contact
@@ -125,7 +125,7 @@ public class Contact extends Cursor
      */
     @Indexed
     public Long updated_time = 0L;
-    
+
     @Indexed
     public Long last_contacted = 0L;
 
@@ -159,13 +159,13 @@ public class Contact extends Cursor
      */
     @Indexed
     public Integer lead_score = 0;
-    
-	/**
-	 * Schema version of the contact used for updating schema
-	 */
-	@Indexed
-	@JsonIgnore
-	public Integer schema_version = 1;
+
+    /**
+     * Schema version of the contact used for updating schema
+     */
+    @Indexed
+    @JsonIgnore
+    public Integer schema_version = 1;
 
     /**
      * Set of tags. Not saved in it, it is used to map tags from client
@@ -308,10 +308,13 @@ public class Contact extends Cursor
     {
 	// Ties to get contact field from existing properties based on new field
 	// name.
+	System.out.println("The contact field is " + contactField);
 	ContactField field = this.getContactFieldByName(contactField.name);
-
+	System.out.println("The contact field is " + field);
 	String fieldName = field == null ? contactField.name : field.name;
+	System.out.println("The fieldName is " + fieldName);
 	FieldType type = FieldType.CUSTOM;
+	System.out.println("The FieldType is " + type);
 	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME) || fieldName.equals(EMAIL)
 		|| fieldName.equals(TITLE) || fieldName.equals(WEBSITE) || fieldName.equals(COMPANY)
 		|| fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE)
@@ -416,32 +419,11 @@ public class Contact extends Cursor
 	// loop through for checking multiple emails
 	if (Type.PERSON == type)
 	{
-	    for (ContactField contactField : this.properties)
-	    {
-		if (!StringUtils.equalsIgnoreCase(contactField.name, "EMAIL"))
-		    continue;
-
-		String myMail = contactField.value;
-		int countEmails = 0; // to allow if this new entry doesn't have
-		// email-id
-
-		if (myMail != null && !myMail.isEmpty())
-		{
-		    countEmails = ContactUtil.searchContactCountByEmailAndType(myMail, type);
-		    // countEmails =
-		    // ContactUtil.searchContactCountByEmail(myMail);
-		}
-		// Throw BAD_REQUEST if countEmails>=2 (sure duplicate contact)
-		// otherwise if countEmails==1, make sure its not due to
-		// previous
-		// value of this(current) Contact
-		if (countEmails >= 2 || (countEmails == 1 && (id == null || !oldContact.isEmailExists(myMail))))
-		{
-		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-			    .entity("Sorry, a contact with this email already exists " + myMail).build());
-		}
-
-	    }
+	    // Throw BAD_REQUEST if countEmails>=2 (sure duplicate contact)
+	    // otherwise if countEmails==1, make sure its not due to
+	    // previous
+	    // value of this(current) Contact
+	    ContactUtil.isDuplicateContact(this, oldContact, true);
 	}
 
 	// To skip validation for Campaign Tags
@@ -475,9 +457,9 @@ public class Contact extends Cursor
 	// Updates Tag entity, if any new tag is added
 	updateTagsEntity(oldContact, this);
 
-	// Verifies CampaignStatuses
+	// Verifies CampaignStatus
 	checkCampaignStatus(oldContact, this);
-	
+
 	dao.put(this);
 
 	// Execute trigger for contacts
@@ -558,7 +540,10 @@ public class Contact extends Cursor
 	// If tags and properties length differ, contact is considered to be
 	// changed
 	if (contact.tags.size() != currentContactTags.size() || contact.properties.size() != properties.size()
-		|| contact.star_value != star_value || (contact.lead_score != null ? !contact.lead_score.equals(lead_score) : false) || contact.campaignStatus.size() != campaignStatus.size())
+		|| contact.star_value != star_value
+		|| (contact.lead_score != null ? !contact.lead_score.equals(lead_score) : false)
+		|| contact.campaignStatus.size() != campaignStatus.size())
+
 	    return true;
 
 	// Checks if tags are changed
@@ -580,14 +565,14 @@ public class Contact extends Cursor
 	    if (!properties.contains(property))
 		return true;
 	}
-	
-	//Checks campaign status has any change
-	for(CampaignStatus status : contact.campaignStatus)
+
+	// Checks campaign status has any change
+	for (CampaignStatus status : contact.campaignStatus)
 	{
-	    if(campaignStatus == null || status == null)
+	    if (campaignStatus == null || status == null)
 		continue;
-	    
-	    if(!campaignStatus.contains(status))
+
+	    if (!campaignStatus.contains(status))
 		return true;
 	}
 
@@ -626,6 +611,7 @@ public class Contact extends Cursor
      */
     public ContactField getContactFieldByName(String fieldName)
     {
+	System.out.println("inside get contfield " + fieldName);
 	// Iterates through all the properties and returns matching property
 	for (ContactField field : properties)
 	{
@@ -1029,16 +1015,13 @@ public class Contact extends Cursor
 
 	if (this.type == Type.PERSON)
 	{
-			if (this.properties.size() > 0) {
-				ContactField firstNameField = this
-						.getContactFieldByName(Contact.FIRST_NAME);
-				ContactField lastNameField = this
-						.getContactFieldByName(Contact.LAST_NAME);
-				this.first_name = firstNameField != null ? firstNameField.value
-						: "";
-				this.last_name = lastNameField != null ? lastNameField.value
-						: "";
-			}
+	    if (this.properties.size() > 0)
+	    {
+		ContactField firstNameField = this.getContactFieldByName(Contact.FIRST_NAME);
+		ContactField lastNameField = this.getContactFieldByName(Contact.LAST_NAME);
+		this.first_name = firstNameField != null ? firstNameField.value : "";
+		this.last_name = lastNameField != null ? lastNameField.value : "";
+	    }
 	    if (StringUtils.isNotEmpty(contact_company_id))
 	    {
 		// update id, for existing company
@@ -1086,13 +1069,14 @@ public class Contact extends Cursor
 		}
 	    }
 	}
-		if (this.type == Type.COMPANY) {
-			if (this.properties.size() > 0) {
-				ContactField nameField = this
-						.getContactFieldByName(Contact.NAME);
-				this.name = nameField != null ? nameField.value : "";
-			}
-		}
+	if (this.type == Type.COMPANY)
+	{
+	    if (this.properties.size() > 0)
+	    {
+		ContactField nameField = this.getContactFieldByName(Contact.NAME);
+		this.name = nameField != null ? nameField.value : "";
+	    }
+	}
 
 	// Store Created and Last Updated Time Check for id even if created
 	// time is 0(To check whether it is update request)
@@ -1243,39 +1227,44 @@ public class Contact extends Cursor
 	    System.err.println("Exception occured in updateTagsEntity..." + e.getMessage());
 	}
     }
-    
+
     /**
-     * Verifies CampaignStatus in both old and new contact objects. To update campaign statuses 
-     * if not exists in updated contact
+     * Verifies CampaignStatus in both old and new contact objects. To update
+     * campaign statuses if not exists in updated contact
      * 
-     * @param oldContact - oldContact from datastore
-     * @param updatedContact - updated contact object ready to save
+     * @param oldContact
+     *            - oldContact from datastore
+     * @param updatedContact
+     *            - updated contact object ready to save
      */
     private void checkCampaignStatus(Contact oldContact, Contact updatedContact)
     {
-    	try
-    	{
-    		
-    		// For New contact
-    		if(oldContact == null || oldContact.campaignStatus == null)
-    			return;
-    	
-    		System.out.println("Old CampaignStatus: " + oldContact.campaignStatus + " New campaignStatus: " + updatedContact.campaignStatus);
-    		
-    		// If no change return
-    		if(updatedContact.campaignStatus != null && oldContact.campaignStatus.size() == updatedContact.campaignStatus.size())
-    			return;
-    	
-    		// Updated Campaign Status in new contact
-    		if(updatedContact.campaignStatus == null || updatedContact.campaignStatus.size() == 0 || updatedContact.campaignStatus.size() < oldContact.campaignStatus.size())
-    			updatedContact.campaignStatus = oldContact.campaignStatus;
-    			
-    	}
-    	catch(Exception e)
-    	{
-    		System.err.println("Exception occured while checking CampaignStatus in Contact..." + e.getMessage());
-    		e.printStackTrace();
-    	}
+	try
+	{
+
+	    // For New contact
+	    if (oldContact == null || oldContact.campaignStatus == null)
+		return;
+
+	    System.out.println("Old CampaignStatus: " + oldContact.campaignStatus + " New campaignStatus: "
+		    + updatedContact.campaignStatus);
+
+	    // If no change return
+	    if (updatedContact.campaignStatus != null
+		    && oldContact.campaignStatus.size() == updatedContact.campaignStatus.size())
+		return;
+
+	    // Updated Campaign Status in new contact
+	    if (updatedContact.campaignStatus == null || updatedContact.campaignStatus.size() == 0
+		    || updatedContact.campaignStatus.size() < oldContact.campaignStatus.size())
+		updatedContact.campaignStatus = oldContact.campaignStatus;
+
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured while checking CampaignStatus in Contact..." + e.getMessage());
+	    e.printStackTrace();
+	}
     }
 
     @Override
