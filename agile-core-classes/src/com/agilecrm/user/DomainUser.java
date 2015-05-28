@@ -28,6 +28,7 @@ import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.OnlineCalendarUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.VersioningUtil;
@@ -259,42 +260,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		this.is_account_owner = isAccountOwner;
 	}
 
-	/**
-	 * Constructs new {@link DomainUser} entity with the following parameters
-	 * domain user gets created whrn registering and domain user is created with
-	 * reference code
-	 * 
-	 * @param domain
-	 *            domain of the user
-	 * @param email
-	 *            email of the user to login into agileCRM
-	 * @param name
-	 *            name of the user
-	 * @param password
-	 *            password to login into agileCRM
-	 * @param isAdmin
-	 *            specifies the accessibility of the user
-	 * @param isAccountOwner
-	 *            specifies ownership
-	 */
-	/*
-	 * public DomainUser(String domain, String email, String name, String
-	 * password, boolean isAdmin, boolean isAccountOwner, String referencecode)
-	 * { this.domain = domain; this.email = email; this.name = name;
-	 * this.password = password; this.is_admin = isAdmin; this.is_account_owner
-	 * = isAccountOwner;
-	 * 
-	 * // added by jagadeesh for referral trackingm // creates new reference
-	 * code and stores in DoaminUser this.referer.reference_code =
-	 * ReferenceUtil.getReferanceNumber();
-	 * 
-	 * this.referer.referral_count = 0;// stores referelcount 0 when creating //
-	 * domain
-	 * 
-	 * this.referer.reference_by = referencecode;
-	 * System.out.println(this.referer.reference_code + "  " +
-	 * this.referer.referral_count + "   " + this.referer.reference_by); }
-	 */
 	/**
 	 * Sends notification on disabling or enabling the domain user
 	 */
@@ -681,6 +646,10 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	private void PrePersist()
 	{
 		DomainUser domainuser = null;
+		if (this.id != null)
+		{
+			domainuser = DomainUserUtil.getDomainUser(id);
+		}
 		// Stores created time in info_json
 		if (!hasInfo(CREATED_TIME))
 		{
@@ -707,28 +676,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 			}
 		}
 
-		if (this.id != null)
-		{
-
-			domainuser = DomainUserUtil.getDomainUser(id);
-			if (StringUtils.isEmpty(domainuser.schedule_id))
-			{
-				this.schedule_id = getScheduleid(domainuser.name);
-
-			}
-			else
-			{
-				if (StringUtils.isNotEmpty(this.schedule_id))
-					this.schedule_id = getScheduleid(this.schedule_id);
-				else
-					this.schedule_id = domainuser.schedule_id;
-			}
-
-		}
-		else
-		{
-			this.schedule_id = getScheduleid(this.name);
-		}
 		// Stores password
 		if (!StringUtils.isEmpty(password) && !password.equals(MASKED_PASSWORD))
 		{
@@ -965,27 +912,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 	/**
 	 * 
-	 * @param name
-	 *            domainuser name
-	 * @return online schedule id
-	 */
-	public String getScheduleid(String name)
-	{
-		String scheduleid = null;
-		if (name.contains(" "))
-		{
-			scheduleid = name.replace(" ", "_");
-			return scheduleid;
-		}
-		else
-		{
-			scheduleid = name;
-			return scheduleid;
-		}
-	}
-
-	/**
-	 * 
 	 * @return default business hours
 	 */
 	public String getDefaultBusinessHours()
@@ -1067,7 +993,14 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 		String calendar_url = VersioningUtil.getHostURLByApp(domain);
 
-		if (!StringUtils.isEmpty(schedule_id))
+		OnlineCalendarPrefs online_cal_prefs = OnlineCalendarUtil.getCalendarPrefs(id);
+		String scheduleid = null;
+		if (online_cal_prefs != null)
+		{
+			scheduleid = online_cal_prefs.schedule_id;
+			calendar_url += "calendar/" + scheduleid;
+		}
+		else if (!StringUtils.isEmpty(schedule_id))
 			calendar_url += "calendar/" + schedule_id;
 
 		return calendar_url;

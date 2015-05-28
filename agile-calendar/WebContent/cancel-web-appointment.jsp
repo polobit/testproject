@@ -388,7 +388,6 @@ $("#cancel_appointment_confirmation").die().live('click', function(e)
 	 
 	 $.ajax({ url : '/core/api/webevents/calendar/deletewebevent?event_id=' + <%=event_id%>+'&cancel_reason='+cancel_reason, type : 'GET', success : function(data)
 			{
-		 var domainname="dsadsadsa";
 		 var appointment_success_img2 = "/img/appointment_confirmation.png";
 		 var ser='<div class="wrapper rounded6" id="templateContainer">'
 		         +'<div id="templateBody" class="bodyContent rounded6">'

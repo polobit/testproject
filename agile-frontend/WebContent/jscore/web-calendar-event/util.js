@@ -336,8 +336,6 @@ function save_web_event(formId, confirmBtn)
 		}
 	}
 
-	console.log(web_calendar_event["selectedSlotsString"].length);
-
 	if (web_calendar_event["selectedSlotsString"].length == 0)
 	{
 		alert("Please select appointment time.");
@@ -365,7 +363,7 @@ function save_web_event(formId, confirmBtn)
 					var d = dates[0];
 					var start = convertToHumanDateUsingMoment("", d.start);
 
-					if (status == "success" && res.response != "slot booked")
+					if (status == "success" && res.responseText != "slot booked")
 					{
 						$('#mainwrap').addClass("appointment-wrap");
 						var appointment_success_img1 = "/img/appointment_confirmation.png";
@@ -378,10 +376,11 @@ function save_web_event(formId, confirmBtn)
 						$(".container").html(temp);
 
 					}
-					else if (res.response == "slot booked")
+					else if (res.responseText == "slot booked")
 					{
-						alert("Sorry. This slot is booked by some one else. Please try another.");
-						location.reload(true);
+						alert("Looks like this slot is booked already. Please try another one.");
+						get_slots(selecteddate, Selected_Time);
+						$('#confirm').attr('disabled', false);
 					}
 
 					else

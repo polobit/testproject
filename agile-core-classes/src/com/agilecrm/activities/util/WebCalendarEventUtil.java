@@ -31,7 +31,9 @@ import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.OnlineCalendarPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.OnlineCalendarUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.IcalendarUtil;
@@ -67,8 +69,15 @@ public class WebCalendarEventUtil
 			JSONException
 	{
 		DomainUser domain_user = DomainUserUtil.getDomainUser(userid);
-
+		OnlineCalendarPrefs prefs = OnlineCalendarUtil.getCalendarPrefs(userid);
 		String domainUser_timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domain_user.id);
+		String business_hours = null;
+		if (prefs != null)
+		{
+			business_hours = prefs.business_hours;
+		}
+		if (StringUtils.isEmpty(business_hours))
+			business_hours = domain_user.business_hours;
 		if (StringUtils.isEmpty(domainUser_timezone))
 		{
 			domainUser_timezone = domain_user.timezone;
@@ -111,7 +120,7 @@ public class WebCalendarEventUtil
 			{
 				List<Long> slots = possibleSlots.get(i);
 				Long main = slots.get(0);
-				if (checkBussinessHour(main, domainUser_timezone, new JSONArray(domain_user.business_hours), slotTime))
+				if (checkBussinessHour(main, domainUser_timezone, new JSONArray(business_hours), slotTime))
 				{
 					listOfLists.add(slots);
 				}
