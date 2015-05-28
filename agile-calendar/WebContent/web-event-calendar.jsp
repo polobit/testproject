@@ -1301,8 +1301,6 @@ var slot_details=[];
 						for(var k=0;k<=multi_user_ids.length - 1;k++){
 							var array=business_hours_array[k];
 							var s=array[convertWeekDayToArray(new Date(dates).getDay())];
-							if(!s)
-								return;
 							if(s.isActive){
 								$("#workhours-"+multi_user_ids[k]).html(getNormalBusinessHouts(s.timeFrom)+" - "+getNormalBusinessHouts(s.timeTill));
 							}
