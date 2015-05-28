@@ -304,8 +304,6 @@ public class AgileTaskletUtil {
 
 					if (field.name.equals(Contact.EMAIL)) {
 						subscriberJSON.put(Contact.EMAIL, field.value);
-						if (!StringUtils.isEmpty(field.subtype))
-							email.put(field.subtype, field.value);
 						if ("work".equals(field.subtype))
 							subscriberJSON.put("email_work", field.value);
 						if ("home".equals(field.subtype))
@@ -316,8 +314,6 @@ public class AgileTaskletUtil {
 					}
 					if (field.name.equals(Contact.PHONE)) {
 						subscriberJSON.put(Contact.PHONE, field.value);
-						if (!StringUtils.isEmpty(field.subtype))
-							phone.put(field.subtype, field.value);
 						if ("work".equals(field.subtype))
 							subscriberJSON.put("phone_work", field.value);
 						if ("home".equals(field.subtype))
