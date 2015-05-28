@@ -83,17 +83,24 @@ public class OnlineCalendarPrefs
 	public OnlineCalendarPrefs(String schedule_id, String meeting_types, String business_hours,
 			String meeting_durations, Long userid)
 	{
-		this.schedule_id = schedule_id;
-		this.user = new Key<DomainUser>(DomainUser.class, userid);
 
-	}
-
-	public OnlineCalendarPrefs(String schedule_id, Long userid)
-	{
 		this.schedule_id = schedule_id;
 		this.meeting_types = meeting_types;
 		this.business_hours = business_hours;
 		this.meeting_durations = meeting_durations;
+		this.user = new Key<DomainUser>(DomainUser.class, userid);
+	}
+
+	/**
+	 * calls this when new user creation
+	 * 
+	 * @param schedule_id
+	 * @param userid
+	 */
+	public OnlineCalendarPrefs(String schedule_id, Long userid)
+	{
+
+		this.schedule_id = schedule_id;
 		this.user = new Key<DomainUser>(DomainUser.class, userid);
 
 	}
