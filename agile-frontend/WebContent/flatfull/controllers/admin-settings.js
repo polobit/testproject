@@ -372,6 +372,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			individual_tag_name : 'tr', sortKey : "order", postRenderCallback : function(el)
 			{
 				console.log("loaded categories : ", el);
+				categories.setup_categories(el);
 			} });
 		this.categoryGridView.collection.fetch();
 		$('#content').find('#admin-prefs-tabs-content').html(this.categoryGridView.render().el);
