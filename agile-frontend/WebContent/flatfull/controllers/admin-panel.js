@@ -254,6 +254,10 @@ var AdminPanelRouter = Backbone.Router.extend({
 				// Show Coupon code input field
 				id = (id && id == "coupon") ? id : "";
 				showCouponCodeContainer(id);
+				$("#user_quantity").attr("value", data.plan.quantity);
+				price = update_price();
+				$( "#users_quantity").text(data.plan.quantity);
+     	    	$("#users_total_cost").text((data.plan.quantity * price).toFixed(2));
 
 				head.load(CSS_PATH + 'css/jslider.css', CSS_PATH + "css/misc/agile-plan-upgrade.css", LIB_PATH + 'lib/jquery.slider.min.js', function()
 				{
@@ -261,7 +265,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 						setPlan("free");
 					else
 						setPlan(data);
-					load_slider(el);
+					//load_slider(el);
 				});
 			} });
 		$('#content').html(subscribe_plan.render().el);

@@ -173,7 +173,7 @@ function setPlan(user_plan)
 		else if(user_plan != "free" && user_plan != "super")
 		{
 			var stripe_subscription = getSubscription(user_plan.billingData, user_plan.plan);
-			if(stripe_subscription)
+			if(stripe_subscription || CURRENT_DOMAIN_USER.domain == "admin")
 			{
 				plan_type = USER_DETAILS.getPlanTypeByStripe(USER_BILLING_PREFS);
 				interval = USER_DETAILS.getPlanIntervalByStripe(USER_BILLING_PREFS);
@@ -184,12 +184,12 @@ function setPlan(user_plan)
 			else
 			{
 				interval = "monthly";
-				plan_type = "free"
+				plan_type = "free";
 			}
 		}
 	
 		
-		$("input[value='" + plan_type + "']").trigger("click");
+		$("#plan_type").attr('value', plan_type).trigger("change");
 		//$("ul.tagsli a." + interval).trigger("click");
 		$("#billing_cycle").attr('value', interval).trigger("change");
 		

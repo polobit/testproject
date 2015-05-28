@@ -122,8 +122,14 @@ public class ContactFilterIdsResultFetcher
 
 	}
 
-	if (this.filter != null)
+	if (this.filter != null) {
 	    modifyFilterCondition();
+	    SearchRule rule = new SearchRule();
+		rule.LHS = "type";
+		rule.CONDITION = RuleCondition.EQUALS;
+		rule.RHS = filter.contact_type.toString();
+		filter.rules.add(rule);
+	}
 
 	BulkActionUtil.setSessionManager(domainUserId);
 

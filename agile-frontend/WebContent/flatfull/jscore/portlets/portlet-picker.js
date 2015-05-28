@@ -1186,7 +1186,7 @@ function dealsFunnelGraph(selector,funnel_data){
 	            marginRight: 20,
 	            className: 'deals-funnel-portlet'
 	        },
-	        colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050" ],
+	        colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
 	        title: {
 	            text: ''
 	        },
@@ -1395,7 +1395,7 @@ function portletGrowthGraph(selector,series,base_model){
 					align : 'right',
 					verticalAlign : 'top'
 				},
-				colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050" ],
+				colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
 		    });
 		});
 	}
@@ -1562,7 +1562,7 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	        exporting: {
 		        enabled: false
 		    },
-		    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", "#fad733" ],
+		    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", "#fad733","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
 		    legend : {
 				itemStyle : {
 					fontSize : '10px',
@@ -1670,7 +1670,7 @@ function getPortletsTimeConversion(diffInSeconds){
 function taskReportBarGraph(selector,groupByList,series,text,base_model,domainUserNamesList){
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
 		$('#'+selector).highcharts({
-			colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050" ],
+			colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
 	        chart: {
 	            type: 'bar',
 	            marginRight: 20
@@ -1746,7 +1746,25 @@ function taskReportBarGraph(selector,groupByList,series,text,base_model,domainUs
 				borderRadius : 3,
 				style : {
 					color : '#EFEFEF'
-				}
+				},
+				formatter: function() {
+                	if(base_model.get('settings')["group-by"]=="user"){
+                		var userIndex=0;
+	                	for(var i=0;i<groupByList.length;i++){
+	                		if(this.key==groupByList[i])
+	                			userIndex=i;
+	                	}
+                		return  '<div>' + 
+        		        		'<div class="p-n" style="color:'+this.series.color+';">'+domainUserNamesList[userIndex]+' </div>' +
+        		        		'<div class="p-n" style="color:'+this.series.color+';">'+this.series.name+':'+this.y+' </div>' +
+        		        		'</div>';
+                	}else
+                		return  '<div>' + 
+		        				'<div class="p-n" style="color:'+this.series.color+';">'+this.x+' </div>' +
+		        				'<div class="p-n" style="color:'+this.series.color+';">'+this.series.name+':'+this.y+' </div>' + 
+		        				'</div>';
+                },
+                useHTML: true
 			},
 			legend : {
 				itemStyle : {
