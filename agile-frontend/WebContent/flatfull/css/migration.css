@@ -1309,4 +1309,10 @@ display:none;
 	position:absolute;
 	bottom:15px;
 }
-	
+
+#noty_bottomCenter_layout_container {
+  bottom: 0px!important;
+}	
+#noty_bottomCenter_layout_container li {
+  width:389px!important;
+}

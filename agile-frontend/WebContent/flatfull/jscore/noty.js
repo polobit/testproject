@@ -22,7 +22,7 @@ function showUpgradeNoty()
 	
 	
 		// Show the first one after 3 secs
-	showNotyPopUp("warning", get_random_message(), "bottom", "none", function(){
+	showNotyPopUp("warning", get_random_message(), "bottomCenter", "none", function(){
 			Nagger_Noty = null;
 			Backbone.history.navigate('subscribe', {
 				 trigger : true
@@ -96,6 +96,14 @@ function showNotyPopUp(type, message, position, timeout, clickCallback) {
 						notySetup(type, message, position, timeout, clickCallback)
 				});	
 	
+	//for bottomCenter position
+	if(position == "bottomCenter")
+		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
+				+ 'lib/noty/layouts/bottomCenter.js', LIB_PATH
+				+ 'lib/noty/themes/default.js', function(){
+			          notySetup(type,message,position,timeout,clickCallback)
+		});
+	
 	// for bottomLeft position
 	if(position == "bottom")
 		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH
@@ -158,7 +166,7 @@ function get_random_message() {
 		trail_expiry_message = "Your trial will expire in "+getPendingdaysIntrail()+" days";*/
 	
 	
-	var messages = ["Thanks for trying Agile CRM. You can upgrade here."];
+	var messages = ["You are using FREE limited version of Agile CRM. Upgrade here."];
 
 	var random = Math.floor((Math.random() * messages.length));
 	// console.log(random + messages[random]);
