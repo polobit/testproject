@@ -10,6 +10,14 @@ define(
 			{
 				var fields;
 				var api;
+				
+				//Loads form view in form.jsp page
+				if($('#agileFormHolder').length != 0) {
+					if(formNumber){
+						formLoad.agile_form_load();
+					}
+					return;
+				}
 
 				getAgileFields(fields, function(fields)
 				{
