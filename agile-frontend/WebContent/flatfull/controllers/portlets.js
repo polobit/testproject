@@ -106,7 +106,10 @@ function addNewPortlet(portlet_type,p_name){
 		json['tasks']="all-tasks";
 	}else if(portlet_type=="USERACTIVITY" && p_name=="StatsReport"){
 		json['duration']="yesterday";
-	}
+	}else if(portlet_type=="TASKSANDEVENTS" && p_name=="Agenda")
+		json['duration']="today-and-tomorrow";
+	else if(portlet_type=="TASKSANDEVENTS" && p_name=="TodayTasks")
+		json['duration']="today-and-tomorrow";
 	else if(portlet_type=="RSS" && p_name=="AgileCRMBlog")
 		obj.size_y=2;
 	var portlet = new BaseModel();
@@ -398,6 +401,13 @@ function getStartAndEndDatesOnDue(duration){
 		else
 			d.setDate(d.getDate() - (new Date().getDay()+6));
 	}
+	// This week end
+	if (duration == "this-week-end"){
+		if(new Date().getDay()!=0)
+			d.setDate((d.getDate() - (new Date().getDay()-1))+7);
+		else
+			d.setDate((d.getDate() - (new Date().getDay()+6))+7);
+	}
 	//Last week start
 	if(duration == "last-week")
 		d.setDate(d.getDate()-d.getDay()-6);
@@ -441,6 +451,14 @@ function getStartAndEndDatesOnDue(duration){
 	// Last 2 days
 	if (duration == "2-days")
 		d.setDate(d.getDate() - 1);
+	
+	// next 7 days
+	if (duration == "next-7-days")
+		d.setDate(d.getDate() + 8);
+
+	// next 7 days
+	if (duration == "today-and-tomorrow")
+		d.setDate(d.getDate() + 2);
 
 	console.log((getGMTTimeFromDate(d) / 1000));
 

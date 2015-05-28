@@ -5531,9 +5531,9 @@ $(function()
 		else if (p_name == 'Deals Assigned')
 			portlet_name = 'Deals Assigned';
 		else if (p_name == 'Agenda')
-			portlet_name = "Today's Events";
+			portlet_name = "Events List";
 		else if (p_name == 'Today Tasks')
-			portlet_name = "Today's Tasks";
+			portlet_name = "Tasks List";
 		else if (p_name == 'Agile CRM Blog')
 			portlet_name = "Agile CRM Blog";
 		else if (p_name == 'Task Report')

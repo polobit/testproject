@@ -587,7 +587,7 @@ public class TaskUtil
 	 * 
 	 * @return List of tasks that have been pending for Today
 	 */
-	public static List<Task> getTodayPendingTasks(Long startTime, Long endTime)
+	public static List<Task> getTodayPendingTasks(Long startTime, Long endTime,String duration)
 	{
 		try
 		{
@@ -609,8 +609,13 @@ public class TaskUtil
 			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 
 			// Gets list of tasks filtered on given conditions
-			return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, domainUser.id))
-					.filter("due >=", startTime).filter("due <", endTime).filter("is_complete", false).limit(50).list();
+			if(duration!=null && duration.equalsIgnoreCase("all-over-due"))
+				return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, domainUser.id))
+						.filter("due <", endTime).filter("is_complete", false).limit(50).list();
+			else
+				return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, domainUser.id))
+						.filter("due >=", startTime).filter("due <", endTime).filter("is_complete", false).limit(50).list();
+			
 		}
 		catch (Exception e)
 		{
