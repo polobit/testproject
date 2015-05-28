@@ -48,7 +48,13 @@
 
 
 <style>
-@media ( min-width : 900px) {
+@media all and (max-width: 500px) {
+.regpage-container {
+	width: 90%;
+}
+
+}
+
 	body {
 		padding-top: 20px;
 		overflow-x: hidden;
@@ -57,7 +63,7 @@
 	.navbar-search {
 		padding-left: 10%
 	}
-}
+
 
 label {
 	display: block !important;
