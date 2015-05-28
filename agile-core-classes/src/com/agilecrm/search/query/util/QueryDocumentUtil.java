@@ -97,7 +97,7 @@ public class QueryDocumentUtil
 		{
 			// Checks Rules is built properly, as validations are not preset at
 			// client side. Improper query raises exceptions.
-			if (rule.LHS == null || rule.RHS == null || rule.CONDITION == null)
+			if (rule.LHS == null || (rule.RHS == null && !rule.CONDITION.equals(SearchRule.RuleCondition.DEFINED) && !rule.CONDITION.equals(SearchRule.RuleCondition.NOT_DEFINED)) || rule.CONDITION == null)
 				continue;
 
 			// If nested condition is not null and nested value is not
@@ -216,6 +216,18 @@ public class QueryDocumentUtil
 						newQuery = lhs + "=\"" + rhs + "_" + condition + "\"";
 						query = buildNestedCondition(joinCondition, query, newQuery);
 					}
+				}
+				else if (condition.equals(SearchRule.RuleCondition.DEFINED))
+				{
+					// double quotes for exact match of value.
+					query = buildNestedCondition(joinCondition, query,
+							"field_labels" + ":\"" + lhs + "\"");
+				}
+				else if (condition.equals(SearchRule.RuleCondition.NOT_DEFINED))
+				{
+					// double quotes for exact match of value.
+					query = buildNotNestedCondition(joinCondition, query,
+							"field_labels" + ":\"" + lhs + "\"");
 				}
 
 			}
