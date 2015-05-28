@@ -261,6 +261,42 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	}
 
 	/**
+	 * Constructs new {@link DomainUser} entity with the following parameters
+	 * domain user gets created whrn registering and domain user is created with
+	 * reference code
+	 * 
+	 * @param domain
+	 *            domain of the user
+	 * @param email
+	 *            email of the user to login into agileCRM
+	 * @param name
+	 *            name of the user
+	 * @param password
+	 *            password to login into agileCRM
+	 * @param isAdmin
+	 *            specifies the accessibility of the user
+	 * @param isAccountOwner
+	 *            specifies ownership
+	 */
+	/*
+	 * public DomainUser(String domain, String email, String name, String
+	 * password, boolean isAdmin, boolean isAccountOwner, String referencecode)
+	 * { this.domain = domain; this.email = email; this.name = name;
+	 * this.password = password; this.is_admin = isAdmin; this.is_account_owner
+	 * = isAccountOwner;
+	 * 
+	 * // added by jagadeesh for referral trackingm // creates new reference
+	 * code and stores in DoaminUser this.referer.reference_code =
+	 * ReferenceUtil.getReferanceNumber();
+	 * 
+	 * this.referer.referral_count = 0;// stores referelcount 0 when creating //
+	 * domain
+	 * 
+	 * this.referer.reference_by = referencecode;
+	 * System.out.println(this.referer.reference_code + "  " +
+	 * this.referer.referral_count + "   " + this.referer.reference_by); }
+	 */
+	/**
 	 * Sends notification on disabling or enabling the domain user
 	 */
 
@@ -646,10 +682,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	private void PrePersist()
 	{
 		DomainUser domainuser = null;
-		if (this.id != null)
-		{
-			domainuser = DomainUserUtil.getDomainUser(id);
-		}
 		// Stores created time in info_json
 		if (!hasInfo(CREATED_TIME))
 		{
@@ -674,6 +706,14 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 				}
 
 			}
+		}
+
+		if (this.id != null)
+		{
+
+			domainuser = DomainUserUtil.getDomainUser(id);
+			this.schedule_id = domainuser.schedule_id;
+
 		}
 
 		// Stores password
@@ -908,6 +948,27 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+	}
+
+	/**
+	 * 
+	 * @param name
+	 *            domainuser name
+	 * @return online schedule id
+	 */
+	public String getScheduleid(String name)
+	{
+		String scheduleid = null;
+		if (name.contains(" "))
+		{
+			scheduleid = name.replace(" ", "_");
+			return scheduleid;
+		}
+		else
+		{
+			scheduleid = name;
+			return scheduleid;
+		}
 	}
 
 	/**
