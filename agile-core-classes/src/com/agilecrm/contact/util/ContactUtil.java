@@ -988,17 +988,9 @@ public class ContactUtil
 	Builder[] docs = new Builder[contacts_list.size()];
 	List<Builder> builderObjects = new ArrayList<Builder>();
 	int i = 0;
-
-	List<Contact> updatedContactList = new ArrayList<Contact>();
-
 	for (Contact contact : contacts_list)
 	{
-	    if (newOwnerKey != null && !newOwnerKey.equals(contact.getContactOwnerKey()))
-	    {
-		contact.setContactOwner(newOwnerKey);
-		updatedContactList.add(contact);
-	    }
-
+	    contact.setContactOwner(newOwnerKey);
 	    Key<DomainUser> userKey = contact.getContactOwnerKey();
 
 	    if (!new_owner.equals(userKey))
@@ -1020,10 +1012,6 @@ public class ContactUtil
 	    search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
 
 	Contact.dao.putAll(contacts_list);
-
-	// Trigger owner changes
-	ContactFieldTriggerUtil.checkContactOwnerChanges(updatedContactList);
-
     }
 
     /**
@@ -1418,6 +1406,7 @@ public class ContactUtil
      */
     public static List<JSONObject> getEmailsOpened(Long minTime, Long maxTime) throws Exception
     {
+
 	// List<Contact> contactsList=null;
 	// List<Long> contactIdsList=new ArrayList<Long>();
 	List<JSONObject> contactsList = new ArrayList<JSONObject>();
@@ -1504,6 +1493,7 @@ public class ContactUtil
 	    e.printStackTrace();
 	}
 	return contactsList;
+
     }
 
     /**
@@ -1624,32 +1614,6 @@ public class ContactUtil
     }
 
     /**
-     * Compare two contact field objects using ContactField overridden equals
-     * 
-     * @param value1
-     *            - ContactField object
-     * @param value2
-     *            - ContactField object
-     * @return
-     */
-    public static boolean areEqualContactFieldValues(ContactField value1, ContactField value2)
-    {
-	if (value1 == null && value2 != null)
-	    return false;
-
-	if (value1 != null && value2 == null)
-	    return false;
-
-	if (value1 != null)
-	    return value1.equals(value2);
-
-	if (value2 != null)
-	    return value2.equals(value1);
-
-	return false;
-    }
-
-    /**
      * Chnage owner of the using the owner email and the contact id. For API
      * only.
      * 
@@ -1701,22 +1665,12 @@ public class ContactUtil
 	return null;
     }
 
-    /**
-     * Checks whether the contact exists or not
-     * 
-     * @param contactId
-     *            Id of a contact
-     * @return true or false
-     * @author bhasuri
-     */
     public static boolean isExists(Long contactId)
     {
 	// TODO Auto-generated method stub
 	try
 	{
-
 	    return dao.getCountByProperty("id", contactId) > 0 ? true : false;
-
 	}
 	catch (Exception e)
 	{

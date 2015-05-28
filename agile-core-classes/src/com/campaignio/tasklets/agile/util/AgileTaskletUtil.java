@@ -831,7 +831,7 @@ public class AgileTaskletUtil
 	 * used for both old milestone value where the value of milestone is default
 	 * ones like New, Won and also for the one with pipelineID_New or
 	 * pipelineID_Won. If there is default milestone without an ID, default
-	 * pipeline is returned to be compatile with old ones
+	 * pipeline is returned to be compatible with old ones
 	 * 
 	 * @param milestone
 	 * @return a map of milestone and pipelineID
@@ -875,5 +875,26 @@ public class AgileTaskletUtil
 		trackDetails.put("milestone", milestone);
 		trackDetails.put("pipelineID", pipelineID + "");
 		return trackDetails;
+	}
+
+	/**
+	 * @param subscriberJSON
+	 *            - Subscriber json
+	 * @return Key of the contact associated with ID inside subscriberJSON
+	 */
+	public static Key<Contact> getContactKey(JSONObject subscriberJSON)
+	{
+		String contactId = AgileTaskletUtil.getId(subscriberJSON);
+		try
+		{
+			if (!StringUtils.isEmpty(contactId))
+				return new Key<Contact>(Contact.class, Long.parseLong(contactId));
+		}
+		catch (Exception e)
+		{
+			System.out.println("Inside getContactOwnerKey in CloseTask.java :" + e.getMessage());
+			return null;
+		}
+		return null;
 	}
 }

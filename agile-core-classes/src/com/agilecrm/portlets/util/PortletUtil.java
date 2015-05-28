@@ -727,11 +727,13 @@ public class PortletUtil {
 			Portlet dummyPortlet = new Portlet("Dummy Blog",PortletType.RSS,1,1,1,1);
 			Portlet statsReportPortlet = new Portlet("Stats Report",PortletType.USERACTIVITY,1,1,1,1);
 			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,2,1,1,1);
-			Portlet blogPortlet = new Portlet("Agile CRM Blog",PortletType.RSS,3,1,1,2);
+			Portlet blogPortlet = new Portlet("Agile CRM Blog",PortletType.RSS,3,3,1,2);
 			Portlet eventsPortlet = new Portlet("Agenda",PortletType.TASKSANDEVENTS,1,2,1,1);
 			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,2,1,1);
-			Portlet pendingDealsPortlet = new Portlet("Pending Deals",PortletType.DEALS,1,3,1,1);
-			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,2,3,2,1);
+			Portlet pendingDealsPortlet = new Portlet("Pending Deals",PortletType.DEALS,1,4,2,1);
+			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,1,3,2,1);
+			
+			Portlet onboardingPortlet = new Portlet("Onboarding",PortletType.CONTACTS,3,1,1,2);
 			
 			JSONObject filterBasedContactsPortletJSON = new JSONObject();
 			filterBasedContactsPortletJSON.put("filter","myContacts");
@@ -752,6 +754,32 @@ public class PortletUtil {
 			statsReportPortletJSON.put("duration","yesterday");
 			statsReportPortlet.prefs = statsReportPortletJSON.toString();
 			
+			JSONObject onboardingPortletJSON = new JSONObject();
+			List<String> onboardingSteps = new ArrayList<>();
+			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+			if(domainUser.is_admin){
+				onboardingSteps.add("addUsers");
+				onboardingSteps.add("importContacts");
+				onboardingSteps.add("setupIntegrations");
+				onboardingSteps.add("createCampaign");
+				onboardingSteps.add("setupTrackingCode");
+				onboardingSteps.add("addWebrule");
+				onboardingSteps.add("upgradePlan");
+			}else{
+				onboardingSteps.add("setupProfile");
+				onboardingSteps.add("linkEmailAccount");
+				onboardingSteps.add("addWidgets");
+				onboardingSteps.add("importContacts");
+				onboardingSteps.add("createCampaign");
+			}
+			Map<String,Boolean> processMap = new LinkedHashMap<String,Boolean>();
+			processMap.put("done", false);
+			processMap.put("skip", false);
+			for (String string : onboardingSteps) {
+				onboardingPortletJSON.put(string,processMap);
+			}
+			onboardingPortlet.prefs = onboardingPortletJSON.toString();
+			
 			dummyPortlet.save();
 			eventsPortlet.save();
 			tasksPortlet.save();
@@ -760,16 +788,19 @@ public class PortletUtil {
 			pendingDealsPortlet.save();
 			dealsFunnelPortlet.save();
 			statsReportPortlet.save();
+			
+			onboardingPortlet.save();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
 	public static JSONObject getTaskReportPortletData(JSONObject json)throws Exception{
 		List<DomainUser> domainUsersList=null;
 		List<String> groupByList = new ArrayList<String>();
 		List<Map<String,Integer>> splitByList = new ArrayList<Map<String,Integer>>();
 		JSONObject dataJson = new JSONObject();
+		List<String> domainUserNamesList = new ArrayList<String>();
 		try {
 			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
 			if(dUser!=null)
@@ -778,33 +809,53 @@ public class PortletUtil {
 				for(DomainUser domainUser : domainUsersList){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(Task.Type category : Task.Type.values()){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.name(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")));
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.name(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"));
 						if(tasksList!=null)
 							splitByMap.put(category.name(),tasksList.size());
 						else
 							splitByMap.put(category.name(),0);
 					}
-					groupByList.add(domainUser.name);
+					AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
+					
+					UserPrefs userPrefs = null;
+					
+					if(agileUser!=null)
+						userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+					if(userPrefs!=null)
+						groupByList.add(userPrefs.pic);
+					else
+						groupByList.add("");
 					splitByList.add(splitByMap);
+					domainUserNamesList.add(domainUser.name);
 				}
 			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("user") && json.getString("split-by").equalsIgnoreCase("status")){
 				for(DomainUser domainUser : domainUsersList){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(Task.Status status : Task.Status.values()){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,null,status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")));
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,null,status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"));
 						if(tasksList!=null)
 							splitByMap.put(status.name(),tasksList.size());
 						else
 							splitByMap.put(status.name(),0);
 					}
-					groupByList.add(domainUser.name);
+					AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
+					
+					UserPrefs userPrefs = null;
+					
+					if(agileUser!=null)
+						userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+					if(userPrefs!=null)
+						groupByList.add(userPrefs.pic);
+					else
+						groupByList.add("");
 					splitByList.add(splitByMap);
+					domainUserNamesList.add(domainUser.name);
 				}
 			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("category") && json.getString("split-by").equalsIgnoreCase("user")){
 				for(Task.Type category : Task.Type.values()){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(DomainUser domainUser : domainUsersList){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.name(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")));
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.name(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"));
 						if(tasksList!=null)
 							splitByMap.put(domainUser.name,tasksList.size());
 						else
@@ -817,7 +868,7 @@ public class PortletUtil {
 				for(Task.Type category : Task.Type.values()){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(Task.Status status : Task.Status.values()){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.name(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")));
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.name(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"));
 						if(tasksList!=null)
 							splitByMap.put(status.name(),tasksList.size());
 						else
@@ -830,7 +881,7 @@ public class PortletUtil {
 				for(Task.Status status : Task.Status.values()){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(DomainUser domainUser : domainUsersList){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,null,status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")));
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,null,status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"));
 						if(tasksList!=null)
 							splitByMap.put(domainUser.name,tasksList.size());
 						else
@@ -843,7 +894,7 @@ public class PortletUtil {
 				for(Task.Status status : Task.Status.values()){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(Task.Type category : Task.Type.values()){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.name(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")));
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.name(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"));
 						if(tasksList!=null)
 							splitByMap.put(category.name(),tasksList.size());
 						else
@@ -855,6 +906,7 @@ public class PortletUtil {
 			}
 			dataJson.put("groupByList", groupByList);
 			dataJson.put("splitByList", splitByList);
+			dataJson.put("domainUserNamesList", domainUserNamesList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

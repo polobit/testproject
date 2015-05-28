@@ -1513,7 +1513,7 @@ $(function()
 	{
 		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
 		{
-			var contact_properties = App_Contacts.contactDetailView.model.get('properties')
+			var contact_properties = App_Contacts.contactDetailView.model.get('properties');
 			var currentContactEntity = getPropertyValue(contact_properties, key);
 			var contactEntity = getPropertyValue(properties, key);
 
@@ -1521,6 +1521,12 @@ $(function()
 			{
 				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
 				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
+			}
+			
+			if(App_Contacts.contactDetailView.model.get('type') == 'COMPANY')
+			{
+				currentContactEntity = getPropertyValue(contact_properties, "name") ;
+				contactEntity = getPropertyValue(properties, "name");
 			}
 
 			if (currentContactEntity == contactEntity)
@@ -3631,6 +3637,12 @@ $(function()
 				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
 				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
 			}
+			
+			if(App_Contacts.contactDetailView.model.get('type') == 'COMPANY')
+			{
+				currentContactEntity = getPropertyValue(contact_properties, "name") ;
+				contactEntity = getPropertyValue(properties, "name");
+			}
 
 			if (currentContactEntity == contactEntity)
 				return options.fn(this);
@@ -5675,6 +5687,8 @@ $(function()
 		hours = hours % 12;
 		hours = hours ? hours : 12; // the hour '0' should be '12'
 		minutes = minutes < 10 ? '0' + minutes : minutes;
+		if(hours<10)
+			hours = '0'+hours;
 		var strTime = hours + ':' + minutes + '' + ampm;
 		return strTime;
 	});
@@ -6053,6 +6067,13 @@ $(function()
 
 	Handlebars.registerHelper("toSafeString", function(content){
 		return new Handlebars.SafeString(content);
+	});
+	
+	Handlebars.registerHelper("getPlanLimits", function(key){
+		if(_billing_restriction.currentLimits.planName == "PRO")
+			return "Unlimited";
+		else
+			return _billing_restriction.currentLimits[key];
 	});
 });
 

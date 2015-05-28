@@ -112,8 +112,6 @@ public class ReportsUtil
 		System.out.println("available = " + resultsCollection.size());
 		if (resultsCollection.size() == 0)
 		    continue;
-
-		results.put("count", resultsCollection.size());
 	    }
 
 	    results.put("duration", WordUtils.capitalizeFully((report.duration.toString())));
@@ -146,6 +144,19 @@ public class ReportsUtil
 
 	domain_details.put("report", report);
 	domain_details.put("domain", NamespaceManager.get());
+	try
+	{
+	    Contact con = (Contact) reportList.toArray()[0];
+	    domain_details.put("count", con.count);
+	    if (con.count > 10000)
+		domain_details.put("count", "10000+");
+	    if (con.count > 100)
+		domain_details.put("limit_message", "We are showing only 100 contacts in this email.");
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Error in getting contacts count in reports.");
+	}
 
 	// If report_type if of contacts customize object to show properties
 	if (report.report_type.equals(Reports.ReportType.Contact))
@@ -414,10 +425,10 @@ public class ReportsUtil
 
 	BillingRestrictionUtil.throwLimitExceededException(ErrorMessages.REPORT, false);
     }
-    
+
     public static Integer count()
     {
 	return Reports.dao.count();
     }
-    
+
 }

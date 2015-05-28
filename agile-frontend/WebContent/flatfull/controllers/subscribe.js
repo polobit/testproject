@@ -48,7 +48,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		 * states list using countries.js plugin account stats in subscription
 		 * page
 		 */
-		var subscribe_plan = new Base_Model_View({ url : "core/api/subscription", template : "subscribe-new", window : 'subscribe',
+		var subscribe_plan = new Base_Model_View({ url : "core/api/subscription?reload=true", template : "subscribe-new", window : 'subscribe',
 		/*
 		 * postRenderCallback : function(el) { // Setup account statistics
 		 * set_up_account_stats(el); // Load date and year for card expiry
@@ -65,6 +65,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			set_up_account_stats(el);
 
 			USER_BILLING_PREFS = data;
+
 			
 			USER_CREDIRCARD_DETAILS = subscribe_plan.model.toJSON().billingData;
 			
@@ -73,10 +74,22 @@ var SubscribeRouter = Backbone.Router.extend({
 				Backbone.history.navigate("subscribe", {trigger : true});
 				return;
 			}
-			
-			var planType = data.plan.plan_type;						
+			var billing_data = JSON.parse(data.billingData);
+			var stripe_subscription = getSubscription(data.billingData, data.plan);
+			var planType = "";						
  			var id = null;
- 			var planDetails = "<span class='text-head-black'>Current Plan</span></br><span class='text-head-black'>"+data.plan.quantity+" Users</span>";
+ 			var quantity;
+ 			if(stripe_subscription == null)
+ 			{
+ 				quantity = "2";
+ 				planType = "FREE";
+ 			}
+ 			else
+ 			{
+ 				quantity = billing_data.subscription.quantity;
+ 				planType = billing_data.subscription.plan.name.toUpperCase();
+ 			}
+ 			var planDetails = "<span class='text-head-black'>Current Plan</span></br><span class='text-head-black'>"+quantity+" Users</span>";
  			if(planType.indexOf('STARTER') == 0){
  				var id = $('#starter_plan');
  			}else if(planType.indexOf('REGULAR') == 0){
@@ -87,6 +100,7 @@ var SubscribeRouter = Backbone.Router.extend({
  			
  			if(id){
  				addStyleForAPlan(id,planDetails);
+ 				$("#plan_type").attr("value", id.attr("id").split("_")[0]);
  			}
 									
 			element = setPriceTemplete(data.plan.plan_type, el);
@@ -94,6 +108,10 @@ var SubscribeRouter = Backbone.Router.extend({
 			// Show Coupon code input field
 			id = (id && id == "coupon") ? id : "";
 			showCouponCodeContainer(id);
+			$("#user_quantity").attr("value", quantity);
+			price = update_price();
+			$( "#users_quantity").text(quantity);
+     	    $("#users_total_cost").text((quantity * price).toFixed(2));
 
 			head.load(CSS_PATH + 'css/jslider.css', CSS_PATH + "css/misc/agile-plan-upgrade.css", LIB_PATH + 'lib/jquery.slider.min.js', function()
 			{
@@ -101,7 +119,8 @@ var SubscribeRouter = Backbone.Router.extend({
 					setPlan("free");
 				else
 					setPlan(data);
-				load_slider(el);
+				
+			//	load_slider(el);
 			});
 		} });
 		$('#content').html(subscribe_plan.render().el);
@@ -349,6 +368,16 @@ var SubscribeRouter = Backbone.Router.extend({
 			{
 				window.navigate("subscribe", { trigger : true });
 				showNotyPopUp("information", "Your plan has been updated successfully", "top");
+
+				try
+				{
+					push_actual_plan(data.plan)
+				}
+				catch(err)
+				{
+					console.log(err);
+				}
+
 			},
 			errorCallback : function(data)
 			{
@@ -568,7 +597,8 @@ var SubscribeRouter = Backbone.Router.extend({
 		var counter = 0;
 		$(".active").removeClass("active");
 		$("#planView").addClass("active");
-		$("#content").html(LOADING_HTML);
+		$("#content").html("");
+		showTransitionBar();
 		
 		/*
 		 * Creates new view with a render callback to setup expiry dates
@@ -598,7 +628,11 @@ var SubscribeRouter = Backbone.Router.extend({
 			that.show_card_details(subscription_model);
 			
 			that.recent_invoice(subscription_model);
-	});
+		}).done(function(){
+			hideTransitionBar();
+		}).fail(function(){
+			hideTransitionBar();
+		});
 		
 		
 	},
@@ -938,22 +972,20 @@ function is_free_plan()
  */
 function addStyleForAPlan(id,planDetails){
 	if(id){
-		id.addClass('m-t-n-md');
-		id.find('.panel-heading').addClass('bg-warning').addClass('dker');
-		id.find('.price-panel').addClass('bg-warning');
-		id.find('.panel-footer').addClass('bg-light');
+		id.css("opacity","1");
+		
 		if(planDetails){
 			id.find('.user-plan').html(planDetails);
-			id.find('.djc_addtocart_link').text('Add users');
+			// id.find('.djc_addtocart_link').text('Add users');
 		}
 	}	
 }
 
 function removeStyleForAPlan(){
 	var id = $('#plans-panel');
-	id.find('.m-t-n-md').removeClass('m-t-n-md');
-	id.find('.panel-heading').removeClass('bg-warning').removeClass('dker');
-	id.find('.price-panel').removeClass('bg-warning');
-	id.find('.panel-footer').removeClass('bg-light');		
+	id.find(".plan-collection-bot").css("opacity","0.5");
+	
+	
+			
 	
 }

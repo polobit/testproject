@@ -430,12 +430,21 @@
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsTaskReportSettingsForm" name="portletsTaskReportSettingsForm" method="post" >
 			<div class="control-group form-group">
-				<label class="control-label">Group by</label>
+				<label class="control-label">Report by</label>
 				<div class="controls">
 					<select id="group-by-task-report" name="group-by" class="required form-control">
 						<option value="user">User</option>
 						<option value="category">Category</option>
 						<option value="status">Status</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group form-group" id="tasks-control-group">
+				<label class="control-label">Tasks</label>
+				<div class="controls">
+					<select id="tasks-task-report" name="tasks" class="required form-control">
+						<option value="all-tasks" id="all-tasks">All Tasks</option>
+						<option value="completed-tasks" id="completed-tasks">Completed Tasks</option>
 					</select>
 				</div>
 			</div>
@@ -517,7 +526,7 @@
 		Delete this dashlet?
 	</div>
 	<div class="modal-footer">
-		<a id="portlet-delete-cancel-modal" href="#" class="btn btn-sm btn-danger" data-dismiss="modal">No</a>
+		<a id="portlet-delete-cancel-modal" href="#" class="btn btn-sm btn-default" data-dismiss="modal">No</a>
 		<a id="" class="portlet-delete-modal save-modal btn btn-sm btn-primary" href="#">Yes</a>
 	</div>
 </div>

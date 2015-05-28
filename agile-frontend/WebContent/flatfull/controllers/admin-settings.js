@@ -382,12 +382,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$('#content').find('.stats-tab').addClass('select');
 		$(".active").removeClass("active");
 		$('#content').find('#admin-prefs-tabs-content').html(getRandomLoadingImg());
-
-		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
+		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js'+ '?_=' + _AGILE_VERSION, function()
 		{
-
 			var email_stats = {};
 			var sms_stats = {};
+			var acct_stats = {};
 			$.ajax({ url : 'core/api/emails/email-stats', type : "GET", dataType : 'json', success : function(stats)
 			{
 				email_stats = stats;
@@ -396,12 +395,18 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					sms_stats = stats;
 					var totalLogs = {};
 					totalLogs = $.extend(email_stats, sms_stats);
-
-					var emailStatsModelView = new Base_Model_View({ template : 'admin-settings-integrations-stats', data : totalLogs });
-
-					$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render(true).el);
+					
+					$.ajax({ url : 'core/api/namespace-stats/getdomainstats', type : "GET", dataType : 'json', success : function(stats)
+						{
+							acct_stats = stats;
+							totalLogs = $.extend(totalLogs, acct_stats);
+							var emailStatsModelView = new Base_Model_View({ template : 'admin-settings-integrations-stats', data : totalLogs });
+		
+							$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render(true).el);
+							hideTransitionBar();
+						}});
+					
 				} });
-				hideTransitionBar();
 
 			} });
 		});

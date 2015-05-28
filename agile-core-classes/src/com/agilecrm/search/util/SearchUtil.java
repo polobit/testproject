@@ -322,6 +322,10 @@ public class SearchUtil
 	    // special character is replaced with _<special char name>_
 	    if (value.startsWith("_"))
 		value = value.substring(1);
+	    //replace first numeric character with NUM_
+	    if (value.length() >0 && value.substring(0, 1).matches("[0-9]")) {
+	    	value = value.replaceFirst(value.substring(0, 1), "NUM_");
+	    }
 
 	    System.out.println("value to map : " + value);
 	}
@@ -375,17 +379,17 @@ public class SearchUtil
 	 */
 	for (ContactField contactField : properties)
 	{
-	    if (contactField.name.equals("first_name"))
+	    if ("first_name".equals(contactField.name))
 	    {
 		firstName = contactField.value;
 	    }
 
-	    else if (contactField.name.equals("last_name"))
+	    else if ("last_name".equals(contactField.name))
 	    {
 		lastName = contactField.value;
 	    }
 
-	    else if (contactField.name.equals("address"))
+	    else if ("address".equals(contactField.name))
 	    {
 		// Creates HashMap from Address JSON string
 		try
@@ -531,11 +535,15 @@ public class SearchUtil
 		if (emailBounceStatus == null || emailBounceStatus.campaign_id == null)
 		    continue;
 
-		emailStatus = emailBounceStatus.campaign_id + "_" + "BOUNCED";
+		if (emailBounceStatus.emailBounceType.equals(EmailBounceType.HARD_BOUNCE))
+			emailStatus = emailBounceStatus.campaign_id + "_" + "HARDBOUNCED";
 
+		if (emailBounceStatus.emailBounceType.equals(EmailBounceType.SOFT_BOUNCE))
+			emailStatus = emailBounceStatus.campaign_id + "_" + "SOFTBOUNCED";
+			
 		// If SPAM, replace with SPAM
 		if (emailBounceStatus.emailBounceType.equals(EmailBounceType.SPAM))
-		    emailStatus = emailStatus.replace("BOUNCED", "SPAM");
+			emailStatus = emailBounceStatus.campaign_id + "_" + "SPAM";
 
 		campaignSearchStatus.add(emailBounceStatus.campaign_id.toString());
 		campaignSearchStatus.add(emailStatus);

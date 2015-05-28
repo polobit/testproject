@@ -543,6 +543,7 @@ public class Contact extends Cursor
 		|| contact.star_value != star_value
 		|| (contact.lead_score != null ? !contact.lead_score.equals(lead_score) : false)
 		|| contact.campaignStatus.size() != campaignStatus.size())
+
 	    return true;
 
 	// Checks if tags are changed
@@ -614,8 +615,7 @@ public class Contact extends Cursor
 	// Iterates through all the properties and returns matching property
 	for (ContactField field : properties)
 	{
-	    System.out.println("contact field " + field);
-	    if (field.name.equals(fieldName))
+	    if (fieldName.equals(field.name))
 		return field;
 	}
 	return null;

@@ -690,4 +690,20 @@ border-radius: 2px;
 	color: #98a6ad!important;
  	font-weight: 300!important;
 }
+.ob-portlet-font-check{
+	padding-left: 2px;
+}
+.ob-portlet-font-no-check{
+	padding-left: 2px;
+}
+.ob-portlet-check{
+	margin-left: -11px!important;
+  	opacity: 0;
+  	color: #363F44;
+}
+.ob-portlet-no-check{
+	margin-left: -8px!important;
+  	opacity: 0;
+  	color: #98a6ad;
+}
  
