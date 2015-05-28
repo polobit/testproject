@@ -202,7 +202,7 @@ public class Workflow extends Cursor {
 
 				throw new WebApplicationException(
 						Response.status(Status.BAD_REQUEST)
-								.entity("Your campaign has become too large (more than 1MB of data).  Please consider splitting it into multiple campaigns using the 'Transfer' option.")
+								.entity("Unable to save the campaign as it exceeds the limit of 1MB. Please consider splitting into multiple campaigns using the 'Transfer' property.")
 								.build());
 			} catch (JSONException e1) {
 				System.out.println("Exception while saving a Workflow"
