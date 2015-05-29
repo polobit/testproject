@@ -102,6 +102,8 @@ public class BillingRestrictionUtil
 	{
 	    restriction = BillingRestriction.getInstance(null, null);
 	    restriction.refresh(true);
+	    restriction.save();
+
 	}
 
 	return restriction;
