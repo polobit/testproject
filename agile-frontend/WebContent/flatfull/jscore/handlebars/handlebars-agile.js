@@ -275,7 +275,7 @@ function getTemplateUrls(templateName)
 	}
 	if (templateName.indexOf("fbpagetab") == 0)
 	{
-		template_relative_urls.push("fbpagetab.js");
+		template_relative_urls.push("facebookpage.js");
 	}
 	return template_relative_urls;
 }
