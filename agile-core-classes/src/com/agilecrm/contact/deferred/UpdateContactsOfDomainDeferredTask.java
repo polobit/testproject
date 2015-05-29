@@ -61,6 +61,9 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 				previousCursor = contactSchemaUpdateStats.cursor;
 				failedIds = contactSchemaUpdateStats.failedIds;
 				updateStats(previousCursor,failedIds, "RUNNING");
+				if(previousCursor != null && cursor == null) {
+					cursor = previousCursor;
+				}
 			}
 			ContactDocument contactDocuments = new ContactDocument();
 			contacts_list = Contact.dao.fetchAll(200, cursor, null);
