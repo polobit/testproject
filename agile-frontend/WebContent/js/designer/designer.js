@@ -247,6 +247,9 @@ function addNodeInternal(node)
 		if(!checkMaxNodesCount())
 	 		return;
 		
+		if(!checkWorkflowSize())
+			return;
+		
 		var objectDisplayName = "Copy of " + this.displayName;
 		
 		var nodeDefinitionCopy = JSON.parse(JSON.stringify(this.getProperty("NodeDefinition")));

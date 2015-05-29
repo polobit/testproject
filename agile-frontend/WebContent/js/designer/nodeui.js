@@ -107,8 +107,12 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
         buttons: {
             'Save': function () {
             	
+            	if(!checkWorkflowSize())
+        			return;
+
             	// Triggers change events of of URL Visited select
             	$(this).find("form #type-select").trigger('change');
+            	
             	
             	// Disables 'text' required property if html is given and text is empty 
             	disable_text_required_property($(this));
