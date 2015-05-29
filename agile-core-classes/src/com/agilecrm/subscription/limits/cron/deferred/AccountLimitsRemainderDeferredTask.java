@@ -37,9 +37,8 @@ public class AccountLimitsRemainderDeferredTask implements DeferredTask
 	    // and saves back
 	    BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionAndSubscriptionFromDB();
 
-	    restriction.refresh(true);
-
 	    restriction.tags_in_our_domain.clear();
+	    restriction.refresh(true);
 
 	    // Get tag for each type. If usage exceeds 75 of allowed limit then
 	    // tag is added
