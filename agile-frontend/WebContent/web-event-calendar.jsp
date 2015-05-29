@@ -218,7 +218,7 @@ if (scheduleid != null && !multiple_users)
 	      }
 	      else if(online_prefs!=null){
 	    	   meeting_durations=online_prefs.meeting_durations;
-	 	      meeting_types=domainUser.meeting_types;  
+	 	      meeting_types=online_prefs.meeting_types;  
 	      }
 	      single_user_map_object.put(String.valueOf(user_id),WebCalendarEventUtil.getSlotDetails(null, meeting_durations)); 
 	      	
