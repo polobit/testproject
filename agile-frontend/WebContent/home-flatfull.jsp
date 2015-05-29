@@ -139,7 +139,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 <!--  font awesome files -->
 
  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet"> 
-<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"> 
+<link rel="stylesheet" href="<%=FLAT_FULL_PATH%>css/flatfull/font-awesome.min.css" type="text/css" />
 
  
 <!--  agile app framework  -->
