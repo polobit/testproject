@@ -1105,9 +1105,8 @@ public class Contact extends Cursor
 			ContactField nameLowerField = this
 					.getContactFieldByName("name_lower");
 			if(nameLowerField == null) {
-				ContactField nameField = this
-						.getContactFieldByName(Contact.NAME);
-				this.properties.add(new ContactField("name_lower", nameField.value, null));
+				if(StringUtils.isNotEmpty(name))
+					this.properties.add(new ContactField("name_lower", name.toLowerCase(), null));
 			}
 			 
 		}
