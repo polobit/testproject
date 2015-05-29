@@ -250,8 +250,7 @@ public abstract class DaoBillingRestriction implements
     protected String setTagsToUpdate(int max_allowed, int currentCount)
     {
 
-	String tag = BillingRestrictionReminderUtil.getTag(currentCount, max_allowed, entityClass.getTagPrefix(),
-		hardUpdateTags);
+	String tag = BillingRestrictionReminderUtil.getTag(currentCount, max_allowed, entityClass.getTagPrefix(), true);
 
 	if (tag != null)
 	{
@@ -268,8 +267,10 @@ public abstract class DaoBillingRestriction implements
 		// Removes previous tags
 		for (String percentageString : BillingRestrictionUtil.percentages)
 		{
-		    isTagRemoved = restriction.tags_in_our_domain.remove(entityClass.getTagPrefix() + "_"
+		    boolean removed = restriction.tags_in_our_domain.remove(entityClass.getTagPrefix() + "_"
 			    + percentageString);
+
+		    isTagRemoved = isTagRemoved ? isTagRemoved : removed;
 		}
 
 		if (isTagRemoved)
@@ -277,7 +278,6 @@ public abstract class DaoBillingRestriction implements
 		    restriction.save();
 		    hardUpdateTags = true;
 		}
-
 	    }
 
 	    // If tags are not there then new tag is saved in tags in our domain
