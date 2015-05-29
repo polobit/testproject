@@ -144,6 +144,8 @@ public class PortletUtil {
 				if(portlet.name!=null && portlet.name.equalsIgnoreCase("Growth Graph") && json.containsKey("start-date") && json.containsKey("end-date")
 						 && !json.containsKey("duration"))
 					json.put("duration","1-week");
+				else if(portlet.name!=null && (portlet.name.equalsIgnoreCase("Agenda") || portlet.name.equalsIgnoreCase("Today Tasks")) && !json.containsKey("duration"))
+					json.put("duration","1-day");
 				portlet.settings=json;
 			}else{
 				if(portlet.name!=null && (portlet.name.equalsIgnoreCase("Agenda") || portlet.name.equalsIgnoreCase("Today Tasks"))){
