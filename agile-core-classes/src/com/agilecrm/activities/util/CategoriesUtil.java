@@ -94,4 +94,27 @@ public class CategoriesUtil
 	name.replaceAll(" ", Category.SPACE);
 	return name;
     }
+
+    public void saveCategoryOrder(List<Long> catIds)
+    {
+	for (int i = 0; i < catIds.size(); i++)
+	{
+	    Category cat = getCategory(catIds.get(i));
+	    cat.setOrder(i);
+	    updateCategory(cat);
+	}
+
+    }
+
+    public boolean isDuplicate(boolean isUpdate)
+    {
+	return true;
+    }
+
+    public List<Category> getCategoryByName(String name)
+    {
+	name = CategoriesUtil.encodeCategory(name);
+
+	return dao.ofy().query(Category.class).filter("name", name).list();
+    }
 }
