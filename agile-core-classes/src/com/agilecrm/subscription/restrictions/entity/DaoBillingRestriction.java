@@ -262,6 +262,24 @@ public abstract class DaoBillingRestriction implements
 		restriction = BillingRestrictionUtil.getBillingRestrictionAndSubscriptionFromDB();
 	    }
 
+	    if (percentage < 75 && !restriction.tags_in_our_domain.isEmpty())
+	    {
+		boolean isTagRemoved = false;
+		// Removes previous tags
+		for (String percentageString : BillingRestrictionUtil.percentages)
+		{
+		    isTagRemoved = restriction.tags_in_our_domain.remove(entityClass.getTagPrefix() + "_"
+			    + percentageString);
+		}
+
+		if (isTagRemoved)
+		{
+		    restriction.save();
+		    hardUpdateTags = true;
+		}
+
+	    }
+
 	    // If tags are not there then new tag is saved in tags in our domain
 	    // class
 	    if ((restriction.tags_in_our_domain.isEmpty() || !restriction.tags_in_our_domain.contains(tag))
