@@ -128,7 +128,16 @@ public class Contact extends Cursor
     
     @Indexed
     public Long last_contacted = 0L;
-
+    
+    @Indexed
+    public Long last_emailed = 0L;
+    
+    @Indexed
+    public Long last_campaign_emaild = 0L;
+    
+    @Indexed
+    public Long last_called = 0L;
+    
     /**
      * Viewed time of the contact, in milliseconds
      */
@@ -1034,9 +1043,9 @@ public class Contact extends Cursor
 						.getContactFieldByName(Contact.FIRST_NAME);
 				ContactField lastNameField = this
 						.getContactFieldByName(Contact.LAST_NAME);
-				this.first_name = firstNameField != null ? firstNameField.value
+				this.first_name = firstNameField != null ? firstNameField.value.toLowerCase()
 						: "";
-				this.last_name = lastNameField != null ? lastNameField.value
+				this.last_name = lastNameField != null ? lastNameField.value.toLowerCase()
 						: "";
 			}
 	    if (StringUtils.isNotEmpty(contact_company_id))
@@ -1092,6 +1101,15 @@ public class Contact extends Cursor
 						.getContactFieldByName(Contact.NAME);
 				this.name = nameField != null ? nameField.value : "";
 			}
+			//Company name lower case field used for duplicate check.
+			ContactField nameLowerField = this
+					.getContactFieldByName("name_lower");
+			if(nameLowerField == null) {
+				ContactField nameField = this
+						.getContactFieldByName(Contact.NAME);
+				this.properties.add(new ContactField("name_lower", nameField.value, null));
+			}
+			 
 		}
 
 	// Store Created and Last Updated Time Check for id even if created
