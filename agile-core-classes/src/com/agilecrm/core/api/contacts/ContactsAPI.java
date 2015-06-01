@@ -1100,6 +1100,7 @@ public class ContactsAPI
 		for (Note note : notes)
 		{
 		    note.addContactIds(contact.id.toString());
+		    note.owner_id = String.valueOf(note.getDomainOwner().id);
 		    note.save();
 		}
 
