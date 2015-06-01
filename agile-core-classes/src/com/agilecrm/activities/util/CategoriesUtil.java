@@ -2,27 +2,64 @@ package com.agilecrm.activities.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.agilecrm.activities.Category;
 import com.agilecrm.db.ObjectifyGenericDao;
 
+/**
+ * All the utility methods and the dao methods for saving, updating and
+ * retrieving the categories.
+ * 
+ * @author saikiran.
+ *
+ */
 public class CategoriesUtil
 {
+
+    /**
+     * Regex for validating the category name.
+     */
+    private static final String CATEGORY_PATTERN = "^(?U)[\\p{Alpha}][\\p{Alpha}\\_\\- \\d]*";
+    private Pattern pattern;
+    private Matcher matcher;
 
     // Dao
     public ObjectifyGenericDao<Category> dao = null;
 
+    /**
+     * Default constructor.
+     */
     public CategoriesUtil()
     {
 	dao = new ObjectifyGenericDao<Category>(Category.class);
+	pattern = Pattern.compile(CATEGORY_PATTERN);
     }
 
+    /**
+     * Save the category in data store. If category name is not valid, then
+     * return null.
+     * 
+     * @param category
+     *            category to be saved.
+     * @return saved category.
+     */
     public Category createCategory(Category category)
     {
+	if (!validate(category.getLabel()))
+	    return null;
 	dao.put(category);
 	return category;
     }
 
+    /**
+     * Retrieve the category using the id.
+     * 
+     * @param id
+     *            id of the category.
+     * @return category.
+     */
     public Category getCategory(Long id)
     {
 	try
@@ -36,9 +73,17 @@ public class CategoriesUtil
 	return null;
     }
 
+    /**
+     * Update the category. If the category name is not valid or id is null then
+     * return null.
+     * 
+     * @param category
+     *            category to be updated.
+     * @return updated category.
+     */
     public Category updateCategory(Category category)
     {
-	if (category.getId() == null)
+	if (!validate(category.getLabel()) || category.getId() == null)
 	    return null;
 	Category oldCat = getCategory(category.getId());
 	if (oldCat == null)
@@ -48,6 +93,11 @@ public class CategoriesUtil
 	return category;
     }
 
+    /**
+     * Return list of categories.
+     * 
+     * @return list of categories sort by the order.
+     */
     public List<Category> getAllCategories()
     {
 	List<Category> categories = dao.fetchAllByOrder("order");
@@ -59,12 +109,24 @@ public class CategoriesUtil
 	return categories;
     }
 
+    /**
+     * Delete the category.
+     * 
+     * @param id
+     *            id of the category which has to be deleted.
+     */
     public void deleteCategory(Long id)
     {
 	Category cat = getCategory(id);
 	dao.delete(cat);
     }
 
+    /**
+     * Create default categories. This is for the first time when the user is
+     * loggin for the first time.
+     * 
+     * @return list of default categories.
+     */
     public List<Category> careateDefaultCategories()
     {
 	// TODO Auto-generated method stub
@@ -88,6 +150,14 @@ public class CategoriesUtil
 	return categories;
     }
 
+    /**
+     * Encode the label of the category to save as a value in the data store.
+     * Like all CAPS and no spaces.
+     * 
+     * @param label
+     *            label of the category.
+     * @return encoded label.
+     */
     public static String encodeCategory(String label)
     {
 	String name = label.toUpperCase();
@@ -95,6 +165,13 @@ public class CategoriesUtil
 	return name;
     }
 
+    /**
+     * Save the categories a precise order.
+     * 
+     * @param catIds
+     *            List of id of the categories in a sequence which are to be
+     *            save in the same order.
+     */
     public void saveCategoryOrder(List<Long> catIds)
     {
 	for (int i = 0; i < catIds.size(); i++)
@@ -106,15 +183,39 @@ public class CategoriesUtil
 
     }
 
+    /**
+     * @param isUpdate
+     * @return
+     */
     public boolean isDuplicate(boolean isUpdate)
     {
 	return true;
     }
 
+    /**
+     * Get the category by name.
+     * 
+     * @param name
+     *            name of the category.
+     * @return
+     */
     public List<Category> getCategoryByName(String name)
     {
 	name = CategoriesUtil.encodeCategory(name);
 
 	return dao.ofy().query(Category.class).filter("name", name).list();
+    }
+
+    /**
+     * Validate category label with regular expression
+     * 
+     * @param category
+     *            label of the category for validation.
+     * @return true valid name, false invalid name
+     */
+    public boolean validate(final String category)
+    {
+	matcher = pattern.matcher(category);
+	return matcher.matches();
     }
 }

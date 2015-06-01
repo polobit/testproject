@@ -22,18 +22,38 @@ import org.json.JSONObject;
 
 import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.CategoriesUtil;
-import com.agilecrm.contact.util.TagUtil;
 
+/**
+ * API call related to categories.
+ * 
+ * @author saikiran.
+ *
+ */
 @Path("/api/categories")
 public class CategoriesAPI
 {
+    /**
+     * CategoryUtil class reference.
+     */
     private CategoriesUtil categoriesUtil = null;
 
+    /**
+     * Default constructor.
+     */
     public CategoriesAPI()
     {
+	// Create categoryUtil object for performing the database related
+	// operations.
 	categoriesUtil = new CategoriesUtil();
     }
 
+    /**
+     * Get the list of categories.
+     * 
+     * @param entityType
+     *            the type of entity to which the category belongs.
+     * @return list of categories.
+     */
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public List<Category> getCategories(@QueryParam("entity_type") String entityType)
@@ -43,6 +63,13 @@ public class CategoriesAPI
 	return null;
     }
 
+    /**
+     * Save the category, if it is a valid category.
+     * 
+     * @param category
+     *            category to be saved.
+     * @return saved category.
+     */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -51,7 +78,7 @@ public class CategoriesAPI
 	if (category.getId() != null)
 	    return updateCategory(category);
 
-	if (!TagUtil.isValidTag(category.getLabel()))
+	if (!categoriesUtil.validate(category.getLabel()))
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Invalid category name.").build());
 
@@ -62,12 +89,19 @@ public class CategoriesAPI
 	return categoriesUtil.createCategory(category);
     }
 
+    /**
+     * Update a category if it is a valid category.
+     * 
+     * @param category
+     *            category to be updated.
+     * @return updated category.
+     */
     @PUT
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Category updateCategory(Category category)
     {
-	if (!TagUtil.isValidTag(category.getLabel()))
+	if (!categoriesUtil.validate(category.getLabel()))
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Invalid category name.").build());
 
@@ -79,6 +113,13 @@ public class CategoriesAPI
 	return categoriesUtil.updateCategory(category);
     }
 
+    /**
+     * Save the category order based on the order of the category id's sent.
+     * 
+     * @param ids
+     *            category ids.
+     * @return successes message after saving or else error message.
+     */
     @Path("order")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -120,6 +161,12 @@ public class CategoriesAPI
 	}
     }
 
+    /**
+     * Delete category based on the id.
+     * 
+     * @param id
+     *            id of the category.
+     */
     @Path("delete")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)

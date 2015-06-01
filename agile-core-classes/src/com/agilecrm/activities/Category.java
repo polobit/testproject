@@ -9,6 +9,13 @@ import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
+/**
+ * Categories of the entities like Task etc. It includes the order of the
+ * categories in which they have to be displayed in the select box in front end.
+ * 
+ * @author saikiran.
+ *
+ */
 @XmlRootElement
 @Cached
 public class Category
