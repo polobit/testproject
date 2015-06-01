@@ -20,6 +20,7 @@ import com.agilecrm.contact.deferred.TagsDeferredTask;
 import com.agilecrm.contact.deferred.tags.TagDBUpdateDeferredTask;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.validator.TagValidator;
 import com.google.appengine.api.NamespaceManager;
@@ -123,13 +124,13 @@ public class TagUtil
 	{
 	    TagDBUpdateDeferredTask task = new TagDBUpdateDeferredTask(tag, tracker);
 
-	    String tagName = tag.tag + "_" + NamespaceManager.get() + "_" + tracker;
+	    String tagName = SearchUtil.normalizeString(tag.tag) + "_" + NamespaceManager.get() + "_" + tracker;
 
 	    Queue queue = QueueFactory.getQueue(AgileQueues.TAG_ENTITY_QUEUE);
 
 	    try
 	    {
-		queue.addAsync(TaskOptions.Builder.withPayload(task).taskName(tagName));
+		queue.add(TaskOptions.Builder.withPayload(task).taskName(tagName));
 	    }
 	    catch (TaskAlreadyExistsException e)
 	    {

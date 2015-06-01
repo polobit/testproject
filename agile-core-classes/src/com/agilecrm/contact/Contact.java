@@ -406,6 +406,7 @@ public class Contact extends Cursor
 	    // notifications/triggers with new tags
 	    oldContact.tags = oldContact.getContactTags();
 
+	    oldContact.bulkActionTracker = bulkActionTracker;
 	    // Set the created time. This will help to restrict the user from
 	    // changing the created time through rest api.
 	    created_time = oldContact.created_time;
@@ -1207,9 +1208,10 @@ public class Contact extends Cursor
 		// Check if it is null, it can be null tag is created using
 		// developers api
 		if (tag.createdTime == null || tag.createdTime == 0L)
+		{
 		    tag.createdTime = System.currentTimeMillis();
-		else
 		    newTags.add(tag);
+		}
 	    }
 
 	    LinkedHashSet<String> oldTags = null;
@@ -1222,7 +1224,7 @@ public class Contact extends Cursor
 	    if (tags.equals(oldTags))
 		return;
 
-	    // System.out.println("Tag entity need to update....");
+	    System.out.println("Tag entity need to update...." + bulkActionTracker);
 
 	    TagUtil.runUpdateDeferedTask(newTags, bulkActionTracker);
 	}
