@@ -475,7 +475,11 @@ var WorkflowsRouter = Backbone.Router
 									addTagsDefaultTypeahead(this.parentElement,true);
 								});
 						
-						populate_milestones_in_trigger($('form#addTriggerNewForm', el), 'trigger-deal-milestone');
+						populate_milestones_in_trigger($('#triggeradd'), 'trigger-deal-milestone');
+						
+						/*var trigger_deal_milestone_value = currentTrigger.toJSON()['trigger_deal_milestone'];
+						populate_milestones_in_trigger($('form#addTriggerForm', el), 'trigger-deal-milestone', trigger_deal_milestone_value);
+*/
 						
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 
