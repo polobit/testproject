@@ -67,7 +67,8 @@ public class FacebookPageUtil
 	{
 	    // redirect_uri = "https://" + NamespaceManager.get() +
 	    // ".agilecrm.com/fbpage?action=CALLBACK";
-	    redirect_uri = "https://" + NamespaceManager.get() + "-dot-sandbox-dot-agilecrmbeta.appspot.com/fbpage?action=CALLBACK";
+	   // redirect_uri = "https://" + NamespaceManager.get() + "-dot-sandbox-dot-agilecrmbeta.appspot.com/fbpage?action=CALLBACK";
+		redirect_uri = "http://agiletestapp.appspot.com/redirect";
 	}
     }
 

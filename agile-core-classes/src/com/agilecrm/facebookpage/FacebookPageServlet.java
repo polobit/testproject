@@ -53,6 +53,7 @@ public class FacebookPageServlet extends HttpServlet
 		}
 		break;
 	    case CALLBACK:
+	    response.setContentType("text/plain");
 		currentSession.setAttribute("fbpage_user_accesstoken", FacebookPageUtil.getAccessToken(request.getParameter("code")));
 		currentSession.setAttribute("fbpage_logged_in", true);
 		System.out.println(currentSession.getAttribute("fbpage_user_accesstoken"));
