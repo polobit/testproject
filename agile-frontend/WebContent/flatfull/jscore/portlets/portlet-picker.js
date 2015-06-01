@@ -324,12 +324,36 @@ function set_p_portlets(base_model){
 			$(this).html($(App_Portlets.dealsWon[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Agenda"){
-			$(this).html(getRandomLoadingImg());
-			$(this).html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
+			if(App_Portlets.todayEventsCollection[parseInt(pos)]!=undefined && App_Portlets.todayEventsCollection[parseInt(pos)].collection.length>0){
+				$(this).html(getRandomLoadingImg());
+				$(this).html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
+			}else{
+				if(base_model.get('settings').duration=="next-7-days")
+					$(this).html("<div class='portlet-error-message'>No calendar events for next 7 days</div>");
+				else if(base_model.get('settings').duration=="this-week")
+					$(this).html("<div class='portlet-error-message'>No calendar events for this week</div>");
+				else if(base_model.get('settings').duration=="today-and-tomorrow")
+					$(this).html("<div class='portlet-error-message'>No calendar events for today and tomorrow</div>");
+				else if(base_model.get('settings').duration=="1-day")
+					$(this).html("<div class='portlet-error-message'>No calendar events for today</div>");
+			}
 			setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Today Tasks"){
-			$(this).html(getRandomLoadingImg());
-			$(this).html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
+			if(App_Portlets.tasksCollection[parseInt(pos)]!=undefined && App_Portlets.tasksCollection[parseInt(pos)].collection.length>0){
+				$(this).html(getRandomLoadingImg());
+				$(this).html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
+			}else{
+				if(base_model.get('settings').duration=="next-7-days")
+					$(this).html("<div class='portlet-error-message'>No tasks for next 7 days</div>");
+				else if(base_model.get('settings').duration=="this-week")
+					$(this).html("<div class='portlet-error-message'>No tasks for this week</div>");
+				else if(base_model.get('settings').duration=="today-and-tomorrow")
+					$(this).html("<div class='portlet-error-message'>No tasks for today and tomorrow</div>");
+				else if(base_model.get('settings').duration=="1-day")
+					$(this).html("<div class='portlet-error-message'>No tasks for today</div>");
+				else if(base_model.get('settings').duration=="all-over-due")
+					$(this).html("<div class='portlet-error-message'>No overdue tasks</div>");
+			}
 			setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Deals By Milestone"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);

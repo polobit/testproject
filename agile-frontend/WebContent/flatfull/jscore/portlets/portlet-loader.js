@@ -765,12 +765,36 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.dealsWon[parseInt(pos)].render().el));
 	        	}else if(data.get('portlet_type')=="TASKSANDEVENTS" && data.get('name')=="Agenda"){
 	        		App_Portlets.todayEventsCollection[parseInt(pos)].collection.fetch();
-	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
-	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
+	        		if(App_Portlets.tasksCollection[parseInt(pos)]!=undefined && App_Portlets.tasksCollection[parseInt(pos)].collection.length>0){
+	        			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
+	        			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
+	        		}else{
+	        			if(data.get('settings').duration=="next-7-days")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No calendar events for next 7 days</div>");
+						else if(data.get('settings').duration=="this-week")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No calendar events for this week</div>");
+						else if(data.get('settings').duration=="today-and-tomorrow")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No calendar events for today and tomorrow</div>");
+						else if(data.get('settings').duration=="1-day")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No calendar events for today</div>");
+	        		}
 	        	}else if(data.get('portlet_type')=="TASKSANDEVENTS" && data.get('name')=="Today Tasks"){
 	        		App_Portlets.tasksCollection[parseInt(pos)].collection.fetch();
-	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
-	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
+	        		if(App_Portlets.tasksCollection[parseInt(pos)]!=undefined && App_Portlets.tasksCollection[parseInt(pos)].collection.length>0){
+	        			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
+	        			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
+	        		}else{
+	        			if(data.get('settings').duration=="next-7-days")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No tasks for next 7 days");
+						else if(data.get('settings').duration=="this-week")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No tasks for this week");
+						else if(data.get('settings').duration=="today-and-tomorrow")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No tasks for today and tomorrow");
+						else if(data.get('settings').duration=="1-day")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No tasks for today");
+						else if(data.get('settings').duration=="all-over-due")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No overdue tasks</div>");
+	        		}
 	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Stats Report"){
 	        		/*$('#'+el.split("-save-modal")[0]).parent().find('.stats_report_portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.stats_report_portlet_body').html($(App_Portlets.statsReport[parseInt(pos)].render().el));*/
