@@ -723,7 +723,7 @@ public class ContactUtil
 	    contact.addTags(tags_array);
 	}
 
-	dao.putAll(contacts_list);
+	//dao.putAll(contacts_list);
     }
 
     public static void addTagsToContactsBulk(List<Contact> contacts_list, String[] tags_array)
@@ -748,7 +748,7 @@ public class ContactUtil
 
 	}
 
-	dao.putAll(contacts_list);
+	//dao.putAll(contacts_list);
     }
 
     public static void removeTagsToContactsBulk(List<Contact> contacts_list, String[] tags_array)
