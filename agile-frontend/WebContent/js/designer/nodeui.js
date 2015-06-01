@@ -107,9 +107,6 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
         buttons: {
             'Save': function () {
             	
-            	if(!checkWorkflowSize())
-        			return;
-
             	// Triggers change events of of URL Visited select
             	$(this).find("form #type-select").trigger('change');
             	
@@ -201,12 +198,18 @@ function saveNode(e) {
 				}	  
 			  				  	
 		}
+		
+		
+		
 		 templateContinue(nodeId);
 		 
 		 var $save_info = '<span id="workflow-edit-msg" style="color: red;">You have unsaved changes. Click on &lsquo;Save Campaign&rsquo; to save.</span>';
 		 
 		 // Shows 'Save Campaign' message. Naresh (21/02/2014)
 		 window.parent.$("#workflow-msg").html($save_info).fadeIn(1000);
+		 
+		 if(!checkWorkflowSize())
+				return;
 		   	
         // close the dialog after the node is constructed			
         $("#nodeui").dialog('close');
