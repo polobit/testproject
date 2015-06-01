@@ -26,6 +26,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
+import com.agilecrm.contact.exception.DuplicateContactException;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
@@ -409,6 +410,107 @@ public class ContactUtil
     }
 
     /**
+     * Use this method only if contact is new contact
+     * 
+     * @param contact
+     * @param throwError
+     * @return
+     */
+    public static boolean isDuplicateContact(Contact contact, boolean throwError)
+    {
+	if (contact.id != null)
+	{
+	    Contact oldContact = ContactUtil.getContact(contact.id);
+	    if (oldContact == null)
+		contact.id = null;
+	    else
+		return isDuplicateContact(contact, oldContact, throwError);
+	}
+
+	// Lists out all email fields from updated contact
+	List<ContactField> newEmailFields = contact.getContactPropertiesList(Contact.EMAIL);
+
+	for (ContactField field : newEmailFields)
+	{
+	    int i = searchContactCountByEmail(field.value.toLowerCase());
+
+	    if (i > 0)
+	    {
+		if (throwError)
+		{
+		    if (throwError)
+			throw new DuplicateContactException("Sorry, a contact with this email already exists "
+				+ field.value);
+		    else
+			return true;
+		}
+	    }
+	}
+
+	return false;
+
+    }
+
+    /**
+     * Checks duplicate contact. Before checking in datastore, this method
+     * compare emails with that of existing data of that particular contact
+     * 
+     * @param contact
+     * @param oldContact
+     * @return
+     */
+    public static boolean isDuplicateContact(Contact contact, Contact oldContact, boolean throwError)
+    {
+	if (oldContact == null)
+	{
+	    return isDuplicateContact(contact, throwError);
+	}
+
+	// Lists out all emails from old contact
+	List<ContactField> emailFields = oldContact.getContactPropertiesList(Contact.EMAIL);
+
+	// Lists out all email fields from updated contact
+	List<ContactField> newEmailFields = contact.getContactPropertiesList(Contact.EMAIL);
+
+	// Store extra emails
+	List<ContactField> newAddedEmails = new ArrayList<ContactField>();
+
+	for (ContactField newField : newEmailFields)
+	{
+	    boolean isFound = false;
+	    for (ContactField field : emailFields)
+	    {
+		if (StringUtils.equalsIgnoreCase(newField.value, field.value))
+		{
+		    isFound = true;
+		    break;
+		}
+	    }
+	    if (!isFound)
+		newAddedEmails.add(newField);
+	}
+
+	if (newAddedEmails.isEmpty())
+	    return false;
+
+	for (ContactField field : newAddedEmails)
+	{
+	    if (searchContactCountByEmailAndType(field.value.toLowerCase(), Type.PERSON) > 0)
+	    {
+		if (throwError)
+		    throw new DuplicateContactException("Sorry, a contact with this email already exists "
+			    + field.value);
+		else
+		    return true;
+	    }
+
+	}
+
+	return false;
+
+    }
+
+    /**
      * Get Count of Contacts by Email - should be used in most of the cases
      * unless the real entity is required
      * 
@@ -617,11 +719,11 @@ public class ContactUtil
 
 	for (Contact contact : contacts_list)
 	{
-
+	    contact.bulkActionTracker = String.valueOf(BulkActionUtil.randInt(1, 10000));
 	    contact.addTags(tags_array);
 	}
 
-	dao.putAll(contacts_list);
+	// dao.putAll(contacts_list);
     }
 
     public static void addTagsToContactsBulk(List<Contact> contacts_list, String[] tags_array)
@@ -632,14 +734,12 @@ public class ContactUtil
 	    return;
 	}
 
-	String bulk_action_tracker = String.valueOf(BulkActionUtil.randInt(1, 10000));
-
 	for (Contact contact : contacts_list)
 	{
 
 	    try
 	    {
-		contact.bulkActionTracker = bulk_action_tracker;
+		contact.bulkActionTracker = String.valueOf(BulkActionUtil.randInt(1, 10000));
 		contact.addTags(tags_array);
 	    }
 	    catch (Exception e)
@@ -649,7 +749,7 @@ public class ContactUtil
 
 	}
 
-	dao.putAll(contacts_list);
+	// dao.putAll(contacts_list);
     }
 
     public static void removeTagsToContactsBulk(List<Contact> contacts_list, String[] tags_array)
@@ -662,11 +762,11 @@ public class ContactUtil
 
 	for (Contact contact : contacts_list)
 	{
-
+	    contact.bulkActionTracker = String.valueOf(BulkActionUtil.randInt(1, 10000));
 	    contact.removeTags(tags_array);
 	}
 
-	dao.putAll(contacts_list);
+	// dao.putAll(contacts_list);
     }
 
     /**
@@ -1270,7 +1370,10 @@ public class ContactUtil
 	List<String> activeWorkflows = null;
 	try
 	{
+	    // Gets the list of all workflows
 	    List<CampaignStatus> campaignStatusList = dao.get(id).campaignStatus;
+
+	    // Sort the list by ACTIVE status
 	    Iterator<CampaignStatus> statusIterator = campaignStatusList.iterator();
 	    activeWorkflows = new ArrayList<String>();
 	    while (statusIterator.hasNext())
@@ -1284,16 +1387,13 @@ public class ContactUtil
 		catch (EnumConstantNotPresentException e)
 		{
 		    System.err.println("Inside workflowListOfAContact");
-		    e.printStackTrace();
 		}
 	    }
 
 	}
 	catch (EntityNotFoundException e)
 	{
-	    // TODO Auto-generated catch block
 	    System.out.println("Inside workflowListOfAContact of ContactUtil.java and message is: " + e.getMessage());
-	    e.printStackTrace();
 	}
 	return activeWorkflows;
     }
@@ -1422,13 +1522,15 @@ public class ContactUtil
 
 	    if (campaignID == null)
 	    {
-		// return any status - Done, removed or active
+		// Any campaign with given status
 
+		// return any status - Done, removed or active
 		if (CheckCampaign.ANY_STATUS.equals(status))
 		    return dao.getByProperty(searchMap).campaignStatus;
 
 		List<CampaignStatus> campaignIDsList = new ArrayList<CampaignStatus>();
 
+		// Gets list of campaigns ids
 		campaignIDsList = dao.getByProperty(searchMap).campaignStatus;
 
 		Iterator<CampaignStatus> statusIterator = campaignIDsList.iterator();
@@ -1451,11 +1553,14 @@ public class ContactUtil
 
 		List<CampaignStatus> campaignIDsList = new ArrayList<CampaignStatus>();
 
+		// appending status for query
 		if (!CheckCampaign.ANY_STATUS.equals(status))
 		    searchMap.put("campaignStatus.status", campaignID + "-" + status.toUpperCase());
 
+		// Adds list of campaign IDs for the given campaign ID
 		campaignIDsList.addAll(dao.getByProperty(searchMap).campaignStatus);
 
+		// return if the status is any
 		if (!CheckCampaign.ANY_STATUS.equals(status))
 		    return campaignIDsList;
 
@@ -1463,7 +1568,6 @@ public class ContactUtil
 
 		List<CampaignStatus> givenStatusList = new ArrayList<CampaignStatus>();
 
-		// any status gets active
 		while (statusIterator.hasNext())
 		{
 		    CampaignStatus campaignStatus = statusIterator.next();
@@ -1473,11 +1577,9 @@ public class ContactUtil
 
 		    if (StringUtils.containsIgnoreCase(campaignStatus.status, CheckCampaign.STATUS_ACTIVE)
 			    || StringUtils.containsIgnoreCase(campaignStatus.status, CheckCampaign.STATUS_DONE))
-		    {
 			givenStatusList.add(campaignStatus);
-			return givenStatusList;
-		    }
 		}
+		return givenStatusList;
 	    }
 	}
 

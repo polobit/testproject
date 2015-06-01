@@ -22,7 +22,7 @@ public class SMSGateway implements Serializable
 	 */
 	public static enum SMS_API
 	{
-		TWILIO
+		TWILIO, PLIVO
 	};
 
 	public static SMS_API sms_api;

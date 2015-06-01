@@ -4,7 +4,8 @@
 
 // window options funda
 $("#menuPosition").die().live("change", function(){
-	
+	CURRENT_USER_PREFS.menuPosition = $(this).val();
+	$(".theme-save-status").css("display","inline");
 	if($(this).val() == 'top')
 	{
 		$(".app").addClass("app-aside-dock");
@@ -25,6 +26,8 @@ $("#menuPosition").die().live("change", function(){
 });
 
 $("#layout").die().live("change", function(){
+	CURRENT_USER_PREFS.layout = $(this).val();
+	$(".theme-save-status").css("display","inline");
 	if($(this).val() == 'fluid')
 	{
 		$(".app").removeClass("container");
@@ -115,7 +118,8 @@ $("#check-box-layout").die().live('click',function(){
 
 //retrieve the current radio button value	
 	$(".magicMenu input:radio").die().live('click',function(){
-		var inputVal = $(this).val();
+		CURRENT_USER_PREFS.theme = $(this).val();
+		$(".theme-save-status").css("display","inline");
 		var asideClassName = $(this).attr("target-aside-class");
 		var logoClassName = $(this).attr("target-logo-class");
 		var topBarClassName = $(this).attr("target-topbar-class");

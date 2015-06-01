@@ -76,6 +76,7 @@ public class Wait extends TaskletAdapter
 			// Add ourselves to Cron Queue
 			long timeout = CronUtil.getTimer(duration, durationType, timezone, at);
 
+			// Add the task to the cron
 			CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, null, null, null);
 		}
 		catch (Exception e)

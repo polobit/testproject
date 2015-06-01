@@ -21,6 +21,23 @@ $(function()
 		displayFilledModal(streamId, null, null, "Tweet");
 	});
 
+	//twitter text field message limit to 140
+	$('.twit-tweet-limit').live("keyup", function () {
+ 			var left;
+            left = 140 - $(this).val().length;
+ 
+            if(left < 0){
+                $('#twitter-counter').addClass("text-danger");
+                 $('#send_tweet').attr("disabled", true);
+            }else{
+                $('#twitter-counter').removeClass("text-danger");
+                $('#send_tweet').attr("disabled", false);
+            }
+ 
+            $('#twitter-counter').text(left);
+        });
+
+
 	/**
 	 * Get stream and create reply tweet and post it on Twitter to related
 	 * tweet.

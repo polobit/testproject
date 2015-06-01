@@ -34,8 +34,6 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.deferred.DealsDeferredTask;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
-import com.agilecrm.export.util.DealExportBlobUtil;
-import com.agilecrm.export.util.DealExportEmailUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -500,64 +498,27 @@ public class DealsAPI
      * add it as a attachment and send the email.
      */
     @Path("/export")
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void exportOpportunities(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
-    {
-	// Append the URL with the current userId to set the session manager in
-	// the backend.
-	OpportunityUtil.postDataToDealBackend("/core/api/opportunity/backend/export/"
-		+ SessionManager.get().getDomainId());
-    }
-
-    /**
-     * Export list of opportunities. Create a CSV file with list of deals and
-     * add it as a attachment and send the email.
-     */
-    @Path("/backend/export/{current_user_id}")
     @POST
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void exportOpportunitiesBackend(@PathParam("current_user_id") Long currentUserId,
-	    @QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
+    public void exportOpportunities(@FormParam("filter") String filter)
     {
-	// Set the session manager to get the user preferences and the other
-	// details required.
-	if (SessionManager.get() != null)
+	org.json.JSONObject filterJSON;
+	try
 	{
-	    SessionManager.get().setDomainId(currentUserId);
+	    filterJSON = new org.json.JSONObject(filter);
+	    System.out.println("------------" + filterJSON.toString());
+
+	    // Append the URL with the current userId to set the session manager
+	    // in
+	    // the backend.
+	    OpportunityUtil.postDataToDealBackend("/core/api/opportunity/backend/export/"
+		    + SessionManager.get().getDomainId(), filter);
 	}
-	else
+	catch (JSONException e)
 	{
-	    DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
-	    SessionManager.set(new UserInfo(null, user.email, user.name));
-	    SessionManager.get().setDomainId(user.id);
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
 	}
-	String currentCursor = null;
-	String previousCursor = null;
-	int firstTime = 0;
-	String path = null;
-	List<Opportunity> deals = null;
-	long total = 0;
-	int max = 1000;
-	do
-	{
-	    deals = OpportunityUtil.getOpportunities(max, currentCursor);
-	    currentCursor = deals.get(deals.size() - 1).cursor;
-	    firstTime++;
-	    if (firstTime == 1)
-		path = DealExportBlobUtil.writeDealCSVToBlobstore(deals, false);
-	    else
-		DealExportBlobUtil.editExistingBlobFile(path, deals, false);
-	    total += deals.size();
-	} while (deals.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
-	DealExportBlobUtil.editExistingBlobFile(path, null, true);
-	List<String> fileData = DealExportBlobUtil.retrieveBlobFileData(path);
-	if (count == null)
-	    count = String.valueOf(total);
-	// Send every partition as separate email
-	for (String partition : fileData)
-	    DealExportEmailUtil.exportDealCSVAsEmail(DomainUserUtil.getDomainUser(currentUserId), partition,
-		    String.valueOf(count));
     }
 
     /**

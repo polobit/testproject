@@ -430,12 +430,21 @@
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsTaskReportSettingsForm" name="portletsTaskReportSettingsForm" method="post" >
 			<div class="control-group form-group">
-				<label class="control-label">Group by</label>
+				<label class="control-label">Report by</label>
 				<div class="controls">
 					<select id="group-by-task-report" name="group-by" class="required form-control">
 						<option value="user">User</option>
 						<option value="category">Category</option>
 						<option value="status">Status</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group form-group" id="tasks-control-group">
+				<label class="control-label">Tasks</label>
+				<div class="controls">
+					<select id="tasks-task-report" name="tasks" class="required form-control">
+						<option value="all-tasks" id="all-tasks">All Tasks</option>
+						<option value="completed-tasks" id="completed-tasks">Completed Tasks</option>
 					</select>
 				</div>
 			</div>
@@ -453,9 +462,12 @@
 				<label class="control-label">Duration</label>
 				<div class="controls">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="1-day" >1 Day</option>
-						<option value="1-week">1 Week</option>
-						<option value="1-month">1 Month</option>
+						<option value="1-day" >Today</option>
+						<option value="yesterday" >Yesterday</option>
+						<option value="this-week" >This Week</option>
+						<option value="1-week">Last 7 Days</option>
+						<option value="this-month" >This Month</option>
+						<option value="1-month">Last 30 Days</option>
 					</select>
 				</div>
 			</div>
@@ -517,7 +529,7 @@
 		Delete this dashlet?
 	</div>
 	<div class="modal-footer">
-		<a id="portlet-delete-cancel-modal" href="#" class="btn btn-sm btn-danger" data-dismiss="modal">No</a>
+		<a id="portlet-delete-cancel-modal" href="#" class="btn btn-sm btn-default" data-dismiss="modal">No</a>
 		<a id="" class="portlet-delete-modal save-modal btn btn-sm btn-primary" href="#">Yes</a>
 	</div>
 </div>

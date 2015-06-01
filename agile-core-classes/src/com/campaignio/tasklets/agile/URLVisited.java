@@ -90,8 +90,7 @@ public class URLVisited extends TaskletAdapter
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
-			System.err.println("Exception occuredin URL Visited node..." + e.getMessage());
+			System.out.println("Exception occuredin URL Visited node..." + e.getMessage());
 
 		}
 
