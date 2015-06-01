@@ -120,16 +120,16 @@ public class TagUtil
 	    return;
 	}
 
+	Queue queue = QueueFactory.getQueue(AgileQueues.TAG_ENTITY_QUEUE);
 	for (Tag tag : tags)
 	{
 	    TagDBUpdateDeferredTask task = new TagDBUpdateDeferredTask(tag, tracker);
 
 	    String tagName = SearchUtil.normalizeString(tag.tag) + "_" + NamespaceManager.get() + "_" + tracker;
 
-	    Queue queue = QueueFactory.getQueue(AgileQueues.TAG_ENTITY_QUEUE);
-
 	    try
 	    {
+		System.out.println("tag name : " + tagName);
 		queue.add(TaskOptions.Builder.withPayload(task).taskName(tagName));
 	    }
 	    catch (TaskAlreadyExistsException e)

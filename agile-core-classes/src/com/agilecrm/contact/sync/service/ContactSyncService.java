@@ -343,6 +343,7 @@ public abstract class ContactSyncService implements SyncService
 	{
 	    try
 	    {
+		contact.bulkActionTracker = bulk_action_tracker;
 		contact.save();
 	    }
 	    catch (AccessDeniedException e)
