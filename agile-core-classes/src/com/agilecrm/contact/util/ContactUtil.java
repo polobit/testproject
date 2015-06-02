@@ -26,7 +26,6 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
-import com.agilecrm.contact.exception.DuplicateContactException;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
@@ -717,9 +716,10 @@ public class ContactUtil
 	    return;
 	}
 
+	String tracker = String.valueOf(System.currentTimeMillis());
 	for (Contact contact : contacts_list)
 	{
-	    contact.bulkActionTracker = String.valueOf(BulkActionUtil.randInt(1, 10000));
+	    contact.bulkActionTracker = tracker;
 	    contact.addTags(tags_array);
 	}
 
@@ -734,12 +734,13 @@ public class ContactUtil
 	    return;
 	}
 
+	String tracker = String.valueOf(System.currentTimeMillis());
 	for (Contact contact : contacts_list)
 	{
 
 	    try
 	    {
-		contact.bulkActionTracker = String.valueOf(BulkActionUtil.randInt(1, 10000));
+		contact.bulkActionTracker = tracker;
 		contact.addTags(tags_array);
 	    }
 	    catch (Exception e)
@@ -760,9 +761,10 @@ public class ContactUtil
 	    return;
 	}
 
+	String tracker = String.valueOf(System.currentTimeMillis());
 	for (Contact contact : contacts_list)
 	{
-	    contact.bulkActionTracker = String.valueOf(BulkActionUtil.randInt(1, 10000));
+	    contact.bulkActionTracker = tracker;
 	    contact.removeTags(tags_array);
 	}
 

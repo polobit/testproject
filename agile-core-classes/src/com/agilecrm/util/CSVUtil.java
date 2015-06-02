@@ -85,7 +85,7 @@ import com.googlecode.objectify.Key;
 public class CSVUtil
 {
     BillingRestriction billingRestriction;
-    String bulk_action_tracker = String.valueOf(BulkActionUtil.randInt(1, 10000));
+    String bulk_action_tracker = String.valueOf(System.currentTimeMillis());
 
     private ContactBillingRestriction dBbillingRestriction;
 

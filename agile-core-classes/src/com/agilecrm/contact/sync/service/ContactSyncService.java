@@ -42,7 +42,7 @@ import com.thirdparty.google.ContactPrefs;
 public abstract class ContactSyncService implements SyncService
 {
 
-    String bulk_action_tracker = String.valueOf(BulkActionUtil.randInt(1, 10000));
+    String bulk_action_tracker = String.valueOf(System.currentTimeMillis());
 
     /** NOTIFICATION_TEMPLATE. */
     protected static final String NOTIFICATION_TEMPLATE = "contact_sync_notification_template";
