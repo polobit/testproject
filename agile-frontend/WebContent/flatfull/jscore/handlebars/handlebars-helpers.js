@@ -1162,7 +1162,22 @@ $(function()
 									el = el
 											.concat('<div class="contact-addressview"><div><div class="pull-left hide" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color">');
 
-								$.each(address, function(key, val)
+								if(address.address !== undefined)
+									el = el.concat(address.address+", ");
+
+								if(address.city !== undefined)
+									el = el.concat(address.city+", ");
+
+								if(address.state !== undefined)
+									el = el.concat(address.state+", ");
+
+								if(address.zip !== undefined)
+									el = el.concat(address.zip+", ");
+
+								if(address.country !== undefined)
+									el = el.concat(address.country+".");
+
+								/*$.each(address, function(key, val)
 								{
 									if (--count == 0)
 									{
@@ -1170,7 +1185,7 @@ $(function()
 										return;
 									}
 									el = el.concat(val + ", ");
-								});
+								});*/
 
 								if (properties[i].subtype)
 									el = el.concat('<span class="label bg-light dk text-tiny">' + properties[i].subtype + '</span>');
@@ -5531,9 +5546,9 @@ $(function()
 		else if (p_name == 'Deals Assigned')
 			portlet_name = 'Deals Assigned';
 		else if (p_name == 'Agenda')
-			portlet_name = "Today's Events";
+			portlet_name = "Events";
 		else if (p_name == 'Today Tasks')
-			portlet_name = "Today's Tasks";
+			portlet_name = "Tasks";
 		else if (p_name == 'Agile CRM Blog')
 			portlet_name = "Agile CRM Blog";
 		else if (p_name == 'Task Report')

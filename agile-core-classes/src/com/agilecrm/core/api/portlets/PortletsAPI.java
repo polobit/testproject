@@ -265,9 +265,9 @@ public class PortletsAPI {
 	@Path("/portletAgenda")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Event> getPortletAgendaList(@QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime)throws Exception {
+	public List<Event> getPortletAgendaList(@QueryParam("duration") String duration,@QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime)throws Exception {
 		PortletUtil.checkPrivilegesForPortlets("EVENTS");
-		return PortletUtil.getAgendaList(startTime,endTime);
+		return PortletUtil.getAgendaList(startTime,endTime,duration);
 	}
 	/**
 	 * Gets Today Tasks portlet data
@@ -277,9 +277,9 @@ public class PortletsAPI {
 	@Path("/portletTodayTasks")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Task> getPortletTodayTasksList(@QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime)throws Exception {
+	public List<Task> getPortletTodayTasksList(@QueryParam("duration") String duration,@QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime)throws Exception {
 		PortletUtil.checkPrivilegesForPortlets("TASKS");
-		return PortletUtil.getTodayTasksList(startTime,endTime);
+		return PortletUtil.getTodayTasksList(startTime,endTime,duration);
 	}
 	/**
 	 * Gets Deals By Milestone portlet data

@@ -713,14 +713,31 @@
 					{{else}}
 						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
 					{{/if}} -->
+					<li><a href="#" id="{{id}}-settings" class="portlet-settings icon-wrench" data-toggle="modal"></a></li>
                     <li><i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close" onclick="deletePortlet(this);"></i></li>
 				</ul>
 			</div>
 			<div class="portlet_header_name">
                 <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
                 <span class="portlet-icon-divider"></span> -->
-				<span class="inline-block"><h4 class="font-thin m-t-none text-muted h4">
-                   Today's Events</h4>
+				<span class="inline-block">
+					<h4 class="font-thin m-t-none text-muted h4">
+						{{#if_equals settings.duration "next-7-days"}}
+							Events <small>Next 7 Days</small>
+						{{else}}
+							{{#if_equals settings.duration "this-week"}}
+								Events <small>This Week</small>
+							{{else}}
+								{{#if_equals settings.duration "today-and-tomorrow"}}
+									Events <small>Today and Tomorrow</small>
+								{{else}}
+									{{#if_equals settings.duration "1-day"}}
+										Events <small>Today</small>
+									{{/if_equals}}
+								{{/if_equals}}
+							{{/if_equals}}
+						{{/if_equals}}
+					</h4>
                 </span>
 			</div>
 		</div>
@@ -738,14 +755,35 @@
 					{{else}}
 						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
 					{{/if}} -->
+					<li><a href="#" id="{{id}}-settings" class="portlet-settings icon-wrench" data-toggle="modal"></a></li>
                     <li><i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close" onclick="deletePortlet(this);"></i></li>
 				</ul>
 			</div>
 			<div class="portlet_header_name">
                 <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
                 <span class="portlet-icon-divider"></span> -->
-				<span class="inline-block"><h4 class="font-thin m-t-none text-muted h4">
-                   Today's Tasks</h4>
+				<span class="inline-block">
+				<h4 class="font-thin m-t-none text-muted h4">
+					{{#if_equals settings.duration "next-7-days"}}
+						Tasks <small>Next 7 Days</small>
+					{{else}}
+						{{#if_equals settings.duration "this-week"}}
+							Tasks <small>This Week</small>
+						{{else}}
+							{{#if_equals settings.duration "today-and-tomorrow"}}
+								Tasks <small>Today and Tomorrow</small>
+							{{else}}
+								{{#if_equals settings.duration "1-day"}}
+									Tasks <small>Today</small>
+								{{else}}
+									{{#if_equals settings.duration "all-over-due"}}
+										Tasks <small>All Over Due</small>
+									{{/if_equals}}
+								{{/if_equals}}
+							{{/if_equals}}
+						{{/if_equals}}
+					{{/if_equals}}
+				</h4>
                 </span>
 			</div>
 		</div>
