@@ -51,6 +51,9 @@ function downloadNodes(callback) {
                 {
                 	if(!checkMaxNodesCount())
                  		return;
+                	if(!checkWorkflowSize())
+            			return;
+            		
                 	constructNodeFromDefinition(data);                
                 });
 
@@ -141,6 +144,9 @@ function downloadAdvancedNodes() {
                 {
                 	if(!checkMaxNodesCount())
                  		return;
+                	if(!checkWorkflowSize())
+            			return;
+
                 	constructNodeFromDefinition(data);                
                 });
 
@@ -209,6 +215,9 @@ function addDraggingCapability() {
             
             if(!checkMaxNodesCount())
         		return;
+            if(!checkWorkflowSize())
+    			return;
+    		
           
                constructNodeFromDefinition(jsonDefinition);
 
@@ -301,4 +310,28 @@ function initToolbar(callback) {
     $('#toolbartabs').tabs('select', 0);
     // Set to first tab	   
     downloadNodes(callback);
+}
+
+function checkWorkflowSize(workflowJSON){
+	
+	if(workflowJSON == undefined )
+		workflowJSON = window.frames.serializePhoneSystem();
+		
+		var bytes = [];
+
+		var workflowLength = workflowJSON.length;
+		
+		for (var i = 0; i < workflowLength; ++i) {
+		    bytes.push(workflowJSON.charCodeAt(i));
+		}
+
+		var dataSize = bytes.length / 1000000;
+		
+		if(dataSize > 0.95){
+			alert("Unable to save the campaign as it exceeds the limit of 1MB. Please consider splitting into multiple campaigns using the 'Transfer' property.");
+			return false;
+		}
+		else
+			return true;
+	
 }
