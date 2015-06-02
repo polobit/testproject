@@ -372,9 +372,7 @@ public class Task extends Cursor
 		return;
 
 	    owner_id = SessionManager.get().getDomainId().toString();
-	    System.out.println("Owner_id_Test1 " + this.owner_id);
 	}
-	System.out.println("Owner_id_Test1 " + this.owner_id);
 	// Saves domain user key
 	if (owner_id != null)
 	    owner = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
