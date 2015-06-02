@@ -334,3 +334,15 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 		}
 	});
 }
+function saveAttachmentBlobKey(blobKey,fileName)
+{
+	var el = $("#uploadAttachmentForm");
+	$("#uploadAttachmentModal").modal('hide');
+	$('#emailForm').find('#eattachment').css('display','block');
+	$('#emailForm').find('#attachment_id').find("#attachment_fname").text(fileName);
+	$('#emailForm').find('#eattachment_key').attr('value',blobKey);
+	$('#emailForm').find('#eattachment_key').attr('name',"blob_key");
+	$('#emailForm').find('#attachment-select').find('option:first').attr('selected', 'selected');
+	var el = $('#emailForm').find(".attachment-document-select");
+	$('#emailForm').find(".attachment-document-select").css('display','none');
+}

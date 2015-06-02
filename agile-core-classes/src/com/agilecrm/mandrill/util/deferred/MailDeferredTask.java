@@ -99,7 +99,7 @@ public class MailDeferredTask implements DeferredTask
 	// If null or Mandrill
 	if (emailGateway == null || emailGateway.email_api == EmailGateway.EMAIL_API.MANDRILL)
 	    Mandrill.sendMail(apiKey, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, metadata,
-		    null);
+		    null, null);
 
 	// If SendGrid
 	else if (emailGateway.email_api == EMAIL_API.SEND_GRID)
