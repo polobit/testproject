@@ -477,6 +477,10 @@ var WorkflowsRouter = Backbone.Router
 						
 						populate_milestones_in_trigger($('#triggeradd'), 'trigger-deal-milestone');
 						
+						populate_contact_filters_in_trigger($('#triggeradd'), 'RUNS_DAILY');
+						populate_contact_filters_in_trigger($('#triggeradd'), 'RUNS_WEEKLY');
+						populate_contact_filters_in_trigger($('#triggeradd'), 'RUNS_MONTHLY');
+						
 						/*var trigger_deal_milestone_value = currentTrigger.toJSON()['trigger_deal_milestone'];
 						populate_milestones_in_trigger($('form#addTriggerForm', el), 'trigger-deal-milestone', trigger_deal_milestone_value);
 */

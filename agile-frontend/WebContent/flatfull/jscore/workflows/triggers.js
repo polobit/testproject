@@ -252,7 +252,7 @@ function populate_contact_filters_in_trigger(trigger_form, filter_select_id, val
 
 	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	
-	fillSelect('contact-filter', '/core/api/filters', 'workflow', function fillContactFilter()
+	fillSelect(filter_select_id, '/core/api/filters', 'workflow', function fillContactFilter()
 	{
 		if (value)
 		{
