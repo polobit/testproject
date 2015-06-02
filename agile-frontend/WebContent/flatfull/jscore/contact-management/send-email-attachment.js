@@ -14,7 +14,7 @@
 		var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}'>{{name}}</option>";
         fillSelect('attachment-select','core/api/documents', 'documents',  function fillNew()
 		{
-			el.find("#attachment-select option:first").after("<option value='new'>Upload New Doc</option>");
+			el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
 
 		}, optionsTemplate, false, el); 
 	});
