@@ -324,7 +324,7 @@ function set_p_portlets(base_model){
 			$(this).html($(App_Portlets.dealsWon[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Agenda"){
-			if(App_Portlets.todayEventsCollection[parseInt(pos)]!=undefined && App_Portlets.todayEventsCollection[parseInt(pos)].collection.length>0){
+			/*if(App_Portlets.todayEventsCollection[parseInt(pos)]!=undefined && App_Portlets.todayEventsCollection[parseInt(pos)].collection.length>0){
 				$(this).html(getRandomLoadingImg());
 				$(this).html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
 			}else{
@@ -336,10 +336,12 @@ function set_p_portlets(base_model){
 					$(this).html("<div class='portlet-error-message'>No calendar events for today and tomorrow</div>");
 				else if(base_model.get('settings').duration=="1-day")
 					$(this).html("<div class='portlet-error-message'>No calendar events for today</div>");
-			}
+			}*/
+			$(this).html(getRandomLoadingImg());
+			$(this).html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Today Tasks"){
-			if(App_Portlets.tasksCollection[parseInt(pos)]!=undefined && App_Portlets.tasksCollection[parseInt(pos)].collection.length>0){
+			/*if(App_Portlets.tasksCollection[parseInt(pos)]!=undefined && App_Portlets.tasksCollection[parseInt(pos)].collection.length>0){
 				$(this).html(getRandomLoadingImg());
 				$(this).html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
 			}else{
@@ -353,7 +355,9 @@ function set_p_portlets(base_model){
 					$(this).html("<div class='portlet-error-message'>No tasks for today</div>");
 				else if(base_model.get('settings').duration=="all-over-due")
 					$(this).html("<div class='portlet-error-message'>No overdue tasks</div>");
-			}
+			}*/
+			$(this).html(getRandomLoadingImg());
+			$(this).html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Deals By Milestone"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
