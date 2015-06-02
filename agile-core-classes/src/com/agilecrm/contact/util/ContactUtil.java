@@ -26,7 +26,6 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
-import com.agilecrm.contact.exception.DuplicateContactException;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
@@ -717,13 +716,14 @@ public class ContactUtil
 	    return;
 	}
 
+	String tracker = String.valueOf(System.currentTimeMillis());
 	for (Contact contact : contacts_list)
 	{
-
+	    contact.bulkActionTracker = tracker;
 	    contact.addTags(tags_array);
 	}
 
-	//dao.putAll(contacts_list);
+	// dao.putAll(contacts_list);
     }
 
     public static void addTagsToContactsBulk(List<Contact> contacts_list, String[] tags_array)
@@ -734,11 +734,13 @@ public class ContactUtil
 	    return;
 	}
 
+	String tracker = String.valueOf(System.currentTimeMillis());
 	for (Contact contact : contacts_list)
 	{
 
 	    try
 	    {
+		contact.bulkActionTracker = tracker;
 		contact.addTags(tags_array);
 	    }
 	    catch (Exception e)
@@ -748,7 +750,7 @@ public class ContactUtil
 
 	}
 
-	//dao.putAll(contacts_list);
+	// dao.putAll(contacts_list);
     }
 
     public static void removeTagsToContactsBulk(List<Contact> contacts_list, String[] tags_array)
@@ -759,13 +761,14 @@ public class ContactUtil
 	    return;
 	}
 
+	String tracker = String.valueOf(System.currentTimeMillis());
 	for (Contact contact : contacts_list)
 	{
-
+	    contact.bulkActionTracker = tracker;
 	    contact.removeTags(tags_array);
 	}
 
-	dao.putAll(contacts_list);
+	// dao.putAll(contacts_list);
     }
 
     /**

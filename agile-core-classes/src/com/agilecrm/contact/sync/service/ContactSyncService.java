@@ -15,6 +15,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
+import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -40,6 +41,8 @@ import com.thirdparty.google.ContactPrefs;
  */
 public abstract class ContactSyncService implements SyncService
 {
+
+    String bulk_action_tracker = String.valueOf(System.currentTimeMillis());
 
     /** NOTIFICATION_TEMPLATE. */
     protected static final String NOTIFICATION_TEMPLATE = "contact_sync_notification_template";
@@ -321,6 +324,8 @@ public abstract class ContactSyncService implements SyncService
 	    }
 	    try
 	    {
+
+		contact.bulkActionTracker = bulk_action_tracker;
 		contact.save();
 
 		syncStatus.put(ImportStatus.MERGED_CONTACTS, syncStatus.get(ImportStatus.MERGED_CONTACTS) + 1);
@@ -338,6 +343,7 @@ public abstract class ContactSyncService implements SyncService
 	{
 	    try
 	    {
+		contact.bulkActionTracker = bulk_action_tracker;
 		contact.save();
 	    }
 	    catch (AccessDeniedException e)

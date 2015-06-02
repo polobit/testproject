@@ -489,6 +489,22 @@ function showPortletSettings(el){
 		
 		elData = $('#portletsStatsReportSettingsForm');
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Agenda"){
+		$('#portletsAgendaSettingsModal').modal('show');
+		$('#portletsAgendaSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
+		$("#portlet-type",$('#portletsAgendaSettingsModal')).val(base_model.get('portlet_type'));
+		$("#portlet-name",$('#portletsAgendaSettingsModal')).val(base_model.get('name'));
+		
+		elData = $('#portletsAgendaSettingsForm');
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Today Tasks"){
+		$('#portletsTodayTasksSettingsModal').modal('show');
+		$('#portletsTodayTasksSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
+		$("#portlet-type",$('#portletsTodayTasksSettingsModal')).val(base_model.get('portlet_type'));
+		$("#portlet-name",$('#portletsTodayTasksSettingsModal')).val(base_model.get('name'));
+		
+		elData = $('#portletsTodayTasksSettingsForm');
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
 	}
 	
 	if(base_model.get('name')=="Pending Deals" || base_model.get('name')=="Deals By Milestone" || base_model.get('name')=="Closures Per Person" || base_model.get('name')=="Deals Funnel"){
@@ -644,6 +660,48 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        			postRenderCallback : function(p_el){
 	        				displayTimeAgo(p_el);
 	        			} });
+	        	}else if(data.get('portlet_type')=="TASKSANDEVENTS" && data.get('name')=="Agenda"){
+	        		var start_date_str = '';
+					var end_date_str = '';
+					if(data.get('settings').duration=='next-7-days'){
+						start_date_str = 'TOMORROW';
+						end_date_str = ''+data.get('settings').duration;
+					}else if(data.get('settings').duration=='today-and-tomorrow'){
+						start_date_str = 'today';
+						end_date_str = ''+data.get('settings').duration;
+					}else if(data.get('settings').duration=='this-week'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-week-end';
+					}else{
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'TOMORROW';
+					}
+
+	        		App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda?duration='+data.get('settings').duration+'&start_time='+getStartAndEndDatesOnDue(start_date_str)+'&end_time='+getStartAndEndDatesOnDue(end_date_str), templateKey : 'portlets-events', sort_collection : false, individual_tag_name : 'tr',
+						postRenderCallback : function(p_el){
+
+						} });
+	        	}else if(data.get('portlet_type')=="TASKSANDEVENTS" && data.get('name')=="Today Tasks"){
+	        		var start_date_str = '';
+					var end_date_str = '';
+					if(data.get('settings').duration=='next-7-days'){
+						start_date_str = 'TOMORROW';
+						end_date_str = ''+data.get('settings').duration;
+					}else if(data.get('settings').duration=='today-and-tomorrow'){
+						start_date_str = 'today';
+						end_date_str = ''+data.get('settings').duration;
+					}else if(data.get('settings').duration=='this-week'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-week-end';
+					}else{
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'TOMORROW';
+					}
+					
+	        		App_Portlets.tasksCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletTodayTasks?duration='+data.get('settings').duration+'&start_time='+getStartAndEndDatesOnDue(start_date_str)+'&end_time='+getStartAndEndDatesOnDue(end_date_str), templateKey : 'portlets-tasks', sort_collection : false, individual_tag_name : 'tr',
+						postRenderCallback : function(p_el){
+
+						} });
 	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Stats Report"){
 	        		/*var start_date_str = '';
 	        		var end_date_str = '';
@@ -678,7 +736,8 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        	if(data.get('name')!="Deals By Milestone" && data.get('name')!="Closures Per Person" && data.get('name')!="Deals Funnel" && data.get('name')!="Emails Sent" 
 	        		&& data.get('name')!="Growth Graph" && data.get('name')!="Deals Assigned" && data.get('name')!="Calls Per Person" 
 	        			&& data.get('name')!="Pending Deals" && data.get('name')!="Deals Won" && data.get('name')!="Filter Based" 
-							&& data.get('name')!="Emails Opened" && data.get('name')!="Task Report" && data.get('name')!="Stats Report"){
+							&& data.get('name')!="Emails Opened" && data.get('name')!="Task Report" && data.get('name')!="Stats Report" 
+							&& data.get('name')!="Agenda" && data.get('name')!="Today Tasks"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(portletCollectionView.render().el));
 	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Filter Based"){
@@ -704,6 +763,38 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		App_Portlets.dealsWon[parseInt(pos)].collection.fetch();
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.dealsWon[parseInt(pos)].render().el));
+	        	}else if(data.get('portlet_type')=="TASKSANDEVENTS" && data.get('name')=="Agenda"){
+	        		App_Portlets.todayEventsCollection[parseInt(pos)].collection.fetch();
+	        		if(App_Portlets.tasksCollection[parseInt(pos)]!=undefined && App_Portlets.tasksCollection[parseInt(pos)].collection.length>0){
+	        			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
+	        			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
+	        		}else{
+	        			if(data.get('settings').duration=="next-7-days")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No calendar events for next 7 days</div>");
+						else if(data.get('settings').duration=="this-week")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No calendar events for this week</div>");
+						else if(data.get('settings').duration=="today-and-tomorrow")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No calendar events for today and tomorrow</div>");
+						else if(data.get('settings').duration=="1-day")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No calendar events for today</div>");
+	        		}
+	        	}else if(data.get('portlet_type')=="TASKSANDEVENTS" && data.get('name')=="Today Tasks"){
+	        		App_Portlets.tasksCollection[parseInt(pos)].collection.fetch();
+	        		if(App_Portlets.tasksCollection[parseInt(pos)]!=undefined && App_Portlets.tasksCollection[parseInt(pos)].collection.length>0){
+	        			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
+	        			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
+	        		}else{
+	        			if(data.get('settings').duration=="next-7-days")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No tasks for next 7 days");
+						else if(data.get('settings').duration=="this-week")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No tasks for this week");
+						else if(data.get('settings').duration=="today-and-tomorrow")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No tasks for today and tomorrow");
+						else if(data.get('settings').duration=="1-day")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No tasks for today");
+						else if(data.get('settings').duration=="all-over-due")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No overdue tasks</div>");
+	        		}
 	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Stats Report"){
 	        		/*$('#'+el.split("-save-modal")[0]).parent().find('.stats_report_portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.stats_report_portlet_body').html($(App_Portlets.statsReport[parseInt(pos)].render().el));*/
@@ -722,7 +813,10 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			}else if(data.get('settings').duration=='24-hours'){
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'now';
-	    			}else{
+	    			}else if(data.get('settings').duration=='this-week'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-week-end';
+					}else{
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'TOMORROW';
 	    			}

@@ -1,6 +1,7 @@
 package com.agilecrm.contact.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -11,16 +12,21 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.deferred.TagStatsDeferredTask;
+import com.agilecrm.contact.deferred.TagsDeferredTask;
+import com.agilecrm.contact.deferred.tags.TagDBUpdateDeferredTask;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.validator.TagValidator;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskAlreadyExistsException;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 
@@ -87,6 +93,56 @@ public class TagUtil
 	    return;
 
 	tag.addTag(tag.tag);
+
+    }
+
+    /**
+     * Updates tags database based on tracker. If there is a tracker, assuming
+     * it is a bulk action and it is run with custom task name
+     * 
+     * @param tags
+     * @param tracker
+     */
+    public static void runUpdateDeferedTask(List<Tag> tags, String tracker)
+    {
+	if (StringUtils.isEmpty(tracker))
+	{
+	    Set<String> tagsSet = new HashSet<String>();
+
+	    for (Tag tag : tags)
+	    {
+		tagsSet.add(tag.tag);
+	    }
+	    // Update Tags - Create a deferred task
+	    TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tagsSet);
+	    Queue queue = QueueFactory.getQueue(AgileQueues.TAG_ENTITY_QUEUE);
+	    queue.addAsync(TaskOptions.Builder.withPayload(tagsDeferredTask));
+	    return;
+	}
+
+	Queue queue = QueueFactory.getQueue(AgileQueues.TAG_ENTITY_QUEUE);
+	for (Tag tag : tags)
+	{
+	    TagDBUpdateDeferredTask task = new TagDBUpdateDeferredTask(tag, tracker);
+
+	    String tagName = SearchUtil.normalizeString(tag.tag) + "_" + NamespaceManager.get() + "_" + tracker;
+
+	    try
+	    {
+		System.out.println("tag name : " + tagName);
+		queue.add(TaskOptions.Builder.withPayload(task).taskName(tagName));
+	    }
+	    catch (TaskAlreadyExistsException e)
+	    {
+
+		e.printStackTrace();
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
+	}
 
     }
 
@@ -397,8 +453,8 @@ public class TagUtil
 	{
 	    throw new WebApplicationException(
 		    Response.status(Response.Status.BAD_REQUEST)
-		            .entity("Sorry, Tag name should start with an alphabet and can not contain special characters other than underscore and space - "
-		                    + tag).build());
+			    .entity("Sorry, Tag name should start with an alphabet and can not contain special characters other than underscore and space - "
+				    + tag).build());
 	}
     }
 

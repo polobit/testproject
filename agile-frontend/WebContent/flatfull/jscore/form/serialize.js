@@ -233,7 +233,7 @@ function serializeLhsFilters(element)
 			json_object["RHS_NEW"] = RHS_NEW_VALUE;
 			json_array.push(json_object);
 			var fieldName = LHS.replace(/ +/g, '_');
-			fieldName = fieldName.replace(/#/g, '\\#').replace(/@/g, '\\@');
+			fieldName = fieldName.replace(/#/g, '\\#').replace(/@/g, '\\@').replace(/[\/]/g,'\\/');
 			var currentElemnt = $(element).find('#'+fieldName+'_div');
 			$(currentElemnt).parent().find("a#lhs-filters-header").addClass('bold-text');
 			$(currentElemnt).find('a.clear-filter-condition-lhs').removeClass('hide');
