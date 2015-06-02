@@ -4,33 +4,7 @@
 
 
 
-/* starting hack for mobile compatibility */
 
-@media all and (max-width:500px) {
-
-.regpage-container {
-    width: 90%;
-}
-
-.regpage-container {
-        padding:0px;
-    }
-
- .elements-sibling {
-    float: none;
-    margin-right: 0px;
- }   
- .elements-sibling-last {
-
-display: block;
-width: auto;
- }
-}
-
-
-
-
-/* ending hack for mobile compatibility */
 
 html,body
 {
@@ -251,12 +225,14 @@ vertical-align: bottom;
 .elements-sibling {
 float:left;
 margin-right:5px;
+width:175px;
 }
 .elements-sibling-last
 {
     display: inline-block;
     width:180px;
 }
+
 
 @media all and (max-width:500px) {
 
@@ -272,10 +248,12 @@ margin-right:5px;
     float: none;
     margin-right: 0px;
     margin-bottom:10px;
+    width:100%;
  }   
  .elements-sibling-last {
 
 display: block;
 width: auto;
  }
+
 }
