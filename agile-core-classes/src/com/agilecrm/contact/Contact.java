@@ -128,7 +128,16 @@ public class Contact extends Cursor
 
     @Indexed
     public Long last_contacted = 0L;
-
+    
+    @Indexed
+    public Long last_emailed = 0L;
+    
+    @Indexed
+    public Long last_campaign_emaild = 0L;
+    
+    @Indexed
+    public Long last_called = 0L;
+    
     /**
      * Viewed time of the contact, in milliseconds
      */
@@ -1015,13 +1024,16 @@ public class Contact extends Cursor
 
 	if (this.type == Type.PERSON)
 	{
-	    if (this.properties.size() > 0)
-	    {
-		ContactField firstNameField = this.getContactFieldByName(Contact.FIRST_NAME);
-		ContactField lastNameField = this.getContactFieldByName(Contact.LAST_NAME);
-		this.first_name = firstNameField != null ? firstNameField.value : "";
-		this.last_name = lastNameField != null ? lastNameField.value : "";
-	    }
+			if (this.properties.size() > 0) {
+				ContactField firstNameField = this
+						.getContactFieldByName(Contact.FIRST_NAME);
+				ContactField lastNameField = this
+						.getContactFieldByName(Contact.LAST_NAME);
+				this.first_name = firstNameField != null ? firstNameField.value.toLowerCase()
+						: "";
+				this.last_name = lastNameField != null ? lastNameField.value.toLowerCase()
+						: "";
+			}
 	    if (StringUtils.isNotEmpty(contact_company_id))
 	    {
 		// update id, for existing company
@@ -1069,14 +1081,21 @@ public class Contact extends Cursor
 		}
 	    }
 	}
-	if (this.type == Type.COMPANY)
-	{
-	    if (this.properties.size() > 0)
-	    {
-		ContactField nameField = this.getContactFieldByName(Contact.NAME);
-		this.name = nameField != null ? nameField.value : "";
-	    }
-	}
+		if (this.type == Type.COMPANY) {
+			if (this.properties.size() > 0) {
+				ContactField nameField = this
+						.getContactFieldByName(Contact.NAME);
+				this.name = nameField != null ? nameField.value : "";
+			}
+			//Company name lower case field used for duplicate check.
+			ContactField nameLowerField = this
+					.getContactFieldByName("name_lower");
+			if(nameLowerField == null) {
+				if(StringUtils.isNotEmpty(name))
+					this.properties.add(new ContactField("name_lower", name.toLowerCase(), null));
+			}
+			 
+		}
 
 	// Store Created and Last Updated Time Check for id even if created
 	// time is 0(To check whether it is update request)

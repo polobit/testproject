@@ -132,6 +132,39 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 
 			doc.addField(Field.newBuilder().setName("last_contacted_epoch").setNumber(contact.last_contacted));
 		}
+		
+		// Describes last contacted time document if updated time is not 0.
+		if (contact.last_emailed > 0L)
+		{
+			fields.put("last_emailed", contact.last_emailed.toString());
+			Date updatedDate = DateUtils.truncate(new Date(contact.last_emailed * 1000), Calendar.DATE);
+
+			doc.addField(Field.newBuilder().setName("last_emailed").setDate(updatedDate));
+
+			doc.addField(Field.newBuilder().setName("last_emailed_epoch").setNumber(contact.last_emailed));
+		}
+		
+		// Describes last contacted time document if updated time is not 0.
+		if (contact.last_campaign_emaild > 0L)
+		{
+			fields.put("last_campaign_emaild", contact.last_campaign_emaild.toString());
+			Date updatedDate = DateUtils.truncate(new Date(contact.last_campaign_emaild * 1000), Calendar.DATE);
+
+			doc.addField(Field.newBuilder().setName("last_campaign_emaild").setDate(updatedDate));
+
+			doc.addField(Field.newBuilder().setName("last_campaign_emaild_epoch").setNumber(contact.last_campaign_emaild));
+		}
+		
+		// Describes last contacted time document if updated time is not 0.
+		if (contact.last_called > 0L)
+		{
+			fields.put("last_called", contact.last_called.toString());
+			Date updatedDate = DateUtils.truncate(new Date(contact.last_called * 1000), Calendar.DATE);
+
+			doc.addField(Field.newBuilder().setName("last_called").setDate(updatedDate));
+
+			doc.addField(Field.newBuilder().setName("last_called_epoch").setNumber(contact.last_called));
+		}
 
 		// Adds Other fields in contacts to document
 		doc.addField(Field.newBuilder().setName("lead_score").setNumber(contact.lead_score));

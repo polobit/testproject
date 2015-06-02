@@ -61,6 +61,9 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 				previousCursor = contactSchemaUpdateStats.cursor;
 				failedIds = contactSchemaUpdateStats.failedIds;
 				updateStats(previousCursor,failedIds, "RUNNING");
+				if(previousCursor != null && cursor == null) {
+					cursor = previousCursor;
+				}
 			}
 			ContactDocument contactDocuments = new ContactDocument();
 			contacts_list = Contact.dao.fetchAll(200, cursor, null);
@@ -87,17 +90,26 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 				for (Contact contact : contacts_list)
 				{
 					contact.updated_time = System.currentTimeMillis() / 1000;
-					//builderObjects.add(contactDocuments.buildDocument(contact));
-					try {
+					builderObjects.add(contactDocuments.buildDocument(contact));
+					/*try {
 						search.index.putAsync(contactDocuments.buildDocument(contact));
 					} catch(Exception e) {
 						System.out.println("Exception while adding contact to text search: "+contact.id + e);
 						failedIds = failedIds + ", " + contact.id;
-					}
-					/*if(builderObjects.size() >= 50) {
-						search.index.putAsync(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
-						builderObjects.clear();
 					}*/
+					try {
+						if(builderObjects.size() >= 50) {
+							search.index.putAsync(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
+							builderObjects.clear();
+						}
+					} catch(Exception e) {
+						try {
+							search.index.putAsync(contactDocuments.buildDocument(contact));
+						} catch(Exception e1) {
+							System.out.println("Exception while adding contact to text search: "+contact.id + e);
+							failedIds = failedIds + ", " + contact.id;
+						}
+					}
 				}
 				Contact.dao.putAll(contacts_list);
 

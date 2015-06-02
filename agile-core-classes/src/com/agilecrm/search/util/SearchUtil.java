@@ -137,6 +137,11 @@ public class SearchUtil
 			splitAddressAndAddToSearch(fields, doc, contactField);
 			continue;
 		}
+		if (customField == null && (field_name.equals(Contact.FIRST_NAME) || field_name.equals(Contact.LAST_NAME))) {
+			 doc.addField(Field.newBuilder().setName(field_name).setText(StringUtils.lowerCase(normalized_value)));
+		    fields.put(field_name, normalized_value);
+			continue;
+		}
 
 	    /*
 	     * If key already exist appends contact field value to respective
