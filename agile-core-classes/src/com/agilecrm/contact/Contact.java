@@ -455,7 +455,8 @@ public class Contact extends Cursor
 	}
 
 	// Updates Tag entity, if any new tag is added
-	updateTagsEntity(oldContact, this);
+	if (type == Type.PERSON)
+	    updateTagsEntity(oldContact, this);
 
 	// Verifies CampaignStatus
 	checkCampaignStatus(oldContact, this);
