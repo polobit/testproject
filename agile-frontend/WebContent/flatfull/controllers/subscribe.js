@@ -789,6 +789,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			{
 				$('.modal-backdrop').remove();	
 				$("#credit-card-form-modal").modal('hide');
+				$('body').removeClass('modal-open');
 				
 				$("#change-card").show();
 				
