@@ -38,7 +38,9 @@
       <web-uri>agile-temp-bulk.war</web-uri>
       <context-root>agile-temp-bulk</context-root>
     </web>
-     <web>
+  </module>
+  <module>
+       <web>
       <web-uri>agile-sync.war</web-uri>
       <context-root>agile-sync</context-root>
     </web>
