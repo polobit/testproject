@@ -42,7 +42,7 @@ public class UploadAttachmentServlet extends HttpServlet
             BlobInfoFactory factory = new BlobInfoFactory();
             BlobInfo blobInfo = factory.loadBlobInfo(blobKey);
             res.sendRedirect("/upload-attachment.jsp?key=" + blobKey.getKeyString()+"&fileName="+blobInfo.getFilename());
-            CacheUtil.setCache(blobKey.getKeyString(),true);
+            CacheUtil.setCache(blobKey.getKeyString(),true,16400000);
         }
     }
 }

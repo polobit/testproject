@@ -23,40 +23,50 @@
 	 * For adding existing document to current contact
 	 */
 	$(".add-attachment-confirm").die().live('click', function(e){
-		e.preventDefault();
-		
-	    var document_id = $(this).closest(".attachment-document-select").find("#attachment-select").val();
-	    var saveBtn = $(this);
-		
-  		// To check whether the document is selected or not
-	    if(document_id == "")
-	    {
-	    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>This field is required.</span>");
-	    	saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
-	    	return;
-	    }	    	
-	    else if(document_id == "new")
-	    {	
-	    	e.preventDefault();
-			$(this).closest('form').find('#error').html("");
-			var form_id = $(this).closest('form').attr("id");
-			var id = $(this).find("a").attr("id");
+		e.preventDefault();		
+		var network_type = $('#attachment-select').find(":selected").attr('network_type');
+		if(typeof network_type !=='undefined' && network_type.toUpperCase() === 'GOOGLE')
+		{
+			$(this).closest("span").find(".attachment-status").html("<span style='color:#df382c;margin-top:10px; display:block'>Can not attach Google Drive doc to email. You can add a link instead in the email.</span>");
+			$(this).css({'border': '1px solid #df382c','outline': 'none'   });				             	            
+		}
+		else
+		{
+			$('#attachment-select').closest("span").find('.attachment-status').find("span").fadeOut(0);
+			$('#attachment-select').css({"border":"1px solid #bbb"});
+		    var document_id = $(this).closest(".attachment-document-select").find("#attachment-select").val();
+		    var saveBtn = $(this);
 			
-			var newwindow = window.open("upload-attachment.jsp?id="+ form_id +"&t=" + CURRENT_USER_PREFS.template +"&d=" + CURRENT_DOMAIN_USER.domain, 'name','height=310,width=500');
-			
-			if (window.focus)
-			{
-				newwindow.focus();
-			}
-	    }
-	    else if(document_id != undefined && document_id != null)
-	    {
-	    	var docName = $( "#attachment-select option:selected").text();
-	    	$('#emailForm').find('#eattachment').css('display','block');
-	    	$('#emailForm').find('#attachment_id').find("#attachment_fname").text(docName);
-	    	$('#emailForm').find(".attachment-document-select").css('display','none');
-	    	$('#emailForm').find('#eattachment_key').attr('name',"document_key");
-	    	$('#emailForm').find('#eattachment_key').attr('value',document_id);
+	  		// To check whether the document is selected or not
+		    if(document_id == "")
+		    {
+		    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>This field is required.</span>");
+		    	saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
+		    	return;
+		    }	    	
+		    else if(document_id == "new")
+		    {	
+		    	e.preventDefault();
+				$(this).closest('form').find('#error').html("");
+				var form_id = $(this).closest('form').attr("id");
+				var id = $(this).find("a").attr("id");
+				
+				var newwindow = window.open("upload-attachment.jsp?id="+ form_id +"&t=" + CURRENT_USER_PREFS.template +"&d=" + CURRENT_DOMAIN_USER.domain, 'name','height=310,width=500');
+				
+				if (window.focus)
+				{
+					newwindow.focus();
+				}
+		    }
+		    else if(document_id != undefined && document_id != null)
+		    {
+		    	var docName = $( "#attachment-select option:selected").text();
+		    	$('#emailForm').find('#eattachment').css('display','block');
+		    	$('#emailForm').find('#attachment_id').find("#attachment_fname").text(docName);
+		    	$('#emailForm').find(".attachment-document-select").css('display','none');
+		    	$('#emailForm').find('#eattachment_key').attr('name',"document_key");
+		    	$('#emailForm').find('#eattachment_key').attr('value',document_id);
+		    }
 	    }
 	});
 	
