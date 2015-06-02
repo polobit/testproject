@@ -131,6 +131,8 @@ public class OnlineCalendarPrefs
 			if (d_user != null)
 				this.user = new Key<DomainUser>(DomainUser.class, d_user.id);
 		}
+		if (this.schedule_id != null)
+			this.schedule_id = this.schedule_id.toLowerCase();
 	}
 
 	@JsonIgnore
