@@ -50,26 +50,7 @@
 <style>
 
 
-@media all and (max-width:500px) {
 
-.regpage-container {
-    width: 90%;
-}
-
-.regpage-container {
-        padding:0px;
-    }
-
- .elements-sibling {
-    float: none;
-    margin-right: 0px;
- }   
- .elements-sibling-last {
-
-display: block;
-width: auto;
- }
-}
 
 
 	body {
@@ -297,7 +278,7 @@ $.validator.setDefaults({
 									</div> -->
 									 <div class="form-group login-plan_type">
 									<div class="elements-sibling">
-									<select class="form-control required"  name="plan_type" data-width="100%" style="min-width:175px">
+									<select class="form-control required"  name="plan_type" data-width="100%">
 											<option value="" selected disabled>Choose Plan</option>
 											<option value="Free">Free</option>
 											<option value="Starter">Starter</option>
@@ -305,7 +286,7 @@ $.validator.setDefaults({
 											<option value="pro">Pro</option>
 								 	 </select>
 								 	 </div>
-								 	 <div   class="form-group"> <input
+								 	 <div class="elements-sibling-last"> <input
 											class="input-xlarge field required form-control number" name="users_count"
 											type="text" min="1"
 											placeholder="Users" autocapitalize="off" autofocus>

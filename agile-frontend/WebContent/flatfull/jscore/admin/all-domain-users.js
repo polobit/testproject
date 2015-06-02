@@ -106,7 +106,7 @@ $(".delete_user").die().live('click', function(e){
 		$("#partialrefund").die().live('click', function(e){
 			
 			e.preventDefault();
-			if (!isValidForm($("#CCform")))
+			if (!isValidForm($("#admin-partial-refund")))
 			{
 			    return;
 			}
