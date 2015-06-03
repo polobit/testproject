@@ -578,7 +578,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 	disable_save_button($(saveBtn));//$(saveBtn).attr('disabled', 'disabled');
 	
 	if (!isValidForm('#' + formId)) {
-		var container = $('#' + formId).closest('.modal-dialog');
+		var container = $('#' + formId).closest('.modal');
 		var ele = $('#' + formId).find('.single-error').first();
 		container.scrollTop(ele.offset().top - container.offset().top + container.scrollTop());
 		// Removes disabled attribute of save button
