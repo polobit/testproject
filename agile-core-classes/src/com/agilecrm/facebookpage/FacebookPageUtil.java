@@ -172,10 +172,22 @@ public class FacebookPageUtil
     {
 	if (StringUtils.isBlank(pageID))
 	    return null;
-
-	ObjectifyGenericDao<FacebookPage> dao = new ObjectifyGenericDao<FacebookPage>(FacebookPage.class);
-	Query<FacebookPage> q = dao.ofy().query(FacebookPage.class);
-	q.filter("page_id", pageID);
+	
+	Query<FacebookPage> q = null;
+	String oldNameSpace = NamespaceManager.get();
+	NamespaceManager.set("");
+	
+	try
+	{
+		ObjectifyGenericDao<FacebookPage> dao = new ObjectifyGenericDao<FacebookPage>(FacebookPage.class);
+		q = dao.ofy().query(FacebookPage.class);
+		q.filter("page_id", pageID);
+	}
+	finally
+	{
+		NamespaceManager.set(oldNameSpace);
+	}
+	
 	return q.get();
     }
 
