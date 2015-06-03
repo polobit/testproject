@@ -24,13 +24,15 @@ define([
 			    		  
 			    		  _agile.set_account($("#_agile_api").val(), $("#_agile_domain").val());
 			    		  
+			    		  console.log($("#_agile_api").val()+","+ $("#_agile_domain").val());
+			    		  
 			    		  $('#agile-form').attr("method","POST");
 			    		  var agileFormSubmitURL = "#";
 			    		  $('#agile-form').attr("action",agileFormSubmitURL);
 			    		  
 			    		  var newRedirectHiddenField = $("#_agile_redirect_url").val();
 			    		  if(typeof newRedirectHiddenField != "undefined") {
-			    			  $("#_agile_redirect_url").val("#");
+			    			  $("#_agile_redirect_url").val("https://"+$("#_agile_domain").val()+".agilecrm.com/agileform_thankyou.jsp");
 			    		  }
 			    		 
 			    		  //changing redirect url - for old form support
