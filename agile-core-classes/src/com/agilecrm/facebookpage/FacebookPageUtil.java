@@ -181,25 +181,41 @@ public class FacebookPageUtil
 
     public static List<Map<String, String>> getLinkedFacebookPages(String domain)
     {
-	if (StringUtils.isBlank(domain))
-	    return null;
-
-	ObjectifyGenericDao<FacebookPage> dao = new ObjectifyGenericDao<FacebookPage>(FacebookPage.class);
-	Query<FacebookPage> q = dao.ofy().query(FacebookPage.class);
-	q.filter("domain", domain);
-	List<FacebookPage> facebookPages = q.list();
+    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
+    	if (StringUtils.isBlank(domain))
+    	    return null;
+	
+	List<FacebookPage> facebookPages = null;
+	
+	try
+	{
+		NamespaceManager.set("");
+		ObjectifyGenericDao<FacebookPage> dao = new ObjectifyGenericDao<FacebookPage>(FacebookPage.class);
+		Query<FacebookPage> q = dao.ofy().query(FacebookPage.class);
+		if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
+		{
+			q.filter("domain", domain);
+		}
+		facebookPages = q.list();
+	}
+	finally
+	{
+		NamespaceManager.set(domain);
+	}
 
 	List<Map<String, String>> listOfpages = new ArrayList<Map<String, String>>();
-
-	for (Iterator<FacebookPage> iterator = facebookPages.iterator(); iterator.hasNext();)
-	{
-	    FacebookPage facebookPage = (FacebookPage) iterator.next();
-	    Map<String, String> pagesInfo = new LinkedHashMap<String, String>();
-	    pagesInfo.put("form_id", facebookPage.form_id);
-	    pagesInfo.put("form_name", facebookPage.form_name);
-	    pagesInfo.put("page_id", facebookPage.page_id);
-	    pagesInfo.put("page_name", facebookPage.page_name);
-	    listOfpages.add(pagesInfo);
+	
+	if(facebookPages != null) {
+		for (Iterator<FacebookPage> iterator = facebookPages.iterator(); iterator.hasNext();)
+		{
+		    FacebookPage facebookPage = (FacebookPage) iterator.next();
+		    Map<String, String> pagesInfo = new LinkedHashMap<String, String>();
+		    pagesInfo.put("form_id", facebookPage.form_id);
+		    pagesInfo.put("form_name", facebookPage.form_name);
+		    pagesInfo.put("page_id", facebookPage.page_id);
+		    pagesInfo.put("page_name", facebookPage.page_name);
+		    listOfpages.add(pagesInfo);
+		}
 	}
 
 	return listOfpages;

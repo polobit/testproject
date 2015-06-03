@@ -20,7 +20,7 @@ String requestMethod = request.getMethod();
    <body>
       <div class="container">
          <div class="row">
-       <% if(requestMethod.equalsIgnoreCase("GET")) { %>
+       <% if(true) { %>
            <textarea id="render" style="width:0px;height:0px;display:none;" class="hidden"></textarea>
            <div id="agileFormHolder"></div>           
            <script data-main="misc/formbuilder/main.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
