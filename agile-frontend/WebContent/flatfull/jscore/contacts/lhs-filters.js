@@ -60,6 +60,9 @@ function loadCustomFiledsFilters(fields, cel, is_company) {
 	{
 		var selected = $(this).val();
 		$(this).parent().find('div.condition_container').addClass('hide');
+		if($(this).val() == 'DEFINED' || $(this).val() == 'NOT_DEFINED') {
+			submitLhsFilter();
+		}
 		$(this).parent().find('div.condition_container.'+selected).find('input').val("").attr('prev-val', "");
 		$(this).parent().find('div.condition_container.'+selected).find('select').val("").attr('prev-val', "");;
 		$(this).parent().find('div.condition_container.'+selected).removeClass('hide');

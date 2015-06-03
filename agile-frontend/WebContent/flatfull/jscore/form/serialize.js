@@ -202,8 +202,9 @@ function serializeLhsFilters(element)
 		
 		var RHS_ELEMENT = $(currentElement).find('.'+CONDITION).find('#RHS').children();
 		var RHS_NEW_ELEMENT = $(currentElement).find('.'+CONDITION).find('#RHS_NEW').children();
-		
-		RHS_VALUE = $(RHS_ELEMENT).val().trim();
+		if($(RHS_ELEMENT).val() != undefined) {			
+			RHS_VALUE = $(RHS_ELEMENT).val().trim();
+		}
 		if ($(RHS_ELEMENT).hasClass("date") && RHS_VALUE && RHS_VALUE != "") {
 			var date = new Date($(RHS_ELEMENT).val());
 			RHS_VALUE = getGMTEpochFromDate(date);
@@ -218,7 +219,7 @@ function serializeLhsFilters(element)
 		}
 		
 		// Set if value of input/select is valid
-		if (RHS_VALUE && RHS_VALUE != null && RHS_VALUE != "") {
+		if ((RHS_VALUE && RHS_VALUE != null && RHS_VALUE != "") || CONDITION =="DEFINED" || CONDITION =="NOT_DEFINED") {
 			//if rhs_new exists and is empty dont consider this condition.
 			if(RHS_NEW_ELEMENT && RHS_NEW_ELEMENT.length > 0 ) {
 				if(!RHS_NEW_VALUE || RHS_NEW_VALUE == null || RHS_NEW_VALUE == "") {
