@@ -336,6 +336,18 @@
             			TBD New Email
        				</div>
         			<!-- Add button -->
+
+					<div class="ellipsis-multiline m-b-md" rel="tooltip" id="trigger-inbound-mail-event">
+            			<small><i class="icon-info-sign"></i> For Agile CRM to recognize your emails, please setup <a class="inbound-help-text">{{inboundMail}}</a> as forwarding email at your email server. When there is a new email to this address, the From address will be added to your Contacts and to the Campaign (in case it is a new Contact).</small>								
+       				</div>
+
+					<div class="checkbox">
+                    	<label class="i-checks i-checks-sm">
+                        	<input type="checkbox" name="new_email_trigger_run_on_new_contacts"><i></i>
+	                            Run only on new Contacts
+						</label>
+                    </div>
+
         			<div>
             			<a class="btn btn-sm btn-default" href="#">Go</a>
         			</div>
