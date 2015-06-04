@@ -24,23 +24,16 @@ define([
 			    		  
 			    		  _agile.set_account($("#_agile_api").val(), $("#_agile_domain").val());
 			    		  
-			    		  console.log($("#_agile_api").val()+","+ $("#_agile_domain").val());
-			    		  
-			    		  $('#agile-form').attr("method","POST");
-			    		  var agileFormSubmitURL = "#";
-			    		  $('#agile-form').attr("action",agileFormSubmitURL);
+//			    		  console.log($("#_agile_api").val()+","+ $("#_agile_domain").val());
+//			    		  
+//			    		  $('#agile-form').attr("method","POST");
+//			    		  var agileFormSubmitURL = "#";
+//			    		  $('#agile-form').attr("action",agileFormSubmitURL);
 			    		  
 			    		  var newRedirectHiddenField = $("#_agile_redirect_url").val();
-			    		  if(typeof newRedirectHiddenField != "undefined") {
+			    		  if(typeof newRedirectHiddenField != "undefined" && newRedirectHiddenField == "#") {
 			    			  $("#_agile_redirect_url").val("https://"+$("#_agile_domain").val()+".agilecrm.com/agileform_thankyou.jsp");
-			    		  }
-			    		 
-			    		  //changing redirect url - for old form support
-			    		  if($('#agile-form-data').length != 0) {
-			    			  var agile_form_data = $('#agile-form-data').attr('name').split(" ");
-				    		  agile_form_data[2] = agileFormSubmitURL;
-				    		  $('#agile-form-data').attr('name',agile_form_data.join(" "));  
-			    		  }			    		  
+			    		  }		    		  
 			    		  
 			    	  }
 				}

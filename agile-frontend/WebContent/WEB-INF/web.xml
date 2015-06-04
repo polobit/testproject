@@ -881,5 +881,14 @@
 		<servlet-name>FacebookPageServlet</servlet-name>
 		<url-pattern>/fbpage</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>FacebookPageCallbackServlet</servlet-name>
+		<servlet-class>com.agilecrm.facebookpage.FacebookPageCallbackServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FacebookPageCallbackServlet</servlet-name>
+		<url-pattern>/fbpagecallback</url-pattern>
+	</servlet-mapping>
+	
 	
 </web-app>

@@ -22,6 +22,8 @@ $(function(){
 		    data : formData,
 		    success: function(data, textStatus, jqXHR){
 		       if(data == "true") {
+		    	   $('#formToUse').prop('selectedIndex',0);
+		    	   $('#facebookTabPage').prop('selectedIndex',0);
 		    	   $("#statusMessageHolder").html("Done. Form added to <a target=\"_blank\" href=\"https://www.facebook.com/pages/null/"+facebookPageId+"?sk=app_"+AgileFacebookAppId+"\">your Facebook page.</a><br>");
 		       } else {
 		    	   $("#statusMessageHolder").html("Something went wrong, please try again.");

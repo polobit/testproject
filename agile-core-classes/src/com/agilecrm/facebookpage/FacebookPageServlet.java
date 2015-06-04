@@ -23,7 +23,7 @@ public class FacebookPageServlet extends HttpServlet
 
     private static enum ACTIONS
     {
-	GET_DETAILS, CALLBACK, SAVE_DETAILS, DELETE_TAB
+	GET_DETAILS, SAVE_DETAILS, DELETE_TAB
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -34,7 +34,6 @@ public class FacebookPageServlet extends HttpServlet
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
 	String action = request.getParameter("action");
-	HttpSession currentSession = request.getSession();
 	PrintWriter out = response.getWriter();
 	if (action != null && action.trim() != "")
 	{
@@ -51,13 +50,6 @@ public class FacebookPageServlet extends HttpServlet
 		{
 		    e.printStackTrace();
 		}
-		break;
-	    case CALLBACK:
-	    response.setContentType("text/plain");
-		currentSession.setAttribute("fbpage_user_accesstoken", FacebookPageUtil.getAccessToken(request.getParameter("code")));
-		currentSession.setAttribute("fbpage_logged_in", true);
-		System.out.println(currentSession.getAttribute("fbpage_user_accesstoken"));
-		response.sendRedirect("/#fbpagetab");
 		break;
 	    case DELETE_TAB:
 		response.setContentType("text/plain");

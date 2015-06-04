@@ -59,6 +59,15 @@ public class FacebookPage
 
     public void delete()
     {
-	dao.delete(this);
+    String oldNameSpace = NamespaceManager.get();
+    NamespaceManager.set("");
+    try
+    {
+    	dao.delete(this);
+    }
+    finally
+    {
+        NamespaceManager.set(oldNameSpace);
+    }
     }
 }
