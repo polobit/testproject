@@ -34,7 +34,9 @@ public class FacebookPageUtil
 
     // set this to your servlet URL for the authentication servlet/filter (this
     // is used for local test)
-    private static String redirect_uri = "http://localhost:8888/fbpagecallback";
+    private static String redirect_uri = "https://my.agilecrm.com/backend/googleservlet";
+    private static String state = "http://localhost:8888/fbpagecallback";
+    
     // / set this to the list of extended permissions you want
     private static final String[] scopes = new String[] { "public_profile", "email", "manage_pages" };
 
@@ -51,7 +53,7 @@ public class FacebookPageUtil
     public static String getLoginRedirectURL()
     {
 	setProductionCallbackURL();
-	return FB_END_POINT + "/oauth/authorize?client_id=" + APP_ID + "&display=page&scope=" + StringUtils.join(scopes, ',') + "&redirect_uri=" + redirect_uri;
+	return FB_END_POINT + "/oauth/authorize?client_id=" + APP_ID + "&display=page&scope=" + StringUtils.join(scopes, ',') + "&redirect_uri=" + redirect_uri + "&state=" + state;
     }
 
     public static String getAuthURL(String authCode)
@@ -65,9 +67,8 @@ public class FacebookPageUtil
     {
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 	{
-		//redirect_uri = "https://my.agilecrm.com/backend/googleservlet?state=https://" + NamespaceManager.get() +  ".agilecrm.com/fbpagecallback";
-		
-		redirect_uri = "https://my.agilecrm.com/backend/googleservlet?state=https://" + NamespaceManager.get() + "-dot-sandbox-dot-agilecrmbeta.appspot.com/fbpagecallback";
+		//state = "https://" + NamespaceManager.get() +  ".agilecrm.com/fbpagecallback";		
+		state = "https://" + NamespaceManager.get() + "-dot-sandbox-dot-agilecrmbeta.appspot.com/fbpagecallback";
 	}
     }
 
