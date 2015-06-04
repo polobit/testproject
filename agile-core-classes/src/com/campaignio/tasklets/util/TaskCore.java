@@ -3,8 +3,6 @@ package com.campaignio.tasklets.util;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.AgileQueues;
-import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
@@ -58,7 +56,7 @@ public class TaskCore
 
 		// Set campaign-status as campaignId-ACTIVE.
 		CampaignStatusUtil.setStatusOfCampaign(AgileTaskletUtil.getId(subscriberJSON), campaignId,
-		        campaignName, Status.ACTIVE);
+			campaignName, Status.ACTIVE);
 
 		// To avoid setting status in Start Node again
 		subscriberJSON.put(_ACTIVE_STATUS_SET, true);
@@ -92,11 +90,15 @@ public class TaskCore
 		// executeWorkflow(campaignJSON, subscriberJSON);
 
 		TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(
-		        AgileTaskletUtil.getId(campaignJSON), subscriberJSON.toString(), namespace);
+			AgileTaskletUtil.getId(campaignJSON), subscriberJSON.toString(), namespace);
+
+		taskletWorkflowDeferredTask.run();
 
 		// Add deferred tasks to pull queue with namespace as tag
-		PullQueueUtil.addToPullQueue(len >= 200 ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE
-		        : AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, taskletWorkflowDeferredTask, namespace);
+		// PullQueueUtil.addToPullQueue(len >= 200 ?
+		// AgileQueues.BULK_CAMPAIGN_PULL_QUEUE
+		// : AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE,
+		// taskletWorkflowDeferredTask, namespace);
 
 	    }
 	    catch (Exception e)

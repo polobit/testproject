@@ -228,6 +228,7 @@ public class BulkOperationsAPI
 	idsFetcher.setLimits();
 
 	int count = 0;
+	UserInfo info = new UserInfo(user);
 	while (idsFetcher.hasNext())
 	{
 
@@ -236,10 +237,10 @@ public class BulkOperationsAPI
 		Set<Key<Contact>> contactSet = idsFetcher.next();
 		count += contactSet.size();
 		CampaignSubscriberDeferredTask task = new CampaignSubscriberDeferredTask(current_user_id, workflowId,
-			NamespaceManager.get(), contactSet, new UserInfo(user));
+			NamespaceManager.get(), contactSet, info);
 
 		// Add to queue
-		Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_SUBSCRIBE_SUBTASK_QUEUE);
+		Queue queue = QueueFactory.getQueue(AgileQueues.BULK_CAMPAIGN_QUEUE);
 		queue.add(TaskOptions.Builder.withPayload(task));
 
 	    }

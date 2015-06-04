@@ -121,14 +121,19 @@ public class ContactFilterIdsResultFetcher
 	    }
 
 	}
+	else if (searchMap != null)
+	{
+	    iterator = getSystemFilter("_dummy");
+	}
 
-	if (this.filter != null) {
+	if (this.filter != null)
+	{
 	    modifyFilterCondition();
 	    SearchRule rule = new SearchRule();
-		rule.LHS = "type";
-		rule.CONDITION = RuleCondition.EQUALS;
-		rule.RHS = filter.contact_type.toString();
-		filter.rules.add(rule);
+	    rule.LHS = "type";
+	    rule.CONDITION = RuleCondition.EQUALS;
+	    rule.RHS = filter.contact_type.toString();
+	    filter.rules.add(rule);
 	}
 
 	BulkActionUtil.setSessionManager(domainUserId);
@@ -239,6 +244,20 @@ public class ContactFilterIdsResultFetcher
     public int getTotalCount()
     {
 	return fetched_count;
+    }
+
+    private Boolean isContacts;
+    private Boolean isCompany;
+
+    public boolean isCompany()
+    {
+	if (isCompany != null)
+	    return isCompany;
+	if (isContacts != null)
+	    return isContacts;
+
+	return true;
+
     }
 
     QueryDocument<Contact> queryInstace = new QueryDocument<Contact>(new ContactDocument().getIndex(), Contact.class);
