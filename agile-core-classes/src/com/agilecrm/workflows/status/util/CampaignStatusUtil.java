@@ -321,20 +321,17 @@ public class CampaignStatusUtil
 			
 			count = query.count();
 			
-			String cursor = null;
+//			String cursor = null;
 			int limit = 200;
  
 			Set<Key<Contact>> contactKeys = null;
 			
-			do
-			{
-			
 				contactKeys = new HashSet<Key<Contact>>();
 				int index = 0;
-				query = query.limit(limit);
+//				query = query.limit(limit);
 				
-				if(cursor != null)
-					query = query.startCursor(Cursor.fromWebSafeString(cursor));
+//				if(cursor != null)
+//					query = query.startCursor(Cursor.fromWebSafeString(cursor));
 			
 				QueryResultIterator<Key<Contact>> iterator = query.fetchKeys().iterator();
 			
@@ -345,18 +342,23 @@ public class CampaignStatusUtil
 					++index;
 					
 					if(index == limit)
-						cursor = iterator.getCursor().toWebSafeString();
+					{
+//						System.out.println("Index " + index + " limit " + limit);
+//						cursor = iterator.getCursor().toWebSafeString();
+						
+						CampaignStatusUpdateDeferredTask task = new CampaignStatusUpdateDeferredTask(Long.parseLong(campaignId), campaignName,
+								NamespaceManager.get(), contactKeys);
+
+						// Add to queue
+						Queue queue = QueueFactory.getQueue(AgileQueues.WORKFLOWS_RELATED_QUEUE);
+						queue.add(TaskOptions.Builder.withPayload(task));
+						
+						System.out.println("Index size is..."+index);
+						contactKeys.clear();
+						index = 0;
+					}
 				}
 				
-				CampaignStatusUpdateDeferredTask task = new CampaignStatusUpdateDeferredTask(Long.parseLong(campaignId), campaignName,
-						NamespaceManager.get(), contactKeys);
-
-				// Add to queue
-				Queue queue = QueueFactory.getQueue(AgileQueues.WORKFLOWS_RELATED_QUEUE);
-				queue.add(TaskOptions.Builder.withPayload(task));
-			
-			}while(StringUtils.isEmpty(cursor));
-
 			return count;
 		}
 		catch (Exception e)

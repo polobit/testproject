@@ -86,6 +86,7 @@ public class CampaignStatusUpdateDeferredTask implements DeferredTask
 
 		try
 		{
+			System.out.println("Sizze of contact key set is " + contactKeySet.size());
 			contacts = Contact.dao.fetchAllByKeys(new ArrayList<Key<Contact>>(contactKeySet));
 		}
 		catch (Exception e)
