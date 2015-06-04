@@ -1,18 +1,32 @@
 package com.agilecrm.workflows.status.util;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.AgileQueues;
+import com.agilecrm.bulkaction.deferred.CampaignStatusUpdateDeferredTask;
+import com.agilecrm.bulkaction.deferred.CampaignSubscriberDeferredTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.session.UserInfo;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.api.datastore.QueryResultIterable;
 import com.google.appengine.api.datastore.QueryResultIterator;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
 /**
@@ -296,6 +310,8 @@ public class CampaignStatusUtil
 	 */
 	private static int setRemoveCampaignStatus(String campaignId)
 	{
+		int count = 0;
+		
 		try
 		{
 			String campaignName = WorkflowUtil.getCampaignName(campaignId);
@@ -303,18 +319,43 @@ public class CampaignStatusUtil
 			Query<Contact> query = Contact.dao.ofy().query(Contact.class)
 					.filter("campaignStatus.status", campaignId + "-" + CampaignStatus.Status.ACTIVE);
 			
-			int count = query.count();
-
-			QueryResultIterator<Contact> iterator = query.iterator();
-
-			while (iterator.hasNext())
+			count = query.count();
+			
+			String cursor = null;
+			int limit = 200;
+ 
+			Set<Key<Contact>> contactKeys = null;
+			
+			do
 			{
-				Contact contact = iterator.next();
+			
+				contactKeys = new HashSet<Key<Contact>>();
+				int index = 0;
+				query = query.limit(limit);
+				
+				if(cursor != null)
+					query = query.startCursor(Cursor.fromWebSafeString(cursor));
+			
+				QueryResultIterator<Key<Contact>> iterator = query.fetchKeys().iterator();
+			
+				while (iterator.hasNext())
+				{
+					contactKeys.add(iterator.next());
+					
+					++index;
+					
+					if(index == limit)
+						cursor = iterator.getCursor().toWebSafeString();
+				}
+				
+				CampaignStatusUpdateDeferredTask task = new CampaignStatusUpdateDeferredTask(Long.parseLong(campaignId), campaignName,
+						NamespaceManager.get(), contactKeys);
 
-				CampaignStatusUtil.setEndCampaignStatus(contact, campaignId, campaignName,
-						CampaignStatus.Status.REMOVED);
-
-			}
+				// Add to queue
+				Queue queue = QueueFactory.getQueue(AgileQueues.WORKFLOWS_RELATED_QUEUE);
+				queue.add(TaskOptions.Builder.withPayload(task));
+			
+			}while(StringUtils.isEmpty(cursor));
 
 			return count;
 		}
@@ -322,8 +363,14 @@ public class CampaignStatusUtil
 		{
 			e.printStackTrace();
 			System.err.println("Exception occured while converting campaign status from Active..." + e.getMessage());
-			return 0;
+			return count;
 		}
+	}
+	
+	public static void setRemoveStatus(List<Contact> contacts, String campaignId, String campaignName)
+	{
+		for(Contact contact: contacts)
+			setEndCampaignStatus(contact, campaignId, campaignName, Status.REMOVED);
 	}
 
 }
