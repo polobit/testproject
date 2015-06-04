@@ -48,7 +48,7 @@ String schedule_prefs=null;
 String meeting_durations=null;
 List<Long>_multiple_users=new ArrayList<Long>();
 URL ur=new URL(url);
-String d_name= NamespaceUtil.getNamespaceFromURL(ur);
+String d_name=domain_name= NamespaceUtil.getNamespaceFromURL(ur);
 if(scheduleid.equalsIgnoreCase("calendar")){
     scheduleid=ar[ar.length-1];
 }
