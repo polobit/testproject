@@ -235,6 +235,13 @@
 	    	deleteCategory(id);
 	    });
 	    
+	    $("#add_new_task_category").die().live("keypress",function(e){
+	    	if(e.keyCode == 13)
+	    	{
+	    		$("#add_task_category").click();
+	    	}
+	    });
+	    
 	};
 	
 	

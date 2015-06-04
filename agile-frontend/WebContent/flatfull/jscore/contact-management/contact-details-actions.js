@@ -22,13 +22,15 @@ $(function(){
 		// Displays contact name, to indicate the task is related to the contact
 		fill_relation(el);
 		agile_type_ahead("task_related_to", el, contacts_typeahead);
-
-		// Fills owner select element
-		populateUsers("owners-list", $("#taskForm"), undefined, undefined,
-				function(data) {
-					$("#taskForm").find("#owners-list").html(data);
-					$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
-					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();					
+		categories.getCategoriesHtml(undefined,function(catsHtml){
+			$('#type',el).html(catsHtml);
+			// Fills owner select element
+			populateUsers("owners-list", $("#taskForm"), undefined, undefined,
+					function(data) {
+						$("#taskForm").find("#owners-list").html(data);
+						$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
+						$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();					
+			});
 		});
     });
 	
