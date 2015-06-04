@@ -23,7 +23,7 @@ import com.campaignio.tasklets.util.TaskletUtil;
  * either unsubscribes from few selected campaigns or all of them
  * 
  * 
- * @author Bhasuri
+ * @author Kona
  * 
  */
 public class Unsubscribe extends TaskletAdapter
@@ -58,14 +58,17 @@ public class Unsubscribe extends TaskletAdapter
 					CampaignStatusUtil.setStatusOfCampaignWithName(subscriberID, campaignID, "", Status.DONE);
 					return;
 				}
+
 			List<String> campaignIDs = getListOfCampaignIDs(nodeJSON, subscriberJSON, subscriberID, campaignJSON);
 
 			int campaignIDsSize = campaignIDs.size();
 
 			List<String> campaignNames = new ArrayList<String>();
 
+			// Returns list of active campaigns
 			List<String> activeCampaigns = ContactUtil.workflowListOfAContact(Long.parseLong(subscriberID));
 
+			// Remove campaigns from cron
 			for (int i = 0; i < campaignIDsSize; i++)
 			{
 				if (activeCampaigns.contains(campaignIDs.get(i)))
@@ -75,15 +78,14 @@ public class Unsubscribe extends TaskletAdapter
 			if (campaignNames.size() != 0)
 				message = getMessage(campaignNames);
 
-			System.out.println("Campaign in all method and the message is: " + message
-					+ " and the campaign names are :" + campaignNames);
+			System.out.println("The message is: " + message + " and the campaign names are :" + campaignNames);
 			LogUtil.addLogToSQL(campaignID, subscriberID, "Contact unsubscribed from " + message,
 					LogType.UNSUBSCRIBE.toString());
 
+			// If current campaigns
 			if (campaignIDs.contains(campaignID))
 			{
 				CampaignStatusUtil.setStatusOfCampaignWithName(subscriberID, campaignID, "", Status.DONE);
-
 				return;
 			}
 		}
@@ -97,13 +99,24 @@ public class Unsubscribe extends TaskletAdapter
 
 	}
 
+	/**
+	 * Unsubscribes all the campaigns and removes them from cron
+	 * 
+	 * @param subscriberJSON
+	 * @param subscriberID
+	 * @param campaignID
+	 * @return true if unsubscribed
+	 */
 	private boolean unsubscribeAll(JSONObject subscriberJSON, String subscriberID, String campaignID)
 	{
 
 		Iterator<String> workflowsIDs;
+
+		// List of active workflow
 		workflowsIDs = ContactUtil.workflowListOfAContact(Long.parseLong(subscriberID)).iterator();
 
 		List<String> campaignName = new ArrayList<String>();
+
 		// remove each workflow from cron and set their status to removed
 		while (workflowsIDs.hasNext())
 		{
@@ -115,8 +128,7 @@ public class Unsubscribe extends TaskletAdapter
 		if (campaignName.size() != 0)
 			message = getMessage(campaignName);
 
-		System.out.println("Campaign in all method and the message is: " + message + " and the campaign names are :"
-				+ campaignName);
+		System.out.println("The message is: " + message + " and the campaign names are :" + campaignName);
 		LogUtil.addLogToSQL(campaignID, subscriberID, "Contact unsubscribed from " + message,
 				LogType.UNSUBSCRIBE.toString());
 		return true;
@@ -142,6 +154,15 @@ public class Unsubscribe extends TaskletAdapter
 		return message;
 	}
 
+	/**
+	 * Returns list of Campaign ids from the select field
+	 * 
+	 * @param nodeJSON
+	 * @param subscriberJSON
+	 * @param subscriberID
+	 * @param campaignJSON
+	 * @return list of campaigns to be unsubscribed
+	 */
 	private List<String> getListOfCampaignIDs(JSONObject nodeJSON, JSONObject subscriberJSON, String subscriberID,
 			JSONObject campaignJSON)
 	{
@@ -149,7 +170,9 @@ public class Unsubscribe extends TaskletAdapter
 		JSONArray jsonArray;
 		try
 		{
+			// This array consists of selected campaigns
 			jsonArray = nodeJSON.getJSONArray(JSON_VALUES);
+
 			int jsonArrayLength = jsonArray.length();
 
 			// Iterate through name/value pairs. First one is the select option
@@ -170,14 +193,19 @@ public class Unsubscribe extends TaskletAdapter
 		}
 		catch (JSONException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			return new ArrayList<String>();
 		}
 
 		return campaignIDs;
 	}
 
+	/**
+	 * Sets status of the campaign to "REMOVED"
+	 * 
+	 * @param workflowID
+	 * @param subscriberID
+	 * @return Campaign Name
+	 */
 	private String setStatus(String workflowID, String subscriberID)
 	{
 

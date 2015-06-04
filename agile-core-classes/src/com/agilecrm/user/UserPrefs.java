@@ -116,14 +116,20 @@ public class UserPrefs
     @NotSaved(IfDefault.class)
     public boolean keyboard_shotcuts = false;
     
-    // user theme settings
+    // user theme settings start
     @NotSaved(IfDefault.class)
     public String menuPosition = "leftcol";
     
+    @NotSaved(IfDefault.class)
     public String layout = "fluid";
     
+    @NotSaved(IfDefault.class)
     public String theme = "1";
-
+    
+    @NotSaved(IfDefault.class)
+    public boolean animations = true;
+    //user theme settings end
+    
     /**
      * UserPrefs Dao.
      */

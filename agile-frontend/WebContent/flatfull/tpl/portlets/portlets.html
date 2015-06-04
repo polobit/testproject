@@ -185,7 +185,7 @@
 </div>
 {{else}}
 <div class="portlet-error-message">
-	No tasks for today
+	No tasks
 </div>
 {{/if}}
 </script>
@@ -225,14 +225,14 @@
 </div>
 {{else}}
 	<div class="portlet-error-message">
-		No calendar events for today
+		No calendar events
 	</div>
 {{/if}}
 </script>
 <script id="portlets-events-model-template" type="text/html">
 <td data="{{id}}" class="data">
 	<div class="portlet-time-view no-inherit">
-		<div style="width: 73%;" class="pull-left m-b-xs">
+		<div style="width: 73%;padding-top:2px;padding-bottom:3px;" class="pull-left m-b-xs text-ellipsis">
 			<span class="label p-l-xs p-r-xxs text-base pos-rlt m-r event-start-time font-bold bg-{{event_label_color color}}" datetime="{{get_AM_PM_format start}}">
 				<i class="arrow right arrow-{{event_label_color color}}" style="right:-8px;"></i>
 				{{get_AM_PM_format start}}
@@ -244,7 +244,7 @@
 		<time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" end}}" >{{get_duration start end}}</time>
 		</div>
 		{{#if this.contacts}}
-			<div class="w-full m-b-xxs text-ellipsis" style="padding-left:70px;">
+			<div class="w-full m-b-xxs text-ellipsis" style="padding-left:79px;">
 				{{#related_to_one contacts}}{{/related_to_one}}
 			</div>
 		{{/if}}
@@ -713,14 +713,31 @@
 					{{else}}
 						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
 					{{/if}} -->
+					<li><a href="#" id="{{id}}-settings" class="portlet-settings icon-wrench" data-toggle="modal"></a></li>
                     <li><i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close" onclick="deletePortlet(this);"></i></li>
 				</ul>
 			</div>
 			<div class="portlet_header_name">
                 <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
                 <span class="portlet-icon-divider"></span> -->
-				<span class="inline-block"><h4 class="font-thin m-t-none text-muted h4">
-                   Today's Events</h4>
+				<span class="inline-block">
+					<h4 class="font-thin m-t-none text-muted h4">
+						{{#if_equals settings.duration "next-7-days"}}
+							Events <small>Next 7 Days</small>
+						{{else}}
+							{{#if_equals settings.duration "this-week"}}
+								Events <small>This Week</small>
+							{{else}}
+								{{#if_equals settings.duration "today-and-tomorrow"}}
+									Events <small>Today and Tomorrow</small>
+								{{else}}
+									{{#if_equals settings.duration "1-day"}}
+										Events <small>Today</small>
+									{{/if_equals}}
+								{{/if_equals}}
+							{{/if_equals}}
+						{{/if_equals}}
+					</h4>
                 </span>
 			</div>
 		</div>
@@ -738,14 +755,35 @@
 					{{else}}
 						<li><a href="#"><i id="{{id}}-collapse" class="portlet-minimize icon-minus"></i></a></li>
 					{{/if}} -->
+					<li><a href="#" id="{{id}}-settings" class="portlet-settings icon-wrench" data-toggle="modal"></a></li>
                     <li><i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close" onclick="deletePortlet(this);"></i></li>
 				</ul>
 			</div>
 			<div class="portlet_header_name">
                 <!-- <i class="{{get_portlet_icon name}} icon-1x"></i>
                 <span class="portlet-icon-divider"></span> -->
-				<span class="inline-block"><h4 class="font-thin m-t-none text-muted h4">
-                   Today's Tasks</h4>
+				<span class="inline-block">
+				<h4 class="font-thin m-t-none text-muted h4">
+					{{#if_equals settings.duration "next-7-days"}}
+						Tasks <small>Next 7 Days</small>
+					{{else}}
+						{{#if_equals settings.duration "this-week"}}
+							Tasks <small>This Week</small>
+						{{else}}
+							{{#if_equals settings.duration "today-and-tomorrow"}}
+								Tasks <small>Today and Tomorrow</small>
+							{{else}}
+								{{#if_equals settings.duration "1-day"}}
+									Tasks <small>Today</small>
+								{{else}}
+									{{#if_equals settings.duration "all-over-due"}}
+										Tasks <small>All Over Due</small>
+									{{/if_equals}}
+								{{/if_equals}}
+							{{/if_equals}}
+						{{/if_equals}}
+					{{/if_equals}}
+				</h4>
                 </span>
 			</div>
 		</div>
@@ -874,6 +912,286 @@
      <div class="portlets" id="{{id}}">&nbsp;</div>
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+
+<script id="portlets-admin-onboarding-model-template" type="text/html">
+	<div class="portlet_header portlet_edit_icons panel-heading b-b-none" style="background: #F9EDBE!important;" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+		<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
+			<ul class="portlet_header_control">
+				<li><i id="{{id}}-close" class="icon-close {{remove_spaces name}}-close" style="cursor:pointer;" onclick="deletePortlet(this);"></i></li>
+			</ul>
+		</div>
+		<div class="portlet_header_name">
+			<span class="inline-block">
+				<h4 class="font-thin m-t-none text-muted h4">Getting started</h4>
+			</span>
+		</div>
+	</div>
+	<div class="portlet_body m-l text-lg">
+		<div>
+			{{#if settings.addUsers.done}}
+				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="addUsers">
+					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="addUsers">
+					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.addUsers.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#users-add">Add users</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#users-add">Add users</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Invite co-workers to Agile and start collaborating on sales.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.importContacts.done}}
+				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="importContacts">
+					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="importContacts">
+					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.importContacts.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#import">Import Contacts</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#import">Import Contacts</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Bulk Contact lists can be as a CSV files from your database or any other CRM.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.setupIntegrations.done}}
+				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="setupIntegrations">
+					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="setupIntegrations">
+					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.setupIntegrations.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#integrations">Setup Integrations</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#integrations">Setup Integrations</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Leverage on our huge set of integrations to make the most out of the app - Email/SMS Gateway, Web Forms, E-Commerce, Payments and more.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.createCampaign.done}}
+				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="createCampaign">
+					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="createCampaign">
+					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.createCampaign.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#workflow-templates">Create a campaign</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#workflow-templates">Create a campaign</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Engage your contacts with beautifully designed campaigns. Send email/SMS, score leads based on behaviour and much more.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.setupTrackingCode.done}}
+				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="setupTrackingCode">
+					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="setupTrackingCode">
+					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.setupTrackingCode.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#analytics-code">Setup tracking code</a></span>
+			{{else}}
+				<span inline-block v-text-bottom"><a href="#analytics-code">Setup tracking code</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Track your contacts when they browse through your website. Score and followup hot leads.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.addWebrule.done}}
+				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="addWebrule">
+					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="addWebrule">
+					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.addWebrule.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#webrules-add">Add a Webrule</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#webrules-add">Add a Webrule</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Turn web visitors into contacts with personalised, timely popup messages.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.upgradePlan.done}}
+				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="upgradePlan">
+					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="upgradePlan">
+					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.upgradePlan.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#subscribe-plan">Upgrade plan</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#subscribe-plan">Upgrade plan</a></span>
+			{{/if}}
+			<!-- {{#if settings.upgradePlan.done}}
+				<small class="p-l-sm onboarding-undo c-p">(undo)</small>
+				{{#if settings.upgradePlan.skip}}
+				{{else}}
+					<small class="p-l-sm onboarding-skip c-p">(skip)</small>
+				{{/if}}
+			{{else}}
+				{{#if settings.upgradePlan.skip}}
+					<small class="p-l-sm onboarding-undo c-p">(undo)</small>
+				{{else}}
+					<small class="p-l-sm onboarding-skip c-p">(skip)</small>
+				{{/if}}
+			{{/if}} -->
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Get the best out of Agile with more automation (campaigns, triggers), access control, telephony, advanced reporting and much more.</p>
+			</div>
+		</div>
+	</div>
+	<div class="portlets" id="{{id}}">&nbsp;</div>
+	<div class="column_position" style="display:none">{{column_position}}</div>
+	<div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+<script id="portlets-user-onboarding-model-template" type="text/html">
+	<div class="portlet_header portlet_edit_icons panel-heading b-b-none" style="background: #F9EDBE!important;" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+		<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
+			<ul class="portlet_header_control">
+				<li><i id="{{id}}-close" class="icon-close {{remove_spaces name}}-close" style="cursor:pointer;" onclick="deletePortlet(this);"></i></li>
+			</ul>
+		</div>
+		<div class="portlet_header_name">
+			<span class="inline-block">
+				<h4 class="font-thin m-t-none text-muted h4">Getting started</h4>
+			</span>
+		</div>
+	</div>
+	<div class="portlet_body m-l text-lg">
+		<div>
+			{{#if settings.setupProfile.done}}
+				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="setupProfile">
+					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="setupProfile">
+					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.setupProfile.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#user-prefs">Setup profile</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#user-prefs">Setup profile</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Get set with your profile, add an avatar, email signature and get going with Agile.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.linkEmailAccount.done}}
+				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="linkEmailAccount">
+					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="linkEmailAccount">
+					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.linkEmailAccount.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#email">Link email account</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#email">Link email account</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>No more BCC'ing emails. Just link your email account and  see entire email history of a contact automatically.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.addWidgets.done}}
+				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="addWidgets">
+					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="addWidgets">
+					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.addWidgets.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#add-widget">Add widgets</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#add-widget">Add widgets</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Get a 360 view of your contact with social data, billing history, support tickets, call history and much more.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.importContacts.done}}
+				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="importContacts">
+					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="importContacts">
+					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.importContacts.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#import">Import Contacts</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#import">Import Contacts</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Bulk Contact lists can be as a CSV files from your database or any other CRM.</p>
+			</div>
+		</div>
+		<div>
+			{{#if settings.createCampaign.done}}
+				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="createCampaign">
+					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				</label>
+			{{else}}
+				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="createCampaign">
+					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				</label>
+			{{/if}}
+			{{#if settings.createCampaign.done}}
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#workflow-templates">Create a campaign</a></span>
+			{{else}}
+				<span class="inline-block v-text-bottom"><a href="#workflow-templates">Create a campaign</a></span>
+			{{/if}}
+			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
+				<p>Automate your sales & marketing processes with awesome campaign workflows using drag-drop visual designer tool.</p>
+			</div>
+		</div>
+	</div>
+	<div class="portlets" id="{{id}}">&nbsp;</div>
+	<div class="column_position" style="display:none">{{column_position}}</div>
+	<div class="row_position" style="display:none">{{row_position}}</div>	
 </script>
 
 <script id="portlets-collection-template" type="text/html">

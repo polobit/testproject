@@ -118,13 +118,14 @@ public class UserPrefsAPI
     @Path("saveTheme")
     @PUT
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void saveTheme(@FormParam("menuPosition") String menuPosition, @FormParam("layout") String layout, @FormParam("theme") String theme){
+    public void saveTheme(@FormParam("menuPosition") String menuPosition, @FormParam("layout") String layout, @FormParam("theme") String theme, @FormParam("animations") boolean  animations){
     	UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
     	try
 	    {
     	currentUserPrefs.menuPosition = menuPosition;
     	currentUserPrefs.layout = layout;
     	currentUserPrefs.theme = theme;
+    	currentUserPrefs.animations = animations;
     	currentUserPrefs.save();
 	    }
     	catch (Exception e)

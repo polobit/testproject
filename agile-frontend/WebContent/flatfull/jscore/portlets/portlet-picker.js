@@ -128,6 +128,17 @@ function set_p_portlets(base_model){
 		else
 			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.statusReportView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w').css('background','#f0f3f4'));
 		
+	}else if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Onboarding"){
+		if(CURRENT_DOMAIN_USER.is_admin)
+			App_Portlets.onboardingView = new Base_Model_View({ model : base_model, template : "portlets-admin-onboarding-model", tagName : 'div' });
+		else
+			App_Portlets.onboardingView = new Base_Model_View({ model : base_model, template : "portlets-user-onboarding-model", tagName : 'div' });
+		
+		if($('.gridster > div:visible > div',this.el).length==0)
+			$('.gridster > div:visible',this.el).html($(App_Portlets.onboardingView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w').css('background','#F9EDBE'));
+		else
+			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.onboardingView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w').css('background','#F9EDBE'));
+		setPortletContentHeight(base_model);
 	}
 	//var itemView = new Base_Model_View({ model : base_model, template : "portlets-model", tagName : 'div', });
 
@@ -202,13 +213,45 @@ function set_p_portlets(base_model){
 			} });
 		App_Portlets.dealsWon[parseInt(pos)].collection.fetch();
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Agenda"){
-		App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda?start_time='+getNewDueDate("TODAY")+'&end_time='+getNewDueDate("TOMORROW"), templateKey : 'portlets-events', individual_tag_name : 'tr',
+		var start_date_str = '';
+		var end_date_str = '';
+		if(base_model.get('settings').duration=='next-7-days'){
+			start_date_str = 'TOMORROW';
+			end_date_str = ''+base_model.get('settings').duration;
+		}else if(base_model.get('settings').duration=='today-and-tomorrow'){
+			start_date_str = 'today';
+			end_date_str = ''+base_model.get('settings').duration;
+		}else if(base_model.get('settings').duration=='this-week'){
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'this-week-end';
+		}else{
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'TOMORROW';
+		}
+		
+		App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda?duration='+base_model.get('settings').duration+'&start_time='+getStartAndEndDatesOnDue(start_date_str)+'&end_time='+getStartAndEndDatesOnDue(end_date_str), templateKey : 'portlets-events', sort_collection : false, individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				addWidgetToGridster(base_model);
 			} });
 		App_Portlets.todayEventsCollection[parseInt(pos)].collection.fetch();
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Today Tasks"){
-		App_Portlets.tasksCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletTodayTasks?start_time='+getNewDueDate("TODAY")+'&end_time='+getNewDueDate("TOMORROW"), templateKey : 'portlets-tasks', individual_tag_name : 'tr',
+		var start_date_str = '';
+		var end_date_str = '';
+		if(base_model.get('settings').duration=='next-7-days'){
+			start_date_str = 'TOMORROW';
+			end_date_str = ''+base_model.get('settings').duration;
+		}else if(base_model.get('settings').duration=='today-and-tomorrow'){
+			start_date_str = 'today';
+			end_date_str = ''+base_model.get('settings').duration;
+		}else if(base_model.get('settings').duration=='this-week'){
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'this-week-end';
+		}else{
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'TOMORROW';
+		}
+		
+		App_Portlets.tasksCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletTodayTasks?duration='+base_model.get('settings').duration+'&start_time='+getStartAndEndDatesOnDue(start_date_str)+'&end_time='+getStartAndEndDatesOnDue(end_date_str), templateKey : 'portlets-tasks', sort_collection : false, individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				addWidgetToGridster(base_model);
 			} });
@@ -251,7 +294,7 @@ function set_p_portlets(base_model){
 				&& base_model.get('name')!="Growth Graph" && base_model.get('name')!="Today Tasks" && base_model.get('name')!="Deals Assigned"
 					&& base_model.get('name')!="Calls Per Person" && base_model.get('name')!="Agile CRM Blog" && base_model.get('name')!="Agenda" 
 						&& base_model.get('name')!="Pending Deals" && base_model.get('name')!="Deals Won" && base_model.get('name')!="Filter Based" 
-							&& base_model.get('name')!="Emails Opened" && base_model.get('name')!="Task Report"){
+							&& base_model.get('name')!="Emails Opened" && base_model.get('name')!="Task Report" && base_model.get('name')!="Onboarding"){
 			$(this).html(getRandomLoadingImg());
 			$(this).html($(itemCollection.render().el));
 			setPortletContentHeight(base_model);
@@ -281,10 +324,38 @@ function set_p_portlets(base_model){
 			$(this).html($(App_Portlets.dealsWon[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Agenda"){
+			/*if(App_Portlets.todayEventsCollection[parseInt(pos)]!=undefined && App_Portlets.todayEventsCollection[parseInt(pos)].collection.length>0){
+				$(this).html(getRandomLoadingImg());
+				$(this).html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
+			}else{
+				if(base_model.get('settings').duration=="next-7-days")
+					$(this).html("<div class='portlet-error-message'>No calendar events for next 7 days</div>");
+				else if(base_model.get('settings').duration=="this-week")
+					$(this).html("<div class='portlet-error-message'>No calendar events for this week</div>");
+				else if(base_model.get('settings').duration=="today-and-tomorrow")
+					$(this).html("<div class='portlet-error-message'>No calendar events for today and tomorrow</div>");
+				else if(base_model.get('settings').duration=="1-day")
+					$(this).html("<div class='portlet-error-message'>No calendar events for today</div>");
+			}*/
 			$(this).html(getRandomLoadingImg());
 			$(this).html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Today Tasks"){
+			/*if(App_Portlets.tasksCollection[parseInt(pos)]!=undefined && App_Portlets.tasksCollection[parseInt(pos)].collection.length>0){
+				$(this).html(getRandomLoadingImg());
+				$(this).html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
+			}else{
+				if(base_model.get('settings').duration=="next-7-days")
+					$(this).html("<div class='portlet-error-message'>No tasks for next 7 days</div>");
+				else if(base_model.get('settings').duration=="this-week")
+					$(this).html("<div class='portlet-error-message'>No tasks for this week</div>");
+				else if(base_model.get('settings').duration=="today-and-tomorrow")
+					$(this).html("<div class='portlet-error-message'>No tasks for today and tomorrow</div>");
+				else if(base_model.get('settings').duration=="1-day")
+					$(this).html("<div class='portlet-error-message'>No tasks for today</div>");
+				else if(base_model.get('settings').duration=="all-over-due")
+					$(this).html("<div class='portlet-error-message'>No overdue tasks</div>");
+			}*/
 			$(this).html(getRandomLoadingImg());
 			$(this).html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
@@ -298,7 +369,11 @@ function set_p_portlets(base_model){
 			var milestoneNumbersList=[];
 			
 			var milestoneMap=[];
-			$('#'+selector).html(getRandomLoadingImg());
+			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+			var topPos = 50*sizey;
+			if(sizey==2 || sizey==3)
+				topPos += 50;
+			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
 					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -393,7 +468,11 @@ function set_p_portlets(base_model){
 			var milestonesList=[];
 			var milestoneValuesList=[];
 			var milestoneMap=[];
-			$('#'+selector).html(getRandomLoadingImg());
+			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+			var topPos = 50*sizey;
+			if(sizey==2 || sizey==3)
+				topPos += 50;
+			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
 					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -510,7 +589,11 @@ function set_p_portlets(base_model){
 			
 			var selector=$(this).attr('id');
 			var url='/core/api/portlets/portletGrowthGraph?tags='+base_model.get('settings').tags+'&frequency='+base_model.get('settings').frequency+'&duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(base_model.get('settings').duration)+'&end-date='+getStartAndEndDatesOnDue("TOMORROW");
-			$('#'+selector).html(getRandomLoadingImg());
+			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+			var topPos = 50*sizey;
+			if(sizey==2 || sizey==3)
+				topPos += 50;
+			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==406){
 					// Show cause of error in saving
@@ -633,7 +716,11 @@ function set_p_portlets(base_model){
 			var totalCallsCountList=[];
 			var domainUsersList=[];
 			var domainUserImgList=[];
-			$('#'+selector).html(getRandomLoadingImg());
+			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+			var topPos = 50*sizey;
+			if(sizey==2 || sizey==3)
+				topPos += 50;
+			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
 					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -724,8 +811,12 @@ function set_p_portlets(base_model){
 			var groupByList=[];
 			var splitByList=[];
 			var splitByNamesList=[];
-			
-			$('#'+selector).html(getRandomLoadingImg());
+			var domainUserNamesList=[];
+			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+			var topPos = 50*sizey;
+			if(sizey==2 || sizey==3)
+				topPos += 50;
+			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
 					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -733,7 +824,7 @@ function set_p_portlets(base_model){
 				}
 				groupByList=data["groupByList"];
 				splitByList=data["splitByList"];
-				
+				domainUserNamesList=data["domainUserNamesList"];
 				var series=[];
 				var text='';
 				var colors;
@@ -765,7 +856,7 @@ function set_p_portlets(base_model){
 					groupByNamesList[index] = getPortletNormalName(name);
 				});
 				
-				taskReportBarGraph(selector,groupByNamesList,series,text);
+				taskReportBarGraph(selector,groupByNamesList,series,text,base_model,domainUserNamesList);
 				
 				addWidgetToGridster(base_model);
 			});
@@ -795,7 +886,9 @@ function set_p_portlets(base_model){
 			var emailsOpenedCount=0;
 			
 			
-			$('#'+selector).html(getRandomLoadingImg());
+			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+			var topPos = 50*sizey;
+			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==403){
 					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -841,6 +934,9 @@ function set_p_portlets(base_model){
 			}else if(base_model.get('settings').duration=='24-hours'){
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'now';
+			}else if(base_model.get('settings').duration=='this-week'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-week-end';
 			}else{
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'TOMORROW';
@@ -1153,7 +1249,7 @@ function dealsFunnelGraph(selector,funnel_data){
 	            marginRight: 20,
 	            className: 'deals-funnel-portlet'
 	        },
-	        colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050" ],
+	        colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
 	        title: {
 	            text: ''
 	        },
@@ -1362,7 +1458,7 @@ function portletGrowthGraph(selector,series,base_model){
 					align : 'right',
 					verticalAlign : 'top'
 				},
-				colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050" ],
+				colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
 		    });
 		});
 	}
@@ -1438,7 +1534,10 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	                		if(this.value==domainUserImgList[i])
 	                			userIndex=i;
 	                	}
-	                    return '<img src="'+this.value+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUsersList[userIndex]+'"/>';
+	                	if(this.value!=undefined && this.value!="")
+	                		return '<img src="'+this.value+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUsersList[userIndex]+'"/>';
+	                	else
+	                		return '<img src="'+gravatarImgForPortlets(25)+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUsersList[userIndex]+'"/>';
 	                },
 	                style : {
 	    				color : '#98a6ad',
@@ -1526,7 +1625,7 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	        exporting: {
 		        enabled: false
 		    },
-		    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", "#fad733" ],
+		    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", "#fad733","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
 		    legend : {
 				itemStyle : {
 					fontSize : '10px',
@@ -1585,11 +1684,11 @@ function setPortletContentHeight(base_model){
 			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)-45+"px");
 			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)-45+"px");
 		}else if(base_model.get("size_y")==2){
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+10-45+"px");
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+10-45+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+25-45+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+25-45+"px");
 		}else if(base_model.get("size_y")==3){
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+20-45+"px");
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+20-45+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+50-45+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+50-45+"px");
 		}
 		
 		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-x","hidden");
@@ -1603,6 +1702,7 @@ function getPortletsCurrencySymbol(){
 }
 function getNumberWithCommasForPortlets(value){
 	value = parseFloat(value);
+	value = Math.round(value);
 	if(value==0)
 		return value;
 
@@ -1630,10 +1730,10 @@ function getPortletsTimeConversion(diffInSeconds){
 		duration += ' '+secs+'s';
 	return duration;
 }
-function taskReportBarGraph(selector,gropuByList,series,text){
+function taskReportBarGraph(selector,groupByList,series,text,base_model,domainUserNamesList){
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
 		$('#'+selector).highcharts({
-			colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050" ],
+			colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
 	        chart: {
 	            type: 'bar',
 	            marginRight: 20
@@ -1642,15 +1742,30 @@ function taskReportBarGraph(selector,gropuByList,series,text){
 	            text: ''
 	        },
 	        xAxis: {
-	            categories: gropuByList,
-	            gridLineWidth : 1,
-	    		gridLineColor : '#F4F4F5',
-	    		labels : {
-	    			style : {
+	            categories: groupByList,
+	            labels: {
+	                formatter: function() {
+	                	if(base_model.get('settings')["group-by"]=="user"){
+	                		var userIndex=0;
+		                	for(var i=0;i<groupByList.length;i++){
+		                		if(this.value==groupByList[i])
+		                			userIndex=i;
+		                	}
+	                		if(this.value!=undefined && this.value!="")
+		                		return '<img src="'+this.value+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUserNamesList[userIndex]+'"/>';
+		                	else
+		                		return '<img src="'+gravatarImgForPortlets(25)+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUserNamesList[userIndex]+'"/>';
+	                	}else
+	                		return this.value;
+	                },
+	                style : {
 	    				color : '#98a6ad',
 	    				fontSize : '11px'
-	    			}
-	    		},
+	    			},
+	                useHTML: true
+	            },
+	            gridLineWidth : 1,
+	    		gridLineColor : '#F4F4F5',
 	    		lineWidth : 0,
 	    		tickWidth : 0
 	        },
@@ -1694,7 +1809,25 @@ function taskReportBarGraph(selector,gropuByList,series,text){
 				borderRadius : 3,
 				style : {
 					color : '#EFEFEF'
-				}
+				},
+				formatter: function() {
+                	if(base_model.get('settings')["group-by"]=="user"){
+                		var userIndex=0;
+	                	for(var i=0;i<groupByList.length;i++){
+	                		if(this.key==groupByList[i])
+	                			userIndex=i;
+	                	}
+                		return  '<div>' + 
+        		        		'<div class="p-n" style="color:'+this.series.color+';">'+domainUserNamesList[userIndex]+' </div>' +
+        		        		'<div class="p-n" style="color:'+this.series.color+';">'+this.series.name+':'+this.y+' </div>' +
+        		        		'</div>';
+                	}else
+                		return  '<div>' + 
+		        				'<div class="p-n" style="color:'+this.series.color+';">'+this.x+' </div>' +
+		        				'<div class="p-n" style="color:'+this.series.color+';">'+this.series.name+':'+this.y+' </div>' + 
+		        				'</div>';
+                },
+                useHTML: true
 			},
 			legend : {
 				itemStyle : {

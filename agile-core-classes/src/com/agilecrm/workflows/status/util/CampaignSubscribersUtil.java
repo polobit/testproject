@@ -1,16 +1,12 @@
 package com.agilecrm.workflows.status.util;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.workflows.status.CampaignStatus;
 
 public class CampaignSubscribersUtil
 {
@@ -64,55 +60,6 @@ public class CampaignSubscribersUtil
 	subscribers.put("campaignStatus.campaign_id", campaignId);
 
 	return dao.fetchAll(max, cursor, subscribers, true, false);
-    }
-
-    /**
-     * Removes campaignStatus from Contact when corresponding workflow is
-     * deleted.
-     * 
-     * @param campaignId
-     *            - CampaignId of campaign that gets deleted.
-     */
-    public static void removeCampaignStatus(String campaignId)
-    {
-
-	// Gets list of contacts whose campaignId matches in campaignStatus
-	List<Contact> contactList = getContactsByCampaignId(campaignId);
-
-	if (contactList == null)
-	    return;
-
-	// Iterate over contacts and removes campaignStatus
-	for (Contact contact : contactList)
-	    removeCampaignStatus(contact, campaignId);
-
-    }
-
-    /**
-     * Removes campaignStatus from campaignStatus list of given contact having
-     * campaign-id.
-     * 
-     * @param contact
-     *            - Contact that subscribed to campaign
-     * @param campaignId
-     *            - Campaign Id.
-     */
-    public static void removeCampaignStatus(Contact contact, String campaignId)
-    {
-	Iterator<CampaignStatus> campaignStatusIterator = contact.campaignStatus.listIterator();
-
-	// Iterates over campaignStatus list.
-	while (campaignStatusIterator.hasNext())
-	{
-	    if (!StringUtils.isEmpty(campaignId) && campaignId.equals(campaignStatusIterator.next().campaign_id))
-	    {
-		campaignStatusIterator.remove();
-		break;
-	    }
-	}
-
-	// save changes
-	contact.save();
     }
 
     /**

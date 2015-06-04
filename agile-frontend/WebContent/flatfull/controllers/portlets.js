@@ -106,7 +106,10 @@ function addNewPortlet(portlet_type,p_name){
 		json['tasks']="all-tasks";
 	}else if(portlet_type=="USERACTIVITY" && p_name=="StatsReport"){
 		json['duration']="yesterday";
-	}
+	}else if(portlet_type=="TASKSANDEVENTS" && p_name=="Agenda")
+		json['duration']="today-and-tomorrow";
+	else if(portlet_type=="TASKSANDEVENTS" && p_name=="TodayTasks")
+		json['duration']="today-and-tomorrow";
 	else if(portlet_type=="RSS" && p_name=="AgileCRMBlog")
 		obj.size_y=2;
 	var portlet = new BaseModel();
@@ -158,8 +161,10 @@ function deletePortlet(el){
 	var p_id = el.id.split("-close")[0];
 	$('#portletDeleteModal').modal('show');
 	$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',p_id);
-	if($('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text()!=undefined && $('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text()!="")
+	if($('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text()!=undefined && $('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()!="" && $('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()!="Getting started")
 		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - "+$('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()+"?");
+	else if($('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text()!=undefined && $('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()=="Getting started")
+		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - "+$('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()+"?<br/>This dashlet can't be added back again.");
 	else
 		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - Activity Overview?");
 }
@@ -262,7 +267,7 @@ $('#portlets-events-model-list > tr').live('click', function(e){
 	    $("#update-event-date-2").val((new Date(model.get('end')*1000)).format(dateFormat));
 	    
 	   	// hide end date & time for all day events
-	    if(event.allDay)
+	    if(model.toJSON().allDay)
 	    {
 	    	$("#update-event-date-2").closest('.row').hide();
 	    	$('#update-event-time-1').closest('.control-group').hide();
@@ -272,7 +277,25 @@ $('#portlets-events-model-list > tr').live('click', function(e){
 	    	$('#update-event-time-1').closest('.control-group').show();
 	    	$("#update-event-date-2").closest('.row').show();
 	    }
-	   	
+	    if (model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
+		{
+			$("[id='event_delete']").attr("id", "delete_web_event");
+			web_event_title = model.toJSON().title;
+			if (model.toJSON().contacts.length > 0)
+			{
+				var firstname = getPropertyValue(model.toJSON().contacts[0].properties, "first_name");
+				if (firstname == undefined)
+					firstname = "";
+				var lastname = getPropertyValue(model.toJSON().contacts[0].properties, "last_name");
+				if (lastname == undefined)
+					lastname = "";
+				web_event_contact_name = firstname + " " + lastname;
+			}
+		}
+		else
+		{
+			$("[id='delete_web_event']").attr("id", "event_delete");
+		}
 	    // Fills owner select element 
 		populateUsersInUpdateActivityModal(model.toJSON());
 		
@@ -378,6 +401,13 @@ function getStartAndEndDatesOnDue(duration){
 		else
 			d.setDate(d.getDate() - (new Date().getDay()+6));
 	}
+	// This week end
+	if (duration == "this-week-end"){
+		if(new Date().getDay()!=0)
+			d.setDate((d.getDate() - (new Date().getDay()-1))+7);
+		else
+			d.setDate((d.getDate() - (new Date().getDay()+6))+7);
+	}
 	//Last week start
 	if(duration == "last-week")
 		d.setDate(d.getDate()-d.getDay()-6);
@@ -421,6 +451,14 @@ function getStartAndEndDatesOnDue(duration){
 	// Last 2 days
 	if (duration == "2-days")
 		d.setDate(d.getDate() - 1);
+	
+	// next 7 days
+	if (duration == "next-7-days")
+		d.setDate(d.getDate() + 8);
+
+	// next 7 days
+	if (duration == "today-and-tomorrow")
+		d.setDate(d.getDate() + 2);
 
 	console.log((getGMTTimeFromDate(d) / 1000));
 

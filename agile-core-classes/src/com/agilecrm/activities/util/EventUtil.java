@@ -22,8 +22,8 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.IcalendarUtil;
-import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -102,6 +102,26 @@ public class EventUtil
     {
 	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
 	return dao.listByProperty("related_contacts = ", contactKey);
+    }
+
+    /**
+     * Gets events related to a particular contact
+     * 
+     * @param contactId
+     *            contact id to get the events related to a contact
+     * @return List of events related to a contact whose starttime is lessthan
+     *         today
+     * @throws Exception
+     */
+    public static List<Event> getContactEventsBeforeToday(Long contactId) throws Exception
+    {
+	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
+	Map<String, Object> conditionsMap = new HashMap<String, Object>();
+	conditionsMap.put("start <", System.currentTimeMillis() / 1000);
+	conditionsMap.put("related_contacts", contactKey);
+
+	// Get tasks before today's time and which are not completed
+	return dao.listByProperty(conditionsMap);
     }
 
     /**
@@ -234,7 +254,7 @@ public class EventUtil
 				toemail.value, null);
 			String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 			EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", toemail.value, null,
-				null, subject, null, null, null, null, null, attachments);
+				null, subject, null, null, null, null, null, null, attachments);
 		    }
 		}
 	    }
@@ -246,7 +266,7 @@ public class EventUtil
 		String[] attachments_to_agile_user = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
 
 		EmailGatewayUtil.sendEmail(null, "noreply@agilecrm.com", "Agile CRM", user.email, null, null, subject,
-			null, null, null, null, null, attachments_to_agile_user);
+			null, null, null, null, null, null, attachments_to_agile_user);
 
 	    }
 	}
@@ -341,7 +361,6 @@ public class EventUtil
      */
     public static List<Event> getLatestEvents(Long starttime)
     {
-	System.out.println("in getLatest Events Domain name " + NamespaceManager.get());
 
 	int duration = 3600;
 	Long currenttime = System.currentTimeMillis() / 1000;
@@ -351,8 +370,6 @@ public class EventUtil
 	    starttime = starttime + 120;
 
 	Long endtime = starttime + duration;
-
-	System.out.println(starttime + "----------------------------" + endtime);
 
 	List<Event> domain_events = new ArrayList<>();
 	List<String> default_events = getDefaultEventNames();
@@ -517,4 +534,80 @@ public class EventUtil
 	}
     }
 
+    /**
+     * sends a mail to contact when deleting web event
+     * 
+     * @param event
+     * @param cancel_reason
+     */
+    public static void sendMailToWebEventAttendee(Event event, String cancel_reason)
+    {
+
+	Contact contact = event.getContacts().get(0);
+	String contactEmail = contact.getContactFieldValue("EMAIL");
+	String first_name = contact.getContactFieldValue("FIRST_NAME");
+	String last_name = contact.getContactFieldValue("LAST_NAME");
+	if (StringUtils.isNotEmpty(last_name))
+	    first_name = first_name + " " + last_name;
+	DomainUser domain_user = DomainUserUtil.getCurrentDomainUser();
+	String user_name = domain_user != null ? domain_user.name : "";
+	String cancel_mail = "<p> Dear " + first_name + ",</p><p><b>" + user_name
+		+ "</b> has cancelled your appointment - &#39;" + event.title + "&#39;</p>";
+	if (StringUtils.isNotEmpty(cancel_reason))
+	{
+	    cancel_mail += "<p> Note from " + user_name + ": " + cancel_reason + "</p>";
+	}
+	EmailGatewayUtil.sendEmail(null, "noreplay@agilecrm.com", "Agile CRM", contactEmail, null, null,
+		"Appointment Cancelled", null, cancel_mail, null, null, null, null);
+    }
+
+    /**
+     * calls this method when end user want to cancel webevent from his mail
+     * 
+     * @param event
+     * @param cancel_reason
+     */
+    public static void deleteWebEventFromClinetEnd(Event event, String cancel_reason)
+    {
+
+	try
+	{
+	    DomainUser domain_user = event.getOwner();
+
+	    String domain_user_name = domain_user.name;
+	    String calendar_url = domain_user.getCalendarURL();
+	    String timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domain_user.id);
+	    if (StringUtils.isEmpty(timezone))
+	    {
+		timezone = domain_user.timezone;
+
+	    }
+	    String event_start_time = WebCalendarEventUtil.getGMTDateInMilliSecFromTimeZone(timezone,
+		    event.start * 1000, new SimpleDateFormat("EEE, MMMM d yyyy, h:mm a (z)"));
+	    String event_title = event.title;
+	    Long duration = (event.end - event.start) / 60;
+	    List<Contact> contacts = event.getContacts();
+	    String client_name = contacts.get(0).getContactFieldValue("FIRST_NAME");
+	    if (StringUtils.isNotEmpty(contacts.get(0).getContactFieldValue("LAST_NAME")))
+	    {
+		client_name.concat(contacts.get(0).getContactFieldValue("LAST_NAME"));
+	    }
+	    String client_email = contacts.get(0).getContactFieldValue("EMAIL");
+	    GoogleCalendarUtil.deleteGoogleEvent(event);
+	    event.delete();
+	    String subject = "<p>" + client_name + " (" + client_email
+		    + ") has cancelled the appointment</p><span>Title: " + event_title + " (" + duration
+		    + " mins)</span><br/><span>Start time: " + event_start_time + "</span>";
+	    if (StringUtils.isNotEmpty(cancel_reason))
+		subject += "<br/><span>Reason: " + cancel_reason + "</span>";
+
+	    EmailGatewayUtil.sendEmail(null, client_email, client_name, domain_user.email, null, null,
+		    "Appointment Cancelled", null, subject, null, null, null, null);
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+    }
 }

@@ -137,6 +137,11 @@ public class SearchUtil
 			splitAddressAndAddToSearch(fields, doc, contactField);
 			continue;
 		}
+		if (customField == null && (field_name.equals(Contact.FIRST_NAME) || field_name.equals(Contact.LAST_NAME))) {
+			 doc.addField(Field.newBuilder().setName(field_name).setText(StringUtils.lowerCase(normalized_value)));
+		    fields.put(field_name, normalized_value);
+			continue;
+		}
 
 	    /*
 	     * If key already exist appends contact field value to respective
@@ -535,11 +540,15 @@ public class SearchUtil
 		if (emailBounceStatus == null || emailBounceStatus.campaign_id == null)
 		    continue;
 
-		emailStatus = emailBounceStatus.campaign_id + "_" + "BOUNCED";
+		if (emailBounceStatus.emailBounceType.equals(EmailBounceType.HARD_BOUNCE))
+			emailStatus = emailBounceStatus.campaign_id + "_" + "HARDBOUNCED";
 
+		if (emailBounceStatus.emailBounceType.equals(EmailBounceType.SOFT_BOUNCE))
+			emailStatus = emailBounceStatus.campaign_id + "_" + "SOFTBOUNCED";
+			
 		// If SPAM, replace with SPAM
 		if (emailBounceStatus.emailBounceType.equals(EmailBounceType.SPAM))
-		    emailStatus = emailStatus.replace("BOUNCED", "SPAM");
+			emailStatus = emailBounceStatus.campaign_id + "_" + "SPAM";
 
 		campaignSearchStatus.add(emailBounceStatus.campaign_id.toString());
 		campaignSearchStatus.add(emailStatus);

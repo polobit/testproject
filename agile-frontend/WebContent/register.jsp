@@ -43,12 +43,16 @@
 <link type="text/css" rel="stylesheet" href="/css/openid-min.css" />
 <link type="text/css" rel="stylesheet" href="/css/signin.css" />
 <link type="text/css" rel="stylesheet" href="/css/phonenumber-lib/intlTelInput.css" />
-<link type="text/css" rel="stylesheet" href="/css/register.css" />
+<link type="text/css" rel="stylesheet" href="flatfull/css/register.css" />
 <link type="text/css" rel="stylesheet" href="/css/signup/bootstrap-select.min.css" />
 
 
 <style>
-@media ( min-width : 900px) {
+
+
+
+
+
 	body {
 		padding-top: 20px;
 		overflow-x: hidden;
@@ -57,7 +61,7 @@
 	.navbar-search {
 		padding-left: 10%
 	}
-}
+
 
 label {
 	display: block !important;
@@ -273,8 +277,8 @@ $.validator.setDefaults({
 											placeholder="Company Name" autocapitalize="off">
 									</div> -->
 									 <div class="form-group login-plan_type">
-									<div style="display:inline-block;float:left;margin-right:5px">
-									<select class="form-control required"  name="plan_type" data-width="100%" style="min-width:175px">
+									<div class="elements-sibling">
+									<select class="form-control required"  name="plan_type" data-width="100%">
 											<option value="" selected disabled>Choose Plan</option>
 											<option value="Free">Free</option>
 											<option value="Starter">Starter</option>
@@ -282,7 +286,7 @@ $.validator.setDefaults({
 											<option value="pro">Pro</option>
 								 	 </select>
 								 	 </div>
-								 	 <div style="display:inline-block;width:180px;margin-bottom:0px!important" class="form-group"> <input
+								 	 <div class="elements-sibling-last"> <input
 											class="input-xlarge field required form-control number" name="users_count"
 											type="text" min="1"
 											placeholder="Users" autocapitalize="off" autofocus>

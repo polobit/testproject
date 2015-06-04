@@ -71,6 +71,7 @@ public class CheckCampaign extends TaskletAdapter
 
 		try
 		{
+			// Checks if there are any campaigns in the given status
 			if (ContactUtil.workflowListOfAContact(Long.parseLong(AgileTaskletUtil.getId(subscriberJSON)),
 					campaignID.equals(ANY_CAMPAIGN) ? null : Long.parseLong(campaignID), campaignStatus).size() > 0)
 			{

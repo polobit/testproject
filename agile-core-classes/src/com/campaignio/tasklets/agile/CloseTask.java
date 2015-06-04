@@ -52,23 +52,29 @@ public class CloseTask extends TaskletAdapter
 
 		try
 		{
-
+			// Gets owner key
 			Key<DomainUser> contactOwnerKey = getContactOwnerDomainKey(subscriberJSON, givenOwnerID);
 
-			Key<Contact> contactKey = getContactKey(subscriberJSON);
+			// Gets contact key
+			Key<Contact> contactKey = AgileTaskletUtil.getContactKey(subscriberJSON);
 
+			// Gets list of incomplete tasks
 			List<Task> incompleteTasks = TaskUtil.getIncompleteTasks(contactOwnerKey, contactKey);
 			String message = "";
 
 			if (incompleteTasks.size() > 0)
 			{
+				// sets tasks as completed
 				TaskUtil.setStatusAsComplete(incompleteTasks);
+
+				// Gets message to be displayed in UI
 				message = getMessage(incompleteTasks);
+
 				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
 						"Marked Task " + message + "  as completed.", LogType.CLOSED_TASK.toString());
 			}
 			else
-				// Creates log for sending email
+
 				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
 						"No tasks found.", LogType.CLOSED_TASK.toString());
 
@@ -82,22 +88,12 @@ public class CloseTask extends TaskletAdapter
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
 	}
 
-	private Key<Contact> getContactKey(JSONObject subscriberJSON)
-	{
-		String contactId = AgileTaskletUtil.getId(subscriberJSON);
-		try
-		{
-			if (!StringUtils.isEmpty(contactId))
-				return new Key<Contact>(Contact.class, Long.parseLong(contactId));
-		}
-		catch (Exception e)
-		{
-			System.out.println("Inside getContactOwnerKey in CloseTask.java :" + e.getMessage());
-			return null;
-		}
-		return null;
-	}
-
+	/**
+	 * @param subscriberJSON
+	 *            - Subscriber json
+	 * @return - Key of the owner of the contact associated with ID inside
+	 *         subscriberJSON
+	 */
 	private Key<DomainUser> getContactOwnerDomainKey(JSONObject subscriberJSON, String givenOwnerID)
 	{
 		try
@@ -121,6 +117,13 @@ public class CloseTask extends TaskletAdapter
 
 	}
 
+	/**
+	 * 
+	 * @param incompleteTasks
+	 *            - List of incomplete tasks
+	 * @return - a message where the name of tasks are comma separated with
+	 *         "and" before the last task
+	 */
 	private String getMessage(List<Task> incompleteTasks)
 	{
 		String message = "";

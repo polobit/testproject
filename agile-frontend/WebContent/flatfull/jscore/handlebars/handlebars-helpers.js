@@ -1162,7 +1162,22 @@ $(function()
 									el = el
 											.concat('<div class="contact-addressview"><div><div class="pull-left hide" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color">');
 
-								$.each(address, function(key, val)
+								if(address.address !== undefined)
+									el = el.concat(address.address+", ");
+
+								if(address.city !== undefined)
+									el = el.concat(address.city+", ");
+
+								if(address.state !== undefined)
+									el = el.concat(address.state+", ");
+
+								if(address.zip !== undefined)
+									el = el.concat(address.zip+", ");
+
+								if(address.country !== undefined)
+									el = el.concat(address.country+".");
+
+								/*$.each(address, function(key, val)
 								{
 									if (--count == 0)
 									{
@@ -1170,7 +1185,7 @@ $(function()
 										return;
 									}
 									el = el.concat(val + ", ");
-								});
+								});*/
 
 								if (properties[i].subtype)
 									el = el.concat('<span class="label bg-light dk text-tiny">' + properties[i].subtype + '</span>');
@@ -1513,7 +1528,7 @@ $(function()
 	{
 		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
 		{
-			var contact_properties = App_Contacts.contactDetailView.model.get('properties')
+			var contact_properties = App_Contacts.contactDetailView.model.get('properties');
 			var currentContactEntity = getPropertyValue(contact_properties, key);
 			var contactEntity = getPropertyValue(properties, key);
 
@@ -1521,6 +1536,12 @@ $(function()
 			{
 				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
 				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
+			}
+			
+			if(App_Contacts.contactDetailView.model.get('type') == 'COMPANY')
+			{
+				currentContactEntity = getPropertyValue(contact_properties, "name") ;
+				contactEntity = getPropertyValue(properties, "name");
 			}
 
 			if (currentContactEntity == contactEntity)
@@ -3631,6 +3652,12 @@ $(function()
 				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
 				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
 			}
+			
+			if(App_Contacts.contactDetailView.model.get('type') == 'COMPANY')
+			{
+				currentContactEntity = getPropertyValue(contact_properties, "name") ;
+				contactEntity = getPropertyValue(properties, "name");
+			}
 
 			if (currentContactEntity == contactEntity)
 				return options.fn(this);
@@ -5519,9 +5546,9 @@ $(function()
 		else if (p_name == 'Deals Assigned')
 			portlet_name = 'Deals Assigned';
 		else if (p_name == 'Agenda')
-			portlet_name = "Today's Events";
+			portlet_name = "Events";
 		else if (p_name == 'Today Tasks')
-			portlet_name = "Today's Tasks";
+			portlet_name = "Tasks";
 		else if (p_name == 'Agile CRM Blog')
 			portlet_name = "Agile CRM Blog";
 		else if (p_name == 'Task Report')
@@ -5675,6 +5702,8 @@ $(function()
 		hours = hours % 12;
 		hours = hours ? hours : 12; // the hour '0' should be '12'
 		minutes = minutes < 10 ? '0' + minutes : minutes;
+		if(hours<10)
+			hours = '0'+hours;
 		var strTime = hours + ':' + minutes + '' + ampm;
 		return strTime;
 	});
@@ -6053,6 +6082,13 @@ $(function()
 
 	Handlebars.registerHelper("toSafeString", function(content){
 		return new Handlebars.SafeString(content);
+	});
+	
+	Handlebars.registerHelper("getPlanLimits", function(key){
+		if(_billing_restriction.currentLimits.planName == "PRO")
+			return "Unlimited";
+		else
+			return _billing_restriction.currentLimits[key];
 	});
 });
 

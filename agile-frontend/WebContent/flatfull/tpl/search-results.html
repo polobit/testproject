@@ -1,49 +1,54 @@
-<script id="search-model-template" type="text/html">	
+	<script id="search-model-template" type="text/html">
 	<td></td>
-	<td class="data" data="{{id}}" style="white-space: nowrap;">
-    	<div class="thumb-sm agile-img m-r-sm">
+	<td class="data" data="{{id}}">
+    <div class="table-resp">
+    	<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px;">
         	{{#if_contact_type "PERSON"}} <img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" /> {{/if_contact_type}}
         	{{#if_contact_type "COMPANY"}} <img class="img-inital r r-2x" {{getCompanyImage "40" "display:inline;"}} /> {{/if_contact_type}}
     	</div>
-    	<div style="height: auto; display: inline-block; vertical-align: top; text-overflow: ellipsis; width: 14em; overflow: hidden;">
-        	{{#if_contact_type "PERSON"}} <b> {{getPropertyValue properties
-        	"first_name"}} {{getPropertyValue properties "last_name"}} </b> <br />
-        	{{getPropertyValue properties "email"}} {{/if_contact_type}}
-        	{{#if_contact_type "COMPANY"}} <b>{{getPropertyValue properties
-        	"name"}}</b></br> {{getPropertyValue properties "url"}} {{/if_contact_type}}
+    	<div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
+        	{{#if_contact_type "PERSON"}} <div class="text-cap custom-link"> {{getPropertyValue properties
+        	"first_name"}} {{getPropertyValue properties "last_name"}} </div> 
+        	<div> <small class="text-muted m-t-xs">{{getPropertyValue properties "email"}} </small></div> {{/if_contact_type}}
+        	{{#if_contact_type "COMPANY"}} <div class="text-cap custom-link"> {{getPropertyValue properties
+        	"name"}}</div> 
+           <div> <small class="text-muted m-t-xs"> {{getPropertyValue properties "url"}} </small> </div>
+{{/if_contact_type}}
     	</div>
+       </div>
 	</td>
-	<td><div style="display:inline-block;vertical-align:top;">
+	<td><div class="text-ellipsis">
 		{{getPropertyValue properties "title"}}<br />
     	{{getPropertyValue properties "company"}}</div>
 	</td>
 	<td>
-		<div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;">
+		<div class="overflow-hidden line-clamp line-clamp-2">
 			{{#each tags}}
 				<span class="label bg-light dk text-tiny">{{this}}</span>
 			{{/each}}
 		</div>
 	</td>
-	<td style="width:6em;">{{lead_score}}</td>
+	<td>{{lead_score}}</td>
 </script>
 <script id="search-collection-template" type="text/html">
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
-    <div class="span12">
+    <div class="col-md-12">
        
             
-            <h3 id="search-query-heading" class="font-thin h3">Search results for "{{query}}"</h3>
-            
-            <div class="btn-group right" id="view-list" style="top:-29px;position:relative">
+            <h3 id="search-query-heading" class="m-n font-thin h3 pull-left">Search results for "{{query}}"</h3>
+            <div class="pull-right">
+            <div class="btn-group" id="view-list">
             </div>
-            <div class="btn-group right" id="filter-list" style="top:-29px;position:relative;margin-right:5px">
+            <div class="btn-group right" id="filter-list">
             </div>
-        
+            </div>
+        <div class="clearfix"></div>
     </div>
 </div>
 </div>
-<div>
-    <div class="span9">
+<div class="row">
+    <div class="col-md-12">
         {{#if this.length}}
         <div class="data">
             <div class="data-container">
@@ -61,25 +66,23 @@
                         <li><a href="#" id="bulk-tags">Add tags</a></li>
                     </ul>
                 </div>
-                <table id="contacts_search" class="table table-striped agile-ellipsis-dynamic onlySorting" url="core/api/bulk/update?action_type=DELETE" style="overflow: scroll">
-                    <colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup>
-					<thead>
+                <table id="contacts_search" class="table table-striped showCheckboxes panel agile-table onlySorting " url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto;">
+                    <thead>
                         <tr>
 							<th></th>
-                            <th>Name</th>
-                            <th>Work</th>
-                            <th>Tags</th>
-                            <th>Lead Score</th>
+                            <th style="width:35%">Name</th>
+                            <th style="width:20%">Work</th>
+                            <th style="width:35%">Tags</th>
+                            <th style="width:10%">Lead Score</th>
                         </tr>
                     </thead>
-                    <tbody id="search-model-list" class="model-list-cursor" route="contact/" style="overflow: scroll;">
+                    <tbody id="search-model-list" class="model-list-cursor" route="contact/">
                     </tbody>
                 </table>
             </div>
         </div>
         {{/if}}
     </div>
-    <div class="span3">
-    </div>
+   
 </div>
 </script>

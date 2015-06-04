@@ -139,6 +139,11 @@ public class Reports implements Serializable
     @JsonIgnore
     public Long getCount()
     {
+	SearchRule rule = new SearchRule();
+	rule.LHS = "type";
+	rule.CONDITION = RuleCondition.EQUALS;
+	rule.RHS = "PERSON";
+	rules.add(rule);
 	return new AppengineSearch<Contact>(Contact.class).query.getCount(rules);
     }
 }

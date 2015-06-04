@@ -46,6 +46,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 		System.out.println("Task started for domain: "+ domain);
 		String oldNamespace = NamespaceManager.get();
 		int currentCount = 0;
+		String failedIds = "";
 
 		NamespaceManager.set(domain);
 		List<Contact> contacts_list = null;
@@ -58,7 +59,11 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 			if(contactSchemaUpdateStats != null) {
 				count = contactSchemaUpdateStats.count;
 				previousCursor = contactSchemaUpdateStats.cursor;
-				updateStats(previousCursor,"RUNNING");
+				failedIds = contactSchemaUpdateStats.failedIds;
+				updateStats(previousCursor,failedIds, "RUNNING");
+				if(previousCursor != null && cursor == null) {
+					cursor = previousCursor;
+				}
 			}
 			ContactDocument contactDocuments = new ContactDocument();
 			contacts_list = Contact.dao.fetchAll(200, cursor, null);
@@ -72,7 +77,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 				e.printStackTrace();
 			}
 			if(contacts_list == null || contacts_list.isEmpty()) {
-				updateStats(null, "COMPLETED");
+				updateStats(null, failedIds, "COMPLETED");
 				return;
 			}
 			AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
@@ -86,9 +91,24 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 				{
 					contact.updated_time = System.currentTimeMillis() / 1000;
 					builderObjects.add(contactDocuments.buildDocument(contact));
-					if(builderObjects.size() >= 50) {
-						search.index.putAsync(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
-						builderObjects.clear();
+					/*try {
+						search.index.putAsync(contactDocuments.buildDocument(contact));
+					} catch(Exception e) {
+						System.out.println("Exception while adding contact to text search: "+contact.id + e);
+						failedIds = failedIds + ", " + contact.id;
+					}*/
+					try {
+						if(builderObjects.size() >= 50) {
+							search.index.putAsync(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
+							builderObjects.clear();
+						}
+					} catch(Exception e) {
+						try {
+							search.index.putAsync(contactDocuments.buildDocument(contact));
+						} catch(Exception e1) {
+							System.out.println("Exception while adding contact to text search: "+contact.id + e);
+							failedIds = failedIds + ", " + contact.id;
+						}
 					}
 				}
 				Contact.dao.putAll(contacts_list);
@@ -107,7 +127,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 					if(previousCursor != null) {
 						System.out.println("New ask started for domain: "+ domain+" after completing "+count);
 						//update stats with new count and cursor.
-						updateStats(previousCursor, "ANOTHER_TASK_CRAETED");
+						updateStats(previousCursor,failedIds, "ANOTHER_TASK_CRAETED");
 						UpdateContactsOfDomainDeferredTask updateContactDeferredTask = new UpdateContactsOfDomainDeferredTask(
 								domain, previousCursor, count);
 						// Create Task and push it into Task Queue
@@ -119,7 +139,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 						queue.addAsync(taskOptions);
 					} else {
 						//update stats to completion.
-						updateStats(previousCursor, "COMPLETED");
+						updateStats(previousCursor,failedIds, "COMPLETED");
 					}
 					break;
 				}
@@ -135,7 +155,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 				
 				//update stats to completion.
 				count+=currentCount;
-				updateStats(previousCursor, "COMPLETED");
+				updateStats(previousCursor,failedIds, "COMPLETED");
 				break;
 			} while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
 			
@@ -168,13 +188,14 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 		}
 	}
 
-	private void updateStats(String previousCursor, String status) {
+	private void updateStats(String previousCursor,String failedIds, String status) {
 		NamespaceManager.set("");
 		try {
 			ContactSchemaUpdateStats contactSchemaUpdateStats = ContactSchemaUpdateStats.get(domain);
 			contactSchemaUpdateStats.count = count;
 			contactSchemaUpdateStats.cursor = previousCursor;
 			contactSchemaUpdateStats.status = status;
+			contactSchemaUpdateStats.failedIds = failedIds;
 			contactSchemaUpdateStats.save();
 		} catch(Exception e) {
 			System.err.println("Exception while updating stats for domain: "+ domain);

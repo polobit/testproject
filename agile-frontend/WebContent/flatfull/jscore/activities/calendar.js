@@ -97,7 +97,7 @@ function showCalendar()
 
 	_init_gcal_options();
 	var calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
-	$('#'+calendarView).addClass('bg-light');
+	$('#' + calendarView).addClass('bg-light');
 	fullCal = $('#calendar_event')
 			.fullCalendar(
 					{
@@ -136,14 +136,15 @@ function showCalendar()
 									console.log('-----------------', eventsURL);
 									$.getJSON(eventsURL, function(doc)
 									{
-										$.each(doc,function(index,data){
-											if(data.color=='red' || data.color=='#f05050')
+										$.each(doc, function(index, data)
+										{
+											if (data.color == 'red' || data.color == '#f05050')
 												data.className = 'b-l b-2x b-danger fc-z-index';
-											else if(data.color=='green' || data.color=='#bbb')
+											else if (data.color == 'green' || data.color == '#bbb')
 												data.className = 'b-l b-2x b-light fc-z-index';
-											else if(data.color=='#36C' || data.color=='#23b7e5' || data.color=='blue')
+											else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
 												data.className = 'b-l b-2x b-warning fc-z-index';
-											data.color='';
+											data.color = '';
 											data.backgroundColor = '#fff';
 										});
 
@@ -157,10 +158,11 @@ function showCalendar()
 								} }, { dataType : 'agile-gcal' }
 						],
 						header : { left : 'prev', center : 'title', right : 'next' },
-						defaultView: calendarView,
-					    viewDisplay: function(view){
-						        createCookie('calendarDefaultView', view.name,90);
-						    },
+						defaultView : calendarView,
+						viewDisplay : function(view)
+						{
+							createCookie('calendarDefaultView', view.name, 90);
+						},
 						loading : function(bool)
 						{
 							if (bool)
@@ -183,50 +185,47 @@ function showCalendar()
 						selectHelper : true,
 						editable : true,
 						theme : false,
-						contentHeight: 400,
-						themeButtonIcons: {
-						    prev: 'fc-icon-left-single-arrow',
-						    next: 'fc-icon-right-single-arrow'
-						},
-						eventMouseover: function(event, jsEvent, view){
+						contentHeight : 400,
+						themeButtonIcons : { prev : 'fc-icon-left-single-arrow', next : 'fc-icon-right-single-arrow' },
+						eventMouseover : function(event, jsEvent, view)
+						{
 							calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 							var reletedContacts = '';
-							if(event.contacts.length>0)
+							if (event.contacts.length > 0)
 								reletedContacts += '<i class="icon-user text-muted m-r-xs"></i>'
-							for(var i=0;i<event.contacts.length;i++){
-								if(event.contacts[i].entity_type=="contact_entity"){
+							for (var i = 0; i < event.contacts.length; i++)
+							{
+								if (event.contacts[i].entity_type == "contact_entity")
+								{
 									var last_name = getPropertyValue(event.contacts[i].properties, "last_name");
 									if (last_name == undefined)
 										last_name = "";
-									reletedContacts += '<a class="text-info" href="#contact/'+event.contacts[i].id+'">'+getPropertyValue(event.contacts[i].properties, "first_name")+' '+last_name+'</a>';
+									reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
+											event.contacts[i].properties, "first_name") + ' ' + last_name + '</a>';
 								}
-									else
-									reletedContacts += '<a class="text-info" href="#contact/'+event.contacts[i].id+'">'+getPropertyValue(event.contacts[i].properties, "name")+'</a>';
-								if(i!=event.contacts.length-1)
+								else
+									reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
+											event.contacts[i].properties, "name") + '</a>';
+								if (i != event.contacts.length - 1)
 									reletedContacts += ', ';
 							}
 							var leftorright = 'left';
 							var pullupornot = '';
-							if(calendarView=="agendaDay")
+							if (calendarView == "agendaDay")
 								leftorright = 'top';
-							else{
-								if(event.start.getDay()==5 || event.start.getDay()==6)
+							else
+							{
+								if (event.start.getDay() == 5 || event.start.getDay() == 6)
 									leftorright = 'right';
 								pullupornot = 'pull-up';
 							}
-							var popoverElement	=	'<div class="fc-overlay '+leftorright+'">'+
-													'<div class="panel bg-white b-a pos-rlt p-sm">'+
-													'<span class="arrow '+leftorright+' '+pullupornot+'"></span>'+
-													'<div class="h4 font-thin m-b-sm"><div class="pull-left">'+event.title+'</div><div class="pull-right"><img class="r-2x" src="'+event.ownerPic+'" height="20px" width="20px" title="'+event.owner.name+'"/></div></div>'+
-													'<div class="line b-b b-light"></div>'+
-													'<div><i class="icon-clock text-muted m-r-xs"></i>'+event.start.format('dd-mmm-yyyy HH:MM')+'</div>'+
-													'<div>'+reletedContacts+'</div>'+
-													'</div>'+
-													'</div>';
+							var popoverElement = '<div class="fc-overlay ' + leftorright + '">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left">' + event.title + '</div><div class="pull-right"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+									.format('dd-mmm-yyyy HH:MM') + '</div>' + '<div>' + reletedContacts + '</div>' + '</div>' + '</div>';
 							$(this).append(popoverElement);
 							$(this).find('.fc-overlay').show();
 						},
-						eventMouseout: function(event, jsEvent, view){
+						eventMouseout : function(event, jsEvent, view)
+						{
 							$(this).find('.fc-overlay').hide();
 							$(this).find('.fc-overlay').remove();
 						},
@@ -311,21 +310,22 @@ function showCalendar()
 							event.end = new Date(event.end).getTime() / 1000;
 							if (event.end == null || event.end == 0)
 								event.end = event.start;
-							if(event1.className=="b-l,b-2x,b-danger,fc-z-index")
+							if (event1.className == "b-l,b-2x,b-danger,fc-z-index")
 								event.color = "red";
-							else if(event1.className=="b-l,b-2x,b-light,fc-z-index")
+							else if (event1.className == "b-l,b-2x,b-light,fc-z-index")
 								event.color = "green";
-							else if(event1.className=="b-l,b-2x,b-warning,fc-z-index")
+							else if (event1.className == "b-l,b-2x,b-warning,fc-z-index")
 								event.color = "#36C";
-							var jsoncontacts=event.contacts;
-							var _contacts=[];
-							for(var i in jsoncontacts){
+							var jsoncontacts = event.contacts;
+							var _contacts = [];
+							for ( var i in jsoncontacts)
+							{
 								_contacts.push(jsoncontacts[i].id);
-								
+
 							}
 							delete event.contacts;
 							delete event.owner;
-							event.contacts=_contacts;
+							event.contacts = _contacts;
 							var eventModel = new Backbone.Model();
 							eventModel.url = 'core/api/events';
 
@@ -340,13 +340,13 @@ function showCalendar()
 						 */
 						eventClick : function(event)
 						{
-							if(event.className=="b-l,b-2x,b-danger,fc-z-index")
+							if (event.className == "b-l,b-2x,b-danger,fc-z-index")
 								event.color = "red";
-							else if(event.className=="b-l,b-2x,b-light,fc-z-index")
+							else if (event.className == "b-l,b-2x,b-light,fc-z-index")
 								event.color = "green";
-							else if(event.className=="b-l,b-2x,b-warning,fc-z-index")
+							else if (event.className == "b-l,b-2x,b-warning,fc-z-index")
 								event.color = "#36C";
-							
+
 							if (isNaN(event.id))
 								return;
 							// Deserialize
@@ -378,9 +378,28 @@ function showCalendar()
 								$("#update-event-date-2").closest('.row').show();
 							}
 
+							if (event.type == "WEB_APPOINTMENT" && parseInt(new Date(event.start).getTime() / 1000) > parseInt(new Date().getTime() / 1000))
+							{
+								$("[id='event_delete']").attr("id", "delete_web_event");
+								web_event_title = event.title;
+								if (event.contacts.length > 0)
+								{
+									var firstname = getPropertyValue(event.contacts[0].properties, "first_name");
+									if (firstname == undefined)
+										firstname = "";
+									var lastname = getPropertyValue(event.contacts[0].properties, "last_name");
+									if (lastname == undefined)
+										lastname = "";
+									web_event_contact_name = firstname + " " + lastname;
+								}
+							}
+							else
+							{
+								$("[id='delete_web_event']").attr("id", "event_delete");
+							}
 							// Show edit modal for the event
 							$("#updateActivityModal").modal('show');
-							
+
 							// Fills owner select element
 							populateUsersInUpdateActivityModal(event);
 							return false;
@@ -418,9 +437,10 @@ function buildEventFilters()
 			{
 				if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
 					html1 = '<option value=' + user.id + '>Me</option>';
-				else{
-					if(user.domainUser)
-					html += '<option value=' + user.id + '>' + user.domainUser.name + '</option>';
+				else
+				{
+					if (user.domainUser)
+						html += '<option value=' + user.id + '>' + user.domainUser.name + '</option>';
 				}
 			});
 			html += '<option value="">Any</option>';
@@ -591,21 +611,25 @@ $(function()
 		});
 	});
 });
-function changeView(view) {
-    currentView = view;
-    fullCal.fullCalendar('changeView',view);
+function changeView(view)
+{
+	currentView = view;
+	fullCal.fullCalendar('changeView', view);
 };
-function today(){
+function today()
+{
 	fullCal.fullCalendar('today');
 }
-$('.agendaDayWeekMonth').die().live('click',function(){
+$('.agendaDayWeekMonth').die().live('click', function()
+{
 	currentView = $(this).attr('id');
-	fullCal.fullCalendar('changeView',currentView);
-	$(this).parent().find('button').each(function(){
-		if($(this).attr('id')==currentView)
+	fullCal.fullCalendar('changeView', currentView);
+	$(this).parent().find('button').each(function()
+	{
+		if ($(this).attr('id') == currentView)
 			$(this).addClass('bg-light');
 		else
 			$(this).removeClass('bg-light');
 	});
-	
+
 });

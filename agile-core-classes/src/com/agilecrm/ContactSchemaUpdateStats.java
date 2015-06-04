@@ -32,6 +32,8 @@ public class ContactSchemaUpdateStats
 	public Integer count;
 
 	public Integer total;
+	
+	public String failedIds;
 
 	
 	private static ObjectifyGenericDao<ContactSchemaUpdateStats> dao = new ObjectifyGenericDao<ContactSchemaUpdateStats>(

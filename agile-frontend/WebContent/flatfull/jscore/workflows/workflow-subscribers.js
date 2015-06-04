@@ -9,11 +9,11 @@ $(function()
 					{
 						e.preventDefault();
 						SUBSCRIBERS_SELECT_ALL = true;
-						$('body')
+						$('#content')
 								.find('#subscribers-bulk-select')
 								.css('display', 'block')
 								.html(
-										'Selected All ' + getAvailableActiveContacts() + ' contacts. <a hrer="#" id="select-all-active-contacts-revert" style="cursor:pointer">Select chosen contacts only</a>');
+										'Selected All ' + getAvailableActiveContacts() + ' contacts. <a hrer="#" id="select-all-active-contacts-revert" class="text-info">Select chosen contacts only</a>');
 
 						// On choosing select all option, all the visible
 						// checkboxes in the table should be checked
@@ -31,11 +31,11 @@ $(function()
 					{
 						e.preventDefault();
 						SUBSCRIBERS_SELECT_ALL = false;
-						$('body')
+						$('#content')
 								.find('#subscribers-bulk-select')
 								.css('display', 'block')
 								.html(
-										"Selected " + App_Workflows.active_subscribers_collection.collection.length + " contacts. <a href='#'  id='select-all-active-contacts' >Select all " + getAvailableActiveContacts() + " contacts</a>");
+										"Selected " + App_Workflows.active_subscribers_collection.collection.length + " contacts. <a href='#' id='select-all-active-contacts' class='text-info'>Select all " + getAvailableActiveContacts() + " contacts</a>");
 					});
 });
 
@@ -57,20 +57,22 @@ function toggle_active_contacts_bulk_actions_dropdown(clicked_ele, isBulk)
 	if (clicked_ele)
 			total_available_contacts = getAvailableActiveContacts();
 
-	$('body').find('#subscribers-bulk-select').css('display', 'none');
+	$('#content').find('#subscribers-bulk-select').css('display', 'none');
 
 	// When checked show Delete button
 	if ($(clicked_ele).attr('checked') == 'checked')
 	{
-		$('body').find('#remove-active-from-campaign').css('display', 'inline-block');
+		$('#content').find('#subscribers-block').css('display', 'block');
+		
+		$('#subscribers-block').find('#remove-active-from-campaign').css('display', 'inline-block');
 
 		// To show subscribers-bulk-select only thead is checked i.e., isBulk is true.
 		if (isBulk && total_available_contacts != App_Workflows.active_subscribers_collection.collection.length)
-			$('body')
+		$('#subscribers-block')
 					.find('#subscribers-bulk-select')
 					.css('display', 'block')
 					.html(
-							"Selected " + App_Workflows.active_subscribers_collection.collection.length + " contacts. <a id='select-all-active-contacts' href='#'>Select all " + total_available_contacts + " contacts</a>");
+							"Selected " + App_Workflows.active_subscribers_collection.collection.length + " contacts. <a id='select-all-active-contacts' class='text-info' href='#'>Select all " + total_available_contacts + " contacts</a>");
 
 	}
 	// When unchecked hide Delete button
