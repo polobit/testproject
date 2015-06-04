@@ -359,6 +359,19 @@ public class CampaignStatusUtil
 					}
 				}
 				
+				if(contactKeys.size() > 0)
+				{
+
+					CampaignStatusUpdateDeferredTask task = new CampaignStatusUpdateDeferredTask(Long.parseLong(campaignId), campaignName,
+							NamespaceManager.get(), contactKeys);
+
+					// Add to queue
+					Queue queue = QueueFactory.getQueue(AgileQueues.WORKFLOWS_RELATED_QUEUE);
+					queue.add(TaskOptions.Builder.withPayload(task));
+					
+					System.out.println("Index size is..."+index);
+				}
+				
 			return count;
 		}
 		catch (Exception e)
