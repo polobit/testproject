@@ -3,7 +3,8 @@ $(function()
 	// Total available slots on selected date with selecetd slot
 	var Available_Slots = null;
 	var selected_user_name = null;
-	var Available_Slots = null;
+	var MIDNIGHT_START_TIME = null;
+	var MIDNIGHT_END_TIME = null;
 
 	// Select slot duration 60/30/15min
 	$(".choose").die().live('click', function(e)
