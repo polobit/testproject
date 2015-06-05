@@ -106,7 +106,8 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 						}
 					} catch(Exception e) {
 						try {
-							search.index.putAsync(contactDocuments.buildDocument(contact));
+							for(Builder builder:builderObjects)
+								search.index.putAsync(builder);
 						} catch(Exception e1) {
 							System.out.println("Exception while adding contact to text search: "+contact.id + e);
 							failedIds = failedIds + ", " + contact.id;
@@ -121,7 +122,8 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 						}
 					} catch(Exception e) {
 						try {
-							search.index.putAsync(contactDocuments.buildDocument(contact));
+							for(Builder builder:builderObjects)
+								search.index.putAsync(builder);
 						} catch(Exception e1) {
 							System.out.println("Exception while adding contact to text search: "+contact.id + e);
 							failedIds = failedIds + ", " + contact.id;
