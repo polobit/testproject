@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ws.rs.Consumes;
@@ -28,6 +30,7 @@ import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.BulkActionLog;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.bulkaction.deferred.CampaignStatusUpdateDeferredTask;
 import com.agilecrm.bulkaction.deferred.CampaignSubscriberDeferredTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
@@ -53,7 +56,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CSVUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.workflows.Workflow;
-import com.agilecrm.workflows.status.CampaignStatus.Status;
+import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
@@ -223,7 +226,7 @@ public class BulkOperationsAPI
 	    return;
 
 	ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter,
-		contact_ids, 200, current_user_id);
+		contact_ids, null, 200, current_user_id);
 
 	idsFetcher.setLimits();
 
@@ -590,40 +593,39 @@ public class BulkOperationsAPI
 	    throws JSONException
     {
 
-	// to show in notification
-	int contactSize = 0;
+	Map<String, Object> searchMap = new HashMap<String, Object>();
 
 	// if all active subscribers are selected
 	if (!StringUtils.isEmpty(allActiveSubscribers) && allActiveSubscribers.equals("all-active-subscribers"))
 	{
-
-	    contactSize = CampaignStatusUtil.removeBulkSubscribersFromCampaign(campaign_id);
-
-	    BulkActionNotifications.publishconfirmation(BulkAction.REMOVE_ACTIVE_SUBSCRIBERS,
-		    String.valueOf(contactSize));
-	    return;
+	    searchMap.put("campaignStatus.status", campaign_id + "-" + CampaignStatus.Status.ACTIVE);
 	}
 
-	// Removes and updates for selected active subscribers
-	JSONArray activeContactsJSONArray = new JSONArray(contactIds);
-	contactSize = activeContactsJSONArray.length();
+	ContactFilterIdsResultFetcher fetcher = new ContactFilterIdsResultFetcher(null, null, contactIds, searchMap,
+		200, null);
 
 	String campaignName = null;
 
 	if (!StringUtils.isBlank(campaign_id))
 	    campaignName = WorkflowUtil.getCampaignName(campaign_id);
 
-	for (int i = 0; i < contactSize; i++)
-	{
-	    // Remove from Cron
-	    CronUtil.removeTask(campaign_id, activeContactsJSONArray.getString(i));
+	Long campaignId = Long.parseLong(campaign_id);
 
-	    // Set REMOVED campaignStatus
-	    CampaignStatusUtil.setStatusOfCampaign(activeContactsJSONArray.getString(i), campaign_id, campaignName,
-		    Status.REMOVED);
+	// Removes Cron entities
+	CronUtil.removeTask(campaign_id, null);
+
+	while (fetcher.hasNext())
+	{
+	    CampaignStatusUpdateDeferredTask task = new CampaignStatusUpdateDeferredTask(campaignId, campaignName,
+		    NamespaceManager.get(), fetcher.next());
+
+	    // Add to queue
+	    Queue queue = QueueFactory.getQueue(AgileQueues.WORKFLOWS_RELATED_QUEUE);
+	    queue.addAsync(TaskOptions.Builder.withPayload(task));
 	}
 
-	BulkActionNotifications.publishconfirmation(BulkAction.REMOVE_ACTIVE_SUBSCRIBERS, String.valueOf(contactSize));
+	BulkActionNotifications.publishconfirmation(BulkAction.REMOVE_ACTIVE_SUBSCRIBERS,
+		String.valueOf(fetcher.getTotalCount()));
     }
 
     /**

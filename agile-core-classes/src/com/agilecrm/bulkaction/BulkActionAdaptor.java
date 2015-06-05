@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;

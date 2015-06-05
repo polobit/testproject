@@ -41,8 +41,6 @@ public class CampaignSubscriberDeferredTask extends BulkActionAdaptor
 
     public boolean isValidTask()
     {
-	System.out.println("validating ************************");
-
 	if (StringUtils.isEmpty(namespace))
 	    return false;
 

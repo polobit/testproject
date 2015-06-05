@@ -77,7 +77,7 @@ public class ContactFilterIdsResultFetcher
     }
 
     public ContactFilterIdsResultFetcher(String filter_id, String dynamic_filter, String contact_ids,
-	    int max_fetch_set_size, Long currentDomainUserId)
+	    Map<String, Object> searchMap, int max_fetch_set_size, Long currentDomainUserId)
     {
 	max_fetch_size = Integer.MAX_VALUE;
 
@@ -327,7 +327,8 @@ public class ContactFilterIdsResultFetcher
      */
     private QueryResultIterator<Key<Contact>> getSystemFilter(String id)
     {
-	searchMap = new HashMap<String, Object>();
+	if (searchMap == null)
+	    searchMap = new HashMap<String, Object>();
 
 	// Checks if Filter id contacts "system", which indicates the
 	// request is to load results based on the default filters provided
