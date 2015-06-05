@@ -86,6 +86,8 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 				currentCount += contacts_list.size();
 
 				previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
+
+				Contact.dao.putAll(contacts_list);
 				
 				for (Contact contact : contacts_list)
 				{
@@ -111,12 +113,20 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 						}
 					}
 				}
-				Contact.dao.putAll(contacts_list);
 
-				if(builderObjects.size() > 0) {
-					search.index.putAsync(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
-					builderObjects.clear();
-				}
+				try {
+						if(builderObjects.size() >= 50) {
+							search.index.putAsync(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
+							builderObjects.clear();
+						}
+					} catch(Exception e) {
+						try {
+							search.index.putAsync(contactDocuments.buildDocument(contact));
+						} catch(Exception e1) {
+							System.out.println("Exception while adding contact to text search: "+contact.id + e);
+							failedIds = failedIds + ", " + contact.id;
+						}
+					}
 				
 				System.out.println("Contacts completed so far: "+ currentCount);
 
