@@ -1043,9 +1043,9 @@ public class Contact extends Cursor
 						.getContactFieldByName(Contact.FIRST_NAME);
 				ContactField lastNameField = this
 						.getContactFieldByName(Contact.LAST_NAME);
-				this.first_name = firstNameField != null ? firstNameField.value.toLowerCase()
+				this.first_name = firstNameField != null ? StringUtils.lowerCase(firstNameField.value)
 						: "";
-				this.last_name = lastNameField != null ? lastNameField.value.toLowerCase()
+				this.last_name = lastNameField != null ? StringUtils.lowerCase(lastNameField.value)
 						: "";
 			}
 	    if (StringUtils.isNotEmpty(contact_company_id))
