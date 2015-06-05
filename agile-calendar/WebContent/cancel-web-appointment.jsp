@@ -26,7 +26,7 @@
 			String event_start = null;
 			 URL ur = new URL(url);
 			 String namespace = NamespaceUtil.getNamespaceFromURL(ur);
-			String calendarUrl=null;
+			String calendar_url=null;
 			String domain_url=VersioningUtil.getHostURLByApp(namespace);
 			 Long eventid=Long.parseLong(event_id);
 			Event event = EventUtil.getEvent(eventid);
@@ -44,7 +44,7 @@
 				    timezone = dom_user.timezone;
 				   
 				}
-				calendarUrl=dom_user.getCalendarURL();
+				calendar_url=dom_user.getCalendarURL();
 				appointment_cancel_info = true;
 				event_title=event_title.substring(0,event_title.indexOf("with")).trim();
 				event_start = WebCalendarEventUtil
@@ -313,6 +313,8 @@ a:link, a:active, a:visited, a {
 
 </style>
 <title>Online Appointment Cancellation - <%=user_name %></title>
+<script type="text/javascript" src="../../lib/web-calendar-event/jquery.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validate.min.js"></script>
 </head>
 <body>
 		<%
@@ -327,8 +329,11 @@ a:link, a:active, a:visited, a {
 				<div class="start_time">
 					Event starts <%=event_start%>&nbsp;(<%=duration %>&nbsp;mins)
 				</div>
+				<div class="cancel_reason">
+					<textarea placeholder="Reason for cancellation" rows="7" cols="75" id="cancel_web_appointment_reason" name="cancel_web_appointment_reason"></textarea>
+				</div>
           
-				<br /> <a  class="button" href='<%=domain_url %>appointment/confirmation?event_id=<%=event_id%>'> Cancel Appointment</a>
+				<br /> <a  class="button" id="cancel_appointment_confirmation" href='#'> Cancel Appointment</a>
 			</div>
 		</div>
 		<br />
@@ -373,5 +378,31 @@ a:link, a:active, a:visited, a {
 					
 		%>
 	
+<script type="text/javascript">
+var domain_user_name=<%=mapper.writeValueAsString(user_name)%>;
+$("#cancel_appointment_confirmation").die().live('click', function(e)
+{
+	e.preventDefault();
+	  var event_id=<%=event_id%>
+	 var cancel_reason=$("#cancel_web_appointment_reason").val();
+	 
+	 $.ajax({ url : '/core/api/webevents/calendar/deletewebevent?event_id=' + <%=event_id%>+'&cancel_reason='+cancel_reason, type : 'GET', success : function(data)
+			{
+		 var appointment_success_img2 = "/img/appointment_confirmation.png";
+		 var ser='<div class="wrapper rounded6" id="templateContainer">'
+		         +'<div id="templateBody" class="bodyContent rounded6">'
+		         +'<h3 style="border-bottom: 1px solid #ddd;padding-bottom:8px;margin-bottom:15px;">'
+		         +'<img style="float: left" src='+appointment_success_img2+'><b style="margin-top: -2px;display: inline-block;margin-left: 9px;"><h3>Appointment Cancelled</h3></b></h3>'
+		         +'<div id="appointment">Your appointment with <b>'+domain_user_name+'</b> is cancelled.</div><br/>'
+		         +'<a  class="button" href="<%=calendar_url %>"> Schedule new appointment</a></div></div><br />';
+		 $("#templateContainer").html(ser);	
+		 
+			}, error : function(response)
+			{
+
+				alert("Something is wrong");
+			} });
+});
+</script>
 </body>
 </html>

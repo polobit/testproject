@@ -25,7 +25,7 @@ $('#app-aside-folded').on('click', function(e) {
 		$(".navi > ul > li#documentsmenu > a span").text("Documents");
 	}
 	
-	contactInnerTabsInvoke();
+	//contactInnerTabsInvoke();
 	
 	});
 	

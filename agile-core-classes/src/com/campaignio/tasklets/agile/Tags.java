@@ -69,10 +69,11 @@ public class Tags extends TaskletAdapter
 
 		String[] tagsArray = tags.split(",");
 
+		String campaignID = AgileTaskletUtil.getId(campaignJSON);
 		// Add Tags based on contact
 		if (type.equals(ADD))
 		{
-		    addTags(contact, tagsArray);
+		    addTags(contact, tagsArray, campaignID);
 		    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
 			    "Tags added - " + tags, LogType.TAGS.toString());
 
@@ -108,7 +109,7 @@ public class Tags extends TaskletAdapter
      * @param tags
      *            added tags
      */
-    private static void addTags(Contact contact, String[] tags)
+    private static void addTags(Contact contact, String[] tags, String campaignId)
     {
 	int oldTagsCount = contact.tagsWithTime.size();
 
@@ -131,6 +132,7 @@ public class Tags extends TaskletAdapter
 	    return;
 	}
 
+	contact.bulkActionTracker = campaignId;
 	// To skip validation
 	contact.save(false, true);
 

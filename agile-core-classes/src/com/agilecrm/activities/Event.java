@@ -72,6 +72,11 @@ public class Event extends Cursor
 	};
 
 	/**
+	 * Entity type for timeline
+	 */
+	@NotSaved
+	public String entity_type = "event";
+	/**
 	 * type of event
 	 */
 	@Indexed

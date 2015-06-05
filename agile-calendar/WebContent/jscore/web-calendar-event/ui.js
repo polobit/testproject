@@ -3,7 +3,8 @@ $(function()
 	// Total available slots on selected date with selecetd slot
 	var Available_Slots = null;
 	var selected_user_name = null;
-	var Available_Slots = null;
+	var MIDNIGHT_START_TIME = null;
+	var MIDNIGHT_END_TIME = null;
 
 	// Select slot duration 60/30/15min
 	$(".choose").die().live('click', function(e)
@@ -14,7 +15,6 @@ $(function()
 		Selected_Time = $(this).attr('data');
 
 		var json_meeting_duration = JSON.parse(meeting_duration);
-		console.log(json_meeting_duration);
 		if (Selected_Time == 15)
 		{
 			appointmenttype = json_meeting_duration['15mins'];

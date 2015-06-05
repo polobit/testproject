@@ -76,17 +76,17 @@ cron:
 - description: Google Contacts daily Sync
   url: /backend/contactsutilservlet?type=GOOGLE&cron=true&duration=DAILY
   schedule: every day 23:30
-  target: agile-normal-bulk
+  target: agile-sync
 
 - description: Google Contacts weekly Sync
   url: /backend/contactsutilservlet?type=GOOGLE&cron=true&duration=WEEKLY
   schedule: every friday 23:50 
-  target: agile-normal-bulk
+  target: agile-sync
 
 - description: Google Contacts monthly Sync
   url: /backend/contactsutilservlet?type=GOOGLE&cron=true&duration=MONTHLY
   schedule: 1st friday of month 23:55
-  target: agile-normal-bulk
+  target: agile-sync
 
 - description: Account Billing Restrictions
   url: /backend/billing/restrictions

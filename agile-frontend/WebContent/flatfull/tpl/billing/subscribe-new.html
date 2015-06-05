@@ -31,7 +31,7 @@
   <div class="carousel-inner">
   <div class="active item">
 	<div class="pull-left tweet-img-pricing">
-		<img src="../../img/testimonial-nicolas.png">
+		<img title="Nicolas Woirhaye" src="../../img/testimonial-nicolas.png">
 	</div>
 	<div class="pull-left tweet-txt">
 		<span class="tweet-arrow"></span>
@@ -47,7 +47,7 @@
 
 </div>
  <div class="item">
- <div class="pull-left tweet-img-pricing"><img src="../../img/testimonial-ron.png"></div>
+ <div class="pull-left tweet-img-pricing"><img title="Ron Kaplan" src="../../img/testimonial-ron.png"></div>
 <div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
 <div class="tweet-head">
 <span class="tweet-authname">Ron Kaplan</span><span class="tweet-authdesc">Sales and Business Development - Espresso Logic</span></div>
@@ -61,7 +61,7 @@
  
  
   <div class="item">
-  <div class="pull-left tweet-img-pricing"><img src="../../img/testimonial-gary.png"></div>
+  <div class="pull-left tweet-img-pricing"><img title="Gary Tramer" src="../../img/testimonial-gary.png"></div>
 <div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
 <div class="tweet-head">
 <span class="tweet-authname">Gary Tramer</span><span class="tweet-authdesc">Head of Strategy - WebReception</span></div>
@@ -73,7 +73,7 @@
     </div>
     
    <div class="item"> 
- <div class="pull-left tweet-img-pricing"><img src="../../img/testimonial-mark.png"></div>
+ <div class="pull-left tweet-img-pricing"><img title="Mark Valles" src="../../img/testimonial-mark.png"></div>
 <div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
 <div class="tweet-head">
 <span class="tweet-authname">Mark Valles
@@ -86,7 +86,7 @@ Brilliant! I literally made 3 clicks and I was able to connect and immediately p
 </div>
 </div>
    <div class="item"> 
-   <div class="pull-left tweet-img-pricing"><img src="../../img/testimonial-paulsingh.png"></div>
+   <div class="pull-left tweet-img-pricing"><img title="Paul Singh" src="../../img/testimonial-paulsingh.png"></div>
 <div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
 <div class="tweet-head">
 <span class="tweet-authname">Paul Singh
@@ -110,7 +110,7 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 
 </li> -->
 <!-- <li>
-<div class="pull-left tweet-img-pricing"><img src="../../img/testimonial-ron.png"></div>
+<div class="pull-left tweet-img-pricing"><img title="Ron Kaplan" src="../../img/testimonial-ron.png"></div>
 <div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
 <div class="tweet-head">
 <span class="tweet-authname">Ron Kaplan</span><span class="tweet-authdesc">Sales and Business Development - Espresso Logic</span></div>
@@ -120,7 +120,7 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 <div class="clearfix"></div>
 </li>
 <li>
-<div class="pull-left tweet-img-pricing"><img src="../../img/testimonial-gary.png"></div>
+<div class="pull-left tweet-img-pricing"><img title="Gary Tramer" src="../../img/testimonial-gary.png"></div>
 <div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
 <div class="tweet-head">
 <span class="tweet-authname">Gary Tramer</span><span class="tweet-authdesc">Head of Strategy - WebReception</span></div>
@@ -192,7 +192,7 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 	<div class="panel-heading">
 		<div><i class="icon-group m-r-xs"></i>Users</div>
 	</div>
-	<div class="panel-body">
+	<div class="panel-body pos-rlt" style="min-height:200px">
 		
 		
 		
@@ -235,6 +235,7 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 
 		{{/getSubscriptionBasedOnPlan}}
 		</div> 
+<div class="billingBtnAlign">
 		{{#if billingData}} 
 			{{#check_plan "FREE"}}
 				<a class="btn btn-sm btn-primary" href="#subscribe-plan" id="account_plan_upgrade">
@@ -246,7 +247,7 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 			{{else}} 
 				<a class="btn btn-sm btn-primary" href="#" id="attach_card_notification"> Upgrade </a>
 	 	{{/if}}
-
+</div>
 	<!--<a style="margin-top:6px;float:right;cursor:pointer;text-decoration:none" id="user-plan-details-popover"><i class="icon-user"></i> Plan Details</a> -->
 </div>
 </script>
@@ -282,7 +283,7 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 <script id="email-plan-details-template" type="text/html">
 	<div class="panel panel-default">
 		<div class="panel-heading"><div><i class="icon-envelope m-r-xs"></i>Emails</div></div>
-		<div class="panel-body">
+		<div class="panel-body pos-rlt" style="min-height:200px">
 
 			<form id="gateway" class="form-horizontal hide">
 				<input type="text" name="gateway" class="hidden form-control" value="Stripe" />
@@ -326,6 +327,8 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 			{{/getSubscriptionBasedOnPlan}}
 
 			<div class="clearfix"></div>
+      
+           <div class="billingBtnAlign">
 			{{#if billingData}}
 			{{#if emailPlan}}
 					<a class="btn btn-sm btn-primary pricing-btn m-t-md" href="#subscribe" id="account_email_plan_upgrade">Modify </a>
@@ -336,7 +339,7 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 				<a class="btn btn-sm btn-primary pricing-btn m-t-md" href="#" id="account_email_attach_card"> Upgrade </a> 
 			{{/if}}
 <!--	<a style="margin-top:6px;float:right;cursor:pointer;text-decoration:none" id="email-plan-details-popover"><i class="icon-info-sign"></i> Usage Details</span> -->
-		
+		</div>
 </div>
 </div>
 </script>
@@ -395,7 +398,9 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
             </tbody>
         </table>
 	{{else}}
-		No recent payments.
+		<div class="wrapper-sm">
+			No recent payments.
+		</div>
 	{{/if}}
 </script>
 <script id="charge-model-template" type="text/html">

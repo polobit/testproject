@@ -24,13 +24,13 @@
 	</td>
 	<td>{{lead_score}}</td>
 </script>
-<script id="report-search-collection-template" type="text/html">
+  <script id="report-search-collection-template" type="text/html">
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-md-12">
         
             
-            <h3 class="pull-left font-thin h3">Report Results <small> {{contacts_count}}</small></h3>
+            <h1 class="m-n font-thin h3 pull-left">Report Results  {{contacts_count}} </h1>
             
        <!--     <div class="btn-group right pos-rlt" id="view-list" style="top:-29px;">
             </div>
@@ -61,19 +61,23 @@
                     </ul>
                 </div>
 				<div class="wrapper-md">
-				<div class="row">
-				<div class="col-md-12 col-sm-12 col-xs-12">
-				<div class="panel panel-default">
+				<div>
+				<div>
+				<div class="panel panel-default m-b-none">
 				<div class="panel-heading">Report Results List</div>
+                <div style="overflow-x:auto">
+                <div class="table-responsive">
                 <table id="contacts_search" class="table table-striped m-b-none agile-table panel onlySorting" url="core/api/contacts/bulk" style="table-layout:auto">
                     <thead>
-                        <tr style="text-transform: capitalize;">
+                        <tr class="text-cap">
                             {{reportsContactTableHeadings "fields_set"}}
                         </tr>
                     </thead>
                     <tbody id="report-search-model-list" class="model-list-cursor" route="contact/" style="overflow: scroll;">
                     </tbody>
                 </table>
+                </div>
+                </div>
                 </div>
 				</div>
 				</div>

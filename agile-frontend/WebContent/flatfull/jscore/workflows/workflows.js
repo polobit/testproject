@@ -60,6 +60,9 @@ $(function(){
            // it is holding jQuery object
            var $clicked_button = $(this);
            
+           if(!window.frames.designer.checkWorkflowSize())
+        	   return;
+           
            if($(this).attr('disabled'))
    			return;
            
@@ -139,7 +142,8 @@ $(function(){
             
             error: function(jqXHR, status, errorThrown){ 
               enable_save_button($clicked_button);
-              
+              //var json = JSON.parse(status.responseText);
+              //workflow_alerts(json["title"], json["message"],"workflow-alert-modal");
               // shows Exception message
               alert(status.responseText);
                 }
@@ -204,7 +208,7 @@ $(function(){
 
 		// Stops video on modal hide
 		$(workflow_help_modal).on("hide.bs.modal", function(){
-			$(this).children('div.modal-body').find("iframe").removeAttr("src");
+			$(this).find("iframe").removeAttr("src");
 		});
 	});
 	

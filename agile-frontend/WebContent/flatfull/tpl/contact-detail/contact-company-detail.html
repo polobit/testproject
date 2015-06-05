@@ -47,7 +47,7 @@
 
 								{{getPropertyValue properties "name"}}
 								{{#if_propertyName "url"}}</br>
-									<a class="text-lg" href="{{getHyperlinkFromURL value}}" target="_blank"><i class="fa fa-globe"></i> <!-- {{value}} --></a>
+									<a class="text-lg" href="{{getHyperlinkFromURL value}}" title="{{getHyperlinkFromURL value}}" target="_blank"><i class="fa fa-globe"></i> <!-- {{value}} --></a>
 								{{/if_propertyName}}
 								
 								<div class="text-base text-center m-b-xs text-muted m-t-sm">
@@ -228,8 +228,8 @@
 				</div>
 				</div>
 		<div class="col  bg-white">
-<div class="vbox">
-<div class="row-row">
+<div class="vbox" style="display:block">
+<div class="row-row" style="display:block">
 	<div class="tab-container">
 			<ul class="nav nav-tabs  bg-light" id="contactDetailsTab">
 				<li class="active"><a data-toggle="tab" href="#company-contacts">Contacts</a></li>

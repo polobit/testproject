@@ -4,7 +4,8 @@
 
 // window options funda
 $("#menuPosition").die().live("change", function(){
-	
+	CURRENT_USER_PREFS.menuPosition = $(this).val();
+	$(".theme-save-status").css("display","inline");
 	if($(this).val() == 'top')
 	{
 		$(".app").addClass("app-aside-dock");
@@ -25,6 +26,8 @@ $("#menuPosition").die().live("change", function(){
 });
 
 $("#layout").die().live("change", function(){
+	CURRENT_USER_PREFS.layout = $(this).val();
+	$(".theme-save-status").css("display","inline");
 	if($(this).val() == 'fluid')
 	{
 		$(".app").removeClass("container");
@@ -36,6 +39,21 @@ $("#layout").die().live("change", function(){
 		$(".app").addClass("container");
 		var pos = $("#aside").offset();
 		$(".fixedicons#planView,.fixedicons#helpView").css("left",pos.left);
+	}
+});
+
+$("#animations").die().live("change",function(){
+	CURRENT_USER_PREFS.animations = $(this).is(':checked');
+	$(".theme-save-status").css("display","inline");
+	if($(this).is(':checked'))
+	{
+		$("body").removeClass("disable-anim");
+		$("#theme-and-layout").removeClass("custom-animated");
+	}
+	else
+	{
+		$("body").addClass("disable-anim");
+
 	}
 });
 	
@@ -115,7 +133,8 @@ $("#check-box-layout").die().live('click',function(){
 
 //retrieve the current radio button value	
 	$(".magicMenu input:radio").die().live('click',function(){
-		var inputVal = $(this).val();
+		CURRENT_USER_PREFS.theme = $(this).val();
+		$(".theme-save-status").css("display","inline");
 		var asideClassName = $(this).attr("target-aside-class");
 		var logoClassName = $(this).attr("target-logo-class");
 		var topBarClassName = $(this).attr("target-topbar-class");
@@ -159,7 +178,7 @@ $.fn.removeClassPrefix = function(prefix) {
 
 //funda for contact details
 
-function contactInnerTabsInvoke(el) {
+/*function contactInnerTabsInvoke(el) {
 	
 	
 	
@@ -173,7 +192,18 @@ function contactInnerTabsInvoke(el) {
 		  $("#prev,#next",el).css("display","block");
 		  $("#contactDetailsTab",el).removeAttr('style');
 	   }
-	 }
+	 }*/
 	 
+
+
+$("#mobile-menu").on("click",function(){
+	$("#aside").toggleClass("off-screen");
+});
+
+$("#mobile-menu-settings").on("click",function(){
+	$("#navbar").toggleClass("show");
+});
+	
+
 	 
 	

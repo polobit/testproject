@@ -105,9 +105,9 @@ function setupViews(cel, button_name) {
 	{
 		var el = getTemplate("contact-view-collection");
 		$("#view-list", cel).html(el);
-		$("#view-list", cel).find('.dropdown-menu').find(".dropdown-submenu").on("click",function(e){
+		/*$("#view-list", cel).find('.dropdown-menu').find(".dropdown-submenu").on("click",function(e){
 		    e.stopImmediatePropagation();
-		});
+		});*/
 		// If button_name is defined, then view is selected then the name of
 		// the view is show in the custom view button.
 		if (button_name)
@@ -150,18 +150,20 @@ function updateSelectedSortKey(el) {
 			
 			// Saves Sort By in cookie
 			createCookie('sort_by_name', sort_by);
+			$('.sort').removeClass('bold-text');
+			$(this).addClass('bold-text');
 
 			CONTACTS_HARD_RELOAD=true;
 			// If filter is not set then show view on the default contacts
 			// list
 			if(!App_Contacts.tag_id)
 			{
-				App_Contacts.contacts();
+				App_Contacts.contacts(undefined, undefined, undefined, true);
 				return;
 			}
 			
 			// If tag filter is applied send tags fetch url and tag_id, which is tobe shown on contacts table.
-			App_Contacts.contacts(App_Contacts.tag_id);
+			App_Contacts.contacts(App_Contacts.tag_id, undefined, undefined, true);
 			return;
 		});
 

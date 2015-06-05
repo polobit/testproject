@@ -31,7 +31,9 @@ import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.OnlineCalendarPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.OnlineCalendarUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.IcalendarUtil;
@@ -63,16 +65,19 @@ public class WebCalendarEventUtil
 	 * @throws JSONException
 	 */
 	public static List<List<Long>> getSlots(Long userid, int slotTime, String date, String timezoneName,
-			Long epochTime, Long selectedTime, Long agileuserid, int timezone) throws ParseException, JSONException
+			Long epochTime, Long startTime, Long endTime, Long agileuserid, int timezone) throws ParseException,
+			JSONException
 	{
 		DomainUser domain_user = DomainUserUtil.getDomainUser(userid);
-
-		Long startTime = selectedTime;
-		Long endTime = startTime + 86400;
-
-		System.out.println("------------------  Timezonename " + timezoneName + " start time " + startTime
-				+ "  -- end time  " + endTime);
+		OnlineCalendarPrefs prefs = OnlineCalendarUtil.getCalendarPrefs(userid);
 		String domainUser_timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domain_user.id);
+		String business_hours = null;
+		if (prefs != null)
+		{
+			business_hours = prefs.business_hours;
+		}
+		if (StringUtils.isEmpty(business_hours))
+			business_hours = domain_user.business_hours;
 		if (StringUtils.isEmpty(domainUser_timezone))
 		{
 			domainUser_timezone = domain_user.timezone;
@@ -115,7 +120,7 @@ public class WebCalendarEventUtil
 			{
 				List<Long> slots = possibleSlots.get(i);
 				Long main = slots.get(0);
-				if (checkBussinessHour(main, domainUser_timezone, new JSONArray(domain_user.business_hours), slotTime))
+				if (checkBussinessHour(main, domainUser_timezone, new JSONArray(business_hours), slotTime))
 				{
 					listOfLists.add(slots);
 				}
@@ -648,7 +653,7 @@ public class WebCalendarEventUtil
 	 * @throws ParseException
 	 * @throws IOException
 	 */
-	public static String createEvents(WebCalendarEvent wce, Contact contact) throws JSONException
+	public static synchronized String createEvents(WebCalendarEvent wce, Contact contact) throws JSONException
 	{
 		System.out.println("In createEvents");
 
@@ -662,7 +667,7 @@ public class WebCalendarEventUtil
 		String selectedDateSlot = wce.date;
 
 		String timezone = wce.timezone;
-
+		List<Long> selected_slot = new ArrayList<Long>();
 		DomainUser _user = new DomainUser();
 		_user.name = wce.userName;
 		_user.email = wce.email;
@@ -704,10 +709,17 @@ public class WebCalendarEventUtil
 			List<Long> slot = new ArrayList<Long>();
 			slot.add(explrObject.getLong("start"));
 			slot.add(explrObject.getLong("end"));
-
+			// slot is assigned to selected slot to check availabity out side
+			selected_slot = slot;
 			// Add slot in WebCalendarEvent entity field
 			wce.selectedSlots.add(slot);
 		}
+
+		// checks for the availability of slot
+
+		boolean isAvailable = checkSlotAvailability(wce, selected_slot);
+		if (!isAvailable)
+			return "slot booked";
 
 		// Looping on list, Each selected slot will create new agile event.
 		for (List<Long> slot : wce.selectedSlots)
@@ -733,7 +745,7 @@ public class WebCalendarEventUtil
 			wce.name = saveMe.name;
 
 			// WCE save
-			saveMe.save();
+			// saveMe.save();
 
 			// Check if the email exists with the current email address
 			boolean isDuplicate = ContactUtil.isExists(contact.getContactFieldValue("EMAIL").toLowerCase());
@@ -828,9 +840,8 @@ public class WebCalendarEventUtil
 				}
 
 				EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
-						"Appointment Scheduled", null, usermail, null, null, null, attachments_to_agile_user);
+						"Appointment Scheduled", null, usermail, null, null, null, null, attachments_to_agile_user);
 			}
-
 			else
 			{
 				// Create agile event
@@ -857,14 +868,6 @@ public class WebCalendarEventUtil
 				}
 
 				epoch_start_date = newEvnt.start;
-				String cid = null; // related contact
-
-				// Add contact in event
-				if (cid != null)
-				{
-					newEvnt.contacts = new ArrayList<String>();
-					boolean add = newEvnt.contacts.add(cid);
-				}
 
 				// save agile event
 				newEvnt.save();
@@ -877,22 +880,24 @@ public class WebCalendarEventUtil
 				{
 
 					usermail = "<p>" + wce.userName + " (" + wce.email
-							+ ") has scheduled an appointment </p><span>Type: '" + wce.name + "' (" + wce.slot_time
-							+ "mins)</span><br/><span>Meeting Type: " + wce.phoneNumber + "</span><br/><span>Note: "
+							+ ") has scheduled an appointment </p><span>Duration: " + wce.slot_time
+							+ "mins</span><br/><span>Meeting Type: " + wce.phoneNumber + "</span><br/><span>Note: "
 							+ wce.notes + "</span><br/><p><a href=https://" + user.domain
 							+ ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
 				}
 				else
 				{
 					usermail = "<p>" + wce.userName + " (" + wce.email
-							+ ") has scheduled an appointment </p><span>Type: '" + wce.name + "' (" + wce.slot_time
-							+ "mins)</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href=https://"
+							+ ") has scheduled an appointment </p><span>Duration: " + wce.slot_time
+							+ "mins</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href=https://"
 							+ user.domain + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
 				}
 
 				EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
-						"Appointment Scheduled", null, usermail, null, null, null, attachments_to_agile_user);
+						"Appointment Scheduled", null, usermail, null, null, null, null, attachments_to_agile_user);
+
 			}
+
 		}
 
 		// If user want confirmation, send confirmation email.
@@ -908,17 +913,16 @@ public class WebCalendarEventUtil
 			if (StringUtils.isNotEmpty(wce.phoneNumber) && !"Meeting Type".equalsIgnoreCase(wce.phoneNumber))
 			{
 				client_mail = "<p>You have a new appointment with <b>" + user.name + "</b> (" + user.email
-						+ ")</p><span>Type: '" + wce.name + "' (" + wce.slot_time + "mins)</span><br/><span>Phone: "
-						+ wce.phoneNumber + "</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href="
-						+ cancel_link
+						+ ")</p><span>Duration: " + wce.slot_time + "mins</span><br/><span>Phone: " + wce.phoneNumber
+						+ "</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href=" + cancel_link
 						+ ">Cancel this appointment</a></p><p>This event has been scheduled using <a href=" + link
 						+ ">Agile CRM</a></p>";
 			}
 			else
 			{
 				client_mail = "<p>You have a new appointment with <b>" + user.name + "</b> (" + user.email
-						+ ")</p><span>Type: '" + wce.name + "' (" + wce.slot_time + "mins)</span><br/><span>Note: "
-						+ wce.notes + "</span><br/><p><a href=" + cancel_link
+						+ ")</p><span>Duration: " + wce.slot_time + "mins</span><br/><span>Note: " + wce.notes
+						+ "</span><br/><p><a href=" + cancel_link
 						+ ">Cancel this appointment</a></p><p>This event has been scheduled using <a href=" + link
 						+ ">Agile CRM</a></p>";
 			}
@@ -926,7 +930,7 @@ public class WebCalendarEventUtil
 			String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 
 			EmailGatewayUtil.sendEmail(null, user.email, user.name, wce.email, null, null, "Appointment Scheduled",
-					null, client_mail, null, null, null, attachments);
+					null, client_mail, null, null, null, null, attachments);
 
 		}
 		return "Done";
@@ -1098,7 +1102,7 @@ public class WebCalendarEventUtil
 		String str = hours.substring(0, 2);
 		String mins = hours.substring(3);
 		if ("00".equals(str) || "24".equals(str))
-			return "12:" + mins + "am";
+			return "00:" + mins + "am";
 		else if ("12".equals(str))
 			return "12:" + mins + "pm";
 		Map<String, String> time_map = new HashMap<>();
@@ -1115,5 +1119,43 @@ public class WebCalendarEventUtil
 			return time_map.get(str) + ":" + mins + "pm";
 		}
 
+	}
+
+	/**
+	 * checks the selcted slot availabilty
+	 * 
+	 * @param wce
+	 * @return
+	 */
+
+	public static boolean checkSlotAvailability(WebCalendarEvent wce, List<Long> slot)
+	{
+		List<List<Long>> filledGoogleSlots = GoogleCalendarUtil.getFilledGoogleSlots(wce.domainUserId,
+				(int) (long) wce.slot_time, wce.timezone_offset, wce.timezone, wce.midnight_start_time,
+				wce.midnight_end_time);
+		List<List<Long>> filledAgileSlots = getFilledAgileSlots(wce.agileUserId, (int) (long) wce.slot_time,
+				wce.midnight_start_time, wce.midnight_end_time);
+		boolean googleAvailability = checkSlotInListOfLists(filledGoogleSlots, slot);
+		boolean agileAvailability = checkSlotInListOfLists(filledAgileSlots, slot);
+		if (googleAvailability && agileAvailability)
+			return true;
+		return false;
+	}
+
+	public static boolean checkSlotInListOfLists(List<List<Long>> filledslots, List<Long> selectedslot)
+	{
+		if (filledslots == null || filledslots.isEmpty())
+			return true;
+		Long start_time = selectedslot.get(0);
+		Long end_time = selectedslot.get(1);
+		for (List<Long> slot : filledslots)
+		{
+			if ((slot.get(0) <= start_time && slot.get(1) > start_time)
+					|| (slot.get(0) < end_time && slot.get(1) >= end_time))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 }

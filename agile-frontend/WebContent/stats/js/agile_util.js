@@ -90,7 +90,7 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 		if (button)
 			button.removeAttribute("disabled");
 
-		if (!agile_form.getAttribute("action") || agile_form.getAttribute("action") == "#")
+		if (!agile_form.getAttribute("action") || agile_form.getAttribute("action") == "#" || agile_form.getAttribute("action").indexOf("/formsubmit") != -1)
 			agile_form.setAttribute("action", url);
 		agile_form.submit();
 	}, 1500);

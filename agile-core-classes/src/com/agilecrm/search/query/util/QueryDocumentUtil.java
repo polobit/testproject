@@ -140,8 +140,13 @@ public class QueryDocumentUtil
 					 * Build query by passing condition old query and new query
 					 */
 					// double quotes for exact match of value.
-					query = buildNestedCondition(joinCondition, query, lhs + ":\"" + SearchUtil.normalizeString(value)
-							+ "\"");
+					if ("tags".equals(lhs)) {
+						value = SearchUtil.normalizeTag(value);
+					} else {
+						value = SearchUtil.normalizeString(value);
+					}
+					query = buildNestedCondition(joinCondition, query, lhs
+							+ ":\"" + value + "\"");
 				}
 				else if (condition.equals(SearchRule.RuleCondition.ON)
 						|| condition.equals(SearchRule.RuleCondition.CONTAINS))
@@ -150,9 +155,14 @@ public class QueryDocumentUtil
 				}
 				else if (condition.equals(SearchRule.RuleCondition.NOTEQUALS))
 				{
+					if ("tags".equals(lhs)) {
+						value = SearchUtil.normalizeTag(value);
+					} else {
+						value = SearchUtil.normalizeString(value);
+					}
 					// double quotes for exact match of value.
 					query = buildNotNestedCondition(joinCondition, query,
-							lhs + ":\"" + SearchUtil.normalizeString(value) + "\"");
+							lhs + ":\"" + value + "\"");
 				}
 
 				else if (condition.equals(SearchRule.RuleCondition.NOT_CONTAINS))

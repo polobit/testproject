@@ -489,6 +489,22 @@ function showPortletSettings(el){
 		
 		elData = $('#portletsStatsReportSettingsForm');
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Agenda"){
+		$('#portletsAgendaSettingsModal').modal('show');
+		$('#portletsAgendaSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
+		$("#portlet-type",$('#portletsAgendaSettingsModal')).val(base_model.get('portlet_type'));
+		$("#portlet-name",$('#portletsAgendaSettingsModal')).val(base_model.get('name'));
+		
+		elData = $('#portletsAgendaSettingsForm');
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Today Tasks"){
+		$('#portletsTodayTasksSettingsModal').modal('show');
+		$('#portletsTodayTasksSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
+		$("#portlet-type",$('#portletsTodayTasksSettingsModal')).val(base_model.get('portlet_type'));
+		$("#portlet-name",$('#portletsTodayTasksSettingsModal')).val(base_model.get('name'));
+		
+		elData = $('#portletsTodayTasksSettingsForm');
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
 	}
 	
 	if(base_model.get('name')=="Pending Deals" || base_model.get('name')=="Deals By Milestone" || base_model.get('name')=="Closures Per Person" || base_model.get('name')=="Deals Funnel"){
@@ -644,6 +660,48 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        			postRenderCallback : function(p_el){
 	        				displayTimeAgo(p_el);
 	        			} });
+	        	}else if(data.get('portlet_type')=="TASKSANDEVENTS" && data.get('name')=="Agenda"){
+	        		var start_date_str = '';
+					var end_date_str = '';
+					if(data.get('settings').duration=='next-7-days'){
+						start_date_str = 'TOMORROW';
+						end_date_str = ''+data.get('settings').duration;
+					}else if(data.get('settings').duration=='today-and-tomorrow'){
+						start_date_str = 'today';
+						end_date_str = ''+data.get('settings').duration;
+					}else if(data.get('settings').duration=='this-week'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-week-end';
+					}else{
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'TOMORROW';
+					}
+
+	        		App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda?duration='+data.get('settings').duration+'&start_time='+getStartAndEndDatesOnDue(start_date_str)+'&end_time='+getStartAndEndDatesOnDue(end_date_str), templateKey : 'portlets-events', sort_collection : false, individual_tag_name : 'tr',
+						postRenderCallback : function(p_el){
+
+						} });
+	        	}else if(data.get('portlet_type')=="TASKSANDEVENTS" && data.get('name')=="Today Tasks"){
+	        		var start_date_str = '';
+					var end_date_str = '';
+					if(data.get('settings').duration=='next-7-days'){
+						start_date_str = 'TOMORROW';
+						end_date_str = ''+data.get('settings').duration;
+					}else if(data.get('settings').duration=='today-and-tomorrow'){
+						start_date_str = 'today';
+						end_date_str = ''+data.get('settings').duration;
+					}else if(data.get('settings').duration=='this-week'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-week-end';
+					}else{
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'TOMORROW';
+					}
+					
+	        		App_Portlets.tasksCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletTodayTasks?duration='+data.get('settings').duration+'&start_time='+getStartAndEndDatesOnDue(start_date_str)+'&end_time='+getStartAndEndDatesOnDue(end_date_str), templateKey : 'portlets-tasks', sort_collection : false, individual_tag_name : 'tr',
+						postRenderCallback : function(p_el){
+
+						} });
 	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Stats Report"){
 	        		/*var start_date_str = '';
 	        		var end_date_str = '';
@@ -678,7 +736,8 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        	if(data.get('name')!="Deals By Milestone" && data.get('name')!="Closures Per Person" && data.get('name')!="Deals Funnel" && data.get('name')!="Emails Sent" 
 	        		&& data.get('name')!="Growth Graph" && data.get('name')!="Deals Assigned" && data.get('name')!="Calls Per Person" 
 	        			&& data.get('name')!="Pending Deals" && data.get('name')!="Deals Won" && data.get('name')!="Filter Based" 
-							&& data.get('name')!="Emails Opened" && data.get('name')!="Task Report" && data.get('name')!="Stats Report"){
+							&& data.get('name')!="Emails Opened" && data.get('name')!="Task Report" && data.get('name')!="Stats Report" 
+							&& data.get('name')!="Agenda" && data.get('name')!="Today Tasks"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(portletCollectionView.render().el));
 	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Filter Based"){
@@ -704,6 +763,42 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		App_Portlets.dealsWon[parseInt(pos)].collection.fetch();
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.dealsWon[parseInt(pos)].render().el));
+	        	}else if(data.get('portlet_type')=="TASKSANDEVENTS" && data.get('name')=="Agenda"){
+	        		App_Portlets.todayEventsCollection[parseInt(pos)].collection.fetch();
+	        		/*if(App_Portlets.todayEventsCollection[parseInt(pos)]!=undefined && App_Portlets.todayEventsCollection[parseInt(pos)].collection.length>0){
+	        			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
+	        			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
+	        		}else{
+	        			if(data.get('settings').duration=="next-7-days")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No calendar events for next 7 days</div>");
+						else if(data.get('settings').duration=="this-week")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No calendar events for this week</div>");
+						else if(data.get('settings').duration=="today-and-tomorrow")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No calendar events for today and tomorrow</div>");
+						else if(data.get('settings').duration=="1-day")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No calendar events for today</div>");
+	        		}*/
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
+	        	}else if(data.get('portlet_type')=="TASKSANDEVENTS" && data.get('name')=="Today Tasks"){
+	        		App_Portlets.tasksCollection[parseInt(pos)].collection.fetch();
+	        		/*if(App_Portlets.tasksCollection[parseInt(pos)]!=undefined && App_Portlets.tasksCollection[parseInt(pos)].collection.length>0){
+	        			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
+	        			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
+	        		}else{
+	        			if(data.get('settings').duration=="next-7-days")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No tasks for next 7 days");
+						else if(data.get('settings').duration=="this-week")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No tasks for this week");
+						else if(data.get('settings').duration=="today-and-tomorrow")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No tasks for today and tomorrow");
+						else if(data.get('settings').duration=="1-day")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No tasks for today");
+						else if(data.get('settings').duration=="all-over-due")
+							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No overdue tasks</div>");
+	        		}*/
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
 	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Stats Report"){
 	        		/*$('#'+el.split("-save-modal")[0]).parent().find('.stats_report_portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.stats_report_portlet_body').html($(App_Portlets.statsReport[parseInt(pos)].render().el));*/
@@ -722,7 +817,10 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			}else if(data.get('settings').duration=='24-hours'){
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'now';
-	    			}else{
+	    			}else if(data.get('settings').duration=='this-week'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-week-end';
+					}else{
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'TOMORROW';
 	    			}
@@ -774,7 +872,11 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			var milestoneValuesList=[];
 	    			var milestoneNumbersList=[];
 	    			var milestoneMap=[];
-	    			$('#'+selector).html(getRandomLoadingImg());
+	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			if(sizey==2 || sizey==3)
+	    				topPos += 50;
+	    			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	    			fetchPortletsGraphData(url,function(data1){
 	    				if(data1.status==403){
 	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -855,7 +957,11 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			var milestonesList=[];
 	    			var milestoneValuesList=[];
 	    			var milestoneMap=[];
-	    			$('#'+selector).html(getRandomLoadingImg());
+	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			if(sizey==2 || sizey==3)
+	    				topPos += 50;
+	    			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	    			fetchPortletsGraphData(url,function(data1){
 	    				if(data1.status==403){
 	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -957,7 +1063,11 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		
 	        		var selector=idVal;
 	    			var url='/core/api/portlets/portletGrowthGraph?tags='+data.get('settings').tags+'&frequency='+data.get('settings').frequency+'&duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(data.get('settings').duration)+'&end-date='+getStartAndEndDatesOnDue("TOMORROW");
-	    			$('#'+selector).html(getRandomLoadingImg());
+	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			if(sizey==2 || sizey==3)
+	    				topPos += 50;
+	    			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	    			fetchPortletsGraphData(url,function(data1){
 	    				if(data1.status==406){
 	    					// Show cause of error in saving
@@ -1065,7 +1175,11 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			var totalCallsCountList=[];
 	    			var domainUsersList=[];
 	    			var domainUserImgList=[];
-	    			$('#'+selector).html(getRandomLoadingImg());
+	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			if(sizey==2 || sizey==3)
+	    				topPos += 50;
+	    			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	    			fetchPortletsGraphData(url,function(data2){
 	    				if(data2.status==403){
 	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -1140,8 +1254,12 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		var groupByList=[];
 	    			var splitByList=[];
 	    			var splitByNamesList=[];
-	    			
-	    			$('#'+selector).html(getRandomLoadingImg());
+	    			var domainUserNamesList=[];
+	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			if(sizey==2 || sizey==3)
+	    				topPos += 50;
+	    			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	    			fetchPortletsGraphData(url,function(data2){
 	    				if(data2.status==403){
 	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -1149,7 +1267,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    				}
 	    				groupByList=data2["groupByList"];
 	    				splitByList=data2["splitByList"];
-	    				
+	    				domainUserNamesList=data2["domainUserNamesList"];
 	    				var series=[];
 	    				var text='';
 	    				var colors;
@@ -1182,7 +1300,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    					groupByNamesList[index] = getPortletNormalName(name);
 	    				});
 	    				
-	    				taskReportBarGraph(selector,groupByNamesList,series,text);
+	    				taskReportBarGraph(selector,groupByNamesList,series,text,data,domainUserNamesList);
 	    				
 	    			});
 	        	}
@@ -1206,7 +1324,9 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			var emailsOpenedCount=0;
 	    			
 	    			
-	    			$('#'+selector).html(getRandomLoadingImg());
+	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	    			fetchPortletsGraphData(url,function(data1){
 	    				if(data1.status==403){
 	    					$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
@@ -1328,3 +1448,70 @@ $('.stats_report_portlet_body').live('mouseout',function(e){
 	$('.stats_report_portlet_body').find('.portlet_header_icons').css("visibility","hidden");
 	//$('.stats_report_portlet_body').find('.stats-report-settings').find('span').eq(0).removeClass('p-l-lg');
 });
+$('.onboarding-skip').live('click',function(e){
+	$(this).parent().find('span').css("text-decoration","line-through");
+	if(!$(this).parent().find('small').hasClass('onboarding-undo'))
+		$(this).parent().find('span').after("<small class='p-l-sm onboarding-undo c-p'>(undo)</small>");
+	$(this).remove();
+});
+$('.onboarding-undo').live('click',function(e){
+	$(this).parent().find('span').css("text-decoration","none");
+	$(this).parent().find('label').remove();
+	$(this).parent().find('span').before("<label class='i-checks i-checks-sm onboarding-check' style='padding-right:4px;'><input type='checkbox'><i></i></label>");
+	if(!$(this).parent().find('small').hasClass('onboarding-skip'))
+		$(this).parent().find('span').after("<small class='p-l-sm onboarding-skip c-p'>(skip)</small>");
+	$(this).remove();
+});
+$('.onboarding-check').live('change',function(e){
+	/*$(this).parent().find('span').before("<label class='fa fa-check p-r-sm'><i></i></label>");
+	if(!$(this).parent().find('small').hasClass('onboarding-undo'))
+		$(this).parent().find('span').after("<small class='p-l-sm onboarding-undo c-p'>(undo)</small>");
+	$(this).remove();*/
+	var that = $(this);
+	var model_id = $(this).parent().parent().parent().find('.portlets').attr('id');
+	var model = Portlets_View.collection.get(model_id);
+	var json1 = {};
+	$(this).parent().parent().find('label').each(function(){
+		var json2 = {};
+		if($(this).find('input:checkbox').is(':checked')){
+			json2["done"] = true;
+			json2["skip"] = false;
+		}else{
+			json2["done"] = false;
+			json2["skip"] = false;
+		}
+		json1[""+$(this).attr('value')] = json2;
+	});
+	model.set({ 'prefs' : JSON.stringify(json1) }, { silent : true });
+	// Saves new width and height in server
+	$.ajax({ type : 'POST', url : '/core/api/portlets/saveOnboardingPrefs', data : JSON.stringify(model.toJSON()),
+		contentType : "application/json; charset=utf-8", dataType : 'json', success: function(){
+			if(that.find('input:checkbox').is(':checked')){
+				that.parent().find('span').css("text-decoration","line-through");
+				that.parent().find('span > a').addClass("text-muted");
+				that.parent().find('label').removeClass('fa fa-square-o ob-portlet-font-check onboarding-check c-p');
+				that.parent().find('label').addClass('fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted');
+				that.find('input:checkbox').removeClass('ob-portlet-no-check');
+				that.find('input:checkbox').addClass('ob-portlet-check');
+			}else{
+				that.parent().find('span').css("text-decoration","none");
+				that.parent().find('span > a').removeClass("text-muted");
+				that.parent().find('label').removeClass('fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted');
+				that.parent().find('label').addClass('fa fa-square-o ob-portlet-font-check onboarding-check c-p');
+				that.find('input:checkbox').removeClass('ob-portlet-check');
+				that.find('input:checkbox').addClass('ob-portlet-no-check');
+			}} });
+		
+});
+function gravatarImgForPortlets(width){
+	// Default image
+	var img = DEFAULT_GRAVATAR_url;
+	var backup_image = "&d=404\" ";
+	// backup_image="";
+	var initials = '';
+	
+	if (initials.length == 0)
+		backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
+	var data_name = '';
+	return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
+}

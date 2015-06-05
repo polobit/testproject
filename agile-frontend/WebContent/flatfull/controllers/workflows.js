@@ -323,6 +323,9 @@ var WorkflowsRouter = Backbone.Router
 
 				// Render tabs with id
 				$('#campaign-analysis-tabs').html(getTemplate("campaign-analysis-tabs", { "id" : id }));
+				
+				// Hide bulk subscribers block
+				$('#subscribers-block').hide();
 
 //				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
 //				{
@@ -857,6 +860,8 @@ var WorkflowsRouter = Backbone.Router
 						fill_subscribers_slate('subscribers-slate', "all-subscribers");
 				} });
 				$("#campaign-analysis-tabs-content").html(all_subscribers_collection.el);
+				// Hide bulk subscribers block
+				$('#subscribers-block').hide();
 
 				$('#campaign-tabs .select').removeClass('select');
 				$('.campaign-subscribers-tab').addClass('select');
@@ -890,6 +895,9 @@ var WorkflowsRouter = Backbone.Router
 				} });
 
 				$("#campaign-analysis-tabs-content").html(this.active_subscribers_collection.el);
+
+				// Hide bulk subscribers block
+				$('#subscribers-block').hide();
 
 				$('#campaign-tabs .select').removeClass('select');
 				$('.campaign-subscribers-tab').addClass('select');
@@ -925,6 +933,9 @@ var WorkflowsRouter = Backbone.Router
 				} });
 				$("#campaign-analysis-tabs-content").html(completed_subscribers_collection.el);
 
+				// Hide bulk subscribers block
+				$('#subscribers-block').hide();
+
 				$('#campaign-tabs .select').removeClass('select');
 				$('.campaign-subscribers-tab').addClass('select');
 			},
@@ -957,6 +968,9 @@ var WorkflowsRouter = Backbone.Router
 
 				$("#campaign-analysis-tabs-content").html(removed_subscribers_collection.el);
 
+				// Hide bulk subscribers block
+				$('#subscribers-block').hide();
+
 				$('#campaign-tabs .select').removeClass('select');
 				$('.campaign-subscribers-tab').addClass('select');
 			},
@@ -981,6 +995,9 @@ var WorkflowsRouter = Backbone.Router
 				} });
 
 				$("#campaign-analysis-tabs-content").html(unsubscribed_subscribers_collection.el);
+
+				// Hide bulk subscribers block
+				$('#subscribers-block').hide();
 
 				$('#campaign-tabs .select').removeClass('select');
 				$('.campaign-subscribers-tab').addClass('select');
@@ -1007,6 +1024,9 @@ var WorkflowsRouter = Backbone.Router
 				} });
 
 				$("#campaign-analysis-tabs-content").html(hardbounced_subscribers_collection.el);
+				// Hide bulk subscribers block
+				$('#subscribers-block').hide();
+
 				$('#campaign-tabs .select').removeClass('select');
 				$('.campaign-subscribers-tab').addClass('select');
 			},
@@ -1032,6 +1052,9 @@ var WorkflowsRouter = Backbone.Router
 				} });
 
 				$("#campaign-analysis-tabs-content").html(softbounced_subscribers_collection.el);
+				// Hide bulk subscribers block
+				$('#subscribers-block').hide();
+
 				$('#campaign-tabs .select').removeClass('select');
 				$('.campaign-subscribers-tab').addClass('select');
 			},
@@ -1057,6 +1080,9 @@ var WorkflowsRouter = Backbone.Router
 				} });
 
 				$("#campaign-analysis-tabs-content").html(spam_reported_subscribers_collection.el);
+				// Hide bulk subscribers block
+				$('#subscribers-block').hide();
+
 				$('#campaign-tabs .select').removeClass('select');
 				$('.campaign-subscribers-tab').addClass('select');
 			} });
