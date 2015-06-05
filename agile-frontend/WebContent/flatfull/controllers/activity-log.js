@@ -168,7 +168,8 @@ var ActivitylogRouter = Backbone.Router.extend({
 					}
 					
 					urlPath=urlPath+keyword;
-					$('.contact-activity-sub-heading').text(uiKeyword);
+					if(id != undefined && id != "all")
+						$('.contact-activity-sub-heading').text(uiKeyword);
 				    $('#log-filter-title').text(uiKeyword);
 				      
 					/*if(IS_FLUID){
