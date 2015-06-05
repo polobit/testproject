@@ -22,10 +22,9 @@ define([
 			    		  
 			    		  //resetting generated form values to meet requirement.
 			    		  
-			    		  _agile.set_account($("#_agile_api").val(), $("#_agile_domain").val());
-			    		  
+//			    		  _agile.set_account($("#_agile_api").val(), $("#_agile_domain").val());
 //			    		  console.log($("#_agile_api").val()+","+ $("#_agile_domain").val());
-//			    		  
+
 //			    		  $('#agile-form').attr("method","POST");
 //			    		  var agileFormSubmitURL = "#";
 //			    		  $('#agile-form').attr("action",agileFormSubmitURL);
