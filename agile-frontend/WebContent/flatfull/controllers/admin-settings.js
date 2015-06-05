@@ -514,16 +514,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			data = App_Admin_Settings.email_gateway.model.toJSON();
 
 			// Add webhook
-			if (data.email_api == "MANDRILL")
+			$.getJSON("core/api/email-gateway/add-webhook?api_user="+data.api_user+"&api_key=" + data.api_key + "&type=" + data.email_api, function(data)
 			{
-				// Add mandrill webhook
-				$.getJSON("core/api/email-gateway/add-webhook?api_key=" + data.api_key + "&type=" + data.email_api, function(data)
-				{
-
 					console.log(data);
-
-				});
-			}
+			});
 		}
 
 		});
