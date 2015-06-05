@@ -52,10 +52,10 @@ $(function(){
 		
 		
 		// Add placeholder and date picker to date custom fields
-		$('.date_input').attr("placeholder","MM/DD/YYYY");
+		$('.date_input').attr("placeholder",CURRENT_USER_PREFS.dateFormat);
     
 		$('.date_input').datepicker({
-			format: 'mm/dd/yyyy'
+			format: CURRENT_USER_PREFS.dateFormat
 		});
 	})
     
@@ -474,7 +474,7 @@ function updateDeal(ele, editFromMilestoneView)
 	
 	// Enable the datepicker
 	$('#close_date', dealForm).datepicker({
-		format : 'mm/dd/yyyy',
+		format : CURRENT_USER_PREFS.dateFormat,
 	});
 	
 	// Add notes in deal modal
@@ -537,7 +537,7 @@ function show_deal(){
 
 	// Enable the datepicker
 	$('#close_date', el).datepicker({
-		format : 'mm/dd/yyyy',
+		format : CURRENT_USER_PREFS.dateFormat,
 	});
 }
 

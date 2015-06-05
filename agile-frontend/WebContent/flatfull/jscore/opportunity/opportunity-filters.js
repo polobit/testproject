@@ -133,7 +133,7 @@ function setupDealFilters(cel){
 		}
 		// Enable the datepicker
 		$('#filter_options .date').datepicker({
-			format : 'mm/dd/yyyy',
+			format : CURRENT_USER_PREFS.dateFormat,
 		});
 		if(!readCookie("agile_deal_view")){
 			$('#pipeline').closest('.control-group').hide();

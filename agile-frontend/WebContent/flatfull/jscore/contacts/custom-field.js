@@ -622,9 +622,8 @@ function show_custom_fields_helper_for_merge(custom_fields, contacts) {
 						checked = true;
 						if (field.field_type.toLowerCase() == "date") {
 							try {
-								value = new Date(
-										property.value * 1000)
-								.format('mm/dd/yyyy');
+								value = getDateInFormatFromEpoc(property.value);
+
 							} catch (err) {
 							}
 						}
@@ -745,8 +744,7 @@ function fill_custom_data(property, form)
 			else if($(element[0]).hasClass("date_input"))
 				{
 				try {
-					element.attr("value", new Date(property.value * 1000)
-							.format('mm/dd/yyyy'));
+					element.attr("value", getDateInFormatFromEpoc(property.value));
 					return;
 				} catch (err) {
 

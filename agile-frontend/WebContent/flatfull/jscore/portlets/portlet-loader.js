@@ -493,7 +493,7 @@ function showPortletSettings(el){
 	
 	if(base_model.get('name')=="Pending Deals" || base_model.get('name')=="Deals By Milestone" || base_model.get('name')=="Closures Per Person" || base_model.get('name')=="Deals Funnel"){
 		$('#due-date', elData).datepicker({
-			format : 'mm/dd/yyyy'
+			format : CURRENT_USER_PREFS.dateFormat
 		});
 	}	
 }

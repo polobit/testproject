@@ -64,13 +64,13 @@ function deserializeForm(data, form)
 								{
 									try
 									{
-										fel.val(new Date(el * 1000).format('mm/dd/yyyy'));
+										fel.val(getDateInFormatFromEpoc(el));
 									}
 									catch (err)
 									{
 
 									}
-									fel.datepicker({ format : 'mm/dd/yyyy', });
+									fel.datepicker({ format : CURRENT_USER_PREFS.dateFormat, });
 								}
 
 								/*
@@ -400,7 +400,7 @@ function deserializeChainedElement(data, rule_element)
 
 				$(input_element).val(new Date(parseInt(value)).format('mm/dd/yyyy'));
 
-				$(input_element).datepicker({ format : 'mm/dd/yyyy', });
+				$(input_element).datepicker({ format : CURRENT_USER_PREFS.dateFormat, });
 
 				$(input_element).datepicker('update');
 

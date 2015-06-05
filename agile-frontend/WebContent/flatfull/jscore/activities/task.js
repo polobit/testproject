@@ -152,7 +152,8 @@ $(function()
 	/**
 	 * Date Picker Activates datepicker for task due element
 	 */
-	$('#task-date-1').datepicker({ format : 'mm/dd/yyyy' });
+	$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat });
+	$('#update-task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat });
 
 	/**
 	 * Shows a pop-up modal with pre-filled values to update a task
@@ -230,7 +231,7 @@ function highlight_task()
 				$("#activityForm").find("#event_related_to").closest(".controls").find("ul").children());
 
 	// Date().format('mm/dd/yyyy'));
-	$('input.date').val(new Date().format('mm/dd/yyyy')).datepicker('update');
+	$('input.date').val(getDateInFormat(new Date())).datepicker('update');
 }
 
 /**

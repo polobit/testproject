@@ -70,6 +70,7 @@ public class UserPrefsAPI
 	    userPrefs.width = prefs.width;
 	    userPrefs.task_reminder = prefs.task_reminder;
 	    userPrefs.event_reminder = prefs.event_reminder;
+	    userPrefs.dateFormat = prefs.dateFormat;
 	    userPrefs.timezone = prefs.timezone;
 	    userPrefs.currency = prefs.currency;
 	    userPrefs.keyboard_shotcuts = prefs.keyboard_shotcuts;

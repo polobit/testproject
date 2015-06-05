@@ -642,6 +642,28 @@ $(function()
 		// 1000));
 	});
 
+	// Helper function to return date in user selected format in  preferences.
+
+	Handlebars.registerHelper('epochToHumanDateInFormat', function(date)
+	{
+
+		if (!date)
+			return;
+		return getDateInFormatFromEpoc(date);
+		
+	});
+
+	// Helper function to return current date in preferences page.
+
+	Handlebars.registerHelper('currentDateInFormat', function(format)
+	{
+		if(!format)
+			return;
+		format = format.replace(/MM/g, "mmmm").replace(/M/g, "mmm").replace(/DD/g, "dddd").replace(/D/g, "ddd");
+		return new Date().format(format);
+		
+	});
+
 	/**
 	 * Helper function to return the date string converting to local timezone.
 	 */

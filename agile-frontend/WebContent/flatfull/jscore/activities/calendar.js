@@ -249,10 +249,10 @@ function showCalendar()
 							highlight_event();
 
 							// Set Date for Event
-							var dateFormat = 'mm/dd/yyyy';
-							$('#task-date-1').val(start.format(dateFormat));
-							$("#event-date-1").val(start.format(dateFormat));
-							$("#event-date-2").val(end.format(dateFormat));
+							//var dateFormat = 'mm/dd/yyyy';
+							$('#task-date-1').val(getDateInFormat(start));
+							$("#event-date-1").val(getDateInFormat(start));
+							$("#event-date-2").val(getDateInFormat(end));
 
 							// Set Time for Event
 							if ((start.getHours() == 00) && (end.getHours() == 00) && (end.getMinutes() == 00))
@@ -363,8 +363,8 @@ function showCalendar()
 
 							// Set date for update Event
 							var dateFormat = 'mm/dd/yyyy';
-							$("#update-event-date-1").val((event.start).format(dateFormat));
-							$("#update-event-date-2").val((event.end).format(dateFormat));
+							$("#update-event-date-1").val(getDateInFormat(event.start));
+							$("#update-event-date-2").val(getDateInFormat(event.end));
 
 							// hide end date & time for all day events
 							if (event.allDay)
@@ -633,3 +633,37 @@ $('.agendaDayWeekMonth').die().live('click', function()
 	});
 
 });
+
+/*
+ function to get the date in user selected format in useprefs page. Will take epoc time  as input
+*/
+
+function getDateInFormatFromEpoc(date)
+{
+	if(!date)
+		return;
+	var dateInFormat;
+	var format = CURRENT_USER_PREFS.dateFormat;
+	format = format.replace(/MM/g, "mmmm").replace(/M/g, "mmm").replace(/DD/g, "dddd").replace(/D/g, "ddd");
+	if ((date / 100000000000) > 1)
+	{
+		console.log(new Date(parseInt(date)).format(format));
+		return new Date(parseInt(date)).format(format, 0);
+	}
+	return new Date(parseInt(date) * 1000).format(format);
+
+}
+
+/*
+ function to get the date in user selected format in useprefs page. Will takes date object as input
+*/
+
+function getDateInFormat(date)
+{
+	if(!date)
+		return;
+	var format = CURRENT_USER_PREFS.dateFormat;
+	format = format.replace(/MM/g, "mmmm").replace(/M/g, "mmm").replace(/DD/g, "dddd").replace(/D/g, "ddd");
+	return date.format(format);
+
+}

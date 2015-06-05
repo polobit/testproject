@@ -396,10 +396,10 @@
 										
 										{{#if_equals index ../this.length}}
 											<span class="contact-custom-value text-sm word-break custom-color">
-											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</span>
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" >{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</span>
 										{{else}}
 											<span class="contact-custom-value text-sm word-break custom-color">
-											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</span>
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" >{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</span>
 										{{/if_equals}}
 										
 										

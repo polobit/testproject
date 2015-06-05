@@ -517,9 +517,9 @@ function deserialize_contact(contact, template)
 				var form = $("#content").html(getTemplate(template, contact));
 
 				// Add placeholder and date picker to date custom fields
-				$('.date_input').attr("placeholder", "MM/DD/YYYY");
+				$('.date_input').attr("placeholder", CURRENT_USER_PREFS.dateFormat);
 
-				$('.date_input').datepicker({ format : 'mm/dd/yyyy' });
+				$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat });
 
 				// To set typeahead for tags
 				setup_tags_typeahead();

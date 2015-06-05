@@ -130,7 +130,7 @@ $(function()
 	 * Activates the date picker to the corresponding fields in activity modal
 	 * and activity-update modal
 	 */
-	var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev)
+	var eventDate = $('#event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat }).on('changeDate', function(ev)
 	{
 		// If event start date is changed and end date is less than start date,
 		// change the value of the end date to start date.
@@ -142,8 +142,8 @@ $(function()
 
 	});
 
-	$('#event-date-2').datepicker({ format : 'mm/dd/yyyy' });
-	$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev)
+	$('#event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat });
+	$('#update-event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat }).on('changeDate', function(ev)
 	{
 		// If event start date is changed and end date is less than start date,
 		// change the value of the end date to start date.
@@ -154,7 +154,7 @@ $(function()
 		}
 
 	});
-	$('#update-event-date-2').datepicker({ format : 'mm/dd/yyyy' });
+	$('#update-event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat });
 
 	/**
 	 * Activates time picker for start time to the fields with class
@@ -483,7 +483,7 @@ function highlight_event()
 				$("#taskForm").find("#task_related_to").closest(".controls").find("ul").children());
 
 	// Date().format('mm/dd/yyyy'));
-	$('input.date').val(new Date().format('mm/dd/yyyy'));
+	$('input.date').val(getDateInFormat(new Date()));
 }
 
 /**

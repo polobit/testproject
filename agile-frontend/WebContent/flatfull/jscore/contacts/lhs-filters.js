@@ -52,10 +52,10 @@ function setupLhsFilters(cel, is_company) {
 
 function loadCustomFiledsFilters(fields, cel, is_company) {
 	$('#custom-filter-fields', cel).html(getTemplate("contacts-lhs-filters-custom", fields));
-	//$('#custom-filter-fields', cel).find("input.date").datepicker({ format : 'mm/dd/yyyy'});
+	//$('#custom-filter-fields', cel).find("input.date").datepicker({ format : CURRENT_USER_PREFS.dateFormat});
 	addTagsTypeaheadLhs($('#tags-lhs-filter-table',cel).find("div.lhs-contact-filter-row").find('#RHS'));
-	$("input.date", cel).datepicker({ format : 'mm/dd/yyyy', autoclose: true});
-	//$('#custom-filter-fields', cel).find("input.date").datepicker({ format : 'mm/dd/yyyy'});
+	$("input.date", cel).datepicker({ format : CURRENT_USER_PREFS.dateFormat, autoclose: true});
+	//$('#custom-filter-fields', cel).find("input.date").datepicker({ format : CURRENT_USER_PREFS.dateFormat});
 	$('select[name="CONDITION"]', cel).die().live('change', function(e)
 	{
 		var selected = $(this).val();

@@ -260,8 +260,8 @@ $('#portlets-events-model-list > tr').live('click', function(e){
 	   
 	 // Set date for update Event
 	    var dateFormat = 'mm/dd/yyyy';
-	    $("#update-event-date-1").val((new Date(model.get('start')*1000)).format(dateFormat));
-	    $("#update-event-date-2").val((new Date(model.get('end')*1000)).format(dateFormat));
+	    $("#update-event-date-1").val(getDateInFormatFromEpoc(model.get('start')));
+	    $("#update-event-date-2").val(getDateInFormatFromEpoc(model.get('end')));
 	    
 	   	// hide end date & time for all day events
 	    if(model.toJSON().allDay)

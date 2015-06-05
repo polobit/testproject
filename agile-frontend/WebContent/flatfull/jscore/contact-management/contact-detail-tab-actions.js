@@ -58,7 +58,6 @@ $(function()
 		{
 			$("[id='delete_web_event']").attr("id", "event_delete");
 		}
-
 		// Fills owner select element
 		populateUsersInUpdateActivityModal(value);
 	});
@@ -129,7 +128,7 @@ $(function()
 		});
 
 		// Enable the datepicker
-		$('#close_date', el).datepicker({ format : 'mm/dd/yyyy', });
+		$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, });
 
 		var json = App_Contacts.contactDetailView.model.toJSON();
 		var contact_name = getContactName(json);
@@ -162,7 +161,7 @@ $(function()
 			agile_type_ahead("contacts-typeahead-input", el, contacts_typeahead);
 
 			// Enable the datepicker
-			$('#close_date', el).datepicker({ format : 'mm/dd/yyyy', });
+			$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, });
 
 			var json = App_Contacts.contactDetailView.model.toJSON();
 			var contact_name = getContactName(json);
