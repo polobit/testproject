@@ -20,6 +20,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import src.com.agilecrm.Globals;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
@@ -28,8 +30,8 @@ import com.googlecode.objectify.Query;
 public class FacebookPageUtil
 {
     // get these from your FB Dev App
-    private static final String APP_ID = "1561509744117603";
-    private static final String APP_SECRET = "b6a3e2f1cbabdb7b7a4611db342978d3";
+    private static final String APP_ID = Globals.FACEBOOK_APP_ID;
+    private static final String APP_SECRET = Globals.FACEBOOK_APP_SECRET;
     private static final String FB_END_POINT = "https://graph.facebook.com";
 
     // set this to your servlet URL for the authentication servlet/filter (this
