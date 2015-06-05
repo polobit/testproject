@@ -18,6 +18,7 @@ import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskCore;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
+import com.thirdparty.Mailgun;
 
 public class CampaignSubscriberDeferredTask extends BulkActionAdaptor
 {
@@ -77,7 +78,7 @@ public class CampaignSubscriberDeferredTask extends BulkActionAdaptor
 	    }
 
 	    // Convert Contacts into JSON Array
-	    JSONArray subscriberJSONArray = AgileTaskletUtil.getSubscriberJSONArray(fetchContacts(), campaignId, null);
+	    JSONArray subscriberJSONArray = AgileTaskletUtil.getSubscriberJSONArray(contacts, campaignId, null);
 
 	    for (int i = 0; i < subscriberJSONArray.length(); i++)
 	    {
@@ -91,6 +92,11 @@ public class CampaignSubscriberDeferredTask extends BulkActionAdaptor
 	}
 	catch (Exception e)
 	{
+	    Mailgun.sendMail("campaigns@agile.com", "Campaign Error Observer", "yaswanth@agilecrm.com", null, null,
+		    "Campaign Initiated in " + NamespaceManager.get() + " , " + campaignId, null,
+		    "Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " + info.getEmail()
+			    + "<br><br>Campaign-id: " + campaignId + "<br>", null);
+
 	    System.err.println("Exception occured in TaskletUtilDeferredTask " + e.getMessage());
 	    e.printStackTrace();
 	}
