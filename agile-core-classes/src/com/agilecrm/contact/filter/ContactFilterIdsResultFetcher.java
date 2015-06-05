@@ -85,7 +85,12 @@ public class ContactFilterIdsResultFetcher
 
 	domainUserId = currentDomainUserId;
 
-	if (filter_id != null)
+	if (searchMap != null)
+	{
+	    iterator = getSystemFilter("_dummy");
+	}
+
+	else if (filter_id != null)
 	{
 	    try
 	    {
@@ -120,10 +125,6 @@ public class ContactFilterIdsResultFetcher
 		e.printStackTrace();
 	    }
 
-	}
-	else if (searchMap != null)
-	{
-	    iterator = getSystemFilter("_dummy");
 	}
 
 	if (this.filter != null)
