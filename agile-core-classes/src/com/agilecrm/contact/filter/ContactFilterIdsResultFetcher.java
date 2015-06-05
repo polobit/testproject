@@ -137,7 +137,8 @@ public class ContactFilterIdsResultFetcher
 	    filter.rules.add(rule);
 	}
 
-	BulkActionUtil.setSessionManager(domainUserId);
+	if (domainUserId != null)
+	    BulkActionUtil.setSessionManager(domainUserId);
 
     }
 

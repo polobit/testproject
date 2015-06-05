@@ -593,11 +593,12 @@ public class BulkOperationsAPI
 	    throws JSONException
     {
 
-	Map<String, Object> searchMap = new HashMap<String, Object>();
+	Map<String, Object> searchMap = null;
 
 	// if all active subscribers are selected
 	if (!StringUtils.isEmpty(allActiveSubscribers) && allActiveSubscribers.equals("all-active-subscribers"))
 	{
+	    searchMap = new HashMap<String, Object>();
 	    searchMap.put("campaignStatus.status", campaign_id + "-" + CampaignStatus.Status.ACTIVE);
 	}
 
