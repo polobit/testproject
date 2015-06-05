@@ -69,9 +69,8 @@ public class FacebookPageUtil
     {
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 	{
-	    // state = "https://" + NamespaceManager.get() +
-	    // ".agilecrm.com/fbpagecallback";
-	    state = "https://" + NamespaceManager.get() + "-dot-sandbox-dot-agilecrmbeta.appspot.com/fbpagecallback";
+	    state = "https://" + NamespaceManager.get() + ".agilecrm.com/fbpagecallback";
+	    //state = "https://" + NamespaceManager.get() + "-dot-sandbox-dot-agilecrmbeta.appspot.com/fbpagecallback";
 	}
     }
 
