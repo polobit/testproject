@@ -36,6 +36,7 @@ import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
+import com.agilecrm.facebookpage.FacebookPage;
 import com.agilecrm.forms.Form;
 import com.agilecrm.portlets.Portlet;
 import com.agilecrm.reports.ActivityReports;
@@ -194,6 +195,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		ObjectifyService.register(ContactSchemaUpdateStats.class);
 
 		ObjectifyService.register(OnlineCalendarPrefs.class);
+		
+		// For facebook page intergration
+		ObjectifyService.register(FacebookPage.class);
 
 	}
 
