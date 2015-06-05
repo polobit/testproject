@@ -99,7 +99,6 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 		for (Contact contact : contacts_list)
 		{
 		    contact.updated_time = System.currentTimeMillis() / 1000;
-		    builderObjects.add(contactDocuments.buildDocument(contact));
 		    /*
 		     * try {
 		     * search.index.putAsync(contactDocuments.buildDocument
@@ -110,6 +109,7 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 		     */
 		    try
 		    {
+		    builderObjects.add(contactDocuments.buildDocument(contact));
 			if (builderObjects.size() >= 50)
 			{
 			    search.index.putAsync(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
