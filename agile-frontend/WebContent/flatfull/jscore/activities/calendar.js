@@ -191,7 +191,7 @@ function showCalendar()
 						{
 							calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 							var reletedContacts = '';
-							var event_description = '';
+							event_description = '';
 							if (event.contacts.length > 0)
 								reletedContacts += '<i class="icon-user text-muted m-r-xs"></i>'
 							for (var i = 0; i < event.contacts.length; i++)
@@ -220,21 +220,12 @@ function showCalendar()
 									leftorright = 'right';
 								pullupornot = 'pull-up';
 							}
-							if(event.description){
-								event_description='<i class="icon-comment-alt text-muted m-r-xs"></i><span title='+event.description+'>'+addDotsAtEnd(event.description)+'</span>';
+							if (event.description)
+							{
+								event_description = '<i class="icon-comment-alt text-muted m-r-xs"></i><span title=' + event.description + '>' + addDotsAtEnd(event.description) + '</span>';
 							}
-							var popoverElement	=	'<div class="fc-overlay '+leftorright+'">'+
-													'<div class="panel bg-white b-a pos-rlt p-sm">'+
-													'<span class="arrow '+leftorright+' '+pullupornot+'"></span>'+
-													'<div class="h4 font-thin m-b-sm"><div class="pull-left">'+event.title+'</div><div class="pull-right"><img class="r-2x" src="'+event.ownerPic+'" height="20px" width="20px" title="'+event.owner.name+'"/></div></div>'+
-													'<div class="line b-b b-light"></div>'+
-													'<div><i class="icon-clock text-muted m-r-xs"></i>'+event.start.format('dd-mmm-yyyy HH:MM')+'</div>'+
-													'<div>'+event_description+'</div>'+
-													'<div>'+reletedContacts+'</div>'+
-													'</div>'+
-													'</div>';
 							var popoverElement = '<div class="fc-overlay ' + leftorright + '">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left">' + event.title + '</div><div class="pull-right"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
-									.format('dd-mmm-yyyy HH:MM') + '</div>' + '<div>' + reletedContacts + '</div>' + '</div>' + '</div>';
+									.format('dd-mmm-yyyy HH:MM') + '</div>' + '<div>' + event_description + '</div>' + '<div>' + reletedContacts + '</div>' + '</div>' + '</div>';
 							$(this).append(popoverElement);
 							$(this).find('.fc-overlay').show();
 						},
