@@ -579,7 +579,6 @@ $(function()
 			$("#webEventCancelModel").modal('show');
 			$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39");
 			$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
-			$("#event_text").html("Please mention reason for cancellation of &#39" + web_event_title + "&#39");
 			return;
 		}
 

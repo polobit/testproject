@@ -147,20 +147,23 @@ function send_ical_info_email(emailModal)
 $(function()
 {
 
-	$('#scheduleModal').on('hidden.bs.modal', function (e) {
-		$("#edit").show();$('#charlength').hide();$('#specialchar').hide();
-		  
-		})
-	
+	$('#scheduleModal').on('hidden.bs.modal', function(e)
+	{
+		$("#edit").show();
+		$('#charlength').hide();
+		$('#specialchar').hide();
+
+	})
+
 	$('#show-schedule-url').die().live('click', function(e)
 	{
 		e.preventDefault();
 		$('#scheduleModal').modal('show');
 	});
 
-	
-	$('#scheduleModal').on('show.bs.modal', function() {
-       
+	$('#scheduleModal').on('show.bs.modal', function()
+	{
+
 		var updatedCurrentUser = Backbone.Model.extend({ url : '/core/api/users/current-user', restKey : "domainUser" });
 
 		var updateduserModel = new updatedCurrentUser();
@@ -176,85 +179,17 @@ $(function()
 			}
 
 			var onlineschedulingURL = "https://" + model.domain + ".agilecrm.com/calendar/" + model.schedule_id;
-			var hrefvalue="https://"+model.domain+".agilecrm.com/calendar/";
+			var hrefvalue = "https://" + model.domain + ".agilecrm.com/calendar/";
 			$("#scheduleurl").attr("href", onlineschedulingURL);
 			$("#hrefvalue").html(hrefvalue);
 			$("#schedule_id").html(model.schedule_id);
-			
+
 			$("#scheduleurl").removeClass("nounderline");
 
-		
 		} });
-	});
-	
-	$("#edit-schedule-id").die().live('click', function(e)
-	{
-
-		e.preventDefault();
-		var data = $('#schedule_id').text();
-		$("#edit").hide();
-		$("#scheduleurl").removeAttr("href");
-		$('#schedule_id').html("<input class='input-sm inline-block form-control' style='width:200px' type='text'  name='url' id='url' value='" + data + "'/><buttion class='btn btn-primary btn-sm inline-block m-l-sm' id='save-scheduleurl'>Save</button>");
-
-
-		$("#scheduleurl").addClass("nounderline");
-		$('#scheduleModal').data('modal', null);
-
-	});
-
-	$("#save-scheduleurl").die().live('click', function(e)
-	{
-		e.preventDefault();
-		var data = $("#url").val();
-		if(data.length<4){
-			$('#charlength').fadeIn('slow');
-            setTimeout(function() {
-         	    $('#charlength').fadeOut('slow');
-         	}, 2000);
-	    	return;
-		}
-		
-		var regex = /^[0-9a-zA-Z\_]+$/
-			    if(!(regex.test(data)))
-			    	{
-			    	 $('#specialchar').fadeIn('slow');
-                       setTimeout(function() {
-                    	    $('#specialchar').fadeOut('slow');
-                    	}, 2000);
-			    	return;
-			    	}
-		   
-		var saveBtn = $(this);
-		disable_save_button($(saveBtn));
-		$.ajax({ url : 'core/api/users/updatescheduleid?scheduleid=' + data, type : 'GET', success : function(user)
-		{
-			var onlineschedulingURL = "https://" + user.domain + ".agilecrm.com/calendar/" + user.schedule_id;
-			$("#scheduleurl").attr("href", onlineschedulingURL);
-			$("#schedule_id").text(user.schedule_id);
-			enable_save_button($(saveBtn));
-			$("#edit").show();	$("#specialchar").hide();$("#charlength").hide();	
-			$("#scheduleurl").removeClass("nounderline");
-			
-
-		}, error : function(error)
-		{
-
-            console.log(error);
-			$('#schedule_error_message').html('Something went wrong as your schedule url was not updated. Please try again in few hours. Error: '+error.statusText);
-			 $('#schedule_error_message').fadeIn('slow');
-             setTimeout(function() {
-          	    $('#schedule_error_message').fadeOut('slow');
-          	}, 2000);
-			enable_save_button($(saveBtn));
-			return;
-		} });
-
 	});
 
 });
-
-
-
 
 $('#send-schedule-url-email').live('click', function(e)
 {

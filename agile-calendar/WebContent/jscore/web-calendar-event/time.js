@@ -1,9 +1,7 @@
 // Convert human date to epoch time
 function getEpochTimeFromDate(selectedDate)
 {
-	console.log("in getEpochTimeFromDate");
 	var d = new Date(selectedDate);
-	console.log(d);
 	return getGMTTimeFromDate(d) / 1000;
 }
 
@@ -144,7 +142,7 @@ function getNormalTimeAMPM(hr)
  */
 function convertWeekDayToArray(day)
 {
-	if (parseInt(day) >= 1 || parseInt(day) <= 6)
+	if (parseInt(day) >= 1 && parseInt(day) <= 6)
 		return parseInt(day) - 1;
 	if (parseInt(day) == 0)
 		return 6;
