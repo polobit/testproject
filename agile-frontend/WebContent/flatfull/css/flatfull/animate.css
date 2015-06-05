@@ -15,6 +15,11 @@ Copyright (c) 2013 Daniel Eden
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
+.disable-anim .animated ,.disable-anim .custom-animated{
+  -webkit-animation-name:none!important;
+  -moz-animation-name:none!important;
+  animation-name:none!important;
+}
 
 .animated.infinite {
   -webkit-animation-iteration-count: infinite;
@@ -1250,7 +1255,7 @@ Copyright (c) 2013 Daniel Eden
   }
 }
 
-.fadeInLeft {
+.fadeInLeft{
   -webkit-animation-name: fadeInLeft;
   animation-name: fadeInLeft;
 }

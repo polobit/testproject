@@ -710,6 +710,14 @@
 	<servlet-mapping>
 		<servlet-name>upload_contacts</servlet-name>
 		<url-pattern>/upload</url-pattern>
+	</servlet-mapping>	
+	<servlet>
+		<servlet-name>upload_attachment</servlet-name>
+		<servlet-class>com.agilecrm.contact.upload.blob.UploadAttachmentServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>upload_attachment</servlet-name>
+		<url-pattern>/uploadattachment</url-pattern>
 	</servlet-mapping>
 
 	<!-- <servlet>

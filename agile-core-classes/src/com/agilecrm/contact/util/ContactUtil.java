@@ -717,13 +717,14 @@ public class ContactUtil
 	    return;
 	}
 
+	String tracker = String.valueOf(System.currentTimeMillis());
 	for (Contact contact : contacts_list)
 	{
-
+	    contact.bulkActionTracker = tracker;
 	    contact.addTags(tags_array);
 	}
 
-	//dao.putAll(contacts_list);
+	// dao.putAll(contacts_list);
     }
 
     public static void addTagsToContactsBulk(List<Contact> contacts_list, String[] tags_array)
@@ -734,11 +735,13 @@ public class ContactUtil
 	    return;
 	}
 
+	String tracker = String.valueOf(System.currentTimeMillis());
 	for (Contact contact : contacts_list)
 	{
 
 	    try
 	    {
+		contact.bulkActionTracker = tracker;
 		contact.addTags(tags_array);
 	    }
 	    catch (Exception e)
@@ -748,7 +751,7 @@ public class ContactUtil
 
 	}
 
-	//dao.putAll(contacts_list);
+	// dao.putAll(contacts_list);
     }
 
     public static void removeTagsToContactsBulk(List<Contact> contacts_list, String[] tags_array)
@@ -759,13 +762,14 @@ public class ContactUtil
 	    return;
 	}
 
+	String tracker = String.valueOf(System.currentTimeMillis());
 	for (Contact contact : contacts_list)
 	{
-
+	    contact.bulkActionTracker = tracker;
 	    contact.removeTags(tags_array);
 	}
 
-	dao.putAll(contacts_list);
+	// dao.putAll(contacts_list);
     }
 
     /**

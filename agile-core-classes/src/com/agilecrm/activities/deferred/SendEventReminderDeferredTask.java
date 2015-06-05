@@ -90,7 +90,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
 			Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com",
 			        "event-reminder-failure", "jagadeesh@invox.com", null, null,
 			        "transient exception occured in sendEventReminderDeferredTask" + domain, null,
-			        "transiant exception", null, null, null);
+			        "transiant exception", null, null, null, null);
 
 			SendEventReminderDeferredTask sendEventReminder = new SendEventReminderDeferredTask(domain,
 			        starttime, nosampleevent);
@@ -116,14 +116,14 @@ public class SendEventReminderDeferredTask implements DeferredTask
 
 			    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com",
 				    "event-reminder-failure " + domain, "jagadeesh@invox.com", null, null, subject,
-				    null, errorString + body, null, null, null);
+				    null, errorString + body, null, null, null, null);
 			}
 			catch (Exception ex)
 			{
 			    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com",
 				    "event-reminder-failure", "jagadeesh@invox.com", null, null,
 				    "exception occured while sending mail " + domain, null,
-				    "exception occured in send event reminder deferred task", null, null, null);
+				    "exception occured in send event reminder deferred task", null, null, null, null);
 
 			    ex.printStackTrace();
 			    System.err
@@ -194,7 +194,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
 			        "event-reminder-failure", "jagadeesh@invox.com", null, null,
 			        "transient failure exception occured " + domain, null,
 			        "exception occured transient failure exception send event reminder deferred task",
-			        null, null, null);
+			        null, null, null, null);
 
 			SendEventReminderDeferredTask sendEventReminder = new SendEventReminderDeferredTask(domain,
 			        starttime, nosampleevent);
@@ -220,14 +220,14 @@ public class SendEventReminderDeferredTask implements DeferredTask
 
 			    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com",
 				    "event-reminder-failure" + domain, "jagadeesh@invox.com", null, null, subject,
-				    null, errorString + body, null, null, null);
+				    null, errorString + body, null, null, null, null);
 			}
 			catch (Exception ex)
 			{
 			    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com",
 				    "event-reminder-failure", "jagadeesh@invox.com", null, null,
 				    "exception occured while sending mail " + domain, null,
-				    "exception occured in send event reminder deferred task", null, null, null);
+				    "exception occured in send event reminder deferred task", null, null, null, null);
 			    ex.printStackTrace();
 			    System.err.println("Exception occured while sending event notification mail "
 				    + e.getMessage());
@@ -276,7 +276,8 @@ public class SendEventReminderDeferredTask implements DeferredTask
 	{
 	    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "event-reminder-failure",
 		    "jagadeesh@invox.com", null, null, "exception occured " + domain, null,
-		    "exception occured transient failure exception send event reminder deferred task", null, null, null);
+		    "exception occured transient failure exception send event reminder deferred task", null, null,
+		    null, null);
 
 	    SendEventReminderDeferredTask sendEventReminder = new SendEventReminderDeferredTask(domain, starttime,
 		    nosampleevent);
@@ -300,13 +301,13 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		String errorString = errors.toString();
 
 		Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "event-reminder-failure",
-		        "jagadeesh@invox.com", null, null, subject, null, errorString + body, null, null, null);
+		        "jagadeesh@invox.com", null, null, subject, null, errorString + body, null, null, null, null);
 	    }
 	    catch (Exception ex)
 	    {
 		Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "event-reminder-failure",
 		        "jagadeesh@invox.com", null, null, "exception occured while sending mail " + domain, null,
-		        "exception occured in send event reminder deferred task", null, null, null);
+		        "exception occured in send event reminder deferred task", null, null, null, null);
 		ex.printStackTrace();
 		System.err.println("Exception occured while sending event notification mail " + e.getMessage());
 	    }

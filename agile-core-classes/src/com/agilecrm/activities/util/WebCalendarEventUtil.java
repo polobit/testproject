@@ -831,7 +831,7 @@ public class WebCalendarEventUtil
 				}
 
 				EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
-						"Appointment Scheduled", null, usermail, null, null, null, attachments_to_agile_user);
+						"Appointment Scheduled", null, usermail, null, null, null, null, attachments_to_agile_user);
 			}
 			else
 			{
@@ -876,7 +876,7 @@ public class WebCalendarEventUtil
 				}
 
 				EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
-						"Appointment Scheduled", null, usermail, null, null, null, attachments_to_agile_user);
+						"Appointment Scheduled", null, usermail, null, null, null, null, attachments_to_agile_user);
 
 			}
 
@@ -912,7 +912,7 @@ public class WebCalendarEventUtil
 			String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 
 			EmailGatewayUtil.sendEmail(null, user.email, user.name, wce.email, null, null, "Appointment Scheduled",
-					null, client_mail, null, null, null, attachments);
+					null, client_mail, null, null, null, null, attachments);
 
 		}
 		return "Done";
@@ -1084,7 +1084,7 @@ public class WebCalendarEventUtil
 		String str = hours.substring(0, 2);
 		String mins = hours.substring(3);
 		if ("00".equals(str) || "24".equals(str))
-			return "12:" + mins + "am";
+			return "00:" + mins + "am";
 		else if ("12".equals(str))
 			return "12:" + mins + "pm";
 		Map<String, String> time_map = new HashMap<>();

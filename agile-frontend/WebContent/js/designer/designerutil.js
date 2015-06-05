@@ -473,11 +473,20 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
 			"Score" : "{{score}}",
 			"Created Date" : "{{created_date}}", 
 			"Modified Date" : "{{modified_date}}", 
-			"Email" : "{{email}}", 
+			"Email" : "{{email}}",
+			"Email Work":"{{email_work}}", 
+			"Email Personal":"{{email_home}}", 
 			"Company" : "{{company}}", 
 			"Title" : "{{title}}",
 			"Website" : "{{website}}", 
-			"Phone" : "{{phone}}"
+			"Phone" : "{{phone}}",
+			"Phone Work" : "{{phone_work}}",
+			"Phone Home" : "{{phone_home}}",
+			"Phone Mobile" : "{{phone_mobile}}",
+			"Phone Main" : "{{phone_main}}",
+			"Phone Home fax" : "{{phone_home_fax}}",
+			"Phone Work fax" : "{{phone_work_fax}}",
+			"Phone Other" : "{{phone_other}}"
 		},
 		"Custom Fields":{
 		},

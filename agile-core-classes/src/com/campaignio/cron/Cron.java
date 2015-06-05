@@ -86,7 +86,10 @@ public class Cron extends HttpServlet
 	/**
 	 * JSON Strings.
 	 */
-	public String campaign_json_string, data_string, node_json_string, subscriber_json_string;
+	@NotSaved
+	public String campaign_json_string=null;
+	
+	public String data_string, node_json_string, subscriber_json_string;
 
 	/**
 	 * Custom Values.
@@ -251,7 +254,7 @@ public class Cron extends HttpServlet
 	@PrePersist
 	void PrePersist()
 	{
-		campaign_json_string = campaign_json.toString();
+		campaign_json_string = null;
 		data_string = data.toString();
 		node_json_string = node_json.toString();
 		subscriber_json_string = subscriber_json.toString();

@@ -60,6 +60,9 @@ $(function(){
            // it is holding jQuery object
            var $clicked_button = $(this);
            
+           if(!window.frames.designer.checkWorkflowSize())
+        	   return;
+           
            if($(this).attr('disabled'))
    			return;
            

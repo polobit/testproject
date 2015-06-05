@@ -238,17 +238,17 @@ public class SendMail
 	    // Setting empty namespace to send without any subaccount
 	    String oldNamespace = NamespaceManager.get();
 	    NamespaceManager.set("");
-	    
+
 	    // Send Email
 	    Mandrill.sendMail(false, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, null,
-		    args);
-	    
+		    null, args);
+
 	    NamespaceManager.set(oldNamespace);
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-	    System.err.println("Exception occured in SendMail..."+ e.getMessage());
+	    System.err.println("Exception occured in SendMail..." + e.getMessage());
 	}
     }
 

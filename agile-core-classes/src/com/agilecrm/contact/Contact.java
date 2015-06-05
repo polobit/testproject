@@ -18,9 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.ContactField.FieldType;
-import com.agilecrm.contact.deferred.TagsDeferredTask;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
 import com.agilecrm.contact.email.bounce.util.EmailBounceStatusUtil;
 import com.agilecrm.contact.util.ContactUtil;
@@ -43,9 +41,6 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.NotFoundException;
 import com.googlecode.objectify.annotation.AlsoLoad;
@@ -128,7 +123,16 @@ public class Contact extends Cursor
 
     @Indexed
     public Long last_contacted = 0L;
-
+    
+    @Indexed
+    public Long last_emailed = 0L;
+    
+    @Indexed
+    public Long last_campaign_emaild = 0L;
+    
+    @Indexed
+    public Long last_called = 0L;
+    
     /**
      * Viewed time of the contact, in milliseconds
      */
@@ -265,6 +269,10 @@ public class Contact extends Cursor
     public Long formId = 0L;
 
     public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
+
+    @JsonIgnore
+    @NotSaved
+    public String bulkActionTracker = "";
 
     /**
      * Default constructor
@@ -410,6 +418,7 @@ public class Contact extends Cursor
 	    // notifications/triggers with new tags
 	    oldContact.tags = oldContact.getContactTags();
 
+	    oldContact.bulkActionTracker = bulkActionTracker;
 	    // Set the created time. This will help to restrict the user from
 	    // changing the created time through rest api.
 	    created_time = oldContact.created_time;
@@ -455,7 +464,8 @@ public class Contact extends Cursor
 	}
 
 	// Updates Tag entity, if any new tag is added
-	updateTagsEntity(oldContact, this);
+	if (type == Type.PERSON)
+	    updateTagsEntity(oldContact, this);
 
 	// Verifies CampaignStatus
 	checkCampaignStatus(oldContact, this);
@@ -1015,13 +1025,16 @@ public class Contact extends Cursor
 
 	if (this.type == Type.PERSON)
 	{
-	    if (this.properties.size() > 0)
-	    {
-		ContactField firstNameField = this.getContactFieldByName(Contact.FIRST_NAME);
-		ContactField lastNameField = this.getContactFieldByName(Contact.LAST_NAME);
-		this.first_name = firstNameField != null ? firstNameField.value : "";
-		this.last_name = lastNameField != null ? lastNameField.value : "";
-	    }
+			if (this.properties.size() > 0) {
+				ContactField firstNameField = this
+						.getContactFieldByName(Contact.FIRST_NAME);
+				ContactField lastNameField = this
+						.getContactFieldByName(Contact.LAST_NAME);
+				this.first_name = firstNameField != null ? StringUtils.lowerCase(firstNameField.value)
+						: "";
+				this.last_name = lastNameField != null ? StringUtils.lowerCase(lastNameField.value)
+						: "";
+			}
 	    if (StringUtils.isNotEmpty(contact_company_id))
 	    {
 		// update id, for existing company
@@ -1069,14 +1082,21 @@ public class Contact extends Cursor
 		}
 	    }
 	}
-	if (this.type == Type.COMPANY)
-	{
-	    if (this.properties.size() > 0)
-	    {
-		ContactField nameField = this.getContactFieldByName(Contact.NAME);
-		this.name = nameField != null ? nameField.value : "";
-	    }
-	}
+		if (this.type == Type.COMPANY) {
+			if (this.properties.size() > 0) {
+				ContactField nameField = this
+						.getContactFieldByName(Contact.NAME);
+				this.name = nameField != null ? nameField.value : "";
+			}
+			//Company name lower case field used for duplicate check.
+			ContactField nameLowerField = this
+					.getContactFieldByName("name_lower");
+			if(nameLowerField == null) {
+				if(StringUtils.isNotEmpty(name))
+					this.properties.add(new ContactField("name_lower", name.toLowerCase(), null));
+			}
+			 
+		}
 
 	// Store Created and Last Updated Time Check for id even if created
 	// time is 0(To check whether it is update request)
@@ -1190,12 +1210,16 @@ public class Contact extends Cursor
 		}
 	    }
 
+	    List<Tag> newTags = new ArrayList<Tag>();
 	    for (Tag tag : tagsWithTime)
 	    {
 		// Check if it is null, it can be null tag is created using
 		// developers api
 		if (tag.createdTime == null || tag.createdTime == 0L)
+		{
 		    tag.createdTime = System.currentTimeMillis();
+		    newTags.add(tag);
+		}
 	    }
 
 	    LinkedHashSet<String> oldTags = null;
@@ -1208,12 +1232,9 @@ public class Contact extends Cursor
 	    if (tags.equals(oldTags))
 		return;
 
-	    // System.out.println("Tag entity need to update....");
+	    System.out.println("Tag entity need to update...." + bulkActionTracker);
 
-	    // Update Tags - Create a deferred task
-	    TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tags);
-	    Queue queue = QueueFactory.getQueue(AgileQueues.TAG_ENTITY_QUEUE);
-	    queue.addAsync(TaskOptions.Builder.withPayload(tagsDeferredTask));
+	    TagUtil.runUpdateDeferedTask(newTags, bulkActionTracker);
 	}
 	catch (WebApplicationException e)
 	{
