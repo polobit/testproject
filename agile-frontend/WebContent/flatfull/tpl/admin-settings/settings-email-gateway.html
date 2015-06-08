@@ -9,17 +9,17 @@
 				<div class="control-group form-group">
 					<div class="controls" id="LHS">
 						<select name="email_api" id="email-api" class="required form-control">
-							<!--<option value="SEND_GRID">SendGrid</option>--> 
+							<option value="SEND_GRID">SendGrid</option>
 							<option value="MANDRILL">Mandrill</option> 
 						</select>
 					</div>
 				</div>
-				<div class="control-group form-group"  id="RHS">
-					<!--<div class="controls">
-						<input type="text" class="input-medium required SEND_GRID form-control" style="width:90%" placeholder="Username" value="{{api_user}}" name="api_user">
-					</div>-->
+				<div class="control-group form-group" id="RHS">
 					<div class="controls">
-						<!--<input type="password" class="input-medium form-control required SEND_GRID" style="width:90%" placeholder="Password" value="{{#if api_user}}{{api_key}}{{/if}}"  name="api_key"/>-->
+						<input type="text" class="input-medium required SEND_GRID form-control" placeholder="Username" value="{{api_user}}" name="api_user">
+					</div>
+					<div class="controls">
+						<input type="password" class="input-medium form-control required SEND_GRID" placeholder="Password" value="{{#if api_user}}{{api_key}}{{/if}}"  name="api_key"/>
                         <input type="text" class="input-medium required MANDRILL form-control"  placeholder="API Key" value="{{#unless api_user}}{{api_key}}{{/unless}}" name="api_key"/>
 					</div>
 				</div>
