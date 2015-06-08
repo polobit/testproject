@@ -1367,5 +1367,55 @@ public class OpportunityUtil {
 		}
 
 	}
+	
+	/**
+	 * Get the own deals count in the specified duration.
+	 * 
+	 * @param minTime
+	 *            Long object
+	 * @param maxTime
+	 *            Long object
+	 */
+	public static int getWonDealsCountOfUser(Long minTime, Long maxTime, Long domainUserId) {
+		int count = 0;
+		try {
+			count = dao.ofy().query(Opportunity.class)
+					.filter("won_date >= ", minTime)
+					.filter("won_date <= ", maxTime)
+					.filter("ownerKey",
+							new Key<DomainUser>(DomainUser.class,
+									domainUserId)).count();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return count;
+
+	}
+	
+	/**
+	 * Get the own deals list in the specified duration.
+	 * 
+	 * @param minTime
+	 *            Long object
+	 * @param maxTime
+	 *            Long object
+	 * @param domainUserId
+	 *            Long object
+	 */
+	public static List<Opportunity> getWonDealsListOfUser(Long minTime, Long maxTime, Long domainUserId) {
+		try {
+			return dao.ofy().query(Opportunity.class)
+					.filter("won_date >= ", minTime)
+					.filter("won_date <= ", maxTime)
+					.filter("archived", false)
+					.filter("ownerKey",
+							new Key<DomainUser>(DomainUser.class,
+									domainUserId)).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
 
 }

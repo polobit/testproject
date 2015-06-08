@@ -16,6 +16,7 @@ function loadPortlets(el){
 	App_Portlets.filteredContacts = new Array();
 	App_Portlets.emailsOpened = new Array();
 	App_Portlets.statsReport = new Array();
+	App_Portlets.leaderboard = new Array();
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
@@ -134,7 +135,26 @@ function set_up_portlets(el, portlets_el){
         		$(window).trigger('resize');
         		
         		$('#'+this.$resized_widget.attr('id')+' > div.portlet_body').css('overflow-x','hidden').css('overflow-y','auto');
+
+        		var tempModel = Portlets_View.collection.get($('#'+this.$resized_widget.attr('id')+' > div.portlets').attr('id'));
+
+        		var that = this;
+        		if(tempModel.get("name")=="Leaderboard"){
+        			/*$('#'+this.$resized_widget.attr('id')+' > .portlet_body').find('ul').find('li').each(function(indexVal){
+        				if($('#'+that.$resized_widget.attr('id')+' > .portlet_body').find('ul').find('li').length-1==indexVal)
+        					$('#'+that.$resized_widget.attr('id')+' > .portlet_header').find('ul').find('li').eq(indexVal).width($(this).width());
+        				else
+        					$('#'+that.$resized_widget.attr('id')+' > .portlet_header').find('ul').find('li').eq(indexVal).width($(this).width());
+        			});*/
+					/*var scrollbarWidth = $('#'+this.$resized_widget.attr('id')+' > .portlet_body').width()-$('#'+this.$resized_widget.attr('id')+' > .portlet_body').find('ul').width();
+					if(scrollbarWidth!=0)
+						$('#'+this.$resized_widget.attr('id')+' > .portlet_header').width($('#'+this.$resized_widget.attr('id')+' > .portlet_header').width()-scrollbarWidth);
+					else
+						$('#'+this.$resized_widget.attr('id')+' > .portlet_header').css("width","100%");*/
+					$('#'+this.$resized_widget.attr('id')+' > .portlet_header').width($('#'+this.$resized_widget.attr('id')+' > .portlet_body').find('ul').width());
+        		}
         		
+
 				var models = [];
 
 				/*
@@ -505,6 +525,58 @@ function showPortletSettings(el){
 		
 		elData = $('#portletsTodayTasksSettingsForm');
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Leaderboard"){
+		$('#portletsLeaderboardSettingsModal').modal('show');
+		$('#portletsLeaderboardSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
+		$("#portlet-type",$('#portletsLeaderboardSettingsModal')).val(base_model.get('portlet_type'));
+		$("#portlet-name",$('#portletsLeaderboardSettingsModal')).val(base_model.get('name'));
+		
+		elData = $('#portletsLeaderboardSettingsForm');
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+		if(base_model.get("settings").category!=undefined && base_model.get("settings").category.revenue)
+			$("#category-list", elData).find('option[value=revenue]').attr("selected", "selected");
+		if(base_model.get("settings").category!=undefined && base_model.get("settings").category.dealsWon)
+			$("#category-list", elData).find('option[value=dealsWon]').attr("selected", "selected");
+		if(base_model.get("settings").category!=undefined && base_model.get("settings").category.calls)
+			$("#category-list", elData).find('option[value=calls]').attr("selected", "selected");
+		if(base_model.get("settings").category!=undefined && base_model.get("settings").category.tasks)
+			$("#category-list", elData).find('option[value=tasks]').attr("selected", "selected");
+
+		if(base_model.get("settings").user!=undefined){
+			var options ='';
+			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', async : false, dataType : 'json',
+				success: function(data){
+					$.each(data,function(index,domainUser){
+						options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
+					});
+					$('#user-list', elData).html(options);
+					$.each(base_model.get("settings").user, function(){
+						$("#user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
+					});
+					$('.loading-img').hide();
+				} });
+		}else{
+			var options ='';
+			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', async : false, dataType : 'json',
+				success: function(data){
+					$.each(data,function(index,domainUser){
+						options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
+					});
+					$('#user-list', elData).html(options);
+					$('.loading-img').hide();
+				} });
+		}
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#category-list, #user-list',elData).multiSelect();
+			$('#ms-category-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "category-list").attr("id", "category");
+			$('#ms-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "user-list").attr("id", "user");
+			$('#ms-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-category-list .ms-selectable .ms-list', elData).css("height","105px");
+			$('#ms-category-list .ms-selection .ms-list', elData).css("height","105px");
+			$('#ms-user-list', elData).addClass('portlet-user-ms-container');
+			$('#ms-category-list', elData).addClass('portlet-category-ms-container');					
+		});
 	}
 	
 	if(base_model.get('name')=="Pending Deals" || base_model.get('name')=="Deals By Milestone" || base_model.get('name')=="Closures Per Person" || base_model.get('name')=="Deals Funnel"){
@@ -578,13 +650,13 @@ $('.portlet-maximize').die().live('click', function(e){
 });
 $('.portlet-settings-save-modal').live('click', function(e){
 	e.preventDefault();
-	$(this).attr('disabled',true);
-	$(this).text('Saving...');
 	var scrollPosition=$(window).scrollTop();
 	var form_id=$(this).parent().prev().find('form:visible').attr('id');
 	var modal_id=$(this).parent().parent().parent().parent().attr('id');
 	if (!isValidForm('#' + form_id))
 		return false;
+	$(this).attr('disabled',true);
+	$(this).text('Saving...');
 	
 	var el=this.id;
 	var flag=true;
@@ -609,6 +681,22 @@ $('.portlet-settings-save-modal').live('click', function(e){
 				tags += $(this).attr('data')+',';
 		});
 		json['tags']=tags;
+	}
+	if(portletType=="USERACTIVITY" && portletName=="Leaderboard"){
+		var tempJson = {};
+		var tempJson1 = [];
+		$('#category-list',$('#'+el).parent().parent()).find('option').each(function(){
+			if($(this).is(':selected'))
+				tempJson[''+$(this).val()] = true;
+			else
+				tempJson[''+$(this).val()] = false;
+		});
+		$('#user-list',$('#'+el).parent().parent()).find('option:selected').each(function(){
+			tempJson1.push($(this).val());
+		});
+		json['duration'] = $('#duration',$('#'+el).parent().parent()).val();
+		json['category'] = tempJson;
+		json['user'] = tempJson1;
 	}
 	
 	var idVal = $('#'+$(this).attr('id').split("-save-modal")[0]).parent().find('.portlet_body').attr('id');
@@ -730,6 +818,16 @@ $('.portlet-settings-save-modal').live('click', function(e){
 												"</div>";
 	        				$('.stats-report-settings',p_el).find('span').eq(0).before(settingsEl);
 	        			} });*/
+	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Leaderboard"){
+	        		var start_date_str = data.get('settings').duration+'-start';
+					var end_date_str = data.get('settings').duration+'-end';
+					var users = '';
+					if(data.get('settings').user!=undefined)
+						users = JSON.stringify(data.get('settings').user);
+					App_Portlets.leaderboard[parseInt(pos)] = new Base_Model_View({ url : '/core/api/portlets/portletLeaderboard?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&revenue='+data.get('settings').category.revenue+'&dealsWon='+data.get('settings').category.dealsWon+'&calls='+data.get('settings').category.calls+'&tasks='+data.get('settings').category.tasks+'&user='+users, template : 'portlets-leader-board-body-model', tagName : 'div',
+						postRenderCallback : function(p_el){
+							$('#ui-id-'+column_position+'-'+row_position+' > .portlet_header').width($('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').find('ul').width());
+						} });
 	        	}
 	        	if(portletCollectionView!=undefined)
 	        		portletCollectionView.collection.fetch();
@@ -737,7 +835,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		&& data.get('name')!="Growth Graph" && data.get('name')!="Deals Assigned" && data.get('name')!="Calls Per Person" 
 	        			&& data.get('name')!="Pending Deals" && data.get('name')!="Deals Won" && data.get('name')!="Filter Based" 
 							&& data.get('name')!="Emails Opened" && data.get('name')!="Task Report" && data.get('name')!="Stats Report" 
-							&& data.get('name')!="Agenda" && data.get('name')!="Today Tasks"){
+							&& data.get('name')!="Agenda" && data.get('name')!="Today Tasks" && data.get('name')!="Leaderboard"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(portletCollectionView.render().el));
 	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Filter Based"){
@@ -795,6 +893,9 @@ $('.portlet-settings-save-modal').live('click', function(e){
 						else if(data.get('settings').duration=="all-over-due")
 							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No overdue tasks</div>");
 	        		}
+	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Leaderboard"){
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.leaderboard[parseInt(pos)].render().el));
 	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Stats Report"){
 	        		/*$('#'+el.split("-save-modal")[0]).parent().find('.stats_report_portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.stats_report_portlet_body').html($(App_Portlets.statsReport[parseInt(pos)].render().el));*/
@@ -1511,3 +1612,25 @@ function gravatarImgForPortlets(width){
 	var data_name = '';
 	return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 }
+$('.leaderboard_portlet_header').live('mouseover',function(e){
+	$('.leaderboard_portlet_header').find('.portlet_header_icons').css("visibility","visible");
+});
+$('.leaderboard_portlet_header').live('mouseout',function(e){
+	$('.leaderboard_portlet_header').find('.portlet_header_icons').css("visibility","hidden");
+});
+$('#category-select-all').die().live('click',function(e){
+		e.preventDefault();
+		$('#category-list').multiSelect('select_all');
+});
+$('#category-select-none').die().live('click',function(e){
+		e.preventDefault();
+		$('#category-list').multiSelect('deselect_all');
+});
+$('#user-select-all').die().live('click',function(e){
+		e.preventDefault();
+		$('#user-list').multiSelect('select_all');
+});
+$('#user-select-none').die().live('click',function(e){
+		e.preventDefault();
+		$('#user-list').multiSelect('deselect_all');
+});

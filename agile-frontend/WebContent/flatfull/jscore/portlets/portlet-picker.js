@@ -139,6 +139,12 @@ function set_p_portlets(base_model){
 		else
 			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.onboardingView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w').css('background','#F9EDBE'));
 		setPortletContentHeight(base_model);
+	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Leaderboard"){
+		App_Portlets.leaderboardView = new Base_Model_View({ model : base_model, template : "portlets-leader-board-model", tagName : 'div' });
+		if($('.gridster > div:visible > div',this.el).length==0)
+			$('.gridster > div:visible',this.el).html($(App_Portlets.leaderboardView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+		else
+			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.leaderboardView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 	}
 	//var itemView = new Base_Model_View({ model : base_model, template : "portlets-model", tagName : 'div', });
 
@@ -285,6 +291,17 @@ function set_p_portlets(base_model){
 									"</div>";
 				$('.stats-report-settings',p_el).find('span').eq(0).before(settingsEl);
 			} });*/
+	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Leaderboard"){
+		var start_date_str = base_model.get('settings').duration+'-start';
+		var end_date_str = base_model.get('settings').duration+'-end';
+		var users = '';
+		if(base_model.get('settings').user!=undefined)
+			users = JSON.stringify(base_model.get('settings').user);
+		App_Portlets.leaderboard[parseInt(pos)] = new Base_Model_View({ url : '/core/api/portlets/portletLeaderboard?duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&revenue='+base_model.get('settings').category.revenue+'&dealsWon='+base_model.get('settings').category.dealsWon+'&calls='+base_model.get('settings').category.calls+'&tasks='+base_model.get('settings').category.tasks+'&user='+users, template : 'portlets-leader-board-body-model', tagName : 'div',
+			postRenderCallback : function(p_el){
+				addWidgetToGridster(base_model);
+				$('#ui-id-'+column_position+'-'+row_position+' > .portlet_header').width($('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').find('ul').width());
+			} });
 	}
 	if(itemCollection!=undefined)
 		itemCollection.collection.fetch();
@@ -294,7 +311,8 @@ function set_p_portlets(base_model){
 				&& base_model.get('name')!="Growth Graph" && base_model.get('name')!="Today Tasks" && base_model.get('name')!="Deals Assigned"
 					&& base_model.get('name')!="Calls Per Person" && base_model.get('name')!="Agile CRM Blog" && base_model.get('name')!="Agenda" 
 						&& base_model.get('name')!="Pending Deals" && base_model.get('name')!="Deals Won" && base_model.get('name')!="Filter Based" 
-							&& base_model.get('name')!="Emails Opened" && base_model.get('name')!="Task Report" && base_model.get('name')!="Onboarding"){
+							&& base_model.get('name')!="Emails Opened" && base_model.get('name')!="Task Report" && base_model.get('name')!="Onboarding" 
+								&& base_model.get('name')!="Leaderboard"){
 			$(this).html(getRandomLoadingImg());
 			$(this).html($(itemCollection.render().el));
 			setPortletContentHeight(base_model);
@@ -354,6 +372,10 @@ function set_p_portlets(base_model){
 				else if(base_model.get('settings').duration=="all-over-due")
 					$(this).html("<div class='portlet-error-message'>No overdue tasks</div>");
 			}
+			setPortletContentHeight(base_model);
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Leaderboard"){
+			$(this).html(getRandomLoadingImg());
+			$(this).html($(App_Portlets.leaderboard[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Deals By Milestone"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
@@ -1675,7 +1697,21 @@ function setPortletContentHeight(base_model){
 		
 		$('#'+base_model.get("id")).parent().find('.stats_report_portlet').css("overflow-x","hidden");
 		$('#'+base_model.get("id")).parent().find('.stats_report_portlet').css("overflow-y","hidden");
-	}else{
+	}/*else if(base_model.get("name")=="Leaderboard"){
+		if(base_model.get("size_y")==1){
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+"px");
+		}else if(base_model.get("size_y")==2){
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+10+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+10+"px");
+		}else if(base_model.get("size_y")==3){
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+20+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+20+"px");
+		}
+		
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-x","hidden");
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-y","auto");
+	}*/else{
 		if(base_model.get("size_y")==1){
 			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)-45+"px");
 			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)-45+"px");

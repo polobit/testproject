@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
@@ -22,6 +23,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.portlets.Portlet;
 import com.agilecrm.portlets.util.PortletUtil;
+import com.agilecrm.user.DomainUser;
 
 /**
  * <code>PortletsAPI</code> includes REST calls to interact with
@@ -439,5 +441,40 @@ public class PortletsAPI {
 		json.put("reportType",reportType);
 		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
 		return PortletUtil.getPortletStatsReportData(json);
+	}
+	/**
+	 * Gets Leaderboard portlet data
+	 * 
+	 * @return {@Link JSONObject}
+	 */
+	@Path("/portletLeaderboard")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public JSONObject getPortletLeaderboardData(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate,@QueryParam("revenue") Boolean revenue,@QueryParam("dealsWon") Boolean dealsWon,@QueryParam("calls") Boolean calls,@QueryParam("tasks") Boolean tasks,@QueryParam("user") String user)throws Exception {
+		JSONObject json=new JSONObject();
+		json.put("duration",duration);
+		json.put("startDate",startDate);
+		json.put("endDate",endDate);
+		json.put("revenue",revenue);
+		json.put("dealsWon",dealsWon);
+		json.put("calls",calls);
+		json.put("tasks",tasks);
+		if(user!=null && !user.equals(""))
+			json.put("user", (JSONArray)JSONSerializer.toJSON(user));
+		else
+			json.put("user", null);
+		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
+		return PortletUtil.getPortletLeaderboardData(json);
+	}
+	/**
+	 * Gets all current domain users
+	 * 
+	 * @return {@Link JSONObject}
+	 */
+	@Path("/portletUsers")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<DomainUser> getCurrentDomainUsersForPortlets()throws Exception {
+		return PortletUtil.getCurrentDomainUsersForPortlets();
 	}
 }

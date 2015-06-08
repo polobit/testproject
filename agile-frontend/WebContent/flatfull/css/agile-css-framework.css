@@ -1281,6 +1281,11 @@ border-collapse: separate;
 
 /*ending table framework*/
 
+.thumb img{
+	height: 50px;
+	width: 50px;
+}
+
 .thumb-sm img{
 	height: 40px;
 	width: 40px;
