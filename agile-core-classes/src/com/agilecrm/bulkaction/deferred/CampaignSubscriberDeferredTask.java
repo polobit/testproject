@@ -68,13 +68,13 @@ public class CampaignSubscriberDeferredTask extends BulkActionAdaptor
 	    JSONObject campaignJSON = WorkflowUtil.getWorkflowJSON(campaignId);
 	    String campaignName = AgileTaskletUtil.getCampaignNameFromJSON(campaignJSON);
 
+	    // Convert Contacts into JSON Array
+	    JSONArray subscriberJSONArray = AgileTaskletUtil.getSubscriberJSONArray(contacts, campaignId, null);
+
 	    for (Contact contact : contacts)
 	    {
 		CampaignStatusUtil.setActiveCampaignStatus(contact, String.valueOf(campaignId), campaignName);
 	    }
-
-	    // Convert Contacts into JSON Array
-	    JSONArray subscriberJSONArray = AgileTaskletUtil.getSubscriberJSONArray(contacts, campaignId, null);
 
 	    for (int i = 0; i < subscriberJSONArray.length(); i++)
 	    {
