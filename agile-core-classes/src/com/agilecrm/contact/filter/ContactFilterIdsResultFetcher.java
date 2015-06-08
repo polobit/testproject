@@ -81,6 +81,8 @@ public class ContactFilterIdsResultFetcher
     {
 	max_fetch_size = Integer.MAX_VALUE;
 
+	this.searchMap = searchMap;
+
 	this.max_fetch_set_size = max_fetch_set_size;
 
 	domainUserId = currentDomainUserId;
