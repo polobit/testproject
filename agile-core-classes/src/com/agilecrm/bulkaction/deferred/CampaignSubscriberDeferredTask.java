@@ -78,11 +78,19 @@ public class CampaignSubscriberDeferredTask extends BulkActionAdaptor
 
 	    for (int i = 0; i < subscriberJSONArray.length(); i++)
 	    {
-		JSONObject subscriberJSON = subscriberJSONArray.getJSONObject(i);
-		// To avoid setting status in Start Node again
-		subscriberJSON.put(TaskCore._ACTIVE_STATUS_SET, true);
+		try
+		{
+		    JSONObject subscriberJSON = subscriberJSONArray.getJSONObject(i);
+		    // To avoid setting status in Start Node again
+		    subscriberJSON.put(TaskCore._ACTIVE_STATUS_SET, true);
 
-		TaskCore.executeWorkflow(campaignJSON, subscriberJSON);
+		    TaskCore.executeWorkflow(campaignJSON, subscriberJSON);
+
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
 	    }
 
 	}
