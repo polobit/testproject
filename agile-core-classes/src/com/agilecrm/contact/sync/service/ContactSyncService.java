@@ -312,9 +312,9 @@ public abstract class ContactSyncService implements SyncService
     private Contact saveContact(Contact contact)
     {
 	addTagToContact(contact);
-	if (ContactUtil.isDuplicateContact(contact))
+	//Temporary fix for stripe sync merging contacts
+	if (ContactUtil.isDuplicateContact(contact) && prefs.type!=null && !prefs.type.equals(Type.STRIPE))
 	{
-
 	    contact = ContactUtil.mergeContactFields(contact);
 
 	    if (!accessControl.canDelete())
