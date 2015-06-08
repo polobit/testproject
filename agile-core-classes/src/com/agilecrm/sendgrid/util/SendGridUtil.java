@@ -198,7 +198,7 @@ public class SendGridUtil
 	{
 
 		SendGrid.sendMail(apiUser, apiKey, sendGridDeferred.fromEmail,
-				sendGridDeferred.fromName, sendGridDeferred.to, sendGridDeferred.cc, sendGridDeferred.bcc,
+				sendGridDeferred.fromName, EmailUtil.getEmail(sendGridDeferred.to), EmailUtil.getEmail(sendGridDeferred.cc), EmailUtil.getEmail(sendGridDeferred.bcc),
 				sendGridDeferred.subject, sendGridDeferred.replyTo, sendGridDeferred.html, sendGridDeferred.text, null);
 	}
 
