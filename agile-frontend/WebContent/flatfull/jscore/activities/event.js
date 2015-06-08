@@ -315,7 +315,7 @@ $(function()
 	 */
 	$('#activityModal, #activityTaskModal').on('show.bs.modal', function(e)
 	{
-
+		$(".event_discription").addClass("hide");
 		// Removes alert message of error related date and time.
 		$('#' + this.id).find('.alert').css('display', 'none');
 
@@ -344,6 +344,7 @@ $(function()
 	 */
 	$('#updateActivityModal').on('hidden.bs.modal', function()
 	{
+
 		if ($(this).hasClass('in'))
 		{
 			return;

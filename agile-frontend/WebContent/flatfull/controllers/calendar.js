@@ -489,6 +489,17 @@ function show_model(id)
 		{
 			$("[id='delete_web_event']").attr("id", "event_delete");
 		}
+		if (event.description)
+		{
+			var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+			$("#event_desc").html(description);
+			$("#description").val(event.description);
+		}
+		else
+		{
+			var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
+			$("#event_desc").html(desc);
+		}
 		// Fills owner select element
 		populateUsersInUpdateActivityModal(event);
 	}

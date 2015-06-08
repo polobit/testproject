@@ -796,12 +796,11 @@ public class WebCalendarEventUtil
 				newEvnt.color = "#36C";
 				newEvnt.type = EventType.WEB_APPOINTMENT;
 
-				if (StringUtils.isNotEmpty(wce.notes) && StringUtils.isNotEmpty(wce.phoneNumber)
-						&& !"Meeting Type".equalsIgnoreCase(wce.phoneNumber))
+				if (StringUtils.isNotEmpty(wce.phoneNumber) && !"Meeting Type".equalsIgnoreCase(wce.phoneNumber))
 				{
-					newEvnt.description = wce.phoneNumber + " - " + wce.notes;
+					newEvnt.meeting_type = wce.phoneNumber.trim();
 				}
-				else if (StringUtils.isNotEmpty(wce.notes))
+				if (StringUtils.isNotEmpty(wce.notes))
 				{
 					newEvnt.description = wce.notes;
 				}
@@ -857,12 +856,11 @@ public class WebCalendarEventUtil
 				client_event.created_time = System.currentTimeMillis() / 1000;
 				newEvnt.color = "#36C";
 				newEvnt.type = EventType.WEB_APPOINTMENT;
-				if (StringUtils.isNotEmpty(wce.notes) && StringUtils.isNotEmpty(wce.phoneNumber)
-						&& !"Meeting Type".equalsIgnoreCase(wce.phoneNumber))
+				if (StringUtils.isNotEmpty(wce.phoneNumber) && !"Meeting Type".equalsIgnoreCase(wce.phoneNumber))
 				{
-					newEvnt.description = wce.phoneNumber + " - " + wce.notes;
+					newEvnt.meeting_type = wce.phoneNumber.trim();
 				}
-				else if (StringUtils.isNotEmpty(wce.notes))
+				if (StringUtils.isNotEmpty(wce.notes))
 				{
 					newEvnt.description = wce.notes;
 				}

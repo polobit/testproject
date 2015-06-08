@@ -12,6 +12,7 @@
                 <fieldset>
                     <input name="id" type="hidden" value="{{id}}" /> 
                     <input type="hidden"  name="type" id="type" value="{{type}}"/>
+                     <input type="hidden"  name="meeting_type" id="meeting_type" value="{{meeting_type}}"/>
                     <div class="row">
                     	<div class="col-md-6">
 	                        <div id="addEvent" class="control-group form-group">
@@ -99,12 +100,8 @@
 	                    </div>
                     </div>
                     
-                     <div class="control-group">
-					<label class="control-label"><b>Description </b></label>
-					<div class="controls">
-						<textarea id="description" name="description" rows="3"
-							class="input form-control" placeholder="Add Description"></textarea>
-					</div>
+                     <div class="control-group" id="event_desc">
+					
 				</div>
                 </fieldset>
             </form>

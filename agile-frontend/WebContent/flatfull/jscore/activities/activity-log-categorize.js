@@ -130,7 +130,7 @@ function update_event_activity(ele)
 	{
 		$("[id='event_delete']").attr("id", "delete_web_event");
 		web_event_title = value.title;
-		if (event.contacts.length > 0)
+		if (value.contacts.length > 0)
 		{
 			var firstname = getPropertyValue(value.contacts[0].properties, "first_name");
 			if (firstname == undefined)
@@ -144,6 +144,17 @@ function update_event_activity(ele)
 	else
 	{
 		$("[id='delete_web_event']").attr("id", "event_delete");
+	}
+	if (value.description)
+	{
+		var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+		$("#event_desc").html(description);
+		$("#description").val(value.description);
+	}
+	else
+	{
+		var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
+		$("#event_desc").html(desc);
 	}
 	// Fills owner select element
 	populateUsersInUpdateActivityModal(value);
