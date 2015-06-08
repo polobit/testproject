@@ -12,7 +12,6 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
-import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskCore;
@@ -55,7 +54,6 @@ public class CampaignSubscriberDeferredTask extends BulkActionAdaptor
 
     protected void performAction()
     {
-	WorkflowSubscribeUtil.subscribeDeferred(fetchContacts(), campaignId);
 	List<Contact> contacts = fetchContacts();
 
 	runCampaign(contacts);
