@@ -29,7 +29,7 @@ import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.TaskHandle;
-import com.thirdparty.SendGrid;
+import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.mandrill.Mandrill;
 
 /**
