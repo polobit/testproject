@@ -9,7 +9,7 @@ var PortletsRouter = Backbone.Router
 												},
 												
 												portlets : function(){
-													head.js(LIB_PATH + 'lib/jquery.gridster.js',function(){
+													head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js?='+ _AGILE_VERSION, LIB_PATH + 'lib/jquery.gridster.js',function(){
 														var el = $(getTemplate('portlets', {}));
 														$("#content").html(el);
 														if (IS_FLUID){
