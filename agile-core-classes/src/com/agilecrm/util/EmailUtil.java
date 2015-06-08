@@ -23,7 +23,7 @@ import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.campaignio.tasklets.util.MergeFieldsUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
-import com.thirdparty.SendGrid;
+import com.thirdparty.sendgrid.SendGrid;
 
 public class EmailUtil
 {

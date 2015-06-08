@@ -6,7 +6,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.util.HTTPUtil;
 import com.google.appengine.api.utils.SystemProperty;
-import com.thirdparty.SendGrid;
+import com.thirdparty.sendgrid.SendGrid;
 
 public class SendGridWebhookUtil
 {
