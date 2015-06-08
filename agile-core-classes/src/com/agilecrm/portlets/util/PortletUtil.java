@@ -98,8 +98,8 @@ public class PortletUtil {
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.ACTIVITY)){
 				//allPortlets.add(new Portlet("Emails Sent",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Stats Report",PortletType.USERACTIVITY));
-				allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Leaderboard",PortletType.USERACTIVITY));
+				allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
 			}
 			
 			allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
