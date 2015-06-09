@@ -1599,11 +1599,11 @@ $('#calls-user-select-none').die().live('click',function(e){
 	e.preventDefault();
 	$('#calls-user-list').multiSelect('deselect_all');
 });
-$('#task-report-select-all').die().live('click',function(e){
+$('#task-report-user-select-all').die().live('click',function(e){
 		e.preventDefault();
-		$('#task-report-list').multiSelect('select_all');
+		$('#task-report-user-list').multiSelect('select_all');
 });
-$('#task-report-select-none').die().live('click',function(e){
+$('#task-report-user-select-none').die().live('click',function(e){
 		e.preventDefault();
-		$('#task-report-list').multiSelect('deselect_all');
+		$('#task-report-user-list').multiSelect('deselect_all');
 });
