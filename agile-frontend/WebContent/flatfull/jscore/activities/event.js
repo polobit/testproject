@@ -351,6 +351,11 @@ $(function()
 			return;
 		}
 
+		$("#updateActivityForm").each(function()
+		{
+			this.reset();
+		});
+
 		$("#updateActivityForm").find("li").remove();
 		$('#update-event-time-1').closest('.control-group').show();
 		$('#update-event-date-2').closest('.row').show();
