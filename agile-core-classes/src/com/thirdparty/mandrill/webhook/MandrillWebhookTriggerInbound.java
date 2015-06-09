@@ -301,7 +301,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 
 	    DomainUser user = APIKey.getDomainUserRelatedToAPIKey(apiKey);
 	    EmailUtil.sendEmailUsingAPI("noreply@agilecrm.com", "Agile CRM", user.email, null, null, messageSubject,
-		    null, null, message.getString("text"), null);
+		    null, null, message.getString("text"), null, null);
 	}
 	catch (Exception e)
 	{

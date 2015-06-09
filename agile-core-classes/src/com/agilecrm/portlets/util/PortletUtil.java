@@ -90,7 +90,7 @@ public class PortletUtil {
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.CALENDAR)){
 				allPortlets.add(new Portlet("Agenda",PortletType.TASKSANDEVENTS));
 				allPortlets.add(new Portlet("Today Tasks",PortletType.TASKSANDEVENTS));
-				//allPortlets.add(new Portlet("Task Report",PortletType.TASKSANDEVENTS));
+				allPortlets.add(new Portlet("Task Report",PortletType.TASKSANDEVENTS));
 			}
 			
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.ACTIVITY)){
@@ -142,12 +142,17 @@ public class PortletUtil {
 				System.out.println("is duration value null--"+json.get("duration")==null);
 				System.out.println("duration value--"+json.get("duration"));*/
 				if(portlet.name!=null && portlet.name.equalsIgnoreCase("Growth Graph") && json.containsKey("start-date") && json.containsKey("end-date")
-						 && !json.containsKey("duration")){
+						 && !json.containsKey("duration"))
 					json.put("duration","1-week");
-					
+				else if(portlet.name!=null && (portlet.name.equalsIgnoreCase("Agenda") || portlet.name.equalsIgnoreCase("Today Tasks")) && !json.containsKey("duration"))
+					json.put("duration","1-day");
+				portlet.settings=json;
+			}else{
+				if(portlet.name!=null && (portlet.name.equalsIgnoreCase("Agenda") || portlet.name.equalsIgnoreCase("Today Tasks"))){
+					JSONObject json=new JSONObject();
+					json.put("duration","1-day");
 					portlet.settings=json;
-				}else
-					portlet.settings=json;
+				}
 			}
 			if(!portlet.name.equalsIgnoreCase("Dummy Blog"))
 				added_portlets.add(portlet);
@@ -368,7 +373,7 @@ public class PortletUtil {
 		}
 		return finalDealsList;
 	}
-	public static List<Event> getAgendaList(String startTime,String endTime)throws Exception{
+	public static List<Event> getAgendaList(String startTime,String endTime,String duration)throws Exception{
 		try {
 			if(startTime!=null && endTime!=null)
 				return EventUtil.getTodayPendingEvents(Long.valueOf(startTime),Long.valueOf(endTime));
@@ -379,11 +384,14 @@ public class PortletUtil {
 			return null;
 		}
 	}
-	public static List<Task> getTodayTasksList(String startTime,String endTime)throws Exception{
+	public static List<Task> getTodayTasksList(String startTime,String endTime,String duration)throws Exception{
 		try {
-			if(startTime!=null && endTime!=null)
-				return TaskUtil.getTodayPendingTasks(Long.valueOf(startTime),Long.valueOf(endTime));
-			else
+			if(startTime!=null && endTime!=null){
+				if(duration!=null && duration.equalsIgnoreCase("all-over-due"))
+					return TaskUtil.getTodayPendingTasks(Long.valueOf(startTime),Long.valueOf(endTime),duration);
+				else
+					return TaskUtil.getTodayPendingTasks(Long.valueOf(startTime),Long.valueOf(endTime),duration);
+			}else
 				return null;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -753,6 +761,14 @@ public class PortletUtil {
 			JSONObject statsReportPortletJSON = new JSONObject();
 			statsReportPortletJSON.put("duration","yesterday");
 			statsReportPortlet.prefs = statsReportPortletJSON.toString();
+			
+			JSONObject eventsPortletJSON = new JSONObject();
+			eventsPortletJSON.put("duration","today-and-tomorrow");
+			eventsPortlet.prefs = eventsPortletJSON.toString();
+			
+			JSONObject tasksPortletJSON = new JSONObject();
+			tasksPortletJSON.put("duration","today-and-tomorrow");
+			tasksPortlet.prefs = tasksPortletJSON.toString();
 			
 			JSONObject onboardingPortletJSON = new JSONObject();
 			List<String> onboardingSteps = new ArrayList<>();

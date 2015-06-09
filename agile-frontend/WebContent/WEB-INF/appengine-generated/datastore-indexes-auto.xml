@@ -1,0 +1,213 @@
+<!-- Indices written at Mon, 4 May 2015 17:19:59 IST -->
+
+<datastore-indexes>
+
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="star_value" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="star_value" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="first_name" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="first_name" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="last_contacted" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="last_contacted" direction="asc"/>
+    </datastore-index>
+
+	<!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="tagsWithTime.tag" direction="asc"/>
+        <property name="last_contacted" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="tagsWithTime.tag" direction="asc"/>
+        <property name="last_contacted" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="tagsWithTime.tag" direction="asc"/>
+        <property name="star_value" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="tagsWithTime.tag" direction="asc"/>
+        <property name="star_value" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="tagsWithTime.tag" direction="asc"/>
+        <property name="first_name" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="tagsWithTime.tag" direction="asc"/>
+        <property name="first_name" direction="asc"/>
+    </datastore-index>
+
+	    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="owner_key" direction="asc"/>
+        <property name="first_name" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="owner_key" direction="asc"/>
+        <property name="first_name" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="owner_key" direction="asc"/>
+        <property name="star_value" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="owner_key" direction="asc"/>
+        <property name="star_value" direction="asc"/>
+    </datastore-index>
+
+	<!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="owner_key" direction="asc"/>
+        <property name="last_contacted" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="owner_key" direction="asc"/>
+        <property name="last_contacted" direction="asc"/>
+    </datastore-index>
+
+	<datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="type" direction="asc"/>
+        <property name="created_time" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="is_complete" direction="asc"/>
+        <property name="owner" direction="asc"/>
+        <property name="due" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="type" direction="asc"/>
+        <property name="due" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="status" direction="asc"/>
+        <property name="type" direction="asc"/>
+        <property name="due" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="status" direction="asc"/>
+        <property name="type" direction="asc"/>
+        <property name="created_time" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="status" direction="asc"/>
+        <property name="due" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="status" direction="asc"/>
+        <property name="created_time" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="type" direction="asc"/>
+        <property name="task_completed_time" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="status" direction="asc"/>
+        <property name="type" direction="asc"/>
+        <property name="task_completed_time" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="status" direction="asc"/>
+        <property name="task_completed_time" direction="asc"/>
+    </datastore-index>
+
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="tagsWithTime.tag" direction="asc"/>
+        <property name="last_name" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="tagsWithTime.tag" direction="asc"/>
+        <property name="last_name" direction="asc"/>
+    </datastore-index>
+
+	    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="owner_key" direction="asc"/>
+        <property name="last_name" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="owner_key" direction="asc"/>
+        <property name="last_name" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="last_name" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="last_name" direction="asc"/>
+    </datastore-index>
+
+
+
+</datastore-indexes>

@@ -34,3 +34,12 @@ function campaignAlert(alertType)
 	alertTemplate.modal('show');
 	
 }
+
+function workflow_alerts(title, message , template){
+	
+	var JSONValues = {};
+	JSONValues["title"] = title;
+	JSONValues["message"] = message;
+	
+	$(getTemplate(template,JSONValues)).modal('show');	
+}

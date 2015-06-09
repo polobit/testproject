@@ -710,6 +710,14 @@
 	<servlet-mapping>
 		<servlet-name>upload_contacts</servlet-name>
 		<url-pattern>/upload</url-pattern>
+	</servlet-mapping>	
+	<servlet>
+		<servlet-name>upload_attachment</servlet-name>
+		<servlet-class>com.agilecrm.contact.upload.blob.UploadAttachmentServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>upload_attachment</servlet-name>
+		<url-pattern>/uploadattachment</url-pattern>
 	</servlet-mapping>
 
 	<!-- <servlet>
@@ -856,5 +864,31 @@
 		<filter-name>EcommerceWebhookFilter</filter-name>
 		<url-pattern>/ecommerce</url-pattern>
 	</filter-mapping>
+	
+	<servlet>
+		<servlet-name>FacebookPageTab</servlet-name>
+		<servlet-class>com.thirdparty.FacebookPageTab</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FacebookPageTab</servlet-name>
+		<url-pattern>/facebookpagetab</url-pattern>
+	</servlet-mapping>	
+	<servlet>
+		<servlet-name>FacebookPageServlet</servlet-name>
+		<servlet-class>com.agilecrm.facebookpage.FacebookPageServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FacebookPageServlet</servlet-name>
+		<url-pattern>/fbpage</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>FacebookPageCallbackServlet</servlet-name>
+		<servlet-class>com.agilecrm.facebookpage.FacebookPageCallbackServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FacebookPageCallbackServlet</servlet-name>
+		<url-pattern>/fbpagecallback</url-pattern>
+	</servlet-mapping>
+	
 	
 </web-app>

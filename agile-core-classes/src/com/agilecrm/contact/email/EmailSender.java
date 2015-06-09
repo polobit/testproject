@@ -15,6 +15,7 @@ import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.EmailBillingRestriction;
 import com.agilecrm.util.EmailUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.blobstore.BlobKey;
 
 public class EmailSender
 {
@@ -38,7 +39,7 @@ public class EmailSender
 	emailSender.billingRestriction = BillingRestrictionUtil.getBillingRestriction(true);
 
 	emailSender.emailBillingRestriction = (EmailBillingRestriction) DaoBillingRestriction.getInstace(
-		DaoBillingRestriction.ClassEntities.Email.toString(), emailSender.billingRestriction);
+	        DaoBillingRestriction.ClassEntities.Email.toString(), emailSender.billingRestriction);
 
 	emailSender.emailGateway = EmailGatewayUtil.getEmailGateway();
 
@@ -52,7 +53,7 @@ public class EmailSender
 
 	isWhiteLabled = billingRestriction.isEmailWhiteLabelEnabled();
 	System.out.println("Email limit for domain " + NamespaceManager.get() + " whitelabel : " + isWhiteLabled
-		+ "pending emails : " + billingRestriction.one_time_emails_count);
+	        + "pending emails : " + billingRestriction.one_time_emails_count);
 
 	return isWhiteLabled;
     }
@@ -72,12 +73,12 @@ public class EmailSender
 	System.out.println("Updated Stats time is..." + System.currentTimeMillis());
 
 	billingRestriction.one_time_emails_count = billingRestriction.one_time_emails_count == null ? 0
-		: billingRestriction.one_time_emails_count;
+	        : billingRestriction.one_time_emails_count;
 
 	billingRestriction.one_time_emails_count -= totalEmailsSent;
 
 	System.out.println("Updated count : " + billingRestriction.one_time_emails_count + ", emails sent"
-		+ totalEmailsSent);
+	        + totalEmailsSent);
 
 	totalEmailsSent = 0;
 
@@ -156,7 +157,7 @@ public class EmailSender
 
     public void sendEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
 	    String replyTo, String html, String text, String mandrillMetadata, List<Long> documentIds,
-	    String... attachments) throws Exception
+	    List<BlobKey> blobKeys, String... attachments) throws Exception
     {
 
 	String domain = NamespaceManager.get();
@@ -165,7 +166,7 @@ public class EmailSender
 	    if (canSend())
 	    {
 		EmailGatewayUtil.sendEmail(emailGateway, domain, fromEmail, fromName, to, cc, bcc, subject, replyTo,
-			html, text, mandrillMetadata, documentIds, attachments);
+		        html, text, mandrillMetadata, documentIds, blobKeys, attachments);
 
 		// Sets Billing restriction limit and account email stats
 		if (!EmailUtil.isToAgileEmail(to))
@@ -186,7 +187,7 @@ public class EmailSender
 
 	// If plan exceeded, throw exception
 	throw new Exception(
-		"Your email quota has expired. Please <a href=\"#subscribe\">upgrade</a> your email subscription.");
+	        "Your email quota has expired. Please <a href=\"#subscribe\">upgrade</a> your email subscription.");
 
     }
 
@@ -195,7 +196,7 @@ public class EmailSender
 	    String html, String text, String mandrillMetadata, String subscriberId, String campaignId)
     {
 	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
-		fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+	        fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
 
 	// Add to pull queue with from email as Tag
 	PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);

@@ -35,7 +35,7 @@
 				</div>
 				<div class="control-group form-group" style="display: none;">
                     <div class="controls col-sm-8 col-sm-offset-2">
-                        <input type="text" placeholder="From Name" class="form-control" id="from_name" name="from_name"  />
+                        <input type="text" placeholder="From Name" class="form-control" id="from_name" name="from_name"/>
                     </div>
                 </div>
                 <div class="control-group form-group">
@@ -100,32 +100,48 @@
                     </div>
                 </div>   
                 
+               <div class="control-group form-group" id="eattachment" style="display:none">
+                	<div class="controls col-sm-10 col-sm-offset-2">
+						<div class="email-attchment-bg form-control" id="attachment_id" name="blob_key" style="display: inline-block"">
+                    	<div id="attachment_fname" class="text-ellipsis"></div>	
+                        </div> 
+                        <a href="#" class="add-attachment-cancel pos-rlt pos-t-n-xs"><i class="icon-remove-circle"></i></a>		
+                    </div>
+                </div>
+
+				<div class="control-group form-group" style="display:none">
+                    <div class="controls col-sm-8">
+                        <input type="text" class="form-control" name="attachment_key" id="eattachment_key"/>
+                    </div>
+                </div>
+                
                <div class="control-group form-group">
-<div class="col-sm-offset-2 col-sm-8">
-<div class="checkbox pull-right">
-                   <label class="i-checks i-checks-sm">
-                       <input type="checkbox" name="track_clicks" checked="checked"><i></i>
-                       Enable Tracking
-                   </label>
-</div>
-<div class="pull-left"> 
-               	   
-                   <div class="controls">
-               	       <a href="#" class="add-attachment-select text-info"><i class='icon-plus-sign'/></i> Add Attachment</a>
-					   <span class="attachment-document-select" style="display:none;">
-							<select id="attachment-select" style="margin-bottom: -1px;" name="document_id" class="form-control inline-block w">
-							</select>
-							&nbsp;
-                            <a href="#" class="add-attachment-cancel"><i class="icon-remove-circle"></i></a>
-                            <span class="attachment-status"></span>
-						</span>
-				   </div>			
-				</div> 
-</div>
-<div class="clearfix"></div>           
-</div>
+					<div class="col-sm-offset-2 col-sm-8">
+						<div class="checkbox pull-right">
+                   			<label class="i-checks i-checks-sm">
+                       		<input type="checkbox" name="track_clicks" checked="checked"><i></i>
+                       		Enable Tracking
+                   			</label>
+						</div>
+						<div class="pull-left"> 
+               	        	<div class="controls">
+               	       		<a href="#" class="add-attachment-select text-info"><i class='icon-plus-sign'/></i> Add Attachment</a>
+					   		<span class="attachment-document-select" style="display:none;">
+								<select id="attachment-select" style="margin-bottom: -1px;" name="document_id" class="form-control inline-block w overflow-auto">
+								</select>
+                            	<a href="#" class="btn btn-default btn-sm add-attachment-cancel">Cancel</a>
+                    			<a href="#" class="btn btn-sm btn-primary add-attachment-confirm">Add</a> 
+								<!--&nbsp;
+                            	<a href="#" class="add-attachment-cancel"><i class="icon-remove-circle"></i></a>-->
+                            	<span class="attachment-status"></span>
+							</span>
+				  		 </div>			
+					</div> 
+				</div>
+				<div class="clearfix"></div>           
+			</div>
                 <input name="signature" type="hidden" value="{{#getCurrentUserPrefs}}{{signature}}{{/getCurrentUserPrefs}}"/>
-<div class="line ling-lg b-b"></div>
+				<div class="line ling-lg b-b"></div>
                 <div class="form-actions col-sm-offset-2 col-sm-8">          
 					<a href="#contacts" class="btn btn-sm btn-danger" id="send-email-close">Close</a>
                     <a href="#"  id="sendEmail" class="btn btn-sm btn-primary">Send</a>

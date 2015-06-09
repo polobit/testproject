@@ -597,7 +597,8 @@ var SubscribeRouter = Backbone.Router.extend({
 		var counter = 0;
 		$(".active").removeClass("active");
 		$("#planView").addClass("active");
-		$("#content").html(LOADING_HTML);
+		$("#content").html("");
+		showTransitionBar();
 		
 		/*
 		 * Creates new view with a render callback to setup expiry dates
@@ -627,7 +628,11 @@ var SubscribeRouter = Backbone.Router.extend({
 			that.show_card_details(subscription_model);
 			
 			that.recent_invoice(subscription_model);
-	});
+		}).done(function(){
+			hideTransitionBar();
+		}).fail(function(){
+			hideTransitionBar();
+		});
 		
 		
 	},
@@ -784,6 +789,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			{
 				$('.modal-backdrop').remove();	
 				$("#credit-card-form-modal").modal('hide');
+				$('body').removeClass('modal-open');
 				
 				$("#change-card").show();
 				

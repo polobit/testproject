@@ -41,9 +41,6 @@ public class ReportServlet extends HttpServlet
 
 	System.out.println("Duration : " + duration);
 
-	List<Key<DomainUser>> keys = DomainUserUtil.getAllDomainOwnerKeys();
-
-	System.out.println("domain owners :" + keys);
 	Set<String> domains = NamespaceUtil.getAllNamespaces();
 
 	for (String namespace : domains)

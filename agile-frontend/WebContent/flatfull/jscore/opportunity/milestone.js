@@ -62,7 +62,11 @@ $(function(){
 		   	     return;
 			
 			$(this).attr('disabled', 'disabled');
-			
+			var input = {};
+			var filterJSON = JSON.stringify($.parseJSON(readCookie('deal-filters')));
+			if (!readCookie("agile_deal_view"))
+				filterJSON.pipeline_id = readCookie('agile_deal_track');
+			input.filter = filterJSON;
 			 // Shows message
 		    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px" style="opacity:0.5;"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
 		    $(this).parent('.modal-footer').find('.deals-export-csv-message').append($save_info);
@@ -70,7 +74,8 @@ $(function(){
 			// Export Deals.
 			$.ajax({
 				url: '/core/api/opportunity/export',
-				type: 'GET',
+				type: 'POST',
+				data : input,
 				success: function() {
 					console.log('Exported!');
 					deals_csv_modal.modal('hide');

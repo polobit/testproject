@@ -27,6 +27,7 @@ import com.agilecrm.widgets.util.WidgetUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.TaskHandle;
 import com.thirdparty.SendGrid;
 import com.thirdparty.mandrill.Mandrill;
@@ -166,7 +167,7 @@ public class EmailGatewayUtil
 	else
 	    response = Mandrill.sendMail(emailGateway.api_key, false, "api_test@agilecrm.com", "API Test",
 		    "naresh@agilecrm.com", null, null, "Mandrill test email from " + NamespaceManager.get(), null,
-		    "Test Email.", "Test Email", null, null);
+		    "Test Email.", "Test Email", null, null, null);
 
 	try
 	{
@@ -309,7 +310,7 @@ public class EmailGatewayUtil
      */
     public static void sendEmail(EmailGateway emailGateway, String domain, String fromEmail, String fromName,
 	    String to, String cc, String bcc, String subject, String replyTo, String html, String text,
-	    String mandrillMetadata, List<Long> documentIds, String... attachments)
+	    String mandrillMetadata, List<Long> documentIds, List<BlobKey> blobKeys, String... attachments)
     {
 	try
 	{
@@ -324,7 +325,7 @@ public class EmailGatewayUtil
 	    if (emailGateway == null)
 	    {
 		Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-		        mandrillMetadata, documentIds, attachments);
+		        mandrillMetadata, documentIds, blobKeys, attachments);
 
 		return;
 	    }
@@ -332,7 +333,7 @@ public class EmailGatewayUtil
 	    // If Mandrill
 	    if (EMAIL_API.MANDRILL.equals(emailGateway.email_api))
 		Mandrill.sendMail(emailGateway.api_key, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html,
-		        text, mandrillMetadata, documentIds, attachments);
+		        text, mandrillMetadata, documentIds, blobKeys, attachments);
 
 	    // If SendGrid
 	    else if (EMAIL_API.SEND_GRID.equals(emailGateway.email_api))
@@ -350,7 +351,7 @@ public class EmailGatewayUtil
 	    System.out.println("Sending email again from exception in EmailGatewayUtil... " + e.getMessage());
 
 	    Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-		    mandrillMetadata, documentIds, attachments);
+		    mandrillMetadata, documentIds, blobKeys, attachments);
 
 	}
     }
@@ -373,12 +374,12 @@ public class EmailGatewayUtil
      */
     public static void sendEmail(String domain, String fromEmail, String fromName, String to, String cc, String bcc,
 	    String subject, String replyTo, String html, String text, String mandrillMetadata, List<Long> documentIds,
-	    String... attachments)
+	    List<BlobKey> blobKeys, String... attachments)
     {
 	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
 
 	sendEmail(emailGateway, domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-	        mandrillMetadata, documentIds, attachments);
+	        mandrillMetadata, documentIds, blobKeys, attachments);
     }
 
     /**

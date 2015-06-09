@@ -8,8 +8,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.cases.Case;
 import com.agilecrm.cases.util.CaseUtil;
@@ -128,4 +130,24 @@ public class ContactFullDetails
 	{
 		return CaseUtil.getCases(contact_id, null, null);
 	}
+
+	/**
+	 * Fetches events
+	 * 
+	 * @return
+	 */
+	@XmlElement
+	public List<Event> getEvents()
+	{
+		try
+		{
+			return EventUtil.getContactEventsBeforeToday(contact_id);
+		}
+		catch (Exception e)
+		{ // TODO Auto-generated catch block
+			e.printStackTrace();
+			return new ArrayList<Event>();
+		}
+	}
+
 }

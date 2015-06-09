@@ -217,7 +217,7 @@ public class Subscription
 	{
 	    NamespaceManager.set(namespace);
 
-	    Subscription subscription = SubscriptionUtil.getSubscription();
+	    Subscription subscription = SubscriptionUtil.getSubscription(true);
 
 	    if (subscription != null)
 	    {

@@ -85,6 +85,8 @@ import com.googlecode.objectify.Key;
 public class CSVUtil
 {
     BillingRestriction billingRestriction;
+    String bulk_action_tracker = String.valueOf(System.currentTimeMillis());
+
     private ContactBillingRestriction dBbillingRestriction;
 
     private static final int MAX_ALLOWED_FIELD_VALUE_SIZE = 490;
@@ -100,7 +102,7 @@ public class CSVUtil
     {
 	this.billingRestriction = billingRestriction;
 	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
-	        Contact.class.getSimpleName(), this.billingRestriction);
+		Contact.class.getSimpleName(), this.billingRestriction);
 
     }
 
@@ -229,14 +231,14 @@ public class CSVUtil
     public void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId)
 	    throws PlanRestrictedException, IOException
     {
-    	
-    	// Creates domain user key, which is set as a contact owner
-    Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
 
-    DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
+	// Creates domain user key, which is set as a contact owner
+	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
 
-    BulkActionUtil.setSessionManager(domainUser);
-    	
+	DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
+
+	BulkActionUtil.setSessionManager(domainUser);
+
 	// Refreshes count of contacts
 	billingRestriction.refreshContacts();
 
@@ -261,12 +263,10 @@ public class CSVUtil
 
 	List<ContactField> properties = contact.properties;
 
-
-
 	System.out.println(csvData.size());
 
 	System.out.println("available scopes for user " + domainUser.email + ", scopes = "
-	        + accessControl.getCurrentUserScopes());
+		+ accessControl.getCurrentUserScopes());
 
 	// Counters to count number of contacts saved contacts
 	int savedContacts = 0;
@@ -368,7 +368,7 @@ public class CSVUtil
 			    {
 				addressJSON.put(field.value, csvValues[j]);
 				tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
-				        field.type.toString()));
+					field.type.toString()));
 			    }
 
 			}
@@ -389,7 +389,7 @@ public class CSVUtil
 		    if (field.type.equals(FieldType.CUSTOM))
 		    {
 			List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(
-			        SCOPE.CONTACT, "DATE");
+				SCOPE.CONTACT, "DATE");
 			for (CustomFieldDef customFieldDef : customFields)
 			{
 			    if (field.name.equalsIgnoreCase(customFieldDef.field_label))
@@ -453,7 +453,7 @@ public class CSVUtil
 		    {
 			accessDeniedToUpdate++;
 			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-			        "Access denied to update contact"));
+				"Access denied to update contact"));
 
 			continue;
 		    }
@@ -471,7 +471,7 @@ public class CSVUtil
 		    {
 			++limitExceeded;
 			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-			        "limit is exceeded"));
+				"limit is exceeded"));
 			continue;
 		    }
 
@@ -483,6 +483,7 @@ public class CSVUtil
 		    }
 		}
 
+		tempContact.bulkActionTracker = bulk_action_tracker;
 		tempContact.save();
 	    }// end of try
 	    catch (InvalidTagException e)
@@ -857,7 +858,7 @@ public class CSVUtil
 	dBbillingRestriction.send_warning_message();
 
 	SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
-	        new Object[] { domainUser, status });
+		new Object[] { domainUser, status });
 
 	if (savedCompany != 0 || mergedCompany != 0)
 	    ActivityUtil.createLogForImport(ActivityType.COMPANY_IMPORT, EntityType.CONTACT, savedCompany,
@@ -917,7 +918,7 @@ public class CSVUtil
 	    List<ContactField> properties, String[] csvValues)
     {
 	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.FIRST_NAME))
-	        && StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
+		&& StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
 	{
 	    buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
 	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "Name field can't be blank"));
@@ -1252,7 +1253,7 @@ public class CSVUtil
 	    try
 	    {
 		if (!StringUtils.isEmpty(opportunity.name) && opportunity.pipeline_id != null
-		        && opportunity.milestone != null && !wrongMilestone)
+			&& opportunity.milestone != null && !wrongMilestone)
 		{
 		    opportunity.save();
 		    savedDeals++;
@@ -1296,7 +1297,7 @@ public class CSVUtil
 	}
 
 	SendMail.sendMail(domainUser.email, "CSV Deals Import Status", "csv_deal_import", new Object[] { domainUser,
-	        status });
+		status });
 
 	if (savedDeals > 0)
 	    ActivityUtil.createLogForImport(ActivityType.DEAL_IMPORT, EntityType.DEAL, savedDeals, 0);
@@ -1313,7 +1314,7 @@ public class CSVUtil
     private boolean isValidEmail(final String hex)
     {
 	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-	        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 	Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 	Matcher matcher = pattern.matcher(hex);
 	return matcher.matches();

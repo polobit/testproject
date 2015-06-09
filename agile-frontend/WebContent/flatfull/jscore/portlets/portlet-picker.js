@@ -213,13 +213,45 @@ function set_p_portlets(base_model){
 			} });
 		App_Portlets.dealsWon[parseInt(pos)].collection.fetch();
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Agenda"){
-		App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda?start_time='+getNewDueDate("TODAY")+'&end_time='+getNewDueDate("TOMORROW"), templateKey : 'portlets-events', individual_tag_name : 'tr',
+		var start_date_str = '';
+		var end_date_str = '';
+		if(base_model.get('settings').duration=='next-7-days'){
+			start_date_str = 'TOMORROW';
+			end_date_str = ''+base_model.get('settings').duration;
+		}else if(base_model.get('settings').duration=='today-and-tomorrow'){
+			start_date_str = 'today';
+			end_date_str = ''+base_model.get('settings').duration;
+		}else if(base_model.get('settings').duration=='this-week'){
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'this-week-end';
+		}else{
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'TOMORROW';
+		}
+		
+		App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda?duration='+base_model.get('settings').duration+'&start_time='+getStartAndEndDatesOnDue(start_date_str)+'&end_time='+getStartAndEndDatesOnDue(end_date_str), templateKey : 'portlets-events', sort_collection : false, individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				addWidgetToGridster(base_model);
 			} });
 		App_Portlets.todayEventsCollection[parseInt(pos)].collection.fetch();
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Today Tasks"){
-		App_Portlets.tasksCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletTodayTasks?start_time='+getNewDueDate("TODAY")+'&end_time='+getNewDueDate("TOMORROW"), templateKey : 'portlets-tasks', individual_tag_name : 'tr',
+		var start_date_str = '';
+		var end_date_str = '';
+		if(base_model.get('settings').duration=='next-7-days'){
+			start_date_str = 'TOMORROW';
+			end_date_str = ''+base_model.get('settings').duration;
+		}else if(base_model.get('settings').duration=='today-and-tomorrow'){
+			start_date_str = 'today';
+			end_date_str = ''+base_model.get('settings').duration;
+		}else if(base_model.get('settings').duration=='this-week'){
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'this-week-end';
+		}else{
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'TOMORROW';
+		}
+		
+		App_Portlets.tasksCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletTodayTasks?duration='+base_model.get('settings').duration+'&start_time='+getStartAndEndDatesOnDue(start_date_str)+'&end_time='+getStartAndEndDatesOnDue(end_date_str), templateKey : 'portlets-tasks', sort_collection : false, individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				addWidgetToGridster(base_model);
 			} });
@@ -292,10 +324,38 @@ function set_p_portlets(base_model){
 			$(this).html($(App_Portlets.dealsWon[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Agenda"){
+			/*if(App_Portlets.todayEventsCollection[parseInt(pos)]!=undefined && App_Portlets.todayEventsCollection[parseInt(pos)].collection.length>0){
+				$(this).html(getRandomLoadingImg());
+				$(this).html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
+			}else{
+				if(base_model.get('settings').duration=="next-7-days")
+					$(this).html("<div class='portlet-error-message'>No calendar events for next 7 days</div>");
+				else if(base_model.get('settings').duration=="this-week")
+					$(this).html("<div class='portlet-error-message'>No calendar events for this week</div>");
+				else if(base_model.get('settings').duration=="today-and-tomorrow")
+					$(this).html("<div class='portlet-error-message'>No calendar events for today and tomorrow</div>");
+				else if(base_model.get('settings').duration=="1-day")
+					$(this).html("<div class='portlet-error-message'>No calendar events for today</div>");
+			}*/
 			$(this).html(getRandomLoadingImg());
 			$(this).html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Today Tasks"){
+			/*if(App_Portlets.tasksCollection[parseInt(pos)]!=undefined && App_Portlets.tasksCollection[parseInt(pos)].collection.length>0){
+				$(this).html(getRandomLoadingImg());
+				$(this).html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
+			}else{
+				if(base_model.get('settings').duration=="next-7-days")
+					$(this).html("<div class='portlet-error-message'>No tasks for next 7 days</div>");
+				else if(base_model.get('settings').duration=="this-week")
+					$(this).html("<div class='portlet-error-message'>No tasks for this week</div>");
+				else if(base_model.get('settings').duration=="today-and-tomorrow")
+					$(this).html("<div class='portlet-error-message'>No tasks for today and tomorrow</div>");
+				else if(base_model.get('settings').duration=="1-day")
+					$(this).html("<div class='portlet-error-message'>No tasks for today</div>");
+				else if(base_model.get('settings').duration=="all-over-due")
+					$(this).html("<div class='portlet-error-message'>No overdue tasks</div>");
+			}*/
 			$(this).html(getRandomLoadingImg());
 			$(this).html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
@@ -874,6 +934,9 @@ function set_p_portlets(base_model){
 			}else if(base_model.get('settings').duration=='24-hours'){
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'now';
+			}else if(base_model.get('settings').duration=='this-week'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-week-end';
 			}else{
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'TOMORROW';
@@ -1186,7 +1249,7 @@ function dealsFunnelGraph(selector,funnel_data){
 	            marginRight: 20,
 	            className: 'deals-funnel-portlet'
 	        },
-	        colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050" ],
+	        colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
 	        title: {
 	            text: ''
 	        },
@@ -1395,7 +1458,7 @@ function portletGrowthGraph(selector,series,base_model){
 					align : 'right',
 					verticalAlign : 'top'
 				},
-				colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050" ],
+				colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
 		    });
 		});
 	}
@@ -1562,7 +1625,7 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	        exporting: {
 		        enabled: false
 		    },
-		    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", "#fad733" ],
+		    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", "#fad733","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
 		    legend : {
 				itemStyle : {
 					fontSize : '10px',
@@ -1670,7 +1733,7 @@ function getPortletsTimeConversion(diffInSeconds){
 function taskReportBarGraph(selector,groupByList,series,text,base_model,domainUserNamesList){
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
 		$('#'+selector).highcharts({
-			colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050" ],
+			colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
 	        chart: {
 	            type: 'bar',
 	            marginRight: 20
@@ -1746,7 +1809,25 @@ function taskReportBarGraph(selector,groupByList,series,text,base_model,domainUs
 				borderRadius : 3,
 				style : {
 					color : '#EFEFEF'
-				}
+				},
+				formatter: function() {
+                	if(base_model.get('settings')["group-by"]=="user"){
+                		var userIndex=0;
+	                	for(var i=0;i<groupByList.length;i++){
+	                		if(this.key==groupByList[i])
+	                			userIndex=i;
+	                	}
+                		return  '<div>' + 
+        		        		'<div class="p-n" style="color:'+this.series.color+';">'+domainUserNamesList[userIndex]+' </div>' +
+        		        		'<div class="p-n" style="color:'+this.series.color+';">'+this.series.name+':'+this.y+' </div>' +
+        		        		'</div>';
+                	}else
+                		return  '<div>' + 
+		        				'<div class="p-n" style="color:'+this.series.color+';">'+this.x+' </div>' +
+		        				'<div class="p-n" style="color:'+this.series.color+';">'+this.series.name+':'+this.y+' </div>' + 
+		        				'</div>';
+                },
+                useHTML: true
 			},
 			legend : {
 				itemStyle : {

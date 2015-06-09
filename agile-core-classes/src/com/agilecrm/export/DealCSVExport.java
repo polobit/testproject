@@ -34,7 +34,7 @@ public class DealCSVExport
     public static final String EXPECTED_VALUE = "Value";
     public static final String CLOSE_DATE = "Close Date";
     public static final String OWNER = "Owner";
-    public static final String RELATED_TO = "Related Conatacts";
+    public static final String RELATED_TO = "Related Contacts";
 
     private static final DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
 
