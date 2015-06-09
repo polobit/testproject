@@ -32,12 +32,10 @@ function gmap_add_marker(Locations){
 			var $this=this;
 			 if(this.email != undefined && this.email != ""){
 					var contactURL="core/api/contacts/search/email/"+this.email;
-					//Get the contact by passing an email :REST call 
 					$.getJSON(contactURL, function( Response ) {
 						var content="";
 						var contactName="";
 						if(Response != undefined){
-							contactName=Response.owner.name;
 							var index=0;
 							while(Response.properties.length > 0 && index < Response.properties.length){
 								
