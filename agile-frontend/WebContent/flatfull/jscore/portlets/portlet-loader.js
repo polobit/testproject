@@ -566,6 +566,8 @@ function showPortletSettings(el){
 					$('.loading-img').hide();
 				} });
 		}
+		$('#ms-category-list', elData).remove();
+		$('#ms-user-list', elData).remove();
 		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
 			$('#category-list, #user-list',elData).multiSelect();
 			$('#ms-category-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "category-list").attr("id", "category");
