@@ -469,6 +469,10 @@ function show_model(id)
 
 		$('#updateActivityModal').find("input[name='id']").val(id);
 		$('#updateActivityModal').find("input[name='type']").val(event.type);
+		if (event.meeting_type)
+			$('#updateActivityModal').find("input[name='meeting_type']").val(event.meeting_type);
+		else
+			$('#updateActivityModal').find("input[name='meeting_type']").val('');
 
 		if (event.type == "WEB_APPOINTMENT" && parseInt(event.start) > parseInt(new Date().getTime() / 1000))
 		{

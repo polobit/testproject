@@ -316,6 +316,7 @@ $(function()
 	$('#activityModal, #activityTaskModal').on('show.bs.modal', function(e)
 	{
 		$(".event_discription").addClass("hide");
+		$("textarea#description").val('');
 		// Removes alert message of error related date and time.
 		$('#' + this.id).find('.alert').css('display', 'none');
 
