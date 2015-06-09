@@ -464,6 +464,40 @@ function showPortletSettings(el){
 		elData = $('#portletsCallsPerPersonSettingsForm');
 		$("#group-by", elData).find('option[value='+ base_model.get("settings")["group-by"] +']').attr("selected", "selected");
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+		
+		if(base_model.get("settings")["calls-user-list"]!=undefined){
+			var options ='';
+			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+				success: function(data){
+					$.each(data,function(index,domainUser){
+						options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
+					});
+					$('#calls-user-list', elData).html(options);
+					$.each(base_model.get("settings")["calls-user-list"], function(){
+						$("#calls-user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
+					});
+					$('.loading-img').hide();
+				} });
+		}else{
+			var options ='';
+			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+				success: function(data){
+					$.each(data,function(index,domainUser){
+						options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
+					});
+					$('#calls-user-list', elData).html(options);
+					$('.loading-img').hide();
+				} });
+		}
+		$('#ms-calls-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#calls-user-list',elData).multiSelect();
+			$('#ms-calls-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "calls-user-list").attr("id", "calls-user");
+			$('#ms-calls-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-calls-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-calls-user-list', elData).addClass('portlet-user-ms-container');					
+		});
+		
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Task Report"){
 		$('#portletsTaskReportSettingsModal').modal('show');
 		$('#portletsTaskReportSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
@@ -481,6 +515,40 @@ function showPortletSettings(el){
 			$('#tasks-control-group').hide();
 		if(base_model.get("settings").tasks=="completed-tasks")
 			$('#split-by-task-report > option#status').hide();
+
+		if(base_model.get("settings")["task-report-user-list"]!=undefined){
+			var options ='';
+			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+				success: function(data){
+					$.each(data,function(index,domainUser){
+						options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
+					});
+					$('#task-report-user-list', elData).html(options);
+					$.each(base_model.get("settings")["task-report-user-list"], function(){
+						$("#task-report-user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
+					});
+					$('.loading-img').hide();
+				} });
+		}else{
+			var options ='';
+			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+				success: function(data){
+					$.each(data,function(index,domainUser){
+						options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
+					});
+					$('#task-report-user-list', elData).html(options);
+					$('.loading-img').hide();
+				} });
+		}
+		$('#ms-task-report-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#task-report-user-list',elData).multiSelect();
+			$('#ms-task-report-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "task-report-user-list").attr("id", "task-report-user");
+			$('#ms-task-report-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-task-report-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-task-report-user-list', elData).addClass('portlet-user-ms-container');					
+		});
+
 	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Stats Report"){
 		$('#portletsStatsReportSettingsModal').modal('show');
 		$('#portletsStatsReportSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
@@ -1164,8 +1232,12 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        			end_date_str = 'TOMORROW';
 	        		}
 	        		
+	        		var users = '';
+					if(data.get('settings')["calls-user-list"]!=undefined)
+						users = JSON.stringify(data.get('settings')["calls-user-list"]);
+
 	        		var selector=idVal;
-	        		var url='/core/api/portlets/portletCallsPerPerson?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str);
+	        		var url='/core/api/portlets/portletCallsPerPerson?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&user='+users;
 	        		
 	        		var answeredCallsCountList=[];
 	    			var busyCallsCountList=[];
@@ -1248,8 +1320,12 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    				end_date_str = 'TOMORROW';
 	    			}
 	        		
+	        		var users = '';
+					if(data.get('settings')["task-report-user-list"]!=undefined)
+						users = JSON.stringify(data.get('settings')["task-report-user-list"]);
+
 	        		var selector=idVal;
-	        		var url='/core/api/portlets/portletTaskReport?group-by='+data.get('settings')["group-by"]+'&split-by='+data.get('settings')["split-by"]+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&tasks='+data.get('settings').tasks;
+	        		var url='/core/api/portlets/portletTaskReport?group-by='+data.get('settings')["group-by"]+'&split-by='+data.get('settings')["split-by"]+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&tasks='+data.get('settings').tasks+'&user='+users;
 	        		
 	        		var groupByList=[];
 	    			var splitByList=[];

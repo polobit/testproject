@@ -705,8 +705,12 @@ function set_p_portlets(base_model){
 				end_date_str = 'TOMORROW';
 			}
 			
+			var users = '';
+			if(base_model.get('settings')["calls-user-list"]!=undefined)
+				users = JSON.stringify(base_model.get('settings')["calls-user-list"]);
+
 			var selector=$(this).attr('id');
-			var url='/core/api/portlets/portletCallsPerPerson?duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str);
+			var url='/core/api/portlets/portletCallsPerPerson?duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&user='+users;
 			
 			var answeredCallsCountList=[];
 			var busyCallsCountList=[];
@@ -804,9 +808,13 @@ function set_p_portlets(base_model){
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'TOMORROW';
 			}
+
+			var users = '';
+			if(base_model.get('settings')["task-report-user-list"]!=undefined)
+				users = JSON.stringify(base_model.get('settings')["task-report-user-list"]);
 			
 			var selector=$(this).attr('id');
-			var url='/core/api/portlets/portletTaskReport?group-by='+base_model.get('settings')["group-by"]+'&split-by='+base_model.get('settings')["split-by"]+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&tasks='+base_model.get('settings').tasks;
+			var url='/core/api/portlets/portletTaskReport?group-by='+base_model.get('settings')["group-by"]+'&split-by='+base_model.get('settings')["split-by"]+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&tasks='+base_model.get('settings').tasks+'&user='+users;
 			
 			var groupByList=[];
 			var splitByList=[];

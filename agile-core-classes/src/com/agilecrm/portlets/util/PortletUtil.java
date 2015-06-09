@@ -668,7 +668,30 @@ public class PortletUtil {
 		
 		List<Long> callsDurationList=new ArrayList<Long>();
 		
-		for(DomainUser domainUser : domainUsersList){
+		List<DomainUser> usersList = new ArrayList<DomainUser>();
+		
+		try {
+			if(json.containsKey("user")){
+				if(json.getJSONArray("user")!=null){
+					List<Long> userJSONList = new ArrayList<Long>();
+					for(int i=0;i<json.getJSONArray("user").size();i++){
+						userJSONList.add(json.getJSONArray("user").getLong(i));
+					}
+					for(DomainUser domainUser : domainUsersList){
+						if(userJSONList.contains(domainUser.id))
+							usersList.add(domainUser);
+					}
+				}
+			}else{
+				for(DomainUser domainUser : domainUsersList){
+					usersList.add(domainUser);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		for(DomainUser domainUser : usersList){
 			int answeredCallsCount=0;
 			int busyCallsCount=0;
 			int failedCallsCount=0;
@@ -821,11 +844,36 @@ public class PortletUtil {
 			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
 			if(dUser!=null)
 				domainUsersList=DomainUserUtil.getUsers(dUser.domain);
-			if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("user") && json.getString("split-by").equalsIgnoreCase("category")){
+
+			List<DomainUser> usersList = new ArrayList<DomainUser>();
+			
+			List<Key<DomainUser>> usersKeyList = new ArrayList<Key<DomainUser>>();
+
+			if(json.containsKey("user")){
+				if(json.getJSONArray("user")!=null){
+					List<Long> userJSONList = new ArrayList<Long>();
+					for(int i=0;i<json.getJSONArray("user").size();i++){
+						userJSONList.add(json.getJSONArray("user").getLong(i));
+					}
+					for(DomainUser domainUser : domainUsersList){
+						if(userJSONList.contains(domainUser.id)){
+							usersList.add(domainUser);
+							usersKeyList.add(new Key<DomainUser>(DomainUser.class, domainUser.id));
+						}
+					}
+				}
+			}else{
 				for(DomainUser domainUser : domainUsersList){
+					usersList.add(domainUser);
+					usersKeyList.add(new Key<DomainUser>(DomainUser.class, domainUser.id));
+				}
+			}
+
+			if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("user") && json.getString("split-by").equalsIgnoreCase("category")){
+				for(DomainUser domainUser : usersList){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(Task.Type category : Task.Type.values()){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.name(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"));
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.name(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),null);
 						if(tasksList!=null)
 							splitByMap.put(category.name(),tasksList.size());
 						else
@@ -845,10 +893,10 @@ public class PortletUtil {
 					domainUserNamesList.add(domainUser.name);
 				}
 			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("user") && json.getString("split-by").equalsIgnoreCase("status")){
-				for(DomainUser domainUser : domainUsersList){
+				for(DomainUser domainUser : usersList){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(Task.Status status : Task.Status.values()){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,null,status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"));
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,null,status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),null);
 						if(tasksList!=null)
 							splitByMap.put(status.name(),tasksList.size());
 						else
@@ -870,8 +918,8 @@ public class PortletUtil {
 			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("category") && json.getString("split-by").equalsIgnoreCase("user")){
 				for(Task.Type category : Task.Type.values()){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
-					for(DomainUser domainUser : domainUsersList){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.name(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"));
+					for(DomainUser domainUser : usersList){
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.name(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),null);
 						if(tasksList!=null)
 							splitByMap.put(domainUser.name,tasksList.size());
 						else
@@ -884,7 +932,7 @@ public class PortletUtil {
 				for(Task.Type category : Task.Type.values()){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(Task.Status status : Task.Status.values()){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.name(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"));
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.name(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),usersKeyList);
 						if(tasksList!=null)
 							splitByMap.put(status.name(),tasksList.size());
 						else
@@ -896,8 +944,8 @@ public class PortletUtil {
 			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("status") && json.getString("split-by").equalsIgnoreCase("user")){
 				for(Task.Status status : Task.Status.values()){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
-					for(DomainUser domainUser : domainUsersList){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,null,status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"));
+					for(DomainUser domainUser : usersList){
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,null,status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),null);
 						if(tasksList!=null)
 							splitByMap.put(domainUser.name,tasksList.size());
 						else
@@ -910,7 +958,7 @@ public class PortletUtil {
 				for(Task.Status status : Task.Status.values()){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(Task.Type category : Task.Type.values()){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.name(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"));
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.name(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),usersKeyList);
 						if(tasksList!=null)
 							splitByMap.put(category.name(),tasksList.size());
 						else
