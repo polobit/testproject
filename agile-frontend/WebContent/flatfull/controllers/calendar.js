@@ -497,7 +497,7 @@ function show_model(id)
 		{
 			var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
 			$("#event_desc").html(description);
-			$("#description").val(event.description);
+			$("textarea#description").val(event.description);
 		}
 		else
 		{
