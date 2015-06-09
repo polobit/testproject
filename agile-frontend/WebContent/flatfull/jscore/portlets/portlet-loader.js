@@ -1591,3 +1591,19 @@ function gravatarImgForPortlets(width){
 	var data_name = '';
 	return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 }
+$('#calls-user-select-all').die().live('click',function(e){
+	e.preventDefault();
+	$('#calls-user-list').multiSelect('select_all');
+});
+$('#calls-user-select-none').die().live('click',function(e){
+	e.preventDefault();
+	$('#calls-user-list').multiSelect('deselect_all');
+});
+$('#task-report-select-all').die().live('click',function(e){
+		e.preventDefault();
+		$('#task-report-list').multiSelect('select_all');
+});
+$('#task-report-select-none').die().live('click',function(e){
+		e.preventDefault();
+		$('#task-report-list').multiSelect('deselect_all');
+});
