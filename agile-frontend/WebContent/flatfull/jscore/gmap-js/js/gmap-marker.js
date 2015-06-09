@@ -28,6 +28,7 @@ function gmap_add_marker(Locations){
 	    	 marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
 	     
 		window.gmap_marker_list.push(marker);
+		//Listener holds the click event for all the markers 
 		google.maps.event.addListener(marker, 'click', function() {
 			var $this=this;
 			 if(this.email != undefined && this.email != ""){
@@ -54,9 +55,7 @@ function gmap_add_marker(Locations){
 						 infowindow.setContent(content);
 						 infowindow.open(map, $this);
 					});
-		    	 
 		     }
-
 			  
 			});
 		
