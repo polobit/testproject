@@ -186,7 +186,7 @@ function render_theme_previews()
 	var textarea_id = '<%= id%>';
 	
 	var html_link = '<span style="display:inline; float: right; margin-top: -32px;">'
-					+'<a class="btn" href="cd_tiny_mce.jsp?id='+textarea_id+'">'
+					+'<a class="btn" href="summernote.jsp?id='+textarea_id+'">'
 						+'Create your own'
 					+'</a></span>'
 	
@@ -255,7 +255,7 @@ function show_fancy_box(content_array)
 
      	    this.href = location.origin + this.href;
              
-            this.title = (this.index + 1) + ' of ' + this.group.length + '<br/> <a style="color: white; text-decoration: underline;" href="cd_tiny_mce.jsp?id='+t_id+'&url='+this.link+'">Load in Editor</a>';
+            this.title = (this.index + 1) + ' of ' + this.group.length + '<br/> <a style="color: white; text-decoration: underline;" href="summernote.jsp?id='+t_id+'&url='+this.link+'">Load in Editor</a>';
          },
          afterLoad: function()
          {
