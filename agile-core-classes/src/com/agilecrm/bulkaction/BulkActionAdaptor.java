@@ -48,9 +48,12 @@ public abstract class BulkActionAdaptor implements DeferredTask
 	}
     }
 
+    private List<Contact> contacts = null;
+
     protected List<Contact> fetchContacts()
     {
-	List<Contact> contacts = null;
+	if (contacts != null)
+	    return contacts;
 
 	try
 	{

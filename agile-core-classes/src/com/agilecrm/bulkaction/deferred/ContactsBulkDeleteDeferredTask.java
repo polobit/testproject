@@ -25,6 +25,7 @@ public class ContactsBulkDeleteDeferredTask extends BulkActionAdaptor
     {
 	this.key = new Key<DomainUser>(DomainUser.class, domainUserId);
 	this.contactKeySet = contactKeySet;
+	this.info = info;
     }
 
     @Override
