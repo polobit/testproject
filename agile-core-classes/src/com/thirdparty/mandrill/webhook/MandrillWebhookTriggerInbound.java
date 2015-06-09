@@ -1,7 +1,9 @@
 package com.thirdparty.mandrill.webhook;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +18,6 @@ import com.agilecrm.account.APIKey;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.EmailUtil;
@@ -29,12 +30,22 @@ import com.googlecode.objectify.Key;
 @SuppressWarnings("serial")
 public class MandrillWebhookTriggerInbound extends HttpServlet
 {
-    public enum AgileDetail
+    public static enum AgileDetail
     {
 	API_KEY, DOMAIN;
     }
 
     public static final String INBOUND_MAIL_EVENT = "INBOUND_MAIL_EVENT";
+
+    public static final Map<String, String> confirmationSubjects;
+
+    static
+    {
+        confirmationSubjects = new HashMap<String, String>();
+        confirmationSubjects.put("forwarding-noreply@google.com", "Forwarding Confirmation");
+        confirmationSubjects.put("no-reply@cc.yahoo-inc.com", "Forwarding Email Confirmation");
+        confirmationSubjects.put("noreply@zoho.com", "Confirm Email Forwarding");
+    }
 
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
@@ -277,12 +288,13 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	try
 	{
 	    String messageSubject = message.getString("subject");
-	    String[] emailTitleWords = new String[] { "Forwarding", "Confirmation" };
-	    for (int i = 0; i < emailTitleWords.length; i++)
-	    {
-		isConfirmationEmail = StringUtils.contains(messageSubject, emailTitleWords[i]);
-		if (!isConfirmationEmail)
+	    String fromEmail = message.getString("from_email");
+
+	    for(Map.Entry<String, String> entry : confirmationSubjects.entrySet()){
+		if(StringUtils.equals(entry.getKey(), fromEmail) && messageSubject.indexOf(entry.getValue())!=-1){
+		    isConfirmationEmail = true;
 		    break;
+		}
 	    }
 	}
 	catch (JSONException e)
