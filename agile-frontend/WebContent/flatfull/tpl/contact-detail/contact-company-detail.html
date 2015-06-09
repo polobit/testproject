@@ -104,10 +104,45 @@
 			{{/canEditContact}}
        </div>
     </div>
-					
-					
-					
+				
+<!-- Tags block -->
 
+<div class="m-t-sm"><small class="text-muted text-sm">Tags</small></div>
+						<div class="contact-tags m-b-xs m-t-xs">
+					<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
+							{{#if tagsWithTime.length}} 
+							 {{#canEditContact owner.id}}
+								{{#each tagsWithTime}}
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+								class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
+								class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> 
+								{{/each}}
+								{{else}}
+									{{#each tagsWithTime}}
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+											class="anchor" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
+									{{/each}}
+							 {{/canEditContact}}
+							{{/if}}
+						 
+						
+					</ul>	
+					<div class="inline-block m-t-xs">
+						<div id="addTagsForm" style="display: none;" class="m-b-none">
+							<div class="control-group save-tag m-b-none">
+								<input name="" type="text" id="addTags"
+									class="tags-typeahead ignore-comma-keydown form-control inline-block"
+									style="width: 60%" placeholder="Enter tag" />
+								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="contact-add-tags">Add</a></span>
+							</div>
+						</div>
+						{{#canEditContact owner.id}}
+			<a href="#" id="add-tags" rel="tooltip"
+							data-original-title="addtag" data-placement="top" class="text-xs text-muted"><i
+							class="icon-plus"></i> <span >Add</span></a>
+						{{/canEditContact}}
+					</div>
+				</div>	
 <!-- funda for contact details edit -->
 
 {{#property_is_exists "phone" properties}}
