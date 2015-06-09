@@ -151,7 +151,7 @@ function set_up_portlets(el, portlets_el){
 						$('#'+this.$resized_widget.attr('id')+' > .portlet_header').width($('#'+this.$resized_widget.attr('id')+' > .portlet_header').width()-scrollbarWidth);
 					else
 						$('#'+this.$resized_widget.attr('id')+' > .portlet_header').css("width","100%");*/
-					$('#'+this.$resized_widget.attr('id')+' > .portlet_header').width($('#'+this.$resized_widget.attr('id')+' > .portlet_body').find('ul').width());
+					$('#'+this.$resized_widget.attr('id')+' > .portlet_header').width(($('#'+this.$resized_widget.attr('id')+' > .portlet_body').find('ul').width()/$('#'+this.$resized_widget.attr('id')+' > .portlet_body').width()*100)+'%');
         		}
         		
 
@@ -828,7 +828,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 						users = JSON.stringify(data.get('settings').user);
 					App_Portlets.leaderboard[parseInt(pos)] = new Base_Model_View({ url : '/core/api/portlets/portletLeaderboard?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&revenue='+data.get('settings').category.revenue+'&dealsWon='+data.get('settings').category.dealsWon+'&calls='+data.get('settings').category.calls+'&tasks='+data.get('settings').category.tasks+'&user='+users, template : 'portlets-leader-board-body-model', tagName : 'div',
 						postRenderCallback : function(p_el){
-							$('#ui-id-'+column_position+'-'+row_position+' > .portlet_header').width($('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').find('ul').width());
+							$('#ui-id-'+column_position+'-'+row_position+' > .portlet_header').width(($('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').find('ul').width()/$('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').width()*100)+'%');
 						} });
 	        	}
 	        	if(portletCollectionView!=undefined)

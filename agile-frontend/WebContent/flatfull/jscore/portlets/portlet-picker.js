@@ -300,7 +300,7 @@ function set_p_portlets(base_model){
 		App_Portlets.leaderboard[parseInt(pos)] = new Base_Model_View({ url : '/core/api/portlets/portletLeaderboard?duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&revenue='+base_model.get('settings').category.revenue+'&dealsWon='+base_model.get('settings').category.dealsWon+'&calls='+base_model.get('settings').category.calls+'&tasks='+base_model.get('settings').category.tasks+'&user='+users, template : 'portlets-leader-board-body-model', tagName : 'div',
 			postRenderCallback : function(p_el){
 				addWidgetToGridster(base_model);
-				$('#ui-id-'+column_position+'-'+row_position+' > .portlet_header').width($('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').find('ul').width());
+				$('#ui-id-'+column_position+'-'+row_position+' > .portlet_header').width(($('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').find('ul').width()/$('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').width()*100)+'%');
 			} });
 	}
 	if(itemCollection!=undefined)
