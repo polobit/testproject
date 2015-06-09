@@ -1,7 +1,7 @@
 $(function()
 {
 // takes searchbox value and navigate this to router
-	$( "#domainSearchForm" ).submit(function( e ) 	{
+	$( "#domain-search-results" ).die().live('click', function( e ) 	{
 		e.preventDefault(e);
 		
 		var email = $('#domainSearchText').val();
