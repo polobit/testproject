@@ -934,6 +934,46 @@ public class Contact extends Cursor
 	return tags;
     }
 
+    @JsonIgnore
+    public void setLastContacted(Long lastContacted)
+    {
+	this.last_contacted = lastContacted;
+    }
+
+    @JsonIgnore
+    public Long getLastContacted()
+    {
+    return last_contacted;
+    }
+    
+    @JsonIgnore
+    public void setLastEmailed(Long lastEmailed)
+    {
+	this.last_emailed = lastEmailed;
+	
+	setLastContacted(last_emailed);
+    }
+
+    @JsonIgnore
+    public Long getLastEmailed()
+    {
+	return last_emailed;
+    }
+    
+    @JsonIgnore
+    public void setLastCampaignEmailed(Long lastCampaignEmailed)
+    {
+	this.last_campaign_emaild = lastCampaignEmailed;
+	
+	setLastContacted(last_campaign_emaild);
+    }
+
+    @JsonIgnore
+    public Long getLastCampaignEmailed()
+    {
+	return last_campaign_emaild;
+    }
+    
     /**
      * While saving a contact it contains domain user key as owner, but while
      * retrieving includes complete DomainUser object.
