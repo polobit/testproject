@@ -158,9 +158,35 @@ public class NoteUtil
      */
     public static void deleteNote(Long noteId, Long contactId)
     {
-	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
-	Key<Note> noteKey = new Key<Note>(contactKey, Note.class, noteId);
-	dao.deleteKey(noteKey);
+	Note note = NoteUtil.getNote(noteId);
+	List<String> contact_ids = note.getContact_ids();
+	if (contact_ids.size() == 1)
+	{
+	    if (contact_ids.contains(String.valueOf(contactId)))
+	    {
+		Key<Note> noteKey = new Key<Note>(Note.class, noteId);
+		dao.deleteKey(noteKey);
+	    }
+
+	}
+	else
+	{
+	    String[] contact_idsArr = new String[contact_ids.size()];
+	    contact_idsArr = contact_ids.toArray(contact_idsArr);
+	    for (String id : contact_idsArr)
+	    {
+
+		if (id.equals(String.valueOf(contactId)))
+		{
+		    Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
+		    note.removeRelatedContacts(contactKey);
+		    note.getContact_ids().removeAll(contact_ids);
+		    note.save();
+		}
+
+	    }
+
+	}
     }
 
     public static List<Note> getNotesRelatedToCurrentUser()
