@@ -128,10 +128,10 @@ public class SendGridWebhook extends HttpServlet
 			// By default SOFT_BOUNCE
 			EmailBounceType type = EmailBounceType.SOFT_BOUNCE;
 
-			// if (HARD_BOUNCE.equals(eventJSON.getString(EVENT)))
+			if (HARD_BOUNCE.equals(eventJSON.getString(EVENT)))
 			type = EmailBounceType.HARD_BOUNCE;
 
-			// if (SPAM_REPORT.equals(eventJSON.getString(EVENT)))
+			if (SPAM_REPORT.equals(eventJSON.getString(EVENT)))
 			type = EmailBounceType.SPAM;
 
 			String campaignId = null;
