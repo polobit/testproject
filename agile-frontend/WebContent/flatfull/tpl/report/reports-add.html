@@ -119,7 +119,7 @@
 													class="BETWEEN_NUMBER number required form-control"/>
 												<input id="updated_date" type="text" name="updated_date"
 													class="ON AFTER BEFORE BETWEEN input required date form-control"
-													placeholder="MM/DD/YY" />
+													placeholder="{{dateFormat}}"  data-date-format="{{dateFormat}}" />
 
 												<input type="text" name="temp"
 													class="IS_GREATER_THAN IS_LESS_THAN number required form-control"/> 
@@ -130,7 +130,7 @@
 												<input type="text" name="temp"
 													class="BETWEEN_NUMBER number form-control required"/>
 												<input id="date_between" type="text" name="temp"
-													class="BETWEEN input date form-control required" placeholder="MM/DD/YY" />
+													class="BETWEEN input date form-control required" placeholder="{{dateFormat}}"  data-date-format="{{dateFormat}}" />
 											</div>
 										</td>
 										<td class="v-top">
@@ -155,14 +155,14 @@
 													id="date_between" type="text"
 													name="temp"
 													class="BETWEEN EQUALS AFTER BEFORE input date required form-control"
-													placeholder="MM/DD/YY" />
+													placeholder="{{dateFormat}}"  data-date-format="{{dateFormat}}"/>
 											</div>
 										</td>
 										<td class="controls v-top">
 											<div id="nested_rhs" name="nested_rhs">
 												<input id="date_between" type="text" name="temp"
 													class="BETWEEN input date required form-control"
-													placeholder="MM/DD/YY" />
+													placeholder="{{dateFormat}}"  data-date-format="{{dateFormat}}"/>
 											</div>
 										</td>
 										<td>

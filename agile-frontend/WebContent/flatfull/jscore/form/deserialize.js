@@ -398,7 +398,7 @@ function deserializeChainedElement(data, rule_element)
 			{
 				value = getLocalTimeFromGMTMilliseconds(value);
 
-				$(input_element).val(new Date(parseInt(value)).format('mm/dd/yyyy'));
+				$(input_element).val(getDateInFormatFromEpoc(value));
 
 				$(input_element).datepicker({ format : CURRENT_USER_PREFS.dateFormat, });
 
@@ -607,8 +607,8 @@ function deserializeChainedSelect1(form, el, element)
 		var RHS_NEW_ELEMENT = $(currentElemnt).find('.'+CONDITION).find('#RHS_NEW').children();
 		if ($(RHS_ELEMENT).hasClass("date")) {
 			RHS_VALUE = getLocalTimeFromGMTMilliseconds(RHS_VALUE);
-			$(RHS_ELEMENT).val(new Date(parseInt(RHS_VALUE)).format('mm/dd/yyyy'));
-			$(RHS_ELEMENT).attr('prev-val', new Date(parseInt(RHS_VALUE)).format('mm/dd/yyyy'));
+			$(RHS_ELEMENT).val(getDateInFormatFromEpoc(RHS_VALUE));
+			$(RHS_ELEMENT).attr('prev-val', getDateInFormatFromEpoc(RHS_VALUE));
 		} else {
 			$(RHS_ELEMENT).val(RHS_VALUE);
 			$(RHS_ELEMENT).attr('prev-val', RHS_VALUE);
@@ -616,8 +616,8 @@ function deserializeChainedSelect1(form, el, element)
 		if(RHS_NEW_ELEMENT) {
 			if ($(RHS_NEW_ELEMENT).hasClass("date")) {
 				RHS_NEW_VALUE = getLocalTimeFromGMTMilliseconds(RHS_NEW_VALUE);
-				$(RHS_NEW_ELEMENT).val(new Date(parseInt(RHS_NEW_VALUE)).format('mm/dd/yyyy'));
-				$(RHS_NEW_ELEMENT).attr('prev-val', new Date(parseInt(RHS_NEW_VALUE)).format('mm/dd/yyyy'));
+				$(RHS_NEW_ELEMENT).val(getDateInFormatFromEpoc(RHS_NEW_VALUE));
+				$(RHS_NEW_ELEMENT).attr('prev-val', getDateInFormatFromEpoc(RHS_NEW_VALUE));
 			} else {
 				$(RHS_NEW_ELEMENT).val(RHS_NEW_VALUE);
 				$(RHS_NEW_ELEMENT).attr('prev-val', RHS_NEW_VALUE);

@@ -517,8 +517,8 @@ function addTasklListDetails(addTaskElement)
 	case "DUE":
 	{		
 		var epochTime = getNewDueDate($(addTaskElement).attr("heading"));
-		var startDate = new Date(epochTime *1000).format('mm/dd/yyyy');
-		$("#taskForm").find("input.date").val(getDateInFormat(startDate)).datepicker('update');		
+		var startDate = getDateInFormatFromEpoc(epochTime);
+		$("#taskForm").find("input.date").val(startDate).datepicker('update');		
 	}
 		break;		
 	case "PRIORITY":

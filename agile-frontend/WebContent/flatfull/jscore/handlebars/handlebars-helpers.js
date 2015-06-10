@@ -653,6 +653,15 @@ $(function()
 		
 	});
 
+	// Helper function to return date format from  preferences.
+
+	Handlebars.registerHelper('dateFormat', function()
+	{
+
+		return CURRENT_USER_PREFS.dateFormat;
+		
+	});
+
 	// Helper function to return current date in preferences page.
 
 	Handlebars.registerHelper('currentDateInFormat', function(format)

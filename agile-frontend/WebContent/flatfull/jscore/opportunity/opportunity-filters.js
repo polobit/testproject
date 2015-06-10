@@ -121,7 +121,7 @@ function setupDealFilters(cel){
 					else if(key=='owner_id')
 						$('#owners-list-filters').val(value);
 					else if($('#'+key).hasClass('date'))
-						$('#'+key).val(new Date(value * 1000).format('mm/dd/yyyy'));
+						$('#'+key).val(getDateInFormatFromEpoc(value));
 					
 					if(key.indexOf('_filter')>0)
 						$('#'+key).trigger('change');

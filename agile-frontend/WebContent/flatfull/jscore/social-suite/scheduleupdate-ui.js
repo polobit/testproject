@@ -26,7 +26,7 @@ $(function()
 					this.className = "tweet-scheduling tweet-scheduling-active";
 
 					// Set current date.
-					$('input.date').val(new Date().format('mm/dd/yyyy'));
+					$('input.date').val(getDateInFormat(new Date()));
 					$('#scheduled_date').datepicker({ startDate : "today", autoclose : true, todayHighlight : true, format : CURRENT_USER_PREFS.dateFormat }).on('changeDate',
 							function(ev)
 							{

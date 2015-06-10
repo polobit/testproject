@@ -451,8 +451,8 @@ function show_model(id)
 		end = getDate(event.end);
 		// Set Date for Event
 
-		$("#update-event-date-1").val(getDateInFormat(event.start));
-		$("#update-event-date-2").val(getDateInFormat(event.end));
+		$("#update-event-date-1").val(getDateInFormatFromEpoc(event.start));
+		$("#update-event-date-2").val(getDateInFormatFromEpoc(event.end));
 
 		// Set Time for Event
 		if ((start.getHours() == 00) && (end.getHours() == 00) && (end.getMinutes() == 00))
