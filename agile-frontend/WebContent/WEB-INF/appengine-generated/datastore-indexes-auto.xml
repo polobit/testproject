@@ -111,6 +111,42 @@
         <property name="last_contacted" direction="asc"/>
     </datastore-index>
 
+     <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="tagsWithTime.tag" direction="asc"/>
+        <property name="last_name" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="tagsWithTime.tag" direction="asc"/>
+        <property name="last_name" direction="asc"/>
+    </datastore-index>
+
+	    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="owner_key" direction="asc"/>
+        <property name="last_name" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="owner_key" direction="asc"/>
+        <property name="last_name" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="last_name" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="last_name" direction="asc"/>
+    </datastore-index>
+
 	
 
 
