@@ -583,6 +583,79 @@ public class QueryDocument<T> implements QueryInterface
 		documents.put("availableDocuments", Long.valueOf(searchResults.size()));
 	    else
 		documents.put("availableDocuments", index.search(query_string).getNumberFound());
+		// If page size is not specified, returns results with out any limit
+		// (Returns are entities )
+		if (page == null && orderBy == null)
+			return processQuery(query);
+
+		// Builds options based on the query string, page size (limit) and sets
+		// cursor.
+		QueryOptions options = buildOptions(query, page, cursor);
+
+		if (StringUtils.isNotBlank(orderBy))
+		{
+			SortOptions sortOptions = null;
+			SortExpression.Builder sortExpressionBuilder = SortExpression.newBuilder();
+			if (orderBy.startsWith("-"))
+			{
+				sortExpressionBuilder = sortExpressionBuilder.setExpression(orderBy.substring(1)).setDirection(
+						SortDirection.DESCENDING);
+			}
+			else
+			{
+				sortExpressionBuilder = sortExpressionBuilder.setExpression(orderBy).setDirection(
+						SortDirection.ASCENDING);
+			}
+			if (orderBy.contains("time"))
+			{
+				sortExpressionBuilder.setDefaultValueDate(SearchApiLimits.MAXIMUM_DATE_VALUE);
+			} 
+			else if (orderBy.contains("name"))
+			{
+				sortExpressionBuilder.setDefaultValue("");
+			}
+			else
+			{
+				sortExpressionBuilder.setDefaultValueNumeric(0.0);
+			}
+			sortOptions = SortOptions.newBuilder().addSortExpression(sortExpressionBuilder.build()).build();
+			options = QueryOptions.newBuilder(options).setSortOptions(sortOptions).build();
+		}
+
+		// Calls process the query with the options built. It returns results in
+		// a map with available entities count and document ids limited to count
+		// sent
+
+		Map<String, Object> results = processQueryWithOptions(options, query);
+
+		Collection<ScoredDocument> resultSetDocuments = (Collection<ScoredDocument>) results.get("fetchedDocuments");
+		Collection<T> entites = getDatastoreEntities(results, page, cursor);
+		entities.addAll(entites);
+
+		if (isBackendOperations && resultSetDocuments != null && entities.size() < resultSetDocuments.size()
+				&& requests < 10)
+		{
+			System.out.println("iterating again");
+
+			List<ScoredDocument> tempDocuments = new ArrayList<ScoredDocument>(resultSetDocuments);
+			String newCursor = tempDocuments.get(tempDocuments.size() - 1).getCursor().toWebSafeString();
+			if (StringUtils.equals(cursor, newCursor) || newCursor == null)
+				return entities;
+
+			page = resultSetDocuments.size() - entities.size();
+			System.out.println("remaianing items = " + page + " cursor" + newCursor + "requests" + requests);
+			requests++;
+			cursor = newCursor;
+			processQuery(query, page, newCursor, orderBy);
+		}
+		if (entities.size() > 0)
+			return entities;
+
+		return entites;
+
+		// Fetches entities from datastore based on the document ids returned.
+		// The type of the it entities are fetched dynamically, based on the
+		// class template
 	}
 
 	documents.put("fetchedDocuments", searchResults);

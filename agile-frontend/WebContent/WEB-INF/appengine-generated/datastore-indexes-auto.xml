@@ -208,6 +208,4 @@
         <property name="last_name" direction="asc"/>
     </datastore-index>
 
-
-
 </datastore-indexes>
