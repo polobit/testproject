@@ -294,6 +294,121 @@
 </div>
 </script>
 
+<script id="portlets-leader-board-body-model-template" type="text/html">
+<div>
+	<ul class="m-n p-n leader-board-{{categoryCount}} leader-board-view">
+		{{#if revenue}}
+		<li class="pull-left">
+			{{#each revenueJson}}
+			{{#if isDomainUser}}
+				<div class="b-b p-sm p-b-none bg-light">
+					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
+						<img class="img-inital r r-2x" src="{{userPic}}" />
+					</div>
+					<div class="agile-thumb agile-thumb-view p-b-xs">
+						<div>You</div>
+						<div class="text-xlg">{{currencySymbol}}{{numberWithCommasForActivities value}}</div>
+					</div>
+				</div>
+			{{else}}
+				<div class="b-b p-sm p-b-none">
+					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
+						<img class="img-inital r r-2x" src="{{userPic}}" /> 
+					</div>
+					<div class="agile-thumb agile-thumb-view p-b-xs">
+						<div>{{userName}}</div>
+						<div class="text-xlg">{{currencySymbol}}{{numberWithCommasForActivities value}}</div>
+					</div>
+				</div>
+			{{/if}}
+			{{/each}}
+		</li>
+		{{/if}}
+		{{#if dealsWon}}
+		<li class="pull-left">
+			{{#each dealsWonJson}}
+				{{#if isDomainUser}}
+				<div class=" b-b p-sm p-b-none bg-light">
+					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
+						<img class="img-inital r r-2x" src="{{userPic}}" />
+					</div>
+					<div class="agile-thumb agile-thumb-view p-b-xs">
+						<div>You</div>
+						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Won</small></div>
+					</div>
+				</div>
+			{{else}}
+				<div class=" b-b p-sm p-b-none">
+					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
+						<img class="img-inital r r-2x" src="{{userPic}}" />
+					</div>
+					<div class="agile-thumb agile-thumb-view p-b-xs">
+						<div>{{userName}}</div>
+						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Won</small></div>
+					</div>
+				</div>
+			{{/if}}
+			{{/each}}
+		</li>
+		{{/if}}
+		{{#if calls}}
+		<li class="pull-left">
+			{{#each callsJson}}
+				{{#if isDomainUser}}
+				<div class=" b-b p-sm p-b-none bg-light">
+					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
+						<img class="img-inital r r-2x" src="{{userPic}}" />
+					</div>
+					<div class="agile-thumb agile-thumb-view p-b-xs">
+						<div>You</div>
+						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Done</small></div>
+					</div>
+				</div>
+			{{else}}
+				<div class=" b-b p-sm p-b-none">
+					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
+						<img class="img-inital r r-2x" src="{{userPic}}" />
+					</div>
+					<div class="agile-thumb agile-thumb-view p-b-xs">
+						<div>{{userName}}</div>
+						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Done</small></div>
+					</div>
+				</div>
+			{{/if}}
+			{{/each}}
+		</li>
+		{{/if}}
+		{{#if tasks}}
+		<li class="pull-left">
+			{{#each tasksJson}}
+				{{#if isDomainUser}}
+				<div class=" b-b p-sm p-b-none bg-light">
+					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
+						<img class="img-inital r r-2x" src="{{userPic}}" />
+					</div>
+					<div class="agile-thumb agile-thumb-view p-b-xs">
+						<div>You</div>
+						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Done</small></div>
+					</div>
+				</div>
+			{{else}}
+				<div class=" b-b p-sm p-b-none">
+					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
+						<img class="img-inital r r-2x" src="{{userPic}}" />
+					</div>
+					<div class="agile-thumb agile-thumb-view p-b-xs">
+						<div>{{userName}}</div>
+						<div class="text-xlg">{{numberWithCommasForActivities value}}<small class="m-l-xs">Done</small></div>
+					</div>
+				</div>
+			{{/if}}
+			{{/each}}
+		</li>
+		{{/if}}
+	</ul>
+</div>
+</script>
+
 <script id="portlets-contacts-filterbased-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
 			<div class="portlet_header_icons pull-right clear-fix" style="display:none;">
@@ -1192,6 +1307,80 @@
 	<div class="portlets" id="{{id}}">&nbsp;</div>
 	<div class="column_position" style="display:none">{{column_position}}</div>
 	<div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+
+<script id="portlets-leader-board-model-template" type="text/html">
+<div class="leaderboard_portlet_header portlet_header portlet_edit_icons" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+	<ul class="m-n p-n leader-board-{{getLeaderboardCateCount settings.category}}">
+		{{#if settings.category.revenue}}
+		<li class="pull-left">
+			<div class="panel-heading">
+				<h4 class="h4 text-ellipsis"><!-- <i class="icon icon-money"></i> -->Revenue</h4>
+				{{#if settings.category.dealsWon}}
+				{{else}}
+					{{#if settings.category.calls}}
+					{{else}}
+						{{#if settings.category.tasks}}
+						{{else}}
+							<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs" style="visibility: hidden;">
+								<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+								<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
+							</div>
+						{{/if}}
+					{{/if}}
+				{{/if}}
+			</div>
+		</li>
+		{{/if}}
+		{{#if settings.category.dealsWon}}
+		<li class="pull-left">
+			<div class="panel-heading">
+				<h4 class="h4 text-ellipsis"><!-- <i class="icon icon-money"></i> -->Deals</h4>
+				{{#if settings.category.calls}}
+				{{else}}
+					{{#if settings.category.tasks}}
+					{{else}}
+						<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs" style="visibility: hidden;">
+							<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+							<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
+						</div>
+					{{/if}}
+				{{/if}}
+			</div>
+		</li>
+		{{/if}}
+		{{#if settings.category.calls}}
+		<li class="pull-left">
+			<div class="panel-heading">
+				<h4 class="h4 text-ellipsis"><!-- <i class="icon icon-call-end"></i> -->Calls</h4>
+				{{#if settings.category.tasks}}
+				{{else}}
+				<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs" style="visibility: hidden;">
+					<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+					<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
+				</div>
+				{{/if}}
+			</div>
+		</li>
+		{{/if}}
+		{{#if settings.category.tasks}}
+		<li class="pull-left">
+			<div class="panel-heading">
+				<h4 class="h4 text-ellipsis"><!-- <i class="icon icon-tasks"></i> -->Tasks</h4>
+				<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs" style="visibility: hidden;">
+					<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+					<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
+				</div>
+			</div>
+		</li>
+		{{/if}}
+	</ul>
+	<div class="clearfix"></div>
+</div>
+<div class="portlet_body"></div>
+<div class="portlets" id="{{id}}">&nbsp;</div>
+<div class="column_position" style="display:none">{{column_position}}</div>
+<div class="row_position" style="display:none">{{row_position}}</div>	
 </script>
 
 <script id="portlets-collection-template" type="text/html">
