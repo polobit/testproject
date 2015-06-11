@@ -122,7 +122,7 @@ public class QueryDocumentUtil
 			 * Build equals and not equals queries conditions except time based
 			 * conditions
 			 */
-			if (!lhs.contains("time"))
+			if (!lhs.contains("time") || condition.equals(SearchRule.RuleCondition.DEFINED) || condition.equals(SearchRule.RuleCondition.NOT_DEFINED) )
 			{
 				/*
 				 * Create new query with LHS and RHS conditions to be processed
@@ -229,6 +229,7 @@ public class QueryDocumentUtil
 					query = buildNotNestedCondition(joinCondition, query,
 							"field_labels" + ":\"" + lhs + "\"");
 				}
+				return query;
 
 			}
 
