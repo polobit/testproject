@@ -298,7 +298,17 @@ $('#portlets-events-model-list > tr').live('click', function(e){
 		}
 	    // Fills owner select element 
 		populateUsersInUpdateActivityModal(model.toJSON());
-		
+		if (model.toJSON().description)
+		{
+			var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+			$("#event_desc").html(description);
+			$("textarea#description").val(model.toJSON().description);
+		}
+		else
+		{
+			var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
+			$("#event_desc").html(desc);
+		}
 	 // Show edit modal for the event
 	    $("#updateActivityModal").modal('show');
 	   	return false;
