@@ -212,7 +212,7 @@ if(isSafari && isWin)
 					<div id="openid_btns">
 					   <% if(!StringUtils.isEmpty(error)){%>
 				        <div class="alert error alert-danger login-error text-center m-b-none">
-							<a class="close m-t-n-sm" data-dismiss="alert" href="#">&times</a><%=error%> 
+							<a class="close" data-dismiss="alert" href="#" style="position:relative;top:-2px;">&times</a><%=error%> 
 						</div>
 						<%}%>
 							

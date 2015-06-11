@@ -156,7 +156,7 @@
 
 
 <script id ="contacts-custom-view-custom-template" type="text/html">
-	<td class='data' data=''>
+	<td class='data' data='{{id}}'>
        <div class="text-ellipsis" style="width:15em;">
 		  <span>{{value}}</span>
        </div>
@@ -164,7 +164,7 @@
 </script>
 
 <script id = "contacts-custom-view-custom-date-template" type="text/html">
-	<td class='data' data=''>
+	<td class='data' data='{{id}}'>
        <div class="text-ellipsis" style="width:15em;">
 	   	  <span>{{epochToHumanDate "dd mmm yyyy" value}}</span>
        </div>

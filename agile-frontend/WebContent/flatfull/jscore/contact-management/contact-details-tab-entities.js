@@ -34,6 +34,7 @@ var contact_details_tab = {
 	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
 	            		 $(".note-created-time", el).timeago();
 	              	})
+	              	contact_detail_page_infi_scroll($('#contact-dtl', App_Contacts.contactDetailView.el), notesView);
 	            }
 	        });
 	        notesView.collection.fetch();
