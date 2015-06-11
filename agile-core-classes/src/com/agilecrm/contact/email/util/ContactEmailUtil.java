@@ -142,6 +142,10 @@ public class ContactEmailUtil
 	    System.out.println("Got Exception while sending email " + e.getMessage());
 	}
 
+	// combined body and signature. Inorder to avoid link tracking in
+	// signature, it is appended after conversion.
+	body = body.replace("</body>", "<div><br/>" + signature + "</div></body>");
+	
 	// Appends tracking image to body if only one email. It is not
 	// possible to append image at the same time to show all given
 	// emails to the recipient.
@@ -152,10 +156,6 @@ public class ContactEmailUtil
 	    if (trackClicks)
 		body = EmailLinksConversion.convertLinksUsingJSOUP(body, contactId, null, false);
 	}
-
-	// combined body and signature. Inorder to avoid link tracking in
-	// signature, it is appended after conversion.
-	body = body.replace("</body>", "<div><br/>" + signature + "</div></body>");
 
 	// Sends email
 	EmailUtil.sendMail(fromEmail, fromName, to, cc, bcc, subject, null, body, null, documentIds, blobKeys);
