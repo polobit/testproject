@@ -17,13 +17,13 @@
 				<div id="RHS">
 					<div class="control-group form-group">
 						<div class="controls">
-							<input type="text" class="input-medium required SEND_GRID form-control" placeholder="Username" value="{{api_user}}" name="api_user">
+							<input type="text" autocomplete="off" class="input-medium required SEND_GRID form-control" placeholder="Username" value="{{api_user}}" name="api_user">
 						</div>
 					</div>
 					<div class="control-group form-group">
 						<div class="controls">
-							<input type="password" class="input-medium form-control required SEND_GRID" placeholder="Password" value="{{#if api_user}}{{api_key}}{{/if}}"  name="api_key"/>
-                        	<input type="text" class="input-medium required MANDRILL form-control"  placeholder="API Key" value="{{#unless api_user}}{{api_key}}{{/unless}}" name="api_key"/>
+							<input type="password" autocomplete="off" class="input-medium form-control required SEND_GRID" placeholder="Password" value="{{#if api_user}}{{api_key}}{{/if}}"  name="api_key"/>
+                        	<input type="text" autocomplete="off" class="input-medium required MANDRILL form-control"  placeholder="API Key" value="{{#unless api_user}}{{api_key}}{{/unless}}" name="api_key"/>
 						</div>
 					</div>
 				</div>
