@@ -50,7 +50,7 @@ cron:
 
 - description: Due Tasks Reminder
   url: /backend/cron/tasks
-  schedule: every day 07:00
+  schedule: every day 10:00
   
 - description: Twitter5
   url: /backend/cron/twitter?rate=rate_limit_5
