@@ -709,7 +709,13 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		if(data.get('settings').duration=='yesterday'){
 	        			start_date_str = ''+data.get('settings').duration;
 	        			end_date_str = 'today';
-	        		}else{
+	        		}else if(data.get('settings').duration=='this-week'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-week-end';
+					}else if(data.get('settings').duration=='this-month'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-month-end';
+					}else{
 	        			start_date_str = ''+data.get('settings').duration;
 	        			end_date_str = 'TOMORROW';
 	        		}
@@ -799,16 +805,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        				$('.stats-report-settings',p_el).find('span').eq(0).before(settingsEl);
 	        			} });*/
 	        	}
-	        	if(portletCollectionView!=undefined)
-	        		portletCollectionView.collection.fetch();
-	        	if(data.get('name')!="Deals By Milestone" && data.get('name')!="Closures Per Person" && data.get('name')!="Deals Funnel" && data.get('name')!="Emails Sent" 
-	        		&& data.get('name')!="Growth Graph" && data.get('name')!="Deals Assigned" && data.get('name')!="Calls Per Person" 
-	        			&& data.get('name')!="Pending Deals" && data.get('name')!="Deals Won" && data.get('name')!="Filter Based" 
-							&& data.get('name')!="Emails Opened" && data.get('name')!="Task Report" && data.get('name')!="Stats Report" 
-							&& data.get('name')!="Agenda" && data.get('name')!="Today Tasks"){
-	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
-	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(portletCollectionView.render().el));
-	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Filter Based"){
+	        	if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Filter Based"){
 	        		if(data.get('settings').filter=="companies"){
 	        			App_Portlets.filteredCompanies[parseInt(pos)].collection.fetch();
 	        			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
@@ -888,6 +885,9 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			}else if(data.get('settings').duration=='this-week'){
 						start_date_str = ''+data.get('settings').duration;
 						end_date_str = 'this-week-end';
+					}else if(data.get('settings').duration=='this-month'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-month-end';
 					}else{
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'TOMORROW';
@@ -1227,7 +1227,13 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		if(data.get('settings').duration=='yesterday'){
 	        			start_date_str = ''+data.get('settings').duration;
 	        			end_date_str = 'today';
-	        		}else{
+	        		}else if(data.get('settings').duration=='this-week'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-week-end';
+					}else if(data.get('settings').duration=='this-month'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-month-end';
+					}else{
 	        			start_date_str = ''+data.get('settings').duration;
 	        			end_date_str = 'TOMORROW';
 	        		}
@@ -1315,7 +1321,13 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			if(data.get('settings').duration=='yesterday'){
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'today';
-	    			}else{
+	    			}else if(data.get('settings').duration=='this-week'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-week-end';
+					}else if(data.get('settings').duration=='this-month'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-month-end';
+					}else{
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'TOMORROW';
 	    			}
@@ -1388,7 +1400,13 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			if(data.get('settings').duration=='yesterday'){
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'today';
-	    			}else{
+	    			}else if(data.get('settings').duration=='this-week'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-week-end';
+					}else if(data.get('settings').duration=='this-month'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-month-end';
+					}else{
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'TOMORROW';
 	    			}

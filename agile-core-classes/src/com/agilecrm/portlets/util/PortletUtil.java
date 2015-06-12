@@ -739,6 +739,8 @@ public class PortletUtil {
 				userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
 			if(userPrefs!=null)
 				domainUserImgList.add(userPrefs.pic);
+			else
+				domainUserImgList.add("no image");
 		}
 		callsPerPersonJSON.put("answeredCallsCountList",answeredCallsCountList);
 		callsPerPersonJSON.put("busyCallsCountList",busyCallsCountList);
@@ -888,7 +890,7 @@ public class PortletUtil {
 					if(userPrefs!=null)
 						groupByList.add(userPrefs.pic);
 					else
-						groupByList.add("");
+						groupByList.add("no image");
 					splitByList.add(splitByMap);
 					domainUserNamesList.add(domainUser.name);
 				}
@@ -911,7 +913,7 @@ public class PortletUtil {
 					if(userPrefs!=null)
 						groupByList.add(userPrefs.pic);
 					else
-						groupByList.add("");
+						groupByList.add("no image");
 					splitByList.add(splitByMap);
 					domainUserNamesList.add(domainUser.name);
 				}

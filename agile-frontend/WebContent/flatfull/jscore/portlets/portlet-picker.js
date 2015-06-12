@@ -188,6 +188,12 @@ function set_p_portlets(base_model){
 		if(base_model.get('settings').duration=='yesterday'){
 			start_date_str = ''+base_model.get('settings').duration;
 			end_date_str = 'today';
+		}else if(base_model.get('settings').duration=='this-week'){
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'this-week-end';
+		}else if(base_model.get('settings').duration=='this-month'){
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'this-month-end';
 		}else{
 			start_date_str = ''+base_model.get('settings').duration;
 			end_date_str = 'TOMORROW';
@@ -286,19 +292,8 @@ function set_p_portlets(base_model){
 				$('.stats-report-settings',p_el).find('span').eq(0).before(settingsEl);
 			} });*/
 	}
-	if(itemCollection!=undefined)
-		itemCollection.collection.fetch();
 	$('.portlet_body',this.el).each(function(){
-		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')!="Deals By Milestone" 
-			&& base_model.get('name')!="Closures Per Person" && base_model.get('name')!="Deals Funnel" && base_model.get('name')!="Emails Sent"
-				&& base_model.get('name')!="Growth Graph" && base_model.get('name')!="Today Tasks" && base_model.get('name')!="Deals Assigned"
-					&& base_model.get('name')!="Calls Per Person" && base_model.get('name')!="Agile CRM Blog" && base_model.get('name')!="Agenda" 
-						&& base_model.get('name')!="Pending Deals" && base_model.get('name')!="Deals Won" && base_model.get('name')!="Filter Based" 
-							&& base_model.get('name')!="Emails Opened" && base_model.get('name')!="Task Report" && base_model.get('name')!="Onboarding"){
-			$(this).html(getRandomLoadingImg());
-			$(this).html($(itemCollection.render().el));
-			setPortletContentHeight(base_model);
-		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Filter Based"){
+		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Filter Based"){
 			if(base_model.get('settings').filter=="companies"){
 				App_Portlets.filteredCompanies[parseInt(pos)].collection.fetch();
 				$(this).html(getRandomLoadingImg());
@@ -700,6 +695,12 @@ function set_p_portlets(base_model){
 			if(base_model.get('settings').duration=='yesterday'){
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'today';
+			}else if(base_model.get('settings').duration=='this-week'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-week-end';
+			}else if(base_model.get('settings').duration=='this-month'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-month-end';
 			}else{
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'TOMORROW';
@@ -804,6 +805,12 @@ function set_p_portlets(base_model){
 			if(base_model.get('settings').duration=='yesterday'){
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'today';
+			}else if(base_model.get('settings').duration=='this-week'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-week-end';
+			}else if(base_model.get('settings').duration=='this-month'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-month-end';
 			}else{
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'TOMORROW';
@@ -882,6 +889,12 @@ function set_p_portlets(base_model){
 			if(base_model.get('settings').duration=='yesterday'){
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'today';
+			}else if(base_model.get('settings').duration=='this-week'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-week-end';
+			}else if(base_model.get('settings').duration=='this-month'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-month-end';
 			}else{
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'TOMORROW';
@@ -945,6 +958,9 @@ function set_p_portlets(base_model){
 			}else if(base_model.get('settings').duration=='this-week'){
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'this-week-end';
+			}else if(base_model.get('settings').duration=='this-month'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-month-end';
 			}else{
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'TOMORROW';
@@ -1542,7 +1558,7 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	                		if(this.value==domainUserImgList[i])
 	                			userIndex=i;
 	                	}
-	                	if(this.value!=undefined && this.value!="")
+	                	if(this.value!=undefined && this.value!="" && this.value!="no image")
 	                		return '<img src="'+this.value+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUsersList[userIndex]+'"/>';
 	                	else
 	                		return '<img src="'+gravatarImgForPortlets(25)+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUsersList[userIndex]+'"/>';
@@ -1759,7 +1775,7 @@ function taskReportBarGraph(selector,groupByList,series,text,base_model,domainUs
 		                		if(this.value==groupByList[i])
 		                			userIndex=i;
 		                	}
-	                		if(this.value!=undefined && this.value!="")
+	                		if(this.value!=undefined && this.value!="" && this.value!="no image")
 		                		return '<img src="'+this.value+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUserNamesList[userIndex]+'"/>';
 		                	else
 		                		return '<img src="'+gravatarImgForPortlets(25)+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUserNamesList[userIndex]+'"/>';
