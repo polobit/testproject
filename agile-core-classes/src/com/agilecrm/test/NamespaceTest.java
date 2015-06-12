@@ -17,8 +17,8 @@ public class NamespaceTest extends HttpServlet
 	// TODO Auto-generated method stub
 	Long startTime = System.currentTimeMillis();
 
-	System.out.println(NamespaceUtil.getAllNamespaces());
+	System.out.println(NamespaceUtil.getAllNamespacesNew());
 
-	System.out.println("total time takes : " + (startTime - System.currentTimeMillis()));
+	System.out.println("total time takes : " + (System.currentTimeMillis() - startTime));
     }
 }

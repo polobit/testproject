@@ -38,12 +38,13 @@ public class NamespaceUtil
      * 
      * @return set of domains as namespaces
      */
-    public static Set<String> getAllNamespaces()
+    public static Set<String> getAllNamespacesNew()
     {
 	Set<String> namespaces = new HashSet<String>();
 	DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 
-	FetchOptions options = FetchOptions.Builder.withChunkSize(500);
+	FetchOptions options = FetchOptions.Builder.withChunkSize(1000);
+
 	Query q = new Query(Entities.NAMESPACE_METADATA_KIND);
 
 	for (Entity e : ds.prepare(q).asIterable(options))
@@ -64,9 +65,29 @@ public class NamespaceUtil
 	return namespaces;
     }
 
+    /**
+     * Gets all namespaces by iterating domain users
+     * 
+     * @return set of domains as namespaces
+     */
+    public static Set<String> getAllNamespaces()
+    {
+	return getAllNamespacesNew();
+
+	// Get All Users
+	/*
+	 * List<DomainUser> domainList = DomainUserUtil.getAllDomainOwners();
+	 * 
+	 * Set<String> domains = new HashSet<String>(); for (DomainUser
+	 * domainUser : domainList) { domains.add(domainUser.domain); }
+	 * 
+	 * return domains;
+	 */
+    }
+
     public static Set<String> getAllNamespacesUsingIterator()
     {
-	return DomainUserUtil.getAllDomainsUsingIterator();
+	return getAllNamespacesNew();
 
     }
 
