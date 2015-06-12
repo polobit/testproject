@@ -44,7 +44,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
         confirmationSubjects = new HashMap<String, String>();
         confirmationSubjects.put("forwarding-noreply@google.com", "Forwarding Confirmation");
         confirmationSubjects.put("no-reply@cc.yahoo-inc.com", "Forwarding Email Confirmation");
-        confirmationSubjects.put("noreply@zoho.com", "Confirm Email Forwarding");
+        confirmationSubjects.put("noreply@zoho.com", "Email forwarding confirmation");
     }
 
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
