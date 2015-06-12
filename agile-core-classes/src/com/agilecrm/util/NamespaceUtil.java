@@ -2,7 +2,6 @@ package com.agilecrm.util;
 
 import java.net.URL;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.json.JSONException;
@@ -10,13 +9,13 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
-import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entities;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Query;
 
@@ -33,165 +32,175 @@ import com.google.appengine.api.datastore.Query;
  */
 public class NamespaceUtil
 {
-	/**
-	 * Gets all namespaces by iterating domain users
-	 * 
-	 * @return set of domains as namespaces
+    /**
+     * Gets all namespaces by iterating domain users
+     * 
+     * @return set of domains as namespaces
+     */
+    public static Set<String> getAllNamespaces()
+    {
+	Set<String> namespaces = new HashSet<String>();
+	DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+
+	Query q = new Query(Entities.NAMESPACE_METADATA_KIND);
+
+	for (Entity e : ds.prepare(q).asIterable())
+	{
+	    // A nonzero numeric id denotes the default namespace;
+	    // see Namespace Queries, below
+	    if (e.getKey().getId() != 0)
+	    {
+		continue;
+	    }
+	    else
+	    {
+		namespaces.add(e.getKey().getName());
+	    }
+	}
+
+	return namespaces;
+    }
+
+    public static Set<String> getAllNamespacesUsingIterator()
+    {
+	return DomainUserUtil.getAllDomainsUsingIterator();
+
+    }
+
+    /**
+     * Gets namespace count (total number of entities stored and the total
+     * number of bytes they take up).
+     * 
+     * @return JSONObject with bytes and entities count
+     */
+    public static JSONObject getNamespaceCount()
+    {
+	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+	/*
+	 * "__Stat_Total__" only has a single instance in the datastore that
+	 * contains the total number of entities stored and the total number of
+	 * bytes they take up.
 	 */
-	public static Set<String> getAllNamespaces()
+	Entity globalStat = datastore.prepare(new Query("__Stat_Total__")).asSingleEntity();
+	Long totalBytes = (Long) globalStat.getProperty("bytes");
+	Long totalEntities = (Long) globalStat.getProperty("count");
+
+	JSONObject statsJSON = new JSONObject();
+
+	try
 	{
-		// Get All Users
-		List<DomainUser> domainList = DomainUserUtil.getAllDomainOwners();
-
-		Set<String> domains = new HashSet<String>();
-		for (DomainUser domainUser : domainList)
-		{
-			domains.add(domainUser.domain);
-		}
-
-		return domains;
+	    statsJSON.put("bytes", totalBytes);
+	    statsJSON.put("entities", totalEntities);
 	}
-
-	public static Set<String> getAllNamespacesUsingIterator()
+	catch (Exception e)
 	{
-		return DomainUserUtil.getAllDomainsUsingIterator();
 
 	}
+	return statsJSON;
+    }
 
-	/**
-	 * Gets namespace count (total number of entities stored and the total
-	 * number of bytes they take up).
-	 * 
-	 * @return JSONObject with bytes and entities count
+    /**
+     * Gets namespace statistics (represents stats for each specific namespace)
+     * 
+     * @return JSONObject with bytes and entities
+     */
+    public static JSONObject getNamespaceStats()
+    {
+	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+	/*
+	 * "__Stat_Ns_Total__" may be found in each specific namespace and
+	 * represent stats for that particular namespace
 	 */
-	public static JSONObject getNamespaceCount()
+	Entity globalStat = datastore.prepare(new Query("__Stat_Ns_Total__")).asSingleEntity();
+
+	Long totalBytes = 0L;
+	Long totalEntities = 0l;
+
+	if (globalStat != null)
 	{
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+	    if (globalStat.hasProperty("bytes"))
+		totalBytes = (Long) globalStat.getProperty("bytes");
 
-		/*
-		 * "__Stat_Total__" only has a single instance in the datastore that
-		 * contains the total number of entities stored and the total number of
-		 * bytes they take up.
-		 */
-		Entity globalStat = datastore.prepare(new Query("__Stat_Total__")).asSingleEntity();
-		Long totalBytes = (Long) globalStat.getProperty("bytes");
-		Long totalEntities = (Long) globalStat.getProperty("count");
+	    if (globalStat.hasProperty("count"))
+		totalEntities = (Long) globalStat.getProperty("count");
 
-		JSONObject statsJSON = new JSONObject();
-
-		try
-		{
-			statsJSON.put("bytes", totalBytes);
-			statsJSON.put("entities", totalEntities);
-		}
-		catch (Exception e)
-		{
-
-		}
-		return statsJSON;
 	}
 
-	/**
-	 * Gets namespace statistics (represents stats for each specific namespace)
-	 * 
-	 * @return JSONObject with bytes and entities
-	 */
-	public static JSONObject getNamespaceStats()
+	JSONObject statsJSON = new JSONObject();
+
+	try
 	{
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-		/*
-		 * "__Stat_Ns_Total__" may be found in each specific namespace and
-		 * represent stats for that particular namespace
-		 */
-		Entity globalStat = datastore.prepare(new Query("__Stat_Ns_Total__")).asSingleEntity();
-
-		Long totalBytes = 0L;
-		Long totalEntities = 0l;
-
-		if (globalStat != null)
-		{
-			if (globalStat.hasProperty("bytes"))
-				totalBytes = (Long) globalStat.getProperty("bytes");
-
-			if (globalStat.hasProperty("count"))
-				totalEntities = (Long) globalStat.getProperty("count");
-
-		}
-
-		JSONObject statsJSON = new JSONObject();
-
-		try
-		{
-			statsJSON.put("bytes", totalBytes);
-			statsJSON.put("entities", totalEntities);
-		}
-		catch (Exception e)
-		{
-
-		}
-		return statsJSON;
+	    statsJSON.put("bytes", totalBytes);
+	    statsJSON.put("entities", totalEntities);
 	}
-
-	/**
-	 * Gets domain user's domain from url.
-	 * 
-	 * @param url
-	 *            - Requested Url.
-	 * @return domain name.
-	 */
-	public static String getNamespaceFromURL(URL url)
+	catch (Exception e)
 	{
-		String host = url.getHost().toString();
 
-		// Eg., return 'admin' from 'admin.agilecrm.com'
-		return host.contains("-dot-") ? host.split("\\-dot-")[0] : host.split("\\.")[0];
 	}
+	return statsJSON;
+    }
 
-	public static String getNamespaceFromURL(String host)
+    /**
+     * Gets domain user's domain from url.
+     * 
+     * @param url
+     *            - Requested Url.
+     * @return domain name.
+     */
+    public static String getNamespaceFromURL(URL url)
+    {
+	String host = url.getHost().toString();
+
+	// Eg., return 'admin' from 'admin.agilecrm.com'
+	return host.contains("-dot-") ? host.split("\\-dot-")[0] : host.split("\\.")[0];
+    }
+
+    public static String getNamespaceFromURL(String host)
+    {
+	System.out.println(host.contains("-dot-"));
+	// Eg., return 'admin' from 'admin.agilecrm.com'
+	return host.contains("-dot-") ? host.split("\\-dot-")[0] : host.split("\\.")[0];
+    }
+
+    /**
+     * Returns the JSON object having the count of contacts, deals, campaigns
+     * etc of the current domain.
+     * 
+     * @return JSON object.
+     */
+    public static String getDomainStats()
+    {
+	JSONObject json = new JSONObject();
+
+	int webrulecount = WebRuleUtil.getCount();
+	int contactcount = ContactUtil.getCount();
+	int dealscount = OpportunityUtil.getCount();
+	// int docs = DocumentUtil.getCount();
+	int compaigncount = WorkflowUtil.getCount();
+	int triggerscount = TriggerUtil.getCount();
+	// int webstats =
+	// AnalyticsSQLUtil.getPageViewsCountForGivenDomain(NamespaceManager.get());
+
+	try
 	{
-		System.out.println(host.contains("-dot-"));
-		// Eg., return 'admin' from 'admin.agilecrm.com'
-		return host.contains("-dot-") ? host.split("\\-dot-")[0] : host.split("\\.")[0];
-	}
+	    json.put("webrule_count", webrulecount);
+	    json.put("contact_count", contactcount);
+	    json.put("deals_count", dealscount);
+	    // json.put("docs_count", docs);
+	    json.put("compaign_count", compaigncount);
+	    json.put("triggers_count", triggerscount);
+	    // json.put("webstats_count", webstats);
 
-	/**
-	 * Returns the JSON object having the count of contacts, deals, campaigns
-	 * etc of the current domain.
-	 * 
-	 * @return JSON object.
-	 */
-	public static String getDomainStats()
+	}
+	catch (JSONException e)
 	{
-		JSONObject json = new JSONObject();
-
-		int webrulecount = WebRuleUtil.getCount();
-		int contactcount = ContactUtil.getCount();
-		int dealscount = OpportunityUtil.getCount();
-		// int docs = DocumentUtil.getCount();
-		int compaigncount = WorkflowUtil.getCount();
-		int triggerscount = TriggerUtil.getCount();
-		// int webstats =
-		// AnalyticsSQLUtil.getPageViewsCountForGivenDomain(NamespaceManager.get());
-
-		try
-		{
-			json.put("webrule_count", webrulecount);
-			json.put("contact_count", contactcount);
-			json.put("deals_count", dealscount);
-			// json.put("docs_count", docs);
-			json.put("compaign_count", compaigncount);
-			json.put("triggers_count", triggerscount);
-			// json.put("webstats_count", webstats);
-
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
-		System.out.println("status account " + json);
-
-		return json.toString();
+	    e.printStackTrace();
 	}
+	System.out.println("status account " + json);
+
+	return json.toString();
+    }
 
 }
