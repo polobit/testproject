@@ -484,9 +484,13 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		template : 'settings-email-gateway', postRenderCallback : function(el)
 		{
+			
 			// Loads jquery.chained.min.js
 			head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 			{
+				
+				$('#content').find('#admin-prefs-tabs-content').html(el);
+				
 				var LHS, RHS;
 
 				// Assigning elements with ids LHS
@@ -506,6 +510,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					$('#email-api', el).val(value).attr("selected", "selected").trigger('change')
 				}, 1);
 			});
+			
 		}, saveCallback : function()
 		{
 			// On saved, navigate to integrations
@@ -522,7 +527,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		});
 
-		$('#content').find('#admin-prefs-tabs-content').html(this.email_gateway.render().el);
+		this.email_gateway.render();
+		
 		$('#content').find('#AdminPrefsTab .select').removeClass('select');
 		$('#content').find('.integrations-tab').addClass('select');
 		$(".active").removeClass("active");
