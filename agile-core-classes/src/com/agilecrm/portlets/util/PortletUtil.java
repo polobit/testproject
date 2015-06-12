@@ -1168,7 +1168,7 @@ public class PortletUtil {
 								milestoneValue += opportunity.expected_value;
 							}
 						}
-						cateJson.put("value", milestoneValue);
+						cateJson.put("value", Math.round(milestoneValue));
 						cateJson.put("userName", domainUser.name);
 						if(dUser.id.equals(domainUser.id))
 							cateJson.put("isDomainUser", true);
