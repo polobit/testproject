@@ -9,8 +9,6 @@ import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 
 /**
  * while fetching onlinecalendar prefs based on schedule id, we have to convert
@@ -53,12 +51,21 @@ public class OnlineCalendarUtil
 	 */
 	public static OnlineCalendarPrefs getCalendarPrefs(Long domainUserId)
 	{
-		Objectify ofy = ObjectifyService.begin();
-		Key<DomainUser> userKey = new Key<DomainUser>(DomainUser.class, domainUserId);
+		if (domainUserId == null)
+			return null;
+		try
+		{
+			Key<DomainUser> userKey = new Key<DomainUser>(DomainUser.class, domainUserId);
 
-		OnlineCalendarPrefs calPrefs = OnlineCalendarPrefs.dao.getByProperty("user", userKey);
+			OnlineCalendarPrefs calPrefs = OnlineCalendarPrefs.dao.getByProperty("user", userKey);
 
-		return calPrefs;
+			return calPrefs;
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception occured in online calendar prefs" + e.getMessage());
+			return null;
+		}
 	}
 
 	/**
