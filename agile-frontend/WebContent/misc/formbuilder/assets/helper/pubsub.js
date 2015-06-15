@@ -53,7 +53,7 @@ var addAgileApi = function(json, api, callback)
 	var agilepreloadfields = {};
 	agilepreloadfields.label = "Preload Fields";
 	agilepreloadfields.type = "select";
-	agilepreloadfields.value = [{value : "", selected : true, label : "no"}, {value : "_agile_load_form_fields();", selected : false, label: "yes"}];
+	agilepreloadfields.value = [{value : false, selected : true, label : "no"}, {value : true, selected : false, label: "yes"}];
 
 	var agileformidtag = {};
 	agileformidtag.label = "Form Tags";

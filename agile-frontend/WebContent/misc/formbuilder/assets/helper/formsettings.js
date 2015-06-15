@@ -14,7 +14,7 @@ define([
 		}
 		catch (e)
 		{
-			return "";
+			return false;
 		}
 	}};
 });
