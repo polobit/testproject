@@ -5,6 +5,8 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.OnlineCalendarPrefs;
+import com.agilecrm.util.VersioningUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -120,4 +122,50 @@ public class OnlineCalendarUtil
 		}
 	}
 
+	/**
+	 * gets the calendar URL based on domain and domainUSer id
+	 * 
+	 * @param id
+	 * @param domain
+	 * @return
+	 */
+	public static String getDomainUserCalendarUrl(Long domainUserId, String domain, DomainUser user)
+	{
+		if (domainUserId == null || StringUtils.isBlank(domain))
+		{
+			return null;
+		}
+		String oldNamespace = NamespaceManager.get();
+		NamespaceManager.set(domain);
+
+		try
+		{
+			String online_calendar_url = VersioningUtil.getHostURLByApp(domain);
+			OnlineCalendarPrefs prefs = getCalendarPrefs(domainUserId);
+			if (prefs != null)
+			{
+				String scheduleid = prefs.schedule_id;
+				if (StringUtils.isNotEmpty(scheduleid))
+					online_calendar_url += "calendar/" + scheduleid;
+			}
+			else
+			{
+				if (user == null)
+					user = DomainUserUtil.getDomainUser(domainUserId);
+				if (user != null)
+					online_calendar_url += "calendar/" + getScheduleid(user.name);
+			}
+			return online_calendar_url;
+		}
+		catch (Exception e)
+		{
+			System.out.println("exception occured when given call from post load");
+			e.printStackTrace();
+			return null;
+		}
+		finally
+		{
+			NamespaceManager.set(oldNamespace);
+		}
+	}
 }
