@@ -7,8 +7,11 @@
 
 <script src="//code.jquery.com/jquery-1.9.1.min.js"></script> 
 
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="flatfull/css/bootstrap.css">
 <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+
+
+<link rel="stylesheet" type="text/css" href="flatfull/css/app.css">
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
 
 <link rel="stylesheet" href="js/designer/summernote/summernote.css">
@@ -204,10 +207,10 @@ function init_tinymce()
   
   var dropdown ="";
   $.each(mergeField,function(field_name,field_value){
-	  dropdown = dropdown + '<li><a data-event="merge" href="#" data-value="'+field_value+'" class=""><i class="fa fa-check"></i>'+field_name+'</a></li>';
+	  dropdown = dropdown + '<li><a data-event="merge" data-value="'+field_value+'" class=""><i class="fa fa-check"></i>'+field_name+'</a></li>';
 	  })
   //$('textarea#content').show();
-  
+	 // dropdown = '<li><a data-event="merge" data-value="" class=""><i class="fa fa-check"></i></a></li>';
   dropdown = '<ul class = "dropdown-menu note-check">' + dropdown + '</ul>'
   var tmpl = $.summernote.renderer.getTemplate();
   // Initialize tinymce;
@@ -284,7 +287,8 @@ function init_tinymce()
  
   
   $('#content').summernote({
-        height: 200,
+        height: 775,
+        width : 750,
         enterHtml: '<p><br></p>',
         onImageUpload: function(files, editor, welEditable) {
       //console.log('image upload:', files, editor, welEditable);
@@ -412,8 +416,8 @@ function showWarning(isWarning)
         <!-- wrapper begins -->
         <div  >
             <div  >
-                <!-- Back button -->
-                <div  >
+                <!-- Back button style="margin-top: 10px; padding-left: 25px; padding-right: 30px; -->
+                <div class = "m-t-sm btn-rounded">
                     <div style="display:none; float: left;" id="navigate-back">
                         <!-- Back link to navigate to history back  -->
                         <a href="#" class="btn btn-default btn-large"> &lt; Back </a>
@@ -449,9 +453,10 @@ function showWarning(isWarning)
             <!-- .block_head ends -->
             <div class="block_content center">
                 <!-- out.println(Util.getHTMLMessageBox("","error", "errormsg")); -->
-                <form method="post" action="somepage">
+                <form method="post" action="somepage" class ="m-t-sm btn-rounded">
                     <p id="loading-msg">Loading HTML Editor...</p>
-                     <textarea name="content" id='content' rows="30" cols="90" style="display:none;"></textarea>
+                     <textarea name="content" id='content' rows="30" cols="90" style="display:none;margin-left: 25px;
+                     "></textarea>
                     <br/>
                     <p><a href="#" id="save_html" class="btn btn-large pull-right" style="font-weight: bold;">Save</a></p>
                 </form>
