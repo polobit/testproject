@@ -45,13 +45,13 @@ public class BulkActionUtil
 	DELETE("/core/api/bulk-actions/delete/contacts", AgileQueues.CONTACTS_DELETE_QUEUE), ASIGN_WORKFLOW(
 		"/core/api/bulk-actions/enroll-campaign/%s", AgileQueues.CAMPAIGN_SUBSCRIBE_QUEUE), CHANGE_OWNER(
 		"/core/api/bulk-actions/change-owner/%s", AgileQueues.OWNER_CHANGE_QUEUE), ADD_TAG(
-		"/core/api/bulk-actions/contact/tags", AgileQueues.BULK_TAGS_QUEUE), CONTACTS_UPLOAD(
+		"/core/api/bulk-actions/contact/tags", AgileQueues.BULK_ACTION_QUEUE), CONTACTS_UPLOAD(
 		"/core/api/bulk-actions/contacts/multi/upload", AgileQueues.CONTACTS_UPLOAD_QUEUE), REMOVE_ACTIVE_SUBSCRIBERS(
 		"/core/api/bulk-actions/remove-active-subscribers/%s", AgileQueues.WORKFLOWS_RELATED_QUEUE), SEND_EMAIL(
 		"/core/api/bulk-actions/contacts/send-email", AgileQueues.BULK_EMAILS_QUEUE), EXPORT_CONTACTS_CSV(
 		"/core/api/bulk-actions/contacts/export-contacts-csv", AgileQueues.CONTACTS_EXPORT_QUEUE), EXPORT_COMPANIES_CSV(
 		"/core/api/bulk-actions/contacts/export-companies-csv", AgileQueues.CONTACTS_EXPORT_QUEUE), REMOVE_TAG(
-		"/core/api/bulk-actions/contact/remove-tags", AgileQueues.BULK_TAGS_QUEUE);
+		"/core/api/bulk-actions/contact/remove-tags", AgileQueues.BULK_ACTION_QUEUE);
 
 	String url, queue;
 
