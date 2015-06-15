@@ -33,6 +33,8 @@ import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.bulkaction.deferred.CampaignStatusUpdateDeferredTask;
 import com.agilecrm.bulkaction.deferred.CampaignSubscriberDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkDeleteDeferredTask;
+import com.agilecrm.bulkaction.deferred.ContactsBulkTagAddDeferredTask;
+import com.agilecrm.bulkaction.deferred.ContactsBulkTagRemoveDeferredTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
@@ -387,24 +389,41 @@ public class BulkOperationsAPI
 	if (tagsArray == null)
 	    return;
 
-	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids,
-		current_user);
+	ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter,
+		contact_ids, null, 200, current_user);
 
-	while (fetcher.hasNextSet())
+	DomainUser user = DomainUserUtil.getDomainUser(current_user);
+	if (user == null)
+	    return;
+
+	UserInfo info = new UserInfo(user);
+
+	while (idsFetcher.hasNext())
 	{
-	    List<Contact> contacts = fetcher.nextSet();
 
-	    if (contact_ids != null)
-		ContactUtil.processContacts(contacts);
+	    try
+	    {
 
-	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
-	    ContactUtil.addTagsToContactsBulk(contacts, tagsArray);
+		Set<Key<Contact>> contactSet = idsFetcher.next();
+		ContactsBulkTagAddDeferredTask task = new ContactsBulkTagAddDeferredTask(current_user,
+			NamespaceManager.get(), contactSet, info, tagsArray);
+
+		// Add to queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.BULK_TAGS_QUEUE);
+		queue.addAsync(TaskOptions.Builder.withPayload(task));
+
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
-		.toString(), String.valueOf(fetcher.getAvailableContacts()));
+		.toString(), String.valueOf(idsFetcher.getTotalCount()));
 
-	ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "ADD_TAG", tagsString, "contacts", "");
+	ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "ADD_TAG", tagsString, "contacts", "");
     }
 
     @SuppressWarnings("unchecked")
@@ -441,24 +460,41 @@ public class BulkOperationsAPI
 	if (tagsArray == null)
 	    return;
 
-	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids,
-		current_user);
+	ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter,
+		contact_ids, null, 200, current_user);
 
-	while (fetcher.hasNextSet())
+	DomainUser user = DomainUserUtil.getDomainUser(current_user);
+	if (user == null)
+	    return;
+
+	UserInfo info = new UserInfo(user);
+
+	while (idsFetcher.hasNext())
 	{
-	    List<Contact> contacts = fetcher.nextSet();
 
-	    if (contact_ids != null)
-		ContactUtil.processContacts(contacts);
+	    try
+	    {
 
-	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
-	    ContactUtil.removeTagsToContactsBulk(contacts, tagsArray);
+		Set<Key<Contact>> contactSet = idsFetcher.next();
+		ContactsBulkTagRemoveDeferredTask task = new ContactsBulkTagRemoveDeferredTask(current_user,
+			NamespaceManager.get(), contactSet, info, tagsArray);
+
+		// Add to queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.BULK_TAGS_QUEUE);
+		queue.addAsync(TaskOptions.Builder.withPayload(task));
+
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.REMOVE_TAGS, Arrays.asList(tagsArray)
-		.toString(), String.valueOf(fetcher.getAvailableContacts()));
+		.toString(), String.valueOf(idsFetcher.getTotalCount()));
 
-	ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "REMOVE_TAG", tagsString, "contacts", "");
+	ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "REMOVE_TAG", tagsString, "contacts", "");
 
     }
 
