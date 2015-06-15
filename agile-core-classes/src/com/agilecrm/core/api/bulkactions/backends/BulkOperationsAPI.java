@@ -32,6 +32,7 @@ import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.bulkaction.deferred.CampaignStatusUpdateDeferredTask;
 import com.agilecrm.bulkaction.deferred.CampaignSubscriberDeferredTask;
+import com.agilecrm.bulkaction.deferred.ContactsBulkDeleteDeferredTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
@@ -93,40 +94,49 @@ public class BulkOperationsAPI
 	    throws JSONException
     {
 	System.out.println(model_ids + " model ids " + filter + " filter " + current_user_id + " current user");
-	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, model_ids,
-		current_user_id);
 
-	while (fetcher.hasNextSet())
+	ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter, model_ids,
+		null, 200, current_user_id);
+
+	while (idsFetcher.hasNext())
 	{
-	    List<Contact> contacts = fetcher.nextSet();
 
-	    if (model_ids != null)
-		ContactUtil.processContacts(contacts);
+	    try
+	    {
+		Set<Key<Contact>> contactSet = idsFetcher.next();
+		ContactsBulkDeleteDeferredTask task = new ContactsBulkDeleteDeferredTask(current_user_id,
+			NamespaceManager.get(), contactSet);
 
-	    ContactUtil.deleteContacts(contacts);
+		// Add to queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_DELETE_QUEUE);
+		queue.add(TaskOptions.Builder.withPayload(task));
+
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
 
 	}
 
-	System.out.println("contacts : " + fetcher.getAvailableContacts());
-	System.out.println("companies : " + fetcher.getAvailableCompanies());
+	System.out.println("contacts : " + idsFetcher.getContactCount());
+	System.out.println("companies : " + idsFetcher.getCompanyCount());
 
 	String message = "";
-	if (fetcher.getAvailableContacts() > 0)
+	if (idsFetcher.getContactCount() > 0)
 	{
-	    message = fetcher.getAvailableContacts() + " Contacts deleted";
-	    ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "DELETE", "", "contacts", "");
+	    message = idsFetcher.getContactCount() + " Contacts deleted";
+	    ActivitySave.createBulkActionActivity(idsFetcher.getContactCount(), "DELETE", "", "contacts", "");
 	}
-	else if (fetcher.getAvailableCompanies() > 0)
+	else if (idsFetcher.getCompanyCount() > 0)
 	{
-	    message = fetcher.getAvailableCompanies() + " Companies deleted";
-	    ActivitySave.createBulkActionActivity(fetcher.getAvailableCompanies(), "DELETE", "", "companies", "");
+	    message = idsFetcher.getCompanyCount() + " Companies deleted";
+	    ActivitySave.createBulkActionActivity(idsFetcher.getCompanyCount(), "DELETE", "", "companies", "");
 	}
 	else
 	{
-	    message = fetcher.getAvailableCompanies() + " Contacts/Companies deleted";
+	    message = idsFetcher.getTotalCount() + " Contacts/Companies deleted";
 	}
-
-	ContactUtil.eraseContactsCountCache();
 
 	BulkActionNotifications.publishNotification(message);
 

@@ -8,7 +8,6 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.bulkaction.BulkActionAdaptor;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 
@@ -20,12 +19,10 @@ public class ContactsBulkDeleteDeferredTask extends BulkActionAdaptor
 
     }
 
-    public ContactsBulkDeleteDeferredTask(Long domainUserId, String namespace, Set<Key<Contact>> contactKeySet,
-	    UserInfo info)
+    public ContactsBulkDeleteDeferredTask(Long domainUserId, String namespace, Set<Key<Contact>> contactKeySet)
     {
 	this.key = new Key<DomainUser>(DomainUser.class, domainUserId);
 	this.contactKeySet = contactKeySet;
-	this.info = info;
     }
 
     @Override
@@ -43,6 +40,8 @@ public class ContactsBulkDeleteDeferredTask extends BulkActionAdaptor
 	List<Contact> contacts = fetchContacts();
 
 	ContactUtil.deleteContacts(contacts);
+
+	ContactUtil.eraseContactsCountCache();
     }
 
 }
