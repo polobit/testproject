@@ -12,9 +12,9 @@ var getAgileFields = function(fields, callback)
 	$.ajax({ type : 'GET', url : url, asynch : true, dataType : 'json', success : function(data)
 	{
 		fields = data;
-		callback(fields)
+		callback(fields);
 	} });
-}
+};
 
 var getAgileApi = function(api, callback)
 {
@@ -25,7 +25,7 @@ var getAgileApi = function(api, callback)
 		api = data;
 		callback(api);
 	} });
-}
+};
 
 var addAgileApi = function(json, api, callback)
 {
@@ -41,12 +41,22 @@ var addAgileApi = function(json, api, callback)
 	agiledomain.value = window.location.hostname.split('.')[0];
 
 	var agileredirecturl = {};
-	agileredirecturl.label = "Redirect URL";
+	agileredirecturl.label = "Form Action";
 	agileredirecturl.type = "input";
 	agileredirecturl.value = "#";
 
+	var agileformmethod = {};
+	agileformmethod.label = "Form Method";
+	agileformmethod.type = "select";
+	agileformmethod.value = [{ value : "GET", selected : true, label : "GET"}, { value : "POST", selected : false, label : "POST" }];
+
+	var agilepreloadfields = {};
+	agilepreloadfields.label = "Preload Fields";
+	agilepreloadfields.type = "select";
+	agilepreloadfields.value = [{value : "", selected : true, label : "no"}, {value : "_agile_load_form_fields();", selected : false, label: "yes"}];
+
 	var agileformidtag = {};
-	agileformidtag.label = "Lead Identification Tag";
+	agileformidtag.label = "Form Tags";
 	agileformidtag.type = "input";
 	agileformidtag.value = "";
 
@@ -55,10 +65,12 @@ var addAgileApi = function(json, api, callback)
 		json[b].fields["agileapi"] = agileapi;
 		json[b].fields["agiledomain"] = agiledomain;
 		json[b].fields["agileredirecturl"] = agileredirecturl;
+		json[b].fields["agileformmethod"] = agileformmethod;
+		json[b].fields["agilepreloadfields"] = agilepreloadfields;
 		json[b].fields["agileformidtag"] = agileformidtag;
 	}
 	callback(json);
-}
+};
 
 var addAgileFields = function(json, fields, callback)
 {
@@ -96,6 +108,6 @@ var addAgileFields = function(json, fields, callback)
 		}
 	}
 	callback(json);
-}
+};
 
 var saveform = [];
