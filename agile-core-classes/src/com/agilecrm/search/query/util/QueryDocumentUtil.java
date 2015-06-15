@@ -229,8 +229,6 @@ public class QueryDocumentUtil
 					query = buildNotNestedCondition(joinCondition, query,
 							"field_labels" + ":\"" + lhs + "\"");
 				}
-				return query;
-
 			}
 
 			// Queries on created or updated times
