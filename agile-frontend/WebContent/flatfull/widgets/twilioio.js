@@ -275,3 +275,25 @@ function twilioIOError(id, message)
 	 */
 	$('#' + id).html(getTemplate('twilio-error', error_json));
 }
+/**
+ * @ author - prakash - 15/6/15
+ * This method updates two fields of contact object - lastcalled and last contacted
+ * This method retrieves the current contact object and make the json call to server to save json time in server.
+ */
+function twilioIOSaveContactedTime()
+{
+	alert ("in twilioIOSaveContactedTime");
+	var id = agile_crm_get_contact().id;
+	alert ("in id = " + id);
+	$.get("/core/api/widgets/twilio/save/time/?id=" + id , function(result)
+			{
+				console.log('In twilioIOSaveContactedTime');
+				console.log('Results : ' + result);
+				alert("result = " + result);
+			}).error(function(data)
+			{
+				alert("data = " + data);
+				console.log('Error - Results :' + data);
+			});
+}
+

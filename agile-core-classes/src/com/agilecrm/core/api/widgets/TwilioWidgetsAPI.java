@@ -2,6 +2,8 @@ package com.agilecrm.core.api.widgets;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -10,6 +12,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -669,5 +672,38 @@ public class TwilioWidgetsAPI
 					.build());
 		}
 
+	}
+	
+	/**
+	 * @author Prakash -15-6-15
+	 * get Id through query parametere and fetch the contact object. It then saves the the last_called and last_connected fieds.
+	 * @param contactId - id of the current user
+	 * @return sucess message
+	 */
+	
+	@Path("save/time")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String saveLastContactedTime(@QueryParam("id") Long contactId){
+		
+		try{
+			System.out.println("contact id ==== " + contactId);
+			Contact contact = ContactUtil.getContact(contactId);
+			Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+			Long secondInEpoch = calendar.getTimeInMillis() / 1000;
+			contact.last_called = secondInEpoch;
+			contact.last_contacted = secondInEpoch;
+			contact.update();
+			System.out.println("contact has been updated");
+			
+			return "sucess";
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+		
 	}
 }
