@@ -27,41 +27,55 @@ $(function()
 	});
 
 	// Event edit in contact details tab
-	$(".event-edit-contact-tab").die().live('click', function(e)
-	{
-		e.preventDefault();
-		var id = $(this).attr('data');
-		var value = eventsView.collection.get(id).toJSON();
-		deserializeForm(value, $("#updateActivityForm"));
-		$("#updateActivityModal").modal('show');
+	$(".event-edit-contact-tab")
+			.die()
+			.live(
+					'click',
+					function(e)
+					{
+						e.preventDefault();
+						var id = $(this).attr('data');
+						var value = eventsView.collection.get(id).toJSON();
+						deserializeForm(value, $("#updateActivityForm"));
+						$("#updateActivityModal").modal('show');
 
-		$('.update-start-timepicker').val(fillTimePicker(value.start));
+						$('.update-start-timepicker').val(fillTimePicker(value.start));
 
-		$('.update-end-timepicker').val(fillTimePicker(value.end));
+						$('.update-end-timepicker').val(fillTimePicker(value.end));
 
-		if (value.type == "WEB_APPOINTMENT" && parseInt(value.start) > parseInt(new Date().getTime() / 1000))
-		{
-			$("[id='event_delete']").attr("id", "delete_web_event");
-			web_event_title = value.title;
-			if (value.contacts.length > 0)
-			{
-				var firstname = getPropertyValue(value.contacts[0].properties, "first_name");
-				if (firstname == undefined)
-					firstname = "";
-				var lastname = getPropertyValue(value.contacts[0].properties, "last_name");
-				if (lastname == undefined)
-					lastname = "";
-				web_event_contact_name = firstname + " " + lastname;
-			}
-		}
-		else
-		{
-			$("[id='delete_web_event']").attr("id", "event_delete");
-		}
-
-		// Fills owner select element
-		populateUsersInUpdateActivityModal(value);
-	});
+						if (value.type == "WEB_APPOINTMENT" && parseInt(value.start) > parseInt(new Date().getTime() / 1000))
+						{
+							$("[id='event_delete']").attr("id", "delete_web_event");
+							web_event_title = value.title;
+							if (value.contacts.length > 0)
+							{
+								var firstname = getPropertyValue(value.contacts[0].properties, "first_name");
+								if (firstname == undefined)
+									firstname = "";
+								var lastname = getPropertyValue(value.contacts[0].properties, "last_name");
+								if (lastname == undefined)
+									lastname = "";
+								web_event_contact_name = firstname + " " + lastname;
+							}
+						}
+						else
+						{
+							$("[id='delete_web_event']").attr("id", "event_delete");
+						}
+						if (value.description)
+						{
+							var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+							$("#event_desc").html(description);
+							$("textarea#description").val(value.description);
+						}
+						else
+						{
+							var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
+							$("#event_desc").html(desc);
+						}
+						// Fills owner select element
+						populateUsersInUpdateActivityModal(value);
+					});
 
 	$(".complete-task").die().live('click', function(e)
 	{

@@ -469,6 +469,10 @@ function show_model(id)
 
 		$('#updateActivityModal').find("input[name='id']").val(id);
 		$('#updateActivityModal').find("input[name='type']").val(event.type);
+		if (event.meeting_type)
+			$('#updateActivityModal').find("input[name='meeting_type']").val(event.meeting_type);
+		else
+			$('#updateActivityModal').find("input[name='meeting_type']").val('');
 
 		if (event.type == "WEB_APPOINTMENT" && parseInt(event.start) > parseInt(new Date().getTime() / 1000))
 		{
@@ -488,6 +492,17 @@ function show_model(id)
 		else
 		{
 			$("[id='delete_web_event']").attr("id", "event_delete");
+		}
+		if (event.description)
+		{
+			var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+			$("#event_desc").html(description);
+			$("textarea#description").val(event.description);
+		}
+		else
+		{
+			var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
+			$("#event_desc").html(desc);
 		}
 		// Fills owner select element
 		populateUsersInUpdateActivityModal(event);

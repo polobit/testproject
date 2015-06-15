@@ -2,6 +2,8 @@ package com.agilecrm.portlets.util;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -96,6 +98,7 @@ public class PortletUtil {
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.ACTIVITY)){
 				//allPortlets.add(new Portlet("Emails Sent",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Stats Report",PortletType.USERACTIVITY));
+				//allPortlets.add(new Portlet("Leaderboard",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
 			}
 			
@@ -1119,6 +1122,206 @@ public class PortletUtil {
 			e.printStackTrace();
 		}
 		return dataJson;
+	}
+	
+	public static JSONObject getPortletLeaderboardData(JSONObject json)throws Exception{
+		List<DomainUser> domainUsersList = null;
+		JSONObject dataJson = new JSONObject();
+		List<JSONObject> cateList = new ArrayList<JSONObject>();
+		long minTime=0L;
+		long maxTime=0L;
+		int categoryCount=0;
+		List<DomainUser> usersList = new ArrayList<DomainUser>();
+		try {
+			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
+			if(dUser!=null)
+				domainUsersList=DomainUserUtil.getUsers(dUser.domain);
+			if(json!=null && json.getString("duration")!=null){
+				if(json.getString("startDate")!=null)
+					minTime = Long.valueOf(json.getString("startDate"));
+				if(json.getString("endDate")!=null)
+					maxTime = Long.valueOf(json.getString("endDate"))-1;
+				if(json.containsKey("user")){
+					if(json.getJSONArray("user")!=null){
+						List<Long> userJSONList = new ArrayList<Long>();
+						for(int i=0;i<json.getJSONArray("user").size();i++){
+							userJSONList.add(json.getJSONArray("user").getLong(i));
+						}
+						for(DomainUser domainUser : domainUsersList){
+							if(userJSONList.contains(domainUser.id))
+								usersList.add(domainUser);
+						}
+					}
+				}else{
+					for(DomainUser domainUser : domainUsersList){
+						usersList.add(domainUser);
+					}
+				}
+				if(json.getBoolean("revenue")){
+					for(DomainUser domainUser : usersList){
+						JSONObject cateJson = new JSONObject();
+						cateJson.put("name", "Revenue");
+						List<Opportunity> wonDealsList = OpportunityUtil.getWonDealsListOfUser(minTime, maxTime, domainUser.id);
+						Double milestoneValue = 0d;
+						if(wonDealsList!=null){
+							for(Opportunity opportunity : wonDealsList){
+								milestoneValue += opportunity.expected_value;
+							}
+						}
+						cateJson.put("value", milestoneValue);
+						cateJson.put("userName", domainUser.name);
+						if(dUser.id.equals(domainUser.id))
+							cateJson.put("isDomainUser", true);
+						else
+							cateJson.put("isDomainUser", false);
+						
+						AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
+						
+						UserPrefs userPrefs = null;
+						
+						if(agileUser!=null)
+							userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+						if(userPrefs!=null)
+							cateJson.put("userPic",userPrefs.pic);
+						else
+							cateJson.put("userPic","");
+						cateList.add(cateJson);
+						Collections.sort(cateList,new Comparator<JSONObject>(){
+							@Override  
+			                public int compare(JSONObject o1, JSONObject o2){
+								return Double.valueOf(o2.getDouble("value")).compareTo(Double.valueOf(o1.getDouble("value")));  
+			                }
+			            });
+					}
+					dataJson.put("revenueJson", cateList);
+					dataJson.put("revenue", true);
+					categoryCount++;
+				}else
+					dataJson.put("revenue", false);
+				if(json.getBoolean("dealsWon")){
+					cateList = new ArrayList<JSONObject>();
+					for(DomainUser domainUser : usersList){
+						JSONObject cateJson = new JSONObject();
+						cateJson.put("name", "Deals Won");
+						cateJson.put("value", OpportunityUtil.getWonDealsCountOfUser(minTime, maxTime, domainUser.id));
+						cateJson.put("userName", domainUser.name);
+						if(dUser.id.equals(domainUser.id))
+							cateJson.put("isDomainUser", true);
+						else
+							cateJson.put("isDomainUser", false);
+						
+						AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
+						
+						UserPrefs userPrefs = null;
+						
+						if(agileUser!=null)
+							userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+						if(userPrefs!=null)
+							cateJson.put("userPic",userPrefs.pic);
+						else
+							cateJson.put("userPic","");
+						cateList.add(cateJson);
+						Collections.sort(cateList,new Comparator<JSONObject>(){
+							@Override  
+			                public int compare(JSONObject o1, JSONObject o2){
+								return Integer.valueOf(o2.getInt("value")).compareTo(Integer.valueOf(o1.getInt("value")));  
+			                }
+			            });
+					}
+					dataJson.put("dealsWonJson", cateList);
+					dataJson.put("dealsWon", true);
+					categoryCount++;
+				}else
+					dataJson.put("dealsWon", false);
+				if(json.getBoolean("calls")){
+					cateList = new ArrayList<JSONObject>();
+					for(DomainUser domainUser : usersList){
+						JSONObject cateJson = new JSONObject();
+						cateJson.put("name", "Deals Won");
+						cateJson.put("value", ActivityUtil.getCompletedCallsCountOfUser(domainUser.id, minTime, maxTime));
+						cateJson.put("userName", domainUser.name);
+						if(dUser.id.equals(domainUser.id))
+							cateJson.put("isDomainUser", true);
+						else
+							cateJson.put("isDomainUser", false);
+						
+						AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
+						
+						UserPrefs userPrefs = null;
+						
+						if(agileUser!=null)
+							userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+						if(userPrefs!=null)
+							cateJson.put("userPic",userPrefs.pic);
+						else
+							cateJson.put("userPic","");
+						cateList.add(cateJson);
+						Collections.sort(cateList,new Comparator<JSONObject>(){
+							@Override  
+			                public int compare(JSONObject o1, JSONObject o2){
+								return Integer.valueOf(o2.getInt("value")).compareTo(Integer.valueOf(o1.getInt("value")));  
+			                }
+			            });
+					}
+					dataJson.put("callsJson", cateList);
+					dataJson.put("calls", true);
+					categoryCount++;
+				}else
+					dataJson.put("calls", false);
+				if(json.getBoolean("tasks")){
+					cateList = new ArrayList<JSONObject>();
+					for(DomainUser domainUser : usersList){
+						JSONObject cateJson = new JSONObject();
+						cateJson.put("name", "Deals Won");
+						cateJson.put("value", TaskUtil.getCompletedTasksOfUser(minTime, maxTime, domainUser.id));
+						cateJson.put("userName", domainUser.name);
+						if(dUser.id.equals(domainUser.id))
+							cateJson.put("isDomainUser", true);
+						else
+							cateJson.put("isDomainUser", false);
+						
+						AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
+						
+						UserPrefs userPrefs = null;
+						
+						if(agileUser!=null)
+							userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+						if(userPrefs!=null)
+							cateJson.put("userPic",userPrefs.pic);
+						else
+							cateJson.put("userPic","");
+						cateList.add(cateJson);
+						Collections.sort(cateList,new Comparator<JSONObject>(){
+							@Override  
+			                public int compare(JSONObject o1, JSONObject o2){
+								return Integer.valueOf(o2.getInt("value")).compareTo(Integer.valueOf(o1.getInt("value")));  
+			                }
+			            });
+					}
+					dataJson.put("tasksJson", cateList);
+					dataJson.put("tasks", true);
+					categoryCount++;
+				}else
+					dataJson.put("tasks", false);
+				dataJson.put("categoryCount", categoryCount);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dataJson;
+	}
+	
+	public static List<DomainUser> getCurrentDomainUsersForPortlets()throws Exception{
+		try {
+			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
+			if(dUser!=null)
+				return DomainUserUtil.getUsers(dUser.domain);
+			else
+				return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

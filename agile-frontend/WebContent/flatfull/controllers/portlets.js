@@ -9,8 +9,7 @@ var PortletsRouter = Backbone.Router
 												},
 												
 												portlets : function(){
-													head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js',
-															LIB_PATH + 'lib/jquery.gridster.js',function(){
+													head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js?='+ _AGILE_VERSION, LIB_PATH + 'lib/jquery.gridster.js',function(){
 														var el = $(getTemplate('portlets', {}));
 														$("#content").html(el);
 														if (IS_FLUID){
@@ -57,6 +56,8 @@ function addNewPortlet(portlet_type,p_name){
 		obj.name="Task Report";
 	else if(p_name=="StatsReport")
 		obj.name="Stats Report";
+	else if(p_name=="Leaderboard")
+		obj.name="Leaderboard";
 	obj.portlet_type=portlet_type;
 	var max_row_position=0;
 	if(gridster!=undefined)
@@ -112,6 +113,17 @@ function addNewPortlet(portlet_type,p_name){
 		json['duration']="today-and-tomorrow";
 	else if(portlet_type=="RSS" && p_name=="AgileCRMBlog")
 		obj.size_y=2;
+	else if(portlet_type=="USERACTIVITY" && p_name=="Leaderboard"){
+		json['duration']="this-month";
+		var categoryJson={};
+		categoryJson['revenue']=true;
+		categoryJson['dealsWon']=true;
+		categoryJson['calls']=true;
+		categoryJson['tasks']=true;
+		json['category']=categoryJson;
+		obj.size_y=2;
+		obj.size_x=2;
+	}
 	var portlet = new BaseModel();
 	portlet.url = 'core/api/portlets/addPortlet';
 	portlet.set({ "prefs" : JSON.stringify(json) }, { silent : true });
@@ -298,7 +310,17 @@ $('#portlets-events-model-list > tr').live('click', function(e){
 		}
 	    // Fills owner select element 
 		populateUsersInUpdateActivityModal(model.toJSON());
-		
+		if (model.toJSON().description)
+		{
+			var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+			$("#event_desc").html(description);
+			$("textarea#description").val(model.toJSON().description);
+		}
+		else
+		{
+			var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
+			$("#event_desc").html(desc);
+		}
 	 // Show edit modal for the event
 	    $("#updateActivityModal").modal('show');
 	   	return false;
@@ -395,7 +417,7 @@ function getStartAndEndDatesOnDue(duration){
 		console.log(getGMTTimeFromDate(d) / 1000);
 	
 	// This week
-	if (duration == "this-week"){
+	if (duration == "this-week" || duration == "this-week-start"){
 		if(new Date().getDay()!=0)
 			d.setDate(d.getDate() - (new Date().getDay()-1));
 		else
@@ -409,7 +431,7 @@ function getStartAndEndDatesOnDue(duration){
 			d.setDate((d.getDate() - (new Date().getDay()+6))+7);
 	}
 	//Last week start
-	if(duration == "last-week")
+	if(duration == "last-week" || duration == "last-week-start")
 		d.setDate(d.getDate()-d.getDay()-6);
 	
 	//Lats week end
@@ -425,11 +447,11 @@ function getStartAndEndDatesOnDue(duration){
 		d.setDate(d.getDate() - 29);
 	
 	// This month
-	if (duration == "this-month")
+	if (duration == "this-month" || duration == "this-month-start")
 		d.setDate(1);
 	
 	//Last month start
-	if(duration == "last-month"){
+	if(duration == "last-month" || duration == "last-month-start"){
 		d.setDate(1);
 		d.setMonth(d.getMonth()-1);
 	}
@@ -459,6 +481,60 @@ function getStartAndEndDatesOnDue(duration){
 	// next 7 days
 	if (duration == "today-and-tomorrow")
 		d.setDate(d.getDate() + 2);
+	
+	//this quarter start
+	if(duration=="this-quarter-start"){
+		var currentMonth = d.getMonth();
+		var qtrMonth = currentMonth%3;
+		if(qtrMonth==0)
+			qtrMonth=3;
+		d.setMonth((currentMonth-qtrMonth)+1);
+		d.setDate(1);
+	}
+	
+	//this quarter end
+	if(duration=="this-quarter-end"){
+		var currentMonth = d.getMonth();
+		var qtrMonth = currentMonth%3;
+		if(qtrMonth==0)
+			qtrMonth=3;
+		d.setMonth((currentMonth-qtrMonth)+4);
+		d.setDate(1);
+	}
+	
+	//last quarter start
+	if(duration=="last-quarter-start"){
+		var currentMonth = d.getMonth();
+		var qtrMonth = currentMonth%3;
+		if(qtrMonth==0)
+			qtrMonth=3;
+		if(currentMonth<=3){
+			d.setMonth(10);
+			dt.setFullYear(dt.getFullYear()-1);
+		}else{
+			d.setMonth((currentMonth-qtrMonth)-2);
+		}
+		d.setDate(1);
+	}
+	
+	//last quarter end
+	if(duration=="last-quarter-end"){
+		var currentMonth = d.getMonth();
+		var qtrMonth = currentMonth%3;
+		if(currentMonth<=3){
+			d.setMonth(1);
+		}else{
+			d.setMonth((currentMonth-qtrMonth)+1);
+		}
+		d.setDate(1);
+	}
+	
+	// This month end
+	if (duration == "this-month-end"){
+		d.setDate(1);
+		d.setMonth(d.getMonth()+1);
+	}
+		
 
 	console.log((getGMTTimeFromDate(d) / 1000));
 
