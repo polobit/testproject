@@ -44,15 +44,15 @@ public class AccountLimitsRemainderDeferredTask implements DeferredTask
 	    // tag is added
 	    // This is required for contacts as we have to hard update even if
 	    // limits are less than 75%
-	    DaoBillingRestriction contactRestriction = DaoBillingRestriction.getInstace("Contact", restriction);
+	    DaoBillingRestriction contactRestriction = DaoBillingRestriction.getInstaceDeamon("Contact", restriction);
 
 	    // Set it true so tags are updated. It removes previous tags
 	    contactRestriction.hardUpdateTags = true;
 	    contactRestriction.getTag();
-	    DaoBillingRestriction.getInstace("WebRule", restriction).getTag();
-	    DaoBillingRestriction.getInstace("Workflow", restriction).getTag();
-	    DaoBillingRestriction.getInstace("Email", restriction).getTag();
-	    DaoBillingRestriction.getInstace("Trigger", restriction).getTag();
+	    DaoBillingRestriction.getInstaceDeamon("WebRule", restriction).getTag();
+	    DaoBillingRestriction.getInstaceDeamon("Workflow", restriction).getTag();
+	    DaoBillingRestriction.getInstaceDeamon("Email", restriction).getTag();
+	    DaoBillingRestriction.getInstaceDeamon("Trigger", restriction).getTag();
 
 	    AccountEmailStatsUtil.checkLimits();
 
