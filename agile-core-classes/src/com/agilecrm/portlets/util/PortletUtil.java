@@ -98,7 +98,7 @@ public class PortletUtil {
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.ACTIVITY)){
 				//allPortlets.add(new Portlet("Emails Sent",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Stats Report",PortletType.USERACTIVITY));
-				//allPortlets.add(new Portlet("Leaderboard",PortletType.USERACTIVITY));
+				allPortlets.add(new Portlet("Leaderboard",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
 			}
 			
@@ -1168,7 +1168,7 @@ public class PortletUtil {
 								milestoneValue += opportunity.expected_value;
 							}
 						}
-						cateJson.put("value", milestoneValue);
+						cateJson.put("value", Math.round(milestoneValue));
 						cateJson.put("userName", domainUser.name);
 						if(dUser.id.equals(domainUser.id))
 							cateJson.put("isDomainUser", true);
