@@ -32,9 +32,6 @@ import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.bulkaction.deferred.CampaignStatusUpdateDeferredTask;
 import com.agilecrm.bulkaction.deferred.CampaignSubscriberDeferredTask;
-import com.agilecrm.bulkaction.deferred.ContactsBulkDeleteDeferredTask;
-import com.agilecrm.bulkaction.deferred.ContactsBulkTagAddDeferredTask;
-import com.agilecrm.bulkaction.deferred.ContactsBulkTagRemoveDeferredTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
@@ -255,7 +252,7 @@ public class BulkOperationsAPI
 			NamespaceManager.get(), contactSet, info);
 
 		// Add to queue
-		Queue queue = QueueFactory.getQueue(AgileQueues.BULK_CAMPAIGN_QUEUE);
+		Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_SUBSCRIBE_SUBTASK_QUEUE);
 		queue.add(TaskOptions.Builder.withPayload(task));
 
 	    }
