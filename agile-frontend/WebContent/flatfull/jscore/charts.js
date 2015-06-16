@@ -878,11 +878,45 @@ function showAreaSpline(url, selector, name, yaxis_name, show_loading)
 						if(cnt!=dataLength-1)
 						{
 							var next_dte = new Date(tempcategories[cnt+1]);
-							categories.push(Highcharts.dateFormat('%e.%b \' %y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+'-'+Highcharts.dateFormat('%e.%b \' %y', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1)));
+							var current_date = new Date();
+							var from_date = '';
+							var to_date = '';
+							if(current_date.getFullYear()!=dte.getFullYear())
+							{
+								from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+							}
+							else
+							{
+								from_date = Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								
+							}
+							if(current_date.getFullYear()!=next_dte.getFullYear())
+							{
+								to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1));
+							}
+							else
+							{
+								to_date = Highcharts.dateFormat('%e.%b', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1));
+							}
+							categories.push(from_date+' - '+to_date);
 						}
 						else
 						{
-							categories.push(Highcharts.dateFormat('%e.%b \' %y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+'-'+Highcharts.dateFormat('%e.%b \' %y', Date.UTC(dte.getFullYear(), dte.getMonth()+1, dte.getDate()-1)));
+							var current_date = new Date();
+							var from_date = '';
+							var to_date = '';
+							if(current_date.getFullYear()!=dte.getFullYear())
+							{
+								from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(dte.getFullYear(), dte.getMonth()+1, dte.getDate()-1));
+							}
+							else
+							{
+								from_date = Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								to_date = Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth()+1, dte.getDate()-1));
+								
+							}
+							categories.push(from_date+' - '+to_date);
 						}
 					}
 					cnt++;
@@ -914,7 +948,8 @@ function showAreaSpline(url, selector, name, yaxis_name, show_loading)
 			        startOfWeek: startOfWeek*/
 			        categories: categories,
 			        tickmarkPlacement: 'on',
-			        minTickInterval: min_tick_interval
+			        minTickInterval: min_tick_interval,
+			        tickWidth: 1
 			    },
 			    yAxis: {
 			        title: {
