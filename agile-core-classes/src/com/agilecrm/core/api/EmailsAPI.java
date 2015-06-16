@@ -24,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.account.EmailGateway;
+import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
@@ -256,13 +257,17 @@ public class EmailsAPI
     public String getEmailActivityFromMandrill() throws Exception
     {
 	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+	
+	// If SendGrid, return 
+	if(emailGateway != null && emailGateway.email_api.equals(EMAIL_API.SEND_GRID))
+		return new JSONObject().put("_agile_email_gateway", emailGateway.email_api.toString()).toString();
 
 	String apiKey = null;
 
 	// Get emailGateway api-key
 	if (emailGateway != null)
 	    apiKey = emailGateway.api_key;
-
+	
 	String domain = NamespaceManager.get();
 
 	// Returns mandrill subaccount info if created, otherwise error json.
@@ -300,6 +305,8 @@ public class EmailsAPI
 	    subAccountJSON.put("created_at", "");
 	    subAccountJSON.put("notes", "");
 	    subAccountJSON.put("first_sent_at", "");
+	    
+	    subAccountJSON.put("_agile_email_gateway", "MANDRILL");
 
 	    return subAccountJSON.toString();
 	}

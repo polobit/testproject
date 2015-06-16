@@ -48,7 +48,7 @@
 				</div>
 <div class="clearfix"></div>
 		</div>
-{{#unless _agile_email_gateway}}
+		{{#unless _agile_email_gateway}}
 			{{#if_equals "paused" status}}
 				<div class="alert alert-danger m-t" role="alert">
   					Important: Emails from your account are blocked due to poor reputation. Please contact our <a href="#contact-us">support</a> team if you wish to correct this.
@@ -56,6 +56,10 @@
 			{{/if_equals}}
 		{{/unless}}
 		<div>
+		
+		{{#if_equals "SEND_GRID" _agile_email_gateway}}
+			<div class="text-md">SendGrid stats are shown <a class="text-info" href="https://sendgrid.com/statistics">here</a></div>
+		{{else}}
 		<div class="row">
         	<div class="col-md-6 b-r b-light">
         	<div class="panel panel-default">
@@ -88,6 +92,7 @@
         	</div>
     	</div>
     	</div>
+		{{/if_equals}}	
     	</div>
     	
 		<div class="m-b-sm"> 
