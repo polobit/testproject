@@ -282,17 +282,16 @@ function twilioIOError(id, message)
  */
 function twilioIOSaveContactedTime()
 {
-	alert ("in twilioIOSaveContactedTime");
+	console.log ('in twilioIOSaveContactedTime');
 	var id = agile_crm_get_contact().id;
-	alert ("in id = " + id);
+	console.log('contact id = ' + id);
 	$.get("/core/api/widgets/twilio/save/time/?id=" + id , function(result)
 			{
-				console.log('In twilioIOSaveContactedTime');
+				console.log('processed In twilioIOSaveContactedTime');
 				console.log('Results : ' + result);
-				alert("result = " + result);
+				console.log('result = ' + result);
 			}).error(function(data)
 			{
-				alert("data = " + data);
 				console.log('Error - Results :' + data);
 			});
 }
