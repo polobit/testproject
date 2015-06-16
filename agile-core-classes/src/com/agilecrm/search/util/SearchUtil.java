@@ -94,6 +94,7 @@ public class SearchUtil
 		{
 		    doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_time_epoch")
 			    .setNumber(Double.valueOf(contactField.value)));
+		    fields.put(field_name, contactField.value);
 		}
 		catch (NumberFormatException e)
 		{
@@ -111,6 +112,7 @@ public class SearchUtil
 		{
 		    doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_number")
 			    .setNumber(Double.valueOf(contactField.value)));
+		    fields.put(normalizeTextSearchString(field_name) + "_number", contactField.value);
 		}
 		catch (Exception e)
 		{
@@ -190,17 +192,29 @@ public class SearchUtil
      */
     private static void splitAddressAndAddToSearch(Map<String, String> fields, Document.Builder doc, ContactField contactField)
 	{
-		String city, country, state, zip;
+		String city = null, country = null, state=null, zip=null;
 		// Trims the spaces in field value
 	    String normalized_value = normalizeString(contactField.value);
 	    String field_name = normalizeTextSearchString(contactField.name);
 		try
 		{
 			JSONObject addressJSON = new JSONObject(contactField.value);
-			city = addressJSON.getString("city");
-			country = addressJSON.getString("country");
-			state = addressJSON.getString("state");
-			zip = addressJSON.getString("zip");
+			try {
+				city = addressJSON.getString("city");
+				} catch(JSONException e){
+			}
+			try {
+				country = addressJSON.getString("country");
+				} catch(JSONException e){
+			}
+			try {
+				state = addressJSON.getString("state");
+				} catch(JSONException e){
+			}
+			try {
+				zip = addressJSON.getString("zip");
+				} catch(JSONException e){
+			}
 			if(StringUtils.isNotEmpty(city)) {
 				if (fields.containsKey("city"))
 				{

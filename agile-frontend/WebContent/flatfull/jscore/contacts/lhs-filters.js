@@ -60,6 +60,9 @@ function loadCustomFiledsFilters(fields, cel, is_company) {
 	{
 		var selected = $(this).val();
 		$(this).parent().find('div.condition_container').addClass('hide');
+		if($(this).val() == 'DEFINED' || $(this).val() == 'NOT_DEFINED') {
+			submitLhsFilter();
+		}
 		$(this).parent().find('div.condition_container.'+selected).find('input').val("").attr('prev-val', "");
 		$(this).parent().find('div.condition_container.'+selected).find('select').val("").attr('prev-val', "");;
 		$(this).parent().find('div.condition_container.'+selected).removeClass('hide');
@@ -125,6 +128,8 @@ $('a.filter-multiple-add-lhs').die().live("click", function(e) {
 		var container = $(this).parents('.lhs-row-filter');
 		$(container).find('#RHS').children().val("").attr('prev-val', "");
 		$(container).find('#RHS_NEW').filter(visibleFilter).children().val("").attr('prev-val', "");
+		$(container).find('select[name="CONDITION"]').val($(container).find('select[name="CONDITION"] option:first').val()).attr('prev-val', "");
+		$(container).find('select[name="CONDITION"]').trigger('change');
 		$(container).find('a#lhs-filters-header').find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 		$(container).find('a#lhs-filters-header').next().addClass('hide');
 		submitLhsFilter();
