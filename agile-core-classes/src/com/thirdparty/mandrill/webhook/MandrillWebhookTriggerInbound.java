@@ -41,10 +41,10 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 
     static
     {
-        confirmationSubjects = new HashMap<String, String>();
-        confirmationSubjects.put("forwarding-noreply@google.com", "Forwarding Confirmation");
-        confirmationSubjects.put("no-reply@cc.yahoo-inc.com", "Forwarding Email Confirmation");
-        confirmationSubjects.put("noreply@zoho.com", "Email forwarding confirmation");
+	confirmationSubjects = new HashMap<String, String>();
+	confirmationSubjects.put("forwarding-noreply@google.com", "Forwarding Confirmation");
+	confirmationSubjects.put("no-reply@cc.yahoo-inc.com", "Forwarding Email Confirmation");
+	confirmationSubjects.put("noreply@zoho.com", "Email forwarding confirmation");
     }
 
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
@@ -71,6 +71,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		{
 		    JSONObject message = event.getJSONObject("msg");
 		    // System.out.println("email message is " + message);
+
 		    if (message == null)
 		    {
 			// response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -290,8 +291,10 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	    String messageSubject = message.getString("subject");
 	    String fromEmail = message.getString("from_email");
 
-	    for(Map.Entry<String, String> entry : confirmationSubjects.entrySet()){
-		if(StringUtils.equals(entry.getKey(), fromEmail) && messageSubject.indexOf(entry.getValue())!=-1){
+	    for (Map.Entry<String, String> entry : confirmationSubjects.entrySet())
+	    {
+		if (StringUtils.equals(entry.getKey(), fromEmail) && messageSubject.indexOf(entry.getValue()) != -1)
+		{
 		    isConfirmationEmail = true;
 		    break;
 		}
@@ -313,11 +316,24 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 
 	    DomainUser user = APIKey.getDomainUserRelatedToAPIKey(apiKey);
 	    EmailUtil.sendEmailUsingAPI("noreply@agilecrm.com", "Agile CRM", user.email, null, null, messageSubject,
-		    null, null, message.getString("text"), null, null);
+		    null, getMessageContent("html", message), getMessageContent("text", message), null, null);
 	}
 	catch (Exception e)
 	{
 	    System.out.println("exception occured in sending confirmation email " + e.getMessage());
 	}
+    }
+
+    public String getMessageContent(String contentType, JSONObject message)
+    {
+	try
+	{
+	    if (message.has(contentType))
+		return message.getString(contentType);
+	}
+	catch (JSONException e)
+	{
+	}
+	return null;
     }
 }
