@@ -1713,9 +1713,9 @@ public class ContactUtil
 
     }
     
-    public static void updateCampaignEmailedTime(Long contactId, Long lastCampaignEmailed)
+    public static void updateCampaignEmailedTime(Long contactId, Long lastCampaignEmailed, String toEmail)
     {
-    	LastContactedDeferredTask lastContactDeferredtask = new LastContactedDeferredTask(contactId, lastCampaignEmailed);
+    	LastContactedDeferredTask lastContactDeferredtask = new LastContactedDeferredTask(contactId, lastCampaignEmailed, toEmail);
     	Queue queue = QueueFactory.getQueue(AgileQueues.LAST_CONTACTED_UPDATE_QUEUE);
     	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask));
     }

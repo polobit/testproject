@@ -609,7 +609,7 @@ public class SendEmail extends TaskletAdapter
 	String domain = NamespaceManager.get();
 
 	// Update campaign emailed time
-	ContactUtil.updateCampaignEmailedTime(Long.parseLong(subscriberId), System.currentTimeMillis()/1000);
+	ContactUtil.updateCampaignEmailedTime(Long.parseLong(subscriberId), System.currentTimeMillis()/1000, to);
 	
 	// For domain "clickdeskengage" - use SendGrid API
 	if (StringUtils.equals(domain, Globals.CLICKDESK_ENGAGE_DOMAIN))
