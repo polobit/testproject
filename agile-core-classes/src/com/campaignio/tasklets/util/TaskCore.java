@@ -3,6 +3,8 @@ package com.campaignio.tasklets.util;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
+import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
@@ -92,13 +94,11 @@ public class TaskCore
 		TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(
 			AgileTaskletUtil.getId(campaignJSON), subscriberJSON.toString(), namespace);
 
-		taskletWorkflowDeferredTask.run();
+		// taskletWorkflowDeferredTask.run();
 
 		// Add deferred tasks to pull queue with namespace as tag
-		// PullQueueUtil.addToPullQueue(len >= 200 ?
-		// AgileQueues.BULK_CAMPAIGN_PULL_QUEUE
-		// : AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE,
-		// taskletWorkflowDeferredTask, namespace);
+		PullQueueUtil.addToPullQueue(len >= 200 ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE
+			: AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, taskletWorkflowDeferredTask, namespace);
 
 	    }
 	    catch (Exception e)
