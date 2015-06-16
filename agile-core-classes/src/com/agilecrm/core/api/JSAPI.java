@@ -1075,9 +1075,8 @@ public class JSAPI
 		if (key.equals("tags"))
 		{
 		    String tagString = obj.getString(key);
-		    tagString = tagString.trim();
-		    tagString = tagString.replace("/ /g", " ");
-		    tagString = tagString.replace("/, /g", ",");
+		    tagString = tagString.trim().replaceAll(" +", " ");
+		    tagString = tagString.replaceAll(", ", ",");
 		    tags = tagString.split(",");
 		}
 		else

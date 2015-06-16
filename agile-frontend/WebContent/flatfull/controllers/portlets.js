@@ -173,10 +173,13 @@ function deletePortlet(el){
 	var p_id = el.id.split("-close")[0];
 	$('#portletDeleteModal').modal('show');
 	$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',p_id);
+	var model = Portlets_View.collection.get(p_id);
 	if($('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text()!=undefined && $('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()!="" && $('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()!="Getting started")
 		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - "+$('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()+"?");
 	else if($('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text()!=undefined && $('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()=="Getting started")
 		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - "+$('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()+"?<br/>This dashlet can't be added back again.");
+	else if(model.get("name")=="Leaderboard")
+		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - Leaderboard?");
 	else
 		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - Activity Overview?");
 }

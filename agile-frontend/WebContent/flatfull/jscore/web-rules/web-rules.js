@@ -88,8 +88,6 @@ $(function()
 				var htmlContent = $(getTemplate("webrules-add", {})).find('.web-rule-contact-condition-table tr').clone();
 				scramble_input_names($(htmlContent));
 
-				$(this).hide();
-				
 				chainFilters(htmlContent, undefined, undefined, true);
 
 				// var htmlContent = $(this).closest("tr").clone();
