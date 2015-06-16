@@ -64,6 +64,7 @@ public class BillingRestrictionReminderUtil
 	try
 	{
 
+	    System.out.println(NamespaceManager.get());
 	    // Fetches contact form our domain
 	    Contact contact = ContactUtil.searchContactByEmail(user.email);
 	    System.out.println(contact != null ? contact.id : "null");

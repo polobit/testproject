@@ -244,6 +244,8 @@ public class BillingRestriction
     public void refresh(boolean refreshContacts)
     {
 
+	System.out.println(this.tags_in_our_domain);
+	System.out.println(this);
 	webrules_count = WebRule.dao.count();
 	campaigns_count = Workflow.dao.count();
 	AccountEmailStats stats = AccountEmailStatsUtil.getAccountEmailStats(NamespaceManager.get());
