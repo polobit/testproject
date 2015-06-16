@@ -21,12 +21,12 @@
 							<b>API key</b> for REST clients (Java, PHP, .Net wrappers) and integrations (Zapier, Wufoo, Unbounce, Chrome extension and others).
 						   <div class="clearfix"></div>
 						   <br/>
-								<pre  id="api_key_code">{{api_key}}<span class="pull-right inline-block"><a id="api_key_generate_icon" class="c-p m-t-xs m-r-xs"><i class="icon-repeat"></i></a><img border="0" src="/img/help.png" class="question-tag-tiny v-top"  rel="popover" data-placement="bottom" data-title="" data-content="Reset API Key" id="element" data-trigger="hover" data-original-title=""></span></pre>
+								<pre  class="prettyprint" id="api_key_code">{{api_key}}<span class="pull-right inline-block"><a id="api_key_generate_icon" class="c-p m-t-xs m-r-xs"><i class="icon-repeat"></i></a><img border="0" src="/img/help.png" class="question-tag-tiny v-top"  rel="popover" data-placement="bottom" data-title="" data-content="Reset API Key" id="element" data-trigger="hover" data-original-title=""></span></pre>
 								tracking-webrules
 						  <b>Javascript API key</b> only for tracking code on website.
 						  <div class="clearfix"></div>
 						   <br/>
-								<pre  id="jsapi_key_code">{{js_api_key}}<span class="inline-block pull-right"><a id="jsapi_key_generate_icon" class="c-p m-t-xs m-r-xs"><i class="icon-repeat"></i></a><img border="0" src="/img/help.png" class="question-tag-tiny v-top" rel="popover" data-placement="bottom" data-title="" data-content="Reset JavaScript API Key" id="element" data-trigger="hover" data-original-title=""></span></pre>
+								<pre class="prettyprint" id="jsapi_key_code">{{js_api_key}}<span class="inline-block pull-right"><a id="jsapi_key_generate_icon" class="c-p m-t-xs m-r-xs"><i class="icon-repeat"></i></a><img border="0" src="/img/help.png" class="question-tag-tiny v-top" rel="popover" data-placement="bottom" data-title="" data-content="Reset JavaScript API Key" id="element" data-trigger="hover" data-original-title=""></span></pre>
 								 
 							<!--<form id="allowedDomainsForm" method="get" action="" class="form-horizontal">
 
@@ -70,7 +70,7 @@
 				<div class="clearfix"></div>
 				<br>
 				<div><!--<a class="right btn" id="api_track_code_icon" style="margin:5px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
-				<pre  id="api_track_code">
+				<pre  id="api_track_code" class="prettyprint">
 				&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
 				&lt;/script&gt;
 				&lt;script type="text/javascript" &gt;
@@ -86,7 +86,7 @@
 				<div class="clearfix"></div>
 				<div><!--<a class="right btn" id="api_track_webrules_code_icon" style="margin:5px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
 				<br>
-				<pre  id="api_track_webrules_code">
+				<pre  id="api_track_webrules_code" class="prettyprint">
 				&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
 				&lt;/script&gt;
 				&lt;script type="text/javascript" &gt;
@@ -122,14 +122,14 @@
 
 				Set Email (Mandatory)<div class="clearfix"></div>
 								
-				<pre >
+				<pre class="prettyprint">
 				 _agile.set_email('jim@example.com');
 				</pre>
 					
 
 				Track Page View<div class="clearfix"></div>
 								
-				<pre >
+				<pre class="prettyprint">
 				 _agile.track_page_view({
 				   success: function(data) {
 					 console.log("success");
@@ -142,7 +142,7 @@
 
 				Create Contact<div class="clearfix"></div>
 								
-				<pre >
+				<pre class="prettyprint">
 				 _agile.create_contact({
 				  "email": "jim@example.com",
 				  "first_name": "Jim",
@@ -166,7 +166,7 @@
 
 				Delete Contact<div class="clearfix"></div>
 								
-				<pre >
+				<pre class="prettyprint">
 				 _agile.delete_contact('jim@example.com', {
 				   success: function(data) {
 					 console.log("success");
@@ -179,7 +179,7 @@
 
 				Add Property<div class="clearfix"></div>
 								
-				<pre >
+				<pre class="prettyprint">
 				_agile.set_property({
 				  "name": "phone",
 				  "value": "+1-541-754-3010",
@@ -196,7 +196,7 @@
 
 				Add Tag<div class="clearfix"></div>
 								
-				<pre >
+				<pre class="prettyprint">
 				 _agile.add_tag('tags2, tag3, tag4', {
 				   success: function(data) {
 					 console.log("success");
@@ -209,7 +209,7 @@
 
 				Remove Tag<div class="clearfix"></div>
 								
-				<pre >
+				<pre class="prettyprint">
 				 _agile.remove_tag('tag4, tag5, tag6', {
 				   success: function(data) {
 					 console.log("success");
@@ -223,7 +223,7 @@
 				Add Score<div class="clearfix"></div>
 								<div class="row">
 									<div class="col-md-12">
-				<pre >
+				<pre class="prettyprint">
 				_agile.add_score(10, {
 				  success: function(data) {
 					console.log("success");
