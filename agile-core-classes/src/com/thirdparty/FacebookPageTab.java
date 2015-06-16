@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.facebookpage.FacebookPage;
 import com.agilecrm.facebookpage.FacebookPageUtil;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * 
@@ -70,6 +71,7 @@ public class FacebookPageTab extends HttpServlet
 		FacebookPage fbpage = FacebookPageUtil.getFacebookPageDetails(facebookRequestedPageID);
 		if (fbpage != null && fbpage.form_id != "")
 		{
+			NamespaceManager.set(fbpage.domain);
 		    request.getRequestDispatcher("form.jsp?id=" + fbpage.form_id).include(request, response);
 		}
 		else
