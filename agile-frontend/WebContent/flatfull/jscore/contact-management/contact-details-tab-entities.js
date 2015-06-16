@@ -34,6 +34,7 @@ var contact_details_tab = {
 	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
 	            		 $(".note-created-time", el).timeago();
 	              	})
+	              	contact_detail_page_infi_scroll($('#contact-dtl', App_Contacts.contactDetailView.el), notesView);
 	            }
 	        });
 	        notesView.collection.fetch();
@@ -352,7 +353,7 @@ function fetch_mails(contact_details_tab_scope,has_email_configured,mail_server_
 
 	// Fetches mails collection
 	mailsView = new Base_Collection_View({ url : mail_server_url , cursor : cursor, page_size : 10,
-	templateKey : "email-social", sort_collection : false, sortKey : "date_secs", descending : true, individual_tag_name : "li",
+	templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{
 		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()

@@ -59,12 +59,13 @@ public class WebCalendarEventsAPI
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<List<Long>> getSlots(@QueryParam("slot_time") int slot_time, @QueryParam("date") String date,
 			@QueryParam("timezone_name") String timezoneName, @QueryParam("epoch_time") Long epochTime,
-			@QueryParam("selected_time_epoch") Long startTime, @QueryParam("user_id") Long userid,
-			@QueryParam("agile_user_id") Long agileuserid, @QueryParam("timezone") int timezone) throws ParseException
+			@QueryParam("startTime") Long startTime, @QueryParam("endTime") Long endTime,
+			@QueryParam("user_id") Long userid, @QueryParam("agile_user_id") Long agileuserid,
+			@QueryParam("timezone") int timezone) throws ParseException
 	{
 		try
 		{
-			return WebCalendarEventUtil.getSlots(userid, slot_time, date, timezoneName, epochTime, startTime,
+			return WebCalendarEventUtil.getSlots(userid, slot_time, date, timezoneName, epochTime, startTime, endTime,
 					agileuserid, timezone);
 		}
 		catch (JSONException e)

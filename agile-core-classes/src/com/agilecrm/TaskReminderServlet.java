@@ -22,26 +22,26 @@ import com.agilecrm.util.NamespaceUtil;
 @SuppressWarnings("serial")
 public class TaskReminderServlet extends HttpServlet
 {
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
-    {
-	doGet(request, response);
-    }
-
-    public void doGet(HttpServletRequest req, HttpServletResponse res)
-    {
-	try
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
 	{
-	    Set<String> domains = NamespaceUtil.getAllNamespaces();
-	    // Start a task queue for each domain
-	    for (String domain : domains)
-	    {
+		doGet(request, response);
+	}
 
-		CreateTaskDeferredTask.createTaskReminderDeferredTask(domain);
-	    }
-	}
-	catch (IOException e)
+	public void doGet(HttpServletRequest req, HttpServletResponse res)
 	{
-	    e.printStackTrace();
+		try
+		{
+			Set<String> domains = NamespaceUtil.getAllNamespacesUsingIterator();
+			// Start a task queue for each domain
+			for (String domain : domains)
+			{
+
+				CreateTaskDeferredTask.createTaskReminderDeferredTask(domain);
+			}
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
-    }
 }

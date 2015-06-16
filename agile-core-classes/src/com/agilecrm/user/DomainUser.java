@@ -28,6 +28,7 @@ import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.OnlineCalendarUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.VersioningUtil;
@@ -711,24 +712,10 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		{
 
 			domainuser = DomainUserUtil.getDomainUser(id);
-			if (StringUtils.isEmpty(domainuser.schedule_id))
-			{
-				this.schedule_id = getScheduleid(domainuser.name);
-
-			}
-			else
-			{
-				if (StringUtils.isNotEmpty(this.schedule_id))
-					this.schedule_id = getScheduleid(this.schedule_id);
-				else
-					this.schedule_id = domainuser.schedule_id;
-			}
+			this.schedule_id = domainuser.schedule_id;
 
 		}
-		else
-		{
-			this.schedule_id = getScheduleid(this.name);
-		}
+
 		// Stores password
 		if (!StringUtils.isEmpty(password) && !password.equals(MASKED_PASSWORD))
 		{
@@ -809,7 +796,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		try
 		{
 
-			this.calendar_url = getCalendarURL();
+			this.calendar_url = OnlineCalendarUtil.getDomainUserCalendarUrl(id, domain, this);
 
 			if (info_json != null)
 				info_json = new JSONObject(info_json_string);
@@ -1067,7 +1054,14 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 		String calendar_url = VersioningUtil.getHostURLByApp(domain);
 
-		if (!StringUtils.isEmpty(schedule_id))
+		OnlineCalendarPrefs online_cal_prefs = OnlineCalendarUtil.getCalendarPrefs(id);
+		String scheduleid = null;
+		if (online_cal_prefs != null)
+		{
+			scheduleid = online_cal_prefs.schedule_id;
+			calendar_url += "calendar/" + scheduleid;
+		}
+		else if (!StringUtils.isEmpty(schedule_id))
 			calendar_url += "calendar/" + schedule_id;
 
 		return calendar_url;

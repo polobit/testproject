@@ -5595,6 +5595,8 @@ $(function()
 			icon_name = "icon-feed";
 		else if (p_name == 'Stats Report')
 			icon_name = "icon-speedometer";
+		else if (p_name == 'Leaderboard')
+			icon_name = "icon-trophy";
 		return icon_name;
 	});
 	/**
@@ -6089,6 +6091,26 @@ $(function()
 			return "Unlimited";
 		else
 			return _billing_restriction.currentLimits[key];
+	});
+
+	Handlebars.registerHelper("getLeaderboardCateCount", function(options){
+		var count=0;
+		if(options.revenue)
+			count++;
+		if(options.dealsWon)
+			count++;
+		if(options.calls)
+			count++;
+		if(options.tasks)
+			count++;
+		return count;
+	});
+
+	/**
+	 * return the increment value of index of a collection
+	 */
+	Handlebars.registerHelper("getIndexIncrementByOne", function(indexVal){
+		return ++indexVal;
 	});
 });
 

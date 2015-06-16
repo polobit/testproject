@@ -43,6 +43,17 @@ $(function()
 	});
 
 	/**
+	 * shows description field in new event model
+	 */
+	$("#add_event_desctiption").live('click', function(e)
+	{
+		e.preventDefault();
+		$(".event_discription").removeClass("hide");
+		$(this).hide();
+		return;
+	});
+
+	/**
 	 * When clicked on update button of event-update-modal, the event will get
 	 * updated by calling save_event function
 	 * 
@@ -304,7 +315,8 @@ $(function()
 	 */
 	$('#activityModal, #activityTaskModal').on('show.bs.modal', function(e)
 	{
-
+		$(".event_discription").addClass("hide");
+		$("textarea#description").val('');
 		// Removes alert message of error related date and time.
 		$('#' + this.id).find('.alert').css('display', 'none');
 
@@ -333,10 +345,16 @@ $(function()
 	 */
 	$('#updateActivityModal').on('hidden.bs.modal', function()
 	{
+
 		if ($(this).hasClass('in'))
 		{
 			return;
 		}
+
+		$("#updateActivityForm").each(function()
+		{
+			this.reset();
+		});
 
 		$("#updateActivityForm").find("li").remove();
 		$('#update-event-time-1').closest('.control-group').show();
@@ -344,6 +362,9 @@ $(function()
 	});
 	$('#activityModal').on('hidden.bs.modal', function()
 	{
+		$("#add_event_desctiption").show();
+
+		$(".event_discription").addClass("hide");
 
 		if ($(this).hasClass('in'))
 		{
@@ -460,7 +481,6 @@ $(function()
 		$("#webEventCancelModel").modal('show');
 		$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39?");
 		$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + event_id + "'/>");
-		$("#event_text").html("Please mention reason for cancellation of &#39" + web_event_title + "&#39?");
 
 	});
 

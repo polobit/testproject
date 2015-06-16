@@ -1,11 +1,8 @@
 // On change of date, change right column above available slot box
 function change_availability_date(selected_date)
 {
-	console.log("In change_availability_date");
-	console.log(selected_date);
 
 	var date = new Date(selected_date);
-	console.log(date);
 
 	$('.availability').html("Availability on " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
 }
@@ -150,32 +147,28 @@ function resetAll()
 // calendar.
 function get_slots(s_date, s_slot)
 {
-	console.log("in get_slots");
-	console.log(s_date + " " + s_slot);
-	var selected_epoch = getSelectedTimeFromDate(s_date);
+	MIDNIGHT_START_TIME = null;
+	MIDNIGHT_END_TIME = null;
+	var selected_epoch_start = getSelectedTimeFromDate(s_date);
 	// Current timezone name
-	var timezoneName = $('#user_timezone').val();
-	console.log(timezoneName);
+	var timezoneName = SELECTED_TIMEZONE;
 
 	// selected date in current epoch time
 	var epochTime = getEpochTimeFromDate(s_date); // milliseconds
-	console.log(epochTime);
 
 	var d = new Date(s_date);
 	var secs = epochTime + d.getSeconds() + (60 * d.getMinutes()) + (60 * 60 * d.getHours());
-	console.log(secs);
 	// gets the midnight of selected date. selected date will be stored in
 	// global variable i.e current_date_mozilla
-	selected_epoch = getMidnightEpoch();
-
+	MIDNIGHT_START_TIME = selected_epoch_start = getMidnightEpoch();
+	MIDNIGHT_END_TIME = selected_epoch_end = selected_epoch_start + 86400;
 	var start_time = getEpochTimeFromDate(d);
 	d.setDate(d.getDate() + 1)
 	var end_time = getEpochTimeFromDate(d);
-	console.log(start_time + "  " + end_time);
 	var timezone = getTimezoneOffset();
 
 	// Send request to get available slot
-	var initialURL = '/core/api/webevents/calendar/getslots?&user_id=' + User_Id + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneName + "&epoch_time=" + epochTime + "&selected_time_epoch=" + selected_epoch + "&agile_user_id=" + Agile_User_Id + "&timezone=" + timezone;
+	var initialURL = '/core/api/webevents/calendar/getslots?&user_id=' + User_Id + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneName + "&epoch_time=" + epochTime + "&startTime=" + selected_epoch_start + "&endTime=" + selected_epoch_end + "&agile_user_id=" + Agile_User_Id + "&timezone=" + timezone;
 	$.getJSON(initialURL, function(data)
 	{
 
@@ -200,7 +193,6 @@ function displayNoSlotsMsg()
 	$('.checkbox-main-grid').html('');
 
 	var date = new Date(selecteddate);
-	console.log(date);
 
 	$('.availability').html("No slots available for " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
 
@@ -270,7 +262,6 @@ function displaySlots()
 // Validates the form fields
 function isValid(formId)
 {
-	console.log(formId);
 
 	$(formId).validate();
 	return $(formId).valid();
@@ -294,7 +285,6 @@ function save_web_event(formId, confirmBtn)
 
 	// Get details
 	var data = $('#' + formId).serializeArray();
-	console.log(data);
 
 	// Make json
 	var web_calendar_event = {};
@@ -315,7 +305,6 @@ function save_web_event(formId, confirmBtn)
 			web_calendar_event[this.name] = this.value || '';
 		}
 	});
-	console.log(web_calendar_event);
 
 	// Add selected parameter which are out of form
 	web_calendar_event["name"] = "Save in DB";
@@ -324,16 +313,16 @@ function save_web_event(formId, confirmBtn)
 	web_calendar_event["domainUserId"] = User_Id;
 	web_calendar_event["agileUserId"] = Agile_User_Id;
 	web_calendar_event["selectedSlotsString"] = [];
-	web_calendar_event["timezone"] = -new Date().getTimezoneOffset();
-
+	web_calendar_event["timezone"] = SELECTED_TIMEZONE;
+	web_calendar_event["midnight_start_time"] = MIDNIGHT_START_TIME;
+	web_calendar_event["midnight_end_time"] = MIDNIGHT_END_TIME;
+	web_calendar_event["timezone_offset"] = getTimezoneOffset();
 	// Get selected slots in UI from available slots list.
 	var i = 0;
 	for ( var prop in web_calendar_event)
 	{
-		console.log(prop);
 		if (prop.indexOf("startTime") != -1)
 		{
-			console.log(web_calendar_event[prop]);
 			var res = prop.split("_");
 
 			var result = {};
@@ -342,13 +331,10 @@ function save_web_event(formId, confirmBtn)
 			web_calendar_event["selectedSlotsString"][i] = result;
 			i++;
 
-			console.log(result["start"]);
 			var dd = new Date(result["start"] * 1000);
 			web_calendar_event["date"] = dd.toString();
 		}
 	}
-
-	console.log(web_calendar_event["selectedSlotsString"].length);
 
 	if (web_calendar_event["selectedSlotsString"].length == 0)
 	{
@@ -359,9 +345,6 @@ function save_web_event(formId, confirmBtn)
 	$('#three').addClass('green-bg').html('<i class="fa fa-check"></i>');
 	// Add selected slots to input json
 	web_calendar_event["selectedSlotsString"] = JSON.stringify(web_calendar_event["selectedSlotsString"]);
-
-	console.log(web_calendar_event);
-	console.log(JSON.stringify(web_calendar_event));
 
 	// Send request to save slot, if new then contact, event
 	$
@@ -380,7 +363,7 @@ function save_web_event(formId, confirmBtn)
 					var d = dates[0];
 					var start = convertToHumanDateUsingMoment("", d.start);
 
-					if (status == "success" && res.response != "Sorry. This slot is booked by some one else. Please try another.")
+					if (status == "success" && res.responseText != "slot booked")
 					{
 						$('#mainwrap').addClass("appointment-wrap");
 						var appointment_success_img1 = "/img/appointment_confirmation.png";
@@ -392,6 +375,12 @@ function save_web_event(formId, confirmBtn)
 
 						$(".container").html(temp);
 
+					}
+					else if (res.responseText == "slot booked")
+					{
+						alert("Looks like this slot is booked already. Please try another one.");
+						get_slots(selecteddate, Selected_Time);
+						$('#confirm').attr('disabled', false);
 					}
 
 					else
@@ -415,7 +404,6 @@ function convertToHumanDate(format, date)
 
 	if ((date / 100000000000) > 1)
 	{
-		console.log(new Date(parseInt(date)).format(format));
 		return new Date(parseInt(date)).format(format, 0);
 	}
 	// date form milliseconds

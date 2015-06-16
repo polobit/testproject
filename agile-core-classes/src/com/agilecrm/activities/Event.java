@@ -130,6 +130,17 @@ public class Event extends Cursor
 	public String date_with_full_format;
 
 	/**
+	 * Description of a event.
+	 */
+	@NotSaved(IfDefault.class)
+	public String description = null;
+
+	/**
+	 * Description of a event.
+	 */
+	@NotSaved(IfDefault.class)
+	public String meeting_type = null;
+	/**
 	 * Related Contact
 	 */
 	@NotSaved(IfDefault.class)

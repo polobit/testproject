@@ -1,0 +1,65 @@
+<script id="fbpagetab-template" type="text/html">
+<style>
+.help-inline {
+color:red;
+}
+</style>
+<div class="row">
+<div class="col-md-4 col-sm-6 col-xs-12">
+<div class="panel wrapper">  
+        	<center><img class="thumbnail bg-transparent thumb-xl img-responsive" src="/img/crm-plugins/facebook.png"></center>
+
+<div id="fbPageSettingsHolder">
+
+<p>Link your Facebook account and add a form to a Facebook page you manage.</p>
+
+{{#if linked_pages.length}}<p class="font-bold">Current Facebook forms</p>
+{{#each linked_pages}}
+	<p id="connectedFormHolder_{{page_id}}"><a target="_blank" href="https://www.facebook.com/pages/null/{{page_id}}?sk=app_{{../app_id}}">{{page_name}}</a> - 
+<a target="_blank" href="/form.jsp?id={{form_id}}">{{form_name}}</a> &nbsp;
+<a href="#" data-pageid="{{page_id}}" id="connectedForm_{{form_id}}" class="deleteFacebookLinkedpage"><i class="icon-trash"></i></a>
+</p>
+{{/each}}
+<div id="delStatusMessageHolder"></div>
+
+{{#if_equals is_authenticated "false"}}
+<p><a  class="btn btn-sm btn-primary ml_5" href="{{oauth_url}}" id="AddFormLinkFacebookAccount">Add Form</a></p><br>
+{{/if_equals}}
+{{else}}
+{{#if_equals is_authenticated "false"}}
+	<p><a class="btn btn-sm btn-primary ml_5" href="{{oauth_url}}">Link Facebook account</a></p><br>
+{{/if_equals}}
+{{/if}}
+
+{{#if_equals is_authenticated "true"}}
+<hr>
+<form id="facebookPageTabSettingForm">
+  <fieldset>
+	<input type="hidden" id="AgileFacebookAppId" value="{{app_id}}">
+	<label for="formToUse">Add this Agile CRM form</label>
+    <select id="formToUse" name="formToUse" required="" class="form-control">
+	<option value="">Select</option>
+	{{#each forms}}
+      <option value="{{id}}">{{formName}}</option>
+	{{/each}}
+    </select><br>
+
+    <label for="facebookTabPage">to this Facebook page</label>
+    <select id="facebookTabPage" name="facebookTabPage" required="" class="form-control">
+	<option value="">Select</option>
+	{{#each pages}}
+      <option data-token="{{access_token}}" value="{{id}}">{{name}}</option>
+	{{/each}}
+    </select><br>
+
+    <div id="statusMessageHolder"></div>
+    <div><a href="#" id="facebookPageTabSave" class="btn btn-primary">Save</a></div>
+  </fieldset>
+</form>
+{{/if_equals}}
+
+			</div>
+		</div>
+	</div>
+</div>
+</script>

@@ -333,6 +333,10 @@ public class QueryDocument<T> implements QueryInterface
 	    {
 		sortExpressionBuilder.setDefaultValueDate(SearchApiLimits.MAXIMUM_DATE_VALUE);
 	    }
+	    else if (orderBy.contains("name"))
+	    {
+		sortExpressionBuilder.setDefaultValue("");
+	    }
 	    else
 	    {
 		sortExpressionBuilder.setDefaultValueNumeric(0.0);
