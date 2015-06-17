@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.calendar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,7 +68,23 @@ public class EventsAPI
 		try
 		{
 			if (ownerId != null)
-				return EventUtil.getEvents(Long.parseLong(start), Long.parseLong(end), Long.parseLong(ownerId));
+			{
+				if (ownerId.contains(","))
+				{
+					String[] owner_ids = ownerId.split(",");
+					List<Event> all_user_events = new ArrayList<Event>();
+					for (String id : owner_ids)
+					{
+						List<Event> events = EventUtil.getEvents(Long.parseLong(start), Long.parseLong(end),
+								Long.parseLong(id));
+						all_user_events.addAll(events);
+
+					}
+					return all_user_events;
+				}
+				else
+					return EventUtil.getEvents(Long.parseLong(start), Long.parseLong(end), Long.parseLong(ownerId));
+			}
 			return EventUtil.getEvents(Long.parseLong(start), Long.parseLong(end), null);
 		}
 		catch (Exception e)
@@ -217,7 +234,21 @@ public class EventsAPI
 			System.out.println("Fetching page by page");
 			if (!StringUtils.isEmpty(ownerId))
 			{
-				return EventUtil.getEventList(Integer.parseInt(count), cursor, Long.parseLong(ownerId));
+				if (ownerId.contains(","))
+				{
+					String[] owner_ids = ownerId.split(",");
+					List<Event> all_user_events = new ArrayList<Event>();
+					for (String id : owner_ids)
+					{
+						List<Event> events = EventUtil
+								.getEventList(Integer.parseInt(count), cursor, Long.parseLong(id));
+						all_user_events.addAll(events);
+
+					}
+					return all_user_events;
+				}
+				else
+					return EventUtil.getEventList(Integer.parseInt(count), cursor, Long.parseLong(ownerId));
 			}
 			else
 			{
@@ -240,7 +271,20 @@ public class EventsAPI
 
 			if (!StringUtils.isEmpty(ownerId))
 			{
-				return EventUtil.getEvents(Integer.parseInt(count), cursor, Long.parseLong(ownerId));
+				if (ownerId.contains(","))
+				{
+					String[] owner_ids = ownerId.split(",");
+					List<Event> all_user_events = new ArrayList<Event>();
+					for (String id : owner_ids)
+					{
+						List<Event> events = EventUtil.getEvents(Integer.parseInt(count), cursor, Long.parseLong(id));
+						all_user_events.addAll(events);
+
+					}
+					return all_user_events;
+				}
+				else
+					return EventUtil.getEvents(Integer.parseInt(count), cursor, Long.parseLong(ownerId));
 			}
 			else
 			{

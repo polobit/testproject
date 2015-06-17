@@ -19,17 +19,32 @@ function isArray(a)
  */
 function load_events_from_google(callback)
 {
-	if (readCookie('event-filters'))
-	{
-		if (JSON.parse(readCookie('event-filters')).type == 'agile')
-			return;
 
-		// Check whether to show the google calendar events or not.
-		if (JSON.parse(readCookie('event-filters')).owner_id.length > 0 && CURRENT_AGILE_USER.id != JSON.parse(readCookie('event-filters')).owner_id)
+	var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
+	var agile_event = false;
+	if (eventFilters)
+	{
+		var type_of_cal = eventFilters.cal_type;
+		var owners = eventFilters.owner_ids;
+		if (owners && owners.length > 0)
+		{
+			$.each(owners, function(index, value)
+			{
+				if (value)
+				{
+					if (value.id == CURRENT_AGILE_USER.id)
+						agile_event = true;
+				}
+			});
+		}
+
+		if ((type_of_cal && type_of_cal.length != 2 && type_of_cal[0] == 'agile') || type_of_cal.length == 0)
+		{
 			return;
+		}
 	}
 
-	// Name of the cookie to store/fetch calendar prefs. Current user id is set
+	// Name of the cookie to store/ calendar prefs. Current user id is set
 	// in cookie name to avoid
 	// showing tasks in different users calendar if logged in same browser
 	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
@@ -96,6 +111,7 @@ function showCalendar()
 {
 
 	_init_gcal_options();
+	putGoogleCalendarLink();
 	var calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 	$('#' + calendarView).addClass('bg-light');
 	fullCal = $('#calendar_event')
@@ -123,29 +139,61 @@ function showCalendar()
 								{ events : function(start, end, callback)
 								{
 
-									var eventFilters = JSON.parse(readCookie('event-filters'));
-									if (readCookie('event-filters') && eventFilters.type == 'google')
+									var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
+									var agile_event_owners = '';
+									if (eventFilters)
 									{
-										$("#loading_calendar_events").hide();
-										return;
+										var type_of_cal = eventFilters.cal_type;
+										var owners = eventFilters.owner_ids;
+										if (owners && owners.length > 0)
+										{
+											$.each(owners, function(index, value)
+											{
+												if (index >= 1)
+													agile_event_owners += ",";
+												agile_event_owners += value;
+											});
+										}
+
+										if ((type_of_cal && type_of_cal.length != 2 && type_of_cal[0] == 'google') || type_of_cal.length == 0)
+										{
+											$("#loading_calendar_events").hide();
+											return;
+										}
 									}
 
+									/*
+									 * if (readCookie('event-filters') &&
+									 * eventFilters.type == 'google') {
+									 * $("#loading_calendar_events").hide();
+									 * return; }
+									 */
+
 									var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
-									if (readCookie('event-filters') && eventFilters.owner_id.length > 0)
-										eventsURL += '&owner_id=' + eventFilters.owner_id;
+
+									eventsURL += '&owner_id=' + agile_event_owners;
 									console.log('-----------------', eventsURL);
 									$.getJSON(eventsURL, function(doc)
 									{
 										$.each(doc, function(index, data)
 										{
-											if (data.color == 'red' || data.color == '#f05050')
-												data.className = 'b-l b-2x b-danger fc-z-index';
-											else if (data.color == 'green' || data.color == '#bbb')
-												data.className = 'b-l b-2x b-light fc-z-index';
-											else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
-												data.className = 'b-l b-2x b-warning fc-z-index';
-											data.color = '';
-											data.backgroundColor = '#fff';
+											if (data.owner.id == CURRENT_DOMAIN_USER.id)
+											{
+												if (data.color == 'red' || data.color == '#f05050')
+													data.className = 'b-l b-2x b-danger fc-z-index';
+												else if (data.color == 'green' || data.color == '#bbb')
+													data.className = 'b-l b-2x b-light fc-z-index';
+												else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
+													data.className = 'b-l b-2x b-warning fc-z-index';
+												data.color = '';
+												data.backgroundColor = '#fff';
+											}
+											else
+											{
+												data.className = '';
+												data.color = '';
+												data.backgroundColor = '#fff';
+											}
 										});
 
 										if (doc)
@@ -162,6 +210,7 @@ function showCalendar()
 						viewDisplay : function(view)
 						{
 							createCookie('calendarDefaultView', view.name, 90);
+							$(".fc-agenda-axis").addClass('bg-light lter');
 						},
 						loading : function(bool)
 						{
@@ -180,6 +229,7 @@ function showCalendar()
 								$("#loading_calendar_events").hide();
 								start_tour('calendar');
 							}
+							$(".fc-agenda-axis").addClass('bg-light lter');
 						},
 						selectable : true,
 						selectHelper : true,
@@ -597,7 +647,7 @@ $(function()
 		}
 	});
 
-	loadDefaultFilters();
+	// loadDefaultFilters();
 
 	// Save current agile user in global.
 	$.getJSON('/core/api/users/agileusers', function(users)
@@ -633,3 +683,35 @@ $('.agendaDayWeekMonth').die().live('click', function()
 	});
 
 });
+
+function getCalendarUsersDetails()
+{
+
+	var users = $.ajax({ type : "GET", url : '/core/api/users/agileusers', async : false }).responseText;
+	var json_users = [];
+	if (users)
+	{
+		$.each(JSON.parse(users), function(i, user)
+		{
+
+			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
+			{
+				CURRENT_AGILE_USER = user;
+
+			}
+			else
+			{
+				if (user.domainUser)
+				{
+					var json = {};
+					json.id = user.id;
+					json.name = user.domainUser.name;
+				}
+				json_users.push(json);
+			}
+
+		});
+	}
+
+	return json_users;
+}
