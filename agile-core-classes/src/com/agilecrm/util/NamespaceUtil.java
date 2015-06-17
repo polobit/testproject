@@ -2,7 +2,6 @@ package com.agilecrm.util;
 
 import java.net.URL;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.json.JSONException;
@@ -10,14 +9,14 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
-import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entities;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
 
 /**
@@ -38,23 +37,56 @@ public class NamespaceUtil
 	 * 
 	 * @return set of domains as namespaces
 	 */
-	public static Set<String> getAllNamespaces()
+	public static Set<String> getAllNamespacesNew()
 	{
-		// Get All Users
-		List<DomainUser> domainList = DomainUserUtil.getAllDomainOwners();
+		Set<String> namespaces = new HashSet<String>();
+		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 
-		Set<String> domains = new HashSet<String>();
-		for (DomainUser domainUser : domainList)
+		FetchOptions options = FetchOptions.Builder.withChunkSize(1000);
+
+		Query q = new Query(Entities.NAMESPACE_METADATA_KIND);
+
+		for (Entity e : ds.prepare(q).asIterable(options))
 		{
-			domains.add(domainUser.domain);
+			// A nonzero numeric id denotes the default namespace;
+			// see Namespace Queries, below
+			if (e.getKey().getId() != 0)
+			{
+				continue;
+			}
+			else
+			{
+				namespaces.add(e.getKey().getName());
+			}
 		}
 
-		return domains;
+		System.out.println("Total domains : " + namespaces.size());
+		return namespaces;
+	}
+
+	/**
+	 * Gets all namespaces by iterating domain users
+	 * 
+	 * @return set of domains as namespaces
+	 */
+	public static Set<String> getAllNamespaces()
+	{
+		return getAllNamespacesNew();
+
+		// Get All Users
+		/*
+		 * List<DomainUser> domainList = DomainUserUtil.getAllDomainOwners();
+		 * 
+		 * Set<String> domains = new HashSet<String>(); for (DomainUser
+		 * domainUser : domainList) { domains.add(domainUser.domain); }
+		 * 
+		 * return domains;
+		 */
 	}
 
 	public static Set<String> getAllNamespacesUsingIterator()
 	{
-		return DomainUserUtil.getAllDomainsUsingIterator();
+		return getAllNamespacesNew();
 
 	}
 

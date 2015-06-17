@@ -107,6 +107,9 @@ public class Condition extends TaskletAdapter
 		// Get Variables
 		String variable1 = getStringValue(nodeJSON, subscriberJSON, data, VARIABLE_1);
 		String variable2 = getStringValue(nodeJSON, subscriberJSON, data, VARIABLE_2);
+		
+		String branch = BRANCH_NO;
+		
 		try
 		{
 
@@ -121,7 +124,7 @@ public class Condition extends TaskletAdapter
 			if (ifType.equalsIgnoreCase(IF_TYPE_STRLEN))
 				variable1 = variable1.length() + "";
 
-			String branch = BRANCH_NO;
+			
 
 			String comparator = getStringValue(nodeJSON, subscriberJSON, data, COMPARATOR);
 
@@ -135,14 +138,14 @@ public class Condition extends TaskletAdapter
 				{
 					if (compareDateValues(variable1, variable2) < 0)
 					{
-						branch = "yes";
+						branch = BRANCH_YES;
 					}
 				}
 				else
 				{
 					// Convert the string into Integer and check
 					if (Long.parseLong(variable1) < Long.parseLong(variable2))
-						branch = "yes";
+						branch = BRANCH_YES;
 				}
 			}
 
@@ -153,14 +156,14 @@ public class Condition extends TaskletAdapter
 				{
 					if (compareDateValues(variable1, variable2) <= 0)
 					{
-						branch = "yes";
+						branch = BRANCH_YES;
 					}
 				}
 				else
 				{
 					// Convert the string into Integer and check
 					if (Long.parseLong(variable1) <= Long.parseLong(variable2))
-						branch = "yes";
+						branch = BRANCH_YES;
 				}
 			}
 
@@ -170,14 +173,14 @@ public class Condition extends TaskletAdapter
 				{
 					if (compareDateValues(variable1, variable2) > 0)
 					{
-						branch = "yes";
+						branch = BRANCH_YES;
 					}
 				}
 				else
 				{
 
 					if (Long.parseLong(variable1) > Long.parseLong(variable2))
-						branch = "yes";
+						branch = BRANCH_YES;
 				}
 			}
 
@@ -187,35 +190,33 @@ public class Condition extends TaskletAdapter
 				{
 					if (compareDateValues(variable1, variable2) >= 0)
 					{
-						branch = "yes";
+						branch = BRANCH_YES;
 					}
 				}
 				else
 				{
 					if (Long.parseLong(variable1) >= Long.parseLong(variable2))
-						branch = "yes";
+						branch = BRANCH_YES;
 				}
 			}
 
 			if (comparator.equalsIgnoreCase(COMPARATOR_NOT_EQUAL_TO))
 			{
 				if (!variable1.equalsIgnoreCase(variable2))
-					branch = "yes";
+					branch = BRANCH_YES;
 			}
 
 			if (comparator.equalsIgnoreCase(COMPARATOR_EQUAL_TO))
 			{
 				if (variable1.equalsIgnoreCase(variable2))
-					branch = "yes";
+					branch = BRANCH_YES;
 			}
 
 			if (comparator.equalsIgnoreCase(COMPARATOR_CONTAINS))
 			{
 				if (variable1.toLowerCase().contains(variable2.toLowerCase()))
-					branch = "yes";
+					branch = BRANCH_YES;
 			}
-			// Go to next tasks
-			TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, branch);
 
 		}
 		catch (Exception e)
@@ -223,6 +224,9 @@ public class Condition extends TaskletAdapter
 			e.printStackTrace();
 			System.out.println("Exception occured while executing Condition node: " + e.getMessage());
 		}
+		
+		// Go to next tasks
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, branch);
 	}
 
 	/**

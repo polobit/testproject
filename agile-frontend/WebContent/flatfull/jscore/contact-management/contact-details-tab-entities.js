@@ -34,6 +34,7 @@ var contact_details_tab = {
 	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
 	            		 $(".note-created-time", el).timeago();
 	              	})
+	              	contact_detail_page_infi_scroll($('#contact-dtl', App_Contacts.contactDetailView.el), notesView);
 	            }
 	        });
 	        notesView.collection.fetch();
@@ -162,7 +163,7 @@ var contact_details_tab = {
 			}
 			$('#mail #mails-span', App_Contacts.contactDetailView.el).remove();
 			$('#mails', App_Contacts.contactDetailView.el).html("");
-			$('#mail', App_Contacts.contactDetailView.el).append('<span id="mails-span"> <img class="mails-loading p-r-xs m-b m-l-sm"  src= "/img/ajax-loader-cursor.gif"></img></span>');
+			//$('#mail', App_Contacts.contactDetailView.el).append('<span id="mails-span"> <img class="mails-loading p-r-xs m-b m-l-sm"  src= "/img/ajax-loader-cursor.gif"></img></span>');
 			var contact = App_Contacts.contactDetailView.model;
 			var json = contact.toJSON();
 			

@@ -866,4 +866,23 @@ public class TaskUtil
     	}
     	return tasksList1;
     }
+    
+    /**
+	 * Gets the count of completed tasks of a user
+	 * 
+	 * @return List of tasks that have been pending for Today
+	 */
+	public static int getCompletedTasksOfUser(Long startTime, Long endTime, Long ownerId)
+	{
+		try
+		{
+			return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, ownerId))
+						.filter("task_completed_time >=", startTime).filter("task_completed_time <", endTime).filter("is_complete", true).count();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return 0;
+		}
+	}
 }

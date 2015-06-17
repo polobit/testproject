@@ -3,7 +3,6 @@ package com.agilecrm.subscription.restrictions.entity.impl;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.EntityDaoRestrictionInterface;
-import com.agilecrm.subscription.restrictions.util.BillingRestrictionReminderUtil;
 import com.agilecrm.webrules.WebRule;
 
 /**
@@ -73,11 +72,14 @@ public class WebRuleBillingRestriction extends DaoBillingRestriction
     @Override
     public String getTag()
     {
-	String tag = BillingRestrictionReminderUtil.getTag(restriction.webrules_count, max_allowed, "WebRule",
-		hardUpdateTags);
+	if (restriction == null || restriction.webrules_count == null)
+	    return null;
 
-	if (tag != null)
-	    restriction.tagsToAddInOurDomain.add(tag);
+	int count = restriction.webrules_count;
+
+	String tag = setTagsToUpdate(max_allowed, restriction.webrules_count);
+
+	restriction.webrules_count = count;
 
 	return tag;
     }

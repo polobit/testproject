@@ -890,5 +890,14 @@
 		<url-pattern>/fbpagecallback</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>NamespaceLimit</servlet-name>
+		<servlet-class>com.agilecrm.test.NamespaceTest</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>NamespaceLimit</servlet-name>
+		<url-pattern>/backend/printallnamespaces</url-pattern>
+	</servlet-mapping>
+	
 	
 </web-app>
