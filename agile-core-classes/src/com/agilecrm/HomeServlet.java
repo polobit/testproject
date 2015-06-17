@@ -284,5 +284,20 @@ public class HomeServlet extends HttpServlet
 			}
 			onlinePrefs.save();
 		}
+		else
+		{
+			if (StringUtils.isBlank(user.schedule_id))
+			{
+				try
+				{
+					onlinePrefs.save();
+				}
+				catch (Exception e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }
