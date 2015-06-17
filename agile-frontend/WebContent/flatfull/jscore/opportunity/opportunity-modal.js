@@ -659,6 +659,10 @@ if(json.close_date==0)
 							return false;
 					}
 				});
+			} else if(App_Companies.companyDetailView
+					&& Current_Route == "company/"
+						+ App_Companies.companyDetailView.model.get('id')){
+				company_util.updateDealsList(deal,true);
 			}
 			// When deal is added or updated from Deals route
 			else if (Current_Route == 'deals') {

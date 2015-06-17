@@ -77,24 +77,26 @@ function loadCustomFiledsFilters(fields, cel, is_company) {
 function submitLhsFilter() {
 	var formData = serializeLhsFilters($('#lhs-contact-filter-form'))
 	// erase filter cookies
-	eraseCookie('contact_filter');
-	eraseCookie('contact_filter_type');
-	//eraseCookie('company_filter');
 	var contact_type = formData.contact_type;
 	if(contact_type == 'COMPANY') {
+		eraseCookie('company_filter');
 		eraseData('dynamic_company_filter');
 		if(formData != null && formData.rules.length >0) {
 			storeData('dynamic_company_filter', JSON.stringify(formData));
-			createCookie('company_filter', "Companies");
+			//createCookie('company_filter', "Companies");
 		}
+		COMPANIES_HARD_RELOAD=true;
+		App_Companies.companies(undefined, undefined, undefined, true);
 	} else {
+		eraseCookie('contact_filter');
+		eraseCookie('contact_filter_type');
 		eraseData('dynamic_contact_filter');
 		if(formData != null && formData.rules.length >0)
 			storeData('dynamic_contact_filter', JSON.stringify(formData));
+		CONTACTS_HARD_RELOAD=true;
+		App_Contacts.contacts(undefined, undefined, undefined, true);
 	}
 	
-	CONTACTS_HARD_RELOAD=true;
-	App_Contacts.contacts(undefined, undefined, undefined, true);
 }
 
 $('a.filter-multiple-add-lhs').die().live("click", function(e) {
@@ -141,7 +143,7 @@ $('#clear-lhs-company-filters').die().live("click", function(e) {
 	e.preventDefault();
 	eraseData('dynamic_company_filter');
 	CONTACTS_HARD_RELOAD=true;
-	App_Contacts.contacts();
+	App_Companies.companies();
 });
 
 $('#lhs-filters-header').die().live("click", function(e) {

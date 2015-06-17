@@ -141,15 +141,6 @@ var ContactsRouter = Backbone.Router.extend({
 		this.tag_id = tag_id;
 		var postData;
 
-		// Check if contacts page is set to show companie
-		if (readCookie('company_filter'))
-		{
-			eraseCookie('contact_filter');
-			eraseCookie('contact_filter_type');
-			is_company = true;
-		}
-		if (readCookie('contact_filter_type') && readCookie('contact_filter_type') == 'COMPANY')
-			is_company = true;
 		// Tags, Search & default browse comes to the same function
 		if (tag_id)
 		{
@@ -160,8 +151,8 @@ var ContactsRouter = Backbone.Router.extend({
 			
 			// erase filter cookie
 			eraseCookie('contact_filter');
-			eraseCookie('company_filter');
-			eraseCookie('contact_filter_type');
+			//eraseCookie('company_filter');
+			//eraseCookie('contact_filter_type');
 			eraseData('dynamic_contact_filter');
 
 			if (this.contactsListView && this.contactsListView.collection)
@@ -190,30 +181,16 @@ var ContactsRouter = Backbone.Router.extend({
 			}
 		}
 
-		if (readCookie('company_filter'))
-		{
-			// Change template to companies - this template is separate
-			// from contacts default template
-			url = "core/api/contacts/companies/list";
-
-			if (!grid_view && !readCookie("agile_contact_view"))
-				template_key = "companies";
-		}
-
 		// If contact-filter cookie is defined set url to fetch
 		// respective filter results
 		if (filter_id || (filter_id = readCookie('contact_filter')))
 		{
 			collection_is_reverse = false;
 			url = "core/api/filters/query/list/" + filter_id;
-			if (readCookie('contact_filter_type') && readCookie('contact_filter_type') == 'COMPANY')
-				template_key = "companies";
 		}
 
 		// If view is set to custom view, load the custom view
-		// If Company filter active-don't load any Custom View Show
-		// default
-		if ((!readCookie('company_filter') && readCookie('contact_filter_type') != 'COMPANY') && !readCookie("agile_contact_view"))
+		if (!readCookie("agile_contact_view"))
 		{
 			if(readData('dynamic_contact_filter')) {
 				// Then call customview function with filter url
@@ -257,13 +234,10 @@ var ContactsRouter = Backbone.Router.extend({
 			$("#contactsmenu").addClass("active");
 			return;
 		}
-		if(readData('dynamic_contact_filter') && !readCookie('company_filter')) {
+		if(readData('dynamic_contact_filter')) {
 			url = 'core/api/filters/filter/dynamic-filter';
 			postData = readData('dynamic_contact_filter');
-		} else if(readData('dynamic_company_filter') && readCookie('company_filter')) {
-			url = 'core/api/filters/filter/dynamic-filter';
-			postData = readData('dynamic_company_filter');
-		}
+		} 
 
 		var slateKey = getContactPadcontentKey(url);
 		if(is_lhs_filter) {
@@ -272,9 +246,6 @@ var ContactsRouter = Backbone.Router.extend({
 			{
 				template_key = "contacts-grid-table";
 				individual_tag_name = "div";
-			}
-			if(readCookie('company_filter')) {
-				template_key = "companies-table";
 			}
 		}
 
@@ -1030,9 +1001,6 @@ var ContactsRouter = Backbone.Router.extend({
 			var el = App_Contacts.contact_custom_view.render(true).el;
 			$('#content').html(el);
 
-			if (readCookie('company_filter'))
-				$('#contact-heading', el).text('Companies');
-
 			//setup_tags(el);
 			//pieTags(el);
 			setupViews(el, view_data.name);
@@ -1067,10 +1035,6 @@ var ContactsRouter = Backbone.Router.extend({
 			postRenderCallback : function(el, collection)
 			{
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
-
-				// To set heading in template
-				if (readCookie('company_filter'))
-					$('#contact-heading', el).text('Companies');
 
 				// To set chats and view when contacts are fetch by
 				// infiniscroll

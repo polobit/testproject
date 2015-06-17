@@ -275,6 +275,9 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 					}
 				});
 			}
+			if (company_util.isCompany()){
+				company_util.updateDocumentsList(document,true);
+			}
 			else if (Current_Route == 'documents') {
 				if (isUpdate)
 					App_Documents.DocumentCollectionView.collection.remove(json);

@@ -131,7 +131,12 @@ $(function()
 		// Enable the datepicker
 		$('#close_date', el).datepicker({ format : 'mm/dd/yyyy', });
 
-		var json = App_Contacts.contactDetailView.model.toJSON();
+		var json = null;
+		if(company_util.isCompany()){
+			json = App_Companies.companyDetailView.model.toJSON();
+		} else {
+			json = App_Contacts.contactDetailView.model.toJSON();
+		}
 		var contact_name = getContactName(json);
 		$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
 
@@ -164,7 +169,12 @@ $(function()
 			// Enable the datepicker
 			$('#close_date', el).datepicker({ format : 'mm/dd/yyyy', });
 
-			var json = App_Contacts.contactDetailView.model.toJSON();
+			var json = null;
+			if(company_util.isCompany()){
+				json = App_Companies.companyDetailView.model.toJSON();
+			} else {
+				json = App_Contacts.contactDetailView.model.toJSON();
+			}
 			var contact_name = getContactName(json);
 			$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
 
@@ -180,30 +190,6 @@ $(function()
 		updatecases(casesView.collection.get(id));
 	});
 
-	// Adding contact when user clicks Add contact button under Contacts tab in
-	// Company Page
-	$(".contact-add-contact").die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		// This is a hacky method. ( See jscore/contact-management/modals.js for
-		// its use )
-		// 'forceCompany' is a global variable. It is used to enforce Company
-		// name on Add Contact modal.
-		// Prevents user from removing this company from the modal that is
-		// shown.
-		// Disables typeahead, as it won't be needed as there will be no Company
-		// input text box.
-		var json = App_Contacts.contactDetailView.model.toJSON();
-		forceCompany.name = getContactName(json); // name of Company
-		forceCompany.id = json.id; // id of Company
-		forceCompany.doit = true; // yes force it. If this is false the
-		// Company won't be forced.
-		// Also after showing modal, it is set to false internally, so
-		// Company is not forced otherwise.
-		$('#personModal').modal('show');
-	});
-
 	// For adding new document from contact-details
 	$(".contact-add-document").die().live('click', function(e)
 	{
@@ -217,7 +203,12 @@ $(function()
 		// Deals type-ahead
 		agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false, null, null, "core/api/search/deals", false, true);
 
-		var json = App_Contacts.contactDetailView.model.toJSON();
+		var json = null;
+		if(company_util.isCompany()){
+			json = App_Companies.companyDetailView.model.toJSON();
+		} else {
+			json = App_Contacts.contactDetailView.model.toJSON();
+		}
 		var contact_name = getContactName(json);
 		$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
 	});
@@ -310,7 +301,12 @@ $(function()
 			// Deals type-ahead
 			agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false, null, null, "core/api/search/deals", false, true);
 
-			var json = App_Contacts.contactDetailView.model.toJSON();
+			var json = null;
+			if(company_util.isCompany()){
+				json = App_Companies.companyDetailView.model.toJSON();
+			} else {
+				json = App_Contacts.contactDetailView.model.toJSON();
+			}
 			var contact_name = getContactName(json);
 			$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
 		}
@@ -343,7 +339,13 @@ function existing_document_attach(document_id, saveBtn)
 	var json = existingDocumentsView.collection.get(document_id).toJSON();
 
 	// To get the contact id and converting into string
-	var contact_id = App_Contacts.contactDetailView.model.id + "";
+	var contact_id = null;
+	
+	if(company_util.isCompany()){
+		contact_id = App_Companies.companyDetailView.model.id + "";
+	} else {
+		contact_id = App_Contacts.contactDetailView.model.id + "";
+	}
 
 	// Checks whether the selected document is already attached to that contact
 	if ((json.contact_ids).indexOf(contact_id) < 0)

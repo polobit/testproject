@@ -393,6 +393,16 @@ $(function()
 				}
 				return "Company";
 			}
+		} else if (App_Companies.companyDetailView && App_Companies.companyDetailView.model)
+		{
+			var contact_properties = App_Companies.companyDetailView.model.get('properties');
+
+			for (var i = 0; i < contact_properties.length; i++)
+			{
+				if (contact_properties[i].name == "name")
+					return contact_properties[i].value;
+			}
+			return "Company";
 		}
 	});
 
@@ -1119,6 +1129,18 @@ $(function()
 	{
 
 		var matching_properties_list = agile_crm_get_contact_properties_list(name)
+		if (matching_properties_list.length > 0)
+			return options.fn(matching_properties_list);
+	});
+	
+	/**
+	 * Displays multiple times occurred properties of a contact in its detail
+	 * view in single entity
+	 */
+	Handlebars.registerHelper('multiple_Company_Property_Element', function(name, properties, options)
+	{
+
+		var matching_properties_list = company_util.agile_crm_get_company_properties_list(name)
 		if (matching_properties_list.length > 0)
 			return options.fn(matching_properties_list);
 	});
@@ -6090,6 +6112,7 @@ $(function()
 		else
 			return _billing_restriction.currentLimits[key];
 	});
+	
 });
 
 // helper function return created time for event

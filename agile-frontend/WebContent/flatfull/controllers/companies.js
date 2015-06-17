@@ -5,7 +5,7 @@
  * @module Company management & filters
  */
 
-CONTACTS_HARD_RELOAD = true;
+COMPANIES_HARD_RELOAD = true;
 
 var CompaniesRouter = Backbone.Router
 .extend({
@@ -20,15 +20,15 @@ var CompaniesRouter = Backbone.Router
 	
 	/**
 	 * Fetches all the companies and shows as list, if tag_id
-	 * and filter_id are not defined, if any one of them is defined then
+	 * and company_filter_id are not defined, if any one of them is defined then
 	 * fetches the contacts related to that particular id (tag_id or
-	 * filter_id) and shows as list. Adds tags, charts for tags and
+	 * company_filter_id) and shows as list. Adds tags, charts for tags and
 	 * filter views to the contacts list from postRenderCallback of its
 	 * Base_Collection_View. Initiates infiniScroll to fetch contacts
 	 * (25 in count) step by step on scrolling down instead of fetching
 	 * all at once.
 	 */
-	companies : function(tag_id, filter_id, grid_view, is_lhs_filter)
+	companies : function(tag_id, company_filter_id, grid_view, is_lhs_filter)
 	{
 
 		if (SCROLL_POSITION)
@@ -44,17 +44,11 @@ var CompaniesRouter = Backbone.Router
 		// If contacts are selected then un selects them
 		SELECT_ALL = false;
 
-		// campaign filters are disabled for time being.
-		if (readData('dynamic_contact_filter') && readData('dynamic_contact_filter').indexOf('campaign_status') >= 0)
-		{
-			eraseData('dynamic_contact_filter');
-		}
-
 		var max_contacts_count = 20;
 		var is_company = true;
 		var template_key = "companies";
 		var individual_tag_name = "tr";
-		var sort_key = readCookie("sort_by_name");
+		var sort_key = readCookie("company_sort_field");
 		if (!sort_key || sort_key == null)
 		{
 			sort_key = '-created_time';
@@ -75,14 +69,6 @@ var CompaniesRouter = Backbone.Router
 		this.tag_id = tag_id;
 		var postData;
 
-		// Check if contacts page is set to show companies
-		if (readCookie('company_filter'))
-		{
-			eraseCookie('contact_filter');
-			eraseCookie('contact_filter_type');
-			is_company = true;
-		}
-
 		// Tags, Search & default browse comes to the same function
 		if (tag_id)
 		{
@@ -91,10 +77,10 @@ var CompaniesRouter = Backbone.Router
 			tag_id = decodeURI(tag_id);
 
 			// erase filter cookie
-			eraseCookie('contact_filter');
+			//eraseCookie('contact_filter');
 			eraseCookie('company_filter');
-			eraseCookie('contact_filter_type');
-			eraseData('dynamic_contact_filter');
+			//eraseCookie('contact_filter_type');
+			//eraseData('dynamic_contact_filter');
 
 			if (this.companiesListView && this.companiesListView.collection)
 			{
@@ -122,24 +108,12 @@ var CompaniesRouter = Backbone.Router
 			}
 		}
 
-		if (readCookie('company_filter'))
-		{
-			// Change template to companies - this template is separate
-			// from contacts default template
-			url = "core/api/contacts/companies/list";
-
-			if (!grid_view && !readCookie("agile_contact_view"))
-				template_key = "companies";
-		}
-
 		// If contact-filter cookie is defined set url to fetch
 		// respective filter results
-		if (filter_id || (filter_id = readCookie('contact_filter')))
+		if (company_filter_id || (company_filter_id = readCookie('company_filter')))
 		{
 			collection_is_reverse = false;
-			url = "core/api/filters/query/list/" + filter_id;
-			if (readCookie('contact_filter_type') && readCookie('contact_filter_type') == 'COMPANY')
-				template_key = "companies";
+			url = "core/api/filters/query/list/" + company_filter_id;
 		}
 
 		console.log("while creating new base collection view : " + collection_is_reverse);
@@ -148,10 +122,10 @@ var CompaniesRouter = Backbone.Router
 		 * If collection is already defined and contacts are fetched the
 		 * show results instead of initializing collection again
 		 */
-		if (CONTACTS_HARD_RELOAD == true)
+		if (COMPANIES_HARD_RELOAD == true)
 		{
 			this.companiesListView = undefined;
-			CONTACTS_HARD_RELOAD = false;
+			COMPANIES_HARD_RELOAD = false;
 		}
 
 		if (this.companiesListView && this.companiesListView.collection)
@@ -161,15 +135,10 @@ var CompaniesRouter = Backbone.Router
 			$('#content').html(this.companiesListView.render(true).el);
 
 			$(".active").removeClass("active");
-			$("#contactsmenu").addClass("active");
+			$("#companiesmenu").addClass("active");
 			return;
 		}
-		if (readData('dynamic_contact_filter') && !readCookie('company_filter'))
-		{
-			url = 'core/api/filters/filter/dynamic-filter';
-			postData = readData('dynamic_contact_filter');
-		}
-		else if (readData('dynamic_company_filter') && readCookie('company_filter'))
+		if (readData('dynamic_company_filter'))
 		{
 			url = 'core/api/filters/filter/dynamic-filter';
 			postData = readData('dynamic_company_filter');
@@ -178,15 +147,11 @@ var CompaniesRouter = Backbone.Router
 		var slateKey = getContactPadcontentKey(url);
 		if (is_lhs_filter)
 		{
-			template_key = "contacts-table";
+			template_key = "companies-table";
 			if (grid_view || readCookie("agile_contact_view"))
 			{
 				template_key = "contacts-grid-table";
 				individual_tag_name = "div";
-			}
-			if (readCookie('company_filter'))
-			{
-				template_key = "companies-table";
 			}
 		}
 
@@ -213,6 +178,8 @@ var CompaniesRouter = Backbone.Router
 						// the initialize
 						var cel = App_Companies.companiesListView.el;
 						var collection = App_Companies.companiesListView.collection;
+						
+						company_list_view.init(cel);
 
 						// To set heading in template
 						if (is_lhs_filter)
@@ -228,14 +195,10 @@ var CompaniesRouter = Backbone.Router
 							else
 								count_message = "<small> (" + count + " Total) </small>";
 							$('#contacts-count').html(count_message);
-							setupViews();
-							setupContactFilterList();
 						}
 						else
 						{
 							setupLhsFilters(cel, is_company);
-							setupViews(cel);
-							setupContactFilterList(cel, tag_id);
 						}
 
 						start_tour("contacts", el);
@@ -249,13 +212,120 @@ var CompaniesRouter = Backbone.Router
 		}
 		else
 		{
-			$('#content').find('.span9').html(this.companiesListView.render().el);
+			$('#content').find('.contacts-div').html(this.companiesListView.render().el);
 			$('#bulk-actions').css('display', 'none');
-			$('#bulk-select').css('display', 'none');
-			CONTACTS_HARD_RELOAD = true;
+			COMPANIES_HARD_RELOAD = true;
 		}
 		$(".active").removeClass("active");
 		$("#companiesmenu").addClass("active");
 	
+	},
+	
+	/**
+	 * Shows a contact in its detail view by taking the contact from
+	 * contacts list view, if list view is defined and contains the
+	 * contact, otherwise downloads the contact from server side based
+	 * on its id. Loads timeline, widgets, map and stars (to rate) from
+	 * postRenderCallback of its Base_Model_View.
+	 * 
+	 */
+	companyDetails : function(id, company){
+
+		// For getting custom fields
+		if (App_Companies.customFieldsList == null || App_Companies.customFieldsList == undefined)
+		{
+			App_Companies.customFieldsList = new Base_Collection_View({ url : '/core/api/custom-fields/position', sort_collection : false,
+				restKey : "customFieldDefs", templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
+			App_Companies.customFieldsList.collection.fetch();
+		}
+
+		var company_collection;
+
+		if (!company && this.companyDetailView && this.companyDetailView.model != null)
+		{
+			// company_collection = this.contactDetailView;
+
+			if (id == this.companyDetailView.model.toJSON()['id'])
+			{
+				App_Companies.companyDetails(id, this.companyDetailView.model);
+				return;
+			}
+		}
+
+		// If user refreshes the contacts detail view page directly - we
+		// should load from the model
+		if (!company)
+			if (!this.companiesListView || this.companiesListView.collection.length == 0 || this.companiesListView.collection.get(id) == null)
+			{
+
+				console.log("Downloading contact");
+
+				// Download
+				var company_details_model = Backbone.Model.extend({ url : function()
+				{
+					return '/core/api/contacts/' + this.id;
+				} });
+
+				var model = new company_details_model();
+				model.id = id;
+				model.fetch({ success : function(data)
+				{
+
+					// Call Contact Details again
+					App_Companies.companyDetails(id, model);
+
+				}, error : function(data, response)
+				{
+					if (response && response.status == '403')
+						$("#content").html(response.responseText);
+				} });
+
+				return;
+			}
+
+		// If not downloaded fresh during refresh - read from collection
+		if (!company)
+		{
+			// Set url to core/api/contacts/list (If filters are loaded
+			// contacts url is changed so set it back)
+
+			// this.companiesListView.collection.url =
+			// "core/api/contacts/list";
+			company = this.companiesListView.collection.get(id);
+		}
+
+		// Assigning contact collection
+		if (this.companiesListView && this.companiesListView.collection)
+			company_collection = this.companiesListView.collection;
+
+		add_recent_view(company);
+
+		// If contact is of type company , go to company details page
+		this.companyDetailView = new Base_Model_View({ model : company, isNew : true, template : "company-detail",
+			postRenderCallback : function(el)
+			{
+				fill_company_related_contacts(id, 'company-contacts');
+				// Clone contact model, to avoid render and
+				// post-render fell in to
+				// loop while changing attributes of contact
+				var recentViewedTime = new Backbone.Model();
+				recentViewedTime.url = "core/api/contacts/viewed-at/" + company.get('id');
+				recentViewedTime.save();
+
+				if (App_Companies.companiesListView && App_Companies.companiesListView.collection && App_Companies.companiesListView.collection.get(id))
+					App_Companies.companiesListView.collection.get(id).attributes = company.attributes;
+
+				company_util.starify(el);
+				company_util.show_map(el);
+				// fill_owners(el, contact.toJSON());
+				// loadWidgets(el, contact.toJSON());
+
+			} });
+
+		var el = this.companyDetailView.render(true).el;
+		$('#content').html(el);
+		fill_company_related_contacts(id, 'company-contacts');
+		company_detail_tab.initEvents();
+		return;
 	}
 });

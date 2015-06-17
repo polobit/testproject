@@ -244,12 +244,6 @@ $(function()
 		contact_details_tab.load_campaigns();
 	});
 
-	$('#contactDetailsTab a[href="#company-contacts"]').live('click', function(e)
-	{
-		e.preventDefault();
-		fill_company_related_contacts(App_Contacts.contactDetailView.model.id, 'company-contacts');
-	});
-
 	/**
 	 * Sets cookie when user changes email dropdown under mail tab. Cookie
 	 * contains email server, email name from next time application loads from
