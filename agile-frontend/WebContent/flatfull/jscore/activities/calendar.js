@@ -190,7 +190,12 @@ function showCalendar()
 											}
 											else
 											{
-												data.className = '';
+												if (data.color == 'red' || data.color == '#f05050')
+													data.className = 'high';
+												else if (data.color == 'green' || data.color == '#bbb')
+													data.className = 'low';
+												else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
+													data.className = 'normal';
 												data.color = '';
 												data.backgroundColor = '#fff';
 											}
@@ -370,11 +375,11 @@ function showCalendar()
 							event.end = new Date(event.end).getTime() / 1000;
 							if (event.end == null || event.end == 0)
 								event.end = event.start;
-							if (event1.className == "b-l,b-2x,b-danger,fc-z-index")
+							if (event1.className == "b-l,b-2x,b-danger,fc-z-index" || event1.className == "high")
 								event.color = "red";
-							else if (event1.className == "b-l,b-2x,b-light,fc-z-index")
+							else if (event1.className == "b-l,b-2x,b-light,fc-z-index" || event1.className == "low")
 								event.color = "green";
-							else if (event1.className == "b-l,b-2x,b-warning,fc-z-index")
+							else if (event1.className == "b-l,b-2x,b-warning,fc-z-index" || event1.className == "normal")
 								event.color = "#36C";
 							var jsoncontacts = event.contacts;
 							var _contacts = [];
@@ -400,11 +405,11 @@ function showCalendar()
 						 */
 						eventClick : function(event)
 						{
-							if (event.className == "b-l,b-2x,b-danger,fc-z-index")
+							if (event.className == "b-l,b-2x,b-danger,fc-z-index" || event.className == "high")
 								event.color = "red";
-							else if (event.className == "b-l,b-2x,b-light,fc-z-index")
+							else if (event.className == "b-l,b-2x,b-light,fc-z-index" || event.className == "low")
 								event.color = "green";
-							else if (event.className == "b-l,b-2x,b-warning,fc-z-index")
+							else if (event.className == "b-l,b-2x,b-warning,fc-z-index" || event.className == "normal")
 								event.color = "#36C";
 
 							if (isNaN(event.id))
