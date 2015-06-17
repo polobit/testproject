@@ -31,7 +31,7 @@ public class TaskReminderServlet extends HttpServlet
 	{
 		try
 		{
-			Set<String> domains = NamespaceUtil.getAllNamespacesUsingIterator();
+			Set<String> domains = NamespaceUtil.getAllNamespaces();
 			// Start a task queue for each domain
 			for (String domain : domains)
 			{

@@ -1053,7 +1053,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 		String calendar_url = VersioningUtil.getHostURLByApp(domain);
 
-		if (!StringUtils.isNotBlank(schedule_id))
+		if (StringUtils.isNotBlank(schedule_id))
 			calendar_url += "calendar/" + schedule_id;
 		else
 			calendar_url += "calendar/" + getScheduleid(name);
