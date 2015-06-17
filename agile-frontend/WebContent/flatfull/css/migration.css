@@ -1316,3 +1316,29 @@ display:none;
 #noty_bottomCenter_layout_container li {
   width:389px!important;
 }
+
+
+/* starting css app mobile compatibility */
+
+@media (min-width:768px){
+.app-details-width {
+	width:299px;
+}
+}
+
+@media (max-width:767px){
+	.app-details-width {
+	width:100%;
+	}
+}
+
+@media (max-width:767px) {
+ .fixedicons {
+ position:static!important;
+ }
+}
+
+
+
+
+
