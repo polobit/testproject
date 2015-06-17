@@ -729,11 +729,12 @@ function getCalendarUsersDetails()
 			{
 				if (user.domainUser)
 				{
-					var json = {};
-					json.id = user.id;
-					json.name = user.domainUser.name;
+					var json_user = {};
+					json_user.id = user.id;
+					json_user.name = user.domainUser.name;
+					json_users.push(json_user);
 				}
-				json_users.push(json);
+
 			}
 
 		});
