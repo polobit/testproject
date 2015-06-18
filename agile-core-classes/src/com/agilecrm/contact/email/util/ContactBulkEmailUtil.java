@@ -109,6 +109,10 @@ public class ContactBulkEmailUtil
 								: AgileQueues.NORMAL_PERSONAL_EMAIL_PULL_QUEUE, null, null, null, domain, fromEmail,
 								fromName, email, null, null, replacedSubject, fromEmail, replacedBody, null, null,
 								null, null);
+						
+						// Update last emailed time
+						contact.setLastEmailed(System.currentTimeMillis()/1000);
+						contact.update();
 					}
 				}
 				catch (Exception e)

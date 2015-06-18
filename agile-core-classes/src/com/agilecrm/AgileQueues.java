@@ -31,7 +31,8 @@ public class AgileQueues
 	public static final String TAG_ENTITY_QUEUE = "tag-entity-queue";
 
 	public static final String CAMPAIGN_SUBSCRIBE_SUBTASK_QUEUE = "campaign-subscribe-subtask-queue";
-
+	public static final String LAST_CONTACTED_UPDATE_QUEUE = "last-contacted-update-queue";
+	
 	// Personal bulk Email pull queues
 	public static final String NORMAL_PERSONAL_EMAIL_PULL_QUEUE = "normal-personal-email-pull-queue";
 	public static final String BULK_PERSONAL_EMAIL_PULL_QUEUE = "bulk-personal-email-pull-queue";
