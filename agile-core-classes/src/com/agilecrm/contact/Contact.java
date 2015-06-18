@@ -469,6 +469,9 @@ public class Contact extends Cursor
 
 	// Verifies CampaignStatus
 	checkCampaignStatus(oldContact, this);
+	
+	// Verifies last contacted fields
+	checkLastContactedFields(Contact oldContact, Contact updatedContact)
 
 	dao.put(this);
 
@@ -1328,6 +1331,38 @@ public class Contact extends Cursor
 	}
     }
 
+    /**
+     * Verifies last contacted fields in both old and new objects. To update
+     * contacted fields if not exists in updated contact
+     * 
+     * @param oldContact - old Contact from datastore
+     * @param updatedContact - updated contact object ready to save
+     */
+    private void checkLastContactedFields(Contact oldContact, Contact updatedContact)
+    {
+    	try
+    	{
+    		if(oldContact == null)
+    			return;
+    		
+    		if(updatedContact.getLastContacted() == null || updatedContact.getLastContacted() == 0L)
+    			updatedContact.setLastContacted(oldContact.getLastContacted());
+    		
+    		if(updatedContact.getLastCampaignEmailed()== null || updatedContact.getLastCampaignEmailed()== 0L)
+    			updatedContact.setLastCampaignEmailed(oldContact.getLastCampaignEmailed());
+    		
+    		if(updatedContact.getLastEmailed() == null || updatedContact.getLastEmailed() == 0L)
+    			updatedContact.setLastEmailed(oldContact.getLastEmailed());
+    		
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
+    		System.err.println("Exception occured while verifying last contacted fields..." + e.getMessage());
+    	}
+    	
+    }
+    
     @Override
     public String toString()
     {
