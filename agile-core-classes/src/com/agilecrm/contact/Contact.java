@@ -1359,17 +1359,17 @@ public class Contact extends Cursor
     		if(oldContact == null)
     			return;
     		
-    		if(updatedContact.getLastContacted() == null || updatedContact.getLastContacted() == 0L)
-    			updatedContact.setLastContacted(oldContact.getLastContacted());
+    		if(updatedContact.getLastContacted() == 0L || updatedContact.getLastContacted() == null)
+    			updatedContact.last_contacted = oldContact.last_contacted;
     		
-    		if(updatedContact.getLastCampaignEmailed()== null || updatedContact.getLastCampaignEmailed()== 0L)
-    			updatedContact.setLastCampaignEmailed(oldContact.getLastCampaignEmailed());
+    		if(updatedContact.getLastCampaignEmailed()== 0L || updatedContact.getLastCampaignEmailed()== null)
+    			updatedContact.last_campaign_emaild = oldContact.last_campaign_emaild;
     		
-    		if(updatedContact.getLastEmailed() == null || updatedContact.getLastEmailed() == 0L)
-    			updatedContact.setLastEmailed(oldContact.getLastEmailed());
+    		if(updatedContact.getLastEmailed() == 0L || updatedContact.getLastEmailed() == null)
+    			updatedContact.last_emailed = oldContact.last_emailed;
     		
-    		if(updatedContact.getLastCalled() == null || updatedContact.getLastCalled() == 0L)
-    			updatedContact.setLastCalled(oldContact.getLastCalled());
+    		if(updatedContact.getLastCalled() == 0L || updatedContact.getLastCalled() == null)
+    			updatedContact.last_called = oldContact.last_called;
     		
     		
     	}
