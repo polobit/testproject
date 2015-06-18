@@ -471,7 +471,7 @@ public class Contact extends Cursor
 	checkCampaignStatus(oldContact, this);
 	
 	// Verifies last contacted fields
-	checkLastContactedFields(Contact oldContact, Contact updatedContact)
+	checkLastContactedFields(oldContact, this);
 
 	dao.put(this);
 
