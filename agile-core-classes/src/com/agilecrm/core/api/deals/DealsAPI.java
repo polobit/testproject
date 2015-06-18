@@ -1,24 +1,50 @@
 package com.agilecrm.core.api.deals;
 
-import src.com.agilecrm.activities.Activity;
-import src.com.agilecrm.activities.Activity.EntityType;
-import src.com.agilecrm.activities.util.ActivitySave;
-import src.com.agilecrm.activities.util.ActivityUtil;
-import src.com.agilecrm.contact.Contact;
-import src.com.agilecrm.contact.Note;
-import src.com.agilecrm.contact.util.ContactUtil;
-import src.com.agilecrm.contact.util.NoteUtil;
-import src.com.agilecrm.deals.Opportunity;
-import src.com.agilecrm.deals.deferred.DealsDeferredTask;
-import src.com.agilecrm.deals.util.MilestoneUtil;
-import src.com.agilecrm.deals.util.OpportunityUtil;
-import src.com.agilecrm.session.SessionManager;
-import src.com.agilecrm.session.UserInfo;
-import src.com.agilecrm.user.DomainUser;
-import src.com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
-import src.com.agilecrm.user.util.DomainUserUtil;
-import src.com.agilecrm.util.NamespaceUtil;
-import src.com.agilecrm.workflows.triggers.util.DealTriggerUtil;
+import java.util.List;
+import java.util.Set;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import net.sf.json.JSONObject;
+
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import com.agilecrm.activities.Activity;
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.util.ActivitySave;
+import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Note;
+import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.deferred.DealsDeferredTask;
+import com.agilecrm.deals.util.MilestoneUtil;
+import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.NamespaceUtil;
+import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.taskqueue.TaskOptions.Method;
 
 /**
  * <code>DealsAPI</code> includes REST calls to interact with
@@ -172,27 +198,9 @@ public class DealsAPI
     @Path("/byMilestone/{milestone}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public List<Opportunity> getOpportunitiesWithMilestone(@PathParam("milestone") String milestone,
-	    @QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
+    public List<Opportunity> getOpportunitiesWithMilestone(@PathParam("milestone") String milestone)
     {
-	int counts = 0;
-	if (count != null)
-	{
-	    counts = Integer.parseInt(count);
-	    if (counts > 50)
-		counts = 50;
-
-	    System.out.println("Test page size = " + counts);
-
-	    return OpportunityUtil.getDealsWithMilestone(null, milestone, null, counts, cursor);
-	}
-	else
-	{
-	    counts = 5;
-	    System.out.println("Test page size1 = " + counts);
-	    return OpportunityUtil.getDealsWithMilestone(null, milestone, null, counts, cursor);
-	}
-
+	return OpportunityUtil.getDeals(null, milestone, null);
     }
 
     /**
