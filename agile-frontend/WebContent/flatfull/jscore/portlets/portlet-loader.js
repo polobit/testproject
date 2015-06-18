@@ -223,10 +223,13 @@ function set_up_portlets(el, portlets_el){
  */
 function showPortletIcons(el){
 	// Shows portlet icons on hover
-	$(el).find('div.portlet_header_icons').show();
+	$(el).find('div.portlet_header_icons').removeClass('vis-hide');
 
 	// Changes width of portlet name
-	$(el).find('div.portlet_header_name').css({ "width" : "65%" });
+	//$(el).find('div.portlet_header_name').css({ "width" : "65%" });
+
+	//Hide the leaderboard small text content in header
+	$(el).find('.portlet-header-small-text').hide();
 }
 /**
  * Expand the portlet header name width.
@@ -242,10 +245,14 @@ function showPortletIcons(el){
 function hidePortletIcons(el)
 {
 	// Hide portlet icons on hover
-	$(el).find('div.portlet_header_icons').hide();
+	// Shows portlet icons on hover
+	$(el).find('div.portlet_header_icons').addClass('vis-hide');
 
 	// Changes width of portlet name
-	$(el).find('div.portlet_header_name').css({ "width" : "80%" });
+	//$(el).find('div.portlet_header_name').css({ "width" : "80%" });
+
+	//Show the leaderboard small text content in header
+	$(el).find('.portlet-header-small-text').show();
 }
 function enablePortletSorting(el){
 	// Loads jquery-ui to get sortable functionality on portlets
@@ -900,8 +907,12 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
 	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Leaderboard"){
-	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
-	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.leaderboard[parseInt(pos)].render().el));
+	        		var sizey = parseInt($('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			if(sizey==2 || sizey==3)
+	    				topPos += 50;
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+	    			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.leaderboard[parseInt(pos)].render().el));
 	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Stats Report"){
 	        		/*$('#'+el.split("-save-modal")[0]).parent().find('.stats_report_portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.stats_report_portlet_body').html($(App_Portlets.statsReport[parseInt(pos)].render().el));*/
