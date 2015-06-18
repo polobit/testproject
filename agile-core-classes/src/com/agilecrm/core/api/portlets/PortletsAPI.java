@@ -383,11 +383,15 @@ public class PortletsAPI {
 	@Path("/portletCallsPerPerson")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getPortletCallsPerPerson(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate)throws Exception {
+	public JSONObject getPortletCallsPerPerson(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate,@QueryParam("user") String user)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("duration",duration);
 		json.put("startDate", startDate);
 		json.put("endDate", endDate);
+		if(user!=null && !user.equals(""))
+			json.put("user", (JSONArray)JSONSerializer.toJSON(user));
+		else
+			json.put("user", null);
 		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
 		return PortletUtil.getPortletCallsPerPerson(json);
 	}
@@ -399,13 +403,17 @@ public class PortletsAPI {
 	@Path("/portletTaskReport")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getTaskReportPortletData(@QueryParam("group-by") String groubBy,@QueryParam("split-by") String splitBy,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate,@QueryParam("tasks") String tasks)throws Exception {
+	public JSONObject getTaskReportPortletData(@QueryParam("group-by") String groubBy,@QueryParam("split-by") String splitBy,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate,@QueryParam("tasks") String tasks,@QueryParam("user") String user)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("group-by",groubBy);
 		json.put("split-by",splitBy);
 		json.put("startDate",startDate);
 		json.put("endDate",endDate);
 		json.put("tasks",tasks);
+		if(user!=null && !user.equals(""))
+			json.put("user", (JSONArray)JSONSerializer.toJSON(user));
+		else
+			json.put("user", null);
 		PortletUtil.checkPrivilegesForPortlets("TASKS");
 		return PortletUtil.getTaskReportPortletData(json);
 	}

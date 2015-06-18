@@ -88,8 +88,12 @@
 														<option value="lead_score">Score</option>
 														<option value="owner_id">Owner</option>
 														<option value="address">Address</option>
+														<!--<option value="city">City</option>
+														<option value="state">State</option>
+														<option value="country">Country</option>
+														<option value="zip">Zip</option>-->
 													</optgroup>
-													<optgroup label="Activities">
+													<optgroup label="Campaigns">
 														<option value="campaign_status">Campaign Status</option>
 													</optgroup>
 													 <optgroup label="Custom Fields" id="custom-fields" class="hide">
@@ -101,11 +105,11 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" class="form-control">
 													<option value="EQUALS"
-														class="first_name last_name phone company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="first_name last_name phone company title org_tag jobtitle email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="first_name last_name company owner org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+														class="first_name last_name company owner org_tag title email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 													<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="NOTEQUALS" class="tags">isn't</option>
 													<option value="EQUALS" class="lead_score">equals</option>
@@ -131,9 +135,13 @@
 													<option value="ACTIVE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Active</option>
 													<option value="DONE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Completed</option>
 													<option value="REMOVED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Removed</option>
-													<option value="BOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Bounced</option>
+													<option value="SOFTBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Soft Bounced</option>
+													<option value="HARDBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Hard Bounced</option>
 													<option value="UNSUBSCRIBED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Unsubscribed</option>
-													<option value="SPAM_REPORTED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Reported Spam</option>
+													<option value="SPAM" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Spam Reported</option>
+													<option value="DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is defined</option>
+													<option value="NOT_DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is not defined</option>
+												
 												</select>
 											</div>
 										</td>
@@ -236,8 +244,12 @@
 														<option value="lead_score">Score</option>
 														<option value="owner_id">Owner</option>
 														<option value="address">Address</option>
+														<!--<option value="city">City</option>
+														<option value="state">State</option>
+														<option value="country">Country</option>
+														<option value="zip">Zip</option>-->
 													</optgroup>
-													<optgroup label="Activities">
+													<optgroup label="Campaigns">
 														<option value="campaign_status">Campaign Status</option>
 													</optgroup>
 													 <optgroup label="Custom Fields" id="custom-fields" class="hide">
@@ -249,11 +261,11 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" class="w-full form-control">
 													<option value="EQUALS"
-														class="first_name last_name phone company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="first_name last_name phone company title org_tag jobtitle email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="first_name last_name company owner org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+														class="first_name last_name company owner org_tag title email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 													<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="NOTEQUALS" class="tags">isn't</option>
 													<option value="BETWEEN_NUMBER" class="lead_score">between</option>
@@ -278,9 +290,12 @@
 													<option value="ACTIVE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Active</option>
 													<option value="DONE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Completed</option>
 													<option value="REMOVED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Removed</option>
-													<option value="BOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Bounced</option>
+													<option value="SOFTBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Soft Bounced</option>
+													<option value="HARDBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Hard Bounced</option>
 													<option value="UNSUBSCRIBED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Unsubscribed</option>
-													<option value="SPAM_REPORTED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Reported Spam</option>
+													<option value="SPAM" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Spam Reported</option>
+													<option value="DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is defined</option>
+													<option value="NOT_DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is not defined</option>
 												</select>
 											</div>
 										</td>
@@ -392,13 +407,11 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp"  class="w-full form-control">
 													<option value="EQUALS"
-														class="name phone company title org_tag jobtitle email url phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="name phone company title org_tag jobtitle email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="name company owner org_tag title email url phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
-													<option value="EQUALS" class="tags tags_time">is</option>
-													<option value="NOTEQUALS" class="tags">isn't</option>
+														class="name company owner org_tag title email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 													<option value="ON" class="updated_time created_time">on</option>
 													<option value="AFTER" class="created_time updated_time">is
 														after</option>
@@ -412,6 +425,8 @@
 														</option>
 													<option value="EQUALS" class="tag org_tag">is</option>
 													<option value="ANYOF" class="tag">is any of</option>
+													<option value="DEFINED" class="email name phone url custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is defined</option>
+													<option value="NOT_DEFINED" class="email name phone url custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is not defined</option>
 												</select>
 											</div>
 										</td>
@@ -512,14 +527,11 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" class="form-control">
 													<option value="EQUALS"
-														class="name phone company title org_tag jobtitle email url phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="name phone company title org_tag jobtitle email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="name company owner org_tag title email url phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
-													<option value="EQUALS" class="tags tags_time">is</option>
-													<option value="NOTEQUALS" class="tags">isn't</option>
-
+														class="name company owner org_tag title email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
 													<option value="IS_LESS_THAN" class="lead_score">less than</option>
 													<option value="ON" class="updated_time created_time">on</option>
@@ -535,6 +547,8 @@
 														</option>
 													<option value="EQUALS" class="tag org_tag">is</option>
 													<option value="ANYOF" class="tag">is any of</option>
+													<option value="DEFINED" class="email name phone url custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is defined</option>
+													<option value="NOT_DEFINED" class="email name phone url custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is not defined</option>
 												</select>
 											</div>
 										</td>

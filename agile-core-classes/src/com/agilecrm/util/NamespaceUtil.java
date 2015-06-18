@@ -2,7 +2,6 @@ package com.agilecrm.util;
 
 import java.net.URL;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.json.JSONException;
@@ -10,7 +9,6 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
-import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
@@ -46,6 +44,7 @@ public class NamespaceUtil
 	DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 
 	FetchOptions options = FetchOptions.Builder.withChunkSize(1000);
+
 	Query q = new Query(Entities.NAMESPACE_METADATA_KIND);
 
 	for (Entity e : ds.prepare(q).asIterable(options))
@@ -62,8 +61,7 @@ public class NamespaceUtil
 	    }
 	}
 
-	System.out.println("Total domain : " + namespaces.size());
-
+	System.out.println("Total domains : " + namespaces.size());
 	return namespaces;
     }
 
@@ -74,21 +72,22 @@ public class NamespaceUtil
      */
     public static Set<String> getAllNamespaces()
     {
+	return getAllNamespacesNew();
+
 	// Get All Users
-	List<DomainUser> domainList = DomainUserUtil.getAllDomainOwners();
-
-	Set<String> domains = new HashSet<String>();
-	for (DomainUser domainUser : domainList)
-	{
-	    domains.add(domainUser.domain);
-	}
-
-	return domains;
+	/*
+	 * List<DomainUser> domainList = DomainUserUtil.getAllDomainOwners();
+	 * 
+	 * Set<String> domains = new HashSet<String>(); for (DomainUser
+	 * domainUser : domainList) { domains.add(domainUser.domain); }
+	 * 
+	 * return domains;
+	 */
     }
 
     public static Set<String> getAllNamespacesUsingIterator()
     {
-	return DomainUserUtil.getAllDomainsUsingIterator();
+	return getAllNamespacesNew();
 
     }
 

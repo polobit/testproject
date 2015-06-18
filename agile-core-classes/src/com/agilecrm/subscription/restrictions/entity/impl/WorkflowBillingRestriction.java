@@ -66,7 +66,8 @@ public class WorkflowBillingRestriction extends DaoBillingRestriction
 
 	int count = restriction.campaigns_count;
 
-	String tag = setTagsToUpdate(max_allowed, restriction.campaigns_count + 1);
+	String tag = setTagsToUpdate(max_allowed, daemonCheck ? restriction.campaigns_count
+		: (restriction.campaigns_count + 1));
 
 	restriction.campaigns_count = count;
 

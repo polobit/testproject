@@ -469,6 +469,9 @@ public class Contact extends Cursor
 
 	// Verifies CampaignStatus
 	checkCampaignStatus(oldContact, this);
+	
+	// Verifies last contacted fields
+	checkLastContactedFields(oldContact, this);
 
 	dao.put(this);
 
@@ -934,6 +937,60 @@ public class Contact extends Cursor
 	return tags;
     }
 
+    @JsonIgnore
+    public void setLastContacted(Long lastContacted)
+    {
+	this.last_contacted = lastContacted;
+    }
+
+    @JsonIgnore
+    public Long getLastContacted()
+    {
+    return last_contacted;
+    }
+    
+    @JsonIgnore
+    public void setLastEmailed(Long lastEmailed)
+    {
+	this.last_emailed = lastEmailed;
+	
+	setLastContacted(last_emailed);
+    }
+
+    @JsonIgnore
+    public Long getLastEmailed()
+    {
+	return last_emailed;
+    }
+    
+    @JsonIgnore
+    public void setLastCalled(Long lastCalled)
+    {
+	this.last_called= lastCalled;
+	
+	setLastContacted(last_called);
+    }
+
+    @JsonIgnore
+    public Long getLastCalled()
+    {
+	return last_called;
+    }
+    
+    @JsonIgnore
+    public void setLastCampaignEmailed(Long lastCampaignEmailed)
+    {
+	this.last_campaign_emaild = lastCampaignEmailed;
+	
+	setLastContacted(last_campaign_emaild);
+    }
+
+    @JsonIgnore
+    public Long getLastCampaignEmailed()
+    {
+	return last_campaign_emaild;
+    }
+    
     /**
      * While saving a contact it contains domain user key as owner, but while
      * retrieving includes complete DomainUser object.
@@ -1288,6 +1345,42 @@ public class Contact extends Cursor
 	}
     }
 
+    /**
+     * Verifies last contacted fields in both old and new objects. To update
+     * contacted fields if not exists in updated contact
+     * 
+     * @param oldContact - old Contact from datastore
+     * @param updatedContact - updated contact object ready to save
+     */
+    private void checkLastContactedFields(Contact oldContact, Contact updatedContact)
+    {
+    	try
+    	{
+    		if(oldContact == null)
+    			return;
+    		
+    		if(updatedContact.getLastContacted() == null || updatedContact.getLastContacted() == 0L)
+    			updatedContact.setLastContacted(oldContact.getLastContacted());
+    		
+    		if(updatedContact.getLastCampaignEmailed()== null || updatedContact.getLastCampaignEmailed()== 0L)
+    			updatedContact.setLastCampaignEmailed(oldContact.getLastCampaignEmailed());
+    		
+    		if(updatedContact.getLastEmailed() == null || updatedContact.getLastEmailed() == 0L)
+    			updatedContact.setLastEmailed(oldContact.getLastEmailed());
+    		
+    		if(updatedContact.getLastCalled() == null || updatedContact.getLastCalled() == 0L)
+    			updatedContact.setLastCalled(oldContact.getLastCalled());
+    		
+    		
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
+    		System.err.println("Exception occured while verifying last contacted fields..." + e.getMessage());
+    	}
+    	
+    }
+    
     @Override
     public String toString()
     {
