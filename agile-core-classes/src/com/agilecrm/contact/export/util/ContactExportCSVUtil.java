@@ -165,8 +165,6 @@ public class ContactExportCSVUtil
      */
     private static String[] addNotes(String[] contactData, List<Note> notes)
     {
-	List<String> data = new ArrayList<String>();
-	data.addAll(Arrays.asList(contactData));
 	int count = 0;
 	for (Note note : notes)
 	{
@@ -175,20 +173,13 @@ public class ContactExportCSVUtil
 		sb.append(note.subject.trim());
 	    if (note.description != null)
 		sb.append("\n" + note.description);
-	    data.add(sb.toString());
+	    //ten notes are already added in header use that index.
+	    contactData[contactData.length-10+count] = sb.toString();
 	    count++;
 	    if (count == 10)
 		break;
 	}
-	// convert all data into string array
-	String[] finalData = new String[data.size()];
-	int i = 0;
-	for (String s : data)
-	{
-	    finalData[i] = s;
-	    i++;
-	}
-	return finalData;
+	return contactData;
     }
 
     /**
