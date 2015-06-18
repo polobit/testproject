@@ -15,7 +15,9 @@ var CompaniesRouter = Backbone.Router
 		/* Companies */
 		"companies" : "companies",
 	
-		"company/:id" : "companyDetails"
+		"company/:id" : "companyDetails",
+		
+		"company-view-prefs" : "companyViewPrefs"
 	},
 	
 	/**
@@ -327,5 +329,35 @@ var CompaniesRouter = Backbone.Router
 		fill_company_related_contacts(id, 'company-contacts');
 		company_detail_tab.initEvents();
 		return;
+	},
+	
+	companyViewPrefs : function(){
+		var companyView = new Base_Model_View({ url : 'core/api/contact-view-prefs/company', template : "company-view",change: false, 
+			restKey : "companyView", window : "companies", postRenderCallback : function(el, modelData)
+			{
+				fillSelect("custom-fields-optgroup", "core/api/custom-fields/scope?scope=COMPANY", undefined, function(data)
+				{
+					head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/jquery.multi-select.js', function()
+					{
+
+						$('#multipleSelect', el).multiSelect();
+
+						$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id", "fields_set").sortable();
+
+						$.each(modelData['fields_set'], function(index, field)
+						{
+							$('#multipleSelect', el).multiSelect('select', field);
+						});
+
+					});
+
+				}, '<option value="CUSTOM_{{field_label}}">{{field_label}}</option>', true, el);
+			}, saveCallback : function(data)
+			{
+				CONTACTS_HARD_RELOAD = true;
+				App_Companies.navigate("companies", { trigger : true });
+			} });
+
+		$("#content").html(companyView.render().el);
 	}
 });

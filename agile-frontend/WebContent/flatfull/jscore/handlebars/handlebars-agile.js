@@ -138,7 +138,7 @@ function getTemplateUrls(templateName)
 		template_relative_urls.push("contact-filter.js");
 	}
 	if (templateName.indexOf("contact-view") == 0 || templateName.indexOf("contact-custom") == 0 || templateName.indexOf("contacts-custom") == 0 || templateName
-			.indexOf("contacts-grid") == 0)
+			.indexOf("contacts-grid") == 0 || templateName.indexOf("company-view") == 0)
 	{
 		template_relative_urls.push("contact-view.js");
 	}
