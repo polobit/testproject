@@ -1560,7 +1560,7 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	                		else if(this.value==domainUserImgList[i] && domainUserImgList[i].substring(0,8)=="no image")
 		                			userIndex=parseInt(domainUserImgList[i].substring(9,10));
 	                	}
-	                	if(this.value!=undefined && this.value!="" && this.value!="no image")
+	                	if(this.value!=undefined && this.value!="" && this.value.substring(0,8)!="no image")
 	                		return '<img src="'+this.value+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUsersList[userIndex]+'"/>';
 	                	else
 	                		return '<img src="'+gravatarImgForPortlets(25)+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUsersList[userIndex]+'"/>';
