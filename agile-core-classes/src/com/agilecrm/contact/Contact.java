@@ -964,6 +964,20 @@ public class Contact extends Cursor
     }
     
     @JsonIgnore
+    public void setLastCalled(Long lastCalled)
+    {
+	this.last_called= lastCalled;
+	
+	setLastContacted(last_called);
+    }
+
+    @JsonIgnore
+    public Long getLastCalled()
+    {
+	return last_called;
+    }
+    
+    @JsonIgnore
     public void setLastCampaignEmailed(Long lastCampaignEmailed)
     {
 	this.last_campaign_emaild = lastCampaignEmailed;
@@ -1353,6 +1367,10 @@ public class Contact extends Cursor
     		
     		if(updatedContact.getLastEmailed() == null || updatedContact.getLastEmailed() == 0L)
     			updatedContact.setLastEmailed(oldContact.getLastEmailed());
+    		
+    		if(updatedContact.getLastCalled() == null || updatedContact.getLastCalled() == 0L)
+    			updatedContact.setLastCalled(oldContact.getLastCalled());
+    		
     		
     	}
     	catch(Exception e)

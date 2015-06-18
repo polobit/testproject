@@ -689,10 +689,7 @@ public class TwilioWidgetsAPI
 		try{
 			System.out.println("contact id ==== " + contactId);
 			Contact contact = ContactUtil.getContact(contactId);
-			Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-			Long secondInEpoch = calendar.getTimeInMillis() / 1000;
-			contact.last_called = secondInEpoch;
-			contact.last_contacted = secondInEpoch;
+			contact.setLastCalled(System.currentTimeMillis() / 1000);
 			contact.update();
 			System.out.println("contact has been updated");
 			
