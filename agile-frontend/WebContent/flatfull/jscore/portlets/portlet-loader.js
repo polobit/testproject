@@ -484,6 +484,40 @@ function showPortletSettings(el){
 		elData = $('#portletsCallsPerPersonSettingsForm');
 		$("#group-by", elData).find('option[value='+ base_model.get("settings")["group-by"] +']').attr("selected", "selected");
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+		
+		if(base_model.get("settings")["calls-user-list"]!=undefined){
+			var options ='';
+			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+				success: function(data){
+					$.each(data,function(index,domainUser){
+						options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
+					});
+					$('#calls-user-list', elData).html(options);
+					$.each(base_model.get("settings")["calls-user-list"], function(){
+						$("#calls-user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
+					});
+					$('.loading-img').hide();
+				} });
+		}else{
+			var options ='';
+			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+				success: function(data){
+					$.each(data,function(index,domainUser){
+						options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
+					});
+					$('#calls-user-list', elData).html(options);
+					$('.loading-img').hide();
+				} });
+		}
+		$('#ms-calls-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#calls-user-list',elData).multiSelect();
+			$('#ms-calls-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "calls-user-list").attr("id", "calls-user");
+			$('#ms-calls-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-calls-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-calls-user-list', elData).addClass('portlet-user-ms-container');					
+		});
+		
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Task Report"){
 		$('#portletsTaskReportSettingsModal').modal('show');
 		$('#portletsTaskReportSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
@@ -501,6 +535,40 @@ function showPortletSettings(el){
 			$('#tasks-control-group').hide();
 		if(base_model.get("settings").tasks=="completed-tasks")
 			$('#split-by-task-report > option#status').hide();
+
+		if(base_model.get("settings")["task-report-user-list"]!=undefined){
+			var options ='';
+			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+				success: function(data){
+					$.each(data,function(index,domainUser){
+						options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
+					});
+					$('#task-report-user-list', elData).html(options);
+					$.each(base_model.get("settings")["task-report-user-list"], function(){
+						$("#task-report-user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
+					});
+					$('.loading-img').hide();
+				} });
+		}else{
+			var options ='';
+			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+				success: function(data){
+					$.each(data,function(index,domainUser){
+						options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
+					});
+					$('#task-report-user-list', elData).html(options);
+					$('.loading-img').hide();
+				} });
+		}
+		$('#ms-task-report-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#task-report-user-list',elData).multiSelect();
+			$('#ms-task-report-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "task-report-user-list").attr("id", "task-report-user");
+			$('#ms-task-report-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-task-report-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-task-report-user-list', elData).addClass('portlet-user-ms-container');					
+		});
+
 	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Stats Report"){
 		$('#portletsStatsReportSettingsModal').modal('show');
 		$('#portletsStatsReportSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
@@ -731,7 +799,13 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		if(data.get('settings').duration=='yesterday'){
 	        			start_date_str = ''+data.get('settings').duration;
 	        			end_date_str = 'today';
-	        		}else{
+	        		}else if(data.get('settings').duration=='this-week'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-week-end';
+					}else if(data.get('settings').duration=='this-month'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-month-end';
+					}else{
 	        			start_date_str = ''+data.get('settings').duration;
 	        			end_date_str = 'TOMORROW';
 	        		}
@@ -831,16 +905,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 							$('#ui-id-'+column_position+'-'+row_position+' > .portlet_header').find('ul').width(($('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').find('ul').width()/$('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').width()*100)+'%');
 						} });
 	        	}
-	        	if(portletCollectionView!=undefined)
-	        		portletCollectionView.collection.fetch();
-	        	if(data.get('name')!="Deals By Milestone" && data.get('name')!="Closures Per Person" && data.get('name')!="Deals Funnel" && data.get('name')!="Emails Sent" 
-	        		&& data.get('name')!="Growth Graph" && data.get('name')!="Deals Assigned" && data.get('name')!="Calls Per Person" 
-	        			&& data.get('name')!="Pending Deals" && data.get('name')!="Deals Won" && data.get('name')!="Filter Based" 
-							&& data.get('name')!="Emails Opened" && data.get('name')!="Task Report" && data.get('name')!="Stats Report" 
-							&& data.get('name')!="Agenda" && data.get('name')!="Today Tasks" && data.get('name')!="Leaderboard"){
-	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
-	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(portletCollectionView.render().el));
-	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Filter Based"){
+	        	if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Filter Based"){
 	        		if(data.get('settings').filter=="companies"){
 	        			App_Portlets.filteredCompanies[parseInt(pos)].collection.fetch();
 	        			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
@@ -923,6 +988,9 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			}else if(data.get('settings').duration=='this-week'){
 						start_date_str = ''+data.get('settings').duration;
 						end_date_str = 'this-week-end';
+					}else if(data.get('settings').duration=='this-month'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-month-end';
 					}else{
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'TOMORROW';
@@ -1262,13 +1330,23 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		if(data.get('settings').duration=='yesterday'){
 	        			start_date_str = ''+data.get('settings').duration;
 	        			end_date_str = 'today';
-	        		}else{
+	        		}else if(data.get('settings').duration=='this-week'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-week-end';
+					}else if(data.get('settings').duration=='this-month'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-month-end';
+					}else{
 	        			start_date_str = ''+data.get('settings').duration;
 	        			end_date_str = 'TOMORROW';
 	        		}
 	        		
+	        		var users = '';
+					if(data.get('settings')["calls-user-list"]!=undefined)
+						users = JSON.stringify(data.get('settings')["calls-user-list"]);
+
 	        		var selector=idVal;
-	        		var url='/core/api/portlets/portletCallsPerPerson?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str);
+	        		var url='/core/api/portlets/portletCallsPerPerson?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&user='+users;
 	        		
 	        		var answeredCallsCountList=[];
 	    			var busyCallsCountList=[];
@@ -1346,13 +1424,23 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			if(data.get('settings').duration=='yesterday'){
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'today';
-	    			}else{
+	    			}else if(data.get('settings').duration=='this-week'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-week-end';
+					}else if(data.get('settings').duration=='this-month'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-month-end';
+					}else{
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'TOMORROW';
 	    			}
 	        		
+	        		var users = '';
+					if(data.get('settings')["task-report-user-list"]!=undefined)
+						users = JSON.stringify(data.get('settings')["task-report-user-list"]);
+
 	        		var selector=idVal;
-	        		var url='/core/api/portlets/portletTaskReport?group-by='+data.get('settings')["group-by"]+'&split-by='+data.get('settings')["split-by"]+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&tasks='+data.get('settings').tasks;
+	        		var url='/core/api/portlets/portletTaskReport?group-by='+data.get('settings')["group-by"]+'&split-by='+data.get('settings')["split-by"]+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&tasks='+data.get('settings').tasks+'&user='+users;
 	        		
 	        		var groupByList=[];
 	    			var splitByList=[];
@@ -1415,7 +1503,13 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			if(data.get('settings').duration=='yesterday'){
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'today';
-	    			}else{
+	    			}else if(data.get('settings').duration=='this-week'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-week-end';
+					}else if(data.get('settings').duration=='this-month'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-month-end';
+					}else{
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'TOMORROW';
 	    			}
@@ -1618,6 +1712,7 @@ function gravatarImgForPortlets(width){
 	var data_name = '';
 	return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 }
+<<<<<<< HEAD
 $('.leaderboard_portlet_header').live('mouseover',function(e){
 	$('.leaderboard_portlet_header').find('.portlet_header_icons').css("visibility","visible");
 });
@@ -1640,3 +1735,21 @@ $('#user-select-none').die().live('click',function(e){
 		e.preventDefault();
 		$('#user-list').multiSelect('deselect_all');
 });
+=======
+$('#calls-user-select-all').die().live('click',function(e){
+	e.preventDefault();
+	$('#calls-user-list').multiSelect('select_all');
+});
+$('#calls-user-select-none').die().live('click',function(e){
+	e.preventDefault();
+	$('#calls-user-list').multiSelect('deselect_all');
+});
+$('#task-report-user-select-all').die().live('click',function(e){
+		e.preventDefault();
+		$('#task-report-user-list').multiSelect('select_all');
+});
+$('#task-report-user-select-none').die().live('click',function(e){
+		e.preventDefault();
+		$('#task-report-user-list').multiSelect('deselect_all');
+});
+>>>>>>> user-option-in-portlets
