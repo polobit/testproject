@@ -1712,7 +1712,6 @@ function gravatarImgForPortlets(width){
 	var data_name = '';
 	return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 }
-<<<<<<< HEAD
 $('.leaderboard_portlet_header').live('mouseover',function(e){
 	$('.leaderboard_portlet_header').find('.portlet_header_icons').css("visibility","visible");
 });
@@ -1735,7 +1734,6 @@ $('#user-select-none').die().live('click',function(e){
 		e.preventDefault();
 		$('#user-list').multiSelect('deselect_all');
 });
-=======
 $('#calls-user-select-all').die().live('click',function(e){
 	e.preventDefault();
 	$('#calls-user-list').multiSelect('select_all');
@@ -1752,4 +1750,4 @@ $('#task-report-user-select-none').die().live('click',function(e){
 		e.preventDefault();
 		$('#task-report-user-list').multiSelect('deselect_all');
 });
->>>>>>> user-option-in-portlets
+
