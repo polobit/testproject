@@ -97,7 +97,7 @@ public class QueryDocumentUtil
 		{
 			// Checks Rules is built properly, as validations are not preset at
 			// client side. Improper query raises exceptions.
-			if (rule.LHS == null || rule.RHS == null || rule.CONDITION == null)
+			if (rule.LHS == null || (rule.RHS == null && !rule.CONDITION.equals(SearchRule.RuleCondition.DEFINED) && !rule.CONDITION.equals(SearchRule.RuleCondition.NOT_DEFINED)) || rule.CONDITION == null)
 				continue;
 
 			// If nested condition is not null and nested value is not
@@ -122,7 +122,7 @@ public class QueryDocumentUtil
 			 * Build equals and not equals queries conditions except time based
 			 * conditions
 			 */
-			if (!lhs.contains("time"))
+			if (!lhs.contains("time") || condition.equals(SearchRule.RuleCondition.DEFINED) || condition.equals(SearchRule.RuleCondition.NOT_DEFINED) )
 			{
 				/*
 				 * Create new query with LHS and RHS conditions to be processed
@@ -217,7 +217,18 @@ public class QueryDocumentUtil
 						query = buildNestedCondition(joinCondition, query, newQuery);
 					}
 				}
-
+				else if (condition.equals(SearchRule.RuleCondition.DEFINED))
+				{
+					// double quotes for exact match of value.
+					query = buildNestedCondition(joinCondition, query,
+							"field_labels" + ":\"" + lhs + "\"");
+				}
+				else if (condition.equals(SearchRule.RuleCondition.NOT_DEFINED))
+				{
+					// double quotes for exact match of value.
+					query = buildNotNestedCondition(joinCondition, query,
+							"field_labels" + ":\"" + lhs + "\"");
+				}
 			}
 
 			// Queries on created or updated times

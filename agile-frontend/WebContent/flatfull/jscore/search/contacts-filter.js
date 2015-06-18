@@ -45,7 +45,7 @@ $(function()
 		// var htmlContent = $(this).closest("tr").clone();
 		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
 		//hide camapign status
-		$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove();
+		//$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove();
 		$(this).prev('table').find("tbody").append(htmlContent);
 	});
 	
@@ -66,7 +66,7 @@ $(function()
 		// var htmlContent = $(this).closest("tr").clone();
 		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
 		//hide camapign status
-		$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove()
+		//$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove()
 		$(this).prev('table').find("tbody").append(htmlContent);
 	});
 	
@@ -567,6 +567,9 @@ function fillCustomFields(fields, el, callback, is_webrules)
 			lhs_element.removeClass('hide');
 		var field = fields[i];
 
+		condition.append('<option value="EQUALS" custom_chained_class= "'+field.field_label+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is</option>');
+		condition.append('<option value="NOTEQUALS" custom_chained_class= "'+field.field_label+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">isn\'t</option>');
+
 		if(field.field_type == "DATE")
 		{
 			lhs_element.append('<option value="'+field.field_label+'_time" field_type="'+field.field_type+'">'+field.field_label+'</option>');
@@ -574,6 +577,11 @@ function fillCustomFields(fields, el, callback, is_webrules)
 			var element = condition.find("option.created_time"); 
 			add_custom_class_to_filter_elements(element, field.field_label+'_time');
 			$(element).addClass(field.field_label+'_time' + _AGILE_CUSTOM_DIVIDER_);
+			/*if(!is_webrules)
+			{
+				condition.append('<option value="DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is defined</option>');
+				condition.append('<option value-="NOT_DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +'_time																																				 '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>');
+			}*/
 		} else if(field.field_type == "NUMBER")
 		{
 			lhs_element.append('<option value="'+field.field_label+'_number" field_type="'+field.field_type+'">'+field.field_label+'</option>');
@@ -581,14 +589,23 @@ function fillCustomFields(fields, el, callback, is_webrules)
 			var element = condition.find("option.lead_score");
 			add_custom_class_to_filter_elements(element, field.field_label+'_number');
 			$(element).addClass(field.field_label+'_number' + _AGILE_CUSTOM_DIVIDER_);
+			/*if(!is_webrules)
+			{
+				condition.append('<option value="DEFINED" custom_chained_class= "'+field.field_label+'_number'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_number '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is defined</option>');
+				condition.append('<option value-="NOT_DEFINED" custom_chained_class= "'+field.field_label+'_number'+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +'_number '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>');
+			}*/
+		
 		}
 		else
 		{
 			lhs_element.append('<option value="'+field.field_label+'" field_type="'+field.field_type+'" >'+field.field_label+'</option>');
-		}
+			if(!is_webrules)
+			{
+				condition.append('<option value="DEFINED" custom_chained_class= "'+field.field_label+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is defined</option>');
+				condition.append('<option value-="NOT_DEFINED" custom_chained_class= "'+field.field_label+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>');
+			}
 		
-		condition.append('<option value="EQUALS" custom_chained_class= "'+field.field_label+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is</option>');
-		condition.append('<option value="NOTEQUALS" custom_chained_class= "'+field.field_label+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">isn\'t</option>');
+		}
 		
 		// Contacts and not contains should only be in webrules form
 		if(is_webrules)

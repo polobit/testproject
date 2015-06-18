@@ -796,7 +796,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		try
 		{
 
-			this.calendar_url = getCalendarURL();
+			this.calendar_url = OnlineCalendarUtil.getDomainUserCalendarUrl(id, domain, this);
 
 			if (info_json != null)
 				info_json = new JSONObject(info_json_string);

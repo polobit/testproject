@@ -61,7 +61,8 @@ public class TriggerBillingRestriction extends DaoBillingRestriction
 
 	int count = restriction.triggers_count;
 
-	String tag = setTagsToUpdate(max_allowed, restriction.triggers_count + 1);
+	String tag = setTagsToUpdate(max_allowed, daemonCheck ? restriction.triggers_count
+		: (restriction.triggers_count + 1));
 
 	restriction.triggers_count = count;
 

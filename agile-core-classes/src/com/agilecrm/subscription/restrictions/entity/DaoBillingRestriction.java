@@ -76,6 +76,8 @@ public abstract class DaoBillingRestriction implements
 
     private ClassEntities entityClass = null;
 
+    public boolean daemonCheck = false;
+
     public static final WildCardBillingRestriction wildCardRestriction = new WildCardBillingRestriction();
 
     public static final ArrayList<String> restrictedDomains;
@@ -204,6 +206,24 @@ public abstract class DaoBillingRestriction implements
 	dao.restriction = restriction;
 	dao.setMax();
 	dao.sendReminder = dao.restriction.sendReminder;
+	return dao;
+    }
+
+    /**
+     * Callend from backend deamon thread
+     * 
+     * @param className
+     * @param restriction
+     * @return
+     */
+    public static DaoBillingRestriction getInstaceDeamon(String className, BillingRestriction restriction)
+    {
+	DaoBillingRestriction dao = getInstace(className, restriction);
+	if (dao == null)
+	    return dao;
+
+	dao.daemonCheck = true;
+
 	return dao;
     }
 
