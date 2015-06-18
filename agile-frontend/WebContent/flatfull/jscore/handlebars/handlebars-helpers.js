@@ -658,7 +658,7 @@ $(function()
 	Handlebars.registerHelper('dateFormat', function()
 	{
 
-		return CURRENT_USER_PREFS.dateFormat;
+		return "Select Date";
 		
 	});
 

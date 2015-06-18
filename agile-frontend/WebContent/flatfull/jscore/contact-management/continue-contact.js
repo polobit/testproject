@@ -517,7 +517,7 @@ function deserialize_contact(contact, template)
 				var form = $("#content").html(getTemplate(template, contact));
 
 				// Add placeholder and date picker to date custom fields
-				$('.date_input').attr("placeholder", CURRENT_USER_PREFS.dateFormat);
+				$('.date_input').attr("placeholder", "Select Date");
 
 				$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat });
 
