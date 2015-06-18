@@ -690,7 +690,7 @@ public class PortletUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		int i=0;
 		for(DomainUser domainUser : usersList){
 			int answeredCallsCount=0;
 			int busyCallsCount=0;
@@ -740,7 +740,8 @@ public class PortletUtil {
 			if(userPrefs!=null)
 				domainUserImgList.add(userPrefs.pic);
 			else
-				domainUserImgList.add("no image");
+				domainUserImgList.add("no image-"+i);
+			i++;
 		}
 		callsPerPersonJSON.put("answeredCallsCountList",answeredCallsCountList);
 		callsPerPersonJSON.put("busyCallsCountList",busyCallsCountList);
@@ -872,6 +873,7 @@ public class PortletUtil {
 			}
 
 			if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("user") && json.getString("split-by").equalsIgnoreCase("category")){
+				int i=0;
 				for(DomainUser domainUser : usersList){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(Task.Type category : Task.Type.values()){
@@ -890,11 +892,13 @@ public class PortletUtil {
 					if(userPrefs!=null)
 						groupByList.add(userPrefs.pic);
 					else
-						groupByList.add("no image");
+						groupByList.add("no image-"+i);
 					splitByList.add(splitByMap);
 					domainUserNamesList.add(domainUser.name);
+					i++;
 				}
 			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("user") && json.getString("split-by").equalsIgnoreCase("status")){
+				int i=0;
 				for(DomainUser domainUser : usersList){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(Task.Status status : Task.Status.values()){
@@ -913,9 +917,10 @@ public class PortletUtil {
 					if(userPrefs!=null)
 						groupByList.add(userPrefs.pic);
 					else
-						groupByList.add("no image");
+						groupByList.add("no image-"+i);
 					splitByList.add(splitByMap);
 					domainUserNamesList.add(domainUser.name);
+					i++;
 				}
 			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("category") && json.getString("split-by").equalsIgnoreCase("user")){
 				for(Task.Type category : Task.Type.values()){

@@ -1555,8 +1555,10 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	                formatter: function() {
 	                	var userIndex=0;
 	                	for(var i=0;i<domainUserImgList.length;i++){
-	                		if(this.value==domainUserImgList[i])
+	                		if(this.value==domainUserImgList[i] && domainUserImgList[i].substring(0,8)!="no image")
 	                			userIndex=i;
+	                		else if(this.value==domainUserImgList[i] && domainUserImgList[i].substring(0,8)=="no image")
+		                			userIndex=parseInt(domainUserImgList[i].substring(9,10));
 	                	}
 	                	if(this.value!=undefined && this.value!="" && this.value!="no image")
 	                		return '<img src="'+this.value+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUsersList[userIndex]+'"/>';
@@ -1772,10 +1774,12 @@ function taskReportBarGraph(selector,groupByList,series,text,base_model,domainUs
 	                	if(base_model.get('settings')["group-by"]=="user"){
 	                		var userIndex=0;
 		                	for(var i=0;i<groupByList.length;i++){
-		                		if(this.value==groupByList[i])
+		                		if(this.value==groupByList[i] && groupByList[i].substring(0,8)!="no image")
 		                			userIndex=i;
+		                		else if(this.value==groupByList[i] && groupByList[i].substring(0,8)=="no image")
+		                			userIndex=parseInt(groupByList[i].substring(9,10));
 		                	}
-	                		if(this.value!=undefined && this.value!="" && this.value!="no image")
+	                		if(this.value!=undefined && this.value!="" && this.value.substring(0,8)!="no image")
 		                		return '<img src="'+this.value+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUserNamesList[userIndex]+'"/>';
 		                	else
 		                		return '<img src="'+gravatarImgForPortlets(25)+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUserNamesList[userIndex]+'"/>';
