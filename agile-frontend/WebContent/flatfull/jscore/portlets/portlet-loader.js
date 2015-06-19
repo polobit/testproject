@@ -228,7 +228,7 @@ function showPortletIcons(el){
 	// Changes width of portlet name
 	//$(el).find('div.portlet_header_name').css({ "width" : "65%" });
 
-	//Hide the leaderboard small text content in header
+	//Hide the leaderboard small text content in header part
 	$(el).find('.portlet-header-small-text').hide();
 }
 /**
@@ -251,7 +251,7 @@ function hidePortletIcons(el)
 	// Changes width of portlet name
 	//$(el).find('div.portlet_header_name').css({ "width" : "80%" });
 
-	//Show the leaderboard small text content in header
+	//Show the leaderboard small text content in header part
 	$(el).find('.portlet-header-small-text').show();
 }
 function enablePortletSorting(el){
