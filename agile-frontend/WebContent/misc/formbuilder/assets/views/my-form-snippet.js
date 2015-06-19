@@ -1,11 +1,11 @@
 define([
        "jquery", "underscore", "backbone",
        "views/snippet", "views/temp-snippet",
-       "helper/pubsub"
+       "helper/pubsub", "helper/tags"
 ], function(
   $, _, Backbone,
   SnippetView, TempSnippetView,
-  PubSub
+  PubSub, Tags
 ){
   return SnippetView.extend({
     events:{
@@ -13,7 +13,6 @@ define([
       , "mousedown" : "mouseDownHandler"
       , "mouseup"   : "mouseUpHandler"
     }
-
     , mouseDownHandler : function(mouseDownEvent){
       mouseDownEvent.stopPropagation();
       mouseDownEvent.preventDefault();
@@ -56,6 +55,9 @@ define([
           var $e = $(e)
           , type = $e.attr("data-type")
           , name = $e.attr("id");
+
+          if (boundContext.model.get("title") == "Form Name" && type == "input" && name == "agileformidtag" && $e.val() && !Tags.validTagsString($e.val()))
+        	  alert("Invalid Form Tags");
 
           switch(type) {
             case "checkbox":
