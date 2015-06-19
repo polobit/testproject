@@ -168,6 +168,10 @@ function showCalendar()
 									 * $("#loading_calendar_events").hide();
 									 * return; }
 									 */
+									var start_end_array = {};
+									start_end_array.startTime = start.getTime() / 1000;
+									start_end_array.endTime = end.getTime() / 1000;
+									createCookie('fullcalendar_start_end_time', JSON.stringify(start_end_array));
 
 									var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
 
