@@ -30,7 +30,7 @@ var CompaniesRouter = Backbone.Router
 	 * (25 in count) step by step on scrolling down instead of fetching
 	 * all at once.
 	 */
-	companies : function(tag_id, company_filter_id, grid_view, is_lhs_filter)
+	companies : function(tag_id, company_filter_id, grid_view, is_lhs_filter, view_data)
 	{
 
 		if (SCROLL_POSITION)
@@ -42,13 +42,58 @@ var CompaniesRouter = Backbone.Router
 		{
 			$(window).scrollTop(0);
 		}
-
+		
 		// If contacts are selected then un selects them
 		SELECT_ALL = false;
+		
+		/**
+		 * If collection is already defined and contacts are fetched the
+		 * show results instead of initializing collection again
+		 */
+		if (COMPANIES_HARD_RELOAD == true)
+		{
+			this.companiesListView = undefined;
+			COMPANIES_HARD_RELOAD = false;
+			view_data = undefined;
+			App_Companies.companyViewModel = undefined;
+		}
+		
+		// If id is defined get the respective custom view object
+		if (!view_data)
+		{
+			// Once view id fetched we use it without fetching it.
+			if (!App_Companies.companyViewModel)
+			{
+				var view = new Backbone.Model();
+				view.url = 'core/api/contact-view-prefs/company';
+				view.fetch({ success : function(data)
+				{
+					// If custom view object is empty i.e., custom view
+					// is deleted.
+					// custom view cookie is eraised and default view is
+					// shown
+					if ($.isEmptyObject(data.toJSON()))
+					{
+						// Erase custom_view cookie, since
+						// view object with given id is not available
+						eraseCookie("contact_view");
 
-		var max_contacts_count = 20;
-		var is_company = true;
-		var template_key = "companies";
+						// Loads default contact view
+						App_Companies.companies();
+						return;
+					}
+					App_Companies.companyViewModel = data.toJSON();
+					App_Companies.companies(tag_id, undefined, undefined, is_lhs_filter,App_Companies.companyViewModel);
+
+				} });
+				return;
+			}
+
+			view_data = App_Companies.companyViewModel;
+
+		}
+
+		var template_key = "companies-custom-view";
 		var individual_tag_name = "tr";
 		var sort_key = readCookie("company_sort_field");
 		if (!sort_key || sort_key == null)
@@ -120,21 +165,13 @@ var CompaniesRouter = Backbone.Router
 
 		console.log("while creating new base collection view : " + collection_is_reverse);
 
-		/**
-		 * If collection is already defined and contacts are fetched the
-		 * show results instead of initializing collection again
-		 */
-		if (COMPANIES_HARD_RELOAD == true)
-		{
-			this.companiesListView = undefined;
-			COMPANIES_HARD_RELOAD = false;
-		}
-
-		if (this.companiesListView && this.companiesListView.collection)
+		if (this.companiesListView && this.companiesListView.collection.url == url)
 		{
 			this.companiesListView.collection.url = url;
+			
+			var el = this.companiesListView.render(true).el;
 
-			$('#content').html(this.companiesListView.render(true).el);
+			$('#content').html(el);
 
 			$(".active").removeClass("active");
 			$("#companiesmenu").addClass("active");
@@ -149,72 +186,64 @@ var CompaniesRouter = Backbone.Router
 		var slateKey = getContactPadcontentKey(url);
 		if (is_lhs_filter)
 		{
-			template_key = "companies-table";
+			template_key = "companies-custom-view-table";
 			if (grid_view || readCookie("agile_contact_view"))
 			{
 				template_key = "contacts-grid-table";
 				individual_tag_name = "div";
 			}
 		}
-
+		
 		/*
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.companiesListView = new Base_Collection_View(
+		this.companiesListView = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
+			templateKey : template_key, individual_tag_name : 'tr', slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
+			postRenderCallback : function(el, collection)
+			{
+				// To set chats and view when contacts are fetch by
+				// infiniscroll
+				//setup_tags(el);
+
+				company_list_view.init(el);
+				
+				if(is_lhs_filter) {
+					var count = 0;
+					if(collection.models.length > 0) {
+						count = collection.models[0].attributes.count || collection.models.length;
+					}
+					var count_message;
+					if (count > 9999 && (readCookie('contact_filter') || readData('dynamic_contact_filter')))
+						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+					else
+						count_message = "<small> (" + count + " Total) </small>";
+					$('#contacts-count').html(count_message);
+				} else {					
+					setupLhsFilters(el,true);
+				}
+			} });
+		
+		var _that = this;
+		$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=COMPANY", function(customDatefields)
 				{
-					url : url,
-					sort_collection : false,
-					templateKey : template_key,
-					individual_tag_name : individual_tag_name,
-					cursor : true,
-					page_size : 25,
-					global_sort_key : sort_key,
-					slateKey : slateKey,
-					request_method : 'POST',
-					post_data : { filterJson : postData },
-					postRenderCallback : function(el, collection)
-					{
+					// Defines appendItem for custom view
+					_that.companiesListView.appendItem = function(base_model){
+						contactTableView(base_model,customDatefields,this);
+					};
+			
+					// Fetch collection
+					_that.companiesListView.collection.fetch();
+					
+				});
 
-						// Contacts are fetched when the app loads in
-						// the initialize
-						var cel = App_Companies.companiesListView.el;
-						var collection = App_Companies.companiesListView.collection;
-						
-						company_list_view.init(cel);
-
-						// To set heading in template
-						if (is_lhs_filter)
-						{
-							var count = 0;
-							if (collection.models.length > 0)
-							{
-								count = collection.models[0].attributes.count || collection.models.length;
-							}
-							var count_message;
-							if (count > 9999 && (readCookie('contact_filter') || readData('dynamic_contact_filter')))
-								count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
-							else
-								count_message = "<small> (" + count + " Total) </small>";
-							$('#contacts-count').html(count_message);
-						}
-						else
-						{
-							setupLhsFilters(cel, is_company);
-						}
-
-						start_tour("contacts", el);
-					} });
-
-		// Contacts are fetched when the app loads in the initialize
-		this.companiesListView.collection.fetch();
 		if (!is_lhs_filter)
 		{
-			$('#content').html(this.companiesListView.render().el);
+			$('#content').html(this.companiesListView.el);
 		}
 		else
 		{
-			$('#content').find('.contacts-div').html(this.companiesListView.render().el);
+			$('#content').find('.contacts-div').html(this.companiesListView.el);
 			$('#bulk-actions').css('display', 'none');
 			COMPANIES_HARD_RELOAD = true;
 		}
@@ -354,10 +383,17 @@ var CompaniesRouter = Backbone.Router
 				}, '<option value="CUSTOM_{{field_label}}">{{field_label}}</option>', true, el);
 			}, saveCallback : function(data)
 			{
-				CONTACTS_HARD_RELOAD = true;
+				COMPANIES_HARD_RELOAD = true;
 				App_Companies.navigate("companies", { trigger : true });
 			} });
 
 		$("#content").html(companyView.render().el);
-	}
+	},
+	
+	/**
+	 * Custom views, its not called through router, but by cookies
+	 */
+	// Id = custom-view-id, view_data = custom view data if already
+	// availabel, url = filter url if there is any filter
+	//customView : function(id, view_data, url, tag_id, is_lhs_filter, postData){}
 });

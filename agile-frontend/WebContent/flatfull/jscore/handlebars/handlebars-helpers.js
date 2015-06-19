@@ -6113,6 +6113,26 @@ $(function()
 			return _billing_restriction.currentLimits[key];
 	});
 	
+	/**
+	 * Returns table headings for custom companies list view
+	 */
+	Handlebars.registerHelper('companyTableHeadings', function(item)
+	{
+
+		var el = "";
+		$.each(App_Companies.companyViewModel[item], function(index, element)
+		{
+			if (element.indexOf("custom_") == 0)
+				element = element.split("custom_")[1];
+			element = element.replace("_", " ")
+
+			el = el.concat('<th>' + ucfirst(element) + '</th>');
+
+		});
+
+		return new Handlebars.SafeString(el);
+	});
+	
 });
 
 // helper function return created time for event

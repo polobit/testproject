@@ -103,17 +103,27 @@ public class ContactViewPrefsUtil
      *            - AgileUser object.
      * @return ContactViewPrefs of given agile-user.
      */
-    public static List<ContactViewPrefs> getAllContactViewPrefs()
+    public static List<ContactViewPrefs> getAllContactViewPrefs(String type)
     {
 	Objectify ofy = ObjectifyService.begin();
 
-	List<ContactViewPrefs> viewPrefs = ofy.query(ContactViewPrefs.class).list();
+	List<ContactViewPrefs> viewPrefs = null;
+
+	if (type.equalsIgnoreCase(ContactViewPrefs.Type.COMPANY.toString()))
+	{
+	    viewPrefs = ofy.query(ContactViewPrefs.class).filter("type", ContactViewPrefs.Type.COMPANY).list();
+	}
+	else
+	{
+	    viewPrefs = ofy.query(ContactViewPrefs.class).filter("type!=", ContactViewPrefs.Type.COMPANY).list();
+	}
 	return viewPrefs;
     }
 
     public static void handleCustomFieldDelete(CustomFieldDef customFieldDef)
     {
-	List<ContactViewPrefs> contactViewPrefs = getAllContactViewPrefs();
+	List<ContactViewPrefs> contactViewPrefs = getAllContactViewPrefs(customFieldDef.scope.toString());
+
 	for (ContactViewPrefs viewPref : contactViewPrefs)
 	{
 	    if (viewPref.fields_set.contains("CUSTOM_" + customFieldDef.field_label))
