@@ -5623,6 +5623,8 @@ $(function()
 					header_name = "" + data.name;
 			} });
 		}
+		if (header_name == undefined || header_name == "")
+			header_name = "Contact List";
 		return header_name;
 	});
 
