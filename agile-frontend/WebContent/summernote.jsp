@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
 
 <link rel="stylesheet" href="js/designer/summernote/summernote.css">
+<link rel="stylesheet" href="js/designer/summernote/summernote_custom.css">
 <script type="text/javascript" src="js/designer/summernote/summernote.js"></script>
 <!-- <script type="text/javascript" src="js/designer/summernote/plugins/customfields.js"></script>
 <script type="text/javascript" src="js/designer/summernote/plugins/chart.js"></script> -->
@@ -205,12 +206,148 @@ function init_tinymce()
   
   var mergeField = getMergeFields();
   
+  
+
+	var options={
+		 
+		"Name" :{
+			"First Name" : "{{first_name}}", 
+			"First Name Fix" : "{{first_name_fix}}", 
+			"Last Name" : "{{last_name}}", 
+			"Last Name Fix" : "{{last_name_fix}}", 
+			"Name Fix" : "{{name_fix}}"
+		},
+		"Properties":{
+			"Score" : "{{score}}",
+			"Created Date" : "{{created_date}}", 
+			"Modified Date" : "{{modified_date}}", 
+			"Email" : "{{email}}",
+			"Email Work":"{{email_work}}", 
+			"Email Personal":"{{email_home}}", 
+			"Company" : "{{company}}", 
+			"Title" : "{{title}}",
+			"Website" : "{{website}}", 
+			"Phone" : "{{phone}}",
+			"Phone Work" : "{{phone_work}}",
+			"Phone Home" : "{{phone_home}}",
+			"Phone Mobile" : "{{phone_mobile}}",
+			"Phone Main" : "{{phone_main}}",
+			"Phone Home fax" : "{{phone_home_fax}}",
+			"Phone Work fax" : "{{phone_work_fax}}",
+			"Phone Other" : "{{phone_other}}"
+		},
+		"Custom Fields":{
+		},
+		"Address":{
+			"City" : "{{location.city}}", 
+			"State" : "{{location.state}}", 
+			"Country" : "{{location.country}}"
+		},
+		"Web":{
+			"Twitter Id" : "{{twitter_id}}", 
+			"LinkedIn Id" : "{{linkedin_id}}"
+		},
+		"Owner":{
+			"Owner Name" : "{{owner.name}}", 
+			"Owner Email" : "{{owner.email}}" , 
+			"Owner calendar URL" : "{{owner.calendar_url}}" , 
+			"Owner Signature" : "{{{owner.signature}}}"
+		},
+		"Misc":{
+			"Unsubscribe Link" : "{{{unsubscribe_link}}}",
+			"Online Link" : "{{{online_link}}}",
+			"Powered by" : "{{{powered_by}}}"
+		}
+	};
+
+	//Get Custom Fields in template format
+	var custom_fields;
+
+	// Cache Contact Custom fields
+	if(window.opener._CONTACT_CUSTOM_FIELDS)
+		custom_fields = _CONTACT_CUSTOM_FIELDS
+	else
+		{
+		    _CONTACT_CUSTOM_FIELDS = window.opener.get_custom_fields();
+			custom_fields = _CONTACT_CUSTOM_FIELDS;
+		}
+
+	options["Custom Fields"] = custom_fields;
+	
+	var selectoption='<li></li>';
+
+	$.each(options, function(name, option_value) {
+		if(typeof(option_value)== 'object')
+			{
+				var optgroup ="<ul></ul>";
+				optgroup = $(optgroup).attr("label",name);
+				$.each(option_value, function(subtype_key, subtype_value) {
+					var title=subtype_key;
+					if(subtype_key.length>18)
+						subtype_key = subtype_key.substr(0,15)+"..." ;
+					$(optgroup).append("<li class='ul-custom-merge-field' value='" + subtype_value + "' title = '"+title+"'>" + subtype_key + "</option>");
+				});
+				selectoption = $(selectoption).append(optgroup);
+			}
+		else
+			{
+				if(name.indexOf("*") == 0)
+					{
+						name  = name.substr(1);
+						selectoption = $(selectoption).append("<option selected value='" + option_value + "' title = '"+name+"'>" + name + "</option>");
+					}
+				else
+					selectoption = $(selectoption).append("<option value='" + option_value + "' title = '"+name+"'>" + name + "</option>");
+			}
+	});
+	
+	console.log(selectoption);
+	return selectoption;
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   var dropdown ="";
+  /* uncomment
   $.each(mergeField,function(field_name,field_value){
 	  dropdown = dropdown + '<li><a data-event="merge" data-value="'+field_value+'" class=""><i class="fa fa-check"></i>'+field_name+'</a></li>';
-	  })
-  //$('textarea#content').show();
-	 // dropdown = '<li><a data-event="merge" data-value="" class=""><i class="fa fa-check"></i></a></li>';
+	  }) */
+	  
+	  /* remove these */
+	 dropdown = '<li><a>First name</a><ul class = "note-check" style="list-style-type: none;"><li class="ul-custom-merge-field"><a data-event="merge" data-value="drop2" style = "text-decoration: none;text-overflow: ellipsis;display: block;overflow: hidden;white-space: nowrap;"class="">Last name Last name Last name Last name Last name </a></li></ul></li>';
+  	  /* remove these */
   dropdown = '<ul class = "dropdown-menu note-check">' + dropdown + '</ul>'
   var tmpl = $.summernote.renderer.getTemplate();
   // Initialize tinymce;

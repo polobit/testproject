@@ -1,0 +1,9 @@
+.ul-custom-merge-field
+{
+  text-decoration: none;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 160px;
+}
