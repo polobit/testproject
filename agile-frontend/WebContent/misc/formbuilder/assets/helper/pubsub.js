@@ -7,7 +7,7 @@ define([
 
 var getAgileFields = function(fields, callback)
 {
-	var url = window.location.protocol + '//' + window.location.host + '/core/api/custom-fields';
+	var url = window.location.protocol + '//' + window.location.host + '/core/api/custom-fields/scope?scope=CONTACT';
 
 	$.ajax({ type : 'GET', url : url, asynch : true, dataType : 'json', success : function(data)
 	{
