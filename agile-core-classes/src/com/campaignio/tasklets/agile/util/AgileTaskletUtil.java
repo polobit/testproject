@@ -266,9 +266,7 @@ public class AgileTaskletUtil {
 									fieldValue = (fieldValue / 100000000000L > 1) ? fieldValue
 											: fieldValue * 1000;
 
-									field.value = DateUtil
-											.getDateInGivenFormat(fieldValue,
-													"dd MMM yyyy", timezone);
+									field.value =  DateUtil.getDateInGivenFormat(fieldValue, "dd MMM yyyy", timezone);
 								}
 							}
 						} catch (Exception e) {
