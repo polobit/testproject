@@ -222,7 +222,7 @@ function set_up_portlets(el, portlets_el){
  *            Element on which mouse entered (portlet header)
  */
 function showPortletIcons(el){
-	// Shows portlet icons on hover
+	// Shows portlet icons on mouse hover
 	$(el).find('div.portlet_header_icons').removeClass('vis-hide');
 
 	// Changes width of portlet name
@@ -244,8 +244,7 @@ function showPortletIcons(el){
  */
 function hidePortletIcons(el)
 {
-	// Hide portlet icons on hover
-	// Shows portlet icons on hover
+	// Hide portlet icons on mouse hover
 	$(el).find('div.portlet_header_icons').addClass('vis-hide');
 
 	// Changes width of portlet name
