@@ -1,8 +1,9 @@
-/*
- * Function to sync form data to agile v3
+/**
+ * Function to synch form data to agile v2
  */
-var _agile_synch_form_v3 = function()
+var _agile_synch_form_v2 = function()
 {
+	// Disable button & add spinner
 	var agile_button = document.getElementsByClassName("agile-button")[0];
 	if (agile_button)
 		agile_button.setAttribute("disabled", "disabled");
@@ -14,9 +15,16 @@ var _agile_synch_form_v3 = function()
 		agile_error_msg.appendChild(spin);
 	}
 
-	var agile_form = document.forms["agile-form"];
-	var agile_redirect_url = agile_form["_agile_redirect_url"].value;
+	// Get form data
+	var agile_form = document.getElementById('agile-form');
+	var agile_form_data = document.getElementById('agile-form-data').getAttribute('name').split(" ");
+	var agile_redirect_url = agile_form_data[2];
+	var agile_api = agile_form_data[1];
+	var agile_domain = agile_form_data[0];
+	var agile_form_data_string = agile_domain + " " + agile_api + " " + agile_redirect_url + " ";
+	var agile_form_identification_tag = document.getElementById('agile-form-data').getAttribute('name').replace(agile_form_data_string, "");
 
+	// Initialize / declare variables
 	var agile_contact = {};
 	var agile_address = {};
 	var agile_tags = undefined;
@@ -24,41 +32,41 @@ var _agile_synch_form_v3 = function()
 	var form_data = {};
 	var new_contact = true;
 
+	// Build contact JSON
 	for ( var i = 0; i < agile_form.length; i++)
 	{
-		var field_name = agile_form[i].getAttribute("name");
-		var field_value = agile_form[i].value;
-		var field_id = agile_form[i].getAttribute("id");
+		var name = agile_form[i].getAttribute('name');
+		var value = agile_form[i].value;
+		var field_id = agile_form[i].getAttribute('id');
 		var field_type = agile_form[i].getAttribute("type");
-
 		if ((field_type == "radio" || field_type == "checkbox") && !agile_form[i].checked)
 			continue;
 
-		if (field_name && field_value)
+		if (name && value)
 		{
-			form_data[field_id] = field_value;
-			if ('address, city, state, country, zip'.indexOf(field_name) != -1)
-				agile_address[field_name] = field_value;
-			else if (field_name == "tags")
+			form_data[field_id] = value;
+			if ('address, city, state, country, zip'.indexOf(name) != -1)
+				agile_address[name] = value;
+			else if (name == "tags")
 			{
 				if (agile_tags)
-					agile_tags = agile_tags + ',' + field_value;
+					agile_tags = agile_tags + ',' + value;
 				else
-					agile_tags = field_value;
+					agile_tags = value;
 			}
-			else if (field_name == "note")
+			else if (name == "note")
 			{
 				var agile_note = {};
 				agile_note.subject = agile_form[i].parentNode.parentNode.getElementsByTagName("label")[0].innerHTML;
-				agile_note.description = field_value;
+				agile_note.description = value;
 				agile_notes.push(agile_note);
 			}
 			else
-				agile_contact[field_name] = field_value;
+				agile_contact[name] = value;
 		}
-		else if (field_value)
+		else if (value)
 		{
-			form_data[field_id] = field_value;
+			form_data[field_id] = value;
 		}
 	}
 
@@ -67,18 +75,30 @@ var _agile_synch_form_v3 = function()
 	if (agile_address.length > 2)
 		agile_contact.address = agile_address;
 
+	// Add tags, agile_form_identification_tag to contact
 	if (agile_tags)
-		agile_contact.tags = agile_tags;
+		if (agile_form_identification_tag)
+			agile_contact.tags = agile_tags + "," + agile_form_identification_tag;
+		else
+			agile_contact.tags = agile_tags;
+	else if (agile_form_identification_tag)
+		agile_contact.tags = agile_form_identification_tag;
 
+	// If email, api, domain present execute JSAPI
 	var agile_email = agile_contact.email;
+
+	// Set account, tracking
+	if (!(agile_id.get() && agile_id.getNamespace()))
+	{
+		_agile.set_account(agile_api, agile_domain);
+		_agile.track_page_view();
+	}
+
+	// Set email
 	if (agile_email)
 		_agile.set_email(agile_email);
-	
-	delete agile_contact._agile_form_name;
-	delete agile_contact._agile_domain;
-	delete agile_contact._agile_api;
-	delete agile_contact._agile_redirect_url;
-	
+
+	// Create contact
 	_agile.create_contact(agile_contact, { success : function(data)
 	{
 		var contact_id = data.id;
