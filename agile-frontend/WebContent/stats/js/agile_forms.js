@@ -31,6 +31,9 @@ var _agile_synch_form_v3 = function()
 		var field_id = agile_form[i].getAttribute("id");
 		var field_type = agile_form[i].getAttribute("type");
 
+		if (field_type == "hidden")
+			agile_form[i].setAttribute("disabled", "disabled");
+
 		if ((field_type == "radio" || field_type == "checkbox") && !agile_form[i].checked)
 			continue;
 
