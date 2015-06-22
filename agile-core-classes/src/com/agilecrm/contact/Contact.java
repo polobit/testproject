@@ -1143,7 +1143,7 @@ public class Contact extends Cursor
 			if (this.properties.size() > 0) {
 				ContactField nameField = this
 						.getContactFieldByName(Contact.NAME);
-				this.name = nameField != null ? nameField.value : "";
+				this.name = nameField != null ? StringUtils.lowerCase(nameField.value) : "";
 			}
 			//Company name lower case field used for duplicate check.
 			ContactField nameLowerField = this
