@@ -113,9 +113,9 @@ var ContactsRouter = Backbone.Router.extend({
 		SELECT_ALL = false;
 		
 		//campaign filters are disabled for time being.
-		if(readData('dynamic_contact_filter') &&readData('dynamic_contact_filter').indexOf('campaign_status') >= 0 ) {
+		/*if(readData('dynamic_contact_filter') &&readData('dynamic_contact_filter').indexOf('campaign_status') >= 0 ) {
 			eraseData('dynamic_contact_filter');
-		}
+		}*/
 
 		var max_contacts_count = 20;
 		var is_company = false;

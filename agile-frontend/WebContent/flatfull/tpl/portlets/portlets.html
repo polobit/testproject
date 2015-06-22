@@ -303,7 +303,11 @@
 			{{#if isDomainUser}}
 				<div class="b-b p-sm p-b-none bg-light">
 					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
-						<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{#if userPic}}
+							<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{else}}
+							<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" />
+						{{/if}}
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>You</div>
@@ -313,7 +317,11 @@
 			{{else}}
 				<div class="b-b p-sm p-b-none">
 					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
-						<img class="img-inital r r-2x" src="{{userPic}}" /> 
+						{{#if userPic}}
+							<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{else}}
+							<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" />
+						{{/if}}
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>{{userName}}</div>
@@ -330,7 +338,11 @@
 				{{#if isDomainUser}}
 				<div class=" b-b p-sm p-b-none bg-light">
 					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
-						<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{#if userPic}}
+							<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{else}}
+							<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" />
+						{{/if}}
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>You</div>
@@ -340,7 +352,11 @@
 			{{else}}
 				<div class=" b-b p-sm p-b-none">
 					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
-						<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{#if userPic}}
+							<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{else}}
+							<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" />
+						{{/if}}
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>{{userName}}</div>
@@ -357,7 +373,11 @@
 				{{#if isDomainUser}}
 				<div class=" b-b p-sm p-b-none bg-light">
 					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
-						<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{#if userPic}}
+							<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{else}}
+							<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" />
+						{{/if}}
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>You</div>
@@ -367,7 +387,11 @@
 			{{else}}
 				<div class=" b-b p-sm p-b-none">
 					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
-						<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{#if userPic}}
+							<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{else}}
+							<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" />
+						{{/if}}
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>{{userName}}</div>
@@ -384,7 +408,11 @@
 				{{#if isDomainUser}}
 				<div class=" b-b p-sm p-b-none bg-light">
 					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
-						<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{#if userPic}}
+							<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{else}}
+							<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" />
+						{{/if}}
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>You</div>
@@ -394,7 +422,11 @@
 			{{else}}
 				<div class=" b-b p-sm p-b-none">
 					<div class="thumb agile-img avatar" data-line="{{getIndexIncrementByOne @index}}">
-						<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{#if userPic}}
+							<img class="img-inital r r-2x" src="{{userPic}}" />
+						{{else}}
+							<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" />
+						{{/if}}
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>{{userName}}</div>
@@ -1310,7 +1342,7 @@
 </script>
 
 <script id="portlets-leader-board-model-template" type="text/html">
-<div class="leaderboard_portlet_header portlet_header portlet_edit_icons" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+<div class="leaderboard_portlet_header portlet_header portlet_edit_icons" style="background-color:#f6f8f8!important;" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
 	<ul class="m-n p-n leader-board-{{getLeaderboardCateCount settings.category}}">
 		{{#if settings.category.revenue}}
 		<li class="pull-left">

@@ -945,7 +945,7 @@ function showNoteAfterCall(callRespJson,messageObj)
 		var noteSub = "";
 		var friendlyStatus = "";
 		var callStatus = callRespJson.status;
-		
+		 
 		if(callStatus != 404 && typeof callRespJson.duration != "undefined") {
 			
 			var phoneNumber = "";
@@ -996,6 +996,11 @@ function showNoteAfterCall(callRespJson,messageObj)
 		 		$("#noteForm").find("#description").focus();
 				$('#noteModal').modal('show');
 				agile_type_ahead("note_related_to", el, contacts_typeahead);
+				//changed by prakash to add the last_called parameter and last_connected parameter of contact object on server side - 15/6/15
+					if(TWILIO_DIRECTION == "outbound-dial") {
+						twilioIOSaveContactedTime();	
+					}
+									
 			} else {
 				//add note automatically
 				$.post( "/core/api/widgets/twilio/autosavenote", {
