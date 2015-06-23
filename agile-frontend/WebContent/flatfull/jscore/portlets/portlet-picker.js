@@ -372,8 +372,12 @@ function set_p_portlets(base_model){
 			$(this).html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Leaderboard"){
-			$(this).html(getRandomLoadingImg());
-			$(this).html($(App_Portlets.leaderboard[parseInt(pos)].render().el));
+			var sizey = parseInt($(this).parent().attr("data-sizey"));
+	    	var topPos = 50*sizey;
+	    	if(sizey==2 || sizey==3)
+	    		topPos += 50;
+	        $(this).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+	    	$(this).html($(App_Portlets.leaderboard[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Deals By Milestone"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);

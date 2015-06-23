@@ -63,11 +63,11 @@ $(function()
 	}
 	 
 	$("input:file").change(function (){
-	    if(this.files[0].size > 18000000)
+	    if(this.files[0].size > 5242880)
 	    {
 	    	$("#fileextension").replaceWith($("#fileextension").clone(true));
 	    	$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
-												+ 'The file you are trying to send exceeds the 18MB attachment limit'
+												+ 'The file you are trying to send exceeds the 5MB attachment limit'
 												+ '</i></p></small></div>');
 	    	$("#mail-upl").after($save_info);
 	    	$save_info.show().delay(4000).hide(1);
@@ -85,7 +85,7 @@ $(function()
 function isValid(){
 	    $("#form").validate({
 	        rules: {
-	        		  file:{required:true,accept:""}
+	        		  attachmentfile:{required:true,accept:""}
 	               },
 	        submitHandler:function(form)
                   {  
