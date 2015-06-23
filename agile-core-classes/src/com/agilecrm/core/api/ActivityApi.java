@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.util.DateUtil;
 
 @Path("/api/activitylog")
 public class ActivityApi
@@ -39,6 +40,12 @@ public class ActivityApi
 	    @QueryParam("page_size") String count, @QueryParam("start_time") Long starttime,
 	    @QueryParam("end_time") Long endtime)
     {
+    String time_zone = DateUtil.getCurrentUserTimezoneOffset();
+    if (time_zone !=null )
+    {
+    	starttime += (Long.parseLong(time_zone)*60*1000);
+    	endtime += (Long.parseLong(time_zone)*60*1000);
+    }
 	if (starttime != null && endtime != null)
 	{
 	    starttime = starttime / 1000;

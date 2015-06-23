@@ -31,6 +31,7 @@ import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.search.util.TagSearchUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.util.DateUtil;
 
 /**
  * <code>ReportsAPI</code> lass includes REST calls to interact with
@@ -231,11 +232,16 @@ public class ReportsAPI
 	    @QueryParam("end_time") String endTime, @QueryParam("time_zone") String timeZone,
 	    @QueryParam("filter") String filterId)
     {
-	ReportsUtil.check(Long.parseLong(startTime), Long.parseLong(endTime));
+	ReportsUtil.check(Long.parseLong(startTime)+(Long.parseLong(timeZone)*60*1000), Long.parseLong(endTime)+(Long.parseLong(timeZone)*60*1000));
 
 	JSONArray tagsJSONArray = new JSONArray();
 	try
 	{
+		String current_timezone = DateUtil.getCurrentUserTimezoneOffset();
+	    if (current_timezone != null)
+	    {
+	    	timeZone = current_timezone;
+	    }
 	    // Get tags with a comma or | tokenized
 	    String[] tags = tagsString.split(",");
 
@@ -246,7 +252,7 @@ public class ReportsAPI
 	    // For each tag, get the occurrences for this time frame
 	    for (String tag : tags)
 	    {
-		int count = TagSearchUtil.getTagCount(filter, tag, startTime, endTime);
+		int count = TagSearchUtil.getTagCount(filter, tag, String.valueOf(Long.parseLong(startTime)+(Long.parseLong(timeZone)*60*1000)), String.valueOf(Long.parseLong(endTime)+(Long.parseLong(timeZone)*60*1000)));
 		tagsJSONArray.put(new JSONObject().put(tag, count));
 	    }
 	}
@@ -281,7 +287,12 @@ public class ReportsAPI
 	    @QueryParam("end_time") String endTime, @QueryParam("time_zone") String timeZone,
 	    @QueryParam("frequency") String frequency, @QueryParam("filter") String filterId) throws Exception
     {
-	ReportsUtil.check(Long.parseLong(startTime), Long.parseLong(endTime));
+    String current_timezone = DateUtil.getCurrentUserTimezoneOffset();
+    if (current_timezone != null)
+    {
+    	timeZone = current_timezone;
+    }
+	ReportsUtil.check(Long.parseLong(startTime)+(Long.parseLong(timeZone)*60*1000), Long.parseLong(endTime)+(Long.parseLong(timeZone)*60*1000));
 
 	// Get tags with a comma or | tokenized
 	String[] tags = tagsString.split(",");
@@ -292,7 +303,7 @@ public class ReportsAPI
 	    filter = ContactFilter.getContactFilter(Long.parseLong(filterId));
 
 	// Get Tags Daily
-	return TagSearchUtil.getTagCount(filter, tags, startTime, endTime, type).toString();
+	return TagSearchUtil.getTagCount(filter, tags, String.valueOf(Long.parseLong(startTime) + (Long.parseLong(timeZone)*60*1000)), String.valueOf(Long.parseLong(endTime) + (Long.parseLong(timeZone)*60*1000)), type).toString();
     }
 
     /*
@@ -336,7 +347,12 @@ public class ReportsAPI
 	    @QueryParam("time_zone") String timeZone, @QueryParam("frequency") String frequency,
 	    @QueryParam("filter") String filterId) throws Exception
     {
-	ReportsUtil.check(Long.parseLong(startTime), Long.parseLong(endTime));
+    String current_timezone = DateUtil.getCurrentUserTimezoneOffset();
+    if (current_timezone != null)
+    {
+    	timeZone = current_timezone;
+    }
+	ReportsUtil.check(Long.parseLong(startTime)+(Long.parseLong(timeZone)*60*1000), Long.parseLong(endTime)+(Long.parseLong(timeZone)*60*1000));
 
 	int type = getType(frequency);
 
@@ -345,6 +361,6 @@ public class ReportsAPI
 	    filter = ContactFilter.getContactFilter(Long.parseLong(filterId));
 
 	// Get Cohorts Monthly
-	return TagSearchUtil.getRatioTagCount(filter, tag1, tag2, startTime, endTime, type).toString();
+	return TagSearchUtil.getRatioTagCount(filter, tag1, tag2, String.valueOf(Long.parseLong(startTime)+(Long.parseLong(timeZone)*60*1000)), String.valueOf(Long.parseLong(endTime)+(Long.parseLong(timeZone)*60*1000)), type).toString();
     }
 }
