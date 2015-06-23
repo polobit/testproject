@@ -1318,6 +1318,10 @@ display:none;
 }
 
 
+
+
+
+
 /* starting css app mobile compatibility */
 
 @media (min-width:768px){
@@ -1330,12 +1334,21 @@ display:none;
 	.app-details-width {
 	width:100%;
 	}
-}
 
-@media (max-width:767px) {
  .fixedicons {
  position:static!important;
  }
+ 
+ .table-layout-mob-view {
+ table-layout:auto;
+ }
+ 
+ .agile-table td > div.table-resp {
+  width: 15em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 }
 
 
