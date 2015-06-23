@@ -52,6 +52,8 @@ public class WaitTill extends TaskletAdapter
 			long timeout;
 
 			timeout = DateUtil.getCalendar(duration, timeZoneString, at).getTimeInMillis();
+			
+			System.out.println("Waits till: " + timeout);
 
 			// Creates log for sending email
 			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
