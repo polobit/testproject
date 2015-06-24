@@ -197,6 +197,8 @@ public class ContactFilter implements Serializable, Comparable<ContactFilter>
 		result.add(filter);
 	}
 
+	Collections.sort(result);
+
 	return result;
     }
 

@@ -8,6 +8,7 @@ import com.agilecrm.core.api.prefs.UserPrefsAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.ContactViewPrefs;
+import com.agilecrm.user.ContactViewPrefs.Type;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -55,24 +56,25 @@ public class ContactViewPrefsUtil
 	Objectify ofy = ObjectifyService.begin();
 	Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
 
-	ContactViewPrefs viewPrefs = null;
+	List<ContactViewPrefs> viewsPrefsList = ofy.query(ContactViewPrefs.class).ancestor(userKey).list();
+
+	if (viewsPrefsList != null && !viewsPrefsList.isEmpty())
+	{
+	    for (ContactViewPrefs viewPrefs : viewsPrefsList)
+	    {
+		if (viewPrefs.type.toString().equalsIgnoreCase(type))
+		    return viewPrefs;
+	    }
+	}
 	if ("COMPANY".equalsIgnoreCase(type))
 	{
-	    viewPrefs = ofy.query(ContactViewPrefs.class).ancestor(userKey)
-		    .filter("type", ContactViewPrefs.Type.COMPANY.toString()).get();
-	    if (viewPrefs == null)
-		viewPrefs = getDefaultCompanyViewPrefs(agileUser);
+	    return getDefaultCompanyViewPrefs(agileUser);
 	}
 	else
 	{
-	    viewPrefs = ofy.query(ContactViewPrefs.class).ancestor(userKey)
-		    .filter("type!=", ContactViewPrefs.Type.COMPANY.toString()).get();
-	    if (viewPrefs == null)
-		viewPrefs = getDefaultContactViewPrefs(agileUser);
+	    return getDefaultContactViewPrefs(agileUser);
 	}
 
-	// Get Prefs
-	return viewPrefs;
     }
 
     /**
@@ -88,12 +90,20 @@ public class ContactViewPrefsUtil
 	Objectify ofy = ObjectifyService.begin();
 	Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
 
-	ContactViewPrefs viewPrefs = ofy.query(ContactViewPrefs.class).ancestor(userKey)
-		.filter("type!=", ContactViewPrefs.Type.COMPANY.toString()).get();
-	if (viewPrefs == null)
-	    return getDefaultContactViewPrefs(agileUser);
+	List<ContactViewPrefs> viewPrefsList = ofy.query(ContactViewPrefs.class).ancestor(userKey).list();
 
-	return viewPrefs;
+	if (viewPrefsList != null && !viewPrefsList.isEmpty())
+	{
+	    for (ContactViewPrefs viewPrefs : viewPrefsList)
+	    {
+		if (viewPrefs.type == Type.PERSON)
+		    return viewPrefs;
+	    }
+
+	}
+
+	return getDefaultContactViewPrefs(agileUser);
+
     }
 
     /**
