@@ -7,3 +7,19 @@
   white-space: nowrap;
   width: 160px;
 }
+
+.m-l-l
+{;
+	margin-left : 20px
+}
+
+.m-l-xs
+{
+	margin-left : -25px;
+}
+
+.ul-custom-scroll
+{
+	overflow-y: scroll;
+ 	height: 320px;
+}

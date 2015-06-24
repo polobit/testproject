@@ -265,7 +265,7 @@ function init_tinymce()
 
 	// Cache Contact Custom fields
 	if(window.opener._CONTACT_CUSTOM_FIELDS)
-		custom_fields = _CONTACT_CUSTOM_FIELDS
+		custom_fields = window.opener._CONTACT_CUSTOM_FIELDS;
 	else
 		{
 		    _CONTACT_CUSTOM_FIELDS = window.opener.get_custom_fields();
@@ -274,18 +274,21 @@ function init_tinymce()
 
 	options["Custom Fields"] = custom_fields;
 	
-	var selectoption='<li></li>';
+	var selectoption='<li data-event="merge" ></li>';
 
 	$.each(options, function(name, option_value) {
 		if(typeof(option_value)== 'object')
 			{
 				var optgroup ="<ul></ul>";
 				optgroup = $(optgroup).attr("label",name);
+				optgroup = $(optgroup).attr("class","m-l-xs agile-custom-field");
+				optgroup = $(optgroup).attr("data-event","merge");
+				optgroup = optgroup.append(name);
 				$.each(option_value, function(subtype_key, subtype_value) {
 					var title=subtype_key;
 					if(subtype_key.length>18)
 						subtype_key = subtype_key.substr(0,15)+"..." ;
-					$(optgroup).append("<li class='ul-custom-merge-field' value='" + subtype_value + "' title = '"+title+"'>" + subtype_key + "</option>");
+					$(optgroup).append("<li data-event='merge' class='ul-custom-merge-field m-l-l' data-value='" + subtype_value + "' title = '"+title+"'>" + subtype_key + "</option>");
 				});
 				selectoption = $(selectoption).append(optgroup);
 			}
@@ -294,7 +297,7 @@ function init_tinymce()
 				if(name.indexOf("*") == 0)
 					{
 						name  = name.substr(1);
-						selectoption = $(selectoption).append("<option selected value='" + option_value + "' title = '"+name+"'>" + name + "</option>");
+						selectoption = $(selectoption).append("<option selected data-value='" + option_value + "' title = '"+name+"'>" + name + "</option>");
 					}
 				else
 					selectoption = $(selectoption).append("<option value='" + option_value + "' title = '"+name+"'>" + name + "</option>");
@@ -302,53 +305,17 @@ function init_tinymce()
 	});
 	
 	console.log(selectoption);
-	return selectoption;
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  var dropdown ="";
+  var dropdown =selectoption;
   /* uncomment
   $.each(mergeField,function(field_name,field_value){
 	  dropdown = dropdown + '<li><a data-event="merge" data-value="'+field_value+'" class=""><i class="fa fa-check"></i>'+field_name+'</a></li>';
 	  }) */
 	  
 	  /* remove these */
-	 dropdown = '<li><a>First name</a><ul class = "note-check" style="list-style-type: none;"><li class="ul-custom-merge-field"><a data-event="merge" data-value="drop2" style = "text-decoration: none;text-overflow: ellipsis;display: block;overflow: hidden;white-space: nowrap;"class="">Last name Last name Last name Last name Last name </a></li></ul></li>';
-  	  /* remove these */
-  dropdown = '<ul class = "dropdown-menu note-check">' + dropdown + '</ul>'
+	 /* dropdown = '<li><a>First name</a><ul class = "note-check" style="list-style-type: none;"><li class="ul-custom-merge-field"><a data-event="merge" data-value="drop2" style = "text-decoration: none;text-overflow: ellipsis;display: block;overflow: hidden;white-space: nowrap;"class="">Last name Last name Last name Last name Last name </a></li></ul></li>';
+  	  */ /* remove these */
+  dropdown = '<ul class = "dropdown-menu note-check ul-custom-scroll agile">' + dropdown.html() + '</ul>' ;
   var tmpl = $.summernote.renderer.getTemplate();
   // Initialize tinymce;
    $.summernote.addPlugin({
@@ -389,7 +356,7 @@ function init_tinymce()
           },
          "hello" : function(event, modules_editor, layoutInfo, value) {
            console.log("OMG");
-           
+           $('.agile').show()
           /*  var selection = document.getSelection();
            var cursorPos = selection.anchorOffset;
            var oldContent =$("#content").code();
@@ -406,7 +373,11 @@ function init_tinymce()
          },
          "merge" : function(event, modules_editor, layoutInfo, value) {
              console.log("OMG");
-             
+             if(value == undefined){
+            	 $('.agile').show();
+            	 return;
+             }
+             $('.agile').removeAttr("style");
              var $editable=layoutInfo.editable();
              modules_editor.insertText($editable,value);
 
