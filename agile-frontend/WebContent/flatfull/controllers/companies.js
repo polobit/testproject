@@ -17,6 +17,8 @@ var CompaniesRouter = Backbone.Router
 	
 		"company/:id" : "companyDetails",
 		
+		"company-edit" : "editCompany",
+		
 		"company-view-prefs" : "companyViewPrefs"
 	},
 	
@@ -391,9 +393,66 @@ var CompaniesRouter = Backbone.Router
 	},
 	
 	/**
-	 * Custom views, its not called through router, but by cookies
+	 * Takes the contact to continue contact form to edit it. If
+	 * attempts to edit a contact without defining contact detail view,
+	 * navigates to contacts page. Gets the contact to edit, from its
+	 * list view or its custom view, if not found in both downloads from
+	 * server side (Contact database).
 	 */
-	// Id = custom-view-id, view_data = custom view data if already
-	// availabel, url = filter url if there is any filter
-	//customView : function(id, view_data, url, tag_id, is_lhs_filter, postData){}
+	editCompany : function(contact)
+	{
+		var company = null;
+
+		// Takes back to companies if companies detailview is not defined
+		if (!this.companyDetailView || !this.companyDetailView.model.id)
+		{
+			this.navigate("companies", { trigger : true });
+			return;
+		}
+
+		// If company detail view is defined the get current company
+		// model id
+		var id = this.companyDetailView.model.id;
+
+		if (this.companyDetailView && this.companyDetailView.model.id)
+		{
+			company = this.companyDetailView.model.toJSON();
+		}
+
+		// If contact list is defined the get contact to edit from the
+		// list
+		else if (this.companiesListView && this.companiesListView.collection && this.companiesListView.collection.get(id))
+		{
+			company = this.companiesListView.collection.get(id).toJSON();
+		}
+
+		// If contact list view and custom view list is not defined then
+		// download contact
+		else if (!company)
+		{
+			// Download contact for edit since list is not defined
+			var company_details_model = Backbone.Model.extend({ url : function()
+			{
+				return '/core/api/contacts/' + id;
+			} });
+
+			var model = new company_details_model();
+
+			model.fetch({ success : function(contact)
+			{
+
+				// Call Contact edit again with downloaded contact
+				// details
+				App_Companies.editCompany(company.toJSON());
+			} });
+
+			return;
+		}
+
+		// Contact Edit - take him to continue-contact form
+		add_custom_fields_to_form(company, function(company)
+		{
+				deserialize_contact(company, 'continue-company');
+		}, company.type);
+	},
 });

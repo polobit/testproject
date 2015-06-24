@@ -511,14 +511,22 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 								}
 								else
 								{
+										if(is_person){
+											// update contacts-details view
+											if (App_Contacts.contactDetailView)
+															App_Contacts.contactDetailView.model = data;
 
-												// update contacts-details view
-												if (App_Contacts.contactDetailView)
-																App_Contacts.contactDetailView.model = data;
+											// App_Contacts.contactDetails(data.id,data);
+											// App_Contacts.navigate("contact/"+data.id);
+											App_Contacts.navigate("contact/" + data.id, { trigger : true });
+										} else {
+											// update contacts-details view
+											if (App_Companies.companyDetailView)
+												App_Companies.companyDetailView.model = data;
 
-												// App_Contacts.contactDetails(data.id,data);
-												// App_Contacts.navigate("contact/"+data.id);
-												App_Contacts.navigate("contact/" + data.id, { trigger : true });
+											App_Companies.navigate("company/" + data.id, { trigger : true });
+										}
+												
 								}
 
 								// Hides the modal
