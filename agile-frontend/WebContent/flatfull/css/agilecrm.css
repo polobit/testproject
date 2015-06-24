@@ -109,19 +109,6 @@ ul.tagsinput li.tag > span > a:first-child {
  display:inline !important;
 }
 
-/* starting hack for new ui contact details big tag will come down  */
-#added-tags-ul li {
-	text-align:left;
-	white-space:normal;
-}
-
-#added-tags-ul li.tag > span > a:first-child {
-	display:inline!important
-}
-
-/* ending hack for new ui contact details big tag will come down  */
-
-
 /* core.css,tooltip.css,bootstrap-min.css*/
 .underline {
 	border-bottom: 1px solid whiteSmoke;
