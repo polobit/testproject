@@ -58,6 +58,8 @@ function addNewPortlet(portlet_type,p_name){
 		obj.name="Stats Report";
 	else if(p_name=="Leaderboard")
 		obj.name="Leaderboard";
+	else if(p_name=="RevenueGraph")
+		obj.name="Revenue Graph";
 	obj.portlet_type=portlet_type;
 	var max_row_position=0;
 	if(gridster!=undefined)
@@ -123,7 +125,8 @@ function addNewPortlet(portlet_type,p_name){
 		json['category']=categoryJson;
 		obj.size_y=2;
 		obj.size_x=2;
-	}
+	}else if(portlet_type=="DEALS" && p_name=="RevenueGraph")
+		json['duration']="this-quarter";
 	var portlet = new BaseModel();
 	portlet.url = 'core/api/portlets/addPortlet';
 	portlet.set({ "prefs" : JSON.stringify(json) }, { silent : true });
@@ -493,7 +496,7 @@ function getStartAndEndDatesOnDue(duration){
 		var qtrMonth = currentMonth%3;
 		if(qtrMonth==0)
 			qtrMonth=3;
-		d.setMonth((currentMonth-qtrMonth)+1);
+		d.setMonth((currentMonth-qtrMonth));
 		d.setDate(1);
 	}
 	
@@ -503,7 +506,7 @@ function getStartAndEndDatesOnDue(duration){
 		var qtrMonth = currentMonth%3;
 		if(qtrMonth==0)
 			qtrMonth=3;
-		d.setMonth((currentMonth-qtrMonth)+4);
+		d.setMonth((currentMonth-qtrMonth)+3);
 		d.setDate(1);
 	}
 	
@@ -514,10 +517,10 @@ function getStartAndEndDatesOnDue(duration){
 		if(qtrMonth==0)
 			qtrMonth=3;
 		if(currentMonth<=3){
-			d.setMonth(10);
+			d.setMonth(9);
 			dt.setFullYear(dt.getFullYear()-1);
 		}else{
-			d.setMonth((currentMonth-qtrMonth)-2);
+			d.setMonth((currentMonth-qtrMonth)-3);
 		}
 		d.setDate(1);
 	}
@@ -527,9 +530,9 @@ function getStartAndEndDatesOnDue(duration){
 		var currentMonth = d.getMonth();
 		var qtrMonth = currentMonth%3;
 		if(currentMonth<=3){
-			d.setMonth(1);
+			d.setMonth(0);
 		}else{
-			d.setMonth((currentMonth-qtrMonth)+1);
+			d.setMonth((currentMonth-qtrMonth));
 		}
 		d.setDate(1);
 	}

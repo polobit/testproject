@@ -145,6 +145,12 @@ function set_p_portlets(base_model){
 			$('.gridster > div:visible',this.el).html($(App_Portlets.leaderboardView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 		else
 			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.leaderboardView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Revenue Graph"){
+		App_Portlets.revenueGraphView = new Base_Model_View({ model : base_model, template : "portlets-deals-revenue-graph-model", tagName : 'div' });
+		if($('.gridster > div:visible > div',this.el).length==0)
+			$('.gridster > div:visible',this.el).html($(App_Portlets.revenueGraphView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+		else
+			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.revenueGraphView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 	}
 	//var itemView = new Base_Model_View({ model : base_model, template : "portlets-model", tagName : 'div', });
 
@@ -904,6 +910,70 @@ function set_p_portlets(base_model){
 			if(base_model.get('is_minimized'))
 				$(this).hide();
 			
+			setPortletContentHeight(base_model);
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Revenue Graph"){
+			$(this).attr('id','p-body-'+column_position+'-'+row_position);
+			
+			var start_date_str = base_model.get('settings').duration+'-start';
+			var end_date_str = base_model.get('settings').duration+'-end';
+
+			var selector=$(this).attr('id');
+			var pipeline_id = 0;
+			var url='core/api/opportunity/stats/details/'+pipeline_id+'?min='+getStartAndEndDatesOnDue(start_date_str)+'&max='+(getStartAndEndDatesOnDue(end_date_str)-1)+'';
+
+			fetchPortletsGraphData(url,function(data){
+				if(data.status==406){
+					// Show cause of error in saving
+					$save_info = $('<div class="portlet-error-message inline-block"><small><p class="text-base" style="color:#B94A48;"><i>'
+							+ data.responseText
+							+ '</i></p></small></div>');
+					
+					$('#'+selector).html($save_info).show();
+					
+					return;
+				}
+				var sortedKeys = [];
+				var categories = [];
+				$.each(data,function(k,v){
+					sortedKeys.push(k);
+				});
+				sortedKeys.sort();
+				var sortedData = {};
+				$.each(sortedKeys,function(index,value){
+					sortedData[''+value] = data[''+value];
+				});
+				var series;
+				// Iterates through data and adds keys into
+				// categories
+				$.each(sortedData, function(k, v){
+					// Initializes series with names with the first
+					// data point
+					if (series == undefined){
+						var index = 0;
+						series = [];
+						$.each(v, function(k1, v1){
+							var series_data = {};
+							series_data.name = k1;
+							series_data.data = [];
+							series[index++] = series_data;
+						});
+					}
+					// Fill Data Values with series data
+					$.each(v, function(k1, v1){
+						// Find series with the name k1 and to that,
+						// push v1
+						var series_data = find_series_with_name(series, k1);
+						series_data.data.push(v1);
+					});
+					var dt = new Date(k * 1000);
+					categories.push(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+
+				});
+				
+				portletDealRevenueGraph(selector,series,base_model,categories);
+				
+				addWidgetToGridster(base_model);
+			});
 			setPortletContentHeight(base_model);
 		}
 		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Emails Opened"){
@@ -2039,4 +2109,107 @@ function emailsOpenedPieChart(selector,data,emailsSentCount,emailsOpenedCount){
 }
 function showUserName(obj){
 	alert("hai");
+}
+function portletDealRevenueGraph(selector,series,base_model,categories){
+	
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
+			if(series==undefined && categories!=undefined && categories.length==0){
+				$('#'+selector).html('<div class="portlet-error-message">No deals found</div>');
+				return;
+			}
+			$('#'+selector).highcharts({
+		        chart: {
+		            type: 'areaspline',
+		            marginRight: 20,
+		            //plotBorderWidth: 1,
+		            //plotBorderColor: '#F4F4F5'
+		        },
+		        title: {
+		            text: ''
+		        },
+		        xAxis: {
+		        	//type: 'datetime',
+		        	categories: categories,
+			        /*dateTimeLabelFormats: {
+			            //don't display the dummy year  month: '%e.%b',
+			        	day: '%e.%b'
+			        },*/
+			        //minTickInterval: 24 * 3600 * 1000,
+			        gridLineWidth : 1,
+					gridLineColor : '#F4F4F5',
+					labels : {
+						style : {
+							color : '#98a6ad',
+							fontSize : '11px'
+						},
+						formatter: function(){
+							return Highcharts.dateFormat('%b.%Y',this.value);
+						},
+					},
+					lineWidth : 0,
+					tickWidth : 0,
+					tickmarkPlacement: 'on'
+		        },
+		        yAxis: {
+		            min: 0,
+		            title: {
+		                text: ''
+		            },
+		            gridLineWidth : 1,
+		    		gridLineColor : '#F4F4F5',
+		    		labels : {
+		    			style : {
+		    				color : '#98a6ad',
+		    				fontSize : '11px'
+		    			}
+		    		}
+		        },
+		        plotOptions: {
+		        	series : {
+		    			borderWidth : 2,
+		    			borderColor : '#23b7e5',
+		    			marker: {
+		    				symbol: 'circle'
+		    			}
+		    		},
+		    		areaspline: {
+		    			marker: {
+		    				lineWidth: 1,
+		                    lineColor: null, // inherit from series
+		                    radius: 2
+		    			}
+		    		}
+		        },
+		        series: series,
+		        exporting: {
+			        enabled: false
+			    },
+			    tooltip : {
+					borderWidth : 1,
+					backgroundColor : '#313030',
+					shadow : false,
+					borderColor: '#000',
+					borderRadius : 3,
+					style : {
+						color : '#EFEFEF'
+					},
+					formatter: function(){
+						return Highcharts.dateFormat('%b.%Y',this.x)+'<br/><font color='+this.series.color+'>'+this.series.name+':</font>'+this.y;
+					},
+					useHTML: true
+				},
+				legend : {
+					itemStyle : {
+						fontSize : '10px',
+						color : '#98a6ad'
+					},
+					borderWidth : 0,
+					layout : 'vertical',
+					floating : true,
+					align : 'right',
+					verticalAlign : 'top'
+				},
+				colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
+		    });
+		});
 }

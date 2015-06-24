@@ -681,7 +681,7 @@ public class OpportunityUtil
 		calendar.set(Calendar.MILLISECOND, 0);
 
 		Date firstDayOfMonth = calendar.getTime();
-		String mmYY = Math.round(firstDayOfMonth.getTime() / 1000) + "";
+		String mmYY = (firstDayOfMonth.getTime() / 1000) + "";
 
 		Double oldTotal = 0D, oldPipeline = 0D;
 

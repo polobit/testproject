@@ -701,7 +701,7 @@ function pieTasks(params)
  */
 function dealsLineChart()
 {
-	showAreaSpline('core/api/opportunity/stats/details?min=0&max=1543842319', 'total-pipeline-chart', 'Monthly Deals', 'Total Value');
+	showDealAreaSpline('core/api/opportunity/stats/details?min=0&max=1543842319', 'total-pipeline-chart', 'Monthly Deals', 'Total Value');
 }
 
 /**
@@ -710,7 +710,7 @@ function dealsLineChart()
  */
 function dealsLineChartByPipeline(pipeline_id)
 {
-	showAreaSpline('core/api/opportunity/stats/details/'+pipeline_id+'?min=0&max=1543842319', 'total-pipeline-chart', 'Monthly Deals', 'Total Value');
+	showDealAreaSpline('core/api/opportunity/stats/details/'+pipeline_id+'?min=0&max=1543842319', 'total-pipeline-chart', 'Monthly Deals', 'Total Value');
 }
 
 /**
@@ -859,6 +859,158 @@ function showAreaSpline(url, selector, name, yaxis_name, show_loading)
 			            year: '%b'
 			        },
 			        minTickInterval: 24 * 3600 * 1000
+			    },
+			    yAxis: {
+			        title: {
+			            text: yaxis_name
+			        },
+			        plotLines: [
+			            {
+			                value: 0,
+			                width: 1,
+			                color: '#808080'
+			            }
+			        ],
+			        min: 0
+			    },
+			    //Tooltip to show details,
+			    ongraphtooltip: {
+			        formatter: function(){
+			            return'<b>'+this.series.name+'</b><br/>'+Highcharts.dateFormat('%e.%b',
+			            this.x)+': '+this.y.toFixed(2);
+			        }
+			    },
+			    legend: {
+			        layout: 'vertical',
+			        align: 'right',
+			        verticalAlign: 'top',
+			        x: -10,
+			        y: 100,
+			        borderWidth: 0
+			    },
+			    //Sets the series of data to be shown in the graph,shows total 
+			    //and pipeline
+			    series: series,
+			    exporting: {
+			        enabled: false
+			    }
+			});
+		});
+	});
+}
+/**
+ * Function to build deal's line chart to compare total value and pipeline value.
+ * <p>
+ * Data obtained to render deal's line chart will be:
+ * [{closed-date:{total:value, pipeline: value},...]
+ * </p>
+ * 
+ * @param url - 
+ *            to fetch json data inorder to render graph.
+ * @param selector - 
+ *            id or class of an element where charts should render.
+ * @param name - 
+ *            title of the chart.
+ * @param yaxis_name - 
+ *            name for y-axis
+ * @param show_loading
+ * 				shows loading image
+ */
+function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
+{
+	
+	// Show loading image if required
+	if(typeof show_loading === 'undefined')
+	{
+		// Old calls were not showing loading image..
+	}
+	else
+		$('#' + selector).html(getRandomLoadingImg());
+	
+	
+	var chart;
+
+	// Loads Highcharts plugin using setupCharts and sets up line chart in the
+	// callback
+	setupCharts(function()
+	{
+
+		// Loads statistics details from backend i.e.,[{closed
+		// date:{total:value, pipeline: value},...]
+		fetchReportData(url, function(data)
+		{
+
+			// Categories are closed dates
+			var categories = [];
+			
+			// Data with total and pipeline values
+			var series;
+			
+			var sortedKeys = [];
+			$.each(data,function(k,v){
+				sortedKeys.push(k);
+			});
+			sortedKeys.sort();
+			var sortedData = {};
+			$.each(sortedKeys,function(index,value){
+				sortedData[''+value] = data[''+value];
+			});
+
+			// Iterates through data and adds keys into
+			// categories
+			$.each(sortedData, function(k, v)
+			{
+
+				// Initializes series with names with the first
+				// data point
+				if (series == undefined)
+				{
+					var index = 0;
+					series = [];
+					$.each(v, function(k1, v1)
+					{
+						var series_data = {};
+						series_data.name = k1;
+						series_data.data = [];
+						series[index++] = series_data;
+					});
+				}
+
+				// Fill Data Values with series data
+				$.each(v, function(k1, v1)
+				{
+
+					// Find series with the name k1 and to that,
+					// push v1
+					var series_data = find_series_with_name(series, k1);
+					series_data.data.push(v1);
+				});
+				var dt = new Date(k * 1000);
+				categories.push(Highcharts.dateFormat('%b.%Y',Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()))+'');
+			});
+
+			// After loading and processing all data, highcharts are initialized
+			// setting preferences and data to show
+			chart = new Highcharts.Chart({
+			    chart: {
+			        renderTo: selector,
+			        type: 'areaspline',
+			        marginRight: 130,
+			        marginBottom: 25
+			    },
+			    title: {
+			        text: name,
+			        x: -20//center
+			    },
+			    xAxis: {
+			        //type: 'datetime',
+			        /*dateTimeLabelFormats: {
+			            //don't display the dummy year  month: '%e.%b',
+			            year: '%b'
+			        },*/
+			        //minTickInterval: 24 * 3600 * 1000
+			        categories: categories,
+			        tickmarkPlacement: 'on'
 			    },
 			    yAxis: {
 			        title: {

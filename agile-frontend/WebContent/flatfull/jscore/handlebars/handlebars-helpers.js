@@ -5597,6 +5597,8 @@ $(function()
 			icon_name = "icon-speedometer";
 		else if (p_name == 'Leaderboard')
 			icon_name = "icon-trophy";
+		else if (p_name == 'Revenue Graph')
+			icon_name = 'icon-graph';
 		return icon_name;
 	});
 	/**
