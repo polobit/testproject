@@ -10,7 +10,11 @@ $(function()
 			if (this.checked == true)
 				renderFullCalenarEvents(ownerids);
 			else
+			{
+				ownerids = getOwnerIdsFromCookie(true);
 				removeFullCalendarEvents(ownerids);
+			}
+
 		}
 
 		if (calendar == "google")
