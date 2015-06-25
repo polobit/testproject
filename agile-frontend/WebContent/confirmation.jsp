@@ -446,7 +446,8 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    String domain = NamespaceManager.get();
 					    String fromEmail = "noreply@agilecrm.com";
 					    
-					    if(StringUtils.isNotBlank(unsubscribeEmail))
+					    // From email as given in Workflow
+					    if(StringUtils.isNotBlank(unsubscribeEmail) && !StringUtils.equalsIgnoreCase(unsubscribeEmail, "null"))
 					    {
 					    	fromEmail = unsubscribeEmail;
 					    }
