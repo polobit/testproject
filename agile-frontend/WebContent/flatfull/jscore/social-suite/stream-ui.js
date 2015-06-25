@@ -152,7 +152,7 @@ function initializeSocialSuite()
 							// Display keyword field.
 							if (Stream_Type == "Search")
 							{
-								document.getElementById('search_stream_keyword').innerHTML = '<div class="remove-keyword"><input id="keyword" name="keyword" type="text" class="required" required="required" autocapitalize="off" placeholder="Search Keyword..." value=""></div>';
+								document.getElementById('search_stream_keyword').innerHTML = '<div class="remove-keyword"><div class="row"><div class="control-group col-md-5"><span class="controls"><input id="keyword" name="keyword" type="text" class="required form-control" required="required" autocapitalize="off" placeholder="Search Keyword..." value="" autofocus></span></div></div></div>';
 							}
 							else
 							{

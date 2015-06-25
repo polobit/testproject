@@ -5879,6 +5879,8 @@ $(function()
 	{
 		var url = '/core/api/forms/form?formId=' + id;
 		var form = $.ajax({ type : 'GET', url : url, async : false, dataType : 'json' }).responseText;
+		if(!form)
+			return new Handlebars.SafeString("?");
 		form = JSON.parse(form);
 		var formName = form.formName;
 		return new Handlebars.SafeString(formName);

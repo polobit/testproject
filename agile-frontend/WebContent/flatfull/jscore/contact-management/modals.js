@@ -145,6 +145,14 @@ $(function(){
 	    	remove_validation_errors('companyModal');
 	    	$('#companyModal input').val('');
 	    });
+
+	    //hide modal when click on upgrade
+
+	    $('.hideCurrentModal').live('click', function () {
+	    	$(this).closest(".modal").hide();
+	    	if($("body").hasClass("modal-open"))
+	    		$("body").removeClass("modal-open");
+	    });
 });
 
 /**
