@@ -1283,8 +1283,8 @@ public class OpportunityUtil
 	List<Opportunity> ownDealsList = new ArrayList<Opportunity>();
 	try
 	{
-	    ownDealsList = dao.ofy().query(Opportunity.class).filter("won_date >= ", minTime)
-		    .filter("won_date <= ", maxTime).list();
+	    ownDealsList = dao.ofy().query(Opportunity.class).filter("milestone", "Won").filter("won_date >= ", minTime)
+		    .filter("won_date <= ", maxTime).filter("archived", false).list();
 	}
 	catch (Exception e)
 	{
@@ -1375,8 +1375,9 @@ public class OpportunityUtil
 	int count = 0;
 	try
 	{
-	    count = dao.ofy().query(Opportunity.class).filter("won_date >= ", minTime).filter("won_date <= ", maxTime)
-		    .filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId)).count();
+	    count = dao.ofy().query(Opportunity.class).filter("milestone", "Won").filter("won_date >= ", minTime).filter("won_date <= ", maxTime)
+			    .filter("archived", false).filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
+			    .count();
 	}
 	catch (Exception e)
 	{
@@ -1400,7 +1401,7 @@ public class OpportunityUtil
     {
 	try
 	{
-	    return dao.ofy().query(Opportunity.class).filter("won_date >= ", minTime).filter("won_date <= ", maxTime)
+	    return dao.ofy().query(Opportunity.class).filter("milestone", "Won").filter("won_date >= ", minTime).filter("won_date <= ", maxTime)
 		    .filter("archived", false).filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
 		    .list();
 	}
