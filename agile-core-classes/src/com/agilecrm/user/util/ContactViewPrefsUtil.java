@@ -173,9 +173,10 @@ public class ContactViewPrefsUtil
     private static ContactViewPrefs getDefaultCompanyViewPrefs(AgileUser agileUser)
     {
 	LinkedHashSet<String> fields_set = new LinkedHashSet<String>();
-	fields_set.add("name");
+	fields_set.add("basic_info");
 	fields_set.add("star_value");
 	fields_set.add("owner");
+	fields_set.add("created_time");
 	ContactViewPrefs viewPrefs = new ContactViewPrefs(agileUser.id, fields_set);
 	viewPrefs.type = ContactViewPrefs.Type.COMPANY;
 	viewPrefs.save();

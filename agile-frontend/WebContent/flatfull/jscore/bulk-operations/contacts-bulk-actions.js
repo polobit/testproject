@@ -61,7 +61,10 @@ $(function()
 		});
 
 		// Navigate to show form
-		Backbone.history.navigate("bulk-owner", { trigger : true });
+		if(company_util.isCompany())
+			Backbone.history.navigate("company-bulk-owner", { trigger : true });
+		else
+			Backbone.history.navigate("bulk-owner", { trigger : true });
 
 		/**
 		 * Changes the owner by sending the new owner name as path parameter and
@@ -651,7 +654,10 @@ $(function()
 
 		});
 
-		Backbone.history.navigate("bulk-email", { trigger : true });
+		if(company_util.isCompany())
+			Backbone.history.navigate("company-bulk-email", { trigger : true });
+		else
+			Backbone.history.navigate("bulk-email", { trigger : true });
 
 		$('#bulk-send-email').die().live('click', function(e)
 		{
@@ -959,8 +965,19 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 	if ($(clicked_ele).attr('checked') == 'checked')
 	{
 		$('body').find('#bulk-actions').css('display', 'inline-block');
-
-		if (isBulk && total_available_contacts != App_Contacts.contactsListView.collection.length)
+		
+		if(company_util.isCompany()){
+			if (isBulk && total_available_contacts != App_Companies.companiesListView.collection.length)
+			{
+			$('body')
+					.find('#bulk-select')
+					.css('display', 'block')
+					.html(
+							"Selected " + App_Companies.companiesListView.collection.length + " companies. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + total_available_contacts + " companies</a>");
+			$('#bulk-select').css("display","inline");
+			}
+		} else {
+			if (isBulk && total_available_contacts != App_Contacts.contactsListView.collection.length)
 			{
 			$('body')
 					.find('#bulk-select')
@@ -969,6 +986,9 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 							"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + total_available_contacts + " contacts</a>");
 			$('#bulk-select').css("display","inline");
 			}
+		}
+
+		
 	}
 	else
 	{
@@ -1005,13 +1025,18 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
  */
 function getAvailableContacts()
 {
-	if (App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
-	{
-		//
-		current_view_contacts_count = App_Contacts.contactsListView.collection.toJSON()[0].count;
-		return current_view_contacts_count;
-	}
-
+		if (company_util.isCompany() && App_Companies.companiesListView.collection.toJSON()[0] && App_Companies.companiesListView.collection.toJSON()[0].count)
+		{
+			//
+			current_view_contacts_count = App_Companies.companiesListView.collection.toJSON()[0].count;
+			return current_view_contacts_count;
+		} else if (App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
+		{
+			//
+			current_view_contacts_count = App_Contacts.contactsListView.collection.toJSON()[0].count;
+			return current_view_contacts_count;
+		}
+	 
 	return App_Contacts.contactsListView.collection.toJSON().length;
 }
 
@@ -1094,8 +1119,11 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 		if (callback && typeof (callback) === "function")
 			callback(data);
 
-		// On save back to contacts list
-		Backbone.history.navigate("contacts", { trigger : true });
+		if(!company_util.isCompany())
+			// On save back to contacts list
+			Backbone.history.navigate("contacts", { trigger : true });
+		else
+			Backbone.history.navigate("companies", { trigger : true });
 
 		// If no_noty is given as error message, neglect noty
 		if (error_message === "no_noty")

@@ -6133,6 +6133,27 @@ $(function()
 		return new Handlebars.SafeString(el);
 	});
 	
+	Handlebars
+	.registerHelper(
+			'companies_count',
+			function()
+			{
+				var count_message;
+				if (this[0] && this[0].count && (this[0].count != -1))
+				{
+
+					if (this[0].count > 9999 && (readCookie('company_filter') || readData('dynamic_company_filter')))
+						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+
+					else
+						count_message = "<small> (" + this[0].count + " Total) </small>";
+				}
+				else
+					count_message = "<small> (" + this.length + " Total) </small>";
+
+				return new Handlebars.SafeString(count_message);
+			});
+	
 });
 
 // helper function return created time for event

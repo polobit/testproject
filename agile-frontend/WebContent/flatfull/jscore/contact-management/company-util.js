@@ -2,7 +2,15 @@
 	
 	
 	company_util.isCompany = function(){
-		return (App_Companies.companyDetailView && Current_Route == "company/" + App_Companies.companyDetailView.model.get('id'));
+		
+		if(App_Companies.companyDetailView && Current_Route == "company/" + App_Companies.companyDetailView.model.get('id'))
+			return true;
+		if(App_Companies.companies && Current_Route == "companies")
+			return true;
+		if(Current_Route.indexOf('company')>-1)
+			return true;
+		
+		return false;
 	};
 	
 	company_util.updateDocumentsList = function(document, isCompany){
