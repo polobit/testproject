@@ -52,7 +52,7 @@ $(function(){
 		
 		
 		// Add placeholder and date picker to date custom fields
-		$('.date_input').attr("placeholder",CURRENT_USER_PREFS.dateFormat);
+		$('.date_input').attr("placeholder","Select Date");
     
 		$('.date_input').datepicker({
 			format: CURRENT_USER_PREFS.dateFormat
