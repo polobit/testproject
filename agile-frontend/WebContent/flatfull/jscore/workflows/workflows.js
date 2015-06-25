@@ -68,7 +68,7 @@ $(function(){
            
     	// Check if the form is valid
     	if (!isValidForm('#workflowform')) {
-  		$('#workflowform').find("span.help-inline").prev('input').focus();
+    		$('#workflowform').find("span.help-inline").not(':hidden').prev('input').focus();
     		return false;
     	}
     	
