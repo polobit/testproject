@@ -167,7 +167,7 @@ public class HomeServlet extends HttpServlet
 
 			domainUser.setInfo(DomainUser.LOGGED_IN_TIME, new Long(System.currentTimeMillis() / 1000));
 			setUserInfoTimezone(req, domainUser.id);
-			createOnlineCalendarPrefs(domainUser);
+			domainUser = createOnlineCalendarPrefs(domainUser);
 			domainUser.save();
 		}
 		catch (Exception e)
@@ -268,7 +268,7 @@ public class HomeServlet extends HttpServlet
 		}
 	}
 
-	private void createOnlineCalendarPrefs(DomainUser user)
+	private DomainUser createOnlineCalendarPrefs(DomainUser user)
 	{
 		OnlineCalendarPrefs onlinePrefs = OnlineCalendarUtil.getCalendarPrefs(user.id);
 		if (onlinePrefs == null)
@@ -282,7 +282,25 @@ public class HomeServlet extends HttpServlet
 			{
 				onlinePrefs = new OnlineCalendarPrefs(OnlineCalendarUtil.getScheduleid(user.name), user.id);
 			}
+			user.schedule_id = onlinePrefs.schedule_id;
 			onlinePrefs.save();
 		}
+		else
+		{
+			if (StringUtils.isBlank(user.schedule_id) || !(onlinePrefs.schedule_id.equalsIgnoreCase(user.schedule_id)))
+			{
+				try
+				{
+					user.schedule_id = onlinePrefs.schedule_id;
+					return user;
+				}
+				catch (Exception e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return user;
 	}
 }
