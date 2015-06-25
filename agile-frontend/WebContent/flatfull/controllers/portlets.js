@@ -57,6 +57,8 @@ function addNewPortlet(portlet_type,p_name){
 		obj.name="Task Report";
 	else if(p_name=="StatsReport")
 		obj.name="Stats Report";
+	else if(p_name=="MiniCalendar")
+		obj.name="Mini Calendar";
 	obj.portlet_type=portlet_type;
 	var max_row_position=0;
 	if(gridster!=undefined)

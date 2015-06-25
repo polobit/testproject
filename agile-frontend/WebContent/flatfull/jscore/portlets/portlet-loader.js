@@ -1848,41 +1848,30 @@ function minicalendar(el)
 			.js(
 					LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
 							{
-						$('#calendar_container').fullCalendar({
+						$('#calendar_container',el).fullCalendar({
 								 
 							    events: '/core/api/events',
 							  
 							    eventRender: function (event, element, view) { 
-							    	 var year = event.start.getFullYear(), month = event.start.getMonth() + 1, date = event.start.getDate();
+							    	if(view.)
+									var year = event.start.getFullYear(), month = event.start.getMonth() + 1, date = event.start.getDate();
 					                   var result = year + '-' + (month < 10 ? '0' + month : month) + '-' + (date < 10 ? '0' + date : date);
 					                   $(element).addClass(result);
 					                   var ele = $('.fc-day'+ date +''),count=$('.' + result).length;
 					                   $(ele).find('.viewMore').remove();
 									   $('.fc-event').hide();
+									  //var eve= $('.fc-event');//.hide();
 					                   if ( count> 0) {
-					                       $('.' + result + ':gt(2)').remove();                          
-					                       $(ele).find('.fc-day-number').after('<small class="viewMore edit-hover" style="color:blue;">'+ count+'</small>');
-										   
+					                      // $('.' + result + ':gt(2)').remove();                          
+					                       $(ele).find('.fc-day-number').after('<small class="viewMore" style="color:blue;" onmouseout="noshow(this)" onmouseover="showevents(this,'+event.start.getTime()+','+event.end.getTime()+')">'+ count+'<div class="eventshow"></div></small>');
 
 					                   } 
-									  
-					                  
-							    },
-								
-								  
-							    eventAfterAllRender: function (view) {
-						               if (view.name == 'month') {
-						                   $('td.fc-day').each(function () {
-						                       var EventCount = $('.' + $(this).attr('data-date')).length;
-						                       if (EventCount == 0)
-						                           $(this).find('.viewMore').remove();
-						                   });
-						               }
-											 $('.viewMore').onmouseover=function(){
-										   $('.viewMore').after('<div>'+event.title+'</div>')
-									   }
+									  										// $(element).tooltip({title: event.title});   
 
-									   }
+					                  
+							    
+								}
+								
 							    	//editable:true,
 							    	//selectable:true
 							
@@ -1891,3 +1880,31 @@ function minicalendar(el)
 
 							});
 }
+
+function showevents(el,start,end)
+{
+	/*var date=$(el).parent().find('.fc-day-number').html();
+	var div='<div class="eventshow">P</div>';
+	$.ajax({ type : 'GET', url : '/core/api/events?start='+start+ "&end="+end, async:false, dataType: 'json',
+				success: function(data){
+					$.each(data,function(index){
+						console.log(data[index].title);
+						div=$(div).text(data[index].title);
+					});
+				} });
+		$(el).append(div);*/
+		//var div='<div class="eventshow"></div>';
+		var c=$(el).find('.eventshow');
+		$(el).find('.fc-event-title').show();
+		var a=new Date(start);
+		month=a.getMonth()+1;
+		var b= a.getFullYear() + '-' + (month < 10 ? '0' + month : month) + '-' + (a.getDate() <10 ? '0' + a.getDate() : a.getDate());
+		c.append($(el).parents('.fc-view-month').find('.'+b).find('.fc-event-title'));
+		//$(el).append(div);
+	   
+   }
+   
+   function noshow(el)
+   {
+	   $(el).find('.fc-event-title').hide();
+   }
