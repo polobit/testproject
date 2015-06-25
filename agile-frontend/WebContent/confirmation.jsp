@@ -334,6 +334,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 			    String tag = request.getParameter("t");
 			    String email = request.getParameter("email");
 			    String campaign_name = request.getParameter("c_name");
+			    String unsubscribeEmail = request.getParameter("unsubscribe_email");
 			    
 			    // Used to send as from name in confirmation email
 			    String company = request.getParameter("company");
@@ -445,10 +446,15 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    String domain = NamespaceManager.get();
 					    String fromEmail = "noreply@agilecrm.com";
 					    
-					    DomainUser owner = DomainUserUtil.getDomainOwner(domain);
-					    
-					    if(owner != null)
-							fromEmail = owner.email;
+					    if(StringUtils.isNotBlank(unsubscribeEmail)))
+					    	fromEmail = unsubscribeEmail;
+					    else{
+					    	
+					    	DomainUser owner = DomainUserUtil.getDomainOwner(domain);
+						    
+							if(owner != null)
+								fromEmail = owner.email;
+						}
 					    
 					    map.put("domain", domain);
 					    

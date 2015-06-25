@@ -68,7 +68,7 @@ $(function(){
            
     	// Check if the form is valid
     	if (!isValidForm('#workflowform')) {
-  		$('#workflowform').find("input.required").focus();
+  		$('#workflowform').find("span.help-inline").prev('input').focus();
     		return false;
     	}
     	
@@ -79,10 +79,12 @@ $(function(){
         
         var unsubscribe_tag = $('#unsubscribe-tag').val().trim();
         var unsubscribe_action = $('#unsubscribe-action').val();
+        var unsubscribe_email = $('#unsubscribe-email').val().trim();
         
         var unsubscribe_json ={
         		               		"tag":unsubscribe_tag,
-        		               		"action":unsubscribe_action
+        		               		"action":unsubscribe_action,
+        		               		"unsubscribe_email": unsubscribe_email
         		               }
         
         // Check for valid name
