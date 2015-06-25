@@ -10,12 +10,12 @@ public class PlanRestrictedException extends WebApplicationException
     {
 
 	super(Response.status(Response.Status.NOT_ACCEPTABLE)
-		.entity(reason + ". Please <a href=\"#subscribe\" data-dismiss=\"modal\">upgrade</a>").build());
+		.entity(reason + ". Please <a href=\"#subscribe\" class=\"hideModal\">upgrade</a>").build());
     }
 
     public PlanRestrictedException(String reason, boolean attachUpgradeMessage)
     {
 	super(Response.status(Response.Status.NOT_ACCEPTABLE)
-		.entity(reason + (attachUpgradeMessage ? ". Please <a href=\"#subscribe\"  data-dismiss=\"modal\">upgrade</a>" : "")).build());
+		.entity(reason + (attachUpgradeMessage ? ". Please <a href=\"#subscribe\"  class=\"hideModal\">upgrade</a>" : "")).build());
     }
 }
