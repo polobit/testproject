@@ -446,10 +446,12 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    String domain = NamespaceManager.get();
 					    String fromEmail = "noreply@agilecrm.com";
 					    
-					    if(StringUtils.isNotBlank(unsubscribeEmail)))
+					    if(StringUtils.isNotBlank(unsubscribeEmail))
+					    {
 					    	fromEmail = unsubscribeEmail;
-					    else{
-					    	
+					    }
+					    else
+					    {
 					    	DomainUser owner = DomainUserUtil.getDomainOwner(domain);
 						    
 							if(owner != null)
