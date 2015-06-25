@@ -1190,8 +1190,10 @@ color:#1f2427!important;
 
 .tagsinput .close
 {
-	float:none;
-	vertical-align:middle;
+	 float: none;
+  position: relative;
+  top: -2px;
+  vertical-align: middle;
 }
 
 /*hack for same grid */
@@ -1332,7 +1334,8 @@ min-width:50%;
 }
 
 #added-tags-ul li.tag > span > a:first-child {
-  display:inline!important
+  display:inline!important;
+  word-break:break-word;
 }
 
 /* ending hack for new ui contact details big tag will come down  */
