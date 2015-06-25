@@ -323,7 +323,7 @@ function removeFullCalendarEvents(ownerid)
 
 }
 
-function getOwnerIdsFromCookie()
+function getOwnerIdsFromCookie(uncheckedagile)
 {
 	var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
 	var agile_event_owners = '';
@@ -333,6 +333,8 @@ function getOwnerIdsFromCookie()
 
 		var owners = eventFilters.owner_ids;
 
+		if (uncheckedagile && owners.length >= 1)
+			owners = [];
 		owners.push(CURRENT_AGILE_USER.id);
 		if (owners && owners.length > 0)
 		{
