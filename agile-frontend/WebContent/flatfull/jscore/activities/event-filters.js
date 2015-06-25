@@ -20,7 +20,7 @@ $(function()
 
 	$(".calendar_user_check").die().live('click', function(e)
 	{
-		checkBothCalWhenNoCalSelected();
+		// checkBothCalWhenNoCalSelected();
 		createRequestUrlBasedOnFilter();
 		// loadFullCalednarOrListView();
 		var user_id = $(this).val();
@@ -76,14 +76,6 @@ function createRequestUrlBasedOnFilter()
 	var calendars_user_val = [];
 	var event_list_type = '';
 
-	try
-	{
-		calendars_user_val.push(CURRENT_AGILE_USER.id);
-	}
-	catch (err)
-	{
-		console.log("error in create request URL");
-	}
 	$('.calendar_check').each(function()
 	{
 		if (this.checked)
@@ -113,9 +105,9 @@ function createRequestUrlBasedOnFilter()
 	var json_obj = {};
 	json_obj.cal_type = calendars_val;
 	json_obj.owner_ids = calendars_user_val;
-	if (event_list_type)
-		json_obj.event_type = event_list_type;
-
+	/*
+	 * if (event_list_type) json_obj.event_type = event_list_type;
+	 */
 	createCookie('event-lhs-filters', JSON.stringify(json_obj));
 
 }
@@ -158,31 +150,27 @@ function buildCalendarLhsFilters()
 			});
 		}
 
-		if (readCookie("agile_calendar_view"))
-		{
-
-			if (list_event_type)
-				$("#event_time").val(list_event_type);
-		}
-
+		/*
+		 * if (readCookie("agile_calendar_view")) {
+		 * 
+		 * if (list_event_type) $("#event_time").val(list_event_type); }
+		 */
 	}
 	else
 	{
-		$('.calendar_user_check').each(function()
-		{ // loop through each checkbox
-			if ($(this).val() == CURRENT_AGILE_USER.id)
-				this.checked = true;
-		});
+		/*
+		 * $('.calendar_user_check').each(function() { // loop through each
+		 * checkbox if ($(this).val() == CURRENT_AGILE_USER.id) this.checked =
+		 * true; });
+		 */
 		$('.calendar_check').each(function()
 		{ // loop through each checkbox
 			this.checked = true;
 		});
 
-		if (readCookie("agile_calendar_view"))
-		{
-			$("#event_time").val("");
-		}
-
+		/*
+		 * if (readCookie("agile_calendar_view")) { $("#event_time").val(""); }
+		 */
 	}
 
 }
@@ -342,7 +330,10 @@ function getOwnerIdsFromCookie()
 	if (eventFilters)
 	{
 		var type_of_cal = eventFilters.cal_type;
+
 		var owners = eventFilters.owner_ids;
+
+		owners.push(CURRENT_AGILE_USER.id);
 		if (owners && owners.length > 0)
 		{
 			$.each(owners, function(index, value)

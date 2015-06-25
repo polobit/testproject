@@ -145,17 +145,25 @@ function showCalendar()
 									{
 										var type_of_cal = eventFilters.cal_type;
 										var owners = eventFilters.owner_ids;
+
+										$.each(type_of_cal, function(index, value)
+										{
+											if (value == 'agile')
+												owners.push(CURRENT_AGILE_USER.id);
+										});
+
 										if (owners && owners.length > 0)
 										{
 											$.each(owners, function(index, value)
 											{
+
 												if (index >= 1)
 													agile_event_owners += ",";
 												agile_event_owners += value;
 											});
 										}
 
-										if ((type_of_cal && type_of_cal.length != 2 && type_of_cal[0] == 'google') || type_of_cal.length == 0)
+										if ((type_of_cal.length == 1 && type_of_cal[0] == 'google' && owners.length == 1 && owners[0] == CURRENT_AGILE_USER.id) || type_of_cal.length == 0 && owners.length == 0)
 										{
 											$("#loading_calendar_events").hide();
 											return;
