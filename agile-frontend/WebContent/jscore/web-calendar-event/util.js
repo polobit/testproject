@@ -307,7 +307,7 @@ function save_web_event(formId, confirmBtn)
 	});
 
 	// Add selected parameter which are out of form
-	web_calendar_event["name"] = "Save in DB";
+	web_calendar_event["name"] = appointmenttype;
 	// web_calendar_event["date"] = Selected_Date;
 	web_calendar_event["slot_time"] = Selected_Time;
 	web_calendar_event["domainUserId"] = User_Id;
