@@ -4,11 +4,15 @@ $(function()
 	{
 		createRequestUrlBasedOnFilter();
 		var calendar = $(this).val();
-		var ownerids = getOwnerIdsFromCookie();
+		var ownerids = '';
 		if (calendar == "agile")
 		{
 			if (this.checked == true)
+			{
+				ownerids = getOwnerIdsFromCookie(true);
 				renderFullCalenarEvents(ownerids);
+			}
+
 			else
 			{
 				ownerids = getOwnerIdsFromCookie(true);
