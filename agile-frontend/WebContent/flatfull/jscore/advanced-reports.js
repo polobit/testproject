@@ -47,7 +47,7 @@ function initFunnelCharts(callback)
 	fillSelect("filter", "core/api/filters", undefined, function(){
 		$('#filter').change(function(){callback();});
 		
-	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All");
+	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Contacts");
 	
 	callback();
 }

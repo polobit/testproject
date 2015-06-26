@@ -127,10 +127,43 @@ public class TagSearchUtil
 	if (endTimeMilli < startTimeMilli)
 	    return null;
 
+	int i = 0;
 	do
 	{
 	    // Get End Time by adding a day, week or month
-	    startCalendar.add(type, 1);
+		if(i == 0 && type == Calendar.MONTH)
+		{
+		//Get first month end date and set mid night time i.e 23:59:59
+		startCalendar.set(Calendar.DAY_OF_MONTH, startCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		startCalendar.set(Calendar.HOUR_OF_DAY, startCalendar.getActualMaximum(Calendar.HOUR_OF_DAY));
+		startCalendar.set(Calendar.MINUTE, startCalendar.getActualMaximum(Calendar.MINUTE));
+		startCalendar.set(Calendar.SECOND, startCalendar.getActualMaximum(Calendar.SECOND));
+		}
+		else if(type == Calendar.MONTH)
+		{
+		//Get month end date and set mid night time i.e 23:59:59
+		startCalendar.set(Calendar.DAY_OF_MONTH, startCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		startCalendar.set(Calendar.HOUR_OF_DAY, startCalendar.getActualMaximum(Calendar.HOUR_OF_DAY));
+		startCalendar.set(Calendar.MINUTE, startCalendar.getActualMaximum(Calendar.MINUTE));
+		startCalendar.set(Calendar.SECOND, startCalendar.getActualMaximum(Calendar.SECOND));
+		}
+		else
+		{
+		// Get End Time by adding a day or week and set mid night time i.e 23:59:59
+		startCalendar.add(type, 1);
+		startCalendar.setTimeInMillis(startCalendar.getTimeInMillis()-(24*60*60*1000));
+		startCalendar.set(Calendar.HOUR_OF_DAY, startCalendar.getActualMaximum(Calendar.HOUR_OF_DAY));
+		startCalendar.set(Calendar.MINUTE, startCalendar.getActualMaximum(Calendar.MINUTE));
+		startCalendar.set(Calendar.SECOND, startCalendar.getActualMaximum(Calendar.SECOND));
+		}
+		
+		if(endTimeMilli < startCalendar.getTimeInMillis())
+		{
+		startCalendar.set(Calendar.DAY_OF_MONTH, endCalendar.get(Calendar.DAY_OF_MONTH));
+		startCalendar.set(Calendar.HOUR_OF_DAY, endCalendar.getActualMaximum(Calendar.HOUR_OF_DAY));
+		startCalendar.set(Calendar.MINUTE, endCalendar.getActualMaximum(Calendar.MINUTE));
+		startCalendar.set(Calendar.SECOND, endCalendar.getActualMaximum(Calendar.SECOND));
+		}
 
 	    // Get Tag Count for each tag
 	    JSONObject tagsCount = new JSONObject();
@@ -143,7 +176,10 @@ public class TagSearchUtil
 	    // Put time and tags array
 	    tagsCountJSONObject.put(startTimeMilli / 1000 + "", tagsCount);
 
-	    startTimeMilli = startCalendar.getTimeInMillis();
+	    startTimeMilli = startCalendar.getTimeInMillis()+1000;
+	    startCalendar.setTimeInMillis(startCalendar.getTimeInMillis()+1000);
+	    
+	    i++;
 	}
 	while (startTimeMilli <= endTimeMilli);
 
