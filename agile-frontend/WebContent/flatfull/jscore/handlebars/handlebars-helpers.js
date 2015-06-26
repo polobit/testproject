@@ -634,7 +634,15 @@ $(function()
 			return new Date(parseInt(date)).format(format, 0);
 		}
 		// date form milliseconds
-		var d = new Date(parseInt(date) * 1000).format(format);
+		var d = "";
+		try
+		{
+			d= new Date(parseInt(date) * 1000).format(format);
+		}
+		catch (err)
+		{
+			console.log("Invalid date for custom field.");
+		}
 
 		return d
 
