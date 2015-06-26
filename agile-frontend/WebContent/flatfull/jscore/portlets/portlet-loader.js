@@ -222,11 +222,14 @@ function set_up_portlets(el, portlets_el){
  *            Element on which mouse entered (portlet header)
  */
 function showPortletIcons(el){
-	// Shows portlet icons on hover
-	$(el).find('div.portlet_header_icons').show();
+	// Shows portlet icons on mouse hover
+	$(el).find('div.portlet_header_icons').removeClass('vis-hide');
 
 	// Changes width of portlet name
-	$(el).find('div.portlet_header_name').css({ "width" : "65%" });
+	//$(el).find('div.portlet_header_name').css({ "width" : "65%" });
+
+	//Hide the leaderboard small text content in header part
+	$(el).find('.portlet-header-small-text').hide();
 }
 /**
  * Expand the portlet header name width.
@@ -241,11 +244,14 @@ function showPortletIcons(el){
  */
 function hidePortletIcons(el)
 {
-	// Hide portlet icons on hover
-	$(el).find('div.portlet_header_icons').hide();
+	// Hide portlet icons on mouse hover
+	$(el).find('div.portlet_header_icons').addClass('vis-hide');
 
 	// Changes width of portlet name
-	$(el).find('div.portlet_header_name').css({ "width" : "80%" });
+	//$(el).find('div.portlet_header_name').css({ "width" : "80%" });
+
+	//Show the leaderboard small text content in header part
+	$(el).find('.portlet-header-small-text').show();
 }
 function enablePortletSorting(el){
 	// Loads jquery-ui to get sortable functionality on portlets
@@ -965,8 +971,12 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
 	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Leaderboard"){
-	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
-	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.leaderboard[parseInt(pos)].render().el));
+	        		var sizey = parseInt($('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			if(sizey==2 || sizey==3)
+	    				topPos += 50;
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+	    			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.leaderboard[parseInt(pos)].render().el));
 	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Stats Report"){
 	        		/*$('#'+el.split("-save-modal")[0]).parent().find('.stats_report_portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.stats_report_portlet_body').html($(App_Portlets.statsReport[parseInt(pos)].render().el));*/
@@ -1750,4 +1760,45 @@ $('#task-report-user-select-none').die().live('click',function(e){
 		e.preventDefault();
 		$('#task-report-user-list').multiSelect('deselect_all');
 });
-
+function getDurationForPortlets(duration){
+	var time_period = 'Today';
+		if (duration == 'yesterday'){
+			time_period = 'Yesterday';
+		}else if (duration == '1-day' || duration == 'today'){
+			time_period = 'Today';
+		}else if (duration == '2-days'){
+			time_period = 'Last 2 Days';
+		}else if (duration == 'this-week'){
+			time_period = 'This Week';
+		}else if (duration == 'last-week'){
+			time_period = 'Last Week';
+		}else if (duration == '1-week'){
+			time_period = 'Last 7 Days';
+		}else if (duration == 'this-month'){
+			time_period = 'This Month';
+		}else if (duration == 'last-month'){
+			time_period = 'Last Month';
+		}else if (duration == '1-month'){
+			time_period = 'Last 30 Days';
+		}else if (duration == 'this-quarter'){
+			time_period = 'This Quarter';
+		}else if (duration == 'last-quarter'){
+			time_period = 'Last Quarter';
+		}else if (duration == '3-months'){
+			time_period = 'Last 3 Months';
+		}else if (duration == '6-months'){
+			time_period = 'Last 6 Months';
+		}else if (duration == '12-months'){
+			time_period = 'Last 12 Months';
+		}else if (duration == 'today-and-tomorrow'){
+			time_period = 'Today and Tomorrow';
+		}else if (duration == 'all-over-due'){
+			time_period = 'All Over Due';
+		}else if (duration == 'next-7-days'){
+			time_period = 'Next 7 Days';
+		}else if (duration == '24-hours'){
+			time_period = 'Last 24 Hours';
+		}
+		
+		return time_period;
+}

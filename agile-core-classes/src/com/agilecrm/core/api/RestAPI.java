@@ -134,11 +134,13 @@ public class RestAPI
 
 	    // Search contact if email is present else return null
 	    Contact contact = ContactUtil.searchContactByEmail(obj.getString("email"));
+
 	    if (contact == null)
 		return null;
 
 	    // Iterate data by keys ignore email key value pair
 	    Iterator<?> keys = obj.keys();
+	    JSONObject tester = new JSONObject();
 	    while (keys.hasNext())
 	    {
 		String key = (String) keys.next();
@@ -156,8 +158,59 @@ public class RestAPI
 		{
 		    // Create and add contact field to contact
 		    JSONObject json = new JSONObject();
-		    json.put("name", key);
-		    json.put("value", obj.getString(key));
+		    if (key.equals("address"))
+		    {
+
+			String zapaddress = obj.getString(key);
+			JSONObject jsonzap = new JSONObject(zapaddress);
+			String oldaddress = contact.getContactFieldValue("ADDRESS");
+			if (oldaddress == null)
+			{
+			    tester = jsonzap;
+			    json.put("name", key);
+			    json.put("value", "" + tester + "");
+			}
+			else
+			{
+			    JSONObject jsonold = new JSONObject(oldaddress);
+
+			    if (!jsonzap.has("address"))
+			    {
+				if (jsonold.has("address"))
+				    jsonzap.put("address", jsonold.getString("address"));
+			    }
+			    if (!jsonzap.has("city"))
+			    {
+				if (jsonold.has("city"))
+				    jsonzap.put("city", jsonold.getString("city"));
+			    }
+			    if (!jsonzap.has("state"))
+			    {
+				if (jsonold.has("state"))
+				    jsonzap.put("state", jsonold.getString("state"));
+			    }
+			    if (!jsonzap.has("zip"))
+			    {
+				if (jsonold.has("zip"))
+				    jsonzap.put("zip", jsonold.getString("zip"));
+			    }
+			    if (!jsonzap.has("country"))
+			    {
+				if (jsonold.has("country"))
+				    jsonzap.put("country", jsonold.getString("country"));
+			    }
+			    tester = jsonzap;
+			    json.put("name", key);
+			    json.put("value", "" + tester + "");
+			}
+
+		    }
+		    else
+		    {
+			json.put("name", key);
+			json.put("value", obj.getString(key));
+		    }
+
 		    ContactField field = mapper.readValue(json.toString(), ContactField.class);
 		    contact.addProperty(field);
 		}

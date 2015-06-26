@@ -274,7 +274,7 @@
 					{{#if this.length}}	
 						{{#gateway_exists "TWILIO" this}}
 							<a href="#integrations" class="btn btn-sm btn-danger " id="sms-gateway-delete"  data={{id}} >Disable</a>
-								<a href="#sms-gateways/twilio" class="btn btn-sm btn-">Settings</a>
+								<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">Settings</a>
 						{{else}}
 							{{#isAllowedInCurrentPlan "is_sms_gateway_allowed"}}
 					            <div>
