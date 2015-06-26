@@ -9,9 +9,9 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.SearchFilter;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.core.api.search.SearchAPI;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.BuilderInterface;
@@ -734,7 +734,7 @@ public class QueryDocumentUtil
 		return query;
 	}
 
-	public static String constructFilterQuery(ContactFilter filter)
+	public static String constructFilterQuery(SearchFilter filter)
 	{
 		// Construct query based on rules
 		String query = "";

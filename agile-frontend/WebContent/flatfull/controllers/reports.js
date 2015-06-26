@@ -245,7 +245,7 @@ var ReportsRouter = Backbone.Router.extend({
 				head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 				{
 					scramble_input_names($(el).find('div#report-settings'));
-					chainFilters(el, undefined, function()
+					chainFiltersForContact(el, undefined, function()
 					{
 						++count;
 						if (count > 1)
@@ -336,7 +336,7 @@ var ReportsRouter = Backbone.Router.extend({
 				head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/agile.jquery.chained.min.js', LIB_PATH + 'lib/jquery.multi-select.js', function()
 				{
 
-					chainFilters(el, report.toJSON(), function()
+					chainFiltersForContact(el, report.toJSON(), function()
 					{
 						++count
 						if (count > 1)
