@@ -148,12 +148,6 @@ function set_p_portlets(base_model){
 			$('.gridster > div:visible',this.el).html($(App_Portlets.leaderboardView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 		else
 			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.leaderboardView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
-	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Revenue Graph"){
-		App_Portlets.revenueGraphView = new Base_Model_View({ model : base_model, template : "portlets-deals-revenue-graph-model", tagName : 'div' });
-		if($('.gridster > div:visible > div',this.el).length==0)
-			$('.gridster > div:visible',this.el).html($(App_Portlets.revenueGraphView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
-		else
-			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.revenueGraphView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 	}
 	else if(base_model.get('portlet_type')=="ACCOUNT" && base_model.get('name')=="Account Details"){
 		App_Portlets.accountView = new Base_Model_View({ model : base_model, template : "portlets-account-model", tagName : 'div',cursor : true,scroll_symbol:'scroll'});
@@ -161,6 +155,13 @@ function set_p_portlets(base_model){
 			$('.gridster > div:visible',this.el).html($(App_Portlets.accountView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 		else
 			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.accountView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+	}
+	else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Mini Calendar"){
+		App_Portlets.miniCal = new Base_Model_View({ model : base_model, template : "portlets-minicalendar-model", tagName : 'div' });
+		if($('.gridster > div:visible > div',this.el).length==0)
+			$('.gridster > div:visible',this.el).html($(App_Portlets.miniCal.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+		else
+			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.miniCal.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 	}
 	else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="User Activities"){
 		App_Portlets.activitiesView = new Base_Model_View({ model : base_model, template : "portlets-activites-model", tagName : 'div' });
@@ -1009,6 +1010,7 @@ else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position &
 			
 			$(this).html(getRandomLoadingImg());
 			$(this).html($(App_Portlets.activity[parseInt(pos)].render().el));
+		setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Revenue Graph"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 			
@@ -1124,6 +1126,15 @@ else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position &
 				$(this).hide();
 			
 			setPortletContentHeight(base_model);
+		}
+		else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Mini Calendar"){
+			$(this).find('div').html(getRandomLoadingImg());
+			minicalendar($(this));
+			if(base_model.get('is_minimized'))
+				$(this).hide();
+			
+			setPortletContentHeight(base_model);
+		
 		}
 		//addWidgetToGridster(base_model);
 	});

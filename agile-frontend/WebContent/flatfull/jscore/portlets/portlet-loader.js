@@ -1844,17 +1844,42 @@ function getDurationForPortlets(duration){
 
 function minicalendar(el)
 {
+	
 	head
 			.js(
-					LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
+					 LIB_PATH + 'lib/web-calendar-event/datepicker.js' ,CSS_PATH + 'css/web-calendar-event/datepicker.css',function(){
+						
+						$('#calendar_container',el).DatePicker({flat : true,date:'13-06-2015',
+						onChange: function(date) {
+							start=((new Date(date)).getTime())/1000;
+							end=new Date();
+							end.setDate(((new Date(date)).getDate()) + 1 )	;
+							end=end.getTime()/1000;
+							var div='<div class="eventshow">P</div>';
+					$.ajax({ type : 'GET', url : '/core/api/events?start='+start+ "&end="+end, async:false, dataType: 'json',
+				success: function(data){
+					$.each(data,function(index){
+						console.log(data[index].title);
+						div=$(div).text(data[index].title);
+					});
+				} });
+		//$(el).append(div);
+							alert("today is"+date);
+							
+				//return {
+					//disabled: true
+				//}
+						},
+						});
+					/* LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
 							{
 						$('#calendar_container',el).fullCalendar({
+								height : 280px,
 								 
 							    events: '/core/api/events',
 							  
 							    eventRender: function (event, element, view) { 
-							    	if(view.)
-									var year = event.start.getFullYear(), month = event.start.getMonth() + 1, date = event.start.getDate();
+							    										var year = event.start.getFullYear(), month = event.start.getMonth() + 1, date = event.start.getDate();
 					                   var result = year + '-' + (month < 10 ? '0' + month : month) + '-' + (date < 10 ? '0' + date : date);
 					                   $(element).addClass(result);
 					                   var ele = $('.fc-day'+ date +''),count=$('.' + result).length;
@@ -1876,7 +1901,7 @@ function minicalendar(el)
 							    	//selectable:true
 							
 							//console.log("showing full calendar");
-						});
+						}); */
 
 							});
 }
