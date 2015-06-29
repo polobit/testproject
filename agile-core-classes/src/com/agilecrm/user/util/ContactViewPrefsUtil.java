@@ -1,5 +1,6 @@
 package com.agilecrm.user.util;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -117,17 +118,21 @@ public class ContactViewPrefsUtil
     {
 	Objectify ofy = ObjectifyService.begin();
 
-	List<ContactViewPrefs> viewPrefs = null;
+	List<ContactViewPrefs> viewPrefs = ofy.query(ContactViewPrefs.class).list();
 
-	if (type.equalsIgnoreCase(ContactViewPrefs.Type.COMPANY.toString()))
+	List<ContactViewPrefs> result = new ArrayList<ContactViewPrefs>();
+
+	for (ContactViewPrefs viewPref : viewPrefs)
 	{
-	    viewPrefs = ofy.query(ContactViewPrefs.class).filter("type", ContactViewPrefs.Type.COMPANY).list();
+	    if (type.equalsIgnoreCase(viewPref.type.toString())
+		    || (type.equals(CustomFieldDef.SCOPE.CONTACT.toString()) && viewPref.type
+			    .equals(ContactViewPrefs.Type.PERSON)))
+	    {
+		result.add(viewPref);
+	    }
 	}
-	else
-	{
-	    viewPrefs = ofy.query(ContactViewPrefs.class).filter("type!=", ContactViewPrefs.Type.COMPANY).list();
-	}
-	return viewPrefs;
+
+	return result;
     }
 
     public static void handleCustomFieldDelete(CustomFieldDef customFieldDef)
@@ -174,8 +179,8 @@ public class ContactViewPrefsUtil
     {
 	LinkedHashSet<String> fields_set = new LinkedHashSet<String>();
 	fields_set.add("basic_info");
-	fields_set.add("star_value");
 	fields_set.add("owner");
+	fields_set.add("star_value");
 	fields_set.add("created_time");
 	ContactViewPrefs viewPrefs = new ContactViewPrefs(agileUser.id, fields_set);
 	viewPrefs.type = ContactViewPrefs.Type.COMPANY;
