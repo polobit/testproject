@@ -141,7 +141,7 @@ $(function()
 	 * Activates the date picker to the corresponding fields in activity modal
 	 * and activity-update modal
 	 */
-	var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev)
+	var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
 	{
 		// If event start date is changed and end date is less than start date,
 		// change the value of the end date to start date.
@@ -153,8 +153,8 @@ $(function()
 
 	});
 
-	$('#event-date-2').datepicker({ format : 'mm/dd/yyyy' });
-	$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev)
+	$('#event-date-2').datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
+	$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
 	{
 		// If event start date is changed and end date is less than start date,
 		// change the value of the end date to start date.
@@ -165,7 +165,7 @@ $(function()
 		}
 
 	});
-	$('#update-event-date-2').datepicker({ format : 'mm/dd/yyyy' });
+	$('#update-event-date-2').datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
 
 	/**
 	 * Activates time picker for start time to the fields with class

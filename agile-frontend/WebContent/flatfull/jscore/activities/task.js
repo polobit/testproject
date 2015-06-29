@@ -11,26 +11,26 @@ $(function()
 {
 
 	$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
-	$('.update-task-timepicker').timepicker().on('show.timepicker', function(e) 
+	$('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
 	{
-		if($('.update-task-timepicker').attr('value')!="" && $('.update-task-timepicker').attr('value')!=undefined)
+		if ($('.update-task-timepicker').attr('value') != "" && $('.update-task-timepicker').attr('value') != undefined)
 		{
-			if($('.update-task-timepicker').attr('value').split(":")[0]!=undefined)
+			if ($('.update-task-timepicker').attr('value').split(":")[0] != undefined)
 				e.time.hours = $('.update-task-timepicker').attr('value').split(":")[0];
-			if($('.update-task-timepicker').attr('value').split(":")[0]!=undefined)
+			if ($('.update-task-timepicker').attr('value').split(":")[0] != undefined)
 				e.time.minutes = $('.update-task-timepicker').attr('value').split(":")[1];
 		}
 		$('.bootstrap-timepicker-hour').val(e.time.hours);
 		$('.bootstrap-timepicker-minute').val(e.time.minutes);
 	});
 	$('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false });
-	$('.new-task-timepicker').timepicker().on('show.timepicker', function(e) 
+	$('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
 	{
-		if($('.new-task-timepicker').attr('value')!="" && $('.new-task-timepicker').attr('value')!=undefined)
+		if ($('.new-task-timepicker').attr('value') != "" && $('.new-task-timepicker').attr('value') != undefined)
 		{
-			if($('.new-task-timepicker').attr('value').split(":")[0]!=undefined)
+			if ($('.new-task-timepicker').attr('value').split(":")[0] != undefined)
 				e.time.hours = $('.new-task-timepicker').attr('value').split(":")[0];
-			if($('.new-task-timepicker').attr('value').split(":")[0]!=undefined)
+			if ($('.new-task-timepicker').attr('value').split(":")[0] != undefined)
 				e.time.minutes = $('.new-task-timepicker').attr('value').split(":")[1];
 		}
 		$('.bootstrap-timepicker-hour').val(e.time.hours);
@@ -152,7 +152,7 @@ $(function()
 	/**
 	 * Date Picker Activates datepicker for task due element
 	 */
-	$('#task-date-1').datepicker({ format : 'mm/dd/yyyy' });
+	$('#task-date-1').datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
 
 	/**
 	 * Shows a pop-up modal with pre-filled values to update a task
@@ -178,7 +178,7 @@ $(function()
 			}
 			$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
 		});
-
+		$('#update-task-date-1', "#updateTaskForm").datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
 		// Add notes in task modal
 		showNoteOnForm("updateTaskForm", value.notes);
 	}
@@ -420,7 +420,7 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 								App_Calendar.tasksListView.render(true);
 							}
 							else
-								App_Tasks.navigate("task/"+task.id, { trigger : true });
+								App_Tasks.navigate("task/" + task.id, { trigger : true });
 							taskDetailView = data;
 							$("#content").html(getTemplate("task-detail", data.toJSON()));
 							task_details_tab.loadActivitiesView();
@@ -615,10 +615,13 @@ function complete_task(taskId, collection, ui, callback)
 	new_task.url = '/core/api/tasks';
 	new_task.save(taskJSON, { success : function(model, response)
 	{
-		if(Current_Route.indexOf("contact/")>-1){
+		if (Current_Route.indexOf("contact/") > -1)
+		{
 			collection.get(taskId).set(model);
-		}else{
-			collection.remove(model);			
+		}
+		else
+		{
+			collection.remove(model);
 		}
 
 		var due_task_count = getDueTasksCount();
