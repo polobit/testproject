@@ -655,7 +655,7 @@ function custom_Property_JSON(name, type, form_id)
 				if (elem_type == 'checkbox')
 								elem_value = elem.is(':checked') ? 'on' : 'off';
 				else if (elem.hasClass("date_input"))
-								elem_value = new Date(elem.val()).format("mm/dd/yyyy");
+								elem_value = new Date(elem.val()).getTime() / 1000;
 				else
 								elem_value = elem.val();
 
