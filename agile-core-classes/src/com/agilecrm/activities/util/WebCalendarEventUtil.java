@@ -26,6 +26,8 @@ import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Event.EventType;
 import com.agilecrm.activities.WebCalendarEvent;
+import com.agilecrm.activities.util.EventUtil;
+import com.agilecrm.activities.util.GoogleCalendarUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
@@ -742,7 +744,7 @@ public class WebCalendarEventUtil
 			saveMe.slot_time = wce.slot_time;
 
 			// Get assigned slot name
-			wce.name = saveMe.name;
+			// wce.name = saveMe.name;
 
 			// WCE save
 			// saveMe.save();
