@@ -329,7 +329,7 @@ public class QueryDocument<T> implements QueryInterface
 		sortExpressionBuilder = sortExpressionBuilder.setExpression(orderBy).setDirection(
 			SortDirection.ASCENDING);
 	    }
-	    if (orderBy.contains("time"))
+	    if (orderBy.contains("time") || orderBy.equals("last_contacted"))
 	    {
 		sortExpressionBuilder.setDefaultValueDate(SearchApiLimits.MAXIMUM_DATE_VALUE);
 	    }
