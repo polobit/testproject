@@ -216,16 +216,15 @@ $(function(){
 	
 	$('#workflow-unsubscribe-option').die().live('click', function(e){
 		e.preventDefault();
-		//$(this).css('display','none');
-		//$('#workflow-unsubscribe-block').show('slow');
-	});
-	
-	$('#workflow-unsubscribe-block').live('shown', function(){
-		$('#workflow-unsubscribe-option').html('<span><i class="icon-minus"></i></span> Manage Unsubscription');
-	});
-	
-	$('#workflow-unsubscribe-block').live('hidden', function(){
-		$('#workflow-unsubscribe-option').html('<span><i class="icon-plus"></i></span> Manage Unsubscription');
+
+		if($(this).hasClass('collapsed'))
+		{
+			$('#workflow-unsubscribe-option').html('<span><i class="icon-plus"></i></span> Manage Unsubscription');
+			return;
+		}
+		
+		$('#workflow-unsubscribe-option').html('<span><i class="icon-minus"></i></span> Manage Unsubscription')
+		
 	});
 	
 	$('#unsubscribe-action').die().live('change', function(e){
