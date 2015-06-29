@@ -111,7 +111,8 @@ function showCalendar()
 {
 
 	_init_gcal_options();
-	putGoogleCalendarLink();
+	if (!readCookie('calendarDefaultView'))
+		putGoogleCalendarLink();
 	var calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 	$('#' + calendarView).addClass('bg-light');
 	fullCal = $('#calendar_event')
@@ -224,6 +225,7 @@ function showCalendar()
 						],
 						header : { left : 'prev', center : 'title', right : 'next' },
 						defaultView : calendarView,
+						slotEventOverlap : false,
 						viewDisplay : function(view)
 						{
 							createCookie('calendarDefaultView', view.name, 90);
