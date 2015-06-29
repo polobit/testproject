@@ -680,9 +680,9 @@ $(function()
 		
 		var dateString = new Date(date);
 		if(dateString == "Invalid Date")
-			getDateInFormatFromEpoc(date);
+			return getDateInFormatFromEpoc(date);
 		else
-		return dateString.format(CURRENT_USER_PREFS.dateFormat);
+			return dateString.format(CURRENT_USER_PREFS.dateFormat);
 		
 	});
 
