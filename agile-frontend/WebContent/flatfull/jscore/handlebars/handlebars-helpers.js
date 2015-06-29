@@ -677,12 +677,12 @@ $(function()
 	{
 		if(!date)
 			return;
-		format = format.replace(/MM/g, "mmmm").replace(/M/g, "mmm").replace(/DD/g, "dddd").replace(/D/g, "ddd");
+		
 		var dateString = new Date(date);
 		if(dateString == "Invalid Date")
 			getDateInFormatFromEpoc(date);
 		else
-		return dateString.format(format);
+		return dateString.format(CURRENT_USER_PREFS.dateFormat);
 		
 	});
 
