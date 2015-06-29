@@ -49,6 +49,7 @@ String meeting_durations=null;
 List<Long>_multiple_users=new ArrayList<Long>();
 URL ur=new URL(url);
 String d_name=domain_name= NamespaceUtil.getNamespaceFromURL(ur);
+int calendar_wk_start_day=0;
 if(scheduleid.equalsIgnoreCase("calendar")){
     scheduleid=ar[ar.length-1];
 }
@@ -215,6 +216,7 @@ if (scheduleid != null && !multiple_users)
 	      if(online_prefs==null){
 	      meeting_durations=domainUser.meeting_durations;
 	      meeting_types=domainUser.meeting_types;
+	      calendar_wk_start_day=Integer.parseInt(userPrefs.calendar_wk_start_day);
 	      }
 	      else if(online_prefs!=null){
 	    	   meeting_durations=online_prefs.meeting_durations;
@@ -1223,6 +1225,7 @@ ObjectMapper mapper = new ObjectMapper();
 var User_Name = <%=mapper.writeValueAsString(user_name)%>;
 var User_Id = <%=user_id%>;
 var Agile_User_Id = <%=agile_user_id%>;
+var CALENDAR_WEEK_START_DAY=<%=calendar_wk_start_day%>
 var selecteddate="";
 var SELECTED_TIMEZONE="";
 var current_date_mozilla="";
@@ -1284,7 +1287,7 @@ var slot_details=[];
 					// Initialize date picker
 					$('#datepick').DatePicker({ flat : true, date : [
 							'2014-07-6', '2016-07-28'
-					], current : '' + currentDate, format : 'Y-m-d', calendars : 1,starts: 0, mode : 'single', view : 'days', onRender: function(date) {
+					], current : '' + currentDate, format : 'Y-m-d', calendars : 1,starts: CALENDAR_WEEK_START_DAY, mode : 'single', view : 'days', onRender: function(date) {
 						return {
 							disabled: (date.valueOf() < Date.now()-ms),
 							className: date.valueOf() < Date.now()-ms ? 'datepickerNotInMonth' : false
