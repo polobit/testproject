@@ -140,7 +140,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 				var custom_field_elements = $('#' + form_id).find('.custom_field');
 				var custom_fields_in_template = [];
 
-				$.each(custom_field_elements, function(index, element)
+				$.each(custom_field_elements, function(index, element)	
 				{
 								var id = $(element).attr('id'), name = $(element).attr('name');
 								custom_fields_in_template.push(name);
@@ -655,7 +655,7 @@ function custom_Property_JSON(name, type, form_id)
 				if (elem_type == 'checkbox')
 								elem_value = elem.is(':checked') ? 'on' : 'off';
 				else if (elem.hasClass("date_input"))
-								elem_value = new Date(elem.val()).getTime() / 1000;
+								elem_value = new Date(elem.val()).format("mm/dd/yyyy");
 				else
 								elem_value = elem.val();
 

@@ -673,6 +673,15 @@ $(function()
 		
 	});
 
+	Handlebars.registerHelper('stringToHumanDateInFormat', function(date)
+	{
+		if(!date)
+			return;
+		format = format.replace(/MM/g, "mmmm").replace(/M/g, "mmm").replace(/DD/g, "dddd").replace(/D/g, "ddd");
+		return new Date(date).format(format);
+		
+	});
+
 	/**
 	 * Helper function to return the date string converting to local timezone.
 	 */
