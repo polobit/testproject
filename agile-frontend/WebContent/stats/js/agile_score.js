@@ -23,6 +23,7 @@ function agile_addScore(score, callback, email)
 	{
 		if (!agile_guid.get_email())
 		{
+			agile_cookieScore("add", score);
 			return;
 		}
 		else
@@ -47,6 +48,7 @@ function agile_subtractScore(score, callback, email)
 	{
 		if (!agile_guid.get_email())
 		{
+			agile_cookieScore("delete", score);
 			return;
 		}
 		else
@@ -72,6 +74,7 @@ function agile_getScore(callback, email)
 	{
 		if (!agile_guid.get_email())
 		{
+			agile_cookieScore("get");
 			return;
 		}
 		else

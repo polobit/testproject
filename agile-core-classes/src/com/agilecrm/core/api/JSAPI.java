@@ -135,14 +135,13 @@ public class JSAPI
     @Path("contacts")
     @GET
     @Produces("application/x-javascript;charset=UTF-8;")
-    public String createContact(@QueryParam("contact") String json, @QueryParam("id") String apiKey)
+    public String createContact(@QueryParam("contact") String json, @QueryParam("campaigns") String campaignIds, @QueryParam("id") String apiKey)
     {
 	try
 	{
 	    ObjectMapper mapper = new ObjectMapper();
 	    Contact contact = mapper.readValue(json, Contact.class);
 	    System.out.println(mapper.writeValueAsString(contact));
-	    System.out.println(contact);
 
 	    // Get Contact count by email
 	    String email = contact.getContactFieldValue(Contact.EMAIL);
@@ -161,6 +160,8 @@ public class JSAPI
 		    String[] tags = new String[contact.tags.size()];
 		    contact.tags.toArray(tags);
 		    contact.addTags(tags);
+		    if(StringUtils.isNotBlank(campaignIds))
+			JSAPIUtil.subscribeCampaigns(campaignIds, contact);
 		}
 		catch (WebApplicationException e)
 		{
@@ -173,13 +174,14 @@ public class JSAPI
 		{
 		    // If zero, save it
 		    contact.save();
+		    if(StringUtils.isNotBlank(campaignIds))
+			JSAPIUtil.subscribeCampaigns(campaignIds, contact);
 		}
 		catch (PlanRestrictedException e)
 		{
 		    return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_LIMIT_REACHED);
 		}
 	    }
-
 	    return mapper.writeValueAsString(contact);
 	}
 	catch (JsonGenerationException e)

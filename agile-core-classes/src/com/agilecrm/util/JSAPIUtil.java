@@ -7,8 +7,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.googlecode.objectify.Key;
 
 public class JSAPIUtil
@@ -76,5 +78,14 @@ public class JSAPIUtil
 	else if (APIKey.isValidJSKey(key))
 	    return APIKey.getDomainUserKeyRelatedToJSAPIKey(key);
 	return null;
+    }
+
+    public static void subscribeCampaigns(String campaignIds, Contact contact)
+    {
+	String[] campaignIdsArr = campaignIds.split(",");
+	for (int i = 0; i < campaignIdsArr.length; i++)
+	{
+	    WorkflowSubscribeUtil.subscribe(contact, Long.parseLong(campaignIdsArr[i]));
+	}
     }
 }
