@@ -556,3 +556,12 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
 	console.log(selectoption);
 	return selectoption;
 }
+
+function show_templates(ele, target_id)
+{
+	// current value
+	var curValue = $(ele).find(':selected').val();
+
+	// inserts text based on cursor.
+	load_email_templates(curValue);
+}

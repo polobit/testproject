@@ -412,7 +412,7 @@ function loadTinyMCE(name)
 	
 }
 
-function load_email_templates()
+function load_email_templates(subtype)
 {
 	// If not empty, redirect to tinymce
 	if($('#tinyMCEhtml_email').val() !== "")
@@ -422,7 +422,12 @@ function load_email_templates()
 	}
 	
 	var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
-	var new_window = window.open('templates.jsp?id=tinyMCEhtml_email&t=email', 'name',strWindowFeatures);
+	var new_window;
+	if(subtype != undefined)
+		new_window = window.open('templates.jsp?id=tinyMCEhtml_email&t=email&subtype='+subtype, 'name',strWindowFeatures);
+	
+	else
+		new_window = window.open('templates.jsp?id=tinyMCEhtml_email&t=email', 'name',strWindowFeatures);
 	
 	if(window.focus)
 		{
@@ -446,7 +451,10 @@ function generateHTMLEditor(uiFieldDefinition, container) {
 	if(uiFieldDefinition.value != undefined)
 		value = uiFieldDefinition.value;
 
-	var htmlDiv = "<label>HTML: <a href='#' onclick='load_email_templates(); return false;'>(Select a Template / Load from Editor)</a></label><br/><br/>";
+	var htmlDiv = "<label>HTML: <a href='#' onclick='load_email_templates(); return false;'>(Select a Template / Load from Editor)</a>" +
+			"</label><select style='position:relative;float:right;cursor:pointer;margin-right: 10px;' onChange = 'show_templates(this)' ><option value='agile_templates'>" +
+			"Agile Templates</option><option value='user'>User Templates</option><option value='campaign_templates'>" +
+			"Agile Templates</option></select><br/><br/>";
 	
 	/*if(uiFieldDefinition.style)
 		htmlDiv += "<textarea  id='tinyMCE" + textAreaName +"' style='width:100%' name='" + textAreaName + "' rows='13' cols='75'>" + value + "</textarea>";		
@@ -454,6 +462,22 @@ function generateHTMLEditor(uiFieldDefinition, container) {
 	htmlDiv += "<textarea  id='tinyMCE" + textAreaName +"' name='" + textAreaName + "' style='width:100%' rows='13' cols='75'>" + value + "</textarea>";		
 	htmlDiv += "<div style='clear:both;'></div><br/><p style='margin: 0;position: relative;top: 20px;'><i>You can leave empty if you do not wish to send html emails. Plain text emails would be sent. Only HTML emails would be tracked.</i></p>";	
 
+	$(htmlDiv).appendTo(container);	
+}
+
+function generatrTemplates(uiFieldDefinition, container) {
+	
+	var textAreaName = uiFieldDefinition.name;
+	
+	var value = "";
+	if(uiFieldDefinition.value != undefined)
+		value = uiFieldDefinition.value;
+
+	var htmlDiv = "<select style='position:relative;float:right;cursor:pointer;margin-right: 10px;'><option value='agile_templates'>Agile Templates</option><option value='user_templates'>User Templates</option><option value='campaign_templates'>Agile Templates</option></select>";
+	
+	/*if(uiFieldDefinition.style)
+		htmlDiv += "<textarea  id='tinyMCE" + textAreaName +"' style='width:100%' name='" + textAreaName + "' rows='13' cols='75'>" + value + "</textarea>";		
+	else*/
 	$(htmlDiv).appendTo(container);	
 }
 
@@ -598,7 +622,6 @@ function _generateUIFields(selector, ui) {
             //addLabel(uiFieldDefinition.label, container);
             
             generateHTMLEditor(uiFieldDefinition, container);
-            
             continue;
         }
 
@@ -638,6 +661,12 @@ function _generateUIFields(selector, ui) {
            
            $(uiField).appendTo(container);
            continue;
+        }
+        
+        if(uiFieldType == "html_template")
+        {
+        	generatrTemplates (uiFieldDefinition, container);
+            continue;
         }
         
         if(uiFieldType == "milestones")
