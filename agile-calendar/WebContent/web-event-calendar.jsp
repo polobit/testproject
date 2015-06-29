@@ -213,10 +213,10 @@ if (scheduleid != null && !multiple_users)
 	      user_id = domainUser.id;
 	      agile_user_id = agileUser.id;
 	      domain_name = domainUser.domain;
+	      calendar_wk_start_day=Integer.parseInt(userPrefs.calendar_wk_start_day);
 	      if(online_prefs==null){
 	      meeting_durations=domainUser.meeting_durations;
 	      meeting_types=domainUser.meeting_types;
-	      calendar_wk_start_day=Integer.parseInt(userPrefs.calendar_wk_start_day);
 	      }
 	      else if(online_prefs!=null){
 	    	   meeting_durations=online_prefs.meeting_durations;
