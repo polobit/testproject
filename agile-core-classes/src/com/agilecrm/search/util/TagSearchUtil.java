@@ -160,11 +160,12 @@ public class TagSearchUtil
 		{
 		// Get End Time by adding a day or week and set mid night time i.e 23:59:59
 		startCalendar.add(type, 1);
-		startCalendar.setTimeInMillis(startCalendar.getTimeInMillis()-(24*60*60*1000));
+		/*startCalendar.setTimeInMillis(startCalendar.getTimeInMillis()-(24*60*60*1000));
 		startCalendar.set(Calendar.HOUR_OF_DAY, startCalendar.getActualMaximum(Calendar.HOUR_OF_DAY));
 		startCalendar.set(Calendar.MINUTE, startCalendar.getActualMaximum(Calendar.MINUTE));
 		startCalendar.set(Calendar.SECOND, startCalendar.getActualMaximum(Calendar.SECOND));
-		startCalendar.setTimeInMillis(startCalendar.getTimeInMillis()+timezoneOffsetMilliSecs);
+		startCalendar.setTimeInMillis(startCalendar.getTimeInMillis()+timezoneOffsetMilliSecs);*/
+		startCalendar.setTimeInMillis(startCalendar.getTimeInMillis()-1000);
 		}
 		
 		if(endTimeMilli < startCalendar.getTimeInMillis())
