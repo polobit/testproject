@@ -678,7 +678,11 @@ $(function()
 		if(!date)
 			return;
 		format = format.replace(/MM/g, "mmmm").replace(/M/g, "mmm").replace(/DD/g, "dddd").replace(/D/g, "ddd");
-		return new Date(date).format(format);
+		var dateString = new Date(date);
+		if(dateString == "Invalid Date")
+			getDateInFormatFromEpoc(date);
+		else
+		return dateString.format(format);
 		
 	});
 
