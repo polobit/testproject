@@ -919,7 +919,7 @@ function set_p_portlets(base_model){
 
 			var selector=$(this).attr('id');
 			var pipeline_id = 0;
-			var url='core/api/opportunity/stats/details/'+pipeline_id+'?min='+getGMTEpochFromDate(new Date(getStartAndEndDatesOnDue(start_date_str)))+'&max='+getGMTEpochFromDate(new Date(getStartAndEndDatesOnDue(end_date_str)-1))+'';
+			var url='core/api/opportunity/stats/details/'+pipeline_id+'?min='+(getGMTEpochFromDate(new Date(getStartAndEndDatesOnDue(start_date_str)*1000))/1000)+'&max='+((getGMTEpochFromDate(new Date(getStartAndEndDatesOnDue(end_date_str)*1000))/1000)-1)+'';
 
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==406){
