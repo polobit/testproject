@@ -70,21 +70,29 @@ function agile_cookieTags(tags, action)
 function agile_cookieScore(action, score)
 {
 	var cookieScore = agile_read_cookie(agile_guid.cookie_score);
-	switch(action){
-	case "get":
-		return cookieScore;
-	case "add":
-	case "delete":
-		if(cookieScore)
+	if(!cookieScore)
+	{
+		if(action == "add")
 		{
-			cookieScore = parseInt(cookieScore) + parseInt(score);
-			agile_delete_cookie(agile_guid.cookie_score);
-			agile_create_cookie(agile_guid.cookie_score, cookieScore, 365 * 5);
+			agile_create_cookie(agile_guid.cookie_score, score, 365 * 5);
 			return;
 		}
-		agile_create_cookie(agile_guid.cookie_score, parseInt(score), 365 * 5);
-		return;
+		if(action == "get")
+			return 0;
 	}
+	score = parseInt(score);
+	agile_delete_cookie(agile_guid.cookie_score);
+
+	if(action == "get")
+		return parseInt(cookieScore);
+	if(action == "add")
+		cookieScore = parseInt(cookieScore) + score;
+	if(action == "delete")
+		cookieScore = parseInt(cookieScore) - score;
+
+	if(cookieScore != 0)
+		agile_create_cookie(agile_guid.cookie_score, cookieScore.toString(), 365 * 5);
+	return;
 }
 
 /**
@@ -98,24 +106,30 @@ function agile_cookieScore(action, score)
 function agile_cookieCampaigns(action, data)
 {
 	var cookieCampaigns = agile_read_cookie(agile_guid.cookie_campaigns);
-	switch(action){
-	case "get":
-		return cookieCampaigns;
-	case "delete":
-	case "add":
-		if(cookieCampaigns)
-			{
-				cookieCampaigns = cookieCampaigns.split(",");
-				cookieCampaigns = agile_updateCookieCampaigns(action, data, cookieCampaigns);
-				agile_delete_cookie(agile_guid.cookie_campaigns);
-				agile_create_cookie(agile_guid.cookie_campaigns, cookieCampaigns.toString(), 365 * 5);
-				return;
-			}
-		cookieCampaigns = [];
-		cookieCampaigns.push(data.id);
-		agile_create_cookie(agile_guid.cookie_campaigns, cookieCampaigns.toString(), 365 * 5);
-		return;
+	if(!cookieCampaigns)
+	{
+		if(action == "add")
+		{
+			cookieCampaigns = [];
+			cookieCampaigns.push(data.id);
+			agile_create_cookie(agile_guid.cookie_campaigns, cookieCampaigns.toString(), 365 * 5);
+			return;
+		}
+		if(action == "get")
+			return null;
 	}
+	cookieCampaigns = cookieCampaigns.split(",");
+	agile_delete_cookie(agile_guid.cookie_campaigns);
+
+	if(action == "get")
+		return cookieCampaigns;
+	if(action == "add" || action == "delete")
+	{
+		cookieCampaigns = agile_updateCookieCampaigns(action, data, cookieCampaigns);
+		if(cookieCampaigns.length > 0)
+			agile_create_cookie(agile_guid.cookie_campaigns, cookieCampaigns.toString(), 365 * 5);
+	}
+	return;
 }
 
 function agile_updateCookieCampaigns(action, data, cookieCampaigns)
