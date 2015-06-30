@@ -39,8 +39,6 @@ public class AgileFormRedirect extends HttpServlet
 	String urlParameters = sb.toString();
 	URL url = new URL(req.getAttribute("url").toString() + "&" + urlParameters);
 	
-	System.out.println("<..................................................>");
-
 	HttpURLConnection con = (HttpURLConnection) url.openConnection();
 	if (StringUtils.equalsIgnoreCase("GET", req.getMethod()))
 	    con.setRequestMethod("GET");
