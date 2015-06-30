@@ -117,13 +117,13 @@
 			{{#each invoice}}
 				<li class="row-fluid list-group-item r-none b-l-none b-r-none text-base">
 					<a class="pull-left" data-toggle="collapse" href="#collapse-{{invoice_id}}" ><i class="icon icon-plus text-muted text-sm"></i> {{ucfirst status}}</a>
-					<div class="pull-right">$ {{amount}}</div><br>
+					<div class="pull-right">{{currency_code}} {{formatAmount amount}}</div><br>
 					<div id="collapse-{{invoice_id}}" class="collapse text-sm" style="color: rgba(0, 0, 0, 0.5);">
 						{{#isArray lines.line}}						
 							{{#each lines.line}}	
 								{{#if name}}
 									<div class="pull-left">{{name}}</div>					
-									<div class="pull-right">$ {{amount}}</div><br>
+									<div class="pull-right">{{formatAmount amount}}</div><br>
 									{{#if tax1_name}}				
 										<div class="pull-left">{{tax1_name}}</div>
 										<div class="pull-right">{{tax1_percent}}%</div><br>
@@ -137,7 +137,7 @@
 						{{else}}
 							{{#if lines.line.name}}
 								<div class="pull-left">{{lines.line.name}}</div>
-								<div class="pull-right">$ {{lines.line.amount}}</div><br>
+								<div class="pull-right">$ {{formatAmount lines.line.amount}}</div><br>
 								{{#if lines.line.tax1_name}}				
 									<div class="pull-left">{{lines.line.tax1_name}}</div>
 									<div class="pull-right">{{lines.line.tax1_percent}}%</div><br>
@@ -159,13 +159,13 @@
 		{{else}}
 			<li class="row-fluid list-group-item r-none b-l-none b-r-none text-base">
 					<a class="pull-left" data-toggle="collapse" href="#collapse-{{invoice.invoice_id}}" ><i class="icon icon-plus text-muted text-sm"></i> {{ucfirst invoice.status}}</a>
-					<div class="pull-right">{{invoice.amount}}</div><br>
+					<div class="pull-right">{{invoice.currency_code}} {{formatAmount invoice.amount}}</div><br>
 					<div id="collapse-{{invoice.invoice_id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
 						{{#isArray invoice.lines.line}}      
 							{{#each invoice.lines.line}}	
 								{{#if name}}
 									<div class="pull-left">{{name}}</div>					
-									<div class="pull-right">$ {{amount}}</div><br>
+									<div class="pull-right">{{formatAmount amount}}</div><br>
 									{{#if tax1_name}}
 										<div class="pull-left">{{tax1_name}}</div>
 										<div class="pull-right">{{tax1_percent}}%</div><br>
@@ -179,7 +179,7 @@
 						{{else}}
 							{{#if invoice.lines.line.name}}
 								<div class="pull-left">{{invoice.lines.line.name}}</div>
-								<div class="pull-right">$ {{invoice.lines.line.amount}}</div><br>
+								<div class="pull-right">$ {{formatAmount invoice.lines.line.amount}}</div><br>
 								{{#if invoice.lines.line.tax1_name}}				
 									<div class="pull-left">{{invoice.lines.line.tax1_name}}</div>
 									<div class="pull-right">{{invoice.lines.line.tax1_percent}}%</div><br>

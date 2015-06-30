@@ -278,7 +278,7 @@ $(function(){
 	       			
 	       			// Append to the list, when no match is found 
 	       			if ($.inArray(new_tags, old_tags) == -1) 
-	       				$('#added-tags-ul').append('<li  class="tag inline-block btn btn-xs btn-default m-r-xs" style="color:#363f44" data="' + new_tags + '"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/'+ new_tags + '" >'+ new_tags + '</a><a class="close remove-tags" id="' + new_tags + '" tag="'+new_tags+'">&times</a></span></li>');
+	       				$('#added-tags-ul').append('<li  class="tag inline-block btn btn-xs btn-default m-r-xs m-b-xs" style="color:#363f44" data="' + new_tags + '"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/'+ new_tags + '" >'+ new_tags + '</a><a class="close remove-tags" id="' + new_tags + '" tag="'+new_tags+'">&times</a></span></li>');
 	       			
 	       			console.log(new_tags);
 	       			// Adds the added tags (if new) to tags collection

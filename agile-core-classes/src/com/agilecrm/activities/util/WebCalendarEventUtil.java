@@ -728,21 +728,20 @@ public class WebCalendarEventUtil
 			WebCalendarEvent saveMe = new WebCalendarEvent();
 
 			// Assign proper name on basis of slot time duration
-			if (wce.slot_time.compareTo((long) 15) == 0)
-				saveMe.name = meeting_duration.getString("15mins");
-			;
-			if (wce.slot_time.compareTo((long) 30) == 0)
-				saveMe.name = meeting_duration.getString("30mins");
-			;
-			if (wce.slot_time.compareTo((long) 60) == 0)
-				saveMe.name = meeting_duration.getString("60mins");
-			;
+			/*
+			 * if (wce.slot_time.compareTo((long) 15) == 0) saveMe.name =
+			 * meeting_duration.getString("15mins"); ; if
+			 * (wce.slot_time.compareTo((long) 30) == 0) saveMe.name =
+			 * meeting_duration.getString("30mins"); ; if
+			 * (wce.slot_time.compareTo((long) 60) == 0) saveMe.name =
+			 * meeting_duration.getString("60mins"); ;
+			 */
 
 			// Assign slot time
 			saveMe.slot_time = wce.slot_time;
 
 			// Get assigned slot name
-			wce.name = saveMe.name;
+			// wce.name = saveMe.name;
 
 			// WCE save
 			// saveMe.save();

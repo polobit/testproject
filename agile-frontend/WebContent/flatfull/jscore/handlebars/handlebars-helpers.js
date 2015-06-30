@@ -2557,6 +2557,11 @@ $(function()
 		// data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 	});
 
+	Handlebars.registerHelper('formatAmount', function(data){
+		data = parseFloat(data);
+		return data.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+	});
+	
 	Handlebars.registerHelper('QbDateFormat', function(data)
 	{
 
