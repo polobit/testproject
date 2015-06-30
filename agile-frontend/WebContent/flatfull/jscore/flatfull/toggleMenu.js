@@ -29,6 +29,17 @@ $('#app-aside-folded').on('click', function(e) {
 	
 	});
 	
+$(document).ready(function(){
+	if(( $(window).width() ) < 768 ) {
+	$(".nav li a").click(function(){
+	  $("#mobile-menu").delay(2000).trigger("click");
+	});
+	}
+	});
+
+
+
+
 	
 	
 	

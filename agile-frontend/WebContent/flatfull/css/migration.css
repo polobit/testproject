@@ -1331,11 +1331,12 @@ display:none;
 }
 
 @media (max-width:767px){
+
 	.app-details-width {
 	width:100%;
 	}
 
- .fixedicons {
+ .fixedicons,.dockedicons {
  position:static!important;
  }
  
