@@ -659,33 +659,29 @@ public class OpportunityUtil
 	List<Opportunity> opportunitiesList = getOpportunitiesByPipeline(pipelineId, minTime, maxTime);
 	if (opportunitiesList != null && opportunitiesList.size() > 0)
 	{
-		Date startOppDate = null;
+		Calendar startCalendar = Calendar.getInstance();
 		if (minTime == 0)
 		{
-			startOppDate = new Date(opportunitiesList.get(0).close_date * 1000);
+			startCalendar.setTimeInMillis(opportunitiesList.get(0).close_date * 1000);
 		}
 		else
 		{
-			startOppDate = new Date(minTime * 1000);
+			startCalendar.setTimeInMillis(minTime * 1000);
 		}
-		Calendar startCalendar = Calendar.getInstance();
-		startCalendar.setTime(startOppDate);
 		startCalendar.set(Calendar.DAY_OF_MONTH, 1);
 		startCalendar.set(Calendar.HOUR_OF_DAY, 0);
 		startCalendar.set(Calendar.MINUTE, 0);
 		startCalendar.set(Calendar.SECOND, 0);
 		startCalendar.set(Calendar.MILLISECOND, 0);
-		Date endOppDate = null;
+		Calendar endCalendar = Calendar.getInstance();
 		if (maxTime == 1543842319)
 		{
-			endOppDate = new Date(opportunitiesList.get(opportunitiesList.size()-1).close_date * 1000);
+			endCalendar.setTimeInMillis(opportunitiesList.get(opportunitiesList.size()-1).close_date * 1000);
 		}
 		else
 		{
-			endOppDate = new Date(maxTime * 1000);
+			endCalendar.setTimeInMillis(maxTime * 1000);
 		}
-		Calendar endCalendar = Calendar.getInstance();
-		endCalendar.setTime(endOppDate);
 		endCalendar.set(Calendar.DAY_OF_MONTH, 1);
 		endCalendar.set(Calendar.HOUR_OF_DAY, 0);
 		endCalendar.set(Calendar.MINUTE, 0);
