@@ -1,4 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@page import="org.json.JSONObject"%>
 <%@page import="java.util.Calendar"%>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -24,7 +25,20 @@
 <%
 		//String LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
 	String LIB_PATH = "/";
+	
+	String template_json = (String) session.getAttribute("Template_JSON");
+
+	String data = null;
+	if(template_json != null)
+	{
+		System.out.println(template_json);
+		/* JSONArray abc=new JSONArray(template_json);
+		JSONObject a = new JSONObject(abc[0]); */
+		session.removeAttribute("Template_JSON");
+	}
 %>
+
+
 	
 <!-- Bootstrap  -->
 <link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
@@ -38,7 +52,12 @@
 <script type="text/javascript" src="js/designer/tinymce/tinymce.min.js"></script>
 <script type="text/javascript">
 
+var TEMPLATE_JSON = <%=template_json%>
+
+
 var MERGE_FIELDS = {}
+
+//var TEMPLATE_JSON = 
 
 //Read a page's GET URL variables and return them as an associative array.
 function getUrlVars() {
@@ -112,6 +131,7 @@ $(function()
 try{
 		
 	    var textarea_id = getUrlVars()["id"];
+	    var subtype = getUrlVars()["subtype"];
 	    var url = getUrlVars()["url"];
 	
 		// Load HTML into Tiny MCE.
@@ -143,6 +163,15 @@ try{
                     init_tinymce();
 	    			});
 	    }
+	    
+	    if(TEMPLATE_JSON != undefined && subtype != undefined){
+	    	$('#content').val(TEMPLATE_JSON.text);
+	    	var isWarning = should_warn(TEMPLATE_JSON.text);
+			showWarning(isWarning);
+			 init_tinymce();
+			
+	    }
+	    	
 	    
 	    // Show empty editor if none of templates selected
 	    if(window.history.length > 1)

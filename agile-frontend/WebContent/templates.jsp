@@ -1,11 +1,27 @@
 <!DOCTYPE html>
+<%@page import="org.json.JSONObject"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
+<%@page import="javax.servlet.http.HttpSession"%>
 <html lang="en">
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<%
+	
+if ("POST".equalsIgnoreCase(request.getMethod())) {
+    // set in session
+   // redirect to second jsp
+   
+   HttpSession sess = request.getSession(); 
+    System.out.println(request.getParameter("data"));
+    sess.setAttribute("Template_JSON", request.getParameter("data"));
+    
+	return;
+}
+%>
 
 	<%
 		String	template = "pink";
@@ -28,6 +44,8 @@
 	   // To differ email templates vs modal templates
 	   String type = request.getParameter("t");
 	%>
+	
+	
 	
 	<!-- Bootstrap  -->
 	<link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
@@ -100,6 +118,30 @@
 
 // Global variable to reuse obtained email templates json
 var TEMPLATES_JSON = undefined;
+
+function redirect(abc){
+	//window.href
+		
+		console.log(TEMPLATES_JSON);
+		var current_template;
+		$.each(TEMPLATES_JSON, function(name,value){
+			if(value["id"] == abc)
+				current_template = value;
+		});
+		
+		console.log(current_template);
+		
+		$.ajax({
+			  type: "POST",
+			  data: {"data" : JSON.stringify(current_template)},
+			  async:false,
+			  success: function (success) {
+				  //alert(success);
+				  window.location.href=(window.location.origin+"/cd_tiny_mce.jsp?subtype=email");
+			}
+			
+		});
+}
 
 $(function(){
 	
@@ -177,6 +219,14 @@ $(function(){
 		});
 	
 }
+ function fill_template()
+ {   
+     if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete")
+     {   
+         //document.getElementById("div_id").innerHTML=xmlHttp.responseText )
+    	 console.log(TEMPLATES_JSON);
+     }   
+ }
 
 /**
  * Render preview-container with theme previews.
@@ -236,6 +286,26 @@ function getMergeFields(){
 	var merge_fields = window.opener.getMergeFields();
 	return merge_fields;
 }
+
+
+	
+	/* HttpSession sess = request.getSession(); 
+	
+	sess.setAtrribute("Template_JSON",TEMPLATES_JSON); */
+	
+	
+	/* window.location.href=(window.location.origin+"/cd_tiny_mce.jsp?id=email");
+	 //if you want any text box value you can get it like below line. 
+    //just make sure you have specified its "id" attribute
+    var name=TEMPLATES_JSON.text;
+    if (typeof XMLHttpRequest != "undefined")
+    {
+      xmlHttp= new XMLHttpRequest();
+    }
+    var url=window.location.origin+"/cd_tiny_mce.jsp?id=email";
+    xmlHttp.onreadystatechange = fill_template;
+    xmlHttp.open("GET", url, true);
+    xmlHttp.send(null); */
 
 function show_fancy_box(content_array)
 {
@@ -332,7 +402,6 @@ Date.prototype.format=function(e){var t="";var n=Date.replaceChars;for(var r=0;r
 
 <script id="email-preview-collection-template" type="text/x-handlebars-template">
 <table class="table table-striped showCheckboxes panel agile-table" url="">
-
 <thead>
     <tr>
 		<th class="hide header">Id</th>                    
@@ -342,15 +411,12 @@ Date.prototype.format=function(e){var t="";var n=Date.replaceChars;for(var r=0;r
     </tr>
 
 </thead>
-{{#each this}}
-
-
 <tbody id="settings-email-templates-model-list" route="email-template/" class="agile-edit-row">
+{{#each this}}
+{{id}}
 
-<tr onClick() = 'cd_tiny_mce?id=tinyMCEhtml'>
-
+<tr onClick = 'redirect({{id}})' style="cursor:pointer">
 <td class='data hide' data='{{id}}'>{{id}}</td>
-    
 <td>
 		<div class="table-resp">
     		{{name}}
@@ -370,11 +436,8 @@ Date.prototype.format=function(e){var t="";var n=Date.replaceChars;for(var r=0;r
     </td>
 </tr>
 
-</tbody>
-
-
 {{/each}}
-
+</tbody>
 </table>
 </script>
 <script id="email-preview-model-template" type="text/x-handlebars-template">
