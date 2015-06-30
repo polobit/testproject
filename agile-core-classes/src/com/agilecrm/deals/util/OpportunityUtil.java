@@ -660,7 +660,8 @@ public class OpportunityUtil
 	List<Opportunity> opportunitiesList = getOpportunitiesByPipeline(pipelineId, minTime, maxTime);
 	if (opportunitiesList != null && opportunitiesList.size() > 0)
 	{
-		Calendar startCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		Calendar startCalendar = Calendar.getInstance();
+		System.out.println("Start Calendar timezone id-----"+startCalendar.getTimeZone().getID());
 		if (minTime == 0)
 		{
 			startCalendar.setTimeInMillis(opportunitiesList.get(0).close_date * 1000);
@@ -674,7 +675,9 @@ public class OpportunityUtil
 		startCalendar.set(Calendar.MINUTE, 0);
 		startCalendar.set(Calendar.SECOND, 0);
 		startCalendar.set(Calendar.MILLISECOND, 0);
-		Calendar endCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		System.out.println("startCalendar.getTimeInMillis()-----"+startCalendar.getTimeInMillis());
+		Calendar endCalendar = Calendar.getInstance();
+		System.out.println("End Calendar timezone id-----"+endCalendar.getTimeZone().getID());
 		if (maxTime == 1543842319)
 		{
 			endCalendar.setTimeInMillis(opportunitiesList.get(opportunitiesList.size()-1).close_date * 1000);
@@ -688,6 +691,7 @@ public class OpportunityUtil
 		endCalendar.set(Calendar.MINUTE, 0);
 		endCalendar.set(Calendar.SECOND, 0);
 		endCalendar.set(Calendar.MILLISECOND, 0);
+		System.out.println("endCalendar.getTimeInMillis()-----"+endCalendar.getTimeInMillis());
 		long startTimeInMilliSecs = startCalendar.getTimeInMillis();
 		while (startTimeInMilliSecs <= endCalendar.getTimeInMillis())
 		{
@@ -715,7 +719,7 @@ public class OpportunityUtil
 		 */
 		Date opportunityDate = new Date(opportunity.close_date * 1000);
 
-		Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(opportunityDate);
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
