@@ -657,6 +657,15 @@
 		<servlet-name>AgileForm</servlet-name>
 		<url-pattern>/formsubmit</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AgileFormRedirect</servlet-name>
+		<servlet-class>com.thirdparty.forms.AgileFormRedirect</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AgileFormRedirect</servlet-name>
+		<url-pattern>/agileformredirect</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>ShopifyWebhookTrigger</servlet-name>

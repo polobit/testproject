@@ -1,6 +1,10 @@
 package com.thirdparty.forms;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.security.acl.Owner;
@@ -14,6 +18,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +28,7 @@ import org.apache.commons.collections.SetUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpConnection;
 import org.json.JSONArray;
 
 import com.agilecrm.account.APIKey;
@@ -94,9 +101,16 @@ public class AgileForm extends HttpServlet
 		response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Form with name does not exist");
 		return;
 	    }
-
 	    runFormTrigger(contact, newContact, form, formJson);
-	    response.sendRedirect(getNormalizedRedirectURL(agileRedirectURL, contact, request));
+
+	    try
+	    {
+		request.setAttribute("url", getNormalizedRedirectURL(agileRedirectURL, contact, request));
+		request.getRequestDispatcher("/agileformredirect").forward(request, response);
+	    }
+	    catch (ServletException e)
+	    {
+	    }
 	    return;
 	}
 	catch (org.json.JSONException e)
@@ -290,7 +304,8 @@ public class AgileForm extends HttpServlet
 	{
 	    try
 	    {
-		com.googlecode.objectify.Key<DomainUser> owner = getDomainUserKeyFromInputKey(formJson.getString("_agile_api"));
+		com.googlecode.objectify.Key<DomainUser> owner = getDomainUserKeyFromInputKey(formJson
+		        .getString("_agile_api"));
 		if (owner != null)
 		    return result;
 	    }
@@ -363,7 +378,6 @@ public class AgileForm extends HttpServlet
 	    params = "&fwd=cd";
 
 	params = params + TrackClickUtil.appendContactPropertiesToParams(contact);
-
 	return normalizedRedirectURL + params;
     }
 
