@@ -684,7 +684,7 @@ public class OpportunityUtil
 		}
 		else
 		{
-			endCalendar.setTimeInMillis((maxTime * 1000)+(24 * 60 * 60 * 1000));
+			endCalendar.setTimeInMillis(maxTime * 1000);
 		}
 		endCalendar.set(Calendar.DAY_OF_MONTH, 1);
 		endCalendar.set(Calendar.HOUR_OF_DAY, 0);
