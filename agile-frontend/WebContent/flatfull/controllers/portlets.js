@@ -491,7 +491,7 @@ function getStartAndEndDatesOnDue(duration){
 		d.setDate(d.getDate() + 2);
 	
 	//this quarter start
-	if(duration=="this-quarter-start"){
+	if(duration=="this-quarter-start" || duration=="this-and-next-quarter-start"){
 		var currentMonth = d.getMonth();
 		var qtrMonth = currentMonth%3;
 		if(qtrMonth==0)
@@ -541,6 +541,53 @@ function getStartAndEndDatesOnDue(duration){
 	if (duration == "this-month-end"){
 		d.setDate(1);
 		d.setMonth(d.getMonth()+1);
+	}
+
+	//next quarter start
+	if(duration=="next-quarter-start"){
+		var currentMonth = d.getMonth();
+		var qtrMonth = currentMonth%3;
+		if(qtrMonth==0)
+			qtrMonth=3;
+		d.setMonth((currentMonth-qtrMonth)+3);
+		d.setDate(1);
+	}
+	
+	//next quarter end
+	if(duration=="next-quarter-end" || duration=="this-and-next-quarter-end"){
+		var currentMonth = d.getMonth();
+		var qtrMonth = currentMonth%3;
+		if(qtrMonth==0)
+			qtrMonth=3;
+		d.setMonth((currentMonth-qtrMonth)+6);
+		d.setDate(1);
+	}
+
+	//this year start
+	if(duration=="this-year-start"){
+		d.setMonth(d.getMonth()-d.getMonth());
+		d.setDate(1);
+	}
+	
+	//this year end
+	if(duration=="this-year-end"){
+		d.setFullYear(d.getFullYear()+1);
+		d.setMonth(d.getMonth()-d.getMonth());
+		d.setDate(1);
+	}
+
+	//next year start
+	if(duration=="next-year-start"){
+		d.setFullYear(d.getFullYear()+1);
+		d.setMonth(d.getMonth()-d.getMonth());
+		d.setDate(1);
+	}
+	
+	//next year end
+	if(duration=="next-year-end"){
+		d.setFullYear(d.getFullYear()+2);
+		d.setMonth(d.getMonth()-d.getMonth());
+		d.setDate(1);
 	}
 		
 

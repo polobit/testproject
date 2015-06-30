@@ -2143,7 +2143,7 @@ function portletDealRevenueGraph(selector,series,base_model,categories){
 							fontSize : '11px'
 						},
 						formatter: function(){
-							return Highcharts.dateFormat('%b.%Y',this.value);
+							return Highcharts.dateFormat('%b',this.value);
 						},
 					},
 					lineWidth : 0,
@@ -2194,7 +2194,7 @@ function portletDealRevenueGraph(selector,series,base_model,categories){
 						color : '#EFEFEF'
 					},
 					formatter: function(){
-						return Highcharts.dateFormat('%b.%Y',this.x)+'<br/><font color='+this.series.color+'>'+this.series.name+':</font>'+this.y;
+						return Highcharts.dateFormat('%b',this.x)+'<br/><font color='+this.series.color+'>'+this.series.name+':</font>'+this.y;
 					},
 					useHTML: true
 				},

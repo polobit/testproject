@@ -956,6 +956,8 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 				sortedData[''+value] = data[''+value];
 			});
 
+			var min_tick_interval = 1;
+			var dataLength = 0;
 			// Iterates through data and adds keys into
 			// categories
 			$.each(sortedData, function(k, v)
@@ -987,7 +989,17 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 				});
 				var dt = new Date(k * 1000);
 				categories.push(Highcharts.dateFormat('%b.%Y',Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()))+'');
+				dataLength++;
 			});
+
+			if(Math.ceil((dataLength-1)/10)>0)
+			{
+				min_tick_interval = Math.ceil(dataLength/10);
+				if(min_tick_interval==3)
+				{
+					min_tick_interval = 4;
+				}
+			}
 
 			// After loading and processing all data, highcharts are initialized
 			// setting preferences and data to show
@@ -1010,7 +1022,8 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 			        },*/
 			        //minTickInterval: 24 * 3600 * 1000
 			        categories: categories,
-			        tickmarkPlacement: 'on'
+			        tickmarkPlacement: 'on',
+			        minTickInterval : min_tick_interval
 			    },
 			    yAxis: {
 			        title: {

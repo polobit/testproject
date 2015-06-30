@@ -6194,6 +6194,22 @@ $(function()
 		{
 			time_period = 'Last 24 Hours';
 		}
+		else if (duration == 'next-quarter')
+		{
+			time_period = 'Next Quarter';
+		}
+		else if (duration == 'this-and-next-quarter')
+		{
+			time_period = 'This and Next Quarter';
+		}
+		else if (duration == 'this-year')
+		{
+			time_period = 'This Year';
+		}
+		else if (duration == 'next-year')
+		{
+			time_period = 'Next Year';
+		}
 		
 		return time_period;
 	});

@@ -657,6 +657,52 @@ public class OpportunityUtil
 
 	// Returns month (key) and total and pipeline
 	List<Opportunity> opportunitiesList = getOpportunitiesByPipeline(pipelineId, minTime, maxTime);
+	if (opportunitiesList != null && opportunitiesList.size() > 0)
+	{
+		Date startOppDate = null;
+		if (minTime == 0)
+		{
+			startOppDate = new Date(opportunitiesList.get(0).close_date * 1000);
+		}
+		else
+		{
+			startOppDate = new Date(minTime * 1000);
+		}
+		Calendar startCalendar = Calendar.getInstance();
+		startCalendar.setTime(startOppDate);
+		startCalendar.set(Calendar.DAY_OF_MONTH, 1);
+		startCalendar.set(Calendar.HOUR_OF_DAY, 0);
+		startCalendar.set(Calendar.MINUTE, 0);
+		startCalendar.set(Calendar.SECOND, 0);
+		startCalendar.set(Calendar.MILLISECOND, 0);
+		Date endOppDate = null;
+		if (maxTime == 1543842319)
+		{
+			endOppDate = new Date(opportunitiesList.get(opportunitiesList.size()-1).close_date * 1000);
+		}
+		else
+		{
+			endOppDate = new Date(maxTime * 1000);
+		}
+		Calendar endCalendar = Calendar.getInstance();
+		endCalendar.setTime(endOppDate);
+		endCalendar.set(Calendar.DAY_OF_MONTH, 1);
+		endCalendar.set(Calendar.HOUR_OF_DAY, 0);
+		endCalendar.set(Calendar.MINUTE, 0);
+		endCalendar.set(Calendar.SECOND, 0);
+		endCalendar.set(Calendar.MILLISECOND, 0);
+		long startTimeInMilliSecs = startCalendar.getTimeInMillis();
+		while (startTimeInMilliSecs <= endCalendar.getTimeInMillis())
+		{
+			JSONObject totalAndPipeline = new JSONObject();
+			totalAndPipeline.put(TOTAL, 0);
+			totalAndPipeline.put(PIPELINE, 0);
+			String mmYY = (startCalendar.getTimeInMillis() / 1000) + "";
+			dealsObject.put(mmYY, totalAndPipeline);
+			startCalendar.add(Calendar.MONTH, 1);
+			startTimeInMilliSecs = startCalendar.getTimeInMillis();
+		}
+	}
 	for (Opportunity opportunity : opportunitiesList)
 	{
 	    try
