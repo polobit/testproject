@@ -41,7 +41,6 @@ function agile_getCampaigns(callback, email)
 	{
 		if (!agile_guid.get_email())
 		{
-			agile_cookieCampaigns("get");
 			return;
 		}
 		else

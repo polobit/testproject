@@ -74,7 +74,6 @@ function agile_getScore(callback, email)
 	{
 		if (!agile_guid.get_email())
 		{
-			agile_cookieScore("get");
 			return;
 		}
 		else

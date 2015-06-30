@@ -72,19 +72,13 @@ function agile_cookieScore(action, score)
 	var cookieScore = agile_read_cookie(agile_guid.cookie_score);
 	if(!cookieScore)
 	{
-		if(action == "add")
-		{
+		if(action == "add" || action == "delete")
 			agile_create_cookie(agile_guid.cookie_score, score, 365 * 5);
-			return;
-		}
-		if(action == "get")
-			return 0;
+		return;
 	}
 	score = parseInt(score);
 	agile_delete_cookie(agile_guid.cookie_score);
 
-	if(action == "get")
-		return parseInt(cookieScore);
 	if(action == "add")
 		cookieScore = parseInt(cookieScore) + score;
 	if(action == "delete")
@@ -113,16 +107,12 @@ function agile_cookieCampaigns(action, data)
 			cookieCampaigns = [];
 			cookieCampaigns.push(data.id);
 			agile_create_cookie(agile_guid.cookie_campaigns, cookieCampaigns.toString(), 365 * 5);
-			return;
 		}
-		if(action == "get")
-			return null;
+		return;
 	}
 	cookieCampaigns = cookieCampaigns.split(",");
 	agile_delete_cookie(agile_guid.cookie_campaigns);
 
-	if(action == "get")
-		return cookieCampaigns;
 	if(action == "add" || action == "delete")
 	{
 		cookieCampaigns = agile_updateCookieCampaigns(action, data, cookieCampaigns);
