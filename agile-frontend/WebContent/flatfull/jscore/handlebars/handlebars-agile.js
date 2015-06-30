@@ -683,26 +683,36 @@ function getContactCustomProperties(items)
 	if(fields.length>0){
 		if(allCustomFields.length>0){
 			for(var i=0;i<allCustomFields.length;i++){
+				var isFieldExist = false;
 				if(allCustomFields[i].field_type=="FORMULA"){
-					finalFields.push(allCustomFields[i]);
+					if($.inArray(allCustomFields[i], finalFields)==-1)
+						finalFields.push(allCustomFields[i]);
 				}else{
 					for(var j=0;j<fields.length;j++){
 						if(allCustomFields[i].name==fields[j].name){
-							finalFields.push(fields[j]);
+							if($.inArray(fields[j], finalFields)==-1)
+								finalFields.push(fields[j]);
+							isFieldExist = true;
 							break;
+						}
+						if(!isFieldExist){
+							if($.inArray(fields[j], finalFields)==-1)
+								finalFields.push(fields[j]);
 						}
 					}
 				}
 			}
 		}else{
 			for(var k=0;k<fields.length;k++){
-				finalFields.push(fields[k]);	
+				if($.inArray(fields[k], finalFields)==-1)
+					finalFields.push(fields[k]);	
 			}
 		}
 		
 	}else{
 		for(var k=0;k<formulaFields.length;k++){
-			finalFields.push(formulaFields[k]);	
+			if($.inArray(formulaFields[k], finalFields)==-1)
+				finalFields.push(formulaFields[k]);	
 		}
 	}
 	
