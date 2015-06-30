@@ -94,7 +94,7 @@ public class SearchUtil
 		{
 		    doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_time_epoch")
 			    .setNumber(Double.valueOf(contactField.value)));
-		    fields.put(field_name, contactField.value);
+		    fields.put(normalizeTextSearchString(field_name) + "_time", contactField.value);
 		}
 		catch (NumberFormatException e)
 		{

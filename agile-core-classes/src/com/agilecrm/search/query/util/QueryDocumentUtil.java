@@ -232,12 +232,12 @@ public class QueryDocumentUtil
 			}
 
 			// Queries on created or updated times
-			if (lhs.contains("time") && !lhs.contains("tags"))
+			else if (lhs.contains("time") && !lhs.contains("tags"))
 			{
 				query = createTimeQueryEpoch(query, lhs, condition, rhs, rhs_new, joinCondition);
 			}
 
-			if (lhs.contains("time") && lhs.contains("tags"))
+			else if (lhs.contains("time") && lhs.contains("tags"))
 			{
 				query = createTimeQueryEpoch(query, SearchUtil.normalizeTextSearchString(rhs) + "_time",
 						nestedCondition, nestedLhs, nestedRhs, joinCondition);
