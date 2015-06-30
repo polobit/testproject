@@ -12,6 +12,8 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="form-control">
 			<option value="EQUALS" >is</option>
 			<option value="NOTEQUALS" >isn't</option>
+			<option value="DEFINED">is defined</option>
+			<option value="NOT_DEFINED">is not defined</option>
 		</select>
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
@@ -32,6 +34,8 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 			<option value="IS_LESS_THAN">less than</option>
 			<option value="IS_GREATER_THAN">greater than</option>
 			<option value="BETWEEN">between</option>
+			<!--<option value="DEFINED">is defined</option>
+			<option value="NOT_DEFINED">is not defined</option>-->
 		</select>
 		<div class="EQUALS IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
 			<span id="RHS">
@@ -63,6 +67,8 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		<option value="BETWEEN">is between</option>
 		<option value="LAST">in last</option>
 		<option value="NEXT">in next</option>
+		<!--<option value="DEFINED">is defined</option>
+		<option value="NOT_DEFINED">is not defined</option>-->
 	</select>
 	<div class="AFTER BEFORE ON condition_container m-t-xs">
 		<span id="RHS">
@@ -95,6 +101,8 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="form-control">
 			<option value="EQUALS" >is</option>
 			<option value="NOTEQUALS" >isn't</option>
+			<option value="DEFINED">is defined</option>
+			<option value="NOT_DEFINED">is not defined</option>
 		</select>
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
@@ -239,7 +247,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		</div>
 	</div>
 </div>
-<!--div class="control-group form-group lhs-row-filter" >
+<div class="control-group form-group lhs-row-filter" >
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
 		Campaign Status
@@ -257,12 +265,12 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 					<option value="REMOVED">Removed</option>
 					<option value="BOUNCED">Bounced</option>
 					<option value="UNSUBSCRIBED">Unsubscribed</option>
-					<option value="SPAM_REPORTED">Reported Spam</option>
+					<option value="SPAM">Spam Reported</option>
 				</select>
 		
-				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED BOUNCED SPAM_REPORTED condition_container m-t-xs">
+				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED BOUNCED SPAM condition_container m-t-xs">
 					<span id="RHS">
-						<select id="campaign_select" class="required form-control" name="temp1" prev-val="">
+						<select id="campaign_select_master" class="required form-control" name="temp1" prev-val="">
 							<option value="">Select value</option>
 						</select>
 					</span>
@@ -277,12 +285,13 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 					<option value="ACTIVE">Active</option>
 					<option value="DONE">Completed</option>
 					<option value="REMOVED">Removed</option>
-					<option value="BOUNCED">Bounced</option>
+					<option value="HARDBOUNCED">Hard Bounced</option>
+					<option value="SOFTBOUNCED">Soft Bounced</option>
 					<option value="UNSUBSCRIBED">Unsubscribed</option>
-					<option value="SPAM_REPORTED">Reported Spam</option>
+					<option value="SPAM">Spam Reported</option>
 				</select>
 		
-				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED BOUNCED SPAM_REPORTED condition_container m-t-xs">
+				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED HARDBOUNCED SOFTBOUNCED SPAM condition_container m-t-xs">
 					<span id="RHS">
 						<select id="campaign_select" class="required form-control" name="temp1" prev-val="">
 							<option value="">Select value</option>
@@ -293,9 +302,9 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 				<div class="clearfix"></div>
 			</div>
 		</div>
-		<a href="#" class="filter-multiple-add-lhs m-t-xs text-l-none pos-rlt" style="top:-25px" data-name="campaign_status"><i class="icon-plus"></i> Add</a>
+		<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-left text-muted pos-rlt" style="top:-10px" data-name="campaign_status"><i class="icon-plus"></i> Add</a>
 	</div>
-</div-->
+</div>
 <div class="control-group form-group lhs-row-filter" >
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >

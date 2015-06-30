@@ -22,7 +22,7 @@ function loadPortlets(el){
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
 	 */
 	if (!Portlets_View){
-		head.load(FLAT_FULL_UI + "css/misc/agile-portlet.css");
+		head.load(FLAT_FULL_UI + "css/misc/agile-portlet.css" + "?_=" + _AGILE_VERSION);
 		// This flag is used to ensure portlet script are loaded only once in
 		// postrender. It is set to false after portlet setup is initialized
 		is_portlet_view_new = true;
@@ -151,7 +151,7 @@ function set_up_portlets(el, portlets_el){
 						$('#'+this.$resized_widget.attr('id')+' > .portlet_header').width($('#'+this.$resized_widget.attr('id')+' > .portlet_header').width()-scrollbarWidth);
 					else
 						$('#'+this.$resized_widget.attr('id')+' > .portlet_header').css("width","100%");*/
-					$('#'+this.$resized_widget.attr('id')+' > .portlet_header').width(($('#'+this.$resized_widget.attr('id')+' > .portlet_body').find('ul').width()/$('#'+this.$resized_widget.attr('id')+' > .portlet_body').width()*100)+'%');
+					$('#'+this.$resized_widget.attr('id')+' > .portlet_header').find('ul').width(($('#'+this.$resized_widget.attr('id')+' > .portlet_body').find('ul').width()/$('#'+this.$resized_widget.attr('id')+' > .portlet_body').width()*100)+'%');
         		}
         		
 
@@ -222,11 +222,14 @@ function set_up_portlets(el, portlets_el){
  *            Element on which mouse entered (portlet header)
  */
 function showPortletIcons(el){
-	// Shows portlet icons on hover
-	$(el).find('div.portlet_header_icons').show();
+	// Shows portlet icons on mouse hover
+	$(el).find('div.portlet_header_icons').removeClass('vis-hide');
 
 	// Changes width of portlet name
-	$(el).find('div.portlet_header_name').css({ "width" : "65%" });
+	//$(el).find('div.portlet_header_name').css({ "width" : "65%" });
+
+	//Hide the leaderboard small text content in header part
+	$(el).find('.portlet-header-small-text').hide();
 }
 /**
  * Expand the portlet header name width.
@@ -241,11 +244,14 @@ function showPortletIcons(el){
  */
 function hidePortletIcons(el)
 {
-	// Hide portlet icons on hover
-	$(el).find('div.portlet_header_icons').hide();
+	// Hide portlet icons on mouse hover
+	$(el).find('div.portlet_header_icons').addClass('vis-hide');
 
 	// Changes width of portlet name
-	$(el).find('div.portlet_header_name').css({ "width" : "80%" });
+	//$(el).find('div.portlet_header_name').css({ "width" : "80%" });
+
+	//Show the leaderboard small text content in header part
+	$(el).find('.portlet-header-small-text').show();
 }
 function enablePortletSorting(el){
 	// Loads jquery-ui to get sortable functionality on portlets
@@ -484,6 +490,40 @@ function showPortletSettings(el){
 		elData = $('#portletsCallsPerPersonSettingsForm');
 		$("#group-by", elData).find('option[value='+ base_model.get("settings")["group-by"] +']').attr("selected", "selected");
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+		
+		if(base_model.get("settings")["calls-user-list"]!=undefined){
+			var options ='';
+			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+				success: function(data){
+					$.each(data,function(index,domainUser){
+						options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
+					});
+					$('#calls-user-list', elData).html(options);
+					$.each(base_model.get("settings")["calls-user-list"], function(){
+						$("#calls-user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
+					});
+					$('.loading-img').hide();
+				} });
+		}else{
+			var options ='';
+			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+				success: function(data){
+					$.each(data,function(index,domainUser){
+						options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
+					});
+					$('#calls-user-list', elData).html(options);
+					$('.loading-img').hide();
+				} });
+		}
+		$('#ms-calls-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#calls-user-list',elData).multiSelect();
+			$('#ms-calls-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "calls-user-list").attr("id", "calls-user");
+			$('#ms-calls-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-calls-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-calls-user-list', elData).addClass('portlet-user-ms-container');					
+		});
+		
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Task Report"){
 		$('#portletsTaskReportSettingsModal').modal('show');
 		$('#portletsTaskReportSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
@@ -501,6 +541,40 @@ function showPortletSettings(el){
 			$('#tasks-control-group').hide();
 		if(base_model.get("settings").tasks=="completed-tasks")
 			$('#split-by-task-report > option#status').hide();
+
+		if(base_model.get("settings")["task-report-user-list"]!=undefined){
+			var options ='';
+			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+				success: function(data){
+					$.each(data,function(index,domainUser){
+						options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
+					});
+					$('#task-report-user-list', elData).html(options);
+					$.each(base_model.get("settings")["task-report-user-list"], function(){
+						$("#task-report-user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
+					});
+					$('.loading-img').hide();
+				} });
+		}else{
+			var options ='';
+			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+				success: function(data){
+					$.each(data,function(index,domainUser){
+						options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
+					});
+					$('#task-report-user-list', elData).html(options);
+					$('.loading-img').hide();
+				} });
+		}
+		$('#ms-task-report-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#task-report-user-list',elData).multiSelect();
+			$('#ms-task-report-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "task-report-user-list").attr("id", "task-report-user");
+			$('#ms-task-report-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-task-report-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-task-report-user-list', elData).addClass('portlet-user-ms-container');					
+		});
+
 	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Stats Report"){
 		$('#portletsStatsReportSettingsModal').modal('show');
 		$('#portletsStatsReportSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
@@ -731,7 +805,13 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		if(data.get('settings').duration=='yesterday'){
 	        			start_date_str = ''+data.get('settings').duration;
 	        			end_date_str = 'today';
-	        		}else{
+	        		}else if(data.get('settings').duration=='this-week'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-week-end';
+					}else if(data.get('settings').duration=='this-month'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-month-end';
+					}else{
 	        			start_date_str = ''+data.get('settings').duration;
 	        			end_date_str = 'TOMORROW';
 	        		}
@@ -828,19 +908,10 @@ $('.portlet-settings-save-modal').live('click', function(e){
 						users = JSON.stringify(data.get('settings').user);
 					App_Portlets.leaderboard[parseInt(pos)] = new Base_Model_View({ url : '/core/api/portlets/portletLeaderboard?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&revenue='+data.get('settings').category.revenue+'&dealsWon='+data.get('settings').category.dealsWon+'&calls='+data.get('settings').category.calls+'&tasks='+data.get('settings').category.tasks+'&user='+users, template : 'portlets-leader-board-body-model', tagName : 'div',
 						postRenderCallback : function(p_el){
-							$('#ui-id-'+column_position+'-'+row_position+' > .portlet_header').width(($('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').find('ul').width()/$('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').width()*100)+'%');
+							$('#ui-id-'+column_position+'-'+row_position+' > .portlet_header').find('ul').width(($('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').find('ul').width()/$('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').width()*100)+'%');
 						} });
 	        	}
-	        	if(portletCollectionView!=undefined)
-	        		portletCollectionView.collection.fetch();
-	        	if(data.get('name')!="Deals By Milestone" && data.get('name')!="Closures Per Person" && data.get('name')!="Deals Funnel" && data.get('name')!="Emails Sent" 
-	        		&& data.get('name')!="Growth Graph" && data.get('name')!="Deals Assigned" && data.get('name')!="Calls Per Person" 
-	        			&& data.get('name')!="Pending Deals" && data.get('name')!="Deals Won" && data.get('name')!="Filter Based" 
-							&& data.get('name')!="Emails Opened" && data.get('name')!="Task Report" && data.get('name')!="Stats Report" 
-							&& data.get('name')!="Agenda" && data.get('name')!="Today Tasks" && data.get('name')!="Leaderboard"){
-	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
-	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(portletCollectionView.render().el));
-	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Filter Based"){
+	        	if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Filter Based"){
 	        		if(data.get('settings').filter=="companies"){
 	        			App_Portlets.filteredCompanies[parseInt(pos)].collection.fetch();
 	        			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
@@ -900,8 +971,12 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
 	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Leaderboard"){
-	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
-	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.leaderboard[parseInt(pos)].render().el));
+	        		var sizey = parseInt($('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').parent().attr("data-sizey"));
+	    			var topPos = 50*sizey;
+	    			if(sizey==2 || sizey==3)
+	    				topPos += 50;
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+	    			$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.leaderboard[parseInt(pos)].render().el));
 	        	}else if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Stats Report"){
 	        		/*$('#'+el.split("-save-modal")[0]).parent().find('.stats_report_portlet_body').html(getRandomLoadingImg());
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.stats_report_portlet_body').html($(App_Portlets.statsReport[parseInt(pos)].render().el));*/
@@ -923,6 +998,9 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			}else if(data.get('settings').duration=='this-week'){
 						start_date_str = ''+data.get('settings').duration;
 						end_date_str = 'this-week-end';
+					}else if(data.get('settings').duration=='this-month'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-month-end';
 					}else{
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'TOMORROW';
@@ -1262,13 +1340,23 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		if(data.get('settings').duration=='yesterday'){
 	        			start_date_str = ''+data.get('settings').duration;
 	        			end_date_str = 'today';
-	        		}else{
+	        		}else if(data.get('settings').duration=='this-week'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-week-end';
+					}else if(data.get('settings').duration=='this-month'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-month-end';
+					}else{
 	        			start_date_str = ''+data.get('settings').duration;
 	        			end_date_str = 'TOMORROW';
 	        		}
 	        		
+	        		var users = '';
+					if(data.get('settings')["calls-user-list"]!=undefined)
+						users = JSON.stringify(data.get('settings')["calls-user-list"]);
+
 	        		var selector=idVal;
-	        		var url='/core/api/portlets/portletCallsPerPerson?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str);
+	        		var url='/core/api/portlets/portletCallsPerPerson?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&user='+users;
 	        		
 	        		var answeredCallsCountList=[];
 	    			var busyCallsCountList=[];
@@ -1346,13 +1434,23 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			if(data.get('settings').duration=='yesterday'){
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'today';
-	    			}else{
+	    			}else if(data.get('settings').duration=='this-week'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-week-end';
+					}else if(data.get('settings').duration=='this-month'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-month-end';
+					}else{
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'TOMORROW';
 	    			}
 	        		
+	        		var users = '';
+					if(data.get('settings')["task-report-user-list"]!=undefined)
+						users = JSON.stringify(data.get('settings')["task-report-user-list"]);
+
 	        		var selector=idVal;
-	        		var url='/core/api/portlets/portletTaskReport?group-by='+data.get('settings')["group-by"]+'&split-by='+data.get('settings')["split-by"]+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&tasks='+data.get('settings').tasks;
+	        		var url='/core/api/portlets/portletTaskReport?group-by='+data.get('settings')["group-by"]+'&split-by='+data.get('settings')["split-by"]+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&tasks='+data.get('settings').tasks+'&user='+users;
 	        		
 	        		var groupByList=[];
 	    			var splitByList=[];
@@ -1415,7 +1513,13 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    			if(data.get('settings').duration=='yesterday'){
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'today';
-	    			}else{
+	    			}else if(data.get('settings').duration=='this-week'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-week-end';
+					}else if(data.get('settings').duration=='this-month'){
+						start_date_str = ''+data.get('settings').duration;
+						end_date_str = 'this-month-end';
+					}else{
 	    				start_date_str = ''+data.get('settings').duration;
 	    				end_date_str = 'TOMORROW';
 	    			}
@@ -1640,3 +1744,61 @@ $('#user-select-none').die().live('click',function(e){
 		e.preventDefault();
 		$('#user-list').multiSelect('deselect_all');
 });
+$('#calls-user-select-all').die().live('click',function(e){
+	e.preventDefault();
+	$('#calls-user-list').multiSelect('select_all');
+});
+$('#calls-user-select-none').die().live('click',function(e){
+	e.preventDefault();
+	$('#calls-user-list').multiSelect('deselect_all');
+});
+$('#task-report-user-select-all').die().live('click',function(e){
+		e.preventDefault();
+		$('#task-report-user-list').multiSelect('select_all');
+});
+$('#task-report-user-select-none').die().live('click',function(e){
+		e.preventDefault();
+		$('#task-report-user-list').multiSelect('deselect_all');
+});
+function getDurationForPortlets(duration){
+	var time_period = 'Today';
+		if (duration == 'yesterday'){
+			time_period = 'Yesterday';
+		}else if (duration == '1-day' || duration == 'today'){
+			time_period = 'Today';
+		}else if (duration == '2-days'){
+			time_period = 'Last 2 Days';
+		}else if (duration == 'this-week'){
+			time_period = 'This Week';
+		}else if (duration == 'last-week'){
+			time_period = 'Last Week';
+		}else if (duration == '1-week'){
+			time_period = 'Last 7 Days';
+		}else if (duration == 'this-month'){
+			time_period = 'This Month';
+		}else if (duration == 'last-month'){
+			time_period = 'Last Month';
+		}else if (duration == '1-month'){
+			time_period = 'Last 30 Days';
+		}else if (duration == 'this-quarter'){
+			time_period = 'This Quarter';
+		}else if (duration == 'last-quarter'){
+			time_period = 'Last Quarter';
+		}else if (duration == '3-months'){
+			time_period = 'Last 3 Months';
+		}else if (duration == '6-months'){
+			time_period = 'Last 6 Months';
+		}else if (duration == '12-months'){
+			time_period = 'Last 12 Months';
+		}else if (duration == 'today-and-tomorrow'){
+			time_period = 'Today and Tomorrow';
+		}else if (duration == 'all-over-due'){
+			time_period = 'All Over Due';
+		}else if (duration == 'next-7-days'){
+			time_period = 'Next 7 Days';
+		}else if (duration == '24-hours'){
+			time_period = 'Last 24 Hours';
+		}
+		
+		return time_period;
+}

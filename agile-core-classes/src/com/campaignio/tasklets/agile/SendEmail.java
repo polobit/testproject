@@ -14,6 +14,7 @@ import com.agilecrm.Globals;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailLinksConversion;
@@ -607,6 +608,9 @@ public class SendEmail extends TaskletAdapter
     {
 	String domain = NamespaceManager.get();
 
+	// Update campaign emailed time
+	ContactUtil.updateCampaignEmailedTime(Long.parseLong(subscriberId), System.currentTimeMillis()/1000, to);
+	
 	// For domain "clickdeskengage" - use SendGrid API
 	if (StringUtils.equals(domain, Globals.CLICKDESK_ENGAGE_DOMAIN))
 	{

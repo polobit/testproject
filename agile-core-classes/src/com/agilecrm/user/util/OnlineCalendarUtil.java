@@ -9,8 +9,6 @@ import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 
 /**
  * while fetching onlinecalendar prefs based on schedule id, we have to convert
@@ -53,12 +51,21 @@ public class OnlineCalendarUtil
 	 */
 	public static OnlineCalendarPrefs getCalendarPrefs(Long domainUserId)
 	{
-		Objectify ofy = ObjectifyService.begin();
-		Key<DomainUser> userKey = new Key<DomainUser>(DomainUser.class, domainUserId);
+		if (domainUserId == null)
+			return null;
+		try
+		{
+			Key<DomainUser> userKey = new Key<DomainUser>(DomainUser.class, domainUserId);
 
-		OnlineCalendarPrefs calPrefs = OnlineCalendarPrefs.dao.getByProperty("user", userKey);
+			OnlineCalendarPrefs calPrefs = OnlineCalendarPrefs.dao.getByProperty("user", userKey);
 
-		return calPrefs;
+			return calPrefs;
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception occured in online calendar prefs" + e.getMessage());
+			return null;
+		}
 	}
 
 	/**
@@ -67,8 +74,12 @@ public class OnlineCalendarUtil
 	public static Key<DomainUser> getKey(OnlineCalendarPrefs prefs)
 	{
 
-		Key<DomainUser> userKey = prefs.getDomainOwnerKey();
-		return userKey;
+		if (prefs != null)
+		{
+			Key<DomainUser> userKey = prefs.getDomainOwnerKey();
+			return userKey;
+		}
+		return null;
 	}
 
 	/**
@@ -92,10 +103,19 @@ public class OnlineCalendarUtil
 	 */
 	public static OnlineCalendarPrefs getOnlineCalendarPrefs(String schedule_id)
 	{
-		if (StringUtils.isNotEmpty(schedule_id))
-			schedule_id = schedule_id.toLowerCase();
-		OnlineCalendarPrefs prefs = dao.ofy().query(OnlineCalendarPrefs.class).filter("schedule_id", schedule_id).get();
-		return prefs;
+		try
+		{
+			if (StringUtils.isNotEmpty(schedule_id))
+				schedule_id = schedule_id.toLowerCase();
+			OnlineCalendarPrefs prefs = dao.ofy().query(OnlineCalendarPrefs.class).filter("schedule_id", schedule_id)
+					.get();
+			return prefs;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	/**
@@ -166,6 +186,34 @@ public class OnlineCalendarUtil
 		finally
 		{
 			NamespaceManager.set(oldNamespace);
+		}
+	}
+
+	/**
+	 * we are saving schedule id in domainuser also when user updating his
+	 * schedule id to avoid additional call for prefs in camapign merge fields
+	 * 
+	 * @param prefs
+	 */
+	public static void saveScheduleIdInDomainUser(OnlineCalendarPrefs prefs)
+	{
+		try
+		{
+			DomainUser user = DomainUserUtil.getCurrentDomainUser();
+			if (user == null)
+			{
+				user = DomainUserUtil.getDomainUser(getDomainUserID(prefs));
+			}
+			if (user != null)
+			{
+				user.schedule_id = prefs.schedule_id;
+				user.save();
+			}
+
+		}
+		catch (Exception e)
+		{
+			System.out.println("exception occured while saving scheduleid in domainUser");
 		}
 	}
 }
