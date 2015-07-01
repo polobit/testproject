@@ -356,7 +356,16 @@ function init_tinymce()
           },
          "hello" : function(event, modules_editor, layoutInfo, value) {
            console.log("OMG");
-           $('.agile').show()
+           if($('.agile').hasClass('active')){
+          	 $('.agile').hide();
+          	 $('.agile').removeClass('active');
+          	 $('.agile').addClass('inactive');
+             $('.agile').parent().removeClass('open');
+           	 return;
+           }
+           $('.agile').show();
+           $('.agile').addClass('active');
+           $('.agile').removeClass('inactive');
           /*  var selection = document.getSelection();
            var cursorPos = selection.anchorOffset;
            var oldContent =$("#content").code();
@@ -375,9 +384,13 @@ function init_tinymce()
              console.log("OMG");
              if(value == undefined){
             	 $('.agile').show();
+            	 $('.agile').addClass('active');
+            	 $('.agile').removeClass('inactive');
             	 return;
              }
              $('.agile').removeAttr("style");
+             $('.agile').removeClass('active');
+             $('.agile').addClass('active');
              var $editable=layoutInfo.editable();
              modules_editor.insertText($editable,value);
 
@@ -388,7 +401,10 @@ function init_tinymce()
              var newContent = oldContent.substring(0, cursorPos) + value + oldContent.substring(cursorPos);
              selection.anchorNode.nodeValue = newContent; */
              
-           }
+           }/*  ,
+           "fullscreen": function(event, modules_editor, layoutInfo, value) {
+        	   alert("sdjskdfj");
+           }  */
           
       }     
   });
@@ -396,7 +412,6 @@ function init_tinymce()
   
   $('#content').summernote({
         height: 775,
-        width : 750,
         enterHtml: '<p><br></p>',
         onImageUpload: function(files, editor, welEditable) {
       //console.log('image upload:', files, editor, welEditable);
@@ -566,7 +581,9 @@ function showWarning(isWarning)
                      <textarea name="content" id='content' rows="30" cols="90" style="display:none;margin-left: 25px;
                      "></textarea>
                     <br/>
-                    <p><a href="#" id="save_html" class="btn btn-large pull-right" style="font-weight: bold;">Save</a></p>
+                    <p>
+                    <a href="#" id="top_save_html" class="btn btn-default btn-large" style="cursor:pointer; font-weight: bold;float: right;margin-bottom: 10px;">Save</a>
+                    </p>
                 </form>
             </div>
         </div>
