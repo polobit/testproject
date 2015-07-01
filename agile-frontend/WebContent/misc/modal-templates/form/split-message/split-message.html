@@ -120,7 +120,12 @@
           },
           submitHandler: function (form) {
               window.parent._agile_save_form(true, window.parent._agile.set_email(document.getElementsByName('email')[0].value));
-              $(form).ajaxSubmit()
+              try{
+            	  $(form).ajaxSubmit();
+              }
+              catch(e){
+            	  window.parent._agile_close_modal()
+              }
           },
           errorPlacement: function (error, element) {
           }
