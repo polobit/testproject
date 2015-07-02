@@ -355,6 +355,16 @@ function chainFiltersForContactAndCompany(el, data, callback) {
 	}
 }
 
+function chainFiltersForContact(el, data, callback) {
+	if(data) {
+		chainFilters($(el).find('.chained-table.contact.and_rules'), data.rules, undefined, false, false);
+		chainFilters($(el).find('.chained-table.contact.or_rules'), data.or_rules, callback, false, false);			
+	} else {
+		chainFilters($(el).find('.chained-table.contact.and_rules'), undefined, undefined, false, false);
+		chainFilters($(el).find('.chained-table.contact.or_rules'), undefined, callback, false, false);
+	}
+}
+
 /**
  * Chains fields using jquery.chained library. It deserialzed data into form
  * 
@@ -375,8 +385,8 @@ function chainFilters(el, data, callback, is_webrules, is_company)
 	} else {
 		if(!SEARCHABLE_CONTACT_CUSTOM_FIELDS)
 		{			
-			if(window.location.hash.indexOf("contact-filter") != -1)
-			   $("#content").html(getRandomLoadingImg());
+			/*if(window.location.hash.indexOf("contact-filter") != -1)
+			   $("#content").html(getRandomLoadingImg());*/
 			fillContactCustomFieldsInFilters(el, function(){
 				show_chained_fields(el, data, true);
 				if (callback && typeof (callback) === "function")

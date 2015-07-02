@@ -452,7 +452,7 @@ public class ActivityUtil
     {
 	try
 	{
-	    return dao.fetchAllByOrder(max, cursor, null, true, false, "-time");
+	    return dao.fetchAllByOrderWithoutCount(max, cursor, null, true, false, "-time");
 	}
 	catch (Exception e)
 	{

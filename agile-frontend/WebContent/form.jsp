@@ -20,14 +20,9 @@ String requestMethod = request.getMethod();
    <body>
       <div class="container">
          <div class="row">
-       <% if(true) { %>
            <textarea id="render" style="width:0px;height:0px;display:none;" class="hidden"></textarea>
            <div id="agileFormHolder"></div>           
-           <script data-main="misc/formbuilder/main-built.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
-			<script type="text/javascript" src="stats/min/agile-min.js"></script>
-			<% } else { %>
-			<div class="form-view" style="text-align:center;padding:50px;">Thanks for your response.</div>
-		<% } %>
+           <script data-main="misc/formbuilder/main.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
          </div>
       </div>
    </body>
