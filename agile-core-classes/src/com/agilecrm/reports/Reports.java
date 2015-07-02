@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.agilecrm.SearchFilter;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
@@ -31,7 +32,7 @@ import com.googlecode.objectify.condition.IfDefault;
 @SuppressWarnings("serial")
 @XmlRootElement
 @Cached
-public class Reports implements Serializable
+public class Reports extends SearchFilter implements Serializable
 {
 
     // Key
@@ -60,10 +61,6 @@ public class Reports implements Serializable
     @Indexed
     @NotSaved(IfDefault.class)
     public Duration duration;
-
-    @NotSaved(IfDefault.class)
-    @Embedded
-    public List<SearchRule> rules = new ArrayList<SearchRule>();
 
     /** List of fields, LinkedHashSet to preserve the order of the fields */
     @NotSaved(IfDefault.class)
@@ -111,7 +108,7 @@ public class Reports implements Serializable
      * 
      * @return
      */
-    @SuppressWarnings("rawtypes")
+    /*@SuppressWarnings("rawtypes")
     public Collection generateReports()
     {
 	SearchRule rule = new SearchRule();
@@ -120,7 +117,7 @@ public class Reports implements Serializable
 	rule.RHS = "PERSON";
 	rules.add(rule);
 	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules);
-    }
+    }*/
 
     /**
      * Generates results with cursor and count. It is used to show report
@@ -133,7 +130,7 @@ public class Reports implements Serializable
     @SuppressWarnings("rawtypes")
     public Collection generateReports(int count, String cursor)
     {
-	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules, count, cursor, null);
+	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResultsForFilter(this, count, cursor, null);
     }
 
     @JsonIgnore
