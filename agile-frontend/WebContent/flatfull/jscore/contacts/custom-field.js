@@ -786,7 +786,7 @@ function serialize_custom_fields(form)
     	json.value =  $(element).val();
     	
     	if(elem_type=='checkbox')json.value = $(element).is(':checked')?'on':'off';
-    	if($(element).hasClass("date_input"))
+    	if($(element).hasClass("date_input") && ($(element).val() !=undefined || $(element).val().trim() !=""))
     		json.value = new Date(this.value).format("mm/dd/yyyy");
     	
     	
