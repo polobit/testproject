@@ -156,7 +156,6 @@ padding: 0 8px 0 0;
 	border-radius: 0 0 4px 4px;*/
     overflow: auto;
     
-    
 }
 .portlet_body table td
 {
@@ -706,4 +705,60 @@ border-radius: 2px;
   	opacity: 0;
   	color: #98a6ad;
 }
+.portlet_body>#calendar_container
+{
+	font-size : 12px;
+}
+ .portlet_body>#calendar_container>.fc-content>.fc-view>.fc-border-separate>tbody>tr
+ {
+  line-height: .66;
+ }
  
+.portlet_body>#calendar_container>.fc-header>tbody>tr>td
+{
+	height : 11px;
+	background-color:#fff;
+	color:black
+}
+.portlet_body>#calendar_container>.fc-header>tbody>tr>td .fc-button>.fc-button-inner, .portlet_body>#calendar_container>.fc-header>tbody>tr>td .fc-state-default{
+	background:#fff;
+	border-color:#fff;
+}
+.portlet_body>#calendar_container>.fc-header>tbody>tr>.fc-header-center h2
+{
+	font-size:14px;
+	line-height : 15px;
+}
+
+.portlet_body>#calendar_container>.fc-content>.fc-view>.fc-border-separate>tbody>tr>td>div>.fc-day-number
+{
+	float : none;
+	text-align : center;
+	position: relative;
+  	top: 2px;
+}
+
+/* .portlet_body>#calendar_container>.fc-content>.fc-view>.fc-border-separate>tbody>tr>td{
+	vertical-align : middle;
+} */
+.portlet_body>#calendar_container>.fc-header>tbody>tr .fc-button-content
+{
+	height : 1.5em;
+}
+/* .portlet_body>#calendar_container>.fc-content>.fc-view>.fc-border-separate tr td:first-child div {
+  position: relative;
+  top: 10px;
+} */
+.portlet_body>#calendar_container>.fc-content>.fc-view div>.fc-event{
+	width : 4px!important
+}
+
+.portlet_body>#calendar_container>.fc-content>.fc-view>.fc-border-separate th, .portlet_body>#calendar_container>.fc-content>.fc-view>.fc-border-separate td
+{
+	border-width:1px 0;
+}
+
+.portlet_body>#calendar_container>.fc-content>.fc-view>.fc-border-separate th.fc-first, .portlet_body>#calendar_container>.fc-content>.fc-view>.fc-border-separate td.fc-first
+{
+	border-left-width:1px
+}

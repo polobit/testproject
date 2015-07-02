@@ -187,6 +187,9 @@ function set_up_portlets(el, portlets_el){
 				// Saves new width and height in server
 				$.ajax({ type : 'POST', url : '/core/api/portlets/widthAndHeight', data : JSON.stringify(models),
 					contentType : "application/json; charset=utf-8", dataType : 'json' });
+					var el=this.$el.find('#calendar_container');
+				var aspectRatio=get_calendar_width(el)/(get_calendar_height(el)-18);
+									  $('#calendar_container').fullCalendar('option','aspectRatio',aspectRatio);
 			}
         }
     }).data('gridster');
@@ -1847,7 +1850,7 @@ function minicalendar(el)
 	
 	head
 			.js(
-					 LIB_PATH + 'lib/web-calendar-event/datepicker.js' ,CSS_PATH + 'css/web-calendar-event/datepicker.css',function(){
+					/*  LIB_PATH + 'lib/web-calendar-event/datepicker.js' ,CSS_PATH + 'css/web-calendar-event/datepicker.css',function(){
 						
 						$('#calendar_container',el).DatePicker({flat : true,date:'13-06-2015',
 						onChange: function(date) {
@@ -1870,38 +1873,106 @@ function minicalendar(el)
 					//disabled: true
 				//}
 						},
-						});
-					/* LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
+						}); */
+					 LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
 							{
 						$('#calendar_container',el).fullCalendar({
-								height : 280px,
-								 
-							    events: '/core/api/events',
+							
+								aspectRatio:(get_calendar_width($(el).find('#calendar_container'))/(get_calendar_height($(el).find('#calendar_container'))-20)) ,
+								selectable: true,
+								header : { left : 'prev', center : 'title', right : 'next' },
+								
+								
+								 events : function(start, end, callback)
+								{
+									var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
+									$.getJSON(eventsURL, function(doc)
+									{
+										$.each(doc, function(index, data)
+										{
+											if (data.color == 'red' || data.color == '#f05050')
+												data.color='cyan'
+											else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
+												data.color='pink';
+											else if (data.color == 'green' || data.color == '#bbb')
+												data.color='black'
+											
+											});
+
+										if (doc)
+										{
+
+											callback(doc);
+
+										}
+									});
+								},  
+							    //events: '/core/api/events',
+								//windowResize: function(view) {
+									// $('#calendar_container').fullCalendar('option', 'height', get_calendar_height());
+									// var aspectRatio=get_calendar_width(el)/(get_calendar_height(el)-30);
+									//  $('#calendar_container').fullCalendar('option','aspectRatio',0.2);
+									//},
 							  
-							    eventRender: function (event, element, view) { 
-							    										var year = event.start.getFullYear(), month = event.start.getMonth() + 1, date = event.start.getDate();
-					                   var result = year + '-' + (month < 10 ? '0' + month : month) + '-' + (date < 10 ? '0' + date : date);
-					                   $(element).addClass(result);
-					                   var ele = $('.fc-day'+ date +''),count=$('.' + result).length;
-					                   $(ele).find('.viewMore').remove();
-									   $('.fc-event').hide();
-									  //var eve= $('.fc-event');//.hide();
+							     eventRender: function (event, element, view) { 
+							    									// 	var year = event.start.getFullYear(), month = event.start.getMonth() + 1, date = event.start.getDate();
+					                  // var result = year + '-' + (month < 10 ? '0' + month : month) + '-' + (date < 10 ? '0' + date : date);
+					                   //$(element).css('width','4px');
+									   $('.fc-event').find('.fc-event-inner').css('display','none');
+									  //var nextEventLeft = element.offset().left + element.width() + 5;
+									  //var nexttop=element.offset().top
+									//element.parent().children().eq(element.index()+1).css('left',nextEventLeft);
+										//element.parent().children().eq(element.index()+1).css('margin-top','-35px')
+					                  // var ele = $('.fc-day'+ date +''),count=$('.' + result).length;
+					                  // $(ele).find('.viewMore').remove(); */
+									  // $('.fc-event').hide();
+									  /* //var eve= $('.fc-event');//.hide();
 					                   if ( count> 0) {
 					                      // $('.' + result + ':gt(2)').remove();                          
 					                       $(ele).find('.fc-day-number').after('<small class="viewMore" style="color:blue;" onmouseout="noshow(this)" onmouseover="showevents(this,'+event.start.getTime()+','+event.end.getTime()+')">'+ count+'<div class="eventshow"></div></small>');
 
 					                   } 
 									  										// $(element).tooltip({title: event.title});   
-
+ */
 					                  
 							    
-								}
+								} ,
 								
+								eventMouseover : function(event, jsEvent, view)
+						{
+							var leftorright = 'left';
+							var pullupornot = '';
+							if (event.start.getDay() == 5 || event.start.getDay() == 6)
+									leftorright = 'right';
+								pullupornot = 'pull-up';
+								var popoverElement = '<div class="fc-overlay ' + leftorright + '">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left">' + event.title + '</div><div class="pull-right"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px"/></div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+									.format('dd-mmm-yyyy HH:MM') + '</div>' + '</div>' + '</div>';
+							$(this).append(popoverElement);
+							$(this).find('.fc-overlay').show();
+						},
+						
+						eventMouseout : function(event, jsEvent, view)
+						{
+							$(this).find('.fc-overlay').hide();
+							$(this).find('.fc-overlay').remove();
+						},
+								
+								dayClick : function(date,allDay,jsEvent,view){
+									$('.events_show').empty().append(date.format('dd mmm yyyy'));alert('today is' + date);
+									var endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
+									var array= $('#calendar_container').fullCalendar('clientEvents', function(event) {
+										return (event.start >= date && event.start < endDate);
+								});
+								$.each(array,function(index){
+									$('.events_show').append('<li style="color : '+array[index].color+'"><span style="color : black">'+array[index].title+'</span></li>');
+									alert(array[index].title);
+								});
+								}
 							    	//editable:true,
 							    	//selectable:true
 							
 							//console.log("showing full calendar");
-						}); */
+						}); 
 
 							});
 }
@@ -1933,3 +2004,10 @@ function showevents(el,start,end)
    {
 	   $(el).find('.fc-event-title').hide();
    }
+   function get_calendar_height(el) {
+      return $(el).parent('.portlet_body').height();
+}
+function get_calendar_width(el)
+{
+	return $(el).width();
+}

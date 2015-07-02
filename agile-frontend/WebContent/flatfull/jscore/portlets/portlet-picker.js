@@ -1129,11 +1129,12 @@ else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position &
 		}
 		else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Mini Calendar"){
 			$(this).find('div').html(getRandomLoadingImg());
+			setPortletContentHeight(base_model);
 			minicalendar($(this));
 			if(base_model.get('is_minimized'))
 				$(this).hide();
 			
-			setPortletContentHeight(base_model);
+			
 		
 		}
 		//addWidgetToGridster(base_model);
@@ -1926,7 +1927,23 @@ function setPortletContentHeight(base_model){
 		
 		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-x","hidden");
 		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-y","auto");
-	}*/else{
+	}*/
+	else if(base_model.get("name")=="Mini Calendar"){
+		if(base_model.get("size_y")==1){
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+"px");
+		}else if(base_model.get("size_y")==2){
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+10+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+10+"px");
+		}else if(base_model.get("size_y")==3){
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+20+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+20+"px");
+		}
+		
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-x","hidden");
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-y","auto");
+	}
+	else{
 		if(base_model.get("size_y")==1){
 			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)-45+"px");
 			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)-45+"px");
