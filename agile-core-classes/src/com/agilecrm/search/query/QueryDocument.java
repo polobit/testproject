@@ -321,17 +321,19 @@ public class QueryDocument<T> implements QueryInterface
 	    SortExpression.Builder sortExpressionBuilder = SortExpression.newBuilder();
 	    if (orderBy.startsWith("-"))
 	    {
-		sortExpressionBuilder = sortExpressionBuilder.setExpression(orderBy.substring(1)).setDirection(
+	    orderBy = orderBy.substring(1);
+		sortExpressionBuilder = sortExpressionBuilder.setDirection(
 			SortDirection.DESCENDING);
 	    }
 	    else
 	    {
-		sortExpressionBuilder = sortExpressionBuilder.setExpression(orderBy).setDirection(
+		sortExpressionBuilder = sortExpressionBuilder.setDirection(
 			SortDirection.ASCENDING);
 	    }
+	    sortExpressionBuilder.setExpression(orderBy);
 	    if (orderBy.contains("time") || orderBy.contains("last_contacted"))
 	    {
-		sortExpressionBuilder.setDefaultValueDate(SearchApiLimits.MAXIMUM_DATE_VALUE);
+		sortExpressionBuilder.setExpression(orderBy+"_time_epoch").setDefaultValueNumeric(0.0);
 	    }
 	    else if (orderBy.contains("name"))
 	    {
