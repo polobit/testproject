@@ -27,6 +27,7 @@ $('#app-aside-folded').on('click', function(e) {
 	
 	//contactInnerTabsInvoke();
 	
+    
 	});
 	
 $(document).ready(function(){

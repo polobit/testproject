@@ -32,10 +32,11 @@
 		</div>
 		{{/unless}}
         {{#if this.length}}
-          <div class="col-sm-9 col-md-9 table-responsive">
+          <div class="col-sm-9 col-md-9">
 			<div class="panel panel-default">
 			    <div class="panel-heading">Documents List</div>
-                <table class="table table-striped showCheckboxes m-b-none panel agile-table" url="core/api/documents/bulk" id="document-list">
+                <div class="table-responsive">
+                <table class="table table-striped showCheckboxes m-b-none panel agile-table table-layout-mob-view" url="core/api/documents/bulk" id="document-list">
                     <thead>
                         <tr>
                             <th style="width:30%">Title</th>
@@ -47,6 +48,7 @@
                     <tbody id="documents-model-list" class="c-p">
                     </tbody>
                 </table>
+                </div>
 			</div>
 		</div>
         {{/if}}
