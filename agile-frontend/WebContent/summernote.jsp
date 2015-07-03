@@ -21,7 +21,9 @@
 <script type="text/javascript" src="js/designer/summernote/plugins/chart.js"></script> -->
 <script>
 
-var MERGE_FIELDS = {}
+var MERGE_FIELDS = {};
+
+var CURRENT_DOMAIN_USER = {};
 
 //Read a page's GET URL variables and return them as an associative array.
 function getUrlVars() {
@@ -112,7 +114,6 @@ $(function() {
         if(textarea_id !== undefined && url !== undefined){
           
           // Show Back link for email templates
-          $('#navigate-back').css('display','inline-block');
           
             // Fetch html and fill into tinymce
             $.get(location.origin+url, function(value){
@@ -127,12 +128,11 @@ $(function() {
         }
         
         // Show empty editor if none of templates selected
-        if(window.history.length > 1)
+        /* if(window.history.length > 1)
         {
           // Show Back link for email templates
-          $('#navigate-back').css('display','inline-block');
           
-        }
+        } */
     }
     catch(err){
       console.log("Error occured");
@@ -150,6 +150,13 @@ $(function() {
       console.log(err);
     } 
 
+      $('body').on('click', function(e){
+    	/*  if($('.agile').hasClass('active')) */{
+    		 $('.agile').hide();
+    		 $('.agile').removeClass('active');
+    	} 
+    });  
+    
     $('#save_html, #top_save_html').on('click', function(e){
       
       e.preventDefault();
@@ -176,7 +183,8 @@ $(function() {
         if(!confirm("Your changes will be lost. Are you sure you want to go back to templates?"))
           return;
       
-      window.history.back();
+      if(!window.history.back())
+    	  window.location.href = window.location.origin +"/templates.jsp?id=tinyMCEhtml_email&t=email"
       
     });
 });
@@ -307,16 +315,9 @@ function init_tinymce()
 	console.log(selectoption);
 
   var dropdown =selectoption;
-  /* uncomment
-  $.each(mergeField,function(field_name,field_value){
-	  dropdown = dropdown + '<li><a data-event="merge" data-value="'+field_value+'" class=""><i class="fa fa-check"></i>'+field_name+'</a></li>';
-	  }) */
-	  
-	  /* remove these */
-	 /* dropdown = '<li><a>First name</a><ul class = "note-check" style="list-style-type: none;"><li class="ul-custom-merge-field"><a data-event="merge" data-value="drop2" style = "text-decoration: none;text-overflow: ellipsis;display: block;overflow: hidden;white-space: nowrap;"class="">Last name Last name Last name Last name Last name </a></li></ul></li>';
-  	  */ /* remove these */
   dropdown = '<ul class = "dropdown-menu note-check ul-custom-scroll agile">' + dropdown.html() + '</ul>' ;
   var tmpl = $.summernote.renderer.getTemplate();
+  
   // Initialize tinymce;
    $.summernote.addPlugin({
       buttons : {
@@ -333,79 +334,47 @@ function init_tinymce()
                  hide : false,
                  airPopover : true,
                  dropdown : dropdown
-                 
-                
-                 
              }, "Agile Merge Fields", false);           
          }
       
       }, 
-      
       events : {
     	  event : function(e, editor, layout) {
-              
-              /*
-              var value = $(e.target).data('value');
-              var $editable = layout.editable();
-              $editable.trigger('focus');
-              editor.insertDom($editable, dom);
-              */                     
               alert("adsdasd");             
-              
-
           },
          "hello" : function(event, modules_editor, layoutInfo, value) {
            console.log("OMG");
+           
            if($('.agile').hasClass('active')){
           	 $('.agile').hide();
           	 $('.agile').removeClass('active');
-          	 $('.agile').addClass('inactive');
+          	// $('.agile').addClass('inactive');
+          	$('.agile').prev().addClass('inactive')
+          	 
              $('.agile').parent().removeClass('open');
            	 return;
            }
            $('.agile').show();
            $('.agile').addClass('active');
-           $('.agile').removeClass('inactive');
-          /*  var selection = document.getSelection();
-           var cursorPos = selection.anchorOffset;
-           var oldContent =$("#content").code();
-           var newContent = oldContent.substring(0, cursorPos) + value + oldContent.substring(cursorPos);
-           $("#content").code(newContent); */
-
-          /*  var selection = document.getSelection();
-           var cursorPos = selection.anchorOffset;
-           var oldContent = selection.anchorNode.nodeValue;
-           var toInsert = "InsertMe!";
-           var newContent = oldContent.substring(0, cursorPos) + value + oldContent.substring(cursorPos);
-           selection.anchorNode.nodeValue = newContent; */
-           
+           //$('.agile').removeClass('inactive');
+           $('.agile').prev().removeClass('inactive')
+           event.stopImmediatePropagation();
          },
          "merge" : function(event, modules_editor, layoutInfo, value) {
              console.log("OMG");
              if(value == undefined){
             	 $('.agile').show();
             	 $('.agile').addClass('active');
-            	 $('.agile').removeClass('inactive');
+            	 $('.agile').prev().removeClass('inactive');
+            	 event.stopImmediatePropagation()
             	 return;
              }
              $('.agile').removeAttr("style");
              $('.agile').removeClass('active');
-             $('.agile').addClass('active');
+             $('.agile').prev().addClass('inactive')
              var $editable=layoutInfo.editable();
              modules_editor.insertText($editable,value);
-
-            /*  var selection = document.getSelection();
-             var cursorPos = selection.anchorOffset;
-             var oldContent = selection.anchorNode.nodeValue;
-             var toInsert = "InsertMe!";
-             var newContent = oldContent.substring(0, cursorPos) + value + oldContent.substring(cursorPos);
-             selection.anchorNode.nodeValue = newContent; */
-             
-           }/*  ,
-           "fullscreen": function(event, modules_editor, layoutInfo, value) {
-        	   alert("sdjskdfj");
-           }  */
-          
+         }
       }     
   });
  
@@ -433,16 +402,36 @@ function init_tinymce()
                        ]
     });
   
-  
+  $('.note-editor').addClass('bc-w');
   
   // add a button   
- 
+    CURRENT_DOMAIN_USER = window.opener.get_domain_user();
   
+}
+
+function isValidString(name){
+	return !/[~@`!#$%\^\(\)&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(name);
+}
+
+function getExtention(name){
+	return name.split("/").pop();
 }
 
 function sendFile(file) {
     formData = new FormData();
-    formData.append('key',  "editor/"+file.name);
+    var filename = file.name;
+    var domain = "";
+    
+    if(CURRENT_DOMAIN_USER)
+    	domain = CURRENT_DOMAIN_USER.domain+"/";
+    
+    if(!isValidString(file.name)){
+    	if(CURRENT_DOMAIN_USER){
+    		filename = CURRENT_DOMAIN_USER.domain + (new Date).getTime();
+    	}
+    }
+    var extension = getExtention(file.type);
+    formData.append('key',  "editor/"+domain+filename+"."+extension);
     formData.append('AWSAccessKeyId', 'AKIAIBK7MQYG5BPFHSRQ');
     formData.append('acl', 'public-read');
 	  formData.append('content-type', 'image/*');
@@ -541,7 +530,7 @@ function showWarning(isWarning)
             <div  >
                 <!-- Back button style="margin-top: 10px; padding-left: 25px; padding-right: 30px; -->
                 <div class = "m-t-sm btn-rounded">
-                    <div style="display:none; float: left;" id="navigate-back">
+                    <div style="display:inline-block; float: left;" id="navigate-back">
                         <!-- Back link to navigate to history back  -->
                         <a href="#" class="btn btn-default btn-large"> &lt; Back </a>
                     </div>
@@ -578,7 +567,7 @@ function showWarning(isWarning)
                 <!-- out.println(Util.getHTMLMessageBox("","error", "errormsg")); -->
                 <form method="post" action="somepage" class ="m-t-sm btn-rounded">
                     <p id="loading-msg">Loading HTML Editor...</p>
-                     <textarea name="content" id='content' rows="30" cols="90" style="display:none;margin-left: 25px;
+                     <textarea name="content" id='content' rows="30" cols="90" style="display:none;margin-left: 25px;background-color:white
                      "></textarea>
                     <br/>
                     <p>

@@ -25,6 +25,15 @@
 }
 
 .inactive{
-	background-color: white;
-  box-shadow: none;
+	background-color: white!important;
+  box-shadow: none!important;
+}
+
+.bc-w{
+background-color: white;
+}
+
+.agile>ul>li:hover{
+  background-color: #edf1f2;
+  cursor: pointer;
 }
