@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CacheUtil;
 import com.analytics.servlets.AnalyticsServlet;
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
@@ -32,7 +33,7 @@ public class RegisterVerificationServlet extends HttpServlet
 	invalid_domains.add("outlook");
 	invalid_domains.add("rossbergercom");
 	invalid_domains.add("fastmail");
-	invalid_domains.add("usa.gov");	
+	invalid_domains.add("usa.gov");
     }
     /**
      * 
@@ -49,10 +50,21 @@ public class RegisterVerificationServlet extends HttpServlet
 
 	// AppEngine Headers
 
+	String userIp = AnalyticsServlet.getClientIP(request);
+
+	System.out.println("user IP address" + userIp);
+
 	try
 	{
+	    if (isTrottleLimitReached(userIp))
+	    {
+		System.out.println("Throttle reached" + userIp);
+		// writeErrorMessage(response, "Registration limit reached");
+		// return;
+	    }
+
 	    if (StringUtils.equalsIgnoreCase(request.getHeader("X-AppEngine-Country"), "BD")
-		    || "180.211.195.60".equals(AnalyticsServlet.getClientIP(request)))
+		    || "180.211.195.60".equals(userIp))
 	    {
 		writeErrorMessage(response, "Access denied");
 		return;
@@ -84,20 +96,21 @@ public class RegisterVerificationServlet extends HttpServlet
 
 	    if (!StringUtils.isEmpty(emailDomain))
 	    {
-		if (invalid_domains.contains(emailDomain.toLowerCase()))
+		if (invalid_domains.contains(emailDomain.toLowerCase())
+			|| invalid_domains.contains(emailDomainSubstring))
 		{
 		    writeErrorMessage(response, "Agile CRM needs your business email to signup");
 		    return;
 		}
 	    }
 	    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
-		if (domainUser != null)
-		{
+	    if (domainUser != null)
+	    {
 
-		    writeErrorMessage(response, "User with same email address already exists in our system for "
-			    + domainUser.domain + " domain");
-		    return;
-		}
+		writeErrorMessage(response, "User with same email address already exists in our system for "
+			+ domainUser.domain + " domain");
+		return;
+	    }
 	}
 
 	System.out.println("domain : " + domain + ", email" + email);
@@ -115,7 +128,6 @@ public class RegisterVerificationServlet extends HttpServlet
 
 	if (!StringUtils.isEmpty(oauth))
 	    return;
-
 
 	writeSussessMessage(response, "success");
     }
@@ -167,6 +179,37 @@ public class RegisterVerificationServlet extends HttpServlet
 	    e.printStackTrace();
 	}
 
+    }
+
+    public static void storeIpInMemcache(HttpServletRequest request, String domain)
+    {
+	try
+	{
+	    String ip = AnalyticsServlet.getClientIP(request);
+	    if (StringUtils.isEmpty(ip))
+		return;
+
+	    CacheUtil.setCacheForNumberOfDays(ip, domain, 1);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+    }
+
+    private boolean isTrottleLimitReached(String ip)
+    {
+	if (StringUtils.isEmpty(ip))
+	    return false;
+
+	String domain = (String) CacheUtil.getCache(ip);
+	if (StringUtils.isEmpty(domain))
+	{
+	    return false;
+	}
+
+	return true;
     }
 
 }

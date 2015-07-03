@@ -28,6 +28,7 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.RegisterVerificationServlet;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.ReferenceUtil;
 import com.agilecrm.util.RegisterUtil;
@@ -497,6 +498,15 @@ public class RegisterServlet extends HttpServlet
 	if (domainUser != null && reference_domain != null)
 	{
 	    ReferenceUtil.updateReferralCount(reference_domain);
+	}
+
+	try
+	{
+	    RegisterVerificationServlet.storeIpInMemcache(request, domainUser.domain);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
 	}
 	userInfo.setDomainId(domainUser.id);
 	return domainUser;
