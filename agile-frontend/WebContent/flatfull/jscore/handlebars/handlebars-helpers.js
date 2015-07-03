@@ -5624,7 +5624,7 @@ $(function()
 			icon_name = 'icon-filter';
 		else if (p_name == 'Deals Assigned')
 			icon_name = 'icon-user';
-		else if (p_name == 'Agenda')
+		else if (p_name == 'Agenda' || p_name == 'Mini Calendar')
 			icon_name = "icon-calendar";
 		else if (p_name == 'Today Tasks' || p_name == 'Task Report')
 			icon_name = "icon-tasks";

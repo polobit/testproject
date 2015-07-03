@@ -744,7 +744,7 @@
 		<div class="panel padder-v item m-l-none overflow-hidden portlet-panel" style="cursor:auto;">
 			<div class="h1 text-info font-thin h1" id="new-contacts-count">&nbsp;</div>
 			<span class="text-muted text-xs" id="new-contacts-label">&nbsp;</span>
-			<div class="top text-right w-full">
+			<div class="top text-right w-full">	
 				<!-- <i class="fa fa-caret-down text-warning m-r-sm"></i> -->
 			</div>
 		</div>
@@ -2142,14 +2142,15 @@ Deleted  {{custom1}} Campaigns<br/>
 				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div> -->
-			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-0" style="visibility: hidden;">
-				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
-				<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
-				</div>
-        <div class="portlet_body panel-body p-n b-n" >
+			
+        <div class="portlet_body_calendar panel-body p-n b-n" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
 	
 			<div id="" class="events_show pull-left" style="width:30%">&nbsp;</div>
 			<div id="calendar_container" class="pull-right" style="width:70%"></div>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-0 vis-hide">
+				
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
 		</div>
      <div class="portlets" id="{{id}}">&nbsp;</div>
      <div class="column_position" style="display:none">{{column_position}}</div>

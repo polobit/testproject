@@ -1127,16 +1127,7 @@ else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position &
 			
 			setPortletContentHeight(base_model);
 		}
-		else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Mini Calendar"){
-			$(this).find('div').html(getRandomLoadingImg());
-			setPortletContentHeight(base_model);
-			minicalendar($(this));
-			if(base_model.get('is_minimized'))
-				$(this).hide();
-			
-			
 		
-		}
 		//addWidgetToGridster(base_model);
 	});
 	$('.stats_report_portlet_body', this.el).each(function(){
@@ -1213,6 +1204,15 @@ else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position &
 		}
 	});
 	//enablePortletTimeAndDates(base_model);
+	$('.portlet_body_calendar', this.el).each(function(){
+		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Mini Calendar"){
+			$(this).find('.events_show').html(getRandomLoadingImg());
+			setPortletContentHeight(base_model);
+			minicalendar($(this));
+			if(base_model.get('is_minimized'))
+				$(this).hide();
+		}
+	});
 }
 
 /**
@@ -1930,18 +1930,18 @@ function setPortletContentHeight(base_model){
 	}*/
 	else if(base_model.get("name")=="Mini Calendar"){
 		if(base_model.get("size_y")==1){
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+"px");
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("height",(base_model.get("size_y")*200)+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("max-height",(base_model.get("size_y")*200)+"px");
 		}else if(base_model.get("size_y")==2){
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+10+"px");
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+10+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("height",(base_model.get("size_y")*200)+25+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("max-height",(base_model.get("size_y")*200)+25+"px");
 		}else if(base_model.get("size_y")==3){
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+20+"px");
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+20+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("height",(base_model.get("size_y")*200)+50+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("max-height",(base_model.get("size_y")*200)+50+"px");
 		}
 		
-		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-x","hidden");
-		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-y","auto");
+		$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("overflow-x","hidden");
+		$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("overflow-y","auto");
 	}
 	else{
 		if(base_model.get("size_y")==1){
@@ -1956,7 +1956,7 @@ function setPortletContentHeight(base_model){
 		}
 		
 		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-x","hidden");
-		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-y","auto");
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-y","hidden");
 	}
 }
 function getPortletsCurrencySymbol(){
