@@ -333,7 +333,7 @@ public class QueryDocument<T> implements QueryInterface
 	    sortExpressionBuilder.setExpression(orderBy);
 	    if (orderBy.contains("time") || orderBy.contains("last_contacted"))
 	    {
-		sortExpressionBuilder.setExpression(orderBy+"_time_epoch").setDefaultValueNumeric(0.0);
+		sortExpressionBuilder.setExpression(orderBy+"_epoch").setDefaultValueNumeric(0.0);
 	    }
 	    else if (orderBy.contains("name"))
 	    {
