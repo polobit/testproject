@@ -82,6 +82,7 @@ function createRequestUrlBasedOnFilter()
 {
 	var calendars_val = [];
 	var calendars_user_val = [];
+	var calendars_domain_user_ids = [];
 	var event_list_type = '';
 
 	$('.calendar_check').each(function()
@@ -94,7 +95,10 @@ function createRequestUrlBasedOnFilter()
 	$('.calendar_user_check').each(function()
 	{
 		if (this.checked)
+		{
 			calendars_user_val.push($(this).val());
+			calendars_domain_user_ids.push($(this).attr("data"));
+		}
 
 	});
 	if (readCookie("agile_calendar_view"))
@@ -113,6 +117,7 @@ function createRequestUrlBasedOnFilter()
 	var json_obj = {};
 	json_obj.cal_type = calendars_val;
 	json_obj.owner_ids = calendars_user_val;
+	json_obj.domain_user_ids = calendars_domain_user_ids;
 	/*
 	 * if (event_list_type) json_obj.event_type = event_list_type;
 	 */
@@ -253,13 +258,6 @@ function putGoogleCalendarLink()
 
 	} });
 
-	/*
-	 * if (calEnable) $("google_cal_link") .html( '<label class="i-checks
-	 * i-checks-sm" id="google_cal_link">' + '<input type="checkbox"
-	 * class="calendar_check" value="google">' + '<i></i> Google </label>');
-	 * else $("google_cal_link").html('<label class="icon-icon-plus"
-	 * id="google_cal_link"> <a href="">Add Google Calendar</a></label>');
-	 */
 	if (calEnable)
 	{
 		$("#google_cal").show();
@@ -269,7 +267,10 @@ function putGoogleCalendarLink()
 	else
 	{
 		$("#google_cal").hide();
-		$("#google_cal_link").removeClass('hide');
+		if (!readCookie('calendarDefaultView'))
+			$("#google_cal_link").removeClass('hide');
+		else
+			$("#google_cal_link").addClass('hide');
 	}
 }
 
@@ -285,28 +286,7 @@ function renderFullCalenarEvents(ownerid)
 	{
 		$.each(doc, function(index, data)
 		{
-			if (data.owner.id == CURRENT_DOMAIN_USER.id)
-			{
-				if (data.color == 'red' || data.color == '#f05050')
-					data.className = 'b-l b-2x b-danger fc-z-index';
-				else if (data.color == 'green' || data.color == '#bbb')
-					data.className = 'b-l b-2x b-light fc-z-index';
-				else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
-					data.className = 'b-l b-2x b-warning fc-z-index';
-				data.color = '';
-				data.backgroundColor = '#fff';
-			}
-			else
-			{
-				if (data.color == 'red' || data.color == '#f05050')
-					data.className = 'high';
-				else if (data.color == 'green' || data.color == '#bbb')
-					data.className = 'low';
-				else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
-					data.className = 'normal';
-				data.color = '';
-				data.backgroundColor = '#fff';
-			}
+			data = renderEventBasedOnOwner(data);
 			$('#calendar_event').fullCalendar('renderEvent', data);
 		});
 	});
@@ -404,4 +384,60 @@ function loadGoogleEventsandRender()
 		}
 
 	});
+}
+
+function renderAddedEventToFullCalenarBasedOnCookie(data)
+{
+	var renderEvent = false;
+	var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
+
+	if (data.owner.id == CURRENT_DOMAIN_USER.id)
+	{
+		renderEvent = true;
+	}
+
+	if (eventFilters && !renderEvent)
+	{
+		var domain_users = eventFilters.domain_user_ids;
+		if (domain_users && domain_users.length > 0)
+		{
+			$.each(domain_users, function(index, value)
+			{
+				if (value == data.owner.id)
+					renderEvent = true;
+			});
+		}
+	}
+	if (renderEvent)
+	{
+		$('#calendar_event').fullCalendar('renderEvent', data);
+	}
+
+}
+
+function renderEventBasedOnOwner(data)
+{
+	if (data.owner.id == CURRENT_DOMAIN_USER.id)
+	{
+		if (data.color == 'red' || data.color == '#f05050')
+			data.className = 'b-l b-2x b-danger fc-z-index';
+		else if (data.color == 'green' || data.color == '#bbb')
+			data.className = 'b-l b-2x b-light fc-z-index';
+		else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
+			data.className = 'b-l b-2x b-warning fc-z-index';
+		data.color = '';
+		data.backgroundColor = '#fff';
+	}
+	else
+	{
+		if (data.color == 'red' || data.color == '#f05050')
+			data.className = 'high';
+		else if (data.color == 'green' || data.color == '#bbb')
+			data.className = 'low';
+		else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
+			data.className = 'normal';
+		data.color = '';
+		data.backgroundColor = '#fff';
+	}
+	return data;
 }

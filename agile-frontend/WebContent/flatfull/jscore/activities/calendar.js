@@ -111,8 +111,7 @@ function showCalendar()
 {
 
 	_init_gcal_options();
-	if (!readCookie('calendarDefaultView'))
-		putGoogleCalendarLink();
+	putGoogleCalendarLink();
 	var calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 	$('#' + calendarView).addClass('bg-light');
 	fullCal = $('#calendar_event')
@@ -190,28 +189,9 @@ function showCalendar()
 									{
 										$.each(doc, function(index, data)
 										{
-											if (data.owner.id == CURRENT_DOMAIN_USER.id)
-											{
-												if (data.color == 'red' || data.color == '#f05050')
-													data.className = 'b-l b-2x b-danger fc-z-index';
-												else if (data.color == 'green' || data.color == '#bbb')
-													data.className = 'b-l b-2x b-light fc-z-index';
-												else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
-													data.className = 'b-l b-2x b-warning fc-z-index';
-												data.color = '';
-												data.backgroundColor = '#fff';
-											}
-											else
-											{
-												if (data.color == 'red' || data.color == '#f05050')
-													data.className = 'high';
-												else if (data.color == 'green' || data.color == '#bbb')
-													data.className = 'low';
-												else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
-													data.className = 'normal';
-												data.color = '';
-												data.backgroundColor = '#fff';
-											}
+											// decides the color of event based
+											// on owner id
+											data = renderEventBasedOnOwner(data);
 										});
 
 										if (doc)
@@ -746,6 +726,7 @@ function getCalendarUsersDetails()
 					var json_user = {};
 					json_user.id = user.id;
 					json_user.name = user.domainUser.name;
+					json_user.domain_user_id = user.domainUser.id;
 					json_users.push(json_user);
 				}
 

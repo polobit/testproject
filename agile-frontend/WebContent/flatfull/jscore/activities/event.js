@@ -658,14 +658,7 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 
 						// $('#calendar').fullCalendar( 'refetchEvents' );
 						var event = data.toJSON();
-						if (event.color == 'red' || event.color == '#f05050')
-							event.className = 'b-l b-2x b-danger fc-z-index';
-						else if (event.color == 'green' || event.color == '#bbb')
-							event.className = 'b-l b-2x b-light fc-z-index';
-						else if (event.color == '#36C' || event.color == '#23b7e5')
-							event.className = 'b-l b-2x b-warning fc-z-index';
-						event.color = '';
-						event.backgroundColor = '#fff';
+						event = renderEventBasedOnOwner(event);
 						if (Current_Route == 'calendar' && !readCookie("agile_calendar_view"))
 						{
 
@@ -675,7 +668,9 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 
 								$('#calendar_event').fullCalendar('removeEvents', json.id);
 
-							$('#calendar_event').fullCalendar('renderEvent', event);
+							// renders Event to full calendar based on Owner
+							// checked or unchecked
+							renderAddedEventToFullCalenarBasedOnCookie(event);
 						}
 						// Updates data to temeline
 						else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
