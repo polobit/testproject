@@ -426,7 +426,7 @@ function renderEventBasedOnOwner(data)
 		else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
 			data.className = 'b-l b-2x b-warning fc-z-index';
 		data.color = '';
-		data.backgroundColor = '#fff';
+		data.backgroundColor = '#fff;height:23px';
 	}
 	else
 	{
@@ -437,7 +437,7 @@ function renderEventBasedOnOwner(data)
 		else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
 			data.className = 'normal';
 		data.color = '';
-		data.backgroundColor = '#fff';
+		data.backgroundColor = '#fff;height:23px';
 	}
 	return data;
 }
