@@ -210,6 +210,7 @@ function showCalendar()
 						{
 							createCookie('calendarDefaultView', view.name, 90);
 							$(".fc-agenda-axis").addClass('bg-light lter');
+							$(".ui-resizable-handle").hide();
 						},
 						loading : function(bool)
 						{
@@ -229,6 +230,7 @@ function showCalendar()
 								start_tour('calendar');
 							}
 							$(".fc-agenda-axis").addClass('bg-light lter');
+							$(".ui-resizable-handle").css("display", "none!important");
 						},
 						selectable : true,
 						selectHelper : true,
@@ -282,11 +284,18 @@ function showCalendar()
 									.format('dd-mmm-yyyy HH:MM') + '</div>' + '<div>' + reletedContacts + '</div>' + '<div>' + meeting_type + '</div>' + '</div>' + '</div>';
 							$(this).append(popoverElement);
 							$(this).find('.fc-overlay').show();
+							$(".ui-resizable-handle").hide();
 						},
 						eventMouseout : function(event, jsEvent, view)
 						{
 							$(this).find('.fc-overlay').hide();
 							$(this).find('.fc-overlay').remove();
+							$(".ui-resizable-handle").hide();
+						},
+						eventAfterRender : function(event, element, view)
+						{
+							$(".ui-resizable-handle").hide();
+							console.log("exec");
 						},
 						/**
 						 * Shows event pop-up modal with pre-filled date and
