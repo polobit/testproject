@@ -46,6 +46,8 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 
 /**
  * <code>DealsAPI</code> includes REST calls to interact with
@@ -506,25 +508,25 @@ public class DealsBulkActionsAPI
 
 	    List<Opportunity> deals = OpportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    System.out.println("total deals -----" + deals.size());
-	    Set<Contact> contacts = new HashSet<Contact>();
+	    Set<Key<Contact>> contactKeys = new HashSet<Key<Contact>>();
 	    for (Opportunity deal : deals)
 	    {
-		for (Contact contact : deal.getContacts())
-		{
-		    contacts.add(contact);
-		}
+		contactKeys.addAll(deal.getContactKeys());
 	    }
 
 	    List<Contact> contactsList = new ArrayList<Contact>();
-	    contactsList.addAll(contacts);
+
+	    Objectify ofy = ObjectifyService.begin();
+	    contactsList.addAll(ofy.get(contactKeys).values());
 
 	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
 	    ContactUtil.addTagsToContactsBulk(contactsList, tagsArray);
 
 	    BulkActionNotifications.publishNotification(Arrays.asList(tagsArray).toString() + " Tag(s) are added to "
-		    + contactsList.size() + " Contacts.");
+		    + contactKeys.size() + " Contacts.");
 
-	    ActivitySave.createBulkActionActivity(contacts.size(), "ADD_TAG", tagsJSONArray.toString(), "contacts", "");
+	    ActivitySave.createBulkActionActivity(contactKeys.size(), "ADD_TAG", tagsJSONArray.toString(), "contacts",
+		    "");
 
 	}
 	catch (Exception je)
