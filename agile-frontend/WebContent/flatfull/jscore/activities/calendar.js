@@ -210,7 +210,6 @@ function showCalendar()
 						{
 							createCookie('calendarDefaultView', view.name, 90);
 							$(".fc-agenda-axis").addClass('bg-light lter');
-							$(".ui-resizable-handle").hide();
 						},
 						loading : function(bool)
 						{
@@ -230,7 +229,7 @@ function showCalendar()
 								start_tour('calendar');
 							}
 							$(".fc-agenda-axis").addClass('bg-light lter');
-							$(".ui-resizable-handle").css("display", "none!important");
+							$(".ui-resizable-handle").hide();
 						},
 						selectable : true,
 						selectHelper : true,
@@ -284,13 +283,13 @@ function showCalendar()
 									.format('dd-mmm-yyyy HH:MM') + '</div>' + '<div>' + reletedContacts + '</div>' + '<div>' + meeting_type + '</div>' + '</div>' + '</div>';
 							$(this).append(popoverElement);
 							$(this).find('.fc-overlay').show();
-							$(".ui-resizable-handle").hide();
+							$(this).find(".ui-resizable-handle").show();
 						},
 						eventMouseout : function(event, jsEvent, view)
 						{
 							$(this).find('.fc-overlay').hide();
 							$(this).find('.fc-overlay').remove();
-							$(".ui-resizable-handle").hide();
+							$(this).find(".ui-resizable-handle").hide();
 						},
 						eventAfterRender : function(event, element, view)
 						{
@@ -378,11 +377,11 @@ function showCalendar()
 							event.end = new Date(event.end).getTime() / 1000;
 							if (event.end == null || event.end == 0)
 								event.end = event.start;
-							if (event1.className == "b-l,b-2x,b-danger,fc-z-index" || event1.className == "high")
+							if (event1.className == "b-l,b-2x,b-danger" || event1.className == "high,b-light")
 								event.color = "red";
-							else if (event1.className == "b-l,b-2x,b-light,fc-z-index" || event1.className == "low")
+							else if (event1.className == "b-l,b-2x,b-info" || event1.className == "low,b-light")
 								event.color = "green";
-							else if (event1.className == "b-l,b-2x,b-warning,fc-z-index" || event1.className == "normal")
+							else if (event1.className == "b-l,b-2x,b-warning" || event1.className == "normal,b-light")
 								event.color = "#36C";
 							var jsoncontacts = event.contacts;
 							var _contacts = [];
@@ -408,11 +407,11 @@ function showCalendar()
 						 */
 						eventClick : function(event)
 						{
-							if (event.className == "b-l,b-2x,b-danger,fc-z-index" || event.className == "high")
+							if (event.className == "b-l,b-2x,b-danger" || event.className == "high,b-light")
 								event.color = "red";
-							else if (event.className == "b-l,b-2x,b-light,fc-z-index" || event.className == "low")
+							else if (event.className == "b-l,b-2x,b-info" || event.className == "low,b-light")
 								event.color = "green";
-							else if (event.className == "b-l,b-2x,b-warning,fc-z-index" || event.className == "normal")
+							else if (event.className == "b-l,b-2x,b-warning" || event.className == "normal,b-light")
 								event.color = "#36C";
 
 							if (isNaN(event.id))
