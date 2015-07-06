@@ -267,10 +267,7 @@ function putGoogleCalendarLink()
 	else
 	{
 		$("#google_cal").addClass('hide');
-		if (!readCookie('calendarDefaultView'))
-			$("#google_cal_link").removeClass('hide');
-		else
-			$("#google_cal_link").addClass('hide');
+		$("#google_cal_link").removeClass('hide');
 	}
 }
 
@@ -420,24 +417,24 @@ function renderEventBasedOnOwner(data)
 	if (data.owner.id == CURRENT_DOMAIN_USER.id)
 	{
 		if (data.color == 'red' || data.color == '#f05050')
-			data.className = 'b-l b-2x b-danger';
+			data.className = 'b-l b-2x b-danger fc_border_height';
 		else if (data.color == 'green' || data.color == '#bbb')
-			data.className = 'b-l b-2x b-info';
+			data.className = 'b-l b-2x b-info fc_border_height';
 		else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
-			data.className = 'b-l b-2x b-warning';
+			data.className = 'b-l b-2x b-warning fc_border_height';
 		data.color = '';
-		data.backgroundColor = '#fff;height:23px';
+		data.backgroundColor = '#fff';
 	}
 	else
 	{
 		if (data.color == 'red' || data.color == '#f05050')
-			data.className = 'high b-light';
+			data.className = 'high b-light fc_border_height';
 		else if (data.color == 'green' || data.color == '#bbb')
-			data.className = 'low b-light';
+			data.className = 'low b-light fc_border_height';
 		else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
-			data.className = 'normal b-light';
+			data.className = 'normal b-light fc_border_height';
 		data.color = '';
-		data.backgroundColor = '#fff;height:23px';
+		data.backgroundColor = '#fff';
 	}
 	return data;
 }

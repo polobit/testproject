@@ -377,11 +377,11 @@ function showCalendar()
 							event.end = new Date(event.end).getTime() / 1000;
 							if (event.end == null || event.end == 0)
 								event.end = event.start;
-							if (event1.className == "b-l,b-2x,b-danger" || event1.className == "high,b-light")
+							if (event1.className == "b-l,b-2x,b-danger,fc_border_height" || event1.className == "high,b-light,fc_border_height")
 								event.color = "red";
-							else if (event1.className == "b-l,b-2x,b-info" || event1.className == "low,b-light")
+							else if (event1.className == "b-l,b-2x,b-info,fc_border_height" || event1.className == "low,b-light,fc_border_height")
 								event.color = "green";
-							else if (event1.className == "b-l,b-2x,b-warning" || event1.className == "normal,b-light")
+							else if (event1.className == "b-l,b-2x,b-warning,fc_border_height" || event1.className == "normal,b-light,fc_border_height")
 								event.color = "#36C";
 							var jsoncontacts = event.contacts;
 							var _contacts = [];
@@ -407,11 +407,11 @@ function showCalendar()
 						 */
 						eventClick : function(event)
 						{
-							if (event.className == "b-l,b-2x,b-danger" || event.className == "high,b-light")
+							if (event.className == "b-l,b-2x,b-danger,fc_border_height" || event.className == "high,b-light,fc_border_height")
 								event.color = "red";
-							else if (event.className == "b-l,b-2x,b-info" || event.className == "low,b-light")
+							else if (event.className == "b-l,b-2x,b-info,fc_border_height" || event.className == "low,b-light,fc_border_height")
 								event.color = "green";
-							else if (event.className == "b-l,b-2x,b-warning" || event.className == "normal,b-light")
+							else if (event.className == "b-l,b-2x,b-warning,fc_border_height" || event.className == "normal,b-light,fc_border_height")
 								event.color = "#36C";
 
 							if (isNaN(event.id))

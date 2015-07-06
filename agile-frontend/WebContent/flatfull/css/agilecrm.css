@@ -2069,5 +2069,8 @@ li.error {
 .white-space-normal {
 	white-space : normal important;
 }
+.fc_border_height{
+	min-height: 20px;
+}
 
 
