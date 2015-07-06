@@ -522,7 +522,7 @@ public class DealsBulkActionsAPI
 	    ContactUtil.addTagsToContactsBulk(contactsList, tagsArray);
 
 	    BulkActionNotifications.publishNotification(Arrays.asList(tagsArray).toString() + " Tag(s) are added to "
-		    + contacts.size() + " Contacts.");
+		    + contactsList.size() + " Contacts.");
 
 	    ActivitySave.createBulkActionActivity(contacts.size(), "ADD_TAG", tagsJSONArray.toString(), "contacts", "");
 
@@ -584,6 +584,7 @@ public class DealsBulkActionsAPI
 	    Workflow workflow = WorkflowUtil.getWorkflow(workflowId);
 
 	    String message = contacts.size() + " Contacts are added to " + workflow.name + " Campaign.";
+
 	    if (contacts.size() == 1)
 		message = " 1 Contact is added to " + workflow.name + " Campaign.";
 

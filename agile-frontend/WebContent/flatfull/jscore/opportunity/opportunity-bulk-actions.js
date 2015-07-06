@@ -119,19 +119,45 @@
 		
 		if(tags.length == 0)
 		{
-			$('#addBulkTags').append('<span for="addBulkTags" generated="true" class="help-inline">This field is required.</span>');
+			$('#addBulkTags').focus();
+			$('.error-tags').show().delay(3000).hide(1);
 			// Removes disabled attribute of save button
 			enable_save_button(saveBtn);//$(saveBtn).removeAttr('disabled');
 			return false;
 		}
 		
-		var url = '/core/api/opportunity/bulk/contacts/add-tag';
-		postBulkActionDealsData(url,form,function(){
-			enable_save_button(saveBtn);
-			$('ul.tagsinput',$("#deal_contact_add_tag_modal")).html('');
-			$("#deal_contact_add_tag_modal").modal('hide');
-		},message);
+		if (tags.length > 0)
+		{
+			var tags_valid = true;
+			$.each(tags, function(index, value)
+				{
+					if(!isValidTag(value, false)) {
+						tags_valid = false;
+						return false;
+					}
+				});
+			if(!tags_valid) {
+				$('.invalid-tags').show().delay(6000).hide(1);
+				enable_save_button(saveBtn);
+				return false;
+			}
+			
+			// To add input field value as tags
+			var tag_input = $('#addBulkTags').val().trim();
+			$('#addBulkTags').val("");
+			
+			if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
+			{
+				$('#addBulkTags').closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
+			}
 		
+			var url = '/core/api/opportunity/bulk/contacts/add-tag';
+			postBulkActionDealsData(url,form,function(){
+				enable_save_button(saveBtn);
+				$('ul.tagsinput',$("#deal_contact_add_tag_modal")).html('');
+				$("#deal_contact_add_tag_modal").modal('hide');
+			},message);
+		}
 	};
 	
 	var bulkDeleteDeals = function(){
