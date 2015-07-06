@@ -384,7 +384,7 @@ function init_tinymce()
         enterHtml: '<p><br></p>',
         onImageUpload: function(files, editor, welEditable) {
       //console.log('image upload:', files, editor, welEditable);
-      sendFile(files[0]);
+      sendFile(files[0],editor,welEditable);
         },
         toolbar : [
                    ['style', ['style']],
@@ -417,7 +417,7 @@ function getExtention(name){
 	return name.split("/").pop();
 }
 
-function sendFile(file) {
+function sendFile(file,editor,layoutInfo) {
     formData = new FormData();
     var filename = file.name;
     var domain = "";
@@ -429,12 +429,12 @@ function sendFile(file) {
     	if(CURRENT_DOMAIN_USER){
     		filename = CURRENT_DOMAIN_USER.domain + (new Date).getTime();
     	}
-    }
-    var extension = getExtention(file.type);
+  			  }
+    var extension = getExtention(file.type);				
     formData.append('key',  "editor/"+domain+filename+"."+extension);
     formData.append('AWSAccessKeyId', 'AKIAIBK7MQYG5BPFHSRQ');
     formData.append('acl', 'public-read');
-	  formData.append('content-type', 'image/*');
+	  formData.append('content-type', file.type);
     formData.append('policy', 'CnsKICAiZXhwaXJhdGlvbiI6ICIyMDI1LTAxLTAxVDEyOjAwOjAwLjAwMFoiLAogICJjb25kaXRpb25zIjogWwogICAgeyJidWNrZXQiOiAiYWdpbGVjcm0iIH0sCiAgICB7ImFjbCI6ICJwdWJsaWMtcmVhZCIgfSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJGtleSIsICJlZGl0b3IvIl0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRDb250ZW50LVR5cGUiLCAiaW1hZ2UvIl0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRzdWNjZXNzX2FjdGlvbl9zdGF0dXMiLCAiMjAxIl0sCiAgXQp9');
     formData.append('signature', '59pSO5qgWElDA/pNt+mCxxzYC4g=');
     formData.append('success_action_status', '201');
@@ -451,9 +451,25 @@ function sendFile(file) {
       success: function(data) {
         // getting the url of the file from amazon and insert it into the editor
         var url = $(data).find('Location').text();
-        $('#content').summernote('editor.insertImage', url);
+        
+       // $('#content').summernote('editor.insertImage', decodeURIComponent(url));
+        
+       // var $editable = layoutInfo.editable();
+//$('#content').summernote('inserImage',decodeURIComponent(url));
+         var img = $('<img src="'+ decodeURIComponent(url)+'"/>');
+        var editor = $.summernote.eventHandler.getModule();
+        editor.insertImage($('.note-editable'),decodeURIComponent(url),$(data).find('Key').text());
+        
+        /*
+        var img = $('<img src="'+url+'" />');
+        editor.insertNode($editable, img[0]);
+        */
+      
       }
     });
+    
+    
+   
 	  
   }
 
@@ -522,7 +538,7 @@ function showWarning(isWarning)
 }
 </script>
 </head>
-<body>
+<body style="background-color:#f0f3f4!important">
 <div  >
     <div  >
         <!-- wrapper begins -->
@@ -563,7 +579,7 @@ function showWarning(isWarning)
             </div>
             </div>
             <!-- .block_head ends -->
-            <div class="block_content center">
+            <div class="block_content center" class="note-editable" contenteditable="true" >
                 <!-- out.println(Util.getHTMLMessageBox("","error", "errormsg")); -->
                 <form method="post" action="somepage" class ="m-t-sm btn-rounded">
                     <p id="loading-msg">Loading HTML Editor...</p>
