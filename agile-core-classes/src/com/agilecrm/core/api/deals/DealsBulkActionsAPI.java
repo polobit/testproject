@@ -544,7 +544,7 @@ public class DealsBulkActionsAPI
 	    @PathParam("workflow_id") Long workflowId, @FormParam("ids") String ids, @FormParam("filter") String filters)
     {
 
-	DomainUser user = null;
+	DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
 	// Set the session manager to get the user preferences and the other
 	// details required.
 	if (SessionManager.get() != null)
@@ -553,7 +553,6 @@ public class DealsBulkActionsAPI
 	}
 	else
 	{
-	    user = DomainUserUtil.getDomainUser(currentUserId);
 	    SessionManager.set(new UserInfo(null, user.email, user.name));
 	    SessionManager.get().setDomainId(user.id);
 	}
