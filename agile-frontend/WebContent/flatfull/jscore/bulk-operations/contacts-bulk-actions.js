@@ -641,7 +641,11 @@ $(function()
 
 			// Shows selected contacts count in Send-email page.
 			$emailForm.find('div#bulk-count').css('display', 'inline-block');
-			$emailForm.find('div#bulk-count p').html("Selected <b>" + count + " contacts</b> for sending email.");
+			
+			if(company_util.isCompany())
+				$emailForm.find('div#bulk-count p').html("Selected <b>" + count + " Companie(s)</b> for sending email.");
+			else
+				$emailForm.find('div#bulk-count p').html("Selected <b>" + count + " Contact(s)</b> for sending email.");
 
 			// Hide to,cc and bcc
 			$emailForm.find('input[name="to"]').closest('.control-group').attr('class', 'hidden');
@@ -689,11 +693,15 @@ $(function()
 			var json = {};
 			json.contact_ids = id_array;
 			json.data = JSON.stringify(form_json);
+			
+			var msg = "Emails have been queued for " + count + " contacts. They will be sent shortly.";
+			if(company_util.isCompany())
+				msg = "Emails have been queued for " + count + " companies. They will be sent shortly.";
 
 			postBulkOperationData(url, json, $form, null, function()
 			{
 				enable_send_button($('#bulk-send-email'));
-			}, "Emails have been queued for " + count + " contacts. They will be sent shortly.");
+			}, msg);
 		});
 	}
 

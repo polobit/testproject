@@ -497,7 +497,20 @@
 	var activateCurrentTab = function(ele){
 		$('#contact-tab-content .tab-pane').removeClass('active');
 		ele.addClass('active');
-	}
+	};
+	
+	// Deletes a contact from database
+	var deleteCurrentCompany = function(){
+		
+		if(!confirm("Do you want to delete the company?"))
+    		return;
+		
+		App_Companies.companyDetailView.model.url = "core/api/contacts/" + App_Companies.companyDetailView.model.id;
+		App_Companies.companyDetailView.model.destroy({success: function(model, response) {
+			  Backbone.history.navigate("companies",{trigger: true});
+		}});
+	};
+	
 	
 	var addTagsToCompany = function(){
 		 // Add Tags
@@ -730,6 +743,13 @@
 			e.preventDefault();
 			
 		   addTagsToCompany();
+		});
+		
+		// Deletes a contact from database
+		$('#company-actions-delete').live('click', function(e){
+			
+			e.preventDefault();
+			deleteCurrentCompany();
 		});
 		
 		/**
