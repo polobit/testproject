@@ -1941,7 +1941,7 @@ function setPortletContentHeight(base_model){
 		}
 		
 		$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("overflow-x","hidden");
-		$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("overflow-y","auto");
+		$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("overflow-y","hidden");
 	}
 	else{
 		if(base_model.get("size_y")==1){

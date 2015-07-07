@@ -188,7 +188,7 @@ function set_up_portlets(el, portlets_el){
         			$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("max-height",this.$resized_widget.attr('data-sizey')*200+50+"px");	
 				}
 				$('#'+this.$resized_widget.attr('id')+' > div.portlet_body_calendar').css('overflow-x','hidden');
-				$('#'+this.$resized_widget.attr('id')+' > div.portlet_body_calendar').css('overflow-y','auto')
+				$('#'+this.$resized_widget.attr('id')+' > div.portlet_body_calendar').css('overflow-y','hidden')
 				var el=this.$el.find('#calendar_container');
 				var aspectRatio=get_calendar_width(el)/(get_calendar_height(el)-24);
 									  $('#calendar_container').fullCalendar('option','aspectRatio',aspectRatio);
@@ -1893,7 +1893,7 @@ function minicalendar(el)
 							{
 						$('#calendar_container',el).fullCalendar({
 							
-								aspectRatio:(get_calendar_width($(el).find('#calendar_container'))/(get_calendar_height($(el).find('#calendar_container')))) ,
+								aspectRatio:(get_calendar_width($(el).find('#calendar_container'))/(get_calendar_height($(el).find('#calendar_container'))-24)) ,
 								selectable: true,
 								header : { left : 'prev', center : 'title', right : 'next' },
 								weekMode:'liquid',
@@ -2013,7 +2013,7 @@ function minicalendar(el)
 								
 								dayClick : function(date,allDay,jsEvent,view){
 									var days = ['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
-									$('.events_show').empty().append('<div class="show p-t-xs">'+days[date.getDay()]+',' +date.format('dd mmm')+' </div>');
+									$('.events_show').empty().append('<div class="show p-t-xs text-sm p-l-xs">'+days[date.getDay()]+',' +date.format('dd mmm')+' </div>');
 									var endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
 									var array= $('#calendar_container').fullCalendar('clientEvents', function(event) {
 										return (event.start >= date && event.start < endDate);
