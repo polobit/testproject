@@ -124,10 +124,10 @@
 	</div>
 <div class="pull-left rightThumbView pos-rlt">
 	<div class="m-t-none text-cap text-md custom-color w-half pull-left">{{titleFromEnums log_type}}</div>
-	  <div class="edit-hover w-half pull-right text-ellipsis ">
-		<span class="inline-block pull-left">Campaign - </span>
+	  <div class="edit-hover w-half pull-right text-ellipsis text-right">
+		<span>Campaign - </span>
          {{#hasMenuScope 'CAMPAIGN'}}
-			<a  href="#workflow/{{campaign_id}}" class="text-ellipsis pull-right" style="width:calc(100% - 72px);"> {{campaign_name}}</a>
+			<a  href="#workflow/{{campaign_id}}"> {{campaign_name}}</a>
 		{{else}}
 			<p>{{campaign_name}}</p>
 		{{/hasMenuScope}}
