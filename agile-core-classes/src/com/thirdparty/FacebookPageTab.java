@@ -74,7 +74,7 @@ public class FacebookPageTab extends HttpServlet
 		FacebookPage fbpage = FacebookPageUtil.getFacebookPageDetails(facebookRequestedPageID);
 		if (fbpage != null && fbpage.form_id != "")
 		{
-		    out.print(getContents("https://" + fbpage.domain + ".agilecrm.com/form.jsp?id=" + fbpage.form_id,"UTF-8"));
+		    out.print(getContents("https://" + fbpage.domain + ".agilecrm.com/form.jsp?id=" + fbpage.form_id + "&d=" + fbpage.domain ,"UTF-8"));
 		}
 		else
 		{

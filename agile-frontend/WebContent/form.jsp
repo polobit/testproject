@@ -1,6 +1,6 @@
 <%
 String formId = request.getParameter("id");
-String requestMethod = request.getMethod();
+String domain = request.getParameter("d");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -22,7 +22,7 @@ String requestMethod = request.getMethod();
          <div class="row">
            <textarea id="render" style="width:0px;height:0px;display:none;" class="hidden"></textarea>
            <div id="agileFormHolder"></div>           
-           <script data-main="misc/formbuilder/main.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+           <script data-main="https://<%=domain%>.agilecrm.com/misc/formbuilder/main-built.js" src="https://<%=domain%>.agilecrm.com/misc/formbuilder/assets/lib/require.js?v=3" ></script>
          </div>
       </div>
    </body>
