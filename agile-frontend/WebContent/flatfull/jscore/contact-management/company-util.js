@@ -421,13 +421,13 @@
 		 * If default filter is selected, removes filter cookies an load contacts
 		 * with out any query condition
 		 */
-		$('.default_company_filter').live('click', function(e)
+		$('.default_company_filter').die().live('click', function(e)
 		{
 			e.preventDefault();
 			revertToDefaultCompanies();
 		});
 		
-		$('#companies-filter').live('click', function(e)
+		$('#companies-filter').die().live('click', function(e)
 		{
 
 			e.preventDefault();
@@ -441,7 +441,7 @@
 			return;
 		});
 		
-		$('.company_static_filter').live('click', function(e)
+		$('.company_static_filter').die().live('click', function(e)
 		{
 
 			e.preventDefault();
@@ -498,6 +498,40 @@
 		$('#contact-tab-content .tab-pane').removeClass('active');
 		ele.addClass('active');
 	};
+	
+	/**
+	 * Changes, owner of the contact, when an option of change owner drop down
+	 * is selected.   
+	 */
+	var changeOwner = function(that){
+		
+		// Reads the owner id from the selected option
+		var new_owner_id = that.attr('data');
+		var new_owner_name = that.text();
+		var current_owner_id = $('#contact-owner').attr('data');
+		
+		// Returns, if same owner is selected again 
+		if(new_owner_id == current_owner_id)
+			{
+			  // Showing updated owner
+			  show_owner();
+			  return;
+			}
+		
+		  var contactModel = new BaseModel();
+		    contactModel.url = '/core/api/contacts/change-owner/' + new_owner_id + "/" + App_Companies.companyDetailView.model.get('id');
+		    contactModel.save(App_Companies.companyDetailView.model.toJSON(), {success: function(model){
+
+		    	// Replaces old owner details with changed one
+				$('#contact-owner').text(new_owner_name);
+				$('#contact-owner').attr('data', new_owner_id);
+				
+				// Showing updated owner
+				show_owner(); 
+				App_Companies.companyDetailView.model = model;
+				
+		    }});
+   	};
 	
 	// Deletes a contact from database
 	var deleteCurrentCompany = function(){
@@ -750,6 +784,17 @@
 			
 			e.preventDefault();
 			deleteCurrentCompany();
+		});
+		
+		/**
+		 * Changes, owner of the contact, when an option of change owner drop down
+		 * is selected.   
+		 */
+		$('.company-owner-list').live('click', function(){
+		
+			$('#change-owner-ul').css('display', 'none');
+			
+			changeOwner($(this));
 		});
 		
 		/**

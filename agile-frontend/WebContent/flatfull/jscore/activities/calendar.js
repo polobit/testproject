@@ -200,8 +200,12 @@ function showCalendar()
 									var last_name = getPropertyValue(event.contacts[i].properties, "last_name");
 									if (last_name == undefined)
 										last_name = "";
-									reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
-											event.contacts[i].properties, "first_name") + ' ' + last_name + '</a>';
+									if(event.contacts[i].type == 'COMPANY')
+										reletedContacts += '<a class="text-info" href="#company/' + event.contacts[i].id + '">' + getPropertyValue(
+											event.contacts[i].properties, "name") + '</a>';
+									else
+										reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
+												event.contacts[i].properties, "first_name") + ' ' + last_name + '</a>';
 								}
 								else
 									reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(

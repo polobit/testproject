@@ -873,6 +873,15 @@ $(function()
 						e.preventDefault();
 						SELECT_ALL = true;
 						_BULK_CONTACTS = window.location.hash;
+						
+						var html = '';
+						
+						if(company_util.isCompany())
+							html = ' Selected All ' + getAvailableContacts() + ' companies. <a hrer="#" id="select-all-revert" class="c-p text-info">Select chosen companies only</a>';
+						else
+							html = ' Selected All ' + getAvailableContacts() + ' contacts. <a hrer="#" id="select-all-revert" class="c-p text-info">Select chosen contacts only</a>';
+
+						
 						$('body')
 								.find('#bulk-select')
 								.css('display', 'inline-block')
@@ -896,12 +905,15 @@ $(function()
 						e.preventDefault();
 						SELECT_ALL = false;
 						_BULK_CONTACTS = undefined;
+						
+						var html = '';
+						
+						if(company_util.isCompany())
+							html = "Selected " + App_Companies.companiesListView.collection.length + " companies. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " companies</a>";
+						else
+							html = "Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " contacts</a>";
 
-						$('body')
-								.find('#bulk-select')
-								//.css('display', 'block')
-								.html(
-										"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " contacts</a>");
+						$('body').find('#bulk-select').html(html);
 					});
 
 });

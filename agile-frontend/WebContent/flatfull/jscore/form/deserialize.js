@@ -166,6 +166,10 @@ function deserializeForm(data, form)
 													 * first_name and last_name
 													 */
 													tag_name = getContactName(contact);
+													
+													var hrefLink = '#contact/'+contact.id;
+													if(contact.type == 'COMPANY')
+														hrefLink = '#company/'+contact.id;
 
 													/*
 													 * Creates a tag for each
@@ -177,7 +181,7 @@ function deserializeForm(data, form)
 													 * contact full name
 													 */													
 													fel.append(
-																	'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + tag_id + '"  style="display: inline-block; "><a class="text-white v-middle" href="#contact/' + contact.id + '">' + tag_name + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
+																	'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + tag_id + '"  style="display: inline-block; "><a class="text-white v-middle" href="' + hrefLink + '">' + tag_name + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
 												});
 							}
 							
