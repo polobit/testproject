@@ -684,3 +684,6 @@ padding-bottom:0px!important;
 .custom-number-controls:hover > span{
 	visibility: visible;
 }
+.fc_border_height{
+	min-height: 20px;
+}
