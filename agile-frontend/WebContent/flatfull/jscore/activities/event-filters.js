@@ -432,16 +432,19 @@ function renderEventBasedOnOwner(data)
 {
 	try
 	{
-		if (data.owner.id == CURRENT_DOMAIN_USER.id)
+		if (data.owner)
 		{
-			if (data.color == 'red' || data.color == '#f05050')
-				data.className = 'fc-b-l fc-b-2x fc-b-danger fc-border-height fc-event-month';
-			else if (data.color == 'green' || data.color == '#bbb')
-				data.className = 'fc-b-l fc-b-2x fc-b-info fc-border-height fc-event-month';
-			else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
-				data.className = 'fc-b-l fc-b-2x fc-b-warning fc-border-height fc-event-month';
-			data.color = '';
-			data.backgroundColor = '#fff';
+			if (data.owner.id == CURRENT_DOMAIN_USER.id)
+			{
+				if (data.color == 'red' || data.color == '#f05050')
+					data.className = 'fc-b-l fc-b-2x fc-b-danger fc-border-height fc-event-month';
+				else if (data.color == 'green' || data.color == '#bbb')
+					data.className = 'fc-b-l fc-b-2x fc-b-info fc-border-height fc-event-month';
+				else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
+					data.className = 'fc-b-l fc-b-2x fc-b-warning fc-border-height fc-event-month';
+				data.color = '';
+				data.backgroundColor = '#fff';
+			}
 		}
 		else
 		{
@@ -454,6 +457,7 @@ function renderEventBasedOnOwner(data)
 			data.color = '';
 			data.backgroundColor = '#fff';
 		}
+
 	}
 	catch (err)
 	{
