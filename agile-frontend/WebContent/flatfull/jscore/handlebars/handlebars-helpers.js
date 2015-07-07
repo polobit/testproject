@@ -291,29 +291,29 @@ $(function()
 		item = item.toLowerCase().trim();
 		console.log(item);
 		if (item == "email")
-			return "fa-envelope-o";
+						return "fa-envelope-o";
 		if (item == "phone")
-			return "fa-headphones";
+						return "fa-headphones";
 		if (item == "url")
-			return "fa-home";
+						return "fa-home";
 		if (item == "call")
-			return "fa-phone";
+						return "fa-phone";
 		if (item == "follow_up")
-			return "fa-sign-out";
+						return "fa-sign-out";
 		if (item == "meeting")
-			return "fa-group";
+						return "fa-group";
 		if (item == "milestone")
-			return "fa-cog";
+						return "fa-cog";
 		if (item == "send")
-			return "fa-reply";
+						return "fa-reply";
 		if (item == "tweet")
-			return "fa-share-square-o";
+						return "fa-share-square-o";
 		if (item == "other")
-			return "fa-tasks";
+						return "fa-tasks";
 		if (item == "twitter")
-			return "fa-twitter";
+						return "fa-twitter";
 		if (item == "facebook")
-			return "fa-facebook";
+						return "fa-facebook";
 
 	});
 
@@ -393,6 +393,16 @@ $(function()
 				}
 				return "Company";
 			}
+		} else if (App_Companies.companyDetailView && App_Companies.companyDetailView.model)
+		{
+			var contact_properties = App_Companies.companyDetailView.model.get('properties');
+
+			for (var i = 0; i < contact_properties.length; i++)
+			{
+				if (contact_properties[i].name == "name")
+					return contact_properties[i].value;
+			}
+			return "Company";
 		}
 	});
 
@@ -648,6 +658,51 @@ $(function()
 
 		// return $.datepicker.formatDate(format , new Date( parseInt(date) *
 		// 1000));
+	});
+
+	// Helper function to return date in user selected format in  preferences.
+
+	Handlebars.registerHelper('epochToHumanDateInFormat', function(date)
+	{
+
+		if (!date)
+			return;
+		return getDateInFormatFromEpoc(date);
+		
+	});
+
+	// Helper function to return date format from  preferences.
+
+	Handlebars.registerHelper('dateFormat', function()
+	{
+
+		return "Select Date";
+		
+	});
+
+	// Helper function to return current date in preferences page.
+
+	Handlebars.registerHelper('currentDateInFormat', function(format)
+	{
+		if(!format)
+			return;
+		format = format.replace(/MM/g, "mmmm").replace(/M/g, "mmm").replace(/DD/g, "dddd").replace(/D/g, "ddd");
+		return new Date().format(format);
+		
+	});
+
+	Handlebars.registerHelper('stringToHumanDateInFormat', function(date)
+	{
+		if(!date)
+			return;
+		var format = CURRENT_USER_PREFS.dateFormat;
+		format = format.replace(/MM/g, "mmmm").replace(/M/g, "mmm").replace(/DD/g, "dddd").replace(/D/g, "ddd");
+		var dateString = new Date(date);
+		if(dateString == "Invalid Date")
+			return getDateInFormatFromEpoc(date);
+		else
+			return dateString.format(format);
+		
 	});
 
 	/**
@@ -1130,6 +1185,18 @@ $(function()
 		if (matching_properties_list.length > 0)
 			return options.fn(matching_properties_list);
 	});
+	
+	/**
+	 * Displays multiple times occurred properties of a contact in its detail
+	 * view in single entity
+	 */
+	Handlebars.registerHelper('multiple_Company_Property_Element', function(name, properties, options)
+	{
+
+		var matching_properties_list = company_util.agile_crm_get_company_properties_list(name)
+		if (matching_properties_list.length > 0)
+			return options.fn(matching_properties_list);
+	});
 
 	/**
 	 * Converts address as comma seprated values and returns as handlebars safe
@@ -1501,8 +1568,8 @@ $(function()
 	});
 
 	Handlebars.registerHelper("getBase64Domain", function()
-	{
-		return window.btoa(window.location.host.split(".")[0]);
+			{
+				return window.btoa(window.location.host.split(".")[0]);
 	});
 
 	// Gets date in given range
@@ -1751,7 +1818,7 @@ $(function()
 			// Avoid comma appending to last element
 			if (i < j - 1)
 			{
-				ret = ret + ",- ";
+				ret = ret + ", ";
 			}
 			;
 		}
@@ -2451,6 +2518,16 @@ $(function()
 		return getIdFromHash();
 
 	});
+	
+	Handlebars.registerHelper('isAdmin',function(options)
+	{
+		if(CURRENT_DOMAIN_USER.is_admin){
+			return options.fn(this);
+		}else{
+			return options.inverse(this);
+		}
+		 
+	});
 
 	Handlebars.registerHelper('get_subscribers_type_from_hash', function()
 	{
@@ -2798,7 +2875,7 @@ $(function()
 
 		return ucfirst(plan_fragments[1]);
 
-	});
+	});		
 
 	Handlebars.registerHelper('getSubscriptionBasedOnPlan', function(customer, plan, options)
 	{
@@ -3851,6 +3928,26 @@ $(function()
 		var strings = value.replace(/[\[\]]+/g, '');
 		var charwithsinglequote = strings.replace(/"/g, "'");
 		return charwithsinglequote;
+	});
+
+	/**
+	 * Shows list of triggers separated by comma
+	 */
+	Handlebars.registerHelper('toLinkTrigger', function(context, options)
+	{
+		var ret = "";
+		for (var i = 0, j = context.length; i < j; i++)
+		{
+			ret = ret + options.fn(context[i]);
+
+			// Avoid comma appending to last element
+			if (i < j - 1)
+			{
+				ret = ret + ", ";
+			}
+			;
+		}
+		return ret;
 	});
 
 	// Gets minutes from milli seconds
@@ -5026,30 +5123,16 @@ $(function()
 			return "agilecrm";
 		}
 	});
-
-	// Checks whether user reached email accounts(GMAIL/IMAP/OFFICE) limit
-	// reached or not
-	Handlebars.registerHelper('has_email_account_limit_reached', function(options)
-	{
-		var type = HAS_EMAIL_ACCOUNT_LIMIT_REACHED;
-		if (type)
-			return options.fn(this);
-		else
-			return options.inverse(this);
-	});
-
-	// checks whether current user plan is pro or not.
+	
+	//checks whether current user plan is pro or not.
 	Handlebars.registerHelper("if_non_pro_plan", function(options)
 	{
 		if (!_billing_restriction)
 			return options.inverse(this);
-
-		if (_billing_restriction.currentLimits.planName !== "PRO")
-			return options.fn(this);
-
+		    if (_billing_restriction.currentLimits.planName !== "PRO")
+				return options.fn(this);
 		return options.inverse(this);
 	});
-
 	// Checks whether user reached email accounts(GMAIL/IMAP/OFFICE) limit
 	// reached or not
 	Handlebars.registerHelper('has_email_account_limit_reached', function(options)
@@ -5566,7 +5649,7 @@ $(function()
 			portlet_name = "Agile CRM Blog";
 		else if (p_name == 'Task Report')
 			portlet_name = "Task Report";
-		else if (p_name == 'Stats Report')
+		else if(p_name=='Stats Report')
 			portlet_name = "Activity Overview";
 		else
 			portlet_name = p_name;
@@ -5600,16 +5683,22 @@ $(function()
 			icon_name = 'icon-filter';
 		else if (p_name == 'Deals Assigned')
 			icon_name = 'icon-user';
-		else if (p_name == 'Agenda')
+		else if (p_name == 'Agenda' || p_name == 'Mini Calendar')
 			icon_name = "icon-calendar";
 		else if (p_name == 'Today Tasks' || p_name == 'Task Report')
 			icon_name = "icon-tasks";
 		else if (p_name == 'Agile CRM Blog')
 			icon_name = "icon-feed";
-		else if (p_name == 'Stats Report')
+		else if(p_name=='Stats Report')
 			icon_name = "icon-speedometer";
 		else if (p_name == 'Leaderboard')
 			icon_name = "icon-trophy";
+		else if (p_name== 'User Activities')
+			icon_name = "icon-cogs";
+		else if (p_name== 'Account Details')
+			icon_name = "icon-info";
+		else if (p_name == 'Revenue Graph')
+			icon_name = 'icon-graph';
 		return icon_name;
 	});
 	/**
@@ -6002,7 +6091,7 @@ $(function()
 		}
 
 	});
-
+	
 	/*
 	 * Returns the url without query parameters appended by agile
 	 */
@@ -6054,35 +6143,6 @@ $(function()
 		return message;
 	});
 
-	/**
-	 * return onboarding scheduling url by reading fron globals.js file
-	 */
-	Handlebars.registerHelper('ONBOARDING_CALENDAR_URL', function()
-	{
-
-		return ONBOARDING_SCHEDULE_URL;
-
-	});
-
-	/**
-	 * return support scheduling url by reading fron util.js file
-	 */
-	Handlebars.registerHelper('SUPPORT_CALENDAR_URL', function()
-	{
-
-		return SUPPORT_SCHEDULE_URL;
-
-	});
-
-	/**
-	 * return sales scheduling url by reading fron util.js file
-	 */
-	Handlebars.registerHelper('SALES_CALENDAR_URL', function()
-	{
-
-		return SALES_SCHEDULE_URL;
-
-			});
 
 		Handlebars.registerHelper('isAllowedInCurrentPlan', function(functionName, options) {
 	
@@ -6207,7 +6267,6 @@ $(function()
 		{
 			time_period = 'Last 24 Hours';
 		}
-		
 		return time_period;
 	});
 });
@@ -6239,3 +6298,206 @@ Handlebars.registerHelper('getcircle', function(percentage)
 		return 'background-image :linear-gradient(' + (prec - 90) + 'deg, transparent 50%, #39B4CC 50%), linear-gradient(90deg, #e8eff0 50%, transparent 50%)';
 	}
 });
+
+/**
+ * return onboarding scheduling url by reading fron globals.js file
+ */
+Handlebars.registerHelper('ONBOARDING_CALENDAR_URL', function()
+{
+
+	return ONBOARDING_SCHEDULE_URL;
+
+});
+
+/**
+ * return support scheduling url by reading fron util.js file
+ */
+Handlebars.registerHelper('SUPPORT_CALENDAR_URL', function()
+{
+
+	return SUPPORT_SCHEDULE_URL;
+
+});
+
+/**
+ * return sales scheduling url by reading fron util.js file
+ */
+Handlebars.registerHelper('SALES_CALENDAR_URL', function()
+{
+
+	return SALES_SCHEDULE_URL;
+
+});
+	Handlebars.registerHelper('trialDate', function()
+	{
+		
+		var TRAIL_PENDING_DAYS;
+		var _TRAIL_DAYS = 14; 
+
+		var json = $.ajax({ type : 'GET', url : '/core/api/subscription/', async : false,
+			dataType : 'json' }).responseText;
+		console.log("sub json:");
+		console.log(json);
+		var string = JSON.parse(json);
+		console.log("json string:");
+		console.log(string);
+//		var billingData = string.billing_data;
+//		var billingDataString = JSON.parse(billingData);
+		
+		
+		
+			if(TRAIL_PENDING_DAYS)
+				return TRAIL_PENDING_DAYS;
+			
+			if(!string || !string.created_time)
+				return (TRAIL_PENDING_DAYS = 14)
+				
+			var time = (new Date().getTime()/1000) - (string.created_time);
+			
+			var days = time / (24 * 60 *60);
+			
+			TRAIL_PENDING_DAYS = _TRAIL_DAYS - days;
+			
+			if(TRAIL_PENDING_DAYS < 0)
+			{
+				TRAIL_PENDING_DAYS = 0;
+			}
+			
+			TRAIL_PENDING_DAYS = Math.round(TRAIL_PENDING_DAYS);
+			return TRAIL_PENDING_DAYS;
+		});
+	Handlebars.registerHelper('get_portlet_description', function(p_name)
+			{
+	var description = '';
+	if (p_name == 'Filter Based')
+		description = 'See a list of 50 recently added contacts customizable by filters.';
+	else if (p_name == 'Emails Opened')
+		description = 'See what percentage of people open your direct emails.';
+	else if (p_name == 'Growth Graph')
+		description = 'Gain a quick insight on how contacts with specific tag(s) have changed over time.';
+	else if (p_name == 'Calls Per Person')
+		description = 'Detailed reports on call activity of your team.';
+	else if (p_name == 'Pending Deals')
+		description = 'Gives you a heads up on all your pending Deals.';
+	else if (p_name == 'Deals By Milestone')
+		description = 'A pie-chart of Deals grouped by Milestone.';
+	else if (p_name == 'Deals Funnel')
+		description = 'A funnel report of total Deals value in each Milestone.';
+	else if (p_name == 'Agenda')
+		description = 'A quick view of events from your calendar.';
+	else if (p_name == 'Today Tasks')
+		description = 'A list of your upcoming or due Tasks';
+	else if (p_name == 'Task Report')
+		description = 'Get a quick view of tasks by all users reported by status and duration.';
+	else if (p_name == 'Agile CRM Blog')
+		description = "A feed of what's happening at our end including updates on new features.";
+	else if(p_name=='Stats Report')
+		description = 'Detailed list of activities done by your team members.';
+	else if (p_name == 'Leaderboard')
+		description = ' A leaderboard for your team based on revenue won, tasks done, calls etc.';
+	else if (p_name== 'User Activities')
+		description = 'See a timeline of user actions in Agile CRM.';
+	else if (p_name== 'Account Details')
+		description = 'Find current plan information, number of users and more.';
+	else if (p_name== 'Revenue Graph')
+		description = 'Forecasted revenue graph based on your Deals.';
+	return description;
+			});
+
+	Handlebars.registerHelper('trialEndDate', function(billingData, options)
+			{
+		      var json={};
+		      var currentEpoch = new Date().getTime()/1000;
+		      currentEpoch = Math.round(currentEpoch);
+		      /*console.log("billing data is:");
+		      console.log(billingData.customer.metadata.trial_end);*/
+		      //billingData = billingData.toString();
+		      /*console.log("string is:");
+		      if(billingData.subscriptions.data.trialEnd)
+		        console.log(billingData.subscriptions.data.trialEnd);*/
+		      if(!billingData)
+		    	  {
+		    	  	return options.inverse(this);
+		    	  }
+		    	  console.log(billingData);
+		    	  /*var billingData = JSON.parse(billingData.billingData);
+		    	  console.log(billingData);*/
+              if(billingData.metadata && billingData.metadata.trial_end && billingData.metadata.trial_end > currentEpoch)
+        	   {
+
+        		var has_trial = (parseInt(billingData.metadata.trial_end) - currentEpoch)/(24*60*60);
+        		has_trial = Math.round(has_trial);
+        		var trialDate = (billingData.metadata.trial_end)/(24*60*60);
+        		if(has_trial>0)
+        			{
+        				json['trial_exists'] = true;
+        				json['days_left'] = has_trial;
+        				var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        				                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        				                ];
+        				var date = new Date();
+        	            date.setDate(date.getDate() + has_trial); 
+        	            var formattedDate = date.getDate()+' '+(monthNames[date.getMonth()])+' '+date.getFullYear();
+        				/*formattedDate = JSON.stringify(formattedDate);
+        	            console.log(formattedDate);*/
+        				json['trial_date'] = formattedDate;
+        				console.log("trial in json is:"+json['trial_date']);
+        				
+        			}
+        		else
+        			json['trial_exists'] = false;
+        		
+        	   }
+              else
+		        json['trial_exists'] = false;
+
+		       return options.fn(json);		        
+
+			});
+
+	Handlebars.registerHelper('trialEnd', function(billingData, options)
+			{
+		      var json={};
+		      var currentEpoch = new Date().getTime()/1000;
+		      currentEpoch = Math.round(currentEpoch);
+		      /*console.log("billing data is:");
+		      console.log(billingData.customer.metadata.trial_end);*/
+		      //billingData = billingData.toString();
+		      /*console.log("string is:");
+		      if(billingData.subscriptions.data.trialEnd)
+		        console.log(billingData.subscriptions.data.trialEnd);*/
+		      if(!billingData)
+		    	  {
+		    	  	return options.inverse(this);
+		    	  }
+		    	  console.log(billingData);
+
+              if(billingData.metadata && billingData.metadata.trial_end && billingData.metadata.trial_end > currentEpoch)
+        	   {
+
+        		var has_trial = (parseInt(billingData.metadata.trial_end) - currentEpoch)/(24*60*60);
+        		has_trial = Math.floor(has_trial);
+        		if(has_trial>0)
+        			{
+        				json['trial_exists'] = true;
+        				json['days_left'] = has_trial;
+        				var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        				                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        				                ];
+        				var date = new Date();
+        	            date.setDate(date.getDate() + has_trial); 
+        	            var formattedDate = date.getDate()+' '+(monthNames[date.getMonth()])+' '+date.getFullYear();
+        	            formattedDate = JSON.stringify(formattedDate);
+        	            console.log(formattedDate);
+        				json['trial_date'] = formattedDate;
+        			}
+        		else
+        			json['trial_exists'] = false;
+        		
+        	   }
+              else
+		        json['trial_exists'] = false;
+
+		       return options.fn(json);		        
+
+			});

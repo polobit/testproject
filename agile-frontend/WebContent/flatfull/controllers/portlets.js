@@ -5,8 +5,38 @@ var PortletsRouter = Backbone.Router
 								.extend({
 
 												routes : {
-												//"portlets" 						: "portlets"
+												//"portlets" 		: "portlets",
+													"add-dashlet" :"adddashlet"
 												},
+											adddashlet : function()
+											{
+												if(gridster==undefined){
+													App_Portlets.navigate("dashboard", { trigger : true });	
+												}
+												else{
+												head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js',
+															LIB_PATH + 'lib/jquery.gridster.js', LIB_PATH+'css/misc/agile-portlet.css',FLAT_FULL_UI + "css/jquery.gridster.css",
+															function()
+											{this.Catalog_Portlets_View = new Base_Collection_View({ url : '/core/api/portlets/default', templateKey : "portlets-add",
+												sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el){
+													
+												} });
+											
+											
+											this.Catalog_Portlets_View.appendItem = organize_portlets;
+
+											// 
+											this.Catalog_Portlets_View.collection.fetch();
+											$('#content').html(this.Catalog_Portlets_View.render().el);
+											
+											});
+												}
+											} ,
+											// Show form modal
+											//$('#portletStreamModal').modal('show');
+
+											// Add social network types template
+											//$("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);},
 												
 												portlets : function(){
 													head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js?='+ _AGILE_VERSION, LIB_PATH + 'lib/jquery.gridster.js',function(){
@@ -131,19 +161,20 @@ function addNewPortlet(portlet_type,p_name){
 	var scrollPosition;
 	portlet.save(obj, {
         success: function (data) {
-        	hidePortletsPopup();
-        	model=data.toJSON();
-        	//var el = $(getTemplate('portlets-model', model));
+        	//hidePortletsPopup();
+        	model=new BaseModel(data.toJSON());
+//        	var el = $(getTemplate('portlets-collection',model));
         	if($('#zero-portlets').is(':visible'))
         		$('#zero-portlets').hide();
         	if($('#no-portlets').is(':visible'))
     			$('#no-portlets').hide();
-        	Portlets_View.collection.add(model);
+        	App_Portlets.navigate("dashboard", { trigger : true });	
+        	//Portlets_View.collection.add(model);
         	
-        	scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
-        	//move the scroll bar for showing the newly added portlet
-        	window.scrollTo(0,scrollPosition);
-        	scrollPosition = 0;
+//        	scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
+//        	//move the scroll bar for showing the newly added portlet
+//        	window.scrollTo(0,scrollPosition);
+//        	//scrollPosition = 0;
         },
         error: function (model, response) {
         	hidePortletsPopup();
@@ -159,11 +190,9 @@ function addNewPortlet(portlet_type,p_name){
         	window.scrollTo(0,scrollPosition);
         	scrollPosition = 0;
         }});
-	/*setTimeout(function(){
-		gridster.add_widget($('#ui-id-'+model.column_position+'-'+model.row_position),model.size_x,model.size_y,model.column_position,model.row_position);
-		gridster.set_dom_grid_height();
-		window.scrollTo(0,scrollPosition);
-	},1000);*/
+	
+		
+	
 }
 function hidePortletsPopup(){
 	$('#portletStreamModal').modal('hide');
@@ -210,7 +239,7 @@ $('.portlet-delete-modal').live("click", function(e){
 		$('#portletDeleteModal').modal('hide');
 	}, dataType : 'json' });
 });
-$("#add-portlet").live("click", function(e){
+/*$("#add-portlet").live("click", function(e){
 	e.preventDefault();
 	this.Catalog_Portlets_View = new Base_Collection_View({ url : '/core/api/portlets/default', restKey : "portlet", templateKey : "portlets-add",
 		sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el){
@@ -233,7 +262,7 @@ $("#add-portlet").live("click", function(e){
 	// Add social network types template
 	$("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);
 	
-});
+});*/
 $('#portlets-contacts-model-list > tr, #portlets-companies-model-list > tr, #portlets-contacts-email-opens-model-list > tr').live('click', function(e){
 	var id = $(this).find(".data").attr("data");
 	App_Contacts.navigate("contact/" + id, { trigger : true });
