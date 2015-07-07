@@ -294,7 +294,12 @@ function showCalendar()
 						eventAfterRender : function(event, element, view)
 						{
 							$(".ui-resizable-handle").hide();
-							console.log("exec");
+							event = renderEventBasedOnOwner(event);
+							console.log("exec ");
+						},
+						eventRender : function(event, element, view)
+						{
+
 						},
 						/**
 						 * Shows event pop-up modal with pre-filled date and
@@ -368,7 +373,7 @@ function showCalendar()
 								revertFunc();
 								return;
 							}
-
+							event1 = revertEventColorBasedOnPriority(event1);
 							var event = $.extend(true, {}, event1);
 
 							// Update event if the user changes it in the
@@ -377,12 +382,35 @@ function showCalendar()
 							event.end = new Date(event.end).getTime() / 1000;
 							if (event.end == null || event.end == 0)
 								event.end = event.start;
-							if (event1.className == "b-l,b-2x,b-danger,fc_border_height,fc-event-month" || event1.className == "high,b-l,b-2x,b-light,fc_border_height,fc-event-month")
-								event.color = "red";
-							else if (event1.className == "b-l,b-2x,b-info,fc_border_height,fc-event-month" || event1.className == "low,b-l,b-2x,b-light,fc_border_height,fc-event-month")
-								event.color = "green";
-							else if (event1.className == "b-l,b-2x,b-warning,fc_border_height,fc-event-month" || event1.className == "normal,b-l,b-2x,b-light,fc_border_height,fc-event-month")
-								event.color = "#36C";
+
+							/*
+							 * if (event1.className ==
+							 * "b-l,b-2x,b-danger,fc_border_height,fc-event-month" ||
+							 * event1.className ==
+							 * "high,b-l,b-2x,b-light,fc_border_height,fc-event-month" ||
+							 * event1.className == "b-l b-2x b-danger
+							 * fc_border_height fc-event-month" ||
+							 * event1.className == "high b-l b-2x b-light
+							 * fc_border_height fc-event-month") event.color =
+							 * "red"; else if (event1.className ==
+							 * "b-l,b-2x,b-info,fc_border_height,fc-event-month" ||
+							 * event1.className ==
+							 * "low,b-l,b-2x,b-light,fc_border_height,fc-event-month" ||
+							 * event1.className == "b-l b-2x b-info
+							 * fc_border_height fc-event-month" ||
+							 * event1.className == "low b-l b-2x b-light
+							 * fc_border_height fc-event-month") event.color =
+							 * "green"; else if (event1.className ==
+							 * "b-l,b-2x,b-warning,fc_border_height,fc-event-month" ||
+							 * event1.className ==
+							 * "normal,b-l,b-2x,b-light,fc_border_height,fc-event-month" ||
+							 * event1.className == "b-l b-2x b-warning
+							 * fc_border_height fc-event-month" ||
+							 * event1.className == "normal b-l b-2x b-light
+							 * fc_border_height fc-event-month") event.color =
+							 * "#36C";
+							 */
+
 							var jsoncontacts = event.contacts;
 							var _contacts = [];
 							for ( var i in jsoncontacts)
@@ -390,7 +418,6 @@ function showCalendar()
 								_contacts.push(jsoncontacts[i].id);
 
 							}
-							event = renderEventBasedOnOwner(event);
 							delete event.contacts;
 							delete event.owner;
 							event.contacts = _contacts;
@@ -408,7 +435,7 @@ function showCalendar()
 						 */
 						eventClick : function(event)
 						{
-							event = revertEVentColorBasedOnPrioirty(event);
+							event = revertEventColorBasedOnPriority(event);
 
 							if (isNaN(event.id))
 								return;

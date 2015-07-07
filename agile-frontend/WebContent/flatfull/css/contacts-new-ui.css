@@ -690,3 +690,29 @@ padding-bottom:0px!important;
 .fc-event-month{
 	z-index: auto!important;
 }
+
+.fc-b-l{
+border-left: 1px solid #dee5e7!important;
+}
+
+.fc-b-2x{
+border-width: 2px!important;
+}
+
+.fc-b-warning{
+border-color: #fad733!important;
+}
+
+.fc-border-height {
+  min-height: 20px!important;
+}
+
+.fc-b-light{
+border-color: #edf1f2!important;
+}
+.fc-b-info{
+border-color: #23b7e5!important;
+}
+.fc-b-danger {
+  border-color: #f05050!important;
+}
