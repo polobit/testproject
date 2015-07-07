@@ -31,8 +31,8 @@ function gmap_search_by_date(DateRange){
 	console.clear();
 	console.log(DateRange);
 	
-//	var User_Domain = agile_id.getNamespace();
-	var User_Domain = "our";
+    var User_Domain = CURRENT_DOMAIN_USER.domain;
+	//var User_Domain = "our";
 	var options = "&";
 	
 	// Get Date Range
@@ -59,7 +59,6 @@ function gmap_search_by_date(DateRange){
 	$("#map-tab-waiting").fadeIn();
 	$.getJSON( DateRangeUrl, function( Response ) {
 	    
-		console.log("Response: ", Response);
 		$("#map-tab-waiting").fadeOut();
 		if(Response != null) {
 			for(var Key in Response){

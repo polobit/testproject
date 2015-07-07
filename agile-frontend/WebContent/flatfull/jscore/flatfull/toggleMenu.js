@@ -29,6 +29,47 @@ $('#app-aside-folded').on('click', function(e) {
 	
 	});
 	
+$(document).ready(function(){
+	if(( $(window).width() ) < 768 ) {
+	$("#aside li a").click(function(){
+	  $("#mobile-menu").trigger("click");
+	});
+	
+
+   $("#mobile-menu-settings").on("click",function(){
+   if( $("#aside").hasClass("off-screen") ) {
+   $("#aside").removeClass("off-screen");
+   }
+   });
+
+   $("#mobile-menu").on("click",function(){
+   if( $("#navbar").hasClass("show")) {
+   	$("#navbar").removeClass("show");
+   }
+   });
+
+   $("#navbar li a").on("click" , function(){
+   if($(this).hasClass("dropdown-toggle")) {
+	
+    }
+   else {
+   	$("#navbar").removeClass("show");
+   }
+   });
+   
+   }
+
+
+
+   });
+
+
+
+
+
+
+
+ 
 	
 	
 	

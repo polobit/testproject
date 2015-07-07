@@ -1,7 +1,11 @@
 package com.thirdparty;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,7 +19,6 @@ import org.json.JSONObject;
 
 import com.agilecrm.facebookpage.FacebookPage;
 import com.agilecrm.facebookpage.FacebookPageUtil;
-import com.google.appengine.api.NamespaceManager;
 
 /**
  * 
@@ -71,8 +74,7 @@ public class FacebookPageTab extends HttpServlet
 		FacebookPage fbpage = FacebookPageUtil.getFacebookPageDetails(facebookRequestedPageID);
 		if (fbpage != null && fbpage.form_id != "")
 		{
-			NamespaceManager.set(fbpage.domain);
-		    request.getRequestDispatcher("form.jsp?id=" + fbpage.form_id).include(request, response);
+		    out.print(getContents("https://" + fbpage.domain + ".agilecrm.com/form.jsp?id=" + fbpage.form_id + "&d=" + fbpage.domain ,"UTF-8"));
 		}
 		else
 		{
@@ -123,4 +125,27 @@ public class FacebookPageTab extends HttpServlet
 	String json = new String(base64_url_decode(encoded_envelope));
 	return json;
     }
+    
+    public String getContents(String url, String encodeType) {
+        URL u;
+        StringBuilder builder = new StringBuilder();
+        try {
+            u = new URL(url);
+            try {
+                BufferedReader theHTML = new BufferedReader(new InputStreamReader(u.openStream(), encodeType));
+                String thisLine;
+                while ((thisLine = theHTML.readLine()) != null) {
+                    builder.append(thisLine).append("\n");
+                } 
+            } 
+            catch (Exception e) {
+                System.err.println(e);
+            }
+        } catch (MalformedURLException e) {
+            System.err.println(url + " is not a parseable URL");
+            System.err.println(e);
+        }
+        return builder.toString();
+    }
+
 }

@@ -123,25 +123,23 @@
 		{{/if}}
 	</div>
 <div class="pull-left rightThumbView pos-rlt">
-	<div class="m-t-none text-cap text-md custom-color contact-title-dynamic pull-left">{{titleFromEnums log_type}}</div>
-    <div class="pull-right"><i class="fa fa-clock-o m-r-xs text-muted"></i>
-		<time class="log-created-time text-muted" datetime="{{epochToHumanDate "" time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-</div>
-<div class="clearfix"></div>
- 	<div>{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}</div>
-
-    <div class="edit-hover">
-		<div class="pull-right">
-        <span>Campaign - </span>
+	<div class="m-t-none text-cap text-md custom-color w-half pull-left">{{titleFromEnums log_type}}</div>
+	  <div class="edit-hover w-half pull-right text-ellipsis text-right">
+		<span>Campaign - </span>
          {{#hasMenuScope 'CAMPAIGN'}}
 			<a  href="#workflow/{{campaign_id}}"> {{campaign_name}}</a>
 		{{else}}
 			<p>{{campaign_name}}</p>
 		{{/hasMenuScope}}
-        
-        </div>
         <div class="clearfix"></div>
 	</div>	
+<div class="clearfix"></div>
+ 	<div class="pull-left" style="width:calc(100% - 120px)">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}</div>
+<div class="pull-right">
+<i class="fa fa-clock-o m-r-xs text-muted"></i>
+		<time class="log-created-time text-muted" datetime="{{epochToHumanDate "" time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+</div>
+  <div class="clearfix"></div>
 </div>
 <div class="clearfix"></div>
 </div>

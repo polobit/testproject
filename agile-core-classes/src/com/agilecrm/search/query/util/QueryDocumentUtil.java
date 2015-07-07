@@ -9,9 +9,9 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.SearchFilter;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.core.api.search.SearchAPI;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.BuilderInterface;
@@ -122,7 +122,7 @@ public class QueryDocumentUtil
 			 * Build equals and not equals queries conditions except time based
 			 * conditions
 			 */
-			if (!lhs.contains("time") || condition.equals(SearchRule.RuleCondition.DEFINED) || condition.equals(SearchRule.RuleCondition.NOT_DEFINED) )
+			if (!(lhs.contains("time") || lhs.contains("last_contacted")) || condition.equals(SearchRule.RuleCondition.DEFINED) || condition.equals(SearchRule.RuleCondition.NOT_DEFINED) )
 			{
 				/*
 				 * Create new query with LHS and RHS conditions to be processed
@@ -232,12 +232,12 @@ public class QueryDocumentUtil
 			}
 
 			// Queries on created or updated times
-			if (lhs.contains("time") && !lhs.contains("tags"))
+			else if ((lhs.contains("last_contacted") || lhs.contains("time")) && !lhs.contains("tags"))
 			{
 				query = createTimeQueryEpoch(query, lhs, condition, rhs, rhs_new, joinCondition);
 			}
 
-			if (lhs.contains("time") && lhs.contains("tags"))
+			else if (lhs.contains("time") && lhs.contains("tags"))
 			{
 				query = createTimeQueryEpoch(query, SearchUtil.normalizeTextSearchString(rhs) + "_time",
 						nestedCondition, nestedLhs, nestedRhs, joinCondition);
@@ -734,7 +734,7 @@ public class QueryDocumentUtil
 		return query;
 	}
 
-	public static String constructFilterQuery(ContactFilter filter)
+	public static String constructFilterQuery(SearchFilter filter)
 	{
 		// Construct query based on rules
 		String query = "";

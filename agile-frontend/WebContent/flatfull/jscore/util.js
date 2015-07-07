@@ -26,6 +26,8 @@ var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Haaris_Farooqi"
 var SALES_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Shravi_Sharma";
 
 var SUPPORT_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Raja_Shekar,Vamshi,Natesh,praveen,Abhishek_Pandey";
+
+var CALENDAR_WEEK_START_DAY = CURRENT_USER_PREFS.calendar_wk_start_day;
 /**
  * Returns random loading images
  * 

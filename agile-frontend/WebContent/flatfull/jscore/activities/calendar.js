@@ -236,6 +236,7 @@ function showCalendar()
 						editable : true,
 						theme : false,
 						contentHeight : 400,
+						firstDay : CALENDAR_WEEK_START_DAY,
 						themeButtonIcons : { prev : 'fc-icon-left-single-arrow', next : 'fc-icon-right-single-arrow' },
 						eventMouseover : function(event, jsEvent, view)
 						{

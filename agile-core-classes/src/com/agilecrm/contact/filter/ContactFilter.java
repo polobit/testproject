@@ -1,12 +1,10 @@
 package com.agilecrm.contact.filter;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
@@ -14,6 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.agilecrm.SearchFilter;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -55,7 +54,7 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @XmlRootElement
 @Cached
-public class ContactFilter implements Serializable, Comparable<ContactFilter>
+public class ContactFilter extends SearchFilter implements Serializable, Comparable<ContactFilter>
 {
 	// Key
 	@Id
@@ -81,21 +80,7 @@ public class ContactFilter implements Serializable, Comparable<ContactFilter>
 	@NotSaved(IfDefault.class)
 	public Type contact_type = Type.PERSON;
 
-	/**
-	 * Represents list of {@link SearchRule}, query is built on these list of
-	 * conditions
-	 */
-	@NotSaved(IfDefault.class)
-	@Embedded
-	public List<SearchRule> rules = new ArrayList<SearchRule>();
-
-	/**
-	 * Represents list of {@link SearchRule}, query is built on these list of
-	 * conditions
-	 */
-	@NotSaved(IfDefault.class)
-	@Embedded
-	public List<SearchRule> or_rules = new ArrayList<SearchRule>();
+	
 
 	/******************************** New Field ********************/
 	/**

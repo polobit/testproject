@@ -1,6 +1,6 @@
 /**
- * Initializes the date-range-picker. Calls the callback when the date
- * range is selected.
+ * Initializes the date-range-picker. Calls the callback when the date range is
+ * selected.
  * 
  * @param campaign_id -
  *            to show charts w.r.t campaign-id.
@@ -25,30 +25,40 @@ function initFunnelCharts(callback)
 				Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()
 		], 'Last Month' : [
 				Date.today().moveToFirstDayOfMonth().add({ months : -1 }), Date.today().moveToFirstDayOfMonth().add({ days : -1 })
-		] } }, function(start, end)
+		] }, locale : { applyLabel : 'Apply', cancelLabel : 'Cancel', fromLabel : 'From', toLabel : 'To', customRangeLabel : 'Custom', daysOfWeek : [
+				'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'
+		], monthNames : [
+				'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+		], firstDay : parseInt(CALENDAR_WEEK_START_DAY) } }, function(start, end)
 		{
 			var months_diff = Math.abs(start.getMonth() - end.getMonth() + (12 * (start.getFullYear() - end.getFullYear())));
 			$('#reportrange span').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
 			$("#week-range").html(end.add({ days : -6 }).toString('MMMM d, yyyy') + ' - ' + end.add({ days : 6 }).toString('MMMM d, yyyy'));
 
-				callback();
+			callback();
 		});
 	});
 
 	// Init the callback when the frequency selector changes too
-	if($('#frequency').length > 0)
+	if ($('#frequency').length > 0)
 	{
 		// Get Frequency
 		callback();
-		$('#frequency').change(function(){callback();});
+		$('#frequency').change(function()
+		{
+			callback();
+		});
 	}
-	
-	
-	fillSelect("filter", "core/api/filters", undefined, function(){
-		$('#filter').change(function(){callback();});
-		
+
+	fillSelect("filter", "core/api/filters", undefined, function()
+	{
+		$('#filter').change(function()
+		{
+			callback();
+		});
+
 	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All");
-	
+
 	callback();
 }
 

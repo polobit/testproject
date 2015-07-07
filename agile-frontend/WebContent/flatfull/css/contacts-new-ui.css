@@ -716,3 +716,6 @@ border-color: #23b7e5!important;
 .fc-b-danger {
   border-color: #f05050!important;
 }
+#milestone_val > span.help-inline{
+	font-size: 13.5px;
+}
