@@ -442,7 +442,7 @@ function renderEventBasedOnOwner(data)
 
 function revertEVentColorBasedOnPrioirty(event)
 {
-	if (event.className == "b-l,b-2x,b-danger,fc_border_height,fc-event-month" || event.className == "high,b-l,b-2x,b-light,fc_border_height fc-event-month")
+	if (event.className == "b-l,b-2x,b-danger,fc_border_height,fc-event-month" || event.className == "high,b-l,b-2x,b-light,fc_border_height,fc-event-month")
 		event.color = "red";
 	else if (event.className == "b-l,b-2x,b-info,fc_border_height,fc-event-month" || event.className == "low,b-l,b-2x,b-light,fc_border_height,fc-event-month")
 		event.color = "green";
