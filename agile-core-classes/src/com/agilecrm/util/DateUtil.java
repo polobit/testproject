@@ -368,7 +368,8 @@ public class DateUtil
 				sdf = new SimpleDateFormat(CustomFieldCSVDateFormat);
 			else
 				return null;
-
+			//Set timezone to the simple date format
+			sdf.setTimeZone(timeZone);
 			calendar.setTime(sdf.parse(duration));
 		}
 		catch (Exception e)

@@ -743,12 +743,12 @@ border-radius: 2px;
 	background-color: #f2b50f;
 }
 .leader-board-view li div.p-sm:nth-of-type(2) img {
-	border: 2px solid #61abb4;
-	background-color: #61abb4;
+	border: 2px solid #b8732e;
+	background-color: #b8732e;
 }
 .leader-board-view li div.p-sm:nth-of-type(3) img {
-	border: 2px solid #A1A9AD;
-	background-color: #A1A9AD;
+	border: 2px solid #61abb4;
+	background-color: #61abb4;
 }
 .leader-board-view li div.p-sm:nth-of-type(1) .agile-img:after{
 	content: "1";
@@ -769,7 +769,7 @@ border-radius: 2px;
   	position: absolute;
   	bottom: 0;
   	left: 0;
-  	background-color: #61abb4;
+  	background-color: #b8732e;
   	border-radius: 50%;
   	font-size: 12px;
   	width: 18px;
@@ -783,7 +783,7 @@ border-radius: 2px;
   	position: absolute;
   	bottom: 0;
   	left: 0;
-  	background-color: #A1A9AD;
+  	background-color: #61abb4;
   	border-radius: 50%;
   	font-size: 12px;
   	width: 18px;
@@ -811,4 +811,22 @@ border-radius: 2px;
 }
 .portlet-user-ms-container{
 	background: transparent url('../../img/switch.png') no-repeat 164px 50px!important;
+}
+.leaderboard_portlet_header{
+	border-bottom: 1px solid #edf1f2!important;
+}
+.leaderboard_portlet_header ul li div.panel-heading{
+	background-color: #fff!important; 
+}
+.leaderboard-bottom-border-edge:after{
+	content: "";
+  	position: absolute;
+  	border-bottom: 1px solid #F5F7F7;
+  	width: 90%;
+  	height: 10px;
+  	bottom: 0px;
+}
+.portlet_header small {
+	color: #98a6ad!important;
+ 	font-weight: 300!important;
 }

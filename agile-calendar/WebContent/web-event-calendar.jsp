@@ -183,7 +183,7 @@ if (scheduleid != null && !multiple_users)
 {  
 	System.out.println(scheduleid+"  --- schedule id if only one user");
    DomainUser domainUser=null;
-  emailAvailable = true;
+  
   OnlineCalendarPrefs online_prefs=OnlineCalendarUtil.getOnlineCalendarPrefs(scheduleid);
   if(_multiple_users.size()==1 && _multiple_users.size()!=0)
       domainUser=DomainUserUtil.getDomainUser(_multiple_users.get(0));
@@ -197,7 +197,7 @@ if (scheduleid != null && !multiple_users)
 	  
   if(domainUser != null)
 	  {
-          userAvailable = true;
+          userAvailable = true;emailAvailable = true;
           
 	      AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
 	      System.out.println("agileUser " + agileUser);

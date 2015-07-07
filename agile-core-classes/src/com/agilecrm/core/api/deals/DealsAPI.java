@@ -198,9 +198,27 @@ public class DealsAPI
     @Path("/byMilestone/{milestone}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public List<Opportunity> getOpportunitiesWithMilestone(@PathParam("milestone") String milestone)
+    public List<Opportunity> getOpportunitiesWithMilestone(@PathParam("milestone") String milestone,
+	    @QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
     {
-	return OpportunityUtil.getDeals(null, milestone, null);
+	int counts = 0;
+	if (count != null)
+	{
+	    counts = Integer.parseInt(count);
+	    if (counts > 50)
+		counts = 50;
+
+	    System.out.println("Test page size = " + counts);
+
+	    return OpportunityUtil.getDealsWithMilestone(null, milestone, null, counts, cursor);
+	}
+	else
+	{
+	    counts = 5;
+	    System.out.println("Test page size1 = " + counts);
+	    return OpportunityUtil.getDealsWithMilestone(null, milestone, null, counts, cursor);
+	}
+
     }
 
     /**

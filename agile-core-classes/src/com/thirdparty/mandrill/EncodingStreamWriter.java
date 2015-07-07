@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.util.Arrays;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -102,8 +103,8 @@ public class EncodingStreamWriter
 
     private void sendFinalBytes() throws Exception
     {
-	for (int i = previousIndex; i < size; i++)
-	    encodableBuffer[i] = 0;
+	byte[] temp = Arrays.copyOfRange(encodableBuffer,0, previousIndex-1);
+	encodableBuffer = temp;
 	write2Stream();
     }
 }

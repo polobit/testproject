@@ -45,7 +45,7 @@ $(function()
 		// var htmlContent = $(this).closest("tr").clone();
 		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
 		//hide camapign status
-		$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove();
+		//$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove();
 		$(this).prev('table').find("tbody").append(htmlContent);
 	});
 	
@@ -66,7 +66,7 @@ $(function()
 		// var htmlContent = $(this).closest("tr").clone();
 		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
 		//hide camapign status
-		$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove()
+		//$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove()
 		$(this).prev('table').find("tbody").append(htmlContent);
 	});
 	
@@ -355,6 +355,16 @@ function chainFiltersForContactAndCompany(el, data, callback) {
 	}
 }
 
+function chainFiltersForContact(el, data, callback) {
+	if(data) {
+		chainFilters($(el).find('.chained-table.contact.and_rules'), data.rules, undefined, false, false);
+		chainFilters($(el).find('.chained-table.contact.or_rules'), data.or_rules, callback, false, false);			
+	} else {
+		chainFilters($(el).find('.chained-table.contact.and_rules'), undefined, undefined, false, false);
+		chainFilters($(el).find('.chained-table.contact.or_rules'), undefined, callback, false, false);
+	}
+}
+
 /**
  * Chains fields using jquery.chained library. It deserialzed data into form
  * 
@@ -375,8 +385,8 @@ function chainFilters(el, data, callback, is_webrules, is_company)
 	} else {
 		if(!SEARCHABLE_CONTACT_CUSTOM_FIELDS)
 		{			
-			if(window.location.hash.indexOf("contact-filter") != -1)
-			   $("#content").html(getRandomLoadingImg());
+			/*if(window.location.hash.indexOf("contact-filter") != -1)
+			   $("#content").html(getRandomLoadingImg());*/
 			fillContactCustomFieldsInFilters(el, function(){
 				show_chained_fields(el, data, true);
 				if (callback && typeof (callback) === "function")
@@ -577,11 +587,11 @@ function fillCustomFields(fields, el, callback, is_webrules)
 			var element = condition.find("option.created_time"); 
 			add_custom_class_to_filter_elements(element, field.field_label+'_time');
 			$(element).addClass(field.field_label+'_time' + _AGILE_CUSTOM_DIVIDER_);
-			/*if(!is_webrules)
+			if(!is_webrules)
 			{
 				condition.append('<option value="DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is defined</option>');
-				condition.append('<option value-="NOT_DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +'_time																																				 '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>');
-			}*/
+				condition.append('<option value="NOT_DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +'_time																																				 '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>');
+			}
 		} else if(field.field_type == "NUMBER")
 		{
 			lhs_element.append('<option value="'+field.field_label+'_number" field_type="'+field.field_type+'">'+field.field_label+'</option>');
@@ -589,11 +599,11 @@ function fillCustomFields(fields, el, callback, is_webrules)
 			var element = condition.find("option.lead_score");
 			add_custom_class_to_filter_elements(element, field.field_label+'_number');
 			$(element).addClass(field.field_label+'_number' + _AGILE_CUSTOM_DIVIDER_);
-			/*if(!is_webrules)
+			if(!is_webrules)
 			{
 				condition.append('<option value="DEFINED" custom_chained_class= "'+field.field_label+'_number'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_number '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is defined</option>');
-				condition.append('<option value-="NOT_DEFINED" custom_chained_class= "'+field.field_label+'_number'+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +'_number '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>');
-			}*/
+				condition.append('<option value="NOT_DEFINED" custom_chained_class= "'+field.field_label+'_number'+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +'_number '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>');
+			}
 		
 		}
 		else
@@ -602,7 +612,7 @@ function fillCustomFields(fields, el, callback, is_webrules)
 			if(!is_webrules)
 			{
 				condition.append('<option value="DEFINED" custom_chained_class= "'+field.field_label+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is defined</option>');
-				condition.append('<option value-="NOT_DEFINED" custom_chained_class= "'+field.field_label+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>');
+				condition.append('<option value="NOT_DEFINED" custom_chained_class= "'+field.field_label+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>');
 			}
 		
 		}

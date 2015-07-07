@@ -885,4 +885,69 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	{
 		return UserAccessControlUtil.check(clazz.getSimpleName(), entity, CRUDOperation.DELETE, false);
 	}
+	
+	public List<T> fetchAllByOrderWithoutCount(int max, String cursor, Map<String, Object> map, boolean forceLoad, boolean cache,
+			String orderBy)
+	{
+		Query<T> query = ofy().query(clazz);
+		if (map != null)
+			for (String propName : map.keySet())
+			{
+				System.out.println(propName);
+				query.filter(propName, map.get(propName));
+			}
+
+		if (!StringUtils.isEmpty(orderBy))
+			query.order(orderBy);
+
+		return fetchAllWithCursorWithoutCount(max, cursor, query, forceLoad, cache);
+	}
+
+	public List<T> fetchAllWithCursorWithoutCount(int max, String cursor, Query<T> query, boolean forceLoad, boolean cache)
+	{
+		// Checks if read access is allowed to current user. If read access is
+		// not provided then query is modified such that user can access only
+		// entities he had created
+		System.out.println("check read query");
+		UserAccessControlUtil.checkReadAccessAndModifyQuery(clazz.getSimpleName(), query);
+
+		if (cursor != null)
+			query.startCursor(Cursor.fromWebSafeString(cursor));
+
+		int index = 0;
+		String newCursor = null;
+		List<T> results = new ArrayList<T>();
+
+		QueryResultIterator<T> iterator = query.iterator();
+		while (iterator.hasNext())
+		{
+			T result = iterator.next();
+
+			// Add to list
+			results.add(result);
+
+
+
+			// Check if we have reached the limit
+			if (++index == max)
+			{
+				// Sets cursor for client
+				if (iterator.hasNext())
+				{
+					Cursor cursorDb = iterator.getCursor();
+					newCursor = cursorDb.toWebSafeString();
+
+					// Store the cursor in the last element
+					if (result instanceof com.agilecrm.cursor.Cursor)
+					{
+						com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
+						agileCursor.cursor = newCursor;
+					}
+				}
+				break;
+			}
+		}
+		return results;
+	}
+	
 }

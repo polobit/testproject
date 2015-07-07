@@ -77,6 +77,7 @@
 													<optgroup label="Date">
 														<option value="created_time">Created</option>
 														<option value="updated_time">Updated</option>
+														<option value="last_contacted">Last Contacted</option>
 													</optgroup>
  													<optgroup label="Properties">
 														<option value="first_name">First Name</option>
@@ -88,12 +89,12 @@
 														<option value="lead_score">Score</option>
 														<option value="owner_id">Owner</option>
 														<option value="address">Address</option>
-														<!--<option value="city">City</option>
+														<option value="city">City</option>
 														<option value="state">State</option>
 														<option value="country">Country</option>
-														<option value="zip">Zip</option>-->
+														<option value="zip">Zip</option>
 													</optgroup>
-													<optgroup label="Activities">
+													<optgroup label="Campaigns">
 														<option value="campaign_status">Campaign Status</option>
 													</optgroup>
 													 <optgroup label="Custom Fields" id="custom-fields" class="hide">
@@ -116,14 +117,14 @@
 													<option value="BETWEEN_NUMBER" class="lead_score">between</option>
 													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
 													<option value="IS_LESS_THAN" class="lead_score">less than</option>
-													<option value="ON" class="updated_time created_time">on</option>
-													<option value="AFTER" class="created_time updated_time">is
+													<option value="ON" class="updated_time created_time last_contacted">on</option>
+													<option value="AFTER" class="created_time updated_time last_contacted">is
 														after</option>
-													<option value="BEFORE" class="created_time updated_time">is
+													<option value="BEFORE" class="created_time updated_time last_contacted">is
 														before</option>
-													<option value="BETWEEN" class="created_time updated_time">is
+													<option value="BETWEEN" class="created_time updated_time last_contacted">is
 														between</option>
-													<option value="LAST" class="created_time updated_time">in
+													<option value="LAST" class="created_time updated_time last_contacted">in
 														last</option>
 													<option value="NEXT" class="created_time updated_time">in next
 														</option>
@@ -135,12 +136,13 @@
 													<option value="ACTIVE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Active</option>
 													<option value="DONE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Completed</option>
 													<option value="REMOVED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Removed</option>
-													<option value="BOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Bounced</option>
+													<option value="SOFTBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Soft Bounced</option>
+													<option value="HARDBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Hard Bounced</option>
 													<option value="UNSUBSCRIBED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Unsubscribed</option>
-													<option value="SPAM_REPORTED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Reported Spam</option>
+													<option value="SPAM" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Spam Reported</option>
 													<option value="DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is defined</option>
 													<option value="NOT_DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is not defined</option>
-													
+												
 												</select>
 											</div>
 										</td>
@@ -232,6 +234,7 @@
 													<optgroup label="Date">
 														<option value="created_time">Created</option>
 														<option value="updated_time">Updated</option>
+														<option value="last_contacted">Last Contacted</option>
 													</optgroup>
  													<optgroup label="Properties">
 														<option value="first_name">First Name</option>
@@ -243,12 +246,12 @@
 														<option value="lead_score">Score</option>
 														<option value="owner_id">Owner</option>
 														<option value="address">Address</option>
-														<!--<option value="city">City</option>
+														<option value="city">City</option>
 														<option value="state">State</option>
 														<option value="country">Country</option>
-														<option value="zip">Zip</option>-->
+														<option value="zip">Zip</option>
 													</optgroup>
-													<optgroup label="Activities">
+													<optgroup label="Campaigns">
 														<option value="campaign_status">Campaign Status</option>
 													</optgroup>
 													 <optgroup label="Custom Fields" id="custom-fields" class="hide">
@@ -270,14 +273,14 @@
 													<option value="BETWEEN_NUMBER" class="lead_score">between</option>
 													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
 													<option value="IS_LESS_THAN" class="lead_score">less than</option>
-													<option value="ON" class="updated_time created_time">on</option>
-													<option value="AFTER" class="created_time updated_time">is
+													<option value="ON" class="updated_time created_time last_contacted">on</option>
+													<option value="AFTER" class="created_time updated_time last_contacted">is
 														after</option>
-													<option value="BEFORE" class="created_time updated_time">is
+													<option value="BEFORE" class="created_time updated_time last_contacted">is
 														before</option>
-													<option value="BETWEEN" class="created_time updated_time">is
+													<option value="BETWEEN" class="created_time updated_time last_contacted">is
 														between</option>
-													<option value="LAST" class="created_time updated_time">in
+													<option value="LAST" class="created_time updated_time last_contacted">in
 														last</option>
 													<option value="NEXT" class="created_time updated_time">in next
 														</option>
@@ -289,9 +292,10 @@
 													<option value="ACTIVE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Active</option>
 													<option value="DONE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Completed</option>
 													<option value="REMOVED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Removed</option>
-													<option value="BOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Bounced</option>
+													<option value="SOFTBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Soft Bounced</option>
+													<option value="HARDBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Hard Bounced</option>
 													<option value="UNSUBSCRIBED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Unsubscribed</option>
-													<option value="SPAM_REPORTED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Reported Spam</option>
+													<option value="SPAM" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Spam Reported</option>
 													<option value="DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is defined</option>
 													<option value="NOT_DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is not defined</option>
 												</select>

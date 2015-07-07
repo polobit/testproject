@@ -42,21 +42,26 @@ function setupLhsFilters(cel, is_company)
 		$('#lhs_filters_conatiner', cel).html(getTemplate("contacts-lhs-filters"));
 		fillSelect('owner_select', '/core/api/users', undefined, function()
 		{
-			// loading image is added to hidden select by fillselect
-			// remove it manually.
-			if (!SEARCHABLE_CONTACT_CUSTOM_FIELDS)
+			fillSelect('campaign_select_master', '/core/api/workflows', undefined, function()
 			{
-				$.getJSON("core/api/custom-fields/searchable/scope?scope=CONTACT", function(fields)
+				// loading image is added to hidden select by fillselect
+				// remove it manually.
+				$('#campaign_select_master').next('.loading').remove();
+				$('#campaign_select').html($('#campaign_select_master').html());
+				if (!SEARCHABLE_CONTACT_CUSTOM_FIELDS)
 				{
-					SEARCHABLE_CONTACT_CUSTOM_FIELDS = fields;
-					loadCustomFiledsFilters(fields, cel, is_company);
-					return;
-				})
-			}
-			else
-			{
-				loadCustomFiledsFilters(SEARCHABLE_CONTACT_CUSTOM_FIELDS, cel, is_company);
-			}
+					$.getJSON("core/api/custom-fields/searchable/scope?scope=CONTACT", function(fields)
+					{
+						SEARCHABLE_CONTACT_CUSTOM_FIELDS = fields;
+						loadCustomFiledsFilters(fields, cel, is_company);
+						return;
+					})
+				}
+				else
+				{
+					loadCustomFiledsFilters(SEARCHABLE_CONTACT_CUSTOM_FIELDS, cel, is_company);
+				}
+			}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
 		}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
 
 	}
@@ -72,20 +77,6 @@ function loadCustomFiledsFilters(fields, cel, is_company)
 	$("input.date", cel).datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
 	// $('#custom-filter-fields', cel).find("input.date").datepicker({ format :
 	// 'mm/dd/yyyy'});
-	$('select[name="CONDITION"]', cel).die().live('change', function(e)
-	{
-		var selected = $(this).val();
-		$(this).parent().find('div.condition_container').addClass('hide');
-		if ($(this).val() == 'DEFINED' || $(this).val() == 'NOT_DEFINED')
-		{
-			submitLhsFilter();
-		}
-		$(this).parent().find('div.condition_container.' + selected).find('input').val("").attr('prev-val', "");
-		$(this).parent().find('div.condition_container.' + selected).find('select').val("").attr('prev-val', "");
-		;
-		$(this).parent().find('div.condition_container.' + selected).removeClass('hide');
-		$(this).parent().find('div.condition_container.' + selected).find('#RHS :not(input.date)').focus();
-	});
 	scramble_filter_input_names(cel);
 	if (is_company && readData('dynamic_company_filter'))
 	{
@@ -184,6 +175,26 @@ $('#lhs-filters-header').die().live("click", function(e)
 	$(this).find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 	$(this).next().toggleClass('hide');
 	$(this).next().find('.lhs-contact-filter-row:visible').find('#RHS').filter(visibleFilter).find(':not(input.date)').focus();
+});
+
+$('#lhs-contact-filter-form select[name="CONDITION"]').die().live('change', function(e)
+{
+	var selected = $(this).val();
+	$(this).parent().find('div.condition_container').addClass('hide');
+	$(this).parent().find('div.condition_container.' + selected).removeClass('hide');
+	$(this).parent().find('div.condition_container.' + selected).find('#RHS :not(input.date)').focus();
+	var rhs = $(this).parent().find('div.condition_container.' + selected).find('#RHS').children().first().val();
+	var rhs_new_exist = false;
+	var rhs_new = "";
+	if ($(this).parent().find('div.condition_container.' + selected).find('#RHS_NEW') != undefined)
+	{
+		rhs_new_exist = true;
+		rhs_new = $(this).parent().find('div.condition_container.' + selected).find('#RHS_NEW').children().first().val();
+	}
+	if (rhs != "" && (!rhs_new_exist || rhs_new != ""))
+	{
+		submitLhsFilter();
+	}
 });
 
 $('#lhs-contact-filter-form #RHS input').die().live("blur keyup", function(e)
