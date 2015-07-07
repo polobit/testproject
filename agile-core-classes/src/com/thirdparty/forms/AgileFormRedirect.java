@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -53,7 +54,7 @@ public class AgileFormRedirect extends HttpServlet
 	    wr.close();
 	}
 
-	BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+	BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
 	String inputLine;
 	StringBuffer response = new StringBuffer();
 

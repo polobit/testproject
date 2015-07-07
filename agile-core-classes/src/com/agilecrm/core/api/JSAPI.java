@@ -3,7 +3,6 @@ package com.agilecrm.core.api;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
@@ -27,6 +27,8 @@ import org.json.JSONObject;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.TaskUtil;
+import com.agilecrm.cases.Case;
+import com.agilecrm.cases.util.CaseUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
@@ -135,7 +137,8 @@ public class JSAPI
     @Path("contacts")
     @GET
     @Produces("application/x-javascript;charset=UTF-8;")
-    public String createContact(@QueryParam("contact") String json, @QueryParam("campaigns") String campaignIds, @QueryParam("id") String apiKey)
+    public String createContact(@QueryParam("contact") String json, @QueryParam("campaigns") String campaignIds,
+	    @QueryParam("id") String apiKey)
     {
 	try
 	{
@@ -160,7 +163,7 @@ public class JSAPI
 		    String[] tags = new String[contact.tags.size()];
 		    contact.tags.toArray(tags);
 		    contact.addTags(tags);
-		    if(StringUtils.isNotBlank(campaignIds))
+		    if (StringUtils.isNotBlank(campaignIds))
 			JSAPIUtil.subscribeCampaigns(campaignIds, contact);
 		}
 		catch (WebApplicationException e)
@@ -174,7 +177,7 @@ public class JSAPI
 		{
 		    // If zero, save it
 		    contact.save();
-		    if(StringUtils.isNotBlank(campaignIds))
+		    if (StringUtils.isNotBlank(campaignIds))
 			JSAPIUtil.subscribeCampaigns(campaignIds, contact);
 		}
 		catch (PlanRestrictedException e)
@@ -326,10 +329,9 @@ public class JSAPI
 		opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
 
 	    if (StringUtils.isEmpty(opportunity.owner_id))
-		opportunity.owner_id = String.valueOf(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey).getId());
-	    opportunity.save();
-	    System.out.println("opportunitysaved");
+		opportunity.setOpportunityOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
 
+	    opportunity.save();
 	    return mapper.writeValueAsString(opportunity);
 
 	}
@@ -641,7 +643,6 @@ public class JSAPI
 	    Note note = mapper.readValue(json, Note.class);
 	    note.addRelatedContacts(contact.id.toString());
 	    note.save();
-	    System.out.println("note saved");
 	    return mapper.writeValueAsString(note);
 	}
 	catch (Exception e)
@@ -673,7 +674,6 @@ public class JSAPI
 	    else
 	    {
 		ObjectMapper mapper = new ObjectMapper();
-		System.out.println("getting score" + contact.lead_score);
 		return mapper.writeValueAsString(contact.lead_score);
 	    }
 	}
@@ -734,7 +734,7 @@ public class JSAPI
     @Path("contacts/get-tags")
     @GET
     @Produces("application / x-javascript;charset=UTF-8;")
-    public String getTags(@QueryParam("email") String email, @QueryParam("tags") String tags)
+    public String getTags(@QueryParam("email") String email)
     {
 	try
 	{
@@ -744,18 +744,6 @@ public class JSAPI
 	    else
 	    {
 		ObjectMapper mapper = new ObjectMapper();
-		System.out.println("getting tags" + contact.tags);
-
-		if (tags != null && !StringUtils.equals(tags, "null"))
-		{
-		    List<String> cookieTagsList = new ArrayList<String>();
-		    String[] tagsArray = tags.split(",");
-		    for (String tag : tagsArray)
-		    {
-			cookieTagsList.add(tag.trim());
-		    }
-		    contact.tags.addAll(new LinkedHashSet<String>(cookieTagsList));
-		}
 		return mapper.writeValueAsString(contact.tags);
 	    }
 	}
@@ -1389,14 +1377,14 @@ public class JSAPI
 	    for (Trigger trigger : triggers)
 	    {
 		if (StringUtils.equals(trigger.type.toString(), "FORM_SUBMIT")
-			&& (newContact || !TriggerUtil.getTriggerRunStatus(trigger)))
+		        && (newContact || !TriggerUtil.getTriggerRunStatus(trigger)))
 		{
 		    System.out.println("trigger condition, event match ...");
 		    if (StringUtils.equals(trigger.trigger_form_event, form.id.toString()))
 		    {
 			System.out.println("Assigning campaign to contact ...");
 			WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id,
-				new JSONObject().put("form", formFields));
+			        new JSONObject().put("form", formFields));
 		    }
 		}
 	    }
@@ -1423,6 +1411,44 @@ public class JSAPI
 	}
 	catch (Exception e)
 	{
+	    return null;
+	}
+    }
+
+    @Path("/case")
+    @GET
+    @Produces("application / x-javascript;charset=UTF-8;")
+    public String createCase(@QueryParam("case") String caseData, @QueryParam("email") String email,
+	    @QueryParam("id") String apiKey)
+    {
+	try
+	{
+	    ObjectMapper mapper = new ObjectMapper();
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
+	    Case c = mapper.readValue(caseData, Case.class);
+	    if (StringUtils.isEmpty(c.owner_id))
+		c.setCaseOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
+
+	    c.addContactToCase(contact.id.toString());
+	    c.save();
+	    return mapper.writeValueAsString(c);
+	}
+	catch (JsonParseException e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	catch (JsonMappingException e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	catch (IOException e)
+	{
+	    e.printStackTrace();
 	    return null;
 	}
     }
