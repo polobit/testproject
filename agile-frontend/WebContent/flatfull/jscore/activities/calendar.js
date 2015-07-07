@@ -287,8 +287,8 @@ function showCalendar()
 						},
 						eventMouseout : function(event, jsEvent, view)
 						{
-							$(this).find('.fc-overlay').hide();
-							$(this).find('.fc-overlay').remove();
+							// $(this).find('.fc-overlay').hide();
+							// $(this).find('.fc-overlay').remove();
 							$(this).find(".ui-resizable-handle").hide();
 						},
 						eventAfterRender : function(event, element, view)
@@ -377,11 +377,11 @@ function showCalendar()
 							event.end = new Date(event.end).getTime() / 1000;
 							if (event.end == null || event.end == 0)
 								event.end = event.start;
-							if (event1.className == "b-l,b-2x,b-danger,fc_border_height" || event1.className == "high,b-light,fc_border_height")
+							if (event1.className == "b-l,b-2x,b-danger,fc_border_height" || event1.className == "high,b-l,b-2x,b-light,fc_border_height")
 								event.color = "red";
-							else if (event1.className == "b-l,b-2x,b-info,fc_border_height" || event1.className == "low,b-light,fc_border_height")
+							else if (event1.className == "b-l,b-2x,b-info,fc_border_height" || event1.className == "low,b-l,b-2x,b-light,fc_border_height")
 								event.color = "green";
-							else if (event1.className == "b-l,b-2x,b-warning,fc_border_height" || event1.className == "normal,b-light,fc_border_height")
+							else if (event1.className == "b-l,b-2x,b-warning,fc_border_height" || event1.className == "normal,b-l,b-2x,b-light,fc_border_height")
 								event.color = "#36C";
 							var jsoncontacts = event.contacts;
 							var _contacts = [];
@@ -390,6 +390,7 @@ function showCalendar()
 								_contacts.push(jsoncontacts[i].id);
 
 							}
+							event = renderEventBasedOnOwner(event);
 							delete event.contacts;
 							delete event.owner;
 							event.contacts = _contacts;
@@ -407,12 +408,7 @@ function showCalendar()
 						 */
 						eventClick : function(event)
 						{
-							if (event.className == "b-l,b-2x,b-danger,fc_border_height" || event.className == "high,b-light,fc_border_height")
-								event.color = "red";
-							else if (event.className == "b-l,b-2x,b-info,fc_border_height" || event.className == "low,b-light,fc_border_height")
-								event.color = "green";
-							else if (event.className == "b-l,b-2x,b-warning,fc_border_height" || event.className == "normal,b-light,fc_border_height")
-								event.color = "#36C";
+							event = revertEVentColorBasedOnPrioirty(event);
 
 							if (isNaN(event.id))
 								return;

@@ -428,13 +428,24 @@ function renderEventBasedOnOwner(data)
 	else
 	{
 		if (data.color == 'red' || data.color == '#f05050')
-			data.className = 'high b-light fc_border_height';
+			data.className = 'high b-l b-2x b-light fc_border_height';
 		else if (data.color == 'green' || data.color == '#bbb')
-			data.className = 'low b-light fc_border_height';
+			data.className = 'low b-l b-2x b-light fc_border_height';
 		else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
-			data.className = 'normal b-light fc_border_height';
+			data.className = 'normal b-l b-2x b-light fc_border_height';
 		data.color = '';
 		data.backgroundColor = '#fff';
 	}
 	return data;
+}
+
+function revertEVentColorBasedOnPrioirty(event)
+{
+	if (event.className == "b-l,b-2x,b-danger,fc_border_height" || event.className == "high,b-l,b-2x,b-light,fc_border_height")
+		event.color = "red";
+	else if (event.className == "b-l,b-2x,b-info,fc_border_height" || event.className == "low,b-l,b-2x,b-light,fc_border_height")
+		event.color = "green";
+	else if (event.className == "b-l,b-2x,b-warning,fc_border_height" || event.className == "normal,b-l,b-2x,b-light,fc_border_height")
+		event.color = "#36C";
+	return event;
 }
