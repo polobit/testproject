@@ -684,3 +684,6 @@ padding-bottom:0px!important;
 .custom-number-controls:hover > span{
 	visibility: visible;
 }
+#milestone_val > span.help-inline{
+	font-size: 13.5px;
+}
