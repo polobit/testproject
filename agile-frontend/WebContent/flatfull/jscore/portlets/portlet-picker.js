@@ -1956,7 +1956,7 @@ function setPortletContentHeight(base_model){
 		}
 		
 		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-x","hidden");
-		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-y","hidden");
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-y","auto");
 	}
 }
 function getPortletsCurrencySymbol(){

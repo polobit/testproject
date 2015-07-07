@@ -781,7 +781,7 @@ border-radius: 2px;
  background: #bebebe;
 }
 .portlet_body_calendar .events_show{
-	background-color:#23b7e5;
+	/*background-color:#23b7e5;*/
 	height:100%;
 }
 /* .fc-border-separate tr td:first-child > div {
@@ -792,9 +792,21 @@ width:100%;
 	display:table-cell;
 } */
 
+.events_show::-webkit-scrollbar-thumb {
+ background: #bebebe;
+}
+.events_show::-webkit-scrollbar {
+ width: 5px;
+ margin-right: 4px !important;
+ background:#eee;
+}
+.events_show{
+	overflow-y:auto
+}
 
-
-
+.portlet_body_calendar{
+	overflow : auto
+}
 
 
 
