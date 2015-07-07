@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Set;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.googlecode.objectify.Key;
@@ -85,7 +87,19 @@ public abstract class BulkActionAdaptor implements DeferredTask
     {
 
 	if (info != null)
+	{
 	    SessionManager.set(info);
+	    return;
+	}
+
+	if (info == null && key != null)
+	{
+	    DomainUser user = DomainUserUtil.getDomainUser(key.getId());
+	    if (user == null)
+		return;
+
+	    BulkActionUtil.setSessionManager(user);
+	}
     }
 
     /**

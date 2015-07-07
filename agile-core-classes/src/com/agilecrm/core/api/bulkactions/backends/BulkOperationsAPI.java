@@ -35,6 +35,7 @@ import com.agilecrm.bulkaction.deferred.CampaignSubscriberDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkDeleteDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkTagAddDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkTagRemoveDeferredTask;
+import com.agilecrm.bulkaction.deferred.ContactsOwnerChangeDeferredTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
@@ -164,37 +165,48 @@ public class BulkOperationsAPI
     {
 	System.out.println(contact_ids + " model ids " + filter + " filter " + new_owner + " new_owner");
 
-	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids,
-		current_user);
+	ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter,
+		contact_ids, null, 200, current_user);
 
-	while (fetcher.hasNextSet())
+	while (idsFetcher.hasNext())
 	{
-	    List<Contact> contacts = fetcher.nextSet();
 
-	    if (contact_ids != null)
-		ContactUtil.processContacts(contacts);
+	    try
+	    {
+		Set<Key<Contact>> contactSet = idsFetcher.next();
+		ContactsOwnerChangeDeferredTask task = new ContactsOwnerChangeDeferredTask(current_user,
+			NamespaceManager.get(), contactSet, null, new_owner);
 
-	    ContactUtil.changeOwnerToContactsBulk(contacts, new_owner);
+		// Add to queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.OWNER_CHANGE_QUEUE);
+		queue.add(TaskOptions.Builder.withPayload(task));
+
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
 	}
 
 	String message = "Owner changed for ";
-	if (fetcher.getAvailableContacts() > 0)
+	if (idsFetcher.getContactCount() > 0)
 	{
-	    message = message + fetcher.getAvailableContacts() + " Contacts";
+	    message = message + idsFetcher.getContactCount() + " Contacts";
 	    DomainUser user = DomainUserUtil.getDomainUser(Long.parseLong(new_owner));
-	    ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "CHANGE_OWNER", user.name,
-		    "contacts", "");
+	    ActivitySave.createBulkActionActivity(idsFetcher.getContactCount(), "CHANGE_OWNER", user.name, "contacts",
+		    "");
 	}
-	else if (fetcher.getAvailableCompanies() > 0)
+	else if (idsFetcher.getCompanyCount() > 0)
 	{
-	    message = message + fetcher.getAvailableCompanies() + " Companies";
+	    message = message + idsFetcher.getCompanyCount() + " Companies";
 	    DomainUser user = DomainUserUtil.getDomainUser(Long.parseLong(new_owner));
-	    ActivitySave.createBulkActionActivity(fetcher.getAvailableCompanies(), "CHANGE_OWNER", user.name,
-		    "companies", "");
+	    ActivitySave.createBulkActionActivity(idsFetcher.getCompanyCount(), "CHANGE_OWNER", user.name, "companies",
+		    "");
 	}
 	else
 	{
-	    message = message + fetcher.getAvailableCompanies() + " Companies/Contacts";
+	    message = message + idsFetcher.getTotalCount() + " Companies/Contacts";
 	}
 	BulkActionNotifications.publishNotification(message);
 
