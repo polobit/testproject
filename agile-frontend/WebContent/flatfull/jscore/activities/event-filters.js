@@ -386,9 +386,19 @@ function loadGoogleEventsandRender()
 function renderAddedEventToFullCalenarBasedOnCookie(data)
 {
 	var renderEvent = false;
+	var current_user_checked = false;
 	var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
 
-	if (data.owner.id == CURRENT_DOMAIN_USER.id)
+	if (eventFilters)
+	{
+		var type_of_cal = eventFilters.cal_type;
+		for ( var cal in type_of_cal)
+		{
+			if (type_of_cal[cal] == "agile")
+				current_user_checked = true;
+		}
+	}
+	if (data.owner.id == CURRENT_DOMAIN_USER.id && current_user_checked)
 	{
 		renderEvent = true;
 	}
