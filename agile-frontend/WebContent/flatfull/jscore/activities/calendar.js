@@ -287,8 +287,8 @@ function showCalendar()
 						},
 						eventMouseout : function(event, jsEvent, view)
 						{
-							// $(this).find('.fc-overlay').hide();
-							// $(this).find('.fc-overlay').remove();
+							$(this).find('.fc-overlay').hide();
+							$(this).find('.fc-overlay').remove();
 							$(this).find(".ui-resizable-handle").hide();
 						},
 						eventAfterRender : function(event, element, view)
