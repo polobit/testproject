@@ -417,35 +417,37 @@ function renderEventBasedOnOwner(data)
 	if (data.owner.id == CURRENT_DOMAIN_USER.id)
 	{
 		if (data.color == 'red' || data.color == '#f05050')
-			data.className = 'b-l b-2x b-danger fc_border_height';
+			data.className = 'b-l b-2x b-danger fc_border_height fc-event-month';
 		else if (data.color == 'green' || data.color == '#bbb')
-			data.className = 'b-l b-2x b-info fc_border_height';
+			data.className = 'b-l b-2x b-info fc_border_height fc-event-month';
 		else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
-			data.className = 'b-l b-2x b-warning fc_border_height';
+			data.className = 'b-l b-2x b-warning fc_border_height fc-event-month';
 		data.color = '';
 		data.backgroundColor = '#fff';
 	}
 	else
 	{
 		if (data.color == 'red' || data.color == '#f05050')
-			data.className = 'high b-l b-2x b-light fc_border_height';
+			data.className = 'high b-l b-2x b-light fc_border_height fc-event-month';
 		else if (data.color == 'green' || data.color == '#bbb')
-			data.className = 'low b-l b-2x b-light fc_border_height';
+			data.className = 'low b-l b-2x b-light fc_border_height fc-event-month';
 		else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
-			data.className = 'normal b-l b-2x b-light fc_border_height';
+			data.className = 'normal b-l b-2x b-light fc_border_height fc-event-month';
 		data.color = '';
 		data.backgroundColor = '#fff';
 	}
+
 	return data;
 }
 
 function revertEVentColorBasedOnPrioirty(event)
 {
-	if (event.className == "b-l,b-2x,b-danger,fc_border_height" || event.className == "high,b-l,b-2x,b-light,fc_border_height")
+	if (event.className == "b-l,b-2x,b-danger,fc_border_height,fc-event-month" || event.className == "high,b-l,b-2x,b-light,fc_border_height fc-event-month")
 		event.color = "red";
-	else if (event.className == "b-l,b-2x,b-info,fc_border_height" || event.className == "low,b-l,b-2x,b-light,fc_border_height")
+	else if (event.className == "b-l,b-2x,b-info,fc_border_height,fc-event-month" || event.className == "low,b-l,b-2x,b-light,fc_border_height,fc-event-month")
 		event.color = "green";
-	else if (event.className == "b-l,b-2x,b-warning,fc_border_height" || event.className == "normal,b-l,b-2x,b-light,fc_border_height")
+	else if (event.className == "b-l,b-2x,b-warning,fc_border_height,fc-event-month" || event.className == "normal,b-l,b-2x,b-light,fc_border_height,fc-event-month")
 		event.color = "#36C";
 	return event;
+
 }

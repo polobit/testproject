@@ -377,11 +377,11 @@ function showCalendar()
 							event.end = new Date(event.end).getTime() / 1000;
 							if (event.end == null || event.end == 0)
 								event.end = event.start;
-							if (event1.className == "b-l,b-2x,b-danger,fc_border_height" || event1.className == "high,b-l,b-2x,b-light,fc_border_height")
+							if (event1.className == "b-l,b-2x,b-danger,fc_border_height,fc-event-month" || event1.className == "high,b-l,b-2x,b-light,fc_border_height,fc-event-month")
 								event.color = "red";
-							else if (event1.className == "b-l,b-2x,b-info,fc_border_height" || event1.className == "low,b-l,b-2x,b-light,fc_border_height")
+							else if (event1.className == "b-l,b-2x,b-info,fc_border_height,fc-event-month" || event1.className == "low,b-l,b-2x,b-light,fc_border_height,fc-event-month")
 								event.color = "green";
-							else if (event1.className == "b-l,b-2x,b-warning,fc_border_height" || event1.className == "normal,b-l,b-2x,b-light,fc_border_height")
+							else if (event1.className == "b-l,b-2x,b-warning,fc_border_height,fc-event-month" || event1.className == "normal,b-l,b-2x,b-light,fc_border_height,fc-event-month")
 								event.color = "#36C";
 							var jsoncontacts = event.contacts;
 							var _contacts = [];

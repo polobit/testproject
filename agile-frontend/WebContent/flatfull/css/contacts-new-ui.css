@@ -687,3 +687,6 @@ padding-bottom:0px!important;
 .fc_border_height{
 	min-height: 20px;
 }
+.fc-event-month{
+	z-index: auto!important;
+}
