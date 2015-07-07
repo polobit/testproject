@@ -28,7 +28,6 @@ import com.agilecrm.account.APIKey;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.cases.Case;
-import com.agilecrm.cases.util.CaseUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
