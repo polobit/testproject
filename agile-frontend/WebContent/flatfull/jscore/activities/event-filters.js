@@ -445,17 +445,18 @@ function renderEventBasedOnOwner(data)
 				data.color = '';
 				data.backgroundColor = '#fff';
 			}
-		}
-		else
-		{
-			if (data.color == 'red' || data.color == '#f05050')
-				data.className = 'high fc-b-l fc-b-2x fc-b-light fc-border-height fc-event-month';
-			else if (data.color == 'green' || data.color == '#bbb')
-				data.className = 'low fc-b-l fc-b-2x fc-b-light fc-border-height fc-event-month';
-			else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
-				data.className = 'normal fc-b-l fc-b-2x fc-b-light fc-border-height fc-event-month';
-			data.color = '';
-			data.backgroundColor = '#fff';
+
+			else
+			{
+				if (data.color == 'red' || data.color == '#f05050')
+					data.className = 'high fc-b-l fc-b-2x fc-b-light fc-border-height fc-event-month';
+				else if (data.color == 'green' || data.color == '#bbb')
+					data.className = 'low fc-b-l fc-b-2x fc-b-light fc-border-height fc-event-month';
+				else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
+					data.className = 'normal fc-b-l fc-b-2x fc-b-light fc-border-height fc-event-month';
+				data.color = '';
+				data.backgroundColor = '#fff';
+			}
 		}
 
 	}
