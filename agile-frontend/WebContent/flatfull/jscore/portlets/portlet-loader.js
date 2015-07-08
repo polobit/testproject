@@ -1927,6 +1927,7 @@ function minicalendar(el)
 												data.color='#edf1f2'
 											
 											if(data.start >= (todayDate.getTime()/1000) && data.start < (endDate.getTime()/1000)) {	
+											var e_date= new Date(data.start*1000);
 											$(el).find('.events_show').append('<li class="p-l-sm p-t-xs" style=color:'+data.color+'"><span style="color : black">'+data.title+'<br></span><small>'+ e_date.format('dd-mmm-yyyy HH:MM') + ' </small></li>');
 									
 									   }
