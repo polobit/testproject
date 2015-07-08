@@ -2,6 +2,7 @@ $(function()
 {
 	$(".calendar_check").die().live('click', function(e)
 	{
+		showLoadingOnCalendar(true);
 		createRequestUrlBasedOnFilter();
 		var calendar = $(this).val();
 		var ownerids = '';
@@ -28,6 +29,7 @@ $(function()
 
 	$(".calendar_user_check").die().live('click', function(e)
 	{
+		showLoadingOnCalendar(true);
 		// checkBothCalWhenNoCalSelected();
 		createRequestUrlBasedOnFilter();
 		// loadFullCalednarOrListView();
@@ -286,6 +288,8 @@ function renderFullCalenarEvents(ownerid)
 			data = renderEventBasedOnOwner(data);
 			$('#calendar_event').fullCalendar('renderEvent', data);
 		});
+		showLoadingOnCalendar(false);
+
 	});
 
 }
@@ -304,6 +308,7 @@ function removeFullCalendarEvents(ownerid)
 		{
 			$('#calendar_event').fullCalendar('removeEvents', data.id);
 		});
+		showLoadingOnCalendar(false);
 	});
 
 }
@@ -477,4 +482,20 @@ function revertEventColorBasedOnPriority(event)
 		event.color = "#36C";
 	return event;
 
+}
+
+function showLoadingOnCalendar(loading)
+{
+	if (loading)
+	{
+		$("#loading_calendar_events").remove();
+		$('.fc-header-left').append(
+				'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
+				.show();
+		$('.fc-header-left').show();
+	}
+	else
+	{
+		$("#loading_calendar_events").hide();
+	}
 }

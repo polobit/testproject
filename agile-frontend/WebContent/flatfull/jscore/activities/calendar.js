@@ -217,8 +217,10 @@ function showCalendar()
 							{
 
 								$("#loading_calendar_events").remove();
-								$('.fc-header-left').append(
-										'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle">loading...</span>').show();
+								$('.fc-header-left')
+										.append(
+												'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
+										.show();
 								$('.fc-header-left').show();
 
 							}
@@ -240,6 +242,7 @@ function showCalendar()
 						themeButtonIcons : { prev : 'fc-icon-left-single-arrow', next : 'fc-icon-right-single-arrow' },
 						eventMouseover : function(event, jsEvent, view)
 						{
+
 							calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 							var reletedContacts = '';
 							var meeting_type = '';
@@ -298,10 +301,7 @@ function showCalendar()
 							event = renderEventBasedOnOwner(event);
 							console.log("exec ");
 						},
-						eventRender : function(event, element, view)
-						{
 
-						},
 						/**
 						 * Shows event pop-up modal with pre-filled date and
 						 * time values, when we select a day or multiple days of
@@ -383,34 +383,6 @@ function showCalendar()
 							event.end = new Date(event.end).getTime() / 1000;
 							if (event.end == null || event.end == 0)
 								event.end = event.start;
-
-							/*
-							 * if (event1.className ==
-							 * "b-l,b-2x,b-danger,fc_border_height,fc-event-month" ||
-							 * event1.className ==
-							 * "high,b-l,b-2x,b-light,fc_border_height,fc-event-month" ||
-							 * event1.className == "b-l b-2x b-danger
-							 * fc_border_height fc-event-month" ||
-							 * event1.className == "high b-l b-2x b-light
-							 * fc_border_height fc-event-month") event.color =
-							 * "red"; else if (event1.className ==
-							 * "b-l,b-2x,b-info,fc_border_height,fc-event-month" ||
-							 * event1.className ==
-							 * "low,b-l,b-2x,b-light,fc_border_height,fc-event-month" ||
-							 * event1.className == "b-l b-2x b-info
-							 * fc_border_height fc-event-month" ||
-							 * event1.className == "low b-l b-2x b-light
-							 * fc_border_height fc-event-month") event.color =
-							 * "green"; else if (event1.className ==
-							 * "b-l,b-2x,b-warning,fc_border_height,fc-event-month" ||
-							 * event1.className ==
-							 * "normal,b-l,b-2x,b-light,fc_border_height,fc-event-month" ||
-							 * event1.className == "b-l b-2x b-warning
-							 * fc_border_height fc-event-month" ||
-							 * event1.className == "normal b-l b-2x b-light
-							 * fc_border_height fc-event-month") event.color =
-							 * "#36C";
-							 */
 
 							var jsoncontacts = event.contacts;
 							var _contacts = [];
