@@ -1350,6 +1350,9 @@ display:none;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.activity_time {
+  position: static;
+}
 }
 
 
