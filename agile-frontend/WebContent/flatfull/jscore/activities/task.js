@@ -303,7 +303,10 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							$(".navbar_due_tasks").css("display", "none");
 						else
 							$(".navbar_due_tasks").css("display", "inline-block");
-						$('#due_tasks_count').html(due_task_count);
+						if(due_task_count !=0)
+							$('#due_tasks_count').html(due_task_count);
+						else
+							$('#due_tasks_count').html("");
 
 						if (Current_Route == 'calendar')
 						{
@@ -629,8 +632,10 @@ function complete_task(taskId, collection, ui, callback)
 			$(".navbar_due_tasks").css("display", "none");
 		else
 			$(".navbar_due_tasks").css("display", "inline-block");
-		$('#due_tasks_count').html(due_task_count);
-
+		if(due_task_count !=0)
+			$('#due_tasks_count').html(due_task_count);
+		else
+			$('#due_tasks_count').html("");
 		if (ui)
 			ui.fadeOut(500);
 
