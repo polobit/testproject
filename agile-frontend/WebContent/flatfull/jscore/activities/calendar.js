@@ -267,13 +267,31 @@ function showCalendar()
 							var leftorright = 'left';
 							var pullupornot = '';
 							if (calendarView == "agendaDay")
+							{
 								leftorright = 'top';
+							}
 							else
 							{
-								if (event.start.getDay() == 5 || event.start.getDay() == 6)
-									leftorright = 'right';
 								pullupornot = 'pull-up';
+								if (calendarView == "agendaWeek")
+								{
+									if (event.start.getHours() >= 20 && ((event.start.getDay() != 5 && event.start.getDay() != 6)))
+									{
+										leftorright = 'bottom';
+										pullupornot = '';
+									}
+									else if (event.start.getHours() <= 3 && ((event.start.getDay() != 5 && event.start.getDay() != 6)))
+									{
+										leftorright = 'top';
+										pullupornot = '';
+									}
+									else if (event.start.getDay() == 5 || event.start.getDay() == 6)
+										leftorright = 'right';
+
+								}
+
 							}
+
 							if (event.meeting_type && event.description)
 							{
 								meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span>Meeting Type - ' + event.meeting_type + '</span><br/><span title=' + event.description + '>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + addDotsAtEnd(event.description) + '</span>';
@@ -286,6 +304,11 @@ function showCalendar()
 							var popoverElement = '<div class="fc-overlay ' + leftorright + '">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left">' + event.title + '</div><div class="pull-right"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
 									.format('dd-mmm-yyyy HH:MM') + '</div>' + '<div>' + reletedContacts + '</div>' + '<div>' + meeting_type + '</div>' + '</div>' + '</div>';
 							$(this).append(popoverElement);
+							$(jsEvent.currentTarget).css('z-index', 9);
+							if (event.allDay)
+							{
+								$(jsEvent.currentTarget.parentElement).css('z-index', 9);
+							}
 							$(this).find('.fc-overlay').show();
 							$(this).find(".ui-resizable-handle").show();
 						},
@@ -294,6 +317,11 @@ function showCalendar()
 							$(this).find('.fc-overlay').hide();
 							$(this).find('.fc-overlay').remove();
 							$(this).find(".ui-resizable-handle").hide();
+							$(jsEvent.currentTarget).css('z-index', 8);
+							if (event.allDay)
+							{
+								$(jsEvent.currentTarget.parentElement).css('z-index', 8);
+							}
 						},
 						eventAfterRender : function(event, element, view)
 						{

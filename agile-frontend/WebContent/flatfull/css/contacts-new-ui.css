@@ -688,7 +688,7 @@ padding-bottom:0px!important;
 	min-height: 20px;
 }
 .fc-event-month{
-	z-index: auto!important;
+	 /* z-index: auto!important; */
 }
 
 .fc-b-l{

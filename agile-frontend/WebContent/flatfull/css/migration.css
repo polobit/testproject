@@ -474,6 +474,12 @@ box-shadow: 0 1px 1px rgba(0, 0, 0, .05); 03/30/2015 */
   margin-left: -150px;
   z-index: 1000;
 }
+.fc-overlay.bottom {
+  left: -75%;
+  top: -80px;
+  padding: 0 10px;
+  margin: 0;
+}
 .fc-overlay.right {
   left: auto;
   right: 100%;
