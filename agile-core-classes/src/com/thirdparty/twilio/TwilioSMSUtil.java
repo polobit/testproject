@@ -111,18 +111,11 @@ public class TwilioSMSUtil
 
 			result = XML.toJSONObject(response.getResponseText()).getJSONObject(TWILIO_RESPONSE)
 					.getJSONObject(TWILIO_INCOMING_NUMBERS);
-			try
+
+			if (result.getJSONObject("IncomingPhoneNumber") instanceof JSONObject)
 			{
 				verifiredTwilioNumbers.add(result.getJSONObject("IncomingPhoneNumber").get("PhoneNumber").toString());
 				return verifiredTwilioNumbers;
-			}
-			catch (JSONException je)
-			{
-				System.out.println("More than one incoming number");
-			}
-			catch (Exception e)
-			{
-				System.out.println("Exception while reasing result from twilio: " + e.getMessage());
 			}
 
 			JSONArray incomingNumberArray = result.getJSONArray("IncomingPhoneNumber");
@@ -134,8 +127,8 @@ public class TwilioSMSUtil
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception in TwilioSMS. The result is " + result);
-			e.printStackTrace();
+			System.out.println("Exception in TwilioSMS: " + e.getMessage());
+			System.out.println("The result is " + result);
 		}
 
 		return verifiredTwilioNumbers;
