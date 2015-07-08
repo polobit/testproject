@@ -159,9 +159,9 @@ function set_p_portlets(base_model){
 	else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Mini Calendar"){
 		App_Portlets.miniCal = new Base_Model_View({ model : base_model, template : "portlets-minicalendar-model", tagName : 'div' });
 		if($('.gridster > div:visible > div',this.el).length==0)
-			$('.gridster > div:visible',this.el).html($(App_Portlets.miniCal.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+			$('.gridster > div:visible',this.el).html($(App_Portlets.miniCal.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default mini-cal'));
 		else
-			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.miniCal.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.miniCal.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default mini-cal'));
 	}
 	else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="User Activities"){
 		App_Portlets.activitiesView = new Base_Model_View({ model : base_model, template : "portlets-activites-model", tagName : 'div' });
@@ -1940,8 +1940,8 @@ function setPortletContentHeight(base_model){
 			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("max-height",(base_model.get("size_y")*200)+50+"px");
 		}
 		
-		$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("overflow-x","hidden");
-		$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("overflow-y","hidden");
+		//$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("overflow-x","auto");
+		//$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("overflow-y","auto");
 	}
 	else{
 		if(base_model.get("size_y")==1){

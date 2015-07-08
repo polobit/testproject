@@ -752,7 +752,8 @@ border-radius: 2px;
   top: 10px;
 }  */
 .portlet_body_calendar>#calendar_container>.fc-content>.fc-view div>.fc-event{
-	width : 4px!important
+	width : 4px!important;
+	z-index: auto!important;
 }
 
 .portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate th, .portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate td
@@ -804,9 +805,19 @@ width:100%;
 	overflow-y:auto
 }
 
-.portlet_body_calendar{
-	overflow : auto
+/* .portlet_body_calendar{
+	overflow : inherit;
+} */
+
+.portlet_body_calendar>#calendar_container>.fc-content>.fc-view div>.fc-event>.fc-overlay{
+ min-width: 210px!important;
+ max-width: 210px!important;
 }
-
-
-
+.portlet_body_calendar>#calendar_container>.fc-content>.fc-view 
+{
+	overflow:inherit;
+}
+.mini-cal>.gs-resize-handle-both
+{
+	z-index:0;
+}
