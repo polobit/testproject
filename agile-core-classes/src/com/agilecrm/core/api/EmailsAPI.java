@@ -468,7 +468,7 @@ public class EmailsAPI
     	try
 		{
     		data.put("domain", NamespaceManager.get());
-			data.put("verify_link", VersioningUtil.getHostURLByApp(NamespaceManager.get())+"?tid="+ URLEncoder.encode(token, "UTF-8"));
+			data.put("verify_link", VersioningUtil.getHostURLByApp(NamespaceManager.get())+"verify-email?tid="+ URLEncoder.encode(token, "UTF-8"));
 		}
 		catch (UnsupportedEncodingException e)
 		{

@@ -335,8 +335,10 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 			
 			VerifiedEmails verifiedEmails = null;
 			
+			System.out.println("Token id is..." + tokenId);
+			
 			if(tokenId != null && StringUtils.isNumeric(tokenId))
-				VerifiedEmailsUtil.getVerifiedEmailByToken(tokenId);
+				verifiedEmails = VerifiedEmailsUtil.getVerifiedEmailByToken(tokenId);
 			%>
 			<%			
 			if(tokenId == null || verifiedEmails == null)
