@@ -28,5 +28,13 @@ public class VerifiedEmailsUtil
 		return dao.getByProperty(searchMap);
 	}
 	
+	public static VerifiedEmails getVerifiedEmailsByEmail(String email)
+	{
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("email", email);
+		
+		return dao.getByProperty(searchMap);
+	}
+	
 }
 

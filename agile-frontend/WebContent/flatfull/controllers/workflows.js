@@ -102,6 +102,8 @@ var WorkflowsRouter = Backbone.Router
 					
 					e.preventDefault();
 
+
+					if($(this).disabled)
 					if(!isValidForm('#verify-email-form'))
 						return;
 
@@ -124,6 +126,10 @@ var WorkflowsRouter = Backbone.Router
 								 $('#workflow-verify-email').modal('hide');
 								 
 							 });
+						},
+						error: function()
+						{
+							$('#workflow-verify-email').modal('hide');
 						}
 					});
 					

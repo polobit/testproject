@@ -29,8 +29,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.EmailGateway;
+
+import com.agilecrm.account.EmailGateway.EMAIL_API;
+import com.agilecrm.account.VerifiedEmails.Verified;
+
 import com.agilecrm.account.VerifiedEmails;
 import com.agilecrm.account.util.EmailGatewayUtil;
+import com.agilecrm.account.util.VerifiedEmailsUtil;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.ContactEmail;
@@ -457,25 +462,22 @@ public class EmailsAPI
     public void sendVerificationEmail(@FormParam("email") String email)
     {
     	
-    	String token = String.valueOf(System.currentTimeMillis());
-    	VerifiedEmails verifiedEmails = new VerifiedEmails();
-    	verifiedEmails.setEmail(email);
-    	verifiedEmails.setToken(token);
+    	VerifiedEmails verifiedEmails = VerifiedEmailsUtil.getVerifiedEmailsByEmail(email);
+    	
+    	
+    	if(verifiedEmails != null && verifiedEmails.verified.equals(Verified.YES))
+    		throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
+    			    .entity("Email verified already.").build());
+    	
+    	// If null, create new object
+    	if(verifiedEmails == null)
+    		verifiedEmails = new VerifiedEmails(email, String.valueOf(System.currentTimeMillis()));
+    	
     	verifiedEmails.save();
     	
-    	Map<String, String> data = new HashMap<String, String>();
+    	// Send Verification email
+    	verifiedEmails.sendEmail();
     	
-    	try
-		{
-    		data.put("domain", NamespaceManager.get());
-			data.put("verify_link", VersioningUtil.getHostURLByApp(NamespaceManager.get())+"verify-email?tid="+ URLEncoder.encode(token, "UTF-8"));
-		}
-		catch (UnsupportedEncodingException e)
-		{
-			e.printStackTrace();
-		}
-    	
-    	SendMail.sendMail(email, SendMail.FROM_VERIFICATION_EMAIL_SUBJECT, SendMail.FROM_VERIFICATION_EMAIL, data);
     }
 
 }
