@@ -285,9 +285,12 @@ function showCalendar()
 										leftorright = 'top';
 										pullupornot = '';
 									}
-									else if (event.start.getDay() == 5 || event.start.getDay() == 6)
-										leftorright = 'right';
 
+								}
+								if (calendarView == "month")
+								{
+									if (event.start.getDay() == 5 || event.start.getDay() == 6)
+										leftorright = 'right';
 								}
 
 							}
