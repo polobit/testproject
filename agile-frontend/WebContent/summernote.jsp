@@ -579,7 +579,7 @@ function showWarning(isWarning)
             </div>
             </div>
             <!-- .block_head ends -->
-            <div class="block_content center" class="note-editable" contenteditable="true" >
+            <div class="block_content center" class="note-editable" >
                 <!-- out.println(Util.getHTMLMessageBox("","error", "errormsg")); -->
                 <form method="post" action="somepage" class ="m-t-sm btn-rounded">
                     <p id="loading-msg">Loading HTML Editor...</p>
