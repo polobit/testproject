@@ -624,8 +624,10 @@ public class TwilioUtil
 				.getJSONObject("IncomingPhoneNumbers");
 
 		// If no numbers, return empty object
-		if (Integer.parseInt(result.getString("total")) == 0)
-			return new JSONArray();
+		/*
+		 * if (Integer.parseInt(result.getString("total")) == 0) return new
+		 * JSONArray();
+		 */
 
 		/*
 		 * Response may be array or single object, check and return the first
