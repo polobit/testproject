@@ -556,3 +556,36 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
 	console.log(selectoption);
 	return selectoption;
 }
+
+function openVerifyEmailModal(el)
+{
+	if (window.parent.$('#workflow-verify-email').size() != 0)
+		window.parent.$('#workflow-verify-email').remove();
+	
+	var selected = $(el).find(':selected').val();
+	var field_json = $(el).data('field-json');
+	
+	if(selected == 'verify_email')
+		window.parent.workflow_alerts("Verify a new From address", undefined , "workflow-verify-email-modal"
+
+			,function(modal){
+
+				modal.on('hidden.bs.modal', function (e) {
+  
+  					$('#from_email').empty();
+  					
+  					var options =   {
+                						"Contact's Owner": "{{owner.email}}",
+                						"(+) Add New": "verify_email"
+            						};
+
+  					fetchAndFillSelect('core/api/account-prefs/verified-emails', "email", "email", undefined, options, $('#from_email'), "prepend");
+
+					// $select = generateDynamicSelectUI(field_json);
+				});
+
+			}
+
+
+			);
+}

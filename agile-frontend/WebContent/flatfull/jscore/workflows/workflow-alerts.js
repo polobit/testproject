@@ -35,11 +35,16 @@ function campaignAlert(alertType)
 	
 }
 
-function workflow_alerts(title, message , template){
+function workflow_alerts(title, message , template, callback){
 	
 	var JSONValues = {};
 	JSONValues["title"] = title;
 	JSONValues["message"] = message;
 	
-	$(getTemplate(template,JSONValues)).modal('show');	
+	var $modal = $(getTemplate(template,JSONValues));
+
+	$modal.modal('show');	
+
+	if(callback && typeof (callback) === "function")
+		callback($modal);
 }

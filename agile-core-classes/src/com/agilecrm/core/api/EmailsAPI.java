@@ -1,7 +1,11 @@
 package com.agilecrm.core.api;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,9 +25,11 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.EmailGateway;
+import com.agilecrm.account.VerifiedEmails;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
@@ -37,6 +43,8 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.EmailPrefs;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.agilecrm.util.VersioningUtil;
+import com.agilecrm.util.email.SendMail;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -441,6 +449,33 @@ public class EmailsAPI
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+    
+    @Path("verify-from-email")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void sendVerificationEmail(@FormParam("email") String email)
+    {
+    	
+    	String token = String.valueOf(System.currentTimeMillis());
+    	VerifiedEmails verifiedEmails = new VerifiedEmails();
+    	verifiedEmails.setEmail(email);
+    	verifiedEmails.setToken(token);
+    	verifiedEmails.save();
+    	
+    	Map<String, String> data = new HashMap<String, String>();
+    	
+    	try
+		{
+    		data.put("domain", NamespaceManager.get());
+			data.put("verify_link", VersioningUtil.getHostURLByApp(NamespaceManager.get())+"?tid="+ URLEncoder.encode(token, "UTF-8"));
+		}
+		catch (UnsupportedEncodingException e)
+		{
+			e.printStackTrace();
+		}
+    	
+    	SendMail.sendMail(email, SendMail.FROM_VERIFICATION_EMAIL_SUBJECT, SendMail.FROM_VERIFICATION_EMAIL, data);
     }
 
 }

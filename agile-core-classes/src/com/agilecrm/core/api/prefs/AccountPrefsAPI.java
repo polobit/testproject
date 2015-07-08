@@ -1,5 +1,7 @@
 package com.agilecrm.core.api.prefs;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -8,7 +10,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.account.AccountPrefs;
+import com.agilecrm.account.VerifiedEmails;
 import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.account.util.VerifiedEmailsUtil;
 
 /**
  * <code>AccountPrefsAPI</code> includes REST calls to interact with
@@ -47,5 +51,13 @@ public class AccountPrefsAPI
     {
 	prefs.save();
 	return prefs;
+    }
+    
+    @Path("/verified-emails")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<VerifiedEmails> getVerifiedEmails()
+    {
+	return VerifiedEmailsUtil.getVerifiedEmails();
     }
 }

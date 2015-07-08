@@ -114,9 +114,29 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	var keyField = uiFieldDefinition.dynamicName;
 	var valField = uiFieldDefinition.dynamicValue;
 	var appendNameField = uiFieldDefinition.appendToDynamicName;
-		
+
+	var arrange_type = uiFieldDefinition.arrange_type;
+	
+
+	// Select events
+	var eventHandler = uiFieldDefinition.eventHandler;
+	var event = uiFieldDefinition.event;
+
+
+
 	var selectContainer = $("<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
-	var options = uiFieldDefinition.options;
+
+	if(event && eventHandler)
+		selectContainer = $("<select id='"+uiFieldDefinition.id+"' data-field-json = "+uiFieldDefinition+ "name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + event +"='"+eventHandler+"'></select>");
+	
+	fetchAndFillSelect(url,keyField, valField, appendNameField, uiFieldDefinition.options, selectContainer, arrange_type)
+	
+	return selectContainer;
+}
+
+function fetchAndFillSelect(url, keyField, valField, appendNameField, options, selectContainer, arrange_type)
+{
+
 	var selectOptionAttributes ="";
 	
 	
@@ -135,7 +155,7 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 						selectOptionAttributes += "<option value='" + value + "'>" + key + "</option>";
 				});
 	 }
-	
+
 	$.ajax({
 		  url: url,
 		  async: false,
@@ -171,14 +191,17 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
     				else
     				    option = "<option value='" + value + "'>" + key + "</option>";
         				
-        			// Append to container	
-        			$(option).appendTo(selectContainer);	        				        								
+    				if(arrange_type && arrange_type == "prepend")
+    					$(option).prependTo(selectContainer);
+    				else
+    				{	
+    					// Append to container	
+        				$(option).appendTo(selectContainer);	        				        								
+        			}
 				}											   	   	   	  	   	  				
 		});
 		  }
 	});
-	
-	return selectContainer;
 }
 
 
@@ -740,6 +763,14 @@ function _generateUIFields(selector, ui) {
            continue;
         }
         
+        if(uiFieldType == "anchor")
+        {
+        	uiField = generateAnchorUI(uiFieldDefinition);
+        	
+        	$(uiField).appendTo(container)
+        	continue;
+        }
+        
         
         // Else Input, textarea,		                
         addLabel(uiFieldDefinition.label, container);
@@ -753,6 +784,22 @@ function _generateUIFields(selector, ui) {
 
 }
 
+
+function generateAnchorUI(uiFieldDefinition)
+{
+	var style = "style=''", href="#";
+
+	if(uiFieldDefinition.href)
+		href = uiFieldDefinition.href;
+	
+	if(uiFieldDefinition.style)
+		style = getStyleAttribute(uiFieldDefinition.style);
+
+	if(uiFieldDefinition.event)
+		return "<a href='"+href+"'" + " " + style + " " + uiFieldDefinition.event+"='"+uiFieldDefinition.callback+";return;'>"+uiFieldDefinition.text+"</a>";
+
+	return "<a href='"+href+"'"  + " " + style+">"+uiFieldDefinition.text+"</a>";
+}
 
 // Constructs the UI elements from nodeDefinition. IF UI key is elements, it constructs tabs based on categories and add elements 
 // Automatically

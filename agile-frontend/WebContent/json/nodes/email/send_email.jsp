@@ -27,9 +27,19 @@
             "name": "from_email",
             "id": "from_email",
             "required": "required",
-            "title": "Enter your email address.",
-            "fieldType": "input",
-            "type": "email"
+            "title": "Select your email address.",
+            "url": "/core/api/account-prefs/verified-emails",
+            "dynamicName": "email",
+            "dynamicValue": "email",
+            "arrange_type": "prepend",
+            "fieldType": "dynamicselect",
+            "type": "select",
+             "options": {
+                "Contact's Owner": "{{owner.email}}",
+                "(+) Add New": "verify_email"
+            }, 
+            "event": "onchange",
+            "eventHandler": "openVerifyEmailModal(this)"
         },
         {
             "label": "To",
