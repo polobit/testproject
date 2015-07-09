@@ -257,7 +257,7 @@ public class TagSearchUtil
 	    
 	    i++;
 	}
-	while (startTimeMilli < endTimeMilli);
+	while (startTimeMilli <= endTimeMilli);
 
 	return tagsCountJSONObject;
     }
