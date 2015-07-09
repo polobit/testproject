@@ -359,13 +359,27 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 
 			// Categories are closed dates
 			var categories = [];
+			var tempcategories = [];
+			var dataLength = 0;
+			var min_tick_interval = 1;
+			var frequency = $( "#frequency:visible").val();
 			
 			// Data with total and pipeline values
 			var series;
+			
+			var sortedKeys = [];
+			$.each(data,function(k,v){
+				sortedKeys.push(k);
+			});
+			sortedKeys.sort();
+			var sortedData = {};
+			$.each(sortedKeys,function(index,value){
+				sortedData[''+value] = data[''+value];
+			});
 
 			// Iterates through data and adds keys into
 			// categories
-			$.each(data, function(k, v)
+			$.each(sortedData, function(k, v)
 			{
 
 				// Initializes series with names with the first
@@ -390,10 +404,109 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 					// Find series with the name k1 and to that,
 					// push v1
 					var series_data = find_series_with_name(series, k1);
-					series_data.data.push([
-							k * 1000, v1
-					]);
+					series_data.data.push(v1);
 				});
+				tempcategories.push(k*1000);
+				dataLength++;
+
+			});
+
+			var cnt = 0;
+			if(Math.ceil(dataLength/10)>0)
+			{
+				min_tick_interval = Math.ceil(dataLength/10);
+				if(min_tick_interval==3)
+				{
+					min_tick_interval = 4;
+				}
+			}
+			$.each(sortedData, function(k, v)
+			{
+				var dte = new Date(tempcategories[cnt]);
+				if(frequency!=undefined)
+				{
+					if(frequency=="daily")
+					{
+						categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+'');
+					}
+					else if(frequency=="weekly")
+					{
+						if(cnt!=dataLength-1)
+						{
+							var next_dte = new Date(tempcategories[cnt+1]);
+							categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1)));
+						}
+						else
+						{
+							var end_date = new Date(Date.parse($.trim($('#range').html().split("-")[1])).valueOf());
+							categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate())));
+						}
+					}
+					else if(frequency=="monthly")
+					{
+						if(cnt!=dataLength-1)
+						{
+							var next_dte = new Date(tempcategories[cnt+1]);
+							var current_date = new Date();
+							var from_date = '';
+							var to_date = '';
+							if(cnt!=0)
+							{
+								if(current_date.getFullYear()!=dte.getFullYear())
+								{
+									from_date = Highcharts.dateFormat('%b.%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								}
+								else
+								{
+									from_date = Highcharts.dateFormat('%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								
+								}
+								categories.push(from_date);
+							}
+							else
+							{
+								if(current_date.getFullYear()!=dte.getFullYear())
+								{
+									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								}
+								else
+								{
+									from_date = Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								
+								}
+								if(current_date.getFullYear()!=next_dte.getFullYear())
+								{
+									to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1));
+								}
+								else
+								{
+									to_date = Highcharts.dateFormat('%e.%b', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1));
+								}
+								categories.push(from_date+' - '+to_date);
+							}
+						}
+						else
+						{
+							var current_date = new Date();
+							var from_date = '';
+							var to_date = '';
+							var end_date = new Date(Date.parse($.trim($('#range').html().split("-")[1])).valueOf());
+							if(current_date.getFullYear()!=dte.getFullYear())
+							{
+								from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
+							}
+							else
+							{
+								from_date = Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								to_date = Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
+								
+							}
+							categories.push(from_date+' - '+to_date);
+						}
+					}
+					cnt++;
+				}
 
 			});
 
@@ -404,19 +517,25 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 			        renderTo: selector,
 			        type: 'line',
 			        marginRight: 130,
-			        marginBottom: 25
+			        marginBottom: 50
 			    },
 			    title: {
 			        text: name,
 			        x: -20//center
 			    },
 			    xAxis: {
-			        type: 'datetime',
+			        /*type: 'datetime',
 			        dateTimeLabelFormats: {
 			            //don't display the dummy year  month: '%e.%b',
-			            year: '%b'
+			            year: '%b',
+			            month: '%e.%b \'%y',
 			        },
-			        minTickInterval: 24 * 3600 * 1000
+			        minTickInterval: min_interval,
+			        startOfWeek: startOfWeek*/
+			        categories: categories,
+			        tickmarkPlacement: 'on',
+			        minTickInterval: min_tick_interval,
+			        tickWidth: 1
 			    },
 			    yAxis: {
 			        title: {
@@ -432,12 +551,12 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 			        min: 0
 			    },
 			    //Tooltip to show details,
-			    ongraphtooltip: {
+			    /*ongraphtooltip: {
 			        formatter: function(){
 			            return'<b>'+this.series.name+'</b><br/>'+Highcharts.dateFormat('%e.%b',
 			            this.x)+': '+this.y.toFixed(2);
 			        }
-			    },
+			    },*/
 			    legend: {
 			        layout: 'vertical',
 			        align: 'right',
@@ -612,7 +731,8 @@ function showCohorts(url, selector, name, yaxis_name, show_loading)
 			        x: -20//center
 			    },
 			    xAxis: {
-			       categories: categories
+			       categories: categories,
+			       tickmarkPlacement: 'on'
 			    },
 			    yAxis: {
 			        title: {

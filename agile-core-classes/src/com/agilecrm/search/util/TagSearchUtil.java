@@ -195,7 +195,7 @@ public class TagSearchUtil
 	    JSONObject tagsCount = new JSONObject();
 
 	    int tag1Count = getTagCount(contactFilter, tag1, startTimeMilli + "", startCalendar.getTimeInMillis() + "");
-	    int tag2Count = getTagCount(contactFilter, tag2, startTimeMilli + "", startCalendar.getTimeInMillis() + "");
+	    int tag2Count = getNextTagCount(contactFilter, tag1, startTimeMilli + "", startCalendar.getTimeInMillis() + "", tag2);
 
 
 	    // Get Tag Ratio
@@ -349,5 +349,62 @@ public class TagSearchUtil
 
 	float percentage = ((count1 - count2) * 100f / count1);
 	return round(percentage, decimalPlace);
+    }
+    
+    /**
+     * Returns the next tag count for a given filter from main tag start to end time
+     * 
+     * @param ContactFilter
+     *            - the filter to be used. If null, it uses all contacts
+     * @param tag
+     *            - main tag to search for
+     * @param startTime
+     *            - start time of the range
+     * @param end
+     *            - end time of the range
+     * @param nextTag
+     *            - next tag to search for
+     *            
+     * @return {@link Map}
+     */
+    public static int getNextTagCount(ContactFilter contactFilter, String tag, String startTime, String endTime, String nextTag)
+    {
+
+	// Create Contact Filter if not present
+	if (contactFilter == null)
+	{
+	    contactFilter = new ContactFilter();
+	}
+
+	// Add the tag find rule
+	contactFilter.rules.add(getSearchRule(tag, startTime, endTime));
+	
+	SearchRule searchRule = new SearchRule();
+	searchRule.LHS = "tags_time";
+	searchRule.CONDITION = SearchRule.RuleCondition.EQUALS;
+	searchRule.RHS = nextTag;
+	
+	searchRule.RHS_NEW = null;
+	searchRule.nested_condition = SearchRule.RuleCondition.AFTER;
+	searchRule.nested_lhs = "1";
+	searchRule.nested_rhs = "1";
+	
+	contactFilter.rules.add(searchRule);
+
+	// Get Count
+	try
+	{
+	    int count = contactFilter.queryContactsCount();
+	    return count;
+	}
+	catch (Exception e)
+	{
+	}
+	finally
+	{
+	    //contactFilter.rules.remove(contactFilter.rules.size() - 1);
+	    System.out.println(contactFilter);
+	}
+	return 0;
     }
 }
