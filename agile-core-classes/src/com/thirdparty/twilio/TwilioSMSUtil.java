@@ -112,7 +112,7 @@ public class TwilioSMSUtil
 			result = XML.toJSONObject(response.getResponseText()).getJSONObject(TWILIO_RESPONSE)
 					.getJSONObject(TWILIO_INCOMING_NUMBERS);
 
-			if (result.getJSONObject("IncomingPhoneNumber") instanceof JSONObject)
+			if (result.get("IncomingPhoneNumber") instanceof JSONObject)
 			{
 				verifiredTwilioNumbers.add(result.getJSONObject("IncomingPhoneNumber").get("PhoneNumber").toString());
 				return verifiredTwilioNumbers;
