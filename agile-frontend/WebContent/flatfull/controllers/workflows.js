@@ -98,42 +98,8 @@ var WorkflowsRouter = Backbone.Router
 				$('#content').html(getTemplate('workflow-add', { "is_new" : true }));
 				initiate_tour("workflows-add", $('#content'));
 				
-				$('#verify-email-send').live('click', function(e){
-					
-					e.preventDefault();
-
-
-					if($(this).disabled)
-					if(!isValidForm('#verify-email-form'))
-						return;
-
-					var json = serializeForm("verify-email-form");
-					
-					if(!json)
-						return;
-					
-					$.ajax({
-						url: 'core/api/emails/verify-from-email',
-						type: 'POST',
-						data: json,
-						success: function(data){
-							
-						     $('#verify-email-form').find('div.row').html("<p>Done. Please check your email and complete the verification.</p>");
-						     $('#verify-email-send').removeAttr('href').attr('id', 'done-verify-email').text('Done with Verification');
-							
-							 $('#done-verify-email').live('click', function(e){
-								 e.preventDefault();
-								 $('#workflow-verify-email').modal('hide');
-								 
-							 });
-						},
-						error: function()
-						{
-							$('#workflow-verify-email').modal('hide');
-						}
-					});
-					
-				});
+				// Init SendVerify Email
+				send_verify_email()
 			},
 
 			/**
@@ -202,6 +168,9 @@ var WorkflowsRouter = Backbone.Router
 				$('#unsubscribe-tag').val(unsubscribe.tag);
 				$('#unsubscribe-action').val(unsubscribe.action);
 				$('#unsubscribe-action').trigger('change');
+
+				// Init SendVerify Email
+				send_verify_email()
 			},
 
 			/**
@@ -254,6 +223,9 @@ var WorkflowsRouter = Backbone.Router
 				} });
 
 				$('#content').html(getTemplate('workflow-add', { "is_new" : true }));
+
+				// Init SendVerify Email
+				send_verify_email()
 
 			},
 
