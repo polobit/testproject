@@ -1,10 +1,22 @@
 $(function()
 {
 // takes searchbox value and navigate this to router
-	$( "#domain-search-results" ).die().live('click', function( e ) 	{
+	$( "#domainSearchForm" ).submit(function( e ) 	{
 		e.preventDefault(e);
 		
 		var email = $('#domainSearchText').val();
+		console.log(" in all -domain users.js "+email);
+		
+			Backbone.history.navigate("getDomainUserDetails/"+email , {
+                trigger: true
+            });
+	
+	});
+
+	$( "#domain-search-results2" ).die().live('click', function( e ) 	{
+		e.preventDefault(e);
+		
+		var email = $('#domainSearchText2').val();
 		console.log(" in all -domain users.js "+email);
 		
 			Backbone.history.navigate("getDomainUserDetails/"+email , {
