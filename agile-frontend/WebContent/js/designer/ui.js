@@ -136,7 +136,7 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 				rearrange_from_email_options($selectContainer);
 
 				// Make contact owner selected
-				$select.val("Contact's Owner").attr("selected", "selected");
+				$selectContainer.val("Contact's Owner").attr("selected", "selected");
 		});
 
 		return selectContainer;
