@@ -333,6 +333,19 @@
 		});
 	}
 	
+	var updateSelectedSortKey = function(el) {
+		var sort_key = readCookie("company_sort_field");
+		if(sort_key && sort_key != null) {
+			var idSuffix = '-asc';
+			if(sort_key.indexOf('-') == 0) {
+				sort_key = sort_key.substring(1);
+				idSuffix = '-desc'
+			}
+			var elementId = 'comp-sort-by-'+sort_key+idSuffix;
+			$(el).find('#'+elementId).addClass('bold-text');
+		}
+	};
+	
 	/**
 	 * Sets up contact filters list in contacts list page, also whether cookie is
 	 * save with filter name to load filter results instead of all contacts
@@ -378,7 +391,6 @@
 						if (!filter_name)
 							return;
 
-						
 						$('.filter-criteria', cel)
 						.html(
 								'<ul id="added-tags-ul" class="tagsinput p-n m-b-sm m-t-sm m-l-sm"><li class="inline-block tag btn btn-xs btn-primary" data="developer"><span class="inline-block m-r-xs v-middle">' + filter_name + '</span><a class="close default_company_filter">&times</a></li></ul>');
@@ -397,8 +409,8 @@
 			
 				// Shows in contacts list
 				$('#filter-list', cel).html(companyFiltersListView.render().el);
+				
 	}
-	
 	
 	var revertToDefaultCompanies = function(){
 		// Erase filter cookie. Erases both contact and company filter
@@ -486,6 +498,7 @@
 		initEvents();
 		setupCompanyFilterList(cel);
 		setupCompanyViews(cel);
+		updateSelectedSortKey(cel);
 	};
 	
 }(window.company_list_view = window.company_list_view || {}, $));
