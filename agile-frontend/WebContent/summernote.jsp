@@ -439,7 +439,12 @@ function sendFile(file,editor,layoutInfo) {
     formData.append('signature', '59pSO5qgWElDA/pNt+mCxxzYC4g=');
     formData.append('success_action_status', '201');
     formData.append('file', file);
-	  
+    if($('#bhasuri').length == 0 ){
+    var saveBtn = '<img class="loading" style="padding-right:5px;opacity:0.5;" src= "/flatfull/img/ajax-loader-cursor.gif" id="bhasuri"></img>';
+    var fileGroup = '<div style="float:right" class="loader btn-group">'   + saveBtn + '</div>';
+    $(fileGroup).appendTo($('.note-toolbar'));
+    }
+    
     $.ajax({
       data: formData,
       dataType: 'xml',
@@ -459,7 +464,6 @@ function sendFile(file,editor,layoutInfo) {
          var img = $('<img src="'+ decodeURIComponent(url)+'"/>');
         var editor = $.summernote.eventHandler.getModule();
         editor.insertImage($('.note-editable'),decodeURIComponent(url),$(data).find('Key').text());
-        
         /*
         var img = $('<img src="'+url+'" />');
         editor.insertNode($editable, img[0]);

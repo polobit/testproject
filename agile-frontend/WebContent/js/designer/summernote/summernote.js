@@ -3763,6 +3763,11 @@
         range.create().insertNode($image[0]);
         range.createFromNodeAfter($image[0]).select();
         afterCommand($editable);
+        /*
+         * Remove loading
+         * */
+        if($('.loader').length)
+        $('.loader').remove();
       }).fail(function () {
         var $holder = dom.makeLayoutInfo($editable).holder();
         handler.bindCustomEvent(
