@@ -11,6 +11,8 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
 
 /**
@@ -114,20 +116,20 @@ public class TagSearchUtil
     public static JSONObject getTagCount(ContactFilter contactFilter, String tags[], String startTime, String endTime, int type) throws Exception
     {
 	JSONObject tagsCountJSONObject = new JSONObject();
-	long timezoneOffsetMilliSecs = 0;
-	String timezoneOffset = DateUtil.getCurrentUserTimezoneOffset();
-	if (timezoneOffset != null)
+	UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+	String timezone = "UTC";
+	if (userPrefs != null && userPrefs.timezone != null)
 	{
-		timezoneOffsetMilliSecs = Long.valueOf(timezoneOffset)*60*1000;
+		timezone = userPrefs.timezone;
 	}
 
 	// Sets calendar with start time.
-	Calendar startCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+	Calendar startCalendar = Calendar.getInstance(TimeZone.getTimeZone(timezone));
 	startCalendar.setTimeInMillis(Long.parseLong(startTime));
 	long startTimeMilli = startCalendar.getTimeInMillis();
 
 	// Sets calendar with end time.
-	Calendar endCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+	Calendar endCalendar = Calendar.getInstance(TimeZone.getTimeZone(timezone));
 	endCalendar.setTimeInMillis(Long.parseLong(endTime));
 	long endTimeMilli = endCalendar.getTimeInMillis();
 
@@ -145,7 +147,7 @@ public class TagSearchUtil
 		startCalendar.set(Calendar.HOUR_OF_DAY, startCalendar.getActualMaximum(Calendar.HOUR_OF_DAY));
 		startCalendar.set(Calendar.MINUTE, startCalendar.getActualMaximum(Calendar.MINUTE));
 		startCalendar.set(Calendar.SECOND, startCalendar.getActualMaximum(Calendar.SECOND));
-		startCalendar.setTimeInMillis(startCalendar.getTimeInMillis()+timezoneOffsetMilliSecs);
+		startCalendar.setTimeInMillis(startCalendar.getTimeInMillis());
 		}
 		else if(type == Calendar.MONTH)
 		{
@@ -154,7 +156,7 @@ public class TagSearchUtil
 		startCalendar.set(Calendar.HOUR_OF_DAY, startCalendar.getActualMaximum(Calendar.HOUR_OF_DAY));
 		startCalendar.set(Calendar.MINUTE, startCalendar.getActualMaximum(Calendar.MINUTE));
 		startCalendar.set(Calendar.SECOND, startCalendar.getActualMaximum(Calendar.SECOND));
-		startCalendar.setTimeInMillis(startCalendar.getTimeInMillis()+timezoneOffsetMilliSecs);
+		startCalendar.setTimeInMillis(startCalendar.getTimeInMillis());
 		}
 		else
 		{
@@ -174,7 +176,7 @@ public class TagSearchUtil
 		startCalendar.set(Calendar.HOUR_OF_DAY, endCalendar.getActualMaximum(Calendar.HOUR_OF_DAY));
 		startCalendar.set(Calendar.MINUTE, endCalendar.getActualMaximum(Calendar.MINUTE));
 		startCalendar.set(Calendar.SECOND, endCalendar.getActualMaximum(Calendar.SECOND));
-		startCalendar.setTimeInMillis(endCalendar.getTimeInMillis()+timezoneOffsetMilliSecs);
+		startCalendar.setTimeInMillis(endCalendar.getTimeInMillis());
 		}
 
 	    // Get Tag Count for each tag
