@@ -5852,11 +5852,13 @@
      * @param {String} [options.value]
      * @param {String} [options.title]
      * @param {String} [options.dropdown]
+     * @param {String} buttonText
+     * @param {String} showClass
+     * #edited by agilecrm
      */
     var tplIconButton = function (iconClassName, options, buttonText, showClass) {
         var label = '<i class="' + iconClassName + '"></i>';		      
-        var label;
-        
+
         if(buttonText == undefined && showClass == undefined)
       	  label = '<i class="' + iconClassName + '"></i>';
         else
