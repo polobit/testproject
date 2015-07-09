@@ -563,29 +563,47 @@ function openVerifyEmailModal(el)
 		window.parent.$('#workflow-verify-email').remove();
 	
 	var selected = $(el).find(':selected').val();
-	var field_json = $(el).data('field-json');
 	
 	if(selected == 'verify_email')
 		window.parent.workflow_alerts("Verify a new From address", undefined , "workflow-verify-email-modal"
 
 			,function(modal){
 
+				var email = $(modal).find('input').val();
+
 				modal.on('hidden.bs.modal', function (e) {
   
-  					$('#from_email').empty();
+  					// Make send email node from email empty
+					$('#from_email').empty();
   					
   					var options =   {
                 						"Contact's Owner": "{{owner.email}}",
-                						"(+) Add New": "verify_email"
+                						"+ Add new": "verify_email"
             						};
 
-  					fetchAndFillSelect('core/api/account-prefs/verified-emails', "email", "email", undefined, options, $('#from_email'), "prepend");
+  					fetchAndFillSelect('core/api/account-prefs/verified-emails', "email", "email", undefined, options, $('#from_email'), "prepend", function($select){
+  						
+  						$select.val(email).attr("selected", "selected");
 
-					// $select = generateDynamicSelectUI(field_json);
+  						rearrange_from_email_options($select);
+  					});
+
 				});
 
 			}
 
 
 			);
+}
+
+function rearrange_from_email_options($select)
+{
+
+	var last_index = $select.find("option:last").index();
+  	var prev_index = parseInt(last_index-1);
+  					    
+  	$select.find("option:eq("+prev_index+")").remove();
+  	$select.find("option:first").before("<option value='{{owner.email}}'>Contact's Owner</option><option disabled>________________</option>");
+
+  	$select.find("option:last").before("<option disabled>________________</option>");
 }

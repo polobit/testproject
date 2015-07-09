@@ -36,10 +36,14 @@
             "type": "select",
              "options": {
                 "Contact's Owner": "{{owner.email}}",
-                "(+) Add New": "verify_email"
+                "+ Add new": "verify_email"
             }, 
             "event": "onchange",
-            "eventHandler": "openVerifyEmailModal(this)"
+            "eventHandler": "openVerifyEmailModal(this)",
+            "style": {
+            	"width": "77.5%",
+            	"padding": "0.4em"
+            }
         },
         {
             "label": "To",

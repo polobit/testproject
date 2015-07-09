@@ -51,6 +51,19 @@ function workflow_alerts(title, message , template, callback){
 
 function send_verify_email()
 {
+	// On Enter Key
+	$('#verify-email-form').find('input').die().live('keypress', function(e){
+		
+		// Enter key
+		if(e.type== 'keypress' && e.which != 13)
+			return;
+
+		e.preventDefault();
+
+		// Trigger click on enter
+		$('#verify-email-send').trigger('click');
+	});
+
 	$('#verify-email-send').die().live('click', function(e){
 		
 		e.preventDefault();
@@ -78,7 +91,7 @@ function send_verify_email()
 				$('#verify-email-send').removeAttr('disabled');
 
 			     // Remove form elements
-			     $('#verify-email-form').find('div.row').html("<p class='m-l'>Done. Please check your email and complete the verification.</p>");
+			     $('#verify-email-form').find('div.row').html("<p class='m-l'>Verification email sent to &#39;"+json.email+"&#39;. Please check your email and complete the verification process.</p>");
 			     $('#verify-email-send').removeAttr('href').attr('id', 'done-verify-email').text('Done with Verification');
 				
 				 $('#done-verify-email').live('click', function(e){

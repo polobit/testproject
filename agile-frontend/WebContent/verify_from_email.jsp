@@ -345,7 +345,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 			{
 			%>
 			<h2>Email Verification Failed</h2>
-			<p>Link got modified or token got expired. Please try again.</p>		
+			<p>Something went wrong. Please try again.</p>		
 			<%
 			}
 			else
@@ -359,12 +359,6 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 			}
 			%>
 		</div>
-	</div>
-	<br />
-	<div>
-		<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 85px;">Powered
-			by</span> <a href="https://www.agilecrm.com?utm_source=powered-by&utm_medium=verify-email&utm_campaign=<%= NamespaceManager.get() %>" rel="nofollow" target="_blank"> <img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 120px;">
-		</a>
 	</div>
 </body>
 

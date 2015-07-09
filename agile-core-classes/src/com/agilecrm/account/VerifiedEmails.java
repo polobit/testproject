@@ -72,7 +72,6 @@ public class VerifiedEmails
     	
     	try
 		{
-    		data.put("domain", NamespaceManager.get());
 			data.put("verify_link", VersioningUtil.getHostURLByApp(NamespaceManager.get())+"verify-email?tid="+ URLEncoder.encode(token, "UTF-8"));
 		}
 		catch (UnsupportedEncodingException e)

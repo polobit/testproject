@@ -122,19 +122,33 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	var eventHandler = uiFieldDefinition.eventHandler;
 	var event = uiFieldDefinition.event;
 
-
-
 	var selectContainer = $("<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
 
 	if(event && eventHandler)
-		selectContainer = $("<select id='"+uiFieldDefinition.id+"' data-field-json = "+uiFieldDefinition+ "name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + event +"='"+eventHandler+"'></select>");
+		selectContainer = $("<select id='"+uiFieldDefinition.id+"' "+getStyleAttribute(uiFieldDefinition.style)+" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + event +"='"+eventHandler+"'></select>");
 	
+	// For From Email select, options need to rearranged
+	if(uiFieldDefinition.id == "from_email" && uiFieldDefinition.name == "from_email")
+	{
+		fetchAndFillSelect(url,keyField, valField, appendNameField, uiFieldDefinition.options, selectContainer, arrange_type, function($selectContainer){
+
+				// Rearranges options
+				rearrange_from_email_options($selectContainer);
+
+				// Make contact owner selected
+				$select.val("Contact's Owner").attr("selected", "selected");
+		});
+
+		return selectContainer;
+	}
+
+	// Fetches data and fill select
 	fetchAndFillSelect(url,keyField, valField, appendNameField, uiFieldDefinition.options, selectContainer, arrange_type)
 	
 	return selectContainer;
 }
 
-function fetchAndFillSelect(url, keyField, valField, appendNameField, options, selectContainer, arrange_type)
+function fetchAndFillSelect(url, keyField, valField, appendNameField, options, selectContainer, arrange_type, callback)
 {
 
 	var selectOptionAttributes ="";
@@ -200,6 +214,9 @@ function fetchAndFillSelect(url, keyField, valField, appendNameField, options, s
         			}
 				}											   	   	   	  	   	  				
 		});
+
+		  if(callback && typeof (callback) === "function")
+		  	callback(selectContainer);
 		  }
 	});
 }
