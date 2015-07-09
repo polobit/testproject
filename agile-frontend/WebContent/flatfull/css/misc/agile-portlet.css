@@ -782,7 +782,7 @@ border-radius: 2px;
  background: #bebebe;
 }
 .portlet_body_calendar .events_show{
-	/*background-color:#23b7e5;*/
+	background-color:#CBE0E7;
 	height:100%;
 }
 /* .fc-border-separate tr td:first-child > div {
@@ -820,4 +820,19 @@ width:100%;
 .mini-cal>.gs-resize-handle-both
 {
 	z-index:0;
+}
+.portlet_body_calendar>#calendar_container>.fc-header>tbody>tr>.fc-header-left, .portlet_body_calendar>#calendar_container>.fc-header>tbody>tr>.fc-header-right{
+  width: 45%;
+  text-align: center;
+  color:lightgray;
+}
+
+
+.portlet_body_calendar>#calendar_container>.fc-header .fc-button{
+	visibility:hidden;
+}
+.portlet_body_calendar ul
+{
+list-style:inherit!important;
+padding-left:25px;
 }

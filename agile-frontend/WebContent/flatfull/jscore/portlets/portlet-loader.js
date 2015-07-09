@@ -1914,7 +1914,7 @@ function minicalendar(el)
 									   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
 									   if(start<todayDate &&  todayDate<end){
 												//$('.events_show').empty().append(todayDate.format('dd mmm yyyy'));
-												$(el).find('.events_show').empty().append('<div class="show p-t-xs p-l-xs">Today </div>');
+												$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md p-l-xs text-center">Today </div><ul class="list"></ul>');
 									
 									   }
 									var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
@@ -1929,11 +1929,11 @@ function minicalendar(el)
 											else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
 												data.color='#fad733';
 											else if (data.color == 'green' || data.color == '#bbb')
-												data.color='#edf1f2'
+												data.color='#A8A8A8'
 											
 											if(data.start >= (todayDate.getTime()/1000) && data.start < (endDate.getTime()/1000)) {	
 											var e_date= new Date(data.start*1000);
-											$(el).find('.events_show').append('<li class="p-l-sm p-t-xs" style="color:'+data.color+'"><span style="color : black">'+data.title+'<br></span><small class="p-l">'+ e_date.format('HH:MM') + ' </small></li>');
+											$(el).find('.list').append('<li class="p-t-xs" style="color:'+data.color+'"><span style="color : black">'+data.title+'<br><small>'+ e_date.format('HH:MM') + ' </small></span></li>');
 									
 									   }
 									   var e_date= new Date(data.start*1000);
@@ -2097,14 +2097,14 @@ function minicalendar(el)
 						},
 								
 								dayClick : function(date,allDay,jsEvent,view){
-									var days = ['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
-									$(el).find('.events_show').empty().append('<div class="show p-t-xs text-sm p-l-xs">'+days[date.getDay()]+',' +date.format('dd mmm')+' </div>');
+									var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+									$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md p-l-xs text-center">'+days[date.getDay()]+' , ' +date.format('dd mmm')+' </div><ul class="list"></ul>');
 									var endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
 									var array= $('#calendar_container',el).fullCalendar('clientEvents', function(event) {
 										return (event.start >= date && event.start < endDate);
 								});
 								$.each(array,function(index){
-									$(el).find('.events_show').append('<li class="p-l-sm p-t-xs" style="color : '+array[index].color+'"><span style="color : black">'+array[index].title+'</span><br><small class="p-l">'+ array[index].start.format('HH:MM') + ' </small></li>');
+									$(el).find('.list').append('<li class="p-t-xs" style="color : '+array[index].color+'"><span style="color : black">'+array[index].title+'<br><small>'+ array[index].start.format('HH:MM') + ' </small></span></li>');
 									
 								});
 								}
@@ -2124,10 +2124,12 @@ function minicalendar(el)
 
 $('.portlet_body_calendar').live('mouseover',function(e){
 			$(this).find('.portlet_header_icons').removeClass('vis-hide');
+			$(this).find('.fc-button').css('visibility','visible');
 			//$('.portlet_body_calendar').css('overflow','inherit');
 });
 
 $('.portlet_body_calendar').live('mouseout',function(e){
 	$(this).find('.portlet_header_icons').addClass('vis-hide');
+	$(this).find('.fc-button').css('visibility','hidden');
 	//$('.portlet_body_calendar').css('overflow','auto');
 });
