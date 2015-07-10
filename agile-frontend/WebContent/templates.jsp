@@ -43,6 +43,8 @@ if ("POST".equalsIgnoreCase(request.getMethod())) {
 	
 	   // To differ email templates vs modal templates
 	   String type = request.getParameter("t");
+	   
+	   String subtype = request.getParameter("subtype");
 	%>
 	
 	
@@ -148,6 +150,7 @@ $(function(){
 	// textarea id
 	var id = '<%=id%>';
 	var type = '<%=type%>';
+	var subtype = '<%=subtype%>'
 	
 	if(id === undefined)
 		return;
@@ -160,6 +163,11 @@ $(function(){
       if(type === 'web_rules')
     	  url='/misc/modal-templates/modal_templates_structure.js';
       
+      if(subtype === 'email')
+    	  url = '/core/api/email/templates';
+      
+      if(subtype === 'user')
+			url = '/core/api/workflows';      
     	  
    		// Gets email_templates_structure.js
 		get_templates_json(url);
@@ -208,7 +216,7 @@ $(function(){
  function get_templates_json(url)
 {
 		// Fetch email_templates_structure.js and render
-		$.getJSON(location.origin + "/core/api/email/templates", function(data){
+		$.getJSON(location.origin + url, function(data){
 
 			// Initialize global variable to reuse data
 			TEMPLATES_JSON = data;
