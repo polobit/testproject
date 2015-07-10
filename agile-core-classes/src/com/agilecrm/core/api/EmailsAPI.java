@@ -466,7 +466,7 @@ public class EmailsAPI
     	
     	// Email verified already
     	if(verifiedEmails != null && verifiedEmails.verified.equals(Verified.YES))
-    		throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.fromStatusCode(500))
+    		throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
     			    .entity("Email verified already.").build());
     	
     	boolean exists = false;
@@ -485,7 +485,7 @@ public class EmailsAPI
     	
     	// If email exists already and not verified yet, send email again and throw exception
     	if(exists)
-        		throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.fromStatusCode(501))
+        		throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
         			    .entity("Email not verified yet.").build());
     	
     }

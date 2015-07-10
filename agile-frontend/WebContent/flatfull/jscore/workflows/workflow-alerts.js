@@ -98,7 +98,7 @@ function send_verify_email()
 			{
 				$('#verify-email-send').removeAttr('disabled');
 				
-				if(response.status == '501')
+				if(response.responseText == 'Email not verified yet.')
 				{
 					// Remove form elements
 					$('#verify-email-form').find('div.row').html("<p class='m-l'> &#39;"+json.email+"&#39; is not verified yet. Please check your email and complete the verification process.</p>");
