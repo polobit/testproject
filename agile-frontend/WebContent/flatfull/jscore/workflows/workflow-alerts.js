@@ -92,17 +92,21 @@ function send_verify_email()
 
 			     // Remove form elements
 			     $('#verify-email-form').find('div.row').html("<p class='m-l'>Verification email sent to &#39;"+json.email+"&#39;. Please check your email and complete the verification process.</p>");
-			     $('#verify-email-send').removeAttr('href').attr('id', 'done-verify-email').text('Done with Verification');
-				
-				 $('#done-verify-email').live('click', function(e){
-					 e.preventDefault();
-					 $('#workflow-verify-email').modal('hide');
-					 
-				 });
+			     $('#verify-email-send').removeAttr('href').removeAttr('id').attr('data-dismiss', 'modal').text('Done with Verification');
 			},
-			error: function()
+			error: function(response)
 			{
 				$('#verify-email-send').removeAttr('disabled');
+				
+				if(response.status == '501')
+				{
+					// Remove form elements
+					$('#verify-email-form').find('div.row').html("<p class='m-l'> &#39;"+json.email+"&#39; is not verified yet. Please check your email and complete the verification process.</p>");
+					$('#verify-email-send').removeAttr('href').removeAttr('id').attr('data-dismiss', 'modal').text('Done with Verification');
+					
+					$("#verify-ignore").show();
+					return;
+			     }
 
 				$('#workflow-verify-email').modal('hide');
 			}
