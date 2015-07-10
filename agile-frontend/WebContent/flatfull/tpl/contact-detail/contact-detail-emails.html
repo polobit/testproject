@@ -6,6 +6,9 @@
 	<span class="caret"></span>
 	</button>
 	<ul id = "mail-account-type-select" class="pull-right dropdown-menu">
+    <li>
+	<a href="" class="agile-emails" email-server="all" data-url="all" email-server-type="all">All Mail</a>
+	</li>
 	{{#if agileUserName}}
 	<li>
 	<a href="" class="agile-emails" email-server="agile" data-url="core/api/emails/agile-emails?e=" email-server-type={{this}}><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>Agile</a>
@@ -14,7 +17,7 @@
 	{{#if gmailUserNames}}
 	{{#each gmailUserNames}}
 	<li>
-	<a href="" class="agile-emails" email-server="google" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{this}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
+	<a href="" class="agile-emails" email-server="google" data-url="core/api/social-prefs/google-emails?from_email=" email-server-type={{this}}><i class="fa fa-google" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
 	</li>
 	{{/each}}
 	{{/if}}
@@ -64,7 +67,7 @@
 <script id="email-social-collection-template" type="text/html">
 {{#unless this.length}}
     <div class="wrapper p-t-none">
-            <div class="slate-content">
+            <div class="slate-content" id="no-email" style="display:none">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="/img/clipboard.png" />
                 </div>
