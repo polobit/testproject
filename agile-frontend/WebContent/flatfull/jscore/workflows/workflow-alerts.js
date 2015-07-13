@@ -90,8 +90,11 @@ function send_verify_email()
 				
 				$('#verify-email-send').removeAttr('disabled');
 
-			     // Remove form elements
-			     $('#verify-email-form').find('div.row').html("<p class='m-l'>Verification email sent to &#39;"+json.email+"&#39;. Please check your email and complete the verification process.</p>");
+			     // Hide form elements
+			     $('#verify-email-form').find('div.row div').hide();
+			     $('#verify-email-form').find('div.row input').val(json.email);
+
+			     $('#verify-email-form').find('div.row span#alert-msg').html("<p class='m-l'>Verification email sent to &#39;"+json.email+"&#39;. Please check your email and complete the verification process.</p>");
 			     $('#verify-email-send').removeAttr('href').text('Done with Verification');
 			},
 			error: function(response)
@@ -100,8 +103,11 @@ function send_verify_email()
 				
 				if(response.responseText == 'Email not verified yet.')
 				{
-					// Remove form elements
-					$('#verify-email-form').find('div.row').html("<p class='m-l'> &#39;"+json.email+"&#39; is not verified yet. Please check your email and complete the verification process.</p>");
+					// Hide form elements
+					$('#verify-email-form').find('div.row div').hide();
+					$('#verify-email-form').find('div.row input').val(json.email);
+			     
+					$('#verify-email-form').find('div.row span#alert-msg').html("<p class='m-l'> &#39;"+json.email+"&#39; is not verified yet. Please check your email and complete the verification process.</p>");
 					$('#verify-email-send').removeAttr('href').attr('data-dismiss', 'modal').text('Done with Verification');
 					
 					$("#verify-ignore").show();

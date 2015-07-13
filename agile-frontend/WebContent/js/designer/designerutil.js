@@ -603,9 +603,9 @@ function rearrange_from_email_options($select)
   	var prev_index = parseInt(last_index-1);
   					    
   	$select.find("option:eq("+prev_index+")").remove();
-  	$select.find("option:first").before("<option value='{{owner.email}}'>Contact's Owner</option><option disabled>________________</option>");
+  	$select.find("option:first").before("<option value='{{owner.email}}'>Contact's Owner</option>");
 
-  	// Add only if more than 3 options
-  	if($select.children('option').length > 3)
-  		$select.find("option:last").before("<option disabled>________________</option>");
+  		// Add only if more than 3 options
+//  	if($select.children('option').length > 3)
+//  		$select.find("option:last").before("<option disabled>________________</option>");
 }
