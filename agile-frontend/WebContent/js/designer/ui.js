@@ -137,8 +137,8 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 				// Rearranges options
 				rearrange_from_email_options($selectContainer, data);
 
-				// Make contact owner selected
-				$selectContainer.val("Contact's Owner").attr("selected", "selected");
+				$selectContainer.find('option:eq(0)').attr('selected', 'selected');
+				
 		});
 
 		return selectContainer;
@@ -165,7 +165,7 @@ function fetchAndFillSelect(url, keyField, valField, appendNameField, options, s
 					if(key.indexOf("*") == 0)
 					{
 						key  = key.substr(1);
-						selectOptionAttributes += "<option selected value='" + value + "'>" + key + "</option>";
+						selectOptionAttributes += "<option selected='selected' value='" + value + "'>" + key + "</option>";
 					}
 					else
 						selectOptionAttributes += "<option value='" + value + "'>" + key + "</option>";
