@@ -48,7 +48,7 @@ function navigateToDetailsPage(data, name)
 	console.log(model);
 	if (model.entity_type == "contact_entity")
 	{
-		if(model.type="COMPANY")
+		if(model.type == "COMPANY")
 			App_Companies.navigate("company/" + data, { trigger : true });
 		else
 			App_Contacts.navigate("contact/" + data, { trigger : true });

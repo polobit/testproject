@@ -247,6 +247,7 @@ var CompaniesRouter = Backbone.Router
 		{
 			$('#content').find('.contacts-div').html(this.companiesListView.el);
 			$('#bulk-actions').css('display', 'none');
+			$('#bulk-select').css('display', 'none');
 			COMPANIES_HARD_RELOAD = true;
 		}
 		$(".active").removeClass("active");
