@@ -353,8 +353,9 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 				verifiedEmails.verified = Verified.YES;
 				verifiedEmails.save();
 			%>	
+			<img src="img/appointment_confirmation.png" style="float: left;margin-right: 10px;margin-top: 1px;">
 			<h2>Email verified</h2>
-			<p><%= verifiedEmails.getEmail()%> is now verified. You may now proceed and use it in your campaign.</p>
+			<p>&#39;<%= verifiedEmails.getEmail()%>&#39; is now verified. You may now proceed and use it in your campaign.</p>
 			<%
 			}
 			%>
