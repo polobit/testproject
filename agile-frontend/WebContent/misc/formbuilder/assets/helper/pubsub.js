@@ -41,7 +41,7 @@ var addAgileApi = function(json, api, callback)
 	agiledomain.value = window.location.hostname.split('.')[0];
 
 	var agileredirecturl = {};
-	agileredirecturl.label = "Form Action URL";
+	agileredirecturl.label = "Form Action / Redirect URL";
 	agileredirecturl.type = "input";
 	agileredirecturl.value = "#";
 
