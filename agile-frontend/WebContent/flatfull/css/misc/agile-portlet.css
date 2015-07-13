@@ -672,9 +672,9 @@ border-radius: 2px;
  	overflow:hidden!important;
  }
  .portlet-error-message{
- 	padding: 11px 15px;
-	font-size: 15px;
-	font-style: italic;
+ 	padding: 50px 15px;
+	font-size: 12px;
+	text-align: center;
 	color: #98a6ad;
  }
  .portlet-error-privilege-message{
@@ -691,7 +691,7 @@ border-radius: 2px;
  	font-weight: 300!important;
 }
 .ob-portlet-font-check{
-	padding-left: 2px;
+	/* padding-left: 2px; */
 }
 .ob-portlet-font-no-check{
 	padding-left: 2px;

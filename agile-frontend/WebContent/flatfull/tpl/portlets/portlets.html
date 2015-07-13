@@ -451,7 +451,7 @@
 
 <script id="portlets-contacts-filterbased-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
-			<h4 class="h4 text-ellipsis text-muted">
+			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:90%;">{{get_flitered_contact_portlet_header settings.filter}}</span>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
@@ -467,7 +467,7 @@
 
 <script id="portlets-contacts-emails-opened-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading b-b-none" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
-			<h4 class="h4 text-ellipsis text-muted">
+			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Emails Opened</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 					{{get_portlet_duration settings.duration}}
@@ -488,7 +488,7 @@
 </script>
 <script id="portlets-contacts-emails-sent-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
-			<h4 class="h4 text-ellipsis text-muted">
+			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Emails Sent</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 					{{get_portlet_duration settings.duration}}
@@ -506,7 +506,7 @@
 </script>
 <script id="portlets-contacts-growth-graph-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading b-b-none" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
-			<h4 class="h4 text-ellipsis text-muted">
+			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Tag Graph</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 					{{get_portlet_duration settings.duration}}
@@ -526,7 +526,7 @@
 </script>
 <script id="portlets-deals-pending-deals-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
-			<h4 class="h4 text-ellipsis text-muted">
+			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:90%;">
 					{{#if_equals settings.deals "all-deals"}}
 						All Pending Deals
@@ -548,7 +548,7 @@
 </script>
 <script id="portlets-deals-deals-by-milestone-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading b-b-none" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
-			<h4 class="h4 text-ellipsis text-muted">
+			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:70%;">
 					{{#if_equals settings.deals "all-deals"}}
 						All Deals by Milestone
@@ -573,7 +573,7 @@
 </script>
 <script id="portlets-deals-closures-per-person-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
-			<h4 class="h4 text-ellipsis text-muted">
+			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:90%;">Closures per Person</span>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
@@ -588,7 +588,7 @@
 </script>
 <script id="portlets-deals-deals-won-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
-			<h4 class="h4 text-ellipsis text-muted">
+			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Deals Won</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 					{{get_portlet_duration settings.duration}}
@@ -606,7 +606,7 @@
 </script>
 <script id="portlets-deals-deals-funnel-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading b-b-none" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
-			<h4 class="h4 text-ellipsis text-muted">
+			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:70%;">
 					{{#if_equals settings.deals "all-deals"}}
 						All Deals Funnel
@@ -632,7 +632,7 @@
 </script>
 <script id="portlets-deals-deals-assigned-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
-			<h4 class="h4 text-ellipsis text-muted">
+			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Deals Assigned</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 					{{get_portlet_duration settings.duration}}
@@ -650,7 +650,7 @@
 </script>
 <script id="portlets-contacts-calls-per-person-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading b-b-none" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
-			<h4 class="h4 text-ellipsis text-muted">
+			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Calls</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 					{{get_portlet_duration settings.duration}}
@@ -668,7 +668,7 @@
 </script>
 <script id="portlets-tasksandevents-agenda-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
-			<h4 class="h4 text-ellipsis text-muted">
+			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:50%;">Events</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 50%;">
 					{{get_portlet_duration settings.duration}}
@@ -686,7 +686,7 @@
 </script>
 <script id="portlets-tasksandevents-today-tasks-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
-			<h4 class="h4 text-ellipsis text-muted">
+			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:50%;">Tasks</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 50%;">
 					{{get_portlet_duration settings.duration}}
@@ -704,7 +704,7 @@
 </script>
 <script id="portlets-useractivity-blog-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
-			<h4 class="h4 text-ellipsis text-muted">
+			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:90%;">Agile CRM Blog</span>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
@@ -720,7 +720,7 @@
 </script>
 <script id="portlets-tasksandevents-task-report-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading b-b-none" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
-			<h4 class="h4 text-ellipsis text-muted">
+			<h4 class="h4 text-ellipsis">
 				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Task Report</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 					{{get_portlet_duration settings.duration}}
@@ -789,27 +789,27 @@
 </script>
 
 <script id="portlets-admin-onboarding-model-template" type="text/html">
-	<div class="portlet_header portlet_edit_icons panel-heading b-b-none" style="background: #F9EDBE!important;" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
-		<h4 class="h4 text-ellipsis text-muted">
-			<span class="pull-left inline-block text-ellipsis" style="width:90%;">Getting started</span>
+	<div class="portlet_header portlet_edit_icons panel-heading b-b-none getting-started-header" style="background:#7BA9D0!important" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+		<h4 class="h4 text-ellipsis">
+			<span class="pull-left inline-block text-ellipsis" style="width:90%;color:#fff;">Getting Started</span>
 		</h4>
 		<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
 			<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 		</div>
 	</div>
-	<div class="portlet_body m-l text-lg">
+	<div class="portlet_body  text-lg getting-started-body bg-white ">
 		<div>
 			{{#if settings.addUsers.done}}
-				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="addUsers">
-					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				<label class="i-checks i-checks-sm m-b-none   onboarding-check" value="addUsers">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
 				</label>
 			{{else}}
-				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="addUsers">
-					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				<label class="i-checks i-checks-sm m-b-none  onboarding-check" value="addUsers">
+					<input class="thead_check" type="checkbox"><i></i>
 				</label>
 			{{/if}}
 			{{#if settings.addUsers.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#users-add">Add users</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#users-add">Add users</a></span>
 			{{else}}
 				<span class="inline-block v-text-bottom"><a href="#users-add">Add users</a></span>
 			{{/if}}
@@ -819,16 +819,24 @@
 		</div>
 		<div>
 			{{#if settings.importContacts.done}}
-				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="importContacts">
-					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
-				</label>
+
+
+
+
+
+	<label class="i-checks i-checks-sm m-b-none  onboarding-check" value="importContacts">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
+		</label>
 			{{else}}
-				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="importContacts">
-					<input class="ob-portlet-no-check" type="checkbox"><i></i>
-				</label>
+
+
+
+				 <label class="i-checks i-checks-sm m-b-none  onboarding-check" value="importContacts">
+					<input class="thead_check" type="checkbox"><i></i>
+				</label> 
 			{{/if}}
 			{{#if settings.importContacts.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#import">Import Contacts</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#import">Import Contacts</a></span>
 			{{else}}
 				<span class="inline-block v-text-bottom"><a href="#import">Import Contacts</a></span>
 			{{/if}}
@@ -838,16 +846,16 @@
 		</div>
 		<div>
 			{{#if settings.setupIntegrations.done}}
-				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="setupIntegrations">
-					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="setupIntegrations">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
 				</label>
 			{{else}}
-				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="setupIntegrations">
-					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="setupIntegrations">
+					<input class="thead_check" type="checkbox"><i></i>
 				</label>
 			{{/if}}
 			{{#if settings.setupIntegrations.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#integrations">Setup Integrations</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#integrations">Setup Integrations</a></span>
 			{{else}}
 				<span class="inline-block v-text-bottom"><a href="#integrations">Setup Integrations</a></span>
 			{{/if}}
@@ -857,16 +865,16 @@
 		</div>
 		<div>
 			{{#if settings.createCampaign.done}}
-				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="createCampaign">
-					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="createCampaign">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
 				</label>
 			{{else}}
-				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="createCampaign">
-					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="createCampaign">
+					<input class="thead_check" type="checkbox"><i></i>
 				</label>
 			{{/if}}
 			{{#if settings.createCampaign.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#workflow-templates">Create a campaign</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#workflow-templates">Create a campaign</a></span>
 			{{else}}
 				<span class="inline-block v-text-bottom"><a href="#workflow-templates">Create a campaign</a></span>
 			{{/if}}
@@ -876,16 +884,16 @@
 		</div>
 		<div>
 			{{#if settings.setupTrackingCode.done}}
-				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="setupTrackingCode">
-					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="setupTrackingCode">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
 				</label>
 			{{else}}
-				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="setupTrackingCode">
-					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="setupTrackingCode">
+					<input class="thead_check" type="checkbox"><i></i>
 				</label>
 			{{/if}}
 			{{#if settings.setupTrackingCode.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#analytics-code">Setup tracking code</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#analytics-code">Setup tracking code</a></span>
 			{{else}}
 				<span inline-block v-text-bottom"><a href="#analytics-code">Setup tracking code</a></span>
 			{{/if}}
@@ -895,16 +903,16 @@
 		</div>
 		<div>
 			{{#if settings.addWebrule.done}}
-				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="addWebrule">
-					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="addWebrule">
+					<input class="thead_check type="checkbox" checked="checked"><i></i>
 				</label>
 			{{else}}
-				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="addWebrule">
-					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="addWebrule">
+					<input class="thead_check" type="checkbox"><i></i>
 				</label>
 			{{/if}}
 			{{#if settings.addWebrule.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#webrules-add">Add a Webrule</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#webrules-add">Add a Webrule</a></span>
 			{{else}}
 				<span class="inline-block v-text-bottom"><a href="#webrules-add">Add a Webrule</a></span>
 			{{/if}}
@@ -914,16 +922,16 @@
 		</div>
 		<div>
 			{{#if settings.upgradePlan.done}}
-				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="upgradePlan">
-					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="upgradePlan">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
 				</label>
 			{{else}}
-				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="upgradePlan">
-					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="upgradePlan">
+					<input class="thead_check" type="checkbox"><i></i>
 				</label>
 			{{/if}}
 			{{#if settings.upgradePlan.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#subscribe-plan">Upgrade plan</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#subscribe-plan">Upgrade plan</a></span>
 			{{else}}
 				<span class="inline-block v-text-bottom"><a href="#subscribe-plan">Upgrade plan</a></span>
 			{{/if}}
@@ -950,8 +958,8 @@
 	<div class="row_position" style="display:none">{{row_position}}</div>	
 </script>
 <script id="portlets-user-onboarding-model-template" type="text/html">
-	<div class="portlet_header portlet_edit_icons panel-heading b-b-none" style="background: #F9EDBE!important;" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
-		<h4 class="h4 text-ellipsis text-muted">
+	<div class="portlet_header portlet_edit_icons panel-heading b-b-none" style="background:#7BA9D0!important;" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+		<h4 class="h4 text-ellipsis">
 			<span class="pull-left inline-block text-ellipsis" style="width:90%;">Getting started</span>
 		</h4>
 		<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
@@ -1066,7 +1074,7 @@
 		{{#if settings.category.revenue}}
 		<li class="pull-left">
 			<div class="panel-heading">
-				<h4 class="h4 text-ellipsis text-muted"><span class="pull-left inline-block" style="width:50px;">Revenue</span>
+				<h4 class="h4 text-ellipsis"><span class="pull-left inline-block" style="width:50px;">Revenue</span>
 				{{#if settings.category.dealsWon}}
 				</h4>
 				{{else}}
@@ -1092,7 +1100,7 @@
 		{{#if settings.category.dealsWon}}
 		<li class="pull-left">
 			<div class="panel-heading">
-				<h4 class="h4 text-ellipsis text-muted"><span class="pull-left inline-block" style="width:50px;">Deals</span>
+				<h4 class="h4 text-ellipsis"><span class="pull-left inline-block" style="width:50px;">Deals</span>
 				{{#if settings.category.calls}}
 				</h4>
 				{{else}}
@@ -1114,7 +1122,7 @@
 		{{#if settings.category.calls}}
 		<li class="pull-left">
 			<div class="panel-heading">
-				<h4 class="h4 text-ellipsis text-muted"><span class="pull-left inline-block" style="width:50px;">Calls</span>
+				<h4 class="h4 text-ellipsis"><span class="pull-left inline-block" style="width:50px;">Calls</span>
 				{{#if settings.category.tasks}}
 				</h4>
 				{{else}}
@@ -1132,7 +1140,7 @@
 		{{#if settings.category.tasks}}
 		<li class="pull-left">
 			<div class="panel-heading">
-				<h4 class="h4 text-ellipsis text-muted"><span class="pull-left inline-block" style="width:50px;">Tasks</span>
+				<h4 class="h4 text-ellipsis"><span class="pull-left inline-block" style="width:50px;">Tasks</span>
 				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width:calc(100% - 50px);">
 					{{get_portlet_duration settings.duration}}
 				</small></h4>

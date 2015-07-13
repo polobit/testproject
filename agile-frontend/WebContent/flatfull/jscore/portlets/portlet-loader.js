@@ -1695,18 +1695,18 @@ $('.onboarding-check').live('change',function(e){
 		contentType : "application/json; charset=utf-8", dataType : 'json', success: function(){
 			if(that.find('input:checkbox').is(':checked')){
 				that.parent().find('span').css("text-decoration","line-through");
-				that.parent().find('span > a').addClass("text-muted");
+				/*that.parent().find('span > a').addClass("text-muted");
 				that.parent().find('label').removeClass('fa fa-square-o ob-portlet-font-check onboarding-check c-p');
 				that.parent().find('label').addClass('fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted');
 				that.find('input:checkbox').removeClass('ob-portlet-no-check');
-				that.find('input:checkbox').addClass('ob-portlet-check');
+				that.find('input:checkbox').addClass('ob-portlet-check');*/
 			}else{
 				that.parent().find('span').css("text-decoration","none");
-				that.parent().find('span > a').removeClass("text-muted");
+				/*that.parent().find('span > a').removeClass("text-muted");
 				that.parent().find('label').removeClass('fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted');
 				that.parent().find('label').addClass('fa fa-square-o ob-portlet-font-check onboarding-check c-p');
 				that.find('input:checkbox').removeClass('ob-portlet-check');
-				that.find('input:checkbox').addClass('ob-portlet-no-check');
+				that.find('input:checkbox').addClass('ob-portlet-no-check');*/
 			}} });
 		
 });
