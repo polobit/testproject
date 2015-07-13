@@ -148,6 +148,70 @@ $(function()
 		return options.fn(exclusive_fields)
 
 	});
+	
+	/**
+	 * Returns custom fields without few fields like LINKEDIN or TWITTER or
+	 * title fields
+	 */
+	Handlebars.registerHelper('getCompanyCustomPropertiesExclusively', function(items, options)
+	{
+
+		var exclude_by_subtype = [
+				"LINKEDIN", "TWITTER"
+		];
+		var exclude_by_name = [
+			"title"
+		];
+
+		var fields = getCompanyCustomProperties(items);
+		
+		var exclusive_fields = [];
+		for (var i = 0; i < fields.length; i++)
+		{
+			if (jQuery.inArray(fields[i].name, exclude_by_name) != -1 || (fields[i].subtype && jQuery.inArray(fields[i].subtype, exclude_by_subtype) != -1))
+			{
+				continue;
+			}
+
+			exclusive_fields.push(jQuery.extend(true, {}, fields[i]));
+		}
+		if (exclusive_fields.length == 0)
+			return options.inverse(exclusive_fields);
+
+		$.getJSON("core/api/custom-fields/type/DATE", function(data)
+		{
+
+			if (data.length == 0)
+				return;
+
+			for (var j = 0; j < data.length; j++)
+			{
+				for (var i = 0; i < exclusive_fields.length; i++)
+				{
+					if (exclusive_fields[i].name == data[j].field_label)
+						try
+						{
+							var value = exclusive_fields[i].value;
+
+							if (!isNaN(value))
+							{
+								exclusive_fields[i].value = value;
+								exclusive_fields[i]["subtype"] = data[j].field_type;
+							}
+
+						}
+						catch (err)
+						{
+							exclusive_fields[i].value = exclusive_fields[i].value;
+						}
+				}
+			}
+			updateCompanyCustomData(options.fn(exclusive_fields));
+		});
+
+		return options.fn(exclusive_fields)
+
+	});
 
 	Handlebars.registerHelper('urlEncode', function(url, key, data)
 	{
