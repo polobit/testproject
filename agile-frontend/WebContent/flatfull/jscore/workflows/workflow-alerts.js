@@ -108,7 +108,7 @@ function send_verify_email()
 					$('#verify-email-form').find('div.row input').val(json.email);
 			     
 					$('#verify-email-form').find('div.row span#alert-msg').html("<p class='m-l'> &#39;"+json.email+"&#39; is not verified yet. Please check your email and complete the verification process.</p>");
-					$('#verify-email-send').removeAttr('href').attr('data-dismiss', 'modal').text('Done with Verification');
+					$('#verify-email-send').removeAttr('href').text('Done with Verification');
 					
 					$("#verify-ignore").show();
 					return;
