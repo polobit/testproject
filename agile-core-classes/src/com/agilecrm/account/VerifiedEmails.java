@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -85,5 +86,12 @@ public class VerifiedEmails
 	public void save()
 	{
 		sss.put(this);
+	}
+	
+	@PrePersist
+	public void prePersist()
+	{
+		if(email != null)
+			email = email.toLowerCase();
 	}
 }

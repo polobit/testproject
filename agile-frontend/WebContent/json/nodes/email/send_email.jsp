@@ -28,12 +28,12 @@
             "id": "from_email",
             "required": "required",
             "title": "Select your email address.",
-            "url": "/core/api/account-prefs/verified-emails",
+            "url": "/core/api/account-prefs/verified-emails/all",
             "dynamicName": "email",
             "dynamicValue": "email",
             "arrange_type": "prepend",
             "fieldType": "dynamicselect",
-            "type": "select",
+             "type": "verified_email",
              "options": {
                 "Contact's Owner": "{{owner.email}}",
                 "+ Add new": "verify_email"

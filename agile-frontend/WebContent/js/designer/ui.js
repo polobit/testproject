@@ -114,7 +114,9 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	var keyField = uiFieldDefinition.dynamicName;
 	var valField = uiFieldDefinition.dynamicValue;
 	var appendNameField = uiFieldDefinition.appendToDynamicName;
+	var type = uiFieldDefinition.type;
 
+	// Append or prepend
 	var arrange_type = uiFieldDefinition.arrange_type;
 	
 
@@ -125,15 +127,15 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	var selectContainer = $("<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
 
 	if(event && eventHandler)
-		selectContainer = $("<select id='"+uiFieldDefinition.id+"' "+getStyleAttribute(uiFieldDefinition.style)+" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + event +"='"+eventHandler+"'></select>");
+		selectContainer = $("<select id='"+uiFieldDefinition.id+"' "+getStyleAttribute(uiFieldDefinition.style)+" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + event +"='"+eventHandler+"' type='"+(type == undefined ? 'select' : type)+"'></select>");
 	
 	// For From Email select, options need to rearranged
 	if(uiFieldDefinition.id == "from_email" && uiFieldDefinition.name == "from_email")
 	{
-		fetchAndFillSelect(url,keyField, valField, appendNameField, uiFieldDefinition.options, selectContainer, arrange_type, function($selectContainer){
+		fetchAndFillSelect(url,keyField, valField, appendNameField, uiFieldDefinition.options, selectContainer, arrange_type, function($selectContainer, data){
 
 				// Rearranges options
-				rearrange_from_email_options($selectContainer);
+				rearrange_from_email_options($selectContainer, data);
 
 				// Make contact owner selected
 				$selectContainer.val("Contact's Owner").attr("selected", "selected");
@@ -216,7 +218,7 @@ function fetchAndFillSelect(url, keyField, valField, appendNameField, options, s
 		});
 
 		  if(callback && typeof (callback) === "function")
-		  	callback(selectContainer);
+		  	callback(selectContainer, data);
 		  }
 	});
 }

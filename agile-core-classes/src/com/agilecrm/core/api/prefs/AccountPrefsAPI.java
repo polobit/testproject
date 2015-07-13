@@ -53,11 +53,11 @@ public class AccountPrefsAPI
 	return prefs;
     }
     
-    @Path("/verified-emails")
+    @Path("/verified-emails/all")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<VerifiedEmails> getVerifiedEmails()
     {
-	return VerifiedEmailsUtil.getVerifiedEmails();
+	return VerifiedEmailsUtil.getAllEmails();
     }
 }

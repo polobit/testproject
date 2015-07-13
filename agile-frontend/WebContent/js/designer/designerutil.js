@@ -569,10 +569,10 @@ function openVerifyEmailModal(el)
 
 			,function(modal){
 
-				var email = $(modal).find('input').val();
-
 				modal.on('hidden.bs.modal', function (e) {
   
+  					var given_email = $(this).find('input').val();
+  					
   					// Make send email node from email empty
 					$('#from_email').empty();
   					
@@ -581,11 +581,12 @@ function openVerifyEmailModal(el)
                 						"+ Add new": "verify_email"
             						};
 
-  					fetchAndFillSelect('core/api/account-prefs/verified-emails', "email", "email", undefined, options, $('#from_email'), "prepend", function($select){
+  					fetchAndFillSelect('core/api/account-prefs/verified-emails/all', "email", "email", undefined, options, $('#from_email'), "prepend", function($select, data){
   						
-  						$select.val(email).attr("selected", "selected");
+  						if(given_email)
+  							$select.val(given_email).attr("selected", "selected");
 
-  						rearrange_from_email_options($select);
+  						rearrange_from_email_options($select, data);
   					});
 
 				});
@@ -596,14 +597,40 @@ function openVerifyEmailModal(el)
 			);
 }
 
-function rearrange_from_email_options($select)
+function rearrange_from_email_options($select, data)
 {
 
 	var last_index = $select.find("option:last").index();
   	var prev_index = parseInt(last_index-1);
   					    
+  	// Remove Contact's Owner option inorder to make it first option
   	$select.find("option:eq("+prev_index+")").remove();
+  	
   	$select.find("option:first").before("<option value='{{owner.email}}'>Contact's Owner</option>");
+
+	if(!data)
+		return;
+
+	var unverified = [];
+
+	$.each(data, function(index, obj){
+
+			if(obj.verified == "NO")
+				unverified.push(obj.email);
+
+	});
+
+  	$select.find('option').each(function(){
+
+  			var email = $(this).val()
+
+  			if(unverified.indexOf(email) != -1)
+  			{
+  				$(this).attr('unverified', 'unverified');
+  				$(this).text(email + ' (unverified)');
+  			}
+  	});
+
 
   		// Add only if more than 3 options
 //  	if($select.children('option').length > 3)
