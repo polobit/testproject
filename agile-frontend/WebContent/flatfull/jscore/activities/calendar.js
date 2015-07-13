@@ -19,17 +19,32 @@ function isArray(a)
  */
 function load_events_from_google(callback)
 {
-	if (readCookie('event-filters'))
-	{
-		if (JSON.parse(readCookie('event-filters')).type == 'agile')
-			return;
 
-		// Check whether to show the google calendar events or not.
-		if (JSON.parse(readCookie('event-filters')).owner_id.length > 0 && CURRENT_AGILE_USER.id != JSON.parse(readCookie('event-filters')).owner_id)
+	var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
+	var agile_event = false;
+	if (eventFilters)
+	{
+		var type_of_cal = eventFilters.cal_type;
+		var owners = eventFilters.owner_ids;
+		if (owners && owners.length > 0)
+		{
+			$.each(owners, function(index, value)
+			{
+				if (value)
+				{
+					if (value.id == CURRENT_AGILE_USER.id)
+						agile_event = true;
+				}
+			});
+		}
+
+		if ((type_of_cal && type_of_cal.length != 2 && type_of_cal[0] == 'agile') || type_of_cal.length == 0)
+		{
 			return;
+		}
 	}
 
-	// Name of the cookie to store/fetch calendar prefs. Current user id is set
+	// Name of the cookie to store/ calendar prefs. Current user id is set
 	// in cookie name to avoid
 	// showing tasks in different users calendar if logged in same browser
 	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
@@ -96,6 +111,7 @@ function showCalendar()
 {
 
 	_init_gcal_options();
+	putGoogleCalendarLink();
 	var calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 	$('#' + calendarView).addClass('bg-light');
 	fullCal = $('#calendar_event')
@@ -123,29 +139,59 @@ function showCalendar()
 								{ events : function(start, end, callback)
 								{
 
-									var eventFilters = JSON.parse(readCookie('event-filters'));
-									if (readCookie('event-filters') && eventFilters.type == 'google')
+									var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
+									var agile_event_owners = '';
+									if (eventFilters)
 									{
-										$("#loading_calendar_events").hide();
-										return;
+										var type_of_cal = eventFilters.cal_type;
+										var owners = eventFilters.owner_ids;
+
+										$.each(type_of_cal, function(index, value)
+										{
+											if (value == 'agile')
+												owners.push(CURRENT_AGILE_USER.id);
+										});
+
+										if (owners && owners.length > 0)
+										{
+											$.each(owners, function(index, value)
+											{
+
+												if (index >= 1)
+													agile_event_owners += ",";
+												agile_event_owners += value;
+											});
+										}
+
+										if ((type_of_cal.length == 1 && type_of_cal[0] == 'google' && owners.length == 1 && owners[0] == CURRENT_AGILE_USER.id) || type_of_cal.length == 0 && owners.length == 0)
+										{
+											$("#loading_calendar_events").hide();
+											return;
+										}
 									}
 
+									/*
+									 * if (readCookie('event-filters') &&
+									 * eventFilters.type == 'google') {
+									 * $("#loading_calendar_events").hide();
+									 * return; }
+									 */
+									var start_end_array = {};
+									start_end_array.startTime = start.getTime() / 1000;
+									start_end_array.endTime = end.getTime() / 1000;
+									createCookie('fullcalendar_start_end_time', JSON.stringify(start_end_array));
+
 									var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
-									if (readCookie('event-filters') && eventFilters.owner_id.length > 0)
-										eventsURL += '&owner_id=' + eventFilters.owner_id;
+
+									eventsURL += '&owner_id=' + agile_event_owners;
 									console.log('-----------------', eventsURL);
 									$.getJSON(eventsURL, function(doc)
 									{
 										$.each(doc, function(index, data)
 										{
-											if (data.color == 'red' || data.color == '#f05050')
-												data.className = 'b-l b-2x b-danger fc-z-index';
-											else if (data.color == 'green' || data.color == '#bbb')
-												data.className = 'b-l b-2x b-light fc-z-index';
-											else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
-												data.className = 'b-l b-2x b-warning fc-z-index';
-											data.color = '';
-											data.backgroundColor = '#fff';
+											// decides the color of event based
+											// on owner id
+											data = renderEventBasedOnOwner(data);
 										});
 
 										if (doc)
@@ -159,9 +205,11 @@ function showCalendar()
 						],
 						header : { left : 'prev', center : 'title', right : 'next' },
 						defaultView : calendarView,
+						slotEventOverlap : false,
 						viewDisplay : function(view)
 						{
 							createCookie('calendarDefaultView', view.name, 90);
+							$(".fc-agenda-axis").addClass('bg-light lter');
 						},
 						loading : function(bool)
 						{
@@ -169,8 +217,10 @@ function showCalendar()
 							{
 
 								$("#loading_calendar_events").remove();
-								$('.fc-header-left').append(
-										'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle">loading...</span>').show();
+								$('.fc-header-left')
+										.append(
+												'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
+										.show();
 								$('.fc-header-left').show();
 
 							}
@@ -180,15 +230,19 @@ function showCalendar()
 								$("#loading_calendar_events").hide();
 								start_tour('calendar');
 							}
+							$(".fc-agenda-axis").addClass('bg-light lter');
+							$(".ui-resizable-handle").hide();
 						},
 						selectable : true,
 						selectHelper : true,
 						editable : true,
 						theme : false,
 						contentHeight : 400,
+						firstDay : CALENDAR_WEEK_START_DAY,
 						themeButtonIcons : { prev : 'fc-icon-left-single-arrow', next : 'fc-icon-right-single-arrow' },
 						eventMouseover : function(event, jsEvent, view)
 						{
+
 							calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 							var reletedContacts = '';
 							var meeting_type = '';
@@ -213,13 +267,34 @@ function showCalendar()
 							var leftorright = 'left';
 							var pullupornot = '';
 							if (calendarView == "agendaDay")
+							{
 								leftorright = 'top';
+							}
 							else
 							{
-								if (event.start.getDay() == 5 || event.start.getDay() == 6)
-									leftorright = 'right';
 								pullupornot = 'pull-up';
+								if (calendarView == "agendaWeek")
+								{
+									if (event.start.getHours() >= 20 && ((event.start.getDay() != 5 && event.start.getDay() != 6)))
+									{
+										leftorright = 'bottom';
+										pullupornot = '';
+									}
+									else if (event.start.getHours() <= 3 && ((event.start.getDay() != 5 && event.start.getDay() != 6)))
+									{
+										leftorright = 'top';
+										pullupornot = '';
+									}
+
+								}
+								if (calendarView == "month")
+								{
+									if (event.start.getDay() == 5 || event.start.getDay() == 6)
+										leftorright = 'right';
+								}
+
 							}
+
 							if (event.meeting_type && event.description)
 							{
 								meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span>Meeting Type - ' + event.meeting_type + '</span><br/><span title=' + event.description + '>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + addDotsAtEnd(event.description) + '</span>';
@@ -232,13 +307,32 @@ function showCalendar()
 							var popoverElement = '<div class="fc-overlay ' + leftorright + '">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left">' + event.title + '</div><div class="pull-right"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
 									.format('dd-mmm-yyyy HH:MM') + '</div>' + '<div>' + reletedContacts + '</div>' + '<div>' + meeting_type + '</div>' + '</div>' + '</div>';
 							$(this).append(popoverElement);
+							$(jsEvent.currentTarget).css('z-index', 9);
+							if (event.allDay)
+							{
+								$(jsEvent.currentTarget.parentElement).css('z-index', 9);
+							}
 							$(this).find('.fc-overlay').show();
+							$(this).find(".ui-resizable-handle").show();
 						},
 						eventMouseout : function(event, jsEvent, view)
 						{
 							$(this).find('.fc-overlay').hide();
 							$(this).find('.fc-overlay').remove();
+							$(this).find(".ui-resizable-handle").hide();
+							$(jsEvent.currentTarget).css('z-index', 8);
+							if (event.allDay)
+							{
+								$(jsEvent.currentTarget.parentElement).css('z-index', 8);
+							}
 						},
+						eventAfterRender : function(event, element, view)
+						{
+							$(".ui-resizable-handle").hide();
+							event = renderEventBasedOnOwner(event);
+							console.log("exec ");
+						},
+
 						/**
 						 * Shows event pop-up modal with pre-filled date and
 						 * time values, when we select a day or multiple days of
@@ -311,7 +405,7 @@ function showCalendar()
 								revertFunc();
 								return;
 							}
-
+							event1 = revertEventColorBasedOnPriority(event1);
 							var event = $.extend(true, {}, event1);
 
 							// Update event if the user changes it in the
@@ -320,12 +414,7 @@ function showCalendar()
 							event.end = new Date(event.end).getTime() / 1000;
 							if (event.end == null || event.end == 0)
 								event.end = event.start;
-							if (event1.className == "b-l,b-2x,b-danger,fc-z-index")
-								event.color = "red";
-							else if (event1.className == "b-l,b-2x,b-light,fc-z-index")
-								event.color = "green";
-							else if (event1.className == "b-l,b-2x,b-warning,fc-z-index")
-								event.color = "#36C";
+
 							var jsoncontacts = event.contacts;
 							var _contacts = [];
 							for ( var i in jsoncontacts)
@@ -350,12 +439,7 @@ function showCalendar()
 						 */
 						eventClick : function(event)
 						{
-							if (event.className == "b-l,b-2x,b-danger,fc-z-index")
-								event.color = "red";
-							else if (event.className == "b-l,b-2x,b-light,fc-z-index")
-								event.color = "green";
-							else if (event.className == "b-l,b-2x,b-warning,fc-z-index")
-								event.color = "#36C";
+							event = revertEventColorBasedOnPriority(event);
 
 							if (isNaN(event.id))
 								return;
@@ -618,7 +702,7 @@ $(function()
 		}
 	});
 
-	loadDefaultFilters();
+	// loadDefaultFilters();
 
 	// Save current agile user in global.
 	$.getJSON('/core/api/users/agileusers', function(users)
@@ -654,3 +738,37 @@ $('.agendaDayWeekMonth').die().live('click', function()
 	});
 
 });
+
+function getCalendarUsersDetails()
+{
+
+	var users = $.ajax({ type : "GET", url : '/core/api/users/agileusers', async : false }).responseText;
+	var json_users = [];
+	if (users)
+	{
+		$.each(JSON.parse(users), function(i, user)
+		{
+
+			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
+			{
+				CURRENT_AGILE_USER = user;
+
+			}
+			else
+			{
+				if (user.domainUser)
+				{
+					var json_user = {};
+					json_user.id = user.id;
+					json_user.name = user.domainUser.name;
+					json_user.domain_user_id = user.domainUser.id;
+					json_users.push(json_user);
+				}
+
+			}
+
+		});
+	}
+
+	return json_users;
+}

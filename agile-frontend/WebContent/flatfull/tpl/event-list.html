@@ -33,21 +33,21 @@
 <script id="future-model-template" type="text/html">
 
 <td class="e_owner" style="width:60px;cursor: pointer;" onclick=show_model({{id}})>
-    <div class="thumb avatar">
+    <div class="thumb-sm agile-img m-r-sm">
 	{{#if ownerPic}}
-        	<img class="thumbnail" src="{{ownerPic}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
+        	<img class="img-inital r r-2x" src="{{ownerPic}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
 	{{else}}
-			<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
+			<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
 	{{/if}}
   </div>
-</td>
+</td> 
 
 <td onclick=show_model({{id}}) style="cursor:pointer">
 <div class="row" style="margin-left: 1px;">
-<div class="span8">
+<div class="col-md-8">
 <div class="line-clamp">{{title}}</div></div>
 
-<div class="span4" style="text-align:right">
+<div class="col-md-4" style="text-align:right">
 <div class="ellipsis-multiline" style="line-height:20px !important;height: auto !important; word-break:keep-all;">  
 <span class="label" style="background-color:{{color}}">{{event_priority color}}</span></div>
 </div>
@@ -56,9 +56,9 @@
 <div class="clearfix"></div>
 
 <div class="row" style="margin-left: 1px;">
-<div class="span4">{{getCustomDateWithTime start end}}</div>
+<div class="col-md-4">{{getCustomDateWithTime start end}}</div>
 
-<div class="span8 contact_text" style="text-align:right;">
+<div class="col-md-8 contact_text" style="text-align:right;">
 {{#if contacts.length}} 
 <div class="ctx contact_text">  
         {{#each contacts}}<a  href ="#contact/{{this.id}}">{{#if_contact_type "PERSON"}}
@@ -98,15 +98,15 @@
 </script>
 
 <script id="events-model-template" type="text/html">
-<!-- <td class="e_owner" style="width:60px;cursor: pointer;" onclick=show_model({{id}})>
- <div class="thumb avatar">
+ <td class="e_owner" style="width:60px;cursor: pointer;" onclick=show_model({{id}})>
+ <div class="thumb-sm agile-img m-r-sm">
 	{{#if ownerPic}}
-        	<img class="thumbnail" src="{{ownerPic}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
+        	<img class="img-inital r r-2x" src="{{ownerPic}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
 	{{else}}
-			<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
+			<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{eventOwner.name}}"/>
 	{{/if}}
   </div>
-</td> -->
+</td>
 <td style="cursor: pointer;"  onclick=show_model({{id}})>
 	<div class="row m-b-xs m-l-none m-r-none">
 		<div class="pull-left text-ellipsis" style="width:80%;">

@@ -263,7 +263,7 @@ $(function()
 		$('#email-type-select', App_Contacts.contactDetailView.el).html($(this).html());
 		// Here email_server_type means email/username of mail account
 		email_server_type = $(this).attr('email-server-type');
-		if (email_server && url && email_server != 'agile')
+		if (email_server && url && (email_server != 'agile'))
 			url = url.concat(email_server_type);
 		var cookie_value = email_server_type + '|' + email_server;
 		save_email_server_type_in_cookie(cookie_value);

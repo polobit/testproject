@@ -141,7 +141,7 @@ $(function()
 	 * Activates the date picker to the corresponding fields in activity modal
 	 * and activity-update modal
 	 */
-	var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev)
+	var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
 	{
 		// If event start date is changed and end date is less than start date,
 		// change the value of the end date to start date.
@@ -153,8 +153,8 @@ $(function()
 
 	});
 
-	$('#event-date-2').datepicker({ format : 'mm/dd/yyyy' });
-	$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev)
+	$('#event-date-2').datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
+	$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
 	{
 		// If event start date is changed and end date is less than start date,
 		// change the value of the end date to start date.
@@ -165,7 +165,7 @@ $(function()
 		}
 
 	});
-	$('#update-event-date-2').datepicker({ format : 'mm/dd/yyyy' });
+	$('#update-event-date-2').datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
 
 	/**
 	 * Activates time picker for start time to the fields with class
@@ -658,14 +658,7 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 
 						// $('#calendar').fullCalendar( 'refetchEvents' );
 						var event = data.toJSON();
-						if (event.color == 'red' || event.color == '#f05050')
-							event.className = 'b-l b-2x b-danger fc-z-index';
-						else if (event.color == 'green' || event.color == '#bbb')
-							event.className = 'b-l b-2x b-light fc-z-index';
-						else if (event.color == '#36C' || event.color == '#23b7e5')
-							event.className = 'b-l b-2x b-warning fc-z-index';
-						event.color = '';
-						event.backgroundColor = '#fff';
+						event = renderEventBasedOnOwner(event);
 						if (Current_Route == 'calendar' && !readCookie("agile_calendar_view"))
 						{
 
@@ -675,7 +668,9 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 
 								$('#calendar_event').fullCalendar('removeEvents', json.id);
 
-							$('#calendar_event').fullCalendar('renderEvent', event);
+							// renders Event to full calendar based on Owner
+							// checked or unchecked
+							renderAddedEventToFullCalenarBasedOnCookie(event);
 						}
 						// Updates data to temeline
 						else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))

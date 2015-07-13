@@ -14,15 +14,17 @@ function organize_portlets(base_model){
 	 * as div id (div defined in portlet-add.html)
 	 */
 	if (portlet_type == "CONTACTS")
-		$('#contacts', this.el).append($(itemView.render().el));
+		$('#contacts', this.el).append($(itemView.render().el).addClass('col-md-3 col-sm-6 col-xs-12'));
 	else if (portlet_type == "DEALS")
-		$('#deals', this.el).append($(itemView.render().el));
+		$('#deals', this.el).append($(itemView.render().el).addClass('col-md-3 col-sm-6 col-xs-12'));
 	else if (portlet_type == "TASKSANDEVENTS")
-		$('#taksAndEvents', this.el).append($(itemView.render().el));
+		$('#taksAndEvents', this.el).append($(itemView.render().el).addClass('col-md-3 col-sm-6 col-xs-12'));
 	else if (portlet_type == "USERACTIVITY")
-		$('#userActivity', this.el).append($(itemView.render().el));
+		$('#userActivity', this.el).append($(itemView.render().el).addClass('col-md-3 col-sm-6 col-xs-12'));
 	else if (portlet_type == "RSS")
-		$('#rssFeed', this.el).append($(itemView.render().el));
+		$('#rssFeed', this.el).append($(itemView.render().el).addClass('col-md-3 col-sm-6 col-xs-12'));
+	else if (portlet_type == "ACCOUNT")
+		$('#accountInfo', this.el).append($(itemView.render().el).addClass('col-md-3 col-sm-6 col-xs-12'));
 }
 function set_p_portlets(base_model){
 	var itemView;
@@ -821,7 +823,7 @@ function set_p_portlets(base_model){
 			
 			setPortletContentHeight(base_model);
 			
-			addWidgetToGridster(base_model);
+			//addWidgetToGridster(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Task Report"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 			
@@ -957,7 +959,7 @@ function set_p_portlets(base_model){
 			
 			setPortletContentHeight(base_model);
 		}
-		addWidgetToGridster(base_model);
+		//addWidgetToGridster(base_model);
 	});
 	$('.stats_report_portlet_body', this.el).each(function(){
 		/*if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Stats Report"){

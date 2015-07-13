@@ -1218,6 +1218,10 @@ display:flex;
 {
 	word-break:keep-all;
 }
+.word-break-full 
+{
+  word-break:break-word;
+}
 
 /*ending word related properties*/
 
