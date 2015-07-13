@@ -566,7 +566,7 @@ function getStartAndEndDatesOnDue(duration){
 		else if(currentMonth>=6 && currentMonth<9)
 			d.setMonth(9);
 		else if(currentMonth>=9 && currentMonth<12){
-			d.setFullYear(d.getFullYear+1);
+			d.setFullYear(d.getFullYear()+1);
 			d.setMonth(0);
 		}
 		d.setDate(1);
@@ -580,11 +580,11 @@ function getStartAndEndDatesOnDue(duration){
 		else if(currentMonth>=3 && currentMonth<6)
 			d.setMonth(9);
 		else if(currentMonth>=6 && currentMonth<9){
-			d.setFullYear(d.getFullYear+1);
+			d.setFullYear(d.getFullYear()+1);
 			d.setMonth(0);
 		}
 		else if(currentMonth>=9 && currentMonth<12){
-			d.setFullYear(d.getFullYear+1);
+			d.setFullYear(d.getFullYear()+1);
 			d.setMonth(3);
 		}
 		d.setDate(1);
@@ -780,7 +780,7 @@ function getStartAndEndDatesEpochForPortlets(duration)
 		else if(currentMonth>=6 && currentMonth<9)
 			d.setMonth(9);
 		else if(currentMonth>=9 && currentMonth<12){
-			d.setFullYear(d.getFullYear+1);
+			d.setFullYear(d.getFullYear()+1);
 			d.setMonth(0);
 		}
 		d.setDate(1);
@@ -794,11 +794,11 @@ function getStartAndEndDatesEpochForPortlets(duration)
 		else if(currentMonth>=3 && currentMonth<6)
 			d.setMonth(9);
 		else if(currentMonth>=6 && currentMonth<9){
-			d.setFullYear(d.getFullYear+1);
+			d.setFullYear(d.getFullYear()+1);
 			d.setMonth(0);
 		}
 		else if(currentMonth>=9 && currentMonth<12){
-			d.setFullYear(d.getFullYear+1);
+			d.setFullYear(d.getFullYear()+1);
 			d.setMonth(3);
 		}
 		d.setDate(1);
