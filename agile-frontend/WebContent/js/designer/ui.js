@@ -453,7 +453,7 @@ function generateHTMLEditor(uiFieldDefinition, container) {
 
 	var htmlDiv = "<label>HTML: <a href='#' onclick='load_email_templates(); return false;'>(Select a Template / Load from Editor)</a>" +
 			"</label><select style='position:relative;float:right;cursor:pointer;margin-right: 10px;' onChange = 'show_templates(this)' ><option value='agile_templates'>" +
-			"Agile Templates</option><option value='user'>User Templates</option><option value='campaign_templates'>" +
+			"Agile Templates</option><option value='user_templates'>User Templates</option><option value='campaign_templates'>" +
 			"Agile Templates</option></select><br/><br/>";
 	
 	/*if(uiFieldDefinition.style)
