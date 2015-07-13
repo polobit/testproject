@@ -101,6 +101,8 @@ function getOptions()
 	//Get the GMT end time
 	var end_time = getGMTEpochFromDate(new Date(end_value));
 
+	end_time += (23*60*60)+(59*60)+59;
+
 	// Adds start_time, end_time and timezone offset to params.
 	options += ("start_time=" + start_time + "&end_time=" + end_time);
 
