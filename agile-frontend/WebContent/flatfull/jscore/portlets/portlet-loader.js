@@ -1165,7 +1165,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
 	        		
 	        		var selector=idVal;
-	    			var url='/core/api/portlets/portletGrowthGraph?tags='+data.get('settings').tags+'&frequency='+data.get('settings').frequency+'&duration='+data.get('settings').duration+'&start-date='+getGMTEpochFromDate(new Date(getStartAndEndDatesOnDue(data.get('settings').duration)*1000))+'&end-date='+getGMTEpochFromDate(new Date(getStartAndEndDatesOnDue("TOMORROW")*1000));
+	    			var url='/core/api/portlets/portletGrowthGraph?tags='+data.get('settings').tags+'&frequency='+data.get('settings').frequency+'&duration='+data.get('settings').duration+'&start-date='+getUTCMidNightEpochFromDate(new Date(getStartAndEndDatesOnDue(data.get('settings').duration)*1000))+'&end-date='+getUTCMidNightEpochFromDate(new Date(getStartAndEndDatesOnDue("TOMORROW")*1000));
 	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
 	    			var topPos = 50*sizey;
 	    			if(sizey==2 || sizey==3)

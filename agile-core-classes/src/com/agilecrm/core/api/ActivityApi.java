@@ -45,8 +45,8 @@ public class ActivityApi
 	{
 		if (time_zone !=null )
 	    {
-	    	starttime += (Long.parseLong(time_zone)*60*1000);
-	    	endtime += (Long.parseLong(time_zone)*60*1000);
+	    	starttime -= (Long.parseLong(time_zone)*60*1000);
+	    	endtime -= (Long.parseLong(time_zone)*60*1000);
 	    }
 	    starttime = starttime / 1000;
 	    endtime = endtime / 1000;

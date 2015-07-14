@@ -95,7 +95,7 @@ public class CampaignReportsAPI
 		String current_timezone = DateUtil.getCurrentUserTimezoneOffset();
 		if (current_timezone != null)
 		{
-			timeZone = current_timezone;
+			timeZone = "-"+current_timezone;
 		}
 	    // start date in mysql date format.
 	    String startDate = CampaignReportsUtil.getStartDate(startTime, endTime, type, timeZone);
