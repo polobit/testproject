@@ -452,9 +452,9 @@ function generateHTMLEditor(uiFieldDefinition, container) {
 		value = uiFieldDefinition.value;
 
 	var htmlDiv = "<label>HTML: <a href='#' onclick='load_email_templates(); return false;'>(Select a Template / Load from Editor)</a>" +
-			"</label><select style='position:relative;float:right;cursor:pointer;margin-right: 10px;' onChange = 'show_templates(this)' ><option value='agile_templates'>" +
-			"Agile Templates</option><option value='user_templates'>User Templates</option><option value='campaign_templates'>" +
-			"Agile Templates</option></select><br/><br/>";
+			"</label><select style='  position: relative;float: right; cursor: pointer; margin-right: 8px; width: 25%;' onChange = 'show_templates(this)' ><option value=''>Select a Template</option><option value='my_email_templates'>" +
+			"My Email Templates</option><option value='agile_templates'>Agile Campaign Templates</option><option value='campaign_email_templates'>" +
+			" My Campaign Emails</option></select><br/><br/>";
 	
 	/*if(uiFieldDefinition.style)
 		htmlDiv += "<textarea  id='tinyMCE" + textAreaName +"' style='width:100%' name='" + textAreaName + "' rows='13' cols='75'>" + value + "</textarea>";		

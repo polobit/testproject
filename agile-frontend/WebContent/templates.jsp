@@ -12,14 +12,10 @@
 	<%
 	
 if ("POST".equalsIgnoreCase(request.getMethod())) {
-    // set in session
-   // redirect to second jsp
-   
    HttpSession sess = request.getSession(); 
-    System.out.println(request.getParameter("data"));
-    sess.setAttribute("Template_JSON", request.getParameter("data"));
-    
-	return;
+   System.out.println(request.getParameter("data"));
+   sess.setAttribute("Template_JSON", request.getParameter("data"));
+   return;
 }
 %>
 
@@ -29,11 +25,9 @@ if ("POST".equalsIgnoreCase(request.getMethod())) {
 	
 	<%
 	    String CSS_PATH = "/";
-		//String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
 	%> 
 	 
 	<%
-		//String LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
 		String LIB_PATH = "/";
 	%>
 	
@@ -121,36 +115,20 @@ if ("POST".equalsIgnoreCase(request.getMethod())) {
 // Global variable to reuse obtained email templates json
 var TEMPLATES_JSON = undefined;
 var EMAIL_NODES= {};
-function redirect(abc){
-	//window.href
+function show_email_nodes(abc){
 		
-		console.log(TEMPLATES_JSON);
-		var current_template = EMAIL_NODES[abc];
+	var email_nodes =  EMAIL_NODES[abc];
+	$.each(email_nodes,function(name,value){value["campaign_id"]=abc});
+	 EMAIL_NODES[abc] = email_nodes;
+	    
+		var el1 = getTemplate('email-nodes-preview',EMAIL_NODES[abc]);
+		$('#preview-container-content').html("");
+		$('#preview-container-content').append(el1);
 		
-		if(current_template == undefined)
-			return;
-	/* 	$.each(TEMPLATES_JSON, function(name,value){
-			if(value["id"] == abc)
-				current_template = value;
-		}); */
-		
-		console.log(current_template);
-		
-		$.ajax({
-			  type: "POST",
-			  data: {"data" : JSON.stringify(current_template)},
-			  async:false,
-			  success: function (success) {
-				  //alert(success);
-				  window.location.href=(window.location.origin+"/cd_tiny_mce.jsp?subtype=email");
-			}
-			
-		});
 }
 
 $(function(){
 	
-	// textarea id
 	var id = '<%=id%>';
 	var type = '<%=type%>';
 	var subtype = '<%=subtype%>'
@@ -160,23 +138,29 @@ $(function(){
 		
 	var url;
 	
-      if(type === 'email')
-      		url='/misc/email-templates/email_templates_structure.js';
+      if(type === 'email'){
+    	  if(subtype){
+    		  if(subtype == 'my_email_templates'){
+    			  url = '/core/api/email/templates';
+    			  render_template = 'email-preview-collection';
+    		  }
+    		  if(subtype == 'agile_templates'){
+    			  url='/misc/email-templates/email_templates_structure.js';
+    			//  render_template =  'theme-preview';
+    		  }
+			  if(subtype == 'campaign_email_templates'){
+				  url = '/core/api/workflows';
+				  render_template =  'campaign-preview-collection';
+			  }
+    	  }
+    	  else
+    		  url='/misc/email-templates/email_templates_structure.js';
+      }
+      		
 
       if(type === 'web_rules')
     	  url='/misc/modal-templates/modal_templates_structure.js';
       
-      if(subtype === 'user_templates'){
-    	  render_template =  'email-preview-collection';
-    	  url = '/core/api/email/templates';
-      }
-    	  
-      
-      if(subtype === 'campaign_templates'){
-    	  render_template =  'campaign-preview-collection';
-		  url = '/core/api/workflows';      
-      }
-    	  
    		// Gets email_templates_structure.js
 		get_templates_json(url,render_template);
    		
@@ -256,19 +240,25 @@ function render_theme_previews(template)
 					+'<a class="btn" href="cd_tiny_mce.jsp?id='+textarea_id+'">'
 						+'Create your own'
 					+'</a></span>'
+					
+	if(!template){
+		$('#preview-container-title').html(title + html_link);
+		
+		$.each(TEMPLATES_JSON["templates"], function(index, value){
+			// Initialize the theme preview container 
+			var el = getTemplate('theme-preview', value);
+			
+			$('#preview-container-content').append(el);
+			
+		});
+		return;
+	}
 	
 	$('#preview-container-title').html(title + html_link);
 					var el1 = getTemplate(template,TEMPLATES_JSON)
+					$('#preview-container-content').html("");
 					$('#preview-container-content').append(el1);
 	
-	/* $.each(TEMPLATES_JSON["templates"], function(index, value){
-
-		// Initialize the theme preview container 
-		var el = getTemplate('theme-preview', value);
-		
-		$('#preview-container-content').append(el);
-		
-	}); */
 }
 
 /**
@@ -304,24 +294,36 @@ function getMergeFields(){
 }
 
 
-	
-	/* HttpSession sess = request.getSession(); 
-	
-	sess.setAtrribute("Template_JSON",TEMPLATES_JSON); */
-	
-	
-	/* window.location.href=(window.location.origin+"/cd_tiny_mce.jsp?id=email");
-	 //if you want any text box value you can get it like below line. 
-    //just make sure you have specified its "id" attribute
-    var name=TEMPLATES_JSON.text;
-    if (typeof XMLHttpRequest != "undefined")
-    {
-      xmlHttp= new XMLHttpRequest();
-    }
-    var url=window.location.origin+"/cd_tiny_mce.jsp?id=email";
-    xmlHttp.onreadystatechange = fill_template;
-    xmlHttp.open("GET", url, true);
-    xmlHttp.send(null); */
+function render_templates_in_editor(id,campaign_id){
+	//window.href
+		
+		/* console.log(TEMPLATES_JSON);
+		var current_template;
+		$.each(TEMPLATES_JSON, function(name,value){
+			if(value["id"] == id)
+				current_template = value;
+		}); */
+		var current_template = EMAIL_NODES[campaign_id];
+		console.log(current_template);
+		
+		if(!current_template[id].JsonValues[11].value)
+			return;
+		var _html = current_template[id].JsonValues[11].value;
+		current_template = current_template[id];
+		
+		current_template["text"] = _html;
+		
+		$.ajax({
+			  type: "POST",
+			  data: {"data" : JSON.stringify(current_template)},
+			  async:false,
+			  success: function (success) {
+				  //alert(success);
+				  window.location.href=(window.location.origin+"/cd_tiny_mce.jsp?subtype=email");
+			}
+			
+		});
+}
 
 function show_fancy_box(content_array)
 {
@@ -378,22 +380,50 @@ Handlebars.registerHelper('epochToHumanDate', function(format, date)
 		
 Handlebars.registerHelper('has_email_node', function(data){
 	console.log(data);
-	var current_node = data;
+	var current_node = {};
 	var hasEmail = false;
 	var nodes = (JSON.parse(data.rules)).nodes;
-	
 	$.each(nodes,function(name,value){
 		if(value.displayname == 'Send Email'){
-			EMAIL_NODES[current_node.id]=value
+			value["subject"] = value.JsonValues[6].value;
+			value["node_name"] = value.JsonValues[0].value;
+			current_node[value.id]=value
+			
 		}
 		});
-	
+	EMAIL_NODES[data.id] = current_node;
 	
 	if(!$.isEmptyObject(EMAIL_NODES))
 		return "Has email node";
 	else
 		return "No email";
 });
+
+Handlebars.registerHelper('eachkeys', function(context, options)
+		{
+			var fn = options.fn, inverse = options.inverse;
+			var ret = "";
+
+			var empty = true;
+			for (key in context)
+			{
+				empty = false;
+				break;
+			}
+
+			if (!empty)
+			{
+				for (key in context)
+				{
+					ret = ret + fn({ 'key' : key, 'value' : context[key] });
+				}
+			}
+			else
+			{
+				ret = inverse(this);
+			}
+			return ret;
+		});
 		
 Date.prototype.format=function(e){var t="";var n=Date.replaceChars;for(var r=0;r<e.length;r++){var i=e.charAt(r);if(r-1>=0&&e.charAt(r-1)=="\\"){t+=i}else if(n[i]){t+=n[i].call(this)}else if(i!="\\"){t+=i}}return t};Date.replaceChars={shortMonths:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],longMonths:["January","February","March","April","May","June","July","August","September","October","November","December"],shortDays:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],longDays:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],d:function(){return(this.getDate()<10?"0":"")+this.getDate()},D:function(){return Date.replaceChars.shortDays[this.getDay()]},j:function(){return this.getDate()},l:function(){return Date.replaceChars.longDays[this.getDay()]},N:function(){return this.getDay()+1},S:function(){return this.getDate()%10==1&&this.getDate()!=11?"st":this.getDate()%10==2&&this.getDate()!=12?"nd":this.getDate()%10==3&&this.getDate()!=13?"rd":"th"},w:function(){return this.getDay()},z:function(){var e=new Date(this.getFullYear(),0,1);return Math.ceil((this-e)/864e5)},W:function(){var e=new Date(this.getFullYear(),0,1);return Math.ceil(((this-e)/864e5+e.getDay()+1)/7)},F:function(){return Date.replaceChars.longMonths[this.getMonth()]},m:function(){return(this.getMonth()<9?"0":"")+(this.getMonth()+1)},M:function(){return Date.replaceChars.shortMonths[this.getMonth()]},n:function(){return this.getMonth()+1},t:function(){var e=new Date;return(new Date(e.getFullYear(),e.getMonth(),0)).getDate()},L:function(){var e=this.getFullYear();return e%400==0||e%100!=0&&e%4==0},o:function(){var e=new Date(this.valueOf());e.setDate(e.getDate()-(this.getDay()+6)%7+3);return e.getFullYear()},Y:function(){return this.getFullYear()},y:function(){return(""+this.getFullYear()).substr(2)},a:function(){return this.getHours()<12?"am":"pm"},A:function(){return this.getHours()<12?"AM":"PM"},B:function(){return Math.floor(((this.getUTCHours()+1)%24+this.getUTCMinutes()/60+this.getUTCSeconds()/3600)*1e3/24)},g:function(){return this.getHours()%12||12},G:function(){return this.getHours()},h:function(){return((this.getHours()%12||12)<10?"0":"")+(this.getHours()%12||12)},H:function(){return(this.getHours()<10?"0":"")+this.getHours()},i:function(){return(this.getMinutes()<10?"0":"")+this.getMinutes()},s:function(){return(this.getSeconds()<10?"0":"")+this.getSeconds()},u:function(){var e=this.getMilliseconds();return(e<10?"00":e<100?"0":"")+e},e:function(){return"Not Yet Supported"},I:function(){var e=null;for(var t=0;t<12;++t){var n=new Date(this.getFullYear(),t,1);var r=n.getTimezoneOffset();if(e===null)e=r;else if(r<e){e=r;break}else if(r>e)break}return this.getTimezoneOffset()==e|0},O:function(){return(-this.getTimezoneOffset()<0?"-":"+")+(Math.abs(this.getTimezoneOffset()/60)<10?"0":"")+Math.abs(this.getTimezoneOffset()/60)+"00"},P:function(){return(-this.getTimezoneOffset()<0?"-":"+")+(Math.abs(this.getTimezoneOffset()/60)<10?"0":"")+Math.abs(this.getTimezoneOffset()/60)+":00"},T:function(){var e=this.getMonth();this.setMonth(0);var t=this.toTimeString().replace(/^.+ \(?([^\)]+)\)?$/,"$1");this.setMonth(e);return t},Z:function(){return-this.getTimezoneOffset()*60},c:function(){return this.format("Y-m-d\\TH:i:sP")},r:function(){return this.toString()},U:function(){return this.getTime()/1e3}}
 
@@ -435,6 +465,42 @@ Date.prototype.format=function(e){var t="";var n=Date.replaceChars;for(var r=0;r
 {{/if}}
 </script>
 
+<script id="email-nodes-preview-template" type="text/x-handlebars-template">
+<table class="table table-striped showCheckboxes panel agile-table" url="">
+<thead>
+    <tr>
+		<th class="hide header">Id</th>                    
+		<th style="width:30%;" class="header">Email node</th>
+        <th style="width:30%;" class="header">Email Subject</th>
+        <th style="width:40%;" class="header"></th>
+    </tr>
+
+</thead>
+<tbody class="agile-edit-row">
+{{#eachkeys this}}
+ 
+<tr onclick = "render_templates_in_editor('{{value.id}}',{{value.campaign_id}})" style="cursor:pointer">
+<td class='data hide' data='{{value.id}}'>{{value.id}}</td>
+	<td>
+		<div class="table-resp">
+    		{{value.node_name}}
+    	</div>
+    </td> 
+    <td>
+    	<div class="table-resp">
+		    {{value.subject}}
+    	</div>
+    </td>   
+    <td class="text-muted" style="color: #b2b0b1;">
+       
+    </td>
+</tr>
+{{/eachkeys}}
+</tbody>
+</table>
+</script>
+
+
 <script id="email-preview-collection-template" type="text/x-handlebars-template">
 <table class="table table-striped showCheckboxes panel agile-table" url="">
 <thead>
@@ -448,7 +514,7 @@ Date.prototype.format=function(e){var t="";var n=Date.replaceChars;for(var r=0;r
 </thead>
 <tbody id="settings-email-templates-model-list" route="email-template/" class="agile-edit-row">
 {{#each this}}
-<tr onClick = 'redirect({{id}})' style="cursor:pointer">
+<tr onClick = 'render_templates_in_editor({{id}})' style="cursor:pointer">
 <td class='data hide' data='{{id}}'>{{id}}</td>
 <td>
 		<div class="table-resp">
@@ -487,7 +553,7 @@ Date.prototype.format=function(e){var t="";var n=Date.replaceChars;for(var r=0;r
 </thead>
 <tbody id="settings-email-templates-model-list" route="campaign-template/" class="agile-edit-row">
 {{#each this}}
-<tr onClick = 'redirect({{id}})' style="cursor:pointer">
+<tr onClick = 'show_email_nodes({{id}})' style="cursor:pointer">
 <td class='data hide' data='{{id}}'>{{id}}</td>
 <td>
 		<div class="table-resp">
