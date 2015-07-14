@@ -522,7 +522,7 @@ function testMailButton(button){
     	$(button).before("<span class='clearfix' id='confirmation-text'style='top: -49px;"+margin+"display: inline-block;text-align: center;float: left;width: 75%; color: red;font-style: italic;'>Test email cannot be sent to Contact's Owner. Please select any verified email.</span>");
     	
     	// Hide message
-    	$("#confirmation-text").fadeOut(8000,function(){
+    	$("#confirmation-text").fadeOut(15000,function(){
 				
 				  $("#confirmation-text").remove();
 				  $(button).removeAttr('disabled', 'disabled');
