@@ -259,7 +259,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			}
 			
 			$(".bulk-delete-loading").remove();	
-			if(count > 10)
+			if(count > 20)
 			{
 				if($(table).attr('id') == "contacts-table")
 					showNotyPopUp('information', "Your contacts deletion will be processed shortly", "top", 5000);
