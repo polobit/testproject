@@ -604,9 +604,9 @@ function rearrange_from_email_options($select, data)
   	var prev_index = parseInt(last_index-1);
   					    
   	// Remove Contact's Owner option inorder to make it first option
-  	var $owner_option = $select.find("option:eq("+prev_index+")");
+    $select.find("option:eq("+prev_index+")").remove();
   	
-  	$select.find("option:first").before($owner_option);
+  	$select.find("option:first").before("<option value='{{owner.email}}'>Contact's Owner</option>");
 
 	if(!data)
 		return;
