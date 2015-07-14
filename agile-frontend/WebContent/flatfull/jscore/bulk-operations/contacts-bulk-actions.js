@@ -1163,7 +1163,7 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 			showNotyPopUp('information', "Task scheduled", "top", 5000);
 			return;
 		}
-		if(count > 10)
+		if(count > 20)
 			showNotyPopUp('information', error_message, "top", 5000);
 	} });
 }
